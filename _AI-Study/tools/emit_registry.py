@@ -101,6 +101,11 @@ def main(out_path, *team_files):
     ]
     open(out_path, "w").write("\n".join(lines) + "\n")
     print(f"{len(seen)} overrides emitted to {out_path} ({collisions} collisions skipped)")
+    import shutil, subprocess
+    if shutil.which("ruby"):
+        subprocess.run(["ruby", "-c", out_path], check=True)
+    else:
+        print("WARNING: ruby not found — emitted file is NOT syntax-checked")
 
 if __name__ == "__main__":
     main(sys.argv[1], *sys.argv[2:])
