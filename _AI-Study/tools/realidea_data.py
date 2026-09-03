@@ -49,6 +49,20 @@ def species():
 
 
 @lru_cache(maxsize=1)
+def species_by_id():
+    """{numeric_id: INTERNALNAME} from the [N] section headers in pokemon.txt."""
+    out, cur = {}, None
+    for line in open(os.path.join(PBS, "pokemon.txt"), encoding="utf-8-sig", errors="replace"):
+        line = line.strip()
+        m = re.match(r'\[(\d+)\]$', line)
+        if m:
+            cur = int(m.group(1))
+        elif line.startswith("InternalName=") and cur is not None:
+            out[cur] = line.split("=", 1)[1]
+    return out
+
+
+@lru_cache(maxsize=1)
 def min_level():
     """{INTERNALNAME: minimum legal level} from Level-method evolution chains.
     Non-level methods (item/trade/happiness...) contribute no floor."""
