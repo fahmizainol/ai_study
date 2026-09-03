@@ -430,13 +430,18 @@ byte-identical: fully diffable, fully revertible, one injection point.
 | `generated/teams_boss.json` / `teams_filler.json` | canonical team data (validator-clean) |
 | `adapters/realidea/Team_Overrides.rb` | the injected section: registry + `createTrainer` patch |
 
-Deployment state (2026-09-03): `Team_Overrides` is injected into Realidea's
-`Data/Scripts.rxdata` (section 330, before `Main`), carrying the gym-1 team +
-101 deduped overrides. Pre-injection backup:
-`backups/realidea_Scripts.rxdata.pre-teams`; pristine original:
-`backups/realidea_Scripts.rxdata.orig`. The patch is untested at runtime
-(no Ruby available in the analysis environment) — boot the game once before
-trusting it; revert = copy the backup over `Data/Scripts.rxdata`.
+Deployment state (2026-09-03): two sections injected into Realidea's
+`Data/Scripts.rxdata` before `Main` — `Team_Overrides` (gym-1 team + 101 deduped
+filler overrides) and `Level_Cap` (`adapters/realidea/Level_Cap.rb`,
+Reborn-style obedience cap: the `isForeign?` gate removed so *all* overleveled
+mons disobey; badge table retuned to ~2 above each gym's ace —
+16/22/28/35/40/42/47/50, then 65 after badge 8 for the postgame). All original
+sections are byte-identical except the pre-existing 14-line probe hook in
+`Main`; each injected section is independently removable. Everything is under
+git at the `Norm/` root (allowlist `.gitignore`: the study + the one modified
+game file). Pre-injection backups in `backups/`. The patches are untested at
+runtime (no Ruby in the analysis environment) — boot the game once before
+trusting them.
 
 Sources: [TV Tropes — That One Boss: Pokémon Reborn](https://tvtropes.org/pmwiki/pmwiki.php/ThatOneBoss/PokemonReborn) ·
 [Reborn forums — gym difficulty thread](https://www.rebornevo.com/forums/topic/23611-why-are-gym-leaders-so-hard-in-this-game/) ·
