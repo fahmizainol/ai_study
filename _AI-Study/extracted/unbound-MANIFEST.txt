@@ -1,0 +1,90 @@
+Pokémon Unbound — AI source manifest
+=====================================
+Recorded 2026-09-03.
+
+WHY THERE IS NO EXTRACTED SOURCE HERE
+-------------------------------------
+Unbound is not an Essentials game. It is a binary hack of Pokémon FireRed running the
+Complete FireRed Upgrade (CFRU) battle engine, written in C. There is no decompilation
+and there will not be one — it was never built from a source tree, so there is no
+.rxdata to run tools/extract_rxdata.py against.
+
+The AI logic is instead read from the public CFRU repo, which is the engine the ROM
+compiles. Not vendored here (20k lines, and it is a live upstream repo) — clone it:
+
+    git clone --depth 1 https://github.com/Skeli789/Complete-Fire-Red-Upgrade
+
+TARGET ROM
+----------
+  path    ../Pokemon Unbound (v2.1.1.1)/Pokemon Unbound (v2.1.1.1).gba
+  size    33,554,432 bytes (32 MB — FireRed is 16 MB, so doubled)
+  mtime   2023-03-30
+  sha256  7aa25bbf568f7cfcf6ee1cf2e9e6ff637350b3d0705c2375cabb6baa7d9739f7
+  header  offset 0xA0 -> "POKEMON FIRE" / game code "BPRE" (FireRed, US)
+
+SOURCE READ
+-----------
+  repo    github.com/Skeli789/Complete-Fire-Red-Upgrade
+  commit  b637a27898b14e25dd24d0f69a3e302f0069deb8
+  date    2025-01-24  ("Fix bug with AI rechoosing partner move")
+
+  src/Battle_AI/          lines
+    ai_util.c             5,729
+    ai_negatives.c        3,361
+    ai_advanced.c         3,213
+    ai_positives.c        2,960
+    ai_switching.c        2,655
+    ai_master.c           1,776
+    ai_partner.c            659
+    ---------------------------
+    total                20,353   (+ "Doubles AI Strategy.txt", a design doc)
+
+  Also relevant outside Battle_AI/:
+    src/defines_battle.h:42   #define REALLY_SMART_AI  (omniscience, unconditional)
+    src/build_pokemon.c       difficulty-gated stat cheats (IVs / PP / EVs)
+    src/config.h:152          AI_TRY_TO_KILL_RATE 50
+    include/global.h:169-172  OPTIONS_{NORMAL,EASY,HARD,EXPERT}_DIFFICULTY
+    include/battle.h:1006-10  switchingCooldown / switchesInARow / secondPreviousMonIn
+
+*** VERSION GAP — READ THIS BEFORE CITING ANY LINE NUMBER ***
+The ROM is from March 2023. The commit above is from January 2025. Unbound was built
+against a pinned private CFRU snapshot that is not published. Nothing in ANALYSIS.md is
+verified against the shipped binary. Treat the LOGIC as high-confidence and any SPECIFIC
+LINE as indicative. This is the same class of gap as the Ashen Frost meta.txt/bundle
+problem.
+
+UNBOUND'S PRIVATE SURFACE (9 undefined externs)
+-----------------------------------------------
+These are declared extern in public CFRU and defined nowhere in the repo. This set is
+exactly what Unbound keeps to itself — note that it is all tuning constants and
+selection predicates, not logic:
+
+  AI-side (2):
+    GetChanceOfPredictingPlayerNormalSwitch   ai_master.c:1617
+    AISaveSweeperForLaterDifficultyCheck      ai_switching.c:48
+
+  Team-building (7), all in build_pokemon.c:
+    ShouldGiveTrainerMonBestStatsMaxEVs
+    ShouldGiveTrainerMonMaxFriendship
+    GetEVSpreadNumForUnboundRivalChallenge
+    TryGiveSpecialTrainerHiddenPower
+    TryGiveSpecialTrainerStatusCondition
+    TryReplaceUnboundNormalTrainerSpecies
+    GetCurrentLevelCap                        // comment: "Must be implemented yourself"
+
+  Reproduce with:
+    grep -rn "^\s*extern .*(" src/ | ... | check each name for a non-extern definition
+
+REAL #ifdef UNBOUND SITES (3, not 8)
+-------------------------------------
+  ai_switching.c:1715   difficulty gate on ShouldSaveSweeperForLater
+  ai_switching.c:2635   forced shift-switch in a specific map section (MAPSEC_SS_MARINE)
+  ai_master.c:1623      switch-prediction chance gate
+
+  The other 5 "UNBOUND" grep hits are SPECIES_HOOPA_UNBOUND. Filter them.
+
+NOT DONE
+--------
+Static RE of the ROM itself (Ghidra + GhidraGBA loader, THUMB mode), which is what would
+close the version gap and confirm the difficulty-var mapping
+(Vanilla/Difficult/Expert/Insane -> OPTIONS_*_DIFFICULTY values).

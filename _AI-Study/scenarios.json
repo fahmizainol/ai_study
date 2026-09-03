@@ -1,0 +1,3294 @@
+[
+ {
+  "id": "lethal_ko_obvious",
+  "field": 0,
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "EARTHQUAKE",
+   "SWORDSDANCE",
+   "POUND",
+   "PECK"
+  ],
+  "ai_species": "GARCHOMP",
+  "player_species": "ALAKAZAM",
+  "move_ids": {
+   "EARTHQUAKE": 223,
+   "SWORDSDANCE": 418,
+   "POUND": 309,
+   "PECK": 168
+  },
+  "assertions": [
+   [
+    "must_not_choose_move",
+    "SWORDSDANCE"
+   ],
+   [
+    "score_gt",
+    "EARTHQUAKE",
+    "SWORDSDANCE"
+   ]
+  ]
+ },
+ {
+  "id": "lethal_prefer_kill_over_setup",
+  "field": 0,
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "EARTHQUAKE",
+   "SWORDSDANCE",
+   "PROTECT",
+   "POUND"
+  ],
+  "ai_species": "GARCHOMP",
+  "player_species": "MAGNEZONE",
+  "move_ids": {
+   "EARTHQUAKE": 223,
+   "SWORDSDANCE": 418,
+   "PROTECT": 391,
+   "POUND": 309
+  },
+  "assertions": [
+   [
+    "must_not_choose_move",
+    "SWORDSDANCE"
+   ],
+   [
+    "score_gt",
+    "EARTHQUAKE",
+    "SWORDSDANCE"
+   ]
+  ]
+ },
+ {
+  "id": "lethal_vs_healthy_target_may_setup",
+  "field": 0,
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "EARTHQUAKE",
+   "SWORDSDANCE",
+   "POUND",
+   "PECK"
+  ],
+  "ai_species": "GARCHOMP",
+  "player_species": "ALAKAZAM",
+  "move_ids": {
+   "EARTHQUAKE": 223,
+   "SWORDSDANCE": 418,
+   "POUND": 309,
+   "PECK": 168
+  },
+  "assertions": [
+   [
+    "must_choose_any"
+   ]
+  ]
+ },
+ {
+  "id": "immunity_ground_vs_flying",
+  "field": 0,
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "EARTHQUAKE",
+   "DRAGONCLAW",
+   "POUND",
+   "PECK"
+  ],
+  "ai_species": "GARCHOMP",
+  "player_species": "SKARMORY",
+  "move_ids": {
+   "EARTHQUAKE": 223,
+   "DRAGONCLAW": 57,
+   "POUND": 309,
+   "PECK": 168
+  },
+  "assertions": [
+   [
+    "must_not_choose_move",
+    "EARTHQUAKE"
+   ],
+   [
+    "score_gt",
+    "DRAGONCLAW",
+    "EARTHQUAKE"
+   ]
+  ]
+ },
+ {
+  "id": "immunity_normal_vs_ghost",
+  "field": 0,
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "BODYSLAM",
+   "SHADOWBALL",
+   "POUND",
+   "PECK"
+  ],
+  "ai_species": "SNORLAX",
+  "player_species": "GENGAR",
+  "move_ids": {
+   "BODYSLAM": 276,
+   "SHADOWBALL": 175,
+   "POUND": 309,
+   "PECK": 168
+  },
+  "assertions": [
+   [
+    "must_not_choose_move",
+    "BODYSLAM"
+   ],
+   [
+    "score_gt",
+    "SHADOWBALL",
+    "BODYSLAM"
+   ]
+  ]
+ },
+ {
+  "id": "immunity_electric_vs_ground",
+  "field": 0,
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "THUNDERBOLT",
+   "FLASHCANNON",
+   "POUND",
+   "PECK"
+  ],
+  "ai_species": "MAGNEZONE",
+  "player_species": "GARCHOMP",
+  "move_ids": {
+   "THUNDERBOLT": 69,
+   "FLASHCANNON": 519,
+   "POUND": 309,
+   "PECK": 168
+  },
+  "assertions": [
+   [
+    "must_not_choose_move",
+    "THUNDERBOLT"
+   ],
+   [
+    "score_gt",
+    "FLASHCANNON",
+    "THUNDERBOLT"
+   ]
+  ]
+ },
+ {
+  "id": "super_effective_preferred",
+  "field": 0,
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "THUNDERBOLT",
+   "FLASHCANNON",
+   "POUND",
+   "PECK"
+  ],
+  "ai_species": "MAGNEZONE",
+  "player_species": "GYARADOS",
+  "move_ids": {
+   "THUNDERBOLT": 69,
+   "FLASHCANNON": 519,
+   "POUND": 309,
+   "PECK": 168
+  },
+  "assertions": [
+   [
+    "score_gt",
+    "THUNDERBOLT",
+    "FLASHCANNON"
+   ]
+  ]
+ },
+ {
+  "id": "resisted_move_deprioritised",
+  "field": 0,
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "DRAGONCLAW",
+   "EARTHQUAKE",
+   "POUND",
+   "PECK"
+  ],
+  "ai_species": "GARCHOMP",
+  "player_species": "MAGNEZONE",
+  "move_ids": {
+   "DRAGONCLAW": 57,
+   "EARTHQUAKE": 223,
+   "POUND": 309,
+   "PECK": 168
+  },
+  "assertions": [
+   [
+    "score_gt",
+    "EARTHQUAKE",
+    "DRAGONCLAW"
+   ]
+  ]
+ },
+ {
+  "id": "switch_when_outmatched_low_hp",
+  "field": 0,
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "PSYCHIC",
+   "POUND",
+   "PECK",
+   "TACKLE"
+  ],
+  "ai_species": "ALAKAZAM",
+  "player_species": "GENGAR",
+  "move_ids": {
+   "PSYCHIC": 452,
+   "POUND": 309,
+   "PECK": 168,
+   "TACKLE": 303
+  },
+  "assertions": [
+   [
+    "must_consider_switch"
+   ]
+  ]
+ },
+ {
+  "id": "no_switch_when_winning",
+  "field": 0,
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "EARTHQUAKE",
+   "POUND",
+   "PECK",
+   "TACKLE"
+  ],
+  "ai_species": "GARCHOMP",
+  "player_species": "MAGNEZONE",
+  "move_ids": {
+   "EARTHQUAKE": 223,
+   "POUND": 309,
+   "PECK": 168,
+   "TACKLE": 303
+  },
+  "assertions": [
+   [
+    "must_not_switch"
+   ]
+  ]
+ },
+ {
+  "id": "single_mon_cannot_switch",
+  "field": 0,
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "PSYCHIC",
+   "POUND",
+   "PECK",
+   "TACKLE"
+  ],
+  "ai_species": "ALAKAZAM",
+  "player_species": "GENGAR",
+  "move_ids": {
+   "PSYCHIC": 452,
+   "POUND": 309,
+   "PECK": 168,
+   "TACKLE": 303
+  },
+  "assertions": [
+   [
+    "must_not_switch"
+   ]
+  ]
+ },
+ {
+  "id": "no_status_on_already_statused",
+  "field": 0,
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "WILLOWISP",
+   "SLUDGEBOMB",
+   "POUND",
+   "PECK"
+  ],
+  "ai_species": "GENGAR",
+  "player_species": "SNORLAX",
+  "move_ids": {
+   "WILLOWISP": 151,
+   "SLUDGEBOMB": 429,
+   "POUND": 309,
+   "PECK": 168
+  },
+  "assertions": [
+   [
+    "must_not_choose_move",
+    "WILLOWISP"
+   ]
+  ]
+ },
+ {
+  "id": "setup_when_safe",
+  "field": 0,
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "SWORDSDANCE",
+   "BODYSLAM",
+   "POUND",
+   "PECK"
+  ],
+  "ai_species": "SNORLAX",
+  "player_species": "MAGNEZONE",
+  "move_ids": {
+   "SWORDSDANCE": 418,
+   "BODYSLAM": 276,
+   "POUND": 309,
+   "PECK": 168
+  },
+  "assertions": [
+   [
+    "must_choose_any"
+   ]
+  ]
+ },
+ {
+  "id": "heal_when_low",
+  "field": 0,
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "RECOVER",
+   "BODYSLAM",
+   "POUND",
+   "PECK"
+  ],
+  "ai_species": "SNORLAX",
+  "player_species": "ALAKAZAM",
+  "move_ids": {
+   "RECOVER": 393,
+   "BODYSLAM": 276,
+   "POUND": 309,
+   "PECK": 168
+  },
+  "assertions": [
+   [
+    "must_choose_any"
+   ]
+  ]
+ },
+ {
+  "id": "field_changes_scores",
+  "field": 6,
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "EARTHQUAKE",
+   "DRAGONCLAW",
+   "POUND",
+   "PECK"
+  ],
+  "ai_species": "GARCHOMP",
+  "player_species": "SNORLAX",
+  "move_ids": {
+   "EARTHQUAKE": 223,
+   "DRAGONCLAW": 57,
+   "POUND": 309,
+   "PECK": 168
+  },
+  "assertions": [
+   [
+    "must_choose_any"
+   ]
+  ]
+ },
+ {
+  "id": "kill_recognised_raises_score",
+  "field": 0,
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "EARTHQUAKE",
+   "DRAGONCLAW",
+   "PROTECT",
+   "POUND"
+  ],
+  "ai_species": "GARCHOMP",
+  "player_species": "MAGNEZONE",
+  "move_ids": {
+   "EARTHQUAKE": 223,
+   "DRAGONCLAW": 57,
+   "PROTECT": 391,
+   "POUND": 309
+  },
+  "assertions": [
+   [
+    "must_not_choose_move",
+    "PROTECT"
+   ],
+   [
+    "score_gt",
+    "EARTHQUAKE",
+    "PROTECT"
+   ]
+  ]
+ },
+ {
+  "id": "kill_over_status",
+  "field": 0,
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "SHADOWBALL",
+   "WILLOWISP",
+   "POUND",
+   "PECK"
+  ],
+  "ai_species": "GENGAR",
+  "player_species": "ALAKAZAM",
+  "move_ids": {
+   "SHADOWBALL": 175,
+   "WILLOWISP": 151,
+   "POUND": 309,
+   "PECK": 168
+  },
+  "assertions": [
+   [
+    "must_not_choose_move",
+    "WILLOWISP"
+   ],
+   [
+    "score_gt",
+    "SHADOWBALL",
+    "WILLOWISP"
+   ]
+  ]
+ },
+ {
+  "id": "kill_over_protect",
+  "field": 0,
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "EARTHQUAKE",
+   "PROTECT",
+   "POUND",
+   "PECK"
+  ],
+  "ai_species": "GARCHOMP",
+  "player_species": "MAGNEZONE",
+  "move_ids": {
+   "EARTHQUAKE": 223,
+   "PROTECT": 391,
+   "POUND": 309,
+   "PECK": 168
+  },
+  "assertions": [
+   [
+    "must_not_choose_move",
+    "PROTECT"
+   ],
+   [
+    "score_gt",
+    "EARTHQUAKE",
+    "PROTECT"
+   ]
+  ]
+ },
+ {
+  "id": "kill_over_heal",
+  "field": 0,
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "SOFTBOILED",
+   "DAZZLINGGLEAM",
+   "POUND",
+   "PECK"
+  ],
+  "ai_species": "BLISSEY",
+  "player_species": "TYRANITAR",
+  "move_ids": {
+   "SOFTBOILED": 409,
+   "DAZZLINGGLEAM": 566,
+   "POUND": 309,
+   "PECK": 168
+  },
+  "assertions": [
+   [
+    "score_gt",
+    "DAZZLINGGLEAM",
+    "SOFTBOILED"
+   ]
+  ]
+ },
+ {
+  "id": "kill_over_substitute",
+  "field": 0,
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "SHADOWBALL",
+   "SUBSTITUTE",
+   "POUND",
+   "PECK"
+  ],
+  "ai_species": "GENGAR",
+  "player_species": "ALAKAZAM",
+  "move_ids": {
+   "SHADOWBALL": 175,
+   "SUBSTITUTE": 412,
+   "POUND": 309,
+   "PECK": 168
+  },
+  "assertions": [
+   [
+    "score_gt",
+    "SHADOWBALL",
+    "SUBSTITUTE"
+   ]
+  ]
+ },
+ {
+  "id": "kill_over_leechseed",
+  "field": 0,
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "POWERWHIP",
+   "LEECHSEED",
+   "POUND",
+   "PECK"
+  ],
+  "ai_species": "FERROTHORN",
+  "player_species": "STARMIE",
+  "move_ids": {
+   "POWERWHIP": 193,
+   "LEECHSEED": 217,
+   "POUND": 309,
+   "PECK": 168
+  },
+  "assertions": [
+   [
+    "score_gt",
+    "POWERWHIP",
+    "LEECHSEED"
+   ]
+  ]
+ },
+ {
+  "id": "imm_ground_vs_flying_2",
+  "field": 0,
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "EARTHQUAKE",
+   "DRAGONCLAW",
+   "POUND",
+   "PECK"
+  ],
+  "ai_species": "FLYGON",
+  "player_species": "SKARMORY",
+  "move_ids": {
+   "EARTHQUAKE": 223,
+   "DRAGONCLAW": 57,
+   "POUND": 309,
+   "PECK": 168
+  },
+  "assertions": [
+   [
+    "must_not_choose_move",
+    "EARTHQUAKE"
+   ],
+   [
+    "score_gt",
+    "DRAGONCLAW",
+    "EARTHQUAKE"
+   ]
+  ]
+ },
+ {
+  "id": "imm_ground_vs_levitate",
+  "field": 0,
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "EARTHQUAKE",
+   "DRAGONCLAW",
+   "POUND",
+   "PECK"
+  ],
+  "ai_species": "GARCHOMP",
+  "player_species": "FLYGON",
+  "move_ids": {
+   "EARTHQUAKE": 223,
+   "DRAGONCLAW": 57,
+   "POUND": 309,
+   "PECK": 168
+  },
+  "assertions": [
+   [
+    "must_not_choose_move",
+    "EARTHQUAKE"
+   ],
+   [
+    "score_gt",
+    "DRAGONCLAW",
+    "EARTHQUAKE"
+   ]
+  ]
+ },
+ {
+  "id": "imm_normal_vs_ghost_2",
+  "field": 0,
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "BODYSLAM",
+   "CRUNCH",
+   "POUND",
+   "PECK"
+  ],
+  "ai_species": "SNORLAX",
+  "player_species": "GENGAR",
+  "move_ids": {
+   "BODYSLAM": 276,
+   "CRUNCH": 24,
+   "POUND": 309,
+   "PECK": 168
+  },
+  "assertions": [
+   [
+    "must_not_choose_move",
+    "BODYSLAM"
+   ],
+   [
+    "score_gt",
+    "CRUNCH",
+    "BODYSLAM"
+   ]
+  ]
+ },
+ {
+  "id": "imm_fighting_vs_ghost",
+  "field": 0,
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "CLOSECOMBAT",
+   "CRUNCH",
+   "POUND",
+   "PECK"
+  ],
+  "ai_species": "MACHAMP",
+  "player_species": "GENGAR",
+  "move_ids": {
+   "CLOSECOMBAT": 86,
+   "CRUNCH": 24,
+   "POUND": 309,
+   "PECK": 168
+  },
+  "assertions": [
+   [
+    "must_not_choose_move",
+    "CLOSECOMBAT"
+   ],
+   [
+    "score_gt",
+    "CRUNCH",
+    "CLOSECOMBAT"
+   ]
+  ]
+ },
+ {
+  "id": "imm_ghost_vs_normal",
+  "field": 0,
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "SHADOWBALL",
+   "SLUDGEBOMB",
+   "POUND",
+   "PECK"
+  ],
+  "ai_species": "GENGAR",
+  "player_species": "SNORLAX",
+  "move_ids": {
+   "SHADOWBALL": 175,
+   "SLUDGEBOMB": 429,
+   "POUND": 309,
+   "PECK": 168
+  },
+  "assertions": [
+   [
+    "must_not_choose_move",
+    "SHADOWBALL"
+   ],
+   [
+    "score_gt",
+    "SLUDGEBOMB",
+    "SHADOWBALL"
+   ]
+  ]
+ },
+ {
+  "id": "imm_electric_vs_ground_2",
+  "field": 0,
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "THUNDERBOLT",
+   "SHADOWBALL",
+   "POUND",
+   "PECK"
+  ],
+  "ai_species": "JOLTEON",
+  "player_species": "FLYGON",
+  "move_ids": {
+   "THUNDERBOLT": 69,
+   "SHADOWBALL": 175,
+   "POUND": 309,
+   "PECK": 168
+  },
+  "assertions": [
+   [
+    "must_not_choose_move",
+    "THUNDERBOLT"
+   ],
+   [
+    "score_gt",
+    "SHADOWBALL",
+    "THUNDERBOLT"
+   ]
+  ]
+ },
+ {
+  "id": "imm_poison_vs_steel",
+  "field": 0,
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "SLUDGEBOMB",
+   "SHADOWBALL",
+   "POUND",
+   "PECK"
+  ],
+  "ai_species": "GENGAR",
+  "player_species": "SKARMORY",
+  "move_ids": {
+   "SLUDGEBOMB": 429,
+   "SHADOWBALL": 175,
+   "POUND": 309,
+   "PECK": 168
+  },
+  "assertions": [
+   [
+    "must_not_choose_move",
+    "SLUDGEBOMB"
+   ],
+   [
+    "score_gt",
+    "SHADOWBALL",
+    "SLUDGEBOMB"
+   ]
+  ]
+ },
+ {
+  "id": "imm_psychic_vs_dark",
+  "field": 0,
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "PSYCHIC",
+   "DAZZLINGGLEAM",
+   "POUND",
+   "PECK"
+  ],
+  "ai_species": "ALAKAZAM",
+  "player_species": "UMBREON",
+  "move_ids": {
+   "PSYCHIC": 452,
+   "DAZZLINGGLEAM": 566,
+   "POUND": 309,
+   "PECK": 168
+  },
+  "assertions": [
+   [
+    "must_not_choose_move",
+    "PSYCHIC"
+   ],
+   [
+    "score_gt",
+    "DAZZLINGGLEAM",
+    "PSYCHIC"
+   ]
+  ]
+ },
+ {
+  "id": "imm_dragon_vs_fairy",
+  "field": 0,
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "DRAGONCLAW",
+   "EARTHQUAKE",
+   "POUND",
+   "PECK"
+  ],
+  "ai_species": "DRAGONITE",
+  "player_species": "CLEFABLE",
+  "move_ids": {
+   "DRAGONCLAW": 57,
+   "EARTHQUAKE": 223,
+   "POUND": 309,
+   "PECK": 168
+  },
+  "assertions": [
+   [
+    "must_not_choose_move",
+    "DRAGONCLAW"
+   ],
+   [
+    "score_gt",
+    "EARTHQUAKE",
+    "DRAGONCLAW"
+   ]
+  ]
+ },
+ {
+  "id": "imm_ground_vs_flying_gyarados",
+  "field": 0,
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "EARTHQUAKE",
+   "DRAGONCLAW",
+   "POUND",
+   "PECK"
+  ],
+  "ai_species": "GARCHOMP",
+  "player_species": "GYARADOS",
+  "move_ids": {
+   "EARTHQUAKE": 223,
+   "DRAGONCLAW": 57,
+   "POUND": 309,
+   "PECK": 168
+  },
+  "assertions": [
+   [
+    "must_not_choose_move",
+    "EARTHQUAKE"
+   ]
+  ]
+ },
+ {
+  "id": "eff_4x_electric_vs_gyarados",
+  "field": 0,
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "THUNDERBOLT",
+   "SHADOWBALL",
+   "POUND",
+   "PECK"
+  ],
+  "ai_species": "JOLTEON",
+  "player_species": "GYARADOS",
+  "move_ids": {
+   "THUNDERBOLT": 69,
+   "SHADOWBALL": 175,
+   "POUND": 309,
+   "PECK": 168
+  },
+  "assertions": [
+   [
+    "score_gt",
+    "THUNDERBOLT",
+    "SHADOWBALL"
+   ]
+  ]
+ },
+ {
+  "id": "eff_4x_fighting_vs_tyranitar",
+  "field": 0,
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "CLOSECOMBAT",
+   "EARTHQUAKE",
+   "POUND",
+   "PECK"
+  ],
+  "ai_species": "MACHAMP",
+  "player_species": "TYRANITAR",
+  "move_ids": {
+   "CLOSECOMBAT": 86,
+   "EARTHQUAKE": 223,
+   "POUND": 309,
+   "PECK": 168
+  },
+  "assertions": [
+   [
+    "score_gt",
+    "CLOSECOMBAT",
+    "EARTHQUAKE"
+   ]
+  ]
+ },
+ {
+  "id": "eff_water_vs_fire",
+  "field": 0,
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "SURF",
+   "ICEBEAM",
+   "POUND",
+   "PECK"
+  ],
+  "ai_species": "VAPOREON",
+  "player_species": "ARCANINE",
+  "move_ids": {
+   "SURF": 538,
+   "ICEBEAM": 243,
+   "POUND": 309,
+   "PECK": 168
+  },
+  "assertions": [
+   [
+    "score_gt",
+    "SURF",
+    "ICEBEAM"
+   ]
+  ]
+ },
+ {
+  "id": "eff_fire_vs_steelgrass",
+  "field": 0,
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "FLAMETHROWER",
+   "CRUNCH",
+   "POUND",
+   "PECK"
+  ],
+  "ai_species": "ARCANINE",
+  "player_species": "FERROTHORN",
+  "move_ids": {
+   "FLAMETHROWER": 136,
+   "CRUNCH": 24,
+   "POUND": 309,
+   "PECK": 168
+  },
+  "assertions": [
+   [
+    "score_gt",
+    "FLAMETHROWER",
+    "CRUNCH"
+   ]
+  ]
+ },
+ {
+  "id": "eff_fairy_vs_dragon",
+  "field": 0,
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "MOONBLAST",
+   "FLAMETHROWER",
+   "POUND",
+   "PECK"
+  ],
+  "ai_species": "CLEFABLE",
+  "player_species": "GARCHOMP",
+  "move_ids": {
+   "MOONBLAST": 589,
+   "FLAMETHROWER": 136,
+   "POUND": 309,
+   "PECK": 168
+  },
+  "assertions": [
+   [
+    "score_gt",
+    "MOONBLAST",
+    "FLAMETHROWER"
+   ]
+  ]
+ },
+ {
+  "id": "eff_ground_vs_electricsteel",
+  "field": 0,
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "EARTHQUAKE",
+   "DRAGONCLAW",
+   "POUND",
+   "PECK"
+  ],
+  "ai_species": "GARCHOMP",
+  "player_species": "MAGNEZONE",
+  "move_ids": {
+   "EARTHQUAKE": 223,
+   "DRAGONCLAW": 57,
+   "POUND": 309,
+   "PECK": 168
+  },
+  "assertions": [
+   [
+    "score_gt",
+    "EARTHQUAKE",
+    "DRAGONCLAW"
+   ]
+  ]
+ },
+ {
+  "id": "eff_poison_vs_fairy",
+  "field": 0,
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "SLUDGEBOMB",
+   "FLAMETHROWER",
+   "POUND",
+   "PECK"
+  ],
+  "ai_species": "WEEZING",
+  "player_species": "CLEFABLE",
+  "move_ids": {
+   "SLUDGEBOMB": 429,
+   "FLAMETHROWER": 136,
+   "POUND": 309,
+   "PECK": 168
+  },
+  "assertions": [
+   [
+    "score_gt",
+    "SLUDGEBOMB",
+    "FLAMETHROWER"
+   ]
+  ]
+ },
+ {
+  "id": "eff_ice_vs_dragonground",
+  "field": 0,
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "ICEBEAM",
+   "SURF",
+   "POUND",
+   "PECK"
+  ],
+  "ai_species": "LAPRAS",
+  "player_species": "GARCHOMP",
+  "move_ids": {
+   "ICEBEAM": 243,
+   "SURF": 538,
+   "POUND": 309,
+   "PECK": 168
+  },
+  "assertions": [
+   [
+    "score_gt",
+    "ICEBEAM",
+    "SURF"
+   ]
+  ]
+ },
+ {
+  "id": "eff_fire_vs_scizor",
+  "field": 0,
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "FLAMETHROWER",
+   "CRUNCH",
+   "POUND",
+   "PECK"
+  ],
+  "ai_species": "ARCANINE",
+  "player_species": "SCIZOR",
+  "move_ids": {
+   "FLAMETHROWER": 136,
+   "CRUNCH": 24,
+   "POUND": 309,
+   "PECK": 168
+  },
+  "assertions": [
+   [
+    "score_gt",
+    "FLAMETHROWER",
+    "CRUNCH"
+   ]
+  ]
+ },
+ {
+  "id": "eff_resisted_deprioritised_2",
+  "field": 0,
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "DRAGONCLAW",
+   "EARTHQUAKE",
+   "POUND",
+   "PECK"
+  ],
+  "ai_species": "DRAGONITE",
+  "player_species": "SKARMORY",
+  "move_ids": {
+   "DRAGONCLAW": 57,
+   "EARTHQUAKE": 223,
+   "POUND": 309,
+   "PECK": 168
+  },
+  "assertions": [
+   [
+    "score_gt",
+    "DRAGONCLAW",
+    "EARTHQUAKE"
+   ]
+  ]
+ },
+ {
+  "id": "status_burn_vs_fire",
+  "field": 0,
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "WILLOWISP",
+   "SHADOWBALL",
+   "POUND",
+   "PECK"
+  ],
+  "ai_species": "GENGAR",
+  "player_species": "ARCANINE",
+  "move_ids": {
+   "WILLOWISP": 151,
+   "SHADOWBALL": 175,
+   "POUND": 309,
+   "PECK": 168
+  },
+  "assertions": [
+   [
+    "must_not_choose_move",
+    "WILLOWISP"
+   ]
+  ]
+ },
+ {
+  "id": "status_toxic_vs_steel",
+  "field": 0,
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "TOXIC",
+   "SHADOWBALL",
+   "POUND",
+   "PECK"
+  ],
+  "ai_species": "GENGAR",
+  "player_species": "SKARMORY",
+  "move_ids": {
+   "TOXIC": 446,
+   "SHADOWBALL": 175,
+   "POUND": 309,
+   "PECK": 168
+  },
+  "assertions": [
+   [
+    "must_not_choose_move",
+    "TOXIC"
+   ]
+  ]
+ },
+ {
+  "id": "status_toxic_vs_poison",
+  "field": 0,
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "TOXIC",
+   "SHADOWBALL",
+   "POUND",
+   "PECK"
+  ],
+  "ai_species": "GENGAR",
+  "player_species": "TOXAPEX",
+  "move_ids": {
+   "TOXIC": 446,
+   "SHADOWBALL": 175,
+   "POUND": 309,
+   "PECK": 168
+  },
+  "assertions": [
+   [
+    "must_not_choose_move",
+    "TOXIC"
+   ]
+  ]
+ },
+ {
+  "id": "status_thunderwave_vs_ground",
+  "field": 0,
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "THUNDERWAVE",
+   "SHADOWBALL",
+   "POUND",
+   "PECK"
+  ],
+  "ai_species": "JOLTEON",
+  "player_species": "FLYGON",
+  "move_ids": {
+   "THUNDERWAVE": 83,
+   "SHADOWBALL": 175,
+   "POUND": 309,
+   "PECK": 168
+  },
+  "assertions": [
+   [
+    "must_not_choose_move",
+    "THUNDERWAVE"
+   ]
+  ]
+ },
+ {
+  "id": "status_spore_vs_grass",
+  "field": 0,
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "SPORE",
+   "CLOSECOMBAT",
+   "POUND",
+   "PECK"
+  ],
+  "ai_species": "BRELOOM",
+  "player_species": "FERROTHORN",
+  "move_ids": {
+   "SPORE": 219,
+   "CLOSECOMBAT": 86,
+   "POUND": 309,
+   "PECK": 168
+  },
+  "assertions": [
+   [
+    "must_not_choose_move",
+    "SPORE"
+   ]
+  ]
+ },
+ {
+  "id": "redundant_burn",
+  "field": 0,
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "WILLOWISP",
+   "SLUDGEBOMB",
+   "POUND",
+   "PECK"
+  ],
+  "ai_species": "GENGAR",
+  "player_species": "SNORLAX",
+  "move_ids": {
+   "WILLOWISP": 151,
+   "SLUDGEBOMB": 429,
+   "POUND": 309,
+   "PECK": 168
+  },
+  "assertions": [
+   [
+    "must_not_choose_move",
+    "WILLOWISP"
+   ]
+  ]
+ },
+ {
+  "id": "redundant_toxic",
+  "field": 0,
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "TOXIC",
+   "SLUDGEBOMB",
+   "POUND",
+   "PECK"
+  ],
+  "ai_species": "GENGAR",
+  "player_species": "SNORLAX",
+  "move_ids": {
+   "TOXIC": 446,
+   "SLUDGEBOMB": 429,
+   "POUND": 309,
+   "PECK": 168
+  },
+  "assertions": [
+   [
+    "must_not_choose_move",
+    "TOXIC"
+   ]
+  ]
+ },
+ {
+  "id": "redundant_sleep",
+  "field": 0,
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "HYPNOSIS",
+   "SLUDGEBOMB",
+   "POUND",
+   "PECK"
+  ],
+  "ai_species": "GENGAR",
+  "player_species": "SNORLAX",
+  "move_ids": {
+   "HYPNOSIS": 479,
+   "SLUDGEBOMB": 429,
+   "POUND": 309,
+   "PECK": 168
+  },
+  "assertions": [
+   [
+    "must_not_choose_move",
+    "HYPNOSIS"
+   ]
+  ]
+ },
+ {
+  "id": "redundant_paralysis",
+  "field": 0,
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "THUNDERWAVE",
+   "THUNDERBOLT",
+   "POUND",
+   "PECK"
+  ],
+  "ai_species": "JOLTEON",
+  "player_species": "SNORLAX",
+  "move_ids": {
+   "THUNDERWAVE": 83,
+   "THUNDERBOLT": 69,
+   "POUND": 309,
+   "PECK": 168
+  },
+  "assertions": [
+   [
+    "must_not_choose_move",
+    "THUNDERWAVE"
+   ]
+  ]
+ },
+ {
+  "id": "redundant_burn_on_low_hp_target",
+  "field": 0,
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "WILLOWISP",
+   "SLUDGEBOMB",
+   "POUND",
+   "PECK"
+  ],
+  "ai_species": "GENGAR",
+  "player_species": "SNORLAX",
+  "move_ids": {
+   "WILLOWISP": 151,
+   "SLUDGEBOMB": 429,
+   "POUND": 309,
+   "PECK": 168
+  },
+  "assertions": [
+   [
+    "must_not_choose_move",
+    "WILLOWISP"
+   ]
+  ]
+ },
+ {
+  "id": "setup_vs_harmless",
+  "field": 0,
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "SWORDSDANCE",
+   "BODYSLAM",
+   "POUND",
+   "PECK"
+  ],
+  "ai_species": "SNORLAX",
+  "player_species": "GENGAR",
+  "move_ids": {
+   "SWORDSDANCE": 418,
+   "BODYSLAM": 276,
+   "POUND": 309,
+   "PECK": 168
+  },
+  "assertions": [
+   [
+    "must_choose_any"
+   ]
+  ]
+ },
+ {
+  "id": "no_setup_at_max_stage",
+  "field": 0,
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "SWORDSDANCE",
+   "EARTHQUAKE",
+   "POUND",
+   "PECK"
+  ],
+  "ai_species": "GARCHOMP",
+  "player_species": "SNORLAX",
+  "move_ids": {
+   "SWORDSDANCE": 418,
+   "EARTHQUAKE": 223,
+   "POUND": 309,
+   "PECK": 168
+  },
+  "assertions": [
+   [
+    "must_not_choose_move",
+    "SWORDSDANCE"
+   ]
+  ]
+ },
+ {
+  "id": "no_calmmind_at_max_stage",
+  "field": 0,
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "CALMMIND",
+   "PSYCHIC",
+   "POUND",
+   "PECK"
+  ],
+  "ai_species": "ALAKAZAM",
+  "player_species": "SNORLAX",
+  "move_ids": {
+   "CALMMIND": 470,
+   "PSYCHIC": 452,
+   "POUND": 309,
+   "PECK": 168
+  },
+  "assertions": [
+   [
+    "must_not_choose_move",
+    "CALMMIND"
+   ]
+  ]
+ },
+ {
+  "id": "heal_at_low_hp",
+  "field": 0,
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "SOFTBOILED",
+   "DAZZLINGGLEAM",
+   "POUND",
+   "PECK"
+  ],
+  "ai_species": "BLISSEY",
+  "player_species": "ALAKAZAM",
+  "move_ids": {
+   "SOFTBOILED": 409,
+   "DAZZLINGGLEAM": 566,
+   "POUND": 309,
+   "PECK": 168
+  },
+  "assertions": [
+   [
+    "score_gt",
+    "SOFTBOILED",
+    "DAZZLINGGLEAM"
+   ]
+  ]
+ },
+ {
+  "id": "no_heal_at_full_hp",
+  "field": 0,
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "SOFTBOILED",
+   "DAZZLINGGLEAM",
+   "POUND",
+   "PECK"
+  ],
+  "ai_species": "BLISSEY",
+  "player_species": "ALAKAZAM",
+  "move_ids": {
+   "SOFTBOILED": 409,
+   "DAZZLINGGLEAM": 566,
+   "POUND": 309,
+   "PECK": 168
+  },
+  "assertions": [
+   [
+    "must_not_choose_move",
+    "SOFTBOILED"
+   ]
+  ]
+ },
+ {
+  "id": "no_recover_at_full_hp",
+  "field": 0,
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "RECOVER",
+   "SURF",
+   "POUND",
+   "PECK"
+  ],
+  "ai_species": "STARMIE",
+  "player_species": "ARCANINE",
+  "move_ids": {
+   "RECOVER": 393,
+   "SURF": 538,
+   "POUND": 309,
+   "PECK": 168
+  },
+  "assertions": [
+   [
+    "must_not_choose_move",
+    "RECOVER"
+   ]
+  ]
+ },
+ {
+  "id": "no_roost_at_full_hp",
+  "field": 0,
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "ROOST",
+   "BRAVEBIRD",
+   "POUND",
+   "PECK"
+  ],
+  "ai_species": "SKARMORY",
+  "player_species": "SNORLAX",
+  "move_ids": {
+   "ROOST": 172,
+   "BRAVEBIRD": 153,
+   "POUND": 309,
+   "PECK": 168
+  },
+  "assertions": [
+   [
+    "must_not_choose_move",
+    "ROOST"
+   ]
+  ]
+ },
+ {
+  "id": "heal_beats_weak_attack",
+  "field": 0,
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "ROOST",
+   "BRAVEBIRD",
+   "POUND",
+   "PECK"
+  ],
+  "ai_species": "SKARMORY",
+  "player_species": "FERROTHORN",
+  "move_ids": {
+   "ROOST": 172,
+   "BRAVEBIRD": 153,
+   "POUND": 309,
+   "PECK": 168
+  },
+  "assertions": [
+   [
+    "score_gt",
+    "ROOST",
+    "BRAVEBIRD"
+   ]
+  ]
+ },
+ {
+  "id": "switch_considered_when_crippled",
+  "field": 0,
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "FLASHCANNON",
+   "POUND",
+   "PECK",
+   "TACKLE"
+  ],
+  "ai_species": "MAGNEZONE",
+  "player_species": "GARCHOMP",
+  "move_ids": {
+   "FLASHCANNON": 519,
+   "POUND": 309,
+   "PECK": 168,
+   "TACKLE": 303
+  },
+  "assertions": [
+   [
+    "must_consider_switch"
+   ]
+  ]
+ },
+ {
+  "id": "switch_considered_stat_crushed",
+  "field": 0,
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "BODYSLAM",
+   "POUND",
+   "PECK",
+   "TACKLE"
+  ],
+  "ai_species": "SNORLAX",
+  "player_species": "MACHAMP",
+  "move_ids": {
+   "BODYSLAM": 276,
+   "POUND": 309,
+   "PECK": 168,
+   "TACKLE": 303
+  },
+  "assertions": [
+   [
+    "must_consider_switch"
+   ]
+  ]
+ },
+ {
+  "id": "no_switch_when_healthy_winning",
+  "field": 0,
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "EARTHQUAKE",
+   "POUND",
+   "PECK",
+   "TACKLE"
+  ],
+  "ai_species": "GARCHOMP",
+  "player_species": "MAGNEZONE",
+  "move_ids": {
+   "EARTHQUAKE": 223,
+   "POUND": 309,
+   "PECK": 168,
+   "TACKLE": 303
+  },
+  "assertions": [
+   [
+    "must_not_switch"
+   ]
+  ]
+ },
+ {
+  "id": "no_switch_single_mon_low",
+  "field": 0,
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "FLASHCANNON",
+   "POUND",
+   "PECK",
+   "TACKLE"
+  ],
+  "ai_species": "MAGNEZONE",
+  "player_species": "GARCHOMP",
+  "move_ids": {
+   "FLASHCANNON": 519,
+   "POUND": 309,
+   "PECK": 168,
+   "TACKLE": 303
+  },
+  "assertions": [
+   [
+    "must_not_switch"
+   ]
+  ]
+ },
+ {
+  "id": "no_switch_full_hp_neutral",
+  "field": 0,
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "BODYSLAM",
+   "POUND",
+   "PECK",
+   "TACKLE"
+  ],
+  "ai_species": "SNORLAX",
+  "player_species": "SNORLAX",
+  "move_ids": {
+   "BODYSLAM": 276,
+   "POUND": 309,
+   "PECK": 168,
+   "TACKLE": 303
+  },
+  "assertions": [
+   [
+    "must_not_switch"
+   ]
+  ]
+ },
+ {
+  "id": "switch_eval_runs_with_bench",
+  "field": 0,
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "PSYCHIC",
+   "POUND",
+   "PECK",
+   "TACKLE"
+  ],
+  "ai_species": "ALAKAZAM",
+  "player_species": "UMBREON",
+  "move_ids": {
+   "PSYCHIC": 452,
+   "POUND": 309,
+   "PECK": 168,
+   "TACKLE": 303
+  },
+  "assertions": [
+   [
+    "must_consider_switch"
+   ]
+  ]
+ },
+ {
+  "id": "field_1_scores_produced",
+  "field": 1,
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "EARTHQUAKE",
+   "DRAGONCLAW",
+   "POUND",
+   "PECK"
+  ],
+  "ai_species": "GARCHOMP",
+  "player_species": "SNORLAX",
+  "move_ids": {
+   "EARTHQUAKE": 223,
+   "DRAGONCLAW": 57,
+   "POUND": 309,
+   "PECK": 168
+  },
+  "assertions": [
+   [
+    "must_choose_any"
+   ]
+  ]
+ },
+ {
+  "id": "field_2_scores_produced",
+  "field": 2,
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "EARTHQUAKE",
+   "DRAGONCLAW",
+   "POUND",
+   "PECK"
+  ],
+  "ai_species": "GARCHOMP",
+  "player_species": "SNORLAX",
+  "move_ids": {
+   "EARTHQUAKE": 223,
+   "DRAGONCLAW": 57,
+   "POUND": 309,
+   "PECK": 168
+  },
+  "assertions": [
+   [
+    "must_choose_any"
+   ]
+  ]
+ },
+ {
+  "id": "field_immunity_still_holds",
+  "field": 6,
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "BODYSLAM",
+   "CRUNCH",
+   "POUND",
+   "PECK"
+  ],
+  "ai_species": "SNORLAX",
+  "player_species": "GENGAR",
+  "move_ids": {
+   "BODYSLAM": 276,
+   "CRUNCH": 24,
+   "POUND": 309,
+   "PECK": 168
+  },
+  "assertions": [
+   [
+    "must_not_choose_move",
+    "BODYSLAM"
+   ]
+  ]
+ },
+ {
+  "id": "field_kill_still_recognised",
+  "field": 6,
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "EARTHQUAKE",
+   "PROTECT",
+   "POUND",
+   "PECK"
+  ],
+  "ai_species": "GARCHOMP",
+  "player_species": "MAGNEZONE",
+  "move_ids": {
+   "EARTHQUAKE": 223,
+   "PROTECT": 391,
+   "POUND": 309,
+   "PECK": 168
+  },
+  "assertions": [
+   [
+    "must_not_choose_move",
+    "PROTECT"
+   ],
+   [
+    "score_gt",
+    "EARTHQUAKE",
+    "PROTECT"
+   ]
+  ]
+ },
+ {
+  "id": "switch_forced_snorlax_to_ghost",
+  "field": 0,
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "BODYSLAM",
+   "POUND",
+   "PECK",
+   "TACKLE"
+  ],
+  "ai_species": "SNORLAX",
+  "player_species": "MACHAMP",
+  "move_ids": {
+   "BODYSLAM": 276,
+   "POUND": 309,
+   "PECK": 168,
+   "TACKLE": 303
+  },
+  "assertions": [
+   [
+    "must_switch"
+   ]
+  ]
+ },
+ {
+  "id": "switch_wanted_but_pivot_below_gate",
+  "field": 0,
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "BODYSLAM",
+   "POUND",
+   "PECK",
+   "TACKLE"
+  ],
+  "ai_species": "SNORLAX",
+  "player_species": "SNORLAX",
+  "move_ids": {
+   "BODYSLAM": 276,
+   "POUND": 309,
+   "PECK": 168,
+   "TACKLE": 303
+  },
+  "assertions": [
+   [
+    "must_consider_switch"
+   ]
+  ]
+ },
+ {
+  "id": "switch_forced_tyranitar_to_ghost",
+  "field": 0,
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "CRUNCH",
+   "POUND",
+   "PECK",
+   "TACKLE"
+  ],
+  "ai_species": "TYRANITAR",
+  "player_species": "MACHAMP",
+  "move_ids": {
+   "CRUNCH": 24,
+   "POUND": 309,
+   "PECK": 168,
+   "TACKLE": 303
+  },
+  "assertions": [
+   [
+    "must_switch"
+   ]
+  ]
+ },
+ {
+  "id": "no_useless_move_vs_immune_only_option",
+  "field": 0,
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "BODYSLAM",
+   "EARTHQUAKE",
+   "CRUNCH",
+   "POUND"
+  ],
+  "ai_species": "SNORLAX",
+  "player_species": "GENGAR",
+  "move_ids": {
+   "BODYSLAM": 276,
+   "EARTHQUAKE": 223,
+   "CRUNCH": 24,
+   "POUND": 309
+  },
+  "assertions": [
+   [
+    "must_not_choose_move",
+    "BODYSLAM"
+   ]
+  ]
+ },
+ {
+  "id": "absorb_water_vs_waterabsorb",
+  "field": 0,
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "WATERFALL",
+   "CRUNCH",
+   "POUND",
+   "PECK"
+  ],
+  "ai_species": "GYARADOS",
+  "player_species": "VAPOREON",
+  "move_ids": {
+   "WATERFALL": 543,
+   "CRUNCH": 24,
+   "POUND": 309,
+   "PECK": 168
+  },
+  "assertions": [
+   [
+    "must_not_choose_move",
+    "WATERFALL"
+   ],
+   [
+    "score_gt",
+    "CRUNCH",
+    "WATERFALL"
+   ]
+  ]
+ },
+ {
+  "id": "absorb_electric_vs_voltabsorb",
+  "field": 0,
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "THUNDERBOLT",
+   "FLASHCANNON",
+   "POUND",
+   "PECK"
+  ],
+  "ai_species": "MAGNEZONE",
+  "player_species": "JOLTEON",
+  "move_ids": {
+   "THUNDERBOLT": 69,
+   "FLASHCANNON": 519,
+   "POUND": 309,
+   "PECK": 168
+  },
+  "assertions": [
+   [
+    "must_not_choose_move",
+    "THUNDERBOLT"
+   ],
+   [
+    "score_gt",
+    "FLASHCANNON",
+    "THUNDERBOLT"
+   ]
+  ]
+ },
+ {
+  "id": "absorb_fire_vs_flashfire",
+  "field": 0,
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "FLAMETHROWER",
+   "CRUNCH",
+   "POUND",
+   "PECK"
+  ],
+  "ai_species": "ARCANINE",
+  "player_species": "FLAREON",
+  "move_ids": {
+   "FLAMETHROWER": 136,
+   "CRUNCH": 24,
+   "POUND": 309,
+   "PECK": 168
+  },
+  "assertions": [
+   [
+    "must_not_choose_move",
+    "FLAMETHROWER"
+   ],
+   [
+    "score_gt",
+    "CRUNCH",
+    "FLAMETHROWER"
+   ]
+  ]
+ },
+ {
+  "id": "fail_bellydrum_below_half",
+  "field": 0,
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "BELLYDRUM",
+   "BODYSLAM",
+   "POUND",
+   "PECK"
+  ],
+  "ai_species": "SNORLAX",
+  "player_species": "ARCANINE",
+  "move_ids": {
+   "BELLYDRUM": 348,
+   "BODYSLAM": 276,
+   "POUND": 309,
+   "PECK": 168
+  },
+  "assertions": [
+   [
+    "must_not_choose_move",
+    "BELLYDRUM"
+   ]
+  ]
+ },
+ {
+  "id": "fail_substitute_below_quarter",
+  "field": 0,
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "SUBSTITUTE",
+   "SLUDGEBOMB",
+   "POUND",
+   "PECK"
+  ],
+  "ai_species": "GENGAR",
+  "player_species": "CLEFABLE",
+  "move_ids": {
+   "SUBSTITUTE": 412,
+   "SLUDGEBOMB": 429,
+   "POUND": 309,
+   "PECK": 168
+  },
+  "assertions": [
+   [
+    "must_not_choose_move",
+    "SUBSTITUTE"
+   ]
+  ]
+ },
+ {
+  "id": "fail_dreameater_awake",
+  "field": 0,
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "DREAMEATER",
+   "SHADOWBALL",
+   "POUND",
+   "PECK"
+  ],
+  "ai_species": "GENGAR",
+  "player_species": "ALAKAZAM",
+  "move_ids": {
+   "DREAMEATER": 449,
+   "SHADOWBALL": 175,
+   "POUND": 309,
+   "PECK": 168
+  },
+  "assertions": [
+   [
+    "must_not_choose_move",
+    "DREAMEATER"
+   ],
+   [
+    "score_gt",
+    "SHADOWBALL",
+    "DREAMEATER"
+   ]
+  ]
+ },
+ {
+  "id": "fail_explosion_vs_ghost",
+  "field": 0,
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "EXPLOSION",
+   "ROCKSLIDE",
+   "POUND",
+   "PECK"
+  ],
+  "ai_species": "GOLEM",
+  "player_species": "GENGAR",
+  "move_ids": {
+   "EXPLOSION": 260,
+   "ROCKSLIDE": 504,
+   "POUND": 309,
+   "PECK": 168
+  },
+  "assertions": [
+   [
+    "must_not_choose_move",
+    "EXPLOSION"
+   ],
+   [
+    "score_gt",
+    "ROCKSLIDE",
+    "EXPLOSION"
+   ]
+  ]
+ },
+ {
+  "id": "fail_rest_at_full_hp",
+  "field": 0,
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "REST",
+   "BODYSLAM",
+   "POUND",
+   "PECK"
+  ],
+  "ai_species": "SNORLAX",
+  "player_species": "ARCANINE",
+  "move_ids": {
+   "REST": 493,
+   "BODYSLAM": 276,
+   "POUND": 309,
+   "PECK": 168
+  },
+  "assertions": [
+   [
+    "must_not_choose_move",
+    "REST"
+   ]
+  ]
+ },
+ {
+  "id": "redundant_debuff_at_min",
+  "field": 0,
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "CHARM",
+   "MOONBLAST",
+   "POUND",
+   "PECK"
+  ],
+  "ai_species": "CLEFABLE",
+  "player_species": "MACHAMP",
+  "move_ids": {
+   "CHARM": 353,
+   "MOONBLAST": 589,
+   "POUND": 309,
+   "PECK": 168
+  },
+  "assertions": [
+   [
+    "must_not_choose_move",
+    "CHARM"
+   ]
+  ]
+ },
+ {
+  "id": "priority_secures_kill_when_slower",
+  "field": 0,
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "AQUAJET",
+   "PLAYROUGH",
+   "POUND",
+   "PECK"
+  ],
+  "ai_species": "AZUMARILL",
+  "player_species": "GENGAR",
+  "move_ids": {
+   "AQUAJET": 550,
+   "PLAYROUGH": 599,
+   "POUND": 309,
+   "PECK": 168
+  },
+  "assertions": [
+   [
+    "score_gt",
+    "AQUAJET",
+    "PLAYROUGH"
+   ]
+  ]
+ },
+ {
+  "id": "staller_toxic_the_wall",
+  "field": 0,
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "TOXIC",
+   "SCALD",
+   "RECOVER",
+   "HAZE"
+  ],
+  "ai_species": "TOXAPEX",
+  "player_species": "SUICUNE",
+  "move_ids": {
+   "TOXIC": 446,
+   "SCALD": 542,
+   "RECOVER": 393,
+   "HAZE": 258
+  },
+  "assertions": [
+   [
+    "score_gt",
+    "TOXIC",
+    "SCALD"
+   ]
+  ]
+ },
+ {
+  "id": "phazer_haze_vs_setup",
+  "field": 0,
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "HAZE",
+   "SCALD",
+   "RECOVER",
+   "TOXIC"
+  ],
+  "ai_species": "TOXAPEX",
+  "player_species": "GYARADOS",
+  "move_ids": {
+   "HAZE": 258,
+   "SCALD": 542,
+   "RECOVER": 393,
+   "TOXIC": 446
+  },
+  "assertions": [
+   [
+    "score_gt",
+    "HAZE",
+    "SCALD"
+   ]
+  ]
+ },
+ {
+  "id": "no_haze_unboosted",
+  "field": 0,
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "HAZE",
+   "SCALD",
+   "RECOVER",
+   "TOXIC"
+  ],
+  "ai_species": "TOXAPEX",
+  "player_species": "MACHAMP",
+  "move_ids": {
+   "HAZE": 258,
+   "SCALD": 542,
+   "RECOVER": 393,
+   "TOXIC": 446
+  },
+  "assertions": [
+   [
+    "score_gt",
+    "SCALD",
+    "HAZE"
+   ]
+  ]
+ },
+ {
+  "id": "setup_futile_at_low_hp_vs_threat",
+  "field": 0,
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "SWORDSDANCE",
+   "EARTHQUAKE",
+   "POUND",
+   "PECK"
+  ],
+  "ai_species": "GARCHOMP",
+  "player_species": "STARMIE",
+  "move_ids": {
+   "SWORDSDANCE": 418,
+   "EARTHQUAKE": 223,
+   "POUND": 309,
+   "PECK": 168
+  },
+  "assertions": [
+   [
+    "must_not_choose_move",
+    "SWORDSDANCE"
+   ]
+  ]
+ },
+ {
+  "id": "counter_useless_vs_special_attacker",
+  "field": 0,
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "COUNTER",
+   "BODYSLAM",
+   "POUND",
+   "PECK"
+  ],
+  "ai_species": "SNORLAX",
+  "player_species": "ALAKAZAM",
+  "move_ids": {
+   "COUNTER": 115,
+   "BODYSLAM": 276,
+   "POUND": 309,
+   "PECK": 168
+  },
+  "assertions": [
+   [
+    "must_not_choose_move",
+    "COUNTER"
+   ],
+   [
+    "score_gt",
+    "BODYSLAM",
+    "COUNTER"
+   ]
+  ]
+ },
+ {
+  "id": "redundant_spikes_at_max",
+  "field": 0,
+  "weather": null,
+  "ai_side": {},
+  "player_side": {
+   "spikes": 3
+  },
+  "ai_moves": [
+   "SPIKES",
+   "BRAVEBIRD",
+   "POUND",
+   "PECK"
+  ],
+  "ai_species": "SKARMORY",
+  "player_species": "SNORLAX",
+  "move_ids": {
+   "SPIKES": 239,
+   "BRAVEBIRD": 153,
+   "POUND": 309,
+   "PECK": 168
+  },
+  "assertions": [
+   [
+    "must_not_choose_move",
+    "SPIKES"
+   ],
+   [
+    "score_gt",
+    "BRAVEBIRD",
+    "SPIKES"
+   ]
+  ]
+ },
+ {
+  "id": "redundant_toxicspikes_at_max",
+  "field": 0,
+  "weather": null,
+  "ai_side": {},
+  "player_side": {
+   "toxicspikes": 2
+  },
+  "ai_moves": [
+   "TOXICSPIKES",
+   "SCALD",
+   "POUND",
+   "PECK"
+  ],
+  "ai_species": "TOXAPEX",
+  "player_species": "SNORLAX",
+  "move_ids": {
+   "TOXICSPIKES": 447,
+   "SCALD": 542,
+   "POUND": 309,
+   "PECK": 168
+  },
+  "assertions": [
+   [
+    "must_not_choose_move",
+    "TOXICSPIKES"
+   ],
+   [
+    "score_gt",
+    "SCALD",
+    "TOXICSPIKES"
+   ]
+  ]
+ },
+ {
+  "id": "redundant_stealthrock",
+  "field": 0,
+  "weather": null,
+  "ai_side": {},
+  "player_side": {
+   "stealthrock": 1
+  },
+  "ai_moves": [
+   "STEALTHROCK",
+   "POWERWHIP",
+   "POUND",
+   "PECK"
+  ],
+  "ai_species": "FERROTHORN",
+  "player_species": "STARMIE",
+  "move_ids": {
+   "STEALTHROCK": 514,
+   "POWERWHIP": 193,
+   "POUND": 309,
+   "PECK": 168
+  },
+  "assertions": [
+   [
+    "must_not_choose_move",
+    "STEALTHROCK"
+   ],
+   [
+    "score_gt",
+    "POWERWHIP",
+    "STEALTHROCK"
+   ]
+  ]
+ },
+ {
+  "id": "redundant_reflect",
+  "field": 0,
+  "weather": null,
+  "ai_side": {
+   "reflect": 5
+  },
+  "player_side": {},
+  "ai_moves": [
+   "REFLECT",
+   "MOONBLAST",
+   "POUND",
+   "PECK"
+  ],
+  "ai_species": "CLEFABLE",
+  "player_species": "MACHAMP",
+  "move_ids": {
+   "REFLECT": 492,
+   "MOONBLAST": 589,
+   "POUND": 309,
+   "PECK": 168
+  },
+  "assertions": [
+   [
+    "must_not_choose_move",
+    "REFLECT"
+   ],
+   [
+    "score_gt",
+    "MOONBLAST",
+    "REFLECT"
+   ]
+  ]
+ },
+ {
+  "id": "redundant_lightscreen",
+  "field": 0,
+  "weather": null,
+  "ai_side": {
+   "lightscreen": 5
+  },
+  "player_side": {},
+  "ai_moves": [
+   "LIGHTSCREEN",
+   "MOONBLAST",
+   "POUND",
+   "PECK"
+  ],
+  "ai_species": "CLEFABLE",
+  "player_species": "ALAKAZAM",
+  "move_ids": {
+   "LIGHTSCREEN": 482,
+   "MOONBLAST": 589,
+   "POUND": 309,
+   "PECK": 168
+  },
+  "assertions": [
+   [
+    "must_not_choose_move",
+    "LIGHTSCREEN"
+   ],
+   [
+    "score_gt",
+    "MOONBLAST",
+    "LIGHTSCREEN"
+   ]
+  ]
+ },
+ {
+  "id": "redundant_raindance_in_rain",
+  "field": 0,
+  "weather": "rain",
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "RAINDANCE",
+   "SURF",
+   "POUND",
+   "PECK"
+  ],
+  "ai_species": "POLITOED",
+  "player_species": "ARCANINE",
+  "move_ids": {
+   "RAINDANCE": 556,
+   "SURF": 538,
+   "POUND": 309,
+   "PECK": 168
+  },
+  "assertions": [
+   [
+    "must_not_choose_move",
+    "RAINDANCE"
+   ],
+   [
+    "score_gt",
+    "SURF",
+    "RAINDANCE"
+   ]
+  ]
+ },
+ {
+  "id": "redundant_sunnyday_in_sun",
+  "field": 0,
+  "weather": "sun",
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "SUNNYDAY",
+   "FLAMETHROWER",
+   "POUND",
+   "PECK"
+  ],
+  "ai_species": "CHARIZARD",
+  "player_species": "FERROTHORN",
+  "move_ids": {
+   "SUNNYDAY": 150,
+   "FLAMETHROWER": 136,
+   "POUND": 309,
+   "PECK": 168
+  },
+  "assertions": [
+   [
+    "must_not_choose_move",
+    "SUNNYDAY"
+   ],
+   [
+    "score_gt",
+    "FLAMETHROWER",
+    "SUNNYDAY"
+   ]
+  ]
+ },
+ {
+  "id": "thunder_shaky_without_rain",
+  "field": 0,
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "THUNDER",
+   "THUNDERBOLT",
+   "POUND",
+   "PECK"
+  ],
+  "ai_species": "JOLTEON",
+  "player_species": "GYARADOS",
+  "move_ids": {
+   "THUNDER": 65,
+   "THUNDERBOLT": 69,
+   "POUND": 309,
+   "PECK": 168
+  },
+  "assertions": [
+   [
+    "score_gt",
+    "THUNDERBOLT",
+    "THUNDER"
+   ]
+  ]
+ },
+ {
+  "id": "thunder_sure_in_rain",
+  "field": 0,
+  "weather": "rain",
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "THUNDER",
+   "THUNDERBOLT",
+   "POUND",
+   "PECK"
+  ],
+  "ai_species": "JOLTEON",
+  "player_species": "GYARADOS",
+  "move_ids": {
+   "THUNDER": 65,
+   "THUNDERBOLT": 69,
+   "POUND": 309,
+   "PECK": 168
+  },
+  "assertions": [
+   [
+    "score_gt",
+    "THUNDER",
+    "THUNDERBOLT"
+   ]
+  ]
+ },
+ {
+  "id": "solarbeam_bad_outside_sun",
+  "field": 0,
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "SOLARBEAM",
+   "ENERGYBALL",
+   "POUND",
+   "PECK"
+  ],
+  "ai_species": "VENUSAUR",
+  "player_species": "SWAMPERT",
+  "move_ids": {
+   "SOLARBEAM": 195,
+   "ENERGYBALL": 198,
+   "POUND": 309,
+   "PECK": 168
+  },
+  "assertions": [
+   [
+    "score_gt",
+    "ENERGYBALL",
+    "SOLARBEAM"
+   ]
+  ]
+ },
+ {
+  "id": "solarbeam_good_in_sun",
+  "field": 0,
+  "weather": "sun",
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "SOLARBEAM",
+   "ENERGYBALL",
+   "POUND",
+   "PECK"
+  ],
+  "ai_species": "VENUSAUR",
+  "player_species": "SWAMPERT",
+  "move_ids": {
+   "SOLARBEAM": 195,
+   "ENERGYBALL": 198,
+   "POUND": 309,
+   "PECK": 168
+  },
+  "assertions": [
+   [
+    "score_gte",
+    "SOLARBEAM",
+    "ENERGYBALL"
+   ]
+  ]
+ },
+ {
+  "id": "switch_out_all_moves_immune",
+  "field": 0,
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "BODYSLAM",
+   "DOUBLEEDGE",
+   "QUICKATTACK",
+   "HYPERBEAM"
+  ],
+  "ai_species": "SNORLAX",
+  "player_species": "GENGAR",
+  "move_ids": {
+   "BODYSLAM": 276,
+   "DOUBLEEDGE": 265,
+   "QUICKATTACK": 310,
+   "HYPERBEAM": 263
+  },
+  "assertions": [
+   [
+    "must_switch"
+   ]
+  ]
+ },
+ {
+  "id": "switch_stay_hazards_deter",
+  "field": 0,
+  "weather": null,
+  "ai_side": {
+   "spikes": 3,
+   "stealthrock": 1
+  },
+  "player_side": {},
+  "ai_moves": [
+   "BODYSLAM",
+   "POUND",
+   "PECK",
+   "TACKLE"
+  ],
+  "ai_species": "SNORLAX",
+  "player_species": "MACHAMP",
+  "move_ids": {
+   "BODYSLAM": 276,
+   "POUND": 309,
+   "PECK": 168,
+   "TACKLE": 303
+  },
+  "assertions": [
+   [
+    "must_choose_any"
+   ]
+  ]
+ },
+ {
+  "id": "no_switch_when_set_up",
+  "field": 0,
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "DRAGONDANCE",
+   "WATERFALL",
+   "EARTHQUAKE",
+   "ICEFANG"
+  ],
+  "ai_species": "GYARADOS",
+  "player_species": "SUICUNE",
+  "move_ids": {
+   "DRAGONDANCE": 63,
+   "WATERFALL": 543,
+   "EARTHQUAKE": 223,
+   "ICEFANG": 248
+  },
+  "assertions": [
+   [
+    "must_not_switch"
+   ]
+  ]
+ },
+ {
+  "id": "switch_out_vs_fresh_ohko_counter",
+  "field": 0,
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "EARTHQUAKE",
+   "DRAGONCLAW",
+   "POUND",
+   "PECK"
+  ],
+  "ai_species": "GARCHOMP",
+  "player_species": "LAPRAS",
+  "move_ids": {
+   "EARTHQUAKE": 223,
+   "DRAGONCLAW": 57,
+   "POUND": 309,
+   "PECK": 168
+  },
+  "assertions": [
+   [
+    "must_switch"
+   ]
+  ]
+ },
+ {
+  "id": "switch_out_to_absorb_pivot",
+  "field": 0,
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "WATERFALL",
+   "ICEFANG",
+   "POUND",
+   "PECK"
+  ],
+  "ai_species": "GYARADOS",
+  "player_species": "MAGNEZONE",
+  "move_ids": {
+   "WATERFALL": 543,
+   "ICEFANG": 248,
+   "POUND": 309,
+   "PECK": 168
+  },
+  "assertions": [
+   [
+    "must_consider_switch"
+   ]
+  ]
+ },
+ {
+  "id": "roar_useless_vs_last_mon",
+  "field": 0,
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "WHIRLWIND",
+   "BRAVEBIRD",
+   "POUND",
+   "PECK"
+  ],
+  "ai_species": "SKARMORY",
+  "player_species": "SNORLAX",
+  "move_ids": {
+   "WHIRLWIND": 423,
+   "BRAVEBIRD": 153,
+   "POUND": 309,
+   "PECK": 168
+  },
+  "assertions": [
+   [
+    "must_not_choose_move",
+    "WHIRLWIND"
+   ],
+   [
+    "score_gt",
+    "BRAVEBIRD",
+    "WHIRLWIND"
+   ]
+  ]
+ },
+ {
+  "id": "phaze_boosted_foe_into_hazards",
+  "field": 0,
+  "weather": null,
+  "ai_side": {},
+  "player_side": {
+   "spikes": 3,
+   "stealthrock": 1
+  },
+  "ai_moves": [
+   "WHIRLWIND",
+   "BRAVEBIRD",
+   "POUND",
+   "PECK"
+  ],
+  "ai_species": "SKARMORY",
+  "player_species": "GYARADOS",
+  "move_ids": {
+   "WHIRLWIND": 423,
+   "BRAVEBIRD": 153,
+   "POUND": 309,
+   "PECK": 168
+  },
+  "assertions": [
+   [
+    "score_gt",
+    "WHIRLWIND",
+    "BRAVEBIRD"
+   ]
+  ]
+ },
+ {
+  "id": "batonpass_useless_no_bench",
+  "field": 0,
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "BATONPASS",
+   "THUNDERBOLT",
+   "POUND",
+   "PECK"
+  ],
+  "ai_species": "JOLTEON",
+  "player_species": "SNORLAX",
+  "move_ids": {
+   "BATONPASS": 347,
+   "THUNDERBOLT": 69,
+   "POUND": 309,
+   "PECK": 168
+  },
+  "assertions": [
+   [
+    "must_not_choose_move",
+    "BATONPASS"
+   ],
+   [
+    "score_gt",
+    "THUNDERBOLT",
+    "BATONPASS"
+   ]
+  ]
+ },
+ {
+  "id": "spikes_useless_vs_airborne_team",
+  "field": 0,
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "SPIKES",
+   "BRAVEBIRD",
+   "POUND",
+   "PECK"
+  ],
+  "ai_species": "SKARMORY",
+  "player_species": "CROBAT",
+  "move_ids": {
+   "SPIKES": 239,
+   "BRAVEBIRD": 153,
+   "POUND": 309,
+   "PECK": 168
+  },
+  "assertions": [
+   [
+    "must_not_choose_move",
+    "SPIKES"
+   ],
+   [
+    "score_gt",
+    "BRAVEBIRD",
+    "SPIKES"
+   ]
+  ]
+ },
+ {
+  "id": "toxicspikes_useless_vs_immune_team",
+  "field": 0,
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "TOXICSPIKES",
+   "SCALD",
+   "POUND",
+   "PECK"
+  ],
+  "ai_species": "TOXAPEX",
+  "player_species": "GENGAR",
+  "move_ids": {
+   "TOXICSPIKES": 447,
+   "SCALD": 542,
+   "POUND": 309,
+   "PECK": 168
+  },
+  "assertions": [
+   [
+    "must_not_choose_move",
+    "TOXICSPIKES"
+   ],
+   [
+    "score_gt",
+    "SCALD",
+    "TOXICSPIKES"
+   ]
+  ]
+ },
+ {
+  "id": "no_switch_bench_all_fainted",
+  "field": 0,
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "BODYSLAM",
+   "POUND",
+   "PECK",
+   "TACKLE"
+  ],
+  "ai_species": "SNORLAX",
+  "player_species": "MACHAMP",
+  "move_ids": {
+   "BODYSLAM": 276,
+   "POUND": 309,
+   "PECK": 168,
+   "TACKLE": 303
+  },
+  "assertions": [
+   [
+    "must_not_switch"
+   ]
+  ]
+ },
+ {
+  "id": "switch_out_perish_final_turn",
+  "field": 0,
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "BODYSLAM",
+   "POUND",
+   "PECK",
+   "TACKLE"
+  ],
+  "ai_species": "SNORLAX",
+  "player_species": "SUICUNE",
+  "move_ids": {
+   "BODYSLAM": 276,
+   "POUND": 309,
+   "PECK": 168,
+   "TACKLE": 303
+  },
+  "assertions": [
+   [
+    "must_switch"
+   ]
+  ]
+ },
+ {
+  "id": "switch_out_choice_locked_immune",
+  "field": 0,
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "THUNDERBOLT",
+   "SHADOWBALL",
+   "POUND",
+   "PECK"
+  ],
+  "ai_species": "JOLTEON",
+  "player_species": "GARCHOMP",
+  "move_ids": {
+   "THUNDERBOLT": 69,
+   "SHADOWBALL": 175,
+   "POUND": 309,
+   "PECK": 168
+  },
+  "assertions": [
+   [
+    "must_switch"
+   ]
+  ]
+ },
+ {
+  "id": "switch_out_no_pp",
+  "field": 0,
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "BODYSLAM",
+   "POUND",
+   "PECK",
+   "TACKLE"
+  ],
+  "ai_species": "SNORLAX",
+  "player_species": "SUICUNE",
+  "move_ids": {
+   "BODYSLAM": 276,
+   "POUND": 309,
+   "PECK": 168,
+   "TACKLE": 303
+  },
+  "assertions": [
+   [
+    "must_switch"
+   ]
+  ]
+ },
+ {
+  "id": "switch_out_yawned",
+  "field": 0,
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "BODYSLAM",
+   "POUND",
+   "PECK",
+   "TACKLE"
+  ],
+  "ai_species": "SNORLAX",
+  "player_species": "SUICUNE",
+  "move_ids": {
+   "BODYSLAM": 276,
+   "POUND": 309,
+   "PECK": 168,
+   "TACKLE": 303
+  },
+  "assertions": [
+   [
+    "must_switch"
+   ]
+  ]
+ },
+ {
+  "id": "switch_out_chip_stacked",
+  "field": 0,
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "BODYSLAM",
+   "POUND",
+   "PECK",
+   "TACKLE"
+  ],
+  "ai_species": "SNORLAX",
+  "player_species": "SUICUNE",
+  "move_ids": {
+   "BODYSLAM": 276,
+   "POUND": 309,
+   "PECK": 168,
+   "TACKLE": 303
+  },
+  "assertions": [
+   [
+    "must_switch"
+   ]
+  ]
+ }
+]
