@@ -30,6 +30,10 @@ IV_BY_BAND   = [12, 14, 16, 18, 20, 22, 24, 26, 28, 31]
 EVB_BY_BAND  = [0, 0, 0, 120, 120, 240, 240, 300, 300, 400]   # EV budget
 ITEM_BY_BAND = [None, None, None, "ORANBERRY", "ORANBERRY",
                 "SITRUSBERRY", "SITRUSBERRY", "SITRUSBERRY", "SITRUSBERRY", "SITRUSBERRY"]
+# party size (min, max) per band — Reborn's generics grow 1-2 early to 3-4 late
+# (mined avgs: lv1-20 1.8, lv21-35 2.6, lv71+ 2.9); never shrinks an original party
+N_BY_BAND = [(1, 2), (1, 2), (2, 2), (2, 3), (2, 3),
+             (3, 3), (3, 3), (3, 4), (3, 4), (3, 4)]
 
 STATUS_PRIORITY = ["THUNDERWAVE", "WILLOWISP", "STUNSPORE", "SLEEPPOWDER", "HYPNOSIS",
                    "CONFUSERAY", "SCREECH", "GROWL", "LEER", "TAILWHIP", "SANDATTACK",
@@ -130,6 +134,12 @@ def main(out_path):
         rng = random.Random(seed_for(b))
         levels = [m["level"] for m in b["party"]]
         band = band_of(max(levels))
+        # grow the party toward Reborn's generic curve (new mons at ace level - 1,
+        # so the original ace stays the ace); never shrink
+        lo, hi = N_BY_BAND[band]
+        target = max(len(levels), rng.randint(lo, hi))
+        while len(levels) < target:
+            levels.insert(0, max(2, max(levels) - 1))
         bst_cap = 380 + 15 * band + a.get("bst_bonus", defaults["bst_bonus"])
         curve = a.get("curveball", defaults["curveball"])
         themed, anyt = pool_for(a["theme"], max(levels), bst_cap, rng, curve)
