@@ -1,0 +1,731 @@
+balance_vs_bulky  seed 155921   Reborn-Normal (balance, left) vs Portable 0.4.0 (bulky, right)   result for Portable: LOSS in 62 turns
+  Reborn   (balance): Tentacruel, Flygon, Empoleon, Mandibuzz, Vaporeon, Blastoise
+  Portable (bulky): Bronzong, Torkoal, Amoonguss, Chesnaught, Mantine, Forretress
+==============================================================================================================
+
+Turn 1
+  Reborn   Tentacruel 322/322           -> Scald
+  Portable Bronzong 296/296             -> Earthquake
+    view: hp 100%  speed 123 (slower)  incoming max 26%  certain n/a  threatened=False
+    foe moves est: Scald 26%, Rapid Spin 5%, Sludge Bomb 0%, Toxic Spikes 0%
+    * EARTHQUAKE         215  expected_damage+45 super_effective+70
+      STEALTHROCK        100  
+      GYROBALL            64  expected_damage+9 resisted-45
+      TOXIC          -1000000  
+      switch->Torkoal -1000000  matchup+64 incoming_risk-32
+  end:     Reborn Tentacruel 122/322       | Portable Bronzong 230/296
+
+Turn 2
+  Reborn   Tentacruel 122/322           -> Scald
+  Portable Bronzong 230/296             -> Earthquake
+    view: hp 78%  speed 123 (slower)  incoming max 26%  certain n/a  threatened=False
+    foe moves est: Scald 26%, Rapid Spin 5%, Sludge Bomb 0%, Toxic Spikes 0%
+    * EARTHQUAKE         215  expected_damage+45 super_effective+70
+      STEALTHROCK        100  
+      GYROBALL            64  expected_damage+9 resisted-45
+      TOXIC          -1000000  
+      switch->Torkoal -1000000  matchup+64 incoming_risk-32
+  end:     Reborn Mandibuzz 382/382        | Portable Bronzong 155/296
+
+Turn 3
+  Reborn   Mandibuzz 382/382            -> Foul Play
+  Portable Bronzong 155/296             -> switch->Torkoal
+    view: hp 52%  speed 123 (slower)  incoming max 101%  certain n/a  threatened=True
+    foe moves est: Foul Play 101%, Roost 0%, Toxic 0%, Defog 0%
+    * switch->Torkoal     217  matchup+32 incoming_risk+0 escape_lethal_threat+130 escape_reasons+1
+      switch->Mantine     217  matchup+32 incoming_risk+0 escape_lethal_threat+130 escape_reasons+1
+      switch->Forretress     217  matchup+32 incoming_risk+0 escape_lethal_threat+130 escape_reasons+1
+      switch->Amoonguss     185  matchup+32 incoming_risk-32 escape_lethal_threat+130 escape_reasons+1
+      TOXIC              125  fresh_status+25
+  end:     Reborn Mandibuzz 382/382        | Portable Torkoal 302/302
+
+Turn 4
+  Reborn   Mandibuzz 382/382            -> Foul Play
+  Portable Torkoal 302/302              -> Will-O-Wisp
+    view: hp 100%  speed 97 (slower)  incoming max 41%  certain n/a  threatened=False
+    foe moves est: Foul Play 41%, Roost 0%, Toxic 0%, Defog 0%
+    * WILLOWISP          125  fresh_status+25
+      LAVAPLUME          117  expected_damage+17
+      STEALTHROCK        100  
+      EARTHQUAKE     -1000000  
+      switch->Bronzong -1000000  matchup+32 incoming_risk-32
+  end:     Reborn Mandibuzz 359/382 BRN    | Portable Torkoal 189/302
+
+Turn 5
+  Reborn   Mandibuzz 359/382 BRN        -> Toxic
+  Portable Torkoal 189/302              -> Lava Plume
+    view: hp 63%  speed 97 (slower)  incoming max 21%  certain n/a  threatened=False
+    foe moves est: Foul Play 21%, Roost 0%, Toxic 0%, Defog 0%
+    * LAVAPLUME          117  expected_damage+17
+      STEALTHROCK        100  
+      WILLOWISP         -350  target_already_statused-450
+      EARTHQUAKE     -1000000  
+      switch->Bronzong -1000000  matchup+32 incoming_risk-32
+  end:     Reborn Mandibuzz 252/382 BRN    | Portable Torkoal 171/302 PSN
+
+Turn 6
+  Reborn   Mandibuzz 252/382 BRN        -> Foul Play
+  Portable Torkoal 171/302 PSN          -> Lava Plume
+    view: hp 57%  speed 97 (slower)  incoming max 21%  certain n/a  threatened=False
+    foe moves est: Foul Play 21%, Roost 0%, Toxic 0%, Defog 0%
+    * LAVAPLUME          117  expected_damage+17
+      STEALTHROCK        100  
+      WILLOWISP         -350  target_already_statused-450
+      EARTHQUAKE     -1000000  
+      switch->Bronzong -1000000  matchup+32 incoming_risk-32
+  end:     Reborn Mandibuzz 146/382 BRN    | Portable Torkoal 81/302 PSN
+
+Turn 7
+  Reborn   Mandibuzz 146/382 BRN        -> Foul Play
+  Portable Torkoal 81/302 PSN           -> Lava Plume
+    view: hp 27%  speed 97 (slower)  incoming max 21%  certain n/a  threatened=False
+    foe moves est: Foul Play 21%, Roost 0%, Toxic 0%, Defog 0%
+    * LAVAPLUME          117  expected_damage+17
+      STEALTHROCK        100  
+      WILLOWISP         -350  target_already_statused-450
+      EARTHQUAKE     -1000000  
+      switch->Bronzong -1000000  matchup+32 incoming_risk-32
+  end:     Reborn Mandibuzz 39/382 BRN     | Portable Amoonguss 390/390
+
+Turn 8
+  Reborn   Mandibuzz 39/382 BRN         -> Roost
+  Portable Amoonguss 390/390            -> Sludge Bomb
+    view: hp 100%  speed 117 (slower)  incoming max 27%  certain n/a  threatened=False
+    foe moves est: Foul Play 27%, Roost 0%, Toxic 0%, Defog 0%
+    * SLUDGEBOMB         600  lethal+500
+      GIGADRAIN           63  expected_damage+8 resisted-45
+      SPORE             -350  target_already_statused-450
+      SYNTHESIS         -520  heal_near_full-500 heal_losing_race-120
+      switch->Bronzong -1000000  matchup+32 incoming_risk-32
+  end:     Reborn Mandibuzz 115/382 BRN    | Portable Amoonguss 390/390
+
+Turn 9
+  Reborn   Mandibuzz 115/382 BRN        -> Roost
+  Portable Amoonguss 390/390            -> Sludge Bomb
+    view: hp 100%  speed 117 (slower)  incoming max 27%  certain n/a  threatened=False
+    foe moves est: Foul Play 27%, Roost 0%, Toxic 0%, Defog 0%
+    * SLUDGEBOMB         119  expected_damage+19
+      GIGADRAIN           63  expected_damage+8 resisted-45
+      SPORE             -350  target_already_statused-450
+      SYNTHESIS         -520  heal_near_full-500 heal_losing_race-120
+      switch->Bronzong -1000000  matchup+32 incoming_risk-32
+  end:     Reborn Mandibuzz 190/382 BRN    | Portable Amoonguss 390/390
+
+Turn 10
+  Reborn   Mandibuzz 190/382 BRN        -> Roost
+  Portable Amoonguss 390/390            -> Sludge Bomb
+    view: hp 100%  speed 117 (slower)  incoming max 27%  certain n/a  threatened=False
+    foe moves est: Foul Play 27%, Roost 0%, Toxic 0%, Defog 0%
+    * SLUDGEBOMB         119  expected_damage+19
+      GIGADRAIN           63  expected_damage+8 resisted-45
+      SPORE             -350  target_already_statused-450
+      SYNTHESIS         -520  heal_near_full-500 heal_losing_race-120
+      switch->Bronzong -1000000  matchup+32 incoming_risk-32
+  end:     Reborn Mandibuzz 259/382 BRN    | Portable Amoonguss 390/390
+
+Turn 11
+  Reborn   Mandibuzz 259/382 BRN        -> Foul Play
+  Portable Amoonguss 390/390            -> Sludge Bomb
+    view: hp 100%  speed 117 (slower)  incoming max 27%  certain n/a  threatened=False
+    foe moves est: Foul Play 27%, Roost 0%, Toxic 0%, Defog 0%
+    * SLUDGEBOMB         119  expected_damage+19
+      GIGADRAIN           63  expected_damage+8 resisted-45
+      SPORE             -350  target_already_statused-450
+      SYNTHESIS         -520  heal_near_full-500 heal_losing_race-120
+      switch->Bronzong -1000000  matchup+32 incoming_risk-32
+  end:     Reborn Mandibuzz 137/382 BRN    | Portable Amoonguss 295/390
+
+Turn 12
+  Reborn   Mandibuzz 137/382 BRN        -> Roost
+  Portable Amoonguss 295/390            -> Sludge Bomb
+    view: hp 76%  speed 117 (slower)  incoming max 27%  certain n/a  threatened=False
+    foe moves est: Foul Play 27%, Roost 0%, Toxic 0%, Defog 0%
+    * SLUDGEBOMB         119  expected_damage+19
+      GIGADRAIN           63  expected_damage+8 resisted-45
+      SYNTHESIS          -20  heal_losing_race-120
+      SPORE             -350  target_already_statused-450
+      switch->Bronzong -1000000  matchup+32 incoming_risk-32
+  end:     Reborn Mandibuzz 206/382 BRN    | Portable Amoonguss 295/390
+
+Turn 13
+  Reborn   Mandibuzz 206/382 BRN        -> Foul Play
+  Portable Amoonguss 295/390            -> Sludge Bomb
+    view: hp 76%  speed 117 (slower)  incoming max 27%  certain n/a  threatened=False
+    foe moves est: Foul Play 27%, Roost 0%, Toxic 0%, Defog 0%
+    * SLUDGEBOMB         119  expected_damage+19
+      GIGADRAIN           63  expected_damage+8 resisted-45
+      SYNTHESIS          -20  heal_losing_race-120
+      SPORE             -350  target_already_statused-450
+      switch->Bronzong -1000000  matchup+32 incoming_risk-32
+  end:     Reborn Mandibuzz 91/382 BRN     | Portable Amoonguss 200/390
+
+Turn 14
+  Reborn   Mandibuzz 91/382 BRN         -> Roost
+  Portable Amoonguss 200/390            -> Synthesis
+    view: hp 51%  speed 117 (slower)  incoming max 27%  certain n/a  threatened=False
+    foe moves est: Foul Play 27%, Roost 0%, Toxic 0%, Defog 0%
+    * SYNTHESIS          190  heal_mid_hp+90
+      SLUDGEBOMB         119  expected_damage+19
+      GIGADRAIN           63  expected_damage+8 resisted-45
+      SPORE             -350  target_already_statused-450
+      switch->Bronzong -1000000  matchup+32 incoming_risk-32
+  end:     Reborn Mandibuzz 259/382 BRN    | Portable Amoonguss 390/390
+
+Turn 15
+  Reborn   Mandibuzz 259/382 BRN        -> Foul Play
+  Portable Amoonguss 390/390            -> Sludge Bomb
+    view: hp 100%  speed 117 (slower)  incoming max 27%  certain n/a  threatened=False
+    foe moves est: Foul Play 27%, Roost 0%, Toxic 0%, Defog 0%
+    * SLUDGEBOMB         119  expected_damage+19
+      GIGADRAIN           63  expected_damage+8 resisted-45
+      SPORE             -350  target_already_statused-450
+      SYNTHESIS         -520  heal_near_full-500 heal_losing_race-120
+      switch->Bronzong -1000000  matchup+32 incoming_risk-32
+  end:     Reborn Mandibuzz 144/382 BRN    | Portable Amoonguss 300/390
+
+Turn 16
+  Reborn   Mandibuzz 144/382 BRN        -> Roost
+  Portable Amoonguss 300/390            -> Sludge Bomb
+    view: hp 77%  speed 117 (slower)  incoming max 27%  certain n/a  threatened=False
+    foe moves est: Foul Play 27%, Roost 0%, Toxic 0%, Defog 0%
+    * SLUDGEBOMB         119  expected_damage+19
+      GIGADRAIN           63  expected_damage+8 resisted-45
+      SYNTHESIS          -20  heal_losing_race-120
+      SPORE             -350  target_already_statused-450
+      switch->Bronzong -1000000  matchup+32 incoming_risk-32
+  end:     Reborn Mandibuzz 219/382 BRN    | Portable Amoonguss 300/390
+
+Turn 17
+  Reborn   Mandibuzz 219/382 BRN        -> Foul Play
+  Portable Amoonguss 300/390            -> Sludge Bomb
+    view: hp 77%  speed 117 (slower)  incoming max 27%  certain n/a  threatened=False
+    foe moves est: Foul Play 27%, Roost 0%, Toxic 0%, Defog 0%
+    * SLUDGEBOMB         119  expected_damage+19
+      GIGADRAIN           63  expected_damage+8 resisted-45
+      SYNTHESIS          -20  heal_losing_race-120
+      SPORE             -350  target_already_statused-450
+      switch->Bronzong -1000000  matchup+32 incoming_risk-32
+  end:     Reborn Mandibuzz 97/382 BRN     | Portable Amoonguss 300/390
+
+Turn 18
+  Reborn   Mandibuzz 97/382 BRN         -> Roost
+  Portable Amoonguss 300/390            -> Sludge Bomb
+    view: hp 77%  speed 117 (slower)  incoming max 27%  certain n/a  threatened=False
+    foe moves est: Foul Play 27%, Roost 0%, Toxic 0%, Defog 0%
+    * SLUDGEBOMB         119  expected_damage+19
+      GIGADRAIN           63  expected_damage+8 resisted-45
+      SYNTHESIS          -20  heal_losing_race-120
+      SPORE             -350  target_already_statused-450
+      switch->Bronzong -1000000  matchup+32 incoming_risk-32
+  end:     Reborn Mandibuzz 166/382 BRN    | Portable Amoonguss 300/390
+
+Turn 19
+  Reborn   Mandibuzz 166/382 BRN        -> Foul Play
+  Portable Amoonguss 300/390            -> switch->Mantine
+    view: hp 77%  speed 117 (slower)  incoming max 27%  certain n/a  threatened=False
+    foe moves est: Foul Play 27%, Roost 0%, Toxic 0%, Defog 0%
+    * switch->Mantine     207  matchup+32 incoming_risk+0 weak_current_attacks+120 escape_reasons+1
+      switch->Forretress     207  matchup+32 incoming_risk+0 weak_current_attacks+120 escape_reasons+1
+      switch->Bronzong     158  matchup+32 incoming_risk-32 weak_current_attacks+120 escape_reasons+1
+      switch->Chesnaught     111  matchup+32 incoming_risk-96 weak_current_attacks+120 escape_reasons+1
+      GIGADRAIN           63  expected_damage+8 resisted-45
+  end:     Reborn Mandibuzz 143/382 BRN    | Portable Mantine 272/332
+
+Turn 20
+  Reborn   Mandibuzz 143/382 BRN        -> Toxic
+  Portable Mantine 272/332              -> Scald
+    view: hp 82%  speed 197 (slower)  incoming max 19%  certain n/a  threatened=False
+    foe moves est: Foul Play 19%, Roost 0%, Toxic 0%, Defog 0%
+    * SCALD              116  expected_damage+16
+      ROOST              -20  heal_losing_race-120
+      DEFOG             -200  no_hazards_to_remove-300
+      TOXIC             -350  target_already_statused-450
+      switch->Bronzong -1000000  matchup+32 incoming_risk-32
+  end:     Reborn Mandibuzz 31/382 BRN     | Portable Mantine 252/332 PSN
+
+Turn 21
+  Reborn   Mandibuzz 31/382 BRN         -> Roost
+  Portable Mantine 252/332 PSN          -> Scald
+    view: hp 76%  speed 197 (slower)  incoming max 19%  certain n/a  threatened=False
+    foe moves est: Foul Play 19%, Roost 0%, Toxic 0%, Defog 0%
+    * SCALD              600  lethal+500
+      ROOST              100  
+      DEFOG             -200  no_hazards_to_remove-300
+      TOXIC             -350  target_already_statused-450
+      switch->Bronzong -1000000  matchup+32 incoming_risk-32
+  end:     Reborn Mandibuzz 110/382 BRN    | Portable Mantine 212/332 PSN
+
+Turn 22
+  Reborn   Mandibuzz 110/382 BRN        -> Roost
+  Portable Mantine 212/332 PSN          -> Scald
+    view: hp 64%  speed 197 (slower)  incoming max 19%  certain n/a  threatened=False
+    foe moves est: Foul Play 19%, Roost 0%, Toxic 0%, Defog 0%
+    * SCALD              116  expected_damage+16
+      ROOST              100  
+      DEFOG             -200  no_hazards_to_remove-300
+      TOXIC             -350  target_already_statused-450
+      switch->Bronzong -1000000  matchup+32 incoming_risk-32
+  end:     Reborn Mandibuzz 194/382 BRN    | Portable Mantine 152/332 PSN
+
+Turn 23
+  Reborn   Mandibuzz 194/382 BRN        -> Foul Play
+  Portable Mantine 152/332 PSN          -> switch->Forretress
+    view: hp 46%  speed 197 (slower)  incoming max 19%  certain n/a  threatened=False
+    foe moves est: Foul Play 19%, Roost 0%, Toxic 0%, Defog 0%
+    * switch->Forretress     287  matchup+32 incoming_risk+0 escape_residual_chip+200 escape_reasons+1
+      switch->Amoonguss     247  matchup+32 incoming_risk-32 escape_residual_chip+200 escape_reasons+1
+      switch->Bronzong     238  matchup+32 incoming_risk-32 escape_residual_chip+200 escape_reasons+1
+      switch->Chesnaught     191  matchup+32 incoming_risk-96 escape_residual_chip+200 escape_reasons+1
+      ROOST              190  heal_mid_hp+90
+  end:     Reborn Mandibuzz 171/382 BRN    | Portable Forretress 312/312
+
+Turn 24
+  Reborn   Mandibuzz 171/382 BRN        -> Foul Play
+  Portable Forretress 312/312           -> Gyro Ball
+    view: hp 100%  speed 137 (slower)  incoming max 21%  certain n/a  threatened=False
+    foe moves est: Foul Play 21%, Roost 0%, Toxic 0%, Defog 0%
+    * GYROBALL           108  expected_damage+8
+      SPIKES             100  
+      RAPIDSPIN         -193  expected_damage+7 no_hazards_to_remove-300
+      TOXIC             -350  target_already_statused-450
+      switch->Bronzong -1000000  matchup+32 incoming_risk-32
+  end:     Reborn Mandibuzz 107/382 BRN    | Portable Forretress 252/312
+
+Turn 25
+  Reborn   Mandibuzz 107/382 BRN        -> Roost
+  Portable Forretress 252/312           -> Gyro Ball
+    view: hp 81%  speed 137 (slower)  incoming max 21%  certain n/a  threatened=False
+    foe moves est: Foul Play 21%, Roost 0%, Toxic 0%, Defog 0%
+    * GYROBALL           108  expected_damage+8
+      SPIKES             100  
+      RAPIDSPIN         -193  expected_damage+7 no_hazards_to_remove-300
+      TOXIC             -350  target_already_statused-450
+      switch->Bronzong -1000000  matchup+32 incoming_risk-32
+  end:     Reborn Mandibuzz 228/382 BRN    | Portable Forretress 252/312
+
+Turn 26
+  Reborn   Mandibuzz 228/382 BRN        -> Foul Play
+  Portable Forretress 252/312           -> Gyro Ball
+    view: hp 81%  speed 137 (slower)  incoming max 21%  certain n/a  threatened=False
+    foe moves est: Foul Play 21%, Roost 0%, Toxic 0%, Defog 0%
+    * GYROBALL           108  expected_damage+8
+      SPIKES             100  
+      RAPIDSPIN         -193  expected_damage+7 no_hazards_to_remove-300
+      TOXIC             -350  target_already_statused-450
+      switch->Bronzong -1000000  matchup+32 incoming_risk-32
+  end:     Reborn Mandibuzz 161/382 BRN    | Portable Forretress 192/312
+
+Turn 27
+  Reborn   Mandibuzz 161/382 BRN        -> Foul Play
+  Portable Forretress 192/312           -> Gyro Ball
+    view: hp 62%  speed 137 (slower)  incoming max 21%  certain n/a  threatened=False
+    foe moves est: Foul Play 21%, Roost 0%, Toxic 0%, Defog 0%
+    * GYROBALL           108  expected_damage+8
+      SPIKES             100  
+      RAPIDSPIN         -193  expected_damage+7 no_hazards_to_remove-300
+      TOXIC             -350  target_already_statused-450
+      switch->Bronzong -1000000  matchup+32 incoming_risk-32
+  end:     Reborn Mandibuzz 96/382 BRN     | Portable Forretress 128/312
+
+Turn 28
+  Reborn   Mandibuzz 96/382 BRN         -> Foul Play
+  Portable Forretress 128/312           -> Gyro Ball
+    view: hp 41%  speed 137 (slower)  incoming max 21%  certain n/a  threatened=False
+    foe moves est: Foul Play 21%, Roost 0%, Toxic 0%, Defog 0%
+    * GYROBALL           108  expected_damage+8
+      SPIKES             100  
+      RAPIDSPIN         -193  expected_damage+7 no_hazards_to_remove-300
+      TOXIC             -350  target_already_statused-450
+      switch->Bronzong -1000000  matchup+32 incoming_risk-32
+  end:     Reborn Mandibuzz 32/382 BRN     | Portable Forretress 69/312
+
+Turn 29
+  Reborn   Mandibuzz 32/382 BRN         -> Foul Play
+  Portable Forretress 69/312            -> Rapid Spin
+    view: hp 22%  speed 137 (slower)  incoming max 21%  certain n/a  threatened=False
+    foe moves est: Foul Play 21%, Roost 0%, Toxic 0%, Defog 0%
+    * RAPIDSPIN          300  lethal+500 no_hazards_to_remove-300
+      switch->Mantine     188  matchup+32 incoming_risk+0 weak_current_attacks+120 escape_reasons+1
+      switch->Amoonguss     167  matchup+32 incoming_risk-32 weak_current_attacks+120 escape_reasons+1
+      switch->Bronzong     158  matchup+32 incoming_risk-32 weak_current_attacks+120 escape_reasons+1
+      switch->Chesnaught     111  matchup+32 incoming_risk-96 weak_current_attacks+120 escape_reasons+1
+  end:     Reborn Flygon 322/322           | Portable Forretress 14/312
+
+Turn 30
+  Reborn   Flygon 322/322               -> U-turn
+  Portable Forretress 14/312            -> Toxic
+    view: hp 4%  speed 205 (slower)  incoming max 32%  certain n/a  threatened=True
+    foe moves est: Earthquake 32%, Dragon Claw 13%, U-turn 7%, Roost 0%
+    * TOXIC              125  fresh_status+25
+      SPIKES             100  
+      RAPIDSPIN         -190  expected_damage+10 no_hazards_to_remove-300
+      switch->Bronzong -1000000  matchup+32 incoming_risk-32 escape_lethal_threat+130 preserve_low_hp_actor+80
+      switch->Amoonguss -1000000  matchup+32 incoming_risk+0 escape_lethal_threat+130 preserve_low_hp_actor+80
+  end:     Reborn Vaporeon 422/422         | Portable Chesnaught 338/338
+
+Turn 31
+  Reborn   Vaporeon 422/422             -> Ice Beam
+  Portable Chesnaught 338/338           -> Wood Hammer
+    view: hp 100%  speed 185 (slower)  incoming max 61%  certain n/a  threatened=False
+    foe moves est: Ice Beam 61%, Scald 20%, Wish 0%, Protect 0%
+    * WOODHAMMER         245  expected_damage+75 super_effective+70
+      LEECHSEED          125  fresh_status+25
+      DRAINPUNCH         124  expected_damage+24
+      SPIKES             100  
+      switch->Bronzong -1000000  matchup+32 incoming_risk+0
+  end:     Reborn Flygon 322/322           | Portable Amoonguss 300/390
+
+Turn 32
+  Reborn   Flygon 322/322               -> Earthquake
+  Portable Amoonguss 300/390            -> Spore
+    view: hp 77%  speed 117 (slower)  incoming max 43%  certain n/a  threatened=False
+    foe moves est: Earthquake 43%, Dragon Claw 34%, U-turn 20%, Roost 0%
+    * SPORE              125  fresh_status+25
+      GIGADRAIN          121  expected_damage+21
+      SYNTHESIS          -20  heal_losing_race-120
+      switch->Bronzong -1000000  matchup+32 incoming_risk-32
+      switch->Mantine -1000000  matchup+32 incoming_risk+0
+  end:     Reborn Flygon 322/322 SLP       | Portable Amoonguss 153/390
+
+Turn 33
+  Reborn   Flygon 322/322 SLP           -> Earthquake
+  Portable Amoonguss 153/390            -> Synthesis
+    view: hp 39%  speed 117 (slower)  incoming max 43%  certain n/a  threatened=True
+    foe moves est: Earthquake 43%, Dragon Claw 34%, U-turn 20%, Roost 0%
+    * SYNTHESIS          340  heal_mid_hp+90 heal_saves_battler+150
+      GIGADRAIN          121  expected_damage+21
+      SPORE             -350  target_already_statused-450
+      switch->Bronzong -1000000  matchup+32 incoming_risk-32 escape_lethal_threat+130
+      switch->Mantine -1000000  matchup+32 incoming_risk+0 escape_lethal_threat+130
+  end:     Reborn Flygon 322/322 SLP       | Portable Amoonguss 348/390
+
+Turn 34
+  Reborn   Flygon 322/322 SLP           -> Earthquake
+  Portable Amoonguss 348/390            -> Giga Drain
+    view: hp 89%  speed 117 (slower)  incoming max 43%  certain n/a  threatened=False
+    foe moves est: Earthquake 43%, Dragon Claw 34%, U-turn 20%, Roost 0%
+    * GIGADRAIN          121  expected_damage+21
+      SPORE             -350  target_already_statused-450
+      SYNTHESIS         -520  heal_near_full-500 heal_losing_race-120
+      switch->Bronzong -1000000  matchup+32 incoming_risk-32
+      switch->Mantine -1000000  matchup+32 incoming_risk+0
+  end:     Reborn Flygon 226/322           | Portable Amoonguss 235/390
+
+Turn 35
+  Reborn   Flygon 226/322               -> Earthquake
+  Portable Amoonguss 235/390            -> Spore
+    view: hp 60%  speed 117 (slower)  incoming max 43%  certain n/a  threatened=False
+    foe moves est: Earthquake 43%, Dragon Claw 34%, U-turn 20%, Roost 0%
+    * SPORE              125  fresh_status+25
+      GIGADRAIN          121  expected_damage+21
+      SYNTHESIS          -20  heal_losing_race-120
+      switch->Bronzong -1000000  matchup+32 incoming_risk-32
+      switch->Mantine -1000000  matchup+32 incoming_risk+0
+  end:     Reborn Flygon 226/322 SLP       | Portable Amoonguss 83/390
+
+Turn 36
+  Reborn   Flygon 226/322 SLP           -> Earthquake
+  Portable Amoonguss 83/390             -> Giga Drain
+    view: hp 21%  speed 117 (slower)  incoming max 43%  certain n/a  threatened=True
+    foe moves est: Earthquake 43%, Dragon Claw 34%, U-turn 20%, Roost 0%
+    * GIGADRAIN          121  expected_damage+21
+      SYNTHESIS          -39  heal_low_hp+261 heal_cannot_resolve-400
+      SPORE             -350  target_already_statused-450
+      switch->Bronzong -1000000  matchup+32 incoming_risk-32 escape_lethal_threat+130
+      switch->Mantine -1000000  matchup+32 incoming_risk+0 escape_lethal_threat+130
+  end:     Reborn Flygon 133/322 SLP       | Portable Amoonguss 130/390
+
+Turn 37
+  Reborn   Flygon 133/322 SLP           -> Earthquake
+  Portable Amoonguss 130/390            -> Giga Drain
+    view: hp 33%  speed 117 (slower)  incoming max 43%  certain n/a  threatened=True
+    foe moves est: Earthquake 43%, Dragon Claw 34%, U-turn 20%, Roost 0%
+    * GIGADRAIN          121  expected_damage+21
+      SYNTHESIS          -75  heal_low_hp+225 heal_cannot_resolve-400
+      SPORE             -350  target_already_statused-450
+      switch->Bronzong -1000000  matchup+32 incoming_risk-32 escape_lethal_threat+130
+      switch->Mantine -1000000  matchup+32 incoming_risk+0 escape_lethal_threat+130
+  end:     Reborn Flygon 43/322 SLP        | Portable Amoonguss 175/390
+
+Turn 38
+  Reborn   Flygon 43/322 SLP            -> Roost
+  Portable Amoonguss 175/390            -> Giga Drain
+    view: hp 45%  speed 117 (slower)  incoming max 43%  certain n/a  threatened=False
+    foe moves est: Earthquake 43%, Dragon Claw 34%, U-turn 20%, Roost 0%
+    * GIGADRAIN          600  lethal+500
+      SYNTHESIS          190  heal_mid_hp+90
+      SPORE             -350  target_already_statused-450
+      switch->Bronzong -1000000  matchup+32 incoming_risk-32
+      switch->Mantine -1000000  matchup+32 incoming_risk+0
+  end:     Reborn Flygon 115/322           | Portable Amoonguss 220/390
+
+Turn 39
+  Reborn   Flygon 115/322               -> Roost
+  Portable Amoonguss 220/390            -> Synthesis
+    view: hp 56%  speed 117 (slower)  incoming max 43%  certain n/a  threatened=False
+    foe moves est: Earthquake 43%, Dragon Claw 34%, U-turn 20%, Roost 0%
+    * SYNTHESIS          190  heal_mid_hp+90
+      SPORE              125  fresh_status+25
+      GIGADRAIN          121  expected_damage+21
+      switch->Bronzong -1000000  matchup+32 incoming_risk-32
+      switch->Mantine -1000000  matchup+32 incoming_risk+0
+  end:     Reborn Flygon 276/322           | Portable Amoonguss 390/390
+
+Turn 40
+  Reborn   Flygon 276/322               -> Earthquake
+  Portable Amoonguss 390/390            -> Spore
+    view: hp 100%  speed 117 (slower)  incoming max 43%  certain n/a  threatened=False
+    foe moves est: Earthquake 43%, Dragon Claw 34%, U-turn 20%, Roost 0%
+    * SPORE              125  fresh_status+25
+      GIGADRAIN          121  expected_damage+21
+      SYNTHESIS         -520  heal_near_full-500 heal_losing_race-120
+      switch->Bronzong -1000000  matchup+32 incoming_risk-32
+      switch->Mantine -1000000  matchup+32 incoming_risk+0
+  end:     Reborn Flygon 276/322 SLP       | Portable Amoonguss 235/390
+
+Turn 41
+  Reborn   Flygon 276/322 SLP           -> Earthquake
+  Portable Amoonguss 235/390            -> Giga Drain
+    view: hp 60%  speed 117 (slower)  incoming max 43%  certain n/a  threatened=False
+    foe moves est: Earthquake 43%, Dragon Claw 34%, U-turn 20%, Roost 0%
+    * GIGADRAIN          121  expected_damage+21
+      SYNTHESIS          -20  heal_losing_race-120
+      SPORE             -350  target_already_statused-450
+      switch->Bronzong -1000000  matchup+32 incoming_risk-32
+      switch->Mantine -1000000  matchup+32 incoming_risk+0
+  end:     Reborn Flygon 130/322 SLP       | Portable Amoonguss 308/390
+
+Turn 42
+  Reborn   Flygon 130/322 SLP           -> Roost
+  Portable Amoonguss 308/390            -> Giga Drain
+    view: hp 79%  speed 117 (slower)  incoming max 43%  certain n/a  threatened=False
+    foe moves est: Earthquake 43%, Dragon Claw 34%, U-turn 20%, Roost 0%
+    * GIGADRAIN          121  expected_damage+21
+      SYNTHESIS          -20  heal_losing_race-120
+      SPORE             -350  target_already_statused-450
+      switch->Bronzong -1000000  matchup+32 incoming_risk-32
+      switch->Mantine -1000000  matchup+32 incoming_risk+0
+  end:     Reborn Flygon 41/322 SLP        | Portable Amoonguss 353/390
+
+Turn 43
+  Reborn   Flygon 41/322 SLP            -> Roost
+  Portable Amoonguss 353/390            -> Giga Drain
+    view: hp 91%  speed 117 (slower)  incoming max 43%  certain n/a  threatened=False
+    foe moves est: Earthquake 43%, Dragon Claw 34%, U-turn 20%, Roost 0%
+    * GIGADRAIN          600  lethal+500
+      SPORE             -350  target_already_statused-450
+      SYNTHESIS         -520  heal_near_full-500 heal_losing_race-120
+      switch->Bronzong -1000000  matchup+32 incoming_risk-32
+      switch->Mantine -1000000  matchup+32 incoming_risk+0
+  end:     Reborn Flygon 71/322            | Portable Amoonguss 390/390
+
+Turn 44
+  Reborn   Flygon 71/322                -> Roost
+  Portable Amoonguss 390/390            -> Giga Drain
+    view: hp 100%  speed 117 (slower)  incoming max 43%  certain n/a  threatened=False
+    foe moves est: Earthquake 43%, Dragon Claw 34%, U-turn 20%, Roost 0%
+    * GIGADRAIN          600  lethal+500
+      SPORE              125  fresh_status+25
+      SYNTHESIS         -520  heal_near_full-500 heal_losing_race-120
+      switch->Bronzong -1000000  matchup+32 incoming_risk-32
+      switch->Mantine -1000000  matchup+32 incoming_risk+0
+  end:     Reborn Flygon 136/322           | Portable Amoonguss 390/390
+
+Turn 45
+  Reborn   Flygon 136/322               -> Roost
+  Portable Amoonguss 390/390            -> Spore
+    view: hp 100%  speed 117 (slower)  incoming max 43%  certain n/a  threatened=False
+    foe moves est: Earthquake 43%, Dragon Claw 34%, U-turn 20%, Roost 0%
+    * SPORE              125  fresh_status+25
+      GIGADRAIN          121  expected_damage+21
+      SYNTHESIS         -520  heal_near_full-500 heal_losing_race-120
+      switch->Bronzong -1000000  matchup+32 incoming_risk-32
+      switch->Mantine -1000000  matchup+32 incoming_risk+0
+  end:     Reborn Flygon 297/322 SLP       | Portable Amoonguss 390/390
+
+Turn 46
+  Reborn   Flygon 297/322 SLP           -> Earthquake
+  Portable Amoonguss 390/390            -> Giga Drain
+    view: hp 100%  speed 117 (slower)  incoming max 43%  certain n/a  threatened=False
+    foe moves est: Earthquake 43%, Dragon Claw 34%, U-turn 20%, Roost 0%
+    * GIGADRAIN          121  expected_damage+21
+      SPORE             -350  target_already_statused-450
+      SYNTHESIS         -520  heal_near_full-500 heal_losing_race-120
+      switch->Bronzong -1000000  matchup+32 incoming_risk-32
+      switch->Mantine -1000000  matchup+32 incoming_risk+0
+  end:     Reborn Flygon 207/322 SLP       | Portable Amoonguss 390/390
+
+Turn 47
+  Reborn   Flygon 207/322 SLP           -> Earthquake
+  Portable Amoonguss 390/390            -> Giga Drain
+    view: hp 100%  speed 117 (slower)  incoming max 43%  certain n/a  threatened=False
+    foe moves est: Earthquake 43%, Dragon Claw 34%, U-turn 20%, Roost 0%
+    * GIGADRAIN          121  expected_damage+21
+      SPORE             -350  target_already_statused-450
+      SYNTHESIS         -520  heal_near_full-500 heal_losing_race-120
+      switch->Bronzong -1000000  matchup+32 incoming_risk-32
+      switch->Mantine -1000000  matchup+32 incoming_risk+0
+  end:     Reborn Flygon 114/322           | Portable Amoonguss 290/390
+
+Turn 48
+  Reborn   Flygon 114/322               -> Earthquake
+  Portable Amoonguss 290/390            -> switch->Mantine
+    view: hp 74%  speed 117 (slower)  incoming max 43%  certain n/a  threatened=False
+    foe moves est: Earthquake 43%, Dragon Claw 34%, U-turn 20%, Roost 0%
+    * switch->Mantine     188  matchup+32 incoming_risk+0 weak_current_attacks+120 escape_reasons+1
+      switch->Bronzong     158  matchup+32 incoming_risk-32 weak_current_attacks+120 escape_reasons+1
+      SPORE              125  fresh_status+25
+      SYNTHESIS          -20  heal_losing_race-120
+  end:     Reborn Flygon 114/322           | Portable Mantine 132/332 PSN
+
+Turn 49
+  Reborn   Flygon 114/322               -> Roost
+  Portable Mantine 132/332 PSN          -> Roost
+    view: hp 40%  speed 197 (slower)  incoming max 40%  certain n/a  threatened=True
+    foe moves est: Dragon Claw 40%, U-turn 12%, Earthquake 0%, Roost 0%
+    * ROOST              340  heal_mid_hp+90 heal_saves_battler+150
+      TOXIC              125  fresh_status+25
+      SCALD              122  expected_damage+22
+      DEFOG             -200  no_hazards_to_remove-300
+      switch->Bronzong -1000000  matchup+32 incoming_risk-32 escape_lethal_threat+130
+  end:     Reborn Flygon 275/322           | Portable Mantine 258/332 PSN
+
+Turn 50
+  Reborn   Flygon 275/322               -> Dragon Claw
+  Portable Mantine 258/332 PSN          -> Toxic
+    view: hp 78%  speed 197 (slower)  incoming max 40%  certain n/a  threatened=False
+    foe moves est: Dragon Claw 40%, U-turn 12%, Earthquake 0%, Roost 0%
+    * TOXIC              125  fresh_status+25
+      SCALD              122  expected_damage+22
+      ROOST              -20  heal_losing_race-120
+      DEFOG             -200  no_hazards_to_remove-300
+      switch->Bronzong -1000000  matchup+32 incoming_risk-32
+  end:     Reborn Flygon 255/322 PSN       | Portable Mantine 75/332 PSN
+
+Turn 51
+  Reborn   Flygon 255/322 PSN           -> Dragon Claw
+  Portable Mantine 75/332 PSN           -> switch->Amoonguss
+    view: hp 23%  speed 197 (slower)  incoming max 40%  certain n/a  threatened=True
+    foe moves est: Dragon Claw 40%, U-turn 12%, Earthquake 0%, Roost 0%
+    * switch->Amoonguss     408  matchup+32 incoming_risk+0 escape_residual_chip+200 escape_lethal_threat+130 escape_reasons+1
+      switch->Bronzong     368  matchup+32 incoming_risk-32 escape_residual_chip+200 escape_lethal_threat+130 escape_reasons+1
+      SCALD              122  expected_damage+22
+      ROOST              -43  heal_low_hp+257 heal_cannot_resolve-400
+      DEFOG             -200  no_hazards_to_remove-300
+  end:     Reborn Flygon 215/322 PSN       | Portable Amoonguss 170/390
+
+Turn 52
+  Reborn   Flygon 215/322 PSN           -> Earthquake
+  Portable Amoonguss 170/390            -> Synthesis
+    view: hp 44%  speed 117 (slower)  incoming max 43%  certain n/a  threatened=False
+    foe moves est: Earthquake 43%, Dragon Claw 34%, U-turn 20%, Roost 0%
+    * SYNTHESIS          190  heal_mid_hp+90
+      switch->Mantine     180  matchup+32 incoming_risk+0 weak_current_attacks+120 escape_reasons+1
+      switch->Bronzong     158  matchup+32 incoming_risk-32 weak_current_attacks+120 escape_reasons+1
+      SPORE             -350  target_already_statused-450
+  end:     Reborn Flygon 155/322 PSN       | Portable Amoonguss 209/390
+
+Turn 53
+  Reborn   Flygon 155/322 PSN           -> Earthquake
+  Portable Amoonguss 209/390            -> Synthesis
+    view: hp 54%  speed 117 (slower)  incoming max 43%  certain n/a  threatened=False
+    foe moves est: Earthquake 43%, Dragon Claw 34%, U-turn 20%, Roost 0%
+    * SYNTHESIS          190  heal_mid_hp+90
+      switch->Mantine     180  matchup+32 incoming_risk+0 weak_current_attacks+120 escape_reasons+1
+      switch->Bronzong     158  matchup+32 incoming_risk-32 weak_current_attacks+120 escape_reasons+1
+      SPORE             -350  target_already_statused-450
+  end:     Reborn Flygon 75/322 PSN        | Portable Amoonguss 252/390
+
+Turn 54
+  Reborn   Flygon 75/322 PSN            -> Earthquake
+  Portable Amoonguss 252/390            -> switch->Mantine
+    view: hp 65%  speed 117 (slower)  incoming max 43%  certain n/a  threatened=False
+    foe moves est: Earthquake 43%, Dragon Claw 34%, U-turn 20%, Roost 0%
+    * switch->Mantine     180  matchup+32 incoming_risk+0 weak_current_attacks+120 escape_reasons+1
+      switch->Bronzong     158  matchup+32 incoming_risk-32 weak_current_attacks+120 escape_reasons+1
+      SPORE             -350  target_already_statused-450
+  end:     Reborn Flygon 75/322 SLP        | Portable Mantine 55/332 PSN
+
+Turn 55
+  Reborn   Flygon 75/322 SLP            -> Roost
+  Portable Mantine 55/332 PSN           -> Scald
+    view: hp 17%  speed 197 (slower)  incoming max 40%  certain n/a  threatened=True
+    foe moves est: Dragon Claw 40%, U-turn 12%, Earthquake 0%, Roost 0%
+    * SCALD              122  ko_never_lands+0 expected_damage+22
+      ROOST              -25  heal_low_hp+275 heal_cannot_resolve-400
+      DEFOG             -200  no_hazards_to_remove-300
+      TOXIC             -350  target_already_statused-450
+      switch->Bronzong -1000000  matchup+32 incoming_risk-32 escape_lethal_threat+130 preserve_low_hp_actor+80
+  end:     Reborn Blastoise 320/320        | Portable Mantine 15/332 PSN
+
+Turn 56
+  Reborn   Blastoise 320/320            -> Scald
+  Portable Mantine 15/332 PSN           -> Toxic
+    view: hp 5%  speed 197 (slower)  incoming max 21%  certain n/a  threatened=True
+    foe moves est: Dark Pulse 21%, Ice Beam 16%, Rapid Spin 15%, Scald 11%
+    * TOXIC              125  fresh_status+25
+      SCALD               64  expected_damage+9 resisted-45
+      ROOST               11  heal_low_hp+311 heal_cannot_resolve-400
+      DEFOG             -200  no_hazards_to_remove-300
+      switch->Bronzong -1000000  matchup+32 incoming_risk+0 escape_lethal_threat+130 preserve_low_hp_actor+80
+  end:     Reborn Blastoise 320/320        | Portable Amoonguss 252/390
+
+Turn 57
+  Reborn   Blastoise 320/320            -> Ice Beam
+  Portable Amoonguss 252/390            -> switch->Bronzong
+    view: hp 65%  speed 117 (slower)  incoming max 42%  certain n/a  threatened=False
+    foe moves est: Ice Beam 42%, Dark Pulse 28%, Scald 14%, Rapid Spin 13%
+    * switch->Bronzong     190  matchup+32 incoming_risk+0 weak_current_attacks+120 escape_reasons+1
+      SPORE              125  fresh_status+25
+  end:     Reborn Blastoise 320/320        | Portable Bronzong 129/296
+
+Turn 58
+  Reborn   Blastoise 320/320            -> Dark Pulse
+  Portable Bronzong 129/296             -> Toxic
+    view: hp 44%  speed 123 (slower)  incoming max 55%  certain n/a  threatened=True
+    foe moves est: Dark Pulse 55%, Scald 27%, Ice Beam 10%, Rapid Spin 6%
+    * TOXIC              125  fresh_status+25
+      EARTHQUAKE         116  expected_damage+16
+      STEALTHROCK        100  
+      GYROBALL            60  expected_damage+6 resisted-45
+      switch->Amoonguss -1000000  matchup+64 incoming_risk+16 escape_lethal_threat+130
+  end:     Reborn Blastoise 320/320        | Portable Amoonguss 252/390
+
+Turn 59
+  Reborn   Blastoise 320/320            -> Ice Beam
+  Portable Amoonguss 252/390            -> Spore
+    view: hp 65%  speed 117 (slower)  incoming max 42%  certain n/a  threatened=False
+    foe moves est: Ice Beam 42%, Dark Pulse 28%, Scald 14%, Rapid Spin 13%
+    * SPORE              125  fresh_status+25
+  end:     Reborn Blastoise 320/320 SLP    | Portable Amoonguss 100/390
+
+Turn 60
+  Reborn   Blastoise 320/320 SLP        -> Ice Beam
+  Portable Amoonguss 100/390            -> Spore
+    view: hp 26%  speed 117 (slower)  incoming max 42%  certain n/a  threatened=True
+    foe moves est: Ice Beam 42%, Dark Pulse 28%, Scald 14%, Rapid Spin 13%
+    * SPORE             -350  target_already_statused-450
+  end:     Reborn Blastoise 320/320 SLP    | Portable Amoonguss 100/390
+
+Turn 61
+  Reborn   Blastoise 320/320 SLP        -> Ice Beam
+  Portable Amoonguss 100/390            -> Spore
+    view: hp 26%  speed 117 (slower)  incoming max 42%  certain n/a  threatened=True
+    foe moves est: Ice Beam 42%, Dark Pulse 28%, Scald 14%, Rapid Spin 13%
+    * SPORE             -350  target_already_statused-450
+  end:     Reborn Blastoise 320/320 SLP    | Portable Amoonguss 100/390
+
+Turn 62
+  Reborn   Blastoise 320/320 SLP        -> Ice Beam
+  Portable Amoonguss 100/390            -> Spore
+    view: hp 26%  speed 117 (slower)  incoming max 42%  certain n/a  threatened=True
+    foe moves est: Ice Beam 42%, Dark Pulse 28%, Scald 14%, Rapid Spin 13%
+    * SPORE             -350  target_already_statused-450
+  end:     Reborn Blastoise 320/320 SLP    | Portable Amoonguss 100/390
+
+Turn 63
+  Reborn   Blastoise 320/320 SLP        -> Ice Beam
+  Portable Amoonguss 100/390            -> Spore
+    view: hp 26%  speed 117 (slower)  incoming max 42%  certain n/a  threatened=True
+    foe moves est: Ice Beam 42%, Dark Pulse 28%, Scald 14%, Rapid Spin 13%
+    * SPORE             -350  target_already_statused-450

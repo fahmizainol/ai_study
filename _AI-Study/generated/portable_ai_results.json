@@ -1,0 +1,64 @@
+{
+  "captured": "2026-09-04",
+  "version": "0.1.0",
+  "engine": "realidea",
+  "probe": {
+    "corpus_path": "_AI-Study/scenarios_realidea.json",
+    "corpus_sha256": "6715d1855c8a354f56f42bacace3870213f98dd545042caee70df6c0bdff8d4b",
+    "reference_corpus_path": "_AI-Study/scenarios.json",
+    "reference_corpus_sha256": "08e7d4e380fa38489c3d06a8c348363c76e114691c1210b712bea2da74bd5e4b",
+    "reference_results_path": "_AI-Study/generated/probe_results_reference.ndjson",
+    "reference_results_sha256": "dc3583e3fbddb5484f16d9c6b2983a9085bc8dd9b347d454cd1f37798388fb96",
+    "scenarios": 126,
+    "probed": 121,
+    "skipped": 5,
+    "errors": 0,
+    "stock": {
+      "assertions_passed": 143,
+      "assertions_total": 163,
+      "results_sha256": "2eb82eb3df368f2d92f6e0b3280fc10b8a4a1928a49d225fab26da893d8a5378"
+    },
+    "portable": {
+      "assertions_passed": 163,
+      "assertions_total": 163,
+      "results_sha256": "7e7be8a4f03fe02abefa42b7c5aa9fe8b6b3a3594c405875220ee4489baff696",
+      "reference_mean_spearman_rho": 0.913,
+      "reference_top1_score_agreement": "100/110",
+      "reference_action_type_agreement": "117/121"
+    },
+    "tier1_command": "python3 _AI-Study/tools/check_scenarios.py _AI-Study/scenarios_realidea.json \"Realidea V4.1/Data/ai_probe_results_portable.ndjson\"",
+    "tier2_command": "python3 _AI-Study/tools/ai_diff.py _AI-Study/scenarios_realidea.json \"Realidea V4.1/Data/ai_probe_results_portable.ndjson\" _AI-Study/scenarios.json _AI-Study/generated/probe_results_reference.ndjson --label-a realidea-portable --label-b reborn-reference"
+  },
+  "gauntlet": {
+    "records": 80,
+    "seeds": 5,
+    "matchups": 8,
+    "errors": 0,
+    "results_sha256": "b91feba3db22baef4e4eadf2397db1d7c9d634536b94b19ef35f1917443d5fb0",
+    "stock": {
+      "wins": 20,
+      "losses": 20,
+      "draws": 0,
+      "win_rate": 50.0,
+      "mean_turns": 7.1,
+      "single_wins": "14/30",
+      "double_wins": "6/10"
+    },
+    "portable": {
+      "wins": 28,
+      "losses": 12,
+      "draws": 0,
+      "win_rate": 70.0,
+      "mean_turns": 8.9,
+      "single_wins": "20/30",
+      "double_wins": "8/10"
+    }
+  },
+  "build": {
+    "generated_script_sha256": "c532fb202df6be7232206fbd9673aad87162123bd3ee61b8274dbb70e3598ab1",
+    "installed_bundle_sha256": "041207aff8f99c097f2c5e94f0a8cdf92a8fab915daa6cd2761cc315c9e5553a",
+    "installed_section": "Portable_AI",
+    "installed_index": 332,
+    "opt_in_marker": "Realidea V4.1/Data/portable_ai.txt"
+  }
+}

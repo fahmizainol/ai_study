@@ -1,18 +1,27 @@
 # Pokémon Fangame Battle AI — Code Analysis
 
-Comparative teardown of the battle AI in seven local games plus one remote repo, across
+Comparative teardown of the battle AI in eight local games plus one remote repo, across
 **two engines**: RPG Maker XP / Pokémon Essentials (Ruby) and CFRU (C, GBA binary hack).
 All findings are from **reading source code, not playtesting** — team quality and level
 curves also drive felt difficulty and are largely out of scope here.
 
-Analysis date: 2026-09-03. Paths are relative to `/mnt/c/Users/kny/Documents/Games/Norm`.
+Analysis date: 2026-09-03; Pokémon Z V2.13 added 2026-09-04. Paths are relative to
+`/mnt/c/Users/kny/Documents/Games/Norm`.
+
+For which Essentials version each game runs and what it would take to ship one AI across
+all of them, see `AI-PORTABILITY.md`.
 
 ---
 
 ## TL;DR ranking
 
 **Raw opponent strength:**
-Reborn Yang (Intense) ≈ Unbound (Expert/Insane) > Rejuvenation (Intense) > Reborn Yang (Normal) ≈ Phantombass 9.0 ≈ Hegemony PBAI > Ancient Platinum > Consistent AI > Unbound (Vanilla) ≈ Rejuvenation (Easy) > Realidea
+Reborn Yang (Intense) ≈ Unbound (Expert/Insane) > Rejuvenation (Intense) > Reborn Yang (Normal) ≈ Phantombass 9.0 ≈ Hegemony PBAI > Ancient Platinum > Consistent AI > Unbound (Vanilla) ≈ Rejuvenation (Easy) > **Pokémon Z** > Realidea
+
+Pokémon Z and Realidea run *the same scorer* — 124 differing lines, all of them custom
+abilities and items, none of them logic. Z sits above Realidea purely because it puts 181
+of 196 trainer types at skill 100 and Realidea puts zero there. That pair is the cleanest
+A/B in this study for what stock v16 skill gating is worth.
 
 Unbound and Reborn Yang (Intense) top it on **cheat surface**. Unbound is the only one that
 also hands its team free perfect IVs / max PP / 252 EVs; Reborn Yang gives no free stats but
@@ -43,6 +52,7 @@ spread tables) and the only one whose cheating is *deliberately concealed from t
 | **Phantombass 1.0.0** | Hegemony | live | v19 | 15,456 / 9 files | Deterministic | ignores skill | ~25 | **yes** — 15 flags |
 | **Phantombass 1.0.0** | Ancient Platinum | live | v21.1 | 4,840 / 9 files | Prune dominated → weighted random | v21 skill flags; 105/107 types at 100 | ~25 | none (7 static flags only) |
 | **Stock Essentials** | Realidea V4.1 | live | v16 | 4,360 | **Weighted roulette** | 4 tiers; **0 trainers at best** | none | none |
+| **Stock Essentials** | Pokémon Z V2.13 | live | v16.2 | 4,418 (124 lines ≠ Realidea, **all content, no logic**) | **Weighted roulette** — identical code to Realidea | 4 tiers; **181/196 types at 100** | none | none |
 | **Custom** | Rejuvenation v13 | live | modified v16-era | **35,652** | Deterministic — exact max, accuracy tiebreak | 5 tiers; 86% at 90+ | 21 (incl. `FIELDSETTER`) | none |
 | **Custom (Reborn E19 + Yang)** | Reborn Yang | live | Reborn E19.16 (mkxp-z) | 17,647 / 1 file | Compress dominated → roulette over top 5% (top move double-weighted); Intense tightens to 2% | 5 tiers; **219/306 types (72%) at 100** | 18, computed only at `HIGHSKILL`+ | **yes (Intense)** — Wide Guard + redirection counters, swap history |
 | **CFRU Battle AI** | Pokémon Unbound v2.1.1.1 | live | **CFRU** — GBA binary hack, C | 20,353 / 7 files † | Exact max only, random among ties | 3 flag bits per trainer, **rewritten by difficulty** | 18 fight classes | **yes** — anti-cheese switch history |
@@ -58,6 +68,7 @@ spread tables) and the only one whose cheating is *deliberately concealed from t
 | **Phantombass 1.0.0** (Hegemony) | **no** (`OMNISCIENT_AI = false`) | no | no | none | no (Insane Mode restricts *you*) |
 | **Phantombass 1.0.0** (Ancient Plat.) | yes (no revealed-filtering) | no | no | none found | no |
 | **Stock v16** (Realidea) | yes | no | no | none found | no |
+| **Stock v16.2** (Pokémon Z) | yes | no | no | none found | no (no battle difficulty system exists) |
 | **Custom** (Rejuvenation) | yes (758 ability reads, 0 filtering) | **yes** — 60 sites, ~11 read hidden types/abilities | **no** (1 `@choices` site = own side) | **yes** | partly (Easy disables switch AI) |
 | **Reborn Yang — Normal** | **no** — real earned memory model | barely (4 sites, `skill>=BEST` only) | **doubles only** — your item use + priority move | none found | — |
 | **Reborn Yang — Intense** | **yes** — memory bypassed wholesale | same 4 sites | **yes** — Sucker Punch 100%, Counter 75%, switch target, Follow Me 67% | **no free stats**, but enemy gets **unlimited Mega Evolutions** | **yes** — all trainers forced to skill 100 |
@@ -162,6 +173,73 @@ settle it outright.
   wilds below level 25 pick moves at random.
 - Scripts live in `Data/Scripts.rxdata` (300 sections) — v16 predates the Plugins folder,
   so there is nothing separate to decompile.
+
+### Pokémon Z V2.13 — the Realidea control group
+
+Spanish-language fangame, `POKEMON Z V2.13/Pokemon Z V2.13/`. Essentials **v16.2-era**,
+same generation as Realidea: no `Essentials::VERSION` constant, `PBSpecies` data layer,
+hex-int move function codes (`case move.function` / `when 0x0A`). RGSS104E + mkxp-z.
+235 script sections, 160,753 lines. No Plugins folder — v16 predates the framework.
+
+> **Three script bundles ship, one runs.** `Game.ini` sets `Scripts=Data\Scripts.rxdata`
+> (235 sections). `Data/ScriptsBackup.rxdata` (255 sections, the same 160,753 lines) and a
+> root-level `Scripts.rxdata` (1 section, 45 lines) are inert. Same class of trap as Ashen
+> Frost's plugin folder — read `Game.ini` before picking a file.
+
+**Unlike Realidea, the file you read is the file that runs.** Section 75 `PokeBattle_AI`
+(4,418 lines) is the only definition of `pbChooseMoves` / `pbGetMoveScore` in the bundle;
+no later section reopens them. The only other `pbEnemyShouldWithdraw?` definitions are
+`PokeBattle_BattlePalace` (80) and `PokeBattle_BattleArena` (81), both stock facility AI.
+There is no equivalent of Realidea's `275_AI edit clara` override.
+
+**The AI is stock v16 with content patches and nothing else.** Diffed against Realidea's
+`PokeBattle_AI` with line endings normalized: **124 changed lines, zero logic changes.**
+Every one hangs a custom mechanic off the existing scorer:
+
+- abilities — `EARTHEATER`, `MAGNETISMO`, `CORTANTE`, `ACOMETIDA`, `CAMORRISTA`,
+  `PURIFYINGSALT`, `CONTRAGUARDIA`, `SOBRECARGA`, `DESPIERTALLAMA`, `CUERPOHORNEADO`
+- items — `SUPEREVIOLITE`, `CLEARAMULET`, `PUNZASFERA`, `MASCARACRUEL`, `TABLANEUTRA`
+- a custom `HEMORRAGIA` (bleed) status, threaded through `PokeBattle_BattlerEffects` (5),
+  `PokeBattle_Battler` (2), `PokeBattle_Move` (2), `PItem_ItemEffects` (2), and read by the
+  AI's damage estimate via `MASCARACRUEL`
+
+Selection is stock v16 verbatim: dominated-move compression at `mediumSkill`+
+(threshold 1.5 / floor 5 once at `bestSkill`), then the preferred pool
+`scores[i] >= maxscore*0.8` behind `stdev>=40 && pbAIRandom(10)!=0`, then a weighted
+roulette over raw scores. Including the same 10% chance to discard its own best move.
+No roles, no memory model (0 hits for `pbGetMonRole` / `getAIMemory`), no bench peeking,
+no added cheats. No battle difficulty system — `difficulty` appears only in
+`PMinigame_SlotMachine` and `PScreen_Options`. A `Nuzlocke` section exists.
+
+**The difference from Realidea is one PBS column, and it is the whole story.** Confirmed
+in the compiled `Data/trainertypes.dat` (196 records), not just the PBS text:
+
+| skill | Pokémon Z | Realidea |
+|---|---|---|
+| **100 (`bestSkill`)** | **181** types | **0** |
+| 250 | 1 (`URANO`) | 0 |
+| 90–99 / 48–99 high | 0 | 45 (mostly 60, via money fallback) |
+| 32–47 medium | 0 | 68 |
+| ≤31 low | 2 (at 10) | 5 |
+| blank → money fallback | 12 (all player types, → 60) | 108 |
+
+Z writes `100` into SkillLevel (index 8); Realidea wrote its `100`s into the skillCode
+column (index 9) and left index 8 blank, so every `skill >= PBTrainerAI.bestSkill` branch
+is dead code there. Z runs those branches, and the tightest dominated-move compression, in
+almost every trainer battle — including route filler like `CAMPESINO` and `BURGUES`, not
+just the eight `LIDER` gyms.
+
+**Teams** (`PBS/trainers.txt`): 411 trainers, 993 Pokémon. Party sizes skew small — 285 of
+411 field one or two, only 30 field six. 73% of entries are full 13-field lines (through
+the IV field), 33% set explicit movesets, 24% hold items. Levels 1–100, mean 59.7.
+
+**Why it earns a section:** Z and Realidea are the same scorer at two skill settings, on
+the same engine, with the same data layer. Every other pair in this study changes the
+scorer too, so none of them isolate what skill gating alone is worth. Probing Z with the
+existing `adapters/realidea/AI_Probe.rb` at its shipped skill values, against the already
+collected `probe_results_realidea.ndjson`, would answer that with the harness already
+built — Realidea probed at skill 100 scored ρ = 0.887 against Reborn Yang, so the scoring
+function is respectable and the gating is the variable.
 
 ### Rejuvenation v13 — biggest and least honest
 
@@ -557,10 +635,71 @@ Treat the *logic* as high-confidence and any *specific line* as indicative.
 
 ---
 
+### Radical Red — from the community write-up, not decompiled (added 2026-09-05)
+
+Not analysed from the binary; recorded here because it is the one AI in the set with
+a **documented hits-to-KO formula**, which is the gap the portable core has
+(`PORTABLE-AI-REBORN.md`, backlog "damage race"). Source: the player-facing AI
+description as relayed by the study's author. Treat as secondary until checked
+against the CFRU-family source the way Unbound was.
+
+- **Information:** knows the player's moves, abilities and items. Same omniscience
+  class as Reborn Intense / Rejuvenation.
+- **Anti-abuse switch counter** (the "cheat" is bounded and announced): starts at 0,
+  +3 every time the player switches, −1 every turn, never below 0. At ≥9 there is a
+  25% chance the anti-abuse AI activates on a turn the player switches; at ≥12, 33%;
+  at ≥16, 50%. Any KO on either side resets it to 0. In other words the cheat is a
+  *rate-limited switch predictor* keyed to how often the player has been pivoting —
+  a design the other games never bother with (Reborn Intense predicts switches
+  unconditionally via `swappredicted`).
+- **Post-KO switch-in score** — simple and explicit, ties are coin flips except at 0:
+
+  | condition | score |
+  |---|---:|
+  | the AI's candidate outspeeds | +14 |
+  | the player's best move is a 4HKO or worse on it | +17 |
+  | player 3HKOs it | +2 |
+  | player 2HKOs it | −1 |
+  | player OHKOs it | −14 |
+
+  That is a damage race in five lines: speed order plus hits-to-KO from the
+  opponent's side. The reverse side (how fast the switch-in kills the player's mon)
+  is presumably in the move scoring, as in Reborn's %-of-current-HP scale.
+- **Move-score bonuses** (the "priority" picture from the same write-up; these sit on
+  top of a damage score where "most damaging moves" get +0, so the ladder is the
+  whole tiebreak):
+
+  | condition | bonus |
+  |---|---:|
+  | Explosion-type move, if the player's mon is faster, can 2HKO the AI mon, and the AI is not already dying to other moves | +10 |
+  | fast kill (KO while faster) | +9 |
+  | slow kill (KO while slower) | +6 |
+  | speed setup move when the AI is slower | +6 |
+  | other setup move | +5 |
+  | Knock Off, or Thunder Wave when the AI is slower | +3 |
+  | speed control (Bulldoze, Icy Wind and the like) | +2 |
+  | most damaging move | +0 |
+
+  General setup rule: if the AI does not see a kill and is faster and not OHKOed, it
+  sets up; or if it does not see a kill, is slower and is not 2HKOed, it sets up.
+
+  Read against the portable core: fast kill above slow kill is 0.4.0's priority/speed
+  rule in one line; "set up when you cannot kill but they cannot kill you either" is
+  a hits-to-KO condition Portable's `first_setup +55 / unsafe_setup −240` does not
+  express (Portable asks only whether the *next* hit is lethal); speed control as its
+  own tier and Knock Off as a tiebreak have no Portable equivalent.
+- The hard-switch logic exists in the same write-up but was not captured here.
+
 ## Method notes (for repeating this)
 
-- **v16 games** (Realidea): all code in `Data/Scripts.rxdata`. No Plugins folder exists —
-  nothing separate to decompile.
+- **v16 games** (Realidea, Pokémon Z): all code in `Data/Scripts.rxdata`. No Plugins folder
+  exists — nothing separate to decompile. But **read `Game.ini` first**: v16 games often
+  ship several bundles (Pokémon Z has `Data/Scripts.rxdata`, `Data/ScriptsBackup.rxdata`,
+  and a root `Scripts.rxdata`), and only the one named in `Scripts=` is live.
+- **In a monolithic v16 bundle, grep every section for the method you care about, in order.**
+  Section order is load order, so the last definition wins. Realidea redefines
+  `pbChooseMoves` 190 sections after the AI file; Pokémon Z does not. You cannot tell which
+  case you are in without listing all definition sites.
 - **v20/v21 games**: plugin source in `Plugins/<name>/`, compiled bundle in
   `Data/PluginScripts.rxdata`. **Always check the bundle, not just the folder** — see the
   Ashen Frost finding above.

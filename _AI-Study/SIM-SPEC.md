@@ -296,7 +296,7 @@ question.** Similarity tells you *why* it moved.
 | **2** ✅ | **DONE 2026-09-03 — 73 scenarios, 89/89 on reference, incl. 2 forced switches (§9.3)** | 100% pass on reference — **met** |
 | **3** ✅ | **DONE 2026-09-03 — `ai_diff.py` + Hegemony/PBAI adapter; ρ=0.852 (§9.4)** | Two AIs compared on one corpus — **met** |
 | **4** ✅ | **DONE 2026-09-03 — Marshal writer + Realidea adapter; 3 AIs on one corpus (§9.6)** | Realidea probeable — **met** |
-| **5** | Frozen gauntlet + win-rate benchmark; baseline Realidea before any AI change | Baseline recorded |
+| **5** ✅ | **DONE 2026-09-04 — 8 matchups × 5 seeds in stock and portable modes; stock 20/40, Portable AI 28/40 wins** (`PORTABLE-AI-REALIDEA.md`) | Baseline and uplift recorded |
 
 Phases 1–3 are useful on their own even if the Realidea port never happens — they turn the
 study from static reading into measurement.
@@ -990,6 +990,88 @@ tie-break is dead code), but the scores themselves are stochastic. Consequences:
   caveat. The reference is unaffected — Reborn's probe scores have been bit-identical
   across all reruns.
 
+### 9.12 Doubles, phase 1: the harness (2026-09-04)
+
+Both AIs already ran doubles natively; nothing in either engine was modified. Reborn's
+`processAIturn` (`PokeBattle_AI_2.rb:128`) loops every battler index and calls
+`coordinateActions`/`chooseAction` itself, and all four battler objects exist from
+construction (`PokeBattle_Battle.rb:514`), so the harness only had to send out two more
+Pokemon and set `doublebattle`. v19 needed both `setBattleMode("double")` (which sizes
+`@sideSizes` and gates `pbCreateBattler`) **and** `doublebattle = true` — PBAI branches on
+the latter in ~150 places, so setting only the first gives a 2v2 field that the AI still
+reasons about as a single battle.
+
+Scenario format additions: `format=double`, `ai2=`, `player2=`. Battler indices are shared
+by both engines — 0 player left, 1 AI left, 2 player right, 3 AI right — and party order
+must match (second active = party slot 1, bench from 2).
+
+Record shape: every probe now emits `actors[]`, one entry per AI-side battler, each with
+`moves` (best score over targets plus the target that produced it), `score_matrix` (the raw
+per-target rows) and its own `action` including the registered target. **The top level
+mirrors `actors[0]`**, so singles records are unchanged and every existing consumer and
+archived artifact still works.
+
+Assertions gained an optional trailing options dict — `('must_switch', {'actor': 1})` —
+addressing the AI's right-hand battler; with no dict they address the left one, so all 150
+pre-doubles assertions keep their exact meaning. New kinds: `must_target` (left/right) and
+`must_not_double_target` (cross-actor). Degeneracy is now checked per battler, since one AI
+mon's vector can be flat while the other's carries a real ranking.
+
+Six phase-1 positions (`CORPUS_D1`) lift already-proven singles properties onto a 2v2 field,
+so a failure means the harness built the position wrong rather than the AI reasoning wrong.
+All passed on both engines first run, with the artifacts confirming real per-target scoring
+(Thunderbolt 0 into Swampert, 112 into Gyarados) and state applied to all four slots (Spore
+0 against two sleeping foes).
+
+### 9.13 Doubles, phase 2: the coordination layer (2026-09-04)
+
+`coordinateActions` (`PokeBattle_AI_2.rb:2092`, 584 lines, doubles-only) was the largest
+unprobed block of the reference AI and the only place it reads turn order. Four positions
+(`CORPUS_D2`) reach it. Three findings:
+
+**1. The score matrix is NOT what Reborn chooses by.** `chooseAction` feeds it through
+`findChoosableMoves` (:1998), which collapses the per-target rows into one score per
+(move, target set) — and the collapse is not a max. `AllOpposing` **sums** the two foe rows;
+`AllNonUsers` sums them and then multiplies by `max(1 − 2·scorearray[partner][move]/100, 0)`,
+halved again when the user is faster and would KO the partner. So a spread move scoring ≥50
+against its own partner is multiplied to **zero** and becomes unchooseable however good it is
+against the foes. Measured in `d_spread_kills_own_partner`: Earthquake 79 in the matrix,
+Rock Slide 14 — and Reborn picks Rock Slide. Reading a doubles decision from the matrix alone
+will mislead, so the Reborn record now also carries `chooseable[]`, the real decision
+quantity. The 1.5× spread-kills-both bonus (:2118) is visible directly: Earthquake 121 → 181.5.
+
+**2. Reborn's anti-overkill splitting is real but conditional on speed order.** In
+`d_split_targets_not_overkill` (Starmie 115 > Zapdos 100 > Gyarados 81 > Snorlax 30) the
+branch at :2291 penalises each AI mon against the foe beside it in the order: Zapdos's row
+against the low foe is scaled to **84.7 = 121 × 0.7**, flipping its preference and splitting
+the two attackers. But with two identical Zapdos and the order player/ai/ai/player, the
+branch at :2285 is reached, and its entire body is the comment *"don't edit the scores, who
+knows which mon will live"* — it sets `targetting_done` and returns. Measured in
+`d_double_target_abstention_documented`: both Zapdos fire at the 20% Gyarados (121 each vs
+98 for the 55% Starmie), one certain kill and one wasted turn. Recorded as `must_choose_any`
+rather than a failure: the abstention is deliberate and its stated reasoning is defensible,
+even though it costs a turn here. (A `[1,3,2,0]`-style all-AI-first order hits an
+even emptier branch at :2243.)
+
+**3. PBAI has no doubles-specific reasoning at all.** Two of the four positions fail on
+Hegemony, both traceable to one line: `choose_move` (`01_AI_Main.rb:1251-1255`) builds its
+target list from the opposing side and then **skips any ally**, so the AI never scores a move
+against its own partner.
+- `d_spread_kills_own_partner`: PBAI uses Earthquake and KOs its own 25% Magnezone. It cannot
+  price ally damage because the ally is not in its target list. (The dead ally-target branch
+  at `02_AI_Score.rb:2170`, which would only ever allow Heal Pulse, is unreachable in 2v2.)
+- `d_spread_kills_both_preferred`: Earthquake 16 vs Stone Edge 17. PBAI scores each move
+  against each target independently and takes the max, so a move that resolves the whole
+  field is worth no more to it than one that kills a single Pokemon.
+
+Related dead code found while tracing: `$target_ind` (`01_AI_Main.rb:1247`) is set to −1 and
+never incremented, so the doubles flag block at :1420 always reads `$target[-1 % 2]` =
+`$target[1]` — PBAI's "which target did I pick" index is inert.
+
+Corpus after both phases: **126 scenarios / 169 assertions, 169/169 on the reference**.
+Hegemony 134/163 over 121 probeable. Tier-2 mean ρ 0.754 (median 0.949), top-1 86.0%,
+action-type agreement 93.4%.
+
 ---
 
 ## 10. Risks
@@ -1009,5 +1091,9 @@ tie-break is dead code), but the scores themselves are stochastic. Consequences:
 - Does mkxp-z run offscreen on this setup, or must the whole harness live on Windows?
 - Reborn's `load_data("battle")` in `bestTrainersBattle` — what is that file, and can the
   frozen gauntlet reuse its format?
-- Doubles: worth including in the corpus at Phase 2, or defer? (Reborn's AI has substantial
-  doubles-only logic, including the only Normal-mode turn-choice reads.)
+- ~~Doubles: worth including in the corpus at Phase 2, or defer?~~ **Answered 2026-09-04.**
+  Included; see §9.12 (harness) and §9.13 (coordination layer). Neither AI needed
+  modification. Still open within doubles: redirection (Follow Me / Rage Powder, needs a
+  `followme` battler-effect key), Wide Guard (`wideGuardCount` is Intense-only), the
+  doubles priority multiplier (1.3× vs 2× in singles, `PokeBattle_AI_2.rb:2856`), and
+  ally-targeted support moves.

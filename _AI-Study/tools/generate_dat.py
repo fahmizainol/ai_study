@@ -26,7 +26,8 @@ def main(out_path):
     arch = json.load(open(os.path.join(GEN, "archetypes.json")))
     defaults = arch["_defaults"]
 
-    teams, skipped = [], {"no_arch": 0, "no_pool": 0}
+    sp = D.species()
+    teams, skipped = [], {"no_arch": 0, "unknown_species": 0}
     for e in dat:
         tid, name, items, party, pid = e[0], e[1], e[2], e[3], e[4]
         cls = tname.get(tid)
@@ -40,23 +41,20 @@ def main(out_path):
         rng = random.Random(int(hashlib.sha1(
             f"dat|{tid}|{name}|{pid}".encode()).hexdigest()[:8], 16))
         band = G.band_of(max(levels))
-        # keep original party size (dat fights are small, early — no growth here)
-        bst_cap = 380 + 15 * band + a.get("bst_bonus", defaults["bst_bonus"])
-        curve = a.get("curveball", defaults["curveball"])
-        themed, anyt = G.pool_for(a["theme"], max(levels), bst_cap, rng, curve)
-        if not (themed or anyt):
-            skipped["no_pool"] += 1; continue
-        mons, used = [], set()
-        for lvl in levels:
-            pool = anyt if (not a["theme"] or rng.random() < curve or not themed) else themed
-            cand = [n for n in pool if n not in used and D.min_level()[n] <= lvl] or \
-                   [n for n in (themed + anyt) if D.min_level()[n] <= lvl]
-            nm = rng.choice(cand); used.add(nm)
-            moves = G.pick_moves(nm, lvl, rng)
+        # KEEP the original species (dat fights are small, early — no growth here);
+        # just re-equip each for the band via generate_filler's shared helpers.
+        mons = []
+        for spid, lvl in ((m[0], m[1]) for m in party):
+            nm = sid.get(spid)
+            if nm is None or nm not in sp:      # unknown/placeholder id -> can't upgrade
+                continue
+            moves = G.pick_moves(nm, lvl, rng, band)
             ev, nature, iv = G.spread_for(nm, band, moves)
             mons.append({"species": nm, "level": lvl, "moves": moves, "item": None,
-                         "ability": rng.choice([0, 0, 1]) if len(D.species()[nm]["abilities"]) > 1 else 0,
-                         "nature": nature, "iv": iv, "ev": ev})
+                         "ability": rng.choice([0, 0, 1]) if len(sp[nm]["abilities"]) > 1 else 0,
+                         "nature": nature, "iv": iv, "ev": ev, "kept": True})
+        if not mons: skipped["unknown_species"] += 1; continue
+        mons.sort(key=lambda m: m["level"])      # ace (highest) last
         if G.ITEM_BY_BAND[band]:
             mons[-1]["item"] = G.ITEM_BY_BAND[band]
         teams.append({"id": f"dat_{cls}_{name}_{pid}".replace(" ", "_"),

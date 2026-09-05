@@ -38,7 +38,14 @@ def validate(teams, slack=2):
             if not isinstance(lvl, int) or not 1 <= lvl <= 100:
                 err("LEVEL", f"{tag}: level {lvl!r}"); continue
             if lvl < floor[m["species"]]:
-                err("EVO", f"{tag}: level {lvl} < evolution floor {floor[m['species']]}")
+                # a kept original species below its level-evo floor is the dev's own
+                # roster choice (the engine instantiates it fine) — warn, don't fail.
+                # A GENERATED mon under floor is our bug -> hard error.
+                if m.get("kept"):
+                    warn("EVO", f"{tag}: level {lvl} < evolution floor "
+                                f"{floor[m['species']]} (kept original)")
+                else:
+                    err("EVO", f"{tag}: level {lvl} < evolution floor {floor[m['species']]}")
             mvs = m.get("moves", [])
             if not 1 <= len(mvs) <= 4:
                 err("MOVES", f"{tag}: {len(mvs)} moves")
@@ -76,10 +83,13 @@ def validate(teams, slack=2):
     return errs, warns
 
 if __name__ == "__main__":
-    path = sys.argv[1]
     slack = 2
-    if "--slack" in sys.argv: slack = int(sys.argv[sys.argv.index("--slack") + 1])
-    teams = json.load(open(path))
+    args = sys.argv[1:]
+    if "--slack" in args:
+        i = args.index("--slack"); slack = int(args[i + 1]); del args[i:i + 2]
+    teams = []
+    for path in args:
+        teams += json.load(open(path))
     errs, warns = validate(teams, slack)
     for w in warns: print("WARN", w)
     for e in errs: print("FAIL", e)

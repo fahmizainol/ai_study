@@ -1,0 +1,351 @@
+speed_vs_bulky  seed 196613   Reborn-Normal (speed, left) vs Portable 0.4.1 (bulky, right)   result for Portable: WIN in 28 turns
+  Reborn   (speed): Swellow, Staraptor, Noivern, Espeon, Ninetales, Accelgor
+  Portable (bulky): Bronzong, Torkoal, Amoonguss, Chesnaught, Mantine, Forretress
+==============================================================================================================
+
+Turn 1
+  Reborn   Swellow 282/282              -> U-turn
+  Portable Bronzong 296/296             -> Gyro Ball
+    view: hp 100%  speed 123 (slower)  incoming max 21%  certain 21%  threatened=False
+    foe moves est: Brave Bird 21%, U-turn 16%, Quick Attack 7%, Protect 0%
+    * GYROBALL           126  expected_damage+26
+      TOXIC              125  fresh_status+25
+      STEALTHROCK        100  
+      EARTHQUAKE     -1000000  
+      switch->Torkoal -1000000  matchup+32 incoming_risk+0
+  end:     Reborn Swellow 180/282          | Portable Bronzong 296/296
+
+Turn 2
+  Reborn   Swellow 180/282              -> U-turn
+  Portable Bronzong 296/296             -> Gyro Ball
+    view: hp 100%  speed 123 (slower)  incoming max 21%  certain 21%  threatened=False
+    foe moves est: Brave Bird 21%, U-turn 16%, Quick Attack 7%, Protect 0%
+    * GYROBALL           126  expected_damage+26
+      TOXIC              125  fresh_status+25
+      STEALTHROCK        100  
+      EARTHQUAKE     -1000000  
+      switch->Torkoal -1000000  matchup+32 incoming_risk+0
+  end:     Reborn Ninetales 275/308        | Portable Bronzong 250/296
+
+Turn 3
+  Reborn   Ninetales 275/308            -> Dark Pulse
+  Portable Bronzong 250/296             -> Earthquake
+    view: hp 84%  speed 123 (slower)  incoming max 60%  certain 60%  threatened=False
+    foe moves est: Flamethrower 60%, Dark Pulse 53%, Energy Ball 10%, Will-O-Wisp 0%
+    * EARTHQUAKE         213  expected_damage+43 super_effective+70
+      TOXIC              125  fresh_status+25
+      STEALTHROCK        100  
+      GYROBALL            64  expected_damage+9 resisted-45
+      switch->Torkoal -1000000  matchup+64 incoming_risk+16
+  end:     Reborn Ninetales 99/308         | Portable Bronzong 94/296
+
+Turn 4
+  Reborn   Ninetales 99/308             -> Flamethrower
+  Portable Bronzong 94/296              -> Earthquake
+    view: hp 32%  speed 123 (slower)  incoming max 60%  certain 60%  threatened=True
+    foe moves est: Flamethrower 60%, Dark Pulse 53%, Energy Ball 10%, Will-O-Wisp 0%
+    * EARTHQUAKE         213  expected_damage+43 super_effective+70
+      TOXIC              125  fresh_status+25
+      STEALTHROCK        100  
+      GYROBALL            64  expected_damage+9 resisted-45
+      switch->Torkoal -1000000  matchup+64 incoming_risk+16 escape_lethal_threat+130
+  end:     Reborn Ninetales 99/308         | Portable Mantine 332/332
+
+Turn 5
+  Reborn   Ninetales 99/308             -> Will-O-Wisp
+  Portable Mantine 332/332              -> Scald
+    view: hp 100%  speed 197 (slower)  incoming max 20%  certain 20%  threatened=False
+    foe moves est: Dark Pulse 20%, Energy Ball 15%, Flamethrower 12%, Will-O-Wisp 0%
+    * SCALD              670  lethal+500 super_effective+70
+      TOXIC              125  fresh_status+25
+      DEFOG             -200  no_hazards_to_remove-300
+      ROOST             -520  heal_near_full-500 heal_losing_race-120
+      switch->Torkoal -1000000  matchup+64 incoming_risk+16
+  end:     Reborn Staraptor 332/332        | Portable Mantine 312/332 BRN
+
+Turn 6
+  Reborn   Staraptor 332/332            -> Brave Bird
+  Portable Mantine 312/332 BRN          -> Scald
+    view: hp 94%  speed 197 (slower)  incoming max 69%  certain 69%  threatened=False
+    foe moves est: Brave Bird 69%, Double-Edge 69%, Close Combat 23%, U-turn 14%
+    * SCALD              126  expected_damage+26
+      TOXIC              125  fresh_status+25
+      DEFOG             -200  no_hazards_to_remove-300
+      ROOST             -520  heal_near_full-500 heal_losing_race-120
+      switch->Torkoal -1000000  matchup+32 incoming_risk+0
+  end:     Reborn Staraptor 150/332        | Portable Mantine 86/332 BRN
+
+Turn 7
+  Reborn   Staraptor 150/332            -> Brave Bird
+  Portable Mantine 86/332 BRN           -> Scald
+    view: hp 26%  speed 197 (slower)  incoming max 69%  certain 69%  threatened=True
+    foe moves est: Brave Bird 69%, Double-Edge 69%, Close Combat 23%, U-turn 14%
+    * SCALD              126  expected_damage+26
+      TOXIC              125  fresh_status+25
+      ROOST              -53  heal_low_hp+247 heal_cannot_resolve-400
+      DEFOG             -200  no_hazards_to_remove-300
+      switch->Torkoal -1000000  matchup+32 incoming_risk+0 escape_lethal_threat+130
+  end:     Reborn Staraptor 121/332        | Portable Torkoal 302/302
+
+Turn 8
+  Reborn   Staraptor 121/332            -> Brave Bird
+  Portable Torkoal 302/302              -> Lava Plume
+    view: hp 100%  speed 97 (slower)  incoming max 45%  certain 45%  threatened=False
+    foe moves est: Brave Bird 45%, Double-Edge 45%, Close Combat 30%, U-turn 9%
+    * LAVAPLUME          127  expected_damage+27
+      WILLOWISP          125  fresh_status+25
+      STEALTHROCK        100  
+      EARTHQUAKE     -1000000  
+      switch->Amoonguss -1000000  matchup+32 incoming_risk-32
+  end:     Reborn Noivern 332/332          | Portable Torkoal 168/302
+
+Turn 9
+  Reborn   Noivern 332/332              -> Draco Meteor
+  Portable Torkoal 168/302              -> switch->Forretress
+    view: hp 56%  speed 97 (slower)  incoming max 70%  certain 16%  threatened=True
+    foe moves est: Draco Meteor 70%, Hurricane 59%, Flamethrower 16%, U-turn 6%
+    * switch->Forretress     217  matchup+32 incoming_risk+0 escape_lethal_threat+130 escape_reasons+1
+      switch->Amoonguss     185  matchup+32 incoming_risk-32 escape_lethal_threat+130 escape_reasons+1
+      WILLOWISP          125  fresh_status+25
+      switch->Chesnaught     105  matchup+16 incoming_risk-96 escape_lethal_threat+130 escape_reasons+1
+      STEALTHROCK        100  
+  end:     Reborn Noivern 332/332          | Portable Forretress 206/312
+
+Turn 10
+  Reborn   Noivern 332/332              -> Flamethrower
+  Portable Forretress 206/312           -> switch->Torkoal
+    view: hp 66%  speed 137 (slower)  incoming max 71%  certain 71%  threatened=True
+    foe moves est: Flamethrower 71%, Hurricane 32%, Draco Meteor 19%, U-turn 6%
+    * switch->Torkoal     185  matchup+16 incoming_risk+0 escape_lethal_threat+130 escape_reasons+1
+      switch->Amoonguss     185  matchup+32 incoming_risk-32 escape_lethal_threat+130 escape_reasons+1
+      TOXIC              125  fresh_status+25
+      GYROBALL           116  expected_damage+16
+      switch->Chesnaught     105  matchup+16 incoming_risk-96 escape_lethal_threat+130 escape_reasons+1
+  end:     Reborn Noivern 332/332          | Portable Torkoal 147/302
+
+Turn 11
+  Reborn   Noivern 332/332              -> Draco Meteor
+  Portable Torkoal 147/302              -> Will-O-Wisp
+    view: hp 49%  speed 97 (slower)  incoming max 35%  certain 8%  threatened=False
+    foe moves est: Draco Meteor 35%, Hurricane 30%, Flamethrower 8%, U-turn 6%
+    * WILLOWISP          125  fresh_status+25
+      STEALTHROCK        100  
+      LAVAPLUME           66  expected_damage+11 resisted-45
+      EARTHQUAKE     -1000000  
+      switch->Amoonguss -1000000  matchup+32 incoming_risk-32 switch_loop-120
+  end:     Reborn Noivern 332/332          | Portable Torkoal 147/302
+
+Turn 12
+  Reborn   Noivern 332/332              -> Draco Meteor
+  Portable Torkoal 147/302              -> Will-O-Wisp
+    view: hp 49%  speed 97 (slower)  incoming max 35%  certain 8%  threatened=False
+    foe moves est: Draco Meteor 35%, Hurricane 30%, Flamethrower 8%, U-turn 6%
+    * WILLOWISP          125  fresh_status+25
+      STEALTHROCK        100  
+      LAVAPLUME           66  expected_damage+11 resisted-45
+      EARTHQUAKE     -1000000  
+      switch->Amoonguss -1000000  matchup+32 incoming_risk-32
+  end:     Reborn Noivern 312/332 BRN      | Portable Torkoal 147/302
+
+Turn 13
+  Reborn   Noivern 312/332 BRN          -> Draco Meteor
+  Portable Torkoal 147/302              -> Stealth Rock
+    view: hp 49%  speed 97 (slower)  incoming max 35%  certain 8%  threatened=False
+    foe moves est: Draco Meteor 35%, Hurricane 30%, Flamethrower 8%, U-turn 3%
+    * STEALTHROCK        100  
+      LAVAPLUME           66  expected_damage+11 resisted-45
+      WILLOWISP         -350  target_already_statused-450
+      EARTHQUAKE     -1000000  
+      switch->Amoonguss -1000000  matchup+32 incoming_risk-32
+  end:     Reborn Noivern 292/332 BRN      | Portable Torkoal 147/302
+
+Turn 14
+  Reborn   Noivern 292/332 BRN          -> Draco Meteor
+  Portable Torkoal 147/302              -> Lava Plume
+    view: hp 49%  speed 97 (slower)  incoming max 35%  certain 8%  threatened=False
+    foe moves est: Draco Meteor 35%, Hurricane 30%, Flamethrower 8%, U-turn 3%
+    * LAVAPLUME           66  expected_damage+11 resisted-45
+      WILLOWISP         -350  target_already_statused-450
+      STEALTHROCK       -400  hazard_at_cap-500
+      EARTHQUAKE     -1000000  
+      switch->Amoonguss -1000000  matchup+32 incoming_risk-32
+  end:     Reborn Noivern 218/332 BRN      | Portable Torkoal 49/302
+
+Turn 15
+  Reborn   Noivern 218/332 BRN          -> Hurricane
+  Portable Torkoal 49/302               -> Lava Plume
+    view: hp 16%  speed 97 (slower)  incoming max 24%  certain 6%  threatened=True
+    foe moves est: Draco Meteor 24%, Hurricane 20%, Flamethrower 6%, U-turn 3%
+    * LAVAPLUME           66  expected_damage+11 resisted-45
+      WILLOWISP         -350  target_already_statused-450
+      STEALTHROCK       -400  hazard_at_cap-500
+      EARTHQUAKE     -1000000  
+      switch->Amoonguss -1000000  matchup+32 incoming_risk-32 escape_lethal_threat+130 preserve_low_hp_actor+80
+  end:     Reborn Noivern 145/332 BRN      | Portable Torkoal 49/302
+
+Turn 16
+  Reborn   Noivern 145/332 BRN          -> Hurricane
+  Portable Torkoal 49/302               -> Lava Plume
+    view: hp 16%  speed 97 (slower)  incoming max 24%  certain 6%  threatened=True
+    foe moves est: Draco Meteor 24%, Hurricane 20%, Flamethrower 6%, U-turn 3%
+    * LAVAPLUME           66  expected_damage+11 resisted-45
+      WILLOWISP         -350  target_already_statused-450
+      STEALTHROCK       -400  hazard_at_cap-500
+      EARTHQUAKE     -1000000  
+      switch->Amoonguss -1000000  matchup+32 incoming_risk-32 escape_lethal_threat+130 preserve_low_hp_actor+80
+  end:     Reborn Noivern 125/332 BRN      | Portable Amoonguss 390/390
+
+Turn 17
+  Reborn   Noivern 125/332 BRN          -> Hurricane
+  Portable Amoonguss 390/390            -> Sludge Bomb
+    view: hp 100%  speed 117 (slower)  incoming max 29%  certain 15%  threatened=False
+    foe moves est: Hurricane 29%, Draco Meteor 17%, Flamethrower 15%, U-turn 8%
+    * SLUDGEBOMB         125  expected_damage+25
+      GIGADRAIN           60  expected_damage+5 resisted-45
+      SPORE             -350  target_already_statused-450
+      SYNTHESIS         -520  heal_near_full-500 heal_losing_race-120
+      switch->Chesnaught -1000000  matchup+16 incoming_risk-96
+  end:     Reborn Espeon 256/292           | Portable Amoonguss 390/390
+
+Turn 18
+  Reborn   Espeon 256/292               -> Psychic
+  Portable Amoonguss 390/390            -> Spore
+    view: hp 100%  speed 117 (slower)  incoming max 86%  certain 86%  threatened=False
+    foe moves est: Psychic 86%, Shadow Ball 26%, Dazzling Gleam 13%, Morning Sun 0%
+    * SPORE              125  fresh_status+25
+      SLUDGEBOMB         125  expected_damage+25
+      GIGADRAIN          121  expected_damage+21
+      SYNTHESIS         -520  heal_near_full-500 heal_losing_race-120
+      switch->Chesnaught -1000000  matchup+32 incoming_risk-32
+  end:     Reborn Espeon 256/292 SLP       | Portable Amoonguss 74/390
+
+Turn 19
+  Reborn   Espeon 256/292 SLP           -> Psychic
+  Portable Amoonguss 74/390             -> Synthesis
+    view: hp 19%  speed 117 (slower)  incoming max 86%  certain 0%  threatened=True
+    foe moves est: Psychic 86%, Shadow Ball 26%, Dazzling Gleam 13%, Morning Sun 0%
+    * SYNTHESIS          518  heal_low_hp+268 heal_saves_battler+150
+      SLUDGEBOMB         125  expected_damage+25
+      GIGADRAIN          121  expected_damage+21
+      SPORE             -350  target_already_statused-450
+      switch->Chesnaught -1000000  matchup+32 incoming_risk-32 escape_lethal_threat+130 preserve_low_hp_actor+80
+  end:     Reborn Espeon 256/292 SLP       | Portable Amoonguss 269/390
+
+Turn 20
+  Reborn   Espeon 256/292 SLP           -> Psychic
+  Portable Amoonguss 269/390            -> Synthesis
+    view: hp 69%  speed 117 (slower)  incoming max 86%  certain 0%  threatened=True
+    foe moves est: Psychic 86%, Shadow Ball 26%, Dazzling Gleam 13%, Morning Sun 0%
+    * SYNTHESIS          250  heal_saves_battler+150
+      switch->Forretress     221  matchup+32 incoming_risk+16 escape_lethal_threat+130 escape_reasons+1
+      switch->Chesnaught     185  matchup+32 incoming_risk-32 escape_lethal_threat+130 escape_reasons+1
+      SLUDGEBOMB         125  expected_damage+25
+      GIGADRAIN          121  expected_damage+21
+  end:     Reborn Espeon 256/292 SLP       | Portable Amoonguss 390/390
+
+Turn 21
+  Reborn   Espeon 256/292 SLP           -> Psychic
+  Portable Amoonguss 390/390            -> Sludge Bomb
+    view: hp 100%  speed 117 (slower)  incoming max 86%  certain 86%  threatened=False
+    foe moves est: Psychic 86%, Shadow Ball 26%, Dazzling Gleam 13%, Morning Sun 0%
+    * SLUDGEBOMB         125  expected_damage+25
+      GIGADRAIN          121  expected_damage+21
+      SPORE             -350  target_already_statused-450
+      SYNTHESIS         -520  heal_near_full-500 heal_losing_race-120
+      switch->Chesnaught -1000000  matchup+32 incoming_risk-32
+  end:     Reborn Espeon 157/292           | Portable Amoonguss 66/390
+
+Turn 22
+  Reborn   Espeon 157/292               -> Psychic
+  Portable Amoonguss 66/390             -> Spore
+    view: hp 17%  speed 117 (slower)  incoming max 129%  certain 129%  threatened=True
+    foe moves est: Psychic 129%, Shadow Ball 38%, Dazzling Gleam 19%, Morning Sun 0%
+    * SPORE              125  fresh_status+25
+      SLUDGEBOMB         125  expected_damage+25
+      GIGADRAIN          121  expected_damage+21
+      SYNTHESIS          -26  heal_low_hp+274 heal_cannot_resolve-400
+      switch->Chesnaught -1000000  matchup+32 incoming_risk-32 escape_lethal_threat+130 preserve_low_hp_actor+80
+  end:     Reborn Espeon 157/292           | Portable Forretress 206/312
+
+Turn 23
+  Reborn   Espeon 157/292               -> Shadow Ball
+  Portable Forretress 206/312           -> Toxic
+    view: hp 66%  speed 137 (slower)  incoming max 39%  certain 39%  threatened=False
+    foe moves est: Shadow Ball 39%, Psychic 33%, Dazzling Gleam 20%, Morning Sun 0%
+    * TOXIC              125  fresh_status+25
+      GYROBALL           120  expected_damage+20
+      SPIKES             100  
+      RAPIDSPIN         -187  expected_damage+13 no_hazards_to_remove-300
+      switch->Chesnaught -1000000  matchup+32 incoming_risk-32
+  end:     Reborn Espeon 139/292 PSN       | Portable Forretress 206/312
+
+Turn 24
+  Reborn   Espeon 139/292 PSN           -> Shadow Ball
+  Portable Forretress 206/312           -> Gyro Ball
+    view: hp 66%  speed 137 (slower)  incoming max 39%  certain 39%  threatened=False
+    foe moves est: Shadow Ball 39%, Psychic 33%, Dazzling Gleam 20%, Morning Sun 0%
+    * GYROBALL           120  expected_damage+20
+      SPIKES             100  
+      RAPIDSPIN         -187  expected_damage+13 no_hazards_to_remove-300
+      TOXIC             -350  target_already_statused-450
+      switch->Chesnaught -1000000  matchup+32 incoming_risk-32
+  end:     Reborn Espeon 20/292 PSN        | Portable Forretress 206/312
+
+Turn 25
+  Reborn   Espeon 20/292 PSN            -> Shadow Ball
+  Portable Forretress 206/312           -> Gyro Ball
+    view: hp 66%  speed 137 (slower)  incoming max 39%  certain 39%  threatened=False
+    foe moves est: Shadow Ball 39%, Psychic 33%, Dazzling Gleam 20%, Morning Sun 0%
+    * GYROBALL           600  lethal+500
+      RAPIDSPIN          300  lethal+500 no_hazards_to_remove-300
+      SPIKES             100  
+      TOXIC             -350  target_already_statused-450
+      switch->Chesnaught -1000000  matchup+32 incoming_risk-32
+  end:     Reborn Accelgor 242/322         | Portable Forretress 206/312
+
+Turn 26
+  Reborn   Accelgor 242/322             -> Focus Blast
+  Portable Forretress 206/312           -> Gyro Ball
+    view: hp 66%  speed 137 (slower)  incoming max 47%  certain 27%  threatened=False
+    foe moves est: Focus Blast 47%, Bug Buzz 27%, Sludge Bomb 0%, Spikes 0%
+    * GYROBALL           130  expected_damage+30
+      TOXIC              125  fresh_status+25
+      SPIKES             100  
+      RAPIDSPIN         -185  expected_damage+15 no_hazards_to_remove-300
+      switch->Chesnaught -1000000  matchup+16 incoming_risk+0
+  end:     Reborn Accelgor 114/322 SLP     | Portable Forretress 206/312
+
+Turn 27
+  Reborn   Accelgor 114/322 SLP         -> Focus Blast
+  Portable Forretress 206/312           -> Gyro Ball
+    view: hp 66%  speed 137 (slower)  incoming max 47%  certain 0%  threatened=False
+    foe moves est: Focus Blast 47%, Bug Buzz 27%, Sludge Bomb 0%, Spikes 0%
+    * GYROBALL           600  lethal+500
+      SPIKES             100  
+      RAPIDSPIN         -185  expected_damage+15 no_hazards_to_remove-300
+      TOXIC             -350  target_already_statused-450
+      switch->Chesnaught -1000000  matchup+16 incoming_risk+0
+  end:     Reborn Swellow 110/282          | Portable Forretress 206/312
+
+Turn 28
+  Reborn   Swellow 110/282              -> Brave Bird
+  Portable Forretress 206/312           -> Toxic
+    view: hp 66%  speed 137 (slower)  incoming max 33%  certain 33%  threatened=False
+    foe moves est: Brave Bird 33%, U-turn 7%, Quick Attack 6%, Protect 0%
+    * TOXIC              125  fresh_status+25
+      GYROBALL           123  expected_damage+23
+      RAPIDSPIN         -186  expected_damage+14 no_hazards_to_remove-300
+      SPIKES            -500  hazard_hits_nobody-600
+      switch->Chesnaught -1000000  matchup+32 incoming_risk-96
+  end:     Reborn Swellow 62/282 PSN       | Portable Forretress 114/312
+
+Turn 29
+  Reborn   Swellow 62/282 PSN           -> Brave Bird
+  Portable Forretress 114/312           -> Gyro Ball
+    view: hp 37%  speed 137 (slower)  incoming max 50%  certain 50%  threatened=True
+    foe moves est: Brave Bird 50%, U-turn 10%, Quick Attack 9%, Protect 0%
+    * GYROBALL           123  ko_never_lands+0 expected_damage+23
+      RAPIDSPIN         -186  expected_damage+14 no_hazards_to_remove-300
+      TOXIC             -350  target_already_statused-450
+      SPIKES            -500  hazard_hits_nobody-600
+      switch->Chesnaught -1000000  matchup+32 incoming_risk-96 escape_lethal_threat+130

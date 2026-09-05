@@ -1,0 +1,49 @@
+{
+  "captured": "2026-09-04",
+  "engine": "realidea",
+  "ai": "stock-v16+clara",
+  "skill": 100,
+  "corpus": {
+    "path": "_AI-Study/scenarios_realidea.json",
+    "sha256": "665b2276be2bc2b8a947c4a8805ef934ebeb4be6b37748331383a13e79720234",
+    "scenarios": 73,
+    "assertions": 91,
+    "probeable_assertions": 85,
+    "skipped_scenarios": 5,
+    "double_scenarios": 0
+  },
+  "results": {
+    "path": "_AI-Study/probe_results_realidea.ndjson",
+    "sha256": "1b1036c79a37bc3a2ddf002aceba91556fe982f1e27565c61f0108990261eb99",
+    "records": 73,
+    "errors": 0,
+    "passed_assertions": 81,
+    "failed_assertions": 4,
+    "failed_scenarios": [
+      "heal_at_low_hp",
+      "heal_beats_weak_attack",
+      "switch_forced_snorlax_to_ghost",
+      "switch_forced_tyranitar_to_ghost"
+    ]
+  },
+  "reference_comparison": {
+    "reference": "_AI-Study/generated/probe_results_reference.ndjson",
+    "shared_scenarios": 73,
+    "comparable_rankings": 68,
+    "mean_spearman_rho": 0.895,
+    "top1_score_agreement": "55/60",
+    "action_type_agreement": "66/68"
+  },
+  "runtime": {
+    "scenario_input": "Realidea V4.1/Data/ai_scenarios.txt",
+    "scenario_input_sha256": "824777910a0ba97c5575123c183081b5292e19a38801f9aa331565e0a6951908",
+    "scripts_bundle_sha256": "0aae8749ebdde20472e818fb346e07cea4fad61e544038a567257886ef01b722"
+  },
+  "reconciled_current_corpus": {
+    "scenarios": 126,
+    "assertions": 169,
+    "double_scenarios": 11,
+    "double_assertions": 19,
+    "note": "The archived stock run predates corpus batches V4-V7 and D1-D2. Preserve it as the no-regression subset; collect a new stock run before comparing the full corpus."
+  }
+}

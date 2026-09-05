@@ -7,6 +7,8 @@ Started 2026-09-03. Covers **two engines**: Essentials (Ruby) and CFRU (C, GBA).
 _AI-Study/
 ├── README.md                      you are here
 ├── ANALYSIS.md                    the write-up — tables, per-game detail, file:line citations
+├── AI-PORTABILITY.md              engine census + design thesis for ONE AI shipped across
+│                                  Essentials v16/v17/v19/v20/v21 via the plugin framework
 ├── TEAM-DESIGN.md                 trainer team composition: Reborn (Normal+Intense) vs Realidea,
 │                                  plus the LLM generation spec for replacement teams
 ├── tools/
@@ -35,6 +37,15 @@ shared scenario corpus, so an AI port can be measured instead of eyeballed. Note
 Reborn Yang already ships a headless battle harness (`PokeBattle_TestEnvironment.rb`) and a
 structured decision record (`PokeBattle_AI_Info`) — start there, don't build from zero.
 
+`PORTABLE-AI-REALIDEA.md` documents the implemented portable core, Realidea v16 adapter,
+opt-in install/rollback path, and measured scenario/gauntlet results.
+
+`PORTABLE-AI-REBORN.md` is the Reborn benchmark log (0.2.0 → 0.3.2, switch gate,
+fair ceiling). `PORTABLE-AI-DIAGNOSIS.md` picks up where it stops: the three move-policy
+gaps behind the remaining 9.7 points (heal-into-death, the finishing tiebreak, walls
+leaving), each measured with `tools/policy_gaps.py` and mapped to the Reborn-Normal
+rule Portable lacks.
+
 ## Quick recipes
 
 ```bash
@@ -53,6 +64,29 @@ python3 extract_rxdata.py "../../Realidea V4.1/Data/Scripts.rxdata" ./out
 # it proves whether the folder is live. 4 KB here = a loader, so the folder IS the game.
 python3 extract_rxdata.py "../../Reborn Yang/Reborn Yang/Data/Scripts.rxdata" /tmp/x --list
 ```
+
+Running the Reborn head-to-head gauntlet (see `PORTABLE-AI-REBORN.md` for what the arms
+and schedules mean). Serially it is one `Game.exe` per roster, ~2.3 s a battle; the
+parallel driver gives each roster its own game directory and runs four at once, for a
+measured 3.7x on 480 battles with byte-identical results:
+
+```bash
+# one-time, ~118 MB per worker (Audio/Graphics are NTFS junctions to the master)
+bash tools/setup_gauntlet_workers.sh 4
+
+# the harness config, minus the teams= line — the rosters are the arguments
+printf 'mode=gauntlet\nschedule=normal_baseline\nparty_size=6\n'\
+'arms=normal_reborn,normal_portable\ntrace=true\nlog_decisions=false\n' > /tmp/cfg
+
+bash tools/run_gauntlet_parallel.sh generated/reborn_6v6_myrun /tmp/cfg \
+    set_a set_b set_c set_d set_e        # -> generated/reborn_6v6_myrun_set_a.ndjson, ...
+```
+
+`Game.exe` is a **Windows** process (~250 MB, ~0.7 core each); WSL only orchestrates, so
+the worker count is bounded by Windows free RAM rather than by `nproc` inside WSL.
+Rebuild the workers after changing the installed bundle only if you skip the driver —
+it re-syncs `Scripts/` from the master on every run precisely so a worker cannot
+silently execute a stale `Portable_AI.rb`.
 
 Grep vocabulary that pays off:
 
@@ -101,5 +135,11 @@ not: it checks whether you picked Wide Guard, and whether Sucker Punch will fail
   mapping is ROM data, and several cheats key off `>= OPTIONS_EXPERT_DIFFICULTY`.
 - Everything here is static analysis. No playtesting; team composition and level curves
   are largely out of scope.
-- Not yet examined: Bloodborne, Pokemon Empire (+ Expanded), Slipstream RL,
-  Grueling Gold 4.0 / v20.1 — all present in `../`.
+- **Grueling Gold, partially examined 2026-09-04** (during the portability census, not a
+  teardown): v20.1, and its compiled bundle contains **Phantombass AI 1.0** — 15,145 lines
+  across 8 scripts, the full build, not Ancient Platinum's 4,840-line v21 rewrite — plus
+  Deluxe Battle Kit, two of whose scripts define `pbChooseMoves`/`pbGetMoveScore`. Three
+  layers contend for the same methods there. Deserves a proper section in `ANALYSIS.md`.
+- **Pokémon Z V2.13, added 2026-09-04.** v16.2, stock AI, 181/196 trainer types at skill
+  100 — the Realidea control group. See its section in `ANALYSIS.md`.
+- Not yet examined: Bloodborne, Pokemon Empire (+ Expanded, both **v17.2**), Slipstream RL.

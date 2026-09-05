@@ -1,0 +1,1142 @@
+require "test/unit"
+
+root = File.expand_path("..", File.dirname(__FILE__))
+require File.join(root, "portable_ai", "model")
+require File.join(root, "portable_ai", "effects")
+require File.join(root, "portable_ai", "core")
+
+class PortableAITest < Test::Unit::TestCase
+  def target(index, hp)
+    { "index" => index, "hp_pct" => hp, "status" => 0 }
+  end
+
+  def move(slot, id, target_index, base, damage, extra)
+    out = {
+      "type" => "move", "slot" => slot, "move_id" => id,
+      "target" => target_index, "base_score" => base,
+      "expected_damage_pct" => damage, "effectiveness" => 1,
+      "damaging" => damage > 0
+    }
+    (extra || {}).each { |k, v| out[k] = v }
+    out
+  end
+
+  def actor(index, hp, actions, extra)
+    out = { "index" => index, "hp_pct" => hp, "actions" => actions }
+    (extra || {}).each { |k, v| out[k] = v }
+    out
+  end
+
+  def snapshot(actors, targets, memory)
+    {
+      "format" => actors.length > 1 ? "double" : "single",
+      "actors" => actors, "targets" => targets, "memory" => memory || {}
+    }
+  end
+
+  def pick(snap, config)
+    PortableAI.plan(snap, config || {}, Random.new(7))["actions"]
+  end
+
+  def reasons_of(action)
+    action["reasons"].map { |pair| pair[0] }
+  end
+
+  def switch_action(slot)
+    { "type" => "switch", "slot" => slot, "base_score" => 100, "matchup_score" => 0 }
+  end
+
+  def test_lethal_move_beats_setup
+    foe = target(0, 12)
+    actions = [
+      move(0, "EARTHQUAKE", 0, 100, 30, {}),
+      move(1, "SWORDSDANCE", 0, 120, 0, {})
+    ]
+    result = pick(snapshot([actor(1, 100, actions, {})], [foe], {}), {})
+    assert_equal("EARTHQUAKE", result[0]["move_id"])
+  end
+
+  def test_low_hp_heal_beats_weak_attack
+    foe = target(0, 100)
+    actions = [
+      move(0, "ROOST", nil, 87, 0, {}),
+      move(1, "BRAVEBIRD", 0, 110, 12, {})
+    ]
+    result = pick(snapshot([actor(1, 20, actions, {})], [foe], {}), {})
+    assert_equal("ROOST", result[0]["move_id"])
+  end
+
+  def test_heal_is_rejected_near_full
+    foe = target(0, 80)
+    actions = [
+      move(0, "SOFTBOILED", nil, 150, 0, {}),
+      move(1, "DAZZLINGGLEAM", 0, 100, 20, {})
+    ]
+    result = pick(snapshot([actor(1, 95, actions, {})], [foe], {}), {})
+    assert_equal("DAZZLINGGLEAM", result[0]["move_id"])
+  end
+
+  def test_immune_move_is_never_selected
+    foe = target(0, 100)
+    actions = [
+      move(0, "EARTHQUAKE", 0, 500, 0, { "immune" => true }),
+      move(1, "DRAGONCLAW", 0, 50, 10, {})
+    ]
+    result = pick(snapshot([actor(1, 100, actions, {})], [foe], {}), {})
+    assert_equal("DRAGONCLAW", result[0]["move_id"])
+  end
+
+  def test_forced_switch_beats_move
+    foe = target(0, 100)
+    actions = [
+      move(0, "BODYSLAM", 0, 120, 0, { "immune" => true }),
+      { "type" => "switch", "slot" => 1, "base_score" => 0,
+        "matchup_score" => 30, "forced" => true }
+    ]
+    result = pick(snapshot([actor(1, 100, actions, { "no_effective_move" => true })], [foe], {}), {})
+    assert_equal("switch", result[0]["type"])
+    assert_equal(1, result[0]["slot"])
+  end
+
+  def test_unknown_move_uses_adapter_score
+    foe = target(0, 100)
+    actions = [
+      move(0, "CUSTOMMOVE", 0, 130, 15, {}),
+      move(1, "POUND", 0, 80, 15, {})
+    ]
+    result = pick(snapshot([actor(1, 100, actions, {})], [foe], {}), {})
+    assert_equal("CUSTOMMOVE", result[0]["move_id"])
+  end
+
+  def test_doubles_avoids_wasted_double_target
+    left_foe = target(0, 20)
+    right_foe = target(2, 30)
+    left_actions = [
+      move(0, "THUNDERBOLT", 0, 140, 30, {}),
+      move(0, "THUNDERBOLT", 2, 130, 30, {})
+    ]
+    right_actions = [
+      move(0, "FLAMETHROWER", 0, 140, 35, {}),
+      move(0, "FLAMETHROWER", 2, 130, 35, {})
+    ]
+    actors = [actor(1, 100, left_actions, {}), actor(3, 100, right_actions, {})]
+    result = pick(snapshot(actors, [left_foe, right_foe], {}), {})
+    assert_not_equal(result[0]["target"], result[1]["target"])
+  end
+
+  def test_doubles_never_switches_both_actors_to_same_slot
+    foes = [target(0, 100), target(2, 100)]
+    switch = { "type" => "switch", "slot" => 2, "base_score" => 500,
+               "matchup_score" => 100 }
+    stay_left = move(0, "POUND", 0, 10, 5, {})
+    stay_right = move(0, "PECK", 2, 10, 5, {})
+    # Both actors need a real escape reason: since 0.3.0 an unmotivated switch is
+    # gated out entirely, and this test is about slot coordination, not the gate.
+    escaping = { "no_effective_move" => true }
+    actors = [
+      actor(1, 20, [switch, stay_left], escaping),
+      actor(3, 20, [switch, stay_right], escaping)
+    ]
+    result = pick(snapshot(actors, foes, {}), {})
+    assert_equal(1, result.count { |a| a["type"] == "switch" })
+  end
+
+  def test_switch_without_escape_reason_is_gated_out
+    foe = [target(0, 100)]
+    # A switch that would comfortably outscore the move under pre-0.3.0 scoring.
+    switch = { "type" => "switch", "slot" => 1, "base_score" => 500,
+               "matchup_score" => 400 }
+    stay = move(0, "POUND", 0, 10, 5, {})
+    actors = [actor(1, 100, [switch, stay], {})]
+    result = pick(snapshot(actors, foe, {}), {})
+    assert_equal("move", result[0]["type"])
+  end
+
+  def test_switch_with_escape_reason_is_allowed
+    foe = [target(0, 100)]
+    switch = { "type" => "switch", "slot" => 1, "base_score" => 500,
+               "matchup_score" => 400 }
+    stay = move(0, "POUND", 0, 10, 5, {})
+    actors = [actor(1, 100, [switch, stay], { "no_effective_move" => true })]
+    result = pick(snapshot(actors, foe, {}), {})
+    assert_equal("switch", result[0]["type"])
+  end
+
+  def test_switch_gate_can_be_disabled_for_ab_runs
+    foe = [target(0, 100)]
+    switch = { "type" => "switch", "slot" => 1, "base_score" => 500,
+               "matchup_score" => 400 }
+    stay = move(0, "POUND", 0, 10, 5, {})
+    actors = [actor(1, 100, [switch, stay], {})]
+    result = pick(snapshot(actors, foe, {}), { "switch_gate" => false })
+    assert_equal("switch", result[0]["type"])
+  end
+
+  def test_lethal_threat_opens_gate_only_while_healthy
+    foe = [target(0, 100)]
+    switch = { "type" => "switch", "slot" => 1, "base_score" => 500,
+               "matchup_score" => 400 }
+    stay = move(0, "POUND", 0, 10, 5, {})
+    # Healthy battler facing a hard counter: a real matchup problem, pivot allowed.
+    healthy = [actor(1, 100, [switch, stay], { "incoming_damage_pct" => 120 })]
+    assert_equal("switch", pick(snapshot(healthy, foe, {}), {})[0]["type"])
+    # Nearly dead: everything is lethal, so this must not license fleeing on its own.
+    weak = [actor(1, 20, [switch, stay], { "incoming_damage_pct" => 120 })]
+    assert_equal("move", pick(snapshot(weak, foe, {}), {})[0]["type"])
+  end
+
+  def test_boosted_foe_does_not_license_a_healthy_pivot
+    switch = { "type" => "switch", "slot" => 1, "base_score" => 500,
+               "matchup_score" => 400 }
+    stay = move(0, "POUND", 0, 10, 5, {})
+    healthy = [actor(1, 100, [switch, stay], { "incoming_damage_pct" => 120 })]
+    # Same healthy battler, same lethal incoming damage — but the threat is the foe's
+    # +2, not the matchup, so hold ground rather than hand it a free boosted hit.
+    boosted = [target(0, 100)].each { |t| t["positive_stages"] = 2 }
+    assert_equal("move", pick(snapshot(healthy, boosted, {}), {})[0]["type"])
+  end
+
+  def test_boosted_foe_still_allows_an_independent_escape_reason
+    switch = { "type" => "switch", "slot" => 1, "base_score" => 500,
+               "matchup_score" => 400 }
+    stay = move(0, "POUND", 0, 10, 5, {})
+    boosted = [target(0, 100)].each { |t| t["positive_stages"] = 4 }
+    # Nothing here can damage the foe at all; its boosts do not veto that fact.
+    stuck = [actor(1, 100, [switch, stay], { "no_effective_move" => true })]
+    assert_equal("switch", pick(snapshot(stuck, boosted, {}), {})[0]["type"])
+  end
+
+  def test_switch_prefers_the_mon_that_resists_the_foe
+    foe = [target(0, 100)]
+    # Two escape routes with identical offence; one walks into super-effective STAB
+    # (64), the other resists it (16). Nothing else separates them.
+    into_it = { "type" => "switch", "slot" => 1, "base_score" => 100,
+                "matchup_score" => 32, "incoming_risk" => 64 }
+    resists = { "type" => "switch", "slot" => 2, "base_score" => 100,
+                "matchup_score" => 32, "incoming_risk" => 16 }
+    stay = move(0, "POUND", 0, 10, 5, {})
+    actors = [actor(1, 100, [into_it, resists, stay], { "no_effective_move" => true })]
+    result = pick(snapshot(actors, foe, {}), {})
+    assert_equal("switch", result[0]["type"])
+    assert_equal(2, result[0]["slot"])
+  end
+
+  # The two switch candidates below disagree: slot 1 hits harder (64) but eats a
+  # super-effective STAB coming in (64), slot 2 is neutral offensively (32) and
+  # resists (16). Which one wins is decided entirely by switch_risk_weight, so the
+  # pair pins both ends of the knob — including 0.0, which is Portable 0.3.1 and is
+  # the A/B arm the roster runs use.
+  def risk_disagreement_actors
+    hard_hitter = { "type" => "switch", "slot" => 1, "base_score" => 100,
+                    "matchup_score" => 64, "incoming_risk" => 64 }
+    survivor = { "type" => "switch", "slot" => 2, "base_score" => 100,
+                 "matchup_score" => 32, "incoming_risk" => 16 }
+    stay = move(0, "POUND", 0, 10, 5, {})
+    [actor(1, 100, [hard_hitter, survivor, stay], { "no_effective_move" => true })]
+  end
+
+  def test_switch_risk_weight_default_prefers_surviving_the_entry_turn
+    actors = risk_disagreement_actors
+    assert_equal(2, pick(snapshot(actors, [target(0, 100)], {}), {})[0]["slot"])
+  end
+
+  def test_switch_risk_weight_zero_restores_offence_only_scoring
+    actors = risk_disagreement_actors
+    config = { "switch_risk_weight" => 0.0 }
+    assert_equal(1, pick(snapshot(actors, [target(0, 100)], {}), config)[0]["slot"])
+  end
+
+  def test_switch_risk_weight_scales_the_defensive_term
+    actors = risk_disagreement_actors
+    # Half weight halves the 32-point risk gap to 16, which no longer overturns the
+    # 32-point offensive gap, so the knob is a dial rather than an on/off switch.
+    config = { "switch_risk_weight" => 0.5 }
+    assert_equal(1, pick(snapshot(actors, [target(0, 100)], {}), config)[0]["slot"])
+  end
+
+  def test_switch_risk_is_ignored_when_the_adapter_omits_it
+    foe = [target(0, 100)]
+    # Older adapters send no incoming_risk; those switches must score as they did.
+    better = { "type" => "switch", "slot" => 1, "base_score" => 100,
+               "matchup_score" => 64 }
+    worse = { "type" => "switch", "slot" => 2, "base_score" => 100,
+              "matchup_score" => 32 }
+    stay = move(0, "POUND", 0, 10, 5, {})
+    actors = [actor(1, 100, [better, worse, stay], { "no_effective_move" => true })]
+    assert_equal(1, pick(snapshot(actors, foe, {}), {})[0]["slot"])
+  end
+
+  def test_targeted_friendly_fire_is_rejected
+    foes = [target(0, 100), target(2, 100)]
+    hit_ally = move(
+      0, "BRAVEBIRD", 3, 500, 80,
+      {
+        "friendly_fire_pct" => 80, "partner_hp_pct" => 100,
+        "friendly_target" => true
+      }
+    )
+    hit_foe = move(0, "BRAVEBIRD", 0, 100, 20, {})
+    partner_move = move(0, "BODYSLAM", 2, 100, 20, {})
+    actors = [
+      actor(1, 100, [hit_ally, hit_foe], {}),
+      actor(3, 100, [partner_move], {})
+    ]
+    result = pick(snapshot(actors, foes, {}), {})
+    assert_equal(0, result[0]["target"])
+  end
+
+  def test_repeated_setup_is_penalized
+    foe = target(0, 100)
+    actions = [
+      move(0, "SWORDSDANCE", 0, 160, 0, {}),
+      move(1, "BODYSLAM", 0, 100, 20, {})
+    ]
+    memory = { "1" => { "setup" => 2 } }
+    result = pick(snapshot([actor(1, 100, actions, {})], [foe], memory), {})
+    assert_equal("BODYSLAM", result[0]["move_id"])
+  end
+
+  def test_invalid_snapshot_is_rejected
+    assert_raise(ArgumentError) { PortableAI.plan({}, {}, Random.new(1)) }
+  end
+
+  # --- 0.4.0 heal gate -------------------------------------------------------------
+
+  def test_slower_heal_into_a_lethal_hit_is_refused
+    foe = target(0, 100)
+    actions = [
+      move(0, "RECOVER", nil, 100, 0, {}),
+      move(1, "BODYSLAM", 0, 100, 20, {})
+    ]
+    healer = actor(1, 12, actions, { "incoming_damage_pct" => 60, "faster" => false })
+    result = pick(snapshot([healer], [foe], {}), {})
+    assert_equal("BODYSLAM", result[0]["move_id"])
+  end
+
+  def test_strict_threat_keeps_the_heal_when_the_hit_is_not_certain
+    foe = target(0, 100)
+    actions = [
+      move(0, "RECOVER", nil, 100, 0, {}),
+      move(1, "BODYSLAM", 0, 100, 20, {})
+    ]
+    # The foe's best move is 70% accurate (or it is asleep): the adapter reports a
+    # loose 60% threat but a certain 0%. Slower healer at 12%.
+    healer = actor(1, 12, actions, { "incoming_damage_pct" => 60,
+                                     "certain_incoming_damage_pct" => 0,
+                                     "faster" => false })
+    strict = pick(snapshot([healer], [foe], {}), {})
+    assert_equal("RECOVER", strict[0]["move_id"])
+    assert_equal(true, reasons_of(strict[0]).include?("heal_saves_battler"))
+    loose = pick(snapshot([healer], [foe], {}), { "strict_threat" => false })
+    assert_equal("BODYSLAM", loose[0]["move_id"])
+  end
+
+  def test_heal_that_cannot_outrun_the_incoming_hit_is_refused
+    foe = target(0, 100)
+    actions = [
+      move(0, "SOFTBOILED", nil, 100, 0, {}),
+      move(1, "SEISMICTOSS", 0, 100, 18, {})
+    ]
+    healer = actor(1, 10, actions, { "incoming_damage_pct" => 95, "faster" => true })
+    result = pick(snapshot([healer], [foe], {}), {})
+    assert_equal("SEISMICTOSS", result[0]["move_id"])
+  end
+
+  def test_rest_outruns_a_hit_that_a_half_heal_would_not
+    foe = target(0, 100)
+    partial = actor(1, 10, [move(0, "SOFTBOILED", nil, 100, 0, {})],
+                    { "incoming_damage_pct" => 80, "faster" => true })
+    full = actor(1, 10, [move(0, "REST", nil, 100, 0, {})],
+                 { "incoming_damage_pct" => 80, "faster" => true })
+    assert_equal(true, reasons_of(pick(snapshot([partial], [foe], {}), {})[0])
+                       .include?("heal_does_not_save"))
+    assert_equal(true, reasons_of(pick(snapshot([full], [foe], {}), {})[0])
+                       .include?("heal_saves_battler"))
+  end
+
+  def test_weather_heal_is_worth_less_in_sand
+    foe = target(0, 100)
+    actions = [move(0, "MOONLIGHT", nil, 100, 0, {})]
+    healer = actor(1, 20, actions, { "incoming_damage_pct" => 60, "faster" => true })
+    clear = snapshot([healer], [foe], {})
+    sand = snapshot([healer], [foe], {})
+    sand["weather"] = "sand"
+    assert_equal(true, reasons_of(pick(clear, {})[0]).include?("heal_saves_battler"))
+    assert_equal(true, reasons_of(pick(sand, {})[0]).include?("heal_does_not_save"))
+  end
+
+  # A hit that the estimate kills with but a low roll does not is exactly the position
+  # the -400 must not fire in: healing survives half the rolls and wins the game there.
+  def test_marginally_lethal_hit_still_leaves_the_heal_worth_taking
+    foe = target(0, 100)
+    actions = [
+      move(0, "SOFTBOILED", nil, 100, 0, {}),
+      move(1, "DAZZLINGGLEAM", 0, 100, 20, {})
+    ]
+    healer = actor(1, 12, actions, { "incoming_damage_pct" => 13, "faster" => false })
+    result = pick(snapshot([healer], [foe], {}), {})
+    assert_equal("SOFTBOILED", result[0]["move_id"])
+    assert_equal(true, reasons_of(result[0]).include?("heal_saves_battler"))
+  end
+
+  def test_heal_gate_off_restores_the_flat_lethal_threat_penalty
+    foe = target(0, 100)
+    actions = [
+      move(0, "RECOVER", nil, 100, 0, {}),
+      move(1, "BODYSLAM", 0, 100, 20, {})
+    ]
+    healer = actor(1, 12, actions, { "incoming_damage_pct" => 60, "faster" => false })
+    result = pick(snapshot([healer], [foe], {}), { "heal_gate" => false })
+    assert_equal("RECOVER", result[0]["move_id"])
+    assert_equal(true, reasons_of(result[0]).include?("heal_under_lethal_threat"))
+  end
+
+  # --- 0.4.0 accuracy --------------------------------------------------------------
+
+  def test_accurate_knockout_beats_the_inaccurate_one
+    foe = target(0, 40)
+    actions = [
+      move(0, "STONEEDGE", 0, 100, 60, { "accuracy" => 80 }),
+      move(1, "ROCKSLIDE", 0, 100, 45, { "accuracy" => 90 })
+    ]
+    result = pick(snapshot([actor(1, 100, actions, {})], [foe], {}), {})
+    assert_equal("ROCKSLIDE", result[0]["move_id"])
+  end
+
+  def test_accuracy_weight_zero_restores_slot_order_among_knockouts
+    foe = target(0, 40)
+    actions = [
+      move(0, "STONEEDGE", 0, 100, 60, { "accuracy" => 80 }),
+      move(1, "ROCKSLIDE", 0, 100, 45, { "accuracy" => 90 })
+    ]
+    result = pick(snapshot([actor(1, 100, actions, {})], [foe], {}),
+                  { "accuracy_weight" => 0 })
+    assert_equal("STONEEDGE", result[0]["move_id"])
+  end
+
+  def test_missing_accuracy_field_is_not_a_discount
+    foe = target(0, 40)
+    actions = [
+      move(0, "EARTHQUAKE", 0, 100, 60, {}),
+      move(1, "ROCKSLIDE", 0, 100, 45, { "accuracy" => 90 })
+    ]
+    result = pick(snapshot([actor(1, 100, actions, {})], [foe], {}), {})
+    assert_equal("EARTHQUAKE", result[0]["move_id"])
+  end
+
+  # --- 0.4.0 priority vs speed -----------------------------------------------------
+
+  def test_priority_secures_a_knockout_the_actor_could_not_land
+    foe = target(0, 25)
+    actions = [
+      move(0, "ICICLECRASH", 0, 100, 70, {}),
+      move(1, "ICESHARD", 0, 100, 30, { "priority" => 1 })
+    ]
+    doomed = actor(1, 30, actions, { "incoming_damage_pct" => 60, "faster" => false })
+    result = pick(snapshot([doomed], [foe], {}), {})
+    assert_equal("ICESHARD", result[0]["move_id"])
+  end
+
+  def test_a_knockout_that_resolves_after_the_actor_dies_is_not_a_knockout
+    foe = target(0, 25)
+    actions = [move(0, "ICICLECRASH", 0, 100, 70, {})]
+    doomed = actor(1, 30, actions, { "incoming_damage_pct" => 60, "faster" => false })
+    assert_equal(true, reasons_of(pick(snapshot([doomed], [foe], {}), {})[0])
+                       .include?("ko_never_lands"))
+    safe = actor(1, 90, actions, { "incoming_damage_pct" => 60, "faster" => false })
+    assert_equal(true, reasons_of(pick(snapshot([safe], [foe], {}), {})[0])
+                       .include?("lethal"))
+  end
+
+  def test_priority_gate_is_skipped_when_speed_order_is_unknown
+    foe = target(0, 25)
+    actions = [move(0, "ICICLECRASH", 0, 100, 70, {})]
+    unknown = actor(1, 30, actions, { "incoming_damage_pct" => 60 })
+    assert_equal(true, reasons_of(pick(snapshot([unknown], [foe], {}), {})[0])
+                       .include?("lethal"))
+  end
+
+  def test_priority_gate_off_restores_slot_order_among_knockouts
+    foe = target(0, 25)
+    actions = [
+      move(0, "ICICLECRASH", 0, 100, 70, {}),
+      move(1, "ICESHARD", 0, 100, 30, { "priority" => 1 })
+    ]
+    doomed = actor(1, 30, actions, { "incoming_damage_pct" => 60, "faster" => false })
+    result = pick(snapshot([doomed], [foe], {}), { "priority_gate" => false })
+    assert_equal("ICICLECRASH", result[0]["move_id"])
+  end
+
+  # --- 0.4.0 self-cost -------------------------------------------------------------
+
+  def test_self_stat_drop_loses_to_an_equal_knockout
+    foe = target(0, 30)
+    actions = [
+      move(0, "DRACOMETEOR", 0, 100, 80, {}),
+      move(1, "DARKPULSE", 0, 100, 50, {})
+    ]
+    result = pick(snapshot([actor(1, 100, actions, {})], [foe], {}), {})
+    assert_equal("DARKPULSE", result[0]["move_id"])
+  end
+
+  def test_self_stat_drop_is_still_taken_when_it_is_the_only_knockout
+    foe = target(0, 60)
+    actions = [
+      move(0, "DRACOMETEOR", 0, 100, 80, {}),
+      move(1, "DARKPULSE", 0, 100, 50, {})
+    ]
+    result = pick(snapshot([actor(1, 100, actions, {})], [foe], {}), {})
+    assert_equal("DRACOMETEOR", result[0]["move_id"])
+  end
+
+  def test_explosion_is_refused_at_full_hp_when_another_move_kills
+    foe = target(0, 30)
+    actions = [
+      move(0, "EXPLOSION", 0, 100, 90, { "own_reserves" => 2 }),
+      move(1, "THUNDERBOLT", 0, 100, 40, { "own_reserves" => 2 })
+    ]
+    result = pick(snapshot([actor(1, 100, actions, {})], [foe], {}), {})
+    assert_equal("THUNDERBOLT", result[0]["move_id"])
+  end
+
+  def test_explosion_is_allowed_when_the_actor_is_about_to_die_anyway
+    foe = target(0, 30)
+    actions = [
+      move(0, "EXPLOSION", 0, 100, 90, { "own_reserves" => 2 }),
+      move(1, "THUNDERBOLT", 0, 100, 40, { "own_reserves" => 2 })
+    ]
+    result = pick(snapshot([actor(1, 20, actions, {})], [foe], {}), {})
+    assert_equal("EXPLOSION", result[0]["move_id"])
+  end
+
+  # Reborn's deathcode never trades the last Pokemon: fainting on purpose there ends
+  # the battle, whatever it takes with it.
+  def test_explosion_is_refused_with_nothing_left_to_send_out
+    foe = target(0, 30)
+    actions = [
+      move(0, "EXPLOSION", 0, 100, 90, { "own_reserves" => 0 }),
+      move(1, "THUNDERBOLT", 0, 100, 40, { "own_reserves" => 0 })
+    ]
+    result = pick(snapshot([actor(1, 20, actions, {})], [foe], {}), {})
+    assert_equal("THUNDERBOLT", result[0]["move_id"])
+  end
+
+  def test_self_cost_off_restores_slot_order
+    foe = target(0, 30)
+    actions = [
+      move(0, "EXPLOSION", 0, 100, 90, { "own_reserves" => 2 }),
+      move(1, "THUNDERBOLT", 0, 100, 40, { "own_reserves" => 2 })
+    ]
+    result = pick(snapshot([actor(1, 100, actions, {})], [foe], {}),
+                  { "self_cost" => false })
+    assert_equal("EXPLOSION", result[0]["move_id"])
+  end
+
+  # --- 0.5.0 tables -----------------------------------------------------------------
+  #
+  # One pair per row: the rule fires where it should, and is correctly silent where it
+  # should not. The silent half is the half that matters -- every 0.5.0 row is a
+  # multiplier on a move the AI was already going to consider, so a row that never
+  # switches itself off is a row that just rescales the whole move list.
+  #
+  # The three rows Reborn does NOT have are tested here and NOT in the probe corpus:
+  # a corpus card is a guardrail only where stock Reborn passes it (see
+  # PORTABLE-AI-REBORN.md, "0.5.0 Phase A").
+
+  def sec(kind, chance, extra)
+    out = { "effect_kind" => kind, "effect_chance" => chance }
+    (extra || {}).each { |k, v| out[k] = v }
+    out
+  end
+
+  # --- secondary status ---
+  def test_burn_secondary_is_worth_more_into_a_physical_attacker
+    foe = target(0, 100).merge("ability" => "SNORLAX", "physical_attacker" => true)
+    actions = [
+      move(0, "SCALD", 0, 100, 40, sec("burn", 100, {})),
+      move(1, "SURF", 0, 100, 50, {})
+    ]
+    result = pick(snapshot([actor(1, 100, actions, {})], [foe], {}), {})
+    assert_equal("SCALD", result[0]["move_id"])
+  end
+
+  def test_burn_secondary_is_not_worth_10_bp_into_a_special_attacker
+    foe = target(0, 100).merge("special_attacker" => true)
+    actions = [
+      move(0, "SCALD", 0, 100, 40, sec("burn", 100, {})),
+      move(1, "SURF", 0, 100, 50, {})
+    ]
+    result = pick(snapshot([actor(1, 100, actions, {})], [foe], {}), {})
+    assert_equal("SURF", result[0]["move_id"])
+  end
+
+  # A 10% chance is worth a tenth of the effect. Reborn does not do this (its
+  # burncode never reads addlEffect); the departure is deliberate and measured.
+  def test_secondary_chance_scales_the_bonus
+    foe = target(0, 100).merge("physical_attacker" => true)
+    certain = [move(0, "SCALD", 0, 100, 40, sec("burn", 100, {})),
+               move(1, "SURF", 0, 100, 50, {})]
+    rare = [move(0, "SCALD", 0, 100, 40, sec("burn", 10, {})),
+            move(1, "SURF", 0, 100, 50, {})]
+    assert_equal("SCALD", pick(snapshot([actor(1, 100, certain, {})], [foe], {}), {})[0]["move_id"])
+    assert_equal("SURF", pick(snapshot([actor(1, 100, rare, {})], [foe], {}), {})[0]["move_id"])
+  end
+
+  # effect_chance 0 is the engine saying Sheer Force / Shield Dust / Covert Cloak has
+  # removed the secondary entirely.
+  def test_negated_secondary_scores_nothing
+    foe = target(0, 100).merge("physical_attacker" => true)
+    actions = [
+      move(0, "SCALD", 0, 100, 40, sec("burn", 0, {})),
+      move(1, "SURF", 0, 100, 50, {})
+    ]
+    result = pick(snapshot([actor(1, 100, actions, {})], [foe], {}), {})
+    assert_equal("SURF", result[0]["move_id"])
+  end
+
+  def test_burn_is_worthless_into_a_guts_target
+    foe = target(0, 100).merge("ability" => "GUTS", "physical_attacker" => true)
+    actions = [
+      move(0, "SCALD", 0, 100, 40, sec("burn", 100, {})),
+      move(1, "SURF", 0, 100, 41, {})
+    ]
+    result = pick(snapshot([actor(1, 100, actions, {})], [foe], {}), {})
+    assert_equal("SURF", result[0]["move_id"])
+  end
+
+  # --- flinch ---
+  def test_flinch_counts_only_when_faster
+    foe = target(0, 100)
+    actions = [
+      move(0, "ROCKSLIDE", 0, 100, 40, sec("flinch", 30, {})),
+      move(1, "ROCKTOMB", 0, 100, 42, {})
+    ]
+    fast = pick(snapshot([actor(1, 100, actions, { "faster" => true })], [foe], {}), {})
+    slow = pick(snapshot([actor(1, 100, actions, { "faster" => false })], [foe], {}), {})
+    assert_equal("ROCKSLIDE", fast[0]["move_id"])
+    assert_equal("ROCKTOMB", slow[0]["move_id"])
+  end
+
+  def test_flinch_is_ignored_behind_inner_focus
+    foe = target(0, 100).merge("ability" => "INNERFOCUS")
+    actions = [
+      move(0, "ROCKSLIDE", 0, 100, 40, sec("flinch", 30, {})),
+      move(1, "ROCKTOMB", 0, 100, 42, {})
+    ]
+    result = pick(snapshot([actor(1, 100, actions, { "faster" => true })], [foe], {}), {})
+    assert_equal("ROCKTOMB", result[0]["move_id"])
+  end
+
+  # --- target stat drops ---
+  def test_speed_drop_is_valued_only_when_slower
+    foe = target(0, 100)
+    actions = [
+      move(0, "ICYWIND", 0, 100, 30, sec("drop", 100, { "effect_stat" => "speed" })),
+      move(1, "ICEBEAM", 0, 100, 36, {})
+    ]
+    slow = pick(snapshot([actor(1, 100, actions, { "faster" => false })], [foe], {}), {})
+    fast = pick(snapshot([actor(1, 100, actions, { "faster" => true })], [foe], {}), {})
+    assert_equal("ICYWIND", slow[0]["move_id"])
+    assert_equal("ICEBEAM", fast[0]["move_id"])
+  end
+
+  def test_stat_drop_is_dead_against_clear_body
+    foe = target(0, 100).merge("ability" => "CLEARBODY")
+    actions = [
+      move(0, "ICYWIND", 0, 100, 30, sec("drop", 100, { "effect_stat" => "speed" })),
+      move(1, "ICEBEAM", 0, 100, 33, {})
+    ]
+    result = pick(snapshot([actor(1, 100, actions, { "faster" => false })], [foe], {}), {})
+    assert_equal("ICEBEAM", result[0]["move_id"])
+  end
+
+  # --- recoil, drain, item removal, multi-hit ---
+  def test_recoil_loses_to_a_clean_knockout
+    foe = target(0, 20)
+    actions = [
+      move(0, "BRAVEBIRD", 0, 100, 90, { "recoil_fraction" => 0.3333 }),
+      move(1, "DRILLPECK", 0, 100, 70, {})
+    ]
+    result = pick(snapshot([actor(1, 8, actions, {})], [foe], {}), {})
+    assert_equal("DRILLPECK", result[0]["move_id"])
+  end
+
+  def test_rock_head_pays_nothing_for_recoil
+    foe = target(0, 20)
+    actions = [
+      move(0, "BRAVEBIRD", 0, 100, 90, { "recoil_fraction" => 0.3333 }),
+      move(1, "DRILLPECK", 0, 100, 70, {})
+    ]
+    result = pick(snapshot([actor(1, 8, actions, { "ability" => "ROCKHEAD" })], [foe], {}), {})
+    assert_equal("BRAVEBIRD", result[0]["move_id"])
+  end
+
+  def test_drain_is_valued_when_damaged_and_not_at_full_hp
+    foe = target(0, 100)
+    actions = [
+      move(0, "GIGADRAIN", 0, 100, 60, { "drain_fraction" => 0.5 }),
+      move(1, "ENERGYBALL", 0, 100, 64, {})
+    ]
+    hurt = pick(snapshot([actor(1, 40, actions, { "faster" => true })], [foe], {}), {})
+    full = pick(snapshot([actor(1, 100, actions, { "faster" => true })], [foe], {}), {})
+    assert_equal("GIGADRAIN", hurt[0]["move_id"])
+    assert_equal("ENERGYBALL", full[0]["move_id"])
+  end
+
+  def test_knock_off_is_worth_the_item_and_nothing_without_one
+    held = target(0, 100).merge("item" => "LEFTOVERS")
+    bare = target(0, 100)
+    actions = [
+      move(0, "KNOCKOFF", 0, 100, 40, {}),
+      move(1, "NIGHTSLASH", 0, 100, 43, {})
+    ]
+    assert_equal("KNOCKOFF", pick(snapshot([actor(1, 100, actions, {})], [held], {}), {})[0]["move_id"])
+    assert_equal("NIGHTSLASH", pick(snapshot([actor(1, 100, actions, {})], [bare], {}), {})[0]["move_id"])
+  end
+
+  # Focus Sash is deliberately NOT on the whitelist: Reborn's knockcode does not carry
+  # it, and the engine's own damage boost against an item holder is what actually makes
+  # Knock Off the better move there. Copying the list means copying the gap.
+  def test_focus_sash_is_not_on_the_knock_off_whitelist
+    foe = target(0, 100).merge("item" => "FOCUSSASH")
+    actions = [
+      move(0, "KNOCKOFF", 0, 100, 40, {}),
+      move(1, "NIGHTSLASH", 0, 100, 43, {})
+    ]
+    result = pick(snapshot([actor(1, 100, actions, {})], [foe], {}), {})
+    assert_equal("NIGHTSLASH", result[0]["move_id"])
+  end
+
+  def test_multi_hit_answers_a_focus_sash_only_at_full_hp
+    full = target(0, 100).merge("item" => "FOCUSSASH", "full_hp" => true)
+    chipped = target(0, 90).merge("item" => "FOCUSSASH", "full_hp" => false)
+    actions = [
+      move(0, "ICICLESPEAR", 0, 100, 60, { "multi_hit" => true }),
+      move(1, "ICICLECRASH", 0, 100, 68, {})
+    ]
+    assert_equal("ICICLESPEAR",
+                 pick(snapshot([actor(1, 100, actions, {})], [full], {}), {})[0]["move_id"])
+    assert_equal("ICICLECRASH",
+                 pick(snapshot([actor(1, 100, actions, {})], [chipped], {}), {})[0]["move_id"])
+  end
+
+  # --- Sturdy and Focus Sash ---
+  #
+  # 0.5.0 prices the guard in exactly ONE place, the multi-hit row, which is where
+  # Reborn prices it too. A single-hit move keeps its full kill score against a Sturdy
+  # target: see the withdrawal note in Core.score_move for why the first draft's
+  # kill-call cancellation is not here.
+  def test_a_single_hit_move_keeps_its_kill_score_against_sturdy
+    foe = target(0, 100).merge("ability" => "STURDY", "full_hp" => true)
+    actions = [
+      move(0, "EARTHQUAKE", 0, 100, 200, {}),
+      move(1, "SWORDSDANCE", 0, 300, 0, {})
+    ]
+    result = pick(snapshot([actor(1, 100, actions, {})], [foe], {}), {})
+    assert_equal("EARTHQUAKE", result[0]["move_id"])
+    assert_equal(true, reasons_of(result[0]).include?("lethal"))
+  end
+
+  def test_mold_breaker_removes_the_multi_hit_bonus_for_beating_sturdy
+    foe = target(0, 100).merge("ability" => "STURDY", "full_hp" => true)
+    actions = [
+      move(0, "ICICLESPEAR", 0, 100, 60, { "multi_hit" => true }),
+      move(1, "ICICLECRASH", 0, 100, 68, {})
+    ]
+    plain = pick(snapshot([actor(1, 100, actions, {})], [foe], {}), {})
+    breaking = [
+      move(0, "ICICLESPEAR", 0, 100, 60, { "multi_hit" => true, "mold_breaker" => true }),
+      move(1, "ICICLECRASH", 0, 100, 68, { "mold_breaker" => true })
+    ]
+    broken = pick(snapshot([actor(1, 100, breaking, {})], [foe], {}), {})
+    assert_equal("ICICLESPEAR", plain[0]["move_id"])
+    assert_equal("ICICLECRASH", broken[0]["move_id"])
+  end
+
+  # --- abilities that reprice a boost or a status ---
+  def test_setup_is_pointless_in_front_of_unaware
+    foe = target(0, 100).merge("ability" => "UNAWARE")
+    actions = [
+      move(0, "DRAGONDANCE", 0, 200, 0, {}),
+      move(1, "DRAGONCLAW", 0, 100, 30, {})
+    ]
+    result = pick(snapshot([actor(1, 100, actions, {})], [foe], {}), {})
+    assert_equal("DRAGONCLAW", result[0]["move_id"])
+  end
+
+  def test_contrary_inverts_both_setup_and_the_self_drop_charge
+    foe = target(0, 100)
+    actions = [
+      move(0, "LEAFSTORM", 0, 100, 60, {}),
+      move(1, "GIGADRAIN", 0, 100, 62, {})
+    ]
+    plain = pick(snapshot([actor(1, 100, actions, {})], [foe], {}), {})
+    contrary = pick(snapshot([actor(1, 100, actions, { "ability" => "CONTRARY" })], [foe], {}), {})
+    assert_equal("GIGADRAIN", plain[0]["move_id"])
+    assert_equal("LEAFSTORM", contrary[0]["move_id"])
+  end
+
+  def test_status_move_is_deterred_by_the_ability_that_profits_from_it
+    guts = target(0, 100).merge("ability" => "GUTS")
+    plain = target(0, 100)
+    actions = [
+      move(0, "WILLOWISP", 0, 100, 0, {}),
+      move(1, "SEISMICTOSS", 0, 100, 15, {})
+    ]
+    assert_equal("WILLOWISP",
+                 pick(snapshot([actor(1, 100, actions, {})], [plain], {}), {})[0]["move_id"])
+    assert_equal("SEISMICTOSS",
+                 pick(snapshot([actor(1, 100, actions, {})], [guts], {}), {})[0]["move_id"])
+  end
+
+  def test_dark_move_that_does_not_kill_feeds_justified
+    foe = target(0, 100).merge("ability" => "JUSTIFIED")
+    actions = [
+      move(0, "CRUNCH", 0, 100, 40, { "move_type" => "DARK" }),
+      move(1, "ICEFANG", 0, 100, 39, { "move_type" => "ICE" })
+    ]
+    result = pick(snapshot([actor(1, 100, actions, {})], [foe], {}), {})
+    assert_equal("ICEFANG", result[0]["move_id"])
+  end
+
+  # --- turn shape ---
+  def test_fake_out_is_free_on_turn_zero_and_unusable_after
+    foe = target(0, 100)
+    actions = [
+      move(0, "FAKEOUT", 0, 100, 20, {}),
+      move(1, "FLAREBLITZ", 0, 100, 60, {})
+    ]
+    first = pick(snapshot([actor(1, 100, actions, { "turncount" => 0, "faster" => true })], [foe], {}), {})
+    later = pick(snapshot([actor(1, 100, actions, { "turncount" => 3, "faster" => true })], [foe], {}), {})
+    assert_equal("FAKEOUT", first[0]["move_id"])
+    assert_equal("FLAREBLITZ", later[0]["move_id"])
+  end
+
+  def test_trick_room_is_for_a_slow_team_and_never_twice
+    foe = target(0, 100)
+    actions = [
+      move(0, "TRICKROOM", 0, 100, 0, { "own_reserves" => 4 }),
+      move(1, "POWERWHIP", 0, 100, 20, {})
+    ]
+    slow = actor(1, 100, actions, { "faster" => false, "slower_bench_count" => 4 })
+    fast_bench = actor(1, 100, actions, { "faster" => false, "slower_bench_count" => 0 })
+    assert_equal("TRICKROOM", pick(snapshot([slow], [foe], {}), {})[0]["move_id"])
+    assert_equal("POWERWHIP", pick(snapshot([fast_bench], [foe], {}), {})[0]["move_id"])
+    active = snapshot([slow], [foe], {}).merge("trick_room_active" => true)
+    assert_equal("POWERWHIP", pick(active, {})[0]["move_id"])
+  end
+
+  def test_future_sight_is_not_stacked_on_itself
+    foe = target(0, 100)
+    actions = [
+      move(0, "FUTURESIGHT", 0, 100, 0, { "effect_active" => true }),
+      move(1, "PSYCHIC", 0, 100, 20, {})
+    ]
+    result = pick(snapshot([actor(1, 100, actions, {})], [foe], {}), {})
+    assert_equal("PSYCHIC", result[0]["move_id"])
+  end
+
+  # --- doubles ---
+  def test_spread_move_is_worth_double_into_an_absorbing_partner
+    foes = [target(0, 100), target(2, 100)]
+    left = actor(1, 100, [
+      move(0, "DISCHARGE", nil, 100, 40, { "spread" => true, "move_type" => "ELECTRIC" }),
+      move(1, "THUNDERBOLT", 0, 100, 46, { "move_type" => "ELECTRIC" })
+    ], { "partner_alive" => true, "partner_ability" => "VOLTABSORB" })
+    right = actor(3, 100, [move(0, "SURF", 0, 100, 10, {})], {})
+    result = pick(snapshot([left, right], foes, {}), {})
+    assert_equal("DISCHARGE", result[0]["move_id"])
+  end
+
+  def test_move_the_foes_partner_redirects_is_rejected
+    foes = [target(0, 100).merge("partner_ability" => "LIGHTNINGROD"), target(2, 100)]
+    left = actor(1, 100, [
+      move(0, "THUNDERBOLT", 0, 100, 80, { "move_type" => "ELECTRIC" }),
+      move(1, "ICEBEAM", 0, 100, 30, { "move_type" => "ICE" })
+    ], {})
+    right = actor(3, 100, [move(0, "SURF", 0, 100, 10, {})], {})
+    result = pick(snapshot([left, right], foes, {}), {})
+    assert_equal("ICEBEAM", result[0]["move_id"])
+  end
+
+  # Reborn does NOT have this row -- measured, it clicks the move its own partner
+  # absorbs. Unit-tested here rather than in the corpus for exactly that reason.
+  def test_move_the_own_partner_steals_is_discounted
+    foes = [target(0, 100), target(2, 100)]
+    left = actor(1, 100, [
+      move(0, "THUNDERBOLT", 0, 100, 44, { "move_type" => "ELECTRIC" }),
+      move(1, "ICEBEAM", 0, 100, 40, { "move_type" => "ICE" })
+    ], { "partner_alive" => true, "partner_ability" => "LIGHTNINGROD" })
+    right = actor(3, 100, [move(0, "SURF", 0, 100, 10, {})], {})
+    result = pick(snapshot([left, right], foes, {}), {})
+    assert_equal("ICEBEAM", result[0]["move_id"])
+  end
+
+  def test_partner_heal_is_a_dead_move_in_singles
+    foe = target(0, 100)
+    actions = [
+      move(0, "HEALPULSE", 0, 100, 0, {}),
+      move(1, "POWERWHIP", 0, 100, 5, {})
+    ]
+    result = pick(snapshot([actor(1, 100, actions, {})], [foe], {}), {})
+    assert_equal("POWERWHIP", result[0]["move_id"])
+  end
+
+  def test_partner_heal_is_the_move_when_the_partner_is_nearly_dead
+    foes = [target(0, 100), target(2, 100)]
+    left = actor(1, 100, [
+      move(0, "HEALPULSE", 0, 100, 0, {}),
+      move(1, "POWERWHIP", 0, 100, 20, {})
+    ], { "partner_alive" => true, "partner_hp_pct" => 15 })
+    right = actor(3, 100, [move(0, "SURF", 0, 100, 10, {})], {})
+    result = pick(snapshot([left, right], foes, {}), {})
+    assert_equal("HEALPULSE", result[0]["move_id"])
+  end
+
+  # --- entry and switching ---
+  def test_regenerator_discounts_leaving_but_cannot_open_the_gate
+    foe = target(0, 100)
+    actions = [move(0, "SURF", 0, 100, 5, {}), switch_action(1)]
+    quiet = actor(1, 50, actions, { "ability" => "REGENERATOR" })
+    # No escape reason: the switch is still refused outright.
+    assert_equal("move", pick(snapshot([quiet], [foe], {}), {})[0]["type"])
+    escaping = actor(1, 50, actions, { "ability" => "REGENERATOR", "yawned" => true })
+    plain = actor(1, 50, actions, { "yawned" => true })
+    a = pick(snapshot([escaping], [foe], {}), {})[0]
+    b = pick(snapshot([plain], [foe], {}), {})[0]
+    assert_equal("switch", a["type"])
+    assert_equal(50.0, (a["score"] - b["score"]).round(1))
+  end
+
+  def test_real_entry_damage_replaces_the_type_proxy
+    foe = target(0, 100)
+    safe = { "type" => "switch", "slot" => 1, "base_score" => 100, "matchup_score" => 0,
+             "incoming_risk" => 32, "candidate_hp_pct" => 100,
+             "entry_damage_pct" => 0, "incoming_damage_pct" => 5 }
+    risky = { "type" => "switch", "slot" => 2, "base_score" => 100, "matchup_score" => 0,
+              "incoming_risk" => 32, "candidate_hp_pct" => 100,
+              "entry_damage_pct" => 0, "incoming_damage_pct" => 80 }
+    actions = [move(0, "SURF", 0, 100, 5, {}), safe, risky]
+    chosen = pick(snapshot([actor(1, 50, actions, { "yawned" => true })], [foe], {}), {})[0]
+    assert_equal(1, chosen["slot"])
+    assert_equal(true, reasons_of(chosen).include?("entry_incoming_damage"))
+  end
+
+  # --- the four off-switches ---
+  #
+  # Each key false must reproduce the 0.4.1 pick on a board the corresponding table
+  # would otherwise decide. Together they are the control run in B5.
+  def test_side_effects_off_restores_the_bare_damage_ranking
+    foe = target(0, 100).merge("physical_attacker" => true)
+    actions = [
+      move(0, "SCALD", 0, 100, 40, sec("burn", 100, {})),
+      move(1, "SURF", 0, 100, 50, {})
+    ]
+    snap = snapshot([actor(1, 100, actions, {})], [foe], {})
+    assert_equal("SCALD", pick(snap, {})[0]["move_id"])
+    assert_equal("SURF", pick(snap, { "side_effects" => false })[0]["move_id"])
+  end
+
+  def test_ability_rules_off_restores_the_unaware_boost
+    foe = target(0, 100).merge("ability" => "UNAWARE")
+    actions = [
+      move(0, "DRAGONDANCE", 0, 200, 0, {}),
+      move(1, "DRAGONCLAW", 0, 100, 30, {})
+    ]
+    snap = snapshot([actor(1, 100, actions, {})], [foe], {})
+    assert_equal("DRAGONCLAW", pick(snap, {})[0]["move_id"])
+    assert_equal("DRAGONDANCE", pick(snap, { "ability_rules" => false })[0]["move_id"])
+  end
+
+  def test_entry_rules_off_restores_the_type_proxy
+    foe = target(0, 100)
+    safe = { "type" => "switch", "slot" => 1, "base_score" => 100, "matchup_score" => 0,
+             "incoming_risk" => 128, "candidate_hp_pct" => 100,
+             "entry_damage_pct" => 0, "incoming_damage_pct" => 5 }
+    risky = { "type" => "switch", "slot" => 2, "base_score" => 100, "matchup_score" => 0,
+              "incoming_risk" => 0, "candidate_hp_pct" => 100,
+              "entry_damage_pct" => 0, "incoming_damage_pct" => 80 }
+    actions = [move(0, "SURF", 0, 100, 5, {}), safe, risky]
+    snap = snapshot([actor(1, 50, actions, { "yawned" => true })], [foe], {})
+    assert_equal(1, pick(snap, {})[0]["slot"])
+    assert_equal(2, pick(snap, { "entry_rules" => false })[0]["slot"])
+  end
+
+  def test_format_rules_off_lets_the_partner_absorb_go_unpriced
+    foes = [target(0, 100), target(2, 100)]
+    left = actor(1, 100, [
+      move(0, "DISCHARGE", nil, 100, 40, { "spread" => true, "move_type" => "ELECTRIC" }),
+      move(1, "THUNDERBOLT", 0, 100, 46, { "move_type" => "ELECTRIC" })
+    ], { "partner_alive" => true, "partner_ability" => "VOLTABSORB" })
+    right = actor(3, 100, [move(0, "SURF", 0, 100, 10, {})], {})
+    snap = snapshot([left, right], foes, {})
+    assert_equal("DISCHARGE", pick(snap, {})[0]["move_id"])
+    assert_equal("THUNDERBOLT", pick(snap, { "format_rules" => false })[0]["move_id"])
+  end
+  # --- 0.6.0 damage race ---------------------------------------------------
+  # Core.damage_race is a pure function of the snapshot, so these call it directly
+  # rather than inferring it from a pick.
+  RACE_ON = { "damage_race" => true }
+
+  def race_actor(hp, damage, threat, extra)
+    actions = [move(0, "STRENGTH", 0, 100, damage, {})]
+    (extra || {}).each { |k, v| actions[0][k] = v if k == "priority" }
+    a = actor(1, hp, actions, { "threats_by_foe" => { "0" => threat } })
+    (extra || {}).each { |k, v| a[k] = v if k != "priority" }
+    a
+  end
+
+  def race(actor_hp, my_damage, foe_hp, threat, extra)
+    foe = target(0, foe_hp)
+    a = race_actor(actor_hp, my_damage, threat, extra)
+    PortableAI.damage_race(snapshot([a], [foe], {}), a, foe, RACE_ON)
+  end
+
+  def threat(damage, priority, faster)
+    { "damage_pct" => damage, "priority_damage_pct" => priority, "faster" => faster }
+  end
+
+  def test_race_fewer_hits_wins_even_when_slower
+    r = race(100, 50, 100, threat(34, 0, false), {})   # mine 2, theirs 3
+    assert_equal(2, r["mine"])
+    assert_equal(3, r["theirs"])
+    assert_equal(true, r["winning"])
+  end
+
+  def test_race_more_hits_loses_even_with_a_priority_finisher
+    r = race(100, 34, 100, threat(50, 0, true), { "priority" => 1 })  # mine 3, theirs 2
+    assert_equal(false, r["winning"])
+  end
+
+  def test_race_equal_hits_are_decided_by_speed
+    assert_equal(true, race(100, 50, 100, threat(50, 0, true), {})["winning"])
+    assert_equal(false, race(100, 50, 100, threat(50, 0, false), {})["winning"])
+  end
+
+  def test_race_equal_hits_a_priority_finisher_beats_being_slower
+    # Two hits each; my second hit is the priority one and it finishes the job.
+    r = race(100, 50, 100, threat(50, 0, false), { "priority" => 1 })
+    assert_equal(true, r["last_hit_first"])
+    assert_equal(true, r["winning"])
+  end
+
+  def test_race_the_foes_priority_finisher_beats_my_speed
+    r = race(100, 50, 100, threat(50, 50, true), {})
+    assert_equal(false, r["last_hit_first"])
+    assert_equal(false, r["winning"])
+  end
+
+  def test_race_residual_costs_a_turn
+    # 30% a hit alone needs two from 40%; with 12.5% of leech on top it needs one.
+    assert_equal(2, race(40, 50, 100, threat(30, 0, true), {})["theirs"])
+    assert_equal(1, race(40, 50, 100, threat(30, 0, true),
+                         { "residual_damage_pct" => 12.5 })["theirs"])
+  end
+
+  def test_race_is_nil_without_the_export_or_without_damage
+    foe = target(0, 100)
+    bare = actor(1, 100, [move(0, "STRENGTH", 0, 100, 50, {})], {})
+    snap = snapshot([bare], [foe], {})
+    assert_nil(PortableAI.damage_race(snap, bare, foe, RACE_ON))
+    assert_nil(race(100, 0, 100, threat(50, 0, true), {}))
+  end
+
+  def test_race_off_returns_nil
+    assert_nil(PortableAI.damage_race(
+      snapshot([race_actor(100, 50, threat(50, 0, true), {})], [target(0, 100)], {}),
+      race_actor(100, 50, threat(50, 0, true), {}), target(0, 100),
+      { "damage_race" => false }))
+  end
+
+  # The setup move carries NO target, exactly as the adapter exports it: a status move
+  # has no scoring target, and the first cut of setup_into_2hko? was inert everywhere
+  # because of it.
+  def setup_snap(damage, threat_pct, faster)
+    foe = target(0, 100)
+    actions = [
+      move(0, "SWORDSDANCE", nil, 300, 0, {}),
+      move(1, "STRENGTH", 0, 100, damage, {})
+    ]
+    a = actor(1, 100, actions,
+              { "threats_by_foe" => { "0" => threat(threat_pct, 0, faster) } })
+    snapshot([a], [foe], {})
+  end
+
+  def test_setup_into_2hko_is_refused_when_slower
+    snap = setup_snap(34, 50, false)
+    assert_equal("STRENGTH", pick(snap, {})[0]["move_id"])
+  end
+
+  def test_setup_is_allowed_when_only_3hkoed
+    assert_equal("SWORDSDANCE", pick(setup_snap(34, 34, false), {})[0]["move_id"])
+  end
+
+  def test_setup_is_allowed_when_faster
+    assert_equal("SWORDSDANCE", pick(setup_snap(34, 50, true), {})[0]["move_id"])
+  end
+
+  def test_damage_race_off_restores_the_0_5_0_setup_pick
+    snap = setup_snap(34, 50, false)
+    assert_equal("SWORDSDANCE",
+                 pick(snap, { "damage_race" => false })[0]["move_id"])
+  end
+
+  def switch_race_snap(hp, threat_pct, boost)
+    foe = target(0, 100).merge("positive_stages" => boost)
+    out = { "type" => "switch", "slot" => 1, "base_score" => 100,
+            "matchup_score" => 0, "candidate_hp_pct" => 100 }
+    actions = [move(0, "STRENGTH", 0, 100, 20, {}), out]
+    a = actor(1, hp, actions,
+              { "threats_by_foe" => { "0" => threat(threat_pct, 0, false) } })
+    snapshot([a], [foe], {})
+  end
+
+  def test_losing_race_opens_the_gate_only_when_healthy_and_switched_on
+    on = { "damage_race_switch" => true }
+    assert_equal("switch", pick(switch_race_snap(100, 50, 0), on)[0]["type"])
+    # Off by default: 0.5.0's gate refuses the switch for want of a reason.
+    assert_equal("move", pick(switch_race_snap(100, 50, 0), {})[0]["type"])
+    # Not below the healthy pivot, and not against a boosted foe.
+    assert_equal("move", pick(switch_race_snap(40, 50, 0), on)[0]["type"])
+    assert_equal("move", pick(switch_race_snap(100, 50, 2), on)[0]["type"])
+    # Not when the foe needs three.
+    assert_equal("move", pick(switch_race_snap(100, 34, 0), on)[0]["type"])
+  end
+
+  def test_switchin_race_prefers_the_candidate_the_foe_needs_more_hits_for
+    foe = target(0, 100)
+    bulky = { "type" => "switch", "slot" => 1, "base_score" => 100, "matchup_score" => 0,
+              "candidate_hp_pct" => 100, "entry_damage_pct" => 0,
+              "incoming_damage_pct" => 20, "outgoing_damage_pct" => 30,
+              "faster" => false }
+    frail = { "type" => "switch", "slot" => 2, "base_score" => 100, "matchup_score" => 0,
+              "candidate_hp_pct" => 100, "entry_damage_pct" => 0,
+              "incoming_damage_pct" => 55, "outgoing_damage_pct" => 30,
+              "faster" => false }
+    actions = [move(0, "STRENGTH", 0, 100, 5, {}), bulky, frail]
+    snap = snapshot([actor(1, 50, actions, { "yawned" => true })], [foe], {})
+    assert_equal(1, pick(snap, {})[0]["slot"])
+  end
+
+  def test_switchin_race_pays_for_outspeeding_and_needs_both_fields
+    foe = target(0, 100)
+    fast = { "type" => "switch", "slot" => 1, "base_score" => 100, "matchup_score" => 0,
+             "candidate_hp_pct" => 100, "entry_damage_pct" => 0,
+             "incoming_damage_pct" => 30, "outgoing_damage_pct" => 30,
+             "faster" => true }
+    slow = { "type" => "switch", "slot" => 2, "base_score" => 100, "matchup_score" => 0,
+             "candidate_hp_pct" => 100, "entry_damage_pct" => 0,
+             "incoming_damage_pct" => 30, "outgoing_damage_pct" => 30,
+             "faster" => false }
+    actions = [move(0, "STRENGTH", 0, 100, 5, {}), fast, slow]
+    snap = snapshot([actor(1, 50, actions, { "yawned" => true })], [foe], {})
+    assert_equal(1, pick(snap, {})[0]["slot"])
+    assert(reasons_of(pick(snap, {})[0]).include?("switchin_race"))
+    # A candidate the adapter could not estimate contributes no race term at all.
+    bare = { "type" => "switch", "slot" => 3, "base_score" => 100,
+             "matchup_score" => 0, "candidate_hp_pct" => 100 }
+    snap2 = snapshot([actor(1, 50, [move(0, "STRENGTH", 0, 100, 5, {}), bare],
+                            { "yawned" => true })], [foe], {})
+    assert(!reasons_of(pick(snap2, {})[0]).include?("switchin_race"))
+  end
+end

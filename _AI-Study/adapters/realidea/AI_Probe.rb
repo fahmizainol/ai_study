@@ -57,12 +57,26 @@ module AIProbe
   TRIGGER   = "Data/ai_probe.txt"
   SCENARIOS = "Data/ai_scenarios.txt"
   OUT       = "Data/ai_probe_results.ndjson"
+  OUT_STOCK = "Data/ai_probe_results_stock.ndjson"
+  OUT_PORTABLE = "Data/ai_probe_results_portable.ndjson"
   ERRLOG    = "Data/ai_probe_error.txt"
 
   def self.requested?
+    if defined?(PortableAIGauntlet) && PortableAIGauntlet.requested?
+      return true
+    end
     return File.exist?(TRIGGER)
   rescue
     return false
+  end
+
+  def self.result_path
+    if defined?(PortableAIRealidea) && PortableAIRealidea.requested?
+      return OUT_PORTABLE
+    end
+    OUT_STOCK
+  rescue
+    OUT
   end
 
   # --- JSON (no JSON library in RGSS) ---------------------------------------
@@ -117,7 +131,10 @@ module AIProbe
       def pbGetMoveScore(move, attacker, opponent, skill = 100)
         s = aiprobe_pbGetMoveScore(move, attacker, opponent, skill)
         if $aiprobe && $aiprobe[:on] && attacker && attacker.index == $aiprobe[:idx]
-          $aiprobe[:init].push({ "move" => (move.id rescue 0), "score" => s })
+          # target is recorded so doubles can keep a per-target matrix; in singles
+          # every entry carries the same lone opponent index and it collapses away.
+          $aiprobe[:init].push({ "move" => (move.id rescue 0), "score" => s,
+                                 "target" => (opponent ? opponent.index : -1) })
         end
         return s
       end
@@ -189,7 +206,7 @@ module AIProbe
         next if line.empty? || line[0, 1] == "#"
         if line =~ /\A\[(.+)\]\z/
           scns.push(cur) if cur
-          cur = { "id" => $1, "field" => 0,
+          cur = { "id" => $1, "field" => 0, "format" => "single",
                   "ai" => { "active" => {}, "bench" => [] },
                   "player" => { "active" => {}, "bench" => [] } }
           next
@@ -199,11 +216,14 @@ module AIProbe
         next if k.nil? || v.nil?
         case k.strip
         when "field"        then cur["field"] = v.to_i
+        when "format"       then cur["format"] = v.strip
         when "weather"      then cur["weather"] = v.strip
         when "ai_side"      then cur["ai_side"] = parse_side(v)
         when "player_side"  then cur["player_side"] = parse_side(v)
         when "ai"           then cur["ai"]["active"] = parse_mon(v)
         when "player"       then cur["player"]["active"] = parse_mon(v)
+        when "ai2"          then cur["ai"]["active2"] = parse_mon(v)
+        when "player2"      then cur["player"]["active2"] = parse_mon(v)
         when "ai_bench"     then cur["ai"]["bench"].push(parse_mon(v))
         when "player_bench" then cur["player"]["bench"].push(parse_mon(v))
         end
@@ -324,8 +344,16 @@ module AIProbe
     return pkmn
   end
 
+  # Battler index layout, identical in all three engines: even = player side, odd =
+  # AI side. Singles occupies 0/1; doubles adds 2 (player right) and 3 (AI right).
+  # Party order must match — second active = party slot 1, bench from 2.
+  def self.ai_indices(doubles);  return doubles ? [1, 3] : [1]; end
+  def self.foe_indices(doubles); return doubles ? [0, 2] : [0]; end
+
   def self.build_party(side, owner)
-    entries = [side["active"]] + (side["bench"] || [])
+    entries = [side["active"]]
+    entries.push(side["active2"]) if side["active2"]
+    entries += (side["bench"] || [])
     return entries.map { |m| build_mon(m, owner) }
   end
 
@@ -372,6 +400,10 @@ module AIProbe
     def aiTr.skill; 100; end
     def plTr.skill; 100; end
 
+    doubles = (scn["format"] == "double")
+    if doubles && (scn["ai"]["active2"].nil? || scn["player"]["active2"].nil?)
+      raise "format=double needs both ai2= and player2="
+    end
     aiParty = build_party(scn["ai"], aiTr)
     plParty = build_party(scn["player"], plTr)
 
@@ -379,17 +411,25 @@ module AIProbe
     # party1 = player side (even indices), party2 = AI side (odd).
     battle = PokeBattle_Battle.new(scene, plParty, aiParty, plTr, aiTr)
     battle.internalbattle = true
-    battle.doublebattle = false
+    battle.doublebattle = doubles
     (battle.items = []) rescue nil
 
-    battle.battlers[0].pbInitialize(plParty[0], 0, false)
-    battle.pbSendOut(0, plParty[0]) rescue nil
-    battle.battlers[1].pbInitialize(aiParty[0], 0, false)
-    battle.pbSendOut(1, aiParty[0]) rescue nil
+    foe_indices(doubles).each_with_index do |bi, k|
+      battle.battlers[bi].pbInitialize(plParty[k], k, false)
+      battle.pbSendOut(bi, plParty[k]) rescue nil
+    end
+    ai_indices(doubles).each_with_index do |bi, k|
+      battle.battlers[bi].pbInitialize(aiParty[k], k, false)
+      battle.pbSendOut(bi, aiParty[k]) rescue nil
+    end
     battle.pbOnActiveAll rescue nil
 
     apply_state(battle.battlers[0], scn["player"]["active"])
     apply_state(battle.battlers[1], scn["ai"]["active"])
+    if doubles
+      apply_state(battle.battlers[2], scn["player"]["active2"])
+      apply_state(battle.battlers[3], scn["ai"]["active2"])
+    end
 
     # Battle-level state. sides[0] = player half, sides[1] = AI half.
     if scn["weather"]
@@ -401,34 +441,19 @@ module AIProbe
     apply_side_effects(battle.sides[0], scn["player_side"])
     apply_side_effects(battle.sides[1], scn["ai_side"])
 
-    $aiprobe = { :on => true, :idx => 1, :init => [],
-                 :switch_evaluated => false, :switch_decision => nil }
-    begin
-      battle.pbDefaultChooseEnemyCommand(1)
-    ensure
-      $aiprobe[:on] = false
-    end
-
+    foes = foe_indices(doubles)
+    actors = ai_indices(doubles).map { |bi| run_actor(battle, bi, foes) }
     b = battle.battlers[1]
-    best = {}
-    $aiprobe[:init].each do |e|
-      cur = best[e["move"]]
-      best[e["move"]] = e if cur.nil? || (e["score"] && cur["score"] && e["score"] > cur["score"])
-    end
-    moves = []
-    raw = []
-    b.moves.each_with_index do |mv, i|
-      next if mv.nil? || mv.id == 0
-      rec = best[mv.id]
-      sc = rec ? rec["score"] : nil
-      moves.push({ "slot" => i, "id" => mv.id, "score" => sc })
-      raw.push(sc || 0)
-    end
+    portable_plan = (battle.portable_ai_last_plan rescue nil)
+    ai_label = portable_plan ? "portable-ai-#{PortableAI::VERSION}+realidea" : "stock-v16+clara"
 
+    # Top-level keys mirror actors[0] (the AI's LEFT battler), so singles records
+    # keep their pre-doubles shape and existing consumers work untouched.
     out = {
       "id"     => scn["id"],
       "engine" => "realidea",
-      "ai"     => "stock-v16+clara",
+      "ai"     => ai_label,
+      "format" => (doubles ? "double" : "single"),
       "skill"  => 100,
       "field"  => nil,
       "actor"  => { "species" => b.species,
@@ -437,36 +462,130 @@ module AIProbe
                     "status"  => (battle.battlers[0].status rescue nil),
                     "hp_pct"  => (pct(battle.battlers[0].hp * 100.0 /
                                        battle.battlers[0].totalhp) rescue nil) },
-      "moves"  => moves,
-      "scores" => raw,
-      "score_final_derived" => derive_final(raw, 100),
+      "targets" => foes.map { |t|
+        { "index"   => t,
+          "species" => (battle.battlers[t].species rescue nil),
+          "status"  => (battle.battlers[t].status rescue nil),
+          "hp_pct"  => (pct(battle.battlers[t].hp * 100.0 /
+                            battle.battlers[t].totalhp) rescue nil) }
+      },
+      "moves"  => actors[0]["moves"],
+      "scores" => actors[0]["scores"],
+      "score_final_derived" => actors[0]["score_final_derived"],
       "switch_scores"       => [],
-      "should_switch_score" => ($aiprobe[:switch_evaluated] ? $aiprobe[:switch_decision] : nil),
-      "switch_evaluated"    => $aiprobe[:switch_evaluated],
-      "action" => nil
+      "should_switch_score" => actors[0]["should_switch_score"],
+      "switch_evaluated"    => actors[0]["switch_evaluated"],
+      "action" => actors[0]["action"],
+      "actors" => actors
     }
 
-    ch = battle.choices[1]
-    if ch
-      case ch[0]
-      when 1 then out["action"] = { "type" => "move",
-                                    "move" => (ch[2] ? ch[2].id : nil), "slot" => ch[1] }
-      when 2 then out["action"] = { "type" => "switch", "slot" => ch[1] }
-      when 3 then out["action"] = { "type" => "item", "item" => ch[1] }
-      else        out["action"] = { "type" => "none", "raw" => ch[0] }
-      end
-    end
     sc = scene.seen.keys.sort
     out["scene_calls"] = sc if sc.length > 0
     return out
   end
 
+  # One decision record per AI-side battler. In doubles this runs once per battler
+  # in index order, which is what the real command phase does — v16 calls
+  # pbDefaultChooseEnemyCommand per battler, and this engine's AI keeps no
+  # cross-battler turn state, so the calls are independent.
+  def self.run_actor(battle, bi, foes)
+    doubles = foes.length > 1
+    $aiprobe = { :on => true, :idx => bi, :init => [],
+                 :switch_evaluated => false, :switch_decision => nil }
+    begin
+      battle.pbDefaultChooseEnemyCommand(bi)
+    ensure
+      $aiprobe[:on] = false
+    end
+
+    b = battle.battlers[bi]
+    # The portable doubles planner scores both AI battlers on the first command call and
+    # caches the joint plan. The second actor therefore makes no fresh pbGetMoveScore
+    # calls. Read the planner's normalized rankings when present; otherwise retain the
+    # stock alias-capture path.
+    portable_entries = []
+    portable_ranking = nil
+    plan = (battle.portable_ai_last_plan rescue nil)
+    if plan && plan["diagnostics"] && plan["diagnostics"]["rankings"]
+      plan["diagnostics"]["rankings"].each do |ranking|
+        if ranking.any? { |entry| entry["actor_index"] == bi }
+          portable_ranking = ranking
+        end
+        ranking.each do |entry|
+          if entry["actor_index"] == bi && entry["type"] == "move"
+            portable_entries.push({
+              "move" => entry["numeric_move_id"],
+              "score" => entry["score"],
+              "target" => (entry["target"].nil? ? -1 : entry["target"])
+            })
+          end
+        end
+      end
+    end
+    captured = portable_entries.empty? ? $aiprobe[:init] : portable_entries
+    matrix = {}
+    best   = {}
+    captured.each do |e|
+      t = e["target"]
+      (matrix[t.to_s] ||= {})[e["move"]] = e["score"]
+      next if e["score"].nil?
+      cur = best[e["move"]]
+      best[e["move"]] = [e["score"], t] if cur.nil? || e["score"] > cur[0]
+    end
+    moves = []
+    raw = []
+    b.moves.each_with_index do |mv, i|
+      next if mv.nil? || mv.id == 0
+      rec = best[mv.id]
+      sc = rec ? rec[0] : nil
+      moves.push({ "slot" => i, "id" => mv.id, "score" => sc,
+                   "target" => (doubles && rec ? rec[1] : nil) })
+      raw.push(sc || 0)
+    end
+
+    out = {
+      "index"   => bi,
+      "species" => b.species,
+      "hp_pct"  => pct(b.hp * 100.0 / b.totalhp),
+      "moves"   => moves,
+      "scores"  => raw,
+      "score_matrix" => matrix,
+      "score_final_derived" => (portable_entries.empty? ? derive_final(raw, 100) : raw.clone),
+      "should_switch_score" => ($aiprobe[:switch_evaluated] ? $aiprobe[:switch_decision] : nil),
+      "switch_evaluated"    => $aiprobe[:switch_evaluated],
+      "action"  => nil
+    }
+    ch = battle.choices[bi]
+    if ch
+      case ch[0]
+      when 1
+        # choices[i][3] is the registered target, written by pbRegisterTarget.
+        # Singles never registers one, so it stays at its -1 sentinel.
+        out["action"] = { "type" => "move", "move" => (ch[2] ? ch[2].id : nil),
+                          "slot" => ch[1],
+                          "target" => (doubles && ch[3] && ch[3] >= 0 ? ch[3] : nil) }
+      when 2 then out["action"] = { "type" => "switch", "slot" => ch[1] }
+      when 3 then out["action"] = { "type" => "item", "item" => ch[1] }
+      else        out["action"] = { "type" => "none", "raw" => ch[0] }
+      end
+    end
+    if portable_ranking
+      switch_considered = portable_ranking.any? { |entry| entry["type"] == "switch" }
+      out["switch_evaluated"] = switch_considered
+      out["should_switch_score"] = switch_considered ? ((ch && ch[0] == 2) ? 1 : 0) : nil
+    end
+    return out
+  end
+
   def self.run
+    if defined?(PortableAIGauntlet) && PortableAIGauntlet.requested?
+      return PortableAIGauntlet.run
+    end
     bootstrap
     install_capture
     scns = parse_scenarios(SCENARIOS)
     ok = 0; err = 0; skip = 0
-    File.open(OUT, "wb") do |f|
+    File.open(result_path, "wb") do |f|
       scns.each do |scn|
         begin
           rec = probe(scn)

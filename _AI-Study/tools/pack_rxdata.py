@@ -24,11 +24,15 @@ Usage:
     python3 pack_rxdata.py --selftest <Scripts.rxdata>
     python3 pack_rxdata.py --insert <in.rxdata> --script <file.rb> --name AI_Probe \
         --before Main --out <out.rxdata>
+    python3 pack_rxdata.py --insert <in.rxdata> --script <file.rb> --name Portable_AI \
+        --before Main --upsert --out <out.rxdata>
+    python3 pack_rxdata.py --remove <in.rxdata> --name Portable_AI --out <out.rxdata>
     python3 pack_rxdata.py --list <Scripts.rxdata>
 """
 import argparse
 import os
 import sys
+import tempfile
 import zlib
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -92,13 +96,17 @@ def section_names(path):
     return out
 
 
-def build(raw, spans, insert_at=None, new_elem=None, replace=None):
+def build(raw, spans, insert_at=None, new_elem=None, replace=None, remove=None):
     """replace: {index: element_bytes} — swaps whole elements, leaving all others verbatim."""
     replace = replace or {}
-    parts = [HEADER, b'[', w_long(len(spans) + (1 if new_elem else 0))]
+    remove = remove or set()
+    count = len(spans) + (1 if new_elem else 0) - len(remove)
+    parts = [HEADER, b'[', w_long(count)]
     for i, (s, e) in enumerate(spans):
         if new_elem is not None and i == insert_at:
             parts.append(new_elem)
+        if i in remove:
+            continue
         parts.append(replace[i] if i in replace else raw[s:e])
     if new_elem is not None and insert_at == len(spans):
         parts.append(new_elem)
@@ -111,14 +119,33 @@ def make_elem(name, body):
         w_bare_string(name.encode('utf-8')) + w_bare_string(zlib.compress(body))
 
 
+def write_atomic(path, data):
+    """Replace path only after a complete same-directory write and fsync."""
+    target = os.path.abspath(path)
+    directory = os.path.dirname(target) or '.'
+    fd, temporary = tempfile.mkstemp(prefix='.pack_rxdata-', dir=directory)
+    try:
+        with os.fdopen(fd, 'wb') as fh:
+            fh.write(data)
+            fh.flush()
+            os.fsync(fh.fileno())
+        os.replace(temporary, target)
+    finally:
+        if os.path.exists(temporary):
+            os.unlink(temporary)
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--selftest')
     ap.add_argument('--list')
     ap.add_argument('--insert')
+    ap.add_argument('--remove', help='bundle to remove the last section named --name from')
     ap.add_argument('--script')
     ap.add_argument('--name', default='AI_Probe')
     ap.add_argument('--before')
+    ap.add_argument('--upsert', action='store_true',
+                    help='replace the last section named --name, or insert it if absent')
     ap.add_argument('--replace', help='name of a section whose body to swap wholesale')
     ap.add_argument('--replace-with', help='file supplying the new body for --replace')
     ap.add_argument('--out')
@@ -145,9 +172,35 @@ def main():
                     break
         sys.exit(0 if ok else 1)
 
+    if a.remove:
+        if not a.out:
+            ap.error('--remove needs --out')
+        raw, count, spans = scan(a.remove)
+        names = section_names(a.remove)
+        target = a.name.encode('utf-8')
+        hits = [i for i, name in enumerate(names) if name == target]
+        if not hits:
+            ap.error('no section named %r; refusing to remove anything' % a.name)
+        idx = hits[-1]
+        out = build(raw, spans, remove={idx})
+        old_pre = spans[0][0]
+        new_pre = len(HEADER) + 1 + len(w_long(len(spans) - 1))
+        n = spans[idx][0] - old_pre
+        assert out[new_pre:new_pre + n] == raw[old_pre:old_pre + n], \
+            'untouched sections diverged before index %d' % idx
+        write_atomic(a.out, out)
+        print('sections %d -> %d; %d -> %d bytes'
+              % (count, count - 1, len(raw), len(out)))
+        print('  removed %r at index %d' % (a.name, idx))
+        return
+
     if a.insert:
         if not a.out:
             ap.error('--insert needs --out')
+        if a.upsert and not a.script:
+            ap.error('--upsert needs --script')
+        if not a.script and not a.replace:
+            ap.error('--insert needs --script and/or --replace')
         raw, count, spans = scan(a.insert)
         names = section_names(a.insert)
 
@@ -160,37 +213,46 @@ def main():
 
         elem = None
         idx = count
+        replace = {}
+        replaced_names = {}
         if a.script:
             with open(a.script, 'rb') as fh:
                 elem = make_elem(a.name, fh.read())
-            if a.before:
+            existing = [i for i, n in enumerate(names) if n == a.name.encode('utf-8')]
+            if a.upsert and existing:
+                idx = existing[-1]
+                replace[idx] = elem
+                replaced_names[idx] = a.name
+                elem = None
+            elif a.before:
                 idx = find(a.before)
 
-        replace = {}
         if a.replace:
             if not a.replace_with:
                 ap.error('--replace needs --replace-with')
             with open(a.replace_with, 'rb') as fh:
-                replace[find(a.replace)] = make_elem(a.replace, fh.read())
+                replace_idx = find(a.replace)
+                replace[replace_idx] = make_elem(a.replace, fh.read())
+                replaced_names[replace_idx] = a.replace
 
         out = build(raw, spans, insert_at=idx, new_elem=elem, replace=replace)
-        with open(a.out, 'wb') as fh:
-            fh.write(out)
         # Every element before the first one we touch must be byte-identical. Compare from
         # the end of the array header, not from byte 0: the element-count prefix is
         # SUPPOSED to change when a section is added, so a from-zero compare always fails.
-        first_touch = min([idx] + list(replace))
+        first_touch = min(([idx] if elem is not None else []) + list(replace))
         old_pre = spans[0][0]
         new_pre = len(HEADER) + 1 + len(w_long(len(spans) + (1 if elem else 0)))
-        n = spans[first_touch][0] - old_pre
+        touch_offset = spans[first_touch][0] if first_touch < len(spans) else len(raw)
+        n = touch_offset - old_pre
         assert out[new_pre:new_pre + n] == raw[old_pre:old_pre + n], \
             'untouched sections diverged before index %d' % first_touch
+        write_atomic(a.out, out)
         print('sections %d -> %d; %d -> %d bytes'
               % (count, count + (1 if elem else 0), len(raw), len(out)))
         if elem:
             print('  inserted %r at index %d' % (a.name, idx))
-        for i in replace:
-            print('  replaced %r at index %d' % (a.replace, i))
+        for i in sorted(replace):
+            print('  replaced %r at index %d' % (replaced_names[i], i))
 
 
 if __name__ == '__main__':

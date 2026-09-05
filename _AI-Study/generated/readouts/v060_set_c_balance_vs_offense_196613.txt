@@ -1,0 +1,137 @@
+balance_vs_offense  seed 196613   Reborn-Normal (balance, left) vs Portable 0.6.0 (offense, right)   result for right seat: WIN in 9 turns
+  Reborn   (balance): Tentacruel, Flygon, Empoleon, Mandibuzz, Vaporeon, Blastoise
+  Portable (offense): Tyranitar, Mamoswine, Bisharp, Salamence, Heracross, Nidoking
+==============================================================================================================
+
+Turn 1
+  Reborn   Tentacruel 322/322           -> Scald
+  Portable Tyranitar 362/362            -> Earthquake
+    view: hp 100%  speed 179 (slower)  incoming max 33%  certain 33%  threatened=False
+    foe moves est: Scald 33%, Sludge Bomb 9%, Rapid Spin 4%, Toxic Spikes 0%
+    * EARTHQUAKE         232  expected_damage+62 super_effective+70
+      CRUNCH             156  expected_damage+56
+      DRAGONDANCE        155  first_setup+55
+      STONEEDGE          142  expected_damage+46 accuracy-5
+      switch->Mamoswine -1000000  matchup+64 entry_incoming_damage-52 switchin_race-5 entry_hazards+0
+    Reborn   Scald          hit            foe -112 x2
+    Portable Earthquake     hit            foe -266 x2
+  end:     Reborn Tentacruel 36/322        | right Tyranitar 250/362
+
+Turn 2
+  Reborn   Tentacruel 36/322            -> Scald
+  Portable Tyranitar 250/362            -> Crunch
+    view: hp 69%  speed 179 (slower)  incoming max 33%  certain 33%  threatened=False
+    foe moves est: Scald 33%, Sludge Bomb 9%, Rapid Spin 4%, Toxic Spikes 0%
+    * CRUNCH             600  lethal+500
+      STONEEDGE          550  lethal+500 accuracy-50
+      EARTHQUAKE         232  expected_damage+62 super_effective+70
+      DRAGONDANCE        155  first_setup+55
+      switch->Mamoswine -1000000  matchup+64 entry_incoming_damage-52 switchin_race-5 entry_hazards+0
+    Reborn   Scald          hit            foe -114 x2
+    Portable Crunch         hit            foe -36
+  end:     Reborn Flygon 322/322           | right Tyranitar 136/362
+
+Turn 3
+  Reborn   Flygon 322/322               -> Earthquake
+  Portable Tyranitar 136/362            -> Crunch
+    view: hp 38%  speed 179 (slower)  incoming max 66%  certain 66%  threatened=True
+    foe moves est: Earthquake 66%, U-turn 31%, Dragon Claw 27%, Roost 0%
+    * CRUNCH             149  expected_damage+48 secondary_drop+1
+      STONEEDGE           73  expected_damage+20 accuracy-2 resisted-45
+      DRAGONDANCE       -140  unsafe_setup-240
+      EARTHQUAKE     -1000000  
+      switch->Mamoswine -1000000  matchup+128 entry_incoming_damage-19 switchin_race+10 escape_lethal_threat+130 entry_hazards+0
+    Reborn   Earthquake     hit            foe -136 x2
+  end:     Reborn Flygon 322/322           | right Mamoswine 382/382
+
+Turn 4
+  Reborn   Flygon 322/322               -> Earthquake
+  Portable Mamoswine 382/382            -> Icicle Crash
+    view: hp 100%  speed 217 (slower)  incoming max 40%  certain 40%  threatened=False
+    foe moves est: Earthquake 40%, Dragon Claw 32%, U-turn 19%, Roost 0%
+    * ICICLECRASH        715  lethal+500 accuracy-25 super_effective+140
+      ICESHARD           305  expected_damage+65 super_effective+140
+      STONEEDGE           67  expected_damage+13 accuracy-1 resisted-45
+      EARTHQUAKE     -1000000  
+      switch->Bisharp -1000000  matchup+32 entry_incoming_damage-81 switchin_race-5 entry_hazards+0
+    Reborn   Earthquake     hit            foe -147
+    Portable Icicle Crash   hit            foe -322 x4
+  end:     Reborn Vaporeon 422/422         | right Mamoswine 235/382
+
+Turn 5
+  Reborn   Vaporeon 422/422             -> Scald
+  Portable Mamoswine 235/382            -> switch->Heracross
+    view: hp 62%  speed 217 (faster)  incoming max 84%  certain 84%  threatened=True
+    foe moves est: Scald 84%, Ice Beam 31%, Wish 0%, Protect 0%
+    * switch->Heracross     283  matchup+32 entry_incoming_damage-14 switchin_race+80 escape_lethal_threat+130 entry_hazards+0 escape_reasons+1
+      switch->Bisharp     266  matchup+32 entry_incoming_damage-31 switchin_race+80 escape_lethal_threat+130 entry_hazards+0 escape_reasons+1
+      switch->Nidoking     206  matchup+32 entry_incoming_damage-76 switchin_race+65 escape_lethal_threat+130 entry_hazards+0 escape_reasons+1
+      EARTHQUAKE         137  expected_damage+37
+      STONEEDGE          122  expected_damage+24 accuracy-2
+    Reborn   Scald          hit            foe -110
+  end:     Reborn Vaporeon 422/422         | right Heracross 212/322
+
+Turn 6
+  Reborn   Vaporeon 422/422             -> Scald
+  Portable Heracross 212/322            -> Swords Dance
+    view: hp 66%  speed 227 (faster)  incoming max 36%  certain 36%  threatened=False
+    foe moves est: Scald 36%, Ice Beam 27%, Wish 0%, Protect 0%
+    * SWORDSDANCE        155  first_setup+55
+      MEGAHORN           139  expected_damage+42 accuracy-3
+      ROCKSLIDE          119  expected_damage+18 accuracy-1 secondary_flinch+2
+      CLOSECOMBAT        102  expected_damage+42 self_stat_drop-40
+      switch->Mamoswine -1000000  matchup+32 entry_incoming_damage-76 entry_hazards+0
+    Portable Swords Dance   untargeted     
+    Reborn   Scald          hit            foe -111
+  end:     Reborn Vaporeon 422/422         | right Heracross 101/322
+
+Turn 7
+  Reborn   Vaporeon 422/422             -> Scald
+  Portable Heracross 101/322            -> Close Combat
+    view: hp 31%  speed 227 (faster)  incoming max 36%  certain 36%  threatened=True
+    foe moves est: Scald 36%, Ice Beam 27%, Wish 0%, Protect 0%
+    * CLOSECOMBAT        585  lethal+500 self_stat_drop-15
+      MEGAHORN           562  lethal+500 accuracy-38
+      ROCKSLIDE          137  expected_damage+35 accuracy-2 secondary_flinch+3
+      SWORDSDANCE       -140  unsafe_setup-240
+      switch->Mamoswine -1000000  matchup+32 entry_incoming_damage-76 escape_lethal_threat+130 entry_hazards+0
+    Portable Close Combat   hit            foe -422
+  end:     Reborn Mandibuzz 382/382        | right Heracross 101/322
+
+Turn 8
+  Reborn   Mandibuzz 382/382            -> Foul Play
+  Portable Heracross 101/322            -> Megahorn
+    view: hp 31%  speed 227 (faster)  incoming max 125%  certain 125%  threatened=True
+    foe moves est: Foul Play 125%, Roost 0%, Toxic 0%, Defog 0%
+    * MEGAHORN           562  lethal+500 accuracy-38
+      ROCKSLIDE          224  expected_damage+52 accuracy-3 super_effective+70 secondary_flinch+5
+      CLOSECOMBAT        122  expected_damage+62 self_stat_drop-40
+      SWORDSDANCE       -140  unsafe_setup-240
+      switch->Mamoswine -1000000  matchup+64 entry_incoming_damage-57 switchin_race-70 escape_lethal_threat+130 entry_hazards+0
+    Portable Megahorn       hit            foe -382
+  end:     Reborn Blastoise 320/320        | right Heracross 101/322
+
+Turn 9
+  Reborn   Blastoise 320/320            -> Scald
+  Portable Heracross 101/322            -> Megahorn
+    view: hp 31%  speed 227 (faster)  incoming max 44%  certain 44%  threatened=True
+    foe moves est: Scald 44%, Ice Beam 33%, Dark Pulse 22%, Rapid Spin 21%
+    * MEGAHORN           562  lethal+500 accuracy-38
+      CLOSECOMBAT        137  expected_damage+77 self_stat_drop-40
+      ROCKSLIDE          134  expected_damage+32 accuracy-2 secondary_flinch+3
+      SWORDSDANCE       -140  unsafe_setup-240
+      switch->Mamoswine -1000000  matchup+32 entry_incoming_damage-56 escape_lethal_threat+130 entry_hazards+0
+    Portable Megahorn       hit            foe -320
+  end:     Reborn Empoleon 330/330         | right Heracross 101/322
+
+Turn 10
+  Reborn   Empoleon 330/330             -> Scald
+  Portable Heracross 101/322            -> Close Combat
+    view: hp 31%  speed 227 (faster)  incoming max 54%  certain 54%  threatened=True
+    foe moves est: Scald 54%, Flash Cannon 54%, Ice Beam 40%, Stealth Rock 0%
+    * CLOSECOMBAT        655  lethal+500 super_effective+70 self_stat_drop-15
+      MEGAHORN           112  expected_damage+62 accuracy-5 resisted-45
+      ROCKSLIDE           73  expected_damage+17 accuracy-1 resisted-45 secondary_flinch+2
+      SWORDSDANCE       -140  unsafe_setup-240
+      switch->Mamoswine -1000000  matchup+64 entry_incoming_damage-76 escape_lethal_threat+130 entry_hazards+0
+    Portable Close Combat   hit            foe -330 x2
