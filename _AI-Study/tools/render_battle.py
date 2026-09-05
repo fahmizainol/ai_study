@@ -28,7 +28,9 @@ parties=rec.get('final_parties') or [[],[]]
 def slotname(side,slot):
     try: return sp(parties[side][slot][0])
     except Exception: return 'slot%s'%slot
-RIGHT='Portable %s'%rec.get('portable_version','?') if ARM=='normal_portable' else 'Reborn-Normal (right seat)'
+# Both arms name the run's Portable version: a stock-Reborn readout is only the
+# baseline of the run it was recorded in (the harness has changed under it before).
+RIGHT='Portable %s'%rec.get('portable_version','?') if ARM=='normal_portable' else 'Reborn-Normal (right seat, %s run)'%rec.get('portable_version','?')
 print('%s  seed %d   Reborn-Normal (%s, left) vs %s (%s, right)   result for right seat: %s in %d turns'%(rec['id'],rec['seed'],left,RIGHT,right,rec['result'].upper(),rec['turns']))
 print('  Reborn   (%s): %s'%(left,', '.join(sp(m[0]) for m in parties[0])))
 print('  %-8s (%s): %s'%('Portable' if ARM=='normal_portable' else 'RebornR',right,', '.join(sp(m[0]) for m in parties[1])))

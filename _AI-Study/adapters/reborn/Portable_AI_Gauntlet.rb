@@ -687,8 +687,12 @@ module PortableAIRebornGauntlet
         right_party.map { |pokemon| [pokemon.species, pokemon.hp, pokemon.totalhp] }
       ]
     end
+    # Stamped on EVERY arm, not just the portable ones: a stock-Reborn record is only
+    # meaningful as the paired baseline of the run it came from, and the readouts were
+    # once rendered from a stale pre-obedience-fix baseline because nothing in the
+    # record said which run it belonged to.
+    record["portable_version"] = PortableAI::VERSION if defined?(PortableAI::VERSION)
     if portable || shadow
-      record["portable_version"] = PortableAI::VERSION
       run_overrides = PortableAIReborn.config_overrides
       record["config_overrides"] = run_overrides if !run_overrides.empty?
     end
