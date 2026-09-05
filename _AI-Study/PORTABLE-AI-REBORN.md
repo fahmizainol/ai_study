@@ -1487,10 +1487,42 @@ Sucker Punch failing and Leech Seed re-clicked on a seeded target (the next item
 turns 8–9: Chesnaught seeds Heracross (the drain is visible in the HP), then clicks
 Leech Seed again with `fresh_status+25`. `LEECHSEED` carries the `status` tag, and the
 core's only guard is the target's major status plus `status_immune`; the target view
-exports no `LeechSeed` effect, so a seeded foe looks fresh. Fix: export
-`target["seeded"]` (`effects[LeechSeed] >= 0`) and Grass-type immunity from the adapter,
-and have the core reject the move on either (same −450 as `target_already_statused`).
-Small; needs a unit test and a corpus card.
+exports no `LeechSeed` effect, so a seeded foe looks fresh.
+
+Reproduced a second time in set_c `balance_vs_bulky 155921` turns 5–7 (0.6.0 run,
+`generated/readouts/v060_set_c_balance_vs_bulky_155921.txt`): Chesnaught seeds Mandibuzz,
+re-clicks into the seeded target and the engine returns `failed`, then clicks a third
+time and only lands because Reborn pivoted Mandibuzz out that turn and the seed caught
+the incoming Flygon. One genuinely wasted turn of the three, but the rule would waste
+every turn if the foe stayed in. The margin is the whole story:
+
+```
+* LEECHSEED   125  fresh_status+25
+  DRAINPUNCH  118  expected_damage+17 drain_heal+1
+```
+
+Seven points — `fresh_status` alone is why the failing move wins.
+
+Fix (simpler than first written here): `engine_can_status?`
+(`adapters/reborn/Portable_AI_Adapter.rb:1182`) is already the dispatch that asks the
+engine whether a status can land, and it already handles the identical case for
+confusion — `pbCanConfuse?` returns false on an already-confused target. `LEECHSEED`
+just has no row. Adding a `drain` case routes it into the existing
+`target_status_immune` −450, which needs **no new exported field and no new core rule**,
+and picks up the other two failure conditions from `PokeBattle_Move_0DC.pbEffect`
+(`PokeBattle_MoveEffects.rb:6194–6210`) for free: Substitute and Grass-typing both make
+Leech Seed fail and neither is checked today.
+
+Note this is Portable-introduced, not a copy failure. Stock Reborn has **no scoring case
+for function `0xDC` at all** — it appears nowhere in `PokeBattle_AI_2.rb`, which reads
+`PBEffects::LeechSeed` in 20 places but only as state feeding *other* moves' scores.
+Reborn never re-seeds because it never scores Leech Seed above a damage move to begin
+with; `fresh_status` is ours. The corpus would not have caught it either — `LEECHSEED`
+appears twice in `tools/make_scenarios.py` and neither card tests re-application.
+
+Small, but it changes scored behaviour: needs a version bump, a unit test, a corpus card,
+and a paired gauntlet re-run, since every number in the current readouts was measured
+against present scoring.
 
 **Backlog: whole-battle habits seen in the Reborn-right readout** (set_c
 `offense_vs_bulky 262147`, `generated/readouts/set_c_REBORNRIGHT_*`). Reborn's Bronzong

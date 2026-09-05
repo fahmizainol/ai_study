@@ -1,0 +1,483 @@
+balance_vs_bulky  seed 196613   Reborn-Normal (balance, left) vs Portable 0.6.0 (bulky, right)   result for right seat: LOSS in 34 turns
+  Reborn   (balance): Tentacruel, Flygon, Empoleon, Mandibuzz, Vaporeon, Blastoise
+  Portable (bulky): Bronzong, Torkoal, Amoonguss, Chesnaught, Mantine, Forretress
+==============================================================================================================
+
+Turn 1
+  Reborn   Tentacruel 322/322           -> Scald
+  Portable Bronzong 296/296             -> Earthquake
+    view: hp 100%  speed 123 (slower)  incoming max 26%  certain 26%  threatened=False
+    foe moves est: Scald 26%, Rapid Spin 5%, Sludge Bomb 0%, Toxic Spikes 0%
+    * EARTHQUAKE         215  expected_damage+45 super_effective+70
+      STEALTHROCK        100  
+      GYROBALL            64  expected_damage+9 resisted-45
+      TOXIC          -1000000  
+      switch->Torkoal -1000000  matchup+64 entry_incoming_damage-65 switchin_race-5 entry_hazards+0
+    Reborn   Scald          hit            foe -66
+    Portable Earthquake     hit            foe -103 x2 [status=3 status_count=0]
+  end:     Reborn Tentacruel 219/322       | right Bronzong 212/296 BRN
+
+Turn 2
+  Reborn   Tentacruel 219/322           -> Scald
+  Portable Bronzong 212/296 BRN         -> Earthquake
+    view: hp 72%  speed 123 (slower)  incoming max 26%  certain 26%  threatened=False
+    foe moves est: Scald 26%, Rapid Spin 5%, Sludge Bomb 0%, Toxic Spikes 0%
+    * EARTHQUAKE         192  expected_damage+22 super_effective+70
+      STEALTHROCK        100  
+      GYROBALL            59  expected_damage+4 resisted-45
+      TOXIC          -1000000  
+      switch->Torkoal -1000000  matchup+64 entry_incoming_damage-65 switchin_race-5 entry_hazards+0
+    Reborn   Scald          hit            foe -75
+    Portable Earthquake     hit            foe -94 x2 [status=3 status_count=0]
+  end:     Reborn Tentacruel 125/322       | right Bronzong 119/296 BRN
+
+Turn 3
+  Reborn   Tentacruel 125/322           -> Scald
+  Portable Bronzong 119/296 BRN         -> Earthquake
+    view: hp 40%  speed 123 (slower)  incoming max 26%  certain 26%  threatened=False
+    foe moves est: Scald 26%, Rapid Spin 5%, Sludge Bomb 0%, Toxic Spikes 0%
+    * EARTHQUAKE         192  expected_damage+22 super_effective+70
+      STEALTHROCK        100  
+      GYROBALL            59  expected_damage+4 resisted-45
+      TOXIC          -1000000  
+      switch->Torkoal -1000000  matchup+64 entry_incoming_damage-65 switchin_race-5 entry_hazards+0
+    Reborn   Scald          hit            foe -78
+    Portable Earthquake     hit            foe -98 x2 [status=3 status_count=0]
+  end:     Reborn Tentacruel 27/322        | right Bronzong 23/296 BRN
+
+Turn 4
+  Reborn   Tentacruel 27/322            -> Scald
+  Portable Bronzong 23/296 BRN          -> Earthquake
+    view: hp 8%  speed 123 (slower)  incoming max 26%  certain 26%  threatened=True
+    foe moves est: Scald 26%, Rapid Spin 5%, Sludge Bomb 0%, Toxic Spikes 0%
+    * EARTHQUAKE         192  expected_damage+22 super_effective+70
+      STEALTHROCK        100  
+      GYROBALL            59  expected_damage+4 resisted-45
+      TOXIC          -1000000  
+      switch->Torkoal -1000000  matchup+64 entry_incoming_damage-65 switchin_race-5 escape_lethal_threat+130 entry_hazards+0 preserve_low_hp_actor+80
+    Reborn   Scald          hit            foe -23
+  end:     Reborn Tentacruel 27/322        | right Amoonguss 390/390
+
+Turn 5
+  Reborn   Tentacruel 27/322            -> Sludge Bomb
+  Portable Amoonguss 390/390            -> Giga Drain
+    view: hp 100%  speed 117 (slower)  incoming max 30%  certain 30%  threatened=False
+    foe moves est: Sludge Bomb 30%, Scald 13%, Rapid Spin 11%, Toxic Spikes 0%
+    * GIGADRAIN          600  lethal+500
+      SLUDGEBOMB         555  lethal+500 resisted-45
+      SPORE              125  fresh_status+25
+      SYNTHESIS         -520  heal_near_full-500 heal_losing_race-120
+      switch->Torkoal -1000000  matchup+64 entry_incoming_damage-65 switchin_race-5 entry_hazards+0
+    Reborn   Sludge Bomb    hit            foe -110
+    Portable Giga Drain     hit            foe -27, user +14
+  end:     Reborn Mandibuzz 382/382        | right Amoonguss 294/390
+
+Turn 6
+  Reborn   Mandibuzz 382/382            -> Foul Play
+  Portable Amoonguss 294/390            -> Spore
+    view: hp 75%  speed 117 (slower)  incoming max 54%  certain 54%  threatened=False
+    foe moves est: Foul Play 54%, Roost 0%, Toxic 0%, Defog 0%
+    * SPORE              125  fresh_status+25
+      SLUDGEBOMB         120  expected_damage+19 secondary_poison+1
+      GIGADRAIN           63  expected_damage+8 resisted-45 drain_heal+0
+      SYNTHESIS          -20  heal_losing_race-120
+      switch->Torkoal -1000000  matchup+32 entry_incoming_damage-20 switchin_race+10 entry_hazards+0
+    Reborn   Foul Play      hit            foe -204
+    Portable Spore          failed         foe 0
+  end:     Reborn Mandibuzz 382/382 SLP    | right Amoonguss 90/390
+
+Turn 7
+  Reborn   Mandibuzz 382/382 SLP        -> Foul Play
+  Portable Amoonguss 90/390             -> Synthesis
+    view: hp 23%  speed 117 (slower)  incoming max 54%  certain 0%  threatened=True
+    foe moves est: Foul Play 54%, Roost 0%, Toxic 0%, Defog 0%
+    * SYNTHESIS          506  heal_low_hp+256 heal_saves_battler+150
+      SLUDGEBOMB         119  expected_damage+19
+      GIGADRAIN           63  expected_damage+8 resisted-45 drain_heal+0
+      SPORE          -1000000  
+      switch->Torkoal -1000000  matchup+32 entry_incoming_damage-20 switchin_race+10 escape_lethal_threat+130 entry_hazards+0
+    Reborn   Foul Play      could_not_move  [status=1 status_count=2]
+    Portable Synthesis      untargeted     user +195
+  end:     Reborn Mandibuzz 382/382 SLP    | right Amoonguss 285/390
+
+Turn 8
+  Reborn   Mandibuzz 382/382 SLP        -> Foul Play
+  Portable Amoonguss 285/390            -> Sludge Bomb
+    view: hp 73%  speed 117 (slower)  incoming max 54%  certain 54%  threatened=False
+    foe moves est: Foul Play 54%, Roost 0%, Toxic 0%, Defog 0%
+    * SLUDGEBOMB         119  expected_damage+19
+      GIGADRAIN           63  expected_damage+8 resisted-45 drain_heal+0
+      SYNTHESIS          -20  heal_losing_race-120
+      SPORE          -1000000  
+      switch->Torkoal -1000000  matchup+32 entry_incoming_damage-20 switchin_race+10 entry_hazards+0
+    Reborn   Foul Play      hit            foe -206 [status=1 status_count=1]
+    Portable Sludge Bomb    hit            foe -95
+  end:     Reborn Mandibuzz 287/382 SLP    | right Amoonguss 79/390
+
+Turn 9
+  Reborn   Mandibuzz 287/382 SLP        -> Foul Play
+  Portable Amoonguss 79/390             -> Synthesis
+    view: hp 20%  speed 117 (slower)  incoming max 54%  certain 0%  threatened=True
+    foe moves est: Foul Play 54%, Roost 0%, Toxic 0%, Defog 0%
+    * SYNTHESIS          514  heal_low_hp+264 heal_saves_battler+150
+      SLUDGEBOMB         119  expected_damage+19
+      GIGADRAIN           63  expected_damage+8 resisted-45 drain_heal+0
+      SPORE          -1000000  
+      switch->Torkoal -1000000  matchup+32 entry_incoming_damage-20 switchin_race+10 escape_lethal_threat+130 entry_hazards+0
+    Reborn   Foul Play      could_not_move  [status=1 status_count=3]
+    Portable Synthesis      untargeted     user +195
+  end:     Reborn Mandibuzz 287/382 SLP    | right Amoonguss 274/390
+
+Turn 10
+  Reborn   Mandibuzz 287/382 SLP        -> Foul Play
+  Portable Amoonguss 274/390            -> Sludge Bomb
+    view: hp 70%  speed 117 (slower)  incoming max 54%  certain 0%  threatened=False
+    foe moves est: Foul Play 54%, Roost 0%, Toxic 0%, Defog 0%
+    * SLUDGEBOMB         119  expected_damage+19
+      GIGADRAIN           63  expected_damage+8 resisted-45 drain_heal+0
+      SYNTHESIS          -20  heal_losing_race-120
+      SPORE          -1000000  
+      switch->Torkoal -1000000  matchup+32 entry_incoming_damage-20 switchin_race+10 entry_hazards+0
+    Reborn   Foul Play      could_not_move  [status=1 status_count=2]
+    Portable Sludge Bomb    hit            foe -90
+  end:     Reborn Mandibuzz 197/382 SLP    | right Amoonguss 274/390
+
+Turn 11
+  Reborn   Mandibuzz 197/382 SLP        -> Foul Play
+  Portable Amoonguss 274/390            -> Sludge Bomb
+    view: hp 70%  speed 117 (slower)  incoming max 54%  certain 54%  threatened=False
+    foe moves est: Foul Play 54%, Roost 0%, Toxic 0%, Defog 0%
+    * SLUDGEBOMB         119  expected_damage+19
+      GIGADRAIN           63  expected_damage+8 resisted-45 drain_heal+0
+      SYNTHESIS          -20  heal_losing_race-120
+      SPORE          -1000000  
+      switch->Torkoal -1000000  matchup+32 entry_incoming_damage-20 switchin_race+10 entry_hazards+0
+    Reborn   Foul Play      hit            foe -180 [status=1 status_count=1]
+    Portable Sludge Bomb    hit            foe -107
+  end:     Reborn Mandibuzz 43/382 PSN     | right Amoonguss 94/390
+
+Turn 12
+  Reborn   Mandibuzz 43/382 PSN         -> Roost
+  Portable Amoonguss 94/390             -> Sludge Bomb
+    view: hp 24%  speed 117 (slower)  incoming max 54%  certain 54%  threatened=True
+    foe moves est: Foul Play 54%, Roost 0%, Toxic 0%, Defog 0%
+    * SLUDGEBOMB         119  ko_never_lands+0 expected_damage+19
+      GIGADRAIN           63  expected_damage+8 resisted-45 drain_heal+0
+      SYNTHESIS          -47  heal_low_hp+253 heal_cannot_resolve-400
+      SPORE          -1000000  
+      switch->Torkoal -1000000  matchup+32 entry_incoming_damage-20 switchin_race+10 escape_lethal_threat+130 entry_hazards+0
+    Reborn   Roost          untargeted     user +191 [status=2 status_count=0]
+    Portable Sludge Bomb    hit            foe -104
+  end:     Reborn Mandibuzz 83/382 PSN     | right Amoonguss 94/390
+
+Turn 13
+  Reborn   Mandibuzz 83/382 PSN         -> Roost
+  Portable Amoonguss 94/390             -> Sludge Bomb
+    view: hp 24%  speed 117 (slower)  incoming max 54%  certain 54%  threatened=True
+    foe moves est: Foul Play 54%, Roost 0%, Toxic 0%, Defog 0%
+    * SLUDGEBOMB         119  ko_never_lands+0 expected_damage+19
+      GIGADRAIN           63  expected_damage+8 resisted-45 drain_heal+0
+      SYNTHESIS          -47  heal_low_hp+253 heal_cannot_resolve-400
+      SPORE          -1000000  
+      switch->Torkoal -1000000  matchup+32 entry_incoming_damage-20 switchin_race+10 escape_lethal_threat+130 entry_hazards+0
+    Reborn   Roost          untargeted     user +191 [status=2 status_count=0]
+    Portable Sludge Bomb    hit            foe -99
+  end:     Reborn Mandibuzz 128/382 PSN    | right Amoonguss 94/390
+
+Turn 14
+  Reborn   Mandibuzz 128/382 PSN        -> Foul Play
+  Portable Amoonguss 94/390             -> Sludge Bomb
+    view: hp 24%  speed 117 (slower)  incoming max 54%  certain 54%  threatened=True
+    foe moves est: Foul Play 54%, Roost 0%, Toxic 0%, Defog 0%
+    * SLUDGEBOMB         119  expected_damage+19
+      GIGADRAIN           63  expected_damage+8 resisted-45 drain_heal+0
+      SYNTHESIS          -47  heal_low_hp+253 heal_cannot_resolve-400
+      SPORE          -1000000  
+      switch->Torkoal -1000000  matchup+32 entry_incoming_damage-20 switchin_race+10 escape_lethal_threat+130 entry_hazards+0
+    Reborn   Foul Play      hit            foe -94 [status=2 status_count=0]
+  end:     Reborn Mandibuzz 81/382 PSN     | right Mantine 332/332
+
+Turn 15
+  Reborn   Mandibuzz 81/382 PSN         -> Roost
+  Portable Mantine 332/332              -> Scald
+    view: hp 100%  speed 197 (slower)  incoming max 39%  certain 39%  threatened=False
+    foe moves est: Foul Play 39%, Roost 0%, Toxic 0%, Defog 0%
+    * SCALD              116  expected_damage+16
+      DEFOG             -200  no_hazards_to_remove-300
+      ROOST             -520  heal_near_full-500 heal_losing_race-120
+      TOXIC          -1000000  
+      switch->Torkoal -1000000  matchup+32 entry_incoming_damage-20 switchin_race+10 entry_hazards+0
+    Reborn   Roost          untargeted     user +191 [status=2 status_count=0]
+    Portable Scald          hit            foe -86
+  end:     Reborn Mandibuzz 139/382 PSN    | right Mantine 332/332
+
+Turn 16
+  Reborn   Mandibuzz 139/382 PSN        -> Foul Play
+  Portable Mantine 332/332              -> Scald
+    view: hp 100%  speed 197 (slower)  incoming max 39%  certain 39%  threatened=False
+    foe moves est: Foul Play 39%, Roost 0%, Toxic 0%, Defog 0%
+    * SCALD              116  expected_damage+16
+      DEFOG             -200  no_hazards_to_remove-300
+      ROOST             -520  heal_near_full-500 heal_losing_race-120
+      TOXIC          -1000000  
+      switch->Torkoal -1000000  matchup+32 entry_incoming_damage-20 switchin_race+10 entry_hazards+0
+    Reborn   Foul Play      hit            foe -126 [status=2 status_count=0]
+    Portable Scald          hit            foe -90
+  end:     Reborn Mandibuzz 2/382 PSN      | right Mantine 206/332
+
+Turn 17
+  Reborn   Mandibuzz 2/382 PSN          -> Roost
+  Portable Mantine 206/332              -> Scald
+    view: hp 62%  speed 197 (slower)  incoming max 39%  certain 39%  threatened=False
+    foe moves est: Foul Play 39%, Roost 0%, Toxic 0%, Defog 0%
+    * SCALD              600  lethal+500
+      ROOST              -20  heal_losing_race-120
+      DEFOG             -200  no_hazards_to_remove-300
+      TOXIC          -1000000  
+      switch->Torkoal -1000000  matchup+32 entry_incoming_damage-20 switchin_race+10 entry_hazards+0
+    Reborn   Roost          untargeted     user +191 [status=2 status_count=0]
+    Portable Scald          hit            foe -83
+  end:     Reborn Mandibuzz 63/382 PSN     | right Mantine 206/332
+
+Turn 18
+  Reborn   Mandibuzz 63/382 PSN         -> Roost
+  Portable Mantine 206/332              -> Scald
+    view: hp 62%  speed 197 (slower)  incoming max 39%  certain 39%  threatened=False
+    foe moves est: Foul Play 39%, Roost 0%, Toxic 0%, Defog 0%
+    * SCALD              600  lethal+500
+      ROOST              -20  heal_losing_race-120
+      DEFOG             -200  no_hazards_to_remove-300
+      TOXIC          -1000000  
+      switch->Torkoal -1000000  matchup+32 entry_incoming_damage-20 switchin_race+10 entry_hazards+0
+    Reborn   Roost          untargeted     user +191 [status=2 status_count=0]
+    Portable Scald          hit            foe -81
+  end:     Reborn Mandibuzz 126/382 PSN    | right Mantine 206/332
+
+Turn 19
+  Reborn   Mandibuzz 126/382 PSN        -> Roost
+  Portable Mantine 206/332              -> Scald
+    view: hp 62%  speed 197 (slower)  incoming max 39%  certain 39%  threatened=False
+    foe moves est: Foul Play 39%, Roost 0%, Toxic 0%, Defog 0%
+    * SCALD              116  expected_damage+16
+      ROOST              -20  heal_losing_race-120
+      DEFOG             -200  no_hazards_to_remove-300
+      TOXIC          -1000000  
+      switch->Torkoal -1000000  matchup+32 entry_incoming_damage-20 switchin_race+10 entry_hazards+0
+    Reborn   Roost          untargeted     user +191 [status=2 status_count=0]
+    Portable Scald          hit            foe -89
+  end:     Reborn Mandibuzz 181/382 PSN    | right Mantine 206/332
+
+Turn 20
+  Reborn   Mandibuzz 181/382 PSN        -> Foul Play
+  Portable Mantine 206/332              -> Scald
+    view: hp 62%  speed 197 (slower)  incoming max 39%  certain 39%  threatened=False
+    foe moves est: Foul Play 39%, Roost 0%, Toxic 0%, Defog 0%
+    * SCALD              116  expected_damage+16
+      ROOST              -20  heal_losing_race-120
+      DEFOG             -200  no_hazards_to_remove-300
+      TOXIC          -1000000  
+      switch->Torkoal -1000000  matchup+32 entry_incoming_damage-20 switchin_race+10 entry_hazards+0
+    Reborn   Foul Play      hit            foe -123 [status=2 status_count=0]
+    Portable Scald          hit            foe -78
+  end:     Reborn Mandibuzz 56/382 PSN     | right Mantine 83/332
+
+Turn 21
+  Reborn   Mandibuzz 56/382 PSN         -> Roost
+  Portable Mantine 83/332               -> Scald
+    view: hp 25%  speed 197 (slower)  incoming max 39%  certain 39%  threatened=True
+    foe moves est: Foul Play 39%, Roost 0%, Toxic 0%, Defog 0%
+    * SCALD              116  ko_never_lands+0 expected_damage+16
+      ROOST              -50  heal_low_hp+250 heal_cannot_resolve-400
+      DEFOG             -200  no_hazards_to_remove-300
+      TOXIC          -1000000  
+      switch->Torkoal -1000000  matchup+32 entry_incoming_damage-20 switchin_race+10 escape_lethal_threat+130 entry_hazards+0
+    Reborn   Roost          untargeted     user +191 [status=2 status_count=0]
+    Portable Scald          hit            foe -83
+  end:     Reborn Mandibuzz 117/382 PSN    | right Mantine 83/332
+
+Turn 22
+  Reborn   Mandibuzz 117/382 PSN        -> Foul Play
+  Portable Mantine 83/332               -> Scald
+    view: hp 25%  speed 197 (slower)  incoming max 39%  certain 39%  threatened=True
+    foe moves est: Foul Play 39%, Roost 0%, Toxic 0%, Defog 0%
+    * SCALD              116  expected_damage+16
+      ROOST              -50  heal_low_hp+250 heal_cannot_resolve-400
+      DEFOG             -200  no_hazards_to_remove-300
+      TOXIC          -1000000  
+      switch->Torkoal -1000000  matchup+32 entry_incoming_damage-20 switchin_race+10 escape_lethal_threat+130 entry_hazards+0
+    Reborn   Foul Play      hit            foe -83 [status=2 status_count=0]
+  end:     Reborn Mandibuzz 70/382 PSN     | right Torkoal 302/302
+
+Turn 23
+  Reborn   Mandibuzz 70/382 PSN         -> Roost
+  Portable Torkoal 302/302              -> Lava Plume
+    view: hp 100%  speed 97 (slower)  incoming max 41%  certain 41%  threatened=False
+    foe moves est: Foul Play 41%, Roost 0%, Toxic 0%, Defog 0%
+    * LAVAPLUME          117  expected_damage+17
+      STEALTHROCK        100  
+      WILLOWISP      -1000000  
+      EARTHQUAKE     -1000000  
+      switch->Chesnaught -1000000  matchup+32 entry_incoming_damage+1 switchin_race+85 entry_hazards+0
+    Reborn   Roost          untargeted     user +191 [status=2 status_count=0]
+    Portable Lava Plume     hit            foe -86
+  end:     Reborn Mandibuzz 128/382 PSN    | right Torkoal 302/302
+
+Turn 24
+  Reborn   Mandibuzz 128/382 PSN        -> Roost
+  Portable Torkoal 302/302              -> Lava Plume
+    view: hp 100%  speed 97 (slower)  incoming max 41%  certain 41%  threatened=False
+    foe moves est: Foul Play 41%, Roost 0%, Toxic 0%, Defog 0%
+    * LAVAPLUME          117  expected_damage+17
+      STEALTHROCK        100  
+      WILLOWISP      -1000000  
+      EARTHQUAKE     -1000000  
+      switch->Chesnaught -1000000  matchup+32 entry_incoming_damage+1 switchin_race+85 entry_hazards+0
+    Reborn   Roost          untargeted     user +191 [status=2 status_count=0]
+    Portable Lava Plume     hit            foe -86
+  end:     Reborn Mandibuzz 186/382 PSN    | right Torkoal 302/302
+
+Turn 25
+  Reborn   Mandibuzz 186/382 PSN        -> Foul Play
+  Portable Torkoal 302/302              -> Lava Plume
+    view: hp 100%  speed 97 (slower)  incoming max 41%  certain 41%  threatened=False
+    foe moves est: Foul Play 41%, Roost 0%, Toxic 0%, Defog 0%
+    * LAVAPLUME          117  expected_damage+17
+      STEALTHROCK        100  
+      WILLOWISP      -1000000  
+      EARTHQUAKE     -1000000  
+      switch->Chesnaught -1000000  matchup+32 entry_incoming_damage+1 switchin_race+85 entry_hazards+0
+    Reborn   Foul Play      hit            foe -108 [status=2 status_count=0]
+    Portable Lava Plume     hit            foe -93
+  end:     Reborn Mandibuzz 46/382 PSN     | right Torkoal 194/302
+
+Turn 26
+  Reborn   Mandibuzz 46/382 PSN         -> Roost
+  Portable Torkoal 194/302              -> Lava Plume
+    view: hp 64%  speed 97 (slower)  incoming max 41%  certain 41%  threatened=False
+    foe moves est: Foul Play 41%, Roost 0%, Toxic 0%, Defog 0%
+    * LAVAPLUME          117  expected_damage+17
+      STEALTHROCK        100  
+      WILLOWISP      -1000000  
+      EARTHQUAKE     -1000000  
+      switch->Chesnaught -1000000  matchup+32 entry_incoming_damage+1 switchin_race+85 entry_hazards+0
+    Reborn   Roost          untargeted     user +191 [status=2 status_count=0]
+    Portable Lava Plume     hit            foe -90
+  end:     Reborn Mandibuzz 100/382 PSN    | right Torkoal 194/302
+
+Turn 27
+  Reborn   Mandibuzz 100/382 PSN        -> Foul Play
+  Portable Torkoal 194/302              -> Lava Plume
+    view: hp 64%  speed 97 (slower)  incoming max 41%  certain 41%  threatened=False
+    foe moves est: Foul Play 41%, Roost 0%, Toxic 0%, Defog 0%
+    * LAVAPLUME          117  expected_damage+17
+      STEALTHROCK        100  
+      WILLOWISP      -1000000  
+      EARTHQUAKE     -1000000  
+      switch->Chesnaught -1000000  matchup+32 entry_incoming_damage+1 switchin_race+85 entry_hazards+0
+    Reborn   Foul Play      hit            foe -116 [status=2 status_count=0]
+    Portable Lava Plume     hit            foe -90
+  end:     Reborn Flygon 322/322           | right Torkoal 78/302
+
+Turn 28
+  Reborn   Flygon 322/322               -> Earthquake
+  Portable Torkoal 78/302               -> Will-O-Wisp
+    view: hp 26%  speed 97 (slower)  incoming max 66%  certain 66%  threatened=True
+    foe moves est: Earthquake 66%, Dragon Claw 26%, U-turn 8%, Roost 0%
+    * WILLOWISP          125  fresh_status+25
+      STEALTHROCK        100  
+      LAVAPLUME           69  expected_damage+11 resisted-45 secondary_burn+2
+      EARTHQUAKE     -1000000  
+      switch->Chesnaught -1000000  matchup+32 entry_incoming_damage-2 switchin_race+85 escape_lethal_threat+130 entry_hazards+0
+    Reborn   Earthquake     hit            foe -78 x2
+  end:     Reborn Flygon 322/322           | right Chesnaught 338/338
+
+Turn 29
+  Reborn   Flygon 322/322               -> U-turn
+  Portable Chesnaught 338/338           -> Wood Hammer
+    view: hp 100%  speed 185 (slower)  incoming max 26%  certain 26%  threatened=False
+    foe moves est: Dragon Claw 26%, Earthquake 16%, U-turn 15%, Roost 0%
+    * WOODHAMMER         136  expected_damage+40 recoil_cost-4
+      DRAINPUNCH         125  expected_damage+25
+      LEECHSEED          125  fresh_status+25
+      SPIKES             100  
+      switch->Forretress -1000000  matchup+32 entry_incoming_damage-9 switchin_race+85 entry_hazards+0
+    Reborn   U-turn         hit            foe -44
+    Portable Wood Hammer    hit            foe -422 x2, user -141
+  end:     Reborn Empoleon 330/330         | right Chesnaught 153/338
+
+Turn 30
+  Reborn   Empoleon 330/330             -> Ice Beam
+  Portable Chesnaught 153/338           -> Drain Punch
+    view: hp 45%  speed 185 (faster)  incoming max 61%  certain 61%  threatened=True
+    foe moves est: Ice Beam 61%, Flash Cannon 41%, Scald 20%, Stealth Rock 0%
+    * DRAINPUNCH         223  expected_damage+46 super_effective+70 drain_heal+7
+      WOODHAMMER         133  expected_damage+37 recoil_cost-4
+      LEECHSEED          125  fresh_status+25
+      SPIKES             100  
+      switch->Forretress -1000000  matchup+16 entry_incoming_damage-34 switchin_race-5 escape_lethal_threat+130 entry_hazards+0
+    Portable Drain Punch    hit            foe -214 x2, user +107
+    Reborn   Ice Beam       hit            foe -192 x2
+  end:     Reborn Empoleon 116/330         | right Chesnaught 68/338
+
+Turn 31
+  Reborn   Empoleon 116/330             -> Ice Beam
+  Portable Chesnaught 68/338            -> Drain Punch
+    view: hp 20%  speed 185 (faster)  incoming max 61%  certain 61%  threatened=True
+    foe moves est: Ice Beam 61%, Flash Cannon 41%, Scald 20%, Stealth Rock 0%
+    * DRAINPUNCH         705  lethal+500 super_effective+70 drain_heal+35
+      WOODHAMMER         524  lethal+500 recoil_cost-76
+      LEECHSEED          125  fresh_status+25
+      SPIKES             100  
+      switch->Forretress -1000000  matchup+16 entry_incoming_damage-34 switchin_race-5 escape_lethal_threat+130 entry_hazards+0
+    Portable Drain Punch    hit            foe -116 x2, user +58
+  end:     Reborn Blastoise 320/320        | right Chesnaught 126/338
+
+Turn 32
+  Reborn   Blastoise 320/320            -> Ice Beam
+  Portable Chesnaught 126/338           -> Wood Hammer
+    view: hp 37%  speed 185 (slower)  incoming max 50%  certain 50%  threatened=True
+    foe moves est: Ice Beam 50%, Scald 17%, Dark Pulse 17%, Rapid Spin 10%
+    * WOODHAMMER         219  expected_damage+68 super_effective+70 recoil_cost-19
+      LEECHSEED          125  fresh_status+25
+      DRAINPUNCH         123  expected_damage+22 drain_heal+1
+      SPIKES             100  
+      switch->Forretress -1000000  matchup+32 entry_incoming_damage-22 switchin_race+10 escape_lethal_threat+130 entry_hazards+0
+    Reborn   Ice Beam       hit            foe -126 x2
+  end:     Reborn Blastoise 320/320        | right Forretress 312/312
+
+Turn 33
+  Reborn   Blastoise 320/320            -> Dark Pulse
+  Portable Forretress 312/312           -> Toxic
+    view: hp 100%  speed 137 (slower)  incoming max 42%  certain 42%  threatened=False
+    foe moves est: Scald 42%, Dark Pulse 42%, Ice Beam 16%, Rapid Spin 5%
+    * TOXIC              125  fresh_status+25
+      SPIKES             100  
+      GYROBALL            60  expected_damage+5 resisted-45
+      RAPIDSPIN         -192  expected_damage+8 no_hazards_to_remove-300
+    Reborn   Dark Pulse     hit            foe -121
+    Portable Toxic          hit            foe 0
+  end:     Reborn Blastoise 300/320 PSN    | right Forretress 191/312
+
+Turn 34
+  Reborn   Blastoise 300/320 PSN        -> Dark Pulse
+  Portable Forretress 191/312           -> Spikes
+    view: hp 61%  speed 137 (slower)  incoming max 42%  certain 42%  threatened=False
+    foe moves est: Scald 42%, Dark Pulse 42%, Ice Beam 16%, Rapid Spin 5%
+    * SPIKES             100  
+      GYROBALL            60  expected_damage+5 resisted-45
+      RAPIDSPIN         -192  expected_damage+8 no_hazards_to_remove-300
+      TOXIC          -1000000  
+    Reborn   Dark Pulse     hit            foe -122 [status=2 status_count=1]
+    Portable Spikes         untargeted     
+  end:     Reborn Blastoise 260/320 PSN    | right Forretress 69/312
+
+Turn 35
+  Reborn   Blastoise 260/320 PSN        -> Scald
+  Portable Forretress 69/312            -> Spikes
+    view: hp 22%  speed 137 (slower)  incoming max 42%  certain 42%  threatened=True
+    foe moves est: Scald 42%, Dark Pulse 42%, Ice Beam 16%, Rapid Spin 5%
+    * SPIKES             100  
+      GYROBALL            60  expected_damage+5 resisted-45
+      RAPIDSPIN         -192  expected_damage+8 no_hazards_to_remove-300
+      TOXIC          -1000000  
+    Reborn   Scald          hit            foe -69 [status=2 status_count=1]
