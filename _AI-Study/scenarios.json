@@ -7370,5 +7370,156 @@
     "must_choose_any"
    ]
   ]
+ },
+ {
+  "id": "leech_live_on_a_fresh_target",
+  "field": 0,
+  "format": "single",
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "LEECHSEED",
+   "DRAINPUNCH",
+   "POUND",
+   "PECK"
+  ],
+  "ai_species": "CHESNAUGHT",
+  "player_species": "MANDIBUZZ",
+  "ai2_moves": null,
+  "ai2_species": null,
+  "player2_species": null,
+  "ai_party_species": [
+   "CHESNAUGHT"
+  ],
+  "ai_actives": 1,
+  "move_ids": {
+   "LEECHSEED": 217,
+   "DRAINPUNCH": 99,
+   "POUND": 309,
+   "PECK": 168
+  },
+  "assertions": [
+   [
+    "score_gt",
+    "LEECHSEED",
+    "DRAINPUNCH"
+   ]
+  ]
+ },
+ {
+  "id": "leech_no_reseed_on_a_seeded_target",
+  "field": 0,
+  "format": "single",
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "LEECHSEED",
+   "DRAINPUNCH",
+   "POUND",
+   "PECK"
+  ],
+  "ai_species": "CHESNAUGHT",
+  "player_species": "MANDIBUZZ",
+  "ai2_moves": null,
+  "ai2_species": null,
+  "player2_species": null,
+  "ai_party_species": [
+   "CHESNAUGHT"
+  ],
+  "ai_actives": 1,
+  "move_ids": {
+   "LEECHSEED": 217,
+   "DRAINPUNCH": 99,
+   "POUND": 309,
+   "PECK": 168
+  },
+  "assertions": [
+   [
+    "must_not_choose_move",
+    "LEECHSEED"
+   ],
+   [
+    "score_gt",
+    "DRAINPUNCH",
+    "LEECHSEED"
+   ]
+  ]
+ },
+ {
+  "id": "leech_blocked_by_a_substitute",
+  "field": 0,
+  "format": "single",
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "LEECHSEED",
+   "DRAINPUNCH",
+   "POUND",
+   "PECK"
+  ],
+  "ai_species": "CHESNAUGHT",
+  "player_species": "MANDIBUZZ",
+  "ai2_moves": null,
+  "ai2_species": null,
+  "player2_species": null,
+  "ai_party_species": [
+   "CHESNAUGHT"
+  ],
+  "ai_actives": 1,
+  "move_ids": {
+   "LEECHSEED": 217,
+   "DRAINPUNCH": 99,
+   "POUND": 309,
+   "PECK": 168
+  },
+  "assertions": [
+   [
+    "must_not_choose_move",
+    "LEECHSEED"
+   ]
+  ]
+ },
+ {
+  "id": "leech_dead_into_a_grass_type",
+  "field": 0,
+  "format": "single",
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "LEECHSEED",
+   "DRAINPUNCH",
+   "POUND",
+   "PECK"
+  ],
+  "ai_species": "CHESNAUGHT",
+  "player_species": "TANGROWTH",
+  "ai2_moves": null,
+  "ai2_species": null,
+  "player2_species": null,
+  "ai_party_species": [
+   "CHESNAUGHT"
+  ],
+  "ai_actives": 1,
+  "move_ids": {
+   "LEECHSEED": 217,
+   "DRAINPUNCH": 99,
+   "POUND": 309,
+   "PECK": 168
+  },
+  "assertions": [
+   [
+    "must_not_choose_move",
+    "LEECHSEED"
+   ],
+   [
+    "score_gt",
+    "DRAINPUNCH",
+    "LEECHSEED"
+   ]
+  ]
  }
 ]

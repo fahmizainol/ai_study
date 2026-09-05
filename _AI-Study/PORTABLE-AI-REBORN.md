@@ -1483,6 +1483,8 @@ the observed `hp_lost` on all 235 damaged targets; all 23 status moves classifie
 `hit` left the target holding exactly that status at round end; and `failed` picks out
 Sucker Punch failing and Leech Seed re-clicked on a seeded target (the next item).
 
+**FIXED in 0.6.1** (see "Core version 0.6.1 — Leech Seed applicability" below; the
+proposed fix in this entry was superseded by a smaller adapter-only one).
 **Backlog: Leech Seed re-clicked on a seeded target.** Set_c `offense_vs_bulky 262147`
 turns 8–9: Chesnaught seeds Heracross (the drain is visible in the HP), then clicks
 Leech Seed again with `fresh_status+25`. `LEECHSEED` carries the `status` tag, and the
@@ -1523,6 +1525,20 @@ appears twice in `tools/make_scenarios.py` and neither card tests re-application
 Small, but it changes scored behaviour: needs a version bump, a unit test, a corpus card,
 and a paired gauntlet re-run, since every number in the current readouts was measured
 against present scoring.
+
+**Backlog: Yawn re-clicked on an already-drowsy target.** The same bug class as Leech
+Seed, found while fixing it, and deliberately NOT fixed in the same change so that the
+0.6.1 gauntlet measures one thing. `YAWN` is tagged `["status", "sleep"]`
+(`effects.rb:53`), so `engine_can_status?` asks `pbCanSleep?` — which answers about the
+status CONDITION and returns true for a target that is merely drowsy. The engine's own
+second guard is a separate line: `PokeBattle_Move_004#pbEffect`
+(`PokeBattle_MoveEffects.rb:249`) returns -1 with "But it failed!" when
+`effects[PBEffects::Yawn] > 0`. The adapter exports `yawned` but only on `build_actor`
+(`Portable_AI_Adapter.rb:484`) — for the actor, never for the target.
+
+Fix is the shape of the Leech Seed one: a clause in `status_blocked?` reading
+`safe_effect(target, :Yawn, 0).to_i > 0`. Needs the same treatment — unit test, corpus
+card, and its own paired run, since Yawn appears in the rosters and this changes picks.
 
 **Backlog: whole-battle habits seen in the Reborn-right readout** (set_c
 `offense_vs_bulky 262147`, `generated/readouts/set_c_REBORNRIGHT_*`). Reborn's Bronzong
@@ -1926,6 +1942,88 @@ Phase B shipped as core 0.5.0 — see the section above this one. Its inputs wer
 table, the two corrections, and the open question about Boots, which is still open:
 0.5.0 zeroes the entry cost for a Boots holder because that is what the item does, not
 because the term Reborn uses for it was ever located.
+
+## Core version 0.6.1 — Leech Seed applicability (2026-09-06)
+
+**A one-clause adapter fix, and the core was not touched.** The backlog entry proposed
+exporting `target["seeded"]` and adding a core rule at −450. Both turned out to be
+unnecessary, and one of them would have been dead on arrival: `target["status_immune"]`
+is read by `core.rb:218` and **written by nothing in the Reborn adapter**, so the −450
+`target_status_immune` row cannot fire on this engine at all. The live path is
+`status_blocked?` → `action["immune"]` → `HARD_REJECT` (`core.rb:80`), which already
+existed and is stronger.
+
+So the whole change is one clause in `status_blocked?`
+(`adapters/reborn/Portable_AI_Adapter.rb`), mirroring the engine's own three rejections
+in `PokeBattle_Move_0DC#pbEffect` (`PokeBattle_MoveEffects.rb:6194`) — already seeded,
+behind a Substitute, Grass-type. `LEECHSEED` carries the `status` tag but sets no status
+CONDITION (it writes `PBEffects::LeechSeed`, initialised to −1 at
+`PokeBattle_Battler.rb:475`), and there is no `pbCanLeechSeed?` to ask, which is why
+`engine_can_status?` was the wrong home and the major-status guard never saw it.
+
+**Measured, paired against 0.6.0 over all seven rosters, `normal_portable`:**
+
+```
+0.6.0    197/420 = 46.9%
+0.6.1    205/420 = 48.8%   (+8)
+gained 10, lost 2        McNemar chi2=4.08  z=2.02  p=0.043
+```
+
+| archetype | n | 0.6.0 | 0.6.1 | delta |
+|---|---|---|---|---|
+| balance | 105 | 46 | 52 | **+6** |
+| bulky   | 105 | 21 | 23 | **+2** |
+| offense | 105 | 77 | 77 | +0 |
+| speed   | 105 | 53 | 53 | +0 |
+
+The archetype split is the result worth keeping, not the +8. Balance and bulky are the
+sides that carry Leech Seed; offense and speed do not, and they move by exactly zero.
+A change that claimed a broad improvement while touching one status move would have
+been suspicious — this one lands only where its mechanism reaches.
+
+It is **not** free: over the first four rosters it was gained 7 / lost 0, but across all
+seven it costs 2 battles. Removing a wasted turn changes the turn parity of everything
+downstream, and twice that landed badly.
+
+**Confirmation the fix is live rather than coincident:** in set_c, 4 of 60 battles
+changed course, all of them with Portable piloting a Leech Seed carrier, and
+`balance_vs_bulky 155921` — the battle the bug was diagnosed in — went 69 → 67 turns.
+It is still a loss, which is why set_c reads +0: the wasted turns were real but the
+position was lost for other reasons.
+
+**Corpus: 195 → 199 scenarios, 249 assertions, all passing.** The four `CORPUS_LS` cards
+rebuild the observed position (Chesnaught into Mandibuzz) and the probe reproduces it to
+within a point of the readout: `LEECHSEED=125.0 vs DRAINPUNCH=119.03`, against the
+125-vs-118 seen in the battle trace.
+
+Each card was then run against the **pre-fix build** to check it discriminates, and that
+caught a bad card. `leech_dead_into_a_grass_type` with only `must_not_choose_move`
+PASSED on the broken build: move padding hands the AI Peck, Flying is 2x into Grass, and
+Leech Seed lost on damage for a reason that had nothing to do with the rule. It now also
+asserts `score_gt DRAINPUNCH LEECHSEED` (117.37 vs 125.0 broken, vs −1000000 fixed).
+Final state — three blocking cards fail pre-fix, the fresh-target control passes both
+ways, so the corpus cannot pass a build that has the bug and cannot punish one that
+merely stops using the move.
+
+Same discipline on the unit side: 4 new adapter tests (40 tests / 71 assertions), and
+reverting the clause fails exactly the three blocking tests and not the control.
+
+**Two infrastructure bugs found while measuring**, both in
+`tools/run_gauntlet_parallel.sh`, and the second explains the corrupted set_a from the
+0.6.0 session:
+
+1. The `rm` that clears a worker's previous results ignored its exit status. When it
+   failed the stale file survived and the `produced=` probe copied it out under the NEXT
+   roster's name. Now the roster fails loudly instead.
+2. **The root cause.** Dispatch blocked on `wait -n` for a free slot but then chose the
+   worker by round-robin index `i % ${#WORKERS[@]}`, which is not the worker that freed.
+   With 7 rosters over 4 workers, set_e was launched into w1 while set_a was still
+   playing there — two games in one directory, fighting over `Data/ai_harness.txt` and a
+   results file the second cannot delete. Replaced with one serial queue per worker, so
+   "one game per directory at a time" is structural rather than incidental.
+
+Guard 1 fired on this run and refused three rosters rather than emitting wrong data;
+they were re-run cleanly after guard 2 was in place.
 
 ## Core version 0.6.0 — the damage race (2026-09-06)
 

@@ -2192,9 +2192,58 @@ CORPUS_R1 = [
 ]
 
 
+# ---------------------------------------------------------------------------
+#  CORPUS_LS — Leech Seed applicability (adapter fix, 2026-09-06).
+#
+#  LEECHSEED carries the "status" tag (effects.rb:58) but sets no status CONDITION:
+#  the engine writes PBEffects::LeechSeed, initialised to -1 (PokeBattle_Battler.rb
+#  :475). The core's only guards were the target's major status and status_immune, so
+#  a seeded foe read as fresh and the move kept collecting fresh_status+25 while the
+#  engine returned "failed".
+#
+#  The board below is the one actually observed, from set_c balance_vs_bulky 155921
+#  turns 5-7: Chesnaught into Mandibuzz, LEECHSEED 125 (fresh_status+25) over
+#  DRAINPUNCH 118. Seven points, so the pair is the measurement -- the fresh-target
+#  card must keep Leech Seed WINNING, or the fix has simply killed the move.
+#
+#  The three blocked cards mirror PokeBattle_Move_0DC#pbEffect
+#  (PokeBattle_MoveEffects.rb:6194): already seeded, behind a Substitute, Grass-type.
+#  leechseed is a seeder INDEX applied raw by the harness (AI_Harness.rb:318), so 1
+#  is the AI's own active -- the realistic "I seeded it last turn" state.
+# ---------------------------------------------------------------------------
+CORPUS_LS = [
+    # Control. Nothing blocks the seed, so the +25 must still carry it over the
+    # 118-point Drain Punch. This card fails if the fix over-blocks.
+    ('leech_live_on_a_fresh_target', 0,
+     mon('CHESNAUGHT', 50, ['LEECHSEED', 'DRAINPUNCH']),
+     mon('MANDIBUZZ', 50, ['FOULPLAY']),
+     [('score_gt', 'LEECHSEED', 'DRAINPUNCH')]),
+    ('leech_no_reseed_on_a_seeded_target', 0,
+     mon('CHESNAUGHT', 50, ['LEECHSEED', 'DRAINPUNCH']),
+     mon('MANDIBUZZ', 50, ['FOULPLAY'], effects={'leechseed': 1}),
+     [('must_not_choose_move', 'LEECHSEED'),
+      ('score_gt', 'DRAINPUNCH', 'LEECHSEED')]),
+    ('leech_blocked_by_a_substitute', 0,
+     mon('CHESNAUGHT', 50, ['LEECHSEED', 'DRAINPUNCH']),
+     mon('MANDIBUZZ', 50, ['FOULPLAY'], effects={'substitute': 50}),
+     [('must_not_choose_move', 'LEECHSEED')]),
+    # Grass-typing is the engine's third rejection and was never checked either. The
+    # score assertion is what makes this card discriminate: must_not_choose_move alone
+    # passes even on the BROKEN build, because move padding hands the AI Peck and
+    # Flying is 2x into Grass, so Leech Seed loses on damage for an unrelated reason.
+    # Drain Punch is neutral into Tangrowth (Fighting vs Grass) and lands at the same
+    # ~119 it scores into Mandibuzz, so it is the honest comparator against the 125.
+    ('leech_dead_into_a_grass_type', 0,
+     mon('CHESNAUGHT', 50, ['LEECHSEED', 'DRAINPUNCH']),
+     mon('TANGROWTH', 50, ['GIGADRAIN']),
+     [('must_not_choose_move', 'LEECHSEED'),
+      ('score_gt', 'DRAINPUNCH', 'LEECHSEED')]),
+]
+
+
 CORPUS = (CORPUS_V1 + CORPUS_V2 + CORPUS_V3 + CORPUS_V4 + CORPUS_V5
           + CORPUS_V6 + CORPUS_V7 + CORPUS_V8 + CORPUS_V9 + CORPUS_V10
-          + CORPUS_D1 + CORPUS_D2 + CORPUS_D3 + CORPUS_R1)
+          + CORPUS_D1 + CORPUS_D2 + CORPUS_D3 + CORPUS_R1 + CORPUS_LS)
 
 # Values a scenario's extra dict may carry; the generator validates so a typo
 # fails here instead of silently emitting a key no probe reads.

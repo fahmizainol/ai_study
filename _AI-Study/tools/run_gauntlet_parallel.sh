@@ -47,6 +47,15 @@ run_one() {  # worker_dir roster
     || cp -r "$MASTER/Scripts/." "$w/Scripts/"
   cp "$MASTER/Data/!script_order.csv" "$w/Data/" 2>/dev/null
   rm -f "$w"/Data/ai_*results*.ndjson "$w"/Data/ai_*summary*.txt
+  # That rm's exit status used to be ignored. When it failed (an NTFS lock, a
+  # permission error) the PREVIOUS roster's results survived, and the produced= probe
+  # below copied them out under THIS roster's name -- silent cross-roster
+  # contamination that once shipped a 41-record set_a full of set_e battles. Refuse to
+  # run rather than emit a file that looks valid and is not.
+  if ls "$w"/Data/ai_*results*.ndjson >/dev/null 2>&1; then
+    echo "ROSTER_FAILED $roster (stale results in $w/Data could not be removed)"
+    return 1
+  fi
   { cat "$CONFIG"; echo "teams=$roster"; } > "$w/Data/ai_harness.txt"
   touch "$w/Data/portable_ai.txt"
   ( cd "$w" && ./Game.exe ) > "$w/run.log" 2>&1
@@ -61,12 +70,27 @@ run_one() {  # worker_dir roster
   rm -f "$w/Data/ai_harness.txt" "$w/Data/portable_ai.txt"
 }
 
+# Deal the rosters into one queue per worker, then run each queue SERIALLY in its own
+# background shell. The previous version blocked on `wait -n` for a free slot but then
+# picked the worker by round-robin index, so with 7 rosters over 4 workers set_e was
+# dispatched to w1 while set_a was still playing there: two games in one directory,
+# fighting over Data/ai_harness.txt and a results file the second one cannot delete.
+# A queue per worker makes "one game per directory at a time" structural.
+declare -a QUEUE
+for wi in "${!WORKERS[@]}"; do QUEUE[$wi]=""; done
 i=0
 for roster in "${ROSTERS[@]}"; do
-  # Block until a worker frees up, so at most ${#WORKERS[@]} games run at once.
-  while [ "$(jobs -rp | wc -l)" -ge "${#WORKERS[@]}" ]; do wait -n; done
-  run_one "${WORKERS[$(( i % ${#WORKERS[@]} ))]}" "$roster" &
+  wi=$(( i % ${#WORKERS[@]} ))
+  QUEUE[$wi]="${QUEUE[$wi]} $roster"
   i=$(( i + 1 ))
+done
+for wi in "${!WORKERS[@]}"; do
+  [ -n "${QUEUE[$wi]}" ] || continue
+  (
+    for roster in ${QUEUE[$wi]}; do
+      run_one "${WORKERS[$wi]}" "$roster"
+    done
+  ) &
 done
 wait
 echo "ALL_DONE"

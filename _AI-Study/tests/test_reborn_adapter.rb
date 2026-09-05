@@ -86,6 +86,7 @@ end
 module PBEffects
   ChoiceBand = 7
   Substitute = 12
+  LeechSeed = 13
   PerishSong = 20
 end
 
@@ -392,6 +393,49 @@ class PortableAIRebornAdapterTest < Test::Unit::TestCase
     plain.define_singleton_method(:pbCanBurn?) { |_show| true }
     assert_equal(false, PortableAIReborn.status_blocked?(
       ai, FakeMove.new(0x0A, 0, 0), ["status", "burn"], user, plain))
+  end
+
+  # Leech Seed carries the "status" tag but sets no status CONDITION -- it writes
+  # PBEffects::LeechSeed -- so neither the core's major-status guard nor any pbCanX?
+  # predicate ever saw it, and a seeded foe looked fresh: the move kept collecting
+  # fresh_status+25 and the engine kept returning "failed". These four mirror
+  # PokeBattle_Move_0DC#pbEffect (PokeBattle_MoveEffects.rb:6194) exactly.
+  #
+  # The tags come from Effects.describe, the SAME call the action builder makes
+  # (Portable_AI_Adapter.rb:597). Hand-writing ["status", "drain"] here would let the
+  # rule pass a test it never fires on in a real battle.
+  LEECH_TAGS = PortableAI::Effects.describe("LEECHSEED", []).freeze
+
+  def seed_target(seeded = false, sub = false, grass = false)
+    t = plain_battler
+    fx = Hash.new(0)
+    fx[PBEffects::LeechSeed]  = seeded ? 0 : -1
+    fx[PBEffects::Substitute] = sub ? 1 : 0
+    t.define_singleton_method(:effects) { fx }
+    t.define_singleton_method(:pbHasType?) { |sym| grass && sym == :GRASS }
+    t
+  end
+
+  def leech_blocked?(target)
+    PortableAIReborn.status_blocked?(
+      PokeBattle_AI.new(PokeBattle_Battle.new),
+      FakeMove.new(0xDC, 0, 0), LEECH_TAGS, plain_battler, target)
+  end
+
+  def test_leech_seed_is_live_against_a_fresh_target
+    assert_equal(false, leech_blocked?(seed_target))
+  end
+
+  def test_leech_seed_is_blocked_on_an_already_seeded_target
+    assert_equal(true, leech_blocked?(seed_target(true)))
+  end
+
+  def test_leech_seed_is_blocked_by_a_substitute
+    assert_equal(true, leech_blocked?(seed_target(false, true)))
+  end
+
+  def test_leech_seed_is_blocked_against_a_grass_type
+    assert_equal(true, leech_blocked?(seed_target(false, false, true)))
   end
 
   # A secondary that cannot land is worth nothing -- the check status_blocked? makes

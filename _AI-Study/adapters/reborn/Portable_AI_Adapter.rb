@@ -1137,7 +1137,7 @@ module PortableAIReborn
   # Universal status-immunity facts, computed from engine type data. Kind tags come
   # from the canonical effects table; "typed_status" additionally consults the
   # engine's own type verdict (Thunder Wave vs Ground and ability absorbs).
-  # Universal facts about a non-damaging move that make it unusable. Three sources,
+  # Universal facts about a non-damaging move that make it unusable. Four sources,
   # in order of how much they know:
   #
   # 1. Magic Bounce on the target OR its partner reflects every status move
@@ -1164,6 +1164,18 @@ module PortableAIReborn
         PokeBattle_AI::BESTSKILL
       ) rescue nil
       return true if raw && raw <= 0
+    end
+    # 4. Leech Seed carries the "status" tag but sets no status CONDITION -- it writes
+    #    PBEffects::LeechSeed -- so the core's major-status guard never sees it and
+    #    there is no pbCanLeechSeed? to ask, which left a seeded foe looking fresh and
+    #    the move collecting fresh_status+25 every turn. Mirror the engine's own three
+    #    failure conditions from PokeBattle_Move_0DC#pbEffect
+    #    (PokeBattle_MoveEffects.rb:6194): already seeded, behind a Substitute, or
+    #    Grass-type. "drain" is carried by LEECHSEED alone (effects.rb:58).
+    if tags.include?("drain")
+      return true if safe_effect(target, :LeechSeed, -1).to_i >= 0
+      return true if safe_effect(target, :Substitute, 0).to_i > 0
+      return true if battler_has_type?(target, :GRASS)
     end
     verdict = engine_can_status?(tags, target)
     return !verdict if !verdict.nil?
