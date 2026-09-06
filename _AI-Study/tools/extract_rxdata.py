@@ -36,6 +36,19 @@ def inflate(payload):
     return zlib.decompress(payload.encode('latin1')).decode('utf-8', 'replace')
 
 
+def sections(path):
+    """[(name, source), ...] for a plain Scripts.rxdata bundle.
+
+    Exposed because a game whose scripts ship only inside the bundle -- Realidea has
+    no plaintext Scripts folder -- still has to be read as data by the team tools.
+    """
+    out = []
+    for entry in load(path):
+        if len(entry) > 2 and entry[2] is not None:
+            out.append((entry[1] if len(entry) > 1 else '', inflate(entry[2])))
+    return out
+
+
 def main():
     args = [a for a in sys.argv[1:] if not a.startswith('--')]
     listing = '--list' in sys.argv

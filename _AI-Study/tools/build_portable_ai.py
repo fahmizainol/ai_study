@@ -25,7 +25,12 @@ TARGETS = {
     "realidea": {
         "sources": CORE_SOURCES + [
             STUDY / "adapters" / "realidea" / "Portable_AI_Adapter.rb",
+            # The gauntlet declares PortableAIRealideaTeams::SETS with the frozen
+            # archetype fixture, so it precedes the tier rosters that merge into it.
+            # (Reborn is the other way round: its archetype rosters are generated too.)
             STUDY / "adapters" / "realidea" / "Portable_AI_Gauntlet.rb",
+            # Tier suite. Regenerate with tools/make_tier_teams.py --game realidea.
+            STUDY / "generated" / "tier_teams_realidea.rb",
         ],
         "out": STUDY / "generated" / "Portable_AI.rb",
     },

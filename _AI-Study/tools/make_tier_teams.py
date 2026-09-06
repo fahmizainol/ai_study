@@ -25,19 +25,29 @@ that file. Set names are tier-qualified rather than continuing the letters, so e
 ndjson filename says which suite and which tier it came from -- and so a second author
 adding, say, gen9doublesou_a cannot collide with these.
 
-Tier choice is constrained by Reborn's engine, not by team quality. Reborn is gen-7-era
-with gen 8 additions, so gen 6-8 teams behave roughly as designed. Gen 1-4 teams import
-with 100% clean names and are mechanically meaningless -- a Gen 1 team stripped of Gen 1
+Tier choice is constrained by the engine, not by team quality. Gen 1-4 teams import with
+100% clean names and are mechanically meaningless -- a Gen 1 team stripped of Gen 1
 mechanics is just six species. Gen 9 loses Tera Blast, Ivy Cudgel and the newest mons.
 LC (level 5 + Eviolite) and VGC (level 50, doubles, bring-4) both fight the harness,
-which forces level 100 singles.
+which forces level 100 singles. Beyond that the two engines differ sharply:
+
+  Reborn    gen-7-era with gen 8 additions, so gen 6-8 teams behave as designed.
+  Realidea  Essentials v16. It carries the gen 7 dex and all 29 Z-crystals as items,
+            but implements no Z-move engine -- so 24 of gen7ou's 26 sample teams would
+            import holding an inert item, and gen 7 is not offered at all. What it does
+            have in full is Mega Evolution (46 species + 2 primals), which is what
+            gen6ou is built around, and 11 of its 14 sample teams are eligible -- the
+            other three ask for an ability Realidea did not give that species (its
+            Zapdos has Lightningrod, not Static; its Diancie has Magic Bounce, not
+            Clear Body). So: one tier, and the same two sets Reborn draws.
 
 Eligibility is all-or-nothing per team: six sets resolve or the team is dropped, since a
 team missing a member is not the team its author built. Drops are reported, not silent.
 
 Usage:
-    python3 make_tier_teams.py              # writes generated/tier_teams_reborn.rb
-    python3 make_tier_teams.py --report     # also print eligibility and every drop
+    python3 make_tier_teams.py                     # generated/tier_teams_reborn.rb
+    python3 make_tier_teams.py --game realidea     # generated/tier_teams_realidea.rb
+    python3 make_tier_teams.py --report            # also print eligibility and drops
 """
 
 import argparse
@@ -47,22 +57,50 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-import reborn_names as rn
+import showdown_names as sn
 
 STUDY = Path(__file__).resolve().parents[1]
 SOURCE = STUDY / "extracted" / "smogon-teams"
-OUT = STUDY / "generated" / "tier_teams_reborn.rb"
 
 # Draw seed for the tier suite. Independent of the archetype suite's seeds; changing it
-# re-rolls every tier set and invalidates comparison against recorded tier runs.
+# re-rolls every tier set and invalidates comparison against recorded tier runs. Shared
+# by both engines, whose draws are independent anyway because their pools differ.
 DRAW_SEED = 20260906
 
-# Two disjoint draws per tier: one set cannot distinguish "this tier stresses the AI"
-# from "these four teams do". gen8ou's 11 eligible teams is what caps this at two.
-SETS_PER_TIER = 2
 TEAMS_PER_SET = 4
 
-TIERS = ["gen7ou", "gen8ou", "gen8uu", "gen6ou"]
+# Two disjoint draws per tier: one set cannot distinguish "this tier stresses the AI"
+# from "these four teams do". Both engines are capped at two by an 11-team pool --
+# gen8ou's for Reborn, gen6ou's for Realidea.
+ENGINES = {
+    "reborn": {
+        "tiers": ["gen7ou", "gen8ou", "gen8uu", "gen6ou"],
+        "sets_per_tier": 2,
+        "module": "PortableAIRebornTiers",
+        "teams_module": "PortableAIRebornTeams",
+        "archetype_label": "set_a..set_g",
+        "load_order_note": [
+            "# name and the harness needs no change. The bundle concatenates the archetype",
+            "# roster file first (see tools/build_portable_ai.py), so SETS exists by now.",
+        ],
+        "archetype_sets": ["set_a", "set_b", "set_c", "set_d",
+                           "set_e", "set_f", "set_g"],
+        "out": STUDY / "generated" / "tier_teams_reborn.rb",
+    },
+    "realidea": {
+        "tiers": ["gen6ou"],
+        "sets_per_tier": 2,
+        "module": "PortableAIRealideaTiers",
+        "teams_module": "PortableAIRealideaTeams",
+        "archetype_label": "archetype",
+        "load_order_note": [
+            "# name and the harness needs no change. The bundle concatenates the gauntlet,",
+            "# which declares SETS, first (see tools/build_portable_ai.py), so it is there.",
+        ],
+        "archetype_sets": ["archetype"],
+        "out": STUDY / "generated" / "tier_teams_realidea.rb",
+    },
+}
 
 # Team keys are generic and identical across every set, because seat_audit_matchups
 # builds its schedule from teams.keys -- tier-specific keys would make the schedule
@@ -70,7 +108,7 @@ TIERS = ["gen7ou", "gen8ou", "gen8uu", "gen6ou"]
 TEAM_KEYS = [f"team{i + 1}" for i in range(TEAMS_PER_SET)]
 
 
-def eligible_teams(reborn, tier):
+def eligible_teams(game, tier):
     """-> ([(label, [resolved set, ...]), ...], [(label, reason), ...] dropped)."""
     payload = json.loads((SOURCE / f"{tier}.json").read_text(encoding="utf-8"))
     keep, dropped = [], []
@@ -82,29 +120,30 @@ def eligible_teams(reborn, tier):
         if author:
             label = f"{label} — {author}"
         try:
-            keep.append((label, [reborn.resolve_set(s) for s in team["data"]]))
-        except rn.Unrepresentable as reason:
+            keep.append((label, [game.resolve_set(s) for s in team["data"]]))
+        except sn.Unrepresentable as reason:
             dropped.append((label, str(reason)))
     return keep, dropped
 
 
-def draw(pools, seed):
-    """Disjoint draws per tier, from a single seeded RNG consumed in TIERS order.
+def draw(pools, seed, engine):
+    """Disjoint draws per tier, from a single seeded RNG consumed in tier order.
 
-    Consumed in a fixed order so that adding a tier to the end of TIERS cannot re-roll
-    the tiers before it -- the same staging discipline the archetype suite uses.
+    Consumed in a fixed order so that adding a tier to the end of the list cannot
+    re-roll the tiers before it -- the same staging discipline the archetype suite uses.
     """
     rng = random.Random(seed)
     sets = {}
-    for tier in TIERS:
+    per_tier = engine["sets_per_tier"]
+    for tier in engine["tiers"]:
         pool = pools[tier]
-        want = SETS_PER_TIER * TEAMS_PER_SET
+        want = per_tier * TEAMS_PER_SET
         if len(pool) < want:
             raise SystemExit(
                 f"{tier}: {len(pool)} eligible teams, need {want} for "
-                f"{SETS_PER_TIER} sets of {TEAMS_PER_SET}")
+                f"{per_tier} sets of {TEAMS_PER_SET}")
         picked = rng.sample(range(len(pool)), want)
-        for n in range(SETS_PER_TIER):
+        for n in range(per_tier):
             chunk = picked[n * TEAMS_PER_SET:(n + 1) * TEAMS_PER_SET]
             name = f"{tier}_{chr(ord('a') + n)}"
             sets[name] = [pool[i] for i in chunk]
@@ -131,19 +170,24 @@ def ruby_set_entry(resolved):
     return f'["{resolved["species"]}", %w[{moves}], {{ {fields} }}]'
 
 
-def ruby_literal(sets):
+COUNT_WORDS = {1: "one", 2: "two", 3: "three", 4: "four"}
+
+
+def ruby_literal(sets, engine):
     lines = [
         "# Tier suite rosters — generated by tools/make_tier_teams.py; do not hand-edit.",
         "# Regenerate to change; the draw seed is fixed in that tool.",
         "#",
         "# Real competitive teams from Smogon's sample threads (extracted/smogon-teams/),",
-        "# two disjoint sets per tier. Distinct from the archetype suite (set_a..set_g):",
+        "# %s disjoint sets per tier. Distinct from the archetype suite (%s):"
+        % (COUNT_WORDS[engine["sets_per_tier"]], engine["archetype_label"]),
         "# different question, separate seeds, results are never pooled across suites.",
         "#",
         "# Team keys are generic so the seat-audit schedule is identical across sets.",
-        "# Selected at run time via teams= in Data/ai_harness.txt, exactly like set_a.",
+        "# Selected at run time via teams= in Data/ai_harness.txt, exactly like %s."
+        % engine["archetype_sets"][0],
         "",
-        "module PortableAIRebornTiers",
+        "module %s" % engine["module"],
         "  SETS = {",
     ]
     for name in sorted(sets):
@@ -164,14 +208,13 @@ def ruby_literal(sets):
         "end",
         "",
         "# Merged into the archetype suite's lookup so teams= resolves either suite by",
-        "# name and the harness needs no change. The bundle concatenates the archetype",
-        "# roster file first (see tools/build_portable_ai.py), so SETS exists by now.",
-        "PortableAIRebornTeams::SETS.merge!(PortableAIRebornTiers::SETS)",
+    ] + engine["load_order_note"] + [
+        "%s::SETS.merge!(%s::SETS)" % (engine["teams_module"], engine["module"]),
         "",
         "# Which suite a set belongs to, for grouping results. Never pool across suites.",
-        "module PortableAIRebornTeams",
+        "module %s" % engine["teams_module"],
         "  SUITES = {",
-        '    "archetype" => %w[set_a set_b set_c set_d set_e set_f set_g],',
+        '    "archetype" => %%w[%s],' % " ".join(engine["archetype_sets"]),
         f'    "tier" => %w[{" ".join(sorted(sets))}]',
         "  }",
         "end",
@@ -182,25 +225,28 @@ def ruby_literal(sets):
 
 def main():
     parser = argparse.ArgumentParser()
+    parser.add_argument("--game", choices=sorted(ENGINES), default="reborn")
     parser.add_argument("--report", action="store_true")
     args = parser.parse_args()
 
-    reborn = rn.Reborn()
+    engine = ENGINES[args.game]
+    game = sn.GAMES_BY_NAME[args.game]()
     pools, drops = {}, {}
-    for tier in TIERS:
-        pools[tier], drops[tier] = eligible_teams(reborn, tier)
+    for tier in engine["tiers"]:
+        pools[tier], drops[tier] = eligible_teams(game, tier)
 
     if args.report:
-        for tier in TIERS:
+        for tier in engine["tiers"]:
             total = len(pools[tier]) + len(drops[tier])
             print(f"\n{tier}: {len(pools[tier])}/{total} eligible")
             for label, reason in drops[tier]:
                 print(f"    dropped: {label[:52]:54} {reason}")
 
-    sets = draw(pools, DRAW_SEED)
-    OUT.write_text(ruby_literal(sets), encoding="utf-8")
+    out = engine["out"]
+    sets = draw(pools, DRAW_SEED, engine)
+    out.write_text(ruby_literal(sets, engine), encoding="utf-8")
     mons = sum(len(p) for s in sets.values() for _, p in s)
-    print(f"\nwrote {OUT.relative_to(STUDY)}: {len(sets)} sets, "
+    print(f"\nwrote {out.relative_to(STUDY)}: {len(sets)} sets, "
           f"{len(sets) * TEAMS_PER_SET} teams, {mons} Pokemon")
     for name in sorted(sets):
         print(f"  {name:14} " + " | ".join(l[:26] for l, _ in sets[name]))
