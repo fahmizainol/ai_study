@@ -363,6 +363,7 @@ python3 tools/render_realidea_battle.py generated/realidea_tiertrace_gen6ou_a.nd
 ```
 Turn 8   actor 1   SUCKERPUNCH @0               score    194.0
     board   : Bisharp 25%  vs  Scizor 88%
+    foe     : Scizor -> BULLETPUNCH
     view: hp 25%  speed 239 (faster)  incoming max 210%  certain 210%  threatened_lethal=True
     race vs Scizor: mine 2 turns, theirs 1, winning=False
     options considered:
@@ -377,7 +378,8 @@ Turn 8   actor 1   SUCKERPUNCH @0               score    194.0
 
 | always | with `trace=true` |
 |---|---|
-| the actor's **species, HP, status, ability, item and stage totals**, and the same for every foe on the field — the board as the core saw it, at the moment of the decision | `candidates`: **every option the actor had**, capped at six, each with its score and the `reasons` breakdown that produced it |
+| the actor's **species, HP, status, ability, item and stage totals**, and the same for every foe on the field — the board as the core saw it, at the moment of the decision |
+| **what the other side chose that turn** (`foe`), read back from `battle.choices` after it registered — present on 100% of turns in both arms | `candidates`: **every option the actor had**, capped at six, each with its score and the `reasons` breakdown that produced it |
 | speed and speed order, incoming-damage estimates, `threatened_lethal`, and the per-foe damage race | for moves: base power, type effectiveness, expected damage %, immunity |
 
 None of that is newly computed — the shared core already ranks and explains every
@@ -385,6 +387,14 @@ candidate (`portable_ai/core.rb` builds `diagnostics.rankings` and attaches `rea
 and the snapshot already carries species and HP for both sides. Until 2026-09-06 the
 Realidea exporter simply recorded six scalars and the chosen action, which is why its
 readouts were so much thinner than Reborn's; the data was there the whole time.
+
+**The `foe` line is a choice, not an outcome.** `PortableAIGauntlet.command_phase` drives
+all four seats through `pbDefaultChooseEnemyCommand` in index order, so seat 0 has
+registered by the time the measured seat's entry is written — that ordering is the whole
+reason it can be attached. But it is what the opponent *selected* before the turn ran: it
+may have missed, been Protected, or never fired because its user fainted first, and the
+seats execute in priority and speed order, not the order they were asked. For what the
+engine actually *did*, there is still no record — see the limits table.
 
 Species reach the trace **named**. The snapshot keeps the engine's numeric id, because
 that is what the core wants; `species_name` converts on the way out only, through the

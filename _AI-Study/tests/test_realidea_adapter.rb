@@ -1232,8 +1232,6 @@ class PortableAIRealideaAdapterTest < Test::Unit::TestCase
     assert_equal(97, trace[0]["stock"]["numeric_move_id"])
   end
 
-  # Both command hooks can reach one battler in a turn; a second entry would
-  # double-count that turn in any disagreement rate.
   # A crash inside the observer must not remove the turn from the record: absent is
   # indistinguishable from "nothing to decide", so a dropped turn silently shrinks the
   # denominator of every agreement figure.
@@ -1259,6 +1257,37 @@ class PortableAIRealideaAdapterTest < Test::Unit::TestCase
     assert_equal(1, battle.stock_choice)
   end
 
+  # A readout showing one side of a two-sided turn cannot explain the board changing.
+  # command_phase drives all four seats in index order, so seat 0 has already registered
+  # by the time seat 1's entry is written -- that ordering is what makes this possible.
+  def test_the_other_sides_choice_is_attached_to_the_turn
+    $PORTABLE_AI_SHADOW = true
+    battle = PokeBattle_Battle.new
+    battle.instance_variable_set(:@portable_ai_shadow_trace, [])
+    plan = { "actions" => [{ "actor_index" => 1, "type" => "move", "slot" => 0,
+                             "numeric_move_id" => 418 }] }
+    with_stubbed_plan(plan) do
+      battle.pbDefaultChooseEnemyCommand(0)   # the far side registers first
+      battle.pbDefaultChooseEnemyCommand(1)   # the measured seat
+    end
+    trace = battle.instance_variable_get(:@portable_ai_shadow_trace)
+    assert_equal(1, trace.length)             # seat 0 is not a second entry
+    assert_equal("move", trace[0]["foe"]["0"]["type"])
+    assert_equal(97, trace[0]["foe"]["0"]["numeric_move_id"])
+  end
+
+  # A stale foe choice must not bleed into a later turn and be read as this turn's.
+  def test_foe_choices_do_not_survive_into_the_next_turn
+    $PORTABLE_AI_SHADOW = true
+    battle = PokeBattle_Battle.new
+    battle.pbDefaultChooseEnemyCommand(0)
+    assert_not_nil(PortableAIRealidea.foe_choices(battle))
+    battle.turncount = 1
+    assert_nil(PortableAIRealidea.foe_choices(battle))
+  end
+
+  # Both command hooks can reach one battler in a turn; a second entry would
+  # double-count that turn in any disagreement rate.
   def test_shadow_records_one_entry_per_battler_per_turn
     $PORTABLE_AI_SHADOW = true
     battle = PokeBattle_Battle.new

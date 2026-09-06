@@ -21,6 +21,10 @@ What that means when reading the output, and it is worth keeping in mind:
     evidence it chose on. It does not say whether the move hit, crit, or was Protected.
   * A turn with no line is a turn Portable did not decide: the adapter fell through to
     the stock path, or the actor could not act.
+  * The `foe` line is what the other side CHOSE, read back from battle.choices after it
+    registered. It is not an outcome either: that move may have missed, been Protected,
+    or never fired because its user fainted first, and the seats execute in priority and
+    speed order, not the order they were asked.
 
 Usage:
     python3 render_realidea_battle.py <ndjson> [matchup_id] [seed]
@@ -77,6 +81,30 @@ def board(view):
     if not foes:
         return "%s" % mon(view)
     return "%s  vs  %s" % (mon(view), "  |  ".join(mon(f) for f in foes))
+
+
+def render_foe(entry, view):
+    """What the other side picked this turn.
+
+    A CHOICE, not an outcome: registered before the turn ran, so it may have missed,
+    been Protected, or never fired at all. Execution order is priority and speed, not
+    the order the seats were asked.
+    """
+    foes = entry.get("foe")
+    if not foes:
+        return
+    names = {}
+    for target in (view or {}).get("targets") or []:
+        names[str(target.get("index"))] = target.get("species")
+    for index, choice in sorted(foes.items()):
+        if not choice:
+            continue
+        who = names.get(str(index)) or ("foe@%s" % index)
+        if choice.get("type") == "switch":
+            what = "switched out (to slot %s)" % choice.get("slot")
+        else:
+            what = choice.get("move_id") or choice.get("type") or "?"
+        print("    foe     : %s -> %s" % (who, what))
 
 
 def render_candidates(entry):
@@ -148,6 +176,7 @@ def render_shadow(record):
         print("    stock   : %s" % describe(stock, right))
         print("    portable: %-28s score %8.1f" % (
             describe(portable, right), (portable or {}).get("score") or 0))
+        render_foe(entry, view)
         render_view(view)
         render_candidates(entry)
 
@@ -240,6 +269,7 @@ def render(record):
             entry.get("turn"), entry.get("actor"), action, entry.get("score") or 0))
         line = board(view)
         print("    board   : %s" % line) if line else None
+        render_foe(entry, view)
         render_view(view)
         render_candidates(entry)
 

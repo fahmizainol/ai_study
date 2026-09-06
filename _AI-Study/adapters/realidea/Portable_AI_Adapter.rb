@@ -250,6 +250,8 @@ module PortableAIRealidea
           entry["candidates"] =
             candidate_trace(battle.instance_variable_get(:@portable_ai_plan) || {}, index)
         end
+        foes = foe_choices(battle)
+        entry["foe"] = foes if foes
         trace << entry
       end
       return true
@@ -361,7 +363,39 @@ module PortableAIRealidea
     return if !entry || entry["actor"] != index || entry["turn"] != battle.turncount
     return if entry.has_key?("stock")
     entry["stock"] = describe_choice(battle.choices[index])
+    foes = foe_choices(battle)
+    entry["foe"] = foes if foes
   rescue
+  end
+
+  # What the OTHER side picked this turn, stashed as the command phase walks the seats.
+  # PortableAIGauntlet.command_phase drives all four battlers through
+  # pbDefaultChooseEnemyCommand in index order, so seat 0 has already registered by the
+  # time the measured seat's entry is written -- which is what makes attaching it
+  # possible at all. Without this a readout shows one side of a two-sided turn, and a
+  # switch or a heal on the far side looks like the board changing for no reason.
+  #
+  # These are CHOICES, not outcomes: registered before the turn executes, so a move here
+  # may still miss, be Protected, or never fire because its user fainted first. Execution
+  # order is priority and speed, not the index order they were chosen in.
+  def self.stash_foe_choice(battle, index)
+    stash = battle.instance_variable_get(:@portable_ai_foe_choices)
+    if !stash || stash["turn"] != battle.turncount
+      stash = { "turn" => battle.turncount, "choices" => {} }
+      battle.instance_variable_set(:@portable_ai_foe_choices, stash)
+    end
+    described = describe_choice(battle.choices[index])
+    stash["choices"][index.to_s] = described if described
+  rescue
+  end
+
+  def self.foe_choices(battle)
+    stash = battle.instance_variable_get(:@portable_ai_foe_choices)
+    return nil if !stash || stash["turn"] != battle.turncount
+    return nil if stash["choices"].empty?
+    stash["choices"]
+  rescue
+    nil
   end
 
   def self.describe_choice(choice)
@@ -1854,7 +1888,11 @@ class PokeBattle_Battle
     watching = PortableAIRealidea.enabled_for?(self, index) && pbCanShowCommands?(index)
     PortableAIRealidea.observe(self, index) if watching
     result = yield
-    PortableAIRealidea.record_host_choice(self, index) if watching
+    if watching
+      PortableAIRealidea.record_host_choice(self, index)
+    else
+      PortableAIRealidea.stash_foe_choice(self, index)
+    end
     result
   end
 
@@ -1886,6 +1924,12 @@ class PokeBattle_Battle
       end
       return if PortableAIRealidea.choose(self, index)
     end
-    portable_ai_stock_pbDefaultChooseEnemyCommand(index)
+    result = portable_ai_stock_pbDefaultChooseEnemyCommand(index)
+    # The far side of the board, for the live arm's trace. Only seats the portable AI
+    # does not drive: its own are already in the entry.
+    if !PortableAIRealidea.enabled_for?(self, index)
+      PortableAIRealidea.stash_foe_choice(self, index)
+    end
+    result
   end
 end
