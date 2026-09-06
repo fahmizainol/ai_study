@@ -87,6 +87,20 @@ _AI-Study/
 engine-readable variants. `probe_results_*.ndjson` / `tier2_*.json` at top level are
 phase-1 artifacts; everything produced since lives in `generated/`.
 
+## Requirements
+
+- **Python 3** (3.12 here, 3.8+ fine) — **stdlib only**, by design. Nothing in `tools/`
+  imports a third-party package, so there is no `requirements.txt`; keep it that way.
+- **Ruby** (3.2 here) — runs `tests/*.rb` and the `ruby -c` check inside
+  `build_portable_ai.py` (skippable with `--no-ruby-check`). The tests need `test/unit`,
+  a bundled gem in Ruby 3.x; `gem install test-unit` if yours lacks it.
+- **The game installs** and **Windows**, for anything that runs a battle — see
+  "What is NOT in git" at the end of this file.
+
+The system Ruby is *not* the Ruby the AI runs on: Reborn is mkxp-z (modern), Realidea is
+RGSS 1.8-era. A test passing locally says the logic is right, not that the syntax is legal
+in the host — that is what the corpus run in the real game is for.
+
 ## The measurement loop
 
 This is the workflow. Every version in the log went through all of it; skipping steps 5
