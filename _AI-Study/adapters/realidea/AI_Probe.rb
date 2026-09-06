@@ -260,8 +260,59 @@ module AIProbe
     "yawn"       => [PBEffects::Yawn,       :int],
     "substitute" => [PBEffects::Substitute, :int],
     "curse"      => [PBEffects::Curse,      :bool],
-    "choiceband" => [PBEffects::ChoiceBand, :int]
+    "choiceband" => [PBEffects::ChoiceBand, :int],
+    "wish"       => [PBEffects::Wish,       :int]
   }
+
+  # Scenarios that pin a mechanic this engine does not have. Running them anyway would
+  # compare two different positions and blame the AI for the difference (SIM-SPEC §10),
+  # which is the same reason a Reborn field id is skipped rather than zeroed.
+  UNSUPPORTED = {
+    # PBEffects::LastMoveFailed is declared in the MOVE-USAGE namespace as 4
+    # (075_PBEffects.rb:170), which is the same index as the BATTLER effect BideDamage
+    # (:8). The battler's copy is initialised to false (080:415) and NOTHING in the
+    # build ever sets it true -- the only writes to index 4 are Bide's damage
+    # accumulator. So Stomping Tantrum's own doubling is dead code here, and there is
+    # no readable "this move failed last turn" flag for the adapter to export. Reborn's
+    # PBEffects::Tantrum has no equivalent, and successStates[i].useState is not one:
+    # it is set to 2 only on the damaging path (080:3223), so a status move that
+    # worked perfectly reads back as 1 = failed.
+    "a_move_that_failed_last_turn_is_not_re_clicked" =>
+      "no readable move-failure flag: PBEffects::LastMoveFailed (075:170) collides " +
+      "with BideDamage and is never set true",
+    "a_move_that_worked_last_turn_is_still_clicked" =>
+      "pair control for a_move_that_failed_last_turn_is_not_re_clicked; the memory it " +
+      "varies cannot be read here",
+    # Prankster is a priority modifier and nothing else in this build (084:1108,
+    # 080:2618). No Dark-type immunity to it exists anywhere, so a Prankster status
+    # move into a Dark type lands and the card is asserting the opposite engine.
+    "prankster_status_fails_vs_dark" =>
+      "Prankster is a priority modifier only here (084:1108); Dark types are not " +
+      "immune to it"
+  }
+
+  # Why this scenario cannot be probed here, or nil. Checked before anything is built,
+  # so an unbuildable card reports SKIP with a reason rather than ERR with a backtrace.
+  def self.unsupported_reason(scn)
+    if scn["field"].to_i != 0
+      return "scenario pins Reborn field #{scn['field']}; no equivalent here"
+    end
+    named = UNSUPPORTED[scn["id"]]
+    return named if named
+    ["ai", "player"].each do |side|
+      entries = [scn[side]["active"], scn[side]["active2"]]
+      entries += (scn[side]["bench"] || [])
+      entries.each do |m|
+        next if !m
+        (m["effects"] || {}).each_key do |k|
+          if !EFFECT_KEYS[k]
+            return "scenario sets effect #{k}, which has no equivalent in this engine"
+          end
+        end
+      end
+    end
+    return nil
+  end
 
   # Scenario weather names -> stock-v16 PBWeather constants.
   WEATHER_IDS = {
@@ -384,11 +435,10 @@ module AIProbe
 
   # --- probe ----------------------------------------------------------------
   def self.probe(scn)
-    # Reborn field IDs have no Realidea equivalent; running them anyway would compare
-    # two different positions and blame the AI for the difference (SIM-SPEC §10).
-    if scn["field"].to_i != 0
+    reason = unsupported_reason(scn)
+    if reason
       return { "id" => scn["id"], "engine" => "realidea", "skipped" => true,
-               "reason" => "scenario pins Reborn field #{scn['field']}; no equivalent here" }
+               "reason" => reason }
     end
 
     aiTr = PokeBattle_Trainer.new("ProbeAI", 0)

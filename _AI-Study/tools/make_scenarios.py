@@ -2418,6 +2418,14 @@ def main():
                          'hegemony = v19 symbols, resolved by the engine')
     ap.add_argument('--out-engine', required=True)
     ap.add_argument('--out-json', required=True)
+    ap.add_argument('--drop-unresolved', action='store_true',
+                    help='drop each scenario whose names this PBS cannot resolve, '
+                         'instead of failing the whole run. For porting the corpus to '
+                         'an older engine: Realidea is v16 and has no Heavy-Duty Boots '
+                         'or Clear Amulet, so the cards built on them cannot exist '
+                         'there. Every dropped scenario is printed with its reason, and '
+                         'neither output file mentions it -- the emitted corpus and the '
+                         'json stay the same corpus.')
     a = ap.parse_args()
 
     # v16 addresses everything by integer and ships plaintext PBS to resolve against.
@@ -2430,6 +2438,10 @@ def main():
         mv, sp, it, ab = load_pbs(a.pbs)
     else:
         mv = sp = it = ab = None
+    # Unresolved names for the scenario being emitted right now. Merged into `missing`
+    # only when the scenario is actually kept, so --drop-unresolved does not leave the
+    # run failing on a name that only the dropped cards used.
+    scenario_missing = set()
     missing = set()
 
     def state_parts(m):
@@ -2445,7 +2457,7 @@ def main():
             parts.append('ev_%s:%d' % (k, v))
         for k, v in (m.get('effects') or {}).items():
             if k not in EFFECT_NAMES:
-                missing.add('effect:' + k)
+                scenario_missing.add('effect:' + k)
             elif k == 'choiceband':
                 # Value is a move NAME: numeric id on v16, symbol name on v19
                 # (the engines store the locked move in the same effect slot).
@@ -2454,7 +2466,7 @@ def main():
                 elif v in mv:
                     parts.append('effect_choiceband:%d' % mv[v])
                 else:
-                    missing.add('move:' + str(v))
+                    scenario_missing.add('move:' + str(v))
             else:
                 parts.append('effect_%s:%d' % (k, v))
         if m.get('pp_all') is not None:
@@ -2466,7 +2478,7 @@ def main():
             elif m['last_move'] in mv:
                 parts.append('last_move:%d' % mv[m['last_move']])
             else:
-                missing.add('move:' + str(m['last_move']))
+                scenario_missing.add('move:' + str(m['last_move']))
         return parts
 
     def mon_line(m):
@@ -2482,20 +2494,20 @@ def main():
                 parts.append('nature:%s' % m['nature'])
             return '|'.join(parts + state_parts(m))
         if m['species'] not in sp:
-            missing.add('species:' + m['species'])
+            scenario_missing.add('species:' + m['species'])
             return None
         parts = ['species:%d' % sp[m['species']], 'level:%d' % m['level']]
         ids = []
         for name in m['moves']:
             if name not in mv:
-                missing.add('move:' + name)
+                scenario_missing.add('move:' + name)
             else:
                 ids.append(mv[name])
         if ids:
             parts.append('moves:' + ','.join(str(i) for i in ids))
         if m['item']:
             if m['item'] not in it:
-                missing.add('item:' + m['item'])
+                scenario_missing.add('item:' + m['item'])
             else:
                 parts.append('item:%d' % it[m['item']])
         if m['ability']:
@@ -2505,18 +2517,21 @@ def main():
             if m['ability'] in slots:
                 parts.append('ability:%d' % slots.index(m['ability']))
             else:
-                missing.add('ability:%s on %s (has %s)'
+                scenario_missing.add('ability:%s on %s (has %s)'
                             % (m['ability'], m['species'],
                                ','.join(s for s in slots if s)))
         if m.get('nature'):
             if m['nature'] in NATURE_IDS:
                 parts.append('nature:%d' % NATURE_IDS[m['nature']])
             else:
-                missing.add('nature:' + m['nature'])
+                scenario_missing.add('nature:' + m['nature'])
         return '|'.join(parts + state_parts(m))
 
     lines, corpus_json = [], []
+    dropped = []
     for entry in CORPUS:
+        scenario_missing.clear()
+        block = []
         sid, field, ai, pl, asserts = entry[0], entry[1], entry[2], entry[3], entry[4]
         # Optional trailing elements, order-free: a list is the AI bench, a dict
         # is battle-level extra state (weather / ai_side / player_side).
@@ -2528,24 +2543,24 @@ def main():
                 extra = x
         for k in extra:
             if k not in EXTRA_KEYS:
-                missing.add('extra key:%s in %s' % (k, sid))
+                scenario_missing.add('extra key:%s in %s' % (k, sid))
         if extra.get('weather') and extra['weather'] not in WEATHER_NAMES:
-            missing.add('weather:%s in %s' % (extra['weather'], sid))
+            scenario_missing.add('weather:%s in %s' % (extra['weather'], sid))
         for sk in ('ai_side', 'player_side'):
             for k in (extra.get(sk) or {}):
                 if k not in SIDE_EFFECT_KEYS:
-                    missing.add('side_effect:%s in %s' % (k, sid))
+                    scenario_missing.add('side_effect:%s in %s' % (k, sid))
         fmt = extra.get('format', 'single')
         if fmt not in ('single', 'double'):
-            missing.add('format:%s in %s' % (fmt, sid))
+            scenario_missing.add('format:%s in %s' % (fmt, sid))
         ai2, pl2 = extra.get('ai2'), extra.get('player2')
         # Both halves of the field or neither: a 2v1 would be a different battle
         # type that neither probe sets up, and silently dropping the odd one out
         # would probe a position nobody wrote.
         if fmt == 'double' and (ai2 is None or pl2 is None):
-            missing.add('format=double needs ai2 and player2 in %s' % sid)
+            scenario_missing.add('format=double needs ai2 and player2 in %s' % sid)
         if fmt == 'single' and (ai2 or pl2):
-            missing.add('ai2/player2 given without format=double in %s' % sid)
+            scenario_missing.add('ai2/player2 given without format=double in %s' % sid)
         # AI side only. The player's moveset is what the AI reads to build its threat
         # model, and the assertions were calibrated against it — padding it would change
         # the position rather than just the AI's self-classification.
@@ -2553,34 +2568,40 @@ def main():
         if ai2:
             ai2 = pad_to_four(ai2)
         bench = [pad_to_four(b) for b in bench]
-        lines.append('[%s]' % sid)
-        lines.append('field=%d' % field)
+        block.append('[%s]' % sid)
+        block.append('field=%d' % field)
         if fmt != 'single':
-            lines.append('format=%s' % fmt)
+            block.append('format=%s' % fmt)
         if extra.get('weather'):
-            lines.append('weather=%s' % extra['weather'])
+            block.append('weather=%s' % extra['weather'])
         for sk in ('ai_side', 'player_side'):
             d = extra.get(sk)
             if d:
-                lines.append('%s=%s' % (sk, '|'.join('%s:%d' % (k, v)
+                block.append('%s=%s' % (sk, '|'.join('%s:%d' % (k, v)
                                                      for k, v in d.items())))
-        lines.append('ai=' + (mon_line(ai) or ''))
+        block.append('ai=' + (mon_line(ai) or ''))
         if ai2:
-            lines.append('ai2=' + (mon_line(ai2) or ''))
+            block.append('ai2=' + (mon_line(ai2) or ''))
         for b in bench:
-            lines.append('ai_bench=' + (mon_line(b) or ''))
-        lines.append('player=' + (mon_line(pl) or ''))
+            block.append('ai_bench=' + (mon_line(b) or ''))
+        block.append('player=' + (mon_line(pl) or ''))
         # Player actives and bench are NOT padded — their movesets are the AI's
         # threat model, not a role-classifier input.
         if pl2:
-            lines.append('player2=' + (mon_line(pl2) or ''))
+            block.append('player2=' + (mon_line(pl2) or ''))
         for b in (extra.get('player_bench') or []):
-            lines.append('player_bench=' + (mon_line(b) or ''))
-        lines.append('')
+            block.append('player_bench=' + (mon_line(b) or ''))
+        block.append('')
         # move_ids covers BOTH AI actives: a doubles assertion can name a move that
         # only the right-hand battler knows, and check_scenarios/ai_diff resolve
         # every name through this one map.
         all_ai_moves = list(ai['moves']) + (list(ai2['moves']) if ai2 else [])
+        if scenario_missing:
+            if a.drop_unresolved:
+                dropped.append((sid, sorted(scenario_missing)))
+                continue
+            missing |= scenario_missing
+        lines.extend(block)
         corpus_json.append({
             'id': sid, 'field': field, 'format': fmt,
             'weather': extra.get('weather'),
@@ -2617,12 +2638,20 @@ def main():
         raise SystemExit('unresolved names (nothing written): '
                          + ', '.join(sorted(missing)))
 
+    # Loud on purpose. A dropped card is a card this engine cannot be asked about, and
+    # the applicable-assertion count in the docs has to be read off what was written.
+    for sid, reasons in dropped:
+        print('dropped %s: %s' % (sid, ', '.join(reasons)))
+    if dropped:
+        print('dropped %d of %d scenarios this PBS cannot build'
+              % (len(dropped), len(CORPUS)))
+
     with open(a.out_engine, 'w', encoding='utf-8', newline='\n') as f:
         f.write('# generated by make_scenarios.py — do not hand-edit\n')
         f.write('\n'.join(lines))
     with open(a.out_json, 'w', encoding='utf-8') as f:
         json.dump(corpus_json, f, indent=1)
-    print('wrote %d scenarios -> %s (+ %s)' % (len(CORPUS), a.out_engine, a.out_json))
+    print('wrote %d scenarios -> %s (+ %s)' % (len(corpus_json), a.out_engine, a.out_json))
 
 
 if __name__ == '__main__':

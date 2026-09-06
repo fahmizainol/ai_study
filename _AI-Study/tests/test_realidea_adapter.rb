@@ -757,6 +757,22 @@ class PortableAIRealideaAdapterTest < Test::Unit::TestCase
     assert_equal([], missing, "#{label} is missing snapshot keys")
   end
 
+  # Keys the Reborn adapter exports that this engine CANNOT supply, listed so a future
+  # editor has to read the reason before adding one. failed_last_turn has no readable
+  # source here: PBEffects::LastMoveFailed (075_PBEffects.rb:170) is declared in the
+  # move-usage namespace at the same index as the battler effect BideDamage, is
+  # initialised to false and is never set true anywhere in the build, and
+  # successStates[i].useState is set to 2 only on the damaging path so a successful
+  # status move reads back as failed. Absent, the core's move_memory rule is inert.
+  ENGINE_GAPS = %w[failed_last_turn]
+
+  def test_keys_this_engine_cannot_supply_stay_absent
+    move = contract_snapshot["actors"][0]["actions"].find { |a| a["type"] == "move" }
+    present = ENGINE_GAPS.select { |key| move.key?(key) }
+    assert_equal([], present,
+                 "exported a key this engine has no sound source for")
+  end
+
   def test_snapshot_exports_every_key_the_core_reads
     snapshot = contract_snapshot
     assert_exports(TOP_LEVEL_KEYS, snapshot, "snapshot")

@@ -501,6 +501,21 @@ module PortableAIRealidea
       "foe_hazard_layers" => opposing_hazard_layers(battle),
       "target_positive_stages" => positive_stages(scoring_target),
       "effect_active" => effect_active?(battle, move_id, battler),
+      # NOTE: no "failed_last_turn". The Reborn adapter reads PBEffects::Tantrum, the
+      # flag its engine keeps for Stomping Tantrum. Realidea declares the equivalent as
+      # PBEffects::LastMoveFailed = 4 -- but in the MOVE-USAGE namespace, which is the
+      # same index as the BATTLER effect BideDamage = 4 (075_PBEffects.rb:8 and :170).
+      # The battler's copy is initialised to false (080:415) and NOTHING in the build
+      # ever sets it true; the only writes to index 4 are Bide's damage accumulator, so
+      # this engine's own Stomping Tantrum doubling is dead code. successStates is not
+      # a substitute: useState is set to 2 only on the damaging path (080:3223), so a
+      # status move that worked perfectly reads back as 1 = failed.
+      #
+      # Exporting the key from either source would be worse than leaving it out: the
+      # core's move_memory rule takes 200 points off a move, and it would take them off
+      # the wrong ones. Absent, Model.truthy reads nil and the rule is inert, which is
+      # the honest answer for this engine. AI_Probe::UNSUPPORTED skips the corpus pair
+      # that tests it.
       "foe_reserves" => reserve_count(battle, battler.pbOppositeOpposing.index),
       "hazard_targets" => hazard_target_count(battle, move_id, battler.index),
       "own_reserves" => reserve_count(battle, battler.index)
