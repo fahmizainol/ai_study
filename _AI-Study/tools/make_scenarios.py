@@ -68,7 +68,7 @@ NATURE_IDS = {n: i for i, n in enumerate([
 
 def mon(species, level=50, moves=(), item=None, hp_pct=None, status=None,
         stages=None, ability=None, nature=None, ev=None, effects=None,
-        pp_all=None):
+        pp_all=None, last_move=None):
     """ability/nature are NAMES ('WATERABSORB', 'ADAMANT'); ev is {'atk': 252, ...}.
     Probes pin nature=HARDY and ability slot 0 when unspecified, so these are only
     needed when a scenario depends on a specific one (e.g. an absorb-ability target
@@ -78,11 +78,17 @@ def mon(species, level=50, moves=(), item=None, hp_pct=None, status=None,
     EFFECT_NAMES. Values are ints (perish/toxic counters, sub HP, seeder index
     for leechseed where 0 = the player active, 1 = curse on) EXCEPT choiceband,
     whose value is the locked move's NAME (resolved per engine). pp_all sets
-    every move's PP (0 = the +200 forced-out trigger)."""
+    every move's PP (0 = the +200 forced-out trigger).
+
+    last_move is a move NAME and seeds the PORTABLE AI's own memory with "this is
+    what I clicked last turn" (AI_Harness.rb seed_portable_memory). On its own it
+    changes nothing; paired with effects={'tantrum': 1} it states the whole position
+    the 0.6.2 move_memory rule reads -- the engine refused this exact move last
+    turn."""
     return {'species': species, 'level': level, 'moves': list(moves), 'item': item,
             'hp_pct': hp_pct, 'status': status, 'stages': stages or {},
             'ability': ability, 'nature': nature, 'ev': ev or {},
-            'effects': effects or {}, 'pp_all': pp_all}
+            'effects': effects or {}, 'pp_all': pp_all, 'last_move': last_move}
 
 
 # ---------------------------------------------------------------------------
@@ -2241,9 +2247,153 @@ CORPUS_LS = [
 ]
 
 
+# ---------------------------------------------------------------------------
+# 0.6.2 bugfix batch (PORTABLE-AI-REBORN.md, "Turn-by-turn readout pass on set_c").
+#
+# Every card is a pair: the position the readout actually showed, and a control
+# alongside it that the fix must NOT change. Each card is written so it FAILS on the
+# 0.6.1 build -- a card that passes either way tests nothing, which is the lesson
+# leech_dead_into_a_grass_type cost to learn.
+# ---------------------------------------------------------------------------
+CORPUS_062 = [
+    # 1. Spread moves never reach `lethal`. A spread move registers against no single
+    #    battler, so the core's target lookup returns nil and Earthquake was scored
+    #    against a phantom 100% target at any real target HP. Straight from the
+    #    readout: offense_vs_balance 196613 t10, a faster Flygon Roosted instead of
+    #    killing. Roost at 20% HP is worth +265, which no non-lethal Earthquake beats.
+    ('spread_move_kills_the_dying_target', 0,
+     mon('FLYGON', 50, ['EARTHQUAKE', 'ROOST'], hp_pct=20),
+     mon('BISHARP', 50, ['IRONHEAD'], hp_pct=12),
+     [('must_choose_move_in', ['EARTHQUAKE']),
+      ('score_gt', 'EARTHQUAKE', 'ROOST')]),
+    # The control the fix must not break: no kill on the board, so healing is still
+    # the right call and the exported target HP has not turned Earthquake into a
+    # phantom KO the other way.
+    ('spread_move_is_not_lethal_at_full_hp', 0,
+     mon('FLYGON', 50, ['EARTHQUAKE', 'ROOST'], hp_pct=20),
+     mon('BISHARP', 50, ['IRONHEAD']),
+     [('must_choose_move_in', ['ROOST']),
+      ('score_gt', 'ROOST', 'EARTHQUAKE')]),
+
+    # 2. A kill is a kill: pick the one that lands. Both moves KO here. Fire Blast is
+    #    4x and 85% accurate, Dragon Claw is resisted and never misses, and 0.6.1
+    #    handed the pick to the type chart (bulky_vs_offense 196613 t4: 649 vs 555).
+    ('a_kill_is_chosen_on_accuracy_not_type', 0,
+     mon('SALAMENCE', 50, ['FIREBLAST', 'DRAGONCLAW']),
+     mon('FORRETRESS', 50, ['GYROBALL'], hp_pct=4),
+     [('must_not_choose_move', 'FIREBLAST'),
+      ('score_gt', 'DRAGONCLAW', 'FIREBLAST')]),
+    # Control: nothing is lethal, so the type chart is back in charge and the 4x move
+    # is right again. This is the card that fails if lethal_flat leaks into non-kills.
+    ('type_still_decides_when_nothing_kills', 0,
+     mon('SALAMENCE', 50, ['FIREBLAST', 'DRAGONCLAW']),
+     mon('FORRETRESS', 50, ['GYROBALL']),
+     [('must_choose_move_in', ['FIREBLAST']),
+      ('score_gt', 'FIREBLAST', 'DRAGONCLAW')]),
+
+    # 3. A switch-in that is dead before it moves. Three layers of Spikes, and the
+    #    crushed active has a real reason to leave (-6 Attack = clear_crushed_stats).
+    #    Machamp is the better matchup into Tyranitar by a wide margin and 0.6.1 sent
+    #    it in to die on the hazards; Vaporeon is the body that survives to act.
+    #    Readout: bulky_vs_balance 196613 t51.
+    #    The active is at -3 rather than -6 on purpose. clear_crushed_stats pays +350
+    #    and clear_bad_stats pays +90, and at +350 the switch outscores every move by
+    #    so much that a 300-point charge cannot be seen -- two earlier drafts of this
+    #    card (a second bench mon at full HP, then a resisted-matchup Miltank) both
+    #    passed identically on 0.6.1 and 0.6.2 and measured nothing. Machamp is the
+    #    only body available: 28% HP behind three layers of Spikes leaves 3%, which
+    #    any Crunch takes on the minimum roll, so staying in is the right call.
+    ('a_dying_switch_in_is_not_worth_sending', 0,
+     mon('SNORLAX', 50, ['BODYSLAM'], hp_pct=60, stages={'atk': -3}),
+     mon('TYRANITAR', 50, ['CRUNCH']),
+     [('must_not_switch',)],
+     [mon('MACHAMP', 50, ['CLOSECOMBAT'], hp_pct=28)],
+     {'ai_side': {'spikes': 3}}),
+    # Control: the identical board with a Machamp healthy enough to survive the entry.
+    # The switch is still right, and it still goes to Machamp.
+    ('the_switch_still_happens_when_the_body_lives', 0,
+     mon('SNORLAX', 50, ['BODYSLAM'], hp_pct=60, stages={'atk': -3}),
+     mon('TYRANITAR', 50, ['CRUNCH']),
+     [('must_switch_to', 'MACHAMP')],
+     [mon('MACHAMP', 50, ['CLOSECOMBAT'])],
+     {'ai_side': {'spikes': 3}}),
+
+    # 4. Wish re-clicked with a Wish already pending -- "But it failed!"
+    #    (PokeBattle_MoveEffects.rb:6084). Readout: offense_vs_balance 196613 t8.
+    # Pound rather than Seismic Toss as the comparator: Seismic Toss is fixed 100
+    # damage and takes 62% off a Tyranitar, so it beats a live Wish on its own merits
+    # and the pair would not have isolated the rule. Blissey's Pound is the weakest
+    # honest alternative it has.
+    ('wish_is_not_re_clicked_while_one_is_pending', 0,
+     mon('BLISSEY', 50, ['WISH', 'POUND'], hp_pct=50, effects={'wish': 2}),
+     mon('TYRANITAR', 50, ['CRUNCH']),
+     [('must_not_choose_move', 'WISH'),
+      ('score_gt', 'POUND', 'WISH')]),
+    ('wish_is_live_with_none_pending', 0,
+     mon('BLISSEY', 50, ['WISH', 'POUND'], hp_pct=50),
+     mon('TYRANITAR', 50, ['CRUNCH']),
+     [('must_choose_move_in', ['WISH']),
+      ('score_gt', 'WISH', 'POUND')]),
+
+    # 5. first_setup was decided by a memory counter that is zeroed by any non-setup
+    #    action, so a +2 sweeper that attacked once was "first setting up" again
+    #    (bulky_vs_offense 196613 t20). Shuckle is the comparator on purpose: Close
+    #    Combat barely dents it, so a second Swords Dance wins on the bonus alone and
+    #    the card turns entirely on whether the bonus is still paid.
+    ('a_plus_two_sweeper_does_not_set_up_again', 0,
+     mon('HERACROSS', 50, ['SWORDSDANCE', 'CLOSECOMBAT'], hp_pct=45,
+         stages={'atk': 2}),
+     mon('SHUCKLE', 50, ['ROCKSLIDE']),
+     [('must_not_choose_move', 'SWORDSDANCE'),
+      ('score_gt', 'CLOSECOMBAT', 'SWORDSDANCE')]),
+    ('an_unboosted_sweeper_still_sets_up', 0,
+     mon('HERACROSS', 50, ['SWORDSDANCE', 'CLOSECOMBAT'], hp_pct=45),
+     mon('SHUCKLE', 50, ['ROCKSLIDE']),
+     [('must_choose_move_in', ['SWORDSDANCE']),
+      ('score_gt', 'SWORDSDANCE', 'CLOSECOMBAT')]),
+
+    # 6. No memory of a failed move. Bisharp clicked a dead Sucker Punch three turns
+    #    running with a guaranteed Knock Off one point behind (bulky_vs_offense 196613
+    #    t22-24). effect_tantrum is Reborn's OWN "that failed" flag; last_move is what
+    #    the portable memory recorded clicking.
+    ('a_move_that_failed_last_turn_is_not_re_clicked', 0,
+     mon('BISHARP', 50, ['SUCKERPUNCH', 'KNOCKOFF'],
+         effects={'tantrum': 1}, last_move='SUCKERPUNCH'),
+     mon('FORRETRESS', 50, ['GYROBALL']),
+     [('must_not_choose_move', 'SUCKERPUNCH'),
+      ('score_gt', 'KNOCKOFF', 'SUCKERPUNCH')]),
+    # Control: same board, the move worked last turn. Sucker Punch is the better move
+    # here and must stay chosen -- this is what makes the card above discriminate
+    # rather than just measuring Knock Off.
+    ('a_move_that_worked_last_turn_is_still_clicked', 0,
+     mon('BISHARP', 50, ['SUCKERPUNCH', 'KNOCKOFF'], last_move='SUCKERPUNCH'),
+     mon('FORRETRESS', 50, ['GYROBALL']),
+     [('must_choose_move_in', ['SUCKERPUNCH']),
+      ('score_gt', 'SUCKERPUNCH', 'KNOCKOFF')]),
+
+    # 7. Yawn into an already-drowsy target: the engine displays "But it failed!"
+    #    and returns -1 (PokeBattle_MoveEffects.rb:249) while pbCanSleep? -- the only
+    #    thing 0.6.1 asked -- still says yes. Leech Seed's twin.
+    ('yawn_is_dead_into_a_drowsy_target', 0,
+     mon('HYPNO', 50, ['YAWN', 'ZENHEADBUTT']),
+     mon('SNORLAX', 50, ['BODYSLAM'], effects={'yawn': 2}),
+     [('must_not_choose_move', 'YAWN'),
+      ('score_gt', 'ZENHEADBUTT', 'YAWN')]),
+    # The control that makes the card above mean something: on a target that is NOT
+    # drowsy, Yawn has to still be the pick. If it does not win here, the card above
+    # proves nothing.
+    ('yawn_is_live_against_an_alert_target', 0,
+     mon('HYPNO', 50, ['YAWN', 'ZENHEADBUTT']),
+     mon('SNORLAX', 50, ['BODYSLAM']),
+     [('must_choose_move_in', ['YAWN']),
+      ('score_gt', 'YAWN', 'ZENHEADBUTT')]),
+]
+
+
 CORPUS = (CORPUS_V1 + CORPUS_V2 + CORPUS_V3 + CORPUS_V4 + CORPUS_V5
           + CORPUS_V6 + CORPUS_V7 + CORPUS_V8 + CORPUS_V9 + CORPUS_V10
-          + CORPUS_D1 + CORPUS_D2 + CORPUS_D3 + CORPUS_R1 + CORPUS_LS)
+          + CORPUS_D1 + CORPUS_D2 + CORPUS_D3 + CORPUS_R1 + CORPUS_LS
+          + CORPUS_062)
 
 # Values a scenario's extra dict may carry; the generator validates so a typo
 # fails here instead of silently emitting a key no probe reads.
@@ -2251,7 +2401,7 @@ WEATHER_NAMES = {'rain', 'sun', 'sand', 'hail'}
 SIDE_EFFECT_KEYS = {'spikes', 'toxicspikes', 'stealthrock', 'reflect', 'lightscreen'}
 # Battler effects a mon's effects= dict may carry (validated the same way).
 EFFECT_NAMES = {'perishsong', 'leechseed', 'confusion', 'toxic', 'yawn',
-                'substitute', 'curse', 'choiceband'}
+                'substitute', 'curse', 'choiceband', 'wish', 'tantrum'}
 # Keys the trailing extra dict may carry. Validated for the same reason the values
 # are: an unknown key used to be dropped in silence, so a card written with a typo'd
 # or not-yet-implemented key probed a DIFFERENT position than the one on the page and
@@ -2309,6 +2459,14 @@ def main():
                 parts.append('effect_%s:%d' % (k, v))
         if m.get('pp_all') is not None:
             parts.append('pp_all:%d' % m['pp_all'])
+        if m.get('last_move'):
+            # Same treatment as effect_choiceband: numeric id on v16, name on v19.
+            if a.engine == 'hegemony':
+                parts.append('last_move:%s' % m['last_move'])
+            elif m['last_move'] in mv:
+                parts.append('last_move:%d' % mv[m['last_move']])
+            else:
+                missing.add('move:' + str(m['last_move']))
         return parts
 
     def mon_line(m):

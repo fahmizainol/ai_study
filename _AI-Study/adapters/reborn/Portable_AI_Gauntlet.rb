@@ -51,7 +51,17 @@ module PortableAIRebornGauntlet
     # 0.6.0. damage_race=false is the control: the same build must reproduce 0.5.0
     # battle-for-battle before any of its numbers mean anything.
     ["damage_race",        :boolean],
-    ["damage_race_switch", :boolean]
+    ["damage_race_switch", :boolean],
+    # 0.6.2 bugfix batch, one key each so the arms can be ablated singly. All seven
+    # false is 0.6.1, which is the control run: the same build must reproduce the
+    # previous version battle-for-battle before any of its numbers mean anything.
+    ["spread_target_hp",   :boolean],
+    ["lethal_flat",        :boolean],
+    ["entry_death",        :boolean],
+    ["wish_pending",       :boolean],
+    ["setup_stage",        :boolean],
+    ["move_memory",        :boolean],
+    ["yawn_gate",          :boolean]
   ]
 
   OUT     = "Data/ai_gauntlet_results.ndjson"

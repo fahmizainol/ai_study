@@ -16,7 +16,7 @@
 # Everything else is optional evidence used to improve the score.
 
 module PortableAI
-  VERSION = "0.6.1" unless const_defined?(:VERSION)
+  VERSION = "0.6.2" unless const_defined?(:VERSION)
 
   module Model
     DEFAULT_CONFIG = {
@@ -89,7 +89,42 @@ module PortableAI
       "damage_race_switch" => false,
       # Doubles-only rules: partner absorbs, redirection, partner healing, and the
       # flatter value of priority when a second foe acts regardless.
-      "format_rules"    => true
+      "format_rules"    => true,
+
+      # 0.6.2 bugfix batch. Every one of these was READ OFF a turn-by-turn readout of
+      # the 0.6.1 set_c run, not proposed from the source
+      # (PORTABLE-AI-REBORN.md, "Turn-by-turn readout pass on set_c"), and each is its
+      # own key so the batch can be ablated one row at a time. ALL SEVEN FALSE
+      # REPRODUCES 0.6.1 BATTLE-FOR-BATTLE -- that control run is what makes any
+      # number from this version mean anything.
+      #
+      # A spread move carries no registration target, so target_for returned nil and
+      # every Earthquake was scored against a phantom 100% target: never lethal, and
+      # ko_never_lands could not fire for it either. Read the adapter's exported
+      # target_hp_pct instead.
+      "spread_target_hp" => true,
+      # A knockout is a knockout: once lethal, the type-effectiveness term and the
+      # secondaries that only matter to a survivor stop counting, so accuracy decides
+      # between two kills. Fire Blast (85%) was beating Dragon Claw (100%) for the
+      # same KO purely on the super-effective bonus.
+      "lethal_flat"      => true,
+      # Charge a switch candidate that is dead before it moves. score_switch already
+      # computed the subtraction for preserve_low_hp_actor and never rejected on it.
+      "entry_death"      => true,
+      # Wish re-clicked with a Wish already pending. The adapter now reports
+      # PBEffects::Wish through effect_active, the same channel the screens use.
+      "wish_pending"     => true,
+      # first_setup was decided by a memory counter that apply_memory zeroes on any
+      # non-setup action, so a +2 sweeper that attacked once was "first setting up"
+      # again. Drive it off the stages the actor is actually carrying.
+      "setup_stage"      => true,
+      # Do not re-click a move that failed last turn against the same target. Reborn
+      # keeps the flag itself for Stomping Tantrum (PBEffects::Tantrum); this reads it.
+      "move_memory"      => true,
+      # Yawn into an already-drowsy target. Same bug class as 0.6.1's Leech Seed: the
+      # move writes an EFFECT, not a status condition, so pbCanSleep? answers "yes"
+      # about a target the engine will refuse (PokeBattle_MoveEffects.rb:249).
+      "yawn_gate"        => true
     }
 
     def self.config(overrides)

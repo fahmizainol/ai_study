@@ -1,4 +1,4 @@
-bulky_vs_offense  seed 196613   Reborn-Normal (bulky, left) vs Reborn-Normal (right seat) (offense, right)   result for right seat: WIN in 18 turns
+bulky_vs_offense  seed 196613   Reborn-Normal (bulky, left) vs Reborn-Normal (right seat, 0.6.1 run) (offense, right)   result for right seat: WIN in 22 turns
   Reborn   (bulky): Bronzong, Torkoal, Amoonguss, Chesnaught, Mantine, Forretress
   RebornR  (offense): Tyranitar, Mamoswine, Bisharp, Salamence, Heracross, Nidoking
 ==============================================================================================================
@@ -75,51 +75,77 @@ Turn 11
 
 Turn 12
   Reborn   Chesnaught 152/338           -> Drain Punch
-  RebornR  Tyranitar 317/362            -> switch->Nidoking
-    Reborn   Drain Punch    hit            foe -58 x0.5, user +29
-  end:     Reborn Chesnaught 118/338 PSN   | right Nidoking 246/324
+  RebornR  Tyranitar 317/362            -> switch->Heracross
+    Reborn   Drain Punch    hit            foe -60 x0.5, user +30
+  end:     Reborn Chesnaught 161/338       | right Heracross 202/322
 
 Turn 13
-  Reborn   Chesnaught 118/338 PSN       -> Wood Hammer
-  RebornR  Nidoking 246/324             -> Ice Beam
-    RebornR  Ice Beam       hit            foe -118 x2
-  end:     Reborn Mantine 251/332          | right Nidoking 246/324
+  Reborn   Chesnaught 161/338           -> Leech Seed
+  RebornR  Heracross 202/322            -> Swords Dance
+    RebornR  Swords Dance   untargeted     
+    Reborn   Leech Seed     hit            foe 0
+  end:     Reborn Chesnaught 180/338       | right Heracross 142/322
 
 Turn 14
-  Reborn   Mantine 251/332              -> Scald
-  RebornR  Nidoking 246/324             -> Sludge Wave
-    RebornR  Sludge Wave    hit            foe -80
-    Reborn   Scald          hit            foe -214 x2
-  end:     Reborn Mantine 151/332          | right Nidoking 12/324 BRN
+  Reborn   Chesnaught 180/338           -> Spikes
+  RebornR  Heracross 142/322            -> Close Combat
+    RebornR  Close Combat   hit            foe -180
+  end:     Reborn Forretress 312/312       | right Heracross 122/322
 
 Turn 15
-  Reborn   Mantine 151/332              -> Scald
-  RebornR  Nidoking 12/324 BRN          -> Sludge Wave
-    RebornR  Sludge Wave    hit            foe -69 [status=3 status_count=0]
-    Reborn   Scald          hit            foe -12 x2
-  end:     Reborn Mantine 82/332           | right Mamoswine 335/382
+  Reborn   Forretress 312/312           -> Toxic
+  RebornR  Heracross 122/322            -> Swords Dance
+    RebornR  Swords Dance   untargeted     
+    Reborn   Toxic          hit            foe 0
+  end:     Reborn Forretress 312/312       | right Heracross 62/322 PSN
 
 Turn 16
-  Reborn   Mantine 82/332               -> Roost
-  RebornR  Mamoswine 335/382            -> Stone Edge
-    RebornR  Stone Edge     hit            foe -82 x2
-  end:     Reborn Forretress 312/312       | right Mamoswine 335/382
+  Reborn   Forretress 312/312           -> Gyro Ball
+  RebornR  Heracross 62/322 PSN         -> switch->Nidoking
+    Reborn   Gyro Ball      hit            foe -54
+  end:     Reborn Forretress 312/312       | right Nidoking 250/324
 
 Turn 17
-  Reborn   Forretress 312/312           -> Gyro Ball
-  RebornR  Mamoswine 335/382            -> Earthquake
-    RebornR  Earthquake     hit            foe -116
-    Reborn   Gyro Ball      hit            foe -96 x2
-  end:     Reborn Forretress 196/312       | right Mamoswine 239/382
+  Reborn   Forretress 312/312           -> switch->Mantine
+  RebornR  Nidoking 250/324             -> Flamethrower
+    RebornR  Flamethrower   hit            foe -25 x0.5
+  end:     Reborn Mantine 226/332          | right Nidoking 250/324
 
 Turn 18
-  Reborn   Forretress 196/312           -> Gyro Ball
-  RebornR  Mamoswine 239/382            -> Earthquake
-    RebornR  Earthquake     hit            foe -111
-    Reborn   Gyro Ball      hit            foe -96 x2
-  end:     Reborn Forretress 85/312        | right Mamoswine 143/382
+  Reborn   Mantine 226/332              -> Scald
+  RebornR  Nidoking 250/324             -> Sludge Wave
+    RebornR  Sludge Wave    hit            foe -74
+    Reborn   Scald          hit            foe -208 x2
+  end:     Reborn Mantine 152/332          | right Nidoking 42/324
 
 Turn 19
-  Reborn   Forretress 85/312            -> Gyro Ball
-  RebornR  Mamoswine 143/382            -> Earthquake
-    RebornR  Earthquake     hit            foe -85
+  Reborn   Mantine 152/332              -> Scald
+  RebornR  Nidoking 42/324              -> Sludge Wave
+    RebornR  Sludge Wave    hit            foe -77
+    Reborn   Scald          hit            foe -42 x2
+  end:     Reborn Mantine 75/332           | right Mamoswine 335/382
+
+Turn 20
+  Reborn   Mantine 75/332               -> Roost
+  RebornR  Mamoswine 335/382            -> Stone Edge
+    RebornR  Stone Edge     hit            foe -75 x2
+  end:     Reborn Forretress 312/312       | right Mamoswine 335/382
+
+Turn 21
+  Reborn   Forretress 312/312           -> Gyro Ball
+  RebornR  Mamoswine 335/382            -> Earthquake
+    RebornR  Earthquake     hit            foe -114
+    Reborn   Gyro Ball      hit            foe -94 x2
+  end:     Reborn Forretress 198/312       | right Mamoswine 241/382
+
+Turn 22
+  Reborn   Forretress 198/312           -> Gyro Ball
+  RebornR  Mamoswine 241/382            -> Earthquake
+    RebornR  Earthquake     hit            foe -119
+    Reborn   Gyro Ball      hit            foe -94 x2
+  end:     Reborn Forretress 79/312        | right Mamoswine 147/382
+
+Turn 23
+  Reborn   Forretress 79/312            -> Gyro Ball
+  RebornR  Mamoswine 147/382            -> Earthquake
+    RebornR  Earthquake     hit            foe -79

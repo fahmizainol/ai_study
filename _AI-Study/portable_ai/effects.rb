@@ -53,7 +53,12 @@ module PortableAI
     add(%w[TOXIC], ["status", "poison"])
     add(%w[POISONPOWDER], ["status", "poison", "powder"])
     add(%w[SPORE SLEEPPOWDER], ["status", "sleep", "powder"])
-    add(%w[HYPNOSIS DARKVOID YAWN], ["status", "sleep"])
+    add(%w[HYPNOSIS DARKVOID], ["status", "sleep"])
+    # Yawn puts the target to sleep NEXT turn by writing PBEffects::Yawn, so it fails
+    # against an already-drowsy target while pbCanSleep? still says yes. It carries its
+    # own tag purely so the adapter's status_blocked? can find it without a move-name
+    # lookup -- the same shape as "drain" on LEECHSEED below.
+    add(%w[YAWN], ["status", "sleep", "drowsy"])
     add(%w[CONFUSERAY SWAGGER FLATTER], ["status", "confuse"])
     add(%w[LEECHSEED], ["status", "drain"])
     add(%w[TAUNT ENCORE TORMENT DISABLE HEALBLOCK PSYCHICNOISE], ["disrupt"])

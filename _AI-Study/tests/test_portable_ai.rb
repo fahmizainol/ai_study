@@ -1139,4 +1139,172 @@ class PortableAITest < Test::Unit::TestCase
                             { "yawned" => true })], [foe], {})
     assert(!reasons_of(pick(snap2, {})[0]).include?("switchin_race"))
   end
+
+  # ---------------------------------------------------------------------------
+  # 0.6.2 bugfix batch. Every test asserts BOTH directions: the fix, and that the
+  # key off restores the 0.6.1 behaviour it replaces. The control run for the whole
+  # version rests on that second half being true seven times over.
+  # ---------------------------------------------------------------------------
+
+  # A spread move registers against no single battler, so the adapter sets
+  # action["target"] = nil and target_for finds nothing. The exported target_hp_pct is
+  # the same fact by another route: without it Earthquake is scored against a phantom
+  # 100% target and can never be lethal, whatever the real target's HP.
+  def spread_snap
+    foe = target(0, 8)
+    quake = move(0, "EARTHQUAKE", nil, 100, 30, { "target_hp_pct" => 8 })
+    jab = move(1, "POISONJAB", 0, 100, 26, {})
+    snapshot([actor(1, 100, [quake, jab], {})], [foe], {})
+  end
+
+  def test_spread_move_reaches_lethal_from_the_exported_target_hp
+    result = pick(spread_snap, {})[0]
+    assert_equal("EARTHQUAKE", result["move_id"])
+    assert(reasons_of(result).include?("lethal"))
+  end
+
+  def test_spread_target_hp_off_leaves_the_move_on_expected_damage
+    result = pick(spread_snap, { "spread_target_hp" => false })[0]
+    assert_equal("POISONJAB", result["move_id"])
+  end
+
+  # Two moves, both lethal. Fire Blast is super-effective and 85% accurate; Dragon
+  # Claw is neutral and never misses. Once the target is dying either way the type
+  # chart has nothing left to say, so the accurate one has to win.
+  def kill_snap
+    foe = target(0, 20)
+    blast = move(0, "FIREBLAST", 0, 100, 60,
+                 { "effectiveness" => 2, "accuracy" => 85 })
+    claw = move(1, "DRAGONCLAW", 0, 100, 40,
+                { "effectiveness" => 1, "accuracy" => 100 })
+    snapshot([actor(1, 100, [blast, claw], {})], [foe], {})
+  end
+
+  def test_a_kill_is_chosen_on_accuracy_not_on_type
+    assert_equal("DRAGONCLAW", pick(kill_snap, {})[0]["move_id"])
+  end
+
+  def test_lethal_flat_off_restores_the_super_effective_pick
+    assert_equal("FIREBLAST",
+                 pick(kill_snap, { "lethal_flat" => false })[0]["move_id"])
+  end
+
+  # A spread action is a summary of several targets, not one kill: its damage is the
+  # sum over the foes and its effectiveness is what choose_joint weighs "resolves the
+  # whole field" against. Flattening it cost a double kill on the corpus card
+  # d_spread_kills_both_preferred, so the rule stops at the spread flag.
+  def test_a_spread_kill_keeps_its_effectiveness_term
+    foe = target(0, 20)
+    quake = move(0, "EARTHQUAKE", nil, 100, 120,
+                 { "effectiveness" => 4, "spread" => true, "target_hp_pct" => 20 })
+    result = pick(snapshot([actor(1, 100, [quake], {})], [foe], {}), {})[0]
+    assert(reasons_of(result).include?("super_effective"))
+    assert_equal(false, reasons_of(result).include?("lethal_flat"))
+  end
+
+  # 24% HP, 10% hazards on the way in, 30% incoming: 24 - 10 - 30*0.85 = -11.5, dead
+  # before it moves. The healthy candidate has the same matchup and must be preferred.
+  def entry_death_snap(candidate_hp)
+    foe = target(0, 100)
+    dying = { "type" => "switch", "slot" => 1, "base_score" => 140,
+              "matchup_score" => 0, "forced" => true,
+              "candidate_hp_pct" => candidate_hp, "entry_damage_pct" => 10,
+              "incoming_damage_pct" => 30 }
+    healthy = { "type" => "switch", "slot" => 2, "base_score" => 100,
+                "matchup_score" => 0, "forced" => true,
+                "candidate_hp_pct" => 100, "entry_damage_pct" => 10,
+                "incoming_damage_pct" => 30 }
+    snapshot([actor(1, 100, [dying, healthy], {})], [foe], {})
+  end
+
+  def test_a_switch_in_that_dies_before_it_moves_is_charged
+    assert_equal(2, pick(entry_death_snap(24), {})[0]["slot"])
+  end
+
+  def test_entry_death_is_a_penalty_not_a_rejection
+    # Only the dying body is on the bench: it is still registered, because a forced
+    # replacement has to send SOMETHING.
+    foe = target(0, 100)
+    only = { "type" => "switch", "slot" => 1, "base_score" => 100,
+             "matchup_score" => 0, "forced" => true, "candidate_hp_pct" => 24,
+             "entry_damage_pct" => 10, "incoming_damage_pct" => 30 }
+    result = pick(snapshot([actor(1, 100, [only], {})], [foe], {}), {})[0]
+    assert_equal("switch", result["type"])
+    assert(reasons_of(result).include?("dies_on_entry"))
+  end
+
+  def test_entry_death_off_takes_the_higher_scoring_corpse
+    assert_equal(1, pick(entry_death_snap(24), { "entry_death" => false })[0]["slot"])
+  end
+
+  def test_a_candidate_that_survives_the_minimum_roll_is_not_charged
+    # 46 - 10 - 25.5 = +10.5. The point estimate alone would have killed it.
+    result = pick(entry_death_snap(46), {})[0]
+    assert_equal(1, result["slot"])
+  end
+
+  # Wish with a Wish already pending is "But it failed!"
+  # (PokeBattle_MoveEffects.rb:6084). effect_active is the channel the adapter reports
+  # it on, the same one the screens use.
+  def wish_snap
+    foe = target(0, 100)
+    wish = move(0, "WISH", nil, 200, 0, { "effect_active" => true })
+    hit = move(1, "BODYSLAM", 0, 100, 20, {})
+    snapshot([actor(1, 50, [wish, hit], {})], [foe], {})
+  end
+
+  def test_wish_is_refused_while_one_is_pending
+    assert_equal("BODYSLAM", pick(wish_snap, {})[0]["move_id"])
+  end
+
+  def test_wish_pending_off_re_clicks_it
+    assert_equal("WISH", pick(wish_snap, { "wish_pending" => false })[0]["move_id"])
+  end
+
+  # +2 Attack already standing, and the memory counter zeroed by the attack in
+  # between. The stages are the durable record of the same fact.
+  def setup_stage_snap(stages)
+    foe = target(0, 100)
+    actions = [
+      move(0, "SWORDSDANCE", nil, 400, 0, {}),
+      move(1, "CLOSECOMBAT", 0, 100, 45, {})
+    ]
+    snapshot([actor(1, 100, actions, { "positive_stage_total" => stages })], [foe], {})
+  end
+
+  def test_a_boosted_actor_does_not_get_a_first_setup_bonus
+    result = pick(setup_stage_snap(2), {})[0]
+    assert_equal("SWORDSDANCE", result["move_id"])
+    assert(reasons_of(result).include?("repeated_setup"))
+  end
+
+  def test_an_unboosted_actor_still_gets_first_setup
+    result = pick(setup_stage_snap(0), {})[0]
+    assert(reasons_of(result).include?("first_setup"))
+  end
+
+  def test_setup_stage_off_calls_a_plus_two_sweeper_a_first_setup
+    result = pick(setup_stage_snap(2), { "setup_stage" => false })[0]
+    assert(reasons_of(result).include?("first_setup"))
+  end
+
+  # A move the engine refused last turn against this same target will be refused
+  # again. Sucker Punch was re-clicked three turns running with Knock Off one point
+  # behind, so the charge has to be bigger than that gap.
+  def failed_move_snap
+    foe = target(0, 100)
+    sucker = move(0, "SUCKERPUNCH", 0, 100, 40, { "failed_last_turn" => true })
+    knock = move(1, "KNOCKOFF", 0, 100, 38, {})
+    snapshot([actor(1, 100, [sucker, knock], {})], [foe], {})
+  end
+
+  def test_a_move_that_failed_last_turn_is_not_re_clicked
+    result = pick(failed_move_snap, {})[0]
+    assert_equal("KNOCKOFF", result["move_id"])
+  end
+
+  def test_move_memory_off_re_clicks_the_dead_move
+    assert_equal("SUCKERPUNCH",
+                 pick(failed_move_snap, { "move_memory" => false })[0]["move_id"])
+  end
 end

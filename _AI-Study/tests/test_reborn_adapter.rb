@@ -88,6 +88,11 @@ module PBEffects
   Substitute = 12
   LeechSeed = 13
   PerishSong = 20
+  Yawn = 24
+  Wish = 25
+  # Reborn's own "the move that just ran failed" flag, kept for Stomping Tantrum
+  # (PokeBattle_Battler.rb:5085). A boolean, not a counter.
+  Tantrum = 26
 end
 
 module PBTypes
@@ -626,5 +631,138 @@ class PortableAIRebornAdapterTest < Test::Unit::TestCase
     map = { "0:2" => 25.0 }
     out = PortableAIReborn.threats_by_foe(nil, battle, speed_battler(100), [0], map)
     assert_equal(25.0, out["0"]["damage_pct"])
+  end
+
+  # ---------------------------------------------------------------------------
+  # 0.6.2 adapter-side rules.
+  # ---------------------------------------------------------------------------
+
+  # Yawn is Leech Seed's twin: tagged ["status", "sleep"] (effects.rb), so the engine
+  # check the adapter runs is pbCanSleep?, which answers about the status CONDITION and
+  # says yes about a target that is merely drowsy. The engine's real second guard is a
+  # separate line in PokeBattle_Move_004#pbEffect (PokeBattle_MoveEffects.rb:249).
+  #
+  # Tags come from Effects.describe, the same call the action builder makes: the
+  # "drowsy" tag has to actually be on YAWN in the shipped table or the rule never
+  # fires in a battle no matter what this asserts.
+  YAWN_TAGS = PortableAI::Effects.describe("YAWN", []).freeze
+  HYPNOSIS_TAGS = PortableAI::Effects.describe("HYPNOSIS", []).freeze
+
+  def drowsy_target(drowsy, can_sleep = true)
+    t = plain_battler
+    fx = Hash.new(0)
+    fx[PBEffects::Yawn] = drowsy ? 2 : 0
+    t.define_singleton_method(:effects) { fx }
+    t.define_singleton_method(:pbCanSleep?) { |_show| can_sleep }
+    t.define_singleton_method(:pbHasType?) { |_sym| false }
+    t
+  end
+
+  def sleep_blocked?(target, tags = YAWN_TAGS)
+    PortableAIReborn.status_blocked?(
+      PokeBattle_AI.new(PokeBattle_Battle.new),
+      FakeMove.new(0x04, 0, 0), tags, plain_battler, target)
+  end
+
+  def test_yawn_carries_its_own_tag_in_the_shipped_table
+    assert(YAWN_TAGS.include?("drowsy"))
+    assert(YAWN_TAGS.include?("sleep"))
+    assert_equal(false, HYPNOSIS_TAGS.include?("drowsy"))
+  end
+
+  def test_yawn_is_live_against_a_target_that_is_not_drowsy
+    assert_equal(false, sleep_blocked?(drowsy_target(false)))
+  end
+
+  def test_yawn_is_blocked_against_an_already_drowsy_target
+    assert_equal(true, sleep_blocked?(drowsy_target(true)))
+  end
+
+  # The engine check still owns everything it already knew: a target that cannot sleep
+  # at all is blocked whether or not it is drowsy.
+  def test_yawn_still_defers_to_the_engine_sleep_check
+    assert_equal(true, sleep_blocked?(drowsy_target(false, false)))
+  end
+
+  # Hypnosis writes the status condition directly, so a drowsy target is a legal
+  # target for it. Only Yawn carries the extra guard.
+  def test_hypnosis_is_unaffected_by_the_drowsy_clause
+    assert_equal(false, sleep_blocked?(drowsy_target(true), HYPNOSIS_TAGS))
+  end
+
+  def test_yawn_gate_off_restores_the_0_6_1_re_click
+    $PORTABLE_AI_CONFIG = { "yawn_gate" => false }
+    assert_equal(false, sleep_blocked?(drowsy_target(true)))
+  ensure
+    $PORTABLE_AI_CONFIG = nil
+  end
+
+  # Wish reported through the same channel the screens use.
+  def wish_battler(pending)
+    b = plain_battler
+    fx = Hash.new(0)
+    fx[PBEffects::Wish] = pending ? 2 : 0
+    b.define_singleton_method(:effects) { fx }
+    b.define_singleton_method(:pbOwnSide) { Object.new }
+    b
+  end
+
+  def test_wish_is_reported_active_only_while_one_is_pending
+    assert_equal(true, PortableAIReborn.effect_active?(wish_battler(true), "WISH"))
+    assert_equal(false, PortableAIReborn.effect_active?(wish_battler(false), "WISH"))
+  end
+
+  # The durable "I have already set up" record, which the memory counter is not.
+  def test_positive_stage_total_counts_only_the_boosts
+    b = plain_battler
+    stages = [0, 2, 0, 1, 0, -2, 0, 0]
+    b.define_singleton_method(:stages) { stages }
+    assert_equal(3, PortableAIReborn.positive_stages(b))
+  end
+
+  # failed_last_turn? is Reborn's Tantrum flag ANDed with the portable memory's record
+  # of what was clicked at whom. Both halves have to line up: Tantrum alone only says
+  # that something failed.
+  def failed_battler(tantrum)
+    b = plain_battler
+    fx = Hash.new(0)
+    fx[PBEffects::Tantrum] = tantrum
+    b.define_singleton_method(:effects) { fx }
+    b.define_singleton_method(:index) { 1 }
+    b
+  end
+
+  def failed_case(tantrum, last_move, last_species, target_species)
+    battle = PokeBattle_Battle.new
+    battle.instance_variable_set(
+      :@portable_ai_memory,
+      { "1" => { "last_move" => last_move, "last_target_species" => last_species } })
+    target = plain_battler
+    target.define_singleton_method(:species) { target_species }
+    PortableAIReborn.failed_last_turn?(battle, failed_battler(tantrum),
+                                       "SUCKERPUNCH", target)
+  end
+
+  def test_a_repeat_of_the_move_that_failed_at_the_same_target_is_reported
+    assert_equal(true, failed_case(true, "SUCKERPUNCH", 500, 500))
+  end
+
+  def test_nothing_is_reported_when_the_engine_says_the_move_worked
+    assert_equal(false, failed_case(false, "SUCKERPUNCH", 500, 500))
+  end
+
+  def test_a_different_move_is_not_charged_for_the_failure
+    assert_equal(false, failed_case(true, "KNOCKOFF", 500, 500))
+  end
+
+  def test_the_failure_does_not_carry_to_a_target_that_switched_in
+    assert_equal(false, failed_case(true, "SUCKERPUNCH", 500, 501))
+  end
+
+  def test_no_memory_at_all_reports_nothing
+    battle = PokeBattle_Battle.new
+    assert_equal(false,
+                 PortableAIReborn.failed_last_turn?(battle, failed_battler(true),
+                                                    "SUCKERPUNCH", nil))
   end
 end

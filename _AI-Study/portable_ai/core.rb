@@ -74,12 +74,32 @@ module PortableAI
     target = target_for(snapshot, action["target"])
     actor_hp = Model.number(actor["hp_pct"], 100.0)
     target_hp = target ? Model.number(target["hp_pct"], 100.0) : 100.0
+    # A spread move carries no registration target -- the adapter sets
+    # action["target"] = nil because there is no single battler to register against
+    # (Portable_AI_Adapter.rb:551) -- so target_for returns nil and this defaulted to a
+    # phantom 100% target. Earthquake and Lava Plume therefore NEVER reached `lethal`,
+    # at any target HP, and ko_never_lands could not fire for them either. The adapter
+    # exports the scoring target's own HP on every action (:638); read that instead.
+    if !target && config["spread_target_hp"] && !action["target_hp_pct"].nil?
+      target_hp = Model.number(action["target_hp_pct"], 100.0)
+    end
     damage = Model.number(action["expected_damage_pct"], 0.0)
     effectiveness = Model.number(action["effectiveness"], 1.0)
 
     if Model.truthy(action["immune"]) || (Model.truthy(action["damaging"]) && effectiveness <= 0)
       reasons << ["immune", HARD_REJECT]
       return HARD_REJECT
+    end
+
+    # A move the engine refused last turn against this same target will be refused
+    # again: the board has not moved. Reborn keeps the flag itself for Stomping
+    # Tantrum (PBEffects::Tantrum, PokeBattle_Battler.rb:5085) and the adapter reads it
+    # back on the action. Bisharp clicked a dead Sucker Punch three turns running with
+    # a guaranteed Knock Off KO one point behind (bulky_vs_offense 196613 t22-24), so
+    # this is deliberately larger than that gap and smaller than a kill call.
+    if config["move_memory"] && Model.truthy(action["failed_last_turn"])
+      out_score -= 200
+      reasons << ["failed_last_turn", -200]
     end
 
     lethal = false
@@ -165,7 +185,24 @@ module PortableAI
         reasons << ["priority_finisher", bonus]
       end
 
-      if effectiveness > 1
+      # Once the move kills, the type chart has already said everything it has to say:
+      # both kills remove the same battler, so the only thing left to choose on is
+      # which one lands. Fire Blast at 85% was beating Dragon Claw at 100% for the same
+      # KO on a 70-point super-effective bonus against a 45-point resist penalty
+      # (bulky_vs_offense 196613 t4: 649 against 555). flat_kill also drops the
+      # secondaries that only pay out on a survivor -- see side_effect_rules.
+      #
+      # NOT applied to a SPREAD action, which is a summary of several targets rather
+      # than one kill: its damage is the sum over the foes and its effectiveness is a
+      # standing measure of how much of the field the move resolves, which is exactly
+      # what choose_joint weighs it against. Dropping the term there cost Garchomp a
+      # double kill it had been finding since 0.4.0 -- d_spread_kills_both_preferred,
+      # caught by the corpus on the first 0.6.2 probe (Earthquake 740 -> 600, and the
+      # split-fire pair's coordination bonus then won by 66 points).
+      flat_kill = lethal && config["lethal_flat"] && !Model.truthy(action["spread"])
+      if flat_kill
+        reasons << ["lethal_flat", 0]
+      elsif effectiveness > 1
         bonus = 35 * effectiveness
         out_score += bonus
         reasons << ["super_effective", bonus]
@@ -176,7 +213,8 @@ module PortableAI
 
       if config["side_effects"]
         out_score = side_effect_rules(snapshot, actor, action, tags, target,
-                                      damage, lethal, faster, out_score, reasons)
+                                      damage, lethal, faster, out_score, reasons,
+                                      flat_kill)
       end
       if config["ability_rules"]
         out_score = damaging_ability_rules(action, target, lethal, out_score, reasons)
@@ -202,7 +240,13 @@ module PortableAI
         reasons << ["heal_under_lethal_threat", -80]
       end
     elsif tags.include?("delayed_heal")
-      if actor_hp >= 90
+      # Wish fails outright with a Wish already pending (PokeBattle_MoveEffects.rb:6084
+      # returns -1 and displays "But it failed!"). Same channel the screens use: the
+      # adapter reports PBEffects::Wish through effect_active.
+      if config["wish_pending"] && Model.truthy(action["effect_active"])
+        out_score -= 300
+        reasons << ["delayed_heal_pending", -300]
+      elsif actor_hp >= 90
         out_score -= 300
         reasons << ["delayed_heal_near_full", -300]
       elsif actor_hp <= 55
@@ -238,6 +282,17 @@ module PortableAI
 
     if tags.include?("setup")
       repeats = config["memory"] ? memory_count(snapshot, actor["index"], "setup") : 0
+      # The memory counter alone answers "did I set up on the PREVIOUS action", because
+      # apply_memory zeroes every counter but the one it just incremented
+      # (Portable_AI_Adapter.rb:1487). One attack in between and a +2 sweeper was
+      # "first setting up" all over again -- Heracross took a second Swords Dance at
+      # 31% HP that way (bulky_vs_offense 196613 t20). The stages the actor is standing
+      # in are the durable record of the same fact, and one setup move is worth about
+      # two stages (Swords Dance +2, Dragon Dance +1/+1, Calm Mind +1/+1).
+      if config["setup_stage"]
+        carried = Model.number(actor["positive_stage_total"], 0).to_i / 2
+        repeats = carried if carried > repeats
+      end
       if config["ability_rules"] && actor_ability(actor) == "CONTRARY"
         # Contrary turns every boost into a drop. Reborn does not have this row at all;
         # it is here because a Contrary user clicking Swords Dance is strictly harming
@@ -619,6 +674,32 @@ module PortableAI
     if Model.number(actor["hp_pct"], 100) <= 20 && safe
       out_score += 80
       reasons << ["preserve_low_hp_actor", 80]
+    end
+    # The same subtraction, read the other way: a candidate that is dead before it acts
+    # is not a switch, it is a sacrifice, and score_switch computed this quantity for
+    # `safe` without ever rejecting on it. Mandibuzz sent a 58-HP Flygon into Stealth
+    # Rock plus a Rapid Spin; it died without moving and Mandibuzz walked back through
+    # the rocks (bulky_vs_balance 196613 t51).
+    #
+    # Charged on the MINIMUM damage roll, so only a candidate that dies on every roll
+    # pays, and charged rather than HARD_REJECTed so a forced replacement still ranks
+    # the least bad body instead of falling through to slot order.
+    #
+    # 500, not the ~300 the backlog entry proposed, and the corpus is why: on
+    # a_dying_switch_in_is_not_worth_sending the candidate scores 385.9 against a
+    # 59.8 move, so 300 left the corpse ahead by 26 points and the card failed on the
+    # build that was supposed to fix it. 500 is not a fitted number either -- it is
+    # what this scorer already pays for a knockout, and handing the opponent a free one
+    # is the same event seen from the other side.
+    if config["entry_death"] && config["entry_rules"] &&
+       action.key?("entry_damage_pct") && action.key?("incoming_damage_pct")
+      left = Model.number(action["candidate_hp_pct"], 100.0) -
+             Model.number(action["entry_damage_pct"], 0.0) -
+             Model.number(action["incoming_damage_pct"], 0.0) * MIN_DAMAGE_ROLL
+      if left <= 0
+        out_score -= 500
+        reasons << ["dies_on_entry", -500]
+      end
     end
     if config["ability_rules"] && actor_ability(actor) == "REGENERATOR" &&
        Model.number(actor["hp_pct"], 100) < 66
@@ -1235,8 +1316,12 @@ module PortableAI
   # Every per-move side effect that scales the damage the move already does. One pass,
   # one named reason per row that fires, so a trace says which table entry moved the
   # score.
+  # flat_kill (0.6.2, config["lethal_flat"]) drops the rows that only pay out if the
+  # target is still standing afterwards -- the secondary status/flinch/stat-drop, and
+  # the knocked item. The rows that survive it are the ones about whether the knockout
+  # HAPPENS or what it costs the actor: multi_hit versus Sturdy/Sash, recoil, drain.
   def self.side_effect_rules(snapshot, actor, action, tags, target, damage,
-                             lethal, faster, score, reasons)
+                             lethal, faster, score, reasons, flat_kill = false)
     chance = action.key?("effect_chance") ? Model.number(action["effect_chance"], 100.0) : nil
     kind = action["effect_kind"]
     kind = Effects.kind_of(tags, "secondary") if kind.nil?
@@ -1246,7 +1331,7 @@ module PortableAI
 
     # chance == 0 is the engine saying the secondary is negated outright (Sheer Force,
     # Shield Dust, Covert Cloak). No row fires, and the move is judged on damage alone.
-    if kind && !(chance && chance <= 0)
+    if kind && !(chance && chance <= 0) && !flat_kill
       m = secondary_multiplier(kind, action, actor, target, target_ability,
                                lethal, faster)
       if m != 1.0
@@ -1305,7 +1390,7 @@ module PortableAI
       end
     end
 
-    if tags.include?("item_removal") && target_item != ""
+    if tags.include?("item_removal") && target_item != "" && !flat_kill
       m = ITEM_REMOVAL_VALUE[target_item] || 1.0
       if m != 1.0
         delta = multiplier_delta(reduce_when_kills(m, lethal), lethal, damage)

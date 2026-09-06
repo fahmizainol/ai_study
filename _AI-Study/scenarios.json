@@ -7521,5 +7521,574 @@
     "LEECHSEED"
    ]
   ]
+ },
+ {
+  "id": "spread_move_kills_the_dying_target",
+  "field": 0,
+  "format": "single",
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "EARTHQUAKE",
+   "ROOST",
+   "POUND",
+   "PECK"
+  ],
+  "ai_species": "FLYGON",
+  "player_species": "BISHARP",
+  "ai2_moves": null,
+  "ai2_species": null,
+  "player2_species": null,
+  "ai_party_species": [
+   "FLYGON"
+  ],
+  "ai_actives": 1,
+  "move_ids": {
+   "EARTHQUAKE": 223,
+   "ROOST": 172,
+   "POUND": 309,
+   "PECK": 168
+  },
+  "assertions": [
+   [
+    "must_choose_move_in",
+    [
+     "EARTHQUAKE"
+    ]
+   ],
+   [
+    "score_gt",
+    "EARTHQUAKE",
+    "ROOST"
+   ]
+  ]
+ },
+ {
+  "id": "spread_move_is_not_lethal_at_full_hp",
+  "field": 0,
+  "format": "single",
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "EARTHQUAKE",
+   "ROOST",
+   "POUND",
+   "PECK"
+  ],
+  "ai_species": "FLYGON",
+  "player_species": "BISHARP",
+  "ai2_moves": null,
+  "ai2_species": null,
+  "player2_species": null,
+  "ai_party_species": [
+   "FLYGON"
+  ],
+  "ai_actives": 1,
+  "move_ids": {
+   "EARTHQUAKE": 223,
+   "ROOST": 172,
+   "POUND": 309,
+   "PECK": 168
+  },
+  "assertions": [
+   [
+    "must_choose_move_in",
+    [
+     "ROOST"
+    ]
+   ],
+   [
+    "score_gt",
+    "ROOST",
+    "EARTHQUAKE"
+   ]
+  ]
+ },
+ {
+  "id": "a_kill_is_chosen_on_accuracy_not_type",
+  "field": 0,
+  "format": "single",
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "FIREBLAST",
+   "DRAGONCLAW",
+   "POUND",
+   "PECK"
+  ],
+  "ai_species": "SALAMENCE",
+  "player_species": "FORRETRESS",
+  "ai2_moves": null,
+  "ai2_species": null,
+  "player2_species": null,
+  "ai_party_species": [
+   "SALAMENCE"
+  ],
+  "ai_actives": 1,
+  "move_ids": {
+   "FIREBLAST": 128,
+   "DRAGONCLAW": 57,
+   "POUND": 309,
+   "PECK": 168
+  },
+  "assertions": [
+   [
+    "must_not_choose_move",
+    "FIREBLAST"
+   ],
+   [
+    "score_gt",
+    "DRAGONCLAW",
+    "FIREBLAST"
+   ]
+  ]
+ },
+ {
+  "id": "type_still_decides_when_nothing_kills",
+  "field": 0,
+  "format": "single",
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "FIREBLAST",
+   "DRAGONCLAW",
+   "POUND",
+   "PECK"
+  ],
+  "ai_species": "SALAMENCE",
+  "player_species": "FORRETRESS",
+  "ai2_moves": null,
+  "ai2_species": null,
+  "player2_species": null,
+  "ai_party_species": [
+   "SALAMENCE"
+  ],
+  "ai_actives": 1,
+  "move_ids": {
+   "FIREBLAST": 128,
+   "DRAGONCLAW": 57,
+   "POUND": 309,
+   "PECK": 168
+  },
+  "assertions": [
+   [
+    "must_choose_move_in",
+    [
+     "FIREBLAST"
+    ]
+   ],
+   [
+    "score_gt",
+    "FIREBLAST",
+    "DRAGONCLAW"
+   ]
+  ]
+ },
+ {
+  "id": "a_dying_switch_in_is_not_worth_sending",
+  "field": 0,
+  "format": "single",
+  "weather": null,
+  "ai_side": {
+   "spikes": 3
+  },
+  "player_side": {},
+  "ai_moves": [
+   "BODYSLAM",
+   "POUND",
+   "PECK",
+   "TACKLE"
+  ],
+  "ai_species": "SNORLAX",
+  "player_species": "TYRANITAR",
+  "ai2_moves": null,
+  "ai2_species": null,
+  "player2_species": null,
+  "ai_party_species": [
+   "SNORLAX",
+   "MACHAMP"
+  ],
+  "ai_actives": 1,
+  "move_ids": {
+   "BODYSLAM": 276,
+   "POUND": 309,
+   "PECK": 168,
+   "TACKLE": 303
+  },
+  "assertions": [
+   [
+    "must_not_switch"
+   ]
+  ]
+ },
+ {
+  "id": "the_switch_still_happens_when_the_body_lives",
+  "field": 0,
+  "format": "single",
+  "weather": null,
+  "ai_side": {
+   "spikes": 3
+  },
+  "player_side": {},
+  "ai_moves": [
+   "BODYSLAM",
+   "POUND",
+   "PECK",
+   "TACKLE"
+  ],
+  "ai_species": "SNORLAX",
+  "player_species": "TYRANITAR",
+  "ai2_moves": null,
+  "ai2_species": null,
+  "player2_species": null,
+  "ai_party_species": [
+   "SNORLAX",
+   "MACHAMP"
+  ],
+  "ai_actives": 1,
+  "move_ids": {
+   "BODYSLAM": 276,
+   "POUND": 309,
+   "PECK": 168,
+   "TACKLE": 303
+  },
+  "assertions": [
+   [
+    "must_switch_to",
+    "MACHAMP"
+   ]
+  ]
+ },
+ {
+  "id": "wish_is_not_re_clicked_while_one_is_pending",
+  "field": 0,
+  "format": "single",
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "WISH",
+   "POUND",
+   "PECK",
+   "TACKLE"
+  ],
+  "ai_species": "BLISSEY",
+  "player_species": "TYRANITAR",
+  "ai2_moves": null,
+  "ai2_species": null,
+  "player2_species": null,
+  "ai_party_species": [
+   "BLISSEY"
+  ],
+  "ai_actives": 1,
+  "move_ids": {
+   "WISH": 424,
+   "POUND": 309,
+   "PECK": 168,
+   "TACKLE": 303
+  },
+  "assertions": [
+   [
+    "must_not_choose_move",
+    "WISH"
+   ],
+   [
+    "score_gt",
+    "POUND",
+    "WISH"
+   ]
+  ]
+ },
+ {
+  "id": "wish_is_live_with_none_pending",
+  "field": 0,
+  "format": "single",
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "WISH",
+   "POUND",
+   "PECK",
+   "TACKLE"
+  ],
+  "ai_species": "BLISSEY",
+  "player_species": "TYRANITAR",
+  "ai2_moves": null,
+  "ai2_species": null,
+  "player2_species": null,
+  "ai_party_species": [
+   "BLISSEY"
+  ],
+  "ai_actives": 1,
+  "move_ids": {
+   "WISH": 424,
+   "POUND": 309,
+   "PECK": 168,
+   "TACKLE": 303
+  },
+  "assertions": [
+   [
+    "must_choose_move_in",
+    [
+     "WISH"
+    ]
+   ],
+   [
+    "score_gt",
+    "WISH",
+    "POUND"
+   ]
+  ]
+ },
+ {
+  "id": "a_plus_two_sweeper_does_not_set_up_again",
+  "field": 0,
+  "format": "single",
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "SWORDSDANCE",
+   "CLOSECOMBAT",
+   "POUND",
+   "PECK"
+  ],
+  "ai_species": "HERACROSS",
+  "player_species": "SHUCKLE",
+  "ai2_moves": null,
+  "ai2_species": null,
+  "player2_species": null,
+  "ai_party_species": [
+   "HERACROSS"
+  ],
+  "ai_actives": 1,
+  "move_ids": {
+   "SWORDSDANCE": 418,
+   "CLOSECOMBAT": 86,
+   "POUND": 309,
+   "PECK": 168
+  },
+  "assertions": [
+   [
+    "must_not_choose_move",
+    "SWORDSDANCE"
+   ],
+   [
+    "score_gt",
+    "CLOSECOMBAT",
+    "SWORDSDANCE"
+   ]
+  ]
+ },
+ {
+  "id": "an_unboosted_sweeper_still_sets_up",
+  "field": 0,
+  "format": "single",
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "SWORDSDANCE",
+   "CLOSECOMBAT",
+   "POUND",
+   "PECK"
+  ],
+  "ai_species": "HERACROSS",
+  "player_species": "SHUCKLE",
+  "ai2_moves": null,
+  "ai2_species": null,
+  "player2_species": null,
+  "ai_party_species": [
+   "HERACROSS"
+  ],
+  "ai_actives": 1,
+  "move_ids": {
+   "SWORDSDANCE": 418,
+   "CLOSECOMBAT": 86,
+   "POUND": 309,
+   "PECK": 168
+  },
+  "assertions": [
+   [
+    "must_choose_move_in",
+    [
+     "SWORDSDANCE"
+    ]
+   ],
+   [
+    "score_gt",
+    "SWORDSDANCE",
+    "CLOSECOMBAT"
+   ]
+  ]
+ },
+ {
+  "id": "a_move_that_failed_last_turn_is_not_re_clicked",
+  "field": 0,
+  "format": "single",
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "SUCKERPUNCH",
+   "KNOCKOFF",
+   "POUND",
+   "PECK"
+  ],
+  "ai_species": "BISHARP",
+  "player_species": "FORRETRESS",
+  "ai2_moves": null,
+  "ai2_species": null,
+  "player2_species": null,
+  "ai_party_species": [
+   "BISHARP"
+  ],
+  "ai_actives": 1,
+  "move_ids": {
+   "SUCKERPUNCH": 26,
+   "KNOCKOFF": 35,
+   "POUND": 309,
+   "PECK": 168
+  },
+  "assertions": [
+   [
+    "must_not_choose_move",
+    "SUCKERPUNCH"
+   ],
+   [
+    "score_gt",
+    "KNOCKOFF",
+    "SUCKERPUNCH"
+   ]
+  ]
+ },
+ {
+  "id": "a_move_that_worked_last_turn_is_still_clicked",
+  "field": 0,
+  "format": "single",
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "SUCKERPUNCH",
+   "KNOCKOFF",
+   "POUND",
+   "PECK"
+  ],
+  "ai_species": "BISHARP",
+  "player_species": "FORRETRESS",
+  "ai2_moves": null,
+  "ai2_species": null,
+  "player2_species": null,
+  "ai_party_species": [
+   "BISHARP"
+  ],
+  "ai_actives": 1,
+  "move_ids": {
+   "SUCKERPUNCH": 26,
+   "KNOCKOFF": 35,
+   "POUND": 309,
+   "PECK": 168
+  },
+  "assertions": [
+   [
+    "must_choose_move_in",
+    [
+     "SUCKERPUNCH"
+    ]
+   ],
+   [
+    "score_gt",
+    "SUCKERPUNCH",
+    "KNOCKOFF"
+   ]
+  ]
+ },
+ {
+  "id": "yawn_is_dead_into_a_drowsy_target",
+  "field": 0,
+  "format": "single",
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "YAWN",
+   "ZENHEADBUTT",
+   "POUND",
+   "PECK"
+  ],
+  "ai_species": "HYPNO",
+  "player_species": "SNORLAX",
+  "ai2_moves": null,
+  "ai2_species": null,
+  "player2_species": null,
+  "ai_party_species": [
+   "HYPNO"
+  ],
+  "ai_actives": 1,
+  "move_ids": {
+   "YAWN": 426,
+   "ZENHEADBUTT": 455,
+   "POUND": 309,
+   "PECK": 168
+  },
+  "assertions": [
+   [
+    "must_not_choose_move",
+    "YAWN"
+   ],
+   [
+    "score_gt",
+    "ZENHEADBUTT",
+    "YAWN"
+   ]
+  ]
+ },
+ {
+  "id": "yawn_is_live_against_an_alert_target",
+  "field": 0,
+  "format": "single",
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "YAWN",
+   "ZENHEADBUTT",
+   "POUND",
+   "PECK"
+  ],
+  "ai_species": "HYPNO",
+  "player_species": "SNORLAX",
+  "ai2_moves": null,
+  "ai2_species": null,
+  "player2_species": null,
+  "ai_party_species": [
+   "HYPNO"
+  ],
+  "ai_actives": 1,
+  "move_ids": {
+   "YAWN": 426,
+   "ZENHEADBUTT": 455,
+   "POUND": 309,
+   "PECK": 168
+  },
+  "assertions": [
+   [
+    "must_choose_move_in",
+    [
+     "YAWN"
+    ]
+   ],
+   [
+    "score_gt",
+    "YAWN",
+    "ZENHEADBUTT"
+   ]
+  ]
  }
 ]

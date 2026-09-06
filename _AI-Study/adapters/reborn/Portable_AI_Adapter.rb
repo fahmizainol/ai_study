@@ -159,6 +159,18 @@ module PortableAIReborn
     $PORTABLE_AI_CONFIG
   end
 
+  # Whether one core config key is on for this run, for the handful of rules that live
+  # on THIS side of the boundary and so never see the config hash the core is handed.
+  # Same precedence as Model.config: a run-level override wins, otherwise the default.
+  # Only for adapter-owned rules -- anything the core can decide belongs in the core.
+  def self.rule_enabled?(key)
+    overrides = config_overrides
+    return overrides[key] ? true : false if overrides.key?(key)
+    PortableAI::Model::DEFAULT_CONFIG[key] ? true : false
+  rescue
+    true
+  end
+
   def self.config_for(skill)
     base =
       if skill >= PokeBattle_AI::BESTSKILL
@@ -451,6 +463,9 @@ module PortableAIReborn
     end
     negative_stages = 0
     battler.stages.each { |stage| negative_stages += stage if stage && stage < 0 }
+    # 0.6.2: the durable record of "I have already set up", which the memory counter is
+    # not -- apply_memory zeroes it on any non-setup action.
+    positive_stages_total = positive_stages(battler)
 
     incoming_map = incoming_damage_by_move(ai, battle, battler, foe_indices)
     incoming = incoming_map.values.max || 0.0
@@ -471,6 +486,7 @@ module PortableAIReborn
       "faster" => faster_than_foes?(battle, speed, foe_indices),
       "stages" => battler.stages.clone,
       "negative_stage_total" => negative_stages,
+      "positive_stage_total" => positive_stages_total,
       "incoming_damage_pct" => incoming,
       "certain_incoming_damage_pct" => certain,
       "incoming_by_move" => incoming_map,
@@ -623,6 +639,7 @@ module PortableAIReborn
       "mold_breaker" => mold_breaker?(battler),
       # Mirrors of the target view, so a spread action (which has no single target)
       # and a unit test both reach the same facts.
+      "target_species" => (scoring_target ? scoring_target.species : nil),
       "target_ability" => (scoring_target ? ability_key(scoring_target) : nil),
       "target_item" => (scoring_target ? item_key(scoring_target) : nil),
       "target_full_hp" => (scoring_target ? (scoring_target.hp >= scoring_target.totalhp) : false),
@@ -644,6 +661,7 @@ module PortableAIReborn
       "foe_hazard_layers" => opposing_hazard_layers(battler),
       "target_positive_stages" => positive_stages(scoring_target),
       "effect_active" => effect_active?(battler, move_id),
+      "failed_last_turn" => failed_last_turn?(battle, battler, move_id, scoring_target),
       "foe_reserves" => reserve_count(battle, scoring_target ? scoring_target.index : battler.index ^ 1),
       "hazard_targets" => hazard_target_count(battle, move_id, battler.index),
       "own_reserves" => reserve_count(battle, battler.index)
@@ -1177,6 +1195,17 @@ module PortableAIReborn
       return true if safe_effect(target, :Substitute, 0).to_i > 0
       return true if battler_has_type?(target, :GRASS)
     end
+    # 5. Yawn is the same shape one move over. It is tagged ["status", "sleep"]
+    #    (effects.rb:56), so engine_can_status? asks pbCanSleep? -- which answers about
+    #    the status CONDITION and says yes about a target that is merely drowsy. The
+    #    engine's second guard is a separate line the AI never reads:
+    #    PokeBattle_Move_004#pbEffect (PokeBattle_MoveEffects.rb:249) displays "But it
+    #    failed!" and returns -1 when effects[PBEffects::Yawn] > 0. Checked BEFORE
+    #    engine_can_status? for the same reason the Leech Seed clause is: the engine
+    #    check would otherwise return a confident, wrong "yes".
+    if tags.include?("drowsy") && rule_enabled?("yawn_gate")
+      return true if safe_effect(target, :Yawn, 0).to_i > 0
+    end
     verdict = engine_can_status?(tags, target)
     return !verdict if !verdict.nil?
     return true if tags.include?("burn") && battler_has_type?(target, :FIRE)
@@ -1256,8 +1285,41 @@ module PortableAIReborn
     when "LIGHTSCREEN" then safe_side_effect(side, :LightScreen, 0).to_i > 0
     when "SAFEGUARD"   then safe_side_effect(side, :Safeguard, 0).to_i > 0
     when "SUBSTITUTE"  then safe_effect(battler, :Substitute, 0).to_i > 0
+    # 0.6.2. Wish fails outright with a Wish already pending
+    # (PokeBattle_MoveEffects.rb:6084). PBEffects::Wish is the countdown on the USER,
+    # not a side effect, which is why it is read off the battler here.
+    when "WISH"        then safe_effect(battler, :Wish, 0).to_i > 0
     else false
     end
+  end
+
+  # Did THIS move fail last turn against THIS target?
+  #
+  # The engine keeps the answer itself: pbProcessMoveAgainstTarget writes
+  # effects[PBEffects::Tantrum] = (pbEffect returned -1) after every move use
+  # (PokeBattle_Battler.rb:5085, and :4961-4966 for a move with no target), holds it
+  # for Stomping Tantrum to read, and clears it on switch-in (:619). It is the same
+  # flag the gauntlet event log renders as "failed" (Portable_AI_Gauntlet.rb:362).
+  #
+  # It is deliberately NOT successStates[index].useState, which the backlog entry
+  # proposed. useState is set to 2 only on the DAMAGING path (:5362), so a status move
+  # that worked perfectly reads back as "1 = failed" and every Swords Dance would be
+  # charged for succeeding.
+  #
+  # Tantrum alone says only that SOMETHING failed, so it is paired with the portable
+  # memory's record of what was clicked and at whom: a re-click is only charged when
+  # the move id matches and the target is the same Pokemon. A target that switched out
+  # is a new board and the memory of the failure does not carry to it.
+  def self.failed_last_turn?(battle, battler, move_id, target)
+    return false if !safe_effect(battler, :Tantrum, false)
+    memory = battle.instance_variable_get(:@portable_ai_memory) || {}
+    state = memory[battler.index.to_s]
+    return false if !state || state["last_move"] != move_id
+    last_species = state["last_target_species"]
+    return false if target && !last_species.nil? && last_species != target.species
+    true
+  rescue
+    false
   end
 
   # Rough entry cost on this battler's own side (what a switch-in would eat).
@@ -1490,6 +1552,9 @@ module PortableAIReborn
     else
       state[selected_key] = previous_count + 1 if selected_key
       state["last_move"] = action["move_id"]
+      # Who it was aimed at, so failed_last_turn? can tell "this failed against this
+      # Pokemon" from "this failed against the one that has since switched out".
+      state["last_target_species"] = action["target_species"]
     end
     state["last_type"] = action["type"]
     memory[index.to_s] = state

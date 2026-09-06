@@ -187,6 +187,25 @@ def evaluate(scn, res):
             err = hi_err or lo_err
             ok = err is None and hi > lo
             detail = err or ('%s=%s vs %s=%s' % (a[1], hi, a[2], lo))
+        elif kind == 'must_switch_to':
+            # WHICH body was sent in, by species. Both AIs record a switch as
+            # {"type": "switch", "slot": <party slot>} (AI_Harness.rb:785), so this
+            # reads the same on either side -- unlike switch_score_gt, which needs a
+            # party-indexed score array only Reborn emits. Added for the 0.6.2
+            # dies_on_entry card, where the whole question is which of two candidates
+            # the AI picked.
+            party = scn.get('ai_party_species') or []
+            hits = [i for i, sp in enumerate(party) if sp == a[1]]
+            if not party:
+                ok, detail = False, 'scenario has no ai_party_species'
+            elif len(hits) != 1:
+                ok = False
+                detail = ('species %s appears %d times in the AI party'
+                          % (a[1], len(hits)))
+            else:
+                ok = act.get('type') == 'switch' and act.get('slot') == hits[0]
+                detail = ('action=%s slot=%s, wanted slot %d (%s)'
+                          % (act.get('type'), act.get('slot'), hits[0], a[1]))
         elif kind == 'must_switch':
             ok = act.get('type') == 'switch'
             detail = 'action=%s' % act.get('type')

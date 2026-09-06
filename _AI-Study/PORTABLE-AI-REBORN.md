@@ -1526,7 +1526,8 @@ Small, but it changes scored behaviour: needs a version bump, a unit test, a cor
 and a paired gauntlet re-run, since every number in the current readouts was measured
 against present scoring.
 
-**Backlog: Yawn re-clicked on an already-drowsy target.** The same bug class as Leech
+**Backlog: Yawn re-clicked on an already-drowsy target. DONE in 0.6.2** (`yawn_gate`).
+The same bug class as Leech
 Seed, found while fixing it, and deliberately NOT fixed in the same change so that the
 0.6.1 gauntlet measures one thing. `YAWN` is tagged `["status", "sleep"]`
 (`effects.rb:53`), so `engine_can_status?` asks `pbCanSleep?` — which answers about the
@@ -1540,8 +1541,102 @@ Fix is the shape of the Leech Seed one: a clause in `status_blocked?` reading
 `safe_effect(target, :Yawn, 0).to_i > 0`. Needs the same treatment — unit test, corpus
 card, and its own paired run, since Yawn appears in the rosters and this changes picks.
 
+### Turn-by-turn readout pass on set_c (2026-09-06, 0.6.1 paired run)
+
+Source: `generated/reborn_6v6_v061trace_set_c.ndjson` — one run, `arms=normal_reborn,normal_portable trace=true`,
+so the stock-Reborn readouts are the same-run baseline (both arms now carry `portable_version`;
+`render_battle.py` prints it on the Reborn-right header). The earlier `REBORNRIGHT_*` readouts had been
+rendered from `fairdiff`/`fairceiling` runs that predate the obedience fix (Chesnaught "napping" in
+`bulky_vs_balance 196613` turn 13 was disobedience, not a sleep move) and were deleted along with every
+pre-0.6.0 readout. Paired result on set_c: stock-right 33/60, Portable 25/60; 0 unexplained `could_not_move`
+on either seat. Readouts: `generated/readouts/v061_set_c_*` and `v061_REBORNRIGHT_set_c_*` (10 pairs).
+
+Misplays seen repeatedly, with a turn each (all in the v061 files):
+
+- **Spread moves never get `lethal`.** Earthquake / Lava Plume score `expected_damage` only, even at 8% target HP
+  (balance_vs_bulky 196613 t4, balance_vs_bulky 155921 t61, offense_vs_balance 196613 t10 where a faster Flygon
+  Roosted instead of KOing a 66-HP Bisharp). `target_for` cannot resolve the spread target, so `target_hp` defaults
+  to 100. Also disables `ko_never_lands` for those moves.
+- **Sleep is priced like poison.** Spore = `fresh_status+25`, so any neutral ~26% attack beats it by 1 point
+  (speed_vs_bulky 196613 t9-13: Sludge Bomb 126 vs Spore 125 into an awake Noivern; offense_vs_bulky 262147 t13
+  into a +1 Tyranitar). Toxic loses the same way against Roost users: bulky_vs_balance 196613 t19-29, Foul Play
+  126 vs Toxic 125 seven times into a Roosting Mantine, then the mon ran Foul Play out of PP.
+- **Hazards never set.** Stealth Rock is a flat 100 and loses to every attack; Bronzong leads into a speed team of
+  four SR-weak Flying/Fire mons and clicks Gyro Ball (speed_vs_bulky 196613 t1), and into three Dragon Dances
+  (offense_vs_bulky 262147 t4-5). Stock set 31 hazards on set_c to Portable's 25, and its Bronzong opens with SR.
+- **A switch-in that dies on entry is still scored.** `bulky_vs_balance 196613` t51: Mandibuzz (235 HP, no
+  attacking PP) switches to a 58-HP Flygon under Stealth Rock + Rapid Spin; Flygon dies without moving and
+  Mandibuzz re-enters through the rocks for 95. The adapter only drops a candidate when hazards alone kill it;
+  `candidate_hp - entry - incoming <= 0` is computed for `safe` but never rejects.
+- **Heal loops at low HP when heal < incoming.** `heal_saves_battler` (+150) fires whenever the heal survives
+  this turn, so Flygon at 25% Roosts twice into a 59% Wood Hammer and dies having dealt nothing
+  (bulky_vs_balance 155921 t52-53). The rule needs a next-turn test (heal > incoming, or faster and can finish).
+- **`boosted_foe_holds_ground` blocks the one switch that matters.** Chesnaught at 78% sets Spikes into a +2
+  Heracross Megahorn and dies (offense_vs_bulky 262147 t9, Mantine walls it); Tentacruel 94% and Mandibuzz 100%
+  stay into +1 Tyranitar and die without moving (offense_vs_balance 196613 t2, t5 — Vaporeon survives Crunch and
+  KOs the 28-HP Tyranitar).
+- **Faster 2HKO races abandoned.** Vaporeon 63% (faster, 2HKOs Chesnaught, is 2HKOed) leaves on the one-hit
+  `threatened` flag; Empoleon comes in and loses 100% for nothing (bulky_vs_balance 196613 t45-46).
+- **No memory of a failed move.** Bisharp clicks Sucker Punch (`priority_finisher+150`) three turns running into
+  a Spiking Forretress while Knock Off is a guaranteed KO (bulky_vs_offense 196613 t22-24). Wish is re-clicked
+  with a Wish already pending, Protect unconsidered (offense_vs_balance 196613 t8). Same class as Leech Seed/Yawn.
+- **Setup counter resets on any non-setup action** (`apply_memory` zeroes every counter but the selected key),
+  so Heracross at +2 gets `first_setup` for a second Swords Dance at 31% HP (bulky_vs_offense 196613 t20).
+- **Lethal picks ignore accuracy once effectiveness is added**: Fire Blast 649 (85%) over Dragon Claw 555 (100%)
+  for the same KO (bulky_vs_offense 196613 t4).
+- Not bugs, checked: `faster=false` for Bisharp vs Forretress (t22+) is Gen-8 Rapid Spin's +1 Speed; Spore
+  "failed" on Mandibuzz is Effect Spore having statused it on the Foul Play contact first; `x2` in event lines is
+  the hit being recorded twice, the HP number is right.
+
+**Backlog: fixes for the readout-pass misplays (each its own harness key, unit test built the adapter's
+way, corpus card, paired set_c run; all-off must reproduce 0.6.1 battle-for-battle).**
+
+**Items 1-6 are DONE in 0.6.2**, together with the Yawn entry above — seven keys, one
+paired set_c measurement, all-off verified against 0.6.1. See "Core version 0.6.2"
+below, including the four places this entry turned out to be wrong: `successStates` is
+not a failure flag, the core did NOT already reject a pending Wish, -300 was too small
+to fix its own case, and `lethal_flat` must not touch a spread action. **Items 7-11
+remain open** and are deliberately excluded: they are valuation A/Bs rather than bugs,
+and mixing them in would have made the batch unmeasurable.
+
+Bugfix batch, proposed as 0.6.2 measured together:
+
+1. *Spread moves never `lethal`.* `score_move` defaults `target_hp` to 100 when `target_for` cannot resolve
+   the target. The adapter already exports `target_hp_pct` on every action (`Portable_AI_Adapter.rb:638`);
+   read it when `target` is nil. Restores `ko_never_lands` for Earthquake/Lava Plume too.
+2. *Lethal picks ignore accuracy.* Once `lethal`, skip the effectiveness term and target-side secondary
+   bonuses (a KO is a KO). Dragon Claw then scores 600 to Fire Blast's 579 on the t4 board.
+3. *Dying switch-ins still scored.* `score_switch` already computes `safe` from candidate HP − entry −
+   incoming; add a `dies_on_entry` penalty (~−300, min-roll on incoming) when it is ≤ 0. Penalty, not
+   HARD_REJECT, so a forced sack still picks the least bad body.
+4. *Wish re-clicked with a Wish pending.* Add WISH to the adapter's `effect_active?` table (the core
+   already rejects on `effect_active`). Same shape as the Leech Seed fix.
+5. *Setup counter resets on any non-setup action.* Drive `first_setup`/`repeated_setup` off the actual
+   stage of the boosted stat (export `positive_stage_total` next to `negative_stage_total`); keep the
+   memory counter only for back-to-back spam.
+6. *No memory of a failed move.* Adapter stores the last move's outcome in memory at round end (same
+   engine flags the event log reads: `successStates` / `effects[Tantrum]`); core charges ~−200 for
+   re-clicking a move that failed last turn against the same target. Stops the Sucker Punch loop on its own
+   (Knock Off was one point behind).
+
+Valuation changes, one key and one A/B each:
+
+7. *Sleep and Toxic priced +25 like any status.* Split `fresh_status`: sleep scales with the foe's
+   incoming damage % (capped ~+60 over the +25); Toxic gains ~+60 when the actor's best damage against
+   this target is under ~30% or the target has a recovery move (new export: `target_recovers`).
+8. *Stealth Rock flat 100.* Scale by the foe bench using the existing `hazard_targets` / `foe_reserves`
+   exports, plus a step per SR-weak reserve (new export), capped below a lethal. Reborn's own hazard score
+   grows with bench size.
+9. *Heal loop at low HP.* In `heal_gate`, `heal_saves_battler` should also require heal > incoming on the
+   min roll, or the actor faster; otherwise fall through to the −120 losing-race case.
+10. *`boosted_foe_holds_ground` blocks the walling switch.* Keep the suppression only when no bench
+    candidate has `incoming_damage_pct` under ~35%; if a wall exists the escape reason stands.
+11. *Faster 2HKO race abandoned on the one-hit flag.* In `score_switch`, do not add the lethal-threat
+    escape when `worst_race` says the actor wins in move order. The one place the 0.6.0 helper is not yet
+    consulted.
+
 **Backlog: whole-battle habits seen in the Reborn-right readout** (set_c
-`offense_vs_bulky 262147`, `generated/readouts/set_c_REBORNRIGHT_*`). Reborn's Bronzong
+`offense_vs_bulky 262147`, an earlier stock-right readout since deleted). Reborn's Bronzong
 sets Stealth Rock into three Dragon Dances because nothing physical Salamence has
 threatens it, and its Chesnaught adds Spikes; the hazards then take a large bite out of
 Mamoswine and the rest. Reborn switched three times in 28 turns, Portable eight. Reborn
@@ -1942,6 +2037,197 @@ Phase B shipped as core 0.5.0 — see the section above this one. Its inputs wer
 table, the two corrections, and the open question about Boots, which is still open:
 0.5.0 zeroes the entry cost for a Boots holder because that is what the item does, not
 because the term Reborn uses for it was ever located.
+
+## Core version 0.6.2 — the readout-pass bugfix batch (2026-09-06)
+
+**Seven fixes, seven keys, one measurement.** Every one was read off the turn-by-turn
+readout of the 0.6.1 set_c run ("Turn-by-turn readout pass on set_c" above) rather than
+proposed from the source, and each has its own `CONFIG_OVERRIDE_KEYS` entry so any row
+can be ablated singly. **All seven false reproduces 0.6.1** — that control run is what
+makes the rest of this section mean anything. Items 7-11 of the backlog entry (the
+valuation changes: sleep/Toxic pricing, hazard scaling, the heal loop, the boosted-foe
+suppression, the abandoned 2HKO race) are deliberately NOT in this version; they are
+A/Bs, not bugs, and mixing them in would make the batch unmeasurable.
+
+| key | what it fixes | where |
+|---|---|---|
+| `spread_target_hp` | a spread move could never be `lethal` | `core.rb` `score_move` |
+| `lethal_flat` | a kill was chosen on type, not on whether it lands | `core.rb` `score_move` |
+| `entry_death` | a switch-in that dies before it acts was still sent | `core.rb` `score_switch` |
+| `wish_pending` | Wish re-clicked with a Wish already pending | adapter `effect_active?` + core |
+| `setup_stage` | a +2 sweeper got the `first_setup` bonus again | `core.rb` setup branch |
+| `move_memory` | a move the engine refused was re-clicked | adapter export + core |
+| `yawn_gate` | Yawn into an already-drowsy target | adapter `status_blocked?` |
+
+### Four places the backlog entry was wrong, and what the evidence said instead
+
+The entry was written from a readout, not from the engine, and four of its proposals did
+not survive contact. Recorded because the next agent will read the backlog before the
+code.
+
+1. **`successStates` is not a failure flag.** The entry proposed reading
+   `successStates[i].useState` ("0 not used / 1 failed / 2 succeeded",
+   `PokeBattle_Battle.rb:52`) for the failed-move memory. `useState` is set to 2 on the
+   **damaging path only** (`PokeBattle_Battler.rb:5362`), and 1 is written up front as
+   "assume failure" (`:5695`) — so every status move that worked perfectly reads back as
+   failed, and Swords Dance would have been charged for succeeding. The flag that
+   actually means it is `PBEffects::Tantrum`, which the engine keeps for Stomping Tantrum:
+   `user.effects[PBEffects::Tantrum] = (damage == -1)` after every move use (`:5085`,
+   and `:4961-4966` for a targetless move), cleared on switch-in (`:619`). It is the same
+   flag the gauntlet's own event log already renders as `"failed"`
+   (`Portable_AI_Gauntlet.rb:362`) — the entry named it and then proposed the other one.
+2. **The core did not already reject a pending Wish.** "the core already rejects on
+   `effect_active`" is true for `screen` and `delayed_damage` and false for
+   `delayed_heal`, which is WISH's tag (`effects.rb:27`). Adding the adapter table row
+   alone would have exported a fact nothing read.
+3. **`-300` for `dies_on_entry` was too small to fix its own case.** On the corpus card
+   built from the readout the candidate scores 385.9 against a 59.8 move, so a 300-point
+   charge left the corpse ahead by 26 and the card failed on the build meant to fix it.
+   It ships at **500** — not a fitted number: it is what this scorer already pays for a
+   knockout, and handing the opponent a free one is that same event from the other side.
+4. **`lethal_flat` must not touch a spread action.** Applied to everything, it cost
+   Garchomp a double kill the corpus has asserted since 0.4.0
+   (`d_spread_kills_both_preferred`: Earthquake 740 → 600, and the split-fire pair's
+   coordination bonus in `joint_adjustment` then won by 66). A spread action is a
+   summary of several targets — its damage is the sum over the foes and its
+   effectiveness is a standing measure of how much of the field it resolves, which is
+   exactly what `choose_joint` weighs it against. The rule now stops at the `spread`
+   flag. **The corpus caught this on the first probe of the batch**; the gauntlet never
+   would have, because it is singles-only.
+
+### What each fix actually changes
+
+1. **`spread_target_hp`.** A spread move registers against no single battler, so the
+   adapter sets `action["target"] = nil` and `Core.target_for` returns nil — and
+   `target_hp` then defaulted to a phantom **100**. Earthquake and Lava Plume therefore
+   could not reach `lethal` at any real target HP, and `ko_never_lands` could not fire
+   for them either. The adapter has exported `target_hp_pct` on every action since
+   0.5.0; the fix reads it. *(In doubles the bug was masked: the spread action's
+   `expected_damage_pct` is the SUM over the foes, so it cleared the phantom 100 by
+   accident.)*
+2. **`lethal_flat`.** Once a single-target move kills, the type chart has said
+   everything it has to say — both kills remove the same battler, so the only thing
+   left to choose on is which one lands. Also drops the secondaries that only pay out on
+   a survivor (`secondary_*`, `knocks_item`); `multi_hit` versus Sturdy/Sash, recoil and
+   drain stay, because those are about whether the knockout happens or what it costs.
+   The backlog predicted Dragon Claw 600 against Fire Blast 579; the 579 assumed the
+   burn secondary was kept. Measured on the corpus board it is **600 against 562.5**,
+   same pick.
+3. **`entry_death`.** `score_switch` already computed `candidate_hp − entry − incoming`
+   for `safe` and never rejected on it. Now it charges 500 when that is ≤ 0 on the
+   **minimum** damage roll (`MIN_DAMAGE_ROLL`, the engine's own 85% floor), so only a
+   body that dies on every roll pays — and it is a charge, not a `HARD_REJECT`, so a
+   forced replacement still ranks the least bad body instead of falling through to slot
+   order.
+4. **`wish_pending`.** `PBEffects::Wish` is a countdown on the **user**
+   (`PokeBattle_MoveEffects.rb:6089`), so it is read off the battler in
+   `effect_active?` alongside the screens, and the core's `delayed_heal` branch charges
+   300 for it.
+5. **`setup_stage`.** `first_setup` was decided by a memory counter that `apply_memory`
+   zeroes on any non-setup action, so one attack in between and a +2 sweeper was "first
+   setting up" all over again. The stages the actor is standing in are the durable
+   record of the same fact: `positive_stage_total` (new export, next to its negative
+   twin) divided by two, since one setup move is worth about two stages (Swords Dance
+   +2, Dragon Dance +1/+1, Calm Mind +1/+1). The memory counter is kept and the larger
+   of the two wins, so back-to-back spam still escalates.
+6. **`move_memory`.** The adapter ANDs Reborn's `Tantrum` flag with the portable
+   memory's own record of what was clicked and at whom (`last_move` +
+   `last_target_species`, new), and exports one boolean per action. Tantrum alone says
+   only that *something* failed; the pair says *this* move failed against *this*
+   Pokemon, and a target that has since switched out is a new board the memory does not
+   carry to. The core charges 200 — deliberately larger than the 1-point gap Sucker
+   Punch was beating Knock Off by, and smaller than a kill call.
+7. **`yawn_gate`.** Leech Seed's twin, one move over. YAWN now carries its own
+   `"drowsy"` tag (`effects.rb`) purely so `status_blocked?` can find it without a
+   move-name lookup — the same shape as `"drain"` on LEECHSEED — and the clause mirrors
+   `PokeBattle_Move_004#pbEffect` (`PokeBattle_MoveEffects.rb:249`), checked BEFORE
+   `engine_can_status?` for the same reason Leech Seed's is: `pbCanSleep?` would
+   otherwise return a confident, wrong "yes" about a target that is merely drowsy.
+
+### Harness and tooling this needed
+
+Game-side, so **not** in git (the whole `Reborn Yang/` tree is gitignored by design) —
+listed here because a fresh checkout will not have it:
+
+* `AI_Harness.rb` `EFFECT_KEYS` gains `wish` (`PBEffects::Wish`, int) and `tantrum`
+  (`PBEffects::Tantrum`, bool).
+* `AI_Harness.rb` `seed_portable_memory` — new. Seeds the portable AI's own per-battler
+  memory from a `last_move:<numeric id>` scenario key, converted with the adapter's own
+  `move_key` so the stored key is byte-identical to what `apply_memory` writes in a real
+  battle. Paired with `effect_tantrum` it is what makes "the engine refused this exact
+  move last turn" expressible at all.
+
+In git:
+
+* `make_scenarios.py` — `mon(last_move=...)`, and `wish`/`tantrum` in `EFFECT_NAMES`.
+* `check_scenarios.py` — new assertion kind **`must_switch_to <SPECIES>`**. Both AIs
+  record a switch as `{"type": "switch", "slot": <party slot>}`, so this reads the same
+  on either side, unlike `switch_score_gt`, which needs the party-indexed score array
+  only Reborn emits (the Portable record is a score-ordered ranking and returns
+  UNEVALUABLE). The corpus had no way to say *which body went in* before this.
+
+### Measured (2026-09-06)
+
+**The control first, because nothing else counts without it.** The same 0.6.2 build with
+all seven keys false, run over set_c: **60/60 battles identical to the 0.6.1 data on
+result, turn count and decision index.** Not "the same win total" — the same battles.
+Files: `generated/reborn_6v6_v062control_set_c.ndjson` against
+`generated/reborn_6v6_v061_set_c.ndjson`, both stamped `portable_version` on every
+record. set_c was also run twice under the 0.6.2 arm itself and reproduced 60/60, so the
+sweep below is deterministic as well as provenanced (420/420 records stamped `0.6.2`).
+
+**Paired over all seven rosters, `normal_portable`, 6v6, `schedule=normal_baseline` —
+the same 420-battle frame 0.6.1 was measured in:**
+
+```
+normal_portable over 420 paired battles
+  0.6.1       205/420  =  48.8%
+  0.6.2       203/420  =  48.3%   (-2)
+  gained 10, lost 12, net -2
+  McNemar chi2=0.05  z=0.21  two-sided p=0.831   (not significant)
+
+  archetype     n    0.6.1    0.6.2  delta      roster    n  0.6.1  0.6.2  delta
+  balance     105       52       49     -3      set_a    60     32     31     -1
+  bulky       105       23       23     +0      set_b    60     23     25     +2
+  offense     105       77       77     +0      set_c    60     25     26     +1
+  speed       105       53       54     +1      set_d    60     25     25     +0
+                                                set_e    60     40     38     -2
+                                                set_f    60     32     29     -3
+                                                set_g    60     28     29     +1
+```
+
+**128 of the 420 battles (30%) take a different course**, and 22 change hands — 10 won,
+12 lost. So the batch is loud in play and **flat on wins**: it is a behaviour-correctness
+release, not a strength release, and it should be described that way.
+
+**The earlier set_c-only reading was noise, and this is the point of running the frame.**
+Measured on set_c alone the batch looked like +1 gained 1 lost 0; over seven rosters it
+is −2 gained 10 lost 12, with set_c's +1 intact and set_f at −3 beside it. A 60-battle
+roster cannot see an effect this size in either direction, and a single roster that
+happens to point the right way is not evidence that it does.
+
+**What this does and does not license.** It rules out the batch being a regression of any
+size the study can detect, and it does not show a gain. Seven fixes moved together, so
+the −2 cannot be attributed: a per-key ablation over the same frame is what would say
+whether one of the seven is quietly costing battles while the rest pay for it — most
+plausibly `entry_death` at 500, the only row of the seven that was tuned rather than
+copied from the engine, and the only one that can refuse a switch outright. That
+ablation has not been run. **The evidence that these seven are right is the corpus**,
+where each has a position it fails without — not this table.
+
+### Corpus and tests
+
+Corpus **199 → 213** cards: seven pairs, each a position the readout actually showed
+plus a control the fix must not change. **275/275 assertions pass with the keys on; the
+same build with all seven off fails exactly the 13 assertions that carry the seven
+fixes** (six N/A throughout, the pre-existing `switch_score_gt` cards). Every card was
+built to fail on 0.6.1 first — two drafts of the `entry_death` card passed identically
+on both builds and measured nothing before the third one discriminated, which is the
+`leech_dead_into_a_grass_type` lesson repeating.
+
+Unit tests **147 → 161** (`test_portable_ai.rb` 108, `test_reborn_adapter.rb` 53,
+`test_realidea_adapter.rb` 6), all green. Each core test asserts both directions — the
+fix, and that the key off restores the 0.6.1 behaviour it replaces.
 
 ## Core version 0.6.1 — Leech Seed applicability (2026-09-06)
 
