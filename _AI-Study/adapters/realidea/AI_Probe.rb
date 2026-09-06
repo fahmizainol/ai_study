@@ -119,7 +119,39 @@ module AIProbe
     $PokemonSystem = PokemonSystem.new rescue nil
     $Trainer       = PokeBattle_Trainer.new("Probe", 0) if $Trainer.nil?
     $data_animations = pbLoadRxData("Data/Animations") rescue nil
-    $ItemData = pbLoadItems rescue $ItemData
+    # Item data is read by the load and save screens in normal play, which a save-less
+    # harness never opens, so nothing here had ever loaded it. That went unnoticed for
+    # as long as no fixture Pokemon held an item -- but $ItemData[x] on nil raises
+    # inside pbIsBerry? (PItem_Items.rb:63), which pbGetMoveScore calls whenever it
+    # scores Bug Bite or Pluck at high skill, and the gauntlet trainer's skill is 100.
+    # The line that used to be here asked for pbLoadItems, which is a later Essentials'
+    # name and does not exist in v16, so its rescue swallowed a NameError and kept the
+    # nil. See install_exception_capture for why that crash looked like a hang.
+    begin
+      $ItemData = readItemList("Data/items.dat") if !$ItemData
+    rescue
+      nil
+    end
+  end
+
+  # Realidea runs pbCommandPhase and pbAttackPhase inside PBDebug.logonerr, whose
+  # guard around pbPrintException is commented out (PBDebug.rb:11-13), and
+  # pbPrintException ends in RGSS's print -- a modal box. So an exception in either
+  # phase is caught by that rescue, never reaches run_one's, and leaves the process
+  # parked in the window message pump at ~0.015 CPU-seconds per five wall seconds with
+  # an empty results file and nothing written anywhere. Re-raising puts it back where
+  # the harness can record it and move to the next battle. The exception text still
+  # reaches the game's own errorlog.txt first, so nothing is lost.
+  def self.install_exception_capture
+    return if @exception_capture
+    @exception_capture = true
+    Object.class_eval do
+      def pbPrintException(error)
+        raise error
+      end
+    end
+  rescue Exception
+    @exception_capture = false
   end
 
   # --- score capture --------------------------------------------------------
