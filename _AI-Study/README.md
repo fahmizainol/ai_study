@@ -19,7 +19,7 @@ The study has two phases, and they are still both live:
 | | |
 |---|---|
 | Portable core | **0.6.2**, installed in Reborn Yang (opt-in, off by default) |
-| Second adapter | Realidea v16, **installed at 0.6.2** (key parity, 2026-09-06) — in-engine re-measurement still owed |
+| Second adapter | Realidea v16, **installed at 0.6.2** — probe **240/256** vs stock's 204/256, no regressions; strength gauntlet blocked by a reproducible hang |
 | Corpus | **213 cards / 281 assertions** in `scenarios.json` — 275 graded and passing, 6 N/A on the Portable side (`switch_score_gt` needs Reborn's party-indexed score array) |
 | Unit tests | **225** green — `test_portable_ai.rb` 108, `test_reborn_adapter.rb` 53, `test_realidea_adapter.rb` 64 |
 | Benchmark frame | 7 rosters × 60 = **420 battles**, `arms=normal_portable`, `schedule=normal_baseline`, `party_size=6` |
@@ -264,12 +264,11 @@ one switch that saves the mon; a faster 2HKO race abandoned on the one-hit flag.
   post-KO switch-in score is the most compact statement of the same idea.
 - **Breadth as tables, round two** — the remaining `effects.rb` / ability rows sketched
   at the end of the 0.5.0 backlog.
-- **Realidea is installed at 0.6.2 but not re-measured.** The adapter reached key parity
-  on 2026-09-06 and the whole automated gate passes, but every in-engine step needs
-  Windows: probe under portable and under stock against the regenerated 208-card corpus
-  (260 applicable assertions), then the paired gauntlet and its ablation controls. Until
-  then the numbers on that page are 0.1.0's. `move_memory` is inert there for an engine
-  reason, not an adapter one — see the 0.6.2 handoff section.
+- **The Realidea gauntlet hangs, and it is the top open item there.** Deterministic:
+  `speed_vs_bulky` seed 196613 in **stock** mode, blocked at ~0 CPU rather than looping,
+  36 of 80 records complete. Until it is fixed Realidea has no 0.6.2 win rate. Its probe
+  IS measured — 240/256 against stock's 204/256, no card Portable fails that stock
+  passes. Backlog and cost for a Realidea tier suite are in `PORTABLE-AI-REALIDEA.md`.
 
 **Phase-1 threads still open:**
 

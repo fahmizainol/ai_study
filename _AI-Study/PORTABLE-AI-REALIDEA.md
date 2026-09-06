@@ -1,17 +1,13 @@
 # Portable AI for Realidea
 
-Implementation status: **installed at core 0.6.2 (2026-09-06), awaiting in-engine
-re-verification.** Opt-in, and inert until its marker file exists.
+Implementation status: **installed at core 0.6.2 (2026-09-06), probe measured, gauntlet
+blocked.** Opt-in, and inert until its marker file exists.
 
-> **The bundle in `Realidea V4.1/Data/Scripts.rxdata` is 0.6.2; the numbers further down
-> this page are still 0.1.0's.** The adapter reached key parity with the shared core on
-> 2026-09-06 (five commits, one per core version step), the whole automated gate passes,
-> and `pack_rxdata --selftest` round-trips byte-identical — but every in-engine step
-> needs Windows and has NOT been run against this build. Until it has, the probe and
-> gauntlet tables in *Measured result* describe the 0.1.0 install and nothing else. The
-> corpus was regenerated at the same time: **208 scenarios / 275 assertions, of which 198
-> scenarios and 260 assertions are applicable here.** The old 126 / 163 figures are
-> retired.
+> **The probe is run and reported below. The strength gauntlet is NOT: it hangs.**
+> Portable scores **240/256** applicable assertions against stock v16 + clara's
+> **204/256**, and there is no card Portable fails that stock passes. The paired
+> gauntlet stalls deterministically on one battle (see *The gauntlet hang*), so this
+> page still carries 0.1.0's win rates and they are labelled as such.
 
 ## What is installed
 
@@ -176,6 +172,61 @@ Remove all trigger files after testing. With no trigger present, a normal boot r
 title path successfully.
 
 ## Measured result
+
+### 0.6.2 probe — 2026-09-06
+
+Corpus 208 scenarios / 275 assertions. Ten scenarios are skipped with a reason (seven
+pin a Reborn field, three pin a mechanic this engine does not have) and four assertions
+are N/A (`switch_score_gt` needs a party-indexed switch score array, and v16 switching is
+a predicate with no numeric scale), leaving **256 gradeable**:
+
+| AI | assertions |
+|---|---:|
+| Stock v16 + Clara | 204/256 |
+| Portable AI 0.6.2 | **240/256** |
+
+**No card fails under Portable that passes under stock** — every one of the 13 remaining
+failures is shared with stock, and Portable moves 12 of the 14 comparisons in the
+intended direction without closing them.
+
+Those 13 are one structural fact, not 13 bugs. **This adapter feeds stock's own
+`pbGetMoveScore` as base evidence; the Reborn adapter feeds a flat 100** (deliberately —
+see its header). A card written as "core delta X beats core delta Y" cannot survive a
+base that has already loaded tens of points onto whichever move deals more damage:
+
+| card | wanted | stock gap | portable gap |
+|---|---|---:|---:|
+| `a_kill_is_chosen_on_accuracy_not_type` | DRAGONCLAW | −45.0 | −7.5 |
+| `d_priority_flat_in_doubles` | AQUAJET | −90.0 | −30.0 |
+| `recoil_flat_penalty_vs_equal_power` | BRAVEBIRD | −12.0 | −1.9 |
+| `leech_live_on_a_fresh_target` | LEECHSEED | −42.0 | −39.9 |
+| `knockoff_vs_leftovers` | KNOCKOFF | −3.0 | −18.9 |
+| `flinch_ignored_when_slower` | ROCKTOMB | −73.0 | −77.2 |
+
+The last two move the WRONG way and are the only two worth reading as findings. Do not
+close these by inflating core deltas: the same cards pass on Reborn, where the base is
+flat, so a delta large enough to win here would distort them there.
+
+Two real gaps the run found, both fixed: ability absorbs were invisible to the damage
+estimate (v16's `pbTypeModifier` is ability-blind and `pbTypeImmunityByAbility` cannot be
+called from an AI — it is the live effect), and `switch_score_gt` was being scored as a
+failure on an engine that has no switch scores.
+
+### The gauntlet hang
+
+**Unresolved, and it blocks every strength number on this page.** The paired gauntlet
+stops on `speed_vs_bulky`, seed 196613, in **stock** mode — reproduced twice, at the same
+battle, from a full run and from a single-seed run. The process is **blocked, not
+looping**: 0.015 CPU-seconds per 5 wall seconds, and `Data/debuglog.txt` is never written
+because `$INTERNAL` is false in gauntlet mode. 36 of 80 records complete before it.
+
+Stock mode does not run adapter code, so the suspect surface is the gauntlet harness
+itself (`command_phase`, the `pbCommandPhase`/`pbEndOfBattle` overrides) or the engine.
+The next step is a `log_decisions` harness key that sets `$INTERNAL`, the way Reborn's
+harness already has, then re-running that one battle with `seeds=196613` and reading the
+last thing the engine logged.
+
+### 0.1.0 baseline
 
 > Everything in this section is the **0.1.0** install measured on 2026-09-04, against the
 > old 126-scenario corpus. It is kept as the baseline the 0.6.2 run has to be compared
@@ -379,16 +430,29 @@ Before replacing the installed section:
 
 ### What is outstanding right now
 
-Everything above the in-engine line is done and committed. Outstanding, in order, and
-all of it needs Windows:
+The probe is done. Outstanding, in priority order:
 
-1. Probe under Portable AI, then under stock, and grade both with `check_scenarios.py`
-   against `scenarios_realidea.json`. This is the first time the 0.6.2 build meets the
-   208-card corpus, so treat unexpected results as findings to read rather than as
-   failures to patch around.
-2. Paired gauntlet, then the ablation controls.
-3. Rewrite *Measured result* from those artifacts and refresh
-   `generated/portable_ai_results.json`.
+1. **Fix the gauntlet hang** (above). Everything else on this list is downstream of it.
+   Add a `log_decisions` key that sets `$INTERNAL`, re-run `seeds=196613`, read the log.
+2. **Finish the paired gauntlet**, then the ablation controls, then rewrite the 0.1.0
+   baseline section from the new artifacts.
+3. **Port the tier suite to this engine** — a competitive-roster gauntlet to sit beside
+   the archetype one, mirroring what `generated/tier_teams_reborn.rb` does for Reborn.
+   Costed 2026-09-06:
+
+   | piece | work | note |
+   |---|---|---|
+   | `make_party` | port Reborn's — form / item / ability / nature / EVs / IVs, ~25 lines | v16 has every setter needed |
+   | `hptype` | **drop it** — v16 has no `hptype` setter, Hidden Power is IV-derived here | verify the IV array order: Essentials is HP/Atk/Def/**Spe**/SpA/SpD, Smogon writes SpA/SpD/Spe |
+   | rosters | reuse `tier_teams_reborn.rb` verbatim | all four gen6/gen7 sets resolve against this PBS except `HIJUMPKICK` → `HIGHJUMPKICK` |
+   | `teams=` + schedule | port `team_set`, an all-pairs schedule and `party_size`, ~60-80 lines | this gauntlet is simpler than Reborn's: no test environment, no `switchTrainers`, no arms |
+   | the run | ~480 battles, roughly 1.5-2.5 h serial | no parallel path exists: `setup_gauntlet_workers.sh` is hard-coded to Reborn |
+
+   Gen 8 sets are out of scope — this engine is gen 7. **Weigh it against its own value
+   first:** the same suite on Reborn produced a NEGATIVE result (real teams exposed no
+   larger weakness than synthetic ones, −4.4 points against the archetype baseline versus
+   −5.0 against the tier one), and here the opponent would be stock v16 rather than
+   Reborn's AI, which is a weaker and less pointed question.
 
 At this handoff, all trigger files are absent, the injected section is installed but
 inactive, and `pack_rxdata --selftest` round-trips byte-identical. The pre-change bundle

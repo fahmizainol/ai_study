@@ -2,7 +2,7 @@
     "captured": "2026-09-06",
     "version": "0.6.2",
     "engine": "realidea",
-    "status": "installed at 0.6.2; NOT yet re-measured in-engine. The probe and gauntlet blocks below are the 0.1.0 measurement of 2026-09-04, kept as the baseline the 0.6.2 run must be compared against.",
+    "status": "probe measured 2026-09-06; the strength gauntlet is NOT measured -- it hangs deterministically on speed_vs_bulky seed 196613 in stock mode. The gauntlet block under baseline_0_1_0 is the 0.1.0 measurement and is the only win-rate figure this file carries.",
     "installed": {
         "generated_script_sha256": "e57300685760a31b88da4239a98285c27f1f8fbf055de181b95a5e4ad3b06954",
         "generated_script_lines": 3764,
@@ -33,6 +33,33 @@
             "heavy_duty_boots_entry_order_swapped"
         ],
         "dropped_reason": "v16 has no Heavy-Duty Boots or Clear Amulet"
+    },
+    "probe_0_6_2": {
+        "captured": "2026-09-06",
+        "corpus_path": "_AI-Study/scenarios_realidea.json",
+        "corpus_sha256": "e08e5900d7d5eafa37384ccaa9cd51a542347648bfe0a878b892bcf550c9f771",
+        "scenarios": 208,
+        "probed": 198,
+        "skipped_with_reason": 10,
+        "assertions_not_answerable": 4,
+        "gradeable_assertions": 256,
+        "stock": {
+            "assertions_passed": 204,
+            "results_path": "Realidea V4.1/Data/ai_probe_results_stock.ndjson",
+            "results_sha256": "cdb9a7ad2676731c9fcb0d0c7cb2999a2e791d125c4a51ad347dc58ef905b4aa"
+        },
+        "portable": {
+            "assertions_passed": 240,
+            "results_path": "Realidea V4.1/Data/ai_probe_results_portable.ndjson",
+            "results_sha256": "198a80f034103348c61166cb3c1b0ac6ceaabc3925178d30a9a834afef198cdb",
+            "regressions_vs_stock": 0
+        },
+        "note": "all 13 remaining failures are shared with stock; none is a Portable-only regression. They are dominated by this adapter using stock pbGetMoveScore as base evidence where the Reborn adapter uses a flat 100.",
+        "command": "python3 _AI-Study/tools/check_scenarios.py _AI-Study/scenarios_realidea.json \"Realidea V4.1/Data/ai_probe_results_portable.ndjson\""
+    },
+    "gauntlet_0_6_2": {
+        "measured": false,
+        "reason": "deterministic hang: speed_vs_bulky seed 196613, stock mode, blocked at ~0 CPU with debuglog.txt never written; reproduced from a full run and from a single-seed run, 36 of 80 records complete"
     },
     "baseline_0_1_0": {
         "measured_version": "0.1.0",
