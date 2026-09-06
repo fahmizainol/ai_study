@@ -172,7 +172,9 @@ module PortableAIRealidea
           "slot" => action["slot"],
           "move_id" => action["move_id"],
           "target" => action["target"],
-          "score" => action["score"]
+          "score" => action["score"],
+          "view" => view_trace(
+            battle.instance_variable_get(:@portable_ai_last_snapshot), index)
         }
       end
       return true
@@ -196,7 +198,40 @@ module PortableAIRealidea
     battle.instance_variable_set(:@portable_ai_cache_signature, signature)
     battle.instance_variable_set(:@portable_ai_plan, plan)
     battle.instance_variable_set(:@portable_ai_last_plan, plan)
+    battle.instance_variable_set(:@portable_ai_last_snapshot, snapshot)
     plan
+  end
+
+  # What the actor believed about the board when it chose: its own HP and speed order,
+  # the incoming-damage estimates the heal and priority gates read, and the hits-to-KO
+  # both ways per target. The race is reported AS COMPUTED, independently of whether
+  # the run has the rules that consume it switched on -- a trace that only showed the
+  # race when it was live could not say why a run with it off decided differently.
+  DEFAULT_RACE_CONFIG = { "damage_race" => true }
+
+  def self.view_trace(snapshot, index)
+    return {} if !snapshot
+    actor = nil
+    (snapshot["actors"] || []).each do |candidate|
+      actor = candidate if candidate["index"] == index
+    end
+    return {} if !actor
+    race = {}
+    (snapshot["targets"] || []).each do |target|
+      race[target["index"].to_s] =
+        PortableAI.damage_race(snapshot, actor, target, DEFAULT_RACE_CONFIG)
+    end
+    {
+      "hp_pct" => actor["hp_pct"],
+      "speed" => actor["speed"],
+      "faster" => actor["faster"],
+      "incoming_damage_pct" => actor["incoming_damage_pct"],
+      "certain_incoming_damage_pct" => actor["certain_incoming_damage_pct"],
+      "threatened_lethal" => actor["threatened_lethal"],
+      "race" => race
+    }
+  rescue
+    {}
   end
 
   def self.clear_cache(battle)
@@ -204,6 +239,7 @@ module PortableAIRealidea
     battle.instance_variable_set(:@portable_ai_cache_signature, nil)
     battle.instance_variable_set(:@portable_ai_plan, nil)
     battle.instance_variable_set(:@portable_ai_last_plan, nil)
+    battle.instance_variable_set(:@portable_ai_last_snapshot, nil)
   rescue
   end
 
@@ -329,6 +365,10 @@ module PortableAIRealidea
       "incoming_damage_pct" => incoming,
       "certain_incoming_damage_pct" => certain,
       "incoming_by_move" => incoming_map,
+      # 0.6.0: the per-foe view of the same threat, which is what a hits-to-KO question
+      # has to read. Absent on an adapter that does not build it, and the core's
+      # damage_race then returns nil and every consumer goes inert.
+      "threats_by_foe" => threats_by_foe(battle, battler, foe_indices, incoming_map, skill),
       "threatened_lethal" => incoming >= percent(battler.hp, battler.totalhp),
       "no_effective_move" => no_effective,
       "best_damage_pct" => best_damage,
@@ -819,6 +859,45 @@ module PortableAIRealidea
       end
     end
     out
+  end
+
+  # The same incoming_map resolved PER FOE, with the two extra facts a hits-to-KO
+  # question needs: that foe's best hit, its best hit that moves first, and whether it
+  # outruns this battler. incoming_by_move is keyed "foe:moveid" with no priority, and
+  # actor["faster"] is against the FASTEST foe only -- in doubles that is the wrong
+  # flag for the slower target and a race computed off it is wrong.
+  #
+  # Keyed by foe index as a STRING, because the core reads it out of a plain Hash that
+  # has been through JSON in the probe's results file.
+  def self.threats_by_foe(battle, battler, foe_indices, incoming_map, skill)
+    speed = battler_speed(battler)
+    out = {}
+    foe_indices.each do |foe_index|
+      foe = battle.battlers[foe_index]
+      next if !foe || foe.isFainted?
+      locked = safe_effect(foe, :ChoiceBand, -1).to_i
+      best = 0.0
+      best_priority = 0.0
+      foe.moves.each do |known|
+        next if !known || known.id == 0
+        next if locked >= 0 && known.id != locked
+        # Reuse the map the actor already paid for; fall back for anything not in it.
+        damage = incoming_map["#{foe_index}:#{known.id}"]
+        damage = rough_damage_pct(battle, known, foe, battler, skill) if damage.nil?
+        damage = PortableAI::Model.number(damage, 0.0)
+        best = damage if damage > best
+        next if effective_priority(known, foe) <= 0
+        best_priority = damage if damage > best_priority
+      end
+      out[foe_index.to_s] = {
+        "damage_pct" => best,
+        "priority_damage_pct" => best_priority,
+        "faster" => faster_than_foes?(battle, speed, [foe_index])
+      }
+    end
+    out
+  rescue
+    {}
   end
 
   def self.estimated_incoming_damage(battle, battler, foe_indices, skill)

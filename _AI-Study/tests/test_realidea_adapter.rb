@@ -630,6 +630,66 @@ class PortableAIRealideaAdapterTest < Test::Unit::TestCase
     assert_equal(false, actor["partner_airborne"])
   end
 
+  # --- 0.6.0 threats_by_foe --------------------------------------------------
+
+  def race_foe(index, speed, moves, locked = -1)
+    foe = StubBattler.new(:index => index, :speed => speed, :moves => moves)
+    foe.effects[PBEffects::ChoiceBand] = locked
+    foe
+  end
+
+  def test_threats_by_foe_keeps_the_best_priority_hit_separate
+    battle = PokeBattle_Battle.new
+    battle.battlers[0] = race_foe(0, 90, [StubMove.new(:id => 1, :basedamage => 120),
+                                          StubMove.new(:id => 2, :basedamage => 50,
+                                                       :priority => 1)])
+    me = StubBattler.new(:index => 1, :speed => 100)
+    map = PortableAIRealidea.incoming_damage_by_move(battle, me, [0], 100)
+    out = PortableAIRealidea.threats_by_foe(battle, me, [0], map, 100)
+    assert_equal(60.0, out["0"]["damage_pct"])
+    assert_equal(25.0, out["0"]["priority_damage_pct"])
+    assert_equal(true, out["0"]["faster"])
+  end
+
+  # The reason the export exists: actor["faster"] is against the FASTEST foe, so on a
+  # doubles board where the actor outruns one foe and not the other it is a single
+  # false and a race computed off it is wrong for the slower target.
+  def test_threats_by_foe_orders_against_each_foe_separately
+    battle = PokeBattle_Battle.new
+    battle.battlers[0] = race_foe(0, 90, [StubMove.new(:id => 1)])
+    battle.battlers[2] = race_foe(2, 150, [StubMove.new(:id => 3)])
+    me = StubBattler.new(:index => 1, :speed => 100)
+    map = PortableAIRealidea.incoming_damage_by_move(battle, me, [0, 2], 100)
+    out = PortableAIRealidea.threats_by_foe(battle, me, [0, 2], map, 100)
+    assert_equal(true,  out["0"]["faster"])
+    assert_equal(false, out["2"]["faster"])
+    assert_equal(false, PortableAIRealidea.faster_than_foes?(battle, 100, [0, 2]))
+  end
+
+  def test_threats_by_foe_inherits_the_choice_lock
+    battle = PokeBattle_Battle.new
+    battle.battlers[0] = race_foe(0, 90, [StubMove.new(:id => 1, :basedamage => 120),
+                                          StubMove.new(:id => 2, :basedamage => 50)], 2)
+    me = StubBattler.new(:index => 1, :speed => 100)
+    map = PortableAIRealidea.incoming_damage_by_move(battle, me, [0], 100)
+    out = PortableAIRealidea.threats_by_foe(battle, me, [0], map, 100)
+    assert_equal(25.0, out["0"]["damage_pct"])
+  end
+
+  def test_threats_by_foe_is_an_empty_hash_when_the_board_cannot_be_read
+    assert_equal({}, PortableAIRealidea.threats_by_foe(nil, nil, [0], {}, 100))
+  end
+
+  # The race is reported as computed, so a run with damage_race off still says in its
+  # trace what the race was.
+  def test_the_trace_view_carries_the_race_per_target
+    snapshot = contract_snapshot
+    view = PortableAIRealidea.view_trace(snapshot, 1)
+    assert_equal(true, view.key?("race"))
+    assert_equal(true, view["race"].key?("0"))
+    assert_equal(snapshot["actors"][0]["hp_pct"], view["hp_pct"])
+  end
+
   # --- snapshot contract -----------------------------------------------------
   #
   # The list of keys the shared core reads at each level. When a future core rule adds
@@ -642,7 +702,8 @@ class PortableAIRealideaAdapterTest < Test::Unit::TestCase
   ACTOR_KEYS = %w[
     index species hp_pct status speed faster stages negative_stage_total
     positive_stage_total incoming_damage_pct certain_incoming_damage_pct
-    incoming_by_move threatened_lethal no_effective_move best_damage_pct yawned
+    incoming_by_move threats_by_foe threatened_lethal no_effective_move
+    best_damage_pct yawned
     residual_damage_pct trapped ability item mold_breaker slower_bench_count
     partner_alive partner_ability partner_hp_pct partner_airborne turncount actions
   ]
