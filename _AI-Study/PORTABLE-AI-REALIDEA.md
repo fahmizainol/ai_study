@@ -899,6 +899,24 @@ agreement over 3,027 turns (54.9% at 0.6.4). That file is twice the size of its 
 twin, because every traced decision now carries the grid and, under `trace=true`, the
 cells behind it.
 
+**The archetype suite still runs, and both rules are inert on it.** 80 battles in 19
+seconds, no errors, portable 24-16 (60.0%) against stock's 20-20 — and paired against the
+all-keys-false control it is **identical on all 80**, with exactly one battle's decisions
+changing at all (`balance_vs_offense` 262147, a win either way, 14 turns → 8). That is
+structural rather than surprising: the frozen fixture is three mons a side, so a decision
+sees at most one live benched foe and two own bodies off the field, which is never enough
+for "the only answer to a foe still on their bench", and no team in the fixture carries a
+setup move at all. Both rules are about bench depth; an eight-slot benchmark of three-mon
+teams has none.
+
+It is also where the **doubles** path was exercised for the first time — the tier suite is
+singles only. 73 decisions carried a grid, 57 of them with two active foes, and both
+seats (1 and 3) decided through it, so one matrix shared by two own actives and
+`matrix_slot` resolving seat 3 are checked in the engine rather than only in the unit
+tests. The doubles branch of `sole_answer` (take the harsher target) was called on 26
+switch candidates and returned nil on every one, for the reason above — so that branch is
+still pinned by its unit test alone.
+
 **Reborn, same core, its own control**: one `set_c` sweep at the new defaults is
 **60/60 identical to 0.6.4** — same results, same turn counts, and all 2,654 command
 records byte-identical. That is the claim "the other study is untouched" measured
