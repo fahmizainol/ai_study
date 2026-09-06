@@ -108,6 +108,19 @@ def switch_index(scn, view, ref):
     if slot >= len(party):
         return None, '%s is past the end of the AI party (%d mons)' % (ref, len(party))
     if not scores:
+        # Two very different reasons for an empty array, and only one is a failure.
+        # On Reborn, switchscore is filled only once shouldSwitch? has come out positive
+        # (:11358), so empty means the card did not put the active in real trouble --
+        # the assertion is unevaluable through the card's own fault and stays a failure.
+        # On Essentials v16 there IS no numeric switch scale at all: switching is the
+        # pbEnemyShouldWithdrawEx? PREDICATE (085:4116), and AI_Probe reports it as the
+        # three-state should_switch_score with switch_scores permanently empty. There
+        # the assertion is unevaluable through the ENGINE, for stock and portable
+        # alike, and reporting it as a failure blames an AI for a missing scale.
+        if view.get('switch_evaluated'):
+            return UNEVALUABLE, ('this AI reports no numeric switch scale (switching is '
+                                 'a predicate, not a score) -- no positional assertion '
+                                 'can read it')
         return None, 'switch_scores is empty (the AI never evaluated switching here)'
     if len(scores) != len(party):
         return UNEVALUABLE, ('switch_scores is not party-indexed (%d entries for %d '

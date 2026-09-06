@@ -72,6 +72,9 @@ end
 
 module PBAbilities
   STURDY = 5; INTIMIDATE = 22; SERENEGRACE = 32; LEVITATE = 26; SHIELDDUST = 19
+  LIGHTNINGROD = 31; VOLTABSORB = 10; WATERABSORB = 11; FLASHFIRE = 18
+  SAPSIPPER = 157; STORMDRAIN = 114; MOTORDRIVE = 78; DRYSKIN = 87
+  BULLETPROOF = 171; TELEPATHY = 140
   MAGICGUARD = 98; MOLDBREAKER = 104; SHEERFORCE = 125; CONTRARY = 126
   MAGICBOUNCE = 156; PRANKSTER = 158; GALEWINGS = 177; TRIAGE = 209
   UNAWARE = 109
@@ -130,6 +133,8 @@ class StubMove
   def isHealingMove?; @healing; end
   def pbIsMultiHit; @multi_hit; end
   def canMagicCoat?; @magic_coat; end
+  def isBombMove?; @bomb ||= false; end
+  attr_writer :bomb
 end
 
 # A party entry (never on the field). switch_actions and entry_hazard_pct read these.
@@ -214,6 +219,7 @@ class StubBattler
   def pbCanSleep?(_a, _s, _m = nil, _i = false); @can_status; end
   def pbCanFreeze?(_a, _s, _m = nil); @can_status; end
   def pbCanConfuse?(_a = nil, _s = true, _m = nil); @can_status; end
+  def pbIsOpposing?(other); (@index & 1) != (other & 1); end
   def pbCanReduceStatStage?(_stat, _a = nil, _s = false, _m = nil, _mb = false, _ic = false)
     @can_reduce.nil? ? true : @can_reduce
   end
@@ -537,6 +543,48 @@ class PortableAIRealideaAdapterTest < Test::Unit::TestCase
     breaker = StubBattler.new(:index => 1, :mold_breaker => true)
     flagged = StubMove.new(:basedamage => 0, :magic_coat => true)
     assert_equal(false, blocked?(flagged, TWAVE_TAGS, bouncer, breaker))
+  end
+
+  # --- ability absorbs -------------------------------------------------------
+  #
+  # pbTypeModifier (082:405) is ability-blind, and the engine's own
+  # pbTypeImmunityByAbility (:318) cannot be called from the AI -- it raises the
+  # target's stats, heals it and prints. Without the read-only mirror, a Thunderbolt
+  # into Lightning Rod came back neutral and the core scored it as a kill; the
+  # d_redirect_by_foe_partner corpus card caught it in the first 0.6.2 probe run.
+
+  def absorb_case(ability, move_type, options = {})
+    target = StubBattler.new(:index => 0, :ability => ability)
+    attacker = StubBattler.new(:index => 1,
+                               :mold_breaker => options.fetch(:mold_breaker, false))
+    move = StubMove.new(:type => move_type)
+    move.bomb = options.fetch(:bomb, false)
+    PortableAIRealidea.type_effectiveness(PokeBattle_Battle.new, move, attacker, target)
+  end
+
+  def test_an_absorbing_ability_makes_the_move_do_nothing
+    assert_equal(0.0, absorb_case(PBAbilities::LIGHTNINGROD, PBTypes::ELECTRIC))
+    assert_equal(0.0, absorb_case(PBAbilities::VOLTABSORB, PBTypes::ELECTRIC))
+    assert_equal(0.0, absorb_case(PBAbilities::WATERABSORB, PBTypes::WATER))
+    assert_equal(0.0, absorb_case(PBAbilities::SAPSIPPER, PBTypes::GRASS))
+    assert_equal(0.0, absorb_case(PBAbilities::FLASHFIRE, PBTypes::FIRE))
+  end
+
+  def test_the_absorb_only_applies_to_its_own_type
+    assert_equal(1.0, absorb_case(PBAbilities::LIGHTNINGROD, PBTypes::WATER))
+    assert_equal(1.0, absorb_case(PBAbilities::STURDY, PBTypes::ELECTRIC))
+  end
+
+  # Both guards the engine opens pbTypeImmunityByAbility with.
+  def test_mold_breaker_walks_through_an_absorb
+    assert_equal(1.0, absorb_case(PBAbilities::LIGHTNINGROD, PBTypes::ELECTRIC,
+                                  :mold_breaker => true))
+  end
+
+  def test_bulletproof_keys_off_the_bomb_flag_not_the_type
+    assert_equal(0.0, absorb_case(PBAbilities::BULLETPROOF, PBTypes::NORMAL,
+                                  :bomb => true))
+    assert_equal(1.0, absorb_case(PBAbilities::BULLETPROOF, PBTypes::NORMAL))
   end
 
   # --- 0.5.0 move facts ------------------------------------------------------

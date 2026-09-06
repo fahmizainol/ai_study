@@ -1995,6 +1995,22 @@ module PortableAIRealidea
   # fire charge must not apply when it is aimed there.
   PARTNER_HEAL_CODES = [0xCF19]
 
+  # Abilities that make a move of the given type do nothing at all, read off this
+  # engine's own pbTypeImmunityByAbility (082:318-402). The engine's copy CANNOT be
+  # called from the AI: it raises the target's stats, heals it, sets Flash Fire and
+  # prints -- it is the live effect, not a query. pbTypeModifier (:405) is ability-blind,
+  # so without this table a Thunderbolt into Lightning Rod came back neutral and the
+  # core scored it as a kill. (Reborn gets this free: pbTypeModNoMessages returns -1.)
+  #
+  # Bulletproof and Telepathy are in the engine's list too but key off the move's bomb
+  # flag and ally targeting rather than its type, so they are handled at the call site.
+  ABSORB_ABILITIES = {
+    "SAPSIPPER" => :GRASS,
+    "STORMDRAIN" => :WATER, "DRYSKIN" => :WATER, "WATERABSORB" => :WATER,
+    "LIGHTNINGROD" => :ELECTRIC, "MOTORDRIVE" => :ELECTRIC, "VOLTABSORB" => :ELECTRIC,
+    "FLASHFIRE" => :FIRE
+  }
+
   ENABLE_FILE = "Data/portable_ai.txt"
   ERROR_FILE  = "Data/portable_ai_error.txt"
   ENABLE_WILD = false
@@ -2717,9 +2733,30 @@ module PortableAIRealidea
 
   def self.type_effectiveness(battle, move, attacker, target)
     return 1.0 if !target || !move.pbIsDamaging?
+    return 0.0 if absorbed_by_ability?(move, attacker, target)
     move.pbTypeModifier(move.type, attacker, target).to_f / 8.0
   rescue
     1.0
+  end
+
+  # The read-only half of pbTypeImmunityByAbility (082:318-402). Same two guards the
+  # engine opens with: a move aimed at the user itself is exempt, and Mold Breaker
+  # switches the whole check off.
+  def self.absorbed_by_ability?(move, attacker, target)
+    return false if attacker.index == target.index
+    return false if (attacker.hasMoldBreaker rescue false)
+    # Telepathy: an ally's damaging move never lands on the holder.
+    if ability_key(target) == "TELEPATHY" && !target.pbIsOpposing?(attacker.index)
+      return true
+    end
+    return true if ability_key(target) == "BULLETPROOF" && (move.isBombMove? rescue false)
+    wanted = ABSORB_ABILITIES[ability_key(target)]
+    return false if !wanted
+    type = (move.pbType(move.type, attacker, target) rescue move.type)
+    value = (PBTypes.const_get(wanted) rescue nil)
+    !value.nil? && type == value
+  rescue
+    false
   end
 
   # Same base-damage preparation stock v16 does before it calls pbRoughDamage
