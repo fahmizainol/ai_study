@@ -2468,10 +2468,79 @@ CORPUS_063 = [
      [mon('ALAKAZAM', 50, ['PSYCHIC'])]),
 ]
 
+CORPUS_064 = [
+    # 0.6.4. Two refinements of the 0.6.3 rules, read off the 0.6.3 readouts.
+    #
+    # 1. "I cannot hurt it" opens the gate only for a body that BREAKS the wall: two
+    #    whole hits fewer than the actor and no more than four of its own. 0.6.3 asked
+    #    for 10% and got 62 switch-backs from bodies that cleared the line on the bench
+    #    and not on the field. Alakazam has nothing for Umbreon (Psychic is immune) and
+    #    Umbreon has nothing for anyone, so no race is in play and only this reason is.
+    #    Four moves each side so no filler pads the set: Politoed's Scald is a fifth of
+    #    Umbreon and clears the line; Machamp's Close Combat is the body that breaks it.
+    ('no_effective_move_needs_a_body_that_breaks_the_wall', 0,
+     mon('ALAKAZAM', 50, ['PSYCHIC', 'CALMMIND', 'RECOVER', 'SUBSTITUTE']),
+     mon('UMBREON', 50, ['TOXIC', 'WISH', 'PROTECT', 'MOONLIGHT'], ability='SYNCHRONIZE'),
+     [('must_switch_to', 'MACHAMP')],
+     [mon('POLITOED', 50, ['SCALD', 'ICEBEAM', 'HYPNOSIS', 'PROTECT'], ability='DAMP'),
+      mon('MACHAMP', 50, ['CLOSECOMBAT', 'BULLETPUNCH', 'KNOCKOFF', 'ICEPUNCH'],
+          ability='GUTS')]),
+    # The control: only the line-clearer on the bench. 0.6.3 leaves for it, and
+    # Politoed in front of Umbreon is Zapdos in front of Chansey -- a body as weak as
+    # the one that left, one switch-back from now. Must stay.
+    ('a_body_that_only_clears_the_line_is_not_worth_the_free_turn', 0,
+     mon('ALAKAZAM', 50, ['PSYCHIC', 'CALMMIND', 'RECOVER', 'SUBSTITUTE']),
+     mon('UMBREON', 50, ['TOXIC', 'WISH', 'PROTECT', 'MOONLIGHT'], ability='SYNCHRONIZE'),
+     [('must_not_switch',)],
+     [mon('POLITOED', 50, ['SCALD', 'ICEBEAM', 'HYPNOSIS', 'PROTECT'], ability='DAMP')]),
+
+    # 2. Every switch candidate is graded on who lands the last hit once it is in.
+    #    The readout case (team3_vs_team2 155921 t29) was Scizor sent into a Heatran
+    #    that kills it first with Slowbro on the bench -- a post-KO replacement, which
+    #    the probe cannot pose, so the card poses the same choice with a reason to
+    #    leave that is not the race: Zapdos is Yawned. Scald two-shots Heatran and
+    #    Fire Blast is resisted; Bug Bite is resisted and Fire Blast is four times
+    #    effective. Passes at 0.6.3 too (the entry cost already says so) -- this is
+    #    the fixture for the complaint. The graded term itself ships OFF (it cost
+    #    wins on both gauntlets; see Model::DEFAULT_CONFIG), so the card holds the
+    #    behaviour, not the term.
+    ('a_reason_to_leave_does_not_send_in_the_body_that_dies_first', 0,
+     mon('ZAPDOS', 50, ['DISCHARGE', 'HEATWAVE'], effects={'yawn': 2}),
+     mon('HEATRAN', 50, ['FIREBLAST'], ability='FLASHFIRE'),
+     [('must_switch_to', 'SLOWBRO')],
+     [mon('SCIZOR', 50, ['BUGBITE', 'BULLETPUNCH', 'SWORDSDANCE', 'ROOST'],
+          ability='TECHNICIAN'),
+      mon('SLOWBRO', 50, ['SCALD', 'PSYCHIC', 'SLACKOFF', 'CALMMIND'],
+          ability='REGENERATOR')]),
+
+    # 3. The entry damage is part of the race. The arithmetic was in candidate_race
+    #    at 0.6.3; this pair is the proof that was asked for. Flare Blitz knocks
+    #    Zapdos out at 13% and out-damages its Roost, so the race is lost and the heal
+    #    only delays; Charizard's Earthquake two-shots Heatran (Flash Fire takes its
+    #    fire) and Flare Blitz, resisted, is a third of Charizard. Off rocks Charizard
+    #    wins by one hit; on rocks it comes in at half and loses by one. Tuned on both
+    #    engines' rankings: Realidea's chart has Steel resisting Dark, and its
+    #    Charizard hits half again as hard as Reborn's, so a neutral move that
+    #    three-shots on one engine five-shots on the other.
+    ('a_winning_bench_body_is_still_a_winner_off_the_rocks', 0,
+     mon('ZAPDOS', 50, ['ROOST', 'DISCHARGE'], hp_pct=13),
+     mon('HEATRAN', 50, ['FLAREBLITZ'], ability='FLASHFIRE'),
+     [('must_switch_to', 'CHARIZARD')],
+     [mon('CHARIZARD', 50, ['EARTHQUAKE', 'AIRSLASH', 'ROOST', 'PROTECT'],
+          ability='BLAZE')]),
+    ('the_rocks_turn_the_same_body_into_a_loser', 0,
+     mon('ZAPDOS', 50, ['ROOST', 'DISCHARGE'], hp_pct=13),
+     mon('HEATRAN', 50, ['FLAREBLITZ'], ability='FLASHFIRE'),
+     [('must_not_switch',)],
+     [mon('CHARIZARD', 50, ['EARTHQUAKE', 'AIRSLASH', 'ROOST', 'PROTECT'],
+          ability='BLAZE')],
+     {'ai_side': {'stealthrock': 1}}),
+]
+
 CORPUS = (CORPUS_V1 + CORPUS_V2 + CORPUS_V3 + CORPUS_V4 + CORPUS_V5
           + CORPUS_V6 + CORPUS_V7 + CORPUS_V8 + CORPUS_V9 + CORPUS_V10
           + CORPUS_D1 + CORPUS_D2 + CORPUS_D3 + CORPUS_R1 + CORPUS_LS
-          + CORPUS_062 + CORPUS_063)
+          + CORPUS_062 + CORPUS_063 + CORPUS_064)
 
 # Values a scenario's extra dict may carry; the generator validates so a typo
 # fails here instead of silently emitting a key no probe reads.

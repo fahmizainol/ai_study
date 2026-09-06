@@ -1136,6 +1136,35 @@ class PortableAIRealideaAdapterTest < Test::Unit::TestCase
       battle.battlers[1], [0], 100))
   end
 
+  # 0.6.4. A spent move is not a hit the candidate has: the field view drops it
+  # through pbCanChooseMove? and the bench estimate must agree, or the two disagree by
+  # a whole move and the body goes straight back out. Keyed (switch_estimate_pp) so
+  # the control can reproduce 0.6.3's estimate.
+  def test_switch_outgoing_damage_skips_a_move_with_no_pp
+    battle = entry_battle
+    spent = StubMove.new(:basedamage => 120)
+    spent.define_singleton_method(:pp) { 0 }
+    live = StubMove.new(:basedamage => 40)
+    live.define_singleton_method(:pp) { 5 }
+    candidate = StubPokemon.new(:moves => [spent, live])
+    assert_equal(20.0, PortableAIRealidea.switch_outgoing_damage(
+      battle, candidate, 1, battle.battlers[1], [0], 100))
+    # Every move spent: nothing to hit with, and the estimate says so.
+    both = StubPokemon.new(:moves => [spent])
+    assert_equal(0.0, PortableAIRealidea.switch_outgoing_damage(
+      battle, both, 1, battle.battlers[1], [0], 100))
+    # A move that carries no PP field (an older stub, a move object without one) is
+    # not held to a number nobody has.
+    assert_equal(60.0, PortableAIRealidea.switch_outgoing_damage(
+      battle, StubPokemon.new(:moves => [StubMove.new(:basedamage => 120)]), 1,
+      battle.battlers[1], [0], 100))
+    $PORTABLE_AI_CONFIG = { "switch_estimate_pp" => false }
+    assert_equal(60.0, PortableAIRealidea.switch_outgoing_damage(
+      battle, candidate, 1, battle.battlers[1], [0], 100))
+  ensure
+    $PORTABLE_AI_CONFIG = nil
+  end
+
   # Neutral is 8 here (three type slots), weighted x4 so the core sees the same
   # magnitudes it sees from Reborn: neutral 32, one super-effective step 64.
   def test_switch_incoming_risk_takes_the_worst_foe

@@ -828,6 +828,13 @@ module PortableAIReborn
       next if !foe || foe.isFainted?
       (pokemon.moves || []).each do |own|
         next if !own || own.id == 0
+        # 0.6.4 (switch_estimate_pp). A move with no PP left is not a hit this body
+        # has. The field view drops it (pbCanChooseMove?), this estimate did not, so in
+        # a long stall war -- Quagsire and Chansey in front of a Zapdos at turn 89,
+        # every Scald and Seismic Toss spent -- the bench body "hit for 27%" while the
+        # same body on the field hit for nothing, and the two traded places on
+        # weak_current_attacks until the round cap. Its own PP is its own information.
+        next if own.respond_to?(:pp) && own.pp.to_i <= 0 && rule_enabled?("switch_estimate_pp")
         move = (PokeBattle_Move.pbFromPBMove(battle, own, fake) rescue nil)
         next if !move
         damage = rough_damage_pct(ai, move, fake, foe)

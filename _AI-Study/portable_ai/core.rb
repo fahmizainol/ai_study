@@ -581,6 +581,21 @@ module PortableAI
         reasons << ["switchin_race", bonus]
       end
     end
+    # 0.6.4. The other half of the same question: not only how long the candidate
+    # LASTS but who lands the last hit once it is in -- candidate_race, the full
+    # exchange after the entry damage (hazards plus the free hit) is paid, graded by
+    # the margin in hits. Every switch candidate carries it, the post-KO replacement
+    # included, which is what the readout kept asking for: Scizor sent into a Heatran
+    # that kills it first with Slowbro on the bench (team3_vs_team2 155921 t29). The
+    # defensive bands above are Reborn's measured switch-in and stay as they are; this
+    # is the term neither Reborn nor the bands have.
+    if config["switchin_race_grade"] && config["damage_race"]
+      grade = candidate_race_grade(snapshot, action)
+      if grade != 0
+        out_score += grade
+        reasons << ["kill_order", grade]
+      end
+    end
     escapes = []
 
     if Model.truthy(action["forced"])
@@ -595,7 +610,7 @@ module PortableAI
     # places in front of a Chansey on weak_current_attacks. The candidate's own
     # estimate is on the action; absent (older adapters), the reasons keep their
     # 0.6.2 shape and the candidate is not held to a number nobody computed.
-    hitter = candidate_can_hit?(action, config)
+    hitter = candidate_can_hit?(snapshot, actor, action, config)
     if Model.truthy(actor["no_effective_move"])
       if hitter == false
         reasons << ["bench_cannot_hit_either", 0]
@@ -699,8 +714,12 @@ module PortableAI
       if race_lost_by_a_hit?(race) && heal_cannot_outpace?(snapshot, actor)
         bench = candidate_race(action, foe)
         if !bench.nil? && bench["winning"]
-          out_score += 110
-          reasons << ["losing_race_bench_wins", 110]
+          # 0.6.4: the size of the push is the kill_order grade above, so the reason
+          # is worth its gate and nothing more; 0.6.3's flat 110 is what the grade
+          # key off restores.
+          bonus = config["switchin_race_grade"] ? 0 : 110
+          out_score += bonus
+          reasons << ["losing_race_bench_wins", bonus]
           escapes << "losing_race_bench_wins"
         end
       end
@@ -1221,10 +1240,69 @@ module PortableAI
   # reason, the same contract every other missing field keeps.
   WEAK_ATTACK_PCT = 10
 
-  def self.candidate_can_hit?(action, config)
+  #
+  # 0.6.4 (escape_wall_margin): clearing the line is not enough. The bench estimate
+  # and the field estimate are built from different battlers and disagree by a few
+  # points, so a body at 11% on the bench read as weak once it stood there and went
+  # straight back -- 62 of the 133 switch-backs left in the 0.6.3 run were that. The
+  # candidate has to BEAT the actor at the actor's own game: two whole hits fewer to
+  # the knockout, and no more than four of its own, against some foe on the field.
+  # Both counts are hits_needed on the same foe HP, so the comparison is honest
+  # about a chipped wall: at 40% a 15% hit is three, not "weak".
+  WALL_BREAK_MARGIN = 2
+  WALL_BREAK_MAX_HITS = 4
+
+  def self.candidate_can_hit?(snapshot, actor, action, config)
     return nil if !config["escape_needs_hitter"]
     return nil if !action.key?("outgoing_damage_pct") || action["outgoing_damage_pct"].nil?
-    Model.number(action["outgoing_damage_pct"], 0.0) >= WEAK_ATTACK_PCT
+    outgoing = Model.number(action["outgoing_damage_pct"], 0.0)
+    return outgoing >= WEAK_ATTACK_PCT if !config["escape_wall_margin"]
+    actor_best = Model.number(actor["best_damage_pct"], 0.0)
+    live = (snapshot["targets"] || []).select { |t| Model.number(t["hp_pct"], 100.0) > 0 }
+    return nil if live.empty?
+    live.any? do |target|
+      hp = Model.number(target["hp_pct"], 100.0)
+      mine = hits_needed(hp, outgoing) || RACE_MAX_HITS
+      actors = hits_needed(hp, actor_best) || RACE_MAX_HITS
+      mine <= WALL_BREAK_MAX_HITS && mine <= actors - WALL_BREAK_MARGIN
+    end
+  end
+
+  # KILL ORDER, GRADED. candidate_race's answer as a number: the margin in hits
+  # between what the foe needs on the candidate (free hit included) and what the
+  # candidate needs on the foe. Positive is "it finishes first", by that many hits;
+  # zero is decided by speed. In doubles the candidate has to win against both, so
+  # the worse of its two races is the one that counts. 0 without estimates and 0 at
+  # the cap (a wall is graded by the defensive bands, not by a race it never
+  # finishes), so every consumer is inert exactly where candidate_race is.
+  #
+  # The bands: a win by two whole hits is the Scizor-into-Espeon case and worth more
+  # than 0.6.3's flat 110; one hit is that 110; a win on the tiebreak is worth
+  # less, because the adapters call a speed tie "slower" and this is where that
+  # error lives. The losing side mirrors it, short of the -500 a death on entry
+  # already pays.
+  KILL_ORDER_GRADES = { 2 => 150, 1 => 110, 0 => 70, -1 => -70, -2 => -110 }
+  KILL_ORDER_TIE_LOST = -30
+
+  def self.kill_order_grade(race)
+    return 0 if race.nil? || race["mine"].nil? || race["mine"] >= RACE_MAX_HITS
+    # `theirs` counts the free entry hit, which the candidate answers with nothing,
+    # so the exchange proper is theirs - 1 against mine.
+    theirs = race["theirs"].nil? ? RACE_MAX_HITS : race["theirs"]
+    margin = (theirs - 1) - race["mine"]
+    return (race["winning"] ? KILL_ORDER_GRADES[0] : KILL_ORDER_TIE_LOST) if margin == 0
+    KILL_ORDER_GRADES[[[margin, -2].max, 2].min]
+  end
+
+  def self.candidate_race_grade(snapshot, action)
+    worst = nil
+    (snapshot["targets"] || []).each do |target|
+      race = candidate_race(action, target)
+      next if race.nil?
+      grade = kill_order_grade(race)
+      worst = grade if worst.nil? || grade < worst
+    end
+    worst || 0
   end
 
   # The most any recovery move this battler carries restores, in hp_pct units and

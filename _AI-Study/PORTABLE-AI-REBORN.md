@@ -2056,6 +2056,54 @@ table, the two corrections, and the open question about Boots, which is still op
 0.5.0 zeroes the entry cost for a Boots holder because that is what the item does, not
 because the term Reborn uses for it was ever located.
 
+## Core version 0.6.4 — the wall margin, a PP bug, and a grade that does not pay (2026-09-06)
+
+Three keys, read off the 0.6.3 Realidea readout (`PORTABLE-AI-REALIDEA.md` → *0.6.4*):
+`escape_wall_margin` (a bench body opens the "I cannot hurt it" gate only if it beats the
+actor by two whole hits and needs no more than four of its own), `switch_estimate_pp` (the
+bench candidate's outgoing estimate skips a spent move, as the field view does — this
+adapter's `switch_outgoing_damage` walked `pokemon.moves` without looking at PP, exactly
+as Realidea's did), and `switchin_race_grade` (every switch candidate graded on who lands
+the last hit once it is in, by the margin in hits). **All three false reproduces 0.6.3 on
+set_c battle for battle** (60/60, result and turn count).
+
+### Measured (2026-09-06)
+
+Probe: **286/286** on the 224-card corpus (five new cards), the six `switch_score_gt` N/A
+as before. The Stealth Rock pair took four probe runs to hold on both engines — see the
+Realidea page for why (Steel resists Dark on v16; Charizard's Earthquake is 77.1% of
+Heatran here and 91.6% there).
+
+Sweep, `normal_portable`, 420 paired battles, every arm against 0.6.3's 231:
+
+| arm | wins | Δ | McNemar |
+|---|---:|---:|---|
+| full grades, wall on, no PP fix | 220 | −11 | p = 0.10 |
+| grade alone | **219** | **−12** | **p = 0.074** |
+| grade, penalties removed, wall + PP | 224 | −7 | p = 0.12 |
+| wall alone | 230 | −1 | p = 1.0 |
+| **shipped: wall + PP, grade off** | **230** | **−1** | p = 1.0 (gained 2, lost 3) |
+
+Per roster the shipped arm is set_a +1, set_b −1, set_c −1, the rest 0; the grade's loss
+is set_c (−8, −6) and speed (−7). A traced pair of set_c is committed so the grade can be
+chased rather than re-argued: `reborn_6v6_v064trace_set_c.ndjson` at the defaults (28/60,
+identical to the sweep — the trace is observation-free here too) and
+`reborn_6v6_v064gradetrace_set_c.ndjson` with the grade on (21/60). The grade changes who
+comes in, not how often (2.83 against 3.0 switches per battle, 116 against 114 on
+`losing_race_bench_wins`); the first divergences in the flipped battles are a bench that
+is graded −70/−110 across the board so the actor stays in and dies (`offense_vs_speed
+130363` t2), and a −70 body preferred over a −110 one that loses (`balance_vs_offense
+130363` t9). **The grade ships off**, the same disposition as `damage_race_switch`.
+
+The PP fix is neutral here (6v6 rarely spends a move) and decisive on Realidea, where it
+took switch-backs from 133 to 40 per 120 battles. That is what the shared core is for: the
+Reborn sweep is the control that a Realidea fix costs nothing on the other engine.
+
+Artifacts: `generated/reborn_6v6_v064_set_*.ndjson` (shipped defaults),
+`reborn_6v6_v064control_set_c.ndjson`, `reborn_6v6_v064gradeonly_set_*.ndjson`,
+`reborn_6v6_v064gradepositive_set_*.ndjson`, the traced set_c pair above, and
+`probe_results_reborn_v064_portable.ndjson`.
+
 ## Core version 0.6.3 — who is coming in (2026-09-06)
 
 **Three rules, three keys, one principle: a reason to leave has to name a body that does

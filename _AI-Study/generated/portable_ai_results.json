@@ -1,6 +1,6 @@
 {
  "captured": "2026-09-06",
- "version": "0.6.3",
+ "version": "0.6.4",
  "engine": "realidea",
  "status": "probe, tier gauntlet and archetype gauntlet all measured 2026-09-06, all clean. The hang that blocked strength numbers was a crash hidden by PBDebug.logonerr's uncommented pbPrintException call (a nil $ItemData); it is fixed. baseline_0_1_0 is retained for comparison but is superseded by archetype_0_6_2.",
  "installed": {
@@ -516,5 +516,206 @@
   "heal_outpace": "a heal that restores less than the next hit takes, in a lost race, is charged -120 rather than credited +150",
   "escape_needs_hitter": "no_effective_move / weak_current_attacks count only for a candidate whose best hit clears 10%",
   "replacement": "adapter routes faint replacement through the core when Portable drives the side; gauntlet key replacement=stock|portable, default stock"
+ },
+ "probe_0_6_4": {
+  "captured": "2026-09-06",
+  "artifact": "generated/ai_probe_results_portable.ndjson",
+  "cards": 219,
+  "passed": 251,
+  "gradeable": 267,
+  "skipped": 10,
+  "na": 4,
+  "note": "five 0.6.4 cards pass; the same sixteen 0.6.2 failures remain; 0.6.3 record kept as ai_probe_results_portable_0_6_3.ndjson"
+ },
+ "tier_0_6_4": {
+  "captured": "2026-09-06",
+  "artifact": "generated/realidea_shadowtrace_gen6ou_0_6_4.ndjson",
+  "battles": 360,
+  "sets": [
+   "gen6ou_a",
+   "gen6ou_b"
+  ],
+  "defaults": {
+   "escape_wall_margin": true,
+   "switch_estimate_pp": true,
+   "switchin_race_grade": false
+  },
+  "arms": {
+   "stock": {
+    "wins": 58,
+    "losses": 58,
+    "draws": 0,
+    "errors": 4,
+    "win_rate": 50.0,
+    "identical_to_0_6_3": "120/120"
+   },
+   "portable": {
+    "wins": 83,
+    "losses": 28,
+    "draws": 4,
+    "errors": 5,
+    "win_rate": 72.2,
+    "resolved_win_rate": 75.7,
+    "mean_turns": 27.6,
+    "paired_vs_0_6_3": {
+     "identical": 103,
+     "gained": 2,
+     "lost": 1
+    }
+   },
+   "portable_replacement_portable": {
+    "artifact": "generated/realidea_tier_0_6_4_replportable.ndjson",
+    "wins": 88,
+    "losses": 29,
+    "draws": 2,
+    "errors": 1,
+    "win_rate": 73.9,
+    "paired_vs_default": {
+     "identical": 23,
+     "gained": 20,
+     "lost": 15
+    },
+    "verdict": "noise; gauntlet default stays replacement=stock"
+   }
+  },
+  "ablation_vs_0_6_3_portable": {
+   "grade_on_wall_on_no_pp": {
+    "artifact": "generated/realidea_tier_0_6_4_grade_on.ndjson",
+    "record": "80-28-8",
+    "gained": 4,
+    "lost": 6
+   },
+   "grade_only": {
+    "artifact": "generated/realidea_tier_0_6_4_escape_wall_margin_off.ndjson",
+    "record": "80-29",
+    "gained": 5,
+    "lost": 7
+   },
+   "wall_only": {
+    "artifact": "generated/realidea_tier_0_6_4_switchin_race_grade_off.ndjson",
+    "record": "83-28",
+    "gained": 1,
+    "lost": 0
+   },
+   "grade_positive_only_wall_pp": {
+    "artifact": "generated/realidea_tier_0_6_4_exp_positive_only.ndjson",
+    "record": "83-27-5",
+    "gained": 4,
+    "lost": 3
+   }
+  },
+  "switching": {
+   "voluntary_per_battle": {
+    "0.6.3": 4.64,
+    "0.6.4": 3.52
+   },
+   "switch_backs_within_3_turns": {
+    "0.6.3": 133,
+    "0.6.4": 40
+   },
+   "switch_backs_same_foe": {
+    "0.6.3": 120,
+    "0.6.4": 29
+   },
+   "switch_backs_on_weak_current_attacks": {
+    "0.6.3": 62,
+    "0.6.4": 3
+   },
+   "heal_loop_turns_shadow": {
+    "0.6.3": 3,
+    "0.6.4": 3
+   },
+   "root_cause": "switch_outgoing_damage ignored PP: a bench body whose attacks were spent hit for 27% on the bench and for nothing on the field (team1_vs_team2 196613 t89-92)"
+  },
+  "errors": "four ZeroDivisionError at pbRoughDamage:3557 and one upanim NameError, pre-existing engine crashes"
+ },
+ "shadow_0_6_4": {
+  "captured": "2026-09-06",
+  "observation_free": {
+   "paired_battles": 120,
+   "diverged": 0,
+   "rolls_diverted": 0
+  },
+  "turns_compared": 3027,
+  "agreed": 1662,
+  "agreement_pct": 54.9,
+  "by_kind": {
+   "move_vs_move": 809,
+   "switch_vs_move": 498,
+   "move_vs_switch": 43,
+   "switch_vs_switch": 15
+  }
+ },
+ "reborn_0_6_4": {
+  "captured": "2026-09-06",
+  "probe": "286/286 on 224 cards, 6 N/A",
+  "control_set_c": "all three keys false reproduces 0.6.3: 60/60 battles identical, 29/60 +0",
+  "sweep": {
+   "frame": "7 rosters x 60, normal_portable",
+   "0.6.3": 231,
+   "shipped_defaults": {
+    "wins": 230,
+    "net": -1,
+    "gained": 2,
+    "lost": 3,
+    "p": 1.0,
+    "by_roster": {
+     "set_a": 1,
+     "set_b": -1,
+     "set_c": -1,
+     "set_d": 0,
+     "set_e": 0,
+     "set_f": 0,
+     "set_g": 0
+    }
+   },
+   "grade_on_full_no_pp": {
+    "wins": 220,
+    "net": -11,
+    "p": 0.1
+   },
+   "grade_only": {
+    "wins": 219,
+    "net": -12,
+    "gained": 13,
+    "lost": 25,
+    "p": 0.074,
+    "by_roster": {
+     "set_c": -8
+    },
+    "by_archetype": {
+     "speed": -7
+    }
+   },
+   "grade_positive_only_wall_pp": {
+    "wins": 224,
+    "net": -7,
+    "p": 0.12
+   },
+   "wall_only": {
+    "wins": 230,
+    "net": -1
+   }
+  },
+  "traced_set_c_pair": {
+   "defaults": "generated/reborn_6v6_v064trace_set_c.ndjson (28/60, identical to the sweep)",
+   "grade_on": "generated/reborn_6v6_v064gradetrace_set_c.ndjson (21/60)",
+   "switches_per_battle": {
+    "defaults": 3.0,
+    "grade_on": 2.83
+   }
+  },
+  "artifacts": [
+   "generated/reborn_6v6_v064_set_*.ndjson",
+   "generated/reborn_6v6_v064control_set_c.ndjson",
+   "generated/reborn_6v6_v064gradeonly_set_*.ndjson",
+   "generated/reborn_6v6_v064gradepositive_set_*.ndjson",
+   "generated/probe_results_reborn_v064_portable.ndjson"
+  ]
+ },
+ "rules_0_6_4": {
+  "escape_wall_margin": "no_effective_move / weak_current_attacks open the gate only for a candidate two whole hits better than the actor and needing at most four of its own (on)",
+  "switch_estimate_pp": "adapter-side: a bench candidate's outgoing estimate skips a move with no PP left (on)",
+  "switchin_race_grade": "every switch candidate graded on who lands the last hit once it is in, +150/+110/+70/-30/-70/-110 by hit margin; losing_race_bench_wins keeps its gate and gives up its flat 110 (OFF: -12 on Reborn, p=0.07)"
  }
 }

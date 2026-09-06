@@ -16,7 +16,7 @@
 # Everything else is optional evidence used to improve the score.
 
 module PortableAI
-  VERSION = "0.6.3" unless const_defined?(:VERSION)
+  VERSION = "0.6.4" unless const_defined?(:VERSION)
 
   module Model
     DEFAULT_CONFIG = {
@@ -144,7 +144,34 @@ module PortableAI
       # only for a bench candidate whose own best hit clears the weak line. Against a
       # wall every attacker is weak, and without this the bench body that came in was
       # as weak as the one that left and went straight back.
-      "escape_needs_hitter"   => true
+      "escape_needs_hitter"   => true,
+
+      # 0.6.4. Two refinements of the 0.6.3 rules, read off the same readouts, and one
+      # estimate fix. ALL THREE FALSE REPRODUCES 0.6.3 BATTLE-FOR-BATTLE.
+      #
+      # Every switch candidate -- the post-KO replacement included -- is graded on who
+      # lands the last hit once it is in, after hazards and the free entry hit, by
+      # the margin in hits (Core.kill_order_grade). Replaces the flat 110 of
+      # losing_race_bench_wins, which keeps its gate and gives up its score.
+      #
+      # OFF BY DEFAULT, on measurement: the probe and the cards say it does what it
+      # says, and the gauntlets say it costs wins -- Reborn 231 -> 219 / 420 alone
+      # (p = 0.07), 224 with its penalties removed, Realidea +5/-7 -- concentrated in
+      # one bulky roster. Same disposition as damage_race_switch in 0.6.0: an
+      # experiment the A/B can turn on, not a default.
+      "switchin_race_grade"   => false,
+      # A bench body opens the "I cannot hurt it" gate only if it beats the actor at
+      # the actor's own game: two whole hits fewer to the knockout and no more than
+      # four of its own. Refines escape_needs_hitter (inert without it): 62 of the
+      # 133 switch-backs left at 0.6.3 were a body that cleared the 10% line on the
+      # bench and not on the field.
+      "escape_wall_margin"    => true,
+      # Adapter-side (rule_enabled?): a bench candidate's outgoing estimate skips a
+      # move with no PP left, as the field view already does. Found in the 0.6.4
+      # trace: the switch-backs that survived the wall margin were two bodies whose
+      # attacks were all spent, each "hitting for 27%" on the bench and for nothing
+      # on the field.
+      "switch_estimate_pp"    => true
     }
 
     def self.config(overrides)

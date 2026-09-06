@@ -42,6 +42,11 @@ class PortableAITest < Test::Unit::TestCase
     action["reasons"].map { |pair| pair[0] }
   end
 
+  def reason_value(action, name)
+    hit = (action["reasons"] || []).find { |r| r[0] == name }
+    hit && hit[1]
+  end
+
   def switch_action(slot)
     { "type" => "switch", "slot" => slot, "base_score" => 100, "matchup_score" => 0 }
   end
@@ -1463,6 +1468,128 @@ class PortableAITest < Test::Unit::TestCase
     blind = { "type" => "switch", "slot" => 1, "base_score" => 100,
               "matchup_score" => 0, "candidate_hp_pct" => 100 }
     assert_equal("switch", pick(wall_snap([blind]), {})[0]["type"])
+  end
+
+  # --- 0.6.4 the switch-in is graded on who lands the last hit ------------------
+  #
+  # The grade ships OFF (see Model::DEFAULT_CONFIG for the measurement), so every
+  # test turns it on by hand and asserts the default's 0.6.3 shape as well.
+
+  GRADE = { "switchin_race_grade" => true }
+
+  def test_kill_order_grades_by_the_margin_in_hits
+    foe = target(0, 100)
+    grade = lambda { |b| PortableAI.kill_order_grade(PortableAI.candidate_race(b, foe)) }
+    # Two-shots the foe, takes 20: after the free hit the foe needs four more.
+    assert_equal(150, grade.call(bench(1, 60, 20, false)))
+    # Three-shots it, takes 20: four more after the free hit, a win by one.
+    assert_equal(110, grade.call(bench(1, 34, 20, false)))
+    # Three each way once the free hit is paid: speed decides.
+    assert_equal(70, grade.call(bench(1, 34, 25, true)))
+    assert_equal(-30, grade.call(bench(1, 34, 25, false)))
+    # Loses by one, by two, and dies on entry.
+    assert_equal(-70, grade.call(bench(1, 34, 34, true)))
+    assert_equal(-110, grade.call(bench(1, 20, 50, true)))
+    assert_equal(-110, grade.call(bench(1, 60, 100, true)))
+    # Nothing of the foe's gets through: a win by everything up to the cap.
+    assert_equal(150, grade.call(bench(1, 60, 0, false)))
+    # At the cap the count is a stall war, graded by the defensive bands instead.
+    assert_equal(0, grade.call(bench(1, 7, 0, true)))
+    assert_equal(0, PortableAI.kill_order_grade(nil))
+  end
+
+  def test_a_forced_replacement_prefers_the_body_that_kills_first
+    # Both take 20 a hit, so Radical Red's defensive bands see two identical bodies.
+    # Slot 1 needs four hits, slot 2 needs two: Slowbro over Scizor into Heatran.
+    slow = bench(1, 25, 20, false).merge("forced" => true)
+    fast = bench(2, 50, 20, false).merge("forced" => true)
+    a = actor(1, 0, [slow, fast], {})
+    snap = snapshot([a], [target(0, 100)], {})
+    result = pick(snap, GRADE)[0]
+    assert_equal(2, result["slot"])
+    assert(reasons_of(result).include?("kill_order"))
+    # By default (the grade off) the two are the same body and slot order wins.
+    off = pick(snap, {})[0]
+    assert_equal(1, off["slot"])
+    assert(!reasons_of(off).include?("kill_order"))
+  end
+
+  def test_a_losing_bench_body_is_charged_for_the_race_it_loses
+    # The actor is Yawned, so leaving has its reason; the bench body is two-shot
+    # after the free hit and needs four of its own. It still comes in -- the yawn is
+    # worth more than the race -- but the grade is on the record, and by default the
+    # switch scores exactly what 0.6.3 gave it.
+    loser = bench(1, 25, 50, false)
+    a = actor(1, 100, [move(0, "STRENGTH", 0, 100, 20, {}), loser], { "yawned" => true })
+    snap = snapshot([a], [target(0, 100)], {})
+    on = pick(snap, GRADE)[0]
+    off = pick(snap, {})[0]
+    assert_equal("switch", on["type"])
+    assert_equal(-110, reason_value(on, "kill_order"))
+    assert_equal(off["score"] - 110, on["score"])
+  end
+
+  def test_the_grade_replaces_the_flat_bonus_of_the_losing_race_gate
+    snap = losing_race_snap([bench(1, 60, 20, false)])
+    on = pick(snap, GRADE)[0]
+    off = pick(snap, {})[0]
+    assert_equal("switch", on["type"])
+    assert_equal(0, reason_value(on, "losing_race_bench_wins"))
+    assert_equal(150, reason_value(on, "kill_order"))
+    assert_equal(110, reason_value(off, "losing_race_bench_wins"))
+    assert_nil(reason_value(off, "kill_order"))
+  end
+
+  def test_in_doubles_the_candidate_is_graded_on_its_worse_race
+    # 21% two-shots a foe at 40 (a win by two) and five-shots one at full health
+    # (four more for the foe after the free hit: a loss by one). The worse race is
+    # the one that counts.
+    a = actor(1, 100, [move(0, "STRENGTH", 0, 100, 20, {}), bench(1, 21, 20, false)],
+              { "yawned" => true })
+    assert_equal(150, reason_value(pick(snapshot([a], [target(0, 40)], {}), GRADE)[0], "kill_order"))
+    both = snapshot([a], [target(0, 40), target(2, 100)], {})
+    assert_equal(-70, reason_value(pick(both, GRADE)[0], "kill_order"))
+  end
+
+  # --- 0.6.4 "I cannot hurt it" needs a body that breaks the wall ---------------
+
+  def test_the_bench_body_has_to_beat_the_actor_by_two_hits
+    # The actor hits the full-health wall for 5 (the cap). 20 is four-plus-one hits:
+    # over the 10% line, and not a wall-breaker. 30 is four hits and is.
+    line = bench(1, 20, 10, false)
+    breaker = bench(2, 30, 10, false)
+    assert_equal("move", pick(wall_snap([line]), {})[0]["type"])
+    assert_equal("switch", pick(wall_snap([breaker]), {})[0]["type"])
+    # 0.6.3's line: 20 clears 10% and opens the gate.
+    assert_equal("switch", pick(wall_snap([line]), { "escape_wall_margin" => false })[0]["type"])
+    # The margin refines escape_needs_hitter and is inert without it.
+    weak = bench(1, 6, 10, false)
+    assert_equal("switch", pick(wall_snap([weak]),
+                                { "escape_needs_hitter" => false })[0]["type"])
+  end
+
+  def test_the_wall_margin_is_counted_on_the_wall_it_has_left
+    # At 40% the actor's 5 is still eight hits, and 15 is three: enough.
+    snap = wall_snap([bench(1, 15, 10, false)])
+    snap["targets"][0]["hp_pct"] = 40
+    assert_equal("switch", pick(snap, {})[0]["type"])
+    # Against an actor that hits for 9 (five hits at 40), 15 is three: two fewer, ok;
+    # 12 is four: only one fewer, and the gate stays shut.
+    snap["actors"][0]["best_damage_pct"] = 9
+    assert_equal("switch", pick(snap, {})[0]["type"])
+    snap["actors"][0]["actions"][1] = bench(1, 12, 10, false)
+    assert_equal("move", pick(snap, {})[0]["type"])
+  end
+
+  def test_the_wall_breaker_needs_no_more_than_four_hits_of_its_own
+    # Actor at 5 is eight hits; 17 is six -- two fewer, but six is not breaking a wall.
+    assert_equal("move", pick(wall_snap([bench(1, 17, 10, false)]), {})[0]["type"])
+    assert_equal(false, PortableAI.candidate_can_hit?(
+                          wall_snap([]), wall_snap([])["actors"][0],
+                          bench(1, 17, 10, false), PortableAI::Model.config({})))
+    assert_nil(PortableAI.candidate_can_hit?(
+                 snapshot([actor(1, 80, [], {})], [], {}), { "best_damage_pct" => 5 },
+                 bench(1, 30, 10, false), PortableAI::Model.config({})))
   end
 
   # --- 0.6.3 a heal that only delays is not a save ------------------------------

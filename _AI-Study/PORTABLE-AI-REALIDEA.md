@@ -41,7 +41,7 @@ spread damage to a partner, avoids duplicate switches, and assigns finishable ta
 ## Config overrides
 
 `Data/ai_harness.txt` sets run-level knobs for the gauntlet and the probe, one
-`key=value` per line, `#` comments allowed. It is the same file and the same twenty-two
+`key=value` per line, `#` comments allowed. It is the same file and the same twenty-five
 core keys the Reborn harness uses, so an ablation reads identically in both studies —
 which is what lets a single installed build play both sides of a policy A/B instead of
 rebuilding between arms.
@@ -65,6 +65,7 @@ yawn_gate=false
 | `damage_race`, `damage_race_switch` | boolean (0.6.0) |
 | `spread_target_hp`, `lethal_flat`, `entry_death`, `wish_pending`, `setup_stage`, `move_memory`, `yawn_gate` | boolean (0.6.2) |
 | `race_switch_to_winner`, `heal_outpace`, `escape_needs_hitter` | boolean (0.6.3) — all three false reproduces 0.6.2 battle-for-battle |
+| `switchin_race_grade`, `escape_wall_margin`, `switch_estimate_pp` | boolean (0.6.4) — all three false reproduces 0.6.3 battle-for-battle |
 
 Three keys are the harness's own rather than the core's:
 
@@ -83,7 +84,7 @@ record said which run it belonged to.
 
 ### Run keys (not core config)
 
-`Data/ai_harness.txt` also carries keys the gauntlet reads directly. Unlike the twenty-two
+`Data/ai_harness.txt` also carries keys the gauntlet reads directly. Unlike the twenty-five
 config overrides these do not touch core policy — they choose what runs.
 
 | key | default | meaning |
@@ -158,9 +159,9 @@ version-control copy when a byte-for-byte pre-install rollback is required.
 Unit tests:
 
 ```bash
-ruby _AI-Study/tests/test_portable_ai.rb        # 124 tests
+ruby _AI-Study/tests/test_portable_ai.rb        # 133 tests
 ruby _AI-Study/tests/test_reborn_adapter.rb     # 53 tests
-ruby _AI-Study/tests/test_realidea_adapter.rb   # 91 tests
+ruby _AI-Study/tests/test_realidea_adapter.rb   # 92 tests
 python3 _AI-Study/tests/test_tooling.py
 python3 _AI-Study/tools/check_move_codes.py
 ```
@@ -200,6 +201,11 @@ Remove all trigger files after testing. With no trigger present, a normal boot r
 title path successfully.
 
 ## Measured result
+
+### 0.6.4 probe — 2026-09-06
+
+**251/267** on the 219-card corpus (267 gradeable after the same ten skips and four N/A);
+the five 0.6.4 cards all pass and the same sixteen 0.6.2 failures remain. See *0.6.4* below.
 
 ### 0.6.3 probe — 2026-09-06
 
@@ -619,6 +625,115 @@ turn by turn. The probe now writes every option's score and reasons (`ranking`) 
 first 0.6.3 probe run spent a rebuild finding out that a candidate's race had never been
 computed, and that is not happening again.
 
+### 0.6.4 — the switch-backs were a PP bug, and kill order does not pay, 2026-09-06
+
+Two refinements of the 0.6.3 rules were agreed off the 0.6.3 readout, and both went in
+behind their own keys. One of them found something else on the way.
+
+| key | rule | default |
+|---|---|---|
+| `escape_wall_margin` | `no_effective_move` and `weak_current_attacks` open the gate only for a bench candidate that **beats the actor at the actor's own game**: two whole hits fewer to the knockout and no more than four of its own, on the same foe HP (`candidate_can_hit?`). Refines `escape_needs_hitter`, inert without it | on |
+| `switch_estimate_pp` | a bench candidate's outgoing estimate **skips a move with no PP left**, as the field view already does (adapter `switch_outgoing_damage`, both engines) | on |
+| `switchin_race_grade` | every switch candidate, the post-KO replacement included, is graded on **who lands the last hit once it is in** — `candidate_race` after hazards and the free entry hit, by the margin in hits: +150 / +110 / +70 (tiebreak) / −30 / −70 / −110 (`kill_order_grade`). `losing_race_bench_wins` keeps its gate and gives up its flat 110 | **off** |
+
+**All three false reproduces 0.6.3 battle for battle** — Realidea's stock arm is
+bit-identical 120/120 either way, and the Reborn control on set_c is 60/60 with the three
+keys off.
+
+**What the wall margin found.** The first 0.6.4 run still had 125 switch-backs, 114 of
+them against an unchanged foe, and the wall reason was still the driver. The trace
+explained it: at turn 89 of `team1_vs_team2 196613` Quagsire's candidates were Recover,
+Haze and Toxic — **Scald was out of PP** — and Chansey's were Soft-Boiled, Stealth Rock
+and Toxic, Seismic Toss spent. Both had "no damaging move" on the field, and both hit
+"for 27%" on the bench, because `switch_outgoing_damage` walked `pokemon.moves` without
+looking at PP. The 0.6.3 note that "the bench estimate and the field estimate disagree
+across the 10% line" was right about the symptom and wrong about the size: they disagreed
+by a whole move. The margin rule is kept (it is right on its own terms, and the corpus
+cards say so) but the PP fix is what ended the loop:
+
+| | 0.6.3 | 0.6.4 |
+|---|---:|---:|
+| voluntary switches per battle | 4.64 | **3.52** |
+| switch-backs within three turns | 133 | **40** |
+| … against an unchanged foe | 120 | 29 |
+| … driven by `weak_current_attacks` | 62 | **3** |
+| heal-loop turns (shadow) | 3 | 3 |
+
+**What the kill-order grade found.** It does exactly what it says — the probe and the
+five cards below pass, the Scizor-into-Heatran replacement now reads `kill_order −110`
+against Slowbro's +110 — and it **costs wins on both gauntlets**, so it ships off:
+
+| arm (grade on) | Realidea, paired vs 0.6.3 | Reborn, 420 paired |
+|---|---|---|
+| full grades, wall on, no PP fix | 80-28, gained 4 lost 6 | 220 (−11, p = 0.10) |
+| full grades alone (wall off) | 80-29, gained 5 lost 7 | **219 (−12, p = 0.07)** |
+| penalties removed (+150/+110/+70 only), wall + PP | 83-27, gained 4 lost 3 | 224 (−7, p = 0.12) |
+| wall margin alone | 83-28, gained 1 lost 0 | 230 (−1) |
+| **shipped: wall + PP, grade off** | **83-28-4, gained 2 lost 1** | **230 (−1, p = 1.0)** |
+
+The loss sits in one Reborn roster (set_c, −8 and −6), and a traced pair of that roster
+is committed (`reborn_6v6_v064trace_set_c.ndjson` at defaults, 28/60 and identical to the
+sweep; `reborn_6v6_v064gradetrace_set_c.ndjson` with the grade on, 21/60). The grade does
+not change how often the AI switches (3.0 against 2.83 per battle); it changes **who**
+comes in and **whether**: in `offense_vs_speed 130363` t2 every bench body is graded −70
+or −110, the switch the default takes at 223 drops to 113, the actor stays in to Brave
+Bird and loses; in `balance_vs_offense 130363` t9 the grade prefers the −70 body over the
+−110 one and that body loses. A bench body that "loses its race" on a point estimate is
+often still the right pivot — the entry cost is already charged, and the actor was leaving
+for a reason. Same disposition as `damage_race_switch` in 0.6.0: the A/B can turn it on;
+the default cannot.
+
+**Faint replacement**, now that the grade is measured: `replacement=portable` scores
+88-29-2 (73.9%) against the default's 83-28-4 — gained 20, lost 15 paired, still within
+noise, and the gauntlet default stays `stock`.
+
+#### Measured
+
+Probe **251/267** (214 → 219 cards, +5, every new card passes; the same sixteen
+assertions fail that failed on 0.6.2). Tier suite, 240 battles, gen6ou_a + gen6ou_b:
+
+| arm | 0.6.3 | 0.6.4 | |
+|---|---|---|---|
+| stock | 58-58, 4 errors, 50.0% | 58-58, 4 errors, 50.0% | **identical, 120/120 battles** |
+| portable | 82-30-4, 4 errors, 70.7% | 83-28-4, 5 errors, **72.2%** | paired: 103 identical, gained 2, lost 1 |
+| portable, `replacement=portable` | 80-33-5, 67.8% | 88-29-2, 1 error, 73.9% | vs default: gained 20, lost 15 — noise |
+| mean turns, portable | 27.9 | 27.6 | |
+
+Shadow arm, 120/120 observation-free, agreement **54.3% → 54.9%** over 3,027 turns
+(switch-vs-move 544 → 498). The fifth Portable-arm error is a fourth `pbRoughDamage`
+ZeroDivision, the pre-existing engine crash.
+
+**Reborn, same core, full protocol** (`PORTABLE-AI-REBORN.md` → *Core version 0.6.4*):
+probe 286/286; control 60/60 +0; sweep **231 → 230 / 420** (−1, p = 1.0) at the shipped
+defaults. The switching fix is a Realidea result — Reborn's 6v6 battles rarely run a
+move out of PP — and the Reborn sweep is the control that it costs nothing there.
+
+The corpus cards (`CORPUS_064`): `no_effective_move_needs_a_body_that_breaks_the_wall`
+and its control `a_body_that_only_clears_the_line_is_not_worth_the_free_turn` (Alakazam
+in front of an Umbreon that carries no attack, Politoed's Scald at 24% clears 0.6.3's
+line and not the margin, Machamp's Close Combat does — four moves each side so no filler
+pads the set); `a_reason_to_leave_does_not_send_in_the_body_that_dies_first` (Yawned
+Zapdos, Slowbro over Scizor into Heatran — passes at 0.6.3 too, it is the fixture for the
+complaint); and the pair `a_winning_bench_body_is_still_a_winner_off_the_rocks` /
+`the_rocks_turn_the_same_body_into_a_loser` (Charizard's Earthquake two-shots Heatran and
+Flare Blitz is a third of Charizard: off rocks a win by one hit, on rocks in at half and
+a loss by one — the entry-damage arithmetic was in `candidate_race` at 0.6.3, this is the
+proof that was asked for). That last pair took four probe runs to tune, and the reason is
+worth keeping: **Realidea's chart has Steel resisting Dark** (Crunch on Heatran, 18.7%
+here against Reborn's 23.5%), and its Charizard hits half again as hard as Reborn's
+(Earthquake 91.6% against 77.1%), so a move that three-shots on one engine five-shots on
+the other. A card that has to hold on both engines has to be read off both engines'
+`ranking` records, not calculated.
+
+Artifacts: `realidea_shadowtrace_gen6ou_0_6_4.ndjson` (traced, all three arms, the
+shipped defaults), `realidea_shadowtrace_gen6ou_0_6_4_replportable.ndjson` and its lean
+twin `realidea_tier_0_6_4_replportable.ndjson`, the ablation arms as lean files
+(`realidea_tier_0_6_4_grade_on.ndjson`, `_switchin_race_grade_off`,
+`_escape_wall_margin_off`, `_exp_positive_only`), `ai_probe_results_portable.ndjson`
+(0.6.4; 0.6.3's kept as `ai_probe_results_portable_0_6_3.ndjson`), and under `readouts/`
+the same five shadow battles and the one live `replacement=portable` battle as 0.6.3,
+under the `0_6_4` stamp, so the two versions diff turn by turn.
+
 ### The gauntlet hang, and what it actually was
 
 **Fixed 2026-09-06.** It was a crash, not a deadlock, and every symptom that made it
@@ -900,17 +1015,22 @@ Before replacing the installed section:
 
 ### What is outstanding right now
 
-The probe is done, the hang is fixed, the tier gauntlet is measured, and 0.6.3 shipped the
-switching rules. Outstanding, in priority order:
+The probe is done, the hang is fixed, the tier gauntlet is measured, 0.6.3 shipped the
+switching rules and 0.6.4 closed the switch-back loop. Outstanding, in priority order:
 
-0. **The wall switch-backs** (see *0.6.3*): 133 switch-backs per 120 battles, 62 of them
-   `weak_current_attacks` re-firing because the bench estimate and the field estimate
-   disagree across the 10% line. Require the candidate to beat the actor's own best hit.
-   Behind that sits the larger gap the same readout showed: the core has **no model of
-   foe recovery** (`damage_race` counts hits with no heal term, and targets export no
-   moves), so "mine 6 turns" against a Soft-Boiled Clefable is fiction — and no rule
-   values Protect (scouting, stalling a poisoned foe, receiving a Wish); foes chose it 31
-   times in 3,033 turns, so the tier pool cannot even measure that one.
+0. **The core has no model of foe recovery and no value for Protect** (see *0.6.3*,
+   *0.6.4*). `damage_race` counts hits with no heal term and targets export no moves —
+   both adapters *read* the foe's moves to build `incoming_by_move`, they just export the
+   damage and not the list — so "mine 6 turns" against a Soft-Boiled Clefable is fiction,
+   and no rule values Protect (scouting, stalling a poisoned foe, receiving a Wish); foes
+   chose it 31 times in 3,033 turns. Step one is a target-level export (`heals_pct`,
+   `has_protect`, `has_status`, `has_setup`), which is fair information because the stock
+   AIs read the same moves. The wall switch-backs that sat here at 0.6.3 are closed: they
+   were a PP bug in the bench estimate (*0.6.4*).
+0b. **The kill-order grade** (`switchin_race_grade`, off) cost wins on one Reborn roster
+   and a traced pair of that roster is committed; the first divergences are written up
+   under *0.6.4*. Whether a bench body that loses its race on a point estimate should be
+   charged at all, or only relative to the actor's own race, is the open design question.
 1. **Re-measure 0.1.0 so the regression check can actually run.** The gate asks for
    losses the previous version won on the same seed; 0.1.0's per-battle records were not
    kept, only their hash, so that comparison is currently impossible (see *Against the

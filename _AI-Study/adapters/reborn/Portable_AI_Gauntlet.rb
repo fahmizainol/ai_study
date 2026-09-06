@@ -65,7 +65,11 @@ module PortableAIRebornGauntlet
     # 0.6.3. All three false is 0.6.2, which is the control run.
     ["race_switch_to_winner", :boolean],
     ["heal_outpace",          :boolean],
-    ["escape_needs_hitter", :boolean]
+    ["escape_needs_hitter", :boolean],
+    # 0.6.4. All three false is 0.6.3, which is the control run.
+    ["switchin_race_grade",  :boolean],
+    ["escape_wall_margin",   :boolean],
+    ["switch_estimate_pp",   :boolean]
   ]
 
   OUT     = "Data/ai_gauntlet_results.ndjson"

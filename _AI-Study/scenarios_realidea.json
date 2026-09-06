@@ -8117,5 +8117,187 @@
     "must_not_switch"
    ]
   ]
+ },
+ {
+  "id": "no_effective_move_needs_a_body_that_breaks_the_wall",
+  "field": 0,
+  "format": "single",
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "PSYCHIC",
+   "CALMMIND",
+   "RECOVER",
+   "SUBSTITUTE"
+  ],
+  "ai_species": "ALAKAZAM",
+  "player_species": "UMBREON",
+  "ai2_moves": null,
+  "ai2_species": null,
+  "player2_species": null,
+  "ai_party_species": [
+   "ALAKAZAM",
+   "POLITOED",
+   "MACHAMP"
+  ],
+  "ai_actives": 1,
+  "move_ids": {
+   "PSYCHIC": 452,
+   "CALMMIND": 470,
+   "RECOVER": 393,
+   "SUBSTITUTE": 412
+  },
+  "assertions": [
+   [
+    "must_switch_to",
+    "MACHAMP"
+   ]
+  ]
+ },
+ {
+  "id": "a_body_that_only_clears_the_line_is_not_worth_the_free_turn",
+  "field": 0,
+  "format": "single",
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "PSYCHIC",
+   "CALMMIND",
+   "RECOVER",
+   "SUBSTITUTE"
+  ],
+  "ai_species": "ALAKAZAM",
+  "player_species": "UMBREON",
+  "ai2_moves": null,
+  "ai2_species": null,
+  "player2_species": null,
+  "ai_party_species": [
+   "ALAKAZAM",
+   "POLITOED"
+  ],
+  "ai_actives": 1,
+  "move_ids": {
+   "PSYCHIC": 452,
+   "CALMMIND": 470,
+   "RECOVER": 393,
+   "SUBSTITUTE": 412
+  },
+  "assertions": [
+   [
+    "must_not_switch"
+   ]
+  ]
+ },
+ {
+  "id": "a_reason_to_leave_does_not_send_in_the_body_that_dies_first",
+  "field": 0,
+  "format": "single",
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "DISCHARGE",
+   "HEATWAVE",
+   "POUND",
+   "PECK"
+  ],
+  "ai_species": "ZAPDOS",
+  "player_species": "HEATRAN",
+  "ai2_moves": null,
+  "ai2_species": null,
+  "player2_species": null,
+  "ai_party_species": [
+   "ZAPDOS",
+   "SCIZOR",
+   "SLOWBRO"
+  ],
+  "ai_actives": 1,
+  "move_ids": {
+   "DISCHARGE": 71,
+   "HEATWAVE": 132,
+   "POUND": 309,
+   "PECK": 168
+  },
+  "assertions": [
+   [
+    "must_switch_to",
+    "SLOWBRO"
+   ]
+  ]
+ },
+ {
+  "id": "a_winning_bench_body_is_still_a_winner_off_the_rocks",
+  "field": 0,
+  "format": "single",
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "ROOST",
+   "DISCHARGE",
+   "POUND",
+   "PECK"
+  ],
+  "ai_species": "ZAPDOS",
+  "player_species": "HEATRAN",
+  "ai2_moves": null,
+  "ai2_species": null,
+  "player2_species": null,
+  "ai_party_species": [
+   "ZAPDOS",
+   "CHARIZARD"
+  ],
+  "ai_actives": 1,
+  "move_ids": {
+   "ROOST": 172,
+   "DISCHARGE": 71,
+   "POUND": 309,
+   "PECK": 168
+  },
+  "assertions": [
+   [
+    "must_switch_to",
+    "CHARIZARD"
+   ]
+  ]
+ },
+ {
+  "id": "the_rocks_turn_the_same_body_into_a_loser",
+  "field": 0,
+  "format": "single",
+  "weather": null,
+  "ai_side": {
+   "stealthrock": 1
+  },
+  "player_side": {},
+  "ai_moves": [
+   "ROOST",
+   "DISCHARGE",
+   "POUND",
+   "PECK"
+  ],
+  "ai_species": "ZAPDOS",
+  "player_species": "HEATRAN",
+  "ai2_moves": null,
+  "ai2_species": null,
+  "player2_species": null,
+  "ai_party_species": [
+   "ZAPDOS",
+   "CHARIZARD"
+  ],
+  "ai_actives": 1,
+  "move_ids": {
+   "ROOST": 172,
+   "DISCHARGE": 71,
+   "POUND": 309,
+   "PECK": 168
+  },
+  "assertions": [
+   [
+    "must_not_switch"
+   ]
+  ]
  }
 ]
