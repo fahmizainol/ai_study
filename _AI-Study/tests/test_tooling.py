@@ -191,5 +191,46 @@ class ShadowComparisonTest(unittest.TestCase):
         self.assertEqual((1, []), (paired, bad))
 
 
+class RenderSelectionTest(unittest.TestCase):
+    """Addressing one battle in a tier trace.
+
+    A matchup id and seed name four records, not one: both roster sets call their
+    matchups team1_vs_team2, and every battle is recorded once per mode. Same
+    collision that halved the shadow sample -- here it made the renderer print four
+    battles when asked for one.
+    """
+
+    @classmethod
+    def setUpClass(cls):
+        import render_realidea_battle
+        cls.mod = render_realidea_battle
+
+    ROWS = [
+        {"teams": "gen6ou_a", "mode": "portable", "id": "t1_vs_t2", "seed": 1},
+        {"teams": "gen6ou_a", "mode": "shadow", "id": "t1_vs_t2", "seed": 1},
+        {"teams": "gen6ou_b", "mode": "portable", "id": "t1_vs_t2", "seed": 1},
+        {"teams": "gen6ou_b", "mode": "shadow", "id": "t1_vs_t2", "seed": 1},
+    ]
+
+    def test_teams_and_mode_together_name_one_record(self):
+        picked = self.mod.select(self.ROWS, teams="gen6ou_a", mode="shadow")
+        self.assertEqual(1, len(picked))
+        self.assertEqual("gen6ou_a", picked[0]["teams"])
+        self.assertEqual("shadow", picked[0]["mode"])
+
+    def test_either_filter_alone_still_narrows(self):
+        self.assertEqual(2, len(self.mod.select(self.ROWS, teams="gen6ou_b")))
+        self.assertEqual(2, len(self.mod.select(self.ROWS, mode="shadow")))
+
+    def test_no_filter_keeps_everything(self):
+        self.assertEqual(4, len(self.mod.select(self.ROWS)))
+
+    def test_flag_reads_its_value_and_ignores_others(self):
+        argv = ["run.ndjson", "--teams=gen6ou_b", "--mode=shadow", "--list"]
+        self.assertEqual("gen6ou_b", self.mod.flag(argv, "teams"))
+        self.assertEqual("shadow", self.mod.flag(argv, "mode"))
+        self.assertIsNone(self.mod.flag(argv, "format"))
+
+
 if __name__ == "__main__":
     unittest.main()

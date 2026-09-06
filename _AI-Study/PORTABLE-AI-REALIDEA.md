@@ -355,9 +355,15 @@ no previously recorded number changes meaning. Three were wins, three losses.
 key, and `tools/render_realidea_battle.py` prints one battle as text. A traced 120-battle
 set is about 880 KB and takes the same ~65 seconds.
 
+A matchup id and seed do **not** name one battle: both roster sets call their matchups
+`team1_vs_team2`, and each battle is recorded once per mode, so a tier trace holds four
+records under the same pair. `--teams=` and `--mode=` narrow it to one; `--list` shows
+both columns. Same collision that once halved the shadow sample.
+
 ```
 python3 tools/render_realidea_battle.py generated/realidea_tiertrace_gen6ou_a.ndjson --list
-python3 tools/render_realidea_battle.py generated/realidea_tiertrace_gen6ou_a.ndjson team1_vs_team4 104729
+python3 tools/render_realidea_battle.py generated/realidea_tiertrace_gen6ou_a.ndjson \
+    team1_vs_team4 104729 --teams=gen6ou_a --mode=portable
 ```
 
 ```
@@ -411,8 +417,8 @@ Four things to know before reading one:
 |---|---|
 | **One arm per record** | a `mode=portable` record traces the arm that *played*, so it holds no stock answer to the same board. For a turn-by-turn diff of the two AIs, run the **shadow arm** below; those records carry both. |
 | **Decisions, not outcomes** | the line says what Portable chose, the board it faced and every option it weighed. It still does *not* say what the engine then **did** — whether the move hit, crit, was Protected, or what the foe's move actually did. Reborn's gauntlet hooks the engine's `events` stream for that; this one has no such hook, and that is the one real gap left between the two readouts. |
-| **A missing turn is a fall-through** | no line means Portable did not decide that turn — the adapter deferred to the stock path, or the actor could not act. A turn the *observer* crashed on is **not** missing: it is recorded with a null answer and an `observer_error`, and counted as unscorable, because an absent turn would quietly shrink the denominator of every agreement figure. Realidea's `pbRoughDamage` divide-by-zero causes 6 of these in 3,033 turns. |
-| **`race` is keyed by battler seat, not party slot** | the record carries no per-turn foe identity, so the renderer prints `foe@0` rather than guessing a species. A *switch* entry's `slot` **is** a party index and is resolved to a name. |
+| **A missing turn is a fall-through** | no line means Portable did not decide that turn — the adapter deferred to the stock path, or the actor could not act. A turn the *observer* crashed on is **not** missing: it is recorded with a null answer and an `observer_error`, and counted as unscorable, because an absent turn would quietly shrink the denominator of every agreement figure. All 6 in 3,033 turns are the same case, and it is benign: `ArgumentError: actor 1 has no usable actions` on a **Struggle** turn — every move out of PP, which the core has no candidate to represent. The host still played; only the comparison is lost. |
+| **`race` is keyed by battler seat, not party slot** | a seat is not a party index. Records written since the view carried `targets` resolve the seat to the species that was actually standing there; older ones have no per-turn foe identity and still print the bare `foe@0` rather than guessing. A *switch* entry's `slot` **is** a party index and is always resolved to a name. |
 
 `parties` (species and final HP per side) is written alongside any per-turn record —
 `trace=true`, or a shadow record, whose per-turn pairing *is* the arm's output. A switch
@@ -433,7 +439,17 @@ stock/portable pair can be compared on outcomes and nothing finer.
 ```bash
 # modes=stock,portable,shadow  schedule=tier  teams=gen6ou_a   (then gen6ou_b, append=true)
 python3 tools/shadow_check.py generated/realidea_tier_shadow_0_6_2.ndjson
-python3 tools/render_realidea_battle.py generated/realidea_shadowtrace_gen6ou.ndjson team1_vs_team4 104729
+python3 tools/render_realidea_battle.py generated/realidea_shadowtrace_gen6ou.ndjson \
+    team1_vs_team4 104729 --teams=gen6ou_a --mode=shadow
+```
+
+Three rendered battles are committed under `generated/readouts/` so the format can be
+read without a re-render: `team1_vs_team2 196613` and `team3_vs_team2 155921` pair with
+the single-arm readouts already there, and `team2_vs_team1 104729` is the one carrying
+observer failures. Rendering all 360 at once gives an 86,000-line, 6 MB file; that is
+deliberately **not** committed, being a pure derivation of a tracked trace.
+
+```bash
 python3 tools/render_realidea_battle.py generated/realidea_shadowtrace_gen6ou.ndjson > readout.txt
 ```
 

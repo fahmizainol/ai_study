@@ -27,8 +27,12 @@ What that means when reading the output, and it is worth keeping in mind:
     speed order, not the order they were asked.
 
 Usage:
-    python3 render_realidea_battle.py <ndjson> [matchup_id] [seed]
+    python3 render_realidea_battle.py <ndjson> [matchup_id] [seed] [--teams=SET] [--mode=M]
     python3 render_realidea_battle.py <ndjson> --list
+
+A matchup id and seed do NOT name one battle. Two roster sets both call their matchups
+team1_vs_team2, and each battle is recorded once per mode, so a tier trace holds four
+records under the same id and seed. Narrow with --teams and --mode; --list shows both.
 """
 
 import json
@@ -274,17 +278,40 @@ def render(record):
         render_candidates(entry)
 
 
+def flag(argv, name):
+    """Read `--name=value` out of argv, or None."""
+    prefix = "--%s=" % name
+    for arg in argv:
+        if arg.startswith(prefix):
+            return arg[len(prefix):]
+    return None
+
+
+def select(records, teams=None, mode=None):
+    """Narrow to one roster set and/or one arm.
+
+    Without this, asking for a matchup id and seed prints four battles: the two roster
+    sets share matchup names, and each battle is recorded once per mode.
+    """
+    if teams is not None:
+        records = [r for r in records if r.get("teams") == teams]
+    if mode is not None:
+        records = [r for r in records if r.get("mode") == mode]
+    return records
+
+
 def main():
     if len(sys.argv) < 2:
         sys.exit(__doc__)
-    records = load(sys.argv[1])
+    records = select(load(sys.argv[1]),
+                     flag(sys.argv[1:], "teams"), flag(sys.argv[1:], "mode"))
     if "--list" in sys.argv:
         for r in records:
             entries = r.get("trace") or r.get("shadow")
             if entries:
-                print("%-18s seed=%-10s %-6s %-5s turns=%-4s decisions=%d" % (
-                    r.get("id"), r.get("seed"), r.get("mode"), r.get("result"),
-                    r.get("turns") or 0, len(entries)))
+                print("%-18s seed=%-10s %-10s %-8s %-5s turns=%-4s decisions=%d" % (
+                    r.get("id"), r.get("seed"), r.get("teams"), r.get("mode"),
+                    r.get("result"), r.get("turns") or 0, len(entries)))
         return
     args = [a for a in sys.argv[2:] if not a.startswith("--")]
     wanted = [r for r in records
