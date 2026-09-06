@@ -7,10 +7,11 @@ both measured.** Opt-in, and inert until its marker file exists.
 > stock v16 + clara's **202/256**, and there is no card Portable fails that stock passes
 > (stock fails 48 cards, Portable 14, and the 14 are a subset).
 >
-> **Strength:** on 240 paired battles over real gen 6 OU sample teams, Portable wins
-> **66.9%** against stock's **50.0%** (**69.5%** once the engine's discarded timeout
-> verdicts are read back). Stock-versus-stock at exactly 58W/58L is the control that
-> says the schedule is fair. See *Tier suite*.
+> **Strength:** Portable wins on both benchmarks, and both now run clean end to end.
+> On 240 paired battles over real gen 6 OU sample teams it takes **66.9%** against stock's
+> **50.0%**; on 320 battles of the frozen archetype fixture, **64.4%** against **51.2%**.
+> Stock-versus-stock at exactly 58W/58L on the tier schedule is the control that says
+> it is fair. See *Tier suite* and *Archetype gauntlet*.
 >
 > The hang that blocked this page's strength numbers is **fixed**: it was never a
 > deadlock. See *The gauntlet hang, and what it actually was*.
@@ -385,41 +386,70 @@ invisible:
 of success. Before the exception capture, three separate pre-existing engine bugs
 (*Tier suite*, below) were running invisibly.
 
-### 0.1.0 baseline
+### Archetype gauntlet — 0.6.2, 2026-09-06
 
-> Everything in this section is the **0.1.0** install measured on 2026-09-04, against the
-> old 126-scenario corpus. It is kept as the baseline the 0.6.2 run has to be compared
-> against, not as a description of what is installed now.
+The frozen benchmark: eight matchups, the three-mon fixture, `teams=archetype`. First
+completion since the port — the 0.6.2 attempt earlier today stopped at 36 of 80 records.
+**Zero errors in both arms**, which is itself the result: the `$ItemData` crash is gone.
 
-The corpus at the time contained 126 scenarios and 169 assertions. Five Reborn-field
-scenarios were explicitly skipped, leaving 163 applicable assertions:
+| | stock | portable | gap |
+|---|---:|---:|---:|
+| frozen 5 seeds (80 battles) | 20/40 (50.0%) | 26/40 (**65.0%**) | +15.0pt |
+| extended 20 seeds (320 battles) | 82/160 (51.2%) | 103/160 (**64.4%**) | +13.1pt |
+
+Singles/doubles at 20 seeds: stock 56/120 and 26/40, Portable 73/120 and 30/40 — the gain
+is in singles (+14.1pt) and doubles (+10.0pt) alike.
+
+**The extended seeds are an addition, not a replacement.** The five frozen seeds are the
+comparable number; the other fifteen are there because 40 battles per arm cannot separate
+a five-point difference from noise. The frozen-seed subset of the 320-battle run is
+**outcome-identical** to the standalone 80-battle run, so the seeds do not interact and
+both tables describe the same build.
+
+#### Against the 0.1.0 baseline
+
+> The 0.1.0 install was measured on 2026-09-04 against the old 126-scenario corpus. Kept
+> as the baseline, not as a description of what is installed now.
+
+| | 0.1.0 | 0.6.2 (same 5 seeds) |
+|---|---:|---:|
+| Stock | 20/40 (50.0%), singles 14/30, doubles 6/10, mean 7.1 turns | **identical on every figure** |
+| Portable | 28/40 (70.0%), singles 20/30, doubles 8/10 | 26/40 (65.0%), singles 18/30, doubles 8/10 |
+
+**Stock reproducing 0.1.0 exactly — win/loss, both format splits, and mean turn count to
+one decimal — is the control.** The fixture, the seeds and the stock path are unchanged,
+so the Portable column is the only thing being compared. It also shows the `$ItemData`
+fix did not perturb this fixture, which is expected: none of its Pokémon hold an item.
+
+**Portable is two battles below 0.1.0, both in singles.** That is 5 points on n=40, where
+the standard error is about 7.2 — it is not a result in either direction. The 20-seed run
+puts 0.6.2's rate at 64.4% ± 3.8, and 0.1.0's 70.0% ± 7.2 overlaps it; 0.1.0 was never run
+at 20 seeds, so the two cannot be separated.
+
+**The gate's actual regression check could not be run.** It asks for *"losses that the
+previous version won on the same seed — list them by seed and read the traces"*, and that
+needs 0.1.0's per-battle records. Only their SHA-256 was kept
+(`b91feba3…` in `portable_ai_results.json`); the ndjson lived at
+`Realidea V4.1/Data/ai_gauntlet_results.ndjson` and has been overwritten. **Every gauntlet
+artifact is now copied into `generated/` so this cannot recur.** Re-running the check
+means rebuilding 0.1.0 from git and re-measuring it, which is cheap now that a set takes
+under a minute — it is on the outstanding list.
+
+The corpus at 0.1.0 was 126 scenarios / 169 assertions, five Reborn-field scenarios
+skipped, leaving 163 applicable:
 
 | AI | Tier-1 | Spearman vs Reborn | Action-type agreement |
 |---|---:|---:|---:|
 | Stock v16 + Clara | 143/163 | baseline | baseline |
 | Portable AI 0.1.0 | **163/163** | **0.913** | **117/121 (96.7%)** |
 
-The 0.6.2 corpus is **208 scenarios / 275 assertions**. Ten scenarios are skipped with a
-reason — seven pin a Reborn field id, three pin a mechanic this engine does not have —
-leaving **198 scenarios / 260 applicable assertions**. Five of the 213 Reborn cards
-cannot be built against a v16 PBS at all (Heavy-Duty Boots, Clear Amulet) and are
-dropped by `make_scenarios.py --drop-unresolved`, which prints each one.
+That 163/163 is not comparable to 0.6.2's 240/256: the corpus roughly doubled, and the
+cards added since are the ones that discriminate. Hashes and machine-readable totals for
+both are in `generated/portable_ai_results.json`; the pre-expansion stock baseline is
+preserved in `generated/portable_ai_baseline.json`.
 
-The frozen gauntlet ran eight matchups at five identical seeds in stock and portable mode
-(80 battles total, no errors):
-
-| AI | Overall | Singles | Doubles |
-|---|---:|---:|---:|
-| Stock | 20/40 (50.0%) | 14/30 | 6/10 |
-| Portable | **28/40 (70.0%)** | **20/30** | **8/10** |
-
-Hashes and machine-readable totals are recorded in
-`generated/portable_ai_results.json`; the pre-expansion stock baseline is preserved in
-`generated/portable_ai_baseline.json`.
-
-The checks establish decision and frozen-gauntlet improvement. They do not replace a
-manual campaign playthrough of scripted bosses and unusual custom mechanics; the
-fail-safe stock fallback remains enabled for that reason.
+None of this replaces a manual campaign playthrough of scripted bosses and unusual custom
+mechanics; the fail-safe stock fallback remains enabled for that reason.
 
 ## Future-agent handoff
 
@@ -592,18 +622,20 @@ Before replacing the installed section:
 The probe is done, the hang is fixed, and the tier gauntlet is measured. Outstanding, in
 priority order:
 
-1. **Run the archetype gauntlet to completion.** It is the frozen eight-matchup benchmark
-   (`teams=archetype`, the default) and it is what the 0.1.0 win rates on this page were
-   measured on, so it is the only artifact that can retire them. It has not been re-run
-   since the `$ItemData` fix; the 0.6.2 attempt that stopped at 36/80 records almost
-   certainly stopped on that bug, but **that is inference, not measurement** — the run
-   predates the progress file and the error capture, so nothing recorded says so. Re-run
-   it and find out. Then the ablation controls, then rewrite the 0.1.0 baseline section.
-2. **Report the three engine bugs upstream, or work around them.** Six battles of 240 end
+1. **Re-measure 0.1.0 so the regression check can actually run.** The gate asks for
+   losses the previous version won on the same seed; 0.1.0's per-battle records were not
+   kept, only their hash, so that comparison is currently impossible (see *Against the
+   0.1.0 baseline*). Rebuilding 0.1.0 from git and re-running it at the same 20 seeds is
+   now under a minute of box time and would settle whether Portable's two-battle singles
+   deficit is real. Every gauntlet artifact is now copied into `generated/`, so the loss
+   cannot recur.
+2. **Run the ablation controls** from `Data/ai_harness.txt` — each 0.6.2 key off in turn,
+   checked against its predecessor's decisions per seed. Cheap now, and untouched.
+3. **Report the three engine bugs upstream, or work around them.** Six battles of 240 end
    with no verdict. The `hasWorkingAbility` one is a one-word fix (`hasAbility?` on a
    party Pokémon) and it is stock-only, so leaving it in place makes the stock arm look
    slightly worse than its policy deserves.
-3. **A second tier draw is not available.** gen6ou's eligible pool is 11 teams and both
+4. **A second tier draw is not available.** gen6ou's eligible pool is 11 teams and both
    sets are already drawn from it; a third set would overlap. Widening the corpus means
    adding another gen 6 source to `extracted/smogon-teams/`, not re-rolling the seed.
 

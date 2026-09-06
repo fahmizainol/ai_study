@@ -19,7 +19,7 @@ The study has two phases, and they are still both live:
 | | |
 |---|---|
 | Portable core | **0.6.2**, installed in Reborn Yang (opt-in, off by default) |
-| Second adapter | Realidea v16, **installed at 0.6.2** — probe **240/256** vs stock's 202/256, no regressions; tier gauntlet **66.9%** vs stock's **50.0%** over 240 battles on real gen 6 OU teams |
+| Second adapter | Realidea v16, **installed at 0.6.2** — probe **240/256** vs stock's 202/256, no regressions; tier gauntlet **66.9%** vs **50.0%** (240 battles, real gen 6 OU teams), archetype **64.4%** vs **51.2%** (320 battles) |
 | Corpus | **213 cards / 281 assertions** in `scenarios.json` — 275 graded and passing, 6 N/A on the Portable side (`switch_score_gt` needs Reborn's party-indexed score array) |
 | Unit tests | **229** Ruby + **11** Python green — `test_portable_ai.rb` 108, `test_realidea_adapter.rb` 68, `test_reborn_adapter.rb` 53, `test_tooling.py` 11 |
 | Benchmark frame | 7 rosters × 60 = **420 battles**, `arms=normal_portable`, `schedule=normal_baseline`, `party_size=6` |
@@ -264,14 +264,15 @@ one switch that saves the mon; a faster 2HKO race abandoned on the one-hit flag.
   post-KO switch-in score is the most compact statement of the same idea.
 - **Breadth as tables, round two** — the remaining `effects.rb` / ability rows sketched
   at the end of the 0.5.0 backlog.
-- **The Realidea archetype gauntlet has not been re-run since the hang was fixed.** The
-  hang was never a deadlock: an exception inside `PBDebug.logonerr`, whose guard around
-  `pbPrintException` is commented out, became a modal box nobody could dismiss. The
-  exception was a `nil` `$ItemData` — the harness asked for `pbLoadItems`, which is a
-  later Essentials' name. Fixed, along with an error capture and a progress file so the
-  next one is visible. The **tier** gauntlet now runs clean (66.9% vs stock's 50.0%, 240
-  battles); the frozen archetype benchmark still carries 0.1.0 numbers until re-run.
-  Full account, plus Mega Evolution support, in `PORTABLE-AI-REALIDEA.md`.
+- **Realidea's 0.1.0 gauntlet records were not kept, only their hash** — so the gate's
+  regression check ("losses the previous version won on the same seed") cannot be run
+  against it. Both 0.6.2 gauntlets now pass clean and their artifacts are archived in
+  `generated/`; re-measuring 0.1.0 to close the comparison is the top Realidea item. The
+  hang that blocked all of this was never a deadlock: an exception inside
+  `PBDebug.logonerr`, whose guard around `pbPrintException` is commented out, became a
+  modal box nobody could dismiss. The exception was a `nil` `$ItemData` — the harness
+  asked for `pbLoadItems`, a later Essentials' name. Full account, plus Mega Evolution
+  support, in `PORTABLE-AI-REALIDEA.md`.
 
 **Phase-1 threads still open:**
 

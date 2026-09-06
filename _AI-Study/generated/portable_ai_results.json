@@ -2,7 +2,7 @@
   "captured": "2026-09-06",
   "version": "0.6.2",
   "engine": "realidea",
-  "status": "probe and tier gauntlet both measured 2026-09-06. The hang that blocked strength numbers was a crash hidden by PBDebug.logonerr's uncommented pbPrintException call (a nil $ItemData); it is fixed. The frozen ARCHETYPE gauntlet has NOT been re-run since -- baseline_0_1_0 is still the only figure for that schedule, and it is a 0.1.0 measurement.",
+  "status": "probe, tier gauntlet and archetype gauntlet all measured 2026-09-06, all clean. The hang that blocked strength numbers was a crash hidden by PBDebug.logonerr's uncommented pbPrintException call (a nil $ItemData); it is fixed. baseline_0_1_0 is retained for comparison but is superseded by archetype_0_6_2.",
   "installed": {
     "generated_script_sha256": "e57300685760a31b88da4239a98285c27f1f8fbf055de181b95a5e4ad3b06954",
     "generated_script_lines": 3764,
@@ -233,5 +233,72 @@
     "ai": "pbEnemyShouldMegaEvolve? is 'always if possible'; Portable's override calls it on the same line the stock path does, so mega is policy-neutral between arms",
     "harness_gate": "pbCanMegaEvolve? returns false unless $game_switches[512] or [234]; a save-less harness leaves both false. The gauntlet sets 512 (key mega=, default on). 234 is deliberately not set: it triggers a cut-in that blocks on Kernel.pbMessage.",
     "verified": "same matchup and seed with mega on vs off diverges (stock 20 vs 17 turns, portable 16 vs 19)"
+  },
+  "archetype_0_6_2": {
+    "captured": "2026-09-06",
+    "measured": true,
+    "schedule": "frozen -- the same eight matchups and three-mon fixture every 0.1.0 number was measured on",
+    "errors": 0,
+    "note": "first completion since the port; the earlier 0.6.2 attempt stopped at 36/80 records on the $ItemData crash",
+    "frozen_5_seeds": {
+      "battles": 80,
+      "arms": {
+        "stock": {
+          "wins": 20,
+          "losses": 20,
+          "draws": 0,
+          "errors": 0,
+          "win_rate": 50.0,
+          "mean_turns": 7.1,
+          "single_wins": "14/30",
+          "double_wins": "6/10"
+        },
+        "portable": {
+          "wins": 26,
+          "losses": 13,
+          "draws": 1,
+          "errors": 0,
+          "win_rate": 65.0,
+          "mean_turns": 8.4,
+          "single_wins": "18/30",
+          "double_wins": "8/10"
+        }
+      },
+      "results_path": "_AI-Study/generated/realidea_archetype_0_6_2.ndjson",
+      "results_sha256": "c63ab1cfc69ca06aab7184bfdae11c58367305b0cfe8073aad39f9db1b81a605"
+    },
+    "extended_20_seeds": {
+      "battles": 320,
+      "arms": {
+        "stock": {
+          "wins": 82,
+          "losses": 78,
+          "draws": 0,
+          "errors": 0,
+          "win_rate": 51.2,
+          "mean_turns": 7.5,
+          "single_wins": "56/120",
+          "double_wins": "26/40"
+        },
+        "portable": {
+          "wins": 103,
+          "losses": 56,
+          "draws": 1,
+          "errors": 0,
+          "win_rate": 64.4,
+          "mean_turns": 9.1,
+          "single_wins": "73/120",
+          "double_wins": "30/40"
+        }
+      },
+      "results_path": "_AI-Study/generated/realidea_archetype_0_6_2_20seeds.ndjson",
+      "results_sha256": "65461fce576054342bdb09567ea09be37550f9f62a32b1106f460e931b53417d",
+      "note": "an addition, not a replacement: 40 battles per arm cannot separate a five-point difference from noise. The frozen-seed subset of this run is outcome-identical to the standalone 80-battle run."
+    },
+    "vs_baseline_0_1_0": {
+      "stock": "identical on every figure -- 20/40, singles 14/30, doubles 6/10, mean 7.1 turns. This is the control.",
+      "portable": "26/40 vs 0.1.0's 28/40; both battles are in singles. 5 points on n=40 where the standard error is ~7.2, so not a result in either direction.",
+      "regression_check": "NOT RUN. The gate asks for losses the previous version won on the same seed; 0.1.0's per-battle records were not kept (only sha256 b91feba3...), and the file has been overwritten. Every gauntlet artifact is now copied into generated/ so this cannot recur."
+    }
   }
 }
