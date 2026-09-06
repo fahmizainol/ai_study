@@ -19,9 +19,9 @@ The study has two phases, and they are still both live:
 | | |
 |---|---|
 | Portable core | **0.6.2**, installed in Reborn Yang (opt-in, off by default) |
-| Second adapter | Realidea v16, **installed at 0.6.2** — probe **240/256** vs stock's 204/256, no regressions; strength gauntlet blocked by a reproducible hang |
+| Second adapter | Realidea v16, **installed at 0.6.2** — probe **240/256** vs stock's 202/256, no regressions; tier gauntlet **66.9%** vs stock's **50.0%** over 240 battles on real gen 6 OU teams |
 | Corpus | **213 cards / 281 assertions** in `scenarios.json` — 275 graded and passing, 6 N/A on the Portable side (`switch_score_gt` needs Reborn's party-indexed score array) |
-| Unit tests | **225** green — `test_portable_ai.rb` 108, `test_reborn_adapter.rb` 53, `test_realidea_adapter.rb` 64 |
+| Unit tests | **229** Ruby + **11** Python green — `test_portable_ai.rb` 108, `test_realidea_adapter.rb` 68, `test_reborn_adapter.rb` 53, `test_tooling.py` 11 |
 | Benchmark frame | 7 rosters × 60 = **420 battles**, `arms=normal_portable`, `schedule=normal_baseline`, `party_size=6` |
 | Standing | 0.6.0 **197/420** → 0.6.1 **205/420** → 0.6.2 **203/420 (48.3%)** |
 
@@ -65,7 +65,7 @@ _AI-Study/
 ├── SIM-SPEC.md                    the probe/corpus/differential method
 ├── TEAM-DESIGN.md                 trainer team composition + LLM team-generation spec
 ├── PORTABLE-AI-REBORN.md          THE working log: every version, every measurement, the backlog
-├── PORTABLE-AI-REALIDEA.md        first adapter (core 0.1.0) — history
+├── PORTABLE-AI-REALIDEA.md        the v16 adapter: probe, tier gauntlet, mega evolution
 ├── PORTABLE-AI-DIAGNOSIS.md       0.3.2 → 0.4 gap analysis — history, numbers superseded
 │
 ├── portable_ai/                   the engine-independent core — this is the product
@@ -264,11 +264,14 @@ one switch that saves the mon; a faster 2HKO race abandoned on the one-hit flag.
   post-KO switch-in score is the most compact statement of the same idea.
 - **Breadth as tables, round two** — the remaining `effects.rb` / ability rows sketched
   at the end of the 0.5.0 backlog.
-- **The Realidea gauntlet hangs, and it is the top open item there.** Deterministic:
-  `speed_vs_bulky` seed 196613 in **stock** mode, blocked at ~0 CPU rather than looping,
-  36 of 80 records complete. Until it is fixed Realidea has no 0.6.2 win rate. Its probe
-  IS measured — 240/256 against stock's 204/256, no card Portable fails that stock
-  passes. Backlog and cost for a Realidea tier suite are in `PORTABLE-AI-REALIDEA.md`.
+- **The Realidea archetype gauntlet has not been re-run since the hang was fixed.** The
+  hang was never a deadlock: an exception inside `PBDebug.logonerr`, whose guard around
+  `pbPrintException` is commented out, became a modal box nobody could dismiss. The
+  exception was a `nil` `$ItemData` — the harness asked for `pbLoadItems`, which is a
+  later Essentials' name. Fixed, along with an error capture and a progress file so the
+  next one is visible. The **tier** gauntlet now runs clean (66.9% vs stock's 50.0%, 240
+  battles); the frozen archetype benchmark still carries 0.1.0 numbers until re-run.
+  Full account, plus Mega Evolution support, in `PORTABLE-AI-REALIDEA.md`.
 
 **Phase-1 threads still open:**
 

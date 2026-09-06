@@ -1,127 +1,237 @@
 {
-    "captured": "2026-09-06",
-    "version": "0.6.2",
-    "engine": "realidea",
-    "status": "probe measured 2026-09-06; the strength gauntlet is NOT measured -- it hangs deterministically on speed_vs_bulky seed 196613 in stock mode. The gauntlet block under baseline_0_1_0 is the 0.1.0 measurement and is the only win-rate figure this file carries.",
-    "installed": {
-        "generated_script_sha256": "e57300685760a31b88da4239a98285c27f1f8fbf055de181b95a5e4ad3b06954",
-        "generated_script_lines": 3764,
-        "installed_bundle_sha256": "10f96b85cc991360c23abd36a09063147849dc8adc5beb700d79e67119f82f96",
-        "installed_bundle_backup": "_AI-Study/backups/realidea_Scripts.rxdata.pre-0.6.2",
-        "installed_sections": [
-            "Portable_AI (332)",
-            "AI_Probe (329)"
-        ],
-        "opt_in_marker": "Realidea V4.1/Data/portable_ai.txt"
+  "captured": "2026-09-06",
+  "version": "0.6.2",
+  "engine": "realidea",
+  "status": "probe and tier gauntlet both measured 2026-09-06. The hang that blocked strength numbers was a crash hidden by PBDebug.logonerr's uncommented pbPrintException call (a nil $ItemData); it is fixed. The frozen ARCHETYPE gauntlet has NOT been re-run since -- baseline_0_1_0 is still the only figure for that schedule, and it is a 0.1.0 measurement.",
+  "installed": {
+    "generated_script_sha256": "e57300685760a31b88da4239a98285c27f1f8fbf055de181b95a5e4ad3b06954",
+    "generated_script_lines": 3764,
+    "installed_bundle_sha256": "10f96b85cc991360c23abd36a09063147849dc8adc5beb700d79e67119f82f96",
+    "installed_bundle_backup": "_AI-Study/backups/realidea_Scripts.rxdata.pre-0.6.2",
+    "installed_sections": [
+      "Portable_AI (332)",
+      "AI_Probe (329)"
+    ],
+    "opt_in_marker": "Realidea V4.1/Data/portable_ai.txt"
+  },
+  "corpus": {
+    "corpus_path": "_AI-Study/scenarios_realidea.json",
+    "corpus_sha256": "e08e5900d7d5eafa37384ccaa9cd51a542347648bfe0a878b892bcf550c9f771",
+    "engine_corpus_path": "Realidea V4.1/Data/ai_scenarios.txt",
+    "engine_corpus_sha256": "99ba13022cc820d2cb41447424cadcdbebe5165e29ef2972528e81ebfdf208db",
+    "scenarios": 208,
+    "assertions": 275,
+    "probed": 198,
+    "applicable_assertions": 260,
+    "skipped_reborn_field": 7,
+    "skipped_unsupported_mechanic": 3,
+    "dropped_from_reborn_corpus": [
+      "intimidate_ignored_vs_clear_amulet",
+      "spikes_hit_nobody_with_boots",
+      "stealth_rock_ignores_boots",
+      "heavy_duty_boots_entry",
+      "heavy_duty_boots_entry_order_swapped"
+    ],
+    "dropped_reason": "v16 has no Heavy-Duty Boots or Clear Amulet"
+  },
+  "probe_0_6_2": {
+    "captured": "2026-09-06 (re-measured after the $ItemData fix)",
+    "corpus_path": "_AI-Study/scenarios_realidea.json",
+    "corpus_sha256": "e08e5900d7d5eafa37384ccaa9cd51a542347648bfe0a878b892bcf550c9f771",
+    "scenarios": 208,
+    "probed": 198,
+    "skipped_with_reason": 10,
+    "assertions_not_answerable": 4,
+    "gradeable_assertions": 256,
+    "stock": {
+      "assertions_passed": 202,
+      "results_path": "_AI-Study/generated/ai_probe_results_stock.ndjson",
+      "results_sha256": "3a951ac768eca401064bdf755a996dd36ed51bf9b7d7426d0baa5791fbb45dd3",
+      "cards_failed": 48
     },
-    "corpus": {
-        "corpus_path": "_AI-Study/scenarios_realidea.json",
-        "corpus_sha256": "e08e5900d7d5eafa37384ccaa9cd51a542347648bfe0a878b892bcf550c9f771",
-        "engine_corpus_path": "Realidea V4.1/Data/ai_scenarios.txt",
-        "engine_corpus_sha256": "99ba13022cc820d2cb41447424cadcdbebe5165e29ef2972528e81ebfdf208db",
-        "scenarios": 208,
-        "assertions": 275,
-        "probed": 198,
-        "applicable_assertions": 260,
-        "skipped_reborn_field": 7,
-        "skipped_unsupported_mechanic": 3,
-        "dropped_from_reborn_corpus": [
-            "intimidate_ignored_vs_clear_amulet",
-            "spikes_hit_nobody_with_boots",
-            "stealth_rock_ignores_boots",
-            "heavy_duty_boots_entry",
-            "heavy_duty_boots_entry_order_swapped"
-        ],
-        "dropped_reason": "v16 has no Heavy-Duty Boots or Clear Amulet"
+    "portable": {
+      "assertions_passed": 240,
+      "results_path": "_AI-Study/generated/ai_probe_results_portable.ndjson",
+      "results_sha256": "563ad8337e0a49439be769693f260d7a961675a9849d0e7cd98dcd7c510077b3",
+      "cards_failed": 14,
+      "regressions_vs_stock": 0,
+      "cards_fixed_vs_stock": 34
     },
-    "probe_0_6_2": {
-        "captured": "2026-09-06",
-        "corpus_path": "_AI-Study/scenarios_realidea.json",
-        "corpus_sha256": "e08e5900d7d5eafa37384ccaa9cd51a542347648bfe0a878b892bcf550c9f771",
-        "scenarios": 208,
-        "probed": 198,
-        "skipped_with_reason": 10,
-        "assertions_not_answerable": 4,
-        "gradeable_assertions": 256,
-        "stock": {
-            "assertions_passed": 204,
-            "results_path": "Realidea V4.1/Data/ai_probe_results_stock.ndjson",
-            "results_sha256": "cdb9a7ad2676731c9fcb0d0c7cb2999a2e791d125c4a51ad347dc58ef905b4aa"
-        },
-        "portable": {
-            "assertions_passed": 240,
-            "results_path": "Realidea V4.1/Data/ai_probe_results_portable.ndjson",
-            "results_sha256": "198a80f034103348c61166cb3c1b0ac6ceaabc3925178d30a9a834afef198cdb",
-            "regressions_vs_stock": 0
-        },
-        "note": "all 13 remaining failures are shared with stock; none is a Portable-only regression. They are dominated by this adapter using stock pbGetMoveScore as base evidence where the Reborn adapter uses a flat 100.",
-        "command": "python3 _AI-Study/tools/check_scenarios.py _AI-Study/scenarios_realidea.json \"Realidea V4.1/Data/ai_probe_results_portable.ndjson\""
-    },
-    "gauntlet_0_6_2": {
-        "measured": false,
-        "reason": "deterministic hang: speed_vs_bulky seed 196613, stock mode, blocked at ~0 CPU with debuglog.txt never written; reproduced from a full run and from a single-seed run, 36 of 80 records complete"
-    },
-    "baseline_0_1_0": {
-        "measured_version": "0.1.0",
-        "captured": "2026-09-04",
-        "probe": {
-            "corpus_path": "_AI-Study/scenarios_realidea.json",
-            "corpus_sha256": "6715d1855c8a354f56f42bacace3870213f98dd545042caee70df6c0bdff8d4b",
-            "reference_corpus_path": "_AI-Study/scenarios.json",
-            "reference_corpus_sha256": "08e7d4e380fa38489c3d06a8c348363c76e114691c1210b712bea2da74bd5e4b",
-            "reference_results_path": "_AI-Study/generated/probe_results_reference.ndjson",
-            "reference_results_sha256": "dc3583e3fbddb5484f16d9c6b2983a9085bc8dd9b347d454cd1f37798388fb96",
-            "scenarios": 126,
-            "probed": 121,
-            "skipped": 5,
-            "errors": 0,
-            "stock": {
-                "assertions_passed": 143,
-                "assertions_total": 163,
-                "results_sha256": "2eb82eb3df368f2d92f6e0b3280fc10b8a4a1928a49d225fab26da893d8a5378"
-            },
-            "portable": {
-                "assertions_passed": 163,
-                "assertions_total": 163,
-                "results_sha256": "7e7be8a4f03fe02abefa42b7c5aa9fe8b6b3a3594c405875220ee4489baff696",
-                "reference_mean_spearman_rho": 0.913,
-                "reference_top1_score_agreement": "100/110",
-                "reference_action_type_agreement": "117/121"
-            },
-            "tier1_command": "python3 _AI-Study/tools/check_scenarios.py _AI-Study/scenarios_realidea.json \"Realidea V4.1/Data/ai_probe_results_portable.ndjson\"",
-            "tier2_command": "python3 _AI-Study/tools/ai_diff.py _AI-Study/scenarios_realidea.json \"Realidea V4.1/Data/ai_probe_results_portable.ndjson\" _AI-Study/scenarios.json _AI-Study/generated/probe_results_reference.ndjson --label-a realidea-portable --label-b reborn-reference"
-        },
-        "gauntlet": {
-            "records": 80,
-            "seeds": 5,
-            "matchups": 8,
-            "errors": 0,
-            "results_sha256": "b91feba3db22baef4e4eadf2397db1d7c9d634536b94b19ef35f1917443d5fb0",
-            "stock": {
-                "wins": 20,
-                "losses": 20,
-                "draws": 0,
-                "win_rate": 50.0,
-                "mean_turns": 7.1,
-                "single_wins": "14/30",
-                "double_wins": "6/10"
-            },
-            "portable": {
-                "wins": 28,
-                "losses": 12,
-                "draws": 0,
-                "win_rate": 70.0,
-                "mean_turns": 8.9,
-                "single_wins": "20/30",
-                "double_wins": "8/10"
-            }
-        },
-        "build": {
-            "generated_script_sha256": "c532fb202df6be7232206fbd9673aad87162123bd3ee61b8274dbb70e3598ab1",
-            "installed_bundle_sha256": "041207aff8f99c097f2c5e94f0a8cdf92a8fab915daa6cd2761cc315c9e5553a",
-            "installed_section": "Portable_AI",
-            "installed_index": 332,
-            "opt_in_marker": "Realidea V4.1/Data/portable_ai.txt"
-        }
+    "note": "no card Portable fails that stock passes, on the corrected engine: stock fails 48 cards, Portable 14, and the 14 are a subset. The remaining failures are dominated by this adapter using stock pbGetMoveScore as base evidence where the Reborn adapter uses a flat 100.",
+    "command": "python3 _AI-Study/tools/check_scenarios.py _AI-Study/scenarios_realidea.json \"Realidea V4.1/Data/ai_probe_results_portable.ndjson\"",
+    "superseded": {
+      "stock_assertions_passed": 204,
+      "why": "the earlier run today was measured with $ItemData nil, so stock's pbGetMoveScore read no item data. Confirmed by re-running the stock probe with the fix reverted: it reproduces 204 exactly. Five cards fail and three pass once item data is loaded, netting -2. Portable's total is 240 either way, though its per-card results also move."
     }
+  },
+  "gauntlet_0_6_2": {
+    "measured": false,
+    "reason": "deterministic hang: speed_vs_bulky seed 196613, stock mode, blocked at ~0 CPU with debuglog.txt never written; reproduced from a full run and from a single-seed run, 36 of 80 records complete"
+  },
+  "baseline_0_1_0": {
+    "measured_version": "0.1.0",
+    "captured": "2026-09-04",
+    "probe": {
+      "corpus_path": "_AI-Study/scenarios_realidea.json",
+      "corpus_sha256": "6715d1855c8a354f56f42bacace3870213f98dd545042caee70df6c0bdff8d4b",
+      "reference_corpus_path": "_AI-Study/scenarios.json",
+      "reference_corpus_sha256": "08e7d4e380fa38489c3d06a8c348363c76e114691c1210b712bea2da74bd5e4b",
+      "reference_results_path": "_AI-Study/generated/probe_results_reference.ndjson",
+      "reference_results_sha256": "dc3583e3fbddb5484f16d9c6b2983a9085bc8dd9b347d454cd1f37798388fb96",
+      "scenarios": 126,
+      "probed": 121,
+      "skipped": 5,
+      "errors": 0,
+      "stock": {
+        "assertions_passed": 143,
+        "assertions_total": 163,
+        "results_sha256": "2eb82eb3df368f2d92f6e0b3280fc10b8a4a1928a49d225fab26da893d8a5378"
+      },
+      "portable": {
+        "assertions_passed": 163,
+        "assertions_total": 163,
+        "results_sha256": "7e7be8a4f03fe02abefa42b7c5aa9fe8b6b3a3594c405875220ee4489baff696",
+        "reference_mean_spearman_rho": 0.913,
+        "reference_top1_score_agreement": "100/110",
+        "reference_action_type_agreement": "117/121"
+      },
+      "tier1_command": "python3 _AI-Study/tools/check_scenarios.py _AI-Study/scenarios_realidea.json \"Realidea V4.1/Data/ai_probe_results_portable.ndjson\"",
+      "tier2_command": "python3 _AI-Study/tools/ai_diff.py _AI-Study/scenarios_realidea.json \"Realidea V4.1/Data/ai_probe_results_portable.ndjson\" _AI-Study/scenarios.json _AI-Study/generated/probe_results_reference.ndjson --label-a realidea-portable --label-b reborn-reference"
+    },
+    "gauntlet": {
+      "records": 80,
+      "seeds": 5,
+      "matchups": 8,
+      "errors": 0,
+      "results_sha256": "b91feba3db22baef4e4eadf2397db1d7c9d634536b94b19ef35f1917443d5fb0",
+      "stock": {
+        "wins": 20,
+        "losses": 20,
+        "draws": 0,
+        "win_rate": 50.0,
+        "mean_turns": 7.1,
+        "single_wins": "14/30",
+        "double_wins": "6/10"
+      },
+      "portable": {
+        "wins": 28,
+        "losses": 12,
+        "draws": 0,
+        "win_rate": 70.0,
+        "mean_turns": 8.9,
+        "single_wins": "20/30",
+        "double_wins": "8/10"
+      }
+    },
+    "build": {
+      "generated_script_sha256": "c532fb202df6be7232206fbd9673aad87162123bd3ee61b8274dbb70e3598ab1",
+      "installed_bundle_sha256": "041207aff8f99c097f2c5e94f0a8cdf92a8fab915daa6cd2761cc315c9e5553a",
+      "installed_section": "Portable_AI",
+      "installed_index": 332,
+      "opt_in_marker": "Realidea V4.1/Data/portable_ai.txt"
+    }
+  },
+  "tier_0_6_2": {
+    "captured": "2026-09-06",
+    "measured": true,
+    "schedule": "tier -- every ordered non-mirror pairing of each set's four teams, 5 seeds, 2 arms",
+    "rosters": "_AI-Study/generated/tier_teams_realidea.rb",
+    "rosters_sha256": "ad116be6dd50e274579be309be579be90468ba326995d89d932e0049a4708b5b",
+    "tiers": "gen6ou only -- Realidea ships all 29 Z-crystals as items and implements no Z-move engine, so 24 of gen7ou's 26 sample teams would import holding an inert item",
+    "mega_evolution": true,
+    "battles": 240,
+    "sets": {
+      "gen6ou_a": {
+        "results_path": "_AI-Study/generated/realidea_tier_gen6ou_a.ndjson",
+        "results_sha256": "b711a91b91b53c6f2c1e96164fa9171596b05ee3ab7b76996083e98e774f87a5",
+        "battles": 120,
+        "arms": {
+          "stock": {
+            "wins": 32,
+            "losses": 25,
+            "draws": 0,
+            "errors": 3,
+            "timed_out": 0,
+            "win_rate": 56.1,
+            "win_rate_timeouts_resolved": 56.1
+          },
+          "portable": {
+            "wins": 41,
+            "losses": 12,
+            "draws": 6,
+            "errors": 1,
+            "timed_out": 6,
+            "win_rate": 69.5,
+            "win_rate_timeouts_resolved": 74.6
+          }
+        }
+      },
+      "gen6ou_b": {
+        "results_path": "_AI-Study/generated/realidea_tier_gen6ou_b.ndjson",
+        "results_sha256": "e19e91ed73446a5fa3041f68dad2a5914b6c1d64d2bf43db5a3f0ad0b65ac18a",
+        "battles": 120,
+        "arms": {
+          "stock": {
+            "wins": 26,
+            "losses": 33,
+            "draws": 0,
+            "errors": 1,
+            "timed_out": 0,
+            "win_rate": 44.1,
+            "win_rate_timeouts_resolved": 44.1
+          },
+          "portable": {
+            "wins": 38,
+            "losses": 21,
+            "draws": 0,
+            "errors": 1,
+            "timed_out": 0,
+            "win_rate": 64.4,
+            "win_rate_timeouts_resolved": 64.4
+          }
+        }
+      }
+    },
+    "pooled": {
+      "stock": {
+        "wins": 58,
+        "losses": 58,
+        "draws": 0,
+        "errors": 4,
+        "win_rate": 50.0,
+        "win_rate_timeouts_resolved": 50.0
+      },
+      "portable": {
+        "wins": 79,
+        "losses": 33,
+        "draws": 6,
+        "errors": 2,
+        "win_rate": 66.9,
+        "win_rate_timeouts_resolved": 69.5
+      }
+    },
+    "control": "stock vs stock is 58W/58L = 50.0% over the symmetric schedule; the gap is the seat swap, not the schedule",
+    "engine_errors_excluded": {
+      "ZeroDivisionError: divided by 0": 3,
+      "NoMethodError: undefined method `hasWorkingAbility'": 1,
+      "NameError: undefined local variable or method `upanim'": 2
+    },
+    "caveats": [
+      "errors are engine faults in Realidea's own code, not policy failures, and are excluded from win rates",
+      "all six timeouts are portable battles at the 100-round cap; pbStartBattle discards the cap's verdict, so timeout_result carries it separately"
+    ],
+    "engine_error_sites": {
+      "ZeroDivisionError: divided by 0": "PokeBattle_AI.rb:3557 pbRoughDamage -- atk/defense with defense 0",
+      "NoMethodError: undefined method `hasWorkingAbility'": "PokeBattle_AI.rb:4226 pbEnemyShouldWithdrawEx? -- battler method called on a party PokeBattle_Pokemon, reached when weighing a switch under Spikes",
+      "NameError: undefined local variable or method `upanim'": "PokeBattle_BattlerEffects.rb:766 pbIncreaseStatWithCause -- reached from Intimidate on switch-in"
+    }
+  },
+  "mega_evolution": {
+    "supported": true,
+    "forms": "46 mega species (Charizard and Mewtwo have X and Y) + 2 primal reversions",
+    "script": "Pokemon_MegaEvolution.rb",
+    "ai": "pbEnemyShouldMegaEvolve? is 'always if possible'; Portable's override calls it on the same line the stock path does, so mega is policy-neutral between arms",
+    "harness_gate": "pbCanMegaEvolve? returns false unless $game_switches[512] or [234]; a save-less harness leaves both false. The gauntlet sets 512 (key mega=, default on). 234 is deliberately not set: it triggers a cut-in that blocks on Kernel.pbMessage.",
+    "verified": "same matchup and seed with mega on vs off diverges (stock 20 vs 17 turns, portable 16 vs 19)"
+  }
 }

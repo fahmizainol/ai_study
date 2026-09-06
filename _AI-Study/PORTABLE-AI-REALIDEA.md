@@ -1,13 +1,19 @@
 # Portable AI for Realidea
 
-Implementation status: **installed at core 0.6.2 (2026-09-06), probe measured, gauntlet
-blocked.** Opt-in, and inert until its marker file exists.
+Implementation status: **installed at core 0.6.2 (2026-09-06), probe and tier gauntlet
+both measured.** Opt-in, and inert until its marker file exists.
 
-> **The probe is run and reported below. The strength gauntlet is NOT: it hangs.**
-> Portable scores **240/256** applicable assertions against stock v16 + clara's
-> **204/256**, and there is no card Portable fails that stock passes. The paired
-> gauntlet stalls deterministically on one battle (see *The gauntlet hang*), so this
-> page still carries 0.1.0's win rates and they are labelled as such.
+> **Decision quality:** Portable scores **240/256** applicable probe assertions against
+> stock v16 + clara's **202/256**, and there is no card Portable fails that stock passes
+> (stock fails 48 cards, Portable 14, and the 14 are a subset).
+>
+> **Strength:** on 240 paired battles over real gen 6 OU sample teams, Portable wins
+> **66.9%** against stock's **50.0%** (**69.5%** once the engine's discarded timeout
+> verdicts are read back). Stock-versus-stock at exactly 58W/58L is the control that
+> says the schedule is fair. See *Tier suite*.
+>
+> The hang that blocked this page's strength numbers is **fixed**: it was never a
+> deadlock. See *The gauntlet hang, and what it actually was*.
 
 ## What is installed
 
@@ -72,6 +78,24 @@ by mtime — the readouts were once rendered from a stale baseline because nothi
 record said which run it belonged to.
 
 `move_memory` is inert on Realidea whatever this file says; see the handoff below.
+
+### Run keys (not core config)
+
+`Data/ai_harness.txt` also carries keys the gauntlet reads directly. Unlike the nineteen
+config overrides these do not touch core policy — they choose what runs.
+
+| key | default | meaning |
+|---|---|---|
+| `teams=NAME` | `archetype` | roster set: `archetype` (frozen 3-mon fixture), `gen6ou_a`, `gen6ou_b` |
+| `schedule=tier` | frozen | every ordered non-mirror pairing of the set's four teams (12 matchups), written to `Data/ai_tier_results.ndjson` so tier numbers can never pool with the frozen benchmark |
+| `matchups=x,y` | all | run only these named matchups — for smoke-testing a roster, or resuming past one that stalled |
+| `mega=false` | on | suppress Mega Evolution (see *Mega Evolution*) |
+| `seeds=a,b,c` | five | replace the default seeds |
+| `trace=true` | off | record the per-turn portable decision trace |
+| `append=true` | off | append rather than truncate |
+
+Progress goes to `Data/ai_gauntlet_progress.txt` (one line per battle, flushed) and any
+crash outside a battle to `Data/ai_gauntlet_error.txt`.
 
 ## Enable and disable
 
@@ -180,16 +204,18 @@ pin a Reborn field, three pin a mechanic this engine does not have) and four ass
 are N/A (`switch_score_gt` needs a party-indexed switch score array, and v16 switching is
 a predicate with no numeric scale), leaving **256 gradeable**:
 
-| AI | assertions |
-|---|---:|
-| Stock v16 + Clara | 204/256 |
-| Portable AI 0.6.2 | **240/256** |
+| AI | assertions | cards failed |
+|---|---:|---:|
+| Stock v16 + Clara | 202/256 | 48 |
+| Portable AI 0.6.2 | **240/256** | 14 |
 
-**No card fails under Portable that passes under stock** — every one of the 13 remaining
-failures is shared with stock, and Portable moves 12 of the 14 comparisons in the
-intended direction without closing them.
+Re-measured after the `$ItemData` fix; the 204 figure this table carried earlier is
+superseded (see below).
 
-Those 13 are one structural fact, not 13 bugs. **This adapter feeds stock's own
+**No card fails under Portable that passes under stock** — Portable's 14 failing cards are
+a strict subset of stock's 48, and Portable fixes 34.
+
+Those remaining failures are one structural fact, not fourteen bugs. **This adapter feeds stock's own
 `pbGetMoveScore` as base evidence; the Reborn adapter feeds a flat 100** (deliberately —
 see its header). A card written as "core delta X beats core delta Y" cannot survive a
 base that has already loaded tens of points onto whichever move deals more damage:
@@ -212,19 +238,152 @@ estimate (v16's `pbTypeModifier` is ability-blind and `pbTypeImmunityByAbility` 
 called from an AI — it is the live effect), and `switch_score_gt` was being scored as a
 failure on an engine that has no switch scores.
 
-### The gauntlet hang
+#### The stock probe figure moved: 204 → 202
 
-**Unresolved, and it blocks every strength number on this page.** The paired gauntlet
-stops on `speed_vs_bulky`, seed 196613, in **stock** mode — reproduced twice, at the same
-battle, from a full run and from a single-seed run. The process is **blocked, not
-looping**: 0.015 CPU-seconds per 5 wall seconds, and `Data/debuglog.txt` is never written
-because `$INTERNAL` is false in gauntlet mode. 36 of 80 records complete before it.
+The 204 recorded earlier on 2026-09-06 was measured with `$ItemData` `nil`, so stock's
+`pbGetMoveScore` read no item data at all. **Confirmed rather than assumed:** re-running
+the stock probe with the fix reverted reproduces 204 exactly. Five cards fail and three
+pass once item data is loaded, netting −2. Portable totals 240 either way, though its
+per-card results also move, and it still has zero Portable-only regressions.
 
-Stock mode does not run adapter code, so the suspect surface is the gauntlet harness
-itself (`command_phase`, the `pbCommandPhase`/`pbEndOfBattle` overrides) or the engine.
-The next step is a `log_decisions` harness key that sets `$INTERNAL`, the way Reborn's
-harness already has, then re-running that one battle with `seeds=196613` and reading the
-last thing the engine logged.
+`202/256` is the figure measured on an engine that has its item data. Prefer it.
+
+### Mega Evolution — yes, fully
+
+Realidea supports it completely, and the tier gauntlet uses it.
+
+| | |
+|---|---|
+| species | **46 mega forms + 2 primal reversions** (Kyogre, Groudon), `Pokemon_MegaEvolution.rb`. Charizard and Mewtwo carry both X and Y. |
+| items | all the mega stones are in `PBS/items.txt` and each forme is keyed off holding its own |
+| trigger | `pbCanMegaEvolve?` / `pbRegisterMegaEvolution` / `pbMegaEvolve`, `PokeBattle_Battle.rb:1961-2062` |
+| AI | `pbEnemyShouldMegaEvolve?` (`PokeBattle_AI.rb:4022`) is *"simple: always should if possible"* |
+
+**It is policy-neutral between the two arms.** Portable's `pbDefaultChooseEnemyCommand`
+override calls `pbRegisterMegaEvolution(index) if pbEnemyShouldMegaEvolve?(index)` on
+exactly the same line the stock path does, so both arms mega whenever it is legal.
+Enabling it changes the *teams*, never the policy.
+
+**Two gates a save-less harness has to know about**, both in `pbCanMegaEvolve?`:
+
+```ruby
+return false if $game_switches[NO_MEGA_EVOLUTION]                        # switch 34
+return false if !@battlers[index].hasMega?                               # holds the stone?
+return false if $game_switches[512]==false && $game_switches[234]==false # story gates
+```
+
+A fresh `Game_Switches` has every switch false, so **512 and 234 both being false blocks
+every mega evolution in the game**. The gauntlet therefore sets 512, controlled by the
+`mega=` harness key (default on) and stamped on every record. Switch **234 is deliberately
+left alone**: it triggers a scripted Lilliana cut-in that calls `Kernel.pbMessage` and
+`Graphics.update` in a wait loop, which in a headless run is an unbreakable block.
+
+Defaulting it on is provably inert for the archetype fixture, whose mons hold no stone —
+`pbCanMegaEvolve?` tests `hasMega?` *before* it reaches either switch.
+
+Verified in the engine, not just read: the same matchup on the same seed with `mega=true`
+and `mega=false` diverges (stock loss in 20 turns vs 17; portable win in 16 vs 19).
+
+### Tier suite
+
+Real gen 6 OU sample teams from Smogon's threads, two disjoint sets of four, every
+ordered non-mirror pairing over five seeds. `teams=gen6ou_a schedule=tier`.
+
+| set | stock | portable | gap |
+|---|---|---|---|
+| gen6ou_a | 56.1% | 69.5% (74.6% resolved) | **+13.4pt** (+18.4 resolved) |
+| gen6ou_b | 44.1% | 64.4% | **+20.3pt** |
+| **pooled (240 battles)** | **50.0%** | **66.9% (69.5% resolved)** | **+16.9pt** (+19.5 resolved) |
+
+**Stock-versus-stock landed on exactly 58W/58L.** The schedule runs every pairing in both
+directions, so a policy-neutral right seat should sit at 50% — and does. The gap is the
+seat swap, not the schedule. Read with `tools/summarize_tier.py`.
+
+**Why gen 6 only.** Realidea carries the gen 7 dex and all 29 Z-crystals as items and
+implements **no Z-move engine at all** — so 24 of gen7ou's 26 sample teams would import
+holding an inert item, and gen 7 is not offered. It is a mega-era engine with a gen 7
+Pokédex bolted on. Of gen6ou's 14 teams, 11 are eligible; the other three ask for an
+ability Realidea did not give that species (its **Zapdos has Lightningrod, not Static**;
+its **Diancie has Magic Bounce, not Clear Body**). Battle Bond is vetoed for the same
+reason as the Z-crystals: the ability is in `PBS/abilities.txt` and nothing in the engine
+reads it.
+
+**Hidden Power had to be solved, not dropped.** v16 has no `hptype` field — the type comes
+from IV parities — and Realidea's pool is **17 wide, not 16**, because `pbHiddenPower`
+enumerates every non-pseudo type except `NORMAL` and `SHADOW` and this game has `FAIRY`.
+A Showdown spread therefore lands on the wrong type: **7 of gen6ou's 13 Hidden Power sets
+mistype**, four of them Hidden Power Ice becoming *Dragon* on exactly the
+Zapdos/Thundurus/Charizard whose job is checking Landorus. `showdown_names.Realidea`
+solves the IVs against Realidea's own formula, flipping only low bits so every IV keeps
+its author's band and each change is worth one stat point at level 100.
+
+#### Three pre-existing engine bugs this run found
+
+Six battles of 240 ended with no verdict. All three faults are in Realidea's own code, and
+none can be reached by the archetype fixture — it has no items, no hazards and no
+Intimidate.
+
+| fault | where | reached by |
+|---|---|---|
+| `ZeroDivisionError` | `pbRoughDamage:3557` | an `atk/defense` with defense 0 |
+| `NoMethodError` | `pbEnemyShouldWithdrawEx?:4226` | calls `hasWorkingAbility`, a **battler** method, on a party `PokeBattle_Pokemon` — whenever the AI weighs a switch under Spikes |
+| `NameError` | `pbIncreaseStatWithCause:766` | an undefined `upanim`, reached from **Intimidate on switch-in** |
+
+They are excluded from the rates and reported separately: scoring an engine crash as a
+policy failure would flatter whichever arm reaches the broken code less often. Portable
+inherits the `ZeroDivisionError` because this adapter still calls stock `pbGetMoveScore`
+for base scores; the `hasWorkingAbility` one is stock-only, because Portable replaces the
+switch evaluator that contains it.
+
+#### Timeouts are not draws
+
+The 100-round cap computes a verdict on remaining count then HP total — and
+`pbStartBattle` **throws it away**, because the cap raises through `pbAbort` and the
+rescue that catches it overwrites `@decision` with 0 (`PokeBattle_Battle.rb:2753-2755`).
+Every capped battle therefore arrives as an undecided draw no matter who was winning.
+
+All six in this run are portable battles in the stall matchups. The gauntlet now stashes
+the verdict on the way past — behaviour-neutral, the same value is still returned — and
+records it as `timeout_result` **beside** the raw decision rather than folded into it, so
+no previously recorded number changes meaning. Three were wins, three losses.
+
+### The gauntlet hang, and what it actually was
+
+**Fixed 2026-09-06.** It was a crash, not a deadlock, and every symptom that made it
+look like one was the engine hiding it.
+
+Realidea runs `pbCommandPhase` and `pbAttackPhase` inside `PBDebug.logonerr`, and the
+`$INTERNAL` guard around that method's `pbPrintException` call **is commented out**
+(`PBDebug.rb:11-13`). `pbPrintException` ends in RGSS's `print`, which is a modal box. So
+an exception in either phase was caught by `logonerr`'s rescue, turned into a dialog with
+nobody there to dismiss it, and **never reached `run_one`'s own rescue** — which is why no
+error record was ever written. The process then sat in the window message pump at the
+0.015 CPU-seconds per 5 wall seconds that reads exactly like a deadlock.
+
+The engine did log it, to an `errorlog.txt` that `RTP.getSaveFileName` redirects into
+`C:\Users\<user>\Saved Games\Realidea System\` — which is why it was not where anyone
+looked.
+
+The exception: **`$ItemData` was `nil`**, so `pbIsBerry?` raised on `$ItemData[item]`
+(`PItem_Items.rb:63`) the moment `pbGetMoveScore` scored Bug Bite or Pluck at high skill,
+and the gauntlet trainer's skill is 100. Item data is read by the load and save screens,
+which a save-less harness never opens; `bootstrap` asked for `pbLoadItems`, a **later
+Essentials' name that does not exist in v16**, and its `rescue` swallowed the `NameError`
+and kept the `nil`. It had been `nil` since the harness was written and cost nothing for
+as long as no fixture Pokémon held an item. The tier rosters are the first that do.
+
+Three changes, because fixing only the first would leave the next such crash just as
+invisible:
+
+| change | where | why |
+|---|---|---|
+| load `$ItemData` with `readItemList` | `AI_Probe.bootstrap` | the way this engine does it |
+| replace `pbPrintException` so it re-raises | `AIProbe.install_exception_capture` | `run_one` records the error and the run continues to the next battle |
+| write a per-battle progress file | `PortableAIGauntlet.note` | the results file only gains a record when a battle *finishes*, so a run that stopped mid-battle looked identical to one that never started. This file is how the above was found. |
+
+**A caution for anyone extending this harness.** Silence from this engine is not evidence
+of success. Before the exception capture, three separate pre-existing engine bugs
+(*Tier suite*, below) were running invisibly.
 
 ### 0.1.0 baseline
 
@@ -430,32 +589,42 @@ Before replacing the installed section:
 
 ### What is outstanding right now
 
-The probe is done. Outstanding, in priority order:
+The probe is done, the hang is fixed, and the tier gauntlet is measured. Outstanding, in
+priority order:
 
-1. **Fix the gauntlet hang** (above). Everything else on this list is downstream of it.
-   Add a `log_decisions` key that sets `$INTERNAL`, re-run `seeds=196613`, read the log.
-2. **Finish the paired gauntlet**, then the ablation controls, then rewrite the 0.1.0
-   baseline section from the new artifacts.
-3. **Port the tier suite to this engine** — a competitive-roster gauntlet to sit beside
-   the archetype one, mirroring what `generated/tier_teams_reborn.rb` does for Reborn.
-   Costed 2026-09-06:
+1. **Run the archetype gauntlet to completion.** It is the frozen eight-matchup benchmark
+   (`teams=archetype`, the default) and it is what the 0.1.0 win rates on this page were
+   measured on, so it is the only artifact that can retire them. It has not been re-run
+   since the `$ItemData` fix; the 0.6.2 attempt that stopped at 36/80 records almost
+   certainly stopped on that bug, but **that is inference, not measurement** — the run
+   predates the progress file and the error capture, so nothing recorded says so. Re-run
+   it and find out. Then the ablation controls, then rewrite the 0.1.0 baseline section.
+2. **Report the three engine bugs upstream, or work around them.** Six battles of 240 end
+   with no verdict. The `hasWorkingAbility` one is a one-word fix (`hasAbility?` on a
+   party Pokémon) and it is stock-only, so leaving it in place makes the stock arm look
+   slightly worse than its policy deserves.
+3. **A second tier draw is not available.** gen6ou's eligible pool is 11 teams and both
+   sets are already drawn from it; a third set would overlap. Widening the corpus means
+   adding another gen 6 source to `extracted/smogon-teams/`, not re-rolling the seed.
 
-   | piece | work | note |
-   |---|---|---|
-   | `make_party` | port Reborn's — form / item / ability / nature / EVs / IVs, ~25 lines | v16 has every setter needed |
-   | `hptype` | **drop it** — v16 has no `hptype` setter, Hidden Power is IV-derived here | verify the IV array order: Essentials is HP/Atk/Def/**Spe**/SpA/SpD, Smogon writes SpA/SpD/Spe |
-   | rosters | reuse `tier_teams_reborn.rb` verbatim | all four gen6/gen7 sets resolve against this PBS except `HIJUMPKICK` → `HIGHJUMPKICK` |
-   | `teams=` + schedule | port `team_set`, an all-pairs schedule and `party_size`, ~60-80 lines | this gauntlet is simpler than Reborn's: no test environment, no `switchTrainers`, no arms |
-   | the run | ~480 battles, roughly 1.5-2.5 h serial | no parallel path exists: `setup_gauntlet_workers.sh` is hard-coded to Reborn |
+**Correcting the 2026-09-06 cost estimate for this port,** which was wrong in three ways
+worth recording, since all three were wrong in the direction of discouraging the work:
 
-   Gen 8 sets are out of scope — this engine is gen 7. **Weigh it against its own value
-   first:** the same suite on Reborn produced a NEGATIVE result (real teams exposed no
-   larger weakness than synthetic ones, −4.4 points against the archetype baseline versus
-   −5.0 against the tier one), and here the opponent would be stock v16 rather than
-   Reborn's AI, which is a weaker and less pointed question.
+| estimated | actual |
+|---|---|
+| "reuse `tier_teams_reborn.rb` verbatim, except `HIJUMPKICK` → `HIGHJUMPKICK`" | gen 7 is unusable here (Z-crystals), gen 6 needed three teams dropped for ability slots, and the rosters needed their own draw |
+| "`hptype`: **drop it**" | wrong call — dropping it silently retypes 7 of 13 Hidden Power sets. It had to be *solved* against this engine's 17-type formula |
+| "~480 battles, roughly 1.5-2.5 h serial" | 240 battles, **~64 seconds per 120-battle set**. The estimate was off by about two orders of magnitude, and no parallel path was needed |
+
+The argument recorded against doing this at all — that Reborn's tier suite produced a
+negative result and stock v16 is "a weaker and less pointed question" — did not survive
+contact either. Against this engine the suite is the *most* pointed measurement on this
+page: +16.9 points with a 50.0% stock-versus-stock control, and it is what surfaced three
+engine bugs and the `$ItemData` fault that had been silently breaking the harness.
 
 At this handoff, all trigger files are absent, the injected section is installed but
 inactive, and `pack_rxdata --selftest` round-trips byte-identical. The pre-change bundle
-is `backups/realidea_Scripts.rxdata.pre-0.6.2`. The working tree also contains
+is `backups/realidea_Scripts.rxdata.pre-0.6.2`, and the bundle from before the tier port
+is `backups/realidea_Scripts.rxdata.pre-tier`. The working tree also contains
 pre-existing team-generation and study edits from other sessions; future agents should
 inspect the diff and avoid reverting unrelated work.
