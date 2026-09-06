@@ -196,6 +196,8 @@ module PortableAIRealidea
       "format" => battle.doublebattle ? "double" : "single",
       "turn" => battle.turncount,
       "weather" => weather_name(battle),
+      "trick_room_active" => trick_room_active?(battle),
+      "tailwind_active" => (safe_side_effect(battle.sides[1], :Tailwind, 0).to_i > 0),
       "actors" => actors,
       "targets" => targets,
       "memory" => memory
@@ -229,7 +231,7 @@ module PortableAIRealidea
         actions << action
       end
     end
-    switch_actions(battle, battler, foe_indices).each { |action| actions << action }
+    switch_actions(battle, battler, foe_indices, skill).each { |action| actions << action }
 
     damaging = actions.select { |action| action["type"] == "move" && action["damaging"] }
     best_damage = 0
@@ -243,8 +245,12 @@ module PortableAIRealidea
     end
     negative_stages = 0
     battler.stages.each { |stage| negative_stages += stage if stage && stage < 0 }
+    speed = battler_speed(battler)
 
-    incoming = estimated_incoming_damage(battle, battler, foe_indices, skill)
+    incoming_map = incoming_damage_by_move(battle, battler, foe_indices, skill)
+    incoming = 0.0
+    incoming_map.each_value { |damage| incoming = damage if damage > incoming }
+    certain = certain_incoming_damage(battle, battler, foe_indices, incoming_map, skill)
     toxic_stage = safe_effect(battler, :Toxic, 0).to_i
     residual = 0.0
     residual += (toxic_stage + 1) * 100.0 / 16.0 if toxic_stage > 0
@@ -254,13 +260,16 @@ module PortableAIRealidea
       "species" => battler.species,
       "hp_pct" => percent(battler.hp, battler.totalhp),
       "status" => battler.status,
-      "speed" => battler_speed(battler),
+      "speed" => speed,
+      "faster" => faster_than_foes?(battle, speed, foe_indices),
       "stages" => battler.stages.clone,
       "negative_stage_total" => negative_stages,
       # 0.6.2: the durable record of "I have already set up", which the memory counter
       # is not -- apply_memory zeroes it on any non-setup action.
       "positive_stage_total" => positive_stages(battler),
       "incoming_damage_pct" => incoming,
+      "certain_incoming_damage_pct" => certain,
+      "incoming_by_move" => incoming_map,
       "threatened_lethal" => incoming >= percent(battler.hp, battler.totalhp),
       "no_effective_move" => no_effective,
       "best_damage_pct" => best_damage,
@@ -268,6 +277,7 @@ module PortableAIRealidea
       "residual_damage_pct" => residual,
       "trapped" => !has_legal_switch?(battle, index),
       "ability" => ability_key(battler),
+      "slower_bench_count" => slower_bench_count(battle, battler, foe_indices),
       # Fake Out and First Impression are worth +115 on turn 0 and nothing after.
       # Without this the core's turn_shape_rules fired every turn and the AI re-clicked
       # a move the engine refuses (core.rb first_turn_hit).
@@ -342,10 +352,11 @@ module PortableAIRealidea
       "base_score" => base,
       "damaging" => move.pbIsDamaging?,
       "power" => move.basedamage,
-      "priority" => move.priority,
+      "priority" => effective_priority(move, battler),
       "effectiveness" => effectiveness,
       "immune" => (move.pbIsDamaging? && effectiveness <= 0) || blocked,
       "expected_damage_pct" => rough_damage_pct(battle, move, battler, scoring_target, skill),
+      "accuracy" => rough_accuracy(battle, move, battler, scoring_target, skill),
       "target_hp_pct" => (scoring_target ? percent(scoring_target.hp, scoring_target.totalhp) : nil),
       "tags" => tags,
       "spread" => false,
@@ -397,7 +408,7 @@ module PortableAIRealidea
       move.target == PBTargets::Partner
   end
 
-  def self.switch_actions(battle, battler, foe_indices)
+  def self.switch_actions(battle, battler, foe_indices, skill)
     party = battle.pbParty(battler.index)
     forced = safe_effect(battler, :PerishSong, 0) == 1
     actions = []
@@ -407,18 +418,183 @@ module PortableAIRealidea
       matchup = switch_matchup(pokemon, battle, foe_indices)
       hazard = entry_hazard_pct(battle, pokemon, battler)
       next if hazard >= hp_pct
-      actions << {
+      action = {
         "type" => "switch",
         "actor_index" => battler.index,
         "slot" => slot,
         "base_score" => 20 + hp_pct * 0.35 - hazard,
         "matchup_score" => matchup,
+        "incoming_risk" => switch_incoming_risk(pokemon, battle, foe_indices),
         "forced" => forced,
         "safe_entry" => hp_pct > hazard + 20,
-        "species" => pokemon.species
+        "species" => pokemon.species,
+        # candidate_hp_pct and entry_damage_pct restate what is already folded into
+        # base_score so the core can ask "is this Pokemon alive at the end of the turn
+        # it comes in on" rather than "did it clear the hazards".
+        "candidate_hp_pct" => hp_pct,
+        "entry_damage_pct" => hazard
       }
+      real = switch_incoming_damage(battle, pokemon, slot, battler, foe_indices, skill)
+      action["incoming_damage_pct"] = real if !real.nil?
+      out = switch_outgoing_damage(battle, pokemon, slot, battler, foe_indices, skill)
+      action["outgoing_damage_pct"] = out if !out.nil?
+      fast = switch_candidate_faster(battle, pokemon, foe_indices)
+      action["faster"] = fast if !fast.nil?
+      actions << action
     end
     actions
+  end
+
+  # A battler object for a Pokemon that is not on the field, so the entry estimates can
+  # be real damage rolls rather than a type-chart proxy. This is what Reborn's
+  # pbMakeFakeBattler does internally; v16 has no such helper, so it is spelled out.
+  #
+  # PokeBattle_Battler#initialize is NOT pure: pbInitEffects clears Attract and MeanLook
+  # on every battler pointing at the index being built (080:374-378, :418-424). Building
+  # a fake at the actor's own index would therefore silently break a real infatuation or
+  # trap, so both effects are snapshotted and restored. pbInitPokemon itself only copies
+  # stats and builds move objects through pbFromPBMove (:203-241).
+  #
+  # nil when the engine refuses, which leaves the core on the type proxy it used
+  # through 0.1.0.
+  def self.fake_battler(battle, pokemon, party_index, index)
+    saved = []
+    for i in 0...4
+      other = battle.battlers[i]
+      next if !other
+      saved << [other, other.effects[PBEffects::Attract],
+                other.effects[PBEffects::MeanLook]]
+    end
+    begin
+      fake = PokeBattle_Battler.new(battle, index)
+      fake.pbInitPokemon(pokemon, party_index)
+      fake
+    ensure
+      saved.each do |entry|
+        entry[0].effects[PBEffects::Attract] = entry[1]
+        entry[0].effects[PBEffects::MeanLook] = entry[2]
+      end
+    end
+  rescue
+    nil
+  end
+
+  # What the candidate actually eats on the turn it comes in, with its own Intimidate
+  # applied to the foes first -- the only way an entry ability shows up in the number
+  # at all. The temporary stage mutation is restored in `ensure`; pbCanReduceStatStage?
+  # is what makes Clear Body, White Smoke, Full Metal Body and Hyper Cutter exempt.
+  def self.switch_incoming_damage(battle, pokemon, party_index, battler, foe_indices, skill)
+    fake = fake_battler(battle, pokemon, party_index, battler.index)
+    return nil if !fake
+    intimidate = (ability_key(pokemon) == "INTIMIDATE")
+    saved = {}
+    worst = 0.0
+    begin
+      if intimidate
+        foe_indices.each do |foe_index|
+          foe = battle.battlers[foe_index]
+          next if !foe || foe.isFainted?
+          next if !(foe.pbCanReduceStatStage?(PBStats::ATTACK) rescue false)
+          next if (foe.item == PBItems::WHITEHERB rescue false)
+          ability = ability_key(foe)
+          next if ability == "CONTRARY" || ability == "DEFIANT" || ability == "COMPETITIVE"
+          saved[foe_index] = foe.stages[PBStats::ATTACK]
+          foe.stages[PBStats::ATTACK] -= 1
+        end
+      end
+      foe_indices.each do |foe_index|
+        foe = battle.battlers[foe_index]
+        next if !foe || foe.isFainted?
+        foe.moves.each do |known|
+          next if !known || known.id == 0
+          damage = rough_damage_pct(battle, known, foe, fake, skill)
+          worst = damage if damage > worst
+        end
+      end
+    ensure
+      saved.each do |foe_index, value|
+        battle.battlers[foe_index].stages[PBStats::ATTACK] = value
+      end
+    end
+    worst
+  rescue
+    nil
+  end
+
+  # The mirror: the best real hit this candidate has into any current foe, so the core
+  # can ask how many turns it needs rather than only how many it survives. v16's
+  # pbFromPBMove takes (battle, move) -- no user argument (082:50).
+  def self.switch_outgoing_damage(battle, pokemon, party_index, battler, foe_indices, skill)
+    fake = fake_battler(battle, pokemon, party_index, battler.index)
+    return nil if !fake
+    best = 0.0
+    foe_indices.each do |foe_index|
+      foe = battle.battlers[foe_index]
+      next if !foe || foe.isFainted?
+      (pokemon.moves || []).each do |own|
+        next if !own || own.id == 0
+        move = (PokeBattle_Move.pbFromPBMove(battle, own) rescue nil)
+        next if !move
+        damage = rough_damage_pct(battle, move, fake, foe, skill)
+        best = damage if damage > best
+      end
+    end
+    best
+  rescue
+    nil
+  end
+
+  # Whether the candidate would outrun every current foe once it is in. A benched
+  # Pokemon has no battler and therefore no pbSpeed, so this reads the party entry's own
+  # Speed stat -- no stages, which is right: a switch-in enters at stage 0.
+  def self.switch_candidate_faster(battle, pokemon, foe_indices)
+    speed = (pokemon.speed rescue nil)
+    return nil if speed.nil?
+    faster_than_foes?(battle, speed, foe_indices)
+  rescue
+    nil
+  end
+
+  # The mirror of switch_matchup: how hard the foe hits the candidate coming in, scored
+  # off the foe's own types rather than its moveset so this stays inside the
+  # fair-information contract. Same units as switch_matchup (neutral 8, x4 = 32), and
+  # the worst foe is taken rather than the sum.
+  def self.switch_incoming_risk(pokemon, battle, foe_indices)
+    worst = 0
+    types = [pokemon.type1, pokemon.type2].compact.uniq
+    foe_indices.each do |foe_index|
+      foe = battle.battlers[foe_index]
+      next if !foe
+      [foe.type1, foe.type2].compact.uniq.each do |attacking|
+        value = PBTypes.getCombinedEffectiveness(attacking, types[0], types[-1], -1)
+        worst = value if value > worst
+      end
+    end
+    worst * 4
+  rescue
+    0
+  end
+
+  # How many benched Pokemon are slower than every current foe. Trick Room is a
+  # whole-team investment, so it is only worth a turn when the team behind the actor is
+  # slow too.
+  def self.slower_bench_count(battle, battler, foe_indices)
+    fastest = 0
+    foe_indices.each do |foe_index|
+      speed = battler_speed(battle.battlers[foe_index])
+      fastest = speed if speed && speed > fastest
+    end
+    return 0 if fastest <= 0
+    count = 0
+    battle.pbParty(battler.index).each_with_index do |pokemon, slot|
+      next if !pokemon || pokemon.hp <= 0 || pokemon.isEgg?
+      next if slot == battler.pokemonIndex
+      speed = (pokemon.speed rescue nil)
+      count += 1 if speed && speed < fastest
+    end
+    count
+  rescue
+    0
   end
 
   def self.switch_matchup(pokemon, battle, foe_indices)
@@ -471,17 +647,123 @@ module PortableAIRealidea
     nil
   end
 
+  # Hit chance 0-100 as the engine computes it, including ability, weather and
+  # accuracy/evasion stages (085:3716). 125 is v16's never-miss sentinel (:3770), so it
+  # is clamped rather than handed to the core as a >100 probability. nil when the
+  # primitive is unavailable, which the core reads as "do not discount".
+  def self.rough_accuracy(battle, move, attacker, target, skill)
+    return nil if !target
+    value = battle.pbRoughAccuracy(move, attacker, target, skill)
+    return nil if value.nil?
+    value = 100 if value > 100
+    value.to_f
+  rescue
+    nil
+  end
+
+  # Priority as the engine brackets it (084:1105-1113): Prankster on a status move,
+  # Gale Wings on a Flying move, Triage on a healing move. Nothing else moves priority
+  # in this build -- Psychic Terrain is set by move 0x169 and read by NOTHING, so the
+  # Reborn clause that zeroes a priority move under it is deliberately absent here.
+  def self.effective_priority(move, battler)
+    priority = move.priority
+    if (battler.hasWorkingAbility(:PRANKSTER) rescue false) && (move.pbIsStatus? rescue false)
+      priority += 1
+    end
+    flying = (PBTypes.const_get(:FLYING) rescue nil)
+    if (battler.hasWorkingAbility(:GALEWINGS) rescue false) && !flying.nil? &&
+       move.type == flying
+      priority += 1
+    end
+    if (battler.hasWorkingAbility(:TRIAGE) rescue false) && (move.isHealingMove? rescue false)
+      priority += 3
+    end
+    priority
+  rescue
+    move.priority
+  end
+
+  # Reborn's own convention (pbAIfaster?): strictly greater is faster, a tie is not,
+  # and Trick Room inverts the comparison. nil when either speed is unavailable, which
+  # every rule reading it treats as "unknown, do not penalise".
+  def self.faster_than_foes?(battle, speed, foe_indices)
+    return nil if speed.nil?
+    fastest = nil
+    foe_indices.each do |foe_index|
+      foe_speed = battler_speed(battle.battlers[foe_index])
+      next if foe_speed.nil?
+      fastest = foe_speed if fastest.nil? || foe_speed > fastest
+    end
+    return nil if fastest.nil?
+    trick_room_active?(battle) ? speed < fastest : speed > fastest
+  end
+
+  def self.trick_room_active?(battle)
+    safe_field_effect(battle, :TrickRoom, 0).to_i > 0
+  rescue
+    false
+  end
+
+  # Every foe move's estimated hit on this battler, keyed "<foe index>:<move id>". The
+  # maximum is what the threat rules read.
+  #
+  # A Choice item that has already locked in is a CERTAINTY about what is coming and the
+  # strongest one available: the foe cannot use anything else until it switches
+  # (PBEffects::ChoiceBand holds the move id, -1 when free, 080:3725).
+  def self.incoming_damage_by_move(battle, battler, foe_indices, skill)
+    out = {}
+    foe_indices.each do |foe_index|
+      foe = battle.battlers[foe_index]
+      next if !foe
+      locked = safe_effect(foe, :ChoiceBand, -1).to_i
+      foe.moves.each do |known|
+        next if !known || known.id == 0
+        next if locked >= 0 && known.id != locked
+        out["#{foe_index}:#{known.id}"] = rough_damage_pct(battle, known, foe, battler, skill)
+      end
+    end
+    out
+  end
+
   def self.estimated_incoming_damage(battle, battler, foe_indices, skill)
+    maximum = 0.0
+    incoming_damage_by_move(battle, battler, foe_indices, skill).each_value do |damage|
+      maximum = damage if damage > maximum
+    end
+    maximum
+  end
+
+  # The largest incoming hit that cannot fail to happen: the foe is not frozen or asleep
+  # with sleep still to serve, and the move never misses as the engine computes its hit
+  # chance. The core's "you die whatever you click" rules read this under strict_threat;
+  # the loose maximum stays for the soft rules.
+  def self.certain_incoming_damage(battle, battler, foe_indices, incoming_map, skill)
     maximum = 0.0
     foe_indices.each do |foe_index|
       foe = battle.battlers[foe_index]
+      next if !foe || !foe_can_act?(foe)
       foe.moves.each do |known|
         next if !known || known.id == 0
-        damage = rough_damage_pct(battle, known, foe, battler, skill)
+        damage = incoming_map["#{foe_index}:#{known.id}"]
+        next if !damage || damage <= 0
+        accuracy = rough_accuracy(battle, known, foe, battler, skill)
+        next if !accuracy.nil? && accuracy < 100
         maximum = damage if damage > maximum
       end
     end
     maximum
+  end
+
+  def self.foe_can_act?(foe)
+    status = foe.status
+    return false if status == PBStatuses::FROZEN
+    if status == PBStatuses::SLEEP
+      # One turn left means it wakes and acts this turn.
+      return false if (foe.statusCount rescue 0).to_i > 1
+    end
+    true
+  rescue
+    true
   end
 
   def self.has_legal_switch?(battle, index)
@@ -515,6 +797,10 @@ module PortableAIRealidea
     count = 0
     party.each do |pokemon|
       next if !pokemon || pokemon.hp <= 0 || pokemon.isEgg?
+      # The other half of the exemption above: a party that walks over hazards is a
+      # party the hazard move cannot touch.
+      next if pokemon_item_key(pokemon) == "HEAVYDUTYBOOTS"
+      next if pokemon.hasAbility?(:MAGICGUARD)
       airborne = pokemon.hasType?(:FLYING) || pokemon.hasAbility?(:LEVITATE)
       if move_id == "SPIKES" || move_id == "STICKYWEB"
         count += 1 if !airborne
@@ -570,6 +856,11 @@ module PortableAIRealidea
 
   def self.entry_hazard_pct(battle, pokemon, battler)
     side = battle.sides[1]
+    # Heavy-Duty Boots and Magic Guard walk over every hazard, so a holder pays nothing
+    # to come in. (Boots does not exist in this build's item list; the row costs
+    # nothing and keeps the two adapters saying the same thing.)
+    return 0 if pokemon_item_key(pokemon) == "HEAVYDUTYBOOTS"
+    return 0 if pokemon.hasAbility?(:MAGICGUARD)
     spikes = safe_side_effect(side, :Spikes, 0).to_i
     damage = [0, 12.5, 16.7, 25.0][spikes] || 25.0
     if pokemon.hasType?(:FLYING) || pokemon.hasAbility?(:LEVITATE)
@@ -708,6 +999,14 @@ module PortableAIRealidea
     fallback
   end
 
+  def self.safe_field_effect(battle, name, fallback)
+    return fallback if !PBEffects.const_defined?(name.to_s)
+    value = PBEffects.const_get(name.to_s)
+    battle.field.effects[value]
+  rescue
+    fallback
+  end
+
   # Ability and item names as uppercase strings, resolved through the CONSTANT tables
   # rather than through PBAbilities.getName / PBItems.getName -- getName goes to the
   # compiled message file, which in this build is Spanish, and returns an empty string
@@ -719,6 +1018,20 @@ module PortableAIRealidea
     constant_key(PBAbilities, :@ability_keys, value)
   rescue
     nil
+  end
+
+  def self.item_key(battler_or_pokemon)
+    value = (battler_or_pokemon.item rescue nil)
+    return nil if value.nil? || value == 0
+    constant_key(PBItems, :@item_keys, value)
+  rescue
+    nil
+  end
+
+  # A party entry exposes its held item through the same reader; kept as its own name
+  # so the hazard rows read as being about a benched Pokemon.
+  def self.pokemon_item_key(pokemon)
+    item_key(pokemon)
   end
 
   def self.constant_key(namespace, cache_name, value)

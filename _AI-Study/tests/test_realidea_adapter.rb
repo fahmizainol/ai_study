@@ -32,21 +32,25 @@ module PBTypes
 
   # 8 is neutral here: three type slots, each contributing 2 (066_PBTypes_Extra.rb:28).
   def self.getCombinedEffectiveness(attack, t1, t2 = nil, t3 = nil)
-    mods = [t1, t2, t3].map do |defender|
-      next 2 if defender.nil? || defender < 0
-      next 0 if attack == ELECTRIC && defender == GROUND
-      next 4 if attack == WATER && defender == FIRE
-      next 1 if attack == FIRE && defender == WATER
-      2
-    end
-    mods[0] * mods[1] * mods[2]
+    mod1 = single(attack, t1)
+    mod2 = (t2.nil? || t2 < 0 || t2 == t1) ? 2 : single(attack, t2)
+    mod3 = (t3.nil? || t3 < 0 || t3 == t1 || t3 == t2) ? 2 : single(attack, t3)
+    mod1 * mod2 * mod3
+  end
+
+  def self.single(attack, defender)
+    return 2 if defender.nil? || defender < 0
+    return 0 if attack == ELECTRIC && defender == GROUND
+    return 4 if attack == WATER && defender == FIRE
+    return 1 if attack == FIRE && defender == WATER
+    2
   end
 end
 
 module PBEffects
   # Battler effects.
-  ChoiceBand = 7; LeechSeed = 43; PerishSong = 66; Substitute = 91
-  Toxic = 95; Type3 = 99; Wish = 105; Yawn = 108
+  Attract = 1; ChoiceBand = 7; LeechSeed = 43; MeanLook = 50; PerishSong = 66
+  Substitute = 91; Toxic = 95; Type3 = 99; Wish = 105; Yawn = 108
   # Side effects (own array, so the index reuse below is Realidea's own).
   LightScreen = 4; Reflect = 10; Safeguard = 12; Spikes = 14
   StealthRock = 15; StickyWeb = 16; Tailwind = 18; ToxicSpikes = 19
@@ -207,13 +211,55 @@ class StubBattler
   def pbCanFreeze?(_a, _s, _m = nil); @can_status; end
   def pbCanConfuse?(_a = nil, _s = true, _m = nil); @can_status; end
   def pbCanReduceStatStage?(_stat, _a = nil, _s = false, _m = nil, _mb = false, _ic = false)
-    true
+    @can_reduce.nil? ? true : @can_reduce
   end
+  attr_writer :can_reduce
+
+  def hasWorkingAbility(symbol, _ignore = false)
+    value = (PBAbilities.const_get(symbol) rescue nil)
+    !value.nil? && @ability == value
+  end
+end
+
+# The two-line v16 equivalent of Reborn's pbMakeFakeBattler. The constructor's
+# cross-battler Attract/MeanLook clearing is reproduced faithfully so the adapter's
+# save/restore is actually under test.
+class PokeBattle_Battler < StubBattler
+  def initialize(battle, index)
+    super(:index => index)
+    battle.battlers.each do |other|
+      next if !other
+      other.effects[PBEffects::Attract] = -1 if other.effects[PBEffects::Attract] == index
+      other.effects[PBEffects::MeanLook] = -1 if other.effects[PBEffects::MeanLook] == index
+    end
+  end
+
+  def pbInitPokemon(pokemon, party_index)
+    @species = pokemon.species
+    @hp = pokemon.hp
+    @totalhp = pokemon.totalhp
+    @type1 = pokemon.type1
+    @type2 = pokemon.type2
+    @ability = pokemon.ability
+    @item = pokemon.item
+    @speed = pokemon.speed
+    @moves = pokemon.moves
+    @pokemonIndex = party_index
+    self
+  end
+end
+
+class PokeBattle_Move
+  def self.pbFromPBMove(_battle, move); move; end
 end
 
 class StubSide
   attr_accessor :effects
-  def initialize; @effects = Array.new(24, 0); end
+  def initialize
+    @effects = Array.new(24, 0)
+    @effects[PBEffects::StealthRock] = false
+    @effects[PBEffects::StickyWeb] = false
+  end
 end
 
 class StubField
@@ -252,6 +298,7 @@ class PokeBattle_Battle
     !entry.nil? && entry.hp > 0
   end
   def pbGetMoveScore(_move, _attacker, _target, _skill); @score; end
+  def pbRegisterTargetStub; end
   def pbBetterBaseDamage(_move, _attacker, _target, _skill, basedamage); basedamage; end
   def pbRoughDamage(_move, _attacker, target, _skill, basedamage)
     (target.totalhp * basedamage / 200.0)
@@ -483,23 +530,28 @@ class PortableAIRealideaAdapterTest < Test::Unit::TestCase
   # The list of keys the shared core reads at each level. When a future core rule adds
   # a read, the key goes here and this test fails until the Realidea export exists --
   # which is the whole reason this adapter drifted five minor versions behind.
-  TOP_LEVEL_KEYS = %w[format turn weather actors targets memory]
+  TOP_LEVEL_KEYS = %w[
+    format turn weather trick_room_active tailwind_active actors targets memory
+  ]
 
   ACTOR_KEYS = %w[
-    index species hp_pct status speed stages negative_stage_total
-    positive_stage_total incoming_damage_pct threatened_lethal no_effective_move
-    best_damage_pct yawned residual_damage_pct trapped ability turncount actions
+    index species hp_pct status speed faster stages negative_stage_total
+    positive_stage_total incoming_damage_pct certain_incoming_damage_pct
+    incoming_by_move threatened_lethal no_effective_move best_damage_pct yawned
+    residual_damage_pct trapped ability slower_bench_count turncount actions
   ]
 
   MOVE_ACTION_KEYS = %w[
     type actor_index slot move_id numeric_move_id target base_score damaging power
-    priority effectiveness immune expected_damage_pct target_hp_pct tags spread
+    priority effectiveness immune expected_damage_pct accuracy target_hp_pct tags spread
     existing_layers max_layers own_hazard_layers target_positive_stages effect_active
     foe_reserves hazard_targets own_reserves
   ]
 
   SWITCH_ACTION_KEYS = %w[
-    type actor_index slot base_score matchup_score forced safe_entry species
+    type actor_index slot base_score matchup_score incoming_risk forced safe_entry
+    species candidate_hp_pct entry_damage_pct incoming_damage_pct
+    outgoing_damage_pct faster
   ]
 
   TARGET_KEYS = %w[index species hp_pct status types speed positive_stages ability]
@@ -550,6 +602,214 @@ class PortableAIRealideaAdapterTest < Test::Unit::TestCase
     battle.battlers[1].turncount = 4
     snapshot, _ = PortableAIRealidea.build_snapshot(battle)
     assert_equal(4, snapshot["actors"][0]["turncount"])
+  end
+
+  # --- 0.4.x exports ---------------------------------------------------------
+
+  def speed_battler(value)
+    StubBattler.new(:index => 0, :speed => value)
+  end
+
+  def test_speed_order_uses_a_strict_comparison
+    battle = PokeBattle_Battle.new
+    battle.battlers[0] = speed_battler(120)
+    assert_equal(true,  PortableAIRealidea.faster_than_foes?(battle, 130, [0]))
+    assert_equal(false, PortableAIRealidea.faster_than_foes?(battle, 90, [0]))
+    assert_equal(false, PortableAIRealidea.faster_than_foes?(battle, 120, [0]))
+  end
+
+  def test_speed_order_is_nil_without_both_speeds
+    battle = PokeBattle_Battle.new
+    battle.battlers[0] = speed_battler(120)
+    assert_nil(PortableAIRealidea.faster_than_foes?(battle, nil, [0]))
+    assert_nil(PortableAIRealidea.faster_than_foes?(battle, 130, []))
+  end
+
+  def test_trick_room_inverts_speed_order
+    battle = PokeBattle_Battle.new
+    battle.battlers[0] = speed_battler(120)
+    battle.field.effects[PBEffects::TrickRoom] = 5
+    assert_equal(true,  PortableAIRealidea.faster_than_foes?(battle, 90, [0]))
+    assert_equal(false, PortableAIRealidea.faster_than_foes?(battle, 130, [0]))
+  end
+
+  # 125 is v16's never-miss sentinel (085_PokeBattle_AI.rb:3770). Handing it to the
+  # core as a hit chance would make a sure thing worth 1.25 of itself.
+  def test_never_miss_accuracy_is_clamped_to_100
+    battle = PokeBattle_Battle.new
+    battle.define_singleton_method(:pbRoughAccuracy) { |_m, _a, _t, _s| 125 }
+    assert_equal(100.0, PortableAIRealidea.rough_accuracy(
+      battle, StubMove.new, StubBattler.new, StubBattler.new(:index => 0), 100))
+  end
+
+  def test_accuracy_is_nil_when_the_primitive_is_unavailable
+    battle = PokeBattle_Battle.new
+    class << battle
+      undef_method :pbRoughAccuracy
+    end
+    assert_nil(PortableAIRealidea.rough_accuracy(
+      battle, StubMove.new, StubBattler.new, StubBattler.new(:index => 0), 100))
+  end
+
+  # 084_PokeBattle_Battle.rb:1105-1113 is the whole of this engine's priority
+  # arithmetic. Psychic Terrain is set by move 0x169 and read by nothing, so a priority
+  # move under it keeps its bracket here -- unlike Reborn.
+  def test_prankster_raises_a_status_moves_priority
+    user = StubBattler.new(:ability => PBAbilities::PRANKSTER)
+    assert_equal(1, PortableAIRealidea.effective_priority(
+      StubMove.new(:basedamage => 0), user))
+    assert_equal(0, PortableAIRealidea.effective_priority(StubMove.new, user))
+  end
+
+  def test_gale_wings_and_triage_raise_their_own_brackets
+    flier = StubBattler.new(:ability => PBAbilities::GALEWINGS)
+    assert_equal(1, PortableAIRealidea.effective_priority(
+      StubMove.new(:type => PBTypes::FLYING), flier))
+    assert_equal(0, PortableAIRealidea.effective_priority(StubMove.new, flier))
+    healer = StubBattler.new(:ability => PBAbilities::TRIAGE)
+    assert_equal(3, PortableAIRealidea.effective_priority(
+      StubMove.new(:basedamage => 0, :healing => true), healer))
+  end
+
+  # --- threat model ----------------------------------------------------------
+
+  def threat_battle(foe_status = 0, foe_count = 0, accuracy = 100)
+    battle = PokeBattle_Battle.new
+    battle.define_singleton_method(:pbRoughAccuracy) { |_m, _a, _t, _s| accuracy }
+    foe = StubBattler.new(:index => 0, :status => foe_status, :statusCount => foe_count,
+                          :moves => [StubMove.new(:id => PBMoves::TACKLE)])
+    battle.battlers[0] = foe
+    battle
+  end
+
+  def certain_for(battle, us = StubBattler.new(:index => 1))
+    map = PortableAIRealidea.incoming_damage_by_move(battle, us, [0], 100)
+    PortableAIRealidea.certain_incoming_damage(battle, us, [0], map, 100)
+  end
+
+  def test_certain_incoming_damage_counts_a_sure_hit
+    assert_equal(40.0, certain_for(threat_battle))
+  end
+
+  def test_certain_incoming_damage_ignores_a_move_that_can_miss
+    assert_equal(0.0, certain_for(threat_battle(0, 0, 85)))
+  end
+
+  def test_certain_incoming_damage_ignores_a_frozen_foe
+    assert_equal(0.0, certain_for(threat_battle(PBStatuses::FROZEN)))
+  end
+
+  # Sleep with one turn left means the foe wakes and acts this turn.
+  def test_certain_incoming_damage_reads_the_sleep_counter
+    assert_equal(0.0, certain_for(threat_battle(PBStatuses::SLEEP, 3)))
+    assert_equal(40.0, certain_for(threat_battle(PBStatuses::SLEEP, 1)))
+  end
+
+  def test_a_choice_locked_foe_contributes_only_the_locked_move
+    battle = PokeBattle_Battle.new
+    foe = StubBattler.new(:index => 0,
+                          :moves => [StubMove.new(:id => 7), StubMove.new(:id => 9)])
+    foe.effects[PBEffects::ChoiceBand] = 7
+    battle.battlers[0] = foe
+    map = PortableAIRealidea.incoming_damage_by_move(
+      battle, StubBattler.new(:index => 1), [0], 100)
+    assert_equal(["0:7"], map.keys)
+    foe.effects[PBEffects::ChoiceBand] = -1
+    map = PortableAIRealidea.incoming_damage_by_move(
+      battle, StubBattler.new(:index => 1), [0], 100)
+    assert_equal(["0:7", "0:9"], map.keys.sort)
+  end
+
+  # --- switch candidates -----------------------------------------------------
+
+  def entry_battle(foe_atk_stage = 0)
+    battle = PokeBattle_Battle.new
+    foe = StubBattler.new(:index => 0, :moves => [StubMove.new(:id => PBMoves::TACKLE)])
+    foe.stages[PBStats::ATTACK] = foe_atk_stage
+    battle.battlers[0] = foe
+    actor = StubBattler.new(:index => 1)
+    actor.opposite = foe
+    battle.battlers[1] = actor
+    battle.define_singleton_method(:pbRoughDamage) do |_m, attacker, target, _s, base|
+      target.totalhp * base * (2 + attacker.stages[PBStats::ATTACK]) / 400.0
+    end
+    battle
+  end
+
+  # Reborn does exactly this, including the temporary stage mutation and its restore;
+  # leaking it would corrupt every later estimate in the same turn.
+  def test_intimidate_lowers_the_entry_estimate_and_restores_the_stage
+    battle = entry_battle
+    actor = battle.battlers[1]
+    plain = PortableAIRealidea.switch_incoming_damage(
+      battle, StubPokemon.new, 1, actor, [0], 100)
+    scary = StubPokemon.new(:ability => PBAbilities::INTIMIDATE)
+    softened = PortableAIRealidea.switch_incoming_damage(battle, scary, 1, actor, [0], 100)
+    assert_equal(40.0, plain)
+    assert_equal(20.0, softened)
+    assert_equal(0, battle.battlers[0].stages[PBStats::ATTACK])
+  end
+
+  # Clear Body and friends are honoured through the engine's own refusal, not a list
+  # carried here.
+  def test_intimidate_is_ignored_when_the_engine_refuses_the_drop
+    battle = entry_battle
+    battle.battlers[0].can_reduce = false
+    scary = StubPokemon.new(:ability => PBAbilities::INTIMIDATE)
+    assert_equal(40.0, PortableAIRealidea.switch_incoming_damage(
+      battle, scary, 1, battle.battlers[1], [0], 100))
+  end
+
+  # PokeBattle_Battler#initialize clears Attract and MeanLook on everything pointing at
+  # the index being built (080:374-378, :418-424), so building a fake at the actor's own
+  # index would silently break a real infatuation.
+  def test_building_a_fake_battler_leaves_infatuation_alone
+    battle = entry_battle
+    battle.battlers[0].effects[PBEffects::Attract] = 1
+    battle.battlers[0].effects[PBEffects::MeanLook] = 1
+    PortableAIRealidea.switch_incoming_damage(
+      battle, StubPokemon.new, 1, battle.battlers[1], [0], 100)
+    assert_equal(1, battle.battlers[0].effects[PBEffects::Attract])
+    assert_equal(1, battle.battlers[0].effects[PBEffects::MeanLook])
+  end
+
+  def test_switch_outgoing_damage_takes_the_candidates_best_hit
+    battle = entry_battle
+    candidate = StubPokemon.new(:moves => [StubMove.new(:basedamage => 40),
+                                           StubMove.new(:basedamage => 120)])
+    assert_equal(60.0, PortableAIRealidea.switch_outgoing_damage(
+      battle, candidate, 1, battle.battlers[1], [0], 100))
+    assert_equal(20.0, PortableAIRealidea.switch_outgoing_damage(
+      battle, StubPokemon.new(:moves => [StubMove.new(:basedamage => 40)]), 1,
+      battle.battlers[1], [0], 100))
+  end
+
+  # Neutral is 8 here (three type slots), weighted x4 so the core sees the same
+  # magnitudes it sees from Reborn: neutral 32, one super-effective step 64.
+  def test_switch_incoming_risk_takes_the_worst_foe
+    battle = PokeBattle_Battle.new
+    battle.battlers[0] = StubBattler.new(:index => 0, :type1 => PBTypes::WATER,
+                                         :type2 => PBTypes::WATER)
+    fire = StubPokemon.new(:type1 => PBTypes::FIRE, :type2 => PBTypes::FIRE)
+    normal = StubPokemon.new
+    assert_equal(64, PortableAIRealidea.switch_incoming_risk(fire, battle, [0]))
+    assert_equal(32, PortableAIRealidea.switch_incoming_risk(normal, battle, [0]))
+  end
+
+  def test_entry_hazard_cost_is_zero_for_magic_guard
+    battle = PokeBattle_Battle.new
+    battle.sides[1].effects[PBEffects::Spikes] = 3
+    battler = StubBattler.new(:index => 1)
+    assert_equal(25.0, PortableAIRealidea.entry_hazard_pct(battle, StubPokemon.new, battler))
+    guarded = StubPokemon.new(:ability => PBAbilities::MAGICGUARD)
+    assert_equal(0, PortableAIRealidea.entry_hazard_pct(battle, guarded, battler))
+  end
+
+  def test_slower_bench_count_ignores_the_active_slot
+    battle = contract_battle
+    battle.parties[1] = [StubPokemon.new(:speed => 10), StubPokemon.new(:speed => 10),
+                         StubPokemon.new(:speed => 200)]
+    assert_equal(1, PortableAIRealidea.slower_bench_count(battle, battle.battlers[1], [0]))
   end
 
   # Stock v16 resolves variable-power moves before it estimates damage
