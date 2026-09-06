@@ -2,6 +2,15 @@
 
 Implementation status: installed and verified, opt-in, version 0.1.0 (2026-09-04).
 
+> **This adapter is stranded at core 0.1.0 and the core is now at 0.6.2.** Everything
+> below still describes what is installed in Realidea today — it has not been rebuilt
+> since. Two things block a rebuild, and neither is hard, just ungated work: the full
+> re-gate this file specifies (163/163 probe + paired gauntlet) has to be re-run against
+> the new core, and the Realidea adapter does not yet export the evidence fields added
+> from 0.2.0 onward (they default to 0 via `Model.number`, so the rules that consume them
+> are silently inert here). Development since 2026-09-04 has all happened on the Reborn
+> adapter — see `PORTABLE-AI-REBORN.md`, and `README.md` for the current state.
+
 ## What is installed
 
 Realidea loads battle code from `Realidea V4.1/Data/Scripts.rxdata`. The build adds one

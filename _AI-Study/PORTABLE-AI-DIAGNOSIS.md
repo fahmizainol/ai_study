@@ -1,5 +1,17 @@
 # Portable AI 0.3.2 → 0.4: where the remaining 9.7 points are
 
+> **HISTORY — every win count in this file is an artifact; the reasoning is not.**
+> Written before the obedience bug was found. The left seat (Reborn's own AI) was
+> disobedient in every battle behind these traces, so the "fair ceiling" of 239/300
+> (79.7%), the 210/300 for 0.3.2 and therefore the "9.7 points" of the title are all
+> wrong. On the fixed harness the reference is **158/300 (52.7%)** and 0.4.1 is
+> **142/300 (47.3%)** — see "Corrected baseline" in `PORTABLE-AI-REBORN.md`, and
+> `README.md` for where the project actually stands. What survives is the *diagnosis*:
+> the three move-policy gaps identified here (heal-into-death, the finishing tiebreak,
+> walls leaving) became the 0.4.0 rules, and re-measured on the fixed harness those
+> rules are worth **+19 battles over 0.3.2 at p = 0.012**. Read this for the method and
+> the code reading, not for the numbers.
+
 Written 2026-09-05 from the traces already in `generated/` (no new battles were run).
 Companion to `PORTABLE-AI-REBORN.md`, which ends with 0.3.2 at **210/300 (70.0%)**
 against a fair Reborn-Normal ceiling of **239/300 (79.7%)** and three open questions:

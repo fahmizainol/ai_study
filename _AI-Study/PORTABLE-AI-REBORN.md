@@ -1,11 +1,29 @@
 # Portable AI for Reborn Yang
 
-Implementation status: installed and corpus-validated, opt-in, core version 0.2.0
-(2026-09-04). This is the second engine adapter for the portable core (first: Realidea,
+Implementation status: installed and corpus-validated, opt-in, **core version 0.6.2
+(2026-09-06)**. This is the second engine adapter for the portable core (first: Realidea,
 `PORTABLE-AI-REALIDEA.md`) and the groundwork for the head-to-head benchmark the port
 exists to enable: **portable AI vs Reborn's own AI (Normal and Intense), in Reborn's
 engine** — the first strength number against the study's reference-quality AI rather
 than a decision-agreement number.
+
+> **How to read this file.** It is append-forward and 2,500 lines: the newest
+> `## Core version` section is the truth, everything above it is the record of how the
+> project got there, and a number in an old section has often been superseded by a later
+> one (see the obedience banner immediately below). New here? Read `README.md` first, then
+> this file's "What is installed", "Run gauntlets in PARALLEL" and "Traps for future
+> agents", then **"Core version 0.6.2"**, then work backwards as far as you need.
+>
+> **Where to pick up.** The open work is the five valuation A/Bs — items **7-11** of
+> "Backlog: fixes for the readout-pass misplays" — plus the per-key ablation of the seven
+> 0.6.2 fixes that 0.6.2's own "Measured" section asks for and does not run. Items 1-6 and
+> `yawn_gate` are done.
+>
+> **Current standing**, `normal_portable` over the 420-battle frame (7 rosters × 60,
+> `schedule=normal_baseline`, `party_size=6`): 0.6.0 197 → 0.6.1 **205** → 0.6.2 **203
+> (48.3%)**. The schedule is balanced, so `normal_reborn` — Reborn's AI in both seats —
+> sits near 50% by construction and measured 52.7% on the older 300-battle frame.
+> Portable is still behind Reborn-Normal by a few points.
 
 > **Every gauntlet win count recorded before 2026-09-05 is wrong, and the corrected
 > numbers are in "Corrected baseline" below — read that before any table in this file.**
