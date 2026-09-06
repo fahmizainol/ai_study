@@ -179,9 +179,17 @@ Everything lives in [`_AI-Study/`](_AI-Study/). Start with its
 | [`PORTABLE-AI-REBORN.md`](_AI-Study/PORTABLE-AI-REBORN.md) | The working log — every version, every measurement, every retraction, the backlog |
 | [`TEAM-DESIGN.md`](_AI-Study/TEAM-DESIGN.md) | Team composition study + the generation spec |
 
-**The games themselves are not in this repo** — only the study is. Reproducing a
-measurement needs the game installs locally; see "What is NOT in git" in the
-[study README](_AI-Study/README.md).
+**The games themselves are not in this repo** — only the study is. Everything the study
+wrote *is* here, including the game-side runner, so pointing a fresh clone at a Reborn
+Yang install is one command:
+
+```bash
+cd _AI-Study && python3 tools/install_reborn.py
+```
+
+It builds the AI, installs it and the batch runner into the game, and makes the two small
+host edits they need. Idempotent, reversible, and inert until you create the marker file
+that switches it on.
 
 Findings are from reading shipped builds and running the AI, not from playtesting.
 Everything measured here is reproducible from the artifacts committed under

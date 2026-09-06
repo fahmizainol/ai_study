@@ -2164,8 +2164,11 @@ code.
 
 ### Harness and tooling this needed
 
-Game-side, so **not** in git (the whole `Reborn Yang/` tree is gitignored by design) —
-listed here because a fresh checkout will not have it:
+Game-side. **These were untracked when this was written and are now in git**:
+`AI_Harness.rb`'s canonical copy is `adapters/reborn/AI_Harness.rb`, and
+`tools/install_reborn.py` puts it and the two host edits into a game tree (2026-09-06,
+after a fresh checkout was blocked by exactly this). Edit the repo copy, never the game
+copy. The changes themselves:
 
 * `AI_Harness.rb` `EFFECT_KEYS` gains `wish` (`PBEffects::Wish`, int) and `tantrum`
   (`PBEffects::Tantrum`, bool).

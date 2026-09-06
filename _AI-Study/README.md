@@ -75,6 +75,7 @@ _AI-Study/
 ├── adapters/
 │   ├── reborn/Portable_AI_Adapter.rb    snapshot builder — the only file that may touch Reborn
 │   ├── reborn/Portable_AI_Gauntlet.rb   benchmark driver + CONFIG_OVERRIDE_KEYS
+│   ├── reborn/AI_Harness.rb             the game-side batch runner (installed into Scripts/)
 │   └── realidea/                        the v16 adapter, probe, level cap, team overrides
 ├── tools/                         build, corpus, run, compare, render (see below)
 ├── tests/                         ruby unit tests + test_tooling.py
@@ -113,9 +114,8 @@ cd _AI-Study
 # 2. unit tests — seconds, run them constantly
 ruby tests/test_portable_ai.rb && ruby tests/test_reborn_adapter.rb
 
-# 3. build the single-file bundle and install it
-python3 tools/build_portable_ai.py --target reborn
-cp generated/Portable_AI_Reborn.rb "../Reborn Yang/Reborn Yang/Scripts/Portable_AI.rb"
+# 3. build the single-file bundle and install it (also installs/repairs the harness)
+python3 tools/install_reborn.py
 
 # 4. corpus run (~90 s, serial, one pass over all 213 cards)
 cd "../Reborn Yang/Reborn Yang"
@@ -283,22 +283,31 @@ The root `.gitignore` is an allowlist: only `_AI-Study/` and the two Realidea fi
 study modifies are tracked. Everything else in `../` — every game install, including
 `Reborn Yang/` — is deliberately out.
 
-That means a fresh checkout **cannot reproduce a single measurement**. To work on phase 2
-you need, on the machine:
+What you still need locally:
 
 1. **The game installs**, at the paths `../` uses today. Tool defaults are relative to
    them (`render_battle.py` reads `../Reborn Yang/Reborn Yang/PBS/PBS`).
-2. **`Reborn Yang/Reborn Yang/Scripts/AI_Harness.rb`** — 885 lines, written by this study
-   ("Added by the _AI-Study project. Not part of Reborn Yang."), and **untracked**. It is
-   the batch runner, the decision log, the effect exports (`EFFECT_KEYS`) and
-   `seed_portable_memory`; without it there is no probe and no gauntlet. It exists only
-   on the original machine. Copy it before anything else.
-3. **`Data/!script_order.csv`** with `AI_Harness` then `Portable_AI` before `Main`
-   (lines 182-183 today).
-4. **`.gauntlet-workers/`**, rebuilt locally with `tools/setup_gauntlet_workers.sh 4`.
+2. **`.gauntlet-workers/`**, rebuilt locally with `tools/setup_gauntlet_workers.sh 4`.
    Never copied — the driver re-syncs `Scripts/` from the master on every run precisely
    so a worker cannot execute a stale bundle.
 
+Everything the study *wrote* is in the repo, including the game-side pieces, so a fresh
+checkout only has to be pointed at a game:
+
+```bash
+python3 tools/install_reborn.py                  # or --game "/path/to/Reborn Yang"
+python3 tools/install_reborn.py --check          # report only, changes nothing
+```
+
+That builds the bundle and installs four things: `Scripts/AI_Harness.rb` (the batch
+runner — canonical copy lives at `adapters/reborn/AI_Harness.rb`), `Scripts/Portable_AI.rb`
+(built from `portable_ai/` + `adapters/reborn/`), two entries in `Data/!script_order.csv`
+before `Main`, and one opt-in hook in `Scripts/Main.rb`. It is idempotent, so re-run it
+after every rebuild; the host files' pristine originals are in `backups/`, and both edits
+are inert until `Data/ai_harness.txt` exists.
+
+**`adapters/reborn/AI_Harness.rb` is the canonical copy — edit it there, not in the game
+tree, and re-run the installer.** The game copy is a build artifact like `Portable_AI.rb`.
+
 `generated/` **is** tracked, so all the measurement artifacts, readouts and ndjson from
-every run are in the repo even though the runs that made them cannot be re-run without
-the above.
+every run are in the repo alongside the code that produced them.
