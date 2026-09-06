@@ -325,6 +325,12 @@ module PortableAIGauntlet
     # as the paired baseline of the run it came from, and a readout rendered from a
     # stale baseline is the failure this stamp exists to make visible.
     record["portable_version"] = PortableAI::VERSION if defined?(PortableAI::VERSION)
+    # Only alongside a trace, and only then: the trace records a switch by party slot
+    # and a renderer has no other way to learn what lives there. Without a trace the
+    # record stays the compact one every recorded run used.
+    if trace
+      record["parties"] = [party_snapshot(battle.party1), party_snapshot(battle.party2)]
+    end
     if mode == "portable"
       overrides = PortableAIRealidea.config_overrides
       record["config_overrides"] = overrides if !overrides.empty?
@@ -333,11 +339,13 @@ module PortableAIGauntlet
     end
     record
   rescue Exception => error
-    {
+    record = {
       "id" => id,
       "mode" => mode,
       "seed" => seed,
       "format" => doubles ? "double" : "single",
+      "left_stock_team" => left_name,
+      "right_test_team" => right_name,
       "teams" => set_name,
       "mega" => mega,
       "result" => "error",
@@ -346,6 +354,35 @@ module PortableAIGauntlet
       "where" => (error.backtrace ? error.backtrace[0, 6].join(" | ") : nil),
       "portable_version" => (defined?(PortableAI::VERSION) ? PortableAI::VERSION : nil)
     }
+    # The battle that crashed is the one most worth reading turn by turn, and this
+    # record used to be the only one that threw its trace away. Everything here is
+    # best-effort: `battle` may not exist yet, and whatever partial trace it holds is
+    # still the last thing the AI decided before the engine raised.
+    begin
+      if trace && battle
+        partial = battle.instance_variable_get(:@portable_ai_decision_trace)
+        record["trace"] = partial if partial && !partial.empty?
+        record["parties"] = [party_snapshot(battle.party1),
+                             party_snapshot(battle.party2)]
+      end
+    rescue
+      nil
+    end
+    record
+  end
+
+  def self.party_snapshot(party)
+    out = []
+    (party || []).each do |pokemon|
+      if !pokemon
+        out << nil
+        next
+      end
+      name = (PBSpecies.getName(pokemon.species) rescue nil)
+      name = pokemon.species.to_s if name.nil? || name == ""
+      out << { "species" => name, "hp" => pokemon.hp, "totalhp" => pokemon.totalhp }
+    end
+    out
   end
 
   def self.make_trainer(name)

@@ -224,6 +224,24 @@
       "ZeroDivisionError: divided by 0": "PokeBattle_AI.rb:3557 pbRoughDamage -- atk/defense with defense 0",
       "NoMethodError: undefined method `hasWorkingAbility'": "PokeBattle_AI.rb:4226 pbEnemyShouldWithdrawEx? -- battler method called on a party PokeBattle_Pokemon, reached when weighing a switch under Spikes",
       "NameError: undefined local variable or method `upanim'": "PokeBattle_BattlerEffects.rb:766 pbIncreaseStatWithCause -- reached from Intimidate on switch-in"
+    },
+    "traced_set": {
+      "set": "gen6ou_a",
+      "results_path": "_AI-Study/generated/realidea_tiertrace_gen6ou_a.ndjson",
+      "results_sha256": "a6262dd036b4a5ce6d48fbeac8c73f819032aaf5bc22d3590b9adc8072923873",
+      "renderer": "python3 tools/render_realidea_battle.py <ndjson> [matchup_id] [seed] | --list",
+      "observation_free": "the traced run reproduces the untraced one exactly (41/12/6/1 and 32/25/0/3, same win rates and mean turns), so tracing costs nothing in outcome",
+      "limits": [
+        "portable arm only -- run_one stamps a trace for mode=portable, so there is no stock-side decision record",
+        "decisions, not outcomes: no hit/miss/crit/Protect. This gauntlet records no event stream",
+        "a turn with no line is one Portable did not decide (fell through to stock, or the actor could not act)",
+        "race is keyed by battler seat, not party slot; the record carries no per-turn foe identity"
+      ],
+      "readouts": [
+        "realidea_gen6ou_a_team1_vs_team2_196613.txt",
+        "realidea_gen6ou_a_team1_vs_team4_104729.txt",
+        "realidea_gen6ou_a_team3_vs_team2_155921.txt"
+      ]
     }
   },
   "mega_evolution": {

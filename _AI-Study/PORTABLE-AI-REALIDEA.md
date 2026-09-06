@@ -92,7 +92,7 @@ config overrides these do not touch core policy — they choose what runs.
 | `matchups=x,y` | all | run only these named matchups — for smoke-testing a roster, or resuming past one that stalled |
 | `mega=false` | on | suppress Mega Evolution (see *Mega Evolution*) |
 | `seeds=a,b,c` | five | replace the default seeds |
-| `trace=true` | off | record the per-turn portable decision trace |
+| `trace=true` | off | record the per-turn portable decision trace, plus `parties` (see *Turn-by-turn traces*) |
 | `append=true` | off | append rather than truncate |
 
 Progress goes to `Data/ai_gauntlet_progress.txt` (one line per battle, flushed) and any
@@ -347,6 +347,47 @@ All six in this run are portable battles in the stall matchups. The gauntlet now
 the verdict on the way past — behaviour-neutral, the same value is still returned — and
 records it as `timeout_result` **beside** the raw decision rather than folded into it, so
 no previously recorded number changes meaning. Three were wins, three losses.
+
+### Turn-by-turn traces
+
+`trace=true` records the Portable arm's per-turn decisions into each record's `trace`
+key, and `tools/render_realidea_battle.py` prints one battle as text. A traced 120-battle
+set is about 880 KB and takes the same ~65 seconds.
+
+```
+python3 tools/render_realidea_battle.py generated/realidea_tiertrace_gen6ou_a.ndjson --list
+python3 tools/render_realidea_battle.py generated/realidea_tiertrace_gen6ou_a.ndjson team1_vs_team4 104729
+```
+
+```
+Turn 2   actor 1   BULLETPUNCH @0               score    820.0
+    view: hp 73%  speed 249 (faster)  incoming max 28%  certain 28%  threatened_lethal=False
+    race vs foe@0: mine 1 turns, theirs 3, winning=True
+
+Turn 3   actor 1   switch -> Hoopa              score    291.9
+    view: hp 73%  speed 249 (slower)  incoming max 147%  certain 44%  threatened_lethal=True
+    race vs foe@0: mine 5 turns, theirs 1, winning=False
+```
+
+**Tracing is observation-free**, and that is checked rather than assumed: the traced
+`gen6ou_a` run reproduces the untraced one exactly — 41/12/6/1 and 32/25/0/3, same win
+rates, same mean turn counts.
+
+Four things to know before reading one:
+
+| | |
+|---|---|
+| **Portable arm only** | `run_one` stamps a trace for `mode=portable` only, so there is no stock-side decision record and no turn-by-turn diff of the two AIs. Reborn's shadow arm does that; this engine has no equivalent. |
+| **Decisions, not outcomes** | the line says what Portable chose and the evidence it saw. It does *not* say whether the move hit, crit or was Protected. Reborn's renderer has an `events` stream for that; this gauntlet records none. |
+| **A missing turn is a fall-through** | no line means Portable did not decide that turn — the adapter deferred to the stock path, or the actor could not act. |
+| **`race` is keyed by battler seat, not party slot** | the record carries no per-turn foe identity, so the renderer prints `foe@0` rather than guessing a species. A *switch* entry's `slot` **is** a party index and is resolved to a name. |
+
+`parties` (species and final HP per side) is written only alongside a trace — a switch is
+recorded by party slot and a renderer has no other way to learn what lives there. Without
+`trace=true` the record stays the compact one every earlier run used.
+
+Error records carry their partial trace too, since the battle that crashed is the one
+most worth reading; before that they were the only records that threw it away.
 
 ### The gauntlet hang, and what it actually was
 
