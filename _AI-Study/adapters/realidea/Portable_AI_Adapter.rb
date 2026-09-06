@@ -600,21 +600,27 @@ module PortableAIRealidea
   # be real damage rolls rather than a type-chart proxy. This is what Reborn's
   # pbMakeFakeBattler does internally; v16 has no such helper, so it is spelled out.
   #
-  # PokeBattle_Battler#initialize is NOT pure: pbInitEffects clears Attract and MeanLook
-  # on every battler pointing at the index being built (080:374-378, :418-424). Building
-  # a fake at the actor's own index would therefore silently break a real infatuation or
-  # trap, so both effects are snapshotted and restored. pbInitPokemon itself only copies
-  # stats and builds move objects through pbFromPBMove (:203-241).
+  # PokeBattle_Battler#initialize is NOT pure. pbInitEffects reaches across to every
+  # OTHER battler and clears whatever points at the index being built -- Lock-On
+  # (080:338-345), infatuation (:374-378) and Mean Look (:418-424). Building a fake at
+  # the actor's own index would therefore silently cancel a real Lock-On, Attract or
+  # trap on the board it is only supposed to be measuring, so all four effect slots are
+  # snapshotted and restored. pbInitPokemon itself only copies stats and builds move
+  # objects through pbFromPBMove (:203-241); those are the only three writes in the
+  # whole constructor that leave the new battler.
   #
   # nil when the engine refuses, which leaves the core on the type proxy it used
   # through 0.1.0.
+  RESTORED_ON_FAKE = [:Attract, :MeanLook, :LockOn, :LockOnPos]
+
   def self.fake_battler(battle, pokemon, party_index, index)
     saved = []
     for i in 0...4
       other = battle.battlers[i]
       next if !other
-      saved << [other, other.effects[PBEffects::Attract],
-                other.effects[PBEffects::MeanLook]]
+      values = []
+      RESTORED_ON_FAKE.each { |name| values << safe_effect(other, name, nil) }
+      saved << [other, values]
     end
     begin
       fake = PokeBattle_Battler.new(battle, index)
@@ -622,8 +628,12 @@ module PortableAIRealidea
       fake
     ensure
       saved.each do |entry|
-        entry[0].effects[PBEffects::Attract] = entry[1]
-        entry[0].effects[PBEffects::MeanLook] = entry[2]
+        RESTORED_ON_FAKE.each_with_index do |name, slot|
+          value = entry[1][slot]
+          next if value.nil?
+          next if !PBEffects.const_defined?(name.to_s)
+          entry[0].effects[PBEffects.const_get(name.to_s)] = value
+        end
       end
     end
   rescue

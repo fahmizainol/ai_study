@@ -49,7 +49,8 @@ end
 
 module PBEffects
   # Battler effects.
-  Attract = 1; ChoiceBand = 7; LeechSeed = 43; MeanLook = 50; PerishSong = 66
+  Attract = 1; ChoiceBand = 7; LeechSeed = 43; LockOn = 45; LockOnPos = 46
+  MeanLook = 50; PerishSong = 66
   Substitute = 91; Toxic = 95; Type3 = 99; Wish = 105; Yawn = 108
   # Side effects (own array, so the index reuse below is Realidea's own).
   LightScreen = 4; Rainbow = 9; Reflect = 10; Safeguard = 12; Spikes = 14
@@ -237,6 +238,10 @@ class PokeBattle_Battler < StubBattler
       next if !other
       other.effects[PBEffects::Attract] = -1 if other.effects[PBEffects::Attract] == index
       other.effects[PBEffects::MeanLook] = -1 if other.effects[PBEffects::MeanLook] == index
+      if other.effects[PBEffects::LockOnPos] == index && other.effects[PBEffects::LockOn] > 0
+        other.effects[PBEffects::LockOn] = 0
+        other.effects[PBEffects::LockOnPos] = -1
+      end
     end
   end
 
@@ -950,17 +955,23 @@ class PortableAIRealideaAdapterTest < Test::Unit::TestCase
       battle, scary, 1, battle.battlers[1], [0], 100))
   end
 
-  # PokeBattle_Battler#initialize clears Attract and MeanLook on everything pointing at
-  # the index being built (080:374-378, :418-424), so building a fake at the actor's own
-  # index would silently break a real infatuation.
-  def test_building_a_fake_battler_leaves_infatuation_alone
+  # PokeBattle_Battler#initialize reaches across and clears Lock-On (080:338-345),
+  # infatuation (:374-378) and Mean Look (:418-424) on everything pointing at the index
+  # being built, so building a fake at the actor's own index would silently cancel all
+  # three on a board it is only measuring.
+  def test_building_a_fake_battler_leaves_the_real_board_alone
     battle = entry_battle
-    battle.battlers[0].effects[PBEffects::Attract] = 1
-    battle.battlers[0].effects[PBEffects::MeanLook] = 1
+    foe = battle.battlers[0]
+    foe.effects[PBEffects::Attract] = 1
+    foe.effects[PBEffects::MeanLook] = 1
+    foe.effects[PBEffects::LockOn] = 2
+    foe.effects[PBEffects::LockOnPos] = 1
     PortableAIRealidea.switch_incoming_damage(
       battle, StubPokemon.new, 1, battle.battlers[1], [0], 100)
-    assert_equal(1, battle.battlers[0].effects[PBEffects::Attract])
-    assert_equal(1, battle.battlers[0].effects[PBEffects::MeanLook])
+    assert_equal(1, foe.effects[PBEffects::Attract])
+    assert_equal(1, foe.effects[PBEffects::MeanLook])
+    assert_equal(2, foe.effects[PBEffects::LockOn])
+    assert_equal(1, foe.effects[PBEffects::LockOnPos])
   end
 
   def test_switch_outgoing_damage_takes_the_candidates_best_hit
