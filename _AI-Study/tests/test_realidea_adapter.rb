@@ -129,13 +129,24 @@ class StubMove
     @healing    = options.fetch(:healing, false)
     @multi_hit  = options.fetch(:multi_hit, false)
     @typemod    = options.fetch(:typemod, 8)
+    # 0.6.5. The matrix records which side of the split a cell's best hit is on, so
+    # a setup move can be priced by the stat it actually raises. The engine reads
+    # @category (082:136); this drives the same answer from the same field.
+    @category   = options.fetch(:category, 0)
+    # PP is deliberately NOT a field here: the adapter guards every read with
+    # respond_to?(:pp), and a move object that simply has no such field is a real
+    # case (an older stub, a move built from a PBMove with none). A test that wants
+    # one defines the singleton method, as test_switch_outgoing_damage_skips_a_move
+    # _with_no_pp does.
   end
+
+  attr_accessor :category
 
   def pbIsDamaging?; @basedamage > 0; end
   def pbIsStatus?; @basedamage <= 0; end
   def pbTypeModifier(_type, _attacker, _target); @typemod; end
   def pbType(_type, _attacker, _target); @type; end
-  def pbIsPhysical?(_type); true; end
+  def pbIsPhysical?(_type); @category == 0; end
   def isContactMove?; @contact; end
   def isHealingMove?; @healing; end
   def pbIsMultiHit; @multi_hit; end
@@ -146,10 +157,15 @@ end
 
 # A party entry (never on the field). switch_actions and entry_hazard_pct read these.
 class StubPokemon
-  attr_accessor :species, :hp, :totalhp, :type1, :type2, :ability, :item, :moves, :speed
+  attr_accessor :species, :hp, :totalhp, :type1, :type2, :ability, :item, :moves, :speed,
+                :form, :status
 
   def initialize(options = {})
     @species = options.fetch(:species, 1)
+    # A Mega changes stats and ability without changing species, and burn halves
+    # physical damage: both are in the matrix's per-body signature.
+    @form    = options.fetch(:form, 0)
+    @status  = options.fetch(:status, 0)
     @totalhp = options.fetch(:totalhp, 100)
     @hp      = options.fetch(:hp, @totalhp)
     @type1   = options.fetch(:type1, PBTypes::NORMAL)
@@ -174,7 +190,7 @@ end
 class StubBattler
   attr_accessor :index, :species, :hp, :totalhp, :status, :statusCount, :type1, :type2,
                 :stages, :effects, :moves, :ability, :item, :pokemonIndex, :turncount,
-                :speed, :partner, :opposite, :pokemon, :mold_breaker, :can_status
+                :speed, :partner, :opposite, :pokemon, :mold_breaker, :can_status, :form
 
   def initialize(options = {})
     @index       = options.fetch(:index, 1)
@@ -198,6 +214,7 @@ class StubBattler
     @pokemon     = options.fetch(:pokemon, nil)
     @mold_breaker = options.fetch(:mold_breaker, false)
     @can_status  = options.fetch(:can_status, true)
+    @form        = options.fetch(:form, 0)
   end
 
   def default_effects
@@ -265,6 +282,8 @@ class PokeBattle_Battler < StubBattler
 
   def pbInitPokemon(pokemon, party_index)
     @species = pokemon.species
+    @form = (pokemon.form rescue 0)
+    @status = (pokemon.status rescue 0)
     @hp = pokemon.hp
     @totalhp = pokemon.totalhp
     @type1 = pokemon.type1
@@ -852,7 +871,7 @@ class PortableAIRealideaAdapterTest < Test::Unit::TestCase
   # a read, the key goes here and this test fails until the Realidea export exists --
   # which is the whole reason this adapter drifted five minor versions behind.
   TOP_LEVEL_KEYS = %w[
-    format turn weather trick_room_active tailwind_active actors targets memory
+    format turn weather trick_room_active tailwind_active actors targets memory matrix
   ]
 
   ACTOR_KEYS = %w[
@@ -1486,5 +1505,249 @@ class PortableAIRealideaAdapterTest < Test::Unit::TestCase
     pct = PortableAIRealidea.rough_damage_pct(battle, move, StubBattler.new, target, 100)
     assert_equal([60], seen)
     assert_equal(60.0, pct)
+  end
+
+  # --- 0.6.5 the party x party damage matrix ------------------------------------
+  #
+  # pbRoughDamage in the stub battle returns totalhp * basedamage / 200, so a cell's
+  # percentage is half the base damage: bp 40 is 20%, bp 60 is 30%, bp 80 is 40%.
+
+  def matrix_battle
+    battle = PokeBattle_Battle.new
+    foe = StubBattler.new(:index => 0, :species => 2, :speed => 90, :pokemonIndex => 0,
+                          :moves => [StubMove.new(:id => PBMoves::TACKLE,
+                                                  :basedamage => 40)])
+    actor = StubBattler.new(:index => 1, :species => 212, :speed => 120,
+                            :pokemonIndex => 0,
+                            :moves => [StubMove.new(:id => PBMoves::TACKLE,
+                                                    :basedamage => 60)])
+    actor.opposite = foe
+    foe.opposite = actor
+    battle.battlers[0] = foe
+    battle.battlers[1] = actor
+    battle.parties = [
+      [StubPokemon.new(:species => 2, :moves => [StubMove.new(:basedamage => 40)]),
+       StubPokemon.new(:species => 4, :moves => [StubMove.new(:basedamage => 20)])],
+      [StubPokemon.new(:species => 212, :moves => [StubMove.new(:basedamage => 60)]),
+       StubPokemon.new(:species => 213, :speed => 50,
+                       :moves => [StubMove.new(:basedamage => 80)])]
+    ]
+    battle.owner = Owner.new(100, "")
+    battle
+  end
+
+  def matrix_of(battle, skill = 100)
+    PortableAIRealidea.party_matrix(battle, 1, [0], skill)
+  end
+
+  def test_party_matrix_has_a_cell_for_every_live_pair_and_none_for_the_dead
+    matrix = matrix_of(matrix_battle)
+    assert_equal(%w[0:0 0:1 1:0 1:1], matrix["cells"].keys.sort)
+    # A fainted body is not a row and not a column: nothing has to answer it and it
+    # answers nothing.
+    battle = matrix_battle
+    battle.parties[0][1].hp = 0
+    assert_equal(%w[0:0 1:0], matrix_of(battle)["cells"].keys.sort)
+    assert_equal(false, matrix_of(battle)["foe"][1]["alive"])
+  end
+
+  def test_party_matrix_maps_seats_to_slots_on_both_sides
+    matrix = matrix_of(matrix_battle)
+    assert_equal(1, matrix["own"][0]["index"])       # the actor, on the field
+    assert_nil(matrix["own"][1]["index"])            # on the bench, no seat
+    assert_equal(0, matrix["foe"][0]["index"])
+    assert_nil(matrix["foe"][1]["index"])
+    assert_equal(0, PortableAI.matrix_slot(matrix["own"], 1))
+    assert_equal(0, PortableAI.matrix_slot(matrix["foe"], 0))
+    assert_nil(PortableAI.matrix_slot(matrix["own"], 3))
+  end
+
+  def test_party_matrix_cells_carry_both_directions_category_move_and_speed_order
+    battle = matrix_battle
+    battle.battlers[1].moves = [StubMove.new(:id => PBMoves::TACKLE, :basedamage => 60,
+                                             :category => 1)]
+    cell = matrix_of(battle)["cells"]["0:0"]
+    assert_equal(30.0, cell["out"])
+    assert_equal("special", cell["out_cat"])
+    assert_equal("TACKLE", cell["out_move"])
+    assert_equal(20.0, cell["in"])
+    assert_equal("physical", cell["in_cat"])
+    assert_equal(true, cell["faster"])               # 120 against 90
+    # The bench body is slower than the same foe, and a bench Speed is the bare party
+    # stat, exactly as switch_candidate_faster reads it.
+    assert_equal(false, matrix_of(battle)["cells"]["1:0"]["faster"])
+  end
+
+  # The active bodies are priced through their REAL battlers, so their stages, their
+  # Mega form and the item they are holding are all in the number. A benched body has
+  # no stages to read and arrives at zero.
+  def test_party_matrix_uses_the_real_battler_for_actives_and_a_fake_for_the_bench
+    battle = matrix_battle
+    battle.define_singleton_method(:pbRoughDamage) do |_m, attacker, target, _s, base|
+      target.totalhp * base * (2 + attacker.stages[PBStats::ATTACK]) / 400.0
+    end
+    plain = matrix_of(battle)["cells"]
+    assert_equal(20.0, plain["0:0"]["in"])
+    battle.battlers[0].stages[PBStats::ATTACK] = 2
+    boosted = matrix_of(battle)["cells"]
+    assert_equal(40.0, boosted["0:0"]["in"])
+    # Their bench cannot carry a stage, so its column did not move.
+    assert_equal(plain["0:1"]["in"], boosted["0:1"]["in"])
+  end
+
+  # A counting battle: every cell costs one pbRoughDamage call per direction per move,
+  # so what is re-rolled is directly observable.
+  def counting_battle
+    battle = matrix_battle
+    battle.instance_variable_set(:@rough_calls, 0)
+    battle.define_singleton_method(:rough_calls) { @rough_calls }
+    battle.define_singleton_method(:reset_rough_calls) { @rough_calls = 0 }
+    battle.define_singleton_method(:pbRoughDamage) do |_m, _a, target, _s, base|
+      @rough_calls += 1
+      target.totalhp * base / 200.0
+    end
+    battle
+  end
+
+  def test_party_matrix_rerolls_only_dirty_cells
+    battle = counting_battle
+    matrix_of(battle)
+    assert_equal(8, battle.rough_calls)              # four pairs, both directions
+    # Nothing changed: the whole grid is reused.
+    battle.reset_rough_calls
+    matrix_of(battle)
+    assert_equal(0, battle.rough_calls)
+    # HP is deliberately not in the signature -- every cell is a percentage of a max
+    # HP that does not move, and the verdicts are derived from the side tables.
+    battle.battlers[0].hp = 40
+    battle.reset_rough_calls
+    matrix_of(battle)
+    assert_equal(0, battle.rough_calls)
+    # One foe's stages: its column, and nothing else.
+    battle.battlers[0].stages[PBStats::ATTACK] = 2
+    battle.reset_rough_calls
+    matrix_of(battle)
+    assert_equal(4, battle.rough_calls)
+    # The weather moves every number there is.
+    battle.weather = PBWeather::SANDSTORM
+    battle.reset_rough_calls
+    matrix_of(battle)
+    assert_equal(8, battle.rough_calls)
+  end
+
+  # The 0.6.4 guard, extended: the matrix builds fakes at BOTH seats, so a board
+  # effect pointing at either one has to survive the build.
+  def test_party_matrix_build_leaves_the_board_alone
+    battle = matrix_battle
+    battle.battlers[0].effects[PBEffects::Attract] = 1
+    battle.battlers[0].effects[PBEffects::MeanLook] = 1
+    battle.battlers[0].effects[PBEffects::LockOn] = 2
+    battle.battlers[0].effects[PBEffects::LockOnPos] = 1
+    battle.battlers[1].effects[PBEffects::MultiTurn] = 3
+    battle.battlers[1].effects[PBEffects::MultiTurnUser] = 0
+    matrix_of(battle)
+    assert_equal(1, battle.battlers[0].effects[PBEffects::Attract])
+    assert_equal(1, battle.battlers[0].effects[PBEffects::MeanLook])
+    assert_equal(2, battle.battlers[0].effects[PBEffects::LockOn])
+    assert_equal(1, battle.battlers[0].effects[PBEffects::LockOnPos])
+    assert_equal(3, battle.battlers[1].effects[PBEffects::MultiTurn])
+    assert_equal(0, battle.battlers[1].effects[PBEffects::MultiTurnUser])
+  end
+
+  def test_party_matrix_skips_spent_moves_under_the_pp_rule
+    battle = matrix_battle
+    spent = StubMove.new(:basedamage => 80)
+    spent.define_singleton_method(:pp) { 0 }
+    live = StubMove.new(:basedamage => 40)
+    live.define_singleton_method(:pp) { 5 }
+    battle.parties[1][1].moves = [spent, live]
+    assert_equal(20.0, matrix_of(battle)["cells"]["1:0"]["out"])
+    # The 0.6.3 estimate, restored by the key the bench estimate already reads.
+    $PORTABLE_AI_CONFIG = { "switch_estimate_pp" => false }
+    battle.instance_variable_set(:@portable_ai_matrix, nil)
+    assert_equal(40.0, matrix_of(battle)["cells"]["1:0"]["out"])
+  ensure
+    $PORTABLE_AI_CONFIG = nil
+  end
+
+  # 0% is a claim about the board -- nothing this body has lands. nil is an admission
+  # that the engine could not price the pair at all, and the core reads the two
+  # differently: a nil `out` loses the pair, a 0.0 `out` is the same verdict but says
+  # so honestly.
+  def test_a_cell_the_engine_cannot_price_is_nil_not_zero
+    battle = matrix_battle
+    battle.define_singleton_method(:pbRoughDamage) do |_m, _a, target, _s, base|
+      raise ZeroDivisionError, "divided by 0" if target.species == 4
+      target.totalhp * base / 200.0
+    end
+    cells = matrix_of(battle)["cells"]
+    assert_nil(cells["0:1"]["out"])
+    assert_nil(cells["0:1"]["out_cat"])
+    # The other direction is still priced, and so is every other pair.
+    assert_equal(10.0, cells["0:1"]["in"])
+    assert_equal(30.0, cells["0:0"]["out"])
+  end
+
+  def test_party_matrix_is_absent_when_the_key_is_off
+    $PORTABLE_AI_CONFIG = { "party_matrix" => false }
+    snapshot, _skill = PortableAIRealidea.build_snapshot(matrix_battle)
+    assert_nil(snapshot["matrix"])
+    $PORTABLE_AI_CONFIG = nil
+    on, _skill = PortableAIRealidea.build_snapshot(matrix_battle)
+    assert_not_nil(on["matrix"])
+    assert_equal(1, on["matrix"]["version"])
+  ensure
+    $PORTABLE_AI_CONFIG = nil
+  end
+
+  def test_replacement_snapshot_carries_the_matrix
+    battle = matrix_battle
+    battle.battlers[1].hp = 0
+    trace = []
+    battle.instance_variable_set(:@portable_ai_decision_trace, trace)
+    PortableAIRealidea.choose_replacement(battle, 1, battle.parties[1])
+    assert_equal(1, trace.length)
+    grid = trace[0]["view"]["matrix"]
+    assert_not_nil(grid, "the forced-switch consumer was handed no matrix")
+    assert_not_nil(grid["verdicts"]["1:0"])
+  end
+
+  def test_the_trace_view_carries_the_verdict_grid_and_names_both_parties
+    snapshot, _skill = PortableAIRealidea.build_snapshot(matrix_battle)
+    view = PortableAIRealidea.view_trace(snapshot, 1)
+    grid = view["matrix"]
+    assert_equal(%w[Scizor Shuckle], grid["own"].map { |e| e["species"] })
+    assert_equal([true, false], grid["own"].map { |e| e["active"] })
+    assert_equal(2, grid["foe"].length)
+    # The actor two-shots the foe in front and eats five: a win, from current HP.
+    assert_equal("W", grid["verdicts"]["0:0"])
+    # The cells themselves are the bulky half and only appear under trace=true.
+    assert(!grid.has_key?("cells"))
+    $AI_GAUNTLET_TRACE = true
+    lean = PortableAIRealidea.view_trace(snapshot, 1)["matrix"]
+    assert_equal(30.0, lean["cells"]["0:0"]["out"])
+  ensure
+    $AI_GAUNTLET_TRACE = false
+  end
+
+  def test_a_switch_candidate_names_what_only_it_answers
+    $AI_GAUNTLET_TRACE = true
+    battle = matrix_battle
+    # Their benched body hits for 40%, which the actor cannot outrace, and the bench
+    # Shuckle both survives it and outruns it: the only answer this side has to it.
+    battle.parties[0][1].moves = [StubMove.new(:basedamage => 80)]
+    battle.parties[1][1].moves = [StubMove.new(:basedamage => 80)]
+    battle.parties[1][1].speed = 200
+    snapshot, skill = PortableAIRealidea.build_snapshot(battle)
+    assert_equal("L", PortableAI.matrix_verdict(snapshot, 0, 1))
+    assert_equal("W", PortableAI.matrix_verdict(snapshot, 1, 1))
+    plan = PortableAI.plan(snapshot, PortableAIRealidea.config_for(skill),
+                           PortableAIRealidea::BattleRNG.new(battle))
+    entries = PortableAIRealidea.candidate_trace(plan, 1, snapshot)
+    switch = entries.find { |e| e["type"] == "switch" && e["slot"] == 1 }
+    assert_not_nil(switch)
+    assert_equal(["4"], switch["sole_answer_to"])
+  ensure
+    $AI_GAUNTLET_TRACE = false
   end
 end

@@ -2537,10 +2537,88 @@ CORPUS_064 = [
      {'ai_side': {'stealthrock': 1}}),
 ]
 
+# ---------------------------------------------------------------------------
+# 0.6.5 -- the party x party damage matrix and its two consumers.
+#
+# REALIDEA ONLY. Both rules read snapshot["matrix"], which only the Realidea adapter
+# builds; on Reborn they are inert by construction and these cards would grade a build
+# against a rule it does not have. `engine: 'realidea'` keeps them out of the Reborn
+# corpus, printed at generation time rather than skipped in silence.
+#
+# Each card has to FAIL with its key off and pass with it on -- that pair is what
+# makes it evidence rather than decoration -- so the numbers below are tuned against
+# the probe's own matrix verdicts and rankings, not calculated on paper. That is the
+# 0.6.4 lesson (PORTABLE-AI-REALIDEA.md, "Corpus tuning note"): this engine's chart
+# has Steel resisting Dark and its damage rolls differ from Reborn's by up to half.
+CORPUS_065 = [
+    # 1. The shadow case, posed as a card. Stock spent its only answer to their Scizor
+    #    into an Azumarill it loses to (team4_vs_team1 130363, stock arm, a 19-turn
+    #    loss). The probe cannot pose a post-KO replacement, so the reason to leave is
+    #    the same Yawn device the 0.6.4 card uses: Zapdos is drowsy and both bench
+    #    bodies are legal. Magnezone loses to the Heatran in front and is the only
+    #    thing here that beats their benched Gyarados; Slowbro beats the Heatran and
+    #    answers nothing else. 0.6.4 sends Magnezone.
+    ('the_only_answer_to_a_bench_foe_is_not_spent_into_a_foe_it_loses_to', 0,
+     mon('ZAPDOS', 50, ['DISCHARGE', 'HEATWAVE'], effects={'yawn': 2}),
+     mon('HEATRAN', 50, ['FIREBLAST', 'EARTHPOWER'], ability='FLASHFIRE'),
+     [('must_switch_to', 'SLOWBRO')],
+     [mon('MAGNEZONE', 50, ['THUNDERBOLT', 'FLASHCANNON', 'VOLTSWITCH', 'SUBSTITUTE'],
+          ability='MAGNETPULL'),
+      mon('SLOWBRO', 50, ['SCALD', 'PSYCHIC', 'SLACKOFF', 'CALMMIND'],
+          ability='REGENERATOR')],
+     {'engine': 'realidea',
+      'player_bench': [mon('GYARADOS', 50, ['WATERFALL', 'EARTHQUAKE', 'ICEFANG',
+                                            'DRAGONDANCE'], ability='INTIMIDATE')]}),
+
+    # 2. The reserve half of the same rule, and the case it was written for: a forced
+    #    choice between two bodies that BOTH handle what is in front. Tyranitar and
+    #    Slowbro each beat the Heatran; only Tyranitar beats their benched Latias. The
+    #    turn does not need Tyranitar in particular, so it is kept.
+    ('a_forced_choice_keeps_the_body_that_is_the_only_answer_later', 0,
+     mon('ZAPDOS', 50, ['DISCHARGE', 'HEATWAVE'], effects={'yawn': 2}),
+     mon('HEATRAN', 50, ['FIREBLAST', 'EARTHPOWER'], ability='FLASHFIRE'),
+     [('must_switch_to', 'SLOWBRO')],
+     [mon('TYRANITAR', 50, ['STONEEDGE', 'CRUNCH', 'PURSUIT', 'FIREPUNCH'],
+          ability='SANDSTREAM'),
+      mon('SLOWBRO', 50, ['SCALD', 'PSYCHIC', 'SLACKOFF', 'CALMMIND'],
+          ability='REGENERATOR')],
+     {'engine': 'realidea',
+      'player_bench': [mon('LATIAS', 50, ['DRACOMETEOR', 'PSYSHOCK', 'ROOST',
+                                          'HEALINGWISH'], ability='LEVITATE')]}),
+
+    # 3. A boost is worth the cells it flips. Scizor at +2 stops losing to the bodies
+    #    on their bench, and the Clefable in front gives it the turn to buy them.
+    ('a_boost_that_flips_the_bench_is_worth_the_turn', 0,
+     mon('SCIZOR', 50, ['BUGBITE', 'BULLETPUNCH', 'SWORDSDANCE', 'ROOST'],
+         ability='TECHNICIAN'),
+     mon('CLEFABLE', 50, ['MOONBLAST', 'SOFTBOILED', 'CALMMIND', 'THUNDERWAVE'],
+         ability='MAGICGUARD'),
+     [('must_choose_move_in', ['SWORDSDANCE'])],
+     [],
+     {'engine': 'realidea',
+      'player_bench': [mon('LATIAS', 50, ['DRACOMETEOR', 'PSYSHOCK', 'ROOST'],
+                           ability='LEVITATE'),
+                       mon('TYRANITAR', 50, ['STONEEDGE', 'CRUNCH', 'PURSUIT'],
+                           ability='SANDSTREAM')]}),
+    # The control, and the whole point of the rule: the same boost against a party it
+    # changes nothing about. Skarmory walls Scizor at any Attack stage and Heatran
+    # removes it whatever it is holding, so the flat 55 was paying for a wasted turn.
+    ('a_boost_that_flips_nothing_is_not_a_free_55', 0,
+     mon('SCIZOR', 50, ['BUGBITE', 'BULLETPUNCH', 'SWORDSDANCE', 'ROOST'],
+         ability='TECHNICIAN'),
+     mon('SKARMORY', 50, ['BRAVEBIRD', 'ROOST', 'SPIKES', 'WHIRLWIND'],
+         ability='STURDY'),
+     [('must_not_choose_move', 'SWORDSDANCE')],
+     [],
+     {'engine': 'realidea',
+      'player_bench': [mon('HEATRAN', 50, ['FIREBLAST', 'EARTHPOWER', 'TOXIC'],
+                           ability='FLASHFIRE')]}),
+]
+
 CORPUS = (CORPUS_V1 + CORPUS_V2 + CORPUS_V3 + CORPUS_V4 + CORPUS_V5
           + CORPUS_V6 + CORPUS_V7 + CORPUS_V8 + CORPUS_V9 + CORPUS_V10
           + CORPUS_D1 + CORPUS_D2 + CORPUS_D3 + CORPUS_R1 + CORPUS_LS
-          + CORPUS_062 + CORPUS_063 + CORPUS_064)
+          + CORPUS_062 + CORPUS_063 + CORPUS_064 + CORPUS_065)
 
 # Values a scenario's extra dict may carry; the generator validates so a typo
 # fails here instead of silently emitting a key no probe reads.
@@ -2554,7 +2632,7 @@ EFFECT_NAMES = {'perishsong', 'leechseed', 'confusion', 'toxic', 'yawn',
 # or not-yet-implemented key probed a DIFFERENT position than the one on the page and
 # still reported PASS.
 EXTRA_KEYS = {'weather', 'ai_side', 'player_side', 'format', 'ai2', 'player2',
-              'player_bench'}
+              'player_bench', 'engine'}
 
 
 def main():
@@ -2563,6 +2641,14 @@ def main():
     ap.add_argument('--engine', choices=['reborn', 'hegemony'], default='reborn',
                     help='reborn = v16 numeric IDs from PBS; '
                          'hegemony = v19 symbols, resolved by the engine')
+    ap.add_argument('--install',
+                    help='name of the install this corpus is for (e.g. realidea). A '
+                         'card carrying an "engine" key is emitted only for the '
+                         'install it names; every other card is emitted always. Both '
+                         'Reborn and Realidea resolve IDs the v16 way (--engine '
+                         'reborn), so the ID scheme cannot tell them apart, and a '
+                         'card that pins a rule only one adapter exports would '
+                         'otherwise be graded against a build that never had it.')
     ap.add_argument('--out-engine', required=True)
     ap.add_argument('--out-json', required=True)
     ap.add_argument('--drop-unresolved', action='store_true',
@@ -2590,6 +2676,7 @@ def main():
     # run failing on a name that only the dropped cards used.
     scenario_missing = set()
     missing = set()
+    skipped_install = []
 
     def state_parts(m):
         """Trailing state fields (hp/status/stages/evs/effects/pp)."""
@@ -2697,6 +2784,14 @@ def main():
             for k in (extra.get(sk) or {}):
                 if k not in SIDE_EFFECT_KEYS:
                     scenario_missing.add('side_effect:%s in %s' % (k, sid))
+        # A card written for one install only. Not a name this PBS cannot resolve
+        # and not an engine refusal at probe time -- a statement that the behaviour
+        # under test exists on one adapter, so grading the other against it would be
+        # asking a build about a rule it does not have.
+        wanted = extra.get('engine')
+        if wanted and wanted != a.install:
+            skipped_install.append((sid, wanted))
+            continue
         fmt = extra.get('format', 'single')
         if fmt not in ('single', 'double'):
             scenario_missing.add('format:%s in %s' % (fmt, sid))
@@ -2787,6 +2882,8 @@ def main():
 
     # Loud on purpose. A dropped card is a card this engine cannot be asked about, and
     # the applicable-assertion count in the docs has to be read off what was written.
+    for sid, wanted in skipped_install:
+        print('not for this install (%s only): %s' % (wanted, sid))
     for sid, reasons in dropped:
         print('dropped %s: %s' % (sid, ', '.join(reasons)))
     if dropped:

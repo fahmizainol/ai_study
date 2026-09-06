@@ -667,8 +667,24 @@ module AIProbe
       # and the first 0.6.3 probe run spent a rebuild finding out that a switch
       # candidate's race had never been computed.
       out["ranking"] = portable_ranking.map { |entry| ranking_entry(entry) }
+      # 0.6.5. The party x party grid the sole_answer and setup_matrix rules read, in
+      # the compact form the gauntlet trace carries. A card that fails on one of those
+      # rules is unreadable without it: the ranking says a candidate lost 300 points
+      # and only the grid says which two foes it was the last answer to. Absent on a
+      # run with party_matrix off, exactly as the snapshot key is.
+      grid = party_matrix_record(battle)
+      out["party_matrix"] = grid if grid
     end
     return out
+  end
+
+  def self.party_matrix_record(battle)
+    return nil if !defined?(PortableAIRealidea)
+    snapshot = (battle.portable_ai_last_snapshot rescue nil)
+    return nil if !snapshot || !snapshot["matrix"]
+    PortableAIRealidea.matrix_trace(snapshot)
+  rescue
+    nil
   end
 
   RANKING_KEYS = %w[

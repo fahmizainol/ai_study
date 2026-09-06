@@ -327,6 +327,13 @@ module PortableAI
         # about play, so this rule applies to any setup tag.
         out_score -= 180
         reasons << ["setup_into_2hko", -180]
+      elsif repeats == 0 && config["setup_matrix"] &&
+            !(worth = setup_matrix_value(snapshot, actor, action, config)).nil?
+        # 0.6.5. The first boost is priced by what it flips across their whole party
+        # rather than paid a flat 55 (Core.setup_matrix_value). Key off, or no matrix
+        # to read, and the flat bonus below is what happens.
+        out_score += worth["value"]
+        reasons << [worth["reason"], worth["value"]]
       elsif repeats == 0
         out_score += 55
         reasons << ["first_setup", 55]
@@ -595,6 +602,15 @@ module PortableAI
         out_score += grade
         reasons << ["kill_order", grade]
       end
+    end
+    # 0.6.5. What this body is worth to the REST of the battle, from the party x party
+    # matrix: the only answer to a foe still on their bench is not a body to spend in
+    # front of a foe it loses to. A score term, not a reason to leave, so a forced
+    # replacement is ranked by it too (only the gate below is bypassed when forced).
+    sole = sole_answer_value(snapshot, actor, action, config)
+    if !sole.nil?
+      out_score += sole[0]
+      reasons << [sole[1], sole[0]]
     end
     escapes = []
 
@@ -1303,6 +1319,360 @@ module PortableAI
       worst = grade if worst.nil? || grade < worst
     end
     worst || 0
+  end
+
+  # ---------------------------------------------------------------------------
+  # 0.6.5. THE PARTY x PARTY DAMAGE MATRIX -- a pure derived layer over one new
+  # snapshot field.
+  #
+  # Every rule above this line scores against the ACTIVE foe. That is the whole
+  # board a move sees, but it is not the whole board a switch decides: sending the
+  # only body that beats their Azumarill into a Scizor that removes it is a game
+  # thrown away three turns before anything looks wrong, and a boost is worth what
+  # it flips across the rest of the party, not a flat 55.
+  #
+  # The adapter builds `snapshot["matrix"]` -- one damage estimate per party pair,
+  # both directions, cached and re-rolled only when a signature changes. This
+  # section reads it and nothing else, so every consumer goes inert the instant the
+  # field is absent: an adapter that exports no matrix (Reborn) is unchanged, which
+  # is what makes its gauntlet the control for this version.
+  #
+  # SLOTS, NOT SEATS. A benched body has no seat, and a seat is not a party index.
+  # The side tables carry both, and matrix_slot is the only way across.
+  #
+  # NOT in the cells, on purpose: HP (this layer derives the hit counts from the
+  # side tables' current hp_pct, so a verdict decays as a body is chipped),
+  # Intimidate, the Choice lock, and entry hazards. The 0.6.4 switch estimators
+  # still carry those and still feed candidate_race; the matrix is the wide, thin
+  # view, not a replacement for the narrow, thick one. Defender-side screens ARE in
+  # the numbers, because the engine's own damage estimate reads them.
+
+  # Both sides needing six or more hits is not a race, it is a stall: at that depth
+  # the exchange is decided by crits, status and residual, none of which these cells
+  # carry. Deliberately below RACE_MAX_HITS (8), which is a CAP -- "both at the cap"
+  # would need <= 12.5% a hit on both sides and would almost never be reachable --
+  # and above WALL_BREAK_MAX_HITS (4), which asks the opposite question. The verdict
+  # is recomputed from current HP every snapshot, so an S decays into W or L as soon
+  # as one side is chipped enough to matter.
+  MATRIX_STALL_HITS = 6
+
+  def self.matrix(snapshot)
+    m = (snapshot || {})["matrix"]
+    m.is_a?(Hash) ? m : nil
+  end
+
+  # Seat (a battler index: actor["index"], target["index"], never an action's slot)
+  # to party slot. nil for a seat no live party entry occupies.
+  def self.matrix_slot(side_table, seat)
+    return nil if side_table.nil? || seat.nil?
+    side_table.each do |entry|
+      next if entry.nil?
+      return entry["slot"] if !entry["index"].nil? && entry["index"] == seat
+    end
+    nil
+  end
+
+  def self.matrix_entry(side_table, slot)
+    return nil if side_table.nil? || slot.nil?
+    side_table.each do |entry|
+      next if entry.nil?
+      return entry if entry["slot"] == slot
+    end
+    nil
+  end
+
+  def self.matrix_cell(snapshot, own_slot, foe_slot)
+    m = matrix(snapshot)
+    return nil if m.nil? || own_slot.nil? || foe_slot.nil?
+    cells = m["cells"]
+    return nil if !cells.is_a?(Hash)
+    cell = cells["#{own_slot}:#{foe_slot}"]
+    cell.is_a?(Hash) ? cell : nil
+  end
+
+  # Hits each way at the HP both bodies are actually standing on. nil on either side
+  # means nothing that body has gets through, which is a distinct answer from "it
+  # needs many hits" and the verdict below reads it as such.
+  def self.matrix_hits(cell, own_hp, foe_hp)
+    return nil if cell.nil?
+    { "mine" => hits_needed(foe_hp, Model.number(cell["out"], 0.0)),
+      "theirs" => hits_needed(own_hp, Model.number(cell["in"], 0.0)) }
+  end
+
+  # "W" this body wins the pair, "L" it loses, "S" neither finishes, nil unknown.
+  #
+  # No free-hit convention here. The turn a switch costs belongs to candidate_race
+  # (:1210), which already charges it; a matrix verdict is the standing question
+  # "who beats whom", asked of two bodies at their current HP.
+  def self.matrix_verdict(snapshot, own_slot, foe_slot)
+    cell = matrix_cell(snapshot, own_slot, foe_slot)
+    return nil if cell.nil?
+    m = matrix(snapshot)
+    own = matrix_entry(m["own"], own_slot)
+    foe = matrix_entry(m["foe"], foe_slot)
+    return nil if own.nil? || foe.nil?
+    cell_verdict(cell, Model.number(own["hp_pct"], 100.0),
+                 Model.number(foe["hp_pct"], 100.0))
+  end
+
+  # The same judgement on a cell the caller is holding -- a transformed one, which by
+  # construction is in no matrix (Core.setup_matrix_value).
+  # A pair the engine could not price reads here exactly like a pair nothing lands in:
+  # `out` nil and `out` 0.0 both give no hits and both lose. The distinction is kept in
+  # the cell for the readout (`?` against `0%`) rather than acted on, because the
+  # alternative -- a verdict of nil -- would silently drop the pair out of
+  # matrix_answers and turn "we could not measure it" into "nothing answers it".
+  def self.cell_verdict(cell, own_hp, foe_hp)
+    return nil if cell.nil?
+    return nil if own_hp <= 0 || foe_hp <= 0
+    hits = matrix_hits(cell, own_hp, foe_hp)
+    mine = hits["mine"]
+    theirs = hits["theirs"]
+    stalled_mine = mine.nil? || mine >= MATRIX_STALL_HITS
+    stalled_theirs = theirs.nil? || theirs >= MATRIX_STALL_HITS
+    return "S" if stalled_mine && stalled_theirs
+    return "L" if mine.nil?
+    return "W" if theirs.nil?
+    return "W" if mine < theirs
+    return "L" if mine > theirs
+    faster = cell["faster"]
+    return nil if faster != true && faster != false
+    faster ? "W" : "L"
+  end
+
+  def self.matrix_live_slots(side_table)
+    out = []
+    (side_table || []).each do |entry|
+      next if entry.nil?
+      next if entry["alive"] == false
+      next if Model.number(entry["hp_pct"], 0.0) <= 0
+      out << entry["slot"]
+    end
+    out
+  end
+
+  # Every live body on our side that beats this foe.
+  def self.matrix_answers(snapshot, foe_slot)
+    m = matrix(snapshot)
+    return [] if m.nil?
+    matrix_live_slots(m["own"]).select do |own_slot|
+      matrix_verdict(snapshot, own_slot, foe_slot) == "W"
+    end
+  end
+
+  # The live foes this body is the ONLY answer to. Empty when the matrix is absent,
+  # so a consumer written against it is inert by construction.
+  def self.sole_answers(snapshot, own_slot)
+    m = matrix(snapshot)
+    return [] if m.nil? || own_slot.nil?
+    matrix_live_slots(m["foe"]).select do |foe_slot|
+      answers = matrix_answers(snapshot, foe_slot)
+      answers.length == 1 && answers[0] == own_slot
+    end
+  end
+
+  # A cell as it would read after the actor's own stat stages. Physical output scales
+  # with Attack, special with Special Attack, and the mirror on the way in; speed
+  # stages can flip who moves first, which is the whole point of a Dragon Dance.
+  # Ratios, not the engine's numerator/denominator pairs -- STAGE_MULT.
+  #
+  # Applied from stage 0. Its only caller is the first-setup arm (repeats == 0, which
+  # setup_stage keys off positive_stage_total < 2), so the body is carrying at most
+  # one stage already and the error is bounded by one.
+  def self.matrix_transform_cell(cell, stages, own_speed, foe_speed, trick_room)
+    return nil if cell.nil?
+    out = Model.copy_hash(cell)
+    stages = stages || {}
+    offence = (cell["out_cat"] == "special") ? stages["spa"] : stages["atk"]
+    defence = (cell["in_cat"] == "special") ? stages["spd"] : stages["def"]
+    if !cell["out"].nil? && !offence.nil? && offence != 0
+      out["out"] = Model.number(cell["out"], 0.0) * Effects.stage_multiplier(offence)
+    end
+    if !cell["in"].nil? && !defence.nil? && defence != 0
+      out["in"] = Model.number(cell["in"], 0.0) / Effects.stage_multiplier(defence)
+    end
+    speed_stage = stages["speed"]
+    if !speed_stage.nil? && speed_stage != 0 && !own_speed.nil? && !foe_speed.nil?
+      mine = own_speed.to_f * Effects.stage_multiplier(speed_stage)
+      # The adapters' own convention (faster_than_foes?): strictly greater is faster,
+      # a tie is not, and Trick Room inverts it.
+      out["faster"] = trick_room ? mine < foe_speed.to_f : mine > foe_speed.to_f
+    end
+    out
+  end
+
+  # CONSUMER A. The only answer to a foe is not a body to spend.
+  #
+  # Read off the 0.6.4 shadow trace: stock sent its only answer to their Scizor into
+  # an Azumarill it loses to, with a body on the bench that beats the Azumarill and
+  # nothing else that beats the Scizor (team4_vs_team1 seed 130363, stock arm, a
+  # 19-turn loss). No per-turn rule can see that, because on the turn it happens the
+  # Azumarill is the only foe on the field and the candidate is simply losing to it.
+  #
+  # Both terms are negative and neither is an escape reason: this rule answers WHO
+  # comes in, never whether to leave. Adding a gate-opener here would reopen the
+  # switch programme the diagnosis closed (PORTABLE-AI-DIAGNOSIS.md §4).
+  #
+  # -150 is the top KILL_ORDER_GRADES band: trading away the only answer to something
+  # is a future win thrown away by about that margin. It stays clear of the -500
+  # dies_on_entry pays, so a candidate that dies this turn still ranks below one that
+  # merely spends its later value. -45 is below the 70 tiebreak grade on purpose, so
+  # the reserve term only reorders bodies that were otherwise inside one band.
+  SOLE_ANSWER_EXPOSED = -150
+  SOLE_ANSWER_EXPOSED_CAP = -300
+  SOLE_ANSWER_RESERVED = -45
+  SOLE_ANSWER_RESERVED_CAP = -135
+
+  # [value, reason] or nil. Inert without the key, without a matrix, and for a
+  # candidate whose only unique value is the foe already standing in front of it --
+  # that body is answering it right now, which is what it is for.
+  def self.sole_answer_value(snapshot, actor, action, config)
+    return nil if !config["sole_answer"]
+    m = matrix(snapshot)
+    return nil if m.nil?
+    slot = action["slot"]
+    return nil if slot.nil?
+    actor_slot = matrix_slot(m["own"], (actor || {})["index"])
+    active = []
+    (snapshot["targets"] || []).each do |t|
+      next if t.nil? || Model.number(t["hp_pct"], 100.0) <= 0
+      foe_slot = matrix_slot(m["foe"], t["index"])
+      active << foe_slot if !foe_slot.nil? && !active.include?(foe_slot)
+    end
+    return nil if active.empty?
+
+    # What this body is worth LATER: the live foes nothing else on the bench beats.
+    # The foes on the field are excluded because their answer is being decided now,
+    # by this very score.
+    unique = sole_answers(snapshot, slot).reject { |foe_slot| active.include?(foe_slot) }
+    return nil if unique.empty?
+
+    # Someone else can take the turn in front. The actor is dropped from the pool
+    # along with the candidate: it is the body leaving.
+    covered = {}
+    active.each do |foe_slot|
+      covered[foe_slot] =
+        !(matrix_answers(snapshot, foe_slot) - [slot, actor_slot]).empty?
+    end
+
+    # Doubles takes the harsher target, the candidate_race_grade convention: losing
+    # to EITHER foe on the field exposes the body.
+    exposed = active.any? do |foe_slot|
+      matrix_verdict(snapshot, slot, foe_slot) == "L" && covered[foe_slot]
+    end
+    if exposed
+      return [[SOLE_ANSWER_EXPOSED * unique.length, SOLE_ANSWER_EXPOSED_CAP].max,
+              "sole_answer_exposed"]
+    end
+
+    # It beats what is in front -- and so does something else, so the turn does not
+    # need this body in particular. This is the forced replacement's question: of the
+    # bodies that all handle the board, send the one holding the least unique value.
+    # Every active foe has to be covered, not just one: a foe only this body answers
+    # is a foe it is needed against now.
+    if active.all? { |foe_slot| matrix_verdict(snapshot, slot, foe_slot) == "W" } &&
+       active.all? { |foe_slot| covered[foe_slot] }
+      return [[SOLE_ANSWER_RESERVED * unique.length, SOLE_ANSWER_RESERVED_CAP].max,
+              "sole_answer_reserved"]
+    end
+    nil
+  end
+
+  # CONSUMER B. A boost is worth the cells it flips.
+  #
+  # The first setup move of a battle has been paying a flat 55 since 0.3.0, whether
+  # it wins the game or wastes the turn. A boost is a SWEEP: what it is worth is how
+  # many of their remaining bodies stop beating this one, bench included, which is
+  # exactly the question the matrix answers and no per-turn rule can.
+  #
+  # The four safety branches above (Contrary, Unaware, unsafe, setup_into_2hko) run
+  # first and are untouched: this arm only ever replaces the flat bonus, so the worst
+  # it can do is decline to pay it. It never returns a negative -- being punished for
+  # setting up is what those branches are for.
+  SETUP_FLIP_TO_WIN = 55
+  SETUP_FLIP_TO_STALL = 25
+  SETUP_FLIP_CAP = 220
+
+  # {"value","reason"} or nil, and nil restores first_setup exactly: no matrix, no
+  # stage row for this move, or no slot for the actor.
+  def self.setup_matrix_value(snapshot, actor, action, config)
+    stages = Effects.setup_stages(action["move_id"])
+    return nil if stages.nil?
+    m = matrix(snapshot)
+    return nil if m.nil?
+    own_slot = matrix_slot(m["own"], (actor || {})["index"])
+    return nil if own_slot.nil?
+    own = matrix_entry(m["own"], own_slot)
+    return nil if own.nil?
+    own_hp = Model.number(own["hp_pct"], 100.0)
+    return nil if own_hp <= 0
+    trick_room = Model.truthy(snapshot["trick_room_active"])
+
+    # Which foes are on the field, by slot, and what the actor's own scoring already
+    # knows about them. A boost is paid for in a turn, and the turn is spent in front
+    # of these.
+    active = {}
+    (snapshot["targets"] || []).each do |t|
+      next if t.nil? || Model.number(t["hp_pct"], 100.0) <= 0
+      foe_slot = matrix_slot(m["foe"], t["index"])
+      active[foe_slot] = t if !foe_slot.nil?
+    end
+    return nil if active.empty?
+
+    transformed = {}
+    matrix_live_slots(m["foe"]).each do |foe_slot|
+      cell = matrix_cell(snapshot, own_slot, foe_slot)
+      next if cell.nil?
+      foe = matrix_entry(m["foe"], foe_slot)
+      next if foe.nil?
+      transformed[foe_slot] =
+        matrix_transform_cell(cell, stages, own["speed"], foe["speed"], trick_room)
+    end
+    return nil if transformed.empty?
+
+    # THE BUDGET IN FRONT. The boost is only worth grading if the actor lives to use
+    # it: one turn for the setup, then the hits the boosted attack still needs, all
+    # inside what the foe needs to remove it. `theirs` prefers the actor's real
+    # per-foe threat (damage_race, which carries residual, the priority order and the
+    # Choice lock) over the cell, which carries none of those; it is deliberately the
+    # UNBOOSTED number, because the defensive half of a boost cannot be spent on the
+    # turn it is bought.
+    active.each do |foe_slot, target|
+      cell = transformed[foe_slot]
+      return { "value" => 0, "reason" => "setup_no_budget" } if cell.nil?
+      foe_hp = Model.number(target["hp_pct"], 100.0)
+      race = damage_race(snapshot, actor, target, config)
+      theirs = race.nil? ? nil : race["theirs"]
+      if race.nil?
+        base = matrix_cell(snapshot, own_slot, foe_slot)
+        theirs = base.nil? ? nil : hits_needed(own_hp, Model.number(base["in"], 0.0))
+      end
+      next if theirs.nil?           # nothing of theirs gets through: the turn is free
+      post = hits_needed(foe_hp, Model.number(cell["out"], 0.0)) || RACE_MAX_HITS
+      next if post + 1 < theirs
+      next if post + 1 == theirs && cell["faster"] == true
+      return { "value" => 0, "reason" => "setup_no_budget" }
+    end
+
+    # WHAT IT FLIPS, over their whole live party. A body that stops losing is the
+    # win; a body that stops losing but only reaches a stall is worth less and still
+    # worth something, because a stall is a body their sweeper has to answer.
+    value = 0
+    transformed.each do |foe_slot, cell|
+      before = matrix_verdict(snapshot, own_slot, foe_slot)
+      next if before.nil? || before == "W"
+      foe = matrix_entry(m["foe"], foe_slot)
+      after = cell_verdict(cell, own_hp, Model.number(foe["hp_pct"], 100.0))
+      next if after.nil?
+      if after == "W"
+        value += SETUP_FLIP_TO_WIN
+      elsif before == "L" && after == "S"
+        value += SETUP_FLIP_TO_STALL
+      end
+    end
+    return { "value" => 0, "reason" => "setup_no_flip" } if value <= 0
+    value = SETUP_FLIP_CAP if value > SETUP_FLIP_CAP
+    { "value" => value, "reason" => "setup_flips" }
   end
 
   # The most any recovery move this battler carries restores, in hp_pct units and

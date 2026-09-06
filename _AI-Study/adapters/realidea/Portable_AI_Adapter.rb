@@ -248,7 +248,8 @@ module PortableAIRealidea
         }
         if trace_candidates?
           entry["candidates"] =
-            candidate_trace(battle.instance_variable_get(:@portable_ai_plan) || {}, index)
+            candidate_trace(battle.instance_variable_get(:@portable_ai_plan) || {}, index,
+                            battle.instance_variable_get(:@portable_ai_last_snapshot))
         end
         foes = foe_choices(battle)
         entry["foe"] = foes if foes
@@ -293,7 +294,10 @@ module PortableAIRealidea
       "view" => view_trace(
         battle.instance_variable_get(:@portable_ai_last_snapshot), index)
     }
-    entry["candidates"] = candidate_trace(plan || {}, index) if trace_candidates?
+    if trace_candidates?
+      entry["candidates"] = candidate_trace(
+        plan || {}, index, battle.instance_variable_get(:@portable_ai_last_snapshot))
+    end
     trace << entry
   rescue Exception => error
     log_error(error, index)
@@ -454,6 +458,9 @@ module PortableAIRealidea
       "targets" => foe_indices.map { |i| battler_view(battle.battlers[i], battle, skill) },
       "memory" => battle.instance_variable_get(:@portable_ai_memory) || {}
     }
+    # The forced-switch consumer needs the same grid the voluntary one reads: this is
+    # the decision the sole-answer rule was written for.
+    snapshot["matrix"] = party_matrix(battle, index, foe_indices, skill) if rule_enabled?("party_matrix")
     plan = PortableAI.plan(snapshot, config_for(skill), BattleRNG.new(battle))
     chosen = nil
     (plan["actions"] || []).each do |action|
@@ -469,7 +476,7 @@ module PortableAIRealidea
         "forced" => true, "slot" => slot, "score" => chosen["score"],
         "view" => view_trace(snapshot, index)
       }
-      entry["candidates"] = candidate_trace(plan, index) if trace_candidates?
+      entry["candidates"] = candidate_trace(plan, index, snapshot) if trace_candidates?
       trace << entry
     end
     slot
@@ -539,10 +546,48 @@ module PortableAIRealidea
           "item" => t["item"], "positive_stages" => t["positive_stages"]
         }
       end,
-      "race" => race
+      "race" => race,
+      # 0.6.5. The whole grid, as the core derives it -- rows are our party, columns
+      # theirs, and the verdict of each live pair at the HP both are standing on.
+      # Reported AS COMPUTED, like the race above: a readout of a run with the
+      # consumers off still has to show what they would have read.
+      "matrix" => matrix_trace(snapshot)
     }
   rescue
     {}
+  end
+
+  # The compact form: who is on each side, and W/L/S per live pair. The cells
+  # themselves -- two damage numbers, two categories, two move names each -- are
+  # roughly twenty times the size and only appear under trace=true, which is the same
+  # split candidate_trace makes and what keeps a plain shadow file near 1.6 MB.
+  def self.matrix_trace(snapshot)
+    m = (snapshot || {})["matrix"]
+    return nil if !m.is_a?(Hash)
+    verdicts = {}
+    PortableAI.matrix_live_slots(m["own"]).each do |own_slot|
+      PortableAI.matrix_live_slots(m["foe"]).each do |foe_slot|
+        verdicts["#{own_slot}:#{foe_slot}"] =
+          PortableAI.matrix_verdict(snapshot, own_slot, foe_slot)
+      end
+    end
+    out = { "own" => matrix_trace_side(m["own"]),
+            "foe" => matrix_trace_side(m["foe"]),
+            "verdicts" => verdicts }
+    out["cells"] = m["cells"] if trace_candidates?
+    out
+  rescue
+    nil
+  end
+
+  def self.matrix_trace_side(table)
+    out = []
+    (table || []).each do |entry|
+      next if !entry
+      out << { "slot" => entry["slot"], "species" => species_name(entry["species"]),
+               "hp_pct" => entry["hp_pct"], "active" => !entry["index"].nil? }
+    end
+    out
   end
 
   # Every option a singles actor can have: four moves and five bench slots. The old
@@ -567,7 +612,7 @@ module PortableAIRealidea
   #
   # Gated on trace= because it is the bulky half: a plain shadow run stays lean and still
   # names both mons, while trace=true gives the full breakdown.
-  def self.candidate_trace(plan, index)
+  def self.candidate_trace(plan, index, snapshot = nil)
     diagnostics = plan["diagnostics"] || {}
     rankings = diagnostics["rankings"] || []
     actors = (plan["actions"] || []).map { |action| action["actor_index"] }
@@ -597,7 +642,27 @@ module PortableAIRealidea
       end
       # A switch candidate names the bench Pokemon it would bring in.
       entry["species"] = species_name(candidate["species"]) if candidate["species"]
+      # 0.6.5. And what only IT answers, which is the whole of the sole_answer term:
+      # a reader seeing -300 on a candidate needs the two names behind it. Empty
+      # without a matrix, so this is inert on a run with the key off.
+      if candidate["type"] == "switch" && snapshot
+        named = sole_answer_names(snapshot, candidate["slot"])
+        entry["sole_answer_to"] = named if !named.empty?
+      end
       out << entry
+    end
+    out
+  rescue
+    []
+  end
+
+  # The live foes this bench slot is the only answer to, named.
+  def self.sole_answer_names(snapshot, slot)
+    table = ((snapshot || {})["matrix"] || {})["foe"]
+    out = []
+    PortableAI.sole_answers(snapshot, slot).each do |foe_slot|
+      entry = PortableAI.matrix_entry(table, foe_slot)
+      out << species_name(entry["species"]) if entry
     end
     out
   rescue
@@ -651,7 +716,7 @@ module PortableAIRealidea
     end
 
     memory = battle.instance_variable_get(:@portable_ai_memory) || {}
-    [{
+    snapshot = {
       "format" => battle.doublebattle ? "double" : "single",
       "turn" => battle.turncount,
       "weather" => weather_name(battle),
@@ -660,7 +725,13 @@ module PortableAIRealidea
       "actors" => actors,
       "targets" => targets,
       "memory" => memory
-    }, skill]
+    }
+    # 0.6.5. Both parties, priced against each other. Absent when the key is off, and
+    # every core rule that reads it is inert without it.
+    if rule_enabled?("party_matrix")
+      snapshot["matrix"] = party_matrix(battle, indices[0], foe_indices, skill)
+    end
+    [snapshot, skill]
   end
 
   def self.battler_view(battler, battle, skill)
@@ -1009,7 +1080,10 @@ module PortableAIRealidea
   RESTORED_ON_FAKE = [:Attract, :MeanLook, :LockOn, :LockOnPos,
                       :MultiTurn, :MultiTurnUser]
 
-  def self.fake_battler(battle, pokemon, party_index, index)
+  # The save/restore on its own, so a caller that needs MANY fakes pays for the board
+  # once instead of once per body (party_matrix builds up to ten). Returns whatever
+  # the block returns; the restore runs even when the block raises.
+  def self.preserving_board(battle)
     saved = []
     for i in 0...4
       other = battle.battlers[i]
@@ -1019,9 +1093,7 @@ module PortableAIRealidea
       saved << [other, values]
     end
     begin
-      fake = PokeBattle_Battler.new(battle, index)
-      fake.pbInitPokemon(pokemon, party_index)
-      fake
+      yield
     ensure
       saved.each do |entry|
         RESTORED_ON_FAKE.each_with_index do |name, slot|
@@ -1031,6 +1103,22 @@ module PortableAIRealidea
           entry[0].effects[PBEffects.const_get(name.to_s)] = value
         end
       end
+    end
+  end
+
+  # The construction alone. ONLY safe inside preserving_board -- on its own it leaves
+  # the board with whatever pbInitEffects cleared.
+  def self.fake_battler_unguarded(battle, pokemon, party_index, index)
+    fake = PokeBattle_Battler.new(battle, index)
+    fake.pbInitPokemon(pokemon, party_index)
+    fake
+  rescue
+    nil
+  end
+
+  def self.fake_battler(battle, pokemon, party_index, index)
+    preserving_board(battle) do
+      fake_battler_unguarded(battle, pokemon, party_index, index)
     end
   rescue
     nil
@@ -1116,6 +1204,263 @@ module PortableAIRealidea
     return nil if speed.nil?
     faster_than_foes?(battle, speed, foe_indices)
   rescue
+    nil
+  end
+
+  # ---------------------------------------------------------------------------
+  # 0.6.5. THE PARTY x PARTY DAMAGE MATRIX.
+  #
+  # Every estimate above this line is about the mon in front. switch_incoming_damage
+  # and switch_outgoing_damage each build a fake battler, price it against the active
+  # foes, and throw the battler away; nothing on either side ever sees the four bodies
+  # still on the opposing bench. This builds the whole grid once -- best hit each way
+  # for every live pair of party slots -- and hands it to the core, which derives the
+  # hit counts and the verdicts from it (core.rb, "THE PARTY x PARTY DAMAGE MATRIX").
+  #
+  # SLOTS, NOT SEATS. Cells are keyed "<own party slot>:<foe party slot>", and the two
+  # side tables carry the seat (`index`, nil on the bench) so the core can go from an
+  # actor, a target or a switch action back to a row or a column.
+  #
+  # FAIR INFORMATION. It reads the foe party's movesets, which is exactly what
+  # switch_incoming_damage already reads for the active foes; the contract is the
+  # engine's own "fair" knowledge level, not partial observability.
+  #
+  # COST. In singles at battle start: ten bodies, 25 live pairs, two directions, at
+  # most four moves each -- about 200 pbRoughDamage calls, once. After that only the
+  # dirty rows and columns are re-rolled, so a Calm Mind costs one column (~40 calls)
+  # and a turn that changes nothing but HP costs nothing at all. For comparison,
+  # switch_actions already spends about ten fakes and forty calls on every decision.
+  MATRIX_VERSION = 1
+
+  # The whole field, or nil when the key is off or the engine refuses. Cached on the
+  # battle object against a per-slot signature; clear_cache deliberately leaves it
+  # alone, because the signature is what invalidates it and the battle object is per
+  # battle, so nothing leaks across two of them.
+  def self.party_matrix(battle, own_index, foe_indices, skill)
+    own_party = battle.pbParty(own_index)
+    foe_party = battle.pbOpposingParty(own_index)
+    return nil if !own_party || !foe_party
+    own_side = own_index & 1
+    own_seats = [own_side, own_side + 2]
+    foe_seats = [own_side ^ 1, (own_side ^ 1) + 2]
+    own = matrix_side(battle, own_party, own_seats)
+    foe = matrix_side(battle, foe_party, foe_seats)
+
+    field_sig = matrix_field_signature(battle, skill)
+    own_sig = own.map { |entry| matrix_mon_signature(battle, own_party, entry) }
+    foe_sig = foe.map { |entry| matrix_mon_signature(battle, foe_party, entry) }
+    cached = battle.instance_variable_get(:@portable_ai_matrix)
+    reuse = {}
+    if cached && cached["field_sig"] == field_sig
+      # A cell survives only if BOTH its bodies are unchanged. A field change (weather,
+      # Trick Room, a screen going up) moves every number, so it drops the lot.
+      old_own = cached["own_sig"] || []
+      old_foe = cached["foe_sig"] || []
+      (cached["cells"] || {}).each do |key, cell|
+        o, f = key.split(":")
+        o = o.to_i
+        f = f.to_i
+        next if own_sig[o].nil? || old_own[o] != own_sig[o]
+        next if foe_sig[f].nil? || old_foe[f] != foe_sig[f]
+        reuse[key] = cell
+      end
+    end
+
+    live_own = matrix_live_slots(own)
+    live_foe = matrix_live_slots(foe)
+    cells = {}
+    pending = []
+    need_own = {}
+    need_foe = {}
+    live_own.each do |o|
+      live_foe.each do |f|
+        key = "#{o}:#{f}"
+        if reuse.key?(key)
+          cells[key] = reuse[key]
+          next
+        end
+        pending << [o, f]
+        need_own[o] = true
+        need_foe[f] = true
+      end
+    end
+
+    if !pending.empty?
+      trick_room = trick_room_active?(battle)
+      own_fake_seat = own_index
+      foe_fake_seat = (foe_indices || []).first || (own_side ^ 1)
+      # ONE save/restore for every body built below, rather than one per fake.
+      preserving_board(battle) do
+        bodies_own = matrix_bodies(battle, own_party, own, need_own.keys, own_fake_seat)
+        bodies_foe = matrix_bodies(battle, foe_party, foe, need_foe.keys, foe_fake_seat)
+        pending.each do |pair|
+          attacker = bodies_own[pair[0]]
+          defender = bodies_foe[pair[1]]
+          next if !attacker || !defender
+          out = matrix_cell(battle, attacker, defender, skill)
+          incoming = matrix_cell(battle, defender, attacker, skill)
+          cells["#{pair[0]}:#{pair[1]}"] = {
+            "out" => out && out["pct"], "out_cat" => out && out["cat"],
+            "out_move" => out && out["move"],
+            "in" => incoming && incoming["pct"], "in_cat" => incoming && incoming["cat"],
+            "in_move" => incoming && incoming["move"],
+            "faster" => matrix_faster(own[pair[0]], foe[pair[1]], trick_room)
+          }
+        end
+      end
+    end
+
+    battle.instance_variable_set(:@portable_ai_matrix,
+                                { "field_sig" => field_sig, "own_sig" => own_sig,
+                                  "foe_sig" => foe_sig, "cells" => cells })
+    { "version" => MATRIX_VERSION, "own" => own, "foe" => foe, "cells" => cells }
+  rescue Exception
+    nil
+  end
+
+  # One entry per party slot, nil for an empty or egg slot. Rebuilt every snapshot --
+  # it is six field reads a side and it carries the HP the core's verdicts are
+  # derived from, which is exactly the thing that must never be cached.
+  def self.matrix_side(battle, party, seats)
+    out = []
+    party.each_with_index do |pokemon, slot|
+      if !pokemon || (pokemon.isEgg? rescue false)
+        out << nil
+        next
+      end
+      seat = nil
+      seats.each do |i|
+        battler = battle.battlers[i] rescue nil
+        next if !battler || battler.isFainted?
+        seat = i if battler.pokemonIndex == slot
+      end
+      body = seat.nil? ? nil : battle.battlers[seat]
+      hp = body ? percent(body.hp, body.totalhp) : percent(pokemon.hp, pokemon.totalhp)
+      # A benched body's Speed is the bare party stat -- no stages, no Choice Scarf,
+      # no Swift Swim -- which is the convention switch_candidate_faster already uses
+      # and the same thing it means: a switch-in arrives at stage 0.
+      speed = body ? battler_speed(body) : (pokemon.speed rescue nil)
+      types = body ? [body.type1, body.type2] : [pokemon.type1, pokemon.type2]
+      out << {
+        "slot" => slot,
+        "index" => seat,
+        "species" => (body ? body.species : pokemon.species),
+        "hp_pct" => hp,
+        "alive" => hp > 0,
+        "speed" => speed,
+        "types" => types.map { |t| type_key(t) }.compact.uniq
+      }
+    end
+    out
+  end
+
+  def self.matrix_live_slots(side)
+    out = []
+    side.each do |entry|
+      out << entry["slot"] if entry && entry["alive"]
+    end
+    out
+  end
+
+  # The real battler for a body on the field -- its actual stages, its Mega form, the
+  # item it is holding -- and a fake for one on the bench. The fake goes at the seat
+  # its own side occupies, so pbOwnSide (080:797, index & 1) resolves the screens to
+  # the right half of the field.
+  def self.matrix_bodies(battle, party, side, slots, fake_seat)
+    out = {}
+    slots.each do |slot|
+      entry = side[slot]
+      next if !entry
+      out[slot] =
+        if entry["index"].nil?
+          fake_battler_unguarded(battle, party[slot], slot, fake_seat)
+        else
+          battle.battlers[entry["index"]]
+        end
+    end
+    out
+  end
+
+  # The best damaging hit one body has on another, as a percentage of the DEFENDER's
+  # max HP -- the same unit as hp_pct and every other estimate here. nil when the
+  # engine could not price the pair at all, which is a different fact from 0.0 ("it
+  # has nothing that lands") and the core reads the two differently.
+  #
+  # pbRoughDamage divides by the defender's defence (085:3557) and a board that
+  # produces a zero there raises; per-pair rescue keeps one bad pair from costing the
+  # whole matrix.
+  def self.matrix_cell(battle, attacker, defender, skill)
+    best = nil
+    (attacker.moves || []).each do |move|
+      next if !move || move.id == 0
+      # Same PP rule as the 0.6.4 bench estimate, on BOTH sides: a move with nothing
+      # left is not a hit that body has.
+      next if move.respond_to?(:pp) && move.pp.to_i <= 0 && rule_enabled?("switch_estimate_pp")
+      next if !(move.pbIsDamaging? rescue false)
+      pct = rough_damage_pct!(battle, move, attacker, defender, skill)
+      next if best && pct <= best["pct"]
+      type = (move.pbType(move.type, attacker, defender) rescue move.type)
+      best = { "pct" => pct,
+               "cat" => ((move.pbIsPhysical?(type) rescue true) ? "physical" : "special"),
+               "move" => move_key(move.id) }
+    end
+    return { "pct" => 0.0, "cat" => nil, "move" => nil } if best.nil?
+    best
+  rescue Exception
+    nil
+  end
+
+  # Engine convention (faster_than_foes?): strictly greater is faster, a tie is not,
+  # Trick Room inverts. nil when either side table has no Speed.
+  def self.matrix_faster(own_entry, foe_entry, trick_room)
+    mine = own_entry && own_entry["speed"]
+    theirs = foe_entry && foe_entry["speed"]
+    return nil if mine.nil? || theirs.nil?
+    trick_room ? mine < theirs : mine > theirs
+  end
+
+  # What has to change before a row or a column is re-rolled.
+  #
+  # Deliberately NOT here: HP. Every cell is a percentage of a max HP that does not
+  # move, and the core derives its hit counts from the side tables, which are rebuilt
+  # every snapshot. The known approximation this buys: a move whose POWER depends on
+  # current HP either way -- Super Fang, Endeavor, Flail, Water Spout -- keeps the
+  # number it had when the signature last changed.
+  #
+  # `form` because a Mega changes stats and ability without changing species; `status`
+  # because burn halves physical damage; the per-move PP flag because the estimate
+  # skips a spent move; `seat` so a body that walks onto the field is re-rolled as a
+  # real battler with real stages instead of keeping its bench numbers.
+  def self.matrix_mon_signature(battle, party, entry)
+    return nil if !entry
+    pokemon = party[entry["slot"]]
+    return nil if !pokemon
+    seat = entry["index"]
+    source = seat.nil? ? pokemon : (battle.battlers[seat] rescue pokemon)
+    moves = []
+    (source.moves || []).each do |move|
+      next if !move
+      id = (move.id rescue 0)
+      next if id.nil? || id == 0
+      moves << [id, (move.respond_to?(:pp) ? move.pp.to_i > 0 : true)]
+    end
+    stages = seat.nil? ? nil : (source.stages.clone rescue nil)
+    [(source.species rescue nil), (source.form rescue 0), ability_key(source),
+     item_key(source), (source.status rescue 0), entry["alive"], moves, stages, seat]
+  rescue Exception
+    nil
+  end
+
+  # Everything outside the two bodies that moves a damage number: the weather, the
+  # speed order, and the screens on either side (pbRoughDamage reads Reflect and Light
+  # Screen at highSkill, 085:3610). Skill because the estimate itself is skill-gated.
+  def self.matrix_field_signature(battle, skill)
+    [weather_name(battle), trick_room_active?(battle), skill,
+     safe_side_effect(battle.sides[0], :Reflect, 0),
+     safe_side_effect(battle.sides[0], :LightScreen, 0),
+     safe_side_effect(battle.sides[1], :Reflect, 0),
+     safe_side_effect(battle.sides[1], :LightScreen, 0)]
+  rescue Exception
     nil
   end
 
@@ -1215,14 +1560,23 @@ module PortableAIRealidea
   # Passing raw basedamage instead, as this adapter did through 0.1.0, priced every one
   # of those at its sentinel.
   def self.rough_damage_pct(battle, move, attacker, target, skill)
+    rough_damage_pct!(battle, move, attacker, target, skill)
+  rescue
+    0.0
+  end
+
+  # The same estimate with the refusal left visible. Every caller through 0.6.4 wants
+  # "0% when the engine cannot say", which is what the wrapper above gives them; the
+  # matrix wants to tell "nothing lands" apart from "this pair could not be priced",
+  # because a cell it prints as 0 is a claim about the board and a cell it prints as
+  # nil is an admission. pbRoughDamage divides by the defender's defence (085:3557).
+  def self.rough_damage_pct!(battle, move, attacker, target, skill)
     return 0.0 if !target || !move.pbIsDamaging? || move.basedamage <= 0
     base = move.basedamage
     base = 60 if base == 1
     base = battle.pbBetterBaseDamage(move, attacker, target, skill, base) rescue base
     damage = battle.pbRoughDamage(move, attacker, target, skill, base)
     percent(damage, target.totalhp)
-  rescue
-    0.0
   end
 
   def self.battler_speed(battler)
@@ -1842,7 +2196,7 @@ module PortableAIRealidea
 
     # Core config keys a run may override, with the type each parses to. Booleans
     # become real true/false: the core tests them with plain Ruby truthiness, and the
-    # string "false" is truthy. Same twenty-two keys as the Reborn gauntlet
+    # string "false" is truthy. Same twenty-eight keys as the Reborn gauntlet
     # (Portable_AI_Gauntlet.rb:37-70), so an ablation reads identically in both studies.
     CONFIG_OVERRIDE_KEYS = [
       ["switch_risk_weight", :float],
@@ -1874,7 +2228,13 @@ module PortableAIRealidea
       # 0.6.4. All three false is 0.6.3, which is the control run.
       ["switchin_race_grade",  :boolean],
       ["escape_wall_margin",   :boolean],
-      ["switch_estimate_pp",   :boolean]
+      ["switch_estimate_pp",   :boolean],
+      # 0.6.5. All three false is 0.6.4, which is the control run -- and so is
+      # party_matrix on with the other two off, because building the grid decides
+      # nothing by itself.
+      ["party_matrix",         :boolean],
+      ["sole_answer",          :boolean],
+      ["setup_matrix",         :boolean]
     ]
 
     def self.config
@@ -1993,6 +2353,12 @@ class PokeBattle_Battle
 
   def portable_ai_last_plan
     @portable_ai_last_plan
+  end
+
+  # The snapshot that plan was built from, so the probe can put the grid the rules
+  # read on the record of a card they decided.
+  def portable_ai_last_snapshot
+    @portable_ai_last_snapshot
   end
 
   # Observe, let the host choose, then read back what it chose. Shared by both command

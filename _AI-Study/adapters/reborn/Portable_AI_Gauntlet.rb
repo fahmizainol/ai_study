@@ -69,7 +69,13 @@ module PortableAIRebornGauntlet
     # 0.6.4. All three false is 0.6.3, which is the control run.
     ["switchin_race_grade",  :boolean],
     ["escape_wall_margin",   :boolean],
-    ["switch_estimate_pp",   :boolean]
+    ["switch_estimate_pp",   :boolean],
+    # 0.6.5. All three false is 0.6.4, which is the control run -- and so is
+    # party_matrix on with the other two off, because building the grid decides
+    # nothing by itself.
+    ["party_matrix",         :boolean],
+    ["sole_answer",          :boolean],
+    ["setup_matrix",         :boolean]
   ]
 
   OUT     = "Data/ai_gauntlet_results.ndjson"

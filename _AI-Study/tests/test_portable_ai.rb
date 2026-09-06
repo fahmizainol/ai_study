@@ -1637,4 +1637,291 @@ class PortableAITest < Test::Unit::TestCase
     assert_equal("ROOST", pick(snapshot([zapdos(57, [chansey])], [target(0, 100)], {}),
                                both_off)[0]["move_id"])
   end
+
+  # --- 0.6.5 the party x party damage matrix ------------------------------------
+  #
+  # Every test asserts the rule AND that its key off restores 0.6.4. The three keys
+  # false is the control run; a matrix that is merely built and exported decides
+  # nothing, which test_matrix_consumers_are_inert_without_a_matrix pins from the
+  # other side.
+
+  # One side table. Each row is [slot, hp_pct, seat (nil on the bench), speed].
+  def mx_side(rows)
+    rows.map do |row|
+      { "slot" => row[0], "index" => row[2], "species" => 100 + row[0],
+        "hp_pct" => row[1], "alive" => row[1] > 0,
+        "speed" => (row[3] || 100), "types" => [] }
+    end
+  end
+
+  def mx_cell(out, incoming, faster = false, out_cat = "physical", in_cat = "physical")
+    { "out" => out, "out_cat" => out_cat, "out_move" => "TACKLE",
+      "in" => incoming, "in_cat" => in_cat, "in_move" => "TACKLE",
+      "faster" => faster }
+  end
+
+  def matrix_snap(own, foe, cells)
+    { "version" => 1, "own" => mx_side(own), "foe" => mx_side(foe), "cells" => cells }
+  end
+
+  def with_matrix(snap, matrix)
+    snap["matrix"] = matrix
+    snap
+  end
+
+  def verdict_snap(own_hp, out, incoming, faster = false)
+    { "matrix" => matrix_snap([[0, own_hp, 1]], [[0, 100, 0]],
+                              { "0:0" => mx_cell(out, incoming, faster) }) }
+  end
+
+  def test_matrix_verdict_reads_hits_from_current_hp
+    # Two hits against five.
+    assert_equal("W", PortableAI.matrix_verdict(verdict_snap(100, 50, 20), 0, 0))
+    assert_equal("L", PortableAI.matrix_verdict(verdict_snap(100, 20, 50), 0, 0))
+    # Eight hits each way is not a race, it is a stall.
+    assert_equal("S", PortableAI.matrix_verdict(verdict_snap(100, 10, 10), 0, 0))
+    # Equal counts fall to the speed order, and an unknown one stays unknown.
+    assert_equal("W", PortableAI.matrix_verdict(verdict_snap(100, 50, 50, true), 0, 0))
+    assert_equal("L", PortableAI.matrix_verdict(verdict_snap(100, 50, 50, false), 0, 0))
+    # No cell, no claim.
+    assert_nil(PortableAI.matrix_verdict(verdict_snap(100, 50, 20), 0, 1))
+    assert_nil(PortableAI.matrix_verdict({}, 0, 0))
+    # The verdict is derived from CURRENT HP, so the stall decays: at 20% the same
+    # cell says the foe needs two hits and this body still needs eight.
+    assert_equal("L", PortableAI.matrix_verdict(verdict_snap(20, 10, 10), 0, 0))
+  end
+
+  def test_matrix_stall_band_sits_below_the_race_cap
+    # RACE_MAX_HITS is a CAP, so "both at the cap" would need 12.5% a hit on both
+    # sides and the stall band would be all but unreachable.
+    assert(PortableAI::MATRIX_STALL_HITS < PortableAI::RACE_MAX_HITS)
+    assert(PortableAI::MATRIX_STALL_HITS > PortableAI::WALL_BREAK_MAX_HITS)
+  end
+
+  # The actor is drowsy, so every switch candidate has its reason to leave and the
+  # question is only which body goes in. Slot 1 outscores slot 2 by 100 on the engine
+  # base alone, which is 0.6.4's answer.
+  def sole_answer_snap(cells, foe_rows = [[0, 100, 0], [1, 100, nil]])
+    actions = [move(0, "STRENGTH", 0, 100, 20, {}),
+               { "type" => "switch", "slot" => 1, "base_score" => 200,
+                 "matchup_score" => 0 },
+               { "type" => "switch", "slot" => 2, "base_score" => 100,
+                 "matchup_score" => 0 }]
+    a = actor(1, 100, actions, { "yawned" => true })
+    snap = snapshot([a], [target(0, 100)], {})
+    with_matrix(snap, matrix_snap([[0, 100, 1], [1, 100, nil], [2, 100, nil]],
+                                  foe_rows, cells))
+  end
+
+  WINS = [50, 20]        # two hits against five
+  LOSES = [20, 50]
+
+  def mx_pair(pair)
+    mx_cell(pair[0], pair[1])
+  end
+
+  # Slot 1 is the only body that beats their benched foe and it LOSES to the one in
+  # front; slot 2 beats what is in front and answers nothing else.
+  def exposed_cells(other_answers_the_field = true)
+    { "0:0" => mx_pair(LOSES), "0:1" => mx_pair(LOSES),
+      "1:0" => mx_pair(LOSES), "1:1" => mx_pair(WINS),
+      "2:0" => mx_pair(other_answers_the_field ? WINS : LOSES),
+      "2:1" => mx_pair(LOSES) }
+  end
+
+  def test_sole_answers_names_the_only_live_body_that_beats_each_foe
+    snap = sole_answer_snap(exposed_cells)
+    assert_equal([1], PortableAI.sole_answers(snap, 1))
+    assert_equal([], PortableAI.sole_answers(snap, 1) - [1])
+    # Slot 2 is the only answer to the foe in FRONT, which is a real sole answer and
+    # is what matrix_answers says.
+    assert_equal([2], PortableAI.matrix_answers(snap, 0))
+    assert_equal([1], PortableAI.matrix_answers(snap, 1))
+    # A dead foe is not a foe anything has to answer, and a dead body of ours is not
+    # an answer: with slot 2 fainted, nothing answers the foe in front.
+    dead = sole_answer_snap(exposed_cells, [[0, 100, 0], [1, 0, nil]])
+    assert_equal([], PortableAI.sole_answers(dead, 1))
+    dead["matrix"]["own"][2]["alive"] = false
+    dead["matrix"]["own"][2]["hp_pct"] = 0
+    assert_equal([], PortableAI.matrix_answers(dead, 0))
+  end
+
+  def test_the_only_answer_to_a_bench_foe_is_not_sent_into_a_foe_it_loses_to
+    snap = sole_answer_snap(exposed_cells)
+    result = pick(snap, { "sole_answer" => true })[0]
+    assert_equal("switch", result["type"])
+    assert_equal(2, result["slot"])
+    # 0.6.4 spends the only answer, because slot 1 simply scores higher.
+    off = pick(snap, {})[0]
+    assert_equal(1, off["slot"])
+  end
+
+  def test_sole_answer_is_silent_when_no_other_body_answers_the_active_foe
+    # Nothing else beats what is in front, so spending the unique body is not a
+    # choice the rule gets to second-guess.
+    snap = sole_answer_snap(exposed_cells(false))
+    result = pick(snap, { "sole_answer" => true })[0]
+    assert_equal(1, result["slot"])
+    assert(!reasons_of(result).include?("sole_answer_exposed"))
+    assert(!reasons_of(result).include?("sole_answer_reserved"))
+  end
+
+  # Both bodies are forced replacements and both beat the foe in front. One of them is
+  # also the only answer to a foe still on their bench.
+  def test_a_forced_replacement_prefers_the_body_with_least_unique_value
+    actions = [{ "type" => "switch", "slot" => 1, "base_score" => 100,
+                 "matchup_score" => 0, "forced" => true },
+               { "type" => "switch", "slot" => 2, "base_score" => 80,
+                 "matchup_score" => 0, "forced" => true }]
+    a = actor(1, 0.0, actions, {})
+    snap = snapshot([a], [target(0, 100)], {})
+    cells = { "1:0" => mx_pair(WINS), "1:1" => mx_pair(WINS),
+              "2:0" => mx_pair(WINS), "2:1" => mx_pair(LOSES) }
+    with_matrix(snap, matrix_snap([[0, 0, nil], [1, 100, nil], [2, 100, nil]],
+                                  [[0, 100, 0], [1, 100, nil]], cells))
+    plan = PortableAI.plan(snap, { "sole_answer" => true }, Random.new(7))
+    assert_equal(2, plan["actions"][0]["slot"])
+    # The charge is on the body being held back, not on the one that goes.
+    held = plan["diagnostics"]["rankings"][0].find { |c| c["slot"] == 1 }
+    assert_equal(-45, reason_value(held, "sole_answer_reserved"))
+    assert_nil(reason_value(plan["diagnostics"]["rankings"][0].find { |c| c["slot"] == 2 },
+                            "sole_answer_reserved"))
+    # 0.6.4 ranks them by score alone and spends the body it will need later.
+    assert_equal(1, pick(snap, {})[0]["slot"])
+  end
+
+  def test_sole_answer_in_doubles_takes_the_harsher_target
+    actions = [move(0, "STRENGTH", 0, 100, 20, {}),
+               { "type" => "switch", "slot" => 1, "base_score" => 200,
+                 "matchup_score" => 0 },
+               { "type" => "switch", "slot" => 2, "base_score" => 100,
+                 "matchup_score" => 0 }]
+    a = actor(1, 100, actions, { "yawned" => true })
+    snap = snapshot([a], [target(0, 100), target(2, 100)], {})
+    snap["format"] = "double"
+    # Slot 1 beats the first foe and loses to the second, so on the harsher target it
+    # is exposed rather than reserved.
+    cells = { "0:0" => mx_pair(LOSES), "0:1" => mx_pair(LOSES), "0:2" => mx_pair(LOSES),
+              "1:0" => mx_pair(WINS), "1:1" => mx_pair(LOSES), "1:2" => mx_pair(WINS),
+              "2:0" => mx_pair(WINS), "2:1" => mx_pair(WINS), "2:2" => mx_pair(LOSES) }
+    with_matrix(snap, matrix_snap([[0, 100, 1], [1, 100, nil], [2, 100, nil]],
+                                  [[0, 100, 0], [1, 100, 2], [2, 100, nil]], cells))
+    scored = PortableAI.plan(snap, { "sole_answer" => true },
+                             Random.new(7))["diagnostics"]["rankings"][0]
+    one = scored.find { |c| c["type"] == "switch" && c["slot"] == 1 }
+    assert_equal(-150, reason_value(one, "sole_answer_exposed"))
+    assert_nil(reason_value(one, "sole_answer_reserved"))
+  end
+
+  def test_matrix_consumers_are_inert_without_a_matrix
+    both = { "sole_answer" => true, "setup_matrix" => true }
+    plain = snapshot([actor(1, 100, [move(0, "STRENGTH", 0, 100, 20, {}),
+                                     { "type" => "switch", "slot" => 1,
+                                       "base_score" => 200, "matchup_score" => 0 },
+                                     move(1, "SWORDSDANCE", nil, 300, 0, {})],
+                            { "yawned" => true })], [target(0, 100)], {})
+    on = pick(plain, both)[0]
+    off = pick(plain, {})[0]
+    assert_equal(reasons_of(off), reasons_of(on))
+    assert_equal(off["score"], on["score"])
+  end
+
+  # --- 0.6.5 the boost is worth what it flips -----------------------------------
+
+  # Swords Dance (+2 Attack) against a foe in front the actor already beats, and two
+  # on their bench it does not. base_score 300 keeps the setup move the winner either
+  # way, so the assertions are about the value of the term and not about a tie.
+  def setup_matrix_snap(cells, actor_extra = {}, foe_rows = nil)
+    actions = [move(0, "SWORDSDANCE", nil, 300, 0, {}),
+               move(1, "STRENGTH", 0, 100, 20, {})]
+    a = actor(1, 100, actions, actor_extra)
+    snap = snapshot([a], [target(0, 100)], {})
+    rows = foe_rows || [[0, 100, 0], [1, 100, nil], [2, 100, nil]]
+    with_matrix(snap, matrix_snap([[0, 100, 1]], rows, cells))
+  end
+
+  # 30 a hit becomes 60: two hits instead of four, inside the five the foe needs.
+  # 20 into each bench body becomes 40: three hits instead of five, against four.
+  def flipping_cells
+    { "0:0" => mx_cell(30, 20), "0:1" => mx_cell(20, 25), "0:2" => mx_cell(20, 25) }
+  end
+
+  def test_setup_is_worth_the_cells_it_flips
+    snap = setup_matrix_snap(flipping_cells)
+    result = pick(snap, { "setup_matrix" => true })[0]
+    assert_equal("SWORDSDANCE", result["move_id"])
+    assert_equal(110, reason_value(result, "setup_flips"))
+    off = pick(snap, {})[0]
+    assert_equal(55, reason_value(off, "first_setup"))
+    assert_nil(reason_value(off, "setup_flips"))
+  end
+
+  def test_setup_that_flips_nothing_loses_the_flat_bonus
+    # It already beats all three, so there is nothing for the boost to buy.
+    cells = { "0:0" => mx_cell(30, 20), "0:1" => mx_cell(30, 20),
+              "0:2" => mx_cell(30, 20) }
+    snap = setup_matrix_snap(cells)
+    result = pick(snap, { "setup_matrix" => true })[0]
+    assert_equal(0, reason_value(result, "setup_no_flip"))
+    assert_nil(reason_value(result, "setup_flips"))
+    assert_equal(55, reason_value(pick(snap, {})[0], "first_setup"))
+  end
+
+  def test_setup_needs_the_budget_in_front
+    # The foe removes this body in two: there is no turn to spend, whatever the boost
+    # would be worth against their bench.
+    cells = { "0:0" => mx_cell(20, 60), "0:1" => mx_cell(20, 25),
+              "0:2" => mx_cell(20, 25) }
+    snap = setup_matrix_snap(cells)
+    result = pick(snap, { "setup_matrix" => true })[0]
+    assert_equal(0, reason_value(result, "setup_no_budget"))
+    assert_nil(reason_value(result, "setup_flips"))
+    assert_equal(55, reason_value(pick(snap, {})[0], "first_setup"))
+  end
+
+  def test_setup_transform_respects_category_and_speed
+    special = mx_cell(40, 20, false, "special", "physical")
+    # Swords Dance raises Attack; a special attacker's best hit is untouched by it.
+    swords = PortableAI.matrix_transform_cell(special, { "atk" => 2 }, 100, 120, false)
+    assert_equal(40, swords["out"])
+    # Nasty Plot moves the same cell.
+    plot = PortableAI.matrix_transform_cell(special, { "spa" => 2 }, 100, 120, false)
+    assert_equal(80.0, plot["out"])
+    # A defensive stage divides what comes in, by the incoming move's category.
+    amnesia = PortableAI.matrix_transform_cell(special, { "spd" => 2 }, 100, 120, false)
+    assert_equal(20, amnesia["in"])
+    iron = PortableAI.matrix_transform_cell(special, { "def" => 2 }, 100, 120, false)
+    assert_equal(10.0, iron["in"])
+    # Dragon Dance turns a losing speed order into a winning one, and Trick Room
+    # turns it back.
+    dance = PortableAI.matrix_transform_cell(special, { "atk" => 1, "speed" => 1 },
+                                            100, 120, false)
+    assert_equal(true, dance["faster"])
+    inverted = PortableAI.matrix_transform_cell(special, { "atk" => 1, "speed" => 1 },
+                                                100, 120, true)
+    assert_equal(false, inverted["faster"])
+  end
+
+  def test_setup_safety_branches_still_outrank_the_matrix_value
+    # At 30% HP the boost is refused whatever it would flip: unsafe_setup is one of
+    # the four branches that run before this arm is reached.
+    snap = setup_matrix_snap(flipping_cells)
+    snap["actors"][0]["hp_pct"] = 25
+    result = PortableAI.plan(snap, { "setup_matrix" => true },
+                             Random.new(7))["diagnostics"]["rankings"][0]
+    dance = result.find { |c| c["move_id"] == "SWORDSDANCE" }
+    assert_equal(-240, reason_value(dance, "unsafe_setup"))
+    assert_nil(reason_value(dance, "setup_flips"))
+    assert_nil(reason_value(dance, "first_setup"))
+  end
+
+  def test_every_setup_move_has_a_stage_row
+    missing = []
+    PortableAI::Effects::TABLE.each do |id, tags|
+      next if !tags.include?("setup")
+      missing << id if PortableAI::Effects.setup_stages(id).nil?
+    end
+    assert_equal([], missing.sort,
+                 "a setup move with no stage row falls back to the flat 55 in silence")
+  end
 end

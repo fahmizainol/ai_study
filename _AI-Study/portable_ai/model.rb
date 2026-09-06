@@ -16,7 +16,7 @@
 # Everything else is optional evidence used to improve the score.
 
 module PortableAI
-  VERSION = "0.6.4" unless const_defined?(:VERSION)
+  VERSION = "0.6.5" unless const_defined?(:VERSION)
 
   module Model
     DEFAULT_CONFIG = {
@@ -171,7 +171,27 @@ module PortableAI
       # trace: the switch-backs that survived the wall margin were two bodies whose
       # attacks were all spent, each "hitting for 27%" on the bench and for nothing
       # on the field.
-      "switch_estimate_pp"    => true
+      "switch_estimate_pp"    => true,
+
+      # 0.6.5. The party x party damage matrix and the two rules that read it. Every
+      # scoring rule goes inert when snapshot["matrix"] is absent, so the Reborn build
+      # is untouched and its gauntlet is this version's control. ALL THREE FALSE
+      # REPRODUCES 0.6.4 BATTLE-FOR-BATTLE -- and so does party_matrix alone, because
+      # building and exporting the matrix changes no decision by itself.
+      #
+      # Adapter-side (rule_enabled?), and the one of the three that ships ON: it
+      # builds snapshot["matrix"] and puts the grid in the trace. Every 0.6.3 and
+      # 0.6.4 rule was read off a readout, and a readout cannot show what was never
+      # exported. Cached against a per-slot signature, so steady-state cost is the
+      # dirty rows only.
+      "party_matrix"          => true,
+      # The only answer to a foe still on their bench is not a body to spend in front
+      # of a foe it loses to (Core.sole_answer_value). OFF per the convention: an
+      # unproven rule ships off and the paired gauntlet decides.
+      "sole_answer"           => false,
+      # The first boost is worth the cells it flips across their party, instead of a
+      # flat 55 (Core.setup_matrix_value). OFF for the same reason.
+      "setup_matrix"          => false
     }
 
     def self.config(overrides)

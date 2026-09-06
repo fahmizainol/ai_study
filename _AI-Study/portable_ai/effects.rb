@@ -37,6 +37,50 @@ module PortableAI
            IRONDEFENSE AMNESIA COSMICPOWER ACIDARMOR BARRIER STOCKPILE
            HONECLAWS CURSE DEFENDORDER], ["setup"])
     add(%w[BELLYDRUM], ["setup", "hp_cost_half"])
+
+    # 0.6.5. WHAT each setup move actually raises, so a boost can be priced by what
+    # it changes rather than by a flat bonus (Core.setup_matrix_value). Every id
+    # carrying the "setup" tag above has a row here and a test asserts it, because a
+    # missing row silently falls back to the flat 55 and nothing would say so.
+    #
+    # Stat keys are the core's own short names, not engine constants: "atk", "def",
+    # "spa", "spd", "speed". Drops are negative -- Shell Smash pays two defences for
+    # its three boosts and Curse pays speed, and a rule that only read the boosts
+    # would call both of them free.
+    SETUP_STAGES = {
+      "SWORDSDANCE"  => { "atk" => 2 },
+      "NASTYPLOT"    => { "spa" => 2 },
+      "TAILGLOW"     => { "spa" => 3 },
+      "DRAGONDANCE"  => { "atk" => 1, "speed" => 1 },
+      "QUIVERDANCE"  => { "spa" => 1, "spd" => 1, "speed" => 1 },
+      "CALMMIND"     => { "spa" => 1, "spd" => 1 },
+      "BULKUP"       => { "atk" => 1, "def" => 1 },
+      "COIL"         => { "atk" => 1, "def" => 1 },
+      "HONECLAWS"    => { "atk" => 1 },
+      "WORKUP"       => { "atk" => 1, "spa" => 1 },
+      "GROWTH"       => { "atk" => 1, "spa" => 1 },
+      "CURSE"        => { "atk" => 1, "def" => 1, "speed" => -1 },
+      "SHELLSMASH"   => { "atk" => 2, "spa" => 2, "speed" => 2,
+                          "def" => -1, "spd" => -1 },
+      "GEOMANCY"     => { "spa" => 2, "spd" => 2, "speed" => 2 },
+      "BELLYDRUM"    => { "atk" => 6 },
+      "AGILITY"      => { "speed" => 2 },
+      "ROCKPOLISH"   => { "speed" => 2 },
+      "AUTOTOMIZE"   => { "speed" => 2 },
+      "IRONDEFENSE"  => { "def" => 2 },
+      "ACIDARMOR"    => { "def" => 2 },
+      "BARRIER"      => { "def" => 2 },
+      "AMNESIA"      => { "spd" => 2 },
+      "COSMICPOWER"  => { "def" => 1, "spd" => 1 },
+      "STOCKPILE"    => { "def" => 1, "spd" => 1 },
+      "DEFENDORDER"  => { "def" => 1, "spd" => 1 }
+    }
+
+    # The engine's own stage table as ratios (085_PokeBattle_AI.rb:2932 holds the same
+    # numbers as numerator/denominator pairs). Index is the absolute stage; a drop is
+    # the reciprocal, which is what the engine's pair table spells out row by row.
+    STAGE_MULT = [1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0]
+
     add(%w[SOLARBEAM SOLARBLADE], ["charge_solar"])
     add(%w[PROTECT DETECT KINGSSHIELD SPIKYSHIELD BANEFULBUNKER
            OBSTRUCT SILKTRAP BURNINGBULWARK], ["protect"])
@@ -113,6 +157,23 @@ module PortableAI
     # tags ("secondary:burn"), so the core can still find the kind without a chance.
     # The Reborn adapter exports effect_kind/effect_chance from the code map instead
     # and never needs these; they exist so the same core runs on a thinner adapter.
+    # A stage as a damage ratio. Negative stages are the reciprocal, which is what
+    # the engine's own pair table spells out row by row; clamped at +-6 as the engine
+    # clamps the stage itself.
+    def self.stage_multiplier(stage)
+      value = stage.to_i
+      value = 6 if value > 6
+      value = -6 if value < -6
+      return STAGE_MULT[value] if value >= 0
+      1.0 / STAGE_MULT[-value]
+    end
+
+    # nil for a move with no row, which the setup consumer reads as "price it the old
+    # way" rather than as "it raises nothing".
+    def self.setup_stages(move_id)
+      SETUP_STAGES[move_id.to_s.upcase]
+    end
+
     def self.kind_of(tags, prefix)
       head = prefix.to_s + ":"
       (tags || []).each do |tag|

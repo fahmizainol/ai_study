@@ -27,7 +27,7 @@ What that means when reading the output, and it is worth keeping in mind:
     speed order, not the order they were asked.
 
 Usage:
-    python3 render_realidea_battle.py <ndjson> [matchup_id] [seed] [--teams=SET] [--mode=M]
+    python3 render_realidea_battle.py <ndjson> [matchup_id] [seed] [--teams=SET] [--mode=M] [--cells]
     python3 render_realidea_battle.py <ndjson> --list
 
 A matchup id and seed do NOT name one battle. Two roster sets both call their matchups
@@ -131,6 +131,10 @@ def render_candidates(entry):
                 bits.append("faster")
             if bits:
                 what += " (%s)" % ", ".join(bits)
+            # 0.6.5. The whole of the sole_answer term: a reader seeing -300 on a
+            # candidate needs the names behind it.
+            if c.get("sole_answer_to"):
+                what += " sole answer to %s" % ", ".join(c["sole_answer_to"])
         else:
             what = c.get("move_id") or "move%s" % c.get("slot")
             bits = []
@@ -234,6 +238,57 @@ def render_view(view):
         print("    race vs %s: mine %s turns, theirs %s, winning=%s%s" % (
             who, race.get("mine"), race.get("theirs"), race.get("winning"),
             " (ties on speed)" if race.get("last_hit_first") else ""))
+    for line in matrix_lines(view, cells=SHOW_CELLS):
+        print(line)
+
+
+def matrix_lines(view, cells=False):
+    """The party x party grid: our rows, their columns, one verdict each.
+
+    W = this body wins the pair, L = it loses, S = neither finishes inside six hits,
+    - = no cell (a fainted body, or a pair the engine could not price). Verdicts are
+    derived from the HP both bodies were standing on at the moment of the decision, so
+    the same grid reads differently ten turns later, which is the point of printing it
+    per turn rather than once per battle.
+
+    Pure and returns a list of strings, so the tooling test can assert the shape
+    without a record, a file or a terminal.
+    """
+    grid = (view or {}).get("matrix")
+    if not grid:
+        return []
+    own, foe = grid.get("own") or [], grid.get("foe") or []
+    if not own or not foe:
+        return []
+    verdicts = grid.get("verdicts") or {}
+    body = grid.get("cells") or {}
+    name = lambda entry: "%s%s" % (entry.get("species") or "slot%s" % entry.get("slot"),
+                                   "*" if entry.get("active") else "")
+    width = max([len(name(e)) for e in own] + [9])
+    columns = [name(e) for e in foe]
+    cell_width = max([len(c) for c in columns] + [9 if cells else 1]) + 2
+    lines = ["    matrix (own rows x foe cols, verdict from current HP; "
+             "* = on the field):",
+             ("      %-*s      %s" % (
+                 width, "",
+                 "".join("%-*s" % (cell_width, c) for c in columns))).rstrip()]
+    for row in own:
+        parts = []
+        for column in foe:
+            key = "%s:%s" % (row.get("slot"), column.get("slot"))
+            text = verdicts.get(key) or "-"
+            if cells and body.get(key):
+                pair = body[key]
+                text = "%s %s/%s" % (text, pct(pair.get("out")), pct(pair.get("in")))
+            parts.append("%-*s" % (cell_width, text))
+        lines.append("      %-*s %3.0f%% %s" % (
+            width, name(row), row.get("hp_pct") or 0, "".join(parts).rstrip()))
+    return lines
+
+
+def pct(value):
+    """`62%`, or `?` for a pair the engine refused to price -- which is not `0%`."""
+    return "?" if value is None else "%.0f%%" % value
 
 
 def render(record):
@@ -315,9 +370,17 @@ def select(records, teams=None, mode=None):
     return records
 
 
+# --cells prints the two damage numbers behind each verdict (out/in, as a percentage
+# of the DEFENDER's max HP). Only a trace=true run carries them; without it the grid
+# still prints, verdicts only.
+SHOW_CELLS = False
+
+
 def main():
     if len(sys.argv) < 2:
         sys.exit(__doc__)
+    global SHOW_CELLS
+    SHOW_CELLS = "--cells" in sys.argv
     records = select(load(sys.argv[1]),
                      flag(sys.argv[1:], "teams"), flag(sys.argv[1:], "mode"))
     if "--list" in sys.argv:

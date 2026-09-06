@@ -232,5 +232,45 @@ class RenderSelectionTest(unittest.TestCase):
         self.assertIsNone(self.mod.flag(argv, "format"))
 
 
+class MatrixLinesTest(unittest.TestCase):
+    """The 0.6.5 grid: our party down the side, theirs across the top."""
+
+    def setUp(self):
+        import importlib
+
+        self.mod = importlib.import_module("render_realidea_battle")
+
+    VIEW = {
+        "matrix": {
+            "own": [{"slot": 0, "species": "Zapdos", "hp_pct": 62, "active": True},
+                    {"slot": 1, "species": "Magnezone", "hp_pct": 100,
+                     "active": False}],
+            "foe": [{"slot": 0, "species": "Heatran", "hp_pct": 100, "active": True},
+                    {"slot": 1, "species": "Gyarados", "hp_pct": 100, "active": False}],
+            "verdicts": {"0:0": "L", "0:1": "W", "1:0": "L"},
+            "cells": {"0:0": {"out": 62.0, "in": None}},
+        }
+    }
+
+    def test_matrix_lines_render_rows_by_own_party_and_columns_by_foe(self):
+        lines = self.mod.matrix_lines(self.VIEW)
+        self.assertEqual(4, len(lines))                 # header, columns, two rows
+        self.assertIn("Heatran*", lines[1])
+        self.assertIn("Gyarados", lines[1])
+        self.assertTrue(lines[2].strip().startswith("Zapdos*"))
+        self.assertIn("62%", lines[2])
+        self.assertEqual(["L", "W"], lines[2].split()[2:])
+        # A pair with no verdict prints as absent, never as a guess.
+        self.assertEqual(["L", "-"], lines[3].split()[2:])
+
+    def test_matrix_lines_are_empty_without_a_grid(self):
+        self.assertEqual([], self.mod.matrix_lines({}))
+        self.assertEqual([], self.mod.matrix_lines({"matrix": {"own": [], "foe": []}}))
+
+    def test_cells_show_both_damage_numbers_and_mark_the_unpriced_one(self):
+        lines = self.mod.matrix_lines(self.VIEW, cells=True)
+        self.assertIn("L 62%/?", lines[2])
+
+
 if __name__ == "__main__":
     unittest.main()
