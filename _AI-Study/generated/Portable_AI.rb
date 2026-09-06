@@ -3815,6 +3815,11 @@ module PortableAIGauntlet
     srand(seed)
     decision = battle.pbStartBattle(true)
     result = decision == 2 ? "win" : decision == 1 ? "loss" : "draw"
+    # Same seat convention as `result`: party1 is the left, stock-piloted side, so a
+    # verdict of 1 (left ahead) is a loss for the AI under test. Recorded alongside the
+    # raw decision rather than folded into `result`, so no previously recorded number
+    # changes meaning and a reader can choose which question to ask.
+    timeout = battle.portable_ai_timeout_decision rescue nil
     record = {
       "id" => id,
       "mode" => mode,
@@ -3831,6 +3836,11 @@ module PortableAIGauntlet
       "result" => result,
       "turns" => battle.turncount
     }
+    if decision == 0 && timeout
+      record["timed_out"] = true
+      record["timeout_result"] =
+        timeout == 2 ? "win" : timeout == 1 ? "loss" : "draw"
+    end
     # Stamped on EVERY arm, not just the portable one: a stock record is only meaningful
     # as the paired baseline of the run it came from, and a readout rendered from a
     # stale baseline is the failure this stamp exists to make visible.
@@ -3932,6 +3942,23 @@ end
 
 
 class PokeBattle_Battle
+  attr_reader :portable_ai_timeout_decision
+
+  if !method_defined?(:portable_ai_gauntlet_stock_pbDecisionOnTime)
+    alias portable_ai_gauntlet_stock_pbDecisionOnTime pbDecisionOnTime
+  end
+
+  # The 100-round cap computes a verdict on remaining count then HP total, and
+  # pbStartBattle throws it away: the cap raises through pbAbort, and the rescue that
+  # catches it overwrites @decision with 0 (PokeBattle_Battle.rb:2753-2755). So a
+  # battle that was clearly ahead on both tiebreaks is returned as "undecided" and
+  # lands in the results as a draw. Stashing the verdict on the way past costs nothing
+  # and changes no behaviour -- the same value is still returned -- but it lets a
+  # timeout be reported as what it was instead of being pooled with genuine ties.
+  def pbDecisionOnTime
+    @portable_ai_timeout_decision = portable_ai_gauntlet_stock_pbDecisionOnTime
+  end
+
   if !method_defined?(:portable_ai_gauntlet_stock_pbCommandPhase)
     alias portable_ai_gauntlet_stock_pbCommandPhase pbCommandPhase
   end
