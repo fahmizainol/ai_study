@@ -2570,3 +2570,212 @@ Reborn-Normal's 13%, and among KO moves it tiebreaks on slot order, never on acc
 priority or self-cost. A third candidate — `no_effective_move` letting walls leave —
 was **retracted** on inspection: see that document's section 4. Reproduce with
 `tools/policy_gaps.py {heal,finish,leave}`.
+
+## The tier suite — real competitive rosters (2026-09-06)
+
+Not a core version: no AI code changed. This adds a **second roster suite** and the
+harness support it needed. Nothing about 0.6.2's numbers moves.
+
+### Why a second suite
+
+`set_a`..`set_g` are drawn from curated per-archetype pools — six offensive mons, six
+bulky ones — which is what makes them a clean test of **roster invariance**: change the
+mons, see whether the result survives. What they cannot test is whether an AI can pilot
+a *real* team, because no real team is archetype-pure. Human teams carry hazard control,
+speed control and a win condition, and their members are defined as much by EV spread,
+nature and item as by species — none of which `set_a`..`set_g` carry at all.
+
+The tier suite draws from Smogon's published sample teams instead. Teams fight others
+from their own tier, the matchup they were built for.
+
+| suite | sets | question | generator |
+|---|---|---|---|
+| archetype | `set_a`..`set_g` | roster invariance | `tools/make_gauntlet_teams.py` |
+| tier | `gen7ou_a`..`gen6ou_b` | metagame competence | `tools/make_tier_teams.py` |
+
+**Never pool the two.** They answer different questions; `PortableAIRebornTeams::SUITES`
+exists so results can be grouped by suite rather than averaged across them. The
+separation is physical, not conventional: the tier generator writes a different file and
+therefore *cannot* re-roll `set_b`, whatever seed it is handed. Set names are
+tier-qualified rather than continuing the letters, so every ndjson filename says which
+suite and tier it came from — and a second author adding `gen9doublesou_a` cannot collide.
+
+### 8 sets, 32 teams, 192 Pokemon
+
+Two disjoint sets per tier: one set cannot separate "this tier stresses the AI" from
+"these four teams do". `gen8ou`'s 11 eligible teams is what caps it at two.
+
+Tier choice is constrained by Reborn's engine, not team quality. Reborn is gen-7-era
+with gen 8 additions, so gen 6-8 teams behave roughly as built. **Gen 1-4 teams import
+with 100% clean names and are meaningless** — a Gen 1 team without Gen 1 mechanics
+(no physical/special split, no Dark or Steel) is six species in a trenchcoat. Gen 9
+loses Tera Blast, Ivy Cudgel and its newest mons. LC (level 5 + Eviolite) and VGC
+(level 50, doubles, bring-4) both fight a harness that forces level-100 singles.
+
+Eligibility is all-or-nothing per team — six sets resolve or the team is dropped, since
+a team missing a member is not the team its author built. `gen8ou`, `gen8uu` and `gen6ou`
+import whole. `gen7ou` loses 5 of 26: three to Battle Bond (Reborn has no such ability,
+and substituting Protean would silently be a different Pokemon) and two to Electric Seed.
+
+Source data is vendored in `extracted/smogon-teams/` rather than fetched at build time,
+so generation stays offline and reproducible like the rest of the study's validation.
+
+### Four engine facts this depended on, three of which fail silently
+
+Verified against Reborn Yang's own files, not assumed. Any future work touching sets
+needs these:
+
+- **Speed is PBStats index 3, not 5.** Showdown orders stats `(hp, atk, def, spa, spd,
+  spe)`; Essentials is `(HP, ATTACK, DEFENSE, SPEED, SPATK, SPDEF)`. A straight copy puts
+  a Jolly sweeper's 252 Speed EVs into Special Attack, and nothing complains.
+- **Hidden Power's type is not derived from IVs.** The IV formula at
+  `PokeBattle_MoveEffects.rb:3901-3908` is commented out, replaced by a `personalID`
+  lookup that honours a preset `hptype` (`attr_accessor`, `PokeBattle_Pokemon.rb:61`).
+  Breeding IVs for HP Fire — what every other generation does — does nothing here. Sets
+  state the type outright.
+- **Forme indices live in `Scripts/MultipleForms.rb`, not PBS.** `pokemon.txt` has no
+  Landorus-Therian entry at all. A forme also carries its own ability slots, so
+  `setAbility(1)` means Snow Warning on Alolan Ninetales and something else on the base.
+  Note `:Ability` takes *both* a scalar and an array in that file.
+- **Hyphens are not forme markers.** Kommo-o, Porygon-Z, Ho-Oh, Jangmo-o and Type: Null
+  are species. `reborn_names.py` matches literal names before splitting anything.
+
+Keldeo-Resolute and Zarude-Dada fold to their base species — Reborn models no difference
+— and that fold is a small explicit table, not a heuristic, so it cannot quietly swallow
+a forme that does matter.
+
+### `make_party` now takes a spread
+
+`adapters/reborn/Portable_AI_Gauntlet.rb` gained `form`, `nature`, `evs`, `ivs` and
+`hptype`. Each is applied only when the key is present, so `set_a`..`set_g` — which
+carry none — keep the flat 31 IV / 85 EV fixture every recorded run of theirs was
+measured on. Verified: `set_a`'s first entry still has `extra=nil`.
+
+Forme is applied *before* the spread, because a forme brings its own `BaseStats`;
+setting it later builds the mon from the base species' numbers.
+
+### Running it
+
+Identical to the archetype sweep — `teams=` resolves either suite by name:
+
+```bash
+printf 'mode=gauntlet\nschedule=normal_baseline\nparty_size=6\narms=normal_portable\n' > /tmp/cfg.txt
+bash tools/run_gauntlet_parallel.sh generated/reborn_6v6_tier /tmp/cfg.txt \
+     gen7ou_a gen7ou_b gen8ou_a gen8ou_b gen8uu_a gen8uu_b gen6ou_a gen6ou_b
+```
+
+8 sets x 12 ordered non-mirror pairings = 96 matchups per arm, against the archetype
+suite's 84 — a full sweep roughly doubles.
+
+### First run: gen8ou_a (2026-09-06)
+
+One set, both arms on the same frame. 120/120 records, exit 0, ~6 minutes.
+
+| arm | record | rate |
+|---|---|---|
+| `normal_portable` | 35W 25L | 58.3% |
+| `normal_reborn` | 32W 28L | 53.3% |
+
+12 ordered non-mirror matchups x 5 seeds x 2 arms. Turns mean 30.2, range 12-97, no draws.
+
+**The +5 is not a result.** Both arms play the right seat against a stock-Reborn left
+seat and the matrix is seat-balanced, so `normal_reborn` should sit at 50% by symmetry;
+it came in at 53.3%, and that 3.3-point drift is the noise floor at n=60. The difference
+is +5.0 +/- ~9.1. This set was run to test the fixtures, not to measure anything.
+
+**The fixtures are correct**, and that is what the run establishes. Two independent
+checks against a traced re-run:
+
+- *Spreads apply exactly.* Every one of team3's six max-HP values matches the tier EV
+  arithmetic to the point and differs from the archetype suite's flat-85 path --
+  Landorus at 248 HP EVs reads 381, where the 85-EV path gives 340.
+- *Formes apply.* Type effectiveness in the trace is a typing fingerprint, and formes
+  change typing. Across 89 confidently-attributed hits on Rotom there is **not one
+  typemod of 0** -- base Rotom is Electric/Ghost and immune to the Normal and Fighting
+  moves that landed on it, so the mon in play was Electric/Water. Slowking-Galar
+  confirms independently on five attack types with no contradiction.
+
+  (Two readings look inconsistent under a static move->type table and are not: Weather
+  Ball changes type in rain, and team1 is a Drizzle team.)
+
+**Still unexercised: `hptype`.** `gen8ou_a` contains no Hidden Power set, so the one path
+depending on Reborn's personalID mechanism has not run. 15 of the 192 tier mons use it,
+clustered in `gen7ou` -- run `gen7ou_a` before trusting that path.
+
+### All eight sets (2026-09-06)
+
+960 battles, both arms, `schedule=normal_baseline`, party_size 6, 5 seeds per matchup.
+
+| set | portable | reborn (control) | delta |
+|---|---|---|---|
+| gen6ou_a | 35.0% | 51.7% | -16.7 |
+| gen6ou_b | 45.0% | 50.0% | -5.0 |
+| gen7ou_a | 56.7% | 45.0% | +11.7 |
+| gen7ou_b | 36.7% | 46.7% | -10.0 |
+| gen8ou_a | 58.3% | 53.3% | +5.0 |
+| gen8ou_b | 45.0% | 55.0% | -10.0 |
+| gen8uu_a | 43.3% | 50.0% | -6.7 |
+| gen8uu_b | 51.7% | 48.3% | +3.3 |
+| **pooled** | **223/480 = 46.5%** | **240/480 = 50.0%** | **-3.5 +/- 6.3** |
+
+z = -1.10, not significant. **On real competitive teams the portable AI is not
+distinguishable from Reborn-Normal.**
+
+The control pooled to 240/480 -- exactly 50.00%, the symmetry expectation, across 480
+battles. That is the strongest evidence yet that the harness, the seat balancing and the
+matchup matrix are all correct, and it is what licenses reading the 46.5% as being about
+the AI rather than about the frame.
+
+**Per-set deltas run from +11.7 to -16.7.** Any single one of these eight, read alone,
+would support a confident and wrong conclusion in either direction. `gen8ou_a` was run
+first and read +5.0; it is noise. Do not report a tier set on its own.
+
+### The mega-evolution confound (found while reading the above)
+
+**The portable AI never mega-evolves.** Reborn's own AI registers it
+(`PokeBattle_AI_2.rb:1620`, `pbRegisterMegaEvolution if pbCanMegaEvolve?`); nothing in
+`portable_ai/` or the reborn adapter ever calls it -- `grep` finds zero occurrences in
+the built bundle. In the `normal_portable` arm the left seat is Reborn's AI and the right
+seat is portable, so **the left seat mega-evolves and the right seat cannot**. The control
+arm is Reborn on both seats and megas symmetrically, which is exactly why it sits on 50%.
+
+This is a capability gap, not a fixture bug: the stones are held correctly and the engine
+would evolve them if asked.
+
+It splits the tier suite cleanly, because mega stones only exist in gens 6-7:
+
+| stratum | mega stones | portable | control | delta |
+|---|---|---|---|---|
+| gen8ou + gen8uu | 0 | 49.6% | 51.7% | -2.1 +/- 8.9 |
+| gen6ou + gen7ou | 4 per set | 43.3% | 48.3% | -5.0 +/- 8.9 |
+
+Neither stratum is significant on its own, and the two are within noise of each other, so
+this does **not** establish that megas cost the portable AI anything measurable. What it
+establishes is that gen6ou and gen7ou numbers are confounded and the mega-free pair is
+the defensible comparison. **The archetype suite carries zero mega stones**, so every
+previously recorded set_a..set_g result is unaffected.
+
+Worth adding to the backlog: registering mega evolution is a real missing capability,
+independent of whether it shows up in these win rates.
+
+### Fixture verification (traced runs)
+
+All three mechanisms confirmed at battle time, not merely at generation:
+
+- **Spreads.** Every max-HP value matches the tier EV arithmetic exactly and differs from
+  the archetype flat-85 path -- Landorus at 248 HP EVs reads 381 where flat-85 gives 340.
+- **Formes.** Type effectiveness is a typing fingerprint. Across 89 confidently-attributed
+  hits on Rotom there is not one typemod of 0, and base Rotom is Electric/Ghost and immune
+  to the Normal and Fighting moves that landed -- so the mon in play was Electric/Water.
+  Slowking-Galar confirms independently on five attack types.
+- **Hidden Power.** 8 discriminative matchups in `gen7ou_a`, all matching the declared
+  type, none falling back to Normal: HP Ground into Heatran read 16 where Normal gives 2;
+  HP Ice into Landorus and Garchomp read 16 against 4; HP Ice into Heatran read 1 against
+  2. Reborn's personalID mechanism honours a preset `hptype`, as the source implied.
+
+Two verification scripts were themselves buggy before they were right -- a species-typing
+parser that let `name` persist across record boundaries and returned empty type lists
+(making every expectation collapse to 1), and a defender attribution that misread switch
+windows. Both were caught because their output was implausible rather than merely green.
+Trust these numbers because the discriminative cases miss the null by large specific
+margins, not because a script printed OK.

@@ -1,0 +1,24 @@
+Smogon sample teams — source data for the tier suite (tools/make_tier_teams.py).
+
+Source   : https://data.pkmn.cc/teams/FORMAT.json
+Docs     : https://pkmn.github.io/smogon/data/teams/
+Fetched  : 2026-09-06
+Format   : Pokemon Showdown JSON set data, canonicalized and condensed
+           (https://github.com/smogon/pokemon-showdown/blob/master/sim/TEAMS.md#json-format)
+
+Condensed means anything Showdown fills in by default is omitted: level 100, 31 IVs,
+0 EVs. tools/reborn_names.py applies those defaults on the way in.
+
+Teams carry optional name/author fields whose accuracy depends on the sample-team
+maintainers and is not guaranteed -- gen8ou team [3] has a smogtours URL as its
+"author". Treated as metadata only; nothing downstream keys on them.
+
+Vendored rather than fetched at build time so team generation stays offline and
+reproducible, matching the rest of the study's validation.
+
+  gen7ou.json    26 teams    gen8uu.json    24 teams
+  gen8ou.json    11 teams    gen6ou.json    14 teams
+
+Only these four tiers are vendored: they sit closest to Reborn's engine generation.
+Gen 1-4 teams import cleanly but are mechanically meaningless in a gen-7-era engine
+(physical/special split, Dark and Steel types); gen 9 loses Tera and its newest mons.

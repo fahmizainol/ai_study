@@ -746,22 +746,36 @@ module PortableAIRebornGauntlet
   def self.make_party(specs, trainer)
     specs.map do |spec|
       species_name, move_names, extra = spec
+      extra ||= {}
       species = PBSpecies.const_get(species_name)
       pokemon = PokeBattle_Pokemon.new(species, 100, trainer)
+      # Forme first: a forme carries its own BaseStats and its own ability slots, so
+      # setting it after the spread would build the mon from the base species' numbers.
+      # form= records the forme against $Trainer, which AI_Harness.rb:88 guarantees.
+      pokemon.form = extra["form"] if extra["form"] && extra["form"] > 0
       pokemon.resetMoves
       move_names.each_with_index do |move_name, slot|
         pokemon.moves[slot] = PBMove.new(PBMoves.const_get(move_name))
       end
-      if extra && extra["item"]
+      if extra["item"]
         item = (PBItems.const_get(extra["item"]) rescue nil)
         pokemon.setItem(item) if item
       end
-      pokemon.setAbility((extra && extra["ability"]) || 0)
-      pokemon.setNature(0)
+      pokemon.setAbility(extra["ability"] || 0)
+      pokemon.setNature(extra["nature"] || 0)
+      # Hidden Power's type is not derived from IVs in this engine: the IV formula at
+      # PokeBattle_MoveEffects.rb:3901-3908 is commented out in favour of a personalID
+      # lookup that honours a preset hptype. So a set that wants HP Fire says so here;
+      # breeding IVs for it, as every other generation would, does nothing.
+      pokemon.hptype = PBTypes.const_get(extra["hptype"]) if extra["hptype"]
       pokemon.obedient = true
+      # Archetype sets (set_a..set_g) carry no spread and keep the flat 31 IV / 85 EV
+      # fixture every recorded run of theirs was measured on. Tier sets bring the real
+      # competitive spread, which is half of what makes them the sets they are.
+      evs, ivs = extra["evs"], extra["ivs"]
       for stat in 0...6
-        pokemon.iv[stat] = 31
-        pokemon.ev[stat] = 85
+        pokemon.iv[stat] = ivs ? ivs[stat] : 31
+        pokemon.ev[stat] = evs ? evs[stat] : 85
       end
       pokemon.calcStats
       pokemon.hp = pokemon.totalhp
