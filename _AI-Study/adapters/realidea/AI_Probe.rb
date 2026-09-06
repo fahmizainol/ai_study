@@ -479,6 +479,13 @@ module AIProbe
       "actors" => actors
     }
 
+    # Which build and which run-level ablation produced this record. Without both, a
+    # results file cannot be told apart from one written by a different arm.
+    out["portable_version"] = PortableAI::VERSION if defined?(PortableAI::VERSION)
+    if defined?(PortableAIRealidea)
+      overrides = (PortableAIRealidea.config_overrides rescue {})
+      out["config_overrides"] = overrides if overrides && !overrides.empty?
+    end
     sc = scene.seen.keys.sort
     out["scene_calls"] = sc if sc.length > 0
     return out
@@ -581,6 +588,17 @@ module AIProbe
     if defined?(PortableAIGauntlet) && PortableAIGauntlet.requested?
       return PortableAIGauntlet.run
     end
+    # Same Data/ai_harness.txt overrides the gauntlet honours, so one table row can be
+    # ablated against the corpus without a four-minute battle run. The probe is a
+    # separate script section that loads BEFORE Portable_AI, so the module is resolved
+    # here at call time rather than at load time.
+    if defined?(PortableAIRealidea) && defined?(PortableAIRealidea::Harness)
+      return PortableAIRealidea::Harness.with_config { run_scenarios }
+    end
+    run_scenarios
+  end
+
+  def self.run_scenarios
     bootstrap
     install_capture
     scns = parse_scenarios(SCENARIOS)

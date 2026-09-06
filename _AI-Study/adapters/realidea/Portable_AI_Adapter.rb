@@ -48,28 +48,53 @@ module PortableAIRealidea
     [current, intended].max
   end
 
+  # Run-level config overrides, set from Data/ai_harness.txt by the gauntlet and the
+  # probe. Keys not named there keep their skill-derived or Model::DEFAULT_CONFIG value.
+  #
+  # Same contract as the Reborn adapter (:150-186): one installed build plays both
+  # sides of a policy A/B, and every gauntlet and probe record carries the overrides it
+  # ran under. Without this Realidea could not ablate a single core rule without a
+  # rebuild, which makes the two arms different artifacts.
+  def self.config_overrides
+    return {} if !defined?($PORTABLE_AI_CONFIG) || !$PORTABLE_AI_CONFIG.is_a?(Hash)
+    $PORTABLE_AI_CONFIG
+  end
+
+  # Whether one core config key is on for this run, for the handful of rules that live
+  # on THIS side of the boundary and so never see the config hash the core is handed.
+  # Same precedence as Model.config: a run-level override wins, otherwise the default.
+  def self.rule_enabled?(key)
+    overrides = config_overrides
+    return overrides[key] ? true : false if overrides.key?(key)
+    PortableAI::Model::DEFAULT_CONFIG[key] ? true : false
+  rescue
+    true
+  end
+
   def self.config_for(skill)
-    if skill >= PBTrainerAI.bestSkill
-      {
-        "deterministic" => true, "noise" => 0, "switching" => true,
-        "memory" => true, "coordination" => true, "knowledge" => "fair"
-      }
-    elsif skill >= PBTrainerAI.highSkill
-      {
-        "deterministic" => false, "noise" => 5, "switching" => true,
-        "memory" => true, "coordination" => true, "knowledge" => "fair"
-      }
-    elsif skill >= PBTrainerAI.mediumSkill
-      {
-        "deterministic" => false, "noise" => 12, "switching" => true,
-        "memory" => false, "coordination" => true, "knowledge" => "fair"
-      }
-    else
-      {
-        "deterministic" => false, "noise" => 25, "switching" => false,
-        "memory" => false, "coordination" => false, "knowledge" => "fair"
-      }
-    end
+    base =
+      if skill >= PBTrainerAI.bestSkill
+        {
+          "deterministic" => true, "noise" => 0, "switching" => true,
+          "memory" => true, "coordination" => true, "knowledge" => "fair"
+        }
+      elsif skill >= PBTrainerAI.highSkill
+        {
+          "deterministic" => false, "noise" => 5, "switching" => true,
+          "memory" => true, "coordination" => true, "knowledge" => "fair"
+        }
+      elsif skill >= PBTrainerAI.mediumSkill
+        {
+          "deterministic" => false, "noise" => 12, "switching" => true,
+          "memory" => false, "coordination" => true, "knowledge" => "fair"
+        }
+      else
+        {
+          "deterministic" => false, "noise" => 25, "switching" => false,
+          "memory" => false, "coordination" => false, "knowledge" => "fair"
+        }
+      end
+    base.merge(config_overrides)
   end
 
   def self.choose(battle, index)
@@ -184,7 +209,13 @@ module PortableAIRealidea
       "hp_pct" => percent(battler.hp, battler.totalhp),
       "status" => battler.status,
       "types" => [battler.type1, battler.type2],
-      "speed" => (battler.pbSpeed rescue battler.speed)
+      "speed" => battler_speed(battler),
+      # Switch scoring needs the foe's boost level and, unlike a move action, has no
+      # scoring target to read it from (core.rb foe_boost_total).
+      "positive_stages" => positive_stages(battler),
+      # Plain uppercase name, never a PBAbilities constant: the core matches it
+      # against its own tables.
+      "ability" => ability_key(battler)
     }
   end
 
@@ -223,8 +254,12 @@ module PortableAIRealidea
       "species" => battler.species,
       "hp_pct" => percent(battler.hp, battler.totalhp),
       "status" => battler.status,
+      "speed" => battler_speed(battler),
       "stages" => battler.stages.clone,
       "negative_stage_total" => negative_stages,
+      # 0.6.2: the durable record of "I have already set up", which the memory counter
+      # is not -- apply_memory zeroes it on any non-setup action.
+      "positive_stage_total" => positive_stages(battler),
       "incoming_damage_pct" => incoming,
       "threatened_lethal" => incoming >= percent(battler.hp, battler.totalhp),
       "no_effective_move" => no_effective,
@@ -232,6 +267,11 @@ module PortableAIRealidea
       "yawned" => safe_effect(battler, :Yawn, 0).to_i > 0,
       "residual_damage_pct" => residual,
       "trapped" => !has_legal_switch?(battle, index),
+      "ability" => ability_key(battler),
+      # Fake Out and First Impression are worth +115 on turn 0 and nothing after.
+      # Without this the core's turn_shape_rules fired every turn and the AI re-clicked
+      # a move the engine refuses (core.rb first_turn_hit).
+      "turncount" => (battler.turncount.to_i rescue 0),
       "actions" => actions
     }
   end
@@ -291,6 +331,7 @@ module PortableAIRealidea
     base = battle.pbGetMoveScore(move, battler, scoring_target, skill)
     effectiveness = type_effectiveness(battle, move, battler, scoring_target)
     tags = PortableAI::Effects.describe(move_id, [])
+    blocked = !move.pbIsDamaging? && status_blocked?(move, tags, battler, scoring_target)
     {
       "type" => "move",
       "actor_index" => battler.index,
@@ -303,7 +344,7 @@ module PortableAIRealidea
       "power" => move.basedamage,
       "priority" => move.priority,
       "effectiveness" => effectiveness,
-      "immune" => move.pbIsDamaging? && effectiveness <= 0,
+      "immune" => (move.pbIsDamaging? && effectiveness <= 0) || blocked,
       "expected_damage_pct" => rough_damage_pct(battle, move, battler, scoring_target, skill),
       "target_hp_pct" => (scoring_target ? percent(scoring_target.hp, scoring_target.totalhp) : nil),
       "tags" => tags,
@@ -311,6 +352,7 @@ module PortableAIRealidea
       "existing_layers" => existing_layers(battle, move_id, false),
       "max_layers" => max_layers(move_id),
       "own_hazard_layers" => own_hazard_layers(battle),
+      "target_positive_stages" => positive_stages(scoring_target),
       "effect_active" => effect_active?(battle, move_id, battler),
       "foe_reserves" => reserve_count(battle, battler.pbOppositeOpposing.index),
       "hazard_targets" => hazard_target_count(battle, move_id, battler.index),
@@ -405,12 +447,28 @@ module PortableAIRealidea
     1.0
   end
 
+  # Same base-damage preparation stock v16 does before it calls pbRoughDamage
+  # (085_PokeBattle_AI.rb:2802-2810): basedamage 1 is the "variable power" sentinel and
+  # scores as 60, and pbBetterBaseDamage resolves the ~30 function codes that compute
+  # their own power (Seismic Toss, Super Fang, Night Shade, Gyro Ball, Grass Knot...).
+  # Passing raw basedamage instead, as this adapter did through 0.1.0, priced every one
+  # of those at its sentinel.
   def self.rough_damage_pct(battle, move, attacker, target, skill)
     return 0.0 if !target || !move.pbIsDamaging? || move.basedamage <= 0
-    damage = battle.pbRoughDamage(move, attacker, target, skill, move.basedamage)
+    base = move.basedamage
+    base = 60 if base == 1
+    base = battle.pbBetterBaseDamage(move, attacker, target, skill, base) rescue base
+    damage = battle.pbRoughDamage(move, attacker, target, skill, base)
     percent(damage, target.totalhp)
   rescue
     0.0
+  end
+
+  def self.battler_speed(battler)
+    return nil if !battler
+    (battler.pbSpeed rescue battler.speed)
+  rescue
+    nil
   end
 
   def self.estimated_incoming_damage(battle, battler, foe_indices, skill)
@@ -533,6 +591,107 @@ module PortableAIRealidea
     0
   end
 
+  def self.positive_stages(battler)
+    return 0 if !battler
+    total = 0
+    battler.stages.each { |stage| total += stage if stage && stage > 0 }
+    total
+  rescue
+    0
+  end
+
+  # Universal facts about a NON-DAMAGING move that make it unusable, so the core can
+  # stop paying fresh_status +25 for a move the engine will refuse. Mirrors the Reborn
+  # adapter's status_blocked? (:1154-1204) against Realidea's own engine, which
+  # diverges in three places, each verified in 080_PokeBattle_Battler.rb:
+  #
+  # 1. Magic Bounce here bounces only moves carrying the Magic Coat flag (flag c,
+  #    082_PokeBattle_Move.rb:236) and is turned off by Mold Breaker (:2433). Reborn
+  #    reflects every status move and reads the partner's ability too; neither is true
+  #    in this engine, so neither is modelled.
+  # 2. Prankster is a PRIORITY MODIFIER ONLY here (084:1108, 080:2618). There is no
+  #    Dark-type immunity to it anywhere in the build, so the Reborn clause that skips
+  #    a Prankster status move into a Dark type is deliberately absent -- modelling it
+  #    would make the AI refuse a move that lands.
+  # 3. The pbCan*? predicates take the ATTACKER first (081:5-553), not just a
+  #    showMessages flag.
+  def self.status_blocked?(move, tags, battler, target)
+    return false if !target
+    return false if !tags.include?("status")
+    return true if magic_bounced?(move, battler, target)
+    # Thunder Wave into Ground, Toxic into Steel: a typed status move is refused by the
+    # engine's own type verdict, which the damaging-move `immune` path never saw
+    # because a status move has no base damage.
+    if tags.include?("typed_status")
+      return true if type_effectiveness_raw(move, battler, target) <= 0
+    end
+    # Leech Seed sets PBEffects::LeechSeed, not a status CONDITION, so no pbCan*?
+    # predicate sees it and a seeded foe looked fresh every turn. The three failure
+    # conditions are PokeBattle_Move_0DC#pbEffect (083:6296-6310) exactly.
+    if tags.include?("drain")
+      return true if safe_effect(target, :LeechSeed, -1).to_i >= 0
+      return true if safe_effect(target, :Substitute, 0).to_i > 0
+      return true if battler_has_type?(target, :GRASS)
+    end
+    # Yawn is the same shape one move over: tagged ["status", "sleep"], so the engine
+    # check below is pbCanSleep?, which answers about the status CONDITION and says yes
+    # about a target that is merely drowsy. The engine's second guard is a separate
+    # line, PokeBattle_Move_004#pbEffect (083:189).
+    if tags.include?("drowsy") && rule_enabled?("yawn_gate")
+      return true if safe_effect(target, :Yawn, 0).to_i > 0
+    end
+    verdict = engine_can_status?(tags, battler, target)
+    return !verdict if !verdict.nil?
+    # Rescue path for an engine that does not expose the predicates.
+    return true if tags.include?("burn") && battler_has_type?(target, :FIRE)
+    return true if tags.include?("poison") &&
+                   (battler_has_type?(target, :POISON) || battler_has_type?(target, :STEEL))
+    return true if tags.include?("powder") && battler_has_type?(target, :GRASS)
+    return true if tags.include?("paralyze") && battler_has_type?(target, :ELECTRIC)
+    false
+  rescue
+    false
+  end
+
+  # true/false from the engine, or nil when this move applies no status the engine can
+  # be asked about (so the caller falls through to the type list). showMessages is
+  # false: these predicates print "But it failed!" otherwise.
+  def self.engine_can_status?(tags, battler, target)
+    return target.pbCanBurn?(battler, false)     if tags.include?("burn")
+    return target.pbCanPoison?(battler, false)   if tags.include?("poison")
+    return target.pbCanParalyze?(battler, false) if tags.include?("paralyze")
+    return target.pbCanSleep?(battler, false)    if tags.include?("sleep")
+    return target.pbCanFreeze?(battler, false)   if tags.include?("freeze")
+    return target.pbCanConfuse?(battler, false)  if tags.include?("confuse")
+    nil
+  rescue
+    nil
+  end
+
+  def self.magic_bounced?(move, battler, target)
+    return false if !(move.canMagicCoat? rescue false)
+    return false if (battler.hasMoldBreaker rescue false)
+    ability_key(target) == "MAGICBOUNCE"
+  rescue
+    false
+  end
+
+  # The engine's raw type verdict on the 8-is-neutral scale, for a move with no base
+  # damage (type_effectiveness returns a flat 1.0 for those).
+  def self.type_effectiveness_raw(move, attacker, target)
+    move.pbTypeModifier(move.type, attacker, target).to_i
+  rescue
+    8
+  end
+
+  def self.battler_has_type?(battler, symbol)
+    battler.pbHasType?(symbol)
+  rescue
+    type = (PBTypes.const_get(symbol) rescue nil)
+    return false if type.nil?
+    battler.type1 == type || battler.type2 == type
+  end
+
   def self.safe_effect(battler, name, fallback)
     return fallback if !PBEffects.const_defined?(name.to_s)
     value = PBEffects.const_get(name.to_s)
@@ -547,6 +706,34 @@ module PortableAIRealidea
     side.effects[value]
   rescue
     fallback
+  end
+
+  # Ability and item names as uppercase strings, resolved through the CONSTANT tables
+  # rather than through PBAbilities.getName / PBItems.getName -- getName goes to the
+  # compiled message file, which in this build is Spanish, and returns an empty string
+  # for every id in the probe/gauntlet environment that has no message data loaded.
+  # The constants come from Data/Constants.rxdata and are always there.
+  def self.ability_key(battler_or_pokemon)
+    value = (battler_or_pokemon.ability rescue nil)
+    return nil if value.nil? || value == 0
+    constant_key(PBAbilities, :@ability_keys, value)
+  rescue
+    nil
+  end
+
+  def self.constant_key(namespace, cache_name, value)
+    cache = instance_variable_get(cache_name)
+    if !cache
+      cache = {}
+      namespace.constants.each do |name|
+        id = namespace.const_get(name) rescue nil
+        cache[id] = name.to_s.upcase if id.is_a?(Integer)
+      end
+      instance_variable_set(cache_name, cache)
+    end
+    cache[value]
+  rescue
+    nil
   end
 
   def self.move_key(id)
@@ -620,6 +807,95 @@ module PortableAIRealidea
     state["last_type"] = action["type"]
     memory[index.to_s] = state
     battle.instance_variable_set(:@portable_ai_memory, memory)
+  end
+
+  # Run-level knobs read from Data/ai_harness.txt, in the same key=value format the
+  # Reborn harness uses (AI_Harness.rb:51-64). It lives HERE rather than in the
+  # gauntlet because the probe needs it too and the probe is a separate script section
+  # that loads earlier -- and because the thing that consumes $PORTABLE_AI_CONFIG is
+  # this module, not the benchmark that happens to set it.
+  module Harness
+    FILE = "Data/ai_harness.txt"
+
+    # Core config keys a run may override, with the type each parses to. Booleans
+    # become real true/false: the core tests them with plain Ruby truthiness, and the
+    # string "false" is truthy. Same nineteen keys as the Reborn gauntlet
+    # (Portable_AI_Gauntlet.rb:37-70), so an ablation reads identically in both studies.
+    CONFIG_OVERRIDE_KEYS = [
+      ["switch_risk_weight", :float],
+      ["accuracy_weight",    :float],
+      ["heal_gate",          :boolean],
+      ["priority_gate",      :boolean],
+      ["self_cost",          :boolean],
+      ["strict_threat",      :boolean],
+      # 0.5.0 tables. All four false is 0.4.1, which is the control run.
+      ["side_effects",       :boolean],
+      ["ability_rules",      :boolean],
+      ["entry_rules",        :boolean],
+      ["format_rules",       :boolean],
+      # 0.6.0. damage_race=false is the control for the damage-race batch.
+      ["damage_race",        :boolean],
+      ["damage_race_switch", :boolean],
+      # 0.6.2 bugfix batch, one key each so the arms can be ablated singly.
+      ["spread_target_hp",   :boolean],
+      ["lethal_flat",        :boolean],
+      ["entry_death",        :boolean],
+      ["wish_pending",       :boolean],
+      ["setup_stage",        :boolean],
+      ["move_memory",        :boolean],
+      ["yawn_gate",          :boolean]
+    ]
+
+    def self.config
+      cfg = {}
+      return cfg if !File.exist?(FILE)
+      File.open(FILE, "rb") do |file|
+        file.read.split(/[\r\n]+/).each do |line|
+          line = line.strip
+          next if line.empty? || line[0, 1] == "#"
+          key, value = line.split("=", 2)
+          cfg[key.to_s.strip] = value.to_s.strip if key && value
+        end
+      end
+      cfg
+    rescue
+      {}
+    end
+
+    def self.bool(cfg, key, fallback)
+      return fallback if !cfg[key] || cfg[key] == ""
+      ["true", "1", "yes", "on"].include?(cfg[key].to_s.downcase)
+    end
+
+    def self.list(cfg, key, fallback)
+      return fallback if !cfg[key] || cfg[key] == ""
+      out = []
+      cfg[key].to_s.split(",").each do |part|
+        part = part.strip
+        out << part.to_i if part != ""
+      end
+      out.empty? ? fallback : out
+    end
+
+    def self.config_overrides_from(cfg)
+      overrides = {}
+      CONFIG_OVERRIDE_KEYS.each do |key, kind|
+        value = cfg[key]
+        next if !value || value == ""
+        overrides[key] = (kind == :float) ? value.to_f : (value == "true")
+      end
+      overrides
+    end
+
+    # Install this run's overrides for the duration of the block and hand the block the
+    # raw config so it can read its own non-core keys (trace, seeds, append).
+    def self.with_config
+      cfg = config
+      $PORTABLE_AI_CONFIG = config_overrides_from(cfg)
+      yield cfg
+    ensure
+      $PORTABLE_AI_CONFIG = nil
+    end
   end
 
   def self.log_error(error, index)

@@ -3,6 +3,15 @@
 # Create Data/ai_gauntlet.txt and launch the game. The existing AIProbe boot branch
 # delegates here, runs stock and Portable AI against the same teams/seeds, and writes
 # Data/ai_gauntlet_results.ndjson without opening a save file.
+#
+# Data/ai_harness.txt (optional) sets run-level knobs, one key=value per line:
+#   any of PortableAIRealidea::Harness::CONFIG_OVERRIDE_KEYS -- override that core
+#     config key for the whole run, so a policy A/B is two runs of one build rather
+#     than two builds. Whatever is set is stamped on every record.
+#   trace=true   -- record the per-turn portable decision trace (default false; it was
+#                   unconditional through 0.1.0 and dominated the file size)
+#   seeds=a,b,c  -- replace the five default seeds
+#   append=true  -- append to the results file instead of truncating it
 
 class PortableAIGauntletScene < AIProbeNullScene
   def pbStartBattle(battle)
@@ -100,7 +109,14 @@ module PortableAIGauntlet
   end
 
   def self.run
+    PortableAIRealidea::Harness.with_config { |cfg| run_with(cfg) }
+  end
+
+  def self.run_with(cfg)
     AIProbe.bootstrap
+    trace = PortableAIRealidea::Harness.bool(cfg, "trace", false)
+    seeds = PortableAIRealidea::Harness.list(cfg, "seeds", SEEDS)
+    mode_flag = PortableAIRealidea::Harness.bool(cfg, "append", false) ? "ab" : "wb"
     old_trainer = $Trainer
     old_enabled = (defined?($PORTABLE_AI_ENABLED) ? $PORTABLE_AI_ENABLED : nil)
     counts = {
@@ -108,11 +124,11 @@ module PortableAIGauntlet
       "portable" => { "wins" => 0, "losses" => 0, "draws" => 0, "errors" => 0, "turns" => 0 }
     }
 
-    File.open(OUT, "wb") do |file|
+    File.open(OUT, mode_flag) do |file|
       MATCHUPS.each do |matchup|
-        SEEDS.each do |seed|
+        seeds.each do |seed|
           ["stock", "portable"].each do |mode|
-            record = run_one(matchup, seed, mode)
+            record = run_one(matchup, seed, mode, trace)
             bucket = counts[mode]
             bucket["turns"] += record["turns"].to_i
             case record["result"]
@@ -144,7 +160,7 @@ module PortableAIGauntlet
     $PORTABLE_AI_ENABLED = old_enabled if defined?(old_enabled)
   end
 
-  def self.run_one(matchup, seed, mode)
+  def self.run_one(matchup, seed, mode, trace = false)
     id, left_name, right_name, doubles = matchup
     left_trainer = make_trainer("Stock #{left_name}")
     right_trainer = make_trainer("#{mode} #{right_name}")
@@ -159,7 +175,7 @@ module PortableAIGauntlet
     battle.debug = true
     battle.items = []
     battle.instance_variable_set(:@portable_ai_gauntlet, true)
-    battle.instance_variable_set(:@portable_ai_decision_trace, [])
+    battle.instance_variable_set(:@portable_ai_decision_trace, trace ? [] : nil)
 
     $Trainer = left_trainer
     $PORTABLE_AI_ENABLED = (mode == "portable")
@@ -177,8 +193,15 @@ module PortableAIGauntlet
       "result" => result,
       "turns" => battle.turncount
     }
+    # Stamped on EVERY arm, not just the portable one: a stock record is only meaningful
+    # as the paired baseline of the run it came from, and a readout rendered from a
+    # stale baseline is the failure this stamp exists to make visible.
+    record["portable_version"] = PortableAI::VERSION if defined?(PortableAI::VERSION)
     if mode == "portable"
-      record["trace"] = battle.instance_variable_get(:@portable_ai_decision_trace)
+      overrides = PortableAIRealidea.config_overrides
+      record["config_overrides"] = overrides if !overrides.empty?
+      captured = battle.instance_variable_get(:@portable_ai_decision_trace)
+      record["trace"] = captured if captured
     end
     record
   rescue Exception => error
@@ -190,7 +213,8 @@ module PortableAIGauntlet
       "result" => "error",
       "turns" => 0,
       "error" => "#{error.class}: #{error.message}",
-      "where" => (error.backtrace ? error.backtrace[0, 6].join(" | ") : nil)
+      "where" => (error.backtrace ? error.backtrace[0, 6].join(" | ") : nil),
+      "portable_version" => (defined?(PortableAI::VERSION) ? PortableAI::VERSION : nil)
     }
   end
 

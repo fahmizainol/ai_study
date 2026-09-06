@@ -20,7 +20,7 @@
 # Everything else is optional evidence used to improve the score.
 
 module PortableAI
-  VERSION = "0.6.1" unless const_defined?(:VERSION)
+  VERSION = "0.6.2" unless const_defined?(:VERSION)
 
   module Model
     DEFAULT_CONFIG = {
@@ -93,7 +93,42 @@ module PortableAI
       "damage_race_switch" => false,
       # Doubles-only rules: partner absorbs, redirection, partner healing, and the
       # flatter value of priority when a second foe acts regardless.
-      "format_rules"    => true
+      "format_rules"    => true,
+
+      # 0.6.2 bugfix batch. Every one of these was READ OFF a turn-by-turn readout of
+      # the 0.6.1 set_c run, not proposed from the source
+      # (PORTABLE-AI-REBORN.md, "Turn-by-turn readout pass on set_c"), and each is its
+      # own key so the batch can be ablated one row at a time. ALL SEVEN FALSE
+      # REPRODUCES 0.6.1 BATTLE-FOR-BATTLE -- that control run is what makes any
+      # number from this version mean anything.
+      #
+      # A spread move carries no registration target, so target_for returned nil and
+      # every Earthquake was scored against a phantom 100% target: never lethal, and
+      # ko_never_lands could not fire for it either. Read the adapter's exported
+      # target_hp_pct instead.
+      "spread_target_hp" => true,
+      # A knockout is a knockout: once lethal, the type-effectiveness term and the
+      # secondaries that only matter to a survivor stop counting, so accuracy decides
+      # between two kills. Fire Blast (85%) was beating Dragon Claw (100%) for the
+      # same KO purely on the super-effective bonus.
+      "lethal_flat"      => true,
+      # Charge a switch candidate that is dead before it moves. score_switch already
+      # computed the subtraction for preserve_low_hp_actor and never rejected on it.
+      "entry_death"      => true,
+      # Wish re-clicked with a Wish already pending. The adapter now reports
+      # PBEffects::Wish through effect_active, the same channel the screens use.
+      "wish_pending"     => true,
+      # first_setup was decided by a memory counter that apply_memory zeroes on any
+      # non-setup action, so a +2 sweeper that attacked once was "first setting up"
+      # again. Drive it off the stages the actor is actually carrying.
+      "setup_stage"      => true,
+      # Do not re-click a move that failed last turn against the same target. Reborn
+      # keeps the flag itself for Stomping Tantrum (PBEffects::Tantrum); this reads it.
+      "move_memory"      => true,
+      # Yawn into an already-drowsy target. Same bug class as 0.6.1's Leech Seed: the
+      # move writes an EFFECT, not a status condition, so pbCanSleep? answers "yes"
+      # about a target the engine will refuse (PokeBattle_MoveEffects.rb:249).
+      "yawn_gate"        => true
     }
 
     def self.config(overrides)
@@ -208,7 +243,12 @@ module PortableAI
     add(%w[TOXIC], ["status", "poison"])
     add(%w[POISONPOWDER], ["status", "poison", "powder"])
     add(%w[SPORE SLEEPPOWDER], ["status", "sleep", "powder"])
-    add(%w[HYPNOSIS DARKVOID YAWN], ["status", "sleep"])
+    add(%w[HYPNOSIS DARKVOID], ["status", "sleep"])
+    # Yawn puts the target to sleep NEXT turn by writing PBEffects::Yawn, so it fails
+    # against an already-drowsy target while pbCanSleep? still says yes. It carries its
+    # own tag purely so the adapter's status_blocked? can find it without a move-name
+    # lookup -- the same shape as "drain" on LEECHSEED below.
+    add(%w[YAWN], ["status", "sleep", "drowsy"])
     add(%w[CONFUSERAY SWAGGER FLATTER], ["status", "confuse"])
     add(%w[LEECHSEED], ["status", "drain"])
     add(%w[TAUNT ENCORE TORMENT DISABLE HEALBLOCK PSYCHICNOISE], ["disrupt"])
@@ -366,12 +406,32 @@ module PortableAI
     target = target_for(snapshot, action["target"])
     actor_hp = Model.number(actor["hp_pct"], 100.0)
     target_hp = target ? Model.number(target["hp_pct"], 100.0) : 100.0
+    # A spread move carries no registration target -- the adapter sets
+    # action["target"] = nil because there is no single battler to register against
+    # (Portable_AI_Adapter.rb:551) -- so target_for returns nil and this defaulted to a
+    # phantom 100% target. Earthquake and Lava Plume therefore NEVER reached `lethal`,
+    # at any target HP, and ko_never_lands could not fire for them either. The adapter
+    # exports the scoring target's own HP on every action (:638); read that instead.
+    if !target && config["spread_target_hp"] && !action["target_hp_pct"].nil?
+      target_hp = Model.number(action["target_hp_pct"], 100.0)
+    end
     damage = Model.number(action["expected_damage_pct"], 0.0)
     effectiveness = Model.number(action["effectiveness"], 1.0)
 
     if Model.truthy(action["immune"]) || (Model.truthy(action["damaging"]) && effectiveness <= 0)
       reasons << ["immune", HARD_REJECT]
       return HARD_REJECT
+    end
+
+    # A move the engine refused last turn against this same target will be refused
+    # again: the board has not moved. Reborn keeps the flag itself for Stomping
+    # Tantrum (PBEffects::Tantrum, PokeBattle_Battler.rb:5085) and the adapter reads it
+    # back on the action. Bisharp clicked a dead Sucker Punch three turns running with
+    # a guaranteed Knock Off KO one point behind (bulky_vs_offense 196613 t22-24), so
+    # this is deliberately larger than that gap and smaller than a kill call.
+    if config["move_memory"] && Model.truthy(action["failed_last_turn"])
+      out_score -= 200
+      reasons << ["failed_last_turn", -200]
     end
 
     lethal = false
@@ -457,7 +517,24 @@ module PortableAI
         reasons << ["priority_finisher", bonus]
       end
 
-      if effectiveness > 1
+      # Once the move kills, the type chart has already said everything it has to say:
+      # both kills remove the same battler, so the only thing left to choose on is
+      # which one lands. Fire Blast at 85% was beating Dragon Claw at 100% for the same
+      # KO on a 70-point super-effective bonus against a 45-point resist penalty
+      # (bulky_vs_offense 196613 t4: 649 against 555). flat_kill also drops the
+      # secondaries that only pay out on a survivor -- see side_effect_rules.
+      #
+      # NOT applied to a SPREAD action, which is a summary of several targets rather
+      # than one kill: its damage is the sum over the foes and its effectiveness is a
+      # standing measure of how much of the field the move resolves, which is exactly
+      # what choose_joint weighs it against. Dropping the term there cost Garchomp a
+      # double kill it had been finding since 0.4.0 -- d_spread_kills_both_preferred,
+      # caught by the corpus on the first 0.6.2 probe (Earthquake 740 -> 600, and the
+      # split-fire pair's coordination bonus then won by 66 points).
+      flat_kill = lethal && config["lethal_flat"] && !Model.truthy(action["spread"])
+      if flat_kill
+        reasons << ["lethal_flat", 0]
+      elsif effectiveness > 1
         bonus = 35 * effectiveness
         out_score += bonus
         reasons << ["super_effective", bonus]
@@ -468,7 +545,8 @@ module PortableAI
 
       if config["side_effects"]
         out_score = side_effect_rules(snapshot, actor, action, tags, target,
-                                      damage, lethal, faster, out_score, reasons)
+                                      damage, lethal, faster, out_score, reasons,
+                                      flat_kill)
       end
       if config["ability_rules"]
         out_score = damaging_ability_rules(action, target, lethal, out_score, reasons)
@@ -494,7 +572,13 @@ module PortableAI
         reasons << ["heal_under_lethal_threat", -80]
       end
     elsif tags.include?("delayed_heal")
-      if actor_hp >= 90
+      # Wish fails outright with a Wish already pending (PokeBattle_MoveEffects.rb:6084
+      # returns -1 and displays "But it failed!"). Same channel the screens use: the
+      # adapter reports PBEffects::Wish through effect_active.
+      if config["wish_pending"] && Model.truthy(action["effect_active"])
+        out_score -= 300
+        reasons << ["delayed_heal_pending", -300]
+      elsif actor_hp >= 90
         out_score -= 300
         reasons << ["delayed_heal_near_full", -300]
       elsif actor_hp <= 55
@@ -530,6 +614,17 @@ module PortableAI
 
     if tags.include?("setup")
       repeats = config["memory"] ? memory_count(snapshot, actor["index"], "setup") : 0
+      # The memory counter alone answers "did I set up on the PREVIOUS action", because
+      # apply_memory zeroes every counter but the one it just incremented
+      # (Portable_AI_Adapter.rb:1487). One attack in between and a +2 sweeper was
+      # "first setting up" all over again -- Heracross took a second Swords Dance at
+      # 31% HP that way (bulky_vs_offense 196613 t20). The stages the actor is standing
+      # in are the durable record of the same fact, and one setup move is worth about
+      # two stages (Swords Dance +2, Dragon Dance +1/+1, Calm Mind +1/+1).
+      if config["setup_stage"]
+        carried = Model.number(actor["positive_stage_total"], 0).to_i / 2
+        repeats = carried if carried > repeats
+      end
       if config["ability_rules"] && actor_ability(actor) == "CONTRARY"
         # Contrary turns every boost into a drop. Reborn does not have this row at all;
         # it is here because a Contrary user clicking Swords Dance is strictly harming
@@ -911,6 +1006,32 @@ module PortableAI
     if Model.number(actor["hp_pct"], 100) <= 20 && safe
       out_score += 80
       reasons << ["preserve_low_hp_actor", 80]
+    end
+    # The same subtraction, read the other way: a candidate that is dead before it acts
+    # is not a switch, it is a sacrifice, and score_switch computed this quantity for
+    # `safe` without ever rejecting on it. Mandibuzz sent a 58-HP Flygon into Stealth
+    # Rock plus a Rapid Spin; it died without moving and Mandibuzz walked back through
+    # the rocks (bulky_vs_balance 196613 t51).
+    #
+    # Charged on the MINIMUM damage roll, so only a candidate that dies on every roll
+    # pays, and charged rather than HARD_REJECTed so a forced replacement still ranks
+    # the least bad body instead of falling through to slot order.
+    #
+    # 500, not the ~300 the backlog entry proposed, and the corpus is why: on
+    # a_dying_switch_in_is_not_worth_sending the candidate scores 385.9 against a
+    # 59.8 move, so 300 left the corpse ahead by 26 points and the card failed on the
+    # build that was supposed to fix it. 500 is not a fitted number either -- it is
+    # what this scorer already pays for a knockout, and handing the opponent a free one
+    # is the same event seen from the other side.
+    if config["entry_death"] && config["entry_rules"] &&
+       action.key?("entry_damage_pct") && action.key?("incoming_damage_pct")
+      left = Model.number(action["candidate_hp_pct"], 100.0) -
+             Model.number(action["entry_damage_pct"], 0.0) -
+             Model.number(action["incoming_damage_pct"], 0.0) * MIN_DAMAGE_ROLL
+      if left <= 0
+        out_score -= 500
+        reasons << ["dies_on_entry", -500]
+      end
     end
     if config["ability_rules"] && actor_ability(actor) == "REGENERATOR" &&
        Model.number(actor["hp_pct"], 100) < 66
@@ -1527,8 +1648,12 @@ module PortableAI
   # Every per-move side effect that scales the damage the move already does. One pass,
   # one named reason per row that fires, so a trace says which table entry moved the
   # score.
+  # flat_kill (0.6.2, config["lethal_flat"]) drops the rows that only pay out if the
+  # target is still standing afterwards -- the secondary status/flinch/stat-drop, and
+  # the knocked item. The rows that survive it are the ones about whether the knockout
+  # HAPPENS or what it costs the actor: multi_hit versus Sturdy/Sash, recoil, drain.
   def self.side_effect_rules(snapshot, actor, action, tags, target, damage,
-                             lethal, faster, score, reasons)
+                             lethal, faster, score, reasons, flat_kill = false)
     chance = action.key?("effect_chance") ? Model.number(action["effect_chance"], 100.0) : nil
     kind = action["effect_kind"]
     kind = Effects.kind_of(tags, "secondary") if kind.nil?
@@ -1538,7 +1663,7 @@ module PortableAI
 
     # chance == 0 is the engine saying the secondary is negated outright (Sheer Force,
     # Shield Dust, Covert Cloak). No row fires, and the move is judged on damage alone.
-    if kind && !(chance && chance <= 0)
+    if kind && !(chance && chance <= 0) && !flat_kill
       m = secondary_multiplier(kind, action, actor, target, target_ability,
                                lethal, faster)
       if m != 1.0
@@ -1597,7 +1722,7 @@ module PortableAI
       end
     end
 
-    if tags.include?("item_removal") && target_item != ""
+    if tags.include?("item_removal") && target_item != "" && !flat_kill
       m = ITEM_REMOVAL_VALUE[target_item] || 1.0
       if m != 1.0
         delta = multiplier_delta(reduce_when_kills(m, lethal), lethal, damage)
@@ -1861,28 +1986,53 @@ module PortableAIRealidea
     [current, intended].max
   end
 
+  # Run-level config overrides, set from Data/ai_harness.txt by the gauntlet and the
+  # probe. Keys not named there keep their skill-derived or Model::DEFAULT_CONFIG value.
+  #
+  # Same contract as the Reborn adapter (:150-186): one installed build plays both
+  # sides of a policy A/B, and every gauntlet and probe record carries the overrides it
+  # ran under. Without this Realidea could not ablate a single core rule without a
+  # rebuild, which makes the two arms different artifacts.
+  def self.config_overrides
+    return {} if !defined?($PORTABLE_AI_CONFIG) || !$PORTABLE_AI_CONFIG.is_a?(Hash)
+    $PORTABLE_AI_CONFIG
+  end
+
+  # Whether one core config key is on for this run, for the handful of rules that live
+  # on THIS side of the boundary and so never see the config hash the core is handed.
+  # Same precedence as Model.config: a run-level override wins, otherwise the default.
+  def self.rule_enabled?(key)
+    overrides = config_overrides
+    return overrides[key] ? true : false if overrides.key?(key)
+    PortableAI::Model::DEFAULT_CONFIG[key] ? true : false
+  rescue
+    true
+  end
+
   def self.config_for(skill)
-    if skill >= PBTrainerAI.bestSkill
-      {
-        "deterministic" => true, "noise" => 0, "switching" => true,
-        "memory" => true, "coordination" => true, "knowledge" => "fair"
-      }
-    elsif skill >= PBTrainerAI.highSkill
-      {
-        "deterministic" => false, "noise" => 5, "switching" => true,
-        "memory" => true, "coordination" => true, "knowledge" => "fair"
-      }
-    elsif skill >= PBTrainerAI.mediumSkill
-      {
-        "deterministic" => false, "noise" => 12, "switching" => true,
-        "memory" => false, "coordination" => true, "knowledge" => "fair"
-      }
-    else
-      {
-        "deterministic" => false, "noise" => 25, "switching" => false,
-        "memory" => false, "coordination" => false, "knowledge" => "fair"
-      }
-    end
+    base =
+      if skill >= PBTrainerAI.bestSkill
+        {
+          "deterministic" => true, "noise" => 0, "switching" => true,
+          "memory" => true, "coordination" => true, "knowledge" => "fair"
+        }
+      elsif skill >= PBTrainerAI.highSkill
+        {
+          "deterministic" => false, "noise" => 5, "switching" => true,
+          "memory" => true, "coordination" => true, "knowledge" => "fair"
+        }
+      elsif skill >= PBTrainerAI.mediumSkill
+        {
+          "deterministic" => false, "noise" => 12, "switching" => true,
+          "memory" => false, "coordination" => true, "knowledge" => "fair"
+        }
+      else
+        {
+          "deterministic" => false, "noise" => 25, "switching" => false,
+          "memory" => false, "coordination" => false, "knowledge" => "fair"
+        }
+      end
+    base.merge(config_overrides)
   end
 
   def self.choose(battle, index)
@@ -1997,7 +2147,13 @@ module PortableAIRealidea
       "hp_pct" => percent(battler.hp, battler.totalhp),
       "status" => battler.status,
       "types" => [battler.type1, battler.type2],
-      "speed" => (battler.pbSpeed rescue battler.speed)
+      "speed" => battler_speed(battler),
+      # Switch scoring needs the foe's boost level and, unlike a move action, has no
+      # scoring target to read it from (core.rb foe_boost_total).
+      "positive_stages" => positive_stages(battler),
+      # Plain uppercase name, never a PBAbilities constant: the core matches it
+      # against its own tables.
+      "ability" => ability_key(battler)
     }
   end
 
@@ -2036,8 +2192,12 @@ module PortableAIRealidea
       "species" => battler.species,
       "hp_pct" => percent(battler.hp, battler.totalhp),
       "status" => battler.status,
+      "speed" => battler_speed(battler),
       "stages" => battler.stages.clone,
       "negative_stage_total" => negative_stages,
+      # 0.6.2: the durable record of "I have already set up", which the memory counter
+      # is not -- apply_memory zeroes it on any non-setup action.
+      "positive_stage_total" => positive_stages(battler),
       "incoming_damage_pct" => incoming,
       "threatened_lethal" => incoming >= percent(battler.hp, battler.totalhp),
       "no_effective_move" => no_effective,
@@ -2045,6 +2205,11 @@ module PortableAIRealidea
       "yawned" => safe_effect(battler, :Yawn, 0).to_i > 0,
       "residual_damage_pct" => residual,
       "trapped" => !has_legal_switch?(battle, index),
+      "ability" => ability_key(battler),
+      # Fake Out and First Impression are worth +115 on turn 0 and nothing after.
+      # Without this the core's turn_shape_rules fired every turn and the AI re-clicked
+      # a move the engine refuses (core.rb first_turn_hit).
+      "turncount" => (battler.turncount.to_i rescue 0),
       "actions" => actions
     }
   end
@@ -2104,6 +2269,7 @@ module PortableAIRealidea
     base = battle.pbGetMoveScore(move, battler, scoring_target, skill)
     effectiveness = type_effectiveness(battle, move, battler, scoring_target)
     tags = PortableAI::Effects.describe(move_id, [])
+    blocked = !move.pbIsDamaging? && status_blocked?(move, tags, battler, scoring_target)
     {
       "type" => "move",
       "actor_index" => battler.index,
@@ -2116,7 +2282,7 @@ module PortableAIRealidea
       "power" => move.basedamage,
       "priority" => move.priority,
       "effectiveness" => effectiveness,
-      "immune" => move.pbIsDamaging? && effectiveness <= 0,
+      "immune" => (move.pbIsDamaging? && effectiveness <= 0) || blocked,
       "expected_damage_pct" => rough_damage_pct(battle, move, battler, scoring_target, skill),
       "target_hp_pct" => (scoring_target ? percent(scoring_target.hp, scoring_target.totalhp) : nil),
       "tags" => tags,
@@ -2124,6 +2290,7 @@ module PortableAIRealidea
       "existing_layers" => existing_layers(battle, move_id, false),
       "max_layers" => max_layers(move_id),
       "own_hazard_layers" => own_hazard_layers(battle),
+      "target_positive_stages" => positive_stages(scoring_target),
       "effect_active" => effect_active?(battle, move_id, battler),
       "foe_reserves" => reserve_count(battle, battler.pbOppositeOpposing.index),
       "hazard_targets" => hazard_target_count(battle, move_id, battler.index),
@@ -2218,12 +2385,28 @@ module PortableAIRealidea
     1.0
   end
 
+  # Same base-damage preparation stock v16 does before it calls pbRoughDamage
+  # (085_PokeBattle_AI.rb:2802-2810): basedamage 1 is the "variable power" sentinel and
+  # scores as 60, and pbBetterBaseDamage resolves the ~30 function codes that compute
+  # their own power (Seismic Toss, Super Fang, Night Shade, Gyro Ball, Grass Knot...).
+  # Passing raw basedamage instead, as this adapter did through 0.1.0, priced every one
+  # of those at its sentinel.
   def self.rough_damage_pct(battle, move, attacker, target, skill)
     return 0.0 if !target || !move.pbIsDamaging? || move.basedamage <= 0
-    damage = battle.pbRoughDamage(move, attacker, target, skill, move.basedamage)
+    base = move.basedamage
+    base = 60 if base == 1
+    base = battle.pbBetterBaseDamage(move, attacker, target, skill, base) rescue base
+    damage = battle.pbRoughDamage(move, attacker, target, skill, base)
     percent(damage, target.totalhp)
   rescue
     0.0
+  end
+
+  def self.battler_speed(battler)
+    return nil if !battler
+    (battler.pbSpeed rescue battler.speed)
+  rescue
+    nil
   end
 
   def self.estimated_incoming_damage(battle, battler, foe_indices, skill)
@@ -2346,6 +2529,107 @@ module PortableAIRealidea
     0
   end
 
+  def self.positive_stages(battler)
+    return 0 if !battler
+    total = 0
+    battler.stages.each { |stage| total += stage if stage && stage > 0 }
+    total
+  rescue
+    0
+  end
+
+  # Universal facts about a NON-DAMAGING move that make it unusable, so the core can
+  # stop paying fresh_status +25 for a move the engine will refuse. Mirrors the Reborn
+  # adapter's status_blocked? (:1154-1204) against Realidea's own engine, which
+  # diverges in three places, each verified in 080_PokeBattle_Battler.rb:
+  #
+  # 1. Magic Bounce here bounces only moves carrying the Magic Coat flag (flag c,
+  #    082_PokeBattle_Move.rb:236) and is turned off by Mold Breaker (:2433). Reborn
+  #    reflects every status move and reads the partner's ability too; neither is true
+  #    in this engine, so neither is modelled.
+  # 2. Prankster is a PRIORITY MODIFIER ONLY here (084:1108, 080:2618). There is no
+  #    Dark-type immunity to it anywhere in the build, so the Reborn clause that skips
+  #    a Prankster status move into a Dark type is deliberately absent -- modelling it
+  #    would make the AI refuse a move that lands.
+  # 3. The pbCan*? predicates take the ATTACKER first (081:5-553), not just a
+  #    showMessages flag.
+  def self.status_blocked?(move, tags, battler, target)
+    return false if !target
+    return false if !tags.include?("status")
+    return true if magic_bounced?(move, battler, target)
+    # Thunder Wave into Ground, Toxic into Steel: a typed status move is refused by the
+    # engine's own type verdict, which the damaging-move `immune` path never saw
+    # because a status move has no base damage.
+    if tags.include?("typed_status")
+      return true if type_effectiveness_raw(move, battler, target) <= 0
+    end
+    # Leech Seed sets PBEffects::LeechSeed, not a status CONDITION, so no pbCan*?
+    # predicate sees it and a seeded foe looked fresh every turn. The three failure
+    # conditions are PokeBattle_Move_0DC#pbEffect (083:6296-6310) exactly.
+    if tags.include?("drain")
+      return true if safe_effect(target, :LeechSeed, -1).to_i >= 0
+      return true if safe_effect(target, :Substitute, 0).to_i > 0
+      return true if battler_has_type?(target, :GRASS)
+    end
+    # Yawn is the same shape one move over: tagged ["status", "sleep"], so the engine
+    # check below is pbCanSleep?, which answers about the status CONDITION and says yes
+    # about a target that is merely drowsy. The engine's second guard is a separate
+    # line, PokeBattle_Move_004#pbEffect (083:189).
+    if tags.include?("drowsy") && rule_enabled?("yawn_gate")
+      return true if safe_effect(target, :Yawn, 0).to_i > 0
+    end
+    verdict = engine_can_status?(tags, battler, target)
+    return !verdict if !verdict.nil?
+    # Rescue path for an engine that does not expose the predicates.
+    return true if tags.include?("burn") && battler_has_type?(target, :FIRE)
+    return true if tags.include?("poison") &&
+                   (battler_has_type?(target, :POISON) || battler_has_type?(target, :STEEL))
+    return true if tags.include?("powder") && battler_has_type?(target, :GRASS)
+    return true if tags.include?("paralyze") && battler_has_type?(target, :ELECTRIC)
+    false
+  rescue
+    false
+  end
+
+  # true/false from the engine, or nil when this move applies no status the engine can
+  # be asked about (so the caller falls through to the type list). showMessages is
+  # false: these predicates print "But it failed!" otherwise.
+  def self.engine_can_status?(tags, battler, target)
+    return target.pbCanBurn?(battler, false)     if tags.include?("burn")
+    return target.pbCanPoison?(battler, false)   if tags.include?("poison")
+    return target.pbCanParalyze?(battler, false) if tags.include?("paralyze")
+    return target.pbCanSleep?(battler, false)    if tags.include?("sleep")
+    return target.pbCanFreeze?(battler, false)   if tags.include?("freeze")
+    return target.pbCanConfuse?(battler, false)  if tags.include?("confuse")
+    nil
+  rescue
+    nil
+  end
+
+  def self.magic_bounced?(move, battler, target)
+    return false if !(move.canMagicCoat? rescue false)
+    return false if (battler.hasMoldBreaker rescue false)
+    ability_key(target) == "MAGICBOUNCE"
+  rescue
+    false
+  end
+
+  # The engine's raw type verdict on the 8-is-neutral scale, for a move with no base
+  # damage (type_effectiveness returns a flat 1.0 for those).
+  def self.type_effectiveness_raw(move, attacker, target)
+    move.pbTypeModifier(move.type, attacker, target).to_i
+  rescue
+    8
+  end
+
+  def self.battler_has_type?(battler, symbol)
+    battler.pbHasType?(symbol)
+  rescue
+    type = (PBTypes.const_get(symbol) rescue nil)
+    return false if type.nil?
+    battler.type1 == type || battler.type2 == type
+  end
+
   def self.safe_effect(battler, name, fallback)
     return fallback if !PBEffects.const_defined?(name.to_s)
     value = PBEffects.const_get(name.to_s)
@@ -2360,6 +2644,34 @@ module PortableAIRealidea
     side.effects[value]
   rescue
     fallback
+  end
+
+  # Ability and item names as uppercase strings, resolved through the CONSTANT tables
+  # rather than through PBAbilities.getName / PBItems.getName -- getName goes to the
+  # compiled message file, which in this build is Spanish, and returns an empty string
+  # for every id in the probe/gauntlet environment that has no message data loaded.
+  # The constants come from Data/Constants.rxdata and are always there.
+  def self.ability_key(battler_or_pokemon)
+    value = (battler_or_pokemon.ability rescue nil)
+    return nil if value.nil? || value == 0
+    constant_key(PBAbilities, :@ability_keys, value)
+  rescue
+    nil
+  end
+
+  def self.constant_key(namespace, cache_name, value)
+    cache = instance_variable_get(cache_name)
+    if !cache
+      cache = {}
+      namespace.constants.each do |name|
+        id = namespace.const_get(name) rescue nil
+        cache[id] = name.to_s.upcase if id.is_a?(Integer)
+      end
+      instance_variable_set(cache_name, cache)
+    end
+    cache[value]
+  rescue
+    nil
   end
 
   def self.move_key(id)
@@ -2435,6 +2747,95 @@ module PortableAIRealidea
     battle.instance_variable_set(:@portable_ai_memory, memory)
   end
 
+  # Run-level knobs read from Data/ai_harness.txt, in the same key=value format the
+  # Reborn harness uses (AI_Harness.rb:51-64). It lives HERE rather than in the
+  # gauntlet because the probe needs it too and the probe is a separate script section
+  # that loads earlier -- and because the thing that consumes $PORTABLE_AI_CONFIG is
+  # this module, not the benchmark that happens to set it.
+  module Harness
+    FILE = "Data/ai_harness.txt"
+
+    # Core config keys a run may override, with the type each parses to. Booleans
+    # become real true/false: the core tests them with plain Ruby truthiness, and the
+    # string "false" is truthy. Same nineteen keys as the Reborn gauntlet
+    # (Portable_AI_Gauntlet.rb:37-70), so an ablation reads identically in both studies.
+    CONFIG_OVERRIDE_KEYS = [
+      ["switch_risk_weight", :float],
+      ["accuracy_weight",    :float],
+      ["heal_gate",          :boolean],
+      ["priority_gate",      :boolean],
+      ["self_cost",          :boolean],
+      ["strict_threat",      :boolean],
+      # 0.5.0 tables. All four false is 0.4.1, which is the control run.
+      ["side_effects",       :boolean],
+      ["ability_rules",      :boolean],
+      ["entry_rules",        :boolean],
+      ["format_rules",       :boolean],
+      # 0.6.0. damage_race=false is the control for the damage-race batch.
+      ["damage_race",        :boolean],
+      ["damage_race_switch", :boolean],
+      # 0.6.2 bugfix batch, one key each so the arms can be ablated singly.
+      ["spread_target_hp",   :boolean],
+      ["lethal_flat",        :boolean],
+      ["entry_death",        :boolean],
+      ["wish_pending",       :boolean],
+      ["setup_stage",        :boolean],
+      ["move_memory",        :boolean],
+      ["yawn_gate",          :boolean]
+    ]
+
+    def self.config
+      cfg = {}
+      return cfg if !File.exist?(FILE)
+      File.open(FILE, "rb") do |file|
+        file.read.split(/[\r\n]+/).each do |line|
+          line = line.strip
+          next if line.empty? || line[0, 1] == "#"
+          key, value = line.split("=", 2)
+          cfg[key.to_s.strip] = value.to_s.strip if key && value
+        end
+      end
+      cfg
+    rescue
+      {}
+    end
+
+    def self.bool(cfg, key, fallback)
+      return fallback if !cfg[key] || cfg[key] == ""
+      ["true", "1", "yes", "on"].include?(cfg[key].to_s.downcase)
+    end
+
+    def self.list(cfg, key, fallback)
+      return fallback if !cfg[key] || cfg[key] == ""
+      out = []
+      cfg[key].to_s.split(",").each do |part|
+        part = part.strip
+        out << part.to_i if part != ""
+      end
+      out.empty? ? fallback : out
+    end
+
+    def self.config_overrides_from(cfg)
+      overrides = {}
+      CONFIG_OVERRIDE_KEYS.each do |key, kind|
+        value = cfg[key]
+        next if !value || value == ""
+        overrides[key] = (kind == :float) ? value.to_f : (value == "true")
+      end
+      overrides
+    end
+
+    # Install this run's overrides for the duration of the block and hand the block the
+    # raw config so it can read its own non-core keys (trace, seeds, append).
+    def self.with_config
+      cfg = config
+      $PORTABLE_AI_CONFIG = config_overrides_from(cfg)
+      yield cfg
+    ensure
+      $PORTABLE_AI_CONFIG = nil
+    end
+  end
+
   def self.log_error(error, index)
     signature = "#{error.class}: #{error.message}"
     return if defined?(@last_error) && @last_error == signature
@@ -2486,6 +2887,15 @@ end
 # Create Data/ai_gauntlet.txt and launch the game. The existing AIProbe boot branch
 # delegates here, runs stock and Portable AI against the same teams/seeds, and writes
 # Data/ai_gauntlet_results.ndjson without opening a save file.
+#
+# Data/ai_harness.txt (optional) sets run-level knobs, one key=value per line:
+#   any of PortableAIRealidea::Harness::CONFIG_OVERRIDE_KEYS -- override that core
+#     config key for the whole run, so a policy A/B is two runs of one build rather
+#     than two builds. Whatever is set is stamped on every record.
+#   trace=true   -- record the per-turn portable decision trace (default false; it was
+#                   unconditional through 0.1.0 and dominated the file size)
+#   seeds=a,b,c  -- replace the five default seeds
+#   append=true  -- append to the results file instead of truncating it
 
 class PortableAIGauntletScene < AIProbeNullScene
   def pbStartBattle(battle)
@@ -2583,7 +2993,14 @@ module PortableAIGauntlet
   end
 
   def self.run
+    PortableAIRealidea::Harness.with_config { |cfg| run_with(cfg) }
+  end
+
+  def self.run_with(cfg)
     AIProbe.bootstrap
+    trace = PortableAIRealidea::Harness.bool(cfg, "trace", false)
+    seeds = PortableAIRealidea::Harness.list(cfg, "seeds", SEEDS)
+    mode_flag = PortableAIRealidea::Harness.bool(cfg, "append", false) ? "ab" : "wb"
     old_trainer = $Trainer
     old_enabled = (defined?($PORTABLE_AI_ENABLED) ? $PORTABLE_AI_ENABLED : nil)
     counts = {
@@ -2591,11 +3008,11 @@ module PortableAIGauntlet
       "portable" => { "wins" => 0, "losses" => 0, "draws" => 0, "errors" => 0, "turns" => 0 }
     }
 
-    File.open(OUT, "wb") do |file|
+    File.open(OUT, mode_flag) do |file|
       MATCHUPS.each do |matchup|
-        SEEDS.each do |seed|
+        seeds.each do |seed|
           ["stock", "portable"].each do |mode|
-            record = run_one(matchup, seed, mode)
+            record = run_one(matchup, seed, mode, trace)
             bucket = counts[mode]
             bucket["turns"] += record["turns"].to_i
             case record["result"]
@@ -2627,7 +3044,7 @@ module PortableAIGauntlet
     $PORTABLE_AI_ENABLED = old_enabled if defined?(old_enabled)
   end
 
-  def self.run_one(matchup, seed, mode)
+  def self.run_one(matchup, seed, mode, trace = false)
     id, left_name, right_name, doubles = matchup
     left_trainer = make_trainer("Stock #{left_name}")
     right_trainer = make_trainer("#{mode} #{right_name}")
@@ -2642,7 +3059,7 @@ module PortableAIGauntlet
     battle.debug = true
     battle.items = []
     battle.instance_variable_set(:@portable_ai_gauntlet, true)
-    battle.instance_variable_set(:@portable_ai_decision_trace, [])
+    battle.instance_variable_set(:@portable_ai_decision_trace, trace ? [] : nil)
 
     $Trainer = left_trainer
     $PORTABLE_AI_ENABLED = (mode == "portable")
@@ -2660,8 +3077,15 @@ module PortableAIGauntlet
       "result" => result,
       "turns" => battle.turncount
     }
+    # Stamped on EVERY arm, not just the portable one: a stock record is only meaningful
+    # as the paired baseline of the run it came from, and a readout rendered from a
+    # stale baseline is the failure this stamp exists to make visible.
+    record["portable_version"] = PortableAI::VERSION if defined?(PortableAI::VERSION)
     if mode == "portable"
-      record["trace"] = battle.instance_variable_get(:@portable_ai_decision_trace)
+      overrides = PortableAIRealidea.config_overrides
+      record["config_overrides"] = overrides if !overrides.empty?
+      captured = battle.instance_variable_get(:@portable_ai_decision_trace)
+      record["trace"] = captured if captured
     end
     record
   rescue Exception => error
@@ -2673,7 +3097,8 @@ module PortableAIGauntlet
       "result" => "error",
       "turns" => 0,
       "error" => "#{error.class}: #{error.message}",
-      "where" => (error.backtrace ? error.backtrace[0, 6].join(" | ") : nil)
+      "where" => (error.backtrace ? error.backtrace[0, 6].join(" | ") : nil),
+      "portable_version" => (defined?(PortableAI::VERSION) ? PortableAI::VERSION : nil)
     }
   end
 
