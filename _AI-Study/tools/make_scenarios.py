@@ -2540,80 +2540,33 @@ CORPUS_064 = [
 # ---------------------------------------------------------------------------
 # 0.6.5 -- the party x party damage matrix and its two consumers.
 #
-# REALIDEA ONLY. Both rules read snapshot["matrix"], which only the Realidea adapter
-# builds; on Reborn they are inert by construction and these cards would grade a build
-# against a rule it does not have. `engine: 'realidea'` keeps them out of the Reborn
-# corpus, printed at generation time rather than skipped in silence.
+# NO CARDS, and that is a finding rather than an omission. Four were written and all
+# four were dropped after the probe measured them, because none could do the one thing
+# a card has to do: FAIL with its key off and PASS with it on.
 #
-# Each card has to FAIL with its key off and pass with it on -- that pair is what
-# makes it evidence rather than decoration -- so the numbers below are tuned against
-# the probe's own matrix verdicts and rankings, not calculated on paper. That is the
-# 0.6.4 lesson (PORTABLE-AI-REALIDEA.md, "Corpus tuning note"): this engine's chart
-# has Steel resisting Dark and its damage rolls differ from Reborn's by up to half.
-CORPUS_065 = [
-    # 1. The shadow case, posed as a card. Stock spent its only answer to their Scizor
-    #    into an Azumarill it loses to (team4_vs_team1 130363, stock arm, a 19-turn
-    #    loss). The probe cannot pose a post-KO replacement, so the reason to leave is
-    #    the same Yawn device the 0.6.4 card uses: Zapdos is drowsy and both bench
-    #    bodies are legal. Magnezone loses to the Heatran in front and is the only
-    #    thing here that beats their benched Gyarados; Slowbro beats the Heatran and
-    #    answers nothing else. 0.6.4 sends Magnezone.
-    ('the_only_answer_to_a_bench_foe_is_not_spent_into_a_foe_it_loses_to', 0,
-     mon('ZAPDOS', 50, ['DISCHARGE', 'HEATWAVE'], effects={'yawn': 2}),
-     mon('HEATRAN', 50, ['FIREBLAST', 'EARTHPOWER'], ability='FLASHFIRE'),
-     [('must_switch_to', 'SLOWBRO')],
-     [mon('MAGNEZONE', 50, ['THUNDERBOLT', 'FLASHCANNON', 'VOLTSWITCH', 'SUBSTITUTE'],
-          ability='MAGNETPULL'),
-      mon('SLOWBRO', 50, ['SCALD', 'PSYCHIC', 'SLACKOFF', 'CALMMIND'],
-          ability='REGENERATOR')],
-     {'engine': 'realidea',
-      'player_bench': [mon('GYARADOS', 50, ['WATERFALL', 'EARTHQUAKE', 'ICEFANG',
-                                            'DRAGONDANCE'], ability='INTIMIDATE')]}),
-
-    # 2. The reserve half of the same rule, and the case it was written for: a forced
-    #    choice between two bodies that BOTH handle what is in front. Tyranitar and
-    #    Slowbro each beat the Heatran; only Tyranitar beats their benched Latias. The
-    #    turn does not need Tyranitar in particular, so it is kept.
-    ('a_forced_choice_keeps_the_body_that_is_the_only_answer_later', 0,
-     mon('ZAPDOS', 50, ['DISCHARGE', 'HEATWAVE'], effects={'yawn': 2}),
-     mon('HEATRAN', 50, ['FIREBLAST', 'EARTHPOWER'], ability='FLASHFIRE'),
-     [('must_switch_to', 'SLOWBRO')],
-     [mon('TYRANITAR', 50, ['STONEEDGE', 'CRUNCH', 'PURSUIT', 'FIREPUNCH'],
-          ability='SANDSTREAM'),
-      mon('SLOWBRO', 50, ['SCALD', 'PSYCHIC', 'SLACKOFF', 'CALMMIND'],
-          ability='REGENERATOR')],
-     {'engine': 'realidea',
-      'player_bench': [mon('LATIAS', 50, ['DRACOMETEOR', 'PSYSHOCK', 'ROOST',
-                                          'HEALINGWISH'], ability='LEVITATE')]}),
-
-    # 3. A boost is worth the cells it flips. Scizor at +2 stops losing to the bodies
-    #    on their bench, and the Clefable in front gives it the turn to buy them.
-    ('a_boost_that_flips_the_bench_is_worth_the_turn', 0,
-     mon('SCIZOR', 50, ['BUGBITE', 'BULLETPUNCH', 'SWORDSDANCE', 'ROOST'],
-         ability='TECHNICIAN'),
-     mon('CLEFABLE', 50, ['MOONBLAST', 'SOFTBOILED', 'CALMMIND', 'THUNDERWAVE'],
-         ability='MAGICGUARD'),
-     [('must_choose_move_in', ['SWORDSDANCE'])],
-     [],
-     {'engine': 'realidea',
-      'player_bench': [mon('LATIAS', 50, ['DRACOMETEOR', 'PSYSHOCK', 'ROOST'],
-                           ability='LEVITATE'),
-                       mon('TYRANITAR', 50, ['STONEEDGE', 'CRUNCH', 'PURSUIT'],
-                           ability='SANDSTREAM')]}),
-    # The control, and the whole point of the rule: the same boost against a party it
-    # changes nothing about. Skarmory walls Scizor at any Attack stage and Heatran
-    # removes it whatever it is holding, so the flat 55 was paying for a wasted turn.
-    ('a_boost_that_flips_nothing_is_not_a_free_55', 0,
-     mon('SCIZOR', 50, ['BUGBITE', 'BULLETPUNCH', 'SWORDSDANCE', 'ROOST'],
-         ability='TECHNICIAN'),
-     mon('SKARMORY', 50, ['BRAVEBIRD', 'ROOST', 'SPIKES', 'WHIRLWIND'],
-         ability='STURDY'),
-     [('must_not_choose_move', 'SWORDSDANCE')],
-     [],
-     {'engine': 'realidea',
-      'player_bench': [mon('HEATRAN', 50, ['FIREBLAST', 'EARTHPOWER', 'TOXIC'],
-                           ability='FLASHFIRE')]}),
-]
+#   * The two sole_answer cards could not be posed. Every lever that makes a body lose
+#     its race against the foe in front -- taking more per hit, needing more hits --
+#     is a lever the 0.6.4 switch terms already read and already punish
+#     (entry_incoming_damage, the switchin_race band, matchup). So at a single probe
+#     position the rule almost always agrees with the scoring it is refining, and the
+#     cases where it disagrees are the ones the 0.6.4 shadow trace shows: several
+#     candidates inside twenty points of each other, where which body is worth keeping
+#     is a fact about the NEXT four turns. The probe poses one turn.
+#   * The two setup cards died to the same arithmetic from the other side. A setup
+#     move's engine base sits ~110 above its attacks on the boards where the boost is
+#     interesting, so withholding or adding the flat 55 cannot move the pick there,
+#     and on the boards where 55 IS the margin the boost flips nothing.
+#
+# What pins these two rules instead: fourteen core unit tests and twelve adapter tests
+# (both directions each), the tier suite measured per consumer against a control that
+# reproduces 0.6.4 battle for battle, and the readouts -- `sole answer to X` on the
+# candidate line and the verdict grid under every decision, which is how both of the
+# battles this version gained were read. See PORTABLE-AI-REALIDEA.md, "0.6.5".
+#
+# A card that holds this would need the probe to pose a two-body choice where the
+# 0.6.4 terms are within 150 points AND the matrix verdicts differ -- worth building,
+# and it is the first item of 0.6.6 rather than something to fake here.
+CORPUS_065 = []
 
 CORPUS = (CORPUS_V1 + CORPUS_V2 + CORPUS_V3 + CORPUS_V4 + CORPUS_V5
           + CORPUS_V6 + CORPUS_V7 + CORPUS_V8 + CORPUS_V9 + CORPUS_V10

@@ -190,12 +190,21 @@ module PortableAI
       # dirty rows only.
       "party_matrix"          => true,
       # The only answer to a foe still on their bench is not a body to spend in front
-      # of a foe it loses to (Core.sole_answer_value). OFF per the convention: an
-      # unproven rule ships off and the paired gauntlet decides.
-      "sole_answer"           => false,
+      # of a foe it loses to (Core.sole_answer_value). Shipped ON, on the paired
+      # gauntlet: 84-26-4 against the control's 83-28-4 over 240 tier battles, gained
+      # 2 and lost 0, with the stock arm bit-identical. Two battles is weak evidence
+      # (p = 0.48) and both are in gen6ou_a, but the disposition rule is the one
+      # escape_wall_margin shipped under in 0.6.4 at +1/-0, and Reborn exports no
+      # matrix, so this cannot reach the other study at all.
+      "sole_answer"           => true,
       # The first boost is worth the cells it flips across their party, instead of a
-      # flat 55 (Core.setup_matrix_value). OFF for the same reason.
-      "setup_matrix"          => false
+      # flat 55 (Core.setup_matrix_value). Also ON: 84-27-4, gained 1 lost 0 -- but
+      # only after the tier run found the budget test refusing a boost on a TIE and
+      # losing two battles for it. As first written it measured 82-29-4, gained 1 lost
+      # 2. The rule that survived is the narrow one: refuse only what is strictly
+      # unaffordable, and where there is nothing better to say than the flat 55, say
+      # nothing.
+      "setup_matrix"          => true
     }
 
     def self.config(overrides)
@@ -1802,7 +1811,9 @@ module PortableAI
   #
   # NOT in the cells, on purpose: HP (this layer derives the hit counts from the
   # side tables' current hp_pct, so a verdict decays as a body is chipped),
-  # Intimidate, the Choice lock, and entry hazards. The 0.6.4 switch estimators
+  # Intimidate, the Choice lock, entry hazards, and PRIORITY -- a cell is a damage
+  # number, and damage_race is the thing that orders the final hit, so a body that
+  # wins on Bullet Punch reads here as losing. The 0.6.4 switch estimators
   # still carry those and still feed candidate_race; the matrix is the wide, thin
   # view, not a replacement for the narrow, thick one. Defender-side screens ARE in
   # the numbers, because the engine's own damage estimate reads them.
@@ -2090,13 +2101,25 @@ module PortableAI
     end
     return nil if transformed.empty?
 
-    # THE BUDGET IN FRONT. The boost is only worth grading if the actor lives to use
-    # it: one turn for the setup, then the hits the boosted attack still needs, all
-    # inside what the foe needs to remove it. `theirs` prefers the actor's real
-    # per-foe threat (damage_race, which carries residual, the priority order and the
-    # Choice lock) over the cell, which carries none of those; it is deliberately the
-    # UNBOOSTED number, because the defensive half of a boost cannot be spent on the
-    # turn it is bought.
+    # THE BUDGET IN FRONT: does the actor live to spend what it is buying? One turn for
+    # the setup, then the hits the boosted attack still needs, against what the foe
+    # needs to remove it. `theirs` prefers the actor's real per-foe threat
+    # (damage_race, which carries residual, the priority order and the Choice lock)
+    # over the cell, which carries none of those; it is deliberately the UNBOOSTED
+    # number, because the defensive half of a boost cannot be spent on the turn it is
+    # bought.
+    #
+    # Refuses only what it can actually see is unaffordable -- STRICTLY more turns than
+    # the foe needs. A tie is not a refusal, and the 0.6.5 tier run is why: both
+    # battles this rule lost were a boost declined at exactly `post + 1 == theirs`.
+    # Scizor's Swords Dance in front of a Metagross it was winning against on Bullet
+    # Punch priority (team2_vs_team1 262147 t2 -- the cells carry no priority term, so
+    # the matrix reads that race as lost), and Clefable's Calm Mind against a Gliscor
+    # at 76% (team3_vs_team1 104729 t52). In both, withholding the flat 55 handed the
+    # turn to an attack and lost a battle 0.6.4 won. The genuinely dangerous boards --
+    # the 2HKO, the low HP, the lethal threat -- are the four safety branches above,
+    # which run first and are untouched; this test is only here for "you die before
+    # you can use it".
     active.each do |foe_slot, target|
       cell = transformed[foe_slot]
       return { "value" => 0, "reason" => "setup_no_budget" } if cell.nil?
@@ -2109,28 +2132,46 @@ module PortableAI
       end
       next if theirs.nil?           # nothing of theirs gets through: the turn is free
       post = hits_needed(foe_hp, Model.number(cell["out"], 0.0)) || RACE_MAX_HITS
-      next if post + 1 < theirs
-      next if post + 1 == theirs && cell["faster"] == true
-      return { "value" => 0, "reason" => "setup_no_budget" }
+      return { "value" => 0, "reason" => "setup_no_budget" } if post + 1 > theirs
     end
 
     # WHAT IT FLIPS, over their whole live party. A body that stops losing is the
     # win; a body that stops losing but only reaches a stall is worth less and still
     # worth something, because a stall is a body their sweeper has to answer.
+    #
+    # Three answers, not two, and the middle one is why. A boost that flips nothing
+    # but still shortens a race the actor was already winning is NOT worthless -- the
+    # probe said so: Heracross at 45% in front of a Shuckle it beats either way halves
+    # its hit count with Swords Dance, and a rule that paid 0 there dropped the boost
+    # behind Close Combat and broke `an_unboosted_sweeper_still_sets_up`, a card that
+    # has held since 0.4.0. So this rule speaks only where it has something to say:
+    # it pays for flips, it refuses a boost that moves no number anywhere, and in
+    # between it returns nil and the flat first_setup 55 stands exactly as at 0.6.4.
+    #
+    # One flip is worth 55 on purpose -- the same as the flat bonus it replaces, which
+    # is the only calibration point this scorer has for "a boost was worth the turn".
     value = 0
+    changed = false
     transformed.each do |foe_slot, cell|
-      before = matrix_verdict(snapshot, own_slot, foe_slot)
-      next if before.nil? || before == "W"
+      base = matrix_cell(snapshot, own_slot, foe_slot)
       foe = matrix_entry(m["foe"], foe_slot)
-      after = cell_verdict(cell, own_hp, Model.number(foe["hp_pct"], 100.0))
-      next if after.nil?
+      next if base.nil? || foe.nil?
+      foe_hp = Model.number(foe["hp_pct"], 100.0)
+      changed = true if matrix_hits(cell, own_hp, foe_hp) !=
+                        matrix_hits(base, own_hp, foe_hp)
+      before = cell_verdict(base, own_hp, foe_hp)
+      after = cell_verdict(cell, own_hp, foe_hp)
+      next if before.nil? || after.nil? || before == "W"
       if after == "W"
         value += SETUP_FLIP_TO_WIN
       elsif before == "L" && after == "S"
         value += SETUP_FLIP_TO_STALL
       end
     end
-    return { "value" => 0, "reason" => "setup_no_flip" } if value <= 0
+    if value <= 0
+      return nil if changed
+      return { "value" => 0, "reason" => "setup_no_flip" }
+    end
     value = SETUP_FLIP_CAP if value > SETUP_FLIP_CAP
     { "value" => value, "reason" => "setup_flips" }
   end
@@ -3131,7 +3172,8 @@ module PortableAIRealidea
     }
     # The forced-switch consumer needs the same grid the voluntary one reads: this is
     # the decision the sole-answer rule was written for.
-    snapshot["matrix"] = party_matrix(battle, index, foe_indices, skill) if rule_enabled?("party_matrix")
+    snapshot["matrix"] = party_matrix(battle, index, foe_indices, skill) if
+      matrix_wanted?(battle)
     plan = PortableAI.plan(snapshot, config_for(skill), BattleRNG.new(battle))
     chosen = nil
     (plan["actions"] || []).each do |action|
@@ -3397,11 +3439,14 @@ module PortableAIRealidea
       "targets" => targets,
       "memory" => memory
     }
-    # 0.6.5. Both parties, priced against each other. Absent when the key is off, and
-    # every core rule that reads it is inert without it.
-    if rule_enabled?("party_matrix")
-      snapshot["matrix"] = party_matrix(battle, indices[0], foe_indices, skill)
-    end
+    # 0.6.5. Both parties, priced against each other. Absent when the key is off or
+    # when nothing on this run would read it, and every core rule that reads it is
+    # inert without it.
+    # The key is always present, nil included: "the core reads this" is a contract
+    # (test_realidea_adapter.rb TOP_LEVEL_KEYS), and nil is what every rule that
+    # reads it is written to go inert on.
+    snapshot["matrix"] = matrix_wanted?(battle) ?
+                         party_matrix(battle, indices[0], foe_indices, skill) : nil
     [snapshot, skill]
   end
 
@@ -3902,6 +3947,28 @@ module PortableAIRealidea
   # and a turn that changes nothing but HP costs nothing at all. For comparison,
   # switch_actions already spends about ten fakes and forty calls on every decision.
   MATRIX_VERSION = 1
+
+  # WHETHER TO BUILD IT AT ALL. `party_matrix` says the matrix MAY be built; this says
+  # anything would read it if it were.
+  #
+  # Measured on a 60-battle tier set with the consumers off and no trace: 57.2 s
+  # against 72.6 s, so the grid costs about 27% of decision wall time. Both consumers
+  # ship on, so the shipped default does pay it -- but an ABLATION arm with them off
+  # would otherwise pay it for a grid that is never printed and never scored, and so
+  # would every battle of a build whose defaults are later turned back off. The build
+  # follows its readers: either consumer, or a run that is recording a trace (the
+  # gauntlet's decision trace, the shadow observer, the probe). Turning party_matrix
+  # off still forces it off everywhere, which is what the control run needs.
+  def self.matrix_wanted?(battle)
+    return false if !rule_enabled?("party_matrix")
+    return true if rule_enabled?("sole_answer") || rule_enabled?("setup_matrix")
+    return true if battle.instance_variable_get(:@portable_ai_decision_trace)
+    return true if battle.instance_variable_get(:@portable_ai_shadow_trace)
+    return true if defined?($aiprobe) && $aiprobe
+    false
+  rescue
+    false
+  end
 
   # The whole field, or nil when the key is off or the engine refuses. Cached on the
   # battle object against a per-slot signature; clear_cache deliberately leaves it

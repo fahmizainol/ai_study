@@ -460,7 +460,8 @@ module PortableAIRealidea
     }
     # The forced-switch consumer needs the same grid the voluntary one reads: this is
     # the decision the sole-answer rule was written for.
-    snapshot["matrix"] = party_matrix(battle, index, foe_indices, skill) if rule_enabled?("party_matrix")
+    snapshot["matrix"] = party_matrix(battle, index, foe_indices, skill) if
+      matrix_wanted?(battle)
     plan = PortableAI.plan(snapshot, config_for(skill), BattleRNG.new(battle))
     chosen = nil
     (plan["actions"] || []).each do |action|
@@ -726,11 +727,14 @@ module PortableAIRealidea
       "targets" => targets,
       "memory" => memory
     }
-    # 0.6.5. Both parties, priced against each other. Absent when the key is off, and
-    # every core rule that reads it is inert without it.
-    if rule_enabled?("party_matrix")
-      snapshot["matrix"] = party_matrix(battle, indices[0], foe_indices, skill)
-    end
+    # 0.6.5. Both parties, priced against each other. Absent when the key is off or
+    # when nothing on this run would read it, and every core rule that reads it is
+    # inert without it.
+    # The key is always present, nil included: "the core reads this" is a contract
+    # (test_realidea_adapter.rb TOP_LEVEL_KEYS), and nil is what every rule that
+    # reads it is written to go inert on.
+    snapshot["matrix"] = matrix_wanted?(battle) ?
+                         party_matrix(battle, indices[0], foe_indices, skill) : nil
     [snapshot, skill]
   end
 
@@ -1231,6 +1235,28 @@ module PortableAIRealidea
   # and a turn that changes nothing but HP costs nothing at all. For comparison,
   # switch_actions already spends about ten fakes and forty calls on every decision.
   MATRIX_VERSION = 1
+
+  # WHETHER TO BUILD IT AT ALL. `party_matrix` says the matrix MAY be built; this says
+  # anything would read it if it were.
+  #
+  # Measured on a 60-battle tier set with the consumers off and no trace: 57.2 s
+  # against 72.6 s, so the grid costs about 27% of decision wall time. Both consumers
+  # ship on, so the shipped default does pay it -- but an ABLATION arm with them off
+  # would otherwise pay it for a grid that is never printed and never scored, and so
+  # would every battle of a build whose defaults are later turned back off. The build
+  # follows its readers: either consumer, or a run that is recording a trace (the
+  # gauntlet's decision trace, the shadow observer, the probe). Turning party_matrix
+  # off still forces it off everywhere, which is what the control run needs.
+  def self.matrix_wanted?(battle)
+    return false if !rule_enabled?("party_matrix")
+    return true if rule_enabled?("sole_answer") || rule_enabled?("setup_matrix")
+    return true if battle.instance_variable_get(:@portable_ai_decision_trace)
+    return true if battle.instance_variable_get(:@portable_ai_shadow_trace)
+    return true if defined?($aiprobe) && $aiprobe
+    false
+  rescue
+    false
+  end
 
   # The whole field, or nil when the key is off or the engine refuses. Cached on the
   # battle object against a per-slot signature; clear_cache deliberately leaves it

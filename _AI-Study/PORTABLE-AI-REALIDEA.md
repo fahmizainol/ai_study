@@ -66,7 +66,7 @@ yawn_gate=false
 | `spread_target_hp`, `lethal_flat`, `entry_death`, `wish_pending`, `setup_stage`, `move_memory`, `yawn_gate` | boolean (0.6.2) |
 | `race_switch_to_winner`, `heal_outpace`, `escape_needs_hitter` | boolean (0.6.3) — all three false reproduces 0.6.2 battle-for-battle |
 | `switchin_race_grade`, `escape_wall_margin`, `switch_estimate_pp` | boolean (0.6.4) — all three false reproduces 0.6.3 battle-for-battle |
-| `party_matrix`, `sole_answer`, `setup_matrix` | boolean (0.6.5) — all three false reproduces 0.6.4 battle-for-battle, and so does `party_matrix` alone |
+| `party_matrix`, `sole_answer`, `setup_matrix` | boolean (0.6.5) — all three false reproduces 0.6.4 battle-for-battle, and so does `party_matrix` alone. All three ship **on** |
 
 Three keys are the harness's own rather than the core's:
 
@@ -160,9 +160,9 @@ version-control copy when a byte-for-byte pre-install rollback is required.
 Unit tests:
 
 ```bash
-ruby _AI-Study/tests/test_portable_ai.rb        # 147 tests
+ruby _AI-Study/tests/test_portable_ai.rb        # 149 tests
 ruby _AI-Study/tests/test_reborn_adapter.rb     # 53 tests
-ruby _AI-Study/tests/test_realidea_adapter.rb   # 104 tests
+ruby _AI-Study/tests/test_realidea_adapter.rb   # 105 tests
 python3 _AI-Study/tests/test_tooling.py
 python3 _AI-Study/tools/check_move_codes.py
 ```
@@ -735,7 +735,7 @@ twin `realidea_tier_0_6_4_replportable.ndjson`, the ablation arms as lean files
 the same five shadow battles and the one live `replacement=portable` battle as 0.6.3,
 under the `0_6_4` stamp, so the two versions diff turn by turn.
 
-### 0.6.5 — the party × party damage matrix, 2026-09-06
+### 0.6.5 — the party × party damage matrix, 2026-09-07
 
 Every rule through 0.6.4 scores against the **active foe**. That is the whole board a
 move sees; it is not the whole board a switch decides. Read against the 0.6.4 shadow
@@ -748,9 +748,9 @@ This version adds **one snapshot field and two rules that read it**.
 
 | key | rule | default |
 |---|---|---|
-| `party_matrix` | adapter-side (`rule_enabled?`): build `snapshot["matrix"]` — best damaging hit each way for every live pair of party slots, both parties, with the damage category, the move, and the speed order — and put the derived grid in the trace and on the probe record | on |
-| `sole_answer` | the only body that beats a foe still on their bench is not spent in front of a foe it loses to (`sole_answer_exposed`, −150 per unique foe, cap −300) and not sent when another body also handles the board (`sole_answer_reserved`, −45, cap −135) | **off** |
-| `setup_matrix` | the first boost is priced by **what it flips** across their whole live party — `L→W` and `S→W` +55, `L→S` +25, cap +220 — in place of the flat `first_setup` 55, and pays 0 when it flips nothing (`setup_no_flip`) or when the foe in front does not leave the turn to buy it (`setup_no_budget`) | **off** |
+| `party_matrix` | adapter-side (`rule_enabled?`): build `snapshot["matrix"]` — best damaging hit each way for every live pair of party slots, both parties, with the damage category, the move, and the speed order — and put the derived grid in the trace and on the probe record. Built only when something would READ it: either consumer, or a run recording a trace (`matrix_wanted?`) | on |
+| `sole_answer` | the only body that beats a foe still on their bench is not spent in front of a foe it loses to (`sole_answer_exposed`, −150 per unique foe, cap −300) and not sent when another body also handles the board (`sole_answer_reserved`, −45, cap −135) | **on**, on the paired gauntlet |
+| `setup_matrix` | the first boost is priced by **what it flips** across their whole live party — `L→W` and `S→W` +55, `L→S` +25, cap +220 — in place of the flat `first_setup` 55. Three answers, not two: it pays for flips, it pays 0 for a boost that moves no number anywhere (`setup_no_flip`) or that the foe in front leaves no turn to buy (`setup_no_budget`), and **in between it says nothing at all** — a boost that shortens a race without flipping it returns nil and the flat 55 stands, exactly as at 0.6.4 | **on**, after the budget fix below |
 
 **All three false reproduces 0.6.4 battle for battle, and so does `party_matrix` alone**:
 the matrix is data, and no rule reads it unless its own key is on. The 0.6.4 switch
@@ -768,7 +768,11 @@ estimate here already uses. `nil` is a pair the engine refused to price (`pbRoug
 divides by the defender's defence, 085:3557) and is a different fact from `0.0`, which is
 "nothing this body has lands"; the readout prints them as `?` and `0%`.
 
-**What is not in a cell, on purpose:** HP, Intimidate, the Choice lock, entry hazards. The
+**What is not in a cell, on purpose:** HP, Intimidate, the Choice lock, entry hazards,
+and **priority** — the last one cost a battle before it was written down here
+(`team2_vs_team1` 262147 t2: Scizor wins that race on Bullet Punch and the matrix reads
+it as lost, because a cell is a damage number and `damage_race` is the thing that orders
+the final hit). The
 core derives its hit counts and verdicts from the side tables, which are rebuilt every
 snapshot, so a verdict decays from `S` to `L` as a body is chipped without a single cell
 being re-rolled. Defender-side screens **are** in the numbers, because the engine's own
@@ -792,7 +796,22 @@ a turn that only moved HP re-rolls nothing. Measured on a full 6v6 board in the 
 harness, where the call count is structural (pairs × directions × moves) and so the same
 in the engine: **288 `pbRoughDamage` calls at battle start, 0 on an unchanged board, 48
 for one boosted foe**. For comparison the 0.6.4 per-candidate estimators spend 56 on
-every decision of that board, unconditionally. The known approximation the HP-free signature buys: a move whose power depends
+every decision of that board, unconditionally.
+
+In the engine that is **+27% of decision wall time** — 60 tier battles, portable arm,
+trace off: 57.2 s with the grid off against 72.6 s with it on. That is over the 25% the
+plan set as the line for reconsidering the default, and reconsidering it produced a
+better answer than a number: **the grid follows its readers.** `matrix_wanted?` builds it
+when either consumer is on, or when the run is recording a trace (the gauntlet's decision
+trace, the shadow observer, the probe), and not otherwise — the same 60 battles come back
+at **56.2 s** with the consumers off and nothing recording.
+
+Since both consumers ended up shipping on, the shipped default does pay the 27%; what
+the gate buys is that an ablation arm with the consumers off no longer pays for a grid it
+never reads, and that `party_matrix=false` — the control run's setting — costs exactly
+what 0.6.4 cost. In play the 27% is a few milliseconds a decision; it is batch runs where
+it is worth having a switch for. The snapshot key is present either way, `nil` when
+unbuilt, because "the core reads this key" is a contract the adapter test holds it to. The known approximation the HP-free signature buys: a move whose power depends
 on current HP (Super Fang, Endeavor, Flail, Water Spout) keeps the number it had when the
 signature last changed.
 
@@ -812,12 +831,33 @@ where the cells are recorded); a switch candidate that is the last answer to som
 prints `sole answer to X`. The compact grid is what a plain shadow run carries, which is
 what keeps the lean tier file near its 1.6 MB.
 
-**Corpus.** Four cards (`CORPUS_065`), and they are **Realidea-only**: both rules read a
-field only this adapter exports, so on Reborn they are inert by construction and the cards
-would grade a build against a rule it does not have. `make_scenarios.py` grew an `engine`
-key in the extra dict and a `--install` argument for it; a card written for one install is
-printed at generation time rather than skipped in silence, and the Reborn corpus is
-byte-identical with the flag absent. Regenerate the Realidea corpus with:
+**Corpus: no cards, and that is the finding.** Four were written and all four were
+dropped after the probe measured them, because none could do the one thing a card has to
+do — fail with its key off and pass with it on.
+
+The two `sole_answer` cards **could not be posed at all**. Every lever that makes a body
+lose its race against the foe in front — taking more per hit, needing more hits — is a
+lever the 0.6.4 switch terms already read and already punish (`entry_incoming_damage`,
+the `switchin_race` band, `matchup`). So at a single probe position this rule almost
+always agrees with the scoring it refines, and the positions where it disagrees are the
+ones the shadow trace shows: four candidates inside twenty-five points of each other,
+where which body is worth keeping is a fact about the next four turns. The probe poses
+one turn. The two `setup_matrix` cards died to the same arithmetic from the other side: a
+setup move's engine base sits ~110 above its attacks on the boards where the boost is
+interesting, so adding or withholding 55 cannot move the pick there, and on the boards
+where 55 *is* the margin the boost flips nothing.
+
+What pins these rules instead: fourteen core unit tests and twelve adapter tests, both
+directions each; the tier suite measured per consumer against a control that reproduces
+0.6.4 battle for battle; and the readouts. A card that could hold this needs the probe to
+pose a two-body choice where the 0.6.4 terms are within 150 points **and** the matrix
+verdicts differ — worth building, and it is the first item of 0.6.6.
+
+The machinery for a Realidea-only card is in place either way, because both rules read a
+field only this adapter exports: `make_scenarios.py` grew an `engine` key in the extra
+dict and a `--install` argument for it, a card written for one install is printed at
+generation time rather than skipped in silence, and the Reborn corpus is byte-identical
+with the flag absent. Regenerate the Realidea corpus with:
 
 ```bash
 python3 _AI-Study/tools/make_scenarios.py --pbs "Realidea V4.1/PBS" --install realidea \
@@ -825,42 +865,110 @@ python3 _AI-Study/tools/make_scenarios.py --pbs "Realidea V4.1/PBS" --install re
   --out-json _AI-Study/scenarios_realidea.json --drop-unresolved
 ```
 
-The cards: `the_only_answer_to_a_bench_foe_is_not_spent_into_a_foe_it_loses_to` (the
-shadow case, posed with the Yawn device the probe needs because it cannot pose a post-KO
-replacement), `a_forced_choice_keeps_the_body_that_is_the_only_answer_later` (the reserve
-half — two bodies that both handle the board, one of them the only answer to a benched
-Latias), and the pair `a_boost_that_flips_the_bench_is_worth_the_turn` /
-`a_boost_that_flips_nothing_is_not_a_free_55`.
-
 #### Measured
 
-**Not yet.** What is green: `test_portable_ai.rb` 147, `test_realidea_adapter.rb` 104,
-`test_reborn_adapter.rb` 53, `test_tooling.py` 25, `check_move_codes.py`, both builds, and
-`pack_rxdata.py --selftest` byte-identical. What has **not** been run is everything that
-needs the engine, and until it has, no number in this section may be quoted:
+**Controls first, because nothing else means anything without them.**
 
-1. **Probe** twice at defaults and with `sole_answer=true setup_matrix=true`. At defaults
-   the four new cards must **fail** — that is what proves they hold something — and the
-   same sixteen known assertions must fail and no others; with the keys on the new cards
-   must pass and the sixteen must not move. The cards are written from the shape of the
-   rule and are **untuned**: the 0.6.4 lesson is that this engine's chart and rolls differ from
-   Reborn's enough that a card has to be read off the probe's own `ranking` and
-   `party_matrix` records, not calculated. Expect to move Heatran's set and the bench HP
-   until Magnezone edges Slowbro at 0.6.4 defaults — a card that passes on both builds
-   holds nothing.
-2. **Control A**: tier, `gen6ou_a` then `gen6ou_b append=true`, all three keys false —
-   must be identical battle-for-battle to `realidea_shadowtrace_gen6ou_0_6_4.ndjson` per
-   seed (`diff_battles.py`), 240/240, both arms.
-3. **Control B**: the same with `party_matrix=true` only. Must ALSO be identical — that is
-   the proof the build is inert — with `shadow_check.py` 120/120 (the fakes at both seats
-   perturbed nothing) and the wall-time delta recorded against ~65 s per 120 battles.
-4. **Full**: both consumers on, then each alone; render every seed 0.6.4 won and this
-   build lost, and grep the readouts for `sole_answer_` and `setup_flips|setup_no_`.
-5. **Reborn control**: rebuild, install, one `set_c` sweep — decision-identical to 0.6.4
-   (60/60), which it must be, since Reborn exports no matrix.
-6. **Defaults**: a consumer ships on only if it gains more paired wins than it loses on
-   both tier sets with the stock arm bit-identical. Otherwise off, with the numbers
-   recorded here — the disposition `switchin_race_grade` got in 0.6.4.
+| control | claim | result |
+|---|---|---|
+| A — all three keys false, tier, both sets, all three arms | reproduces 0.6.4 battle for battle | **360/360 records identical** to `realidea_shadowtrace_gen6ou_0_6_4.ndjson`: every result, every turn count, and every one of the traced decisions. The only textual differences anywhere are the heap addresses inside the two pre-existing engine crash messages |
+| A — the published table | the arms come back where 0.6.4 left them | stock 58-58, 4 errors, **50.0%**; portable 83-28-4, 5 errors, **72.2%**; `shadow_check.py` **120/120 observation-free, 54.9% agreement** — 0.6.4's own three figures |
+| B — `party_matrix=true` alone | building the grid decides nothing | gen6ou_a **180/180 identical, 4,534 traced decisions identical**, `shadow_check.py` 60/60. The fakes built at both seats perturbed nothing |
+
+**Probe at the shipped defaults: 253/271** (223 cards, four new). The same sixteen
+assertions fail that failed at 0.6.4 and 0.6.2, and nothing else moved.
+
+**The two consumers, measured apart.** Tier suite, 240 battles, gen6ou_a + gen6ou_b,
+portable arm, paired against the control on (roster, matchup, seed). The stock arm is
+bit-identical in every one of these — the required condition before a portable number
+means anything.
+
+| arm | record | rate | paired vs control |
+|---|---|---|---|
+| control (all three off) | 83-28-4, 5 errors | 72.2% | — |
+| `sole_answer` alone | 84-26-4, 6 errors | **73.7%** | **gained 2, lost 0** (p = 0.48) |
+| `setup_matrix` alone, as first written | 82-29-4, 5 errors | 71.3% | gained 1, lost 2 |
+| `setup_matrix` alone, budget fixed | 84-27-4, 5 errors | **73.0%** | **gained 1, lost 0** |
+| both, as first written | 82-29-3, 6 errors | 71.9% | gained 2, lost 2 |
+| **both, budget fixed — the shipped defaults** | **84-27-3**, 6 errors | **73.7%** | **gained 2, lost 0** (p = 0.48) |
+
+**The shipped build, traced, both sets** (`realidea_shadowtrace_gen6ou_0_6_5.ndjson`):
+portable **84-27-3, 6 errors, 73.7%**, stock 58-58 with 4 errors and **50.0% —
+bit-identical to the control**, and the shadow arm **120/120 observation-free** at 54.6%
+agreement over 3,027 turns (54.9% at 0.6.4). That file is twice the size of its 0.6.4
+twin, because every traced decision now carries the grid and, under `trace=true`, the
+cells behind it.
+
+**Reborn, same core, its own control**: one `set_c` sweep at the new defaults is
+**60/60 identical to 0.6.4** — same results, same turn counts, and all 2,654 command
+records byte-identical. That is the claim "the other study is untouched" measured
+rather than asserted: the Reborn adapter exports no `matrix`, so both consumers return
+nil on their first line there.
+
+**Both ship on**, which is the disposition rule stated in the plan and the one
+`escape_wall_margin` shipped under at +1/−0 in 0.6.4: a consumer ships on when it gains
+more paired battles than it loses with the stock arm bit-identical. Read the evidence
+for what it is — two battles out of 120 paired, p = 0.48, both in gen6ou_a — and note
+what limits the downside: **Reborn exports no matrix**, so neither rule can reach the
+other study at all, and either key set false restores 0.6.4 exactly. The probe at the
+new defaults is **251/267**, 0.6.4's own number with 0.6.4's own sixteen failures: both
+rules together change no card outcome.
+
+The two rules do not interact: the full arm's gains are `sole_answer`'s two battles and
+its losses are `setup_matrix`'s two, unchanged. 310 of 3,382 traced decisions differ from
+the control, so this is not a rule that never fires — `sole_answer_reserved` is charged
+771 times and `sole_answer_exposed` 255 times on gen6ou_a alone, and 124 boosts are
+priced above zero by the flip table.
+
+**What the `party_matrix` grid looks like in a readout**, which is the other half of
+what this version ships — `team1_vs_team2 104729` t0, Quagsire deciding whether to leave:
+
+```text
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                     Clefable*  Chansey    Gastrodon  Scizor     Slowbro    Zapdos
+      Quagsire* 100% L          L          L          L          L          W
+      Altaria   100% L          L          S          S          L          L
+      Chansey   100% W          S          W          L          W          W
+      Magnezone 100% W          L          L          W          W          L
+      Suicune   100% W          L          W          W          S          L
+      Zapdos    100% W          L          L          W          W          W
+```
+
+Six rows and six columns say in one glance what six turns of reading a candidate list
+could not: Quagsire beats exactly one of their six, their Chansey is answered only by
+Suicune's stall and their Scizor only by three bodies. `--cells` prints the two damage
+numbers behind every verdict.
+
+**What `sole_answer` won**, and it is the case the rule was written from: at
+`team2_vs_team1 130363` t15 Chansey is leaving on residual chip and four bodies handle
+the Quagsire in front. Scizor is the only one that beats their Chansey, is charged −45,
+and drops from 440.8 to 395.8 — behind Clefable and Zapdos, which handle the board just
+as well and are worth nothing later. Same shape at `team2_vs_team3 155921` t19. The
+charge changed which option ranked first on 12 turns of gen6ou_a.
+
+**What `setup_matrix` lost, and the fix.** Both losses were the same line: the budget
+test refused a boost at exactly `post + 1 == theirs` — the boosted attack needing the
+same number of turns the foe needs, counting the setup turn — and refusing it as a
+**0** silently withdrew the flat 55 that 0.6.4 paid. Scizor's Swords Dance in front of a
+Metagross it was in fact winning against on Bullet Punch priority (`team2_vs_team1`
+262147 t2; the cells carry no priority term, so the matrix reads that race as lost), and
+Clefable's Calm Mind against a Gliscor at 76% (`team3_vs_team1` 104729 t52). The rule
+now refuses only what it can see is unaffordable — strictly more turns than the foe
+needs — and leaves the tie to the four safety branches that run before it and to the
+flat bonus. That is the same principle as the middle answer above: **where this rule has
+nothing better to say than the flat 55, it says nothing.**
+
+**Artifacts.** `realidea_tier_0_6_5.ndjson` (the shipped defaults, written with the
+three keys named explicitly so the record's `config_overrides` stamp says what it ran
+under),
+`_control` (all three keys false), `_sole_answer`, `_setup_matrix` and
+`_setup_matrix_prefix` (the same key before the budget fix, kept so the two battles it
+lost can be read), `realidea_shadowtrace_gen6ou_0_6_5.ndjson` (traced, all three arms, the
+shipped defaults), `ai_probe_results_portable.ndjson` (0.6.5; 0.6.4's kept as
+`ai_probe_results_portable_0_6_4.ndjson`), and `reborn_6v6_v065trace_set_c.ndjson` for the
+Reborn control. The 0.6.5 control run is byte-for-byte the same decisions as
+`realidea_shadowtrace_gen6ou_0_6_4.ndjson`, so that file is the control's artifact and is
+not duplicated.
 
 ### The gauntlet hang, and what it actually was
 

@@ -1645,6 +1645,10 @@ class PortableAITest < Test::Unit::TestCase
   # nothing, which test_matrix_consumers_are_inert_without_a_matrix pins from the
   # other side.
 
+  # Both consumers ship ON from 0.6.5, so a test that wants the 0.6.4 behaviour has to
+  # name the keys. Every 0.6.5 test below asserts the rule AND this.
+  ALL_065_OFF = { "sole_answer" => false, "setup_matrix" => false }
+
   # One side table. Each row is [slot, hp_pct, seat (nil on the bench), speed].
   def mx_side(rows)
     rows.map do |row|
@@ -1748,11 +1752,11 @@ class PortableAITest < Test::Unit::TestCase
 
   def test_the_only_answer_to_a_bench_foe_is_not_sent_into_a_foe_it_loses_to
     snap = sole_answer_snap(exposed_cells)
-    result = pick(snap, { "sole_answer" => true })[0]
+    result = pick(snap, {})[0]
     assert_equal("switch", result["type"])
     assert_equal(2, result["slot"])
     # 0.6.4 spends the only answer, because slot 1 simply scores higher.
-    off = pick(snap, {})[0]
+    off = pick(snap, ALL_065_OFF)[0]
     assert_equal(1, off["slot"])
   end
 
@@ -1760,7 +1764,7 @@ class PortableAITest < Test::Unit::TestCase
     # Nothing else beats what is in front, so spending the unique body is not a
     # choice the rule gets to second-guess.
     snap = sole_answer_snap(exposed_cells(false))
-    result = pick(snap, { "sole_answer" => true })[0]
+    result = pick(snap, {})[0]
     assert_equal(1, result["slot"])
     assert(!reasons_of(result).include?("sole_answer_exposed"))
     assert(!reasons_of(result).include?("sole_answer_reserved"))
@@ -1779,7 +1783,7 @@ class PortableAITest < Test::Unit::TestCase
               "2:0" => mx_pair(WINS), "2:1" => mx_pair(LOSES) }
     with_matrix(snap, matrix_snap([[0, 0, nil], [1, 100, nil], [2, 100, nil]],
                                   [[0, 100, 0], [1, 100, nil]], cells))
-    plan = PortableAI.plan(snap, { "sole_answer" => true }, Random.new(7))
+    plan = PortableAI.plan(snap, {}, Random.new(7))
     assert_equal(2, plan["actions"][0]["slot"])
     # The charge is on the body being held back, not on the one that goes.
     held = plan["diagnostics"]["rankings"][0].find { |c| c["slot"] == 1 }
@@ -1787,7 +1791,7 @@ class PortableAITest < Test::Unit::TestCase
     assert_nil(reason_value(plan["diagnostics"]["rankings"][0].find { |c| c["slot"] == 2 },
                             "sole_answer_reserved"))
     # 0.6.4 ranks them by score alone and spends the body it will need later.
-    assert_equal(1, pick(snap, {})[0]["slot"])
+    assert_equal(1, pick(snap, ALL_065_OFF)[0]["slot"])
   end
 
   def test_sole_answer_in_doubles_takes_the_harsher_target
@@ -1806,7 +1810,7 @@ class PortableAITest < Test::Unit::TestCase
               "2:0" => mx_pair(WINS), "2:1" => mx_pair(WINS), "2:2" => mx_pair(LOSES) }
     with_matrix(snap, matrix_snap([[0, 100, 1], [1, 100, nil], [2, 100, nil]],
                                   [[0, 100, 0], [1, 100, 2], [2, 100, nil]], cells))
-    scored = PortableAI.plan(snap, { "sole_answer" => true },
+    scored = PortableAI.plan(snap, {},
                              Random.new(7))["diagnostics"]["rankings"][0]
     one = scored.find { |c| c["type"] == "switch" && c["slot"] == 1 }
     assert_equal(-150, reason_value(one, "sole_answer_exposed"))
@@ -1814,7 +1818,7 @@ class PortableAITest < Test::Unit::TestCase
   end
 
   def test_matrix_consumers_are_inert_without_a_matrix
-    both = { "sole_answer" => true, "setup_matrix" => true }
+    both = {}
     plain = snapshot([actor(1, 100, [move(0, "STRENGTH", 0, 100, 20, {}),
                                      { "type" => "switch", "slot" => 1,
                                        "base_score" => 200, "matchup_score" => 0 },
@@ -1848,35 +1852,75 @@ class PortableAITest < Test::Unit::TestCase
 
   def test_setup_is_worth_the_cells_it_flips
     snap = setup_matrix_snap(flipping_cells)
-    result = pick(snap, { "setup_matrix" => true })[0]
+    result = pick(snap, {})[0]
     assert_equal("SWORDSDANCE", result["move_id"])
     assert_equal(110, reason_value(result, "setup_flips"))
-    off = pick(snap, {})[0]
+    off = pick(snap, ALL_065_OFF)[0]
     assert_equal(55, reason_value(off, "first_setup"))
     assert_nil(reason_value(off, "setup_flips"))
   end
 
-  def test_setup_that_flips_nothing_loses_the_flat_bonus
-    # It already beats all three, so there is nothing for the boost to buy.
-    cells = { "0:0" => mx_cell(30, 20), "0:1" => mx_cell(30, 20),
-              "0:2" => mx_cell(30, 20) }
+  def test_a_boost_that_moves_no_number_anywhere_loses_the_flat_bonus
+    # Swords Dance raises Attack and every one of these bodies attacks specially, so
+    # the boost changes not one hit count on the board. The foe in front cannot
+    # threaten the turn, so this is not the budget refusing -- it is the boost.
+    cells = { "0:0" => mx_cell(30, 10, false, "special", "special"),
+              "0:1" => mx_cell(30, 10, false, "special", "special"),
+              "0:2" => mx_cell(30, 10, false, "special", "special") }
     snap = setup_matrix_snap(cells)
-    result = pick(snap, { "setup_matrix" => true })[0]
+    result = pick(snap, {})[0]
     assert_equal(0, reason_value(result, "setup_no_flip"))
     assert_nil(reason_value(result, "setup_flips"))
-    assert_equal(55, reason_value(pick(snap, {})[0], "first_setup"))
+    assert_equal(55, reason_value(pick(snap, ALL_065_OFF)[0], "first_setup"))
+  end
+
+  # The middle answer, and the probe is why it exists: a boost that flips no verdict
+  # but still shortens a race the actor was already winning is not worthless. Read off
+  # the 0.6.5 probe, where paying 0 here dropped Heracross's Swords Dance behind Close
+  # Combat in front of a Shuckle it beats either way and broke
+  # `an_unboosted_sweeper_still_sets_up`, a card that has held since 0.4.0.
+  def test_a_boost_that_only_shortens_a_won_race_keeps_the_flat_bonus
+    cells = { "0:0" => mx_cell(30, 10), "0:1" => mx_cell(30, 10),
+              "0:2" => mx_cell(30, 10) }
+    snap = setup_matrix_snap(cells)
+    result = pick(snap, {})[0]
+    assert_equal(55, reason_value(result, "first_setup"))
+    assert_nil(reason_value(result, "setup_no_flip"))
+    assert_nil(reason_value(result, "setup_flips"))
+    # Which is 0.6.4 exactly.
+    assert_equal(55, reason_value(pick(snap, ALL_065_OFF)[0], "first_setup"))
   end
 
   def test_setup_needs_the_budget_in_front
-    # The foe removes this body in two: there is no turn to spend, whatever the boost
-    # would be worth against their bench.
+    # The foe removes this body in two and the boosted attack still needs three: there
+    # is no turn to spend, whatever the boost would be worth against their bench.
     cells = { "0:0" => mx_cell(20, 60), "0:1" => mx_cell(20, 25),
               "0:2" => mx_cell(20, 25) }
     snap = setup_matrix_snap(cells)
-    result = pick(snap, { "setup_matrix" => true })[0]
+    result = pick(snap, {})[0]
     assert_equal(0, reason_value(result, "setup_no_budget"))
     assert_nil(reason_value(result, "setup_flips"))
-    assert_equal(55, reason_value(pick(snap, {})[0], "first_setup"))
+    assert_equal(55, reason_value(pick(snap, ALL_065_OFF)[0], "first_setup"))
+  end
+
+  # A TIE is not a refusal. Both battles this rule lost on the 0.6.5 tier run were a
+  # boost declined at exactly this line -- the boosted attack needing the same number
+  # of turns the foe needs, counting the setup turn -- where withholding the flat 55
+  # handed the turn to an attack and lost a battle 0.6.4 won. The dangerous boards are
+  # the four safety branches above; this test only refuses what it can see is
+  # unaffordable.
+  def test_a_tied_budget_is_not_a_refusal
+    # The foe needs three (35 a hit into 100); boosted, the actor needs two, and the
+    # setup turn makes three.
+    cells = { "0:0" => mx_cell(25, 35), "0:1" => mx_cell(20, 25),
+              "0:2" => mx_cell(20, 25) }
+    snap = setup_matrix_snap(cells)
+    result = pick(snap, {})[0]
+    assert_nil(reason_value(result, "setup_no_budget"))
+    # And with the turn affordable the flips are paid: the foe in front and both on
+    # their bench stop beating this body.
+    assert_equal(165, reason_value(result, "setup_flips"))
+    assert_equal(55, reason_value(pick(snap, ALL_065_OFF)[0], "first_setup"))
   end
 
   def test_setup_transform_respects_category_and_speed
@@ -1907,7 +1951,7 @@ class PortableAITest < Test::Unit::TestCase
     # the four branches that run before this arm is reached.
     snap = setup_matrix_snap(flipping_cells)
     snap["actors"][0]["hp_pct"] = 25
-    result = PortableAI.plan(snap, { "setup_matrix" => true },
+    result = PortableAI.plan(snap, {},
                              Random.new(7))["diagnostics"]["rankings"][0]
     dance = result.find { |c| c["move_id"] == "SWORDSDANCE" }
     assert_equal(-240, reason_value(dance, "unsafe_setup"))

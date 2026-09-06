@@ -927,6 +927,7 @@ class PortableAIRealideaAdapterTest < Test::Unit::TestCase
     snapshot
   end
 
+
   def assert_exports(keys, hash, label)
     missing = keys.reject { |key| hash.key?(key) }
     assert_equal([], missing, "#{label} is missing snapshot keys")
@@ -1689,13 +1690,42 @@ class PortableAIRealideaAdapterTest < Test::Unit::TestCase
   end
 
   def test_party_matrix_is_absent_when_the_key_is_off
-    $PORTABLE_AI_CONFIG = { "party_matrix" => false }
-    snapshot, _skill = PortableAIRealidea.build_snapshot(matrix_battle)
+    $PORTABLE_AI_CONFIG = { "party_matrix" => false, "sole_answer" => true }
+    battle = matrix_battle
+    battle.instance_variable_set(:@portable_ai_decision_trace, [])
+    snapshot, _skill = PortableAIRealidea.build_snapshot(battle)
+    assert(snapshot.key?("matrix"), "the contract key must exist even when nil")
     assert_nil(snapshot["matrix"])
-    $PORTABLE_AI_CONFIG = nil
+    $PORTABLE_AI_CONFIG = { "sole_answer" => true }
     on, _skill = PortableAIRealidea.build_snapshot(matrix_battle)
     assert_not_nil(on["matrix"])
     assert_equal(1, on["matrix"]["version"])
+  ensure
+    $PORTABLE_AI_CONFIG = nil
+  end
+
+  # The grid costs about a quarter of decision time to build (57.2 s against 72.6 s
+  # over a 60-battle tier set), and at the shipped defaults nothing reads it: both
+  # consumers are off, and a player fighting a trainer records no trace. So it follows
+  # its readers rather than the clock.
+  def test_the_matrix_is_not_built_when_nothing_would_read_it
+    # Both consumers ship ON, so "nothing reads it" has to be asked for.
+    $PORTABLE_AI_CONFIG = { "sole_answer" => false, "setup_matrix" => false }
+    plain, _skill = PortableAIRealidea.build_snapshot(matrix_battle)
+    assert_nil(plain["matrix"], "built a grid no rule and no trace would read")
+    # A consumer wants it.
+    $PORTABLE_AI_CONFIG = { "sole_answer" => false, "setup_matrix" => true }
+    wanted, _skill = PortableAIRealidea.build_snapshot(matrix_battle)
+    assert_not_nil(wanted["matrix"])
+    $PORTABLE_AI_CONFIG = { "sole_answer" => false, "setup_matrix" => false }
+    # So does a run that is recording one -- the gauntlet's decision trace, and the
+    # shadow observer, which records even with trace=false.
+    traced = matrix_battle
+    traced.instance_variable_set(:@portable_ai_decision_trace, [])
+    assert_not_nil(PortableAIRealidea.build_snapshot(traced)[0]["matrix"])
+    shadowed = matrix_battle
+    shadowed.instance_variable_set(:@portable_ai_shadow_trace, [])
+    assert_not_nil(PortableAIRealidea.build_snapshot(shadowed)[0]["matrix"])
   ensure
     $PORTABLE_AI_CONFIG = nil
   end
@@ -1713,7 +1743,9 @@ class PortableAIRealideaAdapterTest < Test::Unit::TestCase
   end
 
   def test_the_trace_view_carries_the_verdict_grid_and_names_both_parties
-    snapshot, _skill = PortableAIRealidea.build_snapshot(matrix_battle)
+    battle = matrix_battle
+    battle.instance_variable_set(:@portable_ai_decision_trace, [])
+    snapshot, _skill = PortableAIRealidea.build_snapshot(battle)
     view = PortableAIRealidea.view_trace(snapshot, 1)
     grid = view["matrix"]
     assert_equal(%w[Scizor Shuckle], grid["own"].map { |e| e["species"] })
@@ -1738,6 +1770,7 @@ class PortableAIRealideaAdapterTest < Test::Unit::TestCase
     battle.parties[0][1].moves = [StubMove.new(:basedamage => 80)]
     battle.parties[1][1].moves = [StubMove.new(:basedamage => 80)]
     battle.parties[1][1].speed = 200
+    battle.instance_variable_set(:@portable_ai_decision_trace, [])
     snapshot, skill = PortableAIRealidea.build_snapshot(battle)
     assert_equal("L", PortableAI.matrix_verdict(snapshot, 0, 1))
     assert_equal("W", PortableAI.matrix_verdict(snapshot, 1, 1))

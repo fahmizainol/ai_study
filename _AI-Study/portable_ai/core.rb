@@ -1342,7 +1342,9 @@ module PortableAI
   #
   # NOT in the cells, on purpose: HP (this layer derives the hit counts from the
   # side tables' current hp_pct, so a verdict decays as a body is chipped),
-  # Intimidate, the Choice lock, and entry hazards. The 0.6.4 switch estimators
+  # Intimidate, the Choice lock, entry hazards, and PRIORITY -- a cell is a damage
+  # number, and damage_race is the thing that orders the final hit, so a body that
+  # wins on Bullet Punch reads here as losing. The 0.6.4 switch estimators
   # still carry those and still feed candidate_race; the matrix is the wide, thin
   # view, not a replacement for the narrow, thick one. Defender-side screens ARE in
   # the numbers, because the engine's own damage estimate reads them.
@@ -1630,13 +1632,25 @@ module PortableAI
     end
     return nil if transformed.empty?
 
-    # THE BUDGET IN FRONT. The boost is only worth grading if the actor lives to use
-    # it: one turn for the setup, then the hits the boosted attack still needs, all
-    # inside what the foe needs to remove it. `theirs` prefers the actor's real
-    # per-foe threat (damage_race, which carries residual, the priority order and the
-    # Choice lock) over the cell, which carries none of those; it is deliberately the
-    # UNBOOSTED number, because the defensive half of a boost cannot be spent on the
-    # turn it is bought.
+    # THE BUDGET IN FRONT: does the actor live to spend what it is buying? One turn for
+    # the setup, then the hits the boosted attack still needs, against what the foe
+    # needs to remove it. `theirs` prefers the actor's real per-foe threat
+    # (damage_race, which carries residual, the priority order and the Choice lock)
+    # over the cell, which carries none of those; it is deliberately the UNBOOSTED
+    # number, because the defensive half of a boost cannot be spent on the turn it is
+    # bought.
+    #
+    # Refuses only what it can actually see is unaffordable -- STRICTLY more turns than
+    # the foe needs. A tie is not a refusal, and the 0.6.5 tier run is why: both
+    # battles this rule lost were a boost declined at exactly `post + 1 == theirs`.
+    # Scizor's Swords Dance in front of a Metagross it was winning against on Bullet
+    # Punch priority (team2_vs_team1 262147 t2 -- the cells carry no priority term, so
+    # the matrix reads that race as lost), and Clefable's Calm Mind against a Gliscor
+    # at 76% (team3_vs_team1 104729 t52). In both, withholding the flat 55 handed the
+    # turn to an attack and lost a battle 0.6.4 won. The genuinely dangerous boards --
+    # the 2HKO, the low HP, the lethal threat -- are the four safety branches above,
+    # which run first and are untouched; this test is only here for "you die before
+    # you can use it".
     active.each do |foe_slot, target|
       cell = transformed[foe_slot]
       return { "value" => 0, "reason" => "setup_no_budget" } if cell.nil?
@@ -1649,28 +1663,46 @@ module PortableAI
       end
       next if theirs.nil?           # nothing of theirs gets through: the turn is free
       post = hits_needed(foe_hp, Model.number(cell["out"], 0.0)) || RACE_MAX_HITS
-      next if post + 1 < theirs
-      next if post + 1 == theirs && cell["faster"] == true
-      return { "value" => 0, "reason" => "setup_no_budget" }
+      return { "value" => 0, "reason" => "setup_no_budget" } if post + 1 > theirs
     end
 
     # WHAT IT FLIPS, over their whole live party. A body that stops losing is the
     # win; a body that stops losing but only reaches a stall is worth less and still
     # worth something, because a stall is a body their sweeper has to answer.
+    #
+    # Three answers, not two, and the middle one is why. A boost that flips nothing
+    # but still shortens a race the actor was already winning is NOT worthless -- the
+    # probe said so: Heracross at 45% in front of a Shuckle it beats either way halves
+    # its hit count with Swords Dance, and a rule that paid 0 there dropped the boost
+    # behind Close Combat and broke `an_unboosted_sweeper_still_sets_up`, a card that
+    # has held since 0.4.0. So this rule speaks only where it has something to say:
+    # it pays for flips, it refuses a boost that moves no number anywhere, and in
+    # between it returns nil and the flat first_setup 55 stands exactly as at 0.6.4.
+    #
+    # One flip is worth 55 on purpose -- the same as the flat bonus it replaces, which
+    # is the only calibration point this scorer has for "a boost was worth the turn".
     value = 0
+    changed = false
     transformed.each do |foe_slot, cell|
-      before = matrix_verdict(snapshot, own_slot, foe_slot)
-      next if before.nil? || before == "W"
+      base = matrix_cell(snapshot, own_slot, foe_slot)
       foe = matrix_entry(m["foe"], foe_slot)
-      after = cell_verdict(cell, own_hp, Model.number(foe["hp_pct"], 100.0))
-      next if after.nil?
+      next if base.nil? || foe.nil?
+      foe_hp = Model.number(foe["hp_pct"], 100.0)
+      changed = true if matrix_hits(cell, own_hp, foe_hp) !=
+                        matrix_hits(base, own_hp, foe_hp)
+      before = cell_verdict(base, own_hp, foe_hp)
+      after = cell_verdict(cell, own_hp, foe_hp)
+      next if before.nil? || after.nil? || before == "W"
       if after == "W"
         value += SETUP_FLIP_TO_WIN
       elsif before == "L" && after == "S"
         value += SETUP_FLIP_TO_STALL
       end
     end
-    return { "value" => 0, "reason" => "setup_no_flip" } if value <= 0
+    if value <= 0
+      return nil if changed
+      return { "value" => 0, "reason" => "setup_no_flip" }
+    end
     value = SETUP_FLIP_CAP if value > SETUP_FLIP_CAP
     { "value" => value, "reason" => "setup_flips" }
   end

@@ -186,12 +186,21 @@ module PortableAI
       # dirty rows only.
       "party_matrix"          => true,
       # The only answer to a foe still on their bench is not a body to spend in front
-      # of a foe it loses to (Core.sole_answer_value). OFF per the convention: an
-      # unproven rule ships off and the paired gauntlet decides.
-      "sole_answer"           => false,
+      # of a foe it loses to (Core.sole_answer_value). Shipped ON, on the paired
+      # gauntlet: 84-26-4 against the control's 83-28-4 over 240 tier battles, gained
+      # 2 and lost 0, with the stock arm bit-identical. Two battles is weak evidence
+      # (p = 0.48) and both are in gen6ou_a, but the disposition rule is the one
+      # escape_wall_margin shipped under in 0.6.4 at +1/-0, and Reborn exports no
+      # matrix, so this cannot reach the other study at all.
+      "sole_answer"           => true,
       # The first boost is worth the cells it flips across their party, instead of a
-      # flat 55 (Core.setup_matrix_value). OFF for the same reason.
-      "setup_matrix"          => false
+      # flat 55 (Core.setup_matrix_value). Also ON: 84-27-4, gained 1 lost 0 -- but
+      # only after the tier run found the budget test refusing a boost on a TIE and
+      # losing two battles for it. As first written it measured 82-29-4, gained 1 lost
+      # 2. The rule that survived is the narrow one: refuse only what is strictly
+      # unaffordable, and where there is nothing better to say than the flat 55, say
+      # nothing.
+      "setup_matrix"          => true
     }
 
     def self.config(overrides)
