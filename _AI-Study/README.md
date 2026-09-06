@@ -19,9 +19,9 @@ The study has two phases, and they are still both live:
 | | |
 |---|---|
 | Portable core | **0.6.2**, installed in Reborn Yang (opt-in, off by default) |
-| Second adapter | Realidea v16, still at core **0.1.0** — needs the full re-gate before reinstall |
+| Second adapter | Realidea v16, **installed at 0.6.2** (key parity, 2026-09-06) — in-engine re-measurement still owed |
 | Corpus | **213 cards / 281 assertions** in `scenarios.json` — 275 graded and passing, 6 N/A on the Portable side (`switch_score_gt` needs Reborn's party-indexed score array) |
-| Unit tests | **161** green — `test_portable_ai.rb` 108, `test_reborn_adapter.rb` 53, `test_realidea_adapter.rb` 6 |
+| Unit tests | **225** green — `test_portable_ai.rb` 108, `test_reborn_adapter.rb` 53, `test_realidea_adapter.rb` 64 |
 | Benchmark frame | 7 rosters × 60 = **420 battles**, `arms=normal_portable`, `schedule=normal_baseline`, `party_size=6` |
 | Standing | 0.6.0 **197/420** → 0.6.1 **205/420** → 0.6.2 **203/420 (48.3%)** |
 
@@ -138,6 +138,12 @@ bash tools/setup_gauntlet_workers.sh 4          # once per checkout, ~119 MB eac
 printf 'mode=gauntlet\nschedule=normal_baseline\nparty_size=6\narms=normal_portable\n' > /tmp/cfg.txt
 bash tools/run_gauntlet_parallel.sh generated/reborn_6v6_vNNN /tmp/cfg.txt \
      set_a set_b set_c set_d set_e set_f set_g
+
+# 6b. the tier suite — real Smogon teams, 8 more rosters. A SEPARATE suite: report it
+#     on its own line, never pooled with set_a..set_g. See PORTABLE-AI-REBORN.md,
+#     "The tier suite". Regenerate with tools/make_tier_teams.py.
+bash tools/run_gauntlet_parallel.sh generated/reborn_6v6_tier /tmp/cfg.txt \
+     gen7ou_a gen7ou_b gen8ou_a gen8ou_b gen8uu_a gen8uu_b gen6ou_a gen6ou_b
 
 # 7. paired comparison against the previous version, over the identical frame
 python3 tools/compare_versions.py \
@@ -258,9 +264,12 @@ one switch that saves the mon; a faster 2HKO race abandoned on the one-hit flag.
   post-KO switch-in score is the most compact statement of the same idea.
 - **Breadth as tables, round two** — the remaining `effects.rb` / ability rows sketched
   at the end of the 0.5.0 backlog.
-- **Realidea is stranded at core 0.1.0.** Rebuilding it needs the full gate in
-  `PORTABLE-AI-REALIDEA.md` (163/163 probe + paired gauntlet), and its adapter does not
-  yet export the evidence fields added since 0.2.0.
+- **Realidea is installed at 0.6.2 but not re-measured.** The adapter reached key parity
+  on 2026-09-06 and the whole automated gate passes, but every in-engine step needs
+  Windows: probe under portable and under stock against the regenerated 208-card corpus
+  (260 applicable assertions), then the paired gauntlet and its ablation controls. Until
+  then the numbers on that page are 0.1.0's. `move_memory` is inert there for an engine
+  reason, not an adapter one — see the 0.6.2 handoff section.
 
 **Phase-1 threads still open:**
 

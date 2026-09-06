@@ -1,21 +1,26 @@
 # Portable AI for Realidea
 
-Implementation status: installed and verified, opt-in, version 0.1.0 (2026-09-04).
+Implementation status: **installed at core 0.6.2 (2026-09-06), awaiting in-engine
+re-verification.** Opt-in, and inert until its marker file exists.
 
-> **This adapter is stranded at core 0.1.0 and the core is now at 0.6.2.** Everything
-> below still describes what is installed in Realidea today — it has not been rebuilt
-> since. Two things block a rebuild, and neither is hard, just ungated work: the full
-> re-gate this file specifies (163/163 probe + paired gauntlet) has to be re-run against
-> the new core, and the Realidea adapter does not yet export the evidence fields added
-> from 0.2.0 onward (they default to 0 via `Model.number`, so the rules that consume them
-> are silently inert here). Development since 2026-09-04 has all happened on the Reborn
-> adapter — see `PORTABLE-AI-REBORN.md`, and `README.md` for the current state.
+> **The bundle in `Realidea V4.1/Data/Scripts.rxdata` is 0.6.2; the numbers further down
+> this page are still 0.1.0's.** The adapter reached key parity with the shared core on
+> 2026-09-06 (five commits, one per core version step), the whole automated gate passes,
+> and `pack_rxdata --selftest` round-trips byte-identical — but every in-engine step
+> needs Windows and has NOT been run against this build. Until it has, the probe and
+> gauntlet tables in *Measured result* describe the 0.1.0 install and nothing else. The
+> corpus was regenerated at the same time: **208 scenarios / 275 assertions, of which 198
+> scenarios and 260 assertions are applicable here.** The old 126 / 163 figures are
+> retired.
 
 ## What is installed
 
 Realidea loads battle code from `Realidea V4.1/Data/Scripts.rxdata`. The build adds one
 `Portable_AI` section at index 332, after `AI_Probe`, `Team_Overrides`, and `Level_Cap`,
 and immediately before `Main`.
+
+Section 332 `Portable_AI` is **3754 lines** at `PortableAI::VERSION = "0.6.2"` (the
+0.1.0 install was 1511). Section 329 `AI_Probe` is replaced at the same time.
 
 The generated section contains:
 
@@ -29,6 +34,48 @@ The generated section contains:
 The core sees no `PokeBattle_*`, `PBMoves`, `PBEffects`, or battle objects. In doubles it
 plans both opposing battlers together, rejects targeted friendly fire, penalizes lethal
 spread damage to a partner, avoids duplicate switches, and assigns finishable targets.
+
+## Config overrides
+
+`Data/ai_harness.txt` sets run-level knobs for the gauntlet and the probe, one
+`key=value` per line, `#` comments allowed. It is the same file and the same nineteen
+core keys the Reborn harness uses, so an ablation reads identically in both studies —
+which is what lets a single installed build play both sides of a policy A/B instead of
+rebuilding between arms.
+
+```text
+# 0.6.1 control: every 0.6.2 rule off
+spread_target_hp=false
+lethal_flat=false
+entry_death=false
+wish_pending=false
+setup_stage=false
+move_memory=false
+yawn_gate=false
+```
+
+| Key | Type |
+|---|---|
+| `switch_risk_weight`, `accuracy_weight` | float |
+| `heal_gate`, `priority_gate`, `self_cost`, `strict_threat` | boolean |
+| `side_effects`, `ability_rules`, `entry_rules`, `format_rules` | boolean (0.5.0) |
+| `damage_race`, `damage_race_switch` | boolean (0.6.0) |
+| `spread_target_hp`, `lethal_flat`, `entry_death`, `wish_pending`, `setup_stage`, `move_memory`, `yawn_gate` | boolean (0.6.2) |
+
+Three keys are the harness's own rather than the core's:
+
+| Key | Default | Effect |
+|---|---|---|
+| `trace` | `false` | record the per-turn portable decision trace, including what the actor believed about the board and the hits-to-KO race per target. It was unconditional through 0.1.0 and dominated the results file. |
+| `seeds` | the five frozen seeds | comma-separated replacement list |
+| `append` | `false` | append to `ai_gauntlet_results.ndjson` instead of truncating it |
+
+Every gauntlet and probe record carries `portable_version`, and every portable record
+carries the `config_overrides` it ran under. Read a results file by those stamps, never
+by mtime — the readouts were once rendered from a stale baseline because nothing in the
+record said which run it belonged to.
+
+`move_memory` is inert on Realidea whatever this file says; see the handoff below.
 
 ## Enable and disable
 
@@ -87,9 +134,23 @@ version-control copy when a byte-for-byte pre-install rollback is required.
 Unit tests:
 
 ```bash
-ruby _AI-Study/tests/test_portable_ai.rb
-ruby _AI-Study/tests/test_realidea_adapter.rb
+ruby _AI-Study/tests/test_portable_ai.rb        # 108 tests
+ruby _AI-Study/tests/test_reborn_adapter.rb     # 53 tests
+ruby _AI-Study/tests/test_realidea_adapter.rb   # 64 tests
+python3 _AI-Study/tests/test_tooling.py
+python3 _AI-Study/tools/check_move_codes.py
 ```
+
+`test_realidea_adapter.rb` carries a **snapshot contract test**: the list of keys the
+shared core reads at each level (top level / actor / move action / switch action /
+target), asserted against a snapshot built from a stub board. When a future core rule
+adds a read, the key goes on that list and this test fails until the Realidea export
+exists. That test is the answer to how this adapter came to sit five minor versions
+behind without anything noticing.
+
+`check_move_codes.py` asserts every Essentials function code named in the adapter's
+tables exists in `Realidea V4.1/PBS/moves.txt`, and prints every code the two adapters
+disagree about. It currently reports exactly the three known divergences.
 
 In-engine decision probe:
 
@@ -116,13 +177,23 @@ title path successfully.
 
 ## Measured result
 
-The full Realidea corpus contains 126 scenarios and 169 assertions. Five Reborn-field
-scenarios are explicitly skipped, leaving 163 applicable assertions:
+> Everything in this section is the **0.1.0** install measured on 2026-09-04, against the
+> old 126-scenario corpus. It is kept as the baseline the 0.6.2 run has to be compared
+> against, not as a description of what is installed now.
+
+The corpus at the time contained 126 scenarios and 169 assertions. Five Reborn-field
+scenarios were explicitly skipped, leaving 163 applicable assertions:
 
 | AI | Tier-1 | Spearman vs Reborn | Action-type agreement |
 |---|---:|---:|---:|
 | Stock v16 + Clara | 143/163 | baseline | baseline |
 | Portable AI 0.1.0 | **163/163** | **0.913** | **117/121 (96.7%)** |
+
+The 0.6.2 corpus is **208 scenarios / 275 assertions**. Ten scenarios are skipped with a
+reason — seven pin a Reborn field id, three pin a mechanic this engine does not have —
+leaving **198 scenarios / 260 applicable assertions**. Five of the 213 Reborn cards
+cannot be built against a v16 PBS at all (Heavy-Duty Boots, Clear Amulet) and are
+dropped by `make_scenarios.py --drop-unresolved`, which prints each one.
 
 The frozen gauntlet ran eight matchups at five identical seeds in stock and portable mode
 (80 battles total, no errors):
@@ -141,6 +212,79 @@ manual campaign playthrough of scripted bosses and unusual custom mechanics; the
 fail-safe stock fallback remains enabled for that reason.
 
 ## Future-agent handoff
+
+### 0.6.2 port (2026-09-06)
+
+Five commits, one per core version step, each with its own tests and rebuild. What the
+adapter learned about this engine along the way, and where it deliberately refuses to
+copy Reborn:
+
+**Function codes agree below 0x100 and diverge above it.** The base v16 space
+(0x05-0x21 status secondaries, 0x42-0x4F target drops, 0xBD-0xC1 multi-hit, 0xDD/0xDE
+drain, 0xFA-0xFE recoil) was checked move by move against `PBS/moves.txt` and is shared
+verbatim. Everything Reborn carries above 0x100 was pruned. The divergences that would
+have silently mislabelled moves:
+
+| Code | Reborn | Realidea |
+|---|---|---|
+| `0x139` | 3/4 drain (Draining Kiss) | Play Nice — an Attack drop |
+| `0x13B` | SpAtk drop | Hyperspace Fury — a Defense drop |
+| `0x13F` | Speed drop | Flower Shield — raises ally Defense |
+| `0x14F` | *(unused)* | the 3/4 drain |
+| `0x15A` | *(unused)* | First Impression |
+| `0xCF19` | *(unused)* | Pollen Puff — **heals** a targeted partner |
+
+`tools/check_move_codes.py` is the guard; run it in the gate.
+
+**There is no `pbMakeFakeBattler`, and the two-line equivalent is not pure.**
+`PokeBattle_Battler.new(battle, index)` runs `pbInitEffects(false)`, which reaches
+across to every *other* battler and clears whatever points at the index being built:
+Lock-On and its position (`080:338-345`), infatuation (`:374-378`) and Mean Look
+(`:418-424`). Building a fake at the actor's own index therefore cancels real board
+state the estimate is only supposed to be measuring. All four slots are snapshotted and
+restored around the construction; `pbInitPokemon` itself (`:203-241`) only copies stats
+and builds move objects through `pbFromPBMove`, which takes `(battle, move)` here — no
+user argument.
+
+**`move_memory` cannot work on this engine, and the key is deliberately not exported.**
+Realidea declares `PBEffects::LastMoveFailed = 4` in the *move-usage* namespace
+(`075_PBEffects.rb:170`), which is the same index as the *battler* effect
+`BideDamage = 4` (`:8`). The battler's copy is initialised to `false` (`080:415`) and
+**nothing in the build ever sets it true** — the only writes to index 4 are Bide's damage
+accumulator — so this engine's own Stomping Tantrum doubling (`083:10383`) is dead code.
+`successStates[i].useState` is not a substitute either: it is set to 2 only on the
+damaging path (`080:3223`), so a status move that worked perfectly reads back as
+`1 = failed`. With no key exported, `Model.truthy` reads nil and the core rule is inert,
+which is the honest answer; exporting it from either source would take 200 points off
+the wrong moves. A negative contract test keeps the decision from being quietly undone.
+
+**Three Reborn behaviours are absent here and are not modelled.**
+
+- Prankster is a priority modifier and nothing else (`084:1108`, `080:2618`). There is
+  no Dark-type immunity to it anywhere in the build, so the Reborn clause that kills a
+  Prankster status move into a Dark type would make the AI refuse a move that lands.
+- Psychic Terrain is *set* by move `0x169` and read by nothing, so a priority move under
+  it keeps its bracket. `effective_priority` replicates only the three ability rows the
+  engine actually brackets on (`084:1105-1113`).
+- Magic Bounce reflects only moves carrying the Magic Coat flag (flag `c`,
+  `082:236`) and yields to Mold Breaker (`080:2433`) — narrower than Reborn's blanket
+  reflect, and it does not read the partner's ability.
+
+The corpus cards for the first two, and the pair that tests move memory, are skipped by
+name in `AI_Probe::UNSUPPORTED` with the reason attached, so they report SKIP rather
+than a spurious failure.
+
+**Damage estimates changed, on purpose.** `rough_damage_pct` now does the same
+base-damage preparation stock v16 does before `pbRoughDamage` (`085:2802-2810`):
+`basedamage == 1` is the variable-power sentinel and scores as 60, and
+`pbBetterBaseDamage` resolves the ~30 codes that compute their own power (Seismic Toss,
+Super Fang, Night Shade, Endeavor, Gyro Ball, Grass Knot). Through 0.1.0 every one of
+those was priced at its sentinel. Expect the in-engine probe to move on cards involving
+them; that is a correction, not a regression, but read each one.
+
+**Two exports Reborn has were skipped as having no consumer**: switch-candidate
+`ability`/`item` and actor `types`. Nothing in `portable_ai/core.rb` reads them. If a
+future core rule does, the contract test will say so.
 
 ### Important findings and traps
 
@@ -215,16 +359,39 @@ Before replacing the installed section:
 1. Run all Ruby and Python tests.
 2. Rebuild `generated/Portable_AI.rb`; do not hand-edit it.
 3. Run `pack_rxdata.py --selftest` and verify upsert remains byte-idempotent.
-4. Run the complete in-engine probe. All 163 applicable assertions must still pass, with
-   five explicit field skips and zero missing/error/degenerate records.
-5. Run the paired seeded gauntlet with no portable marker. Reject changes that reduce
-   singles or doubles strength without a documented, reviewed reason.
-6. Remove all `ai_probe.txt`, `ai_gauntlet.txt`, and `portable_ai.txt` trigger files, then
-   smoke-test the normal title path.
-7. Update `generated/portable_ai_results.json` hashes and metrics only from the exact
+4. Run `python3 tools/check_move_codes.py`. Every code in the adapter's tables must
+   exist in `PBS/moves.txt`; read every advisory before ignoring it.
+5. Run the complete in-engine probe. All **260** applicable assertions must pass, with
+   the ten explicit skips (seven Reborn fields, three unsupported mechanics) and zero
+   missing/error/degenerate records.
+6. Run the paired seeded gauntlet with no portable marker. The only meaningful
+   regression signal is **losses that the previous version won on the same seed** —
+   list them by seed and read the traces. Do not expect a win-rate gain; Reborn showed
+   none across 0.3 -> 0.6.
+7. Run the ablation controls from `Data/ai_harness.txt` and check each reproduces its
+   predecessor version's decisions per seed, verified from the `portable_version` and
+   `config_overrides` stamps on the records rather than from file times.
+8. Remove all `ai_probe.txt`, `ai_gauntlet.txt`, `ai_harness.txt`, and `portable_ai.txt`
+   trigger files, then smoke-test the normal title path and confirm
+   `Data/portable_ai_error.txt` is absent.
+9. Update `generated/portable_ai_results.json` hashes and metrics only from the exact
    artifacts used for the report.
 
+### What is outstanding right now
+
+Everything above the in-engine line is done and committed. Outstanding, in order, and
+all of it needs Windows:
+
+1. Probe under Portable AI, then under stock, and grade both with `check_scenarios.py`
+   against `scenarios_realidea.json`. This is the first time the 0.6.2 build meets the
+   208-card corpus, so treat unexpected results as findings to read rather than as
+   failures to patch around.
+2. Paired gauntlet, then the ablation controls.
+3. Rewrite *Measured result* from those artifacts and refresh
+   `generated/portable_ai_results.json`.
+
 At this handoff, all trigger files are absent, the injected section is installed but
-inactive, the normal title path boots, and no high-severity review findings remain.
-The working tree also contains pre-existing team-generation and study edits; future
-agents should inspect the diff and avoid reverting unrelated work.
+inactive, and `pack_rxdata --selftest` round-trips byte-identical. The pre-change bundle
+is `backups/realidea_Scripts.rxdata.pre-0.6.2`. The working tree also contains
+pre-existing team-generation and study edits from other sessions; future agents should
+inspect the diff and avoid reverting unrelated work.
