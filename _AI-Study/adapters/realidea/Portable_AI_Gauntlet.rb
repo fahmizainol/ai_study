@@ -50,6 +50,10 @@ module PortableAIGauntlet
   SEEDS   = [104729, 130363, 155921, 196613, 262147]
 
   DEFAULT_TEAM_SET = "archetype"
+  # stock and portable are the measurement arms; shadow is the observer arm, in which
+  # stock plays and the portable planner records what it would have done instead.
+  MODES = ["stock", "portable", "shadow"]
+  DEFAULT_MODES = ["stock", "portable"]
 
   TEAMS = {
     "offense" => [
@@ -222,20 +226,35 @@ module PortableAIGauntlet
     mega = PortableAIRealidea::Harness.bool(cfg, "mega", true)
     $game_switches[512] = mega
 
+    # Which arms to run. The default pair is the measurement; "shadow" is a third arm
+    # in which the stock AI plays and the portable planner answers from the same
+    # position every turn without registering, so the two policies can be compared turn
+    # by turn instead of only on outcomes. A shadow run's battles must come out
+    # identical to a stock run's over the same seeds -- that equality is what says
+    # observation was free, and tools/shadow_check.py is what checks it.
+    modes = PortableAIRealidea::Harness.names(cfg, "modes", DEFAULT_MODES)
+    unknown = modes.reject { |m| MODES.include?(m) }
+    if !unknown.empty?
+      note("Gauntlet: unknown mode(s) #{unknown.join(', ')}; known: #{MODES.join(', ')}")
+      return
+    end
+
     old_trainer = $Trainer
     old_enabled = (defined?($PORTABLE_AI_ENABLED) ? $PORTABLE_AI_ENABLED : nil)
-    counts = {
-      "stock" => { "wins" => 0, "losses" => 0, "draws" => 0, "errors" => 0, "turns" => 0 },
-      "portable" => { "wins" => 0, "losses" => 0, "draws" => 0, "errors" => 0, "turns" => 0 }
-    }
-    note("Gauntlet: #{matchups.length * seeds.length * 2} battles, " +
+    old_shadow  = (defined?($PORTABLE_AI_SHADOW) ? $PORTABLE_AI_SHADOW : nil)
+    counts = {}
+    modes.each do |mode|
+      counts[mode] =
+        { "wins" => 0, "losses" => 0, "draws" => 0, "errors" => 0, "turns" => 0 }
+    end
+    note("Gauntlet: #{matchups.length * seeds.length * modes.length} battles, " +
          "#{tier ? 'tier' : 'frozen'} schedule, teams=#{set_name}, " +
-         "mega=#{mega}, portable #{PortableAI::VERSION}")
+         "mega=#{mega}, modes=#{modes.join('+')}, portable #{PortableAI::VERSION}")
 
     File.open(out, mode_flag) do |file|
       matchups.each do |matchup|
         seeds.each do |seed|
-          ["stock", "portable"].each do |mode|
+          modes.each do |mode|
             note("start #{matchup[0]} #{mode} seed=#{seed}")
             record = run_one(matchup, seed, mode, trace, teams, set_name, mega)
             note("  #{record['result']} turns=#{record['turns']}" +
@@ -269,6 +288,7 @@ module PortableAIGauntlet
   ensure
     $Trainer = old_trainer if defined?(old_trainer)
     $PORTABLE_AI_ENABLED = old_enabled if defined?(old_enabled)
+    $PORTABLE_AI_SHADOW = old_shadow if defined?(old_shadow)
   end
 
   def self.run_one(matchup, seed, mode, trace = false, teams = nil,
@@ -288,10 +308,17 @@ module PortableAIGauntlet
     battle.debug = true
     battle.items = []
     battle.instance_variable_set(:@portable_ai_gauntlet, true)
-    battle.instance_variable_set(:@portable_ai_decision_trace, trace ? [] : nil)
+    battle.instance_variable_set(
+      :@portable_ai_decision_trace, (trace && mode == "portable") ? [] : nil)
+    # The shadow trace is always collected, trace= or not: it is the entire output of
+    # the arm, not extra detail about it, and a shadow run without it records nothing
+    # the stock arm did not already record.
+    battle.instance_variable_set(
+      :@portable_ai_shadow_trace, mode == "shadow" ? [] : nil)
 
     $Trainer = left_trainer
     $PORTABLE_AI_ENABLED = (mode == "portable")
+    $PORTABLE_AI_SHADOW = (mode == "shadow")
     srand(seed)
     decision = battle.pbStartBattle(true)
     result = decision == 2 ? "win" : decision == 1 ? "loss" : "draw"
@@ -325,17 +352,32 @@ module PortableAIGauntlet
     # as the paired baseline of the run it came from, and a readout rendered from a
     # stale baseline is the failure this stamp exists to make visible.
     record["portable_version"] = PortableAI::VERSION if defined?(PortableAI::VERSION)
-    # Only alongside a trace, and only then: the trace records a switch by party slot
-    # and a renderer has no other way to learn what lives there. Without a trace the
-    # record stays the compact one every recorded run used.
-    if trace
+    # Alongside any per-turn record: a switch is stored as a party slot and a renderer
+    # has no other way to learn what lives there. A shadow record always has one, since
+    # its per-turn pairing IS the arm's output. Without either, the record stays the
+    # compact one every earlier run used.
+    if trace || mode == "shadow"
       record["parties"] = [party_snapshot(battle.party1), party_snapshot(battle.party2)]
     end
-    if mode == "portable"
+    if mode != "stock"
       overrides = PortableAIRealidea.config_overrides
       record["config_overrides"] = overrides if !overrides.empty?
+    end
+    if mode == "portable"
       captured = battle.instance_variable_get(:@portable_ai_decision_trace)
       record["trace"] = captured if captured
+    end
+    if mode == "shadow"
+      observed = battle.instance_variable_get(:@portable_ai_shadow_trace) || []
+      record["shadow"] = observed
+      record["shadow_len"] = observed.length
+      # How many rolls the observation took from its private generator instead of the
+      # battle's. Expected to be well above zero -- the engine's own pbGetMoveScore
+      # rolls inside its stat-boost handlers, and the snapshot calls it for every
+      # candidate move -- and every one of them is a draw the host battle did not lose.
+      # A shadow record reporting 0 has either observed nothing or lost its diversion.
+      record["shadow_rng_diverted"] =
+        battle.instance_variable_get(:@portable_ai_shadow_rng_draws).to_i
     end
     record
   rescue Exception => error

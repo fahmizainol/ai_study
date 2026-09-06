@@ -50,7 +50,7 @@ end
 module PBEffects
   # Battler effects.
   Attract = 1; ChoiceBand = 7; LeechSeed = 43; LockOn = 45; LockOnPos = 46
-  MeanLook = 50; PerishSong = 66
+  MeanLook = 50; MultiTurn = 51; MultiTurnUser = 52; PerishSong = 66
   Substitute = 91; Toxic = 95; Type3 = 99; Wish = 105; Yawn = 108
   # Side effects (own array, so the index reuse below is Realidea's own).
   LightScreen = 4; Rainbow = 9; Reflect = 10; Safeguard = 12; Spikes = 14
@@ -248,6 +248,11 @@ class PokeBattle_Battler < StubBattler
         other.effects[PBEffects::LockOn] = 0
         other.effects[PBEffects::LockOnPos] = -1
       end
+      # Realidea's own fourth cross-battler write, which stock v16 does not make.
+      if other.effects[PBEffects::MultiTurnUser] == index
+        other.effects[PBEffects::MultiTurn] = 0
+        other.effects[PBEffects::MultiTurnUser] = -1
+      end
     end
   end
 
@@ -285,11 +290,14 @@ class StubField
 end
 
 class PokeBattle_Battle
-  attr_reader :stock_choice
+  attr_reader :stock_choice, :registered
   attr_accessor :battlers, :doublebattle, :turncount, :sides, :field, :parties,
-                :weather, :owner, :score
+                :weather, :owner, :score, :choices, :rng_draws
 
   def initialize
+    @choices = [[0, 0, nil, -1], [0, 0, nil, -1], [0, 0, nil, -1], [0, 0, nil, -1]]
+    @registered = []
+    @rng_draws = 0
     @battlers = [nil, nil, nil, nil]
     @doublebattle = false
     @turncount = 0
@@ -300,13 +308,22 @@ class PokeBattle_Battle
     @score = 100
   end
 
-  def pbChooseMoves(index); @stock_choice = index; end
-  def pbDefaultChooseEnemyCommand(index); @stock_choice = index; end
+  # The stock path registers, the way the engine's own does, so a shadow run has
+  # something to read back. Move id 97 is arbitrary and only has to differ from
+  # whatever a test's stubbed plan chooses.
+  def pbChooseMoves(index); pbStockRegister(index); end
+  def pbDefaultChooseEnemyCommand(index); pbStockRegister(index); end
+  def pbStockRegister(index)
+    @stock_choice = index
+    @choices[index] = [1, 3, StubMove.new(:id => 97), -1]
+    index
+  end
+  def pbCanShowCommands?(_index); true; end
   def pbIsOpposing?(index); index.odd?; end
   def opponent; Object.new; end
   def pbGetOwner(_index); @owner; end
   def pbWeather; @weather; end
-  def pbAIRandom(limit); 0; end
+  def pbAIRandom(_limit); @rng_draws += 1; 0; end
   def pbParty(index); @parties[index & 1]; end
   def pbOpposingParty(index); @parties[(index & 1) ^ 1]; end
   def pbCanChooseMove?(_index, _slot, _show); true; end
@@ -324,8 +341,8 @@ class PokeBattle_Battle
   def pbRoughStat(battler, stat, _skill)
     stat == PBStats::ATTACK ? battler.attack_stat : battler.spatk_stat
   end
-  def pbRegisterMove(_i, _slot, _show); true; end
-  def pbRegisterSwitch(_i, _slot); true; end
+  def pbRegisterMove(i, slot, _show); @registered << [:move, i, slot]; true; end
+  def pbRegisterSwitch(i, slot); @registered << [:switch, i, slot]; true; end
   def pbRegisterTarget(_i, _t); true; end
 end
 
@@ -337,11 +354,13 @@ class PortableAIRealideaAdapterTest < Test::Unit::TestCase
   def setup
     $PORTABLE_AI_ENABLED = false
     $PORTABLE_AI_CONFIG = nil
+    $PORTABLE_AI_SHADOW = false
   end
 
   def teardown
     $PORTABLE_AI_ENABLED = false
     $PORTABLE_AI_CONFIG = nil
+    $PORTABLE_AI_SHADOW = false
   end
 
   def test_numeric_skill_code_repairs_realidea_column_shift
@@ -1064,6 +1083,152 @@ class PortableAIRealideaAdapterTest < Test::Unit::TestCase
   # Stock v16 resolves variable-power moves before it estimates damage
   # (085_PokeBattle_AI.rb:2802-2810); passing raw basedamage priced Seismic Toss and
   # Super Fang at their sentinel.
+  # Building a fake battler at a live index runs the engine's pbInitEffects, which
+  # clears every effect on OTHER battlers that points at that index. Realidea clears a
+  # partial trap there as well as Lock-On, Attract and Mean Look, so without MultiTurn
+  # in the restore list, merely WEIGHING a switch while holding a foe in Infestation set
+  # that foe free. The shadow arm is what surfaced it: 14 of 60 observed battles failed
+  # to reproduce their unobserved twins, all of them the roster's one Infestation user.
+  def test_weighing_a_switch_does_not_free_a_trapped_foe
+    battle = PokeBattle_Battle.new
+    trapped = StubBattler.new(:index => 0)
+    trapped.effects[PBEffects::MultiTurn] = 3
+    trapped.effects[PBEffects::MultiTurnUser] = 1
+    battle.battlers[0] = trapped
+    battle.battlers[1] = StubBattler.new(:index => 1)
+    pokemon = StubPokemon.new
+    assert_not_nil(PortableAIRealidea.fake_battler(battle, pokemon, 0, 1))
+    assert_equal(3, trapped.effects[PBEffects::MultiTurn])
+    assert_equal(1, trapped.effects[PBEffects::MultiTurnUser])
+  end
+
+  # The list is only correct while it matches the engine it was read from.
+  def test_restore_list_covers_every_cross_battler_write
+    assert_equal([:Attract, :LockOn, :LockOnPos, :MeanLook, :MultiTurn, :MultiTurnUser],
+                 PortableAIRealidea::RESTORED_ON_FAKE.sort_by { |s| s.to_s })
+  end
+
+  # --- shadow arm ------------------------------------------------------------
+
+  def with_stubbed_plan(plan)
+    singleton = (class << PortableAIRealidea; self; end)
+    singleton.send(:alias_method, :real_plan_for, :plan_for)
+    singleton.send(:define_method, :plan_for) { |_battle| plan }
+    yield
+  ensure
+    singleton.send(:remove_method, :plan_for)
+    singleton.send(:alias_method, :plan_for, :real_plan_for)
+    singleton.send(:remove_method, :real_plan_for)
+  end
+
+  def test_shadow_enables_the_adapter_without_the_live_marker
+    $PORTABLE_AI_SHADOW = true
+    battle = PokeBattle_Battle.new
+    assert_equal(true, PortableAIRealidea.shadow?)
+    assert_equal(true, PortableAIRealidea.active?)
+    assert_equal(true, PortableAIRealidea.enabled_for?(battle, 1))
+    assert_equal(false, PortableAIRealidea.enabled_for?(battle, 0))
+  end
+
+  # The whole point of the arm: the host still chooses, and nothing the observer does
+  # reaches the battle. A registration here would mean the observed battle is not the
+  # battle that runs unobserved, which voids every comparison drawn from it.
+  def test_shadow_records_both_answers_and_registers_nothing
+    $PORTABLE_AI_SHADOW = true
+    battle = PokeBattle_Battle.new
+    battle.instance_variable_set(:@portable_ai_shadow_trace, [])
+    plan = { "actions" => [{ "actor_index" => 1, "type" => "move", "slot" => 0,
+                             "move_id" => "BULLETPUNCH", "numeric_move_id" => 418,
+                             "target" => nil, "score" => 820.0 }] }
+    with_stubbed_plan(plan) { battle.pbDefaultChooseEnemyCommand(1) }
+    assert_equal([], battle.registered)
+    assert_equal(1, battle.stock_choice)
+    trace = battle.instance_variable_get(:@portable_ai_shadow_trace)
+    assert_equal(1, trace.length)
+    assert_equal(418, trace[0]["portable"]["numeric_move_id"])
+    assert_equal("move", trace[0]["stock"]["type"])
+    assert_equal(97, trace[0]["stock"]["numeric_move_id"])
+  end
+
+  # Both command hooks can reach one battler in a turn; a second entry would
+  # double-count that turn in any disagreement rate.
+  def test_shadow_records_one_entry_per_battler_per_turn
+    $PORTABLE_AI_SHADOW = true
+    battle = PokeBattle_Battle.new
+    battle.instance_variable_set(:@portable_ai_shadow_trace, [])
+    plan = { "actions" => [{ "actor_index" => 1, "type" => "move", "slot" => 0,
+                             "numeric_move_id" => 418 }] }
+    with_stubbed_plan(plan) do
+      battle.pbDefaultChooseEnemyCommand(1)
+      battle.pbChooseMoves(1)
+    end
+    assert_equal(1, battle.instance_variable_get(:@portable_ai_shadow_trace).length)
+  end
+
+  # The engine's own scorer rolls: pbGetMoveScore does it inside the stat-boost
+  # handlers, and the snapshot calls it once per candidate move. Those rolls must come
+  # from the observer's generator, not the battle's -- a first 60-battle shadow run
+  # diverged on exactly the 14 matchups whose observed team carried setup moves.
+  # The stubbed plan stands in for that scoring: it rolls through the battle, and the
+  # battle must not feel it.
+  def test_observing_diverts_every_roll_away_from_the_battle
+    $PORTABLE_AI_SHADOW = true
+    battle = PokeBattle_Battle.new
+    battle.instance_variable_set(:@portable_ai_shadow_trace, [])
+    plan = { "actions" => [{ "actor_index" => 1, "type" => "move", "slot" => 0 }] }
+    singleton = (class << PortableAIRealidea; self; end)
+    singleton.send(:alias_method, :real_plan_for, :plan_for)
+    singleton.send(:define_method, :plan_for) do |b|
+      3.times { b.pbAIRandom(10) }
+      plan
+    end
+    begin
+      battle.pbDefaultChooseEnemyCommand(1)
+    ensure
+      singleton.send(:remove_method, :plan_for)
+      singleton.send(:alias_method, :plan_for, :real_plan_for)
+      singleton.send(:remove_method, :real_plan_for)
+    end
+    assert_equal(0, battle.rng_draws)
+    assert_equal(
+      3, battle.instance_variable_get(:@portable_ai_shadow_rng_draws).to_i)
+  end
+
+  # Outside an observation the override must be the engine's own method, or every live
+  # arm and all of normal play would quietly lose its randomness.
+  def test_rolls_outside_an_observation_reach_the_battle
+    battle = PokeBattle_Battle.new
+    3.times { battle.pbAIRandom(10) }
+    assert_equal(3, battle.rng_draws)
+  end
+
+  # Realidea numbers a switch 2 where Reborn numbers it 3, so this is read off this
+  # engine rather than shared with the other adapter.
+  def test_host_switch_choice_is_labelled_with_realidea_numbering
+    choice = PortableAIRealidea.describe_choice([2, 4, nil, -1])
+    assert_equal("switch", choice["type"])
+    assert_equal(4, choice["slot"])
+  end
+
+  # A code with no label must not be given one: a mislabelled choice reads as a
+  # disagreement that never happened.
+  def test_unknown_choice_code_is_reported_not_guessed
+    choice = PortableAIRealidea.describe_choice([9, 0, nil, -1])
+    assert_equal("unregistered", choice["type"])
+    assert_equal(9, choice["code"])
+  end
+
+  def test_neutral_rng_is_deterministic_and_counts_its_draws
+    a = PortableAIRealidea::NeutralRNG.new(7)
+    b = PortableAIRealidea::NeutralRNG.new(7)
+    assert_equal(0, a.draws)
+    drawn = (0...5).map { a.rand(100) }
+    assert_equal(drawn, (0...5).map { b.rand(100) })
+    assert_equal(5, a.draws)
+    assert_equal(true, drawn.all? { |value| value >= 0 && value < 100 })
+    assert_equal(0, PortableAIRealidea::NeutralRNG.new(7).rand(0))
+  end
+
   def test_damage_estimate_goes_through_pbBetterBaseDamage
     battle = PokeBattle_Battle.new
     seen = []

@@ -119,5 +119,77 @@ class RealideaVetoTest(unittest.TestCase):
         self.assertIsNone(self.game.veto({"item": "Leftovers", "ability": "Levitate"}))
 
 
+class ShadowComparisonTest(unittest.TestCase):
+    """How a shadow run decides two AIs picked the same thing.
+
+    The rule has one owner (tools/shadow_check.py) because the readout and the
+    statistics both consume it; if they disagreed about what counts as a
+    disagreement, nothing downstream would be trustworthy.
+    """
+
+    @classmethod
+    def setUpClass(cls):
+        import shadow_check
+        cls.mod = shadow_check
+
+    def test_same_move_agrees_on_numeric_id_not_name(self):
+        # The host choice carries a numeric id; only the portable side has the name.
+        portable = {"type": "move", "numeric_move_id": 418, "move_id": "BULLETPUNCH"}
+        self.assertTrue(self.mod.same_choice(portable, {"type": "move",
+                                                        "numeric_move_id": 418}))
+        self.assertFalse(self.mod.same_choice(portable, {"type": "move",
+                                                         "numeric_move_id": 97}))
+
+    def test_different_kinds_disagree(self):
+        self.assertFalse(self.mod.same_choice(
+            {"type": "switch", "slot": 2}, {"type": "move", "numeric_move_id": 97}))
+
+    def test_switches_compare_on_party_slot(self):
+        self.assertTrue(self.mod.same_choice({"type": "switch", "slot": 3},
+                                             {"type": "switch", "slot": 3}))
+        self.assertFalse(self.mod.same_choice({"type": "switch", "slot": 3},
+                                              {"type": "switch", "slot": 1}))
+
+    # An unscorable pair must not be counted either way: silently calling it agreement
+    # would understate disagreement, and disagreement would overstate it.
+    def test_unscorable_pairs_are_none_not_false(self):
+        self.assertIsNone(self.mod.same_choice(None, {"type": "move"}))
+        self.assertIsNone(self.mod.same_choice({"type": "move"}, None))
+        self.assertIsNone(self.mod.same_choice({"type": "move", "numeric_move_id": 1},
+                                               {"type": "unregistered", "code": 9}))
+        self.assertIsNone(self.mod.same_choice({"type": "move"},
+                                               {"type": "move", "numeric_move_id": 1}))
+
+    # Two roster sets name their matchups identically (team1_vs_team2 in both
+    # gen6ou_a and gen6ou_b), so a key without the set silently collapses them and
+    # halves the sample -- which is exactly what it did on the first full run.
+    def test_records_from_two_roster_sets_do_not_collide(self):
+        rows = [
+            {"mode": "stock", "teams": "gen6ou_a", "id": "t1_vs_t2", "seed": 1},
+            {"mode": "stock", "teams": "gen6ou_b", "id": "t1_vs_t2", "seed": 1},
+            {"mode": "shadow", "teams": "gen6ou_a", "id": "t1_vs_t2", "seed": 1},
+            {"mode": "shadow", "teams": "gen6ou_b", "id": "t1_vs_t2", "seed": 1},
+        ]
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "run.ndjson"
+            path.write_text("\n".join(json.dumps(r) for r in rows), encoding="utf-8")
+            stock, shadow = self.mod.load(str(path))
+        self.assertEqual(2, len(stock))
+        self.assertEqual(2, len(shadow))
+
+    def test_divergent_outcomes_are_reported_as_not_free(self):
+        stock = {("s", "m", 1): {"decision": 2, "turns": 22}}
+        shadow = {("s", "m", 1): {"decision": 2, "turns": 14}}
+        paired, bad = self.mod.check_free(stock, shadow)
+        self.assertEqual(1, paired)
+        self.assertEqual(1, len(bad))
+
+    def test_identical_outcomes_are_reported_as_free(self):
+        stock = {("s", "m", 1): {"decision": 2, "turns": 22}}
+        shadow = {("s", "m", 1): {"decision": 2, "turns": 22}}
+        paired, bad = self.mod.check_free(stock, shadow)
+        self.assertEqual((1, []), (paired, bad))
+
+
 if __name__ == "__main__":
     unittest.main()

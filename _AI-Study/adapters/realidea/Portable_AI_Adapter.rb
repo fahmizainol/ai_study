@@ -87,6 +87,36 @@ module PortableAIRealidea
     end
   end
 
+  # Where an observing shadow's rolls are sent instead of the battle's RNG.
+  #
+  # An observation must take nothing from the stream the host is playing on, and the
+  # planner's own difficulty noise is only half of that. Building a snapshot calls the
+  # ENGINE's scoring helpers -- pbGetMoveScore above all -- and those roll: PokeBattle_AI
+  # makes 21 pbAIRandom calls and no bare rand, several inside the stat-boost handlers
+  # pbGetMoveScore runs for every candidate move. A first shadow run over 60 battles
+  # proved the point rather than arguing it: 14 diverged from their unobserved twins,
+  # and all 14 were the matchups whose observed team carried setup moves.
+  #
+  # So the diversion happens at pbAIRandom, the one choke point both the planner (via
+  # BattleRNG) and the engine's helpers pass through, rather than at the planner alone.
+  # An LCG rather than Kernel#rand because Kernel#rand IS the battle stream: srand(seed)
+  # in the gauntlet seeds it, so drawing from it is the very leak being closed.
+  class NeutralRNG
+    attr_reader :draws
+
+    def initialize(seed)
+      @draws = 0
+      @state = (seed.to_i & 0x3FFFFFFF)
+    end
+
+    def rand(limit)
+      @draws += 1
+      @state = ((@state * 1103515245) + 12345) & 0x3FFFFFFF
+      bound = limit.to_i
+      bound <= 0 ? 0 : @state % bound
+    end
+  end
+
   def self.requested?
     return true if defined?($PORTABLE_AI_ENABLED) && $PORTABLE_AI_ENABLED
     File.exist?(ENABLE_FILE)
@@ -94,8 +124,32 @@ module PortableAIRealidea
     false
   end
 
+  # Shadow mode: build the snapshot and run the planner for the observed side, record
+  # what it would have done, and register nothing -- the host AI still chooses. Both AIs
+  # therefore answer from the identical position on every turn, which is the only way to
+  # compare the two policies at scale; two live arms diverge after about a turn and
+  # everything after that is a different battle, so a live stock/portable pair can be
+  # compared on outcomes but never turn by turn.
+  #
+  # Sound because the planner registers nothing, draws from NeutralRNG instead of the
+  # battle, and restores the two host fields build_snapshot stages (fake_battler's
+  # effects and switch_incoming_damage's attack stages, both under `ensure`). What it
+  # deliberately does NOT do is apply_memory: portable memory would otherwise record
+  # moves the portable AI never made, so a shadow decision does not carry the
+  # repeated-setup penalty the same position would attract in a live portable run.
+  #
+  # The claim is checked, not asserted -- run the shadow and stock arms over the same
+  # seeds and every battle must agree on decision and turns. See PORTABLE-AI-REALIDEA.md.
+  def self.shadow?
+    defined?($PORTABLE_AI_SHADOW) && $PORTABLE_AI_SHADOW ? true : false
+  end
+
+  def self.active?
+    requested? || shadow?
+  end
+
   def self.enabled_for?(battle, index)
-    return false if !requested?
+    return false if !active?
     return false if !battle.pbIsOpposing?(index)
     return false if !ENABLE_WILD && !battle.opponent
     true
@@ -201,6 +255,102 @@ module PortableAIRealidea
     log_error(error, index)
     clear_cache(battle)
     false
+  end
+
+  # One paired observation: what the portable planner would have done from this
+  # position, recorded and not registered. record_host_choice then fills in what the
+  # host actually did, so a single entry holds both AIs' answers to the identical board
+  # -- the turn-by-turn comparison that outcome numbers alone cannot give.
+  def self.observe(battle, index)
+    trace = battle.instance_variable_get(:@portable_ai_shadow_trace)
+    return if !trace
+    # Both command hooks can reach the same battler in one turn. Only the first is the
+    # decision; a second entry would double-count that turn in any disagreement rate.
+    last = trace[-1]
+    return if last && last["turn"] == battle.turncount && last["actor"] == index
+    action = nil
+    with_diverted_rng(battle) do
+      (plan_for(battle)["actions"] || []).each do |candidate|
+        if candidate["actor_index"] == index
+          action = candidate
+          break
+        end
+      end
+    end
+    trace << {
+      "turn" => battle.turncount,
+      "actor" => index,
+      "portable" => action_summary(action),
+      "view" => view_trace(
+        battle.instance_variable_get(:@portable_ai_last_snapshot), index)
+    }
+  rescue Exception => error
+    log_error(error, index)
+    clear_cache(battle)
+  end
+
+  # Every roll taken inside the block comes from a private generator instead of the
+  # battle's, and the count of them is kept: it is the number of draws the observation
+  # would otherwise have stolen from the host, so a run reporting zero has either
+  # observed nothing or lost its diversion.
+  def self.with_diverted_rng(battle)
+    previous = battle.instance_variable_get(:@portable_ai_observer_rng)
+    rng = NeutralRNG.new(battle.turncount.to_i + 1)
+    battle.instance_variable_set(:@portable_ai_observer_rng, rng)
+    yield
+  ensure
+    battle.instance_variable_set(:@portable_ai_observer_rng, previous)
+    if rng && rng.draws > 0
+      total = battle.instance_variable_get(:@portable_ai_shadow_rng_draws).to_i
+      battle.instance_variable_set(:@portable_ai_shadow_rng_draws, total + rng.draws)
+    end
+  end
+
+  def self.action_summary(action)
+    return nil if !action
+    {
+      "type" => action["type"],
+      "slot" => action["slot"],
+      "move_id" => action["move_id"],
+      "numeric_move_id" => action["numeric_move_id"],
+      "target" => action["target"],
+      "score" => action["score"]
+    }
+  end
+
+  # Engine choice codes, read off this engine's own pbRegisterMove/pbRegisterSwitch
+  # rather than assumed: Realidea numbers a switch 2, where Reborn numbers it 3. An
+  # unrecognised code is recorded as its number instead of being labelled, because a
+  # mislabelled choice would read as a disagreement that never happened.
+  CHOICE_TYPES = { 1 => "move", 2 => "switch", 3 => "item", 4 => "call", 5 => "run" }
+
+  # What the host registered, read back from battle.choices in the shape the portable
+  # action already uses. This is the half Realidea never recorded: without it a trace
+  # says what portable would have done but not what it would have differed FROM.
+  # numeric_move_id is the comparison key -- the choice holds a PokeBattle_Move object,
+  # and its numeric id is the one field both sides carry without a name lookup.
+  def self.record_host_choice(battle, index)
+    trace = battle.instance_variable_get(:@portable_ai_shadow_trace)
+    return if !trace
+    entry = trace[-1]
+    return if !entry || entry["actor"] != index || entry["turn"] != battle.turncount
+    return if entry.has_key?("stock")
+    entry["stock"] = describe_choice(battle.choices[index])
+  rescue
+  end
+
+  def self.describe_choice(choice)
+    return nil if !choice
+    kind = CHOICE_TYPES[choice[0]]
+    return { "type" => "unregistered", "code" => choice[0] } if !kind
+    out = { "type" => kind, "slot" => choice[1] }
+    if choice[0] == 1
+      move = choice[2]
+      out["numeric_move_id"] = (move.id rescue nil)
+      out["move_id"] = (getConstantName(PBMoves, move.id) rescue nil)
+      out["target"] = choice[3]
+    end
+    out
   end
 
   def self.plan_for(battle)
@@ -617,17 +767,32 @@ module PortableAIRealidea
   # pbMakeFakeBattler does internally; v16 has no such helper, so it is spelled out.
   #
   # PokeBattle_Battler#initialize is NOT pure. pbInitEffects reaches across to every
-  # OTHER battler and clears whatever points at the index being built -- Lock-On
-  # (080:338-345), infatuation (:374-378) and Mean Look (:418-424). Building a fake at
-  # the actor's own index would therefore silently cancel a real Lock-On, Attract or
-  # trap on the board it is only supposed to be measuring, so all four effect slots are
-  # snapshotted and restored. pbInitPokemon itself only copies stats and builds move
-  # objects through pbFromPBMove (:203-241); those are the only three writes in the
-  # whole constructor that leave the new battler.
+  # OTHER battler and clears whatever points at the index being built. Building a fake
+  # at the actor's own index therefore cancels real effects on the board it is only
+  # supposed to be measuring, so every slot it can touch is snapshotted and restored.
+  # pbInitPokemon itself only copies stats and builds move objects through pbFromPBMove.
+  #
+  # There are FOUR such writes in Realidea, not the three stock Essentials documents:
+  # Lock-On (LockOn + LockOnPos), infatuation (Attract), Mean Look (MeanLook), and --
+  # this engine's own -- partial trapping (MultiTurn + MultiTurnUser), which stock v16
+  # does not clear here. Missing that last pair meant that every time the AI weighed a
+  # switch while it had a foe bound by Infestation, Wrap, Fire Spin or any other binding
+  # move, merely THINKING about the switch set the foe free.
+  #
+  # That was invisible until the shadow arm gave it something to contradict: an observed
+  # battle must play out exactly like its unobserved twin, and 14 of the first 60 did
+  # not. All 14 were the matchups whose observed team carried the one Infestation user
+  # in the roster. The bug is older than the shadow arm and was corrupting the live
+  # Portable arm's own battles too -- it just had no way to show up there, because with
+  # nothing to compare against, a freed foe is simply what happened.
+  #
+  # The list is read off THIS engine's pbInitEffects. If a future Realidea build adds a
+  # fifth, the shadow equality check is what will catch it; see PORTABLE-AI-REALIDEA.md.
   #
   # nil when the engine refuses, which leaves the core on the type proxy it used
   # through 0.1.0.
-  RESTORED_ON_FAKE = [:Attract, :MeanLook, :LockOn, :LockOnPos]
+  RESTORED_ON_FAKE = [:Attract, :MeanLook, :LockOn, :LockOnPos,
+                      :MultiTurn, :MultiTurnUser]
 
   def self.fake_battler(battle, pokemon, party_index, index)
     saved = []
@@ -1513,6 +1678,19 @@ module PortableAIRealidea
       out.empty? ? fallback : out
     end
 
+    # list's string counterpart. Kept separate rather than adding a flag to list,
+    # because every existing caller wants integers and a mode name silently coerced by
+    # to_i would become 0 rather than raise.
+    def self.names(cfg, key, fallback)
+      return fallback if !cfg[key] || cfg[key] == ""
+      out = []
+      cfg[key].to_s.split(",").each do |part|
+        part = part.strip
+        out << part if part != ""
+      end
+      out.empty? ? fallback : out
+    end
+
     def self.config_overrides_from(cfg)
       overrides = {}
       CONFIG_OVERRIDE_KEYS.each do |key, kind|
@@ -1553,12 +1731,38 @@ class PokeBattle_Battle
   if !method_defined?(:portable_ai_stock_pbDefaultChooseEnemyCommand)
     alias portable_ai_stock_pbDefaultChooseEnemyCommand pbDefaultChooseEnemyCommand
   end
+  if !method_defined?(:portable_ai_stock_pbAIRandom)
+    alias portable_ai_stock_pbAIRandom pbAIRandom
+  end
+
+  # The single point every AI roll passes through, engine and planner alike. While a
+  # shadow observation is in progress it is redirected to that observation's private
+  # generator, so watching a battle cannot change it. Outside an observation -- which is
+  # every live arm and all of normal play -- this is the engine's own method.
+  def pbAIRandom(limit)
+    observer = @portable_ai_observer_rng
+    return observer.rand(limit) if observer
+    portable_ai_stock_pbAIRandom(limit)
+  end
 
   def portable_ai_last_plan
     @portable_ai_last_plan
   end
 
+  # Observe, let the host choose, then read back what it chose. Shared by both command
+  # hooks so the paired entry is written the same way on either path.
+  def portable_ai_shadowed(index)
+    watching = PortableAIRealidea.enabled_for?(self, index) && pbCanShowCommands?(index)
+    PortableAIRealidea.observe(self, index) if watching
+    result = yield
+    PortableAIRealidea.record_host_choice(self, index) if watching
+    result
+  end
+
   def pbChooseMoves(index)
+    if PortableAIRealidea.shadow?
+      return portable_ai_shadowed(index) { portable_ai_stock_pbChooseMoves(index) }
+    end
     if PortableAIRealidea.enabled_for?(self, index)
       return if PortableAIRealidea.choose(self, index)
     end
@@ -1566,6 +1770,15 @@ class PokeBattle_Battle
   end
 
   def pbDefaultChooseEnemyCommand(index)
+    # Shadow observes and then hands the turn to the host untouched. It skips the block
+    # below deliberately rather than falling through it: those pre-steps use an item,
+    # auto-pick a move and register a mega evolution, and the host method runs all three
+    # again, so a fall-through would perform each of them twice.
+    if PortableAIRealidea.shadow?
+      return portable_ai_shadowed(index) {
+        portable_ai_stock_pbDefaultChooseEnemyCommand(index)
+      }
+    end
     if PortableAIRealidea.enabled_for?(self, index) && pbCanShowCommands?(index)
       return if pbEnemyShouldUseItem?(index)
       if pbCanShowFightMenu?(index)

@@ -20,6 +20,7 @@ The study has two phases, and they are still both live:
 |---|---|
 | Portable core | **0.6.2**, installed in Reborn Yang (opt-in, off by default) |
 | Second adapter | Realidea v16, **installed at 0.6.2** — probe **240/256** vs stock's 202/256, no regressions; tier gauntlet **66.9%** vs **50.0%** (240 battles, real gen 6 OU teams), archetype **64.4%** vs **51.2%** (320 battles) |
+| Turn-by-turn A/B | Realidea **shadow arm**: stock plays, the portable planner answers the same board every turn and registers nothing. 120/120 observed battles reproduce their unobserved twins exactly; over 3,027 compared turns the two policies **agree 58.3%**. Its equality check caught a pre-existing adapter bug that freed trapped foes (`PORTABLE-AI-REALIDEA.md` → *The shadow arm*) |
 | Corpus | **213 cards / 281 assertions** in `scenarios.json` — 275 graded and passing, 6 N/A on the Portable side (`switch_score_gt` needs Reborn's party-indexed score array) |
 | Unit tests | **229** Ruby + **11** Python green — `test_portable_ai.rb` 108, `test_realidea_adapter.rb` 68, `test_reborn_adapter.rb` 53, `test_tooling.py` 11 |
 | Benchmark frame | 7 rosters × 60 = **420 battles**, `arms=normal_portable`, `schedule=normal_baseline`, `party_size=6` |

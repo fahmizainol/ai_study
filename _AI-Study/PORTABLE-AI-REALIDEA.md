@@ -93,6 +93,7 @@ config overrides these do not touch core policy — they choose what runs.
 | `mega=false` | on | suppress Mega Evolution (see *Mega Evolution*) |
 | `seeds=a,b,c` | five | replace the default seeds |
 | `trace=true` | off | record the per-turn portable decision trace, plus `parties` (see *Turn-by-turn traces*) |
+| `modes=a,b` | `stock,portable` | which arms to run: `stock`, `portable`, `shadow` (see *The shadow arm*) |
 | `append=true` | off | append rather than truncate |
 
 Progress goes to `Data/ai_gauntlet_progress.txt` (one line per battle, flushed) and any
@@ -157,7 +158,7 @@ Unit tests:
 ```bash
 ruby _AI-Study/tests/test_portable_ai.rb        # 108 tests
 ruby _AI-Study/tests/test_reborn_adapter.rb     # 53 tests
-ruby _AI-Study/tests/test_realidea_adapter.rb   # 64 tests
+ruby _AI-Study/tests/test_realidea_adapter.rb   # 78 tests
 python3 _AI-Study/tests/test_tooling.py
 python3 _AI-Study/tools/check_move_codes.py
 ```
@@ -377,17 +378,102 @@ Four things to know before reading one:
 
 | | |
 |---|---|
-| **Portable arm only** | `run_one` stamps a trace for `mode=portable` only, so there is no stock-side decision record and no turn-by-turn diff of the two AIs. Reborn's shadow arm does that; this engine has no equivalent. |
+| **One arm per record** | a `mode=portable` record traces the arm that *played*, so it holds no stock answer to the same board. For a turn-by-turn diff of the two AIs, run the **shadow arm** below; those records carry both. |
 | **Decisions, not outcomes** | the line says what Portable chose and the evidence it saw. It does *not* say whether the move hit, crit or was Protected. Reborn's renderer has an `events` stream for that; this gauntlet records none. |
 | **A missing turn is a fall-through** | no line means Portable did not decide that turn — the adapter deferred to the stock path, or the actor could not act. |
 | **`race` is keyed by battler seat, not party slot** | the record carries no per-turn foe identity, so the renderer prints `foe@0` rather than guessing a species. A *switch* entry's `slot` **is** a party index and is resolved to a name. |
 
-`parties` (species and final HP per side) is written only alongside a trace — a switch is
-recorded by party slot and a renderer has no other way to learn what lives there. Without
-`trace=true` the record stays the compact one every earlier run used.
+`parties` (species and final HP per side) is written alongside any per-turn record —
+`trace=true`, or a shadow record, whose per-turn pairing *is* the arm's output. A switch
+is recorded by party slot and a renderer has no other way to learn what lives there.
+With neither, the record stays the compact one every earlier run used.
 
 Error records carry their partial trace too, since the battle that crashed is the one
 most worth reading; before that they were the only records that threw it away.
+
+### The shadow arm
+
+`modes=shadow` runs the battle on the **stock** AI while the portable planner is asked,
+every turn, what it would have done from the identical position — and registers nothing.
+That is the only way to compare two policies turn by turn: two live arms hold the same
+board for about one turn, and everything after that is a different battle, so a live
+stock/portable pair can be compared on outcomes and nothing finer.
+
+```bash
+# modes=stock,portable,shadow  schedule=tier  teams=gen6ou_a   (then gen6ou_b, append=true)
+python3 tools/shadow_check.py generated/realidea_tier_shadow_0_6_2.ndjson
+python3 tools/render_realidea_battle.py generated/realidea_tier_shadow_0_6_2.ndjson team1_vs_team4 104729
+```
+
+```
+Turn 1   actor 1   <- DIFFERENT
+    stock   : INFESTATION
+    portable: switch -> Scizor             score    307.3
+    view: hp 100%  speed 46 (slower)  incoming max 32%  certain 32%  threatened_lethal=False
+    race vs foe@0: mine 8 turns, theirs 4, winning=False
+```
+
+**The arm is only valid if observation was free, so that is checked, not asserted.** A
+shadow battle and a stock battle on the same matchup and seed must agree on decision and
+turn count — same battle, same AI, differing only in whether anything was watching.
+Over the full 120-battle tier run they agree on all 120, down to an identical engine-error
+profile (4 errors each, same three causes). `shadow_check.py` refuses to report a single
+disagreement figure until that holds.
+
+Three things make it free, and the third was found the hard way:
+
+1. **Nothing is registered.** The planner's action is recorded and discarded; the host
+   still chooses. The hook also *skips* the portable pre-steps rather than falling
+   through them, because the host method runs `pbEnemyShouldUseItem?`, `pbAutoFightMenu`
+   and `pbRegisterMegaEvolution` itself — a fall-through would do each twice.
+2. **Rolls are diverted.** `pbAIRandom` is the single choke point every AI roll passes
+   through, planner and engine alike, and during an observation it draws from a private
+   LCG instead of the battle. In practice it diverts 0 rolls at bestSkill: the planner is
+   deterministic there, and the engine helpers the snapshot calls take no rolls (all 21
+   `pbAIRandom` calls in `PokeBattle_AI` sit in the *choosing* machinery, not the scorer).
+   It matters below bestSkill, where planner noise is live.
+3. **`fake_battler` no longer frees trapped foes** — see below.
+
+#### What the equality check caught
+
+The first shadow run failed it: 14 of 60 battles did not reproduce their unobserved
+twins, and all 14 were the matchups whose *observed* team was the one carrying
+Infestation. Bisecting the observation (each cycle is a 5-battle, 8-second repro via
+`matchups=`) walked it down to `fake_battler`'s constructor.
+
+`PokeBattle_Battler#initialize` runs `pbInitEffects`, which reaches across to every other
+battler and clears whatever points at the index being built. The adapter knew about
+three such writes — Lock-On, Attract, Mean Look — because those are the three stock
+Essentials makes. **Realidea makes a fourth**: it clears `MultiTurn`/`MultiTurnUser`, the
+partial-trapping state. So every time the AI *weighed a switch* while holding a foe in
+Infestation, Wrap or Fire Spin, merely thinking about the switch set that foe free.
+
+That bug is older than the shadow arm and was never shadow-specific — it sat in the live
+Portable arm too. It had simply never had anything to contradict it: with no unobserved
+twin to compare against, a freed foe is just what happened. Adding the pair to
+`RESTORED_ON_FAKE` fixes it, and a regression test asserts the list matches the engine.
+
+**It did not move any published number.** Re-measuring the full tier suite after the fix
+reproduces Portable 66.9% / 69.5% resolved and stock 50.0% exactly. The reason is
+measurable rather than lucky: across 3,027 compared turns the stock AI chose Infestation
+**30** times and the portable planner **0**, so in a live portable run the trap the bug
+needed was never set in the first place. It took a stock-piloted trapper — which is
+exactly what the shadow arm creates — to expose it.
+
+#### What the two policies actually disagree about
+
+Over 3,027 turns where both answered: **58.3% agreement, 41.7% disagreement.** Of the
+disagreements, 943 are move-vs-move, 278 are Portable switching where stock attacked, 32
+the reverse, and 10 are two different switches. Disagreement is not error — stock wins
+its share of these battles — but this is where the whole 16.9-point gap lives.
+
+The largest single cluster is Portable declining stock's hazard/status turns in a losing
+damage race: `switch->4 vs INFESTATION` (23), `SOFTBOILED vs SEISMICTOSS` (25),
+`ROOST vs HIDDENPOWER` (22).
+
+Known limits of the arm: the shadow does **not** carry portable memory (it never moved,
+so it recorded no repeated setup), so its setup choices are slightly over-represented
+against a live portable run. Everything else is exact.
 
 ### The gauntlet hang, and what it actually was
 
@@ -603,6 +689,13 @@ future core rule does, the contract test will say so.
   existing elements as byte slices and writes replacements atomically.
 - `generated/Portable_AI.rb` is generated output. Edit the module/adapter sources and
   rerun `tools/build_portable_ai.py`.
+- **`PokeBattle_Battler.new` is not a pure query, and Realidea clears one more effect
+  than stock Essentials does.** `pbInitEffects` wipes `MultiTurn`/`MultiTurnUser` on the
+  battler that points at the index being constructed, on top of Lock-On, Attract and Mean
+  Look. Anything that builds a throwaway battler at a live index — `fake_battler` does,
+  once per switch candidate — must snapshot and restore all six slots or it will cancel a
+  real partial trap while merely estimating. Read the list off the engine; do not carry
+  stock Essentials' list across.
 - `check_scenarios.py` intentionally fails on missing, errored, or degenerate records.
   Explicit unsupported-field skips are allowed and remain visible.
 
@@ -642,9 +735,10 @@ Before replacing the installed section:
 3. Run `pack_rxdata.py --selftest` and verify upsert remains byte-idempotent.
 4. Run `python3 tools/check_move_codes.py`. Every code in the adapter's tables must
    exist in `PBS/moves.txt`; read every advisory before ignoring it.
-5. Run the complete in-engine probe. All **260** applicable assertions must pass, with
-   the ten explicit skips (seven Reborn fields, three unsupported mechanics) and zero
-   missing/error/degenerate records.
+5. Run the complete in-engine probe. It must reproduce **240/256** with ten scenarios
+   skipped by the engine and four assertions this AI cannot answer (it reports no numeric
+   switch scale), and zero missing/error/degenerate records. Those four are counted as
+   failures by `check_scenarios.py`, which is why the figure is 240 and not 244.
 6. Run the paired seeded gauntlet with no portable marker. The only meaningful
    regression signal is **losses that the previous version won on the same seed** —
    list them by seed and read the traces. Do not expect a win-rate gain; Reborn showed
@@ -676,7 +770,10 @@ priority order:
    with no verdict. The `hasWorkingAbility` one is a one-word fix (`hasAbility?` on a
    party Pokémon) and it is stock-only, so leaving it in place makes the stock arm look
    slightly worse than its policy deserves.
-4. **A second tier draw is not available.** gen6ou's eligible pool is 11 teams and both
+4. **Use the shadow arm on the archetype fixture too.** The 41.7% disagreement figure is
+   measured on the tier rosters only; the frozen 3-mon fixture is a different distribution
+   and would say whether the switching gap is roster-specific.
+5. **A second tier draw is not available.** gen6ou's eligible pool is 11 teams and both
    sets are already drawn from it; a third set would overlap. Widening the corpus means
    adding another gen 6 source to `extracted/smogon-teams/`, not re-rolling the seed.
 
