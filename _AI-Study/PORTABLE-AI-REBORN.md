@@ -2056,6 +2056,62 @@ table, the two corrections, and the open question about Boots, which is still op
 0.5.0 zeroes the entry cost for a Boots holder because that is what the item does, not
 because the term Reborn uses for it was ever located.
 
+## Core version 0.6.3 — who is coming in (2026-09-06)
+
+**Three rules, three keys, one principle: a reason to leave has to name a body that does
+better.** Read off the Realidea shadow readout (`PORTABLE-AI-REALIDEA.md` → *0.6.3*),
+where the same three battles were losing races with a better Pokémon on the bench and
+every switch vetoed for want of a reason. The core is shared, so Reborn was re-measured
+under the full protocol: **all three keys false reproduces 0.6.2 on set_c battle for
+battle** (26/60, +0, every seed), and the real sweep is below.
+
+| key | rule | where |
+|---|---|---|
+| `race_switch_to_winner` | leave a race lost by a whole hit, for a bench candidate that wins its own race — after paying the free entry hit, by a whole hit, not on a tiebreak, and not when a heal the actor carries covers two of the foe's hits. A candidate at the race cap (8+ hits) is walling, not winning | `core.rb` `score_switch`, `candidate_race` |
+| `heal_outpace` | a heal that restores less than the next hit takes, in a race already lost, is charged `heal_only_delays` −120 rather than credited `heal_saves_battler` +150 | `core.rb` `heal_gate` |
+| `escape_needs_hitter` | `no_effective_move` and `weak_current_attacks` count only for a bench candidate whose own best hit clears the 10% line | `core.rb` `score_switch` |
+
+The 0.6.0 `damage_race_switch` flag — the one the Donphan card sank in Phase A — stays
+off. It opened the gate for *any* bench once the actor's race was lost; the difference
+here is the question is asked of the candidate, on the candidate's two estimates, and
+that is what makes it survive the card that killed the flag.
+
+### Measured (2026-09-06)
+
+Probe: **281/281** on the 219-card corpus (six new cards, see *Corpus*), the six
+`switch_score_gt` N/A as before. The first 0.6.3 build failed one card here that Realidea
+had passed — `no_switch_full_hp_neutral`, a Snorlax mirror that switched to a Gengar
+immune to Body Slam — which is what put the race-cap clause into `candidate_race`: Gengar
+"won" a race it needed fifteen hits to finish.
+
+Sweep, `normal_portable`, 420 paired battles over set_a..set_g:
+
+| | 0.6.2 | 0.6.3 | |
+|---|---:|---:|---|
+| wins | 203 (48.3%) | **231 (55.0%)** | +28: gained 51, lost 23 |
+| McNemar | | | χ² = 9.85, **p = 0.002** |
+
+| archetype | n | 0.6.2 | 0.6.3 | Δ |
+|---|---:|---:|---:|---:|
+| balance | 105 | 49 | 55 | +6 |
+| bulky | 105 | 23 | 26 | +3 |
+| offense | 105 | 77 | 82 | +5 |
+| speed | 105 | 54 | 68 | +14 |
+
+| roster | set_a | set_b | set_c | set_d | set_e | set_f | set_g |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| Δ wins | +5 | +6 | +3 | +6 | 0 | +5 | +3 |
+
+This is the first version since 0.3 that moved the Reborn win count, and it moved it on
+six rosters of seven and every archetype. It is also the first rule batch that was not
+proposed from the source: every one of the three was read off a battle a person had
+flagged as wrong, and the numbers followed.
+
+Artifacts: `generated/reborn_6v6_v063_set_*.ndjson`, `reborn_6v6_v063control_set_c.ndjson`,
+`probe_results_reborn_v063_portable.ndjson`. The harness now writes each option's score
+and reasons into the probe record (`ranking`), as Realidea's probe does, so a failed card
+no longer costs a rebuild to explain.
+
 ## Core version 0.6.2 — the readout-pass bugfix batch (2026-09-06)
 
 **Seven fixes, seven keys, one measurement.** Every one was read off the turn-by-turn

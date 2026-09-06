@@ -1,6 +1,6 @@
 {
  "captured": "2026-09-06",
- "version": "0.6.2",
+ "version": "0.6.3",
  "engine": "realidea",
  "status": "probe, tier gauntlet and archetype gauntlet all measured 2026-09-06, all clean. The hang that blocked strength numbers was a crash hidden by PBDebug.logonerr's uncommented pbPrintException call (a nil $ItemData); it is fixed. baseline_0_1_0 is retained for comparison but is superseded by archetype_0_6_2.",
  "installed": {
@@ -377,5 +377,144 @@
    "effect_on_published_numbers": "none -- the full tier suite re-measured after the fix reproduces 66.9%/69.5% and 50.0% exactly. Across 3027 compared turns stock chose Infestation 30 times and portable 0, so a live portable run never set the trap the bug needed",
    "fix": "RESTORED_ON_FAKE gains :MultiTurn and :MultiTurnUser; regression test asserts the list matches the engine"
   }
+ },
+ "probe_0_6_3": {
+  "captured": "2026-09-06",
+  "artifact": "generated/ai_probe_results_portable.ndjson",
+  "sha256": "dea68167a81d96d30f2c35ede9c823c570042798c565e44ff73903eca712c48f",
+  "corpus": {
+   "scenarios": 214,
+   "gradeable": 262,
+   "skipped_by_engine": 10,
+   "not_answerable": 4
+  },
+  "portable": {
+   "passed": 246,
+   "of": 262,
+   "note": "the same sixteen assertions fail that failed on 0.6.2; all six 0.6.3 cards pass"
+  },
+  "previous_record": "generated/ai_probe_results_portable_0_6_2.ndjson"
+ },
+ "tier_0_6_3": {
+  "captured": "2026-09-06",
+  "artifact": "generated/realidea_shadowtrace_gen6ou_0_6_3.ndjson",
+  "sha256": "13a0fbd813c190a0c1201f818a18fad8726a85971c35be9ffbc255851863ca2a",
+  "battles": 360,
+  "sets": [
+   "gen6ou_a",
+   "gen6ou_b"
+  ],
+  "arms": {
+   "stock": {
+    "wins": 58,
+    "losses": 58,
+    "draws": 0,
+    "errors": 4,
+    "win_rate": 50.0,
+    "identical_to_0_6_2": "120/120"
+   },
+   "portable": {
+    "wins": 82,
+    "losses": 30,
+    "draws": 4,
+    "errors": 4,
+    "win_rate": 70.7,
+    "mean_turns": 27.9,
+    "paired_vs_0_6_2": {
+     "identical": 36,
+     "gained": 16,
+     "lost": 13
+    }
+   },
+   "portable_replacement_portable": {
+    "artifact": "generated/realidea_tier_0_6_3_replportable.ndjson",
+    "wins": 80,
+    "losses": 33,
+    "draws": 5,
+    "errors": 2,
+    "win_rate": 67.8,
+    "paired_vs_default": {
+     "identical": 23,
+     "gained": 16,
+     "lost": 18
+    },
+    "verdict": "noise; gauntlet default stays replacement=stock"
+   }
+  },
+  "switching": {
+   "voluntary_per_battle": {
+    "0.6.2": 2.47,
+    "0.6.3": 4.64
+   },
+   "switch_backs_within_3_turns": {
+    "0.6.2": 75,
+    "0.6.3": 133
+   },
+   "switch_backs_same_foe_0_6_3": 120,
+   "heal_loop_turns_shadow": {
+    "0.6.2": 42,
+    "0.6.3": 3
+   }
+  },
+  "errors": "three ZeroDivisionError at pbRoughDamage:3557 and one upanim NameError, both pre-existing engine crashes"
+ },
+ "shadow_0_6_3": {
+  "captured": "2026-09-06",
+  "observation_free": {
+   "paired_battles": 120,
+   "diverged": 0,
+   "rolls_diverted": 0
+  },
+  "turns_compared": 3027,
+  "agreed": 1645,
+  "agreement_pct": 54.3,
+  "by_kind": {
+   "move_vs_move": 790,
+   "switch_vs_move": 544,
+   "move_vs_switch": 34,
+   "switch_vs_switch": 14
+  },
+  "note": "58.3% at 0.6.2; the whole move is switch-vs-move, which is the rules working"
+ },
+ "reborn_0_6_3": {
+  "captured": "2026-09-06",
+  "probe": "281/281 on 219 cards, 6 N/A",
+  "control_set_c": "all three keys false reproduces 0.6.2: 26/60, +0",
+  "sweep": {
+   "frame": "7 rosters x 60, normal_portable",
+   "0.6.2": 203,
+   "0.6.3": 231,
+   "net": 28,
+   "gained": 51,
+   "lost": 23,
+   "mcnemar_chi2": 9.85,
+   "p": 0.002,
+   "by_roster": {
+    "set_a": 5,
+    "set_b": 6,
+    "set_c": 3,
+    "set_d": 6,
+    "set_e": 0,
+    "set_f": 5,
+    "set_g": 3
+   },
+   "by_archetype": {
+    "balance": 6,
+    "bulky": 3,
+    "offense": 5,
+    "speed": 14
+   }
+  },
+  "artifacts": [
+   "generated/reborn_6v6_v063_set_*.ndjson",
+   "generated/reborn_6v6_v063control_set_c.ndjson",
+   "generated/probe_results_reborn_v063_portable.ndjson"
+  ]
+ },
+ "rules_0_6_3": {
+  "race_switch_to_winner": "leave a race lost by a whole hit for a bench candidate that wins its own race after the free entry hit, by a whole hit; not when a carried heal covers two hits; never at the race cap",
+  "heal_outpace": "a heal that restores less than the next hit takes, in a lost race, is charged -120 rather than credited +150",
+  "escape_needs_hitter": "no_effective_move / weak_current_attacks count only for a candidate whose best hit clears 10%",
+  "replacement": "adapter routes faint replacement through the core when Portable drives the side; gauntlet key replacement=stock|portable, default stock"
  }
 }

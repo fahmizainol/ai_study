@@ -412,6 +412,72 @@ module PortableAIRealidea
     out
   end
 
+  # --- faint replacement ------------------------------------------------------
+  #
+  # Stock Essentials picks the replacement for a fainted AI Pokemon by summing the type
+  # chart over each candidate's moves (pbChooseBestNewEnemy, 085_PokeBattle_AI.rb:4283)
+  # and reads nothing about what the candidate takes on the way in. That is how a
+  # Scizor was sent into a Heatran that removes it in one Lava Plume (team3_vs_team2
+  # 155921 t29). The core already prices a forced switch -- entry damage, the
+  # switch-in race, dies_on_entry -- so a Portable-driven side's replacement goes
+  # through the same scorer. One run-level switch lets the gauntlet keep the older
+  # convention (stock replacement on BOTH sides, so strength differences stayed
+  # attributable to turn decisions); in play it is simply on.
+  def self.replacement?
+    return true if !defined?($PORTABLE_AI_REPLACEMENT)
+    $PORTABLE_AI_REPLACEMENT != false
+  end
+
+  # The party slot the core would send in for the fainted battler at `index`, or nil
+  # when it has nothing to say. nil means the stock chooser -- never a slot the engine
+  # would refuse, which is re-checked on the way out.
+  def self.choose_replacement(battle, index, party)
+    battler = battle.battlers[index]
+    return nil if !battler
+    foe_indices = [0]
+    foe_indices << 2 if battle.doublebattle
+    foe_indices = foe_indices.select do |i|
+      foe = battle.battlers[i] rescue nil
+      foe && !foe.isFainted?
+    end
+    skill = corrected_skill(battle.pbGetOwner(index))
+    actions = switch_actions(battle, battler, foe_indices, skill, true)
+    return nil if actions.empty?
+    snapshot = {
+      "format" => battle.doublebattle ? "double" : "single",
+      "turn" => battle.turncount,
+      "weather" => weather_name(battle),
+      "trick_room_active" => trick_room_active?(battle),
+      "tailwind_active" => (safe_side_effect(battle.sides[1], :Tailwind, 0).to_i > 0),
+      "actors" => [{ "index" => index, "species" => battler.species,
+                     "hp_pct" => 0.0, "actions" => actions }],
+      "targets" => foe_indices.map { |i| battler_view(battle.battlers[i], battle, skill) },
+      "memory" => battle.instance_variable_get(:@portable_ai_memory) || {}
+    }
+    plan = PortableAI.plan(snapshot, config_for(skill), BattleRNG.new(battle))
+    chosen = nil
+    (plan["actions"] || []).each do |action|
+      chosen = action if action["actor_index"] == index && action["type"] == "switch"
+    end
+    return nil if !chosen
+    slot = chosen["slot"]
+    return nil if !battle.pbCanSwitchLax?(index, slot, false)
+    trace = battle.instance_variable_get(:@portable_ai_decision_trace)
+    if trace
+      entry = {
+        "turn" => battle.turncount, "actor" => index, "type" => "switch",
+        "forced" => true, "slot" => slot, "score" => chosen["score"],
+        "view" => view_trace(snapshot, index)
+      }
+      entry["candidates"] = candidate_trace(plan, index) if trace_candidates?
+      trace << entry
+    end
+    slot
+  rescue Exception => error
+    log_error(error, index)
+    nil
+  end
+
   def self.plan_for(battle)
     signature = cache_signature(battle)
     cached_signature = battle.instance_variable_get(:@portable_ai_cache_signature)
@@ -479,7 +545,10 @@ module PortableAIRealidea
     {}
   end
 
-  TRACE_CANDIDATE_LIMIT = 6
+  # Every option a singles actor can have: four moves and five bench slots. The old
+  # limit of 6 cut the list at two switches, so a readout could not say what the third
+  # bench Pokemon scored -- which was exactly the question being asked of it.
+  TRACE_CANDIDATE_LIMIT = 10
 
   # The snapshot carries the engine's numeric species id, because that is what the core
   # is given and nothing in the core wants a name. A trace is read by people, so it is
@@ -513,6 +582,12 @@ module PortableAIRealidea
         "move_id" => candidate["move_id"],
         "target" => candidate["target"],
         "score" => candidate["score"],
+        # 0.6.3: the two estimates a switch candidate is judged on, so a readout can
+        # say why a bench Pokemon did or did not count as winning its race.
+        "outgoing_damage_pct" => candidate["outgoing_damage_pct"],
+        "incoming_damage_pct" => candidate["incoming_damage_pct"],
+        "candidate_hp_pct" => candidate["candidate_hp_pct"],
+        "faster" => candidate["faster"],
         "reasons" => candidate["reasons"]
       }
       # What the score was computed FROM, for a move. Without these a reader can see
@@ -858,12 +933,19 @@ module PortableAIRealidea
       move.target == PBTargets::Partner
   end
 
-  def self.switch_actions(battle, battler, foe_indices, skill)
+  # `replacement` builds the candidates for a FAINTED battler: legality is the engine's
+  # own pbCanSwitchLax? (the test the stock chooser applies) rather than pbCanSwitch?,
+  # which reads trapping effects off a battler that has just gone down, and every
+  # candidate is forced -- the core skips its escape gate and ranks bodies.
+  def self.switch_actions(battle, battler, foe_indices, skill, replacement = false)
     party = battle.pbParty(battler.index)
-    forced = safe_effect(battler, :PerishSong, 0) == 1
+    forced = replacement || safe_effect(battler, :PerishSong, 0) == 1
     actions = []
     party.each_with_index do |pokemon, slot|
-      next if !pokemon || !battle.pbCanSwitch?(battler.index, slot, false)
+      next if !pokemon
+      legal = replacement ? battle.pbCanSwitchLax?(battler.index, slot, false) :
+                            battle.pbCanSwitch?(battler.index, slot, false)
+      next if !legal
       hp_pct = percent(pokemon.hp, pokemon.totalhp)
       matchup = switch_matchup(pokemon, battle, foe_indices)
       hazard = entry_hazard_pct(battle, pokemon, battler)
@@ -1753,7 +1835,7 @@ module PortableAIRealidea
 
     # Core config keys a run may override, with the type each parses to. Booleans
     # become real true/false: the core tests them with plain Ruby truthiness, and the
-    # string "false" is truthy. Same nineteen keys as the Reborn gauntlet
+    # string "false" is truthy. Same twenty-two keys as the Reborn gauntlet
     # (Portable_AI_Gauntlet.rb:37-70), so an ablation reads identically in both studies.
     CONFIG_OVERRIDE_KEYS = [
       ["switch_risk_weight", :float],
@@ -1777,7 +1859,11 @@ module PortableAIRealidea
       ["wish_pending",       :boolean],
       ["setup_stage",        :boolean],
       ["move_memory",        :boolean],
-      ["yawn_gate",          :boolean]
+      ["yawn_gate",          :boolean],
+      # 0.6.3. All three false is 0.6.2, which is the control run.
+      ["race_switch_to_winner", :boolean],
+      ["heal_outpace",          :boolean],
+      ["escape_needs_hitter", :boolean]
     ]
 
     def self.config
@@ -1866,6 +1952,22 @@ class PokeBattle_Battle
   end
   if !method_defined?(:portable_ai_stock_pbAIRandom)
     alias portable_ai_stock_pbAIRandom pbAIRandom
+  end
+  if !method_defined?(:portable_ai_stock_pbDefaultChooseNewEnemy)
+    alias portable_ai_stock_pbDefaultChooseNewEnemy pbDefaultChooseNewEnemy
+  end
+
+  # The faint replacement (see PortableAIRealidea.choose_replacement). enabled_for? is
+  # true in the shadow arm too -- that is how the observer finds its seat -- and the
+  # shadow arm registers nothing, so it is excluded here by name: its replacements stay
+  # the stock chooser's, or the observed battle would stop being the stock battle.
+  def pbDefaultChooseNewEnemy(index, party)
+    if PortableAIRealidea.replacement? && !PortableAIRealidea.shadow? &&
+       PortableAIRealidea.enabled_for?(self, index)
+      slot = PortableAIRealidea.choose_replacement(self, index, party)
+      return slot if slot
+    end
+    portable_ai_stock_pbDefaultChooseNewEnemy(index, party)
   end
 
   # The single point every AI roll passes through, engine and planner alike. While a

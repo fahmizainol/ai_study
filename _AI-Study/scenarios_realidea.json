@@ -7900,5 +7900,222 @@
     "ZENHEADBUTT"
    ]
   ]
+ },
+ {
+  "id": "race_leave_for_a_bench_that_wins",
+  "field": 0,
+  "format": "single",
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "STRENGTH",
+   "POUND",
+   "PECK",
+   "TACKLE"
+  ],
+  "ai_species": "DONPHAN",
+  "player_species": "ESPEON",
+  "ai2_moves": null,
+  "ai2_species": null,
+  "player2_species": null,
+  "ai_party_species": [
+   "DONPHAN",
+   "SCIZOR"
+  ],
+  "ai_actives": 1,
+  "move_ids": {
+   "STRENGTH": 283,
+   "POUND": 309,
+   "PECK": 168,
+   "TACKLE": 303
+  },
+  "assertions": [
+   [
+    "must_switch_to",
+    "SCIZOR"
+   ]
+  ]
+ },
+ {
+  "id": "race_stay_when_the_bench_loses_too",
+  "field": 0,
+  "format": "single",
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "STRENGTH",
+   "POUND",
+   "PECK",
+   "TACKLE"
+  ],
+  "ai_species": "DONPHAN",
+  "player_species": "ESPEON",
+  "ai2_moves": null,
+  "ai2_species": null,
+  "player2_species": null,
+  "ai_party_species": [
+   "DONPHAN",
+   "MACHAMP"
+  ],
+  "ai_actives": 1,
+  "move_ids": {
+   "STRENGTH": 283,
+   "POUND": 309,
+   "PECK": 168,
+   "TACKLE": 303
+  },
+  "assertions": [
+   [
+    "must_not_switch"
+   ]
+  ]
+ },
+ {
+  "id": "a_heal_that_only_delays_yields_to_a_winning_bench",
+  "field": 0,
+  "format": "single",
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "ROOST",
+   "DISCHARGE",
+   "POUND",
+   "PECK"
+  ],
+  "ai_species": "ZAPDOS",
+  "player_species": "HEATRAN",
+  "ai2_moves": null,
+  "ai2_species": null,
+  "player2_species": null,
+  "ai_party_species": [
+   "ZAPDOS",
+   "QUAGSIRE"
+  ],
+  "ai_actives": 1,
+  "move_ids": {
+   "ROOST": 172,
+   "DISCHARGE": 71,
+   "POUND": 309,
+   "PECK": 168
+  },
+  "assertions": [
+   [
+    "must_switch_to",
+    "QUAGSIRE"
+   ]
+  ]
+ },
+ {
+  "id": "a_heal_that_outpaces_the_hit_is_still_the_play",
+  "field": 0,
+  "format": "single",
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "ROOST",
+   "DISCHARGE",
+   "POUND",
+   "PECK"
+  ],
+  "ai_species": "ZAPDOS",
+  "player_species": "HEATRAN",
+  "ai2_moves": null,
+  "ai2_species": null,
+  "player2_species": null,
+  "ai_party_species": [
+   "ZAPDOS",
+   "QUAGSIRE"
+  ],
+  "ai_actives": 1,
+  "move_ids": {
+   "ROOST": 172,
+   "DISCHARGE": 71,
+   "POUND": 309,
+   "PECK": 168
+  },
+  "assertions": [
+   [
+    "must_choose_move_in",
+    [
+     "ROOST"
+    ]
+   ]
+  ]
+ },
+ {
+  "id": "weak_attacks_leave_only_for_a_body_that_hits",
+  "field": 0,
+  "format": "single",
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "THUNDERBOLT",
+   "POUND",
+   "PECK",
+   "TACKLE"
+  ],
+  "ai_species": "ZAPDOS",
+  "player_species": "CHANSEY",
+  "ai2_moves": null,
+  "ai2_species": null,
+  "player2_species": null,
+  "ai_party_species": [
+   "ZAPDOS",
+   "ALAKAZAM",
+   "MACHAMP"
+  ],
+  "ai_actives": 1,
+  "move_ids": {
+   "THUNDERBOLT": 69,
+   "POUND": 309,
+   "PECK": 168,
+   "TACKLE": 303
+  },
+  "assertions": [
+   [
+    "must_switch_to",
+    "MACHAMP"
+   ]
+  ]
+ },
+ {
+  "id": "weak_attacks_stay_when_the_bench_is_as_weak",
+  "field": 0,
+  "format": "single",
+  "weather": null,
+  "ai_side": {},
+  "player_side": {},
+  "ai_moves": [
+   "THUNDERBOLT",
+   "POUND",
+   "PECK",
+   "TACKLE"
+  ],
+  "ai_species": "ZAPDOS",
+  "player_species": "CHANSEY",
+  "ai2_moves": null,
+  "ai2_species": null,
+  "player2_species": null,
+  "ai_party_species": [
+   "ZAPDOS",
+   "ALAKAZAM"
+  ],
+  "ai_actives": 1,
+  "move_ids": {
+   "THUNDERBOLT": 69,
+   "POUND": 309,
+   "PECK": 168,
+   "TACKLE": 303
+  },
+  "assertions": [
+   [
+    "must_not_switch"
+   ]
+  ]
  }
 ]

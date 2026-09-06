@@ -161,8 +161,9 @@ def main():
     print("\nturns compared : %d (%d unscorable%s)" % (
         scored, unscored,
         "" if not failures else
-        ", of which %d are turns the observer itself failed on -- a pre-existing engine "
-        "crash in pbRoughDamage, recorded rather than dropped so the denominator stays "
+        ", of which %d are turns the observer itself failed on -- Struggle turns, every "
+        "move out of PP, which the core has no candidate for; recorded rather than "
+        "dropped so the denominator stays "
         "honest" % failures))
     if scored:
         print("agreed         : %d (%.1f%%)" % (agree, agree * 100.0 / scored))

@@ -63,6 +63,18 @@ module AIHarness
     {}
   end
 
+  RANKING_KEYS = %w[
+    type slot move_id numeric_move_id target species score reasons
+    expected_damage_pct effectiveness immune priority
+    candidate_hp_pct entry_damage_pct incoming_damage_pct outgoing_damage_pct faster
+  ]
+
+  def self.ranking_entry(entry)
+    out = {}
+    RANKING_KEYS.each { |key| out[key] = entry[key] if entry.has_key?(key) }
+    out
+  end
+
   def self.int(cfg, key, dflt)
     cfg[key] ? cfg[key].to_i : dflt
   end
@@ -781,6 +793,9 @@ module AIHarness
       rec["switch_evaluated"] = !switch_entries.empty?
       rec["should_switch_score"] =
         switch_entries.empty? ? nil : ((ch && ch[0] == 2) ? 1 : 0)
+      # Every option with its score and reasons, as Realidea's AI_Probe writes it: a
+      # failed card that says only WHAT was chosen costs a rebuild to find out why.
+      rec["ranking"] = portable_ranking.map { |entry| ranking_entry(entry) }
     end
     if doubles
       # THE SCORE MATRIX IS NOT WHAT REBORN CHOOSES BY. chooseAction (:1549) feeds

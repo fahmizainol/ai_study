@@ -338,6 +338,13 @@ class PokeBattle_Battle
     entry = pbParty(index)[slot]
     !entry.nil? && entry.hp > 0
   end
+  # The engine's lax legality (no trapping reads), which the replacement path uses.
+  def pbCanSwitchLax?(index, slot, _show)
+    entry = pbParty(index)[slot]
+    !entry.nil? && entry.hp > 0 && slot != (@battlers[index].pokemonIndex rescue -1)
+  end
+  # Stock's replacement chooser, as a marker the tests can tell from a real slot.
+  def pbDefaultChooseNewEnemy(_index, _party); :stock; end
   def pbGetMoveScore(_move, _attacker, _target, _skill); @score; end
   def pbRegisterTargetStub; end
   def pbBetterBaseDamage(_move, _attacker, _target, _skill, basedamage); basedamage; end
@@ -368,6 +375,76 @@ class PortableAIRealideaAdapterTest < Test::Unit::TestCase
     $PORTABLE_AI_ENABLED = false
     $PORTABLE_AI_CONFIG = nil
     $PORTABLE_AI_SHADOW = false
+    $PORTABLE_AI_REPLACEMENT = nil
+  end
+
+  # --- 0.6.3 faint replacement --------------------------------------------------
+  #
+  # A fainted actor at 1 and two bench bodies: slot 1 at 5% HP, which the foe's Tackle
+  # (20% here) removes on entry, and slot 2 at full health. Stock's chooser sums the
+  # type chart over each body's moves and would not see the difference.
+  def replacement_battle
+    battle = contract_battle
+    battle.battlers[0].moves = [StubMove.new(:id => PBMoves::TACKLE, :basedamage => 40)]
+    battle.battlers[1].hp = 0
+    battle.parties[1] = [
+      StubPokemon.new(:species => 1),
+      StubPokemon.new(:species => 3, :hp => 5, :totalhp => 100,
+                      :moves => [StubMove.new(:id => PBMoves::TACKLE, :basedamage => 40)]),
+      StubPokemon.new(:species => 4, :hp => 100, :totalhp => 100,
+                      :moves => [StubMove.new(:id => PBMoves::TACKLE, :basedamage => 40)])
+    ]
+    battle
+  end
+
+  def test_replacement_prefers_the_body_that_survives_entry
+    $PORTABLE_AI_ENABLED = true
+    battle = replacement_battle
+    assert_equal(2, PortableAIRealidea.choose_replacement(battle, 1, battle.parties[1]))
+    assert_equal(2, battle.pbDefaultChooseNewEnemy(1, battle.parties[1]))
+  end
+
+  def test_replacement_is_stocks_when_off_or_not_portable_driven
+    battle = replacement_battle
+    # Portable not enabled at all.
+    assert_equal(:stock, battle.pbDefaultChooseNewEnemy(1, battle.parties[1]))
+    # Enabled, but the run says replacement=stock.
+    $PORTABLE_AI_ENABLED = true
+    $PORTABLE_AI_REPLACEMENT = false
+    assert_equal(:stock, battle.pbDefaultChooseNewEnemy(1, battle.parties[1]))
+    # The shadow arm is not Portable-driven: its replacements stay stock's, or the
+    # observed battle would no longer be the stock battle.
+    $PORTABLE_AI_REPLACEMENT = nil
+    $PORTABLE_AI_SHADOW = true
+    assert_equal(:stock, battle.pbDefaultChooseNewEnemy(1, battle.parties[1]))
+    # The player's seat is never Portable's.
+    $PORTABLE_AI_SHADOW = false
+    assert_equal(:stock, battle.pbDefaultChooseNewEnemy(0, battle.parties[0]))
+  end
+
+  def test_replacement_offers_only_bodies_the_engine_would_accept
+    $PORTABLE_AI_ENABLED = true
+    battle = replacement_battle
+    battle.parties[1][2].hp = 0            # the healthy body is gone too
+    # Only the 5% body is legal; it is still the answer, because a bad legal body beats
+    # handing the choice back to a chooser that would pick the same one.
+    assert_equal(1, PortableAIRealidea.choose_replacement(battle, 1, battle.parties[1]))
+    battle.parties[1][1].hp = 0
+    # Nothing legal: nil, and the hook falls through to stock.
+    assert_nil(PortableAIRealidea.choose_replacement(battle, 1, battle.parties[1]))
+    assert_equal(:stock, battle.pbDefaultChooseNewEnemy(1, battle.parties[1]))
+  end
+
+  def test_replacement_is_traced_as_a_forced_switch
+    $PORTABLE_AI_ENABLED = true
+    battle = replacement_battle
+    battle.instance_variable_set(:@portable_ai_decision_trace, [])
+    battle.pbDefaultChooseNewEnemy(1, battle.parties[1])
+    trace = battle.instance_variable_get(:@portable_ai_decision_trace)
+    assert_equal(1, trace.length)
+    assert_equal("switch", trace[0]["type"])
+    assert_equal(true, trace[0]["forced"])
+    assert_equal(2, trace[0]["slot"])
   end
 
   def test_numeric_skill_code_repairs_realidea_column_shift

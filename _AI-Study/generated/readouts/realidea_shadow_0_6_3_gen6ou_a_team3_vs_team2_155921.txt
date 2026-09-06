@@ -1,0 +1,1144 @@
+team3_vs_team2  seed 155921  single   WIN in 75 turns   [portable 0.6.3, mega=True, teams=gen6ou_a]
+  left  (team3): Clefable, Alakazam, Ferrothorn, Gliscor, Heatran, Rotom
+  observed (team2): Quagsire, Altaria, Chansey, Magnezone, Suicune, Zapdos
+========================================================================================================
+  shadow arm: stock played BOTH seats; 'portable' lines were computed and never registered.
+
+Turn 0   actor 1   <- DIFFERENT
+    board   : Quagsire 100%  vs  Clefable 100%
+    stock   : SCALD
+    portable: switch -> Magnezone          score    381.8
+    foe     : Clefable -> MOONBLAST
+    view: hp 100%  speed 106 (slower)  incoming max 50%  certain 50%  threatened_lethal=False
+    race vs Clefable: mine 5 turns, theirs 2, winning=False
+    options considered:
+         381.8  switch -> Magnezone (hits 86%, takes 27%, faster) engine_base +55, matchup +64, entry_incoming_damage -2, switchin_race +155, losing_race_bench_wins +110, escape_reasons +1
+         281.6  switch -> Chansey (hits 25%, takes 13%) engine_base +55, matchup +16, entry_incoming_damage +16, switchin_race +85, losing_race_bench_wins +110, escape_reasons +1
+         164.3  SCALD (bp 80, 20% dmg, x1)             engine_base +150, expected_damage +16, secondary_burn -2
+         112.0  HAZE (0% dmg, x1)                      engine_base +112
+         -24.0  TOXIC (0% dmg, x1)                     engine_base +126, fresh_status +25, status_deterred -175
+        -620.0  RECOVER (0% dmg, x1)                   heal_near_full -500, heal_losing_race -120
+         VETO   switch -> Altaria (hits 11%, takes 91%, faster) engine_base +55, matchup +32, entry_incoming_damage -85, switchin_race +65, no_escape_reason -1000000
+         VETO   switch -> Suicune (hits 26%, takes 31%, faster) engine_base +55, matchup +32, entry_incoming_damage -7, switchin_race +155, no_escape_reason -1000000
+         VETO   switch -> Zapdos (hits 41%, takes 40%, faster) engine_base +55, matchup +32, entry_incoming_damage -19, switchin_race +80, no_escape_reason -1000000
+
+Turn 1   actor 1   <- DIFFERENT
+    board   : Quagsire 62% -1  vs  Clefable 87%
+    stock   : SCALD
+    portable: switch -> Magnezone          score    381.8
+    foe     : Clefable -> MOONBLAST
+    view: hp 62%  speed 106 (slower)  incoming max 50%  certain 50%  threatened_lethal=False
+    race vs Clefable: mine 7 turns, theirs 2, winning=False
+    options considered:
+         381.8  switch -> Magnezone (hits 86%, takes 27%, faster) engine_base +55, matchup +64, entry_incoming_damage -2, switchin_race +155, losing_race_bench_wins +110, escape_reasons +1
+         281.6  switch -> Chansey (hits 25%, takes 13%) engine_base +55, matchup +16, entry_incoming_damage +16, switchin_race +85, losing_race_bench_wins +110, escape_reasons +1
+         155.6  SCALD (bp 80, 14% dmg, x1)             engine_base +146, expected_damage +11, secondary_burn -1
+         125.0  HAZE (0% dmg, x1)                      engine_base +125
+         -23.0  RECOVER (0% dmg, x1)                   engine_base +97, heal_losing_race -120
+         -24.0  TOXIC (0% dmg, x1)                     engine_base +126, fresh_status +25, status_deterred -175
+         VETO   switch -> Altaria (hits 11%, takes 91%, faster) engine_base +55, matchup +32, entry_incoming_damage -85, switchin_race +65, no_escape_reason -1000000
+         VETO   switch -> Suicune (hits 26%, takes 31%, faster) engine_base +55, matchup +32, entry_incoming_damage -7, switchin_race +155, no_escape_reason -1000000
+         VETO   switch -> Zapdos (hits 41%, takes 40%, faster) engine_base +55, matchup +32, entry_incoming_damage -19, switchin_race +80, no_escape_reason -1000000
+
+Turn 2   actor 1   <- DIFFERENT
+    board   : Quagsire 21% -1  vs  Clefable 74% brn
+    stock   : RECOVER
+    portable: switch -> Magnezone          score    511.8
+    foe     : Clefable -> ICEBEAM
+    view: hp 21%  speed 106 (slower)  incoming max 50%  certain 50%  threatened_lethal=True
+    race vs Clefable: mine 6 turns, theirs 1, winning=False
+    options considered:
+         511.8  switch -> Magnezone (hits 86%, takes 27%, faster) engine_base +55, matchup +64, entry_incoming_damage -2, switchin_race +155, escape_lethal_threat +130, losing_race_bench_wins +110, escape_reasons +1
+         474.7  switch -> Suicune (hits 26%, takes 31%, faster) engine_base +55, matchup +32, entry_incoming_damage -7, switchin_race +155, escape_lethal_threat +130, losing_race_bench_wins +110, escape_reasons +1
+         411.6  switch -> Chansey (hits 25%, takes 13%) engine_base +55, matchup +16, entry_incoming_damage +16, switchin_race +85, escape_lethal_threat +130, losing_race_bench_wins +110, escape_reasons +1
+         388.0  switch -> Zapdos (hits 41%, takes 40%, faster) engine_base +55, matchup +32, entry_incoming_damage -19, switchin_race +80, escape_lethal_threat +130, losing_race_bench_wins +110, escape_reasons +1
+         129.0  SCALD (bp 80, 14% dmg, x1)             engine_base +118, expected_damage +11
+         125.0  HAZE (0% dmg, x1)                      engine_base +125
+           9.0  RECOVER (0% dmg, x1)                   engine_base +148, heal_low_hp +261, heal_cannot_resolve -400
+         VETO   TOXIC (0% dmg, x1, IMMUNE)             immune -1000000
+         VETO   switch -> Altaria (hits 11%, takes 91%, faster) engine_base +55, matchup +32, entry_incoming_damage -85, switchin_race +65, escape_lethal_threat +130, no_escape_reason -1000000
+
+Turn 3   actor 1
+    board   : Magnezone 100%  vs  Clefable 74% brn
+    stock   : FLASHCANNON
+    portable: FLASHCANNON @0               score    816.0
+    foe     : Clefable -> CALMMIND
+    view: hp 100%  speed 359 (faster)  incoming max 27%  certain 27%  threatened_lethal=False
+    race vs Clefable: mine 1 turns, theirs 4, winning=True
+    options considered:
+         816.0  FLASHCANNON (bp 80, 86% dmg, x2)       engine_base +316, lethal +500
+         269.8  THUNDERBOLT (bp 95, 51% dmg, x1)       engine_base +229, expected_damage +41
+         241.3  VOLTSWITCH (bp 70, 38% dmg, x1)        engine_base +211, expected_damage +30
+         182.5  HIDDENPOWER (bp 1, 24% dmg, x1)        engine_base +163, expected_damage +19
+         VETO   switch -> Altaria (hits 11%, takes 91%, faster) engine_base +55, matchup +32, entry_incoming_damage -85, switchin_race +65, no_escape_reason -1000000
+         VETO   switch -> Chansey (hits 25%, takes 13%) engine_base +55, matchup +16, entry_incoming_damage +16, switchin_race +85, no_escape_reason -1000000
+         VETO   switch -> Suicune (hits 26%, takes 31%, faster) engine_base +55, matchup +32, entry_incoming_damage -7, switchin_race +155, no_escape_reason -1000000
+         VETO   switch -> Zapdos (hits 41%, takes 40%, faster) engine_base +55, matchup +32, entry_incoming_damage -19, switchin_race +80, no_escape_reason -1000000
+
+Turn 4   actor 1   <- DIFFERENT
+    board   : Magnezone 100%  vs  Gliscor 100%
+    stock   : FLASHCANNON
+    portable: switch -> Suicune            score    450.3
+    foe     : Gliscor -> EARTHQUAKE
+    view: hp 100%  speed 359 (faster)  incoming max 157%  certain 157%  threatened_lethal=True
+    race vs Gliscor: mine 3 turns, theirs 1, winning=False
+    options considered:
+         450.3  switch -> Suicune (hits 54%, takes 20%) engine_base +55, matchup +64, entry_incoming_damage +6, switchin_race +85, escape_lethal_threat +130, losing_race_bench_wins +110, escape_reasons +2
+         437.7  switch -> Zapdos (hits 80%, takes 5%)  engine_base +55, matchup +32, entry_incoming_damage +26, switchin_race +85, escape_lethal_threat +130, losing_race_bench_wins +110, escape_reasons +2
+         328.6  switch -> Altaria (hits 11%, takes 4%) engine_base +55, matchup +32, entry_incoming_damage +27, switchin_race +85, escape_lethal_threat +130, escape_reasons +1
+         288.5  switch -> Chansey (hits 28%, takes 23%) engine_base +55, matchup +16, entry_incoming_damage +3, switchin_race +85, escape_lethal_threat +130, escape_reasons +1
+         239.6  FLASHCANNON (bp 80, 44% dmg, x1)       engine_base +204, expected_damage +35
+
+Turn 5   actor 1
+    board   : Suicune 100%  vs  Gliscor 43% psn
+    stock   : SCALD
+    portable: SCALD @0                     score    760.0
+    foe     : Gliscor -> EARTHQUAKE
+    view: hp 100%  speed 206 (slower)  incoming max 20%  certain 20%  threatened_lethal=False
+    race vs Gliscor: mine 1 turns, theirs 5, winning=True
+    options considered:
+         760.0  SCALD (bp 80, 54% dmg, x2)             engine_base +260, lethal +500
+         242.0  CALMMIND (0% dmg, x1)                  engine_base +187, first_setup +55
+          90.0  ROAR (0% dmg, x1)                      engine_base +90
+        -620.0  REST (0% dmg, x1)                      heal_near_full -500, heal_losing_race -120
+         VETO   switch -> Altaria (hits 11%, takes 4%) engine_base +55, matchup +32, entry_incoming_damage +27, switchin_race +85, no_escape_reason -1000000
+         VETO   switch -> Chansey (hits 28%, takes 23%) engine_base +55, matchup +16, entry_incoming_damage +3, switchin_race +85, no_escape_reason -1000000
+         VETO   switch -> Zapdos (hits 80%, takes 5%)  engine_base +55, matchup +32, entry_incoming_damage +26, switchin_race +85, no_escape_reason -1000000
+
+Turn 6   actor 1
+    board   : Suicune 89%  vs  Alakazam 100%
+    stock   : SCALD
+    portable: SCALD @0                     score    203.3
+    foe     : Alakazam -> PSYCHIC
+    view: hp 89%  speed 206 (slower)  incoming max 43%  certain 43%  threatened_lethal=False
+    race vs Alakazam: mine 3 turns, theirs 3, winning=False
+    options considered:
+         203.3  SCALD (bp 80, 43% dmg, x1)             engine_base +173, expected_damage +34, secondary_burn -4
+         192.0  CALMMIND (0% dmg, x1)                  engine_base +137, first_setup +55
+          90.0  ROAR (0% dmg, x1)                      engine_base +90
+        -575.0  REST (0% dmg, x1)                      engine_base +45, heal_near_full -500, heal_losing_race -120
+         VETO   switch -> Altaria (hits 33%, takes 49%) engine_base +55, matchup +32, entry_incoming_damage -31, switchin_race +10, no_escape_reason -1000000
+         VETO   switch -> Chansey (hits 40%, takes 32%) engine_base +55, matchup +16, entry_incoming_damage -8, switchin_race +85, no_escape_reason -1000000
+         VETO   switch -> Zapdos (hits 67%, takes 42%) engine_base +55, matchup +32, entry_incoming_damage -22, switchin_race +10, no_escape_reason -1000000
+
+Turn 7   actor 1
+    board   : Suicune 49%  vs  Alakazam 65%
+    stock   : SCALD
+    portable: SCALD @0                     score    223.4
+    foe     : Alakazam -> PSYCHIC
+    view: hp 49%  speed 206 (slower)  incoming max 52%  certain 52%  threatened_lethal=True
+    race vs Alakazam: mine 2 turns, theirs 1, winning=False
+    options considered:
+         223.4  SCALD (bp 80, 39% dmg, x1)             engine_base +190, expected_damage +32, secondary_burn +2
+          90.0  ROAR (0% dmg, x1)                      engine_base +90
+          85.0  REST (0% dmg, x1)                      engine_base +115, heal_mid_hp +90, heal_only_delays -120
+        -103.0  CALMMIND (0% dmg, x1)                  engine_base +137, unsafe_setup -240
+         VETO   switch -> Altaria (hits 26%, takes 59%) engine_base +55, matchup +32, entry_incoming_damage -44, switchin_race -5, escape_lethal_threat +130, no_escape_reason -1000000
+         VETO   switch -> Chansey (hits 40%, takes 38%) engine_base +55, matchup +16, entry_incoming_damage -17, switchin_race +10, escape_lethal_threat +130, no_escape_reason -1000000
+         VETO   switch -> Zapdos (hits 61%, takes 51%) engine_base +55, matchup +32, entry_incoming_damage -34, switchin_race -5, escape_lethal_threat +130, no_escape_reason -1000000
+
+Turn 8   actor 1
+    board   : Suicune 11%  vs  Alakazam 16% brn
+    stock   : SCALD
+    portable: SCALD @0                     score    291.6
+    foe     : Alakazam -> PSYCHIC
+    view: hp 11%  speed 206 (slower)  incoming max 52%  certain 52%  threatened_lethal=True
+    race vs Alakazam: mine 1 turns, theirs 1, winning=False
+    options considered:
+         291.6  SCALD (bp 80, 39% dmg, x1)             engine_base +260, expected_damage +32
+          90.0  ROAR (0% dmg, x1)                      engine_base +90
+          72.6  REST (0% dmg, x1)                      engine_base +181, heal_low_hp +292, heal_cannot_resolve -400
+        -103.0  CALMMIND (0% dmg, x1)                  engine_base +137, unsafe_setup -240
+         VETO   switch -> Altaria (hits 26%, takes 59%) engine_base +55, matchup +32, entry_incoming_damage -44, switchin_race -5, escape_lethal_threat +130, preserve_low_hp_actor +80, no_escape_reason -1000000
+         VETO   switch -> Chansey (hits 40%, takes 38%) engine_base +55, matchup +16, entry_incoming_damage -17, switchin_race +10, escape_lethal_threat +130, preserve_low_hp_actor +80, no_escape_reason -1000000
+         VETO   switch -> Zapdos (hits 61%, takes 51%) engine_base +55, matchup +32, entry_incoming_damage -34, switchin_race -5, escape_lethal_threat +130, preserve_low_hp_actor +80, no_escape_reason -1000000
+
+Turn 9   actor 1
+    board   : Zapdos 100%  vs  Alakazam 4% brn
+    stock   : HIDDENPOWER
+    portable: HIDDENPOWER @0               score    760.0
+    foe     : Alakazam -> SHADOWBALL
+    view: hp 100%  speed 239 (slower)  incoming max 51%  certain 51%  threatened_lethal=False
+    race vs Alakazam: mine 1 turns, theirs 2, winning=True
+    options considered:
+         760.0  HIDDENPOWER (bp 1, 29% dmg, x1)        engine_base +260, lethal +500
+         760.0  THUNDERBOLT (bp 95, 61% dmg, x1)       engine_base +260, lethal +500
+        -188.0  DEFOG (0% dmg, x1)                     engine_base +112, no_hazards_to_remove -300
+        -620.0  ROOST (0% dmg, x1)                     heal_near_full -500, heal_losing_race -120
+         VETO   switch -> Altaria (hits 26%, takes 59%) engine_base +55, matchup +32, entry_incoming_damage -44, switchin_race -5, no_escape_reason -1000000
+         VETO   switch -> Chansey (hits 40%, takes 38%) engine_base +55, matchup +16, entry_incoming_damage -17, switchin_race +10, no_escape_reason -1000000
+
+Turn 10  actor 1
+    board   : Zapdos 80%  vs  Rotom 100%
+    stock   : THUNDERBOLT
+    portable: THUNDERBOLT @0               score    182.8
+    foe     : Rotom -> HYDROPUMP
+    view: hp 80%  speed 239 (slower)  incoming max 34%  certain 20%  threatened_lethal=False
+    race vs Rotom: mine 3 turns, theirs 3, winning=False
+    options considered:
+         182.8  THUNDERBOLT (bp 95, 46% dmg, x1)       engine_base +146, expected_damage +37
+         119.9  HIDDENPOWER (bp 1, 11% dmg, x1)        engine_base +111, expected_damage +9
+         -45.0  ROOST (0% dmg, x1)                     engine_base +75, heal_losing_race -120
+        -188.0  DEFOG (0% dmg, x1)                     engine_base +112, no_hazards_to_remove -300
+         VETO   switch -> Altaria (hits 14%, takes 24%) engine_base +55, matchup +32, entry_incoming_damage +2, switchin_race +85, no_escape_reason -1000000
+         VETO   switch -> Chansey (hits 33%, takes 15%) engine_base +55, matchup +32, entry_incoming_damage +13, switchin_race +85, no_escape_reason -1000000
+
+Turn 11  actor 1
+    board   : Zapdos 87%  vs  Rotom 65%
+    stock   : THUNDERBOLT
+    portable: THUNDERBOLT @0               score    207.8
+    foe     : Rotom -> HYDROPUMP
+    view: hp 87%  speed 239 (slower)  incoming max 34%  certain 20%  threatened_lethal=False
+    race vs Rotom: mine 2 turns, theirs 3, winning=True
+    options considered:
+         207.8  THUNDERBOLT (bp 95, 46% dmg, x1)       engine_base +171, expected_damage +37
+         125.9  HIDDENPOWER (bp 1, 11% dmg, x1)        engine_base +117, expected_damage +9
+        -188.0  DEFOG (0% dmg, x1)                     engine_base +112, no_hazards_to_remove -300
+        -553.0  ROOST (0% dmg, x1)                     engine_base +67, heal_near_full -500, heal_losing_race -120
+         VETO   switch -> Altaria (hits 14%, takes 24%) engine_base +55, matchup +32, entry_incoming_damage +2, switchin_race +85, no_escape_reason -1000000
+         VETO   switch -> Chansey (hits 33%, takes 15%) engine_base +55, matchup +32, entry_incoming_damage +13, switchin_race +85, no_escape_reason -1000000
+
+Turn 12  actor 1
+    board   : Zapdos 60%  vs  Rotom 27%
+    stock   : THUNDERBOLT
+    portable: THUNDERBOLT @0               score    760.0
+    foe     : Rotom -> PAINSPLIT
+    view: hp 60%  speed 239 (slower)  incoming max 34%  certain 20%  threatened_lethal=False
+    race vs Rotom: mine 1 turns, theirs 2, winning=True
+    options considered:
+         760.0  THUNDERBOLT (bp 95, 46% dmg, x1)       engine_base +260, lethal +500
+         191.0  ROOST (0% dmg, x1)                     engine_base +101, heal_mid_hp +90
+         149.9  HIDDENPOWER (bp 1, 11% dmg, x1)        engine_base +141, expected_damage +9
+        -188.0  DEFOG (0% dmg, x1)                     engine_base +112, no_hazards_to_remove -300
+         VETO   switch -> Altaria (hits 14%, takes 24%) engine_base +55, matchup +32, entry_incoming_damage +2, switchin_race +85, no_escape_reason -1000000
+         VETO   switch -> Chansey (hits 33%, takes 15%) engine_base +55, matchup +32, entry_incoming_damage +13, switchin_race +85, no_escape_reason -1000000
+
+Turn 13  actor 1
+    board   : Zapdos 47%  vs  Rotom 18%
+    stock   : THUNDERBOLT
+    portable: THUNDERBOLT @0               score    760.0
+    foe     : Rotom -> HYDROPUMP
+    view: hp 47%  speed 239 (slower)  incoming max 34%  certain 20%  threatened_lethal=False
+    race vs Rotom: mine 1 turns, theirs 2, winning=True
+    options considered:
+         760.0  THUNDERBOLT (bp 95, 46% dmg, x1)       engine_base +260, lethal +500
+         207.0  ROOST (0% dmg, x1)                     engine_base +117, heal_mid_hp +90
+         170.9  HIDDENPOWER (bp 1, 11% dmg, x1)        engine_base +162, expected_damage +9
+        -188.0  DEFOG (0% dmg, x1)                     engine_base +112, no_hazards_to_remove -300
+         VETO   switch -> Altaria (hits 14%, takes 24%) engine_base +55, matchup +32, entry_incoming_damage +2, switchin_race +85, no_escape_reason -1000000
+         VETO   switch -> Chansey (hits 33%, takes 15%) engine_base +55, matchup +32, entry_incoming_damage +13, switchin_race +85, no_escape_reason -1000000
+
+Turn 14  actor 1   <- DIFFERENT
+    board   : Zapdos 53%  vs  Heatran 100%
+    stock   : ROOST
+    portable: switch -> Chansey            score    330.9
+    foe     : Heatran -> LAVAPLUME
+    view: hp 53%  speed 239 (faster)  incoming max 28%  certain 28%  threatened_lethal=False
+    race vs Heatran: mine 4 turns, theirs 2, winning=False
+    options considered:
+         330.9  switch -> Chansey (hits 26%, takes 12%) engine_base +55, matchup +64, entry_incoming_damage +17, switchin_race +85, losing_race_bench_wins +110, escape_reasons +1
+         200.0  ROOST (0% dmg, x1)                     engine_base +110, heal_mid_hp +90
+         137.4  THUNDERBOLT (bp 95, 26% dmg, x1)       engine_base +116, expected_damage +21
+          60.5  HIDDENPOWER (bp 1, 3% dmg, x0.5)       engine_base +103, expected_damage +2, resisted -45
+        -188.0  DEFOG (0% dmg, x1)                     engine_base +112, no_hazards_to_remove -300
+         VETO   switch -> Altaria (hits 6%, takes 16%, faster) engine_base +55, matchup +16, entry_incoming_damage +11, switchin_race +155, no_escape_reason -1000000
+
+Turn 15  actor 1   <- DIFFERENT
+    board   : Zapdos 83%  vs  Heatran 100%
+    stock   : DEFOG
+    portable: switch -> Chansey            score    330.9
+    foe     : Heatran -> LAVAPLUME
+    view: hp 83%  speed 239 (faster)  incoming max 28%  certain 28%  threatened_lethal=False
+    race vs Heatran: mine 4 turns, theirs 3, winning=False
+    options considered:
+         330.9  switch -> Chansey (hits 26%, takes 12%) engine_base +55, matchup +64, entry_incoming_damage +17, switchin_race +85, losing_race_bench_wins +110, escape_reasons +1
+         137.4  THUNDERBOLT (bp 95, 26% dmg, x1)       engine_base +116, expected_damage +21
+          60.5  HIDDENPOWER (bp 1, 3% dmg, x0.5)       engine_base +103, expected_damage +2, resisted -45
+         -48.0  ROOST (0% dmg, x1)                     engine_base +72, heal_losing_race -120
+        -188.0  DEFOG (0% dmg, x1)                     engine_base +112, no_hazards_to_remove -300
+         VETO   switch -> Altaria (hits 6%, takes 16%, faster) engine_base +55, matchup +16, entry_incoming_damage +11, switchin_race +155, no_escape_reason -1000000
+
+Turn 16  actor 1   <- DIFFERENT
+    board   : Zapdos 63%  vs  Heatran 100%
+    stock   : DEFOG
+    portable: switch -> Chansey            score    330.9
+    foe     : Heatran -> LAVAPLUME
+    view: hp 63%  speed 239 (faster)  incoming max 28%  certain 28%  threatened_lethal=False
+    race vs Heatran: mine 4 turns, theirs 3, winning=False
+    options considered:
+         330.9  switch -> Chansey (hits 26%, takes 12%) engine_base +55, matchup +64, entry_incoming_damage +17, switchin_race +85, losing_race_bench_wins +110, escape_reasons +1
+         137.4  THUNDERBOLT (bp 95, 26% dmg, x1)       engine_base +116, expected_damage +21
+          96.0  ROOST (0% dmg, x1)                     engine_base +96
+          60.5  HIDDENPOWER (bp 1, 3% dmg, x0.5)       engine_base +103, expected_damage +2, resisted -45
+        -200.0  DEFOG (0% dmg, x1)                     engine_base +100, no_hazards_to_remove -300
+         VETO   switch -> Altaria (hits 6%, takes 16%, faster) engine_base +55, matchup +16, entry_incoming_damage +11, switchin_race +155, no_escape_reason -1000000
+
+Turn 17  actor 1   <- DIFFERENT
+    board   : Zapdos 45%  vs  Heatran 100%
+    stock   : ROOST
+    portable: switch -> Chansey            score    330.9
+    foe     : Heatran -> LAVAPLUME
+    view: hp 45%  speed 239 (faster)  incoming max 28%  certain 28%  threatened_lethal=False
+    race vs Heatran: mine 4 turns, theirs 2, winning=False
+    options considered:
+         330.9  switch -> Chansey (hits 26%, takes 12%) engine_base +55, matchup +64, entry_incoming_damage +17, switchin_race +85, losing_race_bench_wins +110, escape_reasons +1
+         210.0  ROOST (0% dmg, x1)                     engine_base +120, heal_mid_hp +90
+         137.4  THUNDERBOLT (bp 95, 26% dmg, x1)       engine_base +116, expected_damage +21
+          60.5  HIDDENPOWER (bp 1, 3% dmg, x0.5)       engine_base +103, expected_damage +2, resisted -45
+        -213.0  DEFOG (0% dmg, x1)                     engine_base +87, no_hazards_to_remove -300
+         VETO   switch -> Altaria (hits 6%, takes 16%, faster) engine_base +55, matchup +16, entry_incoming_damage +11, switchin_race +155, no_escape_reason -1000000
+
+Turn 18  actor 1   <- DIFFERENT
+    board   : Zapdos 64%  vs  Heatran 100%
+    stock   : HIDDENPOWER
+    portable: switch -> Chansey            score    330.9
+    foe     : Heatran -> LAVAPLUME
+    view: hp 64%  speed 239 (faster)  incoming max 28%  certain 28%  threatened_lethal=False
+    race vs Heatran: mine 4 turns, theirs 3, winning=False
+    options considered:
+         330.9  switch -> Chansey (hits 26%, takes 12%) engine_base +55, matchup +64, entry_incoming_damage +17, switchin_race +85, losing_race_bench_wins +110, escape_reasons +1
+         137.4  THUNDERBOLT (bp 95, 26% dmg, x1)       engine_base +116, expected_damage +21
+          95.0  ROOST (0% dmg, x1)                     engine_base +95
+          60.5  HIDDENPOWER (bp 1, 3% dmg, x0.5)       engine_base +103, expected_damage +2, resisted -45
+        -213.0  DEFOG (0% dmg, x1)                     engine_base +87, no_hazards_to_remove -300
+         VETO   switch -> Altaria (hits 6%, takes 16%, faster) engine_base +55, matchup +16, entry_incoming_damage +11, switchin_race +155, no_escape_reason -1000000
+
+Turn 19  actor 1   <- DIFFERENT
+    board   : Zapdos 44%  vs  Heatran 100%
+    stock   : HIDDENPOWER
+    portable: switch -> Chansey            score    330.9
+    foe     : Heatran -> LAVAPLUME
+    view: hp 44%  speed 239 (faster)  incoming max 28%  certain 28%  threatened_lethal=False
+    race vs Heatran: mine 4 turns, theirs 2, winning=False
+    options considered:
+         330.9  switch -> Chansey (hits 26%, takes 12%) engine_base +55, matchup +64, entry_incoming_damage +17, switchin_race +85, losing_race_bench_wins +110, escape_reasons +1
+         210.0  ROOST (0% dmg, x1)                     engine_base +120, heal_mid_hp +90
+         137.4  THUNDERBOLT (bp 95, 26% dmg, x1)       engine_base +116, expected_damage +21
+          60.5  HIDDENPOWER (bp 1, 3% dmg, x0.5)       engine_base +103, expected_damage +2, resisted -45
+        -213.0  DEFOG (0% dmg, x1)                     engine_base +87, no_hazards_to_remove -300
+         VETO   switch -> Altaria (hits 6%, takes 16%, faster) engine_base +55, matchup +16, entry_incoming_damage +11, switchin_race +155, no_escape_reason -1000000
+
+Turn 20  actor 1
+    board   : Zapdos 26%  vs  Heatran 100%
+    stock   : ROOST
+    portable: ROOST                        score    538.1
+    foe     : Heatran -> LAVAPLUME
+    view: hp 26%  speed 239 (faster)  incoming max 28%  certain 28%  threatened_lethal=True
+    race vs Heatran: mine 4 turns, theirs 1, winning=False
+    options considered:
+         538.1  ROOST (0% dmg, x1)                     engine_base +142, heal_low_hp +246, heal_saves_battler +150
+         460.9  switch -> Chansey (hits 26%, takes 12%) engine_base +55, matchup +64, entry_incoming_damage +17, switchin_race +85, escape_lethal_threat +130, losing_race_bench_wins +110, escape_reasons +1
+         137.4  THUNDERBOLT (bp 95, 26% dmg, x1)       engine_base +116, expected_damage +21
+          60.5  HIDDENPOWER (bp 1, 3% dmg, x0.5)       engine_base +103, expected_damage +2, resisted -45
+        -213.0  DEFOG (0% dmg, x1)                     engine_base +87, no_hazards_to_remove -300
+         VETO   switch -> Altaria (hits 6%, takes 16%, faster) engine_base +55, matchup +16, entry_incoming_damage +11, switchin_race +155, escape_lethal_threat +130, no_escape_reason -1000000
+
+Turn 21  actor 1   <- DIFFERENT
+    board   : Zapdos 47% brn  vs  Heatran 100%
+    stock   : ROOST
+    portable: switch -> Chansey            score    330.9
+    foe     : Heatran -> LAVAPLUME
+    view: hp 47%  speed 239 (faster)  incoming max 28%  certain 28%  threatened_lethal=False
+    race vs Heatran: mine 4 turns, theirs 2, winning=False
+    options considered:
+         330.9  switch -> Chansey (hits 26%, takes 12%) engine_base +55, matchup +64, entry_incoming_damage +17, switchin_race +85, losing_race_bench_wins +110, escape_reasons +1
+         207.0  ROOST (0% dmg, x1)                     engine_base +117, heal_mid_hp +90
+         137.4  THUNDERBOLT (bp 95, 26% dmg, x1)       engine_base +116, expected_damage +21
+          60.5  HIDDENPOWER (bp 1, 3% dmg, x0.5)       engine_base +103, expected_damage +2, resisted -45
+        -213.0  DEFOG (0% dmg, x1)                     engine_base +87, no_hazards_to_remove -300
+         VETO   switch -> Altaria (hits 6%, takes 16%, faster) engine_base +55, matchup +16, entry_incoming_damage +11, switchin_race +155, no_escape_reason -1000000
+
+Turn 22  actor 1   <- DIFFERENT
+    board   : Zapdos 66% brn  vs  Heatran 100%
+    stock   : THUNDERBOLT
+    portable: switch -> Chansey            score    330.9
+    foe     : Heatran -> STEALTHROCK
+    view: hp 66%  speed 239 (faster)  incoming max 28%  certain 28%  threatened_lethal=False
+    race vs Heatran: mine 4 turns, theirs 3, winning=False
+    options considered:
+         330.9  switch -> Chansey (hits 26%, takes 12%) engine_base +55, matchup +64, entry_incoming_damage +17, switchin_race +85, losing_race_bench_wins +110, escape_reasons +1
+         137.4  THUNDERBOLT (bp 95, 26% dmg, x1)       engine_base +116, expected_damage +21
+          92.0  ROOST (0% dmg, x1)                     engine_base +92
+          60.5  HIDDENPOWER (bp 1, 3% dmg, x0.5)       engine_base +103, expected_damage +2, resisted -45
+        -213.0  DEFOG (0% dmg, x1)                     engine_base +87, no_hazards_to_remove -300
+         VETO   switch -> Altaria (hits 6%, takes 16%, faster) engine_base +55, matchup +16, entry_incoming_damage +11, switchin_race +155, no_escape_reason -1000000
+
+Turn 23  actor 1   <- DIFFERENT
+    board   : Zapdos 60% brn  vs  Heatran 84%
+    stock   : THUNDERBOLT
+    portable: switch -> Chansey            score    318.4
+    foe     : Heatran -> ROAR
+    view: hp 60%  speed 239 (faster)  incoming max 28%  certain 28%  threatened_lethal=False
+    race vs Heatran: mine 4 turns, theirs 3, winning=False
+    options considered:
+         318.4  switch -> Chansey (hits 26%, takes 12%) engine_base +42, matchup +64, entry_incoming_damage +17, switchin_race +85, losing_race_bench_wins +110, escape_reasons +1
+         143.4  THUNDERBOLT (bp 95, 26% dmg, x1)       engine_base +122, expected_damage +21
+         100.0  ROOST (0% dmg, x1)                     engine_base +100
+          87.0  DEFOG (0% dmg, x1)                     engine_base +87
+          61.5  HIDDENPOWER (bp 1, 3% dmg, x0.5)       engine_base +104, expected_damage +2, resisted -45
+         VETO   switch -> Altaria (hits 6%, takes 16%, faster) engine_base +30, matchup +16, entry_incoming_damage +11, switchin_race +155, no_escape_reason -1000000
+
+Turn 24  actor 1   <- DIFFERENT
+    board   : Chansey 88%  vs  Heatran 65%
+    stock   : STEALTHROCK
+    portable: SEISMICTOSS @0               score    230.7
+    foe     : Heatran -> ROAR
+    view: hp 88%  speed 136 (slower)  incoming max 12%  certain 12%  threatened_lethal=False
+    race vs Heatran: mine 3 turns, theirs 8, winning=True
+    options considered:
+         230.7  SEISMICTOSS (bp 1, 26% dmg, x2)        engine_base +140, expected_damage +21, super_effective +70
+         118.0  STEALTHROCK (0% dmg, x1)               engine_base +118
+        -434.0  SOFTBOILED (0% dmg, x1)                engine_base +66, heal_near_full -500
+         VETO   TOXIC (0% dmg, x1, IMMUNE)             immune -1000000
+         VETO   switch -> Altaria (hits 6%, takes 16%, faster) engine_base +30, matchup +16, entry_incoming_damage +11, switchin_race +155, no_escape_reason -1000000
+         VETO   switch -> Zapdos (hits 26%, takes 28%, faster) engine_base +16, matchup +32, entry_incoming_damage -4, switchin_race +80, no_escape_reason -1000000
+
+Turn 25  actor 1   <- DIFFERENT
+    board   : Altaria 75%  vs  Heatran 72%
+    stock   : HEALBELL
+    portable: switch -> Chansey            score    324.1
+    foe     : Heatran -> ROAR
+    view: hp 75%  speed 203 (faster)  incoming max 16%  certain 16%  threatened_lethal=False
+    race vs Heatran: mine 8 turns, theirs 5, winning=False
+    options considered:
+         324.1  switch -> Chansey (hits 26%, takes 12%) engine_base +38, matchup +64, entry_incoming_damage +17, switchin_race +85, weak_current_attacks +120, escape_reasons +1
+         244.4  switch -> Zapdos (hits 26%, takes 28%, faster) engine_base +16, matchup +32, entry_incoming_damage -4, switchin_race +80, weak_current_attacks +120, escape_reasons +1
+         242.0  DRAGONDANCE (0% dmg, x1)               engine_base +187, first_setup +55
+         137.0  HEALBELL (0% dmg, x1)                  engine_base +137
+          81.0  ROOST (0% dmg, x1)                     engine_base +81
+          67.8  FRUSTRATION (bp 1, 6% dmg, x0.5)       engine_base +108, expected_damage +5, resisted -45
+
+Turn 26  actor 1
+    board   : Chansey 75%  vs  Heatran 78%
+    stock   : SEISMICTOSS
+    portable: SEISMICTOSS @0               score    223.7
+    foe     : Heatran -> ROAR
+    view: hp 75%  speed 136 (slower)  incoming max 12%  certain 12%  threatened_lethal=False
+    race vs Heatran: mine 4 turns, theirs 7, winning=True
+    options considered:
+         223.7  SEISMICTOSS (bp 1, 26% dmg, x2)        engine_base +133, expected_damage +21, super_effective +70
+          81.0  SOFTBOILED (0% dmg, x1)                engine_base +81
+        -500.0  STEALTHROCK (0% dmg, x1)               hazard_at_cap -500
+         VETO   TOXIC (0% dmg, x1, IMMUNE)             immune -1000000
+         VETO   switch -> Altaria (hits 6%, takes 16%, faster) engine_base +34, matchup +16, entry_incoming_damage +11, switchin_race +155, no_escape_reason -1000000
+         VETO   switch -> Zapdos (hits 26%, takes 28%, faster) engine_base +16, matchup +32, entry_incoming_damage -4, switchin_race +80, no_escape_reason -1000000
+
+Turn 27  actor 1   <- DIFFERENT
+    board   : Zapdos 41%  vs  Heatran 58%
+    stock   : ROOST
+    portable: switch -> Chansey            score    309.7
+    foe     : Heatran -> ROAR
+    view: hp 41%  speed 239 (faster)  incoming max 28%  certain 28%  threatened_lethal=False
+    race vs Heatran: mine 3 turns, theirs 2, winning=False
+    options considered:
+         309.7  switch -> Chansey (hits 26%, takes 12%) engine_base +34, matchup +64, entry_incoming_damage +17, switchin_race +85, losing_race_bench_wins +110, escape_reasons +1
+         213.0  ROOST (0% dmg, x1)                     engine_base +123, heal_mid_hp +90
+         157.4  THUNDERBOLT (bp 95, 26% dmg, x1)       engine_base +136, expected_damage +21
+          62.5  HIDDENPOWER (bp 1, 3% dmg, x0.5)       engine_base +105, expected_damage +2, resisted -45
+          50.0  DEFOG (0% dmg, x1)                     engine_base +50
+         VETO   switch -> Altaria (hits 6%, takes 16%, faster) engine_base +34, matchup +16, entry_incoming_damage +11, switchin_race +155, no_escape_reason -1000000
+
+Turn 28  actor 1   <- DIFFERENT
+    board   : Altaria 63%  vs  Heatran 64%
+    stock   : DRAGONDANCE
+    portable: switch -> Zapdos             score    330.3
+    foe     : Heatran -> ROAR
+    view: hp 63%  speed 203 (faster)  incoming max 16%  certain 16%  threatened_lethal=False
+    race vs Heatran: mine 8 turns, theirs 4, winning=False
+    options considered:
+         330.3  switch -> Zapdos (hits 26%, takes 28%, faster) engine_base +27, matchup +32, entry_incoming_damage -4, switchin_race +155, weak_current_attacks +120, escape_reasons +1
+         319.7  switch -> Chansey (hits 26%, takes 12%) engine_base +34, matchup +64, entry_incoming_damage +17, switchin_race +85, weak_current_attacks +120, escape_reasons +1
+         242.0  DRAGONDANCE (0% dmg, x1)               engine_base +187, first_setup +55
+          97.0  ROOST (0% dmg, x1)                     engine_base +97
+          70.2  FRUSTRATION (bp 1, 6% dmg, x0.5)       engine_base +110, expected_damage +5, resisted -45
+          12.0  HEALBELL (0% dmg, x1)                  engine_base +12
+
+Turn 29  actor 1
+    board   : Chansey 63%  vs  Heatran 70%
+    stock   : SEISMICTOSS
+    portable: SEISMICTOSS @0               score    227.7
+    foe     : Heatran -> ROAR
+    view: hp 63%  speed 136 (slower)  incoming max 12%  certain 12%  threatened_lethal=False
+    race vs Heatran: mine 3 turns, theirs 6, winning=True
+    options considered:
+         227.7  SEISMICTOSS (bp 1, 26% dmg, x2)        engine_base +137, expected_damage +21, super_effective +70
+          97.0  SOFTBOILED (0% dmg, x1)                engine_base +97
+        -500.0  STEALTHROCK (0% dmg, x1)               hazard_at_cap -500
+         VETO   TOXIC (0% dmg, x1, IMMUNE)             immune -1000000
+         VETO   switch -> Altaria (hits 6%, takes 16%, faster) engine_base +29, matchup +16, entry_incoming_damage +11, switchin_race +155, no_escape_reason -1000000
+         VETO   switch -> Zapdos (hits 26%, takes 28%, faster) engine_base +27, matchup +32, entry_incoming_damage -4, switchin_race +155, no_escape_reason -1000000
+
+Turn 30  actor 1
+    board   : Zapdos 73%  vs  Heatran 51%
+    stock   : THUNDERBOLT
+    portable: THUNDERBOLT @0               score    163.4
+    foe     : Heatran -> ROAR
+    view: hp 73%  speed 239 (faster)  incoming max 28%  certain 28%  threatened_lethal=False
+    race vs Heatran: mine 2 turns, theirs 3, winning=True
+    options considered:
+         163.4  THUNDERBOLT (bp 95, 26% dmg, x1)       engine_base +142, expected_damage +21
+          63.5  HIDDENPOWER (bp 1, 3% dmg, x0.5)       engine_base +106, expected_damage +2, resisted -45
+          50.0  DEFOG (0% dmg, x1)                     engine_base +50
+         -35.0  ROOST (0% dmg, x1)                     engine_base +85, heal_losing_race -120
+         VETO   switch -> Altaria (hits 6%, takes 16%, faster) engine_base +29, matchup +16, entry_incoming_damage +11, switchin_race +155, no_escape_reason -1000000
+         VETO   switch -> Chansey (hits 26%, takes 12%) engine_base +30, matchup +64, entry_incoming_damage +17, switchin_race +85, no_escape_reason -1000000
+
+Turn 31  actor 1
+    board   : Chansey 50%  vs  Heatran 33%
+    stock   : SEISMICTOSS
+    portable: SEISMICTOSS @0               score    268.7
+    foe     : Heatran -> ROAR
+    view: hp 50%  speed 136 (slower)  incoming max 12%  certain 12%  threatened_lethal=False
+    race vs Heatran: mine 2 turns, theirs 5, winning=True
+    options considered:
+         268.7  SEISMICTOSS (bp 1, 26% dmg, x2)        engine_base +178, expected_damage +21, super_effective +70
+         202.0  SOFTBOILED (0% dmg, x1)                engine_base +112, heal_mid_hp +90
+        -500.0  STEALTHROCK (0% dmg, x1)               hazard_at_cap -500
+         VETO   TOXIC (0% dmg, x1, IMMUNE)             immune -1000000
+         VETO   switch -> Altaria (hits 6%, takes 16%, faster) engine_base +29, matchup +16, entry_incoming_damage +11, switchin_race +155, no_escape_reason -1000000
+         VETO   switch -> Zapdos (hits 26%, takes 28%, faster) engine_base +20, matchup +32, entry_incoming_damage -4, switchin_race +80, no_escape_reason -1000000
+
+Turn 32  actor 1
+    board   : Zapdos 54%  vs  Heatran 13%
+    stock   : THUNDERBOLT
+    portable: THUNDERBOLT @0               score    750.0
+    foe     : Heatran -> ROAR
+    view: hp 54%  speed 239 (faster)  incoming max 28%  certain 28%  threatened_lethal=False
+    race vs Heatran: mine 1 turns, theirs 2, winning=True
+    options considered:
+         750.0  THUNDERBOLT (bp 95, 26% dmg, x1)       engine_base +250, lethal +500
+         198.0  ROOST (0% dmg, x1)                     engine_base +108, heal_mid_hp +90
+          80.5  HIDDENPOWER (bp 1, 3% dmg, x0.5)       engine_base +123, expected_damage +2, resisted -45
+          50.0  DEFOG (0% dmg, x1)                     engine_base +50
+         VETO   switch -> Altaria (hits 6%, takes 16%, faster) engine_base +29, matchup +16, entry_incoming_damage +11, switchin_race +155, no_escape_reason -1000000
+         VETO   switch -> Chansey (hits 26%, takes 12%) engine_base +25, matchup +64, entry_incoming_damage +17, switchin_race +85, no_escape_reason -1000000
+
+Turn 33  actor 1
+    board   : Zapdos 60%  vs  Ferrothorn 94%
+    stock   : ROOST
+    portable: ROOST                        score    100.0
+    foe     : Ferrothorn -> LEECHSEED
+    view: hp 60%  speed 239 (faster)  incoming max 20%  certain 0%  threatened_lethal=False
+    race vs Ferrothorn: mine 7 turns, theirs 3, winning=False
+    options considered:
+         100.0  ROOST (0% dmg, x1)                     engine_base +100
+          81.6  HIDDENPOWER (bp 1, 14% dmg, x0.5)      engine_base +115, expected_damage +12, resisted -45
+          75.0  DEFOG (0% dmg, x1)                     engine_base +75
+          73.3  THUNDERBOLT (bp 95, 15% dmg, x0.5)     engine_base +106, expected_damage +12, resisted -45
+         VETO   switch -> Altaria (hits 11%, takes 15%, faster) engine_base +29, matchup +16, entry_incoming_damage +12, switchin_race +155, no_escape_reason -1000000
+         VETO   switch -> Chansey (hits 28%, takes 27%, faster) engine_base +25, matchup +64, entry_incoming_damage -3, switchin_race +65, no_escape_reason -1000000
+
+Turn 34  actor 1   <- DIFFERENT
+    board   : Zapdos 88%  vs  Ferrothorn 100%
+    stock   : THUNDERBOLT
+    portable: HIDDENPOWER @0               score     80.6
+    foe     : Ferrothorn -> SPIKES
+    view: hp 88%  speed 239 (faster)  incoming max 20%  certain 0%  threatened_lethal=False
+    race vs Ferrothorn: mine 7 turns, theirs 3, winning=False
+    options considered:
+          80.6  HIDDENPOWER (bp 1, 14% dmg, x0.5)      engine_base +114, expected_damage +12, resisted -45
+          75.0  DEFOG (0% dmg, x1)                     engine_base +75
+          72.3  THUNDERBOLT (bp 95, 15% dmg, x0.5)     engine_base +105, expected_damage +12, resisted -45
+        -554.0  ROOST (0% dmg, x1)                     engine_base +66, heal_near_full -500, heal_losing_race -120
+         VETO   switch -> Altaria (hits 11%, takes 15%, faster) engine_base +29, matchup +16, entry_incoming_damage +12, switchin_race +155, no_escape_reason -1000000
+         VETO   switch -> Chansey (hits 28%, takes 27%, faster) engine_base +25, matchup +64, entry_incoming_damage -3, switchin_race +65, no_escape_reason -1000000
+
+Turn 35  actor 1   <- DIFFERENT
+    board   : Zapdos 81%  vs  Ferrothorn 100%
+    stock   : THUNDERBOLT
+    portable: HIDDENPOWER @0               score     80.6
+    foe     : Ferrothorn -> SPIKES
+    view: hp 81%  speed 239 (faster)  incoming max 20%  certain 0%  threatened_lethal=False
+    race vs Ferrothorn: mine 7 turns, theirs 3, winning=False
+    options considered:
+          80.6  HIDDENPOWER (bp 1, 14% dmg, x0.5)      engine_base +114, expected_damage +12, resisted -45
+          75.0  DEFOG (0% dmg, x1)                     engine_base +75
+          72.3  THUNDERBOLT (bp 95, 15% dmg, x0.5)     engine_base +105, expected_damage +12, resisted -45
+         -47.0  ROOST (0% dmg, x1)                     engine_base +73, heal_losing_race -120
+         VETO   switch -> Altaria (hits 11%, takes 15%, faster) engine_base +17, matchup +16, entry_incoming_damage +12, switchin_race +155, no_escape_reason -1000000
+         VETO   switch -> Chansey (hits 28%, takes 27%, faster) engine_base +13, matchup +64, entry_incoming_damage -3, switchin_race +65, no_escape_reason -1000000
+
+Turn 36  actor 1   <- DIFFERENT
+    board   : Zapdos 75%  vs  Ferrothorn 100%
+    stock   : THUNDERBOLT
+    portable: ROOST                        score     81.0
+    foe     : Ferrothorn -> SPIKES
+    view: hp 75%  speed 239 (faster)  incoming max 20%  certain 0%  threatened_lethal=False
+    race vs Ferrothorn: mine 7 turns, theirs 3, winning=False
+    options considered:
+          81.0  ROOST (0% dmg, x1)                     engine_base +81
+          80.6  HIDDENPOWER (bp 1, 14% dmg, x0.5)      engine_base +114, expected_damage +12, resisted -45
+          75.0  DEFOG (0% dmg, x1)                     engine_base +75
+          72.3  THUNDERBOLT (bp 95, 15% dmg, x0.5)     engine_base +105, expected_damage +12, resisted -45
+         VETO   switch -> Altaria (hits 11%, takes 15%, faster) engine_base +13, matchup +16, entry_incoming_damage +12, switchin_race +155, no_escape_reason -1000000
+         VETO   switch -> Chansey (hits 28%, takes 27%, faster) engine_base +8, matchup +64, entry_incoming_damage -3, switchin_race +65, dies_on_entry -500, no_escape_reason -1000000
+
+Turn 37  actor 1   <- DIFFERENT
+    board   : Zapdos 69%  vs  Ferrothorn 100%
+    stock   : THUNDERBOLT
+    portable: ROOST                        score     90.0
+    foe     : Ferrothorn -> POWERWHIP
+    view: hp 69%  speed 239 (faster)  incoming max 20%  certain 0%  threatened_lethal=False
+    race vs Ferrothorn: mine 7 turns, theirs 3, winning=False
+    options considered:
+          90.0  ROOST (0% dmg, x1)                     engine_base +90
+          80.6  HIDDENPOWER (bp 1, 14% dmg, x0.5)      engine_base +114, expected_damage +12, resisted -45
+          75.0  DEFOG (0% dmg, x1)                     engine_base +75
+          72.3  THUNDERBOLT (bp 95, 15% dmg, x0.5)     engine_base +105, expected_damage +12, resisted -45
+         VETO   switch -> Altaria (hits 11%, takes 15%, faster) engine_base +4, matchup +16, entry_incoming_damage +12, switchin_race +155, no_escape_reason -1000000
+         VETO   switch -> Chansey (hits 28%, takes 27%, faster) matchup +64, entry_incoming_damage -3, switchin_race +65, dies_on_entry -500, no_escape_reason -1000000
+
+Turn 38  actor 1   <- DIFFERENT
+    board   : Zapdos 42%  vs  Ferrothorn 100%
+    stock   : HIDDENPOWER
+    portable: ROOST                        score    212.0
+    foe     : Ferrothorn -> POWERWHIP
+    view: hp 42%  speed 239 (faster)  incoming max 20%  certain 0%  threatened_lethal=False
+    race vs Ferrothorn: mine 7 turns, theirs 2, winning=False
+    options considered:
+         212.0  ROOST (0% dmg, x1)                     engine_base +122, heal_mid_hp +90
+          80.6  HIDDENPOWER (bp 1, 14% dmg, x0.5)      engine_base +114, expected_damage +12, resisted -45
+          75.0  DEFOG (0% dmg, x1)                     engine_base +75
+          72.3  THUNDERBOLT (bp 95, 15% dmg, x0.5)     engine_base +105, expected_damage +12, resisted -45
+         VETO   switch -> Altaria (hits 11%, takes 15%, faster) engine_base +4, matchup +16, entry_incoming_damage +12, switchin_race +155, no_escape_reason -1000000
+         VETO   switch -> Chansey (hits 28%, takes 27%, faster) matchup +64, entry_incoming_damage -3, switchin_race +65, dies_on_entry -500, no_escape_reason -1000000
+
+Turn 39  actor 1
+    board   : Zapdos 18%  vs  Ferrothorn 100%
+    stock   : ROOST
+    portable: ROOST                        score    571.5
+    foe     : Ferrothorn -> POWERWHIP
+    view: hp 18%  speed 239 (faster)  incoming max 20%  certain 0%  threatened_lethal=True
+    race vs Ferrothorn: mine 7 turns, theirs 1, winning=False
+    options considered:
+         571.5  ROOST (0% dmg, x1)                     engine_base +152, heal_low_hp +270, heal_saves_battler +150
+          80.6  HIDDENPOWER (bp 1, 14% dmg, x0.5)      engine_base +114, expected_damage +12, resisted -45
+          75.0  DEFOG (0% dmg, x1)                     engine_base +75
+          72.3  THUNDERBOLT (bp 95, 15% dmg, x0.5)     engine_base +105, expected_damage +12, resisted -45
+         VETO   switch -> Altaria (hits 11%, takes 15%, faster) engine_base +4, matchup +16, entry_incoming_damage +12, switchin_race +155, escape_lethal_threat +130, preserve_low_hp_actor +80, no_escape_reason -1000000
+         VETO   switch -> Chansey (hits 28%, takes 27%, faster) matchup +64, entry_incoming_damage -3, switchin_race +65, escape_lethal_threat +130, dies_on_entry -500, no_escape_reason -1000000
+
+Turn 40  actor 1   <- DIFFERENT
+    board   : Zapdos 28%  vs  Ferrothorn 100%
+    stock   : HIDDENPOWER
+    portable: ROOST                        score    382.4
+    foe     : Ferrothorn -> POWERWHIP
+    view: hp 28%  speed 239 (faster)  incoming max 20%  certain 0%  threatened_lethal=False
+    race vs Ferrothorn: mine 7 turns, theirs 1, winning=False
+    options considered:
+         382.4  ROOST (0% dmg, x1)                     engine_base +141, heal_low_hp +241
+          80.6  HIDDENPOWER (bp 1, 14% dmg, x0.5)      engine_base +114, expected_damage +12, resisted -45
+          75.0  DEFOG (0% dmg, x1)                     engine_base +75
+          72.3  THUNDERBOLT (bp 95, 15% dmg, x0.5)     engine_base +105, expected_damage +12, resisted -45
+         VETO   switch -> Altaria (hits 11%, takes 15%, faster) engine_base +4, matchup +16, entry_incoming_damage +12, switchin_race +155, no_escape_reason -1000000
+         VETO   switch -> Chansey (hits 28%, takes 27%, faster) matchup +64, entry_incoming_damage -3, switchin_race +65, dies_on_entry -500, no_escape_reason -1000000
+
+Turn 41  actor 1
+    board   : Zapdos 4%  vs  Ferrothorn 100%
+    stock   : ROOST
+    portable: ROOST                        score    631.7
+    foe     : Ferrothorn -> POWERWHIP
+    view: hp 4%  speed 239 (faster)  incoming max 20%  certain 0%  threatened_lethal=True
+    race vs Ferrothorn: mine 7 turns, theirs 1, winning=False
+    options considered:
+         631.7  ROOST (0% dmg, x1)                     engine_base +170, heal_low_hp +312, heal_saves_battler +150
+          80.6  HIDDENPOWER (bp 1, 14% dmg, x0.5)      engine_base +114, expected_damage +12, resisted -45
+          75.0  DEFOG (0% dmg, x1)                     engine_base +75
+          72.3  THUNDERBOLT (bp 95, 15% dmg, x0.5)     engine_base +105, expected_damage +12, resisted -45
+         VETO   switch -> Altaria (hits 11%, takes 15%, faster) engine_base +4, matchup +16, entry_incoming_damage +12, switchin_race +155, escape_lethal_threat +130, preserve_low_hp_actor +80, no_escape_reason -1000000
+         VETO   switch -> Chansey (hits 28%, takes 27%, faster) matchup +64, entry_incoming_damage -3, switchin_race +65, escape_lethal_threat +130, dies_on_entry -500, no_escape_reason -1000000
+
+Turn 42  actor 1
+    board   : Zapdos 13%  vs  Ferrothorn 100%
+    stock   : ROOST
+    portable: ROOST                        score    593.9
+    foe     : Ferrothorn -> PROTECT
+    view: hp 13%  speed 239 (faster)  incoming max 20%  certain 0%  threatened_lethal=True
+    race vs Ferrothorn: mine 7 turns, theirs 1, winning=False
+    options considered:
+         593.9  ROOST (0% dmg, x1)                     engine_base +158, heal_low_hp +286, heal_saves_battler +150
+          80.6  HIDDENPOWER (bp 1, 14% dmg, x0.5)      engine_base +114, expected_damage +12, resisted -45
+          75.0  DEFOG (0% dmg, x1)                     engine_base +75
+          72.3  THUNDERBOLT (bp 95, 15% dmg, x0.5)     engine_base +105, expected_damage +12, resisted -45
+         VETO   switch -> Altaria (hits 11%, takes 15%, faster) engine_base +4, matchup +16, entry_incoming_damage +12, switchin_race +155, escape_lethal_threat +130, preserve_low_hp_actor +80, no_escape_reason -1000000
+         VETO   switch -> Chansey (hits 28%, takes 27%, faster) matchup +64, entry_incoming_damage -3, switchin_race +65, escape_lethal_threat +130, dies_on_entry -500, no_escape_reason -1000000
+
+Turn 43  actor 1   <- DIFFERENT
+    board   : Zapdos 57%  vs  Ferrothorn 100%
+    stock   : HIDDENPOWER
+    portable: ROOST                        score    195.0
+    foe     : Ferrothorn -> SPIKES
+    view: hp 57%  speed 239 (faster)  incoming max 20%  certain 0%  threatened_lethal=False
+    race vs Ferrothorn: mine 7 turns, theirs 2, winning=False
+    options considered:
+         195.0  ROOST (0% dmg, x1)                     engine_base +105, heal_mid_hp +90
+          80.6  HIDDENPOWER (bp 1, 14% dmg, x0.5)      engine_base +114, expected_damage +12, resisted -45
+          75.0  DEFOG (0% dmg, x1)                     engine_base +75
+          72.3  THUNDERBOLT (bp 95, 15% dmg, x0.5)     engine_base +105, expected_damage +12, resisted -45
+         VETO   switch -> Altaria (hits 11%, takes 15%, faster) engine_base +4, matchup +16, entry_incoming_damage +12, switchin_race +155, no_escape_reason -1000000
+         VETO   switch -> Chansey (hits 28%, takes 27%, faster) matchup +64, entry_incoming_damage -3, switchin_race +65, dies_on_entry -500, no_escape_reason -1000000
+
+Turn 44  actor 1   <- DIFFERENT
+    board   : Zapdos 51%  vs  Ferrothorn 100%
+    stock   : THUNDERBOLT
+    portable: ROOST                        score    202.0
+    foe     : Ferrothorn -> LEECHSEED
+    view: hp 51%  speed 239 (faster)  incoming max 20%  certain 0%  threatened_lethal=False
+    race vs Ferrothorn: mine 7 turns, theirs 2, winning=False
+    options considered:
+         202.0  ROOST (0% dmg, x1)                     engine_base +112, heal_mid_hp +90
+          80.6  HIDDENPOWER (bp 1, 14% dmg, x0.5)      engine_base +114, expected_damage +12, resisted -45
+          75.0  DEFOG (0% dmg, x1)                     engine_base +75
+          72.3  THUNDERBOLT (bp 95, 15% dmg, x0.5)     engine_base +105, expected_damage +12, resisted -45
+         VETO   switch -> Altaria (hits 11%, takes 15%, faster) engine_base +4, matchup +16, entry_incoming_damage +12, switchin_race +155, no_escape_reason -1000000
+         VETO   switch -> Chansey (hits 28%, takes 27%, faster) matchup +64, entry_incoming_damage -3, switchin_race +65, dies_on_entry -500, no_escape_reason -1000000
+
+Turn 45  actor 1   <- DIFFERENT
+    board   : Zapdos 44%  vs  Ferrothorn 100%
+    stock   : THUNDERBOLT
+    portable: ROOST                        score    210.0
+    foe     : Ferrothorn -> LEECHSEED
+    view: hp 44%  speed 239 (faster)  incoming max 20%  certain 0%  threatened_lethal=False
+    race vs Ferrothorn: mine 7 turns, theirs 2, winning=False
+    options considered:
+         210.0  ROOST (0% dmg, x1)                     engine_base +120, heal_mid_hp +90
+          80.6  HIDDENPOWER (bp 1, 14% dmg, x0.5)      engine_base +114, expected_damage +12, resisted -45
+          75.0  DEFOG (0% dmg, x1)                     engine_base +75
+          72.3  THUNDERBOLT (bp 95, 15% dmg, x0.5)     engine_base +105, expected_damage +12, resisted -45
+         VETO   switch -> Altaria (hits 11%, takes 15%, faster) engine_base +4, matchup +16, entry_incoming_damage +12, switchin_race +155, no_escape_reason -1000000
+         VETO   switch -> Chansey (hits 28%, takes 27%, faster) matchup +64, entry_incoming_damage -3, switchin_race +65, dies_on_entry -500, no_escape_reason -1000000
+
+Turn 46  actor 1   <- DIFFERENT
+    board   : Zapdos 38%  vs  Ferrothorn 100%
+    stock   : HIDDENPOWER
+    portable: ROOST                        score    217.0
+    foe     : Ferrothorn -> PROTECT
+    view: hp 38%  speed 239 (faster)  incoming max 20%  certain 0%  threatened_lethal=False
+    race vs Ferrothorn: mine 7 turns, theirs 2, winning=False
+    options considered:
+         217.0  ROOST (0% dmg, x1)                     engine_base +127, heal_mid_hp +90
+          80.6  HIDDENPOWER (bp 1, 14% dmg, x0.5)      engine_base +114, expected_damage +12, resisted -45
+          75.0  DEFOG (0% dmg, x1)                     engine_base +75
+          72.3  THUNDERBOLT (bp 95, 15% dmg, x0.5)     engine_base +105, expected_damage +12, resisted -45
+         VETO   switch -> Altaria (hits 11%, takes 15%, faster) engine_base +4, matchup +16, entry_incoming_damage +12, switchin_race +155, no_escape_reason -1000000
+         VETO   switch -> Chansey (hits 28%, takes 27%, faster) matchup +64, entry_incoming_damage -3, switchin_race +65, dies_on_entry -500, no_escape_reason -1000000
+
+Turn 47  actor 1   <- DIFFERENT
+    board   : Zapdos 32%  vs  Ferrothorn 100%
+    stock   : HIDDENPOWER
+    portable: ROOST                        score    365.7
+    foe     : Ferrothorn -> PROTECT
+    view: hp 32%  speed 239 (faster)  incoming max 20%  certain 0%  threatened_lethal=False
+    race vs Ferrothorn: mine 7 turns, theirs 1, winning=False
+    options considered:
+         365.7  ROOST (0% dmg, x1)                     engine_base +136, heal_low_hp +230
+          80.6  HIDDENPOWER (bp 1, 14% dmg, x0.5)      engine_base +114, expected_damage +12, resisted -45
+          75.0  DEFOG (0% dmg, x1)                     engine_base +75
+          72.3  THUNDERBOLT (bp 95, 15% dmg, x0.5)     engine_base +105, expected_damage +12, resisted -45
+         VETO   switch -> Altaria (hits 11%, takes 15%, faster) engine_base +4, matchup +16, entry_incoming_damage +12, switchin_race +155, no_escape_reason -1000000
+         VETO   switch -> Chansey (hits 28%, takes 27%, faster) matchup +64, entry_incoming_damage -3, switchin_race +65, dies_on_entry -500, no_escape_reason -1000000
+
+Turn 48  actor 1
+    board   : Zapdos 26%  vs  Ferrothorn 100%
+    stock   : ROOST
+    portable: ROOST                        score    391.4
+    foe     : Ferrothorn -> PROTECT
+    view: hp 26%  speed 239 (faster)  incoming max 20%  certain 0%  threatened_lethal=False
+    race vs Ferrothorn: mine 7 turns, theirs 1, winning=False
+    options considered:
+         391.4  ROOST (0% dmg, x1)                     engine_base +143, heal_low_hp +248
+          80.6  HIDDENPOWER (bp 1, 14% dmg, x0.5)      engine_base +114, expected_damage +12, resisted -45
+          75.0  DEFOG (0% dmg, x1)                     engine_base +75
+          72.3  THUNDERBOLT (bp 95, 15% dmg, x0.5)     engine_base +105, expected_damage +12, resisted -45
+         VETO   switch -> Altaria (hits 11%, takes 15%, faster) engine_base +4, matchup +16, entry_incoming_damage +12, switchin_race +155, no_escape_reason -1000000
+         VETO   switch -> Chansey (hits 28%, takes 27%, faster) matchup +64, entry_incoming_damage -3, switchin_race +65, dies_on_entry -500, no_escape_reason -1000000
+
+Turn 49  actor 1   <- DIFFERENT
+    board   : Zapdos 69%  vs  Ferrothorn 100%
+    stock   : THUNDERBOLT
+    portable: HIDDENPOWER @0               score     80.6
+    foe     : Ferrothorn -> PROTECT
+    view: hp 69%  speed 239 (faster)  incoming max 20%  certain 0%  threatened_lethal=False
+    race vs Ferrothorn: mine 7 turns, theirs 3, winning=False
+    options considered:
+          80.6  HIDDENPOWER (bp 1, 14% dmg, x0.5)      engine_base +114, expected_damage +12, resisted -45
+          75.0  DEFOG (0% dmg, x1)                     engine_base +75
+          72.3  THUNDERBOLT (bp 95, 15% dmg, x0.5)     engine_base +105, expected_damage +12, resisted -45
+         VETO   switch -> Altaria (hits 11%, takes 15%, faster) engine_base +4, matchup +16, entry_incoming_damage +12, switchin_race +155, no_escape_reason -1000000
+         VETO   switch -> Chansey (hits 28%, takes 27%, faster) matchup +64, entry_incoming_damage -3, switchin_race +65, dies_on_entry -500, no_escape_reason -1000000
+
+Turn 50  actor 1
+    board   : Zapdos 63%  vs  Ferrothorn 100%
+    stock   : HIDDENPOWER
+    portable: HIDDENPOWER @0               score     80.6
+    foe     : Ferrothorn -> PROTECT
+    view: hp 63%  speed 239 (faster)  incoming max 20%  certain 0%  threatened_lethal=False
+    race vs Ferrothorn: mine 7 turns, theirs 2, winning=False
+    options considered:
+          80.6  HIDDENPOWER (bp 1, 14% dmg, x0.5)      engine_base +114, expected_damage +12, resisted -45
+          75.0  DEFOG (0% dmg, x1)                     engine_base +75
+         VETO   switch -> Altaria (hits 11%, takes 15%, faster) engine_base +4, matchup +16, entry_incoming_damage +12, switchin_race +155, no_escape_reason -1000000
+         VETO   switch -> Chansey (hits 28%, takes 27%, faster) matchup +64, entry_incoming_damage -3, switchin_race +65, dies_on_entry -500, no_escape_reason -1000000
+
+Turn 51  actor 1
+    board   : Zapdos 57%  vs  Ferrothorn 100%
+    stock   : HIDDENPOWER
+    portable: HIDDENPOWER @0               score     80.6
+    foe     : Ferrothorn -> SPIKES
+    view: hp 57%  speed 239 (faster)  incoming max 20%  certain 0%  threatened_lethal=False
+    race vs Ferrothorn: mine 7 turns, theirs 2, winning=False
+    options considered:
+          80.6  HIDDENPOWER (bp 1, 14% dmg, x0.5)      engine_base +114, expected_damage +12, resisted -45
+          75.0  DEFOG (0% dmg, x1)                     engine_base +75
+         VETO   switch -> Altaria (hits 11%, takes 15%, faster) engine_base +4, matchup +16, entry_incoming_damage +12, switchin_race +155, no_escape_reason -1000000
+         VETO   switch -> Chansey (hits 28%, takes 27%, faster) matchup +64, entry_incoming_damage -3, switchin_race +65, dies_on_entry -500, no_escape_reason -1000000
+
+Turn 52  actor 1
+    board   : Zapdos 51%  vs  Ferrothorn 100%
+    stock   : HIDDENPOWER
+    portable: HIDDENPOWER @0               score     80.6
+    foe     : Ferrothorn -> SPIKES
+    view: hp 51%  speed 239 (faster)  incoming max 20%  certain 0%  threatened_lethal=False
+    race vs Ferrothorn: mine 7 turns, theirs 2, winning=False
+    options considered:
+          80.6  HIDDENPOWER (bp 1, 14% dmg, x0.5)      engine_base +114, expected_damage +12, resisted -45
+          75.0  DEFOG (0% dmg, x1)                     engine_base +75
+         VETO   switch -> Altaria (hits 11%, takes 15%, faster) engine_base +4, matchup +16, entry_incoming_damage +12, switchin_race +155, no_escape_reason -1000000
+         VETO   switch -> Chansey (hits 28%, takes 27%, faster) matchup +64, entry_incoming_damage -3, switchin_race +65, dies_on_entry -500, no_escape_reason -1000000
+
+Turn 53  actor 1
+    board   : Zapdos 44%  vs  Ferrothorn 100%
+    stock   : HIDDENPOWER
+    portable: HIDDENPOWER @0               score     80.6
+    foe     : Ferrothorn -> PROTECT
+    view: hp 44%  speed 239 (faster)  incoming max 20%  certain 0%  threatened_lethal=False
+    race vs Ferrothorn: mine 7 turns, theirs 2, winning=False
+    options considered:
+          80.6  HIDDENPOWER (bp 1, 14% dmg, x0.5)      engine_base +114, expected_damage +12, resisted -45
+          75.0  DEFOG (0% dmg, x1)                     engine_base +75
+         VETO   switch -> Altaria (hits 11%, takes 15%, faster) engine_base +4, matchup +16, entry_incoming_damage +12, switchin_race +155, no_escape_reason -1000000
+         VETO   switch -> Chansey (hits 28%, takes 27%, faster) matchup +64, entry_incoming_damage -3, switchin_race +65, dies_on_entry -500, no_escape_reason -1000000
+
+Turn 54  actor 1
+    board   : Zapdos 38%  vs  Ferrothorn 100%
+    stock   : HIDDENPOWER
+    portable: HIDDENPOWER @0               score     80.6
+    foe     : Ferrothorn -> SPIKES
+    view: hp 38%  speed 239 (faster)  incoming max 20%  certain 0%  threatened_lethal=False
+    race vs Ferrothorn: mine 7 turns, theirs 2, winning=False
+    options considered:
+          80.6  HIDDENPOWER (bp 1, 14% dmg, x0.5)      engine_base +114, expected_damage +12, resisted -45
+          75.0  DEFOG (0% dmg, x1)                     engine_base +75
+         VETO   switch -> Altaria (hits 11%, takes 15%, faster) engine_base +4, matchup +16, entry_incoming_damage +12, switchin_race +155, no_escape_reason -1000000
+         VETO   switch -> Chansey (hits 28%, takes 27%, faster) matchup +64, entry_incoming_damage -3, switchin_race +65, dies_on_entry -500, no_escape_reason -1000000
+
+Turn 55  actor 1
+    board   : Zapdos 32%  vs  Ferrothorn 100%
+    stock   : HIDDENPOWER
+    portable: HIDDENPOWER @0               score     80.6
+    foe     : Ferrothorn -> LEECHSEED
+    view: hp 32%  speed 239 (faster)  incoming max 20%  certain 0%  threatened_lethal=False
+    race vs Ferrothorn: mine 7 turns, theirs 1, winning=False
+    options considered:
+          80.6  HIDDENPOWER (bp 1, 14% dmg, x0.5)      engine_base +114, expected_damage +12, resisted -45
+          75.0  DEFOG (0% dmg, x1)                     engine_base +75
+         VETO   switch -> Altaria (hits 11%, takes 15%, faster) engine_base +4, matchup +16, entry_incoming_damage +12, switchin_race +155, no_escape_reason -1000000
+         VETO   switch -> Chansey (hits 28%, takes 27%, faster) matchup +64, entry_incoming_damage -3, switchin_race +65, dies_on_entry -500, no_escape_reason -1000000
+
+Turn 56  actor 1
+    board   : Zapdos 26%  vs  Ferrothorn 100%
+    stock   : switch -> Altaria
+    portable: switch -> Altaria            score    307.8
+    foe     : Ferrothorn -> LEECHSEED
+    view: hp 26%  speed 239 (faster)  incoming max 20%  certain 0%  threatened_lethal=False
+    race vs Ferrothorn: not computed
+    options considered:
+         307.8  switch -> Altaria (hits 11%, takes 15%, faster) engine_base +4, matchup +16, entry_incoming_damage +12, switchin_race +155, weak_current_attacks +120, escape_reasons +1
+          75.0  DEFOG (0% dmg, x1)                     engine_base +75
+        -253.8  switch -> Chansey (hits 28%, takes 27%, faster) matchup +64, entry_incoming_damage -3, switchin_race +65, weak_current_attacks +120, dies_on_entry -500, escape_reasons +1
+
+Turn 57  actor 1
+    board   : Altaria 13%  vs  Ferrothorn 100%
+    stock   : ROOST
+    portable: ROOST                        score    596.8
+    foe     : Ferrothorn -> LEECHSEED
+    view: hp 13%  speed 203 (faster)  incoming max 15%  certain 0%  threatened_lethal=True
+    race vs Ferrothorn: mine 8 turns, theirs 1, winning=False
+    options considered:
+         596.8  ROOST (0% dmg, x1)                     engine_base +160, heal_low_hp +287, heal_saves_battler +150
+          74.6  FRUSTRATION (bp 1, 11% dmg, x0.5)      engine_base +111, expected_damage +9, resisted -45
+          12.0  HEALBELL (0% dmg, x1)                  engine_base +12
+         -53.0  DRAGONDANCE (0% dmg, x1)               engine_base +187, unsafe_setup -240
+         VETO   switch -> Chansey (hits 28%, takes 27%, faster) matchup +64, entry_incoming_damage -3, switchin_race +65, escape_lethal_threat +130, dies_on_entry -500, no_escape_reason -1000000
+         VETO   switch -> Zapdos (hits 15%, takes 20%, faster) engine_base +4, matchup +16, entry_incoming_damage +6, switchin_race +65, escape_lethal_threat +130, dies_on_entry -500, no_escape_reason -1000000
+
+Turn 58  actor 1   <- DIFFERENT
+    board   : Altaria 50%  vs  Ferrothorn 100%
+    stock   : DRAGONDANCE
+    portable: ROOST                        score    202.0
+    foe     : Ferrothorn -> PROTECT
+    view: hp 50%  speed 203 (faster)  incoming max 15%  certain 0%  threatened_lethal=False
+    race vs Ferrothorn: mine 8 turns, theirs 2, winning=False
+    options considered:
+         202.0  ROOST (0% dmg, x1)                     engine_base +112, heal_mid_hp +90
+         192.0  DRAGONDANCE (0% dmg, x1)               engine_base +137, first_setup +55
+          74.6  FRUSTRATION (bp 1, 11% dmg, x0.5)      engine_base +111, expected_damage +9, resisted -45
+          12.0  HEALBELL (0% dmg, x1)                  engine_base +12
+         VETO   switch -> Chansey (hits 28%, takes 27%, faster) matchup +64, entry_incoming_damage -3, switchin_race +65, dies_on_entry -500, no_escape_reason -1000000
+         VETO   switch -> Zapdos (hits 15%, takes 20%, faster) engine_base +4, matchup +16, entry_incoming_damage +6, switchin_race +65, dies_on_entry -500, no_escape_reason -1000000
+
+Turn 59  actor 1   <- DIFFERENT
+    board   : Altaria 38% +2  vs  Ferrothorn 100%
+    stock   : DRAGONDANCE
+    portable: ROOST                        score    218.0
+    foe     : Ferrothorn -> PROTECT
+    view: hp 38%  speed 304 (faster)  incoming max 15%  certain 0%  threatened_lethal=False
+    race vs Ferrothorn: mine 7 turns, theirs 2, winning=False
+    options considered:
+         218.0  ROOST (0% dmg, x1)                     engine_base +128, heal_mid_hp +90
+          83.7  FRUSTRATION (bp 1, 16% dmg, x0.5)      engine_base +116, expected_damage +13, resisted -45
+          12.0  DRAGONDANCE (0% dmg, x1)               engine_base +112, repeated_setup -100
+          12.0  HEALBELL (0% dmg, x1)                  engine_base +12
+         VETO   switch -> Chansey (hits 28%, takes 27%, faster) matchup +64, entry_incoming_damage -3, switchin_race +65, dies_on_entry -500, no_escape_reason -1000000
+         VETO   switch -> Zapdos (hits 15%, takes 20%, faster) engine_base +4, matchup +16, entry_incoming_damage +6, switchin_race +65, dies_on_entry -500, no_escape_reason -1000000
+
+Turn 60  actor 1
+    board   : Altaria 25% +4  vs  Ferrothorn 100%
+    stock   : ROOST
+    portable: ROOST                        score    391.5
+    foe     : Ferrothorn -> PROTECT
+    view: hp 25%  speed 406 (faster)  incoming max 15%  certain 0%  threatened_lethal=False
+    race vs Ferrothorn: mine 5 turns, theirs 1, winning=False
+    options considered:
+         391.5  ROOST (0% dmg, x1)                     engine_base +143, heal_low_hp +249
+          92.8  FRUSTRATION (bp 1, 21% dmg, x0.5)      engine_base +121, expected_damage +17, resisted -45
+          12.0  HEALBELL (0% dmg, x1)                  engine_base +12
+        -153.0  DRAGONDANCE (0% dmg, x1)               engine_base +87, unsafe_setup -240
+         VETO   switch -> Chansey (hits 28%, takes 27%, faster) matchup +64, entry_incoming_damage -3, switchin_race +65, dies_on_entry -500, no_escape_reason -1000000
+         VETO   switch -> Zapdos (hits 15%, takes 20%, faster) engine_base +4, matchup +16, entry_incoming_damage +6, switchin_race +65, dies_on_entry -500, no_escape_reason -1000000
+
+Turn 61  actor 1   <- DIFFERENT
+    board   : Altaria 63% +4  vs  Ferrothorn 100%
+    stock   : FRUSTRATION
+    portable: ROOST                        score     96.0
+    foe     : Ferrothorn -> SPIKES
+    view: hp 63%  speed 406 (faster)  incoming max 15%  certain 0%  threatened_lethal=False
+    race vs Ferrothorn: mine 5 turns, theirs 3, winning=False
+    options considered:
+          96.0  ROOST (0% dmg, x1)                     engine_base +96
+          92.8  FRUSTRATION (bp 1, 21% dmg, x0.5)      engine_base +121, expected_damage +17, resisted -45
+          12.0  HEALBELL (0% dmg, x1)                  engine_base +12
+        -113.0  DRAGONDANCE (0% dmg, x1)               engine_base +87, repeated_setup -200
+         VETO   switch -> Chansey (hits 28%, takes 27%, faster) matchup +64, entry_incoming_damage -3, switchin_race +65, dies_on_entry -500, no_escape_reason -1000000
+         VETO   switch -> Zapdos (hits 15%, takes 20%, faster) engine_base +4, matchup +16, entry_incoming_damage +6, switchin_race +65, dies_on_entry -500, no_escape_reason -1000000
+
+Turn 62  actor 1   <- DIFFERENT
+    board   : Altaria 38% +4  vs  Ferrothorn 95%
+    stock   : FRUSTRATION
+    portable: ROOST                        score    217.0
+    foe     : Ferrothorn -> SPIKES
+    view: hp 38%  speed 406 (faster)  incoming max 15%  certain 0%  threatened_lethal=False
+    race vs Ferrothorn: mine 5 turns, theirs 2, winning=False
+    options considered:
+         217.0  ROOST (0% dmg, x1)                     engine_base +127, heal_mid_hp +90
+          93.8  FRUSTRATION (bp 1, 21% dmg, x0.5)      engine_base +122, expected_damage +17, resisted -45
+          12.0  HEALBELL (0% dmg, x1)                  engine_base +12
+        -113.0  DRAGONDANCE (0% dmg, x1)               engine_base +87, repeated_setup -200
+         VETO   switch -> Chansey (hits 28%, takes 27%, faster) matchup +64, entry_incoming_damage -3, switchin_race +65, dies_on_entry -500, no_escape_reason -1000000
+         VETO   switch -> Zapdos (hits 15%, takes 20%, faster) engine_base +4, matchup +16, entry_incoming_damage +6, switchin_race +65, dies_on_entry -500, no_escape_reason -1000000
+
+Turn 63  actor 1
+    board   : Altaria 13% +4  vs  Ferrothorn 79%
+    stock   : ROOST
+    portable: ROOST                        score    593.1
+    foe     : Ferrothorn -> SPIKES
+    view: hp 13%  speed 406 (faster)  incoming max 15%  certain 0%  threatened_lethal=True
+    race vs Ferrothorn: mine 4 turns, theirs 1, winning=False
+    options considered:
+         593.1  ROOST (0% dmg, x1)                     engine_base +158, heal_low_hp +285, heal_saves_battler +150
+          98.8  FRUSTRATION (bp 1, 21% dmg, x0.5)      engine_base +127, expected_damage +17, resisted -45
+          12.0  HEALBELL (0% dmg, x1)                  engine_base +12
+        -153.0  DRAGONDANCE (0% dmg, x1)               engine_base +87, unsafe_setup -240
+         VETO   switch -> Chansey (hits 28%, takes 27%, faster) matchup +64, entry_incoming_damage -3, switchin_race +65, escape_lethal_threat +130, dies_on_entry -500, no_escape_reason -1000000
+         VETO   switch -> Zapdos (hits 15%, takes 20%, faster) engine_base +4, matchup +16, entry_incoming_damage +6, switchin_race +65, escape_lethal_threat +130, dies_on_entry -500, no_escape_reason -1000000
+
+Turn 64  actor 1   <- DIFFERENT
+    board   : Altaria 51% +4  vs  Ferrothorn 98%
+    stock   : FRUSTRATION
+    portable: ROOST                        score    202.0
+    foe     : Ferrothorn -> SPIKES
+    view: hp 51%  speed 406 (faster)  incoming max 15%  certain 0%  threatened_lethal=False
+    race vs Ferrothorn: mine 5 turns, theirs 2, winning=False
+    options considered:
+         202.0  ROOST (0% dmg, x1)                     engine_base +112, heal_mid_hp +90
+          93.8  FRUSTRATION (bp 1, 21% dmg, x0.5)      engine_base +122, expected_damage +17, resisted -45
+          12.0  HEALBELL (0% dmg, x1)                  engine_base +12
+        -113.0  DRAGONDANCE (0% dmg, x1)               engine_base +87, repeated_setup -200
+         VETO   switch -> Chansey (hits 28%, takes 27%, faster) matchup +64, entry_incoming_damage -3, switchin_race +65, dies_on_entry -500, no_escape_reason -1000000
+         VETO   switch -> Zapdos (hits 15%, takes 20%, faster) engine_base +4, matchup +16, entry_incoming_damage +6, switchin_race +65, dies_on_entry -500, no_escape_reason -1000000
+
+Turn 65  actor 1
+    board   : Altaria 26% +4  vs  Ferrothorn 89%
+    stock   : ROOST
+    portable: ROOST                        score    388.8
+    foe     : Ferrothorn -> SPIKES
+    view: hp 26%  speed 406 (faster)  incoming max 15%  certain 0%  threatened_lethal=False
+    race vs Ferrothorn: mine 5 turns, theirs 1, winning=False
+    options considered:
+         388.8  ROOST (0% dmg, x1)                     engine_base +142, heal_low_hp +247
+          95.8  FRUSTRATION (bp 1, 21% dmg, x0.5)      engine_base +124, expected_damage +17, resisted -45
+          12.0  HEALBELL (0% dmg, x1)                  engine_base +12
+        -153.0  DRAGONDANCE (0% dmg, x1)               engine_base +87, unsafe_setup -240
+         VETO   switch -> Chansey (hits 28%, takes 27%, faster) matchup +64, entry_incoming_damage -3, switchin_race +65, dies_on_entry -500, no_escape_reason -1000000
+         VETO   switch -> Zapdos (hits 15%, takes 20%, faster) engine_base +4, matchup +16, entry_incoming_damage +6, switchin_race +65, dies_on_entry -500, no_escape_reason -1000000
+
+Turn 66  actor 1   <- DIFFERENT
+    board   : Altaria 64% +4  vs  Ferrothorn 100%
+    stock   : DRAGONDANCE
+    portable: ROOST                        score     96.0
+    foe     : Ferrothorn -> SPIKES
+    view: hp 64%  speed 406 (faster)  incoming max 15%  certain 0%  threatened_lethal=False
+    race vs Ferrothorn: mine 5 turns, theirs 3, winning=False
+    options considered:
+          96.0  ROOST (0% dmg, x1)                     engine_base +96
+          92.8  FRUSTRATION (bp 1, 21% dmg, x0.5)      engine_base +121, expected_damage +17, resisted -45
+          12.0  HEALBELL (0% dmg, x1)                  engine_base +12
+        -113.0  DRAGONDANCE (0% dmg, x1)               engine_base +87, repeated_setup -200
+         VETO   switch -> Chansey (hits 28%, takes 27%, faster) matchup +64, entry_incoming_damage -3, switchin_race +65, dies_on_entry -500, no_escape_reason -1000000
+         VETO   switch -> Zapdos (hits 15%, takes 20%, faster) engine_base +4, matchup +16, entry_incoming_damage +6, switchin_race +65, dies_on_entry -500, no_escape_reason -1000000
+
+Turn 67  actor 1   <- DIFFERENT
+    board   : Altaria 51% +6  vs  Ferrothorn 100%
+    stock   : FRUSTRATION
+    portable: ROOST                        score    201.0
+    foe     : Ferrothorn -> SPIKES
+    view: hp 51%  speed 507 (faster)  incoming max 15%  certain 0%  threatened_lethal=False
+    race vs Ferrothorn: mine 4 turns, theirs 2, winning=False
+    options considered:
+         201.0  ROOST (0% dmg, x1)                     engine_base +111, heal_mid_hp +90
+         101.9  FRUSTRATION (bp 1, 26% dmg, x0.5)      engine_base +126, expected_damage +21, resisted -45
+          12.0  HEALBELL (0% dmg, x1)                  engine_base +12
+        -238.0  DRAGONDANCE (0% dmg, x1)               engine_base +62, repeated_setup -300
+         VETO   switch -> Chansey (hits 28%, takes 27%, faster) matchup +64, entry_incoming_damage -3, switchin_race +65, dies_on_entry -500, no_escape_reason -1000000
+         VETO   switch -> Zapdos (hits 15%, takes 20%, faster) engine_base +4, matchup +16, entry_incoming_damage +6, switchin_race +65, dies_on_entry -500, no_escape_reason -1000000
+
+Turn 68  actor 1   <- DIFFERENT
+    board   : Altaria 26% +6  vs  Ferrothorn 89%
+    stock   : FRUSTRATION
+    portable: ROOST                        score    388.0
+    foe     : Ferrothorn -> SPIKES
+    view: hp 26%  speed 507 (faster)  incoming max 15%  certain 0%  threatened_lethal=False
+    race vs Ferrothorn: mine 4 turns, theirs 1, winning=False
+    options considered:
+         388.0  ROOST (0% dmg, x1)                     engine_base +142, heal_low_hp +246
+         104.9  FRUSTRATION (bp 1, 26% dmg, x0.5)      engine_base +129, expected_damage +21, resisted -45
+          12.0  HEALBELL (0% dmg, x1)                  engine_base +12
+        -178.0  DRAGONDANCE (0% dmg, x1)               engine_base +62, unsafe_setup -240
+         VETO   switch -> Chansey (hits 28%, takes 27%, faster) matchup +64, entry_incoming_damage -3, switchin_race +65, dies_on_entry -500, no_escape_reason -1000000
+         VETO   switch -> Zapdos (hits 15%, takes 20%, faster) engine_base +4, matchup +16, entry_incoming_damage +6, switchin_race +65, dies_on_entry -500, no_escape_reason -1000000
+
+Turn 69  actor 1
+    board   : Altaria 1% +6  vs  Ferrothorn 78%
+    stock   : ROOST
+    portable: ROOST                        score    643.8
+    foe     : Ferrothorn -> SPIKES
+    view: hp 1%  speed 507 (faster)  incoming max 15%  certain 0%  threatened_lethal=True
+    race vs Ferrothorn: mine 3 turns, theirs 1, winning=False
+    options considered:
+         643.8  ROOST (0% dmg, x1)                     engine_base +173, heal_low_hp +321, heal_saves_battler +150
+         109.9  FRUSTRATION (bp 1, 26% dmg, x0.5)      engine_base +134, expected_damage +21, resisted -45
+          12.0  HEALBELL (0% dmg, x1)                  engine_base +12
+        -178.0  DRAGONDANCE (0% dmg, x1)               engine_base +62, unsafe_setup -240
+         VETO   switch -> Chansey (hits 28%, takes 27%, faster) matchup +64, entry_incoming_damage -3, switchin_race +65, escape_lethal_threat +130, dies_on_entry -500, no_escape_reason -1000000
+         VETO   switch -> Zapdos (hits 15%, takes 20%, faster) engine_base +4, matchup +16, entry_incoming_damage +6, switchin_race +65, escape_lethal_threat +130, dies_on_entry -500, no_escape_reason -1000000
+
+Turn 70  actor 1
+    board   : Altaria 39% +6  vs  Ferrothorn 97%
+    stock   : ROOST
+    portable: ROOST                        score    216.0
+    foe     : Ferrothorn -> SPIKES
+    view: hp 39%  speed 507 (faster)  incoming max 15%  certain 0%  threatened_lethal=False
+    race vs Ferrothorn: mine 4 turns, theirs 2, winning=False
+    options considered:
+         216.0  ROOST (0% dmg, x1)                     engine_base +126, heal_mid_hp +90
+         102.9  FRUSTRATION (bp 1, 26% dmg, x0.5)      engine_base +127, expected_damage +21, resisted -45
+          12.0  HEALBELL (0% dmg, x1)                  engine_base +12
+        -238.0  DRAGONDANCE (0% dmg, x1)               engine_base +62, repeated_setup -300
+         VETO   switch -> Chansey (hits 28%, takes 27%, faster) matchup +64, entry_incoming_damage -3, switchin_race +65, dies_on_entry -500, no_escape_reason -1000000
+         VETO   switch -> Zapdos (hits 15%, takes 20%, faster) engine_base +4, matchup +16, entry_incoming_damage +6, switchin_race +65, dies_on_entry -500, no_escape_reason -1000000
+
+Turn 71  actor 1
+    board   : Altaria 77% +6  vs  Ferrothorn 100%
+    stock   : FRUSTRATION
+    portable: FRUSTRATION @0               score    101.9
+    foe     : Ferrothorn -> SPIKES
+    view: hp 77%  speed 507 (faster)  incoming max 15%  certain 0%  threatened_lethal=False
+    race vs Ferrothorn: mine 4 turns, theirs 3, winning=False
+    options considered:
+         101.9  FRUSTRATION (bp 1, 26% dmg, x0.5)      engine_base +126, expected_damage +21, resisted -45
+          80.0  ROOST (0% dmg, x1)                     engine_base +80
+          12.0  HEALBELL (0% dmg, x1)                  engine_base +12
+        -238.0  DRAGONDANCE (0% dmg, x1)               engine_base +62, repeated_setup -300
+         VETO   switch -> Chansey (hits 28%, takes 27%, faster) matchup +64, entry_incoming_damage -3, switchin_race +65, dies_on_entry -500, no_escape_reason -1000000
+         VETO   switch -> Zapdos (hits 15%, takes 20%, faster) engine_base +4, matchup +16, entry_incoming_damage +6, switchin_race +65, dies_on_entry -500, no_escape_reason -1000000
+
+Turn 72  actor 1   <- DIFFERENT
+    board   : Altaria 52% +6  vs  Ferrothorn 86%
+    stock   : FRUSTRATION
+    portable: ROOST                        score    201.0
+    foe     : Ferrothorn -> SPIKES
+    view: hp 52%  speed 507 (faster)  incoming max 15%  certain 0%  threatened_lethal=False
+    race vs Ferrothorn: mine 4 turns, theirs 2, winning=False
+    options considered:
+         201.0  ROOST (0% dmg, x1)                     engine_base +111, heal_mid_hp +90
+         106.9  FRUSTRATION (bp 1, 26% dmg, x0.5)      engine_base +131, expected_damage +21, resisted -45
+          12.0  HEALBELL (0% dmg, x1)                  engine_base +12
+        -238.0  DRAGONDANCE (0% dmg, x1)               engine_base +62, repeated_setup -300
+         VETO   switch -> Chansey (hits 28%, takes 27%, faster) matchup +64, entry_incoming_damage -3, switchin_race +65, dies_on_entry -500, no_escape_reason -1000000
+         VETO   switch -> Zapdos (hits 15%, takes 20%, faster) engine_base +4, matchup +16, entry_incoming_damage +6, switchin_race +65, dies_on_entry -500, no_escape_reason -1000000
+
+Turn 73  actor 1
+    board   : Altaria 27% +6  vs  Ferrothorn 74%
+    stock   : ROOST
+    portable: ROOST                        score    386.3
+    foe     : Ferrothorn -> SPIKES
+    view: hp 27%  speed 507 (faster)  incoming max 15%  certain 0%  threatened_lethal=False
+    race vs Ferrothorn: mine 3 turns, theirs 1, winning=False
+    options considered:
+         386.3  ROOST (0% dmg, x1)                     engine_base +142, heal_low_hp +244
+         110.9  FRUSTRATION (bp 1, 26% dmg, x0.5)      engine_base +135, expected_damage +21, resisted -45
+          12.0  HEALBELL (0% dmg, x1)                  engine_base +12
+        -178.0  DRAGONDANCE (0% dmg, x1)               engine_base +62, unsafe_setup -240
+         VETO   switch -> Chansey (hits 28%, takes 27%, faster) matchup +64, entry_incoming_damage -3, switchin_race +65, dies_on_entry -500, no_escape_reason -1000000
+         VETO   switch -> Zapdos (hits 15%, takes 20%, faster) engine_base +4, matchup +16, entry_incoming_damage +6, switchin_race +65, dies_on_entry -500, no_escape_reason -1000000
+
+Turn 74  actor 1
+    board   : Altaria 65% +6  vs  Ferrothorn 93%
+    stock   : FRUSTRATION
+    portable: FRUSTRATION @0               score    103.9
+    foe     : Ferrothorn -> STRUGGLE
+    view: hp 65%  speed 507 (faster)  incoming max 15%  certain 0%  threatened_lethal=False
+    race vs Ferrothorn: mine 4 turns, theirs 3, winning=False
+    options considered:
+         103.9  FRUSTRATION (bp 1, 26% dmg, x0.5)      engine_base +128, expected_damage +21, resisted -45
+          95.0  ROOST (0% dmg, x1)                     engine_base +95
+          12.0  HEALBELL (0% dmg, x1)                  engine_base +12
+        -238.0  DRAGONDANCE (0% dmg, x1)               engine_base +62, repeated_setup -300
+         VETO   switch -> Chansey (hits 28%, takes 27%, faster) matchup +64, entry_incoming_damage -3, switchin_race +65, dies_on_entry -500, no_escape_reason -1000000
+         VETO   switch -> Zapdos (hits 15%, takes 20%, faster) engine_base +4, matchup +16, entry_incoming_damage +6, switchin_race +65, dies_on_entry -500, no_escape_reason -1000000
+
+Turn 75  actor 1   <- DIFFERENT
+    board   : Altaria 32% +6  vs  Ferrothorn 54%
+    stock   : FRUSTRATION
+    portable: ROOST                        score    364.0
+    foe     : Ferrothorn -> STRUGGLE
+    view: hp 32%  speed 507 (faster)  incoming max 15%  certain 0%  threatened_lethal=False
+    race vs Ferrothorn: mine 3 turns, theirs 2, winning=False
+    options considered:
+         364.0  ROOST (0% dmg, x1)                     engine_base +135, heal_low_hp +229
+         123.9  FRUSTRATION (bp 1, 26% dmg, x0.5)      engine_base +148, expected_damage +21, resisted -45
+          12.0  HEALBELL (0% dmg, x1)                  engine_base +12
+        -238.0  DRAGONDANCE (0% dmg, x1)               engine_base +62, repeated_setup -300
+         VETO   switch -> Chansey (hits 28%, takes 27%, faster) matchup +64, entry_incoming_damage -3, switchin_race +65, dies_on_entry -500, no_escape_reason -1000000
+         VETO   switch -> Zapdos (hits 15%, takes 20%, faster) engine_base +4, matchup +16, entry_incoming_damage +6, switchin_race +65, dies_on_entry -500, no_escape_reason -1000000
+

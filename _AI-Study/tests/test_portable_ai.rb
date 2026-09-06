@@ -1307,4 +1307,207 @@ class PortableAITest < Test::Unit::TestCase
     assert_equal("SUCKERPUNCH",
                  pick(failed_move_snap, { "move_memory" => false })[0]["move_id"])
   end
+
+  # --- 0.6.3 leave a losing race for a bench candidate that wins it -------------
+  #
+  # Every test asserts both directions: the rule, and that the key off restores the
+  # 0.6.2 behaviour. Both keys false is the control run.
+
+  def bench(slot, outgoing, incoming, faster)
+    { "type" => "switch", "slot" => slot, "base_score" => 100, "matchup_score" => 0,
+      "candidate_hp_pct" => 100, "entry_damage_pct" => 0,
+      "outgoing_damage_pct" => outgoing, "incoming_damage_pct" => incoming,
+      "faster" => faster }
+  end
+
+  # The actor hits for 20 (five to KO) and the foe hits it for 50 (two): a race lost
+  # by three whole hits, at full health, against an unboosted foe.
+  def losing_race_snap(actions, extra = {}, boost = 0)
+    foe = target(0, 100).merge("positive_stages" => boost)
+    fields = { "threats_by_foe" => { "0" => threat(50, 0, false) },
+               "incoming_damage_pct" => 50 }
+    extra.each { |k, v| fields[k] = v }
+    a = actor(1, 100, [move(0, "STRENGTH", 0, 100, 20, {})] + actions, fields)
+    snapshot([a], [foe], {})
+  end
+
+  def test_losing_race_leaves_for_a_bench_candidate_that_wins_it
+    # Bench 1 two-shots the foe and eats 20 a hit: after the free entry hit it has 80
+    # left, four more hits for the foe against two of its own.
+    snap = losing_race_snap([bench(1, 60, 20, false)])
+    result = pick(snap, {})[0]
+    assert_equal("switch", result["type"])
+    assert_equal(1, result["slot"])
+    assert(reasons_of(result).include?("losing_race_bench_wins"))
+    # Keyed off, the 0.6.2 gate refuses it for want of a reason.
+    off = pick(snap, { "race_switch_to_winner" => false })[0]
+    assert_equal("move", off["type"])
+  end
+
+  def test_a_bench_candidate_that_also_loses_does_not_open_the_gate
+    # Bench 1 needs five hits and takes three: it loses the same race, only slower.
+    result = pick(losing_race_snap([bench(1, 20, 40, false)]), {})[0]
+    assert_equal("move", result["type"])
+  end
+
+  def test_the_switch_turn_is_paid_for
+    # The candidate two-shots the foe and is two-shot itself. It attacks nothing on
+    # the turn it comes in, so the foe's second hit lands first however fast it is.
+    assert_equal("move", pick(losing_race_snap([bench(1, 50, 50, true)]), {})[0]["type"])
+    # Three-shot instead: after the free hit the foe still needs two, and now the
+    # candidate's speed decides the last exchange.
+    assert_equal("switch", pick(losing_race_snap([bench(1, 50, 34, true)]), {})[0]["type"])
+    assert_equal("move", pick(losing_race_snap([bench(1, 50, 34, false)]), {})[0]["type"])
+  end
+
+  def test_a_heal_that_covers_two_hits_keeps_the_actor_in
+    # Counted in hits the race is lost either way. A healer alternates healing and
+    # attacking, so one Recover has to cover two of the foe's hits to sustain: it
+    # does against 20 a hit, and bleeds out against 30.
+    recover = move(2, "RECOVER", nil, 100, 0, {})
+    stays = losing_race_snap([recover, bench(1, 60, 20, false)],
+                             { "threats_by_foe" => { "0" => threat(20, 0, false) },
+                               "incoming_damage_pct" => 20 })
+    leaves = losing_race_snap([recover, bench(1, 60, 20, false)],
+                              { "threats_by_foe" => { "0" => threat(30, 0, false) },
+                                "incoming_damage_pct" => 30 })
+    assert_equal("move", pick(stays, {})[0]["type"])
+    assert_equal("switch", pick(leaves, {})[0]["type"])
+  end
+
+  def test_a_boosted_foe_does_not_veto_leaving_for_a_winner
+    # The foe's stages are already inside the candidate's incoming estimate, so the
+    # suppression the 0.6.0 flag carries has nothing to guard against here.
+    snap = losing_race_snap([bench(1, 60, 20, false)], {}, 2)
+    assert_equal("switch", pick(snap, {})[0]["type"])
+  end
+
+  def test_a_candidate_that_dies_on_entry_never_wins_its_race
+    assert_equal("move", pick(losing_race_snap([bench(1, 60, 100, true)]), {})[0]["type"])
+  end
+
+  def test_a_candidate_without_estimates_cannot_claim_the_race
+    blind = { "type" => "switch", "slot" => 1, "base_score" => 100,
+              "matchup_score" => 0, "candidate_hp_pct" => 100 }
+    assert_equal("move", pick(losing_race_snap([blind]), {})[0]["type"])
+  end
+
+  def test_an_even_race_lost_on_the_tiebreak_does_not_open_the_gate
+    # Two hits each way and the actor is "slower" -- which is what the adapters export
+    # on a speed TIE too, so a mirror match reads as lost from both chairs. Leaving
+    # over that would have both Snorlax running from each other.
+    even = losing_race_snap([bench(1, 60, 20, false)],
+                            { "threats_by_foe" => { "0" => threat(50, 0, false) },
+                              "incoming_damage_pct" => 50 })
+    even["actors"][0]["actions"][0]["expected_damage_pct"] = 50   # mine 2, theirs 2
+    assert_equal("move", pick(even, {})[0]["type"])
+    assert_equal(false, PortableAI.race_lost_by_a_hit?(
+                          { "winning" => false, "mine" => 2, "theirs" => 2 }))
+    assert_equal(true, PortableAI.race_lost_by_a_hit?(
+                         { "winning" => false, "mine" => 3, "theirs" => 2 }))
+  end
+
+  def test_a_wall_that_cannot_finish_is_not_a_winner
+    # Immune to everything the foe has, and needing fifteen hits of its own: the
+    # count sits at the cap, and the cap means "stall war", not "win".
+    wall = bench(1, 7, 0, true)
+    assert_equal(false, PortableAI.candidate_race(wall, target(0, 100))["winning"])
+    assert_equal("move", pick(losing_race_snap([wall]), {})[0]["type"])
+  end
+
+  def test_candidate_race_counts_the_free_hit
+    race = PortableAI.candidate_race(bench(1, 60, 20, false), target(0, 100))
+    assert_equal(2, race["mine"])
+    assert_equal(5, race["theirs"])     # the free hit, then four more on 80
+    assert_equal(true, race["winning"])
+    assert_nil(PortableAI.candidate_race(bench(1, 60, 20, false), nil))
+  end
+
+  # --- 0.6.3 "I cannot hurt it" needs a bench body that can ---------------------
+
+  # A wall: the actor's best hit is 5%, so weak_current_attacks would open the gate
+  # for anything. No race is exported, so only that reason is in play.
+  def wall_snap(candidates)
+    a = actor(1, 80, [move(0, "STRENGTH", 0, 100, 5, {})] + candidates,
+              { "best_damage_pct" => 5 })
+    snapshot([a], [target(0, 100)], {})
+  end
+
+  def test_weak_attacks_leave_only_for_a_body_that_hits
+    weak = bench(1, 6, 10, false)       # as weak as the one leaving
+    hits = bench(2, 30, 10, false)
+    result = pick(wall_snap([weak, hits]), {})[0]
+    assert_equal("switch", result["type"])
+    assert_equal(2, result["slot"])
+    # Alone, the weak body cannot open the gate: the actor stays and attacks.
+    alone = pick(wall_snap([weak]), {})[0]
+    assert_equal("move", alone["type"])
+    assert(reasons_of(pick(wall_snap([weak]), {})[0]).include?("STRENGTH") == false)
+    # Keyed off, 0.6.2's shape: the weak body is a legal escape again.
+    off = pick(wall_snap([weak]), { "escape_needs_hitter" => false })[0]
+    assert_equal("switch", off["type"])
+  end
+
+  def test_no_effective_move_leaves_only_for_a_body_that_hits
+    weak = bench(1, 6, 10, false)
+    a = actor(1, 80, [move(0, "STRENGTH", 0, 100, 0, {}), weak],
+              { "no_effective_move" => true })
+    assert_equal("move", pick(snapshot([a], [target(0, 100)], {}), {})[0]["type"])
+    a["actions"][1] = bench(1, 30, 10, false)
+    assert_equal("switch", pick(snapshot([a], [target(0, 100)], {}), {})[0]["type"])
+  end
+
+  def test_a_candidate_without_an_estimate_is_not_held_to_one
+    # No outgoing_damage_pct on the action (an older adapter): the reason keeps its
+    # 0.6.2 shape rather than refusing on a number nobody computed.
+    blind = { "type" => "switch", "slot" => 1, "base_score" => 100,
+              "matchup_score" => 0, "candidate_hp_pct" => 100 }
+    assert_equal("switch", pick(wall_snap([blind]), {})[0]["type"])
+  end
+
+  # --- 0.6.3 a heal that only delays is not a save ------------------------------
+
+  def zapdos(incoming, extra_actions = [])
+    actions = [move(0, "ROOST", nil, 100, 0, {}),
+               move(1, "DISCHARGE", 0, 100, 23, {})] + extra_actions
+    # 13% HP, faster, five hits from a KO against one.
+    actor(1, 13, actions, { "incoming_damage_pct" => incoming, "faster" => true,
+                            "threats_by_foe" => { "0" => threat(incoming, 0, false) } })
+  end
+
+  def test_a_heal_that_only_delays_is_not_a_save
+    snap = snapshot([zapdos(57)], [target(0, 100)], {})
+    on = pick(snap, {})[0]
+    assert(reasons_of(on).include?("heal_only_delays"))
+    assert(!reasons_of(on).include?("heal_saves_battler"))
+    off = pick(snap, { "heal_outpace" => false })[0]
+    assert(reasons_of(off).include?("heal_saves_battler"))
+  end
+
+  def test_a_heal_that_outpaces_the_hit_still_saves
+    # Roost +50 against a 28% hit: the heal changes who is alive at the end of the
+    # turn, and the turn after, so 0.6.2's verdict stands.
+    result = pick(snapshot([zapdos(28)], [target(0, 100)], {}), {})[0]
+    assert_equal("ROOST", result["move_id"])
+    assert(reasons_of(result).include?("heal_saves_battler"))
+  end
+
+  def test_a_heal_that_only_delays_still_beats_attacking_with_no_bench
+    # -120 is a charge, not a veto: with nowhere to go, healing into the hit is still
+    # better than a 23% Discharge and dying.
+    result = pick(snapshot([zapdos(57)], [target(0, 100)], {}), {})[0]
+    assert_equal("ROOST", result["move_id"])
+  end
+
+  def test_zapdos_leaves_for_chansey_instead_of_roosting_into_a_bigger_hit
+    # Chansey three-shots the foe and takes 10 a hit: the foe needs ten.
+    chansey = bench(1, 34, 10, false)
+    result = pick(snapshot([zapdos(57, [chansey])], [target(0, 100)], {}), {})[0]
+    assert_equal("switch", result["type"])
+    assert(reasons_of(result).include?("losing_race_bench_wins"))
+    # Both keys off: 0.6.2 Roosts.
+    both_off = { "race_switch_to_winner" => false, "heal_outpace" => false }
+    assert_equal("ROOST", pick(snapshot([zapdos(57, [chansey])], [target(0, 100)], {}),
+                               both_off)[0]["move_id"])
+  end
 end

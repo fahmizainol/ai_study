@@ -20,7 +20,7 @@
 # Everything else is optional evidence used to improve the score.
 
 module PortableAI
-  VERSION = "0.6.2" unless const_defined?(:VERSION)
+  VERSION = "0.6.3" unless const_defined?(:VERSION)
 
   module Model
     DEFAULT_CONFIG = {
@@ -128,7 +128,27 @@ module PortableAI
       # Yawn into an already-drowsy target. Same bug class as 0.6.1's Leech Seed: the
       # move writes an EFFECT, not a status condition, so pbCanSleep? answers "yes"
       # about a target the engine will refuse (PokeBattle_MoveEffects.rb:249).
-      "yawn_gate"        => true
+      "yawn_gate"        => true,
+
+      # 0.6.3. Two rules read off the Realidea shadow run's turn-by-turn readout, where
+      # the same three battles were losing races with a better Pokemon on the bench and
+      # every switch vetoed for want of a reason (PORTABLE-AI-REALIDEA.md, "0.6.3").
+      # Each is its own key; BOTH FALSE REPRODUCES 0.6.2 BATTLE-FOR-BATTLE.
+      #
+      # Leave a race this battler loses for a bench candidate that wins it -- per
+      # candidate, on the candidate's own estimates, after paying the switch turn; and
+      # only when no recovery move the actor carries would turn the race around. The
+      # 0.6.0 damage_race_switch flag opened the gate for every candidate; this asks who.
+      "race_switch_to_winner" => true,
+      # A heal that restores less than the next hit takes, in a race already lost, is
+      # charged as heal_only_delays (-120) instead of credited as heal_saves_battler
+      # (+150). Zapdos Roosted into a bigger Lava Plume five turns running.
+      "heal_outpace"          => true,
+      # "I cannot hurt it" (no_effective_move, weak_current_attacks) opens the gate
+      # only for a bench candidate whose own best hit clears the weak line. Against a
+      # wall every attacker is weak, and without this the bench body that came in was
+      # as weak as the one that left and went straight back.
+      "escape_needs_hitter"   => true
     }
 
     def self.config(overrides)
@@ -843,7 +863,7 @@ module PortableAI
   SWITCH_ESCAPE_REASONS = %w[
     no_effective_move clear_crushed_stats clear_bad_stats weak_current_attacks
     escape_yawn escape_residual_chip escape_lethal_threat_while_healthy
-    losing_damage_race
+    losing_damage_race losing_race_bench_wins
   ]
 
   # Highest positive stage total among the opposing active battlers.
@@ -919,10 +939,23 @@ module PortableAI
       out_score += 1000
       reasons << ["forced_switch", 1000]
     end
+    # 0.6.3. "I cannot hurt it" is a reason to leave only for a body that can. Against
+    # a wall every attacker's moves are weak, so these two reasons opened the gate for
+    # whoever stood there, the bench Pokemon that came in was as weak as the one that
+    # left, and it went straight back: 168 of the 193 switch-backs against an
+    # unchanged foe in the first 0.6.3 Realidea run were Zapdos and Suicune trading
+    # places in front of a Chansey on weak_current_attacks. The candidate's own
+    # estimate is on the action; absent (older adapters), the reasons keep their
+    # 0.6.2 shape and the candidate is not held to a number nobody computed.
+    hitter = candidate_can_hit?(action, config)
     if Model.truthy(actor["no_effective_move"])
-      out_score += 260
-      reasons << ["no_effective_move", 260]
-      escapes << "no_effective_move"
+      if hitter == false
+        reasons << ["bench_cannot_hit_either", 0]
+      else
+        out_score += 260
+        reasons << ["no_effective_move", 260]
+        escapes << "no_effective_move"
+      end
     end
     negative_stages = Model.number(actor["negative_stage_total"], 0)
     if negative_stages <= -6
@@ -936,9 +969,13 @@ module PortableAI
       escapes << "clear_bad_stats"
     end
     if Model.number(actor["best_damage_pct"], 100) < 10
-      out_score += 120
-      reasons << ["weak_current_attacks", 120]
-      escapes << "weak_current_attacks"
+      if hitter == false
+        reasons << ["bench_as_weak", 0]
+      else
+        out_score += 120
+        reasons << ["weak_current_attacks", 120]
+        escapes << "weak_current_attacks"
+      end
     end
     if Model.truthy(actor["yawned"])
       out_score += 300
@@ -985,6 +1022,39 @@ module PortableAI
         out_score += 110
         reasons << ["losing_damage_race", 110]
         escapes << "losing_damage_race"
+      end
+    end
+
+    # 0.6.3. Leave a race this battler loses, for a bench candidate that WINS it.
+    #
+    # The 0.6.0 flag above opens the gate for every candidate once the actor's race is
+    # lost, and that is the form the Donphan card sank: stock Reborn never asked whether
+    # whoever came in would do any better, and neither did the flag. This one asks per
+    # candidate, on the candidate's own two estimates, and pays for the switch turn
+    # honestly -- the candidate eats one free hit coming in, then has to land the last
+    # hit of the exchange that follows (candidate_race). Read off the Realidea shadow
+    # run: 884 turns losing the race at >= 50% HP, 550 of them with a bench switch
+    # vetoed by nothing but no_escape_reason -- Quagsire into a Calm Mind Clefable with
+    # Magnezone on the bench among them (team1_vs_team2 104729 t0-5).
+    #
+    # Two things it deliberately does NOT carry over from the flag above. No boost
+    # suppression: the foe's stages are already inside the candidate's incoming
+    # estimate, so "it wins its race against a +2 foe" is a real claim here, not a
+    # manufactured one. No HP floor: a chipped battler that is losing anyway has less
+    # to preserve by staying, not more -- it is Zapdos at 13% Roosting into a 57% Lava
+    # Plume five turns running with Chansey on the bench (team3_vs_team1 155921
+    # t23-28). What it does require is that no recovery move the actor carries would
+    # turn the race around: a race counted in hits is not lost by a battler that
+    # out-heals the hit (heal_cannot_outpace?).
+    if config["race_switch_to_winner"]
+      race, foe = worst_race_with_target(snapshot, actor, config)
+      if race_lost_by_a_hit?(race) && heal_cannot_outpace?(snapshot, actor)
+        bench = candidate_race(action, foe)
+        if !bench.nil? && bench["winning"]
+          out_score += 110
+          reasons << ["losing_race_bench_wins", 110]
+          escapes << "losing_race_bench_wins"
+        end
       end
     end
     if config["entry_rules"] && action.key?("entry_damage_pct")
@@ -1227,8 +1297,22 @@ module PortableAI
       score -= 400
       reasons << ["heal_does_not_save", -400]
     elsif might_die
-      score += 150
-      reasons << ["heal_saves_battler", 150]
+      # 0.6.3. A heal that restores less than the next hit takes, while the race is
+      # already lost, saves nothing: it buys one turn at a net loss and the same
+      # question comes back a turn later, a little lower. Zapdos at 13% Roosted +50
+      # into a 57% Lava Plume five turns running and every one was scored a save
+      # (Realidea shadow run, team3_vs_team1 155921 t23-28; 43 such turns in 3,033,
+      # all 43 in a lost race). Charged what heal_losing_race charges outside a
+      # threat, because it is the same fact with worse timing -- and so that a bench
+      # candidate, once race_switch_to_winner opens the gate, can be heard over it.
+      lost = config["heal_outpace"] ? worst_race(snapshot, actor, config) : nil
+      if race_lost_by_a_hit?(lost) && heal <= incoming
+        score -= 120
+        reasons << ["heal_only_delays", -120]
+      else
+        score += 150
+        reasons << ["heal_saves_battler", 150]
+      end
     elsif incoming > heal
       score -= 120
       reasons << ["heal_losing_race", -120]
@@ -1429,13 +1513,106 @@ module PortableAI
   end
 
   def self.worst_race(snapshot, actor, config)
+    worst_race_with_target(snapshot, actor, config)[0]
+  end
+
+  # The same, keeping WHICH foe it is: the bench candidate's race has to be run against
+  # the foe the actor is actually losing to. [nil, nil] when no target yields a race.
+  def self.worst_race_with_target(snapshot, actor, config)
     worst = nil
+    worst_target = nil
     (snapshot["targets"] || []).each do |target|
       race = damage_race(snapshot, actor, target, config)
       next if race.nil?
-      worst = race if worst.nil? || race_rank(race) < race_rank(worst)
+      if worst.nil? || race_rank(race) < race_rank(worst)
+        worst = race
+        worst_target = target
+      end
     end
-    worst
+    [worst, worst_target]
+  end
+
+  # damage_race's question asked of a BENCH candidate: once it is in, who lands the
+  # last hit. The switch turn is paid for -- the candidate eats one free hit on entry,
+  # on top of the hazards, and attacks nothing that turn -- and only then does the
+  # exchange start. Built from the two estimates the adapter puts on the switch action
+  # (switch_outgoing_damage / switch_incoming_damage); nil when either is missing, and
+  # every consumer goes inert on nil, the contract damage_race keeps. Point estimates
+  # and no priority term: the candidate's moves are not exported one by one, and this
+  # is the soft question. `theirs` counts the free hit.
+  def self.candidate_race(action, target)
+    return nil if action.nil? || target.nil?
+    return nil if !action.key?("outgoing_damage_pct") ||
+                  !action.key?("incoming_damage_pct")
+    target_hp = Model.number(target["hp_pct"], 100.0)
+    return nil if target_hp <= 0
+    incoming = Model.number(action["incoming_damage_pct"], 0.0)
+    mine = hits_needed(target_hp, Model.number(action["outgoing_damage_pct"], 0.0))
+    return nil if mine.nil?
+    # At the cap the count carries no information (see RACE_MAX_HITS): a candidate
+    # that needs eight or more hits is not winning a race, it is walling, and an
+    # immune wall "wins" against anything by this arithmetic. Gengar into a Snorlax
+    # mirror -- Body Slam does nothing to it, Shadow Ball does 7% -- was the case
+    # (no_switch_full_hp_neutral, Reborn probe).
+    return { "mine" => mine, "theirs" => nil, "winning" => false } if mine >= RACE_MAX_HITS
+    left = Model.number(action["candidate_hp_pct"], 100.0) -
+           Model.number(action["entry_damage_pct"], 0.0) - incoming
+    return { "mine" => mine, "theirs" => 1, "winning" => false } if left <= 0
+    more = hits_needed(left, incoming)
+    winning = if more.nil? then true            # nothing of theirs gets through
+              elsif mine < more then true
+              elsif mine > more then false
+              else action["faster"] == true
+              end
+    { "mine" => mine, "theirs" => (more.nil? ? nil : more + 1), "winning" => winning }
+  end
+
+  # Tri-state: true when the candidate's best hit on the current foes clears the
+  # weak_current_attacks line (10% of the target), false when it does not, nil when
+  # the adapter exported no estimate or the key is off -- and nil never withholds a
+  # reason, the same contract every other missing field keeps.
+  WEAK_ATTACK_PCT = 10
+
+  def self.candidate_can_hit?(action, config)
+    return nil if !config["escape_needs_hitter"]
+    return nil if !action.key?("outgoing_damage_pct") || action["outgoing_damage_pct"].nil?
+    Model.number(action["outgoing_damage_pct"], 0.0) >= WEAK_ATTACK_PCT
+  end
+
+  # The most any recovery move this battler carries restores, in hp_pct units and
+  # UNCLIPPED by its current headroom: the question is what the heal is worth when it
+  # is needed, not what it would restore this instant. 0 without one.
+  def self.best_heal_pct(snapshot, actor)
+    best = 0.0
+    (actor["actions"] || []).each do |other|
+      next if other["type"] != "move"
+      tags = Effects.describe(other["move_id"], other["tags"])
+      next if !(tags.include?("heal") || tags.include?("variable_heal"))
+      amount = heal_amount(snapshot, tags)
+      best = amount if amount > best
+    end
+    best
+  end
+
+  # A healer alternates healing and attacking, so to sustain, one heal has to cover
+  # TWO of the foe's hits: Recover (50) holds against 20 a hit and bleeds out against
+  # 30. Below that line a race counted in hits is as lost as it looks.
+  def self.heal_cannot_outpace?(snapshot, actor)
+    incoming = Model.number(actor["incoming_damage_pct"], 0.0)
+    best_heal_pct(snapshot, actor) < incoming * 2
+  end
+
+  # Lost by a WHOLE hit, not on the tiebreak. The adapters export `faster` as a plain
+  # "outspeeds" -- a speed tie reads as slower on both sides -- so two identical
+  # Snorlax each see an equal-count race they "lose", and a rule that acted on that
+  # would have both of them running from a mirror (the no_switch_full_hp_neutral card
+  # caught exactly this). The 0.6.3 rules act only on the hit-count gap, which no
+  # tiebreak can manufacture; the equal-count-and-slower case stays with the 0.6.0
+  # flag, which is off.
+  def self.race_lost_by_a_hit?(race)
+    return false if race.nil? || race["winning"] != false
+    return false if race["mine"].nil? || race["theirs"].nil?
+    race["mine"] > race["theirs"]
   end
 
   # Lower is worse for the actor: losing < unknown < winning, and within losing the
@@ -2350,6 +2527,72 @@ module PortableAIRealidea
     out
   end
 
+  # --- faint replacement ------------------------------------------------------
+  #
+  # Stock Essentials picks the replacement for a fainted AI Pokemon by summing the type
+  # chart over each candidate's moves (pbChooseBestNewEnemy, 085_PokeBattle_AI.rb:4283)
+  # and reads nothing about what the candidate takes on the way in. That is how a
+  # Scizor was sent into a Heatran that removes it in one Lava Plume (team3_vs_team2
+  # 155921 t29). The core already prices a forced switch -- entry damage, the
+  # switch-in race, dies_on_entry -- so a Portable-driven side's replacement goes
+  # through the same scorer. One run-level switch lets the gauntlet keep the older
+  # convention (stock replacement on BOTH sides, so strength differences stayed
+  # attributable to turn decisions); in play it is simply on.
+  def self.replacement?
+    return true if !defined?($PORTABLE_AI_REPLACEMENT)
+    $PORTABLE_AI_REPLACEMENT != false
+  end
+
+  # The party slot the core would send in for the fainted battler at `index`, or nil
+  # when it has nothing to say. nil means the stock chooser -- never a slot the engine
+  # would refuse, which is re-checked on the way out.
+  def self.choose_replacement(battle, index, party)
+    battler = battle.battlers[index]
+    return nil if !battler
+    foe_indices = [0]
+    foe_indices << 2 if battle.doublebattle
+    foe_indices = foe_indices.select do |i|
+      foe = battle.battlers[i] rescue nil
+      foe && !foe.isFainted?
+    end
+    skill = corrected_skill(battle.pbGetOwner(index))
+    actions = switch_actions(battle, battler, foe_indices, skill, true)
+    return nil if actions.empty?
+    snapshot = {
+      "format" => battle.doublebattle ? "double" : "single",
+      "turn" => battle.turncount,
+      "weather" => weather_name(battle),
+      "trick_room_active" => trick_room_active?(battle),
+      "tailwind_active" => (safe_side_effect(battle.sides[1], :Tailwind, 0).to_i > 0),
+      "actors" => [{ "index" => index, "species" => battler.species,
+                     "hp_pct" => 0.0, "actions" => actions }],
+      "targets" => foe_indices.map { |i| battler_view(battle.battlers[i], battle, skill) },
+      "memory" => battle.instance_variable_get(:@portable_ai_memory) || {}
+    }
+    plan = PortableAI.plan(snapshot, config_for(skill), BattleRNG.new(battle))
+    chosen = nil
+    (plan["actions"] || []).each do |action|
+      chosen = action if action["actor_index"] == index && action["type"] == "switch"
+    end
+    return nil if !chosen
+    slot = chosen["slot"]
+    return nil if !battle.pbCanSwitchLax?(index, slot, false)
+    trace = battle.instance_variable_get(:@portable_ai_decision_trace)
+    if trace
+      entry = {
+        "turn" => battle.turncount, "actor" => index, "type" => "switch",
+        "forced" => true, "slot" => slot, "score" => chosen["score"],
+        "view" => view_trace(snapshot, index)
+      }
+      entry["candidates"] = candidate_trace(plan, index) if trace_candidates?
+      trace << entry
+    end
+    slot
+  rescue Exception => error
+    log_error(error, index)
+    nil
+  end
+
   def self.plan_for(battle)
     signature = cache_signature(battle)
     cached_signature = battle.instance_variable_get(:@portable_ai_cache_signature)
@@ -2417,7 +2660,10 @@ module PortableAIRealidea
     {}
   end
 
-  TRACE_CANDIDATE_LIMIT = 6
+  # Every option a singles actor can have: four moves and five bench slots. The old
+  # limit of 6 cut the list at two switches, so a readout could not say what the third
+  # bench Pokemon scored -- which was exactly the question being asked of it.
+  TRACE_CANDIDATE_LIMIT = 10
 
   # The snapshot carries the engine's numeric species id, because that is what the core
   # is given and nothing in the core wants a name. A trace is read by people, so it is
@@ -2451,6 +2697,12 @@ module PortableAIRealidea
         "move_id" => candidate["move_id"],
         "target" => candidate["target"],
         "score" => candidate["score"],
+        # 0.6.3: the two estimates a switch candidate is judged on, so a readout can
+        # say why a bench Pokemon did or did not count as winning its race.
+        "outgoing_damage_pct" => candidate["outgoing_damage_pct"],
+        "incoming_damage_pct" => candidate["incoming_damage_pct"],
+        "candidate_hp_pct" => candidate["candidate_hp_pct"],
+        "faster" => candidate["faster"],
         "reasons" => candidate["reasons"]
       }
       # What the score was computed FROM, for a move. Without these a reader can see
@@ -2796,12 +3048,19 @@ module PortableAIRealidea
       move.target == PBTargets::Partner
   end
 
-  def self.switch_actions(battle, battler, foe_indices, skill)
+  # `replacement` builds the candidates for a FAINTED battler: legality is the engine's
+  # own pbCanSwitchLax? (the test the stock chooser applies) rather than pbCanSwitch?,
+  # which reads trapping effects off a battler that has just gone down, and every
+  # candidate is forced -- the core skips its escape gate and ranks bodies.
+  def self.switch_actions(battle, battler, foe_indices, skill, replacement = false)
     party = battle.pbParty(battler.index)
-    forced = safe_effect(battler, :PerishSong, 0) == 1
+    forced = replacement || safe_effect(battler, :PerishSong, 0) == 1
     actions = []
     party.each_with_index do |pokemon, slot|
-      next if !pokemon || !battle.pbCanSwitch?(battler.index, slot, false)
+      next if !pokemon
+      legal = replacement ? battle.pbCanSwitchLax?(battler.index, slot, false) :
+                            battle.pbCanSwitch?(battler.index, slot, false)
+      next if !legal
       hp_pct = percent(pokemon.hp, pokemon.totalhp)
       matchup = switch_matchup(pokemon, battle, foe_indices)
       hazard = entry_hazard_pct(battle, pokemon, battler)
@@ -3691,7 +3950,7 @@ module PortableAIRealidea
 
     # Core config keys a run may override, with the type each parses to. Booleans
     # become real true/false: the core tests them with plain Ruby truthiness, and the
-    # string "false" is truthy. Same nineteen keys as the Reborn gauntlet
+    # string "false" is truthy. Same twenty-two keys as the Reborn gauntlet
     # (Portable_AI_Gauntlet.rb:37-70), so an ablation reads identically in both studies.
     CONFIG_OVERRIDE_KEYS = [
       ["switch_risk_weight", :float],
@@ -3715,7 +3974,11 @@ module PortableAIRealidea
       ["wish_pending",       :boolean],
       ["setup_stage",        :boolean],
       ["move_memory",        :boolean],
-      ["yawn_gate",          :boolean]
+      ["yawn_gate",          :boolean],
+      # 0.6.3. All three false is 0.6.2, which is the control run.
+      ["race_switch_to_winner", :boolean],
+      ["heal_outpace",          :boolean],
+      ["escape_needs_hitter", :boolean]
     ]
 
     def self.config
@@ -3804,6 +4067,22 @@ class PokeBattle_Battle
   end
   if !method_defined?(:portable_ai_stock_pbAIRandom)
     alias portable_ai_stock_pbAIRandom pbAIRandom
+  end
+  if !method_defined?(:portable_ai_stock_pbDefaultChooseNewEnemy)
+    alias portable_ai_stock_pbDefaultChooseNewEnemy pbDefaultChooseNewEnemy
+  end
+
+  # The faint replacement (see PortableAIRealidea.choose_replacement). enabled_for? is
+  # true in the shadow arm too -- that is how the observer finds its seat -- and the
+  # shadow arm registers nothing, so it is excluded here by name: its replacements stay
+  # the stock chooser's, or the observed battle would stop being the stock battle.
+  def pbDefaultChooseNewEnemy(index, party)
+    if PortableAIRealidea.replacement? && !PortableAIRealidea.shadow? &&
+       PortableAIRealidea.enabled_for?(self, index)
+      slot = PortableAIRealidea.choose_replacement(self, index, party)
+      return slot if slot
+    end
+    portable_ai_stock_pbDefaultChooseNewEnemy(index, party)
   end
 
   # The single point every AI roll passes through, engine and planner alike. While a
@@ -3929,6 +4208,13 @@ module PortableAIGauntlet
   # stock and portable are the measurement arms; shadow is the observer arm, in which
   # stock plays and the portable planner records what it would have done instead.
   MODES = ["stock", "portable", "shadow"]
+  REPLACEMENTS = ["stock", "portable"]
+
+  # What chose the replacements on the measured seat: only a Portable arm with the
+  # key on ever uses the core's chooser.
+  def self.replacement_label(mode)
+    (mode == "portable" && PortableAIRealidea.replacement?) ? "portable" : "stock"
+  end
   DEFAULT_MODES = ["stock", "portable"]
 
   TEAMS = {
@@ -4119,9 +4405,27 @@ module PortableAIGauntlet
       return
     end
 
+    # Who picks the replacement after a faint on the Portable side. "portable" routes
+    # it through the core's forced-switch scorer (0.6.3, and what a Portable install
+    # does in play); "stock" -- the DEFAULT here -- keeps the convention every run
+    # before that used, the stock chooser on BOTH sides, so strength differences stay
+    # attributable to turn decisions and every earlier number stays comparable.
+    # Measured at a fixed core the portable chooser was noise on outcomes (81-29
+    # against 79-34 over the same 120 battles, 17 gained and 19 lost), so the study
+    # keeps the convention and measures the variant by name. The stock and shadow arms
+    # use the stock chooser either way; each record stamps which it was.
+    replacement = (cfg["replacement"] && cfg["replacement"] != "") ?
+                  cfg["replacement"].strip : "stock"
+    if !REPLACEMENTS.include?(replacement)
+      note("Gauntlet: unknown replacement=#{replacement}; known: #{REPLACEMENTS.join(', ')}")
+      return
+    end
+
     old_trainer = $Trainer
     old_enabled = (defined?($PORTABLE_AI_ENABLED) ? $PORTABLE_AI_ENABLED : nil)
     old_shadow  = (defined?($PORTABLE_AI_SHADOW) ? $PORTABLE_AI_SHADOW : nil)
+    old_replacement = (defined?($PORTABLE_AI_REPLACEMENT) ? $PORTABLE_AI_REPLACEMENT : nil)
+    $PORTABLE_AI_REPLACEMENT = (replacement == "portable")
     counts = {}
     modes.each do |mode|
       counts[mode] =
@@ -4129,7 +4433,8 @@ module PortableAIGauntlet
     end
     note("Gauntlet: #{matchups.length * seeds.length * modes.length} battles, " +
          "#{tier ? 'tier' : 'frozen'} schedule, teams=#{set_name}, " +
-         "mega=#{mega}, modes=#{modes.join('+')}, portable #{PortableAI::VERSION}")
+         "mega=#{mega}, modes=#{modes.join('+')}, replacement=#{replacement}, " +
+         "portable #{PortableAI::VERSION}")
 
     File.open(out, mode_flag) do |file|
       matchups.each do |matchup|
@@ -4169,6 +4474,7 @@ module PortableAIGauntlet
     $Trainer = old_trainer if defined?(old_trainer)
     $PORTABLE_AI_ENABLED = old_enabled if defined?(old_enabled)
     $PORTABLE_AI_SHADOW = old_shadow if defined?(old_shadow)
+    $PORTABLE_AI_REPLACEMENT = old_replacement if defined?(old_replacement)
     $AI_GAUNTLET_TRACE = false
   end
 
@@ -4220,6 +4526,7 @@ module PortableAIGauntlet
       # is not the team its author built, and a reader must not have to guess which
       # they are looking at.
       "mega" => mega,
+      "replacement" => replacement_label(mode),
       "decision" => decision,
       "result" => result,
       "turns" => battle.turncount
@@ -4271,6 +4578,7 @@ module PortableAIGauntlet
       "right_test_team" => right_name,
       "teams" => set_name,
       "mega" => mega,
+      "replacement" => replacement_label(mode),
       "result" => "error",
       "turns" => 0,
       "error" => "#{error.class}: #{error.message}",

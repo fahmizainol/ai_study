@@ -120,6 +120,17 @@ def render_candidates(entry):
     for c in cands:
         if c.get("type") == "switch":
             what = "switch -> %s" % (c.get("species") or "slot%s" % c.get("slot"))
+            # The two estimates the 0.6.3 race rule judges a candidate on. Older
+            # records carry neither and print the bare name.
+            bits = []
+            if c.get("outgoing_damage_pct") is not None:
+                bits.append("hits %.0f%%" % c["outgoing_damage_pct"])
+            if c.get("incoming_damage_pct") is not None:
+                bits.append("takes %.0f%%" % c["incoming_damage_pct"])
+            if c.get("faster") is True:
+                bits.append("faster")
+            if bits:
+                what += " (%s)" % ", ".join(bits)
         else:
             what = c.get("move_id") or "move%s" % c.get("slot")
             bits = []
@@ -264,7 +275,11 @@ def render(record):
     for entry in trace:
         view = entry.get("view") or {}
         if entry.get("type") == "switch":
-            action = "switch -> %s" % slot_name(right, entry.get("slot"))
+            # A forced entry is the post-KO replacement (0.6.3 routes it through the
+            # core when replacement=portable); before that the stock chooser made it
+            # and no line was written.
+            action = "%s -> %s" % ("replacement" if entry.get("forced") else "switch",
+                                   slot_name(right, entry.get("slot")))
         else:
             action = entry.get("move_id") or "move%s" % entry.get("slot")
             if entry.get("target") is not None:

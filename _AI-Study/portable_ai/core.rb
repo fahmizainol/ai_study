@@ -511,7 +511,7 @@ module PortableAI
   SWITCH_ESCAPE_REASONS = %w[
     no_effective_move clear_crushed_stats clear_bad_stats weak_current_attacks
     escape_yawn escape_residual_chip escape_lethal_threat_while_healthy
-    losing_damage_race
+    losing_damage_race losing_race_bench_wins
   ]
 
   # Highest positive stage total among the opposing active battlers.
@@ -587,10 +587,23 @@ module PortableAI
       out_score += 1000
       reasons << ["forced_switch", 1000]
     end
+    # 0.6.3. "I cannot hurt it" is a reason to leave only for a body that can. Against
+    # a wall every attacker's moves are weak, so these two reasons opened the gate for
+    # whoever stood there, the bench Pokemon that came in was as weak as the one that
+    # left, and it went straight back: 168 of the 193 switch-backs against an
+    # unchanged foe in the first 0.6.3 Realidea run were Zapdos and Suicune trading
+    # places in front of a Chansey on weak_current_attacks. The candidate's own
+    # estimate is on the action; absent (older adapters), the reasons keep their
+    # 0.6.2 shape and the candidate is not held to a number nobody computed.
+    hitter = candidate_can_hit?(action, config)
     if Model.truthy(actor["no_effective_move"])
-      out_score += 260
-      reasons << ["no_effective_move", 260]
-      escapes << "no_effective_move"
+      if hitter == false
+        reasons << ["bench_cannot_hit_either", 0]
+      else
+        out_score += 260
+        reasons << ["no_effective_move", 260]
+        escapes << "no_effective_move"
+      end
     end
     negative_stages = Model.number(actor["negative_stage_total"], 0)
     if negative_stages <= -6
@@ -604,9 +617,13 @@ module PortableAI
       escapes << "clear_bad_stats"
     end
     if Model.number(actor["best_damage_pct"], 100) < 10
-      out_score += 120
-      reasons << ["weak_current_attacks", 120]
-      escapes << "weak_current_attacks"
+      if hitter == false
+        reasons << ["bench_as_weak", 0]
+      else
+        out_score += 120
+        reasons << ["weak_current_attacks", 120]
+        escapes << "weak_current_attacks"
+      end
     end
     if Model.truthy(actor["yawned"])
       out_score += 300
@@ -653,6 +670,39 @@ module PortableAI
         out_score += 110
         reasons << ["losing_damage_race", 110]
         escapes << "losing_damage_race"
+      end
+    end
+
+    # 0.6.3. Leave a race this battler loses, for a bench candidate that WINS it.
+    #
+    # The 0.6.0 flag above opens the gate for every candidate once the actor's race is
+    # lost, and that is the form the Donphan card sank: stock Reborn never asked whether
+    # whoever came in would do any better, and neither did the flag. This one asks per
+    # candidate, on the candidate's own two estimates, and pays for the switch turn
+    # honestly -- the candidate eats one free hit coming in, then has to land the last
+    # hit of the exchange that follows (candidate_race). Read off the Realidea shadow
+    # run: 884 turns losing the race at >= 50% HP, 550 of them with a bench switch
+    # vetoed by nothing but no_escape_reason -- Quagsire into a Calm Mind Clefable with
+    # Magnezone on the bench among them (team1_vs_team2 104729 t0-5).
+    #
+    # Two things it deliberately does NOT carry over from the flag above. No boost
+    # suppression: the foe's stages are already inside the candidate's incoming
+    # estimate, so "it wins its race against a +2 foe" is a real claim here, not a
+    # manufactured one. No HP floor: a chipped battler that is losing anyway has less
+    # to preserve by staying, not more -- it is Zapdos at 13% Roosting into a 57% Lava
+    # Plume five turns running with Chansey on the bench (team3_vs_team1 155921
+    # t23-28). What it does require is that no recovery move the actor carries would
+    # turn the race around: a race counted in hits is not lost by a battler that
+    # out-heals the hit (heal_cannot_outpace?).
+    if config["race_switch_to_winner"]
+      race, foe = worst_race_with_target(snapshot, actor, config)
+      if race_lost_by_a_hit?(race) && heal_cannot_outpace?(snapshot, actor)
+        bench = candidate_race(action, foe)
+        if !bench.nil? && bench["winning"]
+          out_score += 110
+          reasons << ["losing_race_bench_wins", 110]
+          escapes << "losing_race_bench_wins"
+        end
       end
     end
     if config["entry_rules"] && action.key?("entry_damage_pct")
@@ -895,8 +945,22 @@ module PortableAI
       score -= 400
       reasons << ["heal_does_not_save", -400]
     elsif might_die
-      score += 150
-      reasons << ["heal_saves_battler", 150]
+      # 0.6.3. A heal that restores less than the next hit takes, while the race is
+      # already lost, saves nothing: it buys one turn at a net loss and the same
+      # question comes back a turn later, a little lower. Zapdos at 13% Roosted +50
+      # into a 57% Lava Plume five turns running and every one was scored a save
+      # (Realidea shadow run, team3_vs_team1 155921 t23-28; 43 such turns in 3,033,
+      # all 43 in a lost race). Charged what heal_losing_race charges outside a
+      # threat, because it is the same fact with worse timing -- and so that a bench
+      # candidate, once race_switch_to_winner opens the gate, can be heard over it.
+      lost = config["heal_outpace"] ? worst_race(snapshot, actor, config) : nil
+      if race_lost_by_a_hit?(lost) && heal <= incoming
+        score -= 120
+        reasons << ["heal_only_delays", -120]
+      else
+        score += 150
+        reasons << ["heal_saves_battler", 150]
+      end
     elsif incoming > heal
       score -= 120
       reasons << ["heal_losing_race", -120]
@@ -1097,13 +1161,106 @@ module PortableAI
   end
 
   def self.worst_race(snapshot, actor, config)
+    worst_race_with_target(snapshot, actor, config)[0]
+  end
+
+  # The same, keeping WHICH foe it is: the bench candidate's race has to be run against
+  # the foe the actor is actually losing to. [nil, nil] when no target yields a race.
+  def self.worst_race_with_target(snapshot, actor, config)
     worst = nil
+    worst_target = nil
     (snapshot["targets"] || []).each do |target|
       race = damage_race(snapshot, actor, target, config)
       next if race.nil?
-      worst = race if worst.nil? || race_rank(race) < race_rank(worst)
+      if worst.nil? || race_rank(race) < race_rank(worst)
+        worst = race
+        worst_target = target
+      end
     end
-    worst
+    [worst, worst_target]
+  end
+
+  # damage_race's question asked of a BENCH candidate: once it is in, who lands the
+  # last hit. The switch turn is paid for -- the candidate eats one free hit on entry,
+  # on top of the hazards, and attacks nothing that turn -- and only then does the
+  # exchange start. Built from the two estimates the adapter puts on the switch action
+  # (switch_outgoing_damage / switch_incoming_damage); nil when either is missing, and
+  # every consumer goes inert on nil, the contract damage_race keeps. Point estimates
+  # and no priority term: the candidate's moves are not exported one by one, and this
+  # is the soft question. `theirs` counts the free hit.
+  def self.candidate_race(action, target)
+    return nil if action.nil? || target.nil?
+    return nil if !action.key?("outgoing_damage_pct") ||
+                  !action.key?("incoming_damage_pct")
+    target_hp = Model.number(target["hp_pct"], 100.0)
+    return nil if target_hp <= 0
+    incoming = Model.number(action["incoming_damage_pct"], 0.0)
+    mine = hits_needed(target_hp, Model.number(action["outgoing_damage_pct"], 0.0))
+    return nil if mine.nil?
+    # At the cap the count carries no information (see RACE_MAX_HITS): a candidate
+    # that needs eight or more hits is not winning a race, it is walling, and an
+    # immune wall "wins" against anything by this arithmetic. Gengar into a Snorlax
+    # mirror -- Body Slam does nothing to it, Shadow Ball does 7% -- was the case
+    # (no_switch_full_hp_neutral, Reborn probe).
+    return { "mine" => mine, "theirs" => nil, "winning" => false } if mine >= RACE_MAX_HITS
+    left = Model.number(action["candidate_hp_pct"], 100.0) -
+           Model.number(action["entry_damage_pct"], 0.0) - incoming
+    return { "mine" => mine, "theirs" => 1, "winning" => false } if left <= 0
+    more = hits_needed(left, incoming)
+    winning = if more.nil? then true            # nothing of theirs gets through
+              elsif mine < more then true
+              elsif mine > more then false
+              else action["faster"] == true
+              end
+    { "mine" => mine, "theirs" => (more.nil? ? nil : more + 1), "winning" => winning }
+  end
+
+  # Tri-state: true when the candidate's best hit on the current foes clears the
+  # weak_current_attacks line (10% of the target), false when it does not, nil when
+  # the adapter exported no estimate or the key is off -- and nil never withholds a
+  # reason, the same contract every other missing field keeps.
+  WEAK_ATTACK_PCT = 10
+
+  def self.candidate_can_hit?(action, config)
+    return nil if !config["escape_needs_hitter"]
+    return nil if !action.key?("outgoing_damage_pct") || action["outgoing_damage_pct"].nil?
+    Model.number(action["outgoing_damage_pct"], 0.0) >= WEAK_ATTACK_PCT
+  end
+
+  # The most any recovery move this battler carries restores, in hp_pct units and
+  # UNCLIPPED by its current headroom: the question is what the heal is worth when it
+  # is needed, not what it would restore this instant. 0 without one.
+  def self.best_heal_pct(snapshot, actor)
+    best = 0.0
+    (actor["actions"] || []).each do |other|
+      next if other["type"] != "move"
+      tags = Effects.describe(other["move_id"], other["tags"])
+      next if !(tags.include?("heal") || tags.include?("variable_heal"))
+      amount = heal_amount(snapshot, tags)
+      best = amount if amount > best
+    end
+    best
+  end
+
+  # A healer alternates healing and attacking, so to sustain, one heal has to cover
+  # TWO of the foe's hits: Recover (50) holds against 20 a hit and bleeds out against
+  # 30. Below that line a race counted in hits is as lost as it looks.
+  def self.heal_cannot_outpace?(snapshot, actor)
+    incoming = Model.number(actor["incoming_damage_pct"], 0.0)
+    best_heal_pct(snapshot, actor) < incoming * 2
+  end
+
+  # Lost by a WHOLE hit, not on the tiebreak. The adapters export `faster` as a plain
+  # "outspeeds" -- a speed tie reads as slower on both sides -- so two identical
+  # Snorlax each see an equal-count race they "lose", and a rule that acted on that
+  # would have both of them running from a mirror (the no_switch_full_hp_neutral card
+  # caught exactly this). The 0.6.3 rules act only on the hit-count gap, which no
+  # tiebreak can manufacture; the equal-count-and-slower case stays with the 0.6.0
+  # flag, which is off.
+  def self.race_lost_by_a_hit?(race)
+    return false if race.nil? || race["winning"] != false
+    return false if race["mine"].nil? || race["theirs"].nil?
+    race["mine"] > race["theirs"]
   end
 
   # Lower is worse for the actor: losing < unknown < winning, and within losing the

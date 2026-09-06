@@ -662,8 +662,25 @@ module AIProbe
       switch_considered = portable_ranking.any? { |entry| entry["type"] == "switch" }
       out["switch_evaluated"] = switch_considered
       out["should_switch_score"] = switch_considered ? ((ch && ch[0] == 2) ? 1 : 0) : nil
+      # Every option with its score and reasons, the same readout the gauntlet's trace
+      # carries. Without it a failed card says WHAT was chosen and nothing about why,
+      # and the first 0.6.3 probe run spent a rebuild finding out that a switch
+      # candidate's race had never been computed.
+      out["ranking"] = portable_ranking.map { |entry| ranking_entry(entry) }
     end
     return out
+  end
+
+  RANKING_KEYS = %w[
+    type slot move_id numeric_move_id target species score reasons
+    expected_damage_pct effectiveness immune priority
+    candidate_hp_pct entry_damage_pct incoming_damage_pct outgoing_damage_pct faster
+  ]
+
+  def self.ranking_entry(entry)
+    out = {}
+    RANKING_KEYS.each { |key| out[key] = entry[key] if entry.has_key?(key) }
+    out
   end
 
   def self.run

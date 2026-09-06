@@ -18,21 +18,22 @@ The study has two phases, and they are still both live:
 
 | | |
 |---|---|
-| Portable core | **0.6.2**, installed in Reborn Yang (opt-in, off by default) |
-| Second adapter | Realidea v16, **installed at 0.6.2** — probe **240/256** vs stock's 202/256, no regressions; tier gauntlet **66.9%** vs **50.0%** (240 battles, real gen 6 OU teams), archetype **64.4%** vs **51.2%** (320 battles) |
-| Turn-by-turn A/B | Realidea **shadow arm**: stock plays, the portable planner answers the same board every turn and registers nothing. 120/120 observed battles reproduce their unobserved twins exactly; over 3,027 compared turns the two policies **agree 58.3%**. Its equality check caught a pre-existing adapter bug that freed trapped foes (`PORTABLE-AI-REALIDEA.md` → *The shadow arm*) |
-| Corpus | **213 cards / 281 assertions** in `scenarios.json` — 275 graded and passing, 6 N/A on the Portable side (`switch_score_gt` needs Reborn's party-indexed score array) |
-| Unit tests | **229** Ruby + **11** Python green — `test_portable_ai.rb` 108, `test_realidea_adapter.rb` 68, `test_reborn_adapter.rb` 53, `test_tooling.py` 11 |
+| Portable core | **0.6.3**, installed in Reborn Yang (opt-in, off by default) |
+| Second adapter | Realidea v16, **installed at 0.6.3** — probe **246/262** vs stock's 202/256, no regressions; tier gauntlet **70.7%** vs **50.0%** (240 battles, real gen 6 OU teams; 66.9% at 0.6.2), archetype **64.4%** vs **51.2%** (320 battles, 0.6.2) |
+| Turn-by-turn A/B | Realidea **shadow arm**: stock plays, the portable planner answers the same board every turn and registers nothing. 120/120 observed battles reproduce their unobserved twins exactly; over 3,027 compared turns the two policies **agree 54.3%** (58.3% at 0.6.2 — the difference is 0.6.3's switching). Its equality check caught a pre-existing adapter bug that freed trapped foes, and its readout is where 0.6.3's three rules came from (`PORTABLE-AI-REALIDEA.md` → *The shadow arm*, *0.6.3*) |
+| Corpus | **219 cards / 287 assertions** in `scenarios.json` — 281 graded and passing, 6 N/A on the Portable side (`switch_score_gt` needs Reborn's party-indexed score array) |
+| Unit tests | **269** Ruby + **22** Python green — `test_portable_ai.rb` 125, `test_realidea_adapter.rb` 91, `test_reborn_adapter.rb` 53, `test_tooling.py` 22 |
 | Benchmark frame | 7 rosters × 60 = **420 battles**, `arms=normal_portable`, `schedule=normal_baseline`, `party_size=6` |
-| Standing | 0.6.0 **197/420** → 0.6.1 **205/420** → 0.6.2 **203/420 (48.3%)** |
+| Standing | 0.6.0 **197/420** → 0.6.1 **205/420** → 0.6.2 **203/420** → 0.6.3 **231/420 (55.0%)**, +28, p = 0.002 |
 
-**How to read that 48.3%.** The schedule is balanced all-pairs, so the `normal_reborn`
+**How to read that 55.0%.** The schedule is balanced all-pairs, so the `normal_reborn`
 arm — Reborn's own AI in *both* seats — must sit near 50% by construction, and measures
-**52.7%** on the older 300-battle frame. Portable is therefore still a few points behind
-Reborn-Normal, and the honest summary of the last three versions is: 0.6.1's Leech Seed
-fix was a real +8 (p = 0.043), and 0.6.2's seven-fix batch is **flat on wins** (−2,
-p = 0.83) while changing the course of 30% of battles. It is a behaviour-correctness
-release, not a strength release.
+**52.7%** on the older 300-battle frame. 0.6.3 is the first version to clear it: 0.6.1's
+Leech Seed fix was a real +8 (p = 0.043), 0.6.2's seven-fix batch was **flat on wins**
+(−2, p = 0.83) while changing the course of 30% of battles, and 0.6.3's three switching
+rules — every one read off a battle a person flagged as wrong in the Realidea shadow
+readout, none proposed from the source — are **+28 over 420 paired battles (p = 0.002)**,
+on six rosters of seven (`PORTABLE-AI-REBORN.md` → *Core version 0.6.3*).
 
 Two older results that stay true and matter: **Intense's cheat set is worth nothing**
 to Reborn (−7 vs its own Normal, p = 0.54) but costs *Portable* 23 battles (p = 0.017);

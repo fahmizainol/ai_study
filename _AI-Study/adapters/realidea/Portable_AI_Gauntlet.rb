@@ -53,6 +53,13 @@ module PortableAIGauntlet
   # stock and portable are the measurement arms; shadow is the observer arm, in which
   # stock plays and the portable planner records what it would have done instead.
   MODES = ["stock", "portable", "shadow"]
+  REPLACEMENTS = ["stock", "portable"]
+
+  # What chose the replacements on the measured seat: only a Portable arm with the
+  # key on ever uses the core's chooser.
+  def self.replacement_label(mode)
+    (mode == "portable" && PortableAIRealidea.replacement?) ? "portable" : "stock"
+  end
   DEFAULT_MODES = ["stock", "portable"]
 
   TEAMS = {
@@ -243,9 +250,27 @@ module PortableAIGauntlet
       return
     end
 
+    # Who picks the replacement after a faint on the Portable side. "portable" routes
+    # it through the core's forced-switch scorer (0.6.3, and what a Portable install
+    # does in play); "stock" -- the DEFAULT here -- keeps the convention every run
+    # before that used, the stock chooser on BOTH sides, so strength differences stay
+    # attributable to turn decisions and every earlier number stays comparable.
+    # Measured at a fixed core the portable chooser was noise on outcomes (81-29
+    # against 79-34 over the same 120 battles, 17 gained and 19 lost), so the study
+    # keeps the convention and measures the variant by name. The stock and shadow arms
+    # use the stock chooser either way; each record stamps which it was.
+    replacement = (cfg["replacement"] && cfg["replacement"] != "") ?
+                  cfg["replacement"].strip : "stock"
+    if !REPLACEMENTS.include?(replacement)
+      note("Gauntlet: unknown replacement=#{replacement}; known: #{REPLACEMENTS.join(', ')}")
+      return
+    end
+
     old_trainer = $Trainer
     old_enabled = (defined?($PORTABLE_AI_ENABLED) ? $PORTABLE_AI_ENABLED : nil)
     old_shadow  = (defined?($PORTABLE_AI_SHADOW) ? $PORTABLE_AI_SHADOW : nil)
+    old_replacement = (defined?($PORTABLE_AI_REPLACEMENT) ? $PORTABLE_AI_REPLACEMENT : nil)
+    $PORTABLE_AI_REPLACEMENT = (replacement == "portable")
     counts = {}
     modes.each do |mode|
       counts[mode] =
@@ -253,7 +278,8 @@ module PortableAIGauntlet
     end
     note("Gauntlet: #{matchups.length * seeds.length * modes.length} battles, " +
          "#{tier ? 'tier' : 'frozen'} schedule, teams=#{set_name}, " +
-         "mega=#{mega}, modes=#{modes.join('+')}, portable #{PortableAI::VERSION}")
+         "mega=#{mega}, modes=#{modes.join('+')}, replacement=#{replacement}, " +
+         "portable #{PortableAI::VERSION}")
 
     File.open(out, mode_flag) do |file|
       matchups.each do |matchup|
@@ -293,6 +319,7 @@ module PortableAIGauntlet
     $Trainer = old_trainer if defined?(old_trainer)
     $PORTABLE_AI_ENABLED = old_enabled if defined?(old_enabled)
     $PORTABLE_AI_SHADOW = old_shadow if defined?(old_shadow)
+    $PORTABLE_AI_REPLACEMENT = old_replacement if defined?(old_replacement)
     $AI_GAUNTLET_TRACE = false
   end
 
@@ -344,6 +371,7 @@ module PortableAIGauntlet
       # is not the team its author built, and a reader must not have to guess which
       # they are looking at.
       "mega" => mega,
+      "replacement" => replacement_label(mode),
       "decision" => decision,
       "result" => result,
       "turns" => battle.turncount
@@ -395,6 +423,7 @@ module PortableAIGauntlet
       "right_test_team" => right_name,
       "teams" => set_name,
       "mega" => mega,
+      "replacement" => replacement_label(mode),
       "result" => "error",
       "turns" => 0,
       "error" => "#{error.class}: #{error.message}",

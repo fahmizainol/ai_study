@@ -16,7 +16,7 @@
 # Everything else is optional evidence used to improve the score.
 
 module PortableAI
-  VERSION = "0.6.2" unless const_defined?(:VERSION)
+  VERSION = "0.6.3" unless const_defined?(:VERSION)
 
   module Model
     DEFAULT_CONFIG = {
@@ -124,7 +124,27 @@ module PortableAI
       # Yawn into an already-drowsy target. Same bug class as 0.6.1's Leech Seed: the
       # move writes an EFFECT, not a status condition, so pbCanSleep? answers "yes"
       # about a target the engine will refuse (PokeBattle_MoveEffects.rb:249).
-      "yawn_gate"        => true
+      "yawn_gate"        => true,
+
+      # 0.6.3. Two rules read off the Realidea shadow run's turn-by-turn readout, where
+      # the same three battles were losing races with a better Pokemon on the bench and
+      # every switch vetoed for want of a reason (PORTABLE-AI-REALIDEA.md, "0.6.3").
+      # Each is its own key; BOTH FALSE REPRODUCES 0.6.2 BATTLE-FOR-BATTLE.
+      #
+      # Leave a race this battler loses for a bench candidate that wins it -- per
+      # candidate, on the candidate's own estimates, after paying the switch turn; and
+      # only when no recovery move the actor carries would turn the race around. The
+      # 0.6.0 damage_race_switch flag opened the gate for every candidate; this asks who.
+      "race_switch_to_winner" => true,
+      # A heal that restores less than the next hit takes, in a race already lost, is
+      # charged as heal_only_delays (-120) instead of credited as heal_saves_battler
+      # (+150). Zapdos Roosted into a bigger Lava Plume five turns running.
+      "heal_outpace"          => true,
+      # "I cannot hurt it" (no_effective_move, weak_current_attacks) opens the gate
+      # only for a bench candidate whose own best hit clears the weak line. Against a
+      # wall every attacker is weak, and without this the bench body that came in was
+      # as weak as the one that left and went straight back.
+      "escape_needs_hitter"   => true
     }
 
     def self.config(overrides)

@@ -2269,9 +2269,15 @@ CORPUS_062 = [
     # The control the fix must not break: no kill on the board, so healing is still
     # the right call and the exported target HP has not turned Earthquake into a
     # phantom KO the other way.
+    #
+    # 0.6.3: Metal Claw, not Iron Head. This control is about the phantom KO, but an
+    # Iron Head clears what Roost restores, and under heal_outpace a heal that only
+    # delays a lost race is charged rather than credited -- which is the rule's point,
+    # not this card's. A 50-BP hit keeps the heal a real save and the card measuring
+    # what it was written to measure.
     ('spread_move_is_not_lethal_at_full_hp', 0,
      mon('FLYGON', 50, ['EARTHQUAKE', 'ROOST'], hp_pct=20),
-     mon('BISHARP', 50, ['IRONHEAD']),
+     mon('BISHARP', 50, ['METALCLAW']),
      [('must_choose_move_in', ['ROOST']),
       ('score_gt', 'ROOST', 'EARTHQUAKE')]),
 
@@ -2390,10 +2396,82 @@ CORPUS_062 = [
 ]
 
 
+CORPUS_063 = [
+    # 0.6.3. Read off the Realidea shadow run's turn-by-turn readout, not proposed
+    # from the source: the same three battles were losing races with a better Pokemon
+    # on the bench and every switch vetoed for want of a reason.
+    #
+    # 1. Leave a race the actor loses, for a bench Pokemon that WINS it. Quagsire
+    #    into a Calm Mind Clefable, six hits to its three, with Magnezone on the bench
+    #    (team1_vs_team2 104729 t0-5). The Donphan/Espeon board of
+    #    race_leave_when_losing_2hko_vs_3hko, with a bench that is actually better:
+    #    Scizor resists Psychic four times over and Bug Bite two-shots Espeon. The
+    #    0.6.0 flag that opened the gate for ANY bench was what stock Reborn refused
+    #    on that card; this asks who is coming in.
+    ('race_leave_for_a_bench_that_wins', 0,
+     mon('DONPHAN', 50, ['STRENGTH'], ability='SANDVEIL'),
+     mon('ESPEON', 50, ['EXTRASENSORY'], ability='SYNCHRONIZE'),
+     [('must_switch_to', 'SCIZOR')],
+     [mon('SCIZOR', 50, ['BUGBITE'], ability='SWARM')]),
+    # The control that makes the card above mean something: the same lost race with
+    # a bench that loses it too. Machamp is weak to Psychic and does nothing to Espeon
+    # that Donphan does not, so leaving is just a free hit for the foe -- and the card
+    # is exactly the shape stock Reborn refused. Must stay.
+    ('race_stay_when_the_bench_loses_too', 0,
+     mon('DONPHAN', 50, ['STRENGTH'], ability='SANDVEIL'),
+     mon('ESPEON', 50, ['EXTRASENSORY'], ability='SYNCHRONIZE'),
+     [('must_not_switch',)],
+     [mon('MACHAMP', 50, ['CROSSCHOP'], ability='GUTS')]),
+
+    # 2. A heal that restores less than the next hit takes, in a lost race, is not a
+    #    save. Zapdos at 13% Roosted +50 into a 57% Lava Plume five turns running with
+    #    Chansey on the bench (team3_vs_team1 155921 t23-28). Fire Blast so the hit
+    #    clears the heal on the probe's pinned spreads too. The bench is Quagsire, not
+    #    the Chansey of the readout, and that is the rule being honest rather than the
+    #    card being soft: once the free entry hit is paid, Eviolite Chansey TIES
+    #    Heatran on hit count (four Seismic Tosses against four Fire Blasts) and so
+    #    does Slowbro (two Scalds against two Fire Blasts at 36% each), and both lose
+    #    the speed tiebreak -- neither is a winner, and the probe said so both times.
+    #    Earthquake is four times effective on Heatran: one hit, no tiebreak.
+    ('a_heal_that_only_delays_yields_to_a_winning_bench', 0,
+     mon('ZAPDOS', 50, ['ROOST', 'DISCHARGE'], hp_pct=13),
+     mon('HEATRAN', 50, ['FIREBLAST'], ability='FLASHFIRE'),
+     [('must_switch_to', 'QUAGSIRE')],
+     [mon('QUAGSIRE', 50, ['EARTHQUAKE'], ability='UNAWARE')]),
+    # The control: the same Zapdos against a hit its Roost DOES outpace. The heal is
+    # still the save 0.6.2 said it was, and nothing on the bench is worth the free hit.
+    ('a_heal_that_outpaces_the_hit_is_still_the_play', 0,
+     mon('ZAPDOS', 50, ['ROOST', 'DISCHARGE'], hp_pct=13),
+     mon('HEATRAN', 50, ['FLAMECHARGE'], ability='FLASHFIRE'),
+     [('must_choose_move_in', ['ROOST'])],
+     [mon('QUAGSIRE', 50, ['EARTHQUAKE'], ability='UNAWARE')]),
+
+    # 3. "I cannot hurt it" is a reason to leave only for a body that can. In front of
+    #    a Chansey every special attacker's moves are weak, so weak_current_attacks
+    #    opened the gate for whoever stood there and the bench Pokemon that came in
+    #    was as weak as the one that left: 168 of the 193 switch-backs against an
+    #    unchanged foe in the first 0.6.3 run were Zapdos and Suicune trading places
+    #    in front of one (team1_vs_team2 104729 t88-90). Machamp's Close Combat is the
+    #    body that can; Alakazam's Psychic is as weak as Zapdos's Thunderbolt.
+    ('weak_attacks_leave_only_for_a_body_that_hits', 0,
+     mon('ZAPDOS', 50, ['THUNDERBOLT']),
+     mon('CHANSEY', 50, ['SEISMICTOSS'], item='EVIOLITE'),
+     [('must_switch_to', 'MACHAMP')],
+     [mon('ALAKAZAM', 50, ['PSYCHIC']),
+      mon('MACHAMP', 50, ['CLOSECOMBAT'], ability='GUTS')]),
+    # The control: only the equally weak body on the bench, so leaving buys nothing
+    # but a free Seismic Toss on the way in. Must stay.
+    ('weak_attacks_stay_when_the_bench_is_as_weak', 0,
+     mon('ZAPDOS', 50, ['THUNDERBOLT']),
+     mon('CHANSEY', 50, ['SEISMICTOSS'], item='EVIOLITE'),
+     [('must_not_switch',)],
+     [mon('ALAKAZAM', 50, ['PSYCHIC'])]),
+]
+
 CORPUS = (CORPUS_V1 + CORPUS_V2 + CORPUS_V3 + CORPUS_V4 + CORPUS_V5
           + CORPUS_V6 + CORPUS_V7 + CORPUS_V8 + CORPUS_V9 + CORPUS_V10
           + CORPUS_D1 + CORPUS_D2 + CORPUS_D3 + CORPUS_R1 + CORPUS_LS
-          + CORPUS_062)
+          + CORPUS_062 + CORPUS_063)
 
 # Values a scenario's extra dict may carry; the generator validates so a typo
 # fails here instead of silently emitting a key no probe reads.

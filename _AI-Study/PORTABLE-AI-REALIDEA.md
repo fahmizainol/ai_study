@@ -41,7 +41,7 @@ spread damage to a partner, avoids duplicate switches, and assigns finishable ta
 ## Config overrides
 
 `Data/ai_harness.txt` sets run-level knobs for the gauntlet and the probe, one
-`key=value` per line, `#` comments allowed. It is the same file and the same nineteen
+`key=value` per line, `#` comments allowed. It is the same file and the same twenty-two
 core keys the Reborn harness uses, so an ablation reads identically in both studies —
 which is what lets a single installed build play both sides of a policy A/B instead of
 rebuilding between arms.
@@ -64,6 +64,7 @@ yawn_gate=false
 | `side_effects`, `ability_rules`, `entry_rules`, `format_rules` | boolean (0.5.0) |
 | `damage_race`, `damage_race_switch` | boolean (0.6.0) |
 | `spread_target_hp`, `lethal_flat`, `entry_death`, `wish_pending`, `setup_stage`, `move_memory`, `yawn_gate` | boolean (0.6.2) |
+| `race_switch_to_winner`, `heal_outpace`, `escape_needs_hitter` | boolean (0.6.3) — all three false reproduces 0.6.2 battle-for-battle |
 
 Three keys are the harness's own rather than the core's:
 
@@ -82,7 +83,7 @@ record said which run it belonged to.
 
 ### Run keys (not core config)
 
-`Data/ai_harness.txt` also carries keys the gauntlet reads directly. Unlike the nineteen
+`Data/ai_harness.txt` also carries keys the gauntlet reads directly. Unlike the twenty-two
 config overrides these do not touch core policy — they choose what runs.
 
 | key | default | meaning |
@@ -94,6 +95,7 @@ config overrides these do not touch core policy — they choose what runs.
 | `seeds=a,b,c` | five | replace the default seeds |
 | `trace=true` | off | record the per-turn portable decision trace, plus `parties` (see *Turn-by-turn traces*) |
 | `modes=a,b` | `stock,portable` | which arms to run: `stock`, `portable`, `shadow` (see *The shadow arm*) |
+| `replacement=portable` | `stock` | who picks the Portable arm's post-KO replacement: `stock` keeps the convention every run before 0.6.3 used (the engine's type-chart chooser on both sides, so strength differences stay attributable to turn decisions); `portable` routes it through the core's forced-switch scorer, which is what a Portable install does in play. Stamped on every record (see *0.6.3*) |
 | `append=true` | off | append rather than truncate |
 
 Progress goes to `Data/ai_gauntlet_progress.txt` (one line per battle, flushed) and any
@@ -156,9 +158,9 @@ version-control copy when a byte-for-byte pre-install rollback is required.
 Unit tests:
 
 ```bash
-ruby _AI-Study/tests/test_portable_ai.rb        # 108 tests
+ruby _AI-Study/tests/test_portable_ai.rb        # 124 tests
 ruby _AI-Study/tests/test_reborn_adapter.rb     # 53 tests
-ruby _AI-Study/tests/test_realidea_adapter.rb   # 78 tests
+ruby _AI-Study/tests/test_realidea_adapter.rb   # 91 tests
 python3 _AI-Study/tests/test_tooling.py
 python3 _AI-Study/tools/check_move_codes.py
 ```
@@ -198,6 +200,11 @@ Remove all trigger files after testing. With no trigger present, a normal boot r
 title path successfully.
 
 ## Measured result
+
+### 0.6.3 probe — 2026-09-06
+
+**246/262** on the 214-card corpus (262 gradeable after the same ten skips and four N/A);
+the six 0.6.3 cards all pass and the same sixteen 0.6.2 failures remain. See *0.6.3* below.
 
 ### 0.6.2 probe — 2026-09-06
 
@@ -385,7 +392,7 @@ Turn 8   actor 1   SUCKERPUNCH @0               score    194.0
 | always | with `trace=true` |
 |---|---|
 | the actor's **species, HP, status, ability, item and stage totals**, and the same for every foe on the field — the board as the core saw it, at the moment of the decision |
-| **what the other side chose that turn** (`foe`), read back from `battle.choices` after it registered — present on 100% of turns in both arms | `candidates`: **every option the actor had**, capped at six, each with its score and the `reasons` breakdown that produced it |
+| **what the other side chose that turn** (`foe`), read back from `battle.choices` after it registered — present on 100% of turns in both arms | `candidates`: **every option the actor had** — up to ten, which is four moves and five bench slots, so nothing is cut (the cap was six through 0.6.2, and a readout could not say what the third bench Pokemon scored) — each with its score and the `reasons` breakdown that produced it |
 | speed and speed order, incoming-damage estimates, `threatened_lethal`, and the per-foe damage race | for moves: base power, type effectiveness, expected damage %, immunity |
 
 None of that is newly computed — the shared core already ranks and explains every
@@ -528,6 +535,89 @@ damage race: `switch->4 vs INFESTATION` (23), `SOFTBOILED vs SEISMICTOSS` (25),
 Known limits of the arm: the shadow does **not** carry portable memory (it never moved,
 so it recorded no repeated setup), so its setup choices are slightly over-represented
 against a live portable run. Everything else is exact.
+
+### 0.6.3 — three rules read off the shadow readout, 2026-09-06
+
+Three battles in the 0.6.2 shadow readout were flagged by a person as wrong, and all
+three turned out to be one flaw: **a reason to leave never asked who was coming in.**
+
+| battle | what happened | what was missing |
+|---|---|---|
+| `team1_vs_team2 104729` t0-5 | Quagsire stayed in front of a Calm Mind Clefable, losing the race 6 hits to 3, with Magnezone on the bench | the switch rule that exists for this (`damage_race_switch`, 0.6.0) is off because it opened the gate for *any* bench — and the readout could not even show Magnezone, cut by a six-candidate cap |
+| `team3_vs_team1 155921` t23-28 | Zapdos at 13% Roosted +50 into a 57% Lava Plume five turns running, credited `heal_saves_battler` +150 each time, while `switch → Chansey` was vetoed for being under 50% HP | a heal that loses ground is not a save; the gate's HP floor said "stay and attack", the heal rule said "stay and heal", and nothing said "leave for the body that wins" |
+| `team3_vs_team2 155921` t29 | Scizor sent into a Heatran that removes it in one hit | never Portable's decision: faint replacements went through the engine's type-chart chooser on both sides, by convention |
+
+**Three core rules, three keys** (`portable_ai/core.rb`; all three false reproduces 0.6.2
+battle for battle — Realidea's stock arm is bit-identical 120/120 either way, and the
+Reborn control on set_c is 26/26, +0):
+
+| key | rule |
+|---|---|
+| `race_switch_to_winner` | leave a race lost **by a whole hit** for a bench candidate that **wins its own race** — computed from the two estimates the adapter already puts on the switch action, after paying the free entry hit, by a whole hit, not on a speed tiebreak; not when a recovery move the actor carries covers two of the foe's hits; and never for a candidate at the 8-hit race cap, which is walling, not winning. No HP floor (a chipped battler that is losing has less to preserve) and no boost suppression (the foe's stages are already inside the candidate's incoming estimate) |
+| `heal_outpace` | a heal that restores less than the next hit takes, in a race already lost, is charged `heal_only_delays` −120 instead of credited +150 |
+| `escape_needs_hitter` | `no_effective_move` and `weak_current_attacks` count only for a bench candidate whose own best hit clears the 10% line. Found while checking the first 0.6.3 run: 168 of its 193 switch-backs against an unchanged foe were Zapdos and Suicune trading places in front of a Chansey, each leaving because its attacks were weak and each replaced by one whose attacks were as weak |
+
+Two things the probe corrected before the rules shipped, both recorded in the corpus:
+a speed tie reads as "slower" on both sides, so a Snorlax mirror was a race both Snorlax
+"lost" (hence *by a whole hit*); and a Gengar immune to Body Slam "won" a race it needed
+fifteen hits to finish (hence the cap clause). And two things the rule's own arithmetic
+refused that the readout had suggested: Eviolite Chansey ties Heatran on hit count once
+the free entry hit is paid, and so does Slowbro against Fire Blast — neither is a winner,
+and the Zapdos card benches Quagsire, whose Earthquake is one hit.
+
+**Faint replacement** (`replacement=` run key, adapter `choose_replacement`): the
+engine's chooser sums the type chart over each candidate's moves and reads nothing about
+what the candidate takes coming in. A Portable-driven side now routes it through the
+core's forced-switch scorer — entry damage, the switch-in race, `dies_on_entry` — and
+that is what a Portable install does in play. The **gauntlet defaults to `stock`**
+(every earlier number keeps its convention) and measures the variant by name.
+
+#### Measured
+
+Probe **246/262** (208 → 214 cards, +6, every new card passes; the same sixteen
+assertions fail that failed on 0.6.2). Tier suite, 240 battles, gen6ou_a + gen6ou_b:
+
+| arm | 0.6.2 | 0.6.3 | |
+|---|---|---|---|
+| stock | 58-58, 4 errors, 50.0% | 58-58, 4 errors, 50.0% | **identical, 120/120 battles** |
+| portable | 79-33-6, 2 errors, **66.9%** | 82-30-4, 4 errors, **70.7%** | paired: 36 identical, gained 16, lost 13 |
+| portable, `replacement=portable` | — | 80-33-5, 2 errors, 67.8% | vs default: gained 16, lost 18 — noise |
+| mean turns, portable | 26.1 | 27.9 | |
+
+Shadow arm, 120/120 observation-free: agreement **58.3% → 54.3%** over the same 3,027
+turns, the whole move being switch-vs-move (278 → 544) — which is the point, not a
+problem. The turns the readout was written about:
+
+- Quagsire t0: `switch → Magnezone (hits 78%, takes 21%, faster) 389.6 … losing_race_bench_wins +110`, over Scald 163.5 — and Magnezone is now line 1 of a ten-line list.
+- Zapdos t23: `switch → Chansey 533.6` over `ROOST 327.4 (… heal_only_delays −120)`; t24 onward Slowbro joins once Heatran is paralysed and the tie goes Slowbro's way.
+- Heal-loop turns (a heal chosen while lethal-threatened, into a bigger hit, in a lost race): **42 → 3**.
+
+The cost, stated plainly: voluntary switching **2.47 → 4.64 per battle**, and switch-backs
+within three turns **75 → 133**, 120 of them against an unchanged foe. `escape_needs_hitter`
+took that from 193 to 133 and no further: 62 of the remaining are still
+`weak_current_attacks`, because a candidate can clear the 10% line on the bench estimate
+and fall below it on the field's — the two estimates disagree across the line. That is
+the next item, and the fix has the same shape (require the candidate to *beat the actor's
+own best hit*, not a fixed line).
+
+The four Portable-arm errors are three `ZeroDivisionError`s at `pbRoughDamage:3557` and
+the `upanim` NameError — the pre-existing engine crashes, met more often because a
+switching AI calls into stock `pbGetMoveScore` more often.
+
+**Reborn, same core, full protocol** (`PORTABLE-AI-REBORN.md` → *Core version 0.6.3*):
+probe 281/281; control 26/26 +0; sweep **203 → 231 / 420, +28, p = 0.002**, on six
+rosters of seven and every archetype. The first Reborn win-count movement since 0.3, and
+the first rule batch not proposed from the source.
+
+Artifacts: `realidea_shadowtrace_gen6ou_0_6_3.ndjson` (traced, both variants' default),
+`realidea_shadowtrace_gen6ou_0_6_3_replportable.ndjson` (traced) and its lean twin
+`realidea_tier_0_6_3_replportable.ndjson`, `ai_probe_results_portable.ndjson` (0.6.3; the
+0.6.2 record kept as `ai_probe_results_portable_0_6_2.ndjson`), and under `readouts/` the
+five shadow battles above plus one live `replacement=portable` battle (`replacement → X`
+lines). The 0.6.2 traces and readouts are untouched, so the two versions can be diffed
+turn by turn. The probe now writes every option's score and reasons (`ranking`) — the
+first 0.6.3 probe run spent a rebuild finding out that a candidate's race had never been
+computed, and that is not happening again.
 
 ### The gauntlet hang, and what it actually was
 
@@ -789,10 +879,12 @@ Before replacing the installed section:
 3. Run `pack_rxdata.py --selftest` and verify upsert remains byte-idempotent.
 4. Run `python3 tools/check_move_codes.py`. Every code in the adapter's tables must
    exist in `PBS/moves.txt`; read every advisory before ignoring it.
-5. Run the complete in-engine probe. It must reproduce **240/256** with ten scenarios
+5. Run the complete in-engine probe. It must reproduce **246/262** with ten scenarios
    skipped by the engine and four assertions this AI cannot answer (it reports no numeric
    switch scale), and zero missing/error/degenerate records. Those four are counted as
-   failures by `check_scenarios.py`, which is why the figure is 240 and not 244.
+   failures by `check_scenarios.py`, which is why the figure is 246 and not 250. The
+   sixteen failing assertions are the same sixteen 0.6.2 failed; a change that moves any
+   of them is a finding, not noise.
 6. Run the paired seeded gauntlet with no portable marker. The only meaningful
    regression signal is **losses that the previous version won on the same seed** —
    list them by seed and read the traces. Do not expect a win-rate gain; Reborn showed
@@ -808,9 +900,17 @@ Before replacing the installed section:
 
 ### What is outstanding right now
 
-The probe is done, the hang is fixed, and the tier gauntlet is measured. Outstanding, in
-priority order:
+The probe is done, the hang is fixed, the tier gauntlet is measured, and 0.6.3 shipped the
+switching rules. Outstanding, in priority order:
 
+0. **The wall switch-backs** (see *0.6.3*): 133 switch-backs per 120 battles, 62 of them
+   `weak_current_attacks` re-firing because the bench estimate and the field estimate
+   disagree across the 10% line. Require the candidate to beat the actor's own best hit.
+   Behind that sits the larger gap the same readout showed: the core has **no model of
+   foe recovery** (`damage_race` counts hits with no heal term, and targets export no
+   moves), so "mine 6 turns" against a Soft-Boiled Clefable is fiction — and no rule
+   values Protect (scouting, stalling a poisoned foe, receiving a Wish); foes chose it 31
+   times in 3,033 turns, so the tier pool cannot even measure that one.
 1. **Re-measure 0.1.0 so the regression check can actually run.** The gate asks for
    losses the previous version won on the same seed; 0.1.0's per-battle records were not
    kept, only their hash, so that comparison is currently impossible (see *Against the

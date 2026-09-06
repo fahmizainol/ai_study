@@ -61,7 +61,11 @@ module PortableAIRebornGauntlet
     ["wish_pending",       :boolean],
     ["setup_stage",        :boolean],
     ["move_memory",        :boolean],
-    ["yawn_gate",          :boolean]
+    ["yawn_gate",          :boolean],
+    # 0.6.3. All three false is 0.6.2, which is the control run.
+    ["race_switch_to_winner", :boolean],
+    ["heal_outpace",          :boolean],
+    ["escape_needs_hitter", :boolean]
   ]
 
   OUT     = "Data/ai_gauntlet_results.ndjson"
