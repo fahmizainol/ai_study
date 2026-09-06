@@ -42,6 +42,78 @@ def load(path):
             if l.strip()]
 
 
+# Realidea stores status as the engine's number (075_PBStatuses); the adapter emits the
+# raw value because that is data, and naming it is presentation.
+STATUS = {0: "", 1: "slp", 2: "psn", 3: "brn", 4: "par", 5: "frz"}
+
+
+def mon(view):
+    """`Shuckle 70% par` -- who this is, right now, at the moment of the decision.
+
+    Read from the decision's own snapshot, not from the record's `parties`: that holds
+    FINAL hp and cannot say what the board looked like on turn 3.
+    """
+    if not view:
+        return "?"
+    name = view.get("species") or "?"
+    text = "%s %.0f%%" % (name, view.get("hp_pct") or 0)
+    tag = STATUS.get(view.get("status") or 0, "")
+    if tag:
+        text += " " + tag
+    boosts = view.get("positive_stage_total") or 0
+    drops = view.get("negative_stage_total") or 0
+    if boosts:
+        text += " +%d" % boosts
+    if drops:
+        text += " %d" % drops
+    return text
+
+
+def board(view):
+    """The matchup line: who is out, on both sides, with HP and status."""
+    if not view or not view.get("species"):
+        return None
+    foes = view.get("targets") or []
+    if not foes:
+        return "%s" % mon(view)
+    return "%s  vs  %s" % (mon(view), "  |  ".join(mon(f) for f in foes))
+
+
+def render_candidates(entry):
+    """Every option the actor had, with what it scored and why."""
+    cands = entry.get("candidates")
+    if not cands:
+        return
+    print("    options considered:")
+    for c in cands:
+        if c.get("type") == "switch":
+            what = "switch -> %s" % (c.get("species") or "slot%s" % c.get("slot"))
+        else:
+            what = c.get("move_id") or "move%s" % c.get("slot")
+            bits = []
+            if c.get("power"):
+                bits.append("bp %s" % c["power"])
+            if c.get("expected_damage_pct") is not None:
+                bits.append("%.0f%% dmg" % c["expected_damage_pct"])
+            if c.get("effectiveness") is not None:
+                bits.append("x%g" % c["effectiveness"])
+            if c.get("immune"):
+                bits.append("IMMUNE")
+            if bits:
+                what += " (%s)" % ", ".join(bits)
+        reasons = c.get("reasons") or []
+        top = ", ".join("%s %+.0f" % (r[0], r[1])
+                        for r in reasons
+                        if isinstance(r, list) and len(r) == 2
+                        and isinstance(r[1], (int, float)) and abs(r[1]) >= 1)
+        score = c.get("score") or 0
+        # The core vetoes an illegal or self-defeating option with a large negative
+        # sentinel rather than dropping it, so the reason stays visible. Printing the
+        # raw number just wrecks the column and tells the reader nothing.
+        shown = "   VETO " if score <= -100000 else "%8.1f" % score
+        print("      %s  %-38s %s" % (shown, what, top))
+
+
 def party_names(party):
     return ", ".join((m or {}).get("species", "-") for m in party)
 
@@ -66,11 +138,18 @@ def render_shadow(record):
         portable, stock = entry.get("portable"), entry.get("stock")
         verdict = same_choice(portable, stock)
         mark = {True: "", False: "   <- DIFFERENT", None: "   (not comparable)"}[verdict]
+        view = entry.get("view") or {}
         print("\nTurn %-3s actor %s%s" % (entry.get("turn"), entry.get("actor"), mark))
+        line = board(view)
+        print("    board   : %s" % line) if line else None
+        if entry.get("observer_error"):
+            print("    OBSERVER FAILED: %s" % entry["observer_error"])
+            print("      (the host still played this turn; only the comparison is lost)")
         print("    stock   : %s" % describe(stock, right))
         print("    portable: %-28s score %8.1f" % (
             describe(portable, right), (portable or {}).get("score") or 0))
-        render_view(entry.get("view") or {})
+        render_view(view)
+        render_candidates(entry)
 
 
 def describe(choice, party):
@@ -96,16 +175,20 @@ def render_view(view):
               ("%.0f%%" % view["certain_incoming_damage_pct"])
               if view.get("certain_incoming_damage_pct") is not None else "n/a",
               view.get("threatened_lethal")))
-    # The damage race: turns to kill each way, as the core counted them. Keyed by
-    # BATTLER index, which is a seat, not a party slot -- the record carries no per-turn
-    # foe identity, so the seat is named and not guessed at. (A switch entry's `slot` IS
-    # a party index and is resolved to a species.)
+    # The damage race: turns to kill each way, as the core counted them. Keyed by BATTLER
+    # index -- a seat, not a party slot. Records written before the view carried
+    # `targets` have no per-turn foe identity and still print the bare seat; newer ones
+    # resolve it to the species that was actually standing there.
+    names = {}
+    for target in view.get("targets") or []:
+        names[str(target.get("index"))] = target.get("species")
     for index, race in sorted((view.get("race") or {}).items()):
+        who = names.get(str(index)) or ("foe@%s" % index)
         if not race:      # the core declines a race it cannot compute
-            print("    race vs foe@%s: not computed" % index)
+            print("    race vs %s: not computed" % who)
             continue
-        print("    race vs foe@%s: mine %s turns, theirs %s, winning=%s%s" % (
-            index, race.get("mine"), race.get("theirs"), race.get("winning"),
+        print("    race vs %s: mine %s turns, theirs %s, winning=%s%s" % (
+            who, race.get("mine"), race.get("theirs"), race.get("winning"),
             " (ties on speed)" if race.get("last_hit_first") else ""))
 
 
@@ -155,7 +238,10 @@ def render(record):
                 action += " @%s" % entry["target"]
         print("\nTurn %-3s actor %s   %-28s score %8.1f" % (
             entry.get("turn"), entry.get("actor"), action, entry.get("score") or 0))
+        line = board(view)
+        print("    board   : %s" % line) if line else None
         render_view(view)
+        render_candidates(entry)
 
 
 def main():

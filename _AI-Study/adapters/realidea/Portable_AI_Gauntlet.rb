@@ -190,6 +190,10 @@ module PortableAIGauntlet
     AIProbe.bootstrap
     AIProbe.install_exception_capture
     trace = PortableAIRealidea::Harness.bool(cfg, "trace", false)
+    # Gates the bulky half of a trace: the per-candidate scoring and reasons. Species,
+    # HP and status ride along with every per-turn record regardless, because without
+    # them a readout cannot say who was on the field.
+    $AI_GAUNTLET_TRACE = trace
     seeds = PortableAIRealidea::Harness.list(cfg, "seeds", SEEDS)
     mode_flag = PortableAIRealidea::Harness.bool(cfg, "append", false) ? "ab" : "wb"
 
@@ -289,6 +293,7 @@ module PortableAIGauntlet
     $Trainer = old_trainer if defined?(old_trainer)
     $PORTABLE_AI_ENABLED = old_enabled if defined?(old_enabled)
     $PORTABLE_AI_SHADOW = old_shadow if defined?(old_shadow)
+    $AI_GAUNTLET_TRACE = false
   end
 
   def self.run_one(matchup, seed, mode, trace = false, teams = nil,

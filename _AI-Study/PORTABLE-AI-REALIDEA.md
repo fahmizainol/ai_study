@@ -361,14 +361,35 @@ python3 tools/render_realidea_battle.py generated/realidea_tiertrace_gen6ou_a.nd
 ```
 
 ```
-Turn 2   actor 1   BULLETPUNCH @0               score    820.0
-    view: hp 73%  speed 249 (faster)  incoming max 28%  certain 28%  threatened_lethal=False
-    race vs foe@0: mine 1 turns, theirs 3, winning=True
-
-Turn 3   actor 1   switch -> Hoopa              score    291.9
-    view: hp 73%  speed 249 (slower)  incoming max 147%  certain 44%  threatened_lethal=True
-    race vs foe@0: mine 5 turns, theirs 1, winning=False
+Turn 8   actor 1   SUCKERPUNCH @0               score    194.0
+    board   : Bisharp 25%  vs  Scizor 88%
+    view: hp 25%  speed 239 (faster)  incoming max 210%  certain 210%  threatened_lethal=True
+    race vs Scizor: mine 2 turns, theirs 1, winning=False
+    options considered:
+         194.0  SUCKERPUNCH (bp 80, 49% dmg, x1)       engine_base +155, expected_damage +39
+         155.8  IRONHEAD (bp 80, 20% dmg, x0.5)        engine_base +183, expected_damage +16, resisted -45
+         145.3  KNOCKOFF (bp 20, 13% dmg, x1)          engine_base +135, expected_damage +10
+        -103.0  SWORDSDANCE (0% dmg, x1)               engine_base +137, unsafe_setup -240
+         VETO   switch -> Azumarill                    escape_lethal_threat +130, no_escape_reason -1000000
 ```
+
+**What a per-turn record carries.** Two tiers, because one of them is bulky:
+
+| always | with `trace=true` |
+|---|---|
+| the actor's **species, HP, status, ability, item and stage totals**, and the same for every foe on the field — the board as the core saw it, at the moment of the decision | `candidates`: **every option the actor had**, capped at six, each with its score and the `reasons` breakdown that produced it |
+| speed and speed order, incoming-damage estimates, `threatened_lethal`, and the per-foe damage race | for moves: base power, type effectiveness, expected damage %, immunity |
+
+None of that is newly computed — the shared core already ranks and explains every
+candidate (`portable_ai/core.rb` builds `diagnostics.rankings` and attaches `reasons`),
+and the snapshot already carries species and HP for both sides. Until 2026-09-06 the
+Realidea exporter simply recorded six scalars and the chosen action, which is why its
+readouts were so much thinner than Reborn's; the data was there the whole time.
+
+Species reach the trace **named**. The snapshot keeps the engine's numeric id, because
+that is what the core wants; `species_name` converts on the way out only, through the
+same `PBSpecies.getName` `party_snapshot` uses, so a trace and a record's `parties` agree
+on spelling.
 
 **Tracing is observation-free**, and that is checked rather than assumed: the traced
 `gen6ou_a` run reproduces the untraced one exactly — 41/12/6/1 and 32/25/0/3, same win
@@ -379,8 +400,8 @@ Four things to know before reading one:
 | | |
 |---|---|
 | **One arm per record** | a `mode=portable` record traces the arm that *played*, so it holds no stock answer to the same board. For a turn-by-turn diff of the two AIs, run the **shadow arm** below; those records carry both. |
-| **Decisions, not outcomes** | the line says what Portable chose and the evidence it saw. It does *not* say whether the move hit, crit or was Protected. Reborn's renderer has an `events` stream for that; this gauntlet records none. |
-| **A missing turn is a fall-through** | no line means Portable did not decide that turn — the adapter deferred to the stock path, or the actor could not act. |
+| **Decisions, not outcomes** | the line says what Portable chose, the board it faced and every option it weighed. It still does *not* say what the engine then **did** — whether the move hit, crit, was Protected, or what the foe's move actually did. Reborn's gauntlet hooks the engine's `events` stream for that; this one has no such hook, and that is the one real gap left between the two readouts. |
+| **A missing turn is a fall-through** | no line means Portable did not decide that turn — the adapter deferred to the stock path, or the actor could not act. A turn the *observer* crashed on is **not** missing: it is recorded with a null answer and an `observer_error`, and counted as unscorable, because an absent turn would quietly shrink the denominator of every agreement figure. Realidea's `pbRoughDamage` divide-by-zero causes 6 of these in 3,033 turns. |
 | **`race` is keyed by battler seat, not party slot** | the record carries no per-turn foe identity, so the renderer prints `foe@0` rather than guessing a species. A *switch* entry's `slot` **is** a party index and is resolved to a name. |
 
 `parties` (species and final HP per side) is written alongside any per-turn record —
@@ -402,8 +423,15 @@ stock/portable pair can be compared on outcomes and nothing finer.
 ```bash
 # modes=stock,portable,shadow  schedule=tier  teams=gen6ou_a   (then gen6ou_b, append=true)
 python3 tools/shadow_check.py generated/realidea_tier_shadow_0_6_2.ndjson
-python3 tools/render_realidea_battle.py generated/realidea_tier_shadow_0_6_2.ndjson team1_vs_team4 104729
+python3 tools/render_realidea_battle.py generated/realidea_shadowtrace_gen6ou.ndjson team1_vs_team4 104729
+python3 tools/render_realidea_battle.py generated/realidea_shadowtrace_gen6ou.ndjson > readout.txt
 ```
+
+Two artifacts, on Reborn's convention: **`realidea_tier_shadow_0_6_2.ndjson`** (1.6 MB) is
+the lean measurement, and **`realidea_shadowtrace_gen6ou.ndjson`** (14 MB, `trace=true`)
+is the same 360 battles carrying the full per-candidate scoring. Rendering the second
+gives ~80,000 lines of readable turn-by-turn text. Both report identical numbers, which
+is itself the check that recording more changed nothing.
 
 ```
 Turn 1   actor 1   <- DIFFERENT

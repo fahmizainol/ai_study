@@ -156,7 +156,14 @@ def main():
                 examples.append((key, entry, p, s))
 
     scored = agree + disagree
-    print("\nturns compared : %d (%d unscorable)" % (scored, unscored))
+    failures = sum(1 for r in shadow.values()
+                   for e in (r.get("shadow") or []) if e.get("observer_error"))
+    print("\nturns compared : %d (%d unscorable%s)" % (
+        scored, unscored,
+        "" if not failures else
+        ", of which %d are turns the observer itself failed on -- a pre-existing engine "
+        "crash in pbRoughDamage, recorded rather than dropped so the denominator stays "
+        "honest" % failures))
     if scored:
         print("agreed         : %d (%.1f%%)" % (agree, agree * 100.0 / scored))
         print("disagreed      : %d (%.1f%%)" % (disagree, disagree * 100.0 / scored))

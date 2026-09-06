@@ -47,6 +47,13 @@ module PBTypes
   end
 end
 
+# The adapter names species only when exporting a trace; the core is handed the numeric
+# id the engine uses. Two entries are enough to prove the id never reaches the readout.
+module PBSpecies
+  NAMES = { 213 => "Shuckle", 212 => "Scizor" }
+  def self.getName(id); NAMES[id]; end
+end
+
 module PBEffects
   # Battler effects.
   Attract = 1; ChoiceBand = 7; LeechSeed = 43; LockOn = 45; LockOnPos = 46
@@ -1108,6 +1115,81 @@ class PortableAIRealideaAdapterTest < Test::Unit::TestCase
                  PortableAIRealidea::RESTORED_ON_FAKE.sort_by { |s| s.to_s })
   end
 
+  # --- what a trace carries --------------------------------------------------
+
+  SNAPSHOT = {
+    "actors" => [{
+      "index" => 1, "species" => 213, "hp_pct" => 70.0, "status" => 4,
+      "ability" => "STURDY", "item" => "MENTALHERB", "speed" => 46, "faster" => false,
+      "positive_stage_total" => 2, "negative_stage_total" => -1,
+      "incoming_damage_pct" => 32.0, "certain_incoming_damage_pct" => 32.0,
+      "threatened_lethal" => false
+    }],
+    "targets" => [{
+      "index" => 0, "species" => 212, "hp_pct" => 88.0, "status" => 0,
+      "speed" => 239, "ability" => "TECHNICIAN", "item" => "SCIZORITE",
+      "positive_stages" => 0
+    }]
+  }
+
+  # A readout that cannot say who was on the field is not a readout. `parties` cannot
+  # answer it either: that holds FINAL hp, not hp at the moment of the decision.
+  def test_view_names_both_sides_with_their_state_at_decision_time
+    view = PortableAIRealidea.view_trace(SNAPSHOT, 1)
+    assert_equal("Shuckle", view["species"])
+    assert_equal(70.0, view["hp_pct"])
+    assert_equal(4, view["status"])
+    assert_equal("MENTALHERB", view["item"])
+    assert_equal(2, view["positive_stage_total"])
+    foe = view["targets"][0]
+    assert_equal("Scizor", foe["species"])
+    assert_equal(88.0, foe["hp_pct"])
+    assert_equal(239, foe["speed"])
+  end
+
+  # The numeric id is what the core reads; it must never be what a reader sees.
+  def test_species_is_named_on_the_way_out_only
+    assert_equal("Shuckle", PortableAIRealidea.species_name(213))
+    assert_equal(213, SNAPSHOT["actors"][0]["species"])
+  end
+
+  def test_unknown_species_falls_back_to_its_id_rather_than_vanishing
+    assert_equal("99999", PortableAIRealidea.species_name(99999))
+  end
+
+  # The core scores and explains every option; the trace reads that out rather than
+  # recomputing it. Without it a reader sees the chosen move and no alternative.
+  def test_candidates_carry_every_option_with_its_score_and_reasons
+    plan = {
+      "actions" => [{ "actor_index" => 1 }],
+      "diagnostics" => { "rankings" => [[
+        { "type" => "move", "slot" => 0, "move_id" => "SUCKERPUNCH", "score" => 194.0,
+          "power" => 80, "effectiveness" => 1, "expected_damage_pct" => 49.0,
+          "reasons" => [["engine_base", 155], ["expected_damage", 39]] },
+        { "type" => "switch", "slot" => 4, "species" => 212, "score" => -1000000.0,
+          "reasons" => [["no_escape_reason", -1000000]] }
+      ]] }
+    }
+    out = PortableAIRealidea.candidate_trace(plan, 1)
+    assert_equal(2, out.length)
+    assert_equal("SUCKERPUNCH", out[0]["move_id"])
+    assert_equal(49.0, out[0]["expected_damage_pct"])
+    assert_equal([["engine_base", 155], ["expected_damage", 39]], out[0]["reasons"])
+    assert_equal("Scizor", out[1]["species"])
+  end
+
+  def test_candidates_are_capped_so_one_turn_cannot_dominate_a_file
+    ranked = (0...20).map { |i| { "type" => "move", "slot" => i, "score" => 1.0 * i } }
+    plan = { "actions" => [{ "actor_index" => 1 }],
+             "diagnostics" => { "rankings" => [ranked] } }
+    assert_equal(PortableAIRealidea::TRACE_CANDIDATE_LIMIT,
+                 PortableAIRealidea.candidate_trace(plan, 1).length)
+  end
+
+  def test_candidate_trace_of_an_actor_with_no_plan_is_empty_not_an_error
+    assert_equal([], PortableAIRealidea.candidate_trace({}, 1))
+  end
+
   # --- shadow arm ------------------------------------------------------------
 
   def with_stubbed_plan(plan)
@@ -1152,6 +1234,31 @@ class PortableAIRealideaAdapterTest < Test::Unit::TestCase
 
   # Both command hooks can reach one battler in a turn; a second entry would
   # double-count that turn in any disagreement rate.
+  # A crash inside the observer must not remove the turn from the record: absent is
+  # indistinguishable from "nothing to decide", so a dropped turn silently shrinks the
+  # denominator of every agreement figure.
+  def test_a_failed_observation_is_recorded_not_dropped
+    $PORTABLE_AI_SHADOW = true
+    battle = PokeBattle_Battle.new
+    battle.instance_variable_set(:@portable_ai_shadow_trace, [])
+    singleton = (class << PortableAIRealidea; self; end)
+    singleton.send(:alias_method, :real_plan_for, :plan_for)
+    singleton.send(:define_method, :plan_for) { |_b| raise ZeroDivisionError, "divided by 0" }
+    begin
+      battle.pbDefaultChooseEnemyCommand(1)
+    ensure
+      singleton.send(:remove_method, :plan_for)
+      singleton.send(:alias_method, :plan_for, :real_plan_for)
+      singleton.send(:remove_method, :real_plan_for)
+    end
+    trace = battle.instance_variable_get(:@portable_ai_shadow_trace)
+    assert_equal(1, trace.length)
+    assert_nil(trace[0]["portable"])
+    assert_equal("ZeroDivisionError: divided by 0", trace[0]["observer_error"])
+    # and the host still chose, unaffected
+    assert_equal(1, battle.stock_choice)
+  end
+
   def test_shadow_records_one_entry_per_battler_per_turn
     $PORTABLE_AI_SHADOW = true
     battle = PokeBattle_Battle.new

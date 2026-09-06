@@ -235,7 +235,7 @@ module PortableAIRealidea
       end
       trace = battle.instance_variable_get(:@portable_ai_decision_trace)
       if trace
-        trace << {
+        entry = {
           "turn" => battle.turncount,
           "actor" => index,
           "type" => action["type"],
@@ -246,6 +246,11 @@ module PortableAIRealidea
           "view" => view_trace(
             battle.instance_variable_get(:@portable_ai_last_snapshot), index)
         }
+        if trace_candidates?
+          entry["candidates"] =
+            candidate_trace(battle.instance_variable_get(:@portable_ai_plan) || {}, index)
+        end
+        trace << entry
       end
       return true
     end
@@ -269,24 +274,44 @@ module PortableAIRealidea
     last = trace[-1]
     return if last && last["turn"] == battle.turncount && last["actor"] == index
     action = nil
+    plan = nil
     with_diverted_rng(battle) do
-      (plan_for(battle)["actions"] || []).each do |candidate|
+      plan = plan_for(battle)
+      (plan["actions"] || []).each do |candidate|
         if candidate["actor_index"] == index
           action = candidate
           break
         end
       end
     end
-    trace << {
+    entry = {
       "turn" => battle.turncount,
       "actor" => index,
       "portable" => action_summary(action),
       "view" => view_trace(
         battle.instance_variable_get(:@portable_ai_last_snapshot), index)
     }
+    entry["candidates"] = candidate_trace(plan || {}, index) if trace_candidates?
+    trace << entry
   rescue Exception => error
     log_error(error, index)
     clear_cache(battle)
+    # A failed observation must leave a mark. Realidea's pbRoughDamage can divide by zero
+    # (085:3557) while the snapshot is scoring a move, which leaves the actor with no
+    # usable actions and no entry at all -- and an absent turn is indistinguishable from
+    # "the actor had nothing to decide". Silently dropping it would shrink the
+    # denominator of every agreement figure by an unknown amount. Recorded with a null
+    # portable answer instead, so shadow_check counts it as unscorable and says so.
+    failed = battle.instance_variable_get(:@portable_ai_shadow_trace)
+    if failed
+      last = failed[-1]
+      if !(last && last["turn"] == battle.turncount && last["actor"] == index)
+        failed << {
+          "turn" => battle.turncount, "actor" => index, "portable" => nil,
+          "observer_error" => "#{error.class}: #{error.message}"
+        }
+      end
+    end
   end
 
   # Every roll taken inside the block comes from a private generator instead of the
@@ -388,16 +413,90 @@ module PortableAIRealidea
         PortableAI.damage_race(snapshot, actor, target, DEFAULT_RACE_CONFIG)
     end
     {
+      # Who this actually is. The trace used to record six scalars and the chosen move,
+      # which made a readout unreadable without cross-referencing `parties` by seat --
+      # and `parties` holds FINAL hp, not hp at the moment of the decision. All of this
+      # is already in the snapshot the core was handed; none of it is newly computed.
+      "species" => species_name(actor["species"]),
+      "status" => actor["status"],
+      "ability" => actor["ability"],
+      "item" => actor["item"],
+      "positive_stage_total" => actor["positive_stage_total"],
+      "negative_stage_total" => actor["negative_stage_total"],
       "hp_pct" => actor["hp_pct"],
       "speed" => actor["speed"],
       "faster" => actor["faster"],
       "incoming_damage_pct" => actor["incoming_damage_pct"],
       "certain_incoming_damage_pct" => actor["certain_incoming_damage_pct"],
       "threatened_lethal" => actor["threatened_lethal"],
+      # The board opposite, as the core saw it -- so `race vs foe@0` names a Pokemon
+      # instead of a seat, and a switch decision can be read against what it faced.
+      "targets" => (snapshot["targets"] || []).map do |t|
+        {
+          "index" => t["index"], "species" => species_name(t["species"]),
+          "hp_pct" => t["hp_pct"],
+          "status" => t["status"], "speed" => t["speed"], "ability" => t["ability"],
+          "item" => t["item"], "positive_stages" => t["positive_stages"]
+        }
+      end,
       "race" => race
     }
   rescue
     {}
+  end
+
+  TRACE_CANDIDATE_LIMIT = 6
+
+  # The snapshot carries the engine's numeric species id, because that is what the core
+  # is given and nothing in the core wants a name. A trace is read by people, so it is
+  # named on the way out only -- the snapshot itself is untouched. Same call
+  # party_snapshot uses, so a trace and a record's `parties` agree on spelling.
+  def self.species_name(id)
+    return nil if id.nil?
+    name = (PBSpecies.getName(id) rescue nil)
+    (name.nil? || name == "") ? id.to_s : name
+  end
+
+  # Every option the actor had, with what it scored and why -- the moveset and the
+  # scoring the chosen action alone cannot show. The core already ranks and explains
+  # every candidate (core.rb builds diagnostics.rankings and attaches `reasons` to each);
+  # this reads that out instead of recomputing anything.
+  #
+  # Gated on trace= because it is the bulky half: a plain shadow run stays lean and still
+  # names both mons, while trace=true gives the full breakdown.
+  def self.candidate_trace(plan, index)
+    diagnostics = plan["diagnostics"] || {}
+    rankings = diagnostics["rankings"] || []
+    actors = (plan["actions"] || []).map { |action| action["actor_index"] }
+    slot = actors.index(index)
+    return [] if slot.nil?
+    out = []
+    (rankings[slot] || []).each do |candidate|
+      break if out.length >= TRACE_CANDIDATE_LIMIT
+      entry = {
+        "type" => candidate["type"],
+        "slot" => candidate["slot"],
+        "move_id" => candidate["move_id"],
+        "target" => candidate["target"],
+        "score" => candidate["score"],
+        "reasons" => candidate["reasons"]
+      }
+      # What the score was computed FROM, for a move. Without these a reader can see
+      # that Bullet Punch beat Bug Bite but not that it was 28% into a 4x resist.
+      %w[power effectiveness expected_damage_pct immune damaging priority].each do |key|
+        entry[key] = candidate[key] if candidate.has_key?(key)
+      end
+      # A switch candidate names the bench Pokemon it would bring in.
+      entry["species"] = species_name(candidate["species"]) if candidate["species"]
+      out << entry
+    end
+    out
+  rescue
+    []
+  end
+
+  def self.trace_candidates?
+    defined?($AI_GAUNTLET_TRACE) && $AI_GAUNTLET_TRACE ? true : false
   end
 
   def self.clear_cache(battle)
