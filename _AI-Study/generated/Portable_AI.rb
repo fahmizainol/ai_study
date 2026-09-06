@@ -1946,6 +1946,55 @@ end
 # falls back to the exact pbChooseMoves implementation that was live before this section.
 
 module PortableAIRealidea
+  # Essentials function code -> [effect kind, affected stat]. Mirrors the Reborn
+  # adapter's MOVE_EFFECT_CODES, PRUNED to codes that exist in this build and EXTENDED
+  # with Realidea's own. The base v16 space (0x05-0x21, 0x42-0x4F) is shared verbatim
+  # and was checked move by move against PBS/moves.txt; everything Reborn carries above
+  # 0x100 is a Reborn code that either does not exist here or means something else --
+  # Reborn's 0x139 is a 3/4 drain, Realidea's is Play Nice; Reborn's 0x13f is a Speed
+  # drop, Realidea's is Flower Shield. tools/check_move_codes.py is the guard.
+  MOVE_EFFECT_CODES = {
+    0x05 => ["poison", nil], 0x06 => ["poison", nil],
+    0x07 => ["paralyze", nil], 0x08 => ["paralyze", nil], 0x09 => ["paralyze", nil],
+    0x0A => ["burn", nil], 0x0B => ["burn", nil],
+    0x0C => ["freeze", nil], 0x0D => ["freeze", nil], 0x0E => ["freeze", nil],
+    0x0F => ["flinch", nil], 0x10 => ["flinch", nil], 0x11 => ["flinch", nil],
+    # Target stat drops.
+    0x42 => ["drop", "atk"],
+    0x43 => ["drop", "def"], 0x4A => ["drop", "def"], 0x4C => ["drop", "def"],
+    0x44 => ["drop", "speed"], 0x4D => ["drop", "speed"],
+    0x45 => ["drop", "spa"],
+    0x46 => ["drop", "spd"],
+    0x47 => ["drop", "acc"],
+    # Self-raise on a damaging move (Power-Up Punch, Flame Charge, Charge Beam).
+    0x1C => ["self_raise", "atk"], 0x1D => ["self_raise", "def"],
+    0x1E => ["self_raise", "def"], 0x1F => ["self_raise", "speed"],
+    0x20 => ["self_raise", "spa"], 0x21 => ["self_raise", "spd"],
+    # Realidea's own, read off 083_PokeBattle_MoveEffects.rb rather than guessed.
+    0x139 => ["drop", "atk"],   # Play Nice      (:8847)
+    0x13A => ["drop", "atk"],   # Noble Roar     (:8866, also SpAtk)
+    0x13B => ["drop", "def"],   # Hyperspace Fury(:8912, secondary on the target)
+    0x13C => ["drop", "spa"],   # Confide        (:8937)
+    0x13D => ["drop", "spa"],   # Eerie Impulse  (:8956)
+    0xCF14 => ["drop", "atk"]   # Tearful Look   (:9975, also SpAtk)
+  }
+
+  # Recoil as a fraction of the damage dealt. 0x10B (Jump Kick / High Jump Kick) is
+  # crash damage on a MISS, not recoil, and is left out exactly as Reborn leaves it out.
+  MOVE_RECOIL_CODES = {
+    0xFA => 0.25, 0xFB => 0.3333, 0xFC => 0.5, 0xFD => 0.3333, 0xFE => 0.3333
+  }
+
+  # Fraction of the damage dealt that is restored to the user. 0x14F is Realidea's
+  # 3/4 drain (Draining Kiss, Oblivion Wing) -- Reborn numbers the same effect 0x139.
+  MOVE_DRAIN_CODES = { 0xDD => 0.5, 0xDE => 0.5, 0x14F => 0.75 }
+
+  MULTI_HIT_CODES = [0xBD, 0xBE, 0xBF, 0xC0, 0xC1]
+
+  # Pollen Puff HEALS the partner instead of damaging it (083:9897), so the friendly
+  # fire charge must not apply when it is aimed there.
+  PARTNER_HEAL_CODES = [0xCF19]
+
   ENABLE_FILE = "Data/portable_ai.txt"
   ERROR_FILE  = "Data/portable_ai_error.txt"
   ENABLE_WILD = false
@@ -2124,7 +2173,7 @@ module PortableAIRealidea
 
     skills = indices.map { |i| corrected_skill(battle.pbGetOwner(i)) }
     skill = skills.min || 100
-    targets = foe_indices.map { |i| battler_view(battle.battlers[i]) }
+    targets = foe_indices.map { |i| battler_view(battle.battlers[i], battle, skill) }
     actors = indices.map do |i|
       build_actor(battle, i, foe_indices, skill)
     end
@@ -2142,7 +2191,9 @@ module PortableAIRealidea
     }, skill]
   end
 
-  def self.battler_view(battler)
+  def self.battler_view(battler, battle, skill)
+    physical, special = attack_bias(battle, battler, skill)
+    partner = (battler.pbPartner rescue nil)
     {
       "index" => battler.index,
       "species" => battler.species,
@@ -2153,9 +2204,15 @@ module PortableAIRealidea
       # Switch scoring needs the foe's boost level and, unlike a move action, has no
       # scoring target to read it from (core.rb foe_boost_total).
       "positive_stages" => positive_stages(battler),
-      # Plain uppercase name, never a PBAbilities constant: the core matches it
-      # against its own tables.
-      "ability" => ability_key(battler)
+      # 0.5.0 facts. Plain uppercase names and booleans only: the core matches them
+      # against its own tables and never sees a PBAbilities/PBItems constant.
+      "ability" => ability_key(battler),
+      "item" => item_key(battler),
+      "full_hp" => (battler.hp >= battler.totalhp),
+      "physical_attacker" => physical,
+      "special_attacker" => special,
+      "substitute" => (safe_effect(battler, :Substitute, 0).to_i > 0),
+      "partner_ability" => (partner && !partner.isFainted? ? ability_key(partner) : nil)
     }
   end
 
@@ -2184,6 +2241,8 @@ module PortableAIRealidea
     negative_stages = 0
     battler.stages.each { |stage| negative_stages += stage if stage && stage < 0 }
     speed = battler_speed(battler)
+    partner = (battler.pbPartner rescue nil)
+    partner_alive = (partner && !partner.isFainted?) ? true : false
 
     incoming_map = incoming_damage_by_move(battle, battler, foe_indices, skill)
     incoming = 0.0
@@ -2215,7 +2274,14 @@ module PortableAIRealidea
       "residual_damage_pct" => residual,
       "trapped" => !has_legal_switch?(battle, index),
       "ability" => ability_key(battler),
+      "item" => item_key(battler),
+      # Mold Breaker turns the target's Sturdy off, so the kill call stands.
+      "mold_breaker" => (battler.hasMoldBreaker rescue false) ? true : false,
       "slower_bench_count" => slower_bench_count(battle, battler, foe_indices),
+      "partner_alive" => partner_alive,
+      "partner_ability" => (partner_alive ? ability_key(partner) : nil),
+      "partner_hp_pct" => (partner_alive ? percent(partner.hp, partner.totalhp) : nil),
+      "partner_airborne" => (partner_alive ? (partner.isAirborne? rescue false) : false),
       # Fake Out and First Impression are worth +115 on turn 0 and nothing after.
       # Without this the core's turn_shape_rules fired every turn and the AI re-clicked
       # a move the engine refuses (core.rb first_turn_hit).
@@ -2264,10 +2330,14 @@ module PortableAIRealidea
         battle, battler, move, slot, move_id, target, registration_target, skill
       )
       partner = battler.pbPartner
-      if partner && target_index == partner.index && move.pbIsDamaging?
-        action["friendly_fire_pct"] = action["expected_damage_pct"]
-        action["partner_hp_pct"] = percent(partner.hp, partner.totalhp)
+      if partner && target_index == partner.index
         action["friendly_target"] = true
+        # Pollen Puff aimed at the partner is a HEAL, not friendly fire (083:9897).
+        heals = PARTNER_HEAL_CODES.include?((move.function rescue nil))
+        if move.pbIsDamaging? && !heals
+          action["friendly_fire_pct"] = action["expected_damage_pct"]
+          action["partner_hp_pct"] = percent(partner.hp, partner.totalhp)
+        end
       end
       action
     end
@@ -2280,6 +2350,9 @@ module PortableAIRealidea
     effectiveness = type_effectiveness(battle, move, battler, scoring_target)
     tags = PortableAI::Effects.describe(move_id, [])
     blocked = !move.pbIsDamaging? && status_blocked?(move, tags, battler, scoring_target)
+    kind, stat, chance = move_effect(battle, move, battler, scoring_target)
+    physical, special = scoring_target ? attack_bias(battle, scoring_target, skill) : [false, false]
+    code = (move.function rescue nil)
     {
       "type" => "move",
       "actor_index" => battler.index,
@@ -2291,6 +2364,28 @@ module PortableAIRealidea
       "damaging" => move.pbIsDamaging?,
       "power" => move.basedamage,
       "priority" => effective_priority(move, battler),
+      # 0.5.0 move facts, all from the engine.
+      "move_type" => type_key((move.pbType(move.type, battler, scoring_target) rescue move.type)),
+      "contact" => ((move.isContactMove? rescue false) ? true : false),
+      "effect_kind" => kind,
+      "effect_stat" => stat,
+      "effect_chance" => chance,
+      "multi_hit" => multi_hit?(move),
+      "recoil_fraction" => MOVE_RECOIL_CODES[code],
+      "drain_fraction" => MOVE_DRAIN_CODES[code],
+      "mold_breaker" => (battler.hasMoldBreaker rescue false) ? true : false,
+      # Mirrors of the target view, so a spread action (which has no single target) and
+      # a unit test both reach the same facts.
+      "target_species" => (scoring_target ? scoring_target.species : nil),
+      "target_ability" => (scoring_target ? ability_key(scoring_target) : nil),
+      "target_item" => (scoring_target ? item_key(scoring_target) : nil),
+      "target_full_hp" =>
+        (scoring_target ? (scoring_target.hp >= scoring_target.totalhp) : false),
+      "target_speed" => (scoring_target ? battler_speed(scoring_target) : nil),
+      "target_physical_attacker" => physical,
+      "target_special_attacker" => special,
+      "target_substitute" =>
+        (scoring_target ? (safe_effect(scoring_target, :Substitute, 0).to_i > 0) : false),
       "effectiveness" => effectiveness,
       "immune" => (move.pbIsDamaging? && effectiveness <= 0) || blocked,
       "expected_damage_pct" => rough_damage_pct(battle, move, battler, scoring_target, skill),
@@ -2301,6 +2396,7 @@ module PortableAIRealidea
       "existing_layers" => existing_layers(battle, move_id, false),
       "max_layers" => max_layers(move_id),
       "own_hazard_layers" => own_hazard_layers(battle),
+      "foe_hazard_layers" => opposing_hazard_layers(battle),
       "target_positive_stages" => positive_stages(scoring_target),
       "effect_active" => effect_active?(battle, move_id, battler),
       "foe_reserves" => reserve_count(battle, battler.pbOppositeOpposing.index),
@@ -2771,6 +2867,17 @@ module PortableAIRealidea
     1
   end
 
+  # Hazards already sitting on the half of the field this battler would lay them on.
+  def self.opposing_hazard_layers(battle)
+    side = battle.sides[0]
+    safe_side_effect(side, :Spikes, 0).to_i +
+      safe_side_effect(side, :ToxicSpikes, 0).to_i +
+      (safe_side_effect(side, :StealthRock, false) ? 1 : 0) +
+      (safe_side_effect(side, :StickyWeb, false) ? 1 : 0)
+  rescue
+    0
+  end
+
   def self.own_hazard_layers(battle)
     side = battle.sides[1]
     safe_side_effect(side, :Spikes, 0).to_i +
@@ -2788,6 +2895,9 @@ module PortableAIRealidea
     when "LIGHTSCREEN" then safe_side_effect(side, :LightScreen, 0).to_i > 0
     when "SAFEGUARD"   then safe_side_effect(side, :Safeguard, 0).to_i > 0
     when "SUBSTITUTE"  then safe_effect(battler, :Substitute, 0).to_i > 0
+    # 0.6.2. Wish fails outright with a Wish already pending. PBEffects::Wish is the
+    # countdown on the USER, not a side effect, which is why it is read off the battler.
+    when "WISH"        then safe_effect(battler, :Wish, 0).to_i > 0
     else false
     end
   end
@@ -2818,6 +2928,71 @@ module PortableAIRealidea
     damage
   rescue
     0
+  end
+
+  # Which attacking stat this battler actually hits with. The burn, paralysis and
+  # stat-drop rows all ask it, and stock v16 asks the same question with pbRoughStat
+  # (085:2930).
+  def self.attack_bias(battle, battler, skill)
+    return [false, false] if !battler
+    attack = (battle.pbRoughStat(battler, PBStats::ATTACK, skill) rescue nil)
+    special = (battle.pbRoughStat(battler, PBStats::SPATK, skill) rescue nil)
+    return [false, false] if attack.nil? || special.nil?
+    [attack > special, special > attack]
+  rescue
+    [false, false]
+  end
+
+  # kind / stat / chance for one move against one target, all three from the engine.
+  # The chance is the move's own addlEffect, doubled by Serene Grace or a Rainbow and
+  # zeroed when the secondary is negated -- the same two conditions the engine itself
+  # checks before rolling for it (080:3058-3065).
+  def self.move_effect(battle, move, battler, target)
+    code = (move.function rescue nil)
+    return [nil, nil, nil] if code.nil?
+    entry = MOVE_EFFECT_CODES[code]
+    return [nil, nil, nil] if !entry
+    chance = (move.addlEffect rescue 0).to_i
+    # A status MOVE (Will-O-Wisp, Toxic, Thunder Wave) carries addlEffect 0 because the
+    # status is its whole point, not a secondary; those are certain.
+    chance = 100 if !move.pbIsDamaging? || chance <= 0
+    if target && move.pbIsDamaging?
+      return [entry[0], entry[1], 0] if secondary_negated?(move, battler, target)
+      chance *= 2 if serene_grace?(battler) && (move.function rescue 0) != 0xA4
+    end
+    # A secondary that cannot land is worth nothing, and only the engine knows why not.
+    if target
+      verdict = engine_can_status?([entry[0]], battler, target)
+      return [entry[0], entry[1], 0] if verdict == false
+    end
+    chance = 100 if chance > 100
+    [entry[0], entry[1], chance]
+  rescue
+    [nil, nil, nil]
+  end
+
+  # 080:3059-3061: Sheer Force cancels the secondary outright, and Shield Dust does
+  # unless the user has Mold Breaker.
+  def self.secondary_negated?(move, battler, target)
+    return true if (battler.hasWorkingAbility(:SHEERFORCE) rescue false)
+    return false if (battler.hasMoldBreaker rescue false)
+    (target.hasWorkingAbility(:SHIELDDUST) rescue false) ? true : false
+  rescue
+    false
+  end
+
+  def self.serene_grace?(battler)
+    return true if (battler.hasWorkingAbility(:SERENEGRACE) rescue false)
+    (safe_side_effect(battler.pbOwnSide, :Rainbow, 0).to_i > 0 rescue false)
+  rescue
+    false
+  end
+
+  def self.multi_hit?(move)
+    return true if (move.pbIsMultiHit rescue false)
+    MULTI_HIT_CODES.include?((move.function rescue nil))
+  rescue
+    false
   end
 
   def self.positive_stages(battler)
@@ -2956,6 +3131,13 @@ module PortableAIRealidea
     constant_key(PBAbilities, :@ability_keys, value)
   rescue
     nil
+  end
+
+  # Uppercase type name ("FIRE"), the same shape the core's absorb and redirect tables
+  # are keyed by. Built once from PBTypes, like move_key.
+  def self.type_key(id)
+    return nil if id.nil?
+    constant_key(PBTypes, :@type_keys, id)
   end
 
   def self.item_key(battler_or_pokemon)

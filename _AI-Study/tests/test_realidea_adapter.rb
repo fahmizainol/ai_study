@@ -52,7 +52,7 @@ module PBEffects
   Attract = 1; ChoiceBand = 7; LeechSeed = 43; MeanLook = 50; PerishSong = 66
   Substitute = 91; Toxic = 95; Type3 = 99; Wish = 105; Yawn = 108
   # Side effects (own array, so the index reuse below is Realidea's own).
-  LightScreen = 4; Reflect = 10; Safeguard = 12; Spikes = 14
+  LightScreen = 4; Rainbow = 9; Reflect = 10; Safeguard = 12; Spikes = 14
   StealthRock = 15; StickyWeb = 16; Tailwind = 18; ToxicSpikes = 19
   # Field effects.
   TrickRoom = 10
@@ -70,7 +70,7 @@ module PBTargets
 end
 
 module PBAbilities
-  STURDY = 5; INTIMIDATE = 22; SERENEGRACE = 32; LEVITATE = 26
+  STURDY = 5; INTIMIDATE = 22; SERENEGRACE = 32; LEVITATE = 26; SHIELDDUST = 19
   MAGICGUARD = 98; MOLDBREAKER = 104; SHEERFORCE = 125; CONTRARY = 126
   MAGICBOUNCE = 156; PRANKSTER = 158; GALEWINGS = 177; TRIAGE = 209
   UNAWARE = 109
@@ -195,6 +195,9 @@ class StubBattler
   end
 
   def pbSpeed; @speed; end
+  def attack_stat; @attack_stat ||= 100; end
+  def spatk_stat; @spatk_stat ||= 100; end
+  attr_writer :attack_stat, :spatk_stat
   def isFainted?; @hp <= 0; end
   def pbPartner; @partner; end
   def pbOppositeOpposing; @opposite; end
@@ -219,6 +222,9 @@ class StubBattler
     value = (PBAbilities.const_get(symbol) rescue nil)
     !value.nil? && @ability == value
   end
+
+  def pbOwnSide; @own_side ||= StubSide.new; end
+  attr_writer :own_side
 end
 
 # The two-line v16 equivalent of Reborn's pbMakeFakeBattler. The constructor's
@@ -304,6 +310,9 @@ class PokeBattle_Battle
     (target.totalhp * basedamage / 200.0)
   end
   def pbRoughAccuracy(_move, _attacker, _target, _skill); 100; end
+  def pbRoughStat(battler, stat, _skill)
+    stat == PBStats::ATTACK ? battler.attack_stat : battler.spatk_stat
+  end
   def pbRegisterMove(_i, _slot, _show); true; end
   def pbRegisterSwitch(_i, _slot); true; end
   def pbRegisterTarget(_i, _t); true; end
@@ -525,6 +534,102 @@ class PortableAIRealideaAdapterTest < Test::Unit::TestCase
     assert_equal(false, blocked?(flagged, TWAVE_TAGS, bouncer, breaker))
   end
 
+  # --- 0.5.0 move facts ------------------------------------------------------
+
+  def effect_for(move, user = StubBattler.new, target = StubBattler.new(:index => 0))
+    PortableAIRealidea.move_effect(PokeBattle_Battle.new, move, user, target)
+  end
+
+  def test_function_code_map_names_the_kind_and_the_stat
+    kind, stat, chance = effect_for(StubMove.new(:function => 0x0A, :addlEffect => 30))
+    assert_equal(["burn", nil, 30], [kind, stat, chance])
+    kind, stat, _ = effect_for(StubMove.new(:function => 0x44, :addlEffect => 100))
+    assert_equal(["drop", "speed"], [kind, stat])
+    kind, stat, _ = effect_for(StubMove.new(:function => 0x46, :addlEffect => 10))
+    assert_equal(["drop", "spd"], [kind, stat])
+  end
+
+  # Realidea's own codes, read off 083_PokeBattle_MoveEffects.rb. Reborn numbers a 3/4
+  # drain 0x139; here 0x139 is Play Nice and the drain is 0x14F.
+  def test_realidea_specific_codes_are_named_for_what_this_engine_does
+    kind, stat, _ = effect_for(StubMove.new(:function => 0x13D, :basedamage => 0))
+    assert_equal(["drop", "spa"], [kind, stat])
+    kind, stat, _ = effect_for(StubMove.new(:function => 0x139, :basedamage => 0))
+    assert_equal(["drop", "atk"], [kind, stat])
+    assert_equal(0.75, PortableAIRealidea::MOVE_DRAIN_CODES[0x14F])
+    assert_nil(PortableAIRealidea::MOVE_DRAIN_CODES[0x139])
+  end
+
+  def test_unmapped_function_code_reports_no_effect
+    assert_equal([nil, nil, nil], effect_for(StubMove.new(:function => 0x000)))
+  end
+
+  # A status MOVE carries addlEffect 0 because the status is the whole move.
+  def test_status_move_effect_chance_is_certain_not_zero
+    _, _, chance = effect_for(StubMove.new(:function => 0x0A, :basedamage => 0))
+    assert_equal(100, chance)
+  end
+
+  def test_serene_grace_doubles_the_chance
+    user = StubBattler.new(:ability => PBAbilities::SERENEGRACE)
+    _, _, chance = effect_for(StubMove.new(:function => 0x0A, :addlEffect => 30), user)
+    assert_equal(60, chance)
+  end
+
+  # 080:3059-3061: Sheer Force cancels the secondary outright; Shield Dust does unless
+  # the user has Mold Breaker.
+  def test_sheer_force_and_shield_dust_zero_the_chance
+    forceful = StubBattler.new(:ability => PBAbilities::SHEERFORCE)
+    _, _, zero = effect_for(StubMove.new(:function => 0x0A, :addlEffect => 30), forceful)
+    assert_equal(0, zero)
+    dusty = StubBattler.new(:index => 0, :ability => PBAbilities::SHIELDDUST)
+    _, _, dusted = effect_for(StubMove.new(:function => 0x0A, :addlEffect => 30),
+                              StubBattler.new, dusty)
+    assert_equal(0, dusted)
+    breaker = StubBattler.new(:mold_breaker => true)
+    _, _, through = effect_for(StubMove.new(:function => 0x0A, :addlEffect => 30),
+                               breaker, dusty)
+    assert_equal(30, through)
+  end
+
+  def test_a_secondary_the_target_cannot_take_is_worth_nothing
+    fireproof = StubBattler.new(:index => 0, :can_status => false)
+    _, _, chance = effect_for(StubMove.new(:function => 0x0A, :addlEffect => 30),
+                              StubBattler.new, fireproof)
+    assert_equal(0, chance)
+  end
+
+  def test_attack_bias_reads_the_engines_own_rough_stat
+    battle = PokeBattle_Battle.new
+    physical = StubBattler.new
+    physical.attack_stat = 200
+    physical.spatk_stat = 100
+    assert_equal([true, false], PortableAIRealidea.attack_bias(battle, physical, 100))
+    special = StubBattler.new
+    special.attack_stat = 80
+    special.spatk_stat = 150
+    assert_equal([false, true], PortableAIRealidea.attack_bias(battle, special, 100))
+    even = StubBattler.new
+    assert_equal([false, false], PortableAIRealidea.attack_bias(battle, even, 100))
+  end
+
+  def test_wish_is_reported_active_only_while_one_is_pending
+    battle = PokeBattle_Battle.new
+    pending = StubBattler.new
+    pending.effects[PBEffects::Wish] = 2
+    assert_equal(true, PortableAIRealidea.effect_active?(battle, "WISH", pending))
+    assert_equal(false, PortableAIRealidea.effect_active?(battle, "WISH", StubBattler.new))
+  end
+
+  def test_partner_facts_are_absent_in_singles
+    snapshot = contract_snapshot
+    actor = snapshot["actors"][0]
+    assert_equal(false, actor["partner_alive"])
+    assert_nil(actor["partner_ability"])
+    assert_nil(actor["partner_hp_pct"])
+    assert_equal(false, actor["partner_airborne"])
+  end
+
   # --- snapshot contract -----------------------------------------------------
   #
   # The list of keys the shared core reads at each level. When a future core rule adds
@@ -538,13 +643,18 @@ class PortableAIRealideaAdapterTest < Test::Unit::TestCase
     index species hp_pct status speed faster stages negative_stage_total
     positive_stage_total incoming_damage_pct certain_incoming_damage_pct
     incoming_by_move threatened_lethal no_effective_move best_damage_pct yawned
-    residual_damage_pct trapped ability slower_bench_count turncount actions
+    residual_damage_pct trapped ability item mold_breaker slower_bench_count
+    partner_alive partner_ability partner_hp_pct partner_airborne turncount actions
   ]
 
   MOVE_ACTION_KEYS = %w[
     type actor_index slot move_id numeric_move_id target base_score damaging power
-    priority effectiveness immune expected_damage_pct accuracy target_hp_pct tags spread
-    existing_layers max_layers own_hazard_layers target_positive_stages effect_active
+    priority move_type contact effect_kind effect_stat effect_chance multi_hit
+    recoil_fraction drain_fraction mold_breaker target_species target_ability
+    target_item target_full_hp target_speed target_physical_attacker
+    target_special_attacker target_substitute effectiveness immune
+    expected_damage_pct accuracy target_hp_pct tags spread existing_layers max_layers
+    own_hazard_layers foe_hazard_layers target_positive_stages effect_active
     foe_reserves hazard_targets own_reserves
   ]
 
@@ -554,7 +664,10 @@ class PortableAIRealideaAdapterTest < Test::Unit::TestCase
     outgoing_damage_pct faster
   ]
 
-  TARGET_KEYS = %w[index species hp_pct status types speed positive_stages ability]
+  TARGET_KEYS = %w[
+    index species hp_pct status types speed positive_stages ability item full_hp
+    physical_attacker special_attacker substitute partner_ability
+  ]
 
   # A minimal singles board: one AI battler at index 1 with one move and one healthy
   # bench Pokemon, one foe at index 0.
