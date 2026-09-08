@@ -1,0 +1,380 @@
+team2_vs_team1  seed 155921  single   LOSS in 17 turns   [portable 0.7.7, mega=True, teams=gen5ru_a]
+  left  (team2): Golurk, Durant, Feraligatr, Omastar, Rotom, Sceptile
+  PORTABLE (team1): Galvantula, Druddigon, Golurk, Kabutops, Magneton, Sigilyph
+========================================================================================================
+
+Turn 0   actor 1   GIGADRAIN @0                 score    452.2
+    board   : Galvantula 100%  vs  Golurk 100%
+    foe     : Golurk -> ROCKPOLISH
+    view: hp 100%  speed 346 (faster)  incoming max 144%  certain 144%  threatened_lethal=True
+    race vs Golurk: mine 2 turns, theirs 1, winning=False
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                       Golurk*     Durant      Feraligatr  Omastar     Rotom       Sceptile
+      Galvantula* 100% L 89%/144%  L 197%/111% W 207%/53%  W 269%/76%  W 73%/67%   W 174%/94%
+      Druddigon   100% W 135%/94%  W 275%/72%  W 122%/34%  W 115%/79%  W 185%/44%  W 197%/61%
+      Golurk      100% L 110%/116% W 71%/37%   L 63%/70%   L 119%/102% W 151%/91%  W 122%/62%
+      Kabutops    100% W 118%/197% L 103%/151% W 91%/36%   W 86%/72%   L 150%/152% L 146%/211%
+      Magneton    100% L 55%/466%  L 237%/178% W 126%/43%  W 164%/78%  L 45%/69%   L 70%/186%
+      Sigilyph    100% L 68%/125%  W 372%/86%  W 66%/75%   W 86%/95%   L 93%/126%  W 110%/67%
+    options considered:
+         452.2  GIGADRAIN (bp 75, 89% dmg, x2)         engine_base +311, expected_damage +71, super_effective +70
+         197.4  BUGBUZZ (bp 90, 40% dmg, x0.5)         engine_base +210, expected_damage +32, resisted -45
+         155.4  switch -> Druddigon (hits 135%, takes 94%) engine_base +55, matchup +64, entry_incoming_damage -89, switchin_race -5, escape_lethal_threat +130, escape_reasons +1
+          63.1  switch -> Golurk (hits 110%, takes 116%) engine_base +55, matchup +64, entry_incoming_damage -116, switchin_race -70, escape_lethal_threat +130, escape_reasons +1
+        -410.9  switch -> Sigilyph (hits 68%, takes 125%, faster) engine_base +55, matchup +32, entry_incoming_damage -128, escape_lethal_threat +130, dies_on_entry -500, escape_reasons +1
+        -471.6  switch -> Kabutops (hits 118%, takes 197%, faster) engine_base +55, matchup +64, entry_incoming_damage -221, escape_lethal_threat +130, dies_on_entry -500, escape_reasons +1
+        -847.4  switch -> Magneton (hits 55%, takes 466%, faster) engine_base +55, matchup +32, entry_incoming_damage -564, escape_lethal_threat +130, dies_on_entry -500, escape_reasons +1
+         VETO   THUNDER (bp 120, 0% dmg, x0, IMMUNE)   immune -1000000
+         VETO   VOLTSWITCH (bp 70, 0% dmg, x0, IMMUNE) immune -1000000
+
+Turn 1   actor 1   GIGADRAIN @0                 score    115.3
+    board   : Galvantula 100%  vs  Golurk 21%
+    foe     : Golurk -> EARTHQUAKE
+    view: hp 100%  speed 346 (slower)  incoming max 144%  certain 144%  threatened_lethal=True
+    race vs Golurk: mine 1 turns, theirs 1, winning=False
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                       Golurk*     Durant      Feraligatr  Omastar     Rotom       Sceptile
+      Galvantula* 100% L 89%/144%  L 197%/111% W 207%/53%  W 269%/76%  W 73%/67%   W 174%/94%
+      Druddigon   100% W 135%/94%  W 275%/72%  W 122%/34%  W 115%/79%  W 185%/44%  W 197%/61%
+      Golurk      100% L 110%/116% W 71%/37%   L 63%/70%   L 119%/102% W 151%/91%  W 122%/62%
+      Kabutops    100% L 118%/197% L 103%/151% W 91%/36%   W 86%/72%   L 150%/152% L 146%/211%
+      Magneton    100% L 55%/466%  L 237%/178% W 126%/43%  W 164%/78%  L 45%/69%   L 70%/186%
+      Sigilyph    100% L 68%/125%  W 372%/86%  W 66%/75%   W 86%/95%   L 93%/126%  W 110%/67%
+    options considered:
+         115.3  GIGADRAIN (bp 75, 89% dmg, x2)         engine_base +320, expected_damage +71, super_effective +70, dead_before_moving -346
+         VETO   switch -> Druddigon (hits 135%, takes 94%) sole answer to Golurk engine_base +55, matchup +64, entry_incoming_damage -89, switchin_race -5, escape_lethal_threat +130, no_escape_reason -1000000
+         VETO   switch -> Golurk (hits 110%, takes 116%) engine_base +55, matchup +64, entry_incoming_damage -116, switchin_race -70, escape_lethal_threat +130, no_escape_reason -1000000
+         VETO   switch -> Kabutops (hits 118%, takes 197%) engine_base +55, matchup +64, entry_incoming_damage -221, switchin_race -70, escape_lethal_threat +130, dies_on_entry -500, no_escape_reason -1000000
+         VETO   switch -> Magneton (hits 55%, takes 466%) engine_base +55, matchup +32, entry_incoming_damage -564, switchin_race -70, escape_lethal_threat +130, dies_on_entry -500, no_escape_reason -1000000
+         VETO   switch -> Sigilyph (hits 68%, takes 125%) engine_base +55, matchup +32, entry_incoming_damage -128, switchin_race -70, escape_lethal_threat +130, dies_on_entry -500, no_escape_reason -1000000
+
+Turn 2   actor 1   ICEPUNCH @0                  score    790.0
+    board   : Golurk 100%  vs  Golurk 11%
+    foe     : Golurk -> SHADOWPUNCH
+    view: hp 100%  speed 200 (slower)  incoming max 116%  certain 116%  threatened_lethal=True
+    race vs Golurk: mine 1 turns, theirs 1, winning=False
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                      Golurk*     Durant      Feraligatr  Omastar     Rotom       Sceptile
+      Galvantula   0% -           -           -           -           -           -
+      Druddigon  100% W 135%/94%  W 275%/72%  W 122%/34%  W 115%/79%  W 185%/44%  W 197%/61%
+      Golurk*    100% L 110%/116% W 71%/37%   L 63%/70%   L 119%/102% W 151%/91%  W 122%/62%
+      Kabutops   100% L 118%/197% L 103%/151% W 91%/36%   W 86%/72%   L 150%/152% L 146%/211%
+      Magneton   100% L 55%/466%  L 237%/178% W 126%/43%  W 164%/78%  L 45%/69%   L 70%/186%
+      Sigilyph   100% L 68%/125%  W 372%/86%  W 66%/75%   W 86%/95%   L 93%/126%  W 110%/67%
+    options considered:
+         790.0  ICEPUNCH (bp 75, 92% dmg, x2)          engine_base +290, lethal +500
+         760.0  EARTHQUAKE (bp 100, 76% dmg, x1)       engine_base +260, lethal +500
+         760.0  SHADOWPUNCH (bp 60, 110% dmg, x2)      engine_base +260, lethal +500
+         143.0  STEALTHROCK (0% dmg, x1)               engine_base +143
+         VETO   switch -> Druddigon (hits 135%, takes 94%) sole answer to Golurk engine_base +55, matchup +64, entry_incoming_damage -89, switchin_race -5, escape_lethal_threat +130, no_escape_reason -1000000
+         VETO   switch -> Kabutops (hits 118%, takes 197%) engine_base +55, matchup +64, entry_incoming_damage -221, switchin_race -70, escape_lethal_threat +130, dies_on_entry -500, no_escape_reason -1000000
+         VETO   switch -> Magneton (hits 55%, takes 466%) engine_base +55, matchup +32, entry_incoming_damage -564, switchin_race -70, escape_lethal_threat +130, dies_on_entry -500, no_escape_reason -1000000
+         VETO   switch -> Sigilyph (hits 68%, takes 125%) engine_base +55, matchup +32, entry_incoming_damage -128, switchin_race -70, escape_lethal_threat +130, dies_on_entry -500, no_escape_reason -1000000
+
+Turn 3   actor 1   AQUAJET @0                   score   1110.0
+    board   : Kabutops 100%  vs  Golurk 2%
+    foe     : Golurk -> DYNAMICPUNCH
+    view: hp 100%  speed 259 (slower)  incoming max 197%  certain 197%  threatened_lethal=True
+    race vs Golurk: mine 1 turns, theirs 1, winning=True (ties on speed)
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                      Golurk*     Durant      Feraligatr  Omastar     Rotom       Sceptile
+      Galvantula   0% -           -           -           -           -           -
+      Druddigon  100% W 135%/94%  W 275%/72%  W 122%/34%  W 115%/79%  W 185%/44%  W 197%/61%
+      Golurk       0% -           -           -           -           -           -
+      Kabutops*  100% L 118%/197% L 103%/151% W 91%/36%   W 86%/72%   L 150%/152% L 146%/211%
+      Magneton   100% L 55%/466%  L 237%/178% W 126%/43%  W 164%/78%  L 45%/69%   L 70%/186%
+      Sigilyph   100% L 68%/125%  W 372%/86%  W 66%/75%   W 86%/95%   L 93%/126%  W 110%/67%
+    options considered:
+        1110.0  AQUAJET (bp 40, 60% dmg, x2)           engine_base +260, lethal +500, priority_finisher +350
+         117.5  WATERFALL (bp 80, 118% dmg, x2)        engine_base +320, expected_damage +80, super_effective +70, dead_before_moving -352
+          64.8  STONEEDGE (bp 100, 55% dmg, x0.5)      engine_base +260, expected_damage +44, resisted -45, dead_before_moving -194
+         VETO   RAPIDSPIN (bp 20, 0% dmg, x0, IMMUNE)  immune -1000000
+         VETO   switch -> Druddigon (hits 135%, takes 94%) sole answer to Golurk, Rotom engine_base +55, matchup +64, entry_incoming_damage -89, switchin_race -5, escape_lethal_threat +130, no_escape_reason -1000000
+         VETO   switch -> Magneton (hits 55%, takes 466%) engine_base +55, matchup +32, entry_incoming_damage -564, switchin_race -70, escape_lethal_threat +130, dies_on_entry -500, no_escape_reason -1000000
+         VETO   switch -> Sigilyph (hits 68%, takes 125%) engine_base +55, matchup +32, entry_incoming_damage -128, switchin_race -70, escape_lethal_threat +130, dies_on_entry -500, no_escape_reason -1000000
+
+Turn 4   actor 1   switch -> Sigilyph           score    189.8
+    board   : Kabutops 100%  vs  Sceptile 100%
+    foe     : Sceptile -> LEAFBLADE
+    view: hp 100%  speed 259 (slower)  incoming max 211%  certain 211%  threatened_lethal=True
+    race vs Sceptile: mine 1 turns, theirs 1, winning=False
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                      Golurk      Durant      Feraligatr  Omastar     Rotom       Sceptile*
+      Galvantula   0% -           -           -           -           -           -
+      Druddigon  100% -           W 275%/72%  W 122%/34%  W 115%/79%  W 185%/44%  W 197%/61%
+      Golurk       0% -           -           -           -           -           -
+      Kabutops*  100% -           L 103%/151% W 91%/36%   W 86%/72%   L 150%/152% L 146%/211%
+      Magneton   100% -           L 237%/178% W 126%/43%  W 164%/78%  L 45%/69%   L 70%/186%
+      Sigilyph   100% -           W 372%/86%  W 66%/75%   W 86%/95%   L 93%/126%  W 110%/67%
+    options considered:
+         189.8  switch -> Sigilyph (hits 110%, takes 67%) engine_base +55, matchup +64, entry_incoming_damage -54, switchin_race -5, escape_lethal_threat +130, escape_reasons +1
+         152.4  switch -> Druddigon (hits 197%, takes 61%) sole answer to Rotom engine_base +55, matchup +64, entry_incoming_damage -47, switchin_race -5, sole_answer_reserved -45, escape_lethal_threat +130, escape_reasons +1
+          90.9  AQUAJET (bp 40, 20% dmg, x0.5)         engine_base +120, expected_damage +16, resisted -45
+          82.2  STONEEDGE (bp 100, 146% dmg, x1)       engine_base +257, expected_damage +80, accuracy -8, dead_before_moving -247
+          46.7  WATERFALL (bp 80, 40% dmg, x0.5)       engine_base +200, expected_damage +32, resisted -45, dead_before_moving -140
+         -43.8  RAPIDSPIN (bp 20, 14% dmg, x1)         engine_base +114, expected_damage +11, no_hazards_to_remove -300, dead_before_moving +131
+        -558.9  switch -> Magneton (hits 70%, takes 186%) engine_base +55, matchup +32, entry_incoming_damage -206, switchin_race -70, escape_lethal_threat +130, dies_on_entry -500, escape_reasons +1
+
+Turn 5   actor 1   HEATWAVE                     score    790.7
+    board   : Sigilyph 73%  vs  Sceptile 100%
+    foe     : Sceptile -> ACROBATICS
+    view: hp 73%  speed 322 (slower)  incoming max 67%  certain 67%  threatened_lethal=False
+    race vs Sceptile: mine 1 turns, theirs 2, winning=True
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                      Golurk      Durant      Feraligatr  Omastar     Rotom       Sceptile*
+      Galvantula   0% -           -           -           -           -           -
+      Druddigon  100% -           W 275%/72%  W 122%/34%  W 115%/79%  W 185%/44%  W 197%/61%
+      Golurk       0% -           -           -           -           -           -
+      Kabutops   100% -           L 103%/151% W 91%/36%   W 86%/72%   L 150%/152% L 146%/211%
+      Magneton   100% -           L 237%/178% W 126%/43%  W 164%/78%  L 45%/69%   L 70%/186%
+      Sigilyph*   73% -           L 372%/86%  L 66%/75%   L 86%/95%   L 93%/126%  W 110%/67%
+    options considered:
+         790.7  HEATWAVE (bp 100, 110% dmg, x2)        engine_base +229, lethal +500, accuracy -25, super_effective +70, secondary_burn +17
+         234.1  PSYCHIC (bp 90, 74% dmg, x1)           engine_base +174, expected_damage +60
+         7.000  CALMMIND (0% dmg, x1)                  engine_base +187, setup_into_2hko -180
+         -37.0  ROOST (0% dmg, x1)                     engine_base +83, heal_losing_race -120
+         VETO   switch -> Druddigon (hits 197%, takes 61%) sole answer to Durant, Rotom engine_base +55, matchup +64, entry_incoming_damage -47, switchin_race -5, no_escape_reason -1000000
+         VETO   switch -> Kabutops (hits 146%, takes 211%) engine_base +55, matchup +32, entry_incoming_damage -239, switchin_race -70, dies_on_entry -500, no_escape_reason -1000000
+         VETO   switch -> Magneton (hits 70%, takes 186%) engine_base +55, matchup +32, entry_incoming_damage -206, switchin_race -70, dies_on_entry -500, no_escape_reason -1000000
+
+Turn 6   actor 1   switch -> Druddigon          score    344.6
+    board   : Sigilyph 23%  vs  Rotom 100%
+    foe     : Rotom -> VOLTSWITCH
+    view: hp 23%  speed 322 (slower)  incoming max 126%  certain 126%  threatened_lethal=True
+    race vs Rotom: mine 2 turns, theirs 1, winning=False
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                      Golurk      Durant      Feraligatr  Omastar     Rotom*      Sceptile
+      Galvantula   0% -           -           -           -           -           -
+      Druddigon  100% -           W 275%/72%  W 122%/34%  W 115%/79%  W 185%/44%  -
+      Golurk       0% -           -           -           -           -           -
+      Kabutops   100% -           L 103%/151% W 91%/36%   W 86%/72%   L 150%/152% -
+      Magneton   100% -           L 237%/178% W 126%/43%  W 164%/78%  L 45%/69%   -
+      Sigilyph*   23% -           L 372%/86%  L 66%/75%   L 86%/95%   L 93%/126%  -
+    options considered:
+         344.6  switch -> Druddigon (hits 185%, takes 44%) sole answer to Durant, Rotom engine_base +55, matchup +64, entry_incoming_damage -24, switchin_race +10, escape_lethal_threat +130, losing_race_bench_wins +110, escape_reasons +1
+          67.1  PSYCHIC (bp 90, 93% dmg, x1)           engine_base +193, expected_damage +75, dead_before_moving -201
+          61.4  HEATWAVE (bp 100, 69% dmg, x1)         engine_base +192, expected_damage +55, accuracy -3, secondary_burn +1, dead_before_moving -184
+         0.895  ROOST (0% dmg, x1)                     engine_base +147, heal_low_hp +257, heal_cannot_resolve -400, dead_before_moving -3
+         -25.8  CALMMIND (0% dmg, x1)                  engine_base +137, unsafe_setup -240, dead_before_moving +77
+         VETO   switch -> Kabutops (hits 150%, takes 152%) engine_base +55, matchup +32, entry_incoming_damage -162, switchin_race -70, escape_lethal_threat +130, dies_on_entry -500, no_escape_reason -1000000
+         VETO   switch -> Magneton (hits 45%, takes 69%) engine_base +55, matchup +16, entry_incoming_damage -57, switchin_race -5, escape_lethal_threat +130, no_escape_reason -1000000
+
+Turn 7   actor 1   FIREPUNCH @0                 score    850.0
+    board   : Druddigon 84%  vs  Durant 100%
+    foe     : Durant -> SUPERPOWER
+    view: hp 84%  speed 180 (slower)  incoming max 72%  certain 0%  threatened_lethal=False
+    race vs Durant: mine 1 turns, theirs 2, winning=True
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                      Golurk      Durant*     Feraligatr  Omastar     Rotom       Sceptile
+      Galvantula   0% -           -           -           -           -           -
+      Druddigon*  84% -           W 275%/72%  W 122%/34%  W 115%/79%  W 185%/44%  -
+      Golurk       0% -           -           -           -           -           -
+      Kabutops   100% -           L 103%/151% W 91%/36%   W 86%/72%   L 150%/152% -
+      Magneton   100% -           L 237%/178% W 126%/43%  W 164%/78%  L 45%/69%   -
+      Sigilyph    23% -           L 372%/86%  L 66%/75%   L 86%/95%   L 93%/126%  -
+    options considered:
+         850.0  FIREPUNCH (bp 75, 275% dmg, x4)        engine_base +350, lethal +500
+         344.1  THUNDERPUNCH (bp 75, 69% dmg, x1)      engine_base +289, expected_damage +55
+         261.1  SUCKERPUNCH (bp 80, 56% dmg, x1)       engine_base +216, expected_damage +45
+         228.7  OUTRAGE (bp 120, 63% dmg, x0.5)        engine_base +223, expected_damage +51, resisted -45
+         VETO   switch -> Kabutops (hits 103%, takes 151%) engine_base +55, matchup +32, entry_incoming_damage -161, switchin_race -70, dies_on_entry -500, no_escape_reason -1000000
+         VETO   switch -> Magneton (hits 237%, takes 178%) engine_base +55, matchup +32, entry_incoming_damage -196, switchin_race -70, dies_on_entry -500, no_escape_reason -1000000
+         VETO   switch -> Sigilyph (hits 372%, takes 86%) engine_base +28, matchup +128, entry_incoming_damage -78, switchin_race -70, dies_on_entry -500, no_escape_reason -1000000
+
+Turn 8   actor 1   switch -> Magneton           score    435.6
+    board   : Druddigon 15%  vs  Omastar 100%
+    foe     : Omastar -> SCALD
+    view: hp 15%  speed 180 (slower)  incoming max 79%  certain 79%  threatened_lethal=True
+    race vs Omastar: mine 7 turns, theirs 1, winning=False
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                      Golurk      Durant      Feraligatr  Omastar*    Rotom       Sceptile
+      Galvantula   0% -           -           -           -           -           -
+      Druddigon*  15% -           -           L 122%/34%  L 115%/79%  L 185%/44%  -
+      Golurk       0% -           -           -           -           -           -
+      Kabutops   100% -           -           W 91%/36%   W 86%/72%   L 150%/152% -
+      Magneton   100% -           -           W 126%/43%  W 164%/78%  L 45%/69%   -
+      Sigilyph    23% -           -           L 66%/75%   L 86%/95%   L 93%/126%  -
+    options considered:
+         435.6  switch -> Magneton (hits 164%, takes 78%, faster) engine_base +55, matchup +64, entry_incoming_damage -68, switchin_race +65, escape_lethal_threat +130, losing_race_bench_wins +110, preserve_low_hp_actor +80, escape_reasons +1
+          42.9  FIREPUNCH (bp 75, 15% dmg, x0.25)      engine_base +205, expected_damage +12, resisted -45, dead_before_moving -129
+         VETO   switch -> Kabutops (hits 86%, takes 72%, faster) engine_base +55, matchup +32, entry_incoming_damage -61, switchin_race +65, escape_lethal_threat +130, preserve_low_hp_actor +80, no_escape_reason -1000000
+         VETO   switch -> Sigilyph (hits 86%, takes 95%, faster) engine_base +28, matchup +32, entry_incoming_damage -89, escape_lethal_threat +130, dies_on_entry -500, no_escape_reason -1000000
+
+Turn 9   actor 1   VOLTSWITCH @0                score    820.0
+    board   : Magneton 32%  vs  Omastar 100%
+    foe     : Omastar -> ICEBEAM
+    view: hp 32%  speed 392 (faster)  incoming max 78%  certain 78%  threatened_lethal=True
+    race vs Omastar: mine 2 turns, theirs 1, winning=False
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                      Golurk      Durant      Feraligatr  Omastar*    Rotom       Sceptile
+      Galvantula   0% -           -           -           -           -           -
+      Druddigon   15% -           -           L 122%/34%  L 115%/79%  L 185%/44%  -
+      Golurk       0% -           -           -           -           -           -
+      Kabutops   100% -           -           W 91%/36%   W 86%/72%   L 150%/152% -
+      Magneton*   32% -           -           W 126%/43%  W 164%/78%  L 45%/69%   -
+      Sigilyph    23% -           -           L 66%/75%   L 86%/95%   L 93%/126%  -
+    options considered:
+         820.0  VOLTSWITCH (bp 70, 122% dmg, x2)       engine_base +320, lethal +500
+         810.0  THUNDERBOLT (bp 95, 164% dmg, x2)      engine_base +310, lethal +500
+         285.1  FLASHCANNON (bp 80, 69% dmg, x1)       engine_base +229, expected_damage +56
+         103.3  HIDDENPOWER (bp 1, 10% dmg, x0.5)      engine_base +140, expected_damage +8, resisted -45
+         VETO   switch -> Druddigon (hits 115%, takes 79%) engine_base +25, matchup +64, entry_incoming_damage -69, switchin_race -70, escape_lethal_threat +130, dies_on_entry -500, no_escape_reason -1000000
+         VETO   switch -> Kabutops (hits 86%, takes 72%, faster) engine_base +55, matchup +32, entry_incoming_damage -61, switchin_race +65, escape_lethal_threat +130, no_escape_reason -1000000
+         VETO   switch -> Sigilyph (hits 86%, takes 95%, faster) engine_base +28, matchup +32, entry_incoming_damage -89, escape_lethal_threat +130, dies_on_entry -500, no_escape_reason -1000000
+
+Turn 10  actor 1   FLASHCANNON @0               score    820.0
+    board   : Magneton 32%  vs  Omastar 0%
+    foe     : Omastar -> SCALD
+    view: hp 32%  speed 392 (faster)  incoming max 78%  certain 78%  threatened_lethal=True
+    race vs Omastar: mine 1 turns, theirs 1, winning=True (ties on speed)
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                      Golurk      Durant      Feraligatr  Omastar*    Rotom       Sceptile
+      Galvantula   0% -           -           -           -           -           -
+      Druddigon    0% -           -           -           -           -           -
+      Golurk       0% -           -           -           -           -           -
+      Kabutops   100% -           -           W 91%/36%   W 86%/72%   L 150%/152% -
+      Magneton*   32% -           -           W 126%/43%  W 164%/78%  L 45%/69%   -
+      Sigilyph    23% -           -           L 66%/75%   W 86%/95%   L 93%/126%  -
+    options considered:
+         820.0  FLASHCANNON (bp 80, 69% dmg, x1)       engine_base +320, lethal +500
+         820.0  VOLTSWITCH (bp 70, 122% dmg, x2)       engine_base +320, lethal +500
+         810.0  THUNDERBOLT (bp 95, 164% dmg, x2)      engine_base +310, lethal +500
+         790.0  HIDDENPOWER (bp 1, 10% dmg, x0.5)      engine_base +290, lethal +500
+         VETO   switch -> Kabutops (hits 86%, takes 72%, faster) engine_base +55, matchup +32, entry_incoming_damage -61, switchin_race +65, escape_lethal_threat +130, no_escape_reason -1000000
+         VETO   switch -> Sigilyph (hits 86%, takes 95%, faster) engine_base +28, matchup +32, entry_incoming_damage -89, escape_lethal_threat +130, dies_on_entry -500, no_escape_reason -1000000
+
+Turn 11  actor 1   switch -> Kabutops           score    392.9
+    board   : Magneton 32%  vs  Feraligatr 100%
+    foe     : Feraligatr -> AQUAJET
+    view: hp 32%  speed 392 (faster)  incoming max 43%  certain 43%  threatened_lethal=True
+    race vs Feraligatr: mine 4 turns, theirs 1, winning=False
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                      Golurk       Durant       Feraligatr*  Omastar      Rotom        Sceptile
+      Galvantula   0% -            -            -            -            -            -
+      Druddigon    0% -            -            -            -            -            -
+      Golurk       0% -            -            -            -            -            -
+      Kabutops   100% -            -            W 91%/36%    -            L 150%/152%  -
+      Magneton*   32% -            -            W 126%/43%   -            L 45%/69%    -
+      Sigilyph    23% -            -            L 66%/75%    -            L 93%/126%   -
+    options considered:
+         392.9  switch -> Kabutops (hits 91%, takes 36%, faster) engine_base +55, matchup +32, entry_incoming_damage -14, switchin_race +80, escape_lethal_threat +130, losing_race_bench_wins +110, escape_reasons +1
+         163.6  FLASHCANNON (bp 80, 27% dmg, x0.5)     engine_base +187, expected_damage +21, resisted -45
+         VETO   switch -> Sigilyph (hits 66%, takes 75%, faster) engine_base +28, matchup +32, entry_incoming_damage -64, escape_lethal_threat +130, dies_on_entry -500, no_escape_reason -1000000
+
+Turn 12  actor 1   STONEEDGE @0                 score    238.3
+    board   : Kabutops 73% +1 -1  vs  Feraligatr 100%
+    foe     : Feraligatr -> AQUAJET
+    view: hp 73%  speed 388 (faster)  incoming max 54%  certain 54%  threatened_lethal=False
+    race vs Feraligatr: mine 2 turns, theirs 2, winning=True (ties on speed)
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                      Golurk       Durant       Feraligatr*  Omastar      Rotom        Sceptile
+      Galvantula   0% -            -            -            -            -            -
+      Druddigon    0% -            -            -            -            -            -
+      Golurk       0% -            -            -            -            -            -
+      Kabutops*   73% -            -            W 91%/54%    -            W 150%/152%  -
+      Magneton    32% -            -            W 126%/43%   -            L 45%/69%    -
+      Sigilyph    23% -            -            L 66%/75%    -            L 93%/126%   -
+    options considered:
+         238.3  STONEEDGE (bp 100, 91% dmg, x1)        engine_base +173, expected_damage +73, accuracy -7
+         159.6  WATERFALL (bp 80, 24% dmg, x0.5)       engine_base +184, expected_damage +19, resisted -45, secondary_flinch +1
+          77.0  AQUAJET (bp 40, 12% dmg, x0.5)         engine_base +112, expected_damage +10, resisted -45
+        -185.3  RAPIDSPIN (bp 20, 8% dmg, x1)          engine_base +108, expected_damage +7, no_hazards_to_remove -300
+         VETO   switch -> Magneton (hits 126%, takes 43%, faster) engine_base +31, matchup +64, entry_incoming_damage -23, dies_on_entry -500, no_escape_reason -1000000
+         VETO   switch -> Sigilyph (hits 66%, takes 75%, faster) engine_base +28, matchup +32, entry_incoming_damage -64, dies_on_entry -500, no_escape_reason -1000000
+
+Turn 13  actor 1   STONEEDGE @0                 score    710.0
+    board   : Kabutops 38% +2 -2  vs  Feraligatr 39%
+    foe     : Feraligatr -> AQUAJET
+    view: hp 38%  speed 518 (faster)  incoming max 72%  certain 72%  threatened_lethal=True
+    race vs Feraligatr: mine 1 turns, theirs 1, winning=False
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                      Golurk       Durant       Feraligatr*  Omastar      Rotom        Sceptile
+      Galvantula   0% -            -            -            -            -            -
+      Druddigon    0% -            -            -            -            -            -
+      Golurk       0% -            -            -            -            -            -
+      Kabutops*   38% -            -            W 61%/72%    -            W 100%/152%  -
+      Magneton    32% -            -            W 126%/43%   -            L 45%/69%    -
+      Sigilyph    23% -            -            W 66%/75%    -            L 93%/126%   -
+    options considered:
+         710.0  STONEEDGE (bp 100, 61% dmg, x1)        engine_base +260, lethal +500, accuracy -50
+         197.6  WATERFALL (bp 80, 24% dmg, x0.5)       engine_base +222, expected_damage +19, resisted -45, secondary_flinch +1
+          97.0  AQUAJET (bp 40, 12% dmg, x0.5)         engine_base +132, expected_damage +10, resisted -45
+        -172.3  RAPIDSPIN (bp 20, 8% dmg, x1)          engine_base +121, expected_damage +7, no_hazards_to_remove -300
+         VETO   switch -> Magneton (hits 126%, takes 43%, faster) engine_base +31, matchup +64, entry_incoming_damage -23, escape_lethal_threat +130, dies_on_entry -500, no_escape_reason -1000000
+         VETO   switch -> Sigilyph (hits 66%, takes 75%, faster) engine_base +28, matchup +32, entry_incoming_damage -64, escape_lethal_threat +130, dies_on_entry -500, no_escape_reason -1000000
+
+Turn 14  actor 1   VOLTSWITCH @0                score    820.0
+    board   : Magneton 32%  vs  Feraligatr 45%
+    foe     : Feraligatr -> CRUNCH
+    view: hp 32%  speed 392 (faster)  incoming max 43%  certain 43%  threatened_lethal=True
+    race vs Feraligatr: mine 1 turns, theirs 1, winning=False
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                      Golurk       Durant       Feraligatr*  Omastar      Rotom        Sceptile
+      Galvantula   0% -            -            -            -            -            -
+      Druddigon    0% -            -            -            -            -            -
+      Golurk       0% -            -            -            -            -            -
+      Kabutops     0% -            -            -            -            -            -
+      Magneton*   32% -            -            W 126%/43%   -            L 45%/69%    -
+      Sigilyph    23% -            -            W 66%/75%    -            L 93%/126%   -
+    options considered:
+         820.0  VOLTSWITCH (bp 70, 93% dmg, x2)        engine_base +320, lethal +500
+         810.0  THUNDERBOLT (bp 95, 126% dmg, x2)      engine_base +310, lethal +500
+         195.6  FLASHCANNON (bp 80, 27% dmg, x0.5)     engine_base +219, expected_damage +21, resisted -45
+         176.5  HIDDENPOWER (bp 1, 16% dmg, x1)        engine_base +164, expected_damage +12
+         VETO   switch -> Sigilyph (hits 66%, takes 75%, faster) engine_base +28, matchup +32, entry_incoming_damage -64, escape_lethal_threat +130, dies_on_entry -500, no_escape_reason -1000000
+
+Turn 15  actor 1   PSYCHIC @0                   score     67.1
+    board   : Sigilyph 23%  vs  Rotom 100%
+    foe     : Rotom -> VOLTSWITCH
+    view: hp 23%  speed 322 (slower)  incoming max 126%  certain 126%  threatened_lethal=True
+    race vs Rotom: mine 2 turns, theirs 1, winning=False
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                      Golurk      Durant      Feraligatr  Omastar     Rotom*      Sceptile
+      Galvantula   0% -           -           -           -           -           -
+      Druddigon    0% -           -           -           -           -           -
+      Golurk       0% -           -           -           -           -           -
+      Kabutops     0% -           -           -           -           -           -
+      Magneton    32% -           -           -           -           L 45%/69%   -
+      Sigilyph*   23% -           -           -           -           L 93%/126%  -
+    options considered:
+          67.1  PSYCHIC (bp 90, 93% dmg, x1)           engine_base +193, expected_damage +75, dead_before_moving -201
+          61.4  HEATWAVE (bp 100, 69% dmg, x1)         engine_base +192, expected_damage +55, accuracy -3, secondary_burn +1, dead_before_moving -184
+         0.895  ROOST (0% dmg, x1)                     engine_base +147, heal_low_hp +257, heal_cannot_resolve -400, dead_before_moving -3
+         -13.2  CALMMIND (0% dmg, x1)                  engine_base +187, unsafe_setup -240, dead_before_moving +40
+         VETO   switch -> Magneton (hits 45%, takes 69%) engine_base +31, matchup +16, entry_incoming_damage -57, switchin_race -70, escape_lethal_threat +130, dies_on_entry -500, no_escape_reason -1000000
+
+Turn 16  actor 1   THUNDERBOLT @0               score    195.9
+    board   : Magneton 32%  vs  Rotom 100%
+    foe     : Rotom -> VOLTSWITCH
+    view: hp 32%  speed 392 (slower)  incoming max 31%  certain 31%  threatened_lethal=False
+    race vs Rotom: mine 3 turns, theirs 2, winning=False
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                      Golurk      Durant      Feraligatr  Omastar     Rotom*      Sceptile
+      Galvantula   0% -           -           -           -           -           -
+      Druddigon    0% -           -           -           -           -           -
+      Golurk       0% -           -           -           -           -           -
+      Kabutops     0% -           -           -           -           -           -
+      Magneton*   32% -           -           -           -           L 45%/69%   -
+      Sigilyph     0% -           -           -           -           -           -
+    options considered:
+         195.9  THUNDERBOLT (bp 95, 45% dmg, x0.5)     engine_base +205, expected_damage +36, resisted -45
+         182.2  FLASHCANNON (bp 80, 37% dmg, x0.5)     engine_base +197, expected_damage +30, resisted -45
+         174.6  VOLTSWITCH (bp 70, 33% dmg, x0.5)      engine_base +193, expected_damage +27, resisted -45
+         VETO   HIDDENPOWER (bp 1, 44% dmg, x0, IMMUNE) immune -1000000
+
+Turn 17  actor 1   THUNDERBOLT @0               score     55.7
+    board   : Magneton 4%  vs  Rotom 62%
+    foe     : Rotom -> VOLTSWITCH
+    view: hp 4%  speed 392 (slower)  incoming max 31%  certain 31%  threatened_lethal=True
+    race vs Rotom: mine 2 turns, theirs 1, winning=False
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                      Golurk      Durant      Feraligatr  Omastar     Rotom*      Sceptile
+      Galvantula   0% -           -           -           -           -           -
+      Druddigon    0% -           -           -           -           -           -
+      Golurk       0% -           -           -           -           -           -
+      Kabutops     0% -           -           -           -           -           -
+      Magneton*    4% -           -           -           -           L 45%/69%   -
+      Sigilyph     0% -           -           -           -           -           -
+    options considered:
+          55.7  THUNDERBOLT (bp 95, 45% dmg, x0.5)     engine_base +232, expected_damage +36, resisted -45, dead_before_moving -167
+

@@ -1,0 +1,249 @@
+team2_vs_team3  seed 262147  single   ERROR in 0 turns   [portable 0.7.7, mega=True, teams=gen5ru_a]
+  ENGINE ERROR: ZeroDivisionError: divided by 0
+    at: 085:PokeBattle_AI:3557:in `/' | 085:PokeBattle_AI:3557:in `pbRoughDamage' | 085:PokeBattle_AI:2807:in `pbGetMoveScore' | 275:AI edit clara:116:in `portable_ai_stock_pbChooseMoves' | 275:AI edit clara:114:in `each' | 275:AI edit clara:114:in `portable_ai_stock_pbChooseMoves'
+    turns below are what Portable decided BEFORE the engine raised.
+  left  (team2): Golurk, Durant, Feraligatr, Omastar, Rotom, Sceptile
+  PORTABLE (team3): Uxie, Escavalier, Qwilfish, Rhydon, Rotom, Sceptile
+========================================================================================================
+
+Turn 0   actor 1   switch -> Sceptile           score    211.2
+    board   : Uxie 100%  vs  Golurk 100%
+    foe     : Golurk -> ROCKPOLISH
+    view: hp 100%  speed 308 (faster)  incoming max 73%  certain 73%  threatened_lethal=False
+    race vs Golurk: mine 3 turns, theirs 2, winning=False
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                      Golurk*     Durant      Feraligatr  Omastar     Rotom       Sceptile
+      Uxie*      100% L 36%/73%   L 47%/93%   W 49%/44%   W 64%/32%   L 49%/57%   L 39%/40%
+      Escavalier 100% L 50%/82%   L 46%/63%   W 81%/30%   W 77%/44%   W 67%/46%   W 263%/54%
+      Qwilfish   100% L 75%/203%  L 35%/84%   L 16%/37%   L 30%/34%   L 51%/143%  L 25%/81%
+      Rhydon     100% L 70%/78%   L 65%/59%   W 58%/44%   L 109%/126% W 95%/28%   W 147%/85%
+      Rotom      100% L 94%/167%  W 103%/53%  W 108%/100% W 141%/73%  L 129%/129% L 51%/74%
+      Sceptile   100% W 108%/90%  L 61%/207%  W 90%/49%   W 169%/91%  W 74%/51%   L 175%/177%
+    options considered:
+         211.2  switch -> Sceptile (hits 108%, takes 90%, faster) sole answer to Golurk engine_base +55, matchup +64, entry_incoming_damage -83, switchin_race +65, losing_race_bench_wins +110, escape_reasons +1
+         187.0  CALMMIND (0% dmg, x1)                  engine_base +187
+         174.4  PSYCHIC (bp 90, 36% dmg, x1)           engine_base +145, expected_damage +29
+         112.0  SUBSTITUTE (0% dmg, x1)                engine_base +112
+         VETO   THUNDERBOLT (bp 95, 0% dmg, x0, IMMUNE) immune -1000000
+         VETO   switch -> Escavalier (hits 50%, takes 82%) engine_base +55, matchup +16, entry_incoming_damage -73, switchin_race -5, no_escape_reason -1000000
+         VETO   switch -> Qwilfish (hits 75%, takes 135%, faster) engine_base +55, matchup +64, entry_incoming_damage -141, dies_on_entry -500, no_escape_reason -1000000
+         VETO   switch -> Rhydon (hits 70%, takes 78%) engine_base +55, matchup +32, entry_incoming_damage -68, switchin_race -5, no_escape_reason -1000000
+         VETO   switch -> Rotom (hits 94%, takes 167%, faster) sole answer to Durant engine_base +55, matchup +64, entry_incoming_damage -182, sole_answer_exposed -150, dies_on_entry -500, no_escape_reason -1000000
+
+Turn 1   actor 1   LEAFBLADE @0                 score    760.0
+    board   : Sceptile 100%  vs  Golurk 100%
+    foe     : Golurk -> DYNAMICPUNCH
+    view: hp 100%  speed 339 (slower)  incoming max 90%  certain 90%  threatened_lethal=False
+    race vs Golurk: mine 1 turns, theirs 2, winning=True
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                      Golurk*     Durant      Feraligatr  Omastar     Rotom       Sceptile
+      Uxie       100% L 36%/73%   L 47%/93%   W 49%/44%   W 64%/32%   L 49%/57%   L 39%/40%
+      Escavalier 100% L 50%/82%   L 46%/63%   W 81%/30%   W 77%/44%   W 67%/46%   W 263%/54%
+      Qwilfish   100% L 75%/203%  L 35%/84%   L 16%/37%   L 30%/34%   L 51%/143%  L 25%/81%
+      Rhydon     100% L 70%/78%   L 65%/59%   W 58%/44%   L 109%/126% W 95%/28%   W 147%/85%
+      Rotom      100% L 94%/167%  W 103%/53%  W 108%/100% W 141%/73%  L 129%/129% L 51%/74%
+      Sceptile*  100% W 108%/90%  L 61%/207%  W 90%/49%   W 169%/91%  W 74%/51%   L 175%/177%
+    options considered:
+         760.0  LEAFBLADE (bp 90, 108% dmg, x2)        engine_base +260, lethal +500
+         234.7  ACROBATICS (bp 55, 66% dmg, x1)        engine_base +182, expected_damage +53
+         182.1  EARTHQUAKE (bp 100, 40% dmg, x1)       engine_base +150, expected_damage +32
+         7.000  SWORDSDANCE (0% dmg, x1)               engine_base +187, setup_into_2hko -180
+         VETO   switch -> Uxie (hits 36%, takes 73%)   engine_base +55, matchup +32, entry_incoming_damage -61, switchin_race -5, no_escape_reason -1000000
+         VETO   switch -> Escavalier (hits 50%, takes 82%) engine_base +55, matchup +16, entry_incoming_damage -73, switchin_race -5, no_escape_reason -1000000
+         VETO   switch -> Qwilfish (hits 75%, takes 135%) engine_base +55, matchup +64, entry_incoming_damage -141, switchin_race -70, dies_on_entry -500, no_escape_reason -1000000
+         VETO   switch -> Rhydon (hits 70%, takes 78%) engine_base +55, matchup +32, entry_incoming_damage -68, switchin_race -5, no_escape_reason -1000000
+         VETO   switch -> Rotom (hits 94%, takes 167%) sole answer to Durant engine_base +55, matchup +64, entry_incoming_damage -182, switchin_race -70, dies_on_entry -500, no_escape_reason -1000000
+
+Turn 2   actor 1   WATERFALL @0                 score    108.2
+    board   : Qwilfish 100%  vs  Golurk 90%
+    foe     : Golurk -> EARTHQUAKE
+    view: hp 100%  speed 295 (slower)  incoming max 135%  certain 135%  threatened_lethal=True
+    race vs Golurk: mine 2 turns, theirs 1, winning=False
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                      Golurk*     Durant      Feraligatr  Omastar     Rotom       Sceptile
+      Uxie       100% L 36%/50%   L 47%/93%   W 49%/44%   W 64%/32%   L 49%/57%   L 39%/40%
+      Escavalier 100% L 50%/55%   L 46%/63%   W 81%/30%   W 77%/44%   W 67%/46%   W 263%/54%
+      Qwilfish*  100% L 75%/135%  L 35%/84%   L 16%/37%   L 30%/34%   L 51%/143%  L 25%/81%
+      Rhydon     100% L 70%/52%   L 65%/59%   W 58%/44%   L 109%/126% W 95%/28%   W 147%/85%
+      Rotom      100% L 94%/112%  W 103%/53%  W 108%/100% W 141%/73%  L 129%/129% L 51%/74%
+      Sceptile     0% -           -           -           -           -           -
+    options considered:
+         108.2  WATERFALL (bp 80, 75% dmg, x2)         engine_base +303, expected_damage +60, super_effective +70, dead_before_moving -325
+          48.2  SPIKES (0% dmg, x1)                    engine_base +193, dead_before_moving -145
+          28.0  TAUNT (0% dmg, x1)                     engine_base +112, dead_before_moving -84
+          12.5  DESTINYBOND (0% dmg, x1)               engine_base +50, dead_before_moving -38
+         VETO   switch -> Uxie (hits 36%, takes 50%)   engine_base +55, matchup +32, entry_incoming_damage -32, switchin_race -5, escape_lethal_threat +130, no_escape_reason -1000000
+         VETO   switch -> Escavalier (hits 50%, takes 55%) engine_base +55, matchup +16, entry_incoming_damage -38, switchin_race -5, escape_lethal_threat +130, no_escape_reason -1000000
+         VETO   switch -> Rhydon (hits 70%, takes 52%) engine_base +55, matchup +32, entry_incoming_damage -34, switchin_race -5, escape_lethal_threat +130, no_escape_reason -1000000
+         VETO   switch -> Rotom (hits 94%, takes 112%) sole answer to Durant engine_base +55, matchup +64, entry_incoming_damage -111, switchin_race -70, escape_lethal_threat +130, no_escape_reason -1000000
+
+Turn 3   actor 1   EARTHQUAKE                   score    303.7
+    board   : Rhydon 100%  vs  Golurk 81%
+    foe     : Golurk -> EARTHQUAKE
+    view: hp 100%  speed 124 (slower)  incoming max 52%  certain 52%  threatened_lethal=False
+    race vs Golurk: mine 2 turns, theirs 2, winning=False
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                      Golurk*     Durant      Feraligatr  Omastar     Rotom       Sceptile
+      Uxie       100% L 36%/50%   L 47%/93%   W 49%/44%   W 64%/32%   L 49%/57%   L 39%/40%
+      Escavalier 100% L 50%/55%   L 46%/63%   W 81%/30%   W 77%/44%   W 67%/46%   W 263%/54%
+      Qwilfish     0% -           -           -           -           -           -
+      Rhydon*    100% L 70%/52%   L 65%/59%   W 58%/44%   L 109%/126% W 95%/28%   W 147%/85%
+      Rotom      100% L 94%/112%  W 103%/53%  W 108%/100% W 141%/73%  L 129%/129% L 51%/74%
+      Sceptile     0% -           -           -           -           -           -
+    options considered:
+         303.7  EARTHQUAKE (bp 100, 70% dmg, x1)       engine_base +248, expected_damage +56
+         143.0  STEALTHROCK (0% dmg, x1)               engine_base +143
+         136.8  STONEEDGE (bp 100, 35% dmg, x0.5)      engine_base +154, expected_damage +28, resisted -45
+         120.3  MEGAHORN (bp 120, 28% dmg, x0.5)       engine_base +143, expected_damage +22, resisted -45
+         VETO   switch -> Uxie (hits 36%, takes 50%)   engine_base +55, matchup +32, entry_incoming_damage -32, switchin_race -5, no_escape_reason -1000000
+         VETO   switch -> Escavalier (hits 50%, takes 55%) engine_base +55, matchup +16, entry_incoming_damage -38, switchin_race -5, no_escape_reason -1000000
+         VETO   switch -> Rotom (hits 94%, takes 112%) sole answer to Durant engine_base +55, matchup +64, entry_incoming_damage -111, switchin_race -70, no_escape_reason -1000000
+
+Turn 4   actor 1   EARTHQUAKE                   score    760.0
+    board   : Rhydon 51%  vs  Golurk 11%
+    foe     : Golurk -> EARTHQUAKE
+    view: hp 51%  speed 124 (slower)  incoming max 52%  certain 52%  threatened_lethal=True
+    race vs Golurk: mine 1 turns, theirs 1, winning=False
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                      Golurk*     Durant      Feraligatr  Omastar     Rotom       Sceptile
+      Uxie       100% W 36%/50%   L 47%/93%   W 49%/44%   W 64%/32%   L 49%/57%   L 39%/40%
+      Escavalier 100% W 50%/55%   L 46%/63%   W 81%/30%   W 77%/44%   W 67%/46%   W 263%/54%
+      Qwilfish     0% -           -           -           -           -           -
+      Rhydon*     51% L 70%/52%   L 65%/59%   L 58%/44%   L 109%/126% L 95%/28%   L 147%/85%
+      Rotom      100% L 94%/112%  W 103%/53%  W 108%/100% W 141%/73%  L 129%/129% L 51%/74%
+      Sceptile     0% -           -           -           -           -           -
+    options considered:
+         760.0  EARTHQUAKE (bp 100, 70% dmg, x1)       engine_base +260, lethal +500
+         760.0  MEGAHORN (bp 120, 28% dmg, x0.5)       engine_base +260, lethal +500
+         760.0  STONEEDGE (bp 100, 35% dmg, x0.5)      engine_base +260, lethal +500
+         143.0  STEALTHROCK (0% dmg, x1)               engine_base +143
+         VETO   switch -> Uxie (hits 36%, takes 50%)   engine_base +55, matchup +32, entry_incoming_damage -32, switchin_race -5, escape_lethal_threat +130, no_escape_reason -1000000
+         VETO   switch -> Escavalier (hits 50%, takes 55%) sole answer to Rotom, Sceptile engine_base +55, matchup +16, entry_incoming_damage -38, switchin_race -5, sole_answer_reserved -90, escape_lethal_threat +130, no_escape_reason -1000000
+         VETO   switch -> Rotom (hits 94%, takes 112%) sole answer to Durant engine_base +55, matchup +64, entry_incoming_damage -111, switchin_race -70, sole_answer_exposed -150, escape_lethal_threat +130, no_escape_reason -1000000
+
+Turn 5   actor 1   MEGAHORN @0                  score    101.0
+    board   : Rhydon 4%  vs  Sceptile 100%
+    foe     : Sceptile -> SWORDSDANCE
+    view: hp 4%  speed 124 (slower)  incoming max 85%  certain 85%  threatened_lethal=True
+    race vs Sceptile: mine 1 turns, theirs 1, winning=False
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                      Golurk      Durant      Feraligatr  Omastar     Rotom       Sceptile*
+      Uxie       100% -           L 47%/93%   W 49%/44%   W 64%/32%   L 49%/57%   L 39%/40%
+      Escavalier 100% -           L 46%/63%   W 81%/30%   W 77%/44%   W 67%/46%   W 263%/54%
+      Qwilfish     0% -           -           -           -           -           -
+      Rhydon*      4% -           L 65%/59%   L 58%/44%   L 109%/126% L 95%/28%   L 147%/85%
+      Rotom      100% -           W 103%/53%  W 108%/100% W 141%/73%  L 129%/129% L 51%/74%
+      Sceptile     0% -           -           -           -           -           -
+    options considered:
+         101.0  MEGAHORN (bp 120, 147% dmg, x2)        engine_base +260, expected_damage +80, accuracy -6, super_effective +70, dead_before_moving -303
+          60.2  STONEEDGE (bp 100, 93% dmg, x1)        engine_base +174, expected_damage +74, accuracy -7, dead_before_moving -180
+          34.5  EARTHQUAKE (bp 100, 46% dmg, x0.5)     engine_base +146, expected_damage +37, resisted -45, dead_before_moving -104
+          34.2  STEALTHROCK (0% dmg, x1)               engine_base +137, dead_before_moving -103
+         VETO   switch -> Uxie (hits 39%, takes 40%)   engine_base +55, matchup +32, entry_incoming_damage -19, switchin_race +10, escape_lethal_threat +130, preserve_low_hp_actor +80, no_escape_reason -1000000
+         VETO   switch -> Escavalier (hits 263%, takes 54%) sole answer to Rotom, Sceptile engine_base +55, matchup +64, entry_incoming_damage -36, switchin_race -5, escape_lethal_threat +130, preserve_low_hp_actor +80, no_escape_reason -1000000
+         VETO   switch -> Rotom (hits 51%, takes 74%) sole answer to Durant engine_base +55, matchup +32, entry_incoming_damage -63, switchin_race -5, sole_answer_exposed -150, escape_lethal_threat +130, preserve_low_hp_actor +80, no_escape_reason -1000000
+
+Turn 6   actor 1   switch -> Uxie               score    584.8
+    board   : Rhydon 4%  vs  Omastar 100%
+    foe     : Omastar -> SCALD
+    view: hp 4%  speed 124 (slower)  incoming max 126%  certain 126%  threatened_lethal=True
+    race vs Omastar: mine 2 turns, theirs 1, winning=False
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                      Golurk      Durant      Feraligatr  Omastar*    Rotom       Sceptile
+      Uxie       100% -           L 47%/93%   W 49%/44%   W 64%/32%   L 49%/57%   -
+      Escavalier 100% -           L 46%/63%   W 81%/30%   W 77%/44%   W 67%/46%   -
+      Qwilfish     0% -           -           -           -           -           -
+      Rhydon*      4% -           L 65%/59%   L 58%/44%   L 109%/126% L 95%/28%   -
+      Rotom      100% -           W 103%/53%  W 108%/100% W 141%/73%  L 129%/129% -
+      Sceptile     0% -           -           -           -           -           -
+    options considered:
+         584.8  switch -> Uxie (hits 64%, takes 32%, faster) engine_base +55, matchup +64, entry_incoming_damage -9, switchin_race +155, escape_lethal_threat +130, losing_race_bench_wins +110, preserve_low_hp_actor +80, escape_reasons +1
+         397.5  switch -> Rotom (hits 141%, takes 73%, faster) sole answer to Durant engine_base +55, matchup +64, entry_incoming_damage -61, switchin_race +65, sole_answer_reserved -45, escape_lethal_threat +130, losing_race_bench_wins +110, preserve_low_hp_actor +80, escape_reasons +1
+          99.8  EARTHQUAKE (bp 100, 109% dmg, x2)      engine_base +249, expected_damage +80, super_effective +70, dead_before_moving -299
+          45.8  STONEEDGE (bp 100, 54% dmg, x1)        engine_base +144, expected_damage +44, accuracy -4, dead_before_moving -137
+          42.3  MEGAHORN (bp 120, 43% dmg, x1)         engine_base +137, expected_damage +35, accuracy -3, dead_before_moving -127
+          32.8  STEALTHROCK (0% dmg, x1)               engine_base +131, dead_before_moving -98
+         VETO   switch -> Escavalier (hits 77%, takes 44%) sole answer to Rotom engine_base +55, matchup +32, entry_incoming_damage -24, switchin_race +10, sole_answer_reserved -45, escape_lethal_threat +130, preserve_low_hp_actor +80, no_escape_reason -1000000
+
+Turn 7   actor 1   THUNDERBOLT @0               score    275.8
+    board   : Uxie 62% brn  vs  Omastar 100%
+    foe     : Omastar -> SPIKES
+    view: hp 62%  speed 308 (faster)  incoming max 32%  certain 32%  threatened_lethal=False
+    race vs Omastar: mine 2 turns, theirs 2, winning=True (ties on speed)
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                      Golurk      Durant      Feraligatr  Omastar*    Rotom       Sceptile
+      Uxie*       62% -           L 47%/93%   L 49%/44%   W 64%/32%   L 49%/57%   -
+      Escavalier 100% -           L 46%/63%   W 81%/30%   W 77%/44%   W 67%/46%   -
+      Qwilfish     0% -           -           -           -           -           -
+      Rhydon       4% -           L 65%/59%   L 58%/44%   L 109%/126% L 95%/28%   -
+      Rotom      100% -           W 103%/53%  W 108%/100% W 141%/73%  L 129%/129% -
+      Sceptile     0% -           -           -           -           -           -
+    options considered:
+         275.8  THUNDERBOLT (bp 95, 64% dmg, x2)       engine_base +154, expected_damage +51, super_effective +70
+         187.0  CALMMIND (0% dmg, x1)                  engine_base +187
+         182.8  PSYCHIC (bp 90, 46% dmg, x1)           engine_base +146, expected_damage +36
+         112.0  SUBSTITUTE (0% dmg, x1)                engine_base +112
+         VETO   switch -> Escavalier (hits 77%, takes 44%) sole answer to Rotom engine_base +55, matchup +32, entry_incoming_damage -24, switchin_race +10, sole_answer_reserved -45, no_escape_reason -1000000
+         VETO   switch -> Rhydon (hits 109%, takes 126%) engine_base +21, matchup +64, entry_incoming_damage -129, switchin_race -70, dies_on_entry -500, no_escape_reason -1000000
+         VETO   switch -> Rotom (hits 141%, takes 73%, faster) sole answer to Durant engine_base +55, matchup +64, entry_incoming_damage -61, switchin_race +65, sole_answer_reserved -45, no_escape_reason -1000000
+
+Turn 8   actor 1   THUNDERBOLT @0               score    750.0
+    board   : Uxie 56% brn  vs  Omastar 42%
+    foe     : Omastar -> STEALTHROCK
+    view: hp 56%  speed 308 (faster)  incoming max 32%  certain 32%  threatened_lethal=False
+    race vs Omastar: mine 1 turns, theirs 2, winning=True
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                      Golurk      Durant      Feraligatr  Omastar*    Rotom       Sceptile
+      Uxie*       56% -           L 47%/93%   L 49%/44%   W 64%/32%   L 49%/57%   -
+      Escavalier 100% -           L 46%/63%   W 81%/30%   W 77%/44%   W 67%/46%   -
+      Qwilfish     0% -           -           -           -           -           -
+      Rhydon       4% -           L 65%/59%   L 58%/44%   L 109%/126% L 95%/28%   -
+      Rotom      100% -           W 103%/53%  W 108%/100% W 141%/73%  L 129%/129% -
+      Sceptile     0% -           -           -           -           -           -
+    options considered:
+         750.0  THUNDERBOLT (bp 95, 64% dmg, x2)       engine_base +250, lethal +500
+         748.0  PSYCHIC (bp 90, 46% dmg, x1)           engine_base +248, lethal +500
+         192.0  CALMMIND (0% dmg, x1)                  engine_base +137, setup_flips +55
+         112.0  SUBSTITUTE (0% dmg, x1)                engine_base +112
+         VETO   switch -> Escavalier (hits 77%, takes 44%) sole answer to Rotom engine_base +42, matchup +32, entry_incoming_damage -24, switchin_race +10, sole_answer_reserved -45, no_escape_reason -1000000
+         VETO   switch -> Rotom (hits 141%, takes 73%, faster) sole answer to Durant engine_base +55, matchup +64, entry_incoming_damage -61, switchin_race +65, sole_answer_reserved -45, no_escape_reason -1000000
+
+Turn 9   actor 1   PSYCHIC @0                   score    188.9
+    board   : Uxie 49% brn  vs  Rotom 100%
+    foe     : Rotom -> TRICK
+    view: hp 49%  speed 308 (slower)  incoming max 57%  certain 57%  threatened_lethal=True
+    race vs Rotom: mine 3 turns, theirs 1, winning=False
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                      Golurk      Durant      Feraligatr  Omastar     Rotom*      Sceptile
+      Uxie*       49% -           L 47%/93%   L 49%/44%   -           L 49%/57%   -
+      Escavalier 100% -           L 46%/63%   W 81%/30%   -           W 67%/46%   -
+      Qwilfish     0% -           -           -           -           -           -
+      Rhydon       4% -           L 65%/59%   L 58%/44%   -           L 95%/28%   -
+      Rotom      100% -           W 103%/53%  W 108%/100% -           L 129%/129% -
+      Sceptile     0% -           -           -           -           -           -
+    options considered:
+         188.9  PSYCHIC (bp 90, 49% dmg, x1)           engine_base +149, expected_damage +40
+         112.0  SUBSTITUTE (0% dmg, x1)                engine_base +112
+          85.9  THUNDERBOLT (bp 95, 17% dmg, x0.5)     engine_base +117, expected_damage +14, resisted -45
+        -103.0  CALMMIND (0% dmg, x1)                  engine_base +137, unsafe_setup -240
+         VETO   switch -> Escavalier (hits 67%, takes 46%) sole answer to Rotom engine_base +42, matchup +16, entry_incoming_damage -26, switchin_race +10, escape_lethal_threat +130, no_escape_reason -1000000
+         VETO   switch -> Rotom (hits 129%, takes 129%) sole answer to Durant engine_base +55, matchup +64, entry_incoming_damage -133, switchin_race -70, sole_answer_exposed -150, escape_lethal_threat +130, dies_on_entry -500, no_escape_reason -1000000
+
+Turn 10  actor 1   PSYCHIC @0                   score    276.9
+    board   : Uxie 37% brn  vs  Rotom 64%
+    foe     : Rotom -> SHADOWBALL
+    view: hp 37%  speed 462 (faster)  incoming max 57%  certain 57%  threatened_lethal=True
+    race vs Rotom: mine 2 turns, theirs 1, winning=False
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                      Golurk      Durant      Feraligatr  Omastar     Rotom*      Sceptile
+      Uxie*       37% -           L 47%/93%   L 49%/44%   -           L 49%/57%   -
+      Escavalier 100% -           L 46%/63%   W 81%/30%   -           W 67%/46%   -
+      Qwilfish     0% -           -           -           -           -           -
+      Rhydon       4% -           L 65%/59%   L 58%/44%   -           L 95%/28%   -
+      Rotom      100% -           W 103%/53%  W 108%/100% -           L 129%/129% -
+      Sceptile     0% -           -           -           -           -           -
+    options considered:
+         276.9  PSYCHIC (bp 90, 49% dmg, x1)           engine_base +237, expected_damage +40
+         VETO   switch -> Escavalier (hits 67%, takes 46%) sole answer to Rotom engine_base +42, matchup +16, entry_incoming_damage -26, switchin_race +10, escape_lethal_threat +130, no_escape_reason -1000000
+         VETO   switch -> Rotom (hits 129%, takes 129%) sole answer to Durant engine_base +55, matchup +64, entry_incoming_damage -133, switchin_race -70, sole_answer_exposed -150, escape_lethal_threat +130, dies_on_entry -500, no_escape_reason -1000000
+

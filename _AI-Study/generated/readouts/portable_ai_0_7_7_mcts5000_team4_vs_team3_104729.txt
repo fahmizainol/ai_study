@@ -1,0 +1,278 @@
+team4_vs_team3  seed 104729  single   WIN in 11 turns   [portable 0.7.7, mega=True, teams=gen5ru_a]
+  left  (team4): Steelix, Aerodactyl, Magneton, Sceptile, Skuntank, Uxie
+  PORTABLE (team3): Uxie, Escavalier, Qwilfish, Rhydon, Rotom, Sceptile
+========================================================================================================
+
+Turn 0   actor 1   switch -> Rhydon             score    0.544
+    board   : Uxie 100%  vs  Steelix 100%
+    foe     : Steelix -> STEALTHROCK
+    view: hp 100%  speed 308 (faster)  incoming max 0%  certain 0%  threatened_lethal=False
+    race vs Steelix: mine 6 turns, theirs None, winning=None
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                      Steelix*    Aerodactyl  Magneton    Sceptile    Skuntank    Uxie
+      Uxie*      100% S 18%/0%    W 57%/48%   L 27%/40%   L 39%/58%   L 29%/81%   L 17%/29%
+      Escavalier 100% L 17%/34%   L 69%/114%  L 57%/104%  L 296%/104% L 116%/124% W 133%/18%
+      Qwilfish   100% L 25%/86%   L 104%/107% L 43%/167%  L 28%/123%  L 44%/67%   L 25%/110%
+      Rhydon     100% W 47%/33%   W 193%/40%  W 321%/65%  L 167%/224% W 164%/26%  W 75%/25%
+      Rotom      100% W 47%/0%    L 125%/110% W 69%/45%   L 51%/131%  L 64%/181%  L 64%/59%
+      Sceptile   100% W 27%/28%   L 75%/107%  W 185%/70%  W 198%/123% W 94%/89%   L 44%/51%
+    options considered:
+         0.544  switch -> Rhydon (hits 47%, takes 33%, faster) search_visits +981, search_iterations +5000
+         0.517  THUNDERBOLT (bp 95, 0% dmg, x0, IMMUNE) search_visits +673, search_iterations +5000
+         0.512  PSYCHIC (bp 90, 18% dmg, x0.5)         search_visits +638, search_iterations +5000
+         0.502  CALMMIND (0% dmg, x1)                  search_visits +566, search_iterations +5000
+         0.495  switch -> Sceptile (hits 27%, takes 28%, faster) sole answer to Sceptile search_visits +519, search_iterations +5000
+         0.490  switch -> Rotom (hits 47%, takes 0%, faster) search_visits +493, search_iterations +5000
+         0.487  switch -> Escavalier (hits 17%, takes 34%, faster) search_visits +479, search_iterations +5000
+         0.452  SUBSTITUTE (0% dmg, x1)                search_visits +342, search_iterations +5000
+         0.441  switch -> Qwilfish (hits 25%, takes 57%, faster) search_visits +309, search_iterations +5000
+
+Turn 1   actor 1   STEALTHROCK                  score    0.663
+    board   : Rhydon 100%  vs  Steelix 100%
+    foe     : Steelix -> TOXIC
+    view: hp 100%  speed 124 (faster)  incoming max 33%  certain 33%  threatened_lethal=False
+    race vs Steelix: mine 3 turns, theirs 4, winning=True
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                      Steelix*    Aerodactyl  Magneton    Sceptile    Skuntank    Uxie
+      Uxie       100% S 18%/0%    W 57%/48%   L 27%/40%   L 39%/58%   L 29%/81%   L 17%/29%
+      Escavalier 100% L 17%/34%   L 69%/114%  L 57%/104%  L 296%/104% L 116%/124% W 133%/18%
+      Qwilfish   100% L 25%/86%   L 104%/107% L 43%/167%  L 28%/123%  L 44%/67%   L 25%/110%
+      Rhydon*    100% W 47%/33%   W 193%/40%  W 321%/65%  L 167%/224% W 164%/26%  W 75%/25%
+      Rotom      100% W 47%/0%    L 125%/110% W 69%/45%   L 51%/131%  L 64%/181%  L 64%/59%
+      Sceptile   100% W 27%/28%   L 75%/107%  W 185%/70%  W 198%/123% W 94%/89%   L 44%/51%
+    options considered:
+         0.663  STEALTHROCK (0% dmg, x1)               search_visits +1767, search_iterations +5000
+         0.634  EARTHQUAKE (bp 100, 47% dmg, x2)       search_visits +1046, search_iterations +5000
+         0.616  STONEEDGE (bp 100, 6% dmg, x0.25)      search_visits +802, search_iterations +5000
+         0.591  MEGAHORN (bp 120, 9% dmg, x0.5)        search_visits +589, search_iterations +5000
+         0.462  switch -> Rotom (hits 47%, takes 0%, faster) search_visits +191, search_iterations +5000
+         0.456  switch -> Escavalier (hits 17%, takes 34%, faster) search_visits +184, search_iterations +5000
+         0.432  switch -> Sceptile (hits 27%, takes 28%, faster) sole answer to Sceptile search_visits +158, search_iterations +5000
+         0.430  switch -> Uxie (hits 18%, takes 0%, faster) search_visits +156, search_iterations +5000
+         0.362  switch -> Qwilfish (hits 25%, takes 57%, faster) search_visits +107, search_iterations +5000
+
+Turn 2   actor 1   EARTHQUAKE                   score    0.612
+    board   : Rhydon 94% psn  vs  Steelix 100%
+    foe     : Steelix -> EARTHQUAKE
+    view: hp 94%  speed 124 (faster)  incoming max 33%  certain 33%  threatened_lethal=False
+    race vs Steelix: mine 3 turns, theirs 3, winning=True (ties on speed)
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                      Steelix*    Aerodactyl  Magneton    Sceptile    Skuntank    Uxie
+      Uxie       100% S 18%/0%    W 57%/48%   L 27%/40%   L 39%/58%   L 29%/81%   L 17%/29%
+      Escavalier 100% L 17%/34%   L 69%/114%  L 57%/104%  L 296%/104% L 116%/124% W 133%/18%
+      Qwilfish   100% L 25%/86%   L 104%/107% L 43%/167%  L 28%/123%  L 44%/67%   L 25%/110%
+      Rhydon*     94% W 47%/33%   W 193%/40%  W 321%/65%  L 167%/224% W 164%/26%  W 75%/25%
+      Rotom      100% W 47%/0%    L 125%/110% W 69%/45%   L 51%/131%  L 64%/181%  L 64%/59%
+      Sceptile   100% W 27%/28%   L 75%/107%  W 185%/70%  W 198%/123% W 94%/89%   L 44%/51%
+    options considered:
+         0.612  EARTHQUAKE (bp 100, 47% dmg, x2)       search_visits +2009, search_iterations +5000
+         0.563  STONEEDGE (bp 100, 6% dmg, x0.25)      search_visits +861, search_iterations +5000
+         0.549  MEGAHORN (bp 120, 9% dmg, x0.5)        search_visits +713, search_iterations +5000
+         0.472  switch -> Rotom (hits 47%, takes 0%, faster) search_visits +317, search_iterations +5000
+         0.458  STEALTHROCK (0% dmg, x1)               search_visits +282, search_iterations +5000
+         0.436  switch -> Uxie (hits 18%, takes 0%, faster) search_visits +238, search_iterations +5000
+         0.433  switch -> Sceptile (hits 27%, takes 28%, faster) sole answer to Sceptile search_visits +233, search_iterations +5000
+         0.430  switch -> Escavalier (hits 17%, takes 34%, faster) search_visits +229, search_iterations +5000
+         0.323  switch -> Qwilfish (hits 25%, takes 57%, faster) search_visits +118, search_iterations +5000
+
+Turn 3   actor 1   EARTHQUAKE                   score    0.592
+    board   : Rhydon 50% psn  vs  Steelix 64%
+    foe     : Steelix -> EARTHQUAKE
+    view: hp 50%  speed 124 (faster)  incoming max 33%  certain 33%  threatened_lethal=False
+    race vs Steelix: mine 2 turns, theirs 1, winning=False
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                      Steelix*    Aerodactyl  Magneton    Sceptile    Skuntank    Uxie
+      Uxie       100% W 18%/0%    W 57%/48%   L 27%/40%   L 39%/58%   L 29%/81%   L 17%/29%
+      Escavalier 100% L 17%/34%   L 69%/114%  L 57%/104%  L 296%/104% L 116%/124% W 133%/18%
+      Qwilfish   100% L 25%/86%   L 104%/107% L 43%/167%  L 28%/123%  L 44%/67%   L 25%/110%
+      Rhydon*     50% W 47%/33%   W 193%/40%  L 321%/65%  L 167%/224% W 164%/26%  L 75%/25%
+      Rotom      100% W 47%/0%    L 125%/110% W 69%/45%   L 51%/131%  L 64%/181%  L 64%/59%
+      Sceptile   100% W 27%/28%   L 75%/107%  W 185%/70%  W 198%/123% W 94%/89%   L 44%/51%
+    options considered:
+         0.592  EARTHQUAKE (bp 100, 47% dmg, x2)       search_visits +2071, search_iterations +5000
+         0.532  STONEEDGE (bp 100, 6% dmg, x0.25)      search_visits +749, search_iterations +5000
+         0.516  MEGAHORN (bp 120, 9% dmg, x0.5)        search_visits +612, search_iterations +5000
+         0.473  switch -> Rotom (hits 47%, takes 0%, faster) search_visits +388, search_iterations +5000
+         0.441  STEALTHROCK (0% dmg, x1)               search_visits +293, search_iterations +5000
+         0.430  switch -> Escavalier (hits 17%, takes 34%, faster) sole answer to Uxie search_visits +268, search_iterations +5000
+         0.420  switch -> Uxie (hits 18%, takes 0%, faster) search_visits +248, search_iterations +5000
+         0.420  switch -> Sceptile (hits 27%, takes 28%, faster) sole answer to Sceptile search_visits +248, search_iterations +5000
+         0.310  switch -> Qwilfish (hits 25%, takes 57%, faster) search_visits +123, search_iterations +5000
+
+Turn 4   actor 1   EARTHQUAKE                   score    0.574
+    board   : Rhydon 2% psn  vs  Steelix 28%
+    foe     : Steelix -> EARTHQUAKE
+    view: hp 2%  speed 124 (faster)  incoming max 33%  certain 33%  threatened_lethal=True
+    race vs Steelix: mine 1 turns, theirs 1, winning=True (ties on speed)
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                      Steelix*    Aerodactyl  Magneton    Sceptile    Skuntank    Uxie
+      Uxie       100% W 18%/0%    W 57%/48%   L 27%/40%   L 39%/58%   L 29%/81%   L 17%/29%
+      Escavalier 100% W 17%/34%   L 69%/114%  L 57%/104%  L 296%/104% L 116%/124% W 133%/18%
+      Qwilfish   100% W 25%/86%   L 104%/107% L 43%/167%  L 28%/123%  L 44%/67%   L 25%/110%
+      Rhydon*      2% W 47%/33%   L 193%/40%  L 321%/65%  L 167%/224% L 164%/26%  L 75%/25%
+      Rotom      100% W 47%/0%    L 125%/110% W 69%/45%   L 51%/131%  L 64%/181%  L 64%/59%
+      Sceptile   100% W 27%/28%   L 75%/107%  W 185%/70%  W 198%/123% W 94%/89%   L 44%/51%
+    options considered:
+         0.574  EARTHQUAKE (bp 100, 47% dmg, x2)       search_visits +1607, search_iterations +5000
+         0.548  STONEEDGE (bp 100, 6% dmg, x0.25)      search_visits +1022, search_iterations +5000
+         0.523  MEGAHORN (bp 120, 9% dmg, x0.5)        search_visits +717, search_iterations +5000
+         0.468  switch -> Rotom (hits 47%, takes 0%, faster) search_visits +389, search_iterations +5000
+         0.435  switch -> Escavalier (hits 17%, takes 34%, faster) sole answer to Uxie search_visits +293, search_iterations +5000
+         0.430  switch -> Sceptile (hits 27%, takes 28%, faster) sole answer to Sceptile, Skuntank search_visits +280, search_iterations +5000
+         0.429  STEALTHROCK (0% dmg, x1)               search_visits +278, search_iterations +5000
+         0.421  switch -> Uxie (hits 18%, takes 0%, faster) sole answer to Aerodactyl search_visits +260, search_iterations +5000
+         0.342  switch -> Qwilfish (hits 25%, takes 57%, faster) search_visits +154, search_iterations +5000
+
+Turn 5   actor 1   THUNDERBOLT @0               score    0.630
+    board   : Rotom 88%  vs  Aerodactyl 75%
+    foe     : Aerodactyl -> FIREBLAST
+    view: hp 88%  speed 464 (faster)  incoming max 110%  certain 0%  threatened_lethal=True
+    race vs Aerodactyl: mine 1 turns, theirs 1, winning=True (ties on speed)
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                      Steelix      Aerodactyl*  Magneton     Sceptile     Skuntank     Uxie
+      Uxie       100% -            W 57%/48%    L 27%/40%    L 39%/58%    L 29%/81%    L 17%/29%
+      Escavalier 100% -            L 69%/114%   L 57%/104%   L 296%/104%  L 116%/124%  W 133%/18%
+      Qwilfish   100% -            L 104%/107%  L 43%/167%   L 28%/123%   L 44%/67%    L 25%/110%
+      Rhydon       0% -            -            -            -            -            -
+      Rotom*      88% -            W 125%/110%  W 69%/45%    L 51%/131%   L 64%/181%   W 64%/59%
+      Sceptile   100% -            L 75%/107%   W 185%/70%   W 198%/123%  W 94%/89%    L 44%/51%
+    options considered:
+         0.630  THUNDERBOLT (bp 95, 125% dmg, x2)      search_visits +1887, search_iterations +5000
+         0.618  VOLTSWITCH (bp 70, 93% dmg, x2)        search_visits +1476, search_iterations +5000
+         0.579  SHADOWBALL (bp 80, 53% dmg, x1)        search_visits +807, search_iterations +5000
+         0.451  WILLOWISP (0% dmg, x1)                 search_visits +229, search_iterations +5000
+         0.426  switch -> Sceptile (hits 75%, takes 107%) sole answer to Sceptile, Skuntank search_visits +191, search_iterations +5000
+         0.381  switch -> Escavalier (hits 69%, takes 114%) search_visits +144, search_iterations +5000
+         0.368  switch -> Uxie (hits 57%, takes 48%)   search_visits +134, search_iterations +5000
+         0.365  switch -> Qwilfish (hits 104%, takes 72%) search_visits +132, search_iterations +5000
+
+Turn 6   actor 1   THUNDERBOLT @0               score    0.351
+    board   : Rotom 88%  vs  Skuntank 88%
+    foe     : Skuntank -> SUCKERPUNCH
+    view: hp 88%  speed 464 (faster)  incoming max 181%  certain 181%  threatened_lethal=True
+    race vs Skuntank: mine 2 turns, theirs 1, winning=False
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                      Steelix     Aerodactyl  Magneton    Sceptile    Skuntank*   Uxie
+      Uxie       100% -           -           L 27%/40%   L 39%/58%   L 29%/81%   L 17%/29%
+      Escavalier 100% -           -           L 57%/104%  L 296%/104% L 116%/124% W 133%/18%
+      Qwilfish   100% -           -           L 43%/167%  L 28%/123%  W 44%/67%   L 25%/110%
+      Rhydon       0% -           -           -           -           -           -
+      Rotom*      88% -           -           W 69%/45%   L 51%/131%  L 64%/181%  W 64%/59%
+      Sceptile   100% -           -           W 185%/70%  W 198%/123% W 94%/89%   L 44%/51%
+    options considered:
+         0.351  THUNDERBOLT (bp 95, 64% dmg, x1)       search_visits +3276, search_iterations +5000
+         0.240  switch -> Escavalier (hits 116%, takes 124%) search_visits +513, search_iterations +5000
+         0.233  switch -> Qwilfish (hits 44%, takes 45%, faster) search_visits +477, search_iterations +5000
+         0.214  switch -> Sceptile (hits 94%, takes 89%, faster) sole answer to Sceptile search_visits +395, search_iterations +5000
+         0.198  switch -> Uxie (hits 29%, takes 81%, faster) search_visits +339, search_iterations +5000
+
+Turn 7   actor 1   EARTHQUAKE                   score    0.668
+    board   : Sceptile 88%  vs  Skuntank 78%
+    foe     : Skuntank -> CRUNCH
+    view: hp 88%  speed 339 (faster)  incoming max 89%  certain 89%  threatened_lethal=True
+    race vs Skuntank: mine 1 turns, theirs 1, winning=False
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                      Steelix     Aerodactyl  Magneton    Sceptile    Skuntank*   Uxie
+      Uxie       100% -           -           L 27%/40%   L 39%/58%   L 29%/81%   L 17%/29%
+      Escavalier 100% -           -           L 57%/104%  L 296%/104% L 116%/124% W 133%/18%
+      Qwilfish   100% -           -           L 43%/167%  L 28%/123%  W 44%/67%   L 25%/110%
+      Rhydon       0% -           -           -           -           -           -
+      Rotom        0% -           -           -           -           -           -
+      Sceptile*   88% -           -           W 185%/70%  W 198%/123% W 94%/89%   L 44%/51%
+    options considered:
+         0.668  EARTHQUAKE (bp 100, 94% dmg, x2)       search_visits +3318, search_iterations +5000
+         0.576  ACROBATICS (bp 55, 78% dmg, x1)        search_visits +644, search_iterations +5000
+         0.518  LEAFBLADE (bp 90, 32% dmg, x0.5)       search_visits +352, search_iterations +5000
+         0.476  SWORDSDANCE (0% dmg, x1)               search_visits +247, search_iterations +5000
+         0.445  switch -> Escavalier (hits 116%, takes 124%) sole answer to Uxie search_visits +197, search_iterations +5000
+         0.377  switch -> Qwilfish (hits 44%, takes 45%, faster) search_visits +130, search_iterations +5000
+         0.345  switch -> Uxie (hits 29%, takes 81%, faster) search_visits +112, search_iterations +5000
+
+Turn 8   actor 1   ACROBATICS @0                score    0.724
+    board   : Sceptile 88%  vs  Sceptile 88%
+    foe     : Sceptile -> ACROBATICS
+    view: hp 88%  speed 339 (faster)  incoming max 123%  certain 123%  threatened_lethal=True
+    race vs Sceptile: mine 1 turns, theirs 1, winning=True (ties on speed)
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                      Steelix     Aerodactyl  Magneton    Sceptile*   Skuntank    Uxie
+      Uxie       100% -           -           L 27%/40%   L 39%/58%   -           L 17%/29%
+      Escavalier 100% -           -           L 57%/104%  L 296%/104% -           W 133%/18%
+      Qwilfish   100% -           -           L 43%/167%  L 28%/123%  -           L 25%/110%
+      Rhydon       0% -           -           -           -           -           -
+      Rotom        0% -           -           -           -           -           -
+      Sceptile*   88% -           -           W 185%/70%  W 198%/123% -           L 44%/51%
+    options considered:
+         0.724  ACROBATICS (bp 55, 198% dmg, x2)       search_visits +4106, search_iterations +5000
+         0.508  LEAFBLADE (bp 90, 41% dmg, x0.5)       search_visits +217, search_iterations +5000
+         0.479  EARTHQUAKE (bp 100, 30% dmg, x0.5)     search_visits +179, search_iterations +5000
+         0.477  SWORDSDANCE (0% dmg, x1)               search_visits +175, search_iterations +5000
+         0.435  switch -> Escavalier (hits 296%, takes 104%) sole answer to Uxie search_visits +138, search_iterations +5000
+         0.361  switch -> Qwilfish (hits 28%, takes 123%) search_visits +94, search_iterations +5000
+         0.355  switch -> Uxie (hits 39%, takes 58%)   search_visits +91, search_iterations +5000
+
+Turn 9   actor 1   EARTHQUAKE                   score    0.572
+    board   : Sceptile 88%  vs  Magneton 94%
+    foe     : Magneton -> HIDDENPOWER
+    view: hp 88%  speed 678 (faster)  incoming max 70%  certain 70%  threatened_lethal=False
+    race vs Magneton: mine 1 turns, theirs 2, winning=True
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                      Steelix     Aerodactyl  Magneton*   Sceptile    Skuntank    Uxie
+      Uxie       100% -           -           L 27%/40%   -           -           L 17%/29%
+      Escavalier 100% -           -           L 57%/104%  -           -           W 133%/18%
+      Qwilfish   100% -           -           L 43%/167%  -           -           L 25%/110%
+      Rhydon       0% -           -           -           -           -           -
+      Rotom        0% -           -           -           -           -           -
+      Sceptile*   88% -           -           W 185%/70%  -           -           L 37%/51%
+    options considered:
+         0.572  EARTHQUAKE (bp 100, 185% dmg, x4)      search_visits +2506, search_iterations +5000
+         0.507  SWORDSDANCE (0% dmg, x1)               search_visits +785, search_iterations +5000
+         0.495  LEAFBLADE (bp 90, 31% dmg, x0.5)       search_visits +670, search_iterations +5000
+         0.474  ACROBATICS (bp 55, 13% dmg, x0.25)     search_visits +523, search_iterations +5000
+         0.386  switch -> Escavalier (hits 57%, takes 104%) sole answer to Uxie search_visits +238, search_iterations +5000
+         0.304  switch -> Uxie (hits 27%, takes 40%)   search_visits +140, search_iterations +5000
+         0.302  switch -> Qwilfish (hits 43%, takes 167%) search_visits +138, search_iterations +5000
+
+Turn 10  actor 1   switch -> Escavalier         score    0.977
+    board   : Sceptile 88%  vs  Uxie 88%
+    foe     : Uxie -> SIGNALBEAM
+    view: hp 88%  speed 678 (faster)  incoming max 51%  certain 51%  threatened_lethal=False
+    race vs Uxie: mine 3 turns, theirs 2, winning=False
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                      Steelix     Aerodactyl  Magneton    Sceptile    Skuntank    Uxie*
+      Uxie       100% -           -           -           -           -           L 17%/29%
+      Escavalier 100% -           -           -           -           -           W 133%/18%
+      Qwilfish   100% -           -           -           -           -           L 25%/110%
+      Rhydon       0% -           -           -           -           -           -
+      Rotom        0% -           -           -           -           -           -
+      Sceptile*   88% -           -           -           -           -           L 37%/51%
+    options considered:
+         0.977  switch -> Escavalier (hits 133%, takes 18%) sole answer to Uxie search_visits +4793, search_iterations +5000
+         0.372  LEAFBLADE (bp 90, 37% dmg, x1)         search_visits +39, search_iterations +5000
+         0.361  ACROBATICS (bp 55, 30% dmg, x1)        search_visits +38, search_iterations +5000
+         0.357  switch -> Uxie (hits 17%, takes 29%)   search_visits +37, search_iterations +5000
+         0.319  SWORDSDANCE (0% dmg, x1)               search_visits +34, search_iterations +5000
+         0.283  EARTHQUAKE (bp 100, 0% dmg, x0, IMMUNE) search_visits +30, search_iterations +5000
+         0.268  switch -> Qwilfish (hits 25%, takes 110%) search_visits +29, search_iterations +5000
+
+Turn 11  actor 1   MEGAHORN @0                  score    0.961
+    board   : Escavalier 79%  vs  Uxie 94%
+    foe     : Uxie -> PSYCHIC
+    view: hp 79%  speed 107 (slower)  incoming max 18%  certain 18%  threatened_lethal=False
+    race vs Uxie: mine 1 turns, theirs 5, winning=True
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                       Steelix     Aerodactyl  Magneton    Sceptile    Skuntank    Uxie*
+      Uxie        100% -           -           -           -           -           L 17%/29%
+      Escavalier*  79% -           -           -           -           -           W 133%/18%
+      Qwilfish    100% -           -           -           -           -           L 25%/110%
+      Rhydon        0% -           -           -           -           -           -
+      Rotom         0% -           -           -           -           -           -
+      Sceptile     88% -           -           -           -           -           L 37%/51%
+    options considered:
+         0.961  MEGAHORN (bp 120, 133% dmg, x2)        search_visits +4616, search_iterations +5000
+         0.646  SWORDSDANCE (0% dmg, x1)               search_visits +121, search_iterations +5000
+         0.587  ENDURE (0% dmg, x1)                    search_visits +91, search_iterations +5000
+         0.557  RETURN (bp 1, 11% dmg, x1)             search_visits +81, search_iterations +5000
+         0.300  switch -> Uxie (hits 17%, takes 29%)   search_visits +33, search_iterations +5000
+         0.267  switch -> Qwilfish (hits 25%, takes 110%) search_visits +30, search_iterations +5000
+         0.239  switch -> Sceptile (hits 37%, takes 51%, faster) search_visits +28, search_iterations +5000
+

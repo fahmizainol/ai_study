@@ -1,0 +1,367 @@
+team2_vs_team4  seed 196613  single   LOSS in 16 turns   [portable 0.7.7, mega=True, teams=gen5ru_a]
+  left  (team2): Golurk, Durant, Feraligatr, Omastar, Rotom, Sceptile
+  PORTABLE (team4): Steelix, Aerodactyl, Magneton, Sceptile, Skuntank, Uxie
+========================================================================================================
+
+Turn 0   actor 1   TOXIC @0                     score    200.0
+    board   : Steelix 100%  vs  Golurk 100%
+    foe     : Golurk -> ROCKPOLISH
+    view: hp 100%  speed 102 (slower)  incoming max 68%  certain 68%  threatened_lethal=False
+    race vs Golurk: mine 3 turns, theirs 2, winning=False
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                      Golurk*     Durant      Feraligatr  Omastar     Rotom       Sceptile
+      Steelix*   100% L 42%/68%   L 40%/52%   W 35%/20%   L 66%/107%  L 0%/47%    L 28%/27%
+      Aerodactyl 100% W 53%/93%   W 259%/117% W 66%/78%   L 83%/120%  W 110%/125% W 106%/75%
+      Magneton   100% L 55%/464%  L 237%/178% W 126%/43%  W 164%/79%  L 45%/69%   L 70%/185%
+      Sceptile   100% W 191%/101% L 237%/233% W 185%/55%  W 483%/92%  W 131%/51%  L 122%/198%
+      Skuntank   100% W 134%/237% W 279%/91%  W 55%/33%   W 52%/61%   W 181%/64%  L 88%/94%
+      Uxie       100% L 43%/82%   L 40%/105%  W 42%/50%   W 54%/36%   W 59%/64%   W 52%/44%
+    options considered:
+         200.0  TOXIC (0% dmg, x1)                     engine_base +175, fresh_status +25
+         186.9  EARTHQUAKE (bp 100, 42% dmg, x1)       engine_base +153, expected_damage +34
+         143.0  STEALTHROCK (0% dmg, x1)               engine_base +143
+         112.0  ROAR (0% dmg, x1)                      engine_base +112
+         VETO   switch -> Aerodactyl (hits 53%, takes 93%, faster) engine_base +55, matchup +32, entry_incoming_damage -87, switchin_race +65, no_escape_reason -1000000
+         VETO   switch -> Magneton (hits 55%, takes 464%, faster) engine_base +55, matchup +32, entry_incoming_damage -562, dies_on_entry -500, no_escape_reason -1000000
+         VETO   switch -> Sceptile (hits 191%, takes 101%, faster) engine_base +55, matchup +64, entry_incoming_damage -97, no_escape_reason -1000000
+         VETO   switch -> Skuntank (hits 134%, takes 237%, faster) engine_base +55, matchup +64, entry_incoming_damage -272, dies_on_entry -500, no_escape_reason -1000000
+         VETO   switch -> Uxie (hits 43%, takes 82%, faster) engine_base +55, matchup +32, entry_incoming_damage -72, switchin_race +65, no_escape_reason -1000000
+
+Turn 1   actor 1   EARTHQUAKE                   score    189.9
+    board   : Steelix 100%  vs  Golurk 94% psn
+    foe     : Golurk -> EARTHQUAKE
+    view: hp 100%  speed 102 (slower)  incoming max 68%  certain 68%  threatened_lethal=False
+    race vs Golurk: mine 3 turns, theirs 2, winning=False
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                      Golurk*     Durant      Feraligatr  Omastar     Rotom       Sceptile
+      Steelix*   100% L 42%/68%   L 40%/52%   W 35%/20%   L 66%/107%  L 0%/47%    L 28%/27%
+      Aerodactyl 100% L 53%/93%   W 259%/117% W 66%/78%   L 83%/120%  W 110%/125% W 106%/75%
+      Magneton   100% L 55%/464%  L 237%/178% W 126%/43%  W 164%/79%  L 45%/69%   L 70%/185%
+      Sceptile   100% L 191%/101% L 237%/233% W 185%/55%  W 483%/92%  W 131%/51%  L 122%/198%
+      Skuntank   100% L 134%/237% W 279%/91%  W 55%/33%   W 52%/61%   W 181%/64%  L 88%/94%
+      Uxie       100% L 43%/82%   L 40%/105%  W 42%/50%   W 54%/36%   W 59%/64%   W 52%/44%
+    options considered:
+         189.9  EARTHQUAKE (bp 100, 42% dmg, x1)       engine_base +156, expected_damage +34
+         162.0  ROAR (0% dmg, x1)                      engine_base +112, phaze_value +50
+         143.0  STEALTHROCK (0% dmg, x1)               engine_base +143
+         VETO   TOXIC (0% dmg, x1, IMMUNE)             immune -1000000
+         VETO   switch -> Aerodactyl (hits 53%, takes 93%) engine_base +55, matchup +32, entry_incoming_damage -87, switchin_race -5, no_escape_reason -1000000
+         VETO   switch -> Magneton (hits 55%, takes 464%) engine_base +55, matchup +32, entry_incoming_damage -562, switchin_race -70, dies_on_entry -500, no_escape_reason -1000000
+         VETO   switch -> Sceptile (hits 191%, takes 101%) engine_base +55, matchup +64, entry_incoming_damage -97, switchin_race -70, no_escape_reason -1000000
+         VETO   switch -> Skuntank (hits 134%, takes 237%) engine_base +55, matchup +64, entry_incoming_damage -272, switchin_race -70, dies_on_entry -500, no_escape_reason -1000000
+         VETO   switch -> Uxie (hits 43%, takes 82%)   engine_base +55, matchup +32, entry_incoming_damage -72, switchin_race -5, no_escape_reason -1000000
+
+Turn 2   actor 1   EARTHQUAKE                   score     73.5
+    board   : Steelix 8%  vs  Golurk 36% psn
+    foe     : Golurk -> DYNAMICPUNCH
+    view: hp 8%  speed 102 (slower)  incoming max 68%  certain 68%  threatened_lethal=True
+    race vs Golurk: mine 1 turns, theirs 1, winning=False
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                      Golurk*     Durant      Feraligatr  Omastar     Rotom       Sceptile
+      Steelix*     8% L 42%/68%   L 40%/52%   L 35%/20%   L 66%/107%  L 0%/47%    L 28%/27%
+      Aerodactyl 100% W 53%/93%   W 259%/117% W 66%/78%   L 83%/120%  W 110%/125% W 106%/75%
+      Magneton   100% L 55%/464%  L 237%/178% W 126%/43%  W 164%/79%  L 45%/69%   L 70%/185%
+      Sceptile   100% L 191%/101% L 237%/233% W 185%/55%  W 483%/92%  W 131%/51%  L 122%/198%
+      Skuntank   100% L 134%/237% W 279%/91%  W 55%/33%   W 52%/61%   W 181%/64%  L 88%/94%
+      Uxie       100% W 43%/82%   L 40%/105%  W 42%/50%   W 54%/36%   W 59%/64%   W 52%/44%
+    options considered:
+          73.5  EARTHQUAKE (bp 100, 42% dmg, x1)       engine_base +260, expected_damage +34, dead_before_moving -220
+          40.5  ROAR (0% dmg, x1)                      engine_base +112, phaze_value +50, dead_before_moving -122
+          35.8  STEALTHROCK (0% dmg, x1)               engine_base +143, dead_before_moving -107
+         VETO   TOXIC (0% dmg, x1, IMMUNE)             immune -1000000
+         VETO   switch -> Aerodactyl (hits 53%, takes 93%) engine_base +55, matchup +32, entry_incoming_damage -87, switchin_race -5, escape_lethal_threat +130, preserve_low_hp_actor +80, no_escape_reason -1000000
+         VETO   switch -> Magneton (hits 55%, takes 464%) engine_base +55, matchup +32, entry_incoming_damage -562, switchin_race -70, escape_lethal_threat +130, dies_on_entry -500, no_escape_reason -1000000
+         VETO   switch -> Sceptile (hits 191%, takes 101%) engine_base +55, matchup +64, entry_incoming_damage -97, switchin_race -70, escape_lethal_threat +130, no_escape_reason -1000000
+         VETO   switch -> Skuntank (hits 134%, takes 237%) engine_base +55, matchup +64, entry_incoming_damage -272, switchin_race -70, escape_lethal_threat +130, dies_on_entry -500, no_escape_reason -1000000
+         VETO   switch -> Uxie (hits 43%, takes 82%)   engine_base +55, matchup +32, entry_incoming_damage -72, switchin_race -5, escape_lethal_threat +130, preserve_low_hp_actor +80, no_escape_reason -1000000
+
+Turn 3   actor 1   SUCKERPUNCH @0               score   1110.0
+    board   : Skuntank 100%  vs  Golurk 8% psn
+    foe     : Golurk -> DYNAMICPUNCH
+    view: hp 100%  speed 267 (slower)  incoming max 237%  certain 237%  threatened_lethal=True
+    race vs Golurk: mine 1 turns, theirs 1, winning=True (ties on speed)
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                      Golurk*     Durant      Feraligatr  Omastar     Rotom       Sceptile
+      Steelix      0% -           -           -           -           -           -
+      Aerodactyl 100% W 53%/93%   W 259%/117% W 66%/78%   L 83%/120%  W 110%/125% W 106%/75%
+      Magneton   100% L 55%/464%  L 237%/178% W 126%/43%  W 164%/79%  L 45%/69%   L 70%/185%
+      Sceptile   100% L 191%/101% L 237%/233% W 185%/55%  W 483%/92%  W 131%/51%  L 122%/198%
+      Skuntank*  100% L 134%/237% W 279%/91%  W 55%/33%   W 52%/61%   W 181%/64%  L 88%/94%
+      Uxie       100% W 43%/82%   L 40%/105%  W 42%/50%   W 54%/36%   W 59%/64%   W 52%/44%
+    options considered:
+        1110.0  SUCKERPUNCH (bp 80, 134% dmg, x2)      engine_base +260, lethal +500, priority_finisher +350
+         102.9  CRUNCH (bp 80, 134% dmg, x2)           engine_base +260, expected_damage +80, super_effective +70, secondary_drop +2, dead_before_moving -309
+          96.0  PURSUIT (bp 40, 68% dmg, x2)           engine_base +260, expected_damage +54, super_effective +70, dead_before_moving -288
+          72.6  FIREBLAST (bp 120, 38% dmg, x1)        engine_base +260, expected_damage +30, dead_before_moving -218
+         VETO   switch -> Aerodactyl (hits 53%, takes 93%) engine_base +55, matchup +32, entry_incoming_damage -87, switchin_race -5, escape_lethal_threat +130, no_escape_reason -1000000
+         VETO   switch -> Magneton (hits 55%, takes 464%) engine_base +55, matchup +32, entry_incoming_damage -562, switchin_race -70, escape_lethal_threat +130, dies_on_entry -500, no_escape_reason -1000000
+         VETO   switch -> Sceptile (hits 191%, takes 101%) engine_base +55, matchup +64, entry_incoming_damage -97, switchin_race -70, escape_lethal_threat +130, no_escape_reason -1000000
+         VETO   switch -> Uxie (hits 43%, takes 82%)   engine_base +55, matchup +32, entry_incoming_damage -72, switchin_race -5, escape_lethal_threat +130, no_escape_reason -1000000
+
+Turn 4   actor 1   FIREBLAST @0                 score    335.3
+    board   : Skuntank 90%  vs  Sceptile 100%
+    foe     : Sceptile -> EARTHQUAKE
+    view: hp 90%  speed 267 (slower)  incoming max 94%  certain 94%  threatened_lethal=True
+    race vs Sceptile: mine 2 turns, theirs 1, winning=False
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                      Golurk      Durant      Feraligatr  Omastar     Rotom       Sceptile*
+      Steelix      0% -           -           -           -           -           -
+      Aerodactyl 100% -           W 259%/117% W 66%/78%   L 83%/120%  W 110%/125% W 106%/75%
+      Magneton   100% -           L 237%/178% W 126%/43%  W 164%/79%  L 45%/69%   L 70%/185%
+      Sceptile   100% -           L 237%/233% W 185%/55%  W 483%/92%  W 131%/51%  L 122%/198%
+      Skuntank*   90% -           L 279%/91%  W 55%/33%   W 52%/61%   W 181%/64%  L 88%/94%
+      Uxie       100% -           L 40%/105%  W 42%/50%   W 54%/36%   W 59%/64%   W 52%/44%
+    options considered:
+         335.3  FIREBLAST (bp 120, 82% dmg, x2)        engine_base +200, expected_damage +66, accuracy -5, super_effective +70, secondary_burn +4
+         314.5  switch -> Aerodactyl (hits 106%, takes 75%, faster) sole answer to Durant engine_base +55, matchup +64, entry_incoming_damage -65, switchin_race +65, sole_answer_reserved -45, escape_lethal_threat +130, losing_race_bench_wins +110, escape_reasons +2
+         260.0  CRUNCH (bp 80, 88% dmg, x1)            engine_base +188, expected_damage +71, secondary_drop +1
+         258.6  SUCKERPUNCH (bp 80, 88% dmg, x1)       engine_base +188, expected_damage +71
+         234.1  switch -> Uxie (hits 52%, takes 44%)   engine_base +55, matchup +64, entry_incoming_damage -25, switchin_race +10, escape_lethal_threat +130, escape_reasons +1
+         179.6  PURSUIT (bp 40, 44% dmg, x1)           engine_base +144, expected_damage +36
+        -542.3  switch -> Sceptile (hits 122%, takes 198%) engine_base +55, matchup +64, entry_incoming_damage -221, switchin_race -70, escape_lethal_threat +130, dies_on_entry -500, escape_reasons +1
+        -558.0  switch -> Magneton (hits 70%, takes 185%) engine_base +55, matchup +32, entry_incoming_damage -205, switchin_race -70, escape_lethal_threat +130, dies_on_entry -500, escape_reasons +1
+
+Turn 5   actor 1   SUCKERPUNCH @0               score   1110.0
+    board   : Skuntank 1%  vs  Sceptile 30%
+    foe     : Sceptile -> LEAFBLADE
+    view: hp 1%  speed 267 (slower)  incoming max 94%  certain 94%  threatened_lethal=True
+    race vs Sceptile: mine 1 turns, theirs 1, winning=True (ties on speed)
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                      Golurk      Durant      Feraligatr  Omastar     Rotom       Sceptile*
+      Steelix      0% -           -           -           -           -           -
+      Aerodactyl 100% -           W 259%/117% W 66%/78%   L 83%/120%  W 110%/125% W 106%/75%
+      Magneton   100% -           L 237%/178% W 126%/43%  W 164%/79%  L 45%/69%   L 70%/185%
+      Sceptile   100% -           L 237%/233% W 185%/55%  W 483%/92%  W 131%/51%  L 122%/198%
+      Skuntank*    1% -           L 279%/91%  L 55%/33%   L 52%/61%   L 181%/64%  L 88%/94%
+      Uxie       100% -           L 40%/105%  W 42%/50%   W 54%/36%   W 59%/64%   W 52%/44%
+    options considered:
+        1110.0  SUCKERPUNCH (bp 80, 88% dmg, x1)       engine_base +260, lethal +500, priority_finisher +350
+         106.3  FIREBLAST (bp 120, 82% dmg, x2)        engine_base +290, expected_damage +66, accuracy -5, super_effective +70, secondary_burn +4, dead_before_moving -319
+          83.0  CRUNCH (bp 80, 88% dmg, x1)            engine_base +260, expected_damage +71, secondary_drop +1, dead_before_moving -249
+          73.9  PURSUIT (bp 40, 44% dmg, x1)           engine_base +260, expected_damage +36, dead_before_moving -222
+         VETO   switch -> Aerodactyl (hits 106%, takes 75%, faster) sole answer to Durant engine_base +55, matchup +64, entry_incoming_damage -65, switchin_race +65, sole_answer_reserved -45, escape_lethal_threat +130, preserve_low_hp_actor +80, no_escape_reason -1000000
+         VETO   switch -> Magneton (hits 70%, takes 185%) engine_base +55, matchup +32, entry_incoming_damage -205, switchin_race -70, escape_lethal_threat +130, dies_on_entry -500, no_escape_reason -1000000
+         VETO   switch -> Sceptile (hits 122%, takes 198%) engine_base +55, matchup +64, entry_incoming_damage -221, switchin_race -70, escape_lethal_threat +130, dies_on_entry -500, no_escape_reason -1000000
+         VETO   switch -> Uxie (hits 52%, takes 44%)   engine_base +55, matchup +64, entry_incoming_damage -25, switchin_race +10, escape_lethal_threat +130, preserve_low_hp_actor +80, no_escape_reason -1000000
+
+Turn 6   actor 1   FIREBLAST @0                 score    752.5
+    board   : Aerodactyl 100%  vs  Durant 100%
+    foe     : Durant -> THUNDERFANG
+    view: hp 100%  speed 394 (faster)  incoming max 117%  certain 0%  threatened_lethal=True
+    race vs Durant: mine 1 turns, theirs 1, winning=True (ties on speed)
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                       Golurk      Durant*     Feraligatr  Omastar     Rotom       Sceptile
+      Steelix       0% -           -           -           -           -           -
+      Aerodactyl* 100% -           W 259%/117% W 66%/78%   L 83%/120%  W 110%/125% -
+      Magneton    100% -           L 237%/178% W 126%/43%  W 164%/79%  L 45%/69%   -
+      Sceptile    100% -           L 237%/233% W 185%/55%  W 483%/92%  W 131%/51%  -
+      Skuntank      0% -           -           -           -           -           -
+      Uxie        100% -           L 40%/105%  W 42%/50%   W 54%/36%   W 59%/64%   -
+    options considered:
+         752.5  FIREBLAST (bp 120, 259% dmg, x4)       engine_base +290, lethal +500, accuracy -38
+         212.5  STONEEDGE (bp 100, 74% dmg, x1)        engine_base +159, expected_damage +59, accuracy -6
+         188.5  EARTHQUAKE (bp 100, 49% dmg, x1)       engine_base +149, expected_damage +40
+          28.9  switch -> Uxie (hits 40%, takes 105%)  engine_base +55, matchup +16, entry_incoming_damage -102, switchin_race -70, escape_lethal_threat +130, escape_reasons +1
+        -350.0  ROOST (0% dmg, x1)                     heal_near_full -500, heal_saves_battler +150
+        -548.4  switch -> Magneton (hits 237%, takes 178%) engine_base +55, matchup +32, entry_incoming_damage -195, switchin_race -70, escape_lethal_threat +130, dies_on_entry -500, escape_reasons +1
+        -618.9  switch -> Sceptile (hits 237%, takes 233%) engine_base +55, matchup +32, entry_incoming_damage -266, switchin_race -70, escape_lethal_threat +130, dies_on_entry -500, escape_reasons +1
+
+Turn 7   actor 1   switch -> Sceptile           score    178.4
+    board   : Aerodactyl 90%  vs  Rotom 100%
+    foe     : Rotom -> THUNDERBOLT
+    view: hp 90%  speed 394 (slower)  incoming max 125%  certain 125%  threatened_lethal=True
+    race vs Rotom: mine 1 turns, theirs 1, winning=False
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                       Golurk      Durant      Feraligatr  Omastar     Rotom*      Sceptile
+      Steelix       0% -           -           -           -           -           -
+      Aerodactyl*  90% -           -           W 66%/78%   L 83%/120%  L 110%/125% -
+      Magneton    100% -           -           W 126%/43%  W 164%/79%  L 45%/69%   -
+      Sceptile    100% -           -           W 185%/55%  W 483%/92%  W 131%/51%  -
+      Skuntank      0% -           -           -           -           -           -
+      Uxie        100% -           -           W 42%/50%   W 54%/36%   L 59%/64%   -
+    options considered:
+         178.4  switch -> Sceptile (hits 131%, takes 51%) sole answer to Rotom engine_base +55, matchup +32, entry_incoming_damage -34, switchin_race -5, escape_lethal_threat +130, escape_reasons +1
+         161.9  switch -> Uxie (hits 59%, takes 64%)   engine_base +55, matchup +32, entry_incoming_damage -50, switchin_race -5, escape_lethal_threat +130, escape_reasons +1
+         139.1  switch -> Magneton (hits 45%, takes 69%) engine_base +55, matchup +16, entry_incoming_damage -57, switchin_race -5, escape_lethal_threat +130, escape_reasons +1
+          65.0  STONEEDGE (bp 100, 110% dmg, x1)       engine_base +188, expected_damage +80, accuracy -8, dead_before_moving -195
+          51.8  FIREBLAST (bp 120, 48% dmg, x1)        engine_base +171, expected_damage +39, accuracy -3, dead_before_moving -156
+        -209.5  ROOST (0% dmg, x1)                     engine_base +62, heal_near_full -500, heal_cannot_resolve -400, dead_before_moving +628
+         VETO   EARTHQUAKE (bp 100, 0% dmg, x0, IMMUNE) immune -1000000
+
+Turn 8   actor 1   LEAFSTORM @0                 score    718.0
+    board   : Sceptile 73%  vs  Rotom 100%
+    foe     : Rotom -> THUNDERBOLT
+    view: hp 73%  speed 338 (slower)  incoming max 30%  certain 30%  threatened_lethal=False
+    race vs Rotom: mine 1 turns, theirs 3, winning=True
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                      Golurk      Durant      Feraligatr  Omastar     Rotom*      Sceptile
+      Steelix      0% -           -           -           -           -           -
+      Aerodactyl  90% -           -           W 66%/78%   L 83%/120%  L 110%/125% -
+      Magneton   100% -           -           W 126%/43%  W 164%/79%  L 45%/69%   -
+      Sceptile*   73% -           -           W 185%/55%  W 483%/92%  W 131%/51%  -
+      Skuntank     0% -           -           -           -           -           -
+      Uxie       100% -           -           W 42%/50%   W 54%/36%   L 59%/64%   -
+    options considered:
+         718.0  LEAFSTORM (bp 140, 131% dmg, x1)       engine_base +258, lethal +500, accuracy -25, self_stat_drop -15
+         208.1  ROCKSLIDE (bp 75, 29% dmg, x1)         engine_base +186, expected_damage +23, accuracy -1
+         112.2  ACROBATICS (bp 55, 32% dmg, x0.5)      engine_base +132, expected_damage +25, resisted -45
+         VETO   HIDDENPOWER (bp 1, 44% dmg, x0, IMMUNE) immune -1000000
+         VETO   switch -> Aerodactyl (hits 110%, takes 125%) engine_base +52, matchup +64, entry_incoming_damage -128, switchin_race -70, dies_on_entry -500, no_escape_reason -1000000
+         VETO   switch -> Magneton (hits 45%, takes 69%) engine_base +55, matchup +16, entry_incoming_damage -57, switchin_race -5, no_escape_reason -1000000
+         VETO   switch -> Uxie (hits 59%, takes 64%)   engine_base +55, matchup +32, entry_incoming_damage -50, switchin_race -5, no_escape_reason -1000000
+
+Turn 9   actor 1   LEAFSTORM @0                 score    700.0
+    board   : Sceptile 45% -2  vs  Omastar 100%
+    foe     : Omastar -> ICEBEAM
+    view: hp 45%  speed 338 (faster)  incoming max 92%  certain 92%  threatened_lethal=True
+    race vs Omastar: mine 2 turns, theirs 1, winning=False
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                      Golurk      Durant      Feraligatr  Omastar*    Rotom       Sceptile
+      Steelix      0% -           -           -           -           -           -
+      Aerodactyl  90% -           -           W 66%/78%   L 83%/120%  -           -
+      Magneton   100% -           -           W 126%/43%  W 164%/79%  -           -
+      Sceptile*   45% -           -           L 93%/55%   W 243%/92%  -           -
+      Skuntank     0% -           -           -           -           -           -
+      Uxie       100% -           -           W 42%/50%   W 54%/36%   -           -
+    options considered:
+         700.0  LEAFSTORM (bp 140, 243% dmg, x4)       engine_base +240, lethal +500, accuracy -25, self_stat_drop -15
+         392.7  switch -> Uxie (hits 54%, takes 36%, faster) engine_base +55, matchup +32, entry_incoming_damage -14, switchin_race +80, escape_lethal_threat +130, losing_race_bench_wins +110, escape_reasons +1
+         355.0  switch -> Magneton (hits 164%, takes 79%, faster) engine_base +55, matchup +64, entry_incoming_damage -69, switchin_race +65, escape_lethal_threat +130, losing_race_bench_wins +110, escape_reasons +1
+         188.9  ROCKSLIDE (bp 75, 17% dmg, x1)         engine_base +175, expected_damage +13, secondary_flinch +1
+          87.5  ACROBATICS (bp 55, 18% dmg, x0.5)      engine_base +118, expected_damage +15, resisted -45
+          64.3  HIDDENPOWER (bp 1, 5% dmg, x0.5)       engine_base +105, expected_damage +4, resisted -45
+         VETO   switch -> Aerodactyl (hits 83%, takes 120%, faster) engine_base +52, matchup +64, entry_incoming_damage -121, escape_lethal_threat +130, dies_on_entry -500, no_escape_reason -1000000
+
+Turn 10  actor 1   FLASHCANNON @0               score    820.0
+    board   : Magneton 100%  vs  Omastar 0%
+    foe     : Omastar -> SCALD
+    view: hp 100%  speed 392 (faster)  incoming max 79%  certain 79%  threatened_lethal=False
+    race vs Omastar: mine 1 turns, theirs 2, winning=True
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                      Golurk      Durant      Feraligatr  Omastar*    Rotom       Sceptile
+      Steelix      0% -           -           -           -           -           -
+      Aerodactyl  90% -           -           W 66%/78%   W 83%/120%  -           -
+      Magneton*  100% -           -           W 126%/43%  W 164%/79%  -           -
+      Sceptile     0% -           -           -           -           -           -
+      Skuntank     0% -           -           -           -           -           -
+      Uxie       100% -           -           W 42%/50%   W 54%/36%   -           -
+    options considered:
+         820.0  FLASHCANNON (bp 80, 69% dmg, x1)       engine_base +320, lethal +500
+         820.0  VOLTSWITCH (bp 70, 122% dmg, x2)       engine_base +320, lethal +500
+         810.0  THUNDERBOLT (bp 95, 164% dmg, x2)      engine_base +310, lethal +500
+         790.0  HIDDENPOWER (bp 1, 10% dmg, x0.5)      engine_base +290, lethal +500
+         VETO   switch -> Aerodactyl (hits 83%, takes 120%, faster) engine_base +52, matchup +64, entry_incoming_damage -121, dies_on_entry -500, no_escape_reason -1000000
+         VETO   switch -> Uxie (hits 54%, takes 36%, faster) engine_base +55, matchup +32, entry_incoming_damage -14, switchin_race +80, no_escape_reason -1000000
+
+Turn 11  actor 1   FLASHCANNON @0               score    163.6
+    board   : Magneton 100%  vs  Feraligatr 100%
+    foe     : Feraligatr -> SWORDSDANCE
+    view: hp 100%  speed 392 (faster)  incoming max 43%  certain 43%  threatened_lethal=False
+    race vs Feraligatr: mine 4 turns, theirs 3, winning=False
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                      Golurk       Durant       Feraligatr*  Omastar      Rotom        Sceptile
+      Steelix      0% -            -            -            -            -            -
+      Aerodactyl  90% -            -            W 66%/78%    -            -            -
+      Magneton*  100% -            -            W 126%/43%   -            -            -
+      Sceptile     0% -            -            -            -            -            -
+      Skuntank     0% -            -            -            -            -            -
+      Uxie       100% -            -            W 42%/50%    -            -            -
+    options considered:
+         163.6  FLASHCANNON (bp 80, 27% dmg, x0.5)     engine_base +187, expected_damage +21, resisted -45
+         VETO   switch -> Aerodactyl (hits 66%, takes 78%, faster) engine_base +52, matchup +32, entry_incoming_damage -68, switchin_race +65, no_escape_reason -1000000
+         VETO   switch -> Uxie (hits 42%, takes 50%, faster) engine_base +55, matchup +32, entry_incoming_damage -31, switchin_race +80, no_escape_reason -1000000
+
+Turn 12  actor 1   FLASHCANNON @0               score    169.6
+    board   : Magneton 100%  vs  Feraligatr 81%
+    foe     : Feraligatr -> CRUNCH
+    view: hp 100%  speed 392 (faster)  incoming max 84%  certain 84%  threatened_lethal=False
+    race vs Feraligatr: mine 4 turns, theirs 2, winning=False
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                      Golurk       Durant       Feraligatr*  Omastar      Rotom        Sceptile
+      Steelix      0% -            -            -            -            -            -
+      Aerodactyl  90% -            -            L 66%/153%   -            -            -
+      Magneton*  100% -            -            W 126%/84%   -            -            -
+      Sceptile     0% -            -            -            -            -            -
+      Skuntank     0% -            -            -            -            -            -
+      Uxie       100% -            -            W 42%/98%    -            -            -
+    options considered:
+         169.6  FLASHCANNON (bp 80, 27% dmg, x0.5)     engine_base +193, expected_damage +21, resisted -45
+         VETO   switch -> Aerodactyl (hits 66%, takes 153%, faster) engine_base +52, matchup +32, entry_incoming_damage -164, dies_on_entry -500, no_escape_reason -1000000
+         VETO   switch -> Uxie (hits 42%, takes 98%, faster) engine_base +55, matchup +32, entry_incoming_damage -94, switchin_race +65, no_escape_reason -1000000
+
+Turn 13  actor 1   FLASHCANNON @0               score    179.6
+    board   : Magneton 17%  vs  Feraligatr 62%
+    foe     : Feraligatr -> AQUAJET
+    view: hp 17%  speed 392 (faster)  incoming max 84%  certain 84%  threatened_lethal=True
+    race vs Feraligatr: mine 3 turns, theirs 1, winning=False
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                      Golurk       Durant       Feraligatr*  Omastar      Rotom        Sceptile
+      Steelix      0% -            -            -            -            -            -
+      Aerodactyl  90% -            -            W 66%/153%   -            -            -
+      Magneton*   17% -            -            W 126%/84%   -            -            -
+      Sceptile     0% -            -            -            -            -            -
+      Skuntank     0% -            -            -            -            -            -
+      Uxie       100% -            -            W 42%/98%    -            -            -
+    options considered:
+         179.6  FLASHCANNON (bp 80, 27% dmg, x0.5)     engine_base +203, expected_damage +21, resisted -45
+         VETO   switch -> Aerodactyl (hits 66%, takes 153%, faster) engine_base +52, matchup +32, entry_incoming_damage -164, escape_lethal_threat +130, dies_on_entry -500, no_escape_reason -1000000
+         VETO   switch -> Uxie (hits 42%, takes 98%, faster) engine_base +55, matchup +32, entry_incoming_damage -94, switchin_race +65, escape_lethal_threat +130, preserve_low_hp_actor +80, no_escape_reason -1000000
+
+Turn 14  actor 1   STONEEDGE @0                 score    224.8
+    board   : Aerodactyl 90%  vs  Feraligatr 69%
+    foe     : Feraligatr -> AQUAJET
+    view: hp 90%  speed 394 (faster)  incoming max 153%  certain 153%  threatened_lethal=True
+    race vs Feraligatr: mine 2 turns, theirs 1, winning=False
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                       Golurk       Durant       Feraligatr*  Omastar      Rotom        Sceptile
+      Steelix       0% -            -            -            -            -            -
+      Aerodactyl*  90% -            -            L 66%/153%   -            -            -
+      Magneton      0% -            -            -            -            -            -
+      Sceptile      0% -            -            -            -            -            -
+      Skuntank      0% -            -            -            -            -            -
+      Uxie        100% -            -            W 42%/98%    -            -            -
+    options considered:
+         224.8  STONEEDGE (bp 100, 66% dmg, x1)        engine_base +177, expected_damage +53, accuracy -5
+         200.4  EARTHQUAKE (bp 100, 44% dmg, x1)       engine_base +165, expected_damage +35
+         119.6  FIREBLAST (bp 120, 17% dmg, x0.5)      engine_base +151, expected_damage +14, accuracy -1, resisted -45
+        -838.0  ROOST (0% dmg, x1)                     engine_base +62, heal_near_full -500, heal_does_not_save -400
+         VETO   switch -> Uxie (hits 42%, takes 98%, faster) sole answer to Feraligatr engine_base +55, matchup +32, entry_incoming_damage -94, switchin_race +65, escape_lethal_threat +130, no_escape_reason -1000000
+
+Turn 15  actor 1   PSYCHIC @0                   score    189.7
+    board   : Uxie 100%  vs  Feraligatr 75%
+    foe     : Feraligatr -> CRUNCH
+    view: hp 100%  speed 310 (faster)  incoming max 98%  certain 98%  threatened_lethal=False
+    race vs Feraligatr: mine 2 turns, theirs 2, winning=False
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                      Golurk       Durant       Feraligatr*  Omastar      Rotom        Sceptile
+      Steelix      0% -            -            -            -            -            -
+      Aerodactyl   0% -            -            -            -            -            -
+      Magneton     0% -            -            -            -            -            -
+      Sceptile     0% -            -            -            -            -            -
+      Skuntank     0% -            -            -            -            -            -
+      Uxie*      100% -            -            W 42%/98%    -            -            -
+    options considered:
+         189.7  PSYCHIC (bp 90, 42% dmg, x1)           engine_base +156, expected_damage +33
+         179.4  SIGNALBEAM (bp 75, 23% dmg, x1)        engine_base +161, expected_damage +18
+         120.0  CALMMIND (0% dmg, x1)                  engine_base +120
+          70.0  SUBSTITUTE (0% dmg, x1)                engine_base +70
+
+Turn 16  actor 1   PSYCHIC @0                   score    279.7
+    board   : Uxie 22%  vs  Feraligatr 44%
+    foe     : Feraligatr -> CRUNCH
+    view: hp 22%  speed 310 (faster)  incoming max 98%  certain 98%  threatened_lethal=True
+    race vs Feraligatr: mine 2 turns, theirs 1, winning=False
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                      Golurk       Durant       Feraligatr*  Omastar      Rotom        Sceptile
+      Steelix      0% -            -            -            -            -            -
+      Aerodactyl   0% -            -            -            -            -            -
+      Magneton     0% -            -            -            -            -            -
+      Sceptile     0% -            -            -            -            -            -
+      Skuntank     0% -            -            -            -            -            -
+      Uxie*       22% -            -            L 42%/98%    -            -            -
+    options considered:
+         279.7  PSYCHIC (bp 90, 42% dmg, x1)           engine_base +246, expected_damage +33
+         266.4  SIGNALBEAM (bp 75, 23% dmg, x1)        engine_base +248, expected_damage +18
+        -153.0  CALMMIND (0% dmg, x1)                  engine_base +87, unsafe_setup -240
+        -500.0  SUBSTITUTE (0% dmg, x1)                cannot_afford_substitute -500
+

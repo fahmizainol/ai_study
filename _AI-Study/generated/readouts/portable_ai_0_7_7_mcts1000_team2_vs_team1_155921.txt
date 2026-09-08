@@ -1,0 +1,229 @@
+team2_vs_team1  seed 155921  single   LOSS in 12 turns   [portable 0.7.7, mega=True, teams=gen5ru_a]
+  left  (team2): Golurk, Durant, Feraligatr, Omastar, Rotom, Sceptile
+  PORTABLE (team1): Galvantula, Druddigon, Golurk, Kabutops, Magneton, Sigilyph
+========================================================================================================
+
+Turn 0   actor 1   GIGADRAIN @0                 score    0.498
+    board   : Galvantula 100%  vs  Golurk 100%
+    foe     : Golurk -> ROCKPOLISH
+    view: hp 100%  speed 346 (faster)  incoming max 144%  certain 144%  threatened_lethal=True
+    race vs Golurk: mine 2 turns, theirs 1, winning=False
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                       Golurk*     Durant      Feraligatr  Omastar     Rotom       Sceptile
+      Galvantula* 100% L 89%/144%  L 197%/111% W 207%/53%  W 269%/76%  W 73%/67%   W 174%/94%
+      Druddigon   100% W 135%/94%  W 275%/72%  W 122%/34%  W 115%/79%  W 185%/44%  W 197%/61%
+      Golurk      100% L 110%/116% W 71%/37%   L 63%/70%   L 119%/102% W 151%/91%  W 122%/62%
+      Kabutops    100% W 118%/197% L 103%/151% W 91%/36%   W 86%/72%   L 150%/152% L 146%/211%
+      Magneton    100% L 55%/466%  L 237%/178% W 126%/43%  W 164%/78%  L 45%/69%   L 70%/186%
+      Sigilyph    100% L 68%/125%  W 372%/86%  W 66%/75%   W 86%/95%   L 93%/126%  W 110%/67%
+    options considered:
+         0.498  GIGADRAIN (bp 75, 89% dmg, x2)         search_visits +221, search_iterations +1000
+         0.480  BUGBUZZ (bp 90, 40% dmg, x0.5)         search_visits +191, search_iterations +1000
+         0.401  switch -> Sigilyph (hits 68%, takes 125%, faster) search_visits +115, search_iterations +1000
+         0.376  VOLTSWITCH (bp 70, 0% dmg, x0, IMMUNE) search_visits +100, search_iterations +1000
+         0.370  THUNDER (bp 120, 0% dmg, x0, IMMUNE)   search_visits +98, search_iterations +1000
+         0.325  switch -> Golurk (hits 110%, takes 116%) search_visits +78, search_iterations +1000
+         0.311  switch -> Druddigon (hits 135%, takes 94%) search_visits +72, search_iterations +1000
+         0.296  switch -> Kabutops (hits 118%, takes 197%, faster) search_visits +68, search_iterations +1000
+         0.252  switch -> Magneton (hits 55%, takes 466%, faster) search_visits +57, search_iterations +1000
+
+Turn 1   actor 1   GIGADRAIN @0                 score    0.505
+    board   : Galvantula 100%  vs  Golurk 21%
+    foe     : Golurk -> EARTHQUAKE
+    view: hp 100%  speed 346 (slower)  incoming max 144%  certain 144%  threatened_lethal=True
+    race vs Golurk: mine 1 turns, theirs 1, winning=False
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                       Golurk*     Durant      Feraligatr  Omastar     Rotom       Sceptile
+      Galvantula* 100% L 89%/144%  L 197%/111% W 207%/53%  W 269%/76%  W 73%/67%   W 174%/94%
+      Druddigon   100% W 135%/94%  W 275%/72%  W 122%/34%  W 115%/79%  W 185%/44%  W 197%/61%
+      Golurk      100% L 110%/116% W 71%/37%   L 63%/70%   L 119%/102% W 151%/91%  W 122%/62%
+      Kabutops    100% L 118%/197% L 103%/151% W 91%/36%   W 86%/72%   L 150%/152% L 146%/211%
+      Magneton    100% L 55%/466%  L 237%/178% W 126%/43%  W 164%/78%  L 45%/69%   L 70%/186%
+      Sigilyph    100% L 68%/125%  W 372%/86%  W 66%/75%   W 86%/95%   L 93%/126%  W 110%/67%
+    options considered:
+         0.505  GIGADRAIN (bp 75, 89% dmg, x2)         search_visits +323, search_iterations +1000
+         0.452  switch -> Sigilyph (hits 68%, takes 125%) search_visits +205, search_iterations +1000
+         0.396  switch -> Golurk (hits 110%, takes 116%) search_visits +139, search_iterations +1000
+         0.385  switch -> Druddigon (hits 135%, takes 94%) sole answer to Golurk search_visits +131, search_iterations +1000
+         0.348  switch -> Kabutops (hits 118%, takes 197%) search_visits +106, search_iterations +1000
+         0.330  switch -> Magneton (hits 55%, takes 466%) search_visits +96, search_iterations +1000
+
+Turn 2   actor 1   ICEPUNCH @0                  score    0.427
+    board   : Golurk 100%  vs  Golurk 11%
+    foe     : Golurk -> SHADOWPUNCH
+    view: hp 100%  speed 200 (slower)  incoming max 116%  certain 116%  threatened_lethal=True
+    race vs Golurk: mine 1 turns, theirs 1, winning=False
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                      Golurk*     Durant      Feraligatr  Omastar     Rotom       Sceptile
+      Galvantula   0% -           -           -           -           -           -
+      Druddigon  100% W 135%/94%  W 275%/72%  W 122%/34%  W 115%/79%  W 185%/44%  W 197%/61%
+      Golurk*    100% L 110%/116% W 71%/37%   L 63%/70%   L 119%/102% W 151%/91%  W 122%/62%
+      Kabutops   100% L 118%/197% L 103%/151% W 91%/36%   W 86%/72%   L 150%/152% L 146%/211%
+      Magneton   100% L 55%/466%  L 237%/178% W 126%/43%  W 164%/78%  L 45%/69%   L 70%/186%
+      Sigilyph   100% L 68%/125%  W 372%/86%  W 66%/75%   W 86%/95%   L 93%/126%  W 110%/67%
+    options considered:
+         0.427  ICEPUNCH (bp 75, 92% dmg, x2)          search_visits +160, search_iterations +1000
+         0.426  STEALTHROCK (0% dmg, x1)               search_visits +159, search_iterations +1000
+         0.385  switch -> Druddigon (hits 135%, takes 94%) sole answer to Golurk search_visits +124, search_iterations +1000
+         0.384  EARTHQUAKE (bp 100, 76% dmg, x1)       search_visits +122, search_iterations +1000
+         0.379  switch -> Magneton (hits 55%, takes 466%) search_visits +118, search_iterations +1000
+         0.375  switch -> Kabutops (hits 118%, takes 197%) search_visits +115, search_iterations +1000
+         0.353  switch -> Sigilyph (hits 68%, takes 125%) search_visits +104, search_iterations +1000
+         0.345  SHADOWPUNCH (bp 60, 110% dmg, x2)      search_visits +98, search_iterations +1000
+
+Turn 3   actor 1   AQUAJET @0                   score    0.718
+    board   : Kabutops 100%  vs  Golurk 2%
+    foe     : Golurk -> DYNAMICPUNCH
+    view: hp 100%  speed 259 (slower)  incoming max 197%  certain 197%  threatened_lethal=True
+    race vs Golurk: mine 1 turns, theirs 1, winning=True (ties on speed)
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                      Golurk*     Durant      Feraligatr  Omastar     Rotom       Sceptile
+      Galvantula   0% -           -           -           -           -           -
+      Druddigon  100% W 135%/94%  W 275%/72%  W 122%/34%  W 115%/79%  W 185%/44%  W 197%/61%
+      Golurk       0% -           -           -           -           -           -
+      Kabutops*  100% L 118%/197% L 103%/151% W 91%/36%   W 86%/72%   L 150%/152% L 146%/211%
+      Magneton   100% L 55%/466%  L 237%/178% W 126%/43%  W 164%/78%  L 45%/69%   L 70%/186%
+      Sigilyph   100% L 68%/125%  W 372%/86%  W 66%/75%   W 86%/95%   L 93%/126%  W 110%/67%
+    options considered:
+         0.718  AQUAJET (bp 40, 60% dmg, x2)           search_visits +494, search_iterations +1000
+         0.536  switch -> Sigilyph (hits 68%, takes 125%) search_visits +112, search_iterations +1000
+         0.530  STONEEDGE (bp 100, 55% dmg, x0.5)      search_visits +110, search_iterations +1000
+         0.509  WATERFALL (bp 80, 118% dmg, x2)        search_visits +98, search_iterations +1000
+         0.478  switch -> Druddigon (hits 135%, takes 94%) sole answer to Golurk, Rotom search_visits +84, search_iterations +1000
+         0.375  RAPIDSPIN (bp 20, 0% dmg, x0, IMMUNE)  search_visits +53, search_iterations +1000
+         0.350  switch -> Magneton (hits 55%, takes 466%) search_visits +49, search_iterations +1000
+
+Turn 4   actor 1   STONEEDGE @0                 score    0.519
+    board   : Kabutops 100%  vs  Sceptile 100%
+    foe     : Sceptile -> LEAFBLADE
+    view: hp 100%  speed 259 (slower)  incoming max 211%  certain 211%  threatened_lethal=True
+    race vs Sceptile: mine 1 turns, theirs 1, winning=False
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                      Golurk      Durant      Feraligatr  Omastar     Rotom       Sceptile*
+      Galvantula   0% -           -           -           -           -           -
+      Druddigon  100% -           W 275%/72%  W 122%/34%  W 115%/79%  W 185%/44%  W 197%/61%
+      Golurk       0% -           -           -           -           -           -
+      Kabutops*  100% -           L 103%/151% W 91%/36%   W 86%/72%   L 150%/152% L 146%/211%
+      Magneton   100% -           L 237%/178% W 126%/43%  W 164%/78%  L 45%/69%   L 70%/186%
+      Sigilyph   100% -           W 372%/86%  W 66%/75%   W 86%/95%   L 93%/126%  W 110%/67%
+    options considered:
+         0.519  STONEEDGE (bp 100, 146% dmg, x1)       search_visits +238, search_iterations +1000
+         0.503  switch -> Druddigon (hits 197%, takes 61%) sole answer to Rotom search_visits +209, search_iterations +1000
+         0.484  switch -> Sigilyph (hits 110%, takes 67%) search_visits +182, search_iterations +1000
+         0.404  WATERFALL (bp 80, 40% dmg, x0.5)       search_visits +111, search_iterations +1000
+         0.370  switch -> Magneton (hits 70%, takes 186%) search_visits +92, search_iterations +1000
+         0.364  AQUAJET (bp 40, 20% dmg, x0.5)         search_visits +88, search_iterations +1000
+         0.343  RAPIDSPIN (bp 20, 14% dmg, x1)         search_visits +80, search_iterations +1000
+
+Turn 5   actor 1   OUTRAGE                      score    0.762
+    board   : Druddigon 100%  vs  Sceptile 100%
+    foe     : Sceptile -> EARTHQUAKE
+    view: hp 100%  speed 180 (slower)  incoming max 61%  certain 61%  threatened_lethal=False
+    race vs Sceptile: mine 1 turns, theirs 2, winning=True
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                      Golurk      Durant      Feraligatr  Omastar     Rotom       Sceptile*
+      Galvantula   0% -           -           -           -           -           -
+      Druddigon* 100% -           W 275%/72%  W 122%/34%  W 115%/79%  W 185%/44%  W 197%/61%
+      Golurk       0% -           -           -           -           -           -
+      Kabutops     0% -           -           -           -           -           -
+      Magneton   100% -           L 237%/178% W 126%/43%  W 164%/78%  L 45%/69%   L 70%/186%
+      Sigilyph   100% -           W 372%/86%  W 66%/75%   W 86%/95%   L 93%/126%  W 110%/67%
+    options considered:
+         0.762  OUTRAGE (bp 120, 180% dmg, x1)         search_visits +289, search_iterations +1000
+         0.748  FIREPUNCH (bp 75, 197% dmg, x2)        search_visits +254, search_iterations +1000
+         0.697  THUNDERPUNCH (bp 75, 49% dmg, x0.5)    search_visits +172, search_iterations +1000
+         0.695  SUCKERPUNCH (bp 80, 80% dmg, x1)       search_visits +170, search_iterations +1000
+         0.508  switch -> Sigilyph (hits 110%, takes 67%) search_visits +62, search_iterations +1000
+         0.463  switch -> Magneton (hits 70%, takes 186%) search_visits +53, search_iterations +1000
+
+Turn 8   actor 1   PSYCHIC @0                   score    0.671
+    board   : Sigilyph 100%  vs  Durant 46%
+    foe     : Durant -> XSCISSOR
+    view: hp 100%  speed 322 (slower)  incoming max 58%  certain 0%  threatened_lethal=False
+    race vs Durant: mine 1 turns, theirs 2, winning=True
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                      Golurk      Durant*     Feraligatr  Omastar     Rotom       Sceptile
+      Galvantula   0% -           -           -           -           -           -
+      Druddigon    0% -           -           -           -           -           -
+      Golurk       0% -           -           -           -           -           -
+      Kabutops     0% -           -           -           -           -           -
+      Magneton   100% -           L 237%/120% W 126%/43%  W 164%/78%  L 45%/69%   -
+      Sigilyph*  100% -           W 372%/58%  W 66%/75%   W 86%/95%   L 93%/126%  -
+    options considered:
+         0.671  PSYCHIC (bp 90, 63% dmg, x0.5)         search_visits +371, search_iterations +1000
+         0.627  HEATWAVE (bp 100, 372% dmg, x4)        search_visits +244, search_iterations +1000
+         0.577  ROOST (0% dmg, x1)                     search_visits +168, search_iterations +1000
+         0.529  CALMMIND (0% dmg, x1)                  search_visits +126, search_iterations +1000
+         0.470  switch -> Magneton (hits 237%, takes 120%) search_visits +91, search_iterations +1000
+
+Turn 9   actor 1   PSYCHIC @0                   score    0.444
+    board   : Sigilyph 52%  vs  Rotom 100%
+    foe     : Rotom -> THUNDERBOLT
+    view: hp 52%  speed 322 (slower)  incoming max 126%  certain 126%  threatened_lethal=True
+    race vs Rotom: mine 2 turns, theirs 1, winning=False
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                      Golurk      Durant      Feraligatr  Omastar     Rotom*      Sceptile
+      Galvantula   0% -           -           -           -           -           -
+      Druddigon    0% -           -           -           -           -           -
+      Golurk       0% -           -           -           -           -           -
+      Kabutops     0% -           -           -           -           -           -
+      Magneton   100% -           -           W 126%/43%  W 164%/78%  L 45%/69%   -
+      Sigilyph*   52% -           -           L 66%/75%   L 86%/95%   L 93%/126%  -
+    options considered:
+         0.444  PSYCHIC (bp 90, 93% dmg, x1)           search_visits +260, search_iterations +1000
+         0.428  CALMMIND (0% dmg, x1)                  search_visits +231, search_iterations +1000
+         0.424  ROOST (0% dmg, x1)                     search_visits +224, search_iterations +1000
+         0.385  HEATWAVE (bp 100, 69% dmg, x1)         search_visits +168, search_iterations +1000
+         0.328  switch -> Magneton (hits 45%, takes 69%) sole answer to Feraligatr, Omastar search_visits +117, search_iterations +1000
+
+Turn 10  actor 1   FLASHCANNON @0               score    0.193
+    board   : Magneton 100%  vs  Rotom 100%
+    foe     : Rotom -> THUNDERBOLT
+    view: hp 100%  speed 392 (slower)  incoming max 41%  certain 41%  threatened_lethal=False
+    race vs Rotom: mine 3 turns, theirs 3, winning=False
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                      Golurk      Durant      Feraligatr  Omastar     Rotom*      Sceptile
+      Galvantula   0% -           -           -           -           -           -
+      Druddigon    0% -           -           -           -           -           -
+      Golurk       0% -           -           -           -           -           -
+      Kabutops     0% -           -           -           -           -           -
+      Magneton*  100% -           -           W 126%/43%  W 164%/78%  L 45%/69%   -
+      Sigilyph     0% -           -           -           -           -           -
+    options considered:
+         0.193  FLASHCANNON (bp 80, 37% dmg, x0.5)     search_visits +258, search_iterations +1000
+         0.193  VOLTSWITCH (bp 70, 33% dmg, x0.5)      search_visits +257, search_iterations +1000
+         0.188  THUNDERBOLT (bp 95, 45% dmg, x0.5)     search_visits +249, search_iterations +1000
+         0.183  HIDDENPOWER (bp 1, 44% dmg, x0, IMMUNE) search_visits +236, search_iterations +1000
+
+Turn 11  actor 1   FLASHCANNON @0               score    0.053
+    board   : Magneton 59%  vs  Rotom 65%
+    foe     : Rotom -> THUNDERBOLT
+    view: hp 59%  speed 392 (slower)  incoming max 41%  certain 41%  threatened_lethal=False
+    race vs Rotom: mine 2 turns, theirs 2, winning=False
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                      Golurk      Durant      Feraligatr  Omastar     Rotom*      Sceptile
+      Galvantula   0% -           -           -           -           -           -
+      Druddigon    0% -           -           -           -           -           -
+      Golurk       0% -           -           -           -           -           -
+      Kabutops     0% -           -           -           -           -           -
+      Magneton*   59% -           -           W 126%/43%  W 164%/78%  L 45%/69%   -
+      Sigilyph     0% -           -           -           -           -           -
+    options considered:
+         0.053  FLASHCANNON (bp 80, 37% dmg, x0.5)     search_visits +1000, search_iterations +1000
+
+Turn 12  actor 1   FLASHCANNON @0               score    0.022
+    board   : Magneton 22%  vs  Rotom 32%
+    foe     : Rotom -> THUNDERBOLT
+    view: hp 22%  speed 392 (slower)  incoming max 41%  certain 41%  threatened_lethal=True
+    race vs Rotom: mine 1 turns, theirs 1, winning=False
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                      Golurk      Durant      Feraligatr  Omastar     Rotom*      Sceptile
+      Galvantula   0% -           -           -           -           -           -
+      Druddigon    0% -           -           -           -           -           -
+      Golurk       0% -           -           -           -           -           -
+      Kabutops     0% -           -           -           -           -           -
+      Magneton*   22% -           -           W 126%/43%  W 164%/78%  L 45%/69%   -
+      Sigilyph     0% -           -           -           -           -           -
+    options considered:
+         0.022  FLASHCANNON (bp 80, 37% dmg, x0.5)     search_visits +1000, search_iterations +1000
+

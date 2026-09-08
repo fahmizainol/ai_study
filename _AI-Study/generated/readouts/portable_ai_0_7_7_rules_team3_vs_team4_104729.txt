@@ -1,0 +1,462 @@
+team3_vs_team4  seed 104729  single   LOSS in 20 turns   [portable 0.7.7, mega=True, teams=gen5ru_a]
+  left  (team3): Uxie, Escavalier, Qwilfish, Rhydon, Rotom, Sceptile
+  PORTABLE (team4): Steelix, Aerodactyl, Magneton, Sceptile, Skuntank, Uxie
+========================================================================================================
+
+Turn 0   actor 1   TOXIC @0                     score    151.0
+    board   : Steelix 100%  vs  Uxie 100%
+    foe     : Uxie -> CALMMIND
+    view: hp 100%  speed 102 (slower)  incoming max 18%  certain 18%  threatened_lethal=False
+    race vs Uxie: not computed
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                      Uxie*       Escavalier  Qwilfish    Rhydon      Rotom       Sceptile
+      Steelix*   100% S 0%/18%    W 34%/17%   W 86%/25%   L 33%/47%   L 0%/47%    L 28%/27%
+      Aerodactyl 100% L 48%/57%   W 114%/69%  W 107%/104% L 40%/193%  W 110%/125% W 107%/75%
+      Magneton   100% W 40%/27%   W 104%/57%  W 167%/43%  L 65%/321%  L 45%/69%   L 70%/185%
+      Sceptile   100% W 58%/39%   W 104%/296% W 123%/28%  W 224%/167% W 131%/51%  L 123%/198%
+      Skuntank   100% W 81%/29%   W 124%/116% W 67%/44%   L 26%/164%  W 181%/64%  L 89%/94%
+      Uxie       100% W 29%/17%   L 18%/133%  W 110%/25%  L 25%/75%   W 59%/64%   W 51%/44%
+    options considered:
+         151.0  TOXIC (0% dmg, x1)                     engine_base +126, fresh_status +25
+         143.0  STEALTHROCK (0% dmg, x1)               engine_base +143
+          90.0  ROAR (0% dmg, x1)                      engine_base +90
+         VETO   EARTHQUAKE (bp 100, 0% dmg, x0, IMMUNE) immune -1000000
+         VETO   switch -> Aerodactyl (hits 48%, takes 57%, faster) engine_base +55, matchup +32, entry_incoming_damage -41, switchin_race +65, no_escape_reason -1000000
+         VETO   switch -> Magneton (hits 40%, takes 27%) engine_base +55, matchup +32, entry_incoming_damage -2, switchin_race +85, no_escape_reason -1000000
+         VETO   switch -> Sceptile (hits 58%, takes 39%, faster) sole answer to Rhydon engine_base +55, matchup +32, entry_incoming_damage -18, switchin_race +80, sole_answer_reserved -45, no_escape_reason -1000000
+         VETO   switch -> Skuntank (hits 81%, takes 29%) engine_base +55, matchup +64, entry_incoming_damage -5, switchin_race +85, no_escape_reason -1000000
+         VETO   switch -> Uxie (hits 29%, takes 17%, faster) engine_base +55, matchup +64, entry_incoming_damage +10, switchin_race +155, no_escape_reason -1000000
+
+Turn 1   actor 1   TOXIC @0                     score    151.0
+    board   : Steelix 100%  vs  Uxie 100%
+    foe     : Uxie -> SUBSTITUTE
+    view: hp 100%  speed 102 (slower)  incoming max 27%  certain 27%  threatened_lethal=False
+    race vs Uxie: not computed
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                      Uxie*       Escavalier  Qwilfish    Rhydon      Rotom       Sceptile
+      Steelix*   100% L 0%/27%    W 34%/17%   W 86%/25%   L 33%/47%   L 0%/47%    L 28%/27%
+      Aerodactyl 100% L 48%/85%   W 114%/69%  W 107%/104% L 40%/193%  W 110%/125% W 107%/75%
+      Magneton   100% L 26%/40%   W 104%/57%  W 167%/43%  L 65%/321%  L 45%/69%   L 70%/185%
+      Sceptile   100% L 39%/58%   W 104%/296% W 123%/28%  W 224%/167% W 131%/51%  L 123%/198%
+      Skuntank   100% W 81%/43%   W 124%/116% W 67%/44%   L 26%/164%  W 181%/64%  L 89%/94%
+      Uxie       100% L 20%/26%   L 18%/133%  W 110%/25%  L 25%/75%   W 59%/64%   W 51%/44%
+    options considered:
+         151.0  TOXIC (0% dmg, x1)                     engine_base +126, fresh_status +25
+         143.0  STEALTHROCK (0% dmg, x1)               engine_base +143
+         140.0  ROAR (0% dmg, x1)                      engine_base +90, phaze_value +50
+         VETO   EARTHQUAKE (bp 100, 0% dmg, x0, IMMUNE) immune -1000000
+         VETO   switch -> Aerodactyl (hits 48%, takes 85%, faster) engine_base +55, matchup +32, entry_incoming_damage -77, switchin_race +65, no_escape_reason -1000000
+         VETO   switch -> Magneton (hits 26%, takes 40%) engine_base +55, matchup +32, entry_incoming_damage -19, switchin_race +10, no_escape_reason -1000000
+         VETO   switch -> Sceptile (hits 39%, takes 58%, faster) sole answer to Rhydon engine_base +55, matchup +32, entry_incoming_damage -43, switchin_race +65, sole_answer_exposed -150, no_escape_reason -1000000
+         VETO   switch -> Skuntank (hits 81%, takes 43%) sole answer to Uxie engine_base +55, matchup +64, entry_incoming_damage -23, switchin_race +10, no_escape_reason -1000000
+         VETO   switch -> Uxie (hits 20%, takes 26%, faster) engine_base +55, matchup +64, switchin_race +155, no_escape_reason -1000000
+
+Turn 2   actor 1   STEALTHROCK                  score    143.0
+    board   : Steelix 100%  vs  Uxie 81%
+    foe     : Uxie -> PSYCHIC
+    view: hp 100%  speed 102 (slower)  incoming max 27%  certain 27%  threatened_lethal=False
+    race vs Uxie: not computed
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                      Uxie*       Escavalier  Qwilfish    Rhydon      Rotom       Sceptile
+      Steelix*   100% L 0%/27%    W 34%/17%   W 86%/25%   L 33%/47%   L 0%/47%    L 28%/27%
+      Aerodactyl 100% W 48%/85%   W 114%/69%  W 107%/104% L 40%/193%  W 110%/125% W 107%/75%
+      Magneton   100% L 26%/40%   W 104%/57%  W 167%/43%  L 65%/321%  L 45%/69%   L 70%/185%
+      Sceptile   100% L 39%/58%   W 104%/296% W 123%/28%  W 224%/167% W 131%/51%  L 123%/198%
+      Skuntank   100% W 81%/43%   W 124%/116% W 67%/44%   L 26%/164%  W 181%/64%  L 89%/94%
+      Uxie       100% L 20%/26%   L 18%/133%  W 110%/25%  L 25%/75%   W 59%/64%   W 51%/44%
+    options considered:
+         143.0  STEALTHROCK (0% dmg, x1)               engine_base +143
+         140.0  ROAR (0% dmg, x1)                      engine_base +90, phaze_value +50
+         VETO   EARTHQUAKE (bp 100, 0% dmg, x0, IMMUNE) immune -1000000
+         VETO   TOXIC (0% dmg, x1, IMMUNE)             immune -1000000
+         VETO   switch -> Aerodactyl (hits 48%, takes 85%, faster) engine_base +55, matchup +32, entry_incoming_damage -77, switchin_race +65, no_escape_reason -1000000
+         VETO   switch -> Magneton (hits 26%, takes 40%) engine_base +55, matchup +32, entry_incoming_damage -19, switchin_race +10, no_escape_reason -1000000
+         VETO   switch -> Sceptile (hits 39%, takes 58%, faster) sole answer to Rhydon engine_base +55, matchup +32, entry_incoming_damage -43, switchin_race +65, sole_answer_exposed -150, no_escape_reason -1000000
+         VETO   switch -> Skuntank (hits 81%, takes 43%) engine_base +55, matchup +64, entry_incoming_damage -23, switchin_race +10, no_escape_reason -1000000
+         VETO   switch -> Uxie (hits 20%, takes 26%, faster) engine_base +55, matchup +64, switchin_race +155, no_escape_reason -1000000
+
+Turn 3   actor 1   switch -> Skuntank           score    485.7
+    board   : Steelix 81%  vs  Uxie 88%
+    foe     : Uxie -> CALMMIND
+    view: hp 81%  speed 102 (slower)  incoming max 27%  certain 27%  threatened_lethal=False
+    race vs Uxie: not computed
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                      Uxie*       Escavalier  Qwilfish    Rhydon      Rotom       Sceptile
+      Steelix*    81% L 0%/27%    W 34%/17%   W 86%/25%   L 33%/47%   L 0%/47%    L 28%/27%
+      Aerodactyl 100% W 48%/85%   W 114%/69%  W 107%/104% L 40%/193%  W 110%/125% W 107%/75%
+      Magneton   100% L 26%/40%   W 104%/57%  W 167%/43%  L 65%/321%  L 45%/69%   L 70%/185%
+      Sceptile   100% L 39%/58%   W 104%/296% W 123%/28%  W 224%/167% W 131%/51%  L 123%/198%
+      Skuntank   100% W 81%/43%   W 124%/116% W 67%/44%   L 26%/164%  W 181%/64%  L 89%/94%
+      Uxie       100% L 20%/26%   L 18%/133%  W 110%/25%  L 25%/75%   W 59%/64%   W 51%/44%
+    options considered:
+         485.7  switch -> Skuntank (hits 81%, takes 43%) engine_base +55, matchup +64, entry_incoming_damage -23, switchin_race +10, no_effective_move +260, weak_current_attacks +120, escape_reasons +2
+         458.2  switch -> Magneton (hits 26%, takes 40%) engine_base +55, matchup +32, entry_incoming_damage -19, switchin_race +10, no_effective_move +260, weak_current_attacks +120, escape_reasons +2
+         455.1  switch -> Aerodactyl (hits 48%, takes 85%, faster) engine_base +55, matchup +32, entry_incoming_damage -77, switchin_race +65, no_effective_move +260, weak_current_attacks +120, escape_reasons +2
+         339.3  switch -> Sceptile (hits 39%, takes 58%, faster) sole answer to Rhydon engine_base +55, matchup +32, entry_incoming_damage -43, switchin_race +65, sole_answer_exposed -150, no_effective_move +260, weak_current_attacks +120, escape_reasons +2
+         205.0  ROAR (0% dmg, x1)                      engine_base +140, phaze_value +65
+        -500.0  STEALTHROCK (0% dmg, x1)               hazard_at_cap -500
+         VETO   EARTHQUAKE (bp 100, 0% dmg, x0, IMMUNE) immune -1000000
+         VETO   TOXIC (0% dmg, x1, IMMUNE)             immune -1000000
+         VETO   switch -> Uxie (hits 20%, takes 26%, faster) engine_base +55, matchup +64, switchin_race +155, no_escape_reason -1000000
+
+Turn 4   actor 1   CRUNCH @0                    score    321.9
+    board   : Skuntank 100%  vs  Uxie 94%
+    foe     : Uxie -> THUNDERBOLT
+    view: hp 100%  speed 267 (slower)  incoming max 57%  certain 57%  threatened_lethal=False
+    race vs Uxie: mine 2 turns, theirs 2, winning=True (ties on speed)
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                      Uxie*       Escavalier  Qwilfish    Rhydon      Rotom       Sceptile
+      Steelix     81% L 0%/36%    W 34%/17%   W 86%/25%   L 33%/47%   L 0%/47%    L 28%/27%
+      Aerodactyl 100% L 48%/113%  W 114%/69%  W 107%/104% L 40%/193%  W 110%/125% W 107%/75%
+      Magneton   100% L 20%/53%   W 104%/57%  W 167%/43%  L 65%/321%  L 45%/69%   L 70%/185%
+      Sceptile   100% L 29%/78%   W 104%/296% W 123%/28%  W 224%/167% W 131%/51%  L 123%/198%
+      Skuntank*  100% L 81%/57%   W 124%/116% W 67%/44%   L 26%/164%  W 181%/64%  L 89%/94%
+      Uxie       100% L 15%/34%   L 18%/133%  W 110%/25%  L 25%/75%   W 59%/64%   W 51%/44%
+    options considered:
+         321.9  CRUNCH (bp 80, 81% dmg, x2)            engine_base +186, expected_damage +65, super_effective +70, secondary_drop +1
+         320.6  SUCKERPUNCH (bp 80, 81% dmg, x2)       engine_base +186, expected_damage +65, super_effective +70
+         247.0  PURSUIT (bp 40, 41% dmg, x2)           engine_base +144, expected_damage +33, super_effective +70
+         119.8  FIREBLAST (bp 120, 12% dmg, x1)        engine_base +111, expected_damage +9
+         VETO   switch -> Steelix (hits 0%, takes 36%) engine_base +48, matchup +32, entry_incoming_damage -14, switchin_race +10, no_escape_reason -1000000
+         VETO   switch -> Aerodactyl (hits 48%, takes 113%, faster) engine_base +55, matchup +32, entry_incoming_damage -113, no_escape_reason -1000000
+         VETO   switch -> Magneton (hits 20%, takes 53%) engine_base +55, matchup +32, entry_incoming_damage -36, switchin_race -5, no_escape_reason -1000000
+         VETO   switch -> Sceptile (hits 29%, takes 78%, faster) sole answer to Rhydon engine_base +55, matchup +32, entry_incoming_damage -67, switchin_race +65, no_escape_reason -1000000
+         VETO   switch -> Uxie (hits 15%, takes 34%, faster) engine_base +55, matchup +64, entry_incoming_damage -11, switchin_race +80, no_escape_reason -1000000
+
+Turn 5   actor 1   CRUNCH @0                    score    316.9
+    board   : Skuntank 51%  vs  Uxie 100%
+    foe     : Uxie -> THUNDERBOLT
+    view: hp 51%  speed 267 (slower)  incoming max 57%  certain 57%  threatened_lethal=True
+    race vs Uxie: mine 2 turns, theirs 1, winning=False
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                      Uxie*       Escavalier  Qwilfish    Rhydon      Rotom       Sceptile
+      Steelix     81% L 0%/36%    W 34%/17%   W 86%/25%   L 33%/47%   L 0%/47%    L 28%/27%
+      Aerodactyl 100% L 48%/113%  W 114%/69%  W 107%/104% L 40%/193%  W 110%/125% W 107%/75%
+      Magneton   100% L 20%/53%   W 104%/57%  W 167%/43%  L 65%/321%  L 45%/69%   L 70%/185%
+      Sceptile   100% L 29%/78%   W 104%/296% W 123%/28%  W 224%/167% W 131%/51%  L 123%/198%
+      Skuntank*   51% L 81%/57%   W 124%/116% L 67%/44%   L 26%/164%  L 181%/64%  L 89%/94%
+      Uxie       100% L 15%/34%   L 18%/133%  W 110%/25%  L 25%/75%   W 59%/64%   W 51%/44%
+    options considered:
+         316.9  CRUNCH (bp 80, 81% dmg, x2)            engine_base +181, expected_damage +65, super_effective +70, secondary_drop +1
+         315.6  SUCKERPUNCH (bp 80, 81% dmg, x2)       engine_base +181, expected_damage +65, super_effective +70
+         244.0  PURSUIT (bp 40, 41% dmg, x2)           engine_base +141, expected_damage +33, super_effective +70
+         149.0  FIREBLAST (bp 120, 12% dmg, x1)        engine_base +140, expected_damage +9
+         VETO   switch -> Steelix (hits 0%, takes 36%) engine_base +48, matchup +32, entry_incoming_damage -14, switchin_race +10, escape_lethal_threat +130, no_escape_reason -1000000
+         VETO   switch -> Aerodactyl (hits 48%, takes 113%, faster) engine_base +55, matchup +32, entry_incoming_damage -113, escape_lethal_threat +130, no_escape_reason -1000000
+         VETO   switch -> Magneton (hits 20%, takes 53%) engine_base +55, matchup +32, entry_incoming_damage -36, switchin_race -5, escape_lethal_threat +130, no_escape_reason -1000000
+         VETO   switch -> Sceptile (hits 29%, takes 78%, faster) sole answer to Rhydon engine_base +55, matchup +32, entry_incoming_damage -67, switchin_race +65, escape_lethal_threat +130, no_escape_reason -1000000
+         VETO   switch -> Uxie (hits 15%, takes 34%, faster) engine_base +55, matchup +64, entry_incoming_damage -11, switchin_race +80, escape_lethal_threat +130, no_escape_reason -1000000
+
+Turn 6   actor 1   FLASHCANNON @0               score    210.7
+    board   : Magneton 100%  vs  Uxie 100%
+    foe     : Uxie -> THUNDERBOLT
+    view: hp 100%  speed 392 (faster)  incoming max 53%  certain 53%  threatened_lethal=False
+    race vs Uxie: mine 5 turns, theirs 2, winning=False
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                      Uxie*       Escavalier  Qwilfish    Rhydon      Rotom       Sceptile
+      Steelix     81% L 0%/36%    W 34%/17%   W 86%/25%   L 33%/47%   L 0%/47%    L 28%/27%
+      Aerodactyl 100% L 48%/113%  W 114%/69%  W 107%/104% L 40%/193%  W 110%/125% W 107%/75%
+      Magneton*  100% L 20%/53%   W 104%/57%  W 167%/43%  L 65%/321%  L 45%/69%   L 70%/185%
+      Sceptile   100% L 29%/78%   W 104%/296% W 123%/28%  W 224%/167% W 131%/51%  L 123%/198%
+      Skuntank     0% -           -           -           -           -           -
+      Uxie       100% L 15%/34%   L 18%/133%  W 110%/25%  L 25%/75%   W 59%/64%   W 51%/44%
+    options considered:
+         210.7  FLASHCANNON (bp 80, 17% dmg, x1)       engine_base +197, expected_damage +14
+         187.0  VOLTSWITCH (bp 70, 15% dmg, x1)        engine_base +175, expected_damage +12
+         186.2  THUNDERBOLT (bp 95, 20% dmg, x1)       engine_base +170, expected_damage +16
+         147.9  HIDDENPOWER (bp 1, 10% dmg, x1)        engine_base +140, expected_damage +8
+         VETO   switch -> Steelix (hits 0%, takes 36%) engine_base +48, matchup +32, entry_incoming_damage -14, switchin_race +10, no_escape_reason -1000000
+         VETO   switch -> Aerodactyl (hits 48%, takes 113%, faster) engine_base +55, matchup +32, entry_incoming_damage -113, no_escape_reason -1000000
+         VETO   switch -> Sceptile (hits 29%, takes 78%, faster) sole answer to Rhydon engine_base +55, matchup +32, entry_incoming_damage -67, switchin_race +65, no_escape_reason -1000000
+         VETO   switch -> Uxie (hits 15%, takes 34%, faster) engine_base +55, matchup +64, entry_incoming_damage -11, switchin_race +80, no_escape_reason -1000000
+
+Turn 7   actor 1   FLASHCANNON @0               score    212.7
+    board   : Magneton 66%  vs  Uxie 90%
+    foe     : Uxie -> PSYCHIC
+    view: hp 66%  speed 392 (faster)  incoming max 53%  certain 53%  threatened_lethal=False
+    race vs Uxie: mine 6 turns, theirs 2, winning=False
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                      Uxie*       Escavalier  Qwilfish    Rhydon      Rotom       Sceptile
+      Steelix     81% L 0%/36%    W 34%/17%   W 86%/25%   L 33%/47%   L 0%/47%    L 28%/27%
+      Aerodactyl 100% L 48%/113%  W 114%/69%  W 107%/104% L 40%/193%  W 110%/125% W 107%/75%
+      Magneton*   66% L 20%/53%   W 104%/57%  W 167%/43%  L 65%/321%  L 45%/69%   L 70%/185%
+      Sceptile   100% L 29%/78%   W 104%/296% W 123%/28%  W 224%/167% W 131%/51%  L 123%/198%
+      Skuntank     0% -           -           -           -           -           -
+      Uxie       100% L 15%/34%   L 18%/133%  W 110%/25%  L 25%/75%   W 59%/64%   W 51%/44%
+    options considered:
+         212.7  FLASHCANNON (bp 80, 17% dmg, x1)       engine_base +199, expected_damage +14
+         VETO   switch -> Steelix (hits 0%, takes 36%) engine_base +48, matchup +32, entry_incoming_damage -14, switchin_race +10, no_escape_reason -1000000
+         VETO   switch -> Aerodactyl (hits 48%, takes 113%, faster) engine_base +55, matchup +32, entry_incoming_damage -113, no_escape_reason -1000000
+         VETO   switch -> Sceptile (hits 29%, takes 78%, faster) sole answer to Rhydon engine_base +55, matchup +32, entry_incoming_damage -67, switchin_race +65, no_escape_reason -1000000
+         VETO   switch -> Uxie (hits 15%, takes 34%, faster) engine_base +55, matchup +64, entry_incoming_damage -11, switchin_race +80, no_escape_reason -1000000
+
+Turn 8   actor 1   FLASHCANNON @0               score    215.7
+    board   : Magneton 20%  vs  Uxie 79%
+    foe     : Uxie -> PSYCHIC
+    view: hp 20%  speed 392 (faster)  incoming max 53%  certain 53%  threatened_lethal=True
+    race vs Uxie: mine 5 turns, theirs 1, winning=False
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                      Uxie*       Escavalier  Qwilfish    Rhydon      Rotom       Sceptile
+      Steelix     81% L 0%/36%    W 34%/17%   W 86%/25%   L 33%/47%   L 0%/47%    L 28%/27%
+      Aerodactyl 100% L 48%/113%  W 114%/69%  W 107%/104% L 40%/193%  W 110%/125% W 107%/75%
+      Magneton*   20% L 20%/53%   W 104%/57%  W 167%/43%  L 65%/321%  L 45%/69%   L 70%/185%
+      Sceptile   100% L 29%/78%   W 104%/296% W 123%/28%  W 224%/167% W 131%/51%  L 123%/198%
+      Skuntank     0% -           -           -           -           -           -
+      Uxie       100% L 15%/34%   L 18%/133%  W 110%/25%  L 25%/75%   W 59%/64%   W 51%/44%
+    options considered:
+         215.7  FLASHCANNON (bp 80, 17% dmg, x1)       engine_base +202, expected_damage +14
+         VETO   switch -> Steelix (hits 0%, takes 36%) engine_base +48, matchup +32, entry_incoming_damage -14, switchin_race +10, escape_lethal_threat +130, preserve_low_hp_actor +80, no_escape_reason -1000000
+         VETO   switch -> Aerodactyl (hits 48%, takes 113%, faster) engine_base +55, matchup +32, entry_incoming_damage -113, escape_lethal_threat +130, no_escape_reason -1000000
+         VETO   switch -> Sceptile (hits 29%, takes 78%, faster) sole answer to Rhydon engine_base +55, matchup +32, entry_incoming_damage -67, switchin_race +65, escape_lethal_threat +130, preserve_low_hp_actor +80, no_escape_reason -1000000
+         VETO   switch -> Uxie (hits 15%, takes 34%, faster) engine_base +55, matchup +64, entry_incoming_damage -11, switchin_race +80, escape_lethal_threat +130, preserve_low_hp_actor +80, no_escape_reason -1000000
+
+Turn 9   actor 1   ROCKSLIDE                    score    198.6
+    board   : Sceptile 100%  vs  Uxie 40%
+    foe     : Uxie -> THUNDERBOLT
+    view: hp 100%  speed 338 (faster)  incoming max 78%  certain 78%  threatened_lethal=False
+    race vs Uxie: mine 2 turns, theirs 2, winning=True (ties on speed)
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                      Uxie*       Escavalier  Qwilfish    Rhydon      Rotom       Sceptile
+      Steelix     81% L 0%/36%    W 34%/17%   W 86%/25%   L 33%/47%   L 0%/47%    L 28%/27%
+      Aerodactyl 100% W 48%/113%  W 114%/69%  W 107%/104% L 40%/193%  W 110%/125% W 107%/75%
+      Magneton     0% -           -           -           -           -           -
+      Sceptile*  100% W 29%/78%   W 104%/296% W 123%/28%  W 224%/167% W 131%/51%  L 123%/198%
+      Skuntank     0% -           -           -           -           -           -
+      Uxie       100% W 15%/34%   L 18%/133%  W 110%/25%  L 25%/75%   W 59%/64%   W 51%/44%
+    options considered:
+         198.6  ROCKSLIDE (bp 75, 13% dmg, x1)         engine_base +188, expected_damage +10
+         191.1  ACROBATICS (bp 55, 28% dmg, x1)        engine_base +169, expected_damage +22
+         147.3  LEAFSTORM (bp 140, 29% dmg, x1)        engine_base +165, expected_damage +24, accuracy -1, self_stat_drop -40
+         131.9  HIDDENPOWER (bp 1, 10% dmg, x1)        engine_base +124, expected_damage +8
+         VETO   switch -> Steelix (hits 0%, takes 36%) engine_base +48, matchup +32, entry_incoming_damage -14, switchin_race +10, no_escape_reason -1000000
+         VETO   switch -> Aerodactyl (hits 48%, takes 113%, faster) engine_base +55, matchup +32, entry_incoming_damage -113, no_escape_reason -1000000
+         VETO   switch -> Uxie (hits 15%, takes 34%, faster) engine_base +55, matchup +64, entry_incoming_damage -11, switchin_race +80, no_escape_reason -1000000
+
+Turn 10  actor 1   ROCKSLIDE                    score    195.6
+    board   : Sceptile 76%  vs  Uxie 47%
+    foe     : Uxie -> THUNDERBOLT
+    view: hp 76%  speed 338 (faster)  incoming max 78%  certain 78%  threatened_lethal=True
+    race vs Uxie: mine 2 turns, theirs 1, winning=False
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                      Uxie*       Escavalier  Qwilfish    Rhydon      Rotom       Sceptile
+      Steelix     81% L 0%/36%    W 34%/17%   W 86%/25%   L 33%/47%   L 0%/47%    L 28%/27%
+      Aerodactyl 100% W 48%/113%  W 114%/69%  W 107%/104% L 40%/193%  W 110%/125% W 107%/75%
+      Magneton     0% -           -           -           -           -           -
+      Sceptile*   76% L 29%/78%   W 104%/296% W 123%/28%  W 224%/167% W 131%/51%  L 123%/198%
+      Skuntank     0% -           -           -           -           -           -
+      Uxie       100% L 15%/34%   L 18%/133%  W 110%/25%  L 25%/75%   W 59%/64%   W 51%/44%
+    options considered:
+         195.6  ROCKSLIDE (bp 75, 13% dmg, x1)         engine_base +185, expected_damage +10
+         181.1  ACROBATICS (bp 55, 28% dmg, x1)        engine_base +159, expected_damage +22
+         139.3  LEAFSTORM (bp 140, 29% dmg, x1)        engine_base +157, expected_damage +24, accuracy -1, self_stat_drop -40
+         128.9  HIDDENPOWER (bp 1, 10% dmg, x1)        engine_base +121, expected_damage +8
+         VETO   switch -> Steelix (hits 0%, takes 36%) engine_base +48, matchup +32, entry_incoming_damage -14, switchin_race +10, escape_lethal_threat +130, no_escape_reason -1000000
+         VETO   switch -> Aerodactyl (hits 48%, takes 113%, faster) sole answer to Uxie engine_base +55, matchup +32, entry_incoming_damage -113, escape_lethal_threat +130, no_escape_reason -1000000
+         VETO   switch -> Uxie (hits 15%, takes 34%, faster) engine_base +55, matchup +64, entry_incoming_damage -11, switchin_race +80, escape_lethal_threat +130, no_escape_reason -1000000
+
+Turn 11  actor 1   ROCKSLIDE                    score    192.6
+    board   : Sceptile 49%  vs  Uxie 53%
+    foe     : Uxie -> THUNDERBOLT
+    view: hp 49%  speed 338 (faster)  incoming max 78%  certain 78%  threatened_lethal=True
+    race vs Uxie: mine 2 turns, theirs 1, winning=False
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                      Uxie*       Escavalier  Qwilfish    Rhydon      Rotom       Sceptile
+      Steelix     81% L 0%/36%    W 34%/17%   W 86%/25%   L 33%/47%   L 0%/47%    L 28%/27%
+      Aerodactyl 100% L 48%/113%  W 114%/69%  W 107%/104% L 40%/193%  W 110%/125% W 107%/75%
+      Magneton     0% -           -           -           -           -           -
+      Sceptile*   49% L 29%/78%   W 104%/296% W 123%/28%  W 224%/167% W 131%/51%  L 123%/198%
+      Skuntank     0% -           -           -           -           -           -
+      Uxie       100% L 15%/34%   L 18%/133%  W 110%/25%  L 25%/75%   W 59%/64%   W 51%/44%
+    options considered:
+         192.6  ROCKSLIDE (bp 75, 13% dmg, x1)         engine_base +182, expected_damage +10
+         174.1  ACROBATICS (bp 55, 28% dmg, x1)        engine_base +152, expected_damage +22
+         132.3  LEAFSTORM (bp 140, 29% dmg, x1)        engine_base +150, expected_damage +24, accuracy -1, self_stat_drop -40
+         126.9  HIDDENPOWER (bp 1, 10% dmg, x1)        engine_base +119, expected_damage +8
+         VETO   switch -> Steelix (hits 0%, takes 36%) engine_base +48, matchup +32, entry_incoming_damage -14, switchin_race +10, escape_lethal_threat +130, no_escape_reason -1000000
+         VETO   switch -> Aerodactyl (hits 48%, takes 113%, faster) engine_base +55, matchup +32, entry_incoming_damage -113, escape_lethal_threat +130, no_escape_reason -1000000
+         VETO   switch -> Uxie (hits 15%, takes 34%, faster) engine_base +55, matchup +64, entry_incoming_damage -11, switchin_race +80, escape_lethal_threat +130, no_escape_reason -1000000
+
+Turn 12  actor 1   ROCKSLIDE                    score    194.6
+    board   : Sceptile 22%  vs  Uxie 47%
+    foe     : Uxie -> THUNDERBOLT
+    view: hp 22%  speed 338 (faster)  incoming max 78%  certain 78%  threatened_lethal=True
+    race vs Uxie: mine 2 turns, theirs 1, winning=False
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                      Uxie*       Escavalier  Qwilfish    Rhydon      Rotom       Sceptile
+      Steelix     81% L 0%/36%    W 34%/17%   W 86%/25%   L 33%/47%   L 0%/47%    L 28%/27%
+      Aerodactyl 100% W 48%/113%  W 114%/69%  W 107%/104% L 40%/193%  W 110%/125% W 107%/75%
+      Magneton     0% -           -           -           -           -           -
+      Sceptile*   22% L 29%/78%   W 104%/296% W 123%/28%  W 224%/167% W 131%/51%  L 123%/198%
+      Skuntank     0% -           -           -           -           -           -
+      Uxie       100% L 15%/34%   L 18%/133%  W 110%/25%  L 25%/75%   W 59%/64%   W 51%/44%
+    options considered:
+         194.6  ROCKSLIDE (bp 75, 13% dmg, x1)         engine_base +184, expected_damage +10
+         180.1  ACROBATICS (bp 55, 28% dmg, x1)        engine_base +158, expected_damage +22
+         138.3  LEAFSTORM (bp 140, 29% dmg, x1)        engine_base +156, expected_damage +24, accuracy -1, self_stat_drop -40
+         128.9  HIDDENPOWER (bp 1, 10% dmg, x1)        engine_base +121, expected_damage +8
+         VETO   switch -> Steelix (hits 0%, takes 36%) engine_base +48, matchup +32, entry_incoming_damage -14, switchin_race +10, escape_lethal_threat +130, no_escape_reason -1000000
+         VETO   switch -> Aerodactyl (hits 48%, takes 113%, faster) sole answer to Uxie engine_base +55, matchup +32, entry_incoming_damage -113, escape_lethal_threat +130, no_escape_reason -1000000
+         VETO   switch -> Uxie (hits 15%, takes 34%, faster) engine_base +55, matchup +64, entry_incoming_damage -11, switchin_race +80, escape_lethal_threat +130, no_escape_reason -1000000
+
+Turn 13  actor 1   STONEEDGE @0                 score    642.0
+    board   : Aerodactyl 100%  vs  Uxie 42%
+    foe     : Uxie -> THUNDERBOLT
+    view: hp 100%  speed 394 (faster)  incoming max 113%  certain 113%  threatened_lethal=True
+    race vs Uxie: mine 1 turns, theirs 1, winning=True (ties on speed)
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                       Uxie*       Escavalier  Qwilfish    Rhydon      Rotom       Sceptile
+      Steelix      81% L 0%/36%    W 34%/17%   W 86%/25%   L 33%/47%   L 0%/47%    L 28%/27%
+      Aerodactyl* 100% W 48%/113%  W 114%/69%  W 107%/104% L 40%/193%  W 110%/125% W 107%/75%
+      Magneton      0% -           -           -           -           -           -
+      Sceptile      0% -           -           -           -           -           -
+      Skuntank      0% -           -           -           -           -           -
+      Uxie        100% W 15%/34%   L 18%/133%  W 110%/25%  L 25%/75%   W 59%/64%   W 51%/44%
+    options considered:
+         642.0  STONEEDGE (bp 100, 48% dmg, x1)        engine_base +192, lethal +500, accuracy -50
+         160.3  FIREBLAST (bp 120, 11% dmg, x1)        engine_base +152, expected_damage +9
+        -350.0  ROOST (0% dmg, x1)                     heal_near_full -500, heal_saves_battler +150
+         VETO   EARTHQUAKE (bp 100, 0% dmg, x0, IMMUNE) immune -1000000
+         VETO   switch -> Steelix (hits 0%, takes 36%) engine_base +48, matchup +32, entry_incoming_damage -14, switchin_race +10, escape_lethal_threat +130, no_escape_reason -1000000
+         VETO   switch -> Uxie (hits 15%, takes 34%, faster) engine_base +55, matchup +64, entry_incoming_damage -11, switchin_race +80, escape_lethal_threat +130, no_escape_reason -1000000
+
+Turn 14  actor 1   switch -> Steelix            score    208.9
+    board   : Aerodactyl 90%  vs  Rotom 88%
+    foe     : Rotom -> SHADOWBALL
+    view: hp 90%  speed 394 (slower)  incoming max 125%  certain 125%  threatened_lethal=True
+    race vs Rotom: mine 1 turns, theirs 1, winning=False
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                       Uxie        Escavalier  Qwilfish    Rhydon      Rotom*      Sceptile
+      Steelix      81% -           W 34%/17%   W 86%/25%   L 33%/47%   L 0%/47%    L 28%/27%
+      Aerodactyl*  90% -           W 114%/69%  W 107%/104% L 40%/193%  L 110%/125% W 107%/75%
+      Magneton      0% -           -           -           -           -           -
+      Sceptile      0% -           -           -           -           -           -
+      Skuntank      0% -           -           -           -           -           -
+      Uxie        100% -           L 18%/133%  W 110%/25%  L 25%/75%   L 59%/64%   W 51%/44%
+    options considered:
+         208.9  switch -> Steelix (hits 0%, takes 47%) engine_base +48, matchup +64, entry_incoming_damage -28, switchin_race -5, escape_lethal_threat +130, escape_reasons +1
+         161.9  switch -> Uxie (hits 59%, takes 64%)   engine_base +55, matchup +32, entry_incoming_damage -50, switchin_race -5, escape_lethal_threat +130, escape_reasons +1
+          68.0  STONEEDGE (bp 100, 110% dmg, x1)       engine_base +200, expected_damage +80, accuracy -8, dead_before_moving -204
+          53.3  FIREBLAST (bp 120, 48% dmg, x1)        engine_base +177, expected_damage +39, accuracy -3, dead_before_moving -160
+        -209.5  ROOST (0% dmg, x1)                     engine_base +62, heal_near_full -500, heal_cannot_resolve -400, dead_before_moving +628
+         VETO   EARTHQUAKE (bp 100, 0% dmg, x0, IMMUNE) immune -1000000
+
+Turn 15  actor 1   switch -> Uxie               score    541.9
+    board   : Steelix 46%  vs  Rotom 88%
+    foe     : Rotom -> SHADOWBALL
+    view: hp 46%  speed 102 (slower)  incoming max 47%  certain 47%  threatened_lethal=True
+    race vs Rotom: not computed
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                      Uxie        Escavalier  Qwilfish    Rhydon      Rotom*      Sceptile
+      Steelix*    46% -           L 34%/17%   L 86%/25%   L 33%/47%   L 0%/47%    L 28%/27%
+      Aerodactyl  90% -           W 114%/69%  W 107%/104% L 40%/193%  L 110%/125% W 107%/75%
+      Magneton     0% -           -           -           -           -           -
+      Sceptile     0% -           -           -           -           -           -
+      Skuntank     0% -           -           -           -           -           -
+      Uxie       100% -           L 18%/133%  W 110%/25%  L 25%/75%   L 59%/64%   W 51%/44%
+    options considered:
+         541.9  switch -> Uxie (hits 59%, takes 64%)   engine_base +55, matchup +32, entry_incoming_damage -50, switchin_race -5, no_effective_move +260, weak_current_attacks +120, escape_lethal_threat +130, escape_reasons +2
+         155.0  ROAR (0% dmg, x1)                      engine_base +140, phaze_value +15
+         151.0  TOXIC (0% dmg, x1)                     engine_base +126, fresh_status +25
+         -72.4  switch -> Aerodactyl (hits 110%, takes 125%) sole answer to Escavalier engine_base +52, matchup +64, entry_incoming_damage -128, switchin_race -70, no_effective_move +260, weak_current_attacks +120, escape_lethal_threat +130, dies_on_entry -500, escape_reasons +2
+        -500.0  STEALTHROCK (0% dmg, x1)               hazard_at_cap -500
+         VETO   EARTHQUAKE (bp 100, 0% dmg, x0, IMMUNE) immune -1000000
+
+Turn 16  actor 1   PSYCHIC @0                   score     53.6
+    board   : Uxie 53%  vs  Rotom 88%
+    foe     : Rotom -> SHADOWBALL
+    view: hp 53%  speed 310 (slower)  incoming max 64%  certain 64%  threatened_lethal=True
+    race vs Rotom: mine 2 turns, theirs 1, winning=False
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                      Uxie        Escavalier  Qwilfish    Rhydon      Rotom*      Sceptile
+      Steelix     46% -           L 34%/17%   L 86%/25%   L 33%/47%   L 0%/47%    L 28%/27%
+      Aerodactyl  90% -           W 114%/69%  W 107%/104% L 40%/193%  L 110%/125% W 107%/75%
+      Magneton     0% -           -           -           -           -           -
+      Sceptile     0% -           -           -           -           -           -
+      Skuntank     0% -           -           -           -           -           -
+      Uxie*       53% -           L 18%/133%  W 110%/25%  L 25%/75%   L 59%/64%   L 51%/44%
+    options considered:
+          53.6  PSYCHIC (bp 90, 59% dmg, x1)           engine_base +167, expected_damage +47, dead_before_moving -161
+          29.0  SIGNALBEAM (bp 75, 16% dmg, x0.5)      engine_base +148, expected_damage +13, resisted -45, dead_before_moving -87
+          28.0  SUBSTITUTE (0% dmg, x1)                engine_base +112, dead_before_moving -84
+          11.6  switch -> Steelix (hits 0%, takes 47%) engine_base +36, matchup +64, entry_incoming_damage -28, switchin_race -70, escape_lethal_threat +130, switch_loop -120, escape_reasons +1
+         -13.2  CALMMIND (0% dmg, x1)                  engine_base +187, unsafe_setup -240, dead_before_moving +40
+        -572.4  switch -> Aerodactyl (hits 110%, takes 125%) sole answer to Escavalier, Sceptile engine_base +52, matchup +64, entry_incoming_damage -128, switchin_race -70, escape_lethal_threat +130, dies_on_entry -500, switch_loop -120, escape_reasons +1
+
+Turn 17  actor 1   STONEEDGE @0                 score    650.0
+    board   : Aerodactyl 90%  vs  Rotom 88%
+    foe     : Rotom -> SHADOWBALL
+    view: hp 90%  speed 394 (slower)  incoming max 53%  certain 53%  threatened_lethal=False
+    race vs Rotom: mine 1 turns, theirs 2, winning=True
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                       Uxie        Escavalier  Qwilfish    Rhydon      Rotom*      Sceptile
+      Steelix      46% -           L 34%/17%   L 86%/25%   L 33%/47%   L 0%/47%    L 28%/27%
+      Aerodactyl*  90% -           W 114%/69%  W 107%/104% L 40%/193%  L 110%/125% W 107%/75%
+      Magneton      0% -           -           -           -           -           -
+      Sceptile      0% -           -           -           -           -           -
+      Skuntank      0% -           -           -           -           -           -
+      Uxie          0% -           -           -           -           -           -
+    options considered:
+         650.0  STONEEDGE (bp 100, 110% dmg, x1)       engine_base +200, lethal +500, accuracy -50
+         213.4  FIREBLAST (bp 120, 48% dmg, x1)        engine_base +177, expected_damage +39, accuracy -3
+        -558.0  ROOST (0% dmg, x1)                     engine_base +62, heal_near_full -500, heal_losing_race -120
+         VETO   EARTHQUAKE (bp 100, 0% dmg, x0, IMMUNE) immune -1000000
+         VETO   switch -> Steelix (hits 0%, takes 47%) engine_base +36, matchup +64, entry_incoming_damage -28, switchin_race -70, no_escape_reason -1000000
+
+Turn 18  actor 1   STONEEDGE @0                 score     68.0
+    board   : Aerodactyl 40%  vs  Rotom 88%
+    foe     : Rotom -> SHADOWBALL
+    view: hp 40%  speed 394 (slower)  incoming max 53%  certain 53%  threatened_lethal=True
+    race vs Rotom: mine 1 turns, theirs 1, winning=False
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                       Uxie        Escavalier  Qwilfish    Rhydon      Rotom*      Sceptile
+      Steelix      46% -           L 34%/17%   L 86%/25%   L 33%/47%   L 0%/47%    L 28%/27%
+      Aerodactyl*  40% -           W 114%/69%  W 107%/104% L 40%/193%  L 110%/125% W 107%/75%
+      Magneton      0% -           -           -           -           -           -
+      Sceptile      0% -           -           -           -           -           -
+      Skuntank      0% -           -           -           -           -           -
+      Uxie          0% -           -           -           -           -           -
+    options considered:
+          68.0  STONEEDGE (bp 100, 110% dmg, x1)       engine_base +200, expected_damage +80, accuracy -8, dead_before_moving -204
+          53.3  FIREBLAST (bp 120, 48% dmg, x1)        engine_base +177, expected_damage +39, accuracy -3, dead_before_moving -160
+         -46.2  ROOST (0% dmg, x1)                     engine_base +125, heal_mid_hp +90, heal_cannot_resolve -400, dead_before_moving +139
+         VETO   EARTHQUAKE (bp 100, 0% dmg, x0, IMMUNE) immune -1000000
+         VETO   switch -> Steelix (hits 0%, takes 47%) engine_base +36, matchup +64, entry_incoming_damage -28, switchin_race -70, escape_lethal_threat +130, no_escape_reason -1000000
+
+Turn 19  actor 1   ROAR @0                      score    155.0
+    board   : Steelix 46%  vs  Rotom 88%
+    foe     : Rotom -> SHADOWBALL
+    view: hp 46%  speed 102 (slower)  incoming max 47%  certain 47%  threatened_lethal=True
+    race vs Rotom: not computed
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                      Uxie        Escavalier  Qwilfish    Rhydon      Rotom*      Sceptile
+      Steelix*    46% -           L 34%/17%   L 86%/25%   L 33%/47%   L 0%/47%    L 28%/27%
+      Aerodactyl   0% -           -           -           -           -           -
+      Magneton     0% -           -           -           -           -           -
+      Sceptile     0% -           -           -           -           -           -
+      Skuntank     0% -           -           -           -           -           -
+      Uxie         0% -           -           -           -           -           -
+    options considered:
+         155.0  ROAR (0% dmg, x1)                      engine_base +140, phaze_value +15
+         151.0  TOXIC (0% dmg, x1)                     engine_base +126, fresh_status +25
+        -500.0  STEALTHROCK (0% dmg, x1)               hazard_at_cap -500
+         VETO   EARTHQUAKE (bp 100, 0% dmg, x0, IMMUNE) immune -1000000
+
+Turn 20  actor 1   EARTHQUAKE                   score    166.5
+    board   : Steelix 11%  vs  Escavalier 88%
+    foe     : Escavalier -> MEGAHORN
+    view: hp 11%  speed 102 (slower)  incoming max 17%  certain 3%  threatened_lethal=True
+    race vs Escavalier: mine 3 turns, theirs 1, winning=False
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                      Uxie         Escavalier*  Qwilfish     Rhydon       Rotom        Sceptile
+      Steelix*    11% -            L 34%/17%    L 86%/25%    L 33%/47%    L 0%/47%     L 28%/27%
+      Aerodactyl   0% -            -            -            -            -            -
+      Magneton     0% -            -            -            -            -            -
+      Sceptile     0% -            -            -            -            -            -
+      Skuntank     0% -            -            -            -            -            -
+      Uxie         0% -            -            -            -            -            -
+    options considered:
+         166.5  EARTHQUAKE (bp 100, 34% dmg, x1)       engine_base +139, expected_damage +28
+         155.0  ROAR (0% dmg, x1)                      engine_base +140, phaze_value +15
+        -500.0  STEALTHROCK (0% dmg, x1)               hazard_at_cap -500
+         VETO   TOXIC (0% dmg, x1, IMMUNE)             immune -1000000
+

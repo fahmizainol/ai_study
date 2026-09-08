@@ -1,0 +1,178 @@
+shadow battles : 0.7.5 maximin=60 0.7.6 mcts=60 paired=60
+
+turns compared : 933 (0 unscorable)
+same answer    : 677 (72.6%)
+different      : 256 (27.4%)
+
+by kind (0.7.5 maximin -> 0.7.6 mcts):
+  move -> move          150
+  switch -> move         77
+  move -> switch         23
+  switch -> switch        6
+
+of the different turns, which side matched the stock host's own click:
+  neither     213
+  0.7.5 maximin   24
+  0.7.6 mcts   19
+
+examples:
+  team1_vs_team2 104729 t1 Golurk@3.13479623824451% vs Galvantula@58.0071174377224% | foe declared: - (hit None, worst 89.0282131661442)
+      0.7.5 maximin: ROCKPOLISH         ROCKPOLISH=-88 EARTHQUAKE=-88 DYNAMICPUNCH=-88
+      0.7.6 mcts: EARTHQUAKE         EARTHQUAKE=0.526 SHADOWPUNCH=0.523 DYNAMICPUNCH=0.494
+      stock clicked: EARTHQUAKE
+  team1_vs_team2 104729 t2 Sceptile@100.0% vs Galvantula@59.7864768683274% | foe declared: - (hit None, worst 24.1992882562278)
+      0.7.5 maximin: SWORDSDANCE        SWORDSDANCE=-3.182 ACROBATICS=-24 LEAFBLADE=-86
+      0.7.6 mcts: ACROBATICS         ACROBATICS=0.670 SWORDSDANCE=0.657 EARTHQUAKE=0.632
+      stock clicked: ACROBATICS
+  team1_vs_team2 104729 t3 Sceptile@79.3594306049822% vs Druddigon@100.0% | foe declared: - (hit None, worst 197.153024911032)
+      0.7.5 maximin: ACROBATICS         ACROBATICS=-89 EARTHQUAKE=-93 LEAFBLADE=-105
+      0.7.6 mcts: EARTHQUAKE         EARTHQUAKE=0.407 ACROBATICS=0.398 LEAFBLADE=0.386
+      stock clicked: SWORDSDANCE
+  team1_vs_team2 104729 t7 Durant@20.6225680933852% vs Sigilyph@100.0% | foe declared: - (hit None, worst 372.373540856031)
+      0.7.5 maximin: THUNDERFANG        THUNDERFANG=-60 XSCISSOR=-67 SUPERPOWER=-114
+      0.7.6 mcts: XSCISSOR           XSCISSOR=0.577 THUNDERFANG=0.569 SUPERPOWER=0.486
+      stock clicked: SUPERPOWER
+  team1_vs_team2 104729 t14 Omastar@54.4483985765125% vs Magneton@87.551867219917% | foe declared: - (hit None, worst 164.4128113879)
+      0.7.5 maximin: switch:4           switch:4(Rotom)=-8.286 switch:2(Feraligatr)=-33 ICEBEAM=-63
+      0.7.6 mcts: switch:2           switch:2(Feraligatr)=0.338 switch:4(Rotom)=0.319 SCALD=0.315
+      stock clicked: SCALD
+  team1_vs_team2 130363 t2 Feraligatr@100.0% vs Golurk@11.6417910447761% | foe declared: - (hit None, worst 63.2398753894081)
+      0.7.5 maximin: SUBSTITUTE         SUBSTITUTE=99 CRUNCH=80 SWORDSDANCE=77
+      0.7.6 mcts: CRUNCH             CRUNCH=0.559 AQUAJET=0.537 SWORDSDANCE=0.479
+      stock clicked: AQUAJET
+  team1_vs_team2 130363 t5 Omastar@100.0% vs Druddigon@100.0% | foe declared: - (hit None, worst 0.0)
+      0.7.5 maximin: ICEBEAM            ICEBEAM=-70 SCALD=-77 STEALTHROCK=-92
+      0.7.6 mcts: SCALD              SCALD=0.662 ICEBEAM=0.654 STEALTHROCK=0.628
+      stock clicked: ICEBEAM
+  team1_vs_team2 130363 t6 Omastar@0.355871886120996% vs Druddigon@22.8295819935691% | foe declared: - (hit None, worst 0.0)
+      0.7.5 maximin: STEALTHROCK        STEALTHROCK=-61 SPIKES=-73 SCALD=-74
+      0.7.6 mcts: SCALD              SCALD=0.729 ICEBEAM=0.709 STEALTHROCK=0.690
+      stock clicked: ICEBEAM
+  team1_vs_team2 130363 t7 Omastar@0.355871886120996% vs Magneton@100.0% | foe declared: - (hit None, worst 164.4128113879)
+      0.7.5 maximin: switch:4           switch:4(Rotom)=-120 SCALD=-130 ICEBEAM=-130
+      0.7.6 mcts: SCALD              SCALD=0.578 ICEBEAM=0.566 STEALTHROCK=0.533
+      stock clicked: SPIKES
+  team1_vs_team2 155921 t1 Golurk@1.25391849529781% vs Galvantula@19.5729537366548% | foe declared: - (hit None, worst 89.0282131661442)
+      0.7.5 maximin: ROCKPOLISH         ROCKPOLISH=-50 EARTHQUAKE=-50 SHADOWPUNCH=-50
+      0.7.6 mcts: EARTHQUAKE         EARTHQUAKE=0.531 SHADOWPUNCH=0.517 DYNAMICPUNCH=0.506
+      stock clicked: switch:1
+  team1_vs_team2 155921 t2 Durant@81.3229571984436% vs Galvantula@28.1138790035587% | foe declared: - (hit None, worst 20.6225680933852)
+      0.7.5 maximin: HONECLAWS          HONECLAWS=-13 XSCISSOR=-22 THUNDERFANG=-38
+      0.7.6 mcts: XSCISSOR           XSCISSOR=0.642 SUPERPOWER=0.595 THUNDERFANG=0.586
+      stock clicked: SUPERPOWER
+  team1_vs_team2 155921 t5 Omastar@100.0% vs Druddigon@9.64630225080386% | foe declared: - (hit None, worst 14.5907473309609)
+      0.7.5 maximin: STEALTHROCK        STEALTHROCK=0.475 SCALD=0.000 SPIKES=-15
+      0.7.6 mcts: SCALD              SCALD=0.659 ICEBEAM=0.631 STEALTHROCK=0.627
+      stock clicked: SCALD
+  team1_vs_team2 155921 t7 Omastar@0.355871886120996% vs Magneton@100.0% | foe declared: - (hit None, worst 164.4128113879)
+      0.7.5 maximin: switch:4           switch:4(Rotom)=10 SCALD=0.000 ICEBEAM=0.000
+      0.7.6 mcts: SCALD              SCALD=0.513 ICEBEAM=0.507 SPIKES=0.467
+      stock clicked: SCALD
+  team1_vs_team2 155921 t9 Sceptile@68.3274021352313% vs Kabutops@100.0% | foe declared: - (hit None, worst 146.26334519573)
+      0.7.5 maximin: LEAFBLADE          LEAFBLADE=162 EARTHQUAKE=73 ACROBATICS=32
+      0.7.6 mcts: ACROBATICS         ACROBATICS=0.622 LEAFBLADE=0.621 SWORDSDANCE=0.605
+      stock clicked: LEAFBLADE
+  team1_vs_team2 196613 t3 Feraligatr@100.0% vs Golurk@10.4477611940299% | foe declared: - (hit None, worst 63.2398753894081)
+      0.7.5 maximin: SUBSTITUTE         SUBSTITUTE=100 CRUNCH=81 SWORDSDANCE=78
+      0.7.6 mcts: CRUNCH             CRUNCH=0.565 AQUAJET=0.532 SWORDSDANCE=0.473
+      stock clicked: AQUAJET
+  team1_vs_team2 262147 t6 Omastar@0.355871886120996% vs Magneton@100.0% | foe declared: - (hit None, worst 164.4128113879)
+      0.7.5 maximin: switch:4           switch:4(Rotom)=10 SCALD=0.000 ICEBEAM=0.000
+      0.7.6 mcts: SCALD              SCALD=0.489 ICEBEAM=0.478 STEALTHROCK=0.453
+      stock clicked: SCALD
+  team1_vs_team2 262147 t8 Sceptile@47.3309608540925% vs Kabutops@100.0% | foe declared: - (hit None, worst 146.26334519573)
+      0.7.5 maximin: LEAFBLADE          LEAFBLADE=151 EARTHQUAKE=73 ACROBATICS=32
+      0.7.6 mcts: ACROBATICS         ACROBATICS=0.653 LEAFBLADE=0.648 SWORDSDANCE=0.617
+      stock clicked: LEAFBLADE
+  team1_vs_team3 104729 t1 Uxie@82.2033898305085% vs Galvantula@54.0925266903915% | foe declared: - (hit None, worst 26.8361581920904)
+      0.7.5 maximin: CALMMIND           CALMMIND=60 PSYCHIC=51 SUBSTITUTE=45
+      0.7.6 mcts: PSYCHIC            PSYCHIC=0.594 THUNDERBOLT=0.543 CALMMIND=0.530
+      stock clicked: PSYCHIC
+  team1_vs_team3 104729 t11 Escavalier@100.0% vs Sigilyph@15.7894736842105% | foe declared: - (hit None, worst 245.222929936306)
+      0.7.5 maximin: switch:4           switch:4(Rotom)=-75 MEGAHORN=-77 RETURN=-81
+      0.7.6 mcts: MEGAHORN           MEGAHORN=0.190 RETURN=0.190 ENDURE=0.176
+      stock clicked: MEGAHORN
+  team1_vs_team3 130363 t2 Uxie@61.0169491525424% vs Galvantula@26.6903914590747% | foe declared: - (hit None, worst 26.8361581920904)
+      0.7.5 maximin: CALMMIND           CALMMIND=39 PSYCHIC=39 SUBSTITUTE=38
+      0.7.6 mcts: PSYCHIC            PSYCHIC=0.566 CALMMIND=0.526 THUNDERBOLT=0.521
+      stock clicked: PSYCHIC
+  team1_vs_team3 130363 t6 Rhydon@86.7724867724868% vs Kabutops@100.0% | foe declared: - (hit None, worst 91.005291005291)
+      0.7.5 maximin: switch:2           switch:2(Qwilfish)=24 EARTHQUAKE=0.000 STEALTHROCK=0.000
+      0.7.6 mcts: STONEEDGE          STONEEDGE=0.310 MEGAHORN=0.303 EARTHQUAKE=0.301
+      stock clicked: EARTHQUAKE
+  team1_vs_team3 130363 t7 Rhydon@7.40740740740741% vs Golurk@100.0% | foe declared: - (hit None, worst 58.2010582010582)
+      0.7.5 maximin: EARTHQUAKE         EARTHQUAKE=130 STONEEDGE=130 MEGAHORN=130
+      0.7.6 mcts: STONEEDGE          STONEEDGE=0.380 MEGAHORN=0.375 EARTHQUAKE=0.367
+      stock clicked: MEGAHORN
+  team1_vs_team3 155921 t2 Uxie@20.0564971751412% vs Galvantula@28.4697508896797% | foe declared: - (hit None, worst 42.9378531073446)
+      0.7.5 maximin: CALMMIND           CALMMIND=-58 THUNDERBOLT=-58 PSYCHIC=-58
+      0.7.6 mcts: PSYCHIC            PSYCHIC=0.353 THUNDERBOLT=0.347 CALMMIND=0.311
+      stock clicked: PSYCHIC
+  team1_vs_team3 155921 t3 Rhydon@100.0% vs Galvantula@28.4697508896797% | foe declared: - (hit None, worst 0.264550264550265)
+      0.7.5 maximin: STEALTHROCK        STEALTHROCK=35 EARTHQUAKE=-0.265 STONEEDGE=-12
+      0.7.6 mcts: EARTHQUAKE         EARTHQUAKE=0.699 STEALTHROCK=0.679 STONEEDGE=0.664
+      stock clicked: MEGAHORN
+  team1_vs_team3 155921 t8 Escavalier@100.0% vs Sigilyph@100.0% | foe declared: - (hit None, worst 165.605095541401)
+      0.7.5 maximin: SWORDSDANCE        SWORDSDANCE=-318 MEGAHORN=-318 switch:4(Rotom)=-318
+      0.7.6 mcts: switch:4           switch:4(Rotom)=0.355 SWORDSDANCE=0.342 RETURN=0.310
+      stock clicked: MEGAHORN
+  team1_vs_team3 196613 t2 Uxie@71.4689265536723% vs Galvantula@32.0284697508897% | foe declared: - (hit None, worst 18.0790960451977)
+      0.7.5 maximin: SUBSTITUTE         SUBSTITUTE=130 PSYCHIC=128 CALMMIND=86
+      0.7.6 mcts: PSYCHIC            PSYCHIC=0.542 THUNDERBOLT=0.516 CALMMIND=0.472
+      stock clicked: PSYCHIC
+  team1_vs_team3 196613 t6 Rhydon@7.14285714285714% vs Kabutops@100.0% | foe declared: - (hit None, worst 91.005291005291)
+      0.7.5 maximin: EARTHQUAKE         EARTHQUAKE=0.000 STONEEDGE=0.000 STEALTHROCK=0.000
+      0.7.6 mcts: STONEEDGE          STONEEDGE=0.484 EARTHQUAKE=0.482 STEALTHROCK=0.466
+      stock clicked: EARTHQUAKE
+  team1_vs_team3 262147 t4 Rhydon@29.1005291005291% vs Kabutops@100.0% | foe declared: - (hit None, worst 91.005291005291)
+      0.7.5 maximin: STONEEDGE          STONEEDGE=-130 EARTHQUAKE=-130 STEALTHROCK=-130
+      0.7.6 mcts: EARTHQUAKE         EARTHQUAKE=0.464 STEALTHROCK=0.445 STONEEDGE=0.433
+      stock clicked: EARTHQUAKE
+  team1_vs_team3 262147 t6 Sceptile@100.0% vs Galvantula@100.0% | foe declared: - (hit None, worst 172.953736654804)
+      0.7.5 maximin: SWORDSDANCE        SWORDSDANCE=-130 ACROBATICS=-130 LEAFBLADE=-130
+      0.7.6 mcts: switch:4           switch:4(Rotom)=0.308 switch:1(Escavalier)=0.272 LEAFBLADE=0.269
+      stock clicked: EARTHQUAKE
+  team1_vs_team3 262147 t10 Rotom@100.0% vs Sigilyph@20.7017543859649% | foe declared: - (hit None, worst 93.3609958506224)
+      0.7.5 maximin: SHADOWBALL         SHADOWBALL=-130 THUNDERBOLT=-565 VOLTSWITCH=-565
+      0.7.6 mcts: WILLOWISP          WILLOWISP=0.295 SHADOWBALL=0.246 VOLTSWITCH=0.201
+      stock clicked: VOLTSWITCH
+  team1_vs_team4 104729 t2 Steelix@31.9209039548023% vs Galvantula@18.8612099644128% | foe declared: - (hit None, worst 44.6327683615819)
+      0.7.5 maximin: EARTHQUAKE         EARTHQUAKE=-49 STEALTHROCK=-49 TOXIC=-49
+      0.7.6 mcts: STEALTHROCK        STEALTHROCK=0.442 EARTHQUAKE=0.430 TOXIC=0.374
+      stock clicked: EARTHQUAKE
+  team1_vs_team4 104729 t9 Skuntank@90.2017291066282% vs Magneton@100.0% | foe declared: - (hit None, worst 74.3515850144092)
+      0.7.5 maximin: CRUNCH             CRUNCH=-84 SUCKERPUNCH=-84 PURSUIT=-139
+      0.7.6 mcts: SUCKERPUNCH        SUCKERPUNCH=0.658 CRUNCH=0.648 FIREBLAST=0.614
+      stock clicked: FIREBLAST
+  team1_vs_team4 104729 t12 Uxie@66.031746031746% vs Druddigon@35.3697749196141% | foe declared: - (hit None, worst 45.7142857142857)
+      0.7.5 maximin: PSYCHIC            PSYCHIC=5.404 CALMMIND=4.948 SIGNALBEAM=-35
+      0.7.6 mcts: CALMMIND           CALMMIND=0.168 SUBSTITUTE=0.159 PSYCHIC=0.158
+      stock clicked: PSYCHIC
+  team1_vs_team4 130363 t6 Aerodactyl@70.0996677740864% vs Druddigon@87.7813504823151% | foe declared: - (hit None, worst 205.980066445183)
+      0.7.5 maximin: STONEEDGE          STONEEDGE=202 EARTHQUAKE=192 FIREBLAST=159
+      0.7.6 mcts: EARTHQUAKE         EARTHQUAKE=0.434 STONEEDGE=0.404 FIREBLAST=0.306
+      stock clicked: STONEEDGE
+  team1_vs_team4 130363 t11 Uxie@77.7777777777778% vs Golurk@94.0298507462687% | foe declared: - (hit None, worst 74.2857142857143)
+      0.7.5 maximin: PSYCHIC            PSYCHIC=53 SUBSTITUTE=-21 CALMMIND=-31
+      0.7.6 mcts: SUBSTITUTE         SUBSTITUTE=0.317 PSYCHIC=0.316 CALMMIND=0.265
+      stock clicked: PSYCHIC
+  team1_vs_team4 130363 t12 Uxie@13.3333333333333% vs Golurk@34.0298507462687% | foe declared: - (hit None, worst 74.2857142857143)
+      0.7.5 maximin: PSYCHIC            PSYCHIC=31 SIGNALBEAM=-47 CALMMIND=-64
+      0.7.6 mcts: SIGNALBEAM         SIGNALBEAM=0.295 PSYCHIC=0.274 CALMMIND=0.262
+      stock clicked: PSYCHIC
+  team1_vs_team4 155921 t2 Steelix@35.0282485875706% vs Kabutops@100.0% | foe declared: - (hit None, worst 40.1129943502825)
+      0.7.5 maximin: switch:2           switch:2(Magneton)=25 EARTHQUAKE=0.000 STEALTHROCK=0.000
+      0.7.6 mcts: STEALTHROCK        STEALTHROCK=0.438 switch:2(Magneton)=0.410 EARTHQUAKE=0.403
+      stock clicked: STEALTHROCK
+  team1_vs_team4 155921 t3 Steelix@7.90960451977401% vs Kabutops@100.0% | foe declared: - (hit None, worst 40.1129943502825)
+      0.7.5 maximin: switch:2           switch:2(Magneton)=11 EARTHQUAKE=0.000 TOXIC=0.000
+      0.7.6 mcts: EARTHQUAKE         EARTHQUAKE=0.493 TOXIC=0.456 ROAR=0.440
+      stock clicked: EARTHQUAKE
+  team1_vs_team4 155921 t6 Skuntank@100.0% vs Druddigon@53.6977491961415% | foe declared: - (hit None, worst 87.0317002881844)
+      0.7.5 maximin: CRUNCH             CRUNCH=130 SUCKERPUNCH=130 PURSUIT=43
+      0.7.6 mcts: SUCKERPUNCH        SUCKERPUNCH=0.778 CRUNCH=0.777 FIREBLAST=0.589
+      stock clicked: SUCKERPUNCH
+  team1_vs_team4 262147 t6 Aerodactyl@70.0996677740864% vs Druddigon@87.7813504823151% | foe declared: - (hit None, worst 205.980066445183)
+      0.7.5 maximin: STONEEDGE          STONEEDGE=202 EARTHQUAKE=192 FIREBLAST=159
+      0.7.6 mcts: EARTHQUAKE         EARTHQUAKE=0.434 STONEEDGE=0.404 FIREBLAST=0.306
+      stock clicked: STONEEDGE

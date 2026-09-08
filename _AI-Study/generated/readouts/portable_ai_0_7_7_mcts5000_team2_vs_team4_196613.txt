@@ -1,0 +1,312 @@
+team2_vs_team4  seed 196613  single   WIN in 13 turns   [portable 0.7.7, mega=True, teams=gen5ru_a]
+  left  (team2): Golurk, Durant, Feraligatr, Omastar, Rotom, Sceptile
+  PORTABLE (team4): Steelix, Aerodactyl, Magneton, Sceptile, Skuntank, Uxie
+========================================================================================================
+
+Turn 0   actor 1   STEALTHROCK                  score    0.480
+    board   : Steelix 100%  vs  Golurk 100%
+    foe     : Golurk -> ROCKPOLISH
+    view: hp 100%  speed 102 (slower)  incoming max 68%  certain 68%  threatened_lethal=False
+    race vs Golurk: mine 3 turns, theirs 2, winning=False
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                      Golurk*     Durant      Feraligatr  Omastar     Rotom       Sceptile
+      Steelix*   100% L 42%/68%   L 40%/52%   W 35%/20%   L 66%/107%  L 0%/47%    L 28%/27%
+      Aerodactyl 100% W 53%/93%   W 259%/117% W 66%/78%   L 83%/120%  W 110%/125% W 106%/75%
+      Magneton   100% L 55%/464%  L 237%/178% W 126%/43%  W 164%/79%  L 45%/69%   L 70%/185%
+      Sceptile   100% W 191%/101% L 237%/233% W 185%/55%  W 483%/92%  W 131%/51%  L 122%/198%
+      Skuntank   100% W 134%/237% W 279%/91%  W 55%/33%   W 52%/61%   W 181%/64%  L 88%/94%
+      Uxie       100% L 43%/82%   L 40%/105%  W 42%/50%   W 54%/36%   W 59%/64%   W 52%/44%
+    options considered:
+         0.480  STEALTHROCK (0% dmg, x1)               search_visits +1728, search_iterations +5000
+         0.429  EARTHQUAKE (bp 100, 42% dmg, x1)       search_visits +761, search_iterations +5000
+         0.398  switch -> Uxie (hits 43%, takes 82%, faster) search_visits +524, search_iterations +5000
+         0.396  switch -> Aerodactyl (hits 53%, takes 93%, faster) search_visits +513, search_iterations +5000
+         0.377  TOXIC (0% dmg, x1)                     search_visits +418, search_iterations +5000
+         0.347  switch -> Sceptile (hits 191%, takes 101%, faster) search_visits +317, search_iterations +5000
+         0.345  ROAR (0% dmg, x1)                      search_visits +313, search_iterations +5000
+         0.320  switch -> Skuntank (hits 134%, takes 237%, faster) search_visits +256, search_iterations +5000
+         0.262  switch -> Magneton (hits 55%, takes 464%, faster) search_visits +170, search_iterations +5000
+
+Turn 1   actor 1   EARTHQUAKE                   score    0.453
+    board   : Steelix 100%  vs  Golurk 100%
+    foe     : Golurk -> EARTHQUAKE
+    view: hp 100%  speed 102 (slower)  incoming max 68%  certain 68%  threatened_lethal=False
+    race vs Golurk: mine 3 turns, theirs 2, winning=False
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                      Golurk*     Durant      Feraligatr  Omastar     Rotom       Sceptile
+      Steelix*   100% L 42%/68%   L 40%/52%   W 35%/20%   L 66%/107%  L 0%/47%    L 28%/27%
+      Aerodactyl 100% L 53%/93%   W 259%/117% W 66%/78%   L 83%/120%  W 110%/125% W 106%/75%
+      Magneton   100% L 55%/464%  L 237%/178% W 126%/43%  W 164%/79%  L 45%/69%   L 70%/185%
+      Sceptile   100% L 191%/101% L 237%/233% W 185%/55%  W 483%/92%  W 131%/51%  L 122%/198%
+      Skuntank   100% L 134%/237% W 279%/91%  W 55%/33%   W 52%/61%   W 181%/64%  L 88%/94%
+      Uxie       100% L 43%/82%   L 40%/105%  W 42%/50%   W 54%/36%   W 59%/64%   W 52%/44%
+    options considered:
+         0.453  EARTHQUAKE (bp 100, 42% dmg, x1)       search_visits +1329, search_iterations +5000
+         0.431  switch -> Uxie (hits 43%, takes 82%)   search_visits +932, search_iterations +5000
+         0.395  TOXIC (0% dmg, x1)                     search_visits +584, search_iterations +5000
+         0.383  switch -> Aerodactyl (hits 53%, takes 93%) search_visits +512, search_iterations +5000
+         0.373  STEALTHROCK (0% dmg, x1)               search_visits +458, search_iterations +5000
+         0.366  ROAR (0% dmg, x1)                      search_visits +427, search_iterations +5000
+         0.324  switch -> Skuntank (hits 134%, takes 237%) search_visits +293, search_iterations +5000
+         0.312  switch -> Sceptile (hits 191%, takes 101%) search_visits +264, search_iterations +5000
+         0.274  switch -> Magneton (hits 55%, takes 464%) search_visits +201, search_iterations +5000
+
+Turn 2   actor 1   TOXIC @0                     score    0.467
+    board   : Steelix 8%  vs  Golurk 55%
+    foe     : Golurk -> DYNAMICPUNCH
+    view: hp 8%  speed 102 (slower)  incoming max 68%  certain 68%  threatened_lethal=True
+    race vs Golurk: mine 2 turns, theirs 1, winning=False
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                      Golurk*     Durant      Feraligatr  Omastar     Rotom       Sceptile
+      Steelix*     8% L 42%/68%   L 40%/52%   L 35%/20%   L 66%/107%  L 0%/47%    L 28%/27%
+      Aerodactyl 100% L 53%/93%   W 259%/117% W 66%/78%   L 83%/120%  W 110%/125% W 106%/75%
+      Magneton   100% L 55%/464%  L 237%/178% W 126%/43%  W 164%/79%  L 45%/69%   L 70%/185%
+      Sceptile   100% L 191%/101% L 237%/233% W 185%/55%  W 483%/92%  W 131%/51%  L 122%/198%
+      Skuntank   100% L 134%/237% W 279%/91%  W 55%/33%   W 52%/61%   W 181%/64%  L 88%/94%
+      Uxie       100% L 43%/82%   L 40%/105%  W 42%/50%   W 54%/36%   W 59%/64%   W 52%/44%
+    options considered:
+         0.467  TOXIC (0% dmg, x1)                     search_visits +884, search_iterations +5000
+         0.467  EARTHQUAKE (bp 100, 42% dmg, x1)       search_visits +882, search_iterations +5000
+         0.465  STEALTHROCK (0% dmg, x1)               search_visits +855, search_iterations +5000
+         0.464  ROAR (0% dmg, x1)                      search_visits +844, search_iterations +5000
+         0.421  switch -> Uxie (hits 43%, takes 82%)   search_visits +498, search_iterations +5000
+         0.382  switch -> Aerodactyl (hits 53%, takes 93%) search_visits +341, search_iterations +5000
+         0.368  switch -> Skuntank (hits 134%, takes 237%) search_visits +301, search_iterations +5000
+         0.319  switch -> Magneton (hits 55%, takes 464%) search_visits +207, search_iterations +5000
+         0.305  switch -> Sceptile (hits 191%, takes 101%) search_visits +188, search_iterations +5000
+
+Turn 3   actor 1   SUCKERPUNCH @0               score    0.772
+    board   : Skuntank 100%  vs  Golurk 45%
+    foe     : Golurk -> EARTHQUAKE
+    view: hp 100%  speed 267 (slower)  incoming max 237%  certain 237%  threatened_lethal=True
+    race vs Golurk: mine 1 turns, theirs 1, winning=True (ties on speed)
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                      Golurk*     Durant      Feraligatr  Omastar     Rotom       Sceptile
+      Steelix      0% -           -           -           -           -           -
+      Aerodactyl 100% W 53%/93%   W 259%/117% W 66%/78%   L 83%/120%  W 110%/125% W 106%/75%
+      Magneton   100% L 55%/464%  L 237%/178% W 126%/43%  W 164%/79%  L 45%/69%   L 70%/185%
+      Sceptile   100% L 191%/101% L 237%/233% W 185%/55%  W 483%/92%  W 131%/51%  L 122%/198%
+      Skuntank*  100% L 134%/237% W 279%/91%  W 55%/33%   W 52%/61%   W 181%/64%  L 88%/94%
+      Uxie       100% L 43%/82%   L 40%/105%  W 42%/50%   W 54%/36%   W 59%/64%   W 52%/44%
+    options considered:
+         0.772  SUCKERPUNCH (bp 80, 134% dmg, x2)      search_visits +3771, search_iterations +5000
+         0.597  CRUNCH (bp 80, 134% dmg, x2)           search_visits +291, search_iterations +5000
+         0.550  FIREBLAST (bp 120, 38% dmg, x1)        search_visits +204, search_iterations +5000
+         0.532  switch -> Aerodactyl (hits 53%, takes 93%) sole answer to Golurk search_visits +181, search_iterations +5000
+         0.531  PURSUIT (bp 40, 68% dmg, x2)           search_visits +179, search_iterations +5000
+         0.528  switch -> Uxie (hits 43%, takes 82%)   search_visits +177, search_iterations +5000
+         0.448  switch -> Sceptile (hits 191%, takes 101%) search_visits +111, search_iterations +5000
+         0.391  switch -> Magneton (hits 55%, takes 464%) search_visits +86, search_iterations +5000
+
+Turn 4   actor 1   SUCKERPUNCH @0               score    0.617
+    board   : Skuntank 90%  vs  Sceptile 88%
+    foe     : Sceptile -> EARTHQUAKE
+    view: hp 90%  speed 267 (slower)  incoming max 94%  certain 94%  threatened_lethal=True
+    race vs Sceptile: mine 1 turns, theirs 1, winning=True (ties on speed)
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                      Golurk      Durant      Feraligatr  Omastar     Rotom       Sceptile*
+      Steelix      0% -           -           -           -           -           -
+      Aerodactyl 100% -           W 259%/117% W 66%/78%   L 83%/120%  W 110%/125% W 106%/75%
+      Magneton   100% -           L 237%/178% W 126%/43%  W 164%/79%  L 45%/69%   L 70%/185%
+      Sceptile   100% -           L 237%/233% W 185%/55%  W 483%/92%  W 131%/51%  L 122%/198%
+      Skuntank*   90% -           L 279%/91%  W 55%/33%   W 52%/61%   W 181%/64%  L 88%/94%
+      Uxie       100% -           L 40%/105%  W 42%/50%   W 54%/36%   W 59%/64%   W 52%/44%
+    options considered:
+         0.617  SUCKERPUNCH (bp 80, 88% dmg, x1)       search_visits +2280, search_iterations +5000
+         0.557  switch -> Aerodactyl (hits 106%, takes 75%, faster) sole answer to Durant search_visits +797, search_iterations +5000
+         0.540  FIREBLAST (bp 120, 82% dmg, x2)        search_visits +645, search_iterations +5000
+         0.500  CRUNCH (bp 80, 88% dmg, x1)            search_visits +416, search_iterations +5000
+         0.437  switch -> Sceptile (hits 122%, takes 198%) search_visits +241, search_iterations +5000
+         0.422  switch -> Uxie (hits 52%, takes 44%)   search_visits +216, search_iterations +5000
+         0.419  PURSUIT (bp 40, 44% dmg, x1)           search_visits +214, search_iterations +5000
+         0.403  switch -> Magneton (hits 70%, takes 185%) search_visits +191, search_iterations +5000
+
+Turn 5   actor 1   switch -> Aerodactyl         score    0.510
+    board   : Sceptile 100%  vs  Sceptile 12%
+    foe     : Sceptile -> ACROBATICS
+    view: hp 100%  speed 338 (slower)  incoming max 198%  certain 198%  threatened_lethal=True
+    race vs Sceptile: mine 1 turns, theirs 1, winning=False
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                      Golurk      Durant      Feraligatr  Omastar     Rotom       Sceptile*
+      Steelix      0% -           -           -           -           -           -
+      Aerodactyl 100% -           W 259%/117% W 66%/78%   L 83%/120%  W 110%/125% W 106%/75%
+      Magneton   100% -           L 237%/178% W 126%/43%  W 164%/79%  L 45%/69%   L 70%/185%
+      Sceptile*  100% -           L 237%/233% W 185%/55%  W 483%/92%  W 131%/51%  L 122%/198%
+      Skuntank     0% -           -           -           -           -           -
+      Uxie       100% -           L 40%/105%  W 42%/50%   W 54%/36%   W 59%/64%   W 52%/44%
+    options considered:
+         0.510  switch -> Aerodactyl (hits 106%, takes 75%, faster) sole answer to Durant search_visits +2793, search_iterations +5000
+         0.391  switch -> Magneton (hits 70%, takes 185%) search_visits +438, search_iterations +5000
+         0.389  HIDDENPOWER (bp 1, 70% dmg, x1)        search_visits +430, search_iterations +5000
+         0.384  switch -> Uxie (hits 52%, takes 44%)   search_visits +408, search_iterations +5000
+         0.364  ACROBATICS (bp 55, 122% dmg, x2)       search_visits +340, search_iterations +5000
+         0.360  LEAFSTORM (bp 140, 52% dmg, x0.5)      search_visits +330, search_iterations +5000
+         0.333  ROCKSLIDE (bp 75, 28% dmg, x1)         search_visits +261, search_iterations +5000
+
+Turn 6   actor 1   switch -> Uxie               score    0.415
+    board   : Aerodactyl 64%  vs  Sceptile 12%
+    foe     : Sceptile -> LEAFBLADE
+    view: hp 64%  speed 394 (slower)  incoming max 75%  certain 75%  threatened_lethal=True
+    race vs Sceptile: mine 1 turns, theirs 1, winning=False
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                       Golurk      Durant      Feraligatr  Omastar     Rotom       Sceptile*
+      Steelix       0% -           -           -           -           -           -
+      Aerodactyl*  64% -           W 259%/117% L 66%/78%   L 83%/120%  W 110%/125% L 106%/75%
+      Magneton    100% -           L 237%/178% W 126%/43%  W 164%/79%  L 45%/69%   L 70%/185%
+      Sceptile    100% -           L 237%/233% W 185%/55%  W 483%/92%  W 131%/51%  L 122%/132%
+      Skuntank      0% -           -           -           -           -           -
+      Uxie        100% -           L 40%/105%  W 42%/50%   W 54%/36%   W 59%/64%   W 52%/37%
+    options considered:
+         0.415  switch -> Uxie (hits 52%, takes 37%) sole answer to Sceptile search_visits +1127, search_iterations +5000
+         0.398  switch -> Magneton (hits 70%, takes 185%) search_visits +865, search_iterations +5000
+         0.377  ROOST (0% dmg, x1)                     search_visits +654, search_iterations +5000
+         0.377  EARTHQUAKE (bp 100, 36% dmg, x0.5)     search_visits +654, search_iterations +5000
+         0.371  switch -> Sceptile (hits 122%, takes 132%) search_visits +611, search_iterations +5000
+         0.367  STONEEDGE (bp 100, 106% dmg, x1)       search_visits +581, search_iterations +5000
+         0.355  FIREBLAST (bp 120, 76% dmg, x2)        search_visits +508, search_iterations +5000
+
+Turn 7   actor 1   PSYCHIC @0                   score    0.485
+    board   : Uxie 52%  vs  Sceptile 12%
+    foe     : Sceptile -> ACROBATICS
+    view: hp 52%  speed 310 (slower)  incoming max 37%  certain 37%  threatened_lethal=False
+    race vs Sceptile: mine 1 turns, theirs 2, winning=True
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                      Golurk      Durant      Feraligatr  Omastar     Rotom       Sceptile*
+      Steelix      0% -           -           -           -           -           -
+      Aerodactyl  64% -           W 259%/117% L 66%/78%   L 83%/120%  W 110%/125% L 106%/75%
+      Magneton   100% -           L 237%/178% W 126%/43%  W 164%/79%  L 45%/69%   L 70%/185%
+      Sceptile   100% -           L 237%/233% W 185%/55%  W 483%/92%  W 131%/51%  L 122%/132%
+      Skuntank     0% -           -           -           -           -           -
+      Uxie*       52% -           L 40%/105%  L 42%/50%   W 54%/36%   L 59%/64%   W 52%/37%
+    options considered:
+         0.485  PSYCHIC (bp 90, 47% dmg, x1)           search_visits +1417, search_iterations +5000
+         0.472  SIGNALBEAM (bp 75, 52% dmg, x2)        search_visits +1134, search_iterations +5000
+         0.433  CALMMIND (0% dmg, x1)                  search_visits +653, search_iterations +5000
+         0.415  switch -> Magneton (hits 70%, takes 185%) search_visits +529, search_iterations +5000
+         0.401  switch -> Aerodactyl (hits 106%, takes 75%) sole answer to Durant search_visits +451, search_iterations +5000
+         0.398  SUBSTITUTE (0% dmg, x1)                search_visits +441, search_iterations +5000
+         0.381  switch -> Sceptile (hits 122%, takes 132%) search_visits +375, search_iterations +5000
+
+Turn 8   actor 1   PSYCHIC @0                   score    0.449
+    board   : Uxie 31%  vs  Rotom 88%
+    foe     : Rotom -> VOLTSWITCH
+    view: hp 31%  speed 310 (slower)  incoming max 64%  certain 64%  threatened_lethal=True
+    race vs Rotom: mine 2 turns, theirs 1, winning=False
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                      Golurk      Durant      Feraligatr  Omastar     Rotom*      Sceptile
+      Steelix      0% -           -           -           -           -           -
+      Aerodactyl  64% -           W 259%/117% L 66%/78%   L 83%/120%  L 110%/125% -
+      Magneton   100% -           L 237%/178% W 126%/43%  W 164%/79%  L 45%/69%   -
+      Sceptile   100% -           L 237%/233% W 185%/55%  W 483%/92%  W 131%/51%  -
+      Skuntank     0% -           -           -           -           -           -
+      Uxie*       31% -           L 40%/105%  L 42%/50%   L 54%/36%   L 59%/64%   -
+    options considered:
+         0.449  PSYCHIC (bp 90, 59% dmg, x1)           search_visits +1455, search_iterations +5000
+         0.423  switch -> Sceptile (hits 131%, takes 51%) sole answer to Rotom search_visits +949, search_iterations +5000
+         0.400  SIGNALBEAM (bp 75, 16% dmg, x0.5)      search_visits +685, search_iterations +5000
+         0.397  CALMMIND (0% dmg, x1)                  search_visits +659, search_iterations +5000
+         0.378  SUBSTITUTE (0% dmg, x1)                search_visits +534, search_iterations +5000
+         0.343  switch -> Magneton (hits 45%, takes 69%) search_visits +372, search_iterations +5000
+         0.335  switch -> Aerodactyl (hits 110%, takes 125%) sole answer to Durant search_visits +346, search_iterations +5000
+
+Turn 9   actor 1   PSYCHIC @0                   score    0.484
+    board   : Uxie 12%  vs  Durant 53%
+    foe     : Durant -> XSCISSOR
+    view: hp 12%  speed 310 (slower)  incoming max 105%  certain 0%  threatened_lethal=True
+    race vs Durant: mine 1 turns, theirs 1, winning=False
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                      Golurk      Durant*     Feraligatr  Omastar     Rotom       Sceptile
+      Steelix      0% -           -           -           -           -           -
+      Aerodactyl  64% -           W 386%/117% L 66%/78%   L 83%/120%  W 110%/125% -
+      Magneton   100% -           L 353%/178% W 126%/43%  W 164%/79%  L 45%/69%   -
+      Sceptile   100% -           L 353%/233% W 185%/55%  W 483%/92%  W 131%/51%  -
+      Skuntank     0% -           -           -           -           -           -
+      Uxie*       12% -           L 59%/105%  L 42%/50%   L 54%/36%   L 59%/64%   -
+    options considered:
+         0.484  PSYCHIC (bp 90, 59% dmg, x0.5)         search_visits +1888, search_iterations +5000
+         0.432  CALMMIND (0% dmg, x1)                  search_visits +905, search_iterations +5000
+         0.423  SIGNALBEAM (bp 75, 33% dmg, x0.5)      search_visits +801, search_iterations +5000
+         0.409  SUBSTITUTE (0% dmg, x1)                search_visits +662, search_iterations +5000
+         0.324  switch -> Magneton (hits 353%, takes 178%) search_visits +285, search_iterations +5000
+         0.313  switch -> Aerodactyl (hits 386%, takes 117%, faster) sole answer to Durant search_visits +260, search_iterations +5000
+         0.277  switch -> Sceptile (hits 353%, takes 233%) search_visits +199, search_iterations +5000
+
+Turn 10  actor 1   STONEEDGE @0                 score    0.681
+    board   : Aerodactyl 64%  vs  Durant 53%
+    foe     : Durant -> THUNDERFANG
+    view: hp 64%  speed 394 (faster)  incoming max 117%  certain 0%  threatened_lethal=True
+    race vs Durant: mine 1 turns, theirs 1, winning=True (ties on speed)
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                       Golurk      Durant*     Feraligatr  Omastar     Rotom       Sceptile
+      Steelix       0% -           -           -           -           -           -
+      Aerodactyl*  64% -           W 386%/117% L 66%/78%   L 83%/120%  W 110%/125% -
+      Magneton    100% -           L 353%/178% W 126%/43%  W 164%/79%  L 45%/69%   -
+      Sceptile    100% -           L 353%/233% W 185%/55%  W 483%/92%  W 131%/51%  -
+      Skuntank      0% -           -           -           -           -           -
+      Uxie          0% -           -           -           -           -           -
+    options considered:
+         0.681  STONEEDGE (bp 100, 74% dmg, x1)        search_visits +2702, search_iterations +5000
+         0.660  FIREBLAST (bp 120, 386% dmg, x4)       search_visits +1709, search_iterations +5000
+         0.493  EARTHQUAKE (bp 100, 49% dmg, x1)       search_visits +242, search_iterations +5000
+         0.404  ROOST (0% dmg, x1)                     search_visits +135, search_iterations +5000
+         0.362  switch -> Sceptile (hits 353%, takes 233%) search_visits +108, search_iterations +5000
+         0.354  switch -> Magneton (hits 353%, takes 178%) search_visits +104, search_iterations +5000
+
+Turn 11  actor 1   STONEEDGE @0                 score    0.574
+    board   : Aerodactyl 54%  vs  Rotom 75%
+    foe     : Rotom -> SHADOWBALL
+    view: hp 54%  speed 394 (slower)  incoming max 125%  certain 125%  threatened_lethal=True
+    race vs Rotom: mine 1 turns, theirs 1, winning=False
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                       Golurk      Durant      Feraligatr  Omastar     Rotom*      Sceptile
+      Steelix       0% -           -           -           -           -           -
+      Aerodactyl*  54% -           -           L 66%/78%   L 83%/120%  L 110%/125% -
+      Magneton    100% -           -           W 126%/43%  W 164%/79%  L 45%/69%   -
+      Sceptile    100% -           -           W 185%/55%  W 483%/92%  W 131%/51%  -
+      Skuntank      0% -           -           -           -           -           -
+      Uxie          0% -           -           -           -           -           -
+    options considered:
+         0.574  STONEEDGE (bp 100, 110% dmg, x1)       search_visits +2979, search_iterations +5000
+         0.489  switch -> Sceptile (hits 131%, takes 51%) sole answer to Rotom search_visits +898, search_iterations +5000
+         0.412  FIREBLAST (bp 120, 48% dmg, x1)        search_visits +364, search_iterations +5000
+         0.405  ROOST (0% dmg, x1)                     search_visits +341, search_iterations +5000
+         0.365  EARTHQUAKE (bp 100, 0% dmg, x0, IMMUNE) search_visits +244, search_iterations +5000
+         0.318  switch -> Magneton (hits 45%, takes 69%) search_visits +174, search_iterations +5000
+
+Turn 12  actor 1   THUNDERBOLT @0               score    0.919
+    board   : Magneton 100%  vs  Feraligatr 88%
+    foe     : Feraligatr -> SWORDSDANCE
+    view: hp 100%  speed 392 (faster)  incoming max 43%  certain 43%  threatened_lethal=False
+    race vs Feraligatr: mine 1 turns, theirs 3, winning=True
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                      Golurk       Durant       Feraligatr*  Omastar      Rotom        Sceptile
+      Steelix      0% -            -            -            -            -            -
+      Aerodactyl   0% -            -            -            -            -            -
+      Magneton*  100% -            -            W 126%/43%   W 164%/79%   -            -
+      Sceptile   100% -            -            W 185%/55%   W 483%/92%   -            -
+      Skuntank     0% -            -            -            -            -            -
+      Uxie         0% -            -            -            -            -            -
+    options considered:
+         0.919  THUNDERBOLT (bp 95, 126% dmg, x2)      search_visits +2199, search_iterations +5000
+         0.918  VOLTSWITCH (bp 70, 93% dmg, x2)        search_visits +2146, search_iterations +5000
+         0.750  switch -> Sceptile (hits 185%, takes 55%, faster) search_visits +261, search_iterations +5000
+         0.722  FLASHCANNON (bp 80, 27% dmg, x0.5)     search_visits +212, search_iterations +5000
+         0.700  HIDDENPOWER (bp 1, 16% dmg, x1)        search_visits +182, search_iterations +5000
+
+Turn 13  actor 1   THUNDERBOLT @0               score    1.000
+    board   : Magneton 100%  vs  Omastar 88%
+    foe     : Omastar -> SCALD
+    view: hp 100%  speed 392 (faster)  incoming max 79%  certain 79%  threatened_lethal=False
+    race vs Omastar: mine 1 turns, theirs 2, winning=True
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                      Golurk      Durant      Feraligatr  Omastar*    Rotom       Sceptile
+      Steelix      0% -           -           -           -           -           -
+      Aerodactyl   0% -           -           -           -           -           -
+      Magneton*  100% -           -           -           W 164%/79%  -           -
+      Sceptile   100% -           -           -           W 483%/92%  -           -
+      Skuntank     0% -           -           -           -           -           -
+      Uxie         0% -           -           -           -           -           -
+    options considered:
+         1.000  THUNDERBOLT (bp 95, 164% dmg, x2)      search_visits +3093, search_avg +1, search_iterations +5000
+         0.980  switch -> Sceptile (hits 483%, takes 92%, faster) search_visits +1907, search_iterations +5000
+

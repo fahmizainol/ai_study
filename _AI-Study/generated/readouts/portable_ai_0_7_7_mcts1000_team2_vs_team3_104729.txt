@@ -1,0 +1,507 @@
+team2_vs_team3  seed 104729  single   LOSS in 23 turns   [portable 0.7.7, mega=True, teams=gen5ru_a]
+  left  (team2): Golurk, Durant, Feraligatr, Omastar, Rotom, Sceptile
+  PORTABLE (team3): Uxie, Escavalier, Qwilfish, Rhydon, Rotom, Sceptile
+========================================================================================================
+
+Turn 0   actor 1   PSYCHIC @0                   score    0.549
+    board   : Uxie 100%  vs  Golurk 100%
+    foe     : Golurk -> SHADOWPUNCH
+    view: hp 100%  speed 308 (faster)  incoming max 73%  certain 73%  threatened_lethal=False
+    race vs Golurk: mine 3 turns, theirs 2, winning=False
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                      Golurk*     Durant      Feraligatr  Omastar     Rotom       Sceptile
+      Uxie*      100% L 36%/73%   L 47%/93%   W 49%/44%   W 64%/32%   L 49%/57%   L 39%/40%
+      Escavalier 100% L 50%/82%   L 46%/63%   W 81%/30%   W 77%/44%   W 67%/46%   W 263%/54%
+      Qwilfish   100% L 75%/203%  L 35%/84%   L 16%/37%   L 30%/34%   L 51%/143%  L 25%/81%
+      Rhydon     100% L 70%/78%   L 65%/59%   W 58%/44%   L 109%/126% W 95%/28%   W 147%/85%
+      Rotom      100% L 94%/167%  W 103%/53%  W 108%/100% W 141%/73%  L 129%/129% L 51%/74%
+      Sceptile   100% W 108%/90%  L 61%/207%  W 90%/49%   W 169%/91%  W 74%/51%   L 175%/177%
+    options considered:
+         0.549  PSYCHIC (bp 90, 36% dmg, x1)           search_visits +197, search_iterations +1000
+         0.509  CALMMIND (0% dmg, x1)                  search_visits +148, search_iterations +1000
+         0.477  THUNDERBOLT (bp 95, 0% dmg, x0, IMMUNE) search_visits +123, search_iterations +1000
+         0.476  SUBSTITUTE (0% dmg, x1)                search_visits +121, search_iterations +1000
+         0.433  switch -> Rhydon (hits 70%, takes 78%) search_visits +95, search_iterations +1000
+         0.410  switch -> Sceptile (hits 108%, takes 90%, faster) sole answer to Golurk search_visits +84, search_iterations +1000
+         0.396  switch -> Escavalier (hits 50%, takes 82%) search_visits +79, search_iterations +1000
+         0.391  switch -> Rotom (hits 94%, takes 167%, faster) sole answer to Durant search_visits +77, search_iterations +1000
+         0.385  switch -> Qwilfish (hits 75%, takes 135%, faster) search_visits +76, search_iterations +1000
+
+Turn 1   actor 1   PSYCHIC @0                   score    0.531
+    board   : Uxie 41%  vs  Golurk 60%
+    foe     : Golurk -> SHADOWPUNCH
+    view: hp 41%  speed 308 (faster)  incoming max 73%  certain 73%  threatened_lethal=True
+    race vs Golurk: mine 2 turns, theirs 1, winning=False
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                      Golurk*     Durant      Feraligatr  Omastar     Rotom       Sceptile
+      Uxie*       41% L 36%/73%   L 47%/93%   L 49%/44%   W 64%/32%   L 49%/57%   L 39%/40%
+      Escavalier 100% L 50%/82%   L 46%/63%   W 81%/30%   W 77%/44%   W 67%/46%   W 263%/54%
+      Qwilfish   100% W 75%/203%  L 35%/84%   L 16%/37%   L 30%/34%   L 51%/143%  L 25%/81%
+      Rhydon     100% W 70%/78%   L 65%/59%   W 58%/44%   L 109%/126% W 95%/28%   W 147%/85%
+      Rotom      100% W 94%/167%  W 103%/53%  W 108%/100% W 141%/73%  L 129%/129% L 51%/74%
+      Sceptile   100% W 108%/90%  L 61%/207%  W 90%/49%   W 169%/91%  W 74%/51%   L 175%/177%
+    options considered:
+         0.531  PSYCHIC (bp 90, 36% dmg, x1)           search_visits +183, search_iterations +1000
+         0.482  THUNDERBOLT (bp 95, 0% dmg, x0, IMMUNE) search_visits +132, search_iterations +1000
+         0.477  CALMMIND (0% dmg, x1)                  search_visits +127, search_iterations +1000
+         0.469  SUBSTITUTE (0% dmg, x1)                search_visits +121, search_iterations +1000
+         0.434  switch -> Rhydon (hits 70%, takes 78%) search_visits +101, search_iterations +1000
+         0.433  switch -> Rotom (hits 94%, takes 167%, faster) sole answer to Durant search_visits +100, search_iterations +1000
+         0.392  switch -> Escavalier (hits 50%, takes 82%) search_visits +80, search_iterations +1000
+         0.386  switch -> Sceptile (hits 108%, takes 90%, faster) search_visits +78, search_iterations +1000
+         0.385  switch -> Qwilfish (hits 75%, takes 135%, faster) search_visits +78, search_iterations +1000
+
+Turn 2   actor 1   ACROBATICS @0                score    0.644
+    board   : Sceptile 100%  vs  Golurk 16%
+    foe     : Golurk -> DYNAMICPUNCH
+    view: hp 100%  speed 339 (faster)  incoming max 90%  certain 90%  threatened_lethal=False
+    race vs Golurk: mine 1 turns, theirs 2, winning=True
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                      Golurk*     Durant      Feraligatr  Omastar     Rotom       Sceptile
+      Uxie         0% -           -           -           -           -           -
+      Escavalier 100% W 50%/82%   L 46%/63%   W 81%/30%   W 77%/44%   W 67%/46%   W 263%/54%
+      Qwilfish   100% W 75%/203%  L 35%/84%   L 16%/37%   L 30%/34%   L 51%/143%  L 25%/81%
+      Rhydon     100% W 70%/78%   L 65%/59%   W 58%/44%   L 109%/126% W 95%/28%   W 147%/85%
+      Rotom      100% W 94%/167%  W 103%/53%  W 108%/100% W 141%/73%  L 129%/129% L 51%/74%
+      Sceptile*  100% W 108%/90%  L 61%/207%  W 90%/49%   W 169%/91%  W 74%/51%   L 175%/177%
+    options considered:
+         0.644  ACROBATICS (bp 55, 66% dmg, x1)        search_visits +272, search_iterations +1000
+         0.619  LEAFBLADE (bp 90, 108% dmg, x2)        search_visits +221, search_iterations +1000
+         0.572  EARTHQUAKE (bp 100, 40% dmg, x1)       search_visits +156, search_iterations +1000
+         0.473  SWORDSDANCE (0% dmg, x1)               search_visits +90, search_iterations +1000
+         0.448  switch -> Rotom (hits 94%, takes 167%, faster) sole answer to Durant search_visits +78, search_iterations +1000
+         0.404  switch -> Rhydon (hits 70%, takes 78%) search_visits +64, search_iterations +1000
+         0.397  switch -> Qwilfish (hits 75%, takes 135%, faster) search_visits +62, search_iterations +1000
+         0.374  switch -> Escavalier (hits 50%, takes 82%) search_visits +57, search_iterations +1000
+
+Turn 3   actor 1   switch -> Rotom              score    0.467
+    board   : Sceptile 100%  vs  Durant 100%
+    foe     : Durant -> XSCISSOR
+    view: hp 100%  speed 678 (faster)  incoming max 207%  certain 0%  threatened_lethal=True
+    race vs Durant: mine 3 turns, theirs 1, winning=False
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                      Golurk      Durant*     Feraligatr  Omastar     Rotom       Sceptile
+      Uxie         0% -           -           -           -           -           -
+      Escavalier 100% -           L 46%/63%   W 81%/30%   W 77%/44%   W 67%/46%   W 263%/54%
+      Qwilfish   100% -           L 35%/84%   L 16%/37%   L 30%/34%   L 51%/143%  L 25%/81%
+      Rhydon     100% -           L 65%/59%   W 58%/44%   L 109%/126% W 95%/28%   W 147%/85%
+      Rotom      100% -           W 103%/53%  W 108%/100% W 141%/73%  L 129%/129% L 51%/74%
+      Sceptile*  100% -           L 41%/207%  W 90%/49%   W 169%/91%  W 74%/51%   W 117%/177%
+    options considered:
+         0.467  switch -> Rotom (hits 103%, takes 53%) sole answer to Durant search_visits +202, search_iterations +1000
+         0.425  switch -> Rhydon (hits 65%, takes 59%) search_visits +149, search_iterations +1000
+         0.404  switch -> Escavalier (hits 46%, takes 63%) search_visits +131, search_iterations +1000
+         0.387  EARTHQUAKE (bp 100, 37% dmg, x1)       search_visits +119, search_iterations +1000
+         0.380  ACROBATICS (bp 55, 41% dmg, x1)        search_visits +113, search_iterations +1000
+         0.377  switch -> Qwilfish (hits 35%, takes 57%) search_visits +112, search_iterations +1000
+         0.359  LEAFBLADE (bp 90, 13% dmg, x0.25)      search_visits +101, search_iterations +1000
+         0.292  SWORDSDANCE (0% dmg, x1)               search_visits +73, search_iterations +1000
+
+Turn 4   actor 1   THUNDERBOLT @0               score    0.738
+    board   : Rotom 54%  vs  Durant 100%
+    foe     : Durant -> THUNDERFANG
+    view: hp 54%  speed 464 (faster)  incoming max 53%  certain 0%  threatened_lethal=False
+    race vs Durant: mine 1 turns, theirs 2, winning=True
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                      Golurk      Durant*     Feraligatr  Omastar     Rotom       Sceptile
+      Uxie         0% -           -           -           -           -           -
+      Escavalier 100% -           L 46%/63%   W 81%/30%   W 77%/44%   W 67%/46%   W 263%/54%
+      Qwilfish   100% -           L 35%/84%   L 16%/37%   L 30%/34%   L 51%/143%  L 25%/81%
+      Rhydon     100% -           L 65%/59%   W 58%/44%   L 109%/126% W 95%/28%   W 147%/85%
+      Rotom*      54% -           W 103%/53%  W 108%/100% W 141%/73%  W 129%/129% L 51%/74%
+      Sceptile   100% -           L 41%/207%  W 90%/49%   W 169%/91%  W 74%/51%   L 117%/177%
+    options considered:
+         0.738  THUNDERBOLT (bp 95, 103% dmg, x1)      search_visits +306, search_iterations +1000
+         0.707  SHADOWBALL (bp 80, 87% dmg, x1)        search_visits +233, search_iterations +1000
+         0.670  VOLTSWITCH (bp 70, 76% dmg, x1)        search_visits +177, search_iterations +1000
+         0.548  WILLOWISP (0% dmg, x1)                 search_visits +86, search_iterations +1000
+         0.447  switch -> Rhydon (hits 65%, takes 59%) search_visits +55, search_iterations +1000
+         0.423  switch -> Escavalier (hits 46%, takes 63%) search_visits +51, search_iterations +1000
+         0.417  switch -> Qwilfish (hits 35%, takes 57%) search_visits +49, search_iterations +1000
+         0.383  switch -> Sceptile (hits 41%, takes 207%) search_visits +43, search_iterations +1000
+
+Turn 5   actor 1   THUNDERBOLT @0               score    0.648
+    board   : Rotom 15%  vs  Durant 2%
+    foe     : Durant -> THUNDERFANG
+    view: hp 15%  speed 464 (faster)  incoming max 53%  certain 0%  threatened_lethal=True
+    race vs Durant: mine 1 turns, theirs 1, winning=True (ties on speed)
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                      Golurk      Durant*     Feraligatr  Omastar     Rotom       Sceptile
+      Uxie         0% -           -           -           -           -           -
+      Escavalier 100% -           W 46%/63%   W 81%/30%   W 77%/44%   W 67%/46%   W 263%/54%
+      Qwilfish   100% -           W 35%/84%   L 16%/37%   L 30%/34%   L 51%/143%  L 25%/81%
+      Rhydon     100% -           W 65%/59%   W 58%/44%   L 109%/126% W 95%/28%   W 147%/85%
+      Rotom*      15% -           W 103%/53%  W 108%/100% W 141%/73%  W 129%/129% L 51%/74%
+      Sceptile   100% -           L 41%/207%  W 90%/49%   W 169%/91%  W 74%/51%   L 117%/177%
+    options considered:
+         0.648  THUNDERBOLT (bp 95, 103% dmg, x1)      search_visits +621, search_iterations +1000
+         0.454  switch -> Rhydon (hits 65%, takes 59%) search_visits +119, search_iterations +1000
+         0.425  switch -> Escavalier (hits 46%, takes 63%) search_visits +101, search_iterations +1000
+         0.395  switch -> Qwilfish (hits 35%, takes 57%) search_visits +86, search_iterations +1000
+         0.354  switch -> Sceptile (hits 41%, takes 207%) search_visits +73, search_iterations +1000
+
+Turn 6   actor 1   THUNDERBOLT @0               score    0.538
+    board   : Rotom 15%  vs  Sceptile 100%
+    foe     : Sceptile -> LEAFBLADE
+    view: hp 15%  speed 464 (faster)  incoming max 74%  certain 74%  threatened_lethal=True
+    race vs Sceptile: mine 4 turns, theirs 1, winning=False
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                      Golurk      Durant      Feraligatr  Omastar     Rotom       Sceptile*
+      Uxie         0% -           -           -           -           -           -
+      Escavalier 100% -           -           W 81%/30%   W 77%/44%   W 67%/46%   W 263%/54%
+      Qwilfish   100% -           -           L 16%/37%   L 30%/34%   L 51%/143%  L 25%/81%
+      Rhydon     100% -           -           W 58%/44%   L 109%/126% W 95%/28%   W 147%/85%
+      Rotom*      15% -           -           W 108%/100% W 141%/73%  W 129%/129% L 51%/74%
+      Sceptile   100% -           -           W 90%/49%   W 169%/91%  W 74%/51%   L 117%/177%
+    options considered:
+         0.538  THUNDERBOLT (bp 95, 30% dmg, x0.5)     search_visits +431, search_iterations +1000
+         0.441  switch -> Escavalier (hits 263%, takes 54%) search_visits +180, search_iterations +1000
+         0.436  switch -> Rhydon (hits 147%, takes 85%) search_visits +175, search_iterations +1000
+         0.364  switch -> Sceptile (hits 117%, takes 177%) search_visits +112, search_iterations +1000
+         0.349  switch -> Qwilfish (hits 25%, takes 54%) search_visits +102, search_iterations +1000
+
+Turn 7   actor 1   STONEEDGE @0                 score    0.597
+    board   : Rhydon 100%  vs  Sceptile 73%
+    foe     : Sceptile -> LEAFBLADE
+    view: hp 100%  speed 124 (slower)  incoming max 85%  certain 85%  threatened_lethal=False
+    race vs Sceptile: mine 1 turns, theirs 2, winning=True
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                      Golurk      Durant      Feraligatr  Omastar     Rotom       Sceptile*
+      Uxie         0% -           -           -           -           -           -
+      Escavalier 100% -           -           W 81%/30%   W 77%/44%   W 67%/46%   W 263%/54%
+      Qwilfish   100% -           -           L 16%/37%   L 30%/34%   L 51%/143%  L 25%/81%
+      Rhydon*    100% -           -           W 58%/44%   L 109%/126% W 95%/28%   W 147%/85%
+      Rotom        0% -           -           -           -           -           -
+      Sceptile   100% -           -           W 90%/49%   W 169%/91%  W 74%/51%   L 117%/177%
+    options considered:
+         0.597  STONEEDGE (bp 100, 93% dmg, x1)        search_visits +262, search_iterations +1000
+         0.584  MEGAHORN (bp 120, 147% dmg, x2)        search_visits +235, search_iterations +1000
+         0.510  EARTHQUAKE (bp 100, 46% dmg, x0.5)     search_visits +138, search_iterations +1000
+         0.503  STEALTHROCK (0% dmg, x1)               search_visits +133, search_iterations +1000
+         0.461  switch -> Escavalier (hits 263%, takes 54%) search_visits +105, search_iterations +1000
+         0.390  switch -> Sceptile (hits 117%, takes 177%) search_visits +73, search_iterations +1000
+         0.317  switch -> Qwilfish (hits 25%, takes 54%) search_visits +54, search_iterations +1000
+
+Turn 8   actor 1   switch -> Sceptile           score    0.453
+    board   : Rhydon 27%  vs  Omastar 100%
+    foe     : Omastar -> SCALD
+    view: hp 27%  speed 124 (slower)  incoming max 126%  certain 126%  threatened_lethal=True
+    race vs Omastar: mine 2 turns, theirs 1, winning=False
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                      Golurk      Durant      Feraligatr  Omastar*    Rotom       Sceptile
+      Uxie         0% -           -           -           -           -           -
+      Escavalier 100% -           -           W 81%/30%   W 77%/44%   W 67%/46%   -
+      Qwilfish   100% -           -           L 16%/37%   L 30%/34%   L 51%/143%  -
+      Rhydon*     27% -           -           L 58%/44%   L 109%/126% L 95%/28%   -
+      Rotom        0% -           -           -           -           -           -
+      Sceptile   100% -           -           W 90%/49%   W 169%/91%  W 74%/51%   -
+    options considered:
+         0.453  switch -> Sceptile (hits 169%, takes 91%, faster) search_visits +171, search_iterations +1000
+         0.446  STONEEDGE (bp 100, 54% dmg, x1)        search_visits +163, search_iterations +1000
+         0.432  switch -> Escavalier (hits 77%, takes 44%) search_visits +149, search_iterations +1000
+         0.424  STEALTHROCK (0% dmg, x1)               search_visits +141, search_iterations +1000
+         0.411  EARTHQUAKE (bp 100, 109% dmg, x2)      search_visits +131, search_iterations +1000
+         0.409  MEGAHORN (bp 120, 43% dmg, x1)         search_visits +129, search_iterations +1000
+         0.391  switch -> Qwilfish (hits 30%, takes 34%, faster) search_visits +116, search_iterations +1000
+
+Turn 9   actor 1   LEAFBLADE @0                 score    0.760
+    board   : Sceptile 74%  vs  Omastar 100%
+    foe     : Omastar -> ICEBEAM
+    view: hp 74%  speed 339 (faster)  incoming max 91%  certain 91%  threatened_lethal=True
+    race vs Omastar: mine 2 turns, theirs 1, winning=False
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                      Golurk      Durant      Feraligatr  Omastar*    Rotom       Sceptile
+      Uxie         0% -           -           -           -           -           -
+      Escavalier 100% -           -           W 81%/30%   W 77%/44%   W 67%/46%   -
+      Qwilfish   100% -           -           L 16%/37%   L 30%/34%   L 51%/143%  -
+      Rhydon      27% -           -           L 58%/44%   L 109%/126% L 95%/28%   -
+      Rotom        0% -           -           -           -           -           -
+      Sceptile*   74% -           -           W 90%/49%   W 169%/91%  W 74%/51%   -
+    options considered:
+         0.760  LEAFBLADE (bp 90, 169% dmg, x4)        search_visits +616, search_iterations +1000
+         0.501  EARTHQUAKE (bp 100, 63% dmg, x2)       search_visits +84, search_iterations +1000
+         0.458  switch -> Escavalier (hits 77%, takes 44%) search_visits +68, search_iterations +1000
+         0.455  SWORDSDANCE (0% dmg, x1)               search_visits +68, search_iterations +1000
+         0.427  ACROBATICS (bp 55, 17% dmg, x0.5)      search_visits +60, search_iterations +1000
+         0.397  switch -> Qwilfish (hits 30%, takes 34%, faster) search_visits +54, search_iterations +1000
+         0.379  switch -> Rhydon (hits 109%, takes 126%) search_visits +50, search_iterations +1000
+
+Turn 10  actor 1   switch -> Escavalier         score    0.469
+    board   : Rhydon 27%  vs  Omastar 0%
+    foe     : Omastar -> ICEBEAM
+    view: hp 27%  speed 124 (slower)  incoming max 126%  certain 126%  threatened_lethal=True
+    race vs Omastar: mine 1 turns, theirs 1, winning=False
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                      Golurk      Durant      Feraligatr  Omastar*    Rotom       Sceptile
+      Uxie         0% -           -           -           -           -           -
+      Escavalier 100% -           -           W 81%/30%   W 115%/44%  W 67%/46%   -
+      Qwilfish   100% -           -           L 16%/37%   W 44%/34%   L 51%/143%  -
+      Rhydon*     27% -           -           L 58%/44%   L 162%/126% L 95%/28%   -
+      Rotom        0% -           -           -           -           -           -
+      Sceptile     0% -           -           -           -           -           -
+    options considered:
+         0.469  switch -> Escavalier (hits 115%, takes 44%) sole answer to Feraligatr, Rotom search_visits +190, search_iterations +1000
+         0.461  STONEEDGE (bp 100, 81% dmg, x1)        search_visits +179, search_iterations +1000
+         0.453  STEALTHROCK (0% dmg, x1)               search_visits +171, search_iterations +1000
+         0.444  switch -> Qwilfish (hits 44%, takes 34%) search_visits +157, search_iterations +1000
+         0.437  MEGAHORN (bp 120, 65% dmg, x1)         search_visits +152, search_iterations +1000
+         0.436  EARTHQUAKE (bp 100, 162% dmg, x2)      search_visits +151, search_iterations +1000
+
+Turn 11  actor 1   MEGAHORN @0                  score    0.536
+    board   : Escavalier 83%  vs  Omastar 0%
+    foe     : Omastar -> ICEBEAM
+    view: hp 83%  speed 107 (slower)  incoming max 44%  certain 44%  threatened_lethal=False
+    race vs Omastar: mine 1 turns, theirs 2, winning=True
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                       Golurk      Durant      Feraligatr  Omastar*    Rotom       Sceptile
+      Uxie          0% -           -           -           -           -           -
+      Escavalier*  83% -           -           W 81%/30%   W 115%/44%  L 67%/46%   -
+      Qwilfish    100% -           -           L 16%/37%   W 44%/34%   L 51%/143%  -
+      Rhydon       27% -           -           L 58%/44%   L 162%/126% L 95%/28%   -
+      Rotom         0% -           -           -           -           -           -
+      Sceptile      0% -           -           -           -           -           -
+    options considered:
+         0.536  MEGAHORN (bp 120, 115% dmg, x1)        search_visits +250, search_iterations +1000
+         0.509  SWORDSDANCE (0% dmg, x1)               search_visits +201, search_iterations +1000
+         0.502  RETURN (bp 1, 9% dmg, x0.5)            search_visits +191, search_iterations +1000
+         0.439  switch -> Qwilfish (hits 44%, takes 34%) search_visits +125, search_iterations +1000
+         0.438  ENDURE (0% dmg, x1)                    search_visits +125, search_iterations +1000
+         0.412  switch -> Rhydon (hits 162%, takes 126%) search_visits +108, search_iterations +1000
+
+Turn 12  actor 1   MEGAHORN @0                  score    0.416
+    board   : Escavalier 68%  vs  Rotom 100%
+    foe     : Rotom -> THUNDERBOLT
+    view: hp 68%  speed 107 (slower)  incoming max 46%  certain 46%  threatened_lethal=False
+    race vs Rotom: mine 2 turns, theirs 2, winning=False
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                       Golurk      Durant      Feraligatr  Omastar     Rotom*      Sceptile
+      Uxie          0% -           -           -           -           -           -
+      Escavalier*  68% -           -           W 81%/30%   -           L 67%/46%   -
+      Qwilfish    100% -           -           L 16%/37%   -           L 51%/143%  -
+      Rhydon       27% -           -           L 58%/44%   -           L 95%/28%   -
+      Rotom         0% -           -           -           -           -           -
+      Sceptile      0% -           -           -           -           -           -
+    options considered:
+         0.416  MEGAHORN (bp 120, 67% dmg, x0.5)       search_visits +345, search_iterations +1000
+         0.333  switch -> Rhydon (hits 95%, takes 28%) search_visits +172, search_iterations +1000
+         0.312  SWORDSDANCE (0% dmg, x1)               search_visits +151, search_iterations +1000
+         0.284  RETURN (bp 1, 0% dmg, x0, IMMUNE)      search_visits +125, search_iterations +1000
+         0.282  ENDURE (0% dmg, x1)                    search_visits +125, search_iterations +1000
+         0.204  switch -> Qwilfish (hits 51%, takes 143%) search_visits +82, search_iterations +1000
+
+Turn 13  actor 1   switch -> Rhydon             score    0.347
+    board   : Escavalier 26%  vs  Rotom 100%
+    foe     : Rotom -> THUNDERBOLT
+    view: hp 26%  speed 107 (slower)  incoming max 46%  certain 46%  threatened_lethal=True
+    race vs Rotom: mine 1 turns, theirs 1, winning=False
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                       Golurk      Durant      Feraligatr  Omastar     Rotom*      Sceptile
+      Uxie          0% -           -           -           -           -           -
+      Escavalier*  26% -           -           L 81%/30%   -           L 67%/46%   -
+      Qwilfish    100% -           -           L 16%/37%   -           L 51%/143%  -
+      Rhydon       27% -           -           L 58%/44%   -           L 95%/28%   -
+      Rotom         0% -           -           -           -           -           -
+      Sceptile      0% -           -           -           -           -           -
+    options considered:
+         0.347  switch -> Rhydon (hits 95%, takes 28%) search_visits +225, search_iterations +1000
+         0.319  SWORDSDANCE (0% dmg, x1)               search_visits +180, search_iterations +1000
+         0.312  MEGAHORN (bp 120, 101% dmg, x0.5)      search_visits +172, search_iterations +1000
+         0.305  ENDURE (0% dmg, x1)                    search_visits +163, search_iterations +1000
+         0.305  RETURN (bp 1, 0% dmg, x0, IMMUNE)      search_visits +163, search_iterations +1000
+         0.217  switch -> Qwilfish (hits 51%, takes 143%) search_visits +97, search_iterations +1000
+
+Turn 14  actor 1   STONEEDGE @0                 score    0.311
+    board   : Rhydon 27%  vs  Rotom 100%
+    foe     : Rotom -> switched out (to slot 2)
+    view: hp 27%  speed 124 (slower)  incoming max 0%  certain 0%  threatened_lethal=False
+    race vs Rotom: mine 2 turns, theirs 8, winning=True
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                      Golurk      Durant      Feraligatr  Omastar     Rotom*      Sceptile
+      Uxie         0% -           -           -           -           -           -
+      Escavalier  26% -           -           L 122%/30%  -           L 101%/46%  -
+      Qwilfish   100% -           -           L 16%/37%   -           L 51%/143%  -
+      Rhydon*     27% -           -           L 58%/44%   -           L 95%/28%   -
+      Rotom        0% -           -           -           -           -           -
+      Sceptile     0% -           -           -           -           -           -
+    options considered:
+         0.311  STONEEDGE (bp 100, 95% dmg, x1)        search_visits +231, search_iterations +1000
+         0.279  MEGAHORN (bp 120, 38% dmg, x0.5)       search_visits +183, search_iterations +1000
+         0.277  switch -> Escavalier (hits 101%, takes 46%) search_visits +179, search_iterations +1000
+         0.268  STEALTHROCK (0% dmg, x1)               search_visits +168, search_iterations +1000
+         0.246  EARTHQUAKE (bp 100, 0% dmg, x0, IMMUNE) search_visits +145, search_iterations +1000
+         0.172  switch -> Qwilfish (hits 51%, takes 143%) search_visits +94, search_iterations +1000
+
+Turn 15  actor 1   STONEEDGE @0                 score    0.387
+    board   : Rhydon 27%  vs  Feraligatr 52%
+    foe     : Feraligatr -> AQUAJET
+    view: hp 27%  speed 124 (slower)  incoming max 44%  certain 44%  threatened_lethal=True
+    race vs Feraligatr: mine 1 turns, theirs 1, winning=False
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                      Golurk       Durant       Feraligatr*  Omastar      Rotom        Sceptile
+      Uxie         0% -            -            -            -            -            -
+      Escavalier  26% -            -            L 122%/30%   -            L 101%/46%   -
+      Qwilfish   100% -            -            L 16%/37%    -            L 51%/143%   -
+      Rhydon*     27% -            -            L 58%/44%    -            L 95%/28%    -
+      Rotom        0% -            -            -            -            -            -
+      Sceptile     0% -            -            -            -            -            -
+    options considered:
+         0.387  STONEEDGE (bp 100, 58% dmg, x1)        search_visits +197, search_iterations +1000
+         0.374  MEGAHORN (bp 120, 46% dmg, x1)         search_visits +180, search_iterations +1000
+         0.365  EARTHQUAKE (bp 100, 58% dmg, x1)       search_visits +169, search_iterations +1000
+         0.353  STEALTHROCK (0% dmg, x1)               search_visits +156, search_iterations +1000
+         0.349  switch -> Qwilfish (hits 16%, takes 25%, faster) search_visits +151, search_iterations +1000
+         0.344  switch -> Escavalier (hits 122%, takes 30%) search_visits +147, search_iterations +1000
+
+Turn 16  actor 1   MEGAHORN @0                  score    0.425
+    board   : Escavalier 26%  vs  Feraligatr 58%
+    foe     : Feraligatr -> CRUNCH
+    view: hp 26%  speed 107 (slower)  incoming max 30%  certain 30%  threatened_lethal=True
+    race vs Feraligatr: mine 1 turns, theirs 1, winning=False
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                       Golurk       Durant       Feraligatr*  Omastar      Rotom        Sceptile
+      Uxie          0% -            -            -            -            -            -
+      Escavalier*  26% -            -            L 122%/30%   -            L 101%/46%   -
+      Qwilfish    100% -            -            L 16%/37%    -            L 51%/143%   -
+      Rhydon        0% -            -            -            -            -            -
+      Rotom         0% -            -            -            -            -            -
+      Sceptile      0% -            -            -            -            -            -
+    options considered:
+         0.425  MEGAHORN (bp 120, 122% dmg, x1)        search_visits +339, search_iterations +1000
+         0.346  RETURN (bp 1, 13% dmg, x1)             search_visits +174, search_iterations +1000
+         0.344  SWORDSDANCE (0% dmg, x1)               search_visits +171, search_iterations +1000
+         0.335  ENDURE (0% dmg, x1)                    search_visits +161, search_iterations +1000
+         0.328  switch -> Qwilfish (hits 16%, takes 25%, faster) search_visits +155, search_iterations +1000
+
+Turn 17  actor 1   WATERFALL @0                 score    0.110
+    board   : Qwilfish 100%  vs  Feraligatr 64%
+    foe     : Feraligatr -> SUBSTITUTE
+    view: hp 100%  speed 295 (faster)  incoming max 25%  certain 25%  threatened_lethal=False
+    race vs Feraligatr: mine 5 turns, theirs 5, winning=False
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                      Golurk       Durant       Feraligatr*  Omastar      Rotom        Sceptile
+      Uxie         0% -            -            -            -            -            -
+      Escavalier   0% -            -            -            -            -            -
+      Qwilfish*  100% -            -            W 16%/25%    -            L 51%/143%   -
+      Rhydon       0% -            -            -            -            -            -
+      Rotom        0% -            -            -            -            -            -
+      Sceptile     0% -            -            -            -            -            -
+    options considered:
+         0.110  WATERFALL (bp 80, 16% dmg, x0.5)       search_visits +284, search_iterations +1000
+         0.096  SPIKES (0% dmg, x1)                    search_visits +251, search_iterations +1000
+         0.089  TAUNT (0% dmg, x1)                     search_visits +238, search_iterations +1000
+         0.083  DESTINYBOND (0% dmg, x1)               search_visits +227, search_iterations +1000
+
+Turn 18  actor 1   WATERFALL @0                 score    0.110
+    board   : Qwilfish 100%  vs  Feraligatr 32%
+    foe     : Feraligatr -> AQUAJET
+    view: hp 100%  speed 295 (faster)  incoming max 25%  certain 25%  threatened_lethal=False
+    race vs Feraligatr: mine 3 turns, theirs 5, winning=True
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                      Golurk       Durant       Feraligatr*  Omastar      Rotom        Sceptile
+      Uxie         0% -            -            -            -            -            -
+      Escavalier   0% -            -            -            -            -            -
+      Qwilfish*  100% -            -            W 16%/25%    -            L 51%/143%   -
+      Rhydon       0% -            -            -            -            -            -
+      Rotom        0% -            -            -            -            -            -
+      Sceptile     0% -            -            -            -            -            -
+    options considered:
+         0.110  WATERFALL (bp 80, 16% dmg, x0.5)       search_visits +284, search_iterations +1000
+         0.096  SPIKES (0% dmg, x1)                    search_visits +251, search_iterations +1000
+         0.089  TAUNT (0% dmg, x1)                     search_visits +238, search_iterations +1000
+         0.083  DESTINYBOND (0% dmg, x1)               search_visits +227, search_iterations +1000
+
+Turn 19  actor 1   WATERFALL @0                 score    0.110
+    board   : Qwilfish 93%  vs  Feraligatr 38%
+    foe     : Feraligatr -> SWORDSDANCE
+    view: hp 93%  speed 295 (faster)  incoming max 25%  certain 25%  threatened_lethal=False
+    race vs Feraligatr: mine 3 turns, theirs 4, winning=True
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                      Golurk       Durant       Feraligatr*  Omastar      Rotom        Sceptile
+      Uxie         0% -            -            -            -            -            -
+      Escavalier   0% -            -            -            -            -            -
+      Qwilfish*   93% -            -            W 16%/25%    -            L 51%/143%   -
+      Rhydon       0% -            -            -            -            -            -
+      Rotom        0% -            -            -            -            -            -
+      Sceptile     0% -            -            -            -            -            -
+    options considered:
+         0.110  WATERFALL (bp 80, 16% dmg, x0.5)       search_visits +284, search_iterations +1000
+         0.096  SPIKES (0% dmg, x1)                    search_visits +251, search_iterations +1000
+         0.089  TAUNT (0% dmg, x1)                     search_visits +238, search_iterations +1000
+         0.083  DESTINYBOND (0% dmg, x1)               search_visits +227, search_iterations +1000
+
+Turn 20  actor 1   WATERFALL @0                 score    0.109
+    board   : Qwilfish 99%  vs  Feraligatr 45%
+    foe     : Feraligatr -> SWORDSDANCE
+    view: hp 99%  speed 295 (faster)  incoming max 55%  certain 55%  threatened_lethal=False
+    race vs Feraligatr: mine 3 turns, theirs 2, winning=False
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                      Golurk       Durant       Feraligatr*  Omastar      Rotom        Sceptile
+      Uxie         0% -            -            -            -            -            -
+      Escavalier   0% -            -            -            -            -            -
+      Qwilfish*   99% -            -            L 16%/55%    -            L 51%/143%   -
+      Rhydon       0% -            -            -            -            -            -
+      Rotom        0% -            -            -            -            -            -
+      Sceptile     0% -            -            -            -            -            -
+    options considered:
+         0.109  WATERFALL (bp 80, 16% dmg, x0.5)       search_visits +273, search_iterations +1000
+         0.097  TAUNT (0% dmg, x1)                     search_visits +247, search_iterations +1000
+         0.096  SPIKES (0% dmg, x1)                    search_visits +244, search_iterations +1000
+         0.092  DESTINYBOND (0% dmg, x1)               search_visits +236, search_iterations +1000
+
+Turn 21  actor 1   WATERFALL @0                 score    0.109
+    board   : Qwilfish 100%  vs  Feraligatr 36%
+    foe     : Feraligatr -> CRUNCH
+    view: hp 100%  speed 295 (faster)  incoming max 55%  certain 55%  threatened_lethal=False
+    race vs Feraligatr: mine 3 turns, theirs 2, winning=False
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                      Golurk       Durant       Feraligatr*  Omastar      Rotom        Sceptile
+      Uxie         0% -            -            -            -            -            -
+      Escavalier   0% -            -            -            -            -            -
+      Qwilfish*  100% -            -            L 16%/55%    -            L 51%/143%   -
+      Rhydon       0% -            -            -            -            -            -
+      Rotom        0% -            -            -            -            -            -
+      Sceptile     0% -            -            -            -            -            -
+    options considered:
+         0.109  WATERFALL (bp 80, 16% dmg, x0.5)       search_visits +275, search_iterations +1000
+         0.095  SPIKES (0% dmg, x1)                    search_visits +244, search_iterations +1000
+         0.094  TAUNT (0% dmg, x1)                     search_visits +242, search_iterations +1000
+         0.093  DESTINYBOND (0% dmg, x1)               search_visits +239, search_iterations +1000
+
+Turn 22  actor 1   WATERFALL @0                 score    0.086
+    board   : Qwilfish 57%  vs  Feraligatr 28%
+    foe     : Feraligatr -> CRUNCH
+    view: hp 57%  speed 295 (faster)  incoming max 55%  certain 55%  threatened_lethal=False
+    race vs Feraligatr: mine 2 turns, theirs 2, winning=False
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                      Golurk       Durant       Feraligatr*  Omastar      Rotom        Sceptile
+      Uxie         0% -            -            -            -            -            -
+      Escavalier   0% -            -            -            -            -            -
+      Qwilfish*   57% -            -            W 16%/55%    -            L 51%/143%   -
+      Rhydon       0% -            -            -            -            -            -
+      Rotom        0% -            -            -            -            -            -
+      Sceptile     0% -            -            -            -            -            -
+    options considered:
+         0.086  WATERFALL (bp 80, 16% dmg, x0.5)       search_visits +293, search_iterations +1000
+         0.066  SPIKES (0% dmg, x1)                    search_visits +244, search_iterations +1000
+         0.060  TAUNT (0% dmg, x1)                     search_visits +233, search_iterations +1000
+         0.058  DESTINYBOND (0% dmg, x1)               search_visits +230, search_iterations +1000
+
+Turn 23  actor 1   WATERFALL @0                 score    0.015
+    board   : Qwilfish 16%  vs  Feraligatr 20%
+    foe     : Feraligatr -> CRUNCH
+    view: hp 16%  speed 295 (faster)  incoming max 55%  certain 55%  threatened_lethal=True
+    race vs Feraligatr: mine 2 turns, theirs 1, winning=False
+    matrix (own rows x foe cols, verdict from current HP; * = on the field):
+                      Golurk       Durant       Feraligatr*  Omastar      Rotom        Sceptile
+      Uxie         0% -            -            -            -            -            -
+      Escavalier   0% -            -            -            -            -            -
+      Qwilfish*   16% -            -            L 16%/55%    -            L 51%/143%   -
+      Rhydon       0% -            -            -            -            -            -
+      Rotom        0% -            -            -            -            -            -
+      Sceptile     0% -            -            -            -            -            -
+    options considered:
+         0.015  WATERFALL (bp 80, 16% dmg, x0.5)       search_visits +253, search_iterations +1000
+         0.014  SPIKES (0% dmg, x1)                    search_visits +250, search_iterations +1000
+         0.013  DESTINYBOND (0% dmg, x1)               search_visits +249, search_iterations +1000
+         0.013  TAUNT (0% dmg, x1)                     search_visits +248, search_iterations +1000
+
