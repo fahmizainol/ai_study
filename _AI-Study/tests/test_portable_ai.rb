@@ -3,7 +3,9 @@ require "test/unit"
 root = File.expand_path("..", File.dirname(__FILE__))
 require File.join(root, "portable_ai", "model")
 require File.join(root, "portable_ai", "effects")
+require File.join(root, "portable_ai", "matrix")
 require File.join(root, "portable_ai", "core")
+require File.join(root, "portable_ai", "search")
 
 class PortableAITest < Test::Unit::TestCase
   def target(index, hp)
@@ -1967,5 +1969,1555 @@ class PortableAITest < Test::Unit::TestCase
     end
     assert_equal([], missing.sort,
                  "a setup move with no stage row falls back to the flat 55 in silence")
+  end
+
+  # --- 0.6.6 the foe's declared intent ---------------------------------------------
+  #
+  # The adapter exports predicted_incoming_damage_pct only when it read the foe's
+  # committed move (the oracle arm today). The core then prices the entry hit and
+  # the "you die whatever you click" rules on THAT hit; absent, nothing changes.
+
+  def test_a_declared_status_move_makes_the_lethal_threat_uncertain
+    foe = target(0, 100)
+    actions = [move(0, "RECOVER", nil, 100, 0, {}), move(1, "BODYSLAM", 0, 100, 20, {})]
+    # Worst case and certain case both kill the slower healer; the foe has declared
+    # a move that does nothing to it.
+    healer = actor(1, 12, actions, { "incoming_damage_pct" => 60,
+                                     "certain_incoming_damage_pct" => 60,
+                                     "predicted_incoming_damage_pct" => 0,
+                                     "faster" => false })
+    result = pick(snapshot([healer], [foe], {}), {})[0]
+    assert_equal("RECOVER", result["move_id"])
+    assert_equal(false, reasons_of(result).include?("heal_cannot_resolve"))
+  end
+
+  def test_a_declared_near_certain_hit_refuses_the_heal_strict_threat_missed
+    foe = target(0, 100)
+    actions = [move(0, "RECOVER", nil, 100, 0, {}), move(1, "BODYSLAM", 0, 100, 20, {})]
+    # The Xatu turn: a 95% Air Slash the strict figure reads as 0%. Declared, its
+    # minimum roll discounted by its hit chance still clears 28%.
+    healer = actor(1, 28, actions, { "incoming_damage_pct" => 48,
+                                     "certain_incoming_damage_pct" => 0,
+                                     "predicted_incoming_damage_pct" => 48,
+                                     "predicted_incoming_accuracy" => 95,
+                                     "faster" => false })
+    result = pick(snapshot([healer], [foe], {}), {})[0]
+    assert_equal("BODYSLAM", result["move_id"])
+    # An inaccurate declared hit has to overkill before it counts: 70% of 40 on the
+    # minimum roll is 23.8, short of 28.
+    gamble = actor(1, 28, actions, { "incoming_damage_pct" => 48,
+                                     "certain_incoming_damage_pct" => 0,
+                                     "predicted_incoming_damage_pct" => 40,
+                                     "predicted_incoming_accuracy" => 70,
+                                     "faster" => false })
+    assert_equal("RECOVER", pick(snapshot([gamble], [foe], {}), {})[0]["move_id"])
+  end
+
+  def test_the_entry_hit_is_the_declared_one_and_the_race_after_it_is_the_worst
+    foe = target(0, 100)
+    # Worst case the foe removes the candidate on entry (Megahorn); it has declared
+    # Earthquake, which the candidate resists.
+    sceptile = { "type" => "switch", "slot" => 1, "base_score" => 100, "matchup_score" => 0,
+                 "candidate_hp_pct" => 100, "entry_damage_pct" => 0,
+                 "incoming_damage_pct" => 120, "predicted_incoming_damage_pct" => 20,
+                 "outgoing_damage_pct" => 60, "faster" => true }
+    snap = snapshot([actor(1, 60, [move(0, "STRENGTH", 0, 100, 20, {})] + [sceptile],
+                           { "yawned" => true })], [foe], {})
+    result = pick(snap, {})[0]
+    assert_equal("switch", result["type"])
+    assert_equal(false, reasons_of(result).include?("dies_on_entry"))
+    assert_in_delta((25.0 - 20) * 1.28, reason_value(result, "entry_incoming_damage"), 0.01)
+    # Without the declared hit the same candidate is a corpse.
+    plain = sceptile.reject { |k, _v| k == "predicted_incoming_damage_pct" }
+    ranked = PortableAI.plan(snapshot([actor(1, 60, [move(0, "STRENGTH", 0, 100, 20, {})] +
+                                              [plain], { "yawned" => true })], [foe], {}),
+                             {}, Random.new(7))["diagnostics"]["rankings"][0]
+    blind = ranked.find { |c| c["type"] == "switch" }
+    assert_equal(true, reasons_of(blind).include?("dies_on_entry"))
+    # The race after entry still runs on the worst hit: 80 left against 120 a hit is
+    # one more, so the candidate needs its two hits to land first and cannot.
+    race = PortableAI.candidate_race(sceptile, foe)
+    assert_equal(2, race["theirs"])
+    assert_equal(false, race["winning"])
+  end
+
+  # --- 0.6.6 a wall that cannot be hurt has no reason to leave ---------------------
+
+  def steelix_snap(incoming, moves, config = {})
+    foe = target(0, 100)
+    bench = { "type" => "switch", "slot" => 1, "base_score" => 100, "matchup_score" => 0,
+              "candidate_hp_pct" => 100, "entry_damage_pct" => 0,
+              "incoming_damage_pct" => 20, "outgoing_damage_pct" => 40, "faster" => true }
+    a = actor(1, 100, moves + [bench],
+              { "no_effective_move" => true, "best_damage_pct" => 0,
+                "incoming_damage_pct" => incoming })
+    pick(snapshot([a], [foe], {}), config)[0]
+  end
+
+  def test_a_wall_with_a_status_move_stays_when_the_foe_needs_four_hits
+    toxic = move(0, "TOXIC", 0, 120, 0, {})
+    eq = move(1, "EARTHQUAKE", 0, 0, 0, { "damaging" => true, "immune" => true,
+                                          "effectiveness" => 0 })
+    assert_equal("TOXIC", steelix_snap(18, [toxic, eq])["move_id"])
+    # The foe three-shots it: the same two reasons open the gate as before.
+    assert_equal("switch", steelix_snap(40, [toxic, eq])["type"])
+    # Nothing but blanked attacks: leave, however safe.
+    assert_equal("switch", steelix_snap(18, [eq])["type"])
+    # Alakazam in front of a Toxic Umbreon: Calm Mind, Recover and Substitute work
+    # on nobody but itself, so it is not a wall with a job, it is a body doing
+    # nothing. Leaves (the 0.6.3 corpus card).
+    kazam = [move(0, "CALMMIND", nil, 187, 0, {}), move(2, "RECOVER", nil, 100, 0, {}),
+             move(3, "SUBSTITUTE", nil, 112, 0, {})]
+    assert_equal("switch", steelix_snap(0, kazam + [eq])["type"])
+    # Stealth Rock already at its cap is not a job either.
+    capped = move(0, "STEALTHROCK", nil, 140, 0, { "existing_layers" => 1, "max_layers" => 1 })
+    assert_equal("switch", steelix_snap(18, [capped, eq])["type"])
+    fresh = move(0, "STEALTHROCK", nil, 140, 0, { "existing_layers" => 0, "max_layers" => 1 })
+    assert_equal("STEALTHROCK", steelix_snap(18, [fresh, eq])["move_id"])
+    # Key off is 0.6.5.
+    assert_equal("switch", steelix_snap(18, [toxic, eq],
+                                        { "no_hit_needs_threat" => false })["type"])
+  end
+
+  # --- 0.6.7 a move the actor does not live to click ------------------------------
+
+  # The Sceptile turn (gen5ru_a team3_vs_team4 104729 t10): slower, 100%, a declared
+  # Acrobatics of 198%; its own Acrobatics kills the foe at 88% and never lands.
+  def sceptile_snap(extra_actor = {}, extra_moves = [])
+    foe = target(0, 88)
+    acro = move(0, "ACROBATICS", 0, 260, 123, { "effectiveness" => 2 })
+    rock = move(1, "ROCKSLIDE", 0, 189, 28, {})
+    uxie = { "type" => "switch", "slot" => 5, "base_score" => 55, "matchup_score" => 64,
+             "candidate_hp_pct" => 100, "entry_damage_pct" => 0,
+             "incoming_damage_pct" => 44, "predicted_incoming_damage_pct" => 44,
+             "outgoing_damage_pct" => 51, "faster" => false }
+    a = actor(1, 100, [acro, rock] + extra_moves + [uxie],
+              { "incoming_damage_pct" => 198, "certain_incoming_damage_pct" => 198,
+                "predicted_incoming_damage_pct" => 198,
+                "predicted_incoming_accuracy" => 100,
+                "faster" => false }.merge(extra_actor))
+    snapshot([a], [foe], {})
+  end
+
+  def rankings(snap, config = {})
+    PortableAI.plan(snap, config, Random.new(7))["diagnostics"]["rankings"][0]
+  end
+
+  def test_a_slower_actor_certain_to_die_does_not_credit_the_hit_it_never_lands
+    ranked = rankings(sceptile_snap)
+    assert_equal("switch", ranked[0]["type"])
+    acro = ranked.find { |c| c["move_id"] == "ACROBATICS" }
+    # ko_never_lands already stripped the kill call; what was left (260 + 80 + 70)
+    # is scaled to a quarter.
+    assert_equal(true, reasons_of(acro).include?("ko_never_lands"))
+    assert_in_delta(410 * 0.25, acro["score"], 0.01)
+    assert_in_delta(410 * -0.75, reason_value(acro, "dead_before_moving"), 0.01)
+    # Key off is 0.6.6: the attack wins at 410 over the switch at 234.
+    assert_equal("ACROBATICS", pick(sceptile_snap, { "dead_before_moving" => false })[0]["move_id"])
+  end
+
+  def test_the_order_among_the_moves_is_unchanged_and_a_priority_move_lands
+    ranked = rankings(sceptile_snap)
+    moves = ranked.select { |c| c["type"] == "move" }.map { |c| c["move_id"] }
+    assert_equal(%w[ACROBATICS ROCKSLIDE], moves)
+    # A chip with priority is clicked before death, so it keeps its whole score and
+    # now outranks the attack that never happens.
+    quick = move(2, "QUICKATTACK", 0, 100, 12, { "priority" => 1 })
+    ranked = rankings(sceptile_snap({}, [quick]))
+    moves = ranked.select { |c| c["type"] == "move" }
+    assert_equal("QUICKATTACK", moves[0]["move_id"])
+    assert_equal(false, reasons_of(moves[0]).include?("dead_before_moving"))
+  end
+
+  def test_the_rule_is_inert_when_faster_or_when_the_death_is_not_certain
+    # Faster: the attack lands first and kills.
+    fast = rankings(sceptile_snap({ "faster" => true }))
+    assert_equal("ACROBATICS", fast[0]["move_id"])
+    assert_equal(false, reasons_of(fast[0]).include?("dead_before_moving"))
+    # Speed unknown is not slower.
+    unknown = rankings(sceptile_snap({ "faster" => nil }))
+    assert_equal(false, reasons_of(unknown.find { |c| c["move_id"] == "ACROBATICS" })
+                          .include?("dead_before_moving"))
+    # The foe declared a move that does not kill: nothing is scaled.
+    alive = rankings(sceptile_snap({ "predicted_incoming_damage_pct" => 60 }))
+    assert_equal("ACROBATICS", alive[0]["move_id"])
+    assert_equal(false, reasons_of(alive[0]).include?("dead_before_moving"))
+  end
+
+  def test_a_trapped_or_low_actor_keeps_its_best_move
+    # Trapped: the switches are rejected, the moves keep their order, Acrobatics
+    # is still the click.
+    trapped = pick(sceptile_snap({ "trapped" => true }), {})[0]
+    assert_equal("ACROBATICS", trapped["move_id"])
+    # Below the healthy pivot line the lethal threat is no reason to leave, the gate
+    # stays shut, and the scaled attack is still what gets clicked.
+    low = pick(sceptile_snap({ "hp_pct" => 30 }), {})[0]
+    assert_equal("ACROBATICS", low["move_id"])
+    assert_equal(true, reasons_of(low).include?("dead_before_moving"))
+  end
+  # ---------------------------------------------------------------------------
+  # 0.7.0. THE SEARCH PLANNER. One ply over the joint grid, off by default.
+
+  # Our active trades evenly with theirs and is faster; their bench crushes it; our
+  # bench beats both of their bodies. The position the party matrix was built to see.
+  def search_snap(own_actions)
+    cells = {
+      "0:0" => mx_cell(40, 40, true),
+      "0:1" => mx_cell(5, 60, false),
+      "1:0" => mx_cell(30, 15, true),
+      "1:1" => mx_cell(35, 20, true)
+    }
+    snap = snapshot([actor(0, 100, own_actions, {})], [target(0, 100)], {})
+    with_matrix(snap, matrix_snap([[0, 100, 0], [1, 100, nil]],
+                                  [[0, 100, 0], [1, 100, nil]], cells))
+  end
+
+  def search_pick(snap, config = {})
+    plan = PortableAI::Search.plan(snap, config, Random.new(7))
+    plan && plan["actions"][0]
+  end
+
+  # 0.7.9. Every damage number is a MAX roll; a hit that cannot kill lands, on
+  # average over the search's roll branches, at this fraction of it (the average
+  # roll, lifted by the crit branch). The board-arithmetic tests below are pinned
+  # against it wherever a hit stays short of a kill.
+  ROLL = PortableAI::Search::ROLL_AVERAGE *
+         (1.0 + (PortableAI::Search::CRIT_MULT - 1.0) * PortableAI::Search::CRIT_RATE)
+
+  # The board-arithmetic tests below pin the one-ply numbers; the depth is the
+  # subject of its own tests further down.
+  ONE_PLY = { "search_depth" => 1, "search_foe_mix" => 0 }
+
+  def test_search_planner_declines_what_it_cannot_see
+    actions = [move(0, "TACKLE", 0, 100, 40, { "accuracy" => 100 })]
+    # No matrix: nothing to project on to.
+    assert_nil(PortableAI::Search.plan(
+      snapshot([actor(0, 100, actions, {})], [target(0, 100)], {}), {}, nil))
+    # Doubles: this version reasons about one pair.
+    doubles = search_snap(actions)
+    doubles["format"] = "double"
+    assert_nil(PortableAI::Search.plan(doubles, {}, nil))
+    # A fainted actor holds no matrix seat, so a forced replacement finds no board.
+    # That is how the adapter's replacement path stays with the rule engine without
+    # a special case for it.
+    fainted = search_snap(actions)
+    fainted["actors"][0]["index"] = 4
+    assert_nil(PortableAI::Search.plan(fainted, {}, nil))
+  end
+
+  def test_search_planner_scores_every_action_against_every_foe_reply
+    actions = [move(0, "TACKLE", 0, 100, 40, { "accuracy" => 100 }),
+               { "type" => "switch", "slot" => 1, "base_score" => 100,
+                 "candidate_hp_pct" => 100, "entry_damage_pct" => 0 }]
+    ranked = PortableAI::Search.plan(search_snap(actions), ONE_PLY, nil)["diagnostics"]["rankings"][0]
+    attack = ranked.find { |c| c["type"] == "move" }
+    switch = ranked.find { |c| c["type"] == "switch" }
+    # Stay, and one switch per live body on their bench.
+    assert_equal(2, reason_value(attack, "search_foe_options"))
+    assert_equal(2, attack["search_row"].length)
+    # Within one ply their switch cannot punish an attack -- it only forgoes their
+    # hit -- so the attack's best case is the switch column and its worst the stay.
+    # (Through 0.7.3 a +/-25 verdict on the pair left standing made the switch the
+    # pick here; the leaf is HP alone now. Where maximin departs from greedy is the
+    # foe-switch column pricing each move on its own -- see
+    # test_search_prefers_the_move_their_bench_cannot_wall -- and the second ply.)
+    assert_equal(true, reason_value(attack, "search_best_case") >
+                       reason_value(attack, "search_worst_case"))
+    assert_equal(0.0, attack["score"])
+    # The hit the switch-in eats, nothing back -- at the average roll (0.7.9).
+    assert_in_delta(-15.0 * ROLL, switch["score"], 1e-9)
+    assert_equal("move", ranked[0]["type"])
+  end
+
+  def test_search_planner_ranks_a_kill_by_the_body_it_removes
+    # Their last body at 30%, so the only foe option is to stay and take it. Removing
+    # it ends the battle, which sits above every standing board.
+    cells = { "0:0" => mx_cell(40, 40, true) }
+    tackle = move(0, "TACKLE", 0, 100, 40, { "accuracy" => 100 })
+    ember = move(1, "EMBER", 0, 100, 10, { "accuracy" => 100 })
+    snap = snapshot([actor(0, 100, [tackle, ember], {})], [target(0, 30)], {})
+    with_matrix(snap, matrix_snap([[0, 100, 0]], [[0, 30, 0]], cells))
+    chosen = search_pick(snap, ONE_PLY)
+    assert_equal("TACKLE", chosen["move_id"])
+    assert_equal(PortableAI::Search::BATTLE_OVER, chosen["score"])
+    assert_equal(1, reason_value(chosen, "search_foe_options"))
+    # With a bench behind it the kill is worth what it removes -- the 30 HP and the
+    # body -- as in the original's evaluate, not a flat value that dwarfs the board.
+    cells["0:1"] = mx_cell(40, 40, true)
+    snap = snapshot([actor(0, 100, [tackle, ember], {})], [target(0, 30)], {})
+    with_matrix(snap, matrix_snap([[0, 100, 0]], [[0, 30, 0], [1, 100, nil]], cells))
+    ranked = PortableAI::Search.plan(snap, ONE_PLY, nil)["diagnostics"]["rankings"][0]
+    kill = ranked.find { |c| c["move_id"] == "TACKLE" }
+    chip = ranked.find { |c| c["move_id"] == "EMBER" }
+    # Kill, foe stays: we 130, they 130 (the bench body). No pair stands, no verdict.
+    assert_equal(0.0, kill["search_row"][0])
+    # Chip, foe stays: we 100 - 40 + 30 = 90, they 20 + 30 + 130 = 180 -- at the
+    # max roll; both hits fall short of a kill, so both land at the average (0.7.9).
+    assert_in_delta(-90.0 + (40.0 - 10.0) * (1.0 - ROLL), chip["search_row"][0], 1e-9)
+    assert_equal("TACKLE", ranked[0]["move_id"])
+  end
+
+  def test_search_branches_a_miss_instead_of_scaling_the_damage
+    snap = search_snap([])
+    board = PortableAI::Search.opening_board(snap)
+    stay = { "kind" => "stay" }
+    # A switch-in eats the hit in full on the way in -- candidate_race's convention --
+    # on top of whatever hazards already took (entry_damage_pct).
+    entry = { "type" => "switch", "slot" => 1, "candidate_hp_pct" => 100,
+              "entry_damage_pct" => 0 }
+    assert_equal(1, PortableAI::Search.project(snap, board, entry, stay, true)["own_slot"])
+    assert_equal(85.0, PortableAI::Search.project(snap, board, entry, stay, true)["own_hp"])
+    hazarded = { "type" => "switch", "slot" => 1, "candidate_hp_pct" => 100,
+                 "entry_damage_pct" => 20 }
+    assert_equal(65.0, PortableAI::Search.project(snap, board, hazarded, stay, true)["own_hp"])
+    # Accuracy is a branch, not a multiplier: the move lands in full or not at all.
+    half = move(0, "TACKLE", 0, 100, 40, { "accuracy" => 50 })
+    assert_equal(60.0, PortableAI::Search.project(snap, board, half, stay, true, true)["foe_hp"])
+    assert_equal(100.0, PortableAI::Search.project(snap, board, half, stay, true, false)["foe_hp"])
+    hit = PortableAI::Search.leaf(snap, PortableAI::Search.project(snap, board, half, stay, true, true))
+    miss = PortableAI::Search.leaf(snap, PortableAI::Search.project(snap, board, half, stay, true, false))
+    # `project` alone lands the raw number; `payoff` averages the roll branches on
+    # both sides (0.7.9). Their 40 on us is short of a kill in every branch, so it
+    # averages to 40 x ROLL in both; ours does the same in the hit branch only.
+    assert_in_delta((hit + miss) / 2.0 + 20.0 * (1.0 - ROLL),
+                    PortableAI::Search.payoff(snap, board, half, stay), 1e-9)
+    # The case that made the branch necessary: a 70% move that kills outright is a
+    # 70% chance of the kill, not a certain 70% hit that leaves the foe standing --
+    # and a 90% move that kills by a hair is not a 90% hit that does not.
+    cells = { "0:0" => mx_cell(40, 40, true) }
+    snap = snapshot([actor(0, 100, [], {})], [target(0, 40)], {})
+    with_matrix(snap, matrix_snap([[0, 100, 0]], [[0, 40, 0]], cells))
+    board = PortableAI::Search.opening_board(snap)
+    blast = move(0, "FOCUSBLAST", 0, 100, 100, { "accuracy" => 70 })
+    edge = move(1, "STONEEDGE", 0, 100, 45, { "accuracy" => 90 })
+    over = PortableAI::Search::BATTLE_OVER
+    missed = PortableAI::Search.leaf(snap, PortableAI::Search.project(snap, board, blast, stay, true, false)) +
+             40.0 * (1.0 - ROLL)
+    # 100 max on 40 HP kills on the lowest roll, so the 70% is the whole story.
+    assert_in_delta(0.7 * over + 0.3 * missed,
+                    PortableAI::Search.payoff(snap, board, blast, stay), 1e-9)
+    # 45 max on 40 HP kills on 12 of 16 rolls (85..88 fall short): the 90% move is
+    # a 90% x (15/16 x 12/16 + 1/16 crit) = 68.9% kill, not a 90% one -- the 0.7.9
+    # correction, the original's should_branch_on_damage arithmetic. The non-kill
+    # branch lands the mean of the four short rolls, 0.865 x 45.
+    p_kill = (1.0 - PortableAI::Search::CRIT_RATE) * 12 / 16.0 + PortableAI::Search::CRIT_RATE
+    short = missed + 45.0 * 0.865
+    assert_in_delta(0.9 * (p_kill * over + (1.0 - p_kill) * short) + 0.1 * missed,
+                    PortableAI::Search.payoff(snap, board, edge, stay), 1e-9)
+    assert_equal([[1.0, p_kill], [0.865, 1.0 - p_kill]],
+                 PortableAI::Search.roll_outcomes(45.0, 40.0, true).map { |o| [(o[0] * 1e6).round / 1e6, o[1]] })
+    assert_equal([[1.0, 1.0]], PortableAI::Search.roll_outcomes(100.0, 40.0, true))
+    assert_equal([[PortableAI::Search::ROLL_AVERAGE, 1.0]], PortableAI::Search.roll_outcomes(45.0, 40.0, false))
+    # Moving first and killing means taking nothing back.
+    lethal = move(0, "TACKLE", 0, 100, 100, { "accuracy" => 100 })
+    first = PortableAI::Search.project(snap, board, lethal, stay, true)
+    assert_equal(0.0, first["foe_hp"])
+    assert_equal(100.0, first["own_hp"])
+    # Moving second, the same kill still costs the hit that came before it.
+    second = PortableAI::Search.project(snap, board, lethal, stay, false)
+    assert_equal(0.0, second["foe_hp"])
+    assert_equal(60.0, second["own_hp"])
+  end
+
+  def test_search_planner_returns_the_shape_the_adapter_reads
+    actions = [move(0, "TACKLE", 0, 100, 40, { "accuracy" => 100 })]
+    plan = PortableAI::Search.plan(search_snap(actions), {}, nil)
+    assert_equal(PortableAI::VERSION, plan["diagnostics"]["version"])
+    assert_equal("search", plan["diagnostics"]["planner"])
+    # The same record the rule planner leaves, because the projection reads it back.
+    assert_equal(true, plan["memory_updates"].is_a?(Hash))
+    protect = PortableAI::Search.plan(search_snap(
+      [move(0, "PROTECT", 0, 100, 0, { "actor_index" => 0, "accuracy" => 0 })]), {}, nil)
+    assert_equal("protect", protect["memory_updates"]["0"]["increment"])
+    assert_equal(1, plan["actions"].length)
+    # rankings is [actor][candidates] with a score on each, which is what
+    # candidate_trace and the readout tooling walk.
+    assert_equal(1, plan["diagnostics"]["rankings"].length)
+    assert_equal(actions.length, plan["diagnostics"]["rankings"][0].length)
+    assert_equal(false, plan["diagnostics"]["rankings"][0][0]["score"].nil?)
+    assert_equal([actions.length], plan["diagnostics"]["candidate_counts"])
+  end
+
+  def test_search_planner_is_off_by_default_and_leaves_the_rule_engine_alone
+    assert_equal(false, PortableAI::Model::DEFAULT_CONFIG["search_planner"])
+    # The rule planner never consults it: same snapshot, same answer as always.
+    actions = [move(0, "TACKLE", 0, 100, 40, { "accuracy" => 100 }),
+               { "type" => "switch", "slot" => 1, "base_score" => 100,
+                 "candidate_hp_pct" => 100, "entry_damage_pct" => 0 }]
+    snap = search_snap(actions)
+    assert_equal("move", pick(snap, {})[0]["type"])
+    assert_equal(nil, PortableAI.plan(snap, {}, Random.new(7))["diagnostics"]["planner"])
+  end
+
+  def test_a_foe_switch_in_stands_on_its_own_hp_not_the_body_it_replaced
+    # Their active is nearly dead and their bench is fresh. Reading the bench body at
+    # the active's 6% made every foe switch look like a free kill, which scored a kill
+    # and made maximin choose between fictions. It was the first version's worst bug.
+    cells = { "0:0" => mx_cell(40, 40, true), "0:1" => mx_cell(40, 40, true) }
+    snap = snapshot([actor(0, 100, [], {})], [target(0, 6)], {})
+    with_matrix(snap, matrix_snap([[0, 100, 0]], [[0, 6, 0], [1, 100, nil]], cells))
+    board = PortableAI::Search.opening_board(snap)
+    assert_equal(6.0, board["foe_hp"])
+    after = PortableAI::Search.project(snap, board,
+                                       move(0, "TACKLE", 0, 100, 40, { "accuracy" => 100 }),
+                                       { "kind" => "switch", "slot" => 1 }, true)
+    assert_equal(1, after["foe_slot"])
+    # 100 for the fresh body, minus our hit that lands on it -- not 6 minus the hit.
+    assert_equal(60.0, after["foe_hp"])
+    # Party-wide: we 100 + 30; they (6 + 30) + (60 + 30). Nothing for the pair itself
+    # (0.7.4: no verdict term).
+    assert_equal(130.0 - 126.0, PortableAI::Search.leaf(snap, after))
+  end
+
+  def test_the_on_field_pair_is_priced_from_the_live_view_not_the_cell
+    # The cell says the foe hits for 60; the actor view says 24, because the foe is
+    # Choice-locked into a weak move and the cells carry no Choice lock by design
+    # (matrix.rb). Reading the cell made a healthy body score every move as a certain
+    # death and flee; the live number is what every rule in core.rb reads.
+    cells = { "0:0" => mx_cell(40, 60, true), "1:0" => mx_cell(30, 60, true) }
+    acts = [move(0, "TACKLE", 0, 100, 40, { "accuracy" => 100 })]
+    snap = snapshot([actor(0, 100, acts, { "incoming_damage_pct" => 24, "faster" => false })],
+                    [target(0, 100)], {})
+    with_matrix(snap, matrix_snap([[0, 100, 0], [1, 100, nil]], [[0, 100, 0]], cells))
+    board = PortableAI::Search.opening_board(snap)
+    assert_equal(24.0, board["live_incoming"])
+    stay = { "kind" => "stay" }
+    # The actor view also owns the speed order: live_faster false beats the cell's true.
+    assert_equal(false, PortableAI::Search.moves_first(snap, board, acts[0], stay))
+    assert_equal(76.0, PortableAI::Search.project(snap, board, acts[0], stay, false)["own_hp"])
+    # A body that switches in is priced by its own estimate when the adapter built one
+    # (Intimidate-aware, every foe move, a real roll) ...
+    entry = { "type" => "switch", "slot" => 1, "candidate_hp_pct" => 100,
+              "entry_damage_pct" => 0, "incoming_damage_pct" => 33 }
+    assert_equal(67.0, PortableAI::Search.project(snap, board, entry, stay, true)["own_hp"])
+    # ... and by the cell only when nothing else priced the pair.
+    entry.delete("incoming_damage_pct")
+    assert_equal(40.0, PortableAI::Search.project(snap, board, entry, stay, true)["own_hp"])
+  end
+
+  def test_search_leaf_is_party_wide_so_a_switch_pays_for_the_hit_it_eats
+    # An even trade on the field, a bench body that wins its pair. 0.7.0 switched here
+    # every time: the verdict outranked any amount of HP, so the hit eaten on entry
+    # was free. HP is the currency now, and the 20 the switch-in takes is 20 more than
+    # attacking costs on the party sum.
+    cells = { "0:0" => mx_cell(40, 40, true), "1:0" => mx_cell(50, 20, true) }
+    actions = [move(0, "TACKLE", 0, 100, 40, { "accuracy" => 100 }),
+               { "type" => "switch", "slot" => 1, "base_score" => 100,
+                 "candidate_hp_pct" => 100, "entry_damage_pct" => 0 }]
+    snap = snapshot([actor(0, 100, actions, {})], [target(0, 100)], {})
+    with_matrix(snap, matrix_snap([[0, 100, 0], [1, 100, nil]], [[0, 100, 0]], cells))
+    ranked = PortableAI::Search.plan(snap, ONE_PLY, nil)["diagnostics"]["rankings"][0]
+    attack = ranked.find { |c| c["type"] == "move" }
+    switch = ranked.find { |c| c["type"] == "switch" }
+    # Attack: we (60 + 30) + (100 + 30), they 60 + 30, +130. Switch: we (100 + 30) +
+    # (80 + 30), they 100 + 30, +110. Twenty apart: the hit the switch-in ate.
+    assert_equal(130.0, attack["score"])
+    assert_in_delta(110.0 + 20.0 * (1.0 - ROLL), switch["score"], 1e-9)
+    assert_equal("move", ranked[0]["type"])
+    # And a body of ours going down costs that body, not the battle, while a bench
+    # stands behind it.
+    board = PortableAI::Search.opening_board(snap)
+    dead = PortableAI::Search.project(snap, board,
+                                      move(0, "TACKLE", 0, 100, 0, { "accuracy" => 100 }),
+                                      { "kind" => "stay" }, true)
+    dead["own_hp"] = 0.0
+    dead["own_hps"][0] = 0.0
+    assert_equal(130.0 - 130.0, PortableAI::Search.leaf(snap, dead))
+    alone = with_matrix(snapshot([actor(0, 100, [], {})], [target(0, 100)], {}),
+                        matrix_snap([[0, 100, 0]], [[0, 100, 0]], cells))
+    gone = PortableAI::Search.opening_board(alone)
+    gone["own_hp"] = 0.0
+    gone["own_hps"][0] = 0.0
+    assert_equal(-PortableAI::Search::BATTLE_OVER, PortableAI::Search.leaf(alone, gone))
+  end
+
+  def test_search_offers_no_foe_switch_column_when_the_foe_is_trapped
+    actions = [move(0, "TACKLE", 0, 100, 40, { "accuracy" => 100 })]
+    free = search_snap(actions)
+    assert_equal(["stay", "switch:1"],
+                 PortableAI::Search.plan(free, {}, nil)["diagnostics"]["foe_options"])
+    trapped = search_snap(actions)
+    trapped["targets"][0]["trapped"] = true
+    assert_equal(["stay"],
+                 PortableAI::Search.plan(trapped, {}, nil)["diagnostics"]["foe_options"])
+    assert_equal(1, reason_value(search_pick(trapped), "search_foe_options"))
+  end
+
+  # 0.7.2. WHAT A TURN CHANGES BESIDES HP, in the original's evaluate terms.
+
+  def one_v_one(own_hp, foe_hp, cell, actor_extra = {}, target_extra = {})
+    snap = snapshot([actor(0, own_hp, [], actor_extra)], [target(0, foe_hp)], {})
+    target_extra.each { |k, v| snap["targets"][0][k] = v }
+    with_matrix(snap, matrix_snap([[0, own_hp, 0, 100]], [[0, foe_hp, 0, 90]],
+                                  { "0:0" => cell }))
+  end
+
+  def test_search_every_self_drop_move_has_a_stage_row
+    PortableAI::Effects::TABLE.each do |id, tags|
+      next if !tags.include?("self_drop")
+      assert_not_nil(PortableAI::Effects.self_drop_stages(id), "no SELF_DROP_STAGES row for #{id}")
+    end
+  end
+
+  def test_search_projects_a_boost_as_stages_the_leaf_reads
+    # Even trade, we are slower. Dragon Dance costs the hit we take and the leaf pays
+    # the original's 30 a stage for it.
+    snap = one_v_one(100, 100, mx_cell(40, 40, false))
+    board = PortableAI::Search.opening_board(snap)
+    assert_equal({}, board["own_stages"])
+    stay = { "kind" => "stay" }
+    dd = move(0, "DRAGONDANCE", 0, 100, 0, { "accuracy" => 0 })
+    after = PortableAI::Search.project(snap, board, dd, stay, false)
+    assert_equal({ "atk" => 1, "speed" => 1 }, after["own_stages"])
+    assert_equal(60.0, after["own_hp"])
+    # Points: (60 + 30) - (100 + 30) = -40, +60 for two stages at multiplier 1.0.
+    assert_equal(-40.0 + 60.0, PortableAI::Search.leaf(snap, after))
+    # The stages ride on the body: a switch leaves them behind.
+    boosted = PortableAI::Search.opening_board(snap)
+    boosted["own_stages"] = { "atk" => 2 }
+    snap["matrix"]["own"] << { "slot" => 1, "index" => nil, "hp_pct" => 100, "alive" => true, "speed" => 80 }
+    snap["matrix"]["cells"]["1:0"] = mx_cell(30, 30, false)
+    entry = { "type" => "switch", "slot" => 1, "candidate_hp_pct" => 100, "entry_damage_pct" => 0 }
+    assert_equal({}, PortableAI::Search.project(snap, boosted, entry, stay, true)["own_stages"])
+    # Belly Drum: half the HP for +6, and nothing at all from half or below.
+    drum = move(0, "BELLYDRUM", 0, 100, 0, { "accuracy" => 0 })
+    full = PortableAI::Search.project(snap, PortableAI::Search.opening_board(snap), drum, stay, true)
+    assert_equal({ "atk" => 6 }, full["own_stages"])
+    assert_equal(10.0, full["own_hp"])
+    low = PortableAI::Search.opening_board(one_v_one(50, 100, mx_cell(40, 40, false)))
+    assert_equal({}, PortableAI::Search.project(snap, low, drum, stay, true)["own_stages"])
+    # The existing stages decode from the engine's array (PBStats order).
+    carried = one_v_one(100, 100, mx_cell(40, 40, false), { "stages" => [0, 2, 0, 1, 0, 0, 0, 0] })
+    assert_equal({ "atk" => 2, "speed" => 1 },
+                 PortableAI::Search.opening_board(carried)["own_stages"])
+  end
+
+  def test_search_projects_a_heal_in_speed_order
+    snap = one_v_one(40, 100, mx_cell(40, 40, false))
+    board = PortableAI::Search.opening_board(snap)
+    stay = { "kind" => "stay" }
+    recover = move(0, "RECOVER", 0, 100, 0, { "accuracy" => 0 })
+    # Slower: take 40 to 0 and never heal. Faster: heal to 90, then take 40.
+    assert_equal(0.0, PortableAI::Search.project(snap, board, recover, stay, false)["own_hp"])
+    assert_equal(50.0, PortableAI::Search.project(snap, board, recover, stay, true)["own_hp"])
+    rest = move(0, "REST", 0, 100, 0, { "accuracy" => 0 })
+    after = PortableAI::Search.project(snap, board, rest, stay, true)
+    assert_equal(60.0, after["own_hp"])
+    assert_equal(-25.0, after["own_status_points"])
+  end
+
+  def test_search_projects_protect_and_substitute
+    snap = one_v_one(100, 100, mx_cell(40, 40, true))
+    board = PortableAI::Search.opening_board(snap)
+    stay = { "kind" => "stay" }
+    protect = move(0, "PROTECT", 0, 100, 0, { "accuracy" => 0 })
+    assert_equal(100.0, PortableAI::Search.project(snap, board, protect, stay, true)["own_hp"])
+    # A repeat, by the memory counter, fails and the hit lands.
+    repeated = PortableAI::Search.opening_board(snap)
+    repeated["protect_repeats"] = 1
+    assert_equal(60.0, PortableAI::Search.project(snap, repeated, protect, stay, true)["own_hp"])
+    # Substitute costs a quarter, absorbs the hit, and breaks on one this size.
+    sub = move(0, "SUBSTITUTE", 0, 100, 0, { "accuracy" => 0 })
+    after = PortableAI::Search.project(snap, board, sub, stay, true)
+    assert_equal(75.0, after["own_hp"])
+    assert_equal(false, after["substitute"])
+    # A hit under its HP leaves it standing, and standing it is worth 75 in the leaf.
+    chip = one_v_one(100, 100, mx_cell(40, 10, true), { "incoming_damage_pct" => 10 })
+    stood = PortableAI::Search.project(chip, PortableAI::Search.opening_board(chip), sub, stay, true)
+    assert_equal(75.0, stood["own_hp"])
+    assert_equal(true, stood["substitute"])
+    bare = PortableAI::Search.leaf(chip, stood)
+    stood["substitute"] = false
+    assert_equal(75.0, bare - PortableAI::Search.leaf(chip, stood))
+    # Made second, it goes up after the hit.
+    late = PortableAI::Search.project(snap, board, sub, stay, false)
+    assert_equal(35.0, late["own_hp"])
+    assert_equal(true, late["substitute"])
+  end
+
+  def test_search_projects_a_status_at_the_exported_chance
+    snap = one_v_one(100, 100, mx_cell(40, 40, true), {}, { "physical_attacker" => true })
+    board = PortableAI::Search.opening_board(snap)
+    stay = { "kind" => "stay" }
+    toxic = move(0, "TOXIC", 0, 100, 0, { "accuracy" => 90, "effect_kind" => "poison",
+                                        "effect_chance" => 100 })
+    assert_equal(30.0, PortableAI::Search.project(snap, board, toxic, stay, true)["foe_status_points"])
+    # The engine said it cannot land: nothing.
+    blocked = move(0, "TOXIC", 0, 100, 0, { "accuracy" => 90, "effect_kind" => "poison",
+                                          "effect_chance" => 0 })
+    assert_equal(0.0, PortableAI::Search.project(snap, board, blocked, stay, true)["foe_status_points"])
+    # A secondary at its rate; a burn on a special attacker at half.
+    scald = move(1, "SCALD", 0, 100, 30, { "accuracy" => 100, "effect_kind" => "burn",
+                                         "effect_chance" => 30,
+                                         "target_physical_attacker" => false })
+    assert_equal(25.0 * 0.5 * 0.3, PortableAI::Search.project(snap, board, scald, stay, true)["foe_status_points"])
+    # A status move with no effect export still reads its kind off the tags.
+    wisp = move(2, "WILLOWISP", 0, 100, 0, { "accuracy" => 85, "target_physical_attacker" => true })
+    assert_equal(25.0, PortableAI::Search.project(snap, board, wisp, stay, true)["foe_status_points"])
+    # A drop is a stage off the foe's boost; a foe switch drops all of theirs.
+    boosted = one_v_one(100, 100, mx_cell(40, 40, true), { "incoming_damage_pct" => 0 },
+                        { "positive_stages" => 2 })
+    b = PortableAI::Search.opening_board(boosted)
+    assert_equal(50.0, b["foe_boost"])
+    growl = move(0, "GROWL", 0, 100, 0, { "accuracy" => 100, "effect_kind" => "drop",
+                                        "effect_stat" => "atk", "effect_chance" => 100 })
+    assert_equal(20.0, PortableAI::Search.project(boosted, b, growl, stay, true)["foe_boost"])
+    boosted["matrix"]["foe"] << { "slot" => 1, "index" => nil, "hp_pct" => 100, "alive" => true, "speed" => 50 }
+    boosted["matrix"]["cells"]["0:1"] = mx_cell(40, 40, true)
+    # ... and the Growl then lands on the fresh body, a stage below zero.
+    left = PortableAI::Search.project(boosted, b, growl, { "kind" => "switch", "slot" => 1 }, true)
+    assert_equal(-30.0, left["foe_boost"])
+    # And the leaf: the foe's points carry its boost, and lose the status.
+    assert_equal(PortableAI::Search.leaf(boosted, b) + 30.0,
+                 PortableAI::Search.leaf(boosted, PortableAI::Search.project(boosted, b, growl, stay, true)))
+    # Miss branch: nothing lands, status included.
+    assert_equal(0.0, PortableAI::Search.project(snap, board, toxic, stay, true, false)["foe_status_points"])
+  end
+
+  def test_search_projects_hazards_per_live_foe_body
+    snap = one_v_one(100, 100, mx_cell(40, 40, true))
+    snap["matrix"]["foe"] << { "slot" => 1, "index" => nil, "hp_pct" => 100, "alive" => true, "speed" => 50 }
+    snap["matrix"]["foe"] << { "slot" => 2, "index" => nil, "hp_pct" => 0, "alive" => false, "speed" => 50 }
+    board = PortableAI::Search.opening_board(snap)
+    stay = { "kind" => "stay" }
+    rocks = move(0, "STEALTHROCK", 0, 100, 0, { "accuracy" => 0, "existing_layers" => 0, "max_layers" => 1 })
+    assert_equal(20.0, PortableAI::Search.project(snap, board, rocks, stay, true)["foe_hazard_points"])
+    laid = move(0, "STEALTHROCK", 0, 100, 0, { "accuracy" => 0, "existing_layers" => 1, "max_layers" => 1 })
+    assert_equal(0.0, PortableAI::Search.project(snap, board, laid, stay, true)["foe_hazard_points"])
+    spikes = move(0, "SPIKES", 0, 100, 0, { "accuracy" => 0, "existing_layers" => 1, "max_layers" => 3 })
+    assert_equal(14.0, PortableAI::Search.project(snap, board, spikes, stay, true)["foe_hazard_points"])
+  end
+
+  def test_search_charges_a_kill_for_what_the_move_costs
+    # Both kill. Superpower pays a stage of Attack and Defence, so X-Scissor wins the
+    # tie that 0.7.1 broke on the slot key.
+    # At 80% so a drain has something to restore; faster, so the kill costs no hit.
+    snap = one_v_one(80, 30, mx_cell(40, 40, true))
+    snap["matrix"]["foe"] << { "slot" => 1, "index" => nil, "hp_pct" => 100, "alive" => true, "speed" => 50 }
+    snap["matrix"]["cells"]["0:1"] = mx_cell(40, 40, true)
+    snap["targets"][0]["trapped"] = true
+    snap["actors"][0]["actions"] = [
+      move(0, "SUPERPOWER", 0, 100, 60, { "accuracy" => 100 }),
+      move(1, "XSCISSOR", 0, 100, 60, { "accuracy" => 100 }),
+      move(2, "BRAVEBIRD", 0, 100, 60, { "accuracy" => 100, "recoil_fraction" => 0.3333 }),
+      move(3, "DRAINPUNCH", 0, 100, 60, { "accuracy" => 100, "drain_fraction" => 0.5 })
+    ]
+    ranked = PortableAI::Search.plan(snap, ONE_PLY, nil)["diagnostics"]["rankings"][0]
+    assert_equal(%w[DRAINPUNCH XSCISSOR BRAVEBIRD SUPERPOWER], ranked.map { |c| c["move_id"] })
+    by = {}
+    ranked.each { |c| by[c["move_id"]] = c["score"] }
+    assert_equal(by["XSCISSOR"] - 45.0, by["SUPERPOWER"])
+    assert_in_delta(by["XSCISSOR"] - 60.0 * 0.3333, by["BRAVEBIRD"], 0.001)
+    # 80 + 30 caps at 100: twenty points, not thirty.
+    assert_equal(by["XSCISSOR"] + 20.0, by["DRAINPUNCH"])
+  end
+
+  def test_search_clicks_a_setup_move_when_it_wins_the_position
+    # Slower and losing the pair on a 40/40 trade; +1/+1 makes it faster and a
+    # two-hit kill against three. The boost is worth more than the chip.
+    snap = one_v_one(100, 100, mx_cell(40, 40, false))
+    snap["targets"][0]["trapped"] = true
+    snap["actors"][0]["actions"] = [
+      move(0, "DRAGONDANCE", 0, 100, 0, { "accuracy" => 0 }),
+      move(1, "WATERFALL", 0, 100, 40, { "accuracy" => 100 })
+    ]
+    chosen = search_pick(snap)
+    assert_equal("DRAGONDANCE", chosen["move_id"])
+  end
+
+  # 0.7.3. THE SECOND PLY.
+
+  def test_search_depth_comes_from_the_key_and_floors_at_one
+    assert_equal(2, PortableAI::Search.depth_of({}))
+    assert_equal(2, PortableAI::Search.depth_of(nil))
+    assert_equal(1, PortableAI::Search.depth_of({ "search_depth" => 1 }))
+    assert_equal(1, PortableAI::Search.depth_of({ "search_depth" => 0 }))
+    assert_equal(3, PortableAI::Search.depth_of({ "search_depth" => 3.0 }))
+    assert_equal(2, PortableAI::Model::DEFAULT_CONFIG["search_depth"])
+    plan = PortableAI::Search.plan(search_snap([move(0, "TACKLE", 0, 100, 40, { "accuracy" => 100 })]), {}, nil)
+    assert_equal(2, plan["diagnostics"]["depth"])
+  end
+
+  def test_search_options_below_the_root_follow_the_bodies_on_the_field
+    tackle = move(0, "TACKLE", 0, 100, 40, { "accuracy" => 100 })
+    bench = { "type" => "switch", "slot" => 1, "base_score" => 100,
+              "candidate_hp_pct" => 100, "entry_damage_pct" => 0, "incoming_damage_pct" => 33 }
+    snap = search_snap([tackle, bench])
+    root = [tackle, bench]
+    board = PortableAI::Search.opening_board(snap)
+    # The same pair: the root's moves, and the root's own switch action for the bench.
+    own = PortableAI::Search.own_options(snap, board, root)
+    assert_equal(["TACKLE", nil], own.map { |a| a["move_id"] })
+    assert_equal(33, own[1]["incoming_damage_pct"])
+    # The foe switched: one attack worth the cell, and the bench priced off the table.
+    after = PortableAI::Search.project(snap, board, tackle, { "kind" => "switch", "slot" => 1 }, true)
+    own = PortableAI::Search.own_options(snap, after, root)
+    assert_equal("MATRIX_ATTACK", own[0]["move_id"])
+    assert_equal(5.0, own[0]["expected_damage_pct"])
+    assert_equal(nil, own[1]["incoming_damage_pct"])
+    # Our body down: replacements only, and the foe does nothing that ply.
+    down = PortableAI::Search.opening_board(snap)
+    down["own_hp"] = 0.0
+    assert_equal([[true, 1]], PortableAI::Search.own_options(snap, down, root).map { |a| [a["forced"], a["slot"]] })
+    assert_equal([{ "kind" => "none" }], PortableAI::Search.foe_options(snap, down))
+    # Their body down: we idle, they pick from their bench.
+    theirs = PortableAI::Search.opening_board(snap)
+    theirs["foe_hp"] = 0.0
+    assert_equal([{ "type" => "none" }], PortableAI::Search.own_options(snap, theirs, root))
+    assert_equal([{ "kind" => "switch", "slot" => 1 }], PortableAI::Search.foe_options(snap, theirs))
+    # A trapped actor has no bench while it is the body on the field, and has one
+    # again once another body stands there.
+    snap["actors"][0]["trapped"] = true
+    held = PortableAI::Search.opening_board(snap)
+    assert_equal(["TACKLE"], PortableAI::Search.own_options(snap, held, root).map { |a| a["move_id"] })
+    moved = PortableAI::Search.project(snap, held, bench, { "kind" => "stay" }, true)
+    assert_equal(true, PortableAI::Search.own_options(snap, moved, root).any? { |a| a["type"] == "switch" })
+  end
+
+  def test_search_second_ply_is_the_safest_reply_from_each_board
+    # A kill with a bench behind it: at depth 2 the stay column is the replacement
+    # ply -- the foe brings in whatever is worst for us and we do nothing -- and the
+    # cell's value is exactly that leaf.
+    cells = { "0:0" => mx_cell(40, 40, true), "0:1" => mx_cell(40, 40, true) }
+    tackle = move(0, "TACKLE", 0, 100, 40, { "accuracy" => 100 })
+    snap = snapshot([actor(0, 100, [tackle], {})], [target(0, 30)], {})
+    with_matrix(snap, matrix_snap([[0, 100, 0]], [[0, 30, 0], [1, 100, nil]], cells))
+    board = PortableAI::Search.opening_board(snap)
+    stay = { "kind" => "stay" }
+    killed = PortableAI::Search.project(snap, board, tackle, stay, true)
+    replaced = PortableAI::Search.project(snap, killed, { "type" => "none" }, { "kind" => "switch", "slot" => 1 }, true)
+    assert_equal(1, replaced["foe_slot"])
+    assert_equal(100.0, replaced["foe_hp"])
+    assert_equal(PortableAI::Search.leaf(snap, replaced),
+                 PortableAI::Search.payoff(snap, board, tackle, stay, 2, [tackle]))
+    # Depth 1 of the same cell is the board right after the kill.
+    assert_equal(PortableAI::Search.leaf(snap, killed),
+                 PortableAI::Search.payoff(snap, board, tackle, stay, 1, [tackle]))
+    # A finished battle a ply early is worth the win plus the plies not needed.
+    alone = snapshot([actor(0, 100, [tackle], {})], [target(0, 30)], {})
+    with_matrix(alone, matrix_snap([[0, 100, 0]], [[0, 30, 0]], cells))
+    b = PortableAI::Search.opening_board(alone)
+    assert_equal(PortableAI::Search::BATTLE_OVER + PortableAI::Search::DEPTH_BONUS,
+                 PortableAI::Search.payoff(alone, b, tackle, stay, 2, [tackle]))
+  end
+
+  def test_search_protect_fails_on_the_ply_after_a_protect
+    snap = one_v_one(100, 100, mx_cell(40, 40, true))
+    board = PortableAI::Search.opening_board(snap)
+    stay = { "kind" => "stay" }
+    protect = move(0, "PROTECT", 0, 100, 0, { "accuracy" => 0 })
+    once = PortableAI::Search.project(snap, board, protect, stay, true)
+    assert_equal(1, once["protect_repeats"])
+    twice = PortableAI::Search.project(snap, once, protect, stay, true)
+    assert_equal(60.0, twice["own_hp"])
+    attacked = PortableAI::Search.project(snap, board, move(0, "TACKLE", 0, 100, 40, { "accuracy" => 100 }), stay, true)
+    assert_equal(0, attacked["protect_repeats"])
+  end
+
+  def test_search_projected_stages_scale_the_next_ply_and_the_speed_order
+    snap = one_v_one(100, 100, mx_cell(40, 40, false))
+    board = PortableAI::Search.opening_board(snap)
+    stay = { "kind" => "stay" }
+    dd = move(0, "DRAGONDANCE", 0, 100, 0, { "accuracy" => 0 })
+    tackle = move(1, "TACKLE", 0, 100, 40, { "accuracy" => 100 })
+    danced = PortableAI::Search.project(snap, board, dd, stay, false)
+    # +1 Attack on a physical body: the root's 40 becomes 60 next ply.
+    assert_equal(60.0, PortableAI::Search.own_damage(snap, danced, danced, tackle, stay))
+    # +1 Speed: 150 against their 90 moves first now, whatever the live view said.
+    assert_equal(false, PortableAI::Search.moves_first(snap, board, tackle, stay))
+    assert_equal(true, PortableAI::Search.moves_first(snap, danced, tackle, stay))
+    # A defence stage divides what comes in, by the category of their best hit.
+    armored = PortableAI::Search.project(snap, board, move(0, "IRONDEFENSE", 0, 100, 0, { "accuracy" => 0 }), stay, true)
+    assert_equal({ "def" => 2 }, armored["own_stages"])
+    assert_equal(20.0, PortableAI::Search.foe_damage(snap, armored, armored, tackle, stay))
+    # A landed status is not landed twice, and a foe switch-in starts clean.
+    toxic = move(2, "TOXIC", 0, 100, 0, { "accuracy" => 100, "effect_kind" => "poison", "effect_chance" => 100 })
+    poisoned = PortableAI::Search.project(snap, board, toxic, stay, true)
+    assert_equal(30.0, PortableAI::Search.project(snap, poisoned, toxic, stay, true)["foe_status_points"])
+    snap["matrix"]["foe"] << { "slot" => 1, "index" => nil, "hp_pct" => 100, "alive" => true, "speed" => 50 }
+    snap["matrix"]["cells"]["0:1"] = mx_cell(40, 40, true)
+    fresh = PortableAI::Search.project(snap, poisoned, { "type" => "none" }, { "kind" => "switch", "slot" => 1 }, true)
+    assert_equal(0.0, fresh["foe_status_points"])
+  end
+
+  def test_search_remembers_the_hp_of_a_body_that_left_the_field
+    # Depth two's collapse: we hit the foe for 40, it switched out, and on the leaf
+    # it stood at its table HP again -- every hit was erased whenever the foe's worst
+    # case was a switch, so only stages and hazards were worth clicking (15/60).
+    cells = { "0:0" => mx_cell(40, 40, true), "0:1" => mx_cell(40, 40, true),
+              "1:0" => mx_cell(40, 40, true), "1:1" => mx_cell(40, 40, true) }
+    tackle = move(0, "TACKLE", 0, 100, 40, { "accuracy" => 100 })
+    snap = snapshot([actor(0, 100, [tackle], {})], [target(0, 100)], {})
+    with_matrix(snap, matrix_snap([[0, 100, 0], [1, 100, nil]], [[0, 100, 0], [1, 100, nil]], cells))
+    board = PortableAI::Search.opening_board(snap)
+    assert_equal({ 0 => 100.0 }, board["foe_hps"])
+    hit = PortableAI::Search.project(snap, board, tackle, { "kind" => "stay" }, true)
+    assert_equal(60.0, hit["foe_hp"])
+    assert_equal({ 0 => 60.0 }, hit["foe_hps"])
+    left = PortableAI::Search.project(snap, hit, { "type" => "none" }, { "kind" => "switch", "slot" => 1 }, true)
+    assert_equal({ 0 => 60.0, 1 => 100.0 }, left["foe_hps"])
+    # The leaf still counts the 40 that body lost: we (60 + 30) + 130, they
+    # (60 + 30) + 130: even.
+    assert_equal(0.0, PortableAI::Search.leaf(snap, left))
+    # And it comes back at 60, not 100.
+    back = PortableAI::Search.project(snap, left, { "type" => "none" }, { "kind" => "switch", "slot" => 0 }, true)
+    assert_equal(60.0, back["foe_hp"])
+    # Our side, the same: a body that took 40 and left returns at 60.
+    ours = PortableAI::Search.project(snap, board, tackle, { "kind" => "stay" }, true)
+    assert_equal(60.0, ours["own_hp"])
+    out = PortableAI::Search.project(snap, ours, { "type" => "switch", "slot" => 1, "candidate_hp_pct" => 100, "entry_damage_pct" => 0 }, { "kind" => "none" }, true)
+    assert_equal({ 0 => 60.0, 1 => 100.0 }, out["own_hps"])
+    home = PortableAI::Search.project(snap, out, { "type" => "switch", "slot" => 0, "candidate_hp_pct" => 100, "entry_damage_pct" => 0 }, { "kind" => "none" }, true)
+    assert_equal(60.0, home["own_hp"])
+    # At depth two, a hit landed on a body that then switches out is still worth
+    # the hit: the Tackle line beats the do-nothing line by what it dealt.
+    switch_in = { "kind" => "switch", "slot" => 1 }
+    idle = { "type" => "none" }
+    assert_equal(true, PortableAI::Search.payoff(snap, board, tackle, switch_in, 2, [tackle]) >
+                       PortableAI::Search.payoff(snap, board, idle, switch_in, 2, [tackle]))
+  end
+
+  # 0.7.4. A cell that carries every move it rolled (out_moves) prices THE MOVE WE
+  # CLICK against a switch-in, not the body's best hit. Without the list the one
+  # best number is all there is, as before.
+  def test_search_prices_the_clicked_move_against_a_foe_switch_in
+    cells = { "0:0" => mx_cell(40, 40, true),
+              "0:1" => mx_cell(80, 40, true).merge(
+                "out_moves" => { "ICEBEAM" => { "pct" => 80, "cat" => "special" },
+                                 "EARTHQUAKE" => { "pct" => 0, "cat" => "physical" } }) }
+    quake = move(0, "EARTHQUAKE", 0, 100, 40, { "accuracy" => 100 })
+    beam = move(1, "ICEBEAM", 0, 100, 40, { "accuracy" => 100 })
+    growl = move(2, "GROWL", 0, 100, 0, { "accuracy" => 100 })
+    snap = snapshot([actor(0, 100, [quake, beam, growl], {})], [target(0, 100)], {})
+    with_matrix(snap, matrix_snap([[0, 100, 0]], [[0, 100, 0], [1, 100, nil]], cells))
+    board = PortableAI::Search.opening_board(snap)
+    switch_in = { "kind" => "switch", "slot" => 1 }
+    after = PortableAI::Search.project(snap, board, { "type" => "none" }, switch_in, true)
+    assert_equal(80.0, PortableAI::Search.own_damage(snap, board, after, beam, switch_in))
+    assert_equal(0.0, PortableAI::Search.own_damage(snap, board, after, quake, switch_in))
+    assert_equal(0.0, PortableAI::Search.own_damage(snap, board, after, growl, switch_in))
+    # A move the cell never rolled, or a cell with no list: the best number, as 0.7.3.
+    other = move(3, "SURF", 0, 100, 40, { "accuracy" => 100 })
+    assert_equal(80.0, PortableAI::Search.own_damage(snap, board, after, other, switch_in))
+    snap["matrix"]["cells"]["0:1"].delete("out_moves")
+    assert_equal(80.0, PortableAI::Search.own_damage(snap, board, after, quake, switch_in))
+  end
+
+  # ...and so the foe-switch column can finally order our moves: two 40s on the
+  # field, but only one of them touches the body they would switch to.
+  def test_search_prefers_the_move_their_bench_cannot_wall
+    cells = { "0:0" => mx_cell(40, 40, true),
+              "0:1" => mx_cell(80, 40, true).merge(
+                "out_moves" => { "ICEBEAM" => { "pct" => 80, "cat" => "special" },
+                                 "EARTHQUAKE" => { "pct" => 0, "cat" => "physical" } }) }
+    quake = move(0, "EARTHQUAKE", 0, 100, 40, { "accuracy" => 100 })
+    beam = move(1, "ICEBEAM", 0, 100, 40, { "accuracy" => 100 })
+    snap = snapshot([actor(0, 100, [quake, beam], {})], [target(0, 100)], {})
+    with_matrix(snap, matrix_snap([[0, 100, 0]], [[0, 100, 0], [1, 100, nil]], cells))
+    assert_equal("ICEBEAM", search_pick(snap, ONE_PLY)["move_id"])
+    # Slot order would have said Earthquake; the list is what decides it.
+    snap["matrix"]["cells"]["0:1"].delete("out_moves")
+    assert_equal("EARTHQUAKE", search_pick(snap, ONE_PLY)["move_id"])
+  end
+
+  # 0.7.4. The stages a body already stands on are inside every number the root
+  # exports; only the stages this search projects on top scale them. A +2 body read
+  # as +4 through 0.7.3.
+  def test_search_does_not_scale_the_root_numbers_by_stages_they_already_carry
+    stay = { "kind" => "stay" }
+    tackle = move(0, "TACKLE", 0, 100, 40, { "accuracy" => 100 })
+    # +2 Attack, +1 Speed, +2 Defence already, and the live view says we are slower.
+    snap = one_v_one(100, 100, mx_cell(40, 40, false),
+                     { "stages" => [0, 2, 2, 1, 0, 0, 0, 0], "faster" => false })
+    board = PortableAI::Search.opening_board(snap)
+    assert_equal({ "atk" => 2, "def" => 2, "speed" => 1 }, board["stage_base"])
+    assert_equal({}, PortableAI::Search.projected_stages(board))
+    assert_equal(40.0, PortableAI::Search.own_damage(snap, board, board, tackle, stay))
+    assert_equal(40.0, PortableAI::Search.foe_damage(snap, board, board, tackle, stay))
+    assert_equal(false, PortableAI::Search.moves_first(snap, board, tackle, stay))
+    # The leaf still pays the original's boost term for the whole stack.
+    assert_equal(PortableAI::Search.stage_points({ "atk" => 2, "def" => 2, "speed" => 1 }),
+                 PortableAI::Search.leaf(snap, board) - PortableAI::Search.leaf(snap, board.merge("own_stages" => {})))
+    # A Swords Dance on top is +2 more: x2 on the root's 40, not x3 on 80.
+    dance = move(1, "SWORDSDANCE", 0, 100, 0, { "accuracy" => 0 })
+    danced = PortableAI::Search.project(snap, board, dance, stay, true)
+    assert_equal({ "atk" => 4, "def" => 2, "speed" => 1 }, danced["own_stages"])
+    assert_equal({ "atk" => 2 }, PortableAI::Search.projected_stages(danced))
+    assert_equal(80.0, PortableAI::Search.own_damage(snap, danced, danced, tackle, stay))
+    # A switch leaves the base behind with the stages.
+    snap["matrix"]["own"] << { "slot" => 1, "index" => nil, "hp_pct" => 100, "alive" => true, "speed" => 80 }
+    snap["matrix"]["cells"]["1:0"] = mx_cell(30, 30, false)
+    entry = { "type" => "switch", "slot" => 1, "candidate_hp_pct" => 100, "entry_damage_pct" => 0 }
+    left = PortableAI::Search.project(snap, danced, entry, stay, true)
+    assert_equal({}, left["stage_base"])
+    assert_equal({}, PortableAI::Search.projected_stages(left))
+  end
+
+  # 0.7.5. THE OPPONENT MODEL. search_foe_mix 0 is the original's pick_safest (every
+  # test above). 1 values a row at the expected reply; between, a blend. The weights
+  # are uniform unless the adapter exported a predicted reply for the foe on the
+  # field, and always uniform below the root.
+  def test_search_foe_mix_blends_the_worst_reply_with_the_expected_one
+    actions = [move(0, "TACKLE", 0, 100, 40, { "accuracy" => 100 }),
+               { "type" => "switch", "slot" => 1, "base_score" => 100,
+                 "candidate_hp_pct" => 100, "entry_damage_pct" => 0 }]
+    attack_at = lambda do |config|
+      PortableAI::Search.plan(search_snap(actions), config, nil)["diagnostics"]["rankings"][0]
+                        .find { |c| c["type"] == "move" }
+    end
+    pure = attack_at.call(ONE_PLY)
+    row = pure["search_row"]
+    assert_equal(2, row.length)
+    assert_equal(true, row[1] > row[0])            # their switch is our better column
+    assert_equal(row.min, pure["score"])
+    mean = (row[0] + row[1]) / 2.0
+    assert_in_delta(mean, attack_at.call(ONE_PLY.merge("search_foe_mix" => 1.0))["score"], 1e-9)
+    assert_in_delta(0.5 * row.min + 0.5 * mean,
+                    attack_at.call(ONE_PLY.merge("search_foe_mix" => 0.5))["score"], 1e-9)
+    # Clamped: 3 is 1, -1 is 0.
+    assert_in_delta(mean, attack_at.call(ONE_PLY.merge("search_foe_mix" => 3))["score"], 1e-9)
+    assert_equal(row.min, attack_at.call(ONE_PLY.merge("search_foe_mix" => -1))["score"])
+    assert_equal(1.0, PortableAI::Search.mix_of("search_foe_mix" => 1.0))
+    assert_equal(0.0, PortableAI::Search.mix_of({}))
+  end
+
+  def test_search_foe_mix_weights_the_columns_by_the_predicted_reply
+    actions = [move(0, "TACKLE", 0, 100, 40, { "accuracy" => 100 })]
+    full = ONE_PLY.merge("search_foe_mix" => 1.0)
+    expect = lambda do |predicted|
+      snap = search_snap(actions)
+      snap["actors"][0]["predicted_foe"] = { "0" => predicted } if predicted
+      plan = PortableAI::Search.plan(snap, full, nil)
+      [plan["diagnostics"]["rankings"][0][0], plan["diagnostics"]]
+    end
+    none, diag = expect.call(nil)
+    row = none["search_row"]
+    assert_equal([0.5, 0.5], diag["foe_weights"])
+    assert_nil(diag["foe_reply"])
+    # A model that says "stays four times in five".
+    modelled, diag = expect.call({ "type" => "move", "move_id" => "TACKLE", "switch_chance" => 0.2 })
+    assert_equal([0.8, 0.2], diag["foe_weights"])
+    assert_in_delta(0.8 * row[0] + 0.2 * row[1], modelled["score"], 1e-9)
+    assert_in_delta(0.8 * row[0] + 0.2 * row[1], reason_value(modelled, "search_expected"), 1e-9)
+    # The oracle's declared switch, slot known: that column alone.
+    declared, diag = expect.call({ "type" => "switch", "slot" => 1 })
+    assert_equal([0.0, 1.0], diag["foe_weights"])
+    assert_in_delta(row[1], declared["score"], 1e-9)
+    # A switch to a slot the columns do not have shares the chance over every switch.
+    assert_equal([0.5, 0.25, 0.25],
+                 PortableAI::Search.column_weights(
+                   [{ "kind" => "stay" }, { "kind" => "switch", "slot" => 1 }, { "kind" => "switch", "slot" => 2 }],
+                   { "switch_chance" => 0.5, "switch_slot" => 9 }))
+    # A replacement ply has no stay column: uniform whatever was predicted.
+    assert_equal([0.5, 0.5],
+                 PortableAI::Search.column_weights(
+                   [{ "kind" => "switch", "slot" => 1 }, { "kind" => "switch", "slot" => 2 }],
+                   { "switch_chance" => 0.0 }))
+    # And a prediction is this turn's only: the projected board carries the mix, not
+    # the reply.
+    snap = search_snap(actions)
+    snap["actors"][0]["predicted_foe"] = { "0" => { "type" => "switch", "slot" => 1 } }
+    board = PortableAI::Search.opening_board(snap, "search_foe_mix" => 0.5)
+    assert_equal({ "switch_chance" => 1.0, "switch_slot" => 1 }, board["foe_reply"])
+    after = PortableAI::Search.project(snap, board, actions[0], { "kind" => "stay" }, true)
+    assert_nil(after["foe_reply"])
+  end
+
+  def test_search_foe_mix_stays_maximin_below_the_root
+    # The model is the root's: a prediction exists only for the board in front of
+    # us, and blending the deeper grids with a uniform expectation measured worse
+    # (42 against 46 with the stock model). So safest does not read the mix, and a
+    # projected board does not carry it or the reply.
+    actions = [move(0, "TACKLE", 0, 100, 40, { "accuracy" => 100 })]
+    snap = search_snap(actions)
+    snap["actors"][0]["predicted_foe"] = { "0" => { "type" => "switch", "slot" => 1 } }
+    board = PortableAI::Search.opening_board(snap, "search_foe_mix" => 1.0)
+    assert_equal(false, board.key?("foe_mix"))
+    foe = PortableAI::Search.foe_options(snap, board)
+    own = PortableAI::Search.own_options(snap, board, actions)
+    rows = own.map { |a| foe.map { |f| PortableAI::Search.payoff(snap, board, a, f, 1, actions) } }
+    assert_in_delta(rows.map { |r| r.min }.max,
+                    PortableAI::Search.safest(snap, board, own, foe, 1, actions), 1e-9)
+    # At depth two the root row is blended and its cells are maximin sub-grids: the
+    # root score with mix 1 and a declared switch is exactly the switch column of the
+    # mix-0 row.
+    pure = PortableAI::Search.plan(snap, { "search_foe_mix" => 0 }, nil)["diagnostics"]["rankings"][0][0]
+    mixed = PortableAI::Search.plan(snap, { "search_foe_mix" => 1.0 }, nil)["diagnostics"]["rankings"][0][0]
+    assert_equal(pure["search_row"], mixed["search_row"])
+    assert_in_delta(pure["search_row"][1], mixed["score"], 1e-9)
+  end
+
+  def test_search_reads_its_defaults_under_the_overrides
+    actions = [move(0, "TACKLE", 0, 100, 40, { "accuracy" => 100 })]
+    diag = PortableAI::Search.plan(search_snap(actions), {}, nil)["diagnostics"]
+    assert_equal(PortableAI::Model::DEFAULT_CONFIG["search_foe_mix"], diag["foe_mix"])
+    assert_equal(0.5, diag["foe_mix"])
+    assert_equal(PortableAI::Model::DEFAULT_CONFIG["search_depth"], diag["depth"])
+    # A nil config is the defaults too, as the rule engine takes it.
+    assert_equal(0.5, PortableAI::Search.plan(search_snap(actions), nil, nil)["diagnostics"]["foe_mix"])
+    assert_equal(0.0, PortableAI::Search.plan(search_snap(actions), { "search_foe_mix" => 0 }, nil)["diagnostics"]["foe_mix"])
+  end
+
+  # ---------------------------------------------------------------------------
+  # 0.7.6. THE TREE. Decoupled simultaneous-move MCTS on the same board, off by
+  # default; with the key off `plan` is the maximin above, decision for decision.
+
+  MCTS = { "search_mcts" => true, "search_iterations" => 400 }
+
+  def test_mcts_is_off_by_default_and_off_is_the_maximin
+    assert_equal(false, PortableAI::Model::DEFAULT_CONFIG["search_mcts"])
+    assert_equal(1000, PortableAI::Model::DEFAULT_CONFIG["search_iterations"])
+    assert_equal(0, PortableAI::Model::DEFAULT_CONFIG["search_seed"])
+    actions = [move(0, "TACKLE", 0, 100, 40, { "accuracy" => 100 }),
+               { "type" => "switch", "slot" => 1, "base_score" => 100,
+                 "candidate_hp_pct" => 100, "entry_damage_pct" => 0 }]
+    # The defaults, and an explicit false, are both the grid -- and neither answer
+    # carries a visit count, which is the only thing the tree ranks by.
+    off = PortableAI::Search.plan(search_snap(actions), {}, nil)
+    assert_equal("search", off["diagnostics"]["planner"])
+    assert_equal(nil, off["diagnostics"]["rankings"][0][0]["search_visits"])
+    assert_equal(off, PortableAI::Search.plan(search_snap(actions),
+                                              { "search_mcts" => false }, nil))
+  end
+
+  def test_mcts_returns_the_shape_the_adapter_reads
+    actions = [move(0, "TACKLE", 0, 100, 40, { "accuracy" => 100 }),
+               { "type" => "switch", "slot" => 1, "base_score" => 100,
+                 "candidate_hp_pct" => 100, "entry_damage_pct" => 0 }]
+    plan = PortableAI::Search.plan(search_snap(actions), MCTS, nil)
+    diag = plan["diagnostics"]
+    assert_equal(PortableAI::VERSION, diag["version"])
+    assert_equal("mcts", diag["planner"])
+    assert_equal(400, diag["iterations"])
+    assert_equal(PortableAI::Search::MCTS_HORIZON, diag["horizon"])
+    assert_equal(1, plan["actions"].length)
+    assert_equal(true, plan["memory_updates"].is_a?(Hash))
+    ranked = diag["rankings"][0]
+    assert_equal(actions.length, ranked.length)
+    assert_equal([actions.length], diag["candidate_counts"])
+    # Every iteration passes through the root and credits exactly one option a side,
+    # so the root's visits are the budget -- on both axes.
+    assert_equal(400, ranked.inject(0) { |sum, c| sum + c["search_visits"] })
+    assert_equal(400, diag["foe_visits"].inject(0) { |sum, v| sum + v })
+    # A score is an average in 0..1 (the sigmoid's range), not the leaf's HP points,
+    # and the row has one entry per foe column as the readout tools expect.
+    ranked.each do |candidate|
+      assert_equal(true, candidate["score"] >= 0.0 && candidate["score"] <= 1.0)
+      assert_equal(diag["foe_options"].length, candidate["search_row"].length)
+      assert_equal(400, reason_value(candidate, "search_iterations"))
+    end
+    # Most-visited is the pick, which is Foul Play's convention and not "best average".
+    assert_equal(ranked.map { |c| c["search_visits"] }.max, ranked[0]["search_visits"])
+    assert_equal(ranked[0]["search_visits"], reason_value(ranked[0], "search_visits"))
+  end
+
+  def test_mcts_finds_the_kill_the_maximin_finds
+    # The 0.7.0 kill snapshot, unchanged: their last body at 30%, so their only option
+    # is to stand there and take it, and removing it ends the battle. A tree that
+    # cannot find this one is not searching.
+    cells = { "0:0" => mx_cell(40, 40, true) }
+    tackle = move(0, "TACKLE", 0, 100, 40, { "accuracy" => 100 })
+    ember = move(1, "EMBER", 0, 100, 10, { "accuracy" => 100 })
+    snap = snapshot([actor(0, 100, [tackle, ember], {})], [target(0, 30)], {})
+    with_matrix(snap, matrix_snap([[0, 100, 0]], [[0, 30, 0]], cells))
+    assert_equal("TACKLE", search_pick(snap, MCTS)["move_id"])
+    # And it is the battle ending that says so: a won board is the sigmoid's ceiling.
+    ranked = PortableAI::Search.plan(snap, MCTS, nil)["diagnostics"]["rankings"][0]
+    assert_equal(1.0, ranked.find { |c| c["move_id"] == "TACKLE" }["search_row"][0])
+  end
+
+  def test_mcts_branches_a_pair_into_its_chance_outcomes
+    # An unknown speed order and a 70% move: two orders at a half, each splitting into
+    # a hit and a miss. The same branching payoff averages over, kept as children.
+    cells = { "0:0" => mx_cell(40, 40, nil) }
+    half = move(0, "SURF", 0, 100, 40, { "accuracy" => 70 })
+    snap = snapshot([actor(0, 100, [half], {})], [target(0, 100)], {})
+    with_matrix(snap, matrix_snap([[0, 100, 0]], [[0, 100, 0]], cells))
+    node = PortableAI::Search.node_for(PortableAI::Search.opening_board(snap), 0)
+    PortableAI::Search.populate(snap, node, [half])
+    kids = PortableAI::Search.branches(snap, node, 0, 0, [half])
+    # 0.7.9: two orders x (our hit at its two rolls, or a miss) x their two rolls.
+    assert_equal(12, kids.length)
+    assert_equal(1.0, (kids.inject(0.0) { |sum, k| sum + k["prob"] } * 1e6).round / 1e6)
+    assert_equal(0.3, (kids.select { |k| !k["chance"]["own_does"] }.inject(0.0) { |sum, k| sum + k["prob"] } * 1e6).round / 1e6)
+    # A child's board is built when the tree first walks into it, not before.
+    assert_equal(true, kids.all? { |k| k["node"].nil? })
+    kids.each { |k| PortableAI::Search.child_node(snap, node, 0, 0, k) }
+    # The miss branches leave them untouched; the hit branches do not.
+    kids.each do |k|
+      hp = k["node"]["board"]["foe_hp"]
+      assert_equal(k["chance"]["own_does"], hp < 100.0)
+    end
+    # And every child is one ply deeper, which is what the horizon counts.
+    assert_equal(true, kids.all? { |k| k["node"]["ply"] == 1 })
+    # A certain kill on a known order against a foe that deals nothing is one child
+    # at probability one; below the root's children the roll stops branching, so the
+    # same pair that split three ways above is two children (order known: one).
+    sure = move(0, "TACKLE", 0, 100, 40, { "accuracy" => 100 })
+    known = snapshot([actor(0, 100, [sure], {})], [target(0, 30)], {})
+    with_matrix(known, matrix_snap([[0, 100, 0]], [[0, 30, 0]],
+                                   { "0:0" => mx_cell(40, 0, true) }))
+    root = PortableAI::Search.node_for(PortableAI::Search.opening_board(known), 0)
+    PortableAI::Search.populate(known, root, [sure])
+    assert_equal([1.0], PortableAI::Search.branches(known, root, 0, 0, [sure]).map { |k| k["prob"] })
+    deep = PortableAI::Search.node_for(PortableAI::Search.opening_board(snap), 2)
+    PortableAI::Search.populate(snap, deep, [half])
+    assert_equal([[true, true], [true, false], [false, true], [false, false]],
+                 PortableAI::Search.branches(snap, deep, 0, 0, [half]).map { |k| [k["order"], k["chance"]["own_does"]] })
+  end
+
+  # ---- 0.7.9: the board the original's tree plays on ----
+
+  def test_the_foe_misses_at_its_own_accuracy
+    cells = { "0:0" => mx_cell(40, 40, true) }
+    cells["0:0"]["in_moves"] = { "STONEEDGE" => { "pct" => 40, "cat" => "physical", "damaging" => true,
+                                                  "acc" => 80, "priority" => 0, "effect" => [nil, nil, nil] } }
+    tackle = move(0, "TACKLE", 0, 100, 40, { "accuracy" => 100 })
+    snap = snapshot([actor(0, 100, [tackle], {})], [target(0, 100)], {})
+    with_matrix(snap, matrix_snap([[0, 100, 0]], [[0, 100, 0]], cells))
+    board = PortableAI::Search.opening_board(snap)
+    edge = PortableAI::Search.foe_options(snap, board)[0]
+    assert_equal("STONEEDGE", edge["move_id"])
+    assert_equal(0.8, PortableAI::Search.foe_hit_chance(edge))
+    specs = PortableAI::Search.outcomes(snap, board, tackle, edge, true)
+    missed = specs.select { |sp| !sp[2]["foe_does"] }
+    assert_in_delta(0.2, missed.inject(0.0) { |sum, sp| sum + sp[0] }, 1e-9)
+    after = PortableAI::Search.project(snap, board, tackle, edge, true, true, missed[0][2])
+    assert_equal(100.0, after["own_hp"])
+    # A paralysed foe acts three times in four on top of that; asleep, a third.
+    board["foe_status"] = "paralyze"
+    stuck = PortableAI::Search.outcomes(snap, board, tackle, edge, true).select { |sp| !sp[2]["foe_does"] }
+    assert_in_delta(1.0 - 0.8 * 0.75, stuck.inject(0.0) { |sum, sp| sum + sp[0] }, 1e-9)
+    assert_equal(1.0 / 3.0, PortableAI::Search.act_chance("sleep"))
+    assert_equal(1.0, PortableAI::Search.act_chance(nil))
+    # And the board opens with the status the side table reports (PBStatuses).
+    snap["matrix"]["foe"][0]["status"] = 4
+    assert_equal("paralyze", PortableAI::Search.opening_board(snap)["foe_status"])
+  end
+
+  def test_the_foe_can_set_up_heal_protect_and_status_us
+    cells = { "0:0" => mx_cell(40, 40, true) }
+    cells["0:0"]["in_moves"] = {
+      "SWORDSDANCE" => { "pct" => 0, "cat" => "physical", "damaging" => false, "acc" => nil,
+                         "priority" => 0, "effect" => [nil, nil, nil] },
+      "RECOVER" => { "pct" => 0, "cat" => "physical", "damaging" => false, "acc" => nil,
+                     "priority" => 0, "effect" => [nil, nil, nil] },
+      "PROTECT" => { "pct" => 0, "cat" => "physical", "damaging" => false, "acc" => nil,
+                     "priority" => 4, "effect" => [nil, nil, nil] },
+      "TOXIC" => { "pct" => 0, "cat" => "physical", "damaging" => false, "acc" => 90,
+                   "priority" => 0, "effect" => ["poison", nil, 100] },
+      "ROCKSLIDE" => { "pct" => 40, "cat" => "physical", "damaging" => true, "acc" => 90,
+                       "priority" => 0, "effect" => [nil, nil, nil] } }
+    tackle = move(0, "TACKLE", 0, 100, 40, { "accuracy" => 100 })
+    snap = snapshot([actor(0, 100, [tackle], {})], [target(0, 60)], {})
+    with_matrix(snap, matrix_snap([[0, 100, 0]], [[0, 60, 0]], cells))
+    board = PortableAI::Search.opening_board(snap)
+    foe = {}
+    PortableAI::Search.foe_options(snap, board).each { |f| foe[f["move_id"]] = f if f["kind"] == "stay" }
+    assert_equal(%w[PROTECT RECOVER ROCKSLIDE SWORDSDANCE TOXIC], foe.keys.sort)
+    # Swords Dance: +2 Attack on their side, worth what ours is worth, and it scales
+    # their next physical hit; the leaf and the order both see it.
+    up = PortableAI::Search.project(snap, board, tackle, foe["SWORDSDANCE"], true)
+    assert_equal({ "atk" => 2 }, up["foe_stages"])
+    assert_equal(PortableAI::Search.leaf(snap, PortableAI::Search.project(snap, board, tackle, { "kind" => "stay" }, true)) + 40.0 - 60.0,
+                 PortableAI::Search.leaf(snap, up))
+    assert_equal(80.0, PortableAI::Search.foe_damage(snap, up, up, tackle, foe["ROCKSLIDE"]))
+    # Recover: half back, capped -- after our hit when we move first, before it
+    # when they do.
+    assert_equal(70.0, PortableAI::Search.project(snap, board, tackle, foe["RECOVER"], true)["foe_hp"])
+    assert_equal(60.0, PortableAI::Search.project(snap, board, tackle, foe["RECOVER"], false)["foe_hp"])
+    # Protect at +4 moves first and takes our whole move; it fails on the repeat.
+    assert_equal(false, PortableAI::Search.moves_first(snap, board, tackle, foe["PROTECT"]))
+    shielded = PortableAI::Search.project(snap, board, tackle, foe["PROTECT"], false)
+    assert_equal(60.0, shielded["foe_hp"])
+    assert_equal(1, shielded["foe_protect_repeats"])
+    assert_equal(20.0, PortableAI::Search.project(snap, shielded, tackle, foe["PROTECT"], false)["foe_hp"])
+    # Toxic on us: the status points, the status itself, and it ticks from then on.
+    poisoned = PortableAI::Search.project(snap, board, tackle, foe["TOXIC"], true)
+    assert_equal(-30.0, poisoned["own_status_points"])
+    assert_equal("toxic", poisoned["own_status"])
+    assert_equal(100.0 - 6.25, poisoned["own_hp"])
+    # A bare stay carries no move on the 0.7.9 board, and the foe (60 HP, hit once
+    # already) dies to our second Tackle before it can act anyway: only the tick lands.
+    again = PortableAI::Search.project(snap, poisoned, tackle, { "kind" => "stay" }, true)
+    assert_equal(100.0 - 6.25 - 12.5, again["own_hp"])
+    assert(again["foe_hp"] <= 0.0)
+    # Moving first, its Rock Slide lands before the tick.
+    assert_equal(100.0 - 6.25 - 40.0 - 12.5,
+                 PortableAI::Search.project(snap, poisoned, tackle, foe["ROCKSLIDE"], false)["own_hp"])
+    # A second Toxic on a body already carrying one is refused.
+    assert_equal(-30.0, PortableAI::Search.project(snap, poisoned, tackle, foe["TOXIC"], true)["own_status_points"])
+  end
+
+  def test_the_end_of_turn_ticks_on_both_sides
+    cells = { "0:0" => mx_cell(0, 0, true) }
+    snap = snapshot([actor(0, 100, [], {})], [target(0, 100)], {})
+    with_matrix(snap, matrix_snap([[0, 100, 0]], [[0, 100, 0]], cells))
+    snap["matrix"]["own"][0]["item"] = "LEFTOVERS"
+    snap["matrix"]["foe"][0]["status"] = 3   # burned
+    snap["matrix"]["foe"][0]["types"] = ["FIRE"]
+    snap["weather"] = "sand"
+    board = PortableAI::Search.opening_board(snap)
+    stay = { "kind" => "stay" }
+    none = { "type" => "none" }
+    after = PortableAI::Search.project(snap, board, none, stay, true)
+    # Leftovers a sixteenth, sand a sixteenth: a wash for us; burn and sand for them.
+    assert_equal(100.0, after["own_hp"])
+    assert_equal(100.0 - 12.5 - 6.25, after["foe_hp"])
+    # Sand-proof types and Magic Guard walk over it; Poison Heal turns poison around.
+    snap["matrix"]["foe"][0]["types"] = ["ROCK"]
+    assert_equal(100.0 - 12.5, PortableAI::Search.project(snap, board, none, stay, true)["foe_hp"])
+    snap["matrix"]["foe"][0]["ability"] = "MAGICGUARD"
+    assert_equal(100.0, PortableAI::Search.project(snap, board, none, stay, true)["foe_hp"])
+    snap["matrix"]["foe"][0]["ability"] = "POISONHEAL"
+    snap["matrix"]["foe"][0]["status"] = 2
+    board = PortableAI::Search.opening_board(snap)
+    assert_equal(100.0, PortableAI::Search.project(snap, board, none, stay, true)["foe_hp"])
+    # A switch-in ticks too, under its own status, and a body that left stops.
+    snap["matrix"]["foe"] << { "slot" => 1, "index" => nil, "species" => 101, "hp_pct" => 80,
+                               "alive" => true, "speed" => 100, "types" => ["WATER"], "status" => 2,
+                               "item" => "BLACKSLUDGE", "entry_damage_pct" => 12.5 }
+    board = PortableAI::Search.opening_board(snap)
+    came = PortableAI::Search.project(snap, board, none, { "kind" => "switch", "slot" => 1 }, true)
+    # 80, minus the rocks it came in on, poison, sludge on a non-Poison body, sand.
+    assert_equal(80.0 - 12.5 - 12.5 - 12.5 - 6.25, came["foe_hp"])
+    assert_equal("poison", came["foe_status"])
+  end
+
+  def test_a_switch_below_the_root_pays_the_hazards_the_root_priced
+    cells = { "0:0" => mx_cell(40, 40, true), "1:0" => mx_cell(40, 40, true),
+              "0:1" => mx_cell(40, 40, true), "1:1" => mx_cell(40, 40, true) }
+    tackle = move(0, "TACKLE", 0, 100, 40, { "accuracy" => 100 })
+    root = [tackle, { "type" => "switch", "slot" => 1, "candidate_hp_pct" => 100, "entry_damage_pct" => 25 }]
+    snap = snapshot([actor(0, 100, root, {})], [target(0, 100)], {})
+    with_matrix(snap, matrix_snap([[0, 100, 0], [1, 100, nil]], [[0, 100, 0], [1, 100, nil]], cells))
+    snap["matrix"]["own"][1]["entry_damage_pct"] = 25
+    board = PortableAI::Search.opening_board(snap)
+    # After their switch the pair is no longer the live one, so the root's switch
+    # action is not the truth about it -- but its hazard number still is.
+    moved = PortableAI::Search.project(snap, board, tackle, { "kind" => "switch", "slot" => 1 }, true)
+    bench = PortableAI::Search.own_options(snap, moved, root).find { |a| a["type"] == "switch" }
+    assert_equal(25.0, bench["entry_damage_pct"])
+    # And with no root export at all, the side table's number.
+    bench = PortableAI::Search.own_options(snap, moved, [tackle]).find { |a| a["type"] == "switch" }
+    assert_equal(25.0, bench["entry_damage_pct"])
+  end
+
+  def test_our_switch_in_has_its_whole_move_list_below_the_root
+    cells = { "0:0" => mx_cell(40, 40, true), "1:0" => mx_cell(30, 40, true) }
+    cells["1:0"]["out_moves"] = {
+      "ICEBEAM" => { "pct" => 30, "cat" => "special", "damaging" => true, "acc" => 100,
+                     "priority" => 0, "effect" => ["freeze", nil, 10] },
+      "CALMMIND" => { "pct" => 0, "cat" => "special", "damaging" => false, "acc" => nil,
+                      "priority" => 0, "effect" => [nil, nil, nil] } }
+    tackle = move(0, "TACKLE", 0, 100, 40, { "accuracy" => 100 })
+    root = [tackle, { "type" => "switch", "slot" => 1, "candidate_hp_pct" => 100, "entry_damage_pct" => 0 }]
+    snap = snapshot([actor(0, 100, root, {})], [target(0, 100)], {})
+    with_matrix(snap, matrix_snap([[0, 100, 0], [1, 100, nil]], [[0, 100, 0]], cells))
+    board = PortableAI::Search.opening_board(snap)
+    arrived = PortableAI::Search.project(snap, board, root[1], { "kind" => "stay" }, true)
+    own = PortableAI::Search.own_options(snap, arrived, root)
+    assert_equal(["CALMMIND", "ICEBEAM"], own.select { |a| a["type"] == "move" }.map { |a| a["move_id"] })
+    mind = own.find { |a| a["move_id"] == "CALMMIND" }
+    assert_equal({ "spa" => 1, "spd" => 1 },
+                 PortableAI::Search.project(snap, arrived, mind, { "kind" => "stay" }, true)["own_stages"])
+    beam = own.find { |a| a["move_id"] == "ICEBEAM" }
+    assert_equal(30.0, PortableAI::Search.own_damage(snap, arrived, arrived, beam, { "kind" => "stay" }))
+    # A cell with no list is still the one attack it always was.
+    bare = PortableAI::Search.cell_actions(mx_cell(30, 40, true))
+    assert_equal(["MATRIX_ATTACK"], bare.map { |a| a["move_id"] })
+  end
+
+  def test_mcts_backprop_credits_both_sides_of_one_leaf
+    board = PortableAI::Search.opening_board(search_snap([]))
+    node = PortableAI::Search.node_for(board, 0)
+    node["own"] = [{ "type" => "move" }, { "type" => "switch" }]
+    node["foe"] = [{ "kind" => "stay" }, { "kind" => "switch" }]
+    PortableAI::Search.populate(search_snap([]), node, [])
+    PortableAI::Search.backprop([[node, 1, 0]], 0.75)
+    # Zero sum, one leaf: our option is worth the score, theirs its complement.
+    assert_equal(0.75, node["own_stats"][1]["total"])
+    assert_equal(0.25, node["foe_stats"][0]["total"])
+    assert_equal([0, 1], node["own_stats"].map { |s| s["visits"] })
+    assert_equal([1, 0], node["foe_stats"].map { |s| s["visits"] })
+    assert_equal(1, node["visits"])
+    # The per-cell tally search_row is read from, which the decoupled statistics
+    # above cannot reconstruct.
+    assert_equal({ "total" => 0.75, "visits" => 1 }, node["cells"][[1, 0]])
+    # UCB1 sends the next visit to the option nobody has tried yet.
+    assert_equal(0, PortableAI::Search.ucb_pick(node["own_stats"], node["visits"]))
+    assert_equal(1, PortableAI::Search.ucb_pick(node["foe_stats"], node["visits"]))
+  end
+
+  def test_mcts_scores_a_finished_battle_and_stops_expanding_there
+    snap = search_snap([])
+    board = PortableAI::Search.opening_board(snap)
+    won = PortableAI::Model.copy_hash(board)
+    won["foe_hps"] = { 0 => 0.0, 1 => 0.0 }
+    lost = PortableAI::Model.copy_hash(board)
+    lost["own_hps"] = { 0 => 0.0, 1 => 0.0 }
+    # The sigmoid's ends, not a leaf reading, so a win is never worth less than a
+    # very good board.
+    assert_equal(1.0, PortableAI::Search.evaluate_node(
+      snap, PortableAI::Search.node_for(won, 1), 0.0))
+    assert_equal(0.0, PortableAI::Search.evaluate_node(
+      snap, PortableAI::Search.node_for(lost, 1), 0.0))
+    # And neither is expanded: there is nothing left to play.
+    [won, lost].each do |over|
+      node = PortableAI::Search.node_for(over, 1)
+      PortableAI::Search.populate(snap, node, [])
+      assert_equal(true, PortableAI::Search.terminal_node?(snap, node))
+    end
+    # A standing board is expanded until the horizon and then scored where it stands.
+    # Without the horizon a stage-only or Protect line never resolves and the descent
+    # does not end.
+    live = PortableAI::Search.node_for(board, PortableAI::Search::MCTS_HORIZON - 1)
+    PortableAI::Search.populate(snap, live, [])
+    assert_equal(false, PortableAI::Search.terminal_node?(snap, live))
+    live["ply"] = PortableAI::Search::MCTS_HORIZON
+    assert_equal(true, PortableAI::Search.terminal_node?(snap, live))
+    assert_equal(0.5, PortableAI::Search.sigmoid(0.0))
+  end
+
+  def test_mcts_replays_from_the_snapshot_alone
+    actions = [move(0, "SURF", 0, 100, 40, { "accuracy" => 70 }),
+               move(1, "TACKLE", 0, 100, 25, { "accuracy" => 90 }),
+               { "type" => "switch", "slot" => 1, "base_score" => 100,
+                 "candidate_hp_pct" => 100, "entry_damage_pct" => 0 }]
+    # The chance branches are sampled, so a decision is only readable if the stream is
+    # the position: two runs of the same snapshot are the same tree, visit for visit.
+    first = PortableAI::Search.plan(search_snap(actions), MCTS, nil)["diagnostics"]
+    again = PortableAI::Search.plan(search_snap(actions), MCTS, Random.new(3))["diagnostics"]
+    assert_equal(first["rankings"], again["rankings"])
+    assert_equal(first["foe_visits"], again["foe_visits"])
+    # The battle's own stream is untouched -- the rng argument is accepted and unused,
+    # as on the maximin path -- so a shadow twin observes without disturbing.
+    assert_equal(first["rankings"][0][0]["search_visits"],
+                 PortableAI::Search.plan(search_snap(actions), MCTS,
+                                         Random.new(99))["diagnostics"]["rankings"][0][0]["search_visits"])
+    # search_seed is the one thing that can ask the same position for another tree.
+    seeded = PortableAI::Search.plan(search_snap(actions),
+                                     MCTS.merge({ "search_seed" => 17 }), nil)["diagnostics"]
+    assert_equal(400, seeded["rankings"][0].inject(0) { |sum, c| sum + c["search_visits"] })
+    assert_equal(true, PortableAI::Search.mcts_seed(search_snap(actions),
+                                                    PortableAI::Search.opening_board(search_snap(actions)),
+                                                    { "search_seed" => 17 }) !=
+                       PortableAI::Search.mcts_seed(search_snap(actions),
+                                                    PortableAI::Search.opening_board(search_snap(actions)), {}))
+    # The budget is the key, floored at one.
+    assert_equal(1, PortableAI::Search.iterations_of({ "search_iterations" => 0 }))
+    assert_equal(1000, PortableAI::Search.iterations_of({}))
+    assert_equal(2500, PortableAI::Search.iterations_of({ "search_iterations" => 2500.0 }))
+  end
+
+  # ---------------------------------------------------------------------------
+  # 0.7.7. THE FOE GETS MOVES. Through 0.7.6 the foe had one `stay` column priced at
+  # its best hit, so every planner here modelled the opponent as "it attacks, at
+  # worst" -- and the 0.7.6 tree, whose whole thesis is that the foe's line should be
+  # shaped by the foe's own payoff, was handed an opponent with one way to act.
+
+  # A cell carrying the foe's own per-move rolls (in_moves, matrix version 3).
+  def foe_move_cell(out, incoming, moves, faster = false)
+    cell = mx_cell(out, incoming, faster)
+    cell["in_moves"] = moves
+    cell
+  end
+
+  # Their Golurk owns a big Earthquake, a middling Shadow Punch and a Stealth Rock
+  # that does nothing at all -- the three shapes the old single column could not tell
+  # apart, because it only ever reported the 60.
+  FOE_MOVES = { "EARTHQUAKE" => { "pct" => 60, "cat" => "physical" },
+                "SHADOWPUNCH" => { "pct" => 25, "cat" => "physical" },
+                "STEALTHROCK" => { "pct" => 0, "cat" => nil } }
+
+  def foe_axis_snap(own_actions, moves = FOE_MOVES)
+    cells = { "0:0" => foe_move_cell(40, 60, moves, true),
+              "1:0" => foe_move_cell(30, 10, { "EARTHQUAKE" => { "pct" => 10, "cat" => "physical" },
+                                               "SHADOWPUNCH" => { "pct" => 50, "cat" => "physical" },
+                                               "STEALTHROCK" => { "pct" => 0, "cat" => nil } }, true) }
+    snap = snapshot([actor(0, 100, own_actions, {})], [target(0, 100)], {})
+    with_matrix(snap, matrix_snap([[0, 100, 0], [1, 100, nil]], [[0, 100, 0]], cells))
+  end
+
+  # --- 0.7.8: the damage prior over the foe's columns --------------------------
+
+  # The foe axis snapshot has one foe body, so its columns are moves alone. This one
+  # gives the foe a bench too, which is the only way a switch column exists to check
+  # the prior never reaches it.
+  def foe_bench_snap(own_actions)
+    cells = { "0:0" => foe_move_cell(40, 60, FOE_MOVES, true),
+              "0:1" => foe_move_cell(40, 30, FOE_MOVES, true) }
+    snap = snapshot([actor(0, 100, own_actions, {})], [target(0, 100)], {})
+    with_matrix(snap, matrix_snap([[0, 100, 0]], [[0, 100, 0], [1, 100, nil]], cells))
+  end
+
+  def test_foe_prior_normalises_the_stay_columns_and_leaves_switches_alone
+    snap = foe_bench_snap([])
+    options = PortableAI::Search.foe_options(snap, PortableAI::Search.opening_board(snap))
+    prior = PortableAI::Search.foe_prior(options)
+    # 60 / 25 / 0 over a total of 85, and the switch column is not the prior's business.
+    assert_equal(["stay:EARTHQUAKE", "stay:SHADOWPUNCH", "stay:STEALTHROCK", "switch:1"],
+                 options.map { |f| PortableAI::Search.foe_label(f) })
+    assert_equal([0.7059, 0.2941, 0.0, 0.0], prior.map { |v| (v * 10000).round / 10000.0 })
+    assert_equal(1.0, (prior.inject(0.0) { |sum, v| sum + v } * 10000).round / 10000.0)
+    # Nothing priced -- a Reborn cell, a foe that only owns status -- is no prior at
+    # all, which leaves both consumers exactly as they were.
+    quiet = foe_axis_snap([], { "STEALTHROCK" => { "pct" => 0, "cat" => nil } })
+    assert_equal(nil, PortableAI::Search.foe_prior(
+      PortableAI::Search.foe_options(quiet, PortableAI::Search.opening_board(quiet))))
+    assert_equal(nil, PortableAI::Search.foe_prior([]))
+  end
+
+  def test_column_weights_redistribute_within_the_stay_group_only
+    snap = foe_bench_snap([])
+    options = PortableAI::Search.foe_options(snap, PortableAI::Search.opening_board(snap))
+    prior = PortableAI::Search.foe_prior(options)
+    n = options.length.to_f
+    assert_equal(options.map { 1.0 / n }, PortableAI::Search.column_weights(options, nil))
+    # No opponent model, prior on: the three stay columns still hold 3/4 of the mass
+    # between them, split 60/25/0 instead of evenly. The switch column does not move.
+    weighted = PortableAI::Search.column_weights(options, nil, prior)
+    assert_equal(1.0 / n, weighted[3])
+    assert_equal((0.75 * 60 / 85 * 10000).round, (weighted[0] * 10000).round)
+    assert_equal((0.75 * 25 / 85 * 10000).round, (weighted[1] * 10000).round)
+    assert_equal(0.0, weighted[2])
+    assert_equal(1.0, (weighted.inject(0.0) { |sum, v| sum + v } * 10000).round / 10000.0)
+    # And with a prediction the switch/stay split the reply asked for is untouched --
+    # the prior says WHICH MOVE, never whether the foe stays.
+    reply = { "switch_chance" => 0.4, "switch_slot" => 1 }
+    predicted = PortableAI::Search.column_weights(options, reply, prior)
+    assert_equal(0.4, predicted[3])
+    assert_equal((0.6 * 60 / 85 * 10000).round, (predicted[0] * 10000).round)
+    assert_equal((0.6 * 25 / 85 * 10000).round, (predicted[1] * 10000).round)
+    # Same reply, no prior: the old even share, so the key off is the 0.7.7 table.
+    assert_equal([2000, 2000, 2000, 4000], PortableAI::Search.column_weights(
+      options, reply).map { |v| (v * 10000).round })
+  end
+
+  def test_the_prior_key_is_off_by_default_and_off_reproduces_the_unpriored_search
+    assert_equal(false, PortableAI::Model::DEFAULT_CONFIG["search_foe_prior"])
+    actions = [move(0, "TACKLE", 0, 100, 40, { "accuracy" => 100 }),
+               move(0, "EMBER", 0, 100, 40, { "accuracy" => 100 })]
+    snap = foe_axis_snap(actions)
+    %w[maximin tree].each do |arm|
+      base = arm == "tree" ? MCTS.dup : {}
+      off = PortableAI::Search.plan(snap, base, nil)
+      explicit = PortableAI::Search.plan(snap, base.merge({ "search_foe_prior" => false }), nil)
+      # Everything but the wall clock, which the tree reports and nothing branches on.
+      assert_equal(off["actions"], explicit["actions"])
+      assert_equal(off["diagnostics"]["rankings"], explicit["diagnostics"]["rankings"])
+      assert_equal(off["diagnostics"]["foe_visits"], explicit["diagnostics"]["foe_visits"])
+    end
+  end
+
+  def test_the_prior_moves_the_trees_budget_towards_the_column_that_hits
+    actions = [move(0, "TACKLE", 0, 100, 40, { "accuracy" => 100 }),
+               move(0, "EMBER", 0, 100, 40, { "accuracy" => 100 })]
+    snap = foe_axis_snap(actions)
+    config = MCTS.merge({ "search_iterations" => 2000 })
+    plain = PortableAI::Search.plan(snap, config, nil)["diagnostics"]
+    primed = PortableAI::Search.plan(
+      snap, config.merge({ "search_foe_prior" => true }), nil)["diagnostics"]
+    assert_equal(plain["foe_options"], primed["foe_options"])
+    quake = plain["foe_options"].index("stay:EARTHQUAKE")
+    total = lambda { |d| d["foe_visits"].inject(0) { |sum, v| sum + v }.to_f }
+    # Earthquake is the column that actually hurts, and the PUCT term buys it budget.
+    assert_equal(true, primed["foe_visits"][quake] / total.call(primed) >
+                       plain["foe_visits"][quake] / total.call(plain))
+    # And the column priced at zero is still SAMPLED -- UCB1 sits underneath the
+    # prior, so nothing is starved to nothing.
+    rock = plain["foe_options"].index("stay:STEALTHROCK")
+    assert_equal(true, primed["foe_visits"][rock] > 0)
+    # Still one budget, still deterministic.
+    assert_equal(2000, total.call(primed).to_i)
+    assert_equal(primed["foe_visits"], PortableAI::Search.plan(
+      snap, config.merge({ "search_foe_prior" => true }), nil)["diagnostics"]["foe_visits"])
+  end
+
+  def test_foe_options_are_one_column_per_move_and_fall_back_without_the_list
+    snap = foe_axis_snap([])
+    board = PortableAI::Search.opening_board(snap)
+    options = PortableAI::Search.foe_options(snap, board)
+    # Sorted by move id, because a Ruby 1.8 Hash has no order and a column list that
+    # moved between two runs of one position would make every paired arm unrepeatable.
+    assert_equal(["stay:EARTHQUAKE", "stay:SHADOWPUNCH", "stay:STEALTHROCK"],
+                 options.map { |f| PortableAI::Search.foe_label(f) })
+    assert_equal([60.0, 25.0, 0.0], options.map { |f| f["pct"] })
+    # A cell with no in_moves -- an older adapter, and every Reborn run -- is the one
+    # column at the best hit, which is 0.7.6 exactly.
+    plain = search_snap([])
+    assert_equal(["stay", "switch:1"], PortableAI::Search.foe_options(
+      plain, PortableAI::Search.opening_board(plain)).map { |f| PortableAI::Search.foe_label(f) })
+  end
+
+  def test_the_foe_column_deals_its_own_move_not_the_best_one
+    tackle = move(0, "TACKLE", 0, 100, 40, { "accuracy" => 100 })
+    snap = foe_axis_snap([tackle])
+    board = PortableAI::Search.opening_board(snap)
+    axis = PortableAI::Search.foe_options(snap, board)
+    quake = axis.find { |f| f["move_id"] == "EARTHQUAKE" }
+    rocks = axis.find { |f| f["move_id"] == "STEALTHROCK" }
+    # Through 0.7.6 both of these were the same 60.
+    assert_equal(60.0, PortableAI::Search.foe_damage(snap, board, board, tackle, quake))
+    assert_equal(0.0, PortableAI::Search.foe_damage(snap, board, board, tackle, rocks))
+    # And the move lands on whatever body is standing AFTER our switch resolves --
+    # the mirror of own_damage pricing our move against their switch-in. Slot 1 takes
+    # 10 from Earthquake where slot 0 took 60.
+    leaving = { "type" => "switch", "slot" => 1, "candidate_hp_pct" => 100,
+                "entry_damage_pct" => 0 }
+    after = PortableAI::Search.project(snap, board, leaving, quake, true)
+    assert_equal(1, after["own_slot"])
+    assert_equal(90.0, after["own_hp"])
+  end
+
+  def test_maximin_still_answers_the_worst_column_so_mix_zero_barely_moves
+    # The point of the axis is the EXPECTED reply and the tree, not pick_safest: the
+    # worst thing the foe can do is still its biggest hit, so the min over the new
+    # columns is the number the single column used to carry.
+    tackle = move(0, "TACKLE", 0, 100, 40, { "accuracy" => 100 })
+    snap = foe_axis_snap([tackle])
+    ranked = PortableAI::Search.plan(snap, ONE_PLY, nil)["diagnostics"]["rankings"][0]
+    row = ranked[0]["search_row"]
+    assert_equal(3, row.length)
+    # Earthquake is the worst column for us and Stealth Rock the best.
+    assert_equal(row.min, row[0])
+    assert_equal(row.max, row[2])
+    # The board after their best hit is the same board 0.7.6 scored, so the worst
+    # case is unchanged: 100 - 60 HP on us.
+    plain = PortableAI::Search.project(snap, PortableAI::Search.opening_board(snap),
+                                       tackle, { "kind" => "stay" }, true)
+    assert_equal(40.0, plain["own_hp"])
+  end
+
+  def test_the_predicted_stay_mass_spreads_over_every_move_column
+    axis = [{ "kind" => "stay", "move_id" => "EARTHQUAKE" },
+            { "kind" => "stay", "move_id" => "SHADOWPUNCH" },
+            { "kind" => "switch", "slot" => 1 }]
+    # The prediction says whether it stays, never which move it picks, so the mass
+    # that is not a switch is shared. (Concentrating it on a predicted move is the
+    # next arm; stock_move is already exported for it.)
+    weights = PortableAI::Search.column_weights(axis, { "switch_chance" => 0.4 })
+    assert_equal([0.3, 0.3, 0.4], weights)
+    assert_equal(1.0, weights.inject(0.0) { |a, b| a + b })
+    # Still uniform with nothing predicted, and still uniform on a column list that
+    # has no switch to weigh the stay against.
+    assert_equal([1.0 / 3, 1.0 / 3, 1.0 / 3], PortableAI::Search.column_weights(axis, nil))
+  end
+
+  def test_the_tree_sees_the_wider_foe_and_reports_it
+    tackle = move(0, "TACKLE", 0, 100, 40, { "accuracy" => 100 })
+    diag = PortableAI::Search.plan(foe_axis_snap([tackle]), MCTS, nil)["diagnostics"]
+    assert_equal("mcts", diag["planner"])
+    # Three columns the tree can tell apart, where 0.7.6 had one. (This foe has no
+    # bench, so the axis here is moves alone -- which is the point being tested;
+    # the mixed list is covered by the column_weights test above.)
+    assert_equal(["stay:EARTHQUAKE", "stay:SHADOWPUNCH", "stay:STEALTHROCK"],
+                 diag["foe_options"])
+    assert_equal(3, diag["foe_visits"].length)
+    assert_equal(400, diag["foe_visits"].inject(0) { |sum, v| sum + v })
+    # And the foe's own payoff, not a table, is what spread those visits: the column
+    # that hurts us most is the one it came back to.
+    best = diag["foe_visits"].index(diag["foe_visits"].max)
+    assert_equal("stay:EARTHQUAKE", diag["foe_options"][best])
   end
 end

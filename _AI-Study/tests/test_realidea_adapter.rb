@@ -3,7 +3,9 @@ require "test/unit"
 root = File.expand_path("..", File.dirname(__FILE__))
 require File.join(root, "portable_ai", "model")
 require File.join(root, "portable_ai", "effects")
+require File.join(root, "portable_ai", "matrix")
 require File.join(root, "portable_ai", "core")
+require File.join(root, "portable_ai", "search")
 
 # ---------------------------------------------------------------------------
 # Engine stubs. Constant VALUES are Realidea's own (075_PBEffects.rb,
@@ -93,7 +95,7 @@ end
 
 module PBMoves
   POUND = 1; TACKLE = 2; THUNDERWAVE = 3; TOXIC = 4; LEECHSEED = 5
-  YAWN = 6; SWORDSDANCE = 7; FAKEOUT = 8
+  YAWN = 6; SWORDSDANCE = 7; FAKEOUT = 8; SURF = 9; GROWL = 10
 end
 
 module PBWeather
@@ -215,6 +217,7 @@ class StubBattler
     @mold_breaker = options.fetch(:mold_breaker, false)
     @can_status  = options.fetch(:can_status, true)
     @form        = options.fetch(:form, 0)
+    @airborne    = options.fetch(:airborne, false)
   end
 
   def default_effects
@@ -232,7 +235,13 @@ class StubBattler
   def pbPartner; @partner; end
   def pbOppositeOpposing; @opposite; end
   def hasMoldBreaker; @mold_breaker; end
-  def isAirborne?(_ignore = false); false; end
+  # :airborne => true for an item or effect, :levitate for the ability, which the
+  # engine's ignoreability flag (Mold Breaker) walks through.
+  attr_accessor :airborne
+  def isAirborne?(ignore = false)
+    return !ignore if @airborne == :levitate
+    @airborne ? true : false
+  end
   def pbHasType?(symbol)
     value = (PBTypes.const_get(symbol) rescue nil)
     !value.nil? && (@type1 == value || @type2 == value)
@@ -902,7 +911,7 @@ class PortableAIRealideaAdapterTest < Test::Unit::TestCase
 
   TARGET_KEYS = %w[
     index species hp_pct status types speed positive_stages ability item full_hp
-    physical_attacker special_attacker substitute partner_ability
+    physical_attacker special_attacker substitute partner_ability trapped
   ]
 
   # A minimal singles board: one AI battler at index 1 with one move and one healthy
@@ -1579,6 +1588,44 @@ class PortableAIRealideaAdapterTest < Test::Unit::TestCase
     assert_equal(false, matrix_of(battle)["cells"]["1:0"]["faster"])
   end
 
+  # 0.7.4. The cell keeps every damaging move it rolled, not only the best, so a
+  # reader with a particular move in hand can price THAT move against a body on the
+  # bench. A move that does nothing to the body is a 0 in the list, which is a
+  # different fact from not being in it.
+  def test_party_matrix_cells_carry_every_damaging_move_by_key
+    battle = matrix_battle
+    battle.battlers[1].moves = [
+      StubMove.new(:id => PBMoves::TACKLE, :basedamage => 60, :category => 0),
+      StubMove.new(:id => PBMoves::SURF, :basedamage => 20, :category => 1),
+      StubMove.new(:id => PBMoves::GROWL, :basedamage => 0)
+    ]
+    cell = matrix_of(battle)["cells"]["0:0"]
+    assert_equal(30.0, cell["out"])
+    assert_equal("TACKLE", cell["out_move"])
+    # 0.7.9 (version 4): every move, the status move included at pct 0, each with
+    # its hit chance, priority bracket, whether it deals damage, and the effect
+    # triple the root actions carry -- what the search needs to play the move.
+    assert_equal(%w[GROWL SURF TACKLE], cell["out_moves"].keys.sort)
+    assert_equal({ "pct" => 30.0, "cat" => "physical", "damaging" => true, "acc" => 100.0,
+                   "priority" => 0, "effect" => [nil, nil, nil] }, cell["out_moves"]["TACKLE"])
+    assert_equal(10.0, cell["out_moves"]["SURF"]["pct"])
+    assert_equal("special", cell["out_moves"]["SURF"]["cat"])
+    assert_equal(0.0, cell["out_moves"]["GROWL"]["pct"])
+    assert_equal(false, cell["out_moves"]["GROWL"]["damaging"])
+    # A status move is never the cell's best, whatever its position in the list.
+    assert_equal("TACKLE", cell["out_move"])
+    # The side table carries what a projected end of turn ticks on (version 4).
+    side = matrix_of(battle)["own"][0]
+    assert_equal(true, side.has_key?("status") && side.has_key?("item") &&
+                       side.has_key?("ability") && side.has_key?("entry_damage_pct"))
+    # The pair the engine cannot price at all is still nil, not an empty list.
+    # (A fresh battle: the first one's cells are cached against their signature.)
+    broken = matrix_battle
+    broken.define_singleton_method(:pbRoughDamage) { |*_a| raise ZeroDivisionError }
+    assert_nil(matrix_of(broken)["cells"]["0:0"]["out"])
+    assert_nil(matrix_of(broken)["cells"]["0:0"]["out_moves"])
+  end
+
   # The active bodies are priced through their REAL battlers, so their stages, their
   # Mega form and the item they are holding are all in the number. A benched body has
   # no stages to read and arrives at zero.
@@ -1699,7 +1746,29 @@ class PortableAIRealideaAdapterTest < Test::Unit::TestCase
     $PORTABLE_AI_CONFIG = { "sole_answer" => true }
     on, _skill = PortableAIRealidea.build_snapshot(matrix_battle)
     assert_not_nil(on["matrix"])
-    assert_equal(1, on["matrix"]["version"])
+    # 0.7.7: version 3 is the cell that carries the FOE's per-move rolls beside ours;
+    # 0.7.9: version 4 carries every move on both sides, with accuracy and priority.
+    assert_equal(4, on["matrix"]["version"])
+    cell = on["matrix"]["cells"]["0:0"]
+    # Ours is always kept (out_moves, 0.7.4). THEIRS FOLLOWS ITS READER: the foe move
+    # axis is the only thing that opens in_moves and it lives behind search_planner,
+    # which is off here -- so an ordinary run carries the rolls' summary and not the
+    # breakdown, and pays neither the allocation nor the 28% bigger trace.
+    assert_equal(true, cell["out_moves"].is_a?(Hash))
+    assert_equal(nil, cell["in_moves"])
+
+    $PORTABLE_AI_CONFIG = { "sole_answer" => true, "search_planner" => true }
+    searched, _skill = PortableAIRealidea.build_snapshot(matrix_battle)
+    cell = searched["matrix"]["cells"]["0:0"]
+    assert_equal(true, cell["in_moves"].is_a?(Hash))
+    assert_equal(false, cell["in_moves"].empty?)
+    # A move in the list is priced and categorised, and the summary `in` is the
+    # biggest of them -- so nothing that read `in` before reads anything new, and
+    # turning the axis on cannot move a rule-engine decision.
+    biggest = 0.0
+    cell["in_moves"].each_value { |m| biggest = m["pct"] if m["pct"] > biggest }
+    assert_equal(cell["in"], biggest)
+    assert_equal(true, cell["in_moves"].has_key?(cell["in_move"]))
   ensure
     $PORTABLE_AI_CONFIG = nil
   end
@@ -1783,4 +1852,382 @@ class PortableAIRealideaAdapterTest < Test::Unit::TestCase
   ensure
     $AI_GAUNTLET_TRACE = false
   end
+
+  # --- 0.6.6 Ground into an airborne body --------------------------------------------
+  #
+  # pbTypeModifier says nothing about Levitate; pbSuccessCheck does (080:2710). Both
+  # the effectiveness the core rejects on and the damage every estimate reads must
+  # agree that the move does nothing.
+
+  def airborne_case(airborne, options = {})
+    target = StubBattler.new(:index => 0, :airborne => airborne,
+                             :ability => options.fetch(:ability, 0))
+    attacker = StubBattler.new(:index => 1,
+                               :mold_breaker => options.fetch(:mold_breaker, false))
+    move = StubMove.new(:type => options.fetch(:type, PBTypes::GROUND),
+                        :function => options.fetch(:function, 0x000))
+    battle = PokeBattle_Battle.new
+    [PortableAIRealidea.type_effectiveness(battle, move, attacker, target),
+     PortableAIRealidea.rough_damage_pct(battle, move, attacker, target, 100)]
+  end
+
+  def test_ground_into_an_airborne_target_does_nothing_in_both_estimates
+    assert_equal([0.0, 0.0], airborne_case(true))
+    assert_equal([0.0, 0.0], airborne_case(:levitate))
+    assert_equal([1.0, 40.0], airborne_case(false))
+  end
+
+  def test_only_ground_is_dodged
+    assert_equal([1.0, 40.0], airborne_case(true, :type => PBTypes::WATER))
+  end
+
+  def test_mold_breaker_walks_through_levitate_but_not_a_balloon
+    assert_equal([1.0, 40.0], airborne_case(:levitate, :mold_breaker => true))
+    assert_equal([0.0, 0.0], airborne_case(true, :mold_breaker => true))
+  end
+
+  def test_smack_down_lands_on_an_airborne_target
+    assert_equal([1.0, 40.0], airborne_case(true, :function => 0x11C))
+  end
+
+  def test_airborne_immunity_off_restores_the_blind_estimate
+    $PORTABLE_AI_CONFIG = { "airborne_immunity" => false }
+    assert_equal([1.0, 40.0], airborne_case(:levitate))
+  end
+
+  # --- 0.6.6 the oracle --------------------------------------------------------------
+  #
+  # With foe_oracle on, the foe's registered choice is read back as its intent and the
+  # hit it implies is exported on the actor and on every bench candidate. Off, or
+  # with nothing registered, nothing is exported and the snapshot is 0.6.5's.
+
+  def oracle_battle
+    battle = contract_battle
+    foe = battle.battlers[0]
+    foe.moves = [StubMove.new(:id => PBMoves::TACKLE, :basedamage => 40),
+                 StubMove.new(:id => PBMoves::POUND, :basedamage => 160)]
+    battle
+  end
+
+  def test_oracle_exports_the_declared_hit_not_the_worst_one
+    $PORTABLE_AI_CONFIG = { "foe_oracle" => true }
+    battle = oracle_battle
+    battle.choices[0] = [1, 0, battle.battlers[0].moves[0], -1]
+    actor = PortableAIRealidea.build_snapshot(battle)[0]["actors"][0]
+    assert_equal(80.0, actor["incoming_damage_pct"])
+    assert_equal(20.0, actor["predicted_incoming_damage_pct"])
+    assert_equal(100.0, actor["predicted_incoming_accuracy"])
+    assert_equal("move", actor["predicted_foe"]["0"]["type"])
+    switch = actor["actions"].find { |a| a["type"] == "switch" }
+    assert_equal(80.0, switch["incoming_damage_pct"])
+    assert_equal(20.0, switch["predicted_incoming_damage_pct"])
+  end
+
+  def test_a_declared_switch_is_a_free_turn
+    $PORTABLE_AI_CONFIG = { "foe_oracle" => true }
+    battle = oracle_battle
+    battle.choices[0] = [2, 0, nil, -1]
+    actor = PortableAIRealidea.build_snapshot(battle)[0]["actors"][0]
+    assert_equal(0.0, actor["predicted_incoming_damage_pct"])
+    assert_equal("switch", actor["predicted_foe"]["0"]["type"])
+    switch = actor["actions"].find { |a| a["type"] == "switch" }
+    assert_equal(0.0, switch["predicted_incoming_damage_pct"])
+  end
+
+  def test_the_oracle_is_silent_when_off_or_when_nothing_is_registered
+    battle = oracle_battle
+    battle.choices[0] = [1, 0, battle.battlers[0].moves[0], -1]
+    actor = PortableAIRealidea.build_snapshot(battle)[0]["actors"][0]
+    assert_equal(false, actor.key?("predicted_incoming_damage_pct"))
+    switch = actor["actions"].find { |a| a["type"] == "switch" }
+    assert_equal(false, switch.key?("predicted_incoming_damage_pct"))
+    $PORTABLE_AI_CONFIG = { "foe_oracle" => true }
+    unregistered = PortableAIRealidea.build_snapshot(oracle_battle)[0]["actors"][0]
+    assert_equal(false, unregistered.key?("predicted_incoming_damage_pct"))
+  end
+
+  # 0.7.5. The stock model: the same export, produced from the engine's own AI.
+  def test_stock_model_predicts_the_top_scoring_move_and_the_withdraw_chance
+    $PORTABLE_AI_CONFIG = { "foe_stock_model" => true }
+    battle = oracle_battle
+    # Both moves score the stub's flat 100; the first is the pick, as pbChooseMoves
+    # would take it. Turn 0, nothing poisoned, no Perish: it does not switch.
+    actor = PortableAIRealidea.build_snapshot(battle)[0]["actors"][0]
+    assert_equal(20.0, actor["predicted_incoming_damage_pct"])
+    assert_equal("move", actor["predicted_foe"]["0"]["type"])
+    assert_equal("TACKLE", actor["predicted_foe"]["0"]["move_id"])
+    assert_equal(0.0, actor["predicted_foe"]["0"]["switch_chance"])
+    assert_nil(actor["predicted_foe"]["0"]["switch_slot"])
+    # The scorer decides: make the second move the one stock would score higher.
+    battle = oracle_battle
+    battle.define_singleton_method(:pbGetMoveScore) { |move, _a, _o, _s| move.basedamage }
+    actor = PortableAIRealidea.build_snapshot(battle)[0]["actors"][0]
+    assert_equal("POUND", actor["predicted_foe"]["0"]["move_id"])
+    assert_equal(80.0, actor["predicted_incoming_damage_pct"])
+    # Perish count 1: it must switch, to the first slot its list allows.
+    battle = oracle_battle
+    battle.battlers[0].effects[PBEffects::PerishSong] = 1
+    actor = PortableAIRealidea.build_snapshot(battle)[0]["actors"][0]
+    assert_equal("switch", actor["predicted_foe"]["0"]["type"])
+    assert_equal(0, actor["predicted_foe"]["0"]["slot"])
+    assert_equal(0.0, actor["predicted_incoming_damage_pct"])
+    # Off: nothing exported, as before. On with the oracle: the oracle wins.
+    $PORTABLE_AI_CONFIG = {}
+    assert_equal(false, PortableAIRealidea.build_snapshot(oracle_battle)[0]["actors"][0].key?("predicted_foe"))
+    $PORTABLE_AI_CONFIG = { "foe_stock_model" => true, "foe_oracle" => true }
+    battle = oracle_battle
+    battle.choices[0] = [2, 1, nil, -1]
+    actor = PortableAIRealidea.build_snapshot(battle)[0]["actors"][0]
+    assert_equal("switch", actor["predicted_foe"]["0"]["type"])
+    assert_equal(1, actor["predicted_foe"]["0"]["slot"])
+  ensure
+    $PORTABLE_AI_CONFIG = nil
+  end
+
+  # A forced replacement decides between turns, when the registered choices are the
+  # ones that have just executed. It must not read them.
+  def test_a_replacement_never_reads_a_stale_choice
+    $PORTABLE_AI_ENABLED = true
+    $PORTABLE_AI_CONFIG = { "foe_oracle" => true }
+    battle = replacement_battle
+    battle.choices[0] = [1, 0, battle.battlers[0].moves[0], -1]
+    actions = PortableAIRealidea.switch_actions(battle, battle.battlers[1], [0], 100, true)
+    assert_equal(false, actions.any? { |a| a.key?("predicted_incoming_damage_pct") })
+  end
+  # ---------------------------------------------------------------------------
+  # 0.7.0. PLANNER DISPATCH.
+
+  def dispatch_snap
+    { "format" => "single",
+      "actors" => [{ "index" => 0, "hp_pct" => 100, "actions" => [
+        { "type" => "move", "slot" => 0, "move_id" => "TACKLE", "target" => 0,
+          "base_score" => 100, "expected_damage_pct" => 40, "accuracy" => 100,
+          "effectiveness" => 1, "damaging" => true }] }],
+      "targets" => [{ "index" => 0, "hp_pct" => 100, "status" => 0 }],
+      "memory" => {} }
+  end
+
+  def dispatch_matrix
+    side = lambda do |rows|
+      rows.map { |r| { "slot" => r[0], "index" => r[2], "species" => 100 + r[0],
+                       "hp_pct" => r[1], "alive" => true, "speed" => 100, "types" => [] } }
+    end
+    { "version" => 1, "own" => side.call([[0, 100, 0]]), "foe" => side.call([[0, 100, 0]]),
+      "cells" => { "0:0" => { "out" => 40, "out_cat" => "physical", "out_move" => "TACKLE",
+                              "in" => 40, "in_cat" => "physical", "in_move" => "TACKLE",
+                              "faster" => true } } }
+  end
+
+  def test_the_search_planner_key_is_overridable_and_off_is_the_rule_engine
+    keys = PortableAIRealidea::Harness::CONFIG_OVERRIDE_KEYS
+    assert_equal(true, keys.include?(["search_planner", :boolean]))
+    snap = dispatch_snap
+    snap["matrix"] = dispatch_matrix
+    off = PortableAIRealidea.run_planner(snap, PortableAI::Model.config({}), nil)
+    # Byte-for-byte the rule planner's answer, which is what makes a run with the key
+    # off the control for one with it on.
+    assert_equal(PortableAI.plan(snap, PortableAI::Model.config({}), nil), off)
+    assert_equal(nil, off["diagnostics"]["planner"])
+  end
+
+  def test_the_mcts_keys_are_overridable_and_route_the_same_board
+    keys = PortableAIRealidea::Harness::CONFIG_OVERRIDE_KEYS
+    # The harness file's parser reads a key's kind, so an unregistered key is a line
+    # the run silently ignores -- which is how an arm reproduces its own control.
+    assert_equal(true, keys.include?(["search_mcts", :boolean]))
+    assert_equal(true, keys.include?(["search_iterations", :float]))
+    assert_equal(true, keys.include?(["search_seed", :float]))
+    assert_equal(true, keys.include?(["search_foe_prior", :boolean]))
+    snap = dispatch_snap
+    snap["matrix"] = dispatch_matrix
+    # The dispatch: same planner key, same board, the other search underneath.
+    tree = PortableAI::Model.config({ "search_planner" => true, "search_mcts" => true,
+                                      "search_iterations" => 200 })
+    plan = PortableAIRealidea.run_planner(snap, tree, nil)
+    assert_equal("mcts", plan["diagnostics"]["planner"])
+    assert_equal(200, plan["diagnostics"]["iterations"])
+    # And with search_planner off the tree key alone changes nothing: run_planner
+    # never asks the search at all.
+    off = PortableAI::Model.config({ "search_mcts" => true })
+    assert_equal(nil, PortableAIRealidea.run_planner(snap, off, nil)["diagnostics"]["planner"])
+  end
+
+  def test_search_trace_carries_the_trees_foe_budget_and_is_absent_off_the_tree
+    snap = dispatch_snap
+    snap["matrix"] = dispatch_matrix
+    tree = PortableAI::Model.config({ "search_planner" => true, "search_mcts" => true,
+                                      "search_iterations" => 200 })
+    plan = PortableAIRealidea.run_planner(snap, tree, nil)
+    trace = PortableAIRealidea.search_trace(plan)
+    assert_equal(plan["diagnostics"]["foe_options"], trace["foe_options"])
+    assert_equal(plan["diagnostics"]["foe_visits"], trace["foe_visits"])
+    assert_equal(200, trace["iterations"])
+    # One statistic per foe option, and the budget is what was actually spent.
+    assert_equal(trace["foe_options"].length, trace["foe_visits"].length)
+    assert_equal(true, trace["foe_visits"].inject(0) { |sum, v| sum + v } > 0)
+    # The maximin publishes no foe_visits, so the key simply is not there -- which is
+    # what keeps a non-tree trace the same shape it was before this diagnostic.
+    maximin = PortableAI::Model.config({ "search_planner" => true })
+    assert_equal(nil, PortableAIRealidea.search_trace(
+      PortableAIRealidea.run_planner(snap, maximin, nil)))
+    assert_equal(nil, PortableAIRealidea.search_trace({}))
+  end
+
+  def test_the_search_planner_answers_when_on_and_defers_when_it_cannot
+    on = PortableAI::Model.config({ "search_planner" => true })
+    snap = dispatch_snap
+    snap["matrix"] = dispatch_matrix
+    assert_equal("search", PortableAIRealidea.run_planner(snap, on, nil)["diagnostics"]["planner"])
+    # No matrix -- Reborn's case, and every Realidea run with party_matrix off -- so
+    # the rule engine answers even with the key set.
+    assert_equal(nil, PortableAIRealidea.run_planner(dispatch_snap, on, nil)["diagnostics"]["planner"])
+  end
+
+  # ---- 0.8.0 Foul Play bridge ---------------------------------------------------
+
+  # A private working directory for the file handoff: the bridge addresses Data/
+  # relative to the process, as the game does.
+  def foul_play_scratch
+    require "tmpdir"
+    dir = File.join(Dir.tmpdir, "portable_ai_foul_play_test")
+    Dir.mkdir(dir) if !File.exist?(dir)
+    dir
+  end
+
+  def foul_play_battle
+    PBSpecies.const_set(:BULBASAUR, 1) if !PBSpecies.const_defined?(:BULBASAUR)
+    PBSpecies.const_set(:IVYSAUR, 2) if !PBSpecies.const_defined?(:IVYSAUR)
+    PBSpecies.const_set(:VENUSAUR, 3) if !PBSpecies.const_defined?(:VENUSAUR)
+    PortableAIRealidea.instance_variable_set(:@species_keys, nil)
+    # The rig declares only the effects earlier tests read; these are the game's indices.
+    PBEffects.const_set(:Confusion, 8) if !PBEffects.const_defined?(:Confusion)
+    PBEffects.const_set(:Substitute, 91) if !PBEffects.const_defined?(:Substitute)
+    battle = contract_battle
+    actor = battle.battlers[1]
+    actor.moves = [StubMove.new(:id => PBMoves::TACKLE, :basedamage => 40),
+                   StubMove.new(:id => PBMoves::TOXIC, :basedamage => 0, :category => 2)]
+    actor.stages[PBStats::ATTACK] = 2
+    actor.effects[PBEffects::Substitute] = 25
+    actor.effects[PBEffects::Confusion] = 3
+    battle.sides[1].effects[PBEffects::Spikes] = 2
+    battle.sides[1].effects[PBEffects::StealthRock] = true
+    battle
+  end
+
+  def test_foul_play_state_carries_both_sides_in_poke_engine_terms
+    battle = foul_play_battle
+    snapshot, _skill = PortableAIRealidea.build_snapshot(battle)
+    state = PortableAIRealidea::FoulPlay.state_for(battle, 1, snapshot)
+    own = state["side_one"]
+    foe = state["side_two"]
+    assert_equal(0, own["active"])
+    assert_equal(2, own["pokemon"].length, "the whole own party travels")
+    assert_equal(1, foe["pokemon"].length)
+    assert_equal("BULBASAUR", own["pokemon"][0]["species"])
+    assert_equal("IVYSAUR", foe["pokemon"][0]["species"])
+    assert_equal(["TACKLE", "TOXIC"], own["pokemon"][0]["moves"].map { |m| m["id"] })
+    assert_equal(2, own["boosts"]["attack"])
+    assert_equal(0, foe["boosts"]["attack"])
+    assert_equal(2, own["conditions"]["spikes"])
+    assert_equal(1, own["conditions"]["stealth_rock"], "a boolean hazard becomes a layer count")
+    assert_equal(0, foe["conditions"]["stealth_rock"])
+    assert_equal(25, own["substitute_health"])
+    assert(own["volatiles"].include?("SUBSTITUTE"))
+    assert(own["volatiles"].include?("CONFUSION"))
+    assert(!own["volatiles"].include?("LEECHSEED"), "-1 is the engine's 'off' for Leech Seed")
+    assert_equal(3, own["durations"]["confusion"])
+    assert_equal("none", own["pokemon"][0]["status"])
+    assert_equal("none", state["weather"])
+    assert_equal(["none", 0], state["terrain"])
+    assert_equal(1, state["actor"])
+  end
+
+  def test_foul_play_declines_without_a_foe_on_the_field
+    battle = foul_play_battle
+    battle.battlers[0].hp = 0
+    snapshot = { "actors" => [{ "index" => 1, "actions" => [{ "type" => "move", "slot" => 0 }] }] }
+    assert_nil(PortableAIRealidea::FoulPlay.state_for(battle, 1, snapshot))
+  end
+
+  def test_foul_play_reply_maps_onto_the_snapshot_actions
+    battle = foul_play_battle
+    snapshot, _skill = PortableAIRealidea.build_snapshot(battle)
+    actor = snapshot["actors"][0]
+    reply = PortableAIRealidea::FoulPlay.parse_reply(
+      "type=switch\nslot=1\nvisits=900\nscore=0.61\niterations=5000\n" +
+      "own=move:0:100,move:1:0,switch:1:900\nfoe=move:0:700,switch:1:300\n")
+    assert_equal([["move:0", 100], ["move:1", 0], ["switch:1", 900]], reply["own"])
+    action = PortableAIRealidea::FoulPlay.action_for(battle, 1, actor, reply)
+    assert_equal("switch", action["type"])
+    assert_equal(1, action["slot"])
+    assert_equal(900, action["search_visits"])
+    assert_equal(["foul_play_visits", 900], action["reasons"][0])
+    ranked = PortableAIRealidea::FoulPlay.rankings(actor, reply)
+    assert_equal("switch", ranked[0]["type"], "most visited first")
+    assert_equal(100, ranked[1]["search_visits"])
+    failed = PortableAIRealidea::FoulPlay.parse_reply("type=error\nmessage=PanicException: Taunt duration\n")
+    assert_equal("error", failed["type"])
+    assert_equal("PanicException: Taunt duration", failed["message"])
+    absent = PortableAIRealidea::FoulPlay.parse_reply("type=move\nslot=7\n")
+    assert_nil(PortableAIRealidea::FoulPlay.action_for(battle, 1, actor, absent),
+               "a slot the actor cannot play is not an action")
+  end
+
+  def test_foul_play_silent_sidecar_falls_through_to_the_rules
+    battle = foul_play_battle
+    $PORTABLE_AI_CONFIG = { "foul_play" => true, "party_matrix" => true }
+    PortableAIRealidea::FoulPlay.timeout = 0.02
+    Dir.chdir(foul_play_scratch) do
+      Dir.mkdir("Data") if !File.exist?("Data")
+      File.delete(PortableAIRealidea::FoulPlay::LOG_FILE) if File.exist?(PortableAIRealidea::FoulPlay::LOG_FILE)
+      plan = PortableAIRealidea.plan_for(battle)
+      assert_equal(1, plan["actions"].length)
+      assert_not_equal("foul_play", (plan["diagnostics"] || {})["planner"])
+      assert(File.exist?(PortableAIRealidea::FoulPlay::LOG_FILE), "the fallback is logged")
+      assert_match(/sidecar silent/, File.read(PortableAIRealidea::FoulPlay::LOG_FILE))
+      assert(!File.exist?(PortableAIRealidea::FoulPlay::STATE_FILE), "a stale state is not left for a later sidecar")
+    end
+  ensure
+    PortableAIRealidea::FoulPlay.timeout = 60.0
+  end
+
+  def test_foul_play_reads_a_reply_and_plans_with_it
+    battle = foul_play_battle
+    $PORTABLE_AI_CONFIG = { "foul_play" => true, "party_matrix" => true, "foul_play_iterations" => 1234.0 }
+    PortableAIRealidea::FoulPlay.timeout = 5.0
+    Dir.chdir(foul_play_scratch) do
+      Dir.mkdir("Data") if !File.exist?("Data")
+      state_file = File.expand_path(PortableAIRealidea::FoulPlay::STATE_FILE)
+      reply_file = File.expand_path(PortableAIRealidea::FoulPlay::REPLY_FILE)
+      # A stand-in sidecar: answer only once the state has been written, the way the
+      # real one does, so a reply left over from an earlier turn can never be taken.
+      written = nil
+      sidecar = Thread.new do
+        sleep 0.002 while !File.exist?(state_file)
+        written = File.read(state_file)
+        File.open(reply_file + ".tmp", "wb") do |file|
+          file.write("type=move\nslot=1\nvisits=800\nscore=0.55\niterations=1234\nown=move:0:400,move:1:800\nfoe=move:0:1234\n")
+        end
+        File.rename(reply_file + ".tmp", reply_file)
+      end
+      plan = PortableAIRealidea.plan_for(battle)
+      sidecar.join
+      assert_equal("foul_play", plan["diagnostics"]["planner"])
+      assert_equal("move", plan["actions"][0]["type"])
+      assert_equal(1, plan["actions"][0]["slot"])
+      assert_equal(1234, plan["diagnostics"]["iterations"])
+      assert_equal([1234], plan["diagnostics"]["foe_visits"])
+      assert(!File.exist?(PortableAIRealidea::FoulPlay::REPLY_FILE), "a reply is consumed once")
+      assert_match(/"iterations":1234/, written, "the state names the iteration count the run asked for")
+      File.delete(PortableAIRealidea::FoulPlay::STATE_FILE) if File.exist?(PortableAIRealidea::FoulPlay::STATE_FILE)
+    end
+  ensure
+    PortableAIRealidea::FoulPlay.timeout = 60.0
+  end
+
+  def test_foul_play_json_is_plain
+    json = PortableAIRealidea::FoulPlay.json({ "a" => [1, 2.5, nil, true, "x\"y"], "b" => { "c" => :d } })
+    assert_equal('{"a":[1,2.5,null,true,"x\"y"],"b":{"c":"d"}}', json)
+  end
+
 end

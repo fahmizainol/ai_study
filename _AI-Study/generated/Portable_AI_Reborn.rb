@@ -20,7 +20,7 @@
 # Everything else is optional evidence used to improve the score.
 
 module PortableAI
-  VERSION = "0.6.5" unless const_defined?(:VERSION)
+  VERSION = "0.7.8" unless const_defined?(:VERSION)
 
   module Model
     DEFAULT_CONFIG = {
@@ -204,7 +204,102 @@ module PortableAI
       # 2. The rule that survived is the narrow one: refuse only what is strictly
       # unaffordable, and where there is nothing better to say than the flat 55, say
       # nothing.
-      "setup_matrix"          => true
+      "setup_matrix"          => true,
+
+      # 0.6.6. One estimate fix and one experiment arm, both adapter-side
+      # (rule_enabled?). BOTH FALSE REPRODUCES 0.6.5 BATTLE-FOR-BATTLE.
+      #
+      # Ground into a body that is not on the ground does nothing. The engine decides
+      # that in pbSuccessCheck, after the type modifier every damage estimate reads,
+      # so Levitate, Air Balloon, Magnet Rise and Telekinesis were invisible to every
+      # estimate this adapter makes: Steelix clicked Earthquake into a Levitate Rotom
+      # twice in one battle at +500 (gen5ru_a team3_vs_team4 104729 t4-5), and the
+      # matrix priced the same cell as a kill. Ships ON; it is a bug, keyed so the
+      # control run can still reproduce its predecessor.
+      "airborne_immunity"     => true,
+      # THE ORACLE. Every incoming estimate is the WORST the foe could do -- the max
+      # over its moves against the actor, the max against each bench candidate -- but
+      # the foe clicks one move, and the far seat has already registered it by the
+      # time this side decides. With this key on the adapter reads that choice back
+      # and exports it as the foe's intent; the core then prices the entry hit and
+      # the "you die whatever you click" rules on the declared move instead of the
+      # worst one. That is cheating, which is why it SHIPS OFF and is never a default:
+      # it measures the ceiling a perfect prediction would reach, so a real predictor
+      # (the same export, produced from a model) has a number to be judged against.
+      "foe_oracle"            => false,
+      # Read off the first 0.6.6 run: "I cannot hurt it" (no_effective_move,
+      # weak_current_attacks) opens the switch gate only if the foe can hurt the
+      # actor in fewer than four hits, or the actor has nothing but blanked attacks
+      # (Core.walled_but_safe?). The airborne fix exposed it -- a support Steelix
+      # left a Levitate Uxie it walled at turn 0, four times on one roster.
+      "no_hit_needs_threat"   => true,
+      # 0.6.7. FALSE REPRODUCES 0.6.6 BATTLE-FOR-BATTLE. A non-priority move clicked
+      # by an actor that is slower and certain to die keeps a quarter of its score
+      # (Core::DEAD_BEFORE_MOVING_SCALE): ko_never_lands removed the kill call from
+      # such a move but left its base and damage, and a switch with a real reason to
+      # leave lost to a hit that never lands. The order among the moves is unchanged.
+      "dead_before_moving"    => true,
+      # 0.7.0. WHICH PLANNER RUNS. False is the rule engine (core.rb) and reproduces
+      # 0.6.7 battle-for-battle; true asks the search planner (search.rb) first and
+      # falls back to the rule engine wherever it declines. It declines on doubles and
+      # on any snapshot without a party matrix, so Reborn -- which exports none -- is
+      # unchanged whether this is set or not. The two planners share the board readers
+      # in matrix.rb and none of the scoring: search values the STATE after the turn,
+      # the rule engine values the ACTION. Unmeasured; off until a paired run says
+      # otherwise.
+      "search_planner"        => false,
+      # 0.7.3. How many plies the search planner looks ahead. 1 is the 0.7.2 grid --
+      # this turn, then score the board. 2 answers each of those boards with the
+      # safest reply grid from it, which is what makes a kill the foe can only
+      # postpone by switching still count. Read only when search_planner is on.
+      "search_depth"          => 2,
+      # 0.7.5. THE OPPONENT MODEL, in one number, applied to the root rows only. 0 is
+      # the original's pick_safest: an action is worth the worst the foe can reply
+      # with. 1 values it at the EXPECTED reply instead -- the weights of the reply
+      # the adapter predicts (foe_oracle, foe_stock_model), or uniform over the foe's
+      # options when nothing is predicted. Between the two is a blend. Measured with
+      # the stock model: 0.5 is 46/60 and 1.0 is 44 against 40 at 0; uniform weights
+      # lose (29 / 28). Read only when search_planner is on; 0 reproduces 0.7.4.
+      "search_foe_mix"        => 0.5,
+      # 0.7.8. STEER BY HOW HARD THE FOE'S MOVES HIT. Both planners weight the foe's
+      # columns; with this off, the mass that is not a predicted switch is shared
+      # evenly over every move the foe owns. That even split is measurably wrong: on
+      # the 0.7.7 5000-iteration arm the cell's max-damage incoming move was the move
+      # the foe actually registered on 51.7% of 925 decisions, while the tree's own
+      # most-visited foe column was right on 43.1% -- so the free prior beats the
+      # model each planner built for itself. On the maximin this redistributes
+      # column_weights within the stay group; on the tree it adds a PUCT term to the
+      # foe axis of UCB1. It never moves mass between staying and switching, and it
+      # needs no opponent-model producer. Read only when search_planner is on.
+      "search_foe_prior"      => false,
+      # 0.7.5. Predict the foe's reply with the engine's OWN AI: the withdraw
+      # triggers of pbEnemyShouldWithdrawEx? read without their dice (as a chance),
+      # its switch target, and the top of pbGetMoveScore. Exports through the same
+      # fields the oracle does (predicted_foe and friends), so every consumer of a
+      # prediction reads it alike and its number is judged against the oracle's
+      # ceiling. Not cheating -- it reads no registered choice -- but it is a model
+      # of stock v16, and a human does not switch on stock's triggers. Off.
+      "foe_stock_model"       => false,
+      # 0.7.6. WHICH SEARCH. False is 0.7.5's maximin grid over the joint own x foe
+      # payoff (pick_safest, the legacy poke-engine path) and reproduces it decision
+      # for decision. True routes the same board through a decoupled simultaneous-move
+      # MCTS instead (search.rb, THE TREE), which is what poke-engine and Foul Play
+      # run today: the foe's line is shaped by its own payoff over many iterations
+      # rather than by the one predicted-reply number search_foe_mix blends in --
+      # and neither search_foe_mix nor the predicted reply is read on that path.
+      # Read only when search_planner is on.
+      "search_mcts"           => false,
+      # 0.7.6. The MCTS budget, as an ITERATION COUNT and not a time: a paired run and
+      # its shadow twin must make the same decisions on the same board, and a clock
+      # would make that depend on the machine. The gauntlet is a study harness, not a
+      # move clock, so this may be raised until it stops paying. Read only when
+      # search_mcts is on.
+      "search_iterations"     => 1000,
+      # 0.7.6. Mixed into the per-decision seed of the MCTS chance sampler. The seed is
+      # otherwise the position itself, so a decision replays from its snapshot; this is
+      # how the same position can be asked twice for a different tree. Read only when
+      # search_mcts is on.
+      "search_seed"           => 0
     }
 
     def self.config(overrides)
@@ -419,6 +514,23 @@ module PortableAI
     add(%w[EXPLOSION SELFDESTRUCT FINALGAMBIT MEMENTO HEALINGWISH
            LUNARDANCE], ["self_ko"])
 
+    # 0.7.2. WHAT each self_drop move actually costs, the same shape as SETUP_STAGES,
+    # so a search projection can charge Superpower's Attack and Draco Meteor's Special
+    # Attack rather than pricing the two kills identically. Every id carrying
+    # "self_drop" above has a row here and a test asserts it.
+    SELF_DROP_STAGES = {
+      "DRACOMETEOR"  => { "spa" => -2 },
+      "OVERHEAT"     => { "spa" => -2 },
+      "LEAFSTORM"    => { "spa" => -2 },
+      "PSYCHOBOOST"  => { "spa" => -2 },
+      "FLEURCANNON"  => { "spa" => -2 },
+      "SUPERPOWER"   => { "atk" => -1, "def" => -1 },
+      "CLOSECOMBAT"  => { "def" => -1, "spd" => -1 },
+      "VCREATE"      => { "def" => -1, "spd" => -1, "speed" => -1 },
+      "HAMMERARM"    => { "speed" => -1 },
+      "DRAGONASCENT" => { "def" => -1, "spd" => -1 }
+    }
+
     # Adapters that cannot compute Essentials function codes fall back to bare kind
     # tags ("secondary:burn"), so the core can still find the kind without a chance.
     # The Reborn adapter exports effect_kind/effect_chance from the code map instead
@@ -438,6 +550,51 @@ module PortableAI
     # way" rather than as "it raises nothing".
     def self.setup_stages(move_id)
       SETUP_STAGES[move_id.to_s.upcase]
+    end
+
+    def self.self_drop_stages(move_id)
+      SELF_DROP_STAGES[move_id.to_s.upcase]
+    end
+
+    # How much a heal move restores, in percent of max HP. Rest refills; the weather
+    # heals pay two thirds in sun and a quarter in sand or hail; everything else half.
+    # Move knowledge, so it lives here where both planners can read it (0.7.2; it was
+    # Core.heal_amount, which still delegates).
+    def self.heal_amount(snapshot, tags)
+      return 100.0 if tags.include?("heal_full")
+      if tags.include?("heal_weather")
+        weather = (snapshot || {})["weather"]
+        return 66.0 if weather == "sun"
+        return 25.0 if weather == "sand" || weather == "hail"
+      end
+      50.0
+    end
+
+    # The memory record a chosen action leaves behind: what was clicked and which
+    # repeat counter it advances. The adapter's apply_memory zeroes every counter but
+    # the one incremented, which is what makes "did I Protect last turn" answerable.
+    # Shared by both planners (0.7.2; Core.memory_updates delegates).
+    def self.memory_updates(actions)
+      out = {}
+      actions.each do |action|
+        actor_index = action["actor_index"]
+        update = { "last_type" => action["type"] }
+        if action["type"] == "switch"
+          update["increment"] = "switch"
+        else
+          tags = describe(action["move_id"], action["tags"])
+          update["last_move"] = action["move_id"]
+          if tags.include?("setup")
+            update["increment"] = "setup"
+          elsif tags.include?("protect") || tags.include?("team_protect")
+            update["increment"] = "protect"
+          elsif tags.include?("substitute")
+            update["increment"] = "substitute"
+          end
+        end
+        out[actor_index.to_s] = update
+      end
+      out
     end
 
     def self.kind_of(tags, prefix)
@@ -466,9 +623,216 @@ module PortableAI
 end
 # ===== END portable_ai/effects.rb =====
 
+# ===== BEGIN portable_ai/matrix.rb =====
+# Engine-independent readers over the party x party damage matrix.
+# Requires model.rb and effects.rb to have been loaded first; requires nothing from
+# core.rb, which is the point -- both the rule planner (core.rb) and the search
+# planner (search.rb) read the board through these and neither owns them.
+#
+# Everything here is a pure function of the snapshot. No config, no rng, no scoring.
+
+module PortableAI
+  # Beyond this many hits the exchange is not a race any more, it is a stall war, and
+  # the counts stop carrying information. Cap rather than let a chip move produce a
+  # 40-turn "plan" that compares equal to another one.
+  RACE_MAX_HITS = 8
+
+  # nil when nothing gets through, otherwise the capped number of hits.
+  def self.hits_needed(hp, per_hit)
+    return nil if per_hit.nil? || per_hit <= 0
+    count = (hp / per_hit.to_f).ceil
+    count = RACE_MAX_HITS if count > RACE_MAX_HITS
+    count = 1 if count < 1
+    count
+  end
+
+  # ---------------------------------------------------------------------------
+  # 0.6.5. THE PARTY x PARTY DAMAGE MATRIX -- a pure derived layer over one new
+  # snapshot field.
+  #
+  # Every rule above this line scores against the ACTIVE foe. That is the whole
+  # board a move sees, but it is not the whole board a switch decides: sending the
+  # only body that beats their Azumarill into a Scizor that removes it is a game
+  # thrown away three turns before anything looks wrong, and a boost is worth what
+  # it flips across the rest of the party, not a flat 55.
+  #
+  # The adapter builds `snapshot["matrix"]` -- one damage estimate per party pair,
+  # both directions, cached and re-rolled only when a signature changes. This
+  # section reads it and nothing else, so every consumer goes inert the instant the
+  # field is absent: an adapter that exports no matrix (Reborn) is unchanged, which
+  # is what makes its gauntlet the control for this version.
+  #
+  # SLOTS, NOT SEATS. A benched body has no seat, and a seat is not a party index.
+  # The side tables carry both, and matrix_slot is the only way across.
+  #
+  # NOT in the cells, on purpose: HP (this layer derives the hit counts from the
+  # side tables' current hp_pct, so a verdict decays as a body is chipped),
+  # Intimidate, the Choice lock, entry hazards, and PRIORITY -- a cell is a damage
+  # number, and damage_race is the thing that orders the final hit, so a body that
+  # wins on Bullet Punch reads here as losing. The 0.6.4 switch estimators
+  # still carry those and still feed candidate_race; the matrix is the wide, thin
+  # view, not a replacement for the narrow, thick one. Defender-side screens ARE in
+  # the numbers, because the engine's own damage estimate reads them.
+
+  # Both sides needing six or more hits is not a race, it is a stall: at that depth
+  # the exchange is decided by crits, status and residual, none of which these cells
+  # carry. Deliberately below RACE_MAX_HITS (8), which is a CAP -- "both at the cap"
+  # would need <= 12.5% a hit on both sides and would almost never be reachable --
+  # and above WALL_BREAK_MAX_HITS (4), which asks the opposite question. The verdict
+  # is recomputed from current HP every snapshot, so an S decays into W or L as soon
+  # as one side is chipped enough to matter.
+  MATRIX_STALL_HITS = 6
+
+  def self.matrix(snapshot)
+    m = (snapshot || {})["matrix"]
+    m.is_a?(Hash) ? m : nil
+  end
+
+  # Seat (a battler index: actor["index"], target["index"], never an action's slot)
+  # to party slot. nil for a seat no live party entry occupies.
+  def self.matrix_slot(side_table, seat)
+    return nil if side_table.nil? || seat.nil?
+    side_table.each do |entry|
+      next if entry.nil?
+      return entry["slot"] if !entry["index"].nil? && entry["index"] == seat
+    end
+    nil
+  end
+
+  def self.matrix_entry(side_table, slot)
+    return nil if side_table.nil? || slot.nil?
+    side_table.each do |entry|
+      next if entry.nil?
+      return entry if entry["slot"] == slot
+    end
+    nil
+  end
+
+  def self.matrix_cell(snapshot, own_slot, foe_slot)
+    m = matrix(snapshot)
+    return nil if m.nil? || own_slot.nil? || foe_slot.nil?
+    cells = m["cells"]
+    return nil if !cells.is_a?(Hash)
+    cell = cells["#{own_slot}:#{foe_slot}"]
+    cell.is_a?(Hash) ? cell : nil
+  end
+
+  # Hits each way at the HP both bodies are actually standing on. nil on either side
+  # means nothing that body has gets through, which is a distinct answer from "it
+  # needs many hits" and the verdict below reads it as such.
+  def self.matrix_hits(cell, own_hp, foe_hp)
+    return nil if cell.nil?
+    { "mine" => hits_needed(foe_hp, Model.number(cell["out"], 0.0)),
+      "theirs" => hits_needed(own_hp, Model.number(cell["in"], 0.0)) }
+  end
+
+  # "W" this body wins the pair, "L" it loses, "S" neither finishes, nil unknown.
+  #
+  # No free-hit convention here. The turn a switch costs belongs to candidate_race
+  # (:1210), which already charges it; a matrix verdict is the standing question
+  # "who beats whom", asked of two bodies at their current HP.
+  def self.matrix_verdict(snapshot, own_slot, foe_slot)
+    cell = matrix_cell(snapshot, own_slot, foe_slot)
+    return nil if cell.nil?
+    m = matrix(snapshot)
+    own = matrix_entry(m["own"], own_slot)
+    foe = matrix_entry(m["foe"], foe_slot)
+    return nil if own.nil? || foe.nil?
+    cell_verdict(cell, Model.number(own["hp_pct"], 100.0),
+                 Model.number(foe["hp_pct"], 100.0))
+  end
+
+  # The same judgement on a cell the caller is holding -- a transformed one, which by
+  # construction is in no matrix (Core.setup_matrix_value).
+  # A pair the engine could not price reads here exactly like a pair nothing lands in:
+  # `out` nil and `out` 0.0 both give no hits and both lose. The distinction is kept in
+  # the cell for the readout (`?` against `0%`) rather than acted on, because the
+  # alternative -- a verdict of nil -- would silently drop the pair out of
+  # matrix_answers and turn "we could not measure it" into "nothing answers it".
+  def self.cell_verdict(cell, own_hp, foe_hp)
+    return nil if cell.nil?
+    return nil if own_hp <= 0 || foe_hp <= 0
+    hits = matrix_hits(cell, own_hp, foe_hp)
+    mine = hits["mine"]
+    theirs = hits["theirs"]
+    stalled_mine = mine.nil? || mine >= MATRIX_STALL_HITS
+    stalled_theirs = theirs.nil? || theirs >= MATRIX_STALL_HITS
+    return "S" if stalled_mine && stalled_theirs
+    return "L" if mine.nil?
+    return "W" if theirs.nil?
+    return "W" if mine < theirs
+    return "L" if mine > theirs
+    faster = cell["faster"]
+    return nil if faster != true && faster != false
+    faster ? "W" : "L"
+  end
+
+  def self.matrix_live_slots(side_table)
+    out = []
+    (side_table || []).each do |entry|
+      next if entry.nil?
+      next if entry["alive"] == false
+      next if Model.number(entry["hp_pct"], 0.0) <= 0
+      out << entry["slot"]
+    end
+    out
+  end
+
+  # Every live body on our side that beats this foe.
+  def self.matrix_answers(snapshot, foe_slot)
+    m = matrix(snapshot)
+    return [] if m.nil?
+    matrix_live_slots(m["own"]).select do |own_slot|
+      matrix_verdict(snapshot, own_slot, foe_slot) == "W"
+    end
+  end
+
+  # The live foes this body is the ONLY answer to. Empty when the matrix is absent,
+  # so a consumer written against it is inert by construction.
+  def self.sole_answers(snapshot, own_slot)
+    m = matrix(snapshot)
+    return [] if m.nil? || own_slot.nil?
+    matrix_live_slots(m["foe"]).select do |foe_slot|
+      answers = matrix_answers(snapshot, foe_slot)
+      answers.length == 1 && answers[0] == own_slot
+    end
+  end
+
+  # A cell as it would read after the actor's own stat stages. Physical output scales
+  # with Attack, special with Special Attack, and the mirror on the way in; speed
+  # stages can flip who moves first, which is the whole point of a Dragon Dance.
+  # Ratios, not the engine's numerator/denominator pairs -- STAGE_MULT.
+  #
+  # Applied from stage 0. Its only caller is the first-setup arm (repeats == 0, which
+  # setup_stage keys off positive_stage_total < 2), so the body is carrying at most
+  # one stage already and the error is bounded by one.
+  def self.matrix_transform_cell(cell, stages, own_speed, foe_speed, trick_room)
+    return nil if cell.nil?
+    out = Model.copy_hash(cell)
+    stages = stages || {}
+    offence = (cell["out_cat"] == "special") ? stages["spa"] : stages["atk"]
+    defence = (cell["in_cat"] == "special") ? stages["spd"] : stages["def"]
+    if !cell["out"].nil? && !offence.nil? && offence != 0
+      out["out"] = Model.number(cell["out"], 0.0) * Effects.stage_multiplier(offence)
+    end
+    if !cell["in"].nil? && !defence.nil? && defence != 0
+      out["in"] = Model.number(cell["in"], 0.0) / Effects.stage_multiplier(defence)
+    end
+    speed_stage = stages["speed"]
+    if !speed_stage.nil? && speed_stage != 0 && !own_speed.nil? && !foe_speed.nil?
+      mine = own_speed.to_f * Effects.stage_multiplier(speed_stage)
+      # The adapters' own convention (faster_than_foes?): strictly greater is faster,
+      # a tie is not, and Trick Room inverts it.
+      out["faster"] = trick_room ? mine < foe_speed.to_f : mine > foe_speed.to_f
+    end
+    out
+  end
+end
+# ===== END portable_ai/matrix.rb =====
+
 # ===== BEGIN portable_ai/core.rb =====
 # Engine-independent battle decision module.
-# Requires model.rb and effects.rb to have been loaded first.
+# Requires model.rb, effects.rb and matrix.rb to have been loaded first.
 
 module PortableAI
   HARD_REJECT = -1000000
@@ -940,6 +1304,31 @@ module PortableAI
       end
     end
 
+    # 0.6.7 (dead_before_moving). A move the actor does not live to click is worth a
+    # quarter of itself. ko_never_lands above strips the +500 kill call from such a
+    # move and nothing else: engine_base, expected_damage and super_effective stayed,
+    # so a slower Sceptile at 100% facing a declared Acrobatics of 198% clicked its
+    # own Acrobatics at 410 over a switch at 234 whose only death-aware term was
+    # escape_lethal_threat +130 (gen5ru_a team3_vs_team4 104729 t10). Of the 162
+    # oracle turns where the actor was slower and certain to die, 131 attacked.
+    #
+    # Every non-priority move is scaled the same, so the ORDER among them is what it
+    # was -- the rule never changes which move is clicked, only whether a switch
+    # that has its own reason to exist wins over it -- and a priority move keeps
+    # its whole score, because it lands: a Quick Attack that chips before death now
+    # beats a Focus Blast that never happens. Same triple as ko_never_lands: slower
+    # (nil is not slower), no priority, certain_lethal_threat? (the declared hit on
+    # its minimum roll under the oracle, the strict figure otherwise). A trapped
+    # actor keeps its move; the gate stays closed on the switches, the moves are
+    # ranked as before. Under priority_gate, like ko_never_lands: with the gate off
+    # nothing in the core reads the speed order, and that ablation stays whole.
+    if config["dead_before_moving"] && config["priority_gate"] && faster == false &&
+       Model.number(action["priority"], 0) <= 0 && certain_lethal_threat?(actor, config)
+      adjust = out_score * (DEAD_BEFORE_MOVING_SCALE - 1.0)
+      out_score += adjust
+      reasons << ["dead_before_moving", adjust]
+    end
+
     out_score
   end
 
@@ -1029,7 +1418,7 @@ module PortableAI
       out_score += adjust
       reasons << ["incoming_risk", adjust]
     elsif real_incoming && weight != 0
-      incoming = Model.number(action["incoming_damage_pct"], 0.0)
+      incoming = entry_hit_pct(action)
       adjust = (25.0 - incoming) * 1.28 * weight
       out_score += adjust
       reasons << ["entry_incoming_damage", adjust]
@@ -1096,9 +1485,20 @@ module PortableAI
     # estimate is on the action; absent (older adapters), the reasons keep their
     # 0.6.2 shape and the candidate is not held to a number nobody computed.
     hitter = candidate_can_hit?(snapshot, actor, action, config)
+    # 0.6.6 (no_hit_needs_threat). "I cannot hurt it" is a reason to leave only if IT
+    # can hurt ME. The airborne fix made Steelix's Earthquake into a Levitate Uxie
+    # the nothing it always was, and both reasons below then sent Steelix off the
+    # field at turn 0 with Toxic, Stealth Rock and Roar in hand, against a foe that
+    # needs six hits to remove it -- four battles lost on one roster, every one of
+    # them a Steelix that stock kept in and let lay rocks (gen5ru_a team3_vs_team4
+    # 196613 t0). A wall that cannot be hurt in a hurry and still has a move worth
+    # clicking has no reason to leave; a wall with nothing but blanked attacks does.
+    walled = config["no_hit_needs_threat"] && walled_but_safe?(actor)
     if Model.truthy(actor["no_effective_move"])
       if hitter == false
         reasons << ["bench_cannot_hit_either", 0]
+      elsif walled
+        reasons << ["walled_but_safe", 0]
       else
         out_score += 260
         reasons << ["no_effective_move", 260]
@@ -1119,6 +1519,8 @@ module PortableAI
     if Model.number(actor["best_damage_pct"], 100) < 10
       if hitter == false
         reasons << ["bench_as_weak", 0]
+      elsif walled
+        reasons << ["walled_but_safe", 0] if !reasons.any? { |r| r[0] == "walled_but_safe" }
       else
         out_score += 120
         reasons << ["weak_current_attacks", 120]
@@ -1223,7 +1625,7 @@ module PortableAI
        action.key?("incoming_damage_pct")
       safe = Model.number(action["candidate_hp_pct"], 100.0) -
              Model.number(action["entry_damage_pct"], 0.0) -
-             Model.number(action["incoming_damage_pct"], 0.0) > 0
+             entry_hit_pct(action) > 0
     end
     if Model.number(actor["hp_pct"], 100) <= 20 && safe
       out_score += 80
@@ -1249,7 +1651,7 @@ module PortableAI
        action.key?("entry_damage_pct") && action.key?("incoming_damage_pct")
       left = Model.number(action["candidate_hp_pct"], 100.0) -
              Model.number(action["entry_damage_pct"], 0.0) -
-             Model.number(action["incoming_damage_pct"], 0.0) * MIN_DAMAGE_ROLL
+             entry_hit_pct(action) * MIN_DAMAGE_ROLL
       if left <= 0
         out_score -= 500
         reasons << ["dies_on_entry", -500]
@@ -1368,11 +1770,30 @@ module PortableAI
   # might help (threatened_lethal?), which is what earns the bonus.
   MIN_DAMAGE_ROLL = 0.85
 
+  # What a move the actor will not live to click keeps of its score (dead_before_
+  # moving). Not zero: the death is certain only on the estimate, and a quarter keeps
+  # the moves ranked among themselves for the turns where no switch is allowed.
+  DEAD_BEFORE_MOVING_SCALE = 0.25
+
   # The incoming hit kills through any damage roll, not merely through the estimate.
   # threatened_lethal? is the softer question and stays what the 0.3.2 rules ask.
   def self.certain_lethal_threat?(actor, config = {})
     hp = Model.number(actor["hp_pct"], 100.0)
     return false if hp <= 0
+    # 0.6.6. When the adapter knows which move the foe has committed to, THAT hit is
+    # the one that decides whether death is certain -- a declared Toxic makes it
+    # false whatever the foe's Earthquake would have done, and a declared 95% Air
+    # Slash makes it nearly true where strict_threat's "under 100% is 0%" made it
+    # false (Xatu at 28% Roosted into a 48% Air Slash, gen5uu_a team1_vs_team2 104729
+    # t30). The figure is the declared hit on its minimum roll, discounted by its
+    # hit chance: no threshold constant, and a 70% Focus Blast has to overkill by a
+    # third before it counts as certain. Absent, the 0.6.5 predicate stands.
+    if actor.key?("predicted_incoming_damage_pct")
+      hit = Model.number(actor["predicted_incoming_damage_pct"], 0.0)
+      accuracy = actor["predicted_incoming_accuracy"]
+      hit *= [Model.number(accuracy, 100.0), 100.0].min / 100.0 if !accuracy.nil?
+      return hit * MIN_DAMAGE_ROLL >= hp
+    end
     incoming = actor["incoming_damage_pct"]
     # Under strict_threat only a hit that cannot fail to happen (100% accurate, foe
     # awake) makes death certain; adapters that export no such figure keep the loose
@@ -1409,13 +1830,7 @@ module PortableAI
   # Percentage points of maximum HP a recovery move restores, in the same units as
   # hp_pct and incoming_damage_pct.
   def self.heal_amount(snapshot, tags)
-    return 100.0 if tags.include?("heal_full")
-    if tags.include?("heal_weather")
-      weather = snapshot["weather"]
-      return 66.0 if weather == "sun"
-      return 25.0 if weather == "sand" || weather == "hail"
-    end
-    50.0
+    Effects.heal_amount(snapshot, tags)
   end
 
   # Does healing change who is alive at the end of the turn? Reborn's recovercode
@@ -1510,11 +1925,6 @@ module PortableAI
     end
     false
   end
-
-  # Beyond this many hits the exchange is not a race any more, it is a stall war, and
-  # the counts stop carrying information. Cap rather than let a chip move produce a
-  # 40-turn "plan" that compares equal to another one.
-  RACE_MAX_HITS = 8
 
   # HOW MANY HITS EACH SIDE NEEDS, AND WHO LANDS THE LAST ONE.
   #
@@ -1614,15 +2024,6 @@ module PortableAI
       "last_hit_first" => last_hit_first, "winning" => winning }
   end
 
-  # nil when nothing gets through, otherwise the capped number of hits.
-  def self.hits_needed(hp, per_hit)
-    return nil if per_hit.nil? || per_hit <= 0
-    count = (hp / per_hit.to_f).ceil
-    count = RACE_MAX_HITS if count > RACE_MAX_HITS
-    count = 1 if count < 1
-    count
-  end
-
 
   # "The foe kills me in two and I do not move first." Silent -- false, never a
   # penalty -- whenever the race is unavailable.
@@ -1637,6 +2038,19 @@ module PortableAI
   # matchup is 32 there, and one super-effective step is another 32). The bands are
   # how many hits the FOE needs to knock this candidate out.
   SWITCHIN_RACE_OUTSPEED = 70
+
+  # 0.6.6. THE HIT A SWITCH CANDIDATE EATS ON THE WAY IN. The adapter's
+  # incoming_damage_pct is the worst the foe has against the candidate. When it also
+  # knows which move the foe has committed to -- predicted_incoming_damage_pct, the
+  # oracle arm today and a predictor's export later -- that is the entry hit, and the
+  # worst case stays what the exchange AFTER entry is run on (candidate_race,
+  # switchin_race_bonus): the foe is committed for one turn, not for the race. Absent,
+  # this is the 0.6.5 number, so every consumer is unchanged on a run without it.
+  def self.entry_hit_pct(action)
+    key = action.key?("predicted_incoming_damage_pct") ?
+          "predicted_incoming_damage_pct" : "incoming_damage_pct"
+    Model.number(action[key], 0.0)
+  end
 
   def self.switchin_race_bonus(action)
     # The candidate's OWN hp, not 100: a chipped bench mon that dies in one is exactly
@@ -1707,8 +2121,10 @@ module PortableAI
     # mirror -- Body Slam does nothing to it, Shadow Ball does 7% -- was the case
     # (no_switch_full_hp_neutral, Reborn probe).
     return { "mine" => mine, "theirs" => nil, "winning" => false } if mine >= RACE_MAX_HITS
+    # The free hit is the DECLARED one when the adapter knows it (entry_hit_pct);
+    # the hits after it are the worst the foe has.
     left = Model.number(action["candidate_hp_pct"], 100.0) -
-           Model.number(action["entry_damage_pct"], 0.0) - incoming
+           Model.number(action["entry_damage_pct"], 0.0) - entry_hit_pct(action)
     return { "mine" => mine, "theirs" => 1, "winning" => false } if left <= 0
     more = hits_needed(left, incoming)
     winning = if more.nil? then true            # nothing of theirs gets through
@@ -1736,6 +2152,39 @@ module PortableAI
   # about a chipped wall: at 40% a 15% hit is three, not "weak".
   WALL_BREAK_MARGIN = 2
   WALL_BREAK_MAX_HITS = 4
+
+  # The foe needs this many hits or more to remove the actor -- the band
+  # switchin_race_bonus calls "nothing the foe has gets through in a hurry" -- and the
+  # actor has a non-damaging move that WORKS ON THE FOE OR THE FIELD and can still
+  # land: a status, a hazard below its cap, a phaze, a disruption, a stage reset or
+  # an item trick. Not a boost, a heal, a Substitute or a Protect -- those are what an
+  # Alakazam has in front of a Toxic Umbreon, and doing them forever is not a plan;
+  # the 0.6.3 card no_effective_move_needs_a_body_that_breaks_the_wall is exactly
+  # that board and it must keep leaving. Residual damage counts against the actor
+  # the way damage_race counts it. False without an incoming estimate: a missing
+  # field never closes a gate that would otherwise open.
+  WALL_SAFE_HITS = 4
+  WALL_WORK_TAGS = %w[status hazard force_switch disrupt reset_stages item_control]
+
+  def self.walled_but_safe?(actor)
+    hp = Model.number(actor["hp_pct"], 100.0)
+    return false if hp <= 0 || actor["incoming_damage_pct"].nil?
+    per_hit = Model.number(actor["incoming_damage_pct"], 0.0) +
+              Model.number(actor["residual_damage_pct"], 0.0)
+    theirs = hits_needed(hp, per_hit)
+    return false if !theirs.nil? && theirs < WALL_SAFE_HITS
+    (actor["actions"] || []).any? do |other|
+      next false if other["type"] != "move" || Model.truthy(other["damaging"])
+      next false if Model.truthy(other["immune"])
+      tags = Effects.describe(other["move_id"].to_s.upcase, other["tags"])
+      next false if (tags & WALL_WORK_TAGS).empty?
+      if tags.include?("hazard")
+        next false if Model.number(other["existing_layers"], 0) >=
+                      Model.number(other["max_layers"], 1)
+      end
+      true
+    end
+  end
 
   def self.candidate_can_hit?(snapshot, actor, action, config)
     return nil if !config["escape_needs_hitter"]
@@ -1791,186 +2240,13 @@ module PortableAI
   end
 
   # ---------------------------------------------------------------------------
-  # 0.6.5. THE PARTY x PARTY DAMAGE MATRIX -- a pure derived layer over one new
-  # snapshot field.
+  # 0.6.5. CONSUMERS OF THE PARTY x PARTY DAMAGE MATRIX.
   #
-  # Every rule above this line scores against the ACTIVE foe. That is the whole
-  # board a move sees, but it is not the whole board a switch decides: sending the
-  # only body that beats their Azumarill into a Scizor that removes it is a game
-  # thrown away three turns before anything looks wrong, and a boost is worth what
-  # it flips across the rest of the party, not a flat 55.
-  #
-  # The adapter builds `snapshot["matrix"]` -- one damage estimate per party pair,
-  # both directions, cached and re-rolled only when a signature changes. This
-  # section reads it and nothing else, so every consumer goes inert the instant the
-  # field is absent: an adapter that exports no matrix (Reborn) is unchanged, which
-  # is what makes its gauntlet the control for this version.
-  #
-  # SLOTS, NOT SEATS. A benched body has no seat, and a seat is not a party index.
-  # The side tables carry both, and matrix_slot is the only way across.
-  #
-  # NOT in the cells, on purpose: HP (this layer derives the hit counts from the
-  # side tables' current hp_pct, so a verdict decays as a body is chipped),
-  # Intimidate, the Choice lock, entry hazards, and PRIORITY -- a cell is a damage
-  # number, and damage_race is the thing that orders the final hit, so a body that
-  # wins on Bullet Punch reads here as losing. The 0.6.4 switch estimators
-  # still carry those and still feed candidate_race; the matrix is the wide, thin
-  # view, not a replacement for the narrow, thick one. Defender-side screens ARE in
-  # the numbers, because the engine's own damage estimate reads them.
-
-  # Both sides needing six or more hits is not a race, it is a stall: at that depth
-  # the exchange is decided by crits, status and residual, none of which these cells
-  # carry. Deliberately below RACE_MAX_HITS (8), which is a CAP -- "both at the cap"
-  # would need <= 12.5% a hit on both sides and would almost never be reachable --
-  # and above WALL_BREAK_MAX_HITS (4), which asks the opposite question. The verdict
-  # is recomputed from current HP every snapshot, so an S decays into W or L as soon
-  # as one side is chipped enough to matter.
-  MATRIX_STALL_HITS = 6
-
-  def self.matrix(snapshot)
-    m = (snapshot || {})["matrix"]
-    m.is_a?(Hash) ? m : nil
-  end
-
-  # Seat (a battler index: actor["index"], target["index"], never an action's slot)
-  # to party slot. nil for a seat no live party entry occupies.
-  def self.matrix_slot(side_table, seat)
-    return nil if side_table.nil? || seat.nil?
-    side_table.each do |entry|
-      next if entry.nil?
-      return entry["slot"] if !entry["index"].nil? && entry["index"] == seat
-    end
-    nil
-  end
-
-  def self.matrix_entry(side_table, slot)
-    return nil if side_table.nil? || slot.nil?
-    side_table.each do |entry|
-      next if entry.nil?
-      return entry if entry["slot"] == slot
-    end
-    nil
-  end
-
-  def self.matrix_cell(snapshot, own_slot, foe_slot)
-    m = matrix(snapshot)
-    return nil if m.nil? || own_slot.nil? || foe_slot.nil?
-    cells = m["cells"]
-    return nil if !cells.is_a?(Hash)
-    cell = cells["#{own_slot}:#{foe_slot}"]
-    cell.is_a?(Hash) ? cell : nil
-  end
-
-  # Hits each way at the HP both bodies are actually standing on. nil on either side
-  # means nothing that body has gets through, which is a distinct answer from "it
-  # needs many hits" and the verdict below reads it as such.
-  def self.matrix_hits(cell, own_hp, foe_hp)
-    return nil if cell.nil?
-    { "mine" => hits_needed(foe_hp, Model.number(cell["out"], 0.0)),
-      "theirs" => hits_needed(own_hp, Model.number(cell["in"], 0.0)) }
-  end
-
-  # "W" this body wins the pair, "L" it loses, "S" neither finishes, nil unknown.
-  #
-  # No free-hit convention here. The turn a switch costs belongs to candidate_race
-  # (:1210), which already charges it; a matrix verdict is the standing question
-  # "who beats whom", asked of two bodies at their current HP.
-  def self.matrix_verdict(snapshot, own_slot, foe_slot)
-    cell = matrix_cell(snapshot, own_slot, foe_slot)
-    return nil if cell.nil?
-    m = matrix(snapshot)
-    own = matrix_entry(m["own"], own_slot)
-    foe = matrix_entry(m["foe"], foe_slot)
-    return nil if own.nil? || foe.nil?
-    cell_verdict(cell, Model.number(own["hp_pct"], 100.0),
-                 Model.number(foe["hp_pct"], 100.0))
-  end
-
-  # The same judgement on a cell the caller is holding -- a transformed one, which by
-  # construction is in no matrix (Core.setup_matrix_value).
-  # A pair the engine could not price reads here exactly like a pair nothing lands in:
-  # `out` nil and `out` 0.0 both give no hits and both lose. The distinction is kept in
-  # the cell for the readout (`?` against `0%`) rather than acted on, because the
-  # alternative -- a verdict of nil -- would silently drop the pair out of
-  # matrix_answers and turn "we could not measure it" into "nothing answers it".
-  def self.cell_verdict(cell, own_hp, foe_hp)
-    return nil if cell.nil?
-    return nil if own_hp <= 0 || foe_hp <= 0
-    hits = matrix_hits(cell, own_hp, foe_hp)
-    mine = hits["mine"]
-    theirs = hits["theirs"]
-    stalled_mine = mine.nil? || mine >= MATRIX_STALL_HITS
-    stalled_theirs = theirs.nil? || theirs >= MATRIX_STALL_HITS
-    return "S" if stalled_mine && stalled_theirs
-    return "L" if mine.nil?
-    return "W" if theirs.nil?
-    return "W" if mine < theirs
-    return "L" if mine > theirs
-    faster = cell["faster"]
-    return nil if faster != true && faster != false
-    faster ? "W" : "L"
-  end
-
-  def self.matrix_live_slots(side_table)
-    out = []
-    (side_table || []).each do |entry|
-      next if entry.nil?
-      next if entry["alive"] == false
-      next if Model.number(entry["hp_pct"], 0.0) <= 0
-      out << entry["slot"]
-    end
-    out
-  end
-
-  # Every live body on our side that beats this foe.
-  def self.matrix_answers(snapshot, foe_slot)
-    m = matrix(snapshot)
-    return [] if m.nil?
-    matrix_live_slots(m["own"]).select do |own_slot|
-      matrix_verdict(snapshot, own_slot, foe_slot) == "W"
-    end
-  end
-
-  # The live foes this body is the ONLY answer to. Empty when the matrix is absent,
-  # so a consumer written against it is inert by construction.
-  def self.sole_answers(snapshot, own_slot)
-    m = matrix(snapshot)
-    return [] if m.nil? || own_slot.nil?
-    matrix_live_slots(m["foe"]).select do |foe_slot|
-      answers = matrix_answers(snapshot, foe_slot)
-      answers.length == 1 && answers[0] == own_slot
-    end
-  end
-
-  # A cell as it would read after the actor's own stat stages. Physical output scales
-  # with Attack, special with Special Attack, and the mirror on the way in; speed
-  # stages can flip who moves first, which is the whole point of a Dragon Dance.
-  # Ratios, not the engine's numerator/denominator pairs -- STAGE_MULT.
-  #
-  # Applied from stage 0. Its only caller is the first-setup arm (repeats == 0, which
-  # setup_stage keys off positive_stage_total < 2), so the body is carrying at most
-  # one stage already and the error is bounded by one.
-  def self.matrix_transform_cell(cell, stages, own_speed, foe_speed, trick_room)
-    return nil if cell.nil?
-    out = Model.copy_hash(cell)
-    stages = stages || {}
-    offence = (cell["out_cat"] == "special") ? stages["spa"] : stages["atk"]
-    defence = (cell["in_cat"] == "special") ? stages["spd"] : stages["def"]
-    if !cell["out"].nil? && !offence.nil? && offence != 0
-      out["out"] = Model.number(cell["out"], 0.0) * Effects.stage_multiplier(offence)
-    end
-    if !cell["in"].nil? && !defence.nil? && defence != 0
-      out["in"] = Model.number(cell["in"], 0.0) / Effects.stage_multiplier(defence)
-    end
-    speed_stage = stages["speed"]
-    if !speed_stage.nil? && speed_stage != 0 && !own_speed.nil? && !foe_speed.nil?
-      mine = own_speed.to_f * Effects.stage_multiplier(speed_stage)
-      # The adapters' own convention (faster_than_foes?): strictly greater is faster,
-      # a tie is not, and Trick Room inverts it.
-      out["faster"] = trick_room ? mine < foe_speed.to_f : mine > foe_speed.to_f
-    end
-    out
-  end
+  # The readers themselves -- matrix_cell, cell_verdict, matrix_answers and the rest
+  # -- moved to matrix.rb in 0.7.0, so the search planner can read the same board
+  # without loading the rule engine. What stays here is what SCORES: the rules below
+  # turn a verdict into a reason term. Both layers go inert together when the adapter
+  # exports no snapshot["matrix"] (Reborn), which is what makes its gauntlet a control.
 
   # CONSUMER A. The only answer to a foe is not a body to spend.
   #
@@ -2249,26 +2525,7 @@ module PortableAI
   end
 
   def self.memory_updates(actions)
-    out = {}
-    actions.each do |action|
-      actor_index = action["actor_index"]
-      update = { "last_type" => action["type"] }
-      if action["type"] == "switch"
-        update["increment"] = "switch"
-      else
-        tags = Effects.describe(action["move_id"], action["tags"])
-        update["last_move"] = action["move_id"]
-        if tags.include?("setup")
-          update["increment"] = "setup"
-        elsif tags.include?("protect") || tags.include?("team_protect")
-          update["increment"] = "protect"
-        elsif tags.include?("substitute")
-          update["increment"] = "substitute"
-        end
-      end
-      out[actor_index.to_s] = update
-    end
-    out
+    Effects.memory_updates(actions)
   end
 
   # ---------------------------------------------------------------------------
@@ -2709,10 +2966,1360 @@ module PortableAI
 end
 # ===== END portable_ai/core.rb =====
 
+# ===== BEGIN portable_ai/search.rb =====
+# 0.7.0. A SECOND PLANNER: one-ply search over the joint action grid.
+#
+# Requires model.rb, effects.rb and matrix.rb. It does NOT require core.rb and must
+# not come to: core.rb scores ACTIONS by summing 107 hand-tuned reason terms, and this
+# scores the STATE an action leads to. Two answers to two different questions. Mixing
+# them would give a number that is neither, so they share the board readers (matrix.rb)
+# and nothing else. The adapter picks one per run; the rule planner is the default and
+# this is off unless `search_planner` is set.
+#
+# PROVENANCE. The shape is poke-engine's legacy `expectiminimax_search` + `pick_safest`
+# (https://github.com/pmariglia/poke-engine, src/search.rs, GPL-3.0), the path the
+# older Foul Play "safest" bot ran; Foul Play today runs the engine's MCTS instead.
+# Three ideas are borrowed, no code is:
+#   * `pick_safest` -- pick by maximin over the joint own x foe payoff grid, not by
+#     expected value against a guessed foe move.
+#   * a state-value leaf -- the board after the turn is worth what stands on it. The
+#     original's `evaluate` is a PARTY-WIDE sum: every live body is worth its HP plus a
+#     flat alive bonus, and there is no matchup term at all. 0.7.1 made this leaf that
+#     shape; the first version had the weighting inside out (see THE VALUE SCALE).
+#   * chance as branches -- a speed tie and a miss are both two boards at their
+#     probabilities, never one board at an averaged damage. The leaf is a step at
+#     0 HP, so the value of the expected damage is not the expected value.
+# Deliberately NOT borrowed: damage-roll grouping by faint threshold (we carry one
+# expected roll per cell), reversible instructions (unnecessary -- the snapshot is a
+# plain Hash and Model.copy_hash is the whole undo), and Smogon-corpus set prediction
+# (that is the predictor backlog item, and it feeds the same snapshot fields).
+
+module PortableAI
+  module Search
+    # THE VALUE SCALE, the original's proportions in HP points:
+    #   1 point   one percent of a body's HP, every live body on both sides. HP is the
+    #             currency, as in poke-engine's evaluate (POKEMON_HP = 100 x fraction).
+    #   30        a body being alive at all (POKEMON_ALIVE). So a kill is worth the HP
+    #             it removes plus 30, and losing a 5% body costs 35, not the game.
+    #   +/-1000   the battle is over (the original's 100 x depth x battle_is_over).
+    # NO VERDICT TERM (0.7.4). Through 0.7.3 the leaf added +/-25 for the pair left
+    # standing (matrix.rb's W / L), a term the original does not have, kept "small
+    # on purpose" after 0.7.0 had it at the top of the scale and fled to every
+    # W-verdict bench body. Once the foe-switch column priced each move on its own
+    # (out_moves), an attack the bench could wall read as a bad row, and the verdict
+    # was what made the pre-emptive switch the better one: 35/60 with the term, 40/60
+    # without, on the same build. The pair's matchup is already in the sum -- as the
+    # HP each side stands to lose at the next ply -- which is where the original
+    # keeps it.
+    BODY_ALIVE = 30.0
+    BATTLE_OVER = 1000.0
+    # A win found a ply earlier is worth more (the original's 100 x depth), and the
+    # sentinels the maximin loops start from -- no Float::INFINITY on RGSS's Ruby.
+    DEPTH_BONUS = 100.0
+    DEFAULT_DEPTH = 2
+    HUGE = 1.0e18
+
+    # THE REST OF THE ORIGINAL'S evaluate, at its numbers (poke-engine
+    # src/genx/evaluate.rs), for what a turn can change besides HP. 0.7.2: before this
+    # a setup, heal, Protect, status or hazard move projected as a wasted turn, so the
+    # planner could never click one on purpose.
+    STAGE_VALUE = { "atk" => 30.0, "spa" => 30.0, "speed" => 30.0,
+                    "def" => 15.0, "spd" => 15.0 }
+    STAGE_MULTIPLIER = [0.0, 1.0, 2.0, 2.5, 3.0, 3.15, 3.3]
+    # A foe's stage, which the snapshot reports only as a count of positive ones.
+    FOE_STAGE_VALUE = 25.0
+    STATUS_VALUE = { "toxic" => 30.0, "poison" => 10.0, "burn" => 25.0,
+                     "paralyze" => 25.0, "sleep" => 25.0, "freeze" => 40.0,
+                     "confuse" => 20.0, "drain" => 30.0 }
+    SUBSTITUTE_VALUE = 75.0
+    SUBSTITUTE_COST = 25.0
+    HAZARD_VALUE = { "STEALTHROCK" => 10.0, "SPIKES" => 7.0, "TOXICSPIKES" => 7.0,
+                     "STICKYWEB" => 25.0 }
+
+    # nil means "this planner declines" -- the adapter falls through to the rule planner
+    # and the run is unchanged. Declining is the normal path on anything but a singles
+    # battle with a matrix, so a build with the key on is still the rule AI everywhere
+    # this cannot see the board.
+    def self.plan(snapshot, config, rng)
+      Model.validate(snapshot)
+      # The defaults under the overrides, as the rule engine reads them. Through the
+      # first 0.7.5 build this read the overrides alone, so a default that was not
+      # spelled out in the harness (search_foe_mix 0.5) was 0 in play and the
+      # shipped arm reproduced 0.7.4 to the decision.
+      config = Model.config(config)
+      return nil if (snapshot["format"] || "single") != "single"
+      actors = snapshot["actors"]
+      targets = snapshot["targets"] || []
+      return nil if actors.length != 1 || targets.length != 1
+      return nil if PortableAI.matrix(snapshot).nil?
+
+      board = opening_board(snapshot, config)
+      return nil if board.nil?
+      own_actions = actors[0]["actions"]
+      return nil if !own_actions.is_a?(Array) || own_actions.empty?
+      foe_actions = foe_options(snapshot, board)
+      return nil if foe_actions.empty?
+
+      # 0.7.6. THE TREE, or the grid. Everything above is shared -- the same guards,
+      # the same opening board, the same option lists -- and everything below is the
+      # maximin. With the key off this line is the only trace of MCTS in a run.
+      return mcts_plan(snapshot, config, board, own_actions, foe_actions) if config["search_mcts"]
+
+      depth = depth_of(config)
+      # THE OPPONENT MODEL LIVES AT THE ROOT. The mix and the weights are applied to
+      # the root rows only; every ply below is the original's maximin (safest). A
+      # prediction exists only for the board in front of us, and blending the deeper
+      # grids with a uniform expectation instead was measured as the worse half of
+      # every arm (stock model at 0.5: 42 with it, 46 without; the oracle 34 / 46).
+      mix = mix_of(config)
+      weights = column_weights(foe_actions, board["foe_reply"],
+                               config["search_foe_prior"] ? foe_prior(foe_actions) : nil)
+      ranked = own_actions.map do |action|
+        row = foe_actions.map { |foe| payoff(snapshot, board, action, foe, depth, own_actions) }
+        scored = Model.copy_hash(action)
+        # Maximin: the action is worth the WORST the foe can do to it. pick_safest.
+        # Not an average -- an average rewards a line that is excellent against three
+        # foe options and loses the game against the fourth. That is the original,
+        # and at search_foe_mix 0 it is all there is. Above 0 the worst reply is
+        # blended with the EXPECTED one (row_value): 0.7.4 measured pure maximin as
+        # the limit -- an attack's worst case is the bench body that walls it, and
+        # the measured foe does not make that reply.
+        scored["score"] = row_value(row, weights, mix)
+        # The mean breaks a tie in the minimum, and ties are common by construction:
+        # every own move projects the SAME number against a switching foe (own_damage),
+        # so whenever a foe switch is the worst case the minima collapse. Without this
+        # the fallback is the action key, and the planner would click move slot 0 in
+        # every such position. Lexicographic, not a weighted sum, so it can never
+        # reorder two genuinely different minima however close they are.
+        scored["search_mean"] = row.inject(0.0) { |a, b| a + b } / row.length
+        # The row itself, in foe_actions order, so a traced run can be read rather than
+        # guessed at. The first version had to be debugged from four identical scores.
+        scored["search_row"] = row
+        # Diagnostic: the on-field cell the leaf and the ordering are read from. A move
+        # scored as a certain death against a full-HP actor is either a real cell or a
+        # misread one, and nothing else in the trace can tell those apart.
+        on_field = PortableAI.matrix_cell(snapshot, board["own_slot"], board["foe_slot"])
+        scored["search_cell"] = on_field
+        scored["reasons"] = [["search_worst_case", row.min],
+                             ["search_mean", scored["search_mean"]],
+                             ["search_best_case", row.max],
+                             ["search_foe_options", foe_actions.length],
+                             ["search_expected", expected_value(row, weights)]]
+        scored
+      end
+      ranked.sort! { |a, b| compare(a, b) }
+
+      {
+        "actions" => [ranked[0]],
+        # The same record the rule planner leaves (Effects.memory_updates), because the
+        # projection reads it back: a Protect clicked twice running fails, and only
+        # the memory counter can say the last click was one.
+        "memory_updates" => Effects.memory_updates([ranked[0]]),
+        "diagnostics" => {
+          "version" => VERSION,
+          "planner" => "search",
+          "depth" => depth,
+          "foe_mix" => mix,
+          "foe_weights" => weights,
+          "foe_reply" => board["foe_reply"],
+          "format" => "single",
+          "joint_adjustment" => 0,
+          "foe_options" => foe_actions.map { |f| foe_label(f) },
+          "board" => board,
+          "candidate_counts" => [ranked.length],
+          "rankings" => [ranked]
+        }
+      }
+    end
+
+    # Plies to look ahead: the config key, floored at one. A bare Hash (the tests, an
+    # adapter that never merged defaults) gets DEFAULT_DEPTH.
+    # The opponent model's one number, clamped to [0, 1]. See DEFAULT_CONFIG.
+    def self.mix_of(config)
+      mix = Model.number((config || {})["search_foe_mix"], 0.0)
+      mix = 0.0 if mix < 0.0
+      mix = 1.0 if mix > 1.0
+      mix
+    end
+
+    # What the adapter predicts the foe on the field will do this turn, if it
+    # predicts anything: the chance it switches and, when known, the slot it
+    # switches to. From the actor's predicted_foe entry for the target's seat --
+    # the oracle's (type switch, chance 1) or a model's (type move, its own chance).
+    # nil when nothing was exported, which is every run with both keys off.
+    def self.predicted_reply(snapshot)
+      actor = snapshot["actors"][0]
+      target = snapshot["targets"][0]
+      table = actor["predicted_foe"]
+      return nil if !table.is_a?(Hash) || target["index"].nil?
+      entry = table[target["index"].to_s]
+      return nil if !entry.is_a?(Hash)
+      if entry["type"].to_s == "switch"
+        { "switch_chance" => 1.0, "switch_slot" => entry["slot"] }
+      else
+        { "switch_chance" => Model.number(entry["switch_chance"], 0.0),
+          "switch_slot" => entry["switch_slot"] }
+      end
+    end
+
+    # One weight per foe column, summing to one. Uniform without a prediction --
+    # which, measured, is a bad model of this foe (it says "switches five turns in
+    # six"): 29/60 at the root against 46 with the stock model's weights. With
+    # one: the switch chance goes to the predicted slot's column, or is shared by
+    # every switch column when the slot is unknown, and the rest is the stay column.
+    # A column list with no stay (a replacement ply) is uniform whatever was said.
+    def self.column_weights(foe_actions, reply, prior = nil)
+      n = foe_actions.length
+      return [] if n == 0
+      uniform = foe_actions.map { 1.0 / n }
+      if reply.nil?
+        # No opponent model at all. The prior still has something to say -- it is a
+        # statement about the foe's MOVES, not about whether it stays -- so the stay
+        # columns share exactly the mass uniform gave them, redistributed by damage.
+        return uniform if prior.nil?
+        stays = []
+        foe_actions.each_with_index { |f, i| stays << i if f["kind"] == "stay" }
+        return uniform if stays.length < 2
+        out = uniform.dup
+        spread_stays(out, foe_actions, stays, stays.length.to_f / n, prior)
+        return out
+      end
+      # 0.7.7: there are as many stay columns as the foe has moves, so the mass that
+      # is not a switch is shared over all of them. The prediction says whether it
+      # stays, never which move it picks -- concentrating this on a predicted move is
+      # the next arm, and it is what `stock_move` was exported for.
+      stays = []
+      switches = []
+      foe_actions.each_with_index do |f, i|
+        stays << i if f["kind"] == "stay"
+        switches << i if f["kind"] == "switch"
+      end
+      return uniform if stays.empty? || switches.empty?
+      chance = Model.number(reply["switch_chance"], 0.0)
+      chance = 0.0 if chance < 0.0
+      chance = 1.0 if chance > 1.0
+      out = foe_actions.map { 0.0 }
+      spread_stays(out, foe_actions, stays, 1.0 - chance, prior)
+      slot = reply["switch_slot"]
+      named = slot.nil? ? nil : switches.find { |i| foe_actions[i]["slot"] == slot }
+      if named
+        out[named] = chance
+      else
+        switches.each { |i| out[i] = chance / switches.length }
+      end
+      out
+    end
+
+
+    # The stay columns' share of `mass`, split by the prior when there is one and
+    # evenly when there is not. The prior only ever moves mass BETWEEN STAY COLUMNS:
+    # it says which move the foe picks, never whether it stays, so the switch/stay
+    # split its caller computed survives untouched.
+    def self.spread_stays(out, foe_actions, stays, mass, prior)
+      share = nil
+      if !prior.nil?
+        total = 0.0
+        stays.each { |i| total += prior[i] }
+        share = total if total > 0.0
+      end
+      if share.nil?
+        stays.each { |i| out[i] = mass / stays.length }
+      else
+        stays.each { |i| out[i] = mass * prior[i] / share }
+      end
+    end
+
+    # HOW HARD EACH OF THE FOE'S MOVES HITS, normalised: the free prior over the foe's
+    # columns, read straight out of the cell the tree already built. Measured on the
+    # 0.7.7 5000-iteration arm (925 decisions): the cell's max-damage move IS the move
+    # the foe registers 51.7% of the time, against 43.1% for the tree's own most-visited
+    # foe option -- so the tree's opponent model is worse than the one already sitting
+    # in its input, and this is what the two `search_foe_prior` arms redistribute by.
+    #
+    # nil when nothing is priced (no in_moves, or every column zero), which leaves both
+    # consumers exactly as they were. Switch columns get 0: the prior is about moves,
+    # and its consumers never move mass out of the stay group.
+    def self.foe_prior(foe_actions)
+      out = foe_actions.map { 0.0 }
+      total = 0.0
+      foe_actions.each_with_index do |action, i|
+        next if action["kind"] != "stay"
+        pct = Model.number(action["pct"], 0.0)
+        pct = 0.0 if pct < 0.0
+        out[i] = pct
+        total += pct
+      end
+      return nil if total <= 0.0
+      out.map { |v| v / total }
+    end
+
+    def self.expected_value(row, weights)
+      total = 0.0
+      row.each_with_index { |v, i| total += v * Model.number(weights[i], 0.0) }
+      total
+    end
+
+    # Worst reply blended with the expected one by the mix: 0 is the min, 1 the
+    # expectation.
+    def self.row_value(row, weights, mix)
+      return row.min if mix <= 0.0
+      row.min * (1.0 - mix) + expected_value(row, weights) * mix
+    end
+
+    def self.depth_of(config)
+      depth = Model.number((config || {})["search_depth"], DEFAULT_DEPTH).to_i
+      depth < 1 ? 1 : depth
+    end
+
+    # Worst case first, then the mean, then a stable key -- so a tie never depends on
+    # the order the adapter happened to export actions in.
+    def self.compare(a, b)
+      by_score = b["score"] <=> a["score"]
+      return by_score if by_score != 0
+      by_mean = b["search_mean"] <=> a["search_mean"]
+      return by_mean if by_mean != 0
+      key(a) <=> key(b)
+    end
+
+    def self.key(candidate)
+      [candidate["type"].to_s, candidate["slot"].to_i,
+       candidate["move_id"].to_s, candidate["target"].to_i]
+    end
+
+    # ------------------------------------------------------------------------------
+    # The board. Four numbers: which body stands on each side and the HP it stands on.
+    # Every other body's HP is read from the side tables, which a turn does not touch.
+
+    def self.opening_board(snapshot, config = {})
+      m = PortableAI.matrix(snapshot)
+      own_slot = PortableAI.matrix_slot(m["own"], snapshot["actors"][0]["index"])
+      foe_slot = PortableAI.matrix_slot(m["foe"], snapshot["targets"][0]["index"])
+      return nil if own_slot.nil? || foe_slot.nil?
+      own = PortableAI.matrix_entry(m["own"], own_slot)
+      foe = PortableAI.matrix_entry(m["foe"], foe_slot)
+      return nil if own.nil? || foe.nil?
+      actor = snapshot["actors"][0]
+      target = snapshot["targets"][0]
+      own_hp = Model.number(own["hp_pct"], 100.0)
+      foe_hp = Model.number(foe["hp_pct"], 100.0)
+      { "own_slot" => own_slot, "foe_slot" => foe_slot,
+        "own_hp" => own_hp,
+        "foe_hp" => foe_hp,
+        # EVERY BODY'S HP AS THIS SEARCH HAS CHANGED IT, by slot; a slot not here still
+        # stands on its side-table number. own_hp / foe_hp are the on-field entries of
+        # these maps, kept beside them for the readers. Without the maps a body that
+        # took a hit and left the field came back at full table HP, so at depth two
+        # every hit we landed was erased whenever the foe's worst case was a switch --
+        # which it usually is -- and only stages, hazards and status survived a ply.
+        # The planner clicked Rock Polish and Stealth Rock everywhere and won 15 of
+        # 60. The 0.7.0 bug where a switch-in inherited the OUTGOING body's HP was
+        # this one's mirror image.
+        "own_hps" => { own_slot => own_hp },
+        "foe_hps" => { foe_slot => foe_hp },
+        # THE NARROW, THICK VIEW OF THE PAIR ON THE FIELD, kept beside the wide one.
+        # A cell deliberately carries no Choice lock, no Intimidate, no hazards and no
+        # priority (see matrix.rb) -- it answers "does this body beat that body", not
+        # "what happens this turn". Using it as a per-turn damage number was this
+        # planner's second bug and a worse one than the first: a Choice-Scarf Galvantula
+        # locked into a 24% move read as a 174% Bug Buzz, so a healthy Sceptile scored
+        # every move as a certain death and fled. These two fields are what every rule
+        # in core.rb reads for the same question, and they are Choice-aware.
+        "live_incoming" => (actor["incoming_damage_pct"].nil? ? nil :
+                            Model.number(actor["incoming_damage_pct"], 0.0)),
+        "live_faster" => actor["faster"],
+        # Which pair those two numbers describe. A projected board where either body
+        # has changed is not that pair any more, whatever slot it happens to sit on.
+        "live_pair" => [own_slot, foe_slot],
+        # Root facts a deeper ply needs: whether the actor may leave (only meaningful
+        # while it is the body on the field) and whether the foe may.
+        "own_trapped" => Model.truthy(actor["trapped"]),
+        "foe_trapped" => Model.truthy(target["trapped"]),
+        # What the turn can change besides HP, each in the original's evaluate terms.
+        # Stages belong to the body on the field and are lost with it (own_stages
+        # empties on a switch; foe_boost zeroes on theirs). The rest are DELTAS this
+        # turn makes -- a status landed, a hazard laid, a Substitute standing -- so a
+        # body's existing status, which every row carries alike, is not re-counted.
+        "own_stages" => decode_stages(actor["stages"]),
+        # AND WHICH OF THOSE THE ENGINE HAS ALREADY PRICED IN. Every number the root
+        # exports -- expected_damage_pct, the live pair's cell, the side table's Speed
+        # -- was rolled through the actor's real stages. Scaling them by own_stages
+        # again counted a +2 body as +4 (0.7.1-0.7.3). Only the stages this search
+        # PROJECTS on top scale a number; the leaf's boost term still reads the total,
+        # because a switch really does throw the whole stack away.
+        "stage_base" => decode_stages(actor["stages"]),
+        "foe_boost" => Model.number(target["positive_stages"], 0.0) * FOE_STAGE_VALUE,
+        "foe_status_points" => 0.0,
+        "own_status_points" => 0.0,
+        "foe_hazard_points" => 0.0,
+        "substitute" => Model.truthy(actor["substitute"]),
+        "protected" => false,
+        "protect_repeats" => memory_count(snapshot, actor["index"], "protect"),
+        # The opponent model's input: what the adapter predicts the foe on the field
+        # will do. This turn's only -- project drops it, and plan reads it once.
+        "foe_reply" => predicted_reply(snapshot) }
+    end
+
+    # The adapter exports stages as the engine's array (PBStats order: attack 1,
+    # defence 2, speed 3, special attack 4, special defence 5) or, on a thinner
+    # adapter, as a Hash in the core's own short names. Either way out come the names.
+    STAGE_INDEX = { "atk" => 1, "def" => 2, "speed" => 3, "spa" => 4, "spd" => 5 }
+
+    def self.decode_stages(raw)
+      out = {}
+      if raw.is_a?(Array)
+        STAGE_INDEX.each do |name, index|
+          value = Model.number(raw[index], 0.0).to_i
+          out[name] = value if value != 0
+        end
+      elsif raw.is_a?(Hash)
+        STAGE_INDEX.each_key do |name|
+          value = Model.number(raw[name], 0.0).to_i
+          out[name] = value if value != 0
+        end
+      end
+      out
+    end
+
+    def self.memory_count(snapshot, actor_index, key)
+      memory = snapshot["memory"] || {}
+      actor = memory[actor_index.to_s] || memory[actor_index] || {}
+      Model.number(actor[key], 0).to_i
+    end
+
+    # WHAT THE FOE CAN DO. One column per move it owns, plus one per body on its bench.
+    #
+    # 0.7.7. THROUGH 0.7.6 THIS WAS ONE `stay` COLUMN priced at the foe's BEST hit --
+    # "it attacks, at worst" -- and that was the whole model of the opponent. It made
+    # 0.7.6's tree a fair-weather test of MCTS: a search whose entire thesis is that
+    # the foe's line should be shaped by the foe's own payoff was handed an opponent
+    # with one way to act, so per-side UCB had nothing to discover (41/60 at 1000
+    # iterations, 43 at 5000, against the maximin's 46). The cell now carries the
+    # foe's own per-move rolls (`in_moves`, matrix version 3 -- the mirror of the
+    # `out_moves` 0.7.4 added for us, and the same rolls the adapter was already
+    # making to find `in`), so the foe picks a MOVE here, not just "attack".
+    #
+    # A cell without the list -- an older adapter, a pair the matrix never rolled --
+    # is one `stay` column at the best hit, which is 0.7.6 exactly. That fallback is
+    # also every Reborn run, which exports no matrix at all.
+    #
+    # NOTE FOR MAXIMIN: its worst case over these columns is still the biggest hit, so
+    # `search_foe_mix` 0 is very nearly unchanged by this. What moves is the EXPECTED
+    # reply (more columns to spread over, see column_weights) and the tree.
+    #
+    # A trapped foe has no switch column. The original's option generator respects
+    # trapping; without this a trapper's whole advantage was invisible here, and a foe
+    # switch was the worst case on 41% of turns.
+    #
+    # After a faint the ply is a replacement: the side that lost a body picks a
+    # replacement and the other side does nothing (the original's force_switch
+    # options, MoveChoice::None opposite). Both down, both pick.
+    def self.foe_options(snapshot, board)
+      m = PortableAI.matrix(snapshot)
+      bench = PortableAI.matrix_live_slots(m["foe"]).reject { |slot| slot == board["foe_slot"] }
+      return bench.map { |slot| { "kind" => "switch", "slot" => slot } } if board["foe_hp"] <= 0
+      return [{ "kind" => "none" }] if board["own_hp"] <= 0
+      out = foe_moves(snapshot, board)
+      return out if board["foe_trapped"] && board["foe_slot"] == board["live_pair"][1]
+      bench.each { |slot| out << { "kind" => "switch", "slot" => slot } }
+      out
+    end
+
+    # The foe's move columns for the pair standing on the board. Sorted by move id --
+    # a Ruby 1.8 Hash has no order of its own, and a column list that varied between
+    # two runs of the same position would make every paired arm unrepeatable.
+    def self.foe_moves(snapshot, board)
+      cell = PortableAI.matrix_cell(snapshot, board["own_slot"], board["foe_slot"])
+      moves = cell && cell["in_moves"]
+      return [{ "kind" => "stay" }] if !moves.is_a?(Hash) || moves.empty?
+      out = []
+      moves.keys.sort.each do |move_id|
+        entry = moves[move_id]
+        next if !entry.is_a?(Hash)
+        out << { "kind" => "stay", "move_id" => move_id,
+                 "pct" => Model.number(entry["pct"], 0.0), "cat" => entry["cat"] }
+      end
+      out.empty? ? [{ "kind" => "stay" }] : out
+    end
+
+    # The cell's own roll of one of the FOE's moves; the mirror of cell_move.
+    def self.cell_in_move(cell, move_id)
+      return nil if cell.nil? || move_id.nil?
+      moves = cell["in_moves"]
+      return nil if !moves.is_a?(Hash)
+      entry = moves[move_id.to_s.upcase]
+      entry.is_a?(Hash) ? entry : nil
+    end
+
+    # How a foe column reads in a trace: the move it names, or the body it brings in.
+    def self.foe_label(option)
+      return "switch:#{option['slot']}" if option["kind"] == "switch"
+      return "none" if option["kind"] == "none"
+      option["move_id"].nil? ? "stay" : "stay:#{option['move_id']}"
+    end
+
+    # OUR options from a projected board, for the plies below the root. The root's
+    # exported actions are the truth about THIS turn (legality, PP, the Choice lock,
+    # every per-move number against the foe on the field) and they stay the truth as
+    # long as the same two bodies stand there. Any other pair has only the matrix:
+    # one attack worth the cell, and the bench.
+    def self.own_options(snapshot, board, root_actions)
+      m = PortableAI.matrix(snapshot)
+      bench = PortableAI.matrix_live_slots(m["own"]).reject { |slot| slot == board["own_slot"] }
+      if board["own_hp"] <= 0
+        return bench.map { |slot| bench_switch(m, slot, board, root_actions, true) }
+      end
+      return [{ "type" => "none" }] if board["foe_hp"] <= 0
+      out = []
+      if live_pair?(board)
+        root_actions.each { |a| out << a if a["type"] == "move" }
+      else
+        cell = PortableAI.matrix_cell(snapshot, board["own_slot"], board["foe_slot"])
+        out << { "type" => "move", "move_id" => "MATRIX_ATTACK", "slot" => 0,
+                 "damaging" => true, "accuracy" => 100,
+                 "expected_damage_pct" => (cell.nil? ? 0.0 : Model.number(cell["out"], 0.0)) }
+      end
+      trapped = board["own_trapped"] && board["own_slot"] == board["live_pair"][0]
+      bench.each { |slot| out << bench_switch(m, slot, board, root_actions, false) } if !trapped
+      out
+    end
+
+    # A switch to a bench body, priced from the side table -- or, when the root
+    # exported this very switch against this very foe, from the root's own numbers.
+    def self.bench_switch(m, slot, board, root_actions, forced)
+      if board["foe_slot"] == board["live_pair"][1]
+        root_actions.each do |a|
+          next if a["type"] != "switch" || a["slot"] != slot
+          return a if !forced
+          copy = Model.copy_hash(a)
+          copy["forced"] = true
+          return copy
+        end
+      end
+      entry = PortableAI.matrix_entry(m["own"], slot)
+      { "type" => "switch", "slot" => slot, "forced" => forced,
+        "candidate_hp_pct" => Model.number(entry && entry["hp_pct"], 100.0),
+        "entry_damage_pct" => 0.0 }
+      # (project reads the search's own HP map for this slot first, so a body this
+      # search already damaged comes back at that HP, not the table's.)
+    end
+
+    def self.live_pair?(board)
+      board["own_slot"] == board["live_pair"][0] && board["foe_slot"] == board["live_pair"][1]
+    end
+
+    # The value of one cell of the grid: the leaf averaged over every chance branch the
+    # turn has. Two of them this version, each the original's own branch:
+    #   * speed order, when nothing establishes who moves first -- half each. A coin
+    #     flip is not a free win and not a certain loss, and picking either order would
+    #     make speed ties silently optimistic or silently paranoid.
+    #   * accuracy -- the move lands in full at its accuracy and not at all otherwise.
+    #     Damage x accuracy is NOT the same number once a faint is on the line: a 70%
+    #     move that would kill read as a certain kill, and a 90% move that kills by
+    #     three points read as no kill at all. Both were 0.7.0.
+    # The foe's hit stays certain. `stay` is already its worst case (the max over its
+    # moves) and maximin is the reason this planner exists.
+    def self.payoff(snapshot, board, own_action, foe_action, depth = 1, root_actions = [])
+      first = moves_first(snapshot, board, own_action, foe_action)
+      orders = first.nil? ? [true, false] : [first]
+      hit = hit_chance(own_action)
+      total = orders.inject(0.0) do |sum, order|
+        after = project(snapshot, board, own_action, foe_action, order, true)
+        value = hit * value_of(snapshot, after, depth - 1, root_actions)
+        if hit < 1.0
+          missed = project(snapshot, board, own_action, foe_action, order, false)
+          value += (1.0 - hit) * value_of(snapshot, missed, depth - 1, root_actions)
+        end
+        sum + value
+      end
+      total / orders.length
+    end
+
+    # What a board is worth with `depth` plies still to look: the leaf when none are
+    # left or the battle is over, otherwise the safest reply grid from it -- the
+    # original's expectiminimax, which scores a sub-game by pick_safest.
+    def self.value_of(snapshot, board, depth, root_actions)
+      return leaf(snapshot, board) if depth <= 0
+      over = battle_over(snapshot, board)
+      return over + (over > 0 ? DEPTH_BONUS : -DEPTH_BONUS) * depth if !over.nil?
+      own = own_options(snapshot, board, root_actions)
+      foe = foe_options(snapshot, board)
+      return leaf(snapshot, board) if own.empty? || foe.empty?
+      safest(snapshot, board, own, foe, depth, root_actions)
+    end
+
+    # pick_safest with the original's pruning: a row whose running minimum has already
+    # fallen to the best row's minimum cannot become the best row, so the rest of it
+    # is never projected.
+    def self.safest(snapshot, board, own, foe, depth, root_actions)
+      best = -HUGE
+      own.each do |action|
+        worst = HUGE
+        foe.each do |reply|
+          value = payoff(snapshot, board, action, reply, depth, root_actions)
+          worst = value if value < worst
+          break if worst <= best
+        end
+        best = worst if worst > best
+      end
+      best
+    end
+
+    def self.battle_over(snapshot, board)
+      m = PortableAI.matrix(snapshot)
+      return -BATTLE_OVER if side_value(m["own"], board["own_hps"])["alive"] == 0
+      return BATTLE_OVER if side_value(m["foe"], board["foe_hps"])["alive"] == 0
+      nil
+    end
+
+    # 0.0..1.0. A switch always "lands"; a move lands at its exported accuracy.
+    def self.hit_chance(own_action)
+      return 1.0 if own_action["type"] != "move"
+      accuracy = Model.number(own_action["accuracy"], 100.0)
+      # A self-targeting move exports no meaningful accuracy; it does not miss.
+      accuracy = 100.0 if accuracy <= 0 && !Model.truthy(own_action["damaging"])
+      accuracy = 100.0 if accuracy > 100.0
+      accuracy = 0.0 if accuracy < 0
+      accuracy / 100.0
+    end
+
+    # true we move first, false they do, nil unknown.
+    #
+    # Only two moves make the question meaningful. With a switch on either side at most
+    # one side deals damage that turn, so both orders project the identical board and
+    # the answer here is immaterial -- true, to spend one projection rather than two.
+    def self.moves_first(snapshot, board, own_action, foe_action)
+      return true if own_action["type"] != "move" || foe_action["kind"] != "stay"
+      priority = Model.number(own_action["priority"], 0.0)
+      # The cells carry no priority (see matrix.rb), so a foe's priority move is
+      # invisible here and our own only counts when it is positive.
+      return true if priority > 0
+      # The adapter's own speed answer for the pair on the field, which reads a Choice
+      # Scarf the cell does not. Only the cell knows about hypothetical pairs, and
+      # only the transformed cell knows about a speed stage we projected.
+      stages = projected_stages(board)
+      if live_pair?(board) && Model.number(stages["speed"], 0.0).to_i == 0
+        live = board["live_faster"]
+        return live if live == true || live == false
+      end
+      cell = PortableAI.matrix_cell(snapshot, board["own_slot"], board["foe_slot"])
+      cell = boosted_cell(snapshot, PortableAI.matrix(snapshot), board, cell)
+      return nil if cell.nil?
+      faster = cell["faster"]
+      (faster == true || faster == false) ? faster : nil
+    end
+
+    # One turn, applied to a copy. Switches resolve first; then each side acts in
+    # speed order, and the body that came in eats the other side's hit in full -- the
+    # same free-hit convention candidate_race charges a switch candidate (core.rb).
+    # `hit` is the accuracy branch: false and our move does nothing at all, damage
+    # and effects alike.
+    def self.project(snapshot, board, own_action, foe_action, own_first, hit = true)
+      out = Model.copy_hash(board)
+      out["protected"] = false
+      out["foe_reply"] = nil
+      out["own_hps"] = Model.copy_hash(board["own_hps"])
+      out["foe_hps"] = Model.copy_hash(board["foe_hps"])
+      if own_action["type"] == "switch"
+        out["own_slot"] = own_action["slot"]
+        standing = out["own_hps"].key?(out["own_slot"]) ? out["own_hps"][out["own_slot"]] :
+                   Model.number(own_action["candidate_hp_pct"], 100.0)
+        out["own_hp"] = standing - Model.number(own_action["entry_damage_pct"], 0.0)
+        # Stages, a Substitute and this turn's own status go with the body that left.
+        out["own_stages"] = {}
+        out["stage_base"] = {}
+        out["substitute"] = false
+        out["own_status_points"] = 0.0
+      end
+      if foe_action["kind"] == "switch"
+        out["foe_slot"] = foe_action["slot"]
+        # AND THE HP THAT BODY IS ACTUALLY STANDING ON. Leaving this at the outgoing
+        # body's HP was the first version's worst bug: with the active foe chipped,
+        # every one of its switches read as a free kill for us, so five of six foe
+        # options scored a kill and maximin was choosing between fictions. The
+        # switch-in's HP is in the same side table the board was opened from.
+        entry = PortableAI.matrix_entry(PortableAI.matrix(snapshot)["foe"], foe_action["slot"])
+        out["foe_hp"] = out["foe_hps"].key?(out["foe_slot"]) ? out["foe_hps"][out["foe_slot"]] :
+                        Model.number(entry && entry["hp_pct"], 100.0)
+        out["foe_boost"] = 0.0
+        out["foe_status_points"] = 0.0
+      end
+
+      # Damage each side lands AFTER both switches have resolved, so an attack aimed at
+      # a body that left hits the one that replaced it -- which is the whole reason a
+      # foe switch is worth considering.
+      mine = hit ? own_damage(snapshot, board, out, own_action, foe_action) : 0.0
+      theirs = foe_damage(snapshot, board, out, own_action, foe_action)
+
+      if own_first
+        act_own(snapshot, out, own_action, mine, hit)
+        act_foe(out, theirs) if out["foe_hp"] > 0 && out["own_hp"] > 0
+      else
+        act_foe(out, theirs)
+        act_own(snapshot, out, own_action, mine, hit) if out["own_hp"] > 0
+      end
+      out["own_hp"] = 0.0 if out["own_hp"] < 0
+      out["foe_hp"] = 0.0 if out["foe_hp"] < 0
+      out["own_hps"][out["own_slot"]] = out["own_hp"]
+      out["foe_hps"][out["foe_slot"]] = out["foe_hp"]
+      # Next ply's Protect fails if this one was a Protect.
+      out["protect_repeats"] = out["protected"] ? 1 : 0
+      out
+    end
+
+    # Our action on the board: the damage, then everything the move does besides,
+    # each the original's evaluate term applied where the original's instruction
+    # generator would apply it. A miss (hit false) applies nothing.
+    def self.act_own(snapshot, out, action, damage, hit)
+      return if action["type"] != "move" || !hit
+      out["foe_hp"] -= damage
+      tags = Effects.describe(action["move_id"], action["tags"])
+      move_id = action["move_id"].to_s.upcase
+
+      if damage > 0
+        recoil = Model.number(action["recoil_fraction"], 0.0)
+        out["own_hp"] -= damage * recoil if recoil > 0
+        drain = Model.number(action["drain_fraction"], 0.0)
+        out["own_hp"] = [100.0, out["own_hp"] + damage * drain].min if drain > 0
+      end
+      out["own_hp"] = 0.0 if tags.include?("self_ko")
+
+      if tags.include?("setup")
+        stages = Effects.setup_stages(move_id)
+        if tags.include?("hp_cost_half")
+          # Belly Drum fails below half; above it, half is the price.
+          stages = nil if out["own_hp"] <= 50.0
+          out["own_hp"] -= 50.0 if !stages.nil?
+        end
+        add_stages(out, stages)
+      end
+      add_stages(out, Effects.self_drop_stages(move_id)) if tags.include?("self_drop")
+      if action["effect_kind"].to_s == "self_raise" &&
+         Model.number(action["effect_chance"], 100.0) >= 100.0
+        add_stages(out, { action["effect_stat"].to_s => 1 })
+      end
+
+      if tags.include?("heal") || tags.include?("variable_heal")
+        out["own_hp"] = [100.0, out["own_hp"] + Effects.heal_amount(snapshot, tags)].min
+        out["own_status_points"] -= STATUS_VALUE["sleep"] if tags.include?("self_sleep")
+      end
+
+      # Protect fails on a repeat; the memory counter is the only record of one.
+      if tags.include?("protect") && out["protect_repeats"] <= 0
+        out["protected"] = true
+      end
+      if tags.include?("substitute") && !out["substitute"] && out["own_hp"] > SUBSTITUTE_COST
+        out["own_hp"] -= SUBSTITUTE_COST
+        out["substitute"] = true
+      end
+
+      if tags.include?("hazard")
+        layers = Model.number(action["existing_layers"], 0.0)
+        cap = Model.number(action["max_layers"], 1.0)
+        if layers < cap
+          per_body = HAZARD_VALUE[move_id] || 0.0
+          bodies = PortableAI.matrix_live_slots(PortableAI.matrix(snapshot)["foe"]).length
+          out["foe_hazard_points"] += per_body * bodies
+        end
+      end
+
+      # A status or a stat drop on the foe, at the chance the adapter exported: 100 for
+      # a status move the engine says can land, 0 for one it says cannot (already
+      # statused, immune, Sheer Force), the secondary rate for a damaging move.
+      kind = action["effect_kind"]
+      kind = Effects.kind_of(tags, "secondary") if kind.nil?
+      kind = status_kind(tags) if kind.nil? && tags.include?("status")
+      return if kind.nil?
+      # One status per body: a second Toxic on a foe this search already poisoned is
+      # the engine refusing it, which the root's chance export cannot know a ply on.
+      return if tags.include?("status") && out["foe_status_points"] > 0
+      chance = Model.number(action["effect_chance"], 100.0)
+      return if chance <= 0
+      chance = 100.0 if chance > 100.0
+      kind = kind.to_s
+      if kind == "drop"
+        value = STAGE_VALUE[action["effect_stat"].to_s] || 0.0
+        out["foe_boost"] -= value * chance / 100.0
+      elsif STATUS_VALUE.key?(kind)
+        value = STATUS_VALUE[kind]
+        value = value * (Model.truthy(action["target_physical_attacker"]) ? 1.0 : 0.5) if kind == "burn"
+        value = STATUS_VALUE["toxic"] if kind == "poison" && move_id == "TOXIC"
+        out["foe_status_points"] += value * chance / 100.0
+      end
+    end
+
+    def self.status_kind(tags)
+      %w[poison burn paralyze sleep freeze confuse drain].each do |kind|
+        return kind if tags.include?(kind)
+      end
+      nil
+    end
+
+    def self.add_stages(out, stages)
+      return if stages.nil?
+      merged = Model.copy_hash(out["own_stages"])
+      stages.each do |stat, delta|
+        value = Model.number(merged[stat], 0.0).to_i + delta.to_i
+        value = 6 if value > 6
+        value = -6 if value < -6
+        if value == 0
+          merged.delete(stat)
+        else
+          merged[stat] = value
+        end
+      end
+      out["own_stages"] = merged
+    end
+
+    # Their hit on whatever is in front of them. Protect takes it whole; a Substitute
+    # takes it whole and breaks unless the hit was under its own HP.
+    def self.act_foe(out, damage)
+      return if damage <= 0 || out["protected"]
+      if out["substitute"]
+        out["substitute"] = false if damage >= SUBSTITUTE_COST
+        return
+      end
+      out["own_hp"] -= damage
+    end
+
+    # The damage our move lands when it lands. Accuracy is payoff's branch, not a
+    # multiplier here.
+    def self.own_damage(snapshot, board, projected, own_action, foe_action)
+      return 0.0 if own_action["type"] != "move"
+      cell = PortableAI.matrix_cell(snapshot, projected["own_slot"], projected["foe_slot"])
+      priced = cell_move(cell, own_action["move_id"])
+      category = priced ? priced["cat"] : nil
+      if foe_action["kind"] == "switch"
+        # A body we have no live estimate against. Through 0.7.3 the cell was ONE
+        # number -- the best this body has against that one -- so every move we could
+        # click was credited the same damage against a switch-in and the foe-switch
+        # column could not order our moves against each other; depth two showed that
+        # was the bottleneck (190 of 227 move-versus-move disagreements sat in that
+        # column). The cell now carries every damaging move it rolled (out_moves,
+        # matrix version 2), so THIS move gets its own number against that body: a
+        # 0 for the Earthquake their Flying-type shrugs off, the full Ice Beam for
+        # the one it does not. A cell without the list (an older adapter, a move the
+        # cell never rolled) still falls back to the one best number. A move that
+        # deals nothing on the field deals nothing to a switch-in either.
+        return 0.0 if !Model.truthy(own_action["damaging"])
+        raw = priced ? Model.number(priced["pct"], 0.0) :
+                       (cell.nil? ? 0.0 : Model.number(cell["out"], 0.0))
+        return raw * offence_multiplier(snapshot, projected, category)
+      end
+      # The engine's own number for the pair on the field, which is better than the
+      # cell: it carries this move, these stages, this weather -- and a stage this
+      # search projected on top, by the category the cell priced this move in.
+      Model.number(own_action["expected_damage_pct"], 0.0) *
+        offence_multiplier(snapshot, projected, category)
+    end
+
+    # The cell's own roll of one move, or nil when the cell has no such list.
+    def self.cell_move(cell, move_id)
+      return nil if cell.nil? || move_id.nil?
+      moves = cell["out_moves"]
+      return nil if !moves.is_a?(Hash)
+      entry = moves[move_id.to_s.upcase]
+      entry.is_a?(Hash) ? entry : nil
+    end
+
+    # The stages this search has put on the body ON TOP of the ones the engine's
+    # numbers already carry: own_stages less the root's stage_base, per stat.
+    def self.projected_stages(board)
+      stages = board["own_stages"] || {}
+      base = board["stage_base"] || {}
+      out = {}
+      stages.each do |stat, stage|
+        delta = stage.to_i - Model.number(base[stat], 0.0).to_i
+        out[stat] = delta if delta != 0
+      end
+      base.each do |stat, stage|
+        next if stages.key?(stat)
+        delta = -stage.to_i
+        out[stat] = delta if delta != 0
+      end
+      out
+    end
+
+    # How a projected Attack or Special Attack stage scales what the body deals, by
+    # the category the move is priced in -- or, for a move the cell never rolled, the
+    # category of the body's best hit into the foe on the field (the cell's out_cat).
+    def self.offence_multiplier(snapshot, board, category = nil)
+      stages = projected_stages(board)
+      return 1.0 if stages.empty?
+      if category.nil?
+        cell = PortableAI.matrix_cell(snapshot, board["own_slot"], board["foe_slot"])
+        category = cell && cell["out_cat"]
+      end
+      stat = (category == "special") ? "spa" : "atk"
+      stage = Model.number(stages[stat], 0.0).to_i
+      stage == 0 ? 1.0 : Effects.stage_multiplier(stage)
+    end
+
+    # The mirror for what the body takes: by the category of the move the foe column
+    # actually named (0.7.7), or of its best hit for a column that names none.
+    def self.defence_divisor(snapshot, board, category = nil)
+      stages = projected_stages(board)
+      return 1.0 if stages.empty?
+      if category.nil?
+        cell = PortableAI.matrix_cell(snapshot, board["own_slot"], board["foe_slot"])
+        category = cell && cell["in_cat"]
+      end
+      stat = (category == "special") ? "spd" : "def"
+      stage = Model.number(stages[stat], 0.0).to_i
+      stage == 0 ? 1.0 : Effects.stage_multiplier(stage)
+    end
+
+    # A switching foe deals nothing this turn. A staying one hits whatever is in front
+    # of it, and the number is read from the thickest view the snapshot has of that
+    # pair: the actor view for the body already on the field, the switch candidate's
+    # own estimate (Intimidate-aware, every foe move, a real damage roll) for a body
+    # we bring in, and the cell only for a pair nothing else has priced.
+    def self.foe_damage(snapshot, board, projected, own_action, foe_action)
+      return 0.0 if foe_action["kind"] != "stay"
+      # 0.7.7. THE FOE NAMED A MOVE, so this is that move's number and not the best
+      # one it owns -- and it is read against whatever body is standing AFTER our
+      # switch resolves, exactly as own_damage prices our move against their
+      # switch-in. Falling back to the column's own number for a pair the matrix
+      # never rolled.
+      if !foe_action["move_id"].nil?
+        priced = cell_in_move(
+          PortableAI.matrix_cell(snapshot, projected["own_slot"], projected["foe_slot"]),
+          foe_action["move_id"])
+        raw = priced ? Model.number(priced["pct"], 0.0) : Model.number(foe_action["pct"], 0.0)
+        return raw / defence_divisor(snapshot, projected, priced ? priced["cat"] : foe_action["cat"])
+      end
+      raw = nil
+      raw = board["live_incoming"] if live_pair?(projected) && !board["live_incoming"].nil?
+      if raw.nil? && own_action["type"] == "switch" && !own_action["incoming_damage_pct"].nil?
+        raw = Model.number(own_action["incoming_damage_pct"], 0.0)
+      end
+      if raw.nil?
+        cell = PortableAI.matrix_cell(snapshot, projected["own_slot"], projected["foe_slot"])
+        raw = cell.nil? ? 0.0 : Model.number(cell["in"], 0.0)
+      end
+      raw / defence_divisor(snapshot, projected)
+    end
+
+    # ------------------------------------------------------------------------------
+    # The leaf: every live body on both sides, at the HP it stands on, plus the terms
+    # the original's evaluate carries for the body on the field -- its stages, a
+    # Substitute, a status landed this turn, hazards on the other side. Each side's
+    # HP map overrides the table for the
+    # bodies this search has touched; every other body is as the side table has it.
+
+    def self.leaf(snapshot, board)
+      m = PortableAI.matrix(snapshot)
+      own = side_value(m["own"], board["own_hps"])
+      foe = side_value(m["foe"], board["foe_hps"])
+      return -BATTLE_OVER if own["alive"] == 0
+      return BATTLE_OVER if foe["alive"] == 0
+      score = own["points"] - foe["points"]
+      if board["own_hp"] > 0
+        score += stage_points(board["own_stages"])
+        score += SUBSTITUTE_VALUE if board["substitute"]
+        score += board["own_status_points"]
+      end
+      if board["foe_hp"] > 0
+        score -= board["foe_boost"]
+        score += board["foe_status_points"]
+      end
+      score += board["foe_hazard_points"]
+      score
+    end
+
+    # The pair's cell as it reads under the stages this search projected -- a Dragon
+    # Dance flips who moves first, which is what moves_first asks it for. The stages
+    # the body already carried are inside the cell (matrix_bodies prices a body on
+    # the field through its real battler), so only the projected ones apply.
+    def self.boosted_cell(snapshot, m, board, cell)
+      stages = projected_stages(board)
+      return cell if cell.nil? || stages.empty?
+      own = PortableAI.matrix_entry(m["own"], board["own_slot"])
+      foe = PortableAI.matrix_entry(m["foe"], board["foe_slot"])
+      PortableAI.matrix_transform_cell(cell, stages, own && own["speed"], foe && foe["speed"],
+                                       Model.truthy(snapshot["trick_room_active"]))
+    end
+
+    # The original's boost term: 30 a stage of offence or speed, 15 of defence,
+    # through its diminishing multiplier (a second stage is worth as much as the
+    # first, a third half as much, the sixth almost nothing more).
+    def self.stage_points(stages)
+      total = 0.0
+      (stages || {}).each do |stat, stage|
+        total += (STAGE_VALUE[stat.to_s] || 0.0) * stage_multiplier(stage.to_i)
+      end
+      total
+    end
+
+    def self.stage_multiplier(stage)
+      sign = stage < 0 ? -1.0 : 1.0
+      sign * (STAGE_MULTIPLIER[stage.abs] || STAGE_MULTIPLIER[6])
+    end
+
+    # Every live body on a side, at the HP the search's map says or, for a body the
+    # search never touched, the table's.
+    def self.side_value(table, hps)
+      points = 0.0
+      alive = 0
+      hps = hps || {}
+      (table || []).each do |entry|
+        next if entry.nil? || entry["alive"] == false
+        slot = entry["slot"]
+        body_hp = hps.key?(slot) ? hps[slot] : Model.number(entry["hp_pct"], 0.0)
+        next if body_hp <= 0
+        points += body_hp + BODY_ALIVE
+        alive += 1
+      end
+      { "points" => points, "alive" => alive }
+    end
+
+    # ------------------------------------------------------------------------------
+    # THE TREE (0.7.6). A third planner path on the same board, off unless
+    # `search_mcts` is set -- and with it off `plan` never reaches this section, so a
+    # run without the key reproduces 0.7.5 decision for decision.
+    #
+    # WHY, given the maximin above sits at 46/60 against the rule engine's 48. Every
+    # gain this month came from the board model and the opponent model, not from more
+    # search: depth 2 was +1 over depth 1, and the whole 40 -> 46 was blending one
+    # predicted reply into the root rows. That blend is a TABLE -- the foe's columns
+    # weighted by what stock v16's triggers say it does -- and the AI's real opponent
+    # is the player, who is not stock. The question this path asks is whether a tree
+    # that lets the foe's line be shaped by ITS OWN payoff, over many iterations,
+    # beats the one number. Ruby is slow and that is fine: the budget is an iteration
+    # count, the gauntlet is a study harness and not a 100 ms move clock, so a
+    # generous budget here answers the question a Rust port would only make faster.
+    #
+    # PROVENANCE: poke-engine's src/mcts.rs (GPL-3.0), the path Foul Play runs today,
+    # read 2026-09-08. Four ideas, no code:
+    #   * DECOUPLED simultaneous-move MCTS -- one node, two independent option lists,
+    #     each side selecting its own by UCB1 without seeing the other's pick. The
+    #     justification is Tak, Lanctot & Winands, "Monte Carlo Tree Search in
+    #     Simultaneous Move Games" (2014); a sequential tree here would let one side
+    #     answer a move it cannot see.
+    #   * chance outcomes ENUMERATED into children with their probabilities, then one
+    #     sampled by weight per iteration -- the same branching payoff already does,
+    #     kept as nodes instead of averaged away.
+    #   * NO PLAYOUT. The new board is scored by the static leaf relative to the root
+    #     and squashed, `sigmoid(eval - root_eval)`. A random playout in a game this
+    #     branchy is noise; the leaf is the same evaluate the maximin trusts.
+    #   * the foe credited `1 - score`, and the pick being the MOST-VISITED root
+    #     option (Foul Play's convention), not the highest average.
+    # Not borrowed: the instruction generator (our `project` is the transition) and
+    # reversible instructions (each node holds its own board copy; Model.copy_hash is
+    # the undo).
+    #
+    # THE OPPONENT MODEL HERE IS THE TREE ITSELF. `foe_reply` / `column_weights` --
+    # 0.7.5's table -- are deliberately NOT read on this path: the whole point is to
+    # see what the foe's own payoff says when nothing tells it what to do. 0.7.8's
+    # search_foe_prior is the follow-up, and it does NOT bring the opponent-model
+    # producer in: what it steers by is `foe_prior`, damage the cell had already
+    # priced, because the diagnostic found the tree's own foe model losing to it.
+    MCTS_HORIZON = 8
+    MCTS_DEFAULT_ITERATIONS = 1000
+    # PUCT's exploration constant, AlphaZero's scale. Only reached under
+    # search_foe_prior; the tree without the key is the 0.7.7 tree exactly.
+    MCTS_PRIOR_C = 1.0
+    # The original's scale: "~200 points is very close to 1.0", which in this leaf's
+    # currency is two bodies' worth of swing.
+    SIGMOID_SCALE = 0.0125
+
+    def self.mcts_plan(snapshot, config, board, own_actions, foe_actions)
+      started = Time.now
+      iterations = iterations_of(config)
+      prior_on = config["search_foe_prior"] ? true : false
+      rng = Lcg.new(mcts_seed(snapshot, board, config))
+      root = node_for(board, 0)
+      # The root's own options are the EXPORTED actions -- legality, PP, the Choice
+      # lock, every per-move number against this foe. Only the plies below have to
+      # settle for own_options' matrix reconstruction.
+      root["own"] = own_actions
+      root["foe"] = foe_actions
+      root_leaf = leaf(snapshot, board)
+      count = 0
+      while count < iterations
+        mcts_iterate(snapshot, root, root_leaf, own_actions, rng, prior_on)
+        count += 1
+      end
+
+      ranked = []
+      own_actions.each_with_index do |action, i|
+        stat = root["own_stats"][i]
+        scored = Model.copy_hash(action)
+        scored["score"] = average(stat)
+        scored["search_visits"] = stat["visits"]
+        # The row the readouts print, in foe_actions order: this action's average
+        # score against each foe column. nil is "the tree never tried that pair",
+        # which a 0.0 -- a real, and very bad, score -- would hide.
+        row = []
+        j = 0
+        while j < foe_actions.length
+          cell = root["cells"][[i, j]]
+          row << (cell.nil? || cell["visits"] == 0 ? nil : cell["total"] / cell["visits"])
+          j += 1
+        end
+        scored["search_row"] = row
+        # As on the maximin path: the on-field cell the leaf and the ordering are read
+        # from, because nothing else in a trace can tell a real certain death from a
+        # misread cell.
+        scored["search_cell"] = PortableAI.matrix_cell(snapshot, board["own_slot"], board["foe_slot"])
+        scored["reasons"] = [["search_visits", stat["visits"]],
+                             ["search_avg", scored["score"]],
+                             ["search_iterations", iterations]]
+        ranked << scored
+      end
+      ranked.sort! { |a, b| mcts_compare(a, b) }
+
+      {
+        "actions" => [ranked[0]],
+        "memory_updates" => Effects.memory_updates([ranked[0]]),
+        "diagnostics" => {
+          "version" => VERSION,
+          "planner" => "mcts",
+          "iterations" => iterations,
+          "horizon" => MCTS_HORIZON,
+          # Wall clock, diagnostics only -- nothing branches on it, so a slow machine
+          # and a fast one make the identical decisions. It is here because the budget
+          # question is "how many iterations can a real run afford".
+          "elapsed_ms" => ((Time.now - started) * 1000.0).to_i,
+          "format" => "single",
+          "joint_adjustment" => 0,
+          "foe_options" => foe_actions.map { |f| foe_label(f) },
+          # THE TREE'S OWN OPPONENT MODEL, readable against 0.7.5's foe_reply: how the
+          # foe's visits spread over its options once its own payoff chose them.
+          "foe_visits" => root["foe_stats"].map { |s| s["visits"] },
+          "board" => board,
+          "candidate_counts" => [ranked.length],
+          "rankings" => [ranked]
+        }
+      }
+    end
+
+    def self.iterations_of(config)
+      count = Model.number((config || {})["search_iterations"], MCTS_DEFAULT_ITERATIONS).to_i
+      count < 1 ? 1 : count
+    end
+
+    # Foul Play's convention: the most-visited root option, the one UCB1 kept coming
+    # back to. Its average breaks a tie, then the key -- so a tie never follows the
+    # order the adapter happened to export actions in, as in `compare`.
+    def self.mcts_compare(a, b)
+      by_visits = b["search_visits"] <=> a["search_visits"]
+      return by_visits if by_visits != 0
+      by_score = b["score"] <=> a["score"]
+      return by_score if by_score != 0
+      key(a) <=> key(b)
+    end
+
+    def self.average(stat)
+      stat["visits"] > 0 ? stat["total"] / stat["visits"] : 0.0
+    end
+
+    # A node is a board, the two option lists over it, one statistic per option per
+    # side, and the chance children of each pair already expanded. `ply` is the
+    # distance from the root, which is the only thing bounding the tree.
+    def self.node_for(board, ply)
+      { "board" => board, "ply" => ply, "visits" => 0,
+        "own" => nil, "foe" => nil, "own_stats" => nil, "foe_stats" => nil,
+        "children" => {}, "cells" => {} }
+    end
+
+    # Option lists and their statistics, built on first visit. Most nodes an iteration
+    # creates are never descended into again, so enumerating options in `branches`
+    # would price every leaf at a full option build.
+    def self.populate(snapshot, node, root_actions, prior_on = false)
+      return node if !node["own_stats"].nil?
+      node["own"] = own_options(snapshot, node["board"], root_actions) if node["own"].nil?
+      node["foe"] = foe_options(snapshot, node["board"]) if node["foe"].nil?
+      node["own_stats"] = node["own"].map { { "total" => 0.0, "visits" => 0 } }
+      node["foe_stats"] = node["foe"].map { { "total" => 0.0, "visits" => 0 } }
+      node["foe_prior"] = prior_on ? foe_prior(node["foe"]) : nil
+      node
+    end
+
+    # Scored where it stands and never expanded: the battle is over, a side has no
+    # option, or the horizon is reached. THE HORIZON IS NOT OPTIONAL -- `project` does
+    # not always change HP (a Protect, a stage-only turn, two switches), so a tree
+    # without one can descend forever on a board that never resolves.
+    def self.terminal_node?(snapshot, node)
+      return true if node["ply"] >= MCTS_HORIZON
+      return true if !battle_over(snapshot, node["board"]).nil?
+      node["own"].empty? || node["foe"].empty?
+    end
+
+    # Decoupled UCB1, the original's numbers: `avg + sqrt(2 ln N / n)`, an unvisited
+    # option ahead of every visited one. Called once per side per node, and neither
+    # call sees the other's answer -- that independence is what makes this a
+    # simultaneous-move tree.
+    def self.ucb_pick(stats, parent_visits, prior = nil)
+      # N is 0 on a node's first visit and ln 0 is not a number; every option is
+      # unvisited then, so the exploration term is never reached.
+      ln = parent_visits > 0 ? Math.log(parent_visits.to_f) : 0.0
+      # 0.7.8, foe axis only. AlphaZero's PUCT term ADDED to UCB1 rather than
+      # replacing it: `c * P(j) * sqrt(N) / (1 + n)` steers the split between the
+      # foe's columns while UCB1's own term underneath keeps every column sampled --
+      # so a column the prior prices at zero (Volt Switch off a Choice Specs set, a
+      # status move) is still explored on merit, which a bare PUCT would starve.
+      root = prior.nil? ? 0.0 : Math.sqrt(ln > 0.0 ? parent_visits.to_f : 0.0)
+      best = -HUGE
+      chosen = 0
+      stats.each_with_index do |stat, i|
+        visits = stat["visits"]
+        value = visits == 0 ? HUGE :
+                stat["total"] / visits + Math.sqrt(2.0 * ln / visits)
+        value += MCTS_PRIOR_C * prior[i] * root / (1.0 + visits) if !prior.nil? && visits > 0
+        if value > best
+          best = value
+          chosen = i
+        end
+      end
+      chosen
+    end
+
+    # The chance outcomes of one joint pair, each with its probability: the speed order
+    # when nothing establishes it (half each) times the accuracy branch. The same two
+    # branches `payoff` averages over, kept as children so the tree can sample them.
+    # At most four, summing to one.
+    def self.branches(snapshot, node, i, j, root_actions)
+      board = node["board"]
+      own_action = node["own"][i]
+      foe_action = node["foe"][j]
+      first = moves_first(snapshot, board, own_action, foe_action)
+      orders = first.nil? ? [[true, 0.5], [false, 0.5]] : [[first, 1.0]]
+      hit = hit_chance(own_action)
+      ply = node["ply"] + 1
+      out = []
+      orders.each do |pair|
+        order = pair[0]
+        weight = pair[1]
+        if hit > 0.0
+          out << { "prob" => weight * hit,
+                   "node" => node_for(project(snapshot, board, own_action, foe_action, order, true), ply) }
+        end
+        if hit < 1.0
+          out << { "prob" => weight * (1.0 - hit),
+                   "node" => node_for(project(snapshot, board, own_action, foe_action, order, false), ply) }
+        end
+      end
+      out
+    end
+
+    def self.sample_branch(children, rng)
+      roll = rng.next_float
+      total = 0.0
+      children.each do |child|
+        total += child["prob"]
+        return child["node"] if roll < total
+      end
+      children[children.length - 1]["node"]
+    end
+
+    # One iteration: descend by UCB1, sampling a chance branch at each step; expand the
+    # first pair that has none; score the board reached; credit it back up the path.
+    def self.mcts_iterate(snapshot, root, root_leaf, root_actions, rng, prior_on = false)
+      path = []
+      node = root
+      while true
+        populate(snapshot, node, root_actions, prior_on)
+        break if terminal_node?(snapshot, node)
+        i = ucb_pick(node["own_stats"], node["visits"])
+        j = ucb_pick(node["foe_stats"], node["visits"], node["foe_prior"])
+        path << [node, i, j]
+        children = node["children"][[i, j]]
+        if children.nil?
+          children = branches(snapshot, node, i, j, root_actions)
+          node["children"][[i, j]] = children
+          # Expansion ends the descent: the new child is what this iteration scores.
+          node = sample_branch(children, rng)
+          break
+        end
+        node = sample_branch(children, rng)
+      end
+      backprop(path, evaluate_node(snapshot, node, root_leaf))
+    end
+
+    # No playout. The board is worth what the leaf says about it RELATIVE TO THE ROOT,
+    # squashed to 0..1 -- the original's `sigmoid(eval - root_eval)`. Relative because
+    # UCB1 needs a bounded reward and the leaf is unbounded HP points; a board that
+    # ended the battle is the bound itself.
+    def self.evaluate_node(snapshot, node, root_leaf)
+      over = battle_over(snapshot, node["board"])
+      return (over > 0 ? 1.0 : 0.0) if !over.nil?
+      sigmoid(leaf(snapshot, node["board"]) - root_leaf)
+    end
+
+    def self.sigmoid(x)
+      1.0 / (1.0 + Math.exp(-SIGMOID_SCALE * x))
+    end
+
+    # Up the path: our option is credited the score, theirs its complement -- one leaf,
+    # read from both ends of a zero-sum game. The per-cell tally is ours and not the
+    # original's: decoupled statistics cannot say what a ROW scored, and the row is
+    # what a readout needs to see why the pick went where it did.
+    def self.backprop(path, score)
+      path.each do |entry|
+        node = entry[0]
+        i = entry[1]
+        j = entry[2]
+        node["visits"] += 1
+        own = node["own_stats"][i]
+        own["total"] += score
+        own["visits"] += 1
+        foe = node["foe_stats"][j]
+        foe["total"] += 1.0 - score
+        foe["visits"] += 1
+        cell = node["cells"][[i, j]]
+        if cell.nil?
+          cell = { "total" => 0.0, "visits" => 0 }
+          node["cells"][[i, j]] = cell
+        end
+        cell["total"] += score
+        cell["visits"] += 1
+      end
+    end
+
+    # A stable fingerprint of the position: the turn, the pair on the field, and every
+    # body's HP on both sides, plus `search_seed`. Mixed rather than summed, so two
+    # boards that differ only in which body holds a number do not collide.
+    def self.mcts_seed(snapshot, board, config)
+      seed = Model.number((config || {})["search_seed"], 0.0).to_i
+      parts = [Model.number(snapshot["turn"], 0.0).to_i,
+               board["own_slot"].to_i, board["foe_slot"].to_i]
+      m = PortableAI.matrix(snapshot) || {}
+      ["own", "foe"].each do |side|
+        (m[side] || []).each do |entry|
+          next if entry.nil?
+          parts << entry["slot"].to_i
+          parts << Model.number(entry["hp_pct"], 0.0).round.to_i
+        end
+      end
+      parts.each { |part| seed = ((seed * 33) + part) & 0x3FFFFFFF }
+      seed
+    end
+
+    # The chance branches are SAMPLED, so the tree needs a stream -- and it must not be
+    # the battle's. `pbAIRandom` decides the engine's own rolls: drawing from it here
+    # would change the battle a shadow run is meant to observe without disturbing, and
+    # would make a traced decision unrepeatable. This is the adapter's NeutralRNG
+    # recurrence, seeded per decision from the position alone, so a paired run and its
+    # shadow twin agree and a readout can replay any decision from its snapshot.
+    class Lcg
+      def initialize(seed)
+        @state = (seed.to_i & 0x3FFFFFFF)
+      end
+
+      def next_float
+        @state = ((@state * 1103515245) + 12345) & 0x3FFFFFFF
+        @state / 1073741824.0
+      end
+    end
+  end
+end
+# ===== END portable_ai/search.rb =====
+
 # ===== BEGIN adapters/reborn/Portable_AI_Adapter.rb =====
 # Portable AI adapter for Reborn Yang (Reborn E19.16, v16-era fork, modern Ruby).
 #
-# Concatenated after portable_ai/model.rb, effects.rb and core.rb by
+# Concatenated after portable_ai/model.rb, effects.rb, matrix.rb, core.rb and
+# search.rb by
 # tools/build_portable_ai.py --target reborn, installed as Scripts/Portable_AI.rb and
 # listed in Data/!script_order.csv after AI_Harness, before Main.
 #

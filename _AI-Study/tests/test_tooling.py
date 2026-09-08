@@ -119,6 +119,44 @@ class RealideaVetoTest(unittest.TestCase):
         self.assertIsNone(self.game.veto({"item": "Leftovers", "ability": "Levitate"}))
 
 
+class PbsByteOrderMarkTest(unittest.TestCase):
+    """Realidea's PBS files begin with a UTF-8 BOM, which ate the first row of each.
+
+    `\ufeff` is not whitespace to Python's str.strip(), so `"\ufeff1".strip().isdigit()`
+    is False and the id-prefixed first line of every csv was silently skipped -- costing
+    MEGAHORN from moves, REPEL from items and STENCH from abilities, with no error
+    anywhere. It went unnoticed because the three losses are the FIRST entries and
+    nothing else in the study had asked for them; it surfaced when four gen 5 sample
+    teams were dropped as "unknown move Megahorn". Both readers now open utf-8-sig.
+
+    These assert the recovered rows specifically, not merely a table size, so a future
+    reader rewritten without the BOM handling fails here rather than in a team draw.
+    """
+
+    @classmethod
+    def setUpClass(cls):
+        import showdown_names
+        try:
+            cls.game = showdown_names.Realidea()
+        except SystemExit as reason:
+            raise unittest.SkipTest(str(reason))
+
+    def test_the_first_move_in_the_file_resolves(self):
+        self.assertIn("MEGAHORN", self.game.moves)
+        self.assertEqual(("MEGAHORN", None), self.game.resolve_move("Megahorn"))
+
+    def test_the_first_item_and_ability_in_their_files_resolve(self):
+        self.assertIn("REPEL", self.game.items)
+        self.assertIn("STENCH", self.game.abilities)
+
+    def test_no_table_key_carries_a_stray_bom(self):
+        for label, table in (("moves", self.game.moves), ("items", self.game.items),
+                             ("abilities", self.game.abilities),
+                             ("species", self.game.species), ("types", self.game.types)):
+            for key in table:
+                self.assertNotIn("\ufeff", key, f"{label} key {key!r} carries a BOM")
+
+
 class ShadowComparisonTest(unittest.TestCase):
     """How a shadow run decides two AIs picked the same thing.
 
@@ -270,6 +308,141 @@ class MatrixLinesTest(unittest.TestCase):
     def test_cells_show_both_damage_numbers_and_mark_the_unpriced_one(self):
         lines = self.mod.matrix_lines(self.VIEW, cells=True)
         self.assertIn("L 62%/?", lines[2])
+
+
+def _foul_play_doc():
+    """One exported decision, shaped as FoulPlay.state_for writes it: Golurk facing
+    Galvantula from the gen5ru_a roster, Golurk at +0 with a Substitute up."""
+    def mon(species, types, stats, ability, item, nature, moves, **extra):
+        out = {"species": species, "form": 0, "mega": False, "level": 100, "types": types,
+               "hp": stats[0], "maxhp": stats[0], "attack": stats[1], "defense": stats[2],
+               "special_attack": stats[3], "special_defense": stats[4], "speed": stats[5],
+               "ability": ability, "item": item, "nature": nature,
+               "evs": [0, 252, 0, 0, 4, 252], "status": "none", "status_count": 0,
+               "weight_kg": 100.0,
+               "moves": [{"id": m, "pp": 16, "disabled": False} for m in moves]}
+        out.update(extra)
+        return out
+    golurk = mon("GOLURK", ["GROUND", "GHOST"], [335, 344, 196, 131, 196, 209],
+                 "IRONFIST", "LIFEORB", "ADAMANT", ["EARTHQUAKE", "SHADOWPUNCH", "ICEPUNCH", "STEALTHROCK"])
+    durant = mon("DURANT", ["BUG", "STEEL"], [261, 336, 260, 108, 132, 329],
+                 "HUSTLE", "CHOICESCARF", "JOLLY", ["IRONHEAD", "XSCISSOR", "SUPERPOWER", "ROCKSLIDE"])
+    galvantula = mon("GALVANTULA", ["BUG", "ELECTRIC"], [281, 170, 156, 299, 156, 346],
+                     "COMPOUNDEYES", "CHOICESPECS", "TIMID", ["THUNDER", "BUGBUZZ", "GIGADRAIN", "VOLTSWITCH"])
+    landorus = mon("LANDORUS", ["GROUND", "FLYING"], [319, 369, 216, 249, 196, 245],
+                   "INTIMIDATE", "LEFTOVERS", "NAIVE", ["EARTHQUAKE", "HIDDENPOWER", "UTURN", "STEALTHROCK"],
+                   form=1)
+    landorus["moves"][1].update({"hp_type": "ICE", "hp_power": 70})
+    side = lambda active, mons, **extra: dict({
+        "active": active,
+        "boosts": {"attack": 0, "defense": 0, "special_attack": 0, "special_defense": 0,
+                   "speed": 0, "accuracy": 0, "evasion": 0},
+        "conditions": {"reflect": 0, "light_screen": 0, "spikes": 0, "toxic_spikes": 0,
+                       "stealth_rock": 0, "sticky_web": 0, "tailwind": 0, "safeguard": 0,
+                       "mist": 0, "lucky_chant": 0, "crafty_shield": 0, "mat_block": 0,
+                       "quick_guard": 0, "wide_guard": 0},
+        "toxic_count": 0, "wish": [0, 0], "volatiles": [],
+        "durations": {"confusion": 0, "encore": 0, "taunt": 0, "yawn": 0, "lockedmove": 0, "slowstart": 0},
+        "substitute_health": 0, "trapped": False, "last_used_move": "move:none",
+        "pokemon": mons}, **extra)
+    return {
+        "version": 1, "turn": 3, "actor": 1, "weather": "none", "weather_turns": 0,
+        "trick_room": False, "trick_room_turns": 0, "terrain": ["none", 0], "iterations": 300,
+        "side_one": side(0, [golurk, durant], volatiles=["SUBSTITUTE"], substitute_health=83),
+        "side_two": side(0, [galvantula, landorus], conditions={"stealth_rock": 1}),
+        "cells": {
+            "out_moves": {"EARTHQUAKE": {"pct": 100.0, "damaging": True},
+                          "SHADOWPUNCH": {"pct": 50.0, "damaging": True},
+                          "STEALTHROCK": {"pct": 0.0, "damaging": False}},
+            "in_moves": {"THUNDER": {"pct": 0.0, "damaging": True},
+                         "GIGADRAIN": {"pct": 60.0, "damaging": True}},
+        },
+    }
+
+
+class FoulPlaySidecarTest(unittest.TestCase):
+    """tools/foul_play_sidecar.py: the Realidea export -> poke_engine State -> reply path.
+    The engine-backed tests need the gen 6 build of poke_engine (tools/build_poke_engine.sh)."""
+
+    def setUp(self):
+        import foul_play_sidecar
+        self.sidecar = foul_play_sidecar
+        self.ids = foul_play_sidecar.load_ids()
+
+    def test_id_list_is_the_gen6_engine_vocabulary(self):
+        self.assertIn("GALVANTULA", self.ids["pokemon"])
+        self.assertIn("LANDORUSTHERIAN", self.ids["pokemon"])
+        self.assertIn("HIDDENPOWERICE70", self.ids["moves"])
+        self.assertIn("SUBSTITUTE", self.ids["volatiles"])
+        self.assertIn("TOXIC", self.ids["status"])
+
+    def test_unknown_ids_are_reported_not_mapped_quietly(self):
+        problems = self.sidecar.Problems()
+        self.assertEqual("NONE", self.sidecar.species_id({"species": "NOTAMON"}, self.ids, problems))
+        self.assertEqual("LANDORUSTHERIAN",
+                         self.sidecar.species_id({"species": "LANDORUS", "form": 1}, self.ids, problems))
+        self.assertEqual("CHARIZARDMEGAY",
+                         self.sidecar.species_id({"species": "CHARIZARD", "form": 2, "mega": True}, self.ids, problems))
+        self.assertEqual("HIDDENPOWERICE70",
+                         self.sidecar.move_id({"id": "HIDDENPOWER", "hp_type": "ICE", "hp_power": 70}, self.ids, problems))
+        self.assertEqual("HIDDENPOWERFIRE60",
+                         self.sidecar.move_id({"id": "HIDDENPOWER", "hp_type": "FIRE", "hp_power": 59}, self.ids, problems))
+        self.assertEqual("NONE", self.sidecar.named("items", "EJECTBUTTON", self.ids, problems, "NONE"))
+        self.assertEqual(["species NOTAMON unknown to poke-engine", "item EJECTBUTTON unknown to poke-engine"],
+                         list(problems))
+
+    def test_durations_are_turned_from_remaining_into_elapsed(self):
+        # Essentials: Taunt just used = 3 turns left; poke-engine: 0 turns elapsed.
+        self.assertEqual({"taunt": 0, "encore": 2, "yawn": 1, "slowstart": 4, "confusion": 2, "lockedmove": 1},
+                         self.sidecar.durations_for({"taunt": 3, "encore": 1, "yawn": 1, "slowstart": 4,
+                                                     "confusion": 2, "lockedmove": 2}))
+        self.assertEqual({"taunt": 0, "yawn": 0}, self.sidecar.durations_for({"taunt": 9, "yawn": 0}),
+                         "more turns left than the move lasts reads as none elapsed, never as a panic")
+
+    def test_reply_text_names_the_slot_and_every_option(self):
+        text = self.sidecar.reply_text(("switch:1", 900, 540.0),
+                                       [("move:0", 100, 60.0), ("switch:1", 900, 540.0)],
+                                       [("move:2", 1000)], 1000, 1000)
+        self.assertEqual(["type=switch", "slot=1", "visits=900", "score=0.600000", "iterations=1000",
+                          "total=1000", "own=move:0:100,switch:1:900", "foe=move:2:1000"],
+                         text.strip().split("\n"))
+
+    def _engine(self):
+        try:
+            import poke_engine  # noqa: F401
+        except ImportError:
+            self.skipTest("poke_engine (gen 6 build) is not importable here")
+
+    def test_state_builds_and_the_search_answers_with_a_playable_slot(self):
+        self._engine()
+        doc = _foul_play_doc()
+        problems = self.sidecar.Problems()
+        state = self.sidecar.build_state(doc, self.ids, problems)
+        self.assertEqual([], list(problems))
+        self.assertEqual("golurk", state.side_one.pokemon[0].id)
+        self.assertEqual("landorustherian", state.side_two.pokemon[1].id)
+        self.assertEqual("hiddenpowerice70", state.side_two.pokemon[1].moves[1].id)
+        self.assertEqual(83, state.side_one.substitute_health)
+        self.assertEqual(1, state.side_two.side_conditions.stealth_rock)
+        best, own, foe, total = self.sidecar.search(doc, state, 300)
+        self.assertGreaterEqual(total, 300, "poke-engine counts in chunks of a thousand")
+        labels = sorted(label for label, _, _ in own)
+        self.assertEqual(["move:0", "move:1", "move:2", "move:3", "switch:1"], labels,
+                         "every option maps back to a slot the adapter can register")
+        self.assertIn(best[0], labels)
+
+    def test_damage_check_prices_both_directions_against_the_cells(self):
+        self._engine()
+        doc = _foul_play_doc()
+        state = self.sidecar.build_state(doc, self.ids, self.sidecar.Problems())
+        rows = self.sidecar.damage_check(doc, state, self.ids)
+        by_move = {(r["direction"], r["move"]): r for r in rows}
+        self.assertEqual({("out", "EARTHQUAKE"), ("out", "SHADOWPUNCH"), ("in", "THUNDER"), ("in", "GIGADRAIN")},
+                         set(by_move), "status moves are not priced")
+        self.assertGreater(by_move[("out", "EARTHQUAKE")]["engine_max_pct"], 50.0)
+        self.assertEqual(0.0, by_move[("in", "THUNDER")]["engine_max_pct"], "Ground is immune")
+        self.assertAlmostEqual(by_move[("in", "THUNDER")]["diff"], 0.0)
+        self.assertIsNotNone(by_move[("out", "SHADOWPUNCH")]["diff"])
 
 
 if __name__ == "__main__":

@@ -2,7 +2,8 @@
 # Regenerate to change; the draw seed is fixed in that tool.
 #
 # Real competitive teams from Smogon's sample threads (extracted/smogon-teams/),
-# two disjoint sets per tier. Distinct from the archetype suite (archetype):
+# up to two disjoint sets per tier, capped by how many teams the dex can build.
+# Distinct from the archetype suite (archetype):
 # different question, separate seeds, results are never pooled across suites.
 #
 # Team keys are generic so the seat-audit schedule is identical across sets.
@@ -10,6 +11,196 @@
 
 module PortableAIRealideaTiers
   SETS = {
+    "gen5ou_a" => {
+      # Gen 5 OU Smurf Double LO Plate Volc — Monai
+      "team1" => [
+        ["GARCHOMP", %w[EARTHQUAKE OUTRAGE STEALTHROCK SWORDSDANCE], { "item" => "FOCUSSASH", "ability" => 2, "nature" => 13, "evs" => [0, 252, 0, 252, 0, 4] }],
+        ["BRELOOM", %w[BULLETSEED LOWSWEEP MACHPUNCH SWORDSDANCE], { "item" => "LIFEORB", "ability" => 2, "nature" => 3, "evs" => [4, 252, 0, 252, 0, 0] }],
+        ["DRAGONITE", %w[DRAGONDANCE EXTREMESPEED FIREPUNCH OUTRAGE], { "item" => "LUMBERRY", "ability" => 2, "nature" => 3, "evs" => [0, 252, 0, 252, 0, 4] }],
+        ["SCIZOR", %w[BULLETPUNCH PURSUIT SUPERPOWER SWORDSDANCE], { "item" => "LIFEORB", "ability" => 1, "nature" => 3, "evs" => [40, 252, 0, 216, 0, 0] }],
+        ["STARMIE", %w[HYDROPUMP ICEBEAM RAPIDSPIN THUNDERBOLT], { "item" => "AIRBALLOON", "ability" => 2, "nature" => 10, "evs" => [0, 0, 0, 252, 252, 4] }],
+        ["VOLCARONA", %w[BUGBUZZ FIREBLAST PSYCHIC QUIVERDANCE], { "item" => "INSECTPLATE", "ability" => 0, "nature" => 10, "evs" => [72, 0, 0, 184, 252, 0], "ivs" => [31, 0, 31, 31, 31, 31] }]
+      ],
+      # sdown lando scarf chomp — Rewer
+      "team2" => [
+        ["TYRANITAR", %w[CRUNCH PURSUIT ROCKSLIDE SUPERPOWER], { "item" => "CHOPLEBERRY", "ability" => 0, "nature" => 3, "evs" => [252, 88, 0, 0, 0, 168] }],
+        ["CELEBI", %w[BATONPASS PSYCHIC RECOVER STEALTHROCK], { "item" => "LEFTOVERS", "ability" => 0, "nature" => 20, "evs" => [252, 0, 0, 16, 0, 240], "ivs" => [31, 0, 31, 31, 31, 31] }],
+        ["EXCADRILL", %w[EARTHQUAKE IRONHEAD RAPIDSPIN SWORDSDANCE], { "item" => "LEFTOVERS", "ability" => 1, "nature" => 3, "evs" => [32, 56, 0, 192, 0, 228] }],
+        ["GARCHOMP", %w[DUALCHOP EARTHQUAKE OUTRAGE STEALTHROCK], { "item" => "CHOICESCARF", "ability" => 2, "nature" => 13, "evs" => [0, 252, 0, 252, 0, 4] }],
+        ["LANDORUS", %w[EARTHQUAKE HIDDENPOWER SMACKDOWN SUBSTITUTE], { "form" => 1, "item" => "LEFTOVERS", "ability" => 0, "nature" => 14, "evs" => [0, 252, 4, 252, 0, 0], "ivs" => [31, 30, 31, 30, 31, 31] }],
+        ["ROTOM", %w[HYDROPUMP PAINSPLIT VOLTSWITCH WILLOWISP], { "form" => 2, "item" => "LEFTOVERS", "ability" => 0, "nature" => 5, "evs" => [252, 0, 200, 0, 0, 56], "ivs" => [31, 0, 31, 31, 31, 31] }]
+      ],
+      # Hippo Reuni Mag Sand by Dice, recreated by Peng — Monai
+      "team3" => [
+        ["HIPPOWDON", %w[EARTHQUAKE SLACKOFF STEALTHROCK WHIRLWIND], { "item" => "LEFTOVERS", "ability" => 0, "nature" => 8, "evs" => [252, 0, 32, 0, 0, 224] }],
+        ["EXCADRILL", %w[EARTHQUAKE IRONHEAD RAPIDSPIN ROCKSLIDE], { "item" => "CHOICESCARF", "ability" => 1, "nature" => 3, "evs" => [0, 252, 0, 252, 0, 4] }],
+        ["FERROTHORN", %w[LEECHSEED POWERWHIP PROTECT SPIKES], { "item" => "LEFTOVERS", "ability" => 0, "nature" => 8, "evs" => [252, 0, 96, 0, 0, 160] }],
+        ["LATIOS", %w[DRACOMETEOR RECOVER SURF TRICK], { "item" => "CHOICESPECS", "ability" => 0, "nature" => 10, "evs" => [0, 0, 0, 252, 252, 4], "ivs" => [31, 0, 31, 31, 31, 31] }],
+        ["MAGNEZONE", %w[HIDDENPOWER MAGNETRISE THUNDERBOLT THUNDERWAVE], { "item" => "AIRBALLOON", "ability" => 0, "nature" => 10, "evs" => [0, 0, 4, 252, 252, 0], "ivs" => [31, 2, 30, 30, 30, 31] }],
+        ["REUNICLUS", %w[CALMMIND HIDDENPOWER RECOVER THUNDER], { "item" => "LEFTOVERS", "ability" => 1, "nature" => 5, "evs" => [252, 0, 252, 0, 4, 0], "ivs" => [31, 2, 31, 30, 31, 31] }]
+      ],
+      # WIFI OU - SPLXIII W8 vs GaryTheGengar
+      "team4" => [
+        ["TYRANITAR", %w[CRUNCH EARTHQUAKE PURSUIT ROCKSLIDE], { "item" => "CHOPLEBERRY", "ability" => 0, "nature" => 3, "evs" => [208, 88, 0, 12, 0, 200] }],
+        ["ALAKAZAM", %w[FOCUSBLAST HIDDENPOWER PSYSHOCK SHADOWBALL], { "item" => "FOCUSSASH", "ability" => 2, "nature" => 10, "evs" => [0, 0, 4, 252, 252, 0], "ivs" => [31, 2, 31, 30, 31, 31] }],
+        ["LANDORUS", %w[EARTHQUAKE KNOCKOFF STEALTHROCK UTURN], { "form" => 1, "item" => "LEFTOVERS", "ability" => 0, "nature" => 8, "evs" => [216, 0, 200, 92, 0, 0] }],
+        ["LATIOS", %w[DRACOMETEOR GRASSKNOT SURF TRICK], { "item" => "CHOICESPECS", "ability" => 0, "nature" => 10, "evs" => [0, 0, 4, 252, 252, 0], "ivs" => [31, 0, 31, 31, 31, 31] }],
+        ["ROTOM", %w[HYDROPUMP REST VOLTSWITCH WILLOWISP], { "form" => 2, "item" => "CHESTOBERRY", "ability" => 0, "nature" => 5, "evs" => [252, 0, 120, 0, 0, 136], "ivs" => [31, 0, 31, 10, 31, 31] }],
+        ["SKARMORY", %w[BRAVEBIRD ROOST SPIKES WHIRLWIND], { "item" => "LEFTOVERS", "ability" => 1, "nature" => 23, "evs" => [252, 0, 0, 16, 0, 240] }]
+      ]
+    },
+    "gen5ou_b" => {
+      # WIFI OU - SPL W9 vs ima — Finchinator
+      "team1" => [
+        ["POLITOED", %w[ENCORE SCALD THIEF TOXIC], { "item" => "EJECTBUTTON", "ability" => 2, "nature" => 20, "evs" => [252, 0, 112, 8, 0, 136] }],
+        ["FERROTHORN", %w[GYROBALL KNOCKOFF POWERWHIP STEALTHROCK], { "item" => "CHOPLEBERRY", "ability" => 0, "nature" => 22, "evs" => [252, 0, 4, 0, 0, 252], "ivs" => [31, 31, 31, 0, 31, 31] }],
+        ["GARCHOMP", %w[DUALCHOP EARTHQUAKE OUTRAGE ROCKSLIDE], { "item" => "CHOICESCARF", "ability" => 2, "nature" => 13, "evs" => [8, 244, 4, 252, 0, 0] }],
+        ["KELDEO", %w[HIDDENPOWER HYDROPUMP SECRETSWORD SURF], { "item" => "CHOICESPECS", "ability" => 0, "nature" => 10, "evs" => [0, 0, 0, 252, 244, 12], "ivs" => [31, 2, 31, 30, 31, 30] }],
+        ["STARMIE", %w[HYDROPUMP ICEBEAM RAPIDSPIN THUNDER], { "item" => "AIRBALLOON", "ability" => 2, "nature" => 10, "evs" => [12, 0, 8, 252, 236, 0], "ivs" => [31, 0, 31, 31, 31, 31] }],
+        ["THUNDURUS", %w[AGILITY GRASSKNOT HIDDENPOWER THUNDER], { "form" => 1, "item" => "YACHEBERRY", "ability" => 0, "nature" => 15, "evs" => [88, 0, 0, 112, 236, 72], "ivs" => [31, 2, 31, 30, 31, 31] }]
+      ],
+      # (unnamed #0)
+      "team2" => [
+        ["TYRANITAR", %w[CRUNCH FLAMETHROWER PURSUIT THUNDERWAVE], { "item" => "CHOPLEBERRY", "ability" => 0, "nature" => 2, "evs" => [248, 44, 0, 0, 44, 172] }],
+        ["ALAKAZAM", %w[GRASSKNOT HIDDENPOWER PSYCHIC SHADOWBALL], { "item" => "LIFEORB", "ability" => 2, "nature" => 10, "evs" => [0, 0, 88, 232, 188, 0], "ivs" => [31, 2, 30, 30, 30, 31] }],
+        ["FERROTHORN", %w[GYROBALL KNOCKOFF POWERWHIP SPIKES], { "item" => "RAWSTBERRY", "ability" => 0, "nature" => 7, "evs" => [248, 0, 8, 0, 0, 252], "ivs" => [31, 31, 31, 0, 31, 31] }],
+        ["KELDEO", %w[HIDDENPOWER PROTECT SCALD SECRETSWORD], { "item" => "LEFTOVERS", "ability" => 0, "nature" => 10, "evs" => [0, 0, 0, 252, 252, 4], "ivs" => [31, 2, 31, 30, 31, 31] }],
+        ["LANDORUS", %w[EARTHQUAKE HIDDENPOWER STEALTHROCK UTURN], { "form" => 1, "item" => "LEFTOVERS", "ability" => 0, "nature" => 14, "evs" => [100, 0, 156, 252, 0, 0], "ivs" => [30, 31, 31, 30, 31, 31] }],
+        ["LATIOS", %w[DRACOMETEOR PSYSHOCK SURF TRICK], { "item" => "CHOICESCARF", "ability" => 0, "nature" => 10, "evs" => [0, 0, 0, 252, 252, 4], "ivs" => [31, 0, 31, 31, 31, 31] }]
+      ],
+      # Week 1 U-Turn ThundyT CB Mamo Rain — Monai
+      "team3" => [
+        ["POLITOED", %w[ENCORE PROTECT SCALD TOXIC], { "item" => "LEFTOVERS", "ability" => 2, "nature" => 20, "evs" => [252, 0, 212, 28, 0, 16], "ivs" => [31, 0, 31, 31, 31, 31] }],
+        ["FERROTHORN", %w[KNOCKOFF POWERWHIP SPIKES STEALTHROCK], { "item" => "LUMBERRY", "ability" => 0, "nature" => 8, "evs" => [252, 0, 24, 0, 0, 232], "ivs" => [31, 31, 31, 30, 31, 31] }],
+        ["LATIOS", %w[DRACOMETEOR PSYSHOCK SURF TRICK], { "item" => "CHOICESCARF", "ability" => 0, "nature" => 10, "evs" => [0, 0, 0, 252, 252, 4], "ivs" => [31, 0, 31, 31, 31, 31] }],
+        ["MAMOSWINE", %w[EARTHQUAKE ICESHARD ICICLECRASH SUPERPOWER], { "item" => "CHOICEBAND", "ability" => 2, "nature" => 3, "evs" => [0, 252, 0, 252, 0, 4] }],
+        ["TENTACRUEL", %w[PROTECT RAPIDSPIN SCALD TOXIC], { "item" => "BLACKSLUDGE", "ability" => 2, "nature" => 10, "evs" => [252, 0, 248, 8, 0, 0], "ivs" => [31, 0, 31, 31, 31, 31] }],
+        ["THUNDURUS", %w[FOCUSBLAST HIDDENPOWER THUNDER UTURN], { "form" => 1, "item" => "LEFTOVERS", "ability" => 0, "nature" => 10, "evs" => [24, 0, 28, 208, 192, 56], "ivs" => [31, 30, 31, 30, 31, 31] }]
+      ],
+      # Gen 5 OU Scarf Keldeo
+      "team4" => [
+        ["POLITOED", %w[ENCORE PROTECT SCALD TOXIC], { "item" => "LEFTOVERS", "ability" => 2, "nature" => 20, "evs" => [248, 0, 112, 8, 0, 140], "ivs" => [31, 0, 31, 31, 31, 31] }],
+        ["FERROTHORN", %w[KNOCKOFF POWERWHIP SPIKES STEALTHROCK], { "item" => "LEFTOVERS", "ability" => 0, "nature" => 23, "evs" => [252, 0, 48, 0, 0, 208] }],
+        ["KELDEO", %w[HIDDENPOWER HYDROPUMP SECRETSWORD SURF], { "item" => "CHOICESCARF", "ability" => 0, "nature" => 10, "evs" => [0, 0, 4, 252, 252, 0], "ivs" => [31, 2, 31, 30, 31, 31] }],
+        ["LATIOS", %w[DRACOMETEOR DRAGONPULSE SURF TRICK], { "item" => "CHOICESPECS", "ability" => 0, "nature" => 10, "evs" => [0, 0, 4, 252, 252, 0], "ivs" => [31, 0, 31, 31, 31, 31] }],
+        ["TENTACRUEL", %w[PROTECT RAPIDSPIN SCALD TOXIC], { "item" => "BLACKSLUDGE", "ability" => 2, "nature" => 10, "evs" => [248, 0, 68, 192, 0, 0], "ivs" => [31, 0, 31, 31, 31, 31] }],
+        ["THUNDURUS", %w[FOCUSBLAST HIDDENPOWER SUBSTITUTE THUNDER], { "form" => 1, "item" => "LEFTOVERS", "ability" => 0, "nature" => 15, "evs" => [104, 0, 144, 208, 48, 4], "ivs" => [31, 30, 31, 30, 31, 31] }]
+      ]
+    },
+    "gen5ru_a" => {
+      # Double Electric Whammy — MrAldo
+      "team1" => [
+        ["GALVANTULA", %w[BUGBUZZ GIGADRAIN THUNDER VOLTSWITCH], { "item" => "CHOICESPECS", "ability" => 0, "nature" => 10, "evs" => [0, 0, 0, 252, 252, 4], "ivs" => [31, 0, 31, 31, 31, 31] }],
+        ["DRUDDIGON", %w[FIREPUNCH OUTRAGE SUCKERPUNCH THUNDERPUNCH], { "item" => "CHOICEBAND", "ability" => 1, "nature" => 3, "evs" => [64, 252, 0, 192, 0, 0] }],
+        ["GOLURK", %w[EARTHQUAKE ICEPUNCH SHADOWPUNCH STEALTHROCK], { "item" => "RINDOBERRY", "ability" => 0, "nature" => 3, "evs" => [64, 224, 4, 216, 0, 0] }],
+        ["KABUTOPS", %w[AQUAJET RAPIDSPIN STONEEDGE WATERFALL], { "item" => "ROCKGEM", "ability" => 2, "nature" => 3, "evs" => [0, 252, 0, 252, 0, 4] }],
+        ["MAGNETON", %w[FLASHCANNON HIDDENPOWER THUNDERBOLT VOLTSWITCH], { "item" => "CHOICESCARF", "ability" => 0, "nature" => 10, "evs" => [0, 0, 0, 252, 252, 4], "ivs" => [31, 2, 30, 30, 30, 31] }],
+        ["SIGILYPH", %w[CALMMIND HEATWAVE PSYCHIC ROOST], { "item" => "LIFEORB", "ability" => 1, "nature" => 10, "evs" => [0, 0, 76, 252, 180, 0], "ivs" => [31, 0, 31, 31, 31, 31] }]
+      ],
+      # Golurk and Sash Omastar — DnB
+      "team2" => [
+        ["GOLURK", %w[DYNAMICPUNCH EARTHQUAKE ROCKPOLISH SHADOWPUNCH], { "item" => "LIFEORB", "ability" => 2, "nature" => 3, "evs" => [0, 252, 0, 252, 0, 4] }],
+        ["DURANT", %w[HONECLAWS SUPERPOWER THUNDERFANG XSCISSOR], { "item" => "LUMBERRY", "ability" => 1, "nature" => 13, "evs" => [0, 252, 4, 252, 0, 0] }],
+        ["FERALIGATR", %w[AQUAJET CRUNCH SUBSTITUTE SWORDSDANCE], { "item" => "LEFTOVERS", "ability" => 0, "nature" => 3, "evs" => [40, 252, 0, 216, 0, 0] }],
+        ["OMASTAR", %w[ICEBEAM SCALD SPIKES STEALTHROCK], { "item" => "FOCUSSASH", "ability" => 2, "nature" => 10, "evs" => [0, 0, 0, 252, 252, 4], "ivs" => [31, 0, 31, 31, 31, 31] }],
+        ["ROTOM", %w[SHADOWBALL THUNDERBOLT TRICK VOLTSWITCH], { "item" => "CHOICESCARF", "ability" => 0, "nature" => 10, "evs" => [0, 0, 0, 252, 252, 4], "ivs" => [31, 0, 31, 31, 31, 31] }],
+        ["SCEPTILE", %w[ACROBATICS EARTHQUAKE LEAFBLADE SWORDSDANCE], { "item" => "FLYINGGEM", "ability" => 2, "nature" => 3, "evs" => [0, 252, 4, 252, 0, 0] }]
+      ],
+      # Sceptile + CM Uxie Offense — MrAldo
+      "team3" => [
+        ["UXIE", %w[CALMMIND PSYCHIC SUBSTITUTE THUNDERBOLT], { "item" => "LEFTOVERS", "ability" => 0, "nature" => 10, "evs" => [252, 0, 0, 216, 40, 0], "ivs" => [31, 0, 31, 31, 31, 31] }],
+        ["ESCAVALIER", %w[ENDURE MEGAHORN RETURN SWORDSDANCE], { "item" => "CUSTAPBERRY", "ability" => 0, "nature" => 3, "evs" => [132, 252, 0, 124, 0, 0] }],
+        ["QWILFISH", %w[DESTINYBOND SPIKES TAUNT WATERFALL], { "item" => "BLACKSLUDGE", "ability" => 2, "nature" => 13, "evs" => [252, 4, 0, 252, 0, 0] }],
+        ["RHYDON", %w[EARTHQUAKE MEGAHORN STEALTHROCK STONEEDGE], { "item" => "EVIOLITE", "ability" => 1, "nature" => 3, "evs" => [108, 56, 60, 32, 0, 252] }],
+        ["ROTOM", %w[SHADOWBALL THUNDERBOLT VOLTSWITCH WILLOWISP], { "item" => "CHOICESCARF", "ability" => 0, "nature" => 10, "evs" => [0, 0, 0, 252, 252, 4], "ivs" => [31, 0, 31, 31, 31, 31] }],
+        ["SCEPTILE", %w[ACROBATICS EARTHQUAKE LEAFBLADE SWORDSDANCE], { "item" => "FLYINGGEM", "ability" => 2, "nature" => 3, "evs" => [0, 252, 0, 252, 0, 4] }]
+      ],
+      # Skunk Offense — Luna
+      "team4" => [
+        ["STEELIX", %w[EARTHQUAKE ROAR STEALTHROCK TOXIC], { "item" => "LEFTOVERS", "ability" => 1, "nature" => 8, "evs" => [252, 4, 184, 24, 0, 44] }],
+        ["AERODACTYL", %w[EARTHQUAKE FIREBLAST ROOST STONEEDGE], { "item" => "LIFEORB", "ability" => 1, "nature" => 11, "evs" => [0, 220, 0, 252, 36, 0] }],
+        ["MAGNETON", %w[FLASHCANNON HIDDENPOWER THUNDERBOLT VOLTSWITCH], { "item" => "CHOICESCARF", "ability" => 0, "nature" => 10, "evs" => [4, 0, 0, 252, 252, 0], "ivs" => [31, 2, 30, 30, 30, 31] }],
+        ["SCEPTILE", %w[ACROBATICS HIDDENPOWER LEAFSTORM ROCKSLIDE], { "item" => "FLYINGGEM", "ability" => 2, "nature" => 16, "evs" => [0, 4, 0, 252, 252, 0], "ivs" => [31, 30, 30, 30, 30, 31] }],
+        ["SKUNTANK", %w[CRUNCH FIREBLAST PURSUIT SUCKERPUNCH], { "item" => "LIFEORB", "ability" => 1, "nature" => 1, "evs" => [0, 252, 0, 252, 4, 0] }],
+        ["UXIE", %w[CALMMIND PSYCHIC SIGNALBEAM SUBSTITUTE], { "item" => "LEFTOVERS", "ability" => 0, "nature" => 10, "evs" => [96, 0, 0, 224, 188, 0], "ivs" => [31, 0, 31, 31, 31, 31] }]
+      ]
+    },
+    "gen5uu_a" => {
+      # CM Spam — Hogg
+      "team1" => [
+        ["RAIKOU", %w[CALMMIND HIDDENPOWER THUNDERBOLT VOLTSWITCH], { "item" => "LEFTOVERS", "ability" => 0, "nature" => 10, "evs" => [0, 0, 4, 252, 252, 0], "ivs" => [31, 2, 31, 30, 31, 31] }],
+        ["BLASTOISE", %w[RAPIDSPIN ROAR SCALD TOXIC], { "item" => "LEFTOVERS", "ability" => 2, "nature" => 5, "evs" => [252, 0, 252, 0, 0, 4] }],
+        ["CRESSELIA", %w[CALMMIND HIDDENPOWER PSYSHOCK SUBSTITUTE], { "item" => "LEFTOVERS", "ability" => 0, "nature" => 5, "evs" => [252, 0, 176, 80, 0, 0], "ivs" => [30, 2, 30, 30, 30, 30] }],
+        ["GLIGAR", %w[AERIALACE EARTHQUAKE ROOST STEALTHROCK], { "item" => "EVIOLITE", "ability" => 2, "nature" => 8, "evs" => [236, 0, 216, 56, 0, 0] }],
+        ["TOGEKISS", %w[AIRSLASH NASTYPLOT ROOST THUNDERWAVE], { "item" => "LEFTOVERS", "ability" => 1, "nature" => 10, "evs" => [176, 0, 0, 252, 80, 0], "ivs" => [31, 0, 31, 31, 31, 31] }],
+        ["UMBREON", %w[FOULPLAY HEALBELL PROTECT WISH], { "item" => "LEFTOVERS", "ability" => 0, "nature" => 20, "evs" => [252, 0, 4, 0, 0, 252] }]
+      ],
+      # Double Scarf Offense — Lol1z
+      "team2" => [
+        ["MEW", %w[GIGADRAIN PSYCHIC TRICK UTURN], { "item" => "CHOICESCARF", "ability" => 0, "nature" => 10, "evs" => [4, 0, 0, 252, 252, 0] }],
+        ["DARMANITAN", %w[FLAREBLITZ ROCKSLIDE SUPERPOWER UTURN], { "item" => "CHOICESCARF", "ability" => 0, "nature" => 13, "evs" => [4, 252, 0, 252, 0, 0] }],
+        ["GLIGAR", %w[EARTHQUAKE ROOST STEALTHROCK UTURN], { "item" => "EVIOLITE", "ability" => 2, "nature" => 8, "evs" => [252, 4, 252, 0, 0, 0] }],
+        ["LANTURN", %w[HEALBELL SCALD TOXIC VOLTSWITCH], { "item" => "LEFTOVERS", "ability" => 0, "nature" => 22, "evs" => [252, 0, 0, 0, 4, 252] }],
+        ["MIENSHAO", %w[FAKEOUT HIGHJUMPKICK STONEEDGE UTURN], { "item" => "LIFEORB", "ability" => 1, "nature" => 13, "evs" => [4, 252, 0, 252, 0, 0], "ivs" => [31, 30, 30, 31, 31, 31] }],
+        ["XATU", %w[GRASSKNOT NIGHTSHADE ROOST UTURN], { "item" => "ROCKYHELMET", "ability" => 2, "nature" => 7, "evs" => [252, 0, 252, 0, 0, 4] }]
+      ],
+      # Bulky Offense Specs Meloetta — R0ady
+      "team3" => [
+        ["MELOETTA", %w[HYPERVOICE PSYCHIC SHADOWBALL SLEEPTALK], { "item" => "CHOICESPECS", "ability" => 0, "nature" => 10, "evs" => [0, 0, 0, 252, 252, 4], "ivs" => [31, 0, 31, 31, 31, 31] }],
+        ["BLASTOISE", %w[RAPIDSPIN REFRESH SCALD TOXIC], { "item" => "LEFTOVERS", "ability" => 0, "nature" => 5, "evs" => [252, 0, 252, 0, 0, 4], "ivs" => [31, 0, 31, 31, 31, 31] }],
+        ["COBALION", %w[CLOSECOMBAT IRONHEAD MAGNETRISE SWORDSDANCE], { "item" => "LUMBERRY", "ability" => 0, "nature" => 13, "evs" => [0, 252, 0, 252, 0, 4] }],
+        ["RHYPERIOR", %w[EARTHQUAKE PROTECT ROCKBLAST STEALTHROCK], { "item" => "LEFTOVERS", "ability" => 1, "nature" => 3, "evs" => [248, 16, 0, 8, 0, 236] }],
+        ["VICTINI", %w[BOLTSTRIKE TRICK UTURN VCREATE], { "item" => "CHOICESCARF", "ability" => 0, "nature" => 13, "evs" => [0, 252, 0, 252, 0, 4] }],
+        ["ZAPDOS", %w[DISCHARGE HEATWAVE HIDDENPOWER ROOST], { "item" => "LEFTOVERS", "ability" => 0, "nature" => 10, "evs" => [248, 0, 164, 96, 0, 0], "ivs" => [31, 2, 30, 31, 30, 31] }]
+      ],
+      # Dragon Gem Druddigon — Amukamara
+      "team4" => [
+        ["DRUDDIGON", %w[DRAGONTAIL EARTHQUAKE OUTRAGE STEALTHROCK], { "item" => "DRAGONGEM", "ability" => 2, "nature" => 3, "evs" => [252, 96, 0, 0, 0, 160] }],
+        ["BLASTOISE", %w[RAPIDSPIN REFRESH ROAR SCALD], { "item" => "LEFTOVERS", "ability" => 0, "nature" => 5, "evs" => [252, 0, 252, 0, 0, 4], "ivs" => [31, 0, 31, 31, 31, 31] }],
+        ["FLYGON", %w[DRAGONCLAW EARTHQUAKE OUTRAGE UTURN], { "item" => "CHOICESCARF", "ability" => 0, "nature" => 13, "evs" => [0, 252, 0, 252, 0, 4] }],
+        ["ROSERADE", %w[LEAFSTORM SLEEPPOWDER SLUDGEBOMB SYNTHESIS], { "item" => "LIFEORB", "ability" => 0, "nature" => 10, "evs" => [0, 0, 0, 252, 252, 4], "ivs" => [31, 0, 31, 31, 31, 31] }],
+        ["VICTINI", %w[BOLTSTRIKE UTURN VCREATE ZENHEADBUTT], { "item" => "CHOICEBAND", "ability" => 0, "nature" => 13, "evs" => [0, 252, 0, 252, 0, 4] }],
+        ["ZAPDOS", %w[HEATWAVE HIDDENPOWER ROOST THUNDERBOLT], { "item" => "LEFTOVERS", "ability" => 0, "nature" => 10, "evs" => [0, 0, 4, 252, 252, 0], "ivs" => [31, 2, 30, 31, 30, 31] }]
+      ]
+    },
+    "gen5uu_b" => {
+      # Band Heracross — R0ady
+      "team1" => [
+        ["VICTINI", %w[BOLTSTRIKE TRICK UTURN VCREATE], { "item" => "CHOICESCARF", "ability" => 0, "nature" => 13, "evs" => [0, 252, 0, 252, 0, 4] }],
+        ["BLASTOISE", %w[RAPIDSPIN ROAR SCALD TOXIC], { "item" => "LEFTOVERS", "ability" => 0, "nature" => 5, "evs" => [248, 0, 148, 112, 0, 0], "ivs" => [31, 0, 31, 31, 31, 31] }],
+        ["BRONZONG", %w[EARTHQUAKE PROTECT STEALTHROCK TOXIC], { "item" => "LEFTOVERS", "ability" => 0, "nature" => 23, "evs" => [252, 4, 0, 0, 0, 252] }],
+        ["HERACROSS", %w[CLOSECOMBAT EARTHQUAKE MEGAHORN STONEEDGE], { "item" => "CHOICEBAND", "ability" => 1, "nature" => 13, "evs" => [0, 252, 0, 252, 0, 4] }],
+        ["NIDOQUEEN", %w[EARTHPOWER ICEBEAM TAUNT TOXICSPIKES], { "item" => "BLACKSLUDGE", "ability" => 2, "nature" => 5, "evs" => [252, 0, 220, 36, 0, 0], "ivs" => [31, 0, 31, 31, 31, 31] }],
+        ["RAIKOU", %w[CALMMIND HIDDENPOWER SUBSTITUTE THUNDERBOLT], { "item" => "LEFTOVERS", "ability" => 0, "nature" => 10, "evs" => [0, 0, 0, 252, 252, 4], "ivs" => [31, 2, 31, 30, 31, 31] }]
+      ],
+      # Untitled 1
+      "team2" => [
+        ["GOLURK", %w[EARTHQUAKE ICEPUNCH PROTECT STEALTHROCK], { "item" => "LEFTOVERS", "ability" => 0, "nature" => 3, "evs" => [236, 252, 0, 20, 0, 0] }],
+        ["BISHARP", %w[IRONHEAD PURSUIT SUCKERPUNCH SWORDSDANCE], { "item" => "LIFEORB", "ability" => 0, "nature" => 3, "evs" => [0, 252, 0, 252, 0, 4] }],
+        ["DRUDDIGON", %w[EARTHQUAKE FIREPUNCH OUTRAGE SLEEPTALK], { "item" => "CHOICEBAND", "ability" => 0, "nature" => 3, "evs" => [196, 252, 0, 60, 0, 0] }],
+        ["HERACROSS", %w[CLOSECOMBAT EARTHQUAKE MEGAHORN STONEEDGE], { "item" => "CHOICESCARF", "ability" => 2, "nature" => 13, "evs" => [0, 252, 0, 252, 0, 4] }],
+        ["SUICUNE", %w[CALMMIND HIDDENPOWER HYDROPUMP ICEBEAM], { "item" => "LEFTOVERS", "ability" => 0, "nature" => 10, "evs" => [0, 0, 0, 252, 252, 4], "ivs" => [31, 31, 31, 31, 30, 31] }],
+        ["ZAPDOS", %w[HEATWAVE HIDDENPOWER ROOST THUNDERBOLT], { "item" => "LIFEORB", "ability" => 0, "nature" => 10, "evs" => [0, 0, 0, 252, 252, 4], "ivs" => [31, 30, 30, 31, 30, 31] }]
+      ],
+      # Charge Beam Zapdos Stall — choolio and Kushalos
+      "team3" => [
+        ["ZAPDOS", %w[CHARGEBEAM HIDDENPOWER ROOST THUNDERBOLT], { "item" => "LEFTOVERS", "ability" => 0, "nature" => 10, "evs" => [252, 0, 0, 176, 0, 80], "ivs" => [30, 2, 31, 30, 30, 30] }],
+        ["GLIGAR", %w[EARTHQUAKE KNOCKOFF ROOST STEALTHROCK], { "item" => "EVIOLITE", "ability" => 2, "nature" => 8, "evs" => [232, 0, 216, 60, 0, 0] }],
+        ["HITMONTOP", %w[CLOSECOMBAT RAPIDSPIN REST TOXIC], { "item" => "LEFTOVERS", "ability" => 0, "nature" => 8, "evs" => [252, 0, 252, 4, 0, 0] }],
+        ["ROSERADE", %w[GIGADRAIN REST SLUDGEBOMB SPIKES], { "item" => "BLACKSLUDGE", "ability" => 0, "nature" => 20, "evs" => [248, 0, 0, 40, 0, 220], "ivs" => [31, 0, 31, 31, 31, 31] }],
+        ["SLOWKING", %w[CALMMIND DRAGONTAIL SCALD SLACKOFF], { "item" => "LEFTOVERS", "ability" => 2, "nature" => 7, "evs" => [248, 16, 244, 0, 0, 0] }],
+        ["UMBREON", %w[FOULPLAY HEALBELL PROTECT WISH], { "item" => "LEFTOVERS", "ability" => 0, "nature" => 20, "evs" => [252, 0, 4, 0, 0, 252], "ivs" => [31, 0, 31, 31, 31, 31] }]
+      ],
+      # Tailwind Offense — Hogg
+      "team4" => [
+        ["MEW", %w[EXPLOSION STEALTHROCK TAILWIND TAUNT], { "item" => "NORMALGEM", "ability" => 0, "nature" => 13, "evs" => [0, 252, 0, 252, 0, 4] }],
+        ["DRUDDIGON", %w[DRAGONCLAW EARTHQUAKE OUTRAGE SUCKERPUNCH], { "item" => "CHOICEBAND", "ability" => 2, "nature" => 3, "evs" => [132, 240, 0, 132, 0, 4] }],
+        ["NIDOKING", %w[EARTHPOWER FIREBLAST ICEBEAM SHADOWBALL], { "item" => "LIFEORB", "ability" => 2, "nature" => 10, "evs" => [0, 0, 0, 252, 252, 4], "ivs" => [31, 0, 31, 31, 31, 31] }],
+        ["SUICUNE", %w[CALMMIND HIDDENPOWER HYDROPUMP ICEBEAM], { "item" => "LEFTOVERS", "ability" => 0, "nature" => 10, "evs" => [0, 0, 0, 252, 252, 4], "ivs" => [31, 3, 31, 31, 30, 31] }],
+        ["TORNADUS", %w[GRASSKNOT HURRICANE SUPERPOWER TAILWIND], { "item" => "LIFEORB", "ability" => 0, "nature" => 11, "evs" => [0, 4, 0, 252, 252, 0] }],
+        ["VICTINI", %w[BRICKBREAK GRASSKNOT VCREATE ZENHEADBUTT], { "item" => "CHARCOAL", "ability" => 0, "nature" => 1, "evs" => [0, 252, 0, 252, 4, 0] }]
+      ]
+    },
     "gen6ou_a" => {
       # megazor stall — Luigi
       "team1" => [
@@ -85,6 +276,44 @@ module PortableAIRealideaTiers
         ["SERPERIOR", %w[GLARE LEAFSTORM LIGHTSCREEN REFLECT], { "item" => "LIGHTCLAY", "ability" => 2, "nature" => 10, "evs" => [252, 0, 0, 252, 4, 0], "ivs" => [31, 0, 31, 31, 31, 31] }],
         ["VOLCARONA", %w[FIREBLAST GIGADRAIN HIDDENPOWER QUIVERDANCE], { "item" => "LIFEORB", "ability" => 0, "nature" => 15, "evs" => [4, 0, 0, 252, 252, 0], "ivs" => [31, 1, 31, 31, 30, 30] }]
       ]
+    },
+    "gen6uu_a" => {
+      # Roar Suicune — Adaam
+      "team1" => [
+        ["SUICUNE", %w[CALMMIND REST ROAR SCALD], { "item" => "LEFTOVERS", "ability" => 0, "nature" => 5, "evs" => [252, 0, 180, 76, 0, 0], "ivs" => [31, 0, 31, 31, 31, 31] }],
+        ["AERODACTYL", %w[AERIALACE EARTHQUAKE PURSUIT STONEEDGE], { "item" => "AERODACTYLITE", "ability" => 0, "nature" => 13, "evs" => [0, 252, 0, 252, 0, 4] }],
+        ["BRONZONG", %w[PROTECT PSYWAVE STEALTHROCK TOXIC], { "item" => "LEFTOVERS", "ability" => 0, "nature" => 23, "evs" => [252, 0, 4, 0, 0, 252], "ivs" => [31, 0, 31, 31, 31, 31] }],
+        ["FLORGES", %w[HEALBELL MOONBLAST SYNTHESIS WISH], { "item" => "LEFTOVERS", "ability" => 0, "nature" => 5, "evs" => [252, 0, 240, 16, 0, 0], "ivs" => [31, 0, 31, 31, 31, 31] }],
+        ["KROOKODILE", %w[EARTHQUAKE KNOCKOFF PURSUIT SUPERPOWER], { "item" => "CHOICEBAND", "ability" => 0, "nature" => 13, "evs" => [0, 252, 0, 252, 0, 4] }],
+        ["TENTACRUEL", %w[HAZE KNOCKOFF RAPIDSPIN SCALD], { "item" => "BLACKSLUDGE", "ability" => 1, "nature" => 5, "evs" => [252, 0, 240, 16, 0, 0] }]
+      ],
+      # Leech Seed Mega Sceptile — KillinTime
+      "team2" => [
+        ["SCEPTILE", %w[DRAGONPULSE FOCUSBLAST LEAFSTORM LEECHSEED], { "item" => "SCEPTILITE", "ability" => 0, "nature" => 10, "evs" => [0, 0, 0, 252, 252, 4], "ivs" => [31, 0, 31, 31, 31, 31] }],
+        ["FLORGES", %w[AROMATHERAPY MOONBLAST SYNTHESIS WISH], { "item" => "LEFTOVERS", "ability" => 0, "nature" => 5, "evs" => [252, 0, 240, 16, 0, 0], "ivs" => [31, 0, 31, 31, 31, 31] }],
+        ["MANDIBUZZ", %w[DEFOG FOULPLAY ROOST UTURN], { "item" => "LEFTOVERS", "ability" => 1, "nature" => 23, "evs" => [252, 0, 0, 48, 0, 208] }],
+        ["METAGROSS", %w[EARTHQUAKE METEORMASH PROTECT TOXIC], { "item" => "LEFTOVERS", "ability" => 0, "nature" => 8, "evs" => [248, 108, 96, 56, 0, 0] }],
+        ["MIENSHAO", %w[HIGHJUMPKICK KNOCKOFF POISONJAB UTURN], { "item" => "ASSAULTVEST", "ability" => 1, "nature" => 13, "evs" => [100, 0, 0, 216, 0, 192] }],
+        ["SEISMITOAD", %w[KNOCKOFF SCALD STEALTHROCK TOXIC], { "item" => "LEFTOVERS", "ability" => 2, "nature" => 7, "evs" => [252, 0, 252, 0, 0, 4] }]
+      ],
+      # SubRoost Kyurem — Wanka
+      "team3" => [
+        ["KYUREM", %w[EARTHPOWER ICEBEAM ROOST SUBSTITUTE], { "item" => "LEFTOVERS", "ability" => 0, "nature" => 10, "evs" => [0, 0, 0, 252, 252, 4], "ivs" => [31, 0, 31, 31, 31, 31] }],
+        ["AERODACTYL", %w[AERIALACE CRUNCH PURSUIT STONEEDGE], { "item" => "AERODACTYLITE", "ability" => 0, "nature" => 3, "evs" => [0, 252, 0, 252, 0, 4] }],
+        ["EMPOLEON", %w[DEFOG ROAR SCALD SIGNALBEAM], { "item" => "LEFTOVERS", "ability" => 0, "nature" => 20, "evs" => [248, 0, 0, 8, 0, 252], "ivs" => [31, 0, 31, 31, 31, 31] }],
+        ["NIDOQUEEN", %w[EARTHPOWER ICEBEAM SLUDGEWAVE STEALTHROCK], { "item" => "LIFEORB", "ability" => 2, "nature" => 15, "evs" => [56, 0, 0, 200, 252, 0], "ivs" => [31, 0, 31, 31, 31, 31] }],
+        ["SLOWKING", %w[CALMMIND PSYSHOCK SCALD SLACKOFF], { "item" => "COLBURBERRY", "ability" => 2, "nature" => 5, "evs" => [252, 0, 252, 0, 4, 0], "ivs" => [31, 0, 31, 31, 31, 31] }],
+        ["WHIMSICOTT", %w[LEECHSEED MOONBLAST TAUNT UTURN], { "item" => "LEFTOVERS", "ability" => 0, "nature" => 10, "evs" => [248, 0, 68, 192, 0, 0] }]
+      ],
+      # AV Mienshao + CB Metagross — Wanka
+      "team4" => [
+        ["MIENSHAO", %w[HIGHJUMPKICK KNOCKOFF POISONJAB UTURN], { "item" => "ASSAULTVEST", "ability" => 1, "nature" => 13, "evs" => [100, 0, 0, 216, 0, 192] }],
+        ["AERODACTYL", %w[AERIALACE CRUNCH PURSUIT STONEEDGE], { "item" => "AERODACTYLITE", "ability" => 0, "nature" => 3, "evs" => [0, 252, 0, 252, 0, 4] }],
+        ["EMPOLEON", %w[DEFOG ROAR SCALD SIGNALBEAM], { "item" => "LEFTOVERS", "ability" => 0, "nature" => 20, "evs" => [248, 0, 0, 8, 0, 252], "ivs" => [31, 0, 31, 31, 31, 31] }],
+        ["KROOKODILE", %w[EARTHQUAKE KNOCKOFF STEALTHROCK TAUNT], { "item" => "ROCKYHELMET", "ability" => 0, "nature" => 13, "evs" => [0, 252, 0, 252, 0, 4] }],
+        ["METAGROSS", %w[EARTHQUAKE METEORMASH TRICK ZENHEADBUTT], { "item" => "CHOICEBAND", "ability" => 0, "nature" => 3, "evs" => [120, 252, 0, 136, 0, 0] }],
+        ["SLOWKING", %w[PSYCHIC SCALD SLACKOFF TOXIC], { "item" => "COLBURBERRY", "ability" => 2, "nature" => 5, "evs" => [252, 0, 252, 0, 4, 0], "ivs" => [31, 0, 31, 31, 31, 31] }]
+      ]
     }
   }
 end
@@ -98,6 +327,6 @@ PortableAIRealideaTeams::SETS.merge!(PortableAIRealideaTiers::SETS)
 module PortableAIRealideaTeams
   SUITES = {
     "archetype" => %w[archetype],
-    "tier" => %w[gen6ou_a gen6ou_b]
+    "tier" => %w[gen5ou_a gen5ou_b gen5ru_a gen5uu_a gen5uu_b gen6ou_a gen6ou_b gen6uu_a]
   }
 end

@@ -1,5 +1,5 @@
 # Engine-independent battle decision module.
-# Requires model.rb and effects.rb to have been loaded first.
+# Requires model.rb, effects.rb and matrix.rb to have been loaded first.
 
 module PortableAI
   HARD_REJECT = -1000000
@@ -471,6 +471,31 @@ module PortableAI
       end
     end
 
+    # 0.6.7 (dead_before_moving). A move the actor does not live to click is worth a
+    # quarter of itself. ko_never_lands above strips the +500 kill call from such a
+    # move and nothing else: engine_base, expected_damage and super_effective stayed,
+    # so a slower Sceptile at 100% facing a declared Acrobatics of 198% clicked its
+    # own Acrobatics at 410 over a switch at 234 whose only death-aware term was
+    # escape_lethal_threat +130 (gen5ru_a team3_vs_team4 104729 t10). Of the 162
+    # oracle turns where the actor was slower and certain to die, 131 attacked.
+    #
+    # Every non-priority move is scaled the same, so the ORDER among them is what it
+    # was -- the rule never changes which move is clicked, only whether a switch
+    # that has its own reason to exist wins over it -- and a priority move keeps
+    # its whole score, because it lands: a Quick Attack that chips before death now
+    # beats a Focus Blast that never happens. Same triple as ko_never_lands: slower
+    # (nil is not slower), no priority, certain_lethal_threat? (the declared hit on
+    # its minimum roll under the oracle, the strict figure otherwise). A trapped
+    # actor keeps its move; the gate stays closed on the switches, the moves are
+    # ranked as before. Under priority_gate, like ko_never_lands: with the gate off
+    # nothing in the core reads the speed order, and that ablation stays whole.
+    if config["dead_before_moving"] && config["priority_gate"] && faster == false &&
+       Model.number(action["priority"], 0) <= 0 && certain_lethal_threat?(actor, config)
+      adjust = out_score * (DEAD_BEFORE_MOVING_SCALE - 1.0)
+      out_score += adjust
+      reasons << ["dead_before_moving", adjust]
+    end
+
     out_score
   end
 
@@ -560,7 +585,7 @@ module PortableAI
       out_score += adjust
       reasons << ["incoming_risk", adjust]
     elsif real_incoming && weight != 0
-      incoming = Model.number(action["incoming_damage_pct"], 0.0)
+      incoming = entry_hit_pct(action)
       adjust = (25.0 - incoming) * 1.28 * weight
       out_score += adjust
       reasons << ["entry_incoming_damage", adjust]
@@ -627,9 +652,20 @@ module PortableAI
     # estimate is on the action; absent (older adapters), the reasons keep their
     # 0.6.2 shape and the candidate is not held to a number nobody computed.
     hitter = candidate_can_hit?(snapshot, actor, action, config)
+    # 0.6.6 (no_hit_needs_threat). "I cannot hurt it" is a reason to leave only if IT
+    # can hurt ME. The airborne fix made Steelix's Earthquake into a Levitate Uxie
+    # the nothing it always was, and both reasons below then sent Steelix off the
+    # field at turn 0 with Toxic, Stealth Rock and Roar in hand, against a foe that
+    # needs six hits to remove it -- four battles lost on one roster, every one of
+    # them a Steelix that stock kept in and let lay rocks (gen5ru_a team3_vs_team4
+    # 196613 t0). A wall that cannot be hurt in a hurry and still has a move worth
+    # clicking has no reason to leave; a wall with nothing but blanked attacks does.
+    walled = config["no_hit_needs_threat"] && walled_but_safe?(actor)
     if Model.truthy(actor["no_effective_move"])
       if hitter == false
         reasons << ["bench_cannot_hit_either", 0]
+      elsif walled
+        reasons << ["walled_but_safe", 0]
       else
         out_score += 260
         reasons << ["no_effective_move", 260]
@@ -650,6 +686,8 @@ module PortableAI
     if Model.number(actor["best_damage_pct"], 100) < 10
       if hitter == false
         reasons << ["bench_as_weak", 0]
+      elsif walled
+        reasons << ["walled_but_safe", 0] if !reasons.any? { |r| r[0] == "walled_but_safe" }
       else
         out_score += 120
         reasons << ["weak_current_attacks", 120]
@@ -754,7 +792,7 @@ module PortableAI
        action.key?("incoming_damage_pct")
       safe = Model.number(action["candidate_hp_pct"], 100.0) -
              Model.number(action["entry_damage_pct"], 0.0) -
-             Model.number(action["incoming_damage_pct"], 0.0) > 0
+             entry_hit_pct(action) > 0
     end
     if Model.number(actor["hp_pct"], 100) <= 20 && safe
       out_score += 80
@@ -780,7 +818,7 @@ module PortableAI
        action.key?("entry_damage_pct") && action.key?("incoming_damage_pct")
       left = Model.number(action["candidate_hp_pct"], 100.0) -
              Model.number(action["entry_damage_pct"], 0.0) -
-             Model.number(action["incoming_damage_pct"], 0.0) * MIN_DAMAGE_ROLL
+             entry_hit_pct(action) * MIN_DAMAGE_ROLL
       if left <= 0
         out_score -= 500
         reasons << ["dies_on_entry", -500]
@@ -899,11 +937,30 @@ module PortableAI
   # might help (threatened_lethal?), which is what earns the bonus.
   MIN_DAMAGE_ROLL = 0.85
 
+  # What a move the actor will not live to click keeps of its score (dead_before_
+  # moving). Not zero: the death is certain only on the estimate, and a quarter keeps
+  # the moves ranked among themselves for the turns where no switch is allowed.
+  DEAD_BEFORE_MOVING_SCALE = 0.25
+
   # The incoming hit kills through any damage roll, not merely through the estimate.
   # threatened_lethal? is the softer question and stays what the 0.3.2 rules ask.
   def self.certain_lethal_threat?(actor, config = {})
     hp = Model.number(actor["hp_pct"], 100.0)
     return false if hp <= 0
+    # 0.6.6. When the adapter knows which move the foe has committed to, THAT hit is
+    # the one that decides whether death is certain -- a declared Toxic makes it
+    # false whatever the foe's Earthquake would have done, and a declared 95% Air
+    # Slash makes it nearly true where strict_threat's "under 100% is 0%" made it
+    # false (Xatu at 28% Roosted into a 48% Air Slash, gen5uu_a team1_vs_team2 104729
+    # t30). The figure is the declared hit on its minimum roll, discounted by its
+    # hit chance: no threshold constant, and a 70% Focus Blast has to overkill by a
+    # third before it counts as certain. Absent, the 0.6.5 predicate stands.
+    if actor.key?("predicted_incoming_damage_pct")
+      hit = Model.number(actor["predicted_incoming_damage_pct"], 0.0)
+      accuracy = actor["predicted_incoming_accuracy"]
+      hit *= [Model.number(accuracy, 100.0), 100.0].min / 100.0 if !accuracy.nil?
+      return hit * MIN_DAMAGE_ROLL >= hp
+    end
     incoming = actor["incoming_damage_pct"]
     # Under strict_threat only a hit that cannot fail to happen (100% accurate, foe
     # awake) makes death certain; adapters that export no such figure keep the loose
@@ -940,13 +997,7 @@ module PortableAI
   # Percentage points of maximum HP a recovery move restores, in the same units as
   # hp_pct and incoming_damage_pct.
   def self.heal_amount(snapshot, tags)
-    return 100.0 if tags.include?("heal_full")
-    if tags.include?("heal_weather")
-      weather = snapshot["weather"]
-      return 66.0 if weather == "sun"
-      return 25.0 if weather == "sand" || weather == "hail"
-    end
-    50.0
+    Effects.heal_amount(snapshot, tags)
   end
 
   # Does healing change who is alive at the end of the turn? Reborn's recovercode
@@ -1041,11 +1092,6 @@ module PortableAI
     end
     false
   end
-
-  # Beyond this many hits the exchange is not a race any more, it is a stall war, and
-  # the counts stop carrying information. Cap rather than let a chip move produce a
-  # 40-turn "plan" that compares equal to another one.
-  RACE_MAX_HITS = 8
 
   # HOW MANY HITS EACH SIDE NEEDS, AND WHO LANDS THE LAST ONE.
   #
@@ -1145,15 +1191,6 @@ module PortableAI
       "last_hit_first" => last_hit_first, "winning" => winning }
   end
 
-  # nil when nothing gets through, otherwise the capped number of hits.
-  def self.hits_needed(hp, per_hit)
-    return nil if per_hit.nil? || per_hit <= 0
-    count = (hp / per_hit.to_f).ceil
-    count = RACE_MAX_HITS if count > RACE_MAX_HITS
-    count = 1 if count < 1
-    count
-  end
-
 
   # "The foe kills me in two and I do not move first." Silent -- false, never a
   # penalty -- whenever the race is unavailable.
@@ -1168,6 +1205,19 @@ module PortableAI
   # matchup is 32 there, and one super-effective step is another 32). The bands are
   # how many hits the FOE needs to knock this candidate out.
   SWITCHIN_RACE_OUTSPEED = 70
+
+  # 0.6.6. THE HIT A SWITCH CANDIDATE EATS ON THE WAY IN. The adapter's
+  # incoming_damage_pct is the worst the foe has against the candidate. When it also
+  # knows which move the foe has committed to -- predicted_incoming_damage_pct, the
+  # oracle arm today and a predictor's export later -- that is the entry hit, and the
+  # worst case stays what the exchange AFTER entry is run on (candidate_race,
+  # switchin_race_bonus): the foe is committed for one turn, not for the race. Absent,
+  # this is the 0.6.5 number, so every consumer is unchanged on a run without it.
+  def self.entry_hit_pct(action)
+    key = action.key?("predicted_incoming_damage_pct") ?
+          "predicted_incoming_damage_pct" : "incoming_damage_pct"
+    Model.number(action[key], 0.0)
+  end
 
   def self.switchin_race_bonus(action)
     # The candidate's OWN hp, not 100: a chipped bench mon that dies in one is exactly
@@ -1238,8 +1288,10 @@ module PortableAI
     # mirror -- Body Slam does nothing to it, Shadow Ball does 7% -- was the case
     # (no_switch_full_hp_neutral, Reborn probe).
     return { "mine" => mine, "theirs" => nil, "winning" => false } if mine >= RACE_MAX_HITS
+    # The free hit is the DECLARED one when the adapter knows it (entry_hit_pct);
+    # the hits after it are the worst the foe has.
     left = Model.number(action["candidate_hp_pct"], 100.0) -
-           Model.number(action["entry_damage_pct"], 0.0) - incoming
+           Model.number(action["entry_damage_pct"], 0.0) - entry_hit_pct(action)
     return { "mine" => mine, "theirs" => 1, "winning" => false } if left <= 0
     more = hits_needed(left, incoming)
     winning = if more.nil? then true            # nothing of theirs gets through
@@ -1267,6 +1319,39 @@ module PortableAI
   # about a chipped wall: at 40% a 15% hit is three, not "weak".
   WALL_BREAK_MARGIN = 2
   WALL_BREAK_MAX_HITS = 4
+
+  # The foe needs this many hits or more to remove the actor -- the band
+  # switchin_race_bonus calls "nothing the foe has gets through in a hurry" -- and the
+  # actor has a non-damaging move that WORKS ON THE FOE OR THE FIELD and can still
+  # land: a status, a hazard below its cap, a phaze, a disruption, a stage reset or
+  # an item trick. Not a boost, a heal, a Substitute or a Protect -- those are what an
+  # Alakazam has in front of a Toxic Umbreon, and doing them forever is not a plan;
+  # the 0.6.3 card no_effective_move_needs_a_body_that_breaks_the_wall is exactly
+  # that board and it must keep leaving. Residual damage counts against the actor
+  # the way damage_race counts it. False without an incoming estimate: a missing
+  # field never closes a gate that would otherwise open.
+  WALL_SAFE_HITS = 4
+  WALL_WORK_TAGS = %w[status hazard force_switch disrupt reset_stages item_control]
+
+  def self.walled_but_safe?(actor)
+    hp = Model.number(actor["hp_pct"], 100.0)
+    return false if hp <= 0 || actor["incoming_damage_pct"].nil?
+    per_hit = Model.number(actor["incoming_damage_pct"], 0.0) +
+              Model.number(actor["residual_damage_pct"], 0.0)
+    theirs = hits_needed(hp, per_hit)
+    return false if !theirs.nil? && theirs < WALL_SAFE_HITS
+    (actor["actions"] || []).any? do |other|
+      next false if other["type"] != "move" || Model.truthy(other["damaging"])
+      next false if Model.truthy(other["immune"])
+      tags = Effects.describe(other["move_id"].to_s.upcase, other["tags"])
+      next false if (tags & WALL_WORK_TAGS).empty?
+      if tags.include?("hazard")
+        next false if Model.number(other["existing_layers"], 0) >=
+                      Model.number(other["max_layers"], 1)
+      end
+      true
+    end
+  end
 
   def self.candidate_can_hit?(snapshot, actor, action, config)
     return nil if !config["escape_needs_hitter"]
@@ -1322,186 +1407,13 @@ module PortableAI
   end
 
   # ---------------------------------------------------------------------------
-  # 0.6.5. THE PARTY x PARTY DAMAGE MATRIX -- a pure derived layer over one new
-  # snapshot field.
+  # 0.6.5. CONSUMERS OF THE PARTY x PARTY DAMAGE MATRIX.
   #
-  # Every rule above this line scores against the ACTIVE foe. That is the whole
-  # board a move sees, but it is not the whole board a switch decides: sending the
-  # only body that beats their Azumarill into a Scizor that removes it is a game
-  # thrown away three turns before anything looks wrong, and a boost is worth what
-  # it flips across the rest of the party, not a flat 55.
-  #
-  # The adapter builds `snapshot["matrix"]` -- one damage estimate per party pair,
-  # both directions, cached and re-rolled only when a signature changes. This
-  # section reads it and nothing else, so every consumer goes inert the instant the
-  # field is absent: an adapter that exports no matrix (Reborn) is unchanged, which
-  # is what makes its gauntlet the control for this version.
-  #
-  # SLOTS, NOT SEATS. A benched body has no seat, and a seat is not a party index.
-  # The side tables carry both, and matrix_slot is the only way across.
-  #
-  # NOT in the cells, on purpose: HP (this layer derives the hit counts from the
-  # side tables' current hp_pct, so a verdict decays as a body is chipped),
-  # Intimidate, the Choice lock, entry hazards, and PRIORITY -- a cell is a damage
-  # number, and damage_race is the thing that orders the final hit, so a body that
-  # wins on Bullet Punch reads here as losing. The 0.6.4 switch estimators
-  # still carry those and still feed candidate_race; the matrix is the wide, thin
-  # view, not a replacement for the narrow, thick one. Defender-side screens ARE in
-  # the numbers, because the engine's own damage estimate reads them.
-
-  # Both sides needing six or more hits is not a race, it is a stall: at that depth
-  # the exchange is decided by crits, status and residual, none of which these cells
-  # carry. Deliberately below RACE_MAX_HITS (8), which is a CAP -- "both at the cap"
-  # would need <= 12.5% a hit on both sides and would almost never be reachable --
-  # and above WALL_BREAK_MAX_HITS (4), which asks the opposite question. The verdict
-  # is recomputed from current HP every snapshot, so an S decays into W or L as soon
-  # as one side is chipped enough to matter.
-  MATRIX_STALL_HITS = 6
-
-  def self.matrix(snapshot)
-    m = (snapshot || {})["matrix"]
-    m.is_a?(Hash) ? m : nil
-  end
-
-  # Seat (a battler index: actor["index"], target["index"], never an action's slot)
-  # to party slot. nil for a seat no live party entry occupies.
-  def self.matrix_slot(side_table, seat)
-    return nil if side_table.nil? || seat.nil?
-    side_table.each do |entry|
-      next if entry.nil?
-      return entry["slot"] if !entry["index"].nil? && entry["index"] == seat
-    end
-    nil
-  end
-
-  def self.matrix_entry(side_table, slot)
-    return nil if side_table.nil? || slot.nil?
-    side_table.each do |entry|
-      next if entry.nil?
-      return entry if entry["slot"] == slot
-    end
-    nil
-  end
-
-  def self.matrix_cell(snapshot, own_slot, foe_slot)
-    m = matrix(snapshot)
-    return nil if m.nil? || own_slot.nil? || foe_slot.nil?
-    cells = m["cells"]
-    return nil if !cells.is_a?(Hash)
-    cell = cells["#{own_slot}:#{foe_slot}"]
-    cell.is_a?(Hash) ? cell : nil
-  end
-
-  # Hits each way at the HP both bodies are actually standing on. nil on either side
-  # means nothing that body has gets through, which is a distinct answer from "it
-  # needs many hits" and the verdict below reads it as such.
-  def self.matrix_hits(cell, own_hp, foe_hp)
-    return nil if cell.nil?
-    { "mine" => hits_needed(foe_hp, Model.number(cell["out"], 0.0)),
-      "theirs" => hits_needed(own_hp, Model.number(cell["in"], 0.0)) }
-  end
-
-  # "W" this body wins the pair, "L" it loses, "S" neither finishes, nil unknown.
-  #
-  # No free-hit convention here. The turn a switch costs belongs to candidate_race
-  # (:1210), which already charges it; a matrix verdict is the standing question
-  # "who beats whom", asked of two bodies at their current HP.
-  def self.matrix_verdict(snapshot, own_slot, foe_slot)
-    cell = matrix_cell(snapshot, own_slot, foe_slot)
-    return nil if cell.nil?
-    m = matrix(snapshot)
-    own = matrix_entry(m["own"], own_slot)
-    foe = matrix_entry(m["foe"], foe_slot)
-    return nil if own.nil? || foe.nil?
-    cell_verdict(cell, Model.number(own["hp_pct"], 100.0),
-                 Model.number(foe["hp_pct"], 100.0))
-  end
-
-  # The same judgement on a cell the caller is holding -- a transformed one, which by
-  # construction is in no matrix (Core.setup_matrix_value).
-  # A pair the engine could not price reads here exactly like a pair nothing lands in:
-  # `out` nil and `out` 0.0 both give no hits and both lose. The distinction is kept in
-  # the cell for the readout (`?` against `0%`) rather than acted on, because the
-  # alternative -- a verdict of nil -- would silently drop the pair out of
-  # matrix_answers and turn "we could not measure it" into "nothing answers it".
-  def self.cell_verdict(cell, own_hp, foe_hp)
-    return nil if cell.nil?
-    return nil if own_hp <= 0 || foe_hp <= 0
-    hits = matrix_hits(cell, own_hp, foe_hp)
-    mine = hits["mine"]
-    theirs = hits["theirs"]
-    stalled_mine = mine.nil? || mine >= MATRIX_STALL_HITS
-    stalled_theirs = theirs.nil? || theirs >= MATRIX_STALL_HITS
-    return "S" if stalled_mine && stalled_theirs
-    return "L" if mine.nil?
-    return "W" if theirs.nil?
-    return "W" if mine < theirs
-    return "L" if mine > theirs
-    faster = cell["faster"]
-    return nil if faster != true && faster != false
-    faster ? "W" : "L"
-  end
-
-  def self.matrix_live_slots(side_table)
-    out = []
-    (side_table || []).each do |entry|
-      next if entry.nil?
-      next if entry["alive"] == false
-      next if Model.number(entry["hp_pct"], 0.0) <= 0
-      out << entry["slot"]
-    end
-    out
-  end
-
-  # Every live body on our side that beats this foe.
-  def self.matrix_answers(snapshot, foe_slot)
-    m = matrix(snapshot)
-    return [] if m.nil?
-    matrix_live_slots(m["own"]).select do |own_slot|
-      matrix_verdict(snapshot, own_slot, foe_slot) == "W"
-    end
-  end
-
-  # The live foes this body is the ONLY answer to. Empty when the matrix is absent,
-  # so a consumer written against it is inert by construction.
-  def self.sole_answers(snapshot, own_slot)
-    m = matrix(snapshot)
-    return [] if m.nil? || own_slot.nil?
-    matrix_live_slots(m["foe"]).select do |foe_slot|
-      answers = matrix_answers(snapshot, foe_slot)
-      answers.length == 1 && answers[0] == own_slot
-    end
-  end
-
-  # A cell as it would read after the actor's own stat stages. Physical output scales
-  # with Attack, special with Special Attack, and the mirror on the way in; speed
-  # stages can flip who moves first, which is the whole point of a Dragon Dance.
-  # Ratios, not the engine's numerator/denominator pairs -- STAGE_MULT.
-  #
-  # Applied from stage 0. Its only caller is the first-setup arm (repeats == 0, which
-  # setup_stage keys off positive_stage_total < 2), so the body is carrying at most
-  # one stage already and the error is bounded by one.
-  def self.matrix_transform_cell(cell, stages, own_speed, foe_speed, trick_room)
-    return nil if cell.nil?
-    out = Model.copy_hash(cell)
-    stages = stages || {}
-    offence = (cell["out_cat"] == "special") ? stages["spa"] : stages["atk"]
-    defence = (cell["in_cat"] == "special") ? stages["spd"] : stages["def"]
-    if !cell["out"].nil? && !offence.nil? && offence != 0
-      out["out"] = Model.number(cell["out"], 0.0) * Effects.stage_multiplier(offence)
-    end
-    if !cell["in"].nil? && !defence.nil? && defence != 0
-      out["in"] = Model.number(cell["in"], 0.0) / Effects.stage_multiplier(defence)
-    end
-    speed_stage = stages["speed"]
-    if !speed_stage.nil? && speed_stage != 0 && !own_speed.nil? && !foe_speed.nil?
-      mine = own_speed.to_f * Effects.stage_multiplier(speed_stage)
-      # The adapters' own convention (faster_than_foes?): strictly greater is faster,
-      # a tie is not, and Trick Room inverts it.
-      out["faster"] = trick_room ? mine < foe_speed.to_f : mine > foe_speed.to_f
-    end
-    out
-  end
+  # The readers themselves -- matrix_cell, cell_verdict, matrix_answers and the rest
+  # -- moved to matrix.rb in 0.7.0, so the search planner can read the same board
+  # without loading the rule engine. What stays here is what SCORES: the rules below
+  # turn a verdict into a reason term. Both layers go inert together when the adapter
+  # exports no snapshot["matrix"] (Reborn), which is what makes its gauntlet a control.
 
   # CONSUMER A. The only answer to a foe is not a body to spend.
   #
@@ -1780,26 +1692,7 @@ module PortableAI
   end
 
   def self.memory_updates(actions)
-    out = {}
-    actions.each do |action|
-      actor_index = action["actor_index"]
-      update = { "last_type" => action["type"] }
-      if action["type"] == "switch"
-        update["increment"] = "switch"
-      else
-        tags = Effects.describe(action["move_id"], action["tags"])
-        update["last_move"] = action["move_id"]
-        if tags.include?("setup")
-          update["increment"] = "setup"
-        elsif tags.include?("protect") || tags.include?("team_protect")
-          update["increment"] = "protect"
-        elsif tags.include?("substitute")
-          update["increment"] = "substitute"
-        end
-      end
-      out[actor_index.to_s] = update
-    end
-    out
+    Effects.memory_updates(actions)
   end
 
   # ---------------------------------------------------------------------------

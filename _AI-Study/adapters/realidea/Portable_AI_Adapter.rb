@@ -1,6 +1,7 @@
 # Portable AI adapter for Realidea (Pokemon Essentials v16).
 #
-# This file is concatenated after portable_ai/model.rb, effects.rb and core.rb, then
+# This file is concatenated after portable_ai/model.rb, effects.rb, matrix.rb, core.rb
+# and search.rb, then
 # injected as one script section after "AI edit clara" and before Main.
 #
 # Safe rollout: the hook is inert unless Data/portable_ai.txt exists or
@@ -253,6 +254,8 @@ module PortableAIRealidea
         end
         foes = foe_choices(battle)
         entry["foe"] = foes if foes
+        search = search_trace(battle.instance_variable_get(:@portable_ai_plan) || {})
+        entry["search"] = search if search
         trace << entry
       end
       return true
@@ -462,7 +465,7 @@ module PortableAIRealidea
     # the decision the sole-answer rule was written for.
     snapshot["matrix"] = party_matrix(battle, index, foe_indices, skill) if
       matrix_wanted?(battle)
-    plan = PortableAI.plan(snapshot, config_for(skill), BattleRNG.new(battle))
+    plan = run_planner(snapshot, config_for(skill), BattleRNG.new(battle))
     chosen = nil
     (plan["actions"] || []).each do |action|
       chosen = action if action["actor_index"] == index && action["type"] == "switch"
@@ -486,6 +489,26 @@ module PortableAIRealidea
     nil
   end
 
+  # 0.7.0. WHICH PLANNER ANSWERS. Both take the same snapshot and return the same
+  # shape, so this is the only place that knows there are two.
+  #
+  # The search planner declines by returning nil -- on doubles, and on any snapshot it
+  # cannot resolve a board out of. That covers the forced-replacement path below
+  # without a special case: the actor there is fainted, a fainted body occupies no
+  # matrix seat, and a board with no own slot is one it refuses. So the search arm is
+  # a voluntary-turn experiment and replacement switches stay with the rule engine
+  # until something measures otherwise.
+  #
+  # No rescue. A planner that raises should show up in the run's error readout, not be
+  # silently papered over by the arm it is supposed to be compared against.
+  def self.run_planner(snapshot, config, rng)
+    if config["search_planner"]
+      searched = PortableAI::Search.plan(snapshot, config, rng)
+      return searched if searched
+    end
+    PortableAI.plan(snapshot, config, rng)
+  end
+
   def self.plan_for(battle)
     signature = cache_signature(battle)
     cached_signature = battle.instance_variable_get(:@portable_ai_cache_signature)
@@ -493,7 +516,12 @@ module PortableAIRealidea
     return cached if cached && cached_signature == signature
 
     snapshot, skill = build_snapshot(battle)
-    plan = PortableAI.plan(snapshot, config_for(skill), BattleRNG.new(battle))
+    config = config_for(skill)
+    # 0.8.0. The bridge runs first and declines by returning nil, exactly as the
+    # search planner does, so a silent sidecar or an unmappable reply falls through to
+    # whatever planner the rest of the config names.
+    plan = config["foul_play"] ? FoulPlay.plan(battle, snapshot, config) : nil
+    plan ||= run_planner(snapshot, config, BattleRNG.new(battle))
     battle.instance_variable_set(:@portable_ai_cache_signature, signature)
     battle.instance_variable_set(:@portable_ai_plan, plan)
     battle.instance_variable_set(:@portable_ai_last_plan, plan)
@@ -520,7 +548,7 @@ module PortableAIRealidea
       race[target["index"].to_s] =
         PortableAI.damage_race(snapshot, actor, target, DEFAULT_RACE_CONFIG)
     end
-    {
+    out = {
       # Who this actually is. The trace used to record six scalars and the chosen move,
       # which made a readout unreadable without cross-referencing `parties` by seat --
       # and `parties` holds FINAL hp, not hp at the moment of the decision. All of this
@@ -554,6 +582,14 @@ module PortableAIRealidea
       # consumers off still has to show what they would have read.
       "matrix" => matrix_trace(snapshot)
     }
+    # 0.6.6. The foe's declared intent and the hit it implies, when this run read
+    # one; absent otherwise, so a readout can tell an oracle run from a plain one.
+    if actor.key?("predicted_incoming_damage_pct")
+      out["predicted_incoming_damage_pct"] = actor["predicted_incoming_damage_pct"]
+      out["predicted_incoming_accuracy"] = actor["predicted_incoming_accuracy"]
+      out["predicted_foe"] = actor["predicted_foe"]
+    end
+    out
   rescue
     {}
   end
@@ -632,13 +668,19 @@ module PortableAIRealidea
         # say why a bench Pokemon did or did not count as winning its race.
         "outgoing_damage_pct" => candidate["outgoing_damage_pct"],
         "incoming_damage_pct" => candidate["incoming_damage_pct"],
+        "predicted_incoming_damage_pct" => candidate["predicted_incoming_damage_pct"],
         "candidate_hp_pct" => candidate["candidate_hp_pct"],
         "faster" => candidate["faster"],
         "reasons" => candidate["reasons"]
       }
       # What the score was computed FROM, for a move. Without these a reader can see
       # that Bullet Punch beat Bug Bite but not that it was 28% into a 4x resist.
-      %w[power effectiveness expected_damage_pct immune damaging priority].each do |key|
+      # 0.7.0: search_row is the payoff against each foe option in order, which is the
+      # only way to read why a maximin pick went where it did. 0.7.6: and search_visits
+      # is what the tree RANKS by, so without it an MCTS readout shows six averages
+      # within a hundredth of each other and no reason for the pick between them.
+      %w[power effectiveness expected_damage_pct immune damaging priority
+         search_mean search_row search_cell search_visits].each do |key|
         entry[key] = candidate[key] if candidate.has_key?(key)
       end
       # A switch candidate names the bench Pokemon it would bring in.
@@ -668,6 +710,30 @@ module PortableAIRealidea
     out
   rescue
     []
+  end
+
+  # 0.7.7 diagnostic. WHERE THE TREE SPENT ITS BUDGET, next to what the foe then did.
+  #
+  # `foe_visits` is the MCTS root's own opponent model: how UCB1 spread the iterations
+  # over the foe's options once the foe's own payoff chose between them. The entry
+  # already carries `foe`, the move the foe actually registered that turn, so recording
+  # the two together is the whole test of whether seeding the tree's foe statistics
+  # from the stock model could buy anything -- if the tree already concentrates on the
+  # moves the foe really plays, a better prior has nothing to correct.
+  #
+  # Diagnostics-only and small (two parallel arrays per decision, one entry each per
+  # foe option), so unlike candidate_trace this is not gated on trace= -- a plain
+  # shadow run answers the question too. Absent entirely on the maximin path, which
+  # publishes no foe_visits.
+  def self.search_trace(plan)
+    diagnostics = plan["diagnostics"] || {}
+    visits = diagnostics["foe_visits"]
+    return nil if !visits.is_a?(Array) || visits.empty?
+    { "foe_options" => diagnostics["foe_options"],
+      "foe_visits" => visits,
+      "iterations" => diagnostics["iterations"] }
+  rescue
+    nil
   end
 
   def self.trace_candidates?
@@ -759,7 +825,11 @@ module PortableAIRealidea
       "physical_attacker" => physical,
       "special_attacker" => special,
       "substitute" => (safe_effect(battler, :Substitute, 0).to_i > 0),
-      "partner_ability" => (partner && !partner.isFainted? ? ability_key(partner) : nil)
+      "partner_ability" => (partner && !partner.isFainted? ? ability_key(partner) : nil),
+      # 0.7.1. Whether this body could leave, by the engine's own pbCanSwitch? -- the
+      # same test the actor view answers for itself. The rule engine never reads it on
+      # a target; the search planner drops the foe's switch column when it is true.
+      "trapped" => !has_legal_switch?(battle, battler.index)
     }
   end
 
@@ -773,7 +843,10 @@ module PortableAIRealidea
         actions << action
       end
     end
-    switch_actions(battle, battler, foe_indices, skill).each { |action| actions << action }
+    intents = foe_intents(battle, foe_indices)
+    switch_actions(battle, battler, foe_indices, skill, false, intents).each do |action|
+      actions << action
+    end
 
     damaging = actions.select { |action| action["type"] == "move" && action["damaging"] }
     best_damage = 0
@@ -795,11 +868,14 @@ module PortableAIRealidea
     incoming = 0.0
     incoming_map.each_value { |damage| incoming = damage if damage > incoming }
     certain = certain_incoming_damage(battle, battler, foe_indices, incoming_map, skill)
+    # 0.6.6. What the foe has committed to, when this run is allowed to know it
+    # (foe_intents, read once above for the bench candidates too).
+    predicted = intents.empty? ? nil : predicted_incoming(battle, battler, intents, skill)
     toxic_stage = safe_effect(battler, :Toxic, 0).to_i
     residual = 0.0
     residual += (toxic_stage + 1) * 100.0 / 16.0 if toxic_stage > 0
     residual += 100.0 / 8.0 if safe_effect(battler, :LeechSeed, -1).to_i >= 0
-    {
+    out = {
       "index" => index,
       "species" => battler.species,
       "hp_pct" => percent(battler.hp, battler.totalhp),
@@ -839,6 +915,263 @@ module PortableAIRealidea
       "turncount" => (battler.turncount.to_i rescue 0),
       "actions" => actions
     }
+    if predicted
+      # Present ONLY when an intent was read, so a run with the key off exports
+      # nothing and the core's consumers stay on the worst-case figures.
+      out["predicted_incoming_damage_pct"] = predicted["damage_pct"]
+      out["predicted_incoming_accuracy"] = predicted["accuracy"]
+      out["predicted_foe"] = predicted["foe"]
+    end
+    out
+  end
+
+  # ---------------------------------------------------------------------------
+  # 0.6.6. WHAT THE FOE IS ABOUT TO DO.
+  #
+  # Every incoming estimate in this adapter is the WORST the foe could do: the
+  # actor's incoming_damage_pct is the max over the foe's moves, a bench candidate's
+  # is the max against that candidate. The foe clicks one move. Read off the 0.6.5
+  # traces, the foe's best-damage move against the actor was its actual choice on
+  # 54.9% of 891 turns, and the misses were mostly status and pivot moves -- so half
+  # the time the entry hit the core charged a switch for was a move the foe had
+  # not clicked: "Sceptile takes 167% from Rhydon" was Megahorn, and Rhydon had
+  # registered Earthquake (gen5ru_a team3_vs_team4 104729 t8).
+  #
+  # This is the CONSUMER side of a prediction: the foe's intent, per foe, as a move
+  # object or a switch, and the hit it implies against the actor and against each
+  # bench candidate. Today the only producer is the oracle -- the registered choice
+  # itself, under the foe_oracle key -- which is the ceiling, not a policy. A model
+  # that predicts the move goes through the same three methods and exports the same
+  # fields, and its number is judged against the oracle's.
+  #
+  # THE ORACLE IS CHEATING, and it can only cheat because of seat order: the gauntlet
+  # registers seat 0 before seat 1 (PortableAIGauntlet.command_phase), and in play
+  # the player registers before pbDefaultChooseEnemyCommand runs. The engine resets
+  # every choice at the top of each command phase (084:3045-3051), so a registered
+  # choice is always this turn's. A forced replacement decides between turns, after
+  # the choices have executed and before they are reset, so it must not read them;
+  # choose_replacement passes no intents.
+  #
+  # Keyed by foe index as an INTEGER here (this is the adapter's own working table);
+  # the exported predicted_foe is keyed by string like threats_by_foe.
+  def self.foe_intents(battle, foe_indices)
+    out = {}
+    return stock_intents(battle, foe_indices) if !rule_enabled?("foe_oracle")
+    foe_indices.each do |foe_index|
+      choice = battle.choices[foe_index] rescue nil
+      next if !choice
+      case choice[0]
+      when 1
+        move = choice[2]
+        next if !move || (move.id rescue 0) == 0
+        out[foe_index] = { "kind" => "move", "move" => move,
+                           "target" => (choice[3].nil? ? -1 : choice[3].to_i) }
+      when 2
+        out[foe_index] = { "kind" => "switch", "slot" => (choice[1].nil? ? nil : choice[1].to_i) }
+      end
+    end
+    out
+  rescue
+    {}
+  end
+
+  # 0.7.5. THE SECOND PRODUCER: what stock v16 would do, read from its own code
+  # without the dice. Under foe_stock_model (and only when the oracle is off -- the
+  # oracle is the ceiling this is judged against). Per foe: the withdraw triggers of
+  # pbEnemyShouldWithdrawEx? (085:4116) as a CHANCE rather than a roll, the slot its
+  # list would put first, and the move pbGetMoveScore scores highest. Nothing here
+  # registers anything or draws a random number, so a run with the key on still
+  # reproduces its own dice; but pbGetMoveScore is the scorer that divides by zero
+  # on some boards (085:3557), so every foe is rescued on its own.
+  #
+  # What the triggers say about the measured foe: it switches on a super-effective
+  # hit it just took (20-30%), on a Toxic about to kill (80%), on an Encore into a
+  # dead move (80%), on Perish count 1 or on having no move left -- and otherwise
+  # NEVER. That is why maximin's worst case (the wall it could switch to) is a reply
+  # it does not make.
+  def self.stock_intents(battle, foe_indices)
+    out = {}
+    return out if !rule_enabled?("foe_stock_model")
+    foe_indices.each do |foe_index|
+      intent = stock_intent(battle, foe_index)
+      out[foe_index] = intent if intent
+    end
+    out
+  rescue
+    {}
+  end
+
+  def self.stock_intent(battle, foe_index)
+    foe = battle.battlers[foe_index]
+    return nil if !foe || foe.isFainted?
+    skill = (battle.pbGetOwner(foe_index).skill rescue nil) || 0
+    chance = stock_switch_chance(battle, foe, skill)
+    slot = chance > 0.0 ? stock_switch_slot(battle, foe) : nil
+    chance = 0.0 if slot.nil?
+    return { "kind" => "switch", "slot" => slot } if chance >= 1.0
+    move = stock_move(battle, foe, skill)
+    return nil if !move
+    { "kind" => "move", "move" => move, "target" => -1,
+      "switch_chance" => chance, "switch_slot" => slot }
+  rescue
+    nil
+  end
+
+  # pbEnemyShouldWithdrawEx?'s triggers, each with the probability its roll gives
+  # it, combined as "any of them fires". The Hyper Beam / Truant clause, which
+  # cancels a switch 80% of the time, scales what the others found.
+  def self.stock_switch_chance(battle, foe, skill)
+    high = (skill >= PBTrainerAI.highSkill rescue false)
+    medium = (skill >= PBTrainerAI.mediumSkill rescue false)
+    fires = []
+    if high && (foe.turncount rescue 0).to_i > 0
+      opp = foe.pbOppositeOpposing
+      opp = opp.pbPartner if opp && opp.isFainted?
+      last = (opp && !opp.isFainted?) ? (opp.lastMoveUsed rescue 0).to_i : 0
+      if last > 0 && ((opp.level - foe.level).abs rescue 99) <= 6
+        data = PBMoveData.new(last)
+        typemod = (battle.pbTypeModifier(data.type, foe, foe) rescue 8)
+        if data.basedamage > 70 && typemod > 8
+          fires << 0.3
+        elsif data.basedamage > 50 && typemod > 8
+          fires << 0.2
+        end
+      end
+    end
+    usable = (0...4).any? { |i| (battle.pbCanChooseMove?(foe.index, i, false) rescue true) }
+    fires << 1.0 if !usable && (foe.turncount rescue 0).to_i > 5
+    if high && foe.status == PBStatuses::POISON && (foe.statusCount rescue 0).to_i > 0
+      toxic_hp = foe.totalhp / 16
+      next_hp = toxic_hp * (safe_effect(foe, :Toxic, 0).to_i + 1)
+      fires << 0.8 if next_hp >= foe.hp && toxic_hp < foe.hp
+    end
+    if medium && safe_effect(foe, :Encore, 0).to_i > 0
+      idx = safe_effect(foe, :EncoreIndex, 0).to_i
+      opp = foe.pbOppositeOpposing
+      if opp && !opp.isFainted? && foe.moves[idx]
+        score = (battle.pbGetMoveScore(foe.moves[idx], foe, opp, skill) rescue 100)
+        fires << 0.8 if score <= 20
+      end
+    end
+    fires << 1.0 if safe_effect(foe, :PerishSong, 0).to_i == 1
+    return 0.0 if fires.empty?
+    chance = 1.0 - fires.inject(1.0) { |acc, f| acc * (1.0 - f) }
+    if high
+      opp = foe.pbOppositeOpposing
+      if opp && !opp.isFainted? &&
+         (safe_effect(opp, :HyperBeam, 0).to_i > 0 ||
+          ((opp.hasWorkingAbility(:TRUANT) rescue false) && safe_effect(opp, :Truant, false)))
+        chance *= 0.2
+      end
+    end
+    chance
+  rescue
+    0.0
+  end
+
+  # The slot stock's list puts first: party order among the bodies it may switch
+  # to, with a body immune to the move it just took moved ahead (its 65% / 85%
+  # roll, read as "usually"), or one resisting it when that body is also
+  # super-effective on us (its 60%).
+  def self.stock_switch_slot(battle, foe)
+    party = battle.pbParty(foe.index)
+    return nil if !party
+    opp = foe.pbOppositeOpposing
+    last = (opp && !opp.isFainted?) ? (opp.lastMoveUsed rescue 0).to_i : 0
+    movetype = last > 0 ? (PBMoveData.new(last).type rescue -1) : -1
+    first = nil
+    party.each_with_index do |pokemon, slot|
+      next if !pokemon || !(battle.pbCanSwitch?(foe.index, slot, false) rescue false)
+      first = slot if first.nil?
+      next if movetype < 0
+      typemod = (battle.pbTypeModifier(movetype, foe, foe) rescue 8)
+      return slot if typemod == 0
+      if typemod < 8 && (battle.pbTypeModifier2(pokemon, opp) rescue 8) > 8
+        return slot
+      end
+    end
+    first
+  rescue
+    nil
+  end
+
+  # The move pbChooseMoves would score highest against the body in front of it;
+  # the first usable one when nothing scores above zero (stock then picks among
+  # its usable moves at random, and the first is as good a guess as any).
+  def self.stock_move(battle, foe, skill)
+    opp = foe.pbOppositeOpposing
+    opp = opp.pbPartner if opp && opp.isFainted?
+    return nil if !opp || opp.isFainted?
+    best = nil
+    best_score = 0
+    first = nil
+    (foe.moves || []).each_with_index do |move, i|
+      next if !move || (move.id rescue 0) == 0
+      next if !(battle.pbCanChooseMove?(foe.index, i, false) rescue true)
+      first = move if first.nil?
+      score = (battle.pbGetMoveScore(move, foe, opp, skill) rescue 0).to_i
+      next if score <= best_score
+      best = move
+      best_score = score
+    end
+    best || first
+  rescue
+    nil
+  end
+
+  # Whether a foe's declared move lands on the given seat. Singles registers no
+  # target (-1); a spread move hits every foe; otherwise the registered target says.
+  def self.intent_aimed_at?(intent, seat)
+    return false if !intent || intent["kind"] != "move"
+    target = intent["target"].to_i
+    return true if target < 0
+    return true if target == seat
+    (PBTargets.hasMultipleTargets?(intent["move"]) rescue false) ? true : false
+  end
+
+  # The hit the declared moves land on `battler` this turn: 0 for a status move, a
+  # switch, or a foe that cannot act (frozen, asleep with sleep to serve -- the same
+  # guard certain_incoming_damage keeps). Accuracy is the engine's own estimate of the
+  # least accurate counted move, so the core can discount the hit by its chance of
+  # happening; nil when no counted move has one.
+  def self.predicted_incoming(battle, battler, intents, skill)
+    damage = 0.0
+    accuracy = nil
+    priority = 0
+    foes = {}
+    intents.each do |foe_index, intent|
+      foe = battle.battlers[foe_index]
+      next if !foe || foe.isFainted?
+      entry = { "type" => intent["kind"] }
+      # A model's own reading of its switch, beside the move it expects (0.7.5); the
+      # oracle's switch carries its slot the same way when it knows one.
+      entry["slot"] = intent["slot"] if intent.key?("slot")
+      entry["switch_chance"] = intent["switch_chance"] if intent.key?("switch_chance")
+      entry["switch_slot"] = intent["switch_slot"] if intent.key?("switch_slot")
+      if intent["kind"] == "move"
+        move = intent["move"]
+        entry["move_id"] = move_key(move.id)
+        entry["target"] = intent["target"]
+        if intent_aimed_at?(intent, battler.index) && foe_can_act?(foe)
+          hit = rough_damage_pct(battle, move, foe, battler, skill)
+          acc = rough_accuracy(battle, move, foe, battler, skill)
+          pri = effective_priority(move, foe)
+          entry["damage_pct"] = hit
+          entry["accuracy"] = acc
+          entry["priority"] = pri
+          damage += hit
+          accuracy = acc if hit > 0 && !acc.nil? && (accuracy.nil? || acc < accuracy)
+          priority = pri if hit > 0 && pri > priority
+        else
+          entry["damage_pct"] = 0.0
+        end
+      end
+      foes[foe_index.to_s] = entry
+    end
+    { "damage_pct" => damage, "accuracy" => accuracy, "priority" => priority,
+      "foe" => foes }
+  rescue
+    nil
   end
 
   def self.move_actions(battle, battler, move, slot, foe_indices, skill)
@@ -1012,7 +1345,8 @@ module PortableAIRealidea
   # own pbCanSwitchLax? (the test the stock chooser applies) rather than pbCanSwitch?,
   # which reads trapping effects off a battler that has just gone down, and every
   # candidate is forced -- the core skips its escape gate and ranks bodies.
-  def self.switch_actions(battle, battler, foe_indices, skill, replacement = false)
+  def self.switch_actions(battle, battler, foe_indices, skill, replacement = false,
+                          intents = nil)
     party = battle.pbParty(battler.index)
     forced = replacement || safe_effect(battler, :PerishSong, 0) == 1
     actions = []
@@ -1041,8 +1375,16 @@ module PortableAIRealidea
         "candidate_hp_pct" => hp_pct,
         "entry_damage_pct" => hazard
       }
-      real = switch_incoming_damage(battle, pokemon, slot, battler, foe_indices, skill)
-      action["incoming_damage_pct"] = real if !real.nil?
+      hits = switch_incoming_damages(battle, pokemon, slot, battler, foe_indices, skill,
+                                     intents)
+      if hits
+        action["incoming_damage_pct"] = hits["worst"]
+        # 0.6.6. Present only when the foe's intent was read: the hit the DECLARED
+        # move lands on this candidate, which the core prices the entry on
+        # (Core.entry_hit_pct). The worst case above stays what the race after
+        # entry is run on.
+        action["predicted_incoming_damage_pct"] = hits["predicted"] if !hits["predicted"].nil?
+      end
       out = switch_outgoing_damage(battle, pokemon, slot, battler, foe_indices, skill)
       action["outgoing_damage_pct"] = out if !out.nil?
       fast = switch_candidate_faster(battle, pokemon, foe_indices)
@@ -1133,11 +1475,21 @@ module PortableAIRealidea
   # at all. The temporary stage mutation is restored in `ensure`; pbCanReduceStatStage?
   # is what makes Clear Body, White Smoke, Full Metal Body and Hyper Cutter exempt.
   def self.switch_incoming_damage(battle, pokemon, party_index, battler, foe_indices, skill)
+    hits = switch_incoming_damages(battle, pokemon, party_index, battler, foe_indices, skill)
+    hits ? hits["worst"] : nil
+  end
+
+  # The same pass, also pricing the foe's DECLARED move against the candidate when an
+  # intent table is given (0.6.6): one fake, one Intimidate application, both
+  # numbers. "predicted" is nil without intents, so the export stays absent.
+  def self.switch_incoming_damages(battle, pokemon, party_index, battler, foe_indices,
+                                   skill, intents = nil)
     fake = fake_battler(battle, pokemon, party_index, battler.index)
     return nil if !fake
     intimidate = (ability_key(pokemon) == "INTIMIDATE")
     saved = {}
     worst = 0.0
+    predicted = (intents && !intents.empty?) ? 0.0 : nil
     begin
       if intimidate
         foe_indices.each do |foe_index|
@@ -1159,13 +1511,18 @@ module PortableAIRealidea
           damage = rough_damage_pct(battle, known, foe, fake, skill)
           worst = damage if damage > worst
         end
+        next if predicted.nil?
+        intent = intents[foe_index]
+        # The candidate takes the actor's seat, so "aimed at the actor" is aimed at it.
+        next if !intent_aimed_at?(intent, battler.index) || !foe_can_act?(foe)
+        predicted += rough_damage_pct(battle, intent["move"], foe, fake, skill)
       end
     ensure
       saved.each do |foe_index, value|
         battle.battlers[foe_index].stages[PBStats::ATTACK] = value
       end
     end
-    worst
+    { "worst" => worst, "predicted" => predicted }
   rescue
     nil
   end
@@ -1234,7 +1591,37 @@ module PortableAIRealidea
   # dirty rows and columns are re-rolled, so a Calm Mind costs one column (~40 calls)
   # and a turn that changes nothing but HP costs nothing at all. For comparison,
   # switch_actions already spends about ten fakes and forty calls on every decision.
-  MATRIX_VERSION = 1
+  #
+  # 0.7.4. EVERY MOVE, NOT ONLY THE BEST. A cell's `out` is one number, the best hit
+  # the row body has on the column body, and it is all the search planner had for a
+  # foe switch-in -- so every move we could click was credited the same damage
+  # against every body on their bench, and the foe-switch column could not tell
+  # Earthquake from Ice Beam (190 of the 227 move-versus-move disagreements with the
+  # rule engine at 0.7.2 sat in that column). The rolls were already being made to
+  # find the best; `out_moves` keeps them, keyed by move, with the category each is
+  # priced in. Version 2 of the cell.
+  #
+  # 0.7.7. AND THE SAME FOR THEIRS. `in` was one number too -- the best hit the COLUMN
+  # body has on the row body -- so the search's whole model of what the foe does was
+  # "it attacks, at worst". Its `foe_options` was one `stay` column against five
+  # switch columns, which means a tree built to let the foe's line be shaped by its
+  # own payoff (0.7.6) was handed an opponent with one way to act, and decoupled UCB
+  # had nothing to discover: 41/60 at 1000 iterations, 43 at 5000, against the
+  # maximin's 46. The rolls were ALREADY being made and thrown away -- `incoming` is
+  # the same `matrix_cell` call as `out`, with the same `moves` breakdown on it.
+  # `in_moves` keeps it. No new engine calls. Version 3 of the cell.
+  #
+  # 0.7.9. THE WHOLE MOVE LIST, WITH WHAT THE SEARCH NEEDS TO PLAY IT. Both lists
+  # carried damaging moves only, so the search's foe could attack or switch and do
+  # nothing else -- never set up, heal, lay a hazard, Protect or land a status --
+  # and our own switch-in below the root had one attack. poke-engine's tree hands
+  # both sides every move. Each entry now also carries the hit chance (`acc`, from
+  # pbRoughAccuracy -- the foe's moves never missed in the search), the priority
+  # bracket (a cell carried none, so a foe's priority move was invisible), whether
+  # it deals damage, and the effect triple move_effect exports for the root actions.
+  # The side table carries the residual facts (status, item, ability, hazard entry
+  # damage) so a projected turn can tick. Version 4 of the cell.
+  MATRIX_VERSION = 4
 
   # WHETHER TO BUILD IT AT ALL. `party_matrix` says the matrix MAY be built; this says
   # anything would read it if it were.
@@ -1313,6 +1700,7 @@ module PortableAIRealidea
 
     if !pending.empty?
       trick_room = trick_room_active?(battle)
+      search_axis = rule_enabled?("search_planner")
       own_fake_seat = own_index
       foe_fake_seat = (foe_indices || []).first || (own_side ^ 1)
       # ONE save/restore for every body built below, rather than one per fake.
@@ -1328,8 +1716,18 @@ module PortableAIRealidea
           cells["#{pair[0]}:#{pair[1]}"] = {
             "out" => out && out["pct"], "out_cat" => out && out["cat"],
             "out_move" => out && out["move"],
+            "out_moves" => out && out["moves"],
             "in" => incoming && incoming["pct"], "in_cat" => incoming && incoming["cat"],
             "in_move" => incoming && incoming["move"],
+            # 0.7.7. THE BUILD FOLLOWS ITS READERS, as matrix_wanted? does one level
+            # up: the only thing that reads this is the search planner's foe move
+            # axis (search.rb foe_moves), and the search ships off. Carrying it
+            # unconditionally cost every shipped decision the allocation and every
+            # traced run 28% of its file size (9.7 MB -> 12.4 MB on a 60-battle
+            # control) for a field nothing in that run would open. The rolls
+            # themselves are made either way -- this only decides whether they are
+            # kept.
+            "in_moves" => (search_axis ? (incoming && incoming["moves"]) : nil),
             "faster" => matrix_faster(own[pair[0]], foe[pair[1]], trick_room)
           }
         end
@@ -1374,7 +1772,14 @@ module PortableAIRealidea
         "hp_pct" => hp,
         "alive" => hp > 0,
         "speed" => speed,
-        "types" => types.map { |t| type_key(t) }.compact.uniq
+        "types" => types.map { |t| type_key(t) }.compact.uniq,
+        # 0.7.9. What a projected end of turn needs to tick, and what a switch-in
+        # pays to arrive: the search's residuals and its below-root hazard damage
+        # read these, per body, on both sides.
+        "status" => (body ? body.status : pokemon.status),
+        "item" => (body ? item_key(body) : pokemon_item_key(pokemon)),
+        "ability" => ability_key(body || pokemon),
+        "entry_damage_pct" => entry_hazard_pct(battle, pokemon, body, seats[0] & 1)
       }
     end
     out
@@ -1417,20 +1822,33 @@ module PortableAIRealidea
   # whole matrix.
   def self.matrix_cell(battle, attacker, defender, skill)
     best = nil
+    moves = {}
     (attacker.moves || []).each do |move|
       next if !move || move.id == 0
       # Same PP rule as the 0.6.4 bench estimate, on BOTH sides: a move with nothing
       # left is not a hit that body has.
       next if move.respond_to?(:pp) && move.pp.to_i <= 0 && rule_enabled?("switch_estimate_pp")
-      next if !(move.pbIsDamaging? rescue false)
-      pct = rough_damage_pct!(battle, move, attacker, defender, skill)
-      next if best && pct <= best["pct"]
+      damaging = (move.pbIsDamaging? rescue false) ? true : false
+      key = move_key(move.id)
+      # 0.7.9. A status move is a move the search can play (theirs) or click (ours
+      # below the root). It has no damage number, and it is never the cell's best.
+      pct = damaging ? rough_damage_pct!(battle, move, attacker, defender, skill) : 0.0
       type = (move.pbType(move.type, attacker, defender) rescue move.type)
-      best = { "pct" => pct,
-               "cat" => ((move.pbIsPhysical?(type) rescue true) ? "physical" : "special"),
-               "move" => move_key(move.id) }
+      cat = (move.pbIsPhysical?(type) rescue true) ? "physical" : "special"
+      kind, stat, chance = move_effect(battle, move, attacker, defender)
+      # Every damaging move it has, including the ones that do nothing to this body:
+      # a 0 here is the answer "Earthquake does not touch their Flying-type", which
+      # is exactly what the foe-switch column needs to hear.
+      moves[key] = { "pct" => pct, "cat" => cat, "damaging" => damaging,
+                     "acc" => rough_accuracy(battle, move, attacker, defender, skill),
+                     "priority" => (effective_priority(move, attacker) rescue 0),
+                     "effect" => [kind, stat, chance] }
+      next if !damaging
+      next if best && pct <= best["pct"]
+      best = { "pct" => pct, "cat" => cat, "move" => key }
     end
-    return { "pct" => 0.0, "cat" => nil, "move" => nil } if best.nil?
+    return { "pct" => 0.0, "cat" => nil, "move" => nil, "moves" => moves } if best.nil?
+    best["moves"] = moves
     best
   rescue Exception
     nil
@@ -1553,10 +1971,42 @@ module PortableAIRealidea
 
   def self.type_effectiveness(battle, move, attacker, target)
     return 1.0 if !target || !move.pbIsDamaging?
-    return 0.0 if absorbed_by_ability?(move, attacker, target)
+    return 0.0 if move_does_nothing?(move, attacker, target)
     move.pbTypeModifier(move.type, attacker, target).to_f / 8.0
   rescue
     1.0
+  end
+
+  # The two immunities pbTypeModifier does not carry, in one place, so every damage
+  # estimate (rough_damage_pct!) and the effectiveness the core rejects on agree.
+  def self.move_does_nothing?(move, attacker, target)
+    absorbed_by_ability?(move, attacker, target) ||
+      ground_into_airborne?(move, attacker, target)
+  end
+
+  # 0.6.6 (airborne_immunity). Ground into a body that is not on the ground. The
+  # engine decides it in pbSuccessCheck (080_PokeBattle_Battler.rb:2710), AFTER the
+  # type modifier, off isAirborne? (080:647): Flying type, Levitate, Air Balloon,
+  # Magnet Rise, Telekinesis -- minus Iron Ball, Ingrain, Smack Down and Gravity. The
+  # Flying half is in the chart already; the other four were invisible to every
+  # estimate here, so Steelix clicked Earthquake into a Levitate Rotom twice in one
+  # battle at +500 (gen5ru_a team3_vs_team4 104729 t4-5, stock scored it 0) and the
+  # matrix priced the same cell as a kill. The engine's own exceptions: Ring Target on
+  # the target, Smack Down / Thousand Arrows (0x11C), and Mold Breaker, which walks
+  # through the Levitate clause only -- isAirborne?(true) is the engine's own spelling
+  # of that.
+  def self.ground_into_airborne?(move, attacker, target)
+    return false if !rule_enabled?("airborne_immunity")
+    ground = (PBTypes.const_get(:GROUND) rescue nil)
+    return false if ground.nil?
+    type = (move.pbType(move.type, attacker, target) rescue move.type)
+    return false if type != ground
+    return false if (move.function rescue nil) == 0x11C
+    return false if (target.hasWorkingItem(:RINGTARGET) rescue false)
+    mold = (attacker.hasMoldBreaker rescue false) ? true : false
+    (target.isAirborne?(mold) rescue false) ? true : false
+  rescue
+    false
   end
 
   # The read-only half of pbTypeImmunityByAbility (082:318-402). Same two guards the
@@ -1598,6 +2048,11 @@ module PortableAIRealidea
   # nil is an admission. pbRoughDamage divides by the defender's defence (085:3557).
   def self.rough_damage_pct!(battle, move, attacker, target, skill)
     return 0.0 if !target || !move.pbIsDamaging? || move.basedamage <= 0
+    # pbRoughDamage reads pbTypeModifier and nothing else about immunity, so an
+    # absorbed or airborne-dodged move came back as a full hit here even though
+    # type_effectiveness already called it 0 -- which is what the incoming estimates,
+    # the bench estimates and the matrix all read. One answer for all of them.
+    return 0.0 if move_does_nothing?(move, attacker, target)
     base = move.basedamage
     base = 60 if base == 1
     base = battle.pbBetterBaseDamage(move, attacker, target, skill, base) rescue base
@@ -1872,8 +2327,8 @@ module PortableAIRealidea
     end
   end
 
-  def self.entry_hazard_pct(battle, pokemon, battler)
-    side = battle.sides[1]
+  def self.entry_hazard_pct(battle, pokemon, battler, side_index = 1)
+    side = battle.sides[side_index]
     # Heavy-Duty Boots and Magic Guard walk over every hazard, so a holder pays nothing
     # to come in. (Boots does not exist in this build's item list; the row costs
     # nothing and keeps the two adapters saying the same thing.)
@@ -2212,6 +2667,467 @@ module PortableAIRealidea
     battle.instance_variable_set(:@portable_ai_memory, memory)
   end
 
+  # 0.8.0. FOUL PLAY, THE REAL ONE, PLAYING INSIDE THIS ENGINE.
+  #
+  # Eight versions of search (0.7.0-0.7.9) bought parity with the rule engine and
+  # never a lead, and the last of them showed why nothing could be concluded from
+  # that: the search's board is an approximation of this engine, so a loss can be the
+  # board's fault and a win can be the board's luck. This module removes the
+  # approximation from one side of the comparison. Every voluntary decision is
+  # serialised as a poke-engine State -- both full parties, raw stats, boosts, side
+  # conditions, volatiles, weather -- written to Data/, and a Python sidecar
+  # (tools/foul_play_sidecar.py, running pmariglia's poke-engine package built for
+  # gen 6) runs its Monte Carlo search on it and writes the most-visited choice back.
+  # The choice is mapped onto one of the actions the snapshot already built for this
+  # actor, so the trace, the memory and the registration paths are the ones every
+  # other planner uses.
+  #
+  # The bargain: poke-engine's instruction generator and evaluation are the real
+  # thing, not our port, and it plays against the real Realidea engine, so its wins
+  # are real wins -- but it plans on Showdown gen 6 mechanics, and where this engine
+  # differs (it is Essentials v16 with a gen 7 dex) it plans on the wrong rules. The
+  # sidecar's --check mode measures that gap directly, by pricing the on-field pair's
+  # moves in poke-engine and comparing them with the cells the matrix already carries.
+  #
+  # Handoff is by file because the harness is headless and this is Ruby 1.8 with no
+  # sockets worth trusting on Windows: state out, reply in, each written to a temp
+  # name and renamed so neither side ever reads a half-written file. A silent sidecar
+  # costs one timeout and the turn falls through to the rule engine, which is logged;
+  # a set with a dead sidecar is therefore a rules set with a slow first turn, not a
+  # crash, and the log says so.
+  #
+  # Declines, like the search planner: doubles, no foe on the field, no actions.
+  # Forced replacements stay with the rule engine (pbDefaultChooseNewEnemy never
+  # reaches plan_for).
+  module FoulPlay
+    STATE_FILE = "Data/ai_foulplay_state.json"
+    REPLY_FILE = "Data/ai_foulplay_reply.txt"
+    LOG_FILE   = "Data/ai_foulplay_log.txt"
+    DEFAULT_ITERATIONS = 5000
+
+    @timeout = 60.0
+    class << self
+      attr_accessor :timeout
+    end
+
+    # Battler effect -> poke-engine volatile name, with the test that means "on".
+    # :positive is > 0, :set is >= 0 (effects that hold an index, -1 when off),
+    # :flag is Ruby truth. Effects this engine lacks are skipped by safe_effect.
+    VOLATILES = [
+      [:Confusion,   "CONFUSION",        :positive],
+      [:LeechSeed,   "LEECHSEED",        :set],
+      [:Taunt,       "TAUNT",            :positive],
+      [:Encore,      "ENCORE",           :positive],
+      [:Yawn,        "YAWN",             :positive],
+      [:Curse,       "CURSE",            :flag],
+      [:Ingrain,     "INGRAIN",          :flag],
+      [:AquaRing,    "AQUARING",         :flag],
+      [:Attract,     "ATTRACT",          :set],
+      [:Torment,     "TORMENT",          :flag],
+      [:Nightmare,   "NIGHTMARE",        :flag],
+      [:Embargo,     "EMBARGO",          :positive],
+      [:HealBlock,   "HEALBLOCK",        :positive],
+      [:MagnetRise,  "MAGNETRISE",       :positive],
+      [:Telekinesis, "TELEKINESIS",      :positive],
+      [:Disable,     "DISABLE",          :positive],
+      [:FocusEnergy, "FOCUSENERGY",      :positive],
+      [:Protect,     "PROTECT",          :flag],
+      [:Roost,       "ROOST",            :flag],
+      [:SmackDown,   "SMACKDOWN",        :flag],
+      [:Foresight,   "FORESIGHT",        :flag],
+      [:MiracleEye,  "MIRACLEEYE",       :flag],
+      [:Imprison,    "IMPRISON",         :flag],
+      [:Minimize,    "MINIMIZE",         :flag],
+      [:DefenseCurl, "DEFENSECURL",      :flag],
+      [:Charge,      "CHARGE",           :positive],
+      [:Stockpile,   "STOCKPILE",        :positive],
+      [:Endure,      "ENDURE",           :flag],
+      [:HyperBeam,   "MUSTRECHARGE",     :positive],
+      [:Truant,      "TRUANT",           :flag],
+      [:Unburden,    "UNBURDEN",         :flag],
+      [:FlashFire,   "FLASHFIRE",        :flag],
+      [:Rage,        "RAGE",             :flag],
+      [:Uproar,      "UPROAR",           :positive],
+      [:Outrage,     "LOCKEDMOVE",       :positive],
+      [:Bide,        "BIDE",             :positive],
+      [:MeanLook,    "PARTIALLYTRAPPED", :set],
+      [:MultiTurn,   "PARTIALLYTRAPPED", :positive],
+      [:SlowStart,   "SLOWSTART",        :positive],
+      [:GastroAcid,  "GASTROACID",       :flag],
+      [:LaserFocus,  "LASERFOCUS",       :positive],
+      [:Electrify,   "ELECTRIFY",        :flag],
+      [:Powder,      "POWDER",           :flag],
+      [:DestinyBond, "DESTINYBOND",      :flag],
+      [:Grudge,      "GRUDGE",           :flag],
+      [:Substitute,  "SUBSTITUTE",       :positive],
+      [:TwoTurnAttack, "TWOTURN",        :positive]
+    ]
+
+    # Side effect -> poke-engine side condition. Layer counts and turn counters pass
+    # through; the two booleans (Stealth Rock, Sticky Web) become 1.
+    SIDE_CONDITIONS = [
+      [:Reflect,      "reflect"],
+      [:LightScreen,  "light_screen"],
+      [:Spikes,       "spikes"],
+      [:ToxicSpikes,  "toxic_spikes"],
+      [:StealthRock,  "stealth_rock"],
+      [:StickyWeb,    "sticky_web"],
+      [:Tailwind,     "tailwind"],
+      [:Safeguard,    "safeguard"],
+      [:Mist,         "mist"],
+      [:LuckyChant,   "lucky_chant"],
+      [:CraftyShield, "crafty_shield"],
+      [:MatBlock,     "mat_block"],
+      [:QuickGuard,   "quick_guard"],
+      [:WideGuard,    "wide_guard"]
+    ]
+
+    STATUS_NAMES = { 1 => "sleep", 2 => "poison", 3 => "burn", 4 => "paralyze", 5 => "freeze" }
+
+    def self.plan(battle, snapshot, config)
+      return nil if battle.doublebattle
+      actor = (snapshot["actors"] || [])[0]
+      return nil if !actor || !actor["actions"].is_a?(Array) || actor["actions"].empty?
+      index = actor["index"]
+      state = state_for(battle, index, snapshot)
+      return nil if !state
+      state["iterations"] = (config["foul_play_iterations"] || DEFAULT_ITERATIONS).to_i
+      state["iterations"] = DEFAULT_ITERATIONS if state["iterations"] <= 0
+      reply = exchange(state)
+      return nil if !reply
+      if reply["type"] == "error"
+        log("turn=#{battle.turncount} actor=#{index} sidecar error: #{reply['message']}; rules took the turn")
+        return nil
+      end
+      action = action_for(battle, index, actor, reply)
+      if !action
+        log("turn=#{battle.turncount} actor=#{index} unmapped reply #{reply['type']}=#{reply['slot']}")
+        return nil
+      end
+      ranked = rankings(actor, reply)
+      {
+        "actions" => [action],
+        "memory_updates" => PortableAI::Effects.memory_updates([action]),
+        "diagnostics" => {
+          "version" => PortableAI::VERSION,
+          "planner" => "foul_play",
+          "iterations" => reply["iterations"].to_i,
+          "foe_options" => (reply["foe"] || []).map { |pair| pair[0] },
+          "foe_visits" => (reply["foe"] || []).map { |pair| pair[1].to_i },
+          "rankings" => [ranked]
+        }
+      }
+    rescue Exception => error
+      log("turn=#{battle.turncount rescue '?'} #{error.class}: #{error.message}")
+      nil
+    end
+
+    # ---- the state -------------------------------------------------------------
+
+    def self.state_for(battle, index, snapshot)
+      own = battle.battlers[index]
+      foe = battle.battlers[index ^ 1]
+      return nil if !own || !foe || own.isFainted? || foe.isFainted?
+      {
+        "version" => 1,
+        "turn" => battle.turncount,
+        "actor" => index,
+        "weather" => weather(battle),
+        "weather_turns" => (battle.weatherduration.to_i rescue 0),
+        "trick_room" => PortableAIRealidea.trick_room_active?(battle),
+        "trick_room_turns" => PortableAIRealidea.safe_field_effect(battle, :TrickRoom, 0).to_i,
+        "terrain" => terrain(battle),
+        "side_one" => side_for(battle, own, battle.pbParty(index), index),
+        "side_two" => side_for(battle, foe, battle.pbOpposingParty(index), index ^ 1),
+        "cells" => cells_for(snapshot)
+      }
+    end
+
+    def self.weather(battle)
+      weather = (battle.pbWeather rescue battle.weather)
+      [["SUNNYDAY", "sun"], ["RAINDANCE", "rain"], ["SANDSTORM", "sand"], ["HAIL", "hail"],
+       ["HARSHSUN", "harshsun"], ["HEAVYRAIN", "heavyrain"]].each do |name, key|
+        return key if PBWeather.const_defined?(name) && weather == PBWeather.const_get(name)
+      end
+      "none"
+    end
+
+    def self.terrain(battle)
+      [[:ElectricTerrain, "electricterrain"], [:GrassyTerrain, "grassyterrain"],
+       [:MistyTerrain, "mistyterrain"], [:PsychicTerrain, "psychicterrain"]].each do |name, key|
+        return [key, PortableAIRealidea.safe_field_effect(battle, name, 0).to_i] if
+          PortableAIRealidea.safe_field_effect(battle, name, 0).to_i > 0
+      end
+      ["none", 0]
+    end
+
+    def self.side_for(battle, active, party, index)
+      side = battle.sides[index & 1]
+      conditions = {}
+      SIDE_CONDITIONS.each do |name, key|
+        value = PortableAIRealidea.safe_side_effect(side, name, 0)
+        conditions[key] = (value == true) ? 1 : ((value == false || value.nil?) ? 0 : value.to_i)
+      end
+      volatiles = []
+      VOLATILES.each do |name, key, test|
+        value = PortableAIRealidea.safe_effect(active, name, nil)
+        next if value.nil?
+        on = case test
+             when :positive then value.is_a?(Numeric) && value > 0
+             when :set      then value.is_a?(Numeric) && value >= 0
+             else value ? true : false
+             end
+        volatiles << key if on && !volatiles.include?(key)
+      end
+      stages = active.stages || []
+      pokemon = []
+      party.each_with_index do |member, slot|
+        next if !member || (member.isEgg? rescue false)
+        body = (active.pokemonIndex == slot) ? active : nil
+        pokemon << pokemon_for(battle, member, body, index)
+      end
+      {
+        "active" => active.pokemonIndex,
+        "boosts" => {
+          "attack" => stages[PBStats::ATTACK].to_i, "defense" => stages[PBStats::DEFENSE].to_i,
+          "special_attack" => stages[PBStats::SPATK].to_i, "special_defense" => stages[PBStats::SPDEF].to_i,
+          "speed" => stages[PBStats::SPEED].to_i, "accuracy" => stages[PBStats::ACCURACY].to_i,
+          "evasion" => stages[PBStats::EVASION].to_i
+        },
+        "conditions" => conditions,
+        "toxic_count" => PortableAIRealidea.safe_effect(active, :Toxic, 0).to_i,
+        "wish" => [PortableAIRealidea.safe_effect(active, :Wish, 0).to_i,
+                   PortableAIRealidea.safe_effect(active, :WishAmount, 0).to_i],
+        "volatiles" => volatiles,
+        "durations" => {
+          "confusion" => PortableAIRealidea.safe_effect(active, :Confusion, 0).to_i,
+          "encore" => PortableAIRealidea.safe_effect(active, :Encore, 0).to_i,
+          "taunt" => PortableAIRealidea.safe_effect(active, :Taunt, 0).to_i,
+          "yawn" => PortableAIRealidea.safe_effect(active, :Yawn, 0).to_i,
+          "lockedmove" => PortableAIRealidea.safe_effect(active, :Outrage, 0).to_i,
+          "slowstart" => PortableAIRealidea.safe_effect(active, :SlowStart, 0).to_i
+        },
+        "substitute_health" => PortableAIRealidea.safe_effect(active, :Substitute, 0).to_i,
+        "trapped" => trapped?(battle, index),
+        "last_used_move" => last_used_move(active),
+        "pokemon" => pokemon
+      }
+    end
+
+    # Only trapping counts here -- an empty bench is something poke-engine sees for
+    # itself from the party. pbCanSwitch? with no destination asks exactly that.
+    def self.trapped?(battle, index)
+      !(battle.pbCanSwitch?(index, -1, false) rescue true)
+    rescue
+      false
+    end
+
+    # The Choice lock is the fact that matters: poke-engine reads last_used_move for
+    # Encore and the disabled flags for everything else, and the disabled flags come
+    # from pbCanChooseMove? (which already knows about the lock, Disable, Taunt and
+    # Torment), so the lock is safe to report through both.
+    def self.last_used_move(active)
+      locked = PortableAIRealidea.safe_effect(active, :ChoiceBand, -1)
+      id = (locked.is_a?(Numeric) && locked > 0) ? locked : (active.lastMoveUsed rescue 0)
+      return "move:none" if !id || id.to_i <= 0
+      (active.moves || []).each_with_index do |move, slot|
+        return "move:#{slot}" if move && move.id == id
+      end
+      "move:none"
+    end
+
+    def self.pokemon_for(battle, member, body, index)
+      source = body || member
+      types = [(source.type1 rescue nil), (source.type2 rescue nil)]
+      types = types.map { |t| PortableAIRealidea.type_key(t) }.compact.uniq
+      types << "TYPELESS" while types.length < 2
+      evs = (member.ev rescue nil) || [0, 0, 0, 0, 0, 0]
+      moves = []
+      (source.moves || []).each_with_index do |move, slot|
+        next if !move || move.id == 0
+        entry = {
+          "id" => PortableAIRealidea.move_key(move.id),
+          "pp" => (move.pp.to_i rescue 0),
+          "disabled" => (body ? !(battle.pbCanChooseMove?(index, slot, false) rescue true) : false)
+        }
+        if entry["id"] == "HIDDENPOWER"
+          hp = (pbHiddenPower(member.iv) rescue nil)
+          if hp
+            entry["hp_type"] = PortableAIRealidea.type_key(hp[0])
+            entry["hp_power"] = hp[1].to_i
+          end
+        end
+        moves << entry
+      end
+      {
+        "species" => PortableAIRealidea.constant_key(PBSpecies, :@species_keys, source.species),
+        "form" => (source.form.to_i rescue 0),
+        "mega" => ((member.isMega? rescue false) ? true : false),
+        "level" => (source.level.to_i rescue 100),
+        "types" => types,
+        "hp" => source.hp.to_i,
+        "maxhp" => source.totalhp.to_i,
+        # Raw stats, stages excluded: poke-engine applies the boosts it is handed.
+        "attack" => (source.attack.to_i rescue 0), "defense" => (source.defense.to_i rescue 0),
+        "special_attack" => (source.spatk.to_i rescue 0),
+        "special_defense" => (source.spdef.to_i rescue 0),
+        "speed" => (source.speed.to_i rescue 0),
+        "ability" => PortableAIRealidea.ability_key(source),
+        "item" => (body ? PortableAIRealidea.item_key(body) : PortableAIRealidea.pokemon_item_key(member)),
+        "nature" => (defined?(PBNatures) ?
+                     PortableAIRealidea.constant_key(PBNatures, :@nature_keys, (member.nature rescue 0)) : nil),
+        # PBStats order is HP, ATK, DEF, SPE, SPA, SPD; poke-engine's is hp, atk, def, spa, spd, spe.
+        "evs" => [evs[0], evs[1], evs[2], evs[4], evs[5], evs[3]].map { |v| v.to_i },
+        "status" => (STATUS_NAMES[source.status.to_i] || "none"),
+        "status_count" => (source.statusCount.to_i rescue 0),
+        "weight_kg" => ((member.weight rescue 0).to_f / 10.0),
+        "moves" => moves
+      }
+    end
+
+    # The on-field pair's cells, for the sidecar's damage check: this engine's own
+    # max-roll price of every move both ways, keyed by move id.
+    def self.cells_for(snapshot)
+      matrix = snapshot["matrix"]
+      return nil if !matrix.is_a?(Hash)
+      own_slot = foe_slot = nil
+      (matrix["own"] || []).each { |e| own_slot = e["slot"] if e && !e["index"].nil? }
+      (matrix["foe"] || []).each { |e| foe_slot = e["slot"] if e && !e["index"].nil? }
+      return nil if own_slot.nil? || foe_slot.nil?
+      cell = (matrix["cells"] || {})["#{own_slot}:#{foe_slot}"]
+      return nil if !cell
+      { "out_moves" => cell["out_moves"], "in_moves" => cell["in_moves"] }
+    end
+
+    # ---- the handoff -----------------------------------------------------------
+
+    def self.exchange(state)
+      retrying { File.delete(REPLY_FILE) } if File.exist?(REPLY_FILE)
+      retrying { File.delete(STATE_FILE) } if File.exist?(STATE_FILE)
+      tmp = STATE_FILE + ".tmp"
+      File.open(tmp, "wb") { |file| file.write(json(state)) }
+      retrying { File.rename(tmp, STATE_FILE) }
+      deadline = Time.now + @timeout
+      while Time.now < deadline
+        if File.exist?(REPLY_FILE)
+          text = retrying { File.open(REPLY_FILE, "rb") { |file| file.read } }
+          (retrying { File.delete(REPLY_FILE) }) rescue nil
+          return parse_reply(text)
+        end
+        sleep 0.004
+      end
+      File.delete(STATE_FILE) rescue nil
+      log("turn=#{state['turn']} actor=#{state['actor']} sidecar silent for #{@timeout}s; rules took the turn")
+      nil
+    end
+
+    # Windows refuses to open or delete a file another process still has open, and the
+    # sidecar's rename of the reply can land in the same instant we look at it: EACCES
+    # here means "again in a moment", not failure. Two turns of the first thousand hit
+    # it and fell to the rules before this existed.
+    def self.retrying(tries = 100)
+      attempt = 0
+      begin
+        yield
+      rescue Errno::EACCES, Errno::EBUSY
+        attempt += 1
+        raise if attempt >= tries
+        sleep 0.004
+        retry
+      end
+    end
+
+    # key=value per line. `own` and `foe` are label:visits pairs joined by commas.
+    def self.parse_reply(text)
+      reply = {}
+      text.to_s.split(/[\r\n]+/).each do |line|
+        key, value = line.split("=", 2)
+        next if !key || value.nil?
+        reply[key.strip] = value.strip
+      end
+      ["own", "foe"].each do |key|
+        pairs = []
+        reply[key].to_s.split(",").each do |part|
+          # Labels carry a colon themselves (move:0), so the count is after the LAST one.
+          cut = part.rindex(":")
+          next if cut.nil? || cut == 0
+          pairs << [part[0, cut], part[(cut + 1)..-1].to_i]
+        end
+        reply[key] = pairs
+      end
+      reply
+    end
+
+    def self.action_for(battle, index, actor, reply)
+      slot = reply["slot"].to_i
+      kind = reply["type"]
+      chosen = nil
+      actor["actions"].each do |action|
+        next if action["type"] != kind || action["slot"] != slot
+        next if kind == "move" && !action["target"].nil? && battle.doublebattle
+        chosen = action
+        break
+      end
+      return nil if !chosen
+      out = PortableAI::Model.copy_hash(chosen)
+      out["score"] = reply["score"].to_f
+      out["search_visits"] = reply["visits"].to_i
+      out["reasons"] = [["foul_play_visits", reply["visits"].to_i],
+                        ["foul_play_avg", reply["score"].to_f],
+                        ["foul_play_iterations", reply["iterations"].to_i]]
+      out
+    end
+
+    # Every own action with the visits the sidecar reported for it, best first, so
+    # the trace's candidates block reads the same as the search planner's.
+    def self.rankings(actor, reply)
+      visits = {}
+      (reply["own"] || []).each { |label, count| visits[label] = count }
+      ranked = actor["actions"].map do |action|
+        scored = PortableAI::Model.copy_hash(action)
+        scored["search_visits"] = visits[reply_label(action)].to_i
+        scored["score"] = scored["search_visits"].to_f
+        scored["reasons"] = [["foul_play_visits", scored["search_visits"]]]
+        scored
+      end
+      ranked.sort { |a, b| b["search_visits"] <=> a["search_visits"] }
+    end
+
+    def self.reply_label(action)
+      action["type"] == "switch" ? "switch:#{action['slot']}" : "move:#{action['slot']}"
+    end
+
+    # ---- plumbing --------------------------------------------------------------
+
+    def self.log(line)
+      File.open(LOG_FILE, "ab") { |file| file.write(line + "\n") }
+    rescue
+    end
+
+    def self.json(value)
+      case value
+      when Hash
+        "{" + value.map { |k, v| json_string(k.to_s) + ":" + json(v) }.join(",") + "}"
+      when Array then "[" + value.map { |v| json(v) }.join(",") + "]"
+      when String then json_string(value)
+      when Symbol then json_string(value.to_s)
+      when nil then "null"
+      when true then "true"
+      when false then "false"
+      when Float
+        (value.nan? || value.infinite?) ? "null" : value.to_s
+      when Numeric then value.to_s
+      else json_string(value.to_s)
+      end
+    end
+
+    def self.json_string(text)
+      out = text.gsub(/\\/, "\\\\\\\\").gsub(/"/, "\\\\\"")
+      out = out.gsub(/\n/, "\\n").gsub(/\r/, "\\r").gsub(/\t/, "\\t")
+      "\"" + out + "\""
+    end
+  end
+
   # Run-level knobs read from Data/ai_harness.txt, in the same key=value format the
   # Reborn harness uses (AI_Harness.rb:51-64). It lives HERE rather than in the
   # gauntlet because the probe needs it too and the probe is a separate script section
@@ -2260,7 +3176,28 @@ module PortableAIRealidea
       # nothing by itself.
       ["party_matrix",         :boolean],
       ["sole_answer",          :boolean],
-      ["setup_matrix",         :boolean]
+      ["setup_matrix",         :boolean],
+      # 0.6.6. Both false is 0.6.5, which is the control run. foe_oracle is the
+      # experiment arm and is never on by default.
+      ["airborne_immunity",    :boolean],
+      ["foe_oracle",           :boolean],
+      ["no_hit_needs_threat",  :boolean],
+      # 0.6.7. False is 0.6.6, which is the control run.
+      ["dead_before_moving",   :boolean],
+      # 0.7.0. Which planner runs. False is 0.6.7, which is the control run.
+      ["search_planner",       :boolean],
+      ["search_depth",         :float],
+      ["search_foe_mix",       :float],
+      ["search_foe_prior",     :boolean],
+      ["foe_stock_model",      :boolean],
+      # 0.7.6. Which search runs under search_planner. False is 0.7.5's maximin.
+      ["search_mcts",          :boolean],
+      ["search_iterations",    :float],
+      ["search_seed",          :float],
+      # 0.8.0. The Foul Play bridge (FoulPlay module). False is 0.7.9, which is the
+      # control run; search_planner and foul_play are never on together.
+      ["foul_play",            :boolean],
+      ["foul_play_iterations", :float]
     ]
 
     def self.config

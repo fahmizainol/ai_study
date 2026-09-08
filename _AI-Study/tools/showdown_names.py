@@ -78,7 +78,7 @@ def norm(name):
 def _ini_records(path):
     """Yield {key: value} per [n] section of a PBS ini-style file."""
     record = {}
-    for line in path.read_text(encoding="utf-8", errors="replace").splitlines():
+    for line in path.read_text(encoding="utf-8-sig", errors="replace").splitlines():
         line = line.strip()
         if line.startswith("["):
             if record:
@@ -94,7 +94,7 @@ def _ini_records(path):
 def _csv_names(path):
     """PBS csv files (moves, items, abilities) are `id,INTERNALNAME,Display Name,...`."""
     out = set()
-    for line in path.read_text(encoding="utf-8", errors="replace").splitlines():
+    for line in path.read_text(encoding="utf-8-sig", errors="replace").splitlines():
         parts = line.split(",")
         if len(parts) > 2 and parts[0].strip().isdigit():
             out.add(norm(parts[1]))
@@ -365,6 +365,13 @@ class Realidea(Game):
         "KYUREM":    {"WHITE": (1, ["TURBOBLAZE", None, None]),
                       "BLACK": (2, ["TERAVOLT", None, None])},
     }
+
+    # Keldeo-Resolute is cosmetic here for the same reason it is on Reborn: this engine
+    # registers no Keldeo forme at all (MultipleForms has no block for it), base Keldeo
+    # already has JUSTIFIED, and SECRETSWORD is a move it can simply be taught. Without
+    # this the forme arrives from Showdown as an unknown forme and drops a whole team --
+    # which is what it did to one of gen5ou's thirteen.
+    COSMETIC_FORMES = frozenset({("KELDEO", "RESOLUTE")})
 
     # Hidden Power's 17-wide type pool, in PBTypes id order: every non-pseudo type
     # except NORMAL and SHADOW, which is what pbHiddenPower enumerates

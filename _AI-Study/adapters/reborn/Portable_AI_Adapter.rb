@@ -1,6 +1,7 @@
 # Portable AI adapter for Reborn Yang (Reborn E19.16, v16-era fork, modern Ruby).
 #
-# Concatenated after portable_ai/model.rb, effects.rb and core.rb by
+# Concatenated after portable_ai/model.rb, effects.rb, matrix.rb, core.rb and
+# search.rb by
 # tools/build_portable_ai.py --target reborn, installed as Scripts/Portable_AI.rb and
 # listed in Data/!script_order.csv after AI_Harness, before Main.
 #

@@ -3,7 +3,9 @@ require "test/unit"
 root = File.expand_path("..", File.dirname(__FILE__))
 require File.join(root, "portable_ai", "model")
 require File.join(root, "portable_ai", "effects")
+require File.join(root, "portable_ai", "matrix")
 require File.join(root, "portable_ai", "core")
+require File.join(root, "portable_ai", "search")
 
 # Minimal engine stubs matching the Reborn Yang surface the adapter touches at
 # load/definition time and in the units under test.

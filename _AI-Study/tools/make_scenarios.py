@@ -22,12 +22,12 @@ import re
 
 def load_pbs(pbs):
     mv, sp, it, ab = {}, {}, {}, {}
-    with open(os.path.join(pbs, 'moves.txt'), encoding='utf-8', errors='replace') as f:
+    with open(os.path.join(pbs, 'moves.txt'), encoding='utf-8-sig', errors='replace') as f:
         for line in f:
             p = line.split(',')
             if len(p) >= 2 and p[0].strip().isdigit():
                 mv[p[1].strip()] = int(p[0])
-    with open(os.path.join(pbs, 'items.txt'), encoding='utf-8', errors='replace') as f:
+    with open(os.path.join(pbs, 'items.txt'), encoding='utf-8-sig', errors='replace') as f:
         for line in f:
             p = line.split(',')
             if len(p) >= 2 and p[0].strip().isdigit():
@@ -36,7 +36,7 @@ def load_pbs(pbs):
     # PokeBattle_Pokemon#ability indexes into ([ret1,ret2,h1][abilityIndex]), so a
     # scenario's ability NAME can be resolved to the slot index setAbility expects.
     cur_id, cur_name = None, None
-    with open(os.path.join(pbs, 'pokemon.txt'), encoding='utf-8', errors='replace') as f:
+    with open(os.path.join(pbs, 'pokemon.txt'), encoding='utf-8-sig', errors='replace') as f:
         for line in f:
             line = line.strip()
             m = re.match(r'^\[(\d+)\]$', line)

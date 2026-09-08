@@ -8,8 +8,9 @@ whether the AI can pilot a *real* team, because no such team is archetype-pure. 
 teams carry hazard control, speed control and a win condition, and their sets are
 defined as much by EV spread and item as by species.
 
-This suite draws instead from Smogon's sample teams (extracted/smogon-teams/), so each
-roster is a coherent competitive team that a person built and a tier maintainer
+This suite draws instead from Smogon's sample teams (extracted/smogon-teams/, sourced
+from https://pkmn.github.io/smogon/data/teams/<tier>.json -- see the SOURCE.md there),
+so each roster is a coherent competitive team that a person built and a tier maintainer
 published. Teams within a tier fight each other, which is the matchup they were
 designed for.
 
@@ -88,7 +89,22 @@ ENGINES = {
         "out": STUDY / "generated" / "tier_teams_reborn.rb",
     },
     "realidea": {
-        "tiers": ["gen6ou"],
+        # gen6ou first and the rest appended, so adding a tier cannot re-roll the sets
+        # already recorded against it -- the same staging rule draw() documents.
+        #
+        # gen6ru is fetched and vendored but NOT here: 3 of its 5 sample teams are
+        # unbuildable on v16 (two want Clear Body on a Diancie this engine gave
+        # MAGICBOUNCE and nothing else, one wants a Glalitite it does not have), and 2
+        # teams cannot fill a 4-team set. It becomes usable if either gap ever closes.
+        #
+        # Gen 5 carries a caveat gen 6 does not, and it is not small: this is a v16
+        # engine, so a BW team is played under ORAS rules. Steel loses its Dark and
+        # Ghost resistances, Knock Off hits for 65 instead of 20, and any Fairy-typed
+        # species is Fairy here and was not in BW. The teams are still coherent human
+        # teams and both sides are equally affected, so the AI comparison stays fair --
+        # but a gen 5 set measures "can the AI pilot this structure", not "is this a
+        # faithful BW game", and no result from it should be read as the latter.
+        "tiers": ["gen6ou", "gen6uu", "gen5ou", "gen5uu", "gen5ru"],
         "sets_per_tier": 2,
         "module": "PortableAIRealideaTiers",
         "teams_module": "PortableAIRealideaTeams",
@@ -134,14 +150,20 @@ def draw(pools, seed, engine):
     """
     rng = random.Random(seed)
     sets = {}
-    per_tier = engine["sets_per_tier"]
     for tier in engine["tiers"]:
         pool = pools[tier]
-        want = per_tier * TEAMS_PER_SET
-        if len(pool) < want:
+        # Two disjoint sets is what a tier is WORTH drawing, not what every tier can
+        # give: the UU/RU sample threads are a third the size of OU's and the v16 dex
+        # takes a further cut. Capping per tier rather than failing keeps a one-set tier
+        # in the suite -- with the standing caveat that one set cannot separate "this
+        # tier stresses the AI" from "these four teams do", so a lone set is a lead to
+        # follow, never a result on its own.
+        per_tier = min(engine["sets_per_tier"], len(pool) // TEAMS_PER_SET)
+        if per_tier == 0:
             raise SystemExit(
-                f"{tier}: {len(pool)} eligible teams, need {want} for "
-                f"{per_tier} sets of {TEAMS_PER_SET}")
+                f"{tier}: {len(pool)} eligible teams, need {TEAMS_PER_SET} for even "
+                f"one set -- drop the tier rather than shrinking the set")
+        want = per_tier * TEAMS_PER_SET
         picked = rng.sample(range(len(pool)), want)
         for n in range(per_tier):
             chunk = picked[n * TEAMS_PER_SET:(n + 1) * TEAMS_PER_SET]
@@ -179,8 +201,9 @@ def ruby_literal(sets, engine):
         "# Regenerate to change; the draw seed is fixed in that tool.",
         "#",
         "# Real competitive teams from Smogon's sample threads (extracted/smogon-teams/),",
-        "# %s disjoint sets per tier. Distinct from the archetype suite (%s):"
-        % (COUNT_WORDS[engine["sets_per_tier"]], engine["archetype_label"]),
+        "# up to %s disjoint sets per tier, capped by how many teams the dex can build."
+        % COUNT_WORDS[engine["sets_per_tier"]],
+        "# Distinct from the archetype suite (%s):" % engine["archetype_label"],
         "# different question, separate seeds, results are never pooled across suites.",
         "#",
         "# Team keys are generic so the seat-audit schedule is identical across sets.",

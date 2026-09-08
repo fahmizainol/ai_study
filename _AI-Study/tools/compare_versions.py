@@ -10,6 +10,9 @@ Usage:
     python3 compare_versions.py --before 'generated/reborn_6v6_v031_set_*.ndjson' \
                                 --after  'generated/reborn_6v6_v032_set_*.ndjson'
     ... --arm normal_portable --label-before 0.3.1 --label-after 0.3.2
+    python3 compare_versions.py --before generated/realidea_tier_gen5ru_a_0_6_5.ndjson \
+                                --after generated/realidea_tier_gen5ru_a_0_6_6_live_default.ndjson \
+                                --arm portable
 """
 
 import argparse
@@ -32,11 +35,13 @@ def load(pattern, arm):
                 if not line:
                     continue
                 rec = json.loads(line)
-                if rec.get("arm") != arm:
+                # Reborn records name the arm `arm` and the roster `team_set`;
+                # Realidea's gauntlet names them `mode` and `teams`. Same pairing.
+                if rec.get("arm", rec.get("mode")) != arm:
                     continue
-                key = (rec.get("team_set"), rec["id"], rec["seed"])
-                out[key] = (rec["result"], rec.get("right_test_team"),
-                            rec.get("team_set"))
+                roster = rec.get("team_set", rec.get("teams"))
+                key = (roster, rec["id"], rec["seed"])
+                out[key] = (rec["result"], rec.get("right_test_team"), roster)
     if not out:
         raise SystemExit(f"no {arm!r} records in {pattern!r}")
     return out

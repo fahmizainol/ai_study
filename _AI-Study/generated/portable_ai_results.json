@@ -1,721 +1,1047 @@
 {
- "captured": "2026-09-06",
- "version": "0.6.4",
- "engine": "realidea",
- "status": "probe, tier gauntlet and archetype gauntlet all measured 2026-09-06, all clean. The hang that blocked strength numbers was a crash hidden by PBDebug.logonerr's uncommented pbPrintException call (a nil $ItemData); it is fixed. baseline_0_1_0 is retained for comparison but is superseded by archetype_0_6_2.",
- "installed": {
-  "generated_script_sha256": "e57300685760a31b88da4239a98285c27f1f8fbf055de181b95a5e4ad3b06954",
-  "generated_script_lines": 3764,
-  "installed_bundle_sha256": "10f96b85cc991360c23abd36a09063147849dc8adc5beb700d79e67119f82f96",
-  "installed_bundle_backup": "_AI-Study/backups/realidea_Scripts.rxdata.pre-0.6.2",
-  "installed_sections": [
-   "Portable_AI (332)",
-   "AI_Probe (329)"
-  ],
-  "opt_in_marker": "Realidea V4.1/Data/portable_ai.txt"
- },
- "corpus": {
-  "corpus_path": "_AI-Study/scenarios_realidea.json",
-  "corpus_sha256": "e08e5900d7d5eafa37384ccaa9cd51a542347648bfe0a878b892bcf550c9f771",
-  "engine_corpus_path": "Realidea V4.1/Data/ai_scenarios.txt",
-  "engine_corpus_sha256": "99ba13022cc820d2cb41447424cadcdbebe5165e29ef2972528e81ebfdf208db",
-  "scenarios": 208,
-  "assertions": 275,
-  "probed": 198,
-  "applicable_assertions": 260,
-  "skipped_reborn_field": 7,
-  "skipped_unsupported_mechanic": 3,
-  "dropped_from_reborn_corpus": [
-   "intimidate_ignored_vs_clear_amulet",
-   "spikes_hit_nobody_with_boots",
-   "stealth_rock_ignores_boots",
-   "heavy_duty_boots_entry",
-   "heavy_duty_boots_entry_order_swapped"
-  ],
-  "dropped_reason": "v16 has no Heavy-Duty Boots or Clear Amulet"
- },
- "probe_0_6_2": {
-  "captured": "2026-09-06 (re-measured after the $ItemData fix)",
-  "corpus_path": "_AI-Study/scenarios_realidea.json",
-  "corpus_sha256": "e08e5900d7d5eafa37384ccaa9cd51a542347648bfe0a878b892bcf550c9f771",
-  "scenarios": 208,
-  "probed": 198,
-  "skipped_with_reason": 10,
-  "assertions_not_answerable": 4,
-  "gradeable_assertions": 256,
-  "stock": {
-   "assertions_passed": 202,
-   "results_path": "_AI-Study/generated/ai_probe_results_stock.ndjson",
-   "results_sha256": "3a951ac768eca401064bdf755a996dd36ed51bf9b7d7426d0baa5791fbb45dd3",
-   "cards_failed": 48
+  "captured": "2026-09-07",
+  "version": "0.7.0",
+  "engine": "realidea",
+  "status": "0.7.0 measured 2026-09-07: a second, search-based planner (portable_ai/search.rb) behind the PortableAI.plan seam, selected by search_planner and shipping OFF. MEASURED AND IT LOSES: 31/60 on gen5ru_a against the rule engine's 48/60 and stock v16's 39/60 (McNemar p=0.001); it flees, 216 of 408 changed shadow decisions are move->switch. Two bugs the run exposed are fixed: a foe switch-in inherited the outgoing body's HP (no effect on the total), and the matrix cells were used as a per-turn damage number when they deliberately carry no Choice lock, Intimidate, hazards or priority (worth +6). Control holds: 120/120 tier battles and 933/933 shadow decisions identical to 0.6.7. Reborn inert by construction and not re-run since 0.6.5.",
+  "installed": {
+    "generated_script_sha256": "ee7484e20413073b9880c41948b3b7e6372957fe77c7b0f6f7ba8b93e6b522b6",
+    "generated_script_lines": 6748,
+    "installed_bundle_sha256": "1382681f3b34059853f6f2d29274b68964bae563106b62bd52a59b84129fc271",
+    "installed_bundle_backup": "_AI-Study/backups/realidea_Scripts.rxdata.pre-0.7.0",
+    "installed_sections": [
+      "Portable_AI (332)",
+      "AI_Probe (329)"
+    ],
+    "opt_in_marker": "Realidea V4.1/Data/portable_ai.txt"
   },
-  "portable": {
-   "assertions_passed": 240,
-   "results_path": "_AI-Study/generated/ai_probe_results_portable.ndjson",
-   "results_sha256": "563ad8337e0a49439be769693f260d7a961675a9849d0e7cd98dcd7c510077b3",
-   "cards_failed": 14,
-   "regressions_vs_stock": 0,
-   "cards_fixed_vs_stock": 34
-  },
-  "note": "no card Portable fails that stock passes, on the corrected engine: stock fails 48 cards, Portable 14, and the 14 are a subset. The remaining failures are dominated by this adapter using stock pbGetMoveScore as base evidence where the Reborn adapter uses a flat 100.",
-  "command": "python3 _AI-Study/tools/check_scenarios.py _AI-Study/scenarios_realidea.json \"Realidea V4.1/Data/ai_probe_results_portable.ndjson\"",
-  "superseded": {
-   "stock_assertions_passed": 204,
-   "why": "the earlier run today was measured with $ItemData nil, so stock's pbGetMoveScore read no item data. Confirmed by re-running the stock probe with the fix reverted: it reproduces 204 exactly. Five cards fail and three pass once item data is loaded, netting -2. Portable's total is 240 either way, though its per-card results also move."
-  }
- },
- "gauntlet_0_6_2": {
-  "measured": false,
-  "reason": "deterministic hang: speed_vs_bulky seed 196613, stock mode, blocked at ~0 CPU with debuglog.txt never written; reproduced from a full run and from a single-seed run, 36 of 80 records complete"
- },
- "baseline_0_1_0": {
-  "measured_version": "0.1.0",
-  "captured": "2026-09-04",
-  "probe": {
-   "corpus_path": "_AI-Study/scenarios_realidea.json",
-   "corpus_sha256": "6715d1855c8a354f56f42bacace3870213f98dd545042caee70df6c0bdff8d4b",
-   "reference_corpus_path": "_AI-Study/scenarios.json",
-   "reference_corpus_sha256": "08e7d4e380fa38489c3d06a8c348363c76e114691c1210b712bea2da74bd5e4b",
-   "reference_results_path": "_AI-Study/generated/probe_results_reference.ndjson",
-   "reference_results_sha256": "dc3583e3fbddb5484f16d9c6b2983a9085bc8dd9b347d454cd1f37798388fb96",
-   "scenarios": 126,
-   "probed": 121,
-   "skipped": 5,
-   "errors": 0,
-   "stock": {
-    "assertions_passed": 143,
-    "assertions_total": 163,
-    "results_sha256": "2eb82eb3df368f2d92f6e0b3280fc10b8a4a1928a49d225fab26da893d8a5378"
-   },
-   "portable": {
-    "assertions_passed": 163,
-    "assertions_total": 163,
-    "results_sha256": "7e7be8a4f03fe02abefa42b7c5aa9fe8b6b3a3594c405875220ee4489baff696",
-    "reference_mean_spearman_rho": 0.913,
-    "reference_top1_score_agreement": "100/110",
-    "reference_action_type_agreement": "117/121"
-   },
-   "tier1_command": "python3 _AI-Study/tools/check_scenarios.py _AI-Study/scenarios_realidea.json \"Realidea V4.1/Data/ai_probe_results_portable.ndjson\"",
-   "tier2_command": "python3 _AI-Study/tools/ai_diff.py _AI-Study/scenarios_realidea.json \"Realidea V4.1/Data/ai_probe_results_portable.ndjson\" _AI-Study/scenarios.json _AI-Study/generated/probe_results_reference.ndjson --label-a realidea-portable --label-b reborn-reference"
-  },
-  "gauntlet": {
-   "records": 80,
-   "seeds": 5,
-   "matchups": 8,
-   "errors": 0,
-   "results_sha256": "b91feba3db22baef4e4eadf2397db1d7c9d634536b94b19ef35f1917443d5fb0",
-   "stock": {
-    "wins": 20,
-    "losses": 20,
-    "draws": 0,
-    "win_rate": 50.0,
-    "mean_turns": 7.1,
-    "single_wins": "14/30",
-    "double_wins": "6/10"
-   },
-   "portable": {
-    "wins": 28,
-    "losses": 12,
-    "draws": 0,
-    "win_rate": 70.0,
-    "mean_turns": 8.9,
-    "single_wins": "20/30",
-    "double_wins": "8/10"
-   }
-  },
-  "build": {
-   "generated_script_sha256": "c532fb202df6be7232206fbd9673aad87162123bd3ee61b8274dbb70e3598ab1",
-   "installed_bundle_sha256": "041207aff8f99c097f2c5e94f0a8cdf92a8fab915daa6cd2761cc315c9e5553a",
-   "installed_section": "Portable_AI",
-   "installed_index": 332,
-   "opt_in_marker": "Realidea V4.1/Data/portable_ai.txt"
-  }
- },
- "tier_0_6_2": {
-  "captured": "2026-09-06",
-  "measured": true,
-  "schedule": "tier -- every ordered non-mirror pairing of each set's four teams, 5 seeds, 2 arms",
-  "rosters": "_AI-Study/generated/tier_teams_realidea.rb",
-  "rosters_sha256": "ad116be6dd50e274579be309be579be90468ba326995d89d932e0049a4708b5b",
-  "tiers": "gen6ou only -- Realidea ships all 29 Z-crystals as items and implements no Z-move engine, so 24 of gen7ou's 26 sample teams would import holding an inert item",
-  "mega_evolution": true,
-  "battles": 240,
-  "sets": {
-   "gen6ou_a": {
-    "results_path": "_AI-Study/generated/realidea_tier_gen6ou_a.ndjson",
-    "results_sha256": "b711a91b91b53c6f2c1e96164fa9171596b05ee3ab7b76996083e98e774f87a5",
-    "battles": 120,
-    "arms": {
-     "stock": {
-      "wins": 32,
-      "losses": 25,
-      "draws": 0,
-      "errors": 3,
-      "timed_out": 0,
-      "win_rate": 56.1,
-      "win_rate_timeouts_resolved": 56.1
-     },
-     "portable": {
-      "wins": 41,
-      "losses": 12,
-      "draws": 6,
-      "errors": 1,
-      "timed_out": 6,
-      "win_rate": 69.5,
-      "win_rate_timeouts_resolved": 74.6
-     }
-    }
-   },
-   "gen6ou_b": {
-    "results_path": "_AI-Study/generated/realidea_tier_gen6ou_b.ndjson",
-    "results_sha256": "e19e91ed73446a5fa3041f68dad2a5914b6c1d64d2bf43db5a3f0ad0b65ac18a",
-    "battles": 120,
-    "arms": {
-     "stock": {
-      "wins": 26,
-      "losses": 33,
-      "draws": 0,
-      "errors": 1,
-      "timed_out": 0,
-      "win_rate": 44.1,
-      "win_rate_timeouts_resolved": 44.1
-     },
-     "portable": {
-      "wins": 38,
-      "losses": 21,
-      "draws": 0,
-      "errors": 1,
-      "timed_out": 0,
-      "win_rate": 64.4,
-      "win_rate_timeouts_resolved": 64.4
-     }
-    }
-   }
-  },
-  "pooled": {
-   "stock": {
-    "wins": 58,
-    "losses": 58,
-    "draws": 0,
-    "errors": 4,
-    "win_rate": 50.0,
-    "win_rate_timeouts_resolved": 50.0
-   },
-   "portable": {
-    "wins": 79,
-    "losses": 33,
-    "draws": 6,
-    "errors": 2,
-    "win_rate": 66.9,
-    "win_rate_timeouts_resolved": 69.5
-   }
-  },
-  "control": "stock vs stock is 58W/58L = 50.0% over the symmetric schedule; the gap is the seat swap, not the schedule",
-  "engine_errors_excluded": {
-   "ZeroDivisionError: divided by 0": 3,
-   "NoMethodError: undefined method `hasWorkingAbility'": 1,
-   "NameError: undefined local variable or method `upanim'": 2
-  },
-  "caveats": [
-   "errors are engine faults in Realidea's own code, not policy failures, and are excluded from win rates",
-   "all six timeouts are portable battles at the 100-round cap; pbStartBattle discards the cap's verdict, so timeout_result carries it separately"
-  ],
-  "engine_error_sites": {
-   "ZeroDivisionError: divided by 0": "PokeBattle_AI.rb:3557 pbRoughDamage -- atk/defense with defense 0",
-   "NoMethodError: undefined method `hasWorkingAbility'": "PokeBattle_AI.rb:4226 pbEnemyShouldWithdrawEx? -- battler method called on a party PokeBattle_Pokemon, reached when weighing a switch under Spikes",
-   "NameError: undefined local variable or method `upanim'": "PokeBattle_BattlerEffects.rb:766 pbIncreaseStatWithCause -- reached from Intimidate on switch-in"
-  },
-  "traced_set": {
-   "set": "gen6ou_a",
-   "results_path": "_AI-Study/generated/realidea_tiertrace_gen6ou_a.ndjson",
-   "results_sha256": "a6262dd036b4a5ce6d48fbeac8c73f819032aaf5bc22d3590b9adc8072923873",
-   "renderer": "python3 tools/render_realidea_battle.py <ndjson> [matchup_id] [seed] | --list",
-   "observation_free": "the traced run reproduces the untraced one exactly (41/12/6/1 and 32/25/0/3, same win rates and mean turns), so tracing costs nothing in outcome",
-   "limits": [
-    "portable arm only -- run_one stamps a trace for mode=portable, so there is no stock-side decision record",
-    "decisions, not outcomes: no hit/miss/crit/Protect. This gauntlet records no event stream",
-    "a turn with no line is one Portable did not decide (fell through to stock, or the actor could not act)",
-    "race is keyed by battler seat, not party slot; the record carries no per-turn foe identity"
-   ],
-   "readouts": [
-    "realidea_gen6ou_a_team1_vs_team2_196613.txt",
-    "realidea_gen6ou_a_team1_vs_team4_104729.txt",
-    "realidea_gen6ou_a_team3_vs_team2_155921.txt"
-   ]
-  }
- },
- "mega_evolution": {
-  "supported": true,
-  "forms": "46 mega species (Charizard and Mewtwo have X and Y) + 2 primal reversions",
-  "script": "Pokemon_MegaEvolution.rb",
-  "ai": "pbEnemyShouldMegaEvolve? is 'always if possible'; Portable's override calls it on the same line the stock path does, so mega is policy-neutral between arms",
-  "harness_gate": "pbCanMegaEvolve? returns false unless $game_switches[512] or [234]; a save-less harness leaves both false. The gauntlet sets 512 (key mega=, default on). 234 is deliberately not set: it triggers a cut-in that blocks on Kernel.pbMessage.",
-  "verified": "same matchup and seed with mega on vs off diverges (stock 20 vs 17 turns, portable 16 vs 19)"
- },
- "archetype_0_6_2": {
-  "captured": "2026-09-06",
-  "measured": true,
-  "schedule": "frozen -- the same eight matchups and three-mon fixture every 0.1.0 number was measured on",
-  "errors": 0,
-  "note": "first completion since the port; the earlier 0.6.2 attempt stopped at 36/80 records on the $ItemData crash",
-  "frozen_5_seeds": {
-   "battles": 80,
-   "arms": {
-    "stock": {
-     "wins": 20,
-     "losses": 20,
-     "draws": 0,
-     "errors": 0,
-     "win_rate": 50.0,
-     "mean_turns": 7.1,
-     "single_wins": "14/30",
-     "double_wins": "6/10"
-    },
-    "portable": {
-     "wins": 26,
-     "losses": 13,
-     "draws": 1,
-     "errors": 0,
-     "win_rate": 65.0,
-     "mean_turns": 8.4,
-     "single_wins": "18/30",
-     "double_wins": "8/10"
-    }
-   },
-   "results_path": "_AI-Study/generated/realidea_archetype_0_6_2.ndjson",
-   "results_sha256": "c63ab1cfc69ca06aab7184bfdae11c58367305b0cfe8073aad39f9db1b81a605"
-  },
-  "extended_20_seeds": {
-   "battles": 320,
-   "arms": {
-    "stock": {
-     "wins": 82,
-     "losses": 78,
-     "draws": 0,
-     "errors": 0,
-     "win_rate": 51.2,
-     "mean_turns": 7.5,
-     "single_wins": "56/120",
-     "double_wins": "26/40"
-    },
-    "portable": {
-     "wins": 103,
-     "losses": 56,
-     "draws": 1,
-     "errors": 0,
-     "win_rate": 64.4,
-     "mean_turns": 9.1,
-     "single_wins": "73/120",
-     "double_wins": "30/40"
-    }
-   },
-   "results_path": "_AI-Study/generated/realidea_archetype_0_6_2_20seeds.ndjson",
-   "results_sha256": "65461fce576054342bdb09567ea09be37550f9f62a32b1106f460e931b53417d",
-   "note": "an addition, not a replacement: 40 battles per arm cannot separate a five-point difference from noise. The frozen-seed subset of this run is outcome-identical to the standalone 80-battle run."
-  },
-  "vs_baseline_0_1_0": {
-   "stock": "identical on every figure -- 20/40, singles 14/30, doubles 6/10, mean 7.1 turns. This is the control.",
-   "portable": "26/40 vs 0.1.0's 28/40; both battles are in singles. 5 points on n=40 where the standard error is ~7.2, so not a result in either direction.",
-   "regression_check": "NOT RUN. The gate asks for losses the previous version won on the same seed; 0.1.0's per-battle records were not kept (only sha256 b91feba3...), and the file has been overwritten. Every gauntlet artifact is now copied into generated/ so this cannot recur."
-  }
- },
- "shadow_0_6_2": {
-  "captured": "2026-09-06",
-  "measured": true,
-  "what": "stock plays the battle while the portable planner answers from the same position every turn and registers nothing, so the two policies can be compared turn by turn rather than only on outcomes",
-  "results_path": "_AI-Study/generated/realidea_tier_shadow_0_6_2.ndjson",
-  "results_sha256": "bc967ac77d30d30a5ed19eda2d786692ea864ce1ba9d5ff2cdd324f46c39e76e",
-  "schedule": "tier, gen6ou_a + gen6ou_b, 5 seeds, 3 arms (stock, portable, shadow)",
-  "battles": 360,
-  "observation_free": {
-   "paired_battles": 120,
-   "diverged": 0,
-   "verdict": "every shadow battle reproduced its stock twin on decision and turn count, including an identical engine-error profile; the comparison below is void without this and shadow_check.py enforces it",
-   "rolls_diverted": 0
-  },
-  "arms": {
-   "stock": {
-    "wins": 58,
-    "losses": 58,
-    "draws": 0,
-    "errors": 4,
-    "win_rate": 50.0
-   },
-   "shadow": {
-    "wins": 58,
-    "losses": 58,
-    "draws": 0,
-    "errors": 4,
-    "win_rate": 50.0
-   },
-   "portable": {
-    "wins": 79,
-    "losses": 33,
-    "draws": 6,
-    "errors": 2,
-    "win_rate": 66.9,
-    "win_rate_timeouts_resolved": 69.5
-   }
-  },
-  "agreement": {
-   "turns_compared": 3027,
-   "agreed": 1764,
-   "disagreed": 1263,
-   "disagreement_rate_pct": 41.7,
-   "by_kind": {
-    "move_vs_move": 943,
-    "switch_vs_move": 278,
-    "move_vs_switch": 32,
-    "switch_vs_switch": 10
-   },
-   "note": "disagreement is not error -- stock wins its share of these battles -- but the 16.9-point gap lives here"
-  },
-  "bug_found": {
-   "what": "fake_battler cancelled a live partial trap: Realidea's pbInitEffects clears MultiTurn/MultiTurnUser on the battler pointing at the index being constructed, a fourth cross-battler write stock Essentials does not make, and the adapter's restore list covered only the stock three",
-   "found_by": "the shadow equality check -- 14 of the first 60 observed battles failed to reproduce their unobserved twins, all of them matchups whose observed team carried Infestation",
-   "scope": "pre-existing and not shadow-specific; it sat in the live Portable arm too, with nothing to contradict it",
-   "effect_on_published_numbers": "none -- the full tier suite re-measured after the fix reproduces 66.9%/69.5% and 50.0% exactly. Across 3027 compared turns stock chose Infestation 30 times and portable 0, so a live portable run never set the trap the bug needed",
-   "fix": "RESTORED_ON_FAKE gains :MultiTurn and :MultiTurnUser; regression test asserts the list matches the engine"
-  }
- },
- "probe_0_6_3": {
-  "captured": "2026-09-06",
-  "artifact": "generated/ai_probe_results_portable.ndjson",
-  "sha256": "dea68167a81d96d30f2c35ede9c823c570042798c565e44ff73903eca712c48f",
   "corpus": {
-   "scenarios": 214,
-   "gradeable": 262,
-   "skipped_by_engine": 10,
-   "not_answerable": 4
+    "corpus_path": "_AI-Study/scenarios_realidea.json",
+    "corpus_sha256": "e08e5900d7d5eafa37384ccaa9cd51a542347648bfe0a878b892bcf550c9f771",
+    "engine_corpus_path": "Realidea V4.1/Data/ai_scenarios.txt",
+    "engine_corpus_sha256": "99ba13022cc820d2cb41447424cadcdbebe5165e29ef2972528e81ebfdf208db",
+    "scenarios": 208,
+    "assertions": 275,
+    "probed": 198,
+    "applicable_assertions": 260,
+    "skipped_reborn_field": 7,
+    "skipped_unsupported_mechanic": 3,
+    "dropped_from_reborn_corpus": [
+      "intimidate_ignored_vs_clear_amulet",
+      "spikes_hit_nobody_with_boots",
+      "stealth_rock_ignores_boots",
+      "heavy_duty_boots_entry",
+      "heavy_duty_boots_entry_order_swapped"
+    ],
+    "dropped_reason": "v16 has no Heavy-Duty Boots or Clear Amulet"
   },
-  "portable": {
-   "passed": 246,
-   "of": 262,
-   "note": "the same sixteen assertions fail that failed on 0.6.2; all six 0.6.3 cards pass"
-  },
-  "previous_record": "generated/ai_probe_results_portable_0_6_2.ndjson"
- },
- "tier_0_6_3": {
-  "captured": "2026-09-06",
-  "artifact": "generated/realidea_shadowtrace_gen6ou_0_6_3.ndjson",
-  "sha256": "13a0fbd813c190a0c1201f818a18fad8726a85971c35be9ffbc255851863ca2a",
-  "battles": 360,
-  "sets": [
-   "gen6ou_a",
-   "gen6ou_b"
-  ],
-  "arms": {
-   "stock": {
-    "wins": 58,
-    "losses": 58,
-    "draws": 0,
-    "errors": 4,
-    "win_rate": 50.0,
-    "identical_to_0_6_2": "120/120"
-   },
-   "portable": {
-    "wins": 82,
-    "losses": 30,
-    "draws": 4,
-    "errors": 4,
-    "win_rate": 70.7,
-    "mean_turns": 27.9,
-    "paired_vs_0_6_2": {
-     "identical": 36,
-     "gained": 16,
-     "lost": 13
-    }
-   },
-   "portable_replacement_portable": {
-    "artifact": "generated/realidea_tier_0_6_3_replportable.ndjson",
-    "wins": 80,
-    "losses": 33,
-    "draws": 5,
-    "errors": 2,
-    "win_rate": 67.8,
-    "paired_vs_default": {
-     "identical": 23,
-     "gained": 16,
-     "lost": 18
+  "probe_0_6_2": {
+    "captured": "2026-09-06 (re-measured after the $ItemData fix)",
+    "corpus_path": "_AI-Study/scenarios_realidea.json",
+    "corpus_sha256": "e08e5900d7d5eafa37384ccaa9cd51a542347648bfe0a878b892bcf550c9f771",
+    "scenarios": 208,
+    "probed": 198,
+    "skipped_with_reason": 10,
+    "assertions_not_answerable": 4,
+    "gradeable_assertions": 256,
+    "stock": {
+      "assertions_passed": 202,
+      "results_path": "_AI-Study/generated/ai_probe_results_stock.ndjson",
+      "results_sha256": "3a951ac768eca401064bdf755a996dd36ed51bf9b7d7426d0baa5791fbb45dd3",
+      "cards_failed": 48
     },
-    "verdict": "noise; gauntlet default stays replacement=stock"
-   }
-  },
-  "switching": {
-   "voluntary_per_battle": {
-    "0.6.2": 2.47,
-    "0.6.3": 4.64
-   },
-   "switch_backs_within_3_turns": {
-    "0.6.2": 75,
-    "0.6.3": 133
-   },
-   "switch_backs_same_foe_0_6_3": 120,
-   "heal_loop_turns_shadow": {
-    "0.6.2": 42,
-    "0.6.3": 3
-   }
-  },
-  "errors": "three ZeroDivisionError at pbRoughDamage:3557 and one upanim NameError, both pre-existing engine crashes"
- },
- "shadow_0_6_3": {
-  "captured": "2026-09-06",
-  "observation_free": {
-   "paired_battles": 120,
-   "diverged": 0,
-   "rolls_diverted": 0
-  },
-  "turns_compared": 3027,
-  "agreed": 1645,
-  "agreement_pct": 54.3,
-  "by_kind": {
-   "move_vs_move": 790,
-   "switch_vs_move": 544,
-   "move_vs_switch": 34,
-   "switch_vs_switch": 14
-  },
-  "note": "58.3% at 0.6.2; the whole move is switch-vs-move, which is the rules working"
- },
- "reborn_0_6_3": {
-  "captured": "2026-09-06",
-  "probe": "281/281 on 219 cards, 6 N/A",
-  "control_set_c": "all three keys false reproduces 0.6.2: 26/60, +0",
-  "sweep": {
-   "frame": "7 rosters x 60, normal_portable",
-   "0.6.2": 203,
-   "0.6.3": 231,
-   "net": 28,
-   "gained": 51,
-   "lost": 23,
-   "mcnemar_chi2": 9.85,
-   "p": 0.002,
-   "by_roster": {
-    "set_a": 5,
-    "set_b": 6,
-    "set_c": 3,
-    "set_d": 6,
-    "set_e": 0,
-    "set_f": 5,
-    "set_g": 3
-   },
-   "by_archetype": {
-    "balance": 6,
-    "bulky": 3,
-    "offense": 5,
-    "speed": 14
-   }
-  },
-  "artifacts": [
-   "generated/reborn_6v6_v063_set_*.ndjson",
-   "generated/reborn_6v6_v063control_set_c.ndjson",
-   "generated/probe_results_reborn_v063_portable.ndjson"
-  ]
- },
- "rules_0_6_3": {
-  "race_switch_to_winner": "leave a race lost by a whole hit for a bench candidate that wins its own race after the free entry hit, by a whole hit; not when a carried heal covers two hits; never at the race cap",
-  "heal_outpace": "a heal that restores less than the next hit takes, in a lost race, is charged -120 rather than credited +150",
-  "escape_needs_hitter": "no_effective_move / weak_current_attacks count only for a candidate whose best hit clears 10%",
-  "replacement": "adapter routes faint replacement through the core when Portable drives the side; gauntlet key replacement=stock|portable, default stock"
- },
- "probe_0_6_4": {
-  "captured": "2026-09-06",
-  "artifact": "generated/ai_probe_results_portable.ndjson",
-  "cards": 219,
-  "passed": 251,
-  "gradeable": 267,
-  "skipped": 10,
-  "na": 4,
-  "note": "five 0.6.4 cards pass; the same sixteen 0.6.2 failures remain; 0.6.3 record kept as ai_probe_results_portable_0_6_3.ndjson"
- },
- "tier_0_6_4": {
-  "captured": "2026-09-06",
-  "artifact": "generated/realidea_shadowtrace_gen6ou_0_6_4.ndjson",
-  "battles": 360,
-  "sets": [
-   "gen6ou_a",
-   "gen6ou_b"
-  ],
-  "defaults": {
-   "escape_wall_margin": true,
-   "switch_estimate_pp": true,
-   "switchin_race_grade": false
-  },
-  "arms": {
-   "stock": {
-    "wins": 58,
-    "losses": 58,
-    "draws": 0,
-    "errors": 4,
-    "win_rate": 50.0,
-    "identical_to_0_6_3": "120/120"
-   },
-   "portable": {
-    "wins": 83,
-    "losses": 28,
-    "draws": 4,
-    "errors": 5,
-    "win_rate": 72.2,
-    "resolved_win_rate": 75.7,
-    "mean_turns": 27.6,
-    "paired_vs_0_6_3": {
-     "identical": 103,
-     "gained": 2,
-     "lost": 1
-    }
-   },
-   "portable_replacement_portable": {
-    "artifact": "generated/realidea_tier_0_6_4_replportable.ndjson",
-    "wins": 88,
-    "losses": 29,
-    "draws": 2,
-    "errors": 1,
-    "win_rate": 73.9,
-    "paired_vs_default": {
-     "identical": 23,
-     "gained": 20,
-     "lost": 15
+    "portable": {
+      "assertions_passed": 240,
+      "results_path": "_AI-Study/generated/ai_probe_results_portable.ndjson",
+      "results_sha256": "563ad8337e0a49439be769693f260d7a961675a9849d0e7cd98dcd7c510077b3",
+      "cards_failed": 14,
+      "regressions_vs_stock": 0,
+      "cards_fixed_vs_stock": 34
     },
-    "verdict": "noise; gauntlet default stays replacement=stock"
-   }
+    "note": "no card Portable fails that stock passes, on the corrected engine: stock fails 48 cards, Portable 14, and the 14 are a subset. The remaining failures are dominated by this adapter using stock pbGetMoveScore as base evidence where the Reborn adapter uses a flat 100.",
+    "command": "python3 _AI-Study/tools/check_scenarios.py _AI-Study/scenarios_realidea.json \"Realidea V4.1/Data/ai_probe_results_portable.ndjson\"",
+    "superseded": {
+      "stock_assertions_passed": 204,
+      "why": "the earlier run today was measured with $ItemData nil, so stock's pbGetMoveScore read no item data. Confirmed by re-running the stock probe with the fix reverted: it reproduces 204 exactly. Five cards fail and three pass once item data is loaded, netting -2. Portable's total is 240 either way, though its per-card results also move."
+    }
   },
-  "ablation_vs_0_6_3_portable": {
-   "grade_on_wall_on_no_pp": {
-    "artifact": "generated/realidea_tier_0_6_4_grade_on.ndjson",
-    "record": "80-28-8",
+  "gauntlet_0_6_2": {
+    "measured": false,
+    "reason": "deterministic hang: speed_vs_bulky seed 196613, stock mode, blocked at ~0 CPU with debuglog.txt never written; reproduced from a full run and from a single-seed run, 36 of 80 records complete"
+  },
+  "baseline_0_1_0": {
+    "measured_version": "0.1.0",
+    "captured": "2026-09-04",
+    "probe": {
+      "corpus_path": "_AI-Study/scenarios_realidea.json",
+      "corpus_sha256": "6715d1855c8a354f56f42bacace3870213f98dd545042caee70df6c0bdff8d4b",
+      "reference_corpus_path": "_AI-Study/scenarios.json",
+      "reference_corpus_sha256": "08e7d4e380fa38489c3d06a8c348363c76e114691c1210b712bea2da74bd5e4b",
+      "reference_results_path": "_AI-Study/generated/probe_results_reference.ndjson",
+      "reference_results_sha256": "dc3583e3fbddb5484f16d9c6b2983a9085bc8dd9b347d454cd1f37798388fb96",
+      "scenarios": 126,
+      "probed": 121,
+      "skipped": 5,
+      "errors": 0,
+      "stock": {
+        "assertions_passed": 143,
+        "assertions_total": 163,
+        "results_sha256": "2eb82eb3df368f2d92f6e0b3280fc10b8a4a1928a49d225fab26da893d8a5378"
+      },
+      "portable": {
+        "assertions_passed": 163,
+        "assertions_total": 163,
+        "results_sha256": "7e7be8a4f03fe02abefa42b7c5aa9fe8b6b3a3594c405875220ee4489baff696",
+        "reference_mean_spearman_rho": 0.913,
+        "reference_top1_score_agreement": "100/110",
+        "reference_action_type_agreement": "117/121"
+      },
+      "tier1_command": "python3 _AI-Study/tools/check_scenarios.py _AI-Study/scenarios_realidea.json \"Realidea V4.1/Data/ai_probe_results_portable.ndjson\"",
+      "tier2_command": "python3 _AI-Study/tools/ai_diff.py _AI-Study/scenarios_realidea.json \"Realidea V4.1/Data/ai_probe_results_portable.ndjson\" _AI-Study/scenarios.json _AI-Study/generated/probe_results_reference.ndjson --label-a realidea-portable --label-b reborn-reference"
+    },
+    "gauntlet": {
+      "records": 80,
+      "seeds": 5,
+      "matchups": 8,
+      "errors": 0,
+      "results_sha256": "b91feba3db22baef4e4eadf2397db1d7c9d634536b94b19ef35f1917443d5fb0",
+      "stock": {
+        "wins": 20,
+        "losses": 20,
+        "draws": 0,
+        "win_rate": 50.0,
+        "mean_turns": 7.1,
+        "single_wins": "14/30",
+        "double_wins": "6/10"
+      },
+      "portable": {
+        "wins": 28,
+        "losses": 12,
+        "draws": 0,
+        "win_rate": 70.0,
+        "mean_turns": 8.9,
+        "single_wins": "20/30",
+        "double_wins": "8/10"
+      }
+    },
+    "build": {
+      "generated_script_sha256": "c532fb202df6be7232206fbd9673aad87162123bd3ee61b8274dbb70e3598ab1",
+      "installed_bundle_sha256": "041207aff8f99c097f2c5e94f0a8cdf92a8fab915daa6cd2761cc315c9e5553a",
+      "installed_section": "Portable_AI",
+      "installed_index": 332,
+      "opt_in_marker": "Realidea V4.1/Data/portable_ai.txt"
+    }
+  },
+  "tier_0_6_2": {
+    "captured": "2026-09-06",
+    "measured": true,
+    "schedule": "tier -- every ordered non-mirror pairing of each set's four teams, 5 seeds, 2 arms",
+    "rosters": "_AI-Study/generated/tier_teams_realidea.rb",
+    "rosters_sha256": "ad116be6dd50e274579be309be579be90468ba326995d89d932e0049a4708b5b",
+    "tiers": "gen6ou only -- Realidea ships all 29 Z-crystals as items and implements no Z-move engine, so 24 of gen7ou's 26 sample teams would import holding an inert item",
+    "mega_evolution": true,
+    "battles": 240,
+    "sets": {
+      "gen6ou_a": {
+        "results_path": "_AI-Study/generated/realidea_tier_gen6ou_a.ndjson",
+        "results_sha256": "b711a91b91b53c6f2c1e96164fa9171596b05ee3ab7b76996083e98e774f87a5",
+        "battles": 120,
+        "arms": {
+          "stock": {
+            "wins": 32,
+            "losses": 25,
+            "draws": 0,
+            "errors": 3,
+            "timed_out": 0,
+            "win_rate": 56.1,
+            "win_rate_timeouts_resolved": 56.1
+          },
+          "portable": {
+            "wins": 41,
+            "losses": 12,
+            "draws": 6,
+            "errors": 1,
+            "timed_out": 6,
+            "win_rate": 69.5,
+            "win_rate_timeouts_resolved": 74.6
+          }
+        }
+      },
+      "gen6ou_b": {
+        "results_path": "_AI-Study/generated/realidea_tier_gen6ou_b.ndjson",
+        "results_sha256": "e19e91ed73446a5fa3041f68dad2a5914b6c1d64d2bf43db5a3f0ad0b65ac18a",
+        "battles": 120,
+        "arms": {
+          "stock": {
+            "wins": 26,
+            "losses": 33,
+            "draws": 0,
+            "errors": 1,
+            "timed_out": 0,
+            "win_rate": 44.1,
+            "win_rate_timeouts_resolved": 44.1
+          },
+          "portable": {
+            "wins": 38,
+            "losses": 21,
+            "draws": 0,
+            "errors": 1,
+            "timed_out": 0,
+            "win_rate": 64.4,
+            "win_rate_timeouts_resolved": 64.4
+          }
+        }
+      }
+    },
+    "pooled": {
+      "stock": {
+        "wins": 58,
+        "losses": 58,
+        "draws": 0,
+        "errors": 4,
+        "win_rate": 50.0,
+        "win_rate_timeouts_resolved": 50.0
+      },
+      "portable": {
+        "wins": 79,
+        "losses": 33,
+        "draws": 6,
+        "errors": 2,
+        "win_rate": 66.9,
+        "win_rate_timeouts_resolved": 69.5
+      }
+    },
+    "control": "stock vs stock is 58W/58L = 50.0% over the symmetric schedule; the gap is the seat swap, not the schedule",
+    "engine_errors_excluded": {
+      "ZeroDivisionError: divided by 0": 3,
+      "NoMethodError: undefined method `hasWorkingAbility'": 1,
+      "NameError: undefined local variable or method `upanim'": 2
+    },
+    "caveats": [
+      "errors are engine faults in Realidea's own code, not policy failures, and are excluded from win rates",
+      "all six timeouts are portable battles at the 100-round cap; pbStartBattle discards the cap's verdict, so timeout_result carries it separately"
+    ],
+    "engine_error_sites": {
+      "ZeroDivisionError: divided by 0": "PokeBattle_AI.rb:3557 pbRoughDamage -- atk/defense with defense 0",
+      "NoMethodError: undefined method `hasWorkingAbility'": "PokeBattle_AI.rb:4226 pbEnemyShouldWithdrawEx? -- battler method called on a party PokeBattle_Pokemon, reached when weighing a switch under Spikes",
+      "NameError: undefined local variable or method `upanim'": "PokeBattle_BattlerEffects.rb:766 pbIncreaseStatWithCause -- reached from Intimidate on switch-in"
+    },
+    "traced_set": {
+      "set": "gen6ou_a",
+      "results_path": "_AI-Study/generated/realidea_tiertrace_gen6ou_a.ndjson",
+      "results_sha256": "a6262dd036b4a5ce6d48fbeac8c73f819032aaf5bc22d3590b9adc8072923873",
+      "renderer": "python3 tools/render_realidea_battle.py <ndjson> [matchup_id] [seed] | --list",
+      "observation_free": "the traced run reproduces the untraced one exactly (41/12/6/1 and 32/25/0/3, same win rates and mean turns), so tracing costs nothing in outcome",
+      "limits": [
+        "portable arm only -- run_one stamps a trace for mode=portable, so there is no stock-side decision record",
+        "decisions, not outcomes: no hit/miss/crit/Protect. This gauntlet records no event stream",
+        "a turn with no line is one Portable did not decide (fell through to stock, or the actor could not act)",
+        "race is keyed by battler seat, not party slot; the record carries no per-turn foe identity"
+      ],
+      "readouts": [
+        "realidea_gen6ou_a_team1_vs_team2_196613.txt",
+        "realidea_gen6ou_a_team1_vs_team4_104729.txt",
+        "realidea_gen6ou_a_team3_vs_team2_155921.txt"
+      ]
+    }
+  },
+  "mega_evolution": {
+    "supported": true,
+    "forms": "46 mega species (Charizard and Mewtwo have X and Y) + 2 primal reversions",
+    "script": "Pokemon_MegaEvolution.rb",
+    "ai": "pbEnemyShouldMegaEvolve? is 'always if possible'; Portable's override calls it on the same line the stock path does, so mega is policy-neutral between arms",
+    "harness_gate": "pbCanMegaEvolve? returns false unless $game_switches[512] or [234]; a save-less harness leaves both false. The gauntlet sets 512 (key mega=, default on). 234 is deliberately not set: it triggers a cut-in that blocks on Kernel.pbMessage.",
+    "verified": "same matchup and seed with mega on vs off diverges (stock 20 vs 17 turns, portable 16 vs 19)"
+  },
+  "archetype_0_6_2": {
+    "captured": "2026-09-06",
+    "measured": true,
+    "schedule": "frozen -- the same eight matchups and three-mon fixture every 0.1.0 number was measured on",
+    "errors": 0,
+    "note": "first completion since the port; the earlier 0.6.2 attempt stopped at 36/80 records on the $ItemData crash",
+    "frozen_5_seeds": {
+      "battles": 80,
+      "arms": {
+        "stock": {
+          "wins": 20,
+          "losses": 20,
+          "draws": 0,
+          "errors": 0,
+          "win_rate": 50.0,
+          "mean_turns": 7.1,
+          "single_wins": "14/30",
+          "double_wins": "6/10"
+        },
+        "portable": {
+          "wins": 26,
+          "losses": 13,
+          "draws": 1,
+          "errors": 0,
+          "win_rate": 65.0,
+          "mean_turns": 8.4,
+          "single_wins": "18/30",
+          "double_wins": "8/10"
+        }
+      },
+      "results_path": "_AI-Study/generated/realidea_archetype_0_6_2.ndjson",
+      "results_sha256": "c63ab1cfc69ca06aab7184bfdae11c58367305b0cfe8073aad39f9db1b81a605"
+    },
+    "extended_20_seeds": {
+      "battles": 320,
+      "arms": {
+        "stock": {
+          "wins": 82,
+          "losses": 78,
+          "draws": 0,
+          "errors": 0,
+          "win_rate": 51.2,
+          "mean_turns": 7.5,
+          "single_wins": "56/120",
+          "double_wins": "26/40"
+        },
+        "portable": {
+          "wins": 103,
+          "losses": 56,
+          "draws": 1,
+          "errors": 0,
+          "win_rate": 64.4,
+          "mean_turns": 9.1,
+          "single_wins": "73/120",
+          "double_wins": "30/40"
+        }
+      },
+      "results_path": "_AI-Study/generated/realidea_archetype_0_6_2_20seeds.ndjson",
+      "results_sha256": "65461fce576054342bdb09567ea09be37550f9f62a32b1106f460e931b53417d",
+      "note": "an addition, not a replacement: 40 battles per arm cannot separate a five-point difference from noise. The frozen-seed subset of this run is outcome-identical to the standalone 80-battle run."
+    },
+    "vs_baseline_0_1_0": {
+      "stock": "identical on every figure -- 20/40, singles 14/30, doubles 6/10, mean 7.1 turns. This is the control.",
+      "portable": "26/40 vs 0.1.0's 28/40; both battles are in singles. 5 points on n=40 where the standard error is ~7.2, so not a result in either direction.",
+      "regression_check": "NOT RUN. The gate asks for losses the previous version won on the same seed; 0.1.0's per-battle records were not kept (only sha256 b91feba3...), and the file has been overwritten. Every gauntlet artifact is now copied into generated/ so this cannot recur."
+    }
+  },
+  "shadow_0_6_2": {
+    "captured": "2026-09-06",
+    "measured": true,
+    "what": "stock plays the battle while the portable planner answers from the same position every turn and registers nothing, so the two policies can be compared turn by turn rather than only on outcomes",
+    "results_path": "_AI-Study/generated/realidea_tier_shadow_0_6_2.ndjson",
+    "results_sha256": "bc967ac77d30d30a5ed19eda2d786692ea864ce1ba9d5ff2cdd324f46c39e76e",
+    "schedule": "tier, gen6ou_a + gen6ou_b, 5 seeds, 3 arms (stock, portable, shadow)",
+    "battles": 360,
+    "observation_free": {
+      "paired_battles": 120,
+      "diverged": 0,
+      "verdict": "every shadow battle reproduced its stock twin on decision and turn count, including an identical engine-error profile; the comparison below is void without this and shadow_check.py enforces it",
+      "rolls_diverted": 0
+    },
+    "arms": {
+      "stock": {
+        "wins": 58,
+        "losses": 58,
+        "draws": 0,
+        "errors": 4,
+        "win_rate": 50.0
+      },
+      "shadow": {
+        "wins": 58,
+        "losses": 58,
+        "draws": 0,
+        "errors": 4,
+        "win_rate": 50.0
+      },
+      "portable": {
+        "wins": 79,
+        "losses": 33,
+        "draws": 6,
+        "errors": 2,
+        "win_rate": 66.9,
+        "win_rate_timeouts_resolved": 69.5
+      }
+    },
+    "agreement": {
+      "turns_compared": 3027,
+      "agreed": 1764,
+      "disagreed": 1263,
+      "disagreement_rate_pct": 41.7,
+      "by_kind": {
+        "move_vs_move": 943,
+        "switch_vs_move": 278,
+        "move_vs_switch": 32,
+        "switch_vs_switch": 10
+      },
+      "note": "disagreement is not error -- stock wins its share of these battles -- but the 16.9-point gap lives here"
+    },
+    "bug_found": {
+      "what": "fake_battler cancelled a live partial trap: Realidea's pbInitEffects clears MultiTurn/MultiTurnUser on the battler pointing at the index being constructed, a fourth cross-battler write stock Essentials does not make, and the adapter's restore list covered only the stock three",
+      "found_by": "the shadow equality check -- 14 of the first 60 observed battles failed to reproduce their unobserved twins, all of them matchups whose observed team carried Infestation",
+      "scope": "pre-existing and not shadow-specific; it sat in the live Portable arm too, with nothing to contradict it",
+      "effect_on_published_numbers": "none -- the full tier suite re-measured after the fix reproduces 66.9%/69.5% and 50.0% exactly. Across 3027 compared turns stock chose Infestation 30 times and portable 0, so a live portable run never set the trap the bug needed",
+      "fix": "RESTORED_ON_FAKE gains :MultiTurn and :MultiTurnUser; regression test asserts the list matches the engine"
+    }
+  },
+  "probe_0_6_3": {
+    "captured": "2026-09-06",
+    "artifact": "generated/ai_probe_results_portable.ndjson",
+    "sha256": "dea68167a81d96d30f2c35ede9c823c570042798c565e44ff73903eca712c48f",
+    "corpus": {
+      "scenarios": 214,
+      "gradeable": 262,
+      "skipped_by_engine": 10,
+      "not_answerable": 4
+    },
+    "portable": {
+      "passed": 246,
+      "of": 262,
+      "note": "the same sixteen assertions fail that failed on 0.6.2; all six 0.6.3 cards pass"
+    },
+    "previous_record": "generated/ai_probe_results_portable_0_6_2.ndjson"
+  },
+  "tier_0_6_3": {
+    "captured": "2026-09-06",
+    "artifact": "generated/realidea_shadowtrace_gen6ou_0_6_3.ndjson",
+    "sha256": "13a0fbd813c190a0c1201f818a18fad8726a85971c35be9ffbc255851863ca2a",
+    "battles": 360,
+    "sets": [
+      "gen6ou_a",
+      "gen6ou_b"
+    ],
+    "arms": {
+      "stock": {
+        "wins": 58,
+        "losses": 58,
+        "draws": 0,
+        "errors": 4,
+        "win_rate": 50.0,
+        "identical_to_0_6_2": "120/120"
+      },
+      "portable": {
+        "wins": 82,
+        "losses": 30,
+        "draws": 4,
+        "errors": 4,
+        "win_rate": 70.7,
+        "mean_turns": 27.9,
+        "paired_vs_0_6_2": {
+          "identical": 36,
+          "gained": 16,
+          "lost": 13
+        }
+      },
+      "portable_replacement_portable": {
+        "artifact": "generated/realidea_tier_0_6_3_replportable.ndjson",
+        "wins": 80,
+        "losses": 33,
+        "draws": 5,
+        "errors": 2,
+        "win_rate": 67.8,
+        "paired_vs_default": {
+          "identical": 23,
+          "gained": 16,
+          "lost": 18
+        },
+        "verdict": "noise; gauntlet default stays replacement=stock"
+      }
+    },
+    "switching": {
+      "voluntary_per_battle": {
+        "0.6.2": 2.47,
+        "0.6.3": 4.64
+      },
+      "switch_backs_within_3_turns": {
+        "0.6.2": 75,
+        "0.6.3": 133
+      },
+      "switch_backs_same_foe_0_6_3": 120,
+      "heal_loop_turns_shadow": {
+        "0.6.2": 42,
+        "0.6.3": 3
+      }
+    },
+    "errors": "three ZeroDivisionError at pbRoughDamage:3557 and one upanim NameError, both pre-existing engine crashes"
+  },
+  "shadow_0_6_3": {
+    "captured": "2026-09-06",
+    "observation_free": {
+      "paired_battles": 120,
+      "diverged": 0,
+      "rolls_diverted": 0
+    },
+    "turns_compared": 3027,
+    "agreed": 1645,
+    "agreement_pct": 54.3,
+    "by_kind": {
+      "move_vs_move": 790,
+      "switch_vs_move": 544,
+      "move_vs_switch": 34,
+      "switch_vs_switch": 14
+    },
+    "note": "58.3% at 0.6.2; the whole move is switch-vs-move, which is the rules working"
+  },
+  "reborn_0_6_3": {
+    "captured": "2026-09-06",
+    "probe": "281/281 on 219 cards, 6 N/A",
+    "control_set_c": "all three keys false reproduces 0.6.2: 26/60, +0",
+    "sweep": {
+      "frame": "7 rosters x 60, normal_portable",
+      "0.6.2": 203,
+      "0.6.3": 231,
+      "net": 28,
+      "gained": 51,
+      "lost": 23,
+      "mcnemar_chi2": 9.85,
+      "p": 0.002,
+      "by_roster": {
+        "set_a": 5,
+        "set_b": 6,
+        "set_c": 3,
+        "set_d": 6,
+        "set_e": 0,
+        "set_f": 5,
+        "set_g": 3
+      },
+      "by_archetype": {
+        "balance": 6,
+        "bulky": 3,
+        "offense": 5,
+        "speed": 14
+      }
+    },
+    "artifacts": [
+      "generated/reborn_6v6_v063_set_*.ndjson",
+      "generated/reborn_6v6_v063control_set_c.ndjson",
+      "generated/probe_results_reborn_v063_portable.ndjson"
+    ]
+  },
+  "rules_0_6_3": {
+    "race_switch_to_winner": "leave a race lost by a whole hit for a bench candidate that wins its own race after the free entry hit, by a whole hit; not when a carried heal covers two hits; never at the race cap",
+    "heal_outpace": "a heal that restores less than the next hit takes, in a lost race, is charged -120 rather than credited +150",
+    "escape_needs_hitter": "no_effective_move / weak_current_attacks count only for a candidate whose best hit clears 10%",
+    "replacement": "adapter routes faint replacement through the core when Portable drives the side; gauntlet key replacement=stock|portable, default stock"
+  },
+  "probe_0_6_4": {
+    "captured": "2026-09-06",
+    "artifact": "generated/ai_probe_results_portable.ndjson",
+    "cards": 219,
+    "passed": 251,
+    "gradeable": 267,
+    "skipped": 10,
+    "na": 4,
+    "note": "five 0.6.4 cards pass; the same sixteen 0.6.2 failures remain; 0.6.3 record kept as ai_probe_results_portable_0_6_3.ndjson"
+  },
+  "tier_0_6_4": {
+    "captured": "2026-09-06",
+    "artifact": "generated/realidea_shadowtrace_gen6ou_0_6_4.ndjson",
+    "battles": 360,
+    "sets": [
+      "gen6ou_a",
+      "gen6ou_b"
+    ],
+    "defaults": {
+      "escape_wall_margin": true,
+      "switch_estimate_pp": true,
+      "switchin_race_grade": false
+    },
+    "arms": {
+      "stock": {
+        "wins": 58,
+        "losses": 58,
+        "draws": 0,
+        "errors": 4,
+        "win_rate": 50.0,
+        "identical_to_0_6_3": "120/120"
+      },
+      "portable": {
+        "wins": 83,
+        "losses": 28,
+        "draws": 4,
+        "errors": 5,
+        "win_rate": 72.2,
+        "resolved_win_rate": 75.7,
+        "mean_turns": 27.6,
+        "paired_vs_0_6_3": {
+          "identical": 103,
+          "gained": 2,
+          "lost": 1
+        }
+      },
+      "portable_replacement_portable": {
+        "artifact": "generated/realidea_tier_0_6_4_replportable.ndjson",
+        "wins": 88,
+        "losses": 29,
+        "draws": 2,
+        "errors": 1,
+        "win_rate": 73.9,
+        "paired_vs_default": {
+          "identical": 23,
+          "gained": 20,
+          "lost": 15
+        },
+        "verdict": "noise; gauntlet default stays replacement=stock"
+      }
+    },
+    "ablation_vs_0_6_3_portable": {
+      "grade_on_wall_on_no_pp": {
+        "artifact": "generated/realidea_tier_0_6_4_grade_on.ndjson",
+        "record": "80-28-8",
+        "gained": 4,
+        "lost": 6
+      },
+      "grade_only": {
+        "artifact": "generated/realidea_tier_0_6_4_escape_wall_margin_off.ndjson",
+        "record": "80-29",
+        "gained": 5,
+        "lost": 7
+      },
+      "wall_only": {
+        "artifact": "generated/realidea_tier_0_6_4_switchin_race_grade_off.ndjson",
+        "record": "83-28",
+        "gained": 1,
+        "lost": 0
+      },
+      "grade_positive_only_wall_pp": {
+        "artifact": "generated/realidea_tier_0_6_4_exp_positive_only.ndjson",
+        "record": "83-27-5",
+        "gained": 4,
+        "lost": 3
+      }
+    },
+    "switching": {
+      "voluntary_per_battle": {
+        "0.6.3": 4.64,
+        "0.6.4": 3.52
+      },
+      "switch_backs_within_3_turns": {
+        "0.6.3": 133,
+        "0.6.4": 40
+      },
+      "switch_backs_same_foe": {
+        "0.6.3": 120,
+        "0.6.4": 29
+      },
+      "switch_backs_on_weak_current_attacks": {
+        "0.6.3": 62,
+        "0.6.4": 3
+      },
+      "heal_loop_turns_shadow": {
+        "0.6.3": 3,
+        "0.6.4": 3
+      },
+      "root_cause": "switch_outgoing_damage ignored PP: a bench body whose attacks were spent hit for 27% on the bench and for nothing on the field (team1_vs_team2 196613 t89-92)"
+    },
+    "errors": "four ZeroDivisionError at pbRoughDamage:3557 and one upanim NameError, pre-existing engine crashes"
+  },
+  "shadow_0_6_4": {
+    "captured": "2026-09-06",
+    "observation_free": {
+      "paired_battles": 120,
+      "diverged": 0,
+      "rolls_diverted": 0
+    },
+    "turns_compared": 3027,
+    "agreed": 1662,
+    "agreement_pct": 54.9,
+    "by_kind": {
+      "move_vs_move": 809,
+      "switch_vs_move": 498,
+      "move_vs_switch": 43,
+      "switch_vs_switch": 15
+    }
+  },
+  "reborn_0_6_4": {
+    "captured": "2026-09-06",
+    "probe": "286/286 on 224 cards, 6 N/A",
+    "control_set_c": "all three keys false reproduces 0.6.3: 60/60 battles identical, 29/60 +0",
+    "sweep": {
+      "frame": "7 rosters x 60, normal_portable",
+      "0.6.3": 231,
+      "shipped_defaults": {
+        "wins": 230,
+        "net": -1,
+        "gained": 2,
+        "lost": 3,
+        "p": 1.0,
+        "by_roster": {
+          "set_a": 1,
+          "set_b": -1,
+          "set_c": -1,
+          "set_d": 0,
+          "set_e": 0,
+          "set_f": 0,
+          "set_g": 0
+        }
+      },
+      "grade_on_full_no_pp": {
+        "wins": 220,
+        "net": -11,
+        "p": 0.1
+      },
+      "grade_only": {
+        "wins": 219,
+        "net": -12,
+        "gained": 13,
+        "lost": 25,
+        "p": 0.074,
+        "by_roster": {
+          "set_c": -8
+        },
+        "by_archetype": {
+          "speed": -7
+        }
+      },
+      "grade_positive_only_wall_pp": {
+        "wins": 224,
+        "net": -7,
+        "p": 0.12
+      },
+      "wall_only": {
+        "wins": 230,
+        "net": -1
+      }
+    },
+    "traced_set_c_pair": {
+      "defaults": "generated/reborn_6v6_v064trace_set_c.ndjson (28/60, identical to the sweep)",
+      "grade_on": "generated/reborn_6v6_v064gradetrace_set_c.ndjson (21/60)",
+      "switches_per_battle": {
+        "defaults": 3.0,
+        "grade_on": 2.83
+      }
+    },
+    "artifacts": [
+      "generated/reborn_6v6_v064_set_*.ndjson",
+      "generated/reborn_6v6_v064control_set_c.ndjson",
+      "generated/reborn_6v6_v064gradeonly_set_*.ndjson",
+      "generated/reborn_6v6_v064gradepositive_set_*.ndjson",
+      "generated/probe_results_reborn_v064_portable.ndjson"
+    ]
+  },
+  "rules_0_6_4": {
+    "escape_wall_margin": "no_effective_move / weak_current_attacks open the gate only for a candidate two whole hits better than the actor and needing at most four of its own (on)",
+    "switch_estimate_pp": "adapter-side: a bench candidate's outgoing estimate skips a move with no PP left (on)",
+    "switchin_race_grade": "every switch candidate graded on who lands the last hit once it is in, +150/+110/+70/-30/-70/-110 by hit margin; losing_race_bench_wins keeps its gate and gives up its flat 110 (OFF: -12 on Reborn, p=0.07)"
+  },
+  "probe_0_6_6": {
+    "captured": "2026-09-07",
+    "artifact": "generated/ai_probe_results_portable_0_6_6.ndjson",
+    "cards": 219,
+    "passed": 251,
+    "gradeable": 267,
+    "skipped": 10,
+    "na": 4,
+    "note": "identical to 0.6.5, same sixteen failures. A first draft of no_hit_needs_threat (any non-damaging move counts as work) measured 250/267, failing no_effective_move_needs_a_body_that_breaks_the_wall; the shipped rule keys on foe-facing tags and holds it."
+  },
+  "rules_0_6_6": {
+    "airborne_immunity": true,
+    "no_hit_needs_threat": true,
+    "foe_oracle": false,
+    "control": {
+      "artifact": "generated/realidea_tier_gen5ru_a_0_6_6_control3.ndjson",
+      "identical_to_0_6_5": "120/120 outcomes, 204/204 traced decisions",
+      "tool": "tools/control_check.py"
+    }
+  },
+  "tier_0_6_6": {
+    "captured": "2026-09-07",
+    "rosters": [
+      "gen5ru_a",
+      "gen5uu_a",
+      "gen6uu_a"
+    ],
+    "battles_per_arm": 180,
+    "stock": {
+      "identical_to_0_6_5": true
+    },
+    "ship": {
+      "artifacts": "generated/realidea_tier_<roster>_0_6_6_ship.ndjson",
+      "wins_0_6_5": 133,
+      "wins": 134,
+      "gained": 5,
+      "lost": 4,
+      "mcnemar_p": 1.0,
+      "per_roster": {
+        "gen5ru_a": [
+          46,
+          45,
+          2,
+          3
+        ],
+        "gen5uu_a": [
+          44,
+          45,
+          1,
+          0
+        ],
+        "gen6uu_a": [
+          43,
+          44,
+          2,
+          1
+        ]
+      }
+    },
+    "levitate_only_before_wall_rule": {
+      "artifacts": "generated/realidea_tier_<roster>_0_6_6_live_default.ndjson",
+      "wins_0_6_5": 133,
+      "wins": 133,
+      "gained": 4,
+      "lost": 4,
+      "note": "gen5ru_a 46 -> 44: all four losses a support Steelix leaving a Levitate Uxie it walled; that is what no_hit_needs_threat fixes"
+    },
+    "oracle": {
+      "artifacts": "generated/realidea_tier_<roster>_0_6_6_oracle.ndjson",
+      "wins_0_6_5": 133,
+      "wins": 143,
+      "gained": 23,
+      "lost": 13,
+      "mcnemar_p": 0.134,
+      "vs_ship": {
+        "gained": 22,
+        "lost": 13,
+        "p": 0.176
+      },
+      "per_roster": {
+        "gen5ru_a": [
+          46,
+          50,
+          6,
+          2
+        ],
+        "gen5uu_a": [
+          44,
+          51,
+          9,
+          2
+        ],
+        "gen6uu_a": [
+          43,
+          42,
+          8,
+          9
+        ]
+      },
+      "before_wall_rule": {
+        "artifacts": "generated/realidea_tier_<roster>_0_6_6_live_oracle.ndjson",
+        "wins": 146,
+        "gained": 24,
+        "lost": 8,
+        "mcnemar_p": 0.043
+      }
+    }
+  },
+  "shadow_0_6_6": {
+    "roster": "gen5ru_a",
+    "turns": 933,
+    "observation_free": "60/60 every arm",
+    "base_to_ship": {
+      "different": 30,
+      "kinds": {
+        "switch->move": 13,
+        "move->switch": 7,
+        "switch->switch": 6,
+        "move->move": 4
+      }
+    },
+    "base_to_levitate_only": {
+      "different": 42
+    },
+    "ship_to_oracle": {
+      "different": 79,
+      "kinds": {
+        "move->switch": 63,
+        "switch->switch": 12,
+        "move->move": 4
+      },
+      "declared_below_worst": [
+        328,
+        "35.2%",
+        "mean gap 50.8 points"
+      ],
+      "declared_zero": [
+        147,
+        "15.8%"
+      ],
+      "worst_case_lethal_alarms": 480,
+      "not_backed_by_declared": 45,
+      "slower_and_certain_dead": 162,
+      "of_which_still_attacked": 131
+    },
+    "tool": "tools/shadow_pair_diff.py"
+  },
+  "probe_0_6_7": {
+    "captured": "2026-09-07",
+    "artifact": "generated/ai_probe_results_portable_0_6_7.ndjson",
+    "cards": 219,
+    "passed": 251,
+    "gradeable": 267,
+    "skipped": 10,
+    "na": 4,
+    "note": "identical to 0.6.6, same sixteen failures."
+  },
+  "rules_0_6_7": {
+    "dead_before_moving": true,
+    "scale": 0.25,
+    "control": {
+      "artifact": "generated/realidea_tier_gen5ru_a_0_6_7_control.ndjson",
+      "identical_to_0_6_6": "60/60 portable outcomes, 894/894 traced decisions",
+      "tool": "tools/control_check.py"
+    }
+  },
+  "tier_0_6_7": {
+    "captured": "2026-09-07",
+    "rosters": [
+      "gen5ru_a",
+      "gen5uu_a",
+      "gen6uu_a"
+    ],
+    "battles_per_arm": 180,
+    "stock": {
+      "identical_to_0_6_5": true
+    },
+    "ship": {
+      "artifacts": "generated/realidea_tier_<roster>_0_6_7_ship.ndjson",
+      "wins_0_6_6": 134,
+      "wins": 140,
+      "gained": 11,
+      "lost": 5,
+      "mcnemar_p": 0.211,
+      "vs_0_6_5": {
+        "wins": 133,
+        "gained": 15,
+        "lost": 8,
+        "p": 0.211
+      },
+      "per_roster": {
+        "gen5ru_a": [
+          45,
+          48,
+          5,
+          2
+        ],
+        "gen5uu_a": [
+          45,
+          47,
+          3,
+          1
+        ],
+        "gen6uu_a": [
+          44,
+          45,
+          3,
+          2
+        ]
+      },
+      "note": "one loss is gen5ru_a team3_vs_team4 104729: t14 Aerodactyl certain-dead on the worst-case figure, foe did not attack; the oracle arm wins it"
+    },
+    "oracle": {
+      "artifacts": "generated/realidea_tier_<roster>_0_6_7_oracle.ndjson",
+      "wins_0_6_6": 143,
+      "wins": 150,
+      "gained": 12,
+      "lost": 5,
+      "mcnemar_p": 0.146,
+      "vs_ship": {
+        "gained": 21,
+        "lost": 11,
+        "p": 0.112
+      },
+      "vs_0_6_5": {
+        "wins": 133,
+        "gained": 29,
+        "lost": 12,
+        "p": 0.012
+      },
+      "per_roster": {
+        "gen5ru_a": [
+          50,
+          51,
+          4,
+          3
+        ],
+        "gen5uu_a": [
+          51,
+          52,
+          2,
+          1
+        ],
+        "gen6uu_a": [
+          42,
+          47,
+          6,
+          1
+        ]
+      }
+    }
+  },
+  "shadow_0_6_7": {
+    "roster": "gen5ru_a",
+    "turns": 933,
+    "observation_free": "60/60 every arm",
+    "oracle_0_6_6_to_0_6_7": {
+      "different": 49,
+      "kinds": {
+        "move->switch": 36,
+        "move->move": 13
+      },
+      "move_to_move": "all thirteen a priority move now outranking the attack: Aqua Jet x6, Endure x7"
+    },
+    "ship_0_6_6_to_0_6_7": {
+      "different": 50,
+      "kinds": {
+        "move->switch": 34,
+        "move->move": 16
+      }
+    },
+    "dead_slower_turns_oracle_three_rosters": {
+      "0_6_6": [
+        344,
+        252,
+        92
+      ],
+      "0_6_7": [
+        371,
+        210,
+        161
+      ],
+      "fields": [
+        "turns",
+        "attacked",
+        "switched"
+      ],
+      "tool": "tools/dead_slower_turns.py"
+    },
+    "tool": "tools/shadow_pair_diff.py"
+  },
+  "control_0_7_0": {
+    "gate": "search_planner off must reproduce 0.6.7",
+    "tier_before": "generated/realidea_tier_gen5ru_a_0_6_7_ship.ndjson",
+    "tier_after": "generated/realidea_tier_gen5ru_a_0_7_0_control.ndjson",
+    "tier_paired": 120,
+    "tier_identical": 120,
+    "shadow_before": "generated/realidea_tier_gen5ru_a_0_6_7_shadow_ship.ndjson",
+    "shadow_after": "generated/realidea_tier_gen5ru_a_0_7_0_shadow_control.ndjson",
+    "shadow_battles": 60,
+    "shadow_turns": 933,
+    "shadow_same_answer": 933,
+    "ruby_tests": 332,
+    "python_tests": 28
+  },
+  "search_planner_0_7_0": {
+    "roster": "gen5ru_a",
+    "paired_battles": 60,
+    "rules_wins": 48,
+    "search_wins": 31,
+    "stock_wins": 39,
     "gained": 4,
-    "lost": 6
-   },
-   "grade_only": {
-    "artifact": "generated/realidea_tier_0_6_4_escape_wall_margin_off.ndjson",
-    "record": "80-29",
-    "gained": 5,
-    "lost": 7
-   },
-   "wall_only": {
-    "artifact": "generated/realidea_tier_0_6_4_switchin_race_grade_off.ndjson",
-    "record": "83-28",
-    "gained": 1,
-    "lost": 0
-   },
-   "grade_positive_only_wall_pp": {
-    "artifact": "generated/realidea_tier_0_6_4_exp_positive_only.ndjson",
-    "record": "83-27-5",
-    "gained": 4,
-    "lost": 3
-   }
-  },
-  "switching": {
-   "voluntary_per_battle": {
-    "0.6.3": 4.64,
-    "0.6.4": 3.52
-   },
-   "switch_backs_within_3_turns": {
-    "0.6.3": 133,
-    "0.6.4": 40
-   },
-   "switch_backs_same_foe": {
-    "0.6.3": 120,
-    "0.6.4": 29
-   },
-   "switch_backs_on_weak_current_attacks": {
-    "0.6.3": 62,
-    "0.6.4": 3
-   },
-   "heal_loop_turns_shadow": {
-    "0.6.3": 3,
-    "0.6.4": 3
-   },
-   "root_cause": "switch_outgoing_damage ignored PP: a bench body whose attacks were spent hit for 27% on the bench and for nothing on the field (team1_vs_team2 196613 t89-92)"
-  },
-  "errors": "four ZeroDivisionError at pbRoughDamage:3557 and one upanim NameError, pre-existing engine crashes"
- },
- "shadow_0_6_4": {
-  "captured": "2026-09-06",
-  "observation_free": {
-   "paired_battles": 120,
-   "diverged": 0,
-   "rolls_diverted": 0
-  },
-  "turns_compared": 3027,
-  "agreed": 1662,
-  "agreement_pct": 54.9,
-  "by_kind": {
-   "move_vs_move": 809,
-   "switch_vs_move": 498,
-   "move_vs_switch": 43,
-   "switch_vs_switch": 15
+    "lost": 21,
+    "net": -17,
+    "mcnemar_p": 0.001,
+    "shadow_turns": 933,
+    "shadow_different": 408,
+    "shadow_move_to_switch": 216,
+    "shadow_switch_to_switch": 39,
+    "turns_all_moves_tie_on_worst_case_pct": 38,
+    "worst_case_from_foe_switch_pct": 41,
+    "progression": "25 first build -> 25 after the switch-in HP fix -> 31 after the live-view fix",
+    "verdict": "loses to the rule engine and to stock; ships off",
+    "before": "generated/realidea_tier_gen5ru_a_0_7_0_control.ndjson",
+    "after": "generated/realidea_tier_gen5ru_a_0_7_0_search.ndjson"
   }
- },
- "reborn_0_6_4": {
-  "captured": "2026-09-06",
-  "probe": "286/286 on 224 cards, 6 N/A",
-  "control_set_c": "all three keys false reproduces 0.6.3: 60/60 battles identical, 29/60 +0",
-  "sweep": {
-   "frame": "7 rosters x 60, normal_portable",
-   "0.6.3": 231,
-   "shipped_defaults": {
-    "wins": 230,
-    "net": -1,
-    "gained": 2,
-    "lost": 3,
-    "p": 1.0,
-    "by_roster": {
-     "set_a": 1,
-     "set_b": -1,
-     "set_c": -1,
-     "set_d": 0,
-     "set_e": 0,
-     "set_f": 0,
-     "set_g": 0
-    }
-   },
-   "grade_on_full_no_pp": {
-    "wins": 220,
-    "net": -11,
-    "p": 0.1
-   },
-   "grade_only": {
-    "wins": 219,
-    "net": -12,
-    "gained": 13,
-    "lost": 25,
-    "p": 0.074,
-    "by_roster": {
-     "set_c": -8
-    },
-    "by_archetype": {
-     "speed": -7
-    }
-   },
-   "grade_positive_only_wall_pp": {
-    "wins": 224,
-    "net": -7,
-    "p": 0.12
-   },
-   "wall_only": {
-    "wins": 230,
-    "net": -1
-   }
-  },
-  "traced_set_c_pair": {
-   "defaults": "generated/reborn_6v6_v064trace_set_c.ndjson (28/60, identical to the sweep)",
-   "grade_on": "generated/reborn_6v6_v064gradetrace_set_c.ndjson (21/60)",
-   "switches_per_battle": {
-    "defaults": 3.0,
-    "grade_on": 2.83
-   }
-  },
-  "artifacts": [
-   "generated/reborn_6v6_v064_set_*.ndjson",
-   "generated/reborn_6v6_v064control_set_c.ndjson",
-   "generated/reborn_6v6_v064gradeonly_set_*.ndjson",
-   "generated/reborn_6v6_v064gradepositive_set_*.ndjson",
-   "generated/probe_results_reborn_v064_portable.ndjson"
-  ]
- },
- "rules_0_6_4": {
-  "escape_wall_margin": "no_effective_move / weak_current_attacks open the gate only for a candidate two whole hits better than the actor and needing at most four of its own (on)",
-  "switch_estimate_pp": "adapter-side: a bench candidate's outgoing estimate skips a move with no PP left (on)",
-  "switchin_race_grade": "every switch candidate graded on who lands the last hit once it is in, +150/+110/+70/-30/-70/-110 by hit margin; losing_race_bench_wins keeps its gate and gives up its flat 110 (OFF: -12 on Reborn, p=0.07)"
- }
 }

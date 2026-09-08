@@ -19,7 +19,11 @@ STUDY = Path(__file__).resolve().parents[1]
 CORE_SOURCES = [
     STUDY / "portable_ai" / "model.rb",
     STUDY / "portable_ai" / "effects.rb",
+    # Pure snapshot readers over the damage matrix. Both planners read the board
+    # through these, so they precede core.rb and search.rb alike.
+    STUDY / "portable_ai" / "matrix.rb",
     STUDY / "portable_ai" / "core.rb",
+    STUDY / "portable_ai" / "search.rb",
 ]
 TARGETS = {
     "realidea": {

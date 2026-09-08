@@ -153,6 +153,23 @@ module PortableAI
     add(%w[EXPLOSION SELFDESTRUCT FINALGAMBIT MEMENTO HEALINGWISH
            LUNARDANCE], ["self_ko"])
 
+    # 0.7.2. WHAT each self_drop move actually costs, the same shape as SETUP_STAGES,
+    # so a search projection can charge Superpower's Attack and Draco Meteor's Special
+    # Attack rather than pricing the two kills identically. Every id carrying
+    # "self_drop" above has a row here and a test asserts it.
+    SELF_DROP_STAGES = {
+      "DRACOMETEOR"  => { "spa" => -2 },
+      "OVERHEAT"     => { "spa" => -2 },
+      "LEAFSTORM"    => { "spa" => -2 },
+      "PSYCHOBOOST"  => { "spa" => -2 },
+      "FLEURCANNON"  => { "spa" => -2 },
+      "SUPERPOWER"   => { "atk" => -1, "def" => -1 },
+      "CLOSECOMBAT"  => { "def" => -1, "spd" => -1 },
+      "VCREATE"      => { "def" => -1, "spd" => -1, "speed" => -1 },
+      "HAMMERARM"    => { "speed" => -1 },
+      "DRAGONASCENT" => { "def" => -1, "spd" => -1 }
+    }
+
     # Adapters that cannot compute Essentials function codes fall back to bare kind
     # tags ("secondary:burn"), so the core can still find the kind without a chance.
     # The Reborn adapter exports effect_kind/effect_chance from the code map instead
@@ -172,6 +189,51 @@ module PortableAI
     # way" rather than as "it raises nothing".
     def self.setup_stages(move_id)
       SETUP_STAGES[move_id.to_s.upcase]
+    end
+
+    def self.self_drop_stages(move_id)
+      SELF_DROP_STAGES[move_id.to_s.upcase]
+    end
+
+    # How much a heal move restores, in percent of max HP. Rest refills; the weather
+    # heals pay two thirds in sun and a quarter in sand or hail; everything else half.
+    # Move knowledge, so it lives here where both planners can read it (0.7.2; it was
+    # Core.heal_amount, which still delegates).
+    def self.heal_amount(snapshot, tags)
+      return 100.0 if tags.include?("heal_full")
+      if tags.include?("heal_weather")
+        weather = (snapshot || {})["weather"]
+        return 66.0 if weather == "sun"
+        return 25.0 if weather == "sand" || weather == "hail"
+      end
+      50.0
+    end
+
+    # The memory record a chosen action leaves behind: what was clicked and which
+    # repeat counter it advances. The adapter's apply_memory zeroes every counter but
+    # the one incremented, which is what makes "did I Protect last turn" answerable.
+    # Shared by both planners (0.7.2; Core.memory_updates delegates).
+    def self.memory_updates(actions)
+      out = {}
+      actions.each do |action|
+        actor_index = action["actor_index"]
+        update = { "last_type" => action["type"] }
+        if action["type"] == "switch"
+          update["increment"] = "switch"
+        else
+          tags = describe(action["move_id"], action["tags"])
+          update["last_move"] = action["move_id"]
+          if tags.include?("setup")
+            update["increment"] = "setup"
+          elsif tags.include?("protect") || tags.include?("team_protect")
+            update["increment"] = "protect"
+          elsif tags.include?("substitute")
+            update["increment"] = "substitute"
+          end
+        end
+        out[actor_index.to_s] = update
+      end
+      out
     end
 
     def self.kind_of(tags, prefix)

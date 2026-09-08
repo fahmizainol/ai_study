@@ -127,6 +127,9 @@ def render_candidates(entry):
                 bits.append("hits %.0f%%" % c["outgoing_damage_pct"])
             if c.get("incoming_damage_pct") is not None:
                 bits.append("takes %.0f%%" % c["incoming_damage_pct"])
+            # 0.6.6. The hit the foe's DECLARED move lands, when the run read one.
+            if c.get("predicted_incoming_damage_pct") is not None:
+                bits.append("declared %.0f%%" % c["predicted_incoming_damage_pct"])
             if c.get("faster") is True:
                 bits.append("faster")
             if bits:
@@ -157,8 +160,16 @@ def render_candidates(entry):
         # The core vetoes an illegal or self-defeating option with a large negative
         # sentinel rather than dropping it, so the reason stays visible. Printing the
         # raw number just wrecks the column and tells the reader nothing.
-        shown = "   VETO " if score <= -100000 else "%8.1f" % score
+        shown = "   VETO " if score <= -100000 else score_column(score)
         print("      %s  %-38s %s" % (shown, what, top))
+
+
+# TWO PLANNERS, TWO SCALES. The rule engine and the maximin score in HP points (tens
+# to hundreds); the tree scores a board as a probability in 0..1, where the whole
+# ordering of a decision lives in the third decimal. One column, so it has to carry
+# both: %8.1f rendered every MCTS row as "0.5".
+def score_column(score):
+    return "%8.3f" % score if abs(score) < 10 else "%8.1f" % score
 
 
 def party_names(party):
@@ -193,8 +204,8 @@ def render_shadow(record):
             print("    OBSERVER FAILED: %s" % entry["observer_error"])
             print("      (the host still played this turn; only the comparison is lost)")
         print("    stock   : %s" % describe(stock, right))
-        print("    portable: %-28s score %8.1f" % (
-            describe(portable, right), (portable or {}).get("score") or 0))
+        print("    portable: %-28s score %s" % (
+            describe(portable, right), score_column((portable or {}).get("score") or 0)))
         render_foe(entry, view)
         render_view(view)
         render_candidates(entry)
@@ -223,6 +234,19 @@ def render_view(view):
               ("%.0f%%" % view["certain_incoming_damage_pct"])
               if view.get("certain_incoming_damage_pct") is not None else "n/a",
               view.get("threatened_lethal")))
+    # 0.6.6. What the foe had already committed to, when the run was allowed to read
+    # it (foe_oracle): the move or switch per foe seat and the hit it lands here.
+    if view.get("predicted_foe"):
+        bits = []
+        for seat, intent in sorted(view["predicted_foe"].items()):
+            what = intent.get("move_id") or intent.get("type")
+            if intent.get("damage_pct") is not None:
+                what += " %.0f%%" % intent["damage_pct"]
+                if intent.get("accuracy") not in (None, 100):
+                    what += " @%.0f%%" % intent["accuracy"]
+            bits.append("foe@%s %s" % (seat, what))
+        print("    declared: %s  (hit taken %.0f%%)" % (
+            ", ".join(bits), view.get("predicted_incoming_damage_pct") or 0))
     # The damage race: turns to kill each way, as the core counted them. Keyed by BATTLER
     # index -- a seat, not a party slot. Records written before the view carried
     # `targets` have no per-turn foe identity and still print the bare seat; newer ones
@@ -339,8 +363,9 @@ def render(record):
             action = entry.get("move_id") or "move%s" % entry.get("slot")
             if entry.get("target") is not None:
                 action += " @%s" % entry["target"]
-        print("\nTurn %-3s actor %s   %-28s score %8.1f" % (
-            entry.get("turn"), entry.get("actor"), action, entry.get("score") or 0))
+        print("\nTurn %-3s actor %s   %-28s score %s" % (
+            entry.get("turn"), entry.get("actor"), action,
+            score_column(entry.get("score") or 0)))
         line = board(view)
         print("    board   : %s" % line) if line else None
         render_foe(entry, view)

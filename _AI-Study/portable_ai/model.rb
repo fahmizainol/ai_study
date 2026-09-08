@@ -16,7 +16,7 @@
 # Everything else is optional evidence used to improve the score.
 
 module PortableAI
-  VERSION = "0.6.5" unless const_defined?(:VERSION)
+  VERSION = "0.8.0" unless const_defined?(:VERSION)
 
   module Model
     DEFAULT_CONFIG = {
@@ -200,7 +200,102 @@ module PortableAI
       # 2. The rule that survived is the narrow one: refuse only what is strictly
       # unaffordable, and where there is nothing better to say than the flat 55, say
       # nothing.
-      "setup_matrix"          => true
+      "setup_matrix"          => true,
+
+      # 0.6.6. One estimate fix and one experiment arm, both adapter-side
+      # (rule_enabled?). BOTH FALSE REPRODUCES 0.6.5 BATTLE-FOR-BATTLE.
+      #
+      # Ground into a body that is not on the ground does nothing. The engine decides
+      # that in pbSuccessCheck, after the type modifier every damage estimate reads,
+      # so Levitate, Air Balloon, Magnet Rise and Telekinesis were invisible to every
+      # estimate this adapter makes: Steelix clicked Earthquake into a Levitate Rotom
+      # twice in one battle at +500 (gen5ru_a team3_vs_team4 104729 t4-5), and the
+      # matrix priced the same cell as a kill. Ships ON; it is a bug, keyed so the
+      # control run can still reproduce its predecessor.
+      "airborne_immunity"     => true,
+      # THE ORACLE. Every incoming estimate is the WORST the foe could do -- the max
+      # over its moves against the actor, the max against each bench candidate -- but
+      # the foe clicks one move, and the far seat has already registered it by the
+      # time this side decides. With this key on the adapter reads that choice back
+      # and exports it as the foe's intent; the core then prices the entry hit and
+      # the "you die whatever you click" rules on the declared move instead of the
+      # worst one. That is cheating, which is why it SHIPS OFF and is never a default:
+      # it measures the ceiling a perfect prediction would reach, so a real predictor
+      # (the same export, produced from a model) has a number to be judged against.
+      "foe_oracle"            => false,
+      # Read off the first 0.6.6 run: "I cannot hurt it" (no_effective_move,
+      # weak_current_attacks) opens the switch gate only if the foe can hurt the
+      # actor in fewer than four hits, or the actor has nothing but blanked attacks
+      # (Core.walled_but_safe?). The airborne fix exposed it -- a support Steelix
+      # left a Levitate Uxie it walled at turn 0, four times on one roster.
+      "no_hit_needs_threat"   => true,
+      # 0.6.7. FALSE REPRODUCES 0.6.6 BATTLE-FOR-BATTLE. A non-priority move clicked
+      # by an actor that is slower and certain to die keeps a quarter of its score
+      # (Core::DEAD_BEFORE_MOVING_SCALE): ko_never_lands removed the kill call from
+      # such a move but left its base and damage, and a switch with a real reason to
+      # leave lost to a hit that never lands. The order among the moves is unchanged.
+      "dead_before_moving"    => true,
+      # 0.7.0. WHICH PLANNER RUNS. False is the rule engine (core.rb) and reproduces
+      # 0.6.7 battle-for-battle; true asks the search planner (search.rb) first and
+      # falls back to the rule engine wherever it declines. It declines on doubles and
+      # on any snapshot without a party matrix, so Reborn -- which exports none -- is
+      # unchanged whether this is set or not. The two planners share the board readers
+      # in matrix.rb and none of the scoring: search values the STATE after the turn,
+      # the rule engine values the ACTION. Unmeasured; off until a paired run says
+      # otherwise.
+      "search_planner"        => false,
+      # 0.7.3. How many plies the search planner looks ahead. 1 is the 0.7.2 grid --
+      # this turn, then score the board. 2 answers each of those boards with the
+      # safest reply grid from it, which is what makes a kill the foe can only
+      # postpone by switching still count. Read only when search_planner is on.
+      "search_depth"          => 2,
+      # 0.7.5. THE OPPONENT MODEL, in one number, applied to the root rows only. 0 is
+      # the original's pick_safest: an action is worth the worst the foe can reply
+      # with. 1 values it at the EXPECTED reply instead -- the weights of the reply
+      # the adapter predicts (foe_oracle, foe_stock_model), or uniform over the foe's
+      # options when nothing is predicted. Between the two is a blend. Measured with
+      # the stock model: 0.5 is 46/60 and 1.0 is 44 against 40 at 0; uniform weights
+      # lose (29 / 28). Read only when search_planner is on; 0 reproduces 0.7.4.
+      "search_foe_mix"        => 0.5,
+      # 0.7.8. STEER BY HOW HARD THE FOE'S MOVES HIT. Both planners weight the foe's
+      # columns; with this off, the mass that is not a predicted switch is shared
+      # evenly over every move the foe owns. That even split is measurably wrong: on
+      # the 0.7.7 5000-iteration arm the cell's max-damage incoming move was the move
+      # the foe actually registered on 51.7% of 925 decisions, while the tree's own
+      # most-visited foe column was right on 43.1% -- so the free prior beats the
+      # model each planner built for itself. On the maximin this redistributes
+      # column_weights within the stay group; on the tree it adds a PUCT term to the
+      # foe axis of UCB1. It never moves mass between staying and switching, and it
+      # needs no opponent-model producer. Read only when search_planner is on.
+      "search_foe_prior"      => false,
+      # 0.7.5. Predict the foe's reply with the engine's OWN AI: the withdraw
+      # triggers of pbEnemyShouldWithdrawEx? read without their dice (as a chance),
+      # its switch target, and the top of pbGetMoveScore. Exports through the same
+      # fields the oracle does (predicted_foe and friends), so every consumer of a
+      # prediction reads it alike and its number is judged against the oracle's
+      # ceiling. Not cheating -- it reads no registered choice -- but it is a model
+      # of stock v16, and a human does not switch on stock's triggers. Off.
+      "foe_stock_model"       => false,
+      # 0.7.6. WHICH SEARCH. False is 0.7.5's maximin grid over the joint own x foe
+      # payoff (pick_safest, the legacy poke-engine path) and reproduces it decision
+      # for decision. True routes the same board through a decoupled simultaneous-move
+      # MCTS instead (search.rb, THE TREE), which is what poke-engine and Foul Play
+      # run today: the foe's line is shaped by its own payoff over many iterations
+      # rather than by the one predicted-reply number search_foe_mix blends in --
+      # and neither search_foe_mix nor the predicted reply is read on that path.
+      # Read only when search_planner is on.
+      "search_mcts"           => false,
+      # 0.7.6. The MCTS budget, as an ITERATION COUNT and not a time: a paired run and
+      # its shadow twin must make the same decisions on the same board, and a clock
+      # would make that depend on the machine. The gauntlet is a study harness, not a
+      # move clock, so this may be raised until it stops paying. Read only when
+      # search_mcts is on.
+      "search_iterations"     => 1000,
+      # 0.7.6. Mixed into the per-decision seed of the MCTS chance sampler. The seed is
+      # otherwise the position itself, so a decision replays from its snapshot; this is
+      # how the same position can be asked twice for a different tree. Read only when
+      # search_mcts is on.
+      "search_seed"           => 0
     }
 
     def self.config(overrides)

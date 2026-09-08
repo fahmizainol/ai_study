@@ -22,8 +22,8 @@ Realidea loads battle code from `Realidea V4.1/Data/Scripts.rxdata`. The build a
 `Portable_AI` section at index 332, after `AI_Probe`, `Team_Overrides`, and `Level_Cap`,
 and immediately before `Main`.
 
-Section 332 `Portable_AI` is **3754 lines** at `PortableAI::VERSION = "0.6.2"` (the
-0.1.0 install was 1511). Section 329 `AI_Probe` is replaced at the same time.
+Section 332 `Portable_AI` is **9032 lines** at `PortableAI::VERSION = "0.8.0"` (the
+0.1.0 install was 1511, 0.6.2 was 3754). Section 329 `AI_Probe` is replaced at the same time.
 
 The generated section contains:
 
@@ -67,6 +67,20 @@ yawn_gate=false
 | `race_switch_to_winner`, `heal_outpace`, `escape_needs_hitter` | boolean (0.6.3) — all three false reproduces 0.6.2 battle-for-battle |
 | `switchin_race_grade`, `escape_wall_margin`, `switch_estimate_pp` | boolean (0.6.4) — all three false reproduces 0.6.3 battle-for-battle |
 | `party_matrix`, `sole_answer`, `setup_matrix` | boolean (0.6.5) — all three false reproduces 0.6.4 battle-for-battle, and so does `party_matrix` alone. All three ship **on** |
+| `airborne_immunity`, `no_hit_needs_threat`, `foe_oracle` | boolean (0.6.6) — all three false reproduces 0.6.5 battle-for-battle. The first two ship **on**; `foe_oracle` is the experiment arm and is **never on by default** (it reads the far seat's registered choice, which against a human player is cheating) |
+| `dead_before_moving` | boolean (0.6.7) — false reproduces 0.6.6 battle-for-battle. Ships **on**: a non-priority move clicked by an actor that is slower and certain to die keeps a quarter of its score |
+| `search_planner` | boolean (0.7.0) — false reproduces 0.6.7 battle-for-battle. Chooses **which planner runs**, not which rules are on: false is the rule engine, true asks the one-ply search planner first. **Measured and it loses**: 31/60 at 0.7.0, **36/60 at 0.7.1** (leaf, accuracy, trapping and candidate fixes from the source audit), **39/60 at 0.7.2** (setup, heal, Protect, Substitute, status, hazards and move costs projected), **40/60 at 0.7.3** (a second ply, `search_depth=2`), **40/60 at 0.7.4** (each move priced against the foe's bench; the root-stage double count and the leaf's verdict term removed), **46/60 at 0.7.5** with `foe_stock_model` (the opponent model at the root: `search_foe_mix` 0.5 over the reply stock's own AI would make; −2 against the rule engine's 48/60, p = 0.82) against stock's 39/60. Ships **off** |
+| `search_depth` | float (0.7.3), default 2 — plies the search planner looks ahead; 1 is the 0.7.2 grid. Read only when `search_planner` is on. Depth 2 changes 28% of decisions and is +1 over depth 1 (p = 1.0) |
+| `search_foe_mix` | float (0.7.5), default 0.5 — the search's opponent model in one number, applied to the root rows only: 0 is the original's `pick_safest` (an action is worth the foe's worst reply), 1 values it at the expected reply under the predicted weights (`foe_oracle` or `foe_stock_model`; uniform when neither is on, which measured badly: 29/60). Below the root every ply stays maximin. Read only when `search_planner` is on; 0 reproduces 0.7.4 |
+| `foe_stock_model` | boolean (0.7.5) — predict the foe's reply with the engine's own AI: `pbEnemyShouldWithdrawEx?`'s triggers read as a chance instead of a roll, its switch target, and the move `pbGetMoveScore` puts first; exported through the oracle's fields (`predicted_foe`, `predicted_incoming_damage_pct`), so every consumer reads it alike. Reads no registered choice, draws no random number. With the search at mix 0.5: **46/60**, the same number as the oracle ceiling (46). It is a model of stock v16, and a human does not switch on stock's triggers — ships **off** |
+| `search_foe_prior` | boolean (0.7.8), default false — an opponent model with **no producer behind it**: the foe's columns are weighted by how hard each of its moves hits, a number `matrix_cell` already computed and handed the planner as `in_moves`. On the maximin it redistributes `column_weights`' stay mass (switch/stay split untouched); on the tree it adds AlphaZero's PUCT term `c·P(j)·sqrt(N)/(1+n)` to UCB1 on the foe axis only — **added, not substituting**, so a column the prior prices at zero is still explored on merit. **Measured: it pays on the maximin and not on the tree** — 35 → **41** with zero regressions (p = 0.031), against 45 for the hand-built `foe_stock_model` (p = 0.50, indistinguishable); the tree at 5000 is 48 → 46 (p = 0.73, null). **The maximin result does NOT replicate at that size** — pooled over three rosters it is 119 → 127/180 (5 / 13, p = 0.096), with the zero-regression property gone (gen5uu_a gives back 2, gen6uu_a 3). Read only when `search_planner` is on. Ships **off**
+| `search_mcts` | boolean (0.7.6) — false reproduces 0.7.5 decision for decision. Chooses **which search** runs under `search_planner`: false is the maximin grid over the joint payoff (`pick_safest`), true is a decoupled simultaneous-move MCTS on the same board (poke-engine's `src/mcts.rs`, the path Foul Play runs today) — UCB1 per side, chance outcomes as sampled children, no playout, `sigmoid(eval − root_eval)`, the most-visited root option. Neither `search_foe_mix` nor the predicted reply is read on that path; the tree is its own opponent model. **Measured, and 0.7.6's write-up of it was wrong twice** (see that section's retractions). Against the only maximin holding the same information — the uniform arm at 29, since the tree cannot consume `foe_stock_model` by construction — MCTS is **+12 (p = 0.025)**. On the 0.7.7 foe move axis with a budget that can resolve it, it scores 48 / 46 / 44 at 5000 / 5000-seed-1 / 15000: **~46, the number the maximin needs the stock-trigger table to reach, with no opponent model at all**. Still ~2 behind the rules (48), not significant at n = 60. Ships **off**
+| `search_iterations` | float (0.7.6), default 1000 — the MCTS budget as an iteration count, not a time, so a paired run and its shadow twin decide alike whatever the machine. Costs ~195 ms a decision at 1000 and ~894 ms at 5000 on RGSS's Ruby 1.8 (the maximin is ~10 ms). Read only when `search_mcts` is on
+| `search_seed` | float (0.7.6), default 0 — mixed into the per-decision seed of the MCTS chance sampler. The seed is otherwise the position itself (turn, both slots, every body's HP), so a decision replays from its snapshot alone and nothing is drawn from `pbAIRandom`. Read only when `search_mcts` is on
+| `foul_play` | boolean (0.8.0), ships **off** — hands every voluntary decision to the real Foul Play search (poke-engine gen 6) through `tools/foul_play_sidecar.py`; declines to the rules on doubles, a silent sidecar or an unmappable reply, each logged to `Data/ai_foulplay_log.txt`. **Pooled 162/180 against the rules' 143 (p = 0.005)**, the first arm to beat them. A study instrument: needs the sidecar process beside the game. Never on with `search_planner`
+| `foul_play_iterations` | float (0.8.0), default 5000 — the sidecar's MCTS budget; ~10 ms a decision at 5000. Read only when `foul_play` is on
+| *(matrix version 4)* | 0.7.9 — both move lists carry EVERY move (status moves at pct 0) with `acc`, `priority`, `damaging` and the `effect` triple; the side table carries `status`, `item`, `ability` and `entry_damage_pct` per body. No new key: the search planner reads it whenever it runs, and the rule engine reads none of it (its cell reads are `out`, `in`, the categories and `faster`, all unchanged — stock and rules arms byte-identical). **Measured with the whole 0.7.9 board: the tree at 5000 falls from 48 to 41/60** (see that section) |
+| *(matrix version 3)* | 0.7.7 — the cell gains `in_moves`, the foe's own per-move rolls beside our `out_moves`, so the search's foe axis is one column per move it owns instead of a single "it attacks, at worst". No new engine calls (the rolls were already made to find `in`) and built only when `search_planner` is on, since that is its only reader. Worth **+6** to a maximin with a uniform prior (29 → 35), **−1** to one with a real prior (46 → 45), and **−2 to +9** to the tree depending entirely on whether the budget can resolve the wider foe (39 at 1000, 48 at 5000)
 
 Three keys are the harness's own rather than the core's:
 
@@ -90,7 +104,7 @@ config overrides these do not touch core policy — they choose what runs.
 
 | key | default | meaning |
 |---|---|---|
-| `teams=NAME` | `archetype` | roster set: `archetype` (frozen 3-mon fixture), `gen6ou_a`, `gen6ou_b` |
+| `teams=NAME` | `archetype` | roster set: `archetype` (frozen 3-mon fixture), or a tier set — `gen6ou_a`, `gen6ou_b`, `gen6uu_a`, `gen5ou_a`, `gen5ou_b`, `gen5uu_a`, `gen5uu_b`, `gen5ru_a` |
 | `schedule=tier` | frozen | every ordered non-mirror pairing of the set's four teams (12 matchups), written to `Data/ai_tier_results.ndjson` so tier numbers can never pool with the frozen benchmark |
 | `matchups=x,y` | all | run only these named matchups — for smoke-testing a roster, or resuming past one that stalled |
 | `mega=false` | on | suppress Mega Evolution (see *Mega Evolution*) |
@@ -160,9 +174,9 @@ version-control copy when a byte-for-byte pre-install rollback is required.
 Unit tests:
 
 ```bash
-ruby _AI-Study/tests/test_portable_ai.rb        # 149 tests
+ruby _AI-Study/tests/test_portable_ai.rb        # 209 tests
 ruby _AI-Study/tests/test_reborn_adapter.rb     # 53 tests
-ruby _AI-Study/tests/test_realidea_adapter.rb   # 105 tests
+ruby _AI-Study/tests/test_realidea_adapter.rb   # 126 tests
 python3 _AI-Study/tests/test_tooling.py
 python3 _AI-Study/tools/check_move_codes.py
 ```
@@ -315,7 +329,7 @@ ordered non-mirror pairing over five seeds. `teams=gen6ou_a schedule=tier`.
 directions, so a policy-neutral right seat should sit at 50% — and does. The gap is the
 seat swap, not the schedule. Read with `tools/summarize_tier.py`.
 
-**Why gen 6 only.** Realidea carries the gen 7 dex and all 29 Z-crystals as items and
+**Why not gen 7.** Realidea carries the gen 7 dex and all 29 Z-crystals as items and
 implements **no Z-move engine at all** — so 24 of gen7ou's 26 sample teams would import
 holding an inert item, and gen 7 is not offered. It is a mega-era engine with a gen 7
 Pokédex bolted on. Of gen6ou's 14 teams, 11 are eligible; the other three ask for an
@@ -332,6 +346,82 @@ mistype**, four of them Hidden Power Ice becoming *Dragon* on exactly the
 Zapdos/Thundurus/Charizard whose job is checking Landorus. `showdown_names.Realidea`
 solves the IVs against Realidea's own formula, flipping only low bits so every IV keeps
 its author's band and each change is worth one stat point at level 100.
+
+#### Five tiers, two generations — 2026-09-07
+
+The suite was gen 6 OU alone because that was the only pool vendored. Four more tiers
+were fetched and drawn, taking it from 2 sets to 8. **720 new battles.**
+
+| set | stock (control) | portable | gap | McNemar |
+|---|---|---|---|---|
+| gen6uu_a | 50.0% | 75.4% (77.2% res.) | **+25.4pt** | p = 0.0066 |
+| gen5ou_a | 50.9% | 77.2% | **+26.3pt** | p = 0.00027 |
+| gen5ou_b | 47.4% | 75.0% | **+27.6pt** | p = 0.00073 |
+| gen5uu_a | 43.3% | 78.6% | **+35.2pt** | p = 0.00016 |
+| gen5uu_b | 57.6% | 82.8% | **+25.1pt** | p = 0.00027 |
+| gen5ru_a | 65.0% | 79.3% | **+14.3pt** | p = 0.21 |
+| **pooled (720)** | **52.4%** | **78.1% (78.4% res.)** | **+25.6pt** | **p = 4.1e-15** |
+
+Paired on (set, matchup, seed), 334 usable pairs: portable wins 105 that stock loses,
+stock wins 20 that portable loses. Five of six sets clear on their own; **gen5ru_a does
+not** (+14.3pt, p = 0.21) — the smallest pool, and the one set to treat as a lead rather
+than a result.
+
+**This replicates gen6ou rather than beating it.** The same rosters re-measured at 0.6.5
+give gen6ou +23.7pt (+26.3 resolved) against a 50.0% control, and the six new sets pool
+to +25.6 (+25.9). The portable core's margin over stock v16 is a stable ~25 points across
+five tiers and two generations, not a property of one metagame.
+
+**The mega confound does not apply here.** Gen 5 teams carry no mega stones and gen 6 ones
+do, which would matter on an engine where only one arm megas — but on Realidea both arms
+call `pbRegisterMegaEvolution` on the same line (see *Mega Evolution*), so the gen 5 and
+gen 6 numbers are measuring the same thing.
+
+**Portable errored 18 times to stock's 9, and that is exposure, not a regression.** Every
+fault is inside `085:PokeBattle_AI` — the engine's own scorer, reached through
+`portable_ai_stock_pbChooseMoves` — and 16 of the 23 ZeroDivisionErrors are the known
+`pbRoughDamage` divide-by-zero. The matrix-off control shows the same ~2:1 split, so it
+predates 0.6.5; the portable arm simply plays longer battles (22.3 turns vs 19.7) and
+reaches the buggy function more often. The paired test drops any pair where either arm
+errored, so none of it touches the significance figures.
+
+**Gen 5 is played under ORAS rules and the result must be read that way.** This is a v16
+engine: Steel keeps neither its Dark nor its Ghost resistance, Knock Off hits for 65 not
+20, and Fairy-typed species are Fairy. Both sides are equally affected so the comparison
+stays fair, but a gen 5 set measures *can the AI pilot this structure*, never *is this a
+faithful BW game*.
+
+**gen6ru was attempted and cannot be built.** Three of its five sample teams are
+unrepresentable on this dex — two want Clear Body on a Diancie whose PBS entry reads
+`Abilities=MAGICBOUNCE` and nothing else, one wants a Glalitite that is absent while 44
+other mega stones are present — and two teams cannot fill a four-team set. The pool is
+vendored anyway so the attempt is on record.
+
+#### The BOM that ate the first row of every PBS file
+
+Found while drawing gen 5: four teams were dropped as **"unknown move Megahorn"**, and
+Megahorn is `1,MEGAHORN,...` on line 1 of `moves.txt`. Realidea's PBS files carry a UTF-8
+BOM, and `\ufeff` is not whitespace to Python's `str.strip()` — so `"\ufeff1".strip()
+.isdigit()` is False and the id-prefixed first line of every csv was skipped in silence.
+Cost: `MEGAHORN` from moves, `REPEL` from items, `STENCH` from abilities. Species survived
+by luck, because `_ini_records` accumulates into the *next* `[n]` header.
+
+It went unseen for as long as it did because the three casualties are the first entries
+and nothing had asked for them. Both readers in `showdown_names.py` and all three in
+`make_scenarios.py` now open `utf-8-sig`; `PbsByteOrderMarkTest` in `tests/test_tooling.py`
+pins the recovered rows and was verified to fail with the bug reintroduced. The scenario
+corpus re-emits **byte-identical**, so no probe result moved.
+
+Two other generator facts settled at the same time: **Keldeo-Resolute is cosmetic here**
+(no forme is registered, base Keldeo has Justified, Secret Sword is teachable) and is now
+whitelisted as it already was on Reborn, which recovered gen5ou's thirteenth team; and
+`gen6ou_a`/`gen6ou_b` are **byte-identical** after the regeneration, because new tiers are
+appended to the draw order rather than inserted, so no recorded result was invalidated.
+
+**Provenance, previously unrecorded.** The vendored pools come from
+`https://pkmn.github.io/smogon/data/teams/<tier>.json`; the four original files were
+confirmed byte-identical to it. That URL appeared in no commit, doc or tool, and is now in
+`extracted/smogon-teams/SOURCE.md`.
 
 #### Three pre-existing engine bugs this run found
 
@@ -762,7 +852,7 @@ what makes that claim true by construction rather than by measurement.
 **Shape.** `snapshot["matrix"]` is keyed by **party slot** on both sides, never by seat: a
 benched body has no seat, and a seat is not a party index. Two side tables carry `slot`,
 `index` (the seat, `nil` on the bench), `hp_pct`, `alive`, `speed` and `types`; `cells`
-holds `"<own slot>:<foe slot>" → {out, out_cat, out_move, in, in_cat, in_move, faster}`,
+holds `"<own slot>:<foe slot>" → {out, out_cat, out_move, out_moves, in, in_cat, in_move, faster}`, (`out_moves`, matrix version 2 at 0.7.4: every damaging move the row body rolled, `{MOVE → {pct, cat}}`, a 0 for one that does nothing to the column body)
 where `out`/`in` are percentages of the **defender's** max HP — the unit every other
 estimate here already uses. `nil` is a pair the engine refused to price (`pbRoughDamage`
 divides by the defender's defence, 085:3557) and is a different fact from `0.0`, which is
@@ -988,6 +1078,1178 @@ Reborn control. The 0.6.5 control run is byte-for-byte the same decisions as
 `realidea_shadowtrace_gen6ou_0_6_4.ndjson`, so that file is the control's artifact and is
 not duplicated.
 
+### 0.6.6 — the AI can see Levitate, a wall keeps its job, and the oracle says what a perfect read is worth, 2026-09-07
+
+Read off the user's pass over the 0.6.5 gen 5 traces (`realidea_tiertrace_gen5ru_a`,
+`gen5uu_a`, `gen6uu_a`). Five root causes were diagnosed there; this version fixes the
+first, builds the plumbing the second needs and measures its ceiling, and records the
+other three for the version after.
+
+| key | rule | default |
+|---|---|---|
+| `airborne_immunity` | adapter-side. Ground into a body that is not on the ground does nothing. The engine decides that in `pbSuccessCheck` (080:2710, off `isAirborne?` 080:647 — Levitate, Air Balloon, Magnet Rise, Telekinesis; minus Iron Ball, Ingrain, Smack Down, Gravity), **after** the type modifier every damage estimate reads, so all four were invisible to every estimate this adapter makes. One predicate, `ground_into_airborne?`, now sits under both `type_effectiveness` and `rough_damage_pct!`, so the actor's moves, the incoming map, the bench estimates and the matrix cells all agree. Ring Target, Smack Down/Thousand Arrows (0x11C) and Mold Breaker are the engine's own exceptions | **on** |
+| `no_hit_needs_threat` | core. "I cannot hurt it" (`no_effective_move`, `weak_current_attacks`) opens the switch gate only if it can hurt me — the foe needs fewer than four hits, residual included — or the actor has nothing that works on the foe or the field: a status, a hazard below its cap, a phaze, a disruption, a stage reset or an item trick (`walled_but_safe?`, reason `walled_but_safe` 0). A boost, a heal, a Substitute or a Protect does not count | **on** |
+| `foe_oracle` | adapter-side. The foe's **registered choice** is read back as its intent and exported as `predicted_incoming_damage_pct` / `predicted_incoming_accuracy` / `predicted_foe` on the actor and `predicted_incoming_damage_pct` on every bench candidate. The core prices the entry hit on the declared move (`entry_hit_pct`: `entry_incoming_damage`, `dies_on_entry`, `safe`, the free hit in `candidate_race`) and decides "you die whatever you click" on it (`certain_lethal_threat?`: the declared hit on its minimum roll, discounted by its hit chance). The worst case stays what the race after entry runs on. A forced replacement never reads it: between turns the registered choices are the ones that have just executed | **off** |
+
+**All three false reproduces 0.6.5 battle for battle**: `realidea_tier_gen5ru_a_0_6_6_control3.ndjson`
+against `realidea_tier_gen5ru_a_0_6_5` and the traced subset, 120/120 outcomes and all
+204 traced decisions identical (`tools/control_check.py`, new). The stock arm is
+bit-identical across every run below (65.0% on gen5ru_a, forty-two times over). The probe
+at the shipped defaults is **251/267 with 0.6.5's own sixteen failures**.
+
+**What Levitate cost, and what fixing it cost.** Steelix clicked Earthquake into a
+Levitate Rotom on consecutive turns at +500 (`team3_vs_team4 104729` t4–5; stock scored
+the same move 0). With the fix alone the shadow arm changes 42 of 933 gen5ru_a decisions
+and the live arm goes **46 → 44 of 60, gained 2, lost 4** — and all four losses are the
+same body: Steelix, walling a Levitate Uxie at 18% a hit with Toxic, Stealth Rock and
+Roar in hand, now leaving at turn 0 on `no_effective_move` +260 and
+`weak_current_attacks` +120, because its one attack had finally been priced at the
+nothing it always was (`team3_vs_team4 196613` t0: switch → Uxie 664 over Toxic 151).
+Stock stayed and laid rocks. That is the second key: a wall that cannot be hurt in a
+hurry and has work to do stays.
+
+The first draft of that rule counted any non-damaging move as work, and the probe said
+no: it dropped to 250/267, failing the 0.6.3 card
+`no_effective_move_needs_a_body_that_breaks_the_wall` — Alakazam with Calm Mind, Recover
+and Substitute in front of a Toxic Umbreon, which must leave for Machamp. Boosting an
+attack that does nothing, healing and hiding are not a job; Toxic, rocks and Roar are.
+The rule that shipped keys on the move's tags (`WALL_WORK_TAGS`), holds the card, and
+keeps Steelix in.
+
+**The shipped pair, paired against 0.6.5 over three rosters (180 battles):**
+
+| roster | 0.6.5 | 0.6.6 | gained | lost |
+|---|---|---|---|---|
+| gen5ru_a | 46/60 | 45/60 | 2 | 3 |
+| gen5uu_a | 44/60 | 45/60 | 1 | 0 |
+| gen6uu_a | 43/60 | 44/60 | 2 | 1 |
+| pooled | 133/180 (73.9%) | 134/180 (74.4%) | 5 | 4 |
+
+Net +1, McNemar p = 1.0: an estimate fix that changes 30 of 933 shadow decisions (13
+switch → move, 7 move → switch) and no outcome you can measure. That is the right shape
+for a bug fix — the wins it should buy are in battles a Levitate body decides, and
+gen5ru_a has two of them on one team.
+
+**The oracle: what a perfect one-turn read is worth to *these* rules.** The user's
+question was whether an input-read cheat would teach anything, and the honest answer at
+0.6.5 was no — the core had no consumer for "the foe will click X"; every rule read the
+collapsed worst case. So the consumer was built first (the three `predicted_*` fields
+above and the two places the core reads them), with the oracle as its first producer.
+The same consumer takes a predictor's output unchanged, which is the point: a model that
+guesses the move will be judged against this number.
+
+On identical boards (`shadow_ship` → `shadow_oracle2`, gen5ru_a, 933 turns) the oracle
+changes **79 decisions (8.5%)**, 63 of them move → switch — a bench body that the
+worst-case estimate called dead on entry is alive under the declared move. The
+declared move was **below the worst case on 328 turns (35.2%)**, by 50.8 points on
+average, and was a status move, a switch or an immune hit on 147 (15.8%); of 480
+worst-case lethal alarms, 45 (9%) were not backed by the declared move. Live, paired
+against 0.6.5:
+
+| roster | 0.6.5 | oracle | gained | lost |
+|---|---|---|---|---|
+| gen5ru_a | 46/60 | 50/60 | 6 | 2 |
+| gen5uu_a | 44/60 | 51/60 | 9 | 2 |
+| gen6uu_a | 43/60 | 42/60 | 8 | 9 |
+| pooled | 133/180 (73.9%) | 143/180 (79.4%) | 23 | 13 |
+
+**+10 net, +5.6 points, p = 0.13**, and against the shipped 0.6.6 itself +9 (22/13,
+p = 0.18). Read it as a ceiling with two caveats. First, it is uneven: both gen 5
+rosters gain 4 and 7, gen6uu_a nets nothing on 17 flips — its battles run 39 turns and
+the same oracle measured 47/60 on that roster one build earlier (before the wall rule,
+`_live_oracle`), so five wins there are inside the noise. Second, it is the ceiling of
+**this consumer**, not of perfect information: on 162 of the 933 turns the actor was
+slower and certain to die under the declared move, and on 131 of them the oracle still
+clicked an attack (`ko_never_lands` strips the +500 and leaves `engine_base` and
+`expected_damage` standing — root cause 3 of the readout), and a declared Sucker Punch
+is priced as a full hit on a switch-in the engine would fail it against. Both are
+consumers the perfect read is not yet allowed to reach.
+
+What that settles for the next step: a real predictor is worth building only as a
+producer for this consumer, and its value is bounded by roughly +5 points times its
+accuracy against the oracle. The 0.6.5 traces put the damage-argmax at 54.9% and a
+lock → repeat → argmax ladder at 57.6%; a distribution (damage-weighted, a status lump,
+the exact-information layer from Choice lock / Encore / Outrage / two-turn moves) feeds
+the same fields as an expectation and a death probability, and its number is judged
+here.
+
+**Tools.** `tools/control_check.py` (a run reproduces its predecessor: outcomes per
+battle, decisions per traced turn), `tools/shadow_pair_diff.py` (two shadow runs of the
+same battles, turn by turn, with the boards checked identical first),
+`tools/compare_versions.py` now reads the Realidea schema (`mode`/`teams`), and
+`render_realidea_battle.py` prints the declared move and the per-candidate declared hit
+when a run read one.
+
+**Artifacts** (all gen5ru_a unless named): `_control` (Levitate off, oracle off, before
+the wall rule existed), `_control2`, `_control3` (all three keys off; the last is the
+shipped build), `_live_default` × 3 rosters (Levitate on, no wall rule — the run that
+found the Steelix regression), `_live_oracle` × 3 (same build, oracle on),
+`_ship` × 3 and `_oracle` × 3 (the shipped build), `_shadow_base` / `_shadow_air` /
+`_shadow_ship` / `_shadow_oracle` / `_shadow_oracle2` (traced; the last two are the
+oracle before and after the wall rule), and `ai_probe_results_portable_0_6_6.ndjson`
+(0.6.5's kept as `_0_6_5`). Per-run summaries and the engine error files are under
+`generated/readouts/`; every error is the known `pbRoughDamage` ZeroDivision or a
+Struggle turn.
+
+**Reborn is not the control for this version and has not been re-run.** `airborne_immunity`
+and `foe_oracle` are Realidea-adapter-side and cannot reach it, but `no_hit_needs_threat`
+is a core rule that Reborn's own exports (`no_effective_move`, `incoming_damage_pct`)
+do reach. The installed Reborn bundle is still 0.6.5; rebuilding it is a measurement,
+not a formality.
+
+### 0.6.7 — a hit that never lands is not worth its score, 2026-09-07
+
+Read off the user's question on the 0.6.6 oracle trace: `gen5ru_a team3_vs_team4 104729`
+t10, a Sceptile at 100%, slower by one point, facing a **declared** Acrobatics of 198%,
+clicked its own Acrobatics at 410 over a switch to Uxie at 234. The core knew it was dead:
+`ko_never_lands` fired and stripped the +500 kill call. It stripped nothing else —
+`engine_base` +260, `expected_damage` +80 and `super_effective` +70 stayed on a hit the
+actor does not live to throw — while on the switch side the same fact was worth exactly
+`escape_lethal_threat` +130. That was the "131 of 162" consumer gap the 0.6.6 write-up
+closed on, and it is the whole of this version.
+
+| key | rule | default |
+|---|---|---|
+| `dead_before_moving` | core, in `score_move` after every other term. When the actor is slower (`faster == false`; unknown is not slower), the move has no priority, and `certain_lethal_threat?` holds — the declared hit on its minimum roll discounted by its hit chance under the oracle, the strict worst-case figure otherwise — the move's whole score is scaled to a quarter (`DEAD_BEFORE_MOVING_SCALE`, reason `dead_before_moving` with the amount removed). Every non-priority move is scaled alike, so the **order among the moves is what it was**: the rule never changes which move is clicked, only whether a switch that has its own reason to exist wins over it. A priority move keeps its whole score, because it lands. Under `priority_gate`, like `ko_never_lands` | **on** |
+
+Not zero, for two reasons. The death is certain only on an estimate, and a quarter keeps
+the moves ranked among themselves on the turns where no switch is allowed — a trapped
+actor, or one below the 50% pivot line where `escape_lethal_threat_while_healthy` does
+not open the gate — so those turns play exactly as before. What the rule does NOT do is
+judge the sack: Uxie switching in on that turn eats the declared 44% and then loses the
+race two hits to two on speed, while a Uxie that comes in free after Sceptile dies wins it
+two to three. The `switchin_race` +10 on that candidate is the durability band (three of
+the foe's hits), not a race verdict; the consumer that asks who lands the last hit after
+entry (`kill_order`) has been off since 0.6.4 measured it, and `losing_race_bench_wins`
+read the same race and correctly did not fire. Whether to preserve a 100% body or spend
+it for a free entry is the open question the rule leaves where it found it.
+
+**Key off reproduces 0.6.6 battle for battle**: `realidea_tier_gen5ru_a_0_6_7_control.ndjson`
+against `_0_6_6_ship`, 60/60 portable outcomes and all 894 traced decisions identical
+(`tools/control_check.py`). The stock arm is identical to 0.6.5 on all three rosters
+(paired 0/0). Probe **251/267, the same sixteen failures**. The four new core cards cover
+the Sceptile turn, the preserved move order, a Quick Attack that now outranks the attack
+that never happens, and the trapped / low-HP actor keeping its click; the first draft of
+the rule failed `priority_gate_off_restores_slot_order_among_knockouts` and is the reason
+it sits under `priority_gate`.
+
+**Shipped (oracle off), 180 paired battles, 0.6.6 → 0.6.7:**
+
+| roster | 0.6.6 | 0.6.7 | gained | lost |
+|---|---|---|---|---|
+| gen5ru_a | 45 | 48 | 5 | 2 |
+| gen5uu_a | 45 | 47 | 3 | 1 |
+| gen6uu_a | 44 | 45 | 3 | 2 |
+| **pooled** | **134 (74.4%)** | **140 (77.8%)** | **11** | **5** — McNemar p = 0.21 |
+
+Against 0.6.5 the shipped build is now +7 net (gained 15, lost 8, p = 0.21). The gains are
+the pattern the rule was built for: `team1_vs_team3` on gen5ru_a is won on three seeds
+where a Qwilfish or Rhydon in front of a Magneton's Volt Switch, or a Kabutops' Waterfall,
+now leaves for the Rotom or Sceptile that answers it instead of clicking an attack it
+never throws. One of the five losses is the Sceptile battle itself, on this arm without
+the oracle: at t14 Aerodactyl at 90% is "certain dead" on the worst-case figure (Rotom's
+Shadow Ball 125%, faster), leaves for Steelix, Steelix leaves for Uxie, and the foe had
+not attacked at all — 0.6.6 stayed, hit, and won in 28 turns. That is a wrong *certainty*,
+not a wrong rule, and the oracle arm wins the same battle in 19 turns.
+
+**Oracle (foe_oracle on), 180 paired battles, 0.6.6 → 0.6.7:**
+
+| roster | 0.6.6 | 0.6.7 | gained | lost |
+|---|---|---|---|---|
+| gen5ru_a | 50 | 51 | 4 | 3 |
+| gen5uu_a | 51 | 52 | 2 | 1 |
+| gen6uu_a | 42 | 47 | 6 | 1 |
+| **pooled** | **143 (79.4%)** | **150 (83.3%)** | **12** | **5** — p = 0.15 |
+
+Oracle over ship at 0.6.7: 140 → 150, gained 21, lost 11, p = 0.11 — the ceiling a perfect
+read is worth is still about +10, now on top of a higher floor. **Oracle over 0.6.5:
+133 → 150, gained 29, lost 12, p = 0.012**, the first pooled comparison in this study to
+clear 0.05. The gen6uu_a oracle arm, which had been the odd one out at 0.6.6 (42 of 60,
+one build after 47), is back to 47.
+
+**What the rule reaches** (`tools/dead_slower_turns.py`, new: the core's own predicate over
+a traced run). Slower-and-certain-dead turns on the three oracle rosters went 344 → 371 (the
+rule keeps bodies alive into more such turns), attacked 252 → 210, switched 92 → 161; on
+gen5ru_a 58 of the 60 turns with a switch the gate allowed now switch. The 210 that still
+attack are turns with no open switch — trapped, or under the 50% pivot line — which is
+the gate's decision, not this rule's. The shadow pair (`_0_6_6_shadow_oracle2` →
+`_0_6_7_shadow_oracle`, 933 identical boards) changes 49 decisions: 36 move → switch and
+13 move → move, every one of the thirteen a priority move that now outranks the attack —
+Aqua Jet on Kabutops and Feraligatr, and **Endure on Escavalier**, seven times, twice on
+consecutive turns where the second one fails. Endure at 112 there is the stock engine's
+base score for a move that only delays the same death by a turn; it belongs with the
+Protect item in *outstanding* rather than here. The shipped shadow pair changes 50
+(34 → switch, 16 move → move, same shapes).
+
+**Reborn has not been re-run for this version either.** `dead_before_moving` is a core
+rule and reaches Reborn's exports (`faster`, `incoming_damage_pct`, `priority`); the
+installed Reborn bundle is still 0.6.5, so there are now two core rules whose Reborn
+number is unmeasured.
+
+**Artifacts** (`generated/`): `realidea_tier_gen5ru_a_0_6_7_control.ndjson`, `_ship` × 3
+rosters, `_oracle` × 3, `_shadow_ship` and `_shadow_oracle` (gen5ru_a, traced),
+`ai_probe_results_portable_0_6_7.ndjson` (0.6.6's kept as `_0_6_6`), summaries and error
+files under `generated/readouts/` (every error the known `pbRoughDamage` ZeroDivision).
+Backup of the pre-install bundle: `backups/realidea_Scripts.rxdata.pre-0.6.7`.
+
+### 0.7.0 — a second planner behind the same seam, 2026-09-07
+
+Every version to here tuned one scorer. `score_move` and `score_switch` sum 107 reason
+terms over the actions available *this turn*, and the twenty-six config keys switch those
+terms on and off. The matrix (0.6.5) and the oracle (0.6.6) widened what a term may read,
+but the shape never changed: score each action, click the best one.
+
+0.7.0 adds a **second planner** that answers a different question — what is the board
+worth after the turn — and puts it behind the seam the adapter already went through.
+Nothing about the rule engine changes. `search_planner` picks which planner runs, it is
+**off**, and with it off this build reproduces 0.6.7 battle for battle.
+
+**Where the idea comes from.** Foul Play (https://github.com/pmariglia/foul-play, GPL-3.0)
+over poke-engine (https://github.com/pmariglia/poke-engine). Three ideas are borrowed and
+**no code is** — nothing here is derived from either repository, so the GPL does not
+attach:
+
+| borrowed | as implemented here |
+|---|---|
+| `safest` — maximin over the joint grid | an action is worth the **worst** the foe can do to it, not its average or its best. Ties in the minimum break on the mean, then on a stable key |
+| a state-value leaf | the board after the turn is scored, not the move that produced it: `±2.0` a faint, `±1.0` the `cell_verdict` on the pair left standing, `±0.2` the HP differential. The faint band sits outside the verdict band on purpose, so a kill outranks every standing position |
+| simultaneous moves (DUCT) | the foe is a **set** of options resolved at the same time — keep attacking, or bring in any live bench body — never one predicted move |
+
+Deliberately **not** borrowed this version: damage-roll grouping by faint threshold (a
+cell carries one expected roll), reversible instructions (unnecessary — the snapshot is a
+plain Hash and `Model.copy_hash` is the whole undo), and Smogon-corpus set prediction,
+which is the predictor backlog item and feeds the same snapshot fields either way.
+
+**Structure.** The matrix readers moved out of `core.rb` into `portable_ai/matrix.rb`
+verbatim — `matrix_cell`, `cell_verdict`, `matrix_answers`, `hits_needed` and the rest,
+still under `PortableAI.`, so every caller and every existing test is unchanged. The two
+planners now share exactly one thing, the board readers, and none of the scoring. Load
+order is `model → effects → matrix → core → search`, and both new files are in the
+bundler's engine-free check. The adapter's two `PortableAI.plan` call sites became one
+`run_planner`, which is the only code that knows there are two planners.
+
+**What the search planner declines.** It returns `nil` — and the adapter falls through to
+the rule engine — on doubles, on any snapshot without a matrix, and on any board it cannot
+resolve. That last one covers the forced-replacement path with no special case: the actor
+there is fainted, a fainted body holds no matrix seat, so there is no board.
+
+**Reborn is inert by construction, not by config.** Its adapter still calls
+`PortableAI.plan` directly — it was not edited, and `run_planner` exists only in the
+Realidea adapter — so `search.rb` ships in its bundle and is unreachable from it. Even if
+it were reached, Reborn exports no matrix and the planner would decline. That is what
+keeps the Reborn gauntlet a clean control for this version.
+
+**One honest limit, documented in the code.** A cell is one number — the best that body
+has against that one — so against a *switching* foe every move we could click is credited
+the same damage. That is what the snapshot carries, not an approximation to tighten:
+per-move damage exists only against the body on the field. The consequence is that the
+foe-switch column cannot order our moves against each other, only moves against switches,
+and it is why the tiebreak on the mean exists. Without it the collapse would fall through
+to the action key and the planner would click move slot 0 in every position where a foe
+switch is the worst case.
+
+**Key off reproduces 0.6.7 battle for battle**: `realidea_tier_gen5ru_a_0_7_0_control.ndjson`
+against `_0_6_7_ship`, 120/120 battles identical in result, turns and decision
+(`tools/control_check.py`), stamp `0.7.0`. The shadow arm gives the decision-level half:
+`_0_7_0_shadow_control` against `_0_6_7_shadow_ship`, 60 paired battles, **933 of 933
+turns the same answer** (`tools/shadow_pair_diff.py`) — the same 933 boards 0.6.7 was
+measured on. All 332 Ruby tests pass (163 core, 116 Realidea adapter, 53 Reborn adapter)
+and 28 Python tooling tests.
+
+**Measured, and it loses badly.** gen5ru_a, 60 paired battles, `search_planner=true`
+against the same build with it off:
+
+| arm | wins / 60 | |
+|---|---|---|
+| rule engine (0.7.0 control) | **48 (80.0%)** | |
+| search planner | **31 (51.7%)** | −17, gained 4 lost 21, McNemar p = 0.001 |
+| stock v16 engine AI | 39 (65.0%) | identical in both runs — the control that says the rosters did not move |
+
+It is beaten by the rule engine decisively and **it is also beaten by the stock engine AI
+it was meant to improve on**. On the shadow arm it answers differently on 408 of 933 turns
+(43.7%), and the shape of the disagreement is one-directional: 216 move → switch against
+39 switch → switch. It flees.
+
+**Two bugs were found and fixed by measuring it, and both are worth writing down.**
+
+1. **A foe switch-in inherited the outgoing body's HP.** `project` moved `foe_slot` and
+   left `foe_hp`, so with the active foe chipped every one of its switches read as a free
+   kill — five of six foe options scoring +2, and maximin choosing between fictions.
+   Fixing it moved individual battles and **not the total** (25 → 25): the errors were
+   symmetric across the arms.
+2. **The matrix cells were used as a per-turn damage number, which is exactly what they
+   are not.** A cell deliberately carries no Choice lock, no Intimidate, no hazards and no
+   priority — it answers "does this body beat that body". Read as "what happens this turn"
+   it said a Choice-Scarf Galvantula locked into a 24% move would hit Sceptile for a 174%
+   Bug Buzz, so a healthy Sceptile scored every move as a certain death and switched out.
+   The board now carries the actor view's own `incoming_damage_pct` and `faster` for the
+   pair **on the field** — the Choice-aware numbers every rule in `core.rb` already reads
+   — and falls back to cells only for hypothetical pairs. That fix is worth **+6** (25 →
+   31). Its lesson generalises past this planner: **the wide, thin view and the narrow,
+   thick one are not interchangeable, and the section header in `matrix.rb` says so.**
+
+**What is left is the design, not the bugs.** The remaining gap is structural and visible
+in the payoff rows (`search_row`, exported on every candidate): on 38% of turns every move
+ties on the worst case, because 41% of worst cases come from a foe switch and against a
+switch every move is credited the same cell damage. One ply also means a switch is judged
+on the turn after entry and no further, which is the half of the matchup argument the rule
+engine's `sole_answer` and `candidate_race` cover and this does not. A second ply and a
+per-move estimate against off-field bodies are the two things that would change the shape;
+neither is cheap, and neither is worth doing before someone wants the number.
+
+**Artifacts** (`generated/`): `realidea_tier_gen5ru_a_0_7_0_control.ndjson`, `_search`,
+`_shadow_control`, `_shadow_search`. Backup of the pre-install bundle:
+`backups/realidea_Scripts.rxdata.pre-0.7.0`.
+
+### 0.7.1 — the search planner audited against its source, 2026-09-07
+
+The 0.7.0 planner was read side by side with the code it was modelled on
+(`pmariglia/poke-engine` `src/search.rs` and `src/genx/evaluate.rs`, `pmariglia/foul-play`
+`fp/search/main.py`, cloned at their 2026-09 heads). Two corrections to the provenance
+first: the ancestor is poke-engine's **legacy** `expectiminimax_search` + `pick_safest`
+path, which Foul Play no longer calls — the bot runs the engine's MCTS (decoupled UCT with
+a sigmoid over `evaluate`) — and "DUCT" in the 0.7.0 header named that MCTS, not the
+maximin grid. What matches the original: maximin, the 50/50 speed-tie branch, switches
+before moves, a switching side dealing nothing, priority over speed.
+
+**Four deviations explained the fleeing, and all four are fixed.** Key unchanged
+(`search_planner`, still **off**); false still reproduces 0.6.7 — verified below.
+
+1. **The leaf had the original's weighting inside out.** poke-engine's `evaluate` is a
+   *party-wide* sum — every live body is worth 100 × its HP fraction plus 30 for being
+   alive, boosts 15–30 a stage, Substitute 75, hazards and status subtract — and it has
+   **no matchup term at all**. HP is the currency. 0.7.0 made the pair verdict worth 1.0
+   and HP a 0.002-per-point tiebreak with a flat 2.0 faint, so any W-verdict bench body
+   beat attacking whatever hit it ate on entry, and losing a 5% body cost the same as
+   losing a full one. The leaf is now the original's shape: one point per HP percent on
+   every live body of both parties, `BODY_ALIVE` 30 per body, the verdict kept as a
+   ±25 tilt (under one alive bonus, so it can never buy a switch that eats a real hit),
+   and `BATTLE_OVER` ±1000 when a side has nothing left (the original's `100 × depth`).
+2. **Accuracy was a damage multiplier; the original branches hit and miss.** Because
+   the leaf is a step at 0 HP, a 70% move that kills outright read as a certain 70% hit
+   that left the foe standing, and a 90% move that kills by three points read as no
+   kill at all. `payoff` now averages the hit leaf and the miss leaf at the move's
+   accuracy, the same way it already averaged the two speed orders. The test that
+   codified "half accuracy lands half its damage" is replaced by one that pins both
+   directions of the error.
+3. **A trapped foe still had a switch column.** The original's option generator respects
+   trapping; the adapter computed `has_legal_switch?` but exported `trapped` on the actor
+   only. `battler_view` now exports it on targets (the rule engine never reads it there,
+   which is what keeps the control clean) and `foe_options` returns only `stay` when it
+   is true. Since 41% of worst cases came from a foe switch, a trapper's whole advantage
+   was invisible.
+4. **Own switch candidates read the wide, thin cell for the hit they eat** although the
+   action already carried the Intimidate-aware, every-foe-move `incoming_damage_pct` from
+   the fake-battler roll. Same class as 0.7.0's bug 2, unfixed for candidates. `foe_damage`
+   now reads the candidate's own number and falls back to the cell only for a pair nothing
+   else priced.
+
+**Control.** `realidea_tier_gen5ru_a_0_7_1_control.ndjson` against `_0_7_0_control`: 120/120
+identical (result, turns, decision; `tools/control_check.py`). 167 core tests (two new, five
+rewritten), 116 Realidea, 53 Reborn, 28 tooling; bundle rebuild byte-identical.
+
+**Measured.** gen5ru_a, 60 paired battles, `search_planner=true`:
+
+| arm | wins / 60 | |
+|---|---|---|
+| rule engine (0.7.1 control) | **48 (80.0%)** | identical to 0.7.0 |
+| search planner 0.7.1 | **36 (60.0%)** | vs 0.7.0 search: +5 (gained 15, lost 10, p = 0.42); vs rules: −12 (gained 7, lost 19, p = 0.031) |
+| search planner 0.7.0 | 31 (51.7%) | |
+| stock v16 | 39 (65.0%) | identical in every run |
+
+**The fleeing is gone.** Shadow arm, same 933 boards: 0.7.1 differs from 0.7.0 on 259
+turns and **205 of them are switch → move**, 6 the other way. Against the rule engine it now
+differs on 322 turns split 67 move → switch against 53 switch → move — balanced — and the
+largest class is **167 move → move**: same decision to stay, a different click. The
+losses cluster in team3/team4 (−5, −4); the search arm's battles run 15.5 turns to the
+rules' 13.9.
+
+**What the 167 say is what is left, and it is still design.** Read off the examples: two
+moves that both kill tie at `BATTLE_OVER` and fall to the key (no margin, no side effect,
+no self-cost — Superpower ties X-Scissor); against a foe switch every move is still one
+cell number; a non-damaging move (setup, heal, Protect, status) still projects as a wasted
+turn, the one 0.7.0 limit the audit found undocumented. The original models all of those
+through its instruction generator and `evaluate` (boosts 30 a stage, Substitute 75). Those
+are the next three, in that order, and the first is cheap: `matrix_transform_cell` and the
+exported `effect_kind`/`effect_stat`/`drain_fraction` already carry what a boost or heal
+projection needs. The planner still ships off.
+
+**Artifacts** (`generated/`): `realidea_tier_gen5ru_a_0_7_1_control.ndjson`, `_search`,
+`_shadow_search`. Backup of the pre-install bundle: `backups/realidea_Scripts.rxdata.pre-0.7.1`.
+
+### 0.7.2 — what a turn changes besides HP, 2026-09-07
+
+The audit's one undocumented 0.7.0 limit: a non-damaging move projected as a wasted turn,
+so the search planner could never click a setup, heal, Protect, Substitute, status or
+hazard move on purpose, and it priced Superpower's kill exactly like X-Scissor's. The
+original's instruction generator models every one of those and its `evaluate` prices them
+(boosts 30 a stage of offence or speed and 15 of defence through a diminishing multiplier,
+Substitute 75, Toxic 30, burn 25, paralysis 25, sleep 25, freeze 40, Stealth Rock 10 a
+body, Spikes 7 a layer a body, Sticky Web 25). 0.7.2 projects them at those numbers. Key
+unchanged, still **off**; false reproduces 0.7.1 (120/120, `tools/control_check.py`).
+
+**The turn is now two acts in speed order** (`project` → `act_own`, `act_foe`), after both
+switches resolve. Our act deals the damage and then applies what the move does besides:
+recoil and drain off the damage dealt, a self-KO, setup stages (Belly Drum fails at or
+below half and pays half above it), a self-drop's stages (`Effects::SELF_DROP_STAGES`, the
+same shape as `SETUP_STAGES`, a row for every `self_drop` id and a test that says so), a
+certain self-raise, a heal (`Effects.heal_amount`, hoisted out of the core), Protect
+(which **fails on a repeat** — the planner now leaves the same memory record the rule
+planner does, `Effects.memory_updates`, also hoisted, because the projection reads the
+counter back), Substitute (a quarter of HP, and it absorbs the foe's hit whole and breaks
+unless the hit was under its own HP), a hazard (per live foe body, only below the layer
+cap), and a status or stat drop on the foe **at the chance the adapter exported** — 100 for
+a status move the engine says can land, 0 for one it says cannot, the secondary rate for a
+damaging move, so Scald's burn is worth 25 × 0.3 and Toxic into a Steel type nothing. A
+miss applies none of it. The foe's act is its hit, taken whole by Protect or a standing
+Substitute.
+
+**The board carries the terms the leaf reads**: the actor's own stages (decoded from the
+engine's PBStats array), which empty on a switch and transform the pair's cell through
+`matrix_transform_cell` so a Dragon Dance flips the verdict as well as paying its 60; the
+foe's boost as its exported positive-stage count at 25 each, zeroed when it switches; and
+the deltas this turn makes — status landed, hazard laid, Substitute standing, Rest's sleep.
+A body's existing status is deliberately not re-counted: every row carries it alike.
+
+**Measured.** gen5ru_a, 60 paired, `search_planner=true`:
+
+| arm | wins / 60 | |
+|---|---|---|
+| rule engine (0.7.2 control) | **48** | identical to 0.7.0 and 0.7.1 |
+| search 0.7.2 | **39 (65.0%)** | vs 0.7.1 search +3 (gained 6, lost 3, p = 0.51); vs rules −9 (gained 6, lost 15, p = 0.081) |
+| search 0.7.1 | 36 | |
+| stock v16 | 39 | |
+
+31 → 36 → 39 across the two fixes. It now equals the stock AI it was meant to improve on
+and is nine behind the rule engine, no longer significantly. Shadow arm: 189 of 933 turns
+differ from 0.7.1, **162 of them move → move** (20 switch → move, 7 the reverse — the
+switching is settled); against the rules 378 differ, 227 move → move, 61/60 on switches.
+
+**What the 227 are.** 107 both damaging, and there the rules' pick deals more damage on 63
+to the search's 31 — the foe-switch collapse: 190 of the 227 had a foe switch column, and
+on 91 the rules' pick ties the search's exactly on the worst case, so the click fell to the
+mean or the key. A guaranteed kill on an 11% Golurk is never the worst case because the
+foe can dodge it for free by switching, and a 20% Defence-drop secondary that lands on the
+switch-in outranks it (Feraligatr 130363 t2: Crunch over Aqua Jet). 72 are the rules
+attacking where the search sets up or lays a status — the new terms being used, net
+positive on the total — and 32 both status. **The remaining gap is one ply**: the original
+runs this same grid to depth 3 and more under iterative deepening, and at depth 1 its own
+`pick_safest` has the identical collapse. Nothing cheaper than a second ply changes it; a
+tempo cost on the foe's switch would be inventing a term the original does not have.
+
+**Artifacts** (`generated/`): `realidea_tier_gen5ru_a_0_7_2_control.ndjson`, `_search`,
+`_shadow_search`. Backup: `backups/realidea_Scripts.rxdata.pre-0.7.2`. Tests: 175 core (8
+new), 116 Realidea, 53 Reborn, 28 tooling.
+
+### 0.7.3 — the second ply, 2026-09-07
+
+`search_depth` (default 2). A cell's value at depth two is no longer the leaf of the
+projected board but the **safest reply grid from it** — the original's expectiminimax,
+which scores a sub-game by `pick_safest`, with its row pruning (a row whose running
+minimum has fallen to the best row's cannot win, so the rest of it is never projected).
+Below the root the options follow the bodies on the field: while the same two stand
+there the root's exported moves and switches are the truth and are reused; any other
+pair has only the matrix, one attack worth the cell and the bench off the side table.
+After a faint the ply is a replacement — the side that lost a body picks from its bench
+and the other side does nothing, the original's `force_switch` shape — and a finished
+battle is worth `BATTLE_OVER` plus 100 a ply left, the original's `100 × depth`. A
+projected Attack or Special Attack stage scales the next ply's damage by the category of
+the body's best hit into that foe (`out_cat`), a defence stage divides what comes in, a
+speed stage decides who moves first, Protect fails on the ply after a Protect, and one
+status per body. Cost: 14 ms a decision at depth 2 against 1 ms at depth 1 in modern
+Ruby; the tier run took 101 s against the usual 60.
+
+**The bug the second ply exposed, and the number it produced first: 15/60.** The board
+carried one HP per side — the body on the field. At depth one a damaged body never left
+the field before the leaf, so it never mattered. At depth two a body that took a hit and
+switched out came back at its side-table HP, and since the foe's worst case is usually a
+switch, **every hit we landed was erased** and only stages, hazards and status survived a
+ply. The planner clicked Rock Polish and Stealth Rock everywhere (shadow: 575 of 933
+decisions changed, 167 move → switch) and won 15 of 60. It is the mirror image of 0.7.0's
+first bug, where a foe switch-in inherited the outgoing body's HP. The board now carries a
+per-slot HP map for both sides (`own_hps` / `foe_hps`), every projection writes the on-field
+body back into it, a switch-in reads it before the table, and the leaf sums it. Test:
+`test_search_remembers_the_hp_of_a_body_that_left_the_field`.
+
+**Measured, with the map.** gen5ru_a, 60 paired, `search_planner=true`:
+
+| arm | wins / 60 | |
+|---|---|---|
+| rule engine (0.7.3 control) | **48** | 120/120 identical to 0.7.2 |
+| search depth 2 (0.7.3) | **40 (66.7%)** | vs depth 1: +1 (gained 10, lost 9, p = 1.0); vs rules: −8 (gained 7, lost 15, p = 0.14) |
+| search depth 1 (0.7.2) | 39 | |
+| stock v16 | 39 | |
+
+**Depth does not pay on this picture.** The second ply changes 260 of 933 shadow decisions
+(148 move → move, 65 switch → move, 31 the reverse) and the total does not move. That is
+the answer to the question 0.7.2 left open, and it is the one this file predicted a version
+early: looking further through the same thin picture finds the same picture's plan. The
+collapse that decides most of the 259 move → move disagreements with the rules is not a
+depth problem — against a foe switch every move is still credited the one cell number, at
+every ply — so the next thing worth building is the per-move estimate against the foe's
+bench bodies (the audit's third item), an adapter export off the fake bodies the matrix
+pass already builds. Until then depth 2 stays the default because it is not worse and it
+is the shape the original runs; `search_depth=1` is the ablation.
+
+**Artifacts** (`generated/`): `realidea_tier_gen5ru_a_0_7_3_control.ndjson`, `_search`,
+`_shadow_search` (both with the map; the 15/60 run was not kept). Backup:
+`backups/realidea_Scripts.rxdata.pre-0.7.3`. Tests: 181 core (6 new), 116 Realidea, 53
+Reborn, 28 tooling.
+
+### 0.7.4 — each move against the bench, and two terms that were wrong, 2026-09-07
+
+**The export.** `matrix_cell` (adapter) already rolled every damaging move the row body has
+to find its best; it now keeps them all on the cell as `out_moves` (`{MOVE → {pct, cat}}`,
+`MATRIX_VERSION` 2), a 0 for a move that does nothing to that body. No new engine calls,
+no new fakes, and the cache reuses the list with the cell. The search's `own_damage` reads
+the clicked move's own number against a foe switch-in (`cell_move`), falling back to the
+one best number for a cell without the list, and takes the move's own category for the
+stage multiplier. Test: `test_search_prices_the_clicked_move_against_a_foe_switch_in`,
+`test_search_prefers_the_move_their_bench_cannot_wall` (two 40s on the field, one of them
+walled by the bench: the list decides, slot order no longer does).
+
+**Two things found on the way, both real.**
+
+*The root's stages were counted twice.* Every number the root exports — `expected_damage_pct`,
+the live pair's cell, the side table's Speed — is rolled through the actor's real stages
+(`pbRoughStat` applies `stagemul`/`stagediv` unconditionally, 085:2930). `offence_multiplier`,
+`defence_divisor` and the speed transform then scaled them by `own_stages` again, so a +2
+body read as +4 from 0.7.1 on. The board now carries `stage_base` (the root's real stages,
+cleared with a switch) and `projected_stages` (stages less base) is what scales a number;
+the leaf's boost term still reads the whole stack, because a switch really does lose it.
+Test: `test_search_does_not_scale_the_root_numbers_by_stages_they_already_carry`.
+
+*The leaf's verdict term.* Through 0.7.3 the leaf added ±25 for the pair left standing
+(matrix.rb's W / L) — a term the original does not have, kept "small on purpose" after
+0.7.0 had it at the top of the scale. Removed. The pair's matchup is already in the sum,
+as the HP each side stands to lose at the next ply, which is where the original keeps it.
+
+**Measured, in steps.** gen5ru_a, 60 paired, `search_planner=true`, depth 2, rules 48 and
+stock 39 throughout; the key-off control reproduces 0.7.3 on all 120 battles.
+
+| build | wins / 60 | |
+|---|---|---|
+| 0.7.3 | 40 | |
+| + stage fix only (per-move off, verdict on) | 41 | vs 0.7.3: gained 1, lost 0 |
+| + per-move (verdict on) | **35** | vs stage-only: −6 (gained 7, lost 13, p = 0.26); 4 errors, 1 draw |
+| + per-move, verdict off = **0.7.4** | **40** | vs 35: +5 (gained 14, lost 9, p = 0.40); vs 0.7.3: gained 11, lost 11, p = 0.83; vs rules: −8 (gained 6, lost 14, p = 0.12) |
+
+The two ablation arms were scratch patches of the built file (`priced = nil`;
+`VERDICT_VALUE` zeroed), each reinstalled over by the real build and byte-checked; their
+runs are kept as `_0_7_4_ablate_permove_search` and `_0_7_4_ablate_verdict_search`, and the
+shipped 0.7.4 search arm is decision-identical to the verdict-off arm (60 battles, 1024
+decisions, `control_check`).
+
+**What the honest column does under maximin.** With every move priced on its own, an
+attack's worst case is the bench body that walls it, so an attack the bench can wall reads
+as a poor row at every ply — Sceptile's Earthquake into Magneton went from +35 to −63,
+because their Flying-type can come in for nothing. That is the original's own shape and it
+is the reason its author moved to MCTS: pure `pick_safest` is passive against an opponent
+that does not actually make the safest reply, and stock v16 switches on triggers, not on
+walls. With the verdict term still in, the passivity had somewhere to go — the pre-emptive
+switch to the W-verdict body — and that cost five wins (46 move → switch on the shadow arm
+at 35/60). Without it the search attacks again and the total returns to 40. The shadow arm
+against 0.7.3: 223 of 933 decisions differ (159 move → move, 46 move → switch, 15 the
+reverse), and the wins are the same 40 with eleven battles swapped each way.
+
+**Where this leaves the search.** The three audit items are built (leaf, accuracy branch,
+per-move against the bench), the two projection bugs are fixed, depth is a key, and the
+planner is 40/60 against the rules' 48 on every build since 0.7.2. The picture is no longer
+thin; what remains is the opponent model. Maximin assumes the foe makes the reply that is
+worst for us, and the measured foe does not — so the next thing that could move this number
+is not another term but a weighting over the foe's replies (the original's MCTS answers
+exactly this; a cheaper first step is scoring a row by its worst *likely* reply, with the
+foe's switch columns weighted by whether stock v16 would actually take them). Cost is flat:
+12 ms a decision at depth 2 in modern Ruby (`bench.rb`), the tier run 101 s. Ships **off**.
+
+**Artifacts** (`generated/`): `realidea_tier_gen5ru_a_0_7_4_control.ndjson`, `_search`,
+`_shadow_search`, `_ablate_permove_search`, `_ablate_verdict_search`. Backup:
+`backups/realidea_Scripts.rxdata.pre-0.7.4`. Tests: 184 core (3 new, 4 restated without
+the verdict), 117 Realidea (1 new), 53 Reborn, 28 tooling.
+
+### 0.7.5 — the opponent model, 2026-09-08
+
+0.7.4 left the search at 40/60 with the picture no longer thin and maximin named as the
+limit: an attack's worst case is the bench body that walls it, and the measured foe does
+not make that reply. This version puts a number on the opponent model and builds two
+producers of it, one honest and one not.
+
+**The search side: `search_foe_mix`.** A root row is scored `(1 − mix) × min + mix × E`,
+where E is the row's expectation under one weight per foe column (`column_weights`): the
+predicted switch chance on the predicted slot (or shared over every switch column when the
+slot is unknown), the rest on the stay column; uniform when nothing was predicted. 0 is the
+original's `pick_safest` and reproduces 0.7.4. The board carries the prediction as
+`foe_reply`, this turn's only (`project` drops it), and every ply below the root stays
+maximin — see the ablation.
+
+**The adapter side: `foe_stock_model`.** The oracle (0.6.6) reads the foe's registered
+choice — a perfect one-turn read, and cheating. This is the second producer on the same
+path (`foe_intents` → `predicted_incoming` → `predicted_foe`): what stock v16 would do,
+read from its own code without the dice. `stock_switch_chance` is `pbEnemyShouldWithdrawEx?`
+(085:4116) with each `pbAIRandom` roll read as its probability — 30% / 20% after a
+super-effective hit of base power > 70 / > 50, 80% on a Toxic about to kill, 80% on an
+Encore into a move scoring ≤ 20, certain on Perish count 1 or on no usable move after turn
+5, ×0.2 into a Hyper Beam or Truant turn; `stock_switch_slot` is the slot its list puts
+first (party order, an immune body ahead, a resisting one when it is also super-effective
+on us); `stock_move` is the top of `pbGetMoveScore`. Nothing registers, nothing draws, so
+a run with the key on still reproduces its own dice; every foe is rescued on its own
+because `pbGetMoveScore` is the scorer that divides by zero (085:3557). The intent grew
+`switch_chance` / `switch_slot` (a model's) and `slot` (a declared switch's), and the
+search reads them through `predicted_reply`. What the triggers say about the measured foe:
+it switches after a super-effective hit, on Toxic, Encore or Perish, and otherwise never.
+
+**Measured.** gen5ru_a, 60 paired, `search_planner=true`, depth 2; rules 48, stock 39,
+0.7.4 search 40. Every arm's key-off control reproduces 0.7.4 on all 120 battles.
+
+| weights | mix | both plies blended | root only |
+|---|---|---|---|
+| uniform (no producer) | 0.5 | 43 | 29 |
+| uniform | 1.0 | **24** (−16 vs 0.7.4, p = 0.005) | 28 |
+| stock model | 0.5 | 42 | **46** (+6, p = 0.24; vs rules −2, p = 0.82) |
+| stock model | 1.0 | 30 | 44 |
+| oracle (cheating) | 1.0 | 34 | **46** |
+
+The both-ply arms were the first build (the mix reached `safest` with uniform weights below
+the root); the root-only arms were a scratch patch of it, reinstalled over by the real
+build and byte-checked. Root-only is the shipped semantics, and the shipped 0.7.5 search arm
+is decision-identical to the root-only stock arm at 0.5 (`control_check`, 1024 decisions).
+
+**What the table says.** Three things, each clean.
+
+1. *The weights are the model, and a uniform prior is the wrong one.* Uniform says "it
+   switches five turns in six"; at the root that loses 11 on its own (29 against 40) and
+   at mix 1 it is the worst number this planner has produced since 0.7.0 (24, below stock).
+   The stock model's weights, which say "it stays unless one of five things happened", win
+   it back and six more.
+2. *The stock model is as good as the oracle.* 46 and 46, root-only at mix 1 / 0.5. A
+   one-turn read of stock's actual choice buys the search nothing a model of its triggers
+   does not, which is the honest producer earning the cheating one's ceiling.
+3. *The blend belongs at the root.* Below it there is no prediction, and blending the
+   sub-grids with a uniform expectation is item 1 again one ply down: 42 against 46 for
+   the stock model, 34 against 46 for the oracle.
+
+Against 0.7.4 the shadow arm changes 78 of 933 decisions (38 move → move, 22 move →
+switch, 12 the reverse) — the fewest of any version, because the model only moves a row
+whose worst column was a switch the foe would not make. Sceptile's Earthquake into Magneton,
+the 0.7.4 example: −63 and a pre-emptive switch then, −1 and the click now.
+
+**Where this leaves the search, and the question it raises.** 46 against the rules' 48 is
+inside the noise for the first time (p = 0.82), on a planner that was 31 at 0.7.0. But the
+number is bought by a model of stock v16, and the AI's opponent in the game is the player,
+who does switch to the wall. `foe_stock_model` is a benchmark instrument and ships off;
+`search_foe_mix` at 0.5 without a producer is the uniform arm (43 both-ply, 29 root-only)
+and should not be read as a default that helps — it is the default because the mix is
+meaningless at 0 with a producer on. The honest next step against a human is the
+opponent model the original built, MCTS, which mixes over the foe's replies by their
+value to the foe instead of by a table; against stock it would be the predicted move's own
+damage in the stay column, which this version does not read (the stay column is still the
+foe's best hit). Neither is started. Ships **off**.
+
+**Also fixed on the way.** `Search.plan` read the raw overrides, not the merged config,
+so a search default that the harness did not spell out was never in play; the first shipped
+0.7.5 arm reproduced 0.7.4 to the decision. It merges through `Model.config` now, as the
+rule engine always did (`test_search_reads_its_defaults_under_the_overrides`). The
+`depth` default was never affected (it has its own constant); `search_foe_mix` was.
+
+**The two checks, 2026-09-08.** Does 46 hold off this roster, and does the fair model lift
+the rule engine the way the oracle did? Seven runs, no code: the other two rosters' key-off
+controls (each reproduces its 0.6.7 ship run battle-for-battle, so the rules are the same
+rules), the search with the stock model on each, and the rules with the stock model on all
+three.
+
+| roster | rules | search + stock model | rules + stock model | 0.6.7 oracle |
+|---|---|---|---|---|
+| gen5ru_a | 48 | 46 (−2, p = 0.82) | 47 (−1, p = 1.0) | 50 |
+| gen5uu_a | 47 | 47 (0, p = 0.77) | 51 (+4, p = 0.29) | 51 |
+| gen6uu_a | 45 | 44 (−1, p = 1.0) | 50 (+5, p = 0.27) | 49 |
+| pooled | **140/180** | **137/180** (gained 24, lost 27, p = 0.78) | **148/180** (gained 19, lost 11, p = 0.20) | 150/180 |
+
+*Check one:* the search is level with the rules on every roster and better on none. 46 was
+real but it was parity, not a lead, and parity is where it stays at three times the sample.
+*Check two:* the stock model lifts the rules by eight pooled — not significant at 180, but
+the same direction on all three rosters and within two of the cheating oracle's 150. A model
+of the foe's triggers is worth what a perfect read of its choice was worth, on the planner
+that ships as well as on the one that does not. It stays **off** for the reason the oracle
+does: it is a model of stock v16, and against a human it reads switches that will not come
+and misses the ones that will. If the AI's opponent were this engine, it would ship on.
+
+**Artifacts** (`generated/`, all `realidea_tier_gen5ru_a_0_7_5_`): `control`, `search`,
+`shadow_search`, `rules_stock`; `realidea_tier_{gen5uu_a,gen6uu_a}_0_7_5_{control,search,rules_stock}`; both-ply arms `search_u50`, `search_u100`, `search_s50`, `search_s100`,
+`search_oracle100`; root-only arms `rootonly_u50`, `rootonly_u100`, `rootonly_s50`,
+`rootonly_s100`, `rootonly_oracle100`. Backup: `backups/realidea_Scripts.rxdata.pre-0.7.5`.
+Tests: 188 core (4 new), 118 Realidea (1 new), 53 Reborn, 28 tooling. The extra errors in
+the mixed arms are the stock side's own `pbRoughDamage` division (`where` shows
+`portable_ai_stock_pbChooseMoves`); they rise with game length.
+
+### 0.7.6 — MCTS in Ruby, 2026-09-08
+
+0.7.5 ended with the search at parity and a named suspect: 46/60 was bought by a *table*
+— the foe's columns weighted by what stock v16's triggers say it does — and the AI's real
+opponent is the player. The honest next step named there was the opponent model the
+original built: MCTS, which mixes over the foe's replies by their value to the foe instead
+of by a table. This version builds it, in Ruby, to find out whether it is worth building
+in Rust.
+
+**The bet.** Native speed is not needed to answer the question. The gauntlet is a study
+harness, not a 100 ms move clock, so a Ruby tree can be given thousands of iterations per
+decision and the sweep can simply take longer. If it cannot beat 46 with a generous
+budget, a Rust DLL would not have saved it; if it holds or wins, `Win32API` to a 32-bit
+cdylib is the way to ship it.
+
+**What was built** (`portable_ai/search.rb`, section THE TREE). A third planner path on
+the same board — `opening_board`, `own_options`, `foe_options`, `project`, `moves_first`,
+`hit_chance`, `leaf` and `battle_over` are reused unchanged, and `plan` dispatches to it
+after the guards it already ran. Four ideas from poke-engine's `src/mcts.rs` (GPL-3.0, the
+path Foul Play runs today), no code:
+
+* **Decoupled** simultaneous-move MCTS: one node, two independent option lists, each side
+  selecting its own by UCB1 `avg + sqrt(2 ln N / n)` without seeing the other's pick
+  (Tak, Lanctot & Winands 2014). A sequential tree here would let one side answer a move
+  it cannot see.
+* Chance outcomes **enumerated** into children with their probabilities — the speed order
+  when nothing establishes it, times the accuracy branch, at most four summing to one —
+  then one sampled by weight per iteration. The same branching `payoff` already does, kept
+  as nodes instead of averaged away.
+* **No playout**: the board is scored by the static leaf relative to the root,
+  `sigmoid(eval − root_eval)` with `sigmoid(x) = 1/(1+exp(−0.0125x))`. A battle-over board
+  is 1.0 / 0.0.
+* The foe credited `1 − score`, and the pick being the **most-visited** root option.
+
+Ours and not the original's: a **horizon** of 8 plies (`project` does not always change HP
+— a Protect, a stage-only turn, two switches — so a tree without one can descend forever),
+a per-cell tally so `search_row` can still print what a *row* scored (decoupled statistics
+cannot reconstruct it), and a private LCG seeded per decision from the position itself
+(turn, both slots, every body's HP) rather than from `pbAIRandom`, so a paired run and its
+shadow twin agree and any decision replays from its snapshot alone. The budget is an
+**iteration count**, not a time, for the same reason.
+
+`foe_reply` / `column_weights` — 0.7.5's table — are deliberately **not** read on this
+path. The whole point is what the foe's own payoff says when nothing tells it what to do.
+
+**Measured.** gen5ru_a, 60 paired battles, `search_planner=true`. The key-off control
+reproduces 0.7.5 on all 120 battles and all 915 traced decisions (`control_check`: 0
+diverge), so the maximin and the rules are untouched.
+
+| arm | wins | vs rules 48 | vs maximin 46 |
+|---|---|---|---|
+| rules 0.6.7 (control) | **48** | — | |
+| maximin 0.7.5 (root mix + stock model) | **46** | −2, p = 0.82 | — |
+| **MCTS, 5000 iterations** | **43** | −5, p = 0.302 | −3, p = 0.628 |
+| **MCTS, 1000 iterations** | **41** | −7, p = 0.146 | −5, p = 0.383 |
+| stock | 39 | | |
+| 0.7.5 uniform prior at the root (the collapse reference) | 29 | | |
+
+**It does not collapse, and it does not win.** 41 and 43 sit above stock and eleven clear
+of the uniform prior that had no opponent model at all, and every gap to the rules and to
+the maximin is inside the noise at this sample.
+
+> **RETRACTED BY 0.7.7 — THE COMPARISON ABOVE IS NOT LIKE FOR LIKE.** The 46 in that table
+> is `foe_stock_model=true`: a maximin holding a hand-built model of stock v16's withdraw
+> triggers, which the tree **structurally cannot consume** (it reads no `column_weights` by
+> design). The only maximin with the same information as the tree is the uniform arm, at
+> **29**. Against that, MCTS at 1000 is **+12 (p = 0.025)** and at 5000 **+14**. The search
+> was doing real work and this section called it a loss. See 0.7.7.
+
+**The budget was never the bottleneck**, which is the finding the Rust question hangs on.
+Five times the iterations buys +2 (p = 0.814) — and not because the extra work is wasted:
+the tree measurably converges harder with it.
+
+| | 1000 | 5000 |
+|---|---|---|
+| top option's share of the budget (median) | 27.1% | 38.1% |
+| top-vs-second visit margin (median, % of budget) | 6.2% | 15.4% |
+| decisions where that margin is under 2% | 26% | 19% |
+| cost per decision, RGSS Ruby 1.8 | ~195 ms | ~894 ms |
+| the whole 120-battle arm | ~4 min | ~15 min |
+
+The search converges more, is more decisive, and wins two more games out of sixty. A
+native port makes iterations cheap; iterations are not what is missing.
+
+> **ALSO RETRACTED BY 0.7.7.** This was measured on a tree with nothing to search: the foe
+> had ONE column ("it attacks, at worst"), so extra iterations had no opponent to resolve.
+> Give the foe a real move axis and the same budget step is worth **+9** rather than +2
+> (39 → 48). The claim that survives is narrower and was re-measured three times: strength
+> rises to about 5000 iterations and then **flattens** — 15000 scores 44, and a seed
+> replicate at 5000 scores 46 against 48, so 44/46/48 is one number. Iterations buy
+> something, then stop buying. What that leaves for Rust is a SHIPPING argument (5000
+> iterations is ~1 s a decision in Ruby and would be ~10 ms native, which is the difference
+> between a study harness and a real move clock), not a STRENGTH argument.
+
+**Nor is the evaluation flat.** The obvious suspect for a tree that will not separate is
+the sigmoid squashing the leaf, and it is not that: across 964 decisions the spread between
+the best and worst option's average is a median of 0.22, the full 0..1 range is used, and
+the most-visited option is also the best-average one on 99% of decisions. The tree finds
+what it should — on the kill snapshot it clicks the kill, and on turn 1 of
+`team1_vs_team2` 104729 it clicks Earthquake where the maximin, holding a three-way −88
+tie, clicked Rock Polish.
+
+**What the readouts show.** Against the 0.7.5 shadow twin, 256 of 933 turns differ (27.4%)
+— 150 move → move, 77 switch → move, 23 move → switch, 6 switch → switch. So the tree
+attacks where the maximin left. Of those 256, the maximin matched the stock host's own
+click on 24 and the tree on 19.
+
+The failure is visible on the turn that opens `team2_vs_team1` 130363, one of the four
+games the rules win and both MCTS budgets lose. Galvantula faces Golurk, which is immune
+to Electric. Nine options; the tree ranks them:
+
+```
+     0.459  GIGADRAIN (bp 75, 89% dmg, x2)             search_visits +229
+     0.396  BUGBUZZ (bp 90, 40% dmg, x0.5)             search_visits +146
+     0.373  THUNDER (bp 120, 0% dmg, x0, IMMUNE)       search_visits +127
+     0.346  switch -> Druddigon (hits 135%, takes 94%) search_visits +107
+     0.308  VOLTSWITCH (bp 70, 0% dmg, x0, IMMUNE)     search_visits +88
+```
+
+The order is right — the move that does 89% is first — but two moves that *cannot do
+anything* sit third and fifth, one of them above the switch to the body that beats Golurk
+135%/94%. Galvantula takes 144% either way, so every line loses it, and once both branches
+end with the same body dead the only remaining difference is Golurk's HP.
+
+**The sigmoid is not what flattens that**, and the first draft of this section said it was.
+Checked against the source (2026-09-08): poke-engine's scale is `0.0125` over an evaluate
+whose constants this leaf already matches exactly — `POKEMON_ALIVE 30`, `POKEMON_HP 100 ×
+hp/maxhp`, boosts 30/15, multipliers 1.0/2.0/2.5/3.0/3.15/3.3, Substitute 75, hazards
+10/7/7/25, status 40/25/25/30/10/25. At a *single leaf* an 89-point difference is
+`sigmoid(89) − sigmoid(0)` = 0.753 − 0.500 = **0.253**, which is not compression at all.
+The 0.086 above is a gap between *root averages*, thinned by averaging over the many
+sampled lines in which the difference does not survive. The squash is real but it lives at
+the top of the range — 200 points reads 0.924 and a full party 0.9999, so past about a body
+and a half of advantage every board does look alike — and that is the original's deliberate
+tuning ("~200 points is very close to 1.0"), which Foul Play wins with.
+
+So the lever is **not** `SIGMOID_SCALE`, and it is not iterations either.
+
+**What Foul Play has that this does not is a foe with moves** (source read 2026-09-08).
+Its Smogon usage data does *not* enter the tree as a prior — the MCTS is uniform-prior UCB1
+over a fully specified state. The data enters one step earlier, at *state sampling*
+(`fp/search/standard_battles.py`): for each opponent body it draws a concrete set — moves,
+item, ability, spread — from the usage corpus filtered by what has been revealed, and where
+there is no team preview it invents the unrevealed slots from teammate co-occurrence counts
+(`predict_team_likelihood`). It then runs N independent searches, one per sampled state, and
+aggregates the root policies, `final_policy[move] += (1/N) × (visits / total_visits)` — the
+likelihood shapes *which* teams get drawn, not the weights — keeps every choice within 75%
+of the best, and picks among those at random rather than taking the argmax.
+
+Half of that machinery answers a problem this study does not have: the party matrix already
+exports every foe body and real damage rolls both ways, off their real movesets, so there is
+nothing to guess about *which* Pokémon are there. **The other half is exactly what is
+missing.** A sampled state hands poke-engine the opponent's actual four moves, so the tree's
+foe side chooses among ~9 concrete options — Earthquake, Toxic, a setup move, five switches —
+each with its own damage, status and priority. Ours is `stay` plus one column per bench body
+(`foe_options`), and `stay` collapses every move the foe owns into a single worst-case damage
+number. **A tree whose entire thesis is "let the foe's line be shaped by its own payoff" was
+given a foe with one way to act.** That is the likeliest reason the tree buys nothing the
+maximin did not already have: against a one-option foe, per-side UCB has almost nothing to
+discover, and the decoupled selection that is the whole point of the design degenerates.
+
+The concrete arm is the mirror of 0.7.4's `out_moves`: an `in_moves` breakdown on the cell
+(the foe's per-move rolls, which the adapter already computes to find `in`), and a real foe
+move axis built from it.
+
+> **0.7.7 BUILT THIS AND THE PREDICTION WAS HALF RIGHT.** The axis alone, at this budget,
+> moves the tree by −2 (41 → 39): a wider foe spreads the same 1000 iterations thinner. It
+> only pays WITH the budget to resolve it (39 → 48 at 5000). And on the maximin it is worth
+> +6 against a uniform prior but −1 against a real one, which says the axis is a partial
+> substitute for an opponent model and no substitute at all for a good one.
+
+**Where this leaves the search line.** Two versions have now put the search level with the
+rules and neither has put it ahead. The budget lever is spent and the leaf's scale is not a
+lever at all; what remains is the foe's option axis — the tree cannot model an opponent the
+snapshot only lets it model as "attacks, at worst". Both new keys ship
+**off**; `search_mcts=false` is 0.7.5 decision for decision.
+
+**One divergence from the original worth recording.** Foul Play does not set an iteration
+count: its budget is `--search-time-ms`, default **100 ms** per state, and it logs
+`total_visits` afterwards as "Iterations". What it configures is breadth — `--search-parallelism`
+(default 1) sampled opponent teams, doubled at team preview or when the opponent has shown
+fewer than three moves. The count here is deliberate instead, because a paired run and its
+shadow twin have to decide identically whatever the machine — so 1000 and 5000 have no
+counterpart in the original to be measured against. Its root pick is
+`max(side_one, key=visits)`, which is the convention ported.
+
+**Also fixed on the way**, both in the readout tools, both found by reading 0.7.6 output.
+`shadow_pair_diff.py` compared a move's target raw, and the engine writes the sole foe of a
+single battle as `-1` where the portable planner writes `None` — so 441 of 933 turns on
+which both sides clicked the *identical move* were scored as a disagreement, and the "which
+side matched the host" table could only ever credit a switch (it read `neither 254,
+maximin 2`; it reads `neither 213, maximin 24, mcts 19` now). And both that tool and
+`render_realidea_battle.py` printed the score column at `%.0f` / `%8.1f`, which is right
+for the rule engine's HP points and renders every MCTS row as `1`, `0` or `0.5`; they pick
+the precision from the magnitude now. The `search_visits` field also reaches the trace
+(`candidate_trace`), without which no readout can explain a pick the tree ranks by visits.
+
+**Artifacts** (`generated/`): `realidea_tier_gen5ru_a_0_7_6_{control,mcts_1000,mcts_5000,shadow_mcts_1000}.ndjson`;
+readouts `readouts/portable_ai_0_7_6_{pairdiff_maximin_vs_mcts,gen5ru_a_mcts1000_team2_vs_team1_130363,gen5ru_a_rules_team2_vs_team1_130363}.txt`.
+Backup: `backups/realidea_Scripts.rxdata.pre-0.7.6`. Tests: 195 core (7 new), 119 Realidea
+(1 new), 53 Reborn, 28 tooling. No errors in either MCTS arm (the control's 2 are stock's
+own `pbRoughDamage` division, as always).
+
+### 0.7.7 — the foe gets moves, 2026-09-08
+
+0.7.6 concluded that MCTS did not pay and that iterations were not the bottleneck. Both
+conclusions were wrong, and this version is what found that out. The cause was one line the
+adapter never wrote.
+
+**The hole.** `matrix_cell` is called twice per pair — once for our damage into them, once
+for theirs into us — and each call returns every move it rolled. 0.7.4 kept ours
+(`out_moves`) and it was worth real points. **Nobody ever kept theirs.** The cell carried
+`in`, one number: the biggest hit the foe owns. So `foe_options` was one `stay` column plus
+one per bench body, and every planner here modelled the opponent as *"it attacks, at worst"*.
+For the maximin that is nearly harmless — the worst case IS the biggest hit. For a tree
+whose entire thesis is that the foe's line should be shaped by the foe's own payoff, it is
+fatal: 0.7.6 ran a simultaneous-move search against an opponent with one way to act, so the
+decoupled selection that is the whole point of the design had nothing to discover.
+
+**What was built.** `in_moves` on the cell (matrix version 3, no new engine calls — the
+rolls were already being made and discarded), and a real foe move axis on top of it:
+`foe_moves` emits one column per move sorted by id (a Ruby 1.8 Hash has no order, and a
+column list that moved between two runs of one position would make every paired arm
+unrepeatable); `foe_damage` reads the named move's number **against whatever body is
+standing after our switch resolves**, mirroring how `own_damage` prices our move against
+their switch-in; `defence_divisor` takes the category of the move actually being taken;
+`column_weights` shares the non-switch mass over every move column. A cell without the list
+— an older adapter, a pair the matrix never rolled, and every Reborn run — is one `stay`
+column at the best hit, which is 0.7.6 exactly.
+
+`in_moves` **follows its reader**, as `matrix_wanted?` does one level up: it is built only
+when `search_planner` is on, because `foe_moves` is the only thing that opens it and the
+search ships off. Unconditionally it cost every shipped decision the allocation and every
+traced run 28% of its size (9.7 → 12.4 MB on a 60-battle control; 9.9 gated).
+
+**Measured.** gen5ru_a, 60 paired battles. Controls reproduce 0.7.6 on all 120 battles and
+915 decisions, twice — before and after the gate.
+
+| planner | foe axis | budget | opponent model | wins |
+|---|---|---|---|---|
+| rules 0.6.7 | — | — | — | **48** |
+| maximin | one column | depth 2 | uniform | 29 |
+| maximin | move axis | depth 2 | uniform | **35** |
+| maximin | one column | depth 2 | stock model | **46** |
+| maximin | move axis | depth 2 | stock model | 45 |
+| MCTS | one column | 1000 | none (the tree itself) | 41 |
+| MCTS | one column | 5000 | none | 43 |
+| MCTS | move axis | 1000 | none | 39 |
+| MCTS | move axis | 5000 | none | **48** |
+| MCTS | move axis | 5000, seed 1 | none | **46** |
+| MCTS | move axis | 15000 | none | 44 |
+| stock v16 | | | | 39 |
+
+**Read it as three findings, in order of how much they cost to learn.**
+
+1. *0.7.6's headline was a mis-baselined comparison, and the error was mine.* The 46 that
+   MCTS "lost" to is a maximin carrying `foe_stock_model` — a hand-built table of stock's
+   withdraw triggers that the tree cannot consume by construction. Against the only maximin
+   holding the same information, the uniform arm at 29, MCTS is **+12 (p = 0.025)**. The
+   like-for-like ladder is 29 → 35 (axis) → 41 (tree) → 46-48 (tree + axis + budget).
+2. *The axis and the budget only pay together.* Axis alone at 1000: 41 → 39. Budget alone
+   on one column: 41 → 43. Both: **48**. Widening the foe's options makes each iteration
+   worth less until there are enough of them to resolve the wider tree — which is exactly
+   why 0.7.6 measured "iterations don't matter" and why that measurement did not generalise
+   one line of code later.
+3. *And then it flattens, which the seed replicate is what proves.* 15000 scores 44, below
+   5000's 48. Re-running 5000 with `search_seed=1` — identical battles, identical budget,
+   a different sampling of the tree's own chance branches — scores **46**, changing 6
+   outcomes of 60. So the tree's own randomness is worth about ±2 wins here, and 44 / 46 /
+   48 is one number. **MCTS on the move axis is ~46 at any budget from 5000 up.**
+
+**What that number means.** 46 is the score the maximin needs `foe_stock_model` to reach —
+a model of stock v16's own code, which is a benchmark instrument and ships off because a
+human does not switch on stock's triggers. **The tree gets there with no opponent model at
+all**, deriving one per position from the foe's own payoff. That is the first result in this
+line that is worth something against a player rather than against this engine. It is still
+about two behind the rule engine (48), and at n = 60 that gap is not significant either.
+
+**The Rust question, answered narrowly.** Strength plateaus by 5000 iterations, so a native
+port finds no more wins — 0.7.6's conclusion survives for the reason it gave, on numbers it
+did not have. What a port would buy is the plateau at a real move clock: 5000 iterations is
+~1 s a decision in Ruby (15000 is ~3 s, and a 120-battle arm takes 40 minutes) against an
+estimated ~10 ms native. That is the difference between a study harness and something that
+could ship in a game. It is a shipping argument and should never again be written up as a
+strength one.
+
+**Everything ships off.** `search_mcts=false` is 0.7.5 decision for decision; `in_moves` is
+not even built without `search_planner`.
+
+**Where the line goes next.** The remaining lever is the one that has paid every time it has
+been pulled: the opponent model. Two arms, both cheap, neither needing Rust — concentrate
+`column_weights`' stay mass on the predicted move rather than sharing it (`stock_move` is
+already exported and unused), and seed the tree's foe root statistics with those same
+weights, which is the one way the stock model's +17 can reach a planner that currently
+refuses to look at it.
+
+**Artifacts** (`generated/`, all `realidea_tier_gen5ru_a_0_7_7_`): `control`,
+`control_gated`, `maximin`, `maximin_stock`, `mcts_1000`, `mcts_5000`, `mcts_5000_seed1`,
+`mcts_15000`. Readouts `readouts/portable_ai_0_7_7_{mcts5000,mcts1000,rules}_*` over eight
+battles on all five seeds. Backup `backups/realidea_Scripts.rxdata.pre-0.7.7`. Tests: 200
+core (5 new), 119 Realidea, 53 Reborn, 28 tooling.
+
+**A process note worth keeping.** One arm in this batch silently did not run: Game.exe
+exited without starting the gauntlet and the script copied the PREVIOUS arm's results, which
+produced a "15000" artifact byte-identical to the 5000 one and reporting the same 48. It was
+caught only because the record's own `config_overrides` said `search_iterations: 5000.0`.
+Every run script now records the results file's mtime before launching and refuses to copy
+anything if the file was not touched. **Read the config off the artifact, not off the
+harness file you think you wrote.**
+
+### 0.7.8 — the opponent model that was already in the box, 2026-09-08
+
+0.7.7 left one lever: the opponent model, and two arms to pull it with — concentrate
+`column_weights`' stay mass on a predicted move, and seed the tree's foe root statistics with
+the same weights. Both arms name a *producer* for that prediction, and the only one on hand
+was `stock_move`, a model of this engine's own AI. Before building either, one diagnostic:
+**is the tree's foe budget already landing on the moves the foe really plays?** If it were,
+seeding buys nothing and the idea would have been wrong a third time.
+
+**The diagnostic.** `foe_visits` was already in the MCTS diagnostics and the trace already
+records what the foe then did; the only new code was one adapter helper (`search_trace`)
+writing the first next to the second. Run on the 5000-iteration arm — 925 decisions, and all
+120 battles identical to the un-instrumented arm, so the hook is inert.
+
+| measure | value |
+|---|---|
+| tree's budget spent on the move the foe actually played | 32.3% |
+| the same budget spread evenly (uniform baseline) | 22.9% |
+| tree's most-visited foe option, as a share of budget | 47.0% |
+| that option **was** the foe's actual choice | 399/925 = **43.1%** |
+| foe played a move not on the tree's option list | 107/925 = 11.6% |
+| foe switched | 17/925 |
+
+So the tree does beat uniform, and the answer to the diagnostic's question was "partly". But
+the comparison that mattered was the one it made possible. The cell's max-damage `in_move` —
+**already computed, already handed to the tree as its input, costing nothing** — predicts the
+foe's actual move **478/925 = 51.7%**, against the tree's own 43.1%. Both right 339 (36.6%),
+both wrong 387 (41.8%). *The tree's opponent model is worse than the one sitting in its
+input.* That killed the `stock_move` arms before they were written: the prior to seed with is
+free, and a model of stock's code — a benchmark instrument that cannot ship — was never
+needed for this.
+
+**It is not a sharper prior, it is a differently-aimed one.** Off the control's own traces,
+840 decisions with two or more foe stay columns, cell resolved in all 840:
+
+| | mean share on its own top foe column |
+|---|---|
+| the free damage prior | 56.2% |
+| the tree's budget | 55.5% |
+| uniform at the same widths | 35.5% |
+
+Same concentration, different column. So this was never "spread the budget less evenly" — it
+is "spend the same concentration somewhere better", which also means a null result here would
+be real evidence against the prediction-to-play link rather than an effect too small to see.
+
+**What was built.** `foe_prior` normalises the stay columns by their `pct` and returns nil
+when there is no usable mass; `spread_stays` splits the stay group's share by that prior
+instead of evenly. **The prior only ever moves mass BETWEEN stay columns** — it says which
+move the foe picks, never whether it stays — so the switch/stay split its caller already
+computed survives untouched. On the tree the same vector enters `ucb_pick` as AlphaZero's
+PUCT term `MCTS_PRIOR_C · P(j) · sqrt(N) / (1 + n)` **added to UCB1 rather than replacing
+it**, on the foe axis only. Three alternatives were rejected: bare PUCT starves any column
+priced at zero (a Volt Switch off a Choice Specs set, a status move), progressive bias
+`P/(1+n)` has decayed to nothing by N = 5000, and virtual visits run backwards — more visits
+would *lower* the bonus.
+
+**Measured.** gen5ru_a, 60 paired battles, everything against 0.7.7's own arms. The key-off
+control reproduces 0.7.7 on **all 120 rows byte-identically**, so the 0.7.8 install with the
+key off is the 0.7.7 build exactly.
+
+| planner | budget | opponent model | wins | vs. |
+|---|---|---|---|---|
+| rules 0.6.7 | — | — | **48** | |
+| maximin | depth 2 | uniform | 35 | |
+| maximin | depth 2 | **free damage prior** | **41** | vs uniform: 0 / 6, **p = 0.031** |
+| maximin | depth 2 | `foe_stock_model` | 45 | vs prior: 12 / 8, p = 0.50 |
+| MCTS | 5000 | none (control) | **48** | row-identical to 0.7.7 |
+| MCTS | 5000 | **free damage prior** (PUCT) | 46 (+1 error) | vs control: 5 / 3, p = 0.73 |
+| stock v16 | | | 39 | |
+
+**Two findings.**
+
+1. *On the maximin the free prior pays — on this roster.* 35 → 41
+   with **zero regressions**: every battle the uniform maximin won, the priored one also won,
+   plus six more (p = 0.031). It closes six of the ten points that `foe_stock_model` bought
+   and is not distinguishable from that hand-built stock-trigger table (p = 0.50) — at no
+   cost, from numbers the planner was already being handed. An opponent model does not have
+   to model the opponent; here, pricing its moves by damage is most of the value.
+2. *On the tree it buys nothing.* 48 → 46, p = 0.73, inside the ±2 the seed replicate already
+   established as one number. Consistent with 0.7.7's plateau: the tree at 5000 is not
+   budget-starved on the foe axis, so aiming that budget better changes nothing it could not
+   already find. **The prior helps the planner that needs a distribution to take an
+   expectation over, and not the one that derives its own.**
+
+The prior maximin at 41 is still behind the rule engine's 48 (p = 0.19), which remains true
+of every search arm in this study.
+
+**One error, and it is not ours.** The priored tree arm lost a battle to
+`ZeroDivisionError` in **Realidea's own** `PokeBattle_AI:3557:in 'pbRoughDamage'`, reached
+through the stock chooser. The control ran the same seed to turn 20; the priored arm diverged
+and reached turn 13 in a state that trips a pre-existing divide-by-zero in the engine's
+scoring routine. No portable code is on that backtrace. It is counted as a non-win above.
+
+**Everything ships off.** `search_foe_prior=false` is the default and reproduces 0.7.7 row for
+row on both planners.
+
+**Replication on the other two rosters, 2026-09-08 — and it changes two of the claims above.**
+Everything up to this point was measured on gen5ru_a alone, which the rules-vs-stock table
+shows is the *weakest* of the three rosters for this engine (48 vs 39, p = 0.078 on its own;
+the other two are p = 0.0002 and p = 0.0025). Four arms were re-run on gen5uu_a and gen6uu_a.
+Both new controls reproduce their 0.7.5 counterparts **row for row**, so the 0.7.8 install is
+sound on rosters it had never touched.
+
+| arm | gen5ru_a | gen5uu_a | gen6uu_a | pooled | draws | errors |
+|---|---|---|---|---|---|---|
+| rules 0.6.7 | 48 | 47 | 45 | **140/180 (77.8%)** | 3 | 5 |
+| maximin, uniform | 35 | 40 | 44 | 119/180 (66.1%) | 3 | 6 |
+| maximin + prior | 41 | 43 | 43 | 127/180 (70.6%) | 6 | 6 |
+| MCTS 5000 | 48 | 44 | 43 | **135/180 (75.0%)** | 2 | 6 |
+| stock v16 | 39 | 26 | 29 | 94/180 (52.2%) | | |
+
+| pooled | rules-only | arm-only | p |
+|---|---|---|---|
+| rules vs uniform maximin | 43 | 22 | **0.013** |
+| rules vs priored maximin | 37 | 24 | 0.12 |
+| rules vs MCTS 5000 | 30 | 25 | **0.59** |
+| uniform maximin vs MCTS | 22 | 38 | 0.052 |
+
+1. *The prior's effect is real but far smaller than one roster suggested, and I over-read it.*
+   Pooled 119 → 127 (5 / 13, p = 0.096) — same direction on two of three rosters, not
+   significant, and **the zero-regression property does not survive**: gen5uu_a gives back 2
+   battles and gen6uu_a 3, ending level there. "35 → 41 with zero regressions, p = 0.031" was
+   true and is now plainly the favourable tail of an effect nearer +4 points than +10. The
+   prior's value tracks *how much headroom the uniform model was leaving*, and that varies
+   more between rosters than the prior does: on gen6uu_a the uniform maximin is already 44
+   against the rules' 45, so there is nothing left for an opponent model to recover.
+2. *The tree's tie with the rules survives widening, but the 48/48 headline does not.* MCTS is
+   135 vs 140 pooled, 30 / 25 discordant, **p = 0.59** — a genuine statistical tie on 180
+   battles. But gen5ru_a was its best roster; it scores 44 and 43 on the others. The claim
+   this line can defend is *"level with the rules within the noise"*, never *"matches the
+   rules"*. It does beat the maximin it was meant to (38 / 22 over uniform, p = 0.052), so
+   0.7.7's ladder survives.
+
+**Two accounting caveats, both running against the search.** (a) The `error` bucket is
+Realidea's own `pbRoughDamage` divide-by-zero reached through the stock chooser, and the
+errored battles are **not the same battles in each arm** — on gen5uu_a, 12 distinct battles
+errored somewhere and none errored in all four arms, so it is not an offset that cancels.
+Search arms steer into states that trip it more often (6 pooled vs the rules' 5; 5 vs 2 on
+gen5uu_a alone), and each one costs a battle the rules got scored on. Counting every error as
+a win instead moves rules 140 → 145, uniform 119 → 125, prior 127 → 133 — the ordering
+survives either way, but a 3-win gap with a 2-error difference inside it should never be
+quoted as though it were clean. (b) gen6uu_a is the only roster that produces **draws**, and
+the priored maximin produces 6 of them against the control's 2 — it is not losing those
+battles, it is failing to close them, which is the shape you would expect from weighting the
+foe's columns by damage (an AI more inclined to avoid the big hit than to end the game).
+**The engine bug is a known one-line fault left in place since 0.7.4; fixing it would remove
+this bias rather than bound it, and that is now the cheapest measurement improvement
+available.**
+
+**Where the line goes next.** The lever that has paid twice is now spent on the cheap side:
+the maximin has an opponent model that costs nothing, and the tree has been shown not to want
+one. What is left is the gap to the rule engine, which no search arm has closed at any budget,
+model, axis or depth — and that gap, not the search's internals, is the thing worth explaining
+next.
+
+**Artifacts** (`generated/`): `realidea_tier_gen5ru_a_0_7_8_{mcts_5000_control,mcts_5000_prior,maximin_prior}`; the replication as `realidea_tier_{gen5uu_a,gen6uu_a}_0_7_8_{control,maximin,maximin_prior,mcts_5000}`; the diagnostic ran on `0_7_7_mcts_5000_foevisits`.
+Backups `backups/realidea_Scripts.rxdata.pre-0.7.7-foevisits` and `pre-0.7.8`. Tests: 204
+core (4 new), 120 Realidea (1 new), 53 Reborn, 28 tooling.
+
 ### The gauntlet hang, and what it actually was
 
 **Fixed 2026-09-06.** It was a crash, not a deadlock, and every symptom that made it
@@ -1090,6 +2352,250 @@ preserved in `generated/portable_ai_baseline.json`.
 
 None of this replaces a manual campaign playthrough of scripted bosses and unusual custom
 mechanics; the fail-safe stock fallback remains enabled for that reason.
+
+### 0.7.9 — the search's board audited against the original's, and it loses more, 2026-09-08
+
+**Why.** Eight versions of search had bought parity with the rule engine and never a
+lead, and the 0.7.8 write-up left one idea untried. Before spending it, the tree was
+cross-checked line by line against the original it claims as provenance
+(`pmariglia/poke-engine` `src/mcts.rs`, `genx/evaluate.rs`, the damage-branching part of
+`genx/generate_instructions.rs`; `pmariglia/foul-play` `fp/search/main.py`; all cloned
+fresh at their 2026-09 heads). The MCTS mechanics matched: decoupled UCB1 at the same
+constant, unvisited-first, `sigmoid(eval − root_eval)` at 0.0125, terminal 1/0, the foe
+credited `1 − score`, chance children re-sampled by weight on every descent, the
+most-visited root pick (Foul Play's 75%-band randomisation and its multi-set averaging are
+deliberately absent). **The board the tree plays on did not match, and every gap erred the
+same way — toward damage being bigger and more certain than it is:**
+
+1. **Every damage number is the MAX roll.** `pbRoughDamage` (`085:3147`, "Critical hits
+   - n/a", "Random variance - n/a") applies no random factor; the engine then rolls
+   85..100% (`082:1140`). core.rb has always known this (`MIN_DAMAGE_ROLL` on every kill
+   test). search.rb's header said "we carry one expected roll per cell" and took the
+   number as it came, so with a step leaf at 0 HP a kill that lands one roll in sixteen
+   read as certain, on both axes, at every ply. The original's `should_branch_on_damage`
+   is exactly the answer, and it was the one thing the header listed as "deliberately not
+   borrowed".
+2. **The foe could only attack or switch.** `matrix_cell` listed `pbIsDamaging?` moves
+   only, so the tree's foe never set up, healed, laid a hazard, Protected or landed a
+   status, while our root row was priced for all of those (0.7.2). Our own switch-in below
+   the root had one attack. The original enumerates every move for both sides.
+3. **The foe never missed**, and neither did our below-root attack. "The foe's hit stays
+   certain" was a maximin choice that carried into a tree where it no longer meant worst
+   case.
+4. **No end of turn.** The original applies `add_end_of_turn_instructions` every ply;
+   `project` applied none, so a Toxic was thirty points forever and never HP.
+5. Smaller: no paralysis/sleep/freeze act chance; below-root switch-ins paid no hazards;
+   a foe's priority move was invisible (the cell carried no bracket).
+
+**What was built (all of it, unconditional under `search_planner`; the rule engine reads
+none of it).** `roll_outcomes`: the original's arithmetic — kill branch at the fraction
+of the sixteen rolls that reach HP plus the crit rate (1/16, x1.5, v16), the rest at the
+mean surviving roll; a crit branch when every roll falls short; the average roll (0.925)
+below the root's children. `outcomes`: one enumeration of a joint pair's chances — speed
+order, each side's accuracy times its status act chance (a miss and a full paralysis are
+the same board), the roll — shared by `payoff` (the maximin averages it) and the tree
+(`branches` keeps it as children, projected lazily on first descent, `child_node`).
+`foe_hit_chance`, `act_chance`. `act_foe` rebuilt as the mirror of `act_own`: setup,
+self-drop, heal, Protect (the bracket now read on both sides in `moves_first`), Substitute,
+hazards on our side, a status or drop on us, through our Protect and Substitute; and
+`act_own` through theirs. `foe_stages` on the board, read by `foe_damage`, `own_damage`
+(their defence), `boosted_cell` (their speed) and the leaf. `residual`: Leftovers, Black
+Sludge, burn, poison, the Toxic ladder, sand and hail with their type and ability
+immunities, Leech Seed both ways, Magic Guard, Poison Heal. `resolve_switches` split out of
+`project`; both sides' switch-ins pay `entry_damage_pct` from the side table below the
+root. `cell_actions`: our below-root options from `out_moves`. Matrix version 4 (adapter):
+every move in both lists with `acc`, `priority`, `damaging`, `effect`; the side table with
+`status`, `item`, `ability`, `entry_damage_pct`. Tests: 209 core (six new, five re-pinned
+against the roll model with the arithmetic spelled out), 120 adapter.
+
+**Measured.** gen5ru_a, 60 paired, `search_planner=true search_mcts=true
+search_iterations=5000`, on the engine build with the fainted-target floors (`_aifix`
+arms are the comparators). Stock arm byte-identical 60/60 to `0_7_8_control_aifix`.
+
+| arm | wins | vs 0.7.9 tree |
+|---|---|---|
+| rules (0.7.8 control_aifix) | 50/60 | gained 7, lost 16, **−9**, p = 0.095 |
+| MCTS 5000, 0.7.8 board | 48/60 | gained 3, lost 10, **−7**, p = 0.096 |
+| **MCTS 5000, 0.7.9 board** | **41/60** | |
+| stock | 39/60 | |
+
+Down on all four teams against both comparators. Not significant at n = 60, but the
+direction is the opposite of the one the audit predicted, and it is the same on every
+team.
+
+**What the trace says.** 988 tree decisions (0.7.8: 931). The tree's own picks moved
+where the board moved: **status-move clicks doubled, 55 → 122 of ~800 moves** —
+Substitute 6 → 32, Swords Dance 4 → 19, Calm Mind 13 → 23, Spikes 2 → 10, Toxic 4 → 8.
+Losses carry 2.9 such clicks a battle against 1.6 in wins; the ten battles the 0.7.8 tree
+won and this one lost hold 7, 9 and 3 of them. Battles run a turn longer (15.6 vs 14.7).
+The budget is thinner but not starved: 7.0 foe columns a decision (5.6), the top own
+option holds 42% of the root's visits (47%). Cost unchanged (~22 min for the 120-battle
+set, the same as 0.7.8).
+
+**The reading.** The roll model made attacking *worth less and less certain* — an attack
+that killed for sure now kills at a probability, lands at 0.925 on average, and can miss
+on both sides — while the leaf's terms for a setup stage (30, undiminished for the second)
+and a standing Substitute (75, for 25 HP) stayed at the original's numbers. Those terms
+are banked for certain at every leaf the tree reaches, and an eight-ply tree reaches many
+leaves with the Substitute still up. The 0.7.8 tree over-attacked on a board where attacks
+were over-valued and won 48; the 0.7.9 tree over-sets-up on a board where attacks are
+priced right and the alternatives are not, and wins 41. The original carries the same
+evaluate numbers, but its Substitute is a real HP pool the instruction generator breaks,
+its setup is applied to real stats in a real damage formula every ply, and its opponent
+answers with every move it has at real accuracies — so those constants are calibrated to
+a board this one still only approximates. **The next arm is not more search: it is the
+leaf's non-HP terms re-priced against this board** (SUBSTITUTE_VALUE and STAGE_VALUE
+first, since they moved the picks), with 0.7.9's roll and opponent model kept, because
+those are now correct and were not before. A 15000-iteration arm is the other ablation
+(the top-visit share fell), and it costs three times the run.
+
+**Process.** Another session's Game.exe was mid-run in the master game folder when this
+run was ready, so it ran from a private worker (`.gauntlet-workers/realidea-w1`: Data, PBS,
+Fonts, the exe and dlls copied; Audio and Graphics junctioned, 62 MB), which is the Reborn
+parallel layout applied to Realidea. Read the version stamp off the artifact: the master
+bundle became 0.7.9 at 17:27 and any run launched from it after that is 0.7.9 whatever
+its harness file says.
+
+**Artifacts** (`generated/`): `realidea_tier_gen5ru_a_0_7_9_mcts_5000.ndjson` (traced;
+the stock half is the control). Backup of the pre-install bundle:
+`backups/realidea_Scripts.rxdata.pre-0.7.9`.
+
+### 0.8.0 — the real Foul Play, playing inside this engine, 2026-09-08
+
+**Why.** 0.7.9 ended with the search's board audited against poke-engine's and the tree
+losing more, and the question it could not settle was whether search itself was worth
+anything here or only our approximation of the board was. So the approximation was
+taken out of the comparison: every voluntary decision an actor faces is serialised as a
+poke-engine `State` (`Data/ai_foulplay_state.json`: both full parties with raw stats,
+moves with PP and the engine's own disabled flags, items, abilities, natures, EVs,
+statuses, boosts, the side's hazards, screens and volatiles with their durations,
+weather, terrain, Trick Room, the Choice lock as `last_used_move`), a Python sidecar
+(`tools/foul_play_sidecar.py`, running pmariglia's `poke_engine` package built for gen 6
+at commit `f4e224c`, the same clone 0.7.9 audited against) runs
+`monte_carlo_tree_search` on it for the requested iterations and writes back the
+most-visited root choice as a slot (`Data/ai_foulplay_reply.txt`), and the adapter maps
+that onto one of the actions the snapshot already built and registers it through the
+same path as every other planner (`FoulPlay` module in the adapter; `plan_for` runs it
+first when `foul_play` is on and falls through to the rules on any decline). Forced
+replacements stay with the rules, as they do for the search planner. The handoff is two
+files through temp names and renames, polled every 4 ms; the whole exchange including
+5000 iterations costs ~10 ms a decision, so a 120-battle set takes **1 min 40 s**
+against the Ruby tree's ~22 min.
+
+**What it scores.** Same three rosters, same seeds, same stock control (the stock half of
+every set byte-identical to the 0.7.8 control's):
+
+| roster | stock | rules (0.7.8) | MCTS 5000 (0.7.8) | **Foul Play 5000** |
+|---|---|---|---|---|
+| gen5ru_a | 39 | 50 | 48 | **53** (a first run of the same set scored 50: gained 6 lost 6 against the rules, then 7/4 — run-to-run spread of the sampler is about ±3) |
+| gen5uu_a | 26 | 47 | 48 | **55** |
+| gen6uu_a | 31 | 46 | 44 | **54** |
+| **pooled** | 96 | 143 (79.4%) | 140 | **162 (90.0%)** |
+
+Paired over 180: Foul Play **+19 over the rules, gained 30 lost 11, McNemar p = 0.005**;
+**+22 over the 0.7.8 tree, gained 34 lost 12, p = 0.002**. Every roster is positive
+against both (per-roster p = 0.06–0.08 against the rules, n = 60 each). This is the
+first arm in the study to beat the rule engine at all, and it does so after eight
+versions of our own search could not get past parity. **The search was never the
+problem; the board was.** Foul Play plays on poke-engine's real instruction generator
+and evaluation, and the only thing it shares with 0.7.9 is the tree.
+
+**How it plays.** 4614 of 4619 portable decisions went through the bridge (the rest are
+replacements). Status moves are **29.2% of its move picks** (Roost 312, Calm Mind 169,
+Toxic 119, Stealth Rock 99, Slack Off 92, Roar 80, Protect 58), against ~15% for the
+rules and 0.7.9's "doubled" status rate that the write-up there read as the failure. It
+was not: a search that values setting up and recovering wins here when its board is
+right and loses when its board is not.
+
+**The mechanics gap, measured (the milestone the plan asked for first).** With
+`--check` the sidecar prices the on-field pair's damaging moves both ways with
+poke-engine's `calculate_damage` (max roll, no crit — the first of the two values it
+returns; the second is the crit) and pairs each with the adapter's own cell, which is
+the same quantity from `pbRoughDamage`. `generated/realidea_foulplay_check_<roster>_0_8_0.ndjson`,
+~4000 rows a roster:
+
+| roster | median ratio engine/cell | within 3% | within 10% |
+|---|---|---|---|
+| gen5ru_a | 0.995 | 78% | 92% |
+| gen5uu_a | 1.000 | 85% | 97% |
+| gen6uu_a | 1.000 | 67% | 79% |
+
+Every systematic offset is a **generation difference, not an engine bug**: Realidea's
+PBS carries gen 5 numbers and poke-engine plays gen 6. Thunderbolt/Ice Beam 0.945
+(95 → 90), Fire Blast 0.917 (120 → 110), Thunder 0.917, Heat Wave 0.95, Leaf Storm
+0.929 (140 → 130), Dragon Pulse 0.944, Meteor Mash 0.90; the gems at 0.866 (Rock Gem
+and Flying Gem are ×1.5 here, ×1.3 in gen 6, so Kabutops' Stone Edge and Sceptile's
+Acrobatics); Knock Off **×3.2** on gen6uu_a (gen 6 made it 65 base and ×1.5 on a held
+item; this engine's is 20) — poke-engine overvalues Knock Off here, and still won that
+roster; Return **×3.5** (poke-engine assumes full happiness, 102 base; a trainer's mon
+here has its species' base happiness, so Escavalier's Return is 28). Rock Blast 0.32
+and Psywave 0 are checker artefacts (the engine prices one hit and a special case).
+Cells under 1% against an engine zero are `pbRoughDamage`'s 1-HP floor on an immune
+hit (085:3608), flagged `cell_floor`. The gap is real, small, and costs the arm less
+than it gains: a build of poke-engine with gen 5 numbers would close most of it and is
+one Cargo feature away (`--features poke-engine/gen5`).
+
+**Addendum, the gen 5 build (same day).** The offsets above are one Cargo feature away,
+so the wheel was rebuilt with `--features poke-engine/gen5` (crit ×2 there, which is how
+the build was confirmed to have taken) and the two gen 5 rosters rerun with it,
+same seeds, same control (`realidea_tier_<roster>_0_8_0_foul_play_5000_gen5build.ndjson`,
+`realidea_foulplay_check_<roster>_0_8_0_gen5build.ndjson`). **The damage gap closes and
+the score does not move:**
+
+| roster | within 3% (gen 6 build → gen 5 build) | within 10% | Foul Play gen 6 build | **gen 5 build** | rules |
+|---|---|---|---|---|---|
+| gen5ru_a | 78% → **93%** | 92% → 95% | 53 | **54** | 50 |
+| gen5uu_a | 85% → **94%** | 97% → 98% | 55 | **56** | 47 |
+
+Pooled over the 120: gen 5 build 110, gen 6 build 108, rules 97; gen 5 against gen 6
+gained 9 lost 7, p = 0.80 — a tie; gen 5 against the rules +13, p = 0.021. What is left
+in the check is Return (poke-engine assumes full happiness in every generation) and
+Rock Blast (the checker prices one hit). So the ~11-point lead over the rules is not an
+artefact of gen 6 numbers flattering or hurting the search; the search is that good on
+a board that is right to within a few percent, and a board that is right to within ten
+percent is already enough. Use the gen 5 wheel for gen 5 rosters from here (the build
+script takes the generation as its second argument); the gen 6 roster keeps the gen 6
+wheel, which is the one that knows megas and Fairy.
+
+**Things that went wrong on the way.** (1) The first gen5ru_a run lost two turns to
+`Errno::EACCES` on the reply file — Windows refusing a delete or open while the sidecar's
+rename landed; `retrying` now waits 4 ms and tries again. (2) The gen6uu_a run killed the
+sidecar on its 68th battle: poke-engine **panics** (a Rust `panic!`, surfacing as a
+`PanicException` that `except Exception` does not catch) when a live Taunt carries
+duration 3, because it counts turns *elapsed* (0..2) and Essentials counts turns
+*remaining*. Encore, locked moves and Yawn have the same shape. `durations_for` converts,
+the sidecar now catches `BaseException`, keeps the state that did it and answers
+`type=error` so the turn goes to the rules at once instead of after the 60 s timeout;
+that roster was rerun clean. (3) poke-engine's string parsers map an unknown species,
+move, ability or item to `NONE`/`UNKNOWNITEM` silently, so every id is checked against
+`generated/poke_engine_ids_gen6.json` (extracted from the enum source) and logged;
+across the three rosters the only unknowns are Eject Button, Mental Herb and Light Clay.
+
+**What this means for the study.** The 0.7.x line's conclusion inverts: a correct
+board plus search beats the rules by ~11 points on these rosters, so the leaf
+re-pricing 0.7.9 proposed is worth doing only if one wants a *shippable* search — this
+one is a study instrument (a Python process beside the game) and can never run for a
+player. The rule engine is not "near the ceiling"; it is ~11 points under a ceiling that
+a 5000-iteration tree on the right board reaches in 10 ms. The untried 0.7.0 idea (rules
+as the leaf) is now measured against a real number rather than a hope.
+
+**Reproduce.** `tools/build_poke_engine.sh` (clones and builds the gen 6 wheel into
+`generated/foul_play/venv`, git-ignored); `generated/foul_play/venv/bin/python
+tools/foul_play_sidecar.py --game <game dir> --check` in one terminal;
+`Data/ai_harness.txt` with `schedule=tier`, `teams=<roster>`, `trace=true`,
+`foul_play=true`, `foul_play_iterations=5000`; the trigger; `Game.exe`. Start the
+sidecar first — a decision with no sidecar costs its 60 s timeout. Ran from
+`.gauntlet-workers/realidea-w1` (its bundle is 0.8.0, as is the master's; `foul_play`
+ships off, so a run without the key is 0.7.9 decision for decision).
+
+**Artifacts** (`generated/`): `realidea_tier_<roster>_0_8_0_foul_play_5000.ndjson`
+(three rosters, traced; candidates carry `foul_play_visits`, the search block carries the
+foe's visit split), `realidea_foulplay_check_<roster>_0_8_0.ndjson`. Backup of the
+pre-install bundle: `backups/realidea_Scripts.rxdata.pre-0.8.0`. Tests: core 209 (one
+0.7.9 expectation re-pinned: a bare foe `stay` carries no move on that board),
+adapter 126 (six new: the state shape, decline, reply mapping, silent-sidecar
+fallback, a stand-in sidecar round trip, the JSON), tooling 34 (six new, two of them
+engine-backed and skipped where `poke_engine` is absent).
 
 ## Future-agent handoff
 
@@ -1238,6 +2744,18 @@ future core rule does, the contract test will say so.
    probe and per-game scenario resolution before claiming parity.
 7. **Longer-term team integration.** Keep AI, team overrides, and level-cap changes as
    separately switchable variables so strength changes remain attributable.
+8. **Foul Play for live play (backlog, 2026-09-08).** The 0.8.0 bridge only takes a
+   turn inside the gauntlet, because `foul_play` is read from `Data/ai_harness.txt`
+   solely within `Harness.with_config`; in a normal battle the run-level config is empty
+   and the enemy falls back to the rules. To let a player fight the bot: load the harness
+   overrides at boot whenever `Data/portable_ai.txt` is present (a few lines in the
+   adapter, rebuild, reinstall), then the recipe is sidecar first
+   (`tools/foul_play_sidecar.py --game "Realidea V4.1"`, gen 5 or gen 6 wheel per the
+   0.8.0 addendum), `portable_ai.txt` plus a harness file with `foul_play=true`, launch,
+   fight any trainer in singles. Known limits to state up front: the bot sees the
+   player's whole team (same information the Portable AI gets), forced replacements
+   after a KO stay with the rules, doubles decline, and a missing sidecar costs a 60 s
+   timeout per turn before the rules take over. A study instrument, not a shippable AI.
 
 ### Required gate for future changes
 
@@ -1270,7 +2788,48 @@ Before replacing the installed section:
 ### What is outstanding right now
 
 The probe is done, the hang is fixed, the tier gauntlet is measured, 0.6.3 shipped the
-switching rules and 0.6.4 closed the switch-back loop. Outstanding, in priority order:
+switching rules, 0.6.4 closed the switch-back loop, 0.6.5 added the matrix, 0.6.6
+fixed Levitate and measured the oracle, 0.6.7 stopped crediting a hit the actor does
+not live to throw, and 0.7.0 put a second planner behind the same seam without touching
+the first — which 0.7.1-0.7.8 then took from 31/60 to 48/60 without ever passing the rule
+engine it was meant to replace. Outstanding, in priority order:
+
+-2. **Decide whether the search planner is worth a second ply.** It is measured and it
+   loses: 31/60 against the rule engine's 48 and stock's 39 (see *0.7.0*). The two bugs
+   the run exposed are fixed; what remains is the design. The two changes that would move
+   it are a **second ply** and a **per-move damage estimate against off-field bodies**
+   (without which the foe-switch column cannot order moves at all, and it supplies 41% of
+   the worst cases). Neither is cheap. The honest reading of the number is that a search
+   planner needs a leaf that is at least as good as the rules it replaces, and
+   `cell_verdict` is not — so the more promising direction is the reverse of this
+   version: keep the rule engine as the leaf evaluator and search over it. Do not spend
+   more on the current shape without deciding that first.
+
+   **Update, 2026-09-08, after 0.7.1-0.7.8.** The planner was taken from 31 to 48 across
+   eight versions — leaf and candidate fixes, a second ply, turn effects, per-move bench
+   pricing, an opponent model, MCTS, a foe move axis, a budget that can resolve it, and a
+   free damage prior. **It has never beaten the rule engine at any point on that path**, and
+   on three rosters and 180 battles its best arm (MCTS 5000) is 135/180 against the rules'
+   140/180, 30 / 25 discordant, p = 0.59 — a statistical tie, at ~100x the cost per decision
+   (~1 s vs ~10 ms in Ruby). Every lever named above has now been pulled; the one in this item — *keep the
+   rule engine as the leaf evaluator and search over it* — is the only one never tried, and
+   it is the recommendation this line ends on rather than one it disproved.
+
+-1. **Build the predictor.** 0.6.7 closed the dead-slower-attacker half of the oracle's
+   consumer (see *0.6.7*); the oracle now sits at 150/180 against the shipped 140, and
+   against 0.6.5 it is the first pooled result past p = 0.05. What is left on the consumer
+   side is small: a declared Sucker Punch is still a full hit on a switch-in it would fail
+   against, and Endure / Protect at their stock base score win the scaled turn seven times
+   on one roster. The distribution producer (damage-argmax 54.9%, lock → repeat → argmax
+   57.6% on the 0.6.5 traces) is the next thing to build, exporting the same fields, and
+   its number is judged against the oracle's. The remaining readout items — `strict_
+   threat`'s 95% cliff is closed only under the oracle; Toxic flat +25, Stealth Rock
+   engine-base only, Substitute a flinch guard — are in the memory file. The gate below
+   the 50% pivot line (a dying actor under 50% may not leave, so it attacks at a quarter)
+   is a design choice the rule leaves alone; the 210 turns it still attacks on are there.
+-0. **Re-run Reborn.** `no_hit_needs_threat` (0.6.6) and `dead_before_moving` (0.6.7) both
+   reach it; the installed Reborn bundle is still 0.6.5 and its control status for either
+   version is unmeasured.
 
 0. **The core has no model of foe recovery and no value for Protect** (see *0.6.3*,
    *0.6.4*). `damage_race` counts hits with no heal term and targets export no moves —
