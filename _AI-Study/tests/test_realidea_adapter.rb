@@ -2225,6 +2225,67 @@ class PortableAIRealideaAdapterTest < Test::Unit::TestCase
     PortableAIRealidea::FoulPlay.timeout = 60.0
   end
 
+  # ---- 0.8.1 live play ----------------------------------------------------------
+
+  def test_live_overrides_come_from_the_harness_file_only_when_the_marker_is_present
+    PortableAIRealidea::Harness.instance_variable_set(:@live_overrides, nil)
+    $PORTABLE_AI_CONFIG = nil
+    Dir.chdir(foul_play_scratch) do
+      Dir.mkdir("Data") if !File.exist?("Data")
+      File.open(PortableAIRealidea::Harness::FILE, "wb") do |file|
+        file.write("foul_play=true\nfoul_play_iterations=5000\n")
+      end
+      File.delete(PortableAIRealidea::ENABLE_FILE) if File.exist?(PortableAIRealidea::ENABLE_FILE)
+      # No marker: this is how the gauntlet and the probe run, and they must keep
+      # taking their config from with_config alone.
+      assert_equal({}, PortableAIRealidea.config_overrides)
+
+      File.open(PortableAIRealidea::ENABLE_FILE, "wb") { |file| file.write("on\n") }
+      PortableAIRealidea::Harness.instance_variable_set(:@live_overrides, nil)
+      live = PortableAIRealidea.config_overrides
+      assert_equal(true, live["foul_play"], "a played battle now sees the harness file")
+      assert_equal(5000.0, live["foul_play_iterations"])
+      assert_equal(true, PortableAIRealidea.config_for(0)["foul_play"],
+                   "and it survives the skill-derived config it merges into")
+
+      # A run that installed its own overrides still wins outright.
+      $PORTABLE_AI_CONFIG = { "foul_play" => false }
+      assert_equal({ "foul_play" => false }, PortableAIRealidea.config_overrides)
+    end
+  ensure
+    $PORTABLE_AI_CONFIG = nil
+    PortableAIRealidea::Harness.instance_variable_set(:@live_overrides, nil)
+    Dir.chdir(foul_play_scratch) do
+      File.delete(PortableAIRealidea::ENABLE_FILE) if File.exist?(PortableAIRealidea::ENABLE_FILE)
+      File.delete(PortableAIRealidea::Harness::FILE) if File.exist?(PortableAIRealidea::Harness::FILE)
+    end
+  end
+
+  def test_a_silent_sidecar_stops_being_asked_for_the_rest_of_the_battle
+    battle = foul_play_battle
+    $PORTABLE_AI_CONFIG = { "foul_play" => true, "party_matrix" => true }
+    PortableAIRealidea::FoulPlay.timeout = 0.05
+    Dir.chdir(foul_play_scratch) do
+      Dir.mkdir("Data") if !File.exist?("Data")
+      PortableAIRealidea.plan_for(battle)
+      assert_equal(true, battle.instance_variable_get(:@portable_ai_foul_play_off))
+      File.delete(PortableAIRealidea::FoulPlay::LOG_FILE) if File.exist?(PortableAIRealidea::FoulPlay::LOG_FILE)
+      # A later turn of the SAME battle: a new cache signature, so the planner really
+      # runs again -- and must not pay the timeout a second time.
+      battle.turncount += 1
+      started = Time.now
+      plan = PortableAIRealidea.plan_for(battle)
+      assert(Time.now - started < 0.05, "the second turn does not wait on the sidecar again")
+      assert_not_equal("foul_play", (plan["diagnostics"] || {})["planner"])
+      assert(!File.exist?(PortableAIRealidea::FoulPlay::LOG_FILE), "and nothing more is logged")
+      # A fresh battle asks again: the flag is battle state, not a process latch.
+      assert_nil(foul_play_battle.instance_variable_get(:@portable_ai_foul_play_off))
+    end
+  ensure
+    PortableAIRealidea::FoulPlay.timeout = 60.0
+    $PORTABLE_AI_CONFIG = nil
+  end
+
   def test_foul_play_json_is_plain
     json = PortableAIRealidea::FoulPlay.json({ "a" => [1, 2.5, nil, true, "x\"y"], "b" => { "c" => :d } })
     assert_equal('{"a":[1,2.5,null,true,"x\"y"],"b":{"c":"d"}}', json)

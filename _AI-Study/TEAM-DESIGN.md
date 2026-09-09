@@ -430,6 +430,21 @@ byte-identical: fully diffable, fully revertible, one injection point.
 | `generated/teams_boss.json` / `teams_filler.json` | canonical team data (validator-clean) |
 | `adapters/realidea/Team_Overrides.rb` | the injected section: registry + `createTrainer` patch |
 
+Deployment state (2026-09-09): the KEEP-ORIGINAL rework of 2026-09-04 is now the
+installed generation. It had been generated but never injected, so from 2026-09-04 to
+2026-09-09 the repo and the game disagreed: the game still ran the 2026-09-03
+replace-the-species teams (Travis fielded Gothita + Tynamo), while
+`Team_Overrides.rb` held the rework that keeps each dev-chosen mon and only re-equips
+it (Travis fields his own Starly). Re-emitted with the TEMP `pbTrainerBattle` /
+`customTrainerBattle` tracing and the `Data/team_override_log.txt` writes removed —
+they had served their purpose, and they wrote a line per trainer battle. Verified as a
+pure tracing removal before installing: regenerating produced **zero** new lines
+against the committed file, 42 removed, and all 547 team-data lines byte-identical; the
+11 dat keys are unchanged, as they must be, since a dat key fingerprints the *original*
+party. Booted clean afterwards, and no `team_override_log.txt` appeared, which is the
+runtime proof that the stripped section is the one that loaded. Backup:
+`backups/realidea_Scripts.rxdata.pre-teams-0904`.
+
 Deployment state (2026-09-03): two sections injected into Realidea's
 `Data/Scripts.rxdata` before `Main` — `Team_Overrides` (gym-1 team + 101 deduped
 filler overrides) and `Level_Cap` (`adapters/realidea/Level_Cap.rb`,

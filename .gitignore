@@ -9,6 +9,11 @@
 /Realidea V4.1/Data/*
 !/Realidea V4.1/Data/Scripts.rxdata
 !/Realidea V4.1/Data/ai_scenarios.txt
+# The one-double-click launcher (sidecar + game). The trigger files it creates
+# stay untracked on purpose: a committed Data/portable_ai.txt would be copied
+# into the gauntlet workers, and a measured run with the marker present makes
+# both arms portable and invalidates the stock/portable pairing.
+!/Realidea V4.1/Play with Foul Play.bat
 __pycache__/
 
 # Foul Play bridge build products (tools/build_poke_engine.sh): a venv and a clone.

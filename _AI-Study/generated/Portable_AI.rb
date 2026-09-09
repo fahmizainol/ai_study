@@ -20,7 +20,7 @@
 # Everything else is optional evidence used to improve the score.
 
 module PortableAI
-  VERSION = "0.8.0" unless const_defined?(:VERSION)
+  VERSION = "0.8.1" unless const_defined?(:VERSION)
 
   module Model
     DEFAULT_CONFIG = {
@@ -4913,9 +4913,13 @@ module PortableAIRealidea
   # sides of a policy A/B, and every gauntlet and probe record carries the overrides it
   # ran under. Without this Realidea could not ablate a single core rule without a
   # rebuild, which makes the two arms different artifacts.
+  # A played battle has no run around it: nothing calls Harness.with_config, so through
+  # 0.8.0 the enemy in a normal battle always ran on the bare defaults and `foul_play`
+  # could not be switched on outside the gauntlet and the probe. Harness.live_overrides
+  # closes that, and only for live play -- see the comment there.
   def self.config_overrides
-    return {} if !defined?($PORTABLE_AI_CONFIG) || !$PORTABLE_AI_CONFIG.is_a?(Hash)
-    $PORTABLE_AI_CONFIG
+    return $PORTABLE_AI_CONFIG if defined?($PORTABLE_AI_CONFIG) && $PORTABLE_AI_CONFIG.is_a?(Hash)
+    Harness.live_overrides
   end
 
   # Whether one core config key is on for this run, for the handful of rules that live
@@ -5258,7 +5262,9 @@ module PortableAIRealidea
     # 0.8.0. The bridge runs first and declines by returning nil, exactly as the
     # search planner does, so a silent sidecar or an unmappable reply falls through to
     # whatever planner the rest of the config names.
-    plan = config["foul_play"] ? FoulPlay.plan(battle, snapshot, config) : nil
+    use_foul_play = config["foul_play"] &&
+                    !battle.instance_variable_get(:@portable_ai_foul_play_off)
+    plan = use_foul_play ? FoulPlay.plan(battle, snapshot, config) : nil
     plan ||= run_planner(snapshot, config, BattleRNG.new(battle))
     battle.instance_variable_set(:@portable_ai_cache_signature, signature)
     battle.instance_variable_set(:@portable_ai_plan, plan)
@@ -7532,7 +7538,16 @@ module PortableAIRealidea
       state["iterations"] = (config["foul_play_iterations"] || DEFAULT_ITERATIONS).to_i
       state["iterations"] = DEFAULT_ITERATIONS if state["iterations"] <= 0
       reply = exchange(state)
-      return nil if !reply
+      if !reply
+        # A sidecar that was not running does not start mid-battle, and the wait is
+        # long enough to be felt: without this, one silent turn in a PLAYED battle
+        # becomes a silent turn every turn, each costing the full timeout before the
+        # rules answer. Give up for this battle only, so the next one asks again. An
+        # error reply is not silence and does not disable anything -- poke-engine
+        # panics on particular positions, not on the whole battle.
+        battle.instance_variable_set(:@portable_ai_foul_play_off, true)
+        return nil
+      end
       if reply["type"] == "error"
         log("turn=#{battle.turncount} actor=#{index} sidecar error: #{reply['message']}; rules took the turn")
         return nil
@@ -7990,6 +8005,20 @@ module PortableAIRealidea
         overrides[key] = (kind == :float) ? value.to_f : (value == "true")
       end
       overrides
+    end
+
+    # The same overrides, for a battle nobody wrapped in with_config -- a player
+    # fighting a trainer. Read once per session, so an edit mid-session cannot apply to
+    # half a battle, and gated on the MARKER FILE rather than on requested?: the
+    # gauntlet and the probe run with Data/portable_ai.txt absent and set
+    # $PORTABLE_AI_ENABLED themselves, so every measured run still takes its config
+    # solely from with_config and is unaffected by this path.
+    def self.live_overrides
+      return {} if !File.exist?(ENABLE_FILE)
+      @live_overrides = config_overrides_from(config) if !defined?(@live_overrides) || !@live_overrides
+      @live_overrides
+    rescue
+      {}
     end
 
     # Install this run's overrides for the duration of the block and hand the block the

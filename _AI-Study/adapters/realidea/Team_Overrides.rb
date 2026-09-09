@@ -800,11 +800,6 @@ TEAM_OVERRIDES_DAT[[22,0,50,[183, 358]]] = [
   ["CHIMECHO",50,[:DREAMEATER,:HYPERVOICE,:THUNDERWAVE,:UPROAR],:SITRUSBERRY,0,:MODEST,[28, 28, 28, 28, 28, 28],[0, 0, 0, 150, 150, 0]],
 ]
 
-begin
-  File.open('Data/team_override_log.txt', 'wb') { |fh|
-    fh.write("loaded #{TEAM_OVERRIDES.size} inline + #{TEAM_OVERRIDES_DAT.size} dat overrides at boot\n") }
-rescue; end
-
 # Shared builder: spec row = [species, level, [moves], item, abil, nature, ivs, evs]
 def team_override_build(spec)
   newparty = []
@@ -826,10 +821,6 @@ end
 alias team_override_orig_createTrainer createTrainer
 def createTrainer(trainerid, trainername, party, items=[])
   begin
-    File.open('Data/team_override_log.txt', 'ab') { |fh|
-      fh.write("ENTRY createTrainer tid=#{trainerid.inspect} name=#{trainername.inspect} n=#{party.length}\n") }
-  rescue; end
-  begin
     ace = nil
     for p in party
       next if p.nil?   # original events sometimes have typo'd species -> nil mons
@@ -837,10 +828,6 @@ def createTrainer(trainerid, trainername, party, items=[])
     end
     key = [trainerid, trainername, ace]
     spec = TEAM_OVERRIDES[key]
-    begin
-      File.open('Data/team_override_log.txt', 'ab') { |fh|
-        fh.write("createTrainer #{key.inspect} -> #{spec ? 'HIT' : 'miss'}\n") }
-    rescue; end
     if spec
       newparty = team_override_build(spec)
       if newparty.length == spec.length
@@ -861,10 +848,6 @@ end
 # build the party, then swap it by original species-id signature (encoding-proof).
 alias team_override_orig_pbLoadTrainer pbLoadTrainer
 def pbLoadTrainer(trainerid, trainername, partyid=0)
-  begin
-    File.open('Data/team_override_log.txt', 'ab') { |fh|
-      fh.write("ENTRY pbLoadTrainer tid=#{trainerid.inspect} name=#{trainername.inspect} pid=#{partyid.inspect}\n") }
-  rescue; end
   result = team_override_orig_pbLoadTrainer(trainerid, trainername, partyid)
   begin
     if result && result[0] && result[0].party
@@ -876,10 +859,6 @@ def pbLoadTrainer(trainerid, trainername, partyid=0)
       sig = result[0].party.reject { |p| p.nil? }.collect { |p| p.species }.sort
       key = [tid, partyid, ace, sig]
       spec = TEAM_OVERRIDES_DAT[key]
-      begin
-        File.open('Data/team_override_log.txt', 'ab') { |fh|
-          fh.write("pbLoadTrainer #{key.inspect} -> #{spec ? 'HIT' : 'miss'}\n") }
-      rescue; end
       if spec
         newparty = team_override_build(spec)
         result[0].party = newparty if newparty.length == spec.length
@@ -888,25 +867,4 @@ def pbLoadTrainer(trainerid, trainername, partyid=0)
   rescue
   end
   return result
-end
-
-# --- TEMP tracing: log entry into every trainer-battle entry point, to find
-# which path a given fight actually uses. Remove once confirmed.
-alias team_trace_orig_pbTrainerBattle pbTrainerBattle
-def pbTrainerBattle(trainerid, trainername, *args)
-  begin
-    File.open('Data/team_override_log.txt', 'ab') { |fh|
-      fh.write("ENTRY pbTrainerBattle tid=#{trainerid.inspect} name=#{trainername.inspect}\n") }
-  rescue; end
-  return team_trace_orig_pbTrainerBattle(trainerid, trainername, *args)
-end
-
-alias team_trace_orig_customTrainerBattle customTrainerBattle
-def customTrainerBattle(trainer, *args)
-  begin
-    sp = (trainer && trainer[0] && trainer[0].party) ? trainer[0].party.collect{|p| p.species}.inspect : '?'
-    File.open('Data/team_override_log.txt', 'ab') { |fh|
-      fh.write("ENTRY customTrainerBattle species=#{sp}\n") }
-  rescue; end
-  return team_trace_orig_customTrainerBattle(trainer, *args)
 end

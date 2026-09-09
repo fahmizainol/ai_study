@@ -27,3 +27,7 @@ uv pip install --quiet maturin
   maturin build --release --no-default-features --features "poke-engine/$GEN" -o "$TARGET/wheels-$GEN" )
 uv pip install --quiet --reinstall "$TARGET"/wheels-"$GEN"/poke_engine-*.whl
 python -c "import poke_engine; print('poke_engine $GEN ready in $TARGET/venv-$GEN')"
+# Record which distro this venv belongs to: its python symlinks into that distro's
+# home, so another distro cannot run it. tools/foul_play_sidecar.bat reads this to
+# pick the right -d; without it the .bat would have to hardcode a machine's distro.
+[ -n "${WSL_DISTRO_NAME:-}" ] && printf '%s\n' "$WSL_DISTRO_NAME" > "$TARGET/distro.txt"

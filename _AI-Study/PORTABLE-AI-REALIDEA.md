@@ -41,7 +41,9 @@ spread damage to a partner, avoids duplicate switches, and assigns finishable ta
 ## Config overrides
 
 `Data/ai_harness.txt` sets run-level knobs for the gauntlet and the probe, one
-`key=value` per line, `#` comments allowed. It is the same file and the same twenty-eight
+`key=value` per line, `#` comments allowed. Since 0.8.1 a *played* battle reads it too,
+but only when `Data/portable_ai.txt` is present — the gauntlet and the probe run with
+that marker absent, so their config still comes solely from `Harness.with_config`. It is the same file and the same twenty-eight
 core keys the Reborn harness uses, so an ablation reads identically in both studies —
 which is what lets a single installed build play both sides of a policy A/B instead of
 rebuilding between arms.
@@ -2597,6 +2599,104 @@ adapter 126 (six new: the state shape, decline, reply mapping, silent-sidecar
 fallback, a stand-in sidecar round trip, the JSON), tooling 34 (six new, two of them
 engine-backed and skipped where `poke_engine` is absent).
 
+### 0.8.1 — the bridge reaches a played battle, 2026-09-09
+
+0.8.0 could only be switched on inside the gauntlet and the probe. `foul_play` is a
+`Data/ai_harness.txt` key, the harness file was read only by `Harness.with_config`, and
+nothing wraps a battle a *player* walks into — so a normal battle installed no overrides
+at all and the enemy always fell to the rule engine, whatever the file said.
+
+`Harness.live_overrides` reads the same file for that case, and only for that case: it
+is gated on `Data/portable_ai.txt` being present, not on `requested?`. The gauntlet and
+the probe run with the marker absent and set `$PORTABLE_AI_ENABLED` themselves, so every
+measured run still takes its config solely from `with_config` and is untouched by this
+path; and a run that did install overrides still wins outright. The read is memoised for
+the session, so editing the file mid-session cannot apply to half a battle.
+
+The other half is a live-play failure mode the harness never felt. A silent sidecar costs
+one 60 s timeout per decision, which is invisible in a batch and unplayable at the
+keyboard. A timeout now sets `@portable_ai_foul_play_off` on the battle: the bridge is
+asked once per battle, not once per turn, and the next battle asks again. An `error`
+reply is not silence and disables nothing — poke-engine panics on particular positions
+(the duration bug in the 0.8.0 addendum), not on a whole battle.
+
+**Measurement is unchanged.** With the marker absent `live_overrides` returns `{}`, so
+0.8.1 is 0.8.0 decision for decision on every gauntlet and probe run; the version stamp
+moves so records still say which bundle produced them. The one behavioural difference is
+confined to a *degraded* run: where 0.8.0 retried a dead sidecar every turn, 0.8.1 stops
+for the rest of that battle. Both fall to the rules either way, and the log says so.
+
+**How to play against it.** In this order:
+
+Double-click **`Realidea V4.1/Play with Foul Play.bat`**. It writes the two trigger
+files if they are missing, starts the sidecar, launches the game, and stops the sidecar
+when you quit. That is the whole thing.
+
+It is the only file tracked inside the game folder besides `Data/Scripts.rxdata`. The
+triggers it creates are deliberately *not* committed: a `Data/portable_ai.txt` in the
+repo would be copied into the gauntlet workers, and a measured run with the marker
+present makes both arms portable and invalidates the stock/portable pairing.
+
+**First run on a machine that has never built the bridge** is not just a double-click.
+The search is a Rust crate compiled into a Python wheel, so it needs, once:
+
+1. WSL2 with a Linux distro,
+2. `uv` and a Rust toolchain (`cargo`) inside it,
+3. `tools/build_poke_engine.sh _AI-Study/generated/foul_play gen5` — about 30 s once the
+   toolchain exists, and it records the distro it built in so the `.bat` can find it.
+
+The venv is git-ignored, so a fresh clone always needs step 3; the sidecar window prints
+that exact command when the wheel is missing. Everything after that is the double-click.
+Nothing about the *game* needs a first-run step — `Data/Scripts.rxdata` carries the
+installed sections and is tracked.
+
+`tools/foul_play_sidecar.bat` is the sidecar alone, for when the game is already running
+or a different copy is being served. It takes no arguments for the campaign copy.
+
+```bat
+foul_play_sidecar.bat                      the campaign copy, gen 5 wheel
+foul_play_sidecar.bat "C:\path\to\game"    another copy (a gauntlet worker)
+foul_play_sidecar.bat "" gen6              the gen 6 wheel
+```
+
+The game is a Windows process and the search is a Linux wheel, so the `.bat` runs the
+sidecar through `wsl.exe`; the two halves only ever meet in `Data/`, which is the same
+arrangement the 0.8.0 measurement ran on. It hardcodes `-d UbuntuWork` because the
+venv's `python` symlinks into that distro's home — the default distro cannot run it and
+fails with a bare "No such file or directory". It resolves its own paths, checks the
+wheel is built, and clears a leftover sidecar **for that game directory only**, so a
+gauntlet worker's sidecar is left alone. Closing the console window does not reliably
+reach the Linux process, which is why clearing a stale one is automatic rather than an
+error. By hand, the equivalent is:
+
+```bash
+tools/build_poke_engine.sh _AI-Study/generated/foul_play gen5   # once
+generated/foul_play/venv-gen5/bin/python tools/foul_play_sidecar.py \
+  --game "Realidea V4.1"
+```
+
+`Realidea V4.1/Data/portable_ai.txt` (any content) and a `Data/ai_harness.txt` holding
+`foul_play=true` and `foul_play_iterations=5000`, then launch and fight any trainer in
+singles. Kill the sidecar with `pgrep -f "foul_play_side[c]ar.py --game"` — a plain
+`pkill` on the name kills the calling shell.
+
+Limits to know before playing, none of them new:
+
+- The bot sees your whole team, the same fair-information the Portable AI is given.
+- Singles only. Doubles decline to the rule engine, as the search planner does.
+- A forced replacement after a KO stays with the rule engine: `pbDefaultChooseNewEnemy`
+  never reaches `plan_for`.
+- Wild battles are untouched (`ENABLE_WILD = false`).
+- No sidecar means one 60 s stall per battle, then the rules, logged to
+  `Data/ai_foulplay_log.txt`.
+- It is a study instrument — a Python process running beside the game — not a shippable
+  AI. Delete the marker to go back to stock.
+
+**Tests.** Core 209, adapter 128 (two new: the marker gate on `live_overrides` with
+`with_config` still winning, and the silent sidecar being dropped for the battle but not
+the process), Reborn 53, tooling 34. Install backup:
+`backups/realidea_Scripts.rxdata.pre-0.8.1`.
+
 ## Future-agent handoff
 
 ### 0.6.2 port (2026-09-06)
@@ -2744,18 +2844,11 @@ future core rule does, the contract test will say so.
    probe and per-game scenario resolution before claiming parity.
 7. **Longer-term team integration.** Keep AI, team overrides, and level-cap changes as
    separately switchable variables so strength changes remain attributable.
-8. **Foul Play for live play (backlog, 2026-09-08).** The 0.8.0 bridge only takes a
-   turn inside the gauntlet, because `foul_play` is read from `Data/ai_harness.txt`
-   solely within `Harness.with_config`; in a normal battle the run-level config is empty
-   and the enemy falls back to the rules. To let a player fight the bot: load the harness
-   overrides at boot whenever `Data/portable_ai.txt` is present (a few lines in the
-   adapter, rebuild, reinstall), then the recipe is sidecar first
-   (`tools/foul_play_sidecar.py --game "Realidea V4.1"`, gen 5 or gen 6 wheel per the
-   0.8.0 addendum), `portable_ai.txt` plus a harness file with `foul_play=true`, launch,
-   fight any trainer in singles. Known limits to state up front: the bot sees the
-   player's whole team (same information the Portable AI gets), forced replacements
-   after a KO stay with the rules, doubles decline, and a missing sidecar costs a 60 s
-   timeout per turn before the rules take over. A study instrument, not a shippable AI.
+8. **Foul Play for live play — done in 0.8.1 (2026-09-09).** See the 0.8.1 section
+   for the recipe and the limits. What remains is a played campaign against it: nobody
+   has yet fought the bridge through real trainers, so its behaviour outside the tier
+   rosters (item-using trainers, scripted battles, Mega Evolution, mid-battle saves) is
+   unobserved.
 
 ### Required gate for future changes
 
