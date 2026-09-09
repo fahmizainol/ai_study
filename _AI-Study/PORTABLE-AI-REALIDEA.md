@@ -80,7 +80,7 @@ yawn_gate=false
 | `search_iterations` | float (0.7.6), default 1000 — the MCTS budget as an iteration count, not a time, so a paired run and its shadow twin decide alike whatever the machine. Costs ~195 ms a decision at 1000 and ~894 ms at 5000 on RGSS's Ruby 1.8 (the maximin is ~10 ms). Read only when `search_mcts` is on
 | `search_seed` | float (0.7.6), default 0 — mixed into the per-decision seed of the MCTS chance sampler. The seed is otherwise the position itself (turn, both slots, every body's HP), so a decision replays from its snapshot alone and nothing is drawn from `pbAIRandom`. Read only when `search_mcts` is on
 | `foul_play` | boolean (0.8.0), ships **off** — hands every voluntary decision to the real Foul Play search (poke-engine gen 6) through `tools/foul_play_sidecar.py`; declines to the rules on doubles, a silent sidecar or an unmappable reply, each logged to `Data/ai_foulplay_log.txt`. **Pooled 162/180 against the rules' 143 (p = 0.005)**, the first arm to beat them. A study instrument: needs the sidecar process beside the game. Never on with `search_planner`
-| `foul_play_iterations` | float (0.8.0), default 5000 — the sidecar's MCTS budget; ~10 ms a decision at 5000. Read only when `foul_play` is on
+| `foul_play_iterations` | float (0.8.0), default 5000 — the sidecar's MCTS budget; ~10 ms a decision at 5000, 2-4 ms at 1000. **Leave it at 5000: 1000 measures 146/180 against 5000's 162 (p = 0.017), which is a tie with the rules** (see the 0.8.0 budget addendum). Read only when `foul_play` is on
 | *(matrix version 4)* | 0.7.9 — both move lists carry EVERY move (status moves at pct 0) with `acc`, `priority`, `damaging` and the `effect` triple; the side table carries `status`, `item`, `ability` and `entry_damage_pct` per body. No new key: the search planner reads it whenever it runs, and the rule engine reads none of it (its cell reads are `out`, `in`, the categories and `faster`, all unchanged — stock and rules arms byte-identical). **Measured with the whole 0.7.9 board: the tree at 5000 falls from 48 to 41/60** (see that section) |
 | *(matrix version 3)* | 0.7.7 — the cell gains `in_moves`, the foe's own per-move rolls beside our `out_moves`, so the search's foe axis is one column per move it owns instead of a single "it attacks, at worst". No new engine calls (the rolls were already made to find `in`) and built only when `search_planner` is on, since that is its only reader. Worth **+6** to a maximin with a uniform prior (29 → 35), **−1** to one with a real prior (46 → 45), and **−2 to +9** to the tree depending entirely on whether the budget can resolve the wider foe (39 at 1000, 48 at 5000)
 
@@ -2573,6 +2573,21 @@ move, ability or item to `NONE`/`UNKNOWNITEM` silently, so every id is checked a
 `generated/poke_engine_ids_gen6.json` (extracted from the enum source) and logged;
 across the three rosters the only unknowns are Eject Button, Mental Herb and Light Clay.
 
+**The iteration budget is load-bearing: 1000 is not enough, 2026-09-09.** The same
+three rosters and the same seeds at `foul_play_iterations=1000`, nothing else changed
+(and the budget verified off the trace, not the config: root visits median exactly 1000
+a decision against 5000). Pooled **146/180 against the 5000 arm's 162** — gained 12 lost
+28, p = 0.017 — and against the rules' 143 it is gained 24 lost 21, p = 0.77, a **tie**.
+Every roster moved the same way: 46, 52, 48 against 53, 55, 54. So the ~11-point lead is
+a property of the budget as much as of the board — at a fifth of the iterations the
+search lands exactly where every Ruby arm landed, level with the rules. Nothing is
+bought by the cheaper budget either: the sidecar drops from ~10 ms a decision to 2-4 ms,
+but the engine at ~50 ms a turn dominates and the three rosters took 406 s against 463 s.
+The bridge stayed clean over 4800 decisions — one decline, an unmapped switch reply on
+gen6uu_a turn 39, which falls through to the rules by design. Caveat: the scratchpad had
+been wiped, so the wheel was rebuilt by `tools/build_poke_engine.sh` at the same pinned
+commit rather than being the literal binary the 162 was measured with.
+
 **What this means for the study.** The 0.7.x line's conclusion inverts: a correct
 board plus search beats the rules by ~11 points on these rosters, so the leaf
 re-pricing 0.7.9 proposed is worth doing only if one wants a *shippable* search — this
@@ -2580,6 +2595,14 @@ one is a study instrument (a Python process beside the game) and can never run f
 player. The rule engine is not "near the ceiling"; it is ~11 points under a ceiling that
 a 5000-iteration tree on the right board reaches in 10 ms. The untried 0.7.0 idea (rules
 as the leaf) is now measured against a real number rather than a hope.
+
+**Which board, and doubles.** The four boards a search could step here (Essentials'
+own engine, this Ruby projection, Pokémon Showdown, poke-engine) were measured against
+each other on 2026-09-09: see `SEARCH-BOARDS.md`. Short version, because it settles two
+recurring questions: poke-engine cannot be made to do doubles without rewriting its core
+(boosts and volatiles live on the *side*, every instruction addresses a side and not a
+slot, `MoveTarget` is `User | Opponent`), and Showdown can, at ~4 s a decision for 5000
+iterations against this bridge's 10 ms. Nothing in that document is installed.
 
 **Reproduce.** `tools/build_poke_engine.sh` (clones and builds the gen 6 wheel into
 `generated/foul_play/venv`, git-ignored); `generated/foul_play/venv/bin/python
@@ -2592,7 +2615,9 @@ ships off, so a run without the key is 0.7.9 decision for decision).
 
 **Artifacts** (`generated/`): `realidea_tier_<roster>_0_8_0_foul_play_5000.ndjson`
 (three rosters, traced; candidates carry `foul_play_visits`, the search block carries the
-foe's visit split), `realidea_foulplay_check_<roster>_0_8_0.ndjson`. Backup of the
+foe's visit split), `realidea_foulplay_check_<roster>_0_8_0.ndjson`; the 1000-iteration
+arm as `realidea_tier_<roster>_0_8_0_foul_play_1000.ndjson` and
+`realidea_foulplay_check_<roster>_0_8_0_1000.ndjson`. Backup of the
 pre-install bundle: `backups/realidea_Scripts.rxdata.pre-0.8.0`. Tests: core 209 (one
 0.7.9 expectation re-pinned: a bare foe `stay` carries no move on that board),
 adapter 126 (six new: the state shape, decline, reply mapping, silent-sidecar
