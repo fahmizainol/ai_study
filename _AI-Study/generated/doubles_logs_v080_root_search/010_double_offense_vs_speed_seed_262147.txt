@@ -1,0 +1,239 @@
+double_offense_vs_speed  seed 262147   Reborn-Normal (offense, left) vs Portable 0.8.0 (speed, right)   result for right seat: WIN in 9 rounds (engine turncount 8)
+  Reborn   (offense): Politoed, Kingdra, Ludicolo, Zapdos, Scizor, Gastrodon
+  Portable (speed): Whimsicott, Persian, Excadrill, Tyranitar, Crobat, Rotom
+==============================================================================================================
+
+Turn 1
+  Reborn    Politoed 342/342         -> Scald -> Persian
+  Portable  Whimsicott 282/282       -> Protect
+  Reborn    Kingdra 312/312          -> Hurricane -> Whimsicott
+  Portable  Persian 292/292          -> Fakeout -> Politoed
+    Whimsicott plan score 100.0, joint adjustment -263.1
+    view: hp 100%  speed 289 (slower)  incoming max 103%  certain 103%  threatened=True
+    foe moves est: Hurricane 103%, Muddywater 36%, Scald 31%, Icywind 29%, Helpinghand 0%, Protect 0%, Dracometeor 0%, Protect 0%
+      MOONBLAST -> Kingdra             216  expected_damage+46 super_effective+70 doubles_outcome_candidate+0
+      TAILWIND                         204  speed_control_value+104
+      switch->Rotom                    185  matchup+96 entry_incoming_damage-91 switchin_race-5 escape_lethal_threat+130 entry_hazards+0 escape_reasons+1
+      switch->Crobat                   181  matchup+64 entry_incoming_damage-63 switchin_race-5 escape_lethal_threat+130 entry_hazards+0 escape_reasons+1
+      switch->Tyranitar                160  matchup+64 entry_incoming_damage-84 switchin_race-5 escape_lethal_threat+130 entry_hazards+0 escape_reasons+1
+    Persian plan score 224.8, joint adjustment -263.1
+    view: hp 100%  speed 287 (slower)  incoming max 98%  certain 67%  threatened=False
+    foe moves est: Dracometeor 98%, Muddywater 76%, Scald 67%, Hurricane 55%, Icywind 15%, Helpinghand 0%, Protect 0%, Protect 0%
+    * FAKEOUT -> Politoed              225  expected_damage+10 first_turn_hit+115 doubles_outcome_candidate+0
+      FAKEOUT -> Kingdra               224  expected_damage+9 first_turn_hit+115 doubles_outcome_candidate+0
+      KNOCKOFF -> Kingdra              126  expected_damage+22 knocks_item+4 doubles_outcome_candidate+0
+      KNOCKOFF -> Politoed             124  expected_damage+24 doubles_outcome_candidate+0
+      UTURN -> Politoed                111  expected_damage+11 doubles_outcome_candidate+0
+    Whimsicott   used Protect        untargeted
+    Persian      used Fakeout        hit            Politoed -42
+    Kingdra      used Hurricane      protected      Whimsicott 0, user -31
+    Politoed     used Scald          could_not_move  [flinch=True]
+  end:     Reborn Politoed 300/342 | Portable Whimsicott 282/282 | Reborn Kingdra 281/312 | Portable Persian 292/292
+
+Turn 2
+  Reborn    Politoed 300/342         -> Scald -> Persian
+  Portable  Whimsicott 282/282       -> Tailwind
+  Reborn    Kingdra 281/312          -> Hurricane -> Whimsicott
+  Portable  Persian 292/292          -> Knockoff -> Kingdra
+    Whimsicott plan score 204.0, joint adjustment -408.1
+    view: hp 100%  speed 289 (slower)  incoming max 103%  certain 103%  threatened=True
+    foe moves est: Hurricane 103%, Muddywater 36%, Scald 31%, Icywind 29%, Helpinghand 0%, Protect 0%, Dracometeor 0%, Protect 0%
+      MOONBLAST -> Kingdra             216  expected_damage+46 super_effective+70 doubles_outcome_candidate+0
+    * TAILWIND                         204  speed_control_value+104
+      switch->Rotom                    185  matchup+96 entry_incoming_damage-91 switchin_race-5 escape_lethal_threat+130 entry_hazards+0 escape_reasons+1
+      switch->Crobat                   181  matchup+64 entry_incoming_damage-63 switchin_race-5 escape_lethal_threat+130 entry_hazards+0 escape_reasons+1
+      switch->Tyranitar                160  matchup+64 entry_incoming_damage-84 switchin_race-5 escape_lethal_threat+130 entry_hazards+0 escape_reasons+1
+    Persian plan score 126.2, joint adjustment -408.1
+    view: hp 100%  speed 287 (slower)  incoming max 98%  certain 67%  threatened=False
+    foe moves est: Dracometeor 98%, Muddywater 76%, Scald 67%, Hurricane 55%, Icywind 15%, Helpinghand 0%, Protect 0%, Protect 0%
+    * KNOCKOFF -> Kingdra              126  expected_damage+22 knocks_item+4 doubles_outcome_candidate+0
+      KNOCKOFF -> Politoed             124  expected_damage+24 doubles_outcome_candidate+0
+      UTURN -> Politoed                111  expected_damage+11 doubles_outcome_candidate+0
+      UTURN -> Kingdra                 110  expected_damage+10 doubles_outcome_candidate+0
+      TAUNT -> Politoed                100
+    Whimsicott   used Tailwind       untargeted
+    Kingdra      used Hurricane      hit            Whimsicott -263 x2, user -31
+    Persian      used Knockoff       hit            Kingdra -94
+    Politoed     used Scald          hit            Persian -103
+  end:     Reborn Politoed 300/342 | Portable Whimsicott 19/282 | Reborn Kingdra 156/312 | Portable Persian 189/292
+
+Turn 3
+  Reborn    Politoed 300/342         -> Icywind -> Persian
+  Portable  Whimsicott 19/282        -> Moonblast -> Kingdra
+  Reborn    Kingdra 156/312          -> Muddywater -> Whimsicott
+  Portable  Persian 189/292          -> switch->Rotom
+    Whimsicott plan score 600.0, joint adjustment -375.0
+    view: hp 7%  speed 578 (faster)  incoming max 79%  certain 79%  threatened=True
+    foe moves est: Hurricane 79%, Scald 31%, Icywind 29%, Muddywater 28%, Helpinghand 0%, Protect 0%, Dracometeor 0%, Protect 0%
+    * MOONBLAST -> Kingdra             600  lethal+500 lethal_flat+0 doubles_outcome_candidate+0
+      MOONBLAST -> Politoed            121  expected_damage+20 secondary_drop+1 doubles_outcome_candidate+0
+      HELPINGHAND -> Persian           100
+      PROTECT                          100
+      TAILWIND                        -400  speed_control_redundant-500
+    Persian plan score 213.2, joint adjustment -375.0
+    view: hp 65%  speed 574 (faster)  incoming max 75%  certain 67%  threatened=True
+    foe moves est: Dracometeor 75%, Scald 67%, Muddywater 59%, Hurricane 42%, Icywind 15%, Helpinghand 0%, Protect 0%, Protect 0%
+    * switch->Rotom                    213  matchup+96 entry_incoming_damage-63 switchin_race-5 escape_lethal_threat+130 entry_hazards+0 escape_reasons+1
+      switch->Crobat                   203  matchup+64 entry_incoming_damage-41 switchin_race-5 escape_lethal_threat+130 entry_hazards+0 escape_reasons+1
+      switch->Tyranitar                175  matchup+64 entry_incoming_damage-69 switchin_race-5 escape_lethal_threat+130 entry_hazards+0 escape_reasons+1
+      KNOCKOFF -> Politoed             124  expected_damage+24 doubles_outcome_candidate+0
+      KNOCKOFF -> Kingdra              114  expected_damage+14 doubles_outcome_candidate+0
+    Whimsicott   used Moonblast      hit            Kingdra -156 x2
+    Politoed     used Icywind        hit            Whimsicott -19 x2, Persian -39
+  end:     Reborn Politoed 300/342 | Portable Tyranitar 362/362 | Reborn Ludicolo 322/322 | Portable Rotom 239/262
+
+Turn 4
+  Reborn    Politoed 300/342         -> Scald -> Rotom
+  Portable  Tyranitar 362/362        -> Crunch -> Politoed
+  Reborn    Ludicolo 322/322         -> Fakeout -> Tyranitar
+  Portable  Rotom 239/262            -> Thunderbolt -> Politoed
+    Tyranitar plan score 148.7, joint adjustment 375.0
+    view: hp 100%  speed 358 (faster)  incoming max 36%  certain 36%  threatened=False
+    foe moves est: Scald 36%, Scald 36%, Gigadrain 33%, Icebeam 13%, Icywind 6%, Fakeout 4%, Helpinghand 0%, Protect 0%
+      CRUNCH -> Ludicolo               154  expected_damage+53 secondary_drop+1 doubles_outcome_candidate+0
+      ROCKSLIDE                        149  expected_damage+47 accuracy-2 spread_type_in_damage+0 secondary_flinch+4 doubles_outcome_candidate+0
+    * CRUNCH -> Politoed               149  expected_damage+48 secondary_drop+1 doubles_outcome_candidate+0
+      EARTHQUAKE                       131  expected_damage+31 spread_type_in_damage+0 partner_immune+0 doubles_outcome_candidate+0
+      PROTECT                          100
+    Rotom plan score 213.9, joint adjustment 375.0
+    view: hp 91%  speed 318 (faster)  incoming max 44%  certain 44%  threatened=False
+    foe moves est: Scald 44%, Scald 44%, Gigadrain 41%, Icebeam 33%, Icywind 15%, Helpinghand 0%, Protect 0%, Fakeout 0%
+    * THUNDERBOLT -> Politoed          214  expected_damage+44 super_effective+70 secondary_paralyze+0 doubles_outcome_candidate+0
+      VOLTSWITCH -> Politoed           205  expected_damage+35 super_effective+70 doubles_outcome_candidate+0
+      WILLOWISP -> Politoed            125  fresh_status+25
+      WILLOWISP -> Ludicolo            125  fresh_status+25
+      SHADOWBALL -> Politoed           120  expected_damage+20 secondary_drop+0 doubles_outcome_candidate+0
+    Ludicolo     used Fakeout        hit            Tyranitar -12 x0.5
+    Tyranitar    used Crunch         could_not_move  [flinch=True]
+    Rotom        used Thunderbolt    hit            Politoed -125 x2
+    Politoed     used Scald          hit            Rotom -99
+  end:     Reborn Politoed 154/342 | Portable Tyranitar 350/362 | Reborn Ludicolo 302/322 | Portable Rotom 124/262 BRN
+
+Turn 5
+  Reborn    Politoed 154/342         -> Helpinghand -> Tyranitar
+  Portable  Tyranitar 350/362        -> Crunch -> Politoed
+  Reborn    Ludicolo 302/322         -> Gigadrain -> Rotom
+  Portable  Rotom 124/262 BRN        -> switch->Crobat
+    Tyranitar plan score 600.0, joint adjustment -33.7
+    view: hp 97%  speed 358 (faster)  incoming max 36%  certain 36%  threatened=False
+    foe moves est: Scald 36%, Scald 36%, Gigadrain 33%, Icebeam 13%, Icywind 6%, Fakeout 4%, Helpinghand 0%, Protect 0%
+    * CRUNCH -> Politoed               600  lethal+500 lethal_flat+0 doubles_outcome_candidate+0
+      CRUNCH -> Ludicolo               154  expected_damage+53 secondary_drop+1 doubles_outcome_candidate+0
+      ROCKSLIDE                        149  expected_damage+47 accuracy-2 spread_type_in_damage+0 secondary_flinch+4 doubles_outcome_candidate+0
+      EARTHQUAKE                       131  expected_damage+31 spread_type_in_damage+0 partner_immune+0 doubles_outcome_candidate+0
+      PROTECT                          100
+    Rotom plan score 293.2, joint adjustment -33.7
+    view: hp 47%  speed 318 (faster)  incoming max 44%  certain 44%  threatened=False
+    foe moves est: Scald 44%, Scald 44%, Gigadrain 41%, Icebeam 33%, Icywind 15%, Helpinghand 0%, Protect 0%, Fakeout 0%
+      THUNDERBOLT -> Politoed          600  lethal+500 lethal_flat+0 doubles_outcome_candidate+0
+    * switch->Crobat                   293  matchup+96 entry_incoming_damage-33 switchin_race+65 losing_race_bench_wins+110 entry_hazards+0 escape_reasons+1
+      VOLTSWITCH -> Politoed           205  expected_damage+35 super_effective+70 doubles_outcome_candidate+0
+      WILLOWISP -> Politoed            125  fresh_status+25
+      WILLOWISP -> Ludicolo            125  fresh_status+25
+    Politoed     used Helpinghand    hit            Ludicolo 0
+    Tyranitar    used Crunch         hit            Politoed -154
+    Ludicolo     used Gigadrain      hit            Rotom -35 x0.25, user +18
+  end:     Reborn Zapdos 342/342 | Portable Tyranitar 350/362 | Reborn Ludicolo 300/322 | Portable Crobat 277/332
+
+Turn 6
+  Reborn    Zapdos 342/342           -> Thunderbolt -> Crobat
+  Portable  Tyranitar 350/362        -> Crunch -> Zapdos
+  Reborn    Ludicolo 300/322         -> Icebeam -> Crobat
+  Portable  Crobat 277/332           -> Bravebird -> Ludicolo
+    Tyranitar plan score 144.4, joint adjustment -315.1
+    view: hp 97%  speed 179 (slower)  incoming max 36%  certain 36%  threatened=False
+    foe moves est: Scald 36%, Gigadrain 33%, Thunderbolt 26%, Icebeam 13%, Heatwave 7%, Fakeout 0%, Tailwind 0%, Protect 0%
+      ROCKSLIDE                        163  expected_damage+66 accuracy-3 spread_type_in_damage+0 doubles_outcome_candidate+0
+      CRUNCH -> Ludicolo               154  expected_damage+53 secondary_drop+1 doubles_outcome_candidate+0
+    * CRUNCH -> Zapdos                 144  expected_damage+44 secondary_drop+1 doubles_outcome_candidate+0
+      EARTHQUAKE                       111  expected_damage+11 spread_type_in_damage+0 partner_immune+0 doubles_outcome_candidate+0
+      PROTECT                          100
+    Crobat plan score 574.3, joint adjustment -315.1
+    view: hp 83%  speed 317 (faster)  incoming max 98%  certain 98%  threatened=True
+    foe moves est: Thunderbolt 98%, Icebeam 51%, Scald 34%, Heatwave 26%, Gigadrain 8%, Fakeout 1%, Tailwind 0%, Protect 0%
+    * BRAVEBIRD -> Ludicolo            574  lethal+500 lethal_flat+0 recoil_cost-26 doubles_outcome_candidate+0
+      switch->Excadrill                220  matchup+96 entry_incoming_damage-56 switchin_race-5 escape_lethal_threat+130 entry_hazards+0 escape_reasons+1
+      switch->Persian                  202  matchup+80 entry_incoming_damage-51 escape_lethal_threat+130 entry_hazards+0 escape_reasons+1
+      switch->Rotom                    201  matchup+64 entry_incoming_damage-25 switchin_race-5 escape_lethal_threat+130 entry_hazards+0 escape_reasons+1
+      SUPERFANG -> Zapdos              138  expected_damage+40 accuracy-2 doubles_outcome_candidate+0
+    Crobat       used Bravebird      hit            Ludicolo -300 x2, user -100
+    Zapdos       used Thunderbolt    hit            Crobat -177 x2
+    Tyranitar    used Crunch         hit            Zapdos -189
+  end:     Reborn Zapdos 153/342 | Portable Tyranitar 350/362 | Reborn Scizor 302/302 | Portable Excadrill 382/382
+
+Turn 7
+  Reborn    Zapdos 153/342           -> Tailwind
+  Portable  Tyranitar 350/362        -> Protect
+  Reborn    Scizor 302/302           -> Xscissor -> Tyranitar
+  Portable  Excadrill 382/382        -> Rockslide
+    Tyranitar plan score 100.0, joint adjustment 365.6
+    view: hp 97%  speed 179 (slower)  incoming max 84%  certain 84%  threatened=False
+    foe moves est: Xscissor 84%, Bulletpunch 43%, Thunderbolt 26%, Heatwave 7%, Tailwind 0%, Protect 0%, Swordsdance 0%, Protect 0%
+      CRUNCH -> Zapdos                 600  lethal+500 lethal_flat+0 doubles_outcome_candidate+0
+      ROCKSLIDE                        158  expected_damage+61 accuracy-3 spread_type_in_damage+0 doubles_outcome_candidate+0
+      CRUNCH -> Scizor                 144  expected_damage+43 secondary_drop+1 doubles_outcome_candidate+0
+    * PROTECT                          100
+      EARTHQUAKE                       -66  expected_damage+18 spread_type_in_damage+0 friendly_fire-184 doubles_outcome_candidate+0
+    Excadrill plan score 166.1, joint adjustment 365.6
+    view: hp 100%  speed 233 (slower)  incoming max 52%  certain 31%  threatened=False
+    foe moves est: Heatwave 52%, Xscissor 31%, Bulletpunch 16%, Thunderbolt 0%, Tailwind 0%, Protect 0%, Swordsdance 0%, Protect 0%
+    * ROCKSLIDE                        166  expected_damage+70 accuracy-3 spread_type_in_damage+0 doubles_outcome_candidate+0
+      PROTECT                          100
+      IRONHEAD -> Scizor                80  expected_damage+25 resisted-45 doubles_outcome_candidate+0
+      IRONHEAD -> Zapdos                80  expected_damage+25 resisted-45 doubles_outcome_candidate+0
+      EARTHQUAKE                      -870  expected_damage+46 spread_type_in_damage+0 friendly_fire-1017 doubles_outcome_candidate+0
+    Tyranitar    used Protect        untargeted
+    Zapdos       used Tailwind       untargeted
+    Excadrill    used Rockslide      failed         Zapdos -153 CRIT x2, Scizor 0, user -38
+    Scizor       used Xscissor       protected      Tyranitar 0
+  end:     Reborn Gastrodon 384/384 | Portable Tyranitar 350/362 | Reborn Scizor 302/302 | Portable Excadrill 344/382
+
+Turn 8
+  Reborn    Gastrodon 384/384        -> Scald -> Excadrill
+  Portable  Tyranitar 350/362        -> Crunch -> Gastrodon
+  Reborn    Scizor 302/302           -> Xscissor -> Tyranitar
+  Portable  Excadrill 344/382        -> Rockslide
+    Tyranitar plan score 146.5, joint adjustment -325.8
+    view: hp 97%  speed 179 (slower)  incoming max 84%  certain 84%  threatened=False
+    foe moves est: Xscissor 84%, Bulletpunch 43%, Earthpower 41%, Scald 36%, Recover 0%, Protect 0%, Swordsdance 0%, Protect 0%
+    * CRUNCH -> Gastrodon              147  expected_damage+46 secondary_drop+1 doubles_outcome_candidate+0
+      CRUNCH -> Scizor                 144  expected_damage+43 secondary_drop+1 doubles_outcome_candidate+0
+      ROCKSLIDE                        129  expected_damage+31 accuracy-2 spread_type_in_damage+0 doubles_outcome_candidate+0
+      PROTECT                          -40  repeated_protect-140
+      EARTHQUAKE                       -47  expected_damage+37 spread_type_in_damage+0 friendly_fire-184 doubles_outcome_candidate+0
+    Excadrill plan score 133.8, joint adjustment -325.8
+    view: hp 90%  speed 233 (slower)  incoming max 78%  certain 78%  threatened=False
+    foe moves est: Earthpower 78%, Scald 69%, Xscissor 31%, Bulletpunch 16%, Recover 0%, Protect 0%, Swordsdance 0%, Protect 0%
+    * ROCKSLIDE                        134  expected_damage+36 accuracy-2 spread_type_in_damage+0 doubles_outcome_candidate+0
+      PROTECT                          100
+      IRONHEAD -> Gastrodon             81  expected_damage+26 resisted-45 doubles_outcome_candidate+0
+      IRONHEAD -> Scizor                80  expected_damage+25 resisted-45 doubles_outcome_candidate+0
+      EARTHQUAKE                      -837  expected_damage+80 spread_type_in_damage+0 friendly_fire-1017 doubles_outcome_candidate+0
+    Scizor       used Xscissor       hit            Tyranitar -296 x2, user -30
+    Gastrodon    used Scald          hit            Excadrill -240 x2
+    Excadrill    used Rockslide      hit            Gastrodon -68 x0.5, Scizor -98, user -38
+    Tyranitar    used Crunch         hit            Gastrodon -316
+  end:     Portable Tyranitar 54/362 | Reborn Scizor 174/302 | Portable Excadrill 66/382
+
+Turn 9
+  Portable  Tyranitar 54/362         -> Earthquake
+  Reborn    Scizor 174/302           -> Bulletpunch -> Tyranitar
+  Portable  Excadrill 66/382         -> Earthquake
+    Tyranitar plan score -232.5, joint adjustment 1291.8
+    view: hp 15%  speed 179 (slower)  incoming max 84%  certain 84%  threatened=True
+    foe moves est: Xscissor 84%, Bulletpunch 43%, Swordsdance 0%, Protect 0%
+      PROTECT                          100
+      CRUNCH -> Scizor                  45  ko_never_lands+0 expected_damage+80 secondary_drop+2 dead_before_moving-136 doubles_outcome_candidate+0
+      ROCKSLIDE                         38  expected_damage+54 accuracy-3 spread_type_in_damage+0 dead_before_moving-114 doubles_outcome_candidate+0
+    * EARTHQUAKE                      -232  expected_damage+36 spread_type_in_damage+0 friendly_fire-1066 dead_before_moving+697 doubles_outcome_candidate+0
+      CRUNCH -> Excadrill          -1000000  ko_never_lands+0 expected_damage+80 secondary_drop+2
+    Excadrill plan score -202.5, joint adjustment 1291.8
+    view: hp 17%  speed 233 (slower)  incoming max 31%  certain 31%  threatened=True
+    foe moves est: Xscissor 31%, Bulletpunch 16%, Swordsdance 0%, Protect 0%
+      PROTECT                          100
+      ROCKSLIDE                         31  expected_damage+24 accuracy-1 spread_type_in_damage+0 dead_before_moving-92 doubles_outcome_candidate+0
+      IRONHEAD -> Scizor                19  expected_damage+19 resisted-45 dead_before_moving-56 doubles_outcome_candidate+0
+    * EARTHQUAKE                      -203  expected_damage+35 spread_type_in_damage+0 friendly_fire-945 dead_before_moving+608 doubles_outcome_candidate+0
+      IRONHEAD -> Tyranitar        -1000000  ko_never_lands+0 expected_damage+70 super_effective+70
+    Scizor       used Bulletpunch    hit            Tyranitar -54 x2, user -30
+    Excadrill    used Earthquake     hit            Scizor -144, user -38

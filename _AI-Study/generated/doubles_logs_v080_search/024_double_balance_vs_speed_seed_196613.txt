@@ -1,0 +1,183 @@
+double_balance_vs_speed  seed 196613   Reborn-Normal (balance, left) vs Portable 0.8.0 (speed, right)   result for right seat: WIN in 7 rounds (engine turncount 6)
+  Reborn   (balance): Togekiss, Garchomp, Volcarona, Metagross, Sylveon, Hitmontop
+  Portable (speed): Whimsicott, Persian, Excadrill, Tyranitar, Crobat, Rotom
+==============================================================================================================
+
+Turn 1
+  Reborn    Togekiss 332/332         -> Airslash -> Whimsicott
+  Portable  Whimsicott 282/282       -> Moonblast -> Garchomp
+  Reborn    Garchomp 378/378         -> Earthquake -> Whimsicott
+  Portable  Persian 292/292          -> Fakeout -> Togekiss
+    Whimsicott plan score 210.6, joint adjustment -106.8
+    view: hp 100%  speed 289 (faster)  incoming max 98%  certain 39%  threatened=False
+    foe moves est: Airslash 98%, Dazzlinggleam 39%, Earthquake 31%, Followme 0%, Protect 0%, Dragonclaw 0%, Swordsdance 0%, Protect 0%
+    * MOONBLAST -> Garchomp            211  expected_damage+41 super_effective+70 doubles_outcome_candidate+0
+      MOONBLAST -> Togekiss            120  expected_damage+19 secondary_drop+1 doubles_outcome_candidate+0
+      TAILWIND                         100
+      HELPINGHAND -> Persian           100
+      PROTECT                          100
+    Persian plan score 223.4, joint adjustment -106.8
+    view: hp 100%  speed 287 (faster)  incoming max 82%  certain 82%  threatened=False
+    foe moves est: Dragonclaw 82%, Earthquake 76%, Airslash 52%, Dazzlinggleam 42%, Followme 0%, Protect 0%, Swordsdance 0%, Protect 0%
+    * FAKEOUT -> Togekiss              223  expected_damage+8 first_turn_hit+115 doubles_outcome_candidate+0
+      FAKEOUT -> Garchomp              222  expected_damage+7 first_turn_hit+115 doubles_outcome_candidate+0
+      KNOCKOFF -> Garchomp             122  expected_damage+18 knocks_item+4 doubles_outcome_candidate+0
+      UTURN -> Garchomp                108  expected_damage+8 doubles_outcome_candidate+0
+      TAUNT -> Togekiss                100
+    Persian      used Fakeout        hit            Togekiss -36
+    Whimsicott   used Moonblast      hit            Garchomp -196 x2
+    Garchomp     used Earthquake     hit            Togekiss 0 immune, Whimsicott -74 x0.5, Persian -149, user -37
+    Togekiss     used Airslash       could_not_move  [flinch=True]
+  end:     Reborn Togekiss 296/332 | Portable Whimsicott 208/282 | Reborn Garchomp 145/378 | Portable Persian 143/292
+
+Turn 2
+  Reborn    Togekiss 296/332         -> Dazzlinggleam -> Persian
+  Portable  Whimsicott 208/282       -> switch->Crobat
+  Reborn    Garchomp 145/378         -> Earthquake -> Whimsicott
+  Portable  Persian 143/292          -> Knockoff -> Garchomp
+    Whimsicott plan score 270.8, joint adjustment -116.4
+    view: hp 74%  speed 289 (faster)  incoming max 98%  certain 39%  threatened=True
+    foe moves est: Airslash 98%, Dazzlinggleam 39%, Earthquake 31%, Followme 0%, Protect 0%, Dragonclaw 0%, Swordsdance 0%, Protect 0%
+      MOONBLAST -> Garchomp            600  lethal+500 lethal_flat+0 doubles_outcome_candidate+0
+    * switch->Crobat                   271  matchup+64 entry_incoming_damage-43 switchin_race+65 escape_lethal_threat+130 entry_hazards+0 escape_reasons+1
+      switch->Tyranitar                190  matchup+80 entry_incoming_damage-70 switchin_race-5 escape_lethal_threat+130 entry_hazards+0 escape_reasons+1
+      switch->Rotom                    179  matchup+64 entry_incoming_damage-65 switchin_race-5 escape_lethal_threat+130 entry_hazards+0 escape_reasons+1
+      MOONBLAST -> Togekiss            120  expected_damage+19 secondary_drop+1 doubles_outcome_candidate+0
+    Persian plan score 121.6, joint adjustment -116.4
+    view: hp 49%  speed 287 (faster)  incoming max 82%  certain 82%  threatened=True
+    foe moves est: Dragonclaw 82%, Earthquake 76%, Airslash 52%, Dazzlinggleam 42%, Followme 0%, Protect 0%, Swordsdance 0%, Protect 0%
+    * KNOCKOFF -> Garchomp             122  expected_damage+18 knocks_item+4 doubles_outcome_candidate+0
+      UTURN -> Garchomp                108  expected_damage+8 doubles_outcome_candidate+0
+      TAUNT -> Togekiss                100
+      TAUNT -> Garchomp                100
+      KNOCKOFF -> Togekiss              65  expected_damage+10 resisted-45 doubles_outcome_candidate+0
+    Persian      used Knockoff       hit            Garchomp -89
+    Garchomp     used Earthquake     hit            Togekiss 0 immune, Whimsicott 0 immune, Persian -143
+    Togekiss     used Dazzlinggleam  hit            Whimsicott -69 x0.5
+  end:     Reborn Togekiss 296/332 | Portable Crobat 263/332 | Reborn Garchomp 56/378 | Portable Whimsicott 208/282
+
+Turn 3
+  Reborn    Togekiss 296/332         -> Airslash -> Whimsicott
+  Portable  Crobat 263/332           -> Bravebird -> Garchomp
+  Reborn    Garchomp 56/378          -> Dragonclaw -> Crobat
+  Portable  Whimsicott 208/282       -> switch->Tyranitar
+    Crobat plan score 574.3, joint adjustment -521.5
+    view: hp 79%  speed 317 (faster)  incoming max 45%  certain 45%  threatened=False
+    foe moves est: Dragonclaw 45%, Airslash 40%, Dazzlinggleam 16%, Followme 0%, Protect 0%, Earthquake 0%, Swordsdance 0%, Protect 0%
+    * BRAVEBIRD -> Garchomp            574  lethal+500 lethal_flat+0 recoil_cost-26 doubles_outcome_candidate+0
+      SUPERFANG -> Togekiss            134  expected_damage+36 accuracy-2 doubles_outcome_candidate+0
+      BRAVEBIRD -> Togekiss            127  expected_damage+30 recoil_cost-3 doubles_outcome_candidate+0
+      SUPERFANG -> Garchomp            106  expected_damage+6 accuracy-0 doubles_outcome_candidate+0
+      TAILWIND                         100
+    Whimsicott plan score 213.5, joint adjustment -521.5
+    view: hp 74%  speed 289 (faster)  incoming max 98%  certain 39%  threatened=True
+    foe moves est: Airslash 98%, Dazzlinggleam 39%, Earthquake 24%, Followme 0%, Protect 0%, Dragonclaw 0%, Swordsdance 0%, Protect 0%
+      MOONBLAST -> Garchomp            600  lethal+500 lethal_flat+0 doubles_outcome_candidate+0
+    * switch->Tyranitar                214  matchup+80 entry_incoming_damage-46 switchin_race-5 escape_lethal_threat+130 entry_hazards+0 escape_reasons+1
+      switch->Rotom                    201  matchup+64 entry_incoming_damage-43 switchin_race-5 escape_lethal_threat+130 entry_hazards+0 escape_reasons+1
+      switch->Excadrill                193  matchup+96 entry_incoming_damage-83 switchin_race-5 escape_lethal_threat+130 entry_hazards+0 escape_reasons+1
+      MOONBLAST -> Togekiss            120  expected_damage+19 secondary_drop+1 doubles_outcome_candidate+0
+    Crobat       used Bravebird      hit            Garchomp -56, user -19
+    Togekiss     used Airslash       hit            Whimsicott -37 x0.5
+  end:     Reborn Togekiss 276/332 | Portable Crobat 224/332 | Reborn Metagross 322/322 | Portable Tyranitar 325/362
+
+Turn 4
+  Reborn    Togekiss 276/332         -> Dazzlinggleam -> Tyranitar
+  Portable  Crobat 224/332           -> switch->Excadrill
+  Reborn    Metagross 322/322        -> Zenheadbutt -> Crobat
+  Portable  Tyranitar 325/362        -> Crunch -> Metagross
+    Crobat plan score 392.9, joint adjustment -116.8
+    view: hp 67%  speed 317 (faster)  incoming max 93%  certain 16%  threatened=True
+    foe moves est: Zenheadbutt 93%, Meteormash 52%, Airslash 40%, Dazzlinggleam 16%, Followme 0%, Protect 0%, Earthquake 0%, Protect 0%
+    * switch->Excadrill                393  matchup+80 entry_incoming_damage-47 switchin_race+65 escape_lethal_threat+130 losing_race_bench_wins+110 entry_hazards+0 escape_reasons+2
+      switch->Rotom                    300  matchup+96 entry_incoming_damage-46 switchin_race+65 escape_lethal_threat+130 entry_hazards+0 escape_reasons+1
+      SUPERFANG -> Togekiss            132  expected_damage+33 accuracy-2 doubles_outcome_candidate+0
+      BRAVEBIRD -> Togekiss            127  expected_damage+30 recoil_cost-3 doubles_outcome_candidate+0
+      TAILWIND                         100
+    Tyranitar plan score 236.6, joint adjustment -116.8
+    view: hp 90%  speed 179 (slower)  incoming max 76%  certain 42%  threatened=False
+    foe moves est: Meteormash 76%, Earthquake 42%, Dazzlinggleam 33%, Airslash 10%, Followme 0%, Protect 0%, Zenheadbutt 0%, Protect 0%
+    * CRUNCH -> Metagross              237  expected_damage+67 super_effective+70 doubles_outcome_candidate+0
+      ROCKSLIDE                        144  expected_damage+47 accuracy-2 spread_type_in_damage+0 doubles_outcome_candidate+0
+      EARTHQUAKE                       128  expected_damage+28 spread_type_in_damage+0 partner_immune+0 doubles_outcome_candidate+0
+      PROTECT                          100
+      CRUNCH -> Togekiss                76  expected_damage+21 resisted-45 secondary_drop+0 doubles_outcome_candidate+0
+    Togekiss     used Dazzlinggleam  hit            Crobat -53 x0.5, Tyranitar -108 x2
+    Metagross    used Zenheadbutt    hit            Crobat -82 x0.5
+    Tyranitar    used Crunch         hit            Metagross -322 x2
+  end:     Reborn Togekiss 256/332 | Portable Excadrill 247/382 | Reborn Volcarona 332/332 | Portable Tyranitar 217/362
+
+Turn 5
+  Reborn    Togekiss 256/332         -> Dazzlinggleam -> Tyranitar
+  Portable  Excadrill 247/382        -> switch->Crobat
+  Reborn    Volcarona 332/332        -> Heatwave -> Excadrill
+  Portable  Tyranitar 217/362        -> Rockslide
+    Excadrill plan score 313.4, joint adjustment -44.5
+    view: hp 65%  speed 233 (slower)  incoming max 83%  certain 26%  threatened=True
+    foe moves est: Heatwave 83%, Bugbuzz 26%, Airslash 20%, Dazzlinggleam 16%, Followme 0%, Protect 0%, Ragepowder 0%, Quiverdance 0%
+      IRONHEAD -> Togekiss             600  lethal+500 lethal_flat+0 doubles_outcome_candidate+0
+    * switch->Crobat                   313  matchup+96 entry_incoming_damage-21 switchin_race+65 escape_lethal_threat+130 entry_hazards+0 escape_reasons+1
+      switch->Rotom                    239  matchup+96 entry_incoming_damage-37 switchin_race-5 escape_lethal_threat+130 entry_hazards+0 escape_reasons+1
+      ROCKSLIDE                        176  expected_damage+80 accuracy-4 spread_type_in_damage+0 doubles_outcome_candidate+0
+      PROTECT                          100
+    Tyranitar plan score 176.0, joint adjustment -44.5
+    view: hp 60%  speed 179 (slower)  incoming max 55%  certain 55%  threatened=False
+    foe moves est: Bugbuzz 55%, Dazzlinggleam 33%, Heatwave 11%, Airslash 10%, Followme 0%, Protect 0%, Ragepowder 0%, Quiverdance 0%
+      CRUNCH -> Volcarona              600  lethal+500 lethal_flat+0 doubles_outcome_candidate+0
+    * ROCKSLIDE                        176  expected_damage+80 accuracy-4 spread_type_in_damage+0 doubles_outcome_candidate+0
+      PROTECT                          100
+      CRUNCH -> Togekiss                97  expected_damage+41 resisted-45 secondary_drop+1 doubles_outcome_candidate+0
+      EARTHQUAKE                      -921  expected_damage+45 spread_type_in_damage+0 friendly_fire-1066 doubles_outcome_candidate+0
+    Volcarona    used Heatwave       hit            Excadrill -36, Tyranitar -36 x0.5
+    Togekiss     used Dazzlinggleam  hit            Excadrill -51 x0.5, Tyranitar -102 x2
+    Tyranitar    used Rockslide      hit            Togekiss -256 x2, Volcarona -332 x4
+  end:     Reborn Hitmontop 262/262 | Portable Crobat 117/332 | Reborn Sylveon 352/352 | Portable Tyranitar 79/362
+
+Turn 6
+  Reborn    Hitmontop 262/262        -> Fakeout -> Tyranitar
+  Portable  Crobat 117/332           -> Bravebird -> Hitmontop
+  Reborn    Sylveon 352/352          -> Hypervoice -> Crobat
+  Portable  Tyranitar 79/362         -> Protect
+    Crobat plan score 225.0, joint adjustment -19.4
+    view: hp 35%  speed 317 (faster)  incoming max 23%  certain 23%  threatened=False
+    foe moves est: Moonblast 23%, Hypervoice 20%, Fakeout 18%, Closecombat 13%, Wideguard 0%, Protect 0%, Helpinghand 0%, Protect 0%
+    * BRAVEBIRD -> Hitmontop           225  expected_damage+76 super_effective+70 recoil_cost-21 doubles_outcome_candidate+0
+      SUPERFANG -> Hitmontop           138  expected_damage+40 accuracy-2 doubles_outcome_candidate+0
+      SUPERFANG -> Sylveon             138  expected_damage+40 accuracy-2 doubles_outcome_candidate+0
+      BRAVEBIRD -> Sylveon             127  expected_damage+37 recoil_cost-10 doubles_outcome_candidate+0
+      TAILWIND                         100
+    Tyranitar plan score 100.0, joint adjustment -19.4
+    view: hp 22%  speed 179 (slower)  incoming max 151%  certain 151%  threatened=True
+    foe moves est: Closecombat 151%, Moonblast 49%, Hypervoice 41%, Fakeout 6%, Wideguard 0%, Protect 0%, Helpinghand 0%, Protect 0%
+    * PROTECT                          100
+      EARTHQUAKE                        45  expected_damage+80 spread_type_in_damage+0 partner_immune+0 dead_before_moving-135 doubles_outcome_candidate+0
+      ROCKSLIDE                         42  expected_damage+72 accuracy-4 spread_type_in_damage+0 dead_before_moving-126 doubles_outcome_candidate+0
+      CRUNCH -> Hitmontop               27  expected_damage+52 resisted-45 secondary_drop+1 dead_before_moving-81 doubles_outcome_candidate+0
+      CRUNCH -> Sylveon                 27  expected_damage+51 resisted-45 secondary_drop+1 dead_before_moving-80 doubles_outcome_candidate+0
+    Tyranitar    used Protect        untargeted
+    Hitmontop    used Fakeout        protected      Tyranitar 0
+    Crobat       used Bravebird      hit            Hitmontop -262 x2, user -87
+    Sylveon      used Hypervoice     failed         Crobat -30 x0.5, Tyranitar 0
+  end:     Portable Excadrill 247/382 | Reborn Sylveon 352/352 | Portable Tyranitar 79/362
+
+Turn 7
+  Portable  Excadrill 247/382        -> Ironhead -> Sylveon
+  Reborn    Sylveon 352/352          -> Hypervoice -> Excadrill
+  Portable  Tyranitar 79/362         -> Rockslide
+    Excadrill plan score 600.0, joint adjustment -430.7
+    view: hp 65%  speed 233 (faster)  incoming max 24%  certain 24%  threatened=False
+    foe moves est: Moonblast 24%, Hypervoice 20%, Helpinghand 0%, Protect 0%
+    * IRONHEAD -> Sylveon              600  lethal+500 lethal_flat+0 doubles_outcome_candidate+0
+      ROCKSLIDE                        138  expected_damage+36 accuracy-2 spread_type_in_damage+0 secondary_flinch+3 doubles_outcome_candidate+0
+      PROTECT                          100
+      EARTHQUAKE                      -862  expected_damage+54 spread_type_in_damage+0 friendly_fire-1017 doubles_outcome_candidate+0
+      IRONHEAD -> Tyranitar        -1000000  lethal+500 lethal_flat+0
+    Tyranitar plan score 166.4, joint adjustment -430.7
+    view: hp 22%  speed 179 (faster)  incoming max 49%  certain 49%  threatened=True
+    foe moves est: Moonblast 49%, Hypervoice 41%, Helpinghand 0%, Protect 0%
+    * ROCKSLIDE                        166  expected_damage+64 accuracy-3 spread_type_in_damage+0 secondary_flinch+6 doubles_outcome_candidate+0
+      CRUNCH -> Sylveon                107  expected_damage+51 resisted-45 secondary_drop+1 doubles_outcome_candidate+0
+      PROTECT                          -40  repeated_protect-140
+      EARTHQUAKE                      -923  expected_damage+42 spread_type_in_damage+0 friendly_fire-1066 doubles_outcome_candidate+0
+      CRUNCH -> Excadrill          -1000000  lethal+500 lethal_flat+0
+    Excadrill    used Ironhead       hit            Sylveon -352 x2, user -38

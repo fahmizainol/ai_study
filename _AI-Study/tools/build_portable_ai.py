@@ -47,6 +47,7 @@ TARGETS = {
             # Tier suite; merges into the archetype suite's SETS, so it must follow it.
             # Regenerate with tools/make_tier_teams.py.
             STUDY / "generated" / "tier_teams_reborn.rb",
+            STUDY / "adapters" / "reborn" / "Doubles_Teams.rb",
             STUDY / "adapters" / "reborn" / "Portable_AI_Gauntlet.rb",
         ],
         "out": STUDY / "generated" / "Portable_AI_Reborn.rb",

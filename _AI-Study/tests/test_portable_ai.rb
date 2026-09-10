@@ -900,6 +900,56 @@ class PortableAITest < Test::Unit::TestCase
     assert_equal("HEALPULSE", result[0]["move_id"])
   end
 
+  def test_protect_refunds_partner_spread_friendly_fire
+    protect = move(0, "PROTECT", nil, 100, 0, {}).merge("actor_index" => 1)
+    quake = move(0, "EARTHQUAKE", nil, 100, 60,
+                 { "spread" => true, "friendly_fire_pct" => 80 }).merge("actor_index" => 3)
+    snap = snapshot([actor(1, 50, [], {}), actor(3, 100, [], {})],
+                    [target(0, 100), target(2, 100)], {})
+    cfg = PortableAI::Model.config({})
+    cfg["protect_spread_combo"] = true
+    assert_equal(940, PortableAI.doubles_combo_adjustment(snap, protect, quake, cfg))
+    cfg["protect_spread_combo"] = false
+    assert_equal(0, PortableAI.doubles_combo_adjustment(snap, protect, quake, cfg))
+  end
+
+  def test_helping_hand_values_the_partner_attack
+    helping = move(0, "HELPINGHAND", 3, 100, 0, {}).merge("actor_index" => 1)
+    attack = move(0, "HYDROPUMP", 0, 100, 100, {}).merge("actor_index" => 3)
+    snap = snapshot([actor(1, 100, [], {}), actor(3, 100, [], {})],
+                    [target(0, 100), target(2, 100)], {})
+    cfg = PortableAI::Model.config({})
+    cfg["partner_support_combo"] = true
+    assert_equal(50, PortableAI.doubles_combo_adjustment(snap, helping, attack, cfg))
+    cfg["partner_support_combo"] = false
+    assert_equal(0, PortableAI.doubles_combo_adjustment(snap, helping, attack, cfg))
+  end
+
+  def test_redirection_protects_a_threatened_setup_partner
+    redirect = move(0, "FOLLOWME", nil, 100, 0, {}).merge("actor_index" => 1)
+    setup = move(0, "SWORDSDANCE", nil, 100, 0, {}).merge("actor_index" => 3)
+    snap = snapshot([actor(1, 100, [], {}),
+                     actor(3, 40, [], { "incoming_damage_pct" => 80 })],
+                    [target(0, 100), target(2, 100)], {})
+    cfg = PortableAI::Model.config({})
+    cfg["redirect_setup_combo"] = true
+    assert_equal(160, PortableAI.doubles_combo_adjustment(snap, redirect, setup, cfg))
+    cfg["redirect_setup_combo"] = false
+    assert_equal(0, PortableAI.doubles_combo_adjustment(snap, redirect, setup, cfg))
+  end
+
+  def test_fake_out_buys_a_turn_for_speed_control
+    fake_out = move(0, "FAKEOUT", 0, 100, 20, {}).merge("actor_index" => 1)
+    tailwind = move(0, "TAILWIND", nil, 100, 0, {}).merge("actor_index" => 3)
+    snap = snapshot([actor(1, 100, [], {}), actor(3, 100, [], {})],
+                    [target(0, 100), target(2, 100)], {})
+    cfg = PortableAI::Model.config({})
+    cfg["fakeout_speed_combo"] = true
+    assert_equal(100, PortableAI.doubles_combo_adjustment(snap, fake_out, tailwind, cfg))
+    cfg["fakeout_speed_combo"] = false
+    assert_equal(0, PortableAI.doubles_combo_adjustment(snap, fake_out, tailwind, cfg))
+  end
+
   # --- entry and switching ---
   def test_regenerator_discounts_leaving_but_cannot_open_the_gate
     foe = target(0, 100)

@@ -7,6 +7,7 @@
 TEAM_OVERRIDES = {}
 TEAM_OVERRIDE_ITEMS = {}
 TEAM_OVERRIDES_DAT = {}
+TEAM_OVERRIDES_DISABLE_FILE = "Data/original_teams.txt"
 
 # map078_gym1_abi
 TEAM_OVERRIDES[[33,"Abi",14]] = [
@@ -817,9 +818,20 @@ def team_override_build(spec)
   newparty
 end
 
+# Put Data/original_teams.txt beside the game data to keep the original
+# trainer rosters while leaving the installed AI and other patches active.
+def team_overrides_enabled?
+  return !File.exist?(TEAM_OVERRIDES_DISABLE_FILE)
+rescue
+  return true
+end
+
 # Path 1: inline createTrainer fights.
 alias team_override_orig_createTrainer createTrainer
 def createTrainer(trainerid, trainername, party, items=[])
+  if !team_overrides_enabled?
+    return team_override_orig_createTrainer(trainerid, trainername, party, items)
+  end
   begin
     ace = nil
     for p in party
@@ -849,6 +861,7 @@ end
 alias team_override_orig_pbLoadTrainer pbLoadTrainer
 def pbLoadTrainer(trainerid, trainername, partyid=0)
   result = team_override_orig_pbLoadTrainer(trainerid, trainername, partyid)
+  return result if !team_overrides_enabled?
   begin
     if result && result[0] && result[0].party
       tid = trainerid.is_a?(Integer) ? trainerid : getID(PBTrainers, trainerid)

@@ -48,6 +48,16 @@ module PortableAIRebornGauntlet
     ["ability_rules",      :boolean],
     ["entry_rules",        :boolean],
     ["format_rules",       :boolean],
+    ["protect_spread_combo", :boolean],
+    ["doubles_outcomes", :boolean],
+    ["opponent_utility", :boolean],
+    ["fakeout_timeline", :boolean],
+    ["doubles_adversarial", :boolean],
+    ["doubles_search", :boolean],
+    ["doubles_search_leaf", :boolean],
+    ["partner_support_combo", :boolean],
+    ["redirect_setup_combo", :boolean],
+    ["fakeout_speed_combo", :boolean],
     # 0.6.0. damage_race=false is the control: the same build must reproduce 0.5.0
     # battle-for-battle before any of its numbers mean anything.
     ["damage_race",        :boolean],
@@ -111,6 +121,17 @@ module PortableAIRebornGauntlet
     teams.keys.inject([]) do |all, left|
       teams.keys.each do |right|
         all << ["#{left}_vs_#{right}", left, right, false] if left != right
+      end
+      all
+    end
+  end
+
+  # Every ordered non-mirror pairing as an actual doubles battle. This keeps doubles
+  # measurements out of the historical singles seat-audit schedule.
+  def self.doubles_audit_matchups(teams)
+    teams.keys.inject([]) do |all, left|
+      teams.keys.each do |right|
+        all << ["double_#{left}_vs_#{right}", left, right, true] if left != right
       end
       all
     end
@@ -519,7 +540,14 @@ module PortableAIRebornGauntlet
 
     seat_audit = cfg["schedule"] == "seat_audit"
     normal_baseline = cfg["schedule"] == "normal_baseline"
-    matchups = (seat_audit || normal_baseline) ? seat_audit_matchups(teams) : MATCHUPS
+    doubles_audit = cfg["schedule"] == "doubles_audit"
+    matchups = if doubles_audit
+                 doubles_audit_matchups(teams)
+               elsif seat_audit || normal_baseline
+                 seat_audit_matchups(teams)
+               else
+                 MATCHUPS
+               end
     if cfg["matchups"] && cfg["matchups"] != ""
       wanted_matchups = cfg["matchups"].split(",").map { |name| name.strip }
       matchups = matchups.select { |matchup| wanted_matchups.include?(matchup[0]) }
@@ -557,6 +585,7 @@ module PortableAIRebornGauntlet
     total = matchups.length * seeds.length * arms.length
     done = 0
     schedule_name = normal_baseline ? "normal baseline" :
+                    doubles_audit ? "doubles audit" :
                     seat_audit ? "seat audit" : "frozen"
     AIHarness.echo "Gauntlet: #{total} battles, #{schedule_name} schedule " \
                    "(#{arms.map { |a| a[0] }.join(', ')}), #{party_size}v#{party_size}, " \

@@ -1,0 +1,212 @@
+double_balance_vs_offense  seed 130363   Reborn-Normal (balance, left) vs Portable 0.8.0 (offense, right)   result for right seat: WIN in 8 rounds (engine turncount 7)
+  Reborn   (balance): Togekiss, Garchomp, Volcarona, Metagross, Sylveon, Hitmontop
+  Portable (offense): Politoed, Kingdra, Ludicolo, Zapdos, Scizor, Gastrodon
+==============================================================================================================
+
+Turn 1
+  Reborn    Togekiss 332/332         -> Dazzlinggleam -> Kingdra
+  Portable  Politoed 342/342         -> Scald -> Togekiss
+  Reborn    Garchomp 378/378         -> Earthquake -> Politoed
+  Portable  Kingdra 312/312          -> Dracometeor -> Garchomp
+    Politoed plan score 128.1, joint adjustment -71.8
+    view: hp 100%  speed 197 (slower)  incoming max 59%  certain 59%  threatened=False
+    foe moves est: Dragonclaw 59%, Earthquake 56%, Airslash 32%, Dazzlinggleam 26%, Followme 0%, Protect 0%, Swordsdance 0%, Protect 0%
+      ICYWIND                          150  expected_damage+39 accuracy-1 spread_type_in_damage+0 secondary_drop+12 doubles_outcome_candidate+0
+      SCALD -> Garchomp                135  expected_damage+29 secondary_burn+6 doubles_outcome_candidate+0
+    * SCALD -> Togekiss                128  expected_damage+27 secondary_burn+2 doubles_outcome_candidate+0
+      HELPINGHAND -> Kingdra           100
+      PROTECT                          100
+    Kingdra plan score 560.0, joint adjustment -71.8
+    view: hp 100%  speed 454 (faster)  incoming max 110%  certain 110%  threatened=True
+    foe moves est: Dragonclaw 110%, Dazzlinggleam 60%, Earthquake 51%, Airslash 37%, Followme 0%, Protect 0%, Swordsdance 0%, Protect 0%
+    * DRACOMETEOR -> Garchomp          560  lethal+500 accuracy-25 lethal_flat+0 self_stat_drop-15 doubles_outcome_candidate+0
+      switch->Ludicolo                 319  matchup+192 entry_incoming_damage-53 switchin_race-5 escape_lethal_threat+130 entry_hazards+0 escape_reasons+1
+      switch->Scizor                   242  matchup+96 entry_incoming_damage-34 switchin_race-5 escape_lethal_threat+130 entry_hazards+0 escape_reasons+1
+      switch->Zapdos                   206  matchup+64 entry_incoming_damage-38 switchin_race-5 escape_lethal_threat+130 entry_hazards+0 escape_reasons+1
+      switch->Gastrodon                203  matchup+64 entry_incoming_damage-41 switchin_race-5 escape_lethal_threat+130 entry_hazards+0 escape_reasons+1
+    Kingdra      used Dracometeor    hit            Garchomp -378 x2, user -31
+    Togekiss     used Dazzlinggleam  hit            Politoed -81, Kingdra -178 x2
+    Politoed     used Scald          hit            Togekiss -122
+  end:     Reborn Togekiss 210/332 | Portable Politoed 261/342 | Reborn Sylveon 352/352 | Portable Kingdra 103/312
+
+Turn 2
+  Reborn    Togekiss 210/332         -> Dazzlinggleam -> Kingdra
+  Portable  Politoed 261/342         -> switch->Zapdos
+  Reborn    Sylveon 352/352          -> Hypervoice -> Politoed
+  Portable  Kingdra 103/312          -> Protect
+    Politoed plan score 319.5, joint adjustment -25.0
+    view: hp 76%  speed 197 (slower)  incoming max 39%  certain 39%  threatened=False
+    foe moves est: Moonblast 39%, Airslash 32%, Hypervoice 32%, Dazzlinggleam 26%, Followme 0%, Protect 0%, Helpinghand 0%, Protect 0%
+    * switch->Zapdos                   319  matchup+96 entry_incoming_damage-22 switchin_race+80 losing_race_bench_wins+110 entry_hazards+0 escape_reasons+1
+      SCALD -> Togekiss                128  expected_damage+27 secondary_burn+2 doubles_outcome_candidate+0
+      SCALD -> Sylveon                 124  expected_damage+22 secondary_burn+1 doubles_outcome_candidate+0
+      ICYWIND                          122  expected_damage+17 accuracy-0 spread_type_in_damage+0 secondary_drop+5 doubles_outcome_candidate+0
+      HELPINGHAND -> Kingdra           100
+    Kingdra plan score 100.0, joint adjustment -25.0
+    view: hp 33%  speed 454 (faster)  incoming max 88%  certain 88%  threatened=True
+    foe moves est: Moonblast 88%, Hypervoice 74%, Dazzlinggleam 60%, Airslash 37%, Followme 0%, Protect 0%, Helpinghand 0%, Protect 0%
+      switch->Zapdos                   449  matchup+96 entry_incoming_damage-22 switchin_race+80 escape_lethal_threat+130 losing_race_bench_wins+110 entry_hazards+0 escape_reasons+1
+      MUDDYWATER                       126  expected_damage+29 accuracy-2 spread_type_in_damage+0 doubles_outcome_candidate+0
+      HURRICANE -> Togekiss            111  expected_damage+11 doubles_outcome_candidate+0
+      HURRICANE -> Sylveon             109  expected_damage+9 doubles_outcome_candidate+0
+    * PROTECT                          100
+    Kingdra      used Protect        untargeted
+    Togekiss     used Dazzlinggleam  failed         Politoed -90, Kingdra 0
+    Sylveon      used Hypervoice     failed         Politoed -122, Kingdra 0
+  end:     Reborn Togekiss 210/332 | Portable Zapdos 151/342 | Reborn Sylveon 352/352 | Portable Kingdra 103/312
+
+Turn 3
+  Reborn    Togekiss 210/332         -> Dazzlinggleam -> Kingdra
+  Portable  Zapdos 151/342           -> Thunderbolt -> Togekiss
+  Reborn    Sylveon 352/352          -> Hypervoice -> Zapdos
+  Portable  Kingdra 103/312          -> Hurricane -> Togekiss
+    Zapdos plan score 220.6, joint adjustment 209.3
+    view: hp 44%  speed 257 (faster)  incoming max 42%  certain 42%  threatened=False
+    foe moves est: Moonblast 42%, Hypervoice 36%, Dazzlinggleam 29%, Airslash 18%, Followme 0%, Protect 0%, Helpinghand 0%, Protect 0%
+    * THUNDERBOLT -> Togekiss          221  expected_damage+50 super_effective+70 secondary_paralyze+1 doubles_outcome_candidate+0
+      THUNDERBOLT -> Sylveon           122  expected_damage+22 secondary_paralyze+0 doubles_outcome_candidate+0
+      HEATWAVE                         112  expected_damage+12 accuracy-1 spread_type_in_damage+0 secondary_burn+0 doubles_outcome_candidate+0
+      TAILWIND                         100
+      PROTECT                          100
+    Kingdra plan score 110.6, joint adjustment 209.3
+    view: hp 33%  speed 454 (faster)  incoming max 88%  certain 88%  threatened=True
+    foe moves est: Moonblast 88%, Hypervoice 74%, Dazzlinggleam 60%, Airslash 37%, Followme 0%, Protect 0%, Helpinghand 0%, Protect 0%
+      MUDDYWATER                       126  expected_damage+29 accuracy-2 spread_type_in_damage+0 doubles_outcome_candidate+0
+    * HURRICANE -> Togekiss            111  expected_damage+11 doubles_outcome_candidate+0
+      HURRICANE -> Sylveon             109  expected_damage+9 doubles_outcome_candidate+0
+      PROTECT                          -40  repeated_protect-140
+      HURRICANE -> Zapdos          -1000000  expected_damage+8 resisted-45
+    Kingdra      used Hurricane      hit            Togekiss --37, user -31
+    Zapdos       used Thunderbolt    hit            Togekiss -226 x2
+    Togekiss     used Dazzlinggleam  hit            Zapdos -92, Kingdra -72 x2
+    Sylveon      used Hypervoice     hit            Zapdos -59
+  end:     Reborn Togekiss 21/332 | Portable Scizor 302/302 | Reborn Sylveon 352/352 | Portable Ludicolo 322/322
+
+Turn 4
+  Reborn    Togekiss 21/332          -> Airslash -> Scizor
+  Portable  Scizor 302/302           -> Bulletpunch -> Sylveon
+  Reborn    Sylveon 352/352          -> Hypervoice -> Scizor
+  Portable  Ludicolo 322/322         -> Fakeout -> Togekiss
+    Scizor plan score 213.6, joint adjustment -13.0
+    view: hp 100%  speed 187 (slower)  incoming max 44%  certain 26%  threatened=False
+    foe moves est: Airslash 44%, Moonblast 26%, Hypervoice 22%, Dazzlinggleam 18%, Followme 0%, Protect 0%, Helpinghand 0%, Protect 0%
+      BULLETPUNCH -> Togekiss          660  lethal+500 priority_flat_in_doubles+0 priority_finisher+60 lethal_flat+0 doubles_outcome_candidate+0
+      XSCISSOR -> Togekiss             600  lethal+500 lethal_flat+0 doubles_outcome_candidate+0
+    * BULLETPUNCH -> Sylveon           214  expected_damage+44 super_effective+70 doubles_outcome_candidate+0
+      SWORDSDANCE                      155  first_setup+55
+      PROTECT                          100
+    Ludicolo plan score 775.0, joint adjustment -13.0
+    view: hp 100%  speed 394 (faster)  incoming max 47%  certain 28%  threatened=False
+    foe moves est: Airslash 47%, Moonblast 28%, Hypervoice 23%, Dazzlinggleam 19%, Followme 0%, Protect 0%, Helpinghand 0%, Protect 0%
+    * FAKEOUT -> Togekiss              775  lethal+500 priority_finisher+60 lethal_flat+0 first_turn_hit+115 doubles_outcome_candidate+0
+      SCALD -> Togekiss                600  lethal+500 lethal_flat+0 doubles_outcome_candidate+0
+      GIGADRAIN -> Togekiss            600  lethal+500 lethal_flat+0 doubles_outcome_candidate+0
+      ICEBEAM -> Togekiss              600  lethal+500 lethal_flat+0 doubles_outcome_candidate+0
+      FAKEOUT -> Sylveon               222  expected_damage+7 first_turn_hit+115 doubles_outcome_candidate+0
+    Ludicolo     used Fakeout        hit            Togekiss -21
+    Scizor       used Bulletpunch    hit            Sylveon -192 x2, user -30
+    Sylveon      used Hypervoice     hit            Scizor -60 x0.5, Ludicolo -69
+  end:     Reborn Volcarona 332/332 | Portable Scizor 212/302 | Reborn Sylveon 182/352 | Portable Ludicolo 253/322
+
+Turn 5
+  Reborn    Volcarona 332/332        -> Heatwave -> Ludicolo
+  Portable  Scizor 212/302           -> Bulletpunch -> Sylveon
+  Reborn    Sylveon 182/352          -> Hypervoice -> Scizor
+  Portable  Ludicolo 253/322         -> Scald -> Volcarona
+    Scizor plan score 660.0, joint adjustment -209.9
+    view: hp 70%  speed 187 (slower)  incoming max 91%  certain 29%  threatened=True
+    foe moves est: Heatwave 91%, Bugbuzz 29%, Moonblast 26%, Hypervoice 22%, Ragepowder 0%, Quiverdance 0%, Helpinghand 0%, Protect 0%
+    * BULLETPUNCH -> Sylveon           660  lethal+500 priority_flat_in_doubles+0 priority_finisher+60 lethal_flat+0 doubles_outcome_candidate+0
+      switch->Gastrodon                266  matchup+96 entry_incoming_damage-25 switchin_race+10 escape_lethal_threat+130 entry_hazards+0 escape_reasons+1
+      switch->Politoed                 245  matchup+96 entry_incoming_damage-23 switchin_race-5 escape_lethal_threat+130 entry_hazards+0 escape_reasons+1
+      PROTECT                          100
+      XSCISSOR -> Volcarona             78  expected_damage+23 resisted-45 doubles_outcome_candidate+0
+    Ludicolo plan score 226.4, joint adjustment -209.9
+    view: hp 79%  speed 394 (faster)  incoming max 61%  certain 61%  threatened=False
+    foe moves est: Bugbuzz 61%, Moonblast 28%, Hypervoice 23%, Heatwave 12%, Ragepowder 0%, Quiverdance 0%, Helpinghand 0%, Protect 0%
+    * SCALD -> Volcarona               226  expected_damage+56 super_effective+70 doubles_outcome_candidate+0
+      SCALD -> Sylveon                 124  expected_damage+22 secondary_burn+1 doubles_outcome_candidate+0
+      GIGADRAIN -> Sylveon             115  expected_damage+14 drain_heal+1 doubles_outcome_candidate+0
+      ICEBEAM -> Sylveon               111  expected_damage+11 secondary_freeze+0 doubles_outcome_candidate+0
+      ICEBEAM -> Volcarona              62  expected_damage+7 resisted-45 secondary_freeze+0 doubles_outcome_candidate+0
+    Scizor       used Bulletpunch    hit            Sylveon -182 x2, user -30
+    Ludicolo     used Scald          hit            Volcarona -187 x2
+    Volcarona    used Heatwave       failed         Scizor -182 x4, Ludicolo 0
+  end:     Reborn Volcarona 145/332 | Portable Politoed 261/342 | Reborn Metagross 322/322 | Portable Ludicolo 253/322
+
+Turn 6
+  Reborn    Volcarona 145/332        -> Bugbuzz -> Ludicolo
+  Portable  Politoed 261/342         -> Scald -> Metagross
+  Reborn    Metagross 322/322        -> Zenheadbutt -> Ludicolo
+  Portable  Ludicolo 253/322         -> Scald -> Volcarona
+    Politoed plan score 139.5, joint adjustment -27.6
+    view: hp 76%  speed 197 (slower)  incoming max 47%  certain 43%  threatened=False
+    foe moves est: Zenheadbutt 47%, Bugbuzz 43%, Earthquake 30%, Meteormash 27%, Heatwave 9%, Ragepowder 0%, Quiverdance 0%, Protect 0%
+      SCALD -> Volcarona               600  lethal+500 lethal_flat+0 doubles_outcome_candidate+0
+    * SCALD -> Metagross               139  expected_damage+33 secondary_burn+7 doubles_outcome_candidate+0
+      ICYWIND                          109  expected_damage+7 accuracy-0 spread_type_in_damage+0 secondary_drop+2 doubles_outcome_candidate+0
+      HELPINGHAND -> Ludicolo          100
+      PROTECT                          100
+    Ludicolo plan score 600.0, joint adjustment -27.6
+    view: hp 79%  speed 394 (faster)  incoming max 61%  certain 61%  threatened=False
+    foe moves est: Bugbuzz 61%, Zenheadbutt 53%, Meteormash 30%, Earthquake 16%, Heatwave 12%, Ragepowder 0%, Quiverdance 0%, Protect 0%
+    * SCALD -> Volcarona               600  lethal+500 lethal_flat+0 doubles_outcome_candidate+0
+      SCALD -> Metagross               139  expected_damage+33 secondary_burn+7 doubles_outcome_candidate+0
+      GIGADRAIN -> Metagross            66  expected_damage+10 resisted-45 drain_heal+0 doubles_outcome_candidate+0
+      ICEBEAM -> Metagross              63  expected_damage+8 resisted-45 secondary_freeze+0 doubles_outcome_candidate+0
+      ICEBEAM -> Volcarona              62  expected_damage+7 resisted-45 secondary_freeze+0 doubles_outcome_candidate+0
+    Ludicolo     used Scald          hit            Volcarona -145 x2
+    Metagross    used Zenheadbutt    hit            Ludicolo -165
+    Politoed     used Scald          hit            Metagross -150
+  end:     Reborn Hitmontop 262/262 | Portable Politoed 261/342 | Reborn Metagross 152/322 BRN | Portable Ludicolo 88/322
+
+Turn 7
+  Reborn    Hitmontop 262/262        -> Fakeout -> Ludicolo
+  Portable  Politoed 261/342         -> Scald -> Metagross
+  Reborn    Metagross 152/322 BRN    -> Zenheadbutt -> Ludicolo
+  Portable  Ludicolo 88/322          -> Scald -> Metagross
+    Politoed plan score 132.8, joint adjustment 203.0
+    view: hp 76%  speed 197 (slower)  incoming max 54%  certain 54%  threatened=False
+    foe moves est: Closecombat 54%, Zenheadbutt 24%, Fakeout 18%, Earthquake 15%, Meteormash 13%, Wideguard 0%, Protect 0%, Protect 0%
+      SCALD -> Hitmontop               142  expected_damage+35 secondary_burn+7 doubles_outcome_candidate+0
+    * SCALD -> Metagross               133  expected_damage+33 doubles_outcome_candidate+0
+      ICYWIND                          115  expected_damage+12 accuracy-0 spread_type_in_damage+0 secondary_drop+3 doubles_outcome_candidate+0
+      HELPINGHAND -> Ludicolo          100
+      PROTECT                          100
+    Ludicolo plan score 132.8, joint adjustment 203.0
+    view: hp 27%  speed 394 (faster)  incoming max 60%  certain 60%  threatened=True
+    foe moves est: Closecombat 60%, Zenheadbutt 26%, Fakeout 20%, Meteormash 15%, Earthquake 8%, Wideguard 0%, Protect 0%, Protect 0%
+      SCALD -> Hitmontop               142  expected_damage+35 secondary_burn+7 doubles_outcome_candidate+0
+    * SCALD -> Metagross               133  expected_damage+33 doubles_outcome_candidate+0
+      GIGADRAIN -> Hitmontop           122  expected_damage+21 drain_heal+1 doubles_outcome_candidate+0
+      ICEBEAM -> Hitmontop             117  expected_damage+17 secondary_freeze+0 doubles_outcome_candidate+0
+      GIGADRAIN -> Metagross            66  expected_damage+10 resisted-45 drain_heal+0 doubles_outcome_candidate+0
+    Hitmontop    used Fakeout        hit            Ludicolo -63
+    Ludicolo     used Scald          could_not_move  [flinch=True]
+    Metagross    used Zenheadbutt    hit            Ludicolo -25 [status=3 status_count=0]
+    Politoed     used Scald          hit            Metagross -152
+  end:     Reborn Hitmontop 262/262 | Portable Politoed 261/342 | Portable Gastrodon 384/384
+
+Turn 8
+  Reborn    Hitmontop 262/262        -> Closecombat -> Politoed
+  Portable  Politoed 261/342         -> Scald -> Hitmontop
+  Portable  Gastrodon 384/384        -> Scald -> Hitmontop
+    Politoed plan score 117.4, joint adjustment -25.4
+    view: hp 76%  speed 197 (slower)  incoming max 54%  certain 54%  threatened=False
+    foe moves est: Closecombat 54%, Fakeout 18%, Wideguard 0%, Protect 0%
+    * SCALD -> Hitmontop               117  expected_damage+35 secondary_burn+7 own_partner_steals-24 doubles_outcome_candidate+0
+      ICYWIND                          113  expected_damage+10 accuracy-0 spread_type_in_damage+0 secondary_drop+3 doubles_outcome_candidate+0
+      HELPINGHAND -> Gastrodon         100
+      PROTECT                          100
+      SCALD -> Gastrodon           -1000000
+    Gastrodon plan score 141.9, joint adjustment -25.4
+    view: hp 100%  speed 135 (slower)  incoming max 51%  certain 51%  threatened=False
+    foe moves est: Closecombat 51%, Fakeout 17%, Wideguard 0%, Protect 0%
+    * SCALD -> Hitmontop               142  expected_damage+35 secondary_burn+7 doubles_outcome_candidate+0
+      EARTHPOWER -> Hitmontop          126  expected_damage+26 secondary_drop+0 doubles_outcome_candidate+0
+      PROTECT                          100
+      RECOVER                         -520  heal_near_full-500 heal_losing_race-120
+      EARTHPOWER -> Politoed       -1000000  expected_damage+25 secondary_drop+0
+    Politoed     used Scald          hit            Hitmontop -128
+    Hitmontop    used Closecombat    hit            Politoed -82 [status=3 status_count=0]
+    Gastrodon    used Scald          hit            Hitmontop -134

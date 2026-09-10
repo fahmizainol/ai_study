@@ -1,0 +1,238 @@
+double_speed_vs_bulky  seed 130363   Reborn-Normal (speed, left) vs Portable 0.8.0 (bulky, right)   result for right seat: WIN in 9 rounds (engine turncount 8)
+  Reborn   (speed): Whimsicott, Persian, Excadrill, Tyranitar, Crobat, Rotom
+  Portable (bulky): Reuniclus, Torkoal, Amoonguss, Porygon2, Rhyperior, Hariyama
+==============================================================================================================
+
+Turn 1
+  Reborn    Whimsicott 282/282       -> Tailwind
+  Portable  Reuniclus 382/382        -> Psychic -> Persian
+  Reborn    Persian 292/292          -> Fakeout -> Reuniclus
+  Portable  Torkoal 302/302          -> Eruption
+    Reuniclus plan score 144.6, joint adjustment 403.1
+    view: hp 100%  speed 117 (slower)  incoming max 63%  certain 63%  threatened=False
+    foe moves est: Knockoff 63%, Moonblast 30%, Uturn 30%, Fakeout 13%, Tailwind 0%, Helpinghand 0%, Protect 0%, Taunt 0%
+      TRICKROOM                        256  speed_control_value+156
+      FOCUSBLAST -> Persian            236  expected_damage+77 accuracy-12 super_effective+70 secondary_drop+1 doubles_outcome_candidate+0
+    * PSYCHIC -> Persian               145  expected_damage+44 secondary_drop+0 doubles_outcome_candidate+0
+      PSYCHIC -> Whimsicott            141  expected_damage+41 secondary_drop+0 doubles_outcome_candidate+0
+      FOCUSBLAST -> Whimsicott          71  expected_damage+18 accuracy-3 resisted-45 secondary_drop+0 doubles_outcome_candidate+0
+    Torkoal plan score 180.0, joint adjustment 403.1
+    view: hp 100%  speed 97 (slower)  incoming max 25%  certain 25%  threatened=False
+    foe moves est: Knockoff 25%, Moonblast 22%, Fakeout 11%, Uturn 6%, Tailwind 0%, Helpinghand 0%, Protect 0%, Taunt 0%
+    * ERUPTION                         180  expected_damage+80 spread_type_in_damage+0 doubles_outcome_candidate+0
+      HEATWAVE                         178  expected_damage+80 accuracy-4 spread_type_in_damage+0 secondary_burn+2 doubles_outcome_candidate+0
+      EARTHPOWER -> Persian            122  expected_damage+22 secondary_drop+0 doubles_outcome_candidate+0
+      PROTECT                          100
+      EARTHPOWER -> Whimsicott          65  expected_damage+10 resisted-45 secondary_drop+0 doubles_outcome_candidate+0
+    Persian      used Fakeout        hit            Reuniclus -42
+    Whimsicott   used Tailwind       untargeted
+    Reuniclus    used Psychic        could_not_move  [flinch=True]
+    Torkoal      used Eruption       hit            Whimsicott -281 x2, Persian -292
+  end:     Reborn Whimsicott 1/282 | Portable Reuniclus 363/382 | Reborn Tyranitar 362/362 | Portable Torkoal 302/302
+
+Turn 2
+  Reborn    Whimsicott 1/282         -> Moonblast -> Torkoal
+  Portable  Reuniclus 363/382        -> switch->Hariyama
+  Reborn    Tyranitar 362/362        -> Crunch -> Reuniclus
+  Portable  Torkoal 302/302          -> Eruption
+    Reuniclus plan score 425.2, joint adjustment 67.6
+    view: hp 95%  speed 117 (slower)  incoming max 126%  certain 126%  threatened=True
+    foe moves est: Crunch 126%, Moonblast 30%, Rockslide 30%, Earthquake 26%, Tailwind 0%, Helpinghand 0%, Protect 0%, Protect 0%
+    * switch->Hariyama                 425  matchup+144 entry_incoming_damage-24 switchin_race+10 escape_lethal_threat+130 losing_race_bench_wins+110 entry_hazards+0 escape_reasons+2
+      switch->Rhyperior                271  matchup+96 entry_incoming_damage-20 switchin_race+10 escape_lethal_threat+130 entry_hazards+0 escape_reasons+1
+      switch->Porygon2                 269  matchup+96 entry_incoming_damage-22 switchin_race+10 escape_lethal_threat+130 entry_hazards+0 escape_reasons+1
+      switch->Amoonguss                225  matchup+96 entry_incoming_damage-51 switchin_race-5 escape_lethal_threat+130 entry_hazards+0 escape_reasons+1
+      FOCUSBLAST -> Tyranitar           73  expected_damage+61 accuracy-9 super_effective+140 secondary_drop+1 dead_before_moving-219 doubles_outcome_candidate+0
+    Torkoal plan score 180.0, joint adjustment 67.6
+    view: hp 100%  speed 97 (slower)  incoming max 49%  certain 49%  threatened=False
+    foe moves est: Crunch 49%, Rockslide 47%, Earthquake 41%, Moonblast 22%, Tailwind 0%, Helpinghand 0%, Protect 0%, Protect 0%
+      EARTHPOWER -> Whimsicott         600  lethal+500 lethal_flat+0 doubles_outcome_candidate+0
+      EARTHPOWER -> Tyranitar          187  expected_damage+17 super_effective+70 secondary_drop+0 doubles_outcome_candidate+0
+    * ERUPTION                         180  expected_damage+80 spread_type_in_damage+0 doubles_outcome_candidate+0
+      HEATWAVE                         162  expected_damage+64 accuracy-3 spread_type_in_damage+0 secondary_burn+1 doubles_outcome_candidate+0
+      PROTECT                          100
+    Whimsicott   used Moonblast      hit            Torkoal -61 x0.5
+    Tyranitar    used Crunch         hit            Reuniclus -138 x0.5
+    Torkoal      used Eruption       hit            Whimsicott -1 x2, Tyranitar -39 x0.5
+  end:     Reborn Crobat 332/332 | Portable Hariyama 284/450 | Reborn Tyranitar 323/362 | Portable Torkoal 223/302
+
+Turn 3
+  Reborn    Crobat 332/332           -> Bravebird -> Hariyama
+  Portable  Hariyama 284/450         -> switch->Porygon2
+  Reborn    Tyranitar 323/362        -> Rockslide -> Hariyama
+  Portable  Torkoal 223/302          -> Earthpower -> Tyranitar
+    Hariyama plan score 244.0, joint adjustment -367.1
+    view: hp 63%  speed 157 (slower)  incoming max 136%  certain 136%  threatened=True
+    foe moves est: Bravebird 136%, Crunch 47%, Earthquake 39%, Superfang 32%, Rockslide 22%, Tailwind 0%, Taunt 0%, Protect 0%
+    * switch->Porygon2                 244  matchup+96 entry_incoming_damage-32 switchin_race-5 escape_lethal_threat+130 entry_hazards+0 escape_reasons+1
+      switch->Rhyperior                244  matchup+96 entry_incoming_damage-32 switchin_race-5 escape_lethal_threat+130 entry_hazards+0 escape_reasons+1
+      FAKEOUT -> Crobat                224  expected_damage+9 first_turn_hit+115 doubles_outcome_candidate+0
+      FAKEOUT -> Tyranitar             174  expected_damage+4 resisted-45 first_turn_hit+115 doubles_outcome_candidate+0
+      switch->Amoonguss                163  matchup+72 entry_incoming_damage-89 switchin_race-5 escape_lethal_threat+130 entry_hazards+0 escape_reasons+1
+    Torkoal plan score 187.4, joint adjustment -367.1
+    view: hp 74%  speed 97 (slower)  incoming max 49%  certain 49%  threatened=False
+    foe moves est: Crunch 49%, Rockslide 47%, Earthquake 41%, Superfang 37%, Bravebird 36%, Tailwind 0%, Taunt 0%, Protect 0%
+    * EARTHPOWER -> Tyranitar          187  expected_damage+17 super_effective+70 secondary_drop+0 doubles_outcome_candidate+0
+      ERUPTION                         134  expected_damage+34 spread_type_in_damage+0 doubles_outcome_candidate+0
+      HEATWAVE                         130  expected_damage+30 accuracy-1 spread_type_in_damage+0 secondary_burn+2 doubles_outcome_candidate+0
+      PROTECT                          100
+      EARTHPOWER -> Crobat         -1000000  doubles_outcome_candidate+0
+    Crobat       used Bravebird      hit            Hariyama -90, user -30
+    Tyranitar    used Rockslide      hit            Hariyama -65, Torkoal -132 x2
+    Torkoal      used Earthpower     could_not_move  [flinch=True]
+  end:     Reborn Crobat 282/332 | Portable Porygon2 157/332 | Reborn Tyranitar 323/362 | Portable Torkoal 73/302
+
+Turn 4
+  Reborn    Crobat 282/332           -> Bravebird -> Torkoal
+  Portable  Porygon2 157/332         -> Trickroom
+  Reborn    Tyranitar 323/362        -> Rockslide -> Porygon2
+  Portable  Torkoal 73/302           -> Protect
+    Porygon2 plan score 256.0, joint adjustment -280.2
+    view: hp 47%  speed 177 (slower)  incoming max 42%  certain 42%  threatened=False
+    foe moves est: Crunch 42%, Bravebird 31%, Superfang 23%, Rockslide 20%, Earthquake 18%, Tailwind 0%, Taunt 0%, Protect 0%
+    * TRICKROOM                        256  speed_control_value+156
+      ICEBEAM -> Crobat                228  expected_damage+57 super_effective+70 secondary_freeze+1 doubles_outcome_candidate+0
+      RECOVER                          190  heal_mid_hp+90
+      TRIATTACK -> Crobat              138  expected_damage+38 doubles_outcome_candidate+0
+      ICEBEAM -> Tyranitar             115  expected_damage+15 secondary_freeze+0 doubles_outcome_candidate+0
+    Torkoal plan score 100.0, joint adjustment -280.2
+    view: hp 24%  speed 97 (slower)  incoming max 49%  certain 49%  threatened=True
+    foe moves est: Crunch 49%, Rockslide 47%, Earthquake 41%, Bravebird 36%, Superfang 12%, Tailwind 0%, Taunt 0%, Protect 0%
+    * PROTECT                          100
+      EARTHPOWER -> Tyranitar           47  expected_damage+17 super_effective+70 secondary_drop+0 dead_before_moving-141 doubles_outcome_candidate+0
+      HEATWAVE                          33  expected_damage+30 accuracy-1 spread_type_in_damage+0 secondary_burn+2 dead_before_moving-98 doubles_outcome_candidate+0
+      ERUPTION                          28  expected_damage+11 spread_type_in_damage+0 dead_before_moving-83 doubles_outcome_candidate+0
+      EARTHPOWER -> Crobat         -1000000  doubles_outcome_candidate+0
+    Torkoal      used Protect        untargeted
+    Crobat       used Bravebird      protected      Torkoal 0
+    Tyranitar    used Rockslide      failed         Porygon2 -56, Torkoal 0
+    Porygon2     used Trickroom      untargeted
+  end:     Reborn Crobat 262/332 | Portable Porygon2 81/332 | Reborn Tyranitar 323/362 | Portable Torkoal 55/302
+
+Turn 5
+  Reborn    Crobat 262/332           -> Bravebird -> Porygon2
+  Portable  Porygon2 81/332          -> Icebeam -> Crobat
+  Reborn    Tyranitar 323/362        -> Rockslide -> Porygon2
+  Portable  Torkoal 55/302           -> Eruption
+    Porygon2 plan score 228.5, joint adjustment -1.8
+    view: hp 24%  speed 177 (faster)  incoming max 42%  certain 42%  threatened=True
+    foe moves est: Crunch 42%, Bravebird 31%, Rockslide 20%, Earthquake 18%, Superfang 12%, Tailwind 0%, Taunt 0%, Protect 0%
+      RECOVER                          502  heal_low_hp+252 heal_saves_battler+150
+    * ICEBEAM -> Crobat                228  expected_damage+57 super_effective+70 secondary_freeze+1 doubles_outcome_candidate+0
+      TRIATTACK -> Crobat              138  expected_damage+38 doubles_outcome_candidate+0
+      ICEBEAM -> Tyranitar             115  expected_damage+15 secondary_freeze+0 doubles_outcome_candidate+0
+      TRIATTACK -> Tyranitar            65  expected_damage+10 resisted-45 doubles_outcome_candidate+0
+    Torkoal plan score 109.0, joint adjustment -1.8
+    view: hp 18%  speed 97 (faster)  incoming max 49%  certain 49%  threatened=True
+    foe moves est: Crunch 49%, Rockslide 47%, Earthquake 41%, Bravebird 36%, Superfang 9%, Tailwind 0%, Taunt 0%, Protect 0%
+      EARTHPOWER -> Tyranitar          187  expected_damage+17 super_effective+70 secondary_drop+0 doubles_outcome_candidate+0
+      HEATWAVE                         130  expected_damage+30 accuracy-1 spread_type_in_damage+0 secondary_burn+2 doubles_outcome_candidate+0
+    * ERUPTION                         109  expected_damage+9 spread_type_in_damage+0 doubles_outcome_candidate+0
+      PROTECT                          -40  repeated_protect-140
+      EARTHPOWER -> Crobat         -1000000  doubles_outcome_candidate+0
+    Torkoal      used Eruption       hit            Crobat -32, Tyranitar -9 x0.5
+    Porygon2     used Icebeam        hit            Crobat -230 x2
+    Tyranitar    used Rockslide      hit            Porygon2 -56, Torkoal -55 x2
+  end:     Reborn Excadrill 382/382 | Portable Porygon2 5/332 | Reborn Tyranitar 314/362 | Portable Rhyperior 392/392
+
+Turn 6
+  Reborn    Excadrill 382/382        -> Ironhead -> Porygon2
+  Portable  Porygon2 5/332           -> Recover
+  Reborn    Tyranitar 314/362        -> Crunch -> Porygon2
+  Portable  Rhyperior 392/392        -> Megahorn -> Tyranitar
+    Porygon2 plan score 570.5, joint adjustment -490.0
+    view: hp 2%  speed 177 (faster)  incoming max 48%  certain 48%  threatened=True
+    foe moves est: Ironhead 48%, Earthquake 45%, Crunch 42%, Rockslide 23%, Rockslide 20%, Earthquake 18%, Protect 0%, Protect 0%
+    * RECOVER                          570  heal_low_hp+320 heal_saves_battler+150
+      ICEBEAM -> Excadrill             129  expected_damage+29 secondary_freeze+1 doubles_outcome_candidate+0
+      ICEBEAM -> Tyranitar             115  expected_damage+15 secondary_freeze+0 doubles_outcome_candidate+0
+      TRIATTACK -> Excadrill            74  expected_damage+19 resisted-45 doubles_outcome_candidate+0
+      TRIATTACK -> Tyranitar            65  expected_damage+10 resisted-45 doubles_outcome_candidate+0
+    Rhyperior plan score 212.9, joint adjustment -490.0
+    view: hp 100%  speed 137 (faster)  incoming max 92%  certain 92%  threatened=False
+    foe moves est: Ironhead 92%, Earthquake 85%, Crunch 40%, Earthquake 34%, Rockslide 11%, Rockslide 10%, Protect 0%, Protect 0%
+    * MEGAHORN -> Tyranitar            213  expected_damage+46 accuracy-3 super_effective+70 doubles_outcome_candidate+0
+      ROCKSLIDE                        124  expected_damage+23 accuracy-1 spread_type_in_damage+0 secondary_flinch+2 doubles_outcome_candidate+0
+      PROTECT                          100
+      MEGAHORN -> Excadrill             71  expected_damage+17 accuracy-1 resisted-45 doubles_outcome_candidate+0
+      EARTHQUAKE                      -603  expected_damage+80 spread_type_in_damage+0 friendly_fire-783 doubles_outcome_candidate+0
+    Rhyperior    used Megahorn       hit            Tyranitar -168 x2
+    Porygon2     used Recover        untargeted     user +166
+    Tyranitar    used Crunch         hit            Porygon2 -171
+    Excadrill    used Ironhead       hit            Rhyperior -359 x2, user -38
+  end:     Reborn Excadrill 344/382 | Portable Reuniclus 382/382 | Reborn Tyranitar 146/362 | Portable Rhyperior 33/392
+
+Turn 7
+  Reborn    Excadrill 344/382        -> Ironhead -> Rhyperior
+  Portable  Reuniclus 382/382        -> Focusblast -> Tyranitar
+  Reborn    Tyranitar 146/362        -> Rockslide -> Reuniclus
+  Portable  Rhyperior 33/392         -> Protect
+    Reuniclus plan score 525.0, joint adjustment -200.9
+    view: hp 100%  speed 117 (faster)  incoming max 251%  certain 251%  threatened=True
+    foe moves est: Crunch 251%, Rockslide 59%, Ironhead 55%, Earthquake 52%, Earthquake 52%, Rockslide 26%, Protect 0%, Protect 0%
+    * FOCUSBLAST -> Tyranitar          525  lethal+500 accuracy-75 lethal_flat+0 doubles_outcome_candidate+0
+      FOCUSBLAST -> Excadrill          221  expected_damage+59 accuracy-9 super_effective+70 secondary_drop+1 doubles_outcome_candidate+0
+      PSYCHIC -> Excadrill              72  expected_damage+17 resisted-45 secondary_drop+0 doubles_outcome_candidate+0
+      TRICKROOM                       -400  speed_control_redundant-500
+      RECOVER                         -800  heal_near_full-500 heal_does_not_save-400
+    Rhyperior plan score 100.0, joint adjustment -200.9
+    view: hp 8%  speed 137 (faster)  incoming max 80%  certain 80%  threatened=True
+    foe moves est: Crunch 80%, Ironhead 71%, Earthquake 67%, Earthquake 66%, Rockslide 19%, Rockslide 8%, Protect 0%, Protect 0%
+      MEGAHORN -> Tyranitar            562  lethal+500 accuracy-38 lethal_flat+0 doubles_outcome_candidate+0
+      ROCKSLIDE                        146  expected_damage+45 accuracy-2 spread_type_in_damage+0 secondary_flinch+4 doubles_outcome_candidate+0
+    * PROTECT                          100
+      MEGAHORN -> Excadrill             87  expected_damage+34 accuracy-3 resisted-45 doubles_outcome_candidate+0
+      EARTHQUAKE                       -63  expected_damage+80 spread_type_in_damage+0 friendly_fire-243 doubles_outcome_candidate+0
+    Rhyperior    used Protect        untargeted
+    Reuniclus    used Focusblast     hit            Tyranitar -146 x4
+    Excadrill    used Ironhead       protected      Rhyperior 0
+  end:     Reborn Excadrill 344/382 | Portable Reuniclus 382/382 | Reborn Rotom 262/262 | Portable Rhyperior 33/392
+
+Turn 8
+  Reborn    Excadrill 344/382        -> Earthquake -> Rhyperior
+  Portable  Reuniclus 382/382        -> Psychic -> Rotom
+  Reborn    Rotom 262/262            -> Shadowball -> Rhyperior
+  Portable  Rhyperior 33/392         -> Rockslide
+    Reuniclus plan score 143.5, joint adjustment -9.7
+    view: hp 100%  speed 117 (faster)  incoming max 59%  certain 59%  threatened=False
+    foe moves est: Shadowball 59%, Ironhead 55%, Earthquake 52%, Thunderbolt 33%, Rockslide 26%, Voltswitch 26%, Protect 0%, Willowisp 0%
+      FOCUSBLAST -> Excadrill          221  expected_damage+59 accuracy-9 super_effective+70 secondary_drop+1 doubles_outcome_candidate+0
+    * PSYCHIC -> Rotom                 143  expected_damage+43 secondary_drop+0 doubles_outcome_candidate+0
+      PSYCHIC -> Excadrill              72  expected_damage+17 resisted-45 secondary_drop+0 doubles_outcome_candidate+0
+      TRICKROOM                       -400  speed_control_redundant-500
+      RECOVER                         -720  heal_near_full-500 heal_losing_race-120 finish_instead_of_heal-200
+    Rhyperior plan score 174.2, joint adjustment -9.7
+    view: hp 8%  speed 137 (faster)  incoming max 71%  certain 71%  threatened=True
+    foe moves est: Ironhead 71%, Earthquake 66%, Shadowball 39%, Rockslide 8%, Protect 0%, Thunderbolt 0%, Voltswitch 0%, Willowisp 0%
+    * ROCKSLIDE                        174  expected_damage+71 accuracy-4 spread_type_in_damage+0 secondary_flinch+6 doubles_outcome_candidate+0
+      MEGAHORN -> Rotom                 94  expected_damage+42 accuracy-3 resisted-45 doubles_outcome_candidate+0
+      MEGAHORN -> Excadrill             87  expected_damage+34 accuracy-3 resisted-45 doubles_outcome_candidate+0
+      PROTECT                          -40  repeated_protect-140
+      EARTHQUAKE                       -63  expected_damage+80 spread_type_in_damage+0 friendly_fire-243 doubles_outcome_candidate+0
+    Reuniclus    used Psychic        hit            Rotom -156
+    Rhyperior    used Rockslide      hit            Excadrill -60 x0.25, Rotom -106
+    Excadrill    used Earthquake     hit            Reuniclus -176, Rhyperior -33 x2, user -38
+  end:     Reborn Excadrill 246/382 | Portable Reuniclus 229/382 | Portable Hariyama 284/450
+
+Turn 9
+  Reborn    Excadrill 246/382        -> Earthquake -> Hariyama
+  Portable  Reuniclus 229/382        -> Trickroom
+  Portable  Hariyama 284/450         -> Closecombat -> Excadrill
+    Reuniclus plan score 256.0, joint adjustment -38.6
+    view: hp 60%  speed 117 (slower)  incoming max 55%  certain 55%  threatened=False
+    foe moves est: Ironhead 55%, Earthquake 52%, Rockslide 26%, Protect 0%
+      FOCUSBLAST -> Excadrill          525  lethal+500 accuracy-75 lethal_flat+0 doubles_outcome_candidate+0
+    * TRICKROOM                        256  speed_control_value+156
+      PSYCHIC -> Excadrill              72  expected_damage+17 resisted-45 secondary_drop+0 doubles_outcome_candidate+0
+      RECOVER                         -130  heal_mid_hp+90 heal_losing_race-120 finish_instead_of_heal-200
+      PSYCHIC -> Hariyama          -1000000  expected_damage+48 super_effective+70 secondary_drop+0
+    Hariyama plan score 585.0, joint adjustment -38.6
+    view: hp 63%  speed 157 (slower)  incoming max 55%  certain 55%  threatened=False
+    foe moves est: Ironhead 55%, Earthquake 51%, Rockslide 13%, Protect 0%
+    * CLOSECOMBAT -> Excadrill         585  lethal+500 lethal_flat+0 self_stat_drop-15 doubles_outcome_candidate+0
+      FAKEOUT -> Excadrill             175  expected_damage+5 resisted-45 first_turn_hit+115 doubles_outcome_candidate+0
+      KNOCKOFF -> Excadrill            145  expected_damage+37 knocks_item+7 doubles_outcome_candidate+0
+      FAKEOUT -> Reuniclus         -1000000  expected_damage+10 first_turn_hit+115
+      CLOSECOMBAT -> Reuniclus     -1000000  expected_damage+23 resisted-45 self_stat_drop-40
+    Excadrill    used Earthquake     hit            Reuniclus -170, Hariyama -195, user -38
+    Hariyama     used Closecombat    hit            Excadrill -208 x2

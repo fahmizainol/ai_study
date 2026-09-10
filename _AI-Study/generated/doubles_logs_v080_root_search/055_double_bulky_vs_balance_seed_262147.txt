@@ -1,0 +1,461 @@
+double_bulky_vs_balance  seed 262147   Reborn-Normal (bulky, left) vs Portable 0.8.0 (balance, right)   result for right seat: LOSS in 21 rounds (engine turncount 20)
+  Reborn   (bulky): Reuniclus, Torkoal, Amoonguss, Porygon2, Rhyperior, Hariyama
+  Portable (balance): Togekiss, Garchomp, Volcarona, Metagross, Sylveon, Hitmontop
+==============================================================================================================
+
+Turn 1
+  Reborn    Reuniclus 382/382        -> Trickroom
+  Portable  Togekiss 332/332         -> Airslash -> Torkoal
+  Reborn    Torkoal 302/302          -> Heatwave -> Togekiss
+  Portable  Garchomp 378/378         -> Earthquake
+    Togekiss plan score 137.3, joint adjustment 374.0
+    view: hp 100%  speed 217 (faster)  incoming max 62%  certain 62%  threatened=False
+    foe moves est: Eruption 62%, Heatwave 39%, Psychic 37%, Focusblast 8%, Recover 0%, Trickroom 0%, Earthpower 0%, Protect 0%
+    * AIRSLASH -> Torkoal              137  expected_damage+32 accuracy-1 secondary_flinch+6 doubles_outcome_candidate+0
+      DAZZLINGGLEAM                    131  expected_damage+31 spread_type_in_damage+0 doubles_outcome_candidate+0
+      AIRSLASH -> Reuniclus            126  expected_damage+22 accuracy-1 secondary_flinch+4 doubles_outcome_candidate+0
+      FOLLOWME                         100
+      PROTECT                          100
+    Garchomp plan score 180.0, joint adjustment 374.0
+    view: hp 100%  speed 261 (faster)  incoming max 41%  certain 41%  threatened=False
+    foe moves est: Psychic 41%, Focusblast 37%, Eruption 34%, Heatwave 22%, Earthpower 20%, Recover 0%, Trickroom 0%, Protect 0%
+    * EARTHQUAKE                       180  expected_damage+80 spread_type_in_damage+0 partner_immune+0 doubles_outcome_candidate+0
+      SWORDSDANCE                      155  first_setup+55
+      DRAGONCLAW -> Reuniclus          136  expected_damage+36 doubles_outcome_candidate+0
+      DRAGONCLAW -> Torkoal            129  expected_damage+29 doubles_outcome_candidate+0
+      PROTECT                          100
+    Garchomp     used Earthquake     hit            Reuniclus -190, Togekiss 0 immune, Torkoal -211 x2, user -37
+    Togekiss     used Airslash       hit            Torkoal -91
+    Reuniclus    used Trickroom      untargeted
+  end:     Reborn Reuniclus 215/382 | Portable Togekiss 332/332 | Reborn Porygon2 332/332 | Portable Garchomp 341/378
+
+Turn 2
+  Reborn    Reuniclus 215/382        -> Psychic -> Garchomp
+  Portable  Togekiss 332/332         -> Protect
+  Reborn    Porygon2 332/332         -> Icebeam -> Garchomp
+  Portable  Garchomp 341/378         -> Protect
+    Togekiss plan score 100.0, joint adjustment 0.0
+    view: hp 100%  speed 217 (slower)  incoming max 43%  certain 43%  threatened=False
+    foe moves est: Icebeam 43%, Psychic 37%, Triattack 29%, Focusblast 8%, Recover 0%, Trickroom 0%, Recover 0%, Trickroom 0%
+      DAZZLINGGLEAM                    130  expected_damage+30 spread_type_in_damage+0 doubles_outcome_candidate+0
+      AIRSLASH -> Reuniclus            122  expected_damage+22 accuracy-1 doubles_outcome_candidate+0
+      AIRSLASH -> Porygon2             116  expected_damage+16 accuracy-0 doubles_outcome_candidate+0
+      FOLLOWME                         100
+    * PROTECT                          100
+    Garchomp plan score 100.0, joint adjustment 0.0
+    view: hp 90%  speed 261 (slower)  incoming max 95%  certain 95%  threatened=True
+    foe moves est: Icebeam 95%, Psychic 41%, Focusblast 37%, Triattack 32%, Recover 0%, Trickroom 0%, Recover 0%, Trickroom 0%
+      switch->Sylveon                  325  matchup+64 entry_incoming_damage-9 switchin_race+85 escape_lethal_threat+130 entry_hazards+0 escape_reasons+1
+      switch->Volcarona                272  matchup+96 entry_incoming_damage-19 switchin_race+10 escape_lethal_threat+130 entry_hazards+0 escape_reasons+1
+      switch->Metagross                239  matchup+64 entry_incoming_damage-20 switchin_race+10 escape_lethal_threat+130 entry_hazards+0 escape_reasons+1
+      switch->Hitmontop                167  matchup+80 entry_incoming_damage-93 switchin_race-5 escape_lethal_threat+130 entry_hazards+0 escape_reasons+1
+      EARTHQUAKE                       157  expected_damage+57 spread_type_in_damage+0 partner_immune+0 doubles_outcome_candidate+0
+    Togekiss     used Protect        untargeted
+    Garchomp     used Protect        untargeted
+    Reuniclus    used Psychic        protected      Garchomp 0
+    Porygon2     used Icebeam        protected      Garchomp 0
+  end:     Reborn Reuniclus 238/382 | Portable Togekiss 332/332 | Reborn Porygon2 332/332 | Portable Garchomp 341/378
+
+Turn 3
+  Reborn    Reuniclus 238/382        -> Psychic -> Garchomp
+  Portable  Togekiss 332/332         -> Dazzlinggleam
+  Reborn    Porygon2 332/332         -> Icebeam -> Garchomp
+  Portable  Garchomp 341/378         -> switch->Sylveon
+    Togekiss plan score 129.9, joint adjustment -338.5
+    view: hp 100%  speed 217 (slower)  incoming max 43%  certain 43%  threatened=False
+    foe moves est: Icebeam 43%, Psychic 37%, Triattack 29%, Focusblast 8%, Recover 0%, Trickroom 0%, Recover 0%, Trickroom 0%
+    * DAZZLINGGLEAM                    130  expected_damage+30 spread_type_in_damage+0 doubles_outcome_candidate+0
+      AIRSLASH -> Reuniclus            122  expected_damage+22 accuracy-1 doubles_outcome_candidate+0
+      AIRSLASH -> Porygon2             116  expected_damage+16 accuracy-0 doubles_outcome_candidate+0
+      FOLLOWME                         100
+      PROTECT                          -40  repeated_protect-140
+    Garchomp plan score 324.9, joint adjustment -338.5
+    view: hp 90%  speed 261 (slower)  incoming max 95%  certain 95%  threatened=True
+    foe moves est: Icebeam 95%, Psychic 41%, Focusblast 37%, Triattack 32%, Recover 0%, Trickroom 0%, Recover 0%, Trickroom 0%
+    * switch->Sylveon                  325  matchup+64 entry_incoming_damage-9 switchin_race+85 escape_lethal_threat+130 entry_hazards+0 escape_reasons+1
+      switch->Volcarona                272  matchup+96 entry_incoming_damage-19 switchin_race+10 escape_lethal_threat+130 entry_hazards+0 escape_reasons+1
+      switch->Metagross                239  matchup+64 entry_incoming_damage-20 switchin_race+10 escape_lethal_threat+130 entry_hazards+0 escape_reasons+1
+      switch->Hitmontop                167  matchup+80 entry_incoming_damage-93 switchin_race-5 escape_lethal_threat+130 entry_hazards+0 escape_reasons+1
+      EARTHQUAKE                       157  expected_damage+57 spread_type_in_damage+0 partner_immune+0 doubles_outcome_candidate+0
+    Reuniclus    used Psychic        hit            Garchomp -104
+    Porygon2     used Icebeam        hit            Garchomp -57
+    Togekiss     used Dazzlinggleam  hit            Reuniclus -86, Porygon2 -60
+  end:     Reborn Reuniclus 175/382 | Portable Togekiss 332/332 | Reborn Porygon2 272/332 | Portable Sylveon 213/352
+
+Turn 4
+  Reborn    Reuniclus 175/382        -> Recover
+  Portable  Togekiss 332/332         -> Dazzlinggleam
+  Reborn    Porygon2 272/332         -> Icebeam -> Togekiss
+  Portable  Sylveon 213/352          -> Hypervoice
+    Togekiss plan score 129.9, joint adjustment 414.1
+    view: hp 100%  speed 217 (slower)  incoming max 43%  certain 43%  threatened=False
+    foe moves est: Icebeam 43%, Psychic 37%, Triattack 29%, Focusblast 8%, Recover 0%, Trickroom 0%, Recover 0%, Trickroom 0%
+    * DAZZLINGGLEAM                    130  expected_damage+30 spread_type_in_damage+0 doubles_outcome_candidate+0
+      AIRSLASH -> Reuniclus            122  expected_damage+22 accuracy-1 doubles_outcome_candidate+0
+      AIRSLASH -> Porygon2             116  expected_damage+16 accuracy-0 doubles_outcome_candidate+0
+      FOLLOWME                         100
+      PROTECT                          100
+    Sylveon plan score 138.3, joint adjustment 414.1
+    view: hp 61%  speed 177 (slower)  incoming max 32%  certain 32%  threatened=False
+    foe moves est: Psychic 32%, Triattack 25%, Icebeam 18%, Focusblast 14%, Recover 0%, Trickroom 0%, Recover 0%, Trickroom 0%
+    * HYPERVOICE                       138  expected_damage+38 spread_type_in_damage+0 doubles_outcome_candidate+0
+      MOONBLAST -> Reuniclus           128  expected_damage+26 secondary_drop+2 doubles_outcome_candidate+0
+      MOONBLAST -> Porygon2            119  expected_damage+19 doubles_outcome_candidate+0
+      HELPINGHAND -> Togekiss          100
+      PROTECT                          100
+    Reuniclus    used Recover        untargeted     user +191
+    Porygon2     used Icebeam        hit            Togekiss -132 x2
+    Sylveon      used Hypervoice     hit            Reuniclus -116, Porygon2 -69
+    Togekiss     used Dazzlinggleam  hit            Reuniclus -93, Porygon2 -60
+  end:     Reborn Reuniclus 180/382 | Portable Togekiss 200/332 | Reborn Porygon2 143/332 | Portable Sylveon 235/352
+
+Turn 5
+  Reborn    Reuniclus 180/382        -> Recover
+  Portable  Togekiss 200/332         -> Protect
+  Reborn    Porygon2 143/332         -> Recover
+  Portable  Sylveon 235/352          -> Hypervoice
+    Togekiss plan score 100.0, joint adjustment -28.4
+    view: hp 60%  speed 217 (slower)  incoming max 43%  certain 43%  threatened=False
+    foe moves est: Icebeam 43%, Psychic 37%, Triattack 29%, Focusblast 8%, Recover 0%, Trickroom 0%, Recover 0%, Trickroom 0%
+      DAZZLINGGLEAM                    130  expected_damage+30 spread_type_in_damage+0 doubles_outcome_candidate+0
+      AIRSLASH -> Reuniclus            122  expected_damage+22 accuracy-1 doubles_outcome_candidate+0
+      AIRSLASH -> Porygon2             116  expected_damage+16 accuracy-0 doubles_outcome_candidate+0
+      FOLLOWME                         100
+    * PROTECT                          100
+    Sylveon plan score 138.3, joint adjustment -28.4
+    view: hp 67%  speed 177 (slower)  incoming max 32%  certain 32%  threatened=False
+    foe moves est: Psychic 32%, Triattack 25%, Icebeam 18%, Focusblast 14%, Recover 0%, Trickroom 0%, Recover 0%, Trickroom 0%
+    * HYPERVOICE                       138  expected_damage+38 spread_type_in_damage+0 doubles_outcome_candidate+0
+      MOONBLAST -> Reuniclus           128  expected_damage+26 secondary_drop+2 doubles_outcome_candidate+0
+      MOONBLAST -> Porygon2            119  expected_damage+19 doubles_outcome_candidate+0
+      HELPINGHAND -> Togekiss          100
+      PROTECT                          100
+    Togekiss     used Protect        untargeted
+    Reuniclus    used Recover        untargeted     user +191
+    Sylveon      used Hypervoice     hit            Reuniclus -126, Porygon2 -74
+    Porygon2     used Recover        untargeted     user +166
+  end:     Reborn Reuniclus 268/382 | Portable Togekiss 200/332 | Reborn Porygon2 235/332 | Portable Sylveon 257/352
+
+Turn 6
+  Reborn    Reuniclus 268/382        -> Trickroom
+  Portable  Togekiss 200/332         -> Dazzlinggleam
+  Reborn    Porygon2 235/332         -> Icebeam -> Togekiss
+  Portable  Sylveon 257/352          -> Hypervoice
+    Togekiss plan score 129.9, joint adjustment -277.3
+    view: hp 60%  speed 217 (faster)  incoming max 43%  certain 43%  threatened=False
+    foe moves est: Icebeam 43%, Psychic 37%, Triattack 29%, Focusblast 8%, Recover 0%, Trickroom 0%, Recover 0%, Trickroom 0%
+    * DAZZLINGGLEAM                    130  expected_damage+30 spread_type_in_damage+0 doubles_outcome_candidate+0
+      AIRSLASH -> Reuniclus            126  expected_damage+22 accuracy-1 secondary_flinch+4 doubles_outcome_candidate+0
+      AIRSLASH -> Porygon2             118  expected_damage+16 accuracy-0 secondary_flinch+3 doubles_outcome_candidate+0
+      FOLLOWME                         100
+      PROTECT                          -40  repeated_protect-140
+    Sylveon plan score 138.3, joint adjustment -277.3
+    view: hp 73%  speed 177 (slower)  incoming max 32%  certain 32%  threatened=False
+    foe moves est: Psychic 32%, Triattack 25%, Icebeam 18%, Focusblast 14%, Recover 0%, Trickroom 0%, Recover 0%, Trickroom 0%
+    * HYPERVOICE                       138  expected_damage+38 spread_type_in_damage+0 doubles_outcome_candidate+0
+      MOONBLAST -> Reuniclus           128  expected_damage+26 secondary_drop+2 doubles_outcome_candidate+0
+      MOONBLAST -> Porygon2            119  expected_damage+19 doubles_outcome_candidate+0
+      HELPINGHAND -> Togekiss          100
+      PROTECT                          100
+    Togekiss     used Dazzlinggleam  hit            Reuniclus -95, Porygon2 -90 CRIT
+    Sylveon      used Hypervoice     hit            Reuniclus -107, Porygon2 -77
+    Porygon2     used Icebeam        hit            Togekiss -45 x2
+    Reuniclus    used Trickroom      untargeted
+  end:     Reborn Reuniclus 89/382 | Portable Togekiss 155/332 | Reborn Porygon2 68/332 | Portable Sylveon 279/352
+
+Turn 7
+  Reborn    Reuniclus 89/382         -> Recover
+  Portable  Togekiss 155/332         -> Protect
+  Reborn    Porygon2 68/332          -> Recover -> Togekiss
+  Portable  Sylveon 279/352          -> Hypervoice
+    Togekiss plan score 100.0, joint adjustment 449.2
+    view: hp 47%  speed 217 (slower)  incoming max 43%  certain 43%  threatened=False
+    foe moves est: Icebeam 43%, Psychic 37%, Triattack 29%, Focusblast 8%, Recover 0%, Trickroom 0%, Recover 0%, Trickroom 0%
+      AIRSLASH -> Reuniclus            588  lethal+500 accuracy-12 lethal_flat+0 doubles_outcome_candidate+0
+      DAZZLINGGLEAM                    130  expected_damage+30 spread_type_in_damage+0 doubles_outcome_candidate+0
+      AIRSLASH -> Porygon2             116  expected_damage+16 accuracy-0 doubles_outcome_candidate+0
+      FOLLOWME                         100
+    * PROTECT                          100
+    Sylveon plan score 138.3, joint adjustment 449.2
+    view: hp 79%  speed 177 (slower)  incoming max 32%  certain 32%  threatened=False
+    foe moves est: Psychic 32%, Triattack 25%, Icebeam 18%, Focusblast 14%, Recover 0%, Trickroom 0%, Recover 0%, Trickroom 0%
+      MOONBLAST -> Reuniclus           600  lethal+500 lethal_flat+0 doubles_outcome_candidate+0
+      MOONBLAST -> Porygon2            600  lethal+500 lethal_flat+0 doubles_outcome_candidate+0
+    * HYPERVOICE                       138  expected_damage+38 spread_type_in_damage+0 doubles_outcome_candidate+0
+      HELPINGHAND -> Togekiss          100
+      PROTECT                          100
+    Togekiss     used Protect        untargeted
+    Reuniclus    used Recover        untargeted     user +191
+    Sylveon      used Hypervoice     hit            Reuniclus -108, Porygon2 -68
+  end:     Reborn Reuniclus 195/382 | Portable Togekiss 155/332 | Reborn Rhyperior 392/392 | Portable Sylveon 301/352
+
+Turn 8
+  Reborn    Reuniclus 195/382        -> Psychic -> Sylveon
+  Portable  Togekiss 155/332         -> Airslash -> Reuniclus
+  Reborn    Rhyperior 392/392        -> Rockslide -> Togekiss
+  Portable  Sylveon 301/352          -> Hypervoice
+    Togekiss plan score 121.8, joint adjustment -184.1
+    view: hp 47%  speed 217 (slower)  incoming max 59%  certain 37%  threatened=True
+    foe moves est: Rockslide 59%, Psychic 37%, Megahorn 11%, Focusblast 8%, Recover 0%, Trickroom 0%, Earthquake 0%, Protect 0%
+      DAZZLINGGLEAM                    141  expected_damage+41 spread_type_in_damage+0 doubles_outcome_candidate+0
+    * AIRSLASH -> Reuniclus            122  expected_damage+22 accuracy-1 doubles_outcome_candidate+0
+      FOLLOWME                         100
+      AIRSLASH -> Rhyperior             69  expected_damage+15 accuracy-0 resisted-45 doubles_outcome_candidate+0
+      PROTECT                          -40  repeated_protect-140
+    Sylveon plan score 151.8, joint adjustment -184.1
+    view: hp 86%  speed 177 (slower)  incoming max 49%  certain 49%  threatened=False
+    foe moves est: Earthquake 49%, Rockslide 37%, Psychic 32%, Megahorn 26%, Focusblast 14%, Recover 0%, Trickroom 0%, Protect 0%
+    * HYPERVOICE                       152  expected_damage+52 spread_type_in_damage+0 doubles_outcome_candidate+0
+      MOONBLAST -> Rhyperior           135  expected_damage+35 doubles_outcome_candidate+0
+      MOONBLAST -> Reuniclus           128  expected_damage+26 secondary_drop+2 doubles_outcome_candidate+0
+      HELPINGHAND -> Togekiss          100
+      PROTECT                          100
+    Reuniclus    used Psychic        hit            Sylveon -113
+    Rhyperior    used Rockslide      hit            Togekiss 0, Sylveon -128
+    Sylveon      used Hypervoice     could_not_move  [flinch=True]
+    Togekiss     used Airslash       hit            Reuniclus -116
+  end:     Reborn Reuniclus 102/382 | Portable Togekiss 155/332 | Reborn Rhyperior 392/392 | Portable Sylveon 82/352
+
+Turn 9
+  Reborn    Reuniclus 102/382        -> Recover
+  Portable  Togekiss 155/332         -> Protect
+  Reborn    Rhyperior 392/392        -> Rockslide -> Togekiss
+  Portable  Sylveon 82/352           -> Protect
+    Togekiss plan score 100.0, joint adjustment 0.0
+    view: hp 47%  speed 217 (slower)  incoming max 59%  certain 37%  threatened=True
+    foe moves est: Rockslide 59%, Psychic 37%, Megahorn 11%, Focusblast 8%, Recover 0%, Trickroom 0%, Earthquake 0%, Protect 0%
+      AIRSLASH -> Reuniclus            588  lethal+500 accuracy-12 lethal_flat+0 doubles_outcome_candidate+0
+      DAZZLINGGLEAM                    141  expected_damage+41 spread_type_in_damage+0 doubles_outcome_candidate+0
+      FOLLOWME                         100
+    * PROTECT                          100
+      AIRSLASH -> Rhyperior             69  expected_damage+15 accuracy-0 resisted-45 doubles_outcome_candidate+0
+    Sylveon plan score 100.0, joint adjustment 0.0
+    view: hp 23%  speed 177 (slower)  incoming max 49%  certain 49%  threatened=True
+    foe moves est: Earthquake 49%, Rockslide 37%, Psychic 32%, Megahorn 26%, Focusblast 14%, Recover 0%, Trickroom 0%, Protect 0%
+      HELPINGHAND -> Togekiss          100
+    * PROTECT                          100
+      HYPERVOICE                        38  expected_damage+52 spread_type_in_damage+0 dead_before_moving-114 doubles_outcome_candidate+0
+      MOONBLAST -> Rhyperior            34  expected_damage+35 dead_before_moving-101 doubles_outcome_candidate+0
+      MOONBLAST -> Reuniclus            32  ko_never_lands+0 expected_damage+26 secondary_drop+2 dead_before_moving-96 doubles_outcome_candidate+0
+    Sylveon      used Protect        untargeted
+    Togekiss     used Protect        untargeted
+    Reuniclus    used Recover        untargeted     user +191
+    Rhyperior    used Rockslide      protected      Togekiss 0, Sylveon 0
+  end:     Reborn Reuniclus 316/382 | Portable Togekiss 155/332 | Reborn Rhyperior 392/392 | Portable Sylveon 104/352
+
+Turn 10
+  Reborn    Reuniclus 316/382        -> Psychic -> Sylveon
+  Portable  Togekiss 155/332         -> Dazzlinggleam
+  Reborn    Rhyperior 392/392        -> Rockslide -> Togekiss
+  Portable  Sylveon 104/352          -> Helpinghand -> Togekiss
+    Togekiss plan score 141.3, joint adjustment -720.2
+    view: hp 47%  speed 217 (slower)  incoming max 59%  certain 37%  threatened=True
+    foe moves est: Rockslide 59%, Psychic 37%, Megahorn 11%, Focusblast 8%, Recover 0%, Trickroom 0%, Earthquake 0%, Protect 0%
+    * DAZZLINGGLEAM                    141  expected_damage+41 spread_type_in_damage+0 doubles_outcome_candidate+0
+      AIRSLASH -> Reuniclus            122  expected_damage+22 accuracy-1 doubles_outcome_candidate+0
+      FOLLOWME                         100
+      AIRSLASH -> Rhyperior             69  expected_damage+15 accuracy-0 resisted-45 doubles_outcome_candidate+0
+      PROTECT                          -40  repeated_protect-140
+    Sylveon plan score 100.0, joint adjustment -720.2
+    view: hp 30%  speed 177 (slower)  incoming max 49%  certain 49%  threatened=True
+    foe moves est: Earthquake 49%, Rockslide 37%, Psychic 32%, Megahorn 26%, Focusblast 14%, Recover 0%, Trickroom 0%, Protect 0%
+    * HELPINGHAND -> Togekiss          100
+      HYPERVOICE                        38  expected_damage+52 spread_type_in_damage+0 dead_before_moving-114 doubles_outcome_candidate+0
+      MOONBLAST -> Rhyperior            34  expected_damage+35 dead_before_moving-101 doubles_outcome_candidate+0
+      MOONBLAST -> Reuniclus            32  expected_damage+26 secondary_drop+2 dead_before_moving-96 doubles_outcome_candidate+0
+      PROTECT                          -40  repeated_protect-140
+    Sylveon      used Helpinghand    hit            Togekiss 0
+    Reuniclus    used Psychic        hit            Sylveon -104
+    Rhyperior    used Rockslide      hit            Togekiss -155 x2
+  end:     Reborn Reuniclus 339/382 | Portable Garchomp 341/378 | Reborn Rhyperior 392/392 | Portable Volcarona 332/332
+
+Turn 11
+  Reborn    Reuniclus 339/382        -> Trickroom -> Volcarona
+  Portable  Garchomp 341/378         -> Dragonclaw -> Reuniclus
+  Reborn    Rhyperior 392/392        -> Rockslide -> Garchomp
+  Portable  Volcarona 332/332        -> Bugbuzz -> Reuniclus
+    Garchomp plan score 136.0, joint adjustment 91.3
+    view: hp 90%  speed 261 (faster)  incoming max 41%  certain 41%  threatened=False
+    foe moves est: Psychic 41%, Megahorn 37%, Focusblast 37%, Earthquake 35%, Rockslide 13%, Recover 0%, Trickroom 0%, Protect 0%
+      SWORDSDANCE                      155  first_setup+55
+    * DRAGONCLAW -> Reuniclus          136  expected_damage+36 doubles_outcome_candidate+0
+      DRAGONCLAW -> Rhyperior          123  expected_damage+23 doubles_outcome_candidate+0
+      PROTECT                          100
+      EARTHQUAKE                       -12  expected_damage+78 spread_type_in_damage+0 friendly_fire-191 doubles_outcome_candidate+0
+    Volcarona plan score 229.2, joint adjustment 91.3
+    view: hp 100%  speed 257 (faster)  incoming max 155%  certain 52%  threatened=True
+    foe moves est: Rockslide 155%, Earthquake 52%, Psychic 40%, Megahorn 28%, Focusblast 18%, Recover 0%, Trickroom 0%, Protect 0%
+      switch->Metagross                297  matchup+96 entry_incoming_damage-49 switchin_race+65 escape_lethal_threat+130 entry_hazards+0 escape_reasons+1
+      switch->Hitmontop                237  matchup+80 entry_incoming_damage-93 switchin_race+65 escape_lethal_threat+130 entry_hazards+0 escape_reasons+1
+    * BUGBUZZ -> Reuniclus             229  expected_damage+59 super_effective+70 secondary_drop+1 doubles_outcome_candidate+0
+      BUGBUZZ -> Rhyperior             139  expected_damage+39 secondary_drop+0 doubles_outcome_candidate+0
+      HEATWAVE                         137  expected_damage+39 accuracy-2 spread_type_in_damage+0 secondary_burn+1 doubles_outcome_candidate+0
+    Garchomp     used Dragonclaw     hit            Reuniclus -199, user -37
+    Volcarona    used Bugbuzz        hit            Reuniclus -140 x2
+    Rhyperior    used Rockslide      hit            Garchomp -45 x0.5, Volcarona -332 x4
+  end:     Reborn Hariyama 450/450 | Portable Garchomp 259/378 | Reborn Rhyperior 392/392 | Portable Metagross 322/322
+
+Turn 12
+  Reborn    Hariyama 450/450         -> Fakeout -> Garchomp
+  Portable  Garchomp 259/378         -> Dragonclaw -> Hariyama
+  Reborn    Rhyperior 392/392        -> Megahorn -> Garchomp
+  Portable  Metagross 322/322        -> Zenheadbutt -> Hariyama
+    Garchomp plan score 135.9, joint adjustment 294.1
+    view: hp 69%  speed 261 (faster)  incoming max 49%  certain 49%  threatened=False
+    foe moves est: Closecombat 49%, Knockoff 40%, Megahorn 37%, Earthquake 35%, Rockslide 13%, Fakeout 11%, Wideguard 0%, Protect 0%
+      SWORDSDANCE                      155  first_setup+55
+    * DRAGONCLAW -> Hariyama           136  expected_damage+36 doubles_outcome_candidate+0
+      DRAGONCLAW -> Rhyperior          123  expected_damage+23 doubles_outcome_candidate+0
+      PROTECT                          100
+      EARTHQUAKE                       -60  expected_damage+77 spread_type_in_damage+0 friendly_fire-238 doubles_outcome_candidate+0
+    Metagross plan score 227.8, joint adjustment 294.1
+    view: hp 100%  speed 197 (faster)  incoming max 73%  certain 73%  threatened=False
+    foe moves est: Knockoff 73%, Earthquake 63%, Closecombat 45%, Megahorn 34%, Rockslide 12%, Fakeout 5%, Wideguard 0%, Protect 0%
+    * ZENHEADBUTT -> Hariyama          228  expected_damage+57 accuracy-3 super_effective+70 secondary_flinch+3 doubles_outcome_candidate+0
+      METEORMASH -> Rhyperior          209  expected_damage+41 accuracy-2 super_effective+70 doubles_outcome_candidate+0
+      METEORMASH -> Hariyama           130  expected_damage+32 accuracy-2 doubles_outcome_candidate+0
+      ZENHEADBUTT -> Rhyperior         119  expected_damage+18 accuracy-1 secondary_flinch+1 doubles_outcome_candidate+0
+      PROTECT                          100
+    Hariyama     used Fakeout        hit            Garchomp -37
+    Garchomp     used Dragonclaw     could_not_move  [flinch=True]
+    Metagross    used Zenheadbutt    hit            Hariyama -336 x2
+    Rhyperior    used Megahorn       hit            Garchomp -133
+  end:     Reborn Hariyama 114/450 | Portable Garchomp 89/378 | Reborn Rhyperior 392/392 | Portable Metagross 322/322
+
+Turn 13
+  Reborn    Hariyama 114/450         -> Knockoff -> Garchomp
+  Portable  Garchomp 89/378          -> Earthquake
+  Reborn    Rhyperior 392/392        -> Megahorn -> Garchomp
+  Portable  Metagross 322/322        -> Meteormash -> Rhyperior
+    Garchomp plan score -60.3, joint adjustment 799.9
+    view: hp 24%  speed 261 (faster)  incoming max 49%  certain 49%  threatened=True
+    foe moves est: Closecombat 49%, Knockoff 40%, Megahorn 37%, Earthquake 35%, Rockslide 13%, Fakeout 11%, Wideguard 0%, Protect 0%
+      DRAGONCLAW -> Hariyama           600  lethal+500 lethal_flat+0 doubles_outcome_candidate+0
+      DRAGONCLAW -> Rhyperior          123  expected_damage+23 doubles_outcome_candidate+0
+      PROTECT                          100
+    * EARTHQUAKE                       -60  expected_damage+77 spread_type_in_damage+0 friendly_fire-238 doubles_outcome_candidate+0
+      SWORDSDANCE                     -140  unsafe_setup-240
+    Metagross plan score 209.2, joint adjustment 799.9
+    view: hp 100%  speed 197 (faster)  incoming max 73%  certain 73%  threatened=False
+    foe moves est: Knockoff 73%, Earthquake 63%, Closecombat 45%, Megahorn 34%, Rockslide 12%, Fakeout 5%, Wideguard 0%, Protect 0%
+      METEORMASH -> Hariyama           575  lethal+500 accuracy-25 lethal_flat+0 doubles_outcome_candidate+0
+      ZENHEADBUTT -> Hariyama          575  lethal+500 accuracy-25 lethal_flat+0 doubles_outcome_candidate+0
+    * METEORMASH -> Rhyperior          209  expected_damage+41 accuracy-2 super_effective+70 doubles_outcome_candidate+0
+      ZENHEADBUTT -> Rhyperior         119  expected_damage+18 accuracy-1 secondary_flinch+1 doubles_outcome_candidate+0
+      PROTECT                          100
+    Garchomp     used Earthquake     hit            Hariyama -114, Rhyperior -224 x2, Metagross -322 CRIT x2, user -37
+    Rhyperior    used Megahorn       hit            Garchomp -52
+  end:     Reborn Amoonguss 390/390 | Portable Hitmontop 262/262 | Reborn Rhyperior 168/392
+
+Turn 14
+  Reborn    Amoonguss 390/390        -> Spore -> Hitmontop
+  Portable  Hitmontop 262/262        -> Closecombat -> Rhyperior
+  Reborn    Rhyperior 168/392        -> Megahorn -> Hitmontop
+    Hitmontop plan score 585.0, joint adjustment 0.0
+    view: hp 100%  speed 197 (faster)  incoming max 99%  certain 99%  threatened=False
+    foe moves est: Earthquake 99%, Megahorn 53%, Rockslide 50%, Pollenpuff 12%, Spore 0%, Ragepowder 0%, Protect 0%, Protect 0%
+    * CLOSECOMBAT -> Rhyperior         585  lethal+500 lethal_flat+0 self_stat_drop-15
+      FAKEOUT -> Amoonguss             226  expected_damage+11 first_turn_hit+115
+      FAKEOUT -> Rhyperior             173  expected_damage+3 resisted-45 first_turn_hit+115
+      WIDEGUARD                        100
+      PROTECT                          100
+    Hitmontop    used Closecombat    hit            Rhyperior -168 x2
+    Amoonguss    used Spore          hit            Hitmontop 0
+  end:     Reborn Amoonguss 390/390 | Portable Hitmontop 262/262 SLP
+
+Turn 15
+  Reborn    Amoonguss 390/390        -> Pollenpuff -> Hitmontop
+  Portable  Hitmontop 262/262 SLP    -> Wideguard
+    Hitmontop plan score 100.0, joint adjustment 0.0
+    view: hp 100%  speed 197 (faster)  incoming max 18%  certain 18%  threatened=False
+    foe moves est: Pollenpuff 18%, Spore 0%, Ragepowder 0%, Protect 0%
+    * WIDEGUARD                        100
+      PROTECT                          100
+      CLOSECOMBAT -> Amoonguss          32  expected_damage+17 resisted-45 self_stat_drop-40
+      FAKEOUT -> Amoonguss         -1000001  expected_damage+11
+    Hitmontop    used Wideguard      could_not_move  [status=1 status_count=3]
+    Amoonguss    used Pollenpuff     hit            Hitmontop -43 x0.5
+  end:     Reborn Amoonguss 390/390 | Portable Hitmontop 219/262 SLP
+
+Turn 16
+  Reborn    Amoonguss 390/390        -> Pollenpuff -> Hitmontop
+  Portable  Hitmontop 219/262 SLP    -> Closecombat -> Amoonguss
+    Hitmontop plan score 31.6, joint adjustment 0.0
+    view: hp 84%  speed 197 (faster)  incoming max 18%  certain 18%  threatened=False
+    foe moves est: Pollenpuff 18%, Spore 0%, Ragepowder 0%, Protect 0%
+    * CLOSECOMBAT -> Amoonguss          32  expected_damage+17 resisted-45 self_stat_drop-40
+      WIDEGUARD                        -40  repeated_protect-140
+      PROTECT                          -40  repeated_protect-140
+      FAKEOUT -> Amoonguss         -1000001  expected_damage+0
+    Hitmontop    used Closecombat    could_not_move  [status=1 status_count=2]
+    Amoonguss    used Pollenpuff     hit            Hitmontop -43 x0.5
+  end:     Reborn Amoonguss 390/390 | Portable Hitmontop 176/262 SLP
+
+Turn 17
+  Reborn    Amoonguss 390/390        -> Pollenpuff -> Hitmontop
+  Portable  Hitmontop 176/262 SLP    -> Wideguard
+    Hitmontop plan score 100.0, joint adjustment 0.0
+    view: hp 67%  speed 197 (faster)  incoming max 18%  certain 18%  threatened=False
+    foe moves est: Pollenpuff 18%, Spore 0%, Ragepowder 0%, Protect 0%
+    * WIDEGUARD                        100
+      PROTECT                          100
+      CLOSECOMBAT -> Amoonguss          32  expected_damage+17 resisted-45 self_stat_drop-40
+      FAKEOUT -> Amoonguss         -1000001  expected_damage+0
+    Hitmontop    used Wideguard      untargeted      [status=1 status_count=1]
+    Amoonguss    used Pollenpuff     hit            Hitmontop -43 x0.5
+  end:     Reborn Amoonguss 390/390 | Portable Hitmontop 133/262
+
+Turn 18
+  Reborn    Amoonguss 390/390        -> Spore -> Hitmontop
+  Portable  Hitmontop 133/262        -> Closecombat -> Amoonguss
+    Hitmontop plan score 31.6, joint adjustment 0.0
+    view: hp 51%  speed 197 (faster)  incoming max 18%  certain 18%  threatened=False
+    foe moves est: Pollenpuff 18%, Spore 0%, Ragepowder 0%, Protect 0%
+    * CLOSECOMBAT -> Amoonguss          32  expected_damage+17 resisted-45 self_stat_drop-40
+      WIDEGUARD                        -40  repeated_protect-140
+      PROTECT                          -40  repeated_protect-140
+      FAKEOUT -> Amoonguss         -1000001  expected_damage+0
+    Hitmontop    used Closecombat    hit            Amoonguss -84 x0.5
+    Amoonguss    used Spore          hit            Hitmontop 0
+  end:     Reborn Amoonguss 306/390 | Portable Hitmontop 133/262 SLP
+
+Turn 19
+  Reborn    Amoonguss 306/390        -> Pollenpuff -> Hitmontop
+  Portable  Hitmontop 133/262 SLP    -> Wideguard
+    Hitmontop plan score 100.0, joint adjustment 0.0
+    view: hp 51%  speed 197 (faster)  incoming max 24%  certain 24%  threatened=False
+    foe moves est: Pollenpuff 24%, Spore 0%, Ragepowder 0%, Protect 0%
+    * WIDEGUARD                        100
+      PROTECT                          100
+      CLOSECOMBAT -> Amoonguss          32  expected_damage+17 resisted-45 self_stat_drop-40
+      FAKEOUT -> Amoonguss         -1000001  expected_damage+0
+    Hitmontop    used Wideguard      could_not_move  [status=1 status_count=2]
+    Amoonguss    used Pollenpuff     hit            Hitmontop --2 x0.5
+  end:     Reborn Amoonguss 306/390 | Portable Hitmontop 135/262 SLP
+
+Turn 20
+  Reborn    Amoonguss 306/390        -> Pollenpuff -> Hitmontop
+  Portable  Hitmontop 135/262 SLP    -> Closecombat -> Amoonguss
+    Hitmontop plan score 31.6, joint adjustment 0.0
+    view: hp 52%  speed 197 (faster)  incoming max 24%  certain 24%  threatened=False
+    foe moves est: Pollenpuff 24%, Spore 0%, Ragepowder 0%, Protect 0%
+    * CLOSECOMBAT -> Amoonguss          32  expected_damage+17 resisted-45 self_stat_drop-40
+      WIDEGUARD                        -40  repeated_protect-140
+      PROTECT                          -40  repeated_protect-140
+      FAKEOUT -> Amoonguss         -1000001  expected_damage+0
+    Hitmontop    used Closecombat    hit            Amoonguss -88 x0.5 [status=1 status_count=1]
+    Amoonguss    used Pollenpuff     hit            Hitmontop -69 x0.5
+  end:     Reborn Amoonguss 218/390 | Portable Hitmontop 66/262
+
+Turn 21
+  Reborn    Amoonguss 218/390        -> Pollenpuff -> Hitmontop
+  Portable  Hitmontop 66/262         -> Wideguard
+    Hitmontop plan score 100.0, joint adjustment 0.0
+    view: hp 25%  speed 197 (faster)  incoming max 30%  certain 30%  threatened=True
+    foe moves est: Pollenpuff 30%, Spore 0%, Ragepowder 0%, Protect 0%
+    * WIDEGUARD                        100
+      PROTECT                          100
+      CLOSECOMBAT -> Amoonguss          32  expected_damage+17 resisted-45 self_stat_drop-40
+      FAKEOUT -> Amoonguss         -1000001  expected_damage+0
+    Hitmontop    used Wideguard      untargeted
+    Amoonguss    used Pollenpuff     hit            Hitmontop -66 CRIT x0.5

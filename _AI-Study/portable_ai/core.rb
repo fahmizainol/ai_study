@@ -47,6 +47,14 @@ module PortableAI
       score = score_switch(snapshot, actor, action, config, score, reasons)
     else
       score = score_move(snapshot, actor, action, config, score, reasons)
+      if doubles_outcomes_enabled?(snapshot, config) &&
+         Model.truthy(action["damaging"]) && !Model.truthy(action["friendly_target"]) &&
+         (!Model.truthy(action["spread"]) || action["damage_by_target"])
+        # joint_adjustment replaces only this move's independent damage/KO value.
+        # All type, priority, recoil and effect knowledge above remains intact.
+        out["outcome_scored"] = true
+        reasons << ["doubles_outcome_candidate", 0]
+      end
     end
 
     adjustment = Model.number(action["score_adjustment"], 0.0)
@@ -86,7 +94,12 @@ module PortableAI
     damage = Model.number(action["expected_damage_pct"], 0.0)
     effectiveness = Model.number(action["effectiveness"], 1.0)
 
-    if Model.truthy(action["immune"]) || (Model.truthy(action["damaging"]) && effectiveness <= 0)
+    partial_spread = doubles_outcomes_enabled?(snapshot, config) && Model.truthy(action["spread"]) &&
+      action["damage_by_target"] && action["damage_by_target"].any? do |_index, hit|
+        Model.number(hit["damage_pct"], 0) > 0
+      end
+    if (Model.truthy(action["immune"]) ||
+        (Model.truthy(action["damaging"]) && effectiveness <= 0)) && !partial_spread
       reasons << ["immune", HARD_REJECT]
       return HARD_REJECT
     end
@@ -107,6 +120,10 @@ module PortableAI
 
     if Model.truthy(action["damaging"])
       lethal = damage >= target_hp && target_hp > 0
+      # A spread action's damage is summed across foes, so comparing that total with
+      # one foe's HP invents a KO. The pair evaluator awards each real KO instead.
+      lethal = false if doubles_outcomes_enabled?(snapshot, config) && Model.truthy(action["spread"]) &&
+                        action["damage_by_target"]
 
       # NOTE on Sturdy and Focus Sash. 0.5.0 first cancelled the kill call here --
       # lethal = false, damage := target_hp - 1 -- on the argument that a hit leaving
@@ -202,6 +219,9 @@ module PortableAI
       flat_kill = lethal && config["lethal_flat"] && !Model.truthy(action["spread"])
       if flat_kill
         reasons << ["lethal_flat", 0]
+      elsif doubles_outcomes_enabled?(snapshot, config) && Model.truthy(action["spread"]) &&
+            action["damage_by_target"]
+        reasons << ["spread_type_in_damage", 0]
       elsif effectiveness > 1
         bonus = 35 * effectiveness
         out_score += bonus
@@ -855,12 +875,19 @@ module PortableAI
       return [scored_by_actor.map { |items| items[0] }, 0]
     end
 
+    candidates = scored_by_actor
+    if (config["doubles_adversarial"] || config["doubles_search"]) && doubles?(snapshot)
+      candidates = scored_by_actor.map { |items| prune_doubles_candidates(items, 5) }
+    end
+
     best_actions = nil
     best_score = nil
     best_adjustment = 0
-    scored_by_actor[0].each do |left|
-      scored_by_actor[1].each do |right|
-        adjustment = joint_adjustment(snapshot, left, right)
+    candidates[0].each do |left|
+      candidates[1].each do |right|
+        next if left["type"] == "switch" && right["type"] == "switch" &&
+                left["slot"].to_i == right["slot"].to_i
+        adjustment = joint_adjustment(snapshot, left, right, config)
         score = left["score"] + right["score"] + adjustment
         pair = [left, right]
         if best_score.nil? || score > best_score ||
@@ -871,10 +898,48 @@ module PortableAI
         end
       end
     end
+    raise ArgumentError, "no legal joint action pair" if best_actions.nil?
     [best_actions, best_adjustment]
   end
 
-  def self.joint_adjustment(snapshot, left, right)
+  # Keep search cost bounded without reducing every actor to its five highest raw
+  # scores. Doubles plans often depend on one lower-ranked Protect, redirect, speed
+  # control, Fake Out, or switch candidate that creates a strong joint action.
+  def self.prune_doubles_candidates(items, limit = 5)
+    return items.dup if items.length <= limit
+    selected = [items[0]]
+    roles = %w[switch protect redirect field_speed first_turn_only]
+    roles.each do |role|
+      candidate = items.find do |item|
+        !selected.include?(item) && doubles_candidate_role(item) == role
+      end
+      selected << candidate if candidate
+      break if selected.length >= limit
+    end
+    items.each do |item|
+      break if selected.length >= limit
+      selected << item if !selected.include?(item)
+    end
+    selected
+  end
+
+  def self.doubles_candidate_role(action)
+    return "switch" if action["type"] == "switch"
+    tags = Effects.describe(action["move_id"].to_s, action["tags"])
+    return "protect" if tags.include?("protect") || tags.include?("team_protect")
+    return "redirect" if tags.include?("redirect")
+    return "field_speed" if tags.include?("field_speed")
+    return "first_turn_only" if tags.include?("first_turn_only")
+    nil
+  end
+
+  def self.joint_adjustment(snapshot, left, right, config)
+    if (config["doubles_outcomes"] || config["doubles_search"]) && doubles?(snapshot)
+      exact = doubles_outcome_value(snapshot, [left, right], config)
+      independent = doubles_independent_outcome_value(snapshot, left, config) +
+                    doubles_independent_outcome_value(snapshot, right, config)
+      return exact - independent + doubles_combo_adjustment(snapshot, left, right, config)
+    end
     adjustment = 0
     if left["type"] == "switch" && right["type"] == "switch" &&
        left["slot"].to_i == right["slot"].to_i
@@ -903,7 +968,412 @@ module PortableAI
         end
       end
     end
+
+    adjustment += doubles_combo_adjustment(snapshot, left, right, config)
     adjustment
+  end
+
+  # Score interactions whose value only exists when both active Pokemon choose their
+  # actions together. Individual move scoring cannot see these combinations.
+  def self.doubles_combo_adjustment(snapshot, left, right, config)
+    return 0 if !doubles?(snapshot)
+    pairs = [[left, right], [right, left]]
+    adjustment = 0
+
+    pairs.each do |support, partner|
+      support_tags = Effects.describe(support["move_id"].to_s, support["tags"])
+      partner_tags = Effects.describe(partner["move_id"].to_s, partner["tags"])
+
+      if config["protect_spread_combo"] && support_tags.include?("protect") &&
+         Model.truthy(partner["spread"])
+        friendly = Model.number(partner["friendly_fire_pct"], 0.0)
+        if friendly > 0
+          protected_actor = actor_for(snapshot, support["actor_index"])
+          protected_hp = protected_actor ? Model.number(protected_actor["hp_pct"], 100.0) : 100.0
+          refund = friendly * 3
+          refund += 700 if friendly >= protected_hp
+          adjustment += refund
+        end
+      end
+
+      if config["partner_support_combo"] && support_tags.include?("partner_support") &&
+         Model.truthy(partner["damaging"])
+        targets_partner = support["target"].nil? ||
+                          support["target"] == partner["actor_index"]
+        if targets_partner
+          adjustment += [40.0, Model.number(partner["expected_damage_pct"], 0.0) * 0.5].max
+        end
+      end
+
+      if config["redirect_setup_combo"] && support_tags.include?("redirect") &&
+         (partner_tags.include?("setup") || partner_tags.include?("field_speed"))
+        protected_actor = actor_for(snapshot, partner["actor_index"])
+        adjustment += protected_actor && threatened_lethal?(protected_actor) ? 160 : 70
+      end
+
+      if config["fakeout_speed_combo"] && support_tags.include?("first_turn_only") &&
+         Model.truthy(support["damaging"]) && partner_tags.include?("field_speed")
+        adjustment += 100
+      end
+    end
+    adjustment
+  end
+
+  # Resolve both allied actions against plausible opposing attacks. Each foe's strongest
+  # known attack is tried into either ally, yielding four response scenarios on a full
+  # doubles board. Hit/miss branches remain probabilistic inside each scenario.
+  def self.doubles_outcome_value(snapshot, actions, config)
+    responses = doubles_response_scenarios(snapshot, config)
+    responses = [{ "actions" => [], "weight" => 1.0 }] if responses.empty?
+    variants = [actions]
+    if actions.length == 2 &&
+       Model.number(actions[0]["priority"], 0) == Model.number(actions[1]["priority"], 0) &&
+       doubles_action_speed(snapshot, actions[0]) == doubles_action_speed(snapshot, actions[1])
+      variants = [
+        [actions[0].merge("tie_order" => 0), actions[1].merge("tie_order" => 1)],
+        [actions[0].merge("tie_order" => 1), actions[1].merge("tie_order" => 0)]
+      ]
+    end
+    total = 0.0
+    response_values = []
+    responses.each do |response|
+      response_total = 0.0
+      variants.each do |variant|
+        value = doubles_timeline_value(snapshot, variant + response["actions"], config)
+        total += response["weight"] * value
+        response_total += value
+      end
+      response_values << [response_total / variants.length, response["weight"]]
+    end
+    expected = total / variants.length
+    if config["doubles_search"]
+      return doubles_search_response_value(response_values, config["search_foe_mix"])
+    end
+    return expected if !config["doubles_adversarial"]
+    robust_doubles_value(response_values)
+  end
+
+  # The best measured native singles search used a 0.5 blend between pick_safest's
+  # worst reply and the opponent-weighted expectation. Keep the mix configurable
+  # through the same key so a doubles sweep asks the same policy question.
+  def self.doubles_search_response_value(weighted_values, mix)
+    credible = weighted_values.select { |pair| Model.number(pair[1], 0.0) > 0.0 }
+    return 0.0 if credible.empty?
+    expected = credible.inject(0.0) do |sum, pair|
+      sum + Model.number(pair[0], 0.0) * Model.number(pair[1], 0.0)
+    end
+    amount = Model.number(mix, 0.5)
+    amount = 0.0 if amount < 0.0
+    amount = 1.0 if amount > 1.0
+    worst = credible.map { |pair| Model.number(pair[0], 0.0) }.min
+    worst * (1.0 - amount) + expected * amount
+  end
+
+  # Foul Play's search is strong partly because it does not trust a single predicted
+  # reply. This shallow analogue values the probability-weighted result while charging
+  # for the most punishing credible response and retaining a small upside term.
+  def self.robust_doubles_value(weighted_values)
+    credible = weighted_values.select { |pair| Model.number(pair[1], 0.0) > 0.0 }
+    return 0.0 if credible.empty?
+    expected = credible.inject(0.0) do |sum, pair|
+      sum + Model.number(pair[0], 0.0) * Model.number(pair[1], 0.0)
+    end
+    values = credible.map { |pair| Model.number(pair[0], 0.0) }
+    expected * 0.6 + values.min * 0.3 + values.max * 0.1
+  end
+
+  def self.doubles_timeline_value(snapshot, actions, config = {})
+    ordered = actions.sort do |a, b|
+      pa = Model.number(a["priority"], 0)
+      pb = Model.number(b["priority"], 0)
+      if pa != pb
+        pb <=> pa
+      else
+        sa = doubles_action_speed(snapshot, a)
+        sb = doubles_action_speed(snapshot, b)
+        cmp = snapshot["trick_room_active"] ? sa <=> sb : sb <=> sa
+        if cmp == 0 && !a["tie_order"].nil? && !b["tie_order"].nil?
+          a["tie_order"] <=> b["tie_order"]
+        else
+          cmp == 0 ? a["actor_index"].to_i <=> b["actor_index"].to_i : cmp
+        end
+      end
+    end
+    state = { "hp" => {}, "protected" => {}, "flinched" => {},
+              "value" => 0.0, "probability" => 1.0 }
+    (snapshot["targets"] + snapshot["actors"]).each do |mon|
+      state["hp"][mon["index"]] = Model.number(mon["hp_pct"], 100.0)
+    end
+    states = [state]
+    ordered.each do |action|
+        next_states = []
+        states.each do |current|
+          idx = action["actor_index"]
+          if current["hp"][idx] <= 0
+            next_states << current
+            next
+          end
+          if current["flinched"][idx]
+            next_states << current
+            next
+          end
+          if action["foe_response"]
+            if action["utility_response"]
+              apply_foe_utility(current, action, snapshot)
+              next_states << current
+              next
+            end
+            target = actor_for(snapshot, action["target"])
+            if !target || current["hp"][target["index"]] <= 0 ||
+               current["protected"][target["index"]]
+              next_states << current
+            else
+              next_states.concat(doubles_hit_branches([current], target["index"],
+                { "damage_pct" => action["expected_damage_pct"],
+                  "accuracy" => action["accuracy"] }, action, target, "enemy", config))
+            end
+            next
+          end
+          tags = Effects.describe(action["move_id"], action["tags"])
+          if action["type"] == "move" && tags.include?("protect") &&
+             memory_count(snapshot, idx, "protect") == 0 && !action["immune"]
+            current["protected"][idx] = true
+          end
+          if !action["outcome_scored"]
+            next_states << current
+            next
+          end
+          hits = action["damage_by_target"]
+          if !hits
+            hits = { action["target"].to_s => {
+              "damage_pct" => action["immune"] ? 0.0 : action["expected_damage_pct"],
+              "accuracy" => action["accuracy"] } }
+          end
+          branches = [current]
+          hits.each do |target_index, hit|
+            resolved_index = target_index
+            if !Model.truthy(action["spread"]) && current["redirector"] &&
+               current["hp"][current["redirector"]].to_f > 0
+              resolved_index = current["redirector"]
+            end
+            target = snapshot["targets"].find { |mon| mon["index"].to_s == resolved_index.to_s }
+            next if target.nil?
+            exposed = []
+            branches.each do |branch|
+              if branch["protected"][target["index"]] &&
+                 action["opponent_protect_blocks"] != false
+                exposed << branch
+              else
+                exposed.concat(doubles_hit_branches(
+                  [branch], target["index"], hit, action, target, false, config))
+              end
+            end
+            branches = exposed
+          end
+          friendly = Model.number(action["friendly_fire_pct"], 0)
+          partner = snapshot["actors"].find { |mon| mon["index"] != idx }
+          if friendly > 0 && partner
+            exposed = []
+            branches.each do |branch|
+              if branch["protected"][partner["index"]] && action["partner_protect_blocks"] == true
+                exposed << branch
+              else
+                exposed.concat(doubles_hit_branches([branch], partner["index"],
+                  { "damage_pct" => friendly, "accuracy" => action["accuracy"] },
+                  action, partner, "friendly", config))
+              end
+            end
+            branches = exposed
+          end
+          next_states.concat(branches)
+        end
+        states = next_states
+    end
+    states.inject(0.0) { |sum, current| sum + current["value"] * current["probability"] }
+  end
+
+  def self.doubles_action_speed(snapshot, action)
+    return Model.number(action["speed"], 0) if action["foe_response"]
+    actor = actor_for(snapshot, action["actor_index"])
+    actor ? Model.number(actor["speed"], 0) : 0
+  end
+
+  def self.apply_foe_utility(state, action, snapshot)
+    kind = action["utility_response"]
+    case kind
+    when "protect"
+      state["protected"][action["actor_index"]] = true
+    when "team_protect"
+      (snapshot["targets"] || []).each do |foe|
+        state["protected"][foe["index"]] = true if state["hp"][foe["index"]].to_f > 0
+      end
+    when "redirect"
+      state["redirector"] = action["actor_index"]
+    when "field_speed"
+      state["value"] -= Model.number(action["utility_value"], 104.0)
+    when "status", "disrupt"
+      state["value"] -= 60.0
+    when "setup"
+      state["value"] -= 70.0
+    when "screen"
+      state["value"] -= 60.0
+    when "partner_support"
+      state["value"] -= 50.0
+    end
+  end
+
+  def self.doubles_response_scenarios(snapshot, config = {})
+    actors = snapshot["actors"] || []
+    return [] if actors.length != 2
+    scenarios = [{ "actions" => [], "weight" => 1.0 }]
+    (snapshot["targets"] || []).each do |foe|
+      choices = []
+      actors.each do |actor|
+        threats = actor["threats_by_foe"] || {}
+        threat = threats[foe["index"].to_s] || threats[foe["index"]]
+        next if !threat || Model.number(threat["damage_pct"], 0) <= 0
+        choices << {
+          "foe_response" => true, "actor_index" => foe["index"],
+          "target" => actor["index"], "expected_damage_pct" => threat["damage_pct"],
+          "accuracy" => threat["accuracy"], "priority" => threat["priority"],
+          "speed" => foe["speed"], "target_full_hp" => actor["full_hp"],
+          "target_item" => actor["item"], "target_ability" => actor["ability"]
+        }
+      end
+      attack_probability = [[Model.number(foe["attack_probability"], 1.0), 0.0].max, 1.0].min
+      attack_probability = 0.0 if choices.empty?
+      options = choices.map do |choice|
+        { "action" => choice, "weight" => attack_probability / choices.length }
+      end
+      if attack_probability < 1.0
+        utility = config["opponent_utility"] ? foe["utility_response"] : nil
+        utility_action = nil
+        if utility
+          utility_action = {
+            "foe_response" => true, "utility_response" => utility["kind"],
+            "utility_value" => utility["value"], "actor_index" => foe["index"],
+            "priority" => utility["priority"], "speed" => foe["speed"]
+          }
+        end
+        options << { "action" => utility_action, "weight" => 1.0 - attack_probability }
+      end
+      expanded = []
+      scenarios.each do |scenario|
+        options.each do |option|
+          actions = scenario["actions"].dup
+          actions << option["action"] if option["action"]
+          expanded << {
+            "actions" => actions,
+            "weight" => scenario["weight"] * option["weight"]
+          }
+        end
+      end
+      scenarios = expanded
+    end
+    scenarios
+  end
+
+  # The damage value already present in each independently scored action. Subtract it
+  # before adding the exact pair result so every hit and KO is counted once.
+  def self.doubles_independent_outcome_value(snapshot, action, config)
+    return 0.0 if !action["outcome_scored"]
+    value = 0.0
+    if Model.truthy(action["spread"])
+      damage = action["damage_by_target"].inject(0.0) do |sum, pair|
+        sum + Model.number(pair[1]["damage_pct"], 0)
+      end
+      value = [damage, 100.0].min * 0.8
+      # Spread attacks use one accuracy roll for all targets.
+      value *= accuracy_factor(action, config)
+    else
+      target = target_for(snapshot, action["target"])
+      hp = target ? Model.number(target["hp_pct"], 100) : 100
+      damage = Model.number(action["expected_damage_pct"], 0)
+      lethal = damage >= hp && hp > 0
+      value = damage_value(lethal, damage) * accuracy_factor(action, config)
+    end
+    friendly = Model.number(action["friendly_fire_pct"], 0)
+    if friendly > 0
+      partner_hp = Model.number(action["partner_hp_pct"], 100)
+      value -= friendly * 3
+      value -= 700 if friendly >= partner_hp
+    end
+    value
+  end
+
+  def self.doubles_hit_branches(states, index, hit, action, target, cost_kind, config = {})
+    accuracy = Model.number(hit["accuracy"], 100.0)
+    accuracy = 100.0 if accuracy <= 0 # engine convention: always hits
+    chance = [[accuracy / 100.0, 0.0].max, 1.0].min
+    damage = [Model.number(hit["damage_pct"], 0.0), 0.0].max
+    out = []
+    states.each do |state|
+      hp = state["hp"][index]
+      if hp <= 0 || damage <= 0
+        out << state
+        next
+      end
+      if chance < 1.0
+        miss = state.merge("hp" => state["hp"].dup,
+                           "protected" => state["protected"].dup,
+                           "flinched" => state["flinched"].dup)
+        miss["probability"] *= 1.0 - chance
+        out << miss
+      end
+      landed = state.merge("hp" => state["hp"].dup,
+                           "protected" => state["protected"].dup,
+                           "flinched" => state["flinched"].dup)
+      actual = [damage, hp].min
+      # Break a full-HP Sash/Sturdy once; a later hit can finish the target.
+      if hp >= 100 && one_hit_guard?(action, target) && !action["multi_hit"]
+        actual = [actual, hp - 0.01].min
+      end
+      landed["hp"][index] = hp - actual
+      if config["fakeout_timeline"] && action["move_id"].to_s.upcase == "FAKEOUT" &&
+         (target["ability"] || "").to_s.upcase != "INNERFOCUS" &&
+         (target["ability"] || "").to_s.upcase != "SHIELDDUST" &&
+         !Model.truthy(target["substitute"])
+        landed["flinched"][index] = true
+      end
+      landed["probability"] *= chance
+      if cost_kind == "friendly"
+        if config["doubles_search"] && config["doubles_search_leaf"]
+          landed["value"] -= actual + (actual >= hp ? 30.0 : 0.0)
+        else
+          landed["value"] -= actual * 3.0
+          landed["value"] -= 700.0 if actual >= hp
+        end
+      elsif cost_kind == "enemy"
+        # Zero-sum with our own damage: ordinary chip is worth 0.8 per percent and a
+        # knockout is 500. Friendly fire stays much harsher because it is avoidable.
+        if config["doubles_search"] && config["doubles_search_leaf"]
+          landed["value"] -= actual + (actual >= hp ? 30.0 : 0.0)
+        else
+          initial = Model.number(target["hp_pct"], 100.0)
+          before = (initial - hp) * 0.8
+          after = actual >= hp ? 500.0 : (initial - hp + actual) * 0.8
+          landed["value"] -= after - before
+        end
+      else
+        # Marginal value: the second hit earns the remaining KO value, never a
+        # second full KO bonus for a foe the first hit already defeated.
+        if config["doubles_search"] && config["doubles_search_leaf"]
+          landed["value"] += actual + (actual >= hp ? 30.0 : 0.0)
+        else
+          initial = Model.number(target["hp_pct"], 100.0)
+          before = (initial - hp) * 0.8
+          after = actual >= hp ? 500.0 : (initial - hp + actual) * 0.8
+          landed["value"] += after - before
+        end
+      end
+      out << landed
+    end
+    out
+  end
+
+  def self.actor_for(snapshot, index)
+    snapshot["actors"].each { |actor| return actor if actor["index"] == index }
+    nil
   end
 
   def self.single_target_move?(action)
@@ -1752,6 +2222,11 @@ module PortableAI
   def self.doubles?(snapshot)
     return true if (snapshot["format"] || "").to_s == "double"
     (snapshot["actors"] || []).length > 1
+  end
+
+  def self.doubles_outcomes_enabled?(snapshot, config)
+    (config["doubles_outcomes"] || config["doubles_search"]) && config["coordination"] &&
+      doubles?(snapshot) && (snapshot["actors"] || []).length == 2
   end
 
   # Sturdy and Focus Sash both mean "survives one hit from full HP". Mold Breaker turns

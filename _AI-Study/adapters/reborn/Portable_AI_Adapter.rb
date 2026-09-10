@@ -281,6 +281,12 @@ module PortableAIReborn
         # so this costs a copy. Top candidates only, to bound the file size.
         entry["candidates"] = candidate_trace(plan, index) if $AI_GAUNTLET_TRACE
         entry["view"] = view_trace(snapshot, index) if $AI_GAUNTLET_TRACE
+        if $AI_GAUNTLET_TRACE
+          entry["joint_adjustment"] = plan.dig("diagnostics", "joint_adjustment")
+          entry["damage_by_target"] = action["damage_by_target"] if action["damage_by_target"]
+          entry["friendly_fire_pct"] = action["friendly_fire_pct"] if action["friendly_fire_pct"]
+          entry["partner_protect_blocks"] = action["partner_protect_blocks"] if !action["partner_protect_blocks"].nil?
+        end
         trace << entry
       end
     end
@@ -363,7 +369,7 @@ module PortableAIReborn
 
     snapshot = nil
     with_neutral_estimation(ai, indices[0]) do
-      targets = foe_indices.map { |i| battler_view(ai, battle.battlers[i]) }
+      targets = foe_indices.map { |i| battler_view(ai, battle, battle.battlers[i]) }
       actors = indices.map { |i| build_actor(ai, battle, i, foe_indices, skill) }
       memory = battle.instance_variable_get(:@portable_ai_memory) || {}
       snapshot = {
@@ -404,7 +410,7 @@ module PortableAIReborn
     $game_switches[3000] = old_intense if $game_switches && !old_intense.nil?
   end
 
-  def self.battler_view(ai, battler)
+  def self.battler_view(ai, battle, battler)
     physical, special = attack_bias(ai, battler)
     partner = (battler.pbPartner rescue nil)
     {
@@ -426,8 +432,67 @@ module PortableAIReborn
       "special_attacker" => special,
       "substitute" => (safe_effect(battler, :Substitute, 0).to_i > 0),
       "partner_ability" => (partner && !partner.isFainted? ? ability_key(partner) : nil),
-      "choice_locked_move" => choice_locked_move(battler)
+      "choice_locked_move" => choice_locked_move(battler),
+      # The doubles response model needs to distinguish an all-attacks set from a
+      # support set. Use the visible moveset as a neutral prior; target choice is
+      # still resolved in the portable core.
+      "attack_probability" => attack_move_fraction(battler),
+      "utility_response" =>
+        (battle.doublebattle &&
+         PortableAI::Model.truthy((defined?($PORTABLE_AI_CONFIG) && $PORTABLE_AI_CONFIG ?
+           $PORTABLE_AI_CONFIG : {})["opponent_utility"]) ?
+           utility_response(battle, battler) : nil)
     }
+  end
+
+  UTILITY_RESPONSE_RANK = {
+    "field_speed" => 80, "redirect" => 70, "team_protect" => 60,
+    "protect" => 50, "status" => 40, "disrupt" => 35,
+    "screen" => 30, "setup" => 25, "partner_support" => 20
+  }
+
+  # Pick one representative for the non-damaging response branch. The probability
+  # of taking that branch still comes from the damaging/status split of the whole
+  # visible moveset; this chooses what the support half of the set is trying to do.
+  def self.utility_response(battle, battler)
+    locked = safe_effect(battler, :ChoiceBand, -1).to_i
+    target = (battler.pbOppositeOpposing rescue nil)
+    best = nil
+    battler.moves.each do |move|
+      next if !move || move.id == 0 || move.basedamage > 0
+      next if locked >= 0 && move.id != locked
+      move_id = move_key(move.id)
+      tags = PortableAI::Effects.describe(move_id, [])
+      kind = UTILITY_RESPONSE_RANK.keys.find { |tag| tags.include?(tag) }
+      next if !kind
+      next if kind == "field_speed" &&
+              ((move_id == "TAILWIND" &&
+                safe_side_effect(battler.pbOwnSide, :Tailwind, 0).to_i > 0) ||
+               (move_id == "TRICKROOM" && (battle.trickroom.to_i != 0 rescue false)))
+      candidate = {
+        "kind" => kind, "move_id" => move_id,
+        "priority" => effective_priority(battle, move, battler, target),
+        "value" => (move_id == "TRICKROOM" ? 156 :
+                    move_id == "TAILWIND" ? 104 : nil)
+      }
+      rank = UTILITY_RESPONSE_RANK[kind]
+      best = [rank, candidate] if !best || rank > best[0]
+    end
+    best ? best[1] : nil
+  rescue
+    nil
+  end
+
+  def self.attack_move_fraction(battler)
+    locked = safe_effect(battler, :ChoiceBand, -1).to_i
+    moves = battler.moves.select do |move|
+      move && move.id != 0 && (locked < 0 || move.id == locked)
+    end
+    return 0.0 if moves.empty?
+    damaging = moves.count { |move| move.basedamage > 0 }
+    damaging.to_f / moves.length
+  rescue
+    1.0
   end
 
   # The move a Choice item has locked this battler into, once it has actually moved.
@@ -560,6 +625,14 @@ module PortableAIReborn
       end
       return [] if scored.empty?
       action = scored[0]
+      # Preserve each foe's damage and immunity before aggregating the legacy view.
+      action["damage_by_target"] = {}
+      scored.each_with_index do |item, n|
+        action["damage_by_target"][foe_indices[n].to_s] = {
+          "damage_pct" => item["immune"] ? 0.0 : item["expected_damage_pct"],
+          "accuracy" => item["accuracy"]
+        }
+      end
       action["base_score"] = average(scored.map { |item| item["base_score"] })
       action["expected_damage_pct"] = scored.inject(0) do |sum, item|
         sum + PortableAI::Model.number(item["expected_damage_pct"], 0)
@@ -574,6 +647,9 @@ module PortableAIReborn
         if partner && !partner.isFainted?
           action["friendly_fire_pct"] = rough_damage_pct(ai, move, battler, partner)
           action["partner_hp_pct"] = percent(partner.hp, partner.totalhp)
+          action["partner_protect_blocks"] = (move.canProtectAgainst? rescue false) &&
+            !(battler.hasWorkingAbility(:UNSEENFIST) && (move.isContactMove? rescue false)) &&
+            !safe_effect(partner, :ProtectNegation, false)
         end
       end
       return [action]
@@ -653,6 +729,9 @@ module PortableAIReborn
       "immune" => (damaging && effectiveness <= 0) || blocked,
       "expected_damage_pct" => rough_damage_pct(ai, move, battler, scoring_target),
       "accuracy" => rough_accuracy(ai, move, battler, scoring_target),
+      "opponent_protect_blocks" =>
+        ((move.canProtectAgainst? rescue true) &&
+         !(battler.hasWorkingAbility(:UNSEENFIST) && (move.isContactMove? rescue false))),
       "target_hp_pct" => (scoring_target ? percent(scoring_target.hp, scoring_target.totalhp) : nil),
       "tags" => tags,
       "spread" => false,
@@ -1012,6 +1091,11 @@ module PortableAIReborn
   # has been through JSON in the Realidea build.
   def self.threats_by_foe(ai, battle, battler, foe_indices, incoming_map)
     speed = battler_speed(battler)
+    configured = (defined?($PORTABLE_AI_CONFIG) && $PORTABLE_AI_CONFIG ?
+      $PORTABLE_AI_CONFIG : {})
+    outcome_details = battle.doublebattle &&
+      (PortableAI::Model.truthy(configured["doubles_outcomes"]) ||
+       PortableAI::Model.truthy(configured["doubles_search"]))
     out = {}
     foe_indices.each do |foe_index|
       foe = battle.battlers[foe_index]
@@ -1019,6 +1103,9 @@ module PortableAIReborn
       locked = safe_effect(foe, :ChoiceBand, -1).to_i
       best = 0.0
       best_priority = 0.0
+      best_accuracy = 100.0
+      best_move_priority = 0
+      best_priority_accuracy = 100.0
       foe.moves.each do |known|
         next if !known || known.id == 0
         next if locked >= 0 && known.id != locked
@@ -1026,13 +1113,24 @@ module PortableAIReborn
         damage = incoming_map["#{foe_index}:#{known.id}"]
         damage = rough_damage_pct(ai, known, foe, battler) if damage.nil?
         damage = PortableAI::Model.number(damage, 0.0)
-        best = damage if damage > best
-        next if effective_priority(battle, known, foe, battler) <= 0
-        best_priority = damage if damage > best_priority
+        priority = effective_priority(battle, known, foe, battler)
+        if damage > best
+          best = damage
+          best_accuracy = rough_accuracy(ai, known, foe, battler) if outcome_details
+          best_move_priority = priority
+        end
+        next if priority <= 0
+        if damage > best_priority
+          best_priority = damage
+          best_priority_accuracy = rough_accuracy(ai, known, foe, battler) if outcome_details
+        end
       end
       out[foe_index.to_s] = {
         "damage_pct" => best,
+        "accuracy" => best_accuracy,
+        "priority" => best_move_priority,
         "priority_damage_pct" => best_priority,
+        "priority_accuracy" => best_priority_accuracy,
         "faster" => faster_than_foes?(battle, speed, [foe_index])
       }
     end

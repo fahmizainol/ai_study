@@ -18,11 +18,11 @@ The study has two phases, and they are still both live:
 
 | | |
 |---|---|
-| Portable core | **0.6.4**, installed in Reborn Yang (opt-in, off by default) |
+| Portable core | **0.7.0 doubles experiment**, based on the measured 0.6.4 singles core and installed in Reborn Yang (opt-in, off by default) |
 | Second adapter | Realidea v16, **installed at 0.6.4** — probe **251/267** vs stock's 202/256, no regressions; tier gauntlet **72.2%** vs **50.0%** (240 battles, real gen 6 OU teams; 70.7% at 0.6.3, 66.9% at 0.6.2), archetype **64.4%** vs **51.2%** (320 battles, 0.6.2). 0.6.4 closed the switch-back loop (133 → 40 per 120 battles): it was a PP bug in the bench estimate, not a rule |
 | Turn-by-turn A/B | Realidea **shadow arm**: stock plays, the portable planner answers the same board every turn and registers nothing. 120/120 observed battles reproduce their unobserved twins exactly; over 3,027 compared turns the two policies **agree 54.9%** (58.3% at 0.6.2 — the difference is 0.6.3's switching). Its equality check caught a pre-existing adapter bug that freed trapped foes, and its readout is where 0.6.3's three rules came from (`PORTABLE-AI-REALIDEA.md` → *The shadow arm*, *0.6.3*) |
 | Corpus | **224 cards / 292 assertions** in `scenarios.json` — 286 graded and passing, 6 N/A on the Portable side (`switch_score_gt` needs Reborn's party-indexed score array) |
-| Unit tests | **278** Ruby + **22** Python green — `test_portable_ai.rb` 133, `test_realidea_adapter.rb` 92, `test_reborn_adapter.rb` 53, `test_tooling.py` 22 |
+| Tests | **278** Ruby + **22** Python green upstream, plus the dependency-free doubles outcome regression script |
 | Benchmark frame | 7 rosters × 60 = **420 battles**, `arms=normal_portable`, `schedule=normal_baseline`, `party_size=6` |
 | Standing | 0.6.0 **197/420** → 0.6.1 **205/420** → 0.6.2 **203/420** → 0.6.3 **231/420 (55.0%)**, +28, p = 0.002 → 0.6.4 **230/420**, −1, flat: the kill-order grade that was measured at −12 ships off (`PORTABLE-AI-REBORN.md` → *Core version 0.6.4*) |
 
@@ -74,6 +74,9 @@ _AI-Study/
 ├── PORTABLE-AI-DIAGNOSIS.md       0.3.2 → 0.4 gap analysis — history, numbers superseded
 ├── SEARCH-BOARDS.md               what to run a search on: Essentials / Ruby / Showdown /
 │                                 poke-engine measured, and why doubles needs Showdown
+├── DOUBLES-AI.md                  doubles combinations, fixture source, and A/B results
+├── REBORN-DOUBLES-AI.md           teardown of Reborn's doubles decision pipeline
+├── REJUVENATION-MM-DOUBLES-AI.md  Rejuvenation MM teardown + comparison with Reborn
 │
 ├── portable_ai/                   the engine-independent core — this is the product
 │   ├── model.rb                     snapshot/plan value types, Model.number defaults
@@ -120,6 +123,9 @@ cd _AI-Study
 # 1. edit portable_ai/*.rb (rules) or adapters/reborn/*.rb (engine facts)
 # 2. unit tests — seconds, run them constantly
 ruby tests/test_portable_ai.rb && ruby tests/test_reborn_adapter.rb
+
+# doubles outcome timeline checks using Reborn's bundled Ruby when Ruby is not installed
+python tools/run_embedded_ruby.py tests/check_doubles_outcomes.rb --game "../Reborn Yang"
 
 # 3. build the single-file bundle and install it (also installs/repairs the harness)
 python3 tools/install_reborn.py

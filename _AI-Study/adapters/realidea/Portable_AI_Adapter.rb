@@ -542,7 +542,7 @@ module PortableAIRealidea
   # race when it was live could not say why a run with it off decided differently.
   DEFAULT_RACE_CONFIG = { "damage_race" => true }
 
-  def self.view_trace(snapshot, index)
+  def self.view_trace(snapshot, index, include_cells = false)
     return {} if !snapshot
     actor = nil
     (snapshot["actors"] || []).each do |candidate|
@@ -586,7 +586,7 @@ module PortableAIRealidea
       # theirs, and the verdict of each live pair at the HP both are standing on.
       # Reported AS COMPUTED, like the race above: a readout of a run with the
       # consumers off still has to show what they would have read.
-      "matrix" => matrix_trace(snapshot)
+      "matrix" => matrix_trace(snapshot, include_cells)
     }
     # 0.6.6. The foe's declared intent and the hit it implies, when this run read
     # one; absent otherwise, so a readout can tell an oracle run from a plain one.
@@ -604,7 +604,7 @@ module PortableAIRealidea
   # themselves -- two damage numbers, two categories, two move names each -- are
   # roughly twenty times the size and only appear under trace=true, which is the same
   # split candidate_trace makes and what keeps a plain shadow file near 1.6 MB.
-  def self.matrix_trace(snapshot)
+  def self.matrix_trace(snapshot, include_cells = false)
     m = (snapshot || {})["matrix"]
     return nil if !m.is_a?(Hash)
     verdicts = {}
@@ -617,7 +617,7 @@ module PortableAIRealidea
     out = { "own" => matrix_trace_side(m["own"]),
             "foe" => matrix_trace_side(m["foe"]),
             "verdicts" => verdicts }
-    out["cells"] = m["cells"] if trace_candidates?
+    out["cells"] = m["cells"] if include_cells || trace_candidates?
     out
   rescue
     nil
@@ -2708,10 +2708,15 @@ module PortableAIRealidea
   module FoulPlay
     STATE_FILE = "Data/ai_foulplay_state.json"
     REPLY_FILE = "Data/ai_foulplay_reply.txt"
+    READY_FILE = "Data/ai_foulplay_ready.txt"
     LOG_FILE   = "Data/ai_foulplay_log.txt"
+    BATTLE_LOG_FILE = "Data/ai_foulplay_battles.ndjson"
     DEFAULT_ITERATIONS = 5000
 
-    @timeout = 60.0
+    # Live RGSS treats a long file wait as a stuck script and force-quits the game.
+    # A healthy sidecar answers in milliseconds and the launcher warms it before
+    # Game.exe starts, so three seconds is ample while still failing safely to rules.
+    @timeout = 3.0
     class << self
       attr_accessor :timeout
     end
@@ -2792,6 +2797,11 @@ module PortableAIRealidea
 
     def self.plan(battle, snapshot, config)
       return nil if battle.doublebattle
+      if !File.exist?(READY_FILE)
+        log("turn=#{battle.turncount rescue '?'} sidecar not ready; rules took the battle")
+        battle.instance_variable_set(:@portable_ai_foul_play_off, true)
+        return nil
+      end
       actor = (snapshot["actors"] || [])[0]
       return nil if !actor || !actor["actions"].is_a?(Array) || actor["actions"].empty?
       index = actor["index"]
@@ -2820,7 +2830,7 @@ module PortableAIRealidea
         return nil
       end
       ranked = rankings(actor, reply)
-      {
+      plan = {
         "actions" => [action],
         "memory_updates" => PortableAI::Effects.memory_updates([action]),
         "diagnostics" => {
@@ -2832,6 +2842,8 @@ module PortableAIRealidea
           "rankings" => [ranked]
         }
       }
+      record_live_decision(battle, snapshot, plan, index)
+      plan
     rescue Exception => error
       log("turn=#{battle.turncount rescue '?'} #{error.class}: #{error.message}")
       nil
@@ -3110,6 +3122,46 @@ module PortableAIRealidea
 
     def self.reply_label(action)
       action["type"] == "switch" ? "switch:#{action['slot']}" : "move:#{action['slot']}"
+    end
+
+    # Played battles get the same rich decision shape as a traced gauntlet battle.
+    # One JSON object per turn keeps a crash or forced quit from losing earlier turns;
+    # tools/render_live_foul_play.py groups these by battle_id into readable reports.
+    def self.record_live_decision(battle, snapshot, plan, index)
+      return if !File.exist?(PortableAIRealidea::ENABLE_FILE)
+      battle_id = battle.instance_variable_get(:@portable_ai_foul_play_battle_id)
+      if !battle_id
+        battle_id = Time.now.strftime("%Y%m%d-%H%M%S") + "-" + battle.object_id.to_s
+        battle.instance_variable_set(:@portable_ai_foul_play_battle_id, battle_id)
+      end
+      action = (plan["actions"] || [])[0]
+      return if !action
+      entry = {
+        "battle_id" => battle_id,
+        "recorded_at" => Time.now.strftime("%Y-%m-%d %H:%M:%S"),
+        "portable_version" => PortableAI::VERSION,
+        "planner" => "foul_play",
+        "turn" => battle.turncount,
+        "actor" => index,
+        "type" => action["type"],
+        "slot" => action["slot"],
+        "move_id" => action["move_id"],
+        "target" => action["target"],
+        "score" => action["score"],
+        "search_visits" => action["search_visits"],
+        "view" => PortableAIRealidea.view_trace(snapshot, index, true),
+        "candidates" => PortableAIRealidea.candidate_trace(plan, index, snapshot),
+        "search" => PortableAIRealidea.search_trace(plan)
+      }
+      if action["type"] == "switch" && action["species"]
+        entry["switch_species"] = PortableAIRealidea.species_name(action["species"])
+      end
+      foe_index = index ^ 1
+      foe_choice = PortableAIRealidea.describe_choice(battle.choices[foe_index]) rescue nil
+      entry["foe"] = { foe_index.to_s => foe_choice } if foe_choice
+      File.open(BATTLE_LOG_FILE, "ab") { |file| file.write(json(entry) + "\n") }
+    rescue Exception => error
+      log("turn=#{battle.turncount rescue '?'} live battle log #{error.class}: #{error.message}")
     end
 
     # ---- plumbing --------------------------------------------------------------

@@ -11,7 +11,7 @@ REM   foul_play_sidecar.bat                      the campaign copy, gen 5 wheel
 REM   foul_play_sidecar.bat "C:\path\to\game"    another copy
 REM   foul_play_sidecar.bat "" gen6              the gen 6 wheel
 REM
-REM Start this BEFORE Game.exe: the first decision waits 60 s for a reply and then
+REM Start this BEFORE Game.exe: the first decision waits 3 s for a reply and then
 REM hands the battle to the rule engine. Close the window to stop it.
 setlocal
 

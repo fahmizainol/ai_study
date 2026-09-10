@@ -176,9 +176,9 @@ version-control copy when a byte-for-byte pre-install rollback is required.
 Unit tests:
 
 ```bash
-ruby _AI-Study/tests/test_portable_ai.rb        # 209 tests
+ruby _AI-Study/tests/test_portable_ai.rb        # 213 tests
 ruby _AI-Study/tests/test_reborn_adapter.rb     # 53 tests
-ruby _AI-Study/tests/test_realidea_adapter.rb   # 126 tests
+ruby _AI-Study/tests/test_realidea_adapter.rb   # 129 tests
 python3 _AI-Study/tests/test_tooling.py
 python3 _AI-Study/tools/check_move_codes.py
 ```
@@ -216,6 +216,18 @@ Frozen strength gauntlet:
 
 Remove all trigger files after testing. With no trigger present, a normal boot reached the
 title path successfully.
+
+Optional installed-playtest switches:
+
+- `Data/original_teams.txt` bypasses generated trainer-team overrides while retaining
+  Portable/Foul Play AI.
+- `Data/debug_mode.txt` enables Realidea's built-in debug and Pokemon editor menus.
+- `Data/challenge_rules.txt` removes trainer bag items, forces Set style, and blocks the
+  player's Bag in trainer battles. Held items and the wild-battle Bag remain available.
+
+Each switch is enabled by creating the named marker and disabled by deleting it. The
+corresponding adapter sections are `Team_Overrides.rb`, `Debug_Mode.rb`, and
+`Challenge_Rules.rb`.
 
 ## Measured result
 
@@ -2638,10 +2650,12 @@ measured run still takes its config solely from `with_config` and is untouched b
 path; and a run that did install overrides still wins outright. The read is memoised for
 the session, so editing the file mid-session cannot apply to half a battle.
 
-The other half is a live-play failure mode the harness never felt. A silent sidecar costs
-one 60 s timeout per decision, which is invisible in a batch and unplayable at the
-keyboard. A timeout now sets `@portable_ai_foul_play_off` on the battle: the bridge is
-asked once per battle, not once per turn, and the next battle asks again. An `error`
+The other half is a live-play failure mode the harness never felt. The sidecar now writes
+a readiness marker after its engine has loaded. Without that marker the bridge falls back
+to the rules immediately. If a ready sidecar stops responding, the timeout is three
+seconds, safely below RGSS's stuck-script watchdog. Either failure sets
+`@portable_ai_foul_play_off` on the battle: the bridge is asked once per battle, not once
+per turn, and the next battle asks again. An `error`
 reply is not silence and disables nothing — poke-engine panics on particular positions
 (the duration bug in the 0.8.0 addendum), not on a whole battle.
 
@@ -2656,6 +2670,14 @@ for the rest of that battle. Both fall to the rules either way, and the log says
 Double-click **`Realidea V4.1/Play with Foul Play.bat`**. It writes the two trigger
 files if they are missing, starts the sidecar, launches the game, and stops the sidecar
 when you quit. That is the whole thing.
+
+Played Foul Play decisions append immediately to
+`Data/ai_foulplay_battles.ndjson`, one complete entry per turn, so a forced quit does
+not lose earlier decisions. When the launcher closes it runs
+`tools/render_live_foul_play.py` and writes one readable report per battle under
+`Data/foul_play_battle_logs/`. The report uses Pokémon names and the same board, foe
+choice, damage race, party matrix, search score, and options-considered layout as
+`render_realidea_battle.py` uses for traced simulations.
 
 It is the only file tracked inside the game folder besides `Data/Scripts.rxdata`. The
 triggers it creates are deliberately *not* committed: a `Data/portable_ai.txt` in the
@@ -2712,7 +2734,7 @@ Limits to know before playing, none of them new:
 - A forced replacement after a KO stays with the rule engine: `pbDefaultChooseNewEnemy`
   never reaches `plan_for`.
 - Wild battles are untouched (`ENABLE_WILD = false`).
-- No sidecar means one 60 s stall per battle, then the rules, logged to
+- No ready sidecar means an immediate rules fallback, logged to
   `Data/ai_foulplay_log.txt`.
 - It is a study instrument — a Python process running beside the game — not a shippable
   AI. Delete the marker to go back to stock.

@@ -31,7 +31,8 @@ def emit_mon(m):
 def main(out_path, *team_files):
     teams = []
     for f in team_files:
-        teams += json.load(open(f))
+        with open(f, encoding="utf-8") as team_file:
+            teams += json.load(team_file)
     # two paths: inline createTrainer teams (have orig_ace_level) and dat
     # pbLoadTrainer teams (have orig_species_ids). See TEAM-DESIGN.md §6.5.
     inline = [t for t in teams if "orig_ace_level" in t]
@@ -46,6 +47,7 @@ def main(out_path, *team_files):
         "TEAM_OVERRIDES = {}",
         "TEAM_OVERRIDE_ITEMS = {}",
         "TEAM_OVERRIDES_DAT = {}",
+        'TEAM_OVERRIDES_DISABLE_FILE = "Data/original_teams.txt"',
         "",
     ]
     seen = {}
@@ -101,9 +103,20 @@ def main(out_path, *team_files):
         "  newparty",
         "end",
         "",
+        "# Put Data/original_teams.txt beside the game data to keep the original",
+        "# trainer rosters while leaving the installed AI and other patches active.",
+        "def team_overrides_enabled?",
+        "  return !File.exist?(TEAM_OVERRIDES_DISABLE_FILE)",
+        "rescue",
+        "  return true",
+        "end",
+        "",
         "# Path 1: inline createTrainer fights.",
         "alias team_override_orig_createTrainer createTrainer",
         "def createTrainer(trainerid, trainername, party, items=[])",
+        "  if !team_overrides_enabled?",
+        "    return team_override_orig_createTrainer(trainerid, trainername, party, items)",
+        "  end",
         "  begin",
         "    ace = nil",
         "    for p in party",
@@ -133,6 +146,7 @@ def main(out_path, *team_files):
         "alias team_override_orig_pbLoadTrainer pbLoadTrainer",
         "def pbLoadTrainer(trainerid, trainername, partyid=0)",
         "  result = team_override_orig_pbLoadTrainer(trainerid, trainername, partyid)",
+        "  return result if !team_overrides_enabled?",
         "  begin",
         "    if result && result[0] && result[0].party",
         "      tid = trainerid.is_a?(Integer) ? trainerid : getID(PBTrainers, trainerid)",
@@ -153,7 +167,8 @@ def main(out_path, *team_files):
         "  return result",
         "end",
     ]
-    open(out_path, "w").write("\n".join(lines) + "\n")
+    with open(out_path, "w", encoding="utf-8", newline="\n") as out_file:
+        out_file.write("\n".join(lines) + "\n")
     print(f"{len(seen)} inline + {len(seen_dat)} dat overrides emitted ({collisions} collisions skipped)")
     import shutil, subprocess
     if shutil.which("ruby"):

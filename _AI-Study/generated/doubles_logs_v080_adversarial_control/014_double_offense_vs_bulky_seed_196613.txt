@@ -1,0 +1,521 @@
+double_offense_vs_bulky  seed 196613   Reborn-Normal (offense, left) vs Portable 0.8.0 (bulky, right)   result for right seat: LOSS in 22 rounds (engine turncount 21)
+  Reborn   (offense): Politoed, Kingdra, Ludicolo, Zapdos, Scizor, Gastrodon
+  Portable (bulky): Reuniclus, Torkoal, Amoonguss, Porygon2, Rhyperior, Hariyama
+==============================================================================================================
+
+Turn 1
+  Reborn    Politoed 342/342         -> Scald -> Torkoal
+  Portable  Reuniclus 382/382        -> Trickroom
+  Reborn    Kingdra 312/312          -> Dracometeor -> Torkoal
+  Portable  Torkoal 302/302          -> Protect
+    Reuniclus plan score 256.0, joint adjustment -28.2
+    view: hp 100%  speed 117 (slower)  incoming max 61%  certain 14%  threatened=False
+    foe moves est: Dracometeor 61%, Hurricane 35%, Muddywater 16%, Scald 14%, Icywind 10%, Helpinghand 0%, Protect 0%, Protect 0%
+    * TRICKROOM                        256  speed_control_value+156
+      PSYCHIC -> Kingdra               131  expected_damage+31 secondary_drop+0 doubles_outcome_candidate+0
+      PSYCHIC -> Politoed              128  expected_damage+27 secondary_drop+0 doubles_outcome_candidate+0
+      FOCUSBLAST -> Kingdra            124  expected_damage+27 accuracy-4 secondary_drop+0 doubles_outcome_candidate+0
+      FOCUSBLAST -> Politoed           121  expected_damage+24 accuracy-4 secondary_drop+0 doubles_outcome_candidate+0
+    Torkoal plan score 100.0, joint adjustment -28.2
+    view: hp 100%  speed 97 (slower)  incoming max 89%  certain 41%  threatened=False
+    foe moves est: Dracometeor 89%, Hurricane 50%, Muddywater 46%, Scald 41%, Icywind 7%, Helpinghand 0%, Protect 0%, Protect 0%
+      ERUPTION                         136  expected_damage+36 spread_type_in_damage+0 doubles_outcome_candidate+0
+      HEATWAVE                         122  expected_damage+23 accuracy-1 spread_type_in_damage+0 secondary_burn+0 doubles_outcome_candidate+0
+      EARTHPOWER -> Kingdra            116  expected_damage+15 secondary_drop+0 doubles_outcome_candidate+0
+      EARTHPOWER -> Politoed           113  expected_damage+13 secondary_drop+0 doubles_outcome_candidate+0
+    * PROTECT                          100
+    Torkoal      used Protect        untargeted
+    Kingdra      used Dracometeor    protected      Torkoal 0
+    Politoed     used Scald          protected      Torkoal 0
+    Reuniclus    used Trickroom      untargeted
+  end:     Reborn Politoed 342/342 | Portable Reuniclus 382/382 | Reborn Kingdra 312/312 | Portable Torkoal 302/302
+
+Turn 2
+  Reborn    Politoed 342/342         -> Scald -> Torkoal
+  Portable  Reuniclus 382/382        -> switch->Porygon2
+  Reborn    Kingdra 312/312          -> Dracometeor -> Torkoal
+  Portable  Torkoal 302/302          -> Eruption
+    Reuniclus plan score 285.5, joint adjustment -187.0
+    view: hp 100%  speed 117 (faster)  incoming max 61%  certain 14%  threatened=False
+    foe moves est: Dracometeor 61%, Hurricane 35%, Muddywater 16%, Scald 14%, Icywind 10%, Helpinghand 0%, Protect 0%, Protect 0%
+    * switch->Porygon2                 285  matchup+64 entry_incoming_damage-24 switchin_race+80 losing_race_bench_wins+110 entry_hazards+0 escape_reasons+1
+      PSYCHIC -> Kingdra               131  expected_damage+31 secondary_drop+0 doubles_outcome_candidate+0
+      PSYCHIC -> Politoed              128  expected_damage+27 secondary_drop+0 doubles_outcome_candidate+0
+      FOCUSBLAST -> Kingdra            124  expected_damage+27 accuracy-4 secondary_drop+0 doubles_outcome_candidate+0
+      FOCUSBLAST -> Politoed           121  expected_damage+24 accuracy-4 secondary_drop+0 doubles_outcome_candidate+0
+    Torkoal plan score 135.5, joint adjustment -187.0
+    view: hp 100%  speed 97 (faster)  incoming max 89%  certain 41%  threatened=False
+    foe moves est: Dracometeor 89%, Hurricane 50%, Muddywater 46%, Scald 41%, Icywind 7%, Helpinghand 0%, Protect 0%, Protect 0%
+      switch->Porygon2                 285  matchup+64 entry_incoming_damage-24 switchin_race+80 losing_race_bench_wins+110 entry_hazards+0 escape_reasons+1
+    * ERUPTION                         136  expected_damage+36 spread_type_in_damage+0 doubles_outcome_candidate+0
+      HEATWAVE                         122  expected_damage+23 accuracy-1 spread_type_in_damage+0 secondary_burn+0 doubles_outcome_candidate+0
+      EARTHPOWER -> Kingdra            116  expected_damage+15 secondary_drop+0 doubles_outcome_candidate+0
+      EARTHPOWER -> Politoed           113  expected_damage+13 secondary_drop+0 doubles_outcome_candidate+0
+    Torkoal      used Eruption       hit            Politoed -111 x0.5, Kingdra -54 x0.25
+    Politoed     used Scald          hit            Torkoal -302 CRIT x2
+    Kingdra      used Dracometeor    hit            Reuniclus -143, user -31
+  end:     Reborn Politoed 231/342 | Portable Porygon2 189/332 | Reborn Kingdra 227/312 | Portable Reuniclus 382/382
+
+Turn 3
+  Reborn    Politoed 231/342         -> Helpinghand -> Reuniclus
+  Portable  Porygon2 189/332         -> Triattack -> Kingdra
+  Reborn    Kingdra 227/312          -> switch->Scizor
+  Portable  Reuniclus 382/382        -> Psychic -> Kingdra
+    Porygon2 plan score 153.8, joint adjustment 409.1
+    view: hp 57%  speed 177 (faster)  incoming max 22%  certain 10%  threatened=False
+    foe moves est: Dracometeor 22%, Hurricane 13%, Scald 10%, Icywind 7%, Muddywater 6%, Helpinghand 0%, Protect 0%, Protect 0%
+      RECOVER                          190  heal_mid_hp+90
+    * TRIATTACK -> Kingdra             154  expected_damage+54 doubles_outcome_candidate+0
+      ICEBEAM -> Kingdra               118  expected_damage+18 doubles_outcome_candidate+0
+      TRIATTACK -> Politoed            102  expected_damage+47 resisted-45 doubles_outcome_candidate+0
+      ICEBEAM -> Politoed               63  expected_damage+8 resisted-45 doubles_outcome_candidate+0
+    Reuniclus plan score 131.1, joint adjustment 409.1
+    view: hp 100%  speed 117 (faster)  incoming max 31%  certain 14%  threatened=False
+    foe moves est: Dracometeor 31%, Hurricane 18%, Scald 14%, Icywind 10%, Muddywater 8%, Helpinghand 0%, Protect 0%, Protect 0%
+    * PSYCHIC -> Kingdra               131  expected_damage+31 secondary_drop+0 doubles_outcome_candidate+0
+      PSYCHIC -> Politoed              128  expected_damage+27 secondary_drop+0 doubles_outcome_candidate+0
+      FOCUSBLAST -> Kingdra            124  expected_damage+27 accuracy-4 secondary_drop+0 doubles_outcome_candidate+0
+      FOCUSBLAST -> Politoed           121  expected_damage+24 accuracy-4 secondary_drop+0 doubles_outcome_candidate+0
+      TRICKROOM                       -400  speed_control_redundant-500
+    Politoed     used Helpinghand    failed         Kingdra 0
+    Reuniclus    used Psychic        hit            Kingdra -52 x0.5
+    Porygon2     used Triattack      hit            Kingdra -67 x0.25
+  end:     Reborn Politoed 231/342 | Portable Porygon2 189/332 | Reborn Scizor 183/302 | Portable Reuniclus 382/382
+
+Turn 4
+  Reborn    Politoed 231/342         -> Helpinghand -> Reuniclus
+  Portable  Porygon2 189/332         -> Recover
+  Reborn    Scizor 183/302           -> Xscissor -> Reuniclus
+  Portable  Reuniclus 382/382        -> switch->Hariyama
+    Porygon2 plan score 190.0, joint adjustment -234.2
+    view: hp 57%  speed 177 (faster)  incoming max 36%  certain 36%  threatened=False
+    foe moves est: Xscissor 36%, Bulletpunch 18%, Scald 10%, Icywind 7%, Helpinghand 0%, Protect 0%, Swordsdance 0%, Protect 0%
+    * RECOVER                          190  heal_mid_hp+90
+      TRIATTACK -> Politoed            147  expected_damage+47 doubles_outcome_candidate+0
+      TRIATTACK -> Scizor               87  expected_damage+32 resisted-45 doubles_outcome_candidate+0
+      ICEBEAM -> Scizor                 66  expected_damage+11 resisted-45 doubles_outcome_candidate+0
+      ICEBEAM -> Politoed               63  expected_damage+8 resisted-45 doubles_outcome_candidate+0
+    Reuniclus plan score 511.6, joint adjustment -234.2
+    view: hp 100%  speed 117 (faster)  incoming max 106%  certain 106%  threatened=True
+    foe moves est: Xscissor 106%, Bulletpunch 27%, Scald 14%, Icywind 10%, Helpinghand 0%, Protect 0%, Swordsdance 0%, Protect 0%
+    * switch->Hariyama                 512  matchup+64 entry_incoming_damage-2 switchin_race+155 escape_lethal_threat+130 losing_race_bench_wins+110 entry_hazards+0 escape_reasons+2
+      switch->Amoonguss                259  matchup+48 entry_incoming_damage-39 switchin_race+65 escape_lethal_threat+130 entry_hazards+0 escape_reasons+1
+      switch->Rhyperior                249  matchup+64 entry_incoming_damage-65 switchin_race+65 escape_lethal_threat+130 entry_hazards+0 escape_reasons+1
+      FOCUSBLAST -> Scizor             128  expected_damage+32 accuracy-5 secondary_drop+0 doubles_outcome_candidate+0
+      PSYCHIC -> Politoed              128  expected_damage+27 secondary_drop+0 doubles_outcome_candidate+0
+    Politoed     used Helpinghand    hit            Scizor 0
+    Porygon2     used Recover        untargeted     user +143
+    Scizor       used Xscissor       hit            Reuniclus -156 x0.5, user -30
+  end:     Reborn Politoed 231/342 | Portable Porygon2 332/332 | Reborn Scizor 153/302 | Portable Hariyama 294/450
+
+Turn 5
+  Reborn    Politoed 231/342         -> Protect
+  Portable  Porygon2 332/332         -> Triattack -> Politoed
+  Reborn    Scizor 153/302           -> Bulletpunch -> Hariyama
+  Portable  Hariyama 294/450         -> Fakeout -> Politoed
+    Porygon2 plan score 217.5, joint adjustment 426.5
+    view: hp 100%  speed 177 (faster)  incoming max 36%  certain 36%  threatened=False
+    foe moves est: Xscissor 36%, Bulletpunch 18%, Scald 10%, Icywind 7%, Helpinghand 0%, Protect 0%, Swordsdance 0%, Protect 0%
+    * TRIATTACK -> Politoed            217  expected_damage+47 super_effective+70 doubles_outcome_candidate+0
+      TRIATTACK -> Scizor               71  expected_damage+16 resisted-45 doubles_outcome_candidate+0
+      ICEBEAM -> Scizor                 66  expected_damage+11 resisted-45 doubles_outcome_candidate+0
+      ICEBEAM -> Politoed               63  expected_damage+8 resisted-45 doubles_outcome_candidate+0
+      TRICKROOM                       -400  speed_control_redundant-500
+    Hariyama plan score 224.8, joint adjustment 426.5
+    view: hp 65%  speed 157 (faster)  incoming max 27%  certain 27%  threatened=False
+    foe moves est: Bulletpunch 27%, Xscissor 27%, Scald 10%, Icywind 4%, Helpinghand 0%, Protect 0%, Swordsdance 0%, Protect 0%
+    * FAKEOUT -> Politoed              225  expected_damage+10 first_turn_hit+115 doubles_outcome_candidate+0
+      FAKEOUT -> Scizor                175  expected_damage+5 resisted-45 first_turn_hit+115 doubles_outcome_candidate+0
+      KNOCKOFF -> Scizor               126  expected_damage+22 knocks_item+4 doubles_outcome_candidate+0
+      KNOCKOFF -> Politoed             124  expected_damage+24 doubles_outcome_candidate+0
+      CLOSECOMBAT -> Politoed          104  expected_damage+44 self_stat_drop-40 doubles_outcome_candidate+0
+    Politoed     used Protect        untargeted
+    Hariyama     used Fakeout        protected      Politoed 0
+    Scizor       used Bulletpunch    hit            Hariyama -108, user -30
+    Porygon2     used Triattack      protected      Politoed 0
+  end:     Reborn Politoed 231/342 | Portable Porygon2 332/332 | Reborn Scizor 123/302 | Portable Hariyama 186/450
+
+Turn 6
+  Reborn    Politoed 231/342         -> Scald -> Hariyama
+  Portable  Porygon2 332/332         -> Trickroom
+  Reborn    Scizor 123/302           -> Bulletpunch -> Hariyama
+  Portable  Hariyama 186/450         -> Closecombat -> Scizor
+    Porygon2 plan score 256.0, joint adjustment -348.5
+    view: hp 100%  speed 177 (slower)  incoming max 36%  certain 36%  threatened=False
+    foe moves est: Xscissor 36%, Scald 20%, Bulletpunch 18%, Icywind 7%, Helpinghand 0%, Protect 0%, Swordsdance 0%, Protect 0%
+    * TRICKROOM                        256  speed_control_value+156
+      TRIATTACK -> Scizor               69  expected_damage+14 resisted-45 doubles_outcome_candidate+0
+      ICEBEAM -> Scizor                 66  expected_damage+11 resisted-45 secondary_freeze+0 doubles_outcome_candidate+0
+      ICEBEAM -> Politoed               63  expected_damage+8 resisted-45 secondary_freeze+0 doubles_outcome_candidate+0
+      TRIATTACK -> Politoed            -79  failed_last_turn-200 expected_damage+21 doubles_outcome_candidate+0
+    Hariyama plan score 585.0, joint adjustment -348.5
+    view: hp 41%  speed 157 (slower)  incoming max 27%  certain 27%  threatened=False
+    foe moves est: Bulletpunch 27%, Xscissor 27%, Scald 20%, Icywind 4%, Helpinghand 0%, Protect 0%, Swordsdance 0%, Protect 0%
+    * CLOSECOMBAT -> Scizor            585  lethal+500 lethal_flat+0 self_stat_drop-15 doubles_outcome_candidate+0
+      KNOCKOFF -> Scizor               126  expected_damage+22 knocks_item+4 doubles_outcome_candidate+0
+      KNOCKOFF -> Politoed             124  expected_damage+24 doubles_outcome_candidate+0
+      CLOSECOMBAT -> Politoed          104  expected_damage+44 self_stat_drop-40 doubles_outcome_candidate+0
+      CLOSECOMBAT -> Porygon2      -1000000  expected_damage+62 super_effective+70 self_stat_drop-40
+    Scizor       used Bulletpunch    hit            Hariyama -104, user -30
+    Politoed     used Scald          hit            Hariyama -82
+    Porygon2     used Trickroom      untargeted
+  end:     Reborn Politoed 231/342 | Portable Porygon2 332/332 | Reborn Scizor 93/302 | Portable Rhyperior 392/392
+
+Turn 7
+  Reborn    Politoed 231/342         -> Scald -> Rhyperior
+  Portable  Porygon2 332/332         -> Triattack -> Scizor
+  Reborn    Scizor 93/302            -> Bulletpunch -> Rhyperior
+  Portable  Rhyperior 392/392        -> Rockslide
+    Porygon2 plan score 69.3, joint adjustment 186.1
+    view: hp 100%  speed 177 (faster)  incoming max 54%  certain 54%  threatened=False
+    foe moves est: Xscissor 54%, Scald 20%, Bulletpunch 18%, Icywind 7%, Helpinghand 0%, Protect 0%, Swordsdance 0%, Protect 0%
+      TRIATTACK -> Politoed            121  expected_damage+21 doubles_outcome_candidate+0
+    * TRIATTACK -> Scizor               69  expected_damage+14 resisted-45 doubles_outcome_candidate+0
+      ICEBEAM -> Scizor                 66  expected_damage+11 resisted-45 secondary_freeze+0 doubles_outcome_candidate+0
+      ICEBEAM -> Politoed               63  expected_damage+8 resisted-45 secondary_freeze+0 doubles_outcome_candidate+0
+      RECOVER                         -520  heal_near_full-500 heal_losing_race-120
+    Rhyperior plan score 146.1, joint adjustment 186.1
+    view: hp 100%  speed 137 (faster)  incoming max 149%  certain 149%  threatened=True
+    foe moves est: Scald 149%, Xscissor 51%, Bulletpunch 35%, Icywind 26%, Helpinghand 0%, Protect 0%, Swordsdance 0%, Protect 0%
+      switch->Amoonguss                225  matchup+48 entry_incoming_damage-73 switchin_race+65 escape_lethal_threat+130 entry_hazards+0 escape_reasons+1
+    * ROCKSLIDE                        146  expected_damage+44 accuracy-2 spread_type_in_damage+0 secondary_flinch+4 doubles_outcome_candidate+0
+      MEGAHORN -> Politoed             131  expected_damage+33 accuracy-2 doubles_outcome_candidate+0
+      PROTECT                          100
+      EARTHQUAKE                        76  expected_damage+59 spread_type_in_damage+0 friendly_fire-83 doubles_outcome_candidate+0
+    Scizor       used Bulletpunch    hit            Rhyperior -130 x2, user -30
+    Rhyperior    used Rockslide      failed         Politoed -137, Scizor 0
+    Porygon2     used Triattack      hit            Scizor -59 x0.5
+    Politoed     used Scald          hit            Rhyperior -262 x4
+  end:     Reborn Politoed 94/342 | Portable Porygon2 332/332 | Reborn Scizor 4/302 | Portable Amoonguss 390/390
+
+Turn 8
+  Reborn    Politoed 94/342          -> Helpinghand -> Scizor
+  Portable  Porygon2 332/332         -> Triattack -> Scizor
+  Reborn    Scizor 4/302             -> Xscissor -> Amoonguss
+  Portable  Amoonguss 390/390        -> Spore -> Politoed
+    Porygon2 plan score 600.0, joint adjustment -9.4
+    view: hp 100%  speed 177 (faster)  incoming max 54%  certain 54%  threatened=False
+    foe moves est: Xscissor 54%, Scald 20%, Bulletpunch 18%, Icywind 7%, Helpinghand 0%, Protect 0%, Swordsdance 0%, Protect 0%
+    * TRIATTACK -> Scizor              600  lethal+500 lethal_flat+0 doubles_outcome_candidate+0
+      ICEBEAM -> Scizor                600  lethal+500 lethal_flat+0 doubles_outcome_candidate+0
+      TRIATTACK -> Politoed            121  expected_damage+21 doubles_outcome_candidate+0
+      ICEBEAM -> Politoed               63  expected_damage+8 resisted-45 secondary_freeze+0 doubles_outcome_candidate+0
+      TRICKROOM                       -400  speed_control_redundant-500
+    Amoonguss plan score 125.0, joint adjustment -9.4
+    view: hp 100%  speed 117 (faster)  incoming max 82%  certain 82%  threatened=False
+    foe moves est: Xscissor 82%, Bulletpunch 28%, Icywind 20%, Scald 15%, Helpinghand 0%, Protect 0%, Swordsdance 0%, Protect 0%
+    * SPORE -> Politoed                125  fresh_status+25
+      SPORE -> Scizor                  125  fresh_status+25
+      RAGEPOWDER                       100
+      POLLENPUFF -> Scizor             100  lethal+500 lethal_flat+0 partner_heal_near_full-500 doubles_outcome_candidate+0
+      PROTECT                          100
+    Politoed     used Helpinghand    hit            Scizor 0
+    Amoonguss    used Spore          hit            Politoed 0
+    Porygon2     used Triattack      hit            Scizor -4 CRIT x0.5
+  end:     Reborn Politoed 94/342 SLP | Portable Porygon2 332/332 | Reborn Ludicolo 322/322 | Portable Amoonguss 390/390
+
+Turn 9
+  Reborn    Politoed 94/342 SLP      -> Helpinghand -> Ludicolo
+  Portable  Porygon2 332/332         -> Triattack -> Politoed
+  Reborn    Ludicolo 322/322         -> Fakeout -> Amoonguss
+  Portable  Amoonguss 390/390        -> switch->Reuniclus
+    Porygon2 plan score 121.1, joint adjustment -36.5
+    view: hp 100%  speed 177 (faster)  incoming max 20%  certain 20%  threatened=False
+    foe moves est: Scald 20%, Scald 20%, Gigadrain 19%, Icebeam 15%, Icywind 7%, Fakeout 6%, Helpinghand 0%, Protect 0%
+    * TRIATTACK -> Politoed            121  expected_damage+21 doubles_outcome_candidate+0
+      TRIATTACK -> Ludicolo            115  expected_damage+15 doubles_outcome_candidate+0
+      ICEBEAM -> Ludicolo              111  expected_damage+11 secondary_freeze+0 doubles_outcome_candidate+0
+      ICEBEAM -> Politoed               63  expected_damage+8 resisted-45 doubles_outcome_candidate+0
+      TRICKROOM                       -400  speed_control_redundant-500
+    Amoonguss plan score 379.8, joint adjustment -36.5
+    view: hp 100%  speed 117 (faster)  incoming max 43%  certain 43%  threatened=False
+    foe moves est: Icebeam 43%, Icywind 20%, Scald 15%, Scald 15%, Fakeout 9%, Gigadrain 7%, Helpinghand 0%, Protect 0%
+    * switch->Reuniclus                380  matchup+64 entry_incoming_damage-4 switchin_race+155 losing_race_bench_wins+110 entry_hazards+0 escape_reasons+1
+      SPORE -> Ludicolo                125  fresh_status+25
+      RAGEPOWDER                       100
+      PROTECT                          100
+      POLLENPUFF -> Ludicolo          -311  expected_damage+19 super_effective+70 partner_heal_near_full-500 doubles_outcome_candidate+0
+    Politoed     used Helpinghand    could_not_move  [status=1 status_count=3]
+    Ludicolo     used Fakeout        hit            Amoonguss -31
+    Porygon2     used Triattack      hit            Politoed -94 CRIT
+  end:     Reborn Gastrodon 384/384 | Portable Porygon2 332/332 | Reborn Ludicolo 322/322 | Portable Reuniclus 374/382
+
+Turn 10
+  Reborn    Gastrodon 384/384        -> Earthpower -> Reuniclus
+  Portable  Porygon2 332/332         -> Triattack -> Gastrodon
+  Reborn    Ludicolo 322/322         -> Gigadrain -> Reuniclus
+  Portable  Reuniclus 374/382        -> Psychic -> Gastrodon
+    Porygon2 plan score 121.9, joint adjustment -34.3
+    view: hp 100%  speed 177 (faster)  incoming max 23%  certain 23%  threatened=False
+    foe moves est: Earthpower 23%, Scald 20%, Scald 20%, Gigadrain 19%, Icebeam 15%, Fakeout 6%, Recover 0%, Protect 0%
+    * TRIATTACK -> Gastrodon           122  expected_damage+22 doubles_outcome_candidate+0
+      ICEBEAM -> Gastrodon             117  expected_damage+16 secondary_freeze+0 doubles_outcome_candidate+0
+      TRIATTACK -> Ludicolo            115  expected_damage+15 doubles_outcome_candidate+0
+      ICEBEAM -> Ludicolo              111  expected_damage+11 secondary_freeze+0 doubles_outcome_candidate+0
+      TRICKROOM                       -400  speed_control_redundant-500
+    Reuniclus plan score 128.4, joint adjustment -34.3
+    view: hp 98%  speed 117 (faster)  incoming max 32%  certain 32%  threatened=False
+    foe moves est: Earthpower 32%, Scald 29%, Scald 28%, Gigadrain 26%, Icebeam 21%, Fakeout 9%, Recover 0%, Protect 0%
+    * PSYCHIC -> Gastrodon             128  expected_damage+28 secondary_drop+0 doubles_outcome_candidate+0
+      FOCUSBLAST -> Gastrodon          122  expected_damage+25 accuracy-4 secondary_drop+0 doubles_outcome_candidate+0
+      PSYCHIC -> Ludicolo              120  expected_damage+19 secondary_drop+0 doubles_outcome_candidate+0
+      FOCUSBLAST -> Ludicolo           115  expected_damage+17 accuracy-3 secondary_drop+0 doubles_outcome_candidate+0
+      TRICKROOM                       -400  speed_control_redundant-500
+    Reuniclus    used Psychic        hit            Gastrodon -155
+    Gastrodon    used Earthpower     hit            Reuniclus -114
+    Porygon2     used Triattack      hit            Gastrodon -119
+    Ludicolo     used Gigadrain      hit            Reuniclus -90
+  end:     Reborn Gastrodon 134/384 FRZ | Portable Porygon2 332/332 | Reborn Ludicolo 322/322 | Portable Reuniclus 193/382
+
+Turn 11
+  Reborn    Gastrodon 134/384 FRZ    -> Scald -> Reuniclus
+  Portable  Porygon2 332/332         -> Trickroom
+  Reborn    Ludicolo 322/322         -> Gigadrain -> Reuniclus
+  Portable  Reuniclus 193/382        -> Psychic -> Gastrodon
+    Porygon2 plan score 256.0, joint adjustment -391.2
+    view: hp 100%  speed 177 (slower)  incoming max 23%  certain 20%  threatened=False
+    foe moves est: Earthpower 23%, Scald 20%, Scald 20%, Gigadrain 19%, Icebeam 15%, Fakeout 1%, Recover 0%, Protect 0%
+    * TRICKROOM                        256  speed_control_value+156
+      TRIATTACK -> Gastrodon           122  expected_damage+22 doubles_outcome_candidate+0
+      ICEBEAM -> Gastrodon             116  expected_damage+16 doubles_outcome_candidate+0
+      TRIATTACK -> Ludicolo            115  expected_damage+15 doubles_outcome_candidate+0
+      ICEBEAM -> Ludicolo              111  expected_damage+11 secondary_freeze+0 doubles_outcome_candidate+0
+    Reuniclus plan score 600.0, joint adjustment -391.2
+    view: hp 51%  speed 117 (slower)  incoming max 32%  certain 28%  threatened=False
+    foe moves est: Earthpower 32%, Scald 29%, Scald 28%, Gigadrain 26%, Icebeam 21%, Fakeout 1%, Recover 0%, Protect 0%
+    * PSYCHIC -> Gastrodon             600  lethal+500 lethal_flat+0 doubles_outcome_candidate+0
+      TRICKROOM                        256  speed_control_value+156
+      RECOVER                          190  heal_mid_hp+90
+      FOCUSBLAST -> Gastrodon          122  expected_damage+25 accuracy-4 secondary_drop+0 doubles_outcome_candidate+0
+      PSYCHIC -> Ludicolo              120  expected_damage+19 secondary_drop+0 doubles_outcome_candidate+0
+    Ludicolo     used Gigadrain      hit            Reuniclus -101
+    Gastrodon    used Scald          hit            Reuniclus -92 [status=5 status_count=0]
+    Porygon2     used Trickroom      untargeted
+  end:     Reborn Gastrodon 158/384 | Portable Porygon2 332/332 | Reborn Ludicolo 322/322 | Portable Amoonguss 390/390
+
+Turn 12
+  Reborn    Gastrodon 158/384        -> Protect
+  Portable  Porygon2 332/332         -> Triattack -> Gastrodon
+  Reborn    Ludicolo 322/322         -> Icebeam -> Amoonguss
+  Portable  Amoonguss 390/390        -> Spore -> Gastrodon
+    Porygon2 plan score 121.9, joint adjustment -41.6
+    view: hp 100%  speed 177 (faster)  incoming max 23%  certain 23%  threatened=False
+    foe moves est: Earthpower 23%, Scald 20%, Scald 20%, Gigadrain 19%, Icebeam 15%, Fakeout 1%, Recover 0%, Protect 0%
+    * TRIATTACK -> Gastrodon           122  expected_damage+22 doubles_outcome_candidate+0
+      ICEBEAM -> Gastrodon             117  expected_damage+16 secondary_freeze+0 doubles_outcome_candidate+0
+      TRIATTACK -> Ludicolo            115  expected_damage+15 doubles_outcome_candidate+0
+      ICEBEAM -> Ludicolo              111  expected_damage+11 secondary_freeze+0 doubles_outcome_candidate+0
+      TRICKROOM                       -400  speed_control_redundant-500
+    Amoonguss plan score 125.0, joint adjustment -41.6
+    view: hp 100%  speed 117 (faster)  incoming max 43%  certain 43%  threatened=False
+    foe moves est: Icebeam 43%, Earthpower 33%, Scald 15%, Scald 15%, Gigadrain 7%, Fakeout 1%, Recover 0%, Protect 0%
+    * SPORE -> Gastrodon               125  fresh_status+25
+      SPORE -> Ludicolo                125  fresh_status+25
+      RAGEPOWDER                       100
+      PROTECT                          100
+      POLLENPUFF -> Ludicolo          -311  expected_damage+19 super_effective+70 partner_heal_near_full-500 doubles_outcome_candidate+0
+    Gastrodon    used Protect        untargeted
+    Amoonguss    used Spore          protected      Gastrodon 0
+    Porygon2     used Triattack      protected      Gastrodon 0
+    Ludicolo     used Icebeam        hit            Amoonguss -168 x2
+  end:     Reborn Gastrodon 182/384 | Portable Porygon2 332/332 | Reborn Ludicolo 322/322 | Portable Amoonguss 222/390
+
+Turn 13
+  Reborn    Gastrodon 182/384        -> Earthpower -> Amoonguss
+  Portable  Porygon2 332/332         -> Icebeam -> Gastrodon
+  Reborn    Ludicolo 322/322         -> Icebeam -> Amoonguss
+  Portable  Amoonguss 222/390        -> Protect
+    Porygon2 plan score 116.8, joint adjustment -17.9
+    view: hp 100%  speed 177 (faster)  incoming max 23%  certain 23%  threatened=False
+    foe moves est: Earthpower 23%, Scald 20%, Scald 20%, Gigadrain 19%, Icebeam 15%, Fakeout 1%, Recover 0%, Protect 0%
+    * ICEBEAM -> Gastrodon             117  expected_damage+16 secondary_freeze+0 doubles_outcome_candidate+0
+      TRIATTACK -> Ludicolo            115  expected_damage+15 doubles_outcome_candidate+0
+      ICEBEAM -> Ludicolo              111  expected_damage+11 secondary_freeze+0 doubles_outcome_candidate+0
+      TRIATTACK -> Gastrodon           -78  failed_last_turn-200 expected_damage+22 doubles_outcome_candidate+0
+      TRICKROOM                       -400  speed_control_redundant-500
+    Amoonguss plan score 100.0, joint adjustment -17.9
+    view: hp 57%  speed 117 (faster)  incoming max 43%  certain 43%  threatened=False
+    foe moves est: Icebeam 43%, Earthpower 33%, Scald 15%, Scald 15%, Gigadrain 7%, Fakeout 1%, Recover 0%, Protect 0%
+      SPORE -> Ludicolo                125  fresh_status+25
+      RAGEPOWDER                       100
+    * PROTECT                          100
+      SPORE -> Gastrodon               -75  failed_last_turn-200 fresh_status+25
+      POLLENPUFF -> Ludicolo          -311  expected_damage+19 super_effective+70 partner_heal_near_full-500 doubles_outcome_candidate+0
+    Amoonguss    used Protect        untargeted
+    Gastrodon    used Earthpower     protected      Amoonguss 0
+    Porygon2     used Icebeam        hit            Gastrodon -86
+    Ludicolo     used Icebeam        protected      Amoonguss 0
+  end:     Reborn Gastrodon 120/384 | Portable Porygon2 332/332 | Reborn Ludicolo 322/322 | Portable Amoonguss 222/390
+
+Turn 14
+  Reborn    Gastrodon 120/384        -> Recover -> Amoonguss
+  Portable  Porygon2 332/332         -> Triattack -> Gastrodon
+  Reborn    Ludicolo 322/322         -> Icebeam -> Amoonguss
+  Portable  Amoonguss 222/390        -> Spore -> Gastrodon
+    Porygon2 plan score 121.9, joint adjustment -206.4
+    view: hp 100%  speed 177 (faster)  incoming max 23%  certain 23%  threatened=False
+    foe moves est: Earthpower 23%, Scald 20%, Scald 20%, Gigadrain 19%, Icebeam 15%, Fakeout 1%, Recover 0%, Protect 0%
+    * TRIATTACK -> Gastrodon           122  expected_damage+22 doubles_outcome_candidate+0
+      ICEBEAM -> Gastrodon             117  expected_damage+16 secondary_freeze+0 doubles_outcome_candidate+0
+      TRIATTACK -> Ludicolo            115  expected_damage+15 doubles_outcome_candidate+0
+      ICEBEAM -> Ludicolo              111  expected_damage+11 secondary_freeze+0 doubles_outcome_candidate+0
+      TRICKROOM                       -400  speed_control_redundant-500
+    Amoonguss plan score 125.0, joint adjustment -206.4
+    view: hp 57%  speed 117 (faster)  incoming max 43%  certain 43%  threatened=False
+    foe moves est: Icebeam 43%, Earthpower 33%, Scald 15%, Scald 15%, Gigadrain 7%, Fakeout 1%, Recover 0%, Protect 0%
+    * SPORE -> Gastrodon               125  fresh_status+25
+      SPORE -> Ludicolo                125  fresh_status+25
+      RAGEPOWDER                       100
+      PROTECT                         -240  failed_last_turn-200 repeated_protect-140
+      POLLENPUFF -> Ludicolo          -311  expected_damage+19 super_effective+70 partner_heal_near_full-500 doubles_outcome_candidate+0
+    Amoonguss    used Spore          hit            Gastrodon 0
+    Gastrodon    used Recover        could_not_move  [status=1 status_count=3]
+    Porygon2     used Triattack      hit            Gastrodon -108
+    Ludicolo     used Icebeam        hit            Amoonguss -55 x2
+  end:     Reborn Gastrodon 36/384 SLP | Portable Porygon2 332/332 | Reborn Ludicolo 322/322 | Portable Amoonguss 167/390
+
+Turn 15
+  Reborn    Gastrodon 36/384 SLP     -> Recover -> Amoonguss
+  Portable  Porygon2 332/332         -> Triattack -> Gastrodon
+  Reborn    Ludicolo 322/322         -> Icebeam -> Amoonguss
+  Portable  Amoonguss 167/390        -> Protect
+    Porygon2 plan score 600.0, joint adjustment -17.9
+    view: hp 100%  speed 177 (faster)  incoming max 23%  certain 20%  threatened=False
+    foe moves est: Earthpower 23%, Scald 20%, Scald 20%, Gigadrain 19%, Icebeam 15%, Fakeout 1%, Recover 0%, Protect 0%
+    * TRIATTACK -> Gastrodon           600  lethal+500 lethal_flat+0 doubles_outcome_candidate+0
+      ICEBEAM -> Gastrodon             600  lethal+500 lethal_flat+0 doubles_outcome_candidate+0
+      TRIATTACK -> Ludicolo            115  expected_damage+15 doubles_outcome_candidate+0
+      ICEBEAM -> Ludicolo              111  expected_damage+11 secondary_freeze+0 doubles_outcome_candidate+0
+      TRICKROOM                       -400  speed_control_redundant-500
+    Amoonguss plan score 100.0, joint adjustment -17.9
+    view: hp 43%  speed 117 (faster)  incoming max 43%  certain 43%  threatened=True
+    foe moves est: Icebeam 43%, Earthpower 33%, Scald 15%, Scald 15%, Gigadrain 7%, Fakeout 1%, Recover 0%, Protect 0%
+      SPORE -> Ludicolo                125  fresh_status+25
+      RAGEPOWDER                       100
+      POLLENPUFF -> Gastrodon          100  lethal+500 lethal_flat+0 partner_heal_near_full-500 doubles_outcome_candidate+0
+    * PROTECT                          100
+      POLLENPUFF -> Ludicolo          -311  expected_damage+19 super_effective+70 partner_heal_near_full-500 doubles_outcome_candidate+0
+    Amoonguss    used Protect        untargeted
+    Gastrodon    used Recover        could_not_move  [status=1 status_count=2]
+    Porygon2     used Triattack      hit            Gastrodon -36
+    Ludicolo     used Icebeam        protected      Amoonguss 0
+  end:     Reborn Zapdos 342/342 | Portable Porygon2 332/332 | Reborn Ludicolo 322/322 | Portable Amoonguss 167/390
+
+Turn 16
+  Reborn    Zapdos 342/342           -> Heatwave -> Amoonguss
+  Portable  Porygon2 332/332         -> Trickroom
+  Reborn    Ludicolo 322/322         -> Icebeam -> Amoonguss
+  Portable  Amoonguss 167/390        -> Spore -> Zapdos
+    Porygon2 plan score 256.0, joint adjustment -350.5
+    view: hp 100%  speed 177 (slower)  incoming max 29%  certain 29%  threatened=False
+    foe moves est: Thunderbolt 29%, Scald 20%, Gigadrain 19%, Heatwave 15%, Icebeam 15%, Fakeout 1%, Tailwind 0%, Protect 0%
+    * TRICKROOM                        256  speed_control_value+156
+      ICEBEAM -> Zapdos                205  expected_damage+34 super_effective+70 secondary_freeze+1 doubles_outcome_candidate+0
+      TRIATTACK -> Zapdos              123  expected_damage+23 doubles_outcome_candidate+0
+      TRIATTACK -> Ludicolo            115  expected_damage+15 doubles_outcome_candidate+0
+      ICEBEAM -> Ludicolo              111  expected_damage+11 secondary_freeze+0 doubles_outcome_candidate+0
+    Amoonguss plan score 125.0, joint adjustment -350.5
+    view: hp 43%  speed 117 (slower)  incoming max 44%  certain 43%  threatened=True
+    foe moves est: Heatwave 44%, Icebeam 43%, Thunderbolt 21%, Scald 15%, Gigadrain 7%, Fakeout 1%, Tailwind 0%, Protect 0%
+    * SPORE -> Zapdos                  125  fresh_status+25
+      SPORE -> Ludicolo                125  fresh_status+25
+      RAGEPOWDER                       100
+      PROTECT                          -40  repeated_protect-140
+      POLLENPUFF -> Ludicolo          -311  expected_damage+19 super_effective+70 partner_heal_near_full-500 doubles_outcome_candidate+0
+    Zapdos       used Heatwave       hit            Porygon2 -44, Amoonguss -146 x2
+    Ludicolo     used Icebeam        hit            Amoonguss -21 CRIT x2
+    Porygon2     used Trickroom      untargeted
+  end:     Reborn Zapdos 342/342 | Portable Porygon2 288/332 | Reborn Ludicolo 322/322
+
+Turn 17
+  Reborn    Zapdos 342/342           -> Protect
+  Portable  Porygon2 288/332         -> Icebeam -> Zapdos
+  Reborn    Ludicolo 322/322         -> switch->Kingdra
+    Porygon2 plan score 204.8, joint adjustment 0.0
+    view: hp 87%  speed 177 (faster)  incoming max 29%  certain 29%  threatened=False
+    foe moves est: Thunderbolt 29%, Heatwave 20%, Scald 20%, Gigadrain 19%, Icebeam 15%, Fakeout 1%, Tailwind 0%, Protect 0%
+    * ICEBEAM -> Zapdos                205  expected_damage+34 super_effective+70 secondary_freeze+1
+      TRIATTACK -> Zapdos              123  expected_damage+23
+      TRIATTACK -> Ludicolo            115  expected_damage+15
+      ICEBEAM -> Ludicolo              111  expected_damage+11 secondary_freeze+0
+      TRICKROOM                       -400  speed_control_redundant-500
+    Zapdos       used Protect        untargeted
+    Porygon2     used Icebeam        protected      Zapdos 0
+  end:     Reborn Zapdos 342/342 | Portable Porygon2 288/332 | Reborn Kingdra 227/312
+
+Turn 18
+  Reborn    Zapdos 342/342           -> Thunderbolt -> Porygon2
+  Portable  Porygon2 288/332         -> Triattack -> Kingdra
+  Reborn    Kingdra 227/312          -> Protect
+    Porygon2 plan score 123.8, joint adjustment 0.0
+    view: hp 87%  speed 177 (faster)  incoming max 43%  certain 29%  threatened=False
+    foe moves est: Dracometeor 43%, Muddywater 30%, Thunderbolt 29%, Hurricane 25%, Heatwave 20%, Tailwind 0%, Protect 0%, Protect 0%
+    * TRIATTACK -> Kingdra             124  expected_damage+24
+      TRIATTACK -> Zapdos              123  expected_damage+23
+      ICEBEAM -> Kingdra               118  expected_damage+18 secondary_freeze+0
+      ICEBEAM -> Zapdos                  5  failed_last_turn-200 expected_damage+34 super_effective+70 secondary_freeze+1
+      TRICKROOM                       -400  speed_control_redundant-500
+    Kingdra      used Protect        untargeted
+    Porygon2     used Triattack      protected      Kingdra 0
+    Zapdos       used Thunderbolt    hit            Porygon2 -90
+  end:     Reborn Zapdos 342/342 | Portable Porygon2 198/332 | Reborn Kingdra 227/312
+
+Turn 19
+  Reborn    Zapdos 342/342           -> Protect
+  Portable  Porygon2 198/332         -> Icebeam -> Zapdos
+  Reborn    Kingdra 227/312          -> Dracometeor -> Porygon2
+    Porygon2 plan score 204.8, joint adjustment 0.0
+    view: hp 60%  speed 177 (faster)  incoming max 43%  certain 29%  threatened=False
+    foe moves est: Dracometeor 43%, Muddywater 30%, Thunderbolt 29%, Hurricane 25%, Heatwave 20%, Tailwind 0%, Protect 0%, Protect 0%
+    * ICEBEAM -> Zapdos                205  expected_damage+34 super_effective+70 secondary_freeze+1
+      ICEBEAM -> Kingdra               118  expected_damage+18 secondary_freeze+0
+      RECOVER                           70  heal_mid_hp+90 heal_losing_race-120
+      TRICKROOM                       -400  speed_control_redundant-500
+    Zapdos       used Protect        untargeted
+    Porygon2     used Icebeam        protected      Zapdos 0
+    Kingdra      used Dracometeor    hit            Porygon2 -139, user -31
+  end:     Reborn Zapdos 342/342 | Portable Porygon2 59/332 | Reborn Kingdra 196/312
+
+Turn 20
+  Reborn    Zapdos 342/342           -> Thunderbolt -> Porygon2
+  Portable  Porygon2 59/332          -> Recover
+  Reborn    Kingdra 196/312          -> switch->Ludicolo
+    Porygon2 plan score 521.7, joint adjustment 0.0
+    view: hp 18%  speed 177 (faster)  incoming max 29%  certain 29%  threatened=True
+    foe moves est: Thunderbolt 29%, Dracometeor 22%, Heatwave 20%, Muddywater 16%, Hurricane 13%, Tailwind 0%, Protect 0%, Protect 0%
+    * RECOVER                          522  heal_low_hp+272 heal_saves_battler+150
+      ICEBEAM -> Kingdra               118  expected_damage+18 secondary_freeze+0
+      ICEBEAM -> Zapdos                  5  failed_last_turn-200 expected_damage+34 super_effective+70 secondary_freeze+1
+      TRICKROOM                       -400  speed_control_redundant-500
+    Porygon2     used Recover        untargeted     user +166
+    Zapdos       used Thunderbolt    hit            Porygon2 -83
+  end:     Reborn Zapdos 342/342 | Portable Porygon2 142/332 | Reborn Ludicolo 322/322
+
+Turn 21
+  Reborn    Zapdos 342/342           -> Thunderbolt -> Porygon2
+  Portable  Porygon2 142/332         -> Trickroom
+  Reborn    Ludicolo 322/322         -> Fakeout -> Porygon2
+    Porygon2 plan score 256.0, joint adjustment 0.0
+    view: hp 43%  speed 177 (slower)  incoming max 29%  certain 29%  threatened=False
+    foe moves est: Thunderbolt 29%, Heatwave 20%, Scald 20%, Gigadrain 19%, Icebeam 15%, Fakeout 6%, Tailwind 0%, Protect 0%
+    * TRICKROOM                        256  speed_control_value+156
+      ICEBEAM -> Zapdos                205  expected_damage+34 super_effective+70 secondary_freeze+1
+      RECOVER                          190  heal_mid_hp+90
+      ICEBEAM -> Ludicolo              111  expected_damage+11 secondary_freeze+0
+    Ludicolo     used Fakeout        hit            Porygon2 -20
+    Zapdos       used Thunderbolt    hit            Porygon2 -96
+    Porygon2     used Trickroom      could_not_move  [flinch=True]
+  end:     Reborn Zapdos 342/342 | Portable Porygon2 26/332 | Reborn Ludicolo 322/322
+
+Turn 22
+  Reborn    Zapdos 342/342           -> Thunderbolt -> Porygon2
+  Portable  Porygon2 26/332          -> Icebeam -> Zapdos
+  Reborn    Ludicolo 322/322         -> Scald -> Porygon2
+    Porygon2 plan score 51.2, joint adjustment 0.0
+    view: hp 8%  speed 177 (slower)  incoming max 29%  certain 29%  threatened=True
+    foe moves est: Thunderbolt 29%, Heatwave 20%, Scald 20%, Gigadrain 19%, Icebeam 15%, Fakeout 6%, Tailwind 0%, Protect 0%
+    * ICEBEAM -> Zapdos                 51  expected_damage+34 super_effective+70 secondary_freeze+1 dead_before_moving-154
+      ICEBEAM -> Ludicolo               28  expected_damage+11 secondary_freeze+0 dead_before_moving-84
+      TRICKROOM                         14  failed_last_turn-200 speed_control_value+156 dead_before_moving-42
+      RECOVER                            0  heal_low_hp+302 heal_cannot_resolve-400 dead_before_moving-1
+    Zapdos       used Thunderbolt    hit            Porygon2 -26 CRIT

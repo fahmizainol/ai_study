@@ -1,0 +1,718 @@
+double_offense_vs_bulky  seed 196613   Reborn-Normal (offense, left) vs Portable 0.8.0 (bulky, right)   result for right seat: LOSS in 28 rounds (engine turncount 27)
+  Reborn   (offense): Politoed, Kingdra, Ludicolo, Zapdos, Scizor, Gastrodon
+  Portable (bulky): Reuniclus, Torkoal, Amoonguss, Porygon2, Rhyperior, Hariyama
+==============================================================================================================
+
+Turn 1
+  Reborn    Politoed 342/342         -> Scald -> Torkoal
+  Portable  Reuniclus 382/382        -> Trickroom
+  Reborn    Kingdra 312/312          -> Dracometeor -> Torkoal
+  Portable  Torkoal 302/302          -> Protect
+    Reuniclus plan score 256.0, joint adjustment -37.4
+    view: hp 100%  speed 117 (slower)  incoming max 61%  certain 14%  threatened=False
+    foe moves est: Dracometeor 61%, Hurricane 35%, Muddywater 16%, Scald 14%, Icywind 10%, Helpinghand 0%, Protect 0%, Protect 0%
+    * TRICKROOM                        256  speed_control_value+156
+      PSYCHIC -> Kingdra               131  expected_damage+31 secondary_drop+0 doubles_outcome_candidate+0
+      PSYCHIC -> Politoed              128  expected_damage+27 secondary_drop+0 doubles_outcome_candidate+0
+      FOCUSBLAST -> Kingdra            124  expected_damage+27 accuracy-4 secondary_drop+0 doubles_outcome_candidate+0
+      FOCUSBLAST -> Politoed           121  expected_damage+24 accuracy-4 secondary_drop+0 doubles_outcome_candidate+0
+    Torkoal plan score 100.0, joint adjustment -37.4
+    view: hp 100%  speed 97 (slower)  incoming max 89%  certain 41%  threatened=False
+    foe moves est: Dracometeor 89%, Hurricane 50%, Muddywater 46%, Scald 41%, Icywind 7%, Helpinghand 0%, Protect 0%, Protect 0%
+      ERUPTION                         136  expected_damage+36 spread_type_in_damage+0 doubles_outcome_candidate+0
+      HEATWAVE                         122  expected_damage+23 accuracy-1 spread_type_in_damage+0 secondary_burn+0 doubles_outcome_candidate+0
+      EARTHPOWER -> Kingdra            116  expected_damage+15 secondary_drop+0 doubles_outcome_candidate+0
+      EARTHPOWER -> Politoed           113  expected_damage+13 secondary_drop+0 doubles_outcome_candidate+0
+    * PROTECT                          100
+    Torkoal      used Protect        untargeted
+    Kingdra      used Dracometeor    protected      Torkoal 0
+    Politoed     used Scald          protected      Torkoal 0
+    Reuniclus    used Trickroom      untargeted
+  end:     Reborn Politoed 342/342 | Portable Reuniclus 382/382 | Reborn Kingdra 312/312 | Portable Torkoal 302/302
+
+Turn 2
+  Reborn    Politoed 342/342         -> Scald -> Torkoal
+  Portable  Reuniclus 382/382        -> switch->Porygon2
+  Reborn    Kingdra 312/312          -> Dracometeor -> Torkoal
+  Portable  Torkoal 302/302          -> Eruption
+    Reuniclus plan score 285.5, joint adjustment -269.2
+    view: hp 100%  speed 117 (faster)  incoming max 61%  certain 14%  threatened=False
+    foe moves est: Dracometeor 61%, Hurricane 35%, Muddywater 16%, Scald 14%, Icywind 10%, Helpinghand 0%, Protect 0%, Protect 0%
+    * switch->Porygon2                 285  matchup+64 entry_incoming_damage-24 switchin_race+80 losing_race_bench_wins+110 entry_hazards+0 escape_reasons+1
+      PSYCHIC -> Kingdra               131  expected_damage+31 secondary_drop+0 doubles_outcome_candidate+0
+      PSYCHIC -> Politoed              128  expected_damage+27 secondary_drop+0 doubles_outcome_candidate+0
+      FOCUSBLAST -> Kingdra            124  expected_damage+27 accuracy-4 secondary_drop+0 doubles_outcome_candidate+0
+      FOCUSBLAST -> Politoed           121  expected_damage+24 accuracy-4 secondary_drop+0 doubles_outcome_candidate+0
+    Torkoal plan score 135.5, joint adjustment -269.2
+    view: hp 100%  speed 97 (faster)  incoming max 89%  certain 41%  threatened=False
+    foe moves est: Dracometeor 89%, Hurricane 50%, Muddywater 46%, Scald 41%, Icywind 7%, Helpinghand 0%, Protect 0%, Protect 0%
+      switch->Porygon2                 285  matchup+64 entry_incoming_damage-24 switchin_race+80 losing_race_bench_wins+110 entry_hazards+0 escape_reasons+1
+    * ERUPTION                         136  expected_damage+36 spread_type_in_damage+0 doubles_outcome_candidate+0
+      HEATWAVE                         122  expected_damage+23 accuracy-1 spread_type_in_damage+0 secondary_burn+0 doubles_outcome_candidate+0
+      EARTHPOWER -> Kingdra            116  expected_damage+15 secondary_drop+0 doubles_outcome_candidate+0
+      EARTHPOWER -> Politoed           113  expected_damage+13 secondary_drop+0 doubles_outcome_candidate+0
+    Torkoal      used Eruption       hit            Politoed -111 x0.5, Kingdra -54 x0.25
+    Politoed     used Scald          hit            Torkoal -302 CRIT x2
+    Kingdra      used Dracometeor    hit            Reuniclus -143, user -31
+  end:     Reborn Politoed 231/342 | Portable Porygon2 189/332 | Reborn Kingdra 227/312 | Portable Reuniclus 382/382
+
+Turn 3
+  Reborn    Politoed 231/342         -> Helpinghand -> Reuniclus
+  Portable  Porygon2 189/332         -> Triattack -> Kingdra
+  Reborn    Kingdra 227/312          -> switch->Scizor
+  Portable  Reuniclus 382/382        -> Psychic -> Kingdra
+    Porygon2 plan score 153.8, joint adjustment 407.3
+    view: hp 57%  speed 177 (faster)  incoming max 22%  certain 10%  threatened=False
+    foe moves est: Dracometeor 22%, Hurricane 13%, Scald 10%, Icywind 7%, Muddywater 6%, Helpinghand 0%, Protect 0%, Protect 0%
+      RECOVER                          190  heal_mid_hp+90
+    * TRIATTACK -> Kingdra             154  expected_damage+54 doubles_outcome_candidate+0
+      ICEBEAM -> Kingdra               118  expected_damage+18 doubles_outcome_candidate+0
+      TRIATTACK -> Politoed            102  expected_damage+47 resisted-45 doubles_outcome_candidate+0
+      ICEBEAM -> Politoed               63  expected_damage+8 resisted-45 doubles_outcome_candidate+0
+    Reuniclus plan score 131.1, joint adjustment 407.3
+    view: hp 100%  speed 117 (faster)  incoming max 31%  certain 14%  threatened=False
+    foe moves est: Dracometeor 31%, Hurricane 18%, Scald 14%, Icywind 10%, Muddywater 8%, Helpinghand 0%, Protect 0%, Protect 0%
+    * PSYCHIC -> Kingdra               131  expected_damage+31 secondary_drop+0 doubles_outcome_candidate+0
+      PSYCHIC -> Politoed              128  expected_damage+27 secondary_drop+0 doubles_outcome_candidate+0
+      FOCUSBLAST -> Kingdra            124  expected_damage+27 accuracy-4 secondary_drop+0 doubles_outcome_candidate+0
+      FOCUSBLAST -> Politoed           121  expected_damage+24 accuracy-4 secondary_drop+0 doubles_outcome_candidate+0
+      TRICKROOM                       -400  speed_control_redundant-500
+    Politoed     used Helpinghand    failed         Kingdra 0
+    Reuniclus    used Psychic        hit            Kingdra -52 x0.5
+    Porygon2     used Triattack      hit            Kingdra -67 x0.25
+  end:     Reborn Politoed 231/342 | Portable Porygon2 189/332 | Reborn Scizor 183/302 | Portable Reuniclus 382/382
+
+Turn 4
+  Reborn    Politoed 231/342         -> Helpinghand -> Reuniclus
+  Portable  Porygon2 189/332         -> Triattack -> Scizor
+  Reborn    Scizor 183/302           -> Xscissor -> Reuniclus
+  Portable  Reuniclus 382/382        -> Focusblast -> Scizor
+    Porygon2 plan score 86.8, joint adjustment 199.2
+    view: hp 57%  speed 177 (faster)  incoming max 36%  certain 36%  threatened=False
+    foe moves est: Xscissor 36%, Bulletpunch 18%, Scald 10%, Icywind 7%, Helpinghand 0%, Protect 0%, Swordsdance 0%, Protect 0%
+      RECOVER                          190  heal_mid_hp+90
+      TRIATTACK -> Politoed            147  expected_damage+47 doubles_outcome_candidate+0
+    * TRIATTACK -> Scizor               87  expected_damage+32 resisted-45 doubles_outcome_candidate+0
+      ICEBEAM -> Scizor                 66  expected_damage+11 resisted-45 doubles_outcome_candidate+0
+      ICEBEAM -> Politoed               63  expected_damage+8 resisted-45 doubles_outcome_candidate+0
+    Reuniclus plan score 127.8, joint adjustment 199.2
+    view: hp 100%  speed 117 (faster)  incoming max 106%  certain 106%  threatened=True
+    foe moves est: Xscissor 106%, Bulletpunch 27%, Scald 14%, Icywind 10%, Helpinghand 0%, Protect 0%, Swordsdance 0%, Protect 0%
+      switch->Hariyama                 512  matchup+64 entry_incoming_damage-2 switchin_race+155 escape_lethal_threat+130 losing_race_bench_wins+110 entry_hazards+0 escape_reasons+2
+      switch->Amoonguss                259  matchup+48 entry_incoming_damage-39 switchin_race+65 escape_lethal_threat+130 entry_hazards+0 escape_reasons+1
+      switch->Rhyperior                249  matchup+64 entry_incoming_damage-65 switchin_race+65 escape_lethal_threat+130 entry_hazards+0 escape_reasons+1
+    * FOCUSBLAST -> Scizor             128  expected_damage+32 accuracy-5 secondary_drop+0 doubles_outcome_candidate+0
+      PSYCHIC -> Politoed              128  expected_damage+27 secondary_drop+0 doubles_outcome_candidate+0
+    Politoed     used Helpinghand    hit            Scizor 0
+    Reuniclus    used Focusblast     hit            Scizor -126
+    Porygon2     used Triattack      hit            Scizor -57 x0.5
+  end:     Reborn Politoed 231/342 | Portable Porygon2 189/332 | Reborn Gastrodon 384/384 | Portable Reuniclus 382/382
+
+Turn 5
+  Reborn    Politoed 231/342         -> Helpinghand -> Porygon2
+  Portable  Porygon2 189/332         -> Recover
+  Reborn    Gastrodon 384/384        -> Earthpower -> Porygon2
+  Portable  Reuniclus 382/382        -> Psychic -> Gastrodon
+    Porygon2 plan score 190.0, joint adjustment -26.5
+    view: hp 57%  speed 177 (faster)  incoming max 23%  certain 23%  threatened=False
+    foe moves est: Earthpower 23%, Scald 11%, Scald 10%, Icywind 7%, Helpinghand 0%, Protect 0%, Recover 0%, Protect 0%
+    * RECOVER                          190  heal_mid_hp+90
+      ICEBEAM -> Gastrodon             116  expected_damage+16 doubles_outcome_candidate+0
+      TRIATTACK -> Gastrodon           104  expected_damage+49 resisted-45 doubles_outcome_candidate+0
+      TRIATTACK -> Politoed            102  expected_damage+47 resisted-45 doubles_outcome_candidate+0
+      ICEBEAM -> Politoed               63  expected_damage+8 resisted-45 doubles_outcome_candidate+0
+    Reuniclus plan score 128.4, joint adjustment -26.5
+    view: hp 100%  speed 117 (faster)  incoming max 32%  certain 32%  threatened=False
+    foe moves est: Earthpower 32%, Scald 15%, Scald 14%, Icywind 10%, Helpinghand 0%, Protect 0%, Recover 0%, Protect 0%
+    * PSYCHIC -> Gastrodon             128  expected_damage+28 secondary_drop+0 doubles_outcome_candidate+0
+      PSYCHIC -> Politoed              128  expected_damage+27 secondary_drop+0 doubles_outcome_candidate+0
+      FOCUSBLAST -> Gastrodon          122  expected_damage+25 accuracy-4 secondary_drop+0 doubles_outcome_candidate+0
+      FOCUSBLAST -> Politoed           121  expected_damage+24 accuracy-4 secondary_drop+0 doubles_outcome_candidate+0
+      TRICKROOM                       -400  speed_control_redundant-500
+    Politoed     used Helpinghand    hit            Gastrodon 0
+    Reuniclus    used Psychic        hit            Gastrodon -152
+    Gastrodon    used Earthpower     hit            Porygon2 -113
+    Porygon2     used Recover        untargeted     user +166
+  end:     Reborn Politoed 231/342 | Portable Porygon2 242/332 | Reborn Gastrodon 256/384 | Portable Reuniclus 382/382
+
+Turn 6
+  Reborn    Politoed 231/342         -> Icywind -> Reuniclus
+  Portable  Porygon2 242/332         -> Trickroom
+  Reborn    Gastrodon 256/384        -> Earthpower -> Reuniclus
+  Portable  Reuniclus 382/382        -> Trickroom
+    Porygon2 plan score 256.0, joint adjustment -34.5
+    view: hp 73%  speed 177 (slower)  incoming max 23%  certain 23%  threatened=False
+    foe moves est: Earthpower 23%, Scald 20%, Scald 20%, Icywind 7%, Helpinghand 0%, Protect 0%, Recover 0%, Protect 0%
+    * TRICKROOM                        256  speed_control_value+156
+      TRIATTACK -> Gastrodon           122  expected_damage+22 doubles_outcome_candidate+0
+      TRIATTACK -> Politoed            121  expected_damage+21 doubles_outcome_candidate+0
+      ICEBEAM -> Gastrodon             117  expected_damage+16 secondary_freeze+0 doubles_outcome_candidate+0
+      RECOVER                          100
+    Reuniclus plan score 256.0, joint adjustment -34.5
+    view: hp 100%  speed 117 (slower)  incoming max 32%  certain 32%  threatened=False
+    foe moves est: Earthpower 32%, Scald 29%, Scald 28%, Icywind 10%, Helpinghand 0%, Protect 0%, Recover 0%, Protect 0%
+    * TRICKROOM                        256  speed_control_value+156
+      PSYCHIC -> Gastrodon             128  expected_damage+28 secondary_drop+0 doubles_outcome_candidate+0
+      PSYCHIC -> Politoed              128  expected_damage+27 secondary_drop+0 doubles_outcome_candidate+0
+      FOCUSBLAST -> Gastrodon          122  expected_damage+25 accuracy-4 secondary_drop+0 doubles_outcome_candidate+0
+      FOCUSBLAST -> Politoed           121  expected_damage+24 accuracy-4 secondary_drop+0 doubles_outcome_candidate+0
+    Politoed     used Icywind        hit            Porygon2 -21, Reuniclus -37
+    Gastrodon    used Earthpower     hit            Reuniclus -116
+    Porygon2     used Trickroom      untargeted
+    Reuniclus    used Trickroom      untargeted
+  end:     Reborn Politoed 231/342 | Portable Porygon2 221/332 | Reborn Gastrodon 280/384 | Portable Reuniclus 252/382
+
+Turn 7
+  Reborn    Politoed 231/342         -> Icywind -> Reuniclus
+  Portable  Porygon2 221/332         -> Trickroom
+  Reborn    Gastrodon 280/384        -> Earthpower -> Reuniclus
+  Portable  Reuniclus 252/382        -> Trickroom
+    Porygon2 plan score 256.0, joint adjustment -34.5
+    view: hp 67%  speed 118 (slower)  incoming max 23%  certain 23%  threatened=False
+    foe moves est: Earthpower 23%, Scald 20%, Scald 20%, Icywind 7%, Helpinghand 0%, Protect 0%, Recover 0%, Protect 0%
+    * TRICKROOM                        256  speed_control_value+156
+      TRIATTACK -> Gastrodon           122  expected_damage+22 doubles_outcome_candidate+0
+      TRIATTACK -> Politoed            121  expected_damage+21 doubles_outcome_candidate+0
+      ICEBEAM -> Gastrodon             117  expected_damage+16 secondary_freeze+0 doubles_outcome_candidate+0
+      RECOVER                          100
+    Reuniclus plan score 256.0, joint adjustment -34.5
+    view: hp 66%  speed 78 (slower)  incoming max 32%  certain 32%  threatened=False
+    foe moves est: Earthpower 32%, Scald 29%, Scald 28%, Icywind 10%, Helpinghand 0%, Protect 0%, Recover 0%, Protect 0%
+    * TRICKROOM                        256  speed_control_value+156
+      PSYCHIC -> Gastrodon             128  expected_damage+28 secondary_drop+0 doubles_outcome_candidate+0
+      PSYCHIC -> Politoed              128  expected_damage+27 secondary_drop+0 doubles_outcome_candidate+0
+      FOCUSBLAST -> Gastrodon          122  expected_damage+25 accuracy-4 secondary_drop+0 doubles_outcome_candidate+0
+      FOCUSBLAST -> Politoed           121  expected_damage+24 accuracy-4 secondary_drop+0 doubles_outcome_candidate+0
+    Politoed     used Icywind        hit            Porygon2 -21, Reuniclus -34
+    Gastrodon    used Earthpower     hit            Reuniclus -119
+    Porygon2     used Trickroom      untargeted
+    Reuniclus    used Trickroom      untargeted
+  end:     Reborn Politoed 231/342 | Portable Porygon2 200/332 | Reborn Gastrodon 304/384 | Portable Reuniclus 122/382
+
+Turn 8
+  Reborn    Politoed 231/342         -> Icywind -> Reuniclus
+  Portable  Porygon2 200/332         -> Trickroom
+  Reborn    Gastrodon 304/384        -> Earthpower -> Reuniclus
+  Portable  Reuniclus 122/382        -> switch->Hariyama
+    Porygon2 plan score 256.0, joint adjustment -373.0
+    view: hp 60%  speed 88 (slower)  incoming max 23%  certain 23%  threatened=False
+    foe moves est: Earthpower 23%, Scald 20%, Scald 20%, Icywind 7%, Helpinghand 0%, Protect 0%, Recover 0%, Protect 0%
+    * TRICKROOM                        256  speed_control_value+156
+      TRIATTACK -> Gastrodon           122  expected_damage+22 doubles_outcome_candidate+0
+      TRIATTACK -> Politoed            121  expected_damage+21 doubles_outcome_candidate+0
+      ICEBEAM -> Gastrodon             117  expected_damage+16 secondary_freeze+0 doubles_outcome_candidate+0
+      RECOVER                          100
+    Reuniclus plan score 586.1, joint adjustment -373.0
+    view: hp 32%  speed 58 (slower)  incoming max 48%  certain 48%  threatened=True
+    foe moves est: Earthpower 48%, Scald 43%, Scald 42%, Icywind 15%, Helpinghand 0%, Protect 0%, Recover 0%, Protect 0%
+    * switch->Hariyama                 586  matchup+64 entry_incoming_damage+2 switchin_race+85 clear_bad_stats+90 escape_lethal_threat+130 losing_race_bench_wins+110 entry_hazards+0 regenerator_pivot+50 escape_reasons+2
+      switch->Amoonguss                464  matchup+64 entry_incoming_damage-10 switchin_race+85 clear_bad_stats+90 escape_lethal_threat+130 entry_hazards+0 regenerator_pivot+50 escape_reasons+1
+      TRICKROOM                         64  speed_control_value+156 dead_before_moving-192
+      PSYCHIC -> Gastrodon              32  expected_damage+28 secondary_drop+0 dead_before_moving-96 doubles_outcome_candidate+0
+      PSYCHIC -> Politoed               32  expected_damage+27 secondary_drop+0 dead_before_moving-96 doubles_outcome_candidate+0
+    Politoed     used Icywind        hit            Porygon2 -21, Reuniclus -15
+    Gastrodon    used Earthpower     hit            Reuniclus -90
+    Porygon2     used Trickroom      untargeted
+  end:     Reborn Politoed 231/342 | Portable Porygon2 179/332 | Reborn Gastrodon 328/384 | Portable Hariyama 345/450
+
+Turn 9
+  Reborn    Politoed 231/342         -> Helpinghand -> Hariyama
+  Portable  Porygon2 179/332         -> switch->Amoonguss
+  Reborn    Gastrodon 328/384        -> Scald -> Hariyama
+  Portable  Hariyama 345/450         -> Fakeout -> Politoed
+    Porygon2 plan score 354.0, joint adjustment -26.2
+    view: hp 54%  speed 70 (faster)  incoming max 23%  certain 23%  threatened=False
+    foe moves est: Earthpower 23%, Scald 20%, Scald 20%, Icywind 7%, Helpinghand 0%, Protect 0%, Recover 0%, Protect 0%
+    * switch->Amoonguss                354  matchup+64 entry_incoming_damage-10 switchin_race+155 clear_bad_stats+90 entry_hazards+0 escape_reasons+1
+      switch->Reuniclus                268  matchup+64 entry_incoming_damage-9 switchin_race+80 clear_bad_stats+90 entry_hazards+0 escape_reasons+1
+      RECOVER                          190  heal_mid_hp+90
+      TRIATTACK -> Gastrodon           122  expected_damage+22 doubles_outcome_candidate+0
+      TRIATTACK -> Politoed            121  expected_damage+21 doubles_outcome_candidate+0
+    Hariyama plan score 224.8, joint adjustment -26.2
+    view: hp 77%  speed 104 (faster)  incoming max 23%  certain 23%  threatened=False
+    foe moves est: Earthpower 23%, Scald 21%, Scald 20%, Icywind 4%, Helpinghand 0%, Protect 0%, Recover 0%, Protect 0%
+    * FAKEOUT -> Politoed              225  expected_damage+10 first_turn_hit+115 doubles_outcome_candidate+0
+      FAKEOUT -> Gastrodon             224  expected_damage+9 first_turn_hit+115 doubles_outcome_candidate+0
+      KNOCKOFF -> Gastrodon            129  expected_damage+22 knocks_item+7 doubles_outcome_candidate+0
+      KNOCKOFF -> Politoed             124  expected_damage+24 doubles_outcome_candidate+0
+      CLOSECOMBAT -> Politoed          104  expected_damage+44 self_stat_drop-40 doubles_outcome_candidate+0
+    Politoed     used Helpinghand    hit            Gastrodon 0
+    Hariyama     used Fakeout        hit            Politoed -44
+    Gastrodon    used Scald          hit            Hariyama -129
+  end:     Reborn Politoed 187/342 | Portable Amoonguss 390/390 | Reborn Gastrodon 352/384 | Portable Hariyama 216/450
+
+Turn 10
+  Reborn    Politoed 187/342         -> Icywind -> Hariyama
+  Portable  Amoonguss 390/390        -> Pollenpuff -> Politoed
+  Reborn    Gastrodon 352/384        -> Protect
+  Portable  Hariyama 216/450         -> Closecombat -> Politoed
+    Amoonguss plan score 203.3, joint adjustment 424.4
+    view: hp 100%  speed 117 (faster)  incoming max 33%  certain 33%  threatened=False
+    foe moves est: Earthpower 33%, Icywind 20%, Scald 15%, Scald 15%, Helpinghand 0%, Protect 0%, Recover 0%, Protect 0%
+      POLLENPUFF -> Gastrodon          204  expected_damage+14 partner_heal_mid_hp+90 doubles_outcome_candidate+0
+    * POLLENPUFF -> Politoed           203  expected_damage+13 partner_heal_mid_hp+90 doubles_outcome_candidate+0
+      SPORE -> Politoed                125  fresh_status+25
+      SPORE -> Gastrodon               125  fresh_status+25
+      RAGEPOWDER                       100
+    Hariyama plan score 103.5, joint adjustment 424.4
+    view: hp 48%  speed 104 (faster)  incoming max 23%  certain 23%  threatened=False
+    foe moves est: Earthpower 23%, Scald 21%, Scald 20%, Icywind 4%, Helpinghand 0%, Protect 0%, Recover 0%, Protect 0%
+      KNOCKOFF -> Gastrodon            129  expected_damage+22 knocks_item+7 doubles_outcome_candidate+0
+      KNOCKOFF -> Politoed             124  expected_damage+24 doubles_outcome_candidate+0
+    * CLOSECOMBAT -> Politoed          104  expected_damage+44 self_stat_drop-40 doubles_outcome_candidate+0
+      CLOSECOMBAT -> Gastrodon         102  expected_damage+42 self_stat_drop-40 doubles_outcome_candidate+0
+      CLOSECOMBAT -> Amoonguss     -1000000  expected_damage+24 resisted-45 self_stat_drop-40
+    Gastrodon    used Protect        untargeted
+    Hariyama     used Closecombat    hit            Politoed -187
+    Amoonguss    used Pollenpuff     protected      Gastrodon 0
+  end:     Reborn Zapdos 342/342 | Portable Amoonguss 390/390 | Reborn Gastrodon 376/384 | Portable Hariyama 216/450
+
+Turn 11
+  Reborn    Zapdos 342/342           -> Thunderbolt -> Hariyama
+  Portable  Amoonguss 390/390        -> Pollenpuff -> Gastrodon
+  Reborn    Gastrodon 376/384        -> Scald -> Hariyama
+  Portable  Hariyama 216/450         -> switch->Porygon2
+    Amoonguss plan score 204.0, joint adjustment -278.8
+    view: hp 100%  speed 117 (faster)  incoming max 44%  certain 33%  threatened=False
+    foe moves est: Heatwave 44%, Earthpower 33%, Thunderbolt 21%, Scald 15%, Tailwind 0%, Protect 0%, Recover 0%, Protect 0%
+    * POLLENPUFF -> Gastrodon          204  expected_damage+14 partner_heal_mid_hp+90 doubles_outcome_candidate+0
+      POLLENPUFF -> Zapdos             152  expected_damage+7 resisted-45 partner_heal_mid_hp+90 doubles_outcome_candidate+0
+      SPORE -> Zapdos                  125  fresh_status+25
+      SPORE -> Gastrodon               125  fresh_status+25
+      RAGEPOWDER                       100
+    Hariyama plan score 284.9, joint adjustment -278.8
+    view: hp 48%  speed 104 (faster)  incoming max 44%  certain 44%  threatened=False
+    foe moves est: Thunderbolt 44%, Earthpower 35%, Scald 31%, Heatwave 12%, Tailwind 0%, Protect 0%, Recover 0%, Protect 0%
+    * switch->Porygon2                 285  matchup+96 entry_incoming_damage-5 switchin_race+65 clear_bad_stats+90 entry_hazards+0 escape_reasons+1
+      switch->Reuniclus                242  matchup+64 entry_incoming_damage-20 switchin_race+65 clear_bad_stats+90 entry_hazards+0 escape_reasons+1
+      KNOCKOFF -> Gastrodon            129  expected_damage+22 knocks_item+7 doubles_outcome_candidate+0
+      KNOCKOFF -> Zapdos               128  expected_damage+22 knocks_item+6 doubles_outcome_candidate+0
+      CLOSECOMBAT -> Gastrodon         102  expected_damage+42 self_stat_drop-40 doubles_outcome_candidate+0
+    Amoonguss    used Pollenpuff     hit            Gastrodon -75
+    Gastrodon    used Scald          hit            Hariyama -60
+    Zapdos       used Thunderbolt    hit            Hariyama -89
+  end:     Reborn Zapdos 342/342 | Portable Amoonguss 390/390 | Reborn Gastrodon 325/384 | Portable Porygon2 10/332 BRN
+
+Turn 12
+  Reborn    Zapdos 342/342           -> Heatwave -> Porygon2
+  Portable  Amoonguss 390/390        -> Pollenpuff -> Gastrodon
+  Reborn    Gastrodon 325/384        -> Earthpower -> Porygon2
+  Portable  Porygon2 10/332 BRN      -> Recover
+    Amoonguss plan score 429.9, joint adjustment -382.5
+    view: hp 100%  speed 117 (faster)  incoming max 44%  certain 33%  threatened=False
+    foe moves est: Heatwave 44%, Earthpower 33%, Thunderbolt 21%, Scald 15%, Tailwind 0%, Protect 0%, Recover 0%, Protect 0%
+    * POLLENPUFF -> Gastrodon          430  expected_damage+14 partner_heal_low_hp+316 doubles_outcome_candidate+0
+      POLLENPUFF -> Zapdos             378  expected_damage+7 resisted-45 partner_heal_low_hp+316 doubles_outcome_candidate+0
+      SPORE -> Zapdos                  125  fresh_status+25
+      SPORE -> Gastrodon               125  fresh_status+25
+      RAGEPOWDER                       100
+    Porygon2 plan score 566.0, joint adjustment -382.5
+    view: hp 3%  speed 177 (faster)  incoming max 29%  certain 29%  threatened=True
+    foe moves est: Thunderbolt 29%, Earthpower 23%, Scald 20%, Heatwave 15%, Tailwind 0%, Protect 0%, Recover 0%, Protect 0%
+    * RECOVER                          566  heal_low_hp+316 heal_saves_battler+150
+      ICEBEAM -> Zapdos                205  expected_damage+34 super_effective+70 secondary_freeze+1 doubles_outcome_candidate+0
+      TRIATTACK -> Zapdos              123  expected_damage+23 doubles_outcome_candidate+0
+      TRIATTACK -> Gastrodon           122  expected_damage+22 doubles_outcome_candidate+0
+      ICEBEAM -> Gastrodon             117  expected_damage+16 secondary_freeze+0 doubles_outcome_candidate+0
+    Amoonguss    used Pollenpuff     hit            Gastrodon -78
+    Gastrodon    used Earthpower     hit            Porygon2 -10
+    Zapdos       used Heatwave       hit            Amoonguss -107 x2
+  end:     Reborn Zapdos 342/342 | Portable Amoonguss 283/390 | Reborn Gastrodon 271/384 | Portable Rhyperior 392/392
+
+Turn 13
+  Reborn    Zapdos 342/342           -> Tailwind
+  Portable  Amoonguss 283/390        -> Protect
+  Reborn    Gastrodon 271/384        -> Scald -> Rhyperior
+  Portable  Rhyperior 392/392        -> Protect
+    Amoonguss plan score 100.0, joint adjustment 0.0
+    view: hp 73%  speed 117 (slower)  incoming max 44%  certain 33%  threatened=False
+    foe moves est: Heatwave 44%, Earthpower 33%, Thunderbolt 21%, Scald 15%, Tailwind 0%, Protect 0%, Recover 0%, Protect 0%
+      SPORE -> Zapdos                  125  fresh_status+25
+      SPORE -> Gastrodon               125  fresh_status+25
+      RAGEPOWDER                       100
+    * PROTECT                          100
+      POLLENPUFF -> Gastrodon         -386  expected_damage+14 partner_heal_near_full-500 doubles_outcome_candidate+0
+    Rhyperior plan score 100.0, joint adjustment 0.0
+    view: hp 100%  speed 137 (slower)  incoming max 150%  certain 150%  threatened=True
+    foe moves est: Scald 150%, Earthpower 85%, Heatwave 14%, Thunderbolt 0%, Tailwind 0%, Protect 0%, Recover 0%, Protect 0%
+      switch->Hariyama                 220  matchup+64 entry_incoming_damage-6 switchin_race-5 escape_lethal_threat+130 entry_hazards+0 escape_reasons+1
+      switch->Reuniclus                212  matchup+64 entry_incoming_damage-20 switchin_race-5 escape_lethal_threat+130 entry_hazards+0 escape_reasons+1
+    * PROTECT                          100
+      ROCKSLIDE                         38  expected_damage+53 accuracy-3 spread_type_in_damage+0 dead_before_moving-113 doubles_outcome_candidate+0
+      MEGAHORN -> Gastrodon             32  expected_damage+31 accuracy-2 dead_before_moving-97 doubles_outcome_candidate+0
+    Rhyperior    used Protect        untargeted
+    Amoonguss    used Protect        untargeted
+    Zapdos       used Tailwind       untargeted
+    Gastrodon    used Scald          protected      Rhyperior 0
+  end:     Reborn Zapdos 342/342 | Portable Amoonguss 283/390 | Reborn Gastrodon 295/384 | Portable Rhyperior 392/392
+
+Turn 14
+  Reborn    Zapdos 342/342           -> Heatwave -> Rhyperior
+  Portable  Amoonguss 283/390        -> Spore -> Zapdos
+  Reborn    Gastrodon 295/384        -> Scald -> Rhyperior
+  Portable  Rhyperior 392/392        -> switch->Hariyama
+    Amoonguss plan score 125.0, joint adjustment -348.9
+    view: hp 73%  speed 117 (slower)  incoming max 44%  certain 33%  threatened=False
+    foe moves est: Heatwave 44%, Earthpower 33%, Thunderbolt 21%, Scald 15%, Tailwind 0%, Protect 0%, Recover 0%, Protect 0%
+    * SPORE -> Zapdos                  125  fresh_status+25
+      SPORE -> Gastrodon               125  fresh_status+25
+      RAGEPOWDER                       100
+      PROTECT                          -40  repeated_protect-140
+      POLLENPUFF -> Gastrodon         -386  expected_damage+14 partner_heal_near_full-500 doubles_outcome_candidate+0
+    Rhyperior plan score 219.7, joint adjustment -348.9
+    view: hp 100%  speed 137 (slower)  incoming max 150%  certain 150%  threatened=True
+    foe moves est: Scald 150%, Earthpower 85%, Heatwave 14%, Thunderbolt 0%, Tailwind 0%, Protect 0%, Recover 0%, Protect 0%
+    * switch->Hariyama                 220  matchup+64 entry_incoming_damage-6 switchin_race-5 escape_lethal_threat+130 entry_hazards+0 escape_reasons+1
+      switch->Reuniclus                212  matchup+64 entry_incoming_damage-20 switchin_race-5 escape_lethal_threat+130 entry_hazards+0 escape_reasons+1
+      ROCKSLIDE                         38  expected_damage+53 accuracy-3 spread_type_in_damage+0 dead_before_moving-113 doubles_outcome_candidate+0
+      MEGAHORN -> Gastrodon             32  expected_damage+31 accuracy-2 dead_before_moving-97 doubles_outcome_candidate+0
+      MEGAHORN -> Zapdos                17  expected_damage+15 accuracy-1 resisted-45 dead_before_moving-52 doubles_outcome_candidate+0
+    Zapdos       used Heatwave       hit            Amoonguss 0, Rhyperior -33
+    Gastrodon    used Scald          hit            Rhyperior -89
+    Amoonguss    used Spore          hit            Zapdos 0
+  end:     Reborn Zapdos 342/342 SLP | Portable Amoonguss 283/390 | Reborn Gastrodon 319/384 | Portable Hariyama 94/450
+
+Turn 15
+  Reborn    Zapdos 342/342 SLP       -> Thunderbolt -> Hariyama
+  Portable  Amoonguss 283/390        -> Pollenpuff -> Gastrodon
+  Reborn    Gastrodon 319/384        -> Earthpower -> Hariyama
+  Portable  Hariyama 94/450          -> Fakeout -> Gastrodon
+    Amoonguss plan score 376.3, joint adjustment -395.2
+    view: hp 73%  speed 117 (slower)  incoming max 44%  certain 33%  threatened=False
+    foe moves est: Heatwave 44%, Earthpower 33%, Thunderbolt 21%, Scald 15%, Tailwind 0%, Protect 0%, Recover 0%, Protect 0%
+    * POLLENPUFF -> Gastrodon          376  expected_damage+14 partner_heal_low_hp+262 doubles_outcome_candidate+0
+      POLLENPUFF -> Zapdos             325  expected_damage+7 resisted-45 partner_heal_low_hp+262 doubles_outcome_candidate+0
+      SPORE -> Gastrodon               125  fresh_status+25
+      RAGEPOWDER                       100
+      PROTECT                          100
+    Hariyama plan score 224.4, joint adjustment -395.2
+    view: hp 21%  speed 157 (slower)  incoming max 30%  certain 23%  threatened=True
+    foe moves est: Thunderbolt 30%, Earthpower 23%, Scald 21%, Heatwave 8%, Tailwind 0%, Protect 0%, Recover 0%, Protect 0%
+    * FAKEOUT -> Gastrodon             224  expected_damage+9 first_turn_hit+115 doubles_outcome_candidate+0
+      FAKEOUT -> Zapdos                224  expected_damage+9 first_turn_hit+115 doubles_outcome_candidate+0
+      KNOCKOFF -> Gastrodon            129  expected_damage+22 knocks_item+7 doubles_outcome_candidate+0
+      KNOCKOFF -> Zapdos               128  expected_damage+22 knocks_item+6 doubles_outcome_candidate+0
+      CLOSECOMBAT -> Gastrodon         102  expected_damage+42 self_stat_drop-40 doubles_outcome_candidate+0
+    Hariyama     used Fakeout        hit            Gastrodon -53
+    Zapdos       used Thunderbolt    could_not_move  [status=1 status_count=2]
+    Gastrodon    used Earthpower     could_not_move  [flinch=True]
+    Amoonguss    used Pollenpuff     hit            Gastrodon -67
+  end:     Reborn Zapdos 342/342 SLP | Portable Amoonguss 283/390 | Reborn Gastrodon 223/384 | Portable Hariyama 94/450
+
+Turn 16
+  Reborn    Zapdos 342/342 SLP       -> Thunderbolt -> Hariyama
+  Portable  Amoonguss 283/390        -> Pollenpuff -> Gastrodon
+  Reborn    Gastrodon 223/384        -> Scald -> Hariyama
+  Portable  Hariyama 94/450          -> Closecombat -> Gastrodon
+    Amoonguss plan score 376.3, joint adjustment -312.7
+    view: hp 73%  speed 117 (slower)  incoming max 44%  certain 33%  threatened=False
+    foe moves est: Heatwave 44%, Earthpower 33%, Thunderbolt 21%, Scald 15%, Tailwind 0%, Protect 0%, Recover 0%, Protect 0%
+    * POLLENPUFF -> Gastrodon          376  expected_damage+14 partner_heal_low_hp+262 doubles_outcome_candidate+0
+      POLLENPUFF -> Zapdos             325  expected_damage+7 resisted-45 partner_heal_low_hp+262 doubles_outcome_candidate+0
+      SPORE -> Gastrodon               125  fresh_status+25
+      RAGEPOWDER                       100
+      PROTECT                          100
+    Hariyama plan score 25.4, joint adjustment -312.7
+    view: hp 21%  speed 157 (slower)  incoming max 30%  certain 30%  threatened=True
+    foe moves est: Thunderbolt 30%, Earthpower 23%, Scald 21%, Heatwave 8%, Tailwind 0%, Protect 0%, Recover 0%, Protect 0%
+      KNOCKOFF -> Gastrodon             32  expected_damage+22 knocks_item+7 dead_before_moving-97 doubles_outcome_candidate+0
+      KNOCKOFF -> Zapdos                32  expected_damage+22 knocks_item+6 dead_before_moving-96 doubles_outcome_candidate+0
+    * CLOSECOMBAT -> Gastrodon          25  expected_damage+42 self_stat_drop-40 dead_before_moving-76 doubles_outcome_candidate+0
+      CLOSECOMBAT -> Zapdos              9  expected_damage+20 resisted-45 self_stat_drop-40 dead_before_moving-26 doubles_outcome_candidate+0
+      CLOSECOMBAT -> Amoonguss     -1000000  expected_damage+24 resisted-45 self_stat_drop-40
+    Zapdos       used Thunderbolt    hit            Hariyama -94 [status=1 status_count=1]
+    Gastrodon    used Scald          hit            Amoonguss -56 x0.5
+    Amoonguss    used Pollenpuff     hit            Gastrodon -70
+  end:     Reborn Zapdos 342/342 | Portable Amoonguss 227/390 | Reborn Gastrodon 177/384 | Portable Rhyperior 392/392
+
+Turn 17
+  Reborn    Zapdos 342/342           -> Tailwind
+  Portable  Amoonguss 227/390        -> Protect
+  Reborn    Gastrodon 177/384        -> Scald -> Rhyperior
+  Portable  Rhyperior 392/392        -> Protect
+    Amoonguss plan score 100.0, joint adjustment 0.0
+    view: hp 58%  speed 117 (slower)  incoming max 44%  certain 33%  threatened=False
+    foe moves est: Heatwave 44%, Earthpower 33%, Thunderbolt 21%, Scald 15%, Tailwind 0%, Protect 0%, Recover 0%, Protect 0%
+      SPORE -> Zapdos                  125  fresh_status+25
+      SPORE -> Gastrodon               125  fresh_status+25
+      RAGEPOWDER                       100
+    * PROTECT                          100
+      POLLENPUFF -> Gastrodon         -386  expected_damage+14 partner_heal_near_full-500 doubles_outcome_candidate+0
+    Rhyperior plan score 100.0, joint adjustment 0.0
+    view: hp 100%  speed 137 (slower)  incoming max 150%  certain 150%  threatened=True
+    foe moves est: Scald 150%, Earthpower 85%, Heatwave 14%, Thunderbolt 0%, Tailwind 0%, Protect 0%, Recover 0%, Protect 0%
+      switch->Reuniclus                212  matchup+64 entry_incoming_damage-20 switchin_race-5 escape_lethal_threat+130 entry_hazards+0 escape_reasons+1
+    * PROTECT                          100
+      ROCKSLIDE                         38  expected_damage+53 accuracy-3 spread_type_in_damage+0 dead_before_moving-113 doubles_outcome_candidate+0
+      MEGAHORN -> Gastrodon             32  expected_damage+31 accuracy-2 dead_before_moving-97 doubles_outcome_candidate+0
+      MEGAHORN -> Zapdos                17  expected_damage+15 accuracy-1 resisted-45 dead_before_moving-52 doubles_outcome_candidate+0
+    Rhyperior    used Protect        untargeted
+    Amoonguss    used Protect        untargeted
+    Zapdos       used Tailwind       untargeted
+    Gastrodon    used Scald          protected      Rhyperior 0
+  end:     Reborn Zapdos 342/342 | Portable Amoonguss 227/390 | Reborn Gastrodon 201/384 | Portable Rhyperior 392/392
+
+Turn 18
+  Reborn    Zapdos 342/342           -> Heatwave -> Rhyperior
+  Portable  Amoonguss 227/390        -> Spore -> Zapdos
+  Reborn    Gastrodon 201/384        -> Scald -> Rhyperior
+  Portable  Rhyperior 392/392        -> switch->Reuniclus
+    Amoonguss plan score 125.0, joint adjustment -348.9
+    view: hp 58%  speed 117 (slower)  incoming max 44%  certain 33%  threatened=False
+    foe moves est: Heatwave 44%, Earthpower 33%, Thunderbolt 21%, Scald 15%, Tailwind 0%, Protect 0%, Recover 0%, Protect 0%
+    * SPORE -> Zapdos                  125  fresh_status+25
+      SPORE -> Gastrodon               125  fresh_status+25
+      RAGEPOWDER                       100
+      PROTECT                          -40  repeated_protect-140
+      POLLENPUFF -> Gastrodon         -386  expected_damage+14 partner_heal_near_full-500 doubles_outcome_candidate+0
+    Rhyperior plan score 211.5, joint adjustment -348.9
+    view: hp 100%  speed 137 (slower)  incoming max 150%  certain 150%  threatened=True
+    foe moves est: Scald 150%, Earthpower 85%, Heatwave 14%, Thunderbolt 0%, Tailwind 0%, Protect 0%, Recover 0%, Protect 0%
+    * switch->Reuniclus                212  matchup+64 entry_incoming_damage-20 switchin_race-5 escape_lethal_threat+130 entry_hazards+0 escape_reasons+1
+      ROCKSLIDE                         38  expected_damage+53 accuracy-3 spread_type_in_damage+0 dead_before_moving-113 doubles_outcome_candidate+0
+      MEGAHORN -> Gastrodon             32  expected_damage+31 accuracy-2 dead_before_moving-97 doubles_outcome_candidate+0
+      MEGAHORN -> Zapdos                17  expected_damage+15 accuracy-1 resisted-45 dead_before_moving-52 doubles_outcome_candidate+0
+      EARTHQUAKE                         1  expected_damage+29 spread_type_in_damage+0 friendly_fire-126 dead_before_moving-2 doubles_outcome_candidate+0
+    Zapdos       used Heatwave       hit            Amoonguss -146 x2, Rhyperior -79
+    Gastrodon    used Scald          hit            Rhyperior -105
+    Amoonguss    used Spore          hit            Zapdos 0
+  end:     Reborn Zapdos 342/342 SLP | Portable Amoonguss 81/390 | Reborn Gastrodon 225/384 | Portable Reuniclus 65/382 BRN
+
+Turn 19
+  Reborn    Zapdos 342/342 SLP       -> Heatwave -> Reuniclus
+  Portable  Amoonguss 81/390         -> Protect
+  Reborn    Gastrodon 225/384        -> Earthpower -> Amoonguss
+  Portable  Reuniclus 65/382 BRN     -> Trickroom
+    Amoonguss plan score 100.0, joint adjustment -359.4
+    view: hp 21%  speed 117 (slower)  incoming max 44%  certain 33%  threatened=True
+    foe moves est: Heatwave 44%, Earthpower 33%, Thunderbolt 21%, Scald 15%, Tailwind 0%, Protect 0%, Recover 0%, Protect 0%
+      RAGEPOWDER                       100
+    * PROTECT                          100
+      POLLENPUFF -> Gastrodon           97  expected_damage+14 partner_heal_low_hp+274 dead_before_moving-291 doubles_outcome_candidate+0
+      POLLENPUFF -> Zapdos              84  expected_damage+7 resisted-45 partner_heal_low_hp+274 dead_before_moving-252 doubles_outcome_candidate+0
+      SPORE -> Gastrodon                31  fresh_status+25 dead_before_moving-94
+    Reuniclus plan score 64.0, joint adjustment -359.4
+    view: hp 17%  speed 117 (slower)  incoming max 41%  certain 32%  threatened=True
+    foe moves est: Thunderbolt 41%, Earthpower 32%, Scald 29%, Heatwave 21%, Tailwind 0%, Protect 0%, Recover 0%, Protect 0%
+    * TRICKROOM                         64  speed_control_value+156 dead_before_moving-192
+      PSYCHIC -> Zapdos                 32  expected_damage+29 secondary_drop+0 dead_before_moving-97 doubles_outcome_candidate+0
+      PSYCHIC -> Gastrodon              32  expected_damage+28 secondary_drop+0 dead_before_moving-96 doubles_outcome_candidate+0
+      FOCUSBLAST -> Gastrodon           30  expected_damage+25 accuracy-4 secondary_drop+0 dead_before_moving-91 doubles_outcome_candidate+0
+      FOCUSBLAST -> Zapdos              17  expected_damage+13 accuracy-2 resisted-45 secondary_drop+0 dead_before_moving-50 doubles_outcome_candidate+0
+    Amoonguss    used Protect        untargeted
+    Zapdos       used Heatwave       could_not_move  [status=1 status_count=4]
+    Gastrodon    used Earthpower     protected      Amoonguss 0
+    Reuniclus    used Trickroom      untargeted      [status=3 status_count=0]
+  end:     Reborn Zapdos 342/342 SLP | Portable Amoonguss 81/390 | Reborn Gastrodon 249/384 | Portable Reuniclus 65/382 BRN
+
+Turn 20
+  Reborn    Zapdos 342/342 SLP       -> Heatwave -> Reuniclus
+  Portable  Amoonguss 81/390         -> Pollenpuff -> Gastrodon
+  Reborn    Gastrodon 249/384        -> Scald -> Reuniclus
+  Portable  Reuniclus 65/382 BRN     -> Recover
+    Amoonguss plan score 387.9, joint adjustment -714.1
+    view: hp 21%  speed 117 (faster)  incoming max 44%  certain 33%  threatened=True
+    foe moves est: Heatwave 44%, Earthpower 33%, Thunderbolt 21%, Scald 15%, Tailwind 0%, Protect 0%, Recover 0%, Protect 0%
+    * POLLENPUFF -> Gastrodon          388  expected_damage+14 partner_heal_low_hp+274 doubles_outcome_candidate+0
+      POLLENPUFF -> Zapdos             336  expected_damage+7 resisted-45 partner_heal_low_hp+274 doubles_outcome_candidate+0
+      SPORE -> Gastrodon               125  fresh_status+25
+      RAGEPOWDER                       100
+      PROTECT                          -40  repeated_protect-140
+    Reuniclus plan score 524.0, joint adjustment -714.1
+    view: hp 17%  speed 117 (faster)  incoming max 41%  certain 32%  threatened=True
+    foe moves est: Thunderbolt 41%, Earthpower 32%, Scald 29%, Heatwave 21%, Tailwind 0%, Protect 0%, Recover 0%, Protect 0%
+    * RECOVER                          524  heal_low_hp+274 heal_saves_battler+150
+      PSYCHIC -> Zapdos                130  expected_damage+29 secondary_drop+0 doubles_outcome_candidate+0
+      PSYCHIC -> Gastrodon             128  expected_damage+28 secondary_drop+0 doubles_outcome_candidate+0
+      FOCUSBLAST -> Gastrodon          122  expected_damage+25 accuracy-4 secondary_drop+0 doubles_outcome_candidate+0
+      FOCUSBLAST -> Zapdos              66  expected_damage+13 accuracy-2 resisted-45 secondary_drop+0 doubles_outcome_candidate+0
+    Amoonguss    used Pollenpuff     hit            Gastrodon -69
+    Reuniclus    used Recover        untargeted     user +191 [status=3 status_count=0]
+    Gastrodon    used Scald          hit            Reuniclus -105
+    Zapdos       used Heatwave       could_not_move  [status=1 status_count=3]
+  end:     Reborn Zapdos 342/342 SLP | Portable Amoonguss 81/390 | Reborn Gastrodon 204/384 | Portable Reuniclus 151/382 BRN
+
+Turn 21
+  Reborn    Zapdos 342/342 SLP       -> Heatwave -> Reuniclus
+  Portable  Amoonguss 81/390         -> Protect
+  Reborn    Gastrodon 204/384        -> Recover
+  Portable  Reuniclus 151/382 BRN    -> Recover
+    Amoonguss plan score 100.0, joint adjustment -314.9
+    view: hp 21%  speed 117 (faster)  incoming max 44%  certain 33%  threatened=True
+    foe moves est: Heatwave 44%, Earthpower 33%, Thunderbolt 21%, Scald 15%, Tailwind 0%, Protect 0%, Recover 0%, Protect 0%
+      POLLENPUFF -> Gastrodon          204  expected_damage+14 partner_heal_mid_hp+90 doubles_outcome_candidate+0
+      POLLENPUFF -> Zapdos             152  expected_damage+7 resisted-45 partner_heal_mid_hp+90 doubles_outcome_candidate+0
+      SPORE -> Gastrodon               125  fresh_status+25
+      RAGEPOWDER                       100
+    * PROTECT                          100
+    Reuniclus plan score 340.0, joint adjustment -314.9
+    view: hp 40%  speed 117 (faster)  incoming max 41%  certain 32%  threatened=True
+    foe moves est: Thunderbolt 41%, Earthpower 32%, Scald 29%, Heatwave 21%, Tailwind 0%, Protect 0%, Recover 0%, Protect 0%
+    * RECOVER                          340  heal_mid_hp+90 heal_saves_battler+150
+      PSYCHIC -> Zapdos                130  expected_damage+29 secondary_drop+0 doubles_outcome_candidate+0
+      PSYCHIC -> Gastrodon             128  expected_damage+28 secondary_drop+0 doubles_outcome_candidate+0
+      FOCUSBLAST -> Gastrodon          122  expected_damage+25 accuracy-4 secondary_drop+0 doubles_outcome_candidate+0
+      FOCUSBLAST -> Zapdos              66  expected_damage+13 accuracy-2 resisted-45 secondary_drop+0 doubles_outcome_candidate+0
+    Amoonguss    used Protect        untargeted
+    Reuniclus    used Recover        untargeted     user +191 [status=3 status_count=0]
+    Gastrodon    used Recover        untargeted     user +180
+    Zapdos       used Heatwave       could_not_move  [status=1 status_count=2]
+  end:     Reborn Zapdos 342/342 SLP | Portable Amoonguss 81/390 | Reborn Gastrodon 384/384 | Portable Reuniclus 342/382 BRN
+
+Turn 22
+  Reborn    Zapdos 342/342 SLP       -> Heatwave -> Reuniclus
+  Portable  Amoonguss 81/390         -> Spore -> Gastrodon
+  Reborn    Gastrodon 384/384        -> Earthpower -> Amoonguss
+  Portable  Reuniclus 342/382 BRN    -> Psychic -> Zapdos
+    Amoonguss plan score 125.0, joint adjustment -378.3
+    view: hp 21%  speed 117 (faster)  incoming max 44%  certain 33%  threatened=True
+    foe moves est: Heatwave 44%, Earthpower 33%, Thunderbolt 21%, Scald 15%, Tailwind 0%, Protect 0%, Recover 0%, Protect 0%
+    * SPORE -> Gastrodon               125  fresh_status+25
+      RAGEPOWDER                       100
+      PROTECT                          -40  repeated_protect-140
+      POLLENPUFF -> Gastrodon         -386  expected_damage+14 partner_heal_near_full-500 doubles_outcome_candidate+0
+      POLLENPUFF -> Zapdos            -438  expected_damage+7 resisted-45 partner_heal_near_full-500 doubles_outcome_candidate+0
+    Reuniclus plan score 129.8, joint adjustment -378.3
+    view: hp 90%  speed 117 (faster)  incoming max 41%  certain 41%  threatened=False
+    foe moves est: Thunderbolt 41%, Earthpower 32%, Scald 29%, Heatwave 21%, Tailwind 0%, Protect 0%, Recover 0%, Protect 0%
+    * PSYCHIC -> Zapdos                130  expected_damage+29 secondary_drop+0 doubles_outcome_candidate+0
+      PSYCHIC -> Gastrodon             128  expected_damage+28 secondary_drop+0 doubles_outcome_candidate+0
+      FOCUSBLAST -> Gastrodon          122  expected_damage+25 accuracy-4 secondary_drop+0 doubles_outcome_candidate+0
+      FOCUSBLAST -> Zapdos              66  expected_damage+13 accuracy-2 resisted-45 secondary_drop+0 doubles_outcome_candidate+0
+      TRICKROOM                       -400  speed_control_redundant-500
+    Amoonguss    used Spore          hit            Gastrodon 0
+    Reuniclus    used Psychic        hit            Zapdos -149 [status=3 status_count=0]
+    Gastrodon    used Earthpower     could_not_move  [status=1 status_count=3]
+    Zapdos       used Heatwave       hit            Amoonguss -81 x2, Reuniclus -77 [status=1 status_count=1]
+  end:     Reborn Zapdos 214/342 | Portable Rhyperior 392/392 | Reborn Gastrodon 384/384 SLP | Portable Reuniclus 265/382 BRN
+
+Turn 23
+  Reborn    Zapdos 214/342           -> Protect
+  Portable  Rhyperior 392/392        -> Rockslide
+  Reborn    Gastrodon 384/384 SLP    -> Scald -> Rhyperior
+  Portable  Reuniclus 265/382 BRN    -> Psychic -> Zapdos
+    Rhyperior plan score 155.5, joint adjustment -222.9
+    view: hp 100%  speed 137 (faster)  incoming max 150%  certain 0%  threatened=True
+    foe moves est: Scald 150%, Earthpower 85%, Heatwave 14%, Thunderbolt 0%, Tailwind 0%, Protect 0%, Recover 0%, Protect 0%
+    * ROCKSLIDE                        155  expected_damage+53 accuracy-3 spread_type_in_damage+0 secondary_flinch+5 doubles_outcome_candidate+0
+      MEGAHORN -> Gastrodon            129  expected_damage+31 accuracy-2 doubles_outcome_candidate+0
+      PROTECT                          100
+      MEGAHORN -> Zapdos                69  expected_damage+15 accuracy-1 resisted-45 doubles_outcome_candidate+0
+      EARTHQUAKE                         7  expected_damage+29 spread_type_in_damage+0 friendly_fire-123 doubles_outcome_candidate+0
+    Reuniclus plan score 129.8, joint adjustment -222.9
+    view: hp 69%  speed 117 (faster)  incoming max 41%  certain 41%  threatened=False
+    foe moves est: Thunderbolt 41%, Earthpower 32%, Scald 29%, Heatwave 21%, Tailwind 0%, Protect 0%, Recover 0%, Protect 0%
+    * PSYCHIC -> Zapdos                130  expected_damage+29 secondary_drop+0 doubles_outcome_candidate+0
+      PSYCHIC -> Gastrodon             128  expected_damage+28 secondary_drop+0 doubles_outcome_candidate+0
+      FOCUSBLAST -> Gastrodon          122  expected_damage+25 accuracy-4 secondary_drop+0 doubles_outcome_candidate+0
+      FOCUSBLAST -> Zapdos              66  expected_damage+13 accuracy-2 resisted-45 secondary_drop+0 doubles_outcome_candidate+0
+      RECOVER                          -20  heal_losing_race-120
+    Zapdos       used Protect        untargeted
+    Reuniclus    used Psychic        protected      Zapdos 0 [status=3 status_count=0]
+    Gastrodon    used Scald          could_not_move  [status=1 status_count=2]
+    Rhyperior    used Rockslide      hit            Zapdos 0, Gastrodon -60 x0.5
+  end:     Reborn Zapdos 235/342 | Portable Rhyperior 392/392 | Reborn Gastrodon 348/384 SLP | Portable Reuniclus 265/382 BRN
+
+Turn 24
+  Reborn    Zapdos 235/342           -> Tailwind
+  Portable  Rhyperior 392/392        -> Protect
+  Reborn    Gastrodon 348/384 SLP    -> Scald -> Rhyperior
+  Portable  Reuniclus 265/382 BRN    -> Trickroom
+    Rhyperior plan score 100.0, joint adjustment -271.1
+    view: hp 100%  speed 137 (slower)  incoming max 150%  certain 150%  threatened=True
+    foe moves est: Scald 150%, Earthpower 85%, Heatwave 14%, Thunderbolt 0%, Tailwind 0%, Protect 0%, Recover 0%, Protect 0%
+    * PROTECT                          100
+      ROCKSLIDE                         38  expected_damage+53 accuracy-3 spread_type_in_damage+0 dead_before_moving-113 doubles_outcome_candidate+0
+      MEGAHORN -> Gastrodon             32  expected_damage+31 accuracy-2 dead_before_moving-97 doubles_outcome_candidate+0
+      MEGAHORN -> Zapdos                17  expected_damage+15 accuracy-1 resisted-45 dead_before_moving-52 doubles_outcome_candidate+0
+      EARTHQUAKE                         2  expected_damage+29 spread_type_in_damage+0 friendly_fire-123 dead_before_moving-5 doubles_outcome_candidate+0
+    Reuniclus plan score 256.0, joint adjustment -271.1
+    view: hp 69%  speed 117 (slower)  incoming max 41%  certain 41%  threatened=False
+    foe moves est: Thunderbolt 41%, Earthpower 32%, Scald 29%, Heatwave 21%, Tailwind 0%, Protect 0%, Recover 0%, Protect 0%
+    * TRICKROOM                        256  speed_control_value+156
+      PSYCHIC -> Gastrodon             128  expected_damage+28 secondary_drop+0 doubles_outcome_candidate+0
+      FOCUSBLAST -> Gastrodon          122  expected_damage+25 accuracy-4 secondary_drop+0 doubles_outcome_candidate+0
+      FOCUSBLAST -> Zapdos              66  expected_damage+13 accuracy-2 resisted-45 secondary_drop+0 doubles_outcome_candidate+0
+      RECOVER                          -20  heal_losing_race-120
+    Rhyperior    used Protect        untargeted
+    Zapdos       used Tailwind       untargeted
+    Gastrodon    used Scald          protected      Rhyperior 0 [status=1 status_count=1]
+    Reuniclus    used Trickroom      untargeted      [status=3 status_count=0]
+  end:     Reborn Zapdos 256/342 | Portable Rhyperior 392/392 | Reborn Gastrodon 372/384 | Portable Reuniclus 265/382 BRN
+
+Turn 25
+  Reborn    Zapdos 256/342           -> Protect
+  Portable  Rhyperior 392/392        -> Rockslide
+  Reborn    Gastrodon 372/384        -> Scald -> Rhyperior
+  Portable  Reuniclus 265/382 BRN    -> Psychic -> Zapdos
+    Rhyperior plan score 155.5, joint adjustment 63.7
+    view: hp 100%  speed 137 (faster)  incoming max 150%  certain 150%  threatened=True
+    foe moves est: Scald 150%, Earthpower 85%, Heatwave 14%, Thunderbolt 0%, Tailwind 0%, Protect 0%, Recover 0%, Protect 0%
+    * ROCKSLIDE                        155  expected_damage+53 accuracy-3 spread_type_in_damage+0 secondary_flinch+5 doubles_outcome_candidate+0
+      MEGAHORN -> Gastrodon            129  expected_damage+31 accuracy-2 doubles_outcome_candidate+0
+      MEGAHORN -> Zapdos                69  expected_damage+15 accuracy-1 resisted-45 doubles_outcome_candidate+0
+      EARTHQUAKE                         7  expected_damage+29 spread_type_in_damage+0 friendly_fire-123 doubles_outcome_candidate+0
+      PROTECT                          -40  repeated_protect-140
+    Reuniclus plan score 129.8, joint adjustment 63.7
+    view: hp 69%  speed 117 (faster)  incoming max 41%  certain 41%  threatened=False
+    foe moves est: Thunderbolt 41%, Earthpower 32%, Scald 29%, Heatwave 21%, Tailwind 0%, Protect 0%, Recover 0%, Protect 0%
+    * PSYCHIC -> Zapdos                130  expected_damage+29 secondary_drop+0 doubles_outcome_candidate+0
+      PSYCHIC -> Gastrodon             128  expected_damage+28 secondary_drop+0 doubles_outcome_candidate+0
+      FOCUSBLAST -> Gastrodon          122  expected_damage+25 accuracy-4 secondary_drop+0 doubles_outcome_candidate+0
+      FOCUSBLAST -> Zapdos              66  expected_damage+13 accuracy-2 resisted-45 secondary_drop+0 doubles_outcome_candidate+0
+      RECOVER                          -20  heal_losing_race-120
+    Zapdos       used Protect        untargeted
+    Reuniclus    used Psychic        protected      Zapdos 0 [status=3 status_count=0]
+    Rhyperior    used Rockslide      hit            Zapdos 0, Gastrodon -62 x0.5
+    Gastrodon    used Scald          hit            Rhyperior -392 x4
+  end:     Reborn Zapdos 277/342 | Reborn Gastrodon 334/384 | Portable Reuniclus 265/382 BRN
+
+Turn 26
+  Reborn    Zapdos 277/342           -> Thunderbolt -> Reuniclus
+  Reborn    Gastrodon 334/384        -> Protect
+  Portable  Reuniclus 265/382 BRN    -> Psychic -> Gastrodon
+    Reuniclus plan score 128.4, joint adjustment 0.0
+    view: hp 69%  speed 117 (faster)  incoming max 41%  certain 41%  threatened=False
+    foe moves est: Thunderbolt 41%, Earthpower 32%, Scald 29%, Heatwave 29%, Tailwind 0%, Protect 0%, Recover 0%, Protect 0%
+    * PSYCHIC -> Gastrodon             128  expected_damage+28 secondary_drop+0
+      FOCUSBLAST -> Gastrodon          122  expected_damage+25 accuracy-4 secondary_drop+0
+      FOCUSBLAST -> Zapdos              66  expected_damage+13 accuracy-2 resisted-45 secondary_drop+0
+      RECOVER                          -20  heal_losing_race-120
+      PSYCHIC -> Zapdos                -70  failed_last_turn-200 expected_damage+29 secondary_drop+0
+    Gastrodon    used Protect        untargeted
+    Reuniclus    used Psychic        protected      Gastrodon 0 [status=3 status_count=0]
+    Zapdos       used Thunderbolt    hit            Reuniclus -135
+  end:     Reborn Zapdos 298/342 | Reborn Gastrodon 358/384 | Portable Reuniclus 130/382 BRN
+
+Turn 27
+  Reborn    Zapdos 298/342           -> Thunderbolt -> Reuniclus
+  Reborn    Gastrodon 358/384        -> Earthpower -> Reuniclus
+  Portable  Reuniclus 130/382 BRN    -> Recover
+    Reuniclus plan score 472.9, joint adjustment 0.0
+    view: hp 34%  speed 117 (faster)  incoming max 41%  certain 41%  threatened=True
+    foe moves est: Thunderbolt 41%, Earthpower 32%, Scald 29%, Heatwave 29%, Tailwind 0%, Protect 0%, Recover 0%, Protect 0%
+    * RECOVER                          473  heal_low_hp+223 heal_saves_battler+150
+      PSYCHIC -> Zapdos                130  expected_damage+29 secondary_drop+0
+      FOCUSBLAST -> Gastrodon          122  expected_damage+25 accuracy-4 secondary_drop+0
+      FOCUSBLAST -> Zapdos              66  expected_damage+13 accuracy-2 resisted-45 secondary_drop+0
+      PSYCHIC -> Gastrodon             -72  failed_last_turn-200 expected_damage+28 secondary_drop+0
+    Reuniclus    used Recover        untargeted     user +191 [status=3 status_count=0]
+    Gastrodon    used Earthpower     hit            Reuniclus -114
+    Zapdos       used Thunderbolt    hit            Reuniclus -146
+  end:     Reborn Zapdos 319/342 | Reborn Gastrodon 382/384 | Portable Reuniclus 61/382 BRN
+
+Turn 28
+  Reborn    Zapdos 319/342           -> Thunderbolt -> Reuniclus
+  Reborn    Gastrodon 382/384        -> Earthpower -> Reuniclus
+  Portable  Reuniclus 61/382 BRN     -> Recover
+    Reuniclus plan score 327.1, joint adjustment 0.0
+    view: hp 16%  speed 117 (faster)  incoming max 41%  certain 41%  threatened=True
+    foe moves est: Thunderbolt 41%, Earthpower 32%, Scald 29%, Heatwave 29%, Tailwind 0%, Protect 0%, Recover 0%, Protect 0%
+    * RECOVER                          327  failed_last_turn-200 heal_low_hp+277 heal_saves_battler+150
+      PSYCHIC -> Zapdos                130  expected_damage+29 secondary_drop+0
+      PSYCHIC -> Gastrodon             128  expected_damage+28 secondary_drop+0
+      FOCUSBLAST -> Gastrodon          122  expected_damage+25 accuracy-4 secondary_drop+0
+      FOCUSBLAST -> Zapdos              66  expected_damage+13 accuracy-2 resisted-45 secondary_drop+0
+    Reuniclus    used Recover        untargeted     user +191 [status=3 status_count=0]
+    Gastrodon    used Earthpower     hit            Reuniclus -120
+    Zapdos       used Thunderbolt    hit            Reuniclus -132

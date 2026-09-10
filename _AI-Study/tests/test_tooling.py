@@ -310,6 +310,39 @@ class MatrixLinesTest(unittest.TestCase):
         self.assertIn("L 62%/?", lines[2])
 
 
+class LiveFoulPlayRenderTest(unittest.TestCase):
+    def test_live_entry_renders_like_the_full_battle_readout(self):
+        import contextlib
+        import io
+        import render_live_foul_play
+
+        entry = {
+            "battle_id": "demo", "portable_version": "0.8.1", "turn": 0,
+            "actor": 1, "type": "move", "slot": 0, "move_id": "PECK",
+            "score": 0.625,
+            "view": {
+                "species": "Vivillon", "hp_pct": 100, "speed": 42,
+                "faster": True, "incoming_damage_pct": 20,
+                "certain_incoming_damage_pct": 20, "threatened_lethal": False,
+                "targets": [{"index": 0, "species": "Gulliby", "hp_pct": 100}],
+                "race": {}, "matrix": {"own": [], "foe": []},
+            },
+            "foe": {"0": {"type": "move", "move_id": "AQUAJET"}},
+            "candidates": [{"type": "move", "slot": 0, "move_id": "PECK",
+                            "score": 3000, "search_visits": 3000,
+                            "reasons": [["foul_play_visits", 3000]]}],
+        }
+        stream = io.StringIO()
+        with contextlib.redirect_stdout(stream):
+            render_live_foul_play.render([entry])
+        text = stream.getvalue()
+        self.assertIn("Turn 0", text)
+        self.assertIn("Vivillon 100%  vs  Gulliby 100%", text)
+        self.assertIn("Gulliby -> AQUAJET", text)
+        self.assertIn("options considered:", text)
+        self.assertIn("foul_play_visits +3000", text)
+
+
 def _foul_play_doc():
     """One exported decision, shaped as FoulPlay.state_for writes it: Golurk facing
     Galvantula from the gen5ru_a roster, Golurk at +0 with a Substitute up."""
@@ -383,6 +416,9 @@ class FoulPlaySidecarTest(unittest.TestCase):
                          self.sidecar.species_id({"species": "LANDORUS", "form": 1}, self.ids, problems))
         self.assertEqual("CHARIZARDMEGAY",
                          self.sidecar.species_id({"species": "CHARIZARD", "form": 2, "mega": True}, self.ids, problems))
+        self.assertEqual("WINGULL", self.sidecar.species_id({"species": "GULLIBY"}, self.ids, problems))
+        self.assertEqual("SITRUSBERRY",
+                         self.sidecar.named("items", "ORANBERRY", self.ids, problems, "NONE"))
         self.assertEqual("HIDDENPOWERICE70",
                          self.sidecar.move_id({"id": "HIDDENPOWER", "hp_type": "ICE", "hp_power": 70}, self.ids, problems))
         self.assertEqual("HIDDENPOWERFIRE60",
@@ -430,6 +466,18 @@ class FoulPlaySidecarTest(unittest.TestCase):
         self.assertEqual(["move:0", "move:1", "move:2", "move:3", "switch:1"], labels,
                          "every option maps back to a slot the adapter can register")
         self.assertIn(best[0], labels)
+
+    def test_realidea_gulliby_and_oran_build_without_unknown_placeholders(self):
+        self._engine()
+        doc = _foul_play_doc()
+        mon = doc["side_one"]["pokemon"][0]
+        mon["species"] = "GULLIBY"
+        mon["item"] = "ORANBERRY"
+        problems = self.sidecar.Problems()
+        state = self.sidecar.build_state(doc, self.ids, problems)
+        self.assertEqual([], list(problems))
+        self.assertEqual("wingull", state.side_one.pokemon[0].id)
+        self.assertEqual("sitrusberry", state.side_one.pokemon[0].item)
 
     def test_damage_check_prices_both_directions_against_the_cells(self):
         self._engine()

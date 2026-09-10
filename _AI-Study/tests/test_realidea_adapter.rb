@@ -2179,6 +2179,7 @@ class PortableAIRealideaAdapterTest < Test::Unit::TestCase
     PortableAIRealidea::FoulPlay.timeout = 0.02
     Dir.chdir(foul_play_scratch) do
       Dir.mkdir("Data") if !File.exist?("Data")
+      File.open(PortableAIRealidea::FoulPlay::READY_FILE, "wb") { |file| file.write("ready\n") }
       File.delete(PortableAIRealidea::FoulPlay::LOG_FILE) if File.exist?(PortableAIRealidea::FoulPlay::LOG_FILE)
       plan = PortableAIRealidea.plan_for(battle)
       assert_equal(1, plan["actions"].length)
@@ -2188,7 +2189,24 @@ class PortableAIRealideaAdapterTest < Test::Unit::TestCase
       assert(!File.exist?(PortableAIRealidea::FoulPlay::STATE_FILE), "a stale state is not left for a later sidecar")
     end
   ensure
-    PortableAIRealidea::FoulPlay.timeout = 60.0
+    PortableAIRealidea::FoulPlay.timeout = 3.0
+    Dir.chdir(foul_play_scratch) do
+      File.delete(PortableAIRealidea::FoulPlay::READY_FILE) if File.exist?(PortableAIRealidea::FoulPlay::READY_FILE)
+    end
+  end
+
+  def test_foul_play_without_ready_sidecar_falls_through_without_a_handoff
+    battle = foul_play_battle
+    $PORTABLE_AI_CONFIG = { "foul_play" => true, "party_matrix" => true }
+    Dir.chdir(foul_play_scratch) do
+      Dir.mkdir("Data") if !File.exist?("Data")
+      File.delete(PortableAIRealidea::FoulPlay::READY_FILE) if File.exist?(PortableAIRealidea::FoulPlay::READY_FILE)
+      File.delete(PortableAIRealidea::FoulPlay::LOG_FILE) if File.exist?(PortableAIRealidea::FoulPlay::LOG_FILE)
+      plan = PortableAIRealidea.plan_for(battle)
+      assert_equal(1, plan["actions"].length)
+      assert_match(/sidecar not ready/, File.read(PortableAIRealidea::FoulPlay::LOG_FILE))
+      assert(!File.exist?(PortableAIRealidea::FoulPlay::STATE_FILE), "no request is written for an absent sidecar")
+    end
   end
 
   def test_foul_play_reads_a_reply_and_plans_with_it
@@ -2197,6 +2215,7 @@ class PortableAIRealideaAdapterTest < Test::Unit::TestCase
     PortableAIRealidea::FoulPlay.timeout = 5.0
     Dir.chdir(foul_play_scratch) do
       Dir.mkdir("Data") if !File.exist?("Data")
+      File.open(PortableAIRealidea::FoulPlay::READY_FILE, "wb") { |file| file.write("ready\n") }
       state_file = File.expand_path(PortableAIRealidea::FoulPlay::STATE_FILE)
       reply_file = File.expand_path(PortableAIRealidea::FoulPlay::REPLY_FILE)
       # A stand-in sidecar: answer only once the state has been written, the way the
@@ -2222,7 +2241,10 @@ class PortableAIRealideaAdapterTest < Test::Unit::TestCase
       File.delete(PortableAIRealidea::FoulPlay::STATE_FILE) if File.exist?(PortableAIRealidea::FoulPlay::STATE_FILE)
     end
   ensure
-    PortableAIRealidea::FoulPlay.timeout = 60.0
+    PortableAIRealidea::FoulPlay.timeout = 3.0
+    Dir.chdir(foul_play_scratch) do
+      File.delete(PortableAIRealidea::FoulPlay::READY_FILE) if File.exist?(PortableAIRealidea::FoulPlay::READY_FILE)
+    end
   end
 
   # ---- 0.8.1 live play ----------------------------------------------------------

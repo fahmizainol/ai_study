@@ -305,8 +305,15 @@ Intense. The three surrounding blocks all check `!pbOwnedByPlayer` — polarity 
 AI has shown *you*, feeding your UI in `PokeBattle_Scene.rb`. There is no equivalent array
 for your moves, and the AI references it **zero** times.
 
-**What it does not do:** read your current-turn choice. Exactly one `@choices[]` access in
-35,652 lines, and it is `@choices[1]` — its own side, checking whether it already used an item.
+**Current-turn information is read indirectly.** There is only one `@choices[]` access,
+but that misses the custom effect fields populated while the player chooses. The command
+loop processes slots 0, 2, 1, 3 and stores the exact player move in `SomethingCrazy`, its
+targets in `AttackingTarget`, item use in `UsingItem`, and switches in
+`Switching`/`SwitchingTo` (`PokeBattle_Battle.rb:5891-5917`, `:5940-5971`,
+`:5986-6003`). The AI consumes those fields at `PokeBattle_AI.rb:14939-14972`,
+`:29912-29943`, and `:30460-30494`. Rejuvenation therefore sees substantial player
+intent before choosing both enemy actions even though it rarely reads `@choices`
+directly.
 
 ### Reborn Yang — honest by default, and the best-calibrated cheater on Intense
 

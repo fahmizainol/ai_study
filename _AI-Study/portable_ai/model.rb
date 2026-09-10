@@ -25,6 +25,27 @@ module PortableAI
       "switching"     => true,
       "memory"        => true,
       "coordination"  => true,
+      # Per-target doubles outcome evaluator. The traced 60-battle sweep and its
+      # adversarial follow-up beat the matching control, so ship it for playtesting.
+      "doubles_outcomes" => true,
+      # Experimental opponent utility-response branch. Its first 60-battle sweep was
+      # weaker than attack-set weighting, so retain it for ablation but ship it off.
+      "opponent_utility" => false,
+      # Exact Fake Out flinch sequencing. Mechanically correct, but its first sweep
+      # regressed the doubles frame, so keep it independently measurable and off.
+      "fakeout_timeline" => false,
+      # Stage A adversarial doubles search: prune each actor to a small, diverse
+      # action set and prefer pairs that retain value across hostile responses.
+      "doubles_adversarial" => true,
+      # 0.8.0 doubles search prototype. It uses the singles search's measured root
+      # policy (half worst reply, half expected reply) and Foul Play's HP + alive
+      # leaf scale over a simultaneous four-action turn. Independently switchable
+      # from the earlier adversarial aggregation so the two can be paired.
+      "doubles_search" => false,
+      # Ablation for doubles_search: use Foul Play's HP + alive leaf scale. This is
+      # not coherent with the rule action terms yet and measured poorly, so the root
+      # opponent policy can now be tested without it.
+      "doubles_search_leaf" => false,
       "knowledge"     => "fair",
       # A voluntary switch must name an escape reason rather than merely outscoring
       # the available moves (Core.score_switch). Set false to restore the pre-0.3.0
@@ -90,6 +111,14 @@ module PortableAI
       # Doubles-only rules: partner absorbs, redirection, partner healing, and the
       # flatter value of priority when a second foe acts regardless.
       "format_rules"    => true,
+      # Joint doubles choices. Kept as separate switches so every interaction can be
+      # removed from a gauntlet run without rebuilding the bundle.
+      # These prototypes stay off until the Reborn doubles teardown and traced
+      # per-rule measurements establish the right predicates and weights.
+      "protect_spread_combo" => false,
+      "partner_support_combo" => false,
+      "redirect_setup_combo" => false,
+      "fakeout_speed_combo" => false,
 
       # 0.6.2 bugfix batch. Every one of these was READ OFF a turn-by-turn readout of
       # the 0.6.1 set_c run, not proposed from the source

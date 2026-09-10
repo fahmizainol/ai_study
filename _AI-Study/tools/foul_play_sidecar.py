@@ -39,8 +39,23 @@ IDS_FILE = STUDY / "generated" / "poke_engine_ids_gen6.json"
 
 STATE_NAME = "ai_foulplay_state.json"
 REPLY_NAME = "ai_foulplay_reply.txt"
+READY_NAME = "ai_foulplay_ready.txt"
 LOG_NAME = "ai_foulplay_log.txt"
 CHECK_NAME = "ai_foulplay_check.ndjson"
+
+# Realidea names that poke-engine cannot represent directly. Pokemon constructors
+# below still receive Realidea's exported stats, typing, ability, moves and weight;
+# the species surrogate only supplies a valid enum for mechanics keyed by identity.
+# Sitrus is the closest implemented healing berry to Oran at the early-game HP
+# totals where Realidea uses it (normally 8-10 HP rather than Oran's fixed 10).
+SPECIES_ALIASES = {
+    "GULLIBY": "WINGULL",
+    "SEAGHOUL": "PELIPPER",
+    "SAIGULL": "SWANNA",
+}
+NAMED_ALIASES = {
+    "items": {"ORANBERRY": "SITRUSBERRY"},
+}
 
 # Realidea's forme index -> the suffix poke-engine's PokemonName carries. The same
 # table showdown_names.py audits against the game (Realidea.FORME_TABLE), read in the
@@ -109,6 +124,7 @@ def species_id(mon, ids, problems):
             problems.add(f"species {base} form {form} has no poke-engine forme; using base")
     else:
         candidate = base
+    candidate = SPECIES_ALIASES.get(candidate, candidate)
     if candidate not in ids["pokemon"]:
         problems.add(f"species {candidate} unknown to poke-engine")
         return "NONE"
@@ -133,6 +149,7 @@ def move_id(entry, ids, problems):
 def named(kind, value, ids, problems, fallback):
     if not value:
         return fallback
+    value = NAMED_ALIASES.get(kind, {}).get(value, value)
     if value not in ids[kind]:
         problems.add(f"{kind[:-1] if kind.endswith('s') else kind} {value} unknown to poke-engine")
         return fallback
@@ -420,9 +437,17 @@ def serve(game_dir, iterations, check, keep_states=None, poll=0.004):
     data_dir = Path(game_dir) / "Data"
     state_path = data_dir / STATE_NAME
     reply_path = data_dir / REPLY_NAME
+    ready_path = data_dir / READY_NAME
     ids = load_ids()
     if keep_states:
         Path(keep_states).mkdir(parents=True, exist_ok=True)
+    # The adapter checks this before handing over a turn. It makes a failed launcher
+    # an immediate rules fallback instead of blocking the RGSS game loop.
+    try:
+        ready_path.unlink()
+    except FileNotFoundError:
+        pass
+    write_atomic(ready_path, f"pid={os.getpid()}\n")
     print(f"foul_play sidecar watching {state_path}", flush=True)
     decisions = 0
     while True:
