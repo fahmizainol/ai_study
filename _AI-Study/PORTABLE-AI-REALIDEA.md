@@ -179,6 +179,7 @@ Unit tests:
 ruby _AI-Study/tests/test_portable_ai.rb        # 213 tests
 ruby _AI-Study/tests/test_reborn_adapter.rb     # 53 tests
 ruby _AI-Study/tests/test_realidea_adapter.rb   # 129 tests
+ruby _AI-Study/tests/test_realidea_debug_presets.rb   # 26 tests
 python3 _AI-Study/tests/test_tooling.py
 python3 _AI-Study/tools/check_move_codes.py
 ```
@@ -221,7 +222,8 @@ Optional installed-playtest switches:
 
 - `Data/original_teams.txt` bypasses generated trainer-team overrides while retaining
   Portable/Foul Play AI.
-- `Data/debug_mode.txt` enables Realidea's built-in debug and Pokemon editor menus.
+- `Data/debug_mode.txt` enables Realidea's built-in debug and Pokemon editor menus,
+  including the stat presets and level-cap entry described below.
 - `Data/challenge_rules.txt` removes trainer bag items, forces Set style, and blocks the
   player's Bag in trainer battles. Held items and the wild-battle Bag remain available.
 - `Data/level_cap_mode.txt` selects `expert` (20/26/32/36/40/45/52/57/61) or
@@ -239,6 +241,69 @@ Champion event then unlocks level 100.
 Each switch is enabled by creating the named marker and disabled by deleting it. The
 corresponding adapter sections are `Team_Overrides.rb`, `Debug_Mode.rb`, and
 `Challenge_Rules.rb`.
+
+### Extra entries in the party debug menu
+
+`Debug_Mode.rb` also fronts `PokemonScreen#pbPokemonDebug` with a menu of its own.
+Choosing a party Pokemon's *Debug* entry now opens:
+
+| entry | effect |
+|---|---|
+| Debug menu | the stock 22-entry menu, unchanged |
+| Level up to cap (N) | raises the Pokemon to the cap in force, evolving it on the way |
+| Physical wall | 252 HP / 252 Def / 4 SpD, Bold |
+| Special wall | 252 HP / 4 Def / 252 SpD, Calm |
+| Physical sweeper | 4 HP / 252 Atk / 252 Spe, Jolly |
+| Special sweeper | 4 HP / 252 SpA / 252 Spe, Timid |
+| Physical tank | 252 HP / 252 Atk / 4 SpD, Adamant |
+| Special tank | 252 HP / 252 SpA / 4 SpD, Modest |
+| Mixed attacker | 4 HP / 128 Atk / 124 SpA / 252 Spe, Hasty |
+| Clear EVs and nature | zeroes the EVs and drops the nature override |
+
+The header line reprints the live level, nature and EV spread, so an action can be
+confirmed without leaving the menu. A preset writes EVs and forces a nature exactly as the
+stock *EV/IV/pID* and *Nature* entries do; `calcStats` preserves damage taken, so applying
+one never heals or faints. IVs are untouched -- adjust them, or the nature, through the
+stock menu afterwards.
+
+The level entry reads `RealideaLevelCap.current`, so it always agrees with the curve the
+EXP patch is enforcing: it follows `Data/level_cap_mode.txt`, the badge count, and the
+Champion markers, and reads 100 once the cap is lifted. A Pokemon already past the cap is
+never lowered. `Level_Cap.rb` is a separately installable section, so the entry is simply
+absent when it is not installed.
+
+The gain goes through `pbChangeLevel` (`116_PItem_Items.rb:296`) -- the routine a Rare
+Candy calls -- so the level-up message, the stat window, happiness and the evolution come
+from the engine rather than from this section. `pbChangeLevel` runs **one** evolution and
+`pbCheckEvolution` only ever reports the next stage, so a jump from level 5 to a
+mid-game cap would otherwise stop one stage short; the entry keeps checking until the
+chain reports nothing, bounded at `EVOLUTION_STEP_LIMIT` because bad PBS data can describe
+a species that evolves into itself.
+
+`pbChangeLevel` teaches only the moves learned *at* the level reached, so a large jump
+skips the moves in between. The stock *Moves* menu's **Reset movelist** entry
+(`pkmn.resetMoves`) gives the Pokemon the moveset its new level would have; it is left
+manual so the entry cannot silently destroy a moveset set up by hand.
+
+The stock menu builds its command list as a literal inside the method, so these entries
+are added by aliasing `pbPokemonDebug` rather than by reproducing its 380-line body: the
+one cost is a keypress to reach the stock menu, and no game code is duplicated. Install
+with:
+
+```bash
+python3 _AI-Study/tools/pack_rxdata.py \
+  --insert "Realidea V4.1/Data/Scripts.rxdata" \
+  --script _AI-Study/adapters/realidea/Debug_Mode.rb \
+  --name Debug_Mode --before Main --upsert \
+  --out "Realidea V4.1/Data/Scripts.rxdata"
+```
+
+`ruby _AI-Study/tests/test_realidea_debug_presets.rb` covers the table (every spread legal
+under `EVLIMIT`/`EVSTATLIMIT`, Speed at PBStats index 3 rather than last), the apply path,
+the level entry (delegating to `pbChangeLevel`, evolving a multi-stage chain all the way,
+bounded against a self-referential one, clamped into the range `level=` accepts, absent
+without `Level_Cap`, and the preset slots still resolving once it shifts them), and the
+menu wiring.
 
 ## Measured result
 
