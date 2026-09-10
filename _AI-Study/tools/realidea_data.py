@@ -21,7 +21,7 @@ def species():
     """{INTERNALNAME: {types, base_stats(list of 6, PBS order), bst, abilities,
     hidden_ability, learnset [(level, MOVE)...], evolutions [(child, method, param)]}}"""
     out, cur = {}, None
-    for line in open(os.path.join(PBS, "pokemon.txt"), encoding="utf-8", errors="replace"):
+    for line in open(os.path.join(PBS, "pokemon.txt"), encoding="utf-8-sig", errors="replace"):
         line = line.strip()
         if line.startswith("InternalName="):
             cur = line.split("=", 1)[1]
@@ -85,9 +85,16 @@ def min_level():
 
 @lru_cache(maxsize=1)
 def moves():
-    """{INTERNALNAME: {type, category, power, accuracy}}"""
+    """{INTERNALNAME: {type, category, power, accuracy}}
+
+    Read as utf-8-sig: every PBS csv Realidea ships carries a UTF-8 BOM, and plain
+    utf-8 leaves it glued to the first field so row 1 fails the isdigit() guard and
+    disappears. Row 1 of moves.txt is MEGAHORN and row 1 of items.txt is REPEL --
+    learnable() would report Megahorn legal (it is in learnsets and TM lists) while
+    moves() denied it existed, which crashed set-building and made validate_team.py
+    reject it as "not in moves.txt"."""
     out = {}
-    for line in open(os.path.join(PBS, "moves.txt"), encoding="utf-8", errors="replace"):
+    for line in open(os.path.join(PBS, "moves.txt"), encoding="utf-8-sig", errors="replace"):
         f = line.split(",")
         if len(f) > 8 and f[0].isdigit():
             out[f[1]] = {"type": f[5], "category": f[6],
@@ -99,7 +106,7 @@ def moves():
 @lru_cache(maxsize=1)
 def items():
     out = set()
-    for line in open(os.path.join(PBS, "items.txt"), encoding="utf-8", errors="replace"):
+    for line in open(os.path.join(PBS, "items.txt"), encoding="utf-8-sig", errors="replace"):
         f = line.split(",")
         if len(f) > 2 and f[0].isdigit():
             out.add(f[1])

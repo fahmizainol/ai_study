@@ -1,0 +1,43 @@
+@smogon/sets — published competitive movesets, the set corpus for the boss generator
+(tools/smogon_corpus.py, tools/generate_bosses.py).
+
+Source   : https://play.pokemonshowdown.com/data/sets/gen{6,7,8,9}.json
+Package  : https://www.npmjs.com/package/@smogon/sets
+Fetched  : 2026-09-10
+Included : gen6.json, gen7.json, gen8.json, gen9.json, plus upstream LICENSE and
+           README.md verbatim.
+
+LICENSING -- READ BEFORE ANY DISTRIBUTABLE BUILD
+------------------------------------------------
+Each generation file carries two independent set sources, on different terms
+(upstream README.md, vendored here):
+
+  "stats" : generated from Pokemon Showdown ladder usage. MIT licensed.
+  "dex"   : transcribed from Smogon.com's written analyses. COPYRIGHT Smogon.com and
+            its contributors; upstream states you "must first receive permission from
+            Smogon.com before using sets from this data source in your application."
+
+The generator reads BOTH and prefers `dex`, because dex sets are hand-built by
+analysis writers and read as deliberate team-building in a way ladder aggregates do
+not. That choice was made explicitly for a PRIVATE mod, where nothing is distributed.
+
+tools/smogon_corpus.py therefore keeps a `--stats-only` switch that drops the `dex`
+half of the corpus. Any build of Realidea that leaves this machine must use it, or
+must carry Smogon's permission. This is a licensing constraint, not a quality one --
+stats-only output is measurably weaker, and that is the trade being made: mean
+absolute deviation from the eBST curve goes from 1.7 BST to 17.9, and every mega
+disappears from all nine boss teams, because mega sets live almost entirely in the
+`dex` half.
+
+What the generator reads
+------------------------
+moves, item, ability, nature, evs. Sets are filtered against Realidea's own PBS on
+the way in: a move the species cannot learn at the capped level is dropped, and any
+Z-crystal item is dropped outright because Realidea's engine has no Z-move support.
+
+Gen 8 and gen 9 are included only for their National Dex / Ubers / Anything Goes
+formats, which cover gen-7-legal mons that gen-7 tiers do not reach. Their own-gen
+formats are skipped -- they assume mechanics (Dynamax, Tera) this engine lacks.
+
+Vendored rather than fetched at build time so team generation stays offline and
+reproducible, matching the rest of the study.

@@ -1,0 +1,41 @@
+Smogon monthly moveset statistics — teammate correlation for the boss generator
+(tools/smogon_corpus.py, tools/generate_bosses.py).
+
+Source   : https://www.smogon.com/stats/2019-06/moveset/<format>-<rating>.txt
+Index    : https://www.smogon.com/stats/
+Fetched  : 2026-09-10
+Snapshot : 2019-06 (the last month with a full gen-7 ladder across all six tiers)
+
+  gen7ou.txt      2019-06/1825   738437 bytes
+  gen7uu.txt      2019-06/1760   649326 bytes
+  gen7ru.txt      2019-06/1760   605924 bytes
+  gen7nu.txt      2019-06/1760   564358 bytes
+  gen7pu.txt      2019-06/1760   705140 bytes
+  gen7ubers.txt   2019-06/1760   677050 bytes
+
+OU uses the 1825 cutoff (its highest published band); the other five tiers publish
+1760 as their top band. Higher cutoffs mean stronger ladder players, so the teammate
+correlations reflect considered team-building rather than ladder noise.
+
+Gen 7 only, and deliberately: Realidea V4.1 is a gen-7-era Essentials v16 game, so
+gen-8/9 correlations would reference mons, moves and mechanics the engine does not
+have. The 2019-06 snapshot post-dates USUM's final tier shifts.
+
+What the generator actually reads
+--------------------------------
+Only the "Teammates" block of each species entry, used to score off-theme picks
+(TEAM-DESIGN.md §6.5). The parser also reads Abilities/Items/Spreads/Moves and
+"Checks and Counters" so the whole file round-trips, but nothing downstream keys on
+them yet.
+
+"Checks and Counters" is sparse on purpose: Smogon only publishes that block above a
+usage threshold, so all of gen7ou carries just 75 counter lines. That is upstream
+behaviour, not a parse failure.
+
+Licence: Smogon publishes these usage statistics openly; they are generated from
+ladder play on the official Pokemon Showdown server rather than authored analysis
+prose, and carry no separate copyright notice (unlike the `dex` sets in
+extracted/smogon-sets/, which do -- see that manifest).
+
+Vendored rather than fetched at build time so team generation stays offline and
+reproducible, matching the rest of the study.

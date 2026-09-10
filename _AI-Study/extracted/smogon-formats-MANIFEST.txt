@@ -1,0 +1,30 @@
+Pokemon Showdown formats-data — the authoritative competitive tier of every species
+(tools/smogon_corpus.py).
+
+Source   : https://raw.githubusercontent.com/smogon/pokemon-showdown/master/data/mods/gen7/formats-data.ts
+           https://raw.githubusercontent.com/smogon/pokemon-showdown/master/data/mods/gen6/formats-data.ts
+Fetched  : 2026-09-10
+Licence  : MIT (pokemon-showdown), https://github.com/smogon/pokemon-showdown/blob/master/LICENSE
+
+  gen7-formats-data.ts   45228 bytes   -- the tier source the generator uses
+  gen6-formats-data.ts   37518 bytes   -- kept for cross-checking gen-6 mons only
+
+Why this file and not an inferred signal
+----------------------------------------
+Tier is a far better strength signal than BST -- Slaking is 670 BST and ZU, Azumarill
+is 410 and OU -- so the generator gates picks on tier, and the tier had better be
+right. Deriving it from usage statistics or from which sets exist in a format gets it
+wrong: an inferred read put Wobbuffet in Ubers (it is banned FROM Ubers by the Shadow
+Tag clause, so it appears in Ubers-adjacent data), when its actual `tier:` field is
+ZU. BOSS-CURVE.md's original read was correct and the inferred one was not.
+
+`tier:` in this file is the value Showdown itself enforces, so it is the one used.
+
+The `doublesTier` and `isNonstandard` fields are present in the file but unread:
+Realidea's boss battles are singles, and Realidea's own PBS is the authority on what
+exists in this game (a mon absent from Realidea's pokemon.txt can never be picked,
+whatever Showdown says about it).
+
+Gen 7 is the match for Realidea V4.1 (Essentials v16, gen-7 dex, no Z-move engine).
+Gen 6 is vendored alongside because the set corpus in extracted/smogon-sets/ spans
+gen 6-9 and gen-6 sets are used for mons whose gen-7 entry is thin.

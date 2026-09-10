@@ -425,6 +425,102 @@ byte-identical: fully diffable, fully revertible, one injection point.
 
 ---
 
+### 6.6 Boss generation (`tools/generate_bosses.py`)
+
+The nine gym/champion teams are generated, not hand-written. Difficulty comes from
+**real species power**, never from EVs: every set stays inside the legal 510 budget,
+`cheat_tier` is false on all nine, and the eBST target is hit by picking stronger
+Pokemon rather than by inflating weaker ones.
+
+Four inputs decide each team.
+
+**Target eBST** — Reborn Yang Intense's measured ladder (BOSS-CURVE.md §2) linearly
+stretched so the Champion lands on 600:
+
+| badge | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | champ |
+|---|---|---|---|---|---|---|---|---|---|
+| target | 397 | 487 | 504 | 551 | 525 | 583 | 593 | 597 | 600 |
+| achieved | 397 | 487 | 504 | 552 | 525 | 570 | 593 | 596 | 600 |
+
+Mean absolute deviation **1.7 BST**; eight of the nine land within 1. The dip at badge 5 is Reborn's own shape — its
+Shelly (487) outweighs its Shade (472) — and is kept deliberately.
+
+**Level** — Realidea's cap remapped onto the active Unbound expert curve through a
+piecewise-linear fit anchored on the boss ladder, so every boss meets the player at
+cap parity. This is load-bearing: unremapped, the player fights every boss 6-10 levels
+over-levelled, and closing that with BST alone would need +378 BST at gym 1 — more
+than Reborn's entire nine-badge climb (+119).
+
+**Theme** — the leader's type as a **minimum of four** of six slots, not a maximum.
+The other one or two must earn the slot: either ≥25% Smogon co-occurrence with the
+on-theme core, or a resistance to what the theme is weak to. Ungated, correlation
+alone drags in mons that merely share a metagame.
+
+**Sets** — published Smogon sets (`extracted/smogon-sets/`), intersected with what the
+species can actually learn at the capped level, with evolution-family inheritance for
+NFE mids (Dewpider inherits Araquanid's, Paras inherits Parasect's). 51 of 54 mons get
+a published set; the other three fall back to a ranked generated set with a reserved
+support slot. Z-crystals are dropped outright — Realidea has no Z-move engine.
+
+Four rules earned by output that was visibly wrong without them:
+
+- **The BST band is asymmetric.** Kept originals get a floor *and* a ceiling;
+  generated picks get only the floor. A generated pick is already chosen against the
+  running deficit, which steers the mean onto target, so a ceiling on top of that just
+  starves the late game — it locks every Uber out of the Champion. A kept original has
+  no such correction: Bay's Slaking (670) alone pushes gym 8 forty BST over target.
+- **Capped roles.** One hazard setter, one remover, one mega, one weather. Uncapped,
+  incidental duplicates pile up — three Stealth Rock setters on one champion team.
+  Where every published set for a kept mon carries the move anyway (Steelix and Aggron
+  both do), the later holder trades it for its best other legal move.
+- **Nothing before gym 4 is gear the player cannot hold.** Ciudad Anatasa, gym 4's
+  town, is the planned unlock point for strong items and mega stones (backlog). Until
+  then a boss carries only berries and the 17 type-boost items, intersected with
+  `generated/realidea_item_sources.json` so even that pool is provably reachable. A
+  published set whose item falls outside the pool is still used — the moveset is the
+  valuable part — with the item swapped for the type-boost item matching its best
+  STAB, or a Sitrus Berry. Gyms 1-3 came out on Silver Powder / Eviolite / Berry
+  Juice / Mystic Water / Chople Berry, and hit their targets exactly.
+- **Mega evolution is gated by the engine, not by taste.** Realidea commented out the
+  stock Mega Ring check in `pbCanMegaEvolve?` and replaced it with
+  `$game_switches[512]==false && $game_switches[234]==false`. Switch 512 is set once,
+  by Simon's "Sistema Realidea" event on Map333 / Ruta 13 — whose own trainers are
+  level 38, i.e. gym 5's cap and under gym 6's 40. (Switch 234 is a temporary
+  per-venue enable, toggled on and back off inside the Battle Arena; the `MEGARING`
+  item exists in `items.txt` but is never granted anywhere and is vestigial.) The
+  check sits *above* the ownership test, so it gates trainers exactly as it gates the
+  player. Gyms 1-5 therefore field no stones at all: before Ruta 13 a stone is an
+  inert held item that costs its holder a real item and credits the team 100 eBST it
+  never receives — each of those five was ~16 BST under its target before this was
+  found. `UNLOCK_STAGE = 3` therefore assumes switch 512's set moves to Ciudad
+  Anatasa; until it does, the megas at gyms 4-5 will not fire.
+- **A dev original whose evolution fits is evolved, not dropped.** Aimi's Marill is
+  250 BST against a 392 floor, but Azumarill is 410, `(OU)`, and evolves at 18.
+  Cheapest qualifying evolution, not strongest — the point is to rescue the dev's
+  line with the least deviation. Three of the twenty band-failures recover this way
+  (Marill→Azumarill, Poliwhirl→Poliwrath, Piloswine→Mamoswine); the rest have nowhere
+  to go.
+- **Mega is +100 BST, and only while unspent.** Realidea keeps mega stats in
+  `MultipleForms.rb`, not `pokemon.txt`, so a base species' PBS BST understates a
+  stone holder by exactly 100 — every mega and both primals, without exception. Once
+  the one-mega budget is spent (or the stage predates Ruta 13), a Camerupt is a 460
+  again, and ranking it as a 560 skews every later pick. Stones are matched to owners
+  by longest common prefix, tie-broken toward the name that *is* the stem: breaking
+  ties by nearness to the stone's length hands `PIDGEOTITE` to Pidgeotto.
+- **The target governs every slot.** Ranking off-theme candidates by correlation
+  first, with the target as a tiebreak, put a 600 Jirachi and a mega Lucario on the
+  level-20 first gym. Correlation and coverage decide who is *eligible*; the target
+  decides who gets the slot.
+
+Tier progression falls out of this rather than being scheduled: gym 1 is entirely PU
+or below, the middle gyms mix RU/UU/OU, and Ubers appear at gym 8 and the Champion.
+
+**Licensing.** The generator reads both halves of the Smogon set corpus and prefers
+`dex`, whose sets are Smogon-copyrighted (see `extracted/smogon-sets-MANIFEST.txt`).
+That is a deliberate choice for a **private** mod. `--stats-only` drops them for any
+distributable build; the measured cost is MAD 1.7 → 17.9 BST and the loss of every
+mega, since mega sets live almost entirely in the `dex` half.
+
 ## 7. Files
 
 | file | what |
@@ -440,6 +536,14 @@ byte-identical: fully diffable, fully revertible, one injection point.
 | `tools/emit_registry.py` | teams JSON → `Team_Overrides.rb` (Ruby 1.8, fail-safe fallback) |
 | `generated/teams_boss.json` / `teams_filler.json` | canonical team data (validator-clean) |
 | `adapters/realidea/Team_Overrides.rb` | the injected section: registry + `createTrainer` patch |
+| `tools/extract_item_sources.py` | where the player can obtain each item: map events, marts, wild-held, Pickup, berry plants |
+| `generated/realidea_item_sources.json` | 304 obtainable items; 426 in `items.txt` with no route at all |
+| `tools/smogon_corpus.py` | tiers + published sets + teammate correlation (three vendored corpora) |
+| `tools/generate_bosses.py` | §6.6 boss generator: eBST curve → nine validated gym teams |
+| `generated/teams_bosses_gyms.json` | the nine generated boss teams (validator-clean, slack 0) |
+| `extracted/smogon-sets/` | `@smogon/sets` gen 6-9 — set corpus (**`dex` half is copyrighted**) |
+| `extracted/smogon-stats/` | Smogon 2019-06 gen-7 moveset stats — teammate correlation |
+| `extracted/smogon-formats/` | Showdown `formats-data.ts` — the authoritative competitive tier |
 | `tools/boss_curve.py` | §3 remeasured: BST, EV→BST conversion, level-cap alignment |
 | `BOSS-CURVE.md` | the boss power curve in effective BST — where the EV cheat starts |
 
