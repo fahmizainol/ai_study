@@ -68,6 +68,17 @@ Realidea quirks that matter later:
 
 ## 3. Boss ladder, side by side
 
+> **Two corrections to this section, 2026-09-10** (see `BOSS-CURVE.md` for the
+> measurement). (a) The badge numbering below is wrong from badge 13 on: Terra's fight
+> is keyed under the name `T3RR4` and was missed, dropping a slot, and Titania was
+> skipped too. The correct order, monotone in Normal ace level, is 13 Charlotte (72) →
+> 14 Terra (75) → 15 Ciel (78) → 16 Adrienn (81) → 17 Titania (90) → 18 Amaria (92) →
+> 19 Hardy (95) → Saphira (100). Kiki (`class Sensei`, badge 6) is missing from the
+> Intense table. (b) The `avg EV total` column understates the late game: converted
+> into base stats at the true rate of 8 EV = 1 BST point, Reborn's boss curve does not
+> plateau at all — it climbs from 397 to 697 effective BST, and the switchover from
+> species-based to EV-based difficulty happens at exactly badge 8.
+
 Reborn (Yang, Normal mode, `pid 0` story fights; n = party size):
 
 | badge | leader | n | levels | items | 4 custom moves | avg IV | avg EV total | hidden abil. |
@@ -429,6 +440,8 @@ byte-identical: fully diffable, fully revertible, one injection point.
 | `tools/emit_registry.py` | teams JSON → `Team_Overrides.rb` (Ruby 1.8, fail-safe fallback) |
 | `generated/teams_boss.json` / `teams_filler.json` | canonical team data (validator-clean) |
 | `adapters/realidea/Team_Overrides.rb` | the injected section: registry + `createTrainer` patch |
+| `tools/boss_curve.py` | §3 remeasured: BST, EV→BST conversion, level-cap alignment |
+| `BOSS-CURVE.md` | the boss power curve in effective BST — where the EV cheat starts |
 
 Deployment state (2026-09-09): the KEEP-ORIGINAL rework of 2026-09-04 is now the
 installed generation. It had been generated but never injected, so from 2026-09-04 to

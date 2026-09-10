@@ -8,7 +8,7 @@ The study has two phases, and they are still both live:
 
 - **Phase 1 — teardown.** Read every game's AI out of its shipped build and write down
   what it actually does. Static analysis only, no playtesting. → `ANALYSIS.md`,
-  `AI-PORTABILITY.md`, `TEAM-DESIGN.md`.
+  `AI-PORTABILITY.md`, `TEAM-DESIGN.md`, `BOSS-CURVE.md`.
 - **Phase 2 — build and measure.** One engine-independent core (`portable_ai/`) plus a
   thin per-game adapter, installed into a real game, then measured against that game's
   own AI in its own engine. → `SIM-SPEC.md` (the method), `PORTABLE-AI-REBORN.md` (the
@@ -69,6 +69,7 @@ _AI-Study/
 ├── AI-PORTABILITY.md              engine census + the core/adapter contract (§4)
 ├── SIM-SPEC.md                    the probe/corpus/differential method
 ├── TEAM-DESIGN.md                 trainer team composition + LLM team-generation spec
+├── BOSS-CURVE.md                  Reborn's boss power curve in effective BST (EV cheat → BST)
 ├── PORTABLE-AI-REBORN.md          THE working log: every version, every measurement, the backlog
 ├── PORTABLE-AI-REALIDEA.md        the v16 adapter: probe, tier gauntlet, mega evolution
 ├── PORTABLE-AI-DIAGNOSIS.md       0.3.2 → 0.4 gap analysis — history, numbers superseded

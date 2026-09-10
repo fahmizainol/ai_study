@@ -106,10 +106,13 @@ class MarshalReader:
                 k = self.parse()
                 o[str(k)] = self.parse()
             return o
-        if t == 'u':                       # userdef (Table, Tone, ...) — skipped
-            self.parse()
-            self.i += self.long()
-            return None
+        if t == 'u':                       # userdef (Table, Tone, ...) — payload skipped
+            self.parse()                   # class name
+            n = self.long()                # NOTE: read the length BEFORE advancing —
+            self.i += n                    # `self.i += self.long()` loses a byte.
+            o = None
+            self.objs.append(o)            # userdefs occupy an object-table slot
+            return o
         raise ValueError(f"unhandled Marshal type {t!r} at offset {self.i}")
 
 
