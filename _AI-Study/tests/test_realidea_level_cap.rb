@@ -52,6 +52,17 @@ class RealideaLevelCapTest < Test::Unit::TestCase
     assert_equal(100, RealideaLevelCap.current)
   end
 
+  def test_original_team_mode_disables_the_cap
+    $Trainer.numbadges = 0
+    Dir.mktmpdir do |directory|
+      Dir.mkdir(File.join(directory, "Data"))
+      File.open(File.join(directory, "Data", "original_teams.txt"), "wb") do |file|
+        file.write("enabled\n")
+      end
+      Dir.chdir(directory) { assert_equal(100, RealideaLevelCap.current) }
+    end
+  end
+
   def test_champion_stage_uses_selected_mode_cap
     $Trainer.numbadges = 8
     Dir.mktmpdir do |directory|

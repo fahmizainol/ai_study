@@ -464,6 +464,8 @@ filler overrides) and `Level_Cap` (`adapters/realidea/Level_Cap.rb`). The active
 Pokemon Unbound Expert curve is 20/26/32/36/40/45/52/57/61 for badge counts
 0-8. A Pokemon already at or above the active cap gains
 exactly 1 EXP per battle award; EVs and non-battle experience sources are unchanged.
+The cap applies only while edited team overrides are active; `Data/original_teams.txt`
+restores both the original rosters and uncapped progression.
 After badge 8, `Data/champion_level_cap.txt` advances the cap to 75 on Expert or
 66 on Vanilla. The Champion event unlocks level 100. `Data/level_cap_mode.txt` can
 select the retained Vanilla curve with the value `vanilla`. All original

@@ -229,10 +229,12 @@ Optional installed-playtest switches:
 - `Data/champion_level_cap.txt` advances the badge-8 cap to the Champion value:
   75 on Expert or 66 on Vanilla.
 
-`Level_Cap` is always active. The selected curve supplies the cap for badge counts 0
-through 8. Pokemon at or above the cap receive exactly 1 battle EXP. The installed
-Champion-stage marker activates the screenshot's final 75/66 cap after badge 8;
-defeating the current final Champion event then unlocks level 100.
+`Level_Cap` follows the team mode. It applies the selected curve while generated team
+overrides are active; `Data/original_teams.txt` restores the original teams and disables
+the cap. The selected curve supplies the cap for badge counts 0 through 8. Pokemon at
+or above the cap receive exactly 1 battle EXP. The installed Champion-stage marker
+activates the screenshot's final 75/66 cap after badge 8; defeating the current final
+Champion event then unlocks level 100.
 
 Each switch is enabled by creating the named marker and disabled by deleting it. The
 corresponding adapter sections are `Team_Overrides.rb`, `Debug_Mode.rb`, and

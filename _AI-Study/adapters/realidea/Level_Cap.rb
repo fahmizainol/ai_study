@@ -17,6 +17,7 @@ module RealideaLevelCap
   CHAMPION_CAP_BY_MODE = { "vanilla" => 66, "expert" => 75 }
   DEFAULT_MODE = "expert"
   MODE_FILE = "Data/level_cap_mode.txt"
+  ORIGINAL_TEAMS_FILE = "Data/original_teams.txt"
   CHAMPION_STAGE_FILE = "Data/champion_level_cap.txt"
   CHAMPION_SELF_SWITCH = [156, 14, "A"]
 
@@ -47,8 +48,15 @@ module RealideaLevelCap
     return false
   end
 
+  def self.edited_teams?
+    return !File.exist?(ORIGINAL_TEAMS_FILE)
+  rescue
+    return true
+  end
+
   def self.current
     return 100 if champion_defeated?
+    return 100 if !edited_teams?
     badges = 0
     badges = $Trainer.numbadges if $Trainer && $Trainer.respond_to?("numbadges")
     badges = 0 if badges < 0
