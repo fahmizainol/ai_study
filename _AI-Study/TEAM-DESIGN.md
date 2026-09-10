@@ -447,10 +447,13 @@ runtime proof that the stripped section is the one that loaded. Backup:
 
 Deployment state (2026-09-03): two sections injected into Realidea's
 `Data/Scripts.rxdata` before `Main` — `Team_Overrides` (gym-1 team + 101 deduped
-filler overrides) and `Level_Cap` (`adapters/realidea/Level_Cap.rb`,
-Reborn-style obedience cap: the `isForeign?` gate removed so *all* overleveled
-mons disobey; badge table retuned to ~2 above each gym's ace —
-16/22/28/35/40/42/47/50, then 65 after badge 8 for the postgame). All original
+filler overrides) and `Level_Cap` (`adapters/realidea/Level_Cap.rb`). The active
+Pokemon Unbound Expert curve is 20/26/32/36/40/45/52/57/61 for badge counts
+0-8. A Pokemon already at or above the active cap gains
+exactly 1 EXP per battle award; EVs and non-battle experience sources are unchanged.
+After badge 8, `Data/champion_level_cap.txt` advances the cap to 75 on Expert or
+66 on Vanilla. The Champion event unlocks level 100. `Data/level_cap_mode.txt` can
+select the retained Vanilla curve with the value `vanilla`. All original
 sections are byte-identical except the pre-existing 14-line probe hook in
 `Main`; each injected section is independently removable. Everything is under
 git at the `Norm/` root (allowlist `.gitignore`: the study + the one modified

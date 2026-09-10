@@ -10,12 +10,31 @@ Realidea V4.1 builds nearly all trainer teams inline in map-event scripts:
 Marshal stores each script line as a plain string in file order, so we scan
 `strings -a` output per map and reconstruct battles.
 """
-import subprocess, re, json, sys, os
+import argparse, re, json, sys, os
 
-DATA = "/mnt/c/Users/kny/Documents/Games/Norm/Realidea V4.1/Data"
-TOOLS = "/mnt/c/Users/kny/Documents/Games/Norm/_AI-Study/tools"
+TOOLS = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, TOOLS)
 import marshal_rb
+
+parser = argparse.ArgumentParser(description=__doc__)
+parser.add_argument("output")
+parser.add_argument("--game", default=os.path.join(TOOLS, "..", "..", "Realidea"),
+                    help="Realidea game directory (default: workspace Realidea folder)")
+args = parser.parse_args()
+DATA = os.path.join(os.path.abspath(args.game), "Data")
+
+
+def printable_strings(path):
+    """Yield the ASCII runs used by RPG Maker event script commands.
+
+    The prior extractor called GNU strings from one developer's WSL install. Event
+    Ruby is stored verbatim inside the Marshal file, so scanning printable runs is
+    equivalent for the identifiers, levels, and calls parsed below and works on
+    Windows without an external executable.
+    """
+    data = open(path, "rb").read()
+    return [match.group(0).decode("ascii")
+            for match in re.finditer(rb"[\x09\x20-\x7e]{4,}", data)]
 
 tt = marshal_rb.load(os.path.join(DATA, "trainertypes.dat"))
 TYPE_NAMES = {i: (r[1] if r and len(r) > 1 else None) for i, r in enumerate(tt)}
@@ -42,8 +61,7 @@ for fn in sorted(os.listdir(DATA)):
     if m: src = int(m.group(1))
     elif fn == "CommonEvents.rxdata": src = "common"
     else: continue
-    out = subprocess.run(["strings", "-a", os.path.join(DATA, fn)],
-                         capture_output=True, text=True).stdout.splitlines()
+    out = printable_strings(os.path.join(DATA, fn))
     cur = {}   # pN -> mon dict
     for line in out:
         # strip marshal length-prefix garbage before code
@@ -66,7 +84,9 @@ for fn in sorted(os.listdir(DATA)):
                             "party": party})
             cur = {}
 
-json.dump(battles, open(sys.argv[1], "w"), indent=1, ensure_ascii=False)
+with open(args.output, "w", encoding="utf-8", newline="\n") as output:
+    json.dump(battles, output, indent=1, ensure_ascii=False)
+    output.write("\n")
 print(f"{len(battles)} battles extracted")
 sizes = {}
 for b in battles: sizes[len(b["party"])] = sizes.get(len(b["party"]), 0) + 1

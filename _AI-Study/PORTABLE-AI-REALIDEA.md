@@ -224,6 +224,15 @@ Optional installed-playtest switches:
 - `Data/debug_mode.txt` enables Realidea's built-in debug and Pokemon editor menus.
 - `Data/challenge_rules.txt` removes trainer bag items, forces Set style, and blocks the
   player's Bag in trainer battles. Held items and the wild-battle Bag remain available.
+- `Data/level_cap_mode.txt` selects `expert` (20/26/32/36/40/45/52/57/61) or
+  `vanilla` (15/22/29/33/37/43/51/55/60). Expert is the default.
+- `Data/champion_level_cap.txt` advances the badge-8 cap to the Champion value:
+  75 on Expert or 66 on Vanilla.
+
+`Level_Cap` is always active. The selected curve supplies the cap for badge counts 0
+through 8. Pokemon at or above the cap receive exactly 1 battle EXP. The installed
+Champion-stage marker activates the screenshot's final 75/66 cap after badge 8;
+defeating the current final Champion event then unlocks level 100.
 
 Each switch is enabled by creating the named marker and disabled by deleting it. The
 corresponding adapter sections are `Team_Overrides.rb`, `Debug_Mode.rb`, and
