@@ -531,6 +531,40 @@ That is a deliberate choice for a **private** mod. `--stats-only` drops them for
 distributable build; the measured cost is MAD 1.7 → 17.9 BST and the loss of every
 mega, since mega sets live almost entirely in the `dex` half.
 
+**The early-game power ceiling.** TM legality has no level test — `tm.txt` records
+which species *can* learn a machine, never when — so nothing stopped a level-19
+Dwebble being handed Earthquake or a level-25 Wigglytuff Fire Blast. Gyms 1-3 cap
+damaging moves at **70 BP**; after that the ceiling lifts entirely, because by gym 4
+the player has the Anatasa shop, megas and level ~36, and a published set should
+apply as written. 70 leaves a boss a real attacking move and is also exactly U-turn
+and Volt Switch, the only two pivot moves in the game.
+
+The ceiling is soft in three places, each of which was a bug first:
+
+- **It edits a set, it does not reject one.** Whether a published set still counts as
+  itself is judged on what the species could *know* at that level; the ceiling only
+  decides which of those moves it brings, and the slot is topped up. Conflating the
+  two made `build()` answer `None` for whole species and cost gym 4 its Ice core,
+  4 of 6 down to 2.
+- **A species with nothing under the ceiling keeps its weakest attack.** Beldum's
+  cheapest damaging move is an 80-BP Iron Head; the alternative is a Beldum that
+  cannot attack.
+- **Role moves are exempt**, because the ceiling is about damage and a role move's
+  point is not its damage. Of every move that carries a role, three deal any at all
+  (U-turn and Volt Switch at 70, Icy Wind 55, Rapid Spin 20).
+
+Two long-standing weaknesses in the move picker only became visible once the ceiling
+started stripping moves and the top-up ran on nearly every set. The level-up
+preference is a genuine tiebreak, ranked *below* power — above it, every junk move a
+species learns naturally outranks the real attack it needs a machine for, which put
+Azumarill on Tackle and Wigglytuff on Sing/Disable/Defense Curl. And the top-up now
+picks one slot at a time, prefers a damaging move, and does not let a role move claim
+a type: statically, Volt Switch counted as Jolteon's Electric coverage and left it
+with no Electric attack, while Wigglytuff drew Round + Echoed Voice + Snore because
+nothing the first pick did was visible to the second.
+
+Gyms 4-9 are byte-identical either side of this change.
+
 ### 6.7 Named non-gym trainers (`tools/generate_trainers.py`)
 
 Eighteen more fights run through the same builder: the three rivals (Owen, Alba,

@@ -212,9 +212,9 @@
     ],
     "moves": [
      "SWORDSDANCE",
-     "DRILLRUN",
      "KNOCKOFF",
-     "XSCISSOR"
+     "BUGBITE",
+     "HEADBUTT"
     ],
     "item": "EVIOLITE",
     "ability": 2,
@@ -232,7 +232,7 @@
      "setup"
     ],
     "src": "gen6lc/dex/Swords Dance",
-    "fidelity": 3,
+    "fidelity": 2,
     "inherited": null,
     "kept": true,
     "why": "original",
@@ -247,8 +247,8 @@
     "moves": [
      "STEALTHROCK",
      "KNOCKOFF",
-     "XSCISSOR",
-     "EARTHQUAKE"
+     "BUGBITE",
+     "SMACKDOWN"
     ],
     "item": "SILVERPOWDER",
     "ability": 0,
@@ -266,7 +266,7 @@
      "hazards"
     ],
     "src": "gen7pu/stats/Showdown Usage",
-    "fidelity": 4,
+    "fidelity": 2,
     "inherited": "CRUSTLE",
     "kept": true,
     "why": "original",
@@ -313,10 +313,10 @@
      1
     ],
     "moves": [
-     "ICEBEAM",
-     "THUNDERBOLT",
      "RECOVER",
-     "TOXIC"
+     "TOXIC",
+     "ROUND",
+     "PSYBEAM"
     ],
     "item": "EVIOLITE",
     "ability": 0,
@@ -334,7 +334,7 @@
      "recovery"
     ],
     "src": "gen6ou/dex/Defensive",
-    "fidelity": 4,
+    "fidelity": 2,
     "inherited": "PORYGON2",
     "kept": false,
     "why": "added:power",
@@ -348,9 +348,9 @@
     ],
     "moves": [
      "REST",
-     "SCALD",
-     "TAILWIND",
-     "HYPERBEAM"
+     "BUBBLEBEAM",
+     "PSYBEAM",
+     "ROUND"
     ],
     "item": "MYSTICWATER",
     "ability": 1,
@@ -365,11 +365,10 @@
      116
     ],
     "roles": [
-     "recovery",
-     "speed"
+     "recovery"
     ],
     "src": "gen6lc/dex/RestTalk",
-    "fidelity": 2,
+    "fidelity": 1,
     "inherited": "MANTYKE",
     "kept": false,
     "why": "added:recovery",
@@ -382,9 +381,9 @@
      1
     ],
     "moves": [
-     "XSCISSOR",
-     "SEEDBOMB",
      "BUGBITE",
+     "RAZORLEAF",
+     "SHADOWCLAW",
      "CALMMIND"
     ],
     "item": null,
@@ -432,10 +431,10 @@
     "species": "HELIOPTILE",
     "level": 25,
     "moves": [
-     "THUNDERBOLT",
      "VOLTSWITCH",
      "GRASSKNOT",
-     "SURF"
+     "SHOCKWAVE",
+     "ROUND"
     ],
     "item": "SITRUSBERRY",
     "ability": 0,
@@ -453,7 +452,7 @@
      "pivot"
     ],
     "src": "gen8nationaldexmonotype/stats/Showdown Usage",
-    "fidelity": 4,
+    "fidelity": 2,
     "inherited": "HELIOLISK",
     "kept": true,
     "why": "original"
@@ -462,10 +461,10 @@
     "species": "EEVEE",
     "level": 24,
     "moves": [
-     "HYPERVOICE",
      "PROTECT",
      "QUICKATTACK",
-     "HELPINGHAND"
+     "HELPINGHAND",
+     "BITE"
     ],
     "item": "SILKSCARF",
     "ability": 0,
@@ -481,7 +480,7 @@
     ],
     "roles": [],
     "src": "gen6vgc2016/stats/Showdown Usage",
-    "fidelity": 4,
+    "fidelity": 3,
     "inherited": "SYLVEON",
     "kept": true,
     "why": "original"
@@ -491,11 +490,11 @@
     "level": 24,
     "moves": [
      "STEALTHROCK",
-     "IRONHEAD",
      "UTURN",
-     "TOXIC"
+     "TOXIC",
+     "FACADE"
     ],
-    "item": "METALCOAT",
+    "item": "SITRUSBERRY",
     "ability": 0,
     "nature": "CAREFUL",
     "iv": 31,
@@ -512,7 +511,7 @@
      "pivot"
     ],
     "src": "gen6monotype/dex/Specially Defensive (Psychic)",
-    "fidelity": 4,
+    "fidelity": 3,
     "inherited": null,
     "kept": false,
     "why": "added:hazards"
@@ -522,9 +521,9 @@
     "level": 24,
     "moves": [
      "TAILGLOW",
-     "SURF",
      "REST",
-     "SCALD"
+     "AQUAJET",
+     "UTURN"
     ],
     "item": "MYSTICWATER",
     "ability": 0,
@@ -539,11 +538,12 @@
      4
     ],
     "roles": [
+     "pivot",
      "recovery",
      "setup"
     ],
     "src": "gen9nationaldex/stats/Showdown Usage",
-    "fidelity": 4,
+    "fidelity": 2,
     "inherited": null,
     "kept": false,
     "why": "added:recovery"
@@ -552,10 +552,10 @@
     "species": "VOLCANION",
     "level": 24,
     "moves": [
-     "STEAMERUPTION",
-     "FLAMETHROWER",
-     "EARTHPOWER",
-     "SLUDGEBOMB"
+     "WATERPULSE",
+     "INCINERATE",
+     "ROUND",
+     "BULLDOZE"
     ],
     "item": "MYSTICWATER",
     "ability": 0,
@@ -571,7 +571,7 @@
     ],
     "roles": [],
     "src": "gen6ou/dex/Choice Scarf",
-    "fidelity": 4,
+    "fidelity": 0,
     "inherited": null,
     "kept": false,
     "why": "added:power"
@@ -625,7 +625,7 @@
      "SUBSTITUTE",
      "TOXIC",
      "SCALD",
-     "TAILWIND"
+     "HYPERBEAM"
     ],
     "item": "LEFTOVERS",
     "ability": 1,
@@ -639,9 +639,7 @@
      248,
      0
     ],
-    "roles": [
-     "speed"
-    ],
+    "roles": [],
     "src": "gen6nu/dex/SubToxic",
     "fidelity": 3,
     "inherited": null,
@@ -1035,8 +1033,6 @@
     "level": 22,
     "moves": [
      "IRONHEAD",
-     "ZENHEADBUTT",
-     "TAKEDOWN",
      "IRONDEFENSE"
     ],
     "item": null,
@@ -1064,7 +1060,7 @@
     "moves": [
      "TRICK",
      "WILLOWISP",
-     "SEEDBOMB",
+     "RAZORLEAF",
      "ASTONISH"
     ],
     "item": "MIRACLESEED",
@@ -1081,7 +1077,7 @@
     ],
     "roles": [],
     "src": "gen6pu/dex/Choice Scarf",
-    "fidelity": 3,
+    "fidelity": 2,
     "inherited": "GOURGEIST",
     "kept": true,
     "why": "original"
@@ -1090,10 +1086,10 @@
     "species": "BRAVIARY",
     "level": 69,
     "moves": [
-     "BRAVEBIRD",
      "RETURN",
-     "SUPERPOWER",
-     "UTURN"
+     "UTURN",
+     "AERIALACE",
+     "SHADOWCLAW"
     ],
     "item": "SHARPBEAK",
     "ability": 2,
@@ -1111,7 +1107,7 @@
      "pivot"
     ],
     "src": "gen6ru/dex/Physical Attacker",
-    "fidelity": 4,
+    "fidelity": 2,
     "inherited": null,
     "kept": true,
     "why": "original"
@@ -1121,11 +1117,11 @@
     "level": 21,
     "moves": [
      "STEALTHROCK",
-     "IRONHEAD",
      "UTURN",
-     "TOXIC"
+     "TOXIC",
+     "FACADE"
     ],
-    "item": "METALCOAT",
+    "item": "SITRUSBERRY",
     "ability": 0,
     "nature": "CAREFUL",
     "iv": 31,
@@ -1142,7 +1138,7 @@
      "pivot"
     ],
     "src": "gen6monotype/dex/Specially Defensive (Psychic)",
-    "fidelity": 4,
+    "fidelity": 3,
     "inherited": null,
     "kept": false,
     "why": "added:hazards"
@@ -1152,9 +1148,9 @@
     "level": 21,
     "moves": [
      "TAILGLOW",
-     "SURF",
      "REST",
-     "SCALD"
+     "AQUAJET",
+     "UTURN"
     ],
     "item": "MYSTICWATER",
     "ability": 0,
@@ -1169,11 +1165,12 @@
      4
     ],
     "roles": [
+     "pivot",
      "recovery",
      "setup"
     ],
     "src": "gen9nationaldex/stats/Showdown Usage",
-    "fidelity": 4,
+    "fidelity": 2,
     "inherited": null,
     "kept": false,
     "why": "added:recovery"
@@ -1224,10 +1221,10 @@
     "species": "FINNEON",
     "level": 23,
     "moves": [
-     "SCALD",
      "UTURN",
      "TOXIC",
-     "BOUNCE"
+     "AQUAJET",
+     "FACADE"
     ],
     "item": "MYSTICWATER",
     "ability": 1,
@@ -1245,7 +1242,7 @@
      "pivot"
     ],
     "src": "gen6pu/dex/Defog",
-    "fidelity": 3,
+    "fidelity": 2,
     "inherited": "LUMINEON",
     "kept": true,
     "why": "original"
@@ -1255,9 +1252,9 @@
     "level": 24,
     "moves": [
      "CALMMIND",
-     "PSYCHIC",
-     "SIGNALBEAM",
-     "RECOVER"
+     "RECOVER",
+     "PSYWAVE",
+     "SHOCKWAVE"
     ],
     "item": "EVIOLITE",
     "ability": 1,
@@ -1276,7 +1273,7 @@
      "setup"
     ],
     "src": "gen7zu/dex/Calm Mind",
-    "fidelity": 4,
+    "fidelity": 2,
     "inherited": null,
     "kept": true,
     "why": "original"
@@ -1285,10 +1282,10 @@
     "species": "BRAIXEN",
     "level": 23,
     "moves": [
-     "FIREBLAST",
-     "SOLARBEAM",
-     "PSYCHIC",
-     "WILLOWISP"
+     "WILLOWISP",
+     "INCINERATE",
+     "PSYBEAM",
+     "SHOCKWAVE"
     ],
     "item": "CHARCOAL",
     "ability": 1,
@@ -1304,7 +1301,7 @@
     ],
     "roles": [],
     "src": "gen7lc/dex/Magician",
-    "fidelity": 4,
+    "fidelity": 1,
     "inherited": "FENNEKIN",
     "kept": true,
     "why": "original"
@@ -1313,10 +1310,10 @@
     "species": "TOGEKISS",
     "level": 22,
     "moves": [
-     "AIRSLASH",
-     "FIREBLAST",
-     "AURASPHERE",
-     "TRICK"
+     "TRICK",
+     "AIRCUTTER",
+     "FAIRYWIND",
+     "SHOCKWAVE"
     ],
     "item": "SHARPBEAK",
     "ability": 1,
@@ -1332,7 +1329,7 @@
     ],
     "roles": [],
     "src": "gen6monotype/dex/Choice Scarf (Fairy)",
-    "fidelity": 4,
+    "fidelity": 1,
     "inherited": null,
     "kept": false,
     "why": "added:power"
@@ -1342,11 +1339,11 @@
     "level": 22,
     "moves": [
      "STEALTHROCK",
-     "IRONHEAD",
      "UTURN",
-     "TOXIC"
+     "TOXIC",
+     "FACADE"
     ],
-    "item": "METALCOAT",
+    "item": "SITRUSBERRY",
     "ability": 0,
     "nature": "CAREFUL",
     "iv": 31,
@@ -1363,7 +1360,7 @@
      "pivot"
     ],
     "src": "gen6monotype/dex/Specially Defensive (Psychic)",
-    "fidelity": 4,
+    "fidelity": 3,
     "inherited": null,
     "kept": false,
     "why": "added:hazards"
@@ -1375,7 +1372,7 @@
      "RETURN",
      "KNOCKOFF",
      "THUNDERWAVE",
-     "DRAINPUNCH"
+     "AERIALACE"
     ],
     "item": "SILKSCARF",
     "ability": 0,
@@ -1393,7 +1390,7 @@
      "speed"
     ],
     "src": "gen6pu/dex/Tank",
-    "fidelity": 4,
+    "fidelity": 3,
     "inherited": null,
     "kept": false,
     "why": "added:power"
@@ -1642,10 +1639,10 @@
     "species": "EEVEE",
     "level": 29,
     "moves": [
-     "HYPERVOICE",
      "PROTECT",
      "QUICKATTACK",
-     "HELPINGHAND"
+     "HELPINGHAND",
+     "BITE"
     ],
     "item": "SILKSCARF",
     "ability": 0,
@@ -1661,7 +1658,7 @@
     ],
     "roles": [],
     "src": "gen6vgc2016/stats/Showdown Usage",
-    "fidelity": 4,
+    "fidelity": 3,
     "inherited": "SYLVEON",
     "kept": true,
     "why": "original"
@@ -1670,10 +1667,10 @@
     "species": "MANTYKE",
     "level": 29,
     "moves": [
-     "SCALD",
-     "ICEBEAM",
      "RAINDANCE",
-     "SIGNALBEAM"
+     "BUBBLEBEAM",
+     "ROUND",
+     "ICYWIND"
     ],
     "item": "EVIOLITE",
     "ability": 1,
@@ -1687,9 +1684,11 @@
      200,
      0
     ],
-    "roles": [],
+    "roles": [
+     "speed"
+    ],
     "src": "gen6lc/stats/Showdown Usage",
-    "fidelity": 3,
+    "fidelity": 1,
     "inherited": null,
     "kept": true,
     "why": "original"
@@ -1699,9 +1698,9 @@
     "level": 30,
     "moves": [
      "VOLTSWITCH",
-     "HYPERVOICE",
-     "SIGNALBEAM",
-     "THUNDERBOLT"
+     "SHOCKWAVE",
+     "ROUND",
+     "GRASSKNOT"
     ],
     "item": "SITRUSBERRY",
     "ability": 0,
@@ -1719,7 +1718,7 @@
      "pivot"
     ],
     "src": "gen6uu/dex/Special Attacker (dev set was CHARGE/PARABOLICCHARGE/QUICKATTACK/TAILWHIP)",
-    "fidelity": 4,
+    "fidelity": 1,
     "inherited": null,
     "kept": true,
     "why": "original"
@@ -1729,11 +1728,11 @@
     "level": 28,
     "moves": [
      "STEALTHROCK",
-     "IRONHEAD",
      "UTURN",
-     "TOXIC"
+     "TOXIC",
+     "FACADE"
     ],
-    "item": "METALCOAT",
+    "item": "SITRUSBERRY",
     "ability": 0,
     "nature": "CAREFUL",
     "iv": 31,
@@ -1750,7 +1749,7 @@
      "pivot"
     ],
     "src": "gen6monotype/dex/Specially Defensive (Psychic)",
-    "fidelity": 4,
+    "fidelity": 3,
     "inherited": null,
     "kept": false,
     "why": "added:hazards"
@@ -1760,9 +1759,9 @@
     "level": 28,
     "moves": [
      "TAILGLOW",
-     "SURF",
      "REST",
-     "SCALD"
+     "AQUAJET",
+     "UTURN"
     ],
     "item": "MYSTICWATER",
     "ability": 0,
@@ -1777,11 +1776,12 @@
      4
     ],
     "roles": [
+     "pivot",
      "recovery",
      "setup"
     ],
     "src": "gen9nationaldex/stats/Showdown Usage",
-    "fidelity": 4,
+    "fidelity": 2,
     "inherited": null,
     "kept": false,
     "why": "added:recovery"
@@ -1833,8 +1833,6 @@
     "level": 29,
     "moves": [
      "IRONHEAD",
-     "ZENHEADBUTT",
-     "TAKEDOWN",
      "IRONDEFENSE"
     ],
     "item": null,
@@ -1862,7 +1860,7 @@
     "moves": [
      "TRICK",
      "WILLOWISP",
-     "SEEDBOMB",
+     "RAZORLEAF",
      "ASTONISH"
     ],
     "item": "MIRACLESEED",
@@ -1879,7 +1877,7 @@
     ],
     "roles": [],
     "src": "gen6pu/dex/Choice Scarf",
-    "fidelity": 3,
+    "fidelity": 2,
     "inherited": "GOURGEIST",
     "kept": true,
     "why": "original"
@@ -1888,10 +1886,10 @@
     "species": "BRAVIARY",
     "level": 69,
     "moves": [
-     "BRAVEBIRD",
      "RETURN",
-     "SUPERPOWER",
-     "UTURN"
+     "UTURN",
+     "AERIALACE",
+     "SHADOWCLAW"
     ],
     "item": "SHARPBEAK",
     "ability": 2,
@@ -1909,7 +1907,7 @@
      "pivot"
     ],
     "src": "gen6ru/dex/Physical Attacker",
-    "fidelity": 4,
+    "fidelity": 2,
     "inherited": null,
     "kept": true,
     "why": "original"
@@ -1919,11 +1917,11 @@
     "level": 28,
     "moves": [
      "STEALTHROCK",
-     "IRONHEAD",
      "UTURN",
-     "TOXIC"
+     "TOXIC",
+     "FACADE"
     ],
-    "item": "METALCOAT",
+    "item": "SITRUSBERRY",
     "ability": 0,
     "nature": "CAREFUL",
     "iv": 31,
@@ -1940,7 +1938,7 @@
      "pivot"
     ],
     "src": "gen6monotype/dex/Specially Defensive (Psychic)",
-    "fidelity": 4,
+    "fidelity": 3,
     "inherited": null,
     "kept": false,
     "why": "added:hazards"
@@ -1950,9 +1948,9 @@
     "level": 28,
     "moves": [
      "TAILGLOW",
-     "SURF",
      "REST",
-     "SCALD"
+     "AQUAJET",
+     "UTURN"
     ],
     "item": "MYSTICWATER",
     "ability": 0,
@@ -1967,11 +1965,12 @@
      4
     ],
     "roles": [
+     "pivot",
      "recovery",
      "setup"
     ],
     "src": "gen9nationaldex/stats/Showdown Usage",
-    "fidelity": 4,
+    "fidelity": 2,
     "inherited": null,
     "kept": false,
     "why": "added:recovery"
@@ -2884,7 +2883,7 @@
      "OUTRAGE",
      "REST",
      "FLY",
-     "AERIALACE"
+     "GIGAIMPACT"
     ],
     "item": null,
     "ability": 0,
@@ -3138,7 +3137,7 @@
      "OUTRAGE",
      "REST",
      "FLY",
-     "AERIALACE"
+     "GIGAIMPACT"
     ],
     "item": null,
     "ability": 0,

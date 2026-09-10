@@ -112,6 +112,7 @@ def make_trainer(battle):
     lo = target - G.SPREAD[stage] / 2
 
     unlocked = items_unlocked(stage, battle["map"])
+    cap = G.bp_cap(stage)
     allow = None if unlocked else G.early_items()
     quota = G.QUOTA if unlocked else [r for r in G.QUOTA if r != "mega"]
     banned = set() if unlocked else set(G.MEGASTONE)
@@ -148,8 +149,8 @@ def make_trainer(battle):
             notes.append(f"skipped {name} — not in pokemon.txt")
             continue
         lvl = G.remap(lvl)
-        mon = (G.build(name, lvl, banned, avoid=capped(), allow_items=allow)
-               or G.fallback(name, lvl))
+        mon = (G.build(name, lvl, banned, avoid=capped(), allow_items=allow, cap=cap)
+               or G.fallback(name, lvl, cap))
         if m.get("moves"):
             mon["src"] += f" (dev set was {'/'.join(m['moves'])})"
         add(name, mon, "original", True)
@@ -174,7 +175,7 @@ def make_trainer(battle):
             for name in sorted(pool, key=lambda n: (abs(G.potential_bst(n, unlocked)
                                                         - deficit()), SC.rank(n))):
                 mon = G.build(name, pad_level, banned, want=role, avoid=full,
-                              allow_items=allow)
+                              allow_items=allow, cap=cap)
                 if not mon or (role is not None and role not in mon["roles"]):
                     continue
                 if strict and mon["roles"] & full:
@@ -199,7 +200,7 @@ def make_trainer(battle):
             if not m["kept"] or is_dynamic(m["species"]) or len(m["roles"]) > 1:
                 continue
             alt = G.build(m["species"], m["level"], banned, want=role,
-                          avoid=capped(), allow_items=allow)
+                          avoid=capped(), allow_items=allow, cap=cap)
             if alt and role in alt["roles"]:
                 alt["kept"], alt["why"] = True, f"original, re-set for {role}"
                 have.subtract(m["roles"])

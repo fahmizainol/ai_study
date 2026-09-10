@@ -91,6 +91,18 @@ _TYPE_OF_BOOST = {"MIRACLESEED": "GRASS", "CHARCOAL": "FIRE", "MYSTICWATER": "WA
                   "TWISTEDSPOON": "PSYCHIC", "SILVERPOWDER": "BUG", "HARDSTONE": "ROCK",
                   "SPELLTAG": "GHOST", "DRAGONFANG": "DRAGON", "BLACKGLASSES": "DARK",
                   "METALCOAT": "STEEL", "SILKSCARF": "NORMAL"}
+# Early-game move-power ceiling. TM legality has NO level test -- tm.txt says which
+# species CAN learn a machine, never when -- so with nothing to stop it a level-19
+# Dwebble is handed Earthquake and a level-25 Wigglytuff Fire Blast.
+#
+# 70 leaves a boss a real attacking move (it is also exactly U-turn and Volt Switch,
+# the only two pivot moves there are) while keeping the 90-110 BP nukes out of a
+# fight the player meets at level 20. It lifts entirely after gym 3: by then the
+# player has the Anatasa shop, megas and level ~36, and a published Smogon set
+# should apply as written.
+BP_CAP = 70
+BP_CAP_UNTIL = 3          # stages 0-2 = gyms 1-3
+
 ON_THEME_MIN = 4          # of 6; the rest may be off-theme (user: "1,2 can differ")
 TEAM_SIZE = 6
 # Off-theme picks must earn the slot: this much Smogon co-occurrence with the core,
@@ -112,6 +124,12 @@ ROLE_MOVES = {
     "speed": {"THUNDERWAVE", "ICYWIND", "STICKYWEB", "TAILWIND", "TRICKROOM",
               "GLARE", "STUNSPORE"},
 }
+# The power ceiling is about damage output, and a role move's point is not its
+# damage: of the moves that carry a role at all, only three deal any (U-turn and
+# Volt Switch at 70, Icy Wind 55, Rapid Spin 20), and the two pivot moves are the
+# ONLY two there are -- capping them cost gyms 1 and 2 the pivot role outright.
+ROLE_MOVE = set().union(*[set(v) for v in ROLE_MOVES.values()])
+
 WEATHER_ABILITY = {"DRIZZLE", "DROUGHT", "SANDSTREAM", "SNOWWARNING"}
 # Roles worth filling, in the order the generator chases them. Mined from 110 Smogon
 # sample teams: hazards 110/110, setup 75%, recovery 69%, pivot 66%.
@@ -201,6 +219,11 @@ def early_items():
     obtainable = set(item_sources())
     return ({i for i in _items if i.endswith("BERRY")} | TYPE_BOOST
             | {"EVIOLITE", "BERRYJUICE"}) & obtainable
+
+
+def bp_cap(stage):
+    """The power ceiling for a fight in `stage`, or None once it lifts."""
+    return BP_CAP if stage < BP_CAP_UNTIL else None
 
 
 def bst(name):
@@ -349,15 +372,29 @@ def map_stage(map_id):
 
 
 # ---------------------------------------------------------------- set building
-def legal_moves(species, level):
-    return [m for m in _mv if D.learnable(species, m, level, 0) in ("levelup", "tm")]
+def legal_moves(species, level, cap=None):
+    """Every move the species can have at `level`, TMs included.
+
+    `cap` is a SOFT power ceiling: damaging moves above it are dropped, unless that
+    would leave the species with no attack at all, in which case its weakest one is
+    kept. Status moves are never capped -- they have no power to cap."""
+    known = [m for m in _mv if D.learnable(species, m, level, 0) in ("levelup", "tm")]
+    if cap is None:
+        return known
+    damaging = [m for m in known if _mv[m]["power"] > 0 and m not in ROLE_MOVE]
+    under = [m for m in damaging if _mv[m]["power"] <= cap]
+    if damaging and not under:
+        under = [min(damaging, key=lambda m: (_mv[m]["power"], m))]
+    keep = set(under)
+    return [m for m in known
+            if _mv[m]["power"] == 0 or m in ROLE_MOVE or m in keep]
 
 
 # Which role a support slot should go to first, if the species has one available.
 SUPPORT_ORDER = ["setup", "recovery", "hazards", "pivot", "speed", "removal"]
 
 
-def best_moves(species, level, k=4, support=True):
+def best_moves(species, level, k=4, support=True, cap=None):
     """Fallback moveset when no published set survives the level filter.
 
     Damaging moves are ranked by the mon's own attacking bias, then STAB, then
@@ -368,12 +405,18 @@ def best_moves(species, level, k=4, support=True):
     exists to use, and hands Cloyster Giga Impact over Shell Smash."""
     s = _sp[species]
     physical = s["base_stats"][1] >= s["base_stats"][4]
-    known = legal_moves(species, level)
+    known = legal_moves(species, level, cap)
     def score(m):
         d = _mv[m]
+        # The level-up list is the game's own statement about what this mon should
+        # know here, so it breaks ties -- but only ties. Ranked ABOVE power it hands
+        # Azumarill a Tackle and leaves Wigglytuff on Sing/Disable/Defense Curl,
+        # because every junk move a species learns naturally then outranks the real
+        # attack it needs a machine for.
         return ((d["category"] == "Physical") == physical,
                 d["type"] in s["types"],
-                d["power"] * (d["accuracy"] or 100) / 100)
+                d["power"] * (d["accuracy"] or 100) / 100,
+                D.learnable(species, m, level, 0) == "levelup")
     damaging = sorted((m for m in known if _mv[m]["power"] > 0),
                       key=score, reverse=True)
     picked = damaging[:k - 1] if support else damaging[:k]
@@ -424,7 +467,8 @@ def substitute_item(species, moves, pool):
     return "SITRUSBERRY" if "SITRUSBERRY" in pool else None
 
 
-def build(species, level, banned_items=(), want=None, avoid=(), allow_items=None):
+def build(species, level, banned_items=(), want=None, avoid=(), allow_items=None,
+          cap=None):
     """Best level-legal published set for `species`, or None if none survives.
 
     want:        prefer a set that provides this role.
@@ -432,6 +476,10 @@ def build(species, level, banned_items=(), want=None, avoid=(), allow_items=None
     allow_items: if given, the only held items this stage may carry. A set whose item
                  is outside it is still usable -- the moveset is the valuable part --
                  but the item is swapped for an in-pool stand-in.
+    cap:         power ceiling for this stage. Applied HARD to a published set: a set
+                 built around a nuke the curve has not reached yet is not that set
+                 without it, so it loses moves, falls under the len(ok) floor, and
+                 the caller drops through to best_moves() -- which caps softly.
     """
     is_lc = level <= 25
     cands = []
@@ -440,8 +488,18 @@ def build(species, level, banned_items=(), want=None, avoid=(), allow_items=None
             # `m in _mv` is not redundant with learnable(): learnable() answers from
             # pokemon.txt learnsets and tm.txt, so it can report a move legal that
             # moves.txt does not define. Emitting one would fail validation downstream.
-            ok = [m for m in (SC.norm(x) for x in st["moves"])
-                  if m in _mv and D.learnable(species, m, level, 0) in ("levelup", "tm")]
+            # Two different questions, so two lists. `legal` is how much of this
+            # published set the species could know at all -- that is what decides
+            # whether the set still counts as itself (the floor below). `ok` is what
+            # it may actually bring: the level says a mon CANNOT know a move, the
+            # ceiling only says it should not know it YET, and a set that loses one
+            # move to the ceiling is still that set and gets topped up from filler.
+            # Conflating the two made the ceiling reject whole species: gym 4 lost
+            # its Ice core down to 2 of 6 because build() answered None for them.
+            legal = [m for m in (SC.norm(x) for x in st["moves"])
+                     if m in _mv and D.learnable(species, m, level, 0) in ("levelup", "tm")]
+            ok = [m for m in legal
+                  if cap is None or _mv[m]["power"] <= cap or m in ROLE_MOVE]
             item = SC.norm(st.get("item"))
             if item and (item not in _items or item.endswith("IUMZ")):
                 continue                      # Realidea has no Z-move engine
@@ -457,17 +515,17 @@ def build(species, level, banned_items=(), want=None, avoid=(), allow_items=None
             # role returned the same set as not asking -- which silently disabled
             # every role-chasing caller. The len(ok) < 3 floor below still holds, so
             # this trades a filler move for a role, never a whole set.
-            cands.append(((-len(r & set(avoid)), bool(want and want in r), len(ok),
+            cands.append(((-len(r & set(avoid)), bool(want and want in r), len(legal),
                            in_pool, src == species, fmt.endswith("lc") == is_lc,
                            source == "dex"),
-                          ok, item, st, src, r, f"{fmt}/{source}/{setname}"))
+                          ok, item, st, src, r, f"{fmt}/{source}/{setname}", len(legal)))
     if not cands:
         return None
     cands.sort(key=lambda x: x[0], reverse=True)
-    _, ok, item, st, src, _r, label = cands[0]
+    _, ok, item, st, src, _r, label, n_legal = cands[0]
     # An inherited set that only contributes two moves is not really that set any
     # more; hand back None so the caller falls through to best_moves().
-    if len(ok) < (3 if src == species else 2):
+    if n_legal < (3 if src == species else 2):
         return None
 
     s = _sp[species]
@@ -476,15 +534,35 @@ def build(species, level, banned_items=(), want=None, avoid=(), allow_items=None
         d = _mv[m]
         return ((d["category"] == "Physical") == physical,
                 d["type"] in s["types"],
-                d["power"] * (d["accuracy"] or 100) / 100)
+                d["power"] * (d["accuracy"] or 100) / 100,
+                D.learnable(species, m, level, 0) == "levelup")
     # top a short set up to four. Prefer a type the set does not already hit: ranking
     # on raw score alone hands a Steelix that already has Earthquake a second Ground
     # move (Dig) for its free slot.
-    covered = {_mv[m]["type"] for m in ok if _mv[m]["power"] > 0}
-    filler = sorted((m for m in legal_moves(species, level) if m not in ok),
-                    key=lambda m: (_mv[m]["type"] not in covered, score(m)),
-                    reverse=True)
-    moves = ok + filler[:4 - len(ok)]
+    # Top a short set up to four, one slot at a time.
+    #
+    # Damaging first: a set that lost its nuke to the ceiling needs a weaker ATTACK
+    # in that slot, and ranking on uncovered-type alone gives it Tail Whip instead --
+    # a status move has a type too, and an unused one always wins that key.
+    #
+    # A ROLE move does not claim its type. Volt Switch is taken for the switch, not
+    # as Jolteon's answer in Electric, and counting it as coverage left Jolteon with
+    # no Electric attack at all.
+    #
+    # And `covered` grows as we pick, rather than being fixed up front: static, it
+    # gave Wigglytuff Round + Echoed Voice + Snore, three Normal sound moves, because
+    # nothing the first pick did was visible to the second.
+    covered = {_mv[m]["type"] for m in ok
+               if _mv[m]["power"] > 0 and m not in ROLE_MOVE}
+    spare = [m for m in legal_moves(species, level, cap) if m not in ok]
+    moves = list(ok)
+    while len(moves) < 4 and spare:
+        pick = max(spare, key=lambda m: (_mv[m]["power"] > 0,
+                                         _mv[m]["type"] not in covered, score(m)))
+        spare.remove(pick)
+        moves.append(pick)
+        if _mv[pick]["power"] > 0:
+            covered.add(_mv[pick]["type"])
 
     if item not in _items:
         item = None
@@ -518,14 +596,14 @@ def build(species, level, banned_items=(), want=None, avoid=(), allow_items=None
             "fidelity": len(ok), "inherited": None if src == species else src}
 
 
-def fallback(species, level):
+def fallback(species, level, cap=None):
     """Last resort for a species with no usable published set anywhere in its family.
 
     Still gets a real spread: 252/252/4 into the two stats its own moveset actually
     uses, within the legal 510 budget. A boss mon left on HARDY and zero EVs is
     strictly below the curve the rest of the team is built to -- the eBST policy is
     "don't exceed 510", not "don't spend any"."""
-    moves = best_moves(species, level)
+    moves = best_moves(species, level, cap=cap)
     stats = _sp[species]["base_stats"]
     power = collections.Counter()
     for m in moves:
@@ -545,7 +623,7 @@ def fallback(species, level):
 
 
 # ---------------------------------------------------------------- team assembly
-def dedupe_roles(team, level):
+def dedupe_roles(team, level, cap=None):
     """Strip moves that duplicate an already-covered capped role.
 
     Set preference cannot always avoid this: kept originals never get a second
@@ -564,7 +642,7 @@ def dedupe_roles(team, level):
             capped_moves = set().union(*(ROLE_MOVES[r] for r in ROLE_CAP
                                          if r in ROLE_MOVES))
             covered = {_mv[x]["type"] for x in known if _mv[x]["power"] > 0}
-            spare = [x for x in best_moves(m["species"], m["level"], k=12,
+            spare = [x for x in best_moves(m["species"], m["level"], k=12, cap=cap,
                                            support=False)
                      if x not in known and x not in capped_moves]
             # prefer a type the set does not already hit -- swapping Stealth Rock for
@@ -637,6 +715,7 @@ def make_gym(idx):
     # Before UNLOCK_STAGE a boss carries only what an early player could hold, and
     # no mega at all: an unusable stone costs its holder a real item AND credits the
     # team 100 eBST it never receives (that alone had gyms 1-5 ~16 BST under target).
+    ceiling = bp_cap(idx)
     mega_ok = idx >= UNLOCK_STAGE
     allow = None if mega_ok else early_items()
     quota = QUOTA if mega_ok else [r for r in QUOTA if r != "mega"]
@@ -684,8 +763,9 @@ def make_gym(idx):
             notes.append(f"evolved {name} ({bst(name)}) -> {grown} ({bst(grown)}, "
                          f"{SC.tier(grown)}) to reach the band")
             pick, why = grown, "evolved original"
-        add(pick, build(pick, level - 1, banned, avoid=capped(), allow_items=allow)
-            or fallback(pick, level - 1), why, True)
+        add(pick, build(pick, level - 1, banned, avoid=capped(), allow_items=allow,
+                        cap=ceiling)
+            or fallback(pick, level - 1, ceiling), why, True)
 
     def take(pool, role, why, kept=False):
         """Pick the best candidate from `pool` for `role` (None = any).
@@ -701,7 +781,7 @@ def make_gym(idx):
                 if name in used:
                     continue
                 mon = build(name, level - 1, banned, want=role, avoid=full,
-                            allow_items=allow)
+                            allow_items=allow, cap=ceiling)
                 if not mon or (role is not None and role not in mon["roles"]):
                     continue
                 if strict and mon["roles"] & full:
@@ -767,7 +847,7 @@ def make_gym(idx):
             notes.append(f"{m['species']} off-theme: resists "
                          f"{'/'.join(resisted(m['species']))}")
 
-    dedupe_roles(team, level)
+    dedupe_roles(team, level, ceiling)
     # the strongest mon is the ace and is the only one at the cap itself
     team.sort(key=ebst)
     if team:
