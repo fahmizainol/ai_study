@@ -25,6 +25,7 @@ import collections
 import functools
 import json
 import os
+import re
 import sys
 
 import realidea_data as D
@@ -248,6 +249,105 @@ def remap(level):
     return level
 
 
+# ------------------------------------------------------ where a fight sits in the story
+# MapInfos grouping nodes: folders in the editor's tree, not places in the world, so
+# they carry no story position and the walk below must stop at them.
+_FOLDER = {"Localizaciones", "Rutas", "Otros"}
+
+
+def stage_of(level):
+    """Badge band a level belongs to -- picks its eBST target and item pool."""
+    for i, c in enumerate(CAPS):
+        if level <= c["cap"]:
+            return i
+    return len(CAPS) - 1
+
+
+@functools.lru_cache(maxsize=1)
+def _map_tree():
+    import marshal_rb
+    mi = marshal_rb.load(os.path.join(os.path.dirname(D.PBS), "Data", "MapInfos.rxdata"))
+    name, parent, kids = {}, {}, collections.defaultdict(list)
+    for key, info in mi.items():
+        key = int(key)
+        name[key] = info.get("@name")
+        parent[key] = info.get("@parent_id") or 0
+        kids[parent[key]].append(key)
+    level = collections.defaultdict(list)
+    for b in json.load(open(os.path.join(EXTRACTED, "realidea-battles.json"),
+                            encoding="utf-8")):
+        fixed = [m["level"] for m in b["party"] if isinstance(m["level"], int)]
+        if fixed:
+            level[b["map"]].append(max(fixed))
+    return name, parent, kids, level
+
+
+def _route_no(map_name):
+    m = re.match(r"Ruta (\d+)$", map_name or "")
+    return int(m.group(1)) if m else None
+
+
+def story_level(map_id):
+    """The level the game itself pins to this place, and how that was established.
+
+    A `balanceo` fight scales to the player's party, so it carries no level of its
+    own -- but its eBST target and item pool still have to come from somewhere. Take
+    it from the nearest map the developer DID pin: the fight's own map first, then
+    the area it hangs under in MapInfos (Fabrica Rocket sits under Ciudad Anatasa,
+    whose gym pins it at 33), then -- for a numbered route, which hangs off the flat
+    `Rutas` folder and so has no area to inherit -- the routes either side of it."""
+    name, parent, kids, level = _map_tree()
+
+    def subtree_max(m):
+        got, stack = [], [m]
+        while stack:
+            x = stack.pop()
+            got += level.get(x, [])
+            stack += kids.get(x, [])
+        return max(got) if got else None
+
+    own = subtree_max(map_id)
+    if own:
+        return own, "own map"
+    up = parent.get(map_id, 0)
+    while up and name.get(up) not in _FOLDER:
+        got = subtree_max(up)
+        if got:
+            return got, "area %s" % name[up]
+        up = parent.get(up, 0)
+    here = _route_no(name.get(map_id))
+    if here:
+        near = {}
+        for k, nm in name.items():
+            n = _route_no(nm)
+            if n and level.get(k):
+                near[n] = max(near.get(n, 0), max(level[k]))
+        lo = max((n for n in near if n < here), default=None)
+        hi = min((n for n in near if n > here), default=None)
+        seen = [near[n] for n in (lo, hi) if n is not None]
+        if seen:
+            return round(sum(seen) / len(seen)), "between Ruta %s and Ruta %s" % (lo, hi)
+    raise ValueError("no story level for map %s (%s)" % (map_id, name.get(map_id)))
+
+
+def area_of(map_id):
+    """The place a map belongs to -- its outermost non-folder ancestor, else itself.
+
+    Fabrica Rocket's interior maps all resolve to Ciudad Anatasa; a numbered route
+    hangs straight off the `Rutas` folder and so is its own area."""
+    name, parent, _kids, _lvl = _map_tree()
+    here = map_id
+    up = parent.get(map_id, 0)
+    while up and name.get(up) not in _FOLDER:
+        here, up = up, parent.get(up, 0)
+    return here
+
+
+def map_stage(map_id):
+    level, how = story_level(map_id)
+    return stage_of(level), how
+
+
 # ---------------------------------------------------------------- set building
 def legal_moves(species, level):
     return [m for m in _mv if D.learnable(species, m, level, 0) in ("levelup", "tm")]
@@ -352,7 +452,12 @@ def build(species, level, banned_items=(), want=None, avoid=(), allow_items=None
             ability = SC.norm(st.get("ability"))
             r = roles_of(ok, item if item in _items else None, ability)
             in_pool = allow_items is None or not item or item in allow_items
-            cands.append(((-len(r & set(avoid)), len(ok), bool(want and want in r),
+            # `want` outranks move fidelity deliberately. Ranked below it, a 4-move
+            # set with no role always beat a 3-move set with one, so asking for a
+            # role returned the same set as not asking -- which silently disabled
+            # every role-chasing caller. The len(ok) < 3 floor below still holds, so
+            # this trades a filler move for a role, never a whole set.
+            cands.append(((-len(r & set(avoid)), bool(want and want in r), len(ok),
                            in_pool, src == species, fmt.endswith("lc") == is_lc,
                            source == "dex"),
                           ok, item, st, src, r, f"{fmt}/{source}/{setname}"))

@@ -49,7 +49,15 @@ try:
 except Exception as e:
     print("MapInfos parse failed:", e, file=sys.stderr)
 
-re_create = re.compile(r'(p\d)\s*=\s*createPokemon\(\s*("?)([A-Za-z0-9_]+)\2\s*,\s*(\d+|[a-zA-Z_]\w*)')
+# the third argument is an optional explicit moveset; bosses nearly always pass one,
+# and dropping it silently rebuilds them on default level-up moves.
+#
+# The level is either a literal or an expression in `balanceo` (Entrenadores.rb:
+# `pbBalancedLevel($Trainer.party) - 1`), which scales the fight to the player's
+# party. The trailing offset is part of the design -- Camus is balanceo+1 and Silver
+# is balanceo-2 -- so it is captured with the token, not thrown away.
+re_create = re.compile(r'(p\d)\s*=\s*createPokemon\(\s*("?)([A-Za-z0-9_]+)\2\s*,\s*'
+                       r'(\d+|[a-zA-Z_]\w*(?:\s*[-+]\s*\d+)?)\s*(?:,\s*\[([^\]]*)\])?')
 re_attr   = re.compile(r'(p\d)\.(item|ev|name|setAbility|formNoCall)\s*=?\s*\(?\s*(?:PBItems::)?([A-Za-z0-9_,\[\] "]+?)\)?;?\s*$')
 re_party  = re.compile(r'party\s*=\s*\[([^\]]*)\]')
 re_trainer= re.compile(r'createTrainer\(\s*(\d+)\s*,\s*"([^"]*)"')
@@ -68,8 +76,12 @@ for fn in sorted(os.listdir(DATA)):
         code = re.sub(r'^[^a-zA-Z$]*', '', line)
         mc = re_create.search(code)
         if mc:
-            var, _, species, lvl = mc.groups()
-            cur[var] = {"species": species, "level": int(lvl) if lvl.isdigit() else lvl}
+            var, _, species, lvl, moves = mc.groups()
+            lvl = re.sub(r"\s+", "", lvl)
+            mon = {"species": species, "level": int(lvl) if lvl.isdigit() else lvl}
+            if moves:
+                mon["moves"] = re.findall(r':([A-Z0-9]+)', moves)
+            cur[var] = mon
             continue
         ma = re_attr.search(code)
         if ma and ma.group(1) in cur:

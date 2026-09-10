@@ -5,7 +5,7 @@ Input: a JSON file — list of team objects:
   { "id": str, "type_id": int, "class": str, "name": str,
     "orig_ace_level": int, "cheat_tier": bool (default false),
     "trainer_items": [ITEM...],
-    "mons": [ { "species": S, "level": int, "moves": [M x1-4],
+    "mons": [ { "species": S, "level": int | ["balanceo", offset], "moves": [M x1-4],
                 "item": ITEM|null, "ability": 0|1|2, "nature": N,
                 "iv": int|[6 ints], "ev": [6 ints] } ] }
 
@@ -31,10 +31,24 @@ def validate(teams, slack=2):
             err("SIZE", f"{len(t.get('mons', []))} mons")
         for i, m in enumerate(t.get("mons", [])):
             tag = f"mon{i} {m.get('species')}"
+            # A lowercase species is an engine-resolved slot, not a species: the
+            # rival fights fill their starter slot from the Pokes Rivales script at
+            # runtime (owenpoke2, albapoke1...). It has no fixed species and no
+            # moveset to check, so there is nothing here to validate.
+            if m.get("species", "")[:1].islower():
+                warn("DYNAMIC", f"{tag}: engine-resolved slot, not checked"); continue
             s = sp.get(m.get("species"))
             if not s:
                 err("SPECIES", f"{tag}: not in pokemon.txt"); continue
             lvl = m.get("level")
+            if isinstance(lvl, list):
+                # A scaled level, ['balanceo', offset]: the engine resolves it from
+                # the player's party at battle time, so the runtime number is not
+                # knowable here. Check the level the set was DESIGNED against, which
+                # is what its legality was chosen at. (The game already instantiates
+                # its own scaled teams the same way -- PokeBattle_Pokemon.new takes
+                # any level, so a Mamoswine at 20 is built, not rejected.)
+                lvl = m.get("design_level")
             if not isinstance(lvl, int) or not 1 <= lvl <= 100:
                 err("LEVEL", f"{tag}: level {lvl!r}"); continue
             if lvl < floor[m["species"]]:

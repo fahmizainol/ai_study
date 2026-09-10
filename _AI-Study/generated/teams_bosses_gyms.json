@@ -906,92 +906,91 @@
     "why": "original"
    },
    {
-    "species": "ESPEON",
+    "species": "GRENINJA",
     "level": 39,
     "moves": [
-     "CALMMIND",
-     "PSYCHIC",
-     "SHADOWBALL",
-     "MORNINGSUN"
+     "SPIKES",
+     "TAUNT",
+     "SHADOWSNEAK",
+     "HYDROCANNON"
     ],
-    "item": "LEFTOVERS",
-    "ability": 2,
-    "nature": "TIMID",
+    "item": "FOCUSSASH",
+    "ability": 1,
+    "nature": "JOLLY",
     "iv": 31,
     "ev": [
      0,
-     0,
+     252,
      4,
      252,
-     252,
+     0,
      0
     ],
     "roles": [
-     "recovery",
-     "setup"
+     "hazards"
     ],
-    "src": "gen7ru/dex/Calm Mind",
+    "src": "gen6ubers/dex/Suicide Lead",
+    "fidelity": 3,
+    "inherited": null,
+    "kept": false,
+    "why": "theme:hazards"
+   },
+   {
+    "species": "BANETTE",
+    "level": 39,
+    "moves": [
+     "KNOCKOFF",
+     "WILLOWISP",
+     "SHADOWCLAW",
+     "SHADOWSNEAK"
+    ],
+    "item": "BANETTITE",
+    "ability": 0,
+    "nature": "ADAMANT",
+    "iv": 31,
+    "ev": [
+     228,
+     252,
+     0,
+     28,
+     0,
+     0
+    ],
+    "roles": [
+     "mega"
+    ],
+    "src": "gen6ru/dex/Offensive",
     "fidelity": 4,
     "inherited": null,
     "kept": false,
     "why": "off-theme"
    },
    {
-    "species": "GRENINJA",
-    "level": 39,
-    "moves": [
-     "ROCKSLIDE",
-     "UTURN",
-     "ICEBEAM",
-     "GUNKSHOT"
-    ],
-    "item": "CHOICESCARF",
-    "ability": 1,
-    "nature": "HASTY",
-    "iv": 31,
-    "ev": [
-     0,
-     176,
-     0,
-     252,
-     80,
-     0
-    ],
-    "roles": [
-     "pivot"
-    ],
-    "src": "gen7ou/dex/Choice Scarf",
-    "fidelity": 4,
-    "inherited": null,
-    "kept": false,
-    "why": "theme:pivot"
-   },
-   {
-    "species": "AERODACTYL",
+    "species": "JIRACHI",
     "level": 40,
     "moves": [
-     "STEALTHROCK",
-     "TAUNT",
-     "STONEEDGE",
-     "EARTHQUAKE"
+     "WISH",
+     "PROTECT",
+     "IRONHEAD",
+     "UTURN"
     ],
-    "item": "AERODACTYLITE",
-    "ability": 1,
-    "nature": "JOLLY",
+    "item": "LEFTOVERS",
+    "ability": 0,
+    "nature": "CAREFUL",
     "iv": 31,
     "ev": [
-     40,
-     252,
+     248,
      0,
-     216,
      0,
-     0
+     72,
+     0,
+     188
     ],
     "roles": [
-     "hazards",
-     "mega"
+     "pivot",
+     "recovery"
     ],
-    "src": "gen6ubers/dex/Prehistoric Beast (Offensive)",
+    "src": "gen7ou/dex/Wish",
     "fidelity": 4,
     "inherited": null,
     "kept": false,
@@ -1004,8 +1003,8 @@
    "theme": "DARK",
    "notes": [
     "dropped MIGHTYENA (420 BST, band 470-580)",
-    "AERODACTYL off-theme: resists FIGHTING/BUG",
-    "ESPEON off-theme: resists FIGHTING"
+    "JIRACHI off-theme: resists FIGHTING/BUG/FAIRY",
+    "BANETTE off-theme: resists FIGHTING/BUG"
    ]
   }
  },
@@ -1488,36 +1487,6 @@
     "why": "original"
    },
    {
-    "species": "TAPUFINI",
-    "level": 56,
-    "moves": [
-     "WHIRLPOOL",
-     "NATURESMADNESS",
-     "MOONBLAST",
-     "DEFOG"
-    ],
-    "item": "LEFTOVERS",
-    "ability": 0,
-    "nature": "BOLD",
-    "iv": 31,
-    "ev": [
-     248,
-     0,
-     156,
-     64,
-     0,
-     40
-    ],
-    "roles": [
-     "removal"
-    ],
-    "src": "gen7ou/dex/Whirlpool Trapper",
-    "fidelity": 3,
-    "inherited": null,
-    "kept": false,
-    "why": "off-theme"
-   },
-   {
     "species": "MELOETTA",
     "level": 56,
     "moves": [
@@ -1548,64 +1517,95 @@
     "why": "theme:setup"
    },
    {
-    "species": "SLAKING",
+    "species": "JIRACHI",
     "level": 56,
     "moves": [
-     "RETURN",
-     "EARTHQUAKE",
-     "ROCKSLIDE",
-     "BULKUP"
+     "IRONHEAD",
+     "UTURN",
+     "HEALINGWISH",
+     "ICEPUNCH"
     ],
-    "item": "LEFTOVERS",
+    "item": "CHOICESCARF",
     "ability": 0,
     "nature": "ADAMANT",
     "iv": 31,
     "ev": [
-     252,
-     252,
+     176,
+     152,
      0,
+     180,
      0,
-     0,
-     4
+     0
     ],
     "roles": [
-     "setup"
+     "pivot"
     ],
-    "src": "gen7battlespotdoubles/stats/Showdown Usage",
+    "src": "gen6ubers/dex/Choice Scarf",
     "fidelity": 4,
     "inherited": null,
     "kept": false,
-    "why": "theme"
+    "why": "off-theme"
    },
    {
-    "species": "DIALGA",
+    "species": "DRAGONITE",
+    "level": 56,
+    "moves": [
+     "REST",
+     "DRAGONTAIL",
+     "SUBSTITUTE",
+     "THUNDERWAVE"
+    ],
+    "item": null,
+    "ability": 0,
+    "nature": "IMPISH",
+    "iv": 31,
+    "ev": [
+     252,
+     0,
+     252,
+     4,
+     0,
+     0
+    ],
+    "roles": [
+     "recovery",
+     "speed"
+    ],
+    "src": "gen7zu/stats/Showdown Usage",
+    "fidelity": 4,
+    "inherited": "DRAGONAIR",
+    "kept": false,
+    "why": "off-theme"
+   },
+   {
+    "species": "ARCEUS",
     "level": 57,
     "moves": [
      "STEALTHROCK",
-     "DRACOMETEOR",
-     "FLASHCANNON",
-     "THUNDER"
+     "WILLOWISP",
+     "ROAR",
+     "LASTRESORT"
     ],
-    "item": "SHUCABERRY",
+    "item": "LEFTOVERS",
     "ability": 0,
-    "nature": "MODEST",
+    "nature": "BOLD",
     "iv": 31,
     "ev": [
+     248,
+     0,
      244,
+     16,
      0,
-     0,
-     12,
-     252,
      0
     ],
     "roles": [
      "hazards"
     ],
-    "src": "gen6ubers/dex/Offensive Utility",
-    "fidelity": 4,
+    "src": "gen6anythinggoes/dex/Wallceus",
+    "fidelity": 3,
     "inherited": null,
     "kept": false,
-    "why": "off-theme"
+    "why": "theme:hazards"
    }
   ],
   "design": {
@@ -1617,8 +1617,8 @@
     "dropped TOGEKISS (545 BST, band 554-640)",
     "dropped SNORLAX (540 BST, band 554-640)",
     "dropped BEWEAR (500 BST, band 554-640)",
-    "DIALGA off-theme: 46% Smogon co-occurrence",
-    "TAPUFINI off-theme: 82% Smogon co-occurrence"
+    "JIRACHI off-theme: resists FIGHTING",
+    "DRAGONITE off-theme: resists FIGHTING"
    ]
   }
  },

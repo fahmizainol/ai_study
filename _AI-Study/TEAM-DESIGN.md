@@ -418,10 +418,20 @@ plus one archetype call for all 143 filler fights. Versus 178 per-fight sessions
 **Deployment without touching 30+ maps.** The teams live in one generated Ruby file
 (a registry hash), injected into `Scripts.rxdata` as a single section — the same
 proven method as the probe adapter (`adapters/realidea/AI_Probe.rb`). A small patch
-to `createTrainer` looks up the registry by `(type_id, trainer_name, original ace
-level)` — the ace level disambiguates recurring rivals — and swaps in the curated
-party, falling back to the original for anything unregistered. Map events stay
-byte-identical: fully diffable, fully revertible, one injection point.
+to `createTrainer` looks up the registry by `(map_id, type_id, trainer_name, original
+ace level)` and swaps in the curated party, falling back to the original for anything
+unregistered. Map events stay byte-identical: fully diffable, fully revertible, one
+injection point.
+
+The map leads the key because class+name repeats all over the game and the ace level
+does not reliably separate the repeats — Alba's two early fights both ace at 60,
+because she carries a Braviary pinned there, so keyed on ace alone they are one fight
+and one of the two teams is silently dropped. Adding the map took the registry from
+126 usable entries to 146. The ace slot is nil for a `balanceo` fight, which has no
+fixed ace to match. What is left is four pairs of twin trainers standing on the same
+map under the same class, name and level: `createTrainer` is handed nothing that
+tells them apart except their original party, which this key does not read, so both
+twins field the first one's team.
 
 ---
 
@@ -521,6 +531,45 @@ That is a deliberate choice for a **private** mod. `--stats-only` drops them for
 distributable build; the measured cost is MAD 1.7 → 17.9 BST and the loss of every
 mega, since mega sets live almost entirely in the `dex` half.
 
+### 6.7 Named non-gym trainers (`tools/generate_trainers.py`)
+
+Eighteen more fights run through the same builder: the three rivals (Owen, Alba,
+Teresa), the recurring bosses who are not gym leaders (Jeremiah, who fights twice
+under two classes; Simon; Cintia, the post-game superboss), and the three built on
+`balanceo` (Camus, Atlas, Silver). Gym leaders keep their own generator; these share
+its scoring, its item gate and its level remap, and differ in three ways.
+
+**No theme.** A rival has no type identity to build around, so the 4-of-6 theme rule
+has nothing to bind to. Their identity is their roster, which KEEP-ORIGINAL already
+preserves — every dev-chosen species is kept and only re-equipped, and unlike a gym
+leader nothing is dropped for sitting under the curve. That is why the late fights
+land 30-60 eBST under target: Cintia's six are Cynthia's six, and reaching 600 would
+mean replacing the mons that make her Cintia. The padding slots carry what power
+there is, and no fight takes an Uber at any stage — `eligible()` opens that pool from
+gym 7, which is right for a leader whose picks are still theme-locked, but a rival
+has no theme and the whole box-legendary pool comes with it.
+
+**Scaled levels.** Camus, Atlas and Silver are written `balanceo+1` / `balanceo-2` —
+the game's own `pbBalancedLevel($Trainer.party) - 1` plus an offset — so the fight
+tracks the player instead of a pinned number. Those levels stay dynamic: the level
+cell is emitted as `["balanceo", offset]` and the engine evaluates it at battle time,
+padded slots included. The set is still built against a concrete level, recorded as
+`design_level` so the validator can check legality against what it was chosen at.
+
+**Bands read from the map.** A scaled fight has no level anywhere in its party, but
+its eBST target and item pool still need one. `G.story_level()` takes it from the
+nearest place the developer did pin: the fight's own map, then the area it hangs
+under in MapInfos (Fabrica Rocket sits under Ciudad Anatasa, whose gym pins it at
+33), then — for a numbered route, which hangs off a flat `Rutas` folder — the routes
+either side of it. Ruta 11 has no battle of its own; Ruta 10 aces at 29 and Ruta 12
+at 36, which puts Silver at 32.
+
+That last case forced a refinement to the item gate. A gym leader's badge count says
+exactly where they stand, but stage `UNLOCK_STAGE` spans the entire walk from gym 3
+to gym 4, and Silver waits on Ruta 11 partway along it. On that one boundary the
+fight has to actually be in the unlock town to count as past the shop, so Atlas (in
+Ciudad Anatasa) megas and Silver and Teresa's Pueblo Lapis fight do not.
+
 ## 7. Files
 
 | file | what |
@@ -541,6 +590,8 @@ mega, since mega sets live almost entirely in the `dex` half.
 | `tools/smogon_corpus.py` | tiers + published sets + teammate correlation (three vendored corpora) |
 | `tools/generate_bosses.py` | §6.6 boss generator: eBST curve → nine validated gym teams |
 | `generated/teams_bosses_gyms.json` | the nine generated boss teams (validator-clean, slack 0) |
+| `tools/generate_trainers.py` | the same machinery for every named non-gym trainer: three rivals, Jeremiah/Simon/Cintia, and the three `balanceo` bosses |
+| `generated/teams_trainers.json` | those 18 teams (validator-clean, slack 0) |
 | `extracted/smogon-sets/` | `@smogon/sets` gen 6-9 — set corpus (**`dex` half is copyrighted**) |
 | `extracted/smogon-stats/` | Smogon 2019-06 gen-7 moveset stats — teammate correlation |
 | `extracted/smogon-formats/` | Showdown `formats-data.ts` — the authoritative competitive tier |
