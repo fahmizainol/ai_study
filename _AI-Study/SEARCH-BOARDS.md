@@ -843,8 +843,32 @@ carry Tailwind; the lead was verified to be the carrier in all five battles) **T
 still used zero times and reached a printed ranking once.** Trick Room is the same picture from
 the other direction: its setter was active from turn 1 and it sat 10th-15th of 15 options. Two
 setup moves, opportunity guaranteed, never chosen — so this is not a sampling artefact.
-Defect 13 is the obvious mechanism, since targetless moves *are* the setup moves and their
-visits split across duplicate enumerations; that is now cheap to test directly.
+**The cause is the evaluation's weights, not missing code, and not Foul Play** — Foul Play only
+consumes this search; `mcts.rs` and `evaluate.rs` are poke-engine's own. `grep doubles
+src/genx/evaluate.rs` returns nothing: PR #10 left the singles evaluation verbatim, and its
+245 lines of hand-tuned constants say
+
+| term | weight |
+|---|---|
+| `POKEMON_HP` | 100.0 |
+| `SUBSTITUTE` | 40.0 |
+| `POKEMON_ATTACK_BOOST`, `POKEMON_ALIVE` | 30.0 |
+| `REFLECT`, `LIGHT_SCREEN` | 20.0 |
+| `TAILWIND` | **7.0** |
+| Trick Room, weather, terrain | **no term at all** |
+
+So Tailwind is worth about 7% of one body's HP — less than a layer of Spikes, a quarter of one
+Attack boost. Defensible in singles, where Tailwind is mediocre; in BW doubles Prankster
+Tailwind is close to the defining strategy of the format. Trick Room scores zero, so setting it
+is pure cost. Note also that the eval rewards Reflect and Light Screen at 20-40 while **0 of 171
+teams carry either**, and ignores the three field effects the format actually turns on.
+
+Rollouts do not rescue this: Tailwind's payoff *is* speed order, which only materialises through
+later damage exchanges, while the cost (a turn not attacking) is visible at ply one — at a few
+thousand visits against a doubles branching factor near 250 it never surfaces. Defect 13 makes
+it worse by splitting a setup move's visits across duplicate enumerations, but the weights are
+the bigger lever and the cheaper fix. `evaluate.rs:107` is also defect 2's panic site, which
+makes this file the most defect-dense 245 lines in the fork.
 
 **Filtered pools find defects faster than random ones.** The Tailwind pool produced 2 panics and
 2 Choice-lock fallbacks in 5 battles, against roughly 1 per 5 in the general pool — fast
