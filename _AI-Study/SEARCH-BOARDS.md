@@ -134,11 +134,13 @@ The log is also dead weight in a search and grows with the battle: stripping it 
 snapshot cut an iteration from 0.64 to 0.48 ms on a short battle, with the gain shrinking
 as the rest of the state grows relative to it. A fork would disable the log outright.
 
-## Doubles in poke-engine: not feasible
+## Doubles in poke-engine: a core rewrite, and someone already wrote it
 
 Asked because poke-engine is the only board fast enough to be interesting. The answer from
 the source at the pinned commit `f4e224c` is that doubles is a rewrite of the engine core,
-and what survives is the data tables, not the mechanics.
+and what survives is the data tables, not the mechanics. **That rewrite exists** — as a
+closed, unreviewed PR, audited below on 2026-09-12; read the source audit first, because it
+is what the PR had to pay for.
 
 - **The active Pokémon's own state lives on the side, not the Pokémon.** `Side` holds one
   `active_index`, the seven boost stages, the volatile bitset, substitute health, last used
@@ -160,8 +162,163 @@ and what survives is the data tables, not the mechanics.
   pairs. The 10 ms decision does not survive that even in Rust.
 
 The mechanics needing re-audit under a slot-aware model are ~14,000 lines, mostly
-`genx/generate_instructions.rs` (10,904). Upstream has not done it: one PR, #10 "Main
-doubles", opened and closed unmerged the same day in June 2026.
+`genx/generate_instructions.rs` (10,904).
+
+### PR #10 "Main doubles": what it actually is
+
+Upstream has one PR, #10, opened 2026-06-19 14:04Z and **closed by pmariglia 64 minutes
+later with zero comments and zero review comments**. "Unmerged the same day" was recorded
+here before anyone read it. Read now, it is not an abandoned sketch: **9,214 insertions and
+3,869 deletions across 55 files** (`genx/generate_instructions.rs` 2665+/1425-,
+`genx/state.rs` 921+, `state.rs` 826+, `instruction.rs` 171+, every generation's
+`state`/`evaluate`/`choice_effects`, and the Python binding at 246+). Three commits by
+`jagobainda` and `joseramidev`, from fork `0neCr1t/engine` branch `main-doubles` at
+`bf863be3a`. **Both fork and branch are alive**, and the head is also reachable from
+upstream as `refs/pull/10/head`, so it is fetchable either way.
+
+**It pays the four costs above, and the way it pays them is the interesting part:**
+
+- **Per-slot state, by moving state off the side and onto the Pokemon.** The diff deletes
+  `substitute_health`, all seven boosts, `volatile_statuses`, `volatile_status_durations`
+  and `last_used_move` from `Side` and re-adds them on `Pokemon` — "in singles only the
+  active slot-0 Pokemon's copy is ever read/written". `active_index` becomes
+  `active_indices: [PokemonIndex; ACTIVE_PER_SIDE]`. Switch semantics survive on the
+  existing explicit `reset_boosts` / volatile-clear instructions emitted before a switch
+  (`src/state.rs:1440`, `:1795`).
+- **A compile-time slot count, not a runtime one.** `ACTIVE_PER_SIDE` is 2 under the
+  feature and 1 without it (`src/state.rs:14`), plus a new `BattlePosition { side, slot }`
+  as "the single abstraction used for targeting", with `opposing_slots()` and `ally(slot)`.
+- **A Cargo feature, so singles cannot regress.** `doubles = []` in the crate and
+  `doubles = ["poke-engine/doubles"]` in the binding, explicitly "does not imply any
+  generation". A `slotted_instruction!` macro adds `slot: u8` only in a doubles build, so
+  "behavior and the in-memory layout stay bit-for-bit identical to before"; a new
+  `src/decision.rs` (115 lines) aliases `SideChoice` and dispatches, so `mcts`,
+  `mcts_threaded`, `search` and `io` are written once for both formats and collapse to the
+  singles path at zero cost. **That claim is the thing to verify first, and it is cheap.**
+- **A turn as a pair becomes a turn as a pair of `SideAction`s.**
+  `SideAction { actions: [MoveChoice; ACTIVE_PER_SIDE] }` (`genx/state.rs:208`), the
+  cartesian product of a side's slots minus cross-slot illegals (both slots switching to
+  the same benched body); CLI syntax `move;move` with an optional `,<slot>` target suffix.
+- **`MoveTarget` goes from 2 variants to 8**: `User, Opponent, Ally, BothFoes, AllAdjacent,
+  AllAdjacentFoes, AllOthers, UserSide`, with spread targets backfilled across the move
+  table.
+
+**Its tests cover exactly the list this document called "absent, not weakened".** 1,646
+lines, 47 cases: `follow_me_redirects_single_target`,
+`rage_powder_ignored_by_grass_attacker`, `lightning_rod_redirects_nullifies_and_boosts`,
+`storm_drain_...`, `ally_switch_swaps_slots`, `helping_hand_boosts_ally_damage`,
+`wide_guard_blocks_spread`, `earthquake_spread_reduction`, plus
+`four_actors_resolve_in_speed_order`, `four_actor_speed_tie_branches`,
+`trick_room_reverses_order`, `spread_move_faints_both_opposing_actives`,
+`double_faint_enumerates_distinct_replacements`, `replacement_lands_in_correct_slot`,
+`uturn_sets_per_slot_force_switch`, `snipe_shot_ignores_follow_me`,
+`telepathy_avoids_ally_spread`, `friend_guard`/`battery`/`power_spot`,
+`intimidate_hits_both_foes`, `mcts_returns_valid_combined_actions`, and
+`deserializes_singles_format_state`.
+
+**Built and run, 2026-09-12** (cargo 1.91.1, the clone above, no rebase, no patches):
+
+| build | lib | `test_battle_mechanics` | `test_doubles` |
+|---|---|---|---|
+| upstream base `60e1cf8a2`, `--features gen5` | 220 pass | 611 pass | (absent) |
+| the fork, `--features gen5` | **220 pass** | **611 pass** | 0 (gated out) |
+| the fork, `--features doubles,gen5` | 216 pass, **1 fail** | **0 — gated out** | **47 pass** |
+
+It compiles clean in 15.6 s. Three things this settles:
+
+- **The "singles is unchanged" claim holds at the unit level.** The fork's singles build
+  runs the *same test counts as upstream's* — 220 lib and 611 mechanics — and passes all of
+  them. The refactor that moved boosts and volatiles from `Side` onto `Pokemon` did not
+  break a single upstream singles expectation. That is not the same as bit-for-bit identical
+  output on our 180-battle set, which remains measurement 1 below, but it is much stronger
+  evidence than an unreviewed PR description.
+- **The doubles build's safety net is thin, and this is the real coverage answer.** The
+  611-case `test_battle_mechanics` suite is `cfg`-gated *out* of a doubles build entirely
+  (48 `cfg(not(feature = "doubles"))` sites against 116 `cfg(feature = "doubles")`). So the
+  doubles configuration is guarded by **47 doubles cases plus 216 lib cases, where the
+  singles configuration is guarded by 831**. The singles mechanics are not re-asserted
+  under a slot-aware board anywhere. That is the gap to close before trusting a doubles arm,
+  and it is closed by porting fixtures, not by writing engine code.
+- **The one failure is a stale fixture, not an engine bug.**
+  `test_switching_in_with_intimidate` (`genx/generate_instructions.rs:9306`) expects one
+  `Boost SideTwo Attack: -1`; the doubles build emits **two**, because with
+  `ACTIVE_PER_SIDE = 2` Intimidate correctly hits both foes — which is exactly what the
+  passing `test_doubles_intimidate_hits_both_foes` asserts. 216 sibling fixtures were
+  updated for the slot argument and this one was missed. It is a one-line fix, and it is
+  also a fair sample of what a rebase will consist of.
+
+**Why it was closed is not recorded anywhere, and the diff is not the likely reason.**
+Five days *before* the PR, pmariglia's own `79f8186f` (2026-06-14) reads: "Remove allocs
+from sample_node — **Passing some learnings from doubles back onto singles**." He was
+already doing doubles himself. No public branch carries it (all six upstream branches
+checked — `somecrap`, `somecrap-multi`, `somecrap-multi-thread`, `hashing`,
+`threaded-search`, `test-remove-vloss-fix-ucb`: no `doubles` feature, no `test_doubles.rs`,
+no `decision.rs`), so it is local or unpushed. That is inference. What is visible in the PR
+and would get it closed on sight regardless: committed Windows build artifacts
+(`poke_engine.cp313-win_amd64.pyd`, `cp314-win_amd64.pyd`, `poke_engine.pdb`), a
+merge-from-`main` commit in the branch history, a commit message in Spanish, and a 9.2k-line
+unsolicited refactor touching every generation from a first-time contributor
+(`author_association: NONE`) with no prior issue.
+
+**What is genuinely against it.** It is unreviewed by anyone, including its own upstream.
+Its base `60e1cf8a2` (2026-06-14) is **43 commits and 32 files behind** our pinned
+`f4e224c`, so it needs a rebase. And it does **nothing** about the combinatorics above:
+~250 options a side still means tens of thousands of joint pairs, so a 5000-iteration
+budget covers far less of a doubles tree than of a singles one, whatever the mechanics do.
+
+### Is this another Ruby projection?
+
+The reasonable fear, since eight versions of our own board bought parity and never a lead.
+The answer is no, and the reason is worth stating precisely, because it is not about
+coverage.
+
+**What killed the Ruby projection was not low coverage.** It was two uncalibrated error
+sources at once: a hand-written board *plus* evaluation constants borrowed from poke-engine,
+where `SUBSTITUTE_VALUE = 75` and `STAGE_VALUE = 30` sit on real mechanisms — a real HP pool
+the instruction generator breaks, a real stat multiplier in a real damage formula every ply.
+That is why *fixing* coverage made it worse (48 → 41/60 at 0.7.9): pricing attacks correctly
+re-priced them against a setup term that was still fake. The board was a **lie** that
+evaluate believed, and more search amplified it.
+
+**This fork is not an approximation of poke-engine; it is poke-engine with a slot
+dimension** — the same instruction generator, the same damage calc. Its `genx/evaluate.rs`
+diff (19+/43-) looks alarming and is **purely mechanical**: every term and every constant
+unchanged, re-pointed from `side.attack_boost` to `pkmn.attack_boost` and the active test
+widened from `== active_index` to `any(slot)`. The net -24 lines is verbose
+`state.side_one.volatile_statuses.contains(...)` chains collapsing to `pkmn....`. Nothing
+added, nothing removed.
+
+So the real risk is one thing and it is narrower: **evaluate is singles-calibrated and
+doubles-blind.** There is no term for spread coverage, ally support, redirection, Follow Me
+denial, or for two healthy actives being worth more than their summed HP. That is a **gap,
+not a lie** — and the distinction is the whole lesson of 0.7.9: search papers over gaps and
+amplifies lies.
+
+**Our own numbers say coverage is not the binding variable.** poke-engine's *singles*
+coverage is already worse than Showdown's and 0.8.0 measured how much: 67–85% of damage
+rolls within 3% of this engine's, Knock Off wrong by x3.2, Return by x3.5. It beat the rule
+engine by 19 games (p = 0.005). Then closing that gap — the gen 5 build, 78% → 93% within
+3% — **did not move the score** (p = 0.80). Internal consistency decided those runs, not
+fidelity.
+
+**And the trap in choosing Showdown for its coverage:** Showdown is a complete board with
+**no evaluation and no tree**. Picking it for doubles means hand-writing an evaluation
+function again — the exact work that failed in Ruby — on a board 400x slower. This fork
+offers an evaluation that has already beaten the rules and is merely naive about doubles.
+
+**Three measurements turn the fear into a number, cheapest first:**
+
+1. **The singles-identity check.** Build with and without `--features doubles` and replay
+   the 0.8.0 180-battle set. If the doubles build reproduces the singles arm bit-for-bit,
+   the Ruby failure mode is structurally excluded for singles and the only new surface is
+   doubles code. The harness, seeds and control all exist.
+2. **A differential test against Showdown on doubles positions** — the `--check`
+   methodology of 0.8.0 (median ratio, % within 3%, % within 10%) with Showdown as the
+   reference instead of `pbRoughDamage`. This is the only way to get a number for
+   "coverage against Showdown", and 0.8.0 already set the bar: within 10% is enough to win.
+3. ~~Its own doubles tests~~ — **done, above**: 47/47 pass, and they say the mechanics work
+   as their author believed, not that they agree with Showdown. Measurement 2 is the only
+   one that speaks to agreement.
 
 ## Where this leaves the study
 
@@ -169,12 +326,14 @@ doubles", opened and closed unmerged the same day in June 2026.
 |---|---|---|
 | Singles, today, beats the rules | poke-engine via the sidecar | 10 ms |
 | Singles on a second opinion | Showdown | ~4 s at 5000 |
-| **Doubles** | **Showdown, the only candidate** | ~4 s at 5000, or well under 1 s for a one-ply maximin |
+| **Doubles** | Showdown, installed-and-measured | ~4 s at 5000, or well under 1 s for a one-ply maximin |
+| **Doubles**, if PR #10 rebases | poke-engine + `--features doubles` | 10 ms *per joint pair budget*, and the pair count is the problem |
 | A shippable in-game search | none of these | Essentials one-ply maximin is the only shape, untried |
 
 Showdown is ~400x slower than poke-engine for an identical budget, so it buys nothing for
 singles, where the sidecar already wins. It is worth the cost only for doubles, and there
-it is not competing with anything. The one-ply doubles maximin is comfortably sub-second
+its competition is now PR #10 rather than nothing — a rebase and an unreviewed engine
+against a complete board with no evaluation and no tree. The one-ply doubles maximin is comfortably sub-second
 on the stock build and is the cheapest real experiment available.
 
 The prerequisite for any of it is on our side, not Showdown's: **a doubles roster, a
@@ -195,5 +354,10 @@ adapter's search and Foul Play paths both decline doubles by design.
   `showdown_logcheck.js` after a patch.
 - `showdown_teams.js` holds the two gen 5 teams the others share.
 - `ruby ../tools/search_bench.rb` for the Ruby projection numbers.
+
+For PR #10: `git clone --single-branch --branch main-doubles --depth 6
+https://github.com/0neCr1t/engine` (or `git fetch origin refs/pull/10/head` against
+upstream), then `cargo test --features doubles,gen5` and `cargo test --features gen5` for
+the two rows above. Nothing in it is installed and nothing in the study depends on it.
 
 Add `--max-semi-space-size=128` to any `node` invocation to include the GC lever.

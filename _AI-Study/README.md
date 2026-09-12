@@ -55,7 +55,8 @@ obedience banner at the top of `PORTABLE-AI-REBORN.md` before you quote any old 
    respect it or the core stops being portable.
 6. `SEARCH-BOARDS.md` — read before proposing any new search: the four boards a search
    can step, what each costs a turn, and which of them can do doubles. It is the reason
-   the Foul Play bridge exists and the reason doubles is not built on poke-engine.
+   the Foul Play bridge exists, and it carries the audit of poke-engine PR #10 — the
+   closed, unreviewed doubles rewrite that builds and passes its own tests here.
 
 `PORTABLE-AI-DIAGNOSIS.md` and `PORTABLE-AI-REALIDEA.md` are history; both carry
 banners saying what in them has since been superseded.
@@ -78,7 +79,7 @@ _AI-Study/
 ├── PORTABLE-AI-REALIDEA.md        the v16 adapter: probe, tier gauntlet, mega evolution
 ├── PORTABLE-AI-DIAGNOSIS.md       0.3.2 → 0.4 gap analysis — history, numbers superseded
 ├── SEARCH-BOARDS.md               what to run a search on: Essentials / Ruby / Showdown /
-│                                 poke-engine measured, and why doubles needs Showdown
+│                                 poke-engine measured, + poke-engine PR #10 doubles audit
 ├── DOUBLES-AI.md                  doubles combinations, fixture source, and A/B results
 ├── REBORN-DOUBLES-AI.md           teardown of Reborn's doubles decision pipeline
 ├── REJUVENATION-MM-DOUBLES-AI.md  Rejuvenation MM teardown + comparison with Reborn

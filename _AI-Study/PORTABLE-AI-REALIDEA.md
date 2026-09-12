@@ -2702,10 +2702,13 @@ as the leaf) is now measured against a real number rather than a hope.
 **Which board, and doubles.** The four boards a search could step here (Essentials'
 own engine, this Ruby projection, Pokémon Showdown, poke-engine) were measured against
 each other on 2026-09-09: see `SEARCH-BOARDS.md`. Short version, because it settles two
-recurring questions: poke-engine cannot be made to do doubles without rewriting its core
-(boosts and volatiles live on the *side*, every instruction addresses a side and not a
-slot, `MoveTarget` is `User | Opponent`), and Showdown can, at ~4 s a decision for 5000
-iterations against this bridge's 10 ms. Nothing in that document is installed.
+recurring questions: doubles on poke-engine needs a core rewrite (boosts and volatiles live
+on the *side*, every instruction addresses a side and not a slot, `MoveTarget` is
+`User | Opponent`), and Showdown can do doubles today at ~4 s a decision for 5000 iterations
+against this bridge's 10 ms. **Amended 2026-09-12: that rewrite exists** — poke-engine PR
+#10, closed unreviewed in 64 minutes, builds here and passes 47/47 of its own doubles tests
+with the singles suite intact (220 + 611), audited in `SEARCH-BOARDS.md`. Nothing in that
+document is installed.
 
 **Reproduce.** `tools/build_poke_engine.sh` (clones and builds the gen 6 wheel into
 `generated/foul_play/venv`, git-ignored); `generated/foul_play/venv/bin/python
