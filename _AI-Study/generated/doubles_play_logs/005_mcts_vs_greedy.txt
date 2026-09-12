@@ -1,0 +1,189 @@
+battle 5   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: Golem, Mienshao, Musharna, Seaking
+  p2: Gyarados, Gothitelle, Blastoise, Machamp
+
+  Turn 1
+    p1 mcts: switch 3, move 4 2   (slot0 Golem -> Musharna)
+      search (6000 visits): switch musharna;tackle,1 225v 128 | switch musharna;tackle,0 213v 119 | switch musharna;quickguard,1 194v 106 | switch musharna;machpunch,1 192v 104
+    p2 greedy: move 2 1, move 2 1
+      p1a <- Musharna comes in (373/373)
+      p1b Mienshao used Tackle -> p2b: Gothitelle
+      p2a Gyarados used Tackle -> p1a: Musharna
+      p2b Gothitelle used Tackle -> p1a: Musharna
+      after p1: Musharna 296/373, Mienshao 271/271
+      after p2: Gyarados 331/331, Gothitelle 250/281
+
+  Turn 2
+    p1 mcts: move 1, move 4 2
+      search (6000 visits): calmmind,0;tackle,1 214v 129 | calmmind,0;quickguard,1 211v 127 | calmmind,0;switch seaking 209v 125 | calmmind,0;machpunch,1 203v 121
+    p2 greedy: move 2 1, move 2 1
+      p1b Mienshao used Tackle -> p2b: Gothitelle
+      p2a Gyarados used Tackle -> p1a: Musharna
+      p2b Gothitelle used Tackle -> p1a: Musharna
+      p1a Musharna used Calm Mind
+      after p1: Musharna 219/373, Mienshao 271/271
+      after p2: Gyarados 331/331, Gothitelle 219/281
+
+  Turn 3
+    p1 mcts: move 4, move 4 2
+      search (6000 visits): swift,0;tackle,1 229v 131 | calmmind,0;tackle,0 219v 124 | swift,0;tackle,0 199v 110 | swift,0;quickguard,1 198v 109
+    p2 greedy: move 2 1, move 2 1
+      p1b Mienshao used Tackle -> p2b: Gothitelle
+      p2a Gyarados used Tackle -> p1a: Musharna
+      p2b Gothitelle used Tackle -> p1a: Musharna
+      p1a Musharna used Swift -> p2b: Gothitelle  [[spread] p2a,p2b]
+      after p1: Musharna 142/373, Mienshao 271/271
+      after p2: Gyarados 280/331, Gothitelle 141/281
+
+  Turn 4
+    p1 mcts: move 4, move 3 2
+      search (6000 visits): swift,0;machpunch,1 212v 116 | swift,0;tackle,0 199v 107 | calmmind,0;machpunch,1 190v 101 | calmmind,0;tackle,0 189v 100
+    p2 greedy: move 2 1, move 2 1
+      p1b Mienshao used Mach Punch -> p2b: Gothitelle
+      p2a Gyarados used Tackle -> p1a: Musharna
+      p2b Gothitelle used Tackle -> p1a: Musharna
+      p1a Musharna used Swift -> p2b: Gothitelle  [[spread] p2a,p2b]
+      after p1: Musharna 65/373, Mienshao 271/271
+      after p2: Gyarados 229/331, Gothitelle 76/281
+
+  Turn 5
+    p1 mcts: move 4, move 2
+      search (6000 visits): swift,0;quickguard,1 189v 86 | swift,0;tackle,0 175v 78 | swift,0;tackle,1 172v 76 | calmmind,0;quickguard,1 171v 75
+    p2 greedy: move 2 1, move 2 1
+      p1b Mienshao used Quick Guard
+      p2a Gyarados used Tackle -> p1a: Musharna
+      p2b Gothitelle used Tackle -> p1a: Musharna
+      p1a Musharna fainted
+      after p1: Musharna 0/373, Mienshao 271/271
+      after p2: Gyarados 229/331, Gothitelle 76/281
+
+  Turn 6
+      p1a <- Golem comes in (301/301)
+      after p1: Golem 301/301, Mienshao 271/271
+      after p2: Gyarados 229/331, Gothitelle 76/281
+
+  Turn 7
+    p1 mcts: move 4, move 4 1
+      search (5000 visits): swordsdance,0;tackle,0 200v 95 | swordsdance,0;quickguard,1 199v 95 | swordsdance,0;tackle,1 198v 94 | swordsdance,0;machpunch,1 188v 88
+    p2 greedy: move 2 1, move 2 1
+      p1b Mienshao used Tackle -> p2a: Gyarados
+      p2a Gyarados used Tackle -> p1a: Golem
+      p2b Gothitelle used Tackle -> p1a: Golem
+      p1a Golem used Swords Dance
+      after p1: Golem 275/301, Mienshao 271/271
+      after p2: Gyarados 193/331, Gothitelle 76/281
+
+  Turn 8
+    p1 mcts: move 2 2, move 3 2
+      search (6000 visits): tackle,1;machpunch,1 241v 97 | tackle,1;tackle,1 228v 90 | tackle,0;tackle,0 214v 83 | swordsdance,0;quickguard,1 214v 83
+    p2 greedy: move 2 1, move 2 1
+      p1b Mienshao used Mach Punch -> p2b: Gothitelle
+      p2a Gyarados used Tackle -> p1a: Golem
+      p2b Gothitelle used Tackle -> p1a: Golem
+      p1a Golem used Tackle -> p2b: Gothitelle
+      p2b Gothitelle fainted
+      after p1: Golem 249/301, Mienshao 271/271
+      after p2: Gyarados 193/331, Gothitelle 0/281
+
+  Turn 9
+      p2b <- Blastoise comes in (299/299)
+      after p1: Golem 249/301, Mienshao 271/271
+      after p2: Gyarados 193/331, Blastoise 299/299
+
+  Turn 10
+    p1 mcts: move 4, move 1
+      search (5000 visits): swordsdance,0;wideguard,1 182v 58 | swordsdance,0;quickguard,1 173v 54 | tackle,1;wideguard,1 172v 53 | protect,0;quickguard,1 163v 49
+    p2 greedy: move 2 1, move 1
+      p1b Mienshao used Wide Guard
+      p2a Gyarados used Tackle -> p1a: Golem
+      p2b Blastoise used Surf -> p1b: Mienshao  [[spread] p2a]
+      p1a Golem used Swords Dance
+      after p1: Golem 232/301, Mienshao 271/271
+      after p2: Gyarados 160/331, Blastoise 299/299
+
+  Turn 11
+    p1 mcts: move 2 1, move 1
+      search (6000 visits): tackle,0;wideguard,1 273v 90 | tackle,1;wideguard,1 240v 75 | tackle,0;tackle,0 231v 71 | swordsdance,0;wideguard,1 218v 65
+    p2 greedy: move 2 1, move 1
+      p1b Mienshao used Wide Guard  [[still]]
+      p2a Gyarados used Tackle -> p1a: Golem
+      p2b Blastoise used Surf -> p1b: Mienshao  [[spread] p2a,p1a,p1b]
+      p1a Golem fainted
+      after p1: Golem 0/301, Mienshao 169/271
+      after p2: Gyarados 127/331, Blastoise 299/299
+
+  Turn 12
+      p1a <- Seaking comes in (301/301)
+      after p1: Seaking 301/301, Mienshao 169/271
+      after p2: Gyarados 127/331, Blastoise 299/299
+
+  Turn 13
+    p1 mcts: move 4, move 3 1
+      search (4000 visits): swordsdance,0;machpunch,0 234v 136 | swordsdance,0;tackle,0 233v 135 | swordsdance,0;machpunch,1 229v 133 | swordsdance,0;quickguard,1 217v 124
+    p2 greedy: move 2 2, move 1
+      p1b Mienshao used Mach Punch -> p2a: Gyarados
+      p2a Gyarados used Tackle -> p1b: Mienshao
+      p2b Blastoise used Surf -> p1b: Mienshao  [[spread] p2a,p1a,p1b]
+      p1b Mienshao fainted
+      p1a Seaking used Swords Dance
+      after p1: Seaking 261/301, Mienshao 0/271
+      after p2: Gyarados 73/331, Blastoise 299/299
+
+  Turn 14
+    p1 mcts: move 4, pass
+      search (9000 visits): swordsdance,0;No Move 2956v 1489 | tackle,0;No Move 1929v 935 | aquajet,0;No Move 1423v 667 | aquajet,1;No Move 1026v 460
+    p2 greedy: move 2 1, move 1
+      p2a Gyarados used Tackle -> p1a: Seaking
+      p2b Blastoise used Surf -> p1a: Seaking  [[spread] p2a,p1a]
+      p1a Seaking used Swords Dance
+      after p1: Seaking 159/301, Mienshao 0/271
+      after p2: Gyarados 40/331, Blastoise 299/299
+
+  Turn 15
+    p1 mcts: move 3, pass
+      search (10000 visits): protect,0;No Move 2385v 889 | tackle,1;No Move 1825v 658 | aquajet,1;No Move 1804v 649 | aquajet,0;No Move 1532v 538
+    p2 greedy: move 2 1, move 1
+      p1a Seaking used Protect
+      p2a Gyarados used Tackle -> p1a: Seaking
+      p2b Blastoise used Surf -> p1a: Seaking  [[spread] p2a]
+      after p1: Seaking 159/301, Mienshao 0/271
+      after p2: Gyarados 7/331, Blastoise 299/299
+
+  Turn 16
+    p1 mcts: move 3, pass
+      search (11000 visits): protect,0;No Move 3051v 936 | tackle,1;No Move 1916v 548 | aquajet,1;No Move 1906v 545 | aquajet,0;No Move 1696v 475
+    p2 greedy: move 2 1, move 1
+      p1a Seaking used Protect  [[still]]
+      p2a Gyarados used Tackle -> p1a: Seaking
+      p2b Blastoise used Surf -> p1a: Seaking  [[spread] p2a,p1a]
+      p2a Gyarados fainted
+      after p1: Seaking 57/301, Mienshao 0/271
+      after p2: Gyarados 0/331, Blastoise 299/299
+
+  Turn 17
+      p2a <- Machamp comes in (321/321)
+      after p1: Seaking 57/301, Mienshao 0/271
+      after p2: Machamp 321/321, Blastoise 299/299
+
+  Turn 18
+    p1 mcts: move 3, pass
+      search (27000 visits): protect,0;No Move 7883v 323 | aquajet,0;No Move 4142v 90 | tackle,1;No Move 3839v 73 | tackle,0;No Move 3776v 69
+    p2 greedy: move 2, move 1
+      p1a Seaking used Protect
+      p2b Blastoise used Surf -> p1a: Seaking  [[spread] p2a]
+      p2a Machamp used Earthquake -> p1a: Seaking  [[spread] p2b]
+      after p1: Seaking 57/301, Mienshao 0/271
+      after p2: Machamp 245/321, Blastoise 231/299
+
+  Turn 19
+    p1 mcts: move 3, pass
+      search (35000 visits): protect,0;No Move 9854v 380 | aquajet,0;No Move 6593v 187 | tackle,0;No Move 5049v 102 | tackle,1;No Move 4623v 80
+    p2 greedy: move 2, move 1
+      p1a Seaking used Protect  [[still]]
+      p2b Blastoise used Surf -> p1a: Seaking  [[spread] p2a,p1a]
+      p2a Machamp used Earthquake -> p1a: Seaking  [[spread] p2b,p1a]
+      p1a Seaking fainted
+      after p1: Seaking 0/301, Mienshao 0/271
+      after p2: Machamp 169/321, Blastoise 163/299
+
+  RESULT: p2 wins

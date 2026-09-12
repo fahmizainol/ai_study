@@ -625,14 +625,41 @@ theirs is adversarial and independently authored, so it finds bugs; ours is ordi
 normal positions, which is what a search actually encounters, and is where the 73.2%/92.0%
 figures come from.
 
-### 2. Fix the three confirmed defects
+### 2. Replace the play harness's synthetic roster with `doubles_a`
+
+**The teams in the 88-31 run are not taken from anywhere — they were authored for that harness
+and they are its weakest part.** `POOL` in `tools/showdown_doubles_lib.js` is 14 species picked
+for mechanic coverage (Seaking for Lightning Rod, Gastrodon for Storm Drain, Clefable for
+Friend Guard and Follow Me, Musharna for Telepathy, Mienshao for the two area guards,
+Gothitelle for Ally Switch), built as `Level: 100 / EVs: 0 HP / Serious Nature` with **no items**
+and four moves each drawn from a pool restricted to 100%-accurate secondary-free moves by the
+always-max PRNG. So two of the things that decide real doubles — items and speed control — are
+absent, along with weather, status and residual damage. The search beat a toy opponent on toy
+teams; nobody should read 73.9% as "it plays good doubles".
+
+The study already has the right fixture: **`adapters/reborn/Doubles_Teams.rb` (`doubles_a`)**,
+24 sets across offense/balance/bulky/speed, *"derived from the public Pokemon Showdown Gen 8
+Doubles OU set data"* — Sitrus Berry, Life Orb, Assault Vest, Weakness Policy, Fake Out,
+Tailwind, Quiver Dance, Rage Powder. Because they come *from* Showdown data they translate back
+to Showdown sets almost directly. Two known obstacles:
+
+- the fixture's `ability` field is an **index**, not a name, so it needs a dex lookup per species;
+- real sets carry sub-100% moves (Muddy Water, Hurricane, Heat Wave), which the always-max PRNG
+  turns into silent misses. Either the determinism scheme relaxes to a seeded PRNG compared
+  against poke-engine's branch *set* rather than one outcome, or those sets play with known
+  misses and the harness says so.
+
+Doing this is what would make the play result mean something: same referee, same search, real
+teams. It is more valuable than re-running the toy version with transcripts attached.
+
+### 3. Fix the three confirmed defects
 
 All small and localized. Wide Guard / Quick Guard applying to the `Choice` instead of the
 resolved target list (`genx/generate_instructions.rs:1744`); `reset_boosts` hardcoding slot 0
 (`state.rs:1795`, Haze too); a sub-action bound to the slot rather than the body across Ally
 Switch.
 
-### 3. Root-cause the spread-move divergence
+### 4. Root-cause the spread-move divergence
 
 The 19-point gap. Not the attacking slot (49/97 from slot 0 against 69/143 from slot 1), and
 in 39 disagreeing turns the undamaged body is the attacker's own ally — which the isolated

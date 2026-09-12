@@ -8,6 +8,12 @@ No game, no adapter, no sidecar: this measures whether a doubles search is worth
 bridge for, before the bridge exists.
 
     python3 tools/pe_doubles_play.py --battles 20 --p1 mcts --p2 greedy [--ms 300] [--seed 7]
+                                     [--save-log DIR]
+
+--save-log writes one readable transcript per battle: each side's chosen actions, the search's
+own root ranking with visit counts (its reasoning, so a loss can be read rather than guessed
+at), the moves Showdown actually resolved, and the HP that resulted. Without it this harness
+reports a score and nothing inspectable.
 
 Policies:
   mcts    poke-engine `monte_carlo_tree_search` on the translated position; the most-visited
@@ -28,6 +34,12 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent))
 from poke_engine import State, Side, Pokemon, Move, SideConditions, monte_carlo_tree_search
+
+# Species names for the log header, read from the shared pool the server draws teams from.
+# Matches the species/ability/moves triple only -- a bare \['Name', also matches the move
+# lists nested inside it.
+POOL_NAMES = re.findall(r"\['([A-Za-z]+)',\s*'[A-Za-z ]+',\s*\[",
+                        Path(__file__).with_name("showdown_doubles_lib.js").read_text())
 
 CORPUS = Path(__file__).with_name("pe_doubles_corpus.py")
 _ns = {}
@@ -150,11 +162,13 @@ def policy_greedy(req, position, side, rng):
 LABEL = re.compile(r"^(?:switch (?P<sw>[a-z0-9]+)|(?P<mv>[a-z0-9]+)(?:,(?P<t>\d+))?)$")
 
 
-def policy_mcts(req, position, side, rng, ms, stats):
+def policy_mcts(req, position, side, rng, ms, stats, note=None):
     try:
         state = to_state(position)
     except Skip as exc:
         stats[f"fallback: {exc}"] += 1
+        if note is not None:
+            note.append(f"      search skipped ({exc}); greedy took the turn")
         return policy_greedy(req, position, side, rng)
     except Exception as exc:
         stats[f"fallback: state build {type(exc).__name__}"] += 1
@@ -165,6 +179,10 @@ def policy_mcts(req, position, side, rng, ms, stats):
         stats["fallback: no root options"] += 1
         return policy_greedy(req, position, side, rng)
     best = max(options, key=lambda o: o.visits)
+    if note is not None:
+        top = sorted(options, key=lambda o: -o.visits)[:4]
+        note.append(f"      search ({result.total_visits} visits): "
+                    + " | ".join(f"{o.move_choice} {o.visits}v {o.total_score:.0f}" for o in top))
     stats["mcts decisions"] += 1
     stats["visits"] += result.total_visits
     parts = []
@@ -191,6 +209,33 @@ def policy_mcts(req, position, side, rng, ms, stats):
     return parts
 
 
+SWITCH_LINE = re.compile(r"^\|switch\|(p[12][ab]): [^|]+\|([^,|]+)[^|]*\|(\d+)/(\d+)")
+MOVE_LINE = re.compile(r"^\|move\|(p[12][ab]): ([^|]+)\|([^|]+)\|([^|]*)\|?(.*)$")
+FAINT_LINE = re.compile(r"^\|faint\|(p[12][ab]): (.+)$")
+SWAP_LINE = re.compile(r"^\|swap\|(p[12][ab]): ([^|]+)\|(\d+)")
+
+
+def readable(line):
+    """Showdown protocol as a sentence. Its raw form duplicates the species and reads as if
+    the arriving Pokemon were the actor (`|switch|p1a: Blastoise|Blastoise, F|299/299`), which
+    makes a switch look like a failed attempt by the body that arrived."""
+    m = SWITCH_LINE.match(line)
+    if m:
+        return f"{m[1]} <- {m[2]} comes in ({m[3]}/{m[4]})"
+    m = MOVE_LINE.match(line)
+    if m:
+        extra = f"  [{m[5].strip('|')}]" if m[5].strip('|') else ""
+        target = f" -> {m[4]}" if m[4] and m[4] != f"{m[1]}: {m[2]}" else ""
+        return f"{m[1]} {m[2]} used {m[3]}{target}{extra}"
+    m = FAINT_LINE.match(line)
+    if m:
+        return f"{m[1]} {m[2]} fainted"
+    m = SWAP_LINE.match(line)
+    if m:
+        return f"{m[1]} {m[2]} swapped to slot {m[3]}"
+    return line.strip("|").replace("|", " ")
+
+
 def forced_choice(req, rng):
     o = [b["slot"] for b in req["bench"]]
     return ", ".join(f"switch {o.pop(0)}" if f and o else "pass" for f in req["forceSwitch"])
@@ -204,6 +249,7 @@ def main():
     ap.add_argument("--ms", type=int, default=300, help="MCTS budget per decision")
     ap.add_argument("--seed", type=int, default=7)
     ap.add_argument("--max-turns", type=int, default=60)
+    ap.add_argument("--save-log", metavar="DIR", help="write one transcript per battle here")
     args = ap.parse_args()
 
     server = Server()
@@ -218,32 +264,70 @@ def main():
             r = server.send({"cmd": "new", "teams": teams})
             if not r.get("ok"):
                 stats["new failed"] += 1; continue
+            lines = []
+            if args.save_log:
+                names = [[POOL_NAMES[i] for i in t] for t in teams]
+                lines.append(f"battle {battle}   p1={args.p1} vs p2={args.p2}"
+                             + (f"   mcts {args.ms} ms a decision" if "mcts" in (args.p1, args.p2) else ""))
+                lines.append(f"  p1: {', '.join(names[0])}")
+                lines.append(f"  p2: {', '.join(names[1])}")
             for turn in range(args.max_turns):
                 reqs = r.get("requests", {})
                 if not reqs:
                     break
+                if args.save_log:
+                    lines.append(f"\n  Turn {turn + 1}")
                 choices = {"cmd": "choose"}
                 for side, req in reqs.items():
                     name = args.p1 if side == "p1" else args.p2
                     if req.get("forceSwitch"):
                         choices[side] = forced_choice(req, rng)
                         continue
+                    note = [] if args.save_log else None
                     if name == "mcts":
-                        parts = policy_mcts(req, r["position"], side, rng, args.ms, stats)
+                        parts = policy_mcts(req, r["position"], side, rng, args.ms, stats, note)
                     elif name == "greedy":
                         parts = policy_greedy(req, r["position"], side, rng)
                     else:
                         parts = policy_random(req, r["position"], side, rng)
                     choices[side] = showdown_choice(req, parts)
+                    if args.save_log:
+                        detail = []
+                        for slot, part in enumerate(parts):
+                            if part and part[0] == "switch":
+                                out = req["active"][slot]["species"]
+                                inc = next((b["species"] for b in req["bench"]
+                                            if b["slot"] == part[1]), f"#{part[1]}")
+                                detail.append(f"slot{slot} {out} -> {inc}")
+                        lines.append(f"    {side} {name}: {choices[side]}"
+                                     + (f"   ({'; '.join(detail)})" if detail else ""))
+                        lines.extend(note or [])
                 r = server.send(choices)
+                if args.save_log and r.get("ok"):
+                    seen = None
+                    for l in r.get("log", []):
+                        if l == seen:      # battle.log itself repeats |switch| lines
+                            continue
+                        seen = l
+                        lines.append("      " + readable(l))
+                    for sd in r["position"]["sides"]:
+                        lines.append(f"      after {sd['side']}: " + ", ".join(
+                            f"{p['species']} {p['hp']}/{p['maxhp']}" for p in sd["active"] if p))
                 if not r.get("ok"):
                     stats[f"rejected: {r.get('error','')[:60]}"] += 1
                     break
                 if r.get("ended"):
                     wins[r.get("winner") or "draw"] += 1
+                    if args.save_log:
+                        lines.append(f"\n  RESULT: {r.get('winner') or 'draw'} wins")
                     break
             else:
                 wins["turn limit"] += 1
+                if args.save_log:
+                    lines.append("\n  RESULT: turn limit")
+            if args.save_log:
+                d = Path(args.save_log); d.mkdir(parents=True, exist_ok=True)
+                (d / f"{battle:03d}_{args.p1}_vs_{args.p2}.txt").write_text("\n".join(lines) + "\n")
     finally:
         server.close()
 

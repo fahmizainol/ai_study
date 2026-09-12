@@ -1,0 +1,95 @@
+battle 2   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: Golem, Mienshao, Gengar, Blastoise
+  p2: Seaking, Gothitelle, Gastrodon, Musharna
+
+  Turn 1
+    p1 mcts: move 4, move 3 1
+      search (5000 visits): swordsdance,0;machpunch,0 249v 156 | swordsdance,0;tackle,0 236v 146 | swordsdance,0;tackle,1 200v 119 | swordsdance,0;machpunch,1 183v 107
+    p2 greedy: move 2 1, move 2 1
+      p1b Mienshao used Mach Punch -> p2a: Seaking
+      p2a Seaking used Tackle -> p1a: Golem
+      p2b Gothitelle used Tackle -> p1a: Golem
+      p1a Golem used Swords Dance
+      after p1: Golem 278/301, Mienshao 271/271
+      after p2: Seaking 226/301, Gothitelle 281/281
+
+  Turn 2
+    p1 mcts: move 4, move 2
+      search (5000 visits): swordsdance,0;quickguard,1 324v 207 | swordsdance,0;machpunch,1 215v 126 | swordsdance,0;machpunch,0 211v 123 | swordsdance,0;wideguard,1 208v 121
+    p2 greedy: move 2 1, move 2 1
+      p1b Mienshao used Quick Guard
+      p2a Seaking used Tackle -> p1a: Golem
+      p2b Gothitelle used Tackle -> p1a: Golem
+      p1a Golem used Swords Dance
+      after p1: Golem 255/301, Mienshao 271/271
+      after p2: Seaking 226/301, Gothitelle 281/281
+
+  Turn 3
+    p1 mcts: move 2 1, move 3 1
+      search (6000 visits): tackle,0;machpunch,0 521v 354 | tackle,0;quickguard,1 303v 188 | tackle,0;tackle,0 249v 149 | tackle,1;quickguard,1 217v 126
+    p2 greedy: move 2 1, move 2 1
+      p1b Mienshao used Mach Punch -> p2a: Seaking
+      p2a Seaking used Tackle -> p1a: Golem
+      p2b Gothitelle used Tackle -> p1a: Golem
+      p1a Golem used Tackle -> p2a: Seaking
+      p2a Seaking fainted
+      after p1: Golem 232/301, Mienshao 271/271
+      after p2: Seaking 0/301, Gothitelle 281/281
+
+  Turn 4
+      p2a <- Gastrodon comes in (363/363)
+      after p1: Golem 232/301, Mienshao 271/271
+      after p2: Gastrodon 363/363, Gothitelle 281/281
+
+  Turn 5
+    p1 mcts: move 4, move 3 1
+      search (7000 visits): swordsdance,0;machpunch,0 258v 173 | swordsdance,0;wideguard,1 253v 169 | tackle,0;tackle,1 252v 168 | tackle,0;wideguard,1 250v 167
+    p2 greedy: move 1, move 2 1
+      p1b Mienshao used Mach Punch -> p2a: Gastrodon
+      p2b Gothitelle used Tackle -> p1a: Golem
+      p1a Golem used Swords Dance
+      p2a Gastrodon used Earthquake -> p1b: Mienshao  [[spread] p2b,p1a,p1b]
+      after p1: Golem 113/301, Mienshao 168/271
+      after p2: Gastrodon 291/363, Gothitelle 208/281
+
+  Turn 6
+    p1 mcts: move 2 1, move 1
+      search (6000 visits): tackle,0;wideguard,1 460v 293 | tackle,1;wideguard,1 365v 223 | protect,0;wideguard,1 277v 160 | swordsdance,0;wideguard,1 261v 149
+    p2 greedy: move 1, move 2 1
+      p1b Mienshao used Wide Guard
+      p2b Gothitelle used Tackle -> p1a: Golem
+      p1a Golem used Tackle -> p2a: Gastrodon
+      p2a Gastrodon used Earthquake -> p1b: Mienshao  [[spread] p2b]
+      after p1: Golem 104/301, Mienshao 168/271
+      after p2: Gastrodon 77/363, Gothitelle 135/281
+
+  Turn 7
+    p1 mcts: move 2 1, move 3 1
+      search (10000 visits): tackle,0;machpunch,0 773v 506 | tackle,0;tackle,1 744v 485 | tackle,0;machpunch,1 714v 463 | tackle,0;tackle,0 674v 434
+    p2 greedy: move 1, move 2 1
+      p1b Mienshao used Mach Punch -> p2a: Gastrodon
+      p2b Gothitelle used Tackle -> p1a: Golem
+      p1a Golem used Tackle -> p2a: Gastrodon
+      p2a Gastrodon fainted
+      after p1: Golem 95/301, Mienshao 168/271
+      after p2: Gastrodon 0/363, Gothitelle 135/281
+
+  Turn 8
+      p2a <- Musharna comes in (373/373)
+      after p1: Golem 95/301, Mienshao 168/271
+      after p2: Musharna 373/373, Gothitelle 135/281
+
+  Turn 9
+    p1 mcts: move 1, move 2
+      search (9000 visits): earthquake,0;quickguard,1 568v 425 | earthquake,0;tackle,1 556v 416 | tackle,1;machpunch,1 511v 378 | tackle,1;tackle,1 501v 369
+    p2 greedy: move 4, move 2 1
+      p1b Mienshao used Quick Guard
+      p2b Gothitelle used Tackle -> p1a: Golem
+      p1a Golem used Earthquake -> p2b: Gothitelle  [[spread] p1b,p2a,p2b]
+      p1b Mienshao fainted
+      p2a Musharna fainted
+      p2b Gothitelle fainted
+      after p1: Golem 86/301, Mienshao 0/271
+      after p2: Musharna 0/373, Gothitelle 0/281
+
+  RESULT: p1 wins

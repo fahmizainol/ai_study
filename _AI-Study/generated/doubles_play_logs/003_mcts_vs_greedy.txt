@@ -1,0 +1,78 @@
+battle 3   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: Gyarados, Snorlax, Golem, Clefable
+  p2: Vileplume, Blastoise, Seaking, Gastrodon
+
+  Turn 1
+    p1 mcts: move 4, move 4
+      search (6000 visits): swordsdance,0;swordsdance,1 507v 401 | swordsdance,0;earthquake,0 355v 268 | tackle,0;swordsdance,1 261v 187 | tackle,1;swordsdance,1 249v 177
+    p2 greedy: move 2 1, move 1
+      p1a Gyarados used Swords Dance
+      p2b Blastoise used Surf -> p1b: Snorlax  [[spread] p2a,p1a,p1b]
+      p2a Vileplume used Tackle -> p1a: Gyarados
+      p1b Snorlax used Swords Dance
+      after p1: Gyarados 273/331, Snorlax 400/461
+      after p2: Vileplume 255/291, Blastoise 299/299
+
+  Turn 2
+    p1 mcts: move 4, move 2
+      search (6000 visits): swordsdance,0;earthquake,0 343v 266 | tackle,0;earthquake,0 322v 247 | tackle,1;earthquake,0 299v 227 | protect,0;earthquake,0 287v 216
+    p2 greedy: move 2 1, move 1
+      p1a Gyarados used Swords Dance
+      p2b Blastoise used Surf -> p1b: Snorlax  [[spread] p2a,p1a,p1b]
+      p2a Vileplume used Tackle -> p1a: Gyarados
+      p1b Snorlax used Earthquake -> p2b: Blastoise  [[spread] p2a,p2b]
+      after p1: Gyarados 215/331, Snorlax 339/461
+      after p2: Vileplume 86/291, Blastoise 182/299
+
+  Turn 3
+    p1 mcts: move 2 2, move 2
+      search (8000 visits): tackle,1;earthquake,0 566v 419 | tackle,0;earthquake,0 430v 307 | protect,0;earthquake,0 402v 284 | swordsdance,0;earthquake,0 367v 256
+    p2 greedy: move 2 1, move 1
+      p1a Gyarados used Tackle -> p2b: Blastoise
+      p2b Blastoise used Surf -> p1b: Snorlax  [[spread] p2a,p1a,p1b]
+      p2a Vileplume used Tackle -> p1a: Gyarados
+      p1b Snorlax used Earthquake -> p2b: Blastoise  [[spread] p2a,p2b]
+      p2a Vileplume fainted
+      p2b Blastoise fainted
+      after p1: Gyarados 140/331, Snorlax 246/461
+      after p2: Vileplume 0/291, Blastoise 0/299
+
+  Turn 4
+      p2b <- Gastrodon comes in (363/363)
+      p2a <- Seaking comes in (301/301)
+      after p1: Gyarados 140/331, Snorlax 246/461
+      after p2: Seaking 301/301, Gastrodon 363/363
+
+  Turn 5
+    p1 mcts: move 2 1, move 2
+      search (7000 visits): tackle,0;earthquake,0 668v 449 | tackle,1;earthquake,0 474v 304 | protect,0;earthquake,0 386v 240 | tackle,0;tackle,0 361v 221
+    p2 greedy: move 2 1, move 1
+      p1a Gyarados used Tackle -> p2a: Seaking
+      p2a Seaking used Tackle -> p1a: Gyarados
+      p2b Gastrodon used Earthquake -> p1b: Snorlax  [[spread] p2a,p1b]
+      p1b Snorlax used Earthquake -> p2b: Gastrodon  [[spread] p2a,p2b]
+      p2a Seaking fainted
+      after p1: Gyarados 99/331, Snorlax 147/461
+      after p2: Seaking 0/301, Gastrodon 203/363
+
+  Turn 6
+    p1 mcts: move 3, move 2
+      search (16000 visits): protect,0;earthquake,1 9576v 8135 | protect,0;tackle,1 897v 668 | switch golem;tackle,1 880v 654 | tackle,1;tackle,1 564v 399
+    p2 greedy: pass, move 1
+      p1a Gyarados used Protect
+      p2b Gastrodon used Earthquake -> p1b: Snorlax  [[spread] p1b]
+      p1b Snorlax used Earthquake -> p2b: Gastrodon  [[spread] p2b]
+      after p1: Gyarados 99/331, Snorlax 48/461
+      after p2: Seaking 0/301, Gastrodon 43/363
+
+  Turn 7
+    p1 mcts: move 2 2, switch 3   (slot1 Snorlax -> Golem)
+      search (69000 visits): tackle,1;switch golem 14975v 14975 | tackle,1;switch clefable 14974v 14974 | protect,0;tackle,1 12769v 12728 | protect,0;earthquake,1 12759v 12718
+    p2 greedy: pass, move 1
+      p1b <- Golem comes in (301/301)
+      p1a Gyarados used Tackle -> p2b: Gastrodon
+      p2b Gastrodon fainted
+      after p1: Gyarados 99/331, Golem 301/301
+      after p2: Seaking 0/301, Gastrodon 0/363
+
+  RESULT: p1 wins

@@ -1,0 +1,164 @@
+battle 0   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: Mienshao, Musharna, Gothitelle, Blastoise
+  p2: Machamp, Raichu, Clefable, Gengar
+
+  Turn 1
+    p1 mcts: switch 4, move 1   (slot0 Mienshao -> Blastoise)
+      search (5000 visits): switch blastoise;calmmind,1 228v 129 | switch gothitelle;calmmind,1 172v 90 | switch blastoise;swift,0 147v 73 | machpunch,0;calmmind,1 136v 66
+    p2 greedy: move 2, move 1 1
+      p1a <- Blastoise comes in (299/299)
+      p2b Raichu used Shock Wave -> p1a: Blastoise
+      p2a Machamp used Earthquake -> p1b: Musharna  [[spread] p2b,p1a,p1b]
+      p1b Musharna used Calm Mind
+      after p1: Blastoise 115/299, Musharna 296/373
+      after p2: Machamp 321/321, Raichu 43/261
+
+  Turn 2
+    p1 mcts: move 2 2, move 1
+      search (6000 visits): aquajet,1;calmmind,1 277v 179 | surf,0;calmmind,1 274v 177 | surf,0;swift,0 216v 133 | aquajet,1;swift,0 205v 124
+    p2 greedy: move 2, move 1 1
+      p1a Blastoise used Aqua Jet -> p2b: Raichu
+      p2b Raichu fainted
+      p2a Machamp used Earthquake -> p1b: Musharna  [[spread] p1a,p1b]
+      p1b Musharna used Calm Mind
+      after p1: Blastoise 47/299, Musharna 219/373
+      after p2: Machamp 321/321, Raichu 0/261
+
+  Turn 3
+      p2b <- Clefable comes in (331/331)
+      after p1: Blastoise 47/299, Musharna 219/373
+      after p2: Machamp 321/321, Clefable 331/331
+
+  Turn 4
+    p1 mcts: move 1, move 4
+      search (8000 visits): surf,0;swift,0 479v 283 | surf,0;calmmind,1 335v 185 | surf,0;tackle,0 237v 121 | surf,0;protect,1 226v 113
+    p2 greedy: move 2, move 3 1
+      p1a Blastoise used Surf -> p2b: Clefable  [[spread] p2a,p2b]
+      p2b Clefable used Tackle -> p1a: Blastoise
+      p2a Machamp used Earthquake -> p1b: Musharna  [[spread] p2b,p1a,p1b]
+      p1a Blastoise fainted
+      p1b Musharna used Swift -> p2b: Clefable  [[spread] p2a,p2b]
+      after p1: Blastoise 0/299, Musharna 142/373
+      after p2: Machamp 176/321, Clefable 61/331
+
+  Turn 5
+      p1a <- Gothitelle comes in (281/281)
+      after p1: Gothitelle 281/281, Musharna 142/373
+      after p2: Machamp 176/321, Clefable 61/331
+
+  Turn 6
+    p1 mcts: move 4, move 4
+      search (7000 visits): calmmind,0;swift,0 756v 461 | protect,0;swift,0 449v 253 | tackle,0;swift,0 350v 188 | calmmind,0;calmmind,1 333v 177
+    p2 greedy: move 2, move 3 2
+      p1a Gothitelle used Calm Mind
+      p2b Clefable used Tackle -> p1b: Musharna
+      p2a Machamp used Earthquake -> p1b: Musharna  [[spread] p2b,p1a,p1b]
+      p2b Clefable fainted
+      p1b Musharna used Swift -> p2a: Machamp
+      after p1: Gothitelle 210/281, Musharna 19/373
+      after p2: Machamp 71/321, Clefable 0/331
+
+  Turn 7
+      p2b <- Gengar comes in (261/261)
+      after p1: Gothitelle 210/281, Musharna 19/373
+      after p2: Machamp 71/321, Gengar 261/261
+
+  Turn 8
+    p1 mcts: move 4, move 3
+      search (8000 visits): calmmind,0;protect,1 897v 345 | tackle,0;protect,1 524v 178 | tackle,1;protect,1 414v 131 | calmmind,0;swift,0 389v 121
+    p2 greedy: move 2, move 1 2
+      p1b Musharna used Protect
+      p2b Gengar used Shock Wave -> p1b: Musharna
+      p1a Gothitelle used Calm Mind
+      p2a Machamp used Earthquake -> p1b: Musharna  [[spread] p1a]
+      after p1: Gothitelle 139/281, Musharna 19/373
+      after p2: Machamp 71/321, Gengar 261/261
+
+  Turn 9
+    p1 mcts: move 1, move 4
+      search (7000 visits): allyswitch,0;swift,0 572v 187 | calmmind,0;protect,1 492v 154 | tackle,0;protect,1 459v 141 | tackle,1;protect,1 384v 111
+    p2 greedy: move 2, move 1 2
+      p1a Gothitelle used Ally Switch
+      p1a Gothitelle swapped to slot 1
+      p2b Gengar used Shock Wave -> p1b: Gothitelle
+      p2a Machamp used Earthquake -> p1b: Gothitelle  [[spread] p1a,p1b]
+      p1a Musharna fainted
+      after p1: Musharna 0/373, Gothitelle 42/281
+      after p2: Machamp 71/321, Gengar 261/261
+
+  Turn 10
+      p1a <- Mienshao comes in (271/271)
+      after p1: Mienshao 271/271, Gothitelle 42/281
+      after p2: Machamp 71/321, Gengar 261/261
+
+  Turn 11
+    p1 mcts: move 3 1, move 3
+      search (7000 visits): machpunch,0;protect,1 1215v 557 | machpunch,0;tackle,0 973v 432 | machpunch,0;calmmind,1 471v 182 | tackle,0;tackle,0 374v 135
+    p2 greedy: move 2, move 1 2
+      p1b Gothitelle used Protect
+      p1a Mienshao used Mach Punch -> p2a: Machamp
+      p2b Gengar used Shock Wave -> p1b: Gothitelle
+      p2a Machamp used Earthquake -> p1b: Gothitelle  [[spread] p1a]
+      after p1: Mienshao 169/271, Gothitelle 42/281
+      after p2: Machamp 7/321, Gengar 261/261
+
+  Turn 12
+    p1 mcts: move 3 1, move 3
+      search (8000 visits): machpunch,0;protect,1 1119v 557 | machpunch,0;calmmind,1 882v 425 | tackle,0;protect,1 738v 346 | machpunch,0;allyswitch,1 421v 176
+    p2 greedy: move 2, move 1 2
+      p1b Gothitelle used Protect  [[still]]
+      p1a Mienshao used Mach Punch -> p2a: Machamp
+      p2a Machamp fainted
+      p2b Gengar used Shock Wave -> p1b: Gothitelle
+      after p1: Mienshao 169/271, Gothitelle 16/281
+      after p2: Machamp 0/321, Gengar 261/261
+
+  Turn 13
+    p1 mcts: move 3 2, move 3
+      search (12000 visits): machpunch,1;protect,1 1883v 643 | tackle,1;protect,1 1773v 600 | quickguard,0;protect,1 1763v 596 | wideguard,0;protect,1 1748v 590
+    p2 greedy: pass, move 1 2
+      p1b Gothitelle used Protect
+      p1a Mienshao used Mach Punch -> p2b: Gengar
+      p2b Gengar used Shock Wave -> p1b: Gothitelle
+      after p1: Mienshao 169/271, Gothitelle 16/281
+      after p2: Machamp 0/321, Gengar 261/261
+
+  Turn 14
+    p1 mcts: move 1, move 3
+      search (13000 visits): wideguard,0;protect,1 1982v 665 | tackle,1;protect,1 1971v 661 | quickguard,0;protect,1 1963v 658 | machpunch,1;protect,1 1939v 649
+    p2 greedy: pass, move 1 2
+      p1b Gothitelle used Protect  [[still]]
+      p1a Mienshao used Wide Guard
+      p2b Gengar used Shock Wave -> p1b: Gothitelle
+      p1b Gothitelle fainted
+      after p1: Mienshao 169/271, Gothitelle 0/281
+      after p2: Machamp 0/321, Gengar 261/261
+
+  Turn 15
+    p1 mcts: move 4 2, pass
+      search (57000 visits): tackle,1;No Move 14379v 360 | quickguard,0;No Move 14242v 354 | machpunch,1;No Move 14235v 354 | wideguard,0;No Move 14144v 350
+    p2 greedy: pass, move 1 1
+      p2b Gengar used Shock Wave -> p1a: Mienshao
+      p1a Mienshao used Tackle -> p2b: Gengar
+      after p1: Mienshao 87/271, Gothitelle 0/281
+      after p2: Machamp 0/321, Gengar 261/261
+
+  Turn 16
+    p1 mcts: move 2, pass
+      search (116000 visits): quickguard,0;No Move 29234v 275 | wideguard,0;No Move 29205v 274 | tackle,1;No Move 28809v 265 | machpunch,1;No Move 28752v 264
+    p2 greedy: pass, move 1 1
+      p1a Mienshao used Quick Guard
+      p2b Gengar used Shock Wave -> p1a: Mienshao
+      after p1: Mienshao 5/271, Gothitelle 0/281
+      after p2: Machamp 0/321, Gengar 261/261
+
+  Turn 17
+    p1 mcts: move 4 2, pass
+      search (149000 visits): tackle,1;No Move 37312v 143 | wideguard,0;No Move 37254v 142 | machpunch,1;No Move 37239v 142 | quickguard,0;No Move 37195v 141
+    p2 greedy: pass, move 1 1
+      p2b Gengar used Shock Wave -> p1a: Mienshao
+      p1a Mienshao fainted
+      after p1: Mienshao 0/271, Gothitelle 0/281
+      after p2: Machamp 0/321, Gengar 261/261
+
+  RESULT: p2 wins

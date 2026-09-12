@@ -1,0 +1,155 @@
+battle 4   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: Gothitelle, Clefable, Raichu, Gastrodon
+  p2: Gyarados, Musharna, Snorlax, Seaking
+
+  Turn 1
+    p1 mcts: move 4, switch 4   (slot1 Clefable -> Gastrodon)
+      search (5000 visits): calmmind,0;switch gastrodon 327v 209 | switch raichu;switch gastrodon 254v 154 | calmmind,0;switch raichu 179v 100 | switch gastrodon;switch raichu 177v 99
+    p2 greedy: move 2 1, move 4
+      p1b <- Gastrodon comes in (363/363)
+      p2a Gyarados used Tackle -> p1a: Gothitelle
+      p1a Gothitelle used Calm Mind
+      p2b Musharna used Swift -> p1b: Gastrodon  [[spread] p1a,p1b]
+      after p1: Gothitelle 214/281, Gastrodon 322/363
+      after p2: Gyarados 331/331, Musharna 373/373
+
+  Turn 2
+    p1 mcts: move 4, move 4
+      search (6000 visits): calmmind,0;calmmind,1 462v 303 | switch raichu;calmmind,1 316v 194 | allyswitch,0;calmmind,1 251v 147 | calmmind,0;tackle,0 240v 139
+    p2 greedy: move 2 1, move 4
+      p2a Gyarados used Tackle -> p1a: Gothitelle
+      p1a Gothitelle used Calm Mind
+      p1b Gastrodon used Calm Mind
+      p2b Musharna used Swift -> p1b: Gastrodon  [[spread] p1a,p1b]
+      after p1: Gothitelle 152/281, Gastrodon 294/363
+      after p2: Gyarados 331/331, Musharna 373/373
+
+  Turn 3
+    p1 mcts: move 4, move 4
+      search (5000 visits): calmmind,0;calmmind,1 293v 171 | tackle,0;calmmind,1 219v 120 | tackle,1;calmmind,1 215v 117 | protect,0;calmmind,1 198v 105
+    p2 greedy: move 2 1, move 4
+      p2a Gyarados used Tackle -> p1a: Gothitelle
+      p1a Gothitelle used Calm Mind
+      p1b Gastrodon used Calm Mind
+      p2b Musharna used Swift -> p1b: Gastrodon  [[spread] p1a,p1b]
+      after p1: Gothitelle 93/281, Gastrodon 273/363
+      after p2: Gyarados 331/331, Musharna 373/373
+
+  Turn 4
+    p1 mcts: move 4, move 4
+      search (6000 visits): calmmind,0;calmmind,1 297v 149 | calmmind,0;tackle,1 261v 127 | calmmind,0;tackle,0 248v 119 | tackle,0;calmmind,1 232v 109
+    p2 greedy: move 2 1, move 4
+      p2a Gyarados used Tackle -> p1a: Gothitelle
+      p1a Gothitelle used Calm Mind
+      p1b Gastrodon used Calm Mind
+      p2b Musharna used Swift -> p1b: Gastrodon  [[spread] p1a,p1b]
+      after p1: Gothitelle 36/281, Gastrodon 256/363
+      after p2: Gyarados 331/331, Musharna 373/373
+
+  Turn 5
+    p1 mcts: move 3, move 4
+      search (6000 visits): protect,0;calmmind,1 257v 104 | protect,0;tackle,1 238v 94 | calmmind,0;calmmind,1 235v 92 | protect,0;tackle,0 232v 91
+    p2 greedy: move 2 1, move 4
+      p1a Gothitelle used Protect
+      p2a Gyarados used Tackle -> p1a: Gothitelle
+      p1b Gastrodon used Calm Mind
+      p2b Musharna used Swift -> p1b: Gastrodon  [[spread] p1b]
+      after p1: Gothitelle 36/281, Gastrodon 242/363
+      after p2: Gyarados 331/331, Musharna 373/373
+
+  Turn 6
+    p1 mcts: move 3, move 2 1
+      search (6000 visits): protect,0;tackle,0 237v 90 | protect,0;calmmind,1 223v 83 | tackle,0;tackle,1 197v 69 | protect,0;tackle,1 196v 69
+    p2 greedy: move 2 1, move 4
+      p1a Gothitelle used Protect  [[still]]
+      p2a Gyarados used Tackle -> p1a: Gothitelle
+      p1a Gothitelle fainted
+      p1b Gastrodon used Tackle -> p2a: Gyarados
+      p2b Musharna used Swift -> p1b: Gastrodon
+      after p1: Gothitelle 0/281, Gastrodon 223/363
+      after p2: Gyarados 293/331, Musharna 373/373
+
+  Turn 7
+      p1a <- Raichu comes in (261/261)
+      after p1: Raichu 261/261, Gastrodon 223/363
+      after p2: Gyarados 293/331, Musharna 373/373
+
+  Turn 8
+    p1 mcts: move 2, move 2 1
+      search (5000 visits): swift,0;tackle,0 184v 95 | swift,0;tackle,1 173v 88 | tackle,0;tackle,1 156v 77 | shockwave,0;protect,1 150v 73
+    p2 greedy: move 2 2, move 4
+      p1a Raichu used Swift -> p2b: Musharna  [[spread] p2a,p2b]
+      p2a Gyarados used Tackle -> p1b: Gastrodon
+      p1b Gastrodon used Tackle -> p2a: Gyarados
+      p2b Musharna used Swift -> p1b: Gastrodon  [[spread] p1a,p1b]
+      after p1: Raichu 220/261, Gastrodon 149/363
+      after p2: Gyarados 225/331, Musharna 342/373
+
+  Turn 9
+    p1 mcts: move 2, move 2 2
+      search (5000 visits): swift,0;tackle,1 178v 91 | shockwave,0;tackle,1 175v 89 | swift,0;tackle,0 173v 88 | shockwave,0;calmmind,1 164v 82
+    p2 greedy: move 2 2, move 4
+      p1a Raichu used Swift -> p2b: Musharna  [[spread] p2a,p2b]
+      p2a Gyarados used Tackle -> p1b: Gastrodon
+      p1b Gastrodon used Tackle -> p2b: Musharna
+      p2b Musharna used Swift -> p1b: Gastrodon  [[spread] p1a,p1b]
+      after p1: Raichu 179/261, Gastrodon 75/363
+      after p2: Gyarados 195/331, Musharna 275/373
+
+  Turn 10
+    p1 mcts: move 1 1, move 4
+      search (5000 visits): shockwave,0;calmmind,1 168v 84 | shockwave,0;protect,1 160v 79 | shockwave,0;tackle,0 159v 79 | swift,0;tackle,1 159v 78
+    p2 greedy: move 2 2, move 4
+      p1a Raichu used Shock Wave -> p2a: Gyarados
+      p2a Gyarados fainted
+      p1b Gastrodon used Calm Mind
+      p2b Musharna used Swift -> p1b: Gastrodon  [[spread] p1a,p1b]
+      after p1: Raichu 138/261, Gastrodon 63/363
+      after p2: Gyarados 0/331, Musharna 275/373
+
+  Turn 11
+      p2a <- Snorlax comes in (461/461)
+      after p1: Raichu 138/261, Gastrodon 63/363
+      after p2: Snorlax 461/461, Musharna 275/373
+
+  Turn 12
+    p1 mcts: switch 4, move 1   (slot0 Raichu -> Clefable)
+      search (6000 visits): switch clefable;earthquake,0 218v 68 | protect,0;tackle,0 191v 56 | swift,0;switch clefable 188v 54 | switch clefable;tackle,1 182v 52
+    p2 greedy: move 2, move 4
+      p1a <- Clefable comes in (331/331)
+      p1b Gastrodon used Earthquake -> p2b: Musharna  [[spread] p1a,p2a,p2b]
+      p2a Snorlax used Earthquake -> p1b: Gastrodon  [[spread] p1a,p1b]
+      p2b Musharna used Swift -> p1b: Gastrodon  [[spread] p1a,p1b]
+      p1b Gastrodon fainted
+      after p1: Clefable 127/331, Gastrodon 0/363
+      after p2: Snorlax 362/461, Musharna 196/373
+
+  Turn 13
+      p1b <- Raichu comes in (138/261)
+      after p1: Clefable 127/331, Raichu 138/261
+      after p2: Snorlax 362/461, Musharna 196/373
+
+  Turn 14
+    p1 mcts: move 4, move 2
+      search (6000 visits): protect,0;swift,0 427v 142 | protect,0;shockwave,1 360v 113 | protect,0;tackle,0 330v 100 | protect,0;tackle,1 323v 98
+    p2 greedy: move 2, move 4
+      p1a Clefable used Protect
+      p1b Raichu used Swift -> p2b: Musharna  [[spread] p2a,p2b]
+      p2a Snorlax used Earthquake -> p1b: Raichu  [[spread] p1b]
+      p1b Raichu fainted
+      p2b Musharna used Swift -> p1a: Clefable
+      after p1: Clefable 127/331, Raichu 0/261
+      after p2: Snorlax 334/461, Musharna 165/373
+
+  Turn 15
+    p1 mcts: move 4, pass
+      search (12000 visits): protect,0;No Move 4876v 752 | tackle,0;No Move 2524v 328 | tackle,1;No Move 2491v 323 | followme,0;No Move 2109v 257
+    p2 greedy: move 2, move 4
+      p1a Clefable used Protect  [[still]]
+      p2a Snorlax used Earthquake -> p1a: Clefable  [[spread] p1a]
+      p2b Musharna used Swift -> p1a: Clefable
+      p1a Clefable fainted
+      after p1: Clefable 0/331, Raichu 0/261
+      after p2: Snorlax 334/461, Musharna 165/373
+
+  RESULT: p2 wins
