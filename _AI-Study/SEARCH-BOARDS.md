@@ -368,26 +368,49 @@ both the oracle and the position generator, which is what makes this cheap.
   reads as a damage disagreement. The first run showed `('s1', 0): -79`, a body "healing",
   for precisely this reason.
 
-**Result: 9 of 12 agree.** Clean, including every mechanic the stop-rule cared about:
-Follow Me and Rage Powder redirection, Lightning Rod redirect + nullify + the SpA boost, the
-0.75 spread reduction, Earthquake hitting its own ally, Telepathy exempting the ally, Quick
-Guard against priority, Helping Hand, and Friend Guard. **Redirection and spread are not
-broken, so the stop-rule says proceed.**
+**Result: 11 of 12 agree.** Follow Me and Rage Powder redirection, Lightning Rod
+redirect + nullify + the SpA boost, the 0.75 spread reduction, Earthquake hitting its own
+ally, Telepathy exempting the ally, Quick Guard against priority, Helping Hand, Friend Guard,
+Ally Switch and Intimidate's double drop all match Showdown exactly. **Redirection and spread
+are not broken, so the stop-rule says proceed.**
 
-**Three disagreements, stated as candidates rather than bugs** — each could still be this
-harness's action mapping rather than the engine, and confirming one means reading the fork's
-code for that mechanic:
+**One confirmed engine bug, with its root cause.** `wide_guard_blocks_spread`: Surf is
+`AllAdjacent`, so in gen 5 it hits the attacker's own partner as well as both foes
+(confirmed against PokemonDB). Showdown blocks only the guarded side and still damages the
+attacker's ally; poke-engine damages nobody. The cause is
+`src/genx/generate_instructions.rs:1744-1758`, which applies the guard to the **`Choice`**
+rather than to the resolved target list:
 
-| case | Showdown | poke-engine |
-|---|---|---|
-| `wide_guard_blocks_spread` | Surf still hits the attacker's **own ally** (Gengar) while Wide Guard protects the far side | no ally damage — as if Wide Guard cancelled the move outright rather than blocking per target |
-| `ally_switch_swaps_slots` | the incoming attack lands on **Snorlax**, the body that moved into the targeted slot | lands on **Gothitelle**, the Ally Switch user — the swap does not appear to redirect what follows |
-| `intimidate_drops_both_foes` | the two Tackles hit **Gyarados**, the body that switched in | they hit **Snorlax**, the body that switched out — damage resolving against the pre-switch occupant. The Intimidate drops themselves agree on both foes |
+```rust
+let blocked = (choice.target.hits_multiple_targets() && target_conditions.wide_guard > 0)
+    || (choice.priority > 0 && target_conditions.quick_guard > 0);
+if blocked {
+    choice.remove_effects_for_protect();   // cancels the whole move, not the guarded targets
+```
 
-Note that the fork's own `test_doubles_ally_switch_swaps_slots` and
-`test_doubles_intimidate_hits_both_foes` both pass, so its 47 tests assert that these
-instructions are *emitted* without asserting what a later action in the same turn does with
-them. That is the gap an independent reference finds and a self-authored suite cannot.
+`remove_effects_for_protect` zeroes the move outright, so the half of a spread move that was
+never aimed at the guarded side disappears with it. **The same line governs Quick Guard**, so
+a priority `AllAdjacent` move is wrong in the same way; stage 0 missed that only because its
+Quick Guard case uses single-target Mach Punch.
+
+**A second disagreement, on a channel this comparison deliberately ignores.** In the Ally
+Switch case, Showdown has **Snorlax** execute the Tackle that Snorlax chose, from whichever
+position it ends up in (70 damage). poke-engine has **Gothitelle** execute it: the same probe
+with no Ally Switch gives 24 and 61 damage for slots 0 and 1 (matching their Attack stats,
+146 and 256), and with Ally Switch it gives 24 — the slot-1 sub-action performed by the body
+the swap moved *into* slot 1. So **poke-engine binds a sub-action to the slot, Showdown binds
+it to the body.** Showdown is right: a Pokemon executes its own chosen move regardless of
+where it has been moved. This is invisible to the set-based comparison, which asks only who
+was hit, and it is the whole of the 0.343 low end of the ratio range. It is also the reason a
+future corpus run must compare *which body acted*, not only which body was hit.
+
+**Two of the three disagreements in the first version of this section were the harness, not
+the engine.** They are recorded because the mistake is easy to repeat: the projection keyed
+slot occupancy off the **pre-turn** snapshot, so after a `Switch` or a `SwapActiveSlots`
+mid-stream it attributed damage to the body that had left. That made correct poke-engine
+behaviour look like two bugs — damage landing on the body that switched out, and Ally Switch
+failing to redirect. `pe_outcome` now replays occupancy through the instruction list, and both
+cases agree. A doubles differential must track who stands where *as the turn resolves*.
 
 **A blocker fixed on the way, which anyone doing this work needs.** None of the fork's 19
 slotted instruction types print their slot in Debug output (`instruction.rs` was 171+/2-, so

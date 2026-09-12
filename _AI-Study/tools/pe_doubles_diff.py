@@ -19,7 +19,11 @@ stage 0 asks instead is roll-independent and is the whole doubles question:
     poke-engine/Showdown, in the format of the 0.8.0 --check (median, % within 10%)
 
 Bodies are keyed by species, not by slot, so Ally Switch moving a body between slots cannot
-masquerade as a damage disagreement.
+masquerade as a damage disagreement. Crucially, slot occupancy is tracked *through* the
+instruction list: `Switch` and `SwapActiveSlots` change who stands in a slot mid-turn, so a
+`Damage SideOne:0` before and after one of them refers to different bodies. Reading the
+occupancy off the pre-turn snapshot instead -- the first version of this script -- reports
+the body that left as the one that was hit, and invents two disagreements that are not there.
 
 Needs a doubles build of the bindings:
     cd <clone>/poke-engine-py && maturin develop --no-default-features \\
@@ -80,13 +84,31 @@ PE_STAT = {"Attack": "atk", "Defense": "def", "SpecialAttack": "spa",
            "SpecialDefense": "spd", "Speed": "spe", "Accuracy": "accuracy", "Evasion": "evasion"}
 DMG = re.compile(r"^Damage (SideOne|SideTwo):(\d+): (-?\d+)$")
 BST = re.compile(r"^Boost (SideOne|SideTwo):(\d+) (\w+): (-?\d+)$")
+SWI = re.compile(r"^Switch (SideOne|SideTwo): P(\d+) -> P(\d+)$")
+SWP = re.compile(r"^SwapActiveSlots\((SideOne|SideTwo)\)$")
 
-def pe_outcome(branch, names):
-    """Same projection off poke-engine's instruction list. `names` maps (side, slot) to the
-    species standing there, so both sides of the comparison are keyed by body."""
+def pe_outcome(branch, names, roster):
+    """Same projection off poke-engine's instruction list, keyed by body.
+
+    `names` maps (side, slot) -> species at the start of the turn and is updated as the
+    stream goes: a Switch replaces a slot's occupant, SwapActiveSlots exchanges slots 0 and
+    1. `roster` maps (side, party index) -> species so a Switch can be resolved."""
+    names = dict(names)
     dmg, boost = collections.Counter(), collections.Counter()
     for ins in branch.instruction_list:
         s = str(ins)
+        m = SWI.match(s)
+        if m:
+            who = "s1" if m[1] == "SideOne" else "s2"
+            leaving = roster[(who, int(m[2]))]
+            slot = next((sl for (w, sl), n in names.items() if w == who and n == leaving), 0)
+            names[(who, slot)] = roster[(who, int(m[3]))]
+            continue
+        m = SWP.match(s)
+        if m:
+            who = "s1" if m[1] == "SideOne" else "s2"
+            names[(who, 0)], names[(who, 1)] = names[(who, 1)], names[(who, 0)]
+            continue
         m = DMG.match(s)
         if m:
             who = "s1" if m[1] == "SideOne" else "s2"
@@ -103,8 +125,11 @@ cases = json.load(open(CASES, encoding="utf8"))
 agree, disagree, ratios = [], [], []
 for case in cases:
     st = State(side_one=side(case["before"][0]), side_two=side(case["before"][1]))
-    names = {}
+    names, roster = {}, {}
     for who, s_ in (("s1", case["before"][0]), ("s2", case["before"][1])):
+        party = [x for x in s_["active"] if x] + list(s_["bench"])
+        for idx, p in enumerate(party):
+            roster[(who, idx)] = p["species"]
         for slot, p in enumerate([x for x in s_["active"] if x]):
             names[(who, slot)] = p["species"]
     try:
@@ -114,7 +139,7 @@ for case in cases:
         continue
     branches = sorted(branches, key=lambda b: -b.percentage)
     sd_d, sd_b = showdown_outcome(case)
-    pe_d, pe_b = pe_outcome(branches[0], names)
+    pe_d, pe_b = pe_outcome(branches[0], names, roster)
     notes = []
     if set(sd_d) != set(pe_d):
         only_sd = sorted(set(sd_d) - set(pe_d))
