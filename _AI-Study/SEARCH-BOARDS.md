@@ -422,6 +422,66 @@ The same ambiguity affects the MCTS root option labels, where `('ember;ember', 1
 appears repeatedly because the `,<slot>` target suffix is not rendered — worth fixing before
 anyone tries to read a doubles search trace.
 
+### The corpus stage: 456 random doubles turns, and where the divergence actually lives
+
+Run 2026-09-12. `tools/showdown_doubles_corpus.js` plays 40 random `gen5doublescustomgame`
+battles with the same always-max PRNG and dumps every joint-action turn — position, choices,
+outcome — to `generated/showdown_doubles_corpus.ndjson` (456 turns).
+`tools/pe_doubles_corpus.py` replays each on poke-engine and compares the same
+roll-independent projections as stage 0. **Choices are random; movesets are curated**, which
+is what keeps the comparison sound: every move in the pool is 100% accurate with no status
+and no secondary, because under the pinned PRNG `randomChance(acc,100)` is only true above 99
+and a sub-100% move would silently miss on one side while the other branched on its accuracy.
+
+| | compared | bodies damaged agree | boosts agree |
+|---|---|---|---|
+| all turns | 373 | **73.2%** | **87.1%** |
+| holding out Wide Guard turns | 250 | 74.8% | 87.2% |
+| **holding out spread-move turns** | 199 | **92.0%** | **93.0%** |
+| holding out spread + the absorb abilities | 134 | 91.8% | 95.5% |
+
+**Spread moves are where doubles diverges, and Wide Guard is only one instance of it.**
+Holding out the confirmed Wide Guard bug moves bodies-damaged by 1.6 points; holding out
+spread moves moves it by **19**. Outside spread, the two engines agree on who was hit in 92%
+of turns and on boosts in 93%.
+
+Drilling into the spread turns: the disagreement does **not** depend on which slot attacks
+(from slot 0, 49 of 97 turns differ; from slot 1, 69 of 143 — the same rate), so it is not the
+slot generalisation. In **39** of the disagreeing turns the body poke-engine fails to damage
+is *the attacker's own ally*. Since the isolated stage 0 cases for both Surf and Earthquake
+hit the ally correctly, something about the fuller positions suppresses it. Not root-caused
+here; that is the next thing to read.
+
+**A second confirmed bug, found by the boost comparison.** `Side::reset_boosts`
+(`src/state.rs:1795`) reads `get_side(side_ref).get_active()` — slot 0 — and emits
+`BoostInstruction::new(side_ref, 0, ...)`, with no slot parameter anywhere. So when a
+**slot-1** body switches out carrying boosts, poke-engine clears **slot 0's** boosts instead.
+Its own comment says this is deliberate:
+
+```rust
+// NOTE (doubles): this resets slot 0's boosts, matching the still-slot-0
+// switch mechanic (`switch()` sets `active_indices[0]`). Per-slot boost
+// reset on switch/Haze is deferred together with the switch generalization.
+```
+
+**The comment is stale in a way worth knowing: `switch()` *was* generalised.** It now finds
+the slot holding the outgoing body and replaces there (`state.rs:1933-1957`, with the
+matching `reverse_switch`). So the deferral this note justifies itself by no longer applies,
+and `reset_boosts` is simply left behind. `reset_boosts` is also what Haze uses
+(`genx/choice_effects.rs:1388`), so Haze in doubles clears the wrong body too.
+
+**Two limits of this measurement, both recorded because they look solvable and are not.**
+
+- **"Which body acted" cannot be measured from the instruction stream.** `DecrementPP` is
+  only emitted when a move is below 10 PP (`generate_instructions.rs:2488`, an optimisation),
+  and `SetLastUsedMove` does not appear for an ordinary move either. So the slot-versus-body
+  action binding found in stage 0's Ally Switch case has to be probed case by case through
+  damage magnitude. The corpus is blind to it.
+- **Showdown's `stall` counter is not inert and cannot be ignored.** It is the only volatile
+  the corpus produces (226 occurrences), and its success check is `randomChance(1, counter)`,
+  which under an always-max PRNG makes a *repeated* Protect fail. Those 54 turns are skipped
+  rather than mistranslated. The other 29 skips are fainted actives.
+
 **Build gotcha:** the bindings need `maturin develop --no-default-features
 --features="poke-engine/gen5,doubles"`. Without `--no-default-features` the default
 `poke-engine/gen4` is added to `gen5` and the crate fails to compile with duplicate

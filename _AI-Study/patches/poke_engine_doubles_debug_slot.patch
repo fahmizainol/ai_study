@@ -1,5 +1,5 @@
 diff --git a/src/instruction.rs b/src/instruction.rs
-index 835de45..060340b 100644
+index 835de45..4d2c121 100644
 --- a/src/instruction.rs
 +++ b/src/instruction.rs
 @@ -45,6 +45,19 @@ macro_rules! slotted_instruction {
@@ -70,3 +70,25 @@ index 835de45..060340b 100644
                  )
              }
              Instruction::DecrementRestTurns(d) => {
+@@ -332,8 +345,8 @@ impl fmt::Debug for Instruction {
+             Instruction::SetLastUsedMove(s) => {
+                 write!(
+                     f,
+-                    "SetLastUsedMove {:?}: {:?} -> {:?}",
+-                    s.side_ref, s.previous_last_used_move, s.last_used_move
++                    "SetLastUsedMove {:?}{}: {:?} -> {:?}",
++                    s.side_ref, slot_tag(s.slot()), s.previous_last_used_move, s.last_used_move
+                 )
+             }
+             Instruction::ChangeDamageDealtDamage(s) => {
+@@ -356,8 +369,8 @@ impl fmt::Debug for Instruction {
+             Instruction::DecrementPP(s) => {
+                 write!(
+                     f,
+-                    "DecrementPP {:?}: {:?} {}",
+-                    s.side_ref, s.move_index, s.amount
++                    "DecrementPP {:?}{}: {:?} {}",
++                    s.side_ref, slot_tag(s.slot()), s.move_index, s.amount
+                 )
+             }
+             Instruction::ToggleTrickRoom(i) => {
