@@ -1,0 +1,123 @@
+battle 3   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: 2v2 Pool League II/2v2 Pools - BW 7: Snorlax, Chandelure, Darkrai, Infernape
+  p2: 2v2 Pool League II/2v2 Pools - BW 15: Kyurem-Black, Infernape, Metagross, Thundurus
+
+  Turn 1
+    p1 mcts: move 1 1, move 2 2
+      search (2000 visits): doubleedge,0;shadowball,1 48v 37 | doubleedge,1;shadowball,1 46v 35 | doubleedge,1;shadowball,0 41v 30 | firepunch,1;shadowball,1 41v 30
+    p2 greedy: move 1 1, move 3 1
+      p2b Infernape used Overheat -> p1a: Snorlax
+              Infernape spa 2 fell
+      p2a Kyurem used Draco Meteor -> p1a: Snorlax
+              Kyurem spa 2 fell
+      p1b Chandelure used Shadow Ball -> p2b: Infernape
+      p1a Snorlax used Double-Edge -> p2a: Kyurem
+              Kyurem -- critical hit
+      after p1: Snorlax 36/524, Chandelure 324/324
+      after p2: Kyurem-Black 34/454, Infernape 50/293
+
+  Turn 2
+    p1 mcts: move 2 1, move 2 2
+      search (6000 visits): firepunch,0;shadowball,1 112v 48 | protect,0;shadowball,1 112v 48 | doubleedge,1;shadowball,0 108v 46 | doubleedge,0;shadowball,1 107v 45
+    p2 greedy: move 1 1, move 3 1
+      p2b Infernape used Overheat -> p1a: Snorlax  [[miss]]
+              Infernape -- MISSED
+      p2a Kyurem used Draco Meteor -> p1a: Snorlax
+              Kyurem spa 2 fell
+      p1a Snorlax fainted
+      p1b Chandelure used Shadow Ball -> p2b: Infernape
+      p2b Infernape fainted
+      after p1: Snorlax 0/524, Chandelure 324/324
+      after p2: Kyurem-Black 34/454, Infernape 0/293
+
+  Turn 3
+      p2b <- Metagross comes in (364/364)
+      p1a <- Darkrai comes in (281/281)
+      after p1: Darkrai 281/281, Chandelure 324/324
+      after p2: Kyurem-Black 34/454, Metagross 364/364
+
+  Turn 4
+    p1 mcts: move 2 1, move 2 2
+      search (3000 visits): icebeam,0;shadowball,1 112v 66 | darkpulse,0;shadowball,1 111v 66 | darkpulse,1;protect,1 107v 63 | darkpulse,1;shadowball,1 100v 57
+    p2 greedy: move 1 1, move 1 1
+      p1a Darkrai used Ice Beam -> p2a: Kyurem
+      p2a Kyurem fainted
+      p2b Metagross used Meteor Mash -> p1a: Darkrai
+              Metagross used up its Steel Gem
+      p1a Darkrai fainted
+      p1b Chandelure used Shadow Ball -> p2b: Metagross
+      after p1: Darkrai 0/281, Chandelure 324/324
+      after p2: Kyurem-Black 0/454, Metagross 163/364
+
+  Turn 5
+      p1a <- Infernape comes in (293/293)
+      p2a <- Thundurus comes in (299/299)
+      after p1: Infernape 293/293, Chandelure 324/324
+      after p2: Thundurus 299/299, Metagross 163/364
+
+  Turn 6
+    p1 mcts: move 4 2, move 1 1
+      search (2000 visits): overheat,1;overheat,0 100v 73 | fakeout,1;shadowball,1 75v 50 | fakeout,0;shadowball,1 72v 47 | fakeout,0;overheat,0 60v 37
+    p2 greedy: move 1 1, move 1 1
+      p2a Thundurus used Thunderbolt -> p1a: Infernape
+              Thundurus used up its Electric Gem
+      p1a Infernape fainted
+      p2b Metagross used Meteor Mash -> p1b: Chandelure
+      p1b Chandelure used Overheat -> p2a: Thundurus
+              Chandelure spa 2 fell
+      p2a Thundurus fainted
+      after p1: Infernape 0/293, Chandelure 217/324
+      after p2: Thundurus 0/299, Metagross 163/364
+
+  Turn 7
+    p1 mcts: pass, move 4
+      search (16000 visits): No Move;protect,1 10525v 4750 | No Move;overheat,1 2324v 936 | No Move;shadowball,1 1931v 761 | No Move;trickroom,1 1220v 449
+    p2 greedy: pass, move 1 2
+      p1b Chandelure used Protect
+      p2b Metagross used Meteor Mash -> p1b: Chandelure
+              Chandelure -- move: Protect
+      after p1: Infernape 0/293, Chandelure 217/324
+      after p2: Thundurus 0/299, Metagross 163/364
+
+  Turn 8
+    p1 mcts: pass, move 4
+      search (17000 visits): No Move;protect,1 10177v 4572 | No Move;overheat,1 2982v 1228 | No Move;shadowball,1 2407v 969 | No Move;trickroom,1 1434v 539
+    p2 greedy: pass, move 1 2
+      p1b Chandelure used Protect
+      p2b Metagross used Meteor Mash -> p1b: Chandelure
+              Chandelure -- move: Protect
+      after p1: Infernape 0/293, Chandelure 217/324
+      after p2: Thundurus 0/299, Metagross 163/364
+
+  Turn 9
+    p1 mcts: pass, move 4
+      search (14000 visits): No Move;protect,1 8804v 3986 | No Move;overheat,1 2265v 922 | No Move;shadowball,1 1770v 699 | No Move;trickroom,1 1161v 430
+    p2 greedy: pass, move 1 2
+      p1b Chandelure used Protect  [[still]]
+              Chandelure -- IT FAILED
+      p2b Metagross used Meteor Mash -> p1b: Chandelure
+      after p1: Infernape 0/293, Chandelure 104/324
+      after p2: Thundurus 0/299, Metagross 163/364
+
+  Turn 10
+    p1 mcts: pass, move 4
+      search (14000 visits): No Move;protect,1 10763v 4867 | No Move;shadowball,1 1185v 435 | No Move;overheat,1 1120v 407 | No Move;trickroom,1 932v 327
+    p2 greedy: pass, move 1 2
+      p1b Chandelure used Protect
+      p2b Metagross used Meteor Mash -> p1b: Chandelure
+              Chandelure -- move: Protect
+      after p1: Infernape 0/293, Chandelure 104/324
+      after p2: Thundurus 0/299, Metagross 163/364
+
+  Turn 11
+    p1 mcts: pass, move 4
+      search (15000 visits): No Move;protect,1 11497v 5217 | No Move;shadowball,1 1290v 480 | No Move;overheat,1 1166v 426 | No Move;trickroom,1 1047v 375
+    p2 greedy: pass, move 1 2
+      p1b Chandelure used Protect  [[still]]
+              Chandelure -- IT FAILED
+      p2b Metagross used Meteor Mash -> p1b: Chandelure
+      p1b Chandelure fainted
+      after p1: Infernape 0/293, Chandelure 0/324
+      after p2: Thundurus 0/299, Metagross 163/364
+
+  RESULT: p2 wins

@@ -78,7 +78,8 @@ def load_dump_teams(tier, sizes=(6,)):
     # The label carries the roster, not just the scraper's team name: a transcript whose header
     # reads "For london bw 2v2 classic" says nothing about who is playing.
     return [("\n\n".join(set_text(m) for m in t["data"]),
-             "%s: %s" % (t.get("name") or "?", ", ".join(m["species"] for m in t["data"])))
+             "%s: %s" % (t.get("name") or "?", ", ".join(m["species"] for m in t["data"])),
+             len(t["data"]))
             for t in teams]
 
 
@@ -347,8 +348,15 @@ def main():
         args.teams, tuple(int(x) for x in args.team_sizes.split(",")))
     fmt = args.fmt or ("gen5doublescustomgame" if args.teams == "pool"
                        else args.teams.split("doubles")[0] + "doublescustomgame")
-    if dump is not None and len(dump) < 2:
-        sys.exit(f"{args.teams} has {len(dump)} complete six-mon teams; need at least 2")
+    by_size = collections.defaultdict(list)
+    for k, row in enumerate(dump or []):
+        by_size[row[2]].append(k)
+    if dump is not None and not any(len(v) >= 2 for v in by_size.values()):
+        sys.exit(f"{args.teams} has no team size with two or more teams at sizes "
+                 f"{args.team_sizes}; sizes found: {dict((k, len(v)) for k, v in by_size.items())}")
+    if dump is not None:
+        print("   teams: " + ", ".join(f"{len(v)} of size {k}" for k, v in sorted(by_size.items()))
+              + "   (paired only against equal size)")
     server = Server()
     stats = collections.Counter()
     wins = collections.Counter()
@@ -362,7 +370,15 @@ def main():
                 names = [[POOL_NAMES[i] for i in t] for t in teams]
                 req = {"cmd": "new", "teams": teams}
             else:
-                i, j = rng.sample(range(len(dump)), 2)
+                # Pair only teams of the SAME size. --team-sizes says which sizes are
+                # acceptable, not that they may fight each other: the format is a custom game
+                # with no bring-N team preview, so a six-mon team fields all six and a 4-v-6
+                # is a two-Pokemon handicap decided before a move is chosen.
+                i = rng.randrange(len(dump))
+                same = by_size[dump[i][2]]
+                j = i
+                while j == i:
+                    j = same[rng.randrange(len(same))]
                 names = [[dump[i][1]], [dump[j][1]]]
                 # Real sets carry sub-100% moves, crits and secondaries, so the always-max PRNG
                 # is wrong here: it would make every Hurricane miss. Showdown's own seeded PRNG

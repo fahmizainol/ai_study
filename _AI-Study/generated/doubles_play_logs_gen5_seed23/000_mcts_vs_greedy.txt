@@ -1,0 +1,110 @@
+battle 0   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: [PL Week 3-4] Terrakion: Terrakion, Togekiss, Infernape, Latios
+  p2: I love you Verne Troyer: Ferrothorn, Jellicent, Thundurus, Tornadus
+
+  Turn 1
+    p1 mcts: move 2 1, move 3 -1
+      search (4000 visits): closecombat,0;helpinghand,0 139v 56 | rockslide,0;thunderwave,0 112v 41 | closecombat,0;thunderwave,0 110v 40 | closecombat,0;thunderwave,1 104v 36
+    p2 greedy: move 4 1, move 1 1
+      p1b Togekiss used Helping Hand -> p1a: Terrakion
+      p1a Terrakion used Close Combat -> p2a: Ferrothorn
+              Terrakion def 1 fell
+              Terrakion spd 1 fell
+      p2a Ferrothorn fainted
+      p2b Jellicent used Scald -> p1a: Terrakion
+      p1a Terrakion fainted
+      after p1: Terrakion 0/323, Togekiss 374/374
+      after p2: Ferrothorn 0/352, Jellicent 404/404
+
+  Turn 2
+      p1a <- Infernape comes in (293/293)
+      p2a <- Thundurus comes in (362/362)
+      after p1: Infernape 293/293, Togekiss 374/374
+      after p2: Thundurus 362/362, Jellicent 404/404
+
+  Turn 3
+    p1 mcts: switch 4, move 1 1   (slot0 Infernape -> Latios)
+      search (3000 visits): switch latios;airslash,0 72v 34 | fakeout,0;airslash,1 70v 33 | switch latios;airslash,1 69v 32 | fakeout,0;followme,1 65v 29
+    p2 greedy: move 3 1, move 1 1
+      p1a <- Latios comes in (302/302)
+      p2a Thundurus used Thunderbolt -> p1a: Latios
+              Thundurus used up its Electric Gem
+      p1b Togekiss used Air Slash -> p2a: Thundurus
+      p2b Jellicent used Scald -> p1a: Latios
+      after p1: Latios 172/302, Togekiss 374/374
+      after p2: Thundurus 305/362, Jellicent 404/404
+
+  Turn 4
+    p1 mcts: move 1 2, move 3 -1
+      search (2000 visits): dracometeor,1;helpinghand,0 61v 37 | psychic,0;airslash,1 61v 37 | psychic,1;airslash,1 61v 37 | dracometeor,0;airslash,1 56v 33
+    p2 greedy: move 3 1, move 1 1
+      p1b Togekiss used Helping Hand -> p1a: Latios
+      p2a Thundurus used Thunderbolt -> p1a: Latios
+      p1a Latios used Draco Meteor -> p2b: Jellicent
+              Latios used up its Dragon Gem
+              Latios spa 2 fell
+      p2b Jellicent fainted
+      after p1: Latios 112/302, Togekiss 374/374
+      after p2: Thundurus 305/362, Jellicent 0/404
+
+  Turn 5
+      p2b <- Tornadus comes in (299/299)
+      after p1: Latios 112/302, Togekiss 374/374
+      after p2: Thundurus 305/362, Tornadus 299/299
+
+  Turn 6
+    p1 mcts: move 2 1, move 1 2
+      search (3000 visits): psychic,0;airslash,1 95v 57 | tailwind,0;airslash,1 91v 53 | dracometeor,1;airslash,1 90v 53 | psychic,0;switch infernape 84v 48
+    p2 greedy: move 3 1, move 3 1
+      p2a Thundurus used Thunderbolt -> p1a: Latios
+      p2b Tornadus used Superpower -> p1a: Latios
+              Tornadus atk 1 fell
+              Tornadus def 1 fell
+      p1a Latios fainted
+      p1b Togekiss used Air Slash -> p2b: Tornadus
+      after p1: Latios 0/302, Togekiss 374/374
+      after p2: Thundurus 305/362, Tornadus 166/299
+
+  Turn 7
+      p1a <- Infernape comes in (293/293)
+      after p1: Infernape 293/293, Togekiss 374/374
+      after p2: Thundurus 305/362, Tornadus 166/299
+
+  Turn 8
+    p1 mcts: move 1 2, move 1 2
+      search (3000 visits): fakeout,1;airslash,1 129v 67 | fakeout,1;airslash,0 107v 52 | fakeout,1;followme,1 103v 49 | fakeout,1;thunderwave,0 91v 41
+    p2 greedy: move 3 1, move 3 1
+      p1a Infernape used Fake Out -> p2b: Tornadus
+      p2a Thundurus used Thunderbolt -> p1a: Infernape
+              Tornadus COULD NOT MOVE (flinch)
+      p1b Togekiss used Air Slash -> p2b: Tornadus
+      p2b Tornadus fainted
+      after p1: Infernape 104/293, Togekiss 374/374
+      after p2: Thundurus 305/362, Tornadus 0/299
+
+  Turn 9
+    p1 mcts: move 2 1, move 4
+      search (8000 visits): overheat,0;followme,1 2974v 1707 | feint,0;airslash,0 496v 229 | feint,0;followme,1 483v 221 | overheat,0;helpinghand,0 476v 217
+    p2 greedy: move 3 1, pass
+      p1b Togekiss used Follow Me
+      p2a Thundurus used Thunderbolt -> p1b: Togekiss
+              Togekiss used up its Sitrus Berry
+      p1a Infernape used Overheat -> p2a: Thundurus  [[miss]]
+              Infernape -- MISSED
+      after p1: Infernape 104/293, Togekiss 267/374
+      after p2: Thundurus 305/362, Tornadus 0/299
+
+  Turn 10
+    p1 mcts: move 2 1, move 4
+      search (10000 visits): overheat,0;followme,1 3998v 2288 | closecombat,0;followme,1 582v 271 | feint,0;airslash,0 504v 226 | feint,0;followme,1 499v 223
+    p2 greedy: move 3 1, pass
+      p1b Togekiss used Follow Me
+      p2a Thundurus used Thunderbolt -> p1b: Togekiss
+      p1a Infernape used Overheat -> p2a: Thundurus
+              Infernape used up its Fire Gem
+              Infernape spa 2 fell
+      p2a Thundurus fainted
+      after p1: Infernape 104/293, Togekiss 75/374
+      after p2: Thundurus 0/362, Tornadus 0/299
+
+  RESULT: p1 wins

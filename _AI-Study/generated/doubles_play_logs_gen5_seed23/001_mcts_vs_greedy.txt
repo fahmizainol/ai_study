@@ -1,0 +1,62 @@
+battle 1   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: Cradily: Cradily, Jellicent, Victini, Scrafty
+  p2: Itchyfoot porygon: Porygon-Z, Weavile, Victini, Tornadus
+
+  Turn 1
+    p1 mcts: move 1 2, switch 4   (slot1 Jellicent -> Scrafty)
+      search (1000 visits): ancientpower,1;switch scrafty 22v 16 | ancientpower,1;surf,0 20v 14 | ancientpower,0;switch scrafty 19v 12 | gigadrain,0;switch scrafty 19v 12
+    p2 greedy: move 1 1, move 2 1
+      p1b <- Scrafty comes in (334/334)
+              Porygon-Z atk 1 fell
+              Weavile atk 1 fell
+      p2a Porygon-Z used Hyper Beam -> p1a: Cradily
+      p2b Weavile used Ice Punch -> p1a: Cradily
+      p1a Cradily fainted
+      after p1: Cradily 0/375, Scrafty 334/334
+      after p2: Porygon-Z 311/311, Weavile 256/284
+
+  Turn 2
+      p1a <- Victini comes in (341/341)
+      after p1: Victini 341/341, Scrafty 334/334
+      after p2: Porygon-Z 311/311, Weavile 256/284
+
+  Turn 3
+    p1 mcts: move 2 2, move 3 1
+      search (1000 visits): boltstrike,1;drainpunch,0 25v 20 | vcreate,0;drainpunch,1 21v 16 | zenheadbutt,0;drainpunch,1 21v 16 | boltstrike,0;drainpunch,1 20v 14
+    p2 greedy: move 1, move 2 1
+              Porygon-Z COULD NOT MOVE (recharge)
+      p2b Weavile used Ice Punch -> p1a: Victini
+      p1a Victini used Bolt Strike -> p2b: Weavile
+              Weavile -- critical hit
+      p2b Weavile fainted
+      p1b Scrafty used Drain Punch -> p2a: Porygon-Z
+      p2a Porygon-Z fainted
+      after p1: Victini 286/341, Scrafty 334/334
+      after p2: Porygon-Z 0/311, Weavile 0/284
+
+  Turn 4
+      p2b <- Tornadus comes in (299/299)
+      p2a <- Victini comes in (341/341)
+      after p1: Victini 286/341, Scrafty 334/334
+      after p2: Victini 341/341, Tornadus 299/299
+
+  Turn 5
+    p1 mcts: move 2 2, move 2 1
+      search (1000 visits): boltstrike,1;crunch,0 26v 22 | boltstrike,1;drainpunch,1 21v 15 | boltstrike,0;crunch,0 20v 14 | boltstrike,1;fakeout,1 20v 15
+    p2 greedy: move 1 1, move 3 1
+      p2b Tornadus used Superpower -> p1a: Victini
+              Tornadus atk 1 fell
+              Tornadus def 1 fell
+      p1a Victini used Bolt Strike -> p2b: Tornadus
+      p2b Tornadus fainted
+      p2a Victini used V-create -> p1a: Victini
+              Victini used up its Fire Gem
+              Victini spe 1 fell
+              Victini def 1 fell
+              Victini spd 1 fell
+      p1b Scrafty used Crunch -> p2a: Victini
+      p2a Victini fainted
+      after p1: Victini 10/341, Scrafty 334/334
+      after p2: Victini 0/341, Tornadus 0/299
+
+  RESULT: p1 wins

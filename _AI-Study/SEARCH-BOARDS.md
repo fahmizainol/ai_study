@@ -374,7 +374,7 @@ ally, Telepathy exempting the ally, Quick Guard against priority, Helping Hand, 
 Ally Switch and Intimidate's double drop all match Showdown exactly. **Redirection and spread
 are not broken, so the stop-rule says proceed.**
 
-**One confirmed engine bug, with its root cause** — the first of eleven; all eleven are
+**One confirmed engine bug, with its root cause** — the first of thirteen; all thirteen are
 tabulated under [Backlog item 3](#3-fix-the-ten-confirmed-defects), nine of them with verified
 line numbers, and this section and those following hold the evidence for each. `wide_guard_blocks_spread`: Surf is
 `AllAdjacent`, so in gen 5 it hits the attacker's own partner as well as both foes
@@ -656,6 +656,18 @@ always-max pin), 171 authored teams instead of a 14-species pool.
 **about 17% of turns in the first orientation and 7% in the second were decided by the baseline,
 not by the search.** Any reading of 78.8% has to carry that.
 
+**A flaw in the instrument, not in PR #10, that this number carries.** `--team-sizes 4,6`
+accepted both sizes and then paired at random, and the format is a custom game with no bring-N
+team preview — so a four-mon team fielded four against a six-mon team's six. With 13 sixes among
+171 teams that is about **14% of battles decided by a two-Pokémon handicap before a move was
+chosen**, roughly 11 of the 80. The mismatch is random with respect to which seat holds the
+search and both orientations were run, so its expected contribution to the pooled score is
+about zero and the seat agreement (32-8 against 31-9) and the flat 22-18 control were subject
+to the same noise — the headline is probably not wrong. But it is extra variance that should
+not be there, and 11 of 80 battles were not clean. Fixed 2026-09-13: pairing now requires equal
+size and the run prints its pool split. **The 63-17 should be re-run before it is quoted
+further.**
+
 **Why it fell back — a new defect, and the most consequential one for a bridge.** Thirty-five
 times in the first orientation the search proposed a move Showdown had **disabled**. The
 diagnostic distinguishes the two possible causes deliberately, and it is not the wrong-slot
@@ -756,12 +768,13 @@ to Showdown sets almost directly. Two known obstacles:
 Doing this is what would make the play result mean something: same referee, same search, real
 teams. It is more valuable than re-running the toy version with transcripts attached.
 
-### 3. Fix the eleven confirmed defects
+### 3. Fix the thirteen confirmed defects
 
 Every line number below was read out of the `main-doubles` clone, not remembered. Three are
-crashes, so they stop a bridge outright; five are silent wrong answers, which is worse to ship;
-two are cosmetic-but-blinding, in that they make the search's own decision unreadable; and one
-has no site yet, which is why it is the largest. The first ten are small and localized. All
+crashes, so they stop a bridge outright; six are silent wrong answers, which is worse to ship;
+two are cosmetic-but-blinding, in that they make the search's own decision unreadable; one wastes
+the search's own budget; and one has no site yet, which is why it is the largest. The first
+twelve are small and localized. All
 are doubles-only — the singles board is byte-identical (§ measurement 1), so nothing
 here is a regression, only unfinished work.
 
@@ -771,7 +784,7 @@ here is a regression, only unfinished work.
 | # | site | trigger |
 |---|---|---|
 | 1 | `genx/generate_instructions.rs:4289` `mega_evolve` | computes `act_slot`, discards it, then reads `side.get_active()` — slot 0 — and panics at `:4301` on any held item that is not a mega stone (`RHYPERIOR`/`ASSAULTVEST`, `TALONFLAME`/`CHOICEBAND`, …). Note the second, quieter half: were slot 0 *also* holding a stone, this would mega-evolve the wrong body and not panic at all |
-| 2 | `genx/evaluate.rs:107` | `Invalid boost value: -7 / -8`. Boosts escape the ±6 clamp somewhere upstream and only blow up at evaluation. Seen in gen 6 **and** gen 5, so not generation-specific |
+| 2 | `genx/evaluate.rs:107` | `Invalid boost value: -7 / -8 / **-12**`. Boosts escape the ±6 clamp somewhere upstream and only blow up at evaluation. Seen in gen 6 **and** gen 5, so not generation-specific. The −12 (`doubles_play_logs_gen5_seed23/002`, turn 1) matters: it is exactly **double** the legal floor, so this is not a clamp that is off by one or two but drops being stacked with no bound at all — look for a per-slot drop applied once per target |
 | 3 | `state.rs:1722` `get_two_actives` | `assert_ne!(a_idx, b_idx, "get_two_actives called with the same position")` — reached in ordinary play (×5 in the gen 5 run) |
 
 **Silent wrong answers.** These return a plausible result that is wrong, which the differential
@@ -779,11 +792,18 @@ caught only because Showdown was sitting next to it.
 
 | # | site | defect |
 |---|---|---|
-| 4 | *option generation* | **A Choice lock is not enforced.** `last_used_move` is supplied and is exactly how poke-engine encodes the lock, yet the search proposes moves Showdown has disabled — 35 times in the gen 5 run (`dracometeor`, `earthpower`, `icebeam`, `psychic`, `outrage`, `boltstrike`). The single most consequential one for a bridge: it hands the game an illegal action on roughly one turn in six |
+| 4 | *option generation* | **A Choice lock is not enforced.** `last_used_move` is supplied and is exactly how poke-engine encodes the lock, yet the search proposes moves Showdown has disabled — 35 times in the gen 5 run (`dracometeor`, `earthpower`, `icebeam`, `psychic`, `outrage`, `boltstrike`). The single most consequential one for a bridge: it hands the game an illegal action on roughly one turn in six. Reproduced in two later batches on `hydropump`, `icebeam`, `dracometeor`, `vcreate` and `thunderbolt`, so it is not one move's data — and the proposed move **is** in the body's own move list, which rules out the wrong-slot enumeration of defect 8 as the cause |
 | 5 | `genx/generate_instructions.rs:1744` | Wide Guard / Quick Guard is keyed on `choice.target.hits_multiple_targets()` — the Choice's declared target *class* — instead of the resolved target list, so a guard held up by one slot blocks the spread move against **both**. This is the one stage 0 disagreement (`wide_guard_blocks_spread`) |
 | 6 | `state.rs:1795` `reset_boosts` | reads `get_side(side_ref).get_active()` — slot 0 — so when a **slot 1** body switches out carrying boosts, slot 0's boosts are cleared instead. Haze goes through the same path. The `NOTE (doubles)` comment above it is accurate and calls the fix deferred, so this is known, not overlooked |
 | 7 | Ally Switch | a sub-action is bound to the **slot** rather than the body, so it follows the position across the swap instead of the Pokémon that moved |
+| 12 | *stall counter absent* | **Showdown's consecutive-Protect counter is not modelled, so the search loops on a move that cannot work.** In `doubles_play_logs_gen5_seed11/002` Metagross Protects on **fifteen consecutive turns** (11–25), and Showdown fails every second one (`Protect [[still]]` / `IT FAILED`). The search puts 8266 of 14000 visits on it on turn 14 — a turn on which it had already failed — and re-picks it at the same weight the next turn and the next, while Metagross is ground from 364 to 19 and then loses. Known before as a *measurement* nuisance (it is why 164 corpus turns were skipped); these logs show it is a **play** defect that throws games |
 | 11 | status application | **Every status move applies its status to slot 0, whatever it was aimed at.** `thunderwave,0` and `thunderwave,1` both emit `ChangeStatus SideTwo-P0` (`tools/pe_doubles_status_target.py`, two Psychic-type foes so neither is immune and only the index can differ). Damage does *not* have this bug — `airslash,0` and `airslash,1` correctly emit `Damage SideTwo:0` and `:1` — so it is the status write specifically. Worse, the immunity check reads the **right** target while the write goes to the wrong one, so Thunder Wave aimed at a Psychic ally-of-a-Ground-type paralyzes the **Ground type** |
+
+**Wasted search.** Not a wrong answer — a budget spent on nothing.
+
+| # | site | defect |
+|---|---|---|
+| 13 | doubles option generation | **A move with no target is enumerated once per target slot, and the variants are the same action.** `generate_instructions` returns byte-identical lists for `trickroom,0` and `trickroom,1` (`ToggleTrickRoom … ; DecrementTrickRoomTurnsRemaining`) and for `recover,0` and `recover,1` (both empty at full HP). Because each combines with the *other* slot's actions, the duplication multiplies through the joint space. Observed cost: with Jellicent holding Trick Room, six of fifteen root options were `trickroom`, splitting its visits six ways and leaving it ranked 10th–15th. This also bears on the "~250 options a side" combinatorics objection, which may be partly self-inflicted |
 
 **Unreadable, not wrong.** Both are fixed locally by
 `patches/poke_engine_doubles_choice_labels.patch`, which is why the transcripts are legible;
@@ -801,6 +821,17 @@ omitting it from the list would make the list look complete when it is not — b
 | # | site | defect |
 |---|---|---|
 | 10 | *unknown — see [item 4](#4-root-cause-the-spread-move-divergence)* | **The spread-move divergence, and the single largest source of disagreement with Showdown.** Bodies-damaged agrees on 73.2% of 373 corpus turns; hold out spread-move turns and it is **92.0%**, so spread accounts for ~19 of the 27 points. Defect 5 (Wide Guard) is one instance of it and holding *that* out moves the figure by 1.6 points, so the rest is something else. Not the attacking slot (49 of 97 turns differ from slot 0 against 69 of 143 from slot 1 — the same rate), and in 39 disagreeing turns the undamaged body is the attacker's **own ally**, which the isolated stage 0 Surf and Earthquake cases got right. Fuller positions suppress it; nothing narrower is known |
+
+**One hypothesis ruled out, recorded so it is not chased twice.** Jellicent was seen choosing
+Recover at full HP and failing, which looked like defect 11 on the heal path. It is not: at
+404/404 the engine emits **no heal instruction at all**, correctly. The choice itself was noise
+— in that position the top four options sat at 178/177/173/147 visits against a 133 average.
+
+**`disable` is a translator gap with a play cost, not just a skip.** `volatile disable` (and
+`lockedmove`) have no poke-engine equivalent, so the position cannot be built and the search
+never runs: three decisions in `doubles_play_logs_gen5_seed23/004` went to greedy for this
+reason. Recorded above as a counted skip for the corpus; the play harness pays for it in
+decisions, which is the more expensive currency.
 
 **A lead on defect 10 that came out of defect 11.** Status *application* ignores the target
 slot; spread *damage* does not. That rules defect 11 out as the whole explanation, but it puts

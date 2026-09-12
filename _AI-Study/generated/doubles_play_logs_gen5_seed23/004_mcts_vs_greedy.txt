@@ -1,0 +1,213 @@
+battle 4   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: Fuck it: Rotom-Heat, Scrafty, Crobat, Jellicent
+  p2: Untitled 630: Victini, Togekiss, Terrakion, Genesect
+
+  Turn 1
+    p1 mcts: move 2 2, move 2 1
+      search (1000 visits): thunderbolt,1;crunch,0 15v 9 | thunderbolt,0;highjumpkick,1 14v 8 | thunderbolt,0;fakeout,0 13v 7 | thunderbolt,1;fakeout,0 13v 7
+    p2 greedy: move 1 1, move 3 1
+      p2a Victini used Blue Flare -> p1a: Rotom
+              Victini used up its Fire Gem
+              Rotom -- critical hit
+      p1a Rotom fainted
+      p2b Togekiss used Flamethrower -> p1b: Scrafty
+      p1b Scrafty used Crunch -> p2a: Victini
+      after p1: Rotom-Heat 0/253, Scrafty 250/334
+      after p2: Victini 107/341, Togekiss 374/374
+
+  Turn 2
+      p1a <- Crobat comes in (311/311)
+      after p1: Crobat 311/311, Scrafty 250/334
+      after p2: Victini 107/341, Togekiss 374/374
+
+  Turn 3
+    p1 mcts: move 1 2, move 1 1
+      search (4000 visits): bravebird,1;fakeout,0 93v 50 | bravebird,0;highjumpkick,1 90v 48 | bravebird,0;fakeout,1 85v 44 | bravebird,0;crunch,1 82v 42
+    p2 greedy: move 1 2, move 3 2
+      p1b Scrafty used Fake Out  [[still]]
+              Scrafty -- IT FAILED
+      p1a Crobat used Brave Bird -> p2b: Togekiss
+              Crobat used up its Flying Gem
+      p2a Victini used Blue Flare -> p1b: Scrafty
+              Scrafty is now brn
+      p2b Togekiss used Flamethrower -> p1b: Scrafty
+              Scrafty -- critical hit
+      p1b Scrafty fainted
+      after p1: Crobat 225/311, Scrafty 0/334
+      after p2: Victini 107/341, Togekiss 113/374
+
+  Turn 4
+      p1b <- Jellicent comes in (404/404)
+      after p1: Crobat 225/311, Jellicent 404/404
+      after p2: Victini 107/341, Togekiss 113/374
+
+  Turn 5
+    p1 mcts: move 1 1, move 3
+      search (5000 visits): bravebird,0;icywind,0 309v 197 | bravebird,1;icywind,0 261v 161 | roost,0;icywind,0 196v 113 | superfang,0;icywind,0 164v 90
+    p2 greedy: move 1 1, move 3 1
+      p1a Crobat used Brave Bird -> p2a: Victini
+      p2a Victini fainted
+      p2b Togekiss used Flamethrower -> p1a: Crobat
+              Crobat -- critical hit
+      p1a Crobat fainted
+      p1b Jellicent used Icy Wind -> p2b: Togekiss  [[miss]]
+              Jellicent -- MISSED
+      after p1: Crobat 0/311, Jellicent 404/404
+      after p2: Victini 0/341, Togekiss 113/374
+
+  Turn 6
+      p2a <- Terrakion comes in (323/323)
+      after p1: Crobat 0/311, Jellicent 404/404
+      after p2: Terrakion 323/323, Togekiss 113/374
+
+  Turn 7
+    p1 mcts: pass, move 1 2
+      search (6000 visits): No Move;willowisp,1 2124v 1242 | No Move;willowisp,0 1519v 863 | No Move;icywind,0 759v 397 | No Move;recover,1 661v 339
+    p2 greedy: move 1 2, move 3 2
+      p2a Terrakion used Close Combat -> p1b: Jellicent
+              Jellicent -- IMMUNE
+      p2b Togekiss used Flamethrower -> p1b: Jellicent
+      p1b Jellicent used Will-O-Wisp -> p2b: Togekiss  [[miss]]
+              Jellicent -- MISSED
+      after p1: Crobat 0/311, Jellicent 397/404
+      after p2: Terrakion 323/323, Togekiss 113/374
+
+  Turn 8
+    p1 mcts: pass, move 1 2
+      search (5000 visits): No Move;willowisp,1 1851v 1105 | No Move;willowisp,0 1219v 700 | No Move;icywind,0 644v 341 | No Move;recover,1 542v 279
+    p2 greedy: move 1 2, move 3 2
+      p2a Terrakion used Close Combat -> p1b: Jellicent
+              Jellicent -- IMMUNE
+      p2b Togekiss used Flamethrower -> p1b: Jellicent
+      p1b Jellicent used Will-O-Wisp -> p2b: Togekiss  [[miss]]
+              Jellicent -- MISSED
+      after p1: Crobat 0/311, Jellicent 392/404
+      after p2: Terrakion 323/323, Togekiss 113/374
+
+  Turn 9
+    p1 mcts: pass, move 1 2
+      search (5000 visits): No Move;willowisp,1 1749v 1022 | No Move;willowisp,0 1202v 678 | No Move;icywind,0 658v 344 | No Move;recover,1 615v 318
+    p2 greedy: move 1 2, move 3 2
+      p2a Terrakion used Close Combat -> p1b: Jellicent
+              Jellicent -- IMMUNE
+      p2b Togekiss used Flamethrower -> p1b: Jellicent
+              Jellicent is now brn
+      p1b Jellicent used Will-O-Wisp -> p2b: Togekiss
+              Togekiss is now brn
+      after p1: Crobat 0/311, Jellicent 334/404
+      after p2: Terrakion 323/323, Togekiss 67/374
+
+  Turn 10
+    p1 mcts: pass, move 4
+      search (7000 visits): No Move;recover,1 2846v 1484 | No Move;willowisp,1 1469v 720 | No Move;willowisp,0 1233v 592 | No Move;icywind,0 571v 242
+    p2 greedy: move 1 2, move 3 2
+      p2a Terrakion used Close Combat -> p1b: Jellicent
+              Jellicent -- IMMUNE
+      p2b Togekiss used Flamethrower -> p1b: Jellicent
+      p1b Jellicent used Recover
+      after p1: Crobat 0/311, Jellicent 354/404
+      after p2: Terrakion 323/323, Togekiss 21/374
+
+  Turn 11
+    p1 mcts: pass, move 4
+      search (6000 visits): No Move;recover,1 1800v 925 | No Move;willowisp,1 1702v 872 | No Move;willowisp,0 1162v 569 | No Move;shadowball,0 500v 213
+    p2 greedy: move 1 2, move 3 2
+      p2a Terrakion used Close Combat -> p1b: Jellicent
+              Jellicent -- IMMUNE
+      p2b Togekiss used Flamethrower -> p1b: Jellicent
+      p1b Jellicent used Recover
+      p2b Togekiss fainted
+      after p1: Crobat 0/311, Jellicent 354/404
+      after p2: Terrakion 323/323, Togekiss 0/374
+
+  Turn 12
+      p2b <- Genesect comes in (283/283)
+              Genesect atk 1 rose
+      after p1: Crobat 0/311, Jellicent 354/404
+      after p2: Terrakion 323/323, Genesect 283/283
+
+  Turn 13
+    p1 mcts: pass, move 4
+      search (17000 visits): No Move;recover,1 7002v 988 | No Move;willowisp,1 2460v 258 | No Move;willowisp,0 1985v 188 | No Move;shadowball,1 1946v 182
+    p2 greedy: move 1 2, move 3 2
+      p2b Genesect used Ice Beam -> p1b: Jellicent
+      p2a Terrakion used Close Combat -> p1b: Jellicent
+              Jellicent -- IMMUNE
+      p1b Jellicent used Recover
+      after p1: Crobat 0/311, Jellicent 354/404
+      after p2: Terrakion 323/323, Genesect 283/283
+
+  Turn 14
+    p1 mcts: pass, move 4
+      search (18000 visits): No Move;recover,1 7528v 1015 | No Move;willowisp,0 2379v 226 | No Move;willowisp,1 2301v 215 | No Move;shadowball,0 1983v 171
+    p2 greedy: move 1 2, move 3 2
+      p2b Genesect used Ice Beam -> p1b: Jellicent
+      p2a Terrakion used Close Combat -> p1b: Jellicent
+              Jellicent -- IMMUNE
+      p1b Jellicent used Recover
+      after p1: Crobat 0/311, Jellicent 354/404
+      after p2: Terrakion 323/323, Genesect 283/283
+
+  Turn 15
+    p1 mcts: pass, move 4
+      search (12000 visits): No Move;recover,1 4845v 783 | No Move;willowisp,1 1728v 207 | No Move;willowisp,0 1703v 203 | No Move;shadowball,1 1372v 147
+    p2 greedy: move 1 2, move 3 2
+      p2b Genesect used Ice Beam -> p1b: Jellicent
+      p2a Terrakion used Close Combat -> p1b: Jellicent
+              Jellicent -- IMMUNE
+      p1b Jellicent used Recover
+      after p1: Crobat 0/311, Jellicent 354/404
+      after p2: Terrakion 323/323, Genesect 283/283
+
+  Turn 16
+    p1 mcts: pass, move 4
+      search (12000 visits): No Move;recover,1 5137v 713 | No Move;willowisp,1 1927v 194 | No Move;willowisp,0 1642v 151 | No Move;shadowball,0 1166v 84
+    p2 greedy: move 2 2, move 3 2
+      p2b Genesect used Ice Beam -> p1b: Jellicent
+      p2a Terrakion used Stone Edge -> p1b: Jellicent
+      p1b Jellicent used Recover
+      after p1: Crobat 0/311, Jellicent 295/404
+      after p2: Terrakion 323/323, Genesect 283/283
+
+  Turn 17
+    p1 mcts: pass, move 4
+      search (21000 visits): No Move;recover,1 12834v 1231 | No Move;willowisp,1 1946v 66 | No Move;willowisp,0 1816v 56 | No Move;shadowball,0 1497v 30
+    p2 greedy: move 2 2, move 3 2
+      p2b Genesect used Ice Beam -> p1b: Jellicent
+      p2a Terrakion used Stone Edge -> p1b: Jellicent  [[miss]]
+              Terrakion -- MISSED
+      p1b Jellicent used Recover
+      after p1: Crobat 0/311, Jellicent 354/404
+      after p2: Terrakion 323/323, Genesect 283/283
+
+  Turn 18
+    p1 mcts: pass, move 4
+      search (13000 visits): No Move;recover,1 5770v 775 | No Move;willowisp,1 1911v 175 | No Move;willowisp,0 1806v 161 | No Move;shadowball,1 1233v 83
+    p2 greedy: move 2 2, move 3 2
+      p2b Genesect used Ice Beam -> p1b: Jellicent
+      p2a Terrakion used Stone Edge -> p1b: Jellicent
+      p1b Jellicent used Recover
+      after p1: Crobat 0/311, Jellicent 265/404
+      after p2: Terrakion 323/323, Genesect 283/283
+
+  Turn 19
+    p1 mcts: pass, move 4
+      search (20000 visits): No Move;recover,1 11226v 1070 | No Move;willowisp,1 2168v 90 | No Move;willowisp,0 1936v 70 | No Move;shadowball,0 1588v 41
+    p2 greedy: move 2 2, move 3 2
+      p2b Genesect used Ice Beam -> p1b: Jellicent
+      p2a Terrakion used Stone Edge -> p1b: Jellicent
+      p1b Jellicent used Recover
+      after p1: Crobat 0/311, Jellicent 191/404
+      after p2: Terrakion 323/323, Genesect 283/283
+
+  Turn 20
+    p1 mcts: pass, move 4
+      search (36000 visits): No Move;recover,1 16569v 843 | No Move;willowisp,1 4406v 77 | No Move;willowisp,0 3967v 54 | No Move;icywind,0 3779v 45
+    p2 greedy: move 2 2, move 3 2
+      p2b Genesect used Ice Beam -> p1b: Jellicent
+      p2a Terrakion used Stone Edge -> p1b: Jellicent
+      p1b Jellicent fainted
+      after p1: Crobat 0/311, Jellicent 0/404
+      after p2: Terrakion 323/323, Genesect 283/283
+
+  RESULT: p2 wins

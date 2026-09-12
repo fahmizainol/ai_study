@@ -1,0 +1,79 @@
+battle 4   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: [PL Week 3] Skymin: Kyurem-Black, Metagross, Togekiss, Shaymin-Sky
+  p2: scrafty raikou tini kyub: Thundurus-Therian, Scrafty, Victini, Kyurem-Black
+
+  Turn 1
+    p1 mcts: move 2 1, switch 3   (slot1 Metagross -> Togekiss)
+      search (1000 visits): icebeam,0;switch togekiss 19v 14 | icebeam,0;meteormash,1 18v 13 | icebeam,0;switch shayminsky 18v 13 | icebeam,1;meteormash,1 18v 13
+    p2 greedy: move 4 1, move 3 1
+      p1b <- Togekiss comes in (374/374)
+      p2a Thundurus used Focus Blast -> p1a: Kyurem  [[miss]]
+              Thundurus -- MISSED
+      p1a Kyurem used Ice Beam -> p2a: Thundurus
+      p2a Thundurus fainted
+      p2b Scrafty used Crunch -> p1a: Kyurem
+              Scrafty used up its Dark Gem
+      after p1: Kyurem-Black 199/391, Togekiss 374/374
+      after p2: Thundurus-Therian 0/298, Scrafty 332/332
+
+  Turn 2
+      p2a <- Victini comes in (341/341)
+      after p1: Kyurem-Black 199/391, Togekiss 374/374
+      after p2: Victini 341/341, Scrafty 332/332
+
+  Turn 3
+    p1 mcts: move 2 2, move 1 2
+      search (1000 visits): icebeam,1;airslash,1 21v 14 | icebeam,1;switch metagross 18v 11 | switch shayminsky;airslash,1 18v 11 | dracometeor,0;helpinghand,0 17v 10
+    p2 greedy: move 1 1, move 3 1
+      p2a Victini used V-create -> p1a: Kyurem
+              Victini spe 1 fell
+              Victini def 1 fell
+              Victini spd 1 fell
+      p1a Kyurem fainted
+      p1b Togekiss used Air Slash -> p2b: Scrafty
+      p2b Scrafty used Crunch -> p1b: Togekiss
+              Togekiss def 1 fell
+      after p1: Kyurem-Black 0/391, Togekiss 268/374
+      after p2: Victini 307/341, Scrafty 150/332
+
+  Turn 4
+      p1a <- Metagross comes in (364/364)
+      after p1: Metagross 364/364, Togekiss 268/374
+      after p2: Victini 307/341, Scrafty 150/332
+
+  Turn 5
+    p1 mcts: move 2 2, move 1 1
+      search (3000 visits): meteormash,1;airslash,0 99v 52 | meteormash,0;airslash,1 83v 40 | meteormash,1;thunderwave,1 81v 39 | meteormash,1;thunderwave,0 79v 37
+    p2 greedy: move 1 2, move 3 2
+      p2a Victini used V-create -> p1b: Togekiss
+              Togekiss -- critical hit
+              Victini spe 1 fell
+              Victini def 1 fell
+              Victini spd 1 fell
+      p1b Togekiss fainted
+      p1a Metagross used Meteor Mash -> p2b: Scrafty
+              Metagross used up its Steel Gem
+      p2b Scrafty fainted
+      after p1: Metagross 364/364, Togekiss 0/374
+      after p2: Victini 273/341, Scrafty 0/332
+
+  Turn 6
+      p1b <- Shaymin-Sky comes in (341/341)
+      p2b <- Kyurem-Black comes in (391/391)
+      after p1: Metagross 364/364, Shaymin-Sky 341/341
+      after p2: Victini 273/341, Kyurem-Black 391/391
+
+  Turn 7
+    p1 mcts: move 2 2, move 3 1
+      search (1000 visits): meteormash,1;airslash,0 38v 21 | meteormash,1;airslash,1 37v 19 | meteormash,1;seedflare,0 33v 16 | meteormash,1;protect,1 32v 15
+    p2 greedy: move 1 1, move 2 1
+      p1b Shaymin used Air Slash -> p2a: Victini
+      p2a Victini fainted
+      p2b Kyurem used Draco Meteor -> p1a: Metagross
+              Kyurem spa 2 fell
+      p1a Metagross used Meteor Mash -> p2b: Kyurem
+      p2b Kyurem fainted
+      after p1: Metagross 235/364, Shaymin-Sky 307/341
+      after p2: Victini 0/341, Kyurem-Black 0/391
+
+  RESULT: p1 wins

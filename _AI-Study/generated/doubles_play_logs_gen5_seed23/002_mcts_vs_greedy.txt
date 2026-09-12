@@ -1,0 +1,60 @@
+battle 2   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: Vs vrji rowash: Rotom-Wash, Garchomp, Tornadus, Genesect
+  p2: Genesect sand (Please make it stop): Genesect, Tyranitar, Excadrill, Gastrodon
+
+  Turn 1
+    p1 mcts: switch 4, move 3 1   (slot0 Rotom-Wash -> Genesect)
+      search (1000 visits): switch genesect;fireblast,0 23v 17 | thunderbolt,0;earthquake,0 21v 15 | thunderbolt,0;fireblast,0 21v 14 | hydropump,1;fireblast,0 21v 15
+    p2 greedy: move 1 1, move 3 1
+      p1a <- Genesect comes in (290/290)
+              Genesect atk 1 rose
+      p1b Garchomp used Fire Blast -> p2a: Genesect  [[miss]]
+              Garchomp -- MISSED
+      p2a Genesect used Zen Headbutt -> p1a: Genesect
+      p2b Tyranitar used Superpower -> p1a: Genesect
+              Tyranitar atk 1 fell
+              Tyranitar def 1 fell
+      p1a Genesect fainted
+      after p1: Genesect 0/290, Garchomp 357/357
+      after p2: Genesect 291/291, Tyranitar 364/404
+
+  Turn 2
+      p1a <- Tornadus comes in (299/299)
+      after p1: Tornadus 299/299, Garchomp 357/357
+      after p2: Genesect 291/291, Tyranitar 364/404
+
+  Turn 3
+    p1 mcts: move 1 1, move 1
+      search (4000 visits): acrobatics,0;earthquake,0 413v 301 | acrobatics,1;fireblast,0 286v 197 | protect,0;fireblast,0 264v 179 | acrobatics,0;fireblast,0 223v 146
+    p2 greedy: move 1 1, move 3 1
+      p1a Tornadus used Acrobatics -> p2a: Genesect
+              Tornadus used up its Flying Gem
+      p2a Genesect fainted
+      p1b Garchomp used Earthquake -> p2b: Tyranitar  [[spread] p2b]
+              Tornadus -- IMMUNE
+              Garchomp used up its Ground Gem
+      p2b Tyranitar fainted
+      after p1: Tornadus 281/299, Garchomp 357/357
+      after p2: Genesect 0/291, Tyranitar 0/404
+
+  Turn 4
+      p2a <- Excadrill comes in (361/361)
+      p2b <- Gastrodon comes in (426/426)
+      after p1: Tornadus 281/299, Garchomp 357/357
+      after p2: Excadrill 361/361, Gastrodon 426/426
+
+  Turn 5
+    p1 mcts: move 4, move 1
+      search (2000 visits): protect,0;earthquake,0 363v 319 | switch rotomwash;earthquake,0 97v 66 | superpower,0;protect,1 49v 25 | superpower,1;earthquake,0 49v 26
+    p2 greedy: move 2, move 3 1
+      p1a Tornadus used Protect
+      p2a Excadrill used Earthquake -> p1b: Garchomp  [[spread] p2b,p1b]
+              Tornadus -- IMMUNE
+      p1b Garchomp used Earthquake -> p2b: Gastrodon  [[spread] p2a,p2b]
+              Tornadus -- IMMUNE
+      p2a Excadrill fainted
+      p2b Gastrodon fainted
+      after p1: Tornadus 281/299, Garchomp 150/357
+      after p2: Excadrill 0/361, Gastrodon 0/426
+
+  RESULT: p1 wins

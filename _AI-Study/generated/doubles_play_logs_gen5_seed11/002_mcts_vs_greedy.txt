@@ -1,0 +1,288 @@
+battle 2   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: Untitled 625: Latias, Tornadus, Liepard, Metagross
+  p2: [PL Week 4] Trick Room: Cresselia, Hariyama, Metagross, Kyurem-Black
+
+  Turn 1
+    p1 mcts: move 2 2, move 1 2
+      search (3000 visits): psychic,1;acrobatics,1 109v 82 | psychic,1;superpower,1 79v 54 | psychic,1;protect,1 71v 47 | psychic,1;switch metagross 70v 46
+    p2 greedy: move 3 1, move 2 1
+      p1b Tornadus used Acrobatics -> p2b: Hariyama
+              Tornadus used up its Flying Gem
+              Hariyama -- critical hit
+      p2b Hariyama fainted
+      p1a Latias used Psychic -> p2a: Cresselia
+      p2a Cresselia used Psychic -> p1a: Latias
+              Latias spd 1 fell
+      after p1: Latias 289/320, Tornadus 299/299
+      after p2: Cresselia 402/444, Hariyama 0/492
+
+  Turn 2
+      p2b <- Metagross comes in (364/364)
+      after p1: Latias 289/320, Tornadus 299/299
+      after p2: Cresselia 402/444, Metagross 364/364
+
+  Turn 3
+    p1 mcts: move 2 1, switch 4   (slot1 Tornadus -> Metagross)
+      search (2000 visits): psychic,0;switch metagross 34v 17 | switch metagross;acrobatics,0 33v 15 | psychic,1;switch metagross 32v 15 | suckerpunch,0;switch metagross 32v 15
+    p2 greedy: move 3 1, move 2 1
+      p1b <- Metagross comes in (364/364)
+      p1a Latias used Psychic -> p2a: Cresselia
+      p2a Cresselia used Psychic -> p1a: Latias
+      p2b Metagross used Meteor Mash -> p1a: Latias
+              Metagross used up its Steel Gem
+              Latias -- critical hit
+      p1a Latias fainted
+      after p1: Latias 0/320, Metagross 364/364
+      after p2: Cresselia 354/444, Metagross 364/364
+
+  Turn 4
+      p1a <- Liepard comes in (269/269)
+      after p1: Liepard 269/269, Metagross 364/364
+      after p2: Cresselia 354/444, Metagross 364/364
+
+  Turn 5
+    p1 mcts: move 1 2, move 2 1
+      search (3000 visits): fakeout,1;meteormash,0 68v 37 | fakeout,1;meteormash,1 63v 33 | suckerpunch,1;meteormash,1 62v 32 | suckerpunch,1;meteormash,0 58v 29
+    p2 greedy: move 3 1, move 2 1
+      p1a Liepard used Fake Out -> p2b: Metagross
+      p2a Cresselia used Psychic -> p1a: Liepard
+              Liepard -- IMMUNE
+      p1b Metagross used Meteor Mash -> p2a: Cresselia
+              Metagross used up its Steel Gem
+              Metagross COULD NOT MOVE (flinch)
+      after p1: Liepard 269/269, Metagross 364/364
+      after p2: Cresselia 167/444, Metagross 349/364
+
+  Turn 6
+    p1 mcts: switch 4, move 2 1   (slot0 Liepard -> Tornadus)
+      search (4000 visits): switch tornadus;meteormash,0 93v 48 | suckerpunch,1;meteormash,0 88v 44 | faketears,0;meteormash,1 78v 37 | switch tornadus;meteormash,1 76v 36
+    p2 greedy: move 3 1, move 2 1
+      p1a <- Tornadus comes in (299/299)
+      p2a Cresselia used Psychic -> p1a: Tornadus
+      p1b Metagross used Meteor Mash -> p2a: Cresselia
+      p2b Metagross used Meteor Mash -> p1a: Tornadus
+      p1a Tornadus fainted
+      after p1: Tornadus 0/299, Metagross 364/364
+      after p2: Cresselia 31/444, Metagross 349/364
+
+  Turn 7
+      p1a <- Liepard comes in (269/269)
+      after p1: Liepard 269/269, Metagross 364/364
+      after p2: Cresselia 31/444, Metagross 349/364
+
+  Turn 8
+    p1 mcts: move 1 2, move 2 1
+      search (5000 visits): fakeout,1;meteormash,0 164v 88 | suckerpunch,1;meteormash,0 153v 81 | suckerpunch,1;zenheadbutt,0 138v 70 | fakeout,1;bulletpunch,0 134v 67
+    p2 greedy: move 3 1, move 2 1
+      p1a Liepard used Fake Out -> p2b: Metagross
+      p2a Cresselia used Psychic -> p1a: Liepard
+              Liepard -- IMMUNE
+      p1b Metagross used Meteor Mash -> p2a: Cresselia
+      p2a Cresselia fainted
+              Metagross COULD NOT MOVE (flinch)
+      after p1: Liepard 269/269, Metagross 364/364
+      after p2: Cresselia 0/444, Metagross 335/364
+
+  Turn 9
+      p2a <- Kyurem-Black comes in (391/391)
+      after p1: Liepard 269/269, Metagross 364/364
+      after p2: Kyurem-Black 391/391, Metagross 335/364
+
+  Turn 10
+    p1 mcts: move 2 2, move 2 1
+      search (1000 visits): suckerpunch,1;meteormash,0 35v 22 | suckerpunch,0;meteormash,0 29v 17 | suckerpunch,1;zenheadbutt,0 27v 15 | encore,0;meteormash,0 27v 15
+    p2 greedy: move 1 1, move 2 1
+      p1a Liepard used Sucker Punch -> p2b: Metagross
+              Liepard used up its Dark Gem
+      p2a Kyurem used Draco Meteor -> p1a: Liepard  [[miss]]
+              Kyurem -- MISSED
+      p1b Metagross used Meteor Mash -> p2a: Kyurem
+      p2a Kyurem fainted
+      p2b Metagross used Meteor Mash -> p1a: Liepard
+      p1a Liepard fainted
+      after p1: Liepard 0/269, Metagross 364/364
+      after p2: Kyurem-Black 0/391, Metagross 205/364
+
+  Turn 11
+    p1 mcts: pass, move 1
+      search (12000 visits): No Move;protect,1 6744v 3651 | No Move;meteormash,1 2410v 1219 | No Move;zenheadbutt,1 1498v 722 | No Move;bulletpunch,1 1348v 642
+    p2 greedy: pass, move 2 2
+      p1b Metagross used Protect
+      p2b Metagross used Meteor Mash -> p1b: Metagross
+              Metagross -- move: Protect
+      after p1: Liepard 0/269, Metagross 364/364
+      after p2: Kyurem-Black 0/391, Metagross 205/364
+
+  Turn 12
+    p1 mcts: pass, move 1
+      search (13000 visits): No Move;protect,1 7465v 4039 | No Move;meteormash,1 2572v 1300 | No Move;zenheadbutt,1 1521v 730 | No Move;bulletpunch,1 1442v 688
+    p2 greedy: pass, move 2 2
+      p1b Metagross used Protect
+      p2b Metagross used Meteor Mash -> p1b: Metagross
+              Metagross -- move: Protect
+      after p1: Liepard 0/269, Metagross 364/364
+      after p2: Kyurem-Black 0/391, Metagross 205/364
+
+  Turn 13
+    p1 mcts: pass, move 1
+      search (13000 visits): No Move;protect,1 7481v 4044 | No Move;meteormash,1 2528v 1275 | No Move;zenheadbutt,1 1571v 756 | No Move;bulletpunch,1 1420v 675
+    p2 greedy: pass, move 2 2
+      p1b Metagross used Protect
+      p2b Metagross used Meteor Mash -> p1b: Metagross
+              Metagross -- move: Protect
+      after p1: Liepard 0/269, Metagross 364/364
+      after p2: Kyurem-Black 0/391, Metagross 205/364
+
+  Turn 14
+    p1 mcts: pass, move 1
+      search (14000 visits): No Move;protect,1 8266v 4472 | No Move;meteormash,1 2590v 1303 | No Move;zenheadbutt,1 1598v 767 | No Move;bulletpunch,1 1546v 739
+    p2 greedy: pass, move 2 2
+      p1b Metagross used Protect  [[still]]
+              Metagross -- IT FAILED
+      p2b Metagross used Meteor Mash -> p1b: Metagross  [[miss]]
+              Metagross -- MISSED
+      after p1: Liepard 0/269, Metagross 364/364
+      after p2: Kyurem-Black 0/391, Metagross 205/364
+
+  Turn 15
+    p1 mcts: pass, move 1
+      search (13000 visits): No Move;protect,1 7473v 4045 | No Move;meteormash,1 2475v 1248 | No Move;zenheadbutt,1 1597v 771 | No Move;bulletpunch,1 1455v 695
+    p2 greedy: pass, move 2 2
+      p1b Metagross used Protect
+      p2b Metagross used Meteor Mash -> p1b: Metagross
+              Metagross -- move: Protect
+      after p1: Liepard 0/269, Metagross 364/364
+      after p2: Kyurem-Black 0/391, Metagross 205/364
+
+  Turn 16
+    p1 mcts: pass, move 1
+      search (13000 visits): No Move;protect,1 7569v 4098 | No Move;meteormash,1 2424v 1219 | No Move;zenheadbutt,1 1595v 770 | No Move;bulletpunch,1 1412v 672
+    p2 greedy: pass, move 2 2
+      p1b Metagross used Protect  [[still]]
+              Metagross -- IT FAILED
+      p2b Metagross used Meteor Mash -> p1b: Metagross  [[miss]]
+              Metagross -- MISSED
+      after p1: Liepard 0/269, Metagross 364/364
+      after p2: Kyurem-Black 0/391, Metagross 205/364
+
+  Turn 17
+    p1 mcts: pass, move 1
+      search (12000 visits): No Move;protect,1 6803v 3680 | No Move;meteormash,1 2366v 1193 | No Move;zenheadbutt,1 1470v 706 | No Move;bulletpunch,1 1361v 648
+    p2 greedy: pass, move 2 2
+      p1b Metagross used Protect
+      p2b Metagross used Meteor Mash -> p1b: Metagross
+              Metagross -- move: Protect
+      after p1: Liepard 0/269, Metagross 364/364
+      after p2: Kyurem-Black 0/391, Metagross 205/364
+
+  Turn 18
+    p1 mcts: pass, move 1
+      search (8000 visits): No Move;protect,1 4062v 2196 | No Move;meteormash,1 1666v 838 | No Move;zenheadbutt,1 1217v 591 | No Move;bulletpunch,1 1055v 503
+    p2 greedy: pass, move 2 2
+      p1b Metagross used Protect  [[still]]
+              Metagross -- IT FAILED
+      p2b Metagross used Meteor Mash -> p1b: Metagross
+              Metagross atk 1 rose
+      after p1: Liepard 0/269, Metagross 286/364
+      after p2: Kyurem-Black 0/391, Metagross 205/364
+
+  Turn 19
+    p1 mcts: pass, move 1
+      search (13000 visits): No Move;protect,1 9156v 4950 | No Move;meteormash,1 1740v 838 | No Move;zenheadbutt,1 1142v 522 | No Move;bulletpunch,1 962v 429
+    p2 greedy: pass, move 2 2
+      p1b Metagross used Protect
+      p2b Metagross used Meteor Mash -> p1b: Metagross
+              Metagross -- move: Protect
+      after p1: Liepard 0/269, Metagross 286/364
+      after p2: Kyurem-Black 0/391, Metagross 205/364
+
+  Turn 20
+    p1 mcts: pass, move 1
+      search (11000 visits): No Move;protect,1 7444v 4027 | No Move;meteormash,1 1559v 751 | No Move;zenheadbutt,1 1068v 490 | No Move;bulletpunch,1 929v 417
+    p2 greedy: pass, move 2 2
+      p1b Metagross used Protect  [[still]]
+              Metagross -- IT FAILED
+      p2b Metagross used Meteor Mash -> p1b: Metagross
+      after p1: Liepard 0/269, Metagross 174/364
+      after p2: Kyurem-Black 0/391, Metagross 205/364
+
+  Turn 21
+    p1 mcts: pass, move 1
+      search (13000 visits): No Move;protect,1 10816v 5847 | No Move;meteormash,1 871v 379 | No Move;zenheadbutt,1 713v 299 | No Move;bulletpunch,1 600v 243
+    p2 greedy: pass, move 2 2
+      p1b Metagross used Protect
+      p2b Metagross used Meteor Mash -> p1b: Metagross
+              Metagross -- move: Protect
+      after p1: Liepard 0/269, Metagross 174/364
+      after p2: Kyurem-Black 0/391, Metagross 205/364
+
+  Turn 22
+    p1 mcts: pass, move 1
+      search (13000 visits): No Move;protect,1 10721v 5792 | No Move;meteormash,1 946v 417 | No Move;zenheadbutt,1 752v 319 | No Move;bulletpunch,1 581v 233
+    p2 greedy: pass, move 2 2
+      p1b Metagross used Protect
+      p2b Metagross used Meteor Mash -> p1b: Metagross
+              Metagross -- move: Protect
+      after p1: Liepard 0/269, Metagross 174/364
+      after p2: Kyurem-Black 0/391, Metagross 205/364
+
+  Turn 23
+    p1 mcts: pass, move 1
+      search (13000 visits): No Move;protect,1 10268v 5539 | No Move;meteormash,1 1195v 545 | No Move;zenheadbutt,1 820v 353 | No Move;bulletpunch,1 717v 301
+    p2 greedy: pass, move 2 2
+      p1b Metagross used Protect  [[still]]
+              Metagross -- IT FAILED
+      p2b Metagross used Meteor Mash -> p1b: Metagross
+      after p1: Liepard 0/269, Metagross 63/364
+      after p2: Kyurem-Black 0/391, Metagross 205/364
+
+  Turn 24
+    p1 mcts: pass, move 1
+      search (14000 visits): No Move;protect,1 12966v 6915 | No Move;meteormash,1 363v 124 | No Move;bulletpunch,1 338v 113 | No Move;zenheadbutt,1 333v 111
+    p2 greedy: pass, move 4 2
+      p1b Metagross used Protect
+      p2b Metagross used Zen Headbutt -> p1b: Metagross
+              Metagross -- move: Protect
+      after p1: Liepard 0/269, Metagross 63/364
+      after p2: Kyurem-Black 0/391, Metagross 205/364
+
+  Turn 25
+    p1 mcts: pass, move 1
+      search (15000 visits): No Move;protect,1 13850v 7367 | No Move;meteormash,1 416v 147 | No Move;zenheadbutt,1 377v 129 | No Move;bulletpunch,1 357v 120
+    p2 greedy: pass, move 4 2
+      p1b Metagross used Protect  [[still]]
+              Metagross -- IT FAILED
+      p2b Metagross used Zen Headbutt -> p1b: Metagross
+      after p1: Liepard 0/269, Metagross 19/364
+      after p2: Kyurem-Black 0/391, Metagross 205/364
+
+  Turn 26
+    p1 mcts: pass, move 1
+      search (14000 visits): No Move;protect,1 13744v 7212 | No Move;zenheadbutt,1 99v 12 | No Move;meteormash,1 87v 8 | No Move;bulletpunch,1 70v 3
+    p2 greedy: pass, move 4 2
+      p1b Metagross used Protect
+      p2b Metagross used Zen Headbutt -> p1b: Metagross
+              Metagross -- move: Protect
+      after p1: Liepard 0/269, Metagross 19/364
+      after p2: Kyurem-Black 0/391, Metagross 205/364
+
+  Turn 27
+    p1 mcts: pass, move 3 2
+      search (117000 visits): No Move;zenheadbutt,1 48297v 323 | No Move;bulletpunch,1 34409v 91 | No Move;meteormash,1 34294v 88
+    p2 greedy: pass, move 4 2
+      p1b Metagross used Zen Headbutt -> p2b: Metagross
+              Metagross COULD NOT MOVE (flinch)
+      after p1: Liepard 0/269, Metagross 19/364
+      after p2: Kyurem-Black 0/391, Metagross 174/364
+
+  Turn 28
+    p1 mcts: pass, move 3 2
+      search (121000 visits): No Move;zenheadbutt,1 49612v 319 | No Move;meteormash,1 35814v 93 | No Move;bulletpunch,1 35574v 89
+    p2 greedy: pass, move 4 2
+      p1b Metagross used Zen Headbutt -> p2b: Metagross
+      p2b Metagross used Zen Headbutt -> p1b: Metagross
+      p1b Metagross fainted
+      after p1: Liepard 0/269, Metagross 0/364
+      after p2: Kyurem-Black 0/391, Metagross 147/364
+
+  RESULT: p2 wins

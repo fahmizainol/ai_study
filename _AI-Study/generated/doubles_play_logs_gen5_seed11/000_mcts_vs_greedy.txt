@@ -1,0 +1,69 @@
+battle 0   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: meta volc scraft kyurem: Metagross, Scrafty, Volcarona, Kyurem
+  p2: Untitled 491: Gallade, Gastrodon, Rotom-Mow, Weavile
+
+  Turn 1
+    p1 mcts: move 4 1, move 3 2
+      search (1000 visits): zenheadbutt,0;crunch,1 18v 12 | meteormash,0;fakeout,1 17v 11 | meteormash,0;drainpunch,0 17v 11 | meteormash,0;bulkup,1 17v 12
+    p2 greedy: move 1 1, move 4 1
+      p2a Gallade used Close Combat -> p1a: Metagross
+              Gallade def 1 fell
+              Gallade spd 1 fell
+      p1a Metagross used Zen Headbutt -> p2a: Gallade
+      p2a Gallade fainted
+      p1b Scrafty used Crunch -> p2b: Gastrodon
+      p2b Gastrodon used Earth Power -> p1a: Metagross
+      after p1: Metagross 54/364, Scrafty 332/332
+      after p2: Gallade 0/277, Gastrodon 329/426
+
+  Turn 2
+      p2a <- Rotom-Mow comes in (241/241)
+      after p1: Metagross 54/364, Scrafty 332/332
+      after p2: Rotom-Mow 241/241, Gastrodon 329/426
+
+  Turn 3
+    p1 mcts: move 4 1, move 2 1
+      search (1000 visits): zenheadbutt,0;drainpunch,0 16v 10 | protect,0;crunch,0 15v 8 | meteormash,0;drainpunch,0 15v 9 | meteormash,0;crunch,0 15v 8
+    p2 greedy: move 1 1, move 4 1
+      p2a Rotom used Leaf Storm -> p1a: Metagross  [[miss]]
+              Rotom -- MISSED
+      p1a Metagross used Zen Headbutt -> p2a: Rotom
+      p1b Scrafty used Drain Punch -> p2a: Rotom
+              Scrafty used up its Fighting Gem
+      p2a Rotom fainted
+      p2b Gastrodon used Earth Power -> p1a: Metagross
+      p1a Metagross fainted
+      after p1: Metagross 0/364, Scrafty 332/332
+      after p2: Rotom-Mow 0/241, Gastrodon 329/426
+
+  Turn 4
+      p2a <- Weavile comes in (340/340)
+      p1a <- Volcarona comes in (311/311)
+      after p1: Volcarona 311/311, Scrafty 332/332
+      after p2: Weavile 340/340, Gastrodon 329/426
+
+  Turn 5
+    p1 mcts: move 3, move 2 1
+      search (1000 visits): protect,0;drainpunch,0 40v 34 | bugbuzz,1;drainpunch,0 38v 32 | heatwave,0;switch kyurem 37v 31 | heatwave,0;fakeout,0 32v 25
+    p2 greedy: move 2 1, move 4 1
+      p1a Volcarona used Protect
+      p2a Weavile used Ice Punch -> p1a: Volcarona
+              Volcarona -- move: Protect
+      p1b Scrafty used Drain Punch -> p2a: Weavile
+      p2a Weavile fainted
+      p2b Gastrodon used Earth Power -> p1a: Volcarona
+              Volcarona -- move: Protect
+      after p1: Volcarona 311/311, Scrafty 332/332
+      after p2: Weavile 0/340, Gastrodon 329/426
+
+  Turn 6
+    p1 mcts: move 1 2, move 2 2
+      search (10000 visits): bugbuzz,1;drainpunch,1 2868v 2868 | bugbuzz,1;crunch,1 2868v 2868 | bugbuzz,1;switch kyurem 1119v 1065 | bugbuzz,1;bulkup,1 619v 562
+    p2 greedy: pass, move 4 1
+      p1a Volcarona used Bug Buzz -> p2b: Gastrodon
+              Gastrodon -- critical hit
+      p2b Gastrodon fainted
+      after p1: Volcarona 280/311, Scrafty 332/332
+      after p2: Weavile 0/340, Gastrodon 0/426
+
+  RESULT: p1 wins

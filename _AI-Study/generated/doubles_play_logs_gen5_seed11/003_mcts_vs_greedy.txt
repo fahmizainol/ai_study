@@ -1,0 +1,92 @@
+battle 3   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: [PL Week 3] Skymin: Kyurem-Black, Metagross, Togekiss, Shaymin-Sky
+  p2: 2v2 Pool League II/2v2 Pools - BW 9: Volcarona, Tornadus, Tyranitar, Rotom-Wash
+
+  Turn 1
+    p1 mcts: move 3 2, move 2 1
+      search (2000 visits): fusionbolt,1;meteormash,0 42v 29 | icebeam,1;zenheadbutt,0 38v 25 | fusionbolt,1;zenheadbutt,0 38v 25 | fusionbolt,0;zenheadbutt,1 35v 22
+    p2 greedy: move 1 1, move 2 1
+      p2b Tornadus used Superpower -> p1a: Kyurem
+              Tornadus atk 1 fell
+              Tornadus def 1 fell
+      p2a Volcarona used Fire Blast -> p1a: Kyurem
+      p1a Kyurem fainted
+      p1b Metagross used Meteor Mash -> p2a: Volcarona
+              Metagross used up its Steel Gem
+      after p1: Kyurem-Black 0/391, Metagross 364/364
+      after p2: Volcarona 87/311, Tornadus 299/299
+
+  Turn 2
+      p1a <- Togekiss comes in (374/374)
+      after p1: Togekiss 374/374, Metagross 364/364
+      after p2: Volcarona 87/311, Tornadus 299/299
+
+  Turn 3
+    p1 mcts: move 1 1, move 2 2
+      search (2000 visits): airslash,0;meteormash,1 53v 35 | followme,0;meteormash,1 53v 35 | followme,0;zenheadbutt,1 53v 35 | airslash,0;bulletpunch,1 52v 34
+    p2 greedy: move 1 1, move 2 1
+      p2b Tornadus used Superpower -> p1a: Togekiss
+              Togekiss -- critical hit
+              Tornadus atk 1 fell
+              Tornadus def 1 fell
+              Togekiss used up its Sitrus Berry
+      p2a Volcarona used Fire Blast -> p1a: Togekiss
+      p1a Togekiss used Air Slash -> p2a: Volcarona  [[miss]]
+              Togekiss -- MISSED
+      p1b Metagross used Meteor Mash -> p2b: Tornadus
+              Metagross atk 1 rose
+      p2b Tornadus fainted
+      after p1: Togekiss 71/374, Metagross 364/364
+      after p2: Volcarona 87/311, Tornadus 0/299
+
+  Turn 4
+      p2b <- Tyranitar comes in (404/404)
+      after p1: Togekiss 71/374, Metagross 364/364
+      after p2: Volcarona 87/311, Tyranitar 404/404
+
+  Turn 5
+    p1 mcts: move 4, move 2 2
+      search (5000 visits): followme,0;meteormash,1 354v 240 | airslash,0;meteormash,1 181v 107 | helpinghand,1;bulletpunch,0 165v 95 | thunderwave,0;meteormash,1 158v 90
+    p2 greedy: move 1 1, move 1 1
+      p1a Togekiss used Follow Me
+      p2a Volcarona used Fire Blast -> p1a: Togekiss
+      p1a Togekiss fainted
+      p1b Metagross used Meteor Mash -> p2b: Tyranitar  [[miss]]
+              Metagross -- MISSED
+      p2b Tyranitar used Stone Edge -> p1b: Metagross
+              Tyranitar used up its Rock Gem
+      after p1: Togekiss 0/374, Metagross 254/364
+      after p2: Volcarona 68/311, Tyranitar 404/404
+
+  Turn 6
+      p1a <- Shaymin-Sky comes in (341/341)
+      after p1: Shaymin-Sky 341/341, Metagross 254/364
+      after p2: Volcarona 68/311, Tyranitar 404/404
+
+  Turn 7
+    p1 mcts: move 3 1, move 2 2
+      search (4000 visits): airslash,0;meteormash,1 524v 369 | seedflare,1;protect,1 200v 119 | seedflare,1;meteormash,1 174v 100 | seedflare,1;bulletpunch,0 170v 97
+    p2 greedy: move 1 2, move 1 2
+      p1a Shaymin used Air Slash -> p2a: Volcarona
+      p2a Volcarona fainted
+      p1b Metagross used Meteor Mash -> p2b: Tyranitar
+      p2b Tyranitar fainted
+      after p1: Shaymin-Sky 286/341, Metagross 254/364
+      after p2: Volcarona 0/311, Tyranitar 0/404
+
+  Turn 8
+      p2a <- Rotom-Wash comes in (241/241)
+      after p1: Shaymin-Sky 286/341, Metagross 254/364
+      after p2: Rotom-Wash 241/241, Tyranitar 0/404
+
+  Turn 9
+    p1 mcts: move 2 1, move 4 1
+      search (48000 visits): seedflare,0;zenheadbutt,0 21161v 20994 | seedflare,0;protect,1 6733v 6514 | airslash,0;zenheadbutt,0 4603v 4399 | protect,0;zenheadbutt,0 3913v 3717
+    p2 greedy: move 2 2, pass
+      p2a Rotom used Hydro Pump -> p1b: Metagross
+      p1a Shaymin used Seed Flare -> p2a: Rotom
+      p2a Rotom fainted
+      after p1: Shaymin-Sky 252/341, Metagross 65/364
+      after p2: Rotom-Wash 0/241, Tyranitar 0/404
+
+  RESULT: p1 wins
