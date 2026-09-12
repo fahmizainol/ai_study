@@ -374,7 +374,9 @@ ally, Telepathy exempting the ally, Quick Guard against priority, Helping Hand, 
 Ally Switch and Intimidate's double drop all match Showdown exactly. **Redirection and spread
 are not broken, so the stop-rule says proceed.**
 
-**One confirmed engine bug, with its root cause.** `wide_guard_blocks_spread`: Surf is
+**One confirmed engine bug, with its root cause** — the first of nine; all nine are
+tabulated with verified line numbers under [Backlog item 3](#3-fix-the-nine-confirmed-defects),
+and this section and those following hold the evidence for each. `wide_guard_blocks_spread`: Surf is
 `AllAdjacent`, so in gen 5 it hits the attacker's own partner as well as both foes
 (confirmed against PokemonDB). Showdown blocks only the guarded side and still damages the
 attacker's ally; poke-engine damages nobody. The cause is
@@ -754,12 +756,44 @@ to Showdown sets almost directly. Two known obstacles:
 Doing this is what would make the play result mean something: same referee, same search, real
 teams. It is more valuable than re-running the toy version with transcripts attached.
 
-### 3. Fix the three confirmed defects
+### 3. Fix the nine confirmed defects
 
-All small and localized. Wide Guard / Quick Guard applying to the `Choice` instead of the
-resolved target list (`genx/generate_instructions.rs:1744`); `reset_boosts` hardcoding slot 0
-(`state.rs:1795`, Haze too); a sub-action bound to the slot rather than the body across Ally
-Switch.
+Every line number below was read out of the `main-doubles` clone, not remembered. Three are
+crashes, so they stop a bridge outright; four are silent wrong answers, which is worse to ship;
+two are cosmetic-but-blinding, in that they make the search's own decision unreadable. None is
+large. All are doubles-only — the singles board is byte-identical (§ measurement 1), so nothing
+here is a regression, only unfinished work.
+
+**Crashes.** A panic in the planner is not recoverable from the caller's side, and
+`PanicException` subclasses `BaseException`, so a driver that catches `Exception` dies with it.
+
+| # | site | trigger |
+|---|---|---|
+| 1 | `genx/generate_instructions.rs:4289` `mega_evolve` | computes `act_slot`, discards it, then reads `side.get_active()` — slot 0 — and panics at `:4301` on any held item that is not a mega stone (`RHYPERIOR`/`ASSAULTVEST`, `TALONFLAME`/`CHOICEBAND`, …). Note the second, quieter half: were slot 0 *also* holding a stone, this would mega-evolve the wrong body and not panic at all |
+| 2 | `genx/evaluate.rs:107` | `Invalid boost value: -7 / -8`. Boosts escape the ±6 clamp somewhere upstream and only blow up at evaluation. Seen in gen 6 **and** gen 5, so not generation-specific |
+| 3 | `state.rs:1722` `get_two_actives` | `assert_ne!(a_idx, b_idx, "get_two_actives called with the same position")` — reached in ordinary play (×5 in the gen 5 run) |
+
+**Silent wrong answers.** These return a plausible result that is wrong, which the differential
+caught only because Showdown was sitting next to it.
+
+| # | site | defect |
+|---|---|---|
+| 4 | *option generation* | **A Choice lock is not enforced.** `last_used_move` is supplied and is exactly how poke-engine encodes the lock, yet the search proposes moves Showdown has disabled — 35 times in the gen 5 run (`dracometeor`, `earthpower`, `icebeam`, `psychic`, `outrage`, `boltstrike`). The single most consequential one for a bridge: it hands the game an illegal action on roughly one turn in six |
+| 5 | `genx/generate_instructions.rs:1744` | Wide Guard / Quick Guard is keyed on `choice.target.hits_multiple_targets()` — the Choice's declared target *class* — instead of the resolved target list, so a guard held up by one slot blocks the spread move against **both**. This is the one stage 0 disagreement (`wide_guard_blocks_spread`) |
+| 6 | `state.rs:1795` `reset_boosts` | reads `get_side(side_ref).get_active()` — slot 0 — so when a **slot 1** body switches out carrying boosts, slot 0's boosts are cleared instead. Haze goes through the same path. The `NOTE (doubles)` comment above it is accurate and calls the fix deferred, so this is known, not overlooked |
+| 7 | Ally Switch | a sub-action is bound to the **slot** rather than the body, so it follows the position across the swap instead of the Pokémon that moved |
+
+**Unreadable, not wrong.** Both are fixed locally by
+`patches/poke_engine_doubles_choice_labels.patch`, which is why the transcripts are legible;
+neither fix is upstream.
+
+| # | site | defect |
+|---|---|---|
+| 8 | `MoveChoice::to_string` | names every sub-action out of **slot 0's** moveset, so slot 1's decision is reported with the wrong Pokémon's moves |
+| 9 | same | the target slot is dropped from the label entirely, so `surf` and `surf at the ally` print identically |
+
+Still unexplained and **not** in this list because no site is localized yet: the spread-move
+divergence (item 4 below).
 
 ### 4. Root-cause the spread-move divergence
 
