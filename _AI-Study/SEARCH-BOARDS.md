@@ -308,17 +308,44 @@ offers an evaluation that has already beaten the rules and is merely naive about
 
 **Three measurements turn the fear into a number, cheapest first:**
 
-1. **The singles-identity check.** Build with and without `--features doubles` and replay
-   the 0.8.0 180-battle set. If the doubles build reproduces the singles arm bit-for-bit,
-   the Ruby failure mode is structurally excluded for singles and the only new surface is
-   doubles code. The harness, seeds and control all exist.
+1. ~~The singles-identity check by replaying the 0.8.0 180-battle set~~ — **the wrong
+   shape, and done properly instead.** A battle replay cannot be a bit-for-bit check here:
+   `monte_carlo_tree_search` is unseeded (pmariglia's `79f8186f` passes an RNG through
+   precisely so it *could* be seeded "later on if I want to"), which is why 0.8.0 recorded a
+   +/-3 run-to-run spread on a 60-battle set. The deterministic check is at the instruction
+   level, needs no game, and **passed on 2026-09-12**:
+
+   Both the fork's singles build and its own base `60e1cf8a2` were built `--release
+   --features gen9` and run over the 102 states in `data/gen9randombattle.txt`. For each
+   state the root option lists were read off `monte-carlo-tree-search` (deterministic even
+   though the visit counts are not) and every legal joint pair was passed to
+   `generate-instructions`, whose output is fully deterministic:
+
+   | | base `60e1cf8a2` vs fork `bf863be3a`, both singles |
+   |---|---|
+   | root option lists (both sides, incl. switch targets) | **102 of 102 identical** |
+   | instruction sets over every legal joint pair | **4,546 of 4,546 identical** |
+
+   Zero divergence. Moving boosts, volatiles, substitute health and last-used-move off
+   `Side` and onto `Pokemon` changes neither what the engine offers nor what it emits, on
+   ~4.5k position/action combinations covering damage, status, switches, hazards and end of
+   turn. Combined with the 220 + 611 unit tests, the "singles is bit-for-bit unchanged"
+   claim is now evidence rather than assertion. Driver: `tools/pe_identity.py`.
 2. **A differential test against Showdown on doubles positions** — the `--check`
    methodology of 0.8.0 (median ratio, % within 3%, % within 10%) with Showdown as the
    reference instead of `pbRoughDamage`. This is the only way to get a number for
    "coverage against Showdown", and 0.8.0 already set the bar: within 10% is enough to win.
+   **Still the open one, and now the only one that matters before a doubles arm.**
 3. ~~Its own doubles tests~~ — **done, above**: 47/47 pass, and they say the mechanics work
    as their author believed, not that they agree with Showdown. Measurement 2 is the only
    one that speaks to agreement.
+
+What a replay would still add is statistical, not structural: that a wheel built from the
+fork scores within the sampler's spread of the 0.8.0 control. Worth doing when a doubles arm
+is actually proposed, not before. Its cost is already known to be more than a rebase of the
+engine: **`patches/poke_engine_permanent_fields.patch` does not apply to the fork** (it
+fails on `tests/test_battle_mechanics.rs:27`, whose imports moved in the 43 upstream commits
+since the fork's base), so the sidecar's own patch has to be re-cut as part of any rebase.
 
 ## Where this leaves the study
 
