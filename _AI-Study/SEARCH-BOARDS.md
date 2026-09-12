@@ -374,7 +374,7 @@ ally, Telepathy exempting the ally, Quick Guard against priority, Helping Hand, 
 Ally Switch and Intimidate's double drop all match Showdown exactly. **Redirection and spread
 are not broken, so the stop-rule says proceed.**
 
-**One confirmed engine bug, with its root cause** — the first of thirteen; all thirteen are
+**One confirmed engine bug, with its root cause** — the first of fourteen; all fourteen are
 tabulated under [Backlog item 3](#3-fix-the-ten-confirmed-defects), nine of them with verified
 line numbers, and this section and those following hold the evidence for each. `wide_guard_blocks_spread`: Surf is
 `AllAdjacent`, so in gen 5 it hits the attacker's own partner as well as both foes
@@ -768,13 +768,13 @@ to Showdown sets almost directly. Two known obstacles:
 Doing this is what would make the play result mean something: same referee, same search, real
 teams. It is more valuable than re-running the toy version with transcripts attached.
 
-### 3. Fix the thirteen confirmed defects
+### 3. Fix the fourteen confirmed defects
 
 Every line number below was read out of the `main-doubles` clone, not remembered. Three are
-crashes, so they stop a bridge outright; six are silent wrong answers, which is worse to ship;
+crashes, so they stop a bridge outright; seven are silent wrong answers, which is worse to ship;
 two are cosmetic-but-blinding, in that they make the search's own decision unreadable; one wastes
 the search's own budget; and one has no site yet, which is why it is the largest. The first
-twelve are small and localized. All
+thirteen are small and localized. All
 are doubles-only — the singles board is byte-identical (§ measurement 1), so nothing
 here is a regression, only unfinished work.
 
@@ -796,6 +796,7 @@ caught only because Showdown was sitting next to it.
 | 5 | `genx/generate_instructions.rs:1744` | Wide Guard / Quick Guard is keyed on `choice.target.hits_multiple_targets()` — the Choice's declared target *class* — instead of the resolved target list, so a guard held up by one slot blocks the spread move against **both**. This is the one stage 0 disagreement (`wide_guard_blocks_spread`) |
 | 6 | `state.rs:1795` `reset_boosts` | reads `get_side(side_ref).get_active()` — slot 0 — so when a **slot 1** body switches out carrying boosts, slot 0's boosts are cleared instead. Haze goes through the same path. The `NOTE (doubles)` comment above it is accurate and calls the fix deferred, so this is known, not overlooked |
 | 7 | Ally Switch | a sub-action is bound to the **slot** rather than the body, so it follows the position across the swap instead of the Pokémon that moved |
+| 14 | `genx/choice_effects.rs:213` + `genx/generate_instructions.rs:5145` | **Fake Out and First Impression read and write slot 0's move history, not the acting body's.** The restriction is modelled through `last_used_move` — `Move(_)` means the body has already acted, so the move loses its effects — but both the check (`attacking_side.get_active_immutable()`) and the reset (`get_side(…).get_active().last_used_move = Switch(P0)`) go through `get_active()`, which is slot 0. `tools/pe_doubles_fakeout_slot.py` shows the outcome depends *entirely* on slot 0's history and not at all on the user's, wrong in **both** directions: a slot-1 body that has been out for turns keeps a live Fake Out, and a freshly switched-in one loses it. Seen in play (`seed23/004` turn 3): Crobat had just switched into slot 0, so the search ranked Scrafty's dead Fake Out **top**, Showdown failed it, and Scrafty died that turn. The write is the worse half — using Fake Out from slot 1 stamps `Switch(P0)` over **slot 0's** history, and since defect 4's Choice lock is read from the same field, that is a candidate contributor to it |
 | 12 | *stall counter absent* | **Showdown's consecutive-Protect counter is not modelled, so the search loops on a move that cannot work.** In `doubles_play_logs_gen5_seed11/002` Metagross Protects on **fifteen consecutive turns** (11–25), and Showdown fails every second one (`Protect [[still]]` / `IT FAILED`). The search puts 8266 of 14000 visits on it on turn 14 — a turn on which it had already failed — and re-picks it at the same weight the next turn and the next, while Metagross is ground from 364 to 19 and then loses. Known before as a *measurement* nuisance (it is why 164 corpus turns were skipped); these logs show it is a **play** defect that throws games |
 | 11 | status application | **Every status move applies its status to slot 0, whatever it was aimed at.** `thunderwave,0` and `thunderwave,1` both emit `ChangeStatus SideTwo-P0` (`tools/pe_doubles_status_target.py`, two Psychic-type foes so neither is immune and only the index can differ). Damage does *not* have this bug — `airslash,0` and `airslash,1` correctly emit `Damage SideTwo:0` and `:1` — so it is the status write specifically. Worse, the immunity check reads the **right** target while the write goes to the wrong one, so Thunder Wave aimed at a Psychic ally-of-a-Ground-type paralyzes the **Ground type** |
 

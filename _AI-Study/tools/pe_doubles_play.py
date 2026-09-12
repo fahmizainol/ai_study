@@ -309,7 +309,7 @@ def readable(line):
         return f"{m[1]} {m[2]} swapped to slot {m[3]}"
     m = OUTCOME_LINE.match(line)
     if m:
-        who = m[2].split(": ", 1)[-1]
+        who = m[2].replace(": ", " ")   # keep the p1a/p2b prefix: mirror matches are common
         phrase = {"-status": "is now {}", "-curestatus": "is cured of {}",
                   "-fail": "-- IT FAILED", "-immune": "-- IMMUNE", "-miss": "-- MISSED",
                   "-crit": "-- critical hit", "-boost": "{} rose", "-unboost": "{} fell",
