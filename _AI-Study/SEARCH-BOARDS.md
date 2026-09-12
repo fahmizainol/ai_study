@@ -784,7 +784,7 @@ here is a regression, only unfinished work.
 | # | site | trigger |
 |---|---|---|
 | 1 | `genx/generate_instructions.rs:4289` `mega_evolve` | computes `act_slot`, discards it, then reads `side.get_active()` — slot 0 — and panics at `:4301` on any held item that is not a mega stone (`RHYPERIOR`/`ASSAULTVEST`, `TALONFLAME`/`CHOICEBAND`, …). Note the second, quieter half: were slot 0 *also* holding a stone, this would mega-evolve the wrong body and not panic at all |
-| 2 | `genx/evaluate.rs:107` | `Invalid boost value: -7 / -8 / **-12**`. Boosts escape the ±6 clamp somewhere upstream and only blow up at evaluation. Seen in gen 6 **and** gen 5, so not generation-specific. The −12 (`doubles_play_logs_gen5_seed23/002`, turn 1) matters: it is exactly **double** the legal floor, so this is not a clamp that is off by one or two but drops being stacked with no bound at all — look for a per-slot drop applied once per target |
+| 2 | `genx/evaluate.rs:107` | `Invalid boost value: -7 / -8 / **-11 / -12**`. Boosts escape the ±6 clamp somewhere upstream and only blow up at evaluation. Seen in gen 6 **and** gen 5, so not generation-specific. The −12 (`doubles_play_logs_gen5_seed23/002`, turn 1) matters: it is exactly **double** the legal floor, so this is not a clamp that is off by one or two but drops being stacked with no bound at all — look for a per-slot drop applied once per target |
 | 3 | `state.rs:1722` `get_two_actives` | `assert_ne!(a_idx, b_idx, "get_two_actives called with the same position")` — reached in ordinary play (×5 in the gen 5 run) |
 
 **Silent wrong answers.** These return a plausible result that is wrong, which the differential
@@ -833,6 +833,23 @@ Recover at full HP and failing, which looked like defect 11 on the heal path. It
 never runs: three decisions in `doubles_play_logs_gen5_seed23/004` went to greedy for this
 reason. Recorded above as a counted skip for the corpus; the play harness pays for it in
 decisions, which is the more expensive currency.
+
+**The search does not value field or side setup, and a targeted pool is what showed it.**
+`--require-move` keeps only dump teams carrying a named move *and* rotates the carrier to the
+front so it leads — both halves are needed, because on a four-mon team the carrier is usually
+third or fourth and arrives after the game is decided, which is why Tailwind went unused across
+the first fifteen battles despite six of them carrying it. With the filter on (25 of 171 teams
+carry Tailwind; the lead was verified to be the carrier in all five battles) **Tailwind was
+still used zero times and reached a printed ranking once.** Trick Room is the same picture from
+the other direction: its setter was active from turn 1 and it sat 10th-15th of 15 options. Two
+setup moves, opportunity guaranteed, never chosen — so this is not a sampling artefact.
+Defect 13 is the obvious mechanism, since targetless moves *are* the setup moves and their
+visits split across duplicate enumerations; that is now cheap to test directly.
+
+**Filtered pools find defects faster than random ones.** The Tailwind pool produced 2 panics and
+2 Choice-lock fallbacks in 5 battles, against roughly 1 per 5 in the general pool — fast
+offensive teams reach the breaking states more often. Worth preferring for bug-hunting; worth
+avoiding for anything quoted as a win rate, since the pool is no longer representative.
 
 **A lead on defect 10 that came out of defect 11.** Status *application* ignores the target
 slot; spread *damage* does not. That rules defect 11 out as the whole explanation, but it puts

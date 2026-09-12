@@ -1,0 +1,54 @@
+battle 4   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: rotom ttar latios: Latios, Rotom-Heat, Tyranitar, Tornadus
+  p2: Horse: Shaymin-Sky, Keldeo, Rapidash, Liepard
+
+  Turn 1
+    p1 mcts: move 2 2, move 1 1
+      search (1000 visits): psychic,1;thunderbolt,0 27v 22 | psychic,1;switch tornadus 25v 19 | psychic,1;thunderbolt,1 24v 18 | psychic,1;overheat,0 23v 17
+    p2 greedy: move 2 1, move 2 1
+      p2a Shaymin used Seed Flare -> p1a: Latios  [[miss]]
+              p2a Shaymin -- MISSED
+      p1a Latios used Psychic -> p2b: Keldeo
+              p2b Keldeo -- critical hit
+      p2b Keldeo fainted
+      p1b Rotom used Thunderbolt -> p2a: Shaymin
+              p2a Shaymin is now par
+      after p1: Latios 301/301, Rotom-Heat 304/304
+      after p2: Shaymin-Sky 130/341, Keldeo 0/323
+
+  Turn 2
+      p2b <- Rapidash comes in (271/271)
+      after p1: Latios 301/301, Rotom-Heat 304/304
+      after p2: Shaymin-Sky 130/341, Rapidash 271/271
+
+  Turn 3
+    p1 mcts: move 2 2, move 1 1
+      search (3000 visits): psychic,1;thunderbolt,0 102v 81 | psychic,0;thunderbolt,1 99v 78 | dracometeor,1;thunderbolt,0 96v 75 | psychic,1;thunderbolt,1 80v 60
+    p2 greedy: move 2 1, move 1 1
+      p1a Latios used Psychic -> p2b: Rapidash
+      p2b Rapidash used Flare Blitz -> p1a: Latios
+      p1b Rotom used Thunderbolt -> p2a: Shaymin
+      p2a Shaymin fainted
+      after p1: Latios 166/301, Rotom-Heat 304/304
+      after p2: Shaymin-Sky 0/341, Rapidash 9/271
+
+  Turn 4
+      p2a <- Liepard comes in (332/332)
+      after p1: Latios 166/301, Rotom-Heat 304/304
+      after p2: Liepard 332/332, Rapidash 9/271
+
+  Turn 5
+    p1 mcts: move 1 1, move 2 1
+      search (5000 visits): dracometeor,0;overheat,0 199v 185 | switch tyranitar;overheat,0 185v 170 | dracometeor,0;thunderbolt,0 184v 169 | switch tornadus;overheat,0 178v 163
+    p2 greedy: move 4 1, move 1 1
+      p1a Latios used Draco Meteor -> p2a: Liepard
+              p1a Latios used up its Dragon Gem
+              p2a Liepard -- critical hit
+              p1a Latios spa 2 fell
+      p2a Liepard fainted
+      p2b Rapidash used Flare Blitz -> p1a: Latios
+      p2b Rapidash fainted
+      after p1: Latios 20/301, Rotom-Heat 304/304
+      after p2: Liepard 0/332, Rapidash 0/271
+
+  RESULT: p1 wins

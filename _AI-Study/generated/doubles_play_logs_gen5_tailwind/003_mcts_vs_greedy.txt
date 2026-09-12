@@ -1,0 +1,76 @@
+battle 3   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: Untitled 442: Zapdos, Scrafty, Genesect, Landorus
+  p2: tini kiss kyub ttar: Togekiss, Victini, Kyurem-Black, Tyranitar
+
+  Turn 1
+    p1 mcts: move 3 1, move 2 2
+      search (3000 visits): thunderbolt,0;crunch,1 67v 46 | thunderwave,1;crunch,1 60v 40 | thunderbolt,0;drainpunch,1 55v 35 | thunderwave,0;crunch,1 54v 34
+    p2 greedy: move 1 1, move 1 1
+      p2b Victini used V-create -> p1a: Zapdos
+              p2b Victini spe 1 fell
+              p2b Victini def 1 fell
+              p2b Victini spd 1 fell
+      p1a Zapdos used Thunderbolt -> p2a: Togekiss
+              p2a Togekiss used up its Sitrus Berry
+      p2a Togekiss used Air Slash -> p1a: Zapdos
+      p1b Scrafty used Crunch -> p2b: Victini
+      p2b Victini fainted
+      after p1: Zapdos 67/383, Scrafty 334/334
+      after p2: Togekiss 275/374, Victini 0/341
+
+  Turn 2
+      p2b <- Kyurem-Black comes in (391/391)
+      after p1: Zapdos 67/383, Scrafty 334/334
+      after p2: Togekiss 275/374, Kyurem-Black 391/391
+
+  Turn 3
+    p1 mcts: move 3 1, move 3 2
+      search (2000 visits): thunderbolt,0;drainpunch,1 45v 31 | thunderbolt,1;drainpunch,1 40v 26 | switch genesect;drainpunch,1 39v 25 | thunderwave,0;drainpunch,1 38v 24
+    p2 greedy: move 1 1, move 2 1
+      p1a Zapdos used Thunderbolt -> p2a: Togekiss
+      p2b Kyurem used Draco Meteor -> p1a: Zapdos
+              p2b Kyurem spa 2 fell
+      p1a Zapdos fainted
+      p2a Togekiss used Air Slash -> p1b: Scrafty
+              p1b Scrafty COULD NOT MOVE (flinch)
+      after p1: Zapdos 0/383, Scrafty 148/334
+      after p2: Togekiss 71/374, Kyurem-Black 352/391
+
+  Turn 4
+      p1a <- Genesect comes in (291/291)
+              p1a Genesect atk 1 rose
+      after p1: Genesect 291/291, Scrafty 148/334
+      after p2: Togekiss 71/374, Kyurem-Black 352/391
+
+  Turn 5
+    p1 mcts: move 2 1, move 3 2
+      search (2000 visits): ironhead,0;drainpunch,1 65v 47 | icebeam,0;drainpunch,1 54v 36 | ironhead,1;fakeout,0 52v 35 | blazekick,0;drainpunch,1 44v 27
+    p2 greedy: move 1 2, move 2 2
+      p1a Genesect used Iron Head -> p2a: Togekiss
+      p2a Togekiss fainted
+      p2b Kyurem used Draco Meteor -> p1b: Scrafty
+              p2b Kyurem spa 2 fell
+      p1b Scrafty used Drain Punch -> p2b: Kyurem
+      after p1: Genesect 262/291, Scrafty 116/334
+      after p2: Togekiss 0/374, Kyurem-Black 85/391
+
+  Turn 6
+      p2a <- Tyranitar comes in (404/404)
+      after p1: Genesect 262/291, Scrafty 116/334
+      after p2: Tyranitar 404/404, Kyurem-Black 85/391
+
+  Turn 7
+    p1 mcts: move 2 1, move 2 2
+      search (1000 visits): ironhead,0;crunch,1 32v 25 | ironhead,0;drainpunch,1 32v 26 | ironhead,0;fakeout,1 27v 20 | ironhead,0;drainpunch,0 27v 20
+    p2 greedy: move 1 2, move 2 2
+      p1a Genesect used Iron Head -> p2a: Tyranitar
+      p2a Tyranitar fainted
+      p2b Kyurem used Draco Meteor -> p1b: Scrafty
+              p2b Kyurem spa 2 fell
+      p1b Scrafty used Crunch -> p2b: Kyurem
+              p2b Kyurem -- critical hit
+      p2b Kyurem fainted
+      after p1: Genesect 233/291, Scrafty 22/334
+      after p2: Tyranitar 0/404, Kyurem-Black 0/391
+
+  RESULT: p1 wins

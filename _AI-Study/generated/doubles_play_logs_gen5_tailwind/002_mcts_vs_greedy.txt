@@ -1,0 +1,127 @@
+battle 2   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: Bruh: Dragonite, Metagross, Scrafty, Latios
+  p2: kiss scizor hy3 ape: Togekiss, Scizor, Hydreigon, Infernape
+
+  Turn 1
+    p1 mcts: move 4, switch 3   (slot1 Metagross -> Scrafty)
+      search (2000 visits): rockslide,0;switch scrafty 53v 38 | dragonclaw,0;switch scrafty 50v 35 | rockslide,0;meteormash,0 47v 33 | dragonclaw,1;switch scrafty 45v 31
+    p2 greedy: move 1 1, move 2 1
+      p1b <- Scrafty comes in (334/334)
+              p2a Togekiss atk 1 fell
+              p2b Scizor atk 1 fell
+      p2a Togekiss used Air Slash -> p1a: Dragonite
+              p1a Dragonite COULD NOT MOVE (flinch)
+      p2b Scizor used Bug Bite -> p1a: Dragonite
+              p1a Dragonite used up its Haban Berry
+      after p1: Dragonite 274/386, Scrafty 334/334
+      after p2: Togekiss 374/374, Scizor 344/344
+
+  Turn 2
+    p1 mcts: move 2 1, move 3 2
+      search (3000 visits): dragonclaw,0;highjumpkick,1 64v 41 | dragonclaw,1;highjumpkick,0 61v 38 | rockslide,0;highjumpkick,0 57v 34 | dragonclaw,0;crunch,1 56v 34
+    p2 greedy: move 1 1, move 2 1
+      p2a Togekiss used Air Slash -> p1a: Dragonite
+              p1a Dragonite COULD NOT MOVE (flinch)
+      p2b Scizor used Bug Bite -> p1a: Dragonite
+      p1b Scrafty used High Jump Kick -> p2b: Scizor
+      after p1: Dragonite 114/386, Scrafty 334/334
+      after p2: Togekiss 374/374, Scizor 164/344
+
+  Turn 3
+    p1 mcts: move 4, move 3 1
+      search (3000 visits): rockslide,0;highjumpkick,0 61v 37 | dragonclaw,0;highjumpkick,1 57v 34 | dragonclaw,1;highjumpkick,0 55v 32 | rockslide,0;highjumpkick,1 55v 32
+    p2 greedy: move 1 1, move 2 1
+      p2a Togekiss used Air Slash -> p1a: Dragonite
+              p1a Dragonite COULD NOT MOVE (flinch)
+      p2b Scizor used Bug Bite -> p1a: Dragonite
+      p1a Dragonite fainted
+      p1b Scrafty used High Jump Kick -> p2a: Togekiss
+              p2a Togekiss used up its Sitrus Berry
+      after p1: Dragonite 0/386, Scrafty 334/334
+      after p2: Togekiss 272/374, Scizor 164/344
+
+  Turn 4
+      p1a <- Metagross comes in (364/364)
+      after p1: Metagross 364/364, Scrafty 334/334
+      after p2: Togekiss 272/374, Scizor 164/344
+
+  Turn 5
+    p1 mcts: move 2 2, move 3 1
+      search (2000 visits): meteormash,1;highjumpkick,0 52v 32 | meteormash,0;highjumpkick,0 49v 29 | meteormash,0;fakeout,1 46v 27 | meteormash,0;fakeout,0 45v 26
+    p2 greedy: move 1 1, move 2 1
+      p2a Togekiss used Air Slash -> p1a: Metagross
+              p1a Metagross COULD NOT MOVE (flinch)
+      p2b Scizor used Bug Bite -> p1a: Metagross
+      p1b Scrafty used High Jump Kick -> p2a: Togekiss  [[miss]]
+              p1b Scrafty -- MISSED
+      after p1: Metagross 217/364, Scrafty 167/334
+      after p2: Togekiss 272/374, Scizor 164/344
+
+  Turn 6
+    p1 mcts: move 2 1, move 1 1
+      search (3000 visits): meteormash,0;fakeout,0 77v 42 | meteormash,0;highjumpkick,1 74v 40 | meteormash,0;crunch,1 72v 39 | meteormash,1;highjumpkick,0 70v 37
+    p2 greedy: move 1 2, move 2 2
+      p1b Scrafty used Fake Out  [[still]]
+              p1b Scrafty -- IT FAILED
+      p2a Togekiss used Air Slash -> p1b: Scrafty
+      p1b Scrafty fainted
+      p1a Metagross used Meteor Mash -> p2a: Togekiss
+              p1a Metagross used up its Steel Gem
+      p2a Togekiss fainted
+      p2b Scizor used Bug Bite -> p1a: Metagross
+      after p1: Metagross 132/364, Scrafty 0/334
+      after p2: Togekiss 0/374, Scizor 164/344
+
+  Turn 7
+      p2a <- Hydreigon comes in (325/325)
+      p1b <- Latios comes in (301/301)
+      after p1: Metagross 132/364, Latios 301/301
+      after p2: Hydreigon 325/325, Scizor 164/344
+
+  Turn 8
+    p1 mcts: move 1, move 1 1
+      search (4000 visits): protect,0;dracometeor,0 207v 103 | protect,0;psychic,1 109v 43 | bulletpunch,0;dracometeor,1 102v 39 | bulletpunch,1;dracometeor,0 102v 39
+    p2 greedy: move 2 1, move 2 1
+      p1a Metagross used Protect
+      p1b Latios used Draco Meteor -> p2a: Hydreigon
+              p1b Latios spa 2 fell
+      p2a Hydreigon fainted
+      p2b Scizor used Bug Bite -> p1a: Metagross
+              p1a Metagross -- move: Protect
+      after p1: Metagross 132/364, Latios 301/301
+      after p2: Hydreigon 0/325, Scizor 164/344
+
+  Turn 9
+      p2a <- Infernape comes in (293/293)
+      after p1: Metagross 132/364, Latios 301/301
+      after p2: Infernape 293/293, Scizor 164/344
+
+  Turn 10
+    p1 mcts: move 2 2, move 1 2
+      search (2000 visits): protect,0;psychic,0 139v 93 | earthquake,0;psychic,0 72v 39 | protect,0;dracometeor,0 68v 36 | meteormash,1;psychic,0 61v 31
+      ILLEGAL: search chose psychic for slot 1, disabled by Showdown (Choice lock or Taunt) but proposed anyway. Greedy took the turn -- this turn is NOT the search's
+    p2 greedy: move 2 1, move 2 1
+      p1b Latios used Draco Meteor -> p2b: Scizor
+              p1b Latios spa 2 fell
+      p2a Infernape used Overheat -> p1a: Metagross
+              p2a Infernape spa 2 fell
+      p1a Metagross fainted
+      p2b Scizor used Bug Bite -> p1b: Latios
+      after p1: Metagross 0/364, Latios 25/301
+      after p2: Infernape 264/293, Scizor 83/344
+
+  Turn 11
+    p1 mcts: pass, move 1 2
+      search (56000 visits): No Move;trick,0 7362v 23 | No Move;trick,1 7162v 17 | No Move;dracometeor,1 7089v 15 | No Move;psychic,1 7080v 15
+      ILLEGAL: search chose trick for slot 1, disabled by Showdown (Choice lock or Taunt) but proposed anyway. Greedy took the turn -- this turn is NOT the search's
+    p2 greedy: move 2 2, move 2 2
+      p1b Latios used Draco Meteor -> p2b: Scizor
+              p1b Latios spa 2 fell
+      p2a Infernape used Overheat -> p1b: Latios
+              p1b Latios -- critical hit
+              p2a Infernape spa 2 fell
+      p1b Latios fainted
+      after p1: Metagross 0/364, Latios 0/301
+      after p2: Infernape 235/293, Scizor 30/344
+
+  RESULT: p2 wins

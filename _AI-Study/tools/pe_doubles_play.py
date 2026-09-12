@@ -67,14 +67,33 @@ def set_text(m):
     return "\n".join(out)
 
 
-def load_dump_teams(tier, sizes=(6,)):
+def load_dump_teams(tier, sizes=(6,), require=()):
     """Teams of the given sizes from extracted/smogon-dump, as Showdown import text.
 
     Six is the default, but gen 5 doubles on Smogon is largely **2v2 with four-mon teams**
     (gen5doublesou holds 158 of those against 13 complete sixes), and a four-mon team is a
-    legal custom-game bring: team preview's `team 1234` puts two out and benches two."""
+    legal custom-game bring: team preview's `team 1234` puts two out and benches two.
+
+    `require` keeps only teams carrying one of the named moves AND rotates the carrier to the
+    front so it LEADS. Both halves are needed to test a mechanic: 25 of 171 gen 5 doubles teams
+    carry Tailwind, but on a four-mon team the carrier is usually third or fourth, so it starts
+    benched and arrives after the game is decided -- which is exactly why Tailwind was never
+    used once across fifteen battles. Rotating the lead is a deviation from the authored team
+    and is applied symmetrically to both sides; it is recorded in SEARCH-BOARDS.md."""
     raw = json.loads((DUMP / f"{tier}.json").read_text(encoding="utf8"))
     teams = [t for t in raw if len(t.get("data") or []) in sizes]
+    if require:
+        want = {pid(m) for m in require}
+        kept = []
+        for t in teams:
+            i = next((k for k, m in enumerate(t["data"])
+                      if want & {pid(x) for x in (m.get("moves") or [])}), None)
+            if i is None:
+                continue
+            d = t["data"]
+            t = dict(t, data=[d[i]] + d[:i] + d[i + 1:])   # carrier leads
+            kept.append(t)
+        teams = kept
     # The label carries the roster, not just the scraper's team name: a transcript whose header
     # reads "For london bw 2v2 classic" says nothing about who is playing.
     return [("\n\n".join(set_text(m) for m in t["data"]),
@@ -340,12 +359,16 @@ def main():
                          "as gen6doublesou (real scraped teams, complete six-mon only)")
     ap.add_argument("--team-sizes", default="6",
                     help="comma-list of team sizes to accept from the dump, e.g. 4,6")
+    ap.add_argument("--require-move", default=None, metavar="MOVES",
+                    help="comma-list; keep only dump teams carrying one of these moves, and "
+                         "start the carrier rather than benching it (e.g. Tailwind,Trick Room)")
     ap.add_argument("--format", dest="fmt", default=None,
                     help="Showdown format id; defaults to match --teams")
     args = ap.parse_args()
 
+    require = tuple(x.strip() for x in args.require_move.split(",")) if args.require_move else ()
     dump = None if args.teams == "pool" else load_dump_teams(
-        args.teams, tuple(int(x) for x in args.team_sizes.split(",")))
+        args.teams, tuple(int(x) for x in args.team_sizes.split(",")), require)
     fmt = args.fmt or ("gen5doublescustomgame" if args.teams == "pool"
                        else args.teams.split("doubles")[0] + "doublescustomgame")
     by_size = collections.defaultdict(list)
@@ -356,7 +379,8 @@ def main():
                  f"{args.team_sizes}; sizes found: {dict((k, len(v)) for k, v in by_size.items())}")
     if dump is not None:
         print("   teams: " + ", ".join(f"{len(v)} of size {k}" for k, v in sorted(by_size.items()))
-              + "   (paired only against equal size)")
+              + "   (paired only against equal size)"
+              + (f"   requiring {'/'.join(require)}, carrier leads" if require else ""))
     server = Server()
     stats = collections.Counter()
     wins = collections.Counter()

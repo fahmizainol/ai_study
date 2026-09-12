@@ -1,0 +1,70 @@
+battle 1   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: 2v2PL 2025/W5 g3: Togetic, Arcanine, Kyurem-Black, Tornadus
+  p2: 2v2 Pool League II/2v2 Pools - BW 10: Togetic, Braviary, Kyurem-Black, Arcanine
+
+  Turn 1
+    p1 mcts: move 4 -2, move 3 2
+      search (5000 visits): helpinghand,1;flareblitz,1 164v 63 | tailwind,0;flareblitz,1 139v 50 | roost,0;flareblitz,1 138v 49 | tailwind,0;switch kyuremblack 133v 47
+    p2 greedy: move 1, move 1 1
+      p1a Togetic used Helping Hand -> p1b: Arcanine
+      p2a Togetic used Follow Me
+      p2b Braviary used Brave Bird -> p1a: Togetic
+      p1a Togetic fainted
+      p1b Arcanine used Flare Blitz -> p2a: Togetic
+      after p1: Togetic 0/314, Arcanine 268/339
+      after p2: Togetic 98/314, Braviary 203/341
+
+  Turn 2
+      p1a <- Kyurem-Black comes in (391/391)
+      after p1: Kyurem-Black 391/391, Arcanine 268/339
+      after p2: Togetic 98/314, Braviary 203/341
+
+  Turn 3
+    p1 mcts: move 3, switch 4   (slot1 Arcanine -> Tornadus)
+      search (7000 visits): rockslide,0;switch tornadus 628v 478 | rockslide,0;extremespeed,0 209v 133 | rockslide,0;closecombat,0 206v 131 | rockslide,0;flareblitz,0 195v 122
+    p2 greedy: move 1, move 1 2
+      p1b <- Tornadus comes in (299/299)
+      p2a Togetic used Follow Me
+      p1a Kyurem used Rock Slide -> p2b: Braviary  [[spread] p2a,p2b]
+      p2a Togetic fainted
+      p2b Braviary fainted
+      after p1: Kyurem-Black 391/391, Tornadus 299/299
+      after p2: Togetic 0/314, Braviary 0/341
+
+  Turn 4
+      p2b <- Arcanine comes in (339/339)
+      p2a <- Kyurem-Black comes in (391/391)
+              p1a Kyurem atk 1 fell
+              p1b Tornadus atk 1 fell
+              p1b Tornadus atk 2 rose
+      after p1: Kyurem-Black 391/391, Tornadus 299/299
+      after p2: Kyurem-Black 391/391, Arcanine 339/339
+
+  Turn 5
+    p1 mcts: move 3, move 3 1
+      search (4000 visits): outrage,1;superpower,0 324v 296 | rockslide,0;superpower,0 272v 243 | dragonclaw,1;superpower,0 234v 205 | fusionbolt,1;superpower,0 216v 186
+      ILLEGAL: search chose outrage for slot 0, disabled by Showdown (Choice lock or Taunt) but proposed anyway. Greedy took the turn -- this turn is NOT the search's
+    p2 greedy: move 4, move 1 1
+      p1b Tornadus used Superpower -> p2a: Kyurem
+              p1b Tornadus atk 1 fell
+              p1b Tornadus def 1 fell
+      p1a Kyurem used Rock Slide -> p2a: Kyurem  [[spread] p2a,p2b]
+      p2a Kyurem fainted
+              p2b Arcanine COULD NOT MOVE (flinch)
+      after p1: Kyurem-Black 391/391, Tornadus 299/299
+      after p2: Kyurem-Black 0/391, Arcanine 147/339
+
+  Turn 6
+    p1 mcts: move 3, move 3 2
+      search (42000 visits): dragonclaw,1;protect,1 4172v 4172 | dragonclaw,1;switch arcanine 4172v 4172 | fusionbolt,1;protect,1 4172v 4172 | fusionbolt,1;switch arcanine 4171v 4171
+      ILLEGAL: search chose dragonclaw for slot 0, disabled by Showdown (Choice lock or Taunt) but proposed anyway. Greedy took the turn -- this turn is NOT the search's
+    p2 greedy: pass, move 1 1
+      p1b Tornadus used Superpower -> p2b: Arcanine
+              p1b Tornadus atk 1 fell
+              p1b Tornadus def 1 fell
+      p1a Kyurem used Rock Slide -> p2b: Arcanine
+      p2b Arcanine fainted
+      after p1: Kyurem-Black 391/391, Tornadus 299/299
+      after p2: Kyurem-Black 0/391, Arcanine 0/339
+
+  RESULT: p1 wins
