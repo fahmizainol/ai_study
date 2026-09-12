@@ -517,6 +517,66 @@ The prerequisite for any of it is on our side, not Showdown's: **a doubles roste
 doubles harness and a doubles position export out of Realidea do not exist yet.** The
 adapter's search and Foul Play paths both decline doubles by design.
 
+## Backlog
+
+Recorded, not done. In the order they are worth doing.
+
+### 1. Harvest Showdown's own doubles suite as the bug-finding corpus
+
+The 12 stage 0 positions were authored from the fork's own `tests/test_doubles.rs` names, so
+by construction they can only confirm mechanics it already knows about — which is exactly why
+11 of 12 passed while the random corpus agreed on 73.2%. Showdown's suite is the independent
+alternative: **328 individual doubles tests across 113 files** (`test/sim/moves` 150,
+`test/sim/abilities` 108, `test/sim/misc` 29, `test/sim` 25, `test/sim/items` 16), authored by
+people who have never seen this engine.
+
+By generation: **gen 9 281**, gen 8 19, gen 4 8, gen 7 6, gen 3 5, gen 6 5, **gen 5 only 4**.
+So one `--features poke-engine/gen9,doubles` build reaches 281 of 328 and the other six
+generations are 47 tests between them — almost certainly not worth six more builds. Note the
+study's own rosters are gen 5, where their suite has four doubles tests; this corpus is for
+finding bugs, not for measuring the board our arms would actually play on.
+
+**Method: hook the harness, do not parse the files.** A mocha `--require` shim wrapping
+`common.createBattle` and `battle.makeChoices` dumps (position before, choices, position
+after) for every doubles test as it runs; their assertions still execute and are irrelevant.
+`tools/pe_doubles_corpus.py`'s projections then consume it unchanged.
+
+**Costs and limits, from reading five cases:**
+
+- **Terastal and G-Max are out of scope by decision** (2026-09-12). Commander (14 cases),
+  Dragon Darts (13) and Sky Drop (9) remain unrepresentable anyway.
+- **Triples must be excluded, permanently.** The densest Follow Me case is
+  `gameType: 'triples'`, which poke-engine can never do. The `gameType: 'doubles'` count is
+  already the ceiling.
+- **Choice syntax the current translator does not handle**: ally targets (`move pollenpuff -2`),
+  `mega` (`move pursuit mega -2`), and `'auto'`. Ally targeting is the one needing thought,
+  since poke-engine resolves allies through `MoveTarget::Ally` rather than a slot suffix.
+- **Roughly two in five sampled cases assert on `battle.getDebugLog()` or an `onEvent` hook
+  rather than on end state** (Dancer's activation order, Neutralizing Gas's ability message).
+  The HP/boost projections would score those "agree" while missing what the author cared
+  about, so a harvested case measures less than its author intended. Do not claim otherwise.
+- **Yield will be well below 328.** Of five sampled cases only one (Follow Me) targets a
+  mechanic poke-engine plausibly implements. The skip accounting is the headline output, not
+  an inconvenience.
+
+Their suite and the random corpus answer different questions and neither replaces the other:
+theirs is adversarial and independently authored, so it finds bugs; ours is ordinary play over
+normal positions, which is what a search actually encounters, and is where the 73.2%/92.0%
+figures come from.
+
+### 2. Fix the three confirmed defects
+
+All small and localized. Wide Guard / Quick Guard applying to the `Choice` instead of the
+resolved target list (`genx/generate_instructions.rs:1744`); `reset_boosts` hardcoding slot 0
+(`state.rs:1795`, Haze too); a sub-action bound to the slot rather than the body across Ally
+Switch.
+
+### 3. Root-cause the spread-move divergence
+
+The 19-point gap. Not the attacking slot (49/97 from slot 0 against 69/143 from slot 1), and
+in 39 disagreeing turns the undamaged body is the attacker's own ally — which the isolated
+stage 0 Surf and Earthquake cases got right. Read the spread damage path in fuller positions.
+
 ## Reproduce
 
 `git clone --depth 1 https://github.com/smogon/pokemon-showdown` at the repo root,
