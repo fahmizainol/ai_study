@@ -2,7 +2,9 @@
 """Named-trainer generator: the rivals and the other recurring bosses who are not
 gym leaders (TEAM-DESIGN.md §6.5 lever 1).
 
-Same machinery as the gym bosses, four differences:
+The SAME machinery as the gym bosses, not merely a similar one: the build itself is
+generate_bosses.assemble(), and everything below is a field of the spec handed to it.
+What is left here is the four things that are genuinely about these fights:
 
   no theme      A rival has no type identity to build around, so the 4-of-6 theme
                 rule has nothing to bind to. Their identity is their own roster --
@@ -24,6 +26,10 @@ Same machinery as the gym bosses, four differences:
                 come from somewhere, so it is read off where the fight HAPPENS --
                 see G.story_level().
 
+A fight may also carry an archetype and a mode, which it gets from
+generated/fight_plans.json via G.plan_of(); with no entry there it gets the flat
+presence quota, which is what these fights have always had. See TEAM-DESIGN.md §6.8.
+
 Levels are remapped onto the Unbound expert curve exactly as the gym bosses are, so
 a rival meets the player at cap parity instead of trailing it. The STAGE a fight
 belongs to is still read from its ORIGINAL levels -- that is its position in the
@@ -36,6 +42,7 @@ Usage:
     generate_rivals.py --json out.json    # emit for validate_team.py
 """
 import collections
+import functools
 import json
 import os
 import re
@@ -51,13 +58,77 @@ import smogon_corpus as SC
 RIVALS = ("OWEN1", "ALBA", "TERESA")
 BOSSES = ("JEREMIAH", "JEREBUZO", "SIMON", "CINTIA", "CAMUS", "ATLAS", "SILVER")
 TRAINERS = RIVALS + BOSSES
-TEAM_SIZE = 6
+
+# The starter-slot test lives with the assembly loop that has to skip those slots.
+is_dynamic = G.is_dynamic
 
 
-def is_dynamic(species):
-    """An engine-resolved starter slot, e.g. `owenpoke2`. Real internal names are
-    uppercase, so the case test is unambiguous."""
-    return species[:1].islower()
+# The starter branch, verbatim from the game's `Pokes Rivales` script: each of these
+# is a Ruby method returning one of three fakemon off $game_variables[54], so the
+# rival's slot is whichever line rivals the player's starter. A fight that carries one
+# does not have one Pokemon there, it has three at a third of the weight each -- and
+# that is the honest way to read it, because a reading has to hold for all three
+# playthroughs or it is not a reading about the fight.
+STARTER_BRANCH = {
+    "owenpoke1": ("MEADEW", "GULLIBY", "TIGGLARE"),
+    "owenpoke2": ("NINFAE", "SAIGULL", "RABATUTA"),
+    "owenpoke3": ("FAEUNA", "SEAGHOUL", "TIGNITUS"),
+    "albapoke1": ("SAIGULL", "RABATUTA", "NINFAE"),
+    "albapoke2": ("SEAGHOUL", "TIGNITUS", "FAEUNA"),
+}
+# How often a family must turn up across one trainer's fights to count as their spine.
+CORE_MIN = 2
+
+
+def slots(party):
+    """[(species, weight)] for one party, starter branches resolved.
+
+    A branch slot contributes all three fakemon at 1/3 each rather than picking one,
+    so nothing downstream can accidentally read a fight as "the Water one" when that
+    is true in one playthrough of three."""
+    out = []
+    for m in party:
+        name = m["species"]
+        if name in STARTER_BRANCH:
+            out += [(sp, 1 / 3) for sp in STARTER_BRANCH[name]]
+        elif is_dynamic(name):
+            continue                   # an engine slot nobody has a table for
+        else:
+            out.append((name, 1.0))
+    return [(n, w) for n, w in out if n in G._sp]
+
+
+@functools.lru_cache(maxsize=None)
+def recurring(trainer_type):
+    """Families this trainer brings to at least CORE_MIN of their own fights.
+
+    A rival appears up to five times; what makes them that rival is the line that
+    keeps coming back, not the padding around it. Gym leaders fight once, so this is
+    empty for them, which is correct -- a gym's identity is its type, not its spine.
+
+    Here rather than in fight_context because it is a fact about the fight list this
+    module owns, and because assemble() needs it to know which of a rival's Pokemon
+    must never be spent to satisfy a plan."""
+    tally = collections.Counter()
+    n = 0
+    for b in load_fights():
+        if b["type"] != trainer_type:
+            continue
+        n += 1
+        seen = collections.Counter()
+        for name, w in slots(b["party"]):
+            seen[G.root(name)] = max(seen[G.root(name)], w)
+        tally.update(seen)
+    if n < CORE_MIN:
+        return ()
+    return tuple(sorted(k for k, v in tally.items() if v >= CORE_MIN))
+
+
+def fight_id(battle):
+    """The id this fight's team record is emitted under, and the key its plan is
+    filed under in generated/fight_plans.json."""
+    return (f'{"rival" if battle["type"] in RIVALS else "boss"}_{battle["type"]}'
+            f'_{battle["name"] or "x"}_map{battle["map"]:03d}')
 
 
 def dynamic_level(level):
@@ -87,7 +158,15 @@ def items_unlocked(stage, map_id):
     return G.area_of(map_id) == G.area_of(G.CAPS[G.UNLOCK_STAGE]["map"])
 
 
-def make_trainer(battle):
+def fight_band(battle):
+    """Where this fight sits in the story: (party levels, ace, median, stage, how).
+
+    `how` is None for a pinned fight, and otherwise says where the level was read
+    from -- see G.story_level(). Returns None for a party that mixes pinned and
+    scaled levels, which is not seen in Realidea and is not handled.
+
+    Separate from make_trainer because fight_context.py needs a fight's stage and
+    band to propose plans FOR it, and computing them cannot require building it."""
     scaled = [dynamic_level(m["level"]) for m in battle["party"]]
     how = None
     if all(scaled):
@@ -97,122 +176,78 @@ def make_trainer(battle):
         pinned, how = G.story_level(battle["map"])
         party_levels = [pinned] * len(scaled)
     elif any(scaled):
-        return None                     # mixed pinned/scaled party: not seen, not handled
+        return None
     else:
         party_levels = [m["level"] for m in battle["party"]]
-
     ranked = sorted(party_levels)
-    ace = ranked[-1]
     # MEDIAN, not highest: Alba's two early fights carry a Braviary stuck at level 60
     # beside level-16 teammates, and taking the max would file a level-16 fight as
     # endgame and hand it competitive items.
     median = ranked[len(ranked) // 2]
-    stage = G.stage_of(median)
+    return party_levels, ranked[-1], median, G.stage_of(median), how
+
+
+def make_trainer(battle, plan=None):
+    band = fight_band(battle)
+    if band is None:
+        return None
+    party_levels, ace, median, stage, how = band
+    scaled = [dynamic_level(m["level"]) for m in battle["party"]]
     target = G.TARGET[stage]
-    lo = target - G.SPREAD[stage] / 2
-
     unlocked = items_unlocked(stage, battle["map"])
-    cap = G.bp_cap(stage)
-    allow = None if unlocked else G.early_items()
-    quota = G.QUOTA if unlocked else [r for r in G.QUOTA if r != "mega"]
-    banned = set() if unlocked else set(G.MEGASTONE)
 
-    team, have, used, notes = [], collections.Counter(), set(), []
+    # A named trainer has no archetype or mode of its own unless one has been chosen
+    # for it; without a plan the flat presence quota applies, which is what these
+    # fights have always had.
+    archetype, mode = plan if plan else G.plan_of(fight_id(battle))
+    if stage < G.MODE_FROM:
+        mode = None
+    floors, caps = G.plan_for(archetype, unlocked, mode)
 
-    def capped():
-        return {r for r, n in G.ROLE_CAP.items() if have[r] >= n}
+    # 1) every dev-chosen mon is kept and re-equipped, at its own remapped level.
+    #    The starter slots Owen and Alba carry are passed through untouched: the
+    #    species is a method on $game_variables[54] and is not knowable here.
+    # A Builder card can drop one of this trainer's own Pokemon or pin an extra, and
+    # can name which published sets a species may use. A starter slot is never
+    # droppable: it is a method the engine resolves, not a species anyone chose.
+    keep, sets_ = G.picks_for(fight_id(battle))
+    kept = [{"species": m["species"], "level": G.remap(lvl),
+             "moves": m.get("moves"), "dynamic": is_dynamic(m["species"])}
+            for m, lvl in zip(battle["party"], party_levels)]
+    own = {m["species"] for m in battle["party"]}
+    lv = G.remap(max(party_levels) if party_levels else median)
+    kept += [{"species": n, "level": lv, "moves": None, "dynamic": False,
+              "pinned": True}
+             for n, on in keep.items() if on and n not in own and n in G._sp]
 
-    def add(name, mon, why, kept):
-        mon["kept"], mon["why"] = kept, why
-        if mon["item"] in G.MEGASTONE:
-            banned.update(G.MEGASTONE)
-        team.append(mon)
-        have.update(mon["roles"])
-        used.add(name)
+    # 2) pad to six against this stage's eBST target. Rivals get no Ubers at any
+    #    stage: eligible() opens that pool from gym 7, which is right for a gym
+    #    leader whose picks are still theme-locked -- a rival has no theme, so the
+    #    whole box-legendary pool comes with it and Owen turns up with an Arceus.
+    built = G.assemble({
+        "level": max(2, G.remap(median) - 1), "ace_level": None, "stage": stage,
+        "target": target, "lo": target - G.SPREAD[stage] / 2,
+        "hi": target + G.SPREAD[stage] / 2,
+        "theme": None, "on_theme_min": 0, "why_theme": None,
+        "kept": kept, "keep_band": False, "note_unknown": True,
+        "floors": floors, "caps": caps, "mode": mode, "mega_ok": unlocked,
+        "ubers_ok": False, "project_spent_mega": False,
+        "why_open": ("added:%s", "added:power"),
+        "reequip": True, "dedupe": False,
+        # A rival's roster IS the character, so the families they bring to two or more
+        # of their own fights are held back on top of the mode's evidence.
+        "keep_drop": G.KEEP_DROP, "keep_test": G.keep_filter(keep),
+        "set_formats": G.SET_FORMATS, "early_moves": G.EARLY_MOVES,
+        "set_seed": G.SET_SEED or None, "pick_seed": G.PICK_SEED or None,
+        "set_filter": sets_,
+        "protected": ([m["species"] for m in battle["party"]
+                       if G.root(m["species"]) in recurring(battle["type"])]
+                      + [m["species"] for m in battle["party"]
+                         if G.mode_evidence(m["species"], mode)]),
+    })
+    team, notes = built["team"], built["notes"]
 
-    # 1) every dev-chosen mon is kept and re-equipped. No band filter here: a rival's
-    #    roster IS the character, so unlike a gym leader nothing is dropped for being
-    #    under the curve -- the padding slots carry the power instead.
-    for m, lvl in zip(battle["party"], party_levels):
-        name = m["species"]
-        if is_dynamic(name):
-            team.append({"species": name, "level": G.remap(lvl), "moves": [], "item": None,
-                         "ability": 0, "nature": "HARDY", "iv": 31, "ev": [0] * 6,
-                         "roles": set(), "src": "engine (Pokes Rivales starter slot)",
-                         "fidelity": 0, "inherited": None,
-                         "kept": True, "why": "starter slot"})
-            used.add(name)
-            notes.append(f"{name} left to the engine — resolves to the starter "
-                         f"matching the player's")
-            continue
-        if name not in G._sp:
-            notes.append(f"skipped {name} — not in pokemon.txt")
-            continue
-        lvl = G.remap(lvl)
-        mon = (G.build(name, lvl, banned, avoid=capped(), allow_items=allow, cap=cap)
-               or G.fallback(name, lvl, cap))
-        if m.get("moves"):
-            mon["src"] += f" (dev set was {'/'.join(m['moves'])})"
-        add(name, mon, "original", True)
-
-    # 2) pad to six against this stage's eBST target
-    def deficit():
-        real = [m for m in team if not is_dynamic(m["species"])]
-        return target * (len(real) + 1) - sum(G.ebst(m) for m in real)
-
-    pad_level = max(2, G.remap(median) - 1)
-    # Rivals get no Ubers at any stage. eligible() opens the Uber pool from gym 7,
-    # which is right for a gym leader whose picks are still theme-locked -- a rival
-    # has no theme, so the whole box-legendary pool comes with it and Owen turns up
-    # with an Arceus. A rival should read as a peer, not a superboss.
-    pool = [n for n in G.eligible(pad_level, stage)
-            if n not in used and SC.band(n) != "Uber"
-            and G.potential_bst(n, unlocked) >= lo]
-
-    def take(role):
-        for strict in (True, False):
-            full = capped()
-            for name in sorted(pool, key=lambda n: (abs(G.potential_bst(n, unlocked)
-                                                        - deficit()), SC.rank(n))):
-                mon = G.build(name, pad_level, banned, want=role, avoid=full,
-                              allow_items=allow, cap=cap)
-                if not mon or (role is not None and role not in mon["roles"]):
-                    continue
-                if strict and mon["roles"] & full:
-                    continue
-                pool.remove(name)
-                add(name, mon, f"added:{role or 'power'}", False)
-                return True
-        return False
-
-    while len(team) < TEAM_SIZE and pool:
-        unmet = [r for r in quota if not have[r]]
-        if not any(take(r) for r in unmet) and not take(None):
-            break
-
-    # 3) a rival with five dev-chosen mons has only one free slot, so roles cannot be
-    #    covered by adding bodies. The set is the other lever: re-equip a kept mon
-    #    toward a still-missing role. That changes what it does, never which mon it is.
-    for role in quota:
-        if have[role]:
-            continue
-        for i, m in enumerate(team):
-            if not m["kept"] or is_dynamic(m["species"]) or len(m["roles"]) > 1:
-                continue
-            alt = G.build(m["species"], m["level"], banned, want=role,
-                          avoid=capped(), allow_items=allow, cap=cap)
-            if alt and role in alt["roles"]:
-                alt["kept"], alt["why"] = True, f"original, re-set for {role}"
-                have.subtract(m["roles"])
-                have.update(alt["roles"])
-                team[i] = alt
-                notes.append(f"{m['species']} re-equipped to cover {role}")
-                break
-
-    team.sort(key=lambda m: (is_dynamic(m["species"]), G.ebst(m)
-                             if not is_dynamic(m["species"]) else 0))
-
-    # 4) a scaled fight keeps its scaling. Every slot goes back to the token it was
+    # 3) a scaled fight keeps its scaling. Every slot goes back to the token it was
     #    built from -- padded slots included, taking the offset the party already uses
     #    -- so the fight still tracks the player's level after the swap.
     if how:
@@ -229,7 +264,8 @@ def make_trainer(battle):
 
     return {"battle": battle, "stage": stage, "target": target, "ace": ace,
             "median": median, "level": G.remap(median), "team": team,
-            "roles": have, "notes": notes, "dynamic": bool(how)}
+            "roles": built["roles"], "notes": notes, "dynamic": bool(how),
+            "archetype": archetype, "mode": mode, "floors": floors}
 
 
 def show_level(level):
@@ -282,19 +318,24 @@ def main(argv):
             results.append(r)
 
     print(f'{"trainer":10}{"map":>5}{"lv":>9}{"stage":>7}{"mean":>6}{"tgt":>5}{"gap":>6}'
-          f'{"sets":>8}  roles  party')
+          f'{"sets":>8}  roles  plan')
     for r in results:
         real = [m for m in r["team"] if not is_dynamic(m["species"])]
         mean = sum(G.ebst(m) for m in real) / len(real)
         fid = sum(m["fidelity"] for m in r["team"])
-        nrole = sum(1 for x in G.QUOTA[:4] if r["roles"][x])
+        # against this fight's OWN floors: once a fight can carry an archetype, a
+        # fixed four-role denominator is measuring a plan it may not have.
+        floors = {k: v for k, v in r["floors"].items() if k != "mega"}
+        nrole = sum(1 for k, v in floors.items() if r["roles"][k] >= v)
         b = r["battle"]
         shown = "bal ~" + str(r["level"]) if r["dynamic"] else \
             str(r["median"]) + "→" + str(r["level"])
         print(f'{b["name"] or b["type"]:10}{b["map"]:>5}{shown:>9}'
               f'{"gym " + str(r["stage"] + 1):>7}{mean:>6.0f}{r["target"]:>5}'
-              f'{mean - r["target"]:>+6.0f}{f"{fid}/{len(real) * 4}":>8}  {nrole}/4'
-              f'{"+M" if r["roles"]["mega"] else "  "} {len(r["team"])} mons')
+              f'{mean - r["target"]:>+6.0f}{f"{fid}/{len(real) * 4}":>8}'
+              f'  {nrole}/{len(floors)}{"+M" if r["roles"]["mega"] else "  "} '
+              + (r["archetype"] or "flat quota")
+              + (" + " + r["mode"] if r["mode"] else ""))
 
     for r in results:
         b = r["battle"]
@@ -318,8 +359,7 @@ def main(argv):
             mons = [{k: (sorted(v) if isinstance(v, set) else v) for k, v in m.items()}
                     for m in r["team"]]
             records.append({
-                "id": f'{"rival" if b["type"] in RIVALS else "boss"}_{b["type"]}'
-                      f'_{b["name"] or "x"}_map{b["map"]:03d}',
+                "id": fight_id(b),
                 "map": b["map"], "type_id": b.get("type_id") or type_ids.get(b["type"]),
                 "class": b["type"], "name": b["name"],
                 "orig_ace_level": r["ace"], "cheat_tier": False,
