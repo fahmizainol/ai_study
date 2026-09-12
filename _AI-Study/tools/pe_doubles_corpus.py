@@ -43,6 +43,12 @@ CONDITION = {"stealthrock": "stealth_rock", "spikes": "spikes", "toxicspikes": "
              "reflect": "reflect", "lightscreen": "light_screen", "tailwind": "tailwind",
              "safeguard": "safeguard", "mist": "mist", "luckychant": "lucky_chant",
              "wideguard": "wide_guard", "quickguard": "quick_guard", "stickyweb": "sticky_web"}
+# Showdown's status codes are not poke-engine's names (its enum is NONE/BURN/SLEEP/FREEZE/
+# PARALYZE/POISON/TOXIC), and an unmapped one panics the binding with "Invalid PokemonStatus".
+# The synthetic pool inflicts no status, so only real teams reach this.
+STATUS = {"": "none", "none": "none", "fnt": "none", "slp": "sleep", "par": "paralyze",
+          "brn": "burn", "psn": "poison", "tox": "toxic", "frz": "freeze"}
+
 VOLATILE = {"confusion": "confusion", "substitute": "substitute", "leechseed": "leechseed",
             "taunt": "taunt", "encore": "encore", "protect": None, "followme": None,
             "ragepowder": None, "endure": None, "allyswitch": None, "helpinghand": None,
@@ -83,7 +89,8 @@ def mon(d, allow_fainted=False):
         special_attack=d["stats"]["spa"], special_defense=d["stats"]["spd"],
         speed=d["stats"]["spe"],
         ability=pid(d["ability"]), item=pid(d["item"]) if d["item"] else "none",
-        status=pid(d["status"]), weight_kg=float(d.get("weightkg") or 0),
+        status=STATUS.get(pid(d["status"]), pid(d["status"])),
+        weight_kg=float(d.get("weightkg") or 0),
         attack_boost=d["boosts"].get("atk", 0), defense_boost=d["boosts"].get("def", 0),
         special_attack_boost=d["boosts"].get("spa", 0), special_defense_boost=d["boosts"].get("spd", 0),
         speed_boost=d["boosts"].get("spe", 0), accuracy_boost=d["boosts"].get("accuracy", 0),

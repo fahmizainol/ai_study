@@ -41,6 +41,39 @@ from poke_engine import State, Side, Pokemon, Move, SideConditions, monte_carlo_
 POOL_NAMES = re.findall(r"\['([A-Za-z]+)',\s*'[A-Za-z ]+',\s*\[",
                         Path(__file__).with_name("showdown_doubles_lib.js").read_text())
 
+EV_LABEL = {"hp": "HP", "atk": "Atk", "def": "Def", "spa": "SpA", "spd": "SpD", "spe": "Spe"}
+DUMP = Path(__file__).parent.parent / "extracted" / "smogon-dump"
+
+
+def set_text(m):
+    """One scraped set as Showdown import text.
+
+    The dump stores a mega as its mega species (`Gardevoir-Mega` holding `Gardevoirite`), and
+    that is kept verbatim: the body simply starts mega. Stripping the forme instead would need
+    mega choice syntax that neither policy here issues, so no mon would ever transform. The
+    deviation is symmetric between sides; it is recorded in SEARCH-BOARDS.md.
+    """
+    out = [f"{m['species']} @ {m['item']}" if m.get("item") else m["species"]]
+    if m.get("ability"):
+        out.append(f"Ability: {m['ability']}")
+    out.append("Level: 100")
+    if m.get("evs"):
+        out.append("EVs: " + " / ".join(f"{v} {EV_LABEL[k]}" for k, v in m["evs"].items() if v))
+    if m.get("nature"):
+        out.append(f"{m['nature']} Nature")
+    if m.get("ivs"):
+        out.append("IVs: " + " / ".join(f"{v} {EV_LABEL[k]}" for k, v in m["ivs"].items()))
+    out += [f"- {mv}" for mv in m["moves"]]
+    return "\n".join(out)
+
+
+def load_dump_teams(tier):
+    """Complete six-mon teams from extracted/smogon-dump, as Showdown import text."""
+    raw = json.loads((DUMP / f"{tier}.json").read_text(encoding="utf8"))
+    teams = [t for t in raw if len(t.get("data") or []) == 6]
+    return [("\n\n".join(set_text(m) for m in t["data"]), t.get("name") or "?") for t in teams]
+
+
 CORPUS = Path(__file__).with_name("pe_doubles_corpus.py")
 _ns = {}
 exec(compile(CORPUS.read_text().split("# ---- run")[0], str(CORPUS), "exec"), _ns)
@@ -135,7 +168,7 @@ def policy_random(req, position, side, rng):
             parts.append(None); continue
         legal = usable(a["moves"], position, side, slot)
         bench = [b for b in req["bench"] if b["slot"] not in used]
-        if bench and not a["trapped"] and rng.random() < 0.2:
+        if bench and not (a["trapped"] or a.get("maybeTrapped")) and rng.random() < 0.2:
             b = bench[0]; used.add(b["slot"])
             parts.append(("switch", b["slot"], None)); continue
         m = rng.choice(legal) if legal else a["moves"][0]
@@ -173,7 +206,17 @@ def policy_mcts(req, position, side, rng, ms, stats, note=None):
     except Exception as exc:
         stats[f"fallback: state build {type(exc).__name__}"] += 1
         return policy_greedy(req, position, side, rng)
-    result = monte_carlo_tree_search(state, duration_ms=ms)
+    try:
+        result = monte_carlo_tree_search(state, duration_ms=ms)
+    except BaseException as exc:
+        # PanicException subclasses BaseException, so a plain `except Exception` lets an engine
+        # panic kill the run. Real gen 6 positions do panic it ("Invalid boost value: -11"
+        # inside the search), so the turn falls to greedy and the panic is counted rather than
+        # silently absorbed.
+        stats[f"engine panic: {str(exc).splitlines()[0][:60]}"] += 1
+        if note is not None:
+            note.append(f"      search PANICKED ({str(exc).splitlines()[0][:60]}); greedy took the turn")
+        return policy_greedy(req, position, side, rng)
     options = result.side_one if side == "p1" else result.side_two
     if not options:
         stats["fallback: no root options"] += 1
@@ -250,23 +293,44 @@ def main():
     ap.add_argument("--seed", type=int, default=7)
     ap.add_argument("--max-turns", type=int, default=60)
     ap.add_argument("--save-log", metavar="DIR", help="write one transcript per battle here")
+    ap.add_argument("--teams", default="pool",
+                    help="'pool' for the synthetic mechanic pool, or a smogon-dump tier such "
+                         "as gen6doublesou (real scraped teams, complete six-mon only)")
+    ap.add_argument("--format", dest="fmt", default=None,
+                    help="Showdown format id; defaults to match --teams")
     args = ap.parse_args()
 
+    dump = None if args.teams == "pool" else load_dump_teams(args.teams)
+    fmt = args.fmt or ("gen5doublescustomgame" if args.teams == "pool"
+                       else args.teams.split("doubles")[0] + "doublescustomgame")
+    if dump is not None and len(dump) < 2:
+        sys.exit(f"{args.teams} has {len(dump)} complete six-mon teams; need at least 2")
     server = Server()
     stats = collections.Counter()
     wins = collections.Counter()
     try:
         for battle in range(args.battles):
             rng = random.Random(args.seed * 1000 + battle)
-            pool = list(range(14))
-            rng.shuffle(pool)
-            teams = [pool[:4], pool[4:8]]
-            r = server.send({"cmd": "new", "teams": teams})
+            if dump is None:
+                pool = list(range(14))
+                rng.shuffle(pool)
+                teams = [pool[:4], pool[4:8]]
+                names = [[POOL_NAMES[i] for i in t] for t in teams]
+                req = {"cmd": "new", "teams": teams}
+            else:
+                i, j = rng.sample(range(len(dump)), 2)
+                names = [[dump[i][1]], [dump[j][1]]]
+                # Real sets carry sub-100% moves, crits and secondaries, so the always-max PRNG
+                # is wrong here: it would make every Hurricane miss. Showdown's own seeded PRNG
+                # keeps a run reproducible while letting the search plan under real uncertainty,
+                # which is what it does natively.
+                req = {"cmd": "new", "p1": dump[i][0], "p2": dump[j][0], "format": fmt,
+                       "pinPrng": False, "seed": [battle, 2, 3, 4]}
+            r = server.send(req)
             if not r.get("ok"):
                 stats["new failed"] += 1; continue
             lines = []
             if args.save_log:
-                names = [[POOL_NAMES[i] for i in t] for t in teams]
                 lines.append(f"battle {battle}   p1={args.p1} vs p2={args.p2}"
                              + (f"   mcts {args.ms} ms a decision" if "mcts" in (args.p1, args.p2) else ""))
                 lines.append(f"  p1: {', '.join(names[0])}")
@@ -277,6 +341,7 @@ def main():
                     break
                 if args.save_log:
                     lines.append(f"\n  Turn {turn + 1}")
+                r_prev = r
                 choices = {"cmd": "choose"}
                 for side, req in reqs.items():
                     name = args.p1 if side == "p1" else args.p2
@@ -303,6 +368,19 @@ def main():
                                      + (f"   ({'; '.join(detail)})" if detail else ""))
                         lines.extend(note or [])
                 r = server.send(choices)
+                if not r.get("ok"):
+                    # Any remaining legality corner (hidden trapping, a forme-specific rule)
+                    # should cost a turn's policy, not the whole battle: retry once with a
+                    # switch-free greedy choice for every side still owing one.
+                    stats[f"retry after: {r.get('error','')}"] += 1
+                    retry = {"cmd": "choose"}
+                    for side2, req2 in reqs.items():
+                        if req2.get("forceSwitch"):
+                            retry[side2] = forced_choice(req2, rng)
+                        else:
+                            retry[side2] = showdown_choice(
+                                req2, policy_greedy(req2, r_prev["position"], side2, rng))
+                    r = server.send(retry)
                 if args.save_log and r.get("ok"):
                     seen = None
                     for l in r.get("log", []):
@@ -314,7 +392,7 @@ def main():
                         lines.append(f"      after {sd['side']}: " + ", ".join(
                             f"{p['species']} {p['hp']}/{p['maxhp']}" for p in sd["active"] if p))
                 if not r.get("ok"):
-                    stats[f"rejected: {r.get('error','')[:60]}"] += 1
+                    stats[f"rejected: {r.get('error','')}"] += 1
                     break
                 if r.get("ended"):
                     wins[r.get("winner") or "draw"] += 1
@@ -341,7 +419,7 @@ def main():
         print(f"   mcts decisions {stats['mcts decisions']}, mean visits "
               f"{stats['visits']/stats['mcts decisions']:.0f}")
     fb = {k: v for k, v in stats.items() if k.startswith("fallback") or k.startswith("rejected")
-          or k.startswith("unparsed")}
+          or k.startswith("unparsed") or k.startswith("engine panic") or k.startswith("retry")}
     if fb:
         print("   fallbacks and rejections:")
         for k, v in sorted(fb.items(), key=lambda kv: -kv[1]):

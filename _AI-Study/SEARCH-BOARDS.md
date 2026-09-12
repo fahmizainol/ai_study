@@ -578,6 +578,54 @@ position that the differential translator rightly refuses, and refusing it here 
 19 of 107 decisions to the fallback policy — `mon(allow_fainted=True)` now represents it, and
 Showdown's `fnt` status must become `none` because poke-engine encodes a faint as `hp=0`.
 
+### Gen 6 with real scraped teams: the search panics, so the measurement cannot be made yet
+
+Run 2026-09-13, after the synthetic-roster objection above. The teams are real:
+`extracted/smogon-dump/gen6doublesou.json` holds **425 records, 338 of them complete six-mon
+teams**, in the schema `showdown_names.resolve_set` already reads — species, item, ability,
+moves, nature, EVs, IVs. The dump also carries `gen9doublesou` (6,136 records, 5,869 complete),
+`gen8doublesou` (194), `gen7doublesou` (50) and `gen5doublesou` (183, but only **13** complete
+sixes — the gen 5 scene there is largely 2v2 with four-mon teams). `TEAM-CORPUS.md`'s
+"doubles excluded" line means they were set aside, not that they are missing.
+
+The harness now plays them: `--teams gen6doublesou` converts each set to Showdown import text
+and runs `gen6doublescustomgame`. **The always-max PRNG is dropped for real teams** — it would
+turn every Hurricane into a miss — so Showdown's own seeded PRNG resolves accuracy, crits and
+secondaries, which is correct for a play measurement and is what the search plans under
+natively. With cheap policies it works cleanly: greedy beats random **15-5 over 20 battles,
+zero rejections**.
+
+**With the search it does not work, and that is the finding.** On real gen 6 positions
+poke-engine panics, repeatedly and on ordinary input:
+
+| panic | what triggers it |
+|---|---|
+| `cannot mega evolve RHYPERIOR with ASSAULTVEST`, `MEW with ROCKYHELMET`, `TALONFLAME with CHOICEBAND`, `PACHIRISU with SITRUSBERRY`, `LUDICOLO with LEFTOVERS` | a held item that is **not a mega stone**, on a species with **no mega**. The engine attempts a mega evolution anyway and panics on the invalid pair. Present whether the dump's mega species are kept verbatim (`Gardevoir-Mega` holding Gardevoirite) or stripped |
+| `Invalid boost value: -11`, `-10`, `-7`, `12`; `Invalid boost number: 14` | thrown from `src/genx/evaluate.rs:107`, i.e. the **state already holds a boost outside ±6** when evaluation reads it. `get_boost_amount` (`generate_instructions.rs:868`) is slot-aware and clamps correctly, so a write path bypasses it. Cause not isolated; `reset_boosts` (slot-0 hardcoded, above) and the switch-time `swap_active_state` are the suspects |
+
+So **PR #10's doubles build is not usable on real gen 6 doubles teams as it stands**, and no
+score from it would mean anything: a panicked turn falls back to greedy, so the "search" arm is
+partly the baseline. `PanicException` subclasses `BaseException`, so the driver had to catch
+that explicitly — an `except Exception` lets an engine panic kill the whole run.
+
+**Two smaller gaps the synthetic pool had hidden**, both now visible as counted fallbacks:
+`volatile choicelock` (17 in twelve battles — Choice items are everywhere in real teams, and
+poke-engine models the lock as `last_used_move` rather than a volatile, so the translator needs
+to set that field instead), plus `flashfire` and `mustrecharge`. And Showdown's status codes are
+not poke-engine's names: `slp/par/brn/psn/tox/frz` must become `sleep/paralyze/burn/poison/
+toxic/freeze` or the binding panics with `Invalid PokemonStatus`. The pool inflicts no status,
+so only real teams reach it.
+
+**Also worth knowing: runs with the search are not reproducible.** `monte_carlo_tree_search` is
+unseeded, so the same battle seed produces different lines on each invocation — which is why
+one twelve-battle run showed thirteen panics and the next showed none. Any real measurement
+here needs enough battles to swamp that, and the panic rate itself varies run to run.
+
+**What this changes upstream in this document.** The 88-31 result stands as what it was — the
+search beating a toy opponent on toy teams under a pinned PRNG — but the path to a meaningful
+number now runs through fixing these panics first, not through swapping the roster. Real teams
+were the cheap part; they took an afternoon and they broke the engine.
+
 ## Backlog
 
 Recorded, not done. In the order they are worth doing.

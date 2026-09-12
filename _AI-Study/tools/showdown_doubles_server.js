@@ -6,6 +6,12 @@
 // Commands and replies (all single-line JSON):
 //   {"cmd":"new","teams":[[i,...],[i,...]]}   -> {"ok":true,"position":{...},"requests":{...}}
 //       team members are indices into the shared POOL.
+//   {"cmd":"new","p1":"<Showdown import text>","p2":"...","format":"gen6doublescustomgame",
+//    "seed":[1,2,3,4],"pinPrng":false}
+//       real teams instead of the pool. `pinPrng` defaults to TRUE for the pool path (the
+//       differential corpus needs one outcome per turn) and should be FALSE for a play
+//       measurement, where real accuracy, crits and secondaries are the point and Showdown's
+//       own seeded PRNG keeps a run reproducible.
 //   {"cmd":"choose","p1":"move 1 1, move 2","p2":"..."} 
 //                                            -> {"ok":true,"position":{...},"ended":bool,
 //                                                "winner":"p1"|"p2"|null,"log":[...],"requests":{...}}
@@ -20,6 +26,7 @@
 const { P, pinPrng, snap, POOL, teamFrom } = require('./showdown_doubles_lib.js');
 const { Battle } = require(P + '/dist/sim/battle');
 const { Dex } = require(P + '/dist/sim/dex');
+const { Teams } = require(P + '/dist/sim/teams');
 const readline = require('readline');
 
 let battle = null;
@@ -43,14 +50,22 @@ function requests() {
         slot,
         species: side.active[slot] ? side.active[slot].species.name : null,
         fainted: side.active[slot] ? !!side.active[slot].fainted : true,
-        trapped: !!a.trapped,
+        // Shadow Tag / Arena Trap is hidden information, so Showdown reports maybeTrapped and
+        // only rejects the switch when it is attempted. A policy must treat both as trapped.
+        trapped: !!a.trapped, maybeTrapped: !!a.maybeTrapped,
         // basePower/category come from the dex so a baseline policy can be written without
         // a damage model of its own; `target` is Showdown's own targeting category, which is
         // what decides whether a choice needs an explicit target number.
         moves: a.moves.map((m, j) => {
-          const d = Dex.forGen(5).moves.get(m.id);
-          return { n: j + 1, id: m.id, target: m.target, disabled: !!m.disabled,
-                   basePower: d.basePower || 0, category: d.category };
+          // A locked move (Choice item, Outrage, a charging Solar Beam, a Hyper Beam
+          // recharge) arrives as a single-entry list carrying only `move` and `id`. The
+          // MISSING target means "no target may be given" -- it was chosen when the move
+          // started -- so it must stay null rather than be looked up: sending one gets
+          // "You can't choose a target for Solar Beam". basePower and category are still
+          // worth filling from the dex, since a policy wants them.
+          const d = battle.dex.moves.get(m.id);
+          return { n: j + 1, id: m.id, target: m.target || null, locked: !m.target,
+                   disabled: !!m.disabled, basePower: d.basePower || 0, category: d.category };
         }),
       })),
     };
@@ -68,10 +83,15 @@ readline.createInterface({ input: process.stdin }).on('line', (line) => {
   try {
     if (cmd.cmd === 'quit') process.exit(0);
     if (cmd.cmd === 'new') {
-      battle = new Battle({ formatid: 'gen5doublescustomgame', seed: [1, 2, 3, 4] });
-      pinPrng(battle);
-      battle.setPlayer('p1', { name: 'A', team: teamFrom(cmd.teams[0].map(i => POOL[i])) });
-      battle.setPlayer('p2', { name: 'B', team: teamFrom(cmd.teams[1].map(i => POOL[i])) });
+      const formatid = cmd.format || 'gen5doublescustomgame';
+      battle = new Battle({ formatid, seed: cmd.seed || [1, 2, 3, 4] });
+      const pin = cmd.pinPrng !== undefined ? cmd.pinPrng : !!cmd.teams;
+      if (pin) pinPrng(battle);
+      const team = (side) => cmd.teams
+        ? teamFrom(cmd.teams[side].map(i => POOL[i]))
+        : Teams.import(side === 0 ? cmd.p1 : cmd.p2);
+      battle.setPlayer('p1', { name: 'A', team: team(0) });
+      battle.setPlayer('p2', { name: 'B', team: team(1) });
       for (const s of battle.sides) {
         if (s.activeRequest && s.activeRequest.teamPreview) battle.choose(s.id, 'team 1234');
       }
