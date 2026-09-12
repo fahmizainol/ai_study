@@ -13,8 +13,8 @@ neither side reads a half-written one.
     tools/foul_play_sidecar.py --once state.json [--check]       one state, print the reply
     tools/foul_play_sidecar.py --extract-ids <poke-engine clone>  refresh the id list
 
-Needs the gen 6 build of poke_engine importable: tools/build_poke_engine.sh makes a
-venv with it. Everything the engine does not know is written to
+Needs a matching-generation build of poke_engine importable:
+tools/build_poke_engine.sh makes a venv with it. Everything the engine does not know is written to
 Data/ai_foulplay_log.txt rather than silently mapped -- poke-engine's own parsers fall
 back to NONE / UNKNOWNITEM for an unknown name, which would turn a bad export into a
 quiet bad plan, so every id is checked against generated/poke_engine_ids_gen6.json
@@ -272,6 +272,22 @@ def build_side(doc_side, ids, problems):
     )
 
 
+def engine_turns(value):
+    """Fit Essentials' counters into poke-engine's signed 8-bit state fields.
+
+    The trainer-gimmick layer uses 999 as an effectively permanent terrain or
+    room. poke-engine reserves -1 for permanent weather but considers terrain
+    active only while its counter is positive, so 127 is the faithful practical
+    representation for permanent terrain and Trick Room within an MCTS search.
+    """
+    turns = int(value or 0)
+    if turns > 127:
+        return 127
+    if turns < -1:
+        return -1
+    return turns
+
+
 def build_state(doc, ids, problems):
     import poke_engine as pe
 
@@ -284,15 +300,28 @@ def build_state(doc, ids, problems):
     if terrain_name not in ids["terrain"]:
         problems.add(f"terrain {terrain_name} unknown to poke-engine")
         terrain_name, terrain = "NONE", ["none", 0]
+    base_weather = (doc.get("base_weather") or "none").upper()
+    if base_weather not in ids["weather"]:
+        problems.add(f"base weather {base_weather} unknown to poke-engine")
+        base_weather = "NONE"
+    base_terrain = doc.get("base_terrain") or ["none", 0]
+    base_terrain_name = str(base_terrain[0]).upper()
+    if base_terrain_name not in ids["terrain"]:
+        problems.add(f"base terrain {base_terrain_name} unknown to poke-engine")
+        base_terrain_name, base_terrain = "NONE", ["none", 0]
     return pe.State(
         side_one=build_side(doc["side_one"], ids, problems),
         side_two=build_side(doc["side_two"], ids, problems),
         weather=weather.lower(),
-        weather_turns_remaining=int(doc.get("weather_turns") or 0),
+        weather_turns_remaining=engine_turns(doc.get("weather_turns")),
         terrain=terrain_name.lower(),
-        terrain_turns_remaining=int(terrain[1] or 0),
+        terrain_turns_remaining=engine_turns(terrain[1]),
+        base_weather=base_weather.lower(),
+        base_weather_turns_remaining=-1 if base_weather != "NONE" else 0,
+        base_terrain=base_terrain_name.lower(),
+        base_terrain_turns_remaining=engine_turns(base_terrain[1]),
         trick_room=bool(doc.get("trick_room")),
-        trick_room_turns_remaining=int(doc.get("trick_room_turns") or 0),
+        trick_room_turns_remaining=engine_turns(doc.get("trick_room_turns")),
     )
 
 

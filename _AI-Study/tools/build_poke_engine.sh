@@ -14,11 +14,20 @@ HERE="$(cd "$(dirname "$0")/.." && pwd)"
 TARGET="${1:-$HERE/generated/foul_play}"
 GEN="${2:-gen6}"
 COMMIT=f4e224c75bf7af885c85c1dcba982b4143ebf582
+PERMANENT_FIELDS_PATCH="$HERE/patches/poke_engine_permanent_fields.patch"
 mkdir -p "$TARGET"
+TARGET="$(cd "$TARGET" && pwd)"
 if [ ! -d "$TARGET/poke-engine/.git" ]; then
   git clone --quiet https://github.com/pmariglia/poke-engine "$TARGET/poke-engine"
 fi
 git -C "$TARGET/poke-engine" checkout --quiet "$COMMIT"
+if git -C "$TARGET/poke-engine" apply --reverse --check "$PERMANENT_FIELDS_PATCH" 2>/dev/null; then
+  echo "poke-engine permanent-field forecast patch already applied"
+else
+  git -C "$TARGET/poke-engine" apply --check "$PERMANENT_FIELDS_PATCH"
+  git -C "$TARGET/poke-engine" apply "$PERMANENT_FIELDS_PATCH"
+  echo "applied poke-engine permanent-field forecast patch"
+fi
 [ -d "$TARGET/venv-$GEN" ] || uv venv --quiet "$TARGET/venv-$GEN"
 # shellcheck disable=SC1091
 . "$TARGET/venv-$GEN/bin/activate"

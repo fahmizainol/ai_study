@@ -435,6 +435,27 @@ class FoulPlaySidecarTest(unittest.TestCase):
         self.assertEqual({"taunt": 0, "yawn": 0}, self.sidecar.durations_for({"taunt": 9, "yawn": 0}),
                          "more turns left than the move lasts reads as none elapsed, never as a panic")
 
+    def test_permanent_gimmick_counters_fit_poke_engine_state(self):
+        self.assertEqual(-1, self.sidecar.engine_turns(-1),
+                         "permanent weather keeps poke-engine's native sentinel")
+        self.assertEqual(127, self.sidecar.engine_turns(999),
+                         "permanent terrain/rooms remain active without overflowing i8")
+        self.assertEqual(5, self.sidecar.engine_turns(5))
+
+    def test_state_carries_permanent_field_restoration_forecast(self):
+        self._engine()
+        doc = _foul_play_doc()
+        doc["weather"] = "rain"
+        doc["weather_turns"] = 2
+        doc["base_weather"] = "sun"
+        doc["terrain"] = ["electricterrain", 2]
+        doc["base_terrain"] = ["grassyterrain", 127]
+        state = self.sidecar.build_state(doc, self.ids, self.sidecar.Problems())
+        self.assertEqual("sun", state.base_weather)
+        self.assertEqual(-1, state.base_weather_turns_remaining)
+        self.assertEqual("grassyterrain", state.base_terrain)
+        self.assertEqual(127, state.base_terrain_turns_remaining)
+
     def test_reply_text_names_the_slot_and_every_option(self):
         text = self.sidecar.reply_text(("switch:1", 900, 540.0),
                                        [("move:0", 100, 60.0), ("switch:1", 900, 540.0)],

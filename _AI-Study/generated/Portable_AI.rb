@@ -8098,14 +8098,16 @@ module PortableAIRealidea
       foe = battle.battlers[index ^ 1]
       return nil if !own || !foe || own.isFainted? || foe.isFainted?
       {
-        "version" => 1,
+        "version" => 2,
         "turn" => battle.turncount,
         "actor" => index,
         "weather" => weather(battle),
         "weather_turns" => (battle.weatherduration.to_i rescue 0),
+        "base_weather" => base_weather(battle),
         "trick_room" => PortableAIRealidea.trick_room_active?(battle),
         "trick_room_turns" => PortableAIRealidea.safe_field_effect(battle, :TrickRoom, 0).to_i,
         "terrain" => terrain(battle),
+        "base_terrain" => base_terrain(battle),
         "side_one" => side_for(battle, own, battle.pbParty(index), index),
         "side_two" => side_for(battle, foe, battle.pbOpposingParty(index), index ^ 1),
         "cells" => cells_for(snapshot)
@@ -8364,6 +8366,31 @@ module PortableAIRealidea
 
     def self.reply_label(action)
       action["type"] == "switch" ? "switch:#{action['slot']}" : "move:#{action['slot']}"
+    end
+
+    def self.gimmick_permanent?(value)
+      return value if value == true || value == false
+      ["true", "yes", "on", "1"].include?(value.to_s.downcase)
+    end
+
+    def self.base_weather(battle)
+      settings = battle.instance_variable_get(:@realidea_battle_gimmick) rescue nil
+      return "none" if !settings || !gimmick_permanent?(settings["weather_permanent"])
+      name = settings["weather"].to_s.downcase
+      return name if ["sun", "rain", "sand", "hail"].include?(name)
+      "none"
+    rescue
+      "none"
+    end
+
+    def self.base_terrain(battle)
+      settings = battle.instance_variable_get(:@realidea_battle_gimmick) rescue nil
+      return ["none", 0] if !settings || !gimmick_permanent?(settings["terrain_permanent"])
+      name = settings["terrain"].to_s.downcase
+      return [name + "terrain", 127] if ["electric", "grassy", "misty", "psychic"].include?(name)
+      ["none", 0]
+    rescue
+      ["none", 0]
     end
 
     # Played battles get the same rich decision shape as a traced gauntlet battle.

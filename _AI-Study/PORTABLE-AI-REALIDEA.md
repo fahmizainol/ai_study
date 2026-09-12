@@ -79,7 +79,7 @@ yawn_gate=false
 | `search_mcts` | boolean (0.7.6) — false reproduces 0.7.5 decision for decision. Chooses **which search** runs under `search_planner`: false is the maximin grid over the joint payoff (`pick_safest`), true is a decoupled simultaneous-move MCTS on the same board (poke-engine's `src/mcts.rs`, the path Foul Play runs today) — UCB1 per side, chance outcomes as sampled children, no playout, `sigmoid(eval − root_eval)`, the most-visited root option. Neither `search_foe_mix` nor the predicted reply is read on that path; the tree is its own opponent model. **Measured, and 0.7.6's write-up of it was wrong twice** (see that section's retractions). Against the only maximin holding the same information — the uniform arm at 29, since the tree cannot consume `foe_stock_model` by construction — MCTS is **+12 (p = 0.025)**. On the 0.7.7 foe move axis with a budget that can resolve it, it scores 48 / 46 / 44 at 5000 / 5000-seed-1 / 15000: **~46, the number the maximin needs the stock-trigger table to reach, with no opponent model at all**. Still ~2 behind the rules (48), not significant at n = 60. Ships **off**
 | `search_iterations` | float (0.7.6), default 1000 — the MCTS budget as an iteration count, not a time, so a paired run and its shadow twin decide alike whatever the machine. Costs ~195 ms a decision at 1000 and ~894 ms at 5000 on RGSS's Ruby 1.8 (the maximin is ~10 ms). Read only when `search_mcts` is on
 | `search_seed` | float (0.7.6), default 0 — mixed into the per-decision seed of the MCTS chance sampler. The seed is otherwise the position itself (turn, both slots, every body's HP), so a decision replays from its snapshot alone and nothing is drawn from `pbAIRandom`. Read only when `search_mcts` is on
-| `foul_play` | boolean (0.8.0), ships **off** — hands every voluntary decision to the real Foul Play search (poke-engine gen 6) through `tools/foul_play_sidecar.py`; declines to the rules on doubles, a silent sidecar or an unmappable reply, each logged to `Data/ai_foulplay_log.txt`. **Pooled 162/180 against the rules' 143 (p = 0.005)**, the first arm to beat them. A study instrument: needs the sidecar process beside the game. Never on with `search_planner`
+| `foul_play` | boolean (0.8.0), ships **off** — hands every voluntary decision to the real Foul Play search through `tools/foul_play_sidecar.py` and a local poke-engine wheel (the campaign launcher currently uses gen 5; the original study used gen 6); declines to the rules on doubles, a silent sidecar or an unmappable reply, each logged to `Data/ai_foulplay_log.txt`. **Pooled 162/180 against the rules' 143 (p = 0.005)**, the first arm to beat them. A study instrument: needs the sidecar process beside the game. Never on with `search_planner`
 | `foul_play_iterations` | float (0.8.0), default 5000 — the sidecar's MCTS budget; ~10 ms a decision at 5000, 2-4 ms at 1000. **Leave it at 5000: 1000 measures 146/180 against 5000's 162 (p = 0.017), which is a tie with the rules** (see the 0.8.0 budget addendum). Read only when `foul_play` is on
 | *(matrix version 4)* | 0.7.9 — both move lists carry EVERY move (status moves at pct 0) with `acc`, `priority`, `damaging` and the `effect` triple; the side table carries `status`, `item`, `ability` and `entry_damage_pct` per body. No new key: the search planner reads it whenever it runs, and the rule engine reads none of it (its cell reads are `out`, `in`, the categories and `faster`, all unchanged — stock and rules arms byte-identical). **Measured with the whole 0.7.9 board: the tree at 5000 falls from 48 to 41/60** (see that section) |
 | *(matrix version 3)* | 0.7.7 — the cell gains `in_moves`, the foe's own per-move rolls beside our `out_moves`, so the search's foe axis is one column per move it owns instead of a single "it attacks, at worst". No new engine calls (the rolls were already made to find `in`) and built only when `search_planner` is on, since that is its only reader. Worth **+6** to a maximin with a uniform prior (29 → 35), **−1** to one with a real prior (46 → 45), and **−2 to +9** to the tree depending entirely on whether the budget can resolve the wider foe (39 at 1000, 48 at 5000)
@@ -230,6 +230,20 @@ Optional installed-playtest switches:
   `vanilla` (15/22/29/33/37/43/51/55/60). Expert is the default.
 - `Data/champion_level_cap.txt` advances the badge-8 cap to the Champion value:
   75 on Expert or 66 on Vanilla.
+- `Data/battle_gimmicks.txt` selects battle-start rules by trainer. The installed
+  playtest config gives every trainer battle permanent Sun; wild battles are unchanged.
+  A weather move can suppress the base weather for its normal duration, after which the
+  configured weather returns. Per-trainer rows can also choose permanent or timed terrain,
+  initial or permanent Trick Room, and weight-based turn order. Electric Surge, Grassy
+  Surge, Misty Surge, and Psychic Surge now create their terrains on switch-in (five turns,
+  or eight with Terrain Extender). Psychic Terrain has its missing damage, priority-block,
+  and expiry behavior, and Surge Surfer doubles Speed on Electric Terrain.
+
+  Foul Play receives both the current field and the configured permanent weather/terrain.
+  The patched poke-engine restores that base inside each search branch when a temporary
+  override expires, so forecasts such as Rain over permanent Sun no longer assume clear
+  weather afterward. `tools/build_poke_engine.sh` applies
+  `patches/poke_engine_permanent_fields.patch` when it builds the local engine wheel.
 
 `Level_Cap` follows the team mode. It applies the selected curve while generated team
 overrides are active; `Data/original_teams.txt` restores the original teams and disables
@@ -240,7 +254,8 @@ Champion event then unlocks level 100.
 
 Each switch is enabled by creating the named marker and disabled by deleting it. The
 corresponding adapter sections are `Team_Overrides.rb`, `Debug_Mode.rb`, and
-`Challenge_Rules.rb`.
+`Challenge_Rules.rb`. Battle gimmicks live in `Battle_Gimmicks.rb`; the complete config
+format and examples are in `adapters/realidea/battle_gimmicks.example.txt`.
 
 ### Extra entries in the party debug menu
 

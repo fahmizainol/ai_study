@@ -2138,8 +2138,22 @@ class PortableAIRealideaAdapterTest < Test::Unit::TestCase
     assert_equal(3, own["durations"]["confusion"])
     assert_equal("none", own["pokemon"][0]["status"])
     assert_equal("none", state["weather"])
+    assert_equal("none", state["base_weather"])
     assert_equal(["none", 0], state["terrain"])
+    assert_equal(["none", 0], state["base_terrain"])
     assert_equal(1, state["actor"])
+  end
+
+  def test_foul_play_state_carries_permanent_gimmick_fallbacks
+    battle = foul_play_battle
+    battle.instance_variable_set(:@realidea_battle_gimmick, {
+      "weather" => "sun", "weather_permanent" => true,
+      "terrain" => "grassy", "terrain_permanent" => true
+    })
+    snapshot, _skill = PortableAIRealidea.build_snapshot(battle)
+    state = PortableAIRealidea::FoulPlay.state_for(battle, 1, snapshot)
+    assert_equal("sun", state["base_weather"])
+    assert_equal(["grassyterrain", 127], state["base_terrain"])
   end
 
   def test_foul_play_declines_without_a_foe_on_the_field

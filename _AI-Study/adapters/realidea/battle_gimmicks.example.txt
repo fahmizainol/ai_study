@@ -1,0 +1,24 @@
+# Copy this file to Data/battle_gimmicks.txt beside Game.exe.
+# The built-in default is already permanent Sun for every trainer battle.
+# Wild battles never receive trainer gimmicks.
+# Surge abilities still create their matching terrain in any battle; Terrain Extender
+# increases their duration from five turns to eight.
+
+default,weather=sun,weather_permanent=true,terrain=none,trick_room=0,speed=normal,announce=true
+
+# Trainer rows use the numeric trainer type and exact trainer name. Values on a
+# trainer row override the defaults. "none" suppresses a default weather/terrain.
+#
+# trainer,33,Abi,weather=rain,weather_permanent=true
+# trainer,60,Aimi,weather=none,terrain=misty,terrain_permanent=true
+# trainer,76,Example,weather=sand,trick_room=5,speed=heavier
+# trainer,77,Example,weather=hail,terrain=electric,trick_room=permanent,speed=lighter
+#
+# Keys:
+# weather: sun, rain, sand, hail, none
+# weather_permanent: true/false        weather_turns: positive integer
+# terrain: electric, grassy, misty, psychic, none
+# terrain_permanent: true/false        terrain_turns: positive integer
+# trick_room: 0, a positive turn count, or permanent
+# speed: normal, heavier, lighter
+# enabled: true/false                  announce: true/false
