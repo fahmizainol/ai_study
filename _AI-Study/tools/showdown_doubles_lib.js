@@ -26,6 +26,10 @@ const body = (p) => p && ({
   hp: p.hp, maxhp: p.maxhp, status: p.status || 'none', fainted: !!p.fainted,
   stats: { ...p.storedStats }, boosts: { ...p.boosts },
   volatiles: Object.keys(p.volatiles || {}),
+  // Showdown enforces a Choice lock through lastMove rather than a field on the volatile, and
+  // poke-engine represents the same thing as the Pokemon's last_used_move -- so the move id is
+  // what the translator needs to turn `choicelock` into state instead of a skipped turn.
+  lastMove: p.lastMove ? p.lastMove.id : null,
   moves: p.moveSlots.map(m => ({ id: m.id, pp: m.pp })),
 });
 

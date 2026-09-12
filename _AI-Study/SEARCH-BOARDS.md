@@ -626,6 +626,60 @@ search beating a toy opponent on toy teams under a pinned PRNG — but the path 
 number now runs through fixing these panics first, not through swapping the roster. Real teams
 were the cheap part; they took an afternoon and they broke the engine.
 
+### Gen 5 with real scraped teams: 63-17, and the search is only ~85% of it
+
+Run 2026-09-13. Gen 5 has no mega evolution, so `can_mega_evolve` is never true and the
+`mega_evolve` crash above cannot fire — which is what made gen 5 the way through. It also has
+the better team supply for this purpose once four-mon brings are allowed:
+`gen5doublesou.json` holds **158 four-mon teams** (Smogon's gen 5 doubles scene is largely
+**2v2**) against 13 complete sixes, so `--team-sizes 4,6` gives **171 real teams** rather than
+13. A four-mon bring is legal in a custom game: team preview's `team 1234` puts two out and
+benches two.
+
+| matchup | result | two-sided exact p |
+|---|---|---|
+| MCTS as p1 vs greedy | **32-8** (80.0%) | 0.00018 |
+| MCTS as p2 vs greedy | **31-9** (77.5%) | 0.00068 |
+| **pooled, both seats** | **63-17 (78.8%)** | **2.3e-07** |
+| greedy vs greedy — seat control | 22-18 (55.0%) | 0.64 |
+
+40 battles per orientation, ~8,000 visits a decision, zero rejected choices, and the two seats
+agree to within 2.5 points against a flat control. **On real gen 5 doubles teams the search
+beats the baseline decisively.** That is a better-founded version of the 88-31 toy-team figure:
+real items, real EV spreads, real accuracy and crits (Showdown's own seeded PRNG, not the
+always-max pin), 171 authored teams instead of a 14-species pool.
+
+**But the arm is not purely the search, and the honest figure is on the fallback line.**
+`policy_mcts` falls back to greedy whenever the search cannot be used, and it had to:
+**about 17% of turns in the first orientation and 7% in the second were decided by the baseline,
+not by the search.** Any reading of 78.8% has to carry that.
+
+**Why it fell back — a new defect, and the most consequential one for a bridge.** Thirty-five
+times in the first orientation the search proposed a move Showdown had **disabled**. The
+diagnostic distinguishes the two possible causes deliberately, and it is not the wrong-slot
+enumeration: these moves *are* in the body's own move list. They are Choice-locked
+(`dracometeor`, `earthpower`, `icebeam`, `psychic`, `outrage`, `boltstrike`, …), and the lock was
+handed to the engine explicitly — `mon()` now sets `last_used_move` to `move:<index>` from
+Showdown's `pokemon.lastMove`, which is how poke-engine represents a Choice lock and is exactly
+what lifted MCTS decisions from 90 to 166 of ~180 when it was wired in. **So doubles option
+generation does not enforce the Choice lock it is given**, and a bridge would be handing the
+game illegal actions on roughly one turn in six.
+
+Two more panics, neither gen-6-specific:
+
+- `assertion left != right failed: get_two_actives called with...` (5 times) — a doubles-only
+  internal assertion, presumably the same slot passed twice.
+- `Invalid boost value: -7 / -8`, `Invalid boost number: 8` — the same ±6 escape as gen 6, so it
+  is not a generation artefact.
+
+**Two translator facts worth keeping**, both invisible under the synthetic pool:
+
+- **A Choice lock is not a volatile in poke-engine**, it is `last_used_move` serialized as
+  `move:<index into that body's own move list>`; Showdown enforces it through
+  `pokemon.lastMove`, which the snapshot now carries.
+- `flashfire`, `mustrecharge` and `slowstart` **do** exist as poke-engine volatiles and are
+  mapped; `disable` and `lockedmove` do not and remain counted skips.
+
 ## Backlog
 
 Recorded, not done. In the order they are worth doing.

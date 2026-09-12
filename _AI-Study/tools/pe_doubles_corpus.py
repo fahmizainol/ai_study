@@ -58,7 +58,11 @@ VOLATILE = {"confusion": "confusion", "substitute": "substitute", "leechseed": "
             # REPEATED Protect fail. It is therefore ignored for representability but the
             # turn is skipped if a body carrying it actually chooses Protect -- the only
             # situation in which it changes anything.
-            "stall": None}
+            "stall": None,
+            # A Choice lock is not a volatile in poke-engine: it is last_used_move, set below
+            # from the body's lastMove. Flash Fire and the Hyper Beam recharge DO exist there.
+            "choicelock": None, "flashfire": "flashfire", "mustrecharge": "mustrecharge",
+            "slowstart": "slowstart"}
 
 class Skip(Exception):
     pass
@@ -96,6 +100,10 @@ def mon(d, allow_fainted=False):
         speed_boost=d["boosts"].get("spe", 0), accuracy_boost=d["boosts"].get("accuracy", 0),
         evasion_boost=d["boosts"].get("evasion", 0),
         moves=[Move(id=pid(m["id"]), pp=m["pp"]) for m in d["moves"]],
+        # poke-engine reads the Choice lock off last_used_move, serialized as
+        # "move:<index into this body's own move list>".
+        last_used_move=next((f"move:{i}" for i, m in enumerate(d["moves"])
+                             if pid(m["id"]) == pid(d.get("lastMove") or "")), "move:none"),
     )
 
 def build_side(s, allow_fainted=False):

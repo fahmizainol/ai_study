@@ -67,10 +67,14 @@ def set_text(m):
     return "\n".join(out)
 
 
-def load_dump_teams(tier):
-    """Complete six-mon teams from extracted/smogon-dump, as Showdown import text."""
+def load_dump_teams(tier, sizes=(6,)):
+    """Teams of the given sizes from extracted/smogon-dump, as Showdown import text.
+
+    Six is the default, but gen 5 doubles on Smogon is largely **2v2 with four-mon teams**
+    (gen5doublesou holds 158 of those against 13 complete sixes), and a four-mon team is a
+    legal custom-game bring: team preview's `team 1234` puts two out and benches two."""
     raw = json.loads((DUMP / f"{tier}.json").read_text(encoding="utf8"))
-    teams = [t for t in raw if len(t.get("data") or []) == 6]
+    teams = [t for t in raw if len(t.get("data") or []) in sizes]
     return [("\n\n".join(set_text(m) for m in t["data"]), t.get("name") or "?") for t in teams]
 
 
@@ -244,9 +248,16 @@ def policy_mcts(req, position, side, rng, ms, stats, note=None):
                 return policy_greedy(req, position, side, rng)
             parts.append(("switch", b["slot"], None))
         else:
-            if not any(x["id"] == m.group("mv")
-                       for x in usable(req["active"][slot]["moves"], position, side, slot)):
-                stats[f"fallback: move {m.group('mv')} not in slot {slot}"] += 1
+            have = req["active"][slot]["moves"]
+            ok = usable(have, position, side, slot)
+            if not any(x["id"] == m.group("mv") for x in ok):
+                # Distinguish the two very different causes: a move the body does not know
+                # (the engine enumerated from the wrong slot) versus one Showdown has
+                # DISABLED, which for a Choice-locked body means the search ignored the lock.
+                known = next((x for x in have if x["id"] == m.group("mv")), None)
+                why = ("disabled by Showdown (Choice lock or Taunt) but proposed anyway"
+                       if known else "not in this body's move list at all")
+                stats[f"fallback: {m.group('mv')} in slot {slot} {why}"] += 1
                 return policy_greedy(req, position, side, rng)
             parts.append(("move", m.group("mv"), int(m.group("t")) if m.group("t") else None))
     return parts
@@ -296,11 +307,14 @@ def main():
     ap.add_argument("--teams", default="pool",
                     help="'pool' for the synthetic mechanic pool, or a smogon-dump tier such "
                          "as gen6doublesou (real scraped teams, complete six-mon only)")
+    ap.add_argument("--team-sizes", default="6",
+                    help="comma-list of team sizes to accept from the dump, e.g. 4,6")
     ap.add_argument("--format", dest="fmt", default=None,
                     help="Showdown format id; defaults to match --teams")
     args = ap.parse_args()
 
-    dump = None if args.teams == "pool" else load_dump_teams(args.teams)
+    dump = None if args.teams == "pool" else load_dump_teams(
+        args.teams, tuple(int(x) for x in args.team_sizes.split(",")))
     fmt = args.fmt or ("gen5doublescustomgame" if args.teams == "pool"
                        else args.teams.split("doubles")[0] + "doublescustomgame")
     if dump is not None and len(dump) < 2:
