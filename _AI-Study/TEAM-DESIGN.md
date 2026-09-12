@@ -604,6 +604,272 @@ to gym 4, and Silver waits on Ruta 11 partway along it. On that one boundary the
 fight has to actually be in the unlock town to count as past the shop, so Atlas (in
 Ciudad Anatasa) megas and Silver and Teresa's Pueblo Lapis fight do not.
 
+### 6.8 Context-derived plans (`tools/fight_context.py`)
+
+§6.6's `ARCHETYPE` line is nine words someone typed, and §6.7's trainers get a flat
+presence quota because nobody ever chose anything else for them. This is the machinery
+that lets each fight's own roster propose what it should be, and a person pick.
+
+A **plan** is two independent halves. An **archetype** says how the six sets divide the
+work (§6.6); a **mode** — sun, rain, sand, snow, Trick Room, screens — says what the
+battle is *about*, and the other five sets are chosen to exploit it. They never
+contradict each other because they name disjoint roles: `team_shape.role_plan()` never
+returns a mode role and `FLAT_QUOTA` names neither, so `G.plan_for()` merges them by
+addition.
+
+**Modes are measured, not typed in.** `team_shape.build_profile()` takes every corpus
+team whose author tagged a mode in the title *and* whose moves and abilities agree with
+the tag (`team_tags.agreement`), and reports two things: how many setters such a team
+runs, which becomes the mode's floor and cap, and which types it over-represents, which
+becomes the evidence that a fight wants it. The numbers and the snow caveat are in
+`TEAM-CORPUS.md` §10.
+
+**Evidence is read off the fight's own team**, through the same `TS.affinity()` the
+builder ranks candidates with — so the scorer and the builder cannot be using two
+different definitions of "abuser". It is the corpus's type lift for the fight's theme,
+plus 2 per setter and 1 per abuser already on the dev's roster. Dhara's Ground gym
+scores 7.34 on sand because she already fields a Hippowdon, whose ability *is* Sand
+Stream and whose two types are the two sand over-represents most. A mode needs 1.5 to
+be proposed at all, ≥20 corpus teams behind it, and a setter that actually exists in
+that fight's level band — sand before Tyranitar's level-55 floor is Hippopotas and
+Hippowdon, and nothing else.
+
+**Evidence and outcome disagree, and that is the useful part.** Lawrence's Psychic gym
+is the corpus's best Trick Room theme (2.22x) and fields four slow Pokemon; as
+`balance` it still cannot build it, because at eBST 593 the on-theme band holds one
+slow Trick Room learner. `fight_context.py` therefore *builds* every candidate through
+the real generator and reports what it cost — floors met and curve gap — rather than
+ranking on evidence alone. The default is the best-evidence plan **among those that
+meet their floors**, with `--sort strength` to rank by curve gap instead; on an exact
+tie the fight's existing plan wins, because evidence is a property of the mode and
+every archetype carrying the same mode scores identically, which would otherwise let a
+1-BST gap difference overturn an assignment read off the feasibility matrix.
+
+**A kept original keeps its species, not its set** — so the set is the only lever a
+plan has on the mons the developer chose, and until 2026-09-11 it went unused:
+`build()` was called with `want=None` for them, leaving the choice to move fidelity
+alone. They now chase unmet floors the way generated picks do, mode first (a kept mon
+is a fixed candidate — if it will not take the job the fight cannot go shopping for
+someone who will, so the scarce floor gets first refusal). Two gates decide whether
+that can do anything for a given mon, and both are dex facts rather than knobs: the
+species must LEARN the move, and some published set must CARRY it, because `build()`
+chooses among published sets and never writes one. Ciara's Bisharp clears both and
+swaps Swords Dance for Stealth Rock; Aimi's Wigglytuff clears neither for Trick Room,
+so a Trick Room plan reaches the slots around her kept mons and not the mons
+themselves. The same change closed a promise the band test was making and the build
+was not: an original is kept on `potential_bst`, which counts a mega stone it *could*
+hold, and Lawrence's Gallade cleared a 570 floor as a 618 and then walked in as a 518
+while a generated Metagross took the stone.
+
+Two rules keep the mode from being cut by the machinery around it:
+
+- **Mode roles stay out of archetype caps.** An archetype has an opinion about how much
+  recovery it wants and none at all about sun. Left in, gym 1's Volbeat — which has
+  carried Sunny Day since long before any of this — would have put `sun` at its cap and
+  steered every later pick on a fight with no mode at all.
+- **The mode's own move is exempt from `dedupe_roles`.** Trick Room is a `speed` move,
+  so a Trick Room team met its speed cap on the first Thunder Wave and then deleted the
+  Trick Room off the set it had just chosen for it. The mode arrived and was cut in the
+  same build.
+
+**Sticky Web is not buildable in Realidea** and is dropped from the mode vocabulary:
+zero species learn it by level-up and zero by TM, though the move itself is in
+`moves.txt`. Every other mode has a real setter — Drought on Vulpix/Ninetales/Groudon,
+Drizzle on Politoed/Kyogre, Sand Stream on Hippopotas/Hippowdon/Tyranitar, Snow Warning
+on Snover/Abomasnow/Amaura/Aurorus/Alolan Ninetales — and the five mode moves are
+learnable by 112-547 species apiece. All of them are 0 BP in `moves.txt`, so `build()`'s
+early-game power cap passes them untouched.
+
+**Nothing is applied automatically.** `--write` records the choices in
+`generated/fight_plans.json`, which is the only thing the generators read, and which
+they read for `archetype` and `mode` only. A fight that is absent from it gets the
+static default, so a clean checkout reproduces the shipped teams whether this tool has
+ever run or not. `chosen: "user"` marks a plan a person picked and `--write` leaves
+those alone; `boss_studio.py`'s candidates panel is what writes them.
+
+#### One assembly loop
+
+The two generators used to hold near-duplicate copies of the same build — keep the
+dev's mons, top up the theme, fill the rest, re-equip or dedupe, sort — and the
+difference between them was never written down anywhere: it was whatever the two
+bodies happened to do. Every fix to one had to be re-applied to the other by hand, or
+silently was not. They now share `generate_bosses.assemble(spec)`, where the
+differences **are** the spec and there is exactly one list of them (see its docstring).
+Proven in two stages: widening the role vocabulary alone left both team files
+byte-identical once the `roles` field was stripped, and routing both callers through
+`assemble` left them byte-identical outright.
+
+#### The synergy gate: a mode has to be one
+
+The first version could call a fight a rain fight because one of its Pokémon was
+part-Flying. Gym 1 was offered `balance + rain` at 4/7 floors with **rain itself among
+the ones it missed** and a Volbeat holding Sunny Day. Four changes, in the order they
+have to land (see `TEAM-CORPUS.md` §11 for every number behind them):
+
+1. **`TS.affinity` has four tiers, not three** — `SETTER 3 / ABUSER 2 / ON_TYPE 1 /
+   NONE 0`. Sharing a type a mode over-represents is a fact about the metagame the mode
+   lives in, not about the set: sand teams run a lot of Steel, so six Steels scored 7.94
+   for sand while abusing nothing. Callers that *rank* may treat the tiers as one
+   ordinal scale; callers that make a *claim* must require `ABUSER` or better.
+   `evidence()` now does, so type overlap can add to a score but never create one.
+2. **Weather needs an ability setter inside the fight's band.** Not merely something
+   that learns the move. This is what stops gym 1's rain before a build is spent: at
+   302–492 there is no Drizzle holder at all, Politoed being 500.
+3. **An abuser floor the builder chases.** `mode_plan` returns `{mode: n, mode_abuse:
+   1}`, `roles_of` emits `<mode>_abuse` through `TS.abuses`, and the existing floor
+   machinery does the rest. Ships only with (1): `_order` sorts floor-missers last, so
+   the floor alone would have sunk 24 of 42 weather candidates below the no-mode plans
+   and most fights would have silently reverted to `None`.
+4. **The setter leads.** In Essentials the party order *is* the send-out order, and
+   weakest-first was sending gym 1's Rain Dance user out fifth — the weather never went
+   up. The ace is left alone.
+
+Two things had to be fixed for (3) to work at all, and both were pre-existing:
+
+- **`build()` took the ability from the published set**, so an abuser ability that is a
+  species' *hidden* one was unreachable — published sets almost never use those. Gym 6
+  is Dhara's Ground gym, fields a Sand Stream Hippowdon, and could not build sand: the
+  only two species in its band that can abuse sand carry Sand Force hidden. A set's
+  ability is not what makes it that set — the moves are — so a mode now picks it.
+- **`take()`'s loose pass was not loose.** Inside `build()` the avoid-capped term
+  outranks `want`, so while a role was capped every set asked for came back *without*
+  the role and both passes rejected it. Trick Room is also a `speed` move, so one
+  Thunder Wave capped speed and the mode became unfillable — 49 candidate plans missing
+  `trickroom`. The loose pass now drops `avoid` as well as the rejection. Fixing this
+  alone moved the nine gyms from MAD 9.0 to 3.8 and gym 1 from +27 to −1.
+
+Both sorts now refuse a plan that misses a floor. `strength` used to allow one, on the
+reasoning that a near-miss is worth seeing while the curve is being tuned — but floors
+include the mode's own setter and abuser, so that let a strength-sorted default pick a
+plan that *claimed* sand and did not build it. Which sort you asked for is not a reason
+to reintroduce the defect the gate exists to remove.
+
+Result across the 27 fights: modes on 10 of them (5 trick room, 4 sun, 1 sand) instead
+of 21, every one meeting its floors, curve MAD 3.1 → 3.8, validator 27 teams / 0 errors /
+13 warnings (all pre-existing).
+
+**Variety falls, 84.5th → 53.2nd percentile, and that is the honest cost.** The 84.5
+figure was bought partly by modes that were not real — every fight had one. Three of the
+nine gyms now have none, and five of the six that do have **the same one**, `trickroom`,
+which re-converges them by exactly the mechanism §3 identified. Still far above flat
+`QUOTA` (2.4%) and archetype-only (12.6%), but the open question is no longer "can a mode
+be justified" — it is that the only mode most fights can justify is Trick Room, because
+its setter is a move and every weather setter is one of thirteen species in the dex.
+
+#### A setup move says which attacking stat the filler is for
+
+When the power ceiling cuts a published set down to its setup move, `build()` tops the
+set back up from `best_moves`, ranking on `physical = base Atk >= base SpA`. That
+comparison can be a flat tie, and Manaphy is 100 in every stat: `>=` chose physical, so
+a Tail Glow (+3 **Special** Attack) sweeper came back as
+`TAILGLOW / AQUAJET / UTURN / FACADE` — three physical moves, no special attack at all,
+with Bubble Beam sitting unused. A setup move that survived into the set now decides it
+(`TS.SETUP_BOOSTS`), and only moves that raise exactly one of the two vote: Growth, Work
+Up and Shell Smash raise both; **Shift Gear is +1 Attack and +2 Speed**, and a special
+Magearna running it for the speed alongside three special attacks is a real published
+set, not a mistake to correct.
+
+Small but not free: it changed 1 moveset outright (Ciara's Swords Dance Zoroark takes
+Giga Impact over Hyper Beam, which is what Swords Dance wanted) and re-rolled gym 1's
+roster, taking it from −1 to −12 and the ladder MAD from 3.8 to 5.0. That is greedy
+`deficit()` steering in a thin low band, not the fix: Slowpoke and Slowking build the
+identical Trick Room set, and the 30-BST affinity bucket put the 315 one one bucket
+closer on the first pick.
+
+#### `KEEP_DROP`: spending a kept Pokémon on a floor
+
+A fight with five dev-chosen mons has one free slot, so a floor nothing left can cover
+used to be the end of the road. `KEEP_DROP` is the last step of the escalation — fill an
+empty slot, re-equip a mon already on the team, and only then give one up. It is **0 by
+default**, which is the shipped behaviour and what keeps the byte-identity check
+meaningful.
+
+Two things are never spent, and neither is a setting:
+
+- a **core family** (`generate_trainers.recurring`) — Alba without Beldum and Pumpkaboo
+  is not Alba, she is a generic Grass trainer. Gym leaders fight once, so their `core`
+  is empty and they are free.
+- anything that **supplied the mode's evidence** (`mode_evidence`) — dropping Dhara's
+  Hippowdon to make room for her sand plan deletes the reason it is a sand plan, which
+  is the same shape of error as counting a type lift below 1.0 in a mode's favour.
+
+Among the rest, least useful first: how many floors it is the last holder of, then eBST.
+And a replacement may only come from the OFF-theme pool while the team is still above
+`on_theme_min` — spending an on-theme original and refilling off-theme is how Douglas's
+Ice gym came back with a Venusaur and a Jolteon at `ON_THEME_MIN 6`. The knob was
+honoured everywhere except here. It costs something real: gym 6 can no longer spend
+Flygon for a Sand Force Probopass, because that would leave three Ground types of a
+required four, and no Ground type in the band abuses sand. That is the correct
+refusal — a minimum the fight was given is not the mode's to overspend.
+Measured reach before building it: of 356 candidate plans, 188 miss a floor, **85 could
+be fixed by freeing one slot** and 81 have no droppable keep at all. The most-missed
+floor is `recovery` (78), an *archetype* floor — so one mechanism serves both halves of
+a plan.
+
+#### What the engine does not implement
+
+Two dex facts are permanent exclusions rather than knobs, the same category as Sticky
+Web and Aurora Veil: they are things this build of Essentials cannot do, so generating
+around them is generating a promise the battle will not keep.
+
+Every one of the 241 internal ability names in `abilities.txt` was searched across all
+336 decompiled scripts (excluding our own injected `Portable_AI.rb`). **Sixteen have no
+handler anywhere.** Two consequences:
+
+- **`generate_bosses.DEAD_PRIMARY`** — ten species whose *first* ability is one of the
+  sixteen: Solgaleo, Lunala, Necrozma, the four Tapus, Alolan Raichu, and the fakemon
+  Megumin and Tartaglia. `eligible()` and `evolve_into_band()` both refuse them.
+  The test is the **primary** slot, not every slot, and the user set that line: "tapu
+  koko the terrain surge doesnt work but the poke is there so i dun think i wanna put
+  them in the generator. xurkitrees beast boost work and they should be in the
+  generator." Each Tapu has a working hidden ability (Telepathy), so an any-slot test
+  keeps all four — but a Tapu Koko that sets no Electric Terrain is not the Pokémon the
+  player is being shown. The Ultra Beasts stay; Beast Boost has a real handler. (The
+  four terrain *moves* work. Only the surge abilities are unwired.)
+- **`SLUSHRUSH` is out of `team_shape.MODE_ABUSER_ABILITY`.** `pbSpeed` branches on
+  RAINDANCE/HEAVYRAIN for Swift Swim, SUNNYDAY/HARSHSUN for Chlorophyll and SANDSTORM
+  for Sand Rush, and **has no HAIL branch at all**. This is the awkward one: Slush Rush
+  is 29 of the corpus's 31 snow abusers, so leaving it in would let a snow plan satisfy
+  the abuser floor with an ability that does nothing — precisely the un-abused "rain
+  team" the synergy gate exists to stop. Snow is left with Ice Body, passive healing
+  and not a wincon, and is now very hard to propose. Combined with Aurora Veil being
+  unlearnable here (0 species) and Blizzard getting no hail accuracy exemption, **snow
+  is a mode this engine can barely express.** No fight currently uses it.
+
+#### `LEGEND_FROM` / `LEGEND_BST`: when the trump cards arrive
+
+`LEGEND_FROM` (default **5**, i.e. gym 6) is the badge from which a *generated* pick may
+be a legendary or a pseudo-legend, one step before `UBER_FROM`. Detection is by BST
+because Realidea's dex is not the official one — it holds fakemon no name list would
+cover — and the one thing a legendary reliably is is overstatted for where it stands.
+
+`LEGEND_BST` is **580**, which is where the dex itself cuts:
+
+| band | what is in it |
+|---|---|
+| 570–579 | the Ultra Beasts, Silvally — **nothing else** |
+| 580–599 | eighteen species, **every one a legendary** (birds, beasts, genies, Regis, lake trio, musketeers) |
+| 600 | the pseudo-legend cliff: Dragonite, Tyranitar, Metagross, Garchomp, Hydreigon, Goodra, Salamence — *and* Manaphy, Jirachi, Latios, Cresselia, Diancie |
+
+So the test must be `>=`: at `> 600` it catches not one pseudo-legend. 600 was the first
+line proposed and is one slider click away, but it does not deliver "no legendary before
+gym 6" — it leaves Uxie on gym 3 and Regice on gym 4. 580 removes exactly those two, for
+**0.8 BST of curve MAD**. 570 would take the Ultra Beasts with it, which the user wants
+kept.
+
+The gate is on `eligible()`, so it only governs what the generator *adds*. A leader who
+already owns a legendary keeps it at any badge — Cintia's Garchomp and Teresa's Manaphy
+are the dev's casting, not ours.
+
+Measured cost of the whole pass, both files regenerated with `--json`:
+
+```
+curve MAD    5.0 -> 7.9 BST   (gym 2 -3, gym 3 -24; everything else unmoved)
+variety     53.2% -> 61.2%    (gyms 2-3 come off the shared legendary pool)
+modes       10 of 27 fights, unchanged in count: sun 5, trickroom 4, sand 1, snow 0
+validator   27 teams, 0 errors, 13 warnings (the pre-existing 13)
+```
+
 ## 7. Files
 
 | file | what |
@@ -626,6 +892,10 @@ Ciudad Anatasa) megas and Silver and Teresa's Pueblo Lapis fight do not.
 | `generated/teams_bosses_gyms.json` | the nine generated boss teams (validator-clean, slack 0) |
 | `tools/generate_trainers.py` | the same machinery for every named non-gym trainer: three rivals, Jeremiah/Simon/Cintia, and the three `balanceo` bosses |
 | `generated/teams_trainers.json` | those 18 teams (validator-clean, slack 0) |
+| `tools/fight_context.py` | §6.8 deriver: each fight's context → candidate archetype x mode plans, built and scored |
+| `generated/fight_plans.json` | the chosen plan per fight — the only thing both generators read for archetype/mode |
+| `tools/team_shape.py` | the role/mode vocabulary and the corpus reference both the generator and the diagnostic read |
+| `tools/boss_studio.py` | local UI (127.0.0.1:8731): the knobs, the nine rosters live, and the §6.8 candidates panel |
 | `extracted/smogon-sets/` | `@smogon/sets` gen 6-9 — set corpus (**`dex` half is copyrighted**) |
 | `extracted/smogon-stats/` | Smogon 2019-06 gen-7 moveset stats — teammate correlation |
 | `extracted/smogon-formats/` | Showdown `formats-data.ts` — the authoritative competitive tier |

@@ -7,6 +7,12 @@ Three vendored sources under extracted/, each with a MANIFEST beside it:
   smogon-formats/  gen7-formats-data.ts   -> tier(species)
   smogon-sets/     gen{6,7,8,9}.json      -> sets(species)
   smogon-stats/    gen7*.txt              -> teammates(species)
+  smogon-dump/     gen{5..9}<tier>.json   -> dump_teams()
+
+The first three are MARGINALS -- what one species does, averaged over every team it
+appeared on. smogon-dump is the only JOINT: whole six-mon teams exactly as their
+authors posted them, so it is the only source that can answer "what goes together".
+It is also the only unvendored one (86 MB, regenerate with fetch_smogon_dump.py).
 
 Nothing here knows about Realidea. Species are keyed by `norm()` (uppercase
 alphanumerics) so Showdown's "Landorus-Therian" and PBS's "LANDORUSTHERIAN" meet in
@@ -53,6 +59,26 @@ BAND = {"Uber": "Uber", "OU": "OU", "(OU)": "OU", "UUBL": "UU", "UU": "UU",
 BANDS = ["Uber", "OU", "UU", "RU", "NU", "low"]
 
 
+def set_tier(fmt):
+    """The FORMAT half of a set's provenance: "gen6uu" -> "uu", "gen9nationaldexag"
+    -> "nationaldexag".
+
+    Not the same question as tier(): tier() asks what a SPECIES is ranked, this asks
+    which ladder a published SET was written for. Blissey is one species with sets
+    from ou, uu and monotype, and they are different sets."""
+    return re.sub(r"^gen\d+", "", fmt or "")
+
+
+@lru_cache(maxsize=1)
+def set_tiers():
+    """Every format tier present in the set pool, commonest first."""
+    seen = collections.Counter()
+    for named in sets().values():
+        for (fmt, _src, _label) in named:
+            seen[set_tier(fmt)] += 1
+    return [t for t, _n in seen.most_common()]
+
+
 @lru_cache(maxsize=1)
 def tiers():
     """{NORMALIZEDNAME: tier string}. Uses gen 7 — Realidea's own generation."""
@@ -82,8 +108,15 @@ def band(name):
 # ---------------------------------------------------------------- sets
 # Formats whose mechanics this engine does not have, or whose rules make their sets
 # meaningless as "what a strong trainer would bring".
+# "doubles" and "vgc" cover gen{6,7,8,9}doublesou, gen{6,7}battlespotdoubles and
+# vgc2016/2017/2018/2020. They are excluded because this engine runs SINGLES: a
+# doubles set is built around a partner, so it brings Helping Hand, Follow Me, Ally
+# Switch, spread moves and Protect-heavy turn economy, none of which mean anything in
+# a 1v1 battle. Owen's Eevee came back with Protect/Quick Attack/Helping Hand/Bite
+# from gen6vgc2016 -- a legal set, and half of it inert in the fight it was chosen
+# for. `battlespotsingles` deliberately survives both substrings.
 _SKIP_FORMAT = ("1v1", "letsgoou", "purehackmons", "balancedhackmons",
-                "almostanyability", "cap")
+                "almostanyability", "cap", "doubles", "vgc")
 # From gen 8/9 files, only these formats — they cover gen-7-legal mons that gen 7's
 # own tiers miss. Their native formats assume Dynamax/Tera and are skipped.
 _CROSSGEN_OK = ("nationaldex", "ubers", "anythinggoes")
@@ -192,3 +225,34 @@ if __name__ == "__main__":
     print(f"usage    : {len(usage())} species")
     counts = collections.Counter(band(n) for n in tiers())
     print("bands    : " + "  ".join(f"{b}:{counts[b]}" for b in BANDS))
+
+
+# ---------------------------------------------------------------- whole teams
+# fetch_smogon_dump.py writes these; see extracted/smogon-dump/SOURCE.md for the
+# payload traps. The tier in the FILENAME is the forum thread, not the format the
+# team is legal in -- gen6monotype.json is entirely gen 8 teams -- so callers that
+# care about mechanics must test the sets, never trust the stem.
+DUMP = os.path.join(EXTRACTED, "smogon-dump")
+
+
+def dump_teams(gens=None, doubles=False, complete_only=True):
+    """Yield (file stem, team dict) for every scraped team.
+
+    `complete_only` keeps the six-mon teams: the dump is a forum scrape, so it also
+    holds cores, single sets and truncated posts, and any statistic taken per-team
+    is meaningless over a mixture of team sizes."""
+    if not os.path.isdir(DUMP):
+        raise SystemExit(f"missing {DUMP} — run tools/fetch_smogon_dump.py first")
+    for fname in sorted(os.listdir(DUMP)):
+        if not fname.endswith(".json"):
+            continue
+        stem = fname[:-5]
+        if gens and stem[:4] not in gens:
+            continue
+        if not doubles and "doubles" in stem:
+            continue
+        with open(os.path.join(DUMP, fname), encoding="utf-8") as fh:
+            for team in json.load(fh):
+                if complete_only and len(team.get("data") or ()) != 6:
+                    continue
+                yield stem, team

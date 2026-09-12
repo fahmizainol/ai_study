@@ -114,6 +114,30 @@ def items():
 
 
 @lru_cache(maxsize=1)
+def type_chart():
+    """(weaknesses, resistances, immunities), each {DEFENDING_TYPE: [attacking types]}.
+
+    Lives here rather than in generate_bosses -- which is where it was, and which is
+    the only reason team_shape could not read it. The dependency runs
+    generate_bosses -> team_shape -> smogon_corpus, so a type-coverage metric in
+    team_shape could not import the chart without a cycle. PBS parsing is this
+    module's job; both callers read it from here."""
+    weak, res, imm, cur = {}, {}, {}, None
+    for line in open(os.path.join(PBS, "types.txt"), encoding="utf-8-sig",
+                     errors="replace"):
+        line = line.strip()
+        if line.startswith("InternalName="):
+            cur = line.split("=", 1)[1]
+        elif cur and line.startswith("Weaknesses="):
+            weak[cur] = line.split("=", 1)[1].split(",")
+        elif cur and line.startswith("Resistances="):
+            res[cur] = line.split("=", 1)[1].split(",")
+        elif cur and line.startswith("Immunities="):
+            imm[cur] = line.split("=", 1)[1].split(",")
+    return weak, res, imm
+
+
+@lru_cache(maxsize=1)
 def tm_moves():
     """{MOVE: set(species that can learn it via TM/tutor list)}"""
     out, cur = {}, None
@@ -127,14 +151,58 @@ def tm_moves():
     return out
 
 
+@lru_cache(maxsize=1)
+def pre_evolutions():
+    """{INTERNALNAME: [ancestors, nearest first]}.
+
+    pokemon.txt only records the forward direction (a parent lists its children), so
+    invert it once and walk the whole chain -- a stage 3 has to reach its baby form,
+    not just its middle."""
+    sp = species()
+    parents = {}
+    for name, data in sp.items():
+        for child, _method, _param in data["evolutions"]:
+            if child in sp:
+                parents.setdefault(child, []).append(name)
+    out = {}
+    for name in sp:
+        chain, queue = [], list(parents.get(name, ()))
+        while queue:
+            p = queue.pop(0)
+            if p == name or p in chain:
+                continue                       # cycles in PBS data are not fatal
+            chain.append(p)
+            queue += parents.get(p, ())
+        out[name] = chain
+    return out
+
+
 def learnable(sp_name, move, level, slack=0):
     """How can sp_name know `move` at `level`? Returns one of:
     'levelup', 'levelup+N' (over by N but within slack... always returned when over),
-    'tm', None."""
+    'tm', None.
+
+    A PRE-EVOLUTION's level-up move counts as 'levelup' for the evolved form.
+    Essentials carries moves through evolution and the player can hold evolution off
+    indefinitely, so a level-35 Cloyster really can know Icicle Spear (Shellder lv13).
+    Realidea writes its learnsets gen-5 style -- the evolved form's own `Moves=` line
+    is a stub and everything that defines the species sits on the pre-evolution --
+    so without this a fully-evolved mon looks like it can only use TMs: every
+    published Cloyster set fell under build()'s legality floor and gym 4 got
+    Dive/Aqua Jet/Explosion/Rest out of the fallback instead.
+
+    Egg moves stay out: species() never parses `EggMoves=`, and a bred move is not
+    something a trainer's mon plausibly has.
+
+    The evolution LEVEL is deliberately not checked here -- whether the species can
+    exist at this level at all is min_level()'s question, and validate_team.py
+    already enforces that floor separately."""
     sp = species().get(sp_name)
     if not sp:
         return None
     lvls = [lv for lv, mv in sp["learnset"] if mv == move]
+    for parent in pre_evolutions()[sp_name]:
+        lvls += [lv for lv, mv in species()[parent]["learnset"] if mv == move]
     if lvls and min(lvls) <= level:
         return "levelup"
     if sp_name in tm_moves().get(move, ()):

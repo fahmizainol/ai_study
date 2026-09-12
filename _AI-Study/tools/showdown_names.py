@@ -223,6 +223,34 @@ class Game:
                 return base, forme["index"], slots or self.species[base]["abilities"]
         raise Unrepresentable(f"no forme {suffix} for {base}")
 
+    def fold_species(self, display):
+        """Internal name for CO-OCCURRENCE counting, or None if this game has no such
+        species at all. Folds a forme this game cannot represent onto its base.
+
+        Deliberately a different question from resolve_species(), which is about set
+        fidelity: a Mega Scizor is a distinct stat line and resolve_species is right
+        to refuse it where the game has no mega forme. But "who does Scizor get built
+        alongside" is answered identically by the mega and the base, and refusing the
+        mega throws the whole team away. Megas, Arceus plates, Greninja-Ash and
+        Necrozma's fusions are most of the difference: on the scraped dump, folding
+        takes the fully-resolvable share from 39% to 55% of complete teams.
+
+        Exact first, so a forme the game DOES model as its own species is never
+        folded into its base -- Realidea lists Alolan Ninetales as ANINETALES, and
+        collapsing it onto NINETALES would merge an Ice/Fairy Aurora Veil setter with
+        a Fire sweeper."""
+        try:
+            return self.resolve_species(display)[0]
+        except Unrepresentable:
+            pass
+        base = display.split("-")[0]
+        if base != display:
+            try:
+                return self.resolve_species(base)[0]
+            except Unrepresentable:
+                pass
+        return None
+
     def resolve_move(self, display):
         """-> (internal name, hidden-power type or None)."""
         folded = norm(display)
