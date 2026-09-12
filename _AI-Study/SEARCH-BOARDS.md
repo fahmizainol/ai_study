@@ -374,7 +374,7 @@ ally, Telepathy exempting the ally, Quick Guard against priority, Helping Hand, 
 Ally Switch and Intimidate's double drop all match Showdown exactly. **Redirection and spread
 are not broken, so the stop-rule says proceed.**
 
-**One confirmed engine bug, with its root cause** — the first of ten; all ten are
+**One confirmed engine bug, with its root cause** — the first of eleven; all eleven are
 tabulated under [Backlog item 3](#3-fix-the-ten-confirmed-defects), nine of them with verified
 line numbers, and this section and those following hold the evidence for each. `wide_guard_blocks_spread`: Surf is
 `AllAdjacent`, so in gen 5 it hits the attacker's own partner as well as both foes
@@ -756,12 +756,12 @@ to Showdown sets almost directly. Two known obstacles:
 Doing this is what would make the play result mean something: same referee, same search, real
 teams. It is more valuable than re-running the toy version with transcripts attached.
 
-### 3. Fix the ten confirmed defects
+### 3. Fix the eleven confirmed defects
 
 Every line number below was read out of the `main-doubles` clone, not remembered. Three are
-crashes, so they stop a bridge outright; four are silent wrong answers, which is worse to ship;
+crashes, so they stop a bridge outright; five are silent wrong answers, which is worse to ship;
 two are cosmetic-but-blinding, in that they make the search's own decision unreadable; and one
-has no site yet, which is why it is the largest. The first nine are small and localized. All
+has no site yet, which is why it is the largest. The first ten are small and localized. All
 are doubles-only — the singles board is byte-identical (§ measurement 1), so nothing
 here is a regression, only unfinished work.
 
@@ -783,6 +783,7 @@ caught only because Showdown was sitting next to it.
 | 5 | `genx/generate_instructions.rs:1744` | Wide Guard / Quick Guard is keyed on `choice.target.hits_multiple_targets()` — the Choice's declared target *class* — instead of the resolved target list, so a guard held up by one slot blocks the spread move against **both**. This is the one stage 0 disagreement (`wide_guard_blocks_spread`) |
 | 6 | `state.rs:1795` `reset_boosts` | reads `get_side(side_ref).get_active()` — slot 0 — so when a **slot 1** body switches out carrying boosts, slot 0's boosts are cleared instead. Haze goes through the same path. The `NOTE (doubles)` comment above it is accurate and calls the fix deferred, so this is known, not overlooked |
 | 7 | Ally Switch | a sub-action is bound to the **slot** rather than the body, so it follows the position across the swap instead of the Pokémon that moved |
+| 11 | status application | **Every status move applies its status to slot 0, whatever it was aimed at.** `thunderwave,0` and `thunderwave,1` both emit `ChangeStatus SideTwo-P0` (`tools/pe_doubles_status_target.py`, two Psychic-type foes so neither is immune and only the index can differ). Damage does *not* have this bug — `airslash,0` and `airslash,1` correctly emit `Damage SideTwo:0` and `:1` — so it is the status write specifically. Worse, the immunity check reads the **right** target while the write goes to the wrong one, so Thunder Wave aimed at a Psychic ally-of-a-Ground-type paralyzes the **Ground type** |
 
 **Unreadable, not wrong.** Both are fixed locally by
 `patches/poke_engine_doubles_choice_labels.patch`, which is why the transcripts are legible;
@@ -800,6 +801,19 @@ omitting it from the list would make the list look complete when it is not — b
 | # | site | defect |
 |---|---|---|
 | 10 | *unknown — see [item 4](#4-root-cause-the-spread-move-divergence)* | **The spread-move divergence, and the single largest source of disagreement with Showdown.** Bodies-damaged agrees on 73.2% of 373 corpus turns; hold out spread-move turns and it is **92.0%**, so spread accounts for ~19 of the 27 points. Defect 5 (Wide Guard) is one instance of it and holding *that* out moves the figure by 1.6 points, so the rest is something else. Not the attacking slot (49 of 97 turns differ from slot 0 against 69 of 143 from slot 1 — the same rate), and in 39 disagreeing turns the undamaged body is the attacker's **own ally**, which the isolated stage 0 Surf and Earthquake cases got right. Fuller positions suppress it; nothing narrower is known |
+
+**A lead on defect 10 that came out of defect 11.** Status *application* ignores the target
+slot; spread *damage* does not. That rules defect 11 out as the whole explanation, but it puts
+the secondary effects of spread moves under suspicion — a spread move's secondary is a status
+write, and the corpus compared bodies-damaged and boosts, neither of which would isolate one.
+Worth checking before reading the damage path.
+
+**How defect 11 was found, since it is the pattern to reuse.** Not by reading the source: by
+noticing in a transcript that the search chose Thunder Wave against the same foe **thirteen
+turns running** while a kill sat available, reconstructing that position through the harness's
+own translator, and diffing the instruction list against a variant where only the target index
+changed. The play logs are the instrument; the engine is small enough to interrogate directly
+once a transcript says where to look.
 
 ### 4. Root-cause the spread-move divergence
 

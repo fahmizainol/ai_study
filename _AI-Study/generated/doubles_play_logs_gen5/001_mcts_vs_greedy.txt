@@ -1,0 +1,94 @@
+battle 1   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: 2v2 Pool League II/2v2 Pools - BW 9: Volcarona, Tornadus, Tyranitar, Rotom-Wash
+  p2: For london bw 2v2 classic: Togekiss, Kyurem-Black, Victini, Scrafty
+
+  Turn 1
+    p1 mcts: move 1 2, move 4
+      search (2000 visits): fireblast,1;protect,1 49v 29 | fireblast,1;switch tyranitar 43v 23 | bugbuzz,1;protect,1 43v 23 | fireblast,1;acrobatics,1 38v 19
+    p2 greedy: move 3 1, move 2 1
+      p1b Tornadus used Protect
+      p2b Kyurem used Draco Meteor -> p1a: Volcarona
+      p1a Volcarona used Fire Blast -> p2b: Kyurem
+      p2a Togekiss used Flamethrower -> p1a: Volcarona
+      p1a Volcarona fainted
+      after p1: Volcarona 0/311, Tornadus 299/299
+      after p2: Togekiss 374/374, Kyurem-Black 133/391
+
+  Turn 2
+      p1a <- Tyranitar comes in (404/404)
+      after p1: Tyranitar 404/404, Tornadus 299/299
+      after p2: Togekiss 374/374, Kyurem-Black 133/391
+
+  Turn 3
+    p1 mcts: move 1 1, move 4
+      search (1000 visits): stoneedge,0;protect,1 27v 18 | stoneedge,0;switch rotomwash 27v 18 | stoneedge,0;acrobatics,1 25v 15 | stoneedge,0;taunt,0 25v 16
+    p2 greedy: move 3 1, move 2 1
+      p1b Tornadus used Protect  [[still]]
+      p2b Kyurem used Draco Meteor -> p1a: Tyranitar
+      p2a Togekiss used Flamethrower -> p1a: Tyranitar
+      p1a Tyranitar used Stone Edge -> p2a: Togekiss  [[miss]]
+      after p1: Tyranitar 26/404, Tornadus 281/299
+      after p2: Togekiss 351/374, Kyurem-Black 109/391
+
+  Turn 4
+    p1 mcts: move 3, move 4
+      search (4000 visits): rockslide,0;protect,1 144v 80 | stoneedge,0;protect,1 122v 64 | stoneedge,0;acrobatics,0 114v 58 | crunch,0;protect,1 105v 52
+    p2 greedy: move 3 1, move 2 1
+      p1b Tornadus used Protect
+      p2b Kyurem used Draco Meteor -> p1a: Tyranitar
+      p1a Tyranitar fainted
+      p2a Togekiss used Flamethrower -> p1b: Tornadus
+      after p1: Tyranitar 0/404, Tornadus 263/299
+      after p2: Togekiss 328/374, Kyurem-Black 85/391
+
+  Turn 5
+      p1a <- Rotom-Wash comes in (241/241)
+      after p1: Rotom-Wash 241/241, Tornadus 263/299
+      after p2: Togekiss 328/374, Kyurem-Black 85/391
+
+  Turn 6
+    p1 mcts: move 1 1, move 1 2
+      search (2000 visits): thunderbolt,0;acrobatics,1 62v 37 | thunderbolt,0;protect,1 62v 37 | thunderbolt,0;acrobatics,0 55v 31 | thunderbolt,0;superpower,0 52v 29
+    p2 greedy: move 3 2, move 2 2
+      p1a Rotom used Thunderbolt -> p2a: Togekiss
+      p2b Kyurem used Draco Meteor -> p1b: Tornadus
+      p1b Tornadus used Acrobatics -> p2b: Kyurem
+      p2b Kyurem fainted
+      after p1: Rotom-Wash 226/241, Tornadus 169/299
+      after p2: Togekiss 119/374, Kyurem-Black 0/391
+
+  Turn 7
+      p2b <- Victini comes in (341/341)
+      after p1: Rotom-Wash 226/241, Tornadus 169/299
+      after p2: Togekiss 119/374, Victini 341/341
+
+  Turn 8
+    p1 mcts: move 1 1, move 2 1
+      search (2000 visits): hydropump,1;acrobatics,1 64v 45 | hydropump,1;protect,1 64v 45 | hydropump,1;acrobatics,0 61v 43 | hydropump,1;superpower,0 57v 39
+      ILLEGAL: search chose hydropump for slot 0, disabled by Showdown (Choice lock or Taunt) but proposed anyway. Greedy took the turn -- this turn is NOT the search's
+    p2 greedy: move 3 2, move 1 2
+      p1a Rotom used Thunderbolt -> p2a: Togekiss
+      p2a Togekiss fainted
+      p1b Tornadus used Superpower -> p2b: Victini
+      p2b Victini used V-create -> p1b: Tornadus
+      p1b Tornadus fainted
+      after p1: Rotom-Wash 211/241, Tornadus 0/299
+      after p2: Togekiss 0/374, Victini 249/341
+
+  Turn 9
+      p2a <- Scrafty comes in (327/327)
+      after p1: Rotom-Wash 211/241, Tornadus 0/299
+      after p2: Scrafty 327/327, Victini 249/341
+
+  Turn 10
+    p1 mcts: move 1 2, pass
+      search (33000 visits): thunderbolt,1;No Move 5732v 192 | thunderbolt,0;No Move 5418v 173 | hydropump,1;No Move 5233v 161 | hydropump,0;No Move 4540v 119
+    p2 greedy: move 3 1, move 1 1
+      p1a Rotom used Thunderbolt -> p2b: Victini
+      p2b Victini used V-create -> p1a: Rotom
+      p2a Scrafty used Crunch -> p1a: Rotom
+      p1a Rotom fainted
+      after p1: Rotom-Wash 0/241, Tornadus 0/299
+      after p2: Scrafty 327/327, Victini 27/341
+
+  RESULT: p2 wins

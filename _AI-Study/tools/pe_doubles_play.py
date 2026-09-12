@@ -75,7 +75,11 @@ def load_dump_teams(tier, sizes=(6,)):
     legal custom-game bring: team preview's `team 1234` puts two out and benches two."""
     raw = json.loads((DUMP / f"{tier}.json").read_text(encoding="utf8"))
     teams = [t for t in raw if len(t.get("data") or []) in sizes]
-    return [("\n\n".join(set_text(m) for m in t["data"]), t.get("name") or "?") for t in teams]
+    # The label carries the roster, not just the scraper's team name: a transcript whose header
+    # reads "For london bw 2v2 classic" says nothing about who is playing.
+    return [("\n\n".join(set_text(m) for m in t["data"]),
+             "%s: %s" % (t.get("name") or "?", ", ".join(m["species"] for m in t["data"])))
+            for t in teams]
 
 
 CORPUS = Path(__file__).with_name("pe_doubles_corpus.py")
@@ -209,6 +213,8 @@ def policy_mcts(req, position, side, rng, ms, stats, note=None):
         return policy_greedy(req, position, side, rng)
     except Exception as exc:
         stats[f"fallback: state build {type(exc).__name__}"] += 1
+        if note is not None:
+            note.append(f"      position could not be built ({type(exc).__name__}); greedy took the turn")
         return policy_greedy(req, position, side, rng)
     try:
         result = monte_carlo_tree_search(state, duration_ms=ms)
@@ -224,6 +230,8 @@ def policy_mcts(req, position, side, rng, ms, stats, note=None):
     options = result.side_one if side == "p1" else result.side_two
     if not options:
         stats["fallback: no root options"] += 1
+        if note is not None:
+            note.append("      search returned no root options; greedy took the turn")
         return policy_greedy(req, position, side, rng)
     best = max(options, key=lambda o: o.visits)
     if note is not None:
@@ -240,11 +248,16 @@ def policy_mcts(req, position, side, rng, ms, stats, note=None):
         m = LABEL.match(sub)
         if not m:
             stats[f"unparsed label {sub!r}"] += 1
+            if note is not None:
+                note.append(f"      search chose {sub!r}, which could not be parsed; greedy took the turn")
             return policy_greedy(req, position, side, rng)
         if m.group("sw"):
             b = next((b for b in req["bench"] if pid(b["species"]) == m.group("sw")), None)
             if b is None:
                 stats["fallback: switch target not on bench"] += 1
+                if note is not None:
+                    note.append(f"      search chose to switch to {m.group('sw')}, which is not on the bench;"
+                                " greedy took the turn")
                 return policy_greedy(req, position, side, rng)
             parts.append(("switch", b["slot"], None))
         else:
@@ -258,6 +271,9 @@ def policy_mcts(req, position, side, rng, ms, stats, note=None):
                 why = ("disabled by Showdown (Choice lock or Taunt) but proposed anyway"
                        if known else "not in this body's move list at all")
                 stats[f"fallback: {m.group('mv')} in slot {slot} {why}"] += 1
+                if note is not None:
+                    note.append(f"      ILLEGAL: search chose {m.group('mv')} for slot {slot}, {why}."
+                                " Greedy took the turn -- this turn is NOT the search's")
                 return policy_greedy(req, position, side, rng)
             parts.append(("move", m.group("mv"), int(m.group("t")) if m.group("t") else None))
     return parts
@@ -267,6 +283,9 @@ SWITCH_LINE = re.compile(r"^\|switch\|(p[12][ab]): [^|]+\|([^,|]+)[^|]*\|(\d+)/(
 MOVE_LINE = re.compile(r"^\|move\|(p[12][ab]): ([^|]+)\|([^|]+)\|([^|]*)\|?(.*)$")
 FAINT_LINE = re.compile(r"^\|faint\|(p[12][ab]): (.+)$")
 SWAP_LINE = re.compile(r"^\|swap\|(p[12][ab]): ([^|]+)\|(\d+)")
+# Outcome lines: whether the action above actually did anything.
+OUTCOME_LINE = re.compile(r"^\|(-status|-curestatus|-fail|-immune|-miss|-crit|-boost|-unboost"
+                          r"|-activate|cant|-start|-end|-enditem)\|([^|]*)\|?(.*)$")
 
 
 def readable(line):
@@ -287,6 +306,17 @@ def readable(line):
     m = SWAP_LINE.match(line)
     if m:
         return f"{m[1]} {m[2]} swapped to slot {m[3]}"
+    m = OUTCOME_LINE.match(line)
+    if m:
+        who = m[2].split(": ", 1)[-1]
+        phrase = {"-status": "is now {}", "-curestatus": "is cured of {}",
+                  "-fail": "-- IT FAILED", "-immune": "-- IMMUNE", "-miss": "-- MISSED",
+                  "-crit": "-- critical hit", "-boost": "{} rose", "-unboost": "{} fell",
+                  "-activate": "-- {}", "cant": "COULD NOT MOVE ({})",
+                  "-start": "gained {}", "-end": "lost {}", "-enditem": "used up its {}"}
+        arg = " ".join(x for x in m[3].strip("|").split("|") if x and not x.startswith("["))
+        body = phrase.get(m[1], m[1] + " {}")
+        return f"        {who} " + (body.format(arg) if "{}" in body else body)
     return line.strip("|").replace("|", " ")
 
 

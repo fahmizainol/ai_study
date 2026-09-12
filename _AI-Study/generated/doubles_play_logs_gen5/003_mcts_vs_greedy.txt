@@ -1,0 +1,193 @@
+battle 3   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: [PL Week 2-3] Lucario: Thundurus, Kyurem-Black, Lucario, Togekiss
+  p2: 2v2 Pool League II/2v2 Pools - BW 8: Mamoswine, Togekiss, Latios, Arcanine
+
+  Turn 1
+    p1 mcts: move 1 2, move 3
+      search (4000 visits): thunderbolt,1;icywind,0 129v 88 | thunderbolt,1;icebeam,0 125v 85 | hiddenpower,0;icebeam,0 116v 77 | thunderbolt,1;dracometeor,0 114v 76
+    p2 greedy: move 1, move 1 1
+      p1a Thundurus used Thunderbolt -> p2b: Togekiss
+      p1b Kyurem used Icy Wind -> p2a: Mamoswine  [[spread] p2a,p2b]
+      p2a Mamoswine used Earthquake -> p1b: Kyurem  [[spread] p1b]
+      p2b Togekiss used Air Slash -> p1a: Thundurus
+      after p1: Thundurus 201/298, Kyurem-Black 196/391
+      after p2: Mamoswine 256/361, Togekiss 10/374
+
+  Turn 2
+    p1 mcts: move 1 2, move 4 1
+      search (6000 visits): thunderbolt,1;icebeam,0 170v 88 | thunderbolt,0;icebeam,0 164v 84 | hiddenpower,1;icebeam,0 158v 80 | thunderwave,1;icebeam,0 155v 78
+    p2 greedy: move 1, move 1 2
+      p1a Thundurus used Thunderbolt -> p2b: Togekiss
+      p2b Togekiss fainted
+      p1b Kyurem used Ice Beam -> p2a: Mamoswine
+      p2a Mamoswine used Earthquake -> p1a: Thundurus  [[spread] p1b]
+      after p1: Thundurus 172/298, Kyurem-Black 69/391
+      after p2: Mamoswine 16/361, Togekiss 0/374
+
+  Turn 3
+      p2b <- Latios comes in (301/301)
+      after p1: Thundurus 172/298, Kyurem-Black 69/391
+      after p2: Mamoswine 16/361, Latios 301/301
+
+  Turn 4
+    p1 mcts: move 4, move 3
+      search (6000 visits): protect,0;icywind,0 163v 71 | switch togekiss;icebeam,1 157v 68 | protect,0;icebeam,1 146v 61 | thunderwave,1;icebeam,1 131v 52
+    p2 greedy: move 1, move 1 2
+      p1a Thundurus used Protect
+      p2b Latios used Draco Meteor -> p1b: Kyurem
+      p1b Kyurem fainted
+      p2a Mamoswine used Earthquake -> p1a: Thundurus  [[spread] ]
+      after p1: Thundurus 172/298, Kyurem-Black 0/391
+      after p2: Mamoswine 16/361, Latios 301/301
+
+  Turn 5
+      p1b <- Lucario comes in (281/281)
+      after p1: Thundurus 172/298, Lucario 281/281
+      after p2: Mamoswine 16/361, Latios 301/301
+
+  Turn 6
+    p1 mcts: move 4, move 4
+      search (3000 visits): protect,0;nastyplot,1 99v 52 | switch togekiss;nastyplot,1 84v 41 | thunderbolt,1;nastyplot,1 79v 38 | hiddenpower,0;nastyplot,1 77v 37
+    p2 greedy: move 1, move 1 1
+      p1a Thundurus used Protect  [[still]]
+      p2b Latios used Draco Meteor -> p1a: Thundurus
+      p1b Lucario used Nasty Plot
+      p2a Mamoswine used Earthquake -> p1a: Thundurus  [[spread] p1b]
+      p1b Lucario fainted
+      after p1: Thundurus 18/298, Lucario 0/281
+      after p2: Mamoswine 16/361, Latios 301/301
+
+  Turn 7
+      p1b <- Togekiss comes in (374/374)
+      after p1: Thundurus 18/298, Togekiss 374/374
+      after p2: Mamoswine 16/361, Latios 301/301
+
+  Turn 8
+    p1 mcts: move 3 2, move 1 2
+      search (3000 visits): thunderwave,1;airslash,1 101v 41 | protect,0;airslash,1 101v 41 | protect,0;airslash,0 91v 35 | thunderbolt,1;airslash,0 89v 34
+    p2 greedy: move 1, move 1 1
+      p1a Thundurus used Thunder Wave -> p2b: Latios
+      p2b Latios used Draco Meteor -> p1a: Thundurus
+      p1a Thundurus fainted
+      p1b Togekiss used Air Slash -> p2b: Latios
+      p2a Mamoswine used Earthquake -> p1b: Togekiss  [[spread] ]
+      after p1: Thundurus 0/298, Togekiss 374/374
+      after p2: Mamoswine 16/361, Latios 208/301
+
+  Turn 9
+    p1 mcts: pass, move 2 2
+      search (6000 visits): No Move;thunderwave,1 1761v 427 | No Move;airslash,0 1517v 356 | No Move;airslash,1 1178v 260 | No Move;thunderwave,0 802v 156
+    p2 greedy: move 1, move 1 2
+      p1b Togekiss used Thunder Wave -> p2b: Latios
+      p2a Mamoswine used Earthquake -> p1b: Togekiss  [[spread] ]
+      p2b Latios used Draco Meteor -> p1b: Togekiss  [[miss]]
+      after p1: Thundurus 0/298, Togekiss 374/374
+      after p2: Mamoswine 16/361, Latios 208/301
+
+  Turn 10
+    p1 mcts: pass, move 2 2
+      search (6000 visits): No Move;thunderwave,1 1749v 410 | No Move;airslash,0 1510v 343 | No Move;airslash,1 1163v 246 | No Move;thunderwave,0 797v 149
+    p2 greedy: move 1, move 1 2
+      p1b Togekiss used Thunder Wave -> p2b: Latios
+      p2a Mamoswine used Earthquake -> p1b: Togekiss  [[spread] ]
+      p2b Latios used Draco Meteor -> p1b: Togekiss
+      after p1: Thundurus 0/298, Togekiss 325/374
+      after p2: Mamoswine 16/361, Latios 208/301
+
+  Turn 11
+    p1 mcts: pass, move 2 2
+      search (6000 visits): No Move;thunderwave,1 1905v 390 | No Move;airslash,0 1539v 299 | No Move;airslash,1 1026v 175 | No Move;followme,1 780v 118
+    p2 greedy: move 1, move 1 2
+      p1b Togekiss used Thunder Wave -> p2b: Latios
+      p2a Mamoswine used Earthquake -> p1b: Togekiss  [[spread] ]
+      after p1: Thundurus 0/298, Togekiss 325/374
+      after p2: Mamoswine 16/361, Latios 208/301
+
+  Turn 12
+    p1 mcts: pass, move 2 2
+      search (7000 visits): No Move;thunderwave,1 2410v 488 | No Move;airslash,0 1764v 332 | No Move;airslash,1 1080v 173 | No Move;thunderwave,0 880v 129
+    p2 greedy: move 1, move 1 2
+      p1b Togekiss used Thunder Wave -> p2b: Latios
+      p2a Mamoswine used Earthquake -> p1b: Togekiss  [[spread] ]
+      p2b Latios used Draco Meteor -> p1b: Togekiss
+      after p1: Thundurus 0/298, Togekiss 277/374
+      after p2: Mamoswine 16/361, Latios 208/301
+
+  Turn 13
+    p1 mcts: pass, move 2 2
+      search (6000 visits): No Move;thunderwave,1 1897v 332 | No Move;airslash,0 1370v 216 | No Move;thunderwave,0 971v 133 | No Move;airslash,1 960v 130
+    p2 greedy: move 1, move 1 2
+      p1b Togekiss used Thunder Wave -> p2b: Latios
+      p2a Mamoswine used Earthquake -> p1b: Togekiss  [[spread] ]
+      p2b Latios used Draco Meteor -> p1b: Togekiss
+      after p1: Thundurus 0/298, Togekiss 229/374
+      after p2: Mamoswine 16/361, Latios 208/301
+
+  Turn 14
+    p1 mcts: pass, move 2 2
+      search (7000 visits): No Move;thunderwave,1 2594v 410 | No Move;airslash,1 1147v 133 | No Move;airslash,0 1140v 132 | No Move;followme,1 1074v 120
+    p2 greedy: move 1, move 1 2
+      p1b Togekiss used Thunder Wave -> p2b: Latios
+      p2a Mamoswine used Earthquake -> p1b: Togekiss  [[spread] ]
+      p2b Latios used Draco Meteor -> p1b: Togekiss
+      after p1: Thundurus 0/298, Togekiss 273/374
+      after p2: Mamoswine 16/361, Latios 208/301
+
+  Turn 15
+    p1 mcts: pass, move 2 2
+      search (8000 visits): No Move;thunderwave,1 2556v 371 | No Move;airslash,0 1709v 216 | No Move;airslash,1 1301v 145 | No Move;thunderwave,0 1275v 140
+    p2 greedy: move 1, move 3 2
+      p1b Togekiss used Thunder Wave -> p2b: Latios
+      p2a Mamoswine used Earthquake -> p1b: Togekiss  [[spread] ]
+      after p1: Thundurus 0/298, Togekiss 273/374
+      after p2: Mamoswine 16/361, Latios 208/301
+
+  Turn 16
+    p1 mcts: pass, move 2 2
+      search (9000 visits): No Move;thunderwave,1 3188v 454 | No Move;airslash,0 2040v 252 | No Move;airslash,1 1314v 132 | No Move;thunderwave,0 1231v 119
+    p2 greedy: move 1, move 3 2
+      p1b Togekiss used Thunder Wave -> p2b: Latios
+      p2a Mamoswine used Earthquake -> p1b: Togekiss  [[spread] ]
+      p2b Latios used Ice Beam -> p1b: Togekiss
+      after p1: Thundurus 0/298, Togekiss 229/374
+      after p2: Mamoswine 16/361, Latios 208/301
+
+  Turn 17
+    p1 mcts: pass, move 2 2
+      search (10000 visits): No Move;thunderwave,1 3711v 466 | No Move;airslash,0 1718v 159 | No Move;thunderwave,0 1686v 154 | No Move;followme,1 1459v 122
+    p2 greedy: move 1, move 3 2
+      p1b Togekiss used Thunder Wave -> p2b: Latios
+      p2a Mamoswine used Earthquake -> p1b: Togekiss  [[spread] ]
+      after p1: Thundurus 0/298, Togekiss 229/374
+      after p2: Mamoswine 16/361, Latios 208/301
+
+  Turn 18
+    p1 mcts: pass, move 2 2
+      search (10000 visits): No Move;thunderwave,1 3609v 445 | No Move;airslash,0 1749v 161 | No Move;thunderwave,0 1618v 142 | No Move;airslash,1 1560v 134
+    p2 greedy: move 1, move 3 2
+      p1b Togekiss used Thunder Wave -> p2b: Latios
+      p2a Mamoswine used Earthquake -> p1b: Togekiss  [[spread] ]
+      p2b Latios used Ice Beam -> p1b: Togekiss
+      after p1: Thundurus 0/298, Togekiss 189/374
+      after p2: Mamoswine 16/361, Latios 208/301
+
+  Turn 19
+    p1 mcts: pass, move 2 2
+      search (8000 visits): No Move;thunderwave,1 3048v 373 | No Move;thunderwave,0 1424v 124 | No Move;airslash,0 1228v 96 | No Move;followme,1 1193v 91
+    p2 greedy: move 1, move 3 2
+      p1b Togekiss used Thunder Wave -> p2b: Latios
+      p2a Mamoswine used Earthquake -> p1b: Togekiss  [[spread] ]
+      after p1: Thundurus 0/298, Togekiss 189/374
+      after p2: Mamoswine 16/361, Latios 208/301
+
+  Turn 20
+    p1 mcts: pass, move 2 2
+      search (13000 visits): No Move;thunderwave,1 4867v 396 | No Move;thunderwave,0 2196v 112 | No Move;airslash,0 2162v 108 | No Move;followme,1 1914v 85
+    p2 greedy: move 2 2, move 3 2
+      p1b Togekiss used Thunder Wave -> p2b: Latios
+      p2a Mamoswine used Icicle Crash -> p1b: Togekiss
+      p1b Togekiss fainted
+      after p1: Thundurus 0/298, Togekiss 0/374
+      after p2: Mamoswine 16/361, Latios 208/301
+
+  RESULT: p2 wins

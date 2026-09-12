@@ -1,0 +1,71 @@
+battle 0   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: For london bw 2v2 classic: Togekiss, Kyurem-Black, Victini, Scrafty
+  p2: chomp kiss meta: Metagross, Infernape, Togekiss, Garchomp
+
+  Turn 1
+    p1 mcts: move 3 1, move 4 2
+      search (1000 visits): flamethrower,0;earthpower,1 18v 13 | flamethrower,1;earthpower,1 17v 12 | switch scrafty;earthpower,1 17v 12 | airslash,1;earthpower,0 16v 11
+    p2 greedy: move 2 1, move 2 1
+      p1b Kyurem used Earth Power -> p2b: Infernape
+      p2b Infernape used Overheat -> p1a: Togekiss
+      p2b Infernape fainted
+      p1a Togekiss used Flamethrower -> p2a: Metagross
+      p2a Metagross used Meteor Mash -> p1a: Togekiss
+      p1a Togekiss fainted
+      after p1: Togekiss 0/374, Kyurem-Black 391/391
+      after p2: Metagross 143/364, Infernape 0/293
+
+  Turn 2
+      p2b <- Togekiss comes in (374/374)
+      p1a <- Victini comes in (341/341)
+      after p1: Victini 341/341, Kyurem-Black 391/391
+      after p2: Metagross 143/364, Togekiss 374/374
+
+  Turn 3
+    p1 mcts: move 1 1, move 4 1
+      search (2000 visits): boltstrike,1;icebeam,1 63v 50 | boltstrike,1;fusionbolt,1 51v 37 | boltstrike,0;icebeam,1 43v 29 | switch scrafty;icebeam,1 42v 28
+      ILLEGAL: search chose icebeam for slot 1, disabled by Showdown (Choice lock or Taunt) but proposed anyway. Greedy took the turn -- this turn is NOT the search's
+    p2 greedy: move 2 1, move 1 1
+      p1b Kyurem used Earth Power -> p2a: Metagross
+      p2a Metagross fainted
+      p1a Victini used V-create -> p2b: Togekiss
+      p2b Togekiss used Air Slash -> p1a: Victini
+      after p1: Victini 197/341, Kyurem-Black 391/391
+      after p2: Metagross 0/364, Togekiss 103/374
+
+  Turn 4
+      p2a <- Garchomp comes in (357/357)
+      after p1: Victini 197/341, Kyurem-Black 391/391
+      after p2: Garchomp 357/357, Togekiss 103/374
+
+  Turn 5
+    p1 mcts: move 1 2, move 4 2
+      search (6000 visits): switch scrafty;icebeam,0 219v 190 | boltstrike,1;icebeam,0 208v 178 | vcreate,1;icebeam,0 162v 133 | psychic,0;icebeam,0 143v 114
+      ILLEGAL: search chose icebeam for slot 1, disabled by Showdown (Choice lock or Taunt) but proposed anyway. Greedy took the turn -- this turn is NOT the search's
+    p2 greedy: move 1, move 1 1
+      p1b Kyurem used Earth Power -> p2b: Togekiss
+      p2a Garchomp used Earthquake -> p1a: Victini  [[spread] p1a,p1b]
+      p1a Victini fainted
+      p2b Togekiss used Air Slash -> p1b: Kyurem
+      after p1: Victini 0/341, Kyurem-Black 72/391
+      after p2: Garchomp 322/357, Togekiss 103/374
+
+  Turn 6
+      p1a <- Scrafty comes in (327/327)
+      after p1: Scrafty 327/327, Kyurem-Black 72/391
+      after p2: Garchomp 322/357, Togekiss 103/374
+
+  Turn 7
+    p1 mcts: move 3 2, move 4 2
+      search (6000 visits): fakeout,1;icebeam,0 361v 285 | crunch,1;icebeam,0 304v 233 | drainpunch,1;icebeam,0 278v 210 | crunch,1;dracometeor,0 226v 165
+      ILLEGAL: search chose icebeam for slot 1, disabled by Showdown (Choice lock or Taunt) but proposed anyway. Greedy took the turn -- this turn is NOT the search's
+    p2 greedy: move 1, move 1 2
+      p1b Kyurem used Earth Power -> p2b: Togekiss
+      p2a Garchomp used Earthquake -> p1a: Scrafty  [[spread] p1a,p1b]
+      p1b Kyurem fainted
+      p2b Togekiss used Air Slash -> p1a: Scrafty
+      p1a Scrafty fainted
+      after p1: Scrafty 0/327, Kyurem-Black 0/391
+      after p2: Garchomp 287/357, Togekiss 103/374
+
+  RESULT: p2 wins

@@ -1,0 +1,125 @@
+battle 2   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: Vs Z strats Hydreigon: Hydreigon, Togekiss, Mamoswine, Rotom-Wash
+  p2: Untitled 492: Conkeldurr, Cresselia, Weavile, Cradily
+
+  Turn 1
+    p1 mcts: move 4 1, move 3 1
+      search (1000 visits): focusblast,0;airslash,0 28v 20 | flamethrower,0;airslash,0 27v 20 | dracometeor,0;helpinghand,0 22v 14 | dracometeor,0;airslash,0 21v 13
+    p2 greedy: move 3 1, move 4 1
+      p1a Hydreigon used Focus Blast -> p2a: Conkeldurr  [[miss]]
+      p1b Togekiss used Air Slash -> p2a: Conkeldurr  [[miss]]
+      p2b Cresselia used Ice Beam -> p1a: Hydreigon
+      p2a Conkeldurr used Ice Punch -> p1a: Hydreigon
+      p1a Hydreigon fainted
+      after p1: Hydreigon 0/325, Togekiss 374/374
+      after p2: Conkeldurr 414/414, Cresselia 444/444
+
+  Turn 2
+      p1a <- Mamoswine comes in (361/361)
+      after p1: Mamoswine 361/361, Togekiss 374/374
+      after p2: Conkeldurr 414/414, Cresselia 444/444
+
+  Turn 3
+    p1 mcts: move 1, move 3 1
+      search (4000 visits): earthquake,0;airslash,0 748v 624 | iciclecrash,0;airslash,0 387v 300 | iceshard,0;airslash,0 151v 98 | earthquake,0;helpinghand,0 123v 76
+    p2 greedy: move 3 1, move 4 1
+      p1a Mamoswine used Earthquake -> p2a: Conkeldurr  [[spread] p2a]
+      p1b Togekiss used Air Slash -> p2a: Conkeldurr
+      p2a Conkeldurr fainted
+      p2b Cresselia used Ice Beam -> p1a: Mamoswine
+      after p1: Mamoswine 314/361, Togekiss 374/374
+      after p2: Conkeldurr 0/414, Cresselia 444/444
+
+  Turn 4
+      p2a <- Weavile comes in (340/340)
+      after p1: Mamoswine 314/361, Togekiss 374/374
+      after p2: Weavile 340/340, Cresselia 444/444
+
+  Turn 5
+    p1 mcts: move 1, move 2 -1
+      search (4000 visits): earthquake,0;helpinghand,0 273v 210 | earthquake,0;thunderwave,1 185v 133 | earthquake,0;thunderwave,0 165v 115 | earthquake,0;airslash,0 153v 105
+    p2 greedy: move 2 1, move 4 1
+      p1b Togekiss used Helping Hand -> p1a: Mamoswine
+      p2a Weavile used Ice Punch -> p1a: Mamoswine
+      p1a Mamoswine used Earthquake -> p2a: Weavile  [[spread] p2a]
+      p2a Weavile fainted
+      p2b Cresselia used Ice Beam -> p1a: Mamoswine
+      after p1: Mamoswine 188/361, Togekiss 374/374
+      after p2: Weavile 0/340, Cresselia 444/444
+
+  Turn 6
+      p2a <- Cradily comes in (375/375)
+      after p1: Mamoswine 188/361, Togekiss 374/374
+      after p2: Cradily 375/375, Cresselia 444/444
+
+  Turn 7
+    p1 mcts: move 3 1, move 2 -1
+      search (5000 visits): iciclecrash,0;helpinghand,0 840v 649 | iciclecrash,0;airslash,0 540v 398 | iciclecrash,0;thunderwave,1 181v 110 | iciclecrash,0;thunderwave,0 170v 102
+    p2 greedy: move 4, move 4 1
+      p1b Togekiss used Helping Hand -> p1a: Mamoswine
+      p1a Mamoswine used Icicle Crash -> p2a: Cradily
+      p2a Cradily fainted
+      p2b Cresselia used Ice Beam -> p1a: Mamoswine
+      after p1: Mamoswine 140/361, Togekiss 374/374
+      after p2: Cradily 0/375, Cresselia 444/444
+
+  Turn 8
+    p1 mcts: move 3 2, switch 4   (slot1 Togekiss -> Rotom-Wash)
+      search (6000 visits): iciclecrash,1;switch rotomwash 523v 323 | iciclecrash,1;helpinghand,0 446v 269 | iciclecrash,1;airslash,1 394v 232 | iceshard,1;switch rotomwash 347v 200
+    p2 greedy: pass, move 4 1
+      p1b <- Rotom-Wash comes in (303/303)
+      p1a Mamoswine used Icicle Crash -> p2b: Cresselia  [[miss]]
+      p2b Cresselia used Ice Beam -> p1a: Mamoswine
+      after p1: Mamoswine 98/361, Rotom-Wash 303/303
+      after p2: Cradily 0/375, Cresselia 444/444
+
+  Turn 9
+    p1 mcts: move 2, move 3
+      search (6000 visits): protect,0;electroweb,1 524v 351 | iciclecrash,1;protect,1 365v 231 | switch togekiss;electroweb,1 361v 228 | iciclecrash,1;electroweb,1 347v 218
+    p2 greedy: pass, move 4 1
+      p1a Mamoswine used Protect
+      p1b Rotom used Electroweb -> p2b: Cresselia
+      p2b Cresselia used Ice Beam -> p1a: Mamoswine
+      after p1: Mamoswine 98/361, Rotom-Wash 303/303
+      after p2: Cradily 0/375, Cresselia 362/444
+
+  Turn 10
+    p1 mcts: move 2, move 3
+      search (7000 visits): protect,0;electroweb,1 562v 371 | iciclecrash,1;protect,1 483v 312 | iciclecrash,1;electroweb,1 441v 281 | switch togekiss;electroweb,1 399v 250
+    p2 greedy: pass, move 4 1
+      p1a Mamoswine used Protect
+      p1b Rotom used Electroweb -> p2b: Cresselia
+      p2b Cresselia used Ice Beam -> p1a: Mamoswine
+      after p1: Mamoswine 98/361, Rotom-Wash 303/303
+      after p2: Cradily 0/375, Cresselia 304/444
+
+  Turn 11
+    p1 mcts: move 3 2, move 1
+      search (6000 visits): iciclecrash,1;protect,1 430v 279 | iciclecrash,1;hydropump,1 395v 253 | iciclecrash,1;thunderbolt,1 374v 237 | iciclecrash,1;electroweb,1 359v 226
+    p2 greedy: pass, move 4 1
+      p1b Rotom used Protect
+      p1a Mamoswine used Icicle Crash -> p2b: Cresselia
+      after p1: Mamoswine 98/361, Rotom-Wash 303/303
+      after p2: Cradily 0/375, Cresselia 166/444
+
+  Turn 12
+    p1 mcts: move 3 2, move 1
+      search (7000 visits): iciclecrash,1;protect,1 1038v 863 | protect,0;thunderbolt,1 708v 569 | protect,0;hydropump,1 694v 557 | iciclecrash,1;switch togekiss 435v 331
+    p2 greedy: pass, move 4 1
+      p1b Rotom used Protect
+      p1a Mamoswine used Icicle Crash -> p2b: Cresselia
+      p2b Cresselia used Ice Beam -> p1a: Mamoswine
+      after p1: Mamoswine 53/361, Rotom-Wash 303/303
+      after p2: Cradily 0/375, Cresselia 27/444
+
+  Turn 13
+    p1 mcts: move 2, move 2 2
+      search (58000 visits): protect,0;thunderbolt,1 7405v 7405 | iceshard,1;protect,1 7405v 7405 | iceshard,1;switch togekiss 7405v 7405 | switch togekiss;thunderbolt,1 7404v 7404
+    p2 greedy: pass, move 4 1
+      p1a Mamoswine used Protect
+      p1b Rotom used Thunderbolt -> p2b: Cresselia
+      p2b Cresselia fainted
+      after p1: Mamoswine 53/361, Rotom-Wash 303/303
+      after p2: Cradily 0/375, Cresselia 0/444
+
+  RESULT: p1 wins

@@ -1,0 +1,147 @@
+battle 4   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: 2v2 Pool League II/2v2 Pools - BW 13: Arcanine, Latias, Thundurus, Scrafty
+  p2: Untitled 1079: Raikou, Togekiss, Infernape, Kyurem-Black
+
+  Turn 1
+    p1 mcts: move 3 1, move 3
+      search (2000 visits): flareblitz,0;calmmind,1 41v 27 | switch scrafty;dragonpulse,0 41v 27 | switch scrafty;psychic,0 41v 27 | flareblitz,0;dragonpulse,0 40v 26
+    p2 greedy: move 1 1, move 1 1
+      p1b Latias used Calm Mind
+      p2a Raikou used Thunderbolt -> p1a: Arcanine
+      p1a Arcanine fainted
+      p2b Togekiss used Air Slash -> p1b: Latias
+      after p1: Arcanine 0/339, Latias 252/313
+      after p2: Raikou 289/321, Togekiss 374/374
+
+  Turn 2
+      p1a <- Thundurus comes in (299/299)
+      after p1: Thundurus 299/299, Latias 252/313
+      after p2: Raikou 289/321, Togekiss 374/374
+
+  Turn 3
+    p1 mcts: move 1 2, move 2 1
+      search (3000 visits): thunderbolt,1;psychic,0 99v 73 | thunderbolt,0;dragonpulse,0 97v 71 | thunderbolt,0;psychic,0 94v 69 | thunderbolt,1;dragonpulse,0 81v 57
+    p2 greedy: move 1 2, move 1 2
+      p1a Thundurus used Thunderbolt -> p2b: Togekiss
+      p1b Latias used Psychic -> p2a: Raikou
+      p2a Raikou used Thunderbolt -> p1b: Latias
+      p2b Togekiss used Air Slash -> p1b: Latias
+      after p1: Thundurus 299/299, Latias 216/313
+      after p2: Raikou 28/321, Togekiss 60/374
+
+  Turn 4
+    p1 mcts: move 1 2, move 3
+      search (7000 visits): thunderbolt,1;calmmind,1 240v 160 | switch scrafty;dragonpulse,1 224v 147 | thunderbolt,1;dragonpulse,0 222v 146 | thunderbolt,0;calmmind,1 218v 142
+    p2 greedy: move 1 2, move 1 2
+      p1a Thundurus used Thunderbolt -> p2b: Togekiss
+      p2b Togekiss fainted
+      p1b Latias used Calm Mind
+      p2a Raikou used Thunderbolt -> p1b: Latias
+      p2a Raikou fainted
+      after p1: Thundurus 299/299, Latias 48/313
+      after p2: Raikou 0/321, Togekiss 0/374
+
+  Turn 5
+      p2a <- Infernape comes in (293/293)
+      p2b <- Kyurem-Black comes in (391/391)
+      after p1: Thundurus 299/299, Latias 48/313
+      after p2: Infernape 293/293, Kyurem-Black 391/391
+
+  Turn 6
+    p1 mcts: switch 4, move 4   (slot0 Thundurus -> Scrafty)
+      search (5000 visits): switch scrafty;roost,1 253v 180 | switch scrafty;psychic,0 236v 166 | switch scrafty;dragonpulse,1 220v 153 | switch scrafty;dragonpulse,0 204v 139
+    p2 greedy: move 2 2, move 2 2
+      p1a <- Scrafty comes in (334/334)
+      p2b Kyurem used Draco Meteor -> p1b: Latias
+      p1b Latias fainted
+      p2a Infernape used Overheat -> p1a: Scrafty
+      after p1: Scrafty 126/334, Latias 0/313
+      after p2: Infernape 264/293, Kyurem-Black 391/391
+
+  Turn 7
+      p1b <- Thundurus comes in (299/299)
+      after p1: Scrafty 126/334, Thundurus 299/299
+      after p2: Infernape 264/293, Kyurem-Black 391/391
+
+  Turn 8
+    p1 mcts: move 3 2, move 4
+      search (3000 visits): drainpunch,1;protect,1 100v 65 | drainpunch,1;thunderwave,0 84v 52 | fakeout,1;thunderbolt,0 82v 50 | drainpunch,1;thunderwave,1 81v 49
+    p2 greedy: move 2 1, move 2 1
+      p1b Thundurus used Protect
+      p2b Kyurem used Draco Meteor -> p1a: Scrafty
+      p2a Infernape used Overheat -> p1a: Scrafty
+      p1a Scrafty fainted
+      after p1: Scrafty 0/334, Thundurus 299/299
+      after p2: Infernape 235/293, Kyurem-Black 391/391
+
+  Turn 9
+    p1 mcts: pass, move 4
+      search (11000 visits): No Move;protect,1 10276v 6667 | No Move;thunderwave,1 160v 56 | No Move;thunderwave,0 137v 44 | No Move;thunderbolt,1 112v 32
+    p2 greedy: move 2 2, move 2 2
+      p1b Thundurus used Protect  [[still]]
+      p2b Kyurem used Draco Meteor -> p1b: Thundurus  [[miss]]
+      p2a Infernape used Overheat -> p1b: Thundurus
+      after p1: Scrafty 0/334, Thundurus 213/299
+      after p2: Infernape 206/293, Kyurem-Black 391/391
+
+  Turn 10
+    p1 mcts: pass, move 4
+      search (12000 visits): No Move;protect,1 11269v 6103 | No Move;thunderwave,1 149v 34 | No Move;thunderwave,0 133v 27 | No Move;thunderbolt,1 129v 26
+    p2 greedy: move 2 2, move 2 2
+      p1b Thundurus used Protect
+      p2b Kyurem used Draco Meteor -> p1b: Thundurus
+      p2a Infernape used Overheat -> p1b: Thundurus
+      after p1: Scrafty 0/334, Thundurus 213/299
+      after p2: Infernape 206/293, Kyurem-Black 391/391
+
+  Turn 11
+    p1 mcts: pass, move 4
+      search (9000 visits): No Move;protect,1 8311v 4456 | No Move;thunderwave,1 144v 33 | No Move;thunderwave,0 122v 24 | No Move;thunderbolt,0 120v 23
+    p2 greedy: move 2 2, move 2 2
+      p1b Thundurus used Protect
+      p2b Kyurem used Draco Meteor -> p1b: Thundurus
+      p2a Infernape used Overheat -> p1b: Thundurus
+      after p1: Scrafty 0/334, Thundurus 213/299
+      after p2: Infernape 206/293, Kyurem-Black 391/391
+
+  Turn 12
+    p1 mcts: pass, move 4
+      search (8000 visits): No Move;protect,1 7303v 3899 | No Move;thunderwave,1 151v 36 | No Move;thunderwave,0 127v 26 | No Move;thunderbolt,0 118v 23
+    p2 greedy: move 2 2, move 2 2
+      p1b Thundurus used Protect  [[still]]
+      p2b Kyurem used Draco Meteor -> p1b: Thundurus
+      p2a Infernape used Overheat -> p1b: Thundurus
+      after p1: Scrafty 0/334, Thundurus 50/299
+      after p2: Infernape 177/293, Kyurem-Black 391/391
+
+  Turn 13
+    p1 mcts: pass, move 4
+      search (10000 visits): No Move;protect,1 9609v 5060 | No Move;thunderwave,0 71v 4 | No Move;thunderbolt,0 68v 3 | No Move;thunderwave,1 67v 3
+    p2 greedy: move 2 2, move 2 2
+      p1b Thundurus used Protect
+      p2b Kyurem used Draco Meteor -> p1b: Thundurus
+      p2a Infernape used Overheat -> p1b: Thundurus
+      after p1: Scrafty 0/334, Thundurus 50/299
+      after p2: Infernape 177/293, Kyurem-Black 391/391
+
+  Turn 14
+    p1 mcts: pass, move 4
+      search (12000 visits): No Move;protect,1 11603v 6157 | No Move;thunderwave,1 73v 4 | No Move;thunderbolt,0 72v 4 | No Move;thunderwave,0 66v 2
+    p2 greedy: move 2 2, move 2 2
+      p1b Thundurus used Protect
+      p2b Kyurem used Draco Meteor -> p1b: Thundurus
+      p2a Infernape used Overheat -> p1b: Thundurus
+      after p1: Scrafty 0/334, Thundurus 50/299
+      after p2: Infernape 177/293, Kyurem-Black 391/391
+
+  Turn 15
+    p1 mcts: pass, move 4
+      search (12000 visits): No Move;protect,1 11587v 6104 | No Move;thunderbolt,0 72v 4 | No Move;thunderwave,0 71v 3 | No Move;thunderbolt,1 70v 3
+    p2 greedy: move 3 2, move 1
+      p1b Thundurus used Protect  [[still]]
+      p2b Kyurem used Struggle -> p1b: Thundurus
+      p1b Thundurus fainted
+      after p1: Scrafty 0/334, Thundurus 0/299
+      after p2: Infernape 177/293, Kyurem-Black 293/391
+
+  RESULT: p2 wins

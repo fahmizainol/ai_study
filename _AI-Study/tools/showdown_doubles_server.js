@@ -25,6 +25,10 @@
 // produces the same battle.
 const { P, pinPrng, snap, POOL, teamFrom } = require('./showdown_doubles_lib.js');
 const { Battle } = require(P + '/dist/sim/battle');
+
+const LOGGED = ['|move|', '|switch|', '|faint|', '|swap|', '|-status|', '|-curestatus|',
+  '|-fail|', '|-immune|', '|-miss|', '|-crit|', '|-boost|', '|-unboost|', '|-activate|',
+  '|cant|', '|-start|', '|-end|', '|-enditem|', '|-sidestart|', '|-sideend|'];
 const { Dex } = require(P + '/dist/sim/dex');
 const { Teams } = require(P + '/dist/sim/teams');
 const readline = require('readline');
@@ -116,8 +120,10 @@ readline.createInterface({ input: process.stdin }).on('line', (line) => {
         // battle.winner is the player NAME; report the side id, which is what a driver keys on.
         ended: !!battle.ended,
         winner: battle.winner ? (battle.sides.find(s => s.name === battle.winner) || {}).id || null : null,
-        log: battle.log.slice(at).filter(l => l.startsWith('|move|') || l.startsWith('|switch|')
-                                          || l.startsWith('|faint|') || l.startsWith('|swap|')),
+        // The action lines alone cannot say whether an action DID anything: a Thunder Wave
+        // that failed on an already-paralyzed target renders identically to one that landed.
+        // The outcome lines are what make a transcript diagnostic rather than merely plausible.
+        log: battle.log.slice(at).filter(l => LOGGED.some(p => l.startsWith(p))),
       });
     }
     reply({ ok: false, error: 'unknown cmd ' + cmd.cmd });
