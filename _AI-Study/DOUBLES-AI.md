@@ -166,6 +166,43 @@ next validation step.
 Artifacts: `generated/doubles_audit_adversarial.ndjson` and
 `generated/doubles_audit_adversarial_summary.txt`.
 
+### 0.8.1 control reproduction — 2026-09-12
+
+Before running any new doubles arm, the frame's baseline was re-measured on the current
+build, because the doubles comparisons above were taken on 0.8.0 and the installed bundle is
+now **0.8.1**. Same 60 paired cells, the same key set the 0.8.0 control ran with — read off
+`generated/doubles_v080_adversarial_control_stdout.log` rather than assumed:
+`doubles_outcomes=true`, `doubles_adversarial=true`, everything else off. Note this is *not*
+bare defaults; the 38/60 baseline has both of those on.
+
+| arm | wins | losses | mean turns |
+|---|---:|---:|---:|
+| adversarial control, 0.8.0 | 38 | 22 | 11.0 |
+| **adversarial control, 0.8.1** | **38** | **22** | **11.0** |
+
+**All 60 cells are identical, result and turn count and `trace_len` alike**, so 0.8.1 is
+decision-for-decision the same as 0.8.0 on this frame — the same relationship it has on
+Realidea. The baseline is confirmed and any arm measured against it from here is comparable
+to everything above.
+
+The control's per-archetype split was never recorded for this arm, so for reference:
+
+| portable archetype (right seat) | wins |
+|---|---:|
+| offense | 13/15 |
+| balance | 10/15 |
+| speed | 9/15 |
+| bulky | 6/15 |
+
+Artifacts: `generated/doubles_v081_control_doubles_a.ndjson` and
+`generated/doubles_v081_control_logs/`. Zero errors, zero draws.
+
+**A tool fix this run needed.** `tools/render_battle.py` hardcoded the game tree as
+`parents[2]/'Reborn Yang'`, but the master is the nested `Reborn Yang/Reborn Yang`, so the
+standing "always render the traces" instruction below failed with a bare `FileNotFoundError`
+deep inside the species table read. It now resolves whichever of the two layouts actually
+holds `PBS/PBS` or `Scripts/Reborn/PBSpecies.rb`, and takes a `--game=DIR` override.
+
 ### Rebase onto the 0.8.0 singles search
 
 Upstream 0.8.0 contains two distinct singles search results. The native Ruby

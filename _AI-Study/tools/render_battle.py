@@ -1,13 +1,25 @@
 #!/usr/bin/env python3
 """Render one traced gauntlet battle as readable text.
-Usage: python3 tools/render_battle.py <ndjson> <matchup_id> <seed> [--arm=normal_reborn]"""
+Usage: python3 tools/render_battle.py <ndjson> <matchup_id> <seed> [--arm=normal_reborn] [--game=DIR]"""
 import json,sys,re,collections
 from pathlib import Path
 args=[a for a in sys.argv[1:] if not a.startswith('--')]
 ARM=next((a.split('=',1)[1] for a in sys.argv[1:] if a.startswith('--arm=')),'normal_portable')
 SPECIES={}; cur=None
 MOVES={}
-game=Path(__file__).resolve().parents[2]/'Reborn Yang'
+# The game tree has been both flat ("Reborn Yang/PBS") and nested
+# ("Reborn Yang/Reborn Yang/PBS") in this study; resolve whichever actually holds the
+# data rather than assuming, and allow --game to override. Guessing wrong used to fail
+# deep inside the species table read with a bare FileNotFoundError.
+GAME_OVERRIDE=next((a.split('=',1)[1] for a in sys.argv[1:] if a.startswith('--game=')),None)
+def find_game():
+    if GAME_OVERRIDE: return Path(GAME_OVERRIDE)
+    root=Path(__file__).resolve().parents[2]
+    for cand in (root/'Reborn Yang', root/'Reborn Yang'/'Reborn Yang'):
+        if (cand/'PBS'/'PBS').exists() or (cand/'Scripts'/'Reborn'/'PBSpecies.rb').exists():
+            return cand
+    return root/'Reborn Yang'
+game=find_game()
 pbs=game/'PBS'/'PBS'
 if pbs.exists():
     for line in (pbs/'pokemon.txt').read_text(encoding='utf-8',errors='replace').splitlines():
