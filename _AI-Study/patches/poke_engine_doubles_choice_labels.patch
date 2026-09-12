@@ -1,0 +1,80 @@
+diff --git a/poke-engine-py/src/lib.rs b/poke-engine-py/src/lib.rs
+index ebf8d53..a6354c1 100644
+--- a/poke-engine-py/src/lib.rs
++++ b/poke-engine-py/src/lib.rs
+@@ -42,10 +42,16 @@ fn side_choice_to_string(side: &Side, choice: &SideChoice) -> String {
+ }
+ #[cfg(feature = "doubles")]
+ fn side_choice_to_string(side: &Side, choice: &SideChoice) -> String {
++    // Each sub-action must be named against the active in ITS OWN slot, or slot 1's choice
++    // is reported using slot 0's moveset.
+     choice
+         .actions
+         .iter()
+-        .map(|a| movechoice_to_string(side, a))
++        .enumerate()
++        .map(|(slot, a)| match a {
++            MoveChoice::Switch(_) => format!("switch {}", a.to_string_slot(side, slot as u8)),
++            _ => a.to_string_slot(side, slot as u8),
++        })
+         .collect::<Vec<_>>()
+         .join(";")
+ }
+diff --git a/src/genx/state.rs b/src/genx/state.rs
+index 1f06e88..f2d2de3 100644
+--- a/src/genx/state.rs
++++ b/src/genx/state.rs
+@@ -82,15 +82,36 @@ impl MoveChoice {
+     }
+ 
+     pub fn to_string(&self, side: &Side) -> String {
++        self.to_string_slot(side, 0)
++    }
++
++    /// Render a choice as the string `from_string_slot` parses back.
++    ///
++    /// Two things this must do that the original `to_string` did not, and without which a
++    /// doubles decision cannot be read back at all:
++    ///
++    /// * resolve the move name against the active in `acting_slot`, not always slot 0. A
++    ///   slot-1 sub-action was previously named with slot 0's moveset, so it reported a move
++    ///   the acting Pokemon may not even have.
++    /// * carry the `,<slot>` target suffix in a doubles build, so two sub-actions aiming the
++    ///   same move at different foes do not render identically.
++    ///
++    /// Singles output is unchanged: `acting_slot` is always 0 and no suffix is emitted.
++    pub fn to_string_slot(&self, side: &Side, acting_slot: u8) -> String {
++        let active = side.get_active_slot_immutable(acting_slot);
++        #[cfg(feature = "doubles")]
++        let suffix = |target: &BattlePosition| format!(",{}", target.slot);
++        #[cfg(not(feature = "doubles"))]
++        let suffix = |_target: &BattlePosition| String::new();
+         match self {
+-            MoveChoice::MoveTera { move_index, .. } => {
+-                format!("{}-tera", side.get_active_immutable().moves[move_index].id).to_lowercase()
++            MoveChoice::MoveTera { move_index, target } => {
++                format!("{}-tera{}", active.moves[move_index].id, suffix(target)).to_lowercase()
+             }
+-            MoveChoice::MoveMega { move_index, .. } => {
+-                format!("{}-mega", side.get_active_immutable().moves[move_index].id).to_lowercase()
++            MoveChoice::MoveMega { move_index, target } => {
++                format!("{}-mega{}", active.moves[move_index].id, suffix(target)).to_lowercase()
+             }
+-            MoveChoice::Move { move_index, .. } => {
+-                format!("{}", side.get_active_immutable().moves[move_index].id).to_lowercase()
++            MoveChoice::Move { move_index, target } => {
++                format!("{}{}", active.moves[move_index].id, suffix(target)).to_lowercase()
+             }
+             MoveChoice::Switch(index) => format!("{}", side.pokemon[*index].id).to_lowercase(),
+             MoveChoice::None => "No Move".to_string(),
+@@ -123,6 +144,10 @@ impl MoveChoice {
+         if s == "none" {
+             return Some(MoveChoice::None);
+         }
++        // A switch renders as `switch <species>` (that is what the CLI prints and what the
++        // Python binding reports), but only the bare species name was ever parsed, so a
++        // rendered choice could not be read back. Accept both spellings.
++        let s = s.strip_prefix("switch ").map(str::to_string).unwrap_or(s);
+ 
+         // Split off an optional `,<slot>` target suffix. In singles the only valid
+         // target is the opposing active, so the parsed slot is ignored; in doubles

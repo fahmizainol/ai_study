@@ -57,9 +57,20 @@ VOLATILE = {"confusion": "confusion", "substitute": "substitute", "leechseed": "
 class Skip(Exception):
     pass
 
-def mon(d):
-    if d is None or d.get("fainted"):
-        raise Skip("fainted or empty active slot")
+def mon(d, allow_fainted=False):
+    """Translate one body. By default a fainted active is a Skip, because the differential
+    corpus wants positions both engines agree are well formed. The play harness passes
+    allow_fainted=True: late in a battle a side with an empty bench keeps a fainted body on
+    the field, and refusing those silently hands every such decision to the fallback policy."""
+    if d is None:
+        raise Skip("empty active slot")
+    if d.get("fainted"):
+        if not allow_fainted:
+            raise Skip("fainted or empty active slot")
+        # Showdown marks a fainted body with status "fnt", which poke-engine has no
+        # equivalent for -- hp 0 is how it represents the same thing, and passing "fnt"
+        # through panics the binding with "Invalid PokemonStatus: FNT".
+        d = dict(d, hp=0, status="none")
     for v in d["volatiles"]:
         if v not in VOLATILE:
             raise Skip(f"volatile {v}")
@@ -80,13 +91,14 @@ def mon(d):
         moves=[Move(id=pid(m["id"]), pp=m["pp"]) for m in d["moves"]],
     )
 
-def build_side(s):
+def build_side(s, allow_fainted=False):
     kw = {}
     for k, v in s["conditions"].items():
         if k not in CONDITION:
             raise Skip(f"side condition {k}")
         kw[CONDITION[k]] = int(v)
-    party = [mon(p) for p in s["active"]] + [mon(p) for p in s["bench"] if not p.get("fainted")]
+    party = [mon(p, allow_fainted) for p in s["active"]] \
+        + [mon(p) for p in s["bench"] if not p.get("fainted")]
     return Side(active_indices=["0", "1"], pokemon=party,
                 side_conditions=SideConditions(**kw) if kw else SideConditions())
 

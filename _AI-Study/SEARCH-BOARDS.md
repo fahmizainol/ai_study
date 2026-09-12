@@ -517,6 +517,67 @@ The prerequisite for any of it is on our side, not Showdown's: **a doubles roste
 doubles harness and a doubles position export out of Realidea do not exist yet.** The
 adapter's search and Foul Play paths both decline doubles by design.
 
+### Running PR #10's search before building a bridge: it beats a greedy baseline
+
+Run 2026-09-12. The question was whether a doubles search is worth the adapter work a real
+`foul_play` doubles arm would need, and it can be answered without any of it.
+**Showdown adjudicates every turn and poke-engine only plans**, so the board is correct by
+construction and a loss is the planner's fault rather than the board's — the one thing that
+could never be said of the Ruby projection. `tools/showdown_doubles_server.js` holds one
+doubles battle behind a JSON-line protocol; `tools/pe_doubles_play.py` drives it with a policy
+per side (`mcts` = `monte_carlo_tree_search` on the translated position, most-visited root
+action; `greedy` = highest-base-power damaging move at the lowest-HP foe, computed from the
+dex data the server reports so it shares no code with the engine under test; `random`).
+`tools/showdown_doubles_lib.js` holds the snapshot, PRNG and team pool both harnesses share.
+
+| matchup | result | two-sided exact p |
+|---|---|---|
+| MCTS as p1 vs greedy | **40-19** (67.8%) | 0.0086 |
+| MCTS as p2 vs greedy | **48-12** (80.0%) | 3.2e-06 |
+| **pooled, both seats** | **88-31 (73.9%)** | **1.7e-07** |
+| greedy vs greedy — the seat control | 28-30 (48.3%) | 0.9 |
+| greedy vs random — the baseline control | 32-19 (62.7%) | 0.092 |
+
+60 battles per orientation, ~16,000 visits a decision at 300 ms, zero rejected choices. The
+seat control is flat, so running both orientations was necessary and the gap is not a seat
+artefact. **The doubles search beats the baseline decisively, in both seats.**
+
+**What this does and does not establish.** It says the search produces coherent doubles play —
+worth the bridge — and it says so *despite* the defects above: the planner is working from a
+board that agrees with Showdown on 73.2% of turns, misprices Wide Guard, and mis-binds an
+action across Ally Switch. **So 73.9% is a floor, not a ceiling.** What it does **not** say is
+that a doubles `foul_play` arm would beat this study's rule engine. Greedy is a weak opponent —
+it only manages 32-19 against random, with nine turn-limit draws — while the Reborn rule
+planner at 38/60 is a far stronger heuristic. Beating greedy is a necessary result, not a
+sufficient one. The narrowness is also real: 14 curated species, every move 100% accurate with
+no secondary, no weather or terrain.
+
+**Two more defects had to be fixed before the search's own decision could be read**, and both
+would make any doubles search trace unreadable too:
+
+- **`MoveChoice::to_string` named every sub-action using `side.get_active_immutable()` — slot
+  0.** So slot 1's decision was reported with slot 0's moveset: on the shipped example state,
+  whose slot 1 knows `watergun/tackle/helpinghand`, the engine reported choosing `ember` and
+  `protect`, moves that body does not have. The engine's own API could not say what it had
+  decided for its second slot.
+- **The target slot was dropped from the label**, so two sub-actions aiming the same move at
+  different foes rendered identically — the duplicate `('ember;ember', …)` rows in the MCTS
+  output.
+
+`patches/poke_engine_doubles_choice_labels.patch` adds `to_string_slot(side, acting_slot)` with
+a `,<slot>` suffix in doubles builds, and teaches the parser to accept `switch <species>` —
+which the CLI and the binding both print and neither could read back, **in singles as well**.
+After it: 35 root options, 35 distinct labels, **35/35 parse back**, with the 220 singles and
+47 doubles tests still passing.
+
+**Harness traps worth keeping**, all found by this run: Showdown reports `battle.winner` as the
+player *name*, not the side id; a rejected choice explains itself in `side.choice.error` and
+nowhere else; Helping Hand needs an explicit negative ally index (`move 2 -2`) or the whole
+choice is rejected; a late-game **fainted active** on a side with an empty bench is a legal
+position that the differential translator rightly refuses, and refusing it here silently handed
+19 of 107 decisions to the fallback policy — `mon(allow_fainted=True)` now represents it, and
+Showdown's `fnt` status must become `none` because poke-engine encodes a faint as `hp=0`.
+
 ## Backlog
 
 Recorded, not done. In the order they are worth doing.

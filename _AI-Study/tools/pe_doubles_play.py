@@ -1,0 +1,268 @@
+#!/usr/bin/env python3
+"""Play doubles with poke-engine's search as the policy and Showdown as the referee.
+
+The point of this harness is the separation: **Showdown adjudicates every turn, poke-engine
+only plans**. The board is therefore correct by construction, so a loss is the planner's
+fault and not the board's -- which is exactly what could not be said of the Ruby projection.
+No game, no adapter, no sidecar: this measures whether a doubles search is worth building a
+bridge for, before the bridge exists.
+
+    python3 tools/pe_doubles_play.py --battles 20 --p1 mcts --p2 greedy [--ms 300] [--seed 7]
+
+Policies:
+  mcts    poke-engine `monte_carlo_tree_search` on the translated position; the most-visited
+          root action is taken. Needs the doubles bindings and
+          patches/poke_engine_doubles_choice_labels.patch, without which the chosen action
+          cannot be read back at all (the label drops its target slot, and slot 1 is named
+          with slot 0's moveset).
+  greedy  highest-base-power damaging move at the foe with the lowest HP fraction; a status
+          move only when nothing damaging is available. Computed from the dex data the server
+          reports, so it shares no code with the engine under test.
+  random  uniform over legal actions.
+
+A position poke-engine cannot represent makes the mcts policy fall back to greedy for that
+turn, counted and reported: a silent fallback would flatter the search.
+"""
+import argparse, collections, json, random, re, subprocess, sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).parent))
+from poke_engine import State, Side, Pokemon, Move, SideConditions, monte_carlo_tree_search
+
+CORPUS = Path(__file__).with_name("pe_doubles_corpus.py")
+_ns = {}
+exec(compile(CORPUS.read_text().split("# ---- run")[0], str(CORPUS), "exec"), _ns)
+build_side, mon, Skip, WEATHER, pid = _ns["build_side"], _ns["mon"], _ns["Skip"], _ns["WEATHER"], _ns["pid"]
+
+
+class Server:
+    """The Showdown referee, one battle at a time over the JSON-line protocol."""
+
+    def __init__(self):
+        self.p = subprocess.Popen(
+            ["node", str(Path(__file__).with_name("showdown_doubles_server.js"))],
+            stdin=subprocess.PIPE, stdout=subprocess.PIPE, text=True, bufsize=1)
+
+    def send(self, obj):
+        self.p.stdin.write(json.dumps(obj) + "\n")
+        self.p.stdin.flush()
+        line = self.p.stdout.readline()
+        if not line:
+            raise RuntimeError("showdown server died")
+        return json.loads(line)
+
+    def close(self):
+        try:
+            self.send({"cmd": "quit"})
+        except Exception:
+            pass
+        self.p.kill()
+
+
+def to_state(position):
+    """Translate a Showdown position into a poke-engine doubles State, or raise Skip."""
+    s1, s2 = position["sides"]
+    if position["weather"] not in WEATHER:
+        raise Skip(f"weather {position['weather']}")
+    if position["terrain"] != "none":
+        raise Skip(f"terrain {position['terrain']}")
+    for ps in position["pseudo"]:
+        if ps != "trickroom":
+            raise Skip(f"pseudo {ps}")
+    return State(side_one=build_side(s1, allow_fainted=True),
+                 side_two=build_side(s2, allow_fainted=True),
+                 weather=WEATHER[position["weather"]],
+                 trick_room="trickroom" in position["pseudo"])
+
+
+NEEDS_TARGET = {"normal", "any", "adjacentFoe"}
+# Showdown requires an explicit ally index for these, given as a NEGATIVE slot number, and
+# rejects the choice outright without it ("Can't move: Helping Hand needs a target").
+ALLY_TARGET = {"adjacentAlly", "adjacentAllyOrSelf"}
+
+
+def ally_alive(position, side, slot):
+    actives = next(s for s in position["sides"] if s["side"] == side)["active"]
+    other = actives[1 - slot] if len(actives) > 1 else None
+    return bool(other and not other.get("fainted"))
+
+
+def usable(moves, position, side, slot):
+    """Legal moves minus ally-targeting ones with no living ally to aim at."""
+    ok = [m for m in moves if not m["disabled"]]
+    if not ally_alive(position, side, slot):
+        ok = [m for m in ok if m["target"] not in ALLY_TARGET]
+    return ok
+
+
+def showdown_choice(req, parts):
+    """Render per-slot decisions as one Showdown choice string."""
+    out = []
+    for slot, part in enumerate(parts):
+        if part is None:
+            out.append("pass"); continue
+        kind, value, target = part
+        if kind == "switch":
+            out.append(f"switch {value}")
+        else:
+            mv = next(m for m in req["active"][slot]["moves"] if m["id"] == value)
+            if mv["target"] in ALLY_TARGET:
+                out.append(f"move {mv['n']} -{2 if slot == 0 else 1}")
+            elif mv["target"] in NEEDS_TARGET and target is not None:
+                out.append(f"move {mv['n']} {target + 1}")
+            else:
+                out.append(f"move {mv['n']}")
+    return ", ".join(out)
+
+
+def policy_random(req, position, side, rng):
+    parts = []
+    used = set()
+    for slot, a in enumerate(req["active"]):
+        if a["fainted"] or a["species"] is None:
+            parts.append(None); continue
+        legal = usable(a["moves"], position, side, slot)
+        bench = [b for b in req["bench"] if b["slot"] not in used]
+        if bench and not a["trapped"] and rng.random() < 0.2:
+            b = bench[0]; used.add(b["slot"])
+            parts.append(("switch", b["slot"], None)); continue
+        m = rng.choice(legal) if legal else a["moves"][0]
+        parts.append(("move", m["id"], rng.randrange(2) if m["target"] in NEEDS_TARGET else None))
+    return parts
+
+
+def policy_greedy(req, position, side, rng):
+    foes = next(s for s in position["sides"] if s["side"] != side)["active"]
+    order = sorted((i for i, p in enumerate(foes) if p and not p["fainted"]),
+                   key=lambda i: foes[i]["hp"] / foes[i]["maxhp"])
+    target = order[0] if order else 0
+    parts = []
+    for slot, a in enumerate(req["active"]):
+        if a["fainted"] or a["species"] is None:
+            parts.append(None); continue
+        legal = usable(a["moves"], position, side, slot)
+        dmg = [m for m in legal if m["basePower"] > 0]
+        m = max(dmg, key=lambda m: m["basePower"]) if dmg else (legal[0] if legal else a["moves"][0])
+        parts.append(("move", m["id"], target if m["target"] in NEEDS_TARGET else None))
+    return parts
+
+
+LABEL = re.compile(r"^(?:switch (?P<sw>[a-z0-9]+)|(?P<mv>[a-z0-9]+)(?:,(?P<t>\d+))?)$")
+
+
+def policy_mcts(req, position, side, rng, ms, stats):
+    try:
+        state = to_state(position)
+    except Skip as exc:
+        stats[f"fallback: {exc}"] += 1
+        return policy_greedy(req, position, side, rng)
+    except Exception as exc:
+        stats[f"fallback: state build {type(exc).__name__}"] += 1
+        return policy_greedy(req, position, side, rng)
+    result = monte_carlo_tree_search(state, duration_ms=ms)
+    options = result.side_one if side == "p1" else result.side_two
+    if not options:
+        stats["fallback: no root options"] += 1
+        return policy_greedy(req, position, side, rng)
+    best = max(options, key=lambda o: o.visits)
+    stats["mcts decisions"] += 1
+    stats["visits"] += result.total_visits
+    parts = []
+    for slot, sub in enumerate(best.move_choice.split(";")):
+        sub = sub.strip().lower()   # MoveChoice::None renders as "No Move"
+        if sub in ("none", "no move"):
+            parts.append(None); continue
+        m = LABEL.match(sub)
+        if not m:
+            stats[f"unparsed label {sub!r}"] += 1
+            return policy_greedy(req, position, side, rng)
+        if m.group("sw"):
+            b = next((b for b in req["bench"] if pid(b["species"]) == m.group("sw")), None)
+            if b is None:
+                stats["fallback: switch target not on bench"] += 1
+                return policy_greedy(req, position, side, rng)
+            parts.append(("switch", b["slot"], None))
+        else:
+            if not any(x["id"] == m.group("mv")
+                       for x in usable(req["active"][slot]["moves"], position, side, slot)):
+                stats[f"fallback: move {m.group('mv')} not in slot {slot}"] += 1
+                return policy_greedy(req, position, side, rng)
+            parts.append(("move", m.group("mv"), int(m.group("t")) if m.group("t") else None))
+    return parts
+
+
+def forced_choice(req, rng):
+    o = [b["slot"] for b in req["bench"]]
+    return ", ".join(f"switch {o.pop(0)}" if f and o else "pass" for f in req["forceSwitch"])
+
+
+def main():
+    ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
+    ap.add_argument("--battles", type=int, default=20)
+    ap.add_argument("--p1", default="mcts", choices=["mcts", "greedy", "random"])
+    ap.add_argument("--p2", default="greedy", choices=["mcts", "greedy", "random"])
+    ap.add_argument("--ms", type=int, default=300, help="MCTS budget per decision")
+    ap.add_argument("--seed", type=int, default=7)
+    ap.add_argument("--max-turns", type=int, default=60)
+    args = ap.parse_args()
+
+    server = Server()
+    stats = collections.Counter()
+    wins = collections.Counter()
+    try:
+        for battle in range(args.battles):
+            rng = random.Random(args.seed * 1000 + battle)
+            pool = list(range(14))
+            rng.shuffle(pool)
+            teams = [pool[:4], pool[4:8]]
+            r = server.send({"cmd": "new", "teams": teams})
+            if not r.get("ok"):
+                stats["new failed"] += 1; continue
+            for turn in range(args.max_turns):
+                reqs = r.get("requests", {})
+                if not reqs:
+                    break
+                choices = {"cmd": "choose"}
+                for side, req in reqs.items():
+                    name = args.p1 if side == "p1" else args.p2
+                    if req.get("forceSwitch"):
+                        choices[side] = forced_choice(req, rng)
+                        continue
+                    if name == "mcts":
+                        parts = policy_mcts(req, r["position"], side, rng, args.ms, stats)
+                    elif name == "greedy":
+                        parts = policy_greedy(req, r["position"], side, rng)
+                    else:
+                        parts = policy_random(req, r["position"], side, rng)
+                    choices[side] = showdown_choice(req, parts)
+                r = server.send(choices)
+                if not r.get("ok"):
+                    stats[f"rejected: {r.get('error','')[:60]}"] += 1
+                    break
+                if r.get("ended"):
+                    wins[r.get("winner") or "draw"] += 1
+                    break
+            else:
+                wins["turn limit"] += 1
+    finally:
+        server.close()
+
+    n = sum(wins.values())
+    print(f"p1={args.p1} vs p2={args.p2}   {n} battles decided of {args.battles}"
+          + (f"   (mcts budget {args.ms} ms a decision)" if "mcts" in (args.p1, args.p2) else ""))
+    for k in ("p1", "p2", "draw", "turn limit"):
+        if wins[k]:
+            print(f"   {k:11} {wins[k]:4}  ({100*wins[k]/n:.1f}%)" if n else f"   {k}: {wins[k]}")
+    if stats["mcts decisions"]:
+        print(f"   mcts decisions {stats['mcts decisions']}, mean visits "
+              f"{stats['visits']/stats['mcts decisions']:.0f}")
+    fb = {k: v for k, v in stats.items() if k.startswith("fallback") or k.startswith("rejected")
+          or k.startswith("unparsed")}
+    if fb:
+        print("   fallbacks and rejections:")
+        for k, v in sorted(fb.items(), key=lambda kv: -kv[1]):
+            print(f"      {v:5}  {k}")
+
+
+if __name__ == "__main__":
+    main()
