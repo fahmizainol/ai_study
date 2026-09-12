@@ -1,0 +1,7803 @@
+[
+ {
+  "name": "follow_me_redirects",
+  "why": "slot0 uses Follow Me; the foe aims Tackle at slot1 and should hit slot0 instead",
+  "choices": {
+   "p1": "move 1, move 1 1",
+   "p2": "move 1 2, move 1 2"
+  },
+  "pe": {
+   "s1": "followme;tackle,0",
+   "s2": "tackle,1;tackle,1"
+  },
+  "before": [
+   {
+    "side": "p1",
+    "active": [
+     {
+      "species": "Clefable",
+      "ability": "unaware",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 40,
+      "hp": 331,
+      "maxhp": 331,
+      "status": "none",
+      "stats": {
+       "atk": 176,
+       "def": 182,
+       "spa": 206,
+       "spd": 216,
+       "spe": 156
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "followme",
+        "pp": 32
+       },
+       {
+        "id": "tackle",
+        "pp": 56
+       }
+      ]
+     },
+     {
+      "species": "Snorlax",
+      "ability": "immunity",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 460,
+      "hp": 461,
+      "maxhp": 461,
+      "status": "none",
+      "stats": {
+       "atk": 256,
+       "def": 166,
+       "spa": 166,
+       "spd": 256,
+       "spe": 96
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "tackle",
+        "pp": 56
+       }
+      ]
+     }
+    ],
+    "bench": [
+     {
+      "species": "Ditto",
+      "ability": "limber",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 4,
+      "hp": 237,
+      "maxhp": 237,
+      "status": "none",
+      "stats": {
+       "atk": 132,
+       "def": 132,
+       "spa": 132,
+       "spd": 132,
+       "spe": 132
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "transform",
+        "pp": 16
+       }
+      ]
+     },
+     {
+      "species": "Ditto",
+      "ability": "limber",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 4,
+      "hp": 237,
+      "maxhp": 237,
+      "status": "none",
+      "stats": {
+       "atk": 132,
+       "def": 132,
+       "spa": 132,
+       "spd": 132,
+       "spe": 132
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "transform",
+        "pp": 16
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "side": "p2",
+    "active": [
+     {
+      "species": "Machamp",
+      "ability": "noguard",
+      "item": "",
+      "types": [
+       "Fighting"
+      ],
+      "weightkg": 130,
+      "hp": 321,
+      "maxhp": 321,
+      "status": "none",
+      "stats": {
+       "atk": 296,
+       "def": 196,
+       "spa": 166,
+       "spd": 206,
+       "spe": 146
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "tackle",
+        "pp": 56
+       }
+      ]
+     },
+     {
+      "species": "Gengar",
+      "ability": "levitate",
+      "item": "",
+      "types": [
+       "Ghost",
+       "Poison"
+      ],
+      "weightkg": 40.5,
+      "hp": 261,
+      "maxhp": 261,
+      "status": "none",
+      "stats": {
+       "atk": 166,
+       "def": 156,
+       "spa": 296,
+       "spd": 186,
+       "spe": 256
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "tackle",
+        "pp": 56
+       }
+      ]
+     }
+    ],
+    "bench": [
+     {
+      "species": "Ditto",
+      "ability": "limber",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 4,
+      "hp": 237,
+      "maxhp": 237,
+      "status": "none",
+      "stats": {
+       "atk": 132,
+       "def": 132,
+       "spa": 132,
+       "spd": 132,
+       "spe": 132
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "transform",
+        "pp": 16
+       }
+      ]
+     },
+     {
+      "species": "Ditto",
+      "ability": "limber",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 4,
+      "hp": 237,
+      "maxhp": 237,
+      "status": "none",
+      "stats": {
+       "atk": 132,
+       "def": 132,
+       "spa": 132,
+       "spd": 132,
+       "spe": 132
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "transform",
+        "pp": 16
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "after": [
+   {
+    "side": "p1",
+    "active": [
+     {
+      "species": "Clefable",
+      "ability": "unaware",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 40,
+      "hp": 238,
+      "maxhp": 331,
+      "status": "none",
+      "stats": {
+       "atk": 176,
+       "def": 182,
+       "spa": 206,
+       "spd": 216,
+       "spe": 156
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "followme",
+        "pp": 31
+       },
+       {
+        "id": "tackle",
+        "pp": 56
+       }
+      ]
+     },
+     {
+      "species": "Snorlax",
+      "ability": "immunity",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 460,
+      "hp": 461,
+      "maxhp": 461,
+      "status": "none",
+      "stats": {
+       "atk": 256,
+       "def": 166,
+       "spa": 166,
+       "spd": 256,
+       "spe": 96
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "tackle",
+        "pp": 55
+       }
+      ]
+     }
+    ],
+    "bench": [
+     {
+      "species": "Ditto",
+      "ability": "limber",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 4,
+      "hp": 237,
+      "maxhp": 237,
+      "status": "none",
+      "stats": {
+       "atk": 132,
+       "def": 132,
+       "spa": 132,
+       "spd": 132,
+       "spe": 132
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "transform",
+        "pp": 16
+       }
+      ]
+     },
+     {
+      "species": "Ditto",
+      "ability": "limber",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 4,
+      "hp": 237,
+      "maxhp": 237,
+      "status": "none",
+      "stats": {
+       "atk": 132,
+       "def": 132,
+       "spa": 132,
+       "spd": 132,
+       "spe": 132
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "transform",
+        "pp": 16
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "side": "p2",
+    "active": [
+     {
+      "species": "Machamp",
+      "ability": "noguard",
+      "item": "",
+      "types": [
+       "Fighting"
+      ],
+      "weightkg": 130,
+      "hp": 251,
+      "maxhp": 321,
+      "status": "none",
+      "stats": {
+       "atk": 296,
+       "def": 196,
+       "spa": 166,
+       "spd": 206,
+       "spe": 146
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "tackle",
+        "pp": 55
+       }
+      ]
+     },
+     {
+      "species": "Gengar",
+      "ability": "levitate",
+      "item": "",
+      "types": [
+       "Ghost",
+       "Poison"
+      ],
+      "weightkg": 40.5,
+      "hp": 261,
+      "maxhp": 261,
+      "status": "none",
+      "stats": {
+       "atk": 166,
+       "def": 156,
+       "spa": 296,
+       "spd": 186,
+       "spe": 256
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "tackle",
+        "pp": 55
+       }
+      ]
+     }
+    ],
+    "bench": [
+     {
+      "species": "Ditto",
+      "ability": "limber",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 4,
+      "hp": 237,
+      "maxhp": 237,
+      "status": "none",
+      "stats": {
+       "atk": 132,
+       "def": 132,
+       "spa": 132,
+       "spd": 132,
+       "spe": 132
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "transform",
+        "pp": 16
+       }
+      ]
+     },
+     {
+      "species": "Ditto",
+      "ability": "limber",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 4,
+      "hp": 237,
+      "maxhp": 237,
+      "status": "none",
+      "stats": {
+       "atk": 132,
+       "def": 132,
+       "spa": 132,
+       "spd": 132,
+       "spe": 132
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "transform",
+        "pp": 16
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "log": [
+   "|gametype|doubles",
+   "|player|p1|A||",
+   "|player|p2|B||",
+   "|gen|5",
+   "|tier|[Gen 5] Doubles Custom Game",
+   "|clearpoke",
+   "|poke|p1|Clefable, F|",
+   "|poke|p1|Snorlax, F|",
+   "|poke|p1|Ditto|",
+   "|poke|p1|Ditto|",
+   "|poke|p2|Machamp, F|",
+   "|poke|p2|Gengar, F|",
+   "|poke|p2|Ditto|",
+   "|poke|p2|Ditto|",
+   "|teampreview",
+   "|",
+   "|teamsize|p1|4",
+   "|teamsize|p2|4",
+   "|start",
+   "|split|p1",
+   "|switch|p1a: Clefable|Clefable, F|331/331",
+   "|switch|p1a: Clefable|Clefable, F|331/331",
+   "|split|p1",
+   "|switch|p1b: Snorlax|Snorlax, F|461/461",
+   "|switch|p1b: Snorlax|Snorlax, F|461/461",
+   "|split|p2",
+   "|switch|p2a: Machamp|Machamp, F|321/321",
+   "|switch|p2a: Machamp|Machamp, F|321/321",
+   "|split|p2",
+   "|switch|p2b: Gengar|Gengar, F|261/261",
+   "|switch|p2b: Gengar|Gengar, F|261/261",
+   "|turn|1",
+   "|",
+   "|move|p1a: Clefable|Follow Me|p1a: Clefable",
+   "|-singleturn|p1a: Clefable|move: Follow Me",
+   "|move|p2b: Gengar|Tackle|p1a: Clefable",
+   "|debug|Follow Me redirected target of move",
+   "|split|p1",
+   "|-damage|p1a: Clefable|297/331",
+   "|-damage|p1a: Clefable|297/331",
+   "|move|p2a: Machamp|Tackle|p1a: Clefable",
+   "|debug|Follow Me redirected target of move",
+   "|split|p1",
+   "|-damage|p1a: Clefable|238/331",
+   "|-damage|p1a: Clefable|238/331",
+   "|move|p1b: Snorlax|Tackle|p2a: Machamp",
+   "|split|p2",
+   "|-damage|p2a: Machamp|251/321",
+   "|-damage|p2a: Machamp|251/321",
+   "|",
+   "|upkeep",
+   "|turn|2"
+  ]
+ },
+ {
+  "name": "rage_powder_redirects",
+  "why": "same as Follow Me but the grass-immunity rule does not apply to a Fighting attacker",
+  "choices": {
+   "p1": "move 1, move 1 1",
+   "p2": "move 1 2, move 1 2"
+  },
+  "pe": {
+   "s1": "ragepowder;tackle,0",
+   "s2": "tackle,1;tackle,1"
+  },
+  "before": [
+   {
+    "side": "p1",
+    "active": [
+     {
+      "species": "Vileplume",
+      "ability": "chlorophyll",
+      "item": "",
+      "types": [
+       "Grass",
+       "Poison"
+      ],
+      "weightkg": 18.6,
+      "hp": 291,
+      "maxhp": 291,
+      "status": "none",
+      "stats": {
+       "atk": 196,
+       "def": 206,
+       "spa": 236,
+       "spd": 216,
+       "spe": 136
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "ragepowder",
+        "pp": 32
+       },
+       {
+        "id": "tackle",
+        "pp": 56
+       }
+      ]
+     },
+     {
+      "species": "Snorlax",
+      "ability": "immunity",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 460,
+      "hp": 461,
+      "maxhp": 461,
+      "status": "none",
+      "stats": {
+       "atk": 256,
+       "def": 166,
+       "spa": 166,
+       "spd": 256,
+       "spe": 96
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "tackle",
+        "pp": 56
+       }
+      ]
+     }
+    ],
+    "bench": [
+     {
+      "species": "Ditto",
+      "ability": "limber",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 4,
+      "hp": 237,
+      "maxhp": 237,
+      "status": "none",
+      "stats": {
+       "atk": 132,
+       "def": 132,
+       "spa": 132,
+       "spd": 132,
+       "spe": 132
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "transform",
+        "pp": 16
+       }
+      ]
+     },
+     {
+      "species": "Ditto",
+      "ability": "limber",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 4,
+      "hp": 237,
+      "maxhp": 237,
+      "status": "none",
+      "stats": {
+       "atk": 132,
+       "def": 132,
+       "spa": 132,
+       "spd": 132,
+       "spe": 132
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "transform",
+        "pp": 16
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "side": "p2",
+    "active": [
+     {
+      "species": "Machamp",
+      "ability": "noguard",
+      "item": "",
+      "types": [
+       "Fighting"
+      ],
+      "weightkg": 130,
+      "hp": 321,
+      "maxhp": 321,
+      "status": "none",
+      "stats": {
+       "atk": 296,
+       "def": 196,
+       "spa": 166,
+       "spd": 206,
+       "spe": 146
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "tackle",
+        "pp": 56
+       }
+      ]
+     },
+     {
+      "species": "Gengar",
+      "ability": "levitate",
+      "item": "",
+      "types": [
+       "Ghost",
+       "Poison"
+      ],
+      "weightkg": 40.5,
+      "hp": 261,
+      "maxhp": 261,
+      "status": "none",
+      "stats": {
+       "atk": 166,
+       "def": 156,
+       "spa": 296,
+       "spd": 186,
+       "spe": 256
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "tackle",
+        "pp": 56
+       }
+      ]
+     }
+    ],
+    "bench": [
+     {
+      "species": "Ditto",
+      "ability": "limber",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 4,
+      "hp": 237,
+      "maxhp": 237,
+      "status": "none",
+      "stats": {
+       "atk": 132,
+       "def": 132,
+       "spa": 132,
+       "spd": 132,
+       "spe": 132
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "transform",
+        "pp": 16
+       }
+      ]
+     },
+     {
+      "species": "Ditto",
+      "ability": "limber",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 4,
+      "hp": 237,
+      "maxhp": 237,
+      "status": "none",
+      "stats": {
+       "atk": 132,
+       "def": 132,
+       "spa": 132,
+       "spd": 132,
+       "spe": 132
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "transform",
+        "pp": 16
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "after": [
+   {
+    "side": "p1",
+    "active": [
+     {
+      "species": "Vileplume",
+      "ability": "chlorophyll",
+      "item": "",
+      "types": [
+       "Grass",
+       "Poison"
+      ],
+      "weightkg": 18.6,
+      "hp": 210,
+      "maxhp": 291,
+      "status": "none",
+      "stats": {
+       "atk": 196,
+       "def": 206,
+       "spa": 236,
+       "spd": 216,
+       "spe": 136
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "ragepowder",
+        "pp": 31
+       },
+       {
+        "id": "tackle",
+        "pp": 56
+       }
+      ]
+     },
+     {
+      "species": "Snorlax",
+      "ability": "immunity",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 460,
+      "hp": 461,
+      "maxhp": 461,
+      "status": "none",
+      "stats": {
+       "atk": 256,
+       "def": 166,
+       "spa": 166,
+       "spd": 256,
+       "spe": 96
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "tackle",
+        "pp": 55
+       }
+      ]
+     }
+    ],
+    "bench": [
+     {
+      "species": "Ditto",
+      "ability": "limber",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 4,
+      "hp": 237,
+      "maxhp": 237,
+      "status": "none",
+      "stats": {
+       "atk": 132,
+       "def": 132,
+       "spa": 132,
+       "spd": 132,
+       "spe": 132
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "transform",
+        "pp": 16
+       }
+      ]
+     },
+     {
+      "species": "Ditto",
+      "ability": "limber",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 4,
+      "hp": 237,
+      "maxhp": 237,
+      "status": "none",
+      "stats": {
+       "atk": 132,
+       "def": 132,
+       "spa": 132,
+       "spd": 132,
+       "spe": 132
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "transform",
+        "pp": 16
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "side": "p2",
+    "active": [
+     {
+      "species": "Machamp",
+      "ability": "noguard",
+      "item": "",
+      "types": [
+       "Fighting"
+      ],
+      "weightkg": 130,
+      "hp": 251,
+      "maxhp": 321,
+      "status": "none",
+      "stats": {
+       "atk": 296,
+       "def": 196,
+       "spa": 166,
+       "spd": 206,
+       "spe": 146
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "tackle",
+        "pp": 55
+       }
+      ]
+     },
+     {
+      "species": "Gengar",
+      "ability": "levitate",
+      "item": "",
+      "types": [
+       "Ghost",
+       "Poison"
+      ],
+      "weightkg": 40.5,
+      "hp": 261,
+      "maxhp": 261,
+      "status": "none",
+      "stats": {
+       "atk": 166,
+       "def": 156,
+       "spa": 296,
+       "spd": 186,
+       "spe": 256
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "tackle",
+        "pp": 55
+       }
+      ]
+     }
+    ],
+    "bench": [
+     {
+      "species": "Ditto",
+      "ability": "limber",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 4,
+      "hp": 237,
+      "maxhp": 237,
+      "status": "none",
+      "stats": {
+       "atk": 132,
+       "def": 132,
+       "spa": 132,
+       "spd": 132,
+       "spe": 132
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "transform",
+        "pp": 16
+       }
+      ]
+     },
+     {
+      "species": "Ditto",
+      "ability": "limber",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 4,
+      "hp": 237,
+      "maxhp": 237,
+      "status": "none",
+      "stats": {
+       "atk": 132,
+       "def": 132,
+       "spa": 132,
+       "spd": 132,
+       "spe": 132
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "transform",
+        "pp": 16
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "log": [
+   "|gametype|doubles",
+   "|player|p1|A||",
+   "|player|p2|B||",
+   "|gen|5",
+   "|tier|[Gen 5] Doubles Custom Game",
+   "|clearpoke",
+   "|poke|p1|Vileplume, F|",
+   "|poke|p1|Snorlax, F|",
+   "|poke|p1|Ditto|",
+   "|poke|p1|Ditto|",
+   "|poke|p2|Machamp, F|",
+   "|poke|p2|Gengar, F|",
+   "|poke|p2|Ditto|",
+   "|poke|p2|Ditto|",
+   "|teampreview",
+   "|",
+   "|teamsize|p1|4",
+   "|teamsize|p2|4",
+   "|start",
+   "|split|p1",
+   "|switch|p1a: Vileplume|Vileplume, F|291/291",
+   "|switch|p1a: Vileplume|Vileplume, F|291/291",
+   "|split|p1",
+   "|switch|p1b: Snorlax|Snorlax, F|461/461",
+   "|switch|p1b: Snorlax|Snorlax, F|461/461",
+   "|split|p2",
+   "|switch|p2a: Machamp|Machamp, F|321/321",
+   "|switch|p2a: Machamp|Machamp, F|321/321",
+   "|split|p2",
+   "|switch|p2b: Gengar|Gengar, F|261/261",
+   "|switch|p2b: Gengar|Gengar, F|261/261",
+   "|turn|1",
+   "|",
+   "|move|p1a: Vileplume|Rage Powder|p1a: Vileplume",
+   "|-singleturn|p1a: Vileplume|move: Rage Powder",
+   "|move|p2b: Gengar|Tackle|p1a: Vileplume",
+   "|debug|Rage Powder redirected target of move",
+   "|split|p1",
+   "|-damage|p1a: Vileplume|262/291",
+   "|-damage|p1a: Vileplume|262/291",
+   "|move|p2a: Machamp|Tackle|p1a: Vileplume",
+   "|debug|Rage Powder redirected target of move",
+   "|split|p1",
+   "|-damage|p1a: Vileplume|210/291",
+   "|-damage|p1a: Vileplume|210/291",
+   "|move|p1b: Snorlax|Tackle|p2a: Machamp",
+   "|split|p2",
+   "|-damage|p2a: Machamp|251/321",
+   "|-damage|p2a: Machamp|251/321",
+   "|",
+   "|upkeep",
+   "|turn|2"
+  ]
+ },
+ {
+  "name": "lightningrod_redirects_and_boosts",
+  "why": "slot1 has Lightning Rod; an Electric move aimed at slot0 is redirected, nullified, +1 SpA",
+  "choices": {
+   "p1": "move 1 1, move 1 1",
+   "p2": "move 1 1, move 1 1"
+  },
+  "pe": {
+   "s1": "tackle,0;tackle,0",
+   "s2": "shockwave,0;tackle,0"
+  },
+  "before": [
+   {
+    "side": "p1",
+    "active": [
+     {
+      "species": "Snorlax",
+      "ability": "immunity",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 460,
+      "hp": 461,
+      "maxhp": 461,
+      "status": "none",
+      "stats": {
+       "atk": 256,
+       "def": 166,
+       "spa": 166,
+       "spd": 256,
+       "spe": 96
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "tackle",
+        "pp": 56
+       }
+      ]
+     },
+     {
+      "species": "Seaking",
+      "ability": "lightningrod",
+      "item": "",
+      "types": [
+       "Water"
+      ],
+      "weightkg": 39,
+      "hp": 301,
+      "maxhp": 301,
+      "status": "none",
+      "stats": {
+       "atk": 220,
+       "def": 166,
+       "spa": 166,
+       "spd": 196,
+       "spe": 172
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "tackle",
+        "pp": 56
+       }
+      ]
+     }
+    ],
+    "bench": [
+     {
+      "species": "Ditto",
+      "ability": "limber",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 4,
+      "hp": 237,
+      "maxhp": 237,
+      "status": "none",
+      "stats": {
+       "atk": 132,
+       "def": 132,
+       "spa": 132,
+       "spd": 132,
+       "spe": 132
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "transform",
+        "pp": 16
+       }
+      ]
+     },
+     {
+      "species": "Ditto",
+      "ability": "limber",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 4,
+      "hp": 237,
+      "maxhp": 237,
+      "status": "none",
+      "stats": {
+       "atk": 132,
+       "def": 132,
+       "spa": 132,
+       "spd": 132,
+       "spe": 132
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "transform",
+        "pp": 16
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "side": "p2",
+    "active": [
+     {
+      "species": "Raichu",
+      "ability": "static",
+      "item": "",
+      "types": [
+       "Electric"
+      ],
+      "weightkg": 30,
+      "hp": 261,
+      "maxhp": 261,
+      "status": "none",
+      "stats": {
+       "atk": 216,
+       "def": 146,
+       "spa": 216,
+       "spd": 196,
+       "spe": 236
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "shockwave",
+        "pp": 32
+       }
+      ]
+     },
+     {
+      "species": "Gengar",
+      "ability": "levitate",
+      "item": "",
+      "types": [
+       "Ghost",
+       "Poison"
+      ],
+      "weightkg": 40.5,
+      "hp": 261,
+      "maxhp": 261,
+      "status": "none",
+      "stats": {
+       "atk": 166,
+       "def": 156,
+       "spa": 296,
+       "spd": 186,
+       "spe": 256
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "tackle",
+        "pp": 56
+       }
+      ]
+     }
+    ],
+    "bench": [
+     {
+      "species": "Ditto",
+      "ability": "limber",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 4,
+      "hp": 237,
+      "maxhp": 237,
+      "status": "none",
+      "stats": {
+       "atk": 132,
+       "def": 132,
+       "spa": 132,
+       "spd": 132,
+       "spe": 132
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "transform",
+        "pp": 16
+       }
+      ]
+     },
+     {
+      "species": "Ditto",
+      "ability": "limber",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 4,
+      "hp": 237,
+      "maxhp": 237,
+      "status": "none",
+      "stats": {
+       "atk": 132,
+       "def": 132,
+       "spa": 132,
+       "spd": 132,
+       "spe": 132
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "transform",
+        "pp": 16
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "after": [
+   {
+    "side": "p1",
+    "active": [
+     {
+      "species": "Snorlax",
+      "ability": "immunity",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 460,
+      "hp": 424,
+      "maxhp": 461,
+      "status": "none",
+      "stats": {
+       "atk": 256,
+       "def": 166,
+       "spa": 166,
+       "spd": 256,
+       "spe": 96
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "tackle",
+        "pp": 55
+       }
+      ]
+     },
+     {
+      "species": "Seaking",
+      "ability": "lightningrod",
+      "item": "",
+      "types": [
+       "Water"
+      ],
+      "weightkg": 39,
+      "hp": 301,
+      "maxhp": 301,
+      "status": "none",
+      "stats": {
+       "atk": 220,
+       "def": 166,
+       "spa": 166,
+       "spd": 196,
+       "spe": 172
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 1,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "tackle",
+        "pp": 55
+       }
+      ]
+     }
+    ],
+    "bench": [
+     {
+      "species": "Ditto",
+      "ability": "limber",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 4,
+      "hp": 237,
+      "maxhp": 237,
+      "status": "none",
+      "stats": {
+       "atk": 132,
+       "def": 132,
+       "spa": 132,
+       "spd": 132,
+       "spe": 132
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "transform",
+        "pp": 16
+       }
+      ]
+     },
+     {
+      "species": "Ditto",
+      "ability": "limber",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 4,
+      "hp": 237,
+      "maxhp": 237,
+      "status": "none",
+      "stats": {
+       "atk": 132,
+       "def": 132,
+       "spa": 132,
+       "spd": 132,
+       "spe": 132
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "transform",
+        "pp": 16
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "side": "p2",
+    "active": [
+     {
+      "species": "Raichu",
+      "ability": "static",
+      "item": "",
+      "types": [
+       "Electric"
+      ],
+      "weightkg": 30,
+      "hp": 112,
+      "maxhp": 261,
+      "status": "none",
+      "stats": {
+       "atk": 216,
+       "def": 146,
+       "spa": 216,
+       "spd": 196,
+       "spe": 236
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "shockwave",
+        "pp": 31
+       }
+      ]
+     },
+     {
+      "species": "Gengar",
+      "ability": "levitate",
+      "item": "",
+      "types": [
+       "Ghost",
+       "Poison"
+      ],
+      "weightkg": 40.5,
+      "hp": 261,
+      "maxhp": 261,
+      "status": "none",
+      "stats": {
+       "atk": 166,
+       "def": 156,
+       "spa": 296,
+       "spd": 186,
+       "spe": 256
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "tackle",
+        "pp": 55
+       }
+      ]
+     }
+    ],
+    "bench": [
+     {
+      "species": "Ditto",
+      "ability": "limber",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 4,
+      "hp": 237,
+      "maxhp": 237,
+      "status": "none",
+      "stats": {
+       "atk": 132,
+       "def": 132,
+       "spa": 132,
+       "spd": 132,
+       "spe": 132
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "transform",
+        "pp": 16
+       }
+      ]
+     },
+     {
+      "species": "Ditto",
+      "ability": "limber",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 4,
+      "hp": 237,
+      "maxhp": 237,
+      "status": "none",
+      "stats": {
+       "atk": 132,
+       "def": 132,
+       "spa": 132,
+       "spd": 132,
+       "spe": 132
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "transform",
+        "pp": 16
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "log": [
+   "|gametype|doubles",
+   "|player|p1|A||",
+   "|player|p2|B||",
+   "|gen|5",
+   "|tier|[Gen 5] Doubles Custom Game",
+   "|clearpoke",
+   "|poke|p1|Snorlax, F|",
+   "|poke|p1|Seaking, F|",
+   "|poke|p1|Ditto|",
+   "|poke|p1|Ditto|",
+   "|poke|p2|Raichu, F|",
+   "|poke|p2|Gengar, F|",
+   "|poke|p2|Ditto|",
+   "|poke|p2|Ditto|",
+   "|teampreview",
+   "|",
+   "|teamsize|p1|4",
+   "|teamsize|p2|4",
+   "|start",
+   "|split|p1",
+   "|switch|p1a: Snorlax|Snorlax, F|461/461",
+   "|switch|p1a: Snorlax|Snorlax, F|461/461",
+   "|split|p1",
+   "|switch|p1b: Seaking|Seaking, F|301/301",
+   "|switch|p1b: Seaking|Seaking, F|301/301",
+   "|split|p2",
+   "|switch|p2a: Raichu|Raichu, F|261/261",
+   "|switch|p2a: Raichu|Raichu, F|261/261",
+   "|split|p2",
+   "|switch|p2b: Gengar|Gengar, F|261/261",
+   "|switch|p2b: Gengar|Gengar, F|261/261",
+   "|turn|1",
+   "|",
+   "|move|p2b: Gengar|Tackle|p1a: Snorlax",
+   "|split|p1",
+   "|-damage|p1a: Snorlax|424/461",
+   "|-damage|p1a: Snorlax|424/461",
+   "|move|p2a: Raichu|Shock Wave|p1b: Seaking",
+   "|-activate|p1b: Seaking|ability: Lightning Rod",
+   "|-ability|p1b: Seaking|Lightning Rod|boost",
+   "|-boost|p1b: Seaking|spa|1",
+   "|move|p1b: Seaking|Tackle|p2a: Raichu",
+   "|split|p2",
+   "|-damage|p2a: Raichu|206/261",
+   "|-damage|p2a: Raichu|206/261",
+   "|move|p1a: Snorlax|Tackle|p2a: Raichu",
+   "|split|p2",
+   "|-damage|p2a: Raichu|112/261",
+   "|-damage|p2a: Raichu|112/261",
+   "|",
+   "|upkeep",
+   "|turn|2"
+  ]
+ },
+ {
+  "name": "spread_surf_reduction",
+  "why": "Surf hits all adjacent; every hit takes the 0.75x spread multiplier",
+  "choices": {
+   "p1": "move 1 1, move 1 1",
+   "p2": "move 1, move 1 1"
+  },
+  "pe": {
+   "s1": "tackle,0;tackle,0",
+   "s2": "surf;tackle,0"
+  },
+  "before": [
+   {
+    "side": "p1",
+    "active": [
+     {
+      "species": "Snorlax",
+      "ability": "immunity",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 460,
+      "hp": 461,
+      "maxhp": 461,
+      "status": "none",
+      "stats": {
+       "atk": 256,
+       "def": 166,
+       "spa": 166,
+       "spd": 256,
+       "spe": 96
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "tackle",
+        "pp": 56
+       }
+      ]
+     },
+     {
+      "species": "Machamp",
+      "ability": "noguard",
+      "item": "",
+      "types": [
+       "Fighting"
+      ],
+      "weightkg": 130,
+      "hp": 321,
+      "maxhp": 321,
+      "status": "none",
+      "stats": {
+       "atk": 296,
+       "def": 196,
+       "spa": 166,
+       "spd": 206,
+       "spe": 146
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "tackle",
+        "pp": 56
+       }
+      ]
+     }
+    ],
+    "bench": [
+     {
+      "species": "Ditto",
+      "ability": "limber",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 4,
+      "hp": 237,
+      "maxhp": 237,
+      "status": "none",
+      "stats": {
+       "atk": 132,
+       "def": 132,
+       "spa": 132,
+       "spd": 132,
+       "spe": 132
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "transform",
+        "pp": 16
+       }
+      ]
+     },
+     {
+      "species": "Ditto",
+      "ability": "limber",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 4,
+      "hp": 237,
+      "maxhp": 237,
+      "status": "none",
+      "stats": {
+       "atk": 132,
+       "def": 132,
+       "spa": 132,
+       "spd": 132,
+       "spe": 132
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "transform",
+        "pp": 16
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "side": "p2",
+    "active": [
+     {
+      "species": "Blastoise",
+      "ability": "torrent",
+      "item": "",
+      "types": [
+       "Water"
+      ],
+      "weightkg": 85.5,
+      "hp": 299,
+      "maxhp": 299,
+      "status": "none",
+      "stats": {
+       "atk": 202,
+       "def": 236,
+       "spa": 206,
+       "spd": 246,
+       "spe": 192
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "surf",
+        "pp": 24
+       }
+      ]
+     },
+     {
+      "species": "Gengar",
+      "ability": "levitate",
+      "item": "",
+      "types": [
+       "Ghost",
+       "Poison"
+      ],
+      "weightkg": 40.5,
+      "hp": 261,
+      "maxhp": 261,
+      "status": "none",
+      "stats": {
+       "atk": 166,
+       "def": 156,
+       "spa": 296,
+       "spd": 186,
+       "spe": 256
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "tackle",
+        "pp": 56
+       }
+      ]
+     }
+    ],
+    "bench": [
+     {
+      "species": "Ditto",
+      "ability": "limber",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 4,
+      "hp": 237,
+      "maxhp": 237,
+      "status": "none",
+      "stats": {
+       "atk": 132,
+       "def": 132,
+       "spa": 132,
+       "spd": 132,
+       "spe": 132
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "transform",
+        "pp": 16
+       }
+      ]
+     },
+     {
+      "species": "Ditto",
+      "ability": "limber",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 4,
+      "hp": 237,
+      "maxhp": 237,
+      "status": "none",
+      "stats": {
+       "atk": 132,
+       "def": 132,
+       "spa": 132,
+       "spd": 132,
+       "spe": 132
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "transform",
+        "pp": 16
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "after": [
+   {
+    "side": "p1",
+    "active": [
+     {
+      "species": "Snorlax",
+      "ability": "immunity",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 460,
+      "hp": 363,
+      "maxhp": 461,
+      "status": "none",
+      "stats": {
+       "atk": 256,
+       "def": 166,
+       "spa": 166,
+       "spd": 256,
+       "spe": 96
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "tackle",
+        "pp": 55
+       }
+      ]
+     },
+     {
+      "species": "Machamp",
+      "ability": "noguard",
+      "item": "",
+      "types": [
+       "Fighting"
+      ],
+      "weightkg": 130,
+      "hp": 245,
+      "maxhp": 321,
+      "status": "none",
+      "stats": {
+       "atk": 296,
+       "def": 196,
+       "spa": 166,
+       "spd": 206,
+       "spe": 146
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "tackle",
+        "pp": 55
+       }
+      ]
+     }
+    ],
+    "bench": [
+     {
+      "species": "Ditto",
+      "ability": "limber",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 4,
+      "hp": 237,
+      "maxhp": 237,
+      "status": "none",
+      "stats": {
+       "atk": 132,
+       "def": 132,
+       "spa": 132,
+       "spd": 132,
+       "spe": 132
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "transform",
+        "pp": 16
+       }
+      ]
+     },
+     {
+      "species": "Ditto",
+      "ability": "limber",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 4,
+      "hp": 237,
+      "maxhp": 237,
+      "status": "none",
+      "stats": {
+       "atk": 132,
+       "def": 132,
+       "spa": 132,
+       "spd": 132,
+       "spe": 132
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "transform",
+        "pp": 16
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "side": "p2",
+    "active": [
+     {
+      "species": "Blastoise",
+      "ability": "torrent",
+      "item": "",
+      "types": [
+       "Water"
+      ],
+      "weightkg": 85.5,
+      "hp": 196,
+      "maxhp": 299,
+      "status": "none",
+      "stats": {
+       "atk": 202,
+       "def": 236,
+       "spa": 206,
+       "spd": 246,
+       "spe": 192
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "surf",
+        "pp": 23
+       }
+      ]
+     },
+     {
+      "species": "Gengar",
+      "ability": "levitate",
+      "item": "",
+      "types": [
+       "Ghost",
+       "Poison"
+      ],
+      "weightkg": 40.5,
+      "hp": 177,
+      "maxhp": 261,
+      "status": "none",
+      "stats": {
+       "atk": 166,
+       "def": 156,
+       "spa": 296,
+       "spd": 186,
+       "spe": 256
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "tackle",
+        "pp": 55
+       }
+      ]
+     }
+    ],
+    "bench": [
+     {
+      "species": "Ditto",
+      "ability": "limber",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 4,
+      "hp": 237,
+      "maxhp": 237,
+      "status": "none",
+      "stats": {
+       "atk": 132,
+       "def": 132,
+       "spa": 132,
+       "spd": 132,
+       "spe": 132
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "transform",
+        "pp": 16
+       }
+      ]
+     },
+     {
+      "species": "Ditto",
+      "ability": "limber",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 4,
+      "hp": 237,
+      "maxhp": 237,
+      "status": "none",
+      "stats": {
+       "atk": 132,
+       "def": 132,
+       "spa": 132,
+       "spd": 132,
+       "spe": 132
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "transform",
+        "pp": 16
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "log": [
+   "|gametype|doubles",
+   "|player|p1|A||",
+   "|player|p2|B||",
+   "|gen|5",
+   "|tier|[Gen 5] Doubles Custom Game",
+   "|clearpoke",
+   "|poke|p1|Snorlax, F|",
+   "|poke|p1|Machamp, F|",
+   "|poke|p1|Ditto|",
+   "|poke|p1|Ditto|",
+   "|poke|p2|Blastoise, F|",
+   "|poke|p2|Gengar, F|",
+   "|poke|p2|Ditto|",
+   "|poke|p2|Ditto|",
+   "|teampreview",
+   "|",
+   "|teamsize|p1|4",
+   "|teamsize|p2|4",
+   "|start",
+   "|split|p1",
+   "|switch|p1a: Snorlax|Snorlax, F|461/461",
+   "|switch|p1a: Snorlax|Snorlax, F|461/461",
+   "|split|p1",
+   "|switch|p1b: Machamp|Machamp, F|321/321",
+   "|switch|p1b: Machamp|Machamp, F|321/321",
+   "|split|p2",
+   "|switch|p2a: Blastoise|Blastoise, F|299/299",
+   "|switch|p2a: Blastoise|Blastoise, F|299/299",
+   "|split|p2",
+   "|switch|p2b: Gengar|Gengar, F|261/261",
+   "|switch|p2b: Gengar|Gengar, F|261/261",
+   "|turn|1",
+   "|",
+   "|move|p2b: Gengar|Tackle|p1a: Snorlax",
+   "|split|p1",
+   "|-damage|p1a: Snorlax|424/461",
+   "|-damage|p1a: Snorlax|424/461",
+   "|move|p2a: Blastoise|Surf|p1b: Machamp|[spread] p2b,p1a,p1b",
+   "|debug|Spread modifier: 0.75",
+   "|debug|Spread modifier: 0.75",
+   "|debug|Spread modifier: 0.75",
+   "|split|p2",
+   "|-damage|p2b: Gengar|177/261",
+   "|-damage|p2b: Gengar|177/261",
+   "|split|p1",
+   "|-damage|p1a: Snorlax|363/461",
+   "|-damage|p1a: Snorlax|363/461",
+   "|split|p1",
+   "|-damage|p1b: Machamp|245/321",
+   "|-damage|p1b: Machamp|245/321",
+   "|move|p1b: Machamp|Tackle|p2a: Blastoise",
+   "|split|p2",
+   "|-damage|p2a: Blastoise|254/299",
+   "|-damage|p2a: Blastoise|254/299",
+   "|move|p1a: Snorlax|Tackle|p2a: Blastoise",
+   "|split|p2",
+   "|-damage|p2a: Blastoise|196/299",
+   "|-damage|p2a: Blastoise|196/299",
+   "|",
+   "|upkeep",
+   "|turn|2"
+  ]
+ },
+ {
+  "name": "earthquake_hits_ally",
+  "why": "Earthquake is AllAdjacent, so it hits the attacker’s own partner too",
+  "choices": {
+   "p1": "move 1 1, move 1 1",
+   "p2": "move 1, move 1 1"
+  },
+  "pe": {
+   "s1": "tackle,0;tackle,0",
+   "s2": "earthquake;tackle,0"
+  },
+  "before": [
+   {
+    "side": "p1",
+    "active": [
+     {
+      "species": "Snorlax",
+      "ability": "immunity",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 460,
+      "hp": 461,
+      "maxhp": 461,
+      "status": "none",
+      "stats": {
+       "atk": 256,
+       "def": 166,
+       "spa": 166,
+       "spd": 256,
+       "spe": 96
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "tackle",
+        "pp": 56
+       }
+      ]
+     },
+     {
+      "species": "Machamp",
+      "ability": "noguard",
+      "item": "",
+      "types": [
+       "Fighting"
+      ],
+      "weightkg": 130,
+      "hp": 321,
+      "maxhp": 321,
+      "status": "none",
+      "stats": {
+       "atk": 296,
+       "def": 196,
+       "spa": 166,
+       "spd": 206,
+       "spe": 146
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "tackle",
+        "pp": 56
+       }
+      ]
+     }
+    ],
+    "bench": [
+     {
+      "species": "Ditto",
+      "ability": "limber",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 4,
+      "hp": 237,
+      "maxhp": 237,
+      "status": "none",
+      "stats": {
+       "atk": 132,
+       "def": 132,
+       "spa": 132,
+       "spd": 132,
+       "spe": 132
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "transform",
+        "pp": 16
+       }
+      ]
+     },
+     {
+      "species": "Ditto",
+      "ability": "limber",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 4,
+      "hp": 237,
+      "maxhp": 237,
+      "status": "none",
+      "stats": {
+       "atk": 132,
+       "def": 132,
+       "spa": 132,
+       "spd": 132,
+       "spe": 132
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "transform",
+        "pp": 16
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "side": "p2",
+    "active": [
+     {
+      "species": "Golem",
+      "ability": "sturdy",
+      "item": "",
+      "types": [
+       "Rock",
+       "Ground"
+      ],
+      "weightkg": 300,
+      "hp": 301,
+      "maxhp": 301,
+      "status": "none",
+      "stats": {
+       "atk": 256,
+       "def": 296,
+       "spa": 146,
+       "spd": 166,
+       "spe": 126
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "earthquake",
+        "pp": 16
+       }
+      ]
+     },
+     {
+      "species": "Machoke",
+      "ability": "guts",
+      "item": "",
+      "types": [
+       "Fighting"
+      ],
+      "weightkg": 70.5,
+      "hp": 301,
+      "maxhp": 301,
+      "status": "none",
+      "stats": {
+       "atk": 236,
+       "def": 176,
+       "spa": 136,
+       "spd": 156,
+       "spe": 126
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "tackle",
+        "pp": 56
+       }
+      ]
+     }
+    ],
+    "bench": [
+     {
+      "species": "Ditto",
+      "ability": "limber",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 4,
+      "hp": 237,
+      "maxhp": 237,
+      "status": "none",
+      "stats": {
+       "atk": 132,
+       "def": 132,
+       "spa": 132,
+       "spd": 132,
+       "spe": 132
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "transform",
+        "pp": 16
+       }
+      ]
+     },
+     {
+      "species": "Ditto",
+      "ability": "limber",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 4,
+      "hp": 237,
+      "maxhp": 237,
+      "status": "none",
+      "stats": {
+       "atk": 132,
+       "def": 132,
+       "spa": 132,
+       "spd": 132,
+       "spe": 132
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "transform",
+        "pp": 16
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "after": [
+   {
+    "side": "p1",
+    "active": [
+     {
+      "species": "Snorlax",
+      "ability": "immunity",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 460,
+      "hp": 286,
+      "maxhp": 461,
+      "status": "none",
+      "stats": {
+       "atk": 256,
+       "def": 166,
+       "spa": 166,
+       "spd": 256,
+       "spe": 96
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "tackle",
+        "pp": 55
+       }
+      ]
+     },
+     {
+      "species": "Machamp",
+      "ability": "noguard",
+      "item": "",
+      "types": [
+       "Fighting"
+      ],
+      "weightkg": 130,
+      "hp": 216,
+      "maxhp": 321,
+      "status": "none",
+      "stats": {
+       "atk": 296,
+       "def": 196,
+       "spa": 166,
+       "spd": 206,
+       "spe": 146
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "tackle",
+        "pp": 55
+       }
+      ]
+     }
+    ],
+    "bench": [
+     {
+      "species": "Ditto",
+      "ability": "limber",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 4,
+      "hp": 237,
+      "maxhp": 237,
+      "status": "none",
+      "stats": {
+       "atk": 132,
+       "def": 132,
+       "spa": 132,
+       "spd": 132,
+       "spe": 132
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "transform",
+        "pp": 16
+       }
+      ]
+     },
+     {
+      "species": "Ditto",
+      "ability": "limber",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 4,
+      "hp": 237,
+      "maxhp": 237,
+      "status": "none",
+      "stats": {
+       "atk": 132,
+       "def": 132,
+       "spa": 132,
+       "spd": 132,
+       "spe": 132
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "transform",
+        "pp": 16
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "side": "p2",
+    "active": [
+     {
+      "species": "Golem",
+      "ability": "sturdy",
+      "item": "",
+      "types": [
+       "Rock",
+       "Ground"
+      ],
+      "weightkg": 300,
+      "hp": 259,
+      "maxhp": 301,
+      "status": "none",
+      "stats": {
+       "atk": 256,
+       "def": 296,
+       "spa": 146,
+       "spd": 166,
+       "spe": 126
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "earthquake",
+        "pp": 15
+       }
+      ]
+     },
+     {
+      "species": "Machoke",
+      "ability": "guts",
+      "item": "",
+      "types": [
+       "Fighting"
+      ],
+      "weightkg": 70.5,
+      "hp": 183,
+      "maxhp": 301,
+      "status": "none",
+      "stats": {
+       "atk": 236,
+       "def": 176,
+       "spa": 136,
+       "spd": 156,
+       "spe": 126
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "tackle",
+        "pp": 55
+       }
+      ]
+     }
+    ],
+    "bench": [
+     {
+      "species": "Ditto",
+      "ability": "limber",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 4,
+      "hp": 237,
+      "maxhp": 237,
+      "status": "none",
+      "stats": {
+       "atk": 132,
+       "def": 132,
+       "spa": 132,
+       "spd": 132,
+       "spe": 132
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "transform",
+        "pp": 16
+       }
+      ]
+     },
+     {
+      "species": "Ditto",
+      "ability": "limber",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 4,
+      "hp": 237,
+      "maxhp": 237,
+      "status": "none",
+      "stats": {
+       "atk": 132,
+       "def": 132,
+       "spa": 132,
+       "spd": 132,
+       "spe": 132
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "transform",
+        "pp": 16
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "log": [
+   "|gametype|doubles",
+   "|player|p1|A||",
+   "|player|p2|B||",
+   "|gen|5",
+   "|tier|[Gen 5] Doubles Custom Game",
+   "|clearpoke",
+   "|poke|p1|Snorlax, F|",
+   "|poke|p1|Machamp, F|",
+   "|poke|p1|Ditto|",
+   "|poke|p1|Ditto|",
+   "|poke|p2|Golem, F|",
+   "|poke|p2|Machoke, F|",
+   "|poke|p2|Ditto|",
+   "|poke|p2|Ditto|",
+   "|teampreview",
+   "|",
+   "|teamsize|p1|4",
+   "|teamsize|p2|4",
+   "|start",
+   "|split|p1",
+   "|switch|p1a: Snorlax|Snorlax, F|461/461",
+   "|switch|p1a: Snorlax|Snorlax, F|461/461",
+   "|split|p1",
+   "|switch|p1b: Machamp|Machamp, F|321/321",
+   "|switch|p1b: Machamp|Machamp, F|321/321",
+   "|split|p2",
+   "|switch|p2a: Golem|Golem, F|301/301",
+   "|switch|p2a: Golem|Golem, F|301/301",
+   "|split|p2",
+   "|switch|p2b: Machoke|Machoke, F|301/301",
+   "|switch|p2b: Machoke|Machoke, F|301/301",
+   "|turn|1",
+   "|",
+   "|move|p1b: Machamp|Tackle|p2a: Golem",
+   "|-resisted|p2a: Golem",
+   "|split|p2",
+   "|-damage|p2a: Golem|283/301",
+   "|-damage|p2a: Golem|283/301",
+   "|move|p2a: Golem|Earthquake|p1b: Machamp|[spread] p2b,p1a,p1b",
+   "|debug|Spread modifier: 0.75",
+   "|debug|Spread modifier: 0.75",
+   "|debug|Spread modifier: 0.75",
+   "|split|p2",
+   "|-damage|p2b: Machoke|183/301",
+   "|-damage|p2b: Machoke|183/301",
+   "|split|p1",
+   "|-damage|p1a: Snorlax|337/461",
+   "|-damage|p1a: Snorlax|337/461",
+   "|split|p1",
+   "|-damage|p1b: Machamp|216/321",
+   "|-damage|p1b: Machamp|216/321",
+   "|move|p2b: Machoke|Tackle|p1a: Snorlax",
+   "|split|p1",
+   "|-damage|p1a: Snorlax|286/461",
+   "|-damage|p1a: Snorlax|286/461",
+   "|move|p1a: Snorlax|Tackle|p2a: Golem",
+   "|-resisted|p2a: Golem",
+   "|split|p2",
+   "|-damage|p2a: Golem|259/301",
+   "|-damage|p2a: Golem|259/301",
+   "|",
+   "|upkeep",
+   "|turn|2"
+  ]
+ },
+ {
+  "name": "telepathy_avoids_ally_spread",
+  "why": "the partner has Telepathy, so the ally’s Earthquake does not touch it",
+  "choices": {
+   "p1": "move 1 1, move 1 1",
+   "p2": "move 1, move 1 1"
+  },
+  "pe": {
+   "s1": "tackle,0;tackle,0",
+   "s2": "earthquake;tackle,0"
+  },
+  "before": [
+   {
+    "side": "p1",
+    "active": [
+     {
+      "species": "Snorlax",
+      "ability": "immunity",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 460,
+      "hp": 461,
+      "maxhp": 461,
+      "status": "none",
+      "stats": {
+       "atk": 256,
+       "def": 166,
+       "spa": 166,
+       "spd": 256,
+       "spe": 96
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "tackle",
+        "pp": 56
+       }
+      ]
+     },
+     {
+      "species": "Machamp",
+      "ability": "noguard",
+      "item": "",
+      "types": [
+       "Fighting"
+      ],
+      "weightkg": 130,
+      "hp": 321,
+      "maxhp": 321,
+      "status": "none",
+      "stats": {
+       "atk": 296,
+       "def": 196,
+       "spa": 166,
+       "spd": 206,
+       "spe": 146
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "tackle",
+        "pp": 56
+       }
+      ]
+     }
+    ],
+    "bench": [
+     {
+      "species": "Ditto",
+      "ability": "limber",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 4,
+      "hp": 237,
+      "maxhp": 237,
+      "status": "none",
+      "stats": {
+       "atk": 132,
+       "def": 132,
+       "spa": 132,
+       "spd": 132,
+       "spe": 132
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "transform",
+        "pp": 16
+       }
+      ]
+     },
+     {
+      "species": "Ditto",
+      "ability": "limber",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 4,
+      "hp": 237,
+      "maxhp": 237,
+      "status": "none",
+      "stats": {
+       "atk": 132,
+       "def": 132,
+       "spa": 132,
+       "spd": 132,
+       "spe": 132
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "transform",
+        "pp": 16
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "side": "p2",
+    "active": [
+     {
+      "species": "Golem",
+      "ability": "sturdy",
+      "item": "",
+      "types": [
+       "Rock",
+       "Ground"
+      ],
+      "weightkg": 300,
+      "hp": 301,
+      "maxhp": 301,
+      "status": "none",
+      "stats": {
+       "atk": 256,
+       "def": 296,
+       "spa": 146,
+       "spd": 166,
+       "spe": 126
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "earthquake",
+        "pp": 16
+       }
+      ]
+     },
+     {
+      "species": "Musharna",
+      "ability": "telepathy",
+      "item": "",
+      "types": [
+       "Psychic"
+      ],
+      "weightkg": 60.5,
+      "hp": 373,
+      "maxhp": 373,
+      "status": "none",
+      "stats": {
+       "atk": 146,
+       "def": 206,
+       "spa": 250,
+       "spd": 226,
+       "spe": 94
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "tackle",
+        "pp": 56
+       }
+      ]
+     }
+    ],
+    "bench": [
+     {
+      "species": "Ditto",
+      "ability": "limber",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 4,
+      "hp": 237,
+      "maxhp": 237,
+      "status": "none",
+      "stats": {
+       "atk": 132,
+       "def": 132,
+       "spa": 132,
+       "spd": 132,
+       "spe": 132
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "transform",
+        "pp": 16
+       }
+      ]
+     },
+     {
+      "species": "Ditto",
+      "ability": "limber",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 4,
+      "hp": 237,
+      "maxhp": 237,
+      "status": "none",
+      "stats": {
+       "atk": 132,
+       "def": 132,
+       "spa": 132,
+       "spd": 132,
+       "spe": 132
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "transform",
+        "pp": 16
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "after": [
+   {
+    "side": "p1",
+    "active": [
+     {
+      "species": "Snorlax",
+      "ability": "immunity",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 460,
+      "hp": 305,
+      "maxhp": 461,
+      "status": "none",
+      "stats": {
+       "atk": 256,
+       "def": 166,
+       "spa": 166,
+       "spd": 256,
+       "spe": 96
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "tackle",
+        "pp": 55
+       }
+      ]
+     },
+     {
+      "species": "Machamp",
+      "ability": "noguard",
+      "item": "",
+      "types": [
+       "Fighting"
+      ],
+      "weightkg": 130,
+      "hp": 216,
+      "maxhp": 321,
+      "status": "none",
+      "stats": {
+       "atk": 296,
+       "def": 196,
+       "spa": 166,
+       "spd": 206,
+       "spe": 146
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "tackle",
+        "pp": 55
+       }
+      ]
+     }
+    ],
+    "bench": [
+     {
+      "species": "Ditto",
+      "ability": "limber",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 4,
+      "hp": 237,
+      "maxhp": 237,
+      "status": "none",
+      "stats": {
+       "atk": 132,
+       "def": 132,
+       "spa": 132,
+       "spd": 132,
+       "spe": 132
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "transform",
+        "pp": 16
+       }
+      ]
+     },
+     {
+      "species": "Ditto",
+      "ability": "limber",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 4,
+      "hp": 237,
+      "maxhp": 237,
+      "status": "none",
+      "stats": {
+       "atk": 132,
+       "def": 132,
+       "spa": 132,
+       "spd": 132,
+       "spe": 132
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "transform",
+        "pp": 16
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "side": "p2",
+    "active": [
+     {
+      "species": "Golem",
+      "ability": "sturdy",
+      "item": "",
+      "types": [
+       "Rock",
+       "Ground"
+      ],
+      "weightkg": 300,
+      "hp": 259,
+      "maxhp": 301,
+      "status": "none",
+      "stats": {
+       "atk": 256,
+       "def": 296,
+       "spa": 146,
+       "spd": 166,
+       "spe": 126
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "earthquake",
+        "pp": 15
+       }
+      ]
+     },
+     {
+      "species": "Musharna",
+      "ability": "telepathy",
+      "item": "",
+      "types": [
+       "Psychic"
+      ],
+      "weightkg": 60.5,
+      "hp": 373,
+      "maxhp": 373,
+      "status": "none",
+      "stats": {
+       "atk": 146,
+       "def": 206,
+       "spa": 250,
+       "spd": 226,
+       "spe": 94
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "tackle",
+        "pp": 55
+       }
+      ]
+     }
+    ],
+    "bench": [
+     {
+      "species": "Ditto",
+      "ability": "limber",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 4,
+      "hp": 237,
+      "maxhp": 237,
+      "status": "none",
+      "stats": {
+       "atk": 132,
+       "def": 132,
+       "spa": 132,
+       "spd": 132,
+       "spe": 132
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "transform",
+        "pp": 16
+       }
+      ]
+     },
+     {
+      "species": "Ditto",
+      "ability": "limber",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 4,
+      "hp": 237,
+      "maxhp": 237,
+      "status": "none",
+      "stats": {
+       "atk": 132,
+       "def": 132,
+       "spa": 132,
+       "spd": 132,
+       "spe": 132
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "transform",
+        "pp": 16
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "log": [
+   "|gametype|doubles",
+   "|player|p1|A||",
+   "|player|p2|B||",
+   "|gen|5",
+   "|tier|[Gen 5] Doubles Custom Game",
+   "|clearpoke",
+   "|poke|p1|Snorlax, F|",
+   "|poke|p1|Machamp, F|",
+   "|poke|p1|Ditto|",
+   "|poke|p1|Ditto|",
+   "|poke|p2|Golem, F|",
+   "|poke|p2|Musharna, F|",
+   "|poke|p2|Ditto|",
+   "|poke|p2|Ditto|",
+   "|teampreview",
+   "|",
+   "|teamsize|p1|4",
+   "|teamsize|p2|4",
+   "|start",
+   "|split|p1",
+   "|switch|p1a: Snorlax|Snorlax, F|461/461",
+   "|switch|p1a: Snorlax|Snorlax, F|461/461",
+   "|split|p1",
+   "|switch|p1b: Machamp|Machamp, F|321/321",
+   "|switch|p1b: Machamp|Machamp, F|321/321",
+   "|split|p2",
+   "|switch|p2a: Golem|Golem, F|301/301",
+   "|switch|p2a: Golem|Golem, F|301/301",
+   "|split|p2",
+   "|switch|p2b: Musharna|Musharna, F|373/373",
+   "|switch|p2b: Musharna|Musharna, F|373/373",
+   "|turn|1",
+   "|",
+   "|move|p1b: Machamp|Tackle|p2a: Golem",
+   "|-resisted|p2a: Golem",
+   "|split|p2",
+   "|-damage|p2a: Golem|283/301",
+   "|-damage|p2a: Golem|283/301",
+   "|move|p2a: Golem|Earthquake|p1b: Machamp|[spread] p1a,p1b",
+   "|-activate|p2b: Musharna|ability: Telepathy",
+   "|debug|Spread modifier: 0.75",
+   "|debug|Spread modifier: 0.75",
+   "|split|p1",
+   "|-damage|p1a: Snorlax|337/461",
+   "|-damage|p1a: Snorlax|337/461",
+   "|split|p1",
+   "|-damage|p1b: Machamp|216/321",
+   "|-damage|p1b: Machamp|216/321",
+   "|move|p1a: Snorlax|Tackle|p2a: Golem",
+   "|-resisted|p2a: Golem",
+   "|split|p2",
+   "|-damage|p2a: Golem|259/301",
+   "|-damage|p2a: Golem|259/301",
+   "|move|p2b: Musharna|Tackle|p1a: Snorlax",
+   "|split|p1",
+   "|-damage|p1a: Snorlax|305/461",
+   "|-damage|p1a: Snorlax|305/461",
+   "|",
+   "|upkeep",
+   "|turn|2"
+  ]
+ },
+ {
+  "name": "wide_guard_blocks_spread",
+  "why": "slot0 Wide Guards; the foe’s Surf should hit neither of our bodies",
+  "choices": {
+   "p1": "move 1, move 1 1",
+   "p2": "move 1, move 1 1"
+  },
+  "pe": {
+   "s1": "wideguard;tackle,0",
+   "s2": "surf;tackle,0"
+  },
+  "before": [
+   {
+    "side": "p1",
+    "active": [
+     {
+      "species": "Mienshao",
+      "ability": "innerfocus",
+      "item": "",
+      "types": [
+       "Fighting"
+      ],
+      "weightkg": 35.5,
+      "hp": 271,
+      "maxhp": 271,
+      "status": "none",
+      "stats": {
+       "atk": 286,
+       "def": 156,
+       "spa": 226,
+       "spd": 156,
+       "spe": 246
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "wideguard",
+        "pp": 16
+       },
+       {
+        "id": "tackle",
+        "pp": 56
+       }
+      ]
+     },
+     {
+      "species": "Snorlax",
+      "ability": "immunity",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 460,
+      "hp": 461,
+      "maxhp": 461,
+      "status": "none",
+      "stats": {
+       "atk": 256,
+       "def": 166,
+       "spa": 166,
+       "spd": 256,
+       "spe": 96
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "tackle",
+        "pp": 56
+       }
+      ]
+     }
+    ],
+    "bench": [
+     {
+      "species": "Ditto",
+      "ability": "limber",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 4,
+      "hp": 237,
+      "maxhp": 237,
+      "status": "none",
+      "stats": {
+       "atk": 132,
+       "def": 132,
+       "spa": 132,
+       "spd": 132,
+       "spe": 132
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "transform",
+        "pp": 16
+       }
+      ]
+     },
+     {
+      "species": "Ditto",
+      "ability": "limber",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 4,
+      "hp": 237,
+      "maxhp": 237,
+      "status": "none",
+      "stats": {
+       "atk": 132,
+       "def": 132,
+       "spa": 132,
+       "spd": 132,
+       "spe": 132
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "transform",
+        "pp": 16
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "side": "p2",
+    "active": [
+     {
+      "species": "Blastoise",
+      "ability": "torrent",
+      "item": "",
+      "types": [
+       "Water"
+      ],
+      "weightkg": 85.5,
+      "hp": 299,
+      "maxhp": 299,
+      "status": "none",
+      "stats": {
+       "atk": 202,
+       "def": 236,
+       "spa": 206,
+       "spd": 246,
+       "spe": 192
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "surf",
+        "pp": 24
+       }
+      ]
+     },
+     {
+      "species": "Gengar",
+      "ability": "levitate",
+      "item": "",
+      "types": [
+       "Ghost",
+       "Poison"
+      ],
+      "weightkg": 40.5,
+      "hp": 261,
+      "maxhp": 261,
+      "status": "none",
+      "stats": {
+       "atk": 166,
+       "def": 156,
+       "spa": 296,
+       "spd": 186,
+       "spe": 256
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "tackle",
+        "pp": 56
+       }
+      ]
+     }
+    ],
+    "bench": [
+     {
+      "species": "Ditto",
+      "ability": "limber",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 4,
+      "hp": 237,
+      "maxhp": 237,
+      "status": "none",
+      "stats": {
+       "atk": 132,
+       "def": 132,
+       "spa": 132,
+       "spd": 132,
+       "spe": 132
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "transform",
+        "pp": 16
+       }
+      ]
+     },
+     {
+      "species": "Ditto",
+      "ability": "limber",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 4,
+      "hp": 237,
+      "maxhp": 237,
+      "status": "none",
+      "stats": {
+       "atk": 132,
+       "def": 132,
+       "spa": 132,
+       "spd": 132,
+       "spe": 132
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "transform",
+        "pp": 16
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "after": [
+   {
+    "side": "p1",
+    "active": [
+     {
+      "species": "Mienshao",
+      "ability": "innerfocus",
+      "item": "",
+      "types": [
+       "Fighting"
+      ],
+      "weightkg": 35.5,
+      "hp": 232,
+      "maxhp": 271,
+      "status": "none",
+      "stats": {
+       "atk": 286,
+       "def": 156,
+       "spa": 226,
+       "spd": 156,
+       "spe": 246
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "wideguard",
+        "pp": 15
+       },
+       {
+        "id": "tackle",
+        "pp": 56
+       }
+      ]
+     },
+     {
+      "species": "Snorlax",
+      "ability": "immunity",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 460,
+      "hp": 461,
+      "maxhp": 461,
+      "status": "none",
+      "stats": {
+       "atk": 256,
+       "def": 166,
+       "spa": 166,
+       "spd": 256,
+       "spe": 96
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "tackle",
+        "pp": 55
+       }
+      ]
+     }
+    ],
+    "bench": [
+     {
+      "species": "Ditto",
+      "ability": "limber",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 4,
+      "hp": 237,
+      "maxhp": 237,
+      "status": "none",
+      "stats": {
+       "atk": 132,
+       "def": 132,
+       "spa": 132,
+       "spd": 132,
+       "spe": 132
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "transform",
+        "pp": 16
+       }
+      ]
+     },
+     {
+      "species": "Ditto",
+      "ability": "limber",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 4,
+      "hp": 237,
+      "maxhp": 237,
+      "status": "none",
+      "stats": {
+       "atk": 132,
+       "def": 132,
+       "spa": 132,
+       "spd": 132,
+       "spe": 132
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "transform",
+        "pp": 16
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "side": "p2",
+    "active": [
+     {
+      "species": "Blastoise",
+      "ability": "torrent",
+      "item": "",
+      "types": [
+       "Water"
+      ],
+      "weightkg": 85.5,
+      "hp": 241,
+      "maxhp": 299,
+      "status": "none",
+      "stats": {
+       "atk": 202,
+       "def": 236,
+       "spa": 206,
+       "spd": 246,
+       "spe": 192
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "surf",
+        "pp": 23
+       }
+      ]
+     },
+     {
+      "species": "Gengar",
+      "ability": "levitate",
+      "item": "",
+      "types": [
+       "Ghost",
+       "Poison"
+      ],
+      "weightkg": 40.5,
+      "hp": 177,
+      "maxhp": 261,
+      "status": "none",
+      "stats": {
+       "atk": 166,
+       "def": 156,
+       "spa": 296,
+       "spd": 186,
+       "spe": 256
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "tackle",
+        "pp": 55
+       }
+      ]
+     }
+    ],
+    "bench": [
+     {
+      "species": "Ditto",
+      "ability": "limber",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 4,
+      "hp": 237,
+      "maxhp": 237,
+      "status": "none",
+      "stats": {
+       "atk": 132,
+       "def": 132,
+       "spa": 132,
+       "spd": 132,
+       "spe": 132
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "transform",
+        "pp": 16
+       }
+      ]
+     },
+     {
+      "species": "Ditto",
+      "ability": "limber",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 4,
+      "hp": 237,
+      "maxhp": 237,
+      "status": "none",
+      "stats": {
+       "atk": 132,
+       "def": 132,
+       "spa": 132,
+       "spd": 132,
+       "spe": 132
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "transform",
+        "pp": 16
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "log": [
+   "|gametype|doubles",
+   "|player|p1|A||",
+   "|player|p2|B||",
+   "|gen|5",
+   "|tier|[Gen 5] Doubles Custom Game",
+   "|clearpoke",
+   "|poke|p1|Mienshao, F|",
+   "|poke|p1|Snorlax, F|",
+   "|poke|p1|Ditto|",
+   "|poke|p1|Ditto|",
+   "|poke|p2|Blastoise, F|",
+   "|poke|p2|Gengar, F|",
+   "|poke|p2|Ditto|",
+   "|poke|p2|Ditto|",
+   "|teampreview",
+   "|",
+   "|teamsize|p1|4",
+   "|teamsize|p2|4",
+   "|start",
+   "|split|p1",
+   "|switch|p1a: Mienshao|Mienshao, F|271/271",
+   "|switch|p1a: Mienshao|Mienshao, F|271/271",
+   "|split|p1",
+   "|switch|p1b: Snorlax|Snorlax, F|461/461",
+   "|switch|p1b: Snorlax|Snorlax, F|461/461",
+   "|split|p2",
+   "|switch|p2a: Blastoise|Blastoise, F|299/299",
+   "|switch|p2a: Blastoise|Blastoise, F|299/299",
+   "|split|p2",
+   "|switch|p2b: Gengar|Gengar, F|261/261",
+   "|switch|p2b: Gengar|Gengar, F|261/261",
+   "|turn|1",
+   "|",
+   "|move|p1a: Mienshao|Wide Guard|p1a: Mienshao",
+   "|-singleturn|p1a: Mienshao|Wide Guard",
+   "|move|p2b: Gengar|Tackle|p1a: Mienshao",
+   "|split|p1",
+   "|-damage|p1a: Mienshao|232/271",
+   "|-damage|p1a: Mienshao|232/271",
+   "|move|p2a: Blastoise|Surf|p1b: Snorlax|[spread] p2b",
+   "|-activate|p1a: Mienshao|move: Wide Guard",
+   "|-activate|p1b: Snorlax|move: Wide Guard",
+   "|debug|Spread modifier: 0.75",
+   "|split|p2",
+   "|-damage|p2b: Gengar|177/261",
+   "|-damage|p2b: Gengar|177/261",
+   "|move|p1b: Snorlax|Tackle|p2a: Blastoise",
+   "|split|p2",
+   "|-damage|p2a: Blastoise|241/299",
+   "|-damage|p2a: Blastoise|241/299",
+   "|",
+   "|upkeep",
+   "|turn|2"
+  ]
+ },
+ {
+  "name": "quick_guard_blocks_priority",
+  "why": "slot0 Quick Guards; a priority move should be blocked and a normal one should not",
+  "choices": {
+   "p1": "move 1, move 1 1",
+   "p2": "move 1 2, move 1 2"
+  },
+  "pe": {
+   "s1": "quickguard;tackle,0",
+   "s2": "machpunch,1;tackle,1"
+  },
+  "before": [
+   {
+    "side": "p1",
+    "active": [
+     {
+      "species": "Mienshao",
+      "ability": "innerfocus",
+      "item": "",
+      "types": [
+       "Fighting"
+      ],
+      "weightkg": 35.5,
+      "hp": 271,
+      "maxhp": 271,
+      "status": "none",
+      "stats": {
+       "atk": 286,
+       "def": 156,
+       "spa": 226,
+       "spd": 156,
+       "spe": 246
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "quickguard",
+        "pp": 24
+       },
+       {
+        "id": "tackle",
+        "pp": 56
+       }
+      ]
+     },
+     {
+      "species": "Snorlax",
+      "ability": "immunity",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 460,
+      "hp": 461,
+      "maxhp": 461,
+      "status": "none",
+      "stats": {
+       "atk": 256,
+       "def": 166,
+       "spa": 166,
+       "spd": 256,
+       "spe": 96
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "tackle",
+        "pp": 56
+       }
+      ]
+     }
+    ],
+    "bench": [
+     {
+      "species": "Ditto",
+      "ability": "limber",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 4,
+      "hp": 237,
+      "maxhp": 237,
+      "status": "none",
+      "stats": {
+       "atk": 132,
+       "def": 132,
+       "spa": 132,
+       "spd": 132,
+       "spe": 132
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "transform",
+        "pp": 16
+       }
+      ]
+     },
+     {
+      "species": "Ditto",
+      "ability": "limber",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 4,
+      "hp": 237,
+      "maxhp": 237,
+      "status": "none",
+      "stats": {
+       "atk": 132,
+       "def": 132,
+       "spa": 132,
+       "spd": 132,
+       "spe": 132
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "transform",
+        "pp": 16
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "side": "p2",
+    "active": [
+     {
+      "species": "Hitmonchan",
+      "ability": "keeneye",
+      "item": "",
+      "types": [
+       "Fighting"
+      ],
+      "weightkg": 50.2,
+      "hp": 241,
+      "maxhp": 241,
+      "status": "none",
+      "stats": {
+       "atk": 246,
+       "def": 194,
+       "spa": 106,
+       "spd": 256,
+       "spe": 188
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "machpunch",
+        "pp": 48
+       }
+      ]
+     },
+     {
+      "species": "Gengar",
+      "ability": "levitate",
+      "item": "",
+      "types": [
+       "Ghost",
+       "Poison"
+      ],
+      "weightkg": 40.5,
+      "hp": 261,
+      "maxhp": 261,
+      "status": "none",
+      "stats": {
+       "atk": 166,
+       "def": 156,
+       "spa": 296,
+       "spd": 186,
+       "spe": 256
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "tackle",
+        "pp": 56
+       }
+      ]
+     }
+    ],
+    "bench": [
+     {
+      "species": "Ditto",
+      "ability": "limber",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 4,
+      "hp": 237,
+      "maxhp": 237,
+      "status": "none",
+      "stats": {
+       "atk": 132,
+       "def": 132,
+       "spa": 132,
+       "spd": 132,
+       "spe": 132
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "transform",
+        "pp": 16
+       }
+      ]
+     },
+     {
+      "species": "Ditto",
+      "ability": "limber",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 4,
+      "hp": 237,
+      "maxhp": 237,
+      "status": "none",
+      "stats": {
+       "atk": 132,
+       "def": 132,
+       "spa": 132,
+       "spd": 132,
+       "spe": 132
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "transform",
+        "pp": 16
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "after": [
+   {
+    "side": "p1",
+    "active": [
+     {
+      "species": "Mienshao",
+      "ability": "innerfocus",
+      "item": "",
+      "types": [
+       "Fighting"
+      ],
+      "weightkg": 35.5,
+      "hp": 271,
+      "maxhp": 271,
+      "status": "none",
+      "stats": {
+       "atk": 286,
+       "def": 156,
+       "spa": 226,
+       "spd": 156,
+       "spe": 246
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "quickguard",
+        "pp": 23
+       },
+       {
+        "id": "tackle",
+        "pp": 56
+       }
+      ]
+     },
+     {
+      "species": "Snorlax",
+      "ability": "immunity",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 460,
+      "hp": 424,
+      "maxhp": 461,
+      "status": "none",
+      "stats": {
+       "atk": 256,
+       "def": 166,
+       "spa": 166,
+       "spd": 256,
+       "spe": 96
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "tackle",
+        "pp": 55
+       }
+      ]
+     }
+    ],
+    "bench": [
+     {
+      "species": "Ditto",
+      "ability": "limber",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 4,
+      "hp": 237,
+      "maxhp": 237,
+      "status": "none",
+      "stats": {
+       "atk": 132,
+       "def": 132,
+       "spa": 132,
+       "spd": 132,
+       "spe": 132
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "transform",
+        "pp": 16
+       }
+      ]
+     },
+     {
+      "species": "Ditto",
+      "ability": "limber",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 4,
+      "hp": 237,
+      "maxhp": 237,
+      "status": "none",
+      "stats": {
+       "atk": 132,
+       "def": 132,
+       "spa": 132,
+       "spd": 132,
+       "spe": 132
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "transform",
+        "pp": 16
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "side": "p2",
+    "active": [
+     {
+      "species": "Hitmonchan",
+      "ability": "keeneye",
+      "item": "",
+      "types": [
+       "Fighting"
+      ],
+      "weightkg": 50.2,
+      "hp": 169,
+      "maxhp": 241,
+      "status": "none",
+      "stats": {
+       "atk": 246,
+       "def": 194,
+       "spa": 106,
+       "spd": 256,
+       "spe": 188
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "machpunch",
+        "pp": 47
+       }
+      ]
+     },
+     {
+      "species": "Gengar",
+      "ability": "levitate",
+      "item": "",
+      "types": [
+       "Ghost",
+       "Poison"
+      ],
+      "weightkg": 40.5,
+      "hp": 261,
+      "maxhp": 261,
+      "status": "none",
+      "stats": {
+       "atk": 166,
+       "def": 156,
+       "spa": 296,
+       "spd": 186,
+       "spe": 256
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "tackle",
+        "pp": 55
+       }
+      ]
+     }
+    ],
+    "bench": [
+     {
+      "species": "Ditto",
+      "ability": "limber",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 4,
+      "hp": 237,
+      "maxhp": 237,
+      "status": "none",
+      "stats": {
+       "atk": 132,
+       "def": 132,
+       "spa": 132,
+       "spd": 132,
+       "spe": 132
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "transform",
+        "pp": 16
+       }
+      ]
+     },
+     {
+      "species": "Ditto",
+      "ability": "limber",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 4,
+      "hp": 237,
+      "maxhp": 237,
+      "status": "none",
+      "stats": {
+       "atk": 132,
+       "def": 132,
+       "spa": 132,
+       "spd": 132,
+       "spe": 132
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "transform",
+        "pp": 16
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "log": [
+   "|gametype|doubles",
+   "|player|p1|A||",
+   "|player|p2|B||",
+   "|gen|5",
+   "|tier|[Gen 5] Doubles Custom Game",
+   "|clearpoke",
+   "|poke|p1|Mienshao, F|",
+   "|poke|p1|Snorlax, F|",
+   "|poke|p1|Ditto|",
+   "|poke|p1|Ditto|",
+   "|poke|p2|Hitmonchan, M|",
+   "|poke|p2|Gengar, F|",
+   "|poke|p2|Ditto|",
+   "|poke|p2|Ditto|",
+   "|teampreview",
+   "|",
+   "|teamsize|p1|4",
+   "|teamsize|p2|4",
+   "|start",
+   "|split|p1",
+   "|switch|p1a: Mienshao|Mienshao, F|271/271",
+   "|switch|p1a: Mienshao|Mienshao, F|271/271",
+   "|split|p1",
+   "|switch|p1b: Snorlax|Snorlax, F|461/461",
+   "|switch|p1b: Snorlax|Snorlax, F|461/461",
+   "|split|p2",
+   "|switch|p2a: Hitmonchan|Hitmonchan, M|241/241",
+   "|switch|p2a: Hitmonchan|Hitmonchan, M|241/241",
+   "|split|p2",
+   "|switch|p2b: Gengar|Gengar, F|261/261",
+   "|switch|p2b: Gengar|Gengar, F|261/261",
+   "|turn|1",
+   "|",
+   "|move|p1a: Mienshao|Quick Guard|p1a: Mienshao",
+   "|-singleturn|p1a: Mienshao|Quick Guard",
+   "|move|p2a: Hitmonchan|Mach Punch|p1b: Snorlax",
+   "|-activate|p1b: Snorlax|Quick Guard",
+   "|move|p2b: Gengar|Tackle|p1b: Snorlax",
+   "|split|p1",
+   "|-damage|p1b: Snorlax|424/461",
+   "|-damage|p1b: Snorlax|424/461",
+   "|move|p1b: Snorlax|Tackle|p2a: Hitmonchan",
+   "|split|p2",
+   "|-damage|p2a: Hitmonchan|169/241",
+   "|-damage|p2a: Hitmonchan|169/241",
+   "|",
+   "|upkeep",
+   "|turn|2"
+  ]
+ },
+ {
+  "name": "helping_hand_boosts_ally",
+  "why": "slot1 Helping Hands, so slot0’s Tackle should do 1.5x",
+  "choices": {
+   "p1": "move 1 1, move 1 -1",
+   "p2": "move 1 1, move 1 1"
+  },
+  "pe": {
+   "s1": "tackle,0;helpinghand",
+   "s2": "tackle,0;tackle,0"
+  },
+  "before": [
+   {
+    "side": "p1",
+    "active": [
+     {
+      "species": "Snorlax",
+      "ability": "immunity",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 460,
+      "hp": 461,
+      "maxhp": 461,
+      "status": "none",
+      "stats": {
+       "atk": 256,
+       "def": 166,
+       "spa": 166,
+       "spd": 256,
+       "spe": 96
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "tackle",
+        "pp": 56
+       }
+      ]
+     },
+     {
+      "species": "Clefable",
+      "ability": "unaware",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 40,
+      "hp": 331,
+      "maxhp": 331,
+      "status": "none",
+      "stats": {
+       "atk": 176,
+       "def": 182,
+       "spa": 206,
+       "spd": 216,
+       "spe": 156
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "helpinghand",
+        "pp": 32
+       },
+       {
+        "id": "tackle",
+        "pp": 56
+       }
+      ]
+     }
+    ],
+    "bench": [
+     {
+      "species": "Ditto",
+      "ability": "limber",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 4,
+      "hp": 237,
+      "maxhp": 237,
+      "status": "none",
+      "stats": {
+       "atk": 132,
+       "def": 132,
+       "spa": 132,
+       "spd": 132,
+       "spe": 132
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "transform",
+        "pp": 16
+       }
+      ]
+     },
+     {
+      "species": "Ditto",
+      "ability": "limber",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 4,
+      "hp": 237,
+      "maxhp": 237,
+      "status": "none",
+      "stats": {
+       "atk": 132,
+       "def": 132,
+       "spa": 132,
+       "spd": 132,
+       "spe": 132
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "transform",
+        "pp": 16
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "side": "p2",
+    "active": [
+     {
+      "species": "Gengar",
+      "ability": "levitate",
+      "item": "",
+      "types": [
+       "Ghost",
+       "Poison"
+      ],
+      "weightkg": 40.5,
+      "hp": 261,
+      "maxhp": 261,
+      "status": "none",
+      "stats": {
+       "atk": 166,
+       "def": 156,
+       "spa": 296,
+       "spd": 186,
+       "spe": 256
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "tackle",
+        "pp": 56
+       }
+      ]
+     },
+     {
+      "species": "Machamp",
+      "ability": "noguard",
+      "item": "",
+      "types": [
+       "Fighting"
+      ],
+      "weightkg": 130,
+      "hp": 321,
+      "maxhp": 321,
+      "status": "none",
+      "stats": {
+       "atk": 296,
+       "def": 196,
+       "spa": 166,
+       "spd": 206,
+       "spe": 146
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "tackle",
+        "pp": 56
+       }
+      ]
+     }
+    ],
+    "bench": [
+     {
+      "species": "Ditto",
+      "ability": "limber",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 4,
+      "hp": 237,
+      "maxhp": 237,
+      "status": "none",
+      "stats": {
+       "atk": 132,
+       "def": 132,
+       "spa": 132,
+       "spd": 132,
+       "spe": 132
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "transform",
+        "pp": 16
+       }
+      ]
+     },
+     {
+      "species": "Ditto",
+      "ability": "limber",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 4,
+      "hp": 237,
+      "maxhp": 237,
+      "status": "none",
+      "stats": {
+       "atk": 132,
+       "def": 132,
+       "spa": 132,
+       "spd": 132,
+       "spe": 132
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "transform",
+        "pp": 16
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "after": [
+   {
+    "side": "p1",
+    "active": [
+     {
+      "species": "Snorlax",
+      "ability": "immunity",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 460,
+      "hp": 360,
+      "maxhp": 461,
+      "status": "none",
+      "stats": {
+       "atk": 256,
+       "def": 166,
+       "spa": 166,
+       "spd": 256,
+       "spe": 96
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "tackle",
+        "pp": 55
+       }
+      ]
+     },
+     {
+      "species": "Clefable",
+      "ability": "unaware",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 40,
+      "hp": 331,
+      "maxhp": 331,
+      "status": "none",
+      "stats": {
+       "atk": 176,
+       "def": 182,
+       "spa": 206,
+       "spd": 216,
+       "spe": 156
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "helpinghand",
+        "pp": 31
+       },
+       {
+        "id": "tackle",
+        "pp": 56
+       }
+      ]
+     }
+    ],
+    "bench": [
+     {
+      "species": "Ditto",
+      "ability": "limber",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 4,
+      "hp": 237,
+      "maxhp": 237,
+      "status": "none",
+      "stats": {
+       "atk": 132,
+       "def": 132,
+       "spa": 132,
+       "spd": 132,
+       "spe": 132
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "transform",
+        "pp": 16
+       }
+      ]
+     },
+     {
+      "species": "Ditto",
+      "ability": "limber",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 4,
+      "hp": 237,
+      "maxhp": 237,
+      "status": "none",
+      "stats": {
+       "atk": 132,
+       "def": 132,
+       "spa": 132,
+       "spd": 132,
+       "spe": 132
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "transform",
+        "pp": 16
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "side": "p2",
+    "active": [
+     {
+      "species": "Gengar",
+      "ability": "levitate",
+      "item": "",
+      "types": [
+       "Ghost",
+       "Poison"
+      ],
+      "weightkg": 40.5,
+      "hp": 261,
+      "maxhp": 261,
+      "status": "none",
+      "stats": {
+       "atk": 166,
+       "def": 156,
+       "spa": 296,
+       "spd": 186,
+       "spe": 256
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "tackle",
+        "pp": 55
+       }
+      ]
+     },
+     {
+      "species": "Machamp",
+      "ability": "noguard",
+      "item": "",
+      "types": [
+       "Fighting"
+      ],
+      "weightkg": 130,
+      "hp": 321,
+      "maxhp": 321,
+      "status": "none",
+      "stats": {
+       "atk": 296,
+       "def": 196,
+       "spa": 166,
+       "spd": 206,
+       "spe": 146
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "tackle",
+        "pp": 55
+       }
+      ]
+     }
+    ],
+    "bench": [
+     {
+      "species": "Ditto",
+      "ability": "limber",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 4,
+      "hp": 237,
+      "maxhp": 237,
+      "status": "none",
+      "stats": {
+       "atk": 132,
+       "def": 132,
+       "spa": 132,
+       "spd": 132,
+       "spe": 132
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "transform",
+        "pp": 16
+       }
+      ]
+     },
+     {
+      "species": "Ditto",
+      "ability": "limber",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 4,
+      "hp": 237,
+      "maxhp": 237,
+      "status": "none",
+      "stats": {
+       "atk": 132,
+       "def": 132,
+       "spa": 132,
+       "spd": 132,
+       "spe": 132
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "transform",
+        "pp": 16
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "log": [
+   "|gametype|doubles",
+   "|player|p1|A||",
+   "|player|p2|B||",
+   "|gen|5",
+   "|tier|[Gen 5] Doubles Custom Game",
+   "|clearpoke",
+   "|poke|p1|Snorlax, F|",
+   "|poke|p1|Clefable, F|",
+   "|poke|p1|Ditto|",
+   "|poke|p1|Ditto|",
+   "|poke|p2|Gengar, F|",
+   "|poke|p2|Machamp, F|",
+   "|poke|p2|Ditto|",
+   "|poke|p2|Ditto|",
+   "|teampreview",
+   "|",
+   "|teamsize|p1|4",
+   "|teamsize|p2|4",
+   "|start",
+   "|split|p1",
+   "|switch|p1a: Snorlax|Snorlax, F|461/461",
+   "|switch|p1a: Snorlax|Snorlax, F|461/461",
+   "|split|p1",
+   "|switch|p1b: Clefable|Clefable, F|331/331",
+   "|switch|p1b: Clefable|Clefable, F|331/331",
+   "|split|p2",
+   "|switch|p2a: Gengar|Gengar, F|261/261",
+   "|switch|p2a: Gengar|Gengar, F|261/261",
+   "|split|p2",
+   "|switch|p2b: Machamp|Machamp, F|321/321",
+   "|switch|p2b: Machamp|Machamp, F|321/321",
+   "|turn|1",
+   "|",
+   "|move|p1b: Clefable|Helping Hand|p1a: Snorlax",
+   "|-singleturn|p1a: Snorlax|Helping Hand|[of] p1b: Clefable",
+   "|move|p2a: Gengar|Tackle|p1a: Snorlax",
+   "|split|p1",
+   "|-damage|p1a: Snorlax|424/461",
+   "|-damage|p1a: Snorlax|424/461",
+   "|move|p2b: Machamp|Tackle|p1a: Snorlax",
+   "|split|p1",
+   "|-damage|p1a: Snorlax|360/461",
+   "|-damage|p1a: Snorlax|360/461",
+   "|move|p1a: Snorlax|Tackle|p2a: Gengar",
+   "|-immune|p2a: Gengar",
+   "|",
+   "|upkeep",
+   "|turn|2"
+  ]
+ },
+ {
+  "name": "friend_guard_reduces_ally_damage",
+  "why": "the partner has Friend Guard, so our slot0 takes 0.75x from the foe",
+  "choices": {
+   "p1": "move 1 1, move 1 1",
+   "p2": "move 1 1, move 1 1"
+  },
+  "pe": {
+   "s1": "tackle,0;tackle,0",
+   "s2": "tackle,0;tackle,0"
+  },
+  "before": [
+   {
+    "side": "p1",
+    "active": [
+     {
+      "species": "Snorlax",
+      "ability": "immunity",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 460,
+      "hp": 461,
+      "maxhp": 461,
+      "status": "none",
+      "stats": {
+       "atk": 256,
+       "def": 166,
+       "spa": 166,
+       "spd": 256,
+       "spe": 96
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "tackle",
+        "pp": 56
+       }
+      ]
+     },
+     {
+      "species": "Clefable",
+      "ability": "friendguard",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 40,
+      "hp": 331,
+      "maxhp": 331,
+      "status": "none",
+      "stats": {
+       "atk": 176,
+       "def": 182,
+       "spa": 206,
+       "spd": 216,
+       "spe": 156
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "tackle",
+        "pp": 56
+       }
+      ]
+     }
+    ],
+    "bench": [
+     {
+      "species": "Ditto",
+      "ability": "limber",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 4,
+      "hp": 237,
+      "maxhp": 237,
+      "status": "none",
+      "stats": {
+       "atk": 132,
+       "def": 132,
+       "spa": 132,
+       "spd": 132,
+       "spe": 132
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "transform",
+        "pp": 16
+       }
+      ]
+     },
+     {
+      "species": "Ditto",
+      "ability": "limber",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 4,
+      "hp": 237,
+      "maxhp": 237,
+      "status": "none",
+      "stats": {
+       "atk": 132,
+       "def": 132,
+       "spa": 132,
+       "spd": 132,
+       "spe": 132
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "transform",
+        "pp": 16
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "side": "p2",
+    "active": [
+     {
+      "species": "Machamp",
+      "ability": "noguard",
+      "item": "",
+      "types": [
+       "Fighting"
+      ],
+      "weightkg": 130,
+      "hp": 321,
+      "maxhp": 321,
+      "status": "none",
+      "stats": {
+       "atk": 296,
+       "def": 196,
+       "spa": 166,
+       "spd": 206,
+       "spe": 146
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "tackle",
+        "pp": 56
+       }
+      ]
+     },
+     {
+      "species": "Gengar",
+      "ability": "levitate",
+      "item": "",
+      "types": [
+       "Ghost",
+       "Poison"
+      ],
+      "weightkg": 40.5,
+      "hp": 261,
+      "maxhp": 261,
+      "status": "none",
+      "stats": {
+       "atk": 166,
+       "def": 156,
+       "spa": 296,
+       "spd": 186,
+       "spe": 256
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "tackle",
+        "pp": 56
+       }
+      ]
+     }
+    ],
+    "bench": [
+     {
+      "species": "Ditto",
+      "ability": "limber",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 4,
+      "hp": 237,
+      "maxhp": 237,
+      "status": "none",
+      "stats": {
+       "atk": 132,
+       "def": 132,
+       "spa": 132,
+       "spd": 132,
+       "spe": 132
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "transform",
+        "pp": 16
+       }
+      ]
+     },
+     {
+      "species": "Ditto",
+      "ability": "limber",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 4,
+      "hp": 237,
+      "maxhp": 237,
+      "status": "none",
+      "stats": {
+       "atk": 132,
+       "def": 132,
+       "spa": 132,
+       "spd": 132,
+       "spe": 132
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "transform",
+        "pp": 16
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "after": [
+   {
+    "side": "p1",
+    "active": [
+     {
+      "species": "Snorlax",
+      "ability": "immunity",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 460,
+      "hp": 385,
+      "maxhp": 461,
+      "status": "none",
+      "stats": {
+       "atk": 256,
+       "def": 166,
+       "spa": 166,
+       "spd": 256,
+       "spe": 96
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "tackle",
+        "pp": 55
+       }
+      ]
+     },
+     {
+      "species": "Clefable",
+      "ability": "friendguard",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 40,
+      "hp": 331,
+      "maxhp": 331,
+      "status": "none",
+      "stats": {
+       "atk": 176,
+       "def": 182,
+       "spa": 206,
+       "spd": 216,
+       "spe": 156
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "tackle",
+        "pp": 55
+       }
+      ]
+     }
+    ],
+    "bench": [
+     {
+      "species": "Ditto",
+      "ability": "limber",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 4,
+      "hp": 237,
+      "maxhp": 237,
+      "status": "none",
+      "stats": {
+       "atk": 132,
+       "def": 132,
+       "spa": 132,
+       "spd": 132,
+       "spe": 132
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "transform",
+        "pp": 16
+       }
+      ]
+     },
+     {
+      "species": "Ditto",
+      "ability": "limber",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 4,
+      "hp": 237,
+      "maxhp": 237,
+      "status": "none",
+      "stats": {
+       "atk": 132,
+       "def": 132,
+       "spa": 132,
+       "spd": 132,
+       "spe": 132
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "transform",
+        "pp": 16
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "side": "p2",
+    "active": [
+     {
+      "species": "Machamp",
+      "ability": "noguard",
+      "item": "",
+      "types": [
+       "Fighting"
+      ],
+      "weightkg": 130,
+      "hp": 202,
+      "maxhp": 321,
+      "status": "none",
+      "stats": {
+       "atk": 296,
+       "def": 196,
+       "spa": 166,
+       "spd": 206,
+       "spe": 146
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "tackle",
+        "pp": 55
+       }
+      ]
+     },
+     {
+      "species": "Gengar",
+      "ability": "levitate",
+      "item": "",
+      "types": [
+       "Ghost",
+       "Poison"
+      ],
+      "weightkg": 40.5,
+      "hp": 261,
+      "maxhp": 261,
+      "status": "none",
+      "stats": {
+       "atk": 166,
+       "def": 156,
+       "spa": 296,
+       "spd": 186,
+       "spe": 256
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "tackle",
+        "pp": 55
+       }
+      ]
+     }
+    ],
+    "bench": [
+     {
+      "species": "Ditto",
+      "ability": "limber",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 4,
+      "hp": 237,
+      "maxhp": 237,
+      "status": "none",
+      "stats": {
+       "atk": 132,
+       "def": 132,
+       "spa": 132,
+       "spd": 132,
+       "spe": 132
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "transform",
+        "pp": 16
+       }
+      ]
+     },
+     {
+      "species": "Ditto",
+      "ability": "limber",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 4,
+      "hp": 237,
+      "maxhp": 237,
+      "status": "none",
+      "stats": {
+       "atk": 132,
+       "def": 132,
+       "spa": 132,
+       "spd": 132,
+       "spe": 132
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "transform",
+        "pp": 16
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "log": [
+   "|gametype|doubles",
+   "|player|p1|A||",
+   "|player|p2|B||",
+   "|gen|5",
+   "|tier|[Gen 5] Doubles Custom Game",
+   "|clearpoke",
+   "|poke|p1|Snorlax, F|",
+   "|poke|p1|Clefable, F|",
+   "|poke|p1|Ditto|",
+   "|poke|p1|Ditto|",
+   "|poke|p2|Machamp, F|",
+   "|poke|p2|Gengar, F|",
+   "|poke|p2|Ditto|",
+   "|poke|p2|Ditto|",
+   "|teampreview",
+   "|",
+   "|teamsize|p1|4",
+   "|teamsize|p2|4",
+   "|start",
+   "|split|p1",
+   "|switch|p1a: Snorlax|Snorlax, F|461/461",
+   "|switch|p1a: Snorlax|Snorlax, F|461/461",
+   "|split|p1",
+   "|switch|p1b: Clefable|Clefable, F|331/331",
+   "|switch|p1b: Clefable|Clefable, F|331/331",
+   "|split|p2",
+   "|switch|p2a: Machamp|Machamp, F|321/321",
+   "|switch|p2a: Machamp|Machamp, F|321/321",
+   "|split|p2",
+   "|switch|p2b: Gengar|Gengar, F|261/261",
+   "|switch|p2b: Gengar|Gengar, F|261/261",
+   "|turn|1",
+   "|",
+   "|move|p2b: Gengar|Tackle|p1a: Snorlax",
+   "|debug|Friend Guard weaken",
+   "|split|p1",
+   "|-damage|p1a: Snorlax|433/461",
+   "|-damage|p1a: Snorlax|433/461",
+   "|move|p1b: Clefable|Tackle|p2a: Machamp",
+   "|split|p2",
+   "|-damage|p2a: Machamp|272/321",
+   "|-damage|p2a: Machamp|272/321",
+   "|move|p2a: Machamp|Tackle|p1a: Snorlax",
+   "|debug|Friend Guard weaken",
+   "|split|p1",
+   "|-damage|p1a: Snorlax|385/461",
+   "|-damage|p1a: Snorlax|385/461",
+   "|move|p1a: Snorlax|Tackle|p2a: Machamp",
+   "|split|p2",
+   "|-damage|p2a: Machamp|202/321",
+   "|-damage|p2a: Machamp|202/321",
+   "|",
+   "|upkeep",
+   "|turn|2"
+  ]
+ },
+ {
+  "name": "ally_switch_swaps_slots",
+  "why": "slot0 Ally Switches, so the foe’s attack aimed at slot0 lands on the body that moved there",
+  "choices": {
+   "p1": "move 1, move 1 1",
+   "p2": "move 1 1, move 1 1"
+  },
+  "pe": {
+   "s1": "allyswitch;tackle,0",
+   "s2": "tackle,0;tackle,0"
+  },
+  "before": [
+   {
+    "side": "p1",
+    "active": [
+     {
+      "species": "Gothitelle",
+      "ability": "frisk",
+      "item": "",
+      "types": [
+       "Psychic"
+      ],
+      "weightkg": 44,
+      "hp": 281,
+      "maxhp": 281,
+      "status": "none",
+      "stats": {
+       "atk": 146,
+       "def": 226,
+       "spa": 226,
+       "spd": 256,
+       "spe": 166
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "allyswitch",
+        "pp": 24
+       },
+       {
+        "id": "tackle",
+        "pp": 56
+       }
+      ]
+     },
+     {
+      "species": "Snorlax",
+      "ability": "immunity",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 460,
+      "hp": 461,
+      "maxhp": 461,
+      "status": "none",
+      "stats": {
+       "atk": 256,
+       "def": 166,
+       "spa": 166,
+       "spd": 256,
+       "spe": 96
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "tackle",
+        "pp": 56
+       }
+      ]
+     }
+    ],
+    "bench": [
+     {
+      "species": "Ditto",
+      "ability": "limber",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 4,
+      "hp": 237,
+      "maxhp": 237,
+      "status": "none",
+      "stats": {
+       "atk": 132,
+       "def": 132,
+       "spa": 132,
+       "spd": 132,
+       "spe": 132
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "transform",
+        "pp": 16
+       }
+      ]
+     },
+     {
+      "species": "Ditto",
+      "ability": "limber",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 4,
+      "hp": 237,
+      "maxhp": 237,
+      "status": "none",
+      "stats": {
+       "atk": 132,
+       "def": 132,
+       "spa": 132,
+       "spd": 132,
+       "spe": 132
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "transform",
+        "pp": 16
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "side": "p2",
+    "active": [
+     {
+      "species": "Machamp",
+      "ability": "noguard",
+      "item": "",
+      "types": [
+       "Fighting"
+      ],
+      "weightkg": 130,
+      "hp": 321,
+      "maxhp": 321,
+      "status": "none",
+      "stats": {
+       "atk": 296,
+       "def": 196,
+       "spa": 166,
+       "spd": 206,
+       "spe": 146
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "tackle",
+        "pp": 56
+       }
+      ]
+     },
+     {
+      "species": "Gengar",
+      "ability": "levitate",
+      "item": "",
+      "types": [
+       "Ghost",
+       "Poison"
+      ],
+      "weightkg": 40.5,
+      "hp": 261,
+      "maxhp": 261,
+      "status": "none",
+      "stats": {
+       "atk": 166,
+       "def": 156,
+       "spa": 296,
+       "spd": 186,
+       "spe": 256
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "tackle",
+        "pp": 56
+       }
+      ]
+     }
+    ],
+    "bench": [
+     {
+      "species": "Ditto",
+      "ability": "limber",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 4,
+      "hp": 237,
+      "maxhp": 237,
+      "status": "none",
+      "stats": {
+       "atk": 132,
+       "def": 132,
+       "spa": 132,
+       "spd": 132,
+       "spe": 132
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "transform",
+        "pp": 16
+       }
+      ]
+     },
+     {
+      "species": "Ditto",
+      "ability": "limber",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 4,
+      "hp": 237,
+      "maxhp": 237,
+      "status": "none",
+      "stats": {
+       "atk": 132,
+       "def": 132,
+       "spa": 132,
+       "spd": 132,
+       "spe": 132
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "transform",
+        "pp": 16
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "after": [
+   {
+    "side": "p1",
+    "active": [
+     {
+      "species": "Snorlax",
+      "ability": "immunity",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 460,
+      "hp": 360,
+      "maxhp": 461,
+      "status": "none",
+      "stats": {
+       "atk": 256,
+       "def": 166,
+       "spa": 166,
+       "spd": 256,
+       "spe": 96
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "tackle",
+        "pp": 55
+       }
+      ]
+     },
+     {
+      "species": "Gothitelle",
+      "ability": "frisk",
+      "item": "",
+      "types": [
+       "Psychic"
+      ],
+      "weightkg": 44,
+      "hp": 281,
+      "maxhp": 281,
+      "status": "none",
+      "stats": {
+       "atk": 146,
+       "def": 226,
+       "spa": 226,
+       "spd": 256,
+       "spe": 166
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "allyswitch",
+        "pp": 23
+       },
+       {
+        "id": "tackle",
+        "pp": 56
+       }
+      ]
+     }
+    ],
+    "bench": [
+     {
+      "species": "Ditto",
+      "ability": "limber",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 4,
+      "hp": 237,
+      "maxhp": 237,
+      "status": "none",
+      "stats": {
+       "atk": 132,
+       "def": 132,
+       "spa": 132,
+       "spd": 132,
+       "spe": 132
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "transform",
+        "pp": 16
+       }
+      ]
+     },
+     {
+      "species": "Ditto",
+      "ability": "limber",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 4,
+      "hp": 237,
+      "maxhp": 237,
+      "status": "none",
+      "stats": {
+       "atk": 132,
+       "def": 132,
+       "spa": 132,
+       "spd": 132,
+       "spe": 132
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "transform",
+        "pp": 16
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "side": "p2",
+    "active": [
+     {
+      "species": "Machamp",
+      "ability": "noguard",
+      "item": "",
+      "types": [
+       "Fighting"
+      ],
+      "weightkg": 130,
+      "hp": 251,
+      "maxhp": 321,
+      "status": "none",
+      "stats": {
+       "atk": 296,
+       "def": 196,
+       "spa": 166,
+       "spd": 206,
+       "spe": 146
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "tackle",
+        "pp": 55
+       }
+      ]
+     },
+     {
+      "species": "Gengar",
+      "ability": "levitate",
+      "item": "",
+      "types": [
+       "Ghost",
+       "Poison"
+      ],
+      "weightkg": 40.5,
+      "hp": 261,
+      "maxhp": 261,
+      "status": "none",
+      "stats": {
+       "atk": 166,
+       "def": 156,
+       "spa": 296,
+       "spd": 186,
+       "spe": 256
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "tackle",
+        "pp": 55
+       }
+      ]
+     }
+    ],
+    "bench": [
+     {
+      "species": "Ditto",
+      "ability": "limber",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 4,
+      "hp": 237,
+      "maxhp": 237,
+      "status": "none",
+      "stats": {
+       "atk": 132,
+       "def": 132,
+       "spa": 132,
+       "spd": 132,
+       "spe": 132
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "transform",
+        "pp": 16
+       }
+      ]
+     },
+     {
+      "species": "Ditto",
+      "ability": "limber",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 4,
+      "hp": 237,
+      "maxhp": 237,
+      "status": "none",
+      "stats": {
+       "atk": 132,
+       "def": 132,
+       "spa": 132,
+       "spd": 132,
+       "spe": 132
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "transform",
+        "pp": 16
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "log": [
+   "|gametype|doubles",
+   "|player|p1|A||",
+   "|player|p2|B||",
+   "|gen|5",
+   "|tier|[Gen 5] Doubles Custom Game",
+   "|clearpoke",
+   "|poke|p1|Gothitelle, F|",
+   "|poke|p1|Snorlax, F|",
+   "|poke|p1|Ditto|",
+   "|poke|p1|Ditto|",
+   "|poke|p2|Machamp, F|",
+   "|poke|p2|Gengar, F|",
+   "|poke|p2|Ditto|",
+   "|poke|p2|Ditto|",
+   "|teampreview",
+   "|",
+   "|teamsize|p1|4",
+   "|teamsize|p2|4",
+   "|start",
+   "|split|p1",
+   "|switch|p1a: Gothitelle|Gothitelle, F|281/281",
+   "|switch|p1a: Gothitelle|Gothitelle, F|281/281",
+   "|split|p1",
+   "|switch|p1b: Snorlax|Snorlax, F|461/461",
+   "|switch|p1b: Snorlax|Snorlax, F|461/461",
+   "|split|p2",
+   "|switch|p2a: Machamp|Machamp, F|321/321",
+   "|switch|p2a: Machamp|Machamp, F|321/321",
+   "|split|p2",
+   "|switch|p2b: Gengar|Gengar, F|261/261",
+   "|switch|p2b: Gengar|Gengar, F|261/261",
+   "|turn|1",
+   "|",
+   "|move|p1a: Gothitelle|Ally Switch|p1a: Gothitelle",
+   "|swap|p1a: Gothitelle|1|[from] move: Ally Switch",
+   "|move|p2b: Gengar|Tackle|p1a: Snorlax",
+   "|split|p1",
+   "|-damage|p1a: Snorlax|424/461",
+   "|-damage|p1a: Snorlax|424/461",
+   "|move|p2a: Machamp|Tackle|p1a: Snorlax",
+   "|split|p1",
+   "|-damage|p1a: Snorlax|360/461",
+   "|-damage|p1a: Snorlax|360/461",
+   "|move|p1a: Snorlax|Tackle|p2a: Machamp",
+   "|split|p2",
+   "|-damage|p2a: Machamp|251/321",
+   "|-damage|p2a: Machamp|251/321",
+   "|",
+   "|upkeep",
+   "|turn|2"
+  ]
+ },
+ {
+  "name": "intimidate_drops_both_foes",
+  "why": "switching an Intimidate body in should drop the Attack of both opposing actives",
+  "choices": {
+   "p1": "switch 3, move 1 1",
+   "p2": "move 1 1, move 1 1"
+  },
+  "pe": {
+   "s1": "gyarados;tackle,0",
+   "s2": "tackle,0;tackle,0"
+  },
+  "before": [
+   {
+    "side": "p1",
+    "active": [
+     {
+      "species": "Snorlax",
+      "ability": "immunity",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 460,
+      "hp": 461,
+      "maxhp": 461,
+      "status": "none",
+      "stats": {
+       "atk": 256,
+       "def": 166,
+       "spa": 166,
+       "spd": 256,
+       "spe": 96
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "tackle",
+        "pp": 56
+       }
+      ]
+     },
+     {
+      "species": "Machamp",
+      "ability": "noguard",
+      "item": "",
+      "types": [
+       "Fighting"
+      ],
+      "weightkg": 130,
+      "hp": 321,
+      "maxhp": 321,
+      "status": "none",
+      "stats": {
+       "atk": 296,
+       "def": 196,
+       "spa": 166,
+       "spd": 206,
+       "spe": 146
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "tackle",
+        "pp": 56
+       }
+      ]
+     }
+    ],
+    "bench": [
+     {
+      "species": "Gyarados",
+      "ability": "intimidate",
+      "item": "",
+      "types": [
+       "Water",
+       "Flying"
+      ],
+      "weightkg": 235,
+      "hp": 331,
+      "maxhp": 331,
+      "status": "none",
+      "stats": {
+       "atk": 286,
+       "def": 194,
+       "spa": 156,
+       "spd": 236,
+       "spe": 198
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "tackle",
+        "pp": 56
+       }
+      ]
+     },
+     {
+      "species": "Ditto",
+      "ability": "limber",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 4,
+      "hp": 237,
+      "maxhp": 237,
+      "status": "none",
+      "stats": {
+       "atk": 132,
+       "def": 132,
+       "spa": 132,
+       "spd": 132,
+       "spe": 132
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "transform",
+        "pp": 16
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "side": "p2",
+    "active": [
+     {
+      "species": "Gengar",
+      "ability": "levitate",
+      "item": "",
+      "types": [
+       "Ghost",
+       "Poison"
+      ],
+      "weightkg": 40.5,
+      "hp": 261,
+      "maxhp": 261,
+      "status": "none",
+      "stats": {
+       "atk": 166,
+       "def": 156,
+       "spa": 296,
+       "spd": 186,
+       "spe": 256
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "tackle",
+        "pp": 56
+       }
+      ]
+     },
+     {
+      "species": "Machoke",
+      "ability": "guts",
+      "item": "",
+      "types": [
+       "Fighting"
+      ],
+      "weightkg": 70.5,
+      "hp": 301,
+      "maxhp": 301,
+      "status": "none",
+      "stats": {
+       "atk": 236,
+       "def": 176,
+       "spa": 136,
+       "spd": 156,
+       "spe": 126
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "tackle",
+        "pp": 56
+       }
+      ]
+     }
+    ],
+    "bench": [
+     {
+      "species": "Ditto",
+      "ability": "limber",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 4,
+      "hp": 237,
+      "maxhp": 237,
+      "status": "none",
+      "stats": {
+       "atk": 132,
+       "def": 132,
+       "spa": 132,
+       "spd": 132,
+       "spe": 132
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "transform",
+        "pp": 16
+       }
+      ]
+     },
+     {
+      "species": "Ditto",
+      "ability": "limber",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 4,
+      "hp": 237,
+      "maxhp": 237,
+      "status": "none",
+      "stats": {
+       "atk": 132,
+       "def": 132,
+       "spa": 132,
+       "spd": 132,
+       "spe": 132
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "transform",
+        "pp": 16
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "after": [
+   {
+    "side": "p1",
+    "active": [
+     {
+      "species": "Gyarados",
+      "ability": "intimidate",
+      "item": "",
+      "types": [
+       "Water",
+       "Flying"
+      ],
+      "weightkg": 235,
+      "hp": 281,
+      "maxhp": 331,
+      "status": "none",
+      "stats": {
+       "atk": 286,
+       "def": 194,
+       "spa": 156,
+       "spd": 236,
+       "spe": 198
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "tackle",
+        "pp": 56
+       }
+      ]
+     },
+     {
+      "species": "Machamp",
+      "ability": "noguard",
+      "item": "",
+      "types": [
+       "Fighting"
+      ],
+      "weightkg": 130,
+      "hp": 321,
+      "maxhp": 321,
+      "status": "none",
+      "stats": {
+       "atk": 296,
+       "def": 196,
+       "spa": 166,
+       "spd": 206,
+       "spe": 146
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "tackle",
+        "pp": 55
+       }
+      ]
+     }
+    ],
+    "bench": [
+     {
+      "species": "Snorlax",
+      "ability": "immunity",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 460,
+      "hp": 461,
+      "maxhp": 461,
+      "status": "none",
+      "stats": {
+       "atk": 256,
+       "def": 166,
+       "spa": 166,
+       "spd": 256,
+       "spe": 96
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "tackle",
+        "pp": 56
+       }
+      ]
+     },
+     {
+      "species": "Ditto",
+      "ability": "limber",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 4,
+      "hp": 237,
+      "maxhp": 237,
+      "status": "none",
+      "stats": {
+       "atk": 132,
+       "def": 132,
+       "spa": 132,
+       "spd": 132,
+       "spe": 132
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "transform",
+        "pp": 16
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "side": "p2",
+    "active": [
+     {
+      "species": "Gengar",
+      "ability": "levitate",
+      "item": "",
+      "types": [
+       "Ghost",
+       "Poison"
+      ],
+      "weightkg": 40.5,
+      "hp": 261,
+      "maxhp": 261,
+      "status": "none",
+      "stats": {
+       "atk": 166,
+       "def": 156,
+       "spa": 296,
+       "spd": 186,
+       "spe": 256
+      },
+      "boosts": {
+       "atk": -1,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "tackle",
+        "pp": 55
+       }
+      ]
+     },
+     {
+      "species": "Machoke",
+      "ability": "guts",
+      "item": "",
+      "types": [
+       "Fighting"
+      ],
+      "weightkg": 70.5,
+      "hp": 301,
+      "maxhp": 301,
+      "status": "none",
+      "stats": {
+       "atk": 236,
+       "def": 176,
+       "spa": 136,
+       "spd": 156,
+       "spe": 126
+      },
+      "boosts": {
+       "atk": -1,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "tackle",
+        "pp": 55
+       }
+      ]
+     }
+    ],
+    "bench": [
+     {
+      "species": "Ditto",
+      "ability": "limber",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 4,
+      "hp": 237,
+      "maxhp": 237,
+      "status": "none",
+      "stats": {
+       "atk": 132,
+       "def": 132,
+       "spa": 132,
+       "spd": 132,
+       "spe": 132
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "transform",
+        "pp": 16
+       }
+      ]
+     },
+     {
+      "species": "Ditto",
+      "ability": "limber",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 4,
+      "hp": 237,
+      "maxhp": 237,
+      "status": "none",
+      "stats": {
+       "atk": 132,
+       "def": 132,
+       "spa": 132,
+       "spd": 132,
+       "spe": 132
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "transform",
+        "pp": 16
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "log": [
+   "|gametype|doubles",
+   "|player|p1|A||",
+   "|player|p2|B||",
+   "|gen|5",
+   "|tier|[Gen 5] Doubles Custom Game",
+   "|clearpoke",
+   "|poke|p1|Snorlax, F|",
+   "|poke|p1|Machamp, F|",
+   "|poke|p1|Gyarados, F|",
+   "|poke|p1|Ditto|",
+   "|poke|p2|Gengar, F|",
+   "|poke|p2|Machoke, F|",
+   "|poke|p2|Ditto|",
+   "|poke|p2|Ditto|",
+   "|teampreview",
+   "|",
+   "|teamsize|p1|4",
+   "|teamsize|p2|4",
+   "|start",
+   "|split|p1",
+   "|switch|p1a: Snorlax|Snorlax, F|461/461",
+   "|switch|p1a: Snorlax|Snorlax, F|461/461",
+   "|split|p1",
+   "|switch|p1b: Machamp|Machamp, F|321/321",
+   "|switch|p1b: Machamp|Machamp, F|321/321",
+   "|split|p2",
+   "|switch|p2a: Gengar|Gengar, F|261/261",
+   "|switch|p2a: Gengar|Gengar, F|261/261",
+   "|split|p2",
+   "|switch|p2b: Machoke|Machoke, F|301/301",
+   "|switch|p2b: Machoke|Machoke, F|301/301",
+   "|turn|1",
+   "|",
+   "|split|p1",
+   "|switch|p1a: Gyarados|Gyarados, F|331/331",
+   "|switch|p1a: Gyarados|Gyarados, F|331/331",
+   "|-ability|p1a: Gyarados|Intimidate|boost",
+   "|-unboost|p2a: Gengar|atk|1",
+   "|-unboost|p2b: Machoke|atk|1",
+   "|move|p2a: Gengar|Tackle|p1a: Gyarados",
+   "|split|p1",
+   "|-damage|p1a: Gyarados|310/331",
+   "|-damage|p1a: Gyarados|310/331",
+   "|move|p1b: Machamp|Tackle|p2a: Gengar",
+   "|-immune|p2a: Gengar",
+   "|move|p2b: Machoke|Tackle|p1a: Gyarados",
+   "|split|p1",
+   "|-damage|p1a: Gyarados|281/331",
+   "|-damage|p1a: Gyarados|281/331",
+   "|",
+   "|upkeep",
+   "|turn|2"
+  ]
+ }
+]

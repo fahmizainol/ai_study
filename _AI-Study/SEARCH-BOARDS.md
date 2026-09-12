@@ -335,7 +335,74 @@ offers an evaluation that has already beaten the rules and is merely naive about
    methodology of 0.8.0 (median ratio, % within 3%, % within 10%) with Showdown as the
    reference instead of `pbRoughDamage`. This is the only way to get a number for
    "coverage against Showdown", and 0.8.0 already set the bar: within 10% is enough to win.
-   **Still the open one, and now the only one that matters before a doubles arm.**
+   **Stage 0 of it is built and run, below. The corpus stage is still open.**
+
+### Stage 0 of the Showdown differential: 12 hand-authored doubles positions
+
+Run 2026-09-12. `tools/showdown_doubles_cases.js` authors 12 positions, one per doubles
+mechanic the fork claims, plays each on Showdown as the reference and dumps the position,
+the joint action and the outcome to `generated/showdown_doubles_cases.json`;
+`tools/pe_doubles_diff.py` rebuilds each position as a poke-engine doubles `State` **using
+the exact stats Showdown computed**, runs the same joint action through
+`generate_instructions`, and compares. No Realidea doubles harness is involved: Showdown is
+both the oracle and the position generator, which is what makes this cheap.
+
+**Three method decisions that the first run forced, and that any repeat must keep:**
+
+- **Determinism by pinning Showdown's PRNG to always-max**, one rule that covers everything:
+  the damage roll lands on its maximum, `randomChance(1,16)` for a crit is false,
+  secondaries never fire, and speed ties resolve identically every run. The consequence to
+  respect is that `randomChance(acc,100)` is then only true when `acc > 99`, so **every case
+  move must be 100% accurate with no secondary** — hence Shock Wave rather than Thunderbolt,
+  Surf rather than Rock Slide. A miss shows up as zero damage rather than as noise.
+- **Absolute damage is not comparable and is not compared.** poke-engine branches on the
+  roll and returns weighted outcomes; its most probable branch measures **median 0.879 of
+  Showdown's max roll (range 0.343-1.107, only 24% within 10%)** over the 25 hits the two
+  engines share. That is a roll model difference and says nothing about doubles. Reading it
+  as disagreement is the trap; the first run of this harness fell into it. What stage 0
+  compares instead is roll-independent and is the actual doubles question: **which bodies
+  took damage at all** (targeting, spread, redirection, Protect-class blocks) and **which
+  bodies got which boosts**. A max-roll comparison would need `calculate_damage`, which
+  returns the max roll first, exactly as the 0.8.0 `--check` used it.
+- **Bodies are keyed by species, never by slot**, or Ally Switch moving a body between slots
+  reads as a damage disagreement. The first run showed `('s1', 0): -79`, a body "healing",
+  for precisely this reason.
+
+**Result: 9 of 12 agree.** Clean, including every mechanic the stop-rule cared about:
+Follow Me and Rage Powder redirection, Lightning Rod redirect + nullify + the SpA boost, the
+0.75 spread reduction, Earthquake hitting its own ally, Telepathy exempting the ally, Quick
+Guard against priority, Helping Hand, and Friend Guard. **Redirection and spread are not
+broken, so the stop-rule says proceed.**
+
+**Three disagreements, stated as candidates rather than bugs** — each could still be this
+harness's action mapping rather than the engine, and confirming one means reading the fork's
+code for that mechanic:
+
+| case | Showdown | poke-engine |
+|---|---|---|
+| `wide_guard_blocks_spread` | Surf still hits the attacker's **own ally** (Gengar) while Wide Guard protects the far side | no ally damage — as if Wide Guard cancelled the move outright rather than blocking per target |
+| `ally_switch_swaps_slots` | the incoming attack lands on **Snorlax**, the body that moved into the targeted slot | lands on **Gothitelle**, the Ally Switch user — the swap does not appear to redirect what follows |
+| `intimidate_drops_both_foes` | the two Tackles hit **Gyarados**, the body that switched in | they hit **Snorlax**, the body that switched out — damage resolving against the pre-switch occupant. The Intimidate drops themselves agree on both foes |
+
+Note that the fork's own `test_doubles_ally_switch_swaps_slots` and
+`test_doubles_intimidate_hits_both_foes` both pass, so its 47 tests assert that these
+instructions are *emitted* without asserting what a later action in the same turn does with
+them. That is the gap an independent reference finds and a self-authored suite cannot.
+
+**A blocker fixed on the way, which anyone doing this work needs.** None of the fork's 19
+slotted instruction types print their slot in Debug output (`instruction.rs` was 171+/2-, so
+the existing arms were never revised): `Damage SideTwo: 72` is ambiguous between the two
+actives, and nothing above is decidable without it. `patches/poke_engine_doubles_debug_slot.patch`
+adds a `slot_tag` helper that is empty in a singles build and `:<slot>` in a doubles build,
+so **singles Debug output stays byte-identical and the 220 singles unit tests still pass**.
+The same ambiguity affects the MCTS root option labels, where `('ember;ember', 12.5, 50)`
+appears repeatedly because the `,<slot>` target suffix is not rendered — worth fixing before
+anyone tries to read a doubles search trace.
+
+**Build gotcha:** the bindings need `maturin develop --no-default-features
+--features="poke-engine/gen5,doubles"`. Without `--no-default-features` the default
+`poke-engine/gen4` is added to `gen5` and the crate fails to compile with duplicate
+definitions — which looks like a fork defect and is not one.
 3. ~~Its own doubles tests~~ — **done, above**: 47/47 pass, and they say the mechanics work
    as their author believed, not that they agree with Showdown. Measurement 2 is the only
    one that speaks to agreement.
@@ -386,5 +453,12 @@ For PR #10: `git clone --single-branch --branch main-doubles --depth 6
 https://github.com/0neCr1t/engine` (or `git fetch origin refs/pull/10/head` against
 upstream), then `cargo test --features doubles,gen5` and `cargo test --features gen5` for
 the two rows above. Nothing in it is installed and nothing in the study depends on it.
+
+For the stage 0 differential, in that clone: apply
+`patches/poke_engine_doubles_debug_slot.patch`, then
+`cd poke-engine-py && maturin develop --no-default-features --features="poke-engine/gen5,doubles"`
+into a venv of its own (**not** `generated/foul_play/venv-gen5`, which is the measured 0.8.0
+instrument). Then `node tools/showdown_doubles_cases.js > generated/showdown_doubles_cases.json`
+and `python3 tools/pe_doubles_diff.py` with that venv's python.
 
 Add `--max-semi-space-size=128` to any `node` invocation to include the GC lever.

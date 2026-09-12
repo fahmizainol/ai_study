@@ -1,0 +1,72 @@
+diff --git a/src/instruction.rs b/src/instruction.rs
+index 835de45..060340b 100644
+--- a/src/instruction.rs
++++ b/src/instruction.rs
+@@ -45,6 +45,19 @@ macro_rules! slotted_instruction {
+     };
+ }
+ 
++/// Renders a slotted instruction's active slot for Debug output: empty in a singles
++/// build (so singles output is unchanged byte for byte), `:<slot>` in a doubles build.
++/// Without this, `Damage SideTwo: 72` is ambiguous between the two actives, which makes
++/// doubles instruction lists unreadable and un-diffable.
++#[cfg(not(feature = "doubles"))]
++fn slot_tag(_slot: u8) -> String {
++    String::new()
++}
++#[cfg(feature = "doubles")]
++fn slot_tag(slot: u8) -> String {
++    format!(":{}", slot)
++}
++
+ #[derive(PartialEq, Clone)]
+ pub struct StateInstructions {
+     pub percentage: f32,
+@@ -151,15 +164,15 @@ impl fmt::Debug for Instruction {
+             Instruction::ApplyVolatileStatus(a) => {
+                 write!(
+                     f,
+-                    "ApplyVolatileStatus {:?}: {:?}",
+-                    a.side_ref, a.volatile_status
++                    "ApplyVolatileStatus {:?}{}: {:?}",
++                    a.side_ref, slot_tag(a.slot()), a.volatile_status
+                 )
+             }
+             Instruction::RemoveVolatileStatus(r) => {
+                 write!(
+                     f,
+-                    "RemoveVolatileStatus {:?}: {:?}",
+-                    r.side_ref, r.volatile_status
++                    "RemoveVolatileStatus {:?}{}: {:?}",
++                    r.side_ref, slot_tag(r.slot()), r.volatile_status
+                 )
+             }
+             Instruction::ChangeStatus(c) => {
+@@ -170,13 +183,13 @@ impl fmt::Debug for Instruction {
+                 )
+             }
+             Instruction::Heal(h) => {
+-                write!(f, "Heal {:?}: {:?}", h.side_ref, h.heal_amount)
++                write!(f, "Heal {:?}{}: {:?}", h.side_ref, slot_tag(h.slot()), h.heal_amount)
+             }
+             Instruction::Damage(d) => {
+-                write!(f, "Damage {:?}: {}", d.side_ref, d.damage_amount)
++                write!(f, "Damage {:?}{}: {}", d.side_ref, slot_tag(d.slot()), d.damage_amount)
+             }
+             Instruction::Boost(b) => {
+-                write!(f, "Boost {:?} {:?}: {:?}", b.side_ref, b.stat, b.amount)
++                write!(f, "Boost {:?}{} {:?}: {:?}", b.side_ref, slot_tag(b.slot()), b.stat, b.amount)
+             }
+             Instruction::ChangeSideCondition(c) => {
+                 write!(
+@@ -275,8 +288,8 @@ impl fmt::Debug for Instruction {
+             Instruction::DamageSubstitute(d) => {
+                 write!(
+                     f,
+-                    "DamageSubstitute {:?}: {:?}",
+-                    d.side_ref, d.damage_amount
++                    "DamageSubstitute {:?}{}: {:?}",
++                    d.side_ref, slot_tag(d.slot()), d.damage_amount
+                 )
+             }
+             Instruction::DecrementRestTurns(d) => {
