@@ -32,7 +32,11 @@ def run(label, ally, foe0, foe1):
           f"foes={foe0['species']}({'/'.join(foe0['types'])},{foe0['ability']}), "
           f"{foe1['species']}({'/'.join(foe1['types'])},{foe1['ability']})")
     for mv in MOVES:
-        ins = generate_instructions(st, f"{mv},0;none", "none;none")
+        try:
+            ins = generate_instructions(st, f"{mv},0;none", "none;none")
+        except ValueError as e:
+            print(f"      {mv:11} -> not a move id this build knows ({e})")
+            continue
         hit = {}
         for x in ins:
             if x.percentage < 50:   # read the dominant branch only
@@ -50,5 +54,11 @@ run("(2) ally is FLYING, so immune to Earthquake but not Surf",
     plain("AllyFly", "Flying"), plain("Foe0"), plain("Foe1"))
 run("(3) ally has TELEPATHY, exempt from the partner's spread move entirely",
     plain("AllyTele", "Normal", "telepathy"), plain("Foe0"), plain("Foe1"))
-run("(4) one FOE has LEVITATE, immune to Earthquake only",
+run("(4) one FOE has LEVITATE (ability immunity) in slot 0",
     plain("Ally"), plain("FoeLev", "Normal", "levitate"), plain("Foe1"))
+run("(5) one FOE is FLYING (type immunity, not ability) in slot 0",
+    plain("Ally"), plain("FoeFly", "Flying"), plain("Foe1"))
+run("(6) the immune FOE is in slot 1 instead -- does it depend on the slot?",
+    plain("Ally"), plain("Foe0"), plain("FoeLev", "Normal", "levitate"))
+run("(7) ally immune by ABILITY rather than type",
+    plain("AllyLev", "Normal", "levitate"), plain("Foe0"), plain("Foe1"))
