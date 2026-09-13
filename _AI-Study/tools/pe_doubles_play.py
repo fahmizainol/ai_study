@@ -132,8 +132,45 @@ class Server:
         self.p.kill()
 
 
-def to_state(position):
-    """Translate a Showdown position into a poke-engine doubles State, or raise Skip."""
+def slot_whitelists(req, side_snapshot, stats=None):
+    """{slot: set of pid'd move ids Showdown will accept} for one side's active slots.
+
+    Two request shapes must both be honoured, and mapping by id rather than by index covers
+    them with a single rule -- anything absent from the request is unusable:
+
+      * a Choice-locked (or Taunted, Assault Vested, Disabled) body lists all of its moves,
+        with `disabled` set on the ones it may not pick;
+      * a body inside a LOCKED move -- Outrage, a charging Solar Beam, a Hyper Beam recharge --
+        gets a single-entry list instead, the other three absent entirely
+        (`showdown_doubles_server.js`).
+    """
+    out = {}
+    for slot, a in enumerate(req.get("active") or []):
+        ok = {pid(m["id"]) for m in a["moves"] if not m["disabled"]}
+        actives = side_snapshot["active"]
+        body = actives[slot] if slot < len(actives) else None
+        known = {pid(m["id"]) for m in (body or {}).get("moves", [])}
+        if ok and known and not (ok & known):
+            # The request and the snapshot disagree about this body's move ids. Disabling every
+            # move on a naming mismatch would be a worse bug than the one being fixed, so leave
+            # the slot unconstrained and make the disagreement visible instead of silent.
+            if stats is not None:
+                stats["whitelist: request and snapshot move ids disjoint"] += 1
+            continue
+        if not ok and stats is not None:
+            stats["whitelist: every move disabled (Struggle territory)"] += 1
+        out[slot] = ok
+    return out
+
+
+def to_state(position, reqs=None, stats=None):
+    """Translate a Showdown position into a poke-engine doubles State, or raise Skip.
+
+    `reqs` is the server's per-side request map from the SAME reply as `position`, so the two
+    are one consistent snapshot. It is what carries move legality: without it every move
+    reaches the engine as enabled and the search proposes Choice-locked moves (defect 4).
+    Both sides are passed, not just the acting one -- the tree models the foe too, and a foe
+    whose lock is ignored is a foe with three extra options it does not have."""
     s1, s2 = position["sides"]
     if position["weather"] not in WEATHER:
         raise Skip(f"weather {position['weather']}")
@@ -142,8 +179,10 @@ def to_state(position):
     for ps in position["pseudo"]:
         if ps != "trickroom":
             raise Skip(f"pseudo {ps}")
-    return State(side_one=build_side(s1, allow_fainted=True),
-                 side_two=build_side(s2, allow_fainted=True),
+    white = {s["side"]: slot_whitelists((reqs or {}).get(s["side"]) or {}, s, stats)
+             for s in position["sides"]}
+    return State(side_one=build_side(s1, allow_fainted=True, usable=white[s1["side"]]),
+                 side_two=build_side(s2, allow_fainted=True, usable=white[s2["side"]]),
                  weather=WEATHER[position["weather"]],
                  trick_room="trickroom" in position["pseudo"])
 
@@ -223,9 +262,9 @@ def policy_greedy(req, position, side, rng):
 LABEL = re.compile(r"^(?:switch (?P<sw>[a-z0-9]+)|(?P<mv>[a-z0-9]+)(?:,(?P<t>\d+))?)$")
 
 
-def policy_mcts(req, position, side, rng, ms, stats, note=None):
+def policy_mcts(req, position, side, rng, ms, stats, note=None, reqs=None):
     try:
-        state = to_state(position)
+        state = to_state(position, reqs, stats)
     except Skip as exc:
         stats[f"fallback: {exc}"] += 1
         if note is not None:
@@ -434,7 +473,8 @@ def main():
                         continue
                     note = [] if args.save_log else None
                     if name == "mcts":
-                        parts = policy_mcts(req, r["position"], side, rng, args.ms, stats, note)
+                        parts = policy_mcts(req, r["position"], side, rng, args.ms, stats, note,
+                                            reqs)
                     elif name == "greedy":
                         parts = policy_greedy(req, r["position"], side, rng)
                     else:

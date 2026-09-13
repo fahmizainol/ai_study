@@ -862,6 +862,11 @@ what lifted MCTS decisions from 90 to 166 of ~180 when it was wired in. **So dou
 generation does not enforce the Choice lock it is given**, and a bridge would be handing the
 game illegal actions on roughly one turn in six.
 
+**CORRECTED in run 9, and the fault was mine, not the engine's.** poke-engine does not read a
+Choice lock off `last_used_move` at all — it reads `Move.disabled`, a field this translator never
+filled. The engine was told nothing was disabled and correctly offered everything. The rate is
+now zero with no engine change; see defect 4 in the table below and the run 9 section.
+
 Two more panics, neither gen-6-specific:
 
 - `assertion left != right failed: get_two_actives called with...` (5 times) — a doubles-only
@@ -871,11 +876,96 @@ Two more panics, neither gen-6-specific:
 
 **Two translator facts worth keeping**, both invisible under the synthetic pool:
 
-- **A Choice lock is not a volatile in poke-engine**, it is `last_used_move` serialized as
-  `move:<index into that body's own move list>`; Showdown enforces it through
-  `pokemon.lastMove`, which the snapshot now carries.
+- **A Choice lock is not a volatile in poke-engine** — but it is **not `last_used_move` either**,
+  which is what this bullet used to claim, and the claim cost 22 illegal proposals in 195
+  decisions before run 9 caught it. `last_used_move` (serialized `move:<index into that body's
+  own move list>`) carries Encore and the Bloodmoon / Gigaton Hammer repeat ban, nothing else.
+  The lock rides on **`Move.disabled`**, which the caller fills from Showdown's per-move
+  `disabled` flags — as `tools/foul_play_sidecar.py:173` had been doing for singles all along.
 - `flashfire`, `mustrecharge` and `slowstart` **do** exist as poke-engine volatiles and are
   mapped; `disable` and `lockedmove` do not and remain counted skips.
+
+### Run 9 retired defect 4, and it was never the engine's defect at all
+
+Defect 4 was the one recorded as most consequential for a bridge: the search proposed
+Choice-locked moves, so a bridge would hand the game an illegal action roughly one turn in six.
+It is now zero — and **no engine code changed**, because the fault was in my translator.
+
+**What the code says, read before probing anything.** `move_is_selectable` (`genx/state.rs:500`)
+is the shared legality predicate for singles (`add_available_moves`) and doubles
+(`add_available_moves_doubles`). It checks `mv.disabled`, `mv.pp`, Encore, the Bloodmoon /
+Gigaton Hammer repeat ban, and Assault Vest / Taunt against status moves — and never looks at the
+held item. Neither does upstream: `bf863be^2` has no Choice check and no `move_is_selectable` at
+all, since PR #10 only refactored the predicate out of `add_available_moves`. **So this was never
+a PR #10 defect, and the engine never claimed to *derive* a Choice lock.** What it offers instead
+is `Move.disabled` — a serialized per-move field with its own `DisableMove` / `EnableMove`
+instructions, surfaced to Python as `Move(id, pp, disabled)`. Filling it is the caller's job, and
+`tools/foul_play_sidecar.py:173`, the singles bridge that plays live, had been doing it correctly
+the whole time. `pe_doubles_corpus.py`'s `mon()` built `Move(id=…, pp=…)`, so every move reached
+the engine enabled and the engine faithfully offered all of them.
+
+The comment sitting directly beneath that line asserted the opposite — "poke-engine reads the
+Choice lock off last_used_move" — and defect 4 was that comment's consequence rather than the
+engine's behaviour.
+
+**Settled by experiment rather than by my reading of two Rust functions**
+(`tools/pe_doubles_choicelock.py`): one doubles position built twice, identical but for the flag.
+Nothing flagged → **16 root options, all four moves reachable**. The three non-locked moves
+flagged → **4 options, only the locked move**. The engine honours the field; it was never given
+it.
+
+**The fix.** `mon(…, usable=…)` and `build_side(…, usable=…)` take the set of move ids Showdown
+will accept and flag the rest; `slot_whitelists()` in `pe_doubles_play.py` derives them from the
+server request that arrives with the same position snapshot. Matched **by id, not by index**,
+because the two request shapes differ: a Choice lock lists all four moves with `disabled` flags,
+while a *locked* move — Outrage, a charging Solar Beam, a Hyper Beam recharge — sends a
+single-entry list with the other three absent entirely. Treating "absent from the request" as
+unusable lets one rule cover Choice, Taunt, Assault Vest, Disable and locked moves together.
+**Both sides' requests are passed, not only the acting one**: the tree models the foe, and a foe
+whose lock is ignored is a foe with three options it does not have. Bench bodies are never
+constrained — the same `on_field` gate the singles bridge spells out. And a guard leaves a slot
+unconstrained *and counted* if request and snapshot move ids turn out disjoint, because disabling
+every move on a naming mismatch would be a worse bug than the one being fixed.
+
+**Priced on a fresh 24-battle gen-5 baseline with the engine held constant** (`--teams
+gen5doublesou --battles 24 --ms 150 --seed 23`, mcts as p1 against greedy):
+
+| | decisions | illegal Choice-lock proposals |
+|---|---|---|
+| before | 195 | **22 (11.3%)** |
+| after | 207 | **0** |
+
+All 22 carried the "disabled by Showdown" label and none the "not in this body's move list" one,
+which rules out defect 8's wrong-slot enumeration as a contributor here; and every affected move
+was a damaging one (`icebeam` 8, `uturn` 5, `stoneedge` 4, `dracometeor` 2, `superpower`,
+`earthquake`, `closecombat`), so Taunt cannot explain any of them either.
+
+**The no-regression controls.** The corpus is byte-identical — 306/316 bodies, 315/316 boosts,
+every bucket unchanged — which is exactly what a change to the shared `mon()` must show, since
+the corpus passes no whitelist and calls `generate_instructions` with explicit actions, so
+legality never gates it. Stage 0 stays 19/19. No engine code changed, so
+`patches/poke_engine_doubles_spread_per_target.patch` is untouched at 1012 lines.
+
+**Two figures that moved and must not be misread.** The win rate went 19-5 → 17-7: that is noise
+at n=24 over a changed action space, not a regression — the fix alters which actions exist, so
+the games diverge from turn one and the seeds are no longer comparable battle-for-battle. Mean
+visits rose 3164 → 5010, the one real side benefit, since fewer illegal options per node buys
+depth on the same budget. The `lockedmove` (12 → 11) and `disable` (10 → 8) volatile skips are
+unrelated, still unmapped, and cost about 10% of decisions between them.
+
+**A cheap pool that found nothing, worth recording as method.** The Tailwind-filtered pool run 6
+recommended for bug-hunting produced **zero** illegal proposals in 8 battles — only 2 of 183
+`gen5doublesou` teams carry Tailwind at size 6, so the pool was nearly degenerate. The unfiltered
+pool holds 82 Choice items, with 78 of 183 teams carrying at least one. A filter that accelerates
+one hunt can erase the mechanic of the next.
+
+**What remains is the engine's half, and it is defect 29.** The engine *does* model a Choice lock
+— a holder using a move disables its other moves — but `get_choice_move_disable_instructions`
+(`genx/items.rs:260`) stamps the instruction with a hard-coded slot 0, carrying the fork's own
+`FIXME(doubles)`, so a slot-1 Choice user locks its **partner**. That was always reachable, since
+the engine sets `disabled` itself; this run's fix makes the flag common rather than rare. Neither
+it nor its switch-out mirror (`re_enable_disabled_moves`) is visible to the measured instruments,
+so both want the probe as their instrument, not the corpus.
 
 ## Backlog
 
@@ -959,7 +1049,7 @@ to Showdown sets almost directly. Two known obstacles:
 Doing this is what would make the play result mean something: same referee, same search, real
 teams. It is more valuable than re-running the toy version with transcripts attached.
 
-### 3. Fix the twenty-eight confirmed defects — 12 done (5, 6, 7, 11, 15, 16, 17, 18, 19, 20, 23, 27), 16 open
+### 3. Fix the twenty-nine confirmed defects — 13 done (4, 5, 6, 7, 11, 15, 16, 17, 18, 19, 20, 23, 27), 16 open
 
 Every line number below was read out of the `main-doubles` clone, not remembered. Three are
 crashes, so they stop a bridge outright; seventeen are silent wrong answers, which is worse to ship;
@@ -983,7 +1073,7 @@ caught only because Showdown was sitting next to it.
 
 | # | site | defect |
 |---|---|---|
-| 4 | *option generation* | **A Choice lock is not enforced.** `last_used_move` is supplied and is exactly how poke-engine encodes the lock, yet the search proposes moves Showdown has disabled — 35 times in the gen 5 run (`dracometeor`, `earthpower`, `icebeam`, `psychic`, `outrage`, `boltstrike`). The single most consequential one for a bridge: it hands the game an illegal action on roughly one turn in six. Reproduced in two later batches on `hydropump`, `icebeam`, `dracometeor`, `vcreate` and `thunderbolt`, so it is not one move's data — and the proposed move **is** in the body's own move list, which rules out the wrong-slot enumeration of defect 8 as the cause |
+| 4 | **FIXED 2026-09-13 (run 9)** — *my own translator*, `tools/pe_doubles_corpus.py` `mon()` | **The Choice lock was never enforced because I never passed it.** This row used to read "`last_used_move` is supplied and is exactly how poke-engine encodes the lock"; that claim is wrong in both halves. `last_used_move` carries Encore and the Bloodmoon / Gigaton Hammer repeat ban and nothing else, and `move_is_selectable` (`genx/state.rs:500`) never consults the held item — in the fork **or upstream**, since `bf863be^2` has no such check either, so this was never a PR #10 defect. What the engine actually reads is `Move.disabled`, a serialized per-move field with its own `DisableMove` / `EnableMove` instructions, exposed to Python as `Move(id, pp, disabled)`. `mon()` built `Move(id=…, pp=…)`, so every move reached the engine enabled and the engine correctly offered all of them; `tools/foul_play_sidecar.py:173` — the **singles** bridge that plays live — had been passing it correctly the whole time. Fix: `mon(…, usable=…)` and `build_side(…, usable=…)` take the set of ids Showdown will accept and flag the rest, threaded from the server request by `slot_whitelists()` in `pe_doubles_play.py`, matched by **id rather than index** because a Choice lock lists all four moves with `disabled` flags while a *locked* move (Outrage, a charging move, a Hyper Beam recharge) sends a single-entry list instead. Both sides are passed, not only the acting one, since the tree models the foe too. Priced on a fresh 24-battle gen-5 baseline with the engine held constant: **22 illegal proposals in 195 decisions (11.3%) → 0 in 207**, with the corpus byte-identical (306/316, 315/316) and stage 0 unchanged at 19/19. Probe `tools/pe_doubles_choicelock.py`. **The engine half that remains is defect 29** |
 | 5 | **FIXED 2026-09-13** — `genx/generate_instructions.rs:1744` | Wide Guard / Quick Guard was applied to the shared `Choice` via `remove_effects_for_protect()`, cancelling the **whole** move. But both are *side conditions* and cannot protect anyone on the other side, so the half aimed at the attacker's own ally was thrown away. Was the one stage 0 disagreement (`wide_guard_blocks_spread`); **stage 0 went to 13/13** (19/19 today — runs 4, 5 and 6 each added a case, run 7 two, run 8 one). Fix: `area_protection_blocks(state, choice, pos)` keyed on **`pos.side`**, applied per position in the spread loop, with the whole-move cancel kept only for the single-target case where it is correct. **Extended in run 3:** that first fix covered only the *side conditions*, and the identical mechanism at `:1842` applies to the per-body **protect volatiles** — so slot-0 Protect + Earthquake still did nothing at all, slot-1 Protect still left the protecting body damaged, and a protecting **ally** was still damaged. `area_protection_blocks` now also checks PROTECT / SPIKYSHIELD / BANEFULBUNKER / BURNINGBULWARK / SILKTRAP — deliberately *not* `PROTECT_VOLATILES`, which also contains ENDURE, and Endure does not stop damage, it survives it at 1 HP |
 | 6 | **FIXED 2026-09-13 (run 7)** — `state.rs:1795` `reset_boosts` | read `get_active()` — slot 0 — and emitted `BoostInstruction::new(side_ref, 0, …)`, with no slot parameter anywhere. Both halves agreed with each other, so apply/reverse stayed sound and nothing crashed; the function simply described the **wrong Pokémon** whenever the slot was 1. **Symmetrical, and both halves matter:** with boosts on slot 0 a slot-1 switch *wiped a body that never left the field*, and with boosts on slot 1 that body's own switch *cleared nothing, so its boosts came back with it later*. **Three callers wanting three different bodies** is why the parameter belongs to the caller: a switch means the slot that is LEAVING (`actor_slot()`, now hoisted so the reset and the `Switch` instruction read one expression), Clear Smog means the RESOLVED TARGET (`def_pos`, the same target-class-versus-resolved-position error as defect 19), and Haze means EVERY living active — four slots in doubles, not two, reusing `living_positions_on_side` so a body that fainted earlier in the turn keeps its boosts exactly as Showdown's `getAllActive()` leaves it. Priced: boosts 93.4% → **95.6%** (302/316) with `switch from slot 1` 9/105 → **2/105**, while all ten *bodies* buckets stayed byte-identical — the correct no-leak control, since this function emits nothing but `Boost`. Stage 0 16 → **18/18** via two new cases, the only instrument that can see Haze or Clear Smog at all. Probe `tools/pe_doubles_resetboosts_slot.py`. The `NOTE (doubles)` comment justified the deferral by "the still-slot-0 switch mechanic", and that had already stopped being true: `switch()` was generalised at `state.rs:1933` |
 | 7 | **FIXED 2026-09-13 (run 6)** — `genx/generate_instructions.rs:4832` and `:5218` | **A sub-action was bound to the slot rather than the body**, so when Ally Switch moved a body mid-turn the *wrong Pokémon executed its move*. `Actor` carried only a `position`; it now also carries `body: PokemonIndex`, and the slot is re-resolved from it at execution time. **Targets deliberately still follow the slot** — the corpus proves a foe's single-target move follows the position through a swap (Gengar's Shock Wave aimed at slot 0 hits whoever ends up in slot 0: battle 24 turn 3, battle 39 turn 1), the opposite rule from the actor's — and ordering stays pre-swap, as Showdown locks it at turn start. Priced: the `allyswitch` bucket went 7/11 → 10/11 and the corpus 95.9% → **96.8%**; stage 0 15/15 → **16/16** via the new case `ally_switch_moves_the_body_not_the_action`. **The measurement that worked:** "which slot took damage" is useless here, because a spread move excludes whichever slot the engine *believes* is acting, so re-pointing the actor merely moves which body is spared. Damage **magnitude** is the independent channel — slot 0 Surfer at SpA 400 beside slot 1 Switcher at SpA 100 gives **27 damage with Ally Switch against 111 without**, same bodies, same move. Probe `tools/pe_doubles_allyswitch_body.py` |
@@ -1003,6 +1093,7 @@ caught only because Showdown was sitting next to it.
 | 26 | open — `genx/generate_instructions.rs:4469` | **`after_move_finish` consumes White Herb on slot 0 only.** It reads `side.get_active_immutable()` and emits its `ChangeItem` with a hardcoded `0`, carrying the author's own `// FIXME(doubles): slot`. So a slot-1 body's White Herb neither triggers nor is consumed, and a slot-0 body's can be consumed for its partner's negative boosts. Same family as defects 20/23; unpriced, because the corpus compares boosts by body and this affects *which* body's boosts are reset |
 | 27 | **FIXED 2026-09-13 (run 8)** — `genx/generate_instructions.rs:1867` | **An absorbed move slipped past BOTH doubles protect gates, and the reason is that the absorb erases the fields they test.** Every absorbing ability calls `remove_all_effects()`, which sets `category = Status` *and* calls `flags.clear_all()` (`choices.rs:20741`). The area guard is gated on `choice.category != MoveCategory::Status` (`:1890`) and the per-body Protect stanza on `choice.flags.protect` (`:1952`) — so once the ability had run, neither fired, `remove_effects_for_protect()` never ran, and that function is the only thing that clears `choice.boost` (`choices.rs:20735`). A Protecting Lightning Rod holder therefore still banked **+1 SpA**, and Wide Guard missed absorbable moves for the same root cause. **Showdown's order is the opposite and that is the fix**: Protect's condition carries `onTryHitPriority: 3` and blocks, while the absorb's boost sits in an unprioritised `onTryHit` on the same event (`data/abilities.ts:2344`), so a blocked move never reaches the ability. The defender's ability and item are now consulted only when the move is **not** blocked; skipping the defensive modifiers costs nothing there, since `remove_effects_for_protect` zeroes `base_power` anyway. Singles is identical by construction (`blocked_before_ability` is `false` under `cfg(not(doubles))`). Priced: the last genuine boosts row closed, 314 → **315/316**, and stage 0 18 → **19/19** via `protect_blocks_the_absorb_boost_too`, where Showdown leaves the holder at 301→301 with no boost and logs `\|-activate\|… move: Protect`. Bodies unchanged at 306/316, and probe `tools/pe_doubles_spread_redirect.py` is byte-identical across all four cells |
 | 28 | open — `genx/generate_instructions.rs:2324` | **Ability redirection is applied to SPREAD moves, which Showdown never does.** The single-target guard in `redirect_target` gates only the *volatile* redirection (Follow Me / Rage Powder / Spotlight); the Lightning Rod / Storm Drain scan above it runs for every move. In Showdown the redirect event is unreachable for spread moves — `priorityEvent('RedirectTarget')` sits inside the `default:` branch of the target switch (`sim/pokemon.ts:835`), which `allAdjacent` / `allAdjacentFoes` / `allies` never reach, and it is additionally skipped for charging moves and when `activePerHalf <= 1`. The missing guard **predates run 4**; what run 4 changed by making the ability scan field-wide is that a spread move can now be drawn onto the attacker's **own ally**. Recorded rather than fixed because it has **no measured consequence**: probe `tools/pe_doubles_spread_redirect.py` varies the ally's Storm Drain and the foe's Protect independently and the engine is correct in all four cells (the ally absorbs its partner's Surf, which is right — it is a legitimate target of the spread move — and every other body takes its normal damage). So the divergence is currently latent, living in `state.target_position` rather than in any outcome |
+| 29 | open — `genx/items.rs:260` `get_choice_move_disable_instructions` | **A Choice lock is stamped on slot 0, whichever body used the move.** The engine *does* model the lock — a Choice holder using a move disables that body's other moves — but the helper takes `&Pokemon` + `&SideReference` and has no `State` to ask which slot is acting, so it carries the fork's own `0, // FIXME(doubles): slot (no State access in this fn)`. Three doubles-reachable call sites pass through it: `items.rs:761` (the CHOICEBAND / CHOICESPECS / CHOICESCARF arm), `choice_effects.rs:1005`, `abilities.rs:673`. A **slot-1** Choice user therefore locks its **partner** and keeps all four of its own moves. Probe `tools/pe_doubles_choicedisable_slot.py`: with both bodies Choice Banded and each using its own M0, a correct engine emits six disables (`M1 M2 M3` twice over) — four appear, and one of them is **`M0`, the move just used**, which can only happen if the second actor wrote onto the first body. Note the probe cannot read the slot directly: `DisableMove`'s Display omits it (`DisableMove SideOne: M1`) even though the apply path uses it (`state.rs:2149` → `get_active_slot(slot)`), so the evidence is the index set, not a slot number. **Not newly exposed by defect 4's fix** — the engine sets `disabled` itself, so this was always reachable; filling `Move.disabled` makes it common rather than rare. `state.rs:1890` `re_enable_disabled_moves` is the mirror image on switch-out, same hard-coded slot 0, already recorded and still unfixed. Neither is visible to the measured instruments: the corpus projects damage, boosts and statuses but never move availability, and the play harness rebuilds the root state from Showdown every turn, so a wrong lock inside the tree never reaches a submitted action |
 | 11 | **SUPERSEDED by defect 20 — same fault, and fixed there in run 5** | this is the symptom-level entry, written before the site was known; row 20 is the same bug at `genx/generate_instructions.rs:815` and carries the fix. Kept because its evidence is still the clearest statement of the symptom, and because run 6's backlog text mistakenly used *this* number for `reset_boosts` (which is defect **6**) — a slip corrected in run 7. **Every status move applies its status to slot 0, whatever it was aimed at.** `thunderwave,0` and `thunderwave,1` both emit `ChangeStatus SideTwo-P0` (`tools/pe_doubles_status_target.py`, two Psychic-type foes so neither is immune and only the index can differ). Damage does *not* have this bug — `airslash,0` and `airslash,1` correctly emit `Damage SideTwo:0` and `:1` — so it is the status write specifically. Worse, the immunity check reads the **right** target while the write goes to the wrong one, so Thunder Wave aimed at a Psychic ally-of-a-Ground-type paralyzes the **Ground type** |
 
 **Wasted search.** Not a wrong answer — a budget spent on nothing.

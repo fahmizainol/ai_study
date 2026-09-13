@@ -98,11 +98,19 @@ STALL_MOVES = {"protect", "detect", "endure", "wideguard", "quickguard"}
 class Skip(Exception):
     pass
 
-def mon(d, allow_fainted=False):
+def mon(d, allow_fainted=False, usable=None):
     """Translate one body. By default a fainted active is a Skip, because the differential
     corpus wants positions both engines agree are well formed. The play harness passes
     allow_fainted=True: late in a battle a side with an empty bench keeps a fainted body on
-    the field, and refusing those silently hands every such decision to the fallback policy."""
+    the field, and refusing those silently hands every such decision to the fallback policy.
+
+    `usable`, when given, is the set of pid'd move ids Showdown will accept from this body this
+    turn; every other move is built with `disabled=True`. poke-engine has no Choice-lock rule
+    of its own -- `move_is_selectable` (`genx/state.rs:500`) reads `Move.disabled` and never
+    looks at the held item, in the fork and upstream alike -- so filling this is the CALLER's
+    job, exactly as `tools/foul_play_sidecar.py:173` does for singles. Pass None for a body
+    whose legal set is unknown (a benched one, or a side with no pending request) and nothing
+    is disabled, which is the engine's own default. See tools/pe_doubles_choicelock.py."""
     if d is None:
         raise Skip("empty active slot")
     if d.get("fainted"):
@@ -130,20 +138,32 @@ def mon(d, allow_fainted=False):
         special_attack_boost=d["boosts"].get("spa", 0), special_defense_boost=d["boosts"].get("spd", 0),
         speed_boost=d["boosts"].get("spe", 0), accuracy_boost=d["boosts"].get("accuracy", 0),
         evasion_boost=d["boosts"].get("evasion", 0),
-        moves=[Move(id=pid(m["id"]), pp=m["pp"]) for m in d["moves"]],
-        # poke-engine reads the Choice lock off last_used_move, serialized as
-        # "move:<index into this body's own move list>".
+        moves=[Move(id=pid(m["id"]), pp=m["pp"],
+                    disabled=usable is not None and pid(m["id"]) not in usable)
+               for m in d["moves"]],
+        # last_used_move carries ENCORE and the Bloodmoon / Gigaton Hammer repeat ban, and
+        # nothing else. It is serialized as "move:<index into this body's own move list>".
+        #
+        # It does NOT carry a Choice lock, and an earlier version of this comment claimed it
+        # did. Defect 4 -- "doubles option generation does not enforce the Choice lock it is
+        # given" -- was that claim's consequence: the lock rides on Move.disabled above, which
+        # this translator never filled, so the engine was told nothing was disabled and
+        # correctly offered everything.
         last_used_move=next((f"move:{i}" for i, m in enumerate(d["moves"])
                              if pid(m["id"]) == pid(d.get("lastMove") or "")), "move:none"),
     )
 
-def build_side(s, allow_fainted=False):
+def build_side(s, allow_fainted=False, usable=None):
+    """`usable[slot]`, when given, is the set of pid'd move ids Showdown accepts from that
+    active slot (see `mon`). Bench bodies never take one -- Showdown reports legality for the
+    field only, the same gate `foul_play_sidecar.py` spells as `on_field`."""
     kw = {}
     for k, v in s["conditions"].items():
         if k not in CONDITION:
             raise Skip(f"side condition {k}")
         kw[CONDITION[k]] = int(v)
-    party = [mon(p, allow_fainted) for p in s["active"]] \
+    party = [mon(p, allow_fainted, usable=(usable or {}).get(i))
+             for i, p in enumerate(s["active"])] \
         + [mon(p) for p in s["bench"] if not p.get("fainted")]
     return Side(active_indices=["0", "1"], pokemon=party,
                 side_conditions=SideConditions(**kw) if kw else SideConditions())
