@@ -383,7 +383,7 @@ both the oracle and the position generator, which is what makes this cheap.
   reads as a damage disagreement. The first run showed `('s1', 0): -79`, a body "healing",
   for precisely this reason.
 
-**Result as first run: 11 of 12 agree. Now 16 of 16, zero disagreements** (2026-09-13): the
+**Result as first run: 11 of 12 agree. Now 18 of 18, zero disagreements** (2026-09-13): the
 sole failure was Wide Guard (defect 5, since fixed), and a thirteenth case
 `wide_guard_blocks_own_ally_spread` was added to cover a path stage 0 never tested — see
 "Own-side area protection" below. Follow Me and Rage Powder redirection, Lightning Rod
@@ -489,7 +489,7 @@ note under defect 15 for why that number is not an improvement.
 > **Both figures in this table are superseded.** The instrument used to produce them was
 > charging the engine for 57 turns it cannot represent, and defects 5, 16 and 17 were all
 > still open. The numbers to quote are in the next section: bodies 74.1% → **96.8%** and boosts
-> 85.8% → **93.4%** across runs 1–6.
+> 85.8% → **95.6%** across runs 1–7.
 
 ### The instrument was charging the engine for 57 turns it cannot represent
 
@@ -514,15 +514,24 @@ exactly (277/316, 273/316), which doubles as a build-integrity check.
 | + defects 16 + 17 + Protect-in-spread (run 3) | 95.6% (302/316) | 86.4% |
 | + defects 18 + 19 (run 4, redirection + absorb side) | 95.9% (303/316) | 93.4% (295/316) |
 | + defect 20 + 23 (run 5, status targeting) | 95.9% (303/316) | 93.4% (295/316) |
-| **+ defect 7 (run 6, Ally Switch body binding)** | **96.8%** (306/316) | 93.4% (295/316) |
-| spread-held-out ceiling (166) | 90.4% → **97.6%** (162/166) | 92.8% → **95.8%** (159/166) |
-| holding out Wide Guard (250) | 85.2% → **96.4%** (241/250) | 86.8% → **94.0%** (235/250) |
-| holding out both absorb abilities (172) | **96.5%** (166/172) | **95.3%** (164/172) |
+| + defect 7 (run 6, Ally Switch body binding) | **96.8%** (306/316) | 93.4% (295/316) |
+| **+ defect 6 (run 7, `reset_boosts` slot)** | 96.8% (306/316) | **95.6%** (302/316) |
+| spread-held-out ceiling (166) | 90.4% → **97.6%** (162/166) | 92.8% → **98.2%** (163/166) |
+| holding out Wide Guard (250) | 85.2% → **96.4%** (241/250) | 86.8% → **95.6%** (239/250) |
+| holding out both absorb abilities (172) | **96.5%** (166/172) | **97.1%** (167/172) |
 
-**Runs 1–6 together: bodies-damaged 74.1% → 96.8%, +22.7 points / 72 turns; boosts 85.8% →
-93.4%, +7.6 points / 22 turns.** Of the bodies figure, +13.6 came from the two spread fixes,
-+7.9 from the Protect fixes, +0.3 from run 4 and +0.9 from run 6. Run 5 moved neither headline
-by design: it fixed status targeting, which this instrument cannot see at all.
+**Runs 1–7 together: bodies-damaged 74.1% → 96.8%, +22.7 points / 72 turns; boosts 85.8% →
+95.6%, +9.8 points / 31 turns.** Of the bodies figure, +13.6 came from the two spread fixes,
++7.9 from the Protect fixes, +0.3 from run 4 and +0.9 from run 6. Of the boosts figure, +7.0
+came from run 4's redirection pair and +2.2 from run 7's `reset_boosts` slot. Run 5 moved neither
+headline by design: it fixed status targeting, which this instrument cannot see at all.
+
+**Run 7 moved only boosts, and that is the control working rather than a shortfall.**
+`reset_boosts` emits nothing but `Boost` instructions, so a bodies column that does not budge is
+the prediction, not the disappointment — and it did not budge anywhere: 306/316 overall, all ten
+bodies buckets byte-identical, and all three held-out bodies rows unchanged to the digit
+(162/166, 241/250, 166/172). The three held-out **boosts** rows all rose, which is the other half
+of the same control.
 
 **Boosts were flat for three runs (85.8% → 86.4% → 86.4%) and moved only in run 4.** I had told
 the user that was because the fork "does not model redirection at all". **That was wrong** —
@@ -544,7 +553,10 @@ single-target Protect turns — so the subset legitimately moves, 90.4% → 97.6
 its job in both directions: it stayed still when the fix was spread-only and moved when the fix
 was not. What it reported then was a higher ceiling, putting the **residual spread gap at 2.0
 points** as of run 3. Runs 4–6 raised the ceiling again: it is **0.8 points** today
-(corpus 96.8% against a 97.6% spread-held-out ceiling).
+(corpus 96.8% against a 97.6% spread-held-out ceiling). On the **boosts** metric the same control
+reads 95.6% against **98.2%**, so 2.6 points of the boosts residual still sit on spread turns —
+the larger of the two remaining gaps, and consistent with the residual rows in backlog item 4
+being mostly absorb-ability magnitudes on spread moves.
 
 `--without wideguard` returned 213/250 on both instruments in run 2, as it had to: those 57
 skipped turns are all Wide-Guard-tagged, so the row could not move. It moves in run 3 for the
@@ -558,7 +570,7 @@ spread's 23/150 (15.3%), with `allyswitch` the highest rate at 5/11.
 in turn.** Run 3 left `allyswitch` 4/11, spread 10/150, `ability stormdrain` 7/110 and Friend
 Guard 3/95; after run 6 the bodies standing is **`a body carries boosts` 6/127, spread 6/150,
 `ability stormdrain` 4/110, Friend Guard 3/95, `allyswitch` 1/11** — no bucket above 6 turns, and
-boosts (21 turns) is now the larger metric of the two. See backlog item 4. Friend Guard stays hard for the same reason throughout: it needs the
+boosts — 14 turns after run 7 — is still the larger metric of the two. See backlog item 4. Friend Guard stays hard for the same reason throughout: it needs the
 **target's partner's** ability, a lookup `ability_modify_attack_against` has no way to express.
 
 ### Own-side area protection: verified against Showdown, not reasoned
@@ -674,7 +686,7 @@ artefact. **The doubles search beats the baseline decisively, in both seats.**
 **What this does and does not establish.** It says the search produces coherent doubles play —
 worth the bridge — and it says so *despite* the defects above: the planner is working from a
 board that agreed with Showdown on 73.2% of turns, mispriced Wide Guard (both since fixed —
-96.8% on the corrected instrument after runs 1–6; this measurement predates all of them), and
+96.8% on the corrected instrument after runs 1–7; this measurement predates all of them), and
 mis-binds an action across Ally Switch. **So 73.9% is a floor, not a ceiling.** What it does **not** say is
 that a doubles `foul_play` arm would beat this study's rule engine. Greedy is a weak opponent —
 it only manages 32-19 against random, with nine turn-limit draws — while the Reborn rule
@@ -834,7 +846,7 @@ by construction they can only confirm mechanics it already knows about — which
 them.
 
 **The honest update, after four runs of fixes, is that this argument is now weaker than when it
-was written.** Stage 0 is 16 of 16 and the corpus is 96.8%, so the gap between hand-authored and
+was written.** Stage 0 is 18 of 18 and the corpus is 96.8%, so the gap between hand-authored and
 random has narrowed from ~27 points to ~3.2. The asymmetry is real but no longer dramatic, and
 the case for harvesting no longer rests on a large measured gap — it rests on **coverage**: 328
 tests exercising mechanics stage 0 never names at all. Showdown's suite is the independent
@@ -875,7 +887,7 @@ Their suite and the random corpus answer different questions and neither replace
 theirs is adversarial and independently authored, so it finds bugs; ours is ordinary play over
 normal positions, which is what a search actually encounters, and is where the 73.2%/92.0%
 figures come from — those being the *original* corpus measurement, before the corrected
-instrument and runs 1–6 took it to 96.8% against a 97.6% ceiling.
+instrument and runs 1–7 took it to 96.8% against a 97.6% ceiling.
 
 ### 2. Replace the play harness's synthetic roster with `doubles_a`
 
@@ -904,7 +916,7 @@ to Showdown sets almost directly. Two known obstacles:
 Doing this is what would make the play result mean something: same referee, same search, real
 teams. It is more valuable than re-running the toy version with transcripts attached.
 
-### 3. Fix the twenty-six confirmed defects — 9 done (5, 7, 15, 16, 17, 18, 19, 20, 23), 17 open
+### 3. Fix the twenty-six confirmed defects — 11 done (5, 6, 7, 11, 15, 16, 17, 18, 19, 20, 23), 15 open
 
 Every line number below was read out of the `main-doubles` clone, not remembered. Three are
 crashes, so they stop a bridge outright; seventeen are silent wrong answers, which is worse to ship;
@@ -929,8 +941,8 @@ caught only because Showdown was sitting next to it.
 | # | site | defect |
 |---|---|---|
 | 4 | *option generation* | **A Choice lock is not enforced.** `last_used_move` is supplied and is exactly how poke-engine encodes the lock, yet the search proposes moves Showdown has disabled — 35 times in the gen 5 run (`dracometeor`, `earthpower`, `icebeam`, `psychic`, `outrage`, `boltstrike`). The single most consequential one for a bridge: it hands the game an illegal action on roughly one turn in six. Reproduced in two later batches on `hydropump`, `icebeam`, `dracometeor`, `vcreate` and `thunderbolt`, so it is not one move's data — and the proposed move **is** in the body's own move list, which rules out the wrong-slot enumeration of defect 8 as the cause |
-| 5 | **FIXED 2026-09-13** — `genx/generate_instructions.rs:1744` | Wide Guard / Quick Guard was applied to the shared `Choice` via `remove_effects_for_protect()`, cancelling the **whole** move. But both are *side conditions* and cannot protect anyone on the other side, so the half aimed at the attacker's own ally was thrown away. Was the one stage 0 disagreement (`wide_guard_blocks_spread`); **stage 0 went to 13/13** (16/16 today — runs 4, 5 and 6 each added a case). Fix: `area_protection_blocks(state, choice, pos)` keyed on **`pos.side`**, applied per position in the spread loop, with the whole-move cancel kept only for the single-target case where it is correct. **Extended in run 3:** that first fix covered only the *side conditions*, and the identical mechanism at `:1842` applies to the per-body **protect volatiles** — so slot-0 Protect + Earthquake still did nothing at all, slot-1 Protect still left the protecting body damaged, and a protecting **ally** was still damaged. `area_protection_blocks` now also checks PROTECT / SPIKYSHIELD / BANEFULBUNKER / BURNINGBULWARK / SILKTRAP — deliberately *not* `PROTECT_VOLATILES`, which also contains ENDURE, and Endure does not stop damage, it survives it at 1 HP |
-| 6 | `state.rs:1795` `reset_boosts` | reads `get_side(side_ref).get_active()` — slot 0 — so when a **slot 1** body switches out carrying boosts, slot 0's boosts are cleared instead. Haze goes through the same path. The `NOTE (doubles)` comment above it is accurate and calls the fix deferred, so this is known, not overlooked |
+| 5 | **FIXED 2026-09-13** — `genx/generate_instructions.rs:1744` | Wide Guard / Quick Guard was applied to the shared `Choice` via `remove_effects_for_protect()`, cancelling the **whole** move. But both are *side conditions* and cannot protect anyone on the other side, so the half aimed at the attacker's own ally was thrown away. Was the one stage 0 disagreement (`wide_guard_blocks_spread`); **stage 0 went to 13/13** (18/18 today — runs 4, 5 and 6 each added a case, run 7 two). Fix: `area_protection_blocks(state, choice, pos)` keyed on **`pos.side`**, applied per position in the spread loop, with the whole-move cancel kept only for the single-target case where it is correct. **Extended in run 3:** that first fix covered only the *side conditions*, and the identical mechanism at `:1842` applies to the per-body **protect volatiles** — so slot-0 Protect + Earthquake still did nothing at all, slot-1 Protect still left the protecting body damaged, and a protecting **ally** was still damaged. `area_protection_blocks` now also checks PROTECT / SPIKYSHIELD / BANEFULBUNKER / BURNINGBULWARK / SILKTRAP — deliberately *not* `PROTECT_VOLATILES`, which also contains ENDURE, and Endure does not stop damage, it survives it at 1 HP |
+| 6 | **FIXED 2026-09-13 (run 7)** — `state.rs:1795` `reset_boosts` | read `get_active()` — slot 0 — and emitted `BoostInstruction::new(side_ref, 0, …)`, with no slot parameter anywhere. Both halves agreed with each other, so apply/reverse stayed sound and nothing crashed; the function simply described the **wrong Pokémon** whenever the slot was 1. **Symmetrical, and both halves matter:** with boosts on slot 0 a slot-1 switch *wiped a body that never left the field*, and with boosts on slot 1 that body's own switch *cleared nothing, so its boosts came back with it later*. **Three callers wanting three different bodies** is why the parameter belongs to the caller: a switch means the slot that is LEAVING (`actor_slot()`, now hoisted so the reset and the `Switch` instruction read one expression), Clear Smog means the RESOLVED TARGET (`def_pos`, the same target-class-versus-resolved-position error as defect 19), and Haze means EVERY living active — four slots in doubles, not two, reusing `living_positions_on_side` so a body that fainted earlier in the turn keeps its boosts exactly as Showdown's `getAllActive()` leaves it. Priced: boosts 93.4% → **95.6%** (302/316) with `switch from slot 1` 9/105 → **2/105**, while all ten *bodies* buckets stayed byte-identical — the correct no-leak control, since this function emits nothing but `Boost`. Stage 0 16 → **18/18** via two new cases, the only instrument that can see Haze or Clear Smog at all. Probe `tools/pe_doubles_resetboosts_slot.py`. The `NOTE (doubles)` comment justified the deferral by "the still-slot-0 switch mechanic", and that had already stopped being true: `switch()` was generalised at `state.rs:1933` |
 | 7 | **FIXED 2026-09-13 (run 6)** — `genx/generate_instructions.rs:4832` and `:5218` | **A sub-action was bound to the slot rather than the body**, so when Ally Switch moved a body mid-turn the *wrong Pokémon executed its move*. `Actor` carried only a `position`; it now also carries `body: PokemonIndex`, and the slot is re-resolved from it at execution time. **Targets deliberately still follow the slot** — the corpus proves a foe's single-target move follows the position through a swap (Gengar's Shock Wave aimed at slot 0 hits whoever ends up in slot 0: battle 24 turn 3, battle 39 turn 1), the opposite rule from the actor's — and ordering stays pre-swap, as Showdown locks it at turn start. Priced: the `allyswitch` bucket went 7/11 → 10/11 and the corpus 95.9% → **96.8%**; stage 0 15/15 → **16/16** via the new case `ally_switch_moves_the_body_not_the_action`. **The measurement that worked:** "which slot took damage" is useless here, because a spread move excludes whichever slot the engine *believes* is acting, so re-pointing the actor merely moves which body is spared. Damage **magnitude** is the independent channel — slot 0 Surfer at SpA 400 beside slot 1 Switcher at SpA 100 gives **27 damage with Ally Switch against 111 without**, same bodies, same move. Probe `tools/pe_doubles_allyswitch_body.py` |
 | 15 | `genx/abilities.rs:2633` + `genx/generate_instructions.rs:1731` / `:2551` | **The root cause of defect 10.** Ability immunity is applied by *zeroing the shared `Choice`*, once, against the **nominal** target: Levitate sets `attacker_choice.base_power = 0.0`, `ability_modify_attack_against` runs once inside `before_move`, `damage_calc.rs:588` turns zero base power into `Some((0, 0))`, and `check_move_hit_or_miss` turns that into `percent_hit = 0.0` — all of it at `:2551`, **before** the spread expansion at `:2609`. Two consequences, in opposite directions: **(A)** an immune body in the nominal slot makes the entire spread move miss, so its *ally and the other foe take nothing*; **(B)** ability immunity is never consulted for any other position, so an immune body in slot 1, or an ability-immune ally, **takes full damage**. Type immunity escapes (A) only because it lives inside `calculate_damage`, which the per-target loop re-calls with `state.target_position` set — `damage_calc.rs` contains no `LEVITATE` at all. Measured with `tools/pe_doubles_spread_classes.py` |
 | 14 | `genx/choice_effects.rs:213` + `genx/generate_instructions.rs:5145` | **Fake Out and First Impression read and write slot 0's move history, not the acting body's.** The restriction is modelled through `last_used_move` — `Move(_)` means the body has already acted, so the move loses its effects — but both the check (`attacking_side.get_active_immutable()`) and the reset (`get_side(…).get_active().last_used_move = Switch(P0)`) go through `get_active()`, which is slot 0. `tools/pe_doubles_fakeout_slot.py` shows the outcome depends *entirely* on slot 0's history and not at all on the user's, wrong in **both** directions: a slot-1 body that has been out for turns keeps a live Fake Out, and a freshly switched-in one loses it. Seen in play (`seed23/004` turn 3): Crobat had just switched into slot 0, so the search ranked Scrafty's dead Fake Out **top**, Showdown failed it, and Scrafty died that turn. The write is the worse half — using Fake Out from slot 1 stamps `Switch(P0)` over **slot 0's** history, and since defect 4's Choice lock is read from the same field, that is a candidate contributor to it |
@@ -946,7 +958,7 @@ caught only because Showdown was sitting next to it.
 | 24 | open — `genx/generate_instructions.rs:748` | **`immune_to_status`'s *attacker* read is still slot 0.** Used only by the POISON/TOXIC arm's Corrosion check. Left deliberately: its correct owner differs by caller — for a move it is the actor, but Flame Orb and Toxic Orb call this at end of turn with `MoveTarget::User`, where `actor_slot()` is stale and "attacking side" merely means the other side. Changing it blind would alter item behaviour, so it is recorded rather than guessed at. Narrow: a slot-1 body's Corrosion is read off slot 0 |
 | 25 | open — `choices.rs:357` | **Ally Switch's priority is wrong for gen 5 and gen 6.** The table declares a flat `priority: 2` with no gen gate, and `modify_choice_priority` has no arm for it, but gen 5 inherits gen 6's `priority: 1` (`data/mods/gen6/moves.ts`). Found in run 6 while reading Showdown's move data for the Ally Switch fix, and **deliberately not fixed there**: changing turn order could move other corpus rows, which would have blurred that run's attribution. It changes nothing in the corpus's own Ally Switch turns, where only priority-0 moves oppose it, so it is latent — it would bite against Quick Guard (+3), Fake Out (+3), Mach Punch (+1) or Protect |
 | 26 | open — `genx/generate_instructions.rs:4469` | **`after_move_finish` consumes White Herb on slot 0 only.** It reads `side.get_active_immutable()` and emits its `ChangeItem` with a hardcoded `0`, carrying the author's own `// FIXME(doubles): slot`. So a slot-1 body's White Herb neither triggers nor is consumed, and a slot-0 body's can be consumed for its partner's negative boosts. Same family as defects 20/23; unpriced, because the corpus compares boosts by body and this affects *which* body's boosts are reset |
-| 11 | status application | **Every status move applies its status to slot 0, whatever it was aimed at.** `thunderwave,0` and `thunderwave,1` both emit `ChangeStatus SideTwo-P0` (`tools/pe_doubles_status_target.py`, two Psychic-type foes so neither is immune and only the index can differ). Damage does *not* have this bug — `airslash,0` and `airslash,1` correctly emit `Damage SideTwo:0` and `:1` — so it is the status write specifically. Worse, the immunity check reads the **right** target while the write goes to the wrong one, so Thunder Wave aimed at a Psychic ally-of-a-Ground-type paralyzes the **Ground type** |
+| 11 | **SUPERSEDED by defect 20 — same fault, and fixed there in run 5** | this is the symptom-level entry, written before the site was known; row 20 is the same bug at `genx/generate_instructions.rs:815` and carries the fix. Kept because its evidence is still the clearest statement of the symptom, and because run 6's backlog text mistakenly used *this* number for `reset_boosts` (which is defect **6**) — a slip corrected in run 7. **Every status move applies its status to slot 0, whatever it was aimed at.** `thunderwave,0` and `thunderwave,1` both emit `ChangeStatus SideTwo-P0` (`tools/pe_doubles_status_target.py`, two Psychic-type foes so neither is immune and only the index can differ). Damage does *not* have this bug — `airslash,0` and `airslash,1` correctly emit `Damage SideTwo:0` and `:1` — so it is the status write specifically. Worse, the immunity check reads the **right** target while the write goes to the wrong one, so Thunder Wave aimed at a Psychic ally-of-a-Ground-type paralyzes the **Ground type** |
 
 **Wasted search.** Not a wrong answer — a budget spent on nothing.
 
@@ -1119,11 +1131,19 @@ once a transcript says where to look.
 
 ### 4. ~~Close the rest of the spread-move divergence~~ — DONE 2026-09-13, residual 0.8 points
 
-Defects 15, 5, 16, 17, 18, 19, 20, 23 and 7 are all fixed in
-`patches/poke_engine_doubles_spread_per_target.patch` (700 lines, 4 files; reverses cleanly).
-**Bodies-damaged 74.1% → 96.8% and boosts 85.8% → 93.4% on the corrected instrument across
-runs 1–6. Stage 0 went 11-of-12 → 16-of-16.** The residual spread gap is 0.8 points and spread
-is no longer the dominant source of disagreement.
+Defects 15, 5, 16, 17, 18, 19, 20, 23, 7 and 6 are all fixed in
+`patches/poke_engine_doubles_spread_per_target.patch` (971 lines, 12 files; reverses cleanly).
+**Bodies-damaged 74.1% → 96.8% and boosts 85.8% → 95.6% on the corrected instrument across
+runs 1–7. Stage 0 went 11-of-12 → 18-of-18.** The residual spread gap is 0.8 points on bodies
+and 2.6 on boosts, and spread is no longer the dominant source of disagreement.
+
+**The patch grew from 4 files to 12 in run 7, which earns a line of its own.** `reset_boosts`
+lives in `src/state.rs`, a file the patch did not previously touch at all, and giving it a `slot`
+parameter changed its signature — so all nine call sites had to follow it, six of them in
+`src/gen1`, `src/gen2` and `src/gen3`. Those six pass a literal `0` and are behaviour-identical
+by construction, but they have to ship with the patch or the tree stops compiling for those
+features. That is why `cargo check` was run for gen1, gen2 and gen3 separately: the measured
+build is `gen5,doubles` and would never have caught them.
 
 **Protect is done too (run 3): 26 of 73 turns → 1 of 73.** It was three faults — defects 16 and
 17, both new, plus defect 5's mechanism applied to the per-body volatile, which the run-2 patch
@@ -1138,19 +1158,41 @@ entirely — probe B2 emitted no `Heal` instruction at all until that was fixed.
 
 What is left, in descending size. Nothing here is a spread problem any more:
 
-**Bodies-damaged is now the smaller problem: 10 disagreeing turns against boosts' 21.** After
+**Bodies-damaged is the smaller problem: 10 disagreeing turns against boosts' 14.** After
 run 6 no bodies bucket exceeds 6 turns or a 6.2% rate, and the list is flat enough that ranking
 it by rate and by count disagree — which is itself the signal that the large single causes are
 gone. Ally Switch is down to 1 of 11, and that one turn is the branch-spread artefact described
-above, not a defect.
+above, not a defect. Run 7 left this column untouched, every bucket included.
 
-**So the next target is boosts, and the buckets name a defect already in the table.** Boosts
-disagree on 21 turns and have not moved since run 4. `switch from slot 1` is 9 of 105 and
-`switch from slot 0` 7 of 125 — switching turns, on the boosts metric specifically — which is
-the exact fingerprint of **defect 11**, `Side::reset_boosts` (`state.rs:1795`) hardcoding slot 0,
-so a slot-1 body switching out clears **slot 0's** boosts instead of its own. Haze uses the same
-function. That is a catalogued defect with a known site, and unlike run 5's status work the
-current instrument can price it, because boosts are compared per body.
+**Run 7 took the boosts target, and it was defect 6 — not defect 11. The numbering slip is
+worth recording.** The run-6 text here named "defect 11" for `Side::reset_boosts`; the table
+numbers that site **6**, and row 11 is the older symptom-level entry for *status application*,
+which run 5 had already fixed at site level as defect 20. The fingerprint reading was right and
+the label was wrong. Fixing `reset_boosts` took `switch from slot 1` on boosts from 9 of 105 to
+**2 of 105** and the metric 93.4% → **95.6%**.
+
+**`switch from slot 0` was co-occurrence, not a second cause — measured, not assumed.** It fell
+only 7 → 5 of 125, and held out on its own that bucket is 120/125 (96.0%). Two of its five
+surviving rows have the switch on the **opposite side** from the body that disagrees (battle 22
+turn 7, battle 33 turn 6), which is what co-occurrence looks like and what a second cause would
+not look like.
+
+**What the 14 residual boost turns are**, read off the rows rather than inferred. `a body
+carries boosts` 13/127 and `spread move` 11/150 are consequence tags — a boost that lands on the
+wrong body is carried into later turns — and the named causes are `ability stormdrain` 7/110 and
+`ability lightningrod` 3/44. Three shapes recur:
+
+1. an absorb boost of the wrong **magnitude** — battle 5 turn 10, Showdown +2 against the
+   engine's +1, which is defect 18's documented precedence simplification;
+2. an Intimidate-on-switch-in with the wrong **sign** — battle 9 turn 8, Showdown +1 against the
+   engine's −1, the shape of **defect 22**, where `ability_on_switch_in` indexes the opposing
+   side by the switcher's own slot number;
+3. a clear-on-switch mismatch I have **not** isolated — battle 33 turn 6 drops Gengar's spa and
+   spd by one each on a turn whose only switch is on the *other* side, which no reading of
+   `reset_boosts` explains.
+
+So the next target should be chosen from those rows, and defect 22 is the one already carrying a
+named site.
 
 The remaining bodies rows, for completeness:
 
@@ -1176,8 +1218,20 @@ a single previous figure — the asymmetry that makes it safe where the corpus i
 `pe_doubles_diff.py` now compares statuses (keyed through `roster`, since `ChangeStatus` is the
 one compared instruction addressed by **party index** rather than slot), case
 `thunder_wave_lands_on_the_slot_aimed_at` went from the only disagreement to agreeing, and stage 0
-is **15 of 15**. The corpus stays the no-regression control: unchanged at 303/316 and 295/316
-across run 5, exactly as a status-blind instrument should be.
+reached **15 of 15** (it is **18 of 18** today). The corpus stays the no-regression control:
+unchanged at 303/316 and 295/316 across run 5, exactly as a status-blind instrument should be.
+
+**Run 7 hit the same wall twice more, and one grep settled it.** Two of `reset_boosts`' three
+callers are **Haze and Clear Smog**, and the corpus `POOL` contains *neither move* — so no
+number there could have moved for either one whatever the engine did. Both went to stage 0 as
+`haze_clears_all_four_slots` and `clear_smog_clears_the_slot_aimed_at`; both disagreed before the
+fix and agree after, taking stage 0 16 → **18 of 18**. The switch caller is the one the corpus
+*can* price, and the reason is a filter written for an unrelated purpose: the boosts comparison
+keeps only bodies active in **both** snapshots (`pe_doubles_corpus.py:289`), so the departing
+body's own legitimate clear is excluded on both sides and what survives is exactly the boost
+wrongly applied to the body that **stayed**. That also means the "boosts survive on the body
+that left" half of defect 6 is invisible to the corpus by construction, and only the probe shows
+it (section A2).
 
 **A second, structural limit of the instrument, found in run 6.** It compares only the single
 most probable branch, so it can never agree on a row where a KO sits inside the branch spread.

@@ -162,6 +162,36 @@ const CASES = [
     p2: [set('Gengar', 'Levitate', ['Tackle']), set('Machoke', 'Guts', ['Tackle']), FILL, FILL],
     c1: 'switch 3, move 1 1', c2: 'move 1 1, move 1 1',
     pe1: 'gyarados;tackle,0', pe2: 'tackle,0;tackle,0' },
+
+  // Defect 11, the two callers of reset_boosts the CORPUS CANNOT PRICE: showdown_doubles_lib
+  // .js's POOL contains neither Haze nor Clear Smog, so no number there can move for either
+  // one no matter what the engine does. Stage 0 is the only instrument that can adjudicate
+  // them, exactly as with the status work in run 5.
+  //
+  // Both cases have to manufacture the boosts inside the single turn they get, so the
+  // clearing move must resolve LAST. That is arranged by base speed alone, with no EVs in
+  // play: Amoonguss (30) is slower than Machamp (55) and Golem (45), and Koffing (35) is
+  // slower than Machamp (55), Golem (45) and Seaking (68). Every mon moves at priority 0, so
+  // speed alone fixes the order and the always-max PRNG makes speed ties irrelevant anyway.
+  { name: 'clear_smog_clears_the_slot_aimed_at',
+    why: 'Clear Smog aimed at slot 1 must clear slot 1s boosts, not slot 0s',
+    p1: [set('Amoonguss', 'Effect Spore', ['Clear Smog']), set('Snorlax', 'Immunity', ['Swords Dance']), FILL, FILL],
+    p2: [set('Machamp', 'No Guard', ['Swords Dance']), set('Golem', 'Sturdy', ['Swords Dance']), FILL, FILL],
+    c1: 'move 1 2, move 1', c2: 'move 1, move 1',
+    pe1: 'clearsmog,1;swordsdance', pe2: 'swordsdance;swordsdance' },
+
+  // Haze clears every active body, which in doubles is four slots. Three of the four carry
+  // boosts here (the Hazer itself has none, which is fine -- it is not what is in question),
+  // and crucially BOTH slot-1 bodies do, since those are the two the old slot-0-only code
+  // left untouched. Showdown should show Machamp, Golem and Seaking all back at 0.
+  // NOT covered here, and deliberately: the fix skips FAINTED slots to match Showdown's
+  // getAllActive(), and no case in stage 0 Hazes with a body already fainted this turn.
+  { name: 'haze_clears_all_four_slots',
+    why: 'Haze must clear boosts on all four actives, including both slot-1 bodies',
+    p1: [set('Koffing', 'Levitate', ['Haze']), set('Machamp', 'No Guard', ['Swords Dance']), FILL, FILL],
+    p2: [set('Golem', 'Sturdy', ['Swords Dance']), set('Seaking', 'Lightning Rod', ['Swords Dance']), FILL, FILL],
+    c1: 'move 1, move 1', c2: 'move 1, move 1',
+    pe1: 'haze;swordsdance', pe2: 'swordsdance;swordsdance' },
 ];
 
 // Always-max PRNG: see the determinism note at the top.

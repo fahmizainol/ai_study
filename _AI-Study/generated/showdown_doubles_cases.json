@@ -10391,5 +10391,1283 @@
    "|upkeep",
    "|turn|2"
   ]
+ },
+ {
+  "name": "clear_smog_clears_the_slot_aimed_at",
+  "why": "Clear Smog aimed at slot 1 must clear slot 1s boosts, not slot 0s",
+  "choices": {
+   "p1": "move 1 2, move 1",
+   "p2": "move 1, move 1"
+  },
+  "pe": {
+   "s1": "clearsmog,1;swordsdance",
+   "s2": "swordsdance;swordsdance"
+  },
+  "before": [
+   {
+    "side": "p1",
+    "active": [
+     {
+      "species": "Amoonguss",
+      "ability": "effectspore",
+      "item": "",
+      "types": [
+       "Grass",
+       "Poison"
+      ],
+      "weightkg": 10.5,
+      "hp": 369,
+      "maxhp": 369,
+      "status": "none",
+      "stats": {
+       "atk": 206,
+       "def": 176,
+       "spa": 206,
+       "spd": 196,
+       "spe": 96
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "clearsmog",
+        "pp": 24
+       }
+      ]
+     },
+     {
+      "species": "Snorlax",
+      "ability": "immunity",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 460,
+      "hp": 461,
+      "maxhp": 461,
+      "status": "none",
+      "stats": {
+       "atk": 256,
+       "def": 166,
+       "spa": 166,
+       "spd": 256,
+       "spe": 96
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "swordsdance",
+        "pp": 48
+       }
+      ]
+     }
+    ],
+    "bench": [
+     {
+      "species": "Ditto",
+      "ability": "limber",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 4,
+      "hp": 237,
+      "maxhp": 237,
+      "status": "none",
+      "stats": {
+       "atk": 132,
+       "def": 132,
+       "spa": 132,
+       "spd": 132,
+       "spe": 132
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "transform",
+        "pp": 16
+       }
+      ]
+     },
+     {
+      "species": "Ditto",
+      "ability": "limber",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 4,
+      "hp": 237,
+      "maxhp": 237,
+      "status": "none",
+      "stats": {
+       "atk": 132,
+       "def": 132,
+       "spa": 132,
+       "spd": 132,
+       "spe": 132
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "transform",
+        "pp": 16
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "side": "p2",
+    "active": [
+     {
+      "species": "Machamp",
+      "ability": "noguard",
+      "item": "",
+      "types": [
+       "Fighting"
+      ],
+      "weightkg": 130,
+      "hp": 321,
+      "maxhp": 321,
+      "status": "none",
+      "stats": {
+       "atk": 296,
+       "def": 196,
+       "spa": 166,
+       "spd": 206,
+       "spe": 146
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "swordsdance",
+        "pp": 48
+       }
+      ]
+     },
+     {
+      "species": "Golem",
+      "ability": "sturdy",
+      "item": "",
+      "types": [
+       "Rock",
+       "Ground"
+      ],
+      "weightkg": 300,
+      "hp": 301,
+      "maxhp": 301,
+      "status": "none",
+      "stats": {
+       "atk": 256,
+       "def": 296,
+       "spa": 146,
+       "spd": 166,
+       "spe": 126
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "swordsdance",
+        "pp": 48
+       }
+      ]
+     }
+    ],
+    "bench": [
+     {
+      "species": "Ditto",
+      "ability": "limber",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 4,
+      "hp": 237,
+      "maxhp": 237,
+      "status": "none",
+      "stats": {
+       "atk": 132,
+       "def": 132,
+       "spa": 132,
+       "spd": 132,
+       "spe": 132
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "transform",
+        "pp": 16
+       }
+      ]
+     },
+     {
+      "species": "Ditto",
+      "ability": "limber",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 4,
+      "hp": 237,
+      "maxhp": 237,
+      "status": "none",
+      "stats": {
+       "atk": 132,
+       "def": 132,
+       "spa": 132,
+       "spd": 132,
+       "spe": 132
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "transform",
+        "pp": 16
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "after": [
+   {
+    "side": "p1",
+    "active": [
+     {
+      "species": "Amoonguss",
+      "ability": "effectspore",
+      "item": "",
+      "types": [
+       "Grass",
+       "Poison"
+      ],
+      "weightkg": 10.5,
+      "hp": 369,
+      "maxhp": 369,
+      "status": "none",
+      "stats": {
+       "atk": 206,
+       "def": 176,
+       "spa": 206,
+       "spd": 196,
+       "spe": 96
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "clearsmog",
+        "pp": 23
+       }
+      ]
+     },
+     {
+      "species": "Snorlax",
+      "ability": "immunity",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 460,
+      "hp": 461,
+      "maxhp": 461,
+      "status": "none",
+      "stats": {
+       "atk": 256,
+       "def": 166,
+       "spa": 166,
+       "spd": 256,
+       "spe": 96
+      },
+      "boosts": {
+       "atk": 2,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "swordsdance",
+        "pp": 47
+       }
+      ]
+     }
+    ],
+    "bench": [
+     {
+      "species": "Ditto",
+      "ability": "limber",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 4,
+      "hp": 237,
+      "maxhp": 237,
+      "status": "none",
+      "stats": {
+       "atk": 132,
+       "def": 132,
+       "spa": 132,
+       "spd": 132,
+       "spe": 132
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "transform",
+        "pp": 16
+       }
+      ]
+     },
+     {
+      "species": "Ditto",
+      "ability": "limber",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 4,
+      "hp": 237,
+      "maxhp": 237,
+      "status": "none",
+      "stats": {
+       "atk": 132,
+       "def": 132,
+       "spa": 132,
+       "spd": 132,
+       "spe": 132
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "transform",
+        "pp": 16
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "side": "p2",
+    "active": [
+     {
+      "species": "Machamp",
+      "ability": "noguard",
+      "item": "",
+      "types": [
+       "Fighting"
+      ],
+      "weightkg": 130,
+      "hp": 321,
+      "maxhp": 321,
+      "status": "none",
+      "stats": {
+       "atk": 296,
+       "def": 196,
+       "spa": 166,
+       "spd": 206,
+       "spe": 146
+      },
+      "boosts": {
+       "atk": 2,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "swordsdance",
+        "pp": 47
+       }
+      ]
+     },
+     {
+      "species": "Golem",
+      "ability": "sturdy",
+      "item": "",
+      "types": [
+       "Rock",
+       "Ground"
+      ],
+      "weightkg": 300,
+      "hp": 285,
+      "maxhp": 301,
+      "status": "none",
+      "stats": {
+       "atk": 256,
+       "def": 296,
+       "spa": 146,
+       "spd": 166,
+       "spe": 126
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "swordsdance",
+        "pp": 47
+       }
+      ]
+     }
+    ],
+    "bench": [
+     {
+      "species": "Ditto",
+      "ability": "limber",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 4,
+      "hp": 237,
+      "maxhp": 237,
+      "status": "none",
+      "stats": {
+       "atk": 132,
+       "def": 132,
+       "spa": 132,
+       "spd": 132,
+       "spe": 132
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "transform",
+        "pp": 16
+       }
+      ]
+     },
+     {
+      "species": "Ditto",
+      "ability": "limber",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 4,
+      "hp": 237,
+      "maxhp": 237,
+      "status": "none",
+      "stats": {
+       "atk": 132,
+       "def": 132,
+       "spa": 132,
+       "spd": 132,
+       "spe": 132
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "transform",
+        "pp": 16
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "log": [
+   "|gametype|doubles",
+   "|player|p1|A||",
+   "|player|p2|B||",
+   "|gen|5",
+   "|tier|[Gen 5] Doubles Custom Game",
+   "|clearpoke",
+   "|poke|p1|Amoonguss, F|",
+   "|poke|p1|Snorlax, F|",
+   "|poke|p1|Ditto|",
+   "|poke|p1|Ditto|",
+   "|poke|p2|Machamp, F|",
+   "|poke|p2|Golem, F|",
+   "|poke|p2|Ditto|",
+   "|poke|p2|Ditto|",
+   "|teampreview",
+   "|",
+   "|teamsize|p1|4",
+   "|teamsize|p2|4",
+   "|start",
+   "|split|p1",
+   "|switch|p1a: Amoonguss|Amoonguss, F|369/369",
+   "|switch|p1a: Amoonguss|Amoonguss, F|369/369",
+   "|split|p1",
+   "|switch|p1b: Snorlax|Snorlax, F|461/461",
+   "|switch|p1b: Snorlax|Snorlax, F|461/461",
+   "|split|p2",
+   "|switch|p2a: Machamp|Machamp, F|321/321",
+   "|switch|p2a: Machamp|Machamp, F|321/321",
+   "|split|p2",
+   "|switch|p2b: Golem|Golem, F|301/301",
+   "|switch|p2b: Golem|Golem, F|301/301",
+   "|turn|1",
+   "|",
+   "|move|p2a: Machamp|Swords Dance|p2a: Machamp",
+   "|-boost|p2a: Machamp|atk|2",
+   "|move|p2b: Golem|Swords Dance|p2b: Golem",
+   "|-boost|p2b: Golem|atk|2",
+   "|move|p1a: Amoonguss|Clear Smog|p2b: Golem",
+   "|-resisted|p2b: Golem",
+   "|split|p2",
+   "|-damage|p2b: Golem|285/301",
+   "|-damage|p2b: Golem|285/301",
+   "|-clearboost|p2b: Golem",
+   "|move|p1b: Snorlax|Swords Dance|p1b: Snorlax",
+   "|-boost|p1b: Snorlax|atk|2",
+   "|",
+   "|upkeep",
+   "|turn|2"
+  ]
+ },
+ {
+  "name": "haze_clears_all_four_slots",
+  "why": "Haze must clear boosts on all four actives, including both slot-1 bodies",
+  "choices": {
+   "p1": "move 1, move 1",
+   "p2": "move 1, move 1"
+  },
+  "pe": {
+   "s1": "haze;swordsdance",
+   "s2": "swordsdance;swordsdance"
+  },
+  "before": [
+   {
+    "side": "p1",
+    "active": [
+     {
+      "species": "Koffing",
+      "ability": "levitate",
+      "item": "",
+      "types": [
+       "Poison"
+      ],
+      "weightkg": 1,
+      "hp": 221,
+      "maxhp": 221,
+      "status": "none",
+      "stats": {
+       "atk": 166,
+       "def": 226,
+       "spa": 156,
+       "spd": 126,
+       "spe": 106
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "haze",
+        "pp": 48
+       }
+      ]
+     },
+     {
+      "species": "Machamp",
+      "ability": "noguard",
+      "item": "",
+      "types": [
+       "Fighting"
+      ],
+      "weightkg": 130,
+      "hp": 321,
+      "maxhp": 321,
+      "status": "none",
+      "stats": {
+       "atk": 296,
+       "def": 196,
+       "spa": 166,
+       "spd": 206,
+       "spe": 146
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "swordsdance",
+        "pp": 48
+       }
+      ]
+     }
+    ],
+    "bench": [
+     {
+      "species": "Ditto",
+      "ability": "limber",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 4,
+      "hp": 237,
+      "maxhp": 237,
+      "status": "none",
+      "stats": {
+       "atk": 132,
+       "def": 132,
+       "spa": 132,
+       "spd": 132,
+       "spe": 132
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "transform",
+        "pp": 16
+       }
+      ]
+     },
+     {
+      "species": "Ditto",
+      "ability": "limber",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 4,
+      "hp": 237,
+      "maxhp": 237,
+      "status": "none",
+      "stats": {
+       "atk": 132,
+       "def": 132,
+       "spa": 132,
+       "spd": 132,
+       "spe": 132
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "transform",
+        "pp": 16
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "side": "p2",
+    "active": [
+     {
+      "species": "Golem",
+      "ability": "sturdy",
+      "item": "",
+      "types": [
+       "Rock",
+       "Ground"
+      ],
+      "weightkg": 300,
+      "hp": 301,
+      "maxhp": 301,
+      "status": "none",
+      "stats": {
+       "atk": 256,
+       "def": 296,
+       "spa": 146,
+       "spd": 166,
+       "spe": 126
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "swordsdance",
+        "pp": 48
+       }
+      ]
+     },
+     {
+      "species": "Seaking",
+      "ability": "lightningrod",
+      "item": "",
+      "types": [
+       "Water"
+      ],
+      "weightkg": 39,
+      "hp": 301,
+      "maxhp": 301,
+      "status": "none",
+      "stats": {
+       "atk": 220,
+       "def": 166,
+       "spa": 166,
+       "spd": 196,
+       "spe": 172
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "swordsdance",
+        "pp": 48
+       }
+      ]
+     }
+    ],
+    "bench": [
+     {
+      "species": "Ditto",
+      "ability": "limber",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 4,
+      "hp": 237,
+      "maxhp": 237,
+      "status": "none",
+      "stats": {
+       "atk": 132,
+       "def": 132,
+       "spa": 132,
+       "spd": 132,
+       "spe": 132
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "transform",
+        "pp": 16
+       }
+      ]
+     },
+     {
+      "species": "Ditto",
+      "ability": "limber",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 4,
+      "hp": 237,
+      "maxhp": 237,
+      "status": "none",
+      "stats": {
+       "atk": 132,
+       "def": 132,
+       "spa": 132,
+       "spd": 132,
+       "spe": 132
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "transform",
+        "pp": 16
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "after": [
+   {
+    "side": "p1",
+    "active": [
+     {
+      "species": "Koffing",
+      "ability": "levitate",
+      "item": "",
+      "types": [
+       "Poison"
+      ],
+      "weightkg": 1,
+      "hp": 221,
+      "maxhp": 221,
+      "status": "none",
+      "stats": {
+       "atk": 166,
+       "def": 226,
+       "spa": 156,
+       "spd": 126,
+       "spe": 106
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "haze",
+        "pp": 47
+       }
+      ]
+     },
+     {
+      "species": "Machamp",
+      "ability": "noguard",
+      "item": "",
+      "types": [
+       "Fighting"
+      ],
+      "weightkg": 130,
+      "hp": 321,
+      "maxhp": 321,
+      "status": "none",
+      "stats": {
+       "atk": 296,
+       "def": 196,
+       "spa": 166,
+       "spd": 206,
+       "spe": 146
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "swordsdance",
+        "pp": 47
+       }
+      ]
+     }
+    ],
+    "bench": [
+     {
+      "species": "Ditto",
+      "ability": "limber",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 4,
+      "hp": 237,
+      "maxhp": 237,
+      "status": "none",
+      "stats": {
+       "atk": 132,
+       "def": 132,
+       "spa": 132,
+       "spd": 132,
+       "spe": 132
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "transform",
+        "pp": 16
+       }
+      ]
+     },
+     {
+      "species": "Ditto",
+      "ability": "limber",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 4,
+      "hp": 237,
+      "maxhp": 237,
+      "status": "none",
+      "stats": {
+       "atk": 132,
+       "def": 132,
+       "spa": 132,
+       "spd": 132,
+       "spe": 132
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "transform",
+        "pp": 16
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "side": "p2",
+    "active": [
+     {
+      "species": "Golem",
+      "ability": "sturdy",
+      "item": "",
+      "types": [
+       "Rock",
+       "Ground"
+      ],
+      "weightkg": 300,
+      "hp": 301,
+      "maxhp": 301,
+      "status": "none",
+      "stats": {
+       "atk": 256,
+       "def": 296,
+       "spa": 146,
+       "spd": 166,
+       "spe": 126
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "swordsdance",
+        "pp": 47
+       }
+      ]
+     },
+     {
+      "species": "Seaking",
+      "ability": "lightningrod",
+      "item": "",
+      "types": [
+       "Water"
+      ],
+      "weightkg": 39,
+      "hp": 301,
+      "maxhp": 301,
+      "status": "none",
+      "stats": {
+       "atk": 220,
+       "def": 166,
+       "spa": 166,
+       "spd": 196,
+       "spe": 172
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "swordsdance",
+        "pp": 47
+       }
+      ]
+     }
+    ],
+    "bench": [
+     {
+      "species": "Ditto",
+      "ability": "limber",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 4,
+      "hp": 237,
+      "maxhp": 237,
+      "status": "none",
+      "stats": {
+       "atk": 132,
+       "def": 132,
+       "spa": 132,
+       "spd": 132,
+       "spe": 132
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "transform",
+        "pp": 16
+       }
+      ]
+     },
+     {
+      "species": "Ditto",
+      "ability": "limber",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 4,
+      "hp": 237,
+      "maxhp": 237,
+      "status": "none",
+      "stats": {
+       "atk": 132,
+       "def": 132,
+       "spa": 132,
+       "spd": 132,
+       "spe": 132
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "transform",
+        "pp": 16
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "log": [
+   "|gametype|doubles",
+   "|player|p1|A||",
+   "|player|p2|B||",
+   "|gen|5",
+   "|tier|[Gen 5] Doubles Custom Game",
+   "|clearpoke",
+   "|poke|p1|Koffing, F|",
+   "|poke|p1|Machamp, F|",
+   "|poke|p1|Ditto|",
+   "|poke|p1|Ditto|",
+   "|poke|p2|Golem, F|",
+   "|poke|p2|Seaking, F|",
+   "|poke|p2|Ditto|",
+   "|poke|p2|Ditto|",
+   "|teampreview",
+   "|",
+   "|teamsize|p1|4",
+   "|teamsize|p2|4",
+   "|start",
+   "|split|p1",
+   "|switch|p1a: Koffing|Koffing, F|221/221",
+   "|switch|p1a: Koffing|Koffing, F|221/221",
+   "|split|p1",
+   "|switch|p1b: Machamp|Machamp, F|321/321",
+   "|switch|p1b: Machamp|Machamp, F|321/321",
+   "|split|p2",
+   "|switch|p2a: Golem|Golem, F|301/301",
+   "|switch|p2a: Golem|Golem, F|301/301",
+   "|split|p2",
+   "|switch|p2b: Seaking|Seaking, F|301/301",
+   "|switch|p2b: Seaking|Seaking, F|301/301",
+   "|turn|1",
+   "|",
+   "|move|p2b: Seaking|Swords Dance|p2b: Seaking",
+   "|-boost|p2b: Seaking|atk|2",
+   "|move|p1b: Machamp|Swords Dance|p1b: Machamp",
+   "|-boost|p1b: Machamp|atk|2",
+   "|move|p2a: Golem|Swords Dance|p2a: Golem",
+   "|-boost|p2a: Golem|atk|2",
+   "|move|p1a: Koffing|Haze|p1a: Koffing",
+   "|-clearallboost",
+   "|",
+   "|upkeep",
+   "|turn|2"
+  ]
  }
 ]

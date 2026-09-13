@@ -39,11 +39,92 @@ index ee644cb..8ccc923 100644
          return;
      }
      if (attacking_pkmn.ability == Abilities::MOLDBREAKER
+diff --git a/src/genx/choice_effects.rs b/src/genx/choice_effects.rs
+index d7fc3e1..9cd66f2 100644
+--- a/src/genx/choice_effects.rs
++++ b/src/genx/choice_effects.rs
+@@ -818,8 +818,12 @@ pub fn choice_after_damage_hit(
+             }
+         }
+         Choices::CLEARSMOG => {
++            // The RESOLVED target, not "the other side's slot 0". Clear Smog is
++            // single-target, so the side was already right; the slot was not,
++            // and aiming it at slot 1 cleared slot 0's boosts instead.
+             state.reset_boosts(
+-                &attacking_side_ref.get_other_side(),
++                &def_pos.side,
++                def_pos.slot,
+                 &mut instructions.instruction_list,
+             );
+         }
+@@ -1385,8 +1389,18 @@ pub fn choice_special_effect(
+             }
+         }
+         Choices::HAZE => {
+-            state.reset_boosts(&SideReference::SideOne, &mut instructions.instruction_list);
+-            state.reset_boosts(&SideReference::SideTwo, &mut instructions.instruction_list);
++            // Haze clears EVERY active body, which in doubles is four slots and
++            // not two. `living_positions_on_side` is the existing spelling of
++            // "occupied, non-fainted slots" and matches Showdown, whose Haze
++            // iterates getAllActive() -- so a body that fainted earlier this
++            // turn keeps its boosts in both engines. In singles it yields
++            // exactly slot 0, leaving that path bit-identical apart from that
++            // same fainted-active guard.
++            for side_ref in [SideReference::SideOne, SideReference::SideTwo] {
++                for pos in state.living_positions_on_side(side_ref) {
++                    state.reset_boosts(&pos.side, pos.slot, &mut instructions.instruction_list);
++                }
++            }
+         }
+         Choices::REST => {
+             let electric_terrain_active = state.terrain_is_active(&Terrain::ELECTRICTERRAIN);
 diff --git a/src/genx/generate_instructions.rs b/src/genx/generate_instructions.rs
-index fa0676e..e6095e5 100644
+index fa0676e..e2769b4 100644
 --- a/src/genx/generate_instructions.rs
 +++ b/src/genx/generate_instructions.rs
-@@ -444,6 +444,13 @@ fn generate_instructions_from_switch(
+@@ -328,30 +328,35 @@ fn generate_instructions_from_switch(
+         &switching_side_ref,
+         &mut incoming_instructions.instruction_list,
+     );
++    // Slot being switched (the acting slot; 0 in singles). A slot-1 replacement
++    // — partner pivot or a multi-faint replacement — switches into slot 1.
++    // The boost reset MUST name this same slot: the body whose boosts are
++    // cleared is the one leaving the field, and taking slot 0 instead cleared
++    // the partner's boosts on every slot-1 switch (defect 11).
++    let switch_slot = state.actor_slot();
+     if !baton_passing {
+         state.reset_boosts(
+             &switching_side_ref,
++            switch_slot,
+             &mut incoming_instructions.instruction_list,
+         );
+     }
+ 
+     ability_on_switch_out(state, &switching_side_ref, incoming_instructions);
+ 
+-    // Slot being switched (the acting slot; 0 in singles). A slot-1 replacement
+-    // — partner pivot or a multi-faint replacement — switches into slot 1.
+-    let switch_slot = state.actor_slot() as usize;
++    let switch_slot_idx = switch_slot as usize;
+     let switch_instruction = Instruction::Switch(SwitchInstruction {
+         side_ref: switching_side_ref,
+-        previous_index: state.get_side(&switching_side_ref).active_indices[switch_slot],
++        previous_index: state.get_side(&switching_side_ref).active_indices[switch_slot_idx],
+         next_index: new_pokemon_index,
+     });
+ 
+     let side = state.get_side(&switching_side_ref);
+     // Mirror the Switch instruction's effect: per-active state follows the
+     // active pointer (transfers kept state on baton pass; no-op otherwise).
+-    let previous_index = side.active_indices[switch_slot];
++    let previous_index = side.active_indices[switch_slot_idx];
+     side.swap_active_state(previous_index, new_pokemon_index);
+-    side.active_indices[switch_slot] = new_pokemon_index;
++    side.active_indices[switch_slot_idx] = new_pokemon_index;
+     incoming_instructions
+         .instruction_list
+         .push(switch_instruction);
+@@ -444,6 +449,13 @@ fn generate_instructions_from_switch(
                  &state,
                  &MoveTarget::User,
                  &switching_side_ref,
@@ -57,7 +138,7 @@ index fa0676e..e6095e5 100644
                  &PokemonStatus::POISON,
              ) {
                  if side.side_conditions.toxic_spikes == 1 {
-@@ -640,6 +647,10 @@ fn get_instructions_from_volatile_statuses(
+@@ -640,6 +652,10 @@ fn get_instructions_from_volatile_statuses(
              state,
              &MoveTarget::Opponent,
              &target_side,
@@ -68,7 +149,7 @@ index fa0676e..e6095e5 100644
              &PokemonStatus::SLEEP,
          )
      {
-@@ -733,10 +744,20 @@ pub fn immune_to_status(
+@@ -733,10 +749,20 @@ pub fn immune_to_status(
      state: &State,
      status_target: &MoveTarget,
      target_side_ref: &SideReference,
@@ -90,7 +171,7 @@ index fa0676e..e6095e5 100644
      let attacking_pkmn = attacking_side.get_active_immutable();
  
      // General Status Immunity
-@@ -753,7 +774,7 @@ pub fn immune_to_status(
+@@ -753,7 +779,7 @@ pub fn immune_to_status(
      } else if state.terrain.terrain_type == Terrain::MISTYTERRAIN && target_pkmn.is_grounded() {
          true
      } else if (target_side
@@ -99,7 +180,7 @@ index fa0676e..e6095e5 100644
          .contains(&PokemonVolatileStatus::SUBSTITUTE)
          || target_side.side_conditions.safeguard > 0)
          && status_target == &MoveTarget::Opponent
-@@ -821,20 +842,42 @@ fn get_instructions_from_status_effects(
+@@ -821,20 +847,42 @@ fn get_instructions_from_status_effects(
  ) {
      let act_slot = state.actor_slot();
      let def_pos = state.defender_position(attacking_side_reference);
@@ -146,7 +227,7 @@ index fa0676e..e6095e5 100644
  
      let instruction = if target_pkmn.item == Items::LUMBERRY {
          target_pkmn.item = Items::NONE;
-@@ -997,7 +1040,21 @@ fn get_instructions_from_boosts(
+@@ -997,7 +1045,21 @@ fn get_instructions_from_boosts(
      attacking_side_reference: &SideReference,
      incoming_instructions: &mut StateInstructions,
  ) {
@@ -169,7 +250,7 @@ index fa0676e..e6095e5 100644
      // The boost lands on the user's own slot for User/UserSide, and on the move's
      // resolved target otherwise — which for an `Ally` target is the partner slot.
      // All slots are 0 in singles, so this is bit-for-bit identical there.
-@@ -1161,7 +1218,15 @@ fn get_instructions_from_heal(
+@@ -1161,7 +1223,15 @@ fn get_instructions_from_heal(
  ) {
      let act_slot = state.actor_slot();
      let def_pos = state.defender_position(attacking_side_reference);
@@ -186,7 +267,7 @@ index fa0676e..e6095e5 100644
      // User/UserSide heals the acting slot; an `Ally`/`Opponent` heal lands on the
      // move's resolved target (the partner for an ally-target move). Slot 0 in singles.
      let target_slot = match heal.target {
-@@ -1711,6 +1776,65 @@ fn terastallized_base_power_floor(
+@@ -1711,6 +1781,65 @@ fn terastallized_base_power_floor(
      }
  }
  
@@ -252,7 +333,7 @@ index fa0676e..e6095e5 100644
  fn before_move(
      state: &mut State,
      choice: &mut Choice,
-@@ -1728,28 +1852,42 @@ fn before_move(
+@@ -1728,28 +1857,42 @@ fn before_move(
      modify_choice(state, choice, defender_choice, attacking_side);
  
      ability_modify_attack_being_used(state, choice, defender_choice, attacking_side);
@@ -309,7 +390,7 @@ index fa0676e..e6095e5 100644
              choice.remove_effects_for_protect();
              if choice.crash.is_some() {
                  choice.accuracy = 0.0;
-@@ -1785,8 +1923,13 @@ fn before_move(
+@@ -1785,8 +1928,13 @@ fn before_move(
          }
      }
  
@@ -325,7 +406,7 @@ index fa0676e..e6095e5 100644
          .get_active_slot_immutable(def_slot).volatile_statuses
          .contains(&PokemonVolatileStatus::PROTECT)
          || defending_side
-@@ -2136,18 +2279,39 @@ fn redirect_target(
+@@ -2136,18 +2284,39 @@ fn redirect_target(
      let target_side_ref = nominal.side;
      let target_side = state.get_side_immutable(&target_side_ref);
  
@@ -375,7 +456,7 @@ index fa0676e..e6095e5 100644
          }
      }
  
-@@ -2156,6 +2320,13 @@ fn redirect_target(
+@@ -2156,6 +2325,13 @@ fn redirect_target(
          return ability_redirect.unwrap_or(nominal);
      }
  
@@ -389,7 +470,7 @@ index fa0676e..e6095e5 100644
      let attacker_is_grass =
          attacker.types.0 == PokemonType::GRASS || attacker.types.1 == PokemonType::GRASS;
      let attacker_ignores_powder = attacker_is_grass || attacker.ability == Abilities::OVERCOAT;
-@@ -2547,12 +2718,18 @@ pub fn generate_instructions_from_move(
+@@ -2547,12 +2723,18 @@ pub fn generate_instructions_from_move(
          return;
      }
      choice_special_effect(state, choice, &attacking_side, &mut incoming_instructions);
@@ -409,7 +490,7 @@ index fa0676e..e6095e5 100644
          &mut incoming_instructions,
          &mut final_instructions,
      );
-@@ -2611,10 +2788,62 @@ pub fn generate_instructions_from_move(
+@@ -2611,10 +2793,62 @@ pub fn generate_instructions_from_move(
          if targets.len() > 1 {
              for target in targets {
                  state.target_position = target;
@@ -473,7 +554,7 @@ index fa0676e..e6095e5 100644
                      DamageRolls::Max,
                  ) {
                      Some((max_damage_dealt, _)) => (max_damage_dealt as f32 * 0.925) as i16,
-@@ -3893,25 +4122,45 @@ fn add_end_of_turn_instructions(
+@@ -3893,25 +4127,45 @@ fn add_end_of_turn_instructions(
              PokemonVolatileStatus::ENDURE,
          ];
  
@@ -535,7 +616,7 @@ index fa0676e..e6095e5 100644
              incoming_instructions
                  .instruction_list
                  .push(Instruction::ChangeSideCondition(
-@@ -4578,10 +4827,19 @@ pub fn generate_instructions_from_move_pair(
+@@ -4578,10 +4832,19 @@ pub fn generate_instructions_from_move_pair(
  /// One actor in a turn: a battle position plus the fully-built `Choice` it will
  /// execute, and the position its move primarily targets (used to find the
  /// "defender choice" the way the singles path passes the opposing side's choice).
@@ -555,7 +636,7 @@ index fa0676e..e6095e5 100644
      choice: Choice,
      target: Option<BattlePosition>,
  }
-@@ -4934,12 +5192,44 @@ fn resolve_ordered_actors(
+@@ -4934,12 +5197,44 @@ fn resolve_ordered_actors(
              .unwrap_or_default();
  
          let mut next: Vec<StateInstructions> = Vec::with_capacity(work.len());
@@ -605,7 +686,7 @@ index fa0676e..e6095e5 100644
              let mut choice = actor.choice.clone();
              choice.first_move = idx == 0;
              generate_instructions_from_move(
-@@ -5057,6 +5347,8 @@ pub fn generate_instructions_from_actions(
+@@ -5057,6 +5352,8 @@ pub fn generate_instructions_from_actions(
              }
              actors.push(Actor {
                  position: BattlePosition::new(side_ref, slot),
@@ -671,6 +752,196 @@ index ce242c1..ad6453e 100644
                  instructions.instruction_list.push(ins);
              }
          }
+diff --git a/src/state.rs b/src/state.rs
+index 4d493d9..80b827f 100644
+--- a/src/state.rs
++++ b/src/state.rs
+@@ -1792,17 +1792,28 @@ impl State {
+         }
+     }
+ 
+-    pub fn reset_boosts(&mut self, side_ref: &SideReference, vec_to_add_to: &mut Vec<Instruction>) {
+-        // NOTE (doubles): this resets slot 0's boosts, matching the still-slot-0
+-        // switch mechanic (`switch()` sets `active_indices[0]`). Per-slot boost
+-        // reset on switch/Haze is deferred together with the switch generalization.
+-        let active = self.get_side(side_ref).get_active();
++    /// Clear every stat boost on ONE active slot, emitting the reversing
++    /// instructions. The slot is the caller's to name, because the three callers
++    /// mean three different bodies: a switch clears the slot that is LEAVING
++    /// (`actor_slot()`), Clear Smog clears the RESOLVED TARGET, and Haze clears
++    /// every living active on both sides. Reading slot 0 for all three cleared
++    /// the wrong Pokemon's boosts whenever the slot in question was 1 -- and
++    /// since the emitted BoostInstruction named slot 0 too, the state and the
++    /// instruction agreed with each other while both described the wrong body,
++    /// so apply/reverse stayed sound and only the outcome was wrong.
++    pub fn reset_boosts(
++        &mut self,
++        side_ref: &SideReference,
++        slot: u8,
++        vec_to_add_to: &mut Vec<Instruction>,
++    ) {
++        let active = self.get_side(side_ref).get_active_slot(slot);
+ 
+         if active.attack_boost != 0 {
+             let amount = -1 * active.attack_boost;
+             vec_to_add_to.push(Instruction::Boost(BoostInstruction::new(
+                 *side_ref,
+-                0,
++                slot,
+                 PokemonBoostableStat::Attack,
+                 amount,
+             )));
+@@ -1813,7 +1824,7 @@ impl State {
+             let amount = -1 * active.defense_boost;
+             vec_to_add_to.push(Instruction::Boost(BoostInstruction::new(
+                 *side_ref,
+-                0,
++                slot,
+                 PokemonBoostableStat::Defense,
+                 amount,
+             )));
+@@ -1824,7 +1835,7 @@ impl State {
+             let amount = -1 * active.special_attack_boost;
+             vec_to_add_to.push(Instruction::Boost(BoostInstruction::new(
+                 *side_ref,
+-                0,
++                slot,
+                 PokemonBoostableStat::SpecialAttack,
+                 amount,
+             )));
+@@ -1835,7 +1846,7 @@ impl State {
+             let amount = -1 * active.special_defense_boost;
+             vec_to_add_to.push(Instruction::Boost(BoostInstruction::new(
+                 *side_ref,
+-                0,
++                slot,
+                 PokemonBoostableStat::SpecialDefense,
+                 amount,
+             )));
+@@ -1846,7 +1857,7 @@ impl State {
+             let amount = -1 * active.speed_boost;
+             vec_to_add_to.push(Instruction::Boost(BoostInstruction::new(
+                 *side_ref,
+-                0,
++                slot,
+                 PokemonBoostableStat::Speed,
+                 amount,
+             )));
+@@ -1857,7 +1868,7 @@ impl State {
+             let amount = -1 * active.evasion_boost;
+             vec_to_add_to.push(Instruction::Boost(BoostInstruction::new(
+                 *side_ref,
+-                0,
++                slot,
+                 PokemonBoostableStat::Evasion,
+                 amount,
+             )));
+@@ -1868,7 +1879,7 @@ impl State {
+             let amount = -1 * active.accuracy_boost;
+             vec_to_add_to.push(Instruction::Boost(BoostInstruction::new(
+                 *side_ref,
+-                0,
++                slot,
+                 PokemonBoostableStat::Accuracy,
+                 amount,
+             )));
+@@ -1881,8 +1892,13 @@ impl State {
+         side_ref: &SideReference,
+         vec_to_add_to: &mut Vec<Instruction>,
+     ) {
+-        // NOTE (doubles): operates on slot 0, consistent with the slot-0 switch
+-        // mechanic (see `reset_boosts`).
++        // NOTE (doubles): still operates on slot 0, unlike `reset_boosts`, which
++        // now takes the switching slot. A slot-1 body switching out therefore
++        // re-enables SLOT 0's disabled moves instead of its own. Recorded and
++        // deliberately unfixed: it wants the identical `slot` parameter, but no
++        // measured metric can see it (the corpus projects damage, boosts and
++        // statuses -- never move availability), so fixing it here would be an
++        // unverifiable change riding along with a verified one.
+         let active = self.get_side(side_ref).get_active();
+         if active.moves.m0.disabled {
+             active.moves.m0.disabled = false;
+diff --git a/src/gen1/choice_effects.rs b/src/gen1/choice_effects.rs
+index 5ab5018..b198b98 100644
+--- a/src/gen1/choice_effects.rs
++++ b/src/gen1/choice_effects.rs
+@@ -101,8 +101,8 @@ pub fn choice_special_effect(
+             }
+         }
+         Choices::HAZE => {
+-            state.reset_boosts(&SideReference::SideOne, &mut instructions.instruction_list);
+-            state.reset_boosts(&SideReference::SideTwo, &mut instructions.instruction_list);
++            state.reset_boosts(&SideReference::SideOne, 0, &mut instructions.instruction_list);
++            state.reset_boosts(&SideReference::SideTwo, 0, &mut instructions.instruction_list);
+         }
+         // Gen1 Rest lasts 1 turn less (2 turns versus 3) because you cannot attack on the turn you wake up
+         Choices::REST => {
+diff --git a/src/gen1/generate_instructions.rs b/src/gen1/generate_instructions.rs
+index 43b6e22..feb7b88 100644
+--- a/src/gen1/generate_instructions.rs
++++ b/src/gen1/generate_instructions.rs
+@@ -156,6 +156,7 @@ pub fn generate_instructions_from_switch(
+     );
+     state.reset_boosts(
+         &switching_side_ref,
++        0, // singles-only gen: slot 0 is the only slot
+         &mut incoming_instructions.instruction_list,
+     );
+ 
+diff --git a/src/gen2/choice_effects.rs b/src/gen2/choice_effects.rs
+index d5bedac..1a004ad 100644
+--- a/src/gen2/choice_effects.rs
++++ b/src/gen2/choice_effects.rs
+@@ -391,8 +391,8 @@ pub fn choice_special_effect(
+             }
+         }
+         Choices::HAZE => {
+-            state.reset_boosts(&SideReference::SideOne, &mut instructions.instruction_list);
+-            state.reset_boosts(&SideReference::SideTwo, &mut instructions.instruction_list);
++            state.reset_boosts(&SideReference::SideOne, 0, &mut instructions.instruction_list);
++            state.reset_boosts(&SideReference::SideTwo, 0, &mut instructions.instruction_list);
+         }
+         Choices::REST => {
+             let active_index = attacking_side.active_indices[0];
+diff --git a/src/gen2/generate_instructions.rs b/src/gen2/generate_instructions.rs
+index b26f13b..f6c51e6 100644
+--- a/src/gen2/generate_instructions.rs
++++ b/src/gen2/generate_instructions.rs
+@@ -183,6 +183,7 @@ pub fn generate_instructions_from_switch(
+     if !baton_passing {
+         state.reset_boosts(
+             &switching_side_ref,
++            0, // singles-only gen: slot 0 is the only slot
+             &mut incoming_instructions.instruction_list,
+         );
+     }
+diff --git a/src/gen3/choice_effects.rs b/src/gen3/choice_effects.rs
+index cd9f2bb..ff52578 100644
+--- a/src/gen3/choice_effects.rs
++++ b/src/gen3/choice_effects.rs
+@@ -503,8 +503,8 @@ pub fn choice_special_effect(
+             }
+         }
+         Choices::HAZE => {
+-            state.reset_boosts(&SideReference::SideOne, &mut instructions.instruction_list);
+-            state.reset_boosts(&SideReference::SideTwo, &mut instructions.instruction_list);
++            state.reset_boosts(&SideReference::SideOne, 0, &mut instructions.instruction_list);
++            state.reset_boosts(&SideReference::SideTwo, 0, &mut instructions.instruction_list);
+         }
+         Choices::REST => {
+             let active_index = attacking_side.active_indices[0];
+diff --git a/src/gen3/generate_instructions.rs b/src/gen3/generate_instructions.rs
+index 760dea4..6a2fd9e 100644
+--- a/src/gen3/generate_instructions.rs
++++ b/src/gen3/generate_instructions.rs
+@@ -189,6 +189,7 @@ fn generate_instructions_from_switch(
+     if !baton_passing {
+         state.reset_boosts(
+             &switching_side_ref,
++            0, // singles-only gen: slot 0 is the only slot
+             &mut incoming_instructions.instruction_list,
+         );
+     }
 diff --git a/src/genx/state.rs b/src/genx/state.rs
 index 1f06e88..f5ac81e 100644
 --- a/src/genx/state.rs
