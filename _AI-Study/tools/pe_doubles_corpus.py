@@ -53,16 +53,28 @@ VOLATILE = {"confusion": "confusion", "substitute": "substitute", "leechseed": "
             "taunt": "taunt", "encore": "encore", "protect": None, "followme": None,
             "ragepowder": None, "endure": None, "allyswitch": None, "helpinghand": None,
             "wideguard": None, "quickguard": None,
-            # Showdown's consecutive-Protect counter. Not inert: its success check is
+            # Showdown's consecutive-protection counter. Not inert: its success check is
             # randomChance(1, counter), which under the pinned always-max PRNG makes a
-            # REPEATED Protect fail. It is therefore ignored for representability but the
-            # turn is skipped if a body carrying it actually chooses Protect -- the only
-            # situation in which it changes anything.
+            # REPEATED protection move fail. It is therefore ignored for representability
+            # but the turn is skipped if a body carrying it actually chooses one of
+            # STALL_MOVES -- the only situation in which it changes anything.
             "stall": None,
             # A Choice lock is not a volatile in poke-engine: it is last_used_move, set below
             # from the body's lastMove. Flash Fire and the Hyper Beam recharge DO exist there.
             "choicelock": None, "flashfire": "flashfire", "mustrecharge": "mustrecharge",
             "slowstart": "slowstart"}
+
+# Every move that feeds Showdown's `stall` counter, not just Protect. Wide Guard and Quick
+# Guard both call `onHitSide -> source.addVolatile('stall')` (`data/moves.ts:20816` and
+# `:14498`), and Detect/Endure do the same. Re-chosen by a body already carrying `stall`,
+# any of them FAILS under the always-max PRNG, while poke-engine has no stall counter at all
+# (defect 12) and succeeds -- so the turn cannot be compared soundly in either direction and
+# is skipped, exactly as repeated Protect already was.
+#
+# This was a real flaw in this harness: the skip below used to test `id == "protect"` alone,
+# so 71 turns in which a stalled body re-chose WIDE GUARD were compared anyway and counted
+# against the engine. Gen 5 only, so no King's Shield / Spiky Shield / Baneful Bunker.
+STALL_MOVES = {"protect", "detect", "endure", "wideguard", "quickguard"}
 
 class Skip(Exception):
     pass
@@ -243,9 +255,9 @@ for line in open(SRC, encoding="utf8"):
         for who, parts in (("s1", row["parts"]["s1"]), ("s2", row["parts"]["s2"])):
             side_d = s1 if who == "s1" else s2
             for slot, part in enumerate(parts or []):
-                if part["kind"] == "move" and part["id"] == "protect" \
+                if part["kind"] == "move" and part["id"] in STALL_MOVES \
                    and side_d["active"][slot] and side_d["active"][slot]["species"] in stalled:
-                    raise Skip("repeated Protect under Showdown's stall counter")
+                    raise Skip(f"repeated {part['id']} under Showdown's stall counter")
     except Skip as exc:
         skips[str(exc)] += 1; continue
     except Exception as exc:

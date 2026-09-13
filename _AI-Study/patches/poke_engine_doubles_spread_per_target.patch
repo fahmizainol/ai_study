@@ -40,10 +40,10 @@ index ee644cb..8ccc923 100644
      }
      if (attacking_pkmn.ability == Abilities::MOLDBREAKER
 diff --git a/src/genx/generate_instructions.rs b/src/genx/generate_instructions.rs
-index fa0676e..9290dbf 100644
+index fa0676e..045d1b8 100644
 --- a/src/genx/generate_instructions.rs
 +++ b/src/genx/generate_instructions.rs
-@@ -1711,6 +1711,22 @@ fn terastallized_base_power_floor(
+@@ -1711,6 +1711,45 @@ fn terastallized_base_power_floor(
      }
  }
  
@@ -63,10 +63,33 @@ index fa0676e..9290dbf 100644
 +    false
 +}
 +
++/// Whether area protection on `pos`'s **own** side stops this move from hitting the body
++/// standing there. Wide Guard blocks spread moves; Quick Guard blocks increased-priority
++/// moves. Both are *side conditions*, so they protect the side that set them — including
++/// that side's own members against their partner's Earthquake — and they can never reach
++/// the other side. Keyed on `pos.side` for exactly that reason: a spread move blocked
++/// against one side must still hit the bodies standing on the other.
++///
++/// Matches Showdown's `wideguard.condition.onTryHit`, which fires per body on the guarded
++/// side and blocks only `allAdjacent`/`allAdjacentFoes`. `hits_multiple_targets()` is
++/// equivalent to that pair in this build: no move assigns `BothFoes` or `AllOthers` (the
++/// sole references to either are inside `hits_multiple_targets` itself). `flags.protect`
++/// stands in for `checkMoveBypassesProtect`, and is `true` for Earthquake, Surf and
++/// Heat Wave, so it narrows nothing that should be blocked.
++#[cfg(feature = "doubles")]
++fn area_protection_blocks(state: &State, choice: &Choice, pos: BattlePosition) -> bool {
++    if choice.category == MoveCategory::Status || !choice.flags.protect {
++        return false;
++    }
++    let side_conditions = &state.get_side_immutable(&pos.side).side_conditions;
++    (choice.target.hits_multiple_targets() && side_conditions.wide_guard > 0)
++        || (choice.priority > 0 && side_conditions.quick_guard > 0)
++}
++
  fn before_move(
      state: &mut State,
      choice: &mut Choice,
-@@ -1728,10 +1744,22 @@ fn before_move(
+@@ -1728,28 +1767,42 @@ fn before_move(
      modify_choice(state, choice, defender_choice, attacking_side);
  
      ability_modify_attack_being_used(state, choice, defender_choice, attacking_side);
@@ -91,7 +114,39 @@ index fa0676e..9290dbf 100644
  
      // Slot the move is aimed at (the chosen foe in doubles; opposing slot 0 in
      // singles). Captured before borrowing the sides below.
-@@ -2547,12 +2575,18 @@ pub fn generate_instructions_from_move(
+     let def_slot = state.defender_position(attacking_side).slot;
+ 
+-    // Doubles area protection: Wide Guard blocks spread moves and Quick Guard
+-    // blocks increased-priority moves aimed at a side that put the guard up this
+-    // turn. Both protect the whole side, so this is keyed on the target side's
+-    // side conditions, not a per-slot volatile.
++    // Doubles area protection (Wide Guard / Quick Guard). Only the SINGLE-target case is
++    // resolved here, where cancelling the move outright is correct because there is exactly
++    // one target and it is the guarded one. Cancelling a *spread* move was defect 5: the
++    // guard is a side condition and cannot protect anyone on the other side, so the half
++    // aimed at the attacker's own ally was thrown away. Showdown's own
++    // `wide_guard_blocks_spread` case is explicit — both guarded bodies take nothing while
++    // the attacker's ally, Gengar, takes the full 84. The per-target loop in
++    // `generate_instructions_from_move` applies `area_protection_blocks` per position.
+     #[cfg(feature = "doubles")]
+-    if choice.target.targets_opponent_side() && choice.category != MoveCategory::Status {
+-        let target_conditions = &state
+-            .get_side_immutable(&attacking_side.get_other_side())
+-            .side_conditions;
+-        let blocked = (choice.target.hits_multiple_targets()
+-            && target_conditions.wide_guard > 0)
+-            || (choice.priority > 0 && target_conditions.quick_guard > 0);
+-        if blocked {
++    if !per_target
++        && choice.target.targets_opponent_side()
++        && choice.category != MoveCategory::Status
++    {
++        let def_pos = state.defender_position(attacking_side);
++        if area_protection_blocks(state, choice, def_pos) {
+             choice.remove_effects_for_protect();
+             if choice.crash.is_some() {
+                 choice.accuracy = 0.0;
+@@ -2547,12 +2600,18 @@ pub fn generate_instructions_from_move(
          return;
      }
      choice_special_effect(state, choice, &attacking_side, &mut incoming_instructions);
@@ -111,10 +166,16 @@ index fa0676e..9290dbf 100644
          &mut incoming_instructions,
          &mut final_instructions,
      );
-@@ -2611,10 +2645,40 @@ pub fn generate_instructions_from_move(
+@@ -2611,10 +2670,46 @@ pub fn generate_instructions_from_move(
          if targets.len() > 1 {
              for target in targets {
                  state.target_position = target;
++                // Wide/Quick Guard on THIS body's own side spares this body only; every
++                // other position still takes the move (defect 5). Checked per target for
++                // the same reason the modifiers below are.
++                if area_protection_blocks(state, choice, target) {
++                    continue;
++                }
 +                // This target's own abilities and items, applied to a per-target clone so
 +                // that one body's immunity cannot leak onto the next. `before_move`
 +                // deliberately skipped both for this case (see `resolves_per_target`);

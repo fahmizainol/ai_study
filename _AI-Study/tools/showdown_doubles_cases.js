@@ -72,6 +72,21 @@ const CASES = [
     c1: 'move 1, move 1 1', c2: 'move 1, move 1 1',
     pe1: 'wideguard;tackle,0', pe2: 'surf;tackle,0' },
 
+  // Added 2026-09-13 for defect 5. Wide Guard is a SIDE condition, and Showdown's
+  // condition.onTryHit has no check on where the move came from -- so in principle a side's
+  // own Wide Guard should also stop its partner's Earthquake. Nothing in stage 0 tested
+  // that, because the old poke-engine code only ever consulted get_other_side(), so the
+  // path was invisible. This case is built to be decisive: p2 aims both Tackles at p1
+  // SLOT 1, never at the Wide Guarder, so slot 0's HP after the turn answers exactly one
+  // question. Full HP => own-side protection is real; damaged => Wide Guard only stops the
+  // opposing side's spread moves and the per-position keying must be narrowed.
+  { name: 'wide_guard_blocks_own_ally_spread',
+    why: 'slot0 Wide Guards and slot1 uses Earthquake; does our own guard spare slot0 from our own spread move?',
+    p1: [set('Mienshao', 'Inner Focus', ['Wide Guard', 'Tackle']), set('Golem', 'Sturdy', ['Earthquake']), FILL, FILL],
+    p2: [set('Snorlax', 'Immunity', ['Tackle']), set('Machamp', 'No Guard', ['Tackle']), FILL, FILL],
+    c1: 'move 1, move 1', c2: 'move 1 2, move 1 2',
+    pe1: 'wideguard;earthquake', pe2: 'tackle,1;tackle,1' },
+
   { name: 'quick_guard_blocks_priority',
     why: 'slot0 Quick Guards; a priority move should be blocked and a normal one should not',
     p1: [set('Mienshao', 'Inner Focus', ['Quick Guard', 'Tackle']), set('Snorlax', 'Immunity', ['Tackle']), FILL, FILL],
