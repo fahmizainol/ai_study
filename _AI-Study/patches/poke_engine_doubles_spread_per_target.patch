@@ -40,10 +40,10 @@ index ee644cb..8ccc923 100644
      }
      if (attacking_pkmn.ability == Abilities::MOLDBREAKER
 diff --git a/src/genx/generate_instructions.rs b/src/genx/generate_instructions.rs
-index fa0676e..045d1b8 100644
+index fa0676e..be06984 100644
 --- a/src/genx/generate_instructions.rs
 +++ b/src/genx/generate_instructions.rs
-@@ -1711,6 +1711,45 @@ fn terastallized_base_power_floor(
+@@ -1711,6 +1711,65 @@ fn terastallized_base_power_floor(
      }
  }
  
@@ -81,6 +81,26 @@ index fa0676e..045d1b8 100644
 +    if choice.category == MoveCategory::Status || !choice.flags.protect {
 +        return false;
 +    }
++    // Per-body protection volatiles. Protect and its variants shield the body carrying
++    // them and nobody else, so for a spread move they belong here, per position, exactly
++    // as the side conditions do. These are the same five the single-target path checks in
++    // `before_move` -- deliberately NOT `PROTECT_VOLATILES`, which also contains ENDURE,
++    // and Endure does not stop damage, it survives it at 1 HP.
++    let body = state
++        .get_side_immutable(&pos.side)
++        .get_active_slot_immutable(pos.slot);
++    for vs in [
++        PokemonVolatileStatus::PROTECT,
++        PokemonVolatileStatus::SPIKYSHIELD,
++        PokemonVolatileStatus::BANEFULBUNKER,
++        PokemonVolatileStatus::BURNINGBULWARK,
++        PokemonVolatileStatus::SILKTRAP,
++    ] {
++        if body.volatile_statuses.contains(&vs) {
++            return true;
++        }
++    }
++
 +    let side_conditions = &state.get_side_immutable(&pos.side).side_conditions;
 +    (choice.target.hits_multiple_targets() && side_conditions.wide_guard > 0)
 +        || (choice.priority > 0 && side_conditions.quick_guard > 0)
@@ -89,7 +109,7 @@ index fa0676e..045d1b8 100644
  fn before_move(
      state: &mut State,
      choice: &mut Choice,
-@@ -1728,28 +1767,42 @@ fn before_move(
+@@ -1728,28 +1787,42 @@ fn before_move(
      modify_choice(state, choice, defender_choice, attacking_side);
  
      ability_modify_attack_being_used(state, choice, defender_choice, attacking_side);
@@ -146,7 +166,23 @@ index fa0676e..045d1b8 100644
              choice.remove_effects_for_protect();
              if choice.crash.is_some() {
                  choice.accuracy = 0.0;
-@@ -2547,12 +2600,18 @@ pub fn generate_instructions_from_move(
+@@ -1785,8 +1858,13 @@ fn before_move(
+         }
+     }
+ 
+-    // modify choice if defender has protect active
+-    if (defending_side
++    // Protect and its variants -- SINGLE-TARGET case only. For a multi-target spread move
++    // these are resolved per position by `area_protection_blocks` inside the spread loop:
++    // cancelling the whole move here would throw away the halves aimed at bodies that are
++    // NOT protected, which is defect 5's mechanism applied to a per-body volatile. Probes
++    // (4)(5)(6) in `tools/pe_doubles_protect_slot.py` measured all three symptoms.
++    if !per_target
++        && (defending_side
+         .get_active_slot_immutable(def_slot).volatile_statuses
+         .contains(&PokemonVolatileStatus::PROTECT)
+         || defending_side
+@@ -2547,12 +2625,18 @@ pub fn generate_instructions_from_move(
          return;
      }
      choice_special_effect(state, choice, &attacking_side, &mut incoming_instructions);
@@ -166,7 +202,7 @@ index fa0676e..045d1b8 100644
          &mut incoming_instructions,
          &mut final_instructions,
      );
-@@ -2611,10 +2670,46 @@ pub fn generate_instructions_from_move(
+@@ -2611,10 +2695,46 @@ pub fn generate_instructions_from_move(
          if targets.len() > 1 {
              for target in targets {
                  state.target_position = target;
@@ -214,3 +250,92 @@ index fa0676e..045d1b8 100644
                      DamageRolls::Max,
                  ) {
                      Some((max_damage_dealt, _)) => (max_damage_dealt as f32 * 0.925) as i16,
+@@ -3893,25 +4013,45 @@ fn add_end_of_turn_instructions(
+             PokemonVolatileStatus::ENDURE,
+         ];
+ 
+-        let mut protect_vs = None;
+-        for status in &possible_statuses {
+-            if side.get_active().volatile_statuses.contains(status) {
+-                protect_vs = Some(*status);
+-                break;
++        // Scan EVERY slot, not just slot 0. Both the scan and the RemoveVolatileStatus used
++        // to hardcode slot 0, so a protect volatile on slot 1 was never cleared and
++        // persisted for the rest of the battle -- a body permanently immune in the search's
++        // model. Visible as the missing RemoveVolatileStatus in probes E1/E4 of
++        // `tools/pe_doubles_protect_slot.py`. No `cfg` needed: with `ACTIVE_PER_SIDE == 1`
++        // this loops slot 0 alone and `get_active_slot(0)` *is* `get_active()`, so singles
++        // is unchanged by construction.
++        //
++        // The counter below stays per-SIDE deliberately. Showdown's `stall` is a per-body
++        // volatile, so two bodies each Protecting once is not the same as one Protecting
++        // twice -- but fixing that needs a per-body field on `Pokemon`. That is defect
++        // 12(a), recorded separately, not smuggled in here.
++        let mut protected_any = false;
++        for slot in 0..crate::state::ACTIVE_PER_SIDE as u8 {
++            let mut slot_vs = None;
++            for status in &possible_statuses {
++                if side
++                    .get_active_slot(slot)
++                    .volatile_statuses
++                    .contains(status)
++                {
++                    slot_vs = Some(*status);
++                    break;
++                }
++            }
++            if let Some(protect_vs) = slot_vs {
++                incoming_instructions
++                    .instruction_list
++                    .push(Instruction::RemoveVolatileStatus(
++                        RemoveVolatileStatusInstruction::new(*side_ref, slot, protect_vs),
++                    ));
++                side.get_active_slot(slot)
++                    .volatile_statuses
++                    .remove(&protect_vs);
++                protected_any = true;
+             }
+         }
+ 
+-        if let Some(protect_vs) = protect_vs {
+-            incoming_instructions
+-                .instruction_list
+-                .push(Instruction::RemoveVolatileStatus(
+-                    RemoveVolatileStatusInstruction::new(
+-                        *side_ref,
+-                        0,
+-                        protect_vs,
+-                    ),
+-                ));
+-            side.get_active().volatile_statuses.remove(&protect_vs);
++        if protected_any {
+             incoming_instructions
+                 .instruction_list
+                 .push(Instruction::ChangeSideCondition(
+diff --git a/src/genx/state.rs b/src/genx/state.rs
+index 1f06e88..f5ac81e 100644
+--- a/src/genx/state.rs
++++ b/src/genx/state.rs
+@@ -732,6 +757,22 @@ impl Pokemon {
+                 }
+                 true
+             }
++            // `first_move` stands in for Showdown's `onTry: !!this.queue.willAct()` --
++            // Protect fails only when nothing is left to act. In singles, where Protect's
++            // +4 priority makes it first except against another priority move, that proxy
++            // is close enough.
++            //
++            // In DOUBLES it is wrong and silently destructive: at most one sub-action per
++            // side is the `first_move`, so when BOTH bodies Protect the second one's
++            // volatile is dropped and that body takes the hit. Measured in corpus battle 33
++            // turn 8 (Showdown protects both, poke-engine protects one) and isolated by
++            // `tools/pe_doubles_protect_slot.py` probes E1/E4: it is the first-ACTING body
++            // that wins, not slot 0, and a lone Protect always works. Both bodies Protecting
++            // is ordinary doubles play and something else is essentially always still to
++            // act, so allow it. Over-allows only when Protect is the turn's last action.
++            #[cfg(feature = "doubles")]
++            PokemonVolatileStatus::PROTECT => true,
++            #[cfg(not(feature = "doubles"))]
+             PokemonVolatileStatus::PROTECT => first_move,
+             PokemonVolatileStatus::TAUNT
+             | PokemonVolatileStatus::TORMENT
