@@ -472,8 +472,8 @@ evidence that it moves spread turns and nothing else. Boosts end flat (−1 turn
 note under defect 15 for why that number is not an improvement.
 
 > **Both figures in this table are superseded.** The instrument used to produce them was
-> charging the engine for 57 turns it cannot represent, and defect 5 was still open. The
-> numbers to quote are in the next section: 74.1% → **87.7%**, 83% of the gap closed.
+> charging the engine for 57 turns it cannot represent, and defects 5, 16 and 17 were all
+> still open. The numbers to quote are in the next section: 74.1% → **95.6%** across runs 1–3.
 
 ### The instrument was charging the engine for 57 turns it cannot represent
 
