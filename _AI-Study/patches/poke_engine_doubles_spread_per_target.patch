@@ -79,7 +79,7 @@ index d7fc3e1..9cd66f2 100644
          Choices::REST => {
              let electric_terrain_active = state.terrain_is_active(&Terrain::ELECTRICTERRAIN);
 diff --git a/src/genx/generate_instructions.rs b/src/genx/generate_instructions.rs
-index fa0676e..e2769b4 100644
+index fa0676e..56d73db 100644
 --- a/src/genx/generate_instructions.rs
 +++ b/src/genx/generate_instructions.rs
 @@ -328,30 +328,35 @@ fn generate_instructions_from_switch(
@@ -333,7 +333,7 @@ index fa0676e..e2769b4 100644
  fn before_move(
      state: &mut State,
      choice: &mut Choice,
-@@ -1728,28 +1857,42 @@ fn before_move(
+@@ -1728,28 +1857,83 @@ fn before_move(
      modify_choice(state, choice, defender_choice, attacking_side);
  
      ability_modify_attack_being_used(state, choice, defender_choice, attacking_side);
@@ -346,13 +346,54 @@ index fa0676e..e2769b4 100644
 +    // move against all of them, the attacker's own ally included. The spread loop in
 +    // `generate_instructions_from_move` applies both per target on a per-target clone.
 +    let per_target = resolves_per_target(state, attacking_side, choice);
-+    if !per_target {
++
++    // Showdown checks PROTECTION BEFORE the target's ability. Protect's condition carries
++    // `onTryHitPriority: 3` and blocks (`data/moves.ts`), while an absorbing ability's boost
++    // lives in an unprioritised `onTryHit` on the same event (`data/abilities.ts:2344`), so a
++    // blocked move never reaches the ability at all. poke-engine ran the ability first, and an
++    // absorb's `remove_all_effects()` sets `category = Status` *and* calls `flags.clear_all()` —
++    // erasing the exact fields both protect gates below test (`category != Status` for the area
++    // guard, `flags.protect` for the per-body one). So an absorbed move skipped BOTH gates,
++    // `remove_effects_for_protect()` never ran, and that function is the only thing that clears
++    // `choice.boost` (`choices.rs:20735`): a Protecting Lightning Rod holder still banked +1 SpA.
++    // Found as the last genuine boosts row in the corpus (battle 16 turn 10) and adjudicated by
++    // stage-0 case `protect_blocks_the_absorb_boost_too`, where Showdown leaves the holder at
++    // 301→301 with no boost and logs `|-activate|… move: Protect`. Consulting the defender's
++    // ability and item only when the move is NOT blocked restores Showdown's order. Skipping the
++    // defensive modifiers in that case costs nothing, because `remove_effects_for_protect`
++    // zeroes `base_power` anyway. Same root cause also made Wide Guard miss absorbable moves.
++    #[cfg(feature = "doubles")]
++    let blocked_before_ability = {
++        let def_pos = state.defender_position(attacking_side);
++        let has_protect_volatile = [
++            PokemonVolatileStatus::PROTECT,
++            PokemonVolatileStatus::SPIKYSHIELD,
++            PokemonVolatileStatus::BANEFULBUNKER,
++            PokemonVolatileStatus::BURNINGBULWARK,
++            PokemonVolatileStatus::SILKTRAP,
++        ]
++        .iter()
++        .any(|vs| {
++            state
++                .get_side_immutable(&def_pos.side)
++                .get_active_slot_immutable(def_pos.slot)
++                .volatile_statuses
++                .contains(vs)
++        });
++        choice.flags.protect
++            && (has_protect_volatile || area_protection_blocks(state, choice, def_pos))
++    };
++    // Singles is identical by construction: nothing is gated on this.
++    #[cfg(not(feature = "doubles"))]
++    let blocked_before_ability = false;
++
++    if !per_target && !blocked_before_ability {
 +        ability_modify_attack_against(state, choice, defender_choice, attacking_side);
 +    }
  
      item_modify_attack_being_used(state, choice, attacking_side);
 -    item_modify_attack_against(state, choice, attacking_side);
-+    if !per_target {
++    if !per_target && !blocked_before_ability {
 +        item_modify_attack_against(state, choice, attacking_side);
 +    }
  
@@ -390,7 +431,7 @@ index fa0676e..e2769b4 100644
              choice.remove_effects_for_protect();
              if choice.crash.is_some() {
                  choice.accuracy = 0.0;
-@@ -1785,8 +1928,13 @@ fn before_move(
+@@ -1785,8 +1969,13 @@ fn before_move(
          }
      }
  
@@ -406,7 +447,7 @@ index fa0676e..e2769b4 100644
          .get_active_slot_immutable(def_slot).volatile_statuses
          .contains(&PokemonVolatileStatus::PROTECT)
          || defending_side
-@@ -2136,18 +2284,39 @@ fn redirect_target(
+@@ -2136,18 +2325,39 @@ fn redirect_target(
      let target_side_ref = nominal.side;
      let target_side = state.get_side_immutable(&target_side_ref);
  
@@ -456,7 +497,7 @@ index fa0676e..e2769b4 100644
          }
      }
  
-@@ -2156,6 +2325,13 @@ fn redirect_target(
+@@ -2156,6 +2366,13 @@ fn redirect_target(
          return ability_redirect.unwrap_or(nominal);
      }
  
@@ -470,7 +511,7 @@ index fa0676e..e2769b4 100644
      let attacker_is_grass =
          attacker.types.0 == PokemonType::GRASS || attacker.types.1 == PokemonType::GRASS;
      let attacker_ignores_powder = attacker_is_grass || attacker.ability == Abilities::OVERCOAT;
-@@ -2547,12 +2723,18 @@ pub fn generate_instructions_from_move(
+@@ -2547,12 +2764,18 @@ pub fn generate_instructions_from_move(
          return;
      }
      choice_special_effect(state, choice, &attacking_side, &mut incoming_instructions);
@@ -490,7 +531,7 @@ index fa0676e..e2769b4 100644
          &mut incoming_instructions,
          &mut final_instructions,
      );
-@@ -2611,10 +2793,62 @@ pub fn generate_instructions_from_move(
+@@ -2611,10 +2834,62 @@ pub fn generate_instructions_from_move(
          if targets.len() > 1 {
              for target in targets {
                  state.target_position = target;
@@ -554,7 +595,7 @@ index fa0676e..e2769b4 100644
                      DamageRolls::Max,
                  ) {
                      Some((max_damage_dealt, _)) => (max_damage_dealt as f32 * 0.925) as i16,
-@@ -3893,25 +4127,45 @@ fn add_end_of_turn_instructions(
+@@ -3893,25 +4168,45 @@ fn add_end_of_turn_instructions(
              PokemonVolatileStatus::ENDURE,
          ];
  
@@ -616,7 +657,7 @@ index fa0676e..e2769b4 100644
              incoming_instructions
                  .instruction_list
                  .push(Instruction::ChangeSideCondition(
-@@ -4578,10 +4832,19 @@ pub fn generate_instructions_from_move_pair(
+@@ -4578,10 +4873,19 @@ pub fn generate_instructions_from_move_pair(
  /// One actor in a turn: a battle position plus the fully-built `Choice` it will
  /// execute, and the position its move primarily targets (used to find the
  /// "defender choice" the way the singles path passes the opposing side's choice).
@@ -636,7 +677,7 @@ index fa0676e..e2769b4 100644
      choice: Choice,
      target: Option<BattlePosition>,
  }
-@@ -4934,12 +5197,44 @@ fn resolve_ordered_actors(
+@@ -4934,12 +5238,44 @@ fn resolve_ordered_actors(
              .unwrap_or_default();
  
          let mut next: Vec<StateInstructions> = Vec::with_capacity(work.len());
@@ -686,7 +727,7 @@ index fa0676e..e2769b4 100644
              let mut choice = actor.choice.clone();
              choice.first_move = idx == 0;
              generate_instructions_from_move(
-@@ -5057,6 +5352,8 @@ pub fn generate_instructions_from_actions(
+@@ -5057,6 +5393,8 @@ pub fn generate_instructions_from_actions(
              }
              actors.push(Actor {
                  position: BattlePosition::new(side_ref, slot),

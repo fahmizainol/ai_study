@@ -186,6 +186,25 @@ const CASES = [
   // left untouched. Showdown should show Machamp, Golem and Seaking all back at 0.
   // NOT covered here, and deliberately: the fix skips FAINTED slots to match Showdown's
   // getAllActive(), and no case in stage 0 Hazes with a body already fainted this turn.
+  // Run 8, from corpus battle 16 turn 10. An absorb ability rewrites the move via
+  // `remove_all_effects()`, which sets `category = Status` AND calls `flags.clear_all()` — and
+  // both of poke-engine's doubles protect gates test exactly those erased fields
+  // (`generate_instructions.rs:1890` requires `category != Status`, `:1952` requires
+  // `flags.protect`). So an absorbed move skips both gates, `remove_effects_for_protect()` never
+  // runs, and it is that function alone which would have cleared `choice.boost`
+  // (`choices.rs:20735`). Showdown's ordering is the opposite: Protect's condition carries
+  // `onTryHitPriority: 3` and blocks, while Lightning Rod's boost sits in an unprioritised
+  // `onTryHit` on the same event, so the move never reaches the ability.
+  // Built to answer one question: Seaking holds Lightning Rod and Protects, and the only
+  // Electric move is aimed straight at it. Gengar tackles the OTHER body so the turn still has
+  // a visible effect and a silent no-op cannot pass for agreement.
+  { name: 'protect_blocks_the_absorb_boost_too',
+    why: 'a Protecting Lightning Rod holder takes no damage AND gets no spa boost',
+    p1: [set('Seaking', 'Lightning Rod', ['Protect', 'Tackle']), set('Snorlax', 'Immunity', ['Swords Dance']), FILL, FILL],
+    p2: [set('Raichu', 'Static', ['Shock Wave']), set('Gengar', 'Levitate', ['Tackle']), FILL, FILL],
+    c1: 'move 1, move 1', c2: 'move 1 1, move 1 2',
+    pe1: 'protect;swordsdance', pe2: 'shockwave,0;tackle,1' },
+
   { name: 'haze_clears_all_four_slots',
     why: 'Haze must clear boosts on all four actives, including both slot-1 bodies',
     p1: [set('Koffing', 'Levitate', ['Haze']), set('Machamp', 'No Guard', ['Swords Dance']), FILL, FILL],

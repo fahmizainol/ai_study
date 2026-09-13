@@ -30,7 +30,7 @@ tools/pe_doubles_diff.py for both.
 import json, re, sys, collections, statistics
 from poke_engine import State, Side, Pokemon, Move, SideConditions, generate_instructions
 
-_VALUED = ("--without", "--only")
+_VALUED = ("--without", "--only", "--dump")
 _pos = [a for i, a in enumerate(sys.argv[1:], 1)
         if not a.startswith("--") and sys.argv[i - 1] not in _VALUED]
 SRC = _pos[0] if _pos else "generated/showdown_doubles_corpus.ndjson"
@@ -42,6 +42,19 @@ EXCLUDE = {sys.argv[i + 1] for i, a in enumerate(sys.argv) if a == "--without"}
 # the eleven turns with THIS mechanic actually do" -- the bucket gives a count and nothing
 # to read. Repeatable, and unioned (a turn is kept if it carries any of the tags).
 ONLY = {sys.argv[i + 1] for i, a in enumerate(sys.argv) if a == "--only"}
+# --all-fails prints EVERY disagreeing turn instead of the first six, and marks which of the
+# disagreeing bodies FAINTED during the turn. Added in run 8, because six examples cannot answer
+# "how many of these rows are comparable at all": Showdown's clearVolatile() zeroes a fainted
+# body's boosts and poke-engine does not (it clears them later, on the replacement switch), so a
+# row whose only disagreement is a dead body's boosts is an instrument artefact. The STATUS
+# projection has always had a fainted guard (`pe_doubles_diff.py:89`); the boosts one never did.
+ALL_FAILS = "--all-fails" in sys.argv
+# --dump <battle>:<turn> prints the engine's full top-branch instruction list for one row. Once
+# the projections have narrowed the residual to a handful of named turns, the deltas alone stop
+# being enough to name a defect -- "poke-engine only: spa +1" does not say WHICH of two boosts
+# went missing -- and the instruction list does.
+_dump = [sys.argv[i + 1] for i, a in enumerate(sys.argv) if a == "--dump"]
+DUMP = tuple(int(x) for x in _dump[0].split(":")) if _dump else None
 pid = lambda s: re.sub(r"[^a-z0-9]", "", s.lower())
 
 WEATHER = {"none": "none", "raindance": "rain", "sunnyday": "sun", "sandstorm": "sand", "hail": "hail"}
@@ -283,6 +296,11 @@ for line in open(SRC, encoding="utf8"):
         skips[f"action rejected: {exc}"] += 1; continue
     tally["compared"] += 1
     top = max(branches, key=lambda b: b.percentage)
+    if DUMP == (row["battle"], row["turn"]):
+        print(f"--- dump battle {row['battle']} turn {row['turn']}  {row['choices']}")
+        print(f"    top branch {top.percentage:.1f}%  ({len(branches)} branches)")
+        for ins in top.instruction_list:
+            print("   ", ins)
     pe_d, pe_b, pe_a = pe_project(top, names, roster, movelists)
     sd_d, sd_b, sd_a = sd_project(row)
 
@@ -294,6 +312,22 @@ for line in open(SRC, encoding="utf8"):
                  for s in row["after"]["sides"] for p in s["active"] if p}
     sd_b = {k: v for k, v in sd_b.items() if (k[0], k[1]) in on_field}
     pe_b = {k: v for k, v in pe_b.items() if (k[0], k[1]) in on_field}
+
+    # A body that FAINTED this turn is not comparable on boosts, and this guard is boosts-only.
+    # Showdown zeroes a fainted body's boosts inside faintMessages (`sim/battle.ts:2563` calls
+    # `clearVolatile(false)`, which resets `boosts` outright); poke-engine keeps them until the
+    # replacement switch clears them, and `evaluate.rs` never reads them, since every boost read
+    # sits behind `pkmn.hp > 0` (`:165`, `:198`). So the divergence is real but inert — and
+    # comparing it charged the engine for 12 of the 14 boosts rows still disagreeing after run 7.
+    # Deliberately NOT applied to bodies-damaged: a body that fainted genuinely *did* take
+    # damage, so excluding it there would hide real disagreements (corpus battle 5 turn 10 is
+    # exactly that shape). The STATUS projection has always had this guard
+    # (`pe_doubles_diff.py:89`); the boosts one never did.
+    dead_bodies = {(("s1" if s["side"] == "p1" else "s2"), p["species"])
+                   for s in row["after"]["sides"] for p in s["active"]
+                   if p and p["hp"] == 0}
+    sd_b = {k: v for k, v in sd_b.items() if (k[0], k[1]) not in dead_bodies}
+    pe_b = {k: v for k, v in pe_b.items() if (k[0], k[1]) not in dead_bodies}
     row_tags = tags(row, s1, s2)
     if row_tags & EXCLUDE:
         skips[f"held out by --without {sorted(row_tags & EXCLUDE)}"] += 1
@@ -313,9 +347,12 @@ for line in open(SRC, encoding="utf8"):
             tally[label + " differ"] += 1
             for t in row_tags:
                 buckets[label][t] += 1
-            if len(fails[label]) < 6:
+            if ALL_FAILS or len(fails[label]) < 6:
+                dead = {(("s1" if s["side"] == "p1" else "s2"), p["species"])
+                        for s in row["after"]["sides"] for p in s["active"]
+                        if p and p["hp"] == 0}
                 fails[label].append((row["battle"], row["turn"], row["choices"],
-                                     sorted(sd - pe), sorted(pe - sd)))
+                                     sorted(sd - pe), sorted(pe - sd), dead))
     for k in set(sd_d) & set(pe_d):
         if sd_d[k]:
             ratios.append(pe_d[k] / sd_d[k])
@@ -341,9 +378,28 @@ for label in ("bodies damaged", "boosts"):
     for t, n in buckets[label].most_common(10):
         base = seen_tags[t]
         print(f"    {n:4}/{base:<4} ({100*n/base:5.1f}% of turns with it)  {t}")
+# The two projections do NOT carry the same shape, which is the trap here: bodies-damaged
+# entries are plain keys `(who, species)`, while boosts entries are PAIRS
+# `((who, species, stat), amount)` because they come from `dict.items()`. Taking `k[:2]` for both
+# reported "0 of 14" fainted-only boosts rows when the true answer is most of them — the bodies
+# rows tagged correctly the whole time, and only reading the snapshots by hand first exposed it.
+def body_of(k):
+    return k[0][:2] if isinstance(k[0], tuple) else k[:2]
+
 for label, rows_ in fails.items():
-    print(f"\n--- first disagreements: {label}")
-    for battle, turn, choices, only_sd, only_pe in rows_:
-        print(f"  battle {battle} turn {turn}  p1={choices['p1']!r} p2={choices['p2']!r}")
+    print(f"\n--- {'all' if ALL_FAILS else 'first'} disagreements: {label}")
+    n_dead = 0
+    for battle, turn, choices, only_sd, only_pe, dead in rows_:
+        bodies = {body_of(k) for k in only_sd} | {body_of(k) for k in only_pe}
+        tag = ""
+        if bodies and bodies <= dead:
+            tag = "   [EVERY disagreeing body FAINTED this turn -- not comparable]"
+            n_dead += 1
+        elif bodies & dead:
+            tag = f"   [fainted this turn: {sorted(bodies & dead)}]"
+        print(f"  battle {battle} turn {turn}  p1={choices['p1']!r} p2={choices['p2']!r}{tag}")
         if only_sd: print(f"    showdown only : {only_sd}")
         if only_pe: print(f"    poke-engine only: {only_pe}")
+    if ALL_FAILS:
+        print(f"  => {n_dead} of {len(rows_)} {label} rows disagree ONLY about bodies that "
+              f"fainted this turn")
