@@ -44,6 +44,19 @@ const CASES = [
     c1: 'move 1 1, move 1 1', c2: 'move 1 1, move 1 1',
     pe1: 'tackle,0;tackle,0', pe2: 'shockwave,0;tackle,0' },
 
+  // Added to adjudicate tests/test_doubles.rs:1402, which asserts that a Surf into a side
+  // holding Storm Drain does NO damage anywhere on that side -- the whole-move-redirect
+  // model. Storm Drain should absorb for its HOLDER only and leave the partner hit. Rather
+  // than decide that from reasoning, ask Showdown: slot1 holds Storm Drain, slot0 is a
+  // plain body, and nothing else touches slot0, so slot0's HP answers exactly one question.
+  // Swords Dance keeps p1's second body busy without adding damage anywhere.
+  { name: 'storm_drain_does_not_shield_partner',
+    why: 'Surf into a Storm Drain holder: the holder absorbs (+1 SpA, no damage) but its partner is still hit',
+    p1: [set('Blastoise', 'Torrent', ['Surf']), set('Machamp', 'No Guard', ['Swords Dance']), FILL, FILL],
+    p2: [set('Snorlax', 'Immunity', ['Tackle']), set('Gastrodon', 'Storm Drain', ['Tackle']), FILL, FILL],
+    c1: 'move 1, move 1', c2: 'move 1 1, move 1 1',
+    pe1: 'surf;swordsdance', pe2: 'tackle,0;tackle,0' },
+
   { name: 'spread_surf_reduction',
     why: 'Surf hits all adjacent; every hit takes the 0.75x spread multiplier',
     p1: [set('Snorlax', 'Immunity', ['Tackle']), set('Machamp', 'No Guard', ['Tackle']), FILL, FILL],

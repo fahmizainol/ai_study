@@ -40,10 +40,50 @@ index ee644cb..8ccc923 100644
      }
      if (attacking_pkmn.ability == Abilities::MOLDBREAKER
 diff --git a/src/genx/generate_instructions.rs b/src/genx/generate_instructions.rs
-index fa0676e..be06984 100644
+index fa0676e..8f99c31 100644
 --- a/src/genx/generate_instructions.rs
 +++ b/src/genx/generate_instructions.rs
-@@ -1711,6 +1711,65 @@ fn terastallized_base_power_floor(
+@@ -997,7 +997,21 @@ fn get_instructions_from_boosts(
+     attacking_side_reference: &SideReference,
+     incoming_instructions: &mut StateInstructions,
+ ) {
+-    let target_side_ref = boosts.target.affected_side(*attacking_side_reference);
++    // The SIDE comes from the move's resolved target, not from the target class. In
++    // doubles an absorbing ability (Storm Drain, Lightning Rod, Sap Sipper, Motor
++    // Drive, Wind Rider, Well-Baked Body) rewrites the move into a boost on ITSELF,
++    // and that body can be the attacker's own ally -- reached by a spread move or by
++    // redirection. Those handlers hardcode `target: MoveTarget::Opponent`, which
++    // `affected_side` resolves to the far side unconditionally, so the boost landed
++    // on the mirrored slot of the wrong side. User-side classes keep the class-based
++    // side: an `Ally` move's resolved position defaults to the opposing slot, so
++    // trusting it there would send Helping Hand across the field. In singles
++    // `defender_position` is always the opposing side, so this is identical there.
++    let target_side_ref = if boosts.target.targets_user_side() {
++        boosts.target.affected_side(*attacking_side_reference)
++    } else {
++        state.defender_position(attacking_side_reference).side
++    };
+     // The boost lands on the user's own slot for User/UserSide, and on the move's
+     // resolved target otherwise — which for an `Ally` target is the partner slot.
+     // All slots are 0 in singles, so this is bit-for-bit identical there.
+@@ -1161,7 +1175,15 @@ fn get_instructions_from_heal(
+ ) {
+     let act_slot = state.actor_slot();
+     let def_pos = state.defender_position(attacking_side_reference);
+-    let target_side_ref = heal.target.affected_side(*attacking_side_reference);
++    // Side from the resolved target, for the same reason as in
++    // `get_instructions_from_boosts`: the absorbing heal abilities (Water Absorb,
++    // Volt Absorb, Dry Skin, Earth Eater) hardcode `target: MoveTarget::Opponent`
++    // and the absorber can be the attacker's own ally.
++    let target_side_ref = if heal.target.targets_user_side() {
++        heal.target.affected_side(*attacking_side_reference)
++    } else {
++        def_pos.side
++    };
+     // User/UserSide heals the acting slot; an `Ally`/`Opponent` heal lands on the
+     // move's resolved target (the partner for an ally-target move). Slot 0 in singles.
+     let target_slot = match heal.target {
+@@ -1711,6 +1733,65 @@ fn terastallized_base_power_floor(
      }
  }
  
@@ -109,7 +149,7 @@ index fa0676e..be06984 100644
  fn before_move(
      state: &mut State,
      choice: &mut Choice,
-@@ -1728,28 +1787,42 @@ fn before_move(
+@@ -1728,28 +1809,42 @@ fn before_move(
      modify_choice(state, choice, defender_choice, attacking_side);
  
      ability_modify_attack_being_used(state, choice, defender_choice, attacking_side);
@@ -166,7 +206,7 @@ index fa0676e..be06984 100644
              choice.remove_effects_for_protect();
              if choice.crash.is_some() {
                  choice.accuracy = 0.0;
-@@ -1785,8 +1858,13 @@ fn before_move(
+@@ -1785,8 +1880,13 @@ fn before_move(
          }
      }
  
@@ -182,7 +222,71 @@ index fa0676e..be06984 100644
          .get_active_slot_immutable(def_slot).volatile_statuses
          .contains(&PokemonVolatileStatus::PROTECT)
          || defending_side
-@@ -2547,12 +2625,18 @@ pub fn generate_instructions_from_move(
+@@ -2136,18 +2236,39 @@ fn redirect_target(
+     let target_side_ref = nominal.side;
+     let target_side = state.get_side_immutable(&target_side_ref);
+ 
+-    // Ability-based redirection (Lightning Rod, Storm Drain) applies to ALL
+-    // moves of the matching type, including spread moves.
++    // Ability-based redirection (Lightning Rod, Storm Drain) is FIELD-WIDE. Both
++    // register `onAnyRedirectTarget` in Showdown, not `onFoeRedirectTarget`, so a
++    // holder draws a matching move from any source -- including its own ally's move
++    // aimed at a foe. Scanning only the nominal target's side missed exactly that
++    // case. Showdown's `onTryHit` guards `target !== source`, so a holder never
++    // draws its own move; the attacker's position is skipped here for that reason.
++    // The target's side is scanned first so a holder there keeps precedence when
++    // both sides have one -- Showdown resolves that tie by holder speed, and this
++    // is a deliberate simplification.
++    let attacker_pos = BattlePosition::new(attacking_side, state.actor_slot());
+     let mut ability_redirect: Option<BattlePosition> = None;
+-    for slot in 0..crate::state::ACTIVE_PER_SIDE as u8 {
+-        let pkmn = target_side.get_active_slot_immutable(slot);
+-        if pkmn.hp <= 0 {
+-            continue;
++    for scan_side in [target_side_ref, attacking_side] {
++        for slot in 0..crate::state::ACTIVE_PER_SIDE as u8 {
++            let pos = BattlePosition::new(scan_side, slot);
++            if pos == attacker_pos {
++                continue;
++            }
++            let pkmn = state
++                .get_side_immutable(&scan_side)
++                .get_active_slot_immutable(slot);
++            if pkmn.hp <= 0 {
++                continue;
++            }
++            if (pkmn.ability == Abilities::LIGHTNINGROD
++                && choice.move_type == PokemonType::ELECTRIC)
++                || (pkmn.ability == Abilities::STORMDRAIN
++                    && choice.move_type == PokemonType::WATER)
++            {
++                ability_redirect = Some(pos);
++            }
+         }
+-        if (pkmn.ability == Abilities::LIGHTNINGROD && choice.move_type == PokemonType::ELECTRIC)
+-            || (pkmn.ability == Abilities::STORMDRAIN && choice.move_type == PokemonType::WATER)
+-        {
+-            ability_redirect = Some(BattlePosition::new(target_side_ref, slot));
++        if ability_redirect.is_some() {
++            break;
+         }
+     }
+ 
+@@ -2156,6 +2277,13 @@ fn redirect_target(
+         return ability_redirect.unwrap_or(nominal);
+     }
+ 
++    // Follow Me / Rage Powder / Spotlight register `onFoeRedirectTarget`, so unlike
++    // the abilities above they draw only a FOE's move. A move aimed at the
++    // attacker's own side is never drawn by a body on that side.
++    if target_side_ref == attacking_side {
++        return ability_redirect.unwrap_or(nominal);
++    }
++
+     let attacker_is_grass =
+         attacker.types.0 == PokemonType::GRASS || attacker.types.1 == PokemonType::GRASS;
+     let attacker_ignores_powder = attacker_is_grass || attacker.ability == Abilities::OVERCOAT;
+@@ -2547,12 +2675,18 @@ pub fn generate_instructions_from_move(
          return;
      }
      choice_special_effect(state, choice, &attacking_side, &mut incoming_instructions);
@@ -202,7 +306,7 @@ index fa0676e..be06984 100644
          &mut incoming_instructions,
          &mut final_instructions,
      );
-@@ -2611,10 +2695,46 @@ pub fn generate_instructions_from_move(
+@@ -2611,10 +2745,62 @@ pub fn generate_instructions_from_move(
          if targets.len() > 1 {
              for target in targets {
                  state.target_position = target;
@@ -242,6 +346,22 @@ index fa0676e..be06984 100644
 +                        );
 +                    }
 +                }
++                // The same applies to the absorbing abilities that HEAL rather than
++                // boost (Water Absorb, Volt Absorb, Dry Skin, Earth Eater): they
++                // rewrite the move into a heal on themselves, and `run_move` consumes
++                // `choice.heal` once for the whole move, so on a spread move an ally's
++                // absorb-heal was dropped entirely. Applied here for the same reason
++                // and in the same way as the boost above.
++                if let Some(absorbed) = &target_choice.heal {
++                    if choice.heal.is_none() {
++                        get_instructions_from_heal(
++                            state,
++                            absorbed,
++                            &attacking_side,
++                            &mut incoming_instructions,
++                        );
++                    }
++                }
                  let target_damage = match calculate_damage(
                      state,
                      &attacking_side,
@@ -250,7 +370,7 @@ index fa0676e..be06984 100644
                      DamageRolls::Max,
                  ) {
                      Some((max_damage_dealt, _)) => (max_damage_dealt as f32 * 0.925) as i16,
-@@ -3893,25 +4013,45 @@ fn add_end_of_turn_instructions(
+@@ -3893,25 +4079,45 @@ fn add_end_of_turn_instructions(
              PokemonVolatileStatus::ENDURE,
          ];
  

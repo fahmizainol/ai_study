@@ -1950,6 +1950,655 @@
   ]
  },
  {
+  "name": "storm_drain_does_not_shield_partner",
+  "why": "Surf into a Storm Drain holder: the holder absorbs (+1 SpA, no damage) but its partner is still hit",
+  "choices": {
+   "p1": "move 1, move 1",
+   "p2": "move 1 1, move 1 1"
+  },
+  "pe": {
+   "s1": "surf;swordsdance",
+   "s2": "tackle,0;tackle,0"
+  },
+  "before": [
+   {
+    "side": "p1",
+    "active": [
+     {
+      "species": "Blastoise",
+      "ability": "torrent",
+      "item": "",
+      "types": [
+       "Water"
+      ],
+      "weightkg": 85.5,
+      "hp": 299,
+      "maxhp": 299,
+      "status": "none",
+      "stats": {
+       "atk": 202,
+       "def": 236,
+       "spa": 206,
+       "spd": 246,
+       "spe": 192
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "surf",
+        "pp": 24
+       }
+      ]
+     },
+     {
+      "species": "Machamp",
+      "ability": "noguard",
+      "item": "",
+      "types": [
+       "Fighting"
+      ],
+      "weightkg": 130,
+      "hp": 321,
+      "maxhp": 321,
+      "status": "none",
+      "stats": {
+       "atk": 296,
+       "def": 196,
+       "spa": 166,
+       "spd": 206,
+       "spe": 146
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "swordsdance",
+        "pp": 48
+       }
+      ]
+     }
+    ],
+    "bench": [
+     {
+      "species": "Ditto",
+      "ability": "limber",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 4,
+      "hp": 237,
+      "maxhp": 237,
+      "status": "none",
+      "stats": {
+       "atk": 132,
+       "def": 132,
+       "spa": 132,
+       "spd": 132,
+       "spe": 132
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "transform",
+        "pp": 16
+       }
+      ]
+     },
+     {
+      "species": "Ditto",
+      "ability": "limber",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 4,
+      "hp": 237,
+      "maxhp": 237,
+      "status": "none",
+      "stats": {
+       "atk": 132,
+       "def": 132,
+       "spa": 132,
+       "spd": 132,
+       "spe": 132
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "transform",
+        "pp": 16
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "side": "p2",
+    "active": [
+     {
+      "species": "Snorlax",
+      "ability": "immunity",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 460,
+      "hp": 461,
+      "maxhp": 461,
+      "status": "none",
+      "stats": {
+       "atk": 256,
+       "def": 166,
+       "spa": 166,
+       "spd": 256,
+       "spe": 96
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "tackle",
+        "pp": 56
+       }
+      ]
+     },
+     {
+      "species": "Gastrodon",
+      "ability": "stormdrain",
+      "item": "",
+      "types": [
+       "Water",
+       "Ground"
+      ],
+      "weightkg": 29.9,
+      "hp": 363,
+      "maxhp": 363,
+      "status": "none",
+      "stats": {
+       "atk": 202,
+       "def": 172,
+       "spa": 220,
+       "spd": 200,
+       "spe": 114
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "tackle",
+        "pp": 56
+       }
+      ]
+     }
+    ],
+    "bench": [
+     {
+      "species": "Ditto",
+      "ability": "limber",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 4,
+      "hp": 237,
+      "maxhp": 237,
+      "status": "none",
+      "stats": {
+       "atk": 132,
+       "def": 132,
+       "spa": 132,
+       "spd": 132,
+       "spe": 132
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "transform",
+        "pp": 16
+       }
+      ]
+     },
+     {
+      "species": "Ditto",
+      "ability": "limber",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 4,
+      "hp": 237,
+      "maxhp": 237,
+      "status": "none",
+      "stats": {
+       "atk": 132,
+       "def": 132,
+       "spa": 132,
+       "spd": 132,
+       "spe": 132
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "transform",
+        "pp": 16
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "after": [
+   {
+    "side": "p1",
+    "active": [
+     {
+      "species": "Blastoise",
+      "ability": "torrent",
+      "item": "",
+      "types": [
+       "Water"
+      ],
+      "weightkg": 85.5,
+      "hp": 210,
+      "maxhp": 299,
+      "status": "none",
+      "stats": {
+       "atk": 202,
+       "def": 236,
+       "spa": 206,
+       "spd": 246,
+       "spe": 192
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "surf",
+        "pp": 23
+       }
+      ]
+     },
+     {
+      "species": "Machamp",
+      "ability": "noguard",
+      "item": "",
+      "types": [
+       "Fighting"
+      ],
+      "weightkg": 130,
+      "hp": 245,
+      "maxhp": 321,
+      "status": "none",
+      "stats": {
+       "atk": 296,
+       "def": 196,
+       "spa": 166,
+       "spd": 206,
+       "spe": 146
+      },
+      "boosts": {
+       "atk": 2,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "swordsdance",
+        "pp": 47
+       }
+      ]
+     }
+    ],
+    "bench": [
+     {
+      "species": "Ditto",
+      "ability": "limber",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 4,
+      "hp": 237,
+      "maxhp": 237,
+      "status": "none",
+      "stats": {
+       "atk": 132,
+       "def": 132,
+       "spa": 132,
+       "spd": 132,
+       "spe": 132
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "transform",
+        "pp": 16
+       }
+      ]
+     },
+     {
+      "species": "Ditto",
+      "ability": "limber",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 4,
+      "hp": 237,
+      "maxhp": 237,
+      "status": "none",
+      "stats": {
+       "atk": 132,
+       "def": 132,
+       "spa": 132,
+       "spd": 132,
+       "spe": 132
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "transform",
+        "pp": 16
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "side": "p2",
+    "active": [
+     {
+      "species": "Snorlax",
+      "ability": "immunity",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 460,
+      "hp": 400,
+      "maxhp": 461,
+      "status": "none",
+      "stats": {
+       "atk": 256,
+       "def": 166,
+       "spa": 166,
+       "spd": 256,
+       "spe": 96
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "tackle",
+        "pp": 55
+       }
+      ]
+     },
+     {
+      "species": "Gastrodon",
+      "ability": "stormdrain",
+      "item": "",
+      "types": [
+       "Water",
+       "Ground"
+      ],
+      "weightkg": 29.9,
+      "hp": 363,
+      "maxhp": 363,
+      "status": "none",
+      "stats": {
+       "atk": 202,
+       "def": 172,
+       "spa": 220,
+       "spd": 200,
+       "spe": 114
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 1,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "tackle",
+        "pp": 55
+       }
+      ]
+     }
+    ],
+    "bench": [
+     {
+      "species": "Ditto",
+      "ability": "limber",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 4,
+      "hp": 237,
+      "maxhp": 237,
+      "status": "none",
+      "stats": {
+       "atk": 132,
+       "def": 132,
+       "spa": 132,
+       "spd": 132,
+       "spe": 132
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "transform",
+        "pp": 16
+       }
+      ]
+     },
+     {
+      "species": "Ditto",
+      "ability": "limber",
+      "item": "",
+      "types": [
+       "Normal"
+      ],
+      "weightkg": 4,
+      "hp": 237,
+      "maxhp": 237,
+      "status": "none",
+      "stats": {
+       "atk": 132,
+       "def": 132,
+       "spa": 132,
+       "spd": 132,
+       "spe": 132
+      },
+      "boosts": {
+       "atk": 0,
+       "def": 0,
+       "spa": 0,
+       "spd": 0,
+       "spe": 0,
+       "accuracy": 0,
+       "evasion": 0
+      },
+      "moves": [
+       {
+        "id": "transform",
+        "pp": 16
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "log": [
+   "|gametype|doubles",
+   "|player|p1|A||",
+   "|player|p2|B||",
+   "|gen|5",
+   "|tier|[Gen 5] Doubles Custom Game",
+   "|clearpoke",
+   "|poke|p1|Blastoise, F|",
+   "|poke|p1|Machamp, F|",
+   "|poke|p1|Ditto|",
+   "|poke|p1|Ditto|",
+   "|poke|p2|Snorlax, F|",
+   "|poke|p2|Gastrodon, F|",
+   "|poke|p2|Ditto|",
+   "|poke|p2|Ditto|",
+   "|teampreview",
+   "|",
+   "|teamsize|p1|4",
+   "|teamsize|p2|4",
+   "|start",
+   "|split|p1",
+   "|switch|p1a: Blastoise|Blastoise, F|299/299",
+   "|switch|p1a: Blastoise|Blastoise, F|299/299",
+   "|split|p1",
+   "|switch|p1b: Machamp|Machamp, F|321/321",
+   "|switch|p1b: Machamp|Machamp, F|321/321",
+   "|split|p2",
+   "|switch|p2a: Snorlax|Snorlax, F|461/461",
+   "|switch|p2a: Snorlax|Snorlax, F|461/461",
+   "|split|p2",
+   "|switch|p2b: Gastrodon|Gastrodon, F|363/363",
+   "|switch|p2b: Gastrodon|Gastrodon, F|363/363",
+   "|turn|1",
+   "|",
+   "|move|p1a: Blastoise|Surf|p2b: Gastrodon|[spread] p1b,p2a",
+   "|-ability|p2b: Gastrodon|Storm Drain|boost",
+   "|-boost|p2b: Gastrodon|spa|1",
+   "|debug|Spread modifier: 0.75",
+   "|debug|Spread modifier: 0.75",
+   "|split|p1",
+   "|-damage|p1b: Machamp|245/321",
+   "|-damage|p1b: Machamp|245/321",
+   "|split|p2",
+   "|-damage|p2a: Snorlax|400/461",
+   "|-damage|p2a: Snorlax|400/461",
+   "|move|p1b: Machamp|Swords Dance|p1b: Machamp",
+   "|-boost|p1b: Machamp|atk|2",
+   "|move|p2b: Gastrodon|Tackle|p1a: Blastoise",
+   "|split|p1",
+   "|-damage|p1a: Blastoise|268/299",
+   "|-damage|p1a: Blastoise|268/299",
+   "|move|p2a: Snorlax|Tackle|p1a: Blastoise",
+   "|split|p1",
+   "|-damage|p1a: Blastoise|210/299",
+   "|-damage|p1a: Blastoise|210/299",
+   "|",
+   "|upkeep",
+   "|turn|2"
+  ]
+ },
+ {
   "name": "spread_surf_reduction",
   "why": "Surf hits all adjacent; every hit takes the 0.75x spread multiplier",
   "choices": {
