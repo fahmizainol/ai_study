@@ -1,5 +1,5 @@
 diff --git a/src/instruction.rs b/src/instruction.rs
-index 835de45..4d2c121 100644
+index 835de45..68189a0 100644
 --- a/src/instruction.rs
 +++ b/src/instruction.rs
 @@ -45,6 +45,19 @@ macro_rules! slotted_instruction {
@@ -59,7 +59,21 @@ index 835de45..4d2c121 100644
              }
              Instruction::ChangeSideCondition(c) => {
                  write!(
-@@ -275,8 +288,8 @@ impl fmt::Debug for Instruction {
+@@ -231,8 +244,11 @@ impl fmt::Debug for Instruction {
+             Instruction::ChangeItem(c) => {
+                 write!(
+                     f,
+-                    "ChangeItem {:?}: {:?} -> {:?}",
+-                    c.side_ref, c.current_item, c.new_item
++                    "ChangeItem {:?}{}: {:?} -> {:?}",
++                    c.side_ref,
++                    slot_tag(c.slot()),
++                    c.current_item,
++                    c.new_item
+                 )
+             }
+             Instruction::ChangeAttack(c) => {
+@@ -275,8 +291,8 @@ impl fmt::Debug for Instruction {
              Instruction::DamageSubstitute(d) => {
                  write!(
                      f,
@@ -70,7 +84,7 @@ index 835de45..4d2c121 100644
                  )
              }
              Instruction::DecrementRestTurns(d) => {
-@@ -332,8 +345,8 @@ impl fmt::Debug for Instruction {
+@@ -332,8 +348,8 @@ impl fmt::Debug for Instruction {
              Instruction::SetLastUsedMove(s) => {
                  write!(
                      f,
@@ -81,7 +95,7 @@ index 835de45..4d2c121 100644
                  )
              }
              Instruction::ChangeDamageDealtDamage(s) => {
-@@ -356,8 +369,8 @@ impl fmt::Debug for Instruction {
+@@ -356,8 +372,8 @@ impl fmt::Debug for Instruction {
              Instruction::DecrementPP(s) => {
                  write!(
                      f,

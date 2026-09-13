@@ -40,10 +40,113 @@ index ee644cb..8ccc923 100644
      }
      if (attacking_pkmn.ability == Abilities::MOLDBREAKER
 diff --git a/src/genx/generate_instructions.rs b/src/genx/generate_instructions.rs
-index fa0676e..8f99c31 100644
+index fa0676e..b736ac6 100644
 --- a/src/genx/generate_instructions.rs
 +++ b/src/genx/generate_instructions.rs
-@@ -997,7 +997,21 @@ fn get_instructions_from_boosts(
+@@ -444,6 +444,13 @@ fn generate_instructions_from_switch(
+                 &state,
+                 &MoveTarget::User,
+                 &switching_side_ref,
++                // Slot 0 on purpose: the whole switch-in path is slot-0 bound and the
++                // switching slot is not threaded here at all -- see the author's own
++                // `FIXME(doubles): switch-in is slot-0 bound (deferred)` a few lines above,
++                // which also governs the Intimidate-style boost and the `active_indices[0]`
++                // in the Toxic Spikes instruction below. Passing a real slot would be a
++                // pretence while its neighbours still read slot 0.
++                0,
+                 &PokemonStatus::POISON,
+             ) {
+                 if side.side_conditions.toxic_spikes == 1 {
+@@ -640,6 +647,10 @@ fn get_instructions_from_volatile_statuses(
+             state,
+             &MoveTarget::Opponent,
+             &target_side,
++            // Yawn's sleep-immunity check now consults the body actually being put to sleep
++            // rather than slot 0. This resolver still takes its SIDE from the target class
++            // (defect 21), which is left alone here because no instrument can price it yet.
++            target_slot,
+             &PokemonStatus::SLEEP,
+         )
+     {
+@@ -733,10 +744,20 @@ pub fn immune_to_status(
+     state: &State,
+     status_target: &MoveTarget,
+     target_side_ref: &SideReference,
++    target_slot: u8,
+     status: &PokemonStatus,
+ ) -> bool {
+     let (target_side, attacking_side) = state.get_both_sides_immutable(target_side_ref);
+-    let target_pkmn = target_side.get_active_immutable();
++    // `target_slot` says WHICH body on `target_side_ref` is being checked. Without it this
++    // read was `get_active_immutable()` -- slot 0 -- so a status aimed at slot 1 consulted
++    // slot 0's typing, ability and existing status. Visible as: an already-statused slot 0
++    // made a status move aimed at slot 1 emit no instructions at all. Always 0 in singles.
++    let target_pkmn = target_side.get_active_slot_immutable(target_slot);
++    // NOT given a slot deliberately. This read is used only by the POISON/TOXIC arm's
++    // Corrosion check, and its correct owner differs by caller: for a move it is the actor,
++    // but Flame Orb / Toxic Orb call this at end of turn with `MoveTarget::User`, where
++    // `actor_slot()` is stale and "attacking_side" merely means the other side. Left at slot
++    // 0 rather than changed blind; recorded as its own open item.
+     let attacking_pkmn = attacking_side.get_active_immutable();
+ 
+     // General Status Immunity
+@@ -753,7 +774,7 @@ pub fn immune_to_status(
+     } else if state.terrain.terrain_type == Terrain::MISTYTERRAIN && target_pkmn.is_grounded() {
+         true
+     } else if (target_side
+-        .get_active_immutable().volatile_statuses
++        .get_active_slot_immutable(target_slot).volatile_statuses
+         .contains(&PokemonVolatileStatus::SUBSTITUTE)
+         || target_side.side_conditions.safeguard > 0)
+         && status_target == &MoveTarget::Opponent
+@@ -821,20 +842,42 @@ fn get_instructions_from_status_effects(
+ ) {
+     let act_slot = state.actor_slot();
+     let def_pos = state.defender_position(attacking_side_reference);
+-    let target_side_ref = status.target.affected_side(*attacking_side_reference);
++    // Side from the RESOLVED target rather than the target class, for the same reason as in
++    // `get_instructions_from_boosts` (defect 19): a spread move's `Opponent`-target status
++    // secondary can land on the attacker's own ally. User-side classes keep the class-based
++    // side so an `Ally` move is not sent across the field.
++    let target_side_ref = if status.target.targets_user_side() {
++        status.target.affected_side(*attacking_side_reference)
++    } else {
++        def_pos.side
++    };
+     let target_slot = if status.target.targets_user_side() {
+         act_slot
+     } else {
+         def_pos.slot
+     };
+ 
+-    if hit_sub || immune_to_status(state, &status.target, &target_side_ref, &status.status) {
++    if hit_sub
++        || immune_to_status(
++            state,
++            &status.target,
++            &target_side_ref,
++            target_slot,
++            &status.status,
++        )
++    {
+         return;
+     }
+ 
+     let target_side = state.get_side(&target_side_ref);
+-    let target_side_active = target_side.active_indices[0];
+-    let target_pkmn = target_side.get_active();
++    // The slot was resolved correctly above and then ignored three times: `active_indices[0]`
++    // reported slot 0's party index, `get_active()` read and mutated slot 0's body, and the
++    // Lum / Chesto branch emitted `ChangeItem` with the CORRECT `target_slot` while consuming
++    // slot 0's item -- the one place this defect broke the apply/reverse invariant rather than
++    // merely hitting the wrong body. `active_indices` is indexed by slot (`state.rs:1429`) and
++    // has length 1 in singles, so this is identical there.
++    let target_side_active = target_side.active_indices[target_slot as usize];
++    let target_pkmn = target_side.get_active_slot(target_slot);
+ 
+     let instruction = if target_pkmn.item == Items::LUMBERRY {
+         target_pkmn.item = Items::NONE;
+@@ -997,7 +1040,21 @@ fn get_instructions_from_boosts(
      attacking_side_reference: &SideReference,
      incoming_instructions: &mut StateInstructions,
  ) {
@@ -66,7 +169,7 @@ index fa0676e..8f99c31 100644
      // The boost lands on the user's own slot for User/UserSide, and on the move's
      // resolved target otherwise — which for an `Ally` target is the partner slot.
      // All slots are 0 in singles, so this is bit-for-bit identical there.
-@@ -1161,7 +1175,15 @@ fn get_instructions_from_heal(
+@@ -1161,7 +1218,15 @@ fn get_instructions_from_heal(
  ) {
      let act_slot = state.actor_slot();
      let def_pos = state.defender_position(attacking_side_reference);
@@ -83,7 +186,7 @@ index fa0676e..8f99c31 100644
      // User/UserSide heals the acting slot; an `Ally`/`Opponent` heal lands on the
      // move's resolved target (the partner for an ally-target move). Slot 0 in singles.
      let target_slot = match heal.target {
-@@ -1711,6 +1733,65 @@ fn terastallized_base_power_floor(
+@@ -1711,6 +1776,65 @@ fn terastallized_base_power_floor(
      }
  }
  
@@ -149,7 +252,7 @@ index fa0676e..8f99c31 100644
  fn before_move(
      state: &mut State,
      choice: &mut Choice,
-@@ -1728,28 +1809,42 @@ fn before_move(
+@@ -1728,28 +1852,42 @@ fn before_move(
      modify_choice(state, choice, defender_choice, attacking_side);
  
      ability_modify_attack_being_used(state, choice, defender_choice, attacking_side);
@@ -206,7 +309,7 @@ index fa0676e..8f99c31 100644
              choice.remove_effects_for_protect();
              if choice.crash.is_some() {
                  choice.accuracy = 0.0;
-@@ -1785,8 +1880,13 @@ fn before_move(
+@@ -1785,8 +1923,13 @@ fn before_move(
          }
      }
  
@@ -222,7 +325,7 @@ index fa0676e..8f99c31 100644
          .get_active_slot_immutable(def_slot).volatile_statuses
          .contains(&PokemonVolatileStatus::PROTECT)
          || defending_side
-@@ -2136,18 +2236,39 @@ fn redirect_target(
+@@ -2136,18 +2279,39 @@ fn redirect_target(
      let target_side_ref = nominal.side;
      let target_side = state.get_side_immutable(&target_side_ref);
  
@@ -272,7 +375,7 @@ index fa0676e..8f99c31 100644
          }
      }
  
-@@ -2156,6 +2277,13 @@ fn redirect_target(
+@@ -2156,6 +2320,13 @@ fn redirect_target(
          return ability_redirect.unwrap_or(nominal);
      }
  
@@ -286,7 +389,7 @@ index fa0676e..8f99c31 100644
      let attacker_is_grass =
          attacker.types.0 == PokemonType::GRASS || attacker.types.1 == PokemonType::GRASS;
      let attacker_ignores_powder = attacker_is_grass || attacker.ability == Abilities::OVERCOAT;
-@@ -2547,12 +2675,18 @@ pub fn generate_instructions_from_move(
+@@ -2547,12 +2718,18 @@ pub fn generate_instructions_from_move(
          return;
      }
      choice_special_effect(state, choice, &attacking_side, &mut incoming_instructions);
@@ -306,7 +409,7 @@ index fa0676e..8f99c31 100644
          &mut incoming_instructions,
          &mut final_instructions,
      );
-@@ -2611,10 +2745,62 @@ pub fn generate_instructions_from_move(
+@@ -2611,10 +2788,62 @@ pub fn generate_instructions_from_move(
          if targets.len() > 1 {
              for target in targets {
                  state.target_position = target;
@@ -370,7 +473,7 @@ index fa0676e..8f99c31 100644
                      DamageRolls::Max,
                  ) {
                      Some((max_damage_dealt, _)) => (max_damage_dealt as f32 * 0.925) as i16,
-@@ -3893,25 +4079,45 @@ fn add_end_of_turn_instructions(
+@@ -3893,25 +4122,45 @@ fn add_end_of_turn_instructions(
              PokemonVolatileStatus::ENDURE,
          ];
  
@@ -432,6 +535,63 @@ index fa0676e..8f99c31 100644
              incoming_instructions
                  .instruction_list
                  .push(Instruction::ChangeSideCondition(
+diff --git a/src/genx/items.rs b/src/genx/items.rs
+index ce242c1..ad6453e 100644
+--- a/src/genx/items.rs
++++ b/src/genx/items.rs
+@@ -921,15 +921,24 @@ pub fn item_end_of_turn(
+             }
+         }
+         Items::FLAMEORB => {
+-            if !immune_to_status(state, &MoveTarget::User, side_ref, &PokemonStatus::BURN) {
++            // `owner_slot` is the holder and is already used by the Damage/Heal arms in this
++            // same function; these two orb arms read and wrote slot 0 instead, so a slot-1
++            // holder burned or poisoned its own partner.
++            if !immune_to_status(
++                state,
++                &MoveTarget::User,
++                side_ref,
++                owner_slot,
++                &PokemonStatus::BURN,
++            ) {
+                 let side = state.get_side(side_ref);
+                 let ins = Instruction::ChangeStatus(ChangeStatusInstruction {
+                     side_ref: side_ref.clone(),
+-                    pokemon_index: side.active_indices[0],
++                    pokemon_index: side.active_indices[owner_slot as usize],
+                     new_status: PokemonStatus::BURN,
+                     old_status: PokemonStatus::NONE,
+                 });
+-                side.get_active().status = PokemonStatus::BURN;
++                side.get_active_slot(owner_slot).status = PokemonStatus::BURN;
+                 instructions.instruction_list.push(ins);
+             }
+         }
+@@ -947,15 +956,21 @@ pub fn item_end_of_turn(
+             }
+         }
+         Items::TOXICORB => {
+-            if !immune_to_status(state, &MoveTarget::User, side_ref, &PokemonStatus::TOXIC) {
++            if !immune_to_status(
++                state,
++                &MoveTarget::User,
++                side_ref,
++                owner_slot,
++                &PokemonStatus::TOXIC,
++            ) {
+                 let side = state.get_side(side_ref);
+                 let ins = Instruction::ChangeStatus(ChangeStatusInstruction {
+                     side_ref: side_ref.clone(),
+-                    pokemon_index: side.active_indices[0],
++                    pokemon_index: side.active_indices[owner_slot as usize],
+                     new_status: PokemonStatus::TOXIC,
+                     old_status: PokemonStatus::NONE,
+                 });
+-                side.get_active().status = PokemonStatus::TOXIC;
++                side.get_active_slot(owner_slot).status = PokemonStatus::TOXIC;
+                 instructions.instruction_list.push(ins);
+             }
+         }
 diff --git a/src/genx/state.rs b/src/genx/state.rs
 index 1f06e88..f5ac81e 100644
 --- a/src/genx/state.rs

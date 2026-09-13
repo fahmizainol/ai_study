@@ -57,6 +57,19 @@ const CASES = [
     c1: 'move 1, move 1', c2: 'move 1 1, move 1 1',
     pe1: 'surf;swordsdance', pe2: 'tackle,0;tackle,0' },
 
+  // Defect 20: get_instructions_from_status_effects resolves the target slot correctly and
+  // then writes through `get_active()` (slot 0) anyway, so a status aimed at slot 1 lands on
+  // slot 0. Aim Thunder Wave at p2 SLOT 1 with two distinguishable, freely paralyzable bodies
+  // so the answer is a species, not a slot number. Thunder Wave is 100% accurate in gen 5,
+  // which the pinned always-max PRNG requires. Swords Dance keeps p1's other body busy
+  // without touching anyone's HP or status.
+  { name: 'thunder_wave_lands_on_the_slot_aimed_at',
+    why: 'Thunder Wave aimed at slot 1 must paralyze slot 1, not slot 0',
+    p1: [set('Snorlax', 'Immunity', ['Thunder Wave']), set('Machamp', 'No Guard', ['Swords Dance']), FILL, FILL],
+    p2: [set('Blastoise', 'Torrent', ['Tackle']), set('Gengar', 'Levitate', ['Tackle']), FILL, FILL],
+    c1: 'move 1 2, move 1', c2: 'move 1 1, move 1 1',
+    pe1: 'thunderwave,1;swordsdance', pe2: 'tackle,0;tackle,0' },
+
   { name: 'spread_surf_reduction',
     why: 'Surf hits all adjacent; every hit takes the 0.75x spread multiplier',
     p1: [set('Snorlax', 'Immunity', ['Tackle']), set('Machamp', 'No Guard', ['Tackle']), FILL, FILL],

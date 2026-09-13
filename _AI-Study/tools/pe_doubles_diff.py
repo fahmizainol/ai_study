@@ -52,7 +52,11 @@ def mon(d):
         special_attack=d["stats"]["spa"], special_defense=d["stats"]["spd"],
         speed=d["stats"]["spe"],
         ability=pid(d["ability"]), item=pid(d["item"]) if d["item"] else "none",
-        status=pid(d["status"]), weight_kg=float(d.get("weightkg") or 0),
+        # Showdown's code ("par", "brn", ...) is not poke-engine's enum name, and passing one
+        # through panics the binding with "Invalid PokemonStatus". Latent until a case starts
+        # a body already statused, which the status-targeting cases make possible.
+        status=SD_STATUS.get(pid(d["status"]), pid(d["status"])).lower(),
+        weight_kg=float(d.get("weightkg") or 0),
         moves=[Move(id=pid(m["id"]), pp=m["pp"]) for m in d["moves"]],
     )
 
@@ -64,8 +68,8 @@ def side(s):
 # ---- the two projections being compared -------------------------------------------------
 
 def showdown_outcome(case):
-    """HP and boost deltas Showdown actually produced, keyed by (side, species)."""
-    dmg, boost = collections.Counter(), collections.Counter()
+    """HP, boost and status deltas Showdown actually produced, keyed by (side, species)."""
+    dmg, boost, status = collections.Counter(), collections.Counter(), {}
     for b, a in zip(case["before"], case["after"]):
         who = "s1" if b["side"] == "p1" else "s2"
         was = {p["species"]: p for p in b["active"] + b["bench"] if p}
@@ -78,7 +82,13 @@ def showdown_outcome(case):
             for stat, v in p["boosts"].items():
                 if v - pb["boosts"].get(stat, 0):
                     boost[(who, p["species"], stat)] = v - pb["boosts"].get(stat, 0)
-    return dmg, boost
+            # A body that fainted this turn is marked "fnt", which is not a status poke-engine
+            # can express (it uses hp 0), so it must not read as a status disagreement.
+            old, new = SD_STATUS.get(pb.get("status", "none"), "NONE"), \
+                SD_STATUS.get(p.get("status", "none"), "NONE")
+            if old != new and not p.get("fainted") and p["hp"] > 0:
+                status[(who, p["species"])] = new
+    return dmg, boost, status
 
 PE_STAT = {"Attack": "atk", "Defense": "def", "SpecialAttack": "spa",
            "SpecialDefense": "spd", "Speed": "spe", "Accuracy": "accuracy", "Evasion": "evasion"}
@@ -86,6 +96,13 @@ DMG = re.compile(r"^Damage (SideOne|SideTwo):(\d+): (-?\d+)$")
 BST = re.compile(r"^Boost (SideOne|SideTwo):(\d+) (\w+): (-?\d+)$")
 SWI = re.compile(r"^Switch (SideOne|SideTwo): P(\d+) -> P(\d+)$")
 SWP = re.compile(r"^SwapActiveSlots\((SideOne|SideTwo)\)$")
+# ChangeStatus is the one compared instruction keyed by PARTY INDEX rather than slot
+# (`instruction.rs:181` prints `c.pokemon_index`), so it resolves through `roster`, not
+# `names`. Keying it by slot would silently mis-attribute every status on a swapped field.
+STA = re.compile(r"^ChangeStatus (SideOne|SideTwo)-P(\d+): (\w+) -> (\w+)$")
+# Showdown's status codes are not poke-engine's enum names.
+SD_STATUS = {"": "NONE", "none": "NONE", "fnt": "NONE", "slp": "SLEEP", "par": "PARALYZE",
+             "brn": "BURN", "psn": "POISON", "tox": "TOXIC", "frz": "FREEZE"}
 
 def pe_outcome(branch, names, roster):
     """Same projection off poke-engine's instruction list, keyed by body.
@@ -94,9 +111,14 @@ def pe_outcome(branch, names, roster):
     stream goes: a Switch replaces a slot's occupant, SwapActiveSlots exchanges slots 0 and
     1. `roster` maps (side, party index) -> species so a Switch can be resolved."""
     names = dict(names)
-    dmg, boost = collections.Counter(), collections.Counter()
+    dmg, boost, status = collections.Counter(), collections.Counter(), {}
     for ins in branch.instruction_list:
         s = str(ins)
+        m = STA.match(s)
+        if m:
+            who = "s1" if m[1] == "SideOne" else "s2"
+            status[(who, roster[(who, int(m[2]))])] = m[4]
+            continue
         m = SWI.match(s)
         if m:
             who = "s1" if m[1] == "SideOne" else "s2"
@@ -117,7 +139,7 @@ def pe_outcome(branch, names, roster):
         if m:
             who = "s1" if m[1] == "SideOne" else "s2"
             boost[(who, names[(who, int(m[2]))], PE_STAT.get(m[3], m[3]))] += int(m[4])
-    return dmg, boost
+    return dmg, boost, status
 
 # ---- run --------------------------------------------------------------------------------
 
@@ -138,8 +160,8 @@ for case in cases:
         disagree.append((case, f"poke-engine refused the action: {exc}", None, None))
         continue
     branches = sorted(branches, key=lambda b: -b.percentage)
-    sd_d, sd_b = showdown_outcome(case)
-    pe_d, pe_b = pe_outcome(branches[0], names, roster)
+    sd_d, sd_b, sd_s = showdown_outcome(case)
+    pe_d, pe_b, pe_s = pe_outcome(branches[0], names, roster)
     notes = []
     if set(sd_d) != set(pe_d):
         only_sd = sorted(set(sd_d) - set(pe_d))
@@ -149,6 +171,8 @@ for case in cases:
                      (f" poke-engine hit {only_pe} and Showdown did not." if only_pe else ""))
     if sd_b != pe_b:
         notes.append(f"boosts differ: Showdown {dict(sd_b)} vs poke-engine {dict(pe_b)}")
+    if sd_s != pe_s:
+        notes.append(f"statuses differ: Showdown {sd_s} vs poke-engine {pe_s}")
     for k in set(sd_d) & set(pe_d):
         if sd_d[k]:
             ratios.append((case["name"], k, pe_d[k] / sd_d[k]))
