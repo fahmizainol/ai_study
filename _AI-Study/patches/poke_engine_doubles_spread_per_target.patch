@@ -40,7 +40,7 @@ index ee644cb..8ccc923 100644
      }
      if (attacking_pkmn.ability == Abilities::MOLDBREAKER
 diff --git a/src/genx/generate_instructions.rs b/src/genx/generate_instructions.rs
-index fa0676e..b736ac6 100644
+index fa0676e..e6095e5 100644
 --- a/src/genx/generate_instructions.rs
 +++ b/src/genx/generate_instructions.rs
 @@ -444,6 +444,13 @@ fn generate_instructions_from_switch(
@@ -535,6 +535,85 @@ index fa0676e..b736ac6 100644
              incoming_instructions
                  .instruction_list
                  .push(Instruction::ChangeSideCondition(
+@@ -4578,10 +4827,19 @@ pub fn generate_instructions_from_move_pair(
+ /// One actor in a turn: a battle position plus the fully-built `Choice` it will
+ /// execute, and the position its move primarily targets (used to find the
+ /// "defender choice" the way the singles path passes the opposing side's choice).
++///
++/// `body` is which Pokemon this actor IS, and it exists because `position` alone is
++/// not a stable identity: Ally Switch swaps `active_indices` mid-turn, after which
++/// `position.slot` names the slot the PARTNER now stands in. An action belongs to a
++/// body, not to a slot -- Showdown keeps a Pokemon reference here -- so the slot is
++/// re-resolved from `body` at execution time. Targets deliberately stay positions:
++/// the corpus shows a foe's single-target move follows the SLOT through a swap (a
++/// move aimed at slot 0 hits whoever ends up there), which is the opposite rule.
+ #[cfg(feature = "doubles")]
+ #[derive(Clone)]
+ struct Actor {
+     position: BattlePosition,
++    body: PokemonIndex,
+     choice: Choice,
+     target: Option<BattlePosition>,
+ }
+@@ -4934,12 +5192,44 @@ fn resolve_ordered_actors(
+             .unwrap_or_default();
+ 
+         let mut next: Vec<StateInstructions> = Vec::with_capacity(work.len());
+-        state.acting_slot = actor.position.slot;
+-        // Default the move's target to the actor's explicit choice target, or the
+-        // position directly across if none was given. A spread move overrides
+-        // this per living target inside `generate_instructions_from_move`.
+-        state.target_position = actor.target.unwrap_or_else(|| actor.position.opposing());
+         for branch in work.drain(..) {
++            // Re-resolve which slot this body is standing in RIGHT NOW, per branch. Ally
++            // Switch swaps `active_indices` mid-turn, so `actor.position.slot` can by this
++            // point name the PARTNER -- and binding the action to the slot made the wrong
++            // body act (defect 7). Showdown holds a Pokemon reference here, which is why its
++            // swapped body keeps using its own move.
++            //
++            // The swap lives in `branch.instruction_list`, not in the live state: the first
++            // version of this fix did the lookup once per actor BEFORE this loop and changed
++            // nothing at all, because `generate_instructions_from_move` applies the incoming
++            // instructions itself (`:2436`) and `choice_effects`' live `active_indices` swap
++            // is reversed again before the next actor is reached. So apply the branch here
++            // purely to read where the body now stands, then reverse it and let the callee
++            // apply it as usual. `SwapActiveSlots` is self-inverse (`state.rs:2425`/`:2656`)
++            // and this apply/reverse dance is the same one `after_move_finish` uses.
++            //
++            // Falls back to the original slot if the body is no longer active (switched out);
++            // a fainted one still no-ops via the hp == 0 early return in the callee. Singles
++            // is unaffected: `active_indices` has length 1 and nothing can swap.
++            state.apply_instructions(&branch.instruction_list);
++            let acting_slot = {
++                let side = state.get_side_immutable(&actor.position.side);
++                side.active_indices
++                    .iter()
++                    .position(|&p| p == actor.body)
++                    .map(|s| s as u8)
++                    .unwrap_or(actor.position.slot)
++            };
++            state.reverse_instructions(&branch.instruction_list);
++            state.acting_slot = acting_slot;
++            // Default the move's target to the actor's explicit choice target, or the position
++            // directly across from where the body now STANDS if none was given. A spread move
++            // overrides this per living target inside `generate_instructions_from_move`, whose
++            // ally self-exclusion reads `state.acting_slot` (`genx/state.rs:1464`) -- which is
++            // why re-pointing the acting slot is enough to make the exclusion follow the body.
++            state.target_position = actor.target.unwrap_or_else(|| {
++                BattlePosition::new(actor.position.side, acting_slot).opposing()
++            });
+             let mut choice = actor.choice.clone();
+             choice.first_move = idx == 0;
+             generate_instructions_from_move(
+@@ -5057,6 +5347,8 @@ pub fn generate_instructions_from_actions(
+             }
+             actors.push(Actor {
+                 position: BattlePosition::new(side_ref, slot),
++                // Which body this action belongs to, captured before anything can swap.
++                body: state.get_side_immutable(&side_ref).active_indices[slot as usize],
+                 choice,
+                 target,
+             });
 diff --git a/src/genx/items.rs b/src/genx/items.rs
 index ce242c1..ad6453e 100644
 --- a/src/genx/items.rs

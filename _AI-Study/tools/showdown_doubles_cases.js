@@ -134,6 +134,21 @@ const CASES = [
     c1: 'move 1 1, move 1 1', c2: 'move 1 1, move 1 1',
     pe1: 'tackle,0;tackle,0', pe2: 'tackle,0;tackle,0' },
 
+  // Defect 7: a sub-action is bound to the SLOT, not the body, so after Ally Switch moves a
+  // body the wrong Pokemon executes its move. Corpus battle 36 turn 8 is the shape. Gothitelle
+  // (slot 1) Ally Switches into slot 0, which puts the Surf user Blastoise into slot 1. Surf
+  // is AllAdjacent, so it must hit the user's ALLY (now slot 0, Gothitelle) and never the user
+  // itself -- an inversion the engine gets exactly backwards when it resolves Surf from slot 0.
+  // p1 only uses Swords Dance so nothing on p1 disturbs p2's HP, and the answer is which of
+  // p2's two bodies lost HP. Ally Switch outspeeds Surf on either priority reading, so the
+  // separate gen-5 priority discrepancy cannot confound this.
+  { name: 'ally_switch_moves_the_body_not_the_action',
+    why: 'after Ally Switch the swapped body still uses its own move: Surf must hit the ally it swapped past, not the Surf user',
+    p1: [set('Snorlax', 'Immunity', ['Swords Dance']), set('Machamp', 'No Guard', ['Swords Dance']), FILL, FILL],
+    p2: [set('Blastoise', 'Torrent', ['Surf']), set('Gothitelle', 'Frisk', ['Ally Switch']), FILL, FILL],
+    c1: 'move 1, move 1', c2: 'move 1, move 1',
+    pe1: 'swordsdance;swordsdance', pe2: 'surf;allyswitch' },
+
   { name: 'ally_switch_swaps_slots',
     why: 'slot0 Ally Switches, so the foe’s attack aimed at slot0 lands on the body that moved there',
     p1: [set('Gothitelle', 'Frisk', ['Ally Switch', 'Tackle']), set('Snorlax', 'Immunity', ['Tackle']), FILL, FILL],

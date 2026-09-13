@@ -30,12 +30,18 @@ tools/pe_doubles_diff.py for both.
 import json, re, sys, collections, statistics
 from poke_engine import State, Side, Pokemon, Move, SideConditions, generate_instructions
 
+_VALUED = ("--without", "--only")
 _pos = [a for i, a in enumerate(sys.argv[1:], 1)
-        if not a.startswith("--") and sys.argv[i - 1] != "--without"]
+        if not a.startswith("--") and sys.argv[i - 1] not in _VALUED]
 SRC = _pos[0] if _pos else "generated/showdown_doubles_corpus.ndjson"
 # --without <tag> drops every turn carrying that tag, which is how a known bug is held out to
 # see what disagreement is left behind it (see the Wide Guard hold-out in SEARCH-BOARDS.md).
 EXCLUDE = {sys.argv[i + 1] for i, a in enumerate(sys.argv) if a == "--without"}
+# --only <tag> is the inverse: keep ONLY turns carrying that tag. The headline percentages
+# print six example disagreements in total, which is no help when the question is "what do
+# the eleven turns with THIS mechanic actually do" -- the bucket gives a count and nothing
+# to read. Repeatable, and unioned (a turn is kept if it carries any of the tags).
+ONLY = {sys.argv[i + 1] for i, a in enumerate(sys.argv) if a == "--only"}
 pid = lambda s: re.sub(r"[^a-z0-9]", "", s.lower())
 
 WEATHER = {"none": "none", "raindance": "rain", "sunnyday": "sun", "sandstorm": "sand", "hail": "hail"}
@@ -291,6 +297,10 @@ for line in open(SRC, encoding="utf8"):
     row_tags = tags(row, s1, s2)
     if row_tags & EXCLUDE:
         skips[f"held out by --without {sorted(row_tags & EXCLUDE)}"] += 1
+        tally["compared"] -= 1
+        continue
+    if ONLY and not (row_tags & ONLY):
+        skips[f"not selected by --only {sorted(ONLY)}"] += 1
         tally["compared"] -= 1
         continue
     for t in row_tags:
