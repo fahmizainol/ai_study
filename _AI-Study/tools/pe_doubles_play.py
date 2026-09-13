@@ -108,6 +108,12 @@ exec(compile(CORPUS.read_text().split("# ---- run")[0], str(CORPUS), "exec"), _n
 build_side, mon, Skip, WEATHER, pid = _ns["build_side"], _ns["mon"], _ns["Skip"], _ns["WEATHER"], _ns["pid"]
 
 
+# Set from --dump-panics. An engine panic is raised INSIDE the search, so no transcript can show
+# which hypothetical line reached it -- only the root position is recoverable. Dumping it is what
+# lets a probe be built from evidence rather than from a guess.
+PANIC_DUMP = None
+
+
 class Server:
     """The Showdown referee, one battle at a time over the JSON-line protocol."""
 
@@ -283,6 +289,12 @@ def policy_mcts(req, position, side, rng, ms, stats, note=None, reqs=None):
         # inside the search), so the turn falls to greedy and the panic is counted rather than
         # silently absorbed.
         stats[f"engine panic: {str(exc).splitlines()[0][:60]}"] += 1
+        if PANIC_DUMP is not None:
+            d = Path(PANIC_DUMP)
+            d.mkdir(parents=True, exist_ok=True)
+            (d / f"{len(list(d.glob('*.json'))):03d}_{side}.json").write_text(json.dumps(
+                {"panic": str(exc).splitlines()[0], "side": side,
+                 "position": position, "request": req}, indent=1))
         if note is not None:
             note.append(f"      search PANICKED ({str(exc).splitlines()[0][:60]}); greedy took the turn")
         return policy_greedy(req, position, side, rng)
@@ -393,6 +405,9 @@ def main():
     ap.add_argument("--seed", type=int, default=7)
     ap.add_argument("--max-turns", type=int, default=60)
     ap.add_argument("--save-log", metavar="DIR", help="write one transcript per battle here")
+    ap.add_argument("--dump-panics", metavar="DIR",
+                    help="write the root position (and its request) to DIR whenever the search "
+                         "panics, so the state can be replayed in a probe")
     ap.add_argument("--teams", default="pool",
                     help="'pool' for the synthetic mechanic pool, or a smogon-dump tier such "
                          "as gen6doublesou (real scraped teams, complete six-mon only)")
@@ -404,6 +419,8 @@ def main():
     ap.add_argument("--format", dest="fmt", default=None,
                     help="Showdown format id; defaults to match --teams")
     args = ap.parse_args()
+    global PANIC_DUMP
+    PANIC_DUMP = args.dump_panics
 
     require = tuple(x.strip() for x in args.require_move.split(",")) if args.require_move else ()
     dump = None if args.teams == "pool" else load_dump_teams(

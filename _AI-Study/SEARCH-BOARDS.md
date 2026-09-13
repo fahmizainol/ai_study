@@ -886,6 +886,16 @@ Two more panics, neither gen-6-specific:
   own move list>`) carries Encore and the Bloodmoon / Gigaton Hammer repeat ban, nothing else.
   The lock rides on **`Move.disabled`**, which the caller fills from Showdown's per-move
   `disabled` flags — as `tools/foul_play_sidecar.py:173` had been doing for singles all along.
+- **`mon()` drops every volatile it claims to map** (found in run 10). The `VOLATILE` table sends
+  `substitute`, `leechseed`, `taunt`, `encore`, `confusion`, `flashfire`, `mustrecharge` and
+  `slowstart` to engine names — implying they are passed — but the `Pokemon(...)` call has no
+  `volatile_statuses` argument at all, so the loop over `d["volatiles"]` only *validates* them and
+  then discards them. The binding does accept them (`PyPokemon.volatile_statuses`, a real
+  constructor parameter defaulting to empty). **Latent, not a measurement error: 0 of the 456
+  corpus turns carry a volatile that maps to a name**, so no figure in this document is affected —
+  checked before asserting rather than after. It bit run 10's first probe, which set
+  `volatiles=["encore"]` through `mon()` and produced four identical cells because the Encore
+  never existed; probes construct `Pokemon` directly for this reason.
 - `flashfire`, `mustrecharge` and `slowstart` **do** exist as poke-engine volatiles and are
   mapped; `disable`, `lockedmove` and **`twoturnmove`** (added in run 9, 9 skips in the roster
   re-run) do not and remain counted skips. `disable` and `lockedmove` may now be cheap to retire:
@@ -1028,6 +1038,85 @@ block prints `<count>  engine panic: <message>`, so events must be summed from t
 same artefact makes the illegal-proposal figure read 9 instead of 22. A count of a summary is not
 a count of the thing.
 
+### Run 10 fixed the dominant crash, and it took four wrong hypotheses to find
+
+Defect 3 — `get_two_actives called with the same position` — was 19 of the 23 panics in run 9's
+roster re-run and the largest single reason a decision was not the search's. It is fixed, and the
+route matters as much as the answer, because **everything I inferred from reading the source was
+wrong and the engine's own output settled it in one step.**
+
+**Four discarded hypotheses**, each internally plausible:
+
+1. **`get_instructions_from_drag`.** Its pool comes from `get_alive_pkmn_indices`, which excludes
+   only `active_indices[0]`, so in doubles it includes the body standing in slot 1 — dragging it in
+   would duplicate the indices. A **real latent defect**, but not this one: **0 of 183
+   gen5doublesou teams carry a drag move** (positive control on the same scan: Protect 174, Fake
+   Out 117), so no team can ever use one. I had built a confident chain on it.
+2. **Self-redirection.** `redirect_target` skips the attacker outright (`if pos == attacker_pos {
+   continue; }`), citing Showdown's `target !== source`.
+3. **A stale default.** `State::default()` and the binding both set `target_position` to
+   `(SideTwo, 0)` — but the assert fires with `left: 1, right: 1` as readily as `0, 0`, and the
+   `:5276` fallback is `.opposing()`, which correctly flips the side.
+4. **State corruption / duplicate `active_indices`.** The enriched assert prints
+   `active_indices=[P0, P1]`. The indices were healthy the whole time.
+
+**What ended the guessing was instrumenting the engine.** Two temporary `eprintln!`s plus an
+enriched assert message produced the answer immediately:
+
+```
+DBG setup self-target: move=RECOVER   acting_slot=1 tp=SideTwo slot 1 lum=Move(M3)
+DBG same-body damage:  move=EARTHPOWER target_class=Opponent attacker=SideTwo slot 1
+                                                              target=SideTwo slot 1
+```
+
+Recover legitimately sets `target_position` to its own position (`MoveTarget::User` →
+`vec![user_pos]`), and Earth Power is then resolved reading that stale value, never having had a
+setup of its own — because the Encore block at `:2504` replaces the whole `Choice` without
+refreshing the transient. **The enriched assert is kept**; its absence is what cost four
+hypotheses, and it now names both positions and `active_indices`.
+
+**Getting there needed evidence capture, not more reading.** No ply-1 action pair panicked (81 p1
+actions × a double pass, then 9 p2 actions — all clean), which proved the fault accumulates across
+plies inside the tree. A new `--dump-panics` flag writes the root position whenever the search
+panics; 12 states were captured from real play and 4 of them reproduced at 5/5, which turned a
+probabilistic bug into a deterministic one.
+
+**Ablation, with its own control.** Removing any one of Encore, Recover, Earth Power, the fainted
+slot-0 partner, or p2's empty bench dropped the rate to 0/5. That pattern looked too neat — six
+independently necessary ingredients — so I checked whether it was really measuring *reachability*:
+at 2500 ms, 8× the budget, the 0/8 variants still never panicked while the control stayed 8/8. The
+ablation survived its own control.
+
+| identical arm, seed 101, same pool and budget | before | after |
+|---|---|---|
+| `get_two_actives` panics | **11** | **0** |
+| other panics (`Invalid boost number`, defect 2) | 1 | 1 |
+| volatile skips (lockedmove / disable / twoturnmove) | 4 / 3 / 2 | 2 / 3 / 1 |
+| **total fallbacks** | 21 of 242 (**8.7%**) | 7 of 235 (**3.0%**) |
+| result (p2 = MCTS) | 29-11 | 33-7 |
+
+**The win rate is not the result.** MCTS is unseeded, so 72.5% → 82.5% at n=40 is not attributable
+to this fix; what *is* attributable is that 11 decisions previously handed to greedy are now the
+search's. Mean visits moved 8787 → 7127, which is positional noise.
+
+**Controls.** Corpus byte-identical at 306/316 and 315/316 — and that is a **no-leak check, not
+validation**: Encore, Recover and Earth Power appear **0 times** in the corpus pool and Encore in no
+stage-0 case, so neither measured instrument can see this fix at all (run 5's lesson again). Stage 0
+re-run and unchanged at 19/19. cargo unchanged from baseline: doubles 216/1 + 46/1 (the two
+known-wrong fixtures), **singles fully green at 220 + 611 + 15**, which is the control that matters
+for a change that also altered a shared method's visibility. Deliverable patch 1012 → **1081 lines,
+still 12 files**, now extracting **two** hunks from `src/genx/state.rs` (the `PROTECT => true` fix
+and `legal_targets`' visibility) while the unshipped bindings hunks stay out; it reverse-applies
+cleanly.
+
+**Three instrument slips of my own this run, all caught before they reached a conclusion.** A
+`maturin` build failed while the wrapping pipe reported exit 0, so a diagnostic run silently used
+the *old* module — caught only by printing the real exit code. An `awk /\bside\b/` query matched
+nothing because in awk `\b` is a backspace, not a word boundary. And a frequency-sorted `head -10`
+of the diagnostic hid whether EARTHPOWER ever appeared at setup — the same truncation error as the
+earlier `grep … | head -20` that made me declare a guard absent when `slot_options_doubles:1680`
+has one.
+
 ## Backlog
 
 Recorded, not done. In the order they are worth doing.
@@ -1110,7 +1199,7 @@ to Showdown sets almost directly. Two known obstacles:
 Doing this is what would make the play result mean something: same referee, same search, real
 teams. It is more valuable than re-running the toy version with transcripts attached.
 
-### 3. Fix the thirty-one confirmed defects — 13 done (4, 5, 6, 7, 11, 15, 16, 17, 18, 19, 20, 23, 27), 18 open
+### 3. Fix the thirty-one confirmed defects — 15 resolved (3, 4, 5, 6, 7, 10, 11, 15, 16, 17, 18, 19, 20, 23, 27 — rows 10 and 11 are symptom-level and were closed by the site-level fixes), 16 open
 
 Every line number below was read out of the `main-doubles` clone, not remembered. Three are
 crashes, so they stop a bridge outright; seventeen are silent wrong answers, which is worse to ship;
@@ -1127,7 +1216,7 @@ here is a regression, only unfinished work.
 |---|---|---|
 | 1 | `genx/generate_instructions.rs:4289` `mega_evolve` | computes `act_slot`, discards it, then reads `side.get_active()` — slot 0 — and panics at `:4301` on any held item that is not a mega stone (`RHYPERIOR`/`ASSAULTVEST`, `TALONFLAME`/`CHOICEBAND`, …). Note the second, quieter half: were slot 0 *also* holding a stone, this would mega-evolve the wrong body and not panic at all |
 | 2 | `genx/evaluate.rs:107` **and `genx/state.rs:43`** | `Invalid boost value: -7 / -8 / **-11 / -12**` at the first site, `Invalid boost number: 7 / 8` at the second. Boosts escape the ±6 clamp somewhere upstream and blow up at whichever reader reaches them first — **run 9's roster re-run panicked twice at `genx/state.rs:43`, so evaluation is not the only victim and "only blow up at evaluation" was too narrow**. Seen in gen 6 **and** gen 5, so not generation-specific. The −12 (`doubles_play_logs_gen5_seed23/002`, turn 1) matters: it is exactly **double** the legal floor, so this is not a clamp that is off by one or two but drops being stacked with no bound at all — look for a per-slot drop applied once per target |
-| 3 | `state.rs:1722` `get_two_actives` | `assert_ne!(a_idx, b_idx, "get_two_actives called with the same position")` — reached in ordinary play (×5 in the gen 5 run). **Run 9's roster re-run makes this the dominant crash by a wide margin: 19 of the 23 panics across 488 decisions, panicking at `state.rs:1724` with `left: 0, right: 0` — both positions resolving to party index 0.** Once the Choice lock stopped masking turns, this became the single largest reason a decision is not the search's |
+| 3 | **FIXED 2026-09-14 (run 10)** — cause at `genx/generate_instructions.rs:2504`, assert at `state.rs:1722` | `assert_ne!(a_idx, b_idx, "get_two_actives called with the same position")` — reached in ordinary play (×5 in the gen 5 run). **Run 9's roster re-run makes this the dominant crash by a wide margin: 19 of the 23 panics across 488 decisions, panicking at `state.rs:1724` with `left: 0, right: 0` — both positions resolving to party index 0.** Once the Choice lock stopped masking turns, this became the single largest reason a decision is not the search's. **Root cause, found by instrumenting the engine after four wrong hypotheses: Encore substitutes the move but not its TARGET.** `generate_instructions_from_move` holds the only whole-`Choice` replacement in `src/genx/` — `*choice = MOVES.get(…).clone()` — which swaps in the encored move, `target` class included, while `state.target_position` still holds what the per-actor setup (`:5276`) computed for the move the player actually *chose*. Choosing RECOVER (`MoveTarget::User`, whose nominal target correctly **is** the user's own position) while locked into EARTH POWER (`MoveTarget::Opponent`) therefore leaves a damaging foe-move aimed at its own user, and the damage path calls `get_two_actives(attacker, attacker)`. The state is **not** corrupt — the enriched assert prints `active_indices=[P0, P1]`; the party indices matched because attacker and target were the *same position*. Singles never needed a refresh: its `defender_position` ignores `target_position` and returns the opposing slot 0, so a substituted move always targeted the foe — an unfinished doubles conversion, the family of defects 6, 14, 20, 23 and 26. **Adjudicated against Showdown, not assumed:** `sim/battle-actions.ts:228` runs the `OverrideAction` event and then re-derives the target with `target = this.battle.getRandomTarget(pokemon, baseMove)`. Fix re-derives via `legal_targets` (now `pub(crate)`), the same primitive option generation uses, so the swapped-in move gets a **living** foe — which matters rather than being theoretical, since in the captured state the directly-opposite slot is the fainted one and `.opposing()` would have aimed at a corpse. Showdown picks at random among legal targets where this takes the first: a recorded simplification, like `redirect_target`'s speed-tie note. Priced on the identical arm (seed 101, same pool and budget): **11 `get_two_actives` panics → 0**, total fallbacks 21 of 242 (8.7%) → 7 of 235 (**3.0%**). Probe `tools/pe_doubles_encore_target.py`; 12 captured real positions went 5/5 → 0/6 |
 
 **Silent wrong answers.** These return a plausible result that is wrong, which the differential
 caught only because Showdown was sitting next to it.
@@ -1331,7 +1420,7 @@ once a transcript says where to look.
 ### 4. ~~Close the rest of the spread-move divergence~~ — DONE 2026-09-13, residual 0.8 points
 
 Defects 15, 5, 16, 17, 18, 19, 20, 23, 7, 6 and 27 are all fixed in
-`patches/poke_engine_doubles_spread_per_target.patch` (1012 lines, 12 files; reverses cleanly).
+`patches/poke_engine_doubles_spread_per_target.patch` (1081 lines, 12 files; reverses cleanly).
 **Bodies-damaged 74.1% → 96.8% across runs 1–8, and boosts 88.0% → 99.7% on the fainted-guarded
 instrument run 8 introduced. Stage 0 went 11-of-12 → 19-of-19.** The residual spread gap is 0.8
 points on bodies and 0.3 on boosts — one row, and an artefact — so spread is no longer the

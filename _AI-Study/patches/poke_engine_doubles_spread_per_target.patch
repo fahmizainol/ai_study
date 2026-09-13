@@ -1,3 +1,84 @@
+diff --git a/src/gen1/choice_effects.rs b/src/gen1/choice_effects.rs
+index 5ab5018..b198b98 100644
+--- a/src/gen1/choice_effects.rs
++++ b/src/gen1/choice_effects.rs
+@@ -101,8 +101,8 @@ pub fn choice_special_effect(
+             }
+         }
+         Choices::HAZE => {
+-            state.reset_boosts(&SideReference::SideOne, &mut instructions.instruction_list);
+-            state.reset_boosts(&SideReference::SideTwo, &mut instructions.instruction_list);
++            state.reset_boosts(&SideReference::SideOne, 0, &mut instructions.instruction_list);
++            state.reset_boosts(&SideReference::SideTwo, 0, &mut instructions.instruction_list);
+         }
+         // Gen1 Rest lasts 1 turn less (2 turns versus 3) because you cannot attack on the turn you wake up
+         Choices::REST => {
+diff --git a/src/gen1/generate_instructions.rs b/src/gen1/generate_instructions.rs
+index 43b6e22..feb7b88 100644
+--- a/src/gen1/generate_instructions.rs
++++ b/src/gen1/generate_instructions.rs
+@@ -156,6 +156,7 @@ pub fn generate_instructions_from_switch(
+     );
+     state.reset_boosts(
+         &switching_side_ref,
++        0, // singles-only gen: slot 0 is the only slot
+         &mut incoming_instructions.instruction_list,
+     );
+ 
+diff --git a/src/gen2/choice_effects.rs b/src/gen2/choice_effects.rs
+index d5bedac..1a004ad 100644
+--- a/src/gen2/choice_effects.rs
++++ b/src/gen2/choice_effects.rs
+@@ -391,8 +391,8 @@ pub fn choice_special_effect(
+             }
+         }
+         Choices::HAZE => {
+-            state.reset_boosts(&SideReference::SideOne, &mut instructions.instruction_list);
+-            state.reset_boosts(&SideReference::SideTwo, &mut instructions.instruction_list);
++            state.reset_boosts(&SideReference::SideOne, 0, &mut instructions.instruction_list);
++            state.reset_boosts(&SideReference::SideTwo, 0, &mut instructions.instruction_list);
+         }
+         Choices::REST => {
+             let active_index = attacking_side.active_indices[0];
+diff --git a/src/gen2/generate_instructions.rs b/src/gen2/generate_instructions.rs
+index b26f13b..f6c51e6 100644
+--- a/src/gen2/generate_instructions.rs
++++ b/src/gen2/generate_instructions.rs
+@@ -183,6 +183,7 @@ pub fn generate_instructions_from_switch(
+     if !baton_passing {
+         state.reset_boosts(
+             &switching_side_ref,
++            0, // singles-only gen: slot 0 is the only slot
+             &mut incoming_instructions.instruction_list,
+         );
+     }
+diff --git a/src/gen3/choice_effects.rs b/src/gen3/choice_effects.rs
+index cd9f2bb..ff52578 100644
+--- a/src/gen3/choice_effects.rs
++++ b/src/gen3/choice_effects.rs
+@@ -503,8 +503,8 @@ pub fn choice_special_effect(
+             }
+         }
+         Choices::HAZE => {
+-            state.reset_boosts(&SideReference::SideOne, &mut instructions.instruction_list);
+-            state.reset_boosts(&SideReference::SideTwo, &mut instructions.instruction_list);
++            state.reset_boosts(&SideReference::SideOne, 0, &mut instructions.instruction_list);
++            state.reset_boosts(&SideReference::SideTwo, 0, &mut instructions.instruction_list);
+         }
+         Choices::REST => {
+             let active_index = attacking_side.active_indices[0];
+diff --git a/src/gen3/generate_instructions.rs b/src/gen3/generate_instructions.rs
+index 760dea4..6a2fd9e 100644
+--- a/src/gen3/generate_instructions.rs
++++ b/src/gen3/generate_instructions.rs
+@@ -189,6 +189,7 @@ fn generate_instructions_from_switch(
+     if !baton_passing {
+         state.reset_boosts(
+             &switching_side_ref,
++            0, // singles-only gen: slot 0 is the only slot
+             &mut incoming_instructions.instruction_list,
+         );
+     }
 diff --git a/src/genx/abilities.rs b/src/genx/abilities.rs
 index ee644cb..8ccc923 100644
 --- a/src/genx/abilities.rs
@@ -79,7 +160,7 @@ index d7fc3e1..9cd66f2 100644
          Choices::REST => {
              let electric_terrain_active = state.terrain_is_active(&Terrain::ELECTRICTERRAIN);
 diff --git a/src/genx/generate_instructions.rs b/src/genx/generate_instructions.rs
-index fa0676e..56d73db 100644
+index fa0676e..fcf49c9 100644
 --- a/src/genx/generate_instructions.rs
 +++ b/src/genx/generate_instructions.rs
 @@ -328,30 +328,35 @@ fn generate_instructions_from_switch(
@@ -511,7 +592,32 @@ index fa0676e..56d73db 100644
      let attacker_is_grass =
          attacker.types.0 == PokemonType::GRASS || attacker.types.1 == PokemonType::GRASS;
      let attacker_ignores_powder = attacker_is_grass || attacker.ability == Abilities::OVERCOAT;
-@@ -2547,12 +2764,18 @@ pub fn generate_instructions_from_move(
+@@ -2264,6 +2481,13 @@ pub fn generate_instructions_from_move(
+ 
+     state.apply_instructions(&incoming_instructions.instruction_list);
+ 
++    // Doubles: the Encore substitution below replaces the whole `Choice` -- its `target` class
++    // included -- but `state.target_position` was set for the move the player actually chose.
++    // Record the substitution so the target can be re-derived once this `side` borrow has ended
++    // (it cannot be done inline: assigning `state.target_position` needs `state` unborrowed).
++    // Leaving it stale points a foe-targeting move at its own user, which is defect 3.
++    #[cfg(feature = "doubles")]
++    let mut encore_substituted = false;
+     let side = state.get_side(&attacking_side);
+     if side
+         .get_active_slot(acting_slot).volatile_statuses
+@@ -2277,6 +2501,10 @@ pub fn generate_instructions_from_move(
+                         .unwrap()
+                         .clone();
+                     choice.move_index = last_used_move;
++                    #[cfg(feature = "doubles")]
++                    {
++                        encore_substituted = true;
++                    }
+                 }
+             }
+             _ => panic!("Encore should not be active when last used move is not a move"),
+@@ -2547,12 +2775,18 @@ pub fn generate_instructions_from_move(
          return;
      }
      choice_special_effect(state, choice, &attacking_side, &mut incoming_instructions);
@@ -531,7 +637,28 @@ index fa0676e..56d73db 100644
          &mut incoming_instructions,
          &mut final_instructions,
      );
-@@ -2611,10 +2834,62 @@ pub fn generate_instructions_from_move(
+@@ -2599,6 +2833,20 @@ pub fn generate_instructions_from_move(
+         }
+     }
+ 
++    // Defect 3: re-derive the target for a move swapped in by Encore (see the flag above).
++    // `legal_targets` is the same primitive option generation uses, so a foe-targeting move gets
++    // a LIVING foe -- better than the directly-opposite slot, which in this defect's own repro is
++    // the fainted one -- and a self-targeting move gets its own position. Singles has no
++    // `target_position`: `defender_position` there returns the opposing slot 0 outright, which is
++    // why the substitution never needed a refresh before doubles.
++    #[cfg(feature = "doubles")]
++    if encore_substituted {
++        let user_pos = BattlePosition::new(attacking_side, acting_slot);
++        if let Some(new_target) = state.legal_targets(user_pos, &choice.target).first() {
++            state.target_position = *new_target;
++        }
++    }
++
+     // Doubles spread moves (Earthquake, Rock Slide, …) hit every living adjacent
+     // target. Resolve the damage against each target in turn (reusing the normal
+     // per-target damage path, which already applies the 0.75x spread reduction in
+@@ -2611,10 +2859,62 @@ pub fn generate_instructions_from_move(
          if targets.len() > 1 {
              for target in targets {
                  state.target_position = target;
@@ -595,7 +722,7 @@ index fa0676e..56d73db 100644
                      DamageRolls::Max,
                  ) {
                      Some((max_damage_dealt, _)) => (max_damage_dealt as f32 * 0.925) as i16,
-@@ -3893,25 +4168,45 @@ fn add_end_of_turn_instructions(
+@@ -3893,25 +4193,45 @@ fn add_end_of_turn_instructions(
              PokemonVolatileStatus::ENDURE,
          ];
  
@@ -657,7 +784,7 @@ index fa0676e..56d73db 100644
              incoming_instructions
                  .instruction_list
                  .push(Instruction::ChangeSideCondition(
-@@ -4578,10 +4873,19 @@ pub fn generate_instructions_from_move_pair(
+@@ -4578,10 +4898,19 @@ pub fn generate_instructions_from_move_pair(
  /// One actor in a turn: a battle position plus the fully-built `Choice` it will
  /// execute, and the position its move primarily targets (used to find the
  /// "defender choice" the way the singles path passes the opposing side's choice).
@@ -677,7 +804,7 @@ index fa0676e..56d73db 100644
      choice: Choice,
      target: Option<BattlePosition>,
  }
-@@ -4934,12 +5238,44 @@ fn resolve_ordered_actors(
+@@ -4934,12 +5263,44 @@ fn resolve_ordered_actors(
              .unwrap_or_default();
  
          let mut next: Vec<StateInstructions> = Vec::with_capacity(work.len());
@@ -727,7 +854,7 @@ index fa0676e..56d73db 100644
              let mut choice = actor.choice.clone();
              choice.first_move = idx == 0;
              generate_instructions_from_move(
-@@ -5057,6 +5393,8 @@ pub fn generate_instructions_from_actions(
+@@ -5057,6 +5418,8 @@ pub fn generate_instructions_from_actions(
              }
              actors.push(Actor {
                  position: BattlePosition::new(side_ref, slot),
@@ -794,10 +921,24 @@ index ce242c1..ad6453e 100644
              }
          }
 diff --git a/src/state.rs b/src/state.rs
-index 4d493d9..80b827f 100644
+index 4d493d9..87c1fbf 100644
 --- a/src/state.rs
 +++ b/src/state.rs
-@@ -1792,17 +1792,28 @@ impl State {
+@@ -1721,7 +1721,12 @@ impl State {
+         }
+         let a_idx = self.get_side_immutable(&a.side).active_indices[a.slot as usize] as usize;
+         let b_idx = self.get_side_immutable(&b.side).active_indices[b.slot as usize] as usize;
+-        assert_ne!(a_idx, b_idx, "get_two_actives called with the same position");
++        assert_ne!(
++            a_idx, b_idx,
++            "get_two_actives called with the same position: a={:?} b={:?} active_indices={:?}",
++            a, b,
++            self.get_side_immutable(&a.side).active_indices
++        );
+         let pkmn = &mut self.get_side(&a.side).pokemon.pkmn;
+         if a_idx < b_idx {
+             let (left, right) = pkmn.split_at_mut(b_idx);
+@@ -1792,17 +1797,28 @@ impl State {
          }
      }
  
@@ -832,7 +973,7 @@ index 4d493d9..80b827f 100644
                  PokemonBoostableStat::Attack,
                  amount,
              )));
-@@ -1813,7 +1824,7 @@ impl State {
+@@ -1813,7 +1829,7 @@ impl State {
              let amount = -1 * active.defense_boost;
              vec_to_add_to.push(Instruction::Boost(BoostInstruction::new(
                  *side_ref,
@@ -841,7 +982,7 @@ index 4d493d9..80b827f 100644
                  PokemonBoostableStat::Defense,
                  amount,
              )));
-@@ -1824,7 +1835,7 @@ impl State {
+@@ -1824,7 +1840,7 @@ impl State {
              let amount = -1 * active.special_attack_boost;
              vec_to_add_to.push(Instruction::Boost(BoostInstruction::new(
                  *side_ref,
@@ -850,7 +991,7 @@ index 4d493d9..80b827f 100644
                  PokemonBoostableStat::SpecialAttack,
                  amount,
              )));
-@@ -1835,7 +1846,7 @@ impl State {
+@@ -1835,7 +1851,7 @@ impl State {
              let amount = -1 * active.special_defense_boost;
              vec_to_add_to.push(Instruction::Boost(BoostInstruction::new(
                  *side_ref,
@@ -859,7 +1000,7 @@ index 4d493d9..80b827f 100644
                  PokemonBoostableStat::SpecialDefense,
                  amount,
              )));
-@@ -1846,7 +1857,7 @@ impl State {
+@@ -1846,7 +1862,7 @@ impl State {
              let amount = -1 * active.speed_boost;
              vec_to_add_to.push(Instruction::Boost(BoostInstruction::new(
                  *side_ref,
@@ -868,7 +1009,7 @@ index 4d493d9..80b827f 100644
                  PokemonBoostableStat::Speed,
                  amount,
              )));
-@@ -1857,7 +1868,7 @@ impl State {
+@@ -1857,7 +1873,7 @@ impl State {
              let amount = -1 * active.evasion_boost;
              vec_to_add_to.push(Instruction::Boost(BoostInstruction::new(
                  *side_ref,
@@ -877,7 +1018,7 @@ index 4d493d9..80b827f 100644
                  PokemonBoostableStat::Evasion,
                  amount,
              )));
-@@ -1868,7 +1879,7 @@ impl State {
+@@ -1868,7 +1884,7 @@ impl State {
              let amount = -1 * active.accuracy_boost;
              vec_to_add_to.push(Instruction::Boost(BoostInstruction::new(
                  *side_ref,
@@ -886,7 +1027,7 @@ index 4d493d9..80b827f 100644
                  PokemonBoostableStat::Accuracy,
                  amount,
              )));
-@@ -1881,8 +1892,13 @@ impl State {
+@@ -1881,8 +1897,13 @@ impl State {
          side_ref: &SideReference,
          vec_to_add_to: &mut Vec<Instruction>,
      ) {
@@ -902,89 +1043,8 @@ index 4d493d9..80b827f 100644
          let active = self.get_side(side_ref).get_active();
          if active.moves.m0.disabled {
              active.moves.m0.disabled = false;
-diff --git a/src/gen1/choice_effects.rs b/src/gen1/choice_effects.rs
-index 5ab5018..b198b98 100644
---- a/src/gen1/choice_effects.rs
-+++ b/src/gen1/choice_effects.rs
-@@ -101,8 +101,8 @@ pub fn choice_special_effect(
-             }
-         }
-         Choices::HAZE => {
--            state.reset_boosts(&SideReference::SideOne, &mut instructions.instruction_list);
--            state.reset_boosts(&SideReference::SideTwo, &mut instructions.instruction_list);
-+            state.reset_boosts(&SideReference::SideOne, 0, &mut instructions.instruction_list);
-+            state.reset_boosts(&SideReference::SideTwo, 0, &mut instructions.instruction_list);
-         }
-         // Gen1 Rest lasts 1 turn less (2 turns versus 3) because you cannot attack on the turn you wake up
-         Choices::REST => {
-diff --git a/src/gen1/generate_instructions.rs b/src/gen1/generate_instructions.rs
-index 43b6e22..feb7b88 100644
---- a/src/gen1/generate_instructions.rs
-+++ b/src/gen1/generate_instructions.rs
-@@ -156,6 +156,7 @@ pub fn generate_instructions_from_switch(
-     );
-     state.reset_boosts(
-         &switching_side_ref,
-+        0, // singles-only gen: slot 0 is the only slot
-         &mut incoming_instructions.instruction_list,
-     );
- 
-diff --git a/src/gen2/choice_effects.rs b/src/gen2/choice_effects.rs
-index d5bedac..1a004ad 100644
---- a/src/gen2/choice_effects.rs
-+++ b/src/gen2/choice_effects.rs
-@@ -391,8 +391,8 @@ pub fn choice_special_effect(
-             }
-         }
-         Choices::HAZE => {
--            state.reset_boosts(&SideReference::SideOne, &mut instructions.instruction_list);
--            state.reset_boosts(&SideReference::SideTwo, &mut instructions.instruction_list);
-+            state.reset_boosts(&SideReference::SideOne, 0, &mut instructions.instruction_list);
-+            state.reset_boosts(&SideReference::SideTwo, 0, &mut instructions.instruction_list);
-         }
-         Choices::REST => {
-             let active_index = attacking_side.active_indices[0];
-diff --git a/src/gen2/generate_instructions.rs b/src/gen2/generate_instructions.rs
-index b26f13b..f6c51e6 100644
---- a/src/gen2/generate_instructions.rs
-+++ b/src/gen2/generate_instructions.rs
-@@ -183,6 +183,7 @@ pub fn generate_instructions_from_switch(
-     if !baton_passing {
-         state.reset_boosts(
-             &switching_side_ref,
-+            0, // singles-only gen: slot 0 is the only slot
-             &mut incoming_instructions.instruction_list,
-         );
-     }
-diff --git a/src/gen3/choice_effects.rs b/src/gen3/choice_effects.rs
-index cd9f2bb..ff52578 100644
---- a/src/gen3/choice_effects.rs
-+++ b/src/gen3/choice_effects.rs
-@@ -503,8 +503,8 @@ pub fn choice_special_effect(
-             }
-         }
-         Choices::HAZE => {
--            state.reset_boosts(&SideReference::SideOne, &mut instructions.instruction_list);
--            state.reset_boosts(&SideReference::SideTwo, &mut instructions.instruction_list);
-+            state.reset_boosts(&SideReference::SideOne, 0, &mut instructions.instruction_list);
-+            state.reset_boosts(&SideReference::SideTwo, 0, &mut instructions.instruction_list);
-         }
-         Choices::REST => {
-             let active_index = attacking_side.active_indices[0];
-diff --git a/src/gen3/generate_instructions.rs b/src/gen3/generate_instructions.rs
-index 760dea4..6a2fd9e 100644
---- a/src/gen3/generate_instructions.rs
-+++ b/src/gen3/generate_instructions.rs
-@@ -189,6 +189,7 @@ fn generate_instructions_from_switch(
-     if !baton_passing {
-         state.reset_boosts(
-             &switching_side_ref,
-+            0, // singles-only gen: slot 0 is the only slot
-             &mut incoming_instructions.instruction_list,
-         );
-     }
 diff --git a/src/genx/state.rs b/src/genx/state.rs
-index 1f06e88..f5ac81e 100644
+index 1f06e88..17bc70b 100644
 --- a/src/genx/state.rs
 +++ b/src/genx/state.rs
 @@ -732,6 +757,22 @@ impl Pokemon {
@@ -1010,3 +1070,12 @@ index 1f06e88..f5ac81e 100644
              PokemonVolatileStatus::PROTECT => first_move,
              PokemonVolatileStatus::TAUNT
              | PokemonVolatileStatus::TORMENT
+@@ -1664,7 +1705,7 @@ impl State {
+     /// choice and yield a single nominal position. An ally-target move with no
+     /// living ally yields no positions, making the move unselectable.
+     #[cfg(feature = "doubles")]
+-    fn legal_targets(
++    pub(crate) fn legal_targets(
+         &self,
+         user_pos: BattlePosition,
+         move_target: &MoveTarget,
