@@ -1,0 +1,155 @@
+diff --git a/src/genx/abilities.rs b/src/genx/abilities.rs
+index ee644cb..8ccc923 100644
+--- a/src/genx/abilities.rs
++++ b/src/genx/abilities.rs
+@@ -2303,18 +2303,27 @@ pub fn ability_modify_attack_against(
+     defender_choice: &Choice,
+     attacking_side_ref: &SideReference,
+ ) {
++    // Checked before resolving the target: this returned early for user-side targets
++    // regardless of which body was read, and reading one at all was what made the
++    // resolution below wrong.
++    if attacker_choice.target.targets_user_side() {
++        return;
++    }
+     let att_slot = state.actor_slot();
+-    let def_slot = if attacker_choice.target.targets_opponent_side() {
+-        state.defender_position(attacking_side_ref).slot
+-    } else {
+-        0
+-    };
++    // The move's current target. A spread move is re-pointed at each target in turn by
++    // the caller, and one of those targets can be on the ATTACKER's own side (Earthquake
++    // hits the ally), so the body must be read from `def_pos.side` — reading it from the
++    // foe side at the ally's slot index looks up an unrelated Pokemon. In singles
++    // `defender_position` is always (other side, slot 0), so this is unchanged there.
++    let def_pos = state.defender_position(attacking_side_ref);
+     let (attacking_side, defending_side) = state.get_both_sides_immutable(attacking_side_ref);
+     let attacking_pkmn = attacking_side.get_active_slot_immutable(att_slot);
+-    let target_pkmn = defending_side.get_active_slot_immutable(def_slot);
+-    if target_pkmn.ability == Abilities::NEUTRALIZINGGAS
+-        || attacker_choice.target.targets_user_side()
+-    {
++    let target_pkmn = if def_pos.side == *attacking_side_ref {
++        attacking_side.get_active_slot_immutable(def_pos.slot)
++    } else {
++        defending_side.get_active_slot_immutable(def_pos.slot)
++    };
++    if target_pkmn.ability == Abilities::NEUTRALIZINGGAS {
+         return;
+     }
+     if (attacking_pkmn.ability == Abilities::MOLDBREAKER
+diff --git a/src/genx/generate_instructions.rs b/src/genx/generate_instructions.rs
+index fa0676e..9290dbf 100644
+--- a/src/genx/generate_instructions.rs
++++ b/src/genx/generate_instructions.rs
+@@ -1711,6 +1711,22 @@ fn terastallized_base_power_floor(
+     }
+ }
+ 
++/// Whether the defender-facing modifiers and the accuracy gate must be resolved per
++/// target rather than once against the nominal target. True exactly when a spread move
++/// has more than one living target: each body carries its own abilities, items and type
++/// immunities, so a zero against one of them says nothing about the others. Always false
++/// in singles, where a move only ever has one target.
++#[cfg(feature = "doubles")]
++fn resolves_per_target(state: &State, attacking_side: &SideReference, choice: &Choice) -> bool {
++    choice.target.hits_multiple_targets()
++        && state.living_spread_target_count(*attacking_side, choice.target) > 1
++}
++
++#[cfg(not(feature = "doubles"))]
++fn resolves_per_target(_state: &State, _attacking_side: &SideReference, _choice: &Choice) -> bool {
++    false
++}
++
+ fn before_move(
+     state: &mut State,
+     choice: &mut Choice,
+@@ -1728,10 +1744,22 @@ fn before_move(
+     modify_choice(state, choice, defender_choice, attacking_side);
+ 
+     ability_modify_attack_being_used(state, choice, defender_choice, attacking_side);
+-    ability_modify_attack_against(state, choice, defender_choice, attacking_side);
++
++    // The two `_against` modifiers below depend on WHICH body is being hit, and they
++    // write onto the shared `choice`. For a multi-target spread move that is the wrong
++    // shape: applied here they would impose the nominal target's abilities and items on
++    // every target, and an immunity among them (which zeroes `base_power`) would zero the
++    // move against all of them, the attacker's own ally included. The spread loop in
++    // `generate_instructions_from_move` applies both per target on a per-target clone.
++    let per_target = resolves_per_target(state, attacking_side, choice);
++    if !per_target {
++        ability_modify_attack_against(state, choice, defender_choice, attacking_side);
++    }
+ 
+     item_modify_attack_being_used(state, choice, attacking_side);
+-    item_modify_attack_against(state, choice, attacking_side);
++    if !per_target {
++        item_modify_attack_against(state, choice, attacking_side);
++    }
+ 
+     // Slot the move is aimed at (the chosen foe in doubles; opposing slot 0 in
+     // singles). Captured before borrowing the sides below.
+@@ -2547,12 +2575,18 @@ pub fn generate_instructions_from_move(
+         return;
+     }
+     choice_special_effect(state, choice, &attacking_side, &mut incoming_instructions);
++    let per_target = resolves_per_target(state, &attacking_side, choice);
+     let damage = calculate_damage(state, &attacking_side, &choice, DamageRolls::Max);
+     check_move_hit_or_miss(
+         state,
+         &choice,
+         &attacking_side,
+-        damage,
++        // A spread move is not a miss just because the NOMINAL target takes 0 — whether
++        // from an immune ability or an immune type — since the other bodies can still be
++        // hit. Whether it misses is a property of the move and its user. Passing `None`
++        // skips `check_move_hit_or_miss`'s zero-damage shortcut and leaves accuracy to
++        // decide; each target's own zero is then handled inside the spread loop.
++        if per_target { None } else { damage },
+         &mut incoming_instructions,
+         &mut final_instructions,
+     );
+@@ -2611,10 +2645,40 @@ pub fn generate_instructions_from_move(
+         if targets.len() > 1 {
+             for target in targets {
+                 state.target_position = target;
++                // This target's own abilities and items, applied to a per-target clone so
++                // that one body's immunity cannot leak onto the next. `before_move`
++                // deliberately skipped both for this case (see `resolves_per_target`);
++                // type immunity needs no such handling because it lives inside
++                // `calculate_damage`, which is already re-called per target here.
++                let mut target_choice = choice.clone();
++                ability_modify_attack_against(
++                    state,
++                    &mut target_choice,
++                    defender_choice,
++                    &attacking_side,
++                );
++                item_modify_attack_against(state, &mut target_choice, &attacking_side);
++                // An absorbing target (Storm Drain, Lightning Rod, Motor Drive) does not
++                // merely take 0: its ability rewrites the move into a boost on itself
++                // (`remove_all_effects` + `boost`). That consequence belongs to THIS target
++                // only, and `run_move` consumes `choice.boost` once for the whole move, so
++                // apply it here while `target_position` still points at this body —
++                // `get_instructions_from_boosts` reads the slot from `defender_position`.
++                // The shared `choice` keeps its own boost for the once-only `run_move`.
++                if let Some(absorbed) = &target_choice.boost {
++                    if choice.boost.is_none() {
++                        get_instructions_from_boosts(
++                            state,
++                            absorbed,
++                            &attacking_side,
++                            &mut incoming_instructions,
++                        );
++                    }
++                }
+                 let target_damage = match calculate_damage(
+                     state,
+                     &attacking_side,
+-                    &choice,
++                    &target_choice,
+                     DamageRolls::Max,
+                 ) {
+                     Some((max_damage_dealt, _)) => (max_damage_dealt as f32 * 0.925) as i16,

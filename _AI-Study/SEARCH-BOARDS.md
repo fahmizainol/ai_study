@@ -451,8 +451,28 @@ Drilling into the spread turns: the disagreement does **not** depend on which sl
 (from slot 0, 49 of 97 turns differ; from slot 1, 69 of 143 — the same rate), so it is not the
 slot generalisation. In **39** of the disagreeing turns the body poke-engine fails to damage
 is *the attacker's own ally*. Since the isolated stage 0 cases for both Surf and Earthquake
-hit the ally correctly, something about the fuller positions suppresses it. Not root-caused
-here; that is the next thing to read.
+hit the ally correctly, something about the fuller positions suppresses it.
+
+**Re-measured 2026-09-13 with defect 15 fixed** (`patches/poke_engine_doubles_spread_per_target.patch`,
+below). Same 456-turn reference `.ndjson`, so only the engine changed:
+
+| | compared | bodies damaged | boosts |
+|---|---|---|---|
+| all turns | 373 | 73.2% → **80.4%** | 87.1% → 86.9% |
+| holding out Wide Guard turns | 250 | 74.8% → **85.2%** | 87.2% → 86.8% |
+| **holding out spread-move turns** (control) | 199 | 92.0% → **92.0%** | 93.0% → **93.0%** |
+| holding out spread + the absorb abilities (control) | 134 | 91.8% → **91.8%** | 95.5% → **95.5%** |
+
+**The fix is worth 7.2 points of the ~18.8-point spread gap — 38% of it — and both held-out
+controls are pinned to the digit** (183/199 and 123/134 bodies, unchanged), which is the
+evidence that it moves spread turns and nothing else. The gap is now 11.6 points and is still
+the largest single source of disagreement. Boosts end flat (−1 turn); see the absorb note
+under defect 15 for why that number is not an improvement.
+
+What remains in the spread bucket, from the same run: Wide Guard 36/123 (defect 5, unfixed),
+Storm Drain 35/127 — the *redirection* mechanic, which this fix deliberately does not touch —
+and Friend Guard 19/107, which is its own gap: Friend Guard is the **target's partner's**
+ability, and `ability_modify_attack_against` only ever reads the target itself.
 
 **A second confirmed bug, found by the boost comparison.** `Side::reset_boosts`
 (`src/state.rs:1795`) reads `get_side(side_ref).get_active()` — slot 0 — and emits
@@ -822,7 +842,7 @@ omitting it from the list would make the list look complete when it is not — b
 
 | # | site | defect |
 |---|---|---|
-| 10 | *mechanism found — see defect 15; the re-measurement is what is still open* | **The spread-move divergence, and the single largest source of disagreement with Showdown.** Bodies-damaged agrees on 73.2% of 373 corpus turns; hold out spread-move turns and it is **92.0%**, so spread accounts for ~19 of the 27 points. Defect 5 (Wide Guard) is one instance of it and holding *that* out moves the figure by 1.6 points, so the rest is something else. Not the attacking slot (49 of 97 turns differ from slot 0 against 69 of 143 from slot 1 — the same rate), and in 39 disagreeing turns the undamaged body is the attacker's **own ally**, which the isolated stage 0 Surf and Earthquake cases got right. Fuller positions suppress it; nothing narrower is known |
+| 10 | **root-caused AND priced — see defect 15; `patches/poke_engine_doubles_spread_per_target.patch` fixes 38% of it** | **The spread-move divergence, and the single largest source of disagreement with Showdown.** Bodies-damaged agreed on 73.2% of 373 corpus turns; hold out spread-move turns and it was **92.0%**, so spread accounted for ~19 of the 27 points. Defect 5 (Wide Guard) is one instance and holding *that* out moves the figure by 1.6 points. Not the attacking slot (49 of 97 turns differ from slot 0 against 69 of 143 from slot 1 — the same rate), and in 39 disagreeing turns the undamaged body is the attacker's **own ally**. **Fixed 2026-09-13 → 80.4% all turns (+7.2 points, 27 turns), with the two held-out controls pinned to the digit. Residual gap 11.6 points: Wide Guard (defect 5), Storm Drain redirection, and Friend Guard — which needs the target's *partner's* ability, a lookup that does not exist** |
 
 **One hypothesis ruled out, recorded so it is not chased twice.** Jellicent was seen choosing
 Recover at full HP and failing, which looked like defect 11 on the heal path. It is not: at
@@ -883,13 +903,22 @@ pool is **secondary-free by construction** (`showdown_doubles_lib.js:48` — eve
 accurate, no status, no secondary, so the always-max PRNG pin is sound). No secondary was ever
 in the measured turns.
 
-Reading the pool for that turned up something better. **Its only spread moves are Earthquake
-and Surf, and both are `AllAdjacent`** — the class that hits the attacker's own ally. No
-`AllAdjacentFoes` move (Heat Wave, Blizzard, Rock Slide, Discharge) appears anywhere in it. So
-the 73.2%-against-92.0% gap is not about spread moves in general: **it is entirely about
-ally-hitting spread**, which is exactly consistent with the 39 disagreeing turns whose
-undamaged body is the attacker's own ally, and it means one whole targeting class has never
-been differentially tested at all.
+Reading the pool for that turned up something better — though the first version of this note
+overstated it, and the corrected form is the one to trust. **The pool's spread moves are
+overwhelmingly `AllAdjacent`**, the class that hits the attacker's own ally: Earthquake in 121
+turns and Surf in 126, against exactly one `AllAdjacentFoes` move — Swift — in **3**. Counted
+off the `.ndjson`: 247 of 250 spread sub-actions are ally-hitting. An earlier version of this
+paragraph said no `AllAdjacentFoes` move appeared in the pool *at all*, which is simply wrong
+(Swift is on Raichu and Musharna, and poke-engine classes it `MoveTarget::AllAdjacentFoes` at
+`choices.rs:16882`).
+
+The conclusion survives, now resting on the counts rather than on that false premise: the
+73.2%-against-92.0% gap is **about ally-hitting spread**, which is exactly consistent with the
+39 disagreeing turns whose undamaged body is the attacker's own ally. And at 3 turns the
+`AllAdjacentFoes` class is untested *in practice* even though it is present — so the original
+warning was right in substance and wrong in letter. The probe covers that class directly
+instead, via Heat Wave and Blizzard, which are correct in all seven scenarios both before and
+after the fix.
 
 Plain targeting by class is *correct*, so the fault is in the complications rather than the
 dispatch (`tools/pe_doubles_spread_classes.py`): in an unobstructed 2v2, Earthquake and Surf
@@ -897,24 +926,62 @@ damage both foes **and the ally**, while Heat Wave and Blizzard damage only the 
 complications are where it breaks, and one probe found it — Earthquake into a 2v2, varying only
 who is immune and where they stand:
 
-| position | expected | poke-engine emits |
-|---|---|---|
-| nothing immune | both foes + ally | both foes + ally ✓ |
-| ally is **Flying** | both foes, ally spared | both foes, ally spared ✓ |
-| ally has **Telepathy** | both foes, ally exempt | both foes, ally exempt ✓ |
-| **slot-0 foe has Levitate** | foe 1 + ally, foe 0 spared | **nothing at all** ✗ |
-| **slot-0 foe is Flying** | foe 1 + ally, foe 0 spared | **nothing at all** ✗ |
-| **slot-1 foe has Levitate** | foe 0 + ally, foe 1 spared | **all three, the immune body included** ✗ |
-| **ally has Levitate** | both foes, ally spared | **all three, the immune ally included** ✗ |
+| position | expected | poke-engine emitted | after the fix |
+|---|---|---|---|
+| nothing immune | both foes + ally | both foes + ally ✓ | ✓ |
+| ally is **Flying** | both foes, ally spared | both foes, ally spared ✓ | ✓ |
+| ally has **Telepathy** | both foes, ally exempt | both foes, ally exempt ✓ | ✓ |
+| **slot-0 foe has Levitate** | foe 1 + ally, foe 0 spared | **nothing at all** ✗ | ✓ |
+| **slot-0 foe is Flying** | foe 1 + ally, foe 0 spared | **nothing at all** ✗ | ✓ |
+| **slot-1 foe has Levitate** | foe 0 + ally, foe 1 spared | **all three, the immune body included** ✗ | ✓ |
+| **ally has Levitate** | both foes, ally spared | **all three, the immune ally included** ✗ | ✓ |
 
-That is defect 15, and it is the same shape as defect 5 — an effect written onto the `Choice`
-instead of resolved per target — from thirteen lines away in the same function (`:1731` against
-`:1744`). It also explains defect 10's signature quantitatively: the corpus pool holds Gengar
-(Levitate) against four Earthquake users, so every turn Gengar stood in the nominal slot,
-poke-engine damaged **nobody** while Showdown damaged everyone else — which is exactly "39
-disagreeing turns in which the undamaged body is the attacker's own ally". Storm Drain,
-Lightning Rod and Friend Guard are in that pool too, so this may not be all of the 19 points;
-re-running the corpus with it fixed is the test.
+That is defect 15. It is **three faults**, not one, and only two of them are about abilities:
+
+1. **The pre-spread accuracy gate.** `:2551` calls `calculate_damage` against the *nominal*
+   target and hands the result to `check_move_hit_or_miss`, whose `Some((0,0)) → percent_hit
+   = 0.0` declares the **whole move** a miss. This is what produces "nothing at all", and it
+   fires for **type** immunity too (row 5 is a Flying foe, no ability involved) — so the
+   one-line summary "immunity zeroes the shared `Choice`" was only two-thirds right.
+2. **Both defender-facing modifiers run once, on the shared `Choice`.**
+   `ability_modify_attack_against` and `item_modify_attack_against` are called once in
+   `before_move` (`:1731`, `:1734`), so no other position's ability or item is ever consulted.
+   Same shape as defect 5, thirteen lines away in the same function (`:1731` against `:1744`).
+3. **`ability_modify_attack_against` reads the target from the wrong side.** It resolved the
+   body as `defending_side.get_active_slot_immutable(def_slot)` — always the foe side — but
+   `defender_position` can point at the attacker's **own** side, because a spread move hits the
+   ally. An ally's ability could therefore never be seen, whatever else was fixed.
+   `item_modify_attack_against` is worse still: `defending_side.get_active_immutable()`, slot 0
+   unconditionally, not even slot-aware.
+
+The fix (`patches/poke_engine_doubles_spread_per_target.patch`) is one helper,
+`resolves_per_target` — true exactly when a spread move has more than one living target —
+which (1) passes `None` to the accuracy gate so a nominal-target zero cannot cancel the move,
+(2) skips both `_against` modifiers in `before_move`, and (3) re-applies them inside the
+existing per-target loop on a per-target `Choice` clone, so one body's immunity cannot leak
+onto the next. Singles is unreachable by construction: the helper is `false` there.
+
+**The absorb abilities are not secondaries — they are whole-move rewrites, and that is a
+sharper statement of the same bug.** Storm Drain, Lightning Rod and Motor Drive each call
+`remove_all_effects()`, force `target = Opponent`, set `category = Status` and install
+`choice.boost` (`abilities.rs:2384, 2588, 2778`). On a shared `Choice` one absorber in any slot
+converts Earthquake into a Status move *for every target*. Because `run_move` consumes
+`choice.boost` exactly once (`:4079`), deferring them cost the absorber's boost until the loop
+also applied each target's own boost while `target_position` still pointed at it —
+`get_instructions_from_boosts` reads the slot from `defender_position` (`:1006`), so that lands
+correctly. Boosts end **flat, not better** (−1 turn), and that is expected: redirection, which
+is most of what Storm Drain and Lightning Rod do in real doubles, is untouched by this fix.
+
+**A claim retracted, corrected in place above:** the pool does contain an `AllAdjacentFoes`
+move (Swift, 3 turns), so "no `AllAdjacentFoes` move appears anywhere in it" was wrong;
+`pe_doubles_corpus.py` counts Swift in its `SPREAD` tag. See the corrected counts under "That
+lead on defect 10 is dead".
+
+**One test fails in the doubles build, and the test is wrong, not the engine.**
+`test_switching_in_with_intimidate` hand-writes a single `BoostInstruction::new(SideTwo, 0, …)`;
+a doubles build correctly lowers **both** foes. 216 passed / 1 failed before and after this fix,
+same single test — it is a singles-era fixture, already noted in the PR #10 audit, and not a
+defect in the engine.
 
 **How defect 11 was found, since it is the pattern to reuse.** Not by reading the source: by
 noticing in a transcript that the search chose Thunder Wave against the same foe **thirteen
@@ -923,12 +990,22 @@ own translator, and diffing the instruction list against a variant where only th
 changed. The play logs are the instrument; the engine is small enough to interrogate directly
 once a transcript says where to look.
 
-### 4. Root-cause the spread-move divergence
+### 4. Close the rest of the spread-move divergence — ~~root-cause it~~ DONE 2026-09-13
 
-This is **defect 10** in the table above, split out because it is the one entry with no
-`file:line` — the work here is finding the site, not editing it. What is known and what has
-already been ruled out is in that row; the next step is reading the spread damage path in
-fuller positions than stage 0's, since those isolated cases pass and the fuller ones do not.
+Defect 10 is root-caused (defect 15) and **priced: the fix is worth 7.2 of the ~18.8 points,
+38% of the gap**, with both held-out controls pinned. `patches/poke_engine_doubles_spread_per_target.patch`.
+
+The residual 11.6 points is three named things, in descending size:
+
+1. **Wide Guard / Quick Guard** — defect 5, 36 of 123 turns. Keyed on
+   `choice.target.hits_multiple_targets()` rather than the resolved target list, so a blocked
+   `AllAdjacent` move loses the half aimed at the attacker's own ally. The `resolves_per_target`
+   helper added for defect 15 is the natural place to hang the correct version.
+2. **Storm Drain / Lightning Rod redirection** — 35 of 127 turns. These abilities *redirect*
+   single-target moves to the absorber; the fork models absorption by rewriting the `Choice`
+   and does not model redirection at all. Not a per-target problem, a targeting one.
+3. **Friend Guard** — 19 of 107 turns. Needs the **target's partner's** ability, and no lookup
+   for "the ally of the body being hit" exists anywhere in the damage path.
 
 ## Reproduce
 
