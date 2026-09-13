@@ -1,0 +1,117 @@
+battle 21   p1=greedy vs p2=mcts   mcts 300 ms a decision
+  p1: [PL week 1] Typhlosion is good: Latios, Scrafty, Amoonguss, Typhlosion
+  p2: Metagross chansey but different: Metagross, Chansey, Keldeo, Landorus-Therian
+
+  Turn 1
+    p1 greedy: move 1 1, move 3 1
+    p2 mcts: move 1 2, switch 4   (slot1 Chansey -> Landorus-Therian)
+      search (5000 visits): meteormash,1;switch landorustherian 130v 109 | earthquake,0;switch landorustherian 125v 104 | meteormash,1;switch keldeo 119v 98 | bulletpunch,1;switch landorustherian 117v 96
+      p2b <- Landorus-Therian comes in (319/319)
+              p1a Latios atk 1 fell
+              p1b Scrafty atk 1 fell
+      p1a Latios used Draco Meteor -> p2a: Metagross
+              p1a Latios used up its Dragon Gem
+              p1a Latios spa 2 fell
+      p2a Metagross used Meteor Mash -> p1b: Scrafty
+              p2a Metagross used up its Steel Gem
+      p1b Scrafty used High Jump Kick -> p2a: Metagross
+      after p1: Latios 301/301, Scrafty 88/334
+      after p2: Metagross 84/364, Landorus-Therian 319/319
+
+  Turn 2
+    p1 greedy: move 1 1, move 3 1
+    p2 mcts: move 4, move 1 1
+      search (7000 visits): protect,0;fly,0 434v 308 | meteormash,1;fly,0 195v 114 | bulletpunch,1;fly,1 191v 111 | earthquake,0;fly,0 173v 98
+      p2a Metagross used Protect
+      p1a Latios used Draco Meteor -> p2a: Metagross
+              p2a Metagross -- move: Protect
+      p2b Landorus used Fly  [[still]]
+              p2b Landorus used up its Power Herb
+      p1b Scrafty used High Jump Kick -> p2a: Metagross
+              p2a Metagross -- move: Protect
+      p1b Scrafty fainted
+      after p1: Latios 103/301, Scrafty 0/334
+      after p2: Metagross 84/364, Landorus-Therian 319/319
+
+  Turn 3
+      p1b <- Amoonguss comes in (432/432)
+      after p1: Latios 103/301, Amoonguss 432/432
+      after p2: Metagross 84/364, Landorus-Therian 319/319
+
+  Turn 4
+    p1 greedy: move 1 1, move 3 1
+    p2 mcts: move 1 2, move 1 2
+      search (5000 visits): meteormash,1;fly,1 217v 157 | meteormash,1;fly,0 184v 129 | earthquake,0;fly,0 165v 112 | meteormash,1;rockslide,0 147v 97
+      p1a Latios used Draco Meteor -> p2a: Metagross
+              p1a Latios spa 2 fell
+      p2b Landorus used Fly  [[still]]
+      p2a Metagross used Meteor Mash -> p1b: Amoonguss
+              p1b Amoonguss used up its Sitrus Berry
+      p1b Amoonguss used Giga Drain -> p2a: Metagross
+      p2a Metagross fainted
+      after p1: Latios 103/301, Amoonguss 296/432
+      after p2: Metagross 0/364, Landorus-Therian 319/319
+
+  Turn 5
+      p2a <- Keldeo comes in (323/323)
+      after p1: Latios 103/301, Amoonguss 296/432
+      after p2: Keldeo 323/323, Landorus-Therian 319/319
+
+  Turn 6
+    p1 greedy: move 1 1, move 3 1
+    p2 mcts: switch 4, move 1   (slot0 Keldeo -> Chansey)
+      search (6000 visits): switch chansey;fly,0 1795v 881 | protect,0;fly,0 1328v 629 | icywind,0;fly,0 1103v 510 | secretsword,1;fly,0 540v 221
+      p2a <- Chansey comes in (703/703)
+      p1a Latios used Draco Meteor -> p2a: Chansey
+              p1a Latios spa 2 fell
+      p2b Landorus used Fly -> p1b: Amoonguss  [[from] lockedmove]
+      p1b Amoonguss fainted
+      after p1: Latios 103/301, Amoonguss 0/432
+      after p2: Chansey 654/703, Landorus-Therian 319/319
+
+  Turn 7
+      p1b <- Typhlosion comes in (297/297)
+      after p1: Latios 103/301, Typhlosion 297/297
+      after p2: Chansey 654/703, Landorus-Therian 319/319
+
+  Turn 8
+    p1 greedy: move 1 1, move 1
+    p2 mcts: move 2, move 2
+      search (7000 visits): softboiled,0;earthquake,0 417v 182 | switch keldeo;earthquake,0 390v 167 | seismictoss,1;earthquake,0 249v 94 | seismictoss,0;earthquake,0 244v 91
+      p1a Latios used Draco Meteor -> p2a: Chansey
+      p1b Typhlosion used Eruption -> p2a: Chansey  [[spread] p2a,p2b]
+              p1b Typhlosion used up its Fire Gem
+      p2b Landorus fainted
+      p2a Chansey used Soft-Boiled
+      after p1: Latios 103/301, Typhlosion 297/297
+      after p2: Chansey 703/703, Landorus-Therian 0/319
+
+  Turn 9
+      p2b <- Keldeo comes in (323/323)
+      after p1: Latios 103/301, Typhlosion 297/297
+      after p2: Chansey 703/703, Keldeo 323/323
+
+  Turn 10
+    p1 greedy: move 1 1, move 1
+    p2 mcts: move 3 1, move 2 2
+      search (7000 visits): healpulse,0;hydropump,1 469v 231 | softboiled,0;hydropump,1 393v 187 | healpulse,1;hydropump,1 355v 164 | thunderwave,1;hydropump,1 341v 157
+      p1a Latios used Draco Meteor -> p2a: Chansey
+      p2b Keldeo used Hydro Pump -> p1b: Typhlosion
+      p1b Typhlosion fainted
+      p2a Chansey used Heal Pulse -> p1a: Latios
+      after p1: Latios 254/301, Typhlosion 0/297
+      after p2: Chansey 661/703, Keldeo 291/323
+
+  Turn 11
+    p1 greedy: move 1 2, pass
+    p2 mcts: move 1 1, move 4
+      search (4000 visits): seismictoss,0;icywind,0 1101v 1007 | seismictoss,0;secretsword,0 657v 577 | seismictoss,0;hydropump,0 429v 360 | thunderwave,0;icywind,0 219v 167
+      p1a Latios used Draco Meteor -> p2b: Keldeo
+      p2b Keldeo used Icy Wind -> p1a: Latios
+              p1a Latios spe 1 fell
+      p2a Chansey used Seismic Toss -> p1a: Latios
+      p1a Latios fainted
+      after p1: Latios 0/301, Typhlosion 0/297
+      after p2: Chansey 661/703, Keldeo 184/323
+
+  RESULT: p2 wins

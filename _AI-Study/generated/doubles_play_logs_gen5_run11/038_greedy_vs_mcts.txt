@@ -1,0 +1,71 @@
+battle 38   p1=greedy vs p2=mcts   mcts 300 ms a decision
+  p1: Cradily: Cradily, Jellicent, Victini, Scrafty
+  p2: kyurem scraft thund tran: Heatran, Scrafty, Thundurus, Kyurem
+
+  Turn 1
+    p1 greedy: move 2 1, move 4
+    p2 mcts: move 2, move 3 2
+      search (2000 visits): eruption,0;crunch,1 71v 54 | eruption,0;bulkup,1 57v 40 | eruption,0;crunch,0 54v 37 | eruption,0;drainpunch,0 53v 36
+      p2a Heatran used Eruption -> p1b: Jellicent  [[spread] p1a,p1b]
+              p2a Heatran used up its Fire Gem
+      p2b Scrafty used Crunch -> p1b: Jellicent
+      p1b Jellicent fainted
+      p1a Cradily used Giga Drain -> p2a: Heatran
+      after p1: Cradily 58/375, Jellicent 0/404
+      after p2: Heatran 297/323, Scrafty 332/332
+
+  Turn 2
+      p1b <- Victini comes in (341/341)
+      after p1: Cradily 58/375, Victini 341/341
+      after p2: Heatran 297/323, Scrafty 332/332
+
+  Turn 3
+    p1 greedy: move 2 1, move 1 1
+    p2 mcts: move 2, move 4
+      search (1000 visits): eruption,0;bulkup,1 22v 15 | eruption,0;crunch,1 21v 14 | earthpower,0;crunch,1 19v 12 | earthpower,1;crunch,0 19v 12
+      p1b Victini used V-create -> p2a: Heatran
+              p2a Heatran gained ability: Flash Fire
+      p2a Heatran used Eruption -> p1a: Cradily  [[spread] p1a,p1b]
+      p1a Cradily fainted
+      p2b Scrafty used Bulk Up
+              p2b Scrafty atk 1 rose
+              p2b Scrafty def 1 rose
+      after p1: Cradily 0/375, Victini 193/341
+      after p2: Heatran 297/323, Scrafty 332/332
+
+  Turn 4
+      p1a <- Scrafty comes in (334/334)
+              p2a Heatran atk 1 fell
+              p2b Scrafty atk 1 fell
+      after p1: Scrafty 334/334, Victini 193/341
+      after p2: Heatran 297/323, Scrafty 332/332
+
+  Turn 5
+    p1 greedy: move 2 1, move 1 1
+    p2 mcts: move 3 1, move 4
+      search (1000 visits): fireblast,0;bulkup,1 23v 18 | fireblast,0;crunch,1 21v 16 | eruption,0;drainpunch,0 20v 15 | eruption,0;crunch,1 20v 15
+      p1b Victini used V-create -> p2a: Heatran
+              p2a Heatran -- IMMUNE
+      p2a Heatran used Fire Blast -> p1a: Scrafty
+      p1a Scrafty used Crunch -> p2a: Heatran
+      p2b Scrafty used Bulk Up
+              p2b Scrafty atk 1 rose
+              p2b Scrafty def 1 rose
+      after p1: Scrafty 10/334, Victini 193/341
+      after p2: Heatran 236/323, Scrafty 332/332
+
+  Turn 6
+    p1 greedy: move 2 1, move 1 1
+    p2 mcts: move 4 1, move 3 2
+      search (3000 visits): earthpower,0;crunch,1 142v 130 | eruption,0;crunch,1 139v 127 | eruption,0;drainpunch,1 106v 91 | earthpower,1;drainpunch,0 106v 91
+      p1b Victini used V-create -> p2a: Heatran
+              p2a Heatran -- IMMUNE
+      p2a Heatran used Earth Power -> p1a: Scrafty
+              p1a Scrafty -- critical hit
+      p1a Scrafty fainted
+      p2b Scrafty used Crunch -> p1b: Victini
+      p1b Victini fainted
+      after p1: Scrafty 0/334, Victini 0/341
+      after p2: Heatran 236/323, Scrafty 332/332
+
+  RESULT: p2 wins

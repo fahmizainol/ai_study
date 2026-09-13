@@ -1,0 +1,197 @@
+battle 13   p1=greedy vs p2=mcts   mcts 300 ms a decision
+  p1: Bw dou/Scizor semi sand: Scizor, Landorus-Therian, Tyranitar, Thundurus, Jellicent, Latios
+  p2: Bw dou/Yuki Latios Sand Semi-Room: Tyranitar, Excadrill, Conkeldurr, Thundurus, Jellicent, Latios
+
+  Turn 1
+    p1 greedy: move 2 1, move 4 1
+    p2 mcts: switch 5, switch 4   (slot0 Tyranitar -> Jellicent; slot1 Excadrill -> Thundurus)
+      search (5000 visits): switch jellicent;switch thundurus 78v 46 | fireblast,0;ironhead,1 77v 45 | fireblast,0;switch jellicent 75v 43 | switch thundurus;switch conkeldurr 73v 42
+      p2b <- Thundurus comes in (347/347)
+      p2a <- Jellicent comes in (404/404)
+      p1b Landorus used Superpower -> p2a: Jellicent
+              p2a Jellicent -- IMMUNE
+      p1a Scizor used Bug Bite -> p2a: Jellicent
+              p2a Jellicent used up its Sitrus Berry
+      after p1: Scizor 333/333, Landorus-Therian 321/321
+      after p2: Jellicent 297/404, Thundurus 326/347
+
+  Turn 2
+    p1 greedy: move 2 1, move 4 1
+    p2 mcts: move 3, move 1 1
+      search (3000 visits): recover,0;thunderbolt,0 36v 24 | scald,1;thunderbolt,0 35v 23 | toxic,1;thunderbolt,0 35v 23 | scald,0;hiddenpower,1 34v 22
+      p1b Landorus used Superpower -> p2a: Jellicent
+              p2a Jellicent -- IMMUNE
+      p2b Thundurus used Thunderbolt -> p1a: Scizor
+              p1a Scizor is now par
+              p1a Scizor COULD NOT MOVE (par)
+      p2a Jellicent used Recover
+      after p1: Scizor 162/333, Landorus-Therian 321/321
+      after p2: Jellicent 379/404, Thundurus 305/347
+
+  Turn 3
+    p1 greedy: move 2 2, move 4 2
+    p2 mcts: move 1 2, move 1 1
+      search (3000 visits): scald,1;thunderbolt,0 37v 25 | toxic,1;thunderbolt,0 35v 23 | scald,0;thunderbolt,0 33v 21 | scald,1;thunderbolt,1 33v 21
+      p1b Landorus used Superpower -> p2b: Thundurus
+              p1b Landorus atk 1 fell
+              p1b Landorus def 1 fell
+      p2b Thundurus used Thunderbolt -> p1a: Scizor
+      p1a Scizor fainted
+      p2a Jellicent used Scald -> p1b: Landorus
+              p1b Landorus is now brn
+              p2b Thundurus used up its Sitrus Berry
+      after p1: Scizor 0/333, Landorus-Therian 111/321
+      after p2: Jellicent 354/404, Thundurus 249/347
+
+  Turn 4
+      p1a <- Tyranitar comes in (386/386)
+      after p1: Tyranitar 386/386, Landorus-Therian 111/321
+      after p2: Jellicent 354/404, Thundurus 249/347
+
+  Turn 5
+    p1 greedy: move 2 2, move 4 2
+    p2 mcts: move 1 1, move 1 2
+      search (3000 visits): scald,0;thunderbolt,1 32v 15 | scald,0;switch excadrill 31v 14 | switch conkeldurr;thunderwave,0 31v 14 | scald,0;thunderwave,0 30v 13
+      p1b Landorus used Superpower -> p2b: Thundurus
+              p1b Landorus atk 1 fell
+              p1b Landorus def 1 fell
+      p2b Thundurus used Thunderbolt -> p1b: Landorus
+              p1b Landorus -- IMMUNE
+      p1a Tyranitar used Crunch -> p2b: Thundurus
+      p2b Thundurus fainted
+      p2a Jellicent used Scald -> p1a: Tyranitar
+              p1a Tyranitar is now brn
+      after p1: Tyranitar 230/386, Landorus-Therian 71/321
+      after p2: Jellicent 329/404, Thundurus 0/347
+
+  Turn 6
+      p2b <- Conkeldurr comes in (386/386)
+      after p1: Tyranitar 230/386, Landorus-Therian 71/321
+      after p2: Jellicent 329/404, Conkeldurr 386/386
+
+  Turn 7
+    p1 greedy: move 2 1, move 4 1
+    p2 mcts: move 2 2, move 3 1
+      search (4000 visits): toxic,1;machpunch,0 58v 20 | recover,0;machpunch,0 58v 21 | trickroom,0;icepunch,0 56v 19 | switch excadrill;icepunch,1 54v 18
+      p2b Conkeldurr used Mach Punch -> p1a: Tyranitar
+              p2b Conkeldurr used up its Fighting Gem
+              p1a Tyranitar used up its Chople Berry
+              p1a Tyranitar used up its Chople Berry
+      p1a Tyranitar fainted
+      p1b Landorus used Superpower -> p2a: Jellicent
+              p2a Jellicent -- IMMUNE
+      p2a Jellicent used Toxic  [[still]]
+              p2a Jellicent -- IT FAILED
+      after p1: Tyranitar 0/386, Landorus-Therian 31/321
+      after p2: Jellicent 304/404, Conkeldurr 362/386
+
+  Turn 8
+      p1a <- Thundurus comes in (362/362)
+      after p1: Thundurus 362/362, Landorus-Therian 31/321
+      after p2: Jellicent 304/404, Conkeldurr 362/386
+
+  Turn 9
+    p1 greedy: move 1 1, move 4 1
+    p2 mcts: move 2 1, move 2 1
+      search (3000 visits): toxic,0;icepunch,0 68v 39 | switch excadrill;icepunch,0 68v 39 | scald,0;icepunch,0 64v 36 | switch tyranitar;icepunch,0 53v 27
+      p1b Landorus used Superpower -> p2a: Jellicent
+              p2a Jellicent -- IMMUNE
+      p1a Thundurus used Thunderbolt -> p2a: Jellicent
+              p1a Thundurus gained Disable Thunderbolt
+      p2b Conkeldurr used Ice Punch -> p1a: Thundurus
+              p1a Thundurus used up its Sitrus Berry
+      p2a Jellicent used Toxic -> p1a: Thundurus
+              p1a Thundurus is now tox
+      p1b Landorus fainted
+      after p1: Thundurus 90/362, Landorus-Therian 0/321
+      after p2: Jellicent 33/404, Conkeldurr 338/386
+
+  Turn 10
+      p1b <- Jellicent comes in (404/404)
+      after p1: Thundurus 90/362, Jellicent 404/404
+      after p2: Jellicent 33/404, Conkeldurr 338/386
+
+  Turn 11
+    p1 greedy: move 2 1, move 1 1
+    p2 mcts: move 3, move 2 1
+      search (5000 visits): recover,0;icepunch,0 103v 64 | recover,0;machpunch,0 94v 57 | toxic,1;icepunch,0 80v 46 | recover,0;detect,1 77v 43
+      p1a Thundurus used Thunder Wave -> p2a: Jellicent
+              p2a Jellicent is now par
+      p2b Conkeldurr used Ice Punch -> p1a: Thundurus
+      p1a Thundurus fainted
+      p2a Jellicent used Recover
+      p1b Jellicent used Scald -> p2a: Jellicent
+              p1b Jellicent gained Disable Scald
+      after p1: Thundurus 0/362, Jellicent 379/404
+      after p2: Jellicent 177/404, Conkeldurr 314/386
+
+  Turn 12
+      p1a <- Latios comes in (301/301)
+      after p1: Latios 301/301, Jellicent 379/404
+      after p2: Jellicent 177/404, Conkeldurr 314/386
+
+  Turn 13
+    p1 greedy: move 1 1, move 2 1
+    p2 mcts: move 3, switch 5   (slot1 Conkeldurr -> Tyranitar)
+      search (3000 visits): recover,0;switch tyranitar 49v 30 | toxic,0;switch tyranitar 44v 26 | scald,0;switch tyranitar 43v 25 | toxic,1;switch tyranitar 43v 25
+      p2b <- Tyranitar comes in (404/404)
+      p1a Latios used Draco Meteor -> p2a: Jellicent  [[miss]]
+              p1a Latios -- MISSED
+      p1b Jellicent used Will-O-Wisp -> p2a: Jellicent  [[miss]]
+              p1b Jellicent -- MISSED
+      p2a Jellicent used Recover
+      after p1: Latios 283/301, Jellicent 354/404
+      after p2: Jellicent 354/404, Tyranitar 404/404
+
+  Turn 14
+    p1 greedy: move 1 1, move 2 1
+    p2 mcts: move 3, move 2 1
+      search (2000 visits): recover,0;pursuit,0 29v 19 | switch excadrill;stoneedge,0 29v 19 | toxic,0;stoneedge,1 28v 18 | toxic,1;pursuit,1 28v 18
+      p1a Latios used Draco Meteor -> p2a: Jellicent
+              p1a Latios used up its Dragon Gem
+              p1a Latios spa 2 fell
+              p1a Latios gained Disable Draco Meteor
+      p2b Tyranitar used Pursuit -> p1a: Latios
+      p1b Jellicent used Will-O-Wisp  [[still]]
+              p1b Jellicent -- IT FAILED
+      p2a Jellicent used Recover
+      after p1: Latios 89/301, Jellicent 329/404
+      after p2: Jellicent 212/404, Tyranitar 404/404
+
+  Turn 15
+    p1 greedy: move 2 1, move 2 1
+    p2 mcts: move 3, move 1 2
+      search (3000 visits): recover,0;stoneedge,1 54v 34 | switch excadrill;pursuit,1 53v 33 | toxic,1;pursuit,1 44v 25 | recover,0;pursuit,1 44v 25
+      p1a Latios used Psychic -> p2a: Jellicent
+      p2b Tyranitar used Stone Edge -> p1b: Jellicent
+              p1b Jellicent used up its Sitrus Berry
+      p1b Jellicent used Will-O-Wisp  [[still]]
+              p1b Jellicent -- IT FAILED
+      p2a Jellicent used Recover
+              p1b Jellicent lost Disable
+      after p1: Latios 71/301, Jellicent 174/404
+      after p2: Jellicent 322/404, Tyranitar 404/404
+
+  Turn 16
+    p1 greedy: move 2 1, move 1 1
+    p2 mcts: switch 6, move 2 2   (slot0 Jellicent -> Latios)
+      search (1000 visits): switch latios;pursuit,1 19v 15 | toxic,0;pursuit,1 17v 12 | recover,0;stoneedge,1 15v 10 | recover,0;pursuit,1 15v 10
+      p2a <- Latios comes in (302/302)
+      p1a Latios used Psychic -> p2a: Latios
+      p2b Tyranitar used Pursuit -> p1b: Jellicent
+      p1b Jellicent fainted
+      after p1: Latios 53/301, Jellicent 0/404
+      after p2: Latios 245/302, Tyranitar 404/404
+
+  Turn 17
+    p1 greedy: move 2 1, pass
+    p2 mcts: move 2 1, switch 5   (slot1 Tyranitar -> Conkeldurr)
+      search (8000 visits): psychic,0;switch conkeldurr 246v 225 | dracometeor,0;fireblast,0 238v 217 | psychic,0;stoneedge,0 235v 214 | hiddenpower,0;stoneedge,0 227v 205
+      p2b <- Conkeldurr comes in (314/386)
+      p1a Latios used Psychic -> p2a: Latios
+      p2a Latios used Psychic -> p1a: Latios
+      p1a Latios fainted
+      after p1: Latios 0/301, Jellicent 0/404
+      after p2: Latios 207/302, Conkeldurr 314/386
+
+  RESULT: p2 wins

@@ -1,0 +1,113 @@
+battle 2   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: Bw dou/Yuki Shaymin Sand: Tyranitar, Excadrill, Rotom-Wash, Shaymin-Sky, Cresselia, Conkeldurr
+  p2: Bw dou/Lmao: Terrakion, Whimsicott, Kyurem-Black, Marowak, Tornadus, Shaymin-Sky
+
+  Turn 1
+    p1 mcts: move 1, move 2 1
+      search (5000 visits): rockslide,0;ironhead,0 197v 170 | stealthrock,0;ironhead,0 195v 168 | pursuit,1;ironhead,0 189v 162 | pursuit,0;ironhead,0 152v 125
+    p2 greedy: move 2 1, move 1
+      p2b Whimsicott used Tailwind
+      -sidestart p2: B move: Tailwind
+      p1b Excadrill used Iron Head -> p2a: Terrakion
+      p2a Terrakion fainted
+      p1a Tyranitar used Rock Slide -> p2b: Whimsicott  [[miss]]
+              p1a Tyranitar -- MISSED
+      after p1: Tyranitar 404/404, Excadrill 324/359
+      after p2: Terrakion 0/323, Whimsicott 304/324
+
+  Turn 2
+      p2a <- Kyurem-Black comes in (391/391)
+      after p1: Tyranitar 404/404, Excadrill 324/359
+      after p2: Kyurem-Black 391/391, Whimsicott 304/324
+
+  Turn 3
+    p1 mcts: move 1, move 2 2
+      search (5000 visits): rockslide,0;ironhead,1 188v 149 | rockslide,0;ironhead,0 187v 148 | rockslide,0;rockslide,0 176v 138 | stealthrock,0;ironhead,0 138v 102
+    p2 greedy: move 1, move 1
+      p2b Whimsicott used Tailwind  [[still]]
+              p2b Whimsicott -- IT FAILED
+      p2a Kyurem used Outrage -> p1a: Tyranitar
+      p1b Excadrill used Iron Head -> p2b: Whimsicott
+              p2b Whimsicott -- critical hit
+      p2b Whimsicott fainted
+      p1a Tyranitar used Rock Slide -> p2a: Kyurem
+      after p1: Tyranitar 62/404, Excadrill 289/359
+      after p2: Kyurem-Black 101/391, Whimsicott 0/324
+
+  Turn 4
+      p2b <- Marowak comes in (274/274)
+      after p1: Tyranitar 62/404, Excadrill 289/359
+      after p2: Kyurem-Black 101/391, Marowak 274/274
+
+  Turn 5
+    p1 mcts: move 1, move 1
+      search skipped (volatile lockedmove); greedy took the turn
+    p2 greedy: move 1, move 2 1
+      p2a Kyurem used Outrage -> p1a: Tyranitar  [[from] lockedmove]
+              p1a Tyranitar -- critical hit
+      p1a Tyranitar fainted
+              p2a Kyurem gained confusion
+      p1b Excadrill used Earthquake -> p2b: Marowak  [[spread] p2a,p2b]
+      p2a Kyurem fainted
+      p2b Marowak used Stone Edge -> p1b: Excadrill
+      after p1: Tyranitar 0/404, Excadrill 198/359
+      after p2: Kyurem-Black 0/391, Marowak 99/274
+
+  Turn 6
+      p2a <- Tornadus comes in (299/299)
+      p1a <- Rotom-Wash comes in (301/301)
+      after p1: Rotom-Wash 301/301, Excadrill 198/359
+      after p2: Tornadus 299/299, Marowak 99/274
+
+  Turn 7
+    p1 mcts: move 2 1, move 2 2
+      search (5000 visits): thunderbolt,0;ironhead,1 142v 105 | hydropump,0;ironhead,1 129v 94 | thunderbolt,0;earthquake,0 120v 86 | hydropump,0;earthquake,0 112v 78
+    p2 greedy: move 2 2, move 2 2
+      p2a Tornadus used Superpower -> p1b: Excadrill
+              p2a Tornadus atk 1 fell
+              p2a Tornadus def 1 fell
+      p1b Excadrill fainted
+      p2b Marowak used Stone Edge -> p1a: Rotom  [[miss]]
+              p2b Marowak -- MISSED
+      p1a Rotom used Thunderbolt -> p2b: Marowak
+              p2b Marowak -- ability: Lightning Rod
+              p2b Marowak -- IMMUNE
+      -sideend p2: B move: Tailwind
+      after p1: Rotom-Wash 283/301, Excadrill 0/359
+      after p2: Tornadus 281/299, Marowak 99/274
+
+  Turn 8
+      p1b <- Shaymin-Sky comes in (341/341)
+      after p1: Rotom-Wash 283/301, Shaymin-Sky 341/341
+      after p2: Tornadus 281/299, Marowak 99/274
+
+  Turn 9
+    p1 mcts: move 2 1, move 1 2
+      search (4000 visits): thunderbolt,0;airslash,1 97v 66 | hydropump,0;airslash,1 94v 64 | hydropump,1;protect,1 87v 58 | thunderbolt,0;earthpower,1 87v 57
+    p2 greedy: move 2 1, move 2 1
+      p1b Shaymin used Air Slash -> p2b: Marowak
+      p2b Marowak fainted
+      p2a Tornadus used Superpower -> p1a: Rotom
+              p2a Tornadus atk 1 fell
+              p2a Tornadus def 1 fell
+      p1a Rotom used Thunderbolt -> p2a: Tornadus
+      p2a Tornadus fainted
+      after p1: Rotom-Wash 184/301, Shaymin-Sky 286/341
+      after p2: Tornadus 0/299, Marowak 0/274
+
+  Turn 10
+      p2a <- Shaymin-Sky comes in (341/341)
+      after p1: Rotom-Wash 184/301, Shaymin-Sky 286/341
+      after p2: Shaymin-Sky 341/341, Marowak 0/274
+
+  Turn 11
+    p1 mcts: switch 5, move 1 1   (slot0 Rotom-Wash -> Cresselia)
+      search (5000 visits): switch cresselia;airslash,0 452v 387 | thunderwave,0;airslash,0 277v 222 | thunderbolt,0;airslash,0 262v 208 | hydropump,0;airslash,0 255v 202
+    p2 greedy: move 2 1, pass
+      p1a <- Cresselia comes in (382/382)
+      p1b Shaymin used Air Slash -> p2a: Shaymin
+      p2a Shaymin fainted
+      after p1: Cresselia 382/382, Shaymin-Sky 252/341
+      after p2: Shaymin-Sky 0/341, Marowak 0/274
+
+  RESULT: p1 wins

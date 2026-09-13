@@ -1,0 +1,92 @@
+battle 20   p1=greedy vs p2=mcts   mcts 300 ms a decision
+  p1: tran liepard torn: Heatran, Liepard, Tornadus, Kyurem-Black
+  p2: Untitled 1079: Raikou, Togekiss, Infernape, Kyurem-Black
+
+  Turn 1
+    p1 greedy: move 1, move 3 1
+    p2 mcts: move 1 2, move 3 -1
+      search (2000 visits): thunderbolt,1;helpinghand,0 51v 35 | aurasphere,1;helpinghand,0 50v 34 | thunderbolt,0;helpinghand,0 47v 31 | aurasphere,0;helpinghand,0 47v 30
+      p2b Togekiss used Helping Hand -> p2a: Raikou
+      p1b Liepard used Sucker Punch -> p2a: Raikou
+              p1b Liepard used up its Dark Gem
+      p1a Heatran used Eruption -> p2b: Togekiss  [[spread] p2a,p2b]
+      p2a Raikou fainted
+      after p1: Heatran 323/323, Liepard 317/317
+      after p2: Raikou 0/321, Togekiss 238/374
+
+  Turn 2
+      p2a <- Infernape comes in (293/293)
+      after p1: Heatran 323/323, Liepard 317/317
+      after p2: Infernape 293/293, Togekiss 238/374
+
+  Turn 3
+    p1 greedy: move 1, move 3 2
+    p2 mcts: move 3 1, move 1 2
+      search (4000 visits): closecombat,0;airslash,1 280v 185 | closecombat,0;switch kyuremblack 259v 169 | closecombat,0;airslash,0 213v 133 | closecombat,0;helpinghand,0 176v 105
+      p1b Liepard used Sucker Punch -> p2b: Togekiss
+      p2a Infernape used Close Combat -> p1a: Heatran
+              p2a Infernape def 1 fell
+              p2a Infernape spd 1 fell
+      p1a Heatran fainted
+      p2b Togekiss used Air Slash -> p1b: Liepard
+      after p1: Heatran 0/323, Liepard 196/317
+      after p2: Infernape 264/293, Togekiss 142/374
+
+  Turn 4
+      p1a <- Tornadus comes in (299/299)
+      after p1: Tornadus 299/299, Liepard 196/317
+      after p2: Infernape 264/293, Togekiss 142/374
+
+  Turn 5
+    p1 greedy: move 3 2, move 3 2
+    p2 mcts: move 3 2, move 4
+      search (5000 visits): closecombat,1;protect,1 193v 114 | closecombat,1;airslash,0 182v 105 | closecombat,1;followme,1 162v 91 | closecombat,1;helpinghand,0 145v 79
+      p2b Togekiss used Protect
+      p1b Liepard used Sucker Punch  [[still]]
+              p1b Liepard -- IT FAILED
+      p1a Tornadus used Superpower -> p2b: Togekiss
+              p2b Togekiss -- move: Protect
+      p2a Infernape used Close Combat -> p1b: Liepard
+              p1b Liepard -- critical hit
+              p2a Infernape def 1 fell
+              p2a Infernape spd 1 fell
+      p1b Liepard fainted
+      after p1: Tornadus 299/299, Liepard 0/317
+      after p2: Infernape 235/293, Togekiss 142/374
+
+  Turn 6
+      p1b <- Kyurem-Black comes in (391/391)
+      after p1: Tornadus 299/299, Kyurem-Black 391/391
+      after p2: Infernape 235/293, Togekiss 142/374
+
+  Turn 7
+    p1 greedy: move 3 2, move 2 2
+    p2 mcts: move 3 2, move 2
+      search (7000 visits): closecombat,1;followme,1 1153v 847 | closecombat,1;airslash,0 333v 209 | closecombat,1;protect,1 299v 183 | closecombat,1;switch kyuremblack 252v 149
+      p2b Togekiss used Follow Me
+      p1a Tornadus used Superpower -> p2b: Togekiss
+              p1a Tornadus atk 1 fell
+              p1a Tornadus def 1 fell
+      p2a Infernape used Close Combat -> p1b: Kyurem
+              p2a Infernape def 1 fell
+              p2a Infernape spd 1 fell
+      p1b Kyurem fainted
+      after p1: Tornadus 299/299, Kyurem-Black 0/391
+      after p2: Infernape 206/293, Togekiss 17/374
+
+  Turn 8
+    p1 greedy: move 3 2, pass
+    p2 mcts: move 3 1, switch 4   (slot1 Togekiss -> Kyurem-Black)
+      search (12000 visits): closecombat,0;switch kyuremblack 2903v 2680 | fakeout,0;switch kyuremblack 1672v 1501 | overheat,0;switch kyuremblack 1354v 1199 | closecombat,0;followme,1 528v 430
+      p2b <- Kyurem-Black comes in (391/391)
+      p1a Tornadus used Superpower -> p2b: Kyurem
+              p1a Tornadus atk 1 fell
+              p1a Tornadus def 1 fell
+      p2a Infernape used Close Combat -> p1a: Tornadus
+              p2a Infernape def 1 fell
+              p2a Infernape spd 1 fell
+      p1a Tornadus fainted
+      after p1: Tornadus 0/299, Kyurem-Black 0/391
+      after p2: Infernape 177/293, Kyurem-Black 231/391
+
+  RESULT: p2 wins

@@ -1,0 +1,92 @@
+battle 15   p1=greedy vs p2=mcts   mcts 300 ms a decision
+  p1: 2v2 Pool League II/2v2 Pools - BW 7: Snorlax, Chandelure, Darkrai, Infernape
+  p2: Fuck it: Rotom-Heat, Scrafty, Crobat, Jellicent
+
+  Turn 1
+    p1 greedy: move 1 1, move 1 1
+    p2 mcts: move 2 2, move 3 1
+      search (4000 visits): thunderbolt,1;highjumpkick,0 118v 95 | thunderbolt,0;crunch,1 78v 56 | thunderbolt,1;crunch,1 78v 56 | trick,0;highjumpkick,0 76v 54
+      p2a Rotom used Thunderbolt -> p1b: Chandelure
+              p2a Rotom used up its Electric Gem
+      p2b Scrafty used High Jump Kick -> p1a: Snorlax
+              p1a Snorlax used up its Chople Berry
+              p1a Snorlax used up its Chople Berry
+      p1b Chandelure used Overheat -> p2a: Rotom
+              p1b Chandelure spa 2 fell
+      p1a Snorlax used Double-Edge -> p2a: Rotom
+      p2a Rotom fainted
+      after p1: Snorlax 189/524, Chandelure 102/324
+      after p2: Rotom-Heat 0/253, Scrafty 334/334
+
+  Turn 2
+      p2a <- Crobat comes in (311/311)
+      after p1: Snorlax 189/524, Chandelure 102/324
+      after p2: Crobat 311/311, Scrafty 334/334
+
+  Turn 3
+    p1 greedy: move 1 1, move 1 1
+    p2 mcts: switch 4, move 2 2   (slot0 Crobat -> Jellicent)
+      search (7000 visits): switch jellicent;crunch,1 210v 124 | superfang,1;crunch,1 176v 99 | bravebird,1;crunch,1 172v 97 | superfang,0;crunch,1 155v 84
+      p2a <- Jellicent comes in (404/404)
+      p2b Scrafty used Crunch -> p1b: Chandelure
+      p1b Chandelure fainted
+      p1a Snorlax used Double-Edge -> p2a: Jellicent
+              p2a Jellicent -- IMMUNE
+      after p1: Snorlax 189/524, Chandelure 0/324
+      after p2: Jellicent 404/404, Scrafty 334/334
+
+  Turn 4
+      p1b <- Darkrai comes in (281/281)
+      after p1: Snorlax 189/524, Darkrai 281/281
+      after p2: Jellicent 404/404, Scrafty 334/334
+
+  Turn 5
+    p1 greedy: move 1 1, move 3 1
+    p2 mcts: move 4, move 3 2
+      search (1000 visits): recover,0;highjumpkick,1 27v 19 | shadowball,0;highjumpkick,1 24v 16 | willowisp,0;highjumpkick,1 23v 15 | willowisp,1;highjumpkick,1 23v 15
+      p1b Darkrai used Focus Blast -> p2a: Jellicent
+              p2a Jellicent -- IMMUNE
+      p2b Scrafty used High Jump Kick -> p1b: Darkrai
+      p1b Darkrai fainted
+      p2a Jellicent used Recover  [[still]]
+              p2a Jellicent -- IT FAILED
+      p1a Snorlax used Double-Edge -> p2a: Jellicent
+              p2a Jellicent -- IMMUNE
+      after p1: Snorlax 189/524, Darkrai 0/281
+      after p2: Jellicent 404/404, Scrafty 334/334
+
+  Turn 6
+      p1b <- Infernape comes in (293/293)
+      after p1: Snorlax 189/524, Infernape 293/293
+      after p2: Jellicent 404/404, Scrafty 334/334
+
+  Turn 7
+    p1 greedy: move 1 1, move 4 1
+    p2 mcts: move 3, move 3 2
+      search (3000 visits): icywind,0;highjumpkick,1 103v 76 | willowisp,0;highjumpkick,1 89v 63 | shadowball,1;crunch,1 79v 54 | shadowball,1;highjumpkick,1 78v 53
+      p1b Infernape used Overheat -> p2a: Jellicent
+              p1b Infernape used up its Fire Gem
+              p1b Infernape spa 2 fell
+      p2b Scrafty used High Jump Kick -> p1b: Infernape
+      p2a Jellicent used Icy Wind -> p1a: Snorlax  [[spread] p1a,p1b]
+              p1a Snorlax spe 1 fell
+              p1b Infernape spe 1 fell
+      p1a Snorlax used Double-Edge -> p2a: Jellicent
+              p2a Jellicent -- IMMUNE
+      after p1: Snorlax 176/524, Infernape 2/293
+      after p2: Jellicent 342/404, Scrafty 334/334
+
+  Turn 8
+    p1 greedy: move 1 1, move 4 1
+    p2 mcts: move 3, move 2 1
+      search (6000 visits): icywind,0;crunch,0 434v 297 | shadowball,1;highjumpkick,0 349v 230 | icywind,0;highjumpkick,0 331v 217 | switch crobat;fakeout,1 273v 172
+      p1b Infernape used Overheat -> p2a: Jellicent
+              p1b Infernape spa 2 fell
+      p2b Scrafty used Crunch -> p1a: Snorlax
+      p1a Snorlax fainted
+      p2a Jellicent used Icy Wind -> p1b: Infernape
+      p1b Infernape fainted
+      after p1: Snorlax 0/524, Infernape 0/293
+      after p2: Jellicent 300/404, Scrafty 334/334
+
+  RESULT: p2 wins

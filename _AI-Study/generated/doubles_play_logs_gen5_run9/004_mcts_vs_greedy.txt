@@ -1,0 +1,91 @@
+battle 4   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: Pqs torn: Tornadus, Infernape, Metagross, Kyurem-Black
+  p2: Untitled 493: Politoed, Ludicolo, Genesect, Togekiss
+
+  Turn 1
+    p1 mcts: move 2 2, switch 4   (slot1 Infernape -> Kyurem-Black)
+      search (4000 visits): acrobatics,1;switch kyuremblack 99v 54 | acrobatics,1;switch metagross 93v 49 | acrobatics,1;fakeout,1 88v 46 | acrobatics,1;fakeout,0 79v 39
+    p2 greedy: move 1 1, move 1 1
+      p1b <- Kyurem-Black comes in (417/417)
+      p2b Ludicolo used Hydro Pump -> p1a: Tornadus
+              p1a Tornadus -- critical hit
+      p1a Tornadus fainted
+      p2a Politoed used Scald -> p1b: Kyurem
+              p1b Kyurem is now brn
+      after p1: Tornadus 0/299, Kyurem-Black 295/417
+      after p2: Politoed 383/383, Ludicolo 271/301
+
+  Turn 2
+      p1a <- Metagross comes in (364/364)
+      after p1: Metagross 364/364, Kyurem-Black 295/417
+      after p2: Politoed 383/383, Ludicolo 271/301
+
+  Turn 3
+    p1 mcts: move 2 2, move 4 2
+      search (1000 visits): meteormash,1;icebeam,1 27v 19 | zenheadbutt,1;icebeam,1 25v 18 | zenheadbutt,1;dragonclaw,1 23v 15 | meteormash,1;fusionbolt,0 22v 14
+    p2 greedy: move 1 2, move 1 2
+      p2b Ludicolo used Hydro Pump -> p1b: Kyurem
+      p1b Kyurem used Ice Beam -> p2b: Ludicolo
+      p1a Metagross used Meteor Mash -> p2b: Ludicolo
+              p1a Metagross used up its Steel Gem
+              p2b Ludicolo -- critical hit
+      p2b Ludicolo fainted
+      p2a Politoed used Scald -> p1b: Kyurem
+      p1b Kyurem fainted
+      after p1: Metagross 364/364, Kyurem-Black 0/417
+      after p2: Politoed 383/383, Ludicolo 0/301
+
+  Turn 4
+      p1b <- Infernape comes in (293/293)
+      p2b <- Genesect comes in (285/285)
+              p2b Genesect spa 1 rose
+      after p1: Metagross 364/364, Infernape 293/293
+      after p2: Politoed 383/383, Genesect 285/285
+
+  Turn 5
+    p1 mcts: move 2 1, move 2 2
+      search (1000 visits): meteormash,0;overheat,1 41v 29 | zenheadbutt,1;overheat,1 37v 25 | protect,0;overheat,1 36v 24 | zenheadbutt,0;overheat,1 36v 24
+    p2 greedy: move 1 1, move 2 1
+      p1b Infernape used Overheat -> p2b: Genesect
+              p1b Infernape spa 2 fell
+      p2b Genesect fainted
+      p1a Metagross used Meteor Mash -> p2a: Politoed
+              p1a Metagross atk 1 rose
+      p2a Politoed used Scald -> p1a: Metagross
+      after p1: Metagross 229/364, Infernape 264/293
+      after p2: Politoed 301/383, Genesect 0/285
+
+  Turn 6
+      p2b <- Togekiss comes in (374/374)
+      after p1: Metagross 229/364, Infernape 264/293
+      after p2: Politoed 301/383, Togekiss 374/374
+
+  Turn 7
+    p1 mcts: move 2 2, move 3 2
+      search (2000 visits): meteormash,1;closecombat,1 66v 42 | meteormash,1;closecombat,0 63v 39 | zenheadbutt,0;closecombat,0 61v 38 | zenheadbutt,1;closecombat,1 53v 31
+    p2 greedy: move 1 1, move 2 1
+      p1b Infernape used Close Combat -> p2b: Togekiss
+              p1b Infernape def 1 fell
+              p1b Infernape spd 1 fell
+      p2b Togekiss used Air Slash -> p1a: Metagross  [[miss]]
+              p2b Togekiss -- MISSED
+      p1a Metagross used Meteor Mash -> p2b: Togekiss
+      p2b Togekiss fainted
+      p2a Politoed used Scald -> p1a: Metagross
+              p1a Metagross -- critical hit
+      p1a Metagross fainted
+      after p1: Metagross 0/364, Infernape 235/293
+      after p2: Politoed 301/383, Togekiss 0/374
+
+  Turn 8
+    p1 mcts: pass, move 1 1
+      search (16000 visits): No Move;fakeout,0 12717v 3078 | No Move;closecombat,0 1284v 197 | No Move;feint,0 1076v 153 | No Move;overheat,0 923v 122
+    p2 greedy: move 1 2, pass
+      p1b Infernape used Fake Out  [[still]]
+              p1b Infernape -- IT FAILED
+      p2a Politoed used Scald -> p1b: Infernape
+      p1b Infernape fainted
+      after p1: Metagross 0/364, Infernape 0/293
+      after p2: Politoed 301/383, Togekiss 0/374
+
+  RESULT: p2 wins

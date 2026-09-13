@@ -1,0 +1,81 @@
+battle 32   p1=greedy vs p2=mcts   mcts 300 ms a decision
+  p1: Untitled 1072: Scrafty, Kyurem-Black, Tornadus, Victini
+  p2: Untitled 1083: Jellicent, Hariyama, Metagross, Tyranitar
+
+  Turn 1
+    p1 greedy: move 3 1, move 1 1
+    p2 mcts: move 2 1, move 4 2
+      search (1000 visits): scald,0;firepunch,1 15v 10 | scald,0;switch metagross 15v 10 | willowisp,0;switch tyranitar 15v 10 | scald,0;icepunch,1 14v 8
+      p1b Kyurem used Draco Meteor -> p2a: Jellicent
+              p1b Kyurem spa 2 fell
+      p1a Scrafty used Crunch -> p2a: Jellicent
+      p2a Jellicent fainted
+      p2b Hariyama used Fire Punch -> p1b: Kyurem
+              p2b Hariyama is now brn
+      after p1: Scrafty 327/327, Kyurem-Black 334/391
+      after p2: Jellicent 0/404, Hariyama 492/492
+
+  Turn 2
+      p2a <- Metagross comes in (364/364)
+      after p1: Scrafty 327/327, Kyurem-Black 334/391
+      after p2: Metagross 364/364, Hariyama 492/492
+
+  Turn 3
+    p1 greedy: move 3 1, move 1 1
+    p2 mcts: move 1 1, move 4 1
+      search (2000 visits): meteormash,0;firepunch,0 46v 30 | meteormash,0;icepunch,0 44v 28 | meteormash,0;switch tyranitar 42v 27 | meteormash,1;icepunch,0 38v 22
+      p1b Kyurem used Draco Meteor -> p2a: Metagross
+              p1b Kyurem spa 2 fell
+      p2a Metagross used Meteor Mash -> p1a: Scrafty
+              p2a Metagross used up its Steel Gem
+      p1a Scrafty used Crunch -> p2a: Metagross
+      p2b Hariyama used Fire Punch -> p1a: Scrafty
+      p1a Scrafty fainted
+      after p1: Scrafty 0/327, Kyurem-Black 334/391
+      after p2: Metagross 205/364, Hariyama 431/492
+
+  Turn 4
+      p1a <- Tornadus comes in (299/299)
+      after p1: Tornadus 299/299, Kyurem-Black 334/391
+      after p2: Metagross 205/364, Hariyama 431/492
+
+  Turn 5
+    p1 greedy: move 2 1, move 1 1
+    p2 mcts: move 1 1, switch 4   (slot1 Hariyama -> Tyranitar)
+      search (2000 visits): meteormash,0;switch tyranitar 61v 41 | zenheadbutt,0;switch tyranitar 54v 34 | protect,0;switch tyranitar 52v 33 | bulletpunch,0;switch tyranitar 51v 32
+      p2b <- Tyranitar comes in (404/404)
+      p1b Kyurem used Draco Meteor -> p2a: Metagross
+              p1b Kyurem spa 2 fell
+      p1a Tornadus used Superpower -> p2a: Metagross
+              p1a Tornadus atk 1 fell
+              p1a Tornadus def 1 fell
+      p2a Metagross used Meteor Mash -> p1a: Tornadus
+      p1a Tornadus fainted
+      after p1: Tornadus 0/299, Kyurem-Black 310/391
+      after p2: Metagross 49/364, Tyranitar 404/404
+
+  Turn 6
+      p1a <- Victini comes in (341/341)
+      after p1: Victini 341/341, Kyurem-Black 310/391
+      after p2: Metagross 49/364, Tyranitar 404/404
+
+  Turn 7
+    p1 greedy: move 1 1, move 1 1
+    p2 mcts: move 2 2, move 2
+      search (2000 visits): bulletpunch,1;rockslide,0 85v 71 | protect,0;crunch,0 72v 58 | bulletpunch,1;crunch,0 69v 55 | zenheadbutt,0;rockslide,0 65v 51
+      p2a Metagross used Bullet Punch -> p1b: Kyurem
+      p1b Kyurem used Draco Meteor -> p2a: Metagross
+      p1a Victini used V-create -> p2a: Metagross
+              p1a Victini used up its Fire Gem
+              p1a Victini spe 1 fell
+              p1a Victini def 1 fell
+              p1a Victini spd 1 fell
+      p2a Metagross fainted
+      p2b Tyranitar used Rock Slide -> p1b: Kyurem  [[spread] p1a,p1b]
+              p2b Tyranitar used up its Rock Gem
+      p1a Victini fainted
+      p1b Kyurem fainted
+      after p1: Victini 0/341, Kyurem-Black 0/391
+      after p2: Metagross 0/364, Tyranitar 404/404
+
+  RESULT: p2 wins

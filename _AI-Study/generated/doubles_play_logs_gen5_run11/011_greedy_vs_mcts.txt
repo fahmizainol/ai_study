@@ -1,0 +1,93 @@
+battle 11   p1=greedy vs p2=mcts   mcts 300 ms a decision
+  p1: Untitled 626: Liepard, Thundurus, Keldeo, Kyurem-Black
+  p2: Vs Z strats Hydreigon: Hydreigon, Togekiss, Mamoswine, Rotom-Wash
+
+  Turn 1
+    p1 greedy: move 2 1, move 1 1
+    p2 mcts: move 4 1, switch 3   (slot1 Togekiss -> Mamoswine)
+      search (3000 visits): focusblast,0;switch mamoswine 61v 44 | darkpulse,0;airslash,0 57v 40 | dracometeor,1;airslash,0 55v 38 | flamethrower,0;helpinghand,0 54v 37
+      p2b <- Mamoswine comes in (361/361)
+      p1a Liepard used Sucker Punch -> p2a: Hydreigon
+              p1a Liepard used up its Dark Gem
+      p2a Hydreigon used Focus Blast -> p1a: Liepard
+      p1a Liepard fainted
+      p1b Thundurus used Thunderbolt -> p2a: Hydreigon
+              p1b Thundurus used up its Electric Gem
+      after p1: Liepard 0/269, Thundurus 299/299
+      after p2: Hydreigon 115/325, Mamoswine 361/361
+
+  Turn 2
+      p1a <- Keldeo comes in (323/323)
+      after p1: Keldeo 323/323, Thundurus 299/299
+      after p2: Hydreigon 115/325, Mamoswine 361/361
+
+  Turn 3
+    p1 greedy: move 2 1, move 1 1
+    p2 mcts: move 4 1, move 4 2
+      search (4000 visits): focusblast,0;iceshard,1 260v 124 | focusblast,1;iciclecrash,1 223v 102 | focusblast,1;iceshard,1 223v 102 | focusblast,0;iciclecrash,1 213v 96
+      p2b Mamoswine used Ice Shard -> p1b: Thundurus
+              p1b Thundurus -- critical hit
+      p1b Thundurus fainted
+      p2a Hydreigon used Focus Blast -> p1a: Keldeo  [[miss]]
+              p2a Hydreigon -- MISSED
+      p1a Keldeo used Hydro Pump -> p2a: Hydreigon  [[miss]]
+              p1a Keldeo -- MISSED
+      after p1: Keldeo 323/323, Thundurus 0/299
+      after p2: Hydreigon 115/325, Mamoswine 361/361
+
+  Turn 4
+      p1b <- Kyurem-Black comes in (391/391)
+      after p1: Keldeo 323/323, Kyurem-Black 391/391
+      after p2: Hydreigon 115/325, Mamoswine 361/361
+
+  Turn 5
+    p1 greedy: move 2 1, move 2 1
+    p2 mcts: move 4 2, move 2
+      search (2000 visits): focusblast,1;protect,1 144v 76 | focusblast,1;earthquake,0 118v 58 | focusblast,1;iciclecrash,1 99v 46 | focusblast,1;iceshard,1 98v 45
+      p2b Mamoswine used Protect
+      p2a Hydreigon used Focus Blast -> p1b: Kyurem  [[miss]]
+              p2a Hydreigon -- MISSED
+      p1b Kyurem used Draco Meteor -> p2a: Hydreigon
+              p2a Hydreigon -- critical hit
+              p1b Kyurem spa 2 fell
+      p2a Hydreigon fainted
+      p1a Keldeo used Hydro Pump -> p2b: Mamoswine
+              p2b Mamoswine -- move: Protect
+      after p1: Keldeo 323/323, Kyurem-Black 391/391
+      after p2: Hydreigon 0/325, Mamoswine 361/361
+
+  Turn 6
+      p2a <- Togekiss comes in (374/374)
+      after p1: Keldeo 323/323, Kyurem-Black 391/391
+      after p2: Togekiss 374/374, Mamoswine 361/361
+
+  Turn 7
+    p1 greedy: move 2 1, move 2 1
+    p2 mcts: move 3 1, move 2
+      search (4000 visits): airslash,0;protect,1 227v 136 | followme,0;earthquake,0 167v 92 | airslash,0;earthquake,0 153v 82 | thunderwave,0;protect,1 131v 67
+      p2b Mamoswine used Protect
+      p1b Kyurem used Draco Meteor -> p2a: Togekiss
+              p1b Kyurem spa 2 fell
+      p1a Keldeo used Hydro Pump -> p2a: Togekiss
+      p2a Togekiss used Air Slash -> p1a: Keldeo
+      after p1: Keldeo 83/323, Kyurem-Black 391/391
+      after p2: Togekiss 154/374, Mamoswine 361/361
+
+  Turn 8
+    p1 greedy: move 2 1, move 2 1
+    p2 mcts: move 1, move 1
+      search (4000 visits): followme,0;earthquake,0 765v 560 | airslash,0;protect,1 199v 117 | thunderwave,0;protect,1 133v 70 | airslash,1;protect,1 107v 52
+      p2a Togekiss used Follow Me
+      p1b Kyurem used Draco Meteor -> p2a: Togekiss
+              p1b Kyurem spa 2 fell
+      p1a Keldeo used Hydro Pump -> p2a: Togekiss
+      p2a Togekiss fainted
+      p2b Mamoswine used Earthquake -> p1b: Kyurem  [[spread] p1a,p1b]
+              p2b Mamoswine used up its Ground Gem
+              p1b Kyurem -- critical hit
+      p1a Keldeo fainted
+      p1b Kyurem fainted
+      after p1: Keldeo 0/323, Kyurem-Black 0/391
+      after p2: Togekiss 0/374, Mamoswine 361/361
+
+  RESULT: p2 wins

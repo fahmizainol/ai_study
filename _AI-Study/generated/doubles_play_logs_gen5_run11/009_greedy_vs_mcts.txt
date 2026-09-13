@@ -1,0 +1,97 @@
+battle 9   p1=greedy vs p2=mcts   mcts 300 ms a decision
+  p1: Vs Z strats pqs: Kyurem-Black, Latios, Infernape, Darkrai
+  p2: Untitled 491: Gallade, Gastrodon, Rotom-Mow, Weavile
+
+  Turn 1
+    p1 greedy: move 3 1, move 2 1
+    p2 mcts: move 1 1, move 3
+      search (1000 visits): closecombat,0;icywind,0 19v 13 | icepunch,1;icywind,0 18v 11 | closecombat,0;scald,1 17v 10 | closecombat,0;recover,1 17v 10
+      p2a Gallade used Close Combat -> p1a: Kyurem
+              p2a Gallade def 1 fell
+              p2a Gallade spd 1 fell
+      p1a Kyurem fainted
+      p1b Latios used Draco Meteor -> p2a: Gallade
+              p1b Latios spa 2 fell
+      p2a Gallade fainted
+      p2b Gastrodon used Icy Wind -> p1b: Latios
+              p1b Latios spe 1 fell
+      after p1: Kyurem-Black 0/391, Latios 201/301
+      after p2: Gallade 0/277, Gastrodon 426/426
+
+  Turn 2
+      p1a <- Infernape comes in (293/293)
+      p2a <- Rotom-Mow comes in (241/241)
+      after p1: Infernape 293/293, Latios 201/301
+      after p2: Rotom-Mow 241/241, Gastrodon 426/426
+
+  Turn 3
+    p1 greedy: move 2 1, move 2 1
+    p2 mcts: move 3, move 4 1
+      search (3000 visits): protect,0;earthpower,0 94v 60 | thunderbolt,0;scald,0 82v 50 | thunderbolt,0;earthpower,0 80v 49 | thunderbolt,0;icywind,0 79v 48
+      p2a Rotom used Protect
+      p1a Infernape used Overheat -> p2a: Rotom
+              p2a Rotom -- move: Protect
+      p1b Latios used Draco Meteor -> p2a: Rotom
+              p2a Rotom -- move: Protect
+      p2b Gastrodon used Earth Power -> p1a: Infernape
+      after p1: Infernape 39/293, Latios 201/301
+      after p2: Rotom-Mow 241/241, Gastrodon 426/426
+
+  Turn 4
+    p1 greedy: move 2 1, move 2 1
+    p2 mcts: move 3, move 4 1
+      search (4000 visits): protect,0;earthpower,0 127v 66 | protect,0;icywind,0 121v 62 | thunderbolt,1;icywind,0 119v 60 | thunderwave,1;icywind,0 115v 58
+      p2a Rotom used Protect  [[still]]
+              p2a Rotom -- IT FAILED
+      p1a Infernape used Overheat -> p2a: Rotom
+              p1a Infernape spa 2 fell
+      p2a Rotom fainted
+      p1b Latios used Draco Meteor -> p2b: Gastrodon
+              p1b Latios spa 2 fell
+      p2b Gastrodon used Earth Power -> p1a: Infernape
+      p1a Infernape fainted
+      after p1: Infernape 0/293, Latios 171/301
+      after p2: Rotom-Mow 0/241, Gastrodon 247/426
+
+  Turn 5
+      p1a <- Darkrai comes in (281/281)
+      p2a <- Weavile comes in (340/340)
+      after p1: Darkrai 281/281, Latios 171/301
+      after p2: Weavile 340/340, Gastrodon 247/426
+
+  Turn 6
+    p1 greedy: move 3 2, move 2 2
+    p2 mcts: move 2 1, move 1 1
+      search (3000 visits): icepunch,0;scald,0 125v 84 | icepunch,0;recover,1 110v 71 | fakeout,0;recover,1 101v 64 | icepunch,0;earthpower,0 97v 60
+      p1a Darkrai used Psychic -> p2b: Gastrodon
+              p2b Gastrodon used up its Sitrus Berry
+      p2a Weavile used Ice Punch -> p1a: Darkrai
+              p1a Darkrai is now frz
+      p1b Latios used Draco Meteor -> p2b: Gastrodon
+              p2b Gastrodon -- critical hit
+              p1b Latios spa 2 fell
+      p2b Gastrodon fainted
+      after p1: Darkrai 101/281, Latios 141/301
+      after p2: Weavile 306/340, Gastrodon 0/426
+
+  Turn 7
+    p1 greedy: move 3 1, move 2 1
+    p2 mcts: move 2 1, pass
+      search (23000 visits): icepunch,0;No Move 20359v 16046 | iceshard,1;No Move 1158v 796 | nightslash,1;No Move 490v 302 | icepunch,1;No Move 420v 252
+              p1a Darkrai COULD NOT MOVE (frz)
+      p2a Weavile used Ice Punch -> p1a: Darkrai
+      p1a Darkrai fainted
+      p1b Latios used Draco Meteor -> p2a: Weavile
+      after p1: Darkrai 0/281, Latios 111/301
+      after p2: Weavile 186/340, Gastrodon 0/426
+
+  Turn 8
+    p1 greedy: pass, move 2 1
+    p2 mcts: move 3 2, pass
+      search (15000 visits): nightslash,1;No Move 3928v 1616 | icepunch,1;No Move 3907v 1607 | iceshard,1;No Move 3776v 1548 | fakeout,1;No Move 3389v 1376
+      p2a Weavile used Night Slash -> p1b: Latios
+      p1b Latios fainted
+      after p1: Darkrai 0/281, Latios 0/301
+      after p2: Weavile 152/340, Gastrodon 0/426
+
+  RESULT: p2 wins

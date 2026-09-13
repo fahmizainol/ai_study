@@ -1,0 +1,156 @@
+battle 26   p1=greedy vs p2=mcts   mcts 300 ms a decision
+  p1: Untitled 502: Terrakion, Amoonguss, Darkrai, Latios
+  p2: Untitled 492: Conkeldurr, Cresselia, Weavile, Cradily
+
+  Turn 1
+    p1 greedy: move 1 1, move 4 1
+    p2 mcts: move 4 1, move 2 -1
+      search (2000 visits): drainpunch,0;helpinghand,0 36v 5 | drainpunch,0;icebeam,1 36v 6 | drainpunch,0;protect,1 35v 5 | drainpunch,0;trickroom,1 33v 4
+      p2b Cresselia used Helping Hand -> p2a: Conkeldurr
+      p1a Terrakion used Close Combat -> p2a: Conkeldurr
+              p1a Terrakion def 1 fell
+              p1a Terrakion spd 1 fell
+      p1b Amoonguss used Sludge Bomb -> p2a: Conkeldurr
+              p2a Conkeldurr -- critical hit
+      p2a Conkeldurr fainted
+      after p1: Terrakion 323/323, Amoonguss 431/431
+      after p2: Conkeldurr 0/414, Cresselia 444/444
+
+  Turn 2
+      p2a <- Weavile comes in (340/340)
+      after p1: Terrakion 323/323, Amoonguss 431/431
+      after p2: Weavile 340/340, Cresselia 444/444
+
+  Turn 3
+    p1 greedy: move 1 1, move 4 1
+    p2 mcts: move 2 2, move 2 -1
+      search (2000 visits): icepunch,1;helpinghand,0 51v 10 | icepunch,1;icebeam,1 48v 8 | icepunch,1;icebeam,0 46v 8 | icepunch,0;helpinghand,0 45v 7
+      p2b Cresselia used Helping Hand -> p2a: Weavile
+      p2a Weavile used Ice Punch -> p1b: Amoonguss
+      p1b Amoonguss fainted
+      p1a Terrakion used Close Combat -> p2a: Weavile
+              p1a Terrakion def 1 fell
+              p1a Terrakion spd 1 fell
+      p2a Weavile fainted
+      after p1: Terrakion 323/323, Amoonguss 0/431
+      after p2: Weavile 0/340, Cresselia 444/444
+
+  Turn 4
+      p2a <- Cradily comes in (375/375)
+      p1b <- Darkrai comes in (281/281)
+      after p1: Terrakion 323/323, Darkrai 281/281
+      after p2: Cradily 375/375, Cresselia 444/444
+
+  Turn 5
+    p1 greedy: move 1 1, move 4 1
+    p2 mcts: move 4, move 4 1
+      search (3000 visits): earthquake,0;icebeam,0 127v 51 | protect,0;trickroom,0 120v 47 | earthquake,0;trickroom,0 118v 46 | rockslide,0;icebeam,0 116v 45
+      p1b Darkrai used Ice Beam -> p2a: Cradily
+      p1a Terrakion used Close Combat -> p2a: Cradily
+              p1a Terrakion def 1 fell
+              p1a Terrakion spd 1 fell
+      p2a Cradily fainted
+      p2b Cresselia used Ice Beam -> p1a: Terrakion
+      after p1: Terrakion 164/323, Darkrai 281/281
+      after p2: Cradily 0/375, Cresselia 444/444
+
+  Turn 6
+    p1 greedy: move 1 2, move 4 2
+    p2 mcts: pass, move 3
+      search (7000 visits): No Move;protect,1 5326v 2393 | No Move;icebeam,0 509v 163 | No Move;icebeam,1 467v 146 | No Move;trickroom,0 353v 100
+      p2b Cresselia used Protect
+      p1b Darkrai used Ice Beam -> p2b: Cresselia
+              p2b Cresselia -- move: Protect
+      p1a Terrakion used Close Combat -> p2b: Cresselia
+              p2b Cresselia -- move: Protect
+      after p1: Terrakion 164/323, Darkrai 281/281
+      after p2: Cradily 0/375, Cresselia 444/444
+
+  Turn 7
+    p1 greedy: move 1 2, move 4 2
+    p2 mcts: pass, move 3
+      search (8000 visits): No Move;protect,1 6355v 2858 | No Move;icebeam,0 588v 193 | No Move;icebeam,1 429v 128 | No Move;trickroom,1 321v 85
+      p2b Cresselia used Protect
+      p1b Darkrai used Ice Beam -> p2b: Cresselia
+              p2b Cresselia -- move: Protect
+      p1a Terrakion used Close Combat -> p2b: Cresselia
+              p2b Cresselia -- move: Protect
+      after p1: Terrakion 164/323, Darkrai 281/281
+      after p2: Cradily 0/375, Cresselia 444/444
+
+  Turn 8
+    p1 greedy: move 1 2, move 4 2
+    p2 mcts: pass, move 3
+      search (6000 visits): No Move;protect,1 4419v 1981 | No Move;icebeam,0 558v 186 | No Move;icebeam,1 386v 115 | No Move;trickroom,1 336v 95
+      p2b Cresselia used Protect  [[still]]
+              p2b Cresselia -- IT FAILED
+      p1b Darkrai used Ice Beam -> p2b: Cresselia
+      p1a Terrakion used Close Combat -> p2b: Cresselia
+              p1a Terrakion def 1 fell
+              p1a Terrakion spd 1 fell
+      after p1: Terrakion 164/323, Darkrai 281/281
+      after p2: Cradily 0/375, Cresselia 289/444
+
+  Turn 9
+    p1 greedy: move 1 2, move 4 2
+    p2 mcts: pass, move 3
+      search (9000 visits): No Move;protect,1 7861v 3231 | No Move;icebeam,0 312v 68 | No Move;icebeam,1 283v 58 | No Move;trickroom,1 276v 56
+      p2b Cresselia used Protect
+      p1b Darkrai used Ice Beam -> p2b: Cresselia
+              p2b Cresselia -- move: Protect
+      p1a Terrakion used Close Combat -> p2b: Cresselia
+              p2b Cresselia -- move: Protect
+      after p1: Terrakion 164/323, Darkrai 281/281
+      after p2: Cradily 0/375, Cresselia 289/444
+
+  Turn 10
+    p1 greedy: move 2 2, move 4 2
+    p2 mcts: pass, move 3
+      search (9000 visits): No Move;protect,1 7854v 3113 | No Move;icebeam,0 365v 81 | No Move;icebeam,1 290v 56 | No Move;trickroom,0 249v 43
+      p2b Cresselia used Protect  [[still]]
+              p2b Cresselia -- IT FAILED
+      p1b Darkrai used Ice Beam -> p2b: Cresselia
+              p2b Cresselia -- critical hit
+      p1a Terrakion used Stone Edge -> p2b: Cresselia  [[miss]]
+              p1a Terrakion -- MISSED
+      after p1: Terrakion 164/323, Darkrai 281/281
+      after p2: Cradily 0/375, Cresselia 144/444
+
+  Turn 11
+    p1 greedy: move 2 2, move 4 2
+    p2 mcts: pass, move 3
+      search (7000 visits): No Move;protect,1 6446v 2585 | No Move;icebeam,0 155v 18 | No Move;trickroom,0 137v 13 | No Move;trickroom,1 132v 11
+      p2b Cresselia used Protect
+      p1b Darkrai used Ice Beam -> p2b: Cresselia
+              p2b Cresselia -- move: Protect
+      p1a Terrakion used Stone Edge -> p2b: Cresselia
+              p2b Cresselia -- move: Protect
+      after p1: Terrakion 164/323, Darkrai 281/281
+      after p2: Cradily 0/375, Cresselia 144/444
+
+  Turn 12
+    p1 greedy: move 2 2, move 4 2
+    p2 mcts: pass, move 3
+      search (10000 visits): No Move;protect,1 9331v 3672 | No Move;icebeam,0 209v 29 | No Move;icebeam,1 156v 15 | No Move;trickroom,0 155v 14
+      p2b Cresselia used Protect
+      p1b Darkrai used Ice Beam -> p2b: Cresselia
+              p2b Cresselia -- move: Protect
+      p1a Terrakion used Stone Edge -> p2b: Cresselia
+              p2b Cresselia -- move: Protect
+      after p1: Terrakion 164/323, Darkrai 281/281
+      after p2: Cradily 0/375, Cresselia 144/444
+
+  Turn 13
+    p1 greedy: move 2 2, move 4 2
+    p2 mcts: pass, move 3
+      search (10000 visits): No Move;protect,1 9332v 3661 | No Move;icebeam,0 187v 23 | No Move;trickroom,0 167v 17 | No Move;trickroom,1 159v 15
+      p2b Cresselia used Protect  [[still]]
+              p2b Cresselia -- IT FAILED
+      p1b Darkrai used Ice Beam -> p2b: Cresselia
+      p1a Terrakion used Stone Edge -> p2b: Cresselia
+              p1a Terrakion used up its Rock Gem
+      p2b Cresselia fainted
+      after p1: Terrakion 164/323, Darkrai 281/281
+      after p2: Cradily 0/375, Cresselia 0/444
+
+  RESULT: p1 wins

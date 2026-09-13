@@ -1,0 +1,204 @@
+battle 24   p1=greedy vs p2=mcts   mcts 300 ms a decision
+  p1: 2v2PL 2025/Semis g3: Metagross, Scrafty, Rotom-Heat, Genesect
+  p2: Itchyfoot anti vrji: Jellicent, Scrafty, Victini, Kyurem-Black
+
+  Turn 1
+    p1 greedy: move 1 1, move 3 1
+    p2 mcts: switch 4, switch 3   (slot0 Jellicent -> Kyurem-Black; slot1 Scrafty -> Victini)
+      search (2000 visits): switch kyuremblack;switch victini 40v 24 | switch victini;drainpunch,1 39v 23 | shadowball,0;switch victini 37v 21 | shadowball,1;switch victini 37v 22
+      p2b <- Victini comes in (341/341)
+      p2a <- Kyurem-Black comes in (391/391)
+      p1a Metagross used Meteor Mash -> p2a: Kyurem
+              p1a Metagross used up its Steel Gem
+              p2a Kyurem -- critical hit
+      p2a Kyurem fainted
+      p1b Scrafty used Crunch -> p2b: Victini
+              p1b Scrafty used up its Dark Gem
+      after p1: Metagross 364/364, Scrafty 332/332
+      after p2: Kyurem-Black 0/391, Victini 141/341
+
+  Turn 2
+      p2a <- Scrafty comes in (334/334)
+              p1a Metagross -- IT FAILED
+              p1b Scrafty atk 1 fell
+      after p1: Metagross 364/364, Scrafty 332/332
+      after p2: Scrafty 334/334, Victini 141/341
+
+  Turn 3
+    p1 greedy: move 1 2, move 3 2
+    p2 mcts: move 3 2, move 1 1
+      search (2000 visits): drainpunch,1;blueflare,0 59v 44 | fakeout,0;blueflare,0 51v 36 | fakeout,1;blueflare,0 50v 36 | switch jellicent;blueflare,0 47v 33
+      p2b Victini used Blue Flare -> p1a: Metagross
+      p1a Metagross fainted
+      p1b Scrafty used Crunch -> p2b: Victini
+              p2b Victini def 1 fell
+      p2a Scrafty used Drain Punch -> p1b: Scrafty
+      after p1: Metagross 0/364, Scrafty 188/332
+      after p2: Scrafty 334/334, Victini 5/341
+
+  Turn 4
+      p1a <- Rotom-Heat comes in (268/268)
+      after p1: Rotom-Heat 268/268, Scrafty 188/332
+      after p2: Scrafty 334/334, Victini 5/341
+
+  Turn 5
+    p1 greedy: move 1 2, move 3 2
+    p2 mcts: move 2 1, move 1 2
+      search (2000 visits): crunch,0;blueflare,1 46v 29 | drainpunch,0;blueflare,1 46v 29 | drainpunch,1;psychic,0 38v 22 | crunch,0;psychic,0 37v 21
+      p2b Victini used Blue Flare -> p1b: Scrafty
+      p1b Scrafty fainted
+      p2b Victini fainted
+      p1a Rotom used Overheat -> p2a: Scrafty
+              p1a Rotom spa 2 fell
+      p2a Scrafty used Crunch -> p1a: Rotom
+              p2a Scrafty used up its Dark Gem
+              p1a Rotom def 1 fell
+      after p1: Rotom-Heat 129/268, Scrafty 0/332
+      after p2: Scrafty 181/334, Victini 0/341
+
+  Turn 6
+      p2b <- Jellicent comes in (404/404)
+      p1b <- Genesect comes in (283/283)
+              p1b Genesect atk 1 rose
+      after p1: Rotom-Heat 129/268, Genesect 283/283
+      after p2: Scrafty 181/334, Jellicent 404/404
+
+  Turn 7
+    p1 greedy: move 1 1, move 3 1
+    p2 mcts: move 3 2, move 2
+      search (2000 visits): drainpunch,1;protect,1 59v 27 | drainpunch,1;shadowball,0 59v 27 | drainpunch,1;shadowball,1 58v 27 | drainpunch,1;recover,1 53v 23
+      p2b Jellicent used Protect
+      p1b Genesect used Ice Beam -> p2a: Scrafty
+      p1a Rotom used Overheat -> p2a: Scrafty
+              p1a Rotom spa 2 fell
+      p2a Scrafty used Drain Punch -> p1b: Genesect
+      after p1: Rotom-Heat 129/268, Genesect 181/283
+      after p2: Scrafty 83/334, Jellicent 404/404
+
+  Turn 8
+    p1 greedy: move 1 1, move 3 1
+    p2 mcts: move 3 2, move 3 2
+      search (2000 visits): drainpunch,1;shadowball,1 63v 30 | drainpunch,1;trickroom,1 58v 27 | drainpunch,1;protect,1 58v 27 | drainpunch,1;recover,1 58v 26
+      p1b Genesect used Ice Beam -> p2a: Scrafty
+      p1a Rotom used Overheat -> p2a: Scrafty
+              p1a Rotom spa 2 fell
+      p2a Scrafty fainted
+      p2b Jellicent used Shadow Ball -> p1b: Genesect
+      after p1: Rotom-Heat 129/268, Genesect 136/283
+      after p2: Scrafty 0/334, Jellicent 404/404
+
+  Turn 9
+    p1 greedy: move 1 2, move 3 2
+    p2 mcts: pass, move 2
+      search (8000 visits): No Move;protect,1 6490v 3728 | No Move;shadowball,1 374v 152 | No Move;shadowball,0 354v 142 | No Move;recover,1 320v 125
+      p2b Jellicent used Protect
+      p1b Genesect used Ice Beam -> p2b: Jellicent
+              p2b Jellicent -- move: Protect
+      p1a Rotom used Overheat -> p2b: Jellicent
+              p2b Jellicent -- move: Protect
+      after p1: Rotom-Heat 129/268, Genesect 136/283
+      after p2: Scrafty 0/334, Jellicent 404/404
+
+  Turn 10
+    p1 greedy: move 1 2, move 3 2
+    p2 mcts: pass, move 2
+      search (7000 visits): No Move;protect,1 5493v 3147 | No Move;shadowball,1 395v 165 | No Move;shadowball,0 327v 130 | No Move;recover,1 323v 128
+      p2b Jellicent used Protect
+      p1b Genesect used Ice Beam -> p2b: Jellicent
+              p2b Jellicent -- move: Protect
+      p1a Rotom used Overheat -> p2b: Jellicent
+              p2b Jellicent -- move: Protect
+      after p1: Rotom-Heat 129/268, Genesect 136/283
+      after p2: Scrafty 0/334, Jellicent 404/404
+
+  Turn 11
+    p1 greedy: move 1 2, move 3 2
+    p2 mcts: pass, move 2
+      search (9000 visits): No Move;protect,1 7406v 4264 | No Move;shadowball,1 446v 189 | No Move;shadowball,0 340v 133 | No Move;recover,1 335v 131
+      p2b Jellicent used Protect  [[still]]
+              p2b Jellicent -- IT FAILED
+      p1b Genesect used Ice Beam -> p2b: Jellicent
+      p1a Rotom used Overheat -> p2b: Jellicent
+      after p1: Rotom-Heat 129/268, Genesect 136/283
+      after p2: Scrafty 0/334, Jellicent 347/404
+
+  Turn 12
+    p1 greedy: move 1 2, move 3 2
+    p2 mcts: pass, move 2
+      search (9000 visits): No Move;protect,1 7384v 4348 | No Move;recover,1 438v 190 | No Move;shadowball,1 391v 165 | No Move;shadowball,0 334v 135
+      p2b Jellicent used Protect
+      p1b Genesect used Ice Beam -> p2b: Jellicent
+              p2b Jellicent -- move: Protect
+      p1a Rotom used Overheat -> p2b: Jellicent
+              p2b Jellicent -- move: Protect
+      after p1: Rotom-Heat 129/268, Genesect 136/283
+      after p2: Scrafty 0/334, Jellicent 347/404
+
+  Turn 13
+    p1 greedy: move 1 2, move 3 2
+    p2 mcts: pass, move 2
+      search (8000 visits): No Move;protect,1 6549v 3868 | No Move;recover,1 400v 172 | No Move;shadowball,1 323v 131 | No Move;shadowball,0 300v 119
+      p2b Jellicent used Protect
+      p1b Genesect used Ice Beam -> p2b: Jellicent
+              p2b Jellicent -- move: Protect
+      p1a Rotom used Overheat -> p2b: Jellicent
+              p2b Jellicent -- move: Protect
+      after p1: Rotom-Heat 129/268, Genesect 136/283
+      after p2: Scrafty 0/334, Jellicent 347/404
+
+  Turn 14
+    p1 greedy: move 2 2, move 3 2
+    p2 mcts: pass, move 2
+      search (9000 visits): No Move;protect,1 7923v 4779 | No Move;recover,1 303v 123 | No Move;shadowball,1 238v 89 | No Move;shadowball,0 208v 74
+      p2b Jellicent used Protect  [[still]]
+              p2b Jellicent -- IT FAILED
+      p1b Genesect used Ice Beam -> p2b: Jellicent
+              p2b Jellicent is now frz
+      p1a Rotom used Thunderbolt -> p2b: Jellicent
+              p1a Rotom used up its Electric Gem
+      after p1: Rotom-Heat 129/268, Genesect 136/283
+      after p2: Scrafty 0/334, Jellicent 225/404
+
+  Turn 15
+    p1 greedy: move 2 2, move 3 2
+    p2 mcts: pass, move 2
+      search (9000 visits): No Move;protect,1 7954v 4918 | No Move;recover,1 438v 202 | No Move;shadowball,1 187v 66 | No Move;shadowball,0 146v 45
+              p2b Jellicent COULD NOT MOVE (frz)
+      p1b Genesect used Ice Beam -> p2b: Jellicent
+              p2b Jellicent used up its Sitrus Berry
+      p1a Rotom used Thunderbolt -> p2b: Jellicent
+      after p1: Rotom-Heat 129/268, Genesect 136/283
+      after p2: Scrafty 0/334, Jellicent 231/404
+
+  Turn 16
+    p1 greedy: move 2 2, move 3 2
+    p2 mcts: pass, move 2
+      search (9000 visits): No Move;protect,1 7818v 4810 | No Move;recover,1 448v 207 | No Move;shadowball,1 217v 81 | No Move;shadowball,0 205v 75
+              p2b Jellicent COULD NOT MOVE (frz)
+      p1b Genesect used Ice Beam -> p2b: Jellicent
+      p1a Rotom used Thunderbolt -> p2b: Jellicent
+      after p1: Rotom-Heat 129/268, Genesect 136/283
+      after p2: Scrafty 0/334, Jellicent 143/404
+
+  Turn 17
+    p1 greedy: move 2 2, move 3 2
+    p2 mcts: pass, move 2
+      search (6000 visits): No Move;protect,1 5193v 3198 | No Move;recover,1 435v 206 | No Move;trickroom,0 98v 24 | No Move;trickroom,1 92v 22
+              p2b Jellicent COULD NOT MOVE (frz)
+      p1b Genesect used Ice Beam -> p2b: Jellicent
+      p1a Rotom used Thunderbolt -> p2b: Jellicent
+      after p1: Rotom-Heat 129/268, Genesect 136/283
+      after p2: Scrafty 0/334, Jellicent 49/404
+
+  Turn 18
+    p1 greedy: move 2 2, move 3 2
+    p2 mcts: pass, move 2
+      search (9000 visits): No Move;protect,1 8716v 5231 | No Move;recover,1 70v 9 | No Move;trickroom,1 60v 6 | No Move;trickroom,0 58v 5
+              p2b Jellicent COULD NOT MOVE (frz)
+      p1b Genesect used Ice Beam -> p2b: Jellicent
+      p1a Rotom used Thunderbolt -> p2b: Jellicent
+      p2b Jellicent fainted
+      after p1: Rotom-Heat 129/268, Genesect 136/283
+      after p2: Scrafty 0/334, Jellicent 0/404
+
+  RESULT: p1 wins

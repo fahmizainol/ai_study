@@ -1,0 +1,118 @@
+battle 8   p1=greedy vs p2=mcts   mcts 300 ms a decision
+  p1: Cloyster (again) (still not good): Amoonguss, Cloyster, Infernape, Metagross
+  p2: Untitled 492: Conkeldurr, Cresselia, Weavile, Cradily
+
+  Turn 1
+    p1 greedy: move 3 1, move 4 1
+    p2 mcts: move 4 2, move 2 -1
+      search (1000 visits): drainpunch,1;helpinghand,0 25v 18 | drainpunch,1;icebeam,1 23v 16 | drainpunch,1;icebeam,0 21v 14 | drainpunch,1;protect,1 20v 13
+      p2b Cresselia used Helping Hand -> p2a: Conkeldurr
+      p1b Cloyster used Hydro Pump -> p2a: Conkeldurr
+      p1a Amoonguss used Sludge Bomb -> p2a: Conkeldurr
+              p2a Conkeldurr is now psn
+      p2a Conkeldurr used Drain Punch -> p1b: Cloyster
+      p1b Cloyster fainted
+      after p1: Amoonguss 431/431, Cloyster 0/241
+      after p2: Conkeldurr 132/414, Cresselia 444/444
+
+  Turn 2
+      p1b <- Infernape comes in (293/293)
+      after p1: Amoonguss 431/431, Infernape 293/293
+      after p2: Conkeldurr 132/414, Cresselia 444/444
+
+  Turn 3
+    p1 greedy: move 3 1, move 2 1
+    p2 mcts: move 4 2, move 4 1
+      search (2000 visits): drainpunch,1;icebeam,0 52v 34 | drainpunch,1;trickroom,1 46v 29 | drainpunch,1;icebeam,1 43v 26 | machpunch,1;helpinghand,0 41v 24
+      p1b Infernape used Flare Blitz -> p2a: Conkeldurr
+      p2a Conkeldurr fainted
+      p2b Cresselia used Ice Beam -> p1a: Amoonguss
+              p1a Amoonguss -- critical hit
+      p1a Amoonguss used Sludge Bomb -> p2b: Cresselia
+      after p1: Amoonguss 231/431, Infernape 220/293
+      after p2: Conkeldurr 0/414, Cresselia 383/444
+
+  Turn 4
+      p2a <- Weavile comes in (340/340)
+      after p1: Amoonguss 231/431, Infernape 220/293
+      after p2: Weavile 340/340, Cresselia 383/444
+
+  Turn 5
+    p1 greedy: move 3 2, move 2 2
+    p2 mcts: move 1 2, move 4 2
+      search (2000 visits): fakeout,1;icebeam,1 49v 25 | icepunch,0;protect,1 48v 24 | nightslash,0;icebeam,0 48v 24 | icepunch,0;helpinghand,0 47v 24
+      p2a Weavile used Fake Out -> p1b: Infernape
+              p1b Infernape COULD NOT MOVE (flinch)
+      p2b Cresselia used Ice Beam -> p1b: Infernape
+      p1a Amoonguss used Sludge Bomb -> p2b: Cresselia
+      after p1: Amoonguss 231/431, Infernape 114/293
+      after p2: Weavile 306/340, Cresselia 326/444
+
+  Turn 6
+    p1 greedy: move 3 2, move 2 2
+    p2 mcts: move 2 1, move 4 2
+      search (4000 visits): icepunch,0;icebeam,1 112v 55 | nightslash,1;helpinghand,0 108v 51 | icepunch,0;trickroom,0 99v 46 | nightslash,1;icebeam,0 97v 44
+      p2a Weavile used Ice Punch -> p1a: Amoonguss
+              p2a Weavile is now par
+      p1a Amoonguss fainted
+      p1b Infernape used Flare Blitz -> p2b: Cresselia
+      p2b Cresselia used Ice Beam -> p1b: Infernape
+      p1b Infernape fainted
+      after p1: Amoonguss 0/431, Infernape 0/293
+      after p2: Weavile 272/340, Cresselia 119/444
+
+  Turn 7
+      p1a <- Metagross comes in (364/364)
+      after p1: Metagross 364/364, Infernape 0/293
+      after p2: Weavile 272/340, Cresselia 119/444
+
+  Turn 8
+    p1 greedy: move 1 2, pass
+    p2 mcts: move 4, move 3
+      search (4000 visits): protect,0;protect,1 258v 87 | protect,0;icebeam,0 240v 78 | protect,0;trickroom,0 234v 76 | protect,0;helpinghand,0 201v 61
+      p2b Cresselia used Protect
+      p2a Weavile used Protect
+      p1a Metagross used Meteor Mash -> p2b: Cresselia
+              p2b Cresselia -- move: Protect
+      after p1: Metagross 364/364, Infernape 0/293
+      after p2: Weavile 272/340, Cresselia 119/444
+
+  Turn 9
+    p1 greedy: move 1 2, pass
+    p2 mcts: move 4, move 4 1
+      search (5000 visits): protect,0;icebeam,0 317v 103 | protect,0;protect,1 308v 99 | switch cradily;icebeam,0 262v 79 | protect,0;helpinghand,0 259v 78
+              p2a Weavile COULD NOT MOVE (par)
+      p1a Metagross used Meteor Mash -> p2b: Cresselia
+              p1a Metagross used up its Steel Gem
+      p2b Cresselia fainted
+      after p1: Metagross 364/364, Infernape 0/293
+      after p2: Weavile 272/340, Cresselia 0/444
+
+  Turn 10
+      p2b <- Cradily comes in (375/375)
+      after p1: Metagross 364/364, Infernape 0/293
+      after p2: Weavile 272/340, Cradily 375/375
+
+  Turn 11
+    p1 greedy: move 1 1, pass
+    p2 mcts: move 3 1, move 3
+      search (4000 visits): nightslash,0;protect,1 525v 149 | icepunch,0;protect,1 423v 112 | protect,0;protect,1 383v 97 | nightslash,0;earthquake,0 299v 68
+      p2b Cradily used Protect
+      p1a Metagross used Meteor Mash -> p2a: Weavile
+              p2a Weavile -- critical hit
+      p2a Weavile fainted
+      after p1: Metagross 364/364, Infernape 0/293
+      after p2: Weavile 0/340, Cradily 375/375
+
+  Turn 12
+    p1 greedy: move 1 2, pass
+    p2 mcts: pass, move 3
+      search (29000 visits): No Move;protect,1 28893v 26936 | No Move;earthquake,0 40v 8 | No Move;seedbomb,0 36v 6 | No Move;rockslide,0 31v 4
+      p2b Cradily used Protect  [[still]]
+              p2b Cradily -- IT FAILED
+      p1a Metagross used Meteor Mash -> p2b: Cradily
+      p2b Cradily fainted
+      after p1: Metagross 364/364, Infernape 0/293
+      after p2: Weavile 0/340, Cradily 0/375
+
+  RESULT: p1 wins

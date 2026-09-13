@@ -1,0 +1,195 @@
+battle 17   p1=greedy vs p2=mcts   mcts 300 ms a decision
+  p1: blastoise meta mence scraft: Metagross, Scrafty, Blastoise, Salamence
+  p2: Untitled 492: Conkeldurr, Cresselia, Weavile, Cradily
+
+  Turn 1
+    p1 greedy: move 2 1, move 3 1
+    p2 mcts: move 4 2, switch 3   (slot1 Cresselia -> Weavile)
+      search (1000 visits): drainpunch,1;switch weavile 21v 14 | drainpunch,1;switch cradily 21v 14 | drainpunch,0;helpinghand,0 20v 13 | drainpunch,1;helpinghand,0 20v 13
+      p2b <- Weavile comes in (340/340)
+      p1a Metagross used Meteor Mash -> p2a: Conkeldurr
+              p1a Metagross used up its Steel Gem
+              p1a Metagross atk 1 rose
+      p1b Scrafty used Crunch -> p2a: Conkeldurr
+              p1b Scrafty used up its Dark Gem
+      p2a Conkeldurr used Drain Punch -> p1b: Scrafty
+              p2a Conkeldurr is now brn
+      after p1: Metagross 364/364, Scrafty 170/332
+      after p2: Conkeldurr 82/414, Weavile 340/340
+
+  Turn 2
+    p1 greedy: move 2 1, move 3 1
+    p2 mcts: switch 3, move 4   (slot0 Conkeldurr -> Cresselia)
+      search (4000 visits): switch cresselia;protect,1 108v 54 | switch cresselia;icepunch,1 93v 44 | drainpunch,1;protect,1 89v 41 | switch cradily;protect,1 89v 41
+      p2a <- Cresselia comes in (444/444)
+      p2b Weavile used Protect
+      p1a Metagross used Meteor Mash -> p2a: Cresselia
+      p1b Scrafty used Crunch -> p2a: Cresselia
+      after p1: Metagross 364/364, Scrafty 170/332
+      after p2: Cresselia 6/444, Weavile 340/340
+
+  Turn 3
+    p1 greedy: move 2 1, move 3 1
+    p2 mcts: move 3, move 4
+      search (4000 visits): protect,0;protect,1 103v 48 | icebeam,1;protect,1 100v 46 | icebeam,0;icepunch,1 93v 41 | icebeam,0;protect,1 88v 38
+      p2b Weavile used Protect  [[still]]
+              p2b Weavile -- IT FAILED
+      p2a Cresselia used Protect
+      p1a Metagross used Meteor Mash -> p2a: Cresselia
+              p2a Cresselia -- move: Protect
+      p1b Scrafty used Crunch -> p2a: Cresselia
+              p2a Cresselia -- move: Protect
+      after p1: Metagross 364/364, Scrafty 170/332
+      after p2: Cresselia 6/444, Weavile 340/340
+
+  Turn 4
+    p1 greedy: move 2 1, move 3 1
+    p2 mcts: move 3, move 4
+      search (4000 visits): protect,0;protect,1 106v 48 | icebeam,0;protect,1 100v 44 | icebeam,1;protect,1 92v 39 | trickroom,0;protect,1 85v 35
+      p2b Weavile used Protect
+      p2a Cresselia used Protect  [[still]]
+              p2a Cresselia -- IT FAILED
+      p1a Metagross used Meteor Mash -> p2a: Cresselia
+              p1a Metagross atk 1 rose
+      p2a Cresselia fainted
+      p1b Scrafty used Crunch -> p2b: Weavile
+              p2b Weavile -- move: Protect
+      after p1: Metagross 364/364, Scrafty 170/332
+      after p2: Cresselia 0/444, Weavile 340/340
+
+  Turn 5
+      p2a <- Conkeldurr comes in (82/414)
+      after p1: Metagross 364/364, Scrafty 170/332
+      after p2: Conkeldurr 82/414, Weavile 340/340
+
+  Turn 6
+    p1 greedy: move 2 1, move 3 1
+    p2 mcts: move 4 2, move 1 1
+      search (5000 visits): drainpunch,1;fakeout,0 179v 82 | machpunch,1;fakeout,0 152v 65 | machpunch,1;protect,1 133v 54 | drainpunch,1;protect,1 126v 50
+      p2b Weavile used Fake Out  [[still]]
+              p2b Weavile -- IT FAILED
+      p1a Metagross used Meteor Mash -> p2a: Conkeldurr
+      p2a Conkeldurr fainted
+      p1b Scrafty used Crunch -> p2b: Weavile
+      after p1: Metagross 364/364, Scrafty 170/332
+      after p2: Conkeldurr 0/414, Weavile 262/340
+
+  Turn 7
+      p2a <- Cradily comes in (375/375)
+      after p1: Metagross 364/364, Scrafty 170/332
+      after p2: Cradily 375/375, Weavile 262/340
+
+  Turn 8
+    p1 greedy: move 2 2, move 3 2
+    p2 mcts: move 3, move 4
+      search (4000 visits): protect,0;protect,1 202v 89 | protect,0;icepunch,1 165v 67 | rockslide,0;fakeout,0 156v 62 | seedbomb,1;fakeout,0 150v 59
+      p2b Weavile used Protect
+      p2a Cradily used Protect
+      p1a Metagross used Meteor Mash -> p2b: Weavile
+              p2b Weavile -- move: Protect
+      p1b Scrafty used Crunch -> p2b: Weavile
+              p2b Weavile -- move: Protect
+      after p1: Metagross 364/364, Scrafty 170/332
+      after p2: Cradily 375/375, Weavile 262/340
+
+  Turn 9
+    p1 greedy: move 2 2, move 3 2
+    p2 mcts: move 3, move 4
+      search (4000 visits): protect,0;protect,1 240v 103 | seedbomb,1;protect,1 195v 78 | earthquake,0;protect,1 194v 78 | protect,0;icepunch,1 179v 70
+      p2b Weavile used Protect
+      p2a Cradily used Protect
+      p1a Metagross used Meteor Mash -> p2b: Weavile
+              p2b Weavile -- move: Protect
+      p1b Scrafty used Crunch -> p2b: Weavile
+              p2b Weavile -- move: Protect
+      after p1: Metagross 364/364, Scrafty 170/332
+      after p2: Cradily 375/375, Weavile 262/340
+
+  Turn 10
+    p1 greedy: move 2 2, move 3 2
+    p2 mcts: move 3, move 4
+      search (4000 visits): protect,0;protect,1 253v 112 | protect,0;nightslash,0 182v 72 | seedbomb,1;protect,1 174v 68 | protect,0;icepunch,1 172v 67
+      p2b Weavile used Protect  [[still]]
+              p2b Weavile -- IT FAILED
+      p2a Cradily used Protect  [[still]]
+              p2a Cradily -- IT FAILED
+      p1a Metagross used Meteor Mash -> p2b: Weavile
+      p2b Weavile fainted
+      p1b Scrafty used Crunch -> p2a: Cradily
+              p2a Cradily def 1 fell
+      after p1: Metagross 364/364, Scrafty 170/332
+      after p2: Cradily 261/375, Weavile 0/340
+
+  Turn 11
+    p1 greedy: move 2 1, move 3 1
+    p2 mcts: move 3, pass
+      search (10000 visits): protect,0;No Move 7242v 1342 | seedbomb,1;No Move 709v 53 | earthquake,0;No Move 706v 52 | rockslide,0;No Move 694v 51
+      p2a Cradily used Protect
+      p1a Metagross used Meteor Mash -> p2a: Cradily
+              p2a Cradily -- move: Protect
+      p1b Scrafty used Crunch -> p2a: Cradily
+              p2a Cradily -- move: Protect
+      after p1: Metagross 364/364, Scrafty 170/332
+      after p2: Cradily 261/375, Weavile 0/340
+
+  Turn 12
+    p1 greedy: move 2 1, move 3 1
+    p2 mcts: move 3, pass
+      search (10000 visits): protect,0;No Move 7374v 1366 | seedbomb,1;No Move 739v 57 | seedbomb,0;No Move 703v 51 | rockslide,0;No Move 619v 39
+      p2a Cradily used Protect
+      p1a Metagross used Meteor Mash -> p2a: Cradily
+              p2a Cradily -- move: Protect
+      p1b Scrafty used Crunch -> p2a: Cradily
+              p2a Cradily -- move: Protect
+      after p1: Metagross 364/364, Scrafty 170/332
+      after p2: Cradily 261/375, Weavile 0/340
+
+  Turn 13
+    p1 greedy: move 2 1, move 3 1
+    p2 mcts: move 3, pass
+      search (10000 visits): protect,0;No Move 7231v 1335 | seedbomb,1;No Move 715v 53 | earthquake,0;No Move 711v 53 | rockslide,0;No Move 696v 50
+      p2a Cradily used Protect  [[still]]
+              p2a Cradily -- IT FAILED
+      p1a Metagross used Meteor Mash -> p2a: Cradily  [[miss]]
+              p1a Metagross -- MISSED
+      p1b Scrafty used Crunch -> p2a: Cradily
+              p2a Cradily def 1 fell
+      after p1: Metagross 364/364, Scrafty 170/332
+      after p2: Cradily 80/375, Weavile 0/340
+
+  Turn 14
+    p1 greedy: move 2 1, move 3 1
+    p2 mcts: move 3, pass
+      search (9000 visits): protect,0;No Move 6029v 911 | earthquake,0;No Move 782v 42 | seedbomb,1;No Move 749v 37 | rockslide,0;No Move 736v 36
+      p2a Cradily used Protect
+      p1a Metagross used Meteor Mash -> p2a: Cradily
+              p2a Cradily -- move: Protect
+      p1b Scrafty used Crunch -> p2a: Cradily
+              p2a Cradily -- move: Protect
+      after p1: Metagross 364/364, Scrafty 170/332
+      after p2: Cradily 80/375, Weavile 0/340
+
+  Turn 15
+    p1 greedy: move 2 1, move 3 1
+    p2 mcts: move 3, pass
+      search (13000 visits): protect,0;No Move 8845v 1209 | rockslide,0;No Move 1216v 71 | seedbomb,1;No Move 1052v 51 | earthquake,0;No Move 967v 41
+      p2a Cradily used Protect
+      p1a Metagross used Meteor Mash -> p2a: Cradily
+              p2a Cradily -- move: Protect
+      p1b Scrafty used Crunch -> p2a: Cradily
+              p2a Cradily -- move: Protect
+      after p1: Metagross 364/364, Scrafty 170/332
+      after p2: Cradily 80/375, Weavile 0/340
+
+  Turn 16
+    p1 greedy: move 4 1, move 3 1
+    p2 mcts: move 3, pass
+      search (14000 visits): protect,0;No Move 9281v 1174 | seedbomb,1;No Move 1239v 59 | earthquake,0;No Move 1237v 59 | rockslide,0;No Move 1221v 57
+      p2a Cradily used Protect  [[still]]
+              p2a Cradily -- IT FAILED
+      p1a Metagross used Zen Headbutt -> p2a: Cradily
+      p2a Cradily fainted
+      after p1: Metagross 364/364, Scrafty 170/332
+      after p2: Cradily 0/375, Weavile 0/340
+
+  RESULT: p1 wins

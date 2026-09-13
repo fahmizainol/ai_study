@@ -1,0 +1,77 @@
+battle 31   p1=greedy vs p2=mcts   mcts 300 ms a decision
+  p1: Untitled 628: Hitmontop, Latios, Thundurus, Victini
+  p2: Pqs darkrai: Darkrai, Latios, Volcarona, Weavile
+
+  Turn 1
+    p1 greedy: move 3 1, move 1 1
+    p2 mcts: move 2 2, move 3 1
+      search (2000 visits): darkpulse,1;psychic,0 59v 51 | darkpulse,1;switch volcarona 50v 41 | darkpulse,1;dracometeor,0 44v 34 | darkpulse,1;switch weavile 44v 34
+      p2a Darkrai used Dark Pulse -> p1b: Latios
+      p1b Latios fainted
+      p2b Latios used Psychic -> p1a: Hitmontop
+              p1a Hitmontop spd 1 fell
+      p1a Hitmontop used Close Combat -> p2a: Darkrai
+              p1a Hitmontop used up its Fighting Gem
+              p1a Hitmontop def 1 fell
+              p1a Hitmontop spd 1 fell
+      p2a Darkrai fainted
+      after p1: Hitmontop 19/303, Latios 0/301
+      after p2: Darkrai 0/281, Latios 301/301
+
+  Turn 2
+      p2a <- Volcarona comes in (317/317)
+      p1b <- Thundurus comes in (299/299)
+      after p1: Hitmontop 19/303, Thundurus 299/299
+      after p2: Volcarona 317/317, Latios 301/301
+
+  Turn 3
+    p1 greedy: move 3 1, move 2 1
+    p2 mcts: move 4 2, move 4
+      search (3000 visits): fireblast,1;calmmind,1 137v 92 | fireblast,1;psychic,1 123v 80 | bugbuzz,1;psychic,1 120v 78 | bugbuzz,1;calmmind,1 107v 67
+      p1b Thundurus used Thunderbolt -> p2a: Volcarona
+              p1b Thundurus used up its Electric Gem
+      p2b Latios used Calm Mind
+              p2b Latios spa 1 rose
+              p2b Latios spd 1 rose
+      p2a Volcarona used Fire Blast -> p1b: Thundurus
+      p1a Hitmontop used Close Combat -> p2a: Volcarona
+              p1a Hitmontop def 1 fell
+              p1a Hitmontop spd 1 fell
+              p1a Hitmontop is now brn
+      p1a Hitmontop fainted
+      after p1: Hitmontop 0/303, Thundurus 41/299
+      after p2: Volcarona 6/317, Latios 301/301
+
+  Turn 4
+      p1a <- Victini comes in (341/341)
+      after p1: Victini 341/341, Thundurus 41/299
+      after p2: Volcarona 6/317, Latios 301/301
+
+  Turn 5
+    p1 greedy: move 1 1, move 2 1
+    p2 mcts: move 4 2, move 2 1
+      search (4000 visits): fireblast,1;dracometeor,0 334v 270 | bugbuzz,1;dracometeor,0 241v 185 | switch weavile;dracometeor,0 178v 129 | protect,0;dracometeor,0 153v 107
+      p1b Thundurus used Thunderbolt -> p2a: Volcarona
+      p2a Volcarona fainted
+      p2b Latios used Draco Meteor -> p1a: Victini
+              p2b Latios used up its Dragon Gem
+              p2b Latios spa 2 fell
+      p1a Victini fainted
+      after p1: Victini 0/341, Thundurus 41/299
+      after p2: Volcarona 0/317, Latios 301/301
+
+  Turn 6
+      p2a <- Weavile comes in (284/284)
+      after p1: Victini 0/341, Thundurus 41/299
+      after p2: Weavile 284/284, Latios 301/301
+
+  Turn 7
+    p1 greedy: pass, move 2 1
+    p2 mcts: move 2 2, move 4
+      search (11000 visits): icepunch,1;calmmind,1 1456v 807 | nightslash,1;calmmind,1 1435v 794 | fakeout,1;calmmind,1 1414v 781 | lowkick,1;calmmind,1 1378v 759
+      p2a Weavile used Ice Punch -> p1b: Thundurus
+      p1b Thundurus fainted
+      after p1: Victini 0/341, Thundurus 0/299
+      after p2: Weavile 256/284, Latios 301/301
+
+  RESULT: p2 wins

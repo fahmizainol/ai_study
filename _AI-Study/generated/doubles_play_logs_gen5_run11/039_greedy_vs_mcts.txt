@@ -1,0 +1,107 @@
+battle 39   p1=greedy vs p2=mcts   mcts 300 ms a decision
+  p1: Untitled 1080: Victini, Tornadus, Blastoise, Kyurem-Black
+  p2: Pqs torn: Tornadus, Infernape, Metagross, Kyurem-Black
+
+  Turn 1
+    p1 greedy: move 1 1, move 3 1
+    p2 mcts: move 2 1, move 1 1
+      search (2000 visits): acrobatics,0;fakeout,0 50v 35 | acrobatics,1;fakeout,0 48v 34 | acrobatics,1;switch kyuremblack 45v 30 | acrobatics,0;closecombat,0 40v 26
+      p2b Infernape used Fake Out -> p1a: Victini
+      p2a Tornadus used Acrobatics -> p1a: Victini
+              p2a Tornadus used up its Flying Gem
+      p1a Victini fainted
+      p1b Tornadus used Superpower -> p2a: Tornadus
+              p2a Tornadus -- critical hit
+              p1b Tornadus atk 1 fell
+              p1b Tornadus def 1 fell
+      after p1: Victini 0/341, Tornadus 299/299
+      after p2: Tornadus 130/299, Infernape 264/293
+
+  Turn 2
+      p1a <- Blastoise comes in (362/362)
+      after p1: Blastoise 362/362, Tornadus 299/299
+      after p2: Tornadus 130/299, Infernape 264/293
+
+  Turn 3
+    p1 greedy: move 2 1, move 3 1
+    p2 mcts: move 2 2, switch 3   (slot1 Infernape -> Metagross)
+      search (3000 visits): acrobatics,1;switch metagross 66v 39 | acrobatics,1;feint,0 56v 31 | acrobatics,1;switch kyuremblack 55v 30 | acrobatics,1;feint,1 54v 30
+      p2b <- Metagross comes in (364/364)
+      p2a Tornadus used Acrobatics -> p1b: Tornadus
+      p1b Tornadus fainted
+      p1a Blastoise used Scald -> p2a: Tornadus
+      after p1: Blastoise 362/362, Tornadus 0/299
+      after p2: Tornadus 37/299, Metagross 364/364
+
+  Turn 4
+      p1b <- Kyurem-Black comes in (391/391)
+      after p1: Blastoise 362/362, Kyurem-Black 391/391
+      after p2: Tornadus 37/299, Metagross 364/364
+
+  Turn 5
+    p1 greedy: move 2 1, move 2 1
+    p2 mcts: move 2 1, move 2 2
+      search (3000 visits): acrobatics,0;meteormash,1 71v 45 | protect,0;meteormash,1 65v 40 | taunt,0;meteormash,1 65v 39 | superpower,1;meteormash,1 62v 37
+      p1b Kyurem used Draco Meteor -> p2a: Tornadus
+              p1b Kyurem spa 2 fell
+      p2a Tornadus fainted
+      p1a Blastoise used Scald -> p2b: Metagross
+              p2b Metagross is now brn
+      p2b Metagross used Meteor Mash -> p1b: Kyurem
+              p2b Metagross used up its Steel Gem
+      after p1: Blastoise 362/362, Kyurem-Black 133/391
+      after p2: Tornadus 0/299, Metagross 234/364
+
+  Turn 6
+      p2a <- Infernape comes in (264/293)
+      after p1: Blastoise 362/362, Kyurem-Black 133/391
+      after p2: Infernape 264/293, Metagross 234/364
+
+  Turn 7
+    p1 greedy: move 2 2, move 2 2
+    p2 mcts: switch 4, move 3 1   (slot0 Infernape -> Kyurem-Black)
+      search (4000 visits): switch kyuremblack;zenheadbutt,0 94v 46 | switch kyuremblack;meteormash,0 92v 45 | switch kyuremblack;zenheadbutt,1 90v 44 | switch kyuremblack;bulletpunch,1 88v 42
+      p2a <- Kyurem-Black comes in (417/417)
+      p1b Kyurem used Draco Meteor -> p2b: Metagross
+              p1b Kyurem spa 2 fell
+      p1a Blastoise used Scald -> p2b: Metagross
+      p2b Metagross used Zen Headbutt -> p1a: Blastoise
+      after p1: Blastoise 311/362, Kyurem-Black 133/391
+      after p2: Kyurem-Black 417/417, Metagross 37/364
+
+  Turn 8
+    p1 greedy: move 2 2, move 2 2
+    p2 mcts: move 3 1, move 4 2
+      search (3000 visits): fusionbolt,0;bulletpunch,1 80v 42 | fusionbolt,0;meteormash,0 77v 41 | fusionbolt,0;bulletpunch,0 73v 37 | fusionbolt,0;protect,1 71v 36
+      p2b Metagross used Bullet Punch -> p1b: Kyurem
+      p1b Kyurem used Draco Meteor -> p2b: Metagross
+              p1b Kyurem spa 2 fell
+      p2b Metagross fainted
+      p2a Kyurem used Fusion Bolt -> p1a: Blastoise
+      p1a Blastoise used Scald -> p2a: Kyurem
+              p2a Kyurem is now brn
+      after p1: Blastoise 107/362, Kyurem-Black 60/391
+      after p2: Kyurem-Black 302/417, Metagross 0/364
+
+  Turn 9
+      p2b <- Infernape comes in (264/293)
+      after p1: Blastoise 107/362, Kyurem-Black 60/391
+      after p2: Kyurem-Black 302/417, Infernape 264/293
+
+  Turn 10
+    p1 greedy: move 2 1, move 2 1
+    p2 mcts: move 2 2, move 3 1
+      search (9000 visits): dragonclaw,1;closecombat,0 3923v 3447 | icebeam,1;closecombat,0 1563v 1314 | fusionbolt,0;closecombat,1 148v 88 | dragonclaw,0;closecombat,1 135v 78
+      p1b Kyurem used Draco Meteor -> p2a: Kyurem
+              p2a Kyurem used up its Haban Berry
+              p2a Kyurem used up its Haban Berry
+      p2b Infernape used Close Combat -> p1a: Blastoise
+              p2b Infernape def 1 fell
+              p2b Infernape spd 1 fell
+      p1a Blastoise fainted
+      p2a Kyurem used Dragon Claw -> p1b: Kyurem
+      p1b Kyurem fainted
+      after p1: Blastoise 0/362, Kyurem-Black 0/391
+      after p2: Kyurem-Black 242/417, Infernape 235/293
+
+  RESULT: p2 wins

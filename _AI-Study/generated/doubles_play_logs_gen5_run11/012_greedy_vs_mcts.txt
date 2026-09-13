@@ -1,0 +1,194 @@
+battle 12   p1=greedy vs p2=mcts   mcts 300 ms a decision
+  p1: Itchyfoot genesect: Genesect, Tornadus, Victini, Latios
+  p2: 2v2 Pool League II/2v2 Pools - BW 10: Braviary, Togetic, Kyurem-Black, Arcanine
+
+  Turn 1
+    p1 greedy: move 3 1, move 3 1
+    p2 mcts: move 1 1, move 1
+      search (4000 visits): bravebird,0;followme,1 154v 99 | return,1;followme,1 152v 98 | bravebird,0;helpinghand,0 148v 94 | return,1;roost,1 144v 91
+      p2b Togetic used Follow Me
+      p1a Genesect used Ice Beam -> p2b: Togetic
+              p2b Togetic is now frz
+      p1b Tornadus used Superpower -> p2b: Togetic
+              p1b Tornadus atk 1 fell
+              p1b Tornadus def 1 fell
+      p2a Braviary used Brave Bird -> p1a: Genesect
+      after p1: Genesect 2/283, Tornadus 299/299
+      after p2: Braviary 214/341, Togetic 117/314
+
+  Turn 2
+    p1 greedy: move 3 2, move 3 2
+    p2 mcts: move 4, move 3
+      search (6000 visits): protect,0;tailwind,1 243v 143 | protect,0;roost,1 235v 137 | switch kyuremblack;switch arcanine 234v 136 | return,1;followme,1 206v 116
+      p2a Braviary used Protect
+      p1a Genesect used Ice Beam -> p2b: Togetic
+      p1b Tornadus used Superpower -> p2b: Togetic
+              p1b Tornadus atk 1 fell
+              p1b Tornadus def 1 fell
+      p2b Togetic fainted
+      after p1: Genesect 2/283, Tornadus 299/299
+      after p2: Braviary 214/341, Togetic 0/314
+
+  Turn 3
+      p2b <- Kyurem-Black comes in (391/391)
+      after p1: Genesect 2/283, Tornadus 299/299
+      after p2: Braviary 214/341, Kyurem-Black 391/391
+
+  Turn 4
+    p1 greedy: move 3 1, move 3 1
+    p2 mcts: move 4, move 4
+      search (6000 visits): protect,0;outrage,1 239v 156 | protect,0;rockslide,0 219v 140 | switch arcanine;rockslide,0 176v 107 | switch arcanine;dragonclaw,1 155v 90
+      p2a Braviary used Protect  [[still]]
+              p2a Braviary -- IT FAILED
+      p1a Genesect used Ice Beam -> p2a: Braviary
+      p2a Braviary fainted
+      p1b Tornadus used Superpower -> p2b: Kyurem
+              p1b Tornadus atk 1 fell
+              p1b Tornadus def 1 fell
+      p2b Kyurem used Outrage -> p1a: Genesect
+      p1a Genesect fainted
+      after p1: Genesect 0/283, Tornadus 299/299
+      after p2: Braviary 0/341, Kyurem-Black 257/391
+
+  Turn 5
+      p1a <- Victini comes in (341/341)
+      p2a <- Arcanine comes in (339/339)
+              p1a Victini atk 1 fell
+              p1b Tornadus atk 1 fell
+              p1b Tornadus atk 2 rose
+      after p1: Victini 341/341, Tornadus 299/299
+      after p2: Arcanine 339/339, Kyurem-Black 257/391
+
+  Turn 6
+    p1 greedy: move 1 2, move 3 2
+    p2 mcts: move 2 2, move 1
+      search (6000 visits): extremespeed,1;outrage,0 1052v 597 | extremespeed,0;outrage,1 561v 292 | extremespeed,0;outrage,0 523v 268 | flareblitz,0;outrage,0 509v 260
+      p2a Arcanine used Extreme Speed -> p1b: Tornadus
+      p1b Tornadus used Superpower -> p2b: Kyurem
+              p1b Tornadus atk 1 fell
+              p1b Tornadus def 1 fell
+      p1a Victini used V-create -> p2b: Kyurem
+              p1a Victini used up its Fire Gem
+              p1a Victini spe 1 fell
+              p1a Victini def 1 fell
+              p1a Victini spd 1 fell
+      p2b Kyurem fainted
+      after p1: Victini 341/341, Tornadus 17/299
+      after p2: Arcanine 339/339, Kyurem-Black 0/391
+
+  Turn 7
+    p1 greedy: move 1 1, move 3 1
+    p2 mcts: move 4, pass
+      search (5000 visits): protect,0;No Move 1197v 246 | extremespeed,0;No Move 1166v 238 | flareblitz,0;No Move 835v 152 | extremespeed,1;No Move 585v 90
+      p2a Arcanine used Protect
+      p1b Tornadus used Superpower -> p2a: Arcanine
+              p2a Arcanine -- move: Protect
+      p1a Victini used V-create -> p2a: Arcanine
+              p2a Arcanine -- move: Protect
+      after p1: Victini 341/341, Tornadus 17/299
+      after p2: Arcanine 339/339, Kyurem-Black 0/391
+
+  Turn 8
+    p1 greedy: move 1 1, move 3 1
+    p2 mcts: move 2 1, pass
+      search (5000 visits): extremespeed,0;No Move 1241v 258 | protect,0;No Move 1097v 220 | flareblitz,0;No Move 889v 166 | extremespeed,1;No Move 589v 91
+      p2a Arcanine used Extreme Speed -> p1a: Victini
+      p1b Tornadus used Superpower -> p2a: Arcanine
+              p1b Tornadus atk 1 fell
+              p1b Tornadus def 1 fell
+      p1a Victini used V-create -> p2a: Arcanine
+              p1a Victini spe 1 fell
+              p1a Victini def 1 fell
+              p1a Victini spd 1 fell
+      after p1: Victini 211/341, Tornadus 17/299
+      after p2: Arcanine 197/339, Kyurem-Black 0/391
+
+  Turn 9
+    p1 greedy: move 1 1, move 3 1
+    p2 mcts: move 4, pass
+      search (8000 visits): protect,0;No Move 2193v 272 | extremespeed,0;No Move 1714v 192 | flareblitz,0;No Move 990v 79 | extremespeed,1;No Move 920v 69
+      p2a Arcanine used Protect
+      p1b Tornadus used Superpower -> p2a: Arcanine
+              p2a Arcanine -- move: Protect
+      p1a Victini used V-create -> p2a: Arcanine
+              p2a Arcanine -- move: Protect
+      after p1: Victini 211/341, Tornadus 17/299
+      after p2: Arcanine 197/339, Kyurem-Black 0/391
+
+  Turn 10
+    p1 greedy: move 1 1, move 3 1
+    p2 mcts: move 4, pass
+      search (8000 visits): protect,0;No Move 2211v 271 | extremespeed,0;No Move 1676v 183 | flareblitz,0;No Move 937v 70 | extremespeed,1;No Move 919v 67
+      p2a Arcanine used Protect  [[still]]
+              p2a Arcanine -- IT FAILED
+      p1b Tornadus used Superpower -> p2a: Arcanine
+              p1b Tornadus atk 1 fell
+              p1b Tornadus def 1 fell
+      p1a Victini used V-create -> p2a: Arcanine
+              p1a Victini spe 1 fell
+              p1a Victini def 1 fell
+              p1a Victini spd 1 fell
+      after p1: Victini 211/341, Tornadus 17/299
+      after p2: Arcanine 52/339, Kyurem-Black 0/391
+
+  Turn 11
+    p1 greedy: move 1 1, move 2 1
+    p2 mcts: move 4, pass
+      search (19000 visits): protect,0;No Move 4204v 139 | extremespeed,0;No Move 2956v 59 | closecombat,0;No Move 2786v 49 | extremespeed,1;No Move 2403v 27
+      p2a Arcanine used Protect
+      p1b Tornadus used Sky Drop -> p2a: Arcanine
+              p2a Arcanine -- move: Protect
+      p1a Victini used V-create -> p2a: Arcanine
+              p2a Arcanine -- move: Protect
+      after p1: Victini 211/341, Tornadus 17/299
+      after p2: Arcanine 52/339, Kyurem-Black 0/391
+
+  Turn 12
+    p1 greedy: move 1 1, move 2 1
+    p2 mcts: move 4, pass
+      search (19000 visits): protect,0;No Move 4201v 139 | extremespeed,0;No Move 2980v 61 | closecombat,0;No Move 2769v 48 | extremespeed,1;No Move 2379v 25
+      p2a Arcanine used Protect
+      p1b Tornadus used Sky Drop -> p2a: Arcanine
+              p2a Arcanine -- move: Protect
+      p1a Victini used V-create -> p2a: Arcanine
+              p2a Arcanine -- move: Protect
+      after p1: Victini 211/341, Tornadus 17/299
+      after p2: Arcanine 52/339, Kyurem-Black 0/391
+
+  Turn 13
+    p1 greedy: move 1 1, move 2 1
+    p2 mcts: move 4, pass
+      search (18000 visits): protect,0;No Move 3965v 134 | extremespeed,0;No Move 2816v 58 | closecombat,0;No Move 2658v 49 | extremespeed,1;No Move 2218v 23
+      p2a Arcanine used Protect
+      p1b Tornadus used Sky Drop -> p2a: Arcanine
+              p2a Arcanine -- move: Protect
+      p1a Victini used V-create -> p2a: Arcanine
+              p2a Arcanine -- move: Protect
+      after p1: Victini 211/341, Tornadus 17/299
+      after p2: Arcanine 52/339, Kyurem-Black 0/391
+
+  Turn 14
+    p1 greedy: move 3 1, move 2 1
+    p2 mcts: move 4, pass
+      search (18000 visits): protect,0;No Move 3727v 118 | extremespeed,0;No Move 2759v 55 | closecombat,0;No Move 2617v 46 | extremespeed,1;No Move 2376v 32
+      p2a Arcanine used Protect  [[still]]
+              p2a Arcanine -- IT FAILED
+      p1b Tornadus used Sky Drop  [[still]]
+      p1a Victini used Bolt Strike -> p2a: Arcanine  [[miss]]
+              p1a Victini -- MISSED
+      after p1: Victini 211/341, Tornadus 17/299
+      after p2: Arcanine 52/339, Kyurem-Black 0/391
+
+  Turn 15
+    p1 greedy: move 3 1, move 1
+    p2 mcts: move 4, pass
+      search (24000 visits): protect,0;No Move 4886v 101 | extremespeed,0;No Move 3678v 40 | closecombat,0;No Move 3432v 28 | flareblitz,0;No Move 3060v 11
+      p1b Tornadus used Sky Drop -> p2a: Arcanine  [[from] lockedmove]
+              p1b Tornadus used up its Flying Gem
+              p2a Arcanine lost Sky Drop
+      p1a Victini used Bolt Strike -> p2a: Arcanine
+      p2a Arcanine fainted
+      after p1: Victini 211/341, Tornadus 17/299
+      after p2: Arcanine 0/339, Kyurem-Black 0/391
+
+  RESULT: p1 wins

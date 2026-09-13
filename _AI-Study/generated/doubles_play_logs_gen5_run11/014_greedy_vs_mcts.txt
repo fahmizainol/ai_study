@@ -1,0 +1,39 @@
+battle 14   p1=greedy vs p2=mcts   mcts 300 ms a decision
+  p1: LKJC - KIGL: Kyurem-Black, Infernape, Genesect, Latios
+  p2: LKJC - LIMT: Latios, Infernape, Metagross, Thundurus
+
+  Turn 1
+    p1 greedy: move 4 1, move 2 1
+    p2 mcts: move 2 2, move 3 1
+      search (3000 visits): psychic,1;closecombat,0 92v 71 | psychic,1;switch metagross 78v 57 | psychic,1;fakeout,0 75v 54 | dracometeor,1;closecombat,0 68v 48
+      p2a Latios used Psychic -> p1b: Infernape
+      p1b Infernape fainted
+      p2b Infernape used Close Combat -> p1a: Kyurem
+              p2b Infernape def 1 fell
+              p2b Infernape spd 1 fell
+      p1a Kyurem fainted
+      after p1: Kyurem-Black 0/391, Infernape 0/293
+      after p2: Latios 301/301, Infernape 264/293
+
+  Turn 2
+      p1b <- Latios comes in (301/301)
+      p1a <- Genesect comes in (283/283)
+              p1a Genesect atk 1 rose
+      after p1: Genesect 283/283, Latios 301/301
+      after p2: Latios 301/301, Infernape 264/293
+
+  Turn 3
+    p1 greedy: move 3 2, move 1 2
+    p2 mcts: move 1 2, move 4 1
+      search (1000 visits): dracometeor,1;overheat,0 24v 16 | calmmind,0;overheat,0 22v 14 | switch metagross;overheat,0 20v 12 | dracometeor,1;switch metagross 18v 10
+      p1a Genesect used Ice Beam -> p2b: Infernape
+      p2a Latios used Draco Meteor -> p1b: Latios
+              p2a Latios spa 2 fell
+      p1b Latios fainted
+      p2b Infernape used Overheat -> p1a: Genesect
+              p2b Infernape spa 2 fell
+      p1a Genesect fainted
+      after p1: Genesect 0/283, Latios 0/301
+      after p2: Latios 301/301, Infernape 135/293
+
+  RESULT: p2 wins

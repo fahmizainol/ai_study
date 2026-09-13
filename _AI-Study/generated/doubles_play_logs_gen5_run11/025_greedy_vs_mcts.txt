@@ -1,0 +1,104 @@
+battle 25   p1=greedy vs p2=mcts   mcts 300 ms a decision
+  p1: [PL Week 3] Skymin: Kyurem-Black, Metagross, Togekiss, Shaymin-Sky
+  p2: Untitled 544: Deoxys-Attack, Mr. Mime, Cradily, Hariyama
+
+  Turn 1
+    p1 greedy: move 1 1, move 2 1
+    p2 mcts: move 4 1, move 2
+      search (3000 visits): superpower,0;followme,1 96v 54 | psychoboost,0;followme,1 78v 41 | psychoboost,0;psychic,1 72v 36 | psychoboost,0;psychic,0 67v 32
+      p2b Mr. Mime used Follow Me
+      p2a Deoxys used Superpower -> p1a: Kyurem
+              p2a Deoxys atk 1 fell
+              p2a Deoxys def 1 fell
+      p1a Kyurem fainted
+      p1b Metagross used Meteor Mash -> p2b: Mr. Mime
+              p1b Metagross used up its Steel Gem
+              p2b Mr. Mime used up its Sitrus Berry
+      after p1: Kyurem-Black 0/391, Metagross 364/364
+      after p2: Deoxys-Attack 217/241, Mr. Mime 94/284
+
+  Turn 2
+      p1a <- Togekiss comes in (374/374)
+      after p1: Togekiss 374/374, Metagross 364/364
+      after p2: Deoxys-Attack 217/241, Mr. Mime 94/284
+
+  Turn 3
+    p1 greedy: move 1 2, move 2 2
+    p2 mcts: switch 3, move 4 1   (slot0 Deoxys-Attack -> Cradily)
+      search (4000 visits): switch cradily;psychic,0 101v 52 | switch cradily;followme,1 89v 43 | switch cradily;trickroom,0 84v 40 | switch hariyama;followme,1 82v 38
+      p2a <- Cradily comes in (375/375)
+      p2b Mr. Mime used Psychic -> p1a: Togekiss
+      p1a Togekiss used Air Slash -> p2b: Mr. Mime
+      p2b Mr. Mime fainted
+      p1b Metagross used Meteor Mash -> p2a: Cradily
+      p2a Cradily fainted
+      after p1: Togekiss 304/374, Metagross 364/364
+      after p2: Cradily 0/375, Mr. Mime 0/284
+
+  Turn 4
+      p2b <- Hariyama comes in (492/492)
+      p2a <- Deoxys-Attack comes in (217/241)
+      after p1: Togekiss 304/374, Metagross 364/364
+      after p2: Deoxys-Attack 217/241, Hariyama 492/492
+
+  Turn 5
+    p1 greedy: move 1 1, move 2 1
+    p2 mcts: move 1, move 3 1
+      search (3000 visits): protect,0;icepunch,0 89v 37 | darkpulse,1;icepunch,0 75v 28 | psychoboost,0;fakeout,1 74v 28 | darkpulse,0;fakeout,1 71v 26
+      p2a Deoxys used Protect
+      p1a Togekiss used Air Slash -> p2a: Deoxys
+              p2a Deoxys -- move: Protect
+      p1b Metagross used Meteor Mash -> p2a: Deoxys
+              p2a Deoxys -- move: Protect
+      p2b Hariyama used Ice Punch -> p1a: Togekiss
+              p1a Togekiss used up its Sitrus Berry
+              p2b Hariyama is now tox
+      after p1: Togekiss 227/374, Metagross 364/364
+      after p2: Deoxys-Attack 217/241, Hariyama 492/492
+
+  Turn 6
+    p1 greedy: move 1 1, move 2 1
+    p2 mcts: move 1, move 3 1
+      search (3000 visits): protect,0;icepunch,0 126v 64 | psychoboost,0;closecombat,1 88v 38 | darkpulse,1;icepunch,0 84v 36 | protect,0;closecombat,1 77v 31
+      p2a Deoxys used Protect
+      p1a Togekiss used Air Slash -> p2a: Deoxys
+              p2a Deoxys -- move: Protect
+      p1b Metagross used Meteor Mash -> p2a: Deoxys
+              p2a Deoxys -- move: Protect
+      p2b Hariyama used Ice Punch -> p1a: Togekiss
+      p1a Togekiss fainted
+      after p1: Togekiss 0/374, Metagross 364/364
+      after p2: Deoxys-Attack 217/241, Hariyama 462/492
+
+  Turn 7
+      p1a <- Shaymin-Sky comes in (341/341)
+      after p1: Shaymin-Sky 341/341, Metagross 364/364
+      after p2: Deoxys-Attack 217/241, Hariyama 462/492
+
+  Turn 8
+    p1 greedy: move 2 1, move 2 1
+    p2 mcts: move 2 1, move 2 2
+      search (3000 visits): psychoboost,0;closecombat,1 135v 62 | psychoboost,0;facade,1 90v 34 | protect,0;icepunch,0 79v 28 | psychoboost,0;icepunch,0 76v 26
+      p2a Deoxys used Psycho Boost -> p1a: Shaymin
+              p2a Deoxys spa 2 fell
+      p1a Shaymin fainted
+      p1b Metagross used Meteor Mash -> p2a: Deoxys
+      p2a Deoxys fainted
+      p2b Hariyama used Close Combat -> p1b: Metagross
+              p2b Hariyama def 1 fell
+              p2b Hariyama spd 1 fell
+      after p1: Shaymin-Sky 0/341, Metagross 79/364
+      after p2: Deoxys-Attack 0/241, Hariyama 402/492
+
+  Turn 9
+    p1 greedy: pass, move 2 2
+    p2 mcts: pass, move 1 2
+      search (41000 visits): No Move;fakeout,1 11432v 335 | No Move;facade,1 10692v 298 | No Move;closecombat,1 9651v 246 | No Move;icepunch,1 9225v 225
+      p2b Hariyama used Fake Out  [[still]]
+              p2b Hariyama -- IT FAILED
+      p1b Metagross used Meteor Mash -> p2b: Hariyama
+      p2b Hariyama fainted
+      after p1: Shaymin-Sky 0/341, Metagross 79/364
+      after p2: Deoxys-Attack 0/241, Hariyama 0/492
+
+  RESULT: p1 wins

@@ -1,0 +1,125 @@
+battle 36   p1=greedy vs p2=mcts   mcts 300 ms a decision
+  p1: Perfect Rain: Genesect, Politoed, Kingdra, Tornadus
+  p2: 2v2PL 2025/W5 g3: Arcanine, Kyurem-Black, Togetic, Tornadus
+
+  Turn 1
+    p1 greedy: move 2 1, move 3 1
+    p2 mcts: move 3 1, move 4
+      search (3000 visits): flareblitz,0;outrage,1 79v 45 | flareblitz,0;fusionbolt,1 70v 38 | protect,0;outrage,1 62v 32 | flareblitz,0;dragonclaw,1 61v 31
+      p1a Genesect used Thunder -> p2a: Arcanine
+      p2a Arcanine fainted
+      p2b Kyurem used Outrage -> p1a: Genesect
+      p1b Politoed used Scald -> p2b: Kyurem
+              p1b Politoed used up its Water Gem
+      after p1: Genesect 45/285, Politoed 346/346
+      after p2: Arcanine 0/339, Kyurem-Black 252/391
+
+  Turn 2
+      p2a <- Togetic comes in (314/314)
+      after p1: Genesect 45/285, Politoed 346/346
+      after p2: Togetic 314/314, Kyurem-Black 252/391
+
+  Turn 3
+    p1 greedy: move 2 2, move 3 2
+    p2 mcts: move 3, move 1
+      search (5000 visits): tailwind,0;outrage,1 1345v 793 | roost,0;outrage,1 1012v 579 | helpinghand,1;outrage,1 496v 257 | switch tornadus;outrage,1 426v 214
+      p1a Genesect used Thunder -> p2b: Kyurem
+              p2b Kyurem is now par
+              p2b Kyurem COULD NOT MOVE (par)
+      p1b Politoed used Scald -> p2b: Kyurem
+      p2b Kyurem fainted
+      p2a Togetic used Tailwind
+      -sidestart p2: B move: Tailwind
+      after p1: Genesect 45/285, Politoed 346/346
+      after p2: Togetic 314/314, Kyurem-Black 0/391
+
+  Turn 4
+      p2b <- Tornadus comes in (299/299)
+      after p1: Genesect 45/285, Politoed 346/346
+      after p2: Togetic 314/314, Tornadus 299/299
+
+  Turn 5
+    p1 greedy: move 2 1, move 3 1
+    p2 mcts: move 1, move 2 1
+      search (4000 visits): followme,0;acrobatics,0 578v 325 | helpinghand,1;acrobatics,0 491v 269 | roost,0;acrobatics,0 411v 218 | tailwind,0;acrobatics,0 394v 208
+      p2a Togetic used Follow Me
+      p2b Tornadus used Acrobatics -> p1a: Genesect
+              p2b Tornadus used up its Flying Gem
+      p1a Genesect fainted
+      p1b Politoed used Scald -> p2a: Togetic
+      after p1: Genesect 0/285, Politoed 346/346
+      after p2: Togetic 226/314, Tornadus 299/299
+
+  Turn 6
+      p1a <- Kingdra comes in (291/291)
+      after p1: Kingdra 291/291, Politoed 346/346
+      after p2: Togetic 226/314, Tornadus 299/299
+
+  Turn 7
+    p1 greedy: move 1 1, move 3 1
+    p2 mcts: move 2, move 1
+      search (3000 visits): roost,0;protect,1 274v 150 | roost,0;bulkup,1 228v 119 | roost,0;acrobatics,0 221v 115 | roost,0;acrobatics,1 189v 94
+      p2b Tornadus used Protect
+      p1a Kingdra used Draco Meteor -> p2a: Togetic
+              p1a Kingdra spa 2 fell
+      p2a Togetic used Roost
+      p1b Politoed used Scald -> p2a: Togetic
+              p2a Togetic -- critical hit
+      after p1: Kingdra 262/291, Politoed 346/346
+      after p2: Togetic 61/314, Tornadus 299/299
+
+  Turn 8
+    p1 greedy: move 1 1, move 3 1
+    p2 mcts: move 2, move 1
+      search (5000 visits): roost,0;protect,1 656v 336 | roost,0;bulkup,1 535v 264 | roost,0;acrobatics,0 352v 159 | roost,0;acrobatics,1 291v 125
+      p2b Tornadus used Protect  [[still]]
+              p2b Tornadus -- IT FAILED
+      p1a Kingdra used Draco Meteor -> p2a: Togetic  [[miss]]
+              p1a Kingdra -- MISSED
+      p2a Togetic used Roost
+      p1b Politoed used Scald -> p2a: Togetic
+              p2a Togetic is now brn
+      -sideend p2: B move: Tailwind
+      after p1: Kingdra 262/291, Politoed 346/346
+      after p2: Togetic 91/314, Tornadus 299/299
+
+  Turn 9
+    p1 greedy: move 1 1, move 3 1
+    p2 mcts: move 2, move 4
+      search (4000 visits): roost,0;bulkup,1 398v 197 | roost,0;protect,1 393v 194 | roost,0;acrobatics,0 227v 97 | roost,0;acrobatics,1 225v 96
+      p1a Kingdra used Draco Meteor -> p2a: Togetic
+              p1a Kingdra spa 2 fell
+      p2b Tornadus used Bulk Up
+              p2b Tornadus atk 1 rose
+              p2b Tornadus def 1 rose
+      p1b Politoed used Scald -> p2a: Togetic
+      p2a Togetic fainted
+      after p1: Kingdra 233/291, Politoed 346/346
+      after p2: Togetic 0/314, Tornadus 299/299
+
+  Turn 10
+    p1 greedy: move 1 2, move 3 2
+    p2 mcts: pass, move 1
+      search (7000 visits): No Move;protect,1 4674v 2062 | No Move;acrobatics,1 616v 205 | No Move;acrobatics,0 587v 193 | No Move;bulkup,1 504v 158
+      p2b Tornadus used Protect
+      p1a Kingdra used Draco Meteor -> p2b: Tornadus
+              p2b Tornadus -- move: Protect
+      p1b Politoed used Scald -> p2b: Tornadus
+              p2b Tornadus -- move: Protect
+      after p1: Kingdra 233/291, Politoed 346/346
+      after p2: Togetic 0/314, Tornadus 299/299
+
+  Turn 11
+    p1 greedy: move 1 2, move 3 2
+    p2 mcts: pass, move 1
+      search (8000 visits): No Move;protect,1 5691v 2534 | No Move;acrobatics,0 617v 204 | No Move;acrobatics,1 561v 181 | No Move;bulkup,1 502v 157
+      p2b Tornadus used Protect  [[still]]
+              p2b Tornadus -- IT FAILED
+      p1a Kingdra used Draco Meteor -> p2b: Tornadus
+              p1a Kingdra spa 2 fell
+      p1b Politoed used Scald -> p2b: Tornadus
+      p2b Tornadus fainted
+      after p1: Kingdra 204/291, Politoed 346/346
+      after p2: Togetic 0/314, Tornadus 0/299
+
+  RESULT: p1 wins

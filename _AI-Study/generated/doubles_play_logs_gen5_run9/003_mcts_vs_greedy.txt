@@ -1,0 +1,72 @@
+battle 3   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: Vs Z strats volc: Tyranitar, Volcarona, Tornadus, Latios
+  p2: gene terrak volc lati: Genesect, Terrakion, Volcarona, Latios
+
+  Turn 1
+    p1 mcts: move 1 1, move 1
+      search (1000 visits): stoneedge,0;ragepowder,1 29v 20 | protect,0;fireblast,0 27v 18 | rockslide,0;fireblast,0 22v 13 | stoneedge,0;switch tornadus 21v 12
+    p2 greedy: move 3 1, move 2 1
+      p1b Volcarona used Rage Powder
+      p2a Genesect used Ice Beam -> p1b: Volcarona
+      p2b Terrakion used Close Combat -> p1b: Volcarona
+              p2b Terrakion def 1 fell
+              p2b Terrakion spd 1 fell
+              p2b Terrakion is now brn
+      p1a Tyranitar used Stone Edge -> p2a: Genesect
+              p1a Tyranitar used up its Rock Gem
+      p2a Genesect fainted
+      after p1: Tyranitar 404/404, Volcarona 50/311
+      after p2: Genesect 0/283, Terrakion 251/323
+
+  Turn 2
+      p2a <- Volcarona comes in (361/361)
+      after p1: Tyranitar 404/404, Volcarona 50/311
+      after p2: Volcarona 361/361, Terrakion 251/323
+
+  Turn 3
+    p1 mcts: move 3, move 4
+      search (2000 visits): rockslide,0;protect,1 65v 46 | rockslide,0;ragepowder,1 55v 37 | rockslide,0;bugbuzz,0 47v 29 | rockslide,0;fireblast,1 46v 29
+    p2 greedy: move 4 2, move 2 2
+      p1b Volcarona used Protect
+      p2b Terrakion used Close Combat -> p1b: Volcarona
+              p1b Volcarona -- move: Protect
+      p2a Volcarona used Overheat -> p1b: Volcarona
+              p1b Volcarona -- move: Protect
+      p1a Tyranitar used Rock Slide -> p2b: Terrakion  [[spread] p2a,p2b]
+      p2a Volcarona fainted
+      after p1: Tyranitar 404/404, Volcarona 31/311
+      after p2: Volcarona 0/361, Terrakion 125/323
+
+  Turn 4
+      p2a <- Latios comes in (301/301)
+      after p1: Tyranitar 404/404, Volcarona 31/311
+      after p2: Latios 301/301, Terrakion 125/323
+
+  Turn 5
+    p1 mcts: move 2 1, move 4
+      search (6000 visits): crunch,0;protect,1 250v 171 | crunch,0;fireblast,1 218v 145 | crunch,0;ragepowder,1 199v 129 | crunch,0;switch latios 197v 128
+    p2 greedy: move 2 2, move 2 2
+      p1b Volcarona used Protect
+      p2a Latios used Draco Meteor -> p1b: Volcarona
+              p1b Volcarona -- move: Protect
+      p2b Terrakion used Close Combat -> p1b: Volcarona
+              p1b Volcarona -- move: Protect
+      p1a Tyranitar used Crunch -> p2a: Latios
+      p2a Latios fainted
+      after p1: Tyranitar 404/404, Volcarona 12/311
+      after p2: Latios 0/301, Terrakion 85/323
+
+  Turn 6
+    p1 mcts: move 3, move 3 2
+      search (9000 visits): rockslide,1;fireblast,1 353v 164 | crunch,1;protect,1 340v 156 | rockslide,1;ragepowder,1 333v 152 | crunch,1;fireblast,1 327v 149
+    p2 greedy: pass, move 2 2
+      p2b Terrakion used Close Combat -> p1b: Volcarona
+              p2b Terrakion def 1 fell
+              p2b Terrakion spd 1 fell
+      p1b Volcarona fainted
+      p1a Tyranitar used Rock Slide -> p2b: Terrakion
+      p2b Terrakion fainted
+      after p1: Tyranitar 404/404, Volcarona 0/311
+      after p2: Latios 0/301, Terrakion 0/323
+
+  RESULT: p1 wins

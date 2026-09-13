@@ -1,0 +1,61 @@
+battle 37   p1=greedy vs p2=mcts   mcts 300 ms a decision
+  p1: Untitled 1076: Tyranitar, Infernape, Latias, Togekiss
+  p2: gene terrak volc lati: Genesect, Terrakion, Volcarona, Latios
+
+  Turn 1
+    p1 greedy: move 3 1, move 4 1
+    p2 mcts: move 2 1, move 3
+      search (1000 visits): ironhead,0;rockslide,0 23v 19 | xscissor,0;closecombat,1 20v 16 | ironhead,0;stoneedge,1 18v 13 | xscissor,0;stoneedge,1 17v 12
+      p2a Genesect used Iron Head -> p1a: Tyranitar
+              p1a Tyranitar COULD NOT MOVE (flinch)
+      p1b Infernape used Overheat -> p2a: Genesect
+              p1b Infernape spa 2 fell
+      p2a Genesect fainted
+      p2b Terrakion used Rock Slide -> p1a: Tyranitar  [[spread] p1a,p1b]
+      p1a Tyranitar fainted
+      after p1: Tyranitar 0/341, Infernape 61/293
+      after p2: Genesect 0/283, Terrakion 291/323
+
+  Turn 2
+      p2a <- Volcarona comes in (361/361)
+      p1a <- Latias comes in (320/320)
+      after p1: Latias 320/320, Infernape 61/293
+      after p2: Volcarona 361/361, Terrakion 291/323
+
+  Turn 3
+    p1 greedy: move 1 2, move 4 2
+    p2 mcts: move 1 1, move 3
+      search (2000 visits): bugbuzz,0;rockslide,0 86v 56 | bugbuzz,0;stoneedge,0 78v 49 | bugbuzz,0;protect,1 68v 41 | bugbuzz,0;stoneedge,1 68v 41
+      p1a Latias used Draco Meteor -> p2b: Terrakion
+              p1a Latias spa 2 fell
+      p1b Infernape used Overheat -> p2b: Terrakion
+              p1b Infernape spa 2 fell
+      p2b Terrakion used Rock Slide -> p1a: Latias  [[spread] p1a]
+              p2b Terrakion -- MISSED
+      p2a Volcarona used Bug Buzz -> p1a: Latias
+              p1a Latias -- critical hit
+      p1a Latias fainted
+      after p1: Latias 0/320, Infernape 14/293
+      after p2: Volcarona 339/361, Terrakion 50/323
+
+  Turn 4
+      p1a <- Togekiss comes in (374/374)
+      after p1: Togekiss 374/374, Infernape 14/293
+      after p2: Volcarona 339/361, Terrakion 50/323
+
+  Turn 5
+    p1 greedy: move 3 2, move 4 2
+    p2 mcts: switch 4, move 4 1   (slot0 Volcarona -> Latios)
+      search (3000 visits): switch latios;stoneedge,0 137v 89 | protect,0;stoneedge,0 128v 81 | bugbuzz,0;stoneedge,0 118v 73 | overheat,0;stoneedge,0 105v 63
+      p2a <- Latios comes in (301/301)
+      p1b Infernape used Overheat -> p2b: Terrakion
+              p1b Infernape spa 2 fell
+      p1b Infernape fainted
+      p2b Terrakion used Stone Edge -> p1a: Togekiss
+      p2b Terrakion fainted
+      p1a Togekiss used Air Slash -> p2a: Latios
+      p1a Togekiss fainted
+      after p1: Togekiss 0/374, Infernape 0/293
+      after p2: Latios 193/301, Terrakion 0/323
+
+  RESULT: p2 wins

@@ -1,0 +1,70 @@
+battle 1   p1=greedy vs p2=mcts   mcts 300 ms a decision
+  p1: [PL Week 2] Arcanine: Thundurus, Metagross, Kyurem-Black, Arcanine
+  p2: 2v2 Pool League II/2v2 Pools - BW 14: Gyarados, Volcarona, Weavile, Latios
+
+  Turn 1
+    p1 greedy: move 1 1, move 2 1
+    p2 mcts: move 2 1, move 1 2
+      search (2000 visits): stoneedge,0;fireblast,1 57v 42 | waterfall,0;fireblast,1 56v 41 | waterfall,0;fireblast,0 53v 37 | stoneedge,0;fireblast,0 48v 33
+      p2b Volcarona used Fire Blast -> p1b: Metagross
+      p1b Metagross fainted
+      p2a Gyarados used Stone Edge -> p1a: Thundurus
+              p1a Thundurus used up its Sitrus Berry
+      p1a Thundurus used Thunderbolt -> p2a: Gyarados
+      p2a Gyarados fainted
+      after p1: Thundurus 101/347, Metagross 0/364
+      after p2: Gyarados 0/331, Volcarona 311/311
+
+  Turn 2
+      p2a <- Weavile comes in (284/284)
+      p1b <- Kyurem-Black comes in (391/391)
+      after p1: Thundurus 101/347, Kyurem-Black 391/391
+      after p2: Weavile 284/284, Volcarona 311/311
+
+  Turn 3
+    p1 greedy: move 1 1, move 2 1
+    p2 mcts: move 2 1, move 2 2
+      search (4000 visits): icepunch,0;bugbuzz,1 114v 70 | icepunch,0;fireblast,1 113v 69 | nightslash,0;fireblast,1 107v 65 | nightslash,0;bugbuzz,1 104v 62
+      p2a Weavile used Ice Punch -> p1a: Thundurus
+      p1a Thundurus fainted
+      p2b Volcarona used Bug Buzz -> p1b: Kyurem
+              p2b Volcarona used up its Bug Gem
+      p1b Kyurem used Draco Meteor -> p2a: Weavile
+              p1b Kyurem spa 2 fell
+      after p1: Thundurus 0/347, Kyurem-Black 153/391
+      after p2: Weavile 61/284, Volcarona 311/311
+
+  Turn 4
+      p1a <- Arcanine comes in (337/337)
+              p2a Weavile atk 1 fell
+              p2b Volcarona atk 1 fell
+      after p1: Arcanine 337/337, Kyurem-Black 153/391
+      after p2: Weavile 61/284, Volcarona 311/311
+
+  Turn 5
+    p1 greedy: move 2, move 2 1
+    p2 mcts: switch 4, move 2 2   (slot0 Weavile -> Latios)
+      search (2000 visits): switch latios;bugbuzz,1 67v 44 | switch latios;fireblast,1 63v 41 | nightslash,0;bugbuzz,1 45v 25 | lowkick,0;bugbuzz,1 42v 22
+      p2a <- Latios comes in (301/301)
+      p2b Volcarona used Bug Buzz -> p1b: Kyurem
+      p1b Kyurem fainted
+      p1a Arcanine used Heat Wave -> p2a: Latios  [[spread] p2b]
+              p1a Arcanine -- MISSED
+      after p1: Arcanine 337/337, Kyurem-Black 0/391
+      after p2: Latios 301/301, Volcarona 215/311
+
+  Turn 6
+    p1 greedy: move 2, pass
+    p2 mcts: move 1 1, move 2 1
+      search (5000 visits): dracometeor,0;bugbuzz,0 510v 385 | dracometeor,0;fireblast,0 402v 294 | psychic,0;switch weavile 383v 278 | psychic,0;fireblast,0 355v 255
+      p2a Latios used Draco Meteor -> p1a: Arcanine
+              p2a Latios used up its Dragon Gem
+              p2a Latios spa 2 fell
+              p1a Arcanine used up its Sitrus Berry
+      p2b Volcarona used Bug Buzz -> p1a: Arcanine
+              p1a Arcanine -- critical hit
+      p1a Arcanine fainted
+      after p1: Arcanine 0/337, Kyurem-Black 0/391
+      after p2: Latios 301/301, Volcarona 215/311
+
+  RESULT: p2 wins

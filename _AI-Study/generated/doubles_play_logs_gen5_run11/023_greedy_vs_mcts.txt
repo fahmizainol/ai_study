@@ -1,0 +1,83 @@
+battle 23   p1=greedy vs p2=mcts   mcts 300 ms a decision
+  p1: Vs Z strats pqs: Kyurem-Black, Latios, Infernape, Darkrai
+  p2: Untitled 625: Latias, Tornadus, Liepard, Metagross
+
+  Turn 1
+    p1 greedy: move 3 1, move 2 1
+    p2 mcts: move 2 1, move 3 1
+      search (2000 visits): psychic,0;superpower,0 63v 43 | psychic,0;protect,1 39v 21 | dracometeor,0;superpower,0 34v 17 | psychic,0;switch metagross 34v 17
+      p2b Tornadus used Superpower -> p1a: Kyurem
+              p1a Kyurem -- critical hit
+              p2b Tornadus atk 1 fell
+              p2b Tornadus def 1 fell
+      p1a Kyurem fainted
+      p1b Latios used Draco Meteor -> p2a: Latias
+              p2a Latias -- critical hit
+              p2a Latias used up its Haban Berry
+              p2a Latias used up its Haban Berry
+              p1b Latios spa 2 fell
+      p2a Latias fainted
+      after p1: Kyurem-Black 0/391, Latios 271/301
+      after p2: Latias 0/320, Tornadus 299/299
+
+  Turn 2
+      p2a <- Liepard comes in (269/269)
+      p1a <- Infernape comes in (293/293)
+      after p1: Infernape 293/293, Latios 271/301
+      after p2: Liepard 269/269, Tornadus 299/299
+
+  Turn 3
+    p1 greedy: move 2 1, move 2 1
+    p2 mcts: move 2 2, move 1 1
+      search (5000 visits): suckerpunch,1;acrobatics,0 267v 189 | faketears,1;acrobatics,0 234v 161 | suckerpunch,0;acrobatics,0 217v 147 | faketears,0;acrobatics,0 182v 119
+      p2a Liepard used Sucker Punch -> p1b: Latios
+              p2a Liepard used up its Dark Gem
+      p1b Latios fainted
+      p2b Tornadus used Acrobatics -> p1a: Infernape
+              p2b Tornadus used up its Flying Gem
+      p1a Infernape fainted
+      after p1: Infernape 0/293, Latios 0/301
+      after p2: Liepard 269/269, Tornadus 299/299
+
+  Turn 4
+      p1a <- Darkrai comes in (281/281)
+      after p1: Darkrai 281/281, Latios 0/301
+      after p2: Liepard 269/269, Tornadus 299/299
+
+  Turn 5
+    p1 greedy: move 3 1, pass
+    p2 mcts: move 2 1, move 3 1
+      search (8000 visits): suckerpunch,0;superpower,0 1274v 951 | switch metagross;superpower,0 818v 587 | faketears,0;superpower,0 480v 323 | suckerpunch,0;acrobatics,0 462v 309
+      p2a Liepard used Sucker Punch -> p1a: Darkrai
+      p1a Darkrai used Psychic -> p2a: Liepard
+              p2a Liepard -- IMMUNE
+      p2b Tornadus used Superpower -> p1a: Darkrai
+              p2b Tornadus atk 1 fell
+              p2b Tornadus def 1 fell
+      after p1: Darkrai 38/281, Latios 0/301
+      after p2: Liepard 269/269, Tornadus 299/299
+
+  Turn 6
+    p1 greedy: move 3 1, pass
+    p2 mcts: move 3 1, move 2 1
+      search (16000 visits): encore,0;skydrop,0 1629v 1596 | suckerpunch,0;skydrop,0 1101v 1053 | switch metagross;acrobatics,0 1086v 1037 | switch metagross;superpower,0 1010v 960
+      p2a Liepard used Encore -> p1a: Darkrai
+              p1a Darkrai gained Encore
+      p1a Darkrai used Psychic -> p2a: Liepard
+              p2a Liepard -- IMMUNE
+      p2b Tornadus used Sky Drop  [[still]]
+      after p1: Darkrai 38/281, Latios 0/301
+      after p2: Liepard 269/269, Tornadus 299/299
+
+  Turn 7
+    p1 greedy: move 3 1, pass
+    p2 mcts: move 2 1, move 1
+      search (152000 visits): suckerpunch,0;skydrop,0 32420v 32420 | faketears,0;skydrop,0 30329v 30301 | encore,0;skydrop,0 30182v 30152 | fakeout,0;skydrop,0 29942v 29909
+      p2a Liepard used Sucker Punch -> p1a: Darkrai  [[miss]]
+              p2a Liepard -- MISSED
+      p2b Tornadus used Sky Drop -> p1a: Darkrai  [[from] lockedmove]
+      p1a Darkrai fainted
+      after p1: Darkrai 0/281, Latios 0/301
+      after p2: Liepard 269/269, Tornadus 299/299
+
+  RESULT: p2 wins

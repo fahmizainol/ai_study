@@ -1,0 +1,112 @@
+battle 28   p1=greedy vs p2=mcts   mcts 300 ms a decision
+  p1: Fuck it: Rotom-Heat, Scrafty, Crobat, Jellicent
+  p2: 2v2 Pool League II/2v2 Pools - BW 7: Snorlax, Chandelure, Darkrai, Infernape
+
+  Turn 1
+    p1 greedy: move 1 1, move 3 1
+    p2 mcts: move 1 1, move 2 1
+      search (3000 visits): doubleedge,0;shadowball,0 76v 58 | doubleedge,1;shadowball,0 67v 49 | protect,0;shadowball,0 67v 49 | doubleedge,0;switch darkrai 60v 42
+      p1a Rotom used Overheat -> p2a: Snorlax  [[miss]]
+              p1a Rotom -- MISSED
+      p1b Scrafty used High Jump Kick -> p2a: Snorlax
+              p2a Snorlax used up its Chople Berry
+              p2a Snorlax used up its Chople Berry
+      p2b Chandelure used Shadow Ball -> p1a: Rotom
+              p1a Rotom spd 1 fell
+      p2a Snorlax used Double-Edge -> p1a: Rotom
+      p1a Rotom fainted
+      after p1: Rotom-Heat 0/253, Scrafty 334/334
+      after p2: Snorlax 228/524, Chandelure 324/324
+
+  Turn 2
+      p1a <- Crobat comes in (311/311)
+      after p1: Crobat 311/311, Scrafty 334/334
+      after p2: Snorlax 228/524, Chandelure 324/324
+
+  Turn 3
+    p1 greedy: move 1 1, move 3 1
+    p2 mcts: move 1 1, move 2 1
+      search (7000 visits): doubleedge,0;shadowball,0 199v 126 | firepunch,0;shadowball,0 185v 115 | switch infernape;shadowball,0 177v 109 | doubleedge,1;shadowball,0 159v 95
+      p1a Crobat used Brave Bird -> p2a: Snorlax
+              p1a Crobat used up its Flying Gem
+      p2a Snorlax fainted
+      p1b Scrafty used High Jump Kick -> p2b: Chandelure
+              p2b Chandelure -- IMMUNE
+      p2b Chandelure used Shadow Ball -> p1a: Crobat
+      after p1: Crobat 19/311, Scrafty 167/334
+      after p2: Snorlax 0/524, Chandelure 324/324
+
+  Turn 4
+      p2a <- Darkrai comes in (281/281)
+      after p1: Crobat 19/311, Scrafty 167/334
+      after p2: Darkrai 281/281, Chandelure 324/324
+
+  Turn 5
+    p1 greedy: move 1 1, move 3 1
+    p2 mcts: move 1 1, switch 4   (slot1 Chandelure -> Infernape)
+      search (8000 visits): darkpulse,0;switch infernape 166v 15 | switch infernape;shadowball,0 155v 12 | icebeam,0;switch infernape 153v 12 | focusblast,0;switch infernape 152v 12
+      p2b <- Infernape comes in (293/293)
+      p1a Crobat used Brave Bird -> p2a: Darkrai
+      p1a Crobat fainted
+      p2a Darkrai used Dark Pulse -> p1b: Scrafty
+      p1b Scrafty used High Jump Kick -> p2a: Darkrai
+      p2a Darkrai fainted
+      after p1: Crobat 0/311, Scrafty 124/334
+      after p2: Darkrai 0/281, Infernape 293/293
+
+  Turn 6
+      p1a <- Jellicent comes in (404/404)
+      p2a <- Chandelure comes in (324/324)
+      after p1: Jellicent 404/404, Scrafty 124/334
+      after p2: Chandelure 324/324, Infernape 293/293
+
+  Turn 7
+    p1 greedy: move 2 1, move 3 1
+    p2 mcts: move 2 1, move 1 2
+      search (4000 visits): shadowball,0;fakeout,1 182v 94 | shadowball,0;closecombat,1 137v 64 | shadowball,0;fakeout,0 126v 57 | shadowball,0;overheat,1 115v 51
+      p2b Infernape used Fake Out -> p1b: Scrafty
+              p1b Scrafty COULD NOT MOVE (flinch)
+      p1a Jellicent used Shadow Ball -> p2a: Chandelure
+      p2a Chandelure used Shadow Ball -> p1a: Jellicent
+      after p1: Jellicent 193/404, Scrafty 86/334
+      after p2: Chandelure 156/324, Infernape 293/293
+
+  Turn 8
+    p1 greedy: move 2 1, move 3 1
+    p2 mcts: move 2 1, move 3 2
+      search (5000 visits): shadowball,0;closecombat,1 214v 83 | shadowball,0;overheat,1 168v 59 | shadowball,0;fakeout,1 145v 48 | shadowball,0;fakeout,0 139v 45
+      p2b Infernape used Close Combat -> p1b: Scrafty
+              p1b Scrafty used up its Chople Berry
+              p1b Scrafty used up its Chople Berry
+              p2b Infernape def 1 fell
+              p2b Infernape spd 1 fell
+      p1b Scrafty fainted
+      p1a Jellicent used Shadow Ball -> p2a: Chandelure
+              p2a Chandelure -- critical hit
+      p2a Chandelure fainted
+      after p1: Jellicent 218/404, Scrafty 0/334
+      after p2: Chandelure 0/324, Infernape 293/293
+
+  Turn 9
+    p1 greedy: move 2 2, pass
+    p2 mcts: pass, move 1 1
+      search (20000 visits): No Move;fakeout,0 6711v 327 | No Move;closecombat,0 6506v 312 | No Move;overheat,0 4892v 193 | No Move;encore,0 1891v 1
+      p2b Infernape used Fake Out  [[still]]
+              p2b Infernape -- IT FAILED
+      p1a Jellicent used Shadow Ball -> p2b: Infernape
+              p2b Infernape spd 1 fell
+      after p1: Jellicent 243/404, Scrafty 0/334
+      after p2: Chandelure 0/324, Infernape 124/293
+
+  Turn 10
+    p1 greedy: move 2 2, pass
+    p2 mcts: pass, move 3 1
+      search (99000 visits): No Move;closecombat,0 27792v 196 | No Move;fakeout,0 27455v 189 | No Move;overheat,0 25842v 155 | No Move;encore,0 17911v 0
+      p2b Infernape used Close Combat -> p1a: Jellicent
+              p1a Jellicent -- IMMUNE
+      p1a Jellicent used Shadow Ball -> p2b: Infernape
+      p2b Infernape fainted
+      after p1: Jellicent 243/404, Scrafty 0/334
+      after p2: Chandelure 0/324, Infernape 0/293
+
+  RESULT: p1 wins

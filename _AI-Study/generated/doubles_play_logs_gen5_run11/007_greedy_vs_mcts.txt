@@ -1,0 +1,188 @@
+battle 7   p1=greedy vs p2=mcts   mcts 300 ms a decision
+  p1: Bw dou/DaWoblefet Scarf Lando semiroom: Landorus-Therian, Kyurem-Black, Heatran, Jellicent, Thundurus, Conkeldurr
+  p2: Bw dou/Yuki Shaymin Sand: Tyranitar, Excadrill, Rotom-Wash, Shaymin-Sky, Cresselia, Conkeldurr
+
+  Turn 1
+    p1 greedy: move 4 1, move 1 1
+    p2 mcts: switch 5, switch 6   (slot0 Tyranitar -> Cresselia; slot1 Excadrill -> Conkeldurr)
+      search (4000 visits): switch cresselia;switch conkeldurr 69v 45 | switch rotomwash;protect,1 68v 44 | switch rotomwash;ironhead,1 67v 43 | switch rotomwash;switch cresselia 66v 43
+      p2b <- Conkeldurr comes in (386/386)
+      p2a <- Cresselia comes in (382/382)
+      p1a Landorus used Superpower -> p2a: Cresselia
+              p1a Landorus atk 1 fell
+              p1a Landorus def 1 fell
+      p1b Kyurem used Ice Beam -> p2a: Cresselia
+              p2a Cresselia is now frz
+      after p1: Landorus-Therian 326/326, Kyurem-Black 439/439
+      after p2: Cresselia 165/382, Conkeldurr 362/386
+
+  Turn 2
+    p1 greedy: move 4 1, move 1 1
+    p2 mcts: move 1 2, move 1 2
+      search (2000 visits): psychic,1;hammerarm,1 22v 12 | switch shayminsky;hammerarm,1 20v 10 | icebeam,1;icepunch,0 19v 9 | psychic,0;icepunch,1 18v 8
+      p1a Landorus used Superpower -> p2a: Cresselia
+              p1a Landorus atk 1 fell
+              p1a Landorus def 1 fell
+              p2a Cresselia is cured of frz
+      p2a Cresselia used Psychic -> p1b: Kyurem
+      p1b Kyurem used Ice Beam -> p2a: Cresselia
+      p2a Cresselia fainted
+      p2b Conkeldurr used Hammer Arm -> p1b: Kyurem
+              p2b Conkeldurr used up its Fighting Gem
+              p2b Conkeldurr spe 1 fell
+      p1b Kyurem fainted
+      after p1: Landorus-Therian 326/326, Kyurem-Black 0/439
+      after p2: Cresselia 0/382, Conkeldurr 338/386
+
+  Turn 3
+      p2a <- Rotom-Wash comes in (301/301)
+      p1b <- Heatran comes in (386/386)
+      after p1: Landorus-Therian 326/326, Heatran 386/386
+      after p2: Rotom-Wash 301/301, Conkeldurr 338/386
+
+  Turn 4
+    p1 greedy: move 4 2, move 1
+    p2 mcts: move 1 2, move 3 2
+      search (6000 visits): hydropump,1;machpunch,1 112v 56 | hydropump,1;switch tyranitar 108v 53 | thunderbolt,1;hammerarm,1 107v 52 | hydropump,1;hammerarm,1 104v 50
+      p2b Conkeldurr used Mach Punch -> p1b: Heatran
+      p1a Landorus used Superpower -> p2b: Conkeldurr
+              p1a Landorus atk 1 fell
+              p1a Landorus def 1 fell
+      p2a Rotom used Hydro Pump -> p1b: Heatran  [[miss]]
+              p2a Rotom -- MISSED
+      p1b Heatran used Heat Wave -> p2b: Conkeldurr  [[spread] p2a,p2b]
+      after p1: Landorus-Therian 326/326, Heatran 212/386
+      after p2: Rotom-Wash 212/301, Conkeldurr 56/386
+
+  Turn 5
+    p1 greedy: move 4 2, move 1
+    p2 mcts: move 1 2, move 3 2
+      search (7000 visits): hydropump,1;machpunch,1 151v 71 | hydropump,1;switch tyranitar 142v 65 | hydropump,1;icepunch,1 127v 55 | hydropump,1;detect,1 123v 53
+      p2b Conkeldurr used Mach Punch -> p1b: Heatran
+      p1a Landorus used Superpower -> p2b: Conkeldurr
+              p1a Landorus atk 1 fell
+              p1a Landorus def 1 fell
+      p2b Conkeldurr fainted
+      p2a Rotom used Hydro Pump -> p1b: Heatran
+      p1b Heatran fainted
+      after p1: Landorus-Therian 326/326, Heatran 0/386
+      after p2: Rotom-Wash 194/301, Conkeldurr 0/386
+
+  Turn 6
+      p1b <- Jellicent comes in (404/404)
+      p2b <- Shaymin-Sky comes in (341/341)
+      after p1: Landorus-Therian 326/326, Jellicent 404/404
+      after p2: Rotom-Wash 194/301, Shaymin-Sky 341/341
+
+  Turn 7
+    p1 greedy: move 4 1, move 1 1
+    p2 mcts: move 2 2, move 2 1
+      search (2000 visits): thunderbolt,1;seedflare,0 45v 26 | hydropump,0;seedflare,1 44v 25 | thunderbolt,0;seedflare,1 39v 21 | thunderwave,0;seedflare,1 39v 21
+      p1a Landorus used Superpower -> p2a: Rotom
+              p1a Landorus atk 1 fell
+              p1a Landorus def 1 fell
+              p2a Rotom used up its Sitrus Berry
+      p2b Shaymin used Seed Flare -> p1a: Landorus
+              p1a Landorus spd 2 fell
+      p2a Rotom used Thunderbolt -> p1b: Jellicent
+              p1b Jellicent used up its Sitrus Berry
+      p1b Jellicent used Scald -> p2a: Rotom
+              p2a Rotom is now brn
+      after p1: Landorus-Therian 26/326, Jellicent 222/404
+      after p2: Rotom-Wash 121/301, Shaymin-Sky 286/341
+
+  Turn 8
+    p1 greedy: move 4 1, move 1 1
+    p2 mcts: move 4, move 2 2
+      search (3000 visits): protect,0;seedflare,1 64v 25 | thunderbolt,1;seedflare,1 63v 24 | thunderbolt,1;protect,1 63v 24 | thunderbolt,0;seedflare,1 58v 21
+      p2a Rotom used Protect
+      p1a Landorus used Superpower -> p2a: Rotom
+              p2a Rotom -- move: Protect
+      p2b Shaymin used Seed Flare -> p1b: Jellicent
+      p1b Jellicent fainted
+      after p1: Landorus-Therian 26/326, Jellicent 0/404
+      after p2: Rotom-Wash 66/301, Shaymin-Sky 231/341
+
+  Turn 9
+      p1b <- Thundurus comes in (362/362)
+      after p1: Landorus-Therian 26/326, Thundurus 362/362
+      after p2: Rotom-Wash 66/301, Shaymin-Sky 231/341
+
+  Turn 10
+    p1 greedy: move 4 1, move 2 1
+    p2 mcts: move 1 2, move 2 2
+      search (4000 visits): hydropump,1;seedflare,1 96v 40 | thunderbolt,1;seedflare,1 81v 31 | hydropump,1;protect,1 68v 23 | thunderwave,1;seedflare,1 68v 23
+      p1a Landorus used Superpower -> p2a: Rotom
+              p1a Landorus atk 1 fell
+              p1a Landorus def 1 fell
+      p2b Shaymin used Seed Flare -> p1b: Thundurus
+              p1b Thundurus spd 2 fell
+      p1b Thundurus used Thunderbolt -> p2a: Rotom
+      p2a Rotom fainted
+      after p1: Landorus-Therian 26/326, Thundurus 228/362
+      after p2: Rotom-Wash 0/301, Shaymin-Sky 176/341
+
+  Turn 11
+      p2a <- Tyranitar comes in (404/404)
+      after p1: Landorus-Therian 26/326, Thundurus 228/362
+      after p2: Tyranitar 404/404, Shaymin-Sky 176/341
+
+  Turn 12
+    p1 greedy: move 4 2, move 2 2
+    p2 mcts: switch 6, move 2 2   (slot0 Tyranitar -> Excadrill)
+      search (3000 visits): switch excadrill;seedflare,1 105v 38 | pursuit,1;seedflare,1 104v 38 | pursuit,1;airslash,1 92v 31 | rockslide,0;airslash,0 90v 30
+      p2a <- Excadrill comes in (359/359)
+      p1a Landorus used Superpower -> p2b: Shaymin
+      p2b Shaymin used Seed Flare -> p1b: Thundurus
+              p1b Thundurus spd 2 fell
+              p1b Thundurus used up its Sitrus Berry
+      p1b Thundurus used Thunderbolt -> p2b: Shaymin
+      p2b Shaymin fainted
+      after p1: Landorus-Therian 26/326, Thundurus 82/362
+      after p2: Excadrill 359/359, Shaymin-Sky 0/341
+
+  Turn 13
+      p2b <- Tyranitar comes in (404/404)
+      after p1: Landorus-Therian 26/326, Thundurus 82/362
+      after p2: Excadrill 359/359, Tyranitar 404/404
+
+  Turn 14
+    p1 greedy: move 1, move 2 1
+    p2 mcts: move 2 2, move 4
+      search (7000 visits): ironhead,1;protect,1 625v 146 | ironhead,1;pursuit,1 491v 104 | ironhead,1;stealthrock,0 405v 78 | rockslide,0;stealthrock,0 402v 77
+      p2b Tyranitar used Protect
+      p2a Excadrill used Iron Head -> p1b: Thundurus
+      p1b Thundurus fainted
+              p1a Landorus -- move: Struggle
+      p1a Landorus used Struggle -> p2a: Excadrill
+      p1a Landorus fainted
+      after p1: Landorus-Therian 0/326, Thundurus 0/362
+      after p2: Excadrill 303/359, Tyranitar 404/404
+
+  Turn 15
+      p1a <- Conkeldurr comes in (386/386)
+      after p1: Conkeldurr 386/386, Thundurus 0/362
+      after p2: Excadrill 303/359, Tyranitar 404/404
+
+  Turn 16
+    p1 greedy: move 1 1, pass
+    p2 mcts: move 4, move 1
+      search (12000 visits): protect,0;rockslide,0 2623v 1030 | protect,0;pursuit,0 1360v 489 | earthquake,0;protect,1 972v 329 | protect,0;protect,1 968v 327
+      p2a Excadrill used Protect
+      p2b Tyranitar used Rock Slide -> p1a: Conkeldurr
+      p1a Conkeldurr used Hammer Arm -> p2a: Excadrill
+              p2a Excadrill -- move: Protect
+      after p1: Conkeldurr 284/386, Thundurus 0/362
+      after p2: Excadrill 303/359, Tyranitar 404/404
+
+  Turn 17
+    p1 greedy: move 1 1, pass
+    p2 mcts: move 2 1, move 1
+      search (11000 visits): ironhead,0;rockslide,0 4956v 3662 | protect,0;rockslide,0 1310v 891 | protect,0;pursuit,0 582v 361 | protect,0;protect,1 494v 299
+      p2a Excadrill used Iron Head -> p1a: Conkeldurr
+      p2b Tyranitar used Rock Slide -> p1a: Conkeldurr
+      p1a Conkeldurr fainted
+      after p1: Conkeldurr 0/386, Thundurus 0/362
+      after p2: Excadrill 268/359, Tyranitar 404/404
+
+  RESULT: p2 wins

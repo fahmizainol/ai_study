@@ -1,0 +1,130 @@
+battle 0   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: Bw dou/marilli EQ Meta Band Cube: Landorus-Therian, Thundurus, Metagross, Kyurem-Black, Jellicent, Latios
+  p2: Bw dou/has mence for no reason (w5): Tyranitar, Excadrill, Conkeldurr, Cresselia, Thundurus, Salamence
+
+  Turn 1
+    p1 mcts: move 1, move 3 2
+      search (3000 visits): earthquake,0;thunderwave,1 46v 31 | earthquake,0;thunderwave,0 43v 29 | earthquake,0;thunderbolt,1 42v 28 | earthquake,0;thunderbolt,0 41v 27
+    p2 greedy: move 3 1, move 1
+      p1b Thundurus used Thunder Wave -> p2b: Excadrill
+              p2b Excadrill -- IMMUNE
+      p2b Excadrill used Earthquake -> p1b: Thundurus  [[spread] p2a]
+              p1a Landorus -- IMMUNE
+              p1b Thundurus -- IMMUNE
+      p1a Landorus used Earthquake -> p2b: Excadrill  [[spread] p2a,p2b]
+              p1b Thundurus -- IMMUNE
+              p2a Tyranitar -- critical hit
+      p2a Tyranitar fainted
+      p2b Excadrill fainted
+      after p1: Landorus-Therian 320/320, Thundurus 336/358
+      after p2: Tyranitar 0/404, Excadrill 0/359
+
+  Turn 2
+      p2b <- Cresselia comes in (444/444)
+      p2a <- Conkeldurr comes in (386/386)
+      after p1: Landorus-Therian 320/320, Thundurus 336/358
+      after p2: Conkeldurr 386/386, Cresselia 444/444
+
+  Turn 3
+    p1 mcts: move 3 2, move 1 1
+      search (4000 visits): uturn,1;thunderbolt,0 62v 38 | uturn,1;thunderbolt,1 59v 36 | uturn,1;thunderwave,1 55v 32 | switch metagross;thunderbolt,0 52v 30
+    p2 greedy: move 1 2, move 2 2
+      p1b Thundurus used Thunderbolt -> p2a: Conkeldurr
+      p1a Landorus used U-turn -> p2b: Cresselia
+      after p1: Landorus-Therian 320/320, Thundurus 336/358
+      after p2: Conkeldurr 215/386, Cresselia 284/444
+
+  Turn 4
+      p1a <- Metagross comes in (364/364)
+      p2b Cresselia used Ice Beam -> p1b: Thundurus
+              p1b Thundurus used up its Sitrus Berry
+      p2a Conkeldurr used Hammer Arm -> p1b: Thundurus
+              p2a Conkeldurr used up its Fighting Gem
+              p2a Conkeldurr spe 1 fell
+      p1b Thundurus fainted
+      after p1: Metagross 364/364, Thundurus 0/358
+      after p2: Conkeldurr 191/386, Cresselia 257/444
+
+  Turn 5
+      p1b <- Landorus-Therian comes in (320/320)
+              p2a Conkeldurr atk 1 fell
+              p2b Cresselia atk 1 fell
+      after p1: Metagross 364/364, Landorus-Therian 320/320
+      after p2: Conkeldurr 191/386, Cresselia 257/444
+
+  Turn 6
+    p1 mcts: move 1 1, move 3 2
+      search (2000 visits): meteormash,0;uturn,1 51v 31 | meteormash,1;uturn,1 47v 28 | meteormash,1;stealthrock,0 41v 23 | meteormash,1;uturn,0 39v 21
+    p2 greedy: move 1 1, move 2 1
+      p1b Landorus used U-turn -> p2b: Cresselia
+      after p1: Metagross 364/364, Landorus-Therian 320/320
+      after p2: Conkeldurr 191/386, Cresselia 73/444
+
+  Turn 7
+      p1b <- Kyurem-Black comes in (391/391)
+      p2b Cresselia used Ice Beam -> p1a: Metagross
+      p1a Metagross used Meteor Mash -> p2a: Conkeldurr
+      p2a Conkeldurr fainted
+      after p1: Metagross 348/364, Kyurem-Black 367/391
+      after p2: Conkeldurr 0/386, Cresselia 46/444
+
+  Turn 8
+      p2a <- Thundurus comes in (347/347)
+      after p1: Metagross 348/364, Kyurem-Black 367/391
+      after p2: Thundurus 347/347, Cresselia 46/444
+
+  Turn 9
+    p1 mcts: switch 4, move 1   (slot0 Metagross -> Landorus-Therian)
+      search (2000 visits): switch landorustherian;outrage,0 41v 31 | meteormash,0;icebeam,0 40v 29 | meteormash,0;outrage,0 37v 26 | meteormash,0;dragonclaw,0 35v 24
+    p2 greedy: move 1 2, move 2 2
+      p1a <- Landorus-Therian comes in (320/320)
+              p2a Thundurus atk 1 fell
+              p2b Cresselia atk 1 fell
+      p2a Thundurus used Thunderbolt -> p1b: Kyurem
+      p1b Kyurem used Outrage -> p2a: Thundurus
+      p2a Thundurus fainted
+      p2b Cresselia used Ice Beam -> p1b: Kyurem
+      after p1: Landorus-Therian 320/320, Kyurem-Black 178/391
+      after p2: Thundurus 0/347, Cresselia 19/444
+
+  Turn 10
+      p2a <- Salamence comes in (331/331)
+              p1a Landorus atk 1 fell
+              p1b Kyurem atk 1 fell
+      after p1: Landorus-Therian 320/320, Kyurem-Black 178/391
+      after p2: Salamence 331/331, Cresselia 19/444
+
+  Turn 11
+    p1 mcts: move 1, move 1
+      search skipped (volatile lockedmove); greedy took the turn
+    p2 greedy: move 1 2, move 2 2
+      p2a Salamence used Draco Meteor -> p1b: Kyurem
+              p2a Salamence spa 2 fell
+      p1b Kyurem fainted
+      p1a Landorus used Earthquake -> p2a: Salamence  [[spread] ]
+              p2a Salamence -- IMMUNE
+              p2b Cresselia -- IMMUNE
+      p2b Cresselia used Ice Beam -> p1a: Landorus
+              p1a Landorus used up its Focus Sash
+      p2b Cresselia fainted
+      after p1: Landorus-Therian 1/320, Kyurem-Black 0/391
+      after p2: Salamence 278/331, Cresselia 0/444
+
+  Turn 12
+      p1b <- Metagross comes in (348/364)
+      after p1: Landorus-Therian 1/320, Metagross 348/364
+      after p2: Salamence 278/331, Cresselia 0/444
+
+  Turn 13
+    p1 mcts: move 2 1, move 1 1
+      search (10000 visits): stoneedge,0;meteormash,0 1272v 1254 | stoneedge,0;substitute,1 733v 695 | stealthrock,0;meteormash,0 725v 687 | uturn,0;meteormash,0 704v 665
+    p2 greedy: move 1 1, pass
+      p2a Salamence used Draco Meteor -> p1a: Landorus
+              p2a Salamence spa 2 fell
+      p1a Landorus fainted
+      p1b Metagross used Meteor Mash -> p2a: Salamence
+      p2a Salamence fainted
+      after p1: Landorus-Therian 0/320, Metagross 348/364
+      after p2: Salamence 0/331, Cresselia 0/444
+
+  RESULT: p1 wins

@@ -1,0 +1,50 @@
+battle 27   p1=greedy vs p2=mcts   mcts 300 ms a decision
+  p1: darkrai mogus tran kyub: Darkrai, Amoonguss, Heatran, Kyurem-Black
+  p2: Horse: Keldeo, Shaymin-Sky, Rapidash, Liepard
+
+  Turn 1
+    p1 greedy: move 2 1, move 3 1
+    p2 mcts: move 1 1, move 1 2
+      search (2000 visits): secretsword,0;airslash,1 59v 37 | protect,0;seedflare,0 47v 27 | icywind,0;seedflare,0 47v 27 | secretsword,0;tailwind,1 45v 25
+      p2b Shaymin used Air Slash -> p1b: Amoonguss
+      p1a Darkrai used Spacial Rend -> p2a: Keldeo
+      p2a Keldeo used Secret Sword -> p1a: Darkrai
+              p2a Keldeo used up its Fighting Gem
+      p1a Darkrai fainted
+              p1b Amoonguss COULD NOT MOVE (flinch)
+      after p1: Darkrai 0/281, Amoonguss 160/432
+      after p2: Keldeo 179/323, Shaymin-Sky 341/341
+
+  Turn 2
+      p1a <- Heatran comes in (386/386)
+      after p1: Heatran 386/386, Amoonguss 160/432
+      after p2: Keldeo 179/323, Shaymin-Sky 341/341
+
+  Turn 3
+    p1 greedy: move 2, move 3 1
+    p2 mcts: move 2 1, move 1 2
+      search (3000 visits): hydropump,0;airslash,1 171v 131 | secretsword,0;airslash,1 122v 87 | hydropump,0;tailwind,1 94v 62 | hydropump,0;airslash,0 90v 59
+      p2b Shaymin used Air Slash -> p1b: Amoonguss
+      p1b Amoonguss fainted
+      p2a Keldeo used Hydro Pump -> p1a: Heatran
+              p1a Heatran -- critical hit
+      p1a Heatran fainted
+      after p1: Heatran 0/386, Amoonguss 0/432
+      after p2: Keldeo 179/323, Shaymin-Sky 341/341
+
+  Turn 4
+      p1a <- Kyurem-Black comes in (391/391)
+      after p1: Kyurem-Black 391/391, Amoonguss 0/432
+      after p2: Keldeo 179/323, Shaymin-Sky 341/341
+
+  Turn 5
+    p1 greedy: move 2 1, pass
+    p2 mcts: move 1 1, move 1 1
+      search (5000 visits): secretsword,0;airslash,0 481v 353 | secretsword,0;seedflare,0 357v 251 | icywind,0;airslash,0 245v 161 | hydropump,0;airslash,0 232v 151
+      p2b Shaymin used Air Slash -> p1a: Kyurem
+      p2a Keldeo used Secret Sword -> p1a: Kyurem
+      p1a Kyurem fainted
+      after p1: Kyurem-Black 0/391, Amoonguss 0/432
+      after p2: Keldeo 179/323, Shaymin-Sky 341/341
+
+  RESULT: p2 wins

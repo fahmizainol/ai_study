@@ -1,0 +1,86 @@
+battle 16   p1=greedy vs p2=mcts   mcts 300 ms a decision
+  p1: LKJC - LSGT: Latios, Scrafty, Genesect, Thundurus
+  p2: Untitled 1072: Scrafty, Kyurem-Black, Tornadus, Victini
+
+  Turn 1
+    p1 greedy: move 1 1, move 2 1
+    p2 mcts: move 1 1, move 2 1
+      search (1000 visits): fakeout,0;icebeam,0 16v 12 | switch victini;icebeam,0 15v 11 | drainpunch,1;icebeam,0 14v 10 | crunch,1;icebeam,0 14v 10
+      p2a Scrafty used Fake Out -> p1a: Latios
+      p2b Kyurem used Ice Beam -> p1a: Latios
+      p1a Latios fainted
+      p1b Scrafty used Crunch -> p2a: Scrafty
+              p2a Scrafty def 1 fell
+      after p1: Latios 0/301, Scrafty 334/334
+      after p2: Scrafty 310/327, Kyurem-Black 391/391
+
+  Turn 2
+      p1a <- Genesect comes in (283/283)
+              p1a Genesect atk 1 rose
+      after p1: Genesect 283/283, Scrafty 334/334
+      after p2: Scrafty 310/327, Kyurem-Black 391/391
+
+  Turn 3
+    p1 greedy: move 3 1, move 2 1
+    p2 mcts: move 2 2, move 2 2
+      search (1000 visits): drainpunch,1;icebeam,1 41v 28 | switch victini;icebeam,1 38v 25 | drainpunch,1;switch victini 37v 24 | drainpunch,0;icebeam,1 35v 22
+      p1a Genesect used Ice Beam -> p2a: Scrafty
+      p2b Kyurem used Ice Beam -> p1b: Scrafty
+      p2a Scrafty used Drain Punch -> p1b: Scrafty
+              p1b Scrafty used up its Chople Berry
+              p1b Scrafty used up its Chople Berry
+      p1b Scrafty used Crunch -> p2a: Scrafty
+      after p1: Genesect 283/283, Scrafty 107/334
+      after p2: Scrafty 226/327, Kyurem-Black 391/391
+
+  Turn 4
+    p1 greedy: move 3 1, move 2 1
+    p2 mcts: move 2 1, move 2 1
+      search (1000 visits): drainpunch,0;icebeam,0 45v 35 | crunch,0;icebeam,0 38v 27 | switch victini;icebeam,0 38v 27 | crunch,1;icebeam,0 35v 24
+      p1a Genesect used Ice Beam -> p2a: Scrafty
+      p2b Kyurem used Ice Beam -> p1a: Genesect
+      p1b Scrafty used Crunch -> p2a: Scrafty
+              p2a Scrafty -- critical hit
+      p2a Scrafty used Drain Punch -> p1a: Genesect
+      after p1: Genesect 122/283, Scrafty 107/334
+      after p2: Scrafty 95/327, Kyurem-Black 391/391
+
+  Turn 5
+    p1 greedy: move 3 1, move 2 1
+    p2 mcts: switch 4, move 2 1   (slot0 Scrafty -> Victini)
+      search (2000 visits): switch victini;icebeam,0 125v 100 | drainpunch,0;icebeam,0 73v 50 | drainpunch,0;icebeam,1 71v 49 | switch tornadus;icebeam,0 71v 49
+      p2a <- Victini comes in (341/341)
+      p1a Genesect used Ice Beam -> p2a: Victini
+      p2b Kyurem used Ice Beam -> p1a: Genesect
+      p1b Scrafty used Crunch -> p2a: Victini
+      after p1: Genesect 44/283, Scrafty 107/334
+      after p2: Victini 115/341, Kyurem-Black 391/391
+
+  Turn 6
+    p1 greedy: move 3 1, move 2 1
+    p2 mcts: move 2 1, move 2 2
+      search (4000 visits): boltstrike,0;icebeam,1 441v 381 | vcreate,0;icebeam,1 335v 280 | boltstrike,1;icebeam,0 331v 276 | vcreate,1;icebeam,0 312v 258
+      p1a Genesect used Ice Beam -> p2a: Victini
+      p2b Kyurem used Ice Beam -> p1b: Scrafty
+      p1b Scrafty fainted
+      p2a Victini used Bolt Strike -> p1a: Genesect
+      p1a Genesect fainted
+      after p1: Genesect 0/283, Scrafty 0/334
+      after p2: Victini 66/341, Kyurem-Black 391/391
+
+  Turn 7
+      p1a <- Thundurus comes in (298/298)
+      after p1: Thundurus 298/298, Scrafty 0/334
+      after p2: Victini 66/341, Kyurem-Black 391/391
+
+  Turn 8
+    p1 greedy: move 3 1, pass
+    p2 mcts: move 4, move 2 1
+      search (19000 visits): protect,0;icebeam,0 3594v 3453 | vcreate,0;icebeam,0 3202v 3062 | glaciate,0;icebeam,0 3148v 3009 | boltstrike,0;icebeam,0 2998v 2859
+      p2a Victini used Protect
+      p2b Kyurem used Ice Beam -> p1a: Thundurus
+      p1a Thundurus fainted
+      after p1: Thundurus 0/298, Scrafty 0/334
+      after p2: Victini 66/341, Kyurem-Black 391/391
+
+  RESULT: p2 wins

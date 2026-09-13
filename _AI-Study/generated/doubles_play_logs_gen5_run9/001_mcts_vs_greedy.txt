@@ -1,0 +1,107 @@
+battle 1   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: meta volc scraft kyurem: Metagross, Scrafty, Volcarona, Kyurem
+  p2: Top 4 mons in the tier: Kyurem-Black, Latios, Scrafty, Thundurus
+
+  Turn 1
+    p1 mcts: move 2 1, move 3 2
+      search (2000 visits): meteormash,0;crunch,1 39v 27 | meteormash,0;bulkup,1 37v 25 | meteormash,1;drainpunch,0 36v 24 | meteormash,0;fakeout,0 34v 22
+    p2 greedy: move 1 1, move 1 1
+      p2b Latios used Draco Meteor -> p1a: Metagross
+              p2b Latios used up its Dragon Gem
+              p2b Latios spa 2 fell
+      p2a Kyurem used Draco Meteor -> p1a: Metagross
+              p2a Kyurem spa 2 fell
+      p1a Metagross used Meteor Mash -> p2a: Kyurem
+              p1a Metagross used up its Steel Gem
+      p2a Kyurem fainted
+      p1b Scrafty used Crunch -> p2b: Latios
+              p2b Latios def 1 fell
+      after p1: Metagross 45/364, Scrafty 332/332
+      after p2: Kyurem-Black 0/391, Latios 64/304
+
+  Turn 2
+      p2a <- Scrafty comes in (334/334)
+              p1a Metagross -- IT FAILED
+              p1b Scrafty atk 1 fell
+      after p1: Metagross 45/364, Scrafty 332/332
+      after p2: Scrafty 334/334, Latios 64/304
+
+  Turn 3
+    p1 mcts: move 2 1, switch 3   (slot1 Scrafty -> Volcarona)
+      search (4000 visits): meteormash,0;switch volcarona 128v 82 | meteormash,0;bulkup,1 106v 64 | meteormash,0;drainpunch,0 88v 49 | bulletpunch,0;bulkup,1 82v 45
+    p2 greedy: move 2 1, move 1 1
+      p1b <- Volcarona comes in (311/311)
+      p2b Latios used Draco Meteor -> p1a: Metagross
+              p2b Latios spa 2 fell
+      p1a Metagross fainted
+      p2a Scrafty used Crunch -> p1b: Volcarona
+      after p1: Metagross 0/364, Volcarona 151/311
+      after p2: Scrafty 334/334, Latios 64/304
+
+  Turn 4
+      p1a <- Scrafty comes in (332/332)
+              p2a Scrafty atk 1 fell
+              p2b Latios atk 1 fell
+      after p1: Scrafty 332/332, Volcarona 151/311
+      after p2: Scrafty 334/334, Latios 64/304
+
+  Turn 5
+    p1 mcts: move 4, move 1 1
+      search (1000 visits): bulkup,0;bugbuzz,0 42v 27 | drainpunch,0;bugbuzz,0 41v 26 | drainpunch,0;heatwave,0 39v 24 | bulkup,0;heatwave,0 38v 23
+    p2 greedy: move 2 2, move 1 2
+      p2b Latios used Draco Meteor -> p1b: Volcarona
+              p2b Latios spa 2 fell
+      p1b Volcarona used Bug Buzz -> p2a: Scrafty
+      p2a Scrafty used Crunch -> p1b: Volcarona
+      p1b Volcarona fainted
+      p1a Scrafty used Bulk Up
+              p1a Scrafty atk 1 rose
+              p1a Scrafty def 1 rose
+      after p1: Scrafty 332/332, Volcarona 0/311
+      after p2: Scrafty 146/334, Latios 64/304
+
+  Turn 6
+      p1b <- Kyurem comes in (391/391)
+      after p1: Scrafty 332/332, Kyurem 391/391
+      after p2: Scrafty 146/334, Latios 64/304
+
+  Turn 7
+    p1 mcts: move 1 1, move 3 1
+      search (2000 visits): fakeout,0;icebeam,0 75v 42 | fakeout,1;icebeam,0 72v 39 | bulkup,0;icebeam,0 70v 38 | bulkup,0;earthpower,0 59v 29
+    p2 greedy: move 2 1, move 1 1
+      p1a Scrafty used Fake Out  [[still]]
+              p1a Scrafty -- IT FAILED
+      p1b Kyurem used Ice Beam -> p2a: Scrafty
+      p2a Scrafty fainted
+      p2b Latios used Draco Meteor -> p1a: Scrafty
+      after p1: Scrafty 277/332, Kyurem 391/391
+      after p2: Scrafty 0/334, Latios 64/304
+
+  Turn 8
+      p2a <- Thundurus comes in (299/299)
+      after p1: Scrafty 277/332, Kyurem 391/391
+      after p2: Thundurus 299/299, Latios 64/304
+
+  Turn 9
+    p1 mcts: move 3 2, move 3 1
+      search (7000 visits): crunch,1;icebeam,0 2049v 1838 | drainpunch,1;icebeam,0 1929v 1724 | bulkup,0;icebeam,0 699v 580 | fakeout,1;icebeam,0 412v 322
+    p2 greedy: move 1 1, move 1 1
+      p1b Kyurem used Ice Beam -> p2a: Thundurus
+              p2a Thundurus -- critical hit
+      p2a Thundurus fainted
+      p2b Latios used Draco Meteor -> p1a: Scrafty
+              p1a Scrafty -- critical hit
+      p1a Scrafty fainted
+      after p1: Scrafty 0/332, Kyurem 391/391
+      after p2: Thundurus 0/299, Latios 64/304
+
+  Turn 10
+    p1 mcts: pass, move 3 2
+      search (16000 visits): No Move;icebeam,1 16000v 1832
+    p2 greedy: pass, move 1 2
+      p1b Kyurem used Ice Beam -> p2b: Latios
+      p2b Latios fainted
+      after p1: Scrafty 0/332, Kyurem 391/391
+      after p2: Thundurus 0/299, Latios 0/304
+
+  RESULT: p1 wins

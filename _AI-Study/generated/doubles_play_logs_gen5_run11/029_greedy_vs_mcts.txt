@@ -1,0 +1,148 @@
+battle 29   p1=greedy vs p2=mcts   mcts 300 ms a decision
+  p1: darkrai mogus tran kyub: Darkrai, Amoonguss, Heatran, Kyurem-Black
+  p2: [PL Week 2] Amoongus + HO: Amoonguss, Kyurem-Black, Infernape, Keldeo-Resolute
+
+  Turn 1
+    p1 greedy: move 2 1, move 3 1
+    p2 mcts: move 1, move 1 1
+      search (3000 visits): ragepowder,0;dracometeor,0 40v 0 | ragepowder,0;icebeam,0 40v 1 | ragepowder,0;icebeam,1 40v 1 | ragepowder,0;earthpower,0 40v 1
+      p2a Amoonguss used Rage Powder
+      p2b Kyurem used Draco Meteor -> p1a: Darkrai
+              p2b Kyurem spa 2 fell
+      p1a Darkrai used Spacial Rend -> p2a: Amoonguss
+              p2a Amoonguss -- critical hit
+      p1b Amoonguss used Giga Drain -> p2a: Amoonguss
+              p2a Amoonguss used up its Sitrus Berry
+      after p1: Darkrai 40/281, Amoonguss 432/432
+      after p2: Amoonguss 312/432, Kyurem-Black 391/391
+
+  Turn 2
+    p1 greedy: move 2 1, move 3 1
+    p2 mcts: move 2 1, move 1 1
+      search (4000 visits): spore,0;dracometeor,0 137v 1 | protect,0;dracometeor,0 137v 1 | spore,0;dracometeor,1 136v 1 | gigadrain,0;switch keldeoresolute 136v 1
+      p2b Kyurem used Draco Meteor -> p1a: Darkrai
+              p2b Kyurem spa 2 fell
+      p1a Darkrai fainted
+      p1b Amoonguss used Giga Drain -> p2a: Amoonguss
+      p2a Amoonguss used Spore -> p1b: Amoonguss
+              p1b Amoonguss is now slp
+      after p1: Darkrai 0/281, Amoonguss 432/432
+      after p2: Amoonguss 296/432, Kyurem-Black 391/391
+
+  Turn 3
+      p1a <- Heatran comes in (386/386)
+      after p1: Heatran 386/386, Amoonguss 432/432
+      after p2: Amoonguss 296/432, Kyurem-Black 391/391
+
+  Turn 4
+    p1 greedy: move 2, move 3 1
+    p2 mcts: move 4, move 1 2
+      search (5000 visits): protect,0;dracometeor,1 427v 370 | protect,0;dracometeor,0 423v 366 | switch keldeoresolute;dracometeor,0 315v 263 | spore,1;dracometeor,1 279v 229
+      p2a Amoonguss used Protect
+      p2b Kyurem used Draco Meteor -> p1b: Amoonguss
+              p2b Kyurem spa 2 fell
+      p1a Heatran used Eruption -> p2b: Kyurem  [[spread] p2b]
+              p2a Amoonguss -- move: Protect
+              p1a Heatran used up its Fire Gem
+              p1b Amoonguss COULD NOT MOVE (slp)
+      after p1: Heatran 386/386, Amoonguss 351/432
+      after p2: Amoonguss 296/432, Kyurem-Black 22/391
+
+  Turn 5
+    p1 greedy: move 2, move 3 2
+    p2 mcts: move 4, move 1 2
+      search (4000 visits): protect,0;dracometeor,1 203v 196 | protect,0;dracometeor,0 200v 192 | switch keldeoresolute;dracometeor,0 171v 160 | spore,1;dracometeor,0 168v 157
+      p2a Amoonguss used Protect  [[still]]
+              p2a Amoonguss -- IT FAILED
+      p2b Kyurem used Draco Meteor -> p1b: Amoonguss
+      p1a Heatran used Eruption -> p2a: Amoonguss  [[spread] p2a,p2b]
+      p2a Amoonguss fainted
+      p2b Kyurem fainted
+              p1b Amoonguss is cured of slp
+      p1b Amoonguss used Giga Drain -> p2: Amoonguss  [[notarget]]
+              p1b Amoonguss -- IT FAILED
+      after p1: Heatran 386/386, Amoonguss 294/432
+      after p2: Amoonguss 0/432, Kyurem-Black 0/391
+
+  Turn 6
+      p2b <- Keldeo-Resolute comes in (323/323)
+      p2a <- Infernape comes in (293/293)
+      after p1: Heatran 386/386, Amoonguss 294/432
+      after p2: Infernape 293/293, Keldeo-Resolute 323/323
+
+  Turn 7
+    p1 greedy: move 2, move 3 1
+    p2 mcts: move 2 2, move 1 1
+      search (1000 visits): overheat,1;hydropump,0 36v 24 | fakeout,0;hydropump,0 35v 23 | overheat,1;secretsword,0 35v 23 | closecombat,0;hydropump,0 32v 20
+      p2a Infernape used Overheat -> p1b: Amoonguss
+              p2a Infernape used up its Fire Gem
+              p1b Amoonguss -- critical hit
+              p2a Infernape spa 2 fell
+      p1b Amoonguss fainted
+      p2b Keldeo used Hydro Pump -> p1a: Heatran  [[miss]]
+              p2b Keldeo -- MISSED
+      p1a Heatran used Eruption -> p2b: Keldeo  [[spread] p2a,p2b]
+      after p1: Heatran 386/386, Amoonguss 0/432
+      after p2: Infernape 125/293, Keldeo-Resolute 206/323
+
+  Turn 8
+      p1b <- Kyurem-Black comes in (391/391)
+      after p1: Heatran 386/386, Kyurem-Black 391/391
+      after p2: Infernape 125/293, Keldeo-Resolute 206/323
+
+  Turn 9
+    p1 greedy: move 2, move 2 1
+    p2 mcts: move 3 2, move 2 2
+      search (5000 visits): closecombat,1;secretsword,1 478v 348 | closecombat,0;protect,1 348v 243 | overheat,1;secretsword,1 318v 219 | closecombat,1;hydropump,0 262v 174
+      p2b Keldeo used Secret Sword -> p1b: Kyurem
+      p2a Infernape used Close Combat -> p1b: Kyurem
+              p2a Infernape def 1 fell
+              p2a Infernape spd 1 fell
+      p1b Kyurem fainted
+      p1a Heatran used Eruption -> p2a: Infernape  [[spread] p2a,p2b]
+      p2a Infernape fainted
+      after p1: Heatran 386/386, Kyurem-Black 0/391
+      after p2: Infernape 0/293, Keldeo-Resolute 64/323
+
+  Turn 10
+    p1 greedy: move 2, pass
+    p2 mcts: pass, move 4
+      search (29000 visits): No Move;protect,1 28466v 25289 | No Move;hydropump,0 399v 268 | No Move;secretsword,0 105v 49 | No Move;quickguard,1 30v 2
+      p2b Keldeo used Protect
+      p1a Heatran used Eruption -> p2b: Keldeo
+              p2b Keldeo -- move: Protect
+      after p1: Heatran 386/386, Kyurem-Black 0/391
+      after p2: Infernape 0/293, Keldeo-Resolute 64/323
+
+  Turn 11
+    p1 greedy: move 2, pass
+    p2 mcts: pass, move 4
+      search (28000 visits): No Move;protect,1 27714v 24581 | No Move;hydropump,0 205v 120 | No Move;secretsword,0 50v 13 | No Move;quickguard,1 31v 3
+      p2b Keldeo used Protect
+      p1a Heatran used Eruption -> p2b: Keldeo
+              p2b Keldeo -- move: Protect
+      after p1: Heatran 386/386, Kyurem-Black 0/391
+      after p2: Infernape 0/293, Keldeo-Resolute 64/323
+
+  Turn 12
+    p1 greedy: move 2, pass
+    p2 mcts: pass, move 4
+      search (26000 visits): No Move;protect,1 25652v 22729 | No Move;hydropump,0 247v 152 | No Move;secretsword,0 65v 23 | No Move;quickguard,1 36v 5
+      p2b Keldeo used Protect
+      p1a Heatran used Eruption -> p2b: Keldeo
+              p2b Keldeo -- move: Protect
+      after p1: Heatran 386/386, Kyurem-Black 0/391
+      after p2: Infernape 0/293, Keldeo-Resolute 64/323
+
+  Turn 13
+    p1 greedy: move 2, pass
+    p2 mcts: pass, move 4
+      search (26000 visits): No Move;protect,1 25734v 22761 | No Move;hydropump,0 165v 91 | No Move;secretsword,0 67v 24 | No Move;quickguard,1 34v 4
+      p2b Keldeo used Protect  [[still]]
+              p2b Keldeo -- IT FAILED
+      p1a Heatran used Eruption -> p2b: Keldeo
+      p2b Keldeo fainted
+      after p1: Heatran 386/386, Kyurem-Black 0/391
+      after p2: Infernape 0/293, Keldeo-Resolute 0/323
+
+  RESULT: p1 wins
