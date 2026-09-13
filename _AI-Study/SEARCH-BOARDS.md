@@ -813,6 +813,10 @@ were the cheap part; they took an afternoon and they broke the engine.
 
 ### Gen 5 with real scraped teams: 63-17, and the search is only ~85% of it
 
+> **Superseded by run 9's re-run** on a clean equal-size pool with the Choice lock enforced:
+> **64-16 (80.0%)**, fallback down to 7.0% and now almost entirely engine panics. The figures
+> below are kept as history; the numbers to quote are in "Run 9 re-ran the roster" further down.
+
 Run 2026-09-13. Gen 5 has no mega evolution, so `can_mega_evolve` is never true and the
 `mega_evolve` crash above cannot fire — which is what made gen 5 the way through. It also has
 the better team supply for this purpose once four-mon brings are allowed:
@@ -848,8 +852,8 @@ search and both orientations were run, so its expected contribution to the poole
 about zero and the seat agreement (32-8 against 31-9) and the flat 22-18 control were subject
 to the same noise — the headline is probably not wrong. But it is extra variance that should
 not be there, and 11 of 80 battles were not clean. Fixed 2026-09-13: pairing now requires equal
-size and the run prints its pool split. **The 63-17 should be re-run before it is quoted
-further.**
+size and the run prints its pool split. **Re-run in run 9 on a clean pool — 64-16 (80.0%), so
+the headline survived both corrections rather than depending on them.**
 
 **Why it fell back — a new defect, and the most consequential one for a bridge.** Thirty-five
 times in the first orientation the search proposed a move Showdown had **disabled**. The
@@ -883,7 +887,10 @@ Two more panics, neither gen-6-specific:
   The lock rides on **`Move.disabled`**, which the caller fills from Showdown's per-move
   `disabled` flags — as `tools/foul_play_sidecar.py:173` had been doing for singles all along.
 - `flashfire`, `mustrecharge` and `slowstart` **do** exist as poke-engine volatiles and are
-  mapped; `disable` and `lockedmove` do not and remain counted skips.
+  mapped; `disable`, `lockedmove` and **`twoturnmove`** (added in run 9, 9 skips in the roster
+  re-run) do not and remain counted skips. `disable` and `lockedmove` may now be cheap to retire:
+  their effect is already carried by the per-move `disabled` whitelist run 9 added, though
+  `lockedmove` also has a duration the whitelist cannot express.
 
 ### Run 9 retired defect 4, and it was never the engine's defect at all
 
@@ -967,6 +974,60 @@ the engine sets `disabled` itself; this run's fix makes the flag common rather t
 it nor its switch-out mirror (`re_enable_disabled_moves`) is visible to the measured instruments,
 so both want the probe as their instrument, not the corpus.
 
+### Run 9 re-ran the roster: 64-16 on a clean pool, and the blocker is now panics
+
+The 63-17 headline carried two contaminants: a 4-v-6 pairing handicap in ~14% of battles, and
+~17% / ~7% of turns decided by greedy after the search proposed an illegal action. Both are gone —
+equal-size pairing, and defect 4 fixed — so this is the first measurement in which the arm is
+actually the search. Three arms, one seed, one pool, run **sequentially**, because the MCTS budget
+is wall-clock and parallel arms would have silently cut visits per decision.
+
+| arm | result | p (two-sided binomial) |
+|---|---|---|
+| MCTS as p1 vs greedy | **32-8** (80.0%) | 1.8e-04 |
+| greedy vs MCTS as p2 | **32-8** (80.0%) | 1.8e-04 |
+| **pooled, both seats** | **64-16 (80.0%)** | **5.9e-08** |
+| greedy vs greedy — the seat control | 23-17 (57.5%) | 0.43 |
+
+40 battles an arm, 300 ms a decision, `gen5doublesou`, `--team-sizes 4,6` with equal-size pairing:
+**158 teams of size 4 and 13 of size 6**, so 12,403 legal pairings against the 78 a size-6-only
+pool allows. **The 78.8% survived its corrections rather than depending on them** — 80.0% now,
+both seats landing on an identical 32-8, against a seat control that is a weak 23-17. The same-seat
+comparison (MCTS-p1 32-8 against greedy-p1 23-17) is Fisher p=0.053, which is the honest way to
+read it: the pooled figure is overwhelming against a coin, and merely suggestive against greedy
+*in the same seat*.
+
+**Zero illegal proposals across all 488 decisions in the three arms** — defect 4's fix holding at
+scale on real teams.
+
+**The fallback rate is down to 7.0% (34 of 488), and it is now almost entirely engine panics** —
+23 of the 34, so **4.7% of all decisions crash the search**:
+
+| panic site | events | status |
+|---|---|---|
+| `state.rs:1724` `get_two_actives` assert | **19** | defect 3, previously recorded as ×5 |
+| `genx/state.rs:43` `Invalid boost number: 7` | 2 | defect 2 — but a **second site**; that row named only `evaluate.rs:107` |
+| `state.rs:1946` `attempt to add with overflow` | 1 | **new — defect 31** |
+| `mcts.rs:134` / `:135` index out of bounds, len 0 | 1 | **new — defect 30**, since reproduced deterministically |
+
+The remaining 11 fallbacks are unmapped-volatile skips: `twoturnmove` 9 — a third one, previously
+unrecorded — and `lockedmove` 2. `disable` did not appear at all.
+
+**The panics track search VOLUME, not team size, and that is the part that matters for a bridge.**
+No earlier run panicked once: size-6 pools at 150 ms gave zero both before and after the
+Choice-lock fix, and an attribution run on **size-4 teams only at 150 ms produced 0 panics in 122
+decisions** (17-3). The roster run differs chiefly in budget — mean visits 16491 against 3762 — so
+depth is what reaches the pathological states. The honest caveat is that it also had 3.7× the
+decisions, so volume and depth are not fully separated; what is established is that small teams
+alone do not produce them, and that **a realistic bridge budget would make this rate worse, not
+better.**
+
+**A counting trap in my own reporting, worth keeping.** `grep -c 'engine panic'` counts the
+aggregated counter *lines*, not the events, and told me 6 where the true figure is 23 — the stats
+block prints `<count>  engine panic: <message>`, so events must be summed from the counts. The
+same artefact makes the illegal-proposal figure read 9 instead of 22. A count of a summary is not
+a count of the thing.
+
 ## Backlog
 
 Recorded, not done. In the order they are worth doing.
@@ -1049,7 +1110,7 @@ to Showdown sets almost directly. Two known obstacles:
 Doing this is what would make the play result mean something: same referee, same search, real
 teams. It is more valuable than re-running the toy version with transcripts attached.
 
-### 3. Fix the twenty-nine confirmed defects — 13 done (4, 5, 6, 7, 11, 15, 16, 17, 18, 19, 20, 23, 27), 16 open
+### 3. Fix the thirty-one confirmed defects — 13 done (4, 5, 6, 7, 11, 15, 16, 17, 18, 19, 20, 23, 27), 18 open
 
 Every line number below was read out of the `main-doubles` clone, not remembered. Three are
 crashes, so they stop a bridge outright; seventeen are silent wrong answers, which is worse to ship;
@@ -1065,8 +1126,8 @@ here is a regression, only unfinished work.
 | # | site | trigger |
 |---|---|---|
 | 1 | `genx/generate_instructions.rs:4289` `mega_evolve` | computes `act_slot`, discards it, then reads `side.get_active()` — slot 0 — and panics at `:4301` on any held item that is not a mega stone (`RHYPERIOR`/`ASSAULTVEST`, `TALONFLAME`/`CHOICEBAND`, …). Note the second, quieter half: were slot 0 *also* holding a stone, this would mega-evolve the wrong body and not panic at all |
-| 2 | `genx/evaluate.rs:107` | `Invalid boost value: -7 / -8 / **-11 / -12**`. Boosts escape the ±6 clamp somewhere upstream and only blow up at evaluation. Seen in gen 6 **and** gen 5, so not generation-specific. The −12 (`doubles_play_logs_gen5_seed23/002`, turn 1) matters: it is exactly **double** the legal floor, so this is not a clamp that is off by one or two but drops being stacked with no bound at all — look for a per-slot drop applied once per target |
-| 3 | `state.rs:1722` `get_two_actives` | `assert_ne!(a_idx, b_idx, "get_two_actives called with the same position")` — reached in ordinary play (×5 in the gen 5 run) |
+| 2 | `genx/evaluate.rs:107` **and `genx/state.rs:43`** | `Invalid boost value: -7 / -8 / **-11 / -12**` at the first site, `Invalid boost number: 7 / 8` at the second. Boosts escape the ±6 clamp somewhere upstream and blow up at whichever reader reaches them first — **run 9's roster re-run panicked twice at `genx/state.rs:43`, so evaluation is not the only victim and "only blow up at evaluation" was too narrow**. Seen in gen 6 **and** gen 5, so not generation-specific. The −12 (`doubles_play_logs_gen5_seed23/002`, turn 1) matters: it is exactly **double** the legal floor, so this is not a clamp that is off by one or two but drops being stacked with no bound at all — look for a per-slot drop applied once per target |
+| 3 | `state.rs:1722` `get_two_actives` | `assert_ne!(a_idx, b_idx, "get_two_actives called with the same position")` — reached in ordinary play (×5 in the gen 5 run). **Run 9's roster re-run makes this the dominant crash by a wide margin: 19 of the 23 panics across 488 decisions, panicking at `state.rs:1724` with `left: 0, right: 0` — both positions resolving to party index 0.** Once the Choice lock stopped masking turns, this became the single largest reason a decision is not the search's |
 
 **Silent wrong answers.** These return a plausible result that is wrong, which the differential
 caught only because Showdown was sitting next to it.
@@ -1094,6 +1155,8 @@ caught only because Showdown was sitting next to it.
 | 27 | **FIXED 2026-09-13 (run 8)** — `genx/generate_instructions.rs:1867` | **An absorbed move slipped past BOTH doubles protect gates, and the reason is that the absorb erases the fields they test.** Every absorbing ability calls `remove_all_effects()`, which sets `category = Status` *and* calls `flags.clear_all()` (`choices.rs:20741`). The area guard is gated on `choice.category != MoveCategory::Status` (`:1890`) and the per-body Protect stanza on `choice.flags.protect` (`:1952`) — so once the ability had run, neither fired, `remove_effects_for_protect()` never ran, and that function is the only thing that clears `choice.boost` (`choices.rs:20735`). A Protecting Lightning Rod holder therefore still banked **+1 SpA**, and Wide Guard missed absorbable moves for the same root cause. **Showdown's order is the opposite and that is the fix**: Protect's condition carries `onTryHitPriority: 3` and blocks, while the absorb's boost sits in an unprioritised `onTryHit` on the same event (`data/abilities.ts:2344`), so a blocked move never reaches the ability. The defender's ability and item are now consulted only when the move is **not** blocked; skipping the defensive modifiers costs nothing there, since `remove_effects_for_protect` zeroes `base_power` anyway. Singles is identical by construction (`blocked_before_ability` is `false` under `cfg(not(doubles))`). Priced: the last genuine boosts row closed, 314 → **315/316**, and stage 0 18 → **19/19** via `protect_blocks_the_absorb_boost_too`, where Showdown leaves the holder at 301→301 with no boost and logs `\|-activate\|… move: Protect`. Bodies unchanged at 306/316, and probe `tools/pe_doubles_spread_redirect.py` is byte-identical across all four cells |
 | 28 | open — `genx/generate_instructions.rs:2324` | **Ability redirection is applied to SPREAD moves, which Showdown never does.** The single-target guard in `redirect_target` gates only the *volatile* redirection (Follow Me / Rage Powder / Spotlight); the Lightning Rod / Storm Drain scan above it runs for every move. In Showdown the redirect event is unreachable for spread moves — `priorityEvent('RedirectTarget')` sits inside the `default:` branch of the target switch (`sim/pokemon.ts:835`), which `allAdjacent` / `allAdjacentFoes` / `allies` never reach, and it is additionally skipped for charging moves and when `activePerHalf <= 1`. The missing guard **predates run 4**; what run 4 changed by making the ability scan field-wide is that a spread move can now be drawn onto the attacker's **own ally**. Recorded rather than fixed because it has **no measured consequence**: probe `tools/pe_doubles_spread_redirect.py` varies the ally's Storm Drain and the foe's Protect independently and the engine is correct in all four cells (the ally absorbs its partner's Surf, which is right — it is a legitimate target of the spread move — and every other body takes its normal damage). So the divergence is currently latent, living in `state.target_position` rather than in any outcome |
 | 29 | open — `genx/items.rs:260` `get_choice_move_disable_instructions` | **A Choice lock is stamped on slot 0, whichever body used the move.** The engine *does* model the lock — a Choice holder using a move disables that body's other moves — but the helper takes `&Pokemon` + `&SideReference` and has no `State` to ask which slot is acting, so it carries the fork's own `0, // FIXME(doubles): slot (no State access in this fn)`. Three doubles-reachable call sites pass through it: `items.rs:761` (the CHOICEBAND / CHOICESPECS / CHOICESCARF arm), `choice_effects.rs:1005`, `abilities.rs:673`. A **slot-1** Choice user therefore locks its **partner** and keeps all four of its own moves. Probe `tools/pe_doubles_choicedisable_slot.py`: with both bodies Choice Banded and each using its own M0, a correct engine emits six disables (`M1 M2 M3` twice over) — four appear, and one of them is **`M0`, the move just used**, which can only happen if the second actor wrote onto the first body. Note the probe cannot read the slot directly: `DisableMove`'s Display omits it (`DisableMove SideOne: M1`) even though the apply path uses it (`state.rs:2149` → `get_active_slot(slot)`), so the evidence is the index set, not a slot number. **Not newly exposed by defect 4's fix** — the engine sets `disabled` itself, so this was always reachable; filling `Move.disabled` makes it common rather than rare. `state.rs:1890` `re_enable_disabled_moves` is the mirror image on switch-out, same hard-coded slot 0, already recorded and still unfixed. Neither is visible to the measured instruments: the corpus projects damage, boosts and statuses but never move availability, and the play harness rebuilds the root state from Showdown every turn, so a wrong lock inside the tree never reaches a submitted action |
+| 30 | open — `genx/state.rs:1790` `combine_slot_options` | **A doubles side can end up with ZERO legal actions, and the search indexes the empty list.** `mcts.rs:134` (side one) and `:135` (side two) do `self.sN_options.as_ref().unwrap()[idx]` with no emptiness check, so an empty list aborts the search with `index out of bounds: the len is 0 but the index is 0`. The emptiness comes from a **filter, not a missing guard** — per-slot lists cannot be empty (`slot_options_doubles` ends `if options.is_empty() { push(None) }`, `:1680`) and `replacement_options_doubles` survives scarcity (`needing=[0,1]`, `available=1` → `fill=1` keeps `(Switch, None)` and `(None, Switch)`) — but `combine_slot_options` builds the cartesian product and then drops every combination where two slots switch to the same body (`has_duplicate_switch`, `:1819`) **with nothing to fall back on if that empties the result**. So when both slots' only option is a switch (no move selectable — `move_is_selectable` rejects `pp <= 0` and `disabled`) and exactly **one** bench body is available, the sole combination `(Switch(b), Switch(b))` is filtered away and the side has no action at all. **Reproduced deterministically in a three-body state**, no search depth required: `tools/pe_doubles_empty_options.py` cell A panics while both controls — two bench bodies, or one slot keeping a usable move — return 2 options. Singles cannot express this: no pairs, so no duplicate-switch filter. Seen once in run 9's roster re-run (on the `:135` side). The fix is a post-filter fallback, either one all-`None` action or letting one slot switch while the other passes |
+| 31 | open — `state.rs:1946` `heal` | **`attempt to add with overflow`.** `fn heal` does `active.hp += amount` on an `i16`, so an `amount` big enough to carry hp past 32767 aborts the search. It is slot-correct (`get_active_slot(slot)`), so this is **not** a slot defect but an unbounded magnitude. Seen once in run 9's roster re-run at 300 ms and **not root-caused.** Two candidates, neither confirmed: run 4's fix made a spread move apply its `heal` **per target** (so this may be my own blast radius), and defect 2's `-11 / -12` boosts are the same family of accumulation with no clamp. Wants a probe before a fix — giving `hp` a saturating add would hide the cause rather than remove it |
 | 11 | **SUPERSEDED by defect 20 — same fault, and fixed there in run 5** | this is the symptom-level entry, written before the site was known; row 20 is the same bug at `genx/generate_instructions.rs:815` and carries the fix. Kept because its evidence is still the clearest statement of the symptom, and because run 6's backlog text mistakenly used *this* number for `reset_boosts` (which is defect **6**) — a slip corrected in run 7. **Every status move applies its status to slot 0, whatever it was aimed at.** `thunderwave,0` and `thunderwave,1` both emit `ChangeStatus SideTwo-P0` (`tools/pe_doubles_status_target.py`, two Psychic-type foes so neither is immune and only the index can differ). Damage does *not* have this bug — `airslash,0` and `airslash,1` correctly emit `Damage SideTwo:0` and `:1` — so it is the status write specifically. Worse, the immunity check reads the **right** target while the write goes to the wrong one, so Thunder Wave aimed at a Psychic ally-of-a-Ground-type paralyzes the **Ground type** |
 
 **Wasted search.** Not a wrong answer — a budget spent on nothing.
