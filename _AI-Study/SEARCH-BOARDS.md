@@ -637,8 +637,8 @@ artefact. **The doubles search beats the baseline decisively, in both seats.**
 **What this does and does not establish.** It says the search produces coherent doubles play —
 worth the bridge — and it says so *despite* the defects above: the planner is working from a
 board that agreed with Showdown on 73.2% of turns, mispriced Wide Guard (both since fixed —
-87.7% on the corrected instrument; this measurement predates the fixes), and mis-binds an
-action across Ally Switch. **So 73.9% is a floor, not a ceiling.** What it does **not** say is
+95.6% on the corrected instrument after runs 1–3; this measurement predates all of them), and
+mis-binds an action across Ally Switch. **So 73.9% is a floor, not a ceiling.** What it does **not** say is
 that a doubles `foul_play` arm would beat this study's rule engine. Greedy is a weak opponent —
 it only manages 32-19 against random, with nine turn-limit draws — while the Reborn rule
 planner at 38/60 is a far stronger heuristic. Beating greedy is a necessary result, not a
@@ -793,9 +793,14 @@ Recorded, not done. In the order they are worth doing.
 
 The 12 stage 0 positions were authored from the fork's own `tests/test_doubles.rs` names, so
 by construction they can only confirm mechanics it already knows about — which is exactly why
-11 of 12 passed while the random corpus agreed on 73.2% — and the asymmetry survived both
-fixes, which is the point: stage 0 is now 13 of 13 while the corpus sits at 87.7%. Cases I
-author pass because I authored them. Showdown's suite is the independent
+11 of 12 passed while the random corpus agreed on 73.2%. Cases I author pass because I authored
+them.
+
+**The honest update, after three runs of fixes, is that this argument is now weaker than when it
+was written.** Stage 0 is 13 of 13 and the corpus is 95.6%, so the gap between hand-authored and
+random has narrowed from ~27 points to ~4.4. The asymmetry is real but no longer dramatic, and
+the case for harvesting no longer rests on a large measured gap — it rests on **coverage**: 328
+tests exercising mechanics stage 0 never names at all. Showdown's suite is the independent
 alternative: **328 individual doubles tests across 113 files** (`test/sim/moves` 150,
 `test/sim/abilities` 108, `test/sim/misc` 29, `test/sim` 25, `test/sim/items` 16), authored by
 people who have never seen this engine.
@@ -832,7 +837,8 @@ after) for every doubles test as it runs; their assertions still execute and are
 Their suite and the random corpus answer different questions and neither replaces the other:
 theirs is adversarial and independently authored, so it finds bugs; ours is ordinary play over
 normal positions, which is what a search actually encounters, and is where the 73.2%/92.0%
-figures come from.
+figures come from — those being the *original* corpus measurement, before the corrected
+instrument and runs 1–3 took it to 95.6% against a 97.6% ceiling.
 
 ### 2. Replace the play harness's synthetic roster with `doubles_a`
 
