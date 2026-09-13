@@ -26,6 +26,14 @@ const body = (p) => p && ({
   hp: p.hp, maxhp: p.maxhp, status: p.status || 'none', fainted: !!p.fainted,
   stats: { ...p.storedStats }, boosts: { ...p.boosts },
   volatiles: Object.keys(p.volatiles || {}),
+  // Substitute's remaining health, which lives ON the volatile in Showdown
+  // (`effectState.hp = floor(maxhp/4)`, decremented in `sim/battle.ts:2229`) but is a field on
+  // the Pokemon in poke-engine (`substitute_health`). Added in run 11: until then `mon()`
+  // dropped every volatile, so a substitute was simply absent; now that volatiles are passed,
+  // sending SUBSTITUTE without its health would model a barrier that absorbs min(damage, 0)
+  // -- worse than the skip it replaces. Zero when there is no substitute, which is also the
+  // engine's own default.
+  subHp: (p.volatiles && p.volatiles.substitute && p.volatiles.substitute.hp) || 0,
   // Showdown enforces a Choice lock through lastMove rather than a field on the volatile, and
   // poke-engine represents the same thing as the Pokemon's last_used_move -- so the move id is
   // what the translator needs to turn `choicelock` into state instead of a skipped turn.

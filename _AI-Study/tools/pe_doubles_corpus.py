@@ -78,10 +78,52 @@ VOLATILE = {"confusion": "confusion", "substitute": "substitute", "leechseed": "
             # but the turn is skipped if a body carrying it actually chooses one of
             # STALL_MOVES -- the only situation in which it changes anything.
             "stall": None,
-            # A Choice lock is not a volatile in poke-engine: it is last_used_move, set below
-            # from the body's lastMove. Flash Fire and the Hyper Beam recharge DO exist there.
+            # A Choice lock is not a volatile in poke-engine: it rides on Move.disabled (see
+            # `mon`). Flash Fire and the Hyper Beam recharge DO exist there.
             "choicelock": None, "flashfire": "flashfire", "mustrecharge": "mustrecharge",
-            "slowstart": "slowstart"}
+
+            # --- run 11: the three that used to be counted skips -------------------------
+            # `disable` needs no mapping. poke-engine HAS a DISABLE volatile, but nothing
+            # reads it to restrict a choice -- its only non-application use site is an Aroma
+            # Veil gate (`genx/state.rs:780`), while `move_is_selectable` reads the per-move
+            # `Move.disabled` flag, which run 9's whitelist already fills from Showdown's own
+            # per-move `disabled`. So the EFFECT is modelled and the volatile is redundant.
+            "disable": None,
+            # `twoturnmove` likewise. Showdown's condition does `attacker.addVolatile(effect.id)`
+            # in its own onStart (`data/conditions.ts:294`), so a charging body carries BOTH
+            # `twoturnmove` and a volatile named after the move -- and it is the move-named one
+            # that poke-engine reads, via `active_is_charging_move_slot`'s CHARGE_VOLATILES
+            # table (`genx/state.rs:1134`). Mapping the generic marker to an engine name would
+            # be wrong; mapping its siblings is the fix.
+            "twoturnmove": None,
+            # The siblings. Every one of these is both a Showdown volatile id and a
+            # poke-engine PokemonVolatileStatus of the same name, and each appears in
+            # CHARGE_VOLATILES, so passing it makes `slot_options_doubles` (`:1648`) return the
+            # single charge option instead of a full move list -- which is what Showdown's
+            # single-entry request says too. Gen 5 reaches the first twelve; the rest are
+            # later-gen and cost nothing to map.
+            **{v: v for v in ("solarbeam", "fly", "dig", "dive", "bounce", "skullbash",
+                              "skyattack", "razorwind", "freezeshock", "iceburn",
+                              "shadowforce", "skydrop", "phantomforce", "meteorbeam",
+                              "electroshot", "geomancy", "solarblade")},
+            # Outrage / Thrash / Petal Dance. Passed WITHOUT a duration, which is a recorded
+            # approximation rather than a free win: the engine counts lockedmove UP (0, 1, then
+            # at 2 it removes the volatile and applies confusion, `generate_instructions.rs:3898`)
+            # while Showdown counts a hidden `trueDuration` DOWN from random(2,4), and the
+            # snapshot carries no counter at all. A lock therefore always looks FRESH to the
+            # search, so it over-estimates how long the body stays locked. Safe in the sense
+            # that matters -- only a duration above 2 panics (the `_ =>` arm of the taunt-style
+            # match), and 0 is the engine's own start value.
+            "lockedmove": "lockedmove",
+
+            # `slowstart` is deliberately NOT mapped, and this is a downgrade from the old
+            # table, which claimed it. Passing it with the duration the snapshot cannot supply
+            # is actively harmful: the end-of-turn block does `slowstart -= 1` and then tests
+            # `== 0` (`generate_instructions.rs:3880`), so a duration of 0 goes to -1 and the
+            # volatile is NEVER removed -- a permanently halved-Attack body in the search's
+            # model. Inert is strictly better than wrong. Costs nothing here: Slow Start is
+            # 0 bodies in all 183 gen5doublesou teams (Regigigas 0, and Truant/Unburden 0 too).
+            "slowstart": None}
 
 # Every move that feeds Showdown's `stall` counter, not just Protect. Wide Guard and Quick
 # Guard both call `onHitSide -> source.addVolatile('stall')` (`data/moves.ts:20816` and
@@ -151,6 +193,23 @@ def mon(d, allow_fainted=False, usable=None):
         # correctly offered everything.
         last_used_move=next((f"move:{i}" for i, m in enumerate(d["moves"])
                              if pid(m["id"]) == pid(d.get("lastMove") or "")), "move:none"),
+        # The volatiles, ACTUALLY passed. Until run 11 this argument was absent entirely, so
+        # the loop above only validated `d["volatiles"]` and then threw them away -- the
+        # `VOLATILE` table implied a translation that never happened. Harmless for every
+        # figure in SEARCH-BOARDS.md (0 of the 456 corpus turns carry a volatile on an active
+        # OR a bench body, checked rather than assumed), but it silently cost the play harness
+        # every charging and locked body, and it made run 10's first Encore probe inert.
+        #
+        # A None in the table means "representable as nothing" and is dropped here. Names are
+        # still validated above rather than passed through, because `from_str` ends in
+        # `_ => Ok(default)` (`src/lib.rs:65`): an unrecognised name does not error, it
+        # silently becomes NONE and is inserted into the bitset.
+        volatile_statuses={VOLATILE[v] for v in d["volatiles"] if VOLATILE[v]},
+        # Durations are left at their zero defaults on purpose. The snapshot has no counters,
+        # and for the three volatiles whose durations the engine reads (lockedmove, taunt,
+        # encore) zero is the engine's own start value and lands in a safe match arm; slowstart
+        # is the one where zero is NOT safe, which is why it is unmapped above.
+        substitute_health=int(d.get("subHp") or 0),
     )
 
 def build_side(s, allow_fainted=False, usable=None):

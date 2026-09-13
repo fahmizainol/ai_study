@@ -218,6 +218,22 @@ def showdown_choice(req, parts):
     out = []
     for slot, part in enumerate(parts):
         if part is None:
+            # `pass` is legal only for a slot that CANNOT act. A body that must recharge --
+            # or is mid-charge -- has exactly one move in its request, flagged `locked`, and
+            # Showdown rejects the whole choice unless that move is named ("Can't pass: You
+            # must make a choice"). poke-engine expresses both of those as MoveChoice::None
+            # (`genx/state.rs:1642` for MUSTRECHARGE, `:1648` for a charge), so the None has
+            # to be translated back rather than taken literally.
+            #
+            # Latent before run 11 rather than introduced by it: the whitelist alone already
+            # disables every real move on a recharge turn, so the engine already returned
+            # None there. It had simply never fired -- recharge moves are 2 of 183 teams --
+            # and the failure mode is an ABORTED run, not a counted fallback, which is why
+            # it is worth three lines to close.
+            a = (req.get("active") or [None] * (slot + 1))[slot]
+            locked = [m for m in (a or {}).get("moves", []) if m.get("locked")]
+            if a and not a.get("fainted") and len(locked) == 1:
+                out.append(f"move {locked[0]['n']}"); continue
             out.append("pass"); continue
         kind, value, target = part
         if kind == "switch":
