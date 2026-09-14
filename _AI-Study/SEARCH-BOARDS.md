@@ -1229,6 +1229,88 @@ singles encodes the lock the same way. And the single remaining panic dumped its
 seven boosts are zero on all four bodies**, so defect 2's ±6 escape is generated *inside* the tree
 rather than handed to it by the translator, which removes my own instrument as a suspect there.
 
+### Run 12 root-caused defect 2 by instrumenting the one mutator — and the environment was then lost
+
+**Read this row's status first: the fix is verified but NOT in the patch.** The scratchpad worktree
+holding the engine source, the build and the venv was destroyed between sessions, before the patch
+could be regenerated and before the arm was re-priced. The change is two lines and is specified
+exactly below, so it is reconstructible; nothing else from this run is.
+
+**What the defect is.** `ability_end_of_turn` (`genx/abilities.rs:1170`) and `item_end_of_turn`
+(`genx/items.rs:880`) both open with `let owner_slot = state.actor_slot();`. That is a **transient
+set per actor during move resolution** (`generate_instructions.rs:5295`), so by end of turn it names
+whichever body happened to act *last*. Meanwhile every read in both functions goes through
+`attacking_side.get_active()` — slot 0 — and there is **not one `get_active_slot` call in either**.
+So all twelve `owner_slot` emissions in `ability_end_of_turn` stamped instructions with one slot
+while the state they described belonged to another. That breaks apply/reverse: the reversal
+subtracts from the slot the *instruction* names, while generation mutated the slot the *read* named.
+
+**Speed Boost turns that into a two-way runaway.** Its `< 6` guard bounds slot 0 while the emitted
+instruction accumulates elsewhere, so neither body is bounded:
+
+```
+slot 0 Speed 1 +6 -> 7   ...  6 +6 -> 12      in-memory +1 per generation, never reversed
+slot 1 Speed -6 -1 -> -7 ... -11 -1 -> -12    one reversal per cycle, never applied
+```
+
+and the readers then panic — `evaluate.rs:107` `Invalid boost value: -11`, `genx/state.rs:43`
+`Invalid boost number: 7`. **Both signs come from one defect**, which is what defeated four turns of
+source reading: I kept looking for an unclamped *negative* write, and there isn't one — all four
+emits that bypass the clamp (`SPEEDBOOST`, `INTREPIDSWORD`, `DAUNTLESSSHIELD`, `BELLYDRUM`) **add**.
+The negatives are reversals of a positive stamped on the wrong body.
+
+**This also retires a wrong reading that sat in row 2 for four runs.** "The −12 is exactly double the
+legal floor, so look for a per-slot drop applied once per target" was mine, and it is wrong twice
+over: −7/−8 are one or two steps past the limit rather than doubled, and the −12 is the far end of a
+walk, not a doubled application. Belly Drum, the one site that really can emit ±12 in one step, is
+**0/183 teams** in this pool and cannot have produced it.
+
+**The method is the transferable part, and it is run 10's lesson applied on purpose.** Reading the
+callers produced a closed, correct audit — `Side::apply_boost` (`state.rs:2039`) is the sole mutator
+and has no clamp; `get_boost_amount` has exactly two callers; everything else routes through
+`apply_boost_instruction`, which clamps against the same slot it mutates — and that audit still
+explained only half the evidence. **Instrumenting the single chokepoint found it in one run**: an
+`eprintln!` in `apply_boost` that fires on any write leaving ±6 catches every path *by
+construction*, including the one the audit missed, and reports the first out-of-range write rather
+than whichever reader later trips over it.
+
+**The repro is evidence, not a construction**, and getting it wrong once is worth recording.
+`generated/doubles_play_logs_gen5_tailwind/000` is a tracked log where this panic fires on the very
+first decision of battle 0, so the opening position alone suffices — no depth to reach. My first
+probe built the teams in dump order and reported a confident **0/5**; that log was made with
+`--require-move tailwind`, which *rotates the carrier to the lead*, and in both teams the carrier
+sits at index 3. Going through `load_dump_teams` with the same `require` reproduces the real leads,
+and then it is **12/12**.
+
+| `tools/pe_doubles_boost_range.py`, opening position of the tracked log | before | after |
+|---|---|---|
+| panics in 12 attempts | **12/12** | **0/12** |
+| `DBG boost out of range` writes | many per attempt | **none** |
+
+**The fix**, to be re-applied to a fresh worktree: in **both** `ability_end_of_turn`
+(`genx/abilities.rs:1175`) and `item_end_of_turn` (`genx/items.rs:885`), replace
+`let owner_slot = state.actor_slot();` with `let owner_slot = 0;` — the slot the functions actually
+read. That makes state and instruction agree, which is the condition `reset_boosts` documents as
+keeping apply/reverse sound. **Singles is bit-for-bit identical by construction**, since
+`actor_slot()` is defined as `0` under `cfg(not(doubles))`, so no `cfg` gate is needed.
+
+**Controls, all run and all green before the loss.** cargo doubles **216/1 + 46/1** — exactly the
+recorded baseline, both failures being the known-wrong fixtures
+(`test_switching_in_with_intimidate`, `storm_drain_redirects_nullifies_and_boosts`), so no new
+failure; singles **fully green at 220 + 611 + 15**, which is the control that matters for a change
+in a shared code path. Corpus **byte-identical** at 306/316 and 315/316 with identical skip counts;
+stage 0 **19/19, 0 disagree**. **Outstanding: the arm was never re-priced** — it had one fallback
+left at seed 101 (defect 2's own panic), so the expected result is 0, and that is a prediction, not
+a measurement.
+
+**A separate instrument fact worth keeping: `--ms` can be inert.** `run_mcts_loop` (`mcts.rs:276`)
+runs a hard-coded `for _ in 0..1000` batch **before it checks the clock at all**, so any budget
+cheaper than one batch buys exactly one batch. At this position 100, 300 and 1200 ms all produced
+identically 1000 visits and ~2.2 s of wall time. The probe therefore reproduced 12/12 while
+searching ~1000 iterations against the arm's 10450 mean — and it means a small `--ms` in any
+measurement here is not the knob it appears to be. Consistent with the older note that 5000
+iterations is not a knob either.
+
 ## Backlog
 
 Recorded, not done. In the order they are worth doing.
@@ -1311,7 +1393,7 @@ to Showdown sets almost directly. Two known obstacles:
 Doing this is what would make the play result mean something: same referee, same search, real
 teams. It is more valuable than re-running the toy version with transcripts attached.
 
-### 3. Fix the thirty-two confirmed defects — 15 resolved (3, 4, 5, 6, 7, 10, 11, 15, 16, 17, 18, 19, 20, 23, 27 — rows 10 and 11 are symptom-level and were closed by the site-level fixes), 17 open
+### 3. Fix the thirty-three confirmed defects — 16 resolved (2, 3, 4, 5, 6, 7, 10, 11, 15, 16, 17, 18, 19, 20, 23, 27 — rows 10 and 11 are symptom-level and were closed by the site-level fixes; **row 2's fix is verified but NOT yet in the patch**, see run 12), 17 open
 
 Every line number below was read out of the `main-doubles` clone, not remembered. Three are
 crashes, so they stop a bridge outright; seventeen are silent wrong answers, which is worse to ship;
@@ -1327,7 +1409,7 @@ here is a regression, only unfinished work.
 | # | site | trigger |
 |---|---|---|
 | 1 | `genx/generate_instructions.rs:4289` `mega_evolve` | computes `act_slot`, discards it, then reads `side.get_active()` — slot 0 — and panics at `:4301` on any held item that is not a mega stone (`RHYPERIOR`/`ASSAULTVEST`, `TALONFLAME`/`CHOICEBAND`, …). Note the second, quieter half: were slot 0 *also* holding a stone, this would mega-evolve the wrong body and not panic at all |
-| 2 | `genx/evaluate.rs:107` **and `genx/state.rs:43`** | `Invalid boost value: -7 / -8 / **-11 / -12**` at the first site, `Invalid boost number: 7 / 8` at the second. Boosts escape the ±6 clamp somewhere upstream and blow up at whichever reader reaches them first — **run 9's roster re-run panicked twice at `genx/state.rs:43`, so evaluation is not the only victim and "only blow up at evaluation" was too narrow**. Seen in gen 6 **and** gen 5, so not generation-specific. The −12 (`doubles_play_logs_gen5_seed23/002`, turn 1) matters: it is exactly **double** the legal floor, so this is not a clamp that is off by one or two but drops being stacked with no bound at all — look for a per-slot drop applied once per target. **Run 11 narrowed where to look**: `--dump-panics` captured the root state of the surviving `Invalid boost number: 7` and **all seven boosts are zero on all four bodies**, so the escape is generated *during the search* and not supplied by the translator — which also clears my own instrument as a candidate |
+| 2 | `genx/evaluate.rs:107` **and `genx/state.rs:43`** | `Invalid boost value: -7 / -8 / **-11 / -12**` at the first site, `Invalid boost number: 7 / 8` at the second. Boosts escape the ±6 clamp somewhere upstream and blow up at whichever reader reaches them first — **run 9's roster re-run panicked twice at `genx/state.rs:43`, so evaluation is not the only victim and "only blow up at evaluation" was too narrow**. Seen in gen 6 **and** gen 5, so not generation-specific. The −12 (`doubles_play_logs_gen5_seed23/002`, turn 1) matters: it is exactly **double** the legal floor, so this is not a clamp that is off by one or two but drops being stacked with no bound at all — look for a per-slot drop applied once per target. **Run 11 narrowed where to look**: `--dump-panics` captured the root state of the surviving `Invalid boost number: 7` and **all seven boosts are zero on all four bodies**, so the escape is generated *during the search* and not supplied by the translator — which also clears my own instrument as a candidate. **ROOT-CAUSED AND FIXED 2026-09-14 (run 12) — but the fix is NOT in the patch: the worktree was destroyed before it could be regenerated, so it must be re-applied (two lines, specified in the run 12 section).** Cause: `ability_end_of_turn` (`genx/abilities.rs:1175`) and `item_end_of_turn` (`genx/items.rs:885`) both derive `owner_slot` from `state.actor_slot()` — a transient set per actor during move resolution, hence by end of turn a leftover naming whichever body acted LAST — while every read in both functions is `attacking_side.get_active()`, slot 0, with not one `get_active_slot` call between them. So instructions were stamped with one body and described another, which breaks apply/reverse: the reversal subtracts from the slot the instruction names while generation mutated the slot the read named. Speed Boost makes it a runaway because its `< 6` guard bounds slot 0 while the instruction accumulates elsewhere (`slot 0: 1 +6 -> 7 … 6 +6 -> 12`, `slot 1: -6 -1 -> -7 … -11 -1 -> -12`). **Both signs come from this one defect**, which is why source-reading failed: all four emits that bypass the clamp ADD, and the negatives are *reversals of a positive stamped on the wrong body*. **The "exactly double the floor" reading above was mine and is wrong** — −7/−8 are one or two steps past the limit, and Belly Drum, the only site that can emit ±12 at once, is 0/183 teams here. Found by instrumenting `Side::apply_boost`, the sole mutator, after a correct-but-insufficient caller audit; deterministic repro `tools/pe_doubles_boost_range.py` on the opening position of the tracked `doubles_play_logs_gen5_tailwind/000`, **12/12 panics → 0/12**. Controls green: cargo 216/1 + 46/1 (baseline), singles 220 + 611 + 15, corpus 306/316 and 315/316 byte-identical, stage 0 19/19. Fix: `let owner_slot = 0;` in both functions; singles identical by construction. **The arm was never re-priced** |
 | 3 | **FIXED 2026-09-14 (run 10)** — cause at `genx/generate_instructions.rs:2504`, assert at `state.rs:1722` | `assert_ne!(a_idx, b_idx, "get_two_actives called with the same position")` — reached in ordinary play (×5 in the gen 5 run). **Run 9's roster re-run makes this the dominant crash by a wide margin: 19 of the 23 panics across 488 decisions, panicking at `state.rs:1724` with `left: 0, right: 0` — both positions resolving to party index 0.** Once the Choice lock stopped masking turns, this became the single largest reason a decision is not the search's. **Root cause, found by instrumenting the engine after four wrong hypotheses: Encore substitutes the move but not its TARGET.** `generate_instructions_from_move` holds the only whole-`Choice` replacement in `src/genx/` — `*choice = MOVES.get(…).clone()` — which swaps in the encored move, `target` class included, while `state.target_position` still holds what the per-actor setup (`:5276`) computed for the move the player actually *chose*. Choosing RECOVER (`MoveTarget::User`, whose nominal target correctly **is** the user's own position) while locked into EARTH POWER (`MoveTarget::Opponent`) therefore leaves a damaging foe-move aimed at its own user, and the damage path calls `get_two_actives(attacker, attacker)`. The state is **not** corrupt — the enriched assert prints `active_indices=[P0, P1]`; the party indices matched because attacker and target were the *same position*. Singles never needed a refresh: its `defender_position` ignores `target_position` and returns the opposing slot 0, so a substituted move always targeted the foe — an unfinished doubles conversion, the family of defects 6, 14, 20, 23 and 26. **Adjudicated against Showdown, not assumed:** `sim/battle-actions.ts:228` runs the `OverrideAction` event and then re-derives the target with `target = this.battle.getRandomTarget(pokemon, baseMove)`. Fix re-derives via `legal_targets` (now `pub(crate)`), the same primitive option generation uses, so the swapped-in move gets a **living** foe — which matters rather than being theoretical, since in the captured state the directly-opposite slot is the fainted one and `.opposing()` would have aimed at a corpse. Showdown picks at random among legal targets where this takes the first: a recorded simplification, like `redirect_target`'s speed-tie note. Priced on the identical arm (seed 101, same pool and budget): **11 `get_two_actives` panics → 0**, total fallbacks 21 of 242 (8.7%) → 7 of 235 (**3.0%**). Probe `tools/pe_doubles_encore_target.py`; 12 captured real positions went 5/5 → 0/6 |
 
 **Silent wrong answers.** These return a plausible result that is wrong, which the differential
@@ -1359,6 +1441,7 @@ caught only because Showdown was sitting next to it.
 | 30 | open — `genx/state.rs:1790` `combine_slot_options` | **A doubles side can end up with ZERO legal actions, and the search indexes the empty list.** `mcts.rs:134` (side one) and `:135` (side two) do `self.sN_options.as_ref().unwrap()[idx]` with no emptiness check, so an empty list aborts the search with `index out of bounds: the len is 0 but the index is 0`. The emptiness comes from a **filter, not a missing guard** — per-slot lists cannot be empty (`slot_options_doubles` ends `if options.is_empty() { push(None) }`, `:1680`) and `replacement_options_doubles` survives scarcity (`needing=[0,1]`, `available=1` → `fill=1` keeps `(Switch, None)` and `(None, Switch)`) — but `combine_slot_options` builds the cartesian product and then drops every combination where two slots switch to the same body (`has_duplicate_switch`, `:1819`) **with nothing to fall back on if that empties the result**. So when both slots' only option is a switch (no move selectable — `move_is_selectable` rejects `pp <= 0` and `disabled`) and exactly **one** bench body is available, the sole combination `(Switch(b), Switch(b))` is filtered away and the side has no action at all. **Reproduced deterministically in a three-body state**, no search depth required: `tools/pe_doubles_empty_options.py` cell A panics while both controls — two bench bodies, or one slot keeping a usable move — return 2 options. Singles cannot express this: no pairs, so no duplicate-switch filter. Seen once in run 9's roster re-run (on the `:135` side). The fix is a post-filter fallback, either one all-`None` action or letting one slot switch while the other passes |
 | 31 | open — `state.rs:1946` `heal` | **`attempt to add with overflow`.** `fn heal` does `active.hp += amount` on an `i16`, so an `amount` big enough to carry hp past 32767 aborts the search. It is slot-correct (`get_active_slot(slot)`), so this is **not** a slot defect but an unbounded magnitude. Seen once in run 9's roster re-run at 300 ms and **not root-caused.** Two candidates, neither confirmed: run 4's fix made a spread move apply its `heal` **per target** (so this may be my own blast radius), and defect 2's `-11 / -12` boosts are the same family of accumulation with no clamp. Wants a probe before a fix — giving `hp` a saturating add would hide the cause rather than remove it |
 | 32 | open — `state.rs:1895` `re_enable_disabled_moves`, called from `genx/generate_instructions.rs:2612` | **A Taunt expiring unlocks a Choice item.** The function re-enables **every** move whose `disabled` flag is set, and it cannot distinguish *why* a move was disabled. On **switch-out** that is correct — Showdown clears a Choice lock on switch-out too — but the Taunt path is a divergence: poke-engine encodes the Choice lock as `Move.disabled` (defect 29, and the same channel run 9's whitelist fills), whereas Showdown never does, enforcing the lock through `lastMove` instead. So Showdown's `taunt` `onEnd` leaves a Choice-locked body locked, and poke-engine hands it all four moves back. **Not doubles-specific** — it is reachable in upstream singles, where the sidecar bridge encodes the lock the same way — which makes it the first row here that is not a doubles conversion fault. Newly *reachable from the root* in run 11, since `taunt` is 71 of 183 gen5doublesou teams and was being silently dropped by the translator before now; previously it needed the tree to apply and expire a Taunt on its own. Related to row 29's note that this function is also hard-coded to slot 0, which is a separate fault in the same three lines. Unpriced: the corpus never projects move availability, and the play harness rebuilds the root from Showdown every turn, so a wrong unlock inside the tree only degrades the plan, it never reaches a submitted action |
+| 33 | open — `genx/abilities.rs:1170` `ability_end_of_turn` and `genx/items.rs:880` `item_end_of_turn` | **Only slot 0's end-of-turn ability and item are ever considered.** Both functions are called once per **side** (`genx/generate_instructions.rs:3807`) behind a slot-0 hp guard, and neither contains a single `get_active_slot` call — every read is `attacking_side.get_active()`. So a slot-1 body's Speed Boost never ticks, its Black Sludge never heals or hurts it, its Sitrus/Lum/Chesto berry never fires, and a slot-1 Morpeko never flips forme. Found in run 12 while root-causing defect 2, which lives in the same two lines: that run fixed the **state/instruction divergence** (the crash) by naming the slot the functions actually read, and deliberately did **not** convert them to a per-slot loop. The reasons are attribution and risk: the loop is a wrong-**outcome** bug rather than a crash, it needs the borrow structure of a ~230-line match restructured, and no instrument here prices it — the corpus projects damage, boosts and statuses but never end-of-turn ability firing on slot 1 specifically. Bundling it would have blurred a verified crash fix exactly as runs 4 and 5 warn. Same unfinished `get_active()` conversion family as defects 6, 14, 20, 23 and 26 |
 | 11 | **SUPERSEDED by defect 20 — same fault, and fixed there in run 5** | this is the symptom-level entry, written before the site was known; row 20 is the same bug at `genx/generate_instructions.rs:815` and carries the fix. Kept because its evidence is still the clearest statement of the symptom, and because run 6's backlog text mistakenly used *this* number for `reset_boosts` (which is defect **6**) — a slip corrected in run 7. **Every status move applies its status to slot 0, whatever it was aimed at.** `thunderwave,0` and `thunderwave,1` both emit `ChangeStatus SideTwo-P0` (`tools/pe_doubles_status_target.py`, two Psychic-type foes so neither is immune and only the index can differ). Damage does *not* have this bug — `airslash,0` and `airslash,1` correctly emit `Damage SideTwo:0` and `:1` — so it is the status write specifically. Worse, the immunity check reads the **right** target while the write goes to the wrong one, so Thunder Wave aimed at a Psychic ally-of-a-Ground-type paralyzes the **Ground type** |
 
 **Wasted search.** Not a wrong answer — a budget spent on nothing.
