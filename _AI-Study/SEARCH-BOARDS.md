@@ -1664,6 +1664,49 @@ harness bug.
 byte-identical**, stage 0 **19/19**. As throughout this sequence the gen 5 corpus cannot see these
 abilities, so byte-identical is no-regression and not validation. Patch now **1298 lines**.
 
+### Run 18: the largest bucket left on gen 6 was mine, and the gen 6 arm is now at 1.2%
+
+After run 17 the gen 6 arm had 16 fallbacks in 207 decisions, and **13 of the 16 were the
+harness, not the engine** — `unparsed label '<move>-mega,<slot>'`. `choice_labels` renders a mega
+action as the move id with a suffix (`shadowball-mega,0`); `LABEL`'s `[a-z0-9]+` cannot match the
+hyphen, so **every mega the search chose fell to greedy**. On a gen 6 board that is not a cosmetic
+loss: mega evolution is most of what distinguishes the format.
+
+**Parsing it was a third of the fix, and the other two thirds are the part worth recording.**
+
+- **Showdown has to be told.** The flag goes last, after any target number (`move 1 2 mega`), so
+  `showdown_choice` builds the choice and then appends — it is not part of the move token.
+- **The harness had no way to know whether a mega was legal**, because
+  `showdown_doubles_server.js` never exposed `canMegaEvo`. poke-engine enumerates `MoveMega` from
+  its own `can_mega_evolve()`, which knows nothing about the format, about a mega already having
+  happened this battle, or about a dump team listing the species **already mega-evolved**
+  (`Kangaskhan-Mega` holding Kangaskhanite). So the search can propose a mega Showdown would
+  reject, and the only two honest options were to expose the flag or to drop it — and **dropping
+  it would play a different action than the search planned and flatter the search by hiding the
+  disagreement**, exactly the failure the Choice-lock work (defect 4) was about. The server now
+  reports `canMegaEvo` / `canTerastallize`, and an unaccepted flag is counted as an illegal
+  proposal.
+
+| identical 20-battle gen 6 arm, seed 101 | run 17 | run 18 |
+|---|---|---|
+| decisions | 207 | 260 |
+| unparsed mega labels (harness) | **13** | **0** |
+| illegal mega proposals (new counter) | not visible | **0** |
+| engine panics | 3 | **3** |
+| **total fallbacks** | 16 (7.7%) | **3 (1.2%)** |
+
+**That the new counter reads zero is a finding, not a formality**: every mega the search proposed
+was one Showdown accepted, so the engine's mega *enumeration* is sound even though its mega
+*execution* still panics three times. Those three are defect 1's residual and are now the entire
+remaining gap on this board.
+
+**Progression on this arm across four runs**: ~18% → 7.7% → **1.2%**, with gen 5 at 0.0%.
+
+**Controls.** No engine code changed, so cargo is untouched by construction. Corpus **306/316 +
+315/316 byte-identical** and stage 0 **19/19** — both genuine here rather than vacuous, since
+`pe_doubles_corpus.py` and the stage-0 differential drive their own Showdown scripts and would
+have caught a server-serialization regression.
+
 ## Backlog
 
 Recorded, not done. In the order they are worth doing.

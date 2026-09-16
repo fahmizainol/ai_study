@@ -57,6 +57,14 @@ function requests() {
         // Shadow Tag / Arena Trap is hidden information, so Showdown reports maybeTrapped and
         // only rejects the switch when it is attempted. A policy must treat both as trapped.
         trapped: !!a.trapped, maybeTrapped: !!a.maybeTrapped,
+        // Whether Showdown will ACCEPT a "mega"/"terastallize" flag from this slot this turn.
+        // poke-engine enumerates MoveMega from its own can_mega_evolve(), which knows nothing
+        // about the format, whether a mega already happened this battle, or that a dump team
+        // may list the species ALREADY mega-evolved (Kangaskhan-Mega holding Kangaskhanite) --
+        // so the search can propose a mega Showdown would reject. Without this the harness
+        // cannot tell a legal mega from an illegal one and would have to drop the flag, which
+        // silently plays a DIFFERENT action than the one the search planned.
+        canMegaEvo: !!a.canMegaEvo, canTerastallize: !!a.canTerastallize,
         // basePower/category come from the dex so a baseline policy can be written without
         // a damage model of its own; `target` is Showdown's own targeting category, which is
         // what decides whether a choice needs an explicit target number.

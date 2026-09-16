@@ -241,11 +241,17 @@ def showdown_choice(req, parts):
         else:
             mv = next(m for m in req["active"][slot]["moves"] if m["id"] == value)
             if mv["target"] in ALLY_TARGET:
-                out.append(f"move {mv['n']} -{2 if slot == 0 else 1}")
+                choice = f"move {mv['n']} -{2 if slot == 0 else 1}"
             elif mv["target"] in NEEDS_TARGET and target is not None:
-                out.append(f"move {mv['n']} {target + 1}")
+                choice = f"move {mv['n']} {target + 1}"
             else:
-                out.append(f"move {mv['n']}")
+                choice = f"move {mv['n']}"
+            # Showdown takes the mega/terastallize flag LAST, after any target number.
+            if kind == "move-mega":
+                choice += " mega"
+            elif kind == "move-tera":
+                choice += " terastallize"
+            out.append(choice)
     return ", ".join(out)
 
 
@@ -281,7 +287,13 @@ def policy_greedy(req, position, side, rng):
     return parts
 
 
-LABEL = re.compile(r"^(?:switch (?P<sw>[a-z0-9]+)|(?P<mv>[a-z0-9]+)(?:,(?P<t>\d+))?)$")
+# `choice_labels` renders a mega or tera action as the move id with a suffix --
+# `shadowball-mega,0` -- and the bare `[a-z0-9]+` could not match the hyphen, so every mega the
+# search chose fell to greedy: 13 of 16 fallbacks on the run-17 gen 6 arm, the largest bucket on
+# that board and mine, not the engine's.
+LABEL = re.compile(
+    r"^(?:switch (?P<sw>[a-z0-9]+)"
+    r"|(?P<mv>[a-z0-9]+)(?:-(?P<special>mega|tera))?(?:,(?P<t>\d+))?)$")
 
 
 def policy_mcts(req, position, side, rng, ms, stats, note=None, reqs=None):
@@ -362,7 +374,21 @@ def policy_mcts(req, position, side, rng, ms, stats, note=None, reqs=None):
                     note.append(f"      ILLEGAL: search chose {m.group('mv')} for slot {slot}, {why}."
                                 " Greedy took the turn -- this turn is NOT the search's")
                 return policy_greedy(req, position, side, rng)
-            parts.append(("move", m.group("mv"), int(m.group("t")) if m.group("t") else None))
+            special = m.group("special")
+            if special is not None:
+                # Only send a flag Showdown will accept. An unaccepted one is an ILLEGAL
+                # PROPOSAL, counted like the Choice-lock case rather than quietly downgraded
+                # to a plain move -- dropping it would play a different action than the search
+                # planned and would flatter the search by hiding the disagreement.
+                field = "canMegaEvo" if special == "mega" else "canTerastallize"
+                if not req["active"][slot].get(field):
+                    stats[f"fallback: {special} proposed for slot {slot} but Showdown says no"] += 1
+                    if note is not None:
+                        note.append(f"      ILLEGAL: search chose to {special}-evolve in slot {slot},"
+                                    f" which Showdown does not offer. Greedy took the turn")
+                    return policy_greedy(req, position, side, rng)
+            parts.append((f"move-{special}" if special else "move",
+                          m.group("mv"), int(m.group("t")) if m.group("t") else None))
     return parts
 
 
