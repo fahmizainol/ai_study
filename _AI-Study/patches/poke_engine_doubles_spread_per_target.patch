@@ -80,10 +80,27 @@ index 760dea4..6a2fd9e 100644
          );
      }
 diff --git a/src/genx/abilities.rs b/src/genx/abilities.rs
-index ee644cb..8ccc923 100644
+index ee644cb..bbc18e4 100644
 --- a/src/genx/abilities.rs
 +++ b/src/genx/abilities.rs
-@@ -2303,18 +2303,27 @@ pub fn ability_modify_attack_against(
+@@ -1172,7 +1172,15 @@ pub fn ability_end_of_turn(
+     side_ref: &SideReference,
+     instructions: &mut StateInstructions,
+ ) {
+-    let owner_slot = state.actor_slot();
++    // Run 12: this was `state.actor_slot()`, a transient set per actor during move
++    // resolution, so by end of turn it named whichever body acted LAST — while every
++    // read in this function goes through `get_active()`, slot 0. Instructions were
++    // stamped with one body and described another, which breaks apply/reverse and
++    // let Speed Boost walk boosts past the ±6 clamp in both directions. The caller
++    // (`generate_instructions.rs`, "ability/item end-of-turn effects") iterates SIDES,
++    // not slots, and gates on slot 0's hp, so slot 0 is the slot this function reads.
++    // Singles is identical by construction: `actor_slot()` is 0 under cfg(not(doubles)).
++    let owner_slot = 0;
+     let def_pos = state.defender_position(side_ref);
+     let (attacking_side, defending_side) = state.get_both_sides(side_ref);
+     let active_pkmn = attacking_side.get_active();
+@@ -2303,18 +2311,27 @@ pub fn ability_modify_attack_against(
      defender_choice: &Choice,
      attacking_side_ref: &SideReference,
  ) {
@@ -864,10 +881,27 @@ index fa0676e..fcf49c9 100644
                  target,
              });
 diff --git a/src/genx/items.rs b/src/genx/items.rs
-index ce242c1..ad6453e 100644
+index ce242c1..d99994d 100644
 --- a/src/genx/items.rs
 +++ b/src/genx/items.rs
-@@ -921,15 +921,24 @@ pub fn item_end_of_turn(
+@@ -882,7 +882,15 @@ pub fn item_end_of_turn(
+     side_ref: &SideReference,
+     instructions: &mut StateInstructions,
+ ) {
+-    let owner_slot = state.actor_slot();
++    // Run 12: this was `state.actor_slot()`, a transient set per actor during move
++    // resolution, so by end of turn it named whichever body acted LAST — while every
++    // read in this function goes through `get_active()`, slot 0. Instructions were
++    // stamped with one body and described another, which breaks apply/reverse and
++    // let Speed Boost walk boosts past the ±6 clamp in both directions. The caller
++    // (`generate_instructions.rs`, "ability/item end-of-turn effects") iterates SIDES,
++    // not slots, and gates on slot 0's hp, so slot 0 is the slot this function reads.
++    // Singles is identical by construction: `actor_slot()` is 0 under cfg(not(doubles)).
++    let owner_slot = 0;
+     let attacking_side = state.get_side(side_ref);
+     let active_pkmn = attacking_side.get_active();
+     match active_pkmn.item {
+@@ -921,15 +929,24 @@ pub fn item_end_of_turn(
              }
          }
          Items::FLAMEORB => {
@@ -895,7 +929,7 @@ index ce242c1..ad6453e 100644
                  instructions.instruction_list.push(ins);
              }
          }
-@@ -947,15 +956,21 @@ pub fn item_end_of_turn(
+@@ -947,15 +964,21 @@ pub fn item_end_of_turn(
              }
          }
          Items::TOXICORB => {
@@ -920,6 +954,42 @@ index ce242c1..ad6453e 100644
                  instructions.instruction_list.push(ins);
              }
          }
+diff --git a/src/genx/state.rs b/src/genx/state.rs
+index 1f06e88..00df5fb 100644
+--- a/src/genx/state.rs
++++ b/src/genx/state.rs
+@@ -732,6 +732,22 @@ impl Pokemon {
+                 }
+                 true
+             }
++            // `first_move` stands in for Showdown's `onTry: !!this.queue.willAct()` --
++            // Protect fails only when nothing is left to act. In singles, where Protect's
++            // +4 priority makes it first except against another priority move, that proxy
++            // is close enough.
++            //
++            // In DOUBLES it is wrong and silently destructive: at most one sub-action per
++            // side is the `first_move`, so when BOTH bodies Protect the second one's
++            // volatile is dropped and that body takes the hit. Measured in corpus battle 33
++            // turn 8 (Showdown protects both, poke-engine protects one) and isolated by
++            // `tools/pe_doubles_protect_slot.py` probes E1/E4: it is the first-ACTING body
++            // that wins, not slot 0, and a lone Protect always works. Both bodies Protecting
++            // is ordinary doubles play and something else is essentially always still to
++            // act, so allow it. Over-allows only when Protect is the turn's last action.
++            #[cfg(feature = "doubles")]
++            PokemonVolatileStatus::PROTECT => true,
++            #[cfg(not(feature = "doubles"))]
+             PokemonVolatileStatus::PROTECT => first_move,
+             PokemonVolatileStatus::TAUNT
+             | PokemonVolatileStatus::TORMENT
+@@ -1664,7 +1680,7 @@ impl State {
+     /// choice and yield a single nominal position. An ally-target move with no
+     /// living ally yields no positions, making the move unselectable.
+     #[cfg(feature = "doubles")]
+-    fn legal_targets(
++    pub(crate) fn legal_targets(
+         &self,
+         user_pos: BattlePosition,
+         move_target: &MoveTarget,
 diff --git a/src/state.rs b/src/state.rs
 index 4d493d9..87c1fbf 100644
 --- a/src/state.rs
@@ -1043,39 +1113,3 @@ index 4d493d9..87c1fbf 100644
          let active = self.get_side(side_ref).get_active();
          if active.moves.m0.disabled {
              active.moves.m0.disabled = false;
-diff --git a/src/genx/state.rs b/src/genx/state.rs
-index 1f06e88..17bc70b 100644
---- a/src/genx/state.rs
-+++ b/src/genx/state.rs
-@@ -732,6 +757,22 @@ impl Pokemon {
-                 }
-                 true
-             }
-+            // `first_move` stands in for Showdown's `onTry: !!this.queue.willAct()` --
-+            // Protect fails only when nothing is left to act. In singles, where Protect's
-+            // +4 priority makes it first except against another priority move, that proxy
-+            // is close enough.
-+            //
-+            // In DOUBLES it is wrong and silently destructive: at most one sub-action per
-+            // side is the `first_move`, so when BOTH bodies Protect the second one's
-+            // volatile is dropped and that body takes the hit. Measured in corpus battle 33
-+            // turn 8 (Showdown protects both, poke-engine protects one) and isolated by
-+            // `tools/pe_doubles_protect_slot.py` probes E1/E4: it is the first-ACTING body
-+            // that wins, not slot 0, and a lone Protect always works. Both bodies Protecting
-+            // is ordinary doubles play and something else is essentially always still to
-+            // act, so allow it. Over-allows only when Protect is the turn's last action.
-+            #[cfg(feature = "doubles")]
-+            PokemonVolatileStatus::PROTECT => true,
-+            #[cfg(not(feature = "doubles"))]
-             PokemonVolatileStatus::PROTECT => first_move,
-             PokemonVolatileStatus::TAUNT
-             | PokemonVolatileStatus::TORMENT
-@@ -1664,7 +1705,7 @@ impl State {
-     /// choice and yield a single nominal position. An ally-target move with no
-     /// living ally yields no positions, making the move unselectable.
-     #[cfg(feature = "doubles")]
--    fn legal_targets(
-+    pub(crate) fn legal_targets(
-         &self,
-         user_pos: BattlePosition,
-         move_target: &MoveTarget,
