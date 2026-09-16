@@ -45,6 +45,20 @@ EV_LABEL = {"hp": "HP", "atk": "Atk", "def": "Def", "spa": "SpA", "spd": "SpD", 
 DUMP = Path(__file__).parent.parent / "extracted" / "smogon-dump"
 
 
+# A scraped set may record a move SLOT rather than a move: `Rock Slide / Stone Edge`, or
+# `Belly Drum (if Sitrus) / Aqua Tail (if Life Orb)`. Showdown's importer takes the whole line as
+# one move name, `toID` strips the slashes and spaces, and the slot arrives as
+# `helpinghandmagiccoatmirrorcoat` with a null pp -- which `mon()` then cannot build a state from,
+# so the WHOLE DECISION falls to greedy. 37 of 2386 gen 6 sets (1.6%) carry one, and they cost 37
+# of ~390 decisions on the 40-battle arm. **gen5doublesou has none, which is why every gen 5
+# measurement in this document was clean and this went unseen**; gen 9 has 143.
+#
+# Taking the FIRST option is a recorded deviation, not a neutral parse: it is the one the set's
+# author listed first, and it is applied symmetrically to both sides.
+def first_option(mv):
+    return re.sub(r"\s*\([^)]*\)", "", mv.split("/")[0]).strip()
+
+
 def set_text(m):
     """One scraped set as Showdown import text.
 
@@ -63,7 +77,7 @@ def set_text(m):
         out.append(f"{m['nature']} Nature")
     if m.get("ivs"):
         out.append("IVs: " + " / ".join(f"{v} {EV_LABEL[k]}" for k, v in m["ivs"].items()))
-    out += [f"- {mv}" for mv in m["moves"]]
+    out += [f"- {first_option(mv)}" for mv in m["moves"]]
     return "\n".join(out)
 
 

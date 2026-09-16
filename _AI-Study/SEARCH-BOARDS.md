@@ -1769,6 +1769,48 @@ byte-identical**, stage 0 **19/19**.
 were found by an instrument after a symptom pointed somewhere else entirely**: two mega panics, one
 boost panic, one item trace. That is the argument for the remaining 21.
 
+### Run 20 fixed defect 35: a scraped set can record a move SLOT, not a move
+
+`Rock Slide / Stone Edge`. `Helping Hand / Magic Coat / Mirror Coat`. `Belly Drum (if Sitrus) /
+Aqua Tail (if Life Orb)`. **37 of 2386 gen 6 sets (1.6%) store an alternatives line as a single
+move string**, and `set_text` passed it through verbatim. Showdown's importer takes the whole line
+as one move name, `toID` strips the slashes and spaces, and the slot arrives as
+`helpinghandmagiccoatmirrorcoat` with `pp: null` — which `mon()` cannot build a state from, so the
+**entire decision** falls to greedy.
+
+**Why it took until run 19 to see**: `gen5doublesou` has **zero** such sets. Every gen 5
+measurement in this document — including the arm now sitting at 0.0% — was clean by luck of the
+tier, and the gen 6 arm had never been run past 20 battles. `gen9doublesou` has 143.
+
+**Two wrong reads on the way, both corrected by looking at the data.** I first checked the dump for
+move entries that were not strings and found none, and concluded the importer was innocent; the
+entries *are* strings, they just contain several moves. I then guessed the import text was losing
+newlines. Dumping the actual failing body settled it in one run:
+
+```
+species: Gothitelle
+   {'id': 'trickroom', 'pp': 8}   {'id': 'psychic', 'pp': 14}
+   {'id': 'helpinghandmagiccoatmirrorcoat', 'pp': None}   {'id': 'protect', 'pp': 16}
+```
+
+**Taking the first option is a recorded deviation, not a neutral parse** — it is the one the set's
+author listed first, and it is applied symmetrically to both sides. Parentheticals are stripped, so
+`Belly Drum (if Sitrus) / Aqua Tail (if Life Orb)` becomes `Belly Drum`.
+
+| identical 40-battle gen 6 arm, seed 101 | before | after |
+|---|---|---|
+| `state build TypeError` | **37** | **0** |
+| decisions | 385 | 404 |
+| **total fallbacks** | 40 (10.4%) | **2 (0.5%)** |
+
+**The two that remain are new, and they are the honest cost of the fix**: `cannot mega evolve
+GARDEVOIR with NONE`. Those 37 decisions used to fall back *before* reaching the search, so fixing
+the importer exposed positions the search had never been asked about. Same signature as defect 1 —
+a body losing its stone — but Gardevoir's is not Trick, Knock Off or Thief, all of which are fixed.
+Another site in defect 34's class is the obvious candidate and the item instrument will name it.
+
+**Gen 6 is now at 0.5% fallback**, against gen 5's 0.0%.
+
 ## Backlog
 
 Recorded, not done. In the order they are worth doing.
@@ -1851,9 +1893,9 @@ to Showdown sets almost directly. Two known obstacles:
 Doing this is what would make the play result mean something: same referee, same search, real
 teams. It is more valuable than re-running the toy version with transcripts attached.
 
-### 3. Fix the thirty-five confirmed defects — 17 resolved (2, 3, 4, 5, 6, 7, 10, 11, 15, 16, 17, 18, 19, 20, 23, 27 — rows 10 and 11 are symptom-level and were closed by the site-level fixes; row 2 is in the patch, re-established from a clean clone in run 13, and had its SECOND cause fixed in run 16), 18 open
+### 3. Fix the thirty-five confirmed defects — 18 resolved (2, 3, 4, 5, 6, 7, 10, 11, 15, 16, 17, 18, 19, 20, 23, 27 — rows 10 and 11 are symptom-level and were closed by the site-level fixes; row 2 is in the patch, re-established from a clean clone in run 13, and had its SECOND cause fixed in run 16), 18 open
 
-**Count as of run 19**: 35 rows, **17 resolved, 18 open** — defect 1 closed (run 19) and defect 35 added (mine, the team importer). Two movements this round that the arithmetic hides. **Defect 1 is partially fixed and deliberately still counted OPEN** — run 14 fixed its slot read, run 15 root-caused its real cause elsewhere, and 3 mega panics survive on the gen 6 arm. **Defect 34 is new and is a CLASS of 25 sites, 3 of them fixed** (`KNOCKOFF`, `THIEF`, `BELLYDRUM`), so the open count understates the work and overstates the number of independent bugs: defects 1 and 2 both turned out to be instances of 34, found five runs apart under unrelated symptoms
+**Count as of run 20**: 35 rows, **18 resolved, 17 open** — defect 1 closed (run 19) and defect 35 added (mine, the team importer). Two movements this round that the arithmetic hides. **Defect 1 is partially fixed and deliberately still counted OPEN** — run 14 fixed its slot read, run 15 root-caused its real cause elsewhere, and 3 mega panics survive on the gen 6 arm. **Defect 34 is new and is a CLASS of 25 sites, 3 of them fixed** (`KNOCKOFF`, `THIEF`, `BELLYDRUM`), so the open count understates the work and overstates the number of independent bugs: defects 1 and 2 both turned out to be instances of 34, found five runs apart under unrelated symptoms
 
 Every line number below was read out of the `main-doubles` clone, not remembered. Three are
 crashes, so they stop a bridge outright; seventeen are silent wrong answers, which is worse to ship;
@@ -1903,7 +1945,7 @@ caught only because Showdown was sitting next to it.
 | 32 | open — `state.rs:1895` `re_enable_disabled_moves`, called from `genx/generate_instructions.rs:2612` | **A Taunt expiring unlocks a Choice item.** The function re-enables **every** move whose `disabled` flag is set, and it cannot distinguish *why* a move was disabled. On **switch-out** that is correct — Showdown clears a Choice lock on switch-out too — but the Taunt path is a divergence: poke-engine encodes the Choice lock as `Move.disabled` (defect 29, and the same channel run 9's whitelist fills), whereas Showdown never does, enforcing the lock through `lastMove` instead. So Showdown's `taunt` `onEnd` leaves a Choice-locked body locked, and poke-engine hands it all four moves back. **Not doubles-specific** — it is reachable in upstream singles, where the sidecar bridge encodes the lock the same way — which makes it the first row here that is not a doubles conversion fault. Newly *reachable from the root* in run 11, since `taunt` is 71 of 183 gen5doublesou teams and was being silently dropped by the translator before now; previously it needed the tree to apply and expire a Taunt on its own. Related to row 29's note that this function is also hard-coded to slot 0, which is a separate fault in the same three lines. Unpriced: the corpus never projects move availability, and the play harness rebuilds the root from Showdown every turn, so a wrong unlock inside the tree only degrades the plan, it never reaches a submitted action |
 | 33 | open — `genx/abilities.rs:1170` `ability_end_of_turn` and `genx/items.rs:880` `item_end_of_turn` | **Only slot 0's end-of-turn ability and item are ever considered.** Both functions are called once per **side** (`genx/generate_instructions.rs:3807`) behind a slot-0 hp guard, and neither contains a single `get_active_slot` call — every read is `attacking_side.get_active()`. So a slot-1 body's Speed Boost never ticks, its Black Sludge never heals or hurts it, its Sitrus/Lum/Chesto berry never fires, and a slot-1 Morpeko never flips forme. Found in run 12 while root-causing defect 2, which lives in the same two lines: that run fixed the **state/instruction divergence** (the crash) by naming the slot the functions actually read, and deliberately did **not** convert them to a per-slot loop. The reasons are attribution and risk: the loop is a wrong-**outcome** bug rather than a crash, it needs the borrow structure of a ~230-line match restructured, and no instrument here prices it — the corpus projects damage, boosts and statuses but never end-of-turn ability firing on slot 1 specifically. Bundling it would have blurred a verified crash fix exactly as runs 4 and 5 warn. Same unfinished `get_active()` conversion family as defects 6, 14, 20, 23 and 26 |
 | 34 | open — `genx/choice_effects.rs`, 25 sites | **A class, not a defect: a `get_active()` read (slot 0) paired with an instruction stamped with the REAL slot.** The instruction then describes one body and names another, which breaks apply/reverse exactly as defects 2 and 20 did — and where the instruction carries an *absolute* value (items) rather than a delta, the reverse plants one body's property on another. Found by auditing the file after run 15 root-caused two of them. Sites: `HEATCRASH`, `KNOCKOFF`✅, `THIEF`✅, `METEORBEAM`, `BELLYDRUM`✅, `COUNTER`, `MIRRORCOAT`, `METALBURST`, `SUPERFANG`, `NIGHTSHADE`, `SEISMICTOSS`, `ENDEAVOR`, `FINALGAMBIT`, `SUBSTITUTE`, `TRICK`✅ (✅ = fixed by instrument evidence: KNOCKOFF/THIEF run 15, BELLYDRUM run 16, TRICK run 19 — four of twenty-five, and every one was found by an instrument after a symptom pointed somewhere else). **`BELLYDRUM` WAS the standing lead for defect 2's second cause and run 16 CONFIRMED it** — the class and that row were one finding, which is the strongest argument for working through the rest of this list. Deliberately NOT fixed wholesale: each site needs its own slot decided (`act_slot` vs `def_pos.slot` vs a resolved target), and twenty-five blind edits riding on two measurements is what runs 4 and 5 warn against |
-| 35 | open — **mine**, `tools/showdown_doubles_lib.js:41` / the dump team importer | **A move slot arrives with a concatenated id and a null pp**, e.g. `{'id': 'tailwindsteelwing', 'pp': None}` on Talonflame and `'psyshockhiddenpowerground…'` on Sylveon. A concatenated id is `toID()` applied to an ARRAY of move names, so a set is reaching the importer with its moves nested; `pp: null` follows. `mon()` then raises `TypeError: 'NoneType' object cannot be interpreted as an integer` and the whole decision falls to greedy. **37 of ~390 decisions (9.5%) on the 40-battle gen 6 arm** — the single largest fallback bucket on that board now. **Not a regression and that was checked, not assumed**: the pre-run-18 harness at 40 battles gives 37 as well. It is new only because the gen 6 arm had never been run past 20 battles. Fix is in the team importer, not the engine |
+| 35 | open — **mine**, `tools/showdown_doubles_lib.js:41` / the dump team importer | **A move slot arrives with a concatenated id and a null pp**, e.g. `{'id': 'tailwindsteelwing', 'pp': None}` on Talonflame and `'psyshockhiddenpowerground…'` on Sylveon. A concatenated id is `toID()` applied to an ARRAY of move names, so a set is reaching the importer with its moves nested; `pp: null` follows. `mon()` then raises `TypeError: 'NoneType' object cannot be interpreted as an integer` and the whole decision falls to greedy. **37 of ~390 decisions (9.5%) on the 40-battle gen 6 arm** — the single largest fallback bucket on that board now. **Not a regression and that was checked, not assumed**: the pre-run-18 harness at 40 battles gives 37 as well. It is new only because the gen 6 arm had never been run past 20 battles. **FIXED 2026-09-16 (run 20)**: the entries ARE strings, they just contain several moves — a scraped set records a move SLOT (`Rock Slide / Stone Edge`). `set_text` now takes the first option and strips parentheticals, a recorded deviation applied symmetrically. 37 → 0 on the identical arm; gen5doublesou has ZERO such sets, which is why every gen 5 measurement was clean by luck of the tier |
 | 11 | **SUPERSEDED by defect 20 — same fault, and fixed there in run 5** | this is the symptom-level entry, written before the site was known; row 20 is the same bug at `genx/generate_instructions.rs:815` and carries the fix. Kept because its evidence is still the clearest statement of the symptom, and because run 6's backlog text mistakenly used *this* number for `reset_boosts` (which is defect **6**) — a slip corrected in run 7. **Every status move applies its status to slot 0, whatever it was aimed at.** `thunderwave,0` and `thunderwave,1` both emit `ChangeStatus SideTwo-P0` (`tools/pe_doubles_status_target.py`, two Psychic-type foes so neither is immune and only the index can differ). Damage does *not* have this bug — `airslash,0` and `airslash,1` correctly emit `Damage SideTwo:0` and `:1` — so it is the status write specifically. Worse, the immunity check reads the **right** target while the write goes to the wrong one, so Thunder Wave aimed at a Psychic ally-of-a-Ground-type paralyzes the **Ground type** |
 
 **Wasted search.** Not a wrong answer — a budget spent on nothing.
