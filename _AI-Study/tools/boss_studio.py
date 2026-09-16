@@ -891,11 +891,20 @@ def team_load(name, over):
         # name adds a second copy (POLIWHIRL -> POLIWRATH plus pinned POLIWRATH).
         # Do not generalise this to generated baseline picks: once another baseline
         # mon is dropped, those may be rerolled and still need their explicit pin.
+        #
+        # `species in baseline` is load-bearing and its absence was a real bug: an
+        # original with a BRANCHING evolution (POLIWHIRL -> POLIWRATH or POLITOED)
+        # only supplies ONE branch. Dropping the pin whenever the wanted species is
+        # merely somewhere in the family assumed the evolution the generator did not
+        # take, so an imported POLITOED was un-pinned, never generated, and the whole
+        # gym shifted up a slot with a filler backfilled on the end. Only the species
+        # the baseline ACTUALLY contains can duplicate, so only that one may be
+        # un-pinned.
         raw_originals = [m["species"] for m in G.CAPS[i]["team"]
                          if m["species"] in G._sp]
         for species in wanted:
-            if species not in raw_originals and any(
-                    species in G.family(original) for original in raw_originals):
+            if (species not in raw_originals and species in baseline and any(
+                    species in G.family(original) for original in raw_originals)):
                 keep.pop(species, None)
         for old in baseline:
             if old not in wanted:
