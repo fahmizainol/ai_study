@@ -80,7 +80,7 @@ index 760dea4..6a2fd9e 100644
          );
      }
 diff --git a/src/genx/abilities.rs b/src/genx/abilities.rs
-index ee644cb..768710d 100644
+index ee644cb..3c8229a 100644
 --- a/src/genx/abilities.rs
 +++ b/src/genx/abilities.rs
 @@ -1172,7 +1172,15 @@ pub fn ability_end_of_turn(
@@ -135,7 +135,38 @@ index ee644cb..768710d 100644
          }
          Abilities::SLOWSTART => {
              instructions
-@@ -2303,18 +2319,27 @@ pub fn ability_modify_attack_against(
+@@ -1662,16 +1678,20 @@ pub fn ability_on_switch_in(
+             }
+         }
+         Abilities::DAUNTLESSSHIELD => {
+-            // no need to check for boost at +6 because we are switching in
+-            attacking_side.get_active().defense_boost += 1;
+-            instructions
+-                .instruction_list
+-                .push(Instruction::Boost(BoostInstruction::new(
+-                    *side_ref,
+-                    owner_slot,
+-                    PokemonBoostableStat::Defense,
+-                    1,
+-                )));
++            // Run 17: INTREPIDSWORD's identical twin, and the evidence named it rather than the
++            // symmetry — after that fix the residual out-of-range writes were 14, ALL Defense
++            // ±1 and symmetric: 7 on slot 0 going +1 -> 7 and 7 on slot 1 going -1 -> -7. That
++            // is run 12's signature for a positive stamped on the wrong body with the negatives
++            // as its own reversals. Same fix: the clamping helper, which also names the slot.
++            apply_boost_instruction(
++                attacking_side,
++                owner_slot,
++                &PokemonBoostableStat::Defense,
++                &1,
++                side_ref,
++                side_ref,
++                instructions,
++            );
+         }
+         Abilities::GRASSYSURGE => {
+             if state.terrain.terrain_type != Terrain::GRASSYTERRAIN {
+@@ -2303,18 +2323,27 @@ pub fn ability_modify_attack_against(
      defender_choice: &Choice,
      attacking_side_ref: &SideReference,
  ) {
