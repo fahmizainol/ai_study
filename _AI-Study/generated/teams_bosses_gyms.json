@@ -10,111 +10,77 @@
   "trainer_items": [],
   "mons": [
    {
-    "species": "SLOWPOKE",
-    "level": 19,
-    "moves": [
-     "TRICKROOM",
-     "AQUAJET",
-     "FACADE",
-     "BULLDOZE"
-    ],
-    "item": "MYSTICWATER",
-    "ability": 2,
-    "nature": "QUIET",
-    "iv": 31,
-    "ev": [
-     252,
-     0,
-     0,
-     0,
-     252,
-     4
-    ],
-    "roles": [
-     "priority",
-     "speed",
-     "trickroom",
-     "trickroom_abuse"
-    ],
-    "src": "gen6uu/dex/Offensive Trick Room",
-    "fidelity": 1,
-    "inherited": "SLOWKING",
-    "kept": false,
-    "why": "off-theme"
-   },
-   {
-    "species": "SKORUPI",
+    "species": "KARRABLAST",
     "level": 19,
     "moves": [
      "SWORDSDANCE",
      "KNOCKOFF",
      "BUGBITE",
-     "POISONSTING"
+     "FACADE"
     ],
-    "item": "LUMBERRY",
-    "ability": 0,
-    "nature": "JOLLY",
+    "item": "EVIOLITE",
+    "ability": 2,
+    "nature": "ADAMANT",
     "iv": 31,
     "ev": [
      0,
-     252,
-     4,
-     252,
+     236,
+     76,
+     116,
      0,
-     0
+     76
     ],
     "roles": [
      "setup"
     ],
-    "src": "gen6ru/dex/Swords Dance",
-    "fidelity": 2,
-    "inherited": "DRAPION",
-    "kept": false,
-    "why": "theme:setup"
+    "src": "Boss Studio custom moves",
+    "fidelity": 4,
+    "inherited": null,
+    "pinned": true,
+    "kept": true,
+    "why": "pinned on the card"
    },
    {
-    "species": "FRILLISH",
+    "species": "DWEBBLE",
     "level": 19,
     "moves": [
-     "TRICKROOM",
-     "RECOVER",
-     "BUBBLEBEAM",
-     "NIGHTSHADE"
+     "STEALTHROCK",
+     "KNOCKOFF",
+     "BUGBITE",
+     "SMACKDOWN"
     ],
-    "item": "SITRUSBERRY",
+    "item": "SILVERPOWDER",
     "ability": 0,
-    "nature": "QUIET",
+    "nature": "ADAMANT",
     "iv": 31,
     "ev": [
+     0,
      252,
      0,
+     252,
      0,
-     0,
-     244,
-     12
+     4
     ],
     "roles": [
-     "recovery",
-     "speed",
-     "trickroom",
-     "trickroom_abuse"
+     "hazards"
     ],
-    "src": "gen6battlespotdoubles/dex/Trick Room",
-    "fidelity": 2,
-    "inherited": "JELLICENT",
-    "kept": false,
-    "why": "off-theme"
+    "src": "Boss Studio custom moves",
+    "fidelity": 4,
+    "inherited": "CRUSTLE",
+    "pinned": true,
+    "kept": true,
+    "why": "pinned on the card"
    },
    {
     "species": "ANORITH",
     "level": 19,
     "moves": [
-     "SWORDSDANCE",
-     "AERIALACE",
+     "KNOCKOFF",
+     "AQUAJET",
      "BUGBITE",
      "SMACKDOWN"
     ],
-    "item": "SILVERPOWDER",
+    "item": "EVIOLITE",
     "ability": 0,
     "nature": "JOLLY",
     "iv": 31,
@@ -127,13 +93,42 @@
      0
     ],
     "roles": [
-     "setup"
+     "priority"
     ],
-    "src": "gen6lc/dex/Life Orb Swords Dance",
-    "fidelity": 2,
+    "src": "Boss Studio custom moves",
+    "fidelity": 4,
     "inherited": null,
     "kept": true,
-    "why": "original"
+    "why": "original, re-set for setup"
+   },
+   {
+    "species": "KRICKETUNE",
+    "level": 19,
+    "moves": [
+     "TAUNT",
+     "ENDEAVOR",
+     "KNOCKOFF",
+     "BUGBITE"
+    ],
+    "item": "SILVERPOWDER",
+    "ability": 2,
+    "nature": "JOLLY",
+    "iv": 31,
+    "ev": [
+     0,
+     252,
+     4,
+     252,
+     0,
+     0
+    ],
+    "roles": [],
+    "src": "Boss Studio custom moves",
+    "fidelity": 4,
+    "inherited": null,
+    "pinned": true,
+    "kept": true,
+    "why": "pinned on the card"
    },
    {
     "species": "VESPIQUEN",
@@ -160,20 +155,21 @@
      "pivot",
      "recovery"
     ],
-    "src": "generated (no published set fits)",
-    "fidelity": 0,
+    "src": "Boss Studio custom moves",
+    "fidelity": 4,
     "inherited": null,
+    "pinned": false,
     "kept": true,
     "why": "original"
    },
    {
-    "species": "HERACROSS",
+    "species": "DURANT",
     "level": 20,
     "moves": [
-     "SWORDSDANCE",
-     "KNOCKOFF",
+     "BUGBITE",
+     "SHADOWCLAW",
      "FACADE",
-     "BUGBITE"
+     "BITE"
     ],
     "item": "SILVERPOWDER",
     "ability": 1,
@@ -187,14 +183,13 @@
      0,
      0
     ],
-    "roles": [
-     "setup"
-    ],
-    "src": "gen7uu/dex/Swords Dance",
-    "fidelity": 3,
+    "roles": [],
+    "src": "Boss Studio custom moves",
+    "fidelity": 4,
     "inherited": null,
-    "kept": false,
-    "why": "theme:setup"
+    "pinned": true,
+    "kept": true,
+    "why": "pinned on the card"
    }
   ],
   "design": {
@@ -203,8 +198,7 @@
    "theme": "BUG",
    "notes": [
     "dropped DEWPIDER (269 BST, band 302-492)",
-    "SLOWPOKE off-theme: resists FIRE",
-    "FRILLISH off-theme: resists FIRE"
+    "ANORITH re-equipped to cover setup"
    ]
   }
  },
@@ -219,189 +213,191 @@
   "trainer_items": [],
   "mons": [
    {
-    "species": "SLOWKING",
+    "species": "KLEFKI",
     "level": 25,
     "moves": [
-     "TRICKROOM",
-     "WATERPULSE",
-     "CONFUSION",
-     "POWERGEM"
+     "REFLECT",
+     "LIGHTSCREEN",
+     "SAFEGUARD",
+     "DRAININGKISS"
     ],
-    "item": "MYSTICWATER",
-    "ability": 2,
-    "nature": "QUIET",
+    "item": "LIGHTCLAY",
+    "ability": 0,
+    "nature": "CALM",
     "iv": 31,
     "ev": [
      252,
      0,
-     0,
-     0,
-     252,
-     4
-    ],
-    "roles": [
-     "speed",
-     "trickroom",
-     "trickroom_abuse"
-    ],
-    "src": "gen6uu/dex/Offensive Trick Room",
-    "fidelity": 1,
-    "inherited": null,
-    "kept": false,
-    "why": "off-theme"
-   },
-   {
-    "species": "AZUMARILL",
-    "level": 25,
-    "moves": [
-     "AQUAJET",
-     "KNOCKOFF",
-     "PROTECT",
-     "FACADE"
-    ],
-    "item": "SITRUSBERRY",
-    "ability": 1,
-    "nature": "ADAMANT",
-    "iv": 31,
-    "ev": [
-     252,
-     252,
      4,
      0,
      0,
+     252
+    ],
+    "roles": [
+     "screens"
+    ],
+    "src": "Boss Studio custom moves",
+    "fidelity": 4,
+    "inherited": null,
+    "pinned": true,
+    "kept": true,
+    "why": "pinned on the card"
+   },
+   {
+    "species": "RIBOMBEE",
+    "level": 25,
+    "moves": [
+     "SILVERWIND",
+     "STRUGGLEBUG",
+     "DRAININGKISS",
+     "CALMMIND"
+    ],
+    "item": "SITRUSBERRY",
+    "ability": 2,
+    "nature": "MODEST",
+    "iv": 31,
+    "ev": [
+     4,
+     0,
+     0,
+     252,
+     252,
      0
     ],
     "roles": [
-     "priority",
-     "protect",
-     "trickroom_abuse"
+     "setup"
     ],
-    "src": "gen6doublesou/dex/Megabus",
-    "fidelity": 3,
+    "src": "Boss Studio custom moves",
+    "fidelity": 4,
     "inherited": null,
+    "pinned": true,
     "kept": true,
-    "why": "evolved original"
+    "why": "pinned on the card"
    },
    {
-    "species": "WIGGLYTUFF",
+    "species": "SYLVEON",
     "level": 25,
     "moves": [
-     "STEALTHROCK",
-     "ROUND",
-     "FAIRYWIND",
-     "SHOCKWAVE"
+     "CALMMIND",
+     "REST",
+     "SNORE",
+     "DRAININGKISS"
     ],
-    "item": "SILKSCARF",
+    "item": "CHESTOBERRY",
+    "ability": 2,
+    "nature": "MODEST",
+    "iv": 31,
+    "ev": [
+     244,
+     0,
+     172,
+     20,
+     68,
+     4
+    ],
+    "roles": [
+     "recovery",
+     "setup"
+    ],
+    "src": "Boss Studio custom moves",
+    "fidelity": 4,
+    "inherited": null,
+    "pinned": true,
+    "kept": true,
+    "why": "pinned on the card"
+   },
+   {
+    "species": "GRANBULL",
+    "level": 25,
+    "moves": [
+     "THUNDERWAVE",
+     "THIEF",
+     "HEADBUTT",
+     "THUNDERFANG"
+    ],
+    "item": "SITRUSBERRY",
+    "ability": 0,
+    "nature": "ADAMANT",
+    "iv": 31,
+    "ev": [
+     36,
+     116,
+     196,
+     36,
+     0,
+     116
+    ],
+    "roles": [
+     "speed",
+     "status"
+    ],
+    "src": "Boss Studio custom moves",
+    "fidelity": 4,
+    "inherited": "SNUBBULL",
+    "pinned": true,
+    "kept": true,
+    "why": "pinned on the card"
+   },
+   {
+    "species": "DEDENNE",
+    "level": 25,
+    "moves": [
+     "RECYCLE",
+     "NUZZLE",
+     "GRASSKNOT",
+     "ELECTROWEB"
+    ],
+    "item": "SITRUSBERRY",
     "ability": 0,
     "nature": "TIMID",
     "iv": 31,
     "ev": [
-     0,
+     4,
      0,
      0,
      252,
      252,
-     4
+     0
     ],
-    "roles": [
-     "hazards",
-     "trickroom_abuse"
-    ],
-    "src": "gen6pu/dex/Offensive Stealth Rock",
-    "fidelity": 1,
+    "roles": [],
+    "src": "Boss Studio custom moves",
+    "fidelity": 4,
     "inherited": null,
+    "pinned": true,
     "kept": true,
-    "why": "original"
+    "why": "pinned on the card"
    },
    {
-    "species": "CARBINK",
+    "species": "COMFEY",
     "level": 25,
     "moves": [
-     "TRICKROOM",
-     "FACADE",
-     "MAGICCOAT",
-     "SMACKDOWN"
+     "DRAININGKISS",
+     "VENOSHOCK",
+     "LEECHSEED",
+     "GROWTH"
     ],
-    "item": "HARDSTONE",
+    "item": "LEFTOVERS",
     "ability": 1,
-    "nature": "RELAXED",
+    "nature": "MODEST",
     "iv": 31,
     "ev": [
-     252,
      4,
+     0,
+     0,
      252,
-     0,
-     0,
+     252,
      0
     ],
     "roles": [
-     "speed",
-     "trickroom",
-     "trickroom_abuse"
+     "recovery",
+     "setup"
     ],
-    "src": "gen7pu/dex/Trick Room Lead (-hazards)",
-    "fidelity": 3,
+    "src": "Boss Studio custom moves",
+    "fidelity": 4,
     "inherited": null,
-    "kept": false,
-    "why": "theme:trickroom"
-   },
-   {
-    "species": "TANGROWTH",
-    "level": 25,
-    "moves": [
-     "KNOCKOFF",
-     "MEGADRAIN",
-     "SHOCKWAVE",
-     "ROUND"
-    ],
-    "item": "MIRACLESEED",
-    "ability": 2,
-    "nature": "RELAXED",
-    "iv": 31,
-    "ev": [
-     252,
-     0,
-     252,
-     0,
-     0,
-     4
-    ],
-    "roles": [
-     "trickroom_abuse"
-    ],
-    "src": "gen8nationaldex/stats/Showdown Usage",
-    "fidelity": 1,
-    "inherited": null,
-    "kept": false,
-    "why": "off-theme"
-   },
-   {
-    "species": "TOGEKISS",
-    "level": 26,
-    "moves": [
-     "TRICK",
-     "AIRCUTTER",
-     "FAIRYWIND",
-     "MAGICALLEAF"
-    ],
-    "item": "SHARPBEAK",
-    "ability": 1,
-    "nature": "TIMID",
-    "iv": 31,
-    "ev": [
-     0,
-     0,
-     0,
-     252,
-     252,
-     4
-    ],
-    "roles": [],
-    "src": "gen6monotype/dex/Choice Scarf (Fairy)",
-    "fidelity": 1,
-    "inherited": null,
-    "kept": false,
-    "why": "theme"
+    "pinned": true,
+    "kept": true,
+    "why": "pinned on the card"
    }
   ],
   "design": {
@@ -409,10 +405,10 @@
    "level": 26,
    "theme": "FAIRY",
    "notes": [
+    "dropped WIGGLYTUFF -- unticked on the card",
     "dropped MAWILE (380 BST, band 392-582)",
     "evolved MARILL (250) -> AZUMARILL (410, (OU)) to reach the band",
-    "SLOWKING off-theme: 77% Smogon co-occurrence",
-    "TANGROWTH off-theme: 77% Smogon co-occurrence"
+    "dropped AZUMARILL -- unticked on the card"
    ]
   }
  },
@@ -427,190 +423,194 @@
   "trainer_items": [],
   "mons": [
    {
-    "species": "CARBINK",
-    "level": 31,
-    "moves": [
-     "TRICKROOM",
-     "FACADE",
-     "MAGICCOAT",
-     "SMACKDOWN"
-    ],
-    "item": "HARDSTONE",
-    "ability": 1,
-    "nature": "RELAXED",
-    "iv": 31,
-    "ev": [
-     252,
-     4,
-     252,
-     0,
-     0,
-     0
-    ],
-    "roles": [
-     "speed",
-     "trickroom",
-     "trickroom_abuse"
-    ],
-    "src": "gen7pu/dex/Trick Room Lead (-hazards)",
-    "fidelity": 3,
-    "inherited": null,
-    "kept": false,
-    "why": "off-theme"
-   },
-   {
-    "species": "PYUKUMUKU",
-    "level": 31,
-    "moves": [
-     "FACADE",
-     "BIDE",
-     "FLING",
-     "CURSE"
-    ],
-    "item": null,
-    "ability": 0,
-    "nature": "ADAMANT",
-    "iv": 31,
-    "ev": [
-     4,
-     252,
-     0,
-     252,
-     0,
-     0
-    ],
-    "roles": [
-     "setup"
-    ],
-    "src": "generated (no published set fits)",
-    "fidelity": 0,
-    "inherited": null,
-    "kept": true,
-    "why": "original"
-   },
-   {
-    "species": "BRIONNE",
-    "level": 31,
-    "moves": [
-     "CALMMIND",
-     "SUBSTITUTE",
-     "BUBBLEBEAM",
-     "ROUND"
-    ],
-    "item": "MYSTICWATER",
-    "ability": 0,
-    "nature": "BOLD",
-    "iv": 31,
-    "ev": [
-     252,
-     0,
-     132,
-     124,
-     0,
-     0
-    ],
-    "roles": [
-     "protect",
-     "setup",
-     "trickroom_abuse"
-    ],
-    "src": "gen9nationaldex/dex/Bulky Calm Mind",
-    "fidelity": 2,
-    "inherited": "PRIMARINA",
-    "kept": true,
-    "why": "original"
-   },
-   {
-    "species": "POLIWRATH",
-    "level": 31,
-    "moves": [
-     "TOXIC",
-     "PROTECT",
-     "LOWSWEEP",
-     "AQUAJET"
-    ],
-    "item": "BLACKBELT",
-    "ability": 0,
-    "nature": "TIMID",
-    "iv": 31,
-    "ev": [
-     252,
-     0,
-     0,
-     96,
-     160,
-     0
-    ],
-    "roles": [
-     "priority",
-     "protect",
-     "status"
-    ],
-    "src": "gen7pu/dex/Special Tank",
-    "fidelity": 2,
-    "inherited": null,
-    "kept": true,
-    "why": "evolved original"
-   },
-   {
     "species": "TENTACRUEL",
     "level": 31,
     "moves": [
      "TOXICSPIKES",
-     "KNOCKOFF",
      "BUBBLEBEAM",
-     "VENOSHOCK"
+     "VENOSHOCK",
+     "ROUND"
     ],
-    "item": "MYSTICWATER",
-    "ability": 1,
-    "nature": "BOLD",
+    "item": "SITRUSBERRY",
+    "ability": 2,
+    "nature": "CALM",
     "iv": 31,
     "ev": [
      252,
      0,
-     240,
-     16,
+     4,
      0,
-     0
+     0,
+     252
     ],
     "roles": [
      "hazards"
     ],
-    "src": "gen6zu/dex/Defensive",
-    "fidelity": 2,
+    "src": "Boss Studio custom moves",
+    "fidelity": 4,
     "inherited": "TENTACOOL",
-    "kept": false,
-    "why": "theme:hazards"
+    "pinned": true,
+    "kept": true,
+    "why": "pinned on the card"
    },
    {
-    "species": "TANGROWTH",
-    "level": 32,
+    "species": "AZUMARILL",
+    "level": 31,
     "moves": [
+     "AQUAJET",
      "KNOCKOFF",
-     "MEGADRAIN",
-     "SHOCKWAVE",
-     "ROUND"
+     "RETURN",
+     "BULLDOZE"
     ],
-    "item": "MIRACLESEED",
+    "item": "SITRUSBERRY",
+    "ability": 1,
+    "nature": "JOLLY",
+    "iv": 31,
+    "ev": [
+     4,
+     252,
+     0,
+     252,
+     0,
+     0
+    ],
+    "roles": [
+     "priority"
+    ],
+    "src": "Boss Studio custom moves",
+    "fidelity": 4,
+    "inherited": null,
+    "pinned": true,
+    "kept": true,
+    "why": "pinned on the card"
+   },
+   {
+    "species": "POLITOED",
+    "level": 31,
+    "moves": [
+     "PERISHSONG",
+     "PROTECT",
+     "WATERPULSE",
+     "ENDEAVOR"
+    ],
+    "item": "DAMPROCK",
     "ability": 2,
-    "nature": "RELAXED",
+    "nature": "MODEST",
     "iv": 31,
     "ev": [
      252,
      0,
+     0,
+     0,
      252,
-     0,
-     0,
      4
     ],
     "roles": [
-     "trickroom_abuse"
+     "protect",
+     "rain",
+     "weather"
     ],
-    "src": "gen8nationaldex/stats/Showdown Usage",
-    "fidelity": 1,
+    "src": "Boss Studio custom moves",
+    "fidelity": 4,
     "inherited": null,
-    "kept": false,
-    "why": "off-theme"
+    "pinned": true,
+    "kept": true,
+    "why": "pinned on the card"
+   },
+   {
+    "species": "MANTINE",
+    "level": 31,
+    "moves": [
+     "RAINDANCE",
+     "BUBBLEBEAM",
+     "PSYBEAM",
+     "PROTECT"
+    ],
+    "item": "WACANBERRY",
+    "ability": 0,
+    "nature": "MODEST",
+    "iv": 31,
+    "ev": [
+     76,
+     0,
+     36,
+     196,
+     200,
+     0
+    ],
+    "roles": [
+     "protect",
+     "rain"
+    ],
+    "src": "Boss Studio custom moves",
+    "fidelity": 4,
+    "inherited": "MANTYKE",
+    "pinned": true,
+    "kept": true,
+    "why": "pinned on the card"
+   },
+   {
+    "species": "GOREBYSS",
+    "level": 31,
+    "moves": [
+     "WATERPULSE",
+     "ROUND",
+     "ICYWIND",
+     "PROTECT"
+    ],
+    "item": "MYSTICWATER",
+    "ability": 0,
+    "nature": "MODEST",
+    "iv": 31,
+    "ev": [
+     0,
+     0,
+     0,
+     252,
+     252,
+     4
+    ],
+    "roles": [
+     "protect",
+     "speed"
+    ],
+    "src": "Boss Studio custom moves",
+    "fidelity": 4,
+    "inherited": null,
+    "pinned": true,
+    "kept": true,
+    "why": "pinned on the card"
+   },
+   {
+    "species": "VAPOREON",
+    "level": 32,
+    "moves": [
+     "PROTECT",
+     "QUICKATTACK",
+     "WATERPULSE",
+     "AURORABEAM"
+    ],
+    "item": "LEFTOVERS",
+    "ability": 2,
+    "nature": "ADAMANT",
+    "iv": 31,
+    "ev": [
+     0,
+     236,
+     36,
+     0,
+     0,
+     236
+    ],
+    "roles": [
+     "protect"
+    ],
+    "src": "Boss Studio custom moves",
+    "fidelity": 4,
+    "inherited": "EEVEE",
+    "pinned": true,
+    "kept": true,
+    "why": "pinned on the card"
    }
   ],
   "design": {
@@ -618,9 +618,10 @@
    "level": 32,
    "theme": "WATER",
    "notes": [
+    "dropped BRIONNE -- unticked on the card",
+    "dropped PYUKUMUKU -- unticked on the card",
     "evolved POLIWHIRL (385) -> POLIWRATH (500, ZU) to reach the band",
-    "CARBINK off-theme: 34% Smogon co-occurrence",
-    "TANGROWTH off-theme: 40% Smogon co-occurrence"
+    "dropped POLIWRATH -- unticked on the card"
    ]
   }
  },
@@ -658,9 +659,10 @@
     "roles": [
      "hazards"
     ],
-    "src": "gen7ru/dex/Shell Smash",
-    "fidelity": 3,
+    "src": "Boss Studio custom moves",
+    "fidelity": 4,
     "inherited": null,
+    "pinned": false,
     "kept": true,
     "why": "original"
    },
@@ -668,32 +670,30 @@
     "species": "GLACEON",
     "level": 35,
     "moves": [
-     "BLIZZARD",
-     "PROTECT",
-     "HAIL",
-     "ICEBEAM"
+     "ICEBEAM",
+     "SHADOWBALL",
+     "FROSTBREATH",
+     "HYPERBEAM"
     ],
-    "item": "CHOICESCARF",
-    "ability": 0,
-    "nature": "TIMID",
+    "item": "CHOICESPECS",
+    "ability": 2,
+    "nature": "MODEST",
     "iv": 31,
     "ev": [
+     0,
+     0,
      4,
-     0,
-     0,
      252,
      252,
      0
     ],
-    "roles": [
-     "protect",
-     "snow"
-    ],
-    "src": "gen7battlespotdoubles/stats/Showdown Usage",
+    "roles": [],
+    "src": "Boss Studio custom moves",
     "fidelity": 4,
     "inherited": null,
-    "kept": false,
-    "why": "theme"
+    "pinned": true,
+    "kept": true,
+    "why": "pinned on the card"
    },
    {
     "species": "MAMOSWINE",
@@ -719,9 +719,10 @@
     "roles": [
      "priority"
     ],
-    "src": "gen6ou/dex/Wallbreaker",
-    "fidelity": 3,
+    "src": "Boss Studio custom moves",
+    "fidelity": 4,
     "inherited": null,
+    "pinned": false,
     "kept": true,
     "why": "evolved original"
    },
@@ -749,41 +750,41 @@
     "roles": [
      "rain"
     ],
-    "src": "gen6nu/stats/Showdown Usage",
-    "fidelity": 3,
-    "inherited": null,
-    "kept": false,
-    "why": "theme"
-   },
-   {
-    "species": "FLORGES",
-    "level": 35,
-    "moves": [
-     "WISH",
-     "SYNTHESIS",
-     "MOONBLAST",
-     "AROMATHERAPY"
-    ],
-    "item": "LEFTOVERS",
-    "ability": 0,
-    "nature": "BOLD",
-    "iv": 31,
-    "ev": [
-     252,
-     0,
-     252,
-     0,
-     0,
-     4
-    ],
-    "roles": [
-     "recovery"
-    ],
-    "src": "gen6uu/dex/Defensive Support",
+    "src": "Boss Studio custom moves",
     "fidelity": 4,
     "inherited": null,
-    "kept": false,
-    "why": "off-theme"
+    "pinned": true,
+    "kept": true,
+    "why": "pinned on the card"
+   },
+   {
+    "species": "TOGEKISS",
+    "level": 35,
+    "moves": [
+     "AIRSLASH",
+     "FIREBLAST",
+     "AURASPHERE",
+     "TRICK"
+    ],
+    "item": "CHOICESCARF",
+    "ability": 1,
+    "nature": "TIMID",
+    "iv": 31,
+    "ev": [
+     0,
+     0,
+     0,
+     252,
+     252,
+     4
+    ],
+    "roles": [],
+    "src": "Boss Studio custom moves",
+    "fidelity": 4,
+    "inherited": null,
+    "pinned": true,
+    "kept": true,
+    "why": "pinned on the card"
    },
    {
     "species": "GYARADOS",
@@ -791,7 +792,7 @@
     "moves": [
      "WATERFALL",
      "EARTHQUAKE",
-     "PROTECT",
+     "ICEFANG",
      "BOUNCE"
     ],
     "item": "GYARADOSITE",
@@ -799,22 +800,22 @@
     "nature": "JOLLY",
     "iv": 31,
     "ev": [
-     12,
+     0,
      252,
      0,
-     244,
+     252,
      0,
-     0
+     4
     ],
     "roles": [
-     "mega",
-     "protect"
+     "mega"
     ],
-    "src": "gen6battlespotdoubles/dex/Dragon Dance",
-    "fidelity": 3,
+    "src": "Boss Studio custom moves",
+    "fidelity": 4,
     "inherited": null,
-    "kept": false,
-    "why": "off-theme"
+    "pinned": true,
+    "kept": true,
+    "why": "pinned on the card"
    }
   ],
   "design": {
@@ -822,11 +823,9 @@
    "level": 36,
    "theme": "ICE",
    "notes": [
-    "dropped WEAVILE (510 BST, band 520-582)",
-    "dropped FROSLASS (480 BST, band 520-582)",
-    "evolved PILOSWINE (450) -> MAMOSWINE (530, UU) to reach the band",
-    "GYARADOS off-theme: resists FIGHTING/STEEL/FIRE",
-    "FLORGES off-theme: 72% Smogon co-occurrence"
+    "dropped WEAVILE -- unticked on the card",
+    "dropped FROSLASS -- unticked on the card",
+    "evolved PILOSWINE (450) -> MAMOSWINE (530, UU) to reach the band"
    ]
   }
  },
@@ -864,39 +863,69 @@
     "roles": [
      "recovery"
     ],
-    "src": "gen6nu/stats/Showdown Usage",
+    "src": "Boss Studio custom moves",
     "fidelity": 4,
     "inherited": null,
     "kept": true,
-    "why": "original"
+    "why": "original, re-set for recovery"
+   },
+   {
+    "species": "SCRAFTY",
+    "level": 39,
+    "moves": [
+     "HIGHJUMPKICK",
+     "KNOCKOFF",
+     "DRAINPUNCH",
+     "ZENHEADBUTT"
+    ],
+    "item": "CHOICESCARF",
+    "ability": 1,
+    "nature": "JOLLY",
+    "iv": 31,
+    "ev": [
+     36,
+     236,
+     0,
+     212,
+     0,
+     0
+    ],
+    "roles": [],
+    "src": "Boss Studio custom moves",
+    "fidelity": 4,
+    "inherited": null,
+    "pinned": true,
+    "kept": true,
+    "why": "pinned on the card"
    },
    {
     "species": "BISHARP",
     "level": 39,
     "moves": [
      "KNOCKOFF",
+     "SWORDSDANCE",
      "IRONHEAD",
-     "STEALTHROCK",
      "GIGAIMPACT"
     ],
-    "item": null,
+    "item": "LIFEORB",
     "ability": 0,
-    "nature": "JOLLY",
+    "nature": "ADAMANT",
     "iv": 31,
     "ev": [
      0,
-     156,
-     36,
-     196,
+     252,
+     4,
+     252,
      0,
-     116
+     0
     ],
     "roles": [
-     "hazards"
+     "setup"
     ],
-    "src": "gen6lc/dex/Standard",
-    "fidelity": 3,
+    "src": "Boss Studio custom moves",
+    "fidelity": 4,
     "inherited": "PAWNIARD",
+    "pinned": false,
     "kept": true,
     "why": "original"
    },
@@ -924,107 +953,75 @@
     "roles": [
      "setup"
     ],
-    "src": "gen6uu/dex/Swords Dance",
-    "fidelity": 3,
+    "src": "Boss Studio custom moves",
+    "fidelity": 4,
     "inherited": null,
+    "pinned": false,
     "kept": true,
     "why": "original"
    },
    {
-    "species": "UMBREON",
+    "species": "GRENINJA",
     "level": 39,
     "moves": [
-     "FOULPLAY",
-     "MOONLIGHT",
-     "TOXIC",
-     "HEALBELL"
+     "ROCKSLIDE",
+     "UTURN",
+     "ICEBEAM",
+     "GUNKSHOT"
     ],
-    "item": "LEFTOVERS",
-    "ability": 0,
-    "nature": "CALM",
+    "item": "CHOICESCARF",
+    "ability": 1,
+    "nature": "HASTY",
     "iv": 31,
     "ev": [
+     0,
+     176,
+     0,
      252,
-     0,
-     4,
-     0,
-     0,
-     252
-    ],
-    "roles": [
-     "recovery",
-     "status"
-    ],
-    "src": "gen6battlespotsingles/stats/Showdown Usage",
-    "fidelity": 4,
-    "inherited": null,
-    "kept": false,
-    "why": "theme:recovery"
-   },
-   {
-    "species": "HIPPOWDON",
-    "level": 39,
-    "moves": [
-     "EARTHQUAKE",
-     "ICEFANG",
-     "YAWN",
-     "GIGAIMPACT"
-    ],
-    "item": "ROCKYHELMET",
-    "ability": 0,
-    "nature": "IMPISH",
-    "iv": 31,
-    "ev": [
-     252,
-     4,
-     252,
-     0,
-     0,
+     80,
      0
     ],
     "roles": [
-     "sand",
-     "status",
-     "weather"
+     "pivot"
     ],
-    "src": "gen7battlespotsingles/dex/Physically Defensive",
-    "fidelity": 3,
+    "src": "Boss Studio custom moves",
+    "fidelity": 4,
     "inherited": null,
-    "kept": false,
-    "why": "off-theme"
+    "pinned": true,
+    "kept": true,
+    "why": "pinned on the card"
    },
    {
-    "species": "GARDEVOIR",
+    "species": "HOUNDOOM",
     "level": 40,
     "moves": [
-     "WISH",
-     "PROTECT",
-     "HYPERVOICE",
-     "WILLOWISP"
+     "SUNNYDAY",
+     "FIREBLAST",
+     "SOLARBEAM",
+     "SNARL"
     ],
-    "item": "GARDEVOIRITE",
+    "item": "HOUNDOOMINITE",
     "ability": 1,
     "nature": "TIMID",
     "iv": 31,
     "ev": [
-     248,
      0,
-     244,
-     16,
      0,
-     0
+     0,
+     252,
+     252,
+     4
     ],
     "roles": [
      "mega",
-     "protect",
-     "recovery",
-     "status"
+     "sun"
     ],
-    "src": "gen6monotype/dex/Wish + Protect (Psychic)",
+    "src": "Boss Studio custom moves",
     "fidelity": 4,
     "inherited": null,
-    "kept": false,
-    "why": "off-theme"
+    "pinned": true,
+    "kept": true,
+    "why": "pinned on the card"
    }
   ],
   "design": {
@@ -1032,9 +1029,8 @@
    "level": 40,
    "theme": "DARK",
    "notes": [
-    "dropped MIGHTYENA (420 BST, band 470-580)",
-    "GARDEVOIR off-theme: resists FIGHTING/BUG",
-    "HIPPOWDON off-theme: 52% Smogon co-occurrence"
+    "dropped MIGHTYENA (420 BST, band 449-601)",
+    "MALAMAR re-equipped to cover recovery"
    ]
   }
  },
@@ -1074,9 +1070,10 @@
      "status",
      "weather"
     ],
-    "src": "gen7battlespotsingles/dex/Physically Defensive",
-    "fidelity": 3,
+    "src": "Boss Studio custom moves",
+    "fidelity": 4,
     "inherited": null,
+    "pinned": false,
     "kept": true,
     "why": "original"
    },
@@ -1104,73 +1101,108 @@
     "roles": [
      "pivot"
     ],
-    "src": "gen6ru/dex/Choice Band",
+    "src": "Boss Studio custom moves",
     "fidelity": 4,
     "inherited": null,
+    "pinned": false,
     "kept": true,
     "why": "original"
    },
    {
-    "species": "PROBOPASS",
+    "species": "TORTERRA",
     "level": 44,
     "moves": [
-     "FLASHCANNON",
-     "EARTHPOWER",
-     "MAGNETRISE",
-     "TAUNT"
+     "WOODHAMMER",
+     "EARTHQUAKE",
+     "SWORDSDANCE",
+     "SYNTHESIS"
     ],
-    "item": "AIRBALLOON",
-    "ability": 2,
-    "nature": "MODEST",
+    "item": "LEFTOVERS",
+    "ability": 0,
+    "nature": "CAREFUL",
     "iv": 31,
     "ev": [
-     172,
-     0,
-     0,
-     84,
      252,
-     0
+     0,
+     0,
+     76,
+     0,
+     180
     ],
     "roles": [
-     "sand_abuse"
+     "recovery",
+     "setup"
     ],
-    "src": "gen6nu/dex/Steel Trapper (-hazards)",
+    "src": "Boss Studio custom moves",
     "fidelity": 4,
     "inherited": null,
-    "kept": false,
-    "why": "off-theme"
+    "pinned": true,
+    "kept": true,
+    "why": "pinned on the card"
    },
    {
-    "species": "SWAMPERT",
+    "species": "MAMOSWINE",
     "level": 44,
     "moves": [
-     "ICEBEAM",
-     "EARTHPOWER",
-     "SCALD",
-     "EARTHQUAKE"
+     "ICESHARD",
+     "EARTHQUAKE",
+     "SUPERPOWER",
+     "GIGAIMPACT"
     ],
-    "item": "ASSAULTVEST",
-    "ability": 0,
+    "item": "LIFEORB",
+    "ability": 2,
     "nature": "ADAMANT",
     "iv": 31,
     "ev": [
-     252,
+     0,
      252,
      0,
-     0,
+     252,
      0,
      4
     ],
-    "roles": [],
-    "src": "gen7battlespotdoubles/stats/Showdown Usage",
+    "roles": [
+     "priority"
+    ],
+    "src": "Boss Studio custom moves",
     "fidelity": 4,
     "inherited": null,
-    "kept": false,
-    "why": "theme"
+    "pinned": true,
+    "kept": true,
+    "why": "pinned on the card"
+   },
+   {
+    "species": "RHYPERIOR",
+    "level": 44,
+    "moves": [
+     "EARTHQUAKE",
+     "FIREPUNCH",
+     "ICEPUNCH",
+     "ROCKSLIDE"
+    ],
+    "item": "WEAKNESSPOLICY",
+    "ability": 1,
+    "nature": "IMPISH",
+    "iv": 31,
+    "ev": [
+     252,
+     4,
+     252,
+     0,
+     0,
+     0
+    ],
+    "roles": [],
+    "src": "Boss Studio custom moves",
+    "fidelity": 4,
+    "inherited": null,
+    "pinned": true,
+    "kept": true,
+    "why": "pinned on the card"
    },
    {
     "species": "CAMERUPT",
-    "level": 44,
+    "level": 45,
     "moves": [
      "FIREBLAST",
      "EARTHPOWER",
@@ -1194,39 +1226,12 @@
      "mega",
      "status"
     ],
-    "src": "gen6ru/dex/Tank",
+    "src": "Boss Studio custom moves",
     "fidelity": 4,
     "inherited": null,
+    "pinned": false,
     "kept": true,
     "why": "original"
-   },
-   {
-    "species": "KYUREM",
-    "level": 45,
-    "moves": [
-     "DRACOMETEOR",
-     "ICEBEAM",
-     "EARTHPOWER",
-     "FOCUSBLAST"
-    ],
-    "item": "CHOICESPECS",
-    "ability": 0,
-    "nature": "TIMID",
-    "iv": 31,
-    "ev": [
-     0,
-     0,
-     0,
-     252,
-     252,
-     4
-    ],
-    "roles": [],
-    "src": "gen6uu/dex/Choice Specs",
-    "fidelity": 4,
-    "inherited": null,
-    "kept": false,
-    "why": "off-theme"
    }
   ],
   "design": {
@@ -1234,9 +1239,7 @@
    "level": 45,
    "theme": "GROUND",
    "notes": [
-    "dropped CLAYDOL (500 BST, band 513-653)",
-    "PROBOPASS off-theme: resists GRASS/ICE",
-    "KYUREM off-theme: resists WATER/GRASS/ICE"
+    "dropped CLAYDOL (500 BST, band 513-653)"
    ]
   }
  },
@@ -1254,71 +1257,108 @@
     "species": "UXIE",
     "level": 51,
     "moves": [
-     "TRICKROOM",
-     "GIGAIMPACT",
-     "MAGICCOAT",
-     "ZENHEADBUTT"
+     "PSYCHIC",
+     "UTURN",
+     "STEALTHROCK",
+     "THUNDERWAVE"
     ],
-    "item": "MENTALHERB",
+    "item": "LEFTOVERS",
     "ability": 0,
-    "nature": "RELAXED",
+    "nature": "BOLD",
     "iv": 31,
     "ev": [
+     248,
+     0,
      252,
      0,
-     116,
      0,
-     0,
-     140
+     8
     ],
     "roles": [
+     "hazards",
+     "pivot",
      "speed",
-     "trickroom"
+     "status"
     ],
-    "src": "gen7ou/dex/Lead (-hazards)",
-    "fidelity": 3,
+    "src": "Boss Studio custom moves",
+    "fidelity": 4,
     "inherited": null,
-    "kept": false,
-    "why": "theme:trickroom"
+    "pinned": true,
+    "kept": true,
+    "why": "pinned on the card"
    },
    {
     "species": "AZELF",
     "level": 51,
     "moves": [
-     "STEALTHROCK",
-     "EXPLOSION",
-     "SKILLSWAP",
-     "TAUNT"
+     "REFLECT",
+     "LIGHTSCREEN",
+     "TAUNT",
+     "UTURN"
     ],
-    "item": "FOCUSSASH",
+    "item": "LIGHTCLAY",
     "ability": 0,
-    "nature": "NAIVE",
+    "nature": "JOLLY",
     "iv": 31,
     "ev": [
      0,
      0,
-     228,
      252,
-     28,
+     216,
+     0,
+     40
+    ],
+    "roles": [
+     "pivot",
+     "screens"
+    ],
+    "src": "Boss Studio custom moves",
+    "fidelity": 4,
+    "inherited": null,
+    "pinned": true,
+    "kept": true,
+    "why": "pinned on the card"
+   },
+   {
+    "species": "MESPRIT",
+    "level": 51,
+    "moves": [
+     "SUBSTITUTE",
+     "CALMMIND",
+     "PSYSHOCK",
+     "ICEBEAM"
+    ],
+    "item": "LEFTOVERS",
+    "ability": 0,
+    "nature": "TIMID",
+    "iv": 31,
+    "ev": [
+     208,
+     0,
+     0,
+     252,
+     48,
      0
     ],
     "roles": [
-     "hazards"
+     "protect",
+     "setup"
     ],
-    "src": "gen6ou/dex/Lead",
+    "src": "Boss Studio custom moves",
     "fidelity": 4,
     "inherited": null,
-    "kept": false,
-    "why": "theme:hazards"
+    "pinned": true,
+    "kept": true,
+    "why": "pinned on the card"
    },
    {
-    "species": "REGISTEEL",
+    "species": "MEW",
     "level": 51,
     "moves": [
-     "CURSE",
-     "IRONHEAD",
-     "REST",
-     "EXPLOSION"
+     "TAUNT",
+     "WILLOWISP",
+     "KNOCKOFF",
+     "ZENHEADBUTT"
     ],
     "item": "LEFTOVERS",
     "ability": 0,
@@ -1327,82 +1367,52 @@
     "ev": [
      252,
      0,
-     4,
      0,
+     32,
      0,
-     252
+     224
     ],
     "roles": [
-     "recovery",
-     "setup",
-     "trickroom_abuse"
+     "status"
     ],
-    "src": "gen6ru/dex/Curse",
-    "fidelity": 3,
-    "inherited": null,
-    "kept": false,
-    "why": "off-theme"
-   },
-   {
-    "species": "CRESSELIA",
-    "level": 51,
-    "moves": [
-     "TRICKROOM",
-     "PSYCHIC",
-     "ICEBEAM",
-     "HELPINGHAND"
-    ],
-    "item": "MENTALHERB",
-    "ability": 0,
-    "nature": "RELAXED",
-    "iv": 31,
-    "ev": [
-     236,
-     0,
-     204,
-     0,
-     0,
-     68
-    ],
-    "roles": [
-     "speed",
-     "trickroom"
-    ],
-    "src": "gen6battlespotdoubles/dex/Trick Room",
+    "src": "Boss Studio custom moves",
     "fidelity": 4,
     "inherited": null,
-    "kept": false,
-    "why": "theme:trickroom"
+    "pinned": true,
+    "kept": true,
+    "why": "pinned on the card"
    },
    {
-    "species": "MAGEARNA",
+    "species": "JIRACHI",
     "level": 51,
     "moves": [
-     "FLASHCANNON",
-     "FLEURCANNON",
-     "SHIFTGEAR",
-     "ENERGYBALL"
+     "SUBSTITUTE",
+     "CALMMIND",
+     "PSYCHIC",
+     "THUNDERBOLT"
     ],
     "item": "LEFTOVERS",
     "ability": 0,
-    "nature": "CALM",
+    "nature": "TIMID",
     "iv": 31,
     "ev": [
      252,
      0,
      0,
-     4,
-     0,
-     252
+     136,
+     120,
+     0
     ],
     "roles": [
+     "protect",
      "setup"
     ],
-    "src": "gen8ubers/stats/Showdown Usage",
-    "fidelity": 3,
+    "src": "Boss Studio custom moves",
+    "fidelity": 4,
     "inherited": null,
-    "kept": false,
-    "why": "off-theme"
+    "pinned": true,
+    "kept": true,
+    "why": "pinned on the card"
    },
    {
     "species": "GALLADE",
@@ -1429,9 +1439,10 @@
      "mega",
      "setup"
     ],
-    "src": "gen6ou/dex/Bulky Drain Punch Sweeper",
-    "fidelity": 3,
+    "src": "Boss Studio custom moves",
+    "fidelity": 4,
     "inherited": null,
+    "pinned": false,
     "kept": true,
     "why": "original"
    }
@@ -1441,12 +1452,10 @@
    "level": 52,
    "theme": "PSYCHIC",
    "notes": [
-    "dropped ESPEON (525 BST, band 570-616)",
-    "dropped SLOWKING (490 BST, band 570-616)",
-    "dropped BEHEEYEM (485 BST, band 570-616)",
-    "dropped WOBBUFFET (405 BST, band 570-616)",
-    "REGISTEEL off-theme: 26% Smogon co-occurrence",
-    "MAGEARNA off-theme: 47% Smogon co-occurrence"
+    "dropped ESPEON (525 BST, band 567-619)",
+    "dropped SLOWKING (490 BST, band 567-619)",
+    "dropped BEHEEYEM (485 BST, band 567-619)",
+    "dropped WOBBUFFET (405 BST, band 567-619)"
    ]
   }
  },
@@ -1461,16 +1470,45 @@
   "trainer_items": [],
   "mons": [
    {
-    "species": "BANETTE",
+    "species": "LOPUNNY",
     "level": 56,
     "moves": [
-     "KNOCKOFF",
-     "SHADOWSNEAK",
-     "SHADOWCLAW",
-     "SUCKERPUNCH"
+     "DRAINPUNCH",
+     "RETURN",
+     "ICEPUNCH",
+     "DIG"
     ],
-    "item": "CHOICEBAND",
-    "ability": 0,
+    "item": null,
+    "ability": 2,
+    "nature": "JOLLY",
+    "iv": 31,
+    "ev": [
+     0,
+     228,
+     0,
+     236,
+     0,
+     0
+    ],
+    "roles": [],
+    "src": "Boss Studio custom moves",
+    "fidelity": 4,
+    "inherited": "BUNEARY",
+    "pinned": true,
+    "kept": true,
+    "why": "pinned on the card"
+   },
+   {
+    "species": "KANGASKHAN",
+    "level": 56,
+    "moves": [
+     "FAKEOUT",
+     "SUCKERPUNCH",
+     "EARTHQUAKE",
+     "FOCUSPUNCH"
+    ],
+    "item": "SILKSCARF",
+    "ability": 1,
     "nature": "ADAMANT",
     "iv": 31,
     "ev": [
@@ -1484,41 +1522,12 @@
     "roles": [
      "priority"
     ],
-    "src": "gen6zu/dex/Choice Band",
+    "src": "Boss Studio custom moves",
     "fidelity": 4,
     "inherited": null,
-    "kept": false,
-    "why": "off-theme"
-   },
-   {
-    "species": "ARCHEOPS",
-    "level": 56,
-    "moves": [
-     "STEALTHROCK",
-     "ROCKSLIDE",
-     "ACROBATICS",
-     "EARTHQUAKE"
-    ],
-    "item": "BERRYJUICE",
-    "ability": 0,
-    "nature": "JOLLY",
-    "iv": 31,
-    "ev": [
-     76,
-     20,
-     76,
-     196,
-     0,
-     76
-    ],
-    "roles": [
-     "hazards"
-    ],
-    "src": "gen7lc/dex/Utility",
-    "fidelity": 4,
-    "inherited": "ARCHEN",
-    "kept": false,
-    "why": "off-theme"
+    "pinned": true,
+    "kept": true,
+    "why": "pinned on the card"
    },
    {
     "species": "PIDGEOT",
@@ -1546,9 +1555,10 @@
      "pivot",
      "recovery"
     ],
-    "src": "gen7uu/dex/Special Attacker",
+    "src": "Boss Studio custom moves",
     "fidelity": 4,
     "inherited": null,
+    "pinned": false,
     "kept": true,
     "why": "original"
    },
@@ -1577,20 +1587,20 @@
      "protect",
      "setup"
     ],
-    "src": "gen6uu/dex/Substitute + Calm Mind",
+    "src": "Boss Studio custom moves",
     "fidelity": 4,
     "inherited": null,
-    "kept": false,
-    "why": "theme:setup"
+    "kept": true,
+    "why": "original, re-set for setup"
    },
    {
-    "species": "SLAKING",
+    "species": "REGIGIGAS",
     "level": 56,
     "moves": [
      "RETURN",
-     "EARTHQUAKE",
-     "ROCKSLIDE",
-     "BULKUP"
+     "KNOCKOFF",
+     "THUNDERWAVE",
+     "DRAINPUNCH"
     ],
     "item": "LEFTOVERS",
     "ability": 0,
@@ -1599,50 +1609,53 @@
     "ev": [
      252,
      252,
-     0,
-     0,
-     0,
-     4
-    ],
-    "roles": [
-     "setup"
-    ],
-    "src": "gen7battlespotdoubles/stats/Showdown Usage",
-    "fidelity": 4,
-    "inherited": null,
-    "kept": false,
-    "why": "theme:setup"
-   },
-   {
-    "species": "ARCEUS",
-    "level": 57,
-    "moves": [
-     "SWORDSDANCE",
-     "EXTREMESPEED",
-     "SHADOWCLAW",
-     "EARTHQUAKE"
-    ],
-    "item": "LIFEORB",
-    "ability": 0,
-    "nature": "JOLLY",
-    "iv": 31,
-    "ev": [
      4,
-     252,
      0,
-     252,
      0,
      0
     ],
     "roles": [
-     "priority",
-     "setup"
+     "speed",
+     "status"
     ],
-    "src": "gen6ubers/dex/Extreme Killer",
+    "src": "Boss Studio custom moves",
     "fidelity": 4,
     "inherited": null,
-    "kept": false,
-    "why": "theme:setup"
+    "pinned": true,
+    "kept": true,
+    "why": "pinned on the card"
+   },
+   {
+    "species": "SLAKING",
+    "level": 57,
+    "moves": [
+     "BULKUP",
+     "SLACKOFF",
+     "TAUNT",
+     "RETURN"
+    ],
+    "item": null,
+    "ability": 0,
+    "nature": "JOLLY",
+    "iv": 31,
+    "ev": [
+     252,
+     0,
+     0,
+     16,
+     0,
+     240
+    ],
+    "roles": [
+     "recovery",
+     "setup"
+    ],
+    "src": "Boss Studio custom moves",
+    "fidelity": 4,
+    "inherited": "VIGOROTH",
+    "pinned": false,
+    "kept": true,
+    "why": "original"
    }
   ],
   "design": {
@@ -1650,12 +1663,10 @@
    "level": 57,
    "theme": "NORMAL",
    "notes": [
-    "dropped SLAKING (670 BST, band 554-640)",
-    "dropped TOGEKISS (545 BST, band 554-640)",
-    "dropped SNORLAX (540 BST, band 554-640)",
-    "dropped BEWEAR (500 BST, band 554-640)",
-    "BANETTE off-theme: resists FIGHTING",
-    "ARCHEOPS off-theme: resists FIGHTING"
+    "dropped TOGEKISS -- unticked on the card",
+    "dropped SNORLAX -- unticked on the card",
+    "dropped BEWEAR -- unticked on the card",
+    "MELOETTA re-equipped to cover setup"
    ]
   }
  },
@@ -1669,38 +1680,6 @@
   "cheat_tier": false,
   "trainer_items": [],
   "mons": [
-   {
-    "species": "DIANCIE",
-    "level": 60,
-    "moves": [
-     "STONEEDGE",
-     "TRICKROOM",
-     "DIAMONDSTORM",
-     "EXPLOSION"
-    ],
-    "item": "LIFEORB",
-    "ability": 0,
-    "nature": "BRAVE",
-    "iv": 31,
-    "ev": [
-     248,
-     252,
-     8,
-     0,
-     0,
-     0
-    ],
-    "roles": [
-     "speed",
-     "trickroom",
-     "trickroom_abuse"
-    ],
-    "src": "gen6ubers/dex/Trick Room (-hazards)",
-    "fidelity": 4,
-    "inherited": null,
-    "kept": false,
-    "why": "off-theme"
-   },
    {
     "species": "STEELIX",
     "level": 60,
@@ -1723,12 +1702,12 @@
      252
     ],
     "roles": [
-     "status",
-     "trickroom_abuse"
+     "status"
     ],
-    "src": "gen6ru/dex/Defensive Tank (-hazards)",
-    "fidelity": 3,
+    "src": "Boss Studio custom moves",
+    "fidelity": 4,
     "inherited": null,
+    "pinned": false,
     "kept": true,
     "why": "original"
    },
@@ -1755,44 +1734,74 @@
     ],
     "roles": [
      "recovery",
-     "setup",
-     "trickroom_abuse"
+     "setup"
     ],
-    "src": "gen6ru/dex/Curse",
-    "fidelity": 3,
+    "src": "Boss Studio custom moves",
+    "fidelity": 4,
     "inherited": null,
-    "kept": false,
-    "why": "theme"
+    "pinned": true,
+    "kept": true,
+    "why": "pinned on the card"
    },
    {
-    "species": "REGIROCK",
+    "species": "METAGROSS",
     "level": 60,
     "moves": [
-     "ICEPUNCH",
-     "DRAINPUNCH",
-     "STONEEDGE",
-     "FIREPUNCH"
+     "METEORMASH",
+     "EARTHQUAKE",
+     "ZENHEADBUTT",
+     "EXPLOSION"
     ],
-    "item": "ASSAULTVEST",
+    "item": "CHOICEBAND",
     "ability": 0,
     "nature": "ADAMANT",
     "iv": 31,
     "ev": [
-     76,
-     172,
-     4,
-     4,
      0,
-     252
+     252,
+     0,
+     252,
+     0,
+     4
     ],
-    "roles": [
-     "trickroom_abuse"
-    ],
-    "src": "gen7vgc2018/stats/Showdown Usage",
+    "roles": [],
+    "src": "Boss Studio custom moves",
     "fidelity": 4,
     "inherited": null,
-    "kept": false,
-    "why": "off-theme"
+    "pinned": true,
+    "kept": true,
+    "why": "pinned on the card"
+   },
+   {
+    "species": "JIRACHI",
+    "level": 60,
+    "moves": [
+     "IRONHEAD",
+     "UTURN",
+     "HEALINGWISH",
+     "ICEPUNCH"
+    ],
+    "item": "CHOICESCARF",
+    "ability": 0,
+    "nature": "ADAMANT",
+    "iv": 31,
+    "ev": [
+     176,
+     152,
+     0,
+     180,
+     0,
+     0
+    ],
+    "roles": [
+     "pivot"
+    ],
+    "src": "Boss Studio custom moves",
+    "fidelity": 4,
+    "inherited": null,
+    "pinned": true,
+    "kept": true,
+    "why": "pinned on the card"
    },
    {
     "species": "AGGRON",
@@ -1818,12 +1827,12 @@
     "roles": [
      "hazards",
      "mega",
-     "phaze",
-     "trickroom_abuse"
+     "phaze"
     ],
-    "src": "gen6uu/dex/Tank",
+    "src": "Boss Studio custom moves",
     "fidelity": 4,
     "inherited": null,
+    "pinned": false,
     "kept": true,
     "why": "original"
    },
@@ -1831,33 +1840,30 @@
     "species": "DIALGA",
     "level": 61,
     "moves": [
-     "DRAGONPULSE",
-     "FLASHCANNON",
-     "TRICKROOM",
-     "PROTECT"
+     "DRACOMETEOR",
+     "FIREBLAST",
+     "THUNDER",
+     "POWERGEM"
     ],
-    "item": "SITRUSBERRY",
+    "item": "CHOICESPECS",
     "ability": 0,
     "nature": "MODEST",
     "iv": 31,
     "ev": [
-     244,
      0,
-     60,
      0,
-     204,
+     4,
+     252,
+     252,
      0
     ],
-    "roles": [
-     "protect",
-     "speed",
-     "trickroom"
-    ],
-    "src": "gen6vgc2016/stats/Showdown Usage",
+    "roles": [],
+    "src": "Boss Studio custom moves",
     "fidelity": 4,
     "inherited": null,
-    "kept": false,
-    "why": "theme:trickroom"
+    "pinned": true,
+    "kept": true,
+    "why": "pinned on the card"
    }
   ],
   "design": {
@@ -1865,12 +1871,10 @@
    "level": 61,
    "theme": "STEEL",
    "notes": [
-    "dropped EMPOLEON (530 BST, band 550-650)",
-    "dropped AEGISLASH (520 BST, band 550-650)",
-    "dropped BISHARP (490 BST, band 550-650)",
-    "dropped SKARMORY (465 BST, band 550-650)",
-    "DIANCIE off-theme: resists FIGHTING/FIRE",
-    "REGIROCK off-theme: resists FIRE"
+    "dropped EMPOLEON -- unticked on the card",
+    "dropped AEGISLASH -- unticked on the card",
+    "dropped BISHARP (490 BST, band 509-691)",
+    "dropped SKARMORY (465 BST, band 509-691)"
    ]
   }
  }

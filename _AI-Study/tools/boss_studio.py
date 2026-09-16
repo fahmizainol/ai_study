@@ -10,8 +10,10 @@ sandboxed browser page can reach. It runs here or it does not run. Regenerating 
 nine fights takes ~0.6 s, so every control re-generates as you move it.
 
 READ-ONLY by default. `Export` writes a NEW file under generated/ and refuses to
-overwrite one that exists unless you tick the box -- in particular it will not
-silently replace teams_bosses_gyms.json, which is what is injected into the game.
+overwrite one that exists unless you tick the box. The explicit `Install into game`
+action validates the current cards, promotes them to teams_bosses_gyms.json,
+regenerates Team_Overrides.rb and atomically replaces that section in Realidea V4.1's
+Scripts.rxdata.
 
 The knobs are module globals in generate_bosses.py, read at call time, so `settings()`
 swaps them in and puts them back. That is a deliberate choice over threading a config
@@ -31,6 +33,7 @@ import os
 import random
 import statistics
 import sys
+import tempfile
 import threading
 import urllib.parse
 
@@ -39,6 +42,8 @@ import fight_context as FC
 import free_team as FT
 import generate_bosses as G
 import generate_trainers as T
+import emit_registry as ER
+import pack_rxdata as PR
 import realidea_data as D
 import smogon_corpus as SC
 import team_shape as TS
@@ -47,6 +52,12 @@ import validate_team as V
 PORT = 8731
 GENDIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "generated")
 SHIPPED = os.path.join(GENDIR, "teams_bosses_gyms.json")
+REPO = os.path.abspath(os.path.join(GENDIR, ".."))
+REGISTRY = os.path.join(REPO, "adapters", "realidea", "Team_Overrides.rb")
+GAME_BUNDLE = os.path.abspath(os.path.join(REPO, "..", "Realidea V4.1", "Data",
+                                           "Scripts.rxdata"))
+OTHER_TEAMS = [os.path.join(GENDIR, name) for name in
+               ("teams_trainers.json", "teams_filler.json", "teams_dat.json")]
 # Saved Builder configurations, shared between people through the repo the same way
 # everything else here is. A preset is an INPUT, not an artifact, but it lives under
 # generated/ so that one directory is the whole of what the studio writes.
@@ -224,6 +235,7 @@ def theme_list():
 # neither caller asked for. It shows up as irreproducible numbers rather than an
 # error. Generation is ~0.6 s and single-user, so serialising it costs nothing.
 _LOCK = threading.Lock()
+_INSTALL_LOCK = threading.Lock()
 
 
 @contextlib.contextmanager
@@ -897,6 +909,88 @@ def team_load(name, over):
             "gyms": len(records), "mons": sum(len(r["mons"]) for r in records)}
 
 
+def _read_bytes(path):
+    with open(path, "rb") as fh:
+        return fh.read()
+
+
+def _replace_all(payloads):
+    """Replace several files atomically one by one, rolling all of them back on error."""
+    originals = {path: _read_bytes(path) for path in payloads}
+    changed = []
+    try:
+        for path, data in payloads.items():
+            PR.write_atomic(path, data)
+            changed.append(path)
+    except Exception:
+        rollback_errors = []
+        for path in reversed(changed):
+            try:
+                PR.write_atomic(path, originals[path])
+            except Exception as exc:  # pragma: no cover - a second filesystem failure
+                rollback_errors.append(f"{os.path.basename(path)}: {exc}")
+        if rollback_errors:
+            raise RuntimeError("install failed and rollback also failed: "
+                               + "; ".join(rollback_errors))
+        raise
+
+
+def install_game(over):
+    """Build and install the current nine cards through the shipped override pipeline.
+
+    Nothing live is touched until the roster, complete 161-team corpus, generated Ruby
+    and replacement bundle have all been built successfully. The three live files are
+    then replaced together, with rollback if Windows has one of them locked.
+    """
+    with _INSTALL_LOCK:
+        result = run(over or {})
+        records = result["records"]
+        other_records = []
+        for path in OTHER_TEAMS:
+            with open(path, encoding="utf-8") as fh:
+                rows = json.load(fh)
+            if not isinstance(rows, list):
+                raise ValueError(f"{os.path.basename(path)} is not a team list")
+            other_records.extend(rows)
+        errors, warnings = V.validate(records + other_records)
+        if errors:
+            raise ValueError(f"validation failed with {len(errors)} errors: {errors[0]}")
+
+        with tempfile.TemporaryDirectory(prefix="boss-studio-install-") as stage:
+            staged_teams = os.path.join(stage, "teams_bosses_gyms.json")
+            staged_registry = os.path.join(stage, "Team_Overrides.rb")
+            with open(staged_teams, "w", encoding="utf-8", newline="\n") as fh:
+                json.dump(records, fh, indent=1)
+                fh.write("\n")
+            ER.main(staged_registry, staged_teams, *OTHER_TEAMS)
+            registry_bytes = _read_bytes(staged_registry)
+
+        raw, count, spans = PR.scan(GAME_BUNDLE)
+        names = PR.section_names(GAME_BUNDLE)
+        target = b"Team_Overrides"
+        hits = [i for i, name in enumerate(names) if name == target]
+        if len(hits) != 1:
+            raise ValueError(f"expected one Team_Overrides section, found {len(hits)}")
+        idx = hits[0]
+        bundle_bytes = PR.build(
+            raw, spans, replace={idx: PR.make_elem("Team_Overrides", registry_bytes)})
+        # Upsert replacement cannot disturb any section before Team_Overrides.
+        prefix = spans[idx][0] - spans[0][0]
+        array_start = len(PR.HEADER) + 1 + len(PR.w_long(count))
+        if bundle_bytes[array_start:array_start + prefix] != \
+                raw[spans[0][0]:spans[idx][0]]:
+            raise AssertionError("bundle sections before Team_Overrides changed")
+
+        shipped_bytes = (json.dumps(records, indent=1) + "\n").encode("utf-8")
+        _replace_all({SHIPPED: shipped_bytes, REGISTRY: registry_bytes,
+                      GAME_BUNDLE: bundle_bytes})
+        return {"ok": True, "gyms": len(records),
+                "mons": sum(len(row["mons"]) for row in records),
+                "teams": len(records) + len(other_records),
+                "warnings": len(warnings),
+                "bundle": os.path.relpath(GAME_BUNDLE, REPO)}
+
+
 class Handler(http.server.BaseHTTPRequestHandler):
     def _send(self, code, body, ctype="application/json"):
         raw = body if isinstance(body, bytes) else body.encode("utf-8")
@@ -989,6 +1083,9 @@ class Handler(http.server.BaseHTTPRequestHandler):
                     return self._send(400, json.dumps({"error": "choose a team JSON"}))
                 return self._send(200, json.dumps(team_load(
                     body["name"], body.get("settings") or {})))
+            if path == "/api/install":
+                return self._send(200, json.dumps(
+                    install_game(body.get("settings") or {})))
             if path == "/api/export":
                 name = os.path.basename(body.get("name") or "teams_bosses_studio.json")
                 if not name.endswith(".json"):
@@ -1197,6 +1294,10 @@ button.tiny{padding:2px 7px;font-size:11px;font-weight:500}
     <div class="exp"><button id="save">Write to generated/</button>
       <button class="ghost" id="reset">Reset</button></div>
     <div id="msg"></div>
+    <div class="sub" style="margin-top:12px">validate these cards and install them
+      into Realidea V4.1's compiled Team_Overrides section</div>
+    <div class="exp"><button id="install">Install into game</button></div>
+    <div id="imsg"></div>
     <div class="sub" style="margin-top:12px">load a full nine-gym team export back
       into editable cards</div>
     <select id="tload"></select>
@@ -2202,6 +2303,22 @@ async function init(){
     const d=await r.json();
     $('msg').innerHTML=d.error?`<span class="bad">${d.error}</span>`
       :`<span class="ok">wrote ${d.ok} — ${d.errors} validator errors</span>`;};
+  $('install').onclick=async()=>{
+    const button=$('install');
+    button.disabled=true;
+    $('imsg').innerHTML='validating and rebuilding Scripts.rxdata…';
+    try{
+      const r=await fetch('/api/install',{method:'POST',body:JSON.stringify(
+        {settings:get()})});
+      const d=await r.json();
+      $('imsg').innerHTML=d.error
+        ?`<span class="bad">${esc(d.error)}</span>`
+        :`<span class="ok">installed ${d.gyms} gyms / ${d.mons} Pokémon</span> — `
+          +`${d.teams} total overrides validated, ${d.warnings} warnings. Restart the game.`;
+    }catch(e){
+      $('imsg').innerHTML=`<span class="bad">install request failed: ${esc(e.message)}</span>`;
+    }finally{button.disabled=false;}
+  };
   go();
 }
 init();
