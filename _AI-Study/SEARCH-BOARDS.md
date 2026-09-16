@@ -1809,7 +1809,16 @@ the importer exposed positions the search had never been asked about. Same signa
 a body losing its stone — but Gardevoir's is not Trick, Knock Off or Thief, all of which are fixed.
 Another site in defect 34's class is the obvious candidate and the item instrument will name it.
 
-**Gen 6 is now at 0.5% fallback**, against gen 5's 0.0%.
+**A second identical run threw 0 panics**, so those two are at the edge of what this arm can
+resolve: the gen 6 board is somewhere in **0–0.5% fallback** and the residual is not reliably
+reproducible, which is the same unseeded-MCTS problem the doc has recorded since 2026-09-13. The
+item trace under `PE_DBG_ITEM=1` shows Trick now swapping **coherently between the real bodies** —
+`JIRACHI GARDEVOIRITE ↔ CHOICESCARF` paired exactly against `GARDEVOIRMEGA CHOICESCARF ↔
+GARDEVOIRITE`, 1815 against 1815 — so nothing in the trace contradicts the run 19 fix. **No claim
+is made that the Gardevoir panic is fixed**; it is rare enough that catching it needs either a
+larger arm or a captured root position, and `--dump-panics` is the tool for that.
+
+**Gen 6 is now at 0–0.5% fallback**, against gen 5's 0.0%.
 
 ## Backlog
 
