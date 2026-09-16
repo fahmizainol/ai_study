@@ -138,7 +138,7 @@ index ee644cb..bbc18e4 100644
      }
      if (attacking_pkmn.ability == Abilities::MOLDBREAKER
 diff --git a/src/genx/choice_effects.rs b/src/genx/choice_effects.rs
-index d7fc3e1..989978c 100644
+index d7fc3e1..01658e1 100644
 --- a/src/genx/choice_effects.rs
 +++ b/src/genx/choice_effects.rs
 @@ -773,7 +773,12 @@ pub fn choice_after_damage_hit(
@@ -182,7 +182,35 @@ index d7fc3e1..989978c 100644
                  &mut instructions.instruction_list,
              );
          }
-@@ -1385,8 +1396,18 @@ pub fn choice_special_effect(
+@@ -1260,8 +1271,16 @@ pub fn choice_special_effect(
+             }
+         }
+         Choices::BELLYDRUM => {
+-            let boost_amount = 6 - attacking_side.get_active().attack_boost;
+-            let attacker = attacking_side.get_active();
++            // Run 16: all four accesses here were `get_active()` — slot 0 — while both
++            // instructions stamp `act_slot`. With a slot-1 user that computed the amount from
++            // SLOT 0's attack boost and applied it to slot 1, so a slot 0 sitting at -6 emitted
++            // `Attack,+12` onto its partner and drove the boost clean past the ±6 clamp — this
++            // is DEFECT 2's second cause, invisible to the gen 5 pool because 0 of 183 teams
++            // there carry Belly Drum. `reset_boosts` then emits the matching -12 to zero it,
++            // which is why that site looked guilty in the instrument and is not.
++            let boost_amount =
++                6 - attacking_side.get_active_slot_immutable(act_slot).attack_boost;
++            let attacker = attacking_side.get_active_slot(act_slot);
+             if attacker.hp > attacker.maxhp / 2 {
+                 instructions
+                     .instruction_list
+@@ -1279,7 +1298,7 @@ pub fn choice_special_effect(
+                         boost_amount,
+                     )));
+                 attacker.hp -= attacker.maxhp / 2;
+-                attacking_side.get_active().attack_boost = 6;
++                attacking_side.get_active_slot(act_slot).attack_boost = 6;
+             }
+         }
+         Choices::COUNTER => {
+@@ -1385,8 +1404,18 @@ pub fn choice_special_effect(
              }
          }
          Choices::HAZE => {
