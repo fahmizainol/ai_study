@@ -1894,8 +1894,18 @@ has no term in `evaluate()`. `grep -ci doubles src/genx/evaluate.rs` is **0**, a
 `grep -ciE 'switch|tempo|pivot'`. Trick Room, weather and terrain have **no term at all**; Tailwind
 is **7**, less than one Spikes layer; redirection is worth nothing.
 
-**`Rage Powder` at 0 for 11 is the cleanest single point in this study**: a move that exists purely
-to redirect, in a format built on redirection, never chosen once.
+**`Rage Powder` at 0 for 11 looked like the cleanest single point in this study** — a move that
+exists purely to redirect, in a format built on redirection, never chosen once.
+**IT DID NOT REPLICATE, and neither did Trick Room's 0 for 8.** Run 22 re-measured the identical
+baseline build on held-out **seed 202**: Rage Powder **3/7 (43%)**, Trick Room **2/6 (33%)**. Both
+zeros were seed-specific noise at n≈10, and the sentence above was over-read exactly as run 8's
+"two points is not a pattern" warns.
+
+**What does replicate** is the low end of the scale and the high end: Tailwind **2/12 (17%)** on
+seed 101 against **1/8 (12%)** on seed 202, and Protect **22/42 (52%)** against **15/26 (58%)**. So
+the HP-visible-versus-positional story survives for Tailwind and Protect and **loses its two most
+dramatic data points**. The table below should be read as: the search under-uses Tailwind, reliably;
+everything else in it is under-powered at these sample sizes.
 
 **The same structure explains the switch behaviour** in the loss at
 `doubles_play_logs_gen6_run21_seatA/000`. `evaluate()` scores HP, alive, status and hazards for
@@ -1913,10 +1923,53 @@ at all.
 counts is uninformative, because that policy only reaches a status move when nothing damaging is
 legal.
 
-**This is the strongest evidence yet that the evaluation, not the search, is what caps gen 6 at
-67.1%**, and it names a cheap experiment nobody has run: add Trick Room, redirection and a real
+**This is evidence that the evaluation limits what the search will play** — weakened from the
+"strongest evidence yet" this section originally claimed, since two of its four striking figures
+did not survive a second seed —, and it names a cheap experiment nobody has run: add Trick Room, redirection and a real
 Tailwind weight to `evaluate.rs` and re-run this identical arm. The control, the pool and the
 transcripts all already exist.
+
+### Run 22 changed one eval weight, and the measurement corrected two of my own claims
+
+**Shipped: `TAILWIND` 7 → 20, doubles only.** The term is multiplied by turns remaining, so 7 meant
+**28** on a fresh Tailwind against **100** for a fresh Reflect. Tailwind is ×2 Speed — exactly +2
+stages, which this same file prices at **60 for one body** — and it covers both actives plus
+whatever switches in, so parity with a screen is conservative. **Measured on held-out seed 202:
+usage where a carrier reached the field 1/8 (12%) → 5/7 (71%).** The weight did precisely what it
+was designed to do.
+
+**Not shipped: the Trick Room term.** It was written (18/turn, signed by summed effective speed of
+living actives, so the inversion scores positive for the slower side) and it did not help: usage
+2/6 → 1/6. More importantly **the observation that motivated it was noise** — see below.
+
+**Correction 1: two of run 21's figures did not replicate.** On seed 101 the baseline used Trick
+Room 0/8 and Rage Powder 0/11, and this document called the latter "the cleanest single point in
+this study". On seed 202 the *identical build* used Trick Room **2/6 (33%)** and Rage Powder
+**3/7 (43%)**. Both zeros were noise at n≈10. Tailwind (17% → 12%) and Protect (52% → 58%) did
+replicate, so the underlying story survives for those and loses its two most quotable numbers.
+**This is run 8's lesson again and I walked into it: a striking zero at n=10 is not a finding.**
+
+**Correction 2: I inferred a 19% search-depth cost that does not exist.** Mean visits fell
+79,966 → 64,539 with the new eval, and the Trick Room term calls `get_effective_speed_slot` up to
+four times per evaluation, so charging it for the loss was the obvious read. It is wrong: the
+**Tailwind-only** build — a pure constant, zero added computation — also fell, to **68,388**. Mean
+visits track how complex the positions that actually got played were, not evaluation cost. The
+divergence starts at the first decision the weight changes.
+
+| seed 202, mcts as p1, 40 battles | win | mean visits | Tailwind used |
+|---|---|---|---|
+| baseline | 31-8 (79.5%) | 79,966 | 1/8 (12%) |
+| Tailwind 20 only | 28-11 (71.8%) | 68,388 | — |
+| Tailwind 20 + Trick Room | 30-9 (76.9%) | 64,539 | 5/7 (71%) |
+
+**The win column says nothing and is reported only so nobody mistakes its silence for support.**
+Three arms spanning 71.8–79.5% at n=39, where the 95% interval is about ±13 points. The same
+baseline build scored 70.0% on seed 101 and 79.5% on seed 202 — **a 9.5-point swing from the seed
+alone**, which is the clearest statement of this arm's resolution anyone has produced here.
+
+**What would settle it**: 150+ battles per arm, or a paired design on identical seeds so the
+variance from team pairing cancels. Until then the honest claim is the narrow one — **the Tailwind
+weight changes what the search plays, and nothing measured here shows whether that wins games.**
 
 ## Backlog
 
