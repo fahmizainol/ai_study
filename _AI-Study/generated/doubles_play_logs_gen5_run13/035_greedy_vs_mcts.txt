@@ -1,0 +1,86 @@
+battle 35   p1=greedy vs p2=mcts   mcts 300 ms a decision
+  p1: Untitled 492: Conkeldurr, Cresselia, Weavile, Cradily
+  p2: Untitled 1065: Raikou, Politoed, Ludicolo, Amoonguss
+
+  Turn 1
+    p1 greedy: move 3 1, move 4 1
+    p2 mcts: move 1 1, move 4
+      search (16000 visits): thunder,0;icywind,0 3208v 2298 | thunder,0;helpinghand,0 1321v 889 | extrasensory,0;helpinghand,0 1250v 837 | extrasensory,0;scald,0 622v 384
+      p2a Raikou used Thunder -> p1a: Conkeldurr
+      p1b Cresselia used Ice Beam -> p2a: Raikou
+      p2b Politoed used Icy Wind -> p1a: Conkeldurr  [[spread] p1a,p1b]
+              p1a Conkeldurr spe 1 fell
+              p1b Cresselia spe 1 fell
+      p1a Conkeldurr used Ice Punch -> p2a: Raikou
+              p1a Conkeldurr is now brn
+      after p1: Conkeldurr 41/414, Cresselia 425/444
+      after p2: Raikou 106/321, Politoed 384/384
+
+  Turn 2
+    p1 greedy: move 3 1, move 4 1
+    p2 mcts: move 2 1, move 4
+      search (21000 visits): aurasphere,0;icywind,0 1401v 846 | aurasphere,0;helpinghand,0 907v 521 | thunder,1;icywind,0 853v 486 | thunder,0;icywind,0 694v 384
+      p2a Raikou used Aura Sphere -> p1a: Conkeldurr
+      p1a Conkeldurr fainted
+      p2b Politoed used Icy Wind -> p1b: Cresselia
+              p1b Cresselia spe 1 fell
+      p1b Cresselia used Ice Beam -> p2a: Raikou
+      after p1: Conkeldurr 0/414, Cresselia 400/444
+      after p2: Raikou 16/321, Politoed 384/384
+
+  Turn 3
+      p1a <- Weavile comes in (340/340)
+      after p1: Weavile 340/340, Cresselia 400/444
+      after p2: Raikou 16/321, Politoed 384/384
+
+  Turn 4
+    p1 greedy: move 2 1, move 4 1
+    p2 mcts: move 2 1, move 4
+      search (20000 visits): aurasphere,0;icywind,0 1049v 488 | thunder,0;icywind,0 855v 387 | aurasphere,0;protect,1 692v 300 | aurasphere,0;switch amoonguss 690v 299
+      p2a Raikou used Aura Sphere -> p1a: Weavile
+      p1a Weavile fainted
+      p2a Raikou fainted
+      p2b Politoed used Icy Wind -> p1b: Cresselia
+              p1b Cresselia spe 1 fell
+      p1b Cresselia used Ice Beam -> p2b: Politoed
+      after p1: Weavile 0/340, Cresselia 377/444
+      after p2: Raikou 0/321, Politoed 356/384
+
+  Turn 5
+      p2a <- Ludicolo comes in (301/301)
+      p1a <- Cradily comes in (375/375)
+      after p1: Cradily 375/375, Cresselia 377/444
+      after p2: Ludicolo 301/301, Politoed 356/384
+
+  Turn 6
+    p1 greedy: move 4, move 4 2
+    p2 mcts: move 4 1, move 1 -1
+      search (17000 visits): focusblast,0;helpinghand,0 6217v 3227 | icebeam,0;helpinghand,0 1245v 560 | icebeam,0;icywind,0 440v 160 | focusblast,0;icywind,0 414v 148
+      p2b Politoed used Helping Hand -> p2a: Ludicolo
+      p2a Ludicolo used Focus Blast -> p1a: Cradily
+      p1a Cradily fainted
+      p1b Cresselia used Ice Beam -> p2b: Politoed
+      after p1: Cradily 0/375, Cresselia 377/444
+      after p2: Ludicolo 271/301, Politoed 328/384
+
+  Turn 7
+    p1 greedy: pass, move 4 2
+    p2 mcts: move 3 2, move 1 -1
+      search (51000 visits): hydropump,1;helpinghand,0 3057v 1418 | hydropump,1;scald,1 3040v 1409 | hydropump,1;icywind,1 2702v 1239 | hydropump,1;protect,1 2585v 1180
+      p2b Politoed used Helping Hand -> p2a: Ludicolo
+      p2a Ludicolo used Hydro Pump -> p1b: Cresselia
+      p1b Cresselia used Ice Beam -> p2b: Politoed
+      after p1: Cradily 0/375, Cresselia 77/444
+      after p2: Ludicolo 241/301, Politoed 300/384
+
+  Turn 8
+    p1 greedy: pass, move 4 2
+    p2 mcts: move 2 2, move 1 -1
+      search (63000 visits): icebeam,1;helpinghand,0 3010v 1341 | focusblast,1;scald,1 2967v 1320 | hydropump,1;icywind,1 2966v 1320 | fakeout,1;scald,1 2944v 1309
+      p2b Politoed used Helping Hand -> p2a: Ludicolo
+      p2a Ludicolo used Ice Beam -> p1b: Cresselia
+      p1b Cresselia fainted
+      after p1: Cradily 0/375, Cresselia 0/444
+      after p2: Ludicolo 211/301, Politoed 300/384
+
+  RESULT: p2 wins

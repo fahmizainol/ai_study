@@ -1,0 +1,73 @@
+battle 7   p1=greedy vs p2=mcts   mcts 300 ms a decision
+  p1: Untitled 440: Kyurem-Black, Thundurus, Metagross, Hitmontop
+  p2: 2v2PL 2025/semis g5: Latios, Scrafty, Genesect, Thundurus
+
+  Turn 1
+    p1 greedy: move 3 1, move 3 1
+    p2 mcts: move 2 2, move 3 1
+      search (17000 visits): psychic,1;drainpunch,0 598v 311 | psychic,1;switch genesect 589v 305 | calmmind,0;drainpunch,0 399v 191 | dracometeor,0;switch genesect 395v 189
+      p2a Latios used Psychic -> p1b: Thundurus
+      p1b Thundurus used Thunderbolt -> p2a: Latios
+              p1b Thundurus used up its Electric Gem
+      p1a Kyurem used Fusion Bolt -> p2a: Latios
+      p2b Scrafty used Drain Punch -> p1a: Kyurem
+              p1a Kyurem -- critical hit
+      p1a Kyurem fainted
+      after p1: Kyurem-Black 0/393, Thundurus 110/299
+      after p2: Latios 112/301, Scrafty 334/334
+
+  Turn 2
+      p1a <- Metagross comes in (364/364)
+      after p1: Metagross 364/364, Thundurus 110/299
+      after p2: Latios 112/301, Scrafty 334/334
+
+  Turn 3
+    p1 greedy: move 1 1, move 3 1
+    p2 mcts: move 2 2, switch 3   (slot1 Scrafty -> Genesect)
+      search (20000 visits): psychic,1;switch genesect 893v 428 | calmmind,0;switch genesect 717v 332 | protect,0;switch genesect 644v 292 | dracometeor,0;switch genesect 602v 269
+      p2b <- Genesect comes in (283/283)
+              p2b Genesect spa 1 rose
+      p2a Latios used Psychic -> p1b: Thundurus
+      p1b Thundurus fainted
+      p1a Metagross used Meteor Mash -> p2a: Latios  [[miss]]
+              p1a Metagross -- MISSED
+      after p1: Metagross 364/364, Thundurus 0/299
+      after p2: Latios 112/301, Genesect 283/283
+
+  Turn 4
+      p1b <- Hitmontop comes in (272/272)
+              p2a Latios atk 1 fell
+              p2b Genesect atk 1 fell
+      after p1: Metagross 364/364, Hitmontop 272/272
+      after p2: Latios 112/301, Genesect 283/283
+
+  Turn 5
+    p1 greedy: move 1 1, move 2 1
+    p2 mcts: move 2 2, move 4 1
+      search (20000 visits): psychic,1;flamethrower,0 2253v 2047 | psychic,1;bugbuzz,0 897v 766 | psychic,0;flamethrower,0 652v 539 | dracometeor,1;flamethrower,0 641v 530
+      p2b Genesect used Flamethrower -> p1a: Metagross
+      p2a Latios used Psychic -> p1b: Hitmontop
+      p1b Hitmontop fainted
+      p1a Metagross used Meteor Mash -> p2a: Latios
+              p1a Metagross used up its Steel Gem
+              p1a Metagross atk 1 rose
+      p2a Latios fainted
+      after p1: Metagross 40/364, Hitmontop 0/272
+      after p2: Latios 0/301, Genesect 283/283
+
+  Turn 6
+      p2a <- Scrafty comes in (334/334)
+              p1a Metagross -- IT FAILED
+      after p1: Metagross 40/364, Hitmontop 0/272
+      after p2: Scrafty 334/334, Genesect 283/283
+
+  Turn 7
+    p1 greedy: move 1 1, pass
+    p2 mcts: move 4 1, move 4 1
+      search (802000 visits): taunt,0;flamethrower,0 144624v 144314 | crunch,0;flamethrower,0 144563v 144253 | fakeout,0;flamethrower,0 142663v 142344 | drainpunch,0;flamethrower,0 141727v 141403
+      p2b Genesect used Flamethrower -> p1a: Metagross
+      p1a Metagross fainted
+      after p1: Metagross 0/364, Hitmontop 0/272
+      after p2: Scrafty 334/334, Genesect 283/283
+
+  RESULT: p2 wins

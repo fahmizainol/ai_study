@@ -1,0 +1,168 @@
+battle 22   p1=greedy vs p2=mcts   mcts 300 ms a decision
+  p1: 2v2 Pool League II/2v2 Pools - BW 4: Rotom-Heat, Gastrodon, Metagross, Scrafty
+  p2: Gaming: Archen, Sneasel, Nosepass, Mantyke
+
+  Turn 1
+    p1 greedy: move 1 1, move 3 1
+    p2 mcts: switch 3, switch 4   (slot0 Archen -> Nosepass; slot1 Sneasel -> Mantyke)
+      search (11000 visits): switch nosepass;switch mantyke 1221v 918 | switch mantyke;foulplay,1 529v 360 | switch mantyke;icepunch,1 343v 217 | switch nosepass;icepunch,1 342v 217
+      p2b <- Mantyke comes in (294/294)
+      p2a <- Nosepass comes in (264/264)
+      p1a Rotom used Overheat -> p2a: Nosepass
+              p1a Rotom spa 2 fell
+      p1b Gastrodon used Ice Beam -> p2a: Nosepass
+      after p1: Rotom-Heat 268/268, Gastrodon 426/426
+      after p2: Nosepass 138/264, Mantyke 294/294
+
+  Turn 2
+    p1 greedy: move 1 1, move 3 1
+    p2 mcts: move 4 1, move 4 -1
+      search (16000 visits): thunderwave,0;helpinghand,0 1675v 1392 | irondefense,0;switch sneasel 1661v 1379 | thunderwave,1;toxic,1 1423v 1169 | helpinghand,1;switch sneasel 761v 592
+      p2b Mantyke used Helping Hand -> p2a: Nosepass
+      p1a Rotom used Overheat -> p2a: Nosepass
+              p1a Rotom spa 2 fell
+      p1b Gastrodon used Ice Beam -> p2a: Nosepass
+              p2a Nosepass is now frz
+              p2a Nosepass COULD NOT MOVE (frz)
+      after p1: Rotom-Heat 268/268, Gastrodon 426/426
+      after p2: Nosepass 51/264, Mantyke 294/294
+
+  Turn 3
+    p1 greedy: move 1 1, move 3 1
+    p2 mcts: move 4 2, move 3 2
+      search (14000 visits): thunderwave,1;toxic,1 1846v 1472 | irondefense,0;switch sneasel 1577v 1243 | irondefense,0;helpinghand,0 751v 554 | thunderwave,1;toxic,0 606v 436
+      p1a Rotom used Overheat -> p2a: Nosepass
+              p1a Rotom spa 2 fell
+              p2a Nosepass is cured of frz
+      p2b Mantyke used Toxic -> p1b: Gastrodon
+              p1b Gastrodon is now tox
+      p1b Gastrodon used Ice Beam -> p2a: Nosepass
+      p2a Nosepass fainted
+      after p1: Rotom-Heat 268/268, Gastrodon 400/426
+      after p2: Nosepass 0/264, Mantyke 294/294
+
+  Turn 4
+      p2a <- Archen comes in (251/251)
+      after p1: Rotom-Heat 268/268, Gastrodon 400/426
+      after p2: Archen 251/251, Mantyke 294/294
+
+  Turn 5
+    p1 greedy: move 1 1, move 3 1
+    p2 mcts: move 2 1, move 3 2
+      search (21000 visits): bounce,0;toxic,1 8724v 6011 | bounce,1;amnesia,1 5258v 3323 | rockslide,0;toxic,1 996v 552 | headsmash,1;toxic,1 617v 319
+      p2a Archen used Bounce  [[still]]
+      p1a Rotom used Overheat -> p2a: Archen  [[miss]]
+              p1a Rotom -- MISSED
+      p2b Mantyke used Toxic -> p1b: Gastrodon
+              p1b Gastrodon -- IT FAILED
+      p1b Gastrodon used Ice Beam -> p2a: Archen  [[miss]]
+              p1b Gastrodon -- MISSED
+      after p1: Rotom-Heat 268/268, Gastrodon 348/426
+      after p2: Archen 251/251, Mantyke 294/294
+
+  Turn 6
+    p1 greedy: move 1 1, move 3 1
+    p2 mcts: move 1, switch 4   (slot1 Mantyke -> Sneasel)
+      search (4000 visits): bounce,0;switch sneasel 2169v 1352 | bounce,0;amnesia,1 454v 203 | bounce,0;toxic,0 428v 189 | bounce,0;helpinghand,0 414v 182
+      p2b <- Sneasel comes in (251/251)
+      p2a Archen used Bounce -> p1a: Rotom  [[from] lockedmove]
+              p1a Rotom is now par
+      p1a Rotom used Overheat -> p2a: Archen
+      p1b Gastrodon used Ice Beam -> p2a: Archen
+      p2a Archen fainted
+      after p1: Rotom-Heat 193/268, Gastrodon 270/426
+      after p2: Archen 0/251, Sneasel 251/251
+
+  Turn 7
+      p2a <- Mantyke comes in (294/294)
+      after p1: Rotom-Heat 193/268, Gastrodon 270/426
+      after p2: Mantyke 294/294, Sneasel 251/251
+
+  Turn 8
+    p1 greedy: move 1 1, move 3 1
+    p2 mcts: move 1, move 3 1
+      search (16000 visits): amnesia,0;foulplay,0 631v 182 | amnesia,0;foulplay,1 590v 166 | amnesia,0;icepunch,1 561v 156 | amnesia,0;fakeout,1 552v 152
+      p2b Sneasel used Foul Play -> p1a: Rotom
+      p2a Mantyke used Amnesia
+              p2a Mantyke spd 2 rose
+      p1b Gastrodon used Ice Beam -> p2a: Mantyke
+              p2a Mantyke -- critical hit
+      p1a Rotom used Overheat -> p2a: Mantyke
+              p1b Gastrodon used up its Sitrus Berry
+      after p1: Rotom-Heat 118/268, Gastrodon 272/426
+      after p2: Mantyke 227/294, Sneasel 226/251
+
+  Turn 9
+    p1 greedy: move 1 1, move 3 1
+    p2 mcts: move 1, move 2 1
+      search (16000 visits): amnesia,0;icepunch,0 546v 149 | toxic,0;icepunch,1 528v 143 | toxic,0;foulplay,1 526v 142 | helpinghand,1;icepunch,1 519v 139
+      p2b Sneasel used Ice Punch -> p1a: Rotom
+      p2a Mantyke used Amnesia
+              p2a Mantyke spd 2 rose
+      p1b Gastrodon used Ice Beam -> p2a: Mantyke
+      p1a Rotom used Overheat -> p2a: Mantyke
+      after p1: Rotom-Heat 58/268, Gastrodon 142/426
+      after p2: Mantyke 213/294, Sneasel 201/251
+
+  Turn 10
+    p1 greedy: move 1 1, move 3 1
+    p2 mcts: move 4 -2, move 2 2
+      search (18000 visits): helpinghand,1;icepunch,1 727v 198 | toxic,0;icepunch,1 590v 150 | toxic,0;foulplay,0 562v 140 | toxic,0;icepunch,0 557v 138
+      p2a Mantyke used Helping Hand -> p2b: Sneasel
+      p2b Sneasel used Ice Punch -> p1b: Gastrodon
+      p1b Gastrodon fainted
+      p1a Rotom used Overheat -> p2a: Mantyke
+      after p1: Rotom-Heat 58/268, Gastrodon 0/426
+      after p2: Mantyke 209/294, Sneasel 176/251
+
+  Turn 11
+      p1b <- Metagross comes in (364/364)
+      after p1: Rotom-Heat 58/268, Metagross 364/364
+      after p2: Mantyke 209/294, Sneasel 176/251
+
+  Turn 12
+    p1 greedy: move 2 2, move 1 2
+    p2 mcts: move 4 -2, move 3 2
+      search (23000 visits): helpinghand,1;foulplay,1 1117v 228 | toxic,0;foulplay,1 904v 171 | rest,0;foulplay,1 799v 143 | amnesia,0;foulplay,1 766v 135
+      p2a Mantyke used Helping Hand -> p2b: Sneasel
+      p2b Sneasel used Foul Play -> p1b: Metagross
+      p1b Metagross used Meteor Mash -> p2b: Sneasel
+              p1b Metagross used up its Steel Gem
+              p1b Metagross atk 1 rose
+      p2b Sneasel fainted
+      p1a Rotom used Thunderbolt -> p2a: Mantyke
+              p1a Rotom used up its Electric Gem
+      after p1: Rotom-Heat 58/268, Metagross 72/364
+      after p2: Mantyke 173/294, Sneasel 0/251
+
+  Turn 13
+    p1 greedy: move 2 1, move 1 1
+    p2 mcts: move 2, pass
+      search (239000 visits): rest,0;No Move 87929v 1912 | toxic,0;No Move 56289v 988 | toxic,1;No Move 48872v 783 | amnesia,0;No Move 45910v 702
+      p1b Metagross used Meteor Mash -> p2a: Mantyke
+      p2a Mantyke used Rest
+              p2a Mantyke is now slp
+              p1a Rotom COULD NOT MOVE (par)
+      after p1: Rotom-Heat 58/268, Metagross 72/364
+      after p2: Mantyke 294/294, Sneasel 0/251
+
+  Turn 14
+    p1 greedy: move 2 1, move 1 1
+    p2 mcts: move 3 1, pass
+      search (91000 visits): toxic,0;No Move 23080v 790 | rest,0;No Move 22945v 783 | toxic,1;No Move 22847v 778 | amnesia,0;No Move 22128v 742
+      p1b Metagross used Meteor Mash -> p2a: Mantyke
+              p2a Mantyke COULD NOT MOVE (slp)
+      p1a Rotom used Thunderbolt -> p2a: Mantyke
+      after p1: Rotom-Heat 58/268, Metagross 72/364
+      after p2: Mantyke 107/294, Sneasel 0/251
+
+  Turn 15
+    p1 greedy: move 2 1, move 1 1
+    p2 mcts: move 3 2, pass
+      search (148000 visits): toxic,1;No Move 38730v 861 | rest,0;No Move 37688v 825 | amnesia,0;No Move 36646v 789 | toxic,0;No Move 34936v 731
+      p1b Metagross used Meteor Mash -> p2a: Mantyke
+      p2a Mantyke fainted
+      after p1: Rotom-Heat 58/268, Metagross 72/364
+      after p2: Mantyke 0/294, Sneasel 0/251
+
+  RESULT: p1 wins

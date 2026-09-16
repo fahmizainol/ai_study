@@ -1,0 +1,89 @@
+battle 11   p1=greedy vs p2=mcts   mcts 300 ms a decision
+  p1: Untitled 626: Liepard, Thundurus, Keldeo, Kyurem-Black
+  p2: Vs Z strats Hydreigon: Hydreigon, Togekiss, Mamoswine, Rotom-Wash
+
+  Turn 1
+    p1 greedy: move 2 1, move 1 1
+    p2 mcts: move 4 1, switch 3   (slot1 Togekiss -> Mamoswine)
+      search (16000 visits): focusblast,0;switch mamoswine 539v 356 | darkpulse,1;switch mamoswine 530v 349 | flamethrower,1;switch mamoswine 501v 327 | dracometeor,1;airslash,0 470v 304
+      p2b <- Mamoswine comes in (361/361)
+      p1a Liepard used Sucker Punch -> p2a: Hydreigon
+              p1a Liepard used up its Dark Gem
+      p2a Hydreigon used Focus Blast -> p1a: Liepard
+      p1a Liepard fainted
+      p1b Thundurus used Thunderbolt -> p2a: Hydreigon
+              p1b Thundurus used up its Electric Gem
+      after p1: Liepard 0/269, Thundurus 299/299
+      after p2: Hydreigon 115/325, Mamoswine 361/361
+
+  Turn 2
+      p1a <- Keldeo comes in (323/323)
+      after p1: Keldeo 323/323, Thundurus 299/299
+      after p2: Hydreigon 115/325, Mamoswine 361/361
+
+  Turn 3
+    p1 greedy: move 2 1, move 1 1
+    p2 mcts: move 4 2, move 4 2
+      search (21000 visits): focusblast,1;iceshard,1 2168v 970 | switch rotomwash;protect,1 2168v 970 | focusblast,0;iceshard,1 2014v 894 | switch rotomwash;iceshard,1 1638v 709
+      p2b Mamoswine used Ice Shard -> p1b: Thundurus
+              p1b Thundurus -- critical hit
+      p1b Thundurus fainted
+      p2a Hydreigon used Focus Blast -> p1a: Keldeo  [[miss]]
+              p2a Hydreigon -- MISSED
+      p1a Keldeo used Hydro Pump -> p2a: Hydreigon
+      p2a Hydreigon fainted
+      after p1: Keldeo 323/323, Thundurus 0/299
+      after p2: Hydreigon 0/325, Mamoswine 361/361
+
+  Turn 4
+      p1b <- Kyurem-Black comes in (391/391)
+      p2a <- Togekiss comes in (374/374)
+      after p1: Keldeo 323/323, Kyurem-Black 391/391
+      after p2: Togekiss 374/374, Mamoswine 361/361
+
+  Turn 5
+    p1 greedy: move 2 1, move 2 1
+    p2 mcts: move 3 1, move 2
+      search (18000 visits): airslash,0;protect,1 1779v 857 | followme,0;earthquake,0 1133v 515 | airslash,0;earthquake,0 1011v 452 | thunderwave,0;protect,1 778v 333
+      p2b Mamoswine used Protect
+      p1b Kyurem used Draco Meteor -> p2a: Togekiss
+              p1b Kyurem spa 2 fell
+      p1a Keldeo used Hydro Pump -> p2a: Togekiss
+      p2a Togekiss used Air Slash -> p1a: Keldeo
+      after p1: Keldeo 93/323, Kyurem-Black 391/391
+      after p2: Togekiss 97/374, Mamoswine 361/361
+
+  Turn 6
+    p1 greedy: move 2 1, move 2 1
+    p2 mcts: move 1, move 1
+      search (23000 visits): followme,0;earthquake,0 7040v 4512 | airslash,0;protect,1 771v 410 | airslash,1;earthquake,0 633v 327 | thunderwave,1;earthquake,0 562v 284
+      p2a Togekiss used Follow Me
+      p1b Kyurem used Draco Meteor -> p2a: Togekiss
+              p1b Kyurem spa 2 fell
+      p1a Keldeo used Hydro Pump -> p2a: Togekiss
+      p2a Togekiss fainted
+      p2b Mamoswine used Earthquake -> p1a: Keldeo  [[spread] p1a,p1b]
+              p2b Mamoswine used up its Ground Gem
+      p1a Keldeo fainted
+      after p1: Keldeo 0/323, Kyurem-Black 181/391
+      after p2: Togekiss 0/374, Mamoswine 361/361
+
+  Turn 7
+      p2a <- Rotom-Wash comes in (303/303)
+      after p1: Keldeo 0/323, Kyurem-Black 181/391
+      after p2: Rotom-Wash 303/303, Mamoswine 361/361
+
+  Turn 8
+    p1 greedy: pass, move 2 1
+    p2 mcts: move 2 2, move 4 2
+      search (345000 visits): thunderbolt,1;iceshard,1 41010v 40954 | thunderbolt,1;earthquake,1 35848v 35737 | thunderbolt,1;iciclecrash,1 30828v 30668 | hydropump,1;earthquake,1 29983v 29815
+      p2b Mamoswine used Ice Shard -> p1b: Kyurem
+      p1b Kyurem used Draco Meteor -> p2a: Rotom
+              p1b Kyurem spa 2 fell
+      p2a Rotom used Thunderbolt -> p1b: Kyurem
+              p2a Rotom used up its Electric Gem
+      p1b Kyurem fainted
+      after p1: Keldeo 0/323, Kyurem-Black 0/391
+      after p2: Rotom-Wash 231/303, Mamoswine 361/361
+
+  RESULT: p2 wins

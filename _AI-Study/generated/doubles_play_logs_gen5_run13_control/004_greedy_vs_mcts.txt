@@ -1,0 +1,83 @@
+battle 4   p1=greedy vs p2=mcts   mcts 300 ms a decision
+  p1: Untitled 1078: Deoxys-Attack, Blastoise, Tornadus, Kyurem-Black
+  p2: [PL week 1] TerraCott KyuB Thundy: Terrakion, Whimsicott, Kyurem-Black, Thundurus
+
+  Turn 1
+    p1 greedy: move 1 1, move 2 1
+    p2 mcts: move 3, move 4 1
+      search (28000 visits): rockslide,0;energyball,0 2899v 1488 | rockslide,0;tailwind,1 1469v 704 | protect,0;energyball,0 1400v 667 | earthquake,0;energyball,0 1239v 580
+      p1a Deoxys used Psycho Boost -> p2a: Terrakion
+              p2a Terrakion -- critical hit
+              p1a Deoxys spa 2 fell
+      p2a Terrakion fainted
+      p2b Whimsicott used Energy Ball -> p1a: Deoxys
+      p1a Deoxys fainted
+      p1b Blastoise used Scald -> p2b: Whimsicott
+      after p1: Deoxys-Attack 0/241, Blastoise 362/362
+      after p2: Terrakion 0/323, Whimsicott 277/324
+
+  Turn 2
+      p1a <- Tornadus comes in (299/299)
+      p2a <- Kyurem-Black comes in (391/391)
+      after p1: Tornadus 299/299, Blastoise 362/362
+      after p2: Kyurem-Black 391/391, Whimsicott 277/324
+
+  Turn 3
+    p1 greedy: move 2 2, move 2 2
+    p2 mcts: move 2 1, switch 4   (slot1 Whimsicott -> Thundurus)
+      search (19000 visits): icebeam,0;switch thundurus 1942v 1224 | fusionbolt,0;switch thundurus 1477v 909 | fusionbolt,1;switch thundurus 1224v 740 | dracometeor,0;switch thundurus 735v 417
+      p2b <- Thundurus comes in (298/298)
+      p2a Kyurem used Ice Beam -> p1a: Tornadus
+      p1a Tornadus fainted
+      p1b Blastoise used Scald -> p2b: Thundurus
+      after p1: Tornadus 0/299, Blastoise 362/362
+      after p2: Kyurem-Black 391/391, Thundurus 207/298
+
+  Turn 4
+      p1a <- Kyurem-Black comes in (391/391)
+      after p1: Kyurem-Black 391/391, Blastoise 362/362
+      after p2: Kyurem-Black 391/391, Thundurus 207/298
+
+  Turn 5
+    p1 greedy: move 1 2, move 2 2
+    p2 mcts: move 2 2, move 1 2
+      search (23000 visits): icebeam,1;thunderbolt,1 4480v 1839 | icebeam,0;thunderwave,0 2429v 939 | icebeam,0;thunderbolt,1 2044v 774 | icebeam,0;thunderbolt,0 1480v 534
+      p2a Kyurem used Ice Beam -> p1b: Blastoise
+      p2b Thundurus used Thunderbolt -> p1b: Blastoise
+              p1b Blastoise -- critical hit
+              p1b Blastoise used up its Wacan Berry
+              p1b Blastoise used up its Wacan Berry
+      p1b Blastoise fainted
+      p1a Kyurem used Freeze Shock  [[still]]
+              p1a Kyurem used up its Power Herb
+      p2b Thundurus fainted
+      after p1: Kyurem-Black 391/391, Blastoise 0/362
+      after p2: Kyurem-Black 391/391, Thundurus 0/298
+
+  Turn 6
+      p2b <- Whimsicott comes in (277/324)
+      after p1: Kyurem-Black 391/391, Blastoise 0/362
+      after p2: Kyurem-Black 391/391, Whimsicott 277/324
+
+  Turn 7
+    p1 greedy: move 1 2, pass
+    p2 mcts: move 2 1, move 3 -1
+      search (213000 visits): icebeam,0;helpinghand,0 87189v 10492 | icebeam,0;energyball,0 73160v 8692 | icebeam,0;tailwind,1 27034v 2892 | icebeam,0;beatup,0 25617v 2720
+      p2b Whimsicott used Helping Hand -> p2a: Kyurem
+      p2a Kyurem used Ice Beam -> p1a: Kyurem
+      p1a Kyurem used Freeze Shock  [[still]]
+      after p1: Kyurem-Black 130/391, Blastoise 0/362
+      after p2: Kyurem-Black 391/391, Whimsicott 277/324
+
+  Turn 8
+    p1 greedy: move 1, pass
+    p2 mcts: move 2 1, move 1
+      search (2792000 visits): icebeam,0;tailwind,1 698014v 698014 | icebeam,0;beatup,0 698008v 698008 | icebeam,0;helpinghand,0 697989v 697989 | icebeam,0;energyball,0 697989v 697989
+      p2b Whimsicott used Tailwind
+      -sidestart p2: B move: Tailwind
+      p2a Kyurem used Ice Beam -> p1a: Kyurem
+      p1a Kyurem fainted
+      after p1: Kyurem-Black 0/391, Blastoise 0/362
+      after p2: Kyurem-Black 391/391, Whimsicott 277/324
+
+  RESULT: p2 wins

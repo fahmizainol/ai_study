@@ -1,0 +1,61 @@
+battle 25   p1=greedy vs p2=mcts   mcts 300 ms a decision
+  p1: Untitled 544: Deoxys-Attack, Mr. Mime, Cradily, Hariyama
+  p2: Sand HO: Excadrill, Tyranitar, Shaymin-Sky, Scrafty
+
+  Turn 1
+    p1 greedy: move 2 1, move 4 1
+    p2 mcts: move 2 1, move 1
+      search (27000 visits): ironhead,0;rockslide,0 1869v 1648 | ironhead,0;crunch,1 1861v 1641 | drillrun,0;crunch,1 1465v 1272 | ironhead,0;switch scrafty 1310v 1128
+      p2a Excadrill used Iron Head -> p1a: Deoxys
+      p1a Deoxys fainted
+      p1b Mr. Mime used Psychic -> p2a: Excadrill
+      p2b Tyranitar used Rock Slide -> p1b: Mr. Mime
+              p1b Mr. Mime used up its Sitrus Berry
+      after p1: Deoxys-Attack 0/241, Mr. Mime 199/284
+      after p2: Excadrill 255/361, Tyranitar 384/384
+
+  Turn 2
+      p1a <- Cradily comes in (375/375)
+      after p1: Cradily 375/375, Mr. Mime 199/284
+      after p2: Excadrill 255/361, Tyranitar 384/384
+
+  Turn 3
+    p1 greedy: move 3 1, move 4 1
+    p2 mcts: move 2 1, switch 4   (slot1 Tyranitar -> Scrafty)
+      search (21000 visits): ironhead,0;switch scrafty 1314v 1073 | ironhead,0;crunch,1 1302v 1063 | ironhead,0;rockslide,0 1300v 1061 | drillrun,0;crunch,0 693v 534
+      p2b <- Scrafty comes in (334/334)
+              p1a Cradily atk 1 fell
+              p1b Mr. Mime atk 1 fell
+      p2a Excadrill used Iron Head -> p1a: Cradily
+      p1a Cradily fainted
+      p1b Mr. Mime used Psychic -> p2a: Excadrill
+      after p1: Cradily 0/375, Mr. Mime 182/284
+      after p2: Excadrill 147/361, Scrafty 314/334
+
+  Turn 4
+      p1a <- Hariyama comes in (492/492)
+      after p1: Hariyama 492/492, Mr. Mime 182/284
+      after p2: Excadrill 147/361, Scrafty 314/334
+
+  Turn 5
+    p1 greedy: move 2 1, move 4 1
+    p2 mcts: move 2 1, move 3 1
+      search (29000 visits): ironhead,0;highjumpkick,0 1847v 1583 | drillrun,0;highjumpkick,0 1365v 1146 | ironhead,1;highjumpkick,0 1259v 1051 | ironhead,0;crunch,1 1199v 997
+      p2a Excadrill used Iron Head -> p1a: Hariyama
+      p1b Mr. Mime used Psychic -> p2a: Excadrill
+      p2b Scrafty used High Jump Kick -> p1a: Hariyama
+      p1a Hariyama fainted
+      after p1: Hariyama 0/492, Mr. Mime 165/284
+      after p2: Excadrill 33/361, Scrafty 294/334
+
+  Turn 6
+    p1 greedy: pass, move 4 1
+    p2 mcts: move 1 2, move 2 2
+      search (868000 visits): drillrun,1;crunch,1 62376v 62376 | ironhead,1;fakeout,1 62376v 62376 | ironhead,1;crunch,1 62376v 62376 | ironhead,1;highjumpkick,1 62376v 62376
+      p2a Excadrill used Drill Run -> p1b: Mr. Mime
+      p1b Mr. Mime fainted
+      p2a Excadrill fainted
+      after p1: Hariyama 0/492, Mr. Mime 0/284
+      after p2: Excadrill 0/361, Scrafty 294/334
+
+  RESULT: p2 wins

@@ -1,0 +1,64 @@
+battle 20   p1=greedy vs p2=mcts   mcts 300 ms a decision
+  p1: tran liepard torn: Heatran, Liepard, Tornadus, Kyurem-Black
+  p2: Untitled 1079: Raikou, Togekiss, Infernape, Kyurem-Black
+
+  Turn 1
+    p1 greedy: move 1, move 3 1
+    p2 mcts: move 2 1, move 2
+      search (17000 visits): aurasphere,0;followme,1 779v 484 | aurasphere,0;airslash,1 732v 451 | aurasphere,1;followme,1 658v 399 | thunderbolt,1;followme,1 638v 385
+      p2b Togekiss used Follow Me
+      p1b Liepard used Sucker Punch  [[still]]
+              p1b Liepard -- IT FAILED
+      p1a Heatran used Eruption -> p2a: Raikou  [[spread] p2a,p2b]
+      p2a Raikou used Aura Sphere -> p1a: Heatran
+      after p1: Heatran 58/323, Liepard 317/317
+      after p2: Raikou 28/321, Togekiss 233/374
+
+  Turn 2
+    p1 greedy: move 1, move 3 1
+    p2 mcts: switch 4, switch 3   (slot0 Raikou -> Kyurem-Black; slot1 Togekiss -> Infernape)
+      search (27000 visits): switch kyuremblack;switch infernape 944v 531 | thunderbolt,1;airslash,1 737v 400 | switch infernape;airslash,1 730v 396 | aurasphere,1;airslash,1 700v 377
+      p2a <- Kyurem-Black comes in (391/391)
+      p2b <- Infernape comes in (293/293)
+      p1b Liepard used Sucker Punch  [[still]]
+              p1b Liepard -- IT FAILED
+      p1a Heatran used Eruption -> p2a: Kyurem  [[spread] p2a,p2b]
+      after p1: Heatran 58/323, Liepard 317/317
+      after p2: Kyurem-Black 348/391, Infernape 268/293
+
+  Turn 3
+    p1 greedy: move 1, move 3 1
+    p2 mcts: move 4 1, move 3 2
+      search (26000 visits): fusionbolt,0;closecombat,1 2068v 1685 | dracometeor,0;closecombat,1 1574v 1260 | icebeam,0;closecombat,1 1338v 1058 | icebeam,1;switch togekiss 596v 434
+      p1b Liepard used Sucker Punch -> p2a: Kyurem
+              p1b Liepard used up its Dark Gem
+      p2a Kyurem used Fusion Bolt -> p1a: Heatran
+              p1a Heatran -- critical hit
+      p1a Heatran fainted
+      p2b Infernape used Close Combat -> p1b: Liepard
+              p2b Infernape def 1 fell
+              p2b Infernape spd 1 fell
+      p1b Liepard fainted
+      after p1: Heatran 0/323, Liepard 0/317
+      after p2: Kyurem-Black 221/391, Infernape 239/293
+
+  Turn 4
+      p1b <- Kyurem-Black comes in (391/391)
+      p1a <- Tornadus comes in (299/299)
+      after p1: Tornadus 299/299, Kyurem-Black 391/391
+      after p2: Kyurem-Black 221/391, Infernape 239/293
+
+  Turn 5
+    p1 greedy: move 3 1, move 2 1
+    p2 mcts: move 4 1, move 3 2
+      search (32000 visits): fusionbolt,0;closecombat,1 8544v 5772 | fusionbolt,0;switch raikou 6426v 4292 | fusionbolt,0;switch togekiss 2879v 1842 | switch raikou;closecombat,1 2764v 1764
+      p2a Kyurem used Fusion Bolt -> p1a: Tornadus
+      p1a Tornadus fainted
+      p2b Infernape used Close Combat -> p1b: Kyurem
+              p2b Infernape def 1 fell
+              p2b Infernape spd 1 fell
+      p1b Kyurem fainted
+      after p1: Tornadus 0/299, Kyurem-Black 0/391
+      after p2: Kyurem-Black 221/391, Infernape 210/293
+
+  RESULT: p2 wins

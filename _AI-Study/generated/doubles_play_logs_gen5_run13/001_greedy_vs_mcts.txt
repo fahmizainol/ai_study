@@ -1,0 +1,117 @@
+battle 1   p1=greedy vs p2=mcts   mcts 300 ms a decision
+  p1: 2v2 Pool League II/2v2 Pools - BW 14: Gyarados, Volcarona, Weavile, Latios
+  p2: LKJC - LSGT: Latios, Scrafty, Genesect, Thundurus
+
+  Turn 1
+    p1 greedy: move 2 1, move 1 1
+    p2 mcts: move 4, switch 3   (slot1 Scrafty -> Genesect)
+      search (8000 visits): calmmind,0;switch genesect 208v 123 | psychic,1;switch genesect 205v 120 | dracometeor,1;switch genesect 193v 112 | psychic,0;switch genesect 179v 102
+      p2b <- Genesect comes in (283/283)
+              p2b Genesect atk 1 rose
+      p2a Latios used Calm Mind
+              p2a Latios spa 1 rose
+              p2a Latios spd 1 rose
+      p1b Volcarona used Fire Blast -> p2a: Latios
+      p1a Gyarados used Stone Edge -> p2a: Latios
+      after p1: Gyarados 331/331, Volcarona 311/311
+      after p2: Latios 140/301, Genesect 283/283
+
+  Turn 2
+    p1 greedy: move 2 1, move 1 1
+    p2 mcts: move 2 2, move 4 2
+      search (13000 visits): psychic,1;flamethrower,1 851v 596 | dracometeor,1;bugbuzz,0 435v 278 | dracometeor,1;icebeam,0 408v 259 | dracometeor,1;flamethrower,0 340v 209
+      p2b Genesect used Flamethrower -> p1b: Volcarona
+      p2a Latios used Psychic -> p1b: Volcarona
+      p1b Volcarona used Fire Blast -> p2a: Latios
+      p1a Gyarados used Stone Edge -> p2a: Latios
+      p2a Latios fainted
+      after p1: Gyarados 331/331, Volcarona 2/311
+      after p2: Latios 0/301, Genesect 283/283
+
+  Turn 3
+      p2a <- Scrafty comes in (334/334)
+              p1a Gyarados atk 1 fell
+              p1b Volcarona atk 1 fell
+      after p1: Gyarados 331/331, Volcarona 2/311
+      after p2: Scrafty 334/334, Genesect 283/283
+
+  Turn 4
+    p1 greedy: move 2 1, move 1 1
+    p2 mcts: move 2 1, move 4 2
+      search (17000 visits): crunch,0;flamethrower,1 6142v 2853 | drainpunch,0;flamethrower,1 1308v 521 | fakeout,0;flamethrower,1 944v 356 | crunch,0;flamethrower,0 832v 306
+      p2b Genesect used Flamethrower -> p1b: Volcarona
+      p1b Volcarona fainted
+      p1a Gyarados used Stone Edge -> p2a: Scrafty  [[miss]]
+              p1a Gyarados -- MISSED
+      p2a Scrafty used Crunch -> p1a: Gyarados
+      after p1: Gyarados 177/331, Volcarona 0/311
+      after p2: Scrafty 334/334, Genesect 283/283
+
+  Turn 5
+      p1b <- Weavile comes in (284/284)
+      after p1: Gyarados 177/331, Weavile 284/284
+      after p2: Scrafty 334/334, Genesect 283/283
+
+  Turn 6
+    p1 greedy: move 2 1, move 2 1
+    p2 mcts: move 3 2, move 4 1
+      search (18000 visits): drainpunch,1;flamethrower,0 4099v 2741 | crunch,0;flamethrower,1 3959v 2643 | crunch,1;flamethrower,1 2672v 1743 | drainpunch,1;flamethrower,1 1669v 1051
+      p2b Genesect used Flamethrower -> p1a: Gyarados
+              p1a Gyarados is now brn
+      p1b Weavile used Ice Punch -> p2a: Scrafty
+      p1a Gyarados used Stone Edge -> p2a: Scrafty
+      p2a Scrafty used Drain Punch -> p1b: Weavile
+      p1b Weavile fainted
+      after p1: Gyarados 85/331, Weavile 0/284
+      after p2: Scrafty 314/334, Genesect 283/283
+
+  Turn 7
+      p1b <- Latios comes in (301/301)
+      after p1: Gyarados 85/331, Latios 301/301
+      after p2: Scrafty 314/334, Genesect 283/283
+
+  Turn 8
+    p1 greedy: move 2 1, move 1 1
+    p2 mcts: move 2 2, move 4 2
+      search (22000 visits): crunch,1;flamethrower,1 17434v 13024 | crunch,1;flamethrower,0 902v 505 | drainpunch,1;flamethrower,1 301v 137 | crunch,1;switch thundurus 252v 109
+      p2b Genesect used Flamethrower -> p1b: Latios
+              p1b Latios -- critical hit
+      p1b Latios used Draco Meteor -> p2a: Scrafty
+              p1b Latios used up its Dragon Gem
+              p1b Latios spa 2 fell
+      p2a Scrafty fainted
+      p1a Gyarados used Stone Edge -> p2b: Genesect
+      after p1: Gyarados 44/331, Latios 194/301
+      after p2: Scrafty 0/334, Genesect 254/283
+
+  Turn 9
+      p2a <- Thundurus comes in (298/298)
+      after p1: Gyarados 44/331, Latios 194/301
+      after p2: Thundurus 298/298, Genesect 254/283
+
+  Turn 10
+    p1 greedy: move 2 2, move 1 2
+    p2 mcts: move 3 2, move 4 1
+      search (21000 visits): thunderbolt,1;flamethrower,0 5640v 2784 | thunderbolt,1;flamethrower,1 3304v 1571 | hiddenpower,1;flamethrower,0 2543v 1181 | protect,0;flamethrower,1 1167v 493
+      p2b Genesect used Flamethrower -> p1a: Gyarados
+      p1a Gyarados fainted
+      p1b Latios used Draco Meteor -> p2b: Genesect  [[miss]]
+              p1b Latios -- MISSED
+      p2a Thundurus used Thunderbolt -> p1b: Latios
+      after p1: Gyarados 0/331, Latios 112/301
+      after p2: Thundurus 298/298, Genesect 254/283
+
+  Turn 11
+    p1 greedy: pass, move 1 2
+    p2 mcts: move 1 2, move 4 2
+      search (76000 visits): hiddenpower,1;flamethrower,1 22445v 8505 | thunderbolt,1;flamethrower,1 22222v 8417 | thunderwave,1;flamethrower,1 21331v 8065 | protect,0;flamethrower,1 10002v 3632
+      p2b Genesect used Flamethrower -> p1b: Latios
+      p1b Latios used Draco Meteor -> p2b: Genesect
+              p1b Latios spa 2 fell
+      p2a Thundurus used Hidden Power -> p1b: Latios
+              p2a Thundurus used up its Flying Gem
+      p1b Latios fainted
+      after p1: Gyarados 0/331, Latios 0/301
+      after p2: Thundurus 298/298, Genesect 184/283
+
+  RESULT: p2 wins

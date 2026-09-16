@@ -1,0 +1,66 @@
+battle 27   p1=greedy vs p2=mcts   mcts 300 ms a decision
+  p1: darkrai mogus tran kyub: Darkrai, Amoonguss, Heatran, Kyurem-Black
+  p2: Horse: Keldeo, Shaymin-Sky, Rapidash, Liepard
+
+  Turn 1
+    p1 greedy: move 2 1, move 3 1
+    p2 mcts: move 3, move 1 2
+      search (23000 visits): protect,0;airslash,1 808v 202 | secretsword,0;airslash,1 725v 175 | protect,0;seedflare,0 705v 168 | icywind,0;seedflare,0 628v 143
+      p2a Keldeo used Protect
+      p2b Shaymin used Air Slash -> p1b: Amoonguss
+      p1a Darkrai used Spacial Rend -> p2a: Keldeo
+              p2a Keldeo -- move: Protect
+              p1b Amoonguss COULD NOT MOVE (flinch)
+      after p1: Darkrai 281/281, Amoonguss 160/432
+      after p2: Keldeo 323/323, Shaymin-Sky 341/341
+
+  Turn 2
+    p1 greedy: move 2 1, move 3 1
+    p2 mcts: move 1 1, move 1 2
+      search (15000 visits): secretsword,0;airslash,1 604v 161 | icywind,0;seedflare,0 453v 108 | secretsword,0;protect,1 384v 85 | secretsword,0;tailwind,1 352v 74
+      p2b Shaymin used Air Slash -> p1b: Amoonguss
+              p1b Amoonguss -- critical hit
+      p1b Amoonguss fainted
+      p1a Darkrai used Spacial Rend -> p2a: Keldeo
+      p2a Keldeo used Secret Sword -> p1a: Darkrai
+              p2a Keldeo used up its Fighting Gem
+      p1a Darkrai fainted
+      after p1: Darkrai 0/281, Amoonguss 0/432
+      after p2: Keldeo 179/323, Shaymin-Sky 341/341
+
+  Turn 3
+      p1a <- Heatran comes in (386/386)
+      p1b <- Kyurem-Black comes in (391/391)
+      after p1: Heatran 386/386, Kyurem-Black 391/391
+      after p2: Keldeo 179/323, Shaymin-Sky 341/341
+
+  Turn 4
+    p1 greedy: move 2, move 2 1
+    p2 mcts: move 2 1, move 1 2
+      search (17000 visits): hydropump,0;airslash,1 1366v 840 | hydropump,0;protect,1 1277v 781 | hydropump,0;seedflare,1 1027v 613 | secretsword,1;airslash,1 811v 470
+      p2b Shaymin used Air Slash -> p1b: Kyurem
+      p2a Keldeo used Hydro Pump -> p1a: Heatran
+      p1a Heatran fainted
+      p1b Kyurem used Draco Meteor -> p2a: Keldeo
+              p1b Kyurem spa 2 fell
+      p2a Keldeo fainted
+      after p1: Heatran 0/386, Kyurem-Black 196/391
+      after p2: Keldeo 0/323, Shaymin-Sky 341/341
+
+  Turn 5
+      p2a <- Rapidash comes in (271/271)
+      after p1: Heatran 0/386, Kyurem-Black 196/391
+      after p2: Rapidash 271/271, Shaymin-Sky 341/341
+
+  Turn 6
+    p1 greedy: pass, move 2 1
+    p2 mcts: move 1 2, move 3
+      search (60000 visits): flareblitz,1;tailwind,1 3855v 1166 | drillrun,1;tailwind,1 3677v 1106 | wildcharge,1;tailwind,1 3524v 1054 | flareblitz,1;seedflare,1 3453v 1030
+      p2b Shaymin used Tailwind
+      -sidestart p2: B move: Tailwind
+      p2a Rapidash used Flare Blitz -> p1b: Kyurem
+      p1b Kyurem fainted
+      after p1: Heatran 0/386, Kyurem-Black 0/391
+      after p2: Rapidash 179/271, Shaymin-Sky 341/341
+
+  RESULT: p2 wins

@@ -1,0 +1,89 @@
+battle 5   p1=greedy vs p2=mcts   mcts 300 ms a decision
+  p1: 2v2PL 2025/Semis g2: Kyurem-Black, Infernape, Genesect, Thundurus
+  p2: Untitled 493: Politoed, Ludicolo, Genesect, Togekiss
+
+  Turn 1
+    p1 greedy: move 1 1, move 3 1
+    p2 mcts: move 4, move 1 2
+      search (12000 visits): icywind,0;hydropump,1 469v 332 | switch genesect;hydropump,1 463v 327 | scald,1;hydropump,1 433v 303 | scald,0;hydropump,1 426v 297
+      p2b Ludicolo used Hydro Pump -> p1b: Infernape
+      p1b Infernape fainted
+      p1a Kyurem used Draco Meteor -> p2a: Politoed
+              p1a Kyurem spa 2 fell
+      p2a Politoed used Icy Wind -> p1a: Kyurem
+              p1a Kyurem spe 1 fell
+      after p1: Kyurem-Black 407/454, Infernape 0/293
+      after p2: Politoed 124/383, Ludicolo 271/301
+
+  Turn 2
+      p1b <- Genesect comes in (290/290)
+              p1b Genesect atk 1 rose
+      after p1: Kyurem-Black 407/454, Genesect 290/290
+      after p2: Politoed 124/383, Ludicolo 271/301
+
+  Turn 3
+    p1 greedy: move 1 1, move 2 1
+    p2 mcts: move 2 -2, move 1 2
+      search (10000 visits): helpinghand,1;hydropump,1 805v 523 | switch genesect;hydropump,1 617v 388 | icywind,0;hydropump,1 528v 324 | protect,0;hydropump,1 394v 230
+      p2a Politoed used Helping Hand -> p2b: Ludicolo
+      p2b Ludicolo used Hydro Pump -> p1b: Genesect  [[miss]]
+              p2b Ludicolo -- MISSED
+      p1b Genesect used Ice Beam -> p2a: Politoed
+      p1a Kyurem used Draco Meteor -> p2a: Politoed
+              p1a Kyurem spa 2 fell
+      p2a Politoed fainted
+      after p1: Kyurem-Black 407/454, Genesect 290/290
+      after p2: Politoed 0/383, Ludicolo 271/301
+
+  Turn 4
+      p2a <- Genesect comes in (285/285)
+              p2a Genesect spa 1 rose
+      after p1: Kyurem-Black 407/454, Genesect 290/290
+      after p2: Genesect 285/285, Ludicolo 271/301
+
+  Turn 5
+    p1 greedy: move 1 2, move 2 2
+    p2 mcts: move 2 2, move 2 1
+      search (3000 visits): thunder,1;gigadrain,0 89v 69 | thunder,1;icebeam,0 86v 66 | flashcannon,0;hydropump,1 84v 64 | thunder,0;hydropump,1 80v 60
+      p2b Ludicolo used Giga Drain -> p1a: Kyurem
+      p1b Genesect used Ice Beam -> p2b: Ludicolo
+      p2a Genesect used Thunder -> p1b: Genesect
+      p1b Genesect fainted
+      p1a Kyurem used Draco Meteor -> p2b: Ludicolo
+              p1a Kyurem spa 2 fell
+      after p1: Kyurem-Black 328/454, Genesect 0/290
+      after p2: Genesect 285/285, Ludicolo 68/301
+
+  Turn 6
+      p1b <- Thundurus comes in (299/299)
+      after p1: Kyurem-Black 328/454, Thundurus 299/299
+      after p2: Genesect 285/285, Ludicolo 68/301
+
+  Turn 7
+    p1 greedy: move 1 2, move 1 2
+    p2 mcts: move 2 1, move 3 2
+      search (15000 visits): thunder,0;icebeam,1 2151v 1254 | thunder,1;icebeam,0 1404v 787 | thunder,1;hydropump,0 1353v 755 | thunder,1;switch togekiss 1267v 702
+      p2b Ludicolo used Ice Beam -> p1b: Thundurus
+      p1b Thundurus fainted
+      p2a Genesect used Thunder -> p1a: Kyurem
+      p1a Kyurem used Draco Meteor -> p2b: Ludicolo
+      p2b Ludicolo fainted
+      after p1: Kyurem-Black 171/454, Thundurus 0/299
+      after p2: Genesect 285/285, Ludicolo 0/301
+
+  Turn 8
+      p2b <- Togekiss comes in (374/374)
+      after p1: Kyurem-Black 171/454, Thundurus 0/299
+      after p2: Genesect 285/285, Togekiss 374/374
+
+  Turn 9
+    p1 greedy: move 1 1, pass
+    p2 mcts: move 2 1, move 2 1
+      search (390000 visits): thunder,0;airslash,0 388753v 370082 | thunder,0;followme,1 463v 333 | thunder,0;thunderwave,0 462v 332 | thunder,0;roost,1 322v 218
+      p2a Genesect used Thunder -> p1a: Kyurem
+              p1a Kyurem -- critical hit
+      p1a Kyurem fainted
+      after p1: Kyurem-Black 0/454, Thundurus 0/299
+      after p2: Genesect 285/285, Togekiss 374/374
+
+  RESULT: p2 wins

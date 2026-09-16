@@ -1,0 +1,94 @@
+battle 19   p1=greedy vs p2=mcts   mcts 300 ms a decision
+  p1: Itchyfoot genesect: Genesect, Tornadus, Victini, Latios
+  p2: LKJC - KSMT: Kyurem-Black, Scrafty, Metagross, Thundurus
+
+  Turn 1
+    p1 greedy: move 3 1, move 3 1
+    p2 mcts: move 2 2, move 1 1
+      search (16000 visits): icebeam,1;fakeout,0 468v 277 | icebeam,1;fakeout,1 442v 259 | fusionbolt,1;fakeout,0 424v 247 | icebeam,1;switch thundurus 372v 211
+      p2b Scrafty used Fake Out -> p1a: Genesect
+              p1a Genesect COULD NOT MOVE (flinch)
+      p1b Tornadus used Superpower -> p2a: Kyurem
+              p1b Tornadus atk 1 fell
+              p1b Tornadus def 1 fell
+      p2a Kyurem used Ice Beam -> p1b: Tornadus
+      p1b Tornadus fainted
+      after p1: Genesect 263/283, Tornadus 0/299
+      after p2: Kyurem-Black 86/454, Scrafty 334/334
+
+  Turn 2
+      p1b <- Victini comes in (341/341)
+      after p1: Genesect 263/283, Victini 341/341
+      after p2: Kyurem-Black 86/454, Scrafty 334/334
+
+  Turn 3
+    p1 greedy: move 3 1, move 1 1
+    p2 mcts: move 3, move 2 2
+      search (13000 visits): protect,0;crunch,1 530v 312 | protect,0;drainpunch,0 478v 277 | fusionbolt,0;crunch,1 343v 186 | icebeam,0;crunch,1 307v 163
+      p2a Kyurem used Protect
+      p1a Genesect used Ice Beam -> p2a: Kyurem
+              p2a Kyurem -- move: Protect
+      p1b Victini used V-create -> p2a: Kyurem
+              p2a Kyurem -- move: Protect
+      p2b Scrafty used Crunch -> p1b: Victini
+      after p1: Genesect 263/283, Victini 105/341
+      after p2: Kyurem-Black 86/454, Scrafty 334/334
+
+  Turn 4
+    p1 greedy: move 3 1, move 1 1
+    p2 mcts: move 4 1, move 2 2
+      search (18000 visits): fusionbolt,0;crunch,1 417v 214 | icebeam,0;drainpunch,0 402v 205 | icebeam,0;crunch,1 391v 198 | fusionbolt,0;drainpunch,0 387v 195
+      p1a Genesect used Ice Beam -> p2a: Kyurem
+      p2a Kyurem fainted
+      p1b Victini used V-create -> p2b: Scrafty
+              p1b Victini used up its Fire Gem
+              p1b Victini spe 1 fell
+              p1b Victini def 1 fell
+              p1b Victini spd 1 fell
+      p2b Scrafty used Crunch -> p1b: Victini
+      p1b Victini fainted
+      after p1: Genesect 263/283, Victini 0/341
+      after p2: Kyurem-Black 0/454, Scrafty 1/334
+
+  Turn 5
+      p1b <- Latios comes in (301/301)
+      p2a <- Metagross comes in (364/364)
+      after p1: Genesect 263/283, Latios 301/301
+      after p2: Metagross 364/364, Scrafty 1/334
+
+  Turn 6
+    p1 greedy: move 3 2, move 1 2
+    p2 mcts: move 1 2, move 1 1
+      search (24000 visits): meteormash,1;fakeout,0 1322v 958 | meteormash,0;fakeout,0 1297v 938 | meteormash,0;fakeout,1 904v 632 | meteormash,1;drainpunch,0 815v 563
+      p2b Scrafty used Fake Out  [[still]]
+              p2b Scrafty -- IT FAILED
+      p1a Genesect used Ice Beam -> p2b: Scrafty
+              p2b Scrafty -- critical hit
+      p2b Scrafty fainted
+      p1b Latios used Draco Meteor -> p2a: Metagross
+              p1b Latios spa 2 fell
+      p2a Metagross used Meteor Mash -> p1b: Latios
+              p2a Metagross used up its Steel Gem
+              p2a Metagross atk 1 rose
+      p1b Latios fainted
+      after p1: Genesect 263/283, Latios 0/301
+      after p2: Metagross 231/364, Scrafty 0/334
+
+  Turn 7
+      p2b <- Thundurus comes in (362/362)
+      after p1: Genesect 263/283, Latios 0/301
+      after p2: Metagross 231/364, Thundurus 362/362
+
+  Turn 8
+    p1 greedy: move 3 1, pass
+    p2 mcts: move 4, move 1 1
+      search (258000 visits): earthquake,0;thunderbolt,0 99011v 95644 | protect,0;thunderbolt,0 83091v 80145 | meteormash,0;thunderbolt,0 30072v 28662 | earthquake,0;thunderwave,0 16608v 15663
+      p1a Genesect used Ice Beam -> p2a: Metagross
+      p2b Thundurus used Thunderbolt -> p1a: Genesect
+      p2a Metagross used Earthquake -> p1a: Genesect  [[spread] p1a]
+              p2b Thundurus -- IMMUNE
+      p1a Genesect fainted
+      after p1: Genesect 0/283, Latios 0/301
+      after p2: Metagross 150/364, Thundurus 362/362
+
+  RESULT: p2 wins

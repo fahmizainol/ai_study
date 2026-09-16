@@ -1,0 +1,96 @@
+battle 15   p1=greedy vs p2=mcts   mcts 300 ms a decision
+  p1: 2v2 Pool League II/2v2 Pools - BW 7: Snorlax, Chandelure, Darkrai, Infernape
+  p2: Fuck it: Rotom-Heat, Scrafty, Crobat, Jellicent
+
+  Turn 1
+    p1 greedy: move 1 1, move 1 1
+    p2 mcts: move 2 2, move 3 1
+      search (34000 visits): thunderbolt,1;highjumpkick,0 1740v 711 | thunderbolt,1;crunch,1 1022v 384 | thunderbolt,0;crunch,1 816v 292 | thunderbolt,1;crunch,0 790v 281
+      p2a Rotom used Thunderbolt -> p1b: Chandelure
+              p2a Rotom used up its Electric Gem
+      p2b Scrafty used High Jump Kick -> p1a: Snorlax
+              p1a Snorlax used up its Chople Berry
+              p1a Snorlax used up its Chople Berry
+      p1b Chandelure used Overheat -> p2a: Rotom
+              p1b Chandelure spa 2 fell
+      p1a Snorlax used Double-Edge -> p2a: Rotom
+      p2a Rotom fainted
+      after p1: Snorlax 189/524, Chandelure 102/324
+      after p2: Rotom-Heat 0/253, Scrafty 334/334
+
+  Turn 2
+      p2a <- Crobat comes in (311/311)
+      after p1: Snorlax 189/524, Chandelure 102/324
+      after p2: Crobat 311/311, Scrafty 334/334
+
+  Turn 3
+    p1 greedy: move 1 1, move 1 1
+    p2 mcts: move 4 2, move 2 1
+      search (35000 visits): superfang,1;crunch,0 1299v 697 | switch jellicent;fakeout,0 925v 474 | toxic,1;highjumpkick,0 919v 471 | bravebird,1;crunch,0 830v 419
+      p2a Crobat used Super Fang -> p1b: Chandelure
+              p1b Chandelure -- IMMUNE
+      p2b Scrafty used Crunch -> p1a: Snorlax
+              p1a Snorlax def 1 fell
+      p1b Chandelure used Overheat -> p2a: Crobat
+              p1b Chandelure spa 2 fell
+      p1a Snorlax used Double-Edge -> p2a: Crobat
+              p2a Crobat -- critical hit
+      p2a Crobat fainted
+      p1a Snorlax fainted
+      after p1: Snorlax 0/524, Chandelure 102/324
+      after p2: Crobat 0/311, Scrafty 334/334
+
+  Turn 4
+      p2a <- Jellicent comes in (404/404)
+      p1a <- Darkrai comes in (281/281)
+      after p1: Darkrai 281/281, Chandelure 102/324
+      after p2: Jellicent 404/404, Scrafty 334/334
+
+  Turn 5
+    p1 greedy: move 3 1, move 1 1
+    p2 mcts: move 1 1, move 2 2
+      search (13000 visits): willowisp,0;crunch,1 342v 337 | shadowball,0;highjumpkick,0 342v 338 | shadowball,0;crunch,1 339v 334 | willowisp,0;highjumpkick,1 336v 330
+      p1a Darkrai used Focus Blast -> p2a: Jellicent
+              p2a Jellicent -- IMMUNE
+      p2b Scrafty used Crunch -> p1b: Chandelure
+      p1b Chandelure fainted
+      p2a Jellicent used Will-O-Wisp -> p1a: Darkrai
+              p1a Darkrai is now brn
+      after p1: Darkrai 246/281, Chandelure 0/324
+      after p2: Jellicent 404/404, Scrafty 334/334
+
+  Turn 6
+      p1b <- Infernape comes in (293/293)
+      after p1: Darkrai 246/281, Infernape 293/293
+      after p2: Jellicent 404/404, Scrafty 334/334
+
+  Turn 7
+    p1 greedy: move 3 1, move 4 1
+    p2 mcts: move 2 2, move 3 1
+      search (25000 visits): shadowball,1;highjumpkick,0 1135v 336 | shadowball,1;highjumpkick,1 1099v 323 | icywind,0;highjumpkick,1 1026v 297 | icywind,0;highjumpkick,0 1019v 294
+      p1a Darkrai used Focus Blast -> p2a: Jellicent
+              p2a Jellicent -- IMMUNE
+      p1b Infernape used Overheat -> p2a: Jellicent
+              p1b Infernape used up its Fire Gem
+              p1b Infernape spa 2 fell
+      p2b Scrafty used High Jump Kick -> p1a: Darkrai
+      p1a Darkrai fainted
+      p2a Jellicent used Shadow Ball -> p1b: Infernape
+              p1b Infernape -- critical hit
+      after p1: Darkrai 0/281, Infernape 79/293
+      after p2: Jellicent 346/404, Scrafty 334/334
+
+  Turn 8
+    p1 greedy: pass, move 4 1
+    p2 mcts: move 2 2, move 1 2
+      search (738000 visits): shadowball,1;fakeout,1 164606v 164606 | shadowball,1;crunch,1 164606v 164606 | shadowball,1;highjumpkick,1 164606v 164606 | shadowball,1;taunt,1 164603v 164603
+      p2b Scrafty used Fake Out  [[still]]
+              p2b Scrafty -- IT FAILED
+      p1b Infernape used Overheat -> p2a: Jellicent
+              p1b Infernape spa 2 fell
+      p2a Jellicent used Shadow Ball -> p1b: Infernape
+      p1b Infernape fainted
+      after p1: Darkrai 0/281, Infernape 0/293
+      after p2: Jellicent 304/404, Scrafty 334/334
+
+  RESULT: p2 wins

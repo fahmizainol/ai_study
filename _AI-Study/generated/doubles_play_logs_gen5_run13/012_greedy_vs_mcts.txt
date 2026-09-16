@@ -1,0 +1,85 @@
+battle 12   p1=greedy vs p2=mcts   mcts 300 ms a decision
+  p1: Itchyfoot genesect: Genesect, Tornadus, Victini, Latios
+  p2: 2v2 Pool League II/2v2 Pools - BW 10: Braviary, Togetic, Kyurem-Black, Arcanine
+
+  Turn 1
+    p1 greedy: move 3 1, move 3 1
+    p2 mcts: move 4, switch 3   (slot1 Togetic -> Kyurem-Black)
+      search (24000 visits): protect,0;switch kyuremblack 2848v 1922 | protect,0;tailwind,1 1908v 1252 | bravebird,0;followme,1 1308v 830 | bravebird,0;tailwind,1 1275v 807
+      p2b <- Kyurem-Black comes in (391/391)
+      p2a Braviary used Protect
+      p1a Genesect used Ice Beam -> p2a: Braviary
+              p2a Braviary -- move: Protect
+      p1b Tornadus used Superpower -> p2a: Braviary
+              p2a Braviary -- move: Protect
+      after p1: Genesect 283/283, Tornadus 299/299
+      after p2: Braviary 341/341, Kyurem-Black 391/391
+
+  Turn 2
+    p1 greedy: move 3 1, move 3 1
+    p2 mcts: move 4, move 3
+      search (26000 visits): protect,0;rockslide,0 1072v 830 | switch togetic;rockslide,0 1028v 793 | protect,0;outrage,0 993v 764 | protect,0;outrage,1 750v 561
+      p2a Braviary used Protect
+      p1a Genesect used Ice Beam -> p2a: Braviary
+              p2a Braviary -- move: Protect
+      p1b Tornadus used Superpower -> p2a: Braviary
+              p2a Braviary -- move: Protect
+      p2b Kyurem used Rock Slide -> p1b: Tornadus  [[spread] p1a,p1b]
+      p1b Tornadus fainted
+      after p1: Genesect 142/283, Tornadus 0/299
+      after p2: Braviary 341/341, Kyurem-Black 391/391
+
+  Turn 3
+      p1b <- Victini comes in (341/341)
+      after p1: Genesect 142/283, Victini 341/341
+      after p2: Braviary 341/341, Kyurem-Black 391/391
+
+  Turn 4
+    p1 greedy: move 3 1, move 1 1
+    p2 mcts: switch 4, move 3   (slot0 Braviary -> Arcanine)
+      search (21000 visits): switch arcanine;rockslide,0 5260v 3965 | protect,0;rockslide,0 4813v 3615 | switch togetic;rockslide,0 2242v 1617 | protect,0;switch arcanine 945v 633
+      p2a <- Arcanine comes in (339/339)
+              p1a Genesect atk 1 fell
+              p1b Victini atk 1 fell
+      p1a Genesect used Ice Beam -> p2a: Arcanine
+      p1b Victini used V-create -> p2a: Arcanine
+              p1b Victini used up its Fire Gem
+              p1b Victini spe 1 fell
+              p1b Victini def 1 fell
+              p1b Victini spd 1 fell
+      p2b Kyurem used Rock Slide -> p1b: Victini  [[spread] p1a]
+              p2b Kyurem -- MISSED
+      p1a Genesect fainted
+      after p1: Genesect 0/283, Victini 341/341
+      after p2: Arcanine 134/339, Kyurem-Black 391/391
+
+  Turn 5
+      p1a <- Latios comes in (301/301)
+      after p1: Latios 301/301, Victini 341/341
+      after p2: Arcanine 134/339, Kyurem-Black 391/391
+
+  Turn 6
+    p1 greedy: move 1 1, move 1 1
+    p2 mcts: switch 3, move 3   (slot0 Arcanine -> Togetic)
+      search (22000 visits): switch togetic;rockslide,0 13071v 8882 | extremespeed,0;rockslide,0 1112v 650 | switch braviary;rockslide,0 995v 574 | flareblitz,0;rockslide,0 726v 401
+      p2a <- Togetic comes in (314/314)
+      p1a Latios used Draco Meteor -> p2a: Togetic
+              p1a Latios spa 2 fell
+      p2b Kyurem used Rock Slide -> p1b: Victini  [[spread] p1a,p1b]
+      p1b Victini fainted
+      after p1: Latios 139/301, Victini 0/341
+      after p2: Togetic 191/314, Kyurem-Black 391/391
+
+  Turn 7
+    p1 greedy: move 1 1, pass
+    p2 mcts: switch 4, move 3   (slot0 Togetic -> Braviary)
+      search (246000 visits): switch braviary;rockslide,0 217283v 213460 | helpinghand,1;rockslide,0 7340v 6862 | switch arcanine;rockslide,0 5325v 4925 | roost,0;rockslide,0 4793v 4415
+      p2a <- Braviary comes in (341/341)
+      p1a Latios used Draco Meteor -> p2a: Braviary
+              p1a Latios spa 2 fell
+      p2b Kyurem used Rock Slide -> p1a: Latios
+      p1a Latios fainted
+      after p1: Latios 0/301, Victini 0/341
+      after p2: Braviary 197/341, Kyurem-Black 391/391
+
+  RESULT: p2 wins

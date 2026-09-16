@@ -1,0 +1,108 @@
+battle 24   p1=greedy vs p2=mcts   mcts 300 ms a decision
+  p1: 2v2PL 2025/Semis g3: Metagross, Scrafty, Rotom-Heat, Genesect
+  p2: Itchyfoot anti vrji: Jellicent, Scrafty, Victini, Kyurem-Black
+
+  Turn 1
+    p1 greedy: move 1 1, move 3 1
+    p2 mcts: switch 3, move 3 2   (slot0 Jellicent -> Victini)
+      search (9000 visits): switch victini;drainpunch,1 515v 358 | switch victini;switch kyuremblack 301v 192 | shadowball,0;switch victini 291v 184 | shadowball,1;switch victini 287v 181
+      p2a <- Victini comes in (341/341)
+      p1a Metagross used Meteor Mash -> p2a: Victini
+              p1a Metagross used up its Steel Gem
+              p2a Victini -- critical hit
+      p1b Scrafty used Crunch -> p2a: Victini
+              p1b Scrafty used up its Dark Gem
+      p2a Victini fainted
+      p2b Scrafty used Drain Punch -> p1b: Scrafty
+      after p1: Metagross 364/364, Scrafty 228/332
+      after p2: Victini 0/341, Scrafty 334/334
+
+  Turn 2
+      p2a <- Jellicent comes in (404/404)
+      after p1: Metagross 364/364, Scrafty 228/332
+      after p2: Jellicent 404/404, Scrafty 334/334
+
+  Turn 3
+    p1 greedy: move 1 1, move 3 1
+    p2 mcts: move 3 1, move 3 2
+      search (9000 visits): shadowball,0;drainpunch,1 254v 115 | shadowball,1;drainpunch,1 228v 100 | protect,0;drainpunch,1 208v 88 | recover,0;drainpunch,1 201v 84
+      p1a Metagross used Meteor Mash -> p2a: Jellicent
+      p1b Scrafty used Crunch -> p2a: Jellicent
+              p2a Jellicent used up its Sitrus Berry
+      p2b Scrafty used Drain Punch -> p1b: Scrafty
+      p2a Jellicent used Shadow Ball -> p1a: Metagross
+      after p1: Metagross 280/364, Scrafty 136/332
+      after p2: Jellicent 220/404, Scrafty 334/334
+
+  Turn 4
+    p1 greedy: move 1 1, move 3 1
+    p2 mcts: move 4, move 3 2
+      search (14000 visits): recover,0;drainpunch,1 597v 273 | recover,0;drainpunch,0 434v 185 | recover,0;crunch,0 416v 175 | recover,0;switch kyuremblack 398v 166
+      p1a Metagross used Meteor Mash -> p2a: Jellicent  [[miss]]
+              p1a Metagross -- MISSED
+      p1b Scrafty used Crunch -> p2a: Jellicent
+      p2b Scrafty used Drain Punch -> p1b: Scrafty
+      p2a Jellicent used Recover
+      after p1: Metagross 280/364, Scrafty 32/332
+      after p2: Jellicent 264/404, Scrafty 334/334
+
+  Turn 5
+    p1 greedy: move 1 1, move 3 1
+    p2 mcts: move 4, move 3 2
+      search (14000 visits): recover,0;drainpunch,1 407v 168 | recover,0;drainpunch,0 386v 157 | recover,0;crunch,0 385v 157 | recover,0;switch kyuremblack 369v 149
+      p1a Metagross used Meteor Mash -> p2a: Jellicent
+      p1b Scrafty used Crunch -> p2a: Jellicent
+      p2a Jellicent fainted
+      p2b Scrafty used Drain Punch -> p1b: Scrafty
+      p1b Scrafty fainted
+      after p1: Metagross 280/364, Scrafty 0/332
+      after p2: Jellicent 0/404, Scrafty 334/334
+
+  Turn 6
+      p1b <- Rotom-Heat comes in (268/268)
+      p2a <- Kyurem-Black comes in (391/391)
+      after p1: Metagross 280/364, Rotom-Heat 268/268
+      after p2: Kyurem-Black 391/391, Scrafty 334/334
+
+  Turn 7
+    p1 greedy: move 1 1, move 1 1
+    p2 mcts: move 3, move 1 1
+      search (8000 visits): icywind,0;fakeout,0 366v 181 | icywind,0;fakeout,1 273v 125 | icywind,0;drainpunch,0 272v 125 | icywind,0;crunch,1 269v 123
+      p2b Scrafty used Fake Out  [[still]]
+              p2b Scrafty -- IT FAILED
+      p2a Kyurem used Icy Wind -> p1b: Rotom  [[spread] p1a,p1b]
+              p1a Metagross spe 1 fell
+              p1b Rotom spe 1 fell
+      p1b Rotom used Overheat -> p2a: Kyurem
+              p1b Rotom spa 2 fell
+      p1a Metagross used Meteor Mash -> p2a: Kyurem
+              p2a Kyurem -- critical hit
+              p1a Metagross atk 1 rose
+      p2a Kyurem fainted
+      after p1: Metagross 244/364, Rotom-Heat 240/268
+      after p2: Kyurem-Black 0/391, Scrafty 334/334
+
+  Turn 8
+    p1 greedy: move 1 2, move 1 2
+    p2 mcts: pass, move 3 2
+      search (60000 visits): No Move;drainpunch,1 9640v 570 | No Move;fakeout,0 8970v 515 | No Move;fakeout,1 8223v 454 | No Move;drainpunch,0 8198v 452
+      p1b Rotom used Overheat -> p2b: Scrafty
+              p1b Rotom spa 2 fell
+      p2b Scrafty used Drain Punch -> p1b: Rotom
+      p1a Metagross used Meteor Mash -> p2b: Scrafty
+      after p1: Metagross 244/364, Rotom-Heat 174/268
+      after p2: Kyurem-Black 0/391, Scrafty 32/334
+
+  Turn 9
+    p1 greedy: move 1 2, move 1 2
+    p2 mcts: pass, move 1 2
+      search (336000 visits): No Move;fakeout,1 68073v 889 | No Move;drainpunch,0 46419v 417 | No Move;drainpunch,1 45081v 389 | No Move;fakeout,0 41510v 317
+      p2b Scrafty used Fake Out  [[still]]
+              p2b Scrafty -- IT FAILED
+      p1b Rotom used Overheat -> p2b: Scrafty
+              p1b Rotom spa 2 fell
+      p2b Scrafty fainted
+      after p1: Metagross 244/364, Rotom-Heat 174/268
+      after p2: Kyurem-Black 0/391, Scrafty 0/334
+
+  RESULT: p1 wins

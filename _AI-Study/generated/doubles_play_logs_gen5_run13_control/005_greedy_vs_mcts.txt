@@ -1,0 +1,104 @@
+battle 5   p1=greedy vs p2=mcts   mcts 300 ms a decision
+  p1: 2v2PL 2025/Semis g2: Kyurem-Black, Infernape, Genesect, Thundurus
+  p2: Untitled 493: Politoed, Ludicolo, Genesect, Togekiss
+
+  Turn 1
+    p1 greedy: move 1 1, move 3 1
+    p2 mcts: move 1 2, move 4 1
+      search (10000 visits): scald,1;fakeout,0 405v 291 | switch genesect;hydropump,1 384v 274 | icywind,0;hydropump,1 374v 266 | scald,0;hydropump,1 362v 256
+      p2b Ludicolo used Fake Out -> p1a: Kyurem
+      p1b Infernape used Overheat -> p2a: Politoed
+              p1b Infernape used up its Fire Gem
+              p1b Infernape spa 2 fell
+              p1a Kyurem COULD NOT MOVE (flinch)
+      p2a Politoed used Scald -> p1b: Infernape
+      p1b Infernape fainted
+      after p1: Kyurem-Black 423/454, Infernape 0/293
+      after p2: Politoed 325/383, Ludicolo 271/301
+
+  Turn 2
+      p1b <- Genesect comes in (290/290)
+              p1b Genesect atk 1 rose
+      after p1: Kyurem-Black 423/454, Genesect 290/290
+      after p2: Politoed 325/383, Ludicolo 271/301
+
+  Turn 3
+    p1 greedy: move 1 1, move 2 1
+    p2 mcts: switch 3, move 1 2   (slot0 Politoed -> Genesect)
+      search (5000 visits): switch genesect;hydropump,1 238v 165 | helpinghand,1;hydropump,1 190v 126 | icywind,0;hydropump,1 181v 119 | scald,1;hydropump,1 173v 112
+      p2a <- Genesect comes in (285/285)
+              p2a Genesect spa 1 rose
+      p2b Ludicolo used Hydro Pump -> p1b: Genesect
+      p1b Genesect fainted
+      p1a Kyurem used Draco Meteor -> p2a: Genesect
+              p1a Kyurem spa 2 fell
+      after p1: Kyurem-Black 423/454, Genesect 0/290
+      after p2: Genesect 162/285, Ludicolo 241/301
+
+  Turn 4
+      p1b <- Thundurus comes in (299/299)
+      after p1: Kyurem-Black 423/454, Thundurus 299/299
+      after p2: Genesect 162/285, Ludicolo 241/301
+
+  Turn 5
+    p1 greedy: move 1 1, move 1 1
+    p2 mcts: move 3 1, move 3 2
+      search (18000 visits): icebeam,0;icebeam,1 1394v 1000 | flashcannon,0;icebeam,1 1090v 765 | bugbuzz,0;icebeam,1 735v 494 | flashcannon,0;hydropump,1 690v 460
+      p2b Ludicolo used Ice Beam -> p1b: Thundurus
+      p1b Thundurus used Thunderbolt -> p2a: Genesect
+              p1b Thundurus used up its Electric Gem
+      p2a Genesect fainted
+      p1a Kyurem used Draco Meteor -> p2b: Ludicolo
+              p1a Kyurem spa 2 fell
+      after p1: Kyurem-Black 423/454, Thundurus 23/299
+      after p2: Genesect 0/285, Ludicolo 85/301
+
+  Turn 6
+      p2a <- Politoed comes in (325/383)
+      after p1: Kyurem-Black 423/454, Thundurus 23/299
+      after p2: Politoed 325/383, Ludicolo 85/301
+
+  Turn 7
+    p1 greedy: move 1 2, move 1 2
+    p2 mcts: move 1 1, move 2 2
+      search (21000 visits): scald,0;gigadrain,1 1150v 606 | icywind,0;icebeam,1 976v 503 | icywind,0;gigadrain,1 956v 491 | scald,0;icebeam,1 951v 488
+      p2b Ludicolo used Giga Drain -> p1b: Thundurus
+              p1b Thundurus -- critical hit
+      p1b Thundurus fainted
+      p1a Kyurem used Draco Meteor -> p2b: Ludicolo
+              p1a Kyurem spa 2 fell
+      p2b Ludicolo fainted
+      p2a Politoed used Scald -> p1a: Kyurem
+              p1a Kyurem is now brn
+      after p1: Kyurem-Black 301/454, Thundurus 0/299
+      after p2: Politoed 325/383, Ludicolo 0/301
+
+  Turn 8
+      p2b <- Togekiss comes in (374/374)
+      after p1: Kyurem-Black 301/454, Thundurus 0/299
+      after p2: Politoed 325/383, Togekiss 374/374
+
+  Turn 9
+    p1 greedy: move 1 1, pass
+    p2 mcts: move 1 1, move 2 1
+      search (73000 visits): scald,0;airslash,0 65287v 62750 | icywind,0;airslash,0 4199v 3687 | helpinghand,1;airslash,0 1013v 819 | scald,0;roost,1 282v 194
+      p1a Kyurem used Draco Meteor -> p2a: Politoed  [[miss]]
+              p1a Kyurem -- MISSED
+      p2b Togekiss used Air Slash -> p1a: Kyurem
+      p2a Politoed used Scald -> p1a: Kyurem
+      after p1: Kyurem-Black 59/454, Thundurus 0/299
+      after p2: Politoed 325/383, Togekiss 374/374
+
+  Turn 10
+    p1 greedy: move 1 1, pass
+    p2 mcts: move 1 1, move 1
+      search (291000 visits): scald,0;followme,1 18259v 18258 | scald,0;airslash,0 18259v 18258 | scald,0;thunderwave,0 18259v 18258 | scald,0;roost,1 18259v 18258
+      p2b Togekiss used Follow Me
+      p1a Kyurem used Draco Meteor -> p2b: Togekiss
+      p2a Politoed used Scald -> p1a: Kyurem
+              p1a Kyurem -- critical hit
+      p1a Kyurem fainted
+      after p1: Kyurem-Black 0/454, Thundurus 0/299
+      after p2: Politoed 325/383, Togekiss 332/374
+
+  RESULT: p2 wins

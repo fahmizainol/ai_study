@@ -1,0 +1,105 @@
+battle 10   p1=greedy vs p2=mcts   mcts 300 ms a decision
+  p1: Vs Zio Blastoise: Deoxys-Attack, Infernape, Blastoise, Kyurem-Black
+  p2: rotom ttar latios: Rotom-Heat, Tyranitar, Latios, Tornadus
+
+  Turn 1
+    p1 greedy: move 2 1, move 2 1
+    p2 mcts: move 1 1, move 3
+      search (28000 visits): thunderbolt,0;protect,1 3626v 2290 | thunderbolt,1;protect,1 1386v 811 | thunderbolt,0;rockslide,0 900v 500 | thunderbolt,0;switch latios 776v 422
+      p2b Tyranitar used Protect
+      p1a Deoxys used Psycho Boost -> p2a: Rotom
+              p1a Deoxys spa 2 fell
+      p2a Rotom fainted
+      p1b Infernape used Overheat -> p2b: Tyranitar
+              p2b Tyranitar -- move: Protect
+      after p1: Deoxys-Attack 202/241, Infernape 275/293
+      after p2: Rotom-Heat 0/304, Tyranitar 404/404
+
+  Turn 2
+      p2a <- Latios comes in (301/301)
+      after p1: Deoxys-Attack 202/241, Infernape 275/293
+      after p2: Latios 301/301, Tyranitar 404/404
+
+  Turn 3
+    p1 greedy: move 2 1, move 2 1
+    p2 mcts: move 2 2, move 3
+      search (20000 visits): psychic,1;protect,1 3327v 2326 | psychic,1;rockslide,0 1842v 1239 | psychic,1;crunch,0 1617v 1076 | psychic,1;thunderwave,0 1056v 675
+      p2b Tyranitar used Protect  [[still]]
+              p2b Tyranitar -- IT FAILED
+      p1a Deoxys used Psycho Boost -> p2a: Latios
+              p1a Deoxys spa 2 fell
+      p2a Latios used Psychic -> p1b: Infernape
+      p1b Infernape fainted
+      after p1: Deoxys-Attack 163/241, Infernape 0/293
+      after p2: Latios 193/301, Tyranitar 404/404
+
+  Turn 4
+      p1b <- Blastoise comes in (362/362)
+      after p1: Deoxys-Attack 163/241, Blastoise 362/362
+      after p2: Latios 193/301, Tyranitar 404/404
+
+  Turn 5
+    p1 greedy: move 2 1, move 3 1
+    p2 mcts: move 2 2, move 3
+      search (20000 visits): psychic,1;protect,1 1298v 617 | psychic,0;protect,1 1106v 515 | tailwind,0;protect,1 1041v 481 | dracometeor,1;protect,1 986v 451
+      p2b Tyranitar used Protect
+      p1a Deoxys used Psycho Boost -> p2a: Latios
+              p1a Deoxys spa 2 fell
+      p2a Latios used Psychic -> p1b: Blastoise
+      p1b Blastoise used Hydro Pump -> p2a: Latios  [[miss]]
+              p1b Blastoise -- MISSED
+      after p1: Deoxys-Attack 124/241, Blastoise 237/362
+      after p2: Latios 107/301, Tyranitar 404/404
+
+  Turn 6
+    p1 greedy: move 2 1, move 3 1
+    p2 mcts: move 1 2, move 3
+      search (24000 visits): dracometeor,1;protect,1 2601v 1285 | dracometeor,1;switch tornadus 1173v 529 | psychic,1;protect,1 1089v 486 | tailwind,0;protect,1 989v 435
+      p2b Tyranitar used Protect
+      p1a Deoxys used Psycho Boost -> p2a: Latios
+      p2a Latios used Draco Meteor -> p1b: Blastoise
+              p2a Latios used up its Dragon Gem
+              p2a Latios spa 2 fell
+      p1b Blastoise fainted
+      after p1: Deoxys-Attack 85/241, Blastoise 0/362
+      after p2: Latios 44/301, Tyranitar 404/404
+
+  Turn 7
+      p1b <- Kyurem-Black comes in (454/454)
+      after p1: Deoxys-Attack 85/241, Kyurem-Black 454/454
+      after p2: Latios 44/301, Tyranitar 404/404
+
+  Turn 8
+    p1 greedy: move 2 1, move 1 1
+    p2 mcts: move 1 2, move 3
+      search (32000 visits): dracometeor,1;protect,1 6383v 3944 | tailwind,0;protect,1 3959v 2386 | psychic,1;protect,1 2383v 1386 | protect,0;protect,1 1520v 848
+      p2b Tyranitar used Protect  [[still]]
+              p2b Tyranitar -- IT FAILED
+      p1a Deoxys used Psycho Boost -> p2a: Latios
+      p2a Latios fainted
+      p1b Kyurem used Draco Meteor -> p2b: Tyranitar
+              p2b Tyranitar -- critical hit
+              p1b Kyurem spa 2 fell
+      p2b Tyranitar fainted
+      after p1: Deoxys-Attack 46/241, Kyurem-Black 381/454
+      after p2: Latios 0/301, Tyranitar 0/404
+
+  Turn 9
+      p2a <- Tornadus comes in (299/299)
+      after p1: Deoxys-Attack 46/241, Kyurem-Black 381/454
+      after p2: Tornadus 299/299, Tyranitar 0/404
+
+  Turn 10
+    p1 greedy: move 2 1, move 1 1
+    p2 mcts: move 3 2, pass
+      search (380000 visits): acrobatics,1;No Move 156690v 9642 | superpower,1;No Move 147131v 8991 | protect,0;No Move 52613v 2748 | acrobatics,0;No Move 6662v 81
+      p1a Deoxys used Psycho Boost -> p2a: Tornadus
+      p2a Tornadus used Acrobatics -> p1b: Kyurem
+              p2a Tornadus used up its Flying Gem
+      p1b Kyurem used Draco Meteor -> p2a: Tornadus
+              p1b Kyurem spa 2 fell
+      p2a Tornadus fainted
+      after p1: Deoxys-Attack 22/241, Kyurem-Black 80/454
+      after p2: Tornadus 0/299, Tyranitar 0/404
+
+  RESULT: p1 wins

@@ -1,0 +1,84 @@
+battle 29   p1=greedy vs p2=mcts   mcts 300 ms a decision
+  p1: darkrai mogus tran kyub: Darkrai, Amoonguss, Heatran, Kyurem-Black
+  p2: [PL Week 2] Amoongus + HO: Amoonguss, Kyurem-Black, Infernape, Keldeo-Resolute
+
+  Turn 1
+    p1 greedy: move 2 1, move 3 1
+    p2 mcts: switch 3, switch 4   (slot0 Amoonguss -> Infernape; slot1 Kyurem-Black -> Keldeo-Resolute)
+      search (33000 visits): switch infernape;switch keldeoresolute 8395v 8140 | spore,1;dracometeor,1 7721v 2277 | protect,0;icebeam,1 2531v 654 | ragepowder,0;fusionbolt,1 472v 67
+      p2b <- Keldeo-Resolute comes in (323/323)
+      p2a <- Infernape comes in (293/293)
+      p1a Darkrai used Spacial Rend -> p2a: Infernape  [[miss]]
+              p1a Darkrai -- MISSED
+      p1b Amoonguss used Giga Drain -> p2a: Infernape
+      after p1: Darkrai 281/281, Amoonguss 432/432
+      after p2: Infernape 237/293, Keldeo-Resolute 323/323
+
+  Turn 2
+    p1 greedy: move 2 1, move 3 1
+    p2 mcts: move 3 2, move 2 1
+      search (28000 visits): closecombat,1;secretsword,0 393v 8 | overheat,0;secretsword,0 392v 8 | overheat,1;secretsword,0 389v 7 | closecombat,0;secretsword,0 389v 7
+      p1a Darkrai used Spacial Rend -> p2a: Infernape
+      p2b Keldeo used Secret Sword -> p1a: Darkrai
+      p1a Darkrai fainted
+      p2a Infernape used Close Combat -> p1b: Amoonguss
+              p2a Infernape def 1 fell
+              p2a Infernape spd 1 fell
+      p1b Amoonguss used Giga Drain -> p2a: Infernape
+      p2a Infernape fainted
+      after p1: Darkrai 0/281, Amoonguss 367/432
+      after p2: Infernape 0/293, Keldeo-Resolute 291/323
+
+  Turn 3
+      p1a <- Heatran comes in (386/386)
+      p2a <- Amoonguss comes in (432/432)
+      after p1: Heatran 386/386, Amoonguss 367/432
+      after p2: Amoonguss 432/432, Keldeo-Resolute 291/323
+
+  Turn 4
+    p1 greedy: move 2, move 3 2
+    p2 mcts: move 1, move 1 1
+      search (30000 visits): ragepowder,0;hydropump,0 4243v 3546 | protect,0;secretsword,1 1898v 1521 | spore,0;hydropump,1 1857v 1484 | spore,1;secretsword,0 1827v 1532
+      p2a Amoonguss used Rage Powder
+      p2b Keldeo used Hydro Pump -> p1a: Heatran  [[miss]]
+              p2b Keldeo -- MISSED
+      p1a Heatran used Eruption -> p2a: Amoonguss  [[spread] p2a,p2b]
+              p1a Heatran used up its Fire Gem
+      p2a Amoonguss fainted
+      p1b Amoonguss used Giga Drain -> p2b: Keldeo
+      p2b Keldeo fainted
+      after p1: Heatran 386/386, Amoonguss 426/432
+      after p2: Amoonguss 0/432, Keldeo-Resolute 0/323
+
+  Turn 5
+      p2a <- Kyurem-Black comes in (391/391)
+      after p1: Heatran 386/386, Amoonguss 426/432
+      after p2: Kyurem-Black 391/391, Keldeo-Resolute 0/323
+
+  Turn 6
+    p1 greedy: move 2, move 3 1
+    p2 mcts: move 3 1, pass
+      search (120000 visits): earthpower,0;No Move 38768v 2670 | earthpower,1;No Move 23632v 1465 | icebeam,1;No Move 14313v 759 | icebeam,0;No Move 14264v 755
+      p2a Kyurem used Earth Power -> p1a: Heatran
+      p1a Heatran fainted
+      p1b Amoonguss used Giga Drain -> p2a: Kyurem
+      after p1: Heatran 0/386, Amoonguss 432/432
+      after p2: Kyurem-Black 352/391, Keldeo-Resolute 0/323
+
+  Turn 7
+      p1a <- Kyurem-Black comes in (391/391)
+      after p1: Kyurem-Black 391/391, Amoonguss 432/432
+      after p2: Kyurem-Black 352/391, Keldeo-Resolute 0/323
+
+  Turn 8
+    p1 greedy: move 2 1, move 3 1
+    p2 mcts: move 3 1, pass
+      search (474000 visits): earthpower,0;No Move 268824v 4848 | earthpower,1;No Move 205176v 3407
+      p2a Kyurem used Earth Power -> p1a: Kyurem
+      p1a Kyurem used Draco Meteor -> p2a: Kyurem
+              p1a Kyurem spa 2 fell
+      p2a Kyurem fainted
+      after p1: Kyurem-Black 221/391, Amoonguss 432/432
+      after p2: Kyurem-Black 0/391, Keldeo-Resolute 0/323
+
+  RESULT: p1 wins

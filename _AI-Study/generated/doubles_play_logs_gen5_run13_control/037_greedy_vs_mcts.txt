@@ -1,0 +1,54 @@
+battle 37   p1=greedy vs p2=mcts   mcts 300 ms a decision
+  p1: [PL Week 2-3] Lucario: Thundurus, Kyurem-Black, Lucario, Togekiss
+  p2: gene terrak volc lati: Genesect, Terrakion, Volcarona, Latios
+
+  Turn 1
+    p1 greedy: move 1 1, move 2 1
+    p2 mcts: move 2 2, move 3
+      search (18000 visits): ironhead,1;rockslide,0 1096v 755 | ironhead,1;stoneedge,0 720v 473 | xscissor,1;rockslide,0 574v 366 | icebeam,0;closecombat,1 505v 316
+      p2a Genesect used Iron Head -> p1b: Kyurem
+      p1b Kyurem fainted
+      p1a Thundurus used Thunderbolt -> p2a: Genesect
+      p2b Terrakion used Rock Slide -> p1a: Thundurus
+      p1a Thundurus fainted
+      after p1: Thundurus 0/298, Kyurem-Black 0/391
+      after p2: Genesect 18/283, Terrakion 291/323
+
+  Turn 2
+      p1a <- Lucario comes in (281/281)
+      p1b <- Togekiss comes in (374/374)
+      after p1: Lucario 281/281, Togekiss 374/374
+      after p2: Genesect 18/283, Terrakion 291/323
+
+  Turn 3
+    p1 greedy: move 1 1, move 1 1
+    p2 mcts: move 2 2, move 3
+      search (42000 visits): ironhead,1;rockslide,0 15996v 11748 | ironhead,1;closecombat,0 12745v 9304 | ironhead,1;closecombat,1 5480v 3883 | ironhead,1;stoneedge,1 1470v 956
+      p2a Genesect used Iron Head -> p1b: Togekiss
+      p2b Terrakion used Rock Slide -> p1a: Lucario  [[spread] p1a,p1b]
+              p1b Togekiss -- critical hit
+      p1b Togekiss fainted
+      p1a Lucario used Aura Sphere -> p2a: Genesect
+              p1a Lucario used up its Fighting Gem
+      p2a Genesect fainted
+      after p1: Lucario 234/281, Togekiss 0/374
+      after p2: Genesect 0/283, Terrakion 259/323
+
+  Turn 4
+      p2a <- Volcarona comes in (361/361)
+      after p1: Lucario 234/281, Togekiss 0/374
+      after p2: Volcarona 361/361, Terrakion 259/323
+
+  Turn 5
+    p1 greedy: move 1 2, pass
+    p2 mcts: switch 4, move 2 1   (slot0 Volcarona -> Latios)
+      search (174000 visits): switch latios;closecombat,0 136822v 133531 | protect,0;closecombat,0 7742v 7137 | bugbuzz,0;closecombat,0 5669v 5176 | ragepowder,0;closecombat,0 4932v 4481
+      p2a <- Latios comes in (301/301)
+      p2b Terrakion used Close Combat -> p1a: Lucario
+              p2b Terrakion def 1 fell
+              p2b Terrakion spd 1 fell
+      p1a Lucario fainted
+      after p1: Lucario 0/281, Togekiss 0/374
+      after p2: Latios 301/301, Terrakion 227/323
+
+  RESULT: p2 wins

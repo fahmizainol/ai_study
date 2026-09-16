@@ -1,0 +1,84 @@
+battle 28   p1=greedy vs p2=mcts   mcts 300 ms a decision
+  p1: Genesect sun (Oh god why): Genesect, Ninetales, Venusaur, Mamoswine
+  p2: 2v2 Pool League II/2v2 Pools - BW 7: Snorlax, Chandelure, Darkrai, Infernape
+
+  Turn 1
+    p1 greedy: move 1 1, move 3 1
+    p2 mcts: move 2 1, move 2 2
+      search (11000 visits): firepunch,0;shadowball,1 604v 521 | firepunch,0;trickroom,0 425v 352 | doubleedge,1;overheat,0 392v 321 | firepunch,0;shadowball,0 391v 320
+      p1a Genesect used Flamethrower -> p2a: Snorlax
+      p2b Chandelure used Shadow Ball -> p1b: Ninetales
+              p1b Ninetales spd 1 fell
+      p1b Ninetales used Solar Beam  [[still]]
+      p2a Snorlax used Fire Punch -> p1a: Genesect
+      p1a Genesect fainted
+      after p1: Genesect 0/291, Ninetales 221/350
+      after p2: Snorlax 358/524, Chandelure 324/324
+
+  Turn 2
+      p1a <- Venusaur comes in (301/301)
+      after p1: Venusaur 301/301, Ninetales 221/350
+      after p2: Snorlax 358/524, Chandelure 324/324
+
+  Turn 3
+    p1 greedy: move 1 1, move 3 1
+    p2 mcts: move 2 1, move 2 2
+      search (22000 visits): firepunch,0;shadowball,1 1924v 1534 | firepunch,0;overheat,1 1898v 1511 | firepunch,0;trickroom,1 921v 692 | firepunch,0;trickroom,0 881v 659
+      p1a Venusaur used Solar Beam  [[still]]
+      p2b Chandelure used Shadow Ball -> p1b: Ninetales
+      p1b Ninetales used Solar Beam  [[still]]
+      p2a Snorlax used Fire Punch -> p1a: Venusaur
+      p1a Venusaur fainted
+      after p1: Venusaur 0/301, Ninetales 46/350
+      after p2: Snorlax 38/524, Chandelure 324/324
+
+  Turn 4
+      p1a <- Mamoswine comes in (361/361)
+      after p1: Mamoswine 361/361, Ninetales 46/350
+      after p2: Snorlax 38/524, Chandelure 324/324
+
+  Turn 5
+    p1 greedy: move 4 1, move 3 1
+    p2 mcts: move 2 2, move 2 1
+      search (49000 visits): firepunch,1;shadowball,0 22522v 16021 | firepunch,0;shadowball,0 2524v 1627 | protect,0;shadowball,0 1533v 949 | protect,0;overheat,0 1451v 894
+      p1a Mamoswine used Superpower -> p2a: Snorlax
+              p2a Snorlax used up its Chople Berry
+              p2a Snorlax used up its Chople Berry
+              p1a Mamoswine atk 1 fell
+              p1a Mamoswine def 1 fell
+      p2a Snorlax fainted
+      p2b Chandelure used Shadow Ball -> p1a: Mamoswine
+      p1b Ninetales used Solar Beam  [[still]]
+      after p1: Mamoswine 124/361, Ninetales 46/350
+      after p2: Snorlax 0/524, Chandelure 285/324
+
+  Turn 6
+      p2a <- Darkrai comes in (281/281)
+      after p1: Mamoswine 124/361, Ninetales 46/350
+      after p2: Darkrai 281/281, Chandelure 285/324
+
+  Turn 7
+    p1 greedy: move 4 2, move 3 2
+    p2 mcts: move 4, move 2 2
+      search (69000 visits): protect,0;shadowball,1 58160v 49640 | protect,0;overheat,1 983v 709 | protect,0;protect,1 385v 243 | icebeam,0;shadowball,1 360v 225
+      p2a Darkrai used Protect
+      p1a Mamoswine used Superpower -> p2b: Chandelure
+              p2b Chandelure -- IMMUNE
+      p2b Chandelure used Shadow Ball -> p1b: Ninetales
+      p1b Ninetales fainted
+      after p1: Mamoswine 124/361, Ninetales 0/350
+      after p2: Darkrai 281/281, Chandelure 285/324
+
+  Turn 8
+    p1 greedy: move 4 2, pass
+    p2 mcts: move 1 1, move 2 1
+      search (610000 visits): darkpulse,0;shadowball,0 43196v 43196 | icebeam,0;shadowball,0 43196v 43196 | focusblast,0;shadowball,0 43196v 43196 | protect,0;shadowball,0 43195v 43195
+      p1a Mamoswine used Superpower -> p2b: Chandelure
+              p2b Chandelure -- IMMUNE
+      p2a Darkrai used Dark Pulse -> p1a: Mamoswine
+              p1a Mamoswine -- critical hit
+      p1a Mamoswine fainted
+      after p1: Mamoswine 0/361, Ninetales 0/350
+      after p2: Darkrai 253/281, Chandelure 285/324
+
+  RESULT: p2 wins

@@ -1,0 +1,54 @@
+battle 37   p1=greedy vs p2=mcts   mcts 300 ms a decision
+  p1: [PL Week 2-3] Lucario: Thundurus, Kyurem-Black, Lucario, Togekiss
+  p2: gene terrak volc lati: Genesect, Terrakion, Volcarona, Latios
+
+  Turn 1
+    p1 greedy: move 1 1, move 2 1
+    p2 mcts: move 2 2, move 3
+      search (17000 visits): ironhead,1;rockslide,0 818v 555 | ironhead,1;stoneedge,0 790v 534 | xscissor,1;rockslide,0 609v 398 | icebeam,0;closecombat,1 507v 323
+      p2a Genesect used Iron Head -> p1b: Kyurem
+      p1b Kyurem fainted
+      p1a Thundurus used Thunderbolt -> p2a: Genesect
+      p2b Terrakion used Rock Slide -> p1a: Thundurus
+      p1a Thundurus fainted
+      after p1: Thundurus 0/298, Kyurem-Black 0/391
+      after p2: Genesect 18/283, Terrakion 291/323
+
+  Turn 2
+      p1a <- Lucario comes in (281/281)
+      p1b <- Togekiss comes in (374/374)
+      after p1: Lucario 281/281, Togekiss 374/374
+      after p2: Genesect 18/283, Terrakion 291/323
+
+  Turn 3
+    p1 greedy: move 1 1, move 1 1
+    p2 mcts: move 2 2, move 2 1
+      search (36000 visits): ironhead,1;closecombat,0 12150v 8880 | ironhead,1;rockslide,0 9198v 6666 | ironhead,1;closecombat,1 7064v 5072 | ironhead,1;stoneedge,1 1433v 934
+      p2a Genesect used Iron Head -> p1b: Togekiss
+              p1b Togekiss used up its Sitrus Berry
+      p2b Terrakion used Close Combat -> p1a: Lucario
+              p2b Terrakion def 1 fell
+              p2b Terrakion spd 1 fell
+      p1a Lucario fainted
+      p1b Togekiss used Air Slash -> p2a: Genesect
+      p2a Genesect fainted
+      after p1: Lucario 0/281, Togekiss 266/374
+      after p2: Genesect 0/283, Terrakion 259/323
+
+  Turn 4
+      p2a <- Volcarona comes in (361/361)
+      after p1: Lucario 0/281, Togekiss 266/374
+      after p2: Volcarona 361/361, Terrakion 259/323
+
+  Turn 5
+    p1 greedy: pass, move 1 2
+    p2 mcts: move 4 2, move 2 2
+      search (224000 visits): overheat,1;closecombat,1 99609v 98919 | bugbuzz,1;rockslide,1 25269v 24702 | overheat,1;rockslide,1 23403v 22849 | bugbuzz,1;closecombat,1 13292v 12837
+      p2b Terrakion used Close Combat -> p1b: Togekiss
+              p2b Terrakion def 1 fell
+              p2b Terrakion spd 1 fell
+      p1b Togekiss fainted
+      after p1: Lucario 0/281, Togekiss 0/374
+      after p2: Volcarona 361/361, Terrakion 227/323
+
+  RESULT: p2 wins

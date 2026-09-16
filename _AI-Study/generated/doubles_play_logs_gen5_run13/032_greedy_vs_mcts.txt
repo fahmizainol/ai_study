@@ -1,0 +1,108 @@
+battle 32   p1=greedy vs p2=mcts   mcts 300 ms a decision
+  p1: [PL Week 3] Mew and Deo-A: Mew, Infernape, Kyurem-Black, Deoxys-Attack
+  p2: Untitled 1083: Jellicent, Hariyama, Metagross, Tyranitar
+
+  Turn 1
+    p1 greedy: move 4 1, move 2 1
+    p2 mcts: move 2 2, switch 4   (slot1 Hariyama -> Tyranitar)
+      search (18000 visits): scald,1;switch tyranitar 763v 474 | scald,1;fakeout,1 631v 382 | scald,1;switch metagross 598v 359 | scald,1;firepunch,1 559v 332
+      p2b <- Tyranitar comes in (404/404)
+      p1b Infernape used Overheat -> p2a: Jellicent
+              p1b Infernape used up its Fire Gem
+              p1b Infernape spa 2 fell
+      p1a Mew used Psychic -> p2a: Jellicent
+      p2a Jellicent used Scald -> p1b: Infernape
+      after p1: Mew 373/397, Infernape 53/293
+      after p2: Jellicent 130/404, Tyranitar 404/404
+
+  Turn 2
+    p1 greedy: move 4 1, move 2 1
+    p2 mcts: move 3, move 1 1
+      search (27000 visits): recover,0;crunch,0 1835v 1144 | recover,0;protect,1 1534v 941 | scald,0;crunch,0 1332v 805 | recover,0;switch hariyama 978v 571
+      p1b Infernape used Overheat -> p2a: Jellicent
+              p1b Infernape spa 2 fell
+      p1a Mew used Psychic -> p2a: Jellicent
+      p2a Jellicent fainted
+      p2b Tyranitar used Crunch -> p1a: Mew
+              p1a Mew def 1 fell
+              p1a Mew used up its Sitrus Berry
+      after p1: Mew 142/397, Infernape 35/293
+      after p2: Jellicent 0/404, Tyranitar 404/404
+
+  Turn 3
+      p2a <- Metagross comes in (364/364)
+      after p1: Mew 142/397, Infernape 35/293
+      after p2: Metagross 364/364, Tyranitar 404/404
+
+  Turn 4
+    p1 greedy: move 4 1, move 2 1
+    p2 mcts: move 2 2, move 2
+      search (34000 visits): bulletpunch,1;rockslide,0 8744v 5211 | bulletpunch,1;crunch,0 3006v 1688 | bulletpunch,0;protect,1 1099v 557 | bulletpunch,0;switch hariyama 1009v 505
+      p2a Metagross used Bullet Punch -> p1b: Infernape
+              p2a Metagross used up its Steel Gem
+              p1b Infernape -- critical hit
+      p1b Infernape fainted
+      p1a Mew used Psychic -> p2a: Metagross
+              p2a Metagross -- critical hit
+      p2b Tyranitar used Rock Slide -> p1a: Mew
+              p2b Tyranitar used up its Rock Gem
+      p1a Mew fainted
+      after p1: Mew 0/397, Infernape 0/293
+      after p2: Metagross 301/364, Tyranitar 404/404
+
+  Turn 5
+      p1b <- Deoxys-Attack comes in (241/241)
+      p1a <- Kyurem-Black comes in (391/391)
+      after p1: Kyurem-Black 391/391, Deoxys-Attack 241/241
+      after p2: Metagross 301/364, Tyranitar 404/404
+
+  Turn 6
+    p1 greedy: move 1 1, move 3 1
+    p2 mcts: move 1 2, move 2
+      search (6000 visits): meteormash,1;rockslide,0 225v 202 | bulletpunch,1;rockslide,0 224v 201 | meteormash,0;rockslide,0 208v 185 | meteormash,0;crunch,1 205v 182
+      p1b Deoxys used Psycho Boost -> p2a: Metagross
+              p1b Deoxys spa 2 fell
+      p1a Kyurem used Draco Meteor -> p2a: Metagross
+              p2a Metagross -- critical hit
+              p1a Kyurem spa 2 fell
+      p2a Metagross fainted
+      p2b Tyranitar used Rock Slide -> p1a: Kyurem  [[spread] p1a]
+              p2b Tyranitar -- MISSED
+      after p1: Kyurem-Black 125/391, Deoxys-Attack 202/241
+      after p2: Metagross 0/364, Tyranitar 404/404
+
+  Turn 7
+      p2a <- Hariyama comes in (492/492)
+      after p1: Kyurem-Black 125/391, Deoxys-Attack 202/241
+      after p2: Hariyama 492/492, Tyranitar 404/404
+
+  Turn 8
+    p1 greedy: move 1 1, move 3 1
+    p2 mcts: move 1 2, move 3 2
+      search (72000 visits): fakeout,1;superpower,1 13027v 11061 | icepunch,1;superpower,1 8538v 7167 | firepunch,1;superpower,1 7443v 6221 | fakeout,1;crunch,1 5880v 4874
+      p2a Hariyama used Fake Out -> p1b: Deoxys
+              p1b Deoxys COULD NOT MOVE (flinch)
+      p1a Kyurem used Draco Meteor -> p2a: Hariyama
+              p1a Kyurem spa 2 fell
+      p2b Tyranitar used Superpower -> p1b: Deoxys
+              p2b Tyranitar atk 1 fell
+              p2b Tyranitar def 1 fell
+      p1b Deoxys fainted
+              p2a Hariyama is now brn
+      after p1: Kyurem-Black 101/391, Deoxys-Attack 0/241
+      after p2: Hariyama 282/492, Tyranitar 404/404
+
+  Turn 9
+    p1 greedy: move 1 1, pass
+    p2 mcts: move 1 1, move 1 1
+      search (1146000 visits): fakeout,0;crunch,0 72912v 72912 | fakeout,0;superpower,0 72912v 72912 | closecombat,0;crunch,0 72911v 72911 | closecombat,0;superpower,0 72911v 72911
+      p2a Hariyama used Fake Out  [[still]]
+              p2a Hariyama -- IT FAILED
+      p1a Kyurem used Draco Meteor -> p2a: Hariyama
+              p1a Kyurem spa 2 fell
+      p2b Tyranitar used Crunch -> p1a: Kyurem
+      p1a Kyurem fainted
+      after p1: Kyurem-Black 0/391, Deoxys-Attack 0/241
+      after p2: Hariyama 149/492, Tyranitar 404/404
+
+  RESULT: p2 wins

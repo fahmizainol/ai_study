@@ -1,0 +1,138 @@
+battle 21   p1=greedy vs p2=mcts   mcts 300 ms a decision
+  p1: Metagross chansey but different: Metagross, Chansey, Keldeo, Landorus-Therian
+  p2: Untitled 1072: Scrafty, Kyurem-Black, Tornadus, Victini
+
+  Turn 1
+    p1 greedy: move 1 1, move 1 1
+    p2 mcts: move 2 1, move 4 1
+      search (24000 visits): drainpunch,0;earthpower,0 309v 41 | fakeout,1;earthpower,0 304v 39 | taunt,0;earthpower,0 300v 38 | drainpunch,1;icebeam,0 294v 37
+      p2b Kyurem used Earth Power -> p1a: Metagross
+      p1a Metagross used Meteor Mash -> p2a: Scrafty
+              p1a Metagross used up its Steel Gem
+      p2a Scrafty used Drain Punch -> p1a: Metagross
+      p1b Chansey used Seismic Toss -> p2a: Scrafty
+      p2a Scrafty fainted
+      after p1: Metagross 40/364, Chansey 703/703
+      after p2: Scrafty 0/327, Kyurem-Black 391/391
+
+  Turn 2
+      p2a <- Tornadus comes in (299/299)
+      after p1: Metagross 40/364, Chansey 703/703
+      after p2: Tornadus 299/299, Kyurem-Black 391/391
+
+  Turn 3
+    p1 greedy: move 1 1, move 1 1
+    p2 mcts: move 4, switch 4   (slot1 Kyurem-Black -> Victini)
+      search (46000 visits): protect,0;switch victini 8994v 2133 | acrobatics,0;switch victini 2077v 375 | protect,0;earthpower,0 2009v 360 | superpower,1;earthpower,0 1960v 349
+      p2b <- Victini comes in (341/341)
+      p2a Tornadus used Protect
+      p1a Metagross used Meteor Mash -> p2a: Tornadus
+              p2a Tornadus -- move: Protect
+      p1b Chansey used Seismic Toss -> p2a: Tornadus
+              p2a Tornadus -- move: Protect
+      after p1: Metagross 40/364, Chansey 703/703
+      after p2: Tornadus 299/299, Victini 341/341
+
+  Turn 4
+    p1 greedy: move 1 1, move 1 1
+    p2 mcts: move 3 2, move 3
+      search (38000 visits): skydrop,1;glaciate,0 1317v 402 | skydrop,0;glaciate,0 1193v 356 | protect,0;glaciate,0 1189v 355 | superpower,0;glaciate,0 1149v 340
+      p2a Tornadus used Sky Drop  [[still]]
+      p2b Victini used Glaciate -> p1b: Chansey  [[spread] p1a]
+              p2b Victini -- MISSED
+      p1a Metagross used Meteor Mash -> p2a: Tornadus  [[miss]]
+              p1a Metagross -- MISSED
+      after p1: Metagross 22/364, Chansey 703/703
+      after p2: Tornadus 299/299, Victini 341/341
+
+  Turn 5
+    p1 greedy: move 1 1, move 1 1
+    p2 mcts: move 1, move 3
+      search (47000 visits): skydrop,0;glaciate,0 22518v 6420 | skydrop,0;protect,1 8632v 2297 | skydrop,0;boltstrike,1 5906v 1510 | skydrop,0;boltstrike,0 4288v 1051
+      p2a Tornadus used Sky Drop -> p1b: Chansey  [[from] lockedmove]
+              p2a Tornadus used up its Flying Gem
+              p1b Chansey lost Sky Drop
+      p2b Victini used Glaciate -> p1b: Chansey  [[spread] p1a,p1b]
+              p1b Chansey spe 1 fell
+      p1a Metagross used Meteor Mash -> p2a: Tornadus
+              p1a Metagross atk 1 rose
+      p1b Chansey used Seismic Toss -> p2a: Tornadus
+      p2a Tornadus fainted
+      after p1: Metagross 5/364, Chansey 489/703
+      after p2: Tornadus 0/299, Victini 341/341
+
+  Turn 6
+      p2a <- Kyurem-Black comes in (391/391)
+      after p1: Metagross 5/364, Chansey 489/703
+      after p2: Kyurem-Black 391/391, Victini 341/341
+
+  Turn 7
+    p1 greedy: move 1 1, move 1 1
+    p2 mcts: move 1 2, move 3
+      search (40000 visits): dracometeor,1;glaciate,0 2525v 1192 | icebeam,0;glaciate,0 2500v 1180 | icebeam,1;glaciate,0 2475v 1166 | fusionbolt,1;glaciate,0 2464v 1161
+      p2a Kyurem used Draco Meteor -> p1b: Chansey
+              p1b Chansey -- critical hit
+              p2a Kyurem spa 2 fell
+      p2b Victini used Glaciate -> p1a: Metagross  [[spread] p1a,p1b]
+              p1b Chansey spe 1 fell
+      p1a Metagross fainted
+      p1b Chansey used Seismic Toss -> p2a: Kyurem
+      after p1: Metagross 0/364, Chansey 169/703
+      after p2: Kyurem-Black 291/391, Victini 341/341
+
+  Turn 8
+      p1a <- Keldeo comes in (323/323)
+      after p1: Keldeo 323/323, Chansey 169/703
+      after p2: Kyurem-Black 291/391, Victini 341/341
+
+  Turn 9
+    p1 greedy: move 2 1, move 1 1
+    p2 mcts: move 1 1, move 4
+      search (46000 visits): dracometeor,0;protect,1 12118v 3988 | dracometeor,1;protect,1 10937v 3575 | dracometeor,1;boltstrike,0 7680v 2445 | dracometeor,0;boltstrike,0 4203v 1260
+      p2b Victini used Protect
+      p2a Kyurem used Draco Meteor -> p1a: Keldeo
+              p2a Kyurem spa 2 fell
+      p1a Keldeo used Hydro Pump -> p2a: Kyurem
+      p1b Chansey used Seismic Toss -> p2a: Kyurem
+      after p1: Keldeo 155/323, Chansey 169/703
+      after p2: Kyurem-Black 13/391, Victini 341/341
+
+  Turn 10
+    p1 greedy: move 2 1, move 1 1
+    p2 mcts: move 1 1, move 4
+      search (55000 visits): dracometeor,0;protect,1 22219v 7214 | dracometeor,1;protect,1 18374v 5908 | dracometeor,0;glaciate,0 3896v 1095 | dracometeor,1;glaciate,0 2277v 588
+      p2b Victini used Protect  [[still]]
+              p2b Victini -- IT FAILED
+      p2a Kyurem used Draco Meteor -> p1a: Keldeo
+              p2a Kyurem spa 2 fell
+      p1a Keldeo used Hydro Pump -> p2a: Kyurem
+      p2a Kyurem fainted
+      p1b Chansey used Seismic Toss -> p2b: Victini
+      after p1: Keldeo 29/323, Chansey 169/703
+      after p2: Kyurem-Black 0/391, Victini 241/341
+
+  Turn 11
+    p1 greedy: move 2 2, move 1 2
+    p2 mcts: pass, move 4
+      search (52000 visits): No Move;protect,1 48699v 16188 | No Move;glaciate,0 1301v 292 | No Move;boltstrike,0 582v 93 | No Move;boltstrike,1 573v 91
+      p2b Victini used Protect
+      p1a Keldeo used Hydro Pump -> p2b: Victini
+              p2b Victini -- move: Protect
+      p1b Chansey used Seismic Toss -> p2b: Victini
+              p2b Victini -- move: Protect
+      after p1: Keldeo 29/323, Chansey 169/703
+      after p2: Kyurem-Black 0/391, Victini 241/341
+
+  Turn 12
+    p1 greedy: move 2 2, move 1 2
+    p2 mcts: pass, move 4
+      search (56000 visits): No Move;protect,1 52791v 17483 | No Move;glaciate,0 1240v 271 | No Move;boltstrike,1 576v 90 | No Move;boltstrike,0 567v 88
+      p2b Victini used Protect  [[still]]
+              p2b Victini -- IT FAILED
+      p1a Keldeo used Hydro Pump -> p2b: Victini
+      p2b Victini fainted
+      p1a Keldeo fainted
+      after p1: Keldeo 0/323, Chansey 169/703
+      after p2: Kyurem-Black 0/391, Victini 0/341
+
+  RESULT: p1 wins

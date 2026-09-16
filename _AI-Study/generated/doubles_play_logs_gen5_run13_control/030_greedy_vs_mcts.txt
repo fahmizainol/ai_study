@@ -1,0 +1,157 @@
+battle 30   p1=greedy vs p2=mcts   mcts 300 ms a decision
+  p1: Untitled 494: Tornadus, Rotom-Wash, Amoonguss, Terrakion
+  p2: LKJC - KSGL: Kyurem-Black, Scrafty, Genesect, Latios
+
+  Turn 1
+    p1 greedy: move 2 1, move 2 1
+    p2 mcts: move 2 1, move 1 1
+      search (18000 visits): icebeam,0;fakeout,0 529v 284 | fusionbolt,0;fakeout,0 504v 268 | icebeam,0;switch genesect 489v 258 | icebeam,0;fakeout,1 477v 251
+      p2b Scrafty used Fake Out -> p1a: Tornadus
+              p1a Tornadus COULD NOT MOVE (flinch)
+      p1b Rotom used Hydro Pump -> p2a: Kyurem
+      p2a Kyurem used Ice Beam -> p1a: Tornadus
+      p1a Tornadus fainted
+      after p1: Tornadus 0/299, Rotom-Wash 241/241
+      after p2: Kyurem-Black 345/454, Scrafty 334/334
+
+  Turn 2
+      p1a <- Amoonguss comes in (431/431)
+      after p1: Amoonguss 431/431, Rotom-Wash 241/241
+      after p2: Kyurem-Black 345/454, Scrafty 334/334
+
+  Turn 3
+    p1 greedy: move 3 1, move 2 1
+    p2 mcts: move 2 1, move 2 1
+      search (3000 visits): icebeam,0;crunch,0 69v 48 | icebeam,0;drainpunch,1 62v 41 | icebeam,0;crunch,1 54v 34 | icebeam,0;switch genesect 52v 32
+      p1b Rotom used Hydro Pump -> p2a: Kyurem
+      p2a Kyurem used Ice Beam -> p1a: Amoonguss
+              p1a Amoonguss is now frz
+      p2b Scrafty used Crunch -> p1a: Amoonguss
+              p2b Scrafty is now slp
+      p1a Amoonguss fainted
+      after p1: Amoonguss 0/431, Rotom-Wash 241/241
+      after p2: Kyurem-Black 249/454, Scrafty 334/334
+
+  Turn 4
+      p1a <- Terrakion comes in (323/323)
+      after p1: Terrakion 323/323, Rotom-Wash 241/241
+      after p2: Kyurem-Black 249/454, Scrafty 334/334
+
+  Turn 5
+    p1 greedy: move 1 1, move 2 1
+    p2 mcts: move 4, move 3 1
+      search (23000 visits): protect,0;drainpunch,0 2050v 1322 | dracometeor,1;drainpunch,0 1218v 749 | icebeam,0;drainpunch,0 1126v 687 | fusionbolt,0;drainpunch,0 1025v 619
+      p2a Kyurem used Protect
+      p1a Terrakion used Close Combat -> p2a: Kyurem
+              p2a Kyurem -- move: Protect
+      p1b Rotom used Hydro Pump -> p2a: Kyurem
+              p2a Kyurem -- move: Protect
+              p2b Scrafty COULD NOT MOVE (slp)
+      after p1: Terrakion 323/323, Rotom-Wash 241/241
+      after p2: Kyurem-Black 249/454, Scrafty 334/334
+
+  Turn 6
+    p1 greedy: move 1 1, move 2 1
+    p2 mcts: move 1 2, move 3 1
+      search (30000 visits): dracometeor,1;drainpunch,0 1743v 1104 | icebeam,0;drainpunch,0 1467v 913 | fusionbolt,0;drainpunch,0 1197v 730 | fusionbolt,1;drainpunch,0 1049v 630
+      p1a Terrakion used Close Combat -> p2a: Kyurem
+              p1a Terrakion def 1 fell
+              p1a Terrakion spd 1 fell
+      p2a Kyurem fainted
+      p1b Rotom used Hydro Pump -> p2b: Scrafty
+              p2b Scrafty is cured of slp
+      p2b Scrafty used Drain Punch -> p1a: Terrakion
+      p1a Terrakion fainted
+      after p1: Terrakion 0/323, Rotom-Wash 241/241
+      after p2: Kyurem-Black 0/454, Scrafty 334/334
+
+  Turn 7
+      p2a <- Genesect comes in (290/290)
+              p2a Genesect atk 1 rose
+      after p1: Terrakion 0/323, Rotom-Wash 241/241
+      after p2: Genesect 290/290, Scrafty 334/334
+
+  Turn 8
+    p1 greedy: pass, move 2 1
+    p2 mcts: move 3 2, switch 4   (slot1 Scrafty -> Latios)
+      search (46000 visits): bugbuzz,1;switch latios 6549v 2389 | flamethrower,1;switch latios 6218v 2259 | flashcannon,1;switch latios 4844v 1722 | protect,0;switch latios 4467v 1575
+      p2b <- Latios comes in (301/301)
+      p2a Genesect used Bug Buzz -> p1b: Rotom
+              p1b Rotom used up its Sitrus Berry
+      p1b Rotom used Hydro Pump -> p2a: Genesect
+      after p1: Terrakion 0/323, Rotom-Wash 166/241
+      after p2: Genesect 110/290, Latios 301/301
+
+  Turn 9
+    p1 greedy: pass, move 2 1
+    p2 mcts: switch 4, move 4   (slot0 Genesect -> Scrafty)
+      search (50000 visits): switch scrafty;calmmind,1 9747v 4452 | bugbuzz,1;calmmind,1 6422v 2863 | flamethrower,1;calmmind,1 6239v 2776 | protect,0;calmmind,1 5265v 2315
+      p2a <- Scrafty comes in (334/334)
+              p1b Rotom atk 1 fell
+      p2b Latios used Calm Mind
+              p2b Latios spa 1 rose
+              p2b Latios spd 1 rose
+      p1b Rotom used Hydro Pump -> p2a: Scrafty
+      after p1: Terrakion 0/323, Rotom-Wash 166/241
+      after p2: Scrafty 183/334, Latios 301/301
+
+  Turn 10
+    p1 greedy: pass, move 2 1
+    p2 mcts: switch 4, move 4   (slot0 Scrafty -> Genesect)
+      search (52000 visits): switch genesect;calmmind,1 7812v 3394 | crunch,1;calmmind,1 5218v 2205 | fakeout,1;calmmind,1 5025v 2118 | taunt,1;calmmind,1 4847v 2036
+      p2a <- Genesect comes in (110/290)
+              p2a Genesect atk 1 rose
+      p2b Latios used Calm Mind
+              p2b Latios spa 1 rose
+              p2b Latios spd 1 rose
+      p1b Rotom used Hydro Pump -> p2a: Genesect
+      p2a Genesect fainted
+      after p1: Terrakion 0/323, Rotom-Wash 166/241
+      after p2: Genesect 0/290, Latios 301/301
+
+  Turn 11
+      p2a <- Scrafty comes in (183/334)
+              p1b Rotom atk 1 fell
+      after p1: Terrakion 0/323, Rotom-Wash 166/241
+      after p2: Scrafty 183/334, Latios 301/301
+
+  Turn 12
+    p1 greedy: pass, move 2 1
+    p2 mcts: move 1 2, move 4
+      search (64000 visits): fakeout,1;calmmind,1 6343v 2222 | taunt,1;calmmind,1 6323v 2214 | crunch,1;calmmind,1 6279v 2198 | drainpunch,1;calmmind,1 6240v 2183
+      p2a Scrafty used Fake Out -> p1b: Rotom
+      p2b Latios used Calm Mind
+              p2b Latios spa 1 rose
+              p2b Latios spd 1 rose
+              p1b Rotom COULD NOT MOVE (flinch)
+      after p1: Terrakion 0/323, Rotom-Wash 126/241
+      after p2: Scrafty 183/334, Latios 301/301
+
+  Turn 13
+    p1 greedy: pass, move 2 1
+    p2 mcts: move 2 2, move 4
+      search (62000 visits): crunch,1;calmmind,1 5202v 1759 | taunt,1;calmmind,1 5128v 1731 | drainpunch,1;calmmind,1 5107v 1723 | fakeout,1;calmmind,1 5082v 1714
+      p2b Latios used Calm Mind
+              p2b Latios spa 1 rose
+              p2b Latios spd 1 rose
+      p1b Rotom used Hydro Pump -> p2a: Scrafty  [[miss]]
+              p1b Rotom -- MISSED
+      p2a Scrafty used Crunch -> p1b: Rotom
+      after p1: Terrakion 0/323, Rotom-Wash 3/241
+      after p2: Scrafty 183/334, Latios 301/301
+
+  Turn 14
+    p1 greedy: pass, move 1 1
+    p2 mcts: move 3 2, move 4
+      search (70000 visits): drainpunch,1;calmmind,1 5143v 1413 | crunch,1;calmmind,1 5116v 1405 | taunt,1;calmmind,1 5059v 1387 | fakeout,1;calmmind,1 4991v 1366
+      p2b Latios used Calm Mind
+              p2b Latios spa 1 rose
+              p2b Latios spd 1 rose
+      p1b Rotom used Thunderbolt -> p2a: Scrafty
+              p2a Scrafty is now par
+      p2a Scrafty used Drain Punch -> p1b: Rotom
+      p1b Rotom fainted
+      after p1: Terrakion 0/323, Rotom-Wash 0/241
+      after p2: Scrafty 65/334, Latios 301/301
+
+  RESULT: p2 wins

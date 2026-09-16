@@ -1,0 +1,200 @@
+battle 29   p1=greedy vs p2=mcts   mcts 300 ms a decision
+  p1: darkrai mogus tran kyub: Darkrai, Amoonguss, Heatran, Kyurem-Black
+  p2: [PL Week 2] Amoongus + HO: Amoonguss, Kyurem-Black, Infernape, Keldeo-Resolute
+
+  Turn 1
+    p1 greedy: move 2 1, move 3 1
+    p2 mcts: move 2 2, switch 4   (slot1 Kyurem-Black -> Keldeo-Resolute)
+      search (24000 visits): spore,1;switch keldeoresolute 343v 6 | spore,1;icebeam,1 337v 5 | spore,1;earthpower,0 330v 4 | ragepowder,0;fusionbolt,0 325v 4
+      p2b <- Keldeo-Resolute comes in (323/323)
+      p1a Darkrai used Spacial Rend -> p2a: Amoonguss
+      p1b Amoonguss used Giga Drain -> p2a: Amoonguss
+      p2a Amoonguss used Spore -> p1b: Amoonguss
+              p1b Amoonguss is now slp
+      after p1: Darkrai 281/281, Amoonguss 432/432
+      after p2: Amoonguss 309/432, Keldeo-Resolute 323/323
+
+  Turn 2
+    p1 greedy: move 2 1, move 3 1
+    p2 mcts: move 2 2, move 4
+      search (30000 visits): spore,1;protect,1 9039v 4011 | gigadrain,0;hydropump,1 583v 40 | spore,1;switch kyuremblack 447v 19 | gigadrain,1;switch infernape 433v 17
+      p2b Keldeo used Protect
+      p1a Darkrai used Spacial Rend -> p2a: Amoonguss
+              p2a Amoonguss used up its Sitrus Berry
+              p1b Amoonguss COULD NOT MOVE (slp)
+      p2a Amoonguss used Spore -> p1b: Amoonguss
+              p1b Amoonguss -- IT FAILED
+      after p1: Darkrai 281/281, Amoonguss 432/432
+      after p2: Amoonguss 318/432, Keldeo-Resolute 323/323
+
+  Turn 3
+    p1 greedy: move 2 1, move 3 1
+    p2 mcts: move 4, move 4
+      search (30000 visits): protect,0;protect,1 16903v 16230 | protect,0;quickguard,1 2617v 668 | ragepowder,0;switch kyuremblack 350v 37 | ragepowder,0;secretsword,0 208v 8
+      p2b Keldeo used Protect  [[still]]
+              p2b Keldeo -- IT FAILED
+      p2a Amoonguss used Protect
+      p1a Darkrai used Spacial Rend -> p2a: Amoonguss
+              p2a Amoonguss -- move: Protect
+              p1b Amoonguss COULD NOT MOVE (slp)
+      after p1: Darkrai 281/281, Amoonguss 432/432
+      after p2: Amoonguss 318/432, Keldeo-Resolute 323/323
+
+  Turn 4
+    p1 greedy: move 2 1, move 3 1
+    p2 mcts: move 3 2, move 4
+      search (36000 visits): gigadrain,1;protect,1 13478v 12399 | protect,0;secretsword,1 4878v 1137 | protect,0;quickguard,1 2048v 408 | protect,0;secretsword,0 594v 68
+      p2b Keldeo used Protect
+      p1a Darkrai used Spacial Rend -> p2a: Amoonguss
+      p2a Amoonguss used Giga Drain -> p1b: Amoonguss
+              p1b Amoonguss COULD NOT MOVE (slp)
+      after p1: Darkrai 281/281, Amoonguss 412/432
+      after p2: Amoonguss 228/432, Keldeo-Resolute 323/323
+
+  Turn 5
+    p1 greedy: move 2 1, move 3 1
+    p2 mcts: switch 4, switch 3   (slot0 Amoonguss -> Kyurem-Black; slot1 Keldeo-Resolute -> Infernape)
+      search (27000 visits): switch kyuremblack;switch infernape 2600v 412 | ragepowder,0;secretsword,0 668v 51 | spore,0;hydropump,0 625v 42 | protect,0;secretsword,1 616v 40
+      p2b <- Infernape comes in (293/293)
+      p2a <- Kyurem-Black comes in (391/391)
+      p1a Darkrai used Spacial Rend -> p2a: Kyurem
+              p1b Amoonguss is cured of slp
+      p1b Amoonguss used Giga Drain -> p2a: Kyurem
+      after p1: Darkrai 281/281, Amoonguss 432/432
+      after p2: Kyurem-Black 90/391, Infernape 293/293
+
+  Turn 6
+    p1 greedy: move 2 1, move 3 1
+    p2 mcts: move 2 1, move 1 1
+      search (28000 visits): icebeam,0;fakeout,0 380v 33 | dracometeor,0;fakeout,0 363v 29 | icebeam,1;closecombat,0 349v 27 | icebeam,1;fakeout,0 336v 24
+      p2b Infernape used Fake Out -> p1a: Darkrai
+      p2a Kyurem used Ice Beam -> p1a: Darkrai
+              p1a Darkrai COULD NOT MOVE (flinch)
+      p1b Amoonguss used Giga Drain -> p2a: Kyurem
+      after p1: Darkrai 67/281, Amoonguss 432/432
+      after p2: Kyurem-Black 47/391, Infernape 293/293
+
+  Turn 7
+    p1 greedy: move 2 1, move 3 1
+    p2 mcts: switch 4, move 3 2   (slot0 Kyurem-Black -> Amoonguss)
+      search (39000 visits): switch amoonguss;closecombat,1 13335v 3001 | switch keldeoresolute;switch amoonguss 5709v 5272 | icebeam,0;overheat,1 841v 89 | icebeam,0;switch amoonguss 828v 86
+      p2a <- Amoonguss comes in (372/432)
+      p1a Darkrai used Spacial Rend -> p2a: Amoonguss
+      p2b Infernape used Close Combat -> p1b: Amoonguss
+              p2b Infernape def 1 fell
+              p2b Infernape spd 1 fell
+      p1b Amoonguss used Giga Drain -> p2a: Amoonguss
+      after p1: Darkrai 67/281, Amoonguss 361/432
+      after p2: Amoonguss 244/432, Infernape 293/293
+
+  Turn 8
+    p1 greedy: move 2 1, move 3 1
+    p2 mcts: move 2 1, switch 3   (slot1 Infernape -> Keldeo-Resolute)
+      search (34000 visits): spore,0;switch keldeoresolute 10284v 5563 | gigadrain,0;switch keldeoresolute 7865v 2164 | protect,0;closecombat,0 476v 57 | protect,0;feint,0 356v 31
+      p2b <- Keldeo-Resolute comes in (323/323)
+      p1a Darkrai used Spacial Rend -> p2a: Amoonguss
+      p1b Amoonguss used Giga Drain -> p2a: Amoonguss
+      p2a Amoonguss used Spore -> p1a: Darkrai
+              p1a Darkrai is now slp
+      after p1: Darkrai 67/281, Amoonguss 370/432
+      after p2: Amoonguss 125/432, Keldeo-Resolute 323/323
+
+  Turn 9
+    p1 greedy: move 2 1, move 3 1
+    p2 mcts: move 2 2, move 3
+      search (40000 visits): spore,1;quickguard,1 16780v 4188 | gigadrain,0;switch infernape 6570v 6201 | spore,0;switch kyuremblack 991v 134 | ragepowder,0;switch infernape 377v 18
+      p2b Keldeo used Quick Guard
+              p1a Darkrai COULD NOT MOVE (slp)
+      p1b Amoonguss used Giga Drain -> p2a: Amoonguss
+      p2a Amoonguss used Spore -> p1b: Amoonguss
+              p1b Amoonguss is now slp
+      after p1: Darkrai 67/281, Amoonguss 378/432
+      after p2: Amoonguss 109/432, Keldeo-Resolute 323/323
+
+  Turn 10
+    p1 greedy: move 2 1, move 3 1
+    p2 mcts: move 2 1, switch 3   (slot1 Keldeo-Resolute -> Infernape)
+      search (31000 visits): spore,0;switch infernape 17690v 17466 | ragepowder,0;secretsword,0 236v 4 | ragepowder,0;switch infernape 235v 4 | gigadrain,0;protect,1 231v 3
+      p2b <- Infernape comes in (293/293)
+              p1a Darkrai is cured of slp
+      p1a Darkrai used Spacial Rend -> p2a: Amoonguss
+              p2a Amoonguss -- critical hit
+      p2a Amoonguss fainted
+              p1b Amoonguss COULD NOT MOVE (slp)
+      after p1: Darkrai 67/281, Amoonguss 378/432
+      after p2: Amoonguss 0/432, Infernape 293/293
+
+  Turn 11
+      p2a <- Keldeo-Resolute comes in (323/323)
+      after p1: Darkrai 67/281, Amoonguss 378/432
+      after p2: Keldeo-Resolute 323/323, Infernape 293/293
+
+  Turn 12
+    p1 greedy: move 3 1, move 3 1
+    p2 mcts: move 2 1, move 1 1
+      search (24000 visits): secretsword,0;fakeout,0 613v 108 | secretsword,1;fakeout,0 577v 98 | hydropump,0;fakeout,0 572v 97 | secretsword,0;overheat,1 546v 90
+      p2b Infernape used Fake Out -> p1a: Darkrai
+              p1a Darkrai COULD NOT MOVE (flinch)
+      p2a Keldeo used Secret Sword -> p1a: Darkrai
+      p1a Darkrai fainted
+              p1b Amoonguss is cured of slp
+      p1b Amoonguss used Giga Drain -> p2a: Keldeo
+      after p1: Darkrai 0/281, Amoonguss 432/432
+      after p2: Keldeo-Resolute 111/323, Infernape 293/293
+
+  Turn 13
+      p1a <- Heatran comes in (386/386)
+      after p1: Heatran 386/386, Amoonguss 432/432
+      after p2: Keldeo-Resolute 111/323, Infernape 293/293
+
+  Turn 14
+    p1 greedy: move 2, move 3 1
+    p2 mcts: move 2 1, move 2 2
+      search (25000 visits): secretsword,0;overheat,1 5197v 3084 | hydropump,0;overheat,1 3629v 2109 | protect,0;overheat,1 3117v 1794 | protect,0;overheat,0 1393v 746
+      p2b Infernape used Overheat -> p1b: Amoonguss
+              p2b Infernape used up its Fire Gem
+              p2b Infernape spa 2 fell
+      p1b Amoonguss fainted
+      p2a Keldeo used Secret Sword -> p1a: Heatran
+      p1a Heatran used Eruption -> p2a: Keldeo  [[spread] p2a,p2b]
+              p1a Heatran used up its Fire Gem
+      after p1: Heatran 19/386, Amoonguss 0/432
+      after p2: Keldeo-Resolute 71/323, Infernape 282/293
+
+  Turn 15
+      p1b <- Kyurem-Black comes in (391/391)
+      after p1: Heatran 19/386, Kyurem-Black 391/391
+      after p2: Keldeo-Resolute 71/323, Infernape 282/293
+
+  Turn 16
+    p1 greedy: move 2, move 2 1
+    p2 mcts: move 2 1, move 3 2
+      search (30000 visits): secretsword,0;closecombat,1 2867v 1952 | secretsword,0;switch kyuremblack 2634v 1784 | secretsword,1;switch kyuremblack 2439v 1643 | hydropump,0;switch kyuremblack 1751v 1151
+      p2a Keldeo used Secret Sword -> p1a: Heatran
+      p1a Heatran fainted
+      p2b Infernape used Close Combat -> p1b: Kyurem
+              p2b Infernape def 1 fell
+              p2b Infernape spd 1 fell
+      p1b Kyurem used Draco Meteor -> p2a: Keldeo
+              p2a Keldeo -- critical hit
+              p1b Kyurem spa 2 fell
+      p2a Keldeo fainted
+      after p1: Heatran 0/386, Kyurem-Black 46/391
+      after p2: Keldeo-Resolute 0/323, Infernape 282/293
+
+  Turn 17
+      p2a <- Kyurem-Black comes in (47/391)
+      after p1: Heatran 0/386, Kyurem-Black 46/391
+      after p2: Kyurem-Black 47/391, Infernape 282/293
+
+  Turn 18
+    p1 greedy: pass, move 2 1
+    p2 mcts: move 2 2, move 4 2
+      search (1117000 visits): icebeam,1;feint,1 330323v 330155 | fusionbolt,1;feint,1 328304v 328128 | earthpower,1;feint,1 328062v 327885 | dracometeor,1;feint,1 124436v 123653
+      p2b Infernape used Feint -> p1b: Kyurem
+      p2a Kyurem used Ice Beam -> p1b: Kyurem
+      p1b Kyurem fainted
+      after p1: Heatran 0/386, Kyurem-Black 0/391
+      after p2: Kyurem-Black 47/391, Infernape 282/293
+
+  RESULT: p2 wins

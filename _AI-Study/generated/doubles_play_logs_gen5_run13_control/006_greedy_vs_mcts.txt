@@ -1,0 +1,99 @@
+battle 6   p1=greedy vs p2=mcts   mcts 300 ms a decision
+  p1: London anti fire: Gastrodon, Togekiss, Terrakion, Kyurem-Black
+  p2: Untitled 1073: Metagross, Scrafty, Kyurem-Black, Terrakion
+
+  Turn 1
+    p1 greedy: move 3 1, move 3 1
+    p2 mcts: move 1 2, move 1 1
+      search (6000 visits): meteormash,1;fakeout,0 116v 63 | meteormash,1;fakeout,1 115v 62 | icepunch,1;drainpunch,1 114v 61 | meteormash,1;drainpunch,1 106v 55
+      p2b Scrafty used Fake Out -> p1a: Gastrodon
+      p1b Togekiss used Flamethrower -> p2a: Metagross
+      p2a Metagross used Meteor Mash -> p1b: Togekiss  [[miss]]
+              p2a Metagross -- MISSED
+              p1a Gastrodon COULD NOT MOVE (flinch)
+      after p1: Gastrodon 385/426, Togekiss 311/311
+      after p2: Metagross 67/301, Scrafty 334/334
+
+  Turn 2
+    p1 greedy: move 3 1, move 3 1
+    p2 mcts: move 1 2, switch 3   (slot1 Scrafty -> Kyurem-Black)
+      search (13000 visits): meteormash,1;switch kyuremblack 1493v 861 | meteormash,1;drainpunch,1 1170v 658 | meteormash,1;switch terrakion 993v 547 | meteormash,1;drainpunch,0 947v 519
+      p2b <- Kyurem-Black comes in (391/391)
+      p1b Togekiss used Flamethrower -> p2a: Metagross
+      p2a Metagross fainted
+      p1a Gastrodon used Ice Beam -> p2b: Kyurem
+      after p1: Gastrodon 385/426, Togekiss 311/311
+      after p2: Metagross 0/301, Kyurem-Black 305/391
+
+  Turn 3
+      p2a <- Scrafty comes in (334/334)
+              p1a Gastrodon atk 1 fell
+              p1b Togekiss atk 1 fell
+      after p1: Gastrodon 385/426, Togekiss 311/311
+      after p2: Scrafty 334/334, Kyurem-Black 305/391
+
+  Turn 4
+    p1 greedy: move 3 2, move 3 2
+    p2 mcts: move 3 2, move 1 2
+      search (10000 visits): drainpunch,1;icebeam,1 679v 374 | drainpunch,1;fusionbolt,1 470v 243 | drainpunch,1;icebeam,0 337v 162 | drainpunch,0;icebeam,1 243v 107
+      p1b Togekiss used Flamethrower -> p2b: Kyurem
+      p2b Kyurem used Ice Beam -> p1b: Togekiss
+      p2a Scrafty used Drain Punch -> p1b: Togekiss
+      p1b Togekiss fainted
+      p1a Gastrodon used Ice Beam -> p2b: Kyurem
+      after p1: Gastrodon 385/426, Togekiss 0/311
+      after p2: Scrafty 334/334, Kyurem-Black 77/391
+
+  Turn 5
+      p1b <- Terrakion comes in (323/323)
+      after p1: Gastrodon 385/426, Terrakion 323/323
+      after p2: Scrafty 334/334, Kyurem-Black 77/391
+
+  Turn 6
+    p1 greedy: move 3 2, move 1 2
+    p2 mcts: move 3 2, move 1 1
+      search (21000 visits): drainpunch,1;icebeam,0 1715v 968 | drainpunch,1;fusionbolt,1 1204v 655 | drainpunch,1;icebeam,1 1166v 631 | drainpunch,1;dracometeor,0 1041v 556
+      p1b Terrakion used Close Combat -> p2b: Kyurem
+              p1b Terrakion def 1 fell
+              p1b Terrakion spd 1 fell
+      p2b Kyurem fainted
+      p2a Scrafty used Drain Punch -> p1b: Terrakion
+      p1b Terrakion fainted
+      p1a Gastrodon used Ice Beam -> p2a: Scrafty
+      after p1: Gastrodon 385/426, Terrakion 0/323
+      after p2: Scrafty 268/334, Kyurem-Black 0/391
+
+  Turn 7
+      p1b <- Kyurem-Black comes in (391/391)
+      p2b <- Terrakion comes in (323/323)
+      after p1: Gastrodon 385/426, Kyurem-Black 391/391
+      after p2: Scrafty 268/334, Terrakion 323/323
+
+  Turn 8
+    p1 greedy: move 3 1, move 1 1
+    p2 mcts: move 3 1, move 1 2
+      search (18000 visits): drainpunch,0;closecombat,1 2902v 1793 | drainpunch,1;protect,1 1126v 640 | drainpunch,0;stoneedge,1 856v 470 | drainpunch,1;rockslide,0 700v 373
+      p2b Terrakion used Close Combat -> p1b: Kyurem
+              p2b Terrakion def 1 fell
+              p2b Terrakion spd 1 fell
+      p1b Kyurem fainted
+      p2a Scrafty used Drain Punch -> p1a: Gastrodon
+      p1a Gastrodon used Ice Beam -> p2a: Scrafty
+      after p1: Gastrodon 286/426, Kyurem-Black 0/391
+      after p2: Scrafty 258/334, Terrakion 291/323
+
+  Turn 9
+    p1 greedy: move 3 1, pass
+    p2 mcts: move 3 1, move 1 1
+      search (1698000 visits): drainpunch,0;closecombat,0 1696187v 1696187 | knockoff,0;closecombat,0 551v 428 | knockoff,0;rockslide,0 127v 67 | knockoff,0;stoneedge,0 124v 64
+      p2b Terrakion used Close Combat -> p1a: Gastrodon
+              p2b Terrakion def 1 fell
+              p2b Terrakion spd 1 fell
+              p1a Gastrodon used up its Sitrus Berry
+      p2a Scrafty used Drain Punch -> p1a: Gastrodon
+              p1a Gastrodon -- critical hit
+      p1a Gastrodon fainted
+      after p1: Gastrodon 0/426, Kyurem-Black 0/391
+      after p2: Scrafty 319/334, Terrakion 259/323
+
+  RESULT: p2 wins

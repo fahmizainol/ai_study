@@ -1,0 +1,166 @@
+battle 9   p1=greedy vs p2=mcts   mcts 300 ms a decision
+  p1: [PL Week 2] Arcanine: Thundurus, Metagross, Kyurem-Black, Arcanine
+  p2: Untitled 491: Gallade, Gastrodon, Rotom-Mow, Weavile
+
+  Turn 1
+    p1 greedy: move 1 1, move 2 1
+    p2 mcts: move 4 1, move 4 2
+      search (8000 visits): icepunch,0;earthpower,1 292v 180 | zenheadbutt,0;earthpower,1 251v 150 | icepunch,0;scald,1 221v 128 | zenheadbutt,0;scald,1 191v 106
+      p2a Gallade used Ice Punch -> p1a: Thundurus
+              p1a Thundurus -- critical hit
+      p1a Thundurus fainted
+      p1b Metagross used Meteor Mash -> p2a: Gallade
+              p1b Metagross used up its Steel Gem
+      p2a Gallade fainted
+      p2b Gastrodon used Earth Power -> p1b: Metagross
+      after p1: Thundurus 0/347, Metagross 146/364
+      after p2: Gallade 0/277, Gastrodon 426/426
+
+  Turn 2
+      p2a <- Rotom-Mow comes in (241/241)
+      p1a <- Kyurem-Black comes in (391/391)
+      after p1: Kyurem-Black 391/391, Metagross 146/364
+      after p2: Rotom-Mow 241/241, Gastrodon 426/426
+
+  Turn 3
+    p1 greedy: move 2 1, move 2 1
+    p2 mcts: move 3, move 1 2
+      search (12000 visits): protect,0;scald,1 507v 206 | protect,0;earthpower,0 498v 201 | protect,0;earthpower,1 415v 160 | protect,0;scald,0 375v 140
+      p2a Rotom used Protect
+      p1a Kyurem used Draco Meteor -> p2a: Rotom
+              p2a Rotom -- move: Protect
+      p1b Metagross used Meteor Mash -> p2a: Rotom
+              p2a Rotom -- move: Protect
+      p2b Gastrodon used Scald -> p1b: Metagross
+      after p1: Kyurem-Black 391/391, Metagross 46/364
+      after p2: Rotom-Mow 241/241, Gastrodon 426/426
+
+  Turn 4
+    p1 greedy: move 2 1, move 2 1
+    p2 mcts: move 3, move 4 1
+      search (15000 visits): protect,0;earthpower,0 849v 339 | protect,0;scald,0 583v 215 | protect,0;recover,1 559v 204 | protect,0;icywind,0 501v 177
+      p2a Rotom used Protect  [[still]]
+              p2a Rotom -- IT FAILED
+      p1a Kyurem used Draco Meteor -> p2a: Rotom
+              p1a Kyurem spa 2 fell
+      p1b Metagross used Meteor Mash -> p2a: Rotom  [[miss]]
+              p1b Metagross -- MISSED
+      p2b Gastrodon used Earth Power -> p1a: Kyurem
+      after p1: Kyurem-Black 297/391, Metagross 46/364
+      after p2: Rotom-Mow 48/241, Gastrodon 426/426
+
+  Turn 5
+    p1 greedy: move 2 1, move 2 1
+    p2 mcts: move 3, move 4 1
+      search (17000 visits): protect,0;earthpower,0 737v 281 | protect,0;scald,0 535v 189 | thunderbolt,1;earthpower,0 506v 176 | thunderbolt,0;earthpower,0 472v 161
+      p2a Rotom used Protect
+      p1a Kyurem used Draco Meteor -> p2a: Rotom
+              p2a Rotom -- move: Protect
+      p1b Metagross used Meteor Mash -> p2a: Rotom
+              p2a Rotom -- move: Protect
+      p2b Gastrodon used Earth Power -> p1a: Kyurem
+      after p1: Kyurem-Black 201/391, Metagross 46/364
+      after p2: Rotom-Mow 48/241, Gastrodon 426/426
+
+  Turn 6
+    p1 greedy: move 2 1, move 2 1
+    p2 mcts: move 3, move 4 1
+      search (18000 visits): protect,0;earthpower,0 814v 310 | protect,0;scald,0 622v 223 | thunderbolt,1;earthpower,0 558v 194 | thunderbolt,0;earthpower,0 501v 169
+      p2a Rotom used Protect
+      p1a Kyurem used Draco Meteor -> p2a: Rotom
+              p2a Rotom -- move: Protect
+      p1b Metagross used Meteor Mash -> p2a: Rotom
+              p2a Rotom -- move: Protect
+      p2b Gastrodon used Earth Power -> p1a: Kyurem
+      after p1: Kyurem-Black 111/391, Metagross 46/364
+      after p2: Rotom-Mow 48/241, Gastrodon 426/426
+
+  Turn 7
+    p1 greedy: move 2 1, move 2 1
+    p2 mcts: move 3, move 4 1
+      search (19000 visits): protect,0;earthpower,0 776v 281 | protect,0;recover,1 589v 199 | protect,0;scald,0 540v 178 | thunderbolt,1;earthpower,0 532v 175
+      p2a Rotom used Protect  [[still]]
+              p2a Rotom -- IT FAILED
+      p1a Kyurem used Draco Meteor -> p2a: Rotom
+              p1a Kyurem spa 2 fell
+      p2a Rotom fainted
+      p1b Metagross used Meteor Mash -> p2b: Gastrodon
+      p2b Gastrodon used Earth Power -> p1a: Kyurem
+      after p1: Kyurem-Black 20/391, Metagross 46/364
+      after p2: Rotom-Mow 0/241, Gastrodon 342/426
+
+  Turn 8
+      p2a <- Weavile comes in (340/340)
+      after p1: Kyurem-Black 20/391, Metagross 46/364
+      after p2: Weavile 340/340, Gastrodon 342/426
+
+  Turn 9
+    p1 greedy: move 2 2, move 2 2
+    p2 mcts: move 1 2, move 2
+      search (23000 visits): fakeout,1;recover,1 1613v 466 | nightslash,1;recover,1 1127v 301 | fakeout,1;earthpower,1 882v 220 | fakeout,1;scald,1 838v 206
+      p2a Weavile used Fake Out -> p1b: Metagross
+      p1a Kyurem used Draco Meteor -> p2b: Gastrodon  [[miss]]
+              p1a Kyurem -- MISSED
+              p1b Metagross COULD NOT MOVE (flinch)
+      p2b Gastrodon used Recover
+      after p1: Kyurem-Black 20/391, Metagross 24/364
+      after p2: Weavile 306/340, Gastrodon 426/426
+
+  Turn 10
+    p1 greedy: move 2 1, move 2 1
+    p2 mcts: move 3 2, move 2
+      search (25000 visits): nightslash,1;recover,1 938v 222 | nightslash,1;earthpower,1 890v 208 | iceshard,1;earthpower,1 870v 201 | iceshard,1;scald,1 862v 199
+      p2a Weavile used Night Slash -> p1b: Metagross
+      p1b Metagross fainted
+      p1a Kyurem used Draco Meteor -> p2a: Weavile
+              p1a Kyurem spa 2 fell
+      p2b Gastrodon used Recover  [[still]]
+              p2b Gastrodon -- IT FAILED
+      after p1: Kyurem-Black 20/391, Metagross 0/364
+      after p2: Weavile 196/340, Gastrodon 426/426
+
+  Turn 11
+      p1b <- Arcanine comes in (337/337)
+              p2a Weavile atk 1 fell
+              p2b Gastrodon atk 1 fell
+      after p1: Kyurem-Black 20/391, Arcanine 337/337
+      after p2: Weavile 196/340, Gastrodon 426/426
+
+  Turn 12
+    p1 greedy: move 4 1, move 2
+    p2 mcts: move 3 2, move 4 2
+      search (22000 visits): nightslash,1;earthpower,1 2180v 907 | nightslash,1;scald,1 1139v 432 | icepunch,1;earthpower,1 857v 308 | icepunch,1;scald,1 707v 243
+      p2a Weavile used Night Slash -> p1b: Arcanine
+      p1a Kyurem used Ice Beam -> p2a: Weavile
+      p1b Arcanine used Heat Wave -> p2b: Gastrodon  [[spread] p2a,p2b]
+              p2a Weavile -- critical hit
+              p2b Gastrodon -- critical hit
+      p2a Weavile fainted
+      p2b Gastrodon used Earth Power -> p1b: Arcanine
+              p1b Arcanine used up its Sitrus Berry
+      after p1: Kyurem-Black 20/391, Arcanine 134/337
+      after p2: Weavile 0/340, Gastrodon 298/426
+
+  Turn 13
+    p1 greedy: move 4 2, move 2
+    p2 mcts: pass, move 4 2
+      search (83000 visits): No Move;earthpower,1 81854v 60883 | No Move;scald,1 401v 182 | No Move;recover,1 345v 152 | No Move;icywind,0 192v 70
+      p1a Kyurem used Ice Beam -> p2b: Gastrodon
+      p1b Arcanine used Heat Wave -> p2b: Gastrodon
+              p2b Gastrodon used up its Sitrus Berry
+      p2b Gastrodon used Earth Power -> p1b: Arcanine
+      p1b Arcanine fainted
+      after p1: Kyurem-Black 20/391, Arcanine 0/337
+      after p2: Weavile 0/340, Gastrodon 277/426
+
+  Turn 14
+    p1 greedy: move 4 2, pass
+    p2 mcts: pass, move 4 1
+      search (1463000 visits): No Move;earthpower,0 540201v 506937 | No Move;scald,0 439694v 412271 | No Move;icywind,0 269016v 251636 | No Move;recover,1 214089v 199992
+      p1a Kyurem used Ice Beam -> p2b: Gastrodon
+              p2b Gastrodon -- critical hit
+      p2b Gastrodon fainted
+      after p1: Kyurem-Black 20/391, Arcanine 0/337
+      after p2: Weavile 0/340, Gastrodon 0/426
+
+  RESULT: p1 wins

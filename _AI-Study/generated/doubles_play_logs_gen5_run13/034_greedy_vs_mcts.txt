@@ -1,0 +1,136 @@
+battle 34   p1=greedy vs p2=mcts   mcts 300 ms a decision
+  p1: 2v2 Pool League II/2v2 Pools - BW 8: Mamoswine, Togekiss, Latios, Arcanine
+  p2: scrafty raikou tini kyub: Thundurus-Therian, Scrafty, Victini, Kyurem-Black
+
+  Turn 1
+    p1 greedy: move 1, move 1 1
+    p2 mcts: move 1 2, switch 4   (slot1 Scrafty -> Kyurem-Black)
+      search (13000 visits): thunderbolt,1;switch kyuremblack 379v 207 | thunderbolt,1;crunch,1 350v 188 | grassknot,0;bulkup,1 317v 166 | grassknot,0;switch kyuremblack 287v 147
+      p2b <- Kyurem-Black comes in (391/391)
+      p2a Thundurus used Thunderbolt -> p1b: Togekiss
+      p1a Mamoswine used Earthquake -> p2a: Thundurus  [[spread] p2b]
+              p1b Togekiss -- IMMUNE
+              p2a Thundurus -- IMMUNE
+              p1a Mamoswine used up its Ground Gem
+      p1b Togekiss used Air Slash -> p2a: Thundurus
+      after p1: Mamoswine 361/361, Togekiss 98/374
+      after p2: Thundurus-Therian 241/298, Kyurem-Black 252/391
+
+  Turn 2
+    p1 greedy: move 1, move 1 2
+    p2 mcts: move 1 2, move 3 1
+      search (19000 visits): thunderbolt,1;icebeam,0 3970v 2448 | thunderbolt,1;icywind,0 3847v 2368 | switch scrafty;icywind,0 2039v 1200 | switch scrafty;icebeam,0 871v 467
+      p2a Thundurus used Thunderbolt -> p1b: Togekiss
+      p1b Togekiss fainted
+      p2b Kyurem used Ice Beam -> p1a: Mamoswine
+      p1a Mamoswine used Earthquake -> p2b: Kyurem  [[spread] p2b]
+              p2a Thundurus -- IMMUNE
+      after p1: Mamoswine 109/361, Togekiss 0/374
+      after p2: Thundurus-Therian 241/298, Kyurem-Black 170/391
+
+  Turn 3
+      p1b <- Latios comes in (301/301)
+      after p1: Mamoswine 109/361, Latios 301/301
+      after p2: Thundurus-Therian 241/298, Kyurem-Black 170/391
+
+  Turn 4
+    p1 greedy: move 1, move 1 2
+    p2 mcts: switch 4, move 3 2   (slot0 Thundurus-Therian -> Scrafty)
+      search (18000 visits): switch scrafty;icebeam,1 2510v 1383 | switch scrafty;icywind,0 2387v 1309 | switch scrafty;protect,1 1860v 998 | thunderbolt,1;icywind,0 1242v 638
+      p2a <- Scrafty comes in (332/332)
+              p1a Mamoswine atk 1 fell
+              p1b Latios atk 1 fell
+      p1b Latios used Draco Meteor -> p2b: Kyurem
+              p1b Latios spa 2 fell
+      p2b Kyurem fainted
+      p1a Mamoswine used Earthquake -> p2a: Scrafty  [[spread] p2a]
+              p1b Latios -- IMMUNE
+      after p1: Mamoswine 109/361, Latios 301/301
+      after p2: Scrafty 275/332, Kyurem-Black 0/391
+
+  Turn 5
+      p2b <- Victini comes in (341/341)
+      after p1: Mamoswine 109/361, Latios 301/301
+      after p2: Scrafty 275/332, Victini 341/341
+
+  Turn 6
+    p1 greedy: move 1, move 1 1
+    p2 mcts: move 4, move 4 2
+      search (16000 visits): bulkup,0;boltstrike,1 451v 149 | bulkup,0;zenheadbutt,1 438v 143 | bulkup,0;switch thundurustherian 428v 139 | bulkup,0;protect,1 383v 119
+      p1b Latios used Draco Meteor -> p2a: Scrafty
+              p1b Latios spa 2 fell
+      p2b Victini used Bolt Strike -> p1b: Latios
+      p1a Mamoswine used Earthquake -> p2b: Victini  [[spread] p2a,p2b]
+              p1b Latios -- IMMUNE
+      p2a Scrafty used Bulk Up
+              p2a Scrafty atk 1 rose
+              p2a Scrafty def 1 rose
+      after p1: Mamoswine 109/361, Latios 206/301
+      after p2: Scrafty 110/332, Victini 157/341
+
+  Turn 7
+    p1 greedy: move 1, move 1 1
+    p2 mcts: move 2 2, switch 4   (slot1 Victini -> Thundurus-Therian)
+      search (22000 visits): drainpunch,1;switch thundurustherian 731v 212 | bulkup,0;boltstrike,1 624v 173 | bulkup,0;zenheadbutt,1 622v 172 | bulkup,0;switch thundurustherian 591v 161
+      p2b <- Thundurus-Therian comes in (241/298)
+      p1b Latios used Draco Meteor -> p2a: Scrafty
+              p1b Latios spa 2 fell
+      p1a Mamoswine used Earthquake -> p2b: Thundurus  [[spread] p2a]
+              p1b Latios -- IMMUNE
+              p2b Thundurus -- IMMUNE
+      p2a Scrafty used Drain Punch -> p1b: Latios
+              p1b Latios -- critical hit
+      after p1: Mamoswine 109/361, Latios 29/301
+      after p2: Scrafty 90/332, Thundurus-Therian 241/298
+
+  Turn 8
+    p1 greedy: move 1, move 1 1
+    p2 mcts: move 4, move 1 1
+      search (35000 visits): bulkup,0;thunderbolt,0 1463v 398 | bulkup,0;hiddenpower,0 1141v 292 | bulkup,0;focusblast,0 1127v 287 | bulkup,0;switch victini 1063v 267
+      p2b Thundurus used Thunderbolt -> p1a: Mamoswine
+              p1a Mamoswine -- IMMUNE
+      p1b Latios used Draco Meteor -> p2a: Scrafty
+      p1a Mamoswine used Earthquake -> p2b: Thundurus  [[spread] p2a]
+              p1b Latios -- IMMUNE
+              p2b Thundurus -- IMMUNE
+      p2a Scrafty fainted
+      after p1: Mamoswine 109/361, Latios 29/301
+      after p2: Scrafty 0/332, Thundurus-Therian 241/298
+
+  Turn 9
+      p2a <- Victini comes in (157/341)
+      after p1: Mamoswine 109/361, Latios 29/301
+      after p2: Victini 157/341, Thundurus-Therian 241/298
+
+  Turn 10
+    p1 greedy: move 1, move 1 1
+    p2 mcts: move 2 1, move 1 2
+      search (42000 visits): zenheadbutt,0;thunderbolt,1 16898v 5530 | zenheadbutt,0;thunderbolt,0 8490v 2657 | vcreate,0;thunderbolt,1 6481v 1979 | protect,0;thunderbolt,1 1401v 335
+      p2b Thundurus used Thunderbolt -> p1b: Latios
+      p1b Latios fainted
+      p2a Victini used Zen Headbutt -> p1a: Mamoswine
+      p1a Mamoswine fainted
+      after p1: Mamoswine 0/361, Latios 0/301
+      after p2: Victini 123/341, Thundurus-Therian 241/298
+
+  Turn 11
+      p1a <- Arcanine comes in (321/321)
+              p2a Victini atk 1 fell
+              p2b Thundurus atk 1 fell
+      after p1: Arcanine 321/321, Latios 0/301
+      after p2: Victini 123/341, Thundurus-Therian 241/298
+
+  Turn 12
+    p1 greedy: move 1 1, pass
+    p2 mcts: move 1 1, move 1 1
+      search (1168000 visits): vcreate,0;thunderbolt,0 297110v 297061 | zenheadbutt,0;thunderbolt,0 295230v 295172 | boltstrike,0;thunderbolt,0 293099v 293031 | protect,0;thunderbolt,0 282561v 282444
+      p2b Thundurus used Thunderbolt -> p1a: Arcanine
+      p2a Victini used V-create -> p1a: Arcanine
+              p2a Victini spe 1 fell
+              p2a Victini def 1 fell
+              p2a Victini spd 1 fell
+      p1a Arcanine fainted
+      after p1: Arcanine 0/321, Latios 0/301
+      after p2: Victini 89/341, Thundurus-Therian 241/298
+
+  RESULT: p2 wins

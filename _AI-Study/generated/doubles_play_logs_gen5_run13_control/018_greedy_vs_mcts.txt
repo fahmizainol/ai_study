@@ -1,0 +1,87 @@
+battle 18   p1=greedy vs p2=mcts   mcts 300 ms a decision
+  p1: I love you Verne Troyer: Ferrothorn, Jellicent, Thundurus, Tornadus
+  p2: 2v2 bw classic team 2: Tornadus, Volcarona, Metagross, Kyurem-Black
+
+  Turn 1
+    p1 greedy: move 4 1, move 1 1
+    p2 mcts: move 2 1, move 4 1
+      search (45000 visits): acrobatics,0;fireblast,0 1338v 102 | acrobatics,1;fireblast,0 1261v 92 | superpower,0;fireblast,0 1214v 85 | protect,0;fireblast,0 1104v 70
+      p2a Tornadus used Acrobatics -> p1a: Ferrothorn
+              p2a Tornadus used up its Flying Gem
+      p2b Volcarona used Fire Blast -> p1a: Ferrothorn
+      p1a Ferrothorn fainted
+      p1b Jellicent used Scald -> p2a: Tornadus
+              p2a Tornadus is now brn
+      after p1: Ferrothorn 0/352, Jellicent 404/404
+      after p2: Tornadus 129/299, Volcarona 317/317
+
+  Turn 2
+      p1a <- Thundurus comes in (362/362)
+      after p1: Thundurus 362/362, Jellicent 404/404
+      after p2: Tornadus 129/299, Volcarona 317/317
+
+  Turn 3
+    p1 greedy: move 3 1, move 1 1
+    p2 mcts: move 2 2, move 4 1
+      search (21000 visits): acrobatics,1;fireblast,0 999v 582 | acrobatics,0;fireblast,0 912v 525 | protect,0;fireblast,0 640v 350 | acrobatics,1;protect,1 524v 277
+      p1a Thundurus used Thunderbolt -> p2a: Tornadus
+              p1a Thundurus used up its Electric Gem
+      p2a Tornadus fainted
+      p2b Volcarona used Fire Blast -> p1a: Thundurus
+      p1b Jellicent used Scald -> p2b: Volcarona
+      after p1: Thundurus 103/362, Jellicent 404/404
+      after p2: Tornadus 0/299, Volcarona 179/317
+
+  Turn 4
+      p2a <- Metagross comes in (364/364)
+      after p1: Thundurus 103/362, Jellicent 404/404
+      after p2: Metagross 364/364, Volcarona 179/317
+
+  Turn 5
+    p1 greedy: move 3 2, move 1 2
+    p2 mcts: move 3 2, move 4 1
+      search (15000 visits): zenheadbutt,1;fireblast,0 661v 380 | zenheadbutt,0;switch kyuremblack 531v 294 | protect,0;fireblast,0 523v 289 | zenheadbutt,0;bugbuzz,1 510v 281
+      p1a Thundurus used Thunderbolt -> p2b: Volcarona
+      p2b Volcarona used Fire Blast -> p1a: Thundurus
+      p1a Thundurus fainted
+      p2a Metagross used Zen Headbutt -> p1b: Jellicent
+      p1b Jellicent used Scald -> p2b: Volcarona
+      p2b Volcarona fainted
+      after p1: Thundurus 0/362, Jellicent 284/404
+      after p2: Metagross 364/364, Volcarona 0/317
+
+  Turn 6
+      p1a <- Tornadus comes in (299/299)
+      p2b <- Kyurem-Black comes in (391/391)
+      after p1: Tornadus 299/299, Jellicent 284/404
+      after p2: Metagross 364/364, Kyurem-Black 391/391
+
+  Turn 7
+    p1 greedy: move 3 1, move 1 1
+    p2 mcts: move 2 1, move 4 2
+      search (29000 visits): meteormash,0;fusionbolt,1 4717v 3968 | zenheadbutt,1;fusionbolt,1 4542v 3815 | bulletpunch,1;fusionbolt,1 4065v 3399 | meteormash,1;fusionbolt,1 1666v 1326
+      p1a Tornadus used Superpower -> p2a: Metagross
+              p1a Tornadus atk 1 fell
+              p1a Tornadus def 1 fell
+      p2b Kyurem used Fusion Bolt -> p1b: Jellicent
+              p1b Jellicent -- critical hit
+              p1b Jellicent used up its Wacan Berry
+              p1b Jellicent used up its Wacan Berry
+      p2a Metagross used Meteor Mash -> p1a: Tornadus
+              p2a Metagross used up its Steel Gem
+      p1a Tornadus fainted
+      p1b Jellicent used Scald -> p2a: Metagross
+      after p1: Tornadus 0/299, Jellicent 35/404
+      after p2: Metagross 187/364, Kyurem-Black 391/391
+
+  Turn 8
+    p1 greedy: pass, move 1 1
+    p2 mcts: move 1, move 2 2
+      search (845000 visits): protect,0;dragonclaw,1 82082v 82082 | protect,0;fusionbolt,1 82082v 82082 | meteormash,1;dragonclaw,1 82082v 82082 | meteormash,1;fusionbolt,1 82082v 82082
+      p2a Metagross used Protect
+      p2b Kyurem used Dragon Claw -> p1b: Jellicent
+      p1b Jellicent fainted
+      after p1: Tornadus 0/299, Jellicent 0/404
+      after p2: Metagross 187/364, Kyurem-Black 391/391
+
+  RESULT: p2 wins

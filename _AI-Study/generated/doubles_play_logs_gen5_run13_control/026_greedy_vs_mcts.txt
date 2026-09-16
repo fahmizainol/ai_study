@@ -1,0 +1,92 @@
+battle 26   p1=greedy vs p2=mcts   mcts 300 ms a decision
+  p1: Untitled 1082: Arcanine, Latias, Tyranitar, Togekiss
+  p2: Untitled 492: Conkeldurr, Cresselia, Weavile, Cradily
+
+  Turn 1
+    p1 greedy: move 1 1, move 1 1
+    p2 mcts: switch 4, move 1   (slot0 Conkeldurr -> Cradily)
+      search (16000 visits): switch cradily;trickroom,0 555v 360 | drainpunch,0;icebeam,1 519v 334 | drainpunch,0;helpinghand,0 517v 332 | switch cradily;trickroom,1 495v 316
+      p2a <- Cradily comes in (375/375)
+      p1b Latias used Draco Meteor -> p2a: Cradily
+              p1b Latias spa 2 fell
+      p1a Arcanine used Flare Blitz -> p2a: Cradily
+      p2a Cradily fainted
+      p2b Cresselia used Trick Room
+      after p1: Arcanine 263/321, Latias 320/320
+      after p2: Cradily 0/375, Cresselia 444/444
+
+  Turn 2
+      p2a <- Weavile comes in (340/340)
+      after p1: Arcanine 263/321, Latias 320/320
+      after p2: Weavile 340/340, Cresselia 444/444
+
+  Turn 3
+    p1 greedy: move 1 1, move 1 1
+    p2 mcts: switch 4, move 4 2   (slot0 Weavile -> Conkeldurr)
+      search (18000 visits): switch conkeldurr;icebeam,1 3415v 1835 | switch conkeldurr;icebeam,0 1433v 711 | switch conkeldurr;helpinghand,0 750v 339 | icepunch,1;switch conkeldurr 522v 219
+      p2a <- Conkeldurr comes in (414/414)
+      p2b Cresselia used Ice Beam -> p1b: Latias
+      p1a Arcanine used Flare Blitz -> p2a: Conkeldurr
+      p1b Latias used Draco Meteor -> p2a: Conkeldurr  [[miss]]
+              p1b Latias -- MISSED
+              p2a Conkeldurr is now brn
+      after p1: Arcanine 198/321, Latias 222/320
+      after p2: Conkeldurr 216/414, Cresselia 444/444
+
+  Turn 4
+    p1 greedy: move 1 1, move 1 1
+    p2 mcts: move 4 1, move 4 2
+      search (25000 visits): drainpunch,0;icebeam,1 3036v 1769 | drainpunch,1;helpinghand,0 1561v 859 | drainpunch,0;icebeam,0 1301v 702 | drainpunch,0;trickroom,1 1281v 690
+      p2a Conkeldurr used Drain Punch -> p1a: Arcanine
+      p1a Arcanine fainted
+      p2b Cresselia used Ice Beam -> p1b: Latias
+      p1b Latias used Draco Meteor -> p2a: Conkeldurr
+              p1b Latias spa 2 fell
+      after p1: Arcanine 0/321, Latias 130/320
+      after p2: Conkeldurr 120/414, Cresselia 444/444
+
+  Turn 5
+      p1a <- Tyranitar comes in (404/404)
+      after p1: Tyranitar 404/404, Latias 130/320
+      after p2: Conkeldurr 120/414, Cresselia 444/444
+
+  Turn 6
+    p1 greedy: move 3 1, move 1 1
+    p2 mcts: move 4 1, move 4 2
+      search (23000 visits): drainpunch,0;icebeam,1 1689v 769 | drainpunch,0;helpinghand,0 1167v 506 | drainpunch,1;helpinghand,0 1130v 487 | drainpunch,0;protect,1 994v 419
+      p2a Conkeldurr used Drain Punch -> p1a: Tyranitar
+      p1a Tyranitar fainted
+      p2b Cresselia used Ice Beam -> p1b: Latias
+      p1b Latias used Draco Meteor -> p2a: Conkeldurr  [[miss]]
+              p1b Latias -- MISSED
+      after p1: Tyranitar 0/404, Latias 14/320
+      after p2: Conkeldurr 246/414, Cresselia 417/444
+
+  Turn 7
+      p1a <- Togekiss comes in (374/374)
+      after p1: Togekiss 374/374, Latias 14/320
+      after p2: Conkeldurr 246/414, Cresselia 417/444
+
+  Turn 8
+    p1 greedy: move 4 1, move 1 1
+    p2 mcts: move 4 1, move 4 2
+      search (22000 visits): drainpunch,0;icebeam,1 6157v 3804 | drainpunch,0;helpinghand,0 4495v 2687 | drainpunch,0;icebeam,0 633v 308 | switch weavile;icebeam,0 381v 166
+      p2a Conkeldurr used Drain Punch -> p1a: Togekiss
+      p2b Cresselia used Ice Beam -> p1b: Latias
+      p1b Latias fainted
+      p1a Togekiss used Flamethrower -> p2a: Conkeldurr
+              p2a Conkeldurr -- critical hit
+      after p1: Togekiss 126/374, Latias 0/320
+      after p2: Conkeldurr 28/414, Cresselia 390/444
+
+  Turn 9
+    p1 greedy: move 4 1, pass
+    p2 mcts: move 2 1, switch 4   (slot1 Cresselia -> Weavile)
+      search (360000 visits): machpunch,0;switch weavile 76017v 75299 | machpunch,0;icebeam,0 72493v 71776 | machpunch,0;helpinghand,0 67656v 66943 | machpunch,0;protect,1 65925v 65213
+      p2b <- Weavile comes in (340/340)
+      p2a Conkeldurr used Mach Punch -> p1a: Togekiss
+      p1a Togekiss fainted
+      after p1: Togekiss 0/374, Latias 0/320
+      after p2: Conkeldurr 28/414, Weavile 340/340
+
+  RESULT: p2 wins

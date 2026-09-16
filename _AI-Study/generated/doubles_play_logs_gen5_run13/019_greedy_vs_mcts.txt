@@ -1,0 +1,94 @@
+battle 19   p1=greedy vs p2=mcts   mcts 300 ms a decision
+  p1: Itchyfoot genesect: Genesect, Tornadus, Victini, Latios
+  p2: LKJC - KSMT: Kyurem-Black, Scrafty, Metagross, Thundurus
+
+  Turn 1
+    p1 greedy: move 3 1, move 3 1
+    p2 mcts: move 2 2, move 1 1
+      search (14000 visits): icebeam,1;fakeout,0 444v 271 | icebeam,1;fakeout,1 373v 221 | fusionbolt,1;fakeout,0 364v 215 | fusionbolt,1;fakeout,1 341v 199
+      p2b Scrafty used Fake Out -> p1a: Genesect
+              p1a Genesect COULD NOT MOVE (flinch)
+      p1b Tornadus used Superpower -> p2a: Kyurem
+              p1b Tornadus atk 1 fell
+              p1b Tornadus def 1 fell
+      p2a Kyurem used Ice Beam -> p1b: Tornadus
+      p1b Tornadus fainted
+      after p1: Genesect 263/283, Tornadus 0/299
+      after p2: Kyurem-Black 86/454, Scrafty 334/334
+
+  Turn 2
+      p1b <- Victini comes in (341/341)
+      after p1: Genesect 263/283, Victini 341/341
+      after p2: Kyurem-Black 86/454, Scrafty 334/334
+
+  Turn 3
+    p1 greedy: move 3 1, move 1 1
+    p2 mcts: move 3, move 2 2
+      search (10000 visits): protect,0;crunch,1 370v 221 | protect,0;drainpunch,0 286v 162 | fusionbolt,0;crunch,1 213v 112 | switch thundurus;crunch,1 212v 111
+      p2a Kyurem used Protect
+      p1a Genesect used Ice Beam -> p2a: Kyurem
+              p2a Kyurem -- move: Protect
+      p1b Victini used V-create -> p2a: Kyurem
+              p2a Kyurem -- move: Protect
+      p2b Scrafty used Crunch -> p1b: Victini
+      after p1: Genesect 263/283, Victini 105/341
+      after p2: Kyurem-Black 86/454, Scrafty 334/334
+
+  Turn 4
+    p1 greedy: move 3 1, move 1 1
+    p2 mcts: move 2 1, move 3 1
+      search (18000 visits): icebeam,0;drainpunch,0 449v 235 | icebeam,0;crunch,1 430v 223 | protect,0;drainpunch,0 426v 220 | switch metagross;drainpunch,0 418v 215
+      p1a Genesect used Ice Beam -> p2a: Kyurem
+      p2a Kyurem fainted
+      p1b Victini used V-create -> p2b: Scrafty
+              p1b Victini used up its Fire Gem
+              p1b Victini spe 1 fell
+              p1b Victini def 1 fell
+              p1b Victini spd 1 fell
+      p2b Scrafty used Drain Punch -> p1a: Genesect
+      after p1: Genesect 137/283, Victini 105/341
+      after p2: Kyurem-Black 0/454, Scrafty 64/334
+
+  Turn 5
+      p2a <- Metagross comes in (364/364)
+      after p1: Genesect 137/283, Victini 105/341
+      after p2: Metagross 364/364, Scrafty 64/334
+
+  Turn 6
+    p1 greedy: move 3 2, move 1 2
+    p2 mcts: move 1 1, move 1 2
+      search (19000 visits): meteormash,0;fakeout,1 3223v 1733 | bulletpunch,0;fakeout,1 660v 292 | earthquake,0;fakeout,1 547v 233 | meteormash,0;fakeout,0 524v 221
+      p2b Scrafty used Fake Out  [[still]]
+              p2b Scrafty -- IT FAILED
+      p1a Genesect used Ice Beam -> p2b: Scrafty
+      p2b Scrafty fainted
+      p1b Victini used V-create -> p2a: Metagross
+              p1b Victini spe 1 fell
+              p1b Victini def 1 fell
+              p1b Victini spd 1 fell
+      p2a Metagross fainted
+      after p1: Genesect 137/283, Victini 105/341
+      after p2: Metagross 0/364, Scrafty 0/334
+
+  Turn 7
+      p2a <- Thundurus comes in (362/362)
+      after p1: Genesect 137/283, Victini 105/341
+      after p2: Thundurus 362/362, Scrafty 0/334
+
+  Turn 8
+    p1 greedy: move 3 1, move 1 1
+    p2 mcts: move 2 1, pass
+      search (108000 visits): thunderwave,0;No Move 40878v 1679 | hiddenpower,1;No Move 14211v 348 | thunderbolt,1;No Move 13733v 327 | thunderbolt,0;No Move 9939v 165
+      p2a Thundurus used Thunder Wave -> p1a: Genesect
+              p1a Genesect is now par
+      p1a Genesect used Ice Beam -> p2a: Thundurus
+              p2a Thundurus used up its Sitrus Berry
+      p1b Victini used V-create -> p2a: Thundurus
+              p1b Victini spe 1 fell
+              p1b Victini def 1 fell
+              p1b Victini spd 1 fell
+      p2a Thundurus fainted
+      after p1: Genesect 137/283, Victini 105/341
+      after p2: Thundurus 0/362, Scrafty 0/334
+
+  RESULT: p1 wins

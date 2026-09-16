@@ -1,0 +1,149 @@
+battle 17   p1=greedy vs p2=mcts   mcts 300 ms a decision
+  p1: blastoise meta mence scraft: Metagross, Scrafty, Blastoise, Salamence
+  p2: Untitled 492: Conkeldurr, Cresselia, Weavile, Cradily
+
+  Turn 1
+    p1 greedy: move 2 1, move 3 1
+    p2 mcts: move 4 2, move 2 -1
+      search (14000 visits): drainpunch,1;helpinghand,0 639v 370 | drainpunch,1;icebeam,1 607v 349 | drainpunch,1;icebeam,0 463v 254 | drainpunch,1;protect,1 448v 244
+      p2b Cresselia used Helping Hand -> p2a: Conkeldurr
+      p1a Metagross used Meteor Mash -> p2a: Conkeldurr
+              p1a Metagross used up its Steel Gem
+              p1a Metagross atk 1 rose
+      p1b Scrafty used Crunch -> p2a: Conkeldurr
+              p1b Scrafty used up its Dark Gem
+      p2a Conkeldurr used Drain Punch -> p1b: Scrafty
+              p2a Conkeldurr is now brn
+      after p1: Metagross 364/364, Scrafty 92/332
+      after p2: Conkeldurr 121/414, Cresselia 444/444
+
+  Turn 2
+    p1 greedy: move 2 1, move 3 1
+    p2 mcts: move 2 2, move 4 1
+      search (22000 visits): machpunch,1;icebeam,0 575v 226 | machpunch,1;icebeam,1 559v 218 | detect,0;icebeam,1 547v 212 | machpunch,1;protect,1 543v 210
+      p2a Conkeldurr used Mach Punch -> p1b: Scrafty
+      p1b Scrafty fainted
+      p1a Metagross used Meteor Mash -> p2a: Conkeldurr
+              p1a Metagross atk 1 rose
+      p2a Conkeldurr fainted
+      p2b Cresselia used Ice Beam -> p1a: Metagross
+      after p1: Metagross 334/364, Scrafty 0/332
+      after p2: Conkeldurr 0/414, Cresselia 444/444
+
+  Turn 3
+      p1b <- Blastoise comes in (362/362)
+      p2a <- Weavile comes in (340/340)
+      after p1: Metagross 334/364, Blastoise 362/362
+      after p2: Weavile 340/340, Cresselia 444/444
+
+  Turn 4
+    p1 greedy: move 2 1, move 4 1
+    p2 mcts: move 4, move 4 2
+      search (19000 visits): protect,0;icebeam,1 746v 258 | protect,0;switch cradily 704v 240 | fakeout,0;icebeam,1 684v 232 | fakeout,0;icebeam,0 545v 174
+      p2a Weavile used Protect
+      p1b Blastoise used Scald -> p2a: Weavile
+              p2a Weavile -- move: Protect
+      p1a Metagross used Meteor Mash -> p2a: Weavile
+              p2a Weavile -- move: Protect
+      p2b Cresselia used Ice Beam -> p1b: Blastoise
+      after p1: Metagross 334/364, Blastoise 333/362
+      after p2: Weavile 340/340, Cresselia 444/444
+
+  Turn 5
+    p1 greedy: move 2 1, move 4 1
+    p2 mcts: move 4, switch 4   (slot1 Cresselia -> Cradily)
+      search (19000 visits): protect,0;switch cradily 914v 318 | protect,0;icebeam,1 850v 291 | protect,0;icebeam,0 638v 204 | protect,0;protect,1 563v 173
+      p2b <- Cradily comes in (375/375)
+      p2a Weavile used Protect
+      p1b Blastoise used Scald -> p2b: Cradily
+              p2b Cradily -- ability: Storm Drain
+              p2b Cradily spa 1 rose
+      p1a Metagross used Meteor Mash -> p2a: Weavile
+              p2a Weavile -- move: Protect
+      after p1: Metagross 334/364, Blastoise 333/362
+      after p2: Weavile 340/340, Cradily 375/375
+
+  Turn 6
+    p1 greedy: move 2 1, move 4 1
+    p2 mcts: move 2 2, move 3
+      search (24000 visits): icepunch,1;protect,1 1213v 358 | switch cresselia;protect,1 1038v 296 | nightslash,1;protect,1 1020v 289 | protect,0;protect,1 1005v 284
+      p2b Cradily used Protect
+      p2a Weavile used Ice Punch -> p1b: Blastoise
+      p1b Blastoise used Scald -> p2b: Cradily
+              p2b Cradily -- ability: Storm Drain
+              p2b Cradily -- move: Protect
+      p1a Metagross used Meteor Mash -> p2a: Weavile
+      p2a Weavile fainted
+      after p1: Metagross 334/364, Blastoise 275/362
+      after p2: Weavile 0/340, Cradily 375/375
+
+  Turn 7
+      p2a <- Cresselia comes in (444/444)
+      after p1: Metagross 334/364, Blastoise 275/362
+      after p2: Cresselia 444/444, Cradily 375/375
+
+  Turn 8
+    p1 greedy: move 2 1, move 4 1
+    p2 mcts: move 4 2, move 3
+      search (24000 visits): icebeam,1;protect,1 3482v 1289 | icebeam,0;protect,1 1941v 668 | protect,0;protect,1 1525v 505 | trickroom,1;protect,1 1152v 362
+      p2b Cradily used Protect
+      p1b Blastoise used Scald -> p2b: Cradily
+              p2b Cradily -- ability: Storm Drain
+              p2b Cradily -- move: Protect
+      p1a Metagross used Meteor Mash -> p2a: Cresselia
+              p2a Cresselia -- critical hit
+      p2a Cresselia fainted
+      after p1: Metagross 334/364, Blastoise 275/362
+      after p2: Cresselia 0/444, Cradily 375/375
+
+  Turn 9
+    p1 greedy: move 2 2, move 4 2
+    p2 mcts: pass, move 3
+      search (66000 visits): No Move;protect,1 65251v 35680 | No Move;seedbomb,1 203v 47 | No Move;rockslide,0 186v 41 | No Move;earthquake,0 183v 40
+      p2b Cradily used Protect  [[still]]
+              p2b Cradily -- IT FAILED
+      p1b Blastoise used Scald -> p2b: Cradily
+              p2b Cradily spa 1 rose
+      p1a Metagross used Meteor Mash -> p2b: Cradily  [[miss]]
+              p1a Metagross -- MISSED
+      after p1: Metagross 334/364, Blastoise 275/362
+      after p2: Cresselia 0/444, Cradily 375/375
+
+  Turn 10
+    p1 greedy: move 2 2, move 4 2
+    p2 mcts: pass, move 3
+      search (64000 visits): No Move;protect,1 63228v 34520 | No Move;seedbomb,1 212v 51 | No Move;earthquake,0 210v 50 | No Move;rockslide,0 192v 43
+      p2b Cradily used Protect
+      p1b Blastoise used Scald -> p2b: Cradily
+              p2b Cradily -- move: Protect
+      p1a Metagross used Meteor Mash -> p2b: Cradily
+              p2b Cradily -- move: Protect
+      after p1: Metagross 334/364, Blastoise 275/362
+      after p2: Cresselia 0/444, Cradily 375/375
+
+  Turn 11
+    p1 greedy: move 2 2, move 4 2
+    p2 mcts: pass, move 3
+      search (66000 visits): No Move;protect,1 65285v 35675 | No Move;seedbomb,1 200v 46 | No Move;earthquake,0 183v 39 | No Move;rockslide,0 174v 36
+      p2b Cradily used Protect
+      p1b Blastoise used Scald -> p2b: Cradily
+              p2b Cradily -- move: Protect
+      p1a Metagross used Meteor Mash -> p2b: Cradily
+              p2b Cradily -- move: Protect
+      after p1: Metagross 334/364, Blastoise 275/362
+      after p2: Cresselia 0/444, Cradily 375/375
+
+  Turn 12
+    p1 greedy: move 2 2, move 4 2
+    p2 mcts: pass, move 3
+      search (60000 visits): No Move;protect,1 59265v 32326 | No Move;earthquake,0 190v 42 | No Move;seedbomb,1 189v 42 | No Move;seedbomb,0 184v 40
+      p2b Cradily used Protect  [[still]]
+              p2b Cradily -- IT FAILED
+      p1b Blastoise used Scald -> p2b: Cradily
+              p2b Cradily spa 1 rose
+      p1a Metagross used Meteor Mash -> p2b: Cradily
+      p2b Cradily fainted
+      after p1: Metagross 334/364, Blastoise 275/362
+      after p2: Cresselia 0/444, Cradily 0/375
+
+  RESULT: p1 wins

@@ -1,0 +1,88 @@
+battle 38   p1=greedy vs p2=mcts   mcts 300 ms a decision
+  p1: Untitled 1065: Raikou, Politoed, Ludicolo, Amoonguss
+  p2: kyurem scraft thund tran: Heatran, Scrafty, Thundurus, Kyurem
+
+  Turn 1
+    p1 greedy: move 1 1, move 2 1
+    p2 mcts: move 2, move 2 1
+      search (13000 visits): eruption,0;drainpunch,0 342v 161 | earthpower,0;bulkup,1 340v 160 | earthpower,0;fakeout,1 335v 157 | eruption,0;crunch,0 303v 138
+      p1a Raikou used Thunder -> p2a: Heatran
+      p2a Heatran used Eruption -> p1a: Raikou  [[spread] p1a,p1b]
+              p2a Heatran used up its Fire Gem
+      p2b Scrafty used Drain Punch -> p1a: Raikou
+              p2b Scrafty used up its Fighting Gem
+      p1b Politoed used Scald -> p2a: Heatran
+      p2a Heatran fainted
+      after p1: Raikou 75/321, Politoed 368/384
+      after p2: Heatran 0/323, Scrafty 332/332
+
+  Turn 2
+      p2a <- Thundurus comes in (298/298)
+      after p1: Raikou 75/321, Politoed 368/384
+      after p2: Thundurus 298/298, Scrafty 332/332
+
+  Turn 3
+    p1 greedy: move 1 1, move 2 1
+    p2 mcts: move 2 2, move 1 1
+      search (23000 visits): thunderbolt,1;fakeout,0 1722v 817 | thunderbolt,1;drainpunch,0 1171v 529 | thunderbolt,1;crunch,0 948v 414 | protect,0;drainpunch,0 831v 355
+      p2b Scrafty used Fake Out  [[still]]
+              p2b Scrafty -- IT FAILED
+      p1a Raikou used Thunder -> p2a: Thundurus
+      p2a Thundurus fainted
+      p1b Politoed used Scald -> p2b: Scrafty
+      after p1: Raikou 43/321, Politoed 368/384
+      after p2: Thundurus 0/298, Scrafty 215/332
+
+  Turn 4
+      p2a <- Kyurem comes in (391/391)
+      after p1: Raikou 43/321, Politoed 368/384
+      after p2: Kyurem 391/391, Scrafty 215/332
+
+  Turn 5
+    p1 greedy: move 1 2, move 2 2
+    p2 mcts: move 4, move 4
+      search (22000 visits): icywind,0;bulkup,1 2914v 2009 | icywind,0;drainpunch,1 1672v 1108 | icywind,0;fakeout,1 1489v 977 | icywind,0;crunch,1 1397v 912
+      p2a Kyurem used Icy Wind -> p1a: Raikou  [[spread] p1a,p1b]
+              p1b Politoed spe 1 fell
+      p1a Raikou fainted
+      p2b Scrafty used Bulk Up
+              p2b Scrafty atk 1 rose
+              p2b Scrafty def 1 rose
+      p1b Politoed used Scald -> p2b: Scrafty
+              p2b Scrafty is now brn
+      after p1: Raikou 0/321, Politoed 333/384
+      after p2: Kyurem 391/391, Scrafty 59/332
+
+  Turn 6
+      p1a <- Ludicolo comes in (301/301)
+      after p1: Ludicolo 301/301, Politoed 333/384
+      after p2: Kyurem 391/391, Scrafty 59/332
+
+  Turn 7
+    p1 greedy: move 3 2, move 2 2
+    p2 mcts: move 4, move 2 1
+      search (138000 visits): icywind,0;drainpunch,0 36713v 3474 | icywind,0;crunch,0 34258v 3211 | icywind,0;crunch,1 18856v 1595 | icywind,0;drainpunch,1 15295v 1234
+      p1a Ludicolo used Hydro Pump -> p2b: Scrafty
+      p2b Scrafty fainted
+      p2a Kyurem used Icy Wind -> p1b: Politoed  [[spread] p1a,p1b]
+              p1a Ludicolo -- critical hit
+              p1a Ludicolo spe 1 fell
+              p1b Politoed spe 1 fell
+      p1b Politoed used Scald -> p2a: Kyurem
+      after p1: Ludicolo 118/301, Politoed 298/384
+      after p2: Kyurem 322/391, Scrafty 0/332
+
+  Turn 8
+    p1 greedy: move 3 1, move 2 1
+    p2 mcts: move 4, pass
+      search (344000 visits): icywind,0;No Move 344000v 9574
+      p2a Kyurem used Icy Wind -> p1a: Ludicolo  [[spread] p1a,p1b]
+              p1a Ludicolo spe 1 fell
+              p1b Politoed spe 1 fell
+      p1a Ludicolo used Hydro Pump -> p2a: Kyurem
+              p2a Kyurem -- critical hit
+      p2a Kyurem fainted
+      after p1: Ludicolo 6/301, Politoed 259/384
+      after p2: Kyurem 0/391, Scrafty 0/332
+
+  RESULT: p1 wins

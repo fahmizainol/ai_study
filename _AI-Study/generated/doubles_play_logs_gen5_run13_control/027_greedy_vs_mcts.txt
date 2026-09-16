@@ -1,0 +1,100 @@
+battle 27   p1=greedy vs p2=mcts   mcts 300 ms a decision
+  p1: darkrai mogus tran kyub: Darkrai, Amoonguss, Heatran, Kyurem-Black
+  p2: Horse: Keldeo, Shaymin-Sky, Rapidash, Liepard
+
+  Turn 1
+    p1 greedy: move 2 1, move 3 1
+    p2 mcts: move 3, move 2 1
+      search (24000 visits): protect,0;seedflare,0 844v 251 | protect,0;airslash,1 829v 245 | icywind,0;airslash,0 799v 234 | icywind,0;seedflare,0 722v 205
+      p2a Keldeo used Protect
+      p2b Shaymin used Seed Flare -> p1a: Darkrai  [[miss]]
+              p2b Shaymin -- MISSED
+      p1a Darkrai used Spacial Rend -> p2a: Keldeo
+              p2a Keldeo -- move: Protect
+      p1b Amoonguss used Giga Drain -> p2a: Keldeo
+              p2a Keldeo -- move: Protect
+      after p1: Darkrai 281/281, Amoonguss 432/432
+      after p2: Keldeo 323/323, Shaymin-Sky 341/341
+
+  Turn 2
+    p1 greedy: move 2 1, move 3 1
+    p2 mcts: move 4, move 2 1
+      search (24000 visits): icywind,0;seedflare,0 878v 244 | secretsword,0;airslash,1 818v 223 | protect,0;seedflare,0 791v 214 | secretsword,0;tailwind,1 681v 175
+      p2b Shaymin used Seed Flare -> p1a: Darkrai
+              p2b Shaymin used up its Grass Gem
+      p1a Darkrai fainted
+      p2a Keldeo used Icy Wind -> p1b: Amoonguss
+              p1b Amoonguss spe 1 fell
+      p1b Amoonguss used Giga Drain -> p2a: Keldeo
+      after p1: Darkrai 0/281, Amoonguss 372/432
+      after p2: Keldeo 159/323, Shaymin-Sky 341/341
+
+  Turn 3
+      p1a <- Heatran comes in (386/386)
+      after p1: Heatran 386/386, Amoonguss 372/432
+      after p2: Keldeo 159/323, Shaymin-Sky 341/341
+
+  Turn 4
+    p1 greedy: move 2, move 3 1
+    p2 mcts: move 1 1, move 4
+      search (23000 visits): secretsword,0;protect,1 1532v 747 | protect,0;switch rapidash 1532v 747 | protect,0;protect,1 1199v 568 | secretsword,0;airslash,1 927v 422
+      p2b Shaymin used Protect
+      p2a Keldeo used Secret Sword -> p1a: Heatran
+              p2a Keldeo used up its Fighting Gem
+      p1a Heatran fainted
+      p1b Amoonguss used Giga Drain -> p2a: Keldeo
+      after p1: Heatran 0/386, Amoonguss 432/432
+      after p2: Keldeo 1/323, Shaymin-Sky 341/341
+
+  Turn 5
+      p1a <- Kyurem-Black comes in (391/391)
+      after p1: Kyurem-Black 391/391, Amoonguss 432/432
+      after p2: Keldeo 1/323, Shaymin-Sky 341/341
+
+  Turn 6
+    p1 greedy: move 2 1, move 3 1
+    p2 mcts: move 4, move 4
+      search (25000 visits): icywind,0;protect,1 2070v 1369 | secretsword,0;airslash,0 1726v 1125 | secretsword,0;seedflare,0 1650v 1071 | secretsword,0;protect,1 1592v 1030
+      p2b Shaymin used Protect
+      p2a Keldeo used Icy Wind -> p1b: Amoonguss  [[spread] p1b]
+              p2a Keldeo -- MISSED
+              p1b Amoonguss spe 1 fell
+      p1a Kyurem used Draco Meteor -> p2a: Keldeo
+              p2a Keldeo -- critical hit
+              p1a Kyurem spa 2 fell
+      p2a Keldeo fainted
+      p1b Amoonguss used Giga Drain -> p2b: Shaymin
+              p2b Shaymin -- move: Protect
+      after p1: Kyurem-Black 352/391, Amoonguss 336/432
+      after p2: Keldeo 0/323, Shaymin-Sky 341/341
+
+  Turn 7
+      p2a <- Rapidash comes in (271/271)
+      after p1: Kyurem-Black 352/391, Amoonguss 336/432
+      after p2: Rapidash 271/271, Shaymin-Sky 341/341
+
+  Turn 8
+    p1 greedy: move 2 1, move 3 1
+    p2 mcts: move 1 1, move 1 1
+      search (6000 visits): flareblitz,0;airslash,0 554v 387 | flareblitz,0;seedflare,0 317v 203 | flareblitz,1;airslash,0 234v 141 | flareblitz,1;seedflare,0 180v 101
+      p2b Shaymin used Air Slash -> p1a: Kyurem
+      p2a Rapidash used Flare Blitz -> p1a: Kyurem
+      p1a Kyurem fainted
+      p1b Amoonguss used Giga Drain -> p2a: Rapidash
+      after p1: Kyurem-Black 0/391, Amoonguss 358/432
+      after p2: Rapidash 137/271, Shaymin-Sky 341/341
+
+  Turn 9
+    p1 greedy: pass, move 3 1
+    p2 mcts: move 1 2, move 2 2
+      search (71000 visits): flareblitz,1;seedflare,1 4390v 1951 | flareblitz,1;tailwind,1 4214v 1866 | drillrun,1;airslash,1 4169v 1845 | wildcharge,1;airslash,1 4102v 1812
+      p2b Shaymin used Seed Flare -> p1b: Amoonguss  [[miss]]
+              p2b Shaymin -- MISSED
+      p2a Rapidash used Flare Blitz -> p1b: Amoonguss
+              p2a Rapidash is now psn
+      p1b Amoonguss fainted
+      p2a Rapidash fainted
+      after p1: Kyurem-Black 0/391, Amoonguss 0/432
+      after p2: Rapidash 0/271, Shaymin-Sky 341/341
+
+  RESULT: p2 wins

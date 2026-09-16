@@ -1,0 +1,69 @@
+battle 39   p1=greedy vs p2=mcts   mcts 300 ms a decision
+  p1: [PL Week 2] Amoongus + HO: Amoonguss, Kyurem-Black, Infernape, Keldeo-Resolute
+  p2: Pqs torn: Tornadus, Infernape, Metagross, Kyurem-Black
+
+  Turn 1
+    p1 greedy: move 3 1, move 1 1
+    p2 mcts: move 2 1, move 1 2
+      search (37000 visits): acrobatics,0;fakeout,1 1669v 362 | acrobatics,0;feint,1 1121v 215 | acrobatics,0;switch metagross 821v 139 | acrobatics,0;switch kyuremblack 731v 117
+      p2b Infernape used Fake Out -> p1b: Kyurem
+              p1b Kyurem COULD NOT MOVE (flinch)
+      p2a Tornadus used Acrobatics -> p1a: Amoonguss
+              p2a Tornadus used up its Flying Gem
+      p1a Amoonguss fainted
+      after p1: Amoonguss 0/432, Kyurem-Black 330/391
+      after p2: Tornadus 299/299, Infernape 264/293
+
+  Turn 2
+      p1a <- Infernape comes in (293/293)
+      after p1: Infernape 293/293, Kyurem-Black 330/391
+      after p2: Tornadus 299/299, Infernape 264/293
+
+  Turn 3
+    p1 greedy: move 2 2, move 1 2
+    p2 mcts: move 1, move 3 2
+      search (28000 visits): protect,0;closecombat,1 3612v 2033 | acrobatics,0;switch metagross 1276v 652 | acrobatics,0;closecombat,1 1124v 565 | acrobatics,0;switch kyuremblack 1052v 526
+      p2a Tornadus used Protect
+      p1b Kyurem used Draco Meteor -> p2b: Infernape
+              p1b Kyurem spa 2 fell
+      p2b Infernape fainted
+      p1a Infernape used Overheat -> p2a: Tornadus
+              p2a Tornadus -- move: Protect
+      after p1: Infernape 293/293, Kyurem-Black 330/391
+      after p2: Tornadus 299/299, Infernape 0/293
+
+  Turn 4
+      p2b <- Metagross comes in (364/364)
+      after p1: Infernape 293/293, Kyurem-Black 330/391
+      after p2: Tornadus 299/299, Metagross 364/364
+
+  Turn 5
+    p1 greedy: move 2 1, move 1 1
+    p2 mcts: move 2 1, move 3 2
+      search (30000 visits): acrobatics,0;zenheadbutt,1 8645v 7453 | acrobatics,0;meteormash,1 4898v 4144 | acrobatics,0;bulletpunch,1 2094v 1700 | acrobatics,0;zenheadbutt,0 1395v 1101
+      p1b Kyurem used Draco Meteor -> p2a: Tornadus
+              p1b Kyurem spa 2 fell
+      p2a Tornadus used Acrobatics -> p1a: Infernape
+      p1a Infernape fainted
+      p2b Metagross used Zen Headbutt -> p1b: Kyurem
+      after p1: Infernape 0/293, Kyurem-Black 180/391
+      after p2: Tornadus 163/299, Metagross 364/364
+
+  Turn 6
+      p1a <- Keldeo-Resolute comes in (323/323)
+      after p1: Keldeo-Resolute 323/323, Kyurem-Black 180/391
+      after p2: Tornadus 163/299, Metagross 364/364
+
+  Turn 7
+    p1 greedy: move 1 1, move 1 1
+    p2 mcts: move 2 1, move 4 2
+      search (108000 visits): acrobatics,0;bulletpunch,1 97398v 89926 | acrobatics,0;zenheadbutt,1 1186v 908 | acrobatics,1;zenheadbutt,0 1130v 861 | acrobatics,0;meteormash,1 714v 520
+      p2b Metagross used Bullet Punch -> p1b: Kyurem
+              p2b Metagross used up its Steel Gem
+      p1b Kyurem fainted
+      p2a Tornadus used Acrobatics -> p1a: Keldeo
+      p1a Keldeo fainted
+      after p1: Keldeo-Resolute 0/323, Kyurem-Black 0/391
+      after p2: Tornadus 163/299, Metagross 364/364
+
+  RESULT: p2 wins

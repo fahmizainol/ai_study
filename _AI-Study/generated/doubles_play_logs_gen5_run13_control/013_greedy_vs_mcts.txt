@@ -1,0 +1,101 @@
+battle 13   p1=greedy vs p2=mcts   mcts 300 ms a decision
+  p1: Untitled 525: Genesect, Blaziken, Thundurus, Latios
+  p2: Vs Vrji hail: Abomasnow, Rotom-Frost, Infernape, Tornadus
+
+  Turn 1
+    p1 greedy: move 3 1, move 1 1
+    p2 mcts: move 3, move 2 2
+      search (23000 visits): protect,0;thunderbolt,1 1239v 536 | protect,0;thunderbolt,0 1015v 426 | protect,0;discharge,0 987v 412 | protect,0;blizzard,0 879v 359
+      p2a Abomasnow used Protect
+      p2b Rotom used Thunderbolt -> p1b: Blaziken
+      p1a Genesect used Ice Beam -> p2a: Abomasnow
+              p2a Abomasnow -- move: Protect
+      p1b Blaziken used Flare Blitz -> p2a: Abomasnow
+              p2a Abomasnow -- move: Protect
+              p1b Blaziken spe 1 rose
+      after p1: Genesect 273/291, Blaziken 86/302
+      after p2: Abomasnow 383/383, Rotom-Frost 241/241
+
+  Turn 2
+    p1 greedy: move 3 1, move 1 1
+    p2 mcts: move 1, move 2 2
+      search (23000 visits): blizzard,0;thunderbolt,1 5056v 3203 | protect,0;thunderbolt,1 2785v 1704 | switch tornadus;thunderbolt,1 1787v 1055 | woodhammer,0;thunderbolt,1 1338v 768
+      p2b Rotom used Thunderbolt -> p1b: Blaziken
+      p1b Blaziken fainted
+      p1a Genesect used Ice Beam -> p2a: Abomasnow
+              p2a Abomasnow -- critical hit
+      p2a Abomasnow used Blizzard -> p1a: Genesect
+              p2a Abomasnow used up its Ice Gem
+      after p1: Genesect 156/291, Blaziken 0/302
+      after p2: Abomasnow 201/383, Rotom-Frost 241/241
+
+  Turn 3
+      p1b <- Thundurus comes in (362/362)
+      after p1: Genesect 156/291, Thundurus 362/362
+      after p2: Abomasnow 201/383, Rotom-Frost 241/241
+
+  Turn 4
+    p1 greedy: move 3 1, move 1 1
+    p2 mcts: move 1, move 2 1
+      search (20000 visits): blizzard,0;thunderbolt,0 4579v 3264 | iceshard,1;thunderbolt,0 3131v 2189 | iceshard,0;thunderbolt,0 1787v 1203 | woodhammer,1;thunderbolt,0 1663v 1113
+      p2b Rotom used Thunderbolt -> p1a: Genesect
+      p1a Genesect fainted
+      p1b Thundurus used Thunderbolt -> p2a: Abomasnow
+      p2a Abomasnow used Blizzard -> p1b: Thundurus
+              p1b Thundurus used up its Sitrus Berry
+      after p1: Genesect 0/291, Thundurus 212/362
+      after p2: Abomasnow 147/383, Rotom-Frost 241/241
+
+  Turn 5
+      p1a <- Latios comes in (302/302)
+      after p1: Latios 302/302, Thundurus 212/362
+      after p2: Abomasnow 147/383, Rotom-Frost 241/241
+
+  Turn 6
+    p1 greedy: move 1 1, move 1 1
+    p2 mcts: move 4 2, move 2 2
+      search (26000 visits): iceshard,1;thunderbolt,1 9958v 7224 | blizzard,0;thunderbolt,1 5768v 4100 | blizzard,0;thunderbolt,0 1228v 788 | iceshard,0;thunderbolt,1 1191v 762
+      p2a Abomasnow used Ice Shard -> p1b: Thundurus
+      p2b Rotom used Thunderbolt -> p1b: Thundurus
+      p1b Thundurus fainted
+      p1a Latios used Draco Meteor -> p2a: Abomasnow
+              p1a Latios used up its Dragon Gem
+              p1a Latios spa 2 fell
+      p2a Abomasnow fainted
+      after p1: Latios 284/302, Thundurus 0/362
+      after p2: Abomasnow 0/383, Rotom-Frost 241/241
+
+  Turn 7
+      p2a <- Infernape comes in (293/293)
+      after p1: Latios 284/302, Thundurus 0/362
+      after p2: Infernape 293/293, Rotom-Frost 241/241
+
+  Turn 8
+    p1 greedy: move 1 1, pass
+    p2 mcts: move 3 1, move 2 1
+      search (292000 visits): closecombat,0;thunderbolt,0 290191v 288524 | switch tornadus;thunderbolt,0 506v 395 | fakeout,0;thunderbolt,0 409v 307 | overheat,0;thunderbolt,0 389v 290
+      p2b Rotom used Thunderbolt -> p1a: Latios
+      p1a Latios used Draco Meteor -> p2a: Infernape
+              p2a Infernape -- critical hit
+              p1a Latios spa 2 fell
+      p2a Infernape fainted
+      after p1: Latios 200/302, Thundurus 0/362
+      after p2: Infernape 0/293, Rotom-Frost 241/241
+
+  Turn 9
+      p2a <- Tornadus comes in (299/299)
+      after p1: Latios 200/302, Thundurus 0/362
+      after p2: Tornadus 299/299, Rotom-Frost 241/241
+
+  Turn 10
+    p1 greedy: move 1 1, pass
+    p2 mcts: move 1 1, move 2 1
+      search (517000 visits): acrobatics,0;thunderbolt,0 192753v 192420 | skydrop,0;thunderbolt,0 161631v 161178 | superpower,0;thunderbolt,0 142100v 141581 | protect,0;thunderbolt,0 20516v 19986
+      p2b Rotom used Thunderbolt -> p1a: Latios
+      p2a Tornadus used Acrobatics -> p1a: Latios
+              p2a Tornadus used up its Flying Gem
+      p1a Latios fainted
+      after p1: Latios 0/302, Thundurus 0/362
+      after p2: Tornadus 299/299, Rotom-Frost 241/241
+
+  RESULT: p2 wins

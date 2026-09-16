@@ -1,0 +1,374 @@
+battle 30   p1=greedy vs p2=mcts   mcts 300 ms a decision
+  p1: Untitled 494: Tornadus, Rotom-Wash, Amoonguss, Terrakion
+  p2: LKJC - KSGL: Kyurem-Black, Scrafty, Genesect, Latios
+
+  Turn 1
+    p1 greedy: move 2 1, move 2 1
+    p2 mcts: move 2 1, move 1 1
+      search (19000 visits): icebeam,0;fakeout,0 672v 368 | icebeam,0;fakeout,1 588v 316 | icebeam,0;switch genesect 509v 266 | fusionbolt,0;fakeout,0 483v 250
+      p2b Scrafty used Fake Out -> p1a: Tornadus
+              p1a Tornadus COULD NOT MOVE (flinch)
+      p1b Rotom used Hydro Pump -> p2a: Kyurem
+      p2a Kyurem used Ice Beam -> p1a: Tornadus
+      p1a Tornadus fainted
+      after p1: Tornadus 0/299, Rotom-Wash 241/241
+      after p2: Kyurem-Black 345/454, Scrafty 334/334
+
+  Turn 2
+      p1a <- Amoonguss comes in (431/431)
+      after p1: Amoonguss 431/431, Rotom-Wash 241/241
+      after p2: Kyurem-Black 345/454, Scrafty 334/334
+
+  Turn 3
+    p1 greedy: move 3 1, move 2 1
+    p2 mcts: move 2 1, move 2 1
+      search (2000 visits): icebeam,0;crunch,0 36v 24 | icebeam,0;drainpunch,1 35v 23 | icebeam,0;crunch,1 34v 22 | icebeam,0;drainpunch,0 34v 22
+      p1b Rotom used Hydro Pump -> p2a: Kyurem
+      p2a Kyurem used Ice Beam -> p1a: Amoonguss
+              p1a Amoonguss is now frz
+      p2b Scrafty used Crunch -> p1a: Amoonguss
+              p2b Scrafty is now slp
+      p1a Amoonguss fainted
+      after p1: Amoonguss 0/431, Rotom-Wash 241/241
+      after p2: Kyurem-Black 249/454, Scrafty 334/334
+
+  Turn 4
+      p1a <- Terrakion comes in (323/323)
+      after p1: Terrakion 323/323, Rotom-Wash 241/241
+      after p2: Kyurem-Black 249/454, Scrafty 334/334
+
+  Turn 5
+    p1 greedy: move 1 1, move 2 1
+    p2 mcts: move 4, move 3 1
+      search (23000 visits): protect,0;drainpunch,0 2095v 1350 | icebeam,0;drainpunch,0 1179v 721 | dracometeor,1;drainpunch,0 1091v 662 | fusionbolt,0;drainpunch,0 857v 505
+      p2a Kyurem used Protect
+      p1a Terrakion used Close Combat -> p2a: Kyurem
+              p2a Kyurem -- move: Protect
+      p1b Rotom used Hydro Pump -> p2a: Kyurem
+              p2a Kyurem -- move: Protect
+              p2b Scrafty COULD NOT MOVE (slp)
+      after p1: Terrakion 323/323, Rotom-Wash 241/241
+      after p2: Kyurem-Black 249/454, Scrafty 334/334
+
+  Turn 6
+    p1 greedy: move 1 1, move 2 1
+    p2 mcts: move 1 2, move 3 1
+      search (33000 visits): dracometeor,1;drainpunch,0 2638v 1704 | icebeam,0;drainpunch,0 1646v 1024 | fusionbolt,0;drainpunch,0 1366v 835 | fusionbolt,1;drainpunch,0 1342v 819
+      p1a Terrakion used Close Combat -> p2a: Kyurem
+              p1a Terrakion def 1 fell
+              p1a Terrakion spd 1 fell
+      p2a Kyurem fainted
+      p1b Rotom used Hydro Pump -> p2b: Scrafty
+              p2b Scrafty is cured of slp
+      p2b Scrafty used Drain Punch -> p1a: Terrakion
+      p1a Terrakion fainted
+      after p1: Terrakion 0/323, Rotom-Wash 241/241
+      after p2: Kyurem-Black 0/454, Scrafty 334/334
+
+  Turn 7
+      p2a <- Genesect comes in (290/290)
+              p2a Genesect atk 1 rose
+      after p1: Terrakion 0/323, Rotom-Wash 241/241
+      after p2: Genesect 290/290, Scrafty 334/334
+
+  Turn 8
+    p1 greedy: pass, move 2 1
+    p2 mcts: move 3 2, switch 4   (slot1 Scrafty -> Latios)
+      search (43000 visits): bugbuzz,1;switch latios 5951v 2176 | flamethrower,1;switch latios 5746v 2095 | flashcannon,1;switch latios 4649v 1664 | protect,0;switch latios 4156v 1471
+      p2b <- Latios comes in (301/301)
+      p2a Genesect used Bug Buzz -> p1b: Rotom
+              p1b Rotom used up its Sitrus Berry
+      p1b Rotom used Hydro Pump -> p2a: Genesect
+      after p1: Terrakion 0/323, Rotom-Wash 166/241
+      after p2: Genesect 110/290, Latios 301/301
+
+  Turn 9
+    p1 greedy: pass, move 2 1
+    p2 mcts: switch 4, move 4   (slot0 Genesect -> Scrafty)
+      search (39000 visits): switch scrafty;calmmind,1 7506v 3503 | bugbuzz,1;calmmind,1 4953v 2251 | flamethrower,1;calmmind,1 4866v 2208 | flashcannon,1;calmmind,1 3893v 1736
+      p2a <- Scrafty comes in (334/334)
+              p1b Rotom atk 1 fell
+      p2b Latios used Calm Mind
+              p2b Latios spa 1 rose
+              p2b Latios spd 1 rose
+      p1b Rotom used Hydro Pump -> p2a: Scrafty
+      after p1: Terrakion 0/323, Rotom-Wash 166/241
+      after p2: Scrafty 183/334, Latios 301/301
+
+  Turn 10
+    p1 greedy: pass, move 2 1
+    p2 mcts: switch 4, move 4   (slot0 Scrafty -> Genesect)
+      search (57000 visits): switch genesect;calmmind,1 9103v 3933 | fakeout,1;calmmind,1 5652v 2367 | drainpunch,1;calmmind,1 5312v 2215 | taunt,1;calmmind,1 5121v 2129
+      p2a <- Genesect comes in (110/290)
+              p2a Genesect atk 1 rose
+      p2b Latios used Calm Mind
+              p2b Latios spa 1 rose
+              p2b Latios spd 1 rose
+      p1b Rotom used Hydro Pump -> p2a: Genesect
+      p2a Genesect fainted
+      after p1: Terrakion 0/323, Rotom-Wash 166/241
+      after p2: Genesect 0/290, Latios 301/301
+
+  Turn 11
+      p2a <- Scrafty comes in (183/334)
+              p1b Rotom atk 1 fell
+      after p1: Terrakion 0/323, Rotom-Wash 166/241
+      after p2: Scrafty 183/334, Latios 301/301
+
+  Turn 12
+    p1 greedy: pass, move 2 1
+    p2 mcts: move 3 2, move 4
+      search (46000 visits): drainpunch,1;calmmind,1 4617v 1688 | crunch,1;calmmind,1 4483v 1635 | fakeout,1;calmmind,1 4468v 1629 | taunt,1;calmmind,1 4408v 1605
+      p2b Latios used Calm Mind
+              p2b Latios spa 1 rose
+              p2b Latios spd 1 rose
+      p1b Rotom used Hydro Pump -> p2a: Scrafty
+      p2a Scrafty used Drain Punch -> p1b: Rotom
+      after p1: Terrakion 0/323, Rotom-Wash 55/241
+      after p2: Scrafty 67/334, Latios 301/301
+
+  Turn 13
+    p1 greedy: pass, move 1 1
+    p2 mcts: move 4 2, move 4
+      search (77000 visits): taunt,1;calmmind,1 7000v 2293 | fakeout,1;calmmind,1 6970v 2282 | crunch,1;calmmind,1 6950v 2275 | drainpunch,1;calmmind,1 6733v 2198
+      p2b Latios used Calm Mind
+              p2b Latios spa 1 rose
+              p2b Latios spd 1 rose
+      p1b Rotom used Thunderbolt -> p2a: Scrafty
+              p2a Scrafty -- critical hit
+      p2a Scrafty fainted
+      after p1: Terrakion 0/323, Rotom-Wash 55/241
+      after p2: Scrafty 0/334, Latios 301/301
+
+  Turn 14
+    p1 greedy: pass, move 1 2
+    p2 mcts: pass, move 4
+      search (119000 visits): No Move;calmmind,1 47507v 25046 | No Move;protect,1 42707v 22463 | No Move;psychic,1 16266v 8320 | No Move;dracometeor,1 12520v 6337
+      p2b Latios used Calm Mind
+              p2b Latios spa 1 rose
+              p2b Latios spd 1 rose
+      p1b Rotom used Thunderbolt -> p2b: Latios
+      after p1: Terrakion 0/323, Rotom-Wash 55/241
+      after p2: Scrafty 0/334, Latios 280/301
+
+  Turn 15
+    p1 greedy: pass, move 1 2
+    p2 mcts: pass, move 1
+      search (116000 visits): No Move;protect,1 54662v 28293 | No Move;calmmind,1 24076v 12210 | No Move;psychic,1 20796v 10497 | No Move;dracometeor,1 16466v 8243
+      p2b Latios used Protect
+      p1b Rotom used Thunderbolt -> p2b: Latios
+              p2b Latios -- move: Protect
+      after p1: Terrakion 0/323, Rotom-Wash 55/241
+      after p2: Scrafty 0/334, Latios 280/301
+
+  Turn 16
+    p1 greedy: pass, move 1 2
+    p2 mcts: pass, move 1
+      search (116000 visits): No Move;protect,1 54433v 28176 | No Move;calmmind,1 24453v 12408 | No Move;psychic,1 19743v 9950 | No Move;dracometeor,1 17371v 8715
+      p2b Latios used Protect
+      p1b Rotom used Thunderbolt -> p2b: Latios
+              p2b Latios -- move: Protect
+      after p1: Terrakion 0/323, Rotom-Wash 55/241
+      after p2: Scrafty 0/334, Latios 280/301
+
+  Turn 17
+    p1 greedy: pass, move 1 2
+    p2 mcts: pass, move 1
+      search (116000 visits): No Move;protect,1 54868v 28409 | No Move;calmmind,1 23055v 11679 | No Move;dracometeor,1 20410v 10299 | No Move;psychic,1 17667v 8870
+      p2b Latios used Protect
+      p1b Rotom used Thunderbolt -> p2b: Latios
+              p2b Latios -- move: Protect
+      after p1: Terrakion 0/323, Rotom-Wash 55/241
+      after p2: Scrafty 0/334, Latios 280/301
+
+  Turn 18
+    p1 greedy: pass, move 1 2
+    p2 mcts: pass, move 1
+      search (117000 visits): No Move;protect,1 55011v 28468 | No Move;calmmind,1 24733v 12549 | No Move;psychic,1 20059v 10109 | No Move;dracometeor,1 17197v 8620
+      p2b Latios used Protect  [[still]]
+              p2b Latios -- IT FAILED
+      p1b Rotom used Thunderbolt -> p2b: Latios
+              p2b Latios is now par
+      after p1: Terrakion 0/323, Rotom-Wash 55/241
+      after p2: Scrafty 0/334, Latios 262/301
+
+  Turn 19
+    p1 greedy: pass, move 1 2
+    p2 mcts: pass, move 1
+      search (116000 visits): No Move;protect,1 54975v 28458 | No Move;calmmind,1 23512v 11915 | No Move;psychic,1 18866v 9491 | No Move;dracometeor,1 18647v 9377
+              p2b Latios COULD NOT MOVE (par)
+      p1b Rotom used Thunderbolt -> p2b: Latios
+      after p1: Terrakion 0/323, Rotom-Wash 55/241
+      after p2: Scrafty 0/334, Latios 244/301
+
+  Turn 20
+    p1 greedy: pass, move 1 2
+    p2 mcts: pass, move 1
+      search (89000 visits): No Move;protect,1 44765v 23180 | No Move;calmmind,1 15590v 7829 | No Move;psychic,1 15368v 7713 | No Move;dracometeor,1 13277v 6624
+      p2b Latios used Protect
+      p1b Rotom used Thunderbolt -> p2b: Latios
+              p2b Latios -- move: Protect
+      after p1: Terrakion 0/323, Rotom-Wash 55/241
+      after p2: Scrafty 0/334, Latios 244/301
+
+  Turn 21
+    p1 greedy: pass, move 1 2
+    p2 mcts: pass, move 1
+      search (113000 visits): No Move;protect,1 54611v 28279 | No Move;calmmind,1 22395v 11337 | No Move;psychic,1 19861v 10015 | No Move;dracometeor,1 16133v 8074
+      p2b Latios used Protect
+      p1b Rotom used Thunderbolt -> p2b: Latios
+              p2b Latios -- move: Protect
+      after p1: Terrakion 0/323, Rotom-Wash 55/241
+      after p2: Scrafty 0/334, Latios 244/301
+
+  Turn 22
+    p1 greedy: pass, move 1 2
+    p2 mcts: pass, move 1
+      search (116000 visits): No Move;protect,1 55316v 28645 | No Move;calmmind,1 22819v 11556 | No Move;dracometeor,1 21662v 10952 | No Move;psychic,1 16203v 8109
+      p2b Latios used Protect  [[still]]
+              p2b Latios -- IT FAILED
+      p1b Rotom used Thunderbolt -> p2b: Latios
+      after p1: Terrakion 0/323, Rotom-Wash 55/241
+      after p2: Scrafty 0/334, Latios 226/301
+
+  Turn 23
+    p1 greedy: pass, move 1 2
+    p2 mcts: pass, move 1
+      search (101000 visits): No Move;protect,1 48891v 25288 | No Move;calmmind,1 20079v 10141 | No Move;dracometeor,1 16559v 8307 | No Move;psychic,1 15471v 7741
+      p2b Latios used Protect
+      p1b Rotom used Thunderbolt -> p2b: Latios
+              p2b Latios -- move: Protect
+      after p1: Terrakion 0/323, Rotom-Wash 55/241
+      after p2: Scrafty 0/334, Latios 226/301
+
+  Turn 24
+    p1 greedy: pass, move 1 2
+    p2 mcts: pass, move 1
+      search (77000 visits): No Move;protect,1 39511v 20459 | No Move;psychic,1 13667v 6848 | No Move;calmmind,1 13246v 6629 | No Move;dracometeor,1 10576v 5241
+              p2b Latios COULD NOT MOVE (par)
+      p1b Rotom used Thunderbolt -> p2b: Latios
+      after p1: Terrakion 0/323, Rotom-Wash 55/241
+      after p2: Scrafty 0/334, Latios 206/301
+
+  Turn 25
+    p1 greedy: pass, move 1 2
+    p2 mcts: pass, move 1
+      search (107000 visits): No Move;protect,1 52288v 27060 | No Move;calmmind,1 21843v 11053 | No Move;psychic,1 16944v 8499 | No Move;dracometeor,1 15925v 7969
+              p2b Latios COULD NOT MOVE (par)
+      p1b Rotom used Thunderbolt -> p2b: Latios
+      after p1: Terrakion 0/323, Rotom-Wash 55/241
+      after p2: Scrafty 0/334, Latios 185/301
+
+  Turn 26
+    p1 greedy: pass, move 1 2
+    p2 mcts: pass, move 1
+      search (107000 visits): No Move;protect,1 51900v 26882 | No Move;dracometeor,1 20452v 10337 | No Move;calmmind,1 19752v 9972 | No Move;psychic,1 14896v 7443
+      p2b Latios used Protect
+      p1b Rotom used Thunderbolt -> p2b: Latios
+              p2b Latios -- move: Protect
+      after p1: Terrakion 0/323, Rotom-Wash 55/241
+      after p2: Scrafty 0/334, Latios 185/301
+
+  Turn 27
+    p1 greedy: pass, move 1 2
+    p2 mcts: pass, move 1
+      search (106000 visits): No Move;protect,1 51713v 26763 | No Move;calmmind,1 20746v 10482 | No Move;psychic,1 17151v 8609 | No Move;dracometeor,1 16390v 8213
+      p2b Latios used Protect
+      p1b Rotom used Thunderbolt -> p2b: Latios
+              p2b Latios -- move: Protect
+      after p1: Terrakion 0/323, Rotom-Wash 55/241
+      after p2: Scrafty 0/334, Latios 185/301
+
+  Turn 28
+    p1 greedy: pass, move 1 2
+    p2 mcts: pass, move 1
+      search (96000 visits): No Move;protect,1 47746v 24711 | No Move;calmmind,1 18431v 9293 | No Move;psychic,1 16450v 8260 | No Move;dracometeor,1 13373v 6660
+      p2b Latios used Protect  [[still]]
+              p2b Latios -- IT FAILED
+      p1b Rotom used Thunderbolt -> p2b: Latios
+      after p1: Terrakion 0/323, Rotom-Wash 55/241
+      after p2: Scrafty 0/334, Latios 164/301
+
+  Turn 29
+    p1 greedy: pass, move 1 2
+    p2 mcts: pass, move 1
+      search (102000 visits): No Move;protect,1 50051v 25903 | No Move;calmmind,1 20430v 10325 | No Move;dracometeor,1 16002v 8017 | No Move;psychic,1 15517v 7765
+      p2b Latios used Protect
+      p1b Rotom used Thunderbolt -> p2b: Latios
+              p2b Latios -- move: Protect
+      after p1: Terrakion 0/323, Rotom-Wash 55/241
+      after p2: Scrafty 0/334, Latios 164/301
+
+  Turn 30
+    p1 greedy: pass, move 1 2
+    p2 mcts: pass, move 1
+      search (104000 visits): No Move;protect,1 50598v 26208 | No Move;calmmind,1 19239v 9709 | No Move;psychic,1 17250v 8672 | No Move;dracometeor,1 16913v 8496
+      p2b Latios used Protect
+      p1b Rotom used Thunderbolt -> p2b: Latios
+              p2b Latios -- move: Protect
+      after p1: Terrakion 0/323, Rotom-Wash 55/241
+      after p2: Scrafty 0/334, Latios 164/301
+
+  Turn 31
+    p1 greedy: pass, move 1 2
+    p2 mcts: pass, move 1
+      search (102000 visits): No Move;protect,1 50711v 26276 | No Move;psychic,1 19522v 9861 | No Move;calmmind,1 18662v 9412 | No Move;dracometeor,1 13105v 6520
+      p2b Latios used Protect
+      p1b Rotom used Thunderbolt -> p2b: Latios
+              p2b Latios -- move: Protect
+      after p1: Terrakion 0/323, Rotom-Wash 55/241
+      after p2: Scrafty 0/334, Latios 164/301
+
+  Turn 32
+    p1 greedy: pass, move 1 2
+    p2 mcts: pass, move 1
+      search (101000 visits): No Move;protect,1 50100v 25969 | No Move;calmmind,1 17667v 8898 | No Move;dracometeor,1 17202v 8656 | No Move;psychic,1 16031v 8046
+      p2b Latios used Protect  [[still]]
+              p2b Latios -- IT FAILED
+      p1b Rotom used Thunderbolt -> p2b: Latios
+      after p1: Terrakion 0/323, Rotom-Wash 55/241
+      after p2: Scrafty 0/334, Latios 143/301
+
+  Turn 33
+    p1 greedy: pass, move 1 2
+    p2 mcts: pass, move 1
+      search (92000 visits): No Move;protect,1 47008v 24476 | No Move;psychic,1 17601v 8918 | No Move;dracometeor,1 15466v 7799 | No Move;calmmind,1 11925v 5950
+      p2b Latios used Protect
+      p1b Rotom used Thunderbolt -> p2b: Latios
+              p2b Latios -- move: Protect
+      after p1: Terrakion 0/323, Rotom-Wash 55/241
+      after p2: Scrafty 0/334, Latios 143/301
+
+  Turn 34
+    p1 greedy: pass, move 1 2
+    p2 mcts: pass, move 4
+      search (85000 visits): No Move;calmmind,1 32287v 9557 | No Move;dracometeor,1 26562v 7790 | No Move;psychic,1 26151v 7664
+      p1b Rotom used Thunderbolt -> p2b: Latios
+      p2b Latios used Calm Mind
+              p2b Latios spa 1 rose
+              p2b Latios spd 1 rose
+      after p1: Terrakion 0/323, Rotom-Wash 55/241
+      after p2: Scrafty 0/334, Latios 125/301
+
+  Turn 35
+    p1 greedy: pass, move 1 2
+    p2 mcts: pass, move 4
+      search (88000 visits): No Move;calmmind,1 32452v 9247 | No Move;dracometeor,1 28529v 8079 | No Move;psychic,1 27019v 7630
+      p1b Rotom used Thunderbolt -> p2b: Latios
+      p2b Latios used Calm Mind
+              p2b Latios spa 0 rose
+              p2b Latios spd 0 rose
+      after p1: Terrakion 0/323, Rotom-Wash 55/241
+      after p2: Scrafty 0/334, Latios 108/301
+
+  Turn 36
+    p1 greedy: pass, move 1 2
+    p2 mcts: pass, move 3 2
+      search (86000 visits): No Move;psychic,1 28919v 7434 | No Move;calmmind,1 28751v 7389 | No Move;dracometeor,1 28330v 7275
+      p1b Rotom used Thunderbolt -> p2b: Latios
+              p2b Latios -- critical hit
+      p2b Latios fainted
+      after p1: Terrakion 0/323, Rotom-Wash 55/241
+      after p2: Scrafty 0/334, Latios 0/301
+
+  RESULT: p1 wins

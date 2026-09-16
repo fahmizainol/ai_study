@@ -1,0 +1,86 @@
+battle 33   p1=greedy vs p2=mcts   mcts 300 ms a decision
+  p1: chomp kiss meta: Metagross, Infernape, Togekiss, Garchomp
+  p2: 2v2 Pool League II/2v2 Pools - BW 18: Blaziken, Aerodactyl, Blastoise, Latios
+
+  Turn 1
+    p1 greedy: move 2 1, move 2 1
+    p2 mcts: move 1 1, move 1
+      search PANICKED (Invalid boost number: 7); greedy took the turn
+      p2b Aerodactyl used Rock Slide -> p1a: Metagross  [[spread] p1a,p1b]
+              p2b Aerodactyl used up its Rock Gem
+      p1b Infernape used Overheat -> p2a: Blaziken
+              p1b Infernape spa 2 fell
+      p2a Blaziken used Superpower -> p1a: Metagross
+              p2a Blaziken atk 1 fell
+              p2a Blaziken def 1 fell
+      p1a Metagross used Meteor Mash -> p2a: Blaziken
+              p1a Metagross used up its Steel Gem
+              p1a Metagross atk 1 rose
+      p2a Blaziken fainted
+      after p1: Metagross 95/364, Infernape 83/293
+      after p2: Blaziken 0/301, Aerodactyl 301/301
+
+  Turn 2
+      p2a <- Blastoise comes in (362/362)
+      after p1: Metagross 95/364, Infernape 83/293
+      after p2: Blastoise 362/362, Aerodactyl 301/301
+
+  Turn 3
+    p1 greedy: move 2 1, move 2 1
+    p2 mcts: move 2 1, move 1
+      search (39000 visits): scald,0;rockslide,0 4978v 1640 | scald,0;protect,1 4659v 1525 | scald,0;switch latios 2692v 824 | icywind,0;protect,1 2175v 644
+      p2b Aerodactyl used Rock Slide -> p1b: Infernape  [[spread] p1a,p1b]
+      p1b Infernape fainted
+      p2a Blastoise used Scald -> p1a: Metagross
+      p1a Metagross fainted
+      after p1: Metagross 0/364, Infernape 0/293
+      after p2: Blastoise 362/362, Aerodactyl 301/301
+
+  Turn 4
+      p1b <- Garchomp comes in (357/357)
+      p1a <- Togekiss comes in (374/374)
+      after p1: Togekiss 374/374, Garchomp 357/357
+      after p2: Blastoise 362/362, Aerodactyl 301/301
+
+  Turn 5
+    p1 greedy: move 1 1, move 1
+    p2 mcts: move 3, move 1
+      search (14000 visits): icywind,0;rockslide,0 3437v 2139 | icywind,0;protect,1 1670v 985 | icywind,0;skydrop,0 690v 366 | scald,1;rockslide,0 684v 362
+      p2b Aerodactyl used Rock Slide -> p1a: Togekiss  [[spread] p1b]
+              p2b Aerodactyl -- MISSED
+      p1b Garchomp used Earthquake -> p2b: Aerodactyl  [[spread] p2a]
+              p1a Togekiss -- IMMUNE
+              p2b Aerodactyl -- IMMUNE
+      p1a Togekiss used Air Slash -> p2a: Blastoise
+              p2a Blastoise COULD NOT MOVE (flinch)
+      after p1: Togekiss 374/374, Garchomp 274/357
+      after p2: Blastoise 138/362, Aerodactyl 301/301
+
+  Turn 6
+    p1 greedy: move 1 1, move 1
+    p2 mcts: move 3, move 1
+      search (17000 visits): icywind,0;rockslide,0 3021v 1587 | icywind,0;protect,1 1284v 619 | scald,1;rockslide,0 905v 415 | protect,0;rockslide,0 899v 412
+      p2b Aerodactyl used Rock Slide -> p1b: Garchomp  [[spread] p1a,p1b]
+      p1b Garchomp used Earthquake -> p2b: Aerodactyl  [[spread] p2a]
+              p1a Togekiss -- IMMUNE
+              p2b Aerodactyl -- IMMUNE
+              p1a Togekiss COULD NOT MOVE (flinch)
+      p2a Blastoise used Icy Wind -> p1b: Garchomp  [[spread] p1a,p1b]
+              p1a Togekiss spe 1 fell
+              p1b Garchomp spe 1 fell
+      after p1: Togekiss 160/374, Garchomp 73/357
+      after p2: Blastoise 12/362, Aerodactyl 301/301
+
+  Turn 7
+    p1 greedy: move 1 1, move 1
+    p2 mcts: move 3, move 1
+      search (35000 visits): icywind,0;rockslide,0 25573v 16201 | scald,1;rockslide,0 1110v 582 | protect,0;rockslide,0 825v 415 | scald,0;rockslide,0 798v 399
+      p2b Aerodactyl used Rock Slide -> p1a: Togekiss  [[spread] p1a,p1b]
+      p1a Togekiss fainted
+              p1b Garchomp COULD NOT MOVE (flinch)
+      p2a Blastoise used Icy Wind -> p1b: Garchomp
+      p1b Garchomp fainted
+      after p1: Togekiss 0/374, Garchomp 0/357
+      after p2: Blastoise 12/362, Aerodactyl 301/301
+
+  RESULT: p2 wins

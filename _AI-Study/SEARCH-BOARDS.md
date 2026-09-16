@@ -1231,8 +1231,8 @@ rather than handed to it by the translator, which removes my own instrument as a
 
 ### Run 12 root-caused defect 2 by instrumenting the one mutator
 
-**Status, 2026-09-16: the fix is IN the patch and has been re-established from a clean clone
-(run 13 below). The arm is still un-repriced.** The scratchpad worktree holding the engine
+**Status, 2026-09-16: the fix is IN the patch, re-established from a clean clone, and the arm
+is re-priced — run 13 below closes both of this run's open ends.** The scratchpad worktree holding the engine
 source, the build and the venv was destroyed between sessions before the patch could be
 regenerated — the run-12 write-up below was made under that loss and its "not in the patch"
 warnings no longer apply. That the write-up was specific enough to rebuild from is the reason
@@ -1302,9 +1302,9 @@ recorded baseline, both failures being the known-wrong fixtures
 (`test_switching_in_with_intimidate`, `storm_drain_redirects_nullifies_and_boosts`), so no new
 failure; singles **fully green at 220 + 611 + 15**, which is the control that matters for a change
 in a shared code path. Corpus **byte-identical** at 306/316 and 315/316 with identical skip counts;
-stage 0 **19/19, 0 disagree**. **Outstanding: the arm was never re-priced** — it had one fallback
+stage 0 **19/19, 0 disagree**. **Outstanding at the time: the arm was never re-priced** — it had one fallback
 left at seed 101 (defect 2's own panic), so the expected result is 0, and that is a prediction, not
-a measurement.
+a measurement. **Run 13 measured it: 0.** 
 
 **A separate instrument fact worth keeping: `--ms` can be inert.** `run_mcts_loop` (`mcts.rs:276`)
 runs a hard-coded `for _ in 0..1000` batch **before it checks the clock at all**, so any budget
@@ -1314,7 +1314,7 @@ searching ~1000 iterations against the arm's 10450 mean — and it means a small
 measurement here is not the knob it appears to be. Consistent with the older note that 5000
 iterations is not a knob either.
 
-### Run 13 re-applied the fix from a clean clone, and the paired control is the point
+### Run 13 re-applied the fix from a clean clone and re-priced the arm — the fallback rate is now 0.0%
 
 Run 12 was a verified fix with no surviving artefact. This run's only job was to make it durable,
 and the method generalises: **when an environment is lost, re-establish the finding rather than
@@ -1360,8 +1360,38 @@ lost**: the per-file hunk inventory is identical except for the two new fix hunk
 (corpus 306/316 + 315/316, stage 0 19/19) reproduce to the digit. The regenerated patch is
 self-consistent, and `debug_slot` and `choice_labels` still stack on it.
 
-**Still open, unchanged: the arm was never re-priced.** Seed 101 had one fallback left, defect
-2's own panic, so the expected result is 0 — a prediction, not a measurement.
+**The arm is re-priced, and the prediction held.** Run 12 predicted the last fallback would go to
+0; that is now measured. Both arms were run from this session's builds, **sequentially** — the MCTS
+budget is wall-clock, so parallel arms would silently cut visits per decision (run 9's rule) — over
+the same 40 battles at seed 101, `--teams gen5doublesou --team-sizes 4 --ms 300`, p1 greedy vs p2
+mcts. Battle 0's pairing reproduces run 11's transcripts exactly, which is how the arm was confirmed
+to be the same one before anything was read off it.
+
+| identical arm, seed 101, 40 battles | control (`actor_slot()`) | fixed (`0`) |
+|---|---|---|
+| mcts decisions | 247 | 275 |
+| engine panics — defect 2, `Invalid boost number: 7` at `genx/state.rs:43` | **1** | **0** |
+| **total fallbacks** | 1 (0.4%) | **0 (0.0%)** |
+| result (p2 = MCTS) | 29-11 (72.5%) | 30-10 (75.0%) |
+| mean visits | 147,660 | 108,480 |
+
+Transcripts are tracked at `generated/doubles_play_logs_gen5_run13{,_control}`; no transcript in
+either arm records a fallback the summary does not.
+
+**Three things not to over-read here.** First, **this is not literally run 11's build**: mean visits
+are 108k–148k against run 11's 10,450, which is a release build against what must have been a
+`maturin develop` debug one. Same source, seed, pool and budget flag; different optimisation level.
+That makes it a *harder* test rather than a softer one — run 9 established that **panics track search
+volume, not team size** — and the control still panicked at 14x the visits while the fixed build did
+not. It is also why the control was re-run here instead of comparing against run 11's recorded 1-of-263.
+Second, **the win column is noise** and has now read 29-11, 33-7, 27-13 and 29-11 / 30-10 on this same
+arm; the 2.5-point gap is not a result. Third, **the decision counts differ** (247 vs 275) because MCTS
+is unseeded and the games diverge from the first decision, so the comparable figure is the fallback
+*rate*, not the raw count.
+
+**What remains: defect 1** — `mega_evolve` panicking at `genx/generate_instructions.rs:4301` on any
+held item that is not a mega stone — is now the leading known crash, and it did not fire in this gen 5
+pool (megas are gen 6).
 
 ## Backlog
 
@@ -1461,7 +1491,7 @@ here is a regression, only unfinished work.
 | # | site | trigger |
 |---|---|---|
 | 1 | `genx/generate_instructions.rs:4289` `mega_evolve` | computes `act_slot`, discards it, then reads `side.get_active()` — slot 0 — and panics at `:4301` on any held item that is not a mega stone (`RHYPERIOR`/`ASSAULTVEST`, `TALONFLAME`/`CHOICEBAND`, …). Note the second, quieter half: were slot 0 *also* holding a stone, this would mega-evolve the wrong body and not panic at all |
-| 2 | `genx/evaluate.rs:107` **and `genx/state.rs:43`** | `Invalid boost value: -7 / -8 / **-11 / -12**` at the first site, `Invalid boost number: 7 / 8` at the second. Boosts escape the ±6 clamp somewhere upstream and blow up at whichever reader reaches them first — **run 9's roster re-run panicked twice at `genx/state.rs:43`, so evaluation is not the only victim and "only blow up at evaluation" was too narrow**. Seen in gen 6 **and** gen 5, so not generation-specific. The −12 (`doubles_play_logs_gen5_seed23/002`, turn 1) matters: it is exactly **double** the legal floor, so this is not a clamp that is off by one or two but drops being stacked with no bound at all — look for a per-slot drop applied once per target. **Run 11 narrowed where to look**: `--dump-panics` captured the root state of the surviving `Invalid boost number: 7` and **all seven boosts are zero on all four bodies**, so the escape is generated *during the search* and not supplied by the translator — which also clears my own instrument as a candidate. **ROOT-CAUSED AND FIXED 2026-09-14 (run 12); IN THE PATCH AND RE-ESTABLISHED FROM A CLEAN CLONE 2026-09-16 (run 13), with a paired control 12/12 → 0/12 built from the same commit differing only in these two lines.** Cause: `ability_end_of_turn` (`genx/abilities.rs:1175`) and `item_end_of_turn` (`genx/items.rs:885`) both derive `owner_slot` from `state.actor_slot()` — a transient set per actor during move resolution, hence by end of turn a leftover naming whichever body acted LAST — while every read in both functions is `attacking_side.get_active()`, slot 0, with not one `get_active_slot` call between them. So instructions were stamped with one body and described another, which breaks apply/reverse: the reversal subtracts from the slot the instruction names while generation mutated the slot the read named. Speed Boost makes it a runaway because its `< 6` guard bounds slot 0 while the instruction accumulates elsewhere (`slot 0: 1 +6 -> 7 … 6 +6 -> 12`, `slot 1: -6 -1 -> -7 … -11 -1 -> -12`). **Both signs come from this one defect**, which is why source-reading failed: all four emits that bypass the clamp ADD, and the negatives are *reversals of a positive stamped on the wrong body*. **The "exactly double the floor" reading above was mine and is wrong** — −7/−8 are one or two steps past the limit, and Belly Drum, the only site that can emit ±12 at once, is 0/183 teams here. Found by instrumenting `Side::apply_boost`, the sole mutator, after a correct-but-insufficient caller audit; deterministic repro `tools/pe_doubles_boost_range.py` on the opening position of the tracked `doubles_play_logs_gen5_tailwind/000`, **12/12 panics → 0/12**. Controls green: cargo 216/1 + 46/1 (baseline), singles 220 + 611 + 15, corpus 306/316 and 315/316 byte-identical, stage 0 19/19. Fix: `let owner_slot = 0;` in both functions; singles identical by construction — and confirmed independently in run 13 by reading the caller, which iterates SIDES behind a slot-0 hp guard, so slot 0 is the only self-consistent value while that loop stands. **The arm has still never been re-priced** |
+| 2 | `genx/evaluate.rs:107` **and `genx/state.rs:43`** | `Invalid boost value: -7 / -8 / **-11 / -12**` at the first site, `Invalid boost number: 7 / 8` at the second. Boosts escape the ±6 clamp somewhere upstream and blow up at whichever reader reaches them first — **run 9's roster re-run panicked twice at `genx/state.rs:43`, so evaluation is not the only victim and "only blow up at evaluation" was too narrow**. Seen in gen 6 **and** gen 5, so not generation-specific. The −12 (`doubles_play_logs_gen5_seed23/002`, turn 1) matters: it is exactly **double** the legal floor, so this is not a clamp that is off by one or two but drops being stacked with no bound at all — look for a per-slot drop applied once per target. **Run 11 narrowed where to look**: `--dump-panics` captured the root state of the surviving `Invalid boost number: 7` and **all seven boosts are zero on all four bodies**, so the escape is generated *during the search* and not supplied by the translator — which also clears my own instrument as a candidate. **ROOT-CAUSED AND FIXED 2026-09-14 (run 12); IN THE PATCH AND RE-ESTABLISHED FROM A CLEAN CLONE 2026-09-16 (run 13), with a paired control 12/12 → 0/12 built from the same commit differing only in these two lines.** Cause: `ability_end_of_turn` (`genx/abilities.rs:1175`) and `item_end_of_turn` (`genx/items.rs:885`) both derive `owner_slot` from `state.actor_slot()` — a transient set per actor during move resolution, hence by end of turn a leftover naming whichever body acted LAST — while every read in both functions is `attacking_side.get_active()`, slot 0, with not one `get_active_slot` call between them. So instructions were stamped with one body and described another, which breaks apply/reverse: the reversal subtracts from the slot the instruction names while generation mutated the slot the read named. Speed Boost makes it a runaway because its `< 6` guard bounds slot 0 while the instruction accumulates elsewhere (`slot 0: 1 +6 -> 7 … 6 +6 -> 12`, `slot 1: -6 -1 -> -7 … -11 -1 -> -12`). **Both signs come from this one defect**, which is why source-reading failed: all four emits that bypass the clamp ADD, and the negatives are *reversals of a positive stamped on the wrong body*. **The "exactly double the floor" reading above was mine and is wrong** — −7/−8 are one or two steps past the limit, and Belly Drum, the only site that can emit ±12 at once, is 0/183 teams here. Found by instrumenting `Side::apply_boost`, the sole mutator, after a correct-but-insufficient caller audit; deterministic repro `tools/pe_doubles_boost_range.py` on the opening position of the tracked `doubles_play_logs_gen5_tailwind/000`, **12/12 panics → 0/12**. Controls green: cargo 216/1 + 46/1 (baseline), singles 220 + 611 + 15, corpus 306/316 and 315/316 byte-identical, stage 0 19/19. Fix: `let owner_slot = 0;` in both functions; singles identical by construction — and confirmed independently in run 13 by reading the caller, which iterates SIDES behind a slot-0 hp guard, so slot 0 is the only self-consistent value while that loop stands. **RE-PRICED 2026-09-16 (run 13) on the identical arm, and the prediction held: the last fallback is gone — control 1 panic in 247 decisions (this exact site, `genx/state.rs:43`) vs fixed 0 in 275, total fallbacks 0.4% → 0.0%** |
 | 3 | **FIXED 2026-09-14 (run 10)** — cause at `genx/generate_instructions.rs:2504`, assert at `state.rs:1722` | `assert_ne!(a_idx, b_idx, "get_two_actives called with the same position")` — reached in ordinary play (×5 in the gen 5 run). **Run 9's roster re-run makes this the dominant crash by a wide margin: 19 of the 23 panics across 488 decisions, panicking at `state.rs:1724` with `left: 0, right: 0` — both positions resolving to party index 0.** Once the Choice lock stopped masking turns, this became the single largest reason a decision is not the search's. **Root cause, found by instrumenting the engine after four wrong hypotheses: Encore substitutes the move but not its TARGET.** `generate_instructions_from_move` holds the only whole-`Choice` replacement in `src/genx/` — `*choice = MOVES.get(…).clone()` — which swaps in the encored move, `target` class included, while `state.target_position` still holds what the per-actor setup (`:5276`) computed for the move the player actually *chose*. Choosing RECOVER (`MoveTarget::User`, whose nominal target correctly **is** the user's own position) while locked into EARTH POWER (`MoveTarget::Opponent`) therefore leaves a damaging foe-move aimed at its own user, and the damage path calls `get_two_actives(attacker, attacker)`. The state is **not** corrupt — the enriched assert prints `active_indices=[P0, P1]`; the party indices matched because attacker and target were the *same position*. Singles never needed a refresh: its `defender_position` ignores `target_position` and returns the opposing slot 0, so a substituted move always targeted the foe — an unfinished doubles conversion, the family of defects 6, 14, 20, 23 and 26. **Adjudicated against Showdown, not assumed:** `sim/battle-actions.ts:228` runs the `OverrideAction` event and then re-derives the target with `target = this.battle.getRandomTarget(pokemon, baseMove)`. Fix re-derives via `legal_targets` (now `pub(crate)`), the same primitive option generation uses, so the swapped-in move gets a **living** foe — which matters rather than being theoretical, since in the captured state the directly-opposite slot is the fainted one and `.opposing()` would have aimed at a corpse. Showdown picks at random among legal targets where this takes the first: a recorded simplification, like `redirect_target`'s speed-tie note. Priced on the identical arm (seed 101, same pool and budget): **11 `get_two_actives` panics → 0**, total fallbacks 21 of 242 (8.7%) → 7 of 235 (**3.0%**). Probe `tools/pe_doubles_encore_target.py`; 12 captured real positions went 5/5 → 0/6 |
 
 **Silent wrong answers.** These return a plausible result that is wrong, which the differential

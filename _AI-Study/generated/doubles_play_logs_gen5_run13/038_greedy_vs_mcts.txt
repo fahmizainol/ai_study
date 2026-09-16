@@ -1,0 +1,138 @@
+battle 38   p1=greedy vs p2=mcts   mcts 300 ms a decision
+  p1: Untitled 1065: Raikou, Politoed, Ludicolo, Amoonguss
+  p2: kyurem scraft thund tran: Heatran, Scrafty, Thundurus, Kyurem
+
+  Turn 1
+    p1 greedy: move 1 1, move 2 1
+    p2 mcts: move 4 1, move 1 2
+      search (12000 visits): earthpower,0;fakeout,1 397v 200 | earthpower,0;bulkup,1 371v 185 | eruption,0;crunch,0 304v 144 | eruption,0;bulkup,1 293v 137
+      p2b Scrafty used Fake Out -> p1b: Politoed
+      p1a Raikou used Thunder -> p2a: Heatran
+              p2a Heatran is now par
+      p2a Heatran used Earth Power -> p1a: Raikou
+              p1b Politoed COULD NOT MOVE (flinch)
+      after p1: Raikou 43/321, Politoed 353/384
+      after p2: Heatran 77/323, Scrafty 332/332
+
+  Turn 2
+    p1 greedy: move 1 1, move 2 1
+    p2 mcts: switch 4, move 1 1   (slot0 Heatran -> Kyurem)
+      search (21000 visits): switch kyurem;fakeout,0 878v 400 | switch thundurus;fakeout,0 714v 314 | earthpower,1;bulkup,1 435v 170 | earthpower,0;bulkup,1 423v 165
+      p2a <- Kyurem comes in (391/391)
+      p2b Scrafty used Fake Out  [[still]]
+              p2b Scrafty -- IT FAILED
+      p1a Raikou used Thunder -> p2a: Kyurem
+      p1b Politoed used Scald -> p2a: Kyurem
+      after p1: Raikou 11/321, Politoed 353/384
+      after p2: Kyurem 175/391, Scrafty 332/332
+
+  Turn 3
+    p1 greedy: move 1 1, move 2 1
+    p2 mcts: move 4, switch 4   (slot1 Scrafty -> Heatran)
+      search (21000 visits): icywind,0;switch heatran 1591v 1070 | icywind,0;bulkup,1 1448v 966 | icywind,0;fakeout,1 916v 583 | icywind,0;switch thundurus 914v 582
+      p2b <- Heatran comes in (77/323)
+      p2a Kyurem used Icy Wind -> p1b: Politoed  [[spread] p1a,p1b]
+              p1b Politoed spe 1 fell
+      p1a Raikou fainted
+      p1b Politoed used Scald -> p2a: Kyurem
+              p2a Kyurem is now brn
+      after p1: Raikou 0/321, Politoed 312/384
+      after p2: Kyurem 59/391, Heatran 77/323
+
+  Turn 4
+      p1a <- Ludicolo comes in (301/301)
+      after p1: Ludicolo 301/301, Politoed 312/384
+      after p2: Kyurem 59/391, Heatran 77/323
+
+  Turn 5
+    p1 greedy: move 3 1, move 2 1
+    p2 mcts: move 4, move 3 1
+      search (21000 visits): icywind,0;fireblast,0 2666v 1463 | icywind,0;fireblast,1 1821v 967 | icywind,0;earthpower,1 1786v 946 | icywind,0;protect,1 1626v 853
+      p1a Ludicolo used Hydro Pump -> p2a: Kyurem
+      p2a Kyurem fainted
+      p1b Politoed used Scald -> p2b: Heatran
+      p2b Heatran fainted
+      after p1: Ludicolo 271/301, Politoed 312/384
+      after p2: Kyurem 0/391, Heatran 0/323
+
+  Turn 6
+      p2a <- Thundurus comes in (298/298)
+      p2b <- Scrafty comes in (332/332)
+              p1a Ludicolo atk 1 fell
+              p1b Politoed atk 1 fell
+      after p1: Ludicolo 271/301, Politoed 312/384
+      after p2: Thundurus 298/298, Scrafty 332/332
+
+  Turn 7
+    p1 greedy: move 3 1, move 2 1
+    p2 mcts: move 4, move 3 1
+      search (13000 visits): protect,0;crunch,0 663v 296 | protect,0;bulkup,1 631v 279 | protect,0;drainpunch,0 572v 248 | protect,0;crunch,1 491v 206
+      p2a Thundurus used Protect
+      p1a Ludicolo used Hydro Pump -> p2a: Thundurus
+              p2a Thundurus -- move: Protect
+      p2b Scrafty used Crunch -> p1a: Ludicolo
+      p1b Politoed used Scald -> p2a: Thundurus
+              p2a Thundurus -- move: Protect
+      after p1: Ludicolo 123/301, Politoed 312/384
+      after p2: Thundurus 298/298, Scrafty 332/332
+
+  Turn 8
+    p1 greedy: move 3 1, move 2 1
+    p2 mcts: move 4, move 2 1
+      search (20000 visits): protect,0;drainpunch,0 1299v 515 | protect,0;crunch,0 1198v 469 | protect,0;bulkup,1 1044v 399 | thunderwave,0;bulkup,1 859v 316
+      p2a Thundurus used Protect
+      p1a Ludicolo used Hydro Pump -> p2a: Thundurus
+              p2a Thundurus -- move: Protect
+      p2b Scrafty used Drain Punch -> p1a: Ludicolo
+              p2b Scrafty used up its Fighting Gem
+      p1a Ludicolo fainted
+      p1b Politoed used Scald -> p2a: Thundurus
+              p2a Thundurus -- move: Protect
+      after p1: Ludicolo 0/301, Politoed 312/384
+      after p2: Thundurus 298/298, Scrafty 332/332
+
+  Turn 9
+      p1a <- Amoonguss comes in (431/431)
+      after p1: Amoonguss 431/431, Politoed 312/384
+      after p2: Thundurus 298/298, Scrafty 332/332
+
+  Turn 10
+    p1 greedy: move 4 1, move 2 1
+    p2 mcts: move 2 2, move 4
+      search (10000 visits): thunderbolt,1;bulkup,1 974v 657 | thunderbolt,1;crunch,0 705v 458 | protect,0;bulkup,1 352v 205 | thunderwave,0;bulkup,1 288v 161
+      p2a Thundurus used Thunderbolt -> p1b: Politoed
+              p1b Politoed -- critical hit
+              p1b Politoed used up its Wacan Berry
+              p1b Politoed used up its Wacan Berry
+      p1b Politoed fainted
+      p2b Scrafty used Bulk Up
+              p2b Scrafty atk 1 rose
+              p2b Scrafty def 1 rose
+      p1a Amoonguss used Giga Drain -> p2a: Thundurus
+      after p1: Amoonguss 431/431, Politoed 0/384
+      after p2: Thundurus 225/298, Scrafty 332/332
+
+  Turn 11
+    p1 greedy: move 4 1, pass
+    p2 mcts: move 2 1, move 3 1
+      search (54000 visits): thunderbolt,0;crunch,0 44423v 42123 | hiddenpower,0;crunch,0 2785v 2455 | protect,0;crunch,0 2381v 2082 | thunderwave,0;crunch,0 1118v 929
+      p2a Thundurus used Thunderbolt -> p1a: Amoonguss
+              p1a Amoonguss is now par
+      p2b Scrafty used Crunch -> p1a: Amoonguss
+              p2b Scrafty is now par
+      p1a Amoonguss used Giga Drain -> p2a: Thundurus
+      after p1: Amoonguss 145/431, Politoed 0/384
+      after p2: Thundurus 145/298, Scrafty 332/332
+
+  Turn 12
+    p1 greedy: move 4 1, pass
+    p2 mcts: move 1 1, move 3 1
+      search (799000 visits): thunderwave,0;crunch,0 119996v 119996 | thunderbolt,0;drainpunch,0 119996v 119996 | thunderbolt,0;crunch,0 119996v 119996 | hiddenpower,0;drainpunch,0 119996v 119996
+      p2a Thundurus used Thunder Wave -> p1a: Amoonguss
+              p1a Amoonguss -- IT FAILED
+      p2b Scrafty used Crunch -> p1a: Amoonguss
+      p1a Amoonguss fainted
+      after p1: Amoonguss 0/431, Politoed 0/384
+      after p2: Thundurus 145/298, Scrafty 332/332
+
+  RESULT: p2 wins

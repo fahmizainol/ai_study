@@ -1,0 +1,154 @@
+battle 26   p1=greedy vs p2=mcts   mcts 300 ms a decision
+  p1: Untitled 1082: Arcanine, Latias, Tyranitar, Togekiss
+  p2: Untitled 492: Conkeldurr, Cresselia, Weavile, Cradily
+
+  Turn 1
+    p1 greedy: move 1 1, move 1 1
+    p2 mcts: move 4 1, move 4 2
+      search (11000 visits): drainpunch,0;icebeam,1 260v 169 | detect,0;icebeam,1 251v 162 | detect,0;switch cradily 248v 160 | switch cradily;trickroom,1 248v 160
+      p1b Latias used Draco Meteor -> p2a: Conkeldurr
+              p1b Latias spa 2 fell
+      p1a Arcanine used Flare Blitz -> p2a: Conkeldurr
+      p2a Conkeldurr fainted
+      p2b Cresselia used Ice Beam -> p1b: Latias
+      after p1: Arcanine 282/321, Latias 222/320
+      after p2: Conkeldurr 0/414, Cresselia 444/444
+
+  Turn 2
+      p2a <- Weavile comes in (340/340)
+      after p1: Arcanine 282/321, Latias 222/320
+      after p2: Weavile 340/340, Cresselia 444/444
+
+  Turn 3
+    p1 greedy: move 1 1, move 1 1
+    p2 mcts: switch 4, move 1   (slot0 Weavile -> Cradily)
+      search (14000 visits): switch cradily;trickroom,1 722v 340 | switch cradily;trickroom,0 683v 318 | switch cradily;icebeam,1 447v 190 | nightslash,0;helpinghand,0 445v 189
+      p2a <- Cradily comes in (375/375)
+      p1b Latias used Draco Meteor -> p2a: Cradily
+              p1b Latias spa 2 fell
+      p1a Arcanine used Flare Blitz -> p2a: Cradily
+              p2a Cradily -- critical hit
+      p2a Cradily fainted
+      p2b Cresselia used Trick Room
+      after p1: Arcanine 191/321, Latias 222/320
+      after p2: Cradily 0/375, Cresselia 444/444
+
+  Turn 4
+      p2a <- Weavile comes in (340/340)
+      after p1: Arcanine 191/321, Latias 222/320
+      after p2: Weavile 340/340, Cresselia 444/444
+
+  Turn 5
+    p1 greedy: move 1 1, move 1 1
+    p2 mcts: move 3 1, move 4 2
+      search (17000 visits): nightslash,0;icebeam,1 750v 220 | nightslash,0;helpinghand,0 568v 153 | nightslash,0;icebeam,0 520v 136 | nightslash,0;trickroom,0 515v 134
+      p2b Cresselia used Ice Beam -> p1b: Latias
+      p1a Arcanine used Flare Blitz -> p2a: Weavile
+      p2a Weavile fainted
+      p1b Latias used Draco Meteor -> p2b: Cresselia
+              p1b Latias spa 2 fell
+      after p1: Arcanine 79/321, Latias 130/320
+      after p2: Weavile 0/340, Cresselia 405/444
+
+  Turn 6
+    p1 greedy: move 1 2, move 1 2
+    p2 mcts: pass, move 3
+      search (41000 visits): No Move;protect,1 24085v 7449 | No Move;icebeam,0 5573v 1545 | No Move;icebeam,1 5189v 1427 | No Move;trickroom,1 3158v 811
+      p2b Cresselia used Protect
+      p1a Arcanine used Flare Blitz -> p2b: Cresselia
+              p2b Cresselia -- move: Protect
+      p1b Latias used Draco Meteor -> p2b: Cresselia
+              p2b Cresselia -- move: Protect
+      after p1: Arcanine 79/321, Latias 130/320
+      after p2: Weavile 0/340, Cresselia 405/444
+
+  Turn 7
+    p1 greedy: move 1 2, move 1 2
+    p2 mcts: pass, move 3
+      search (45000 visits): No Move;protect,1 27066v 8314 | No Move;icebeam,1 5791v 1589 | No Move;icebeam,0 5666v 1551 | No Move;trickroom,0 3366v 860
+      p2b Cresselia used Protect
+      p1a Arcanine used Flare Blitz -> p2b: Cresselia
+              p2b Cresselia -- move: Protect
+      p1b Latias used Draco Meteor -> p2b: Cresselia
+              p2b Cresselia -- move: Protect
+      after p1: Arcanine 79/321, Latias 130/320
+      after p2: Weavile 0/340, Cresselia 405/444
+
+  Turn 8
+    p1 greedy: move 1 2, move 1 2
+    p2 mcts: pass, move 3
+      search (33000 visits): No Move;protect,1 18165v 5703 | No Move;icebeam,0 4721v 1329 | No Move;icebeam,1 4451v 1244 | No Move;trickroom,0 2859v 750
+      p2b Cresselia used Protect  [[still]]
+              p2b Cresselia -- IT FAILED
+      p1a Arcanine used Flare Blitz -> p2b: Cresselia
+      p1b Latias used Draco Meteor -> p2b: Cresselia
+      after p1: Arcanine 26/321, Latias 130/320
+      after p2: Weavile 0/340, Cresselia 211/444
+
+  Turn 9
+    p1 greedy: move 1 2, move 1 2
+    p2 mcts: pass, move 3
+      search (50000 visits): No Move;protect,1 44380v 14453 | No Move;trickroom,1 1747v 413 | No Move;trickroom,0 1698v 399 | No Move;icebeam,0 1308v 287
+      p2b Cresselia used Protect
+      p1b Latias used Draco Meteor -> p2b: Cresselia
+              p2b Cresselia -- move: Protect
+      p1a Arcanine used Flare Blitz -> p2b: Cresselia
+              p2b Cresselia -- move: Protect
+      after p1: Arcanine 26/321, Latias 130/320
+      after p2: Weavile 0/340, Cresselia 211/444
+
+  Turn 10
+    p1 greedy: move 1 2, move 1 2
+    p2 mcts: pass, move 3
+      search (52000 visits): No Move;protect,1 46067v 15006 | No Move;trickroom,0 1731v 408 | No Move;trickroom,1 1714v 403 | No Move;icebeam,0 1431v 321
+      p2b Cresselia used Protect
+      p1b Latias used Draco Meteor -> p2b: Cresselia
+              p2b Cresselia -- move: Protect
+      p1a Arcanine used Flare Blitz -> p2b: Cresselia
+              p2b Cresselia -- move: Protect
+      after p1: Arcanine 26/321, Latias 130/320
+      after p2: Weavile 0/340, Cresselia 211/444
+
+  Turn 11
+    p1 greedy: move 1 2, move 2 2
+    p2 mcts: pass, move 3
+      search (54000 visits): No Move;protect,1 47416v 14996 | No Move;trickroom,1 1884v 434 | No Move;trickroom,0 1758v 398 | No Move;icebeam,0 1756v 397
+      p2b Cresselia used Protect  [[still]]
+              p2b Cresselia -- IT FAILED
+      p1b Latias used Psychic -> p2b: Cresselia
+      p1a Arcanine used Flare Blitz -> p2b: Cresselia
+      p1a Arcanine fainted
+      after p1: Arcanine 0/321, Latias 130/320
+      after p2: Weavile 0/340, Cresselia 36/444
+
+  Turn 12
+      p1a <- Tyranitar comes in (404/404)
+      after p1: Tyranitar 404/404, Latias 130/320
+      after p2: Weavile 0/340, Cresselia 36/444
+
+  Turn 13
+    p1 greedy: move 3 2, move 2 2
+    p2 mcts: pass, move 3
+      search (66000 visits): No Move;protect,1 63216v 13040 | No Move;trickroom,0 861v 55 | No Move;trickroom,1 734v 37 | No Move;icebeam,0 641v 25
+      p2b Cresselia used Protect
+      p1b Latias used Psychic -> p2b: Cresselia
+              p2b Cresselia -- move: Protect
+      p1a Tyranitar used Superpower -> p2b: Cresselia
+              p2b Cresselia -- move: Protect
+      after p1: Tyranitar 404/404, Latias 110/320
+      after p2: Weavile 0/340, Cresselia 9/444
+
+  Turn 14
+    p1 greedy: move 3 2, move 2 2
+    p2 mcts: pass, move 3
+      search (69000 visits): No Move;protect,1 66145v 13657 | No Move;trickroom,1 905v 61 | No Move;icebeam,0 684v 30 | No Move;trickroom,0 657v 27
+      p2b Cresselia used Protect
+      p1b Latias used Psychic -> p2b: Cresselia
+              p2b Cresselia -- move: Protect
+      p1a Tyranitar used Superpower -> p2b: Cresselia
+              p2b Cresselia -- move: Protect
+      p2b Cresselia fainted
+      after p1: Tyranitar 404/404, Latias 90/320
+      after p2: Weavile 0/340, Cresselia 0/444
+
+  RESULT: p1 wins

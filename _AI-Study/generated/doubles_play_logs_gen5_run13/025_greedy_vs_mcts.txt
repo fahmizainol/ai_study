@@ -1,0 +1,55 @@
+battle 25   p1=greedy vs p2=mcts   mcts 300 ms a decision
+  p1: Untitled 544: Deoxys-Attack, Mr. Mime, Cradily, Hariyama
+  p2: Sand HO: Excadrill, Tyranitar, Shaymin-Sky, Scrafty
+
+  Turn 1
+    p1 greedy: move 2 1, move 4 1
+    p2 mcts: move 2 1, move 3 2
+      search (25000 visits): ironhead,0;crunch,1 1871v 1653 | ironhead,0;rockslide,0 1500v 1307 | drillrun,0;crunch,1 1399v 1213 | drillrun,0;rockslide,0 1125v 960
+      p2a Excadrill used Iron Head -> p1a: Deoxys
+      p1a Deoxys fainted
+      p1b Mr. Mime used Psychic -> p2a: Excadrill
+      p2b Tyranitar used Crunch -> p1b: Mr. Mime
+      p1b Mr. Mime fainted
+      after p1: Deoxys-Attack 0/241, Mr. Mime 0/284
+      after p2: Excadrill 252/361, Tyranitar 384/384
+
+  Turn 2
+      p1a <- Cradily comes in (375/375)
+      p1b <- Hariyama comes in (492/492)
+      after p1: Cradily 375/375, Hariyama 492/492
+      after p2: Excadrill 252/361, Tyranitar 384/384
+
+  Turn 3
+    p1 greedy: move 3 1, move 2 1
+    p2 mcts: move 2 1, switch 4   (slot1 Tyranitar -> Scrafty)
+      search (15000 visits): ironhead,0;switch scrafty 1291v 1004 | ironhead,0;crunch,1 629v 456 | ironhead,0;protect,1 605v 436 | ironhead,0;switch shayminsky 576v 413
+      p2b <- Scrafty comes in (334/334)
+              p1a Cradily atk 1 fell
+              p1b Hariyama atk 1 fell
+      p2a Excadrill used Iron Head -> p1a: Cradily
+      p1a Cradily fainted
+      p1b Hariyama used Close Combat -> p2a: Excadrill
+              p1b Hariyama def 1 fell
+              p1b Hariyama spd 1 fell
+      p2a Excadrill fainted
+              p1b Hariyama is now tox
+      after p1: Cradily 0/375, Hariyama 462/492
+      after p2: Excadrill 0/361, Scrafty 314/334
+
+  Turn 4
+      p2a <- Shaymin-Sky comes in (341/341)
+      after p1: Cradily 0/375, Hariyama 462/492
+      after p2: Shaymin-Sky 341/341, Scrafty 314/334
+
+  Turn 5
+    p1 greedy: pass, move 2 2
+    p2 mcts: move 3 2, move 1 2
+      search (410000 visits): airslash,1;fakeout,1 172887v 172252 | seedflare,1;fakeout,1 67984v 67240 | airslash,1;switch tyranitar 54327v 53606 | airslash,1;highjumpkick,1 53338v 52620
+      p2b Scrafty used Fake Out -> p1b: Hariyama
+      p2a Shaymin used Air Slash -> p1b: Hariyama
+      p1b Hariyama fainted
+      after p1: Cradily 0/375, Hariyama 0/492
+      after p2: Shaymin-Sky 341/341, Scrafty 314/334
+
+  RESULT: p2 wins

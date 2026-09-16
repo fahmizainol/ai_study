@@ -1,0 +1,66 @@
+battle 31   p1=greedy vs p2=mcts   mcts 300 ms a decision
+  p1: Fuck it: Rotom-Heat, Scrafty, Crobat, Jellicent
+  p2: Pqs darkrai: Darkrai, Latios, Volcarona, Weavile
+
+  Turn 1
+    p1 greedy: move 1 1, move 3 1
+    p2 mcts: move 2 1, move 3 1
+      search (19000 visits): darkpulse,0;psychic,0 1028v 686 | switch volcarona;psychic,0 749v 482 | focusblast,1;psychic,0 552v 341 | protect,0;psychic,0 539v 331
+      p2a Darkrai used Dark Pulse -> p1a: Rotom
+      p2b Latios used Psychic -> p1a: Rotom
+      p1a Rotom fainted
+      p1b Scrafty used High Jump Kick -> p2a: Darkrai
+      p2a Darkrai fainted
+      after p1: Rotom-Heat 0/253, Scrafty 334/334
+      after p2: Darkrai 0/281, Latios 301/301
+
+  Turn 2
+      p2a <- Volcarona comes in (317/317)
+      p1a <- Crobat comes in (311/311)
+      after p1: Crobat 311/311, Scrafty 334/334
+      after p2: Volcarona 317/317, Latios 301/301
+
+  Turn 3
+    p1 greedy: move 1 1, move 3 1
+    p2 mcts: move 1, move 3 1
+      search (27000 visits): protect,0;psychic,0 3543v 2175 | bugbuzz,1;switch weavile 2104v 1244 | fireblast,1;switch weavile 1516v 869 | fireblast,0;switch weavile 1510v 866
+      p2a Volcarona used Protect
+      p1a Crobat used Brave Bird -> p2a: Volcarona
+              p2a Volcarona -- move: Protect
+      p2b Latios used Psychic -> p1a: Crobat
+              p1a Crobat -- critical hit
+      p1a Crobat fainted
+      p1b Scrafty used High Jump Kick -> p2a: Volcarona
+              p2a Volcarona -- move: Protect
+      after p1: Crobat 0/311, Scrafty 167/334
+      after p2: Volcarona 317/317, Latios 301/301
+
+  Turn 4
+      p1a <- Jellicent comes in (404/404)
+      after p1: Jellicent 404/404, Scrafty 167/334
+      after p2: Volcarona 317/317, Latios 301/301
+
+  Turn 5
+    p1 greedy: move 2 1, move 3 1
+    p2 mcts: move 3 2, switch 4   (slot1 Latios -> Weavile)
+      search (17000 visits): bugbuzz,1;switch weavile 2092v 1472 | bugbuzz,1;protect,1 1604v 1107 | fireblast,1;switch weavile 1484v 1017 | bugbuzz,1;calmmind,1 1406v 959
+      p2b <- Weavile comes in (284/284)
+      p2a Volcarona used Bug Buzz -> p1b: Scrafty
+              p2a Volcarona used up its Bug Gem
+      p1b Scrafty fainted
+      p1a Jellicent used Shadow Ball -> p2a: Volcarona
+      after p1: Jellicent 404/404, Scrafty 0/334
+      after p2: Volcarona 259/317, Weavile 284/284
+
+  Turn 6
+    p1 greedy: move 2 1, pass
+    p2 mcts: switch 4, move 3 1   (slot0 Volcarona -> Latios)
+      search (237000 visits): switch latios;nightslash,0 229984v 221948 | fireblast,0;nightslash,0 2526v 1941 | bugbuzz,0;nightslash,0 1193v 871 | ragepowder,0;nightslash,0 703v 487
+      p2a <- Latios comes in (301/301)
+      p2b Weavile used Night Slash -> p1a: Jellicent
+              p1a Jellicent -- critical hit
+      p1a Jellicent fainted
+      after p1: Jellicent 0/404, Scrafty 0/334
+      after p2: Latios 301/301, Weavile 256/284
+
+  RESULT: p2 wins

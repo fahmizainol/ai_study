@@ -1,0 +1,73 @@
+battle 3   p1=greedy vs p2=mcts   mcts 300 ms a decision
+  p1: lati torn volc: Latios, Tornadus, Volcarona, Scizor
+  p2: 2v2 Pool League II/2v2 Pools - BW 10: Braviary, Togetic, Kyurem-Black, Arcanine
+
+  Turn 1
+    p1 greedy: move 2 1, move 1 1
+    p2 mcts: move 2 2, move 1
+      search (34000 visits): return,1;followme,1 3879v 2370 | bravebird,1;followme,1 3002v 1804 | return,1;tailwind,1 1845v 1067 | return,0;followme,1 1560v 887
+      p2b Togetic used Follow Me
+      p1b Tornadus used Superpower -> p2b: Togetic
+              p1b Tornadus atk 1 fell
+              p1b Tornadus def 1 fell
+      p1a Latios used Draco Meteor -> p2b: Togetic
+              p1a Latios used up its Dragon Gem
+              p1a Latios spa 2 fell
+      p2a Braviary used Return -> p1b: Tornadus
+      p1b Tornadus fainted
+      after p1: Latios 301/301, Tornadus 0/299
+      after p2: Braviary 307/341, Togetic 34/314
+
+  Turn 2
+      p1b <- Volcarona comes in (361/361)
+      after p1: Latios 301/301, Volcarona 361/361
+      after p2: Braviary 307/341, Togetic 34/314
+
+  Turn 3
+    p1 greedy: move 2 2, move 4 2
+    p2 mcts: move 1 2, move 2
+      search (27000 visits): bravebird,1;roost,1 1542v 907 | return,0;switch arcanine 1492v 874 | return,1;switch arcanine 1464v 856 | return,0;roost,1 1332v 772
+      p1a Latios used Draco Meteor -> p2b: Togetic
+              p1a Latios spa 2 fell
+      p2b Togetic fainted
+      p1b Volcarona used Overheat -> p2a: Braviary
+              p1b Volcarona spa 2 fell
+      p2a Braviary used Brave Bird -> p1b: Volcarona
+      p1b Volcarona fainted
+      p2a Braviary fainted
+      after p1: Latios 301/301, Volcarona 0/361
+      after p2: Braviary 0/341, Togetic 0/314
+
+  Turn 4
+      p1b <- Scizor comes in (344/344)
+      p2a <- Kyurem-Black comes in (391/391)
+      p2b <- Arcanine comes in (339/339)
+              p1a Latios atk 1 fell
+              p1b Scizor atk 1 fell
+      after p1: Latios 301/301, Scizor 344/344
+      after p2: Kyurem-Black 391/391, Arcanine 339/339
+
+  Turn 5
+    p1 greedy: move 2 1, move 2 1
+    p2 mcts: move 3, move 3 2
+      search (59000 visits): rockslide,0;flareblitz,1 36919v 26575 | fusionbolt,0;flareblitz,1 1817v 1066 | dragonclaw,0;flareblitz,1 1345v 766 | outrage,0;flareblitz,1 926v 504
+      p1a Latios used Draco Meteor -> p2a: Kyurem
+              p1a Latios spa 2 fell
+      p2a Kyurem used Rock Slide -> p1a: Latios  [[spread] p1a,p1b]
+      p2b Arcanine used Flare Blitz -> p1b: Scizor
+      p1b Scizor fainted
+      after p1: Latios 126/301, Scizor 0/344
+      after p2: Kyurem-Black 221/391, Arcanine 271/339
+
+  Turn 6
+    p1 greedy: move 2 1, pass
+    p2 mcts: move 3, move 2 1
+      search (1383000 visits): rockslide,0;extremespeed,0 522165v 521114 | rockslide,0;flareblitz,0 510734v 509664 | rockslide,0;closecombat,0 220227v 218908 | rockslide,0;protect,1 129874v 128652
+      p2b Arcanine used Extreme Speed -> p1a: Latios
+      p1a Latios used Draco Meteor -> p2a: Kyurem
+      p2a Kyurem used Rock Slide -> p1a: Latios
+      p1a Latios fainted
+      after p1: Latios 0/301, Scizor 0/344
+      after p2: Kyurem-Black 75/391, Arcanine 271/339
+
+  RESULT: p2 wins

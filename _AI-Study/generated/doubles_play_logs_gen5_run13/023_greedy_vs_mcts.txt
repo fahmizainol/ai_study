@@ -1,0 +1,89 @@
+battle 23   p1=greedy vs p2=mcts   mcts 300 ms a decision
+  p1: [PL Week 2] Arcanine: Thundurus, Metagross, Kyurem-Black, Arcanine
+  p2: Untitled 625: Latias, Tornadus, Liepard, Metagross
+
+  Turn 1
+    p1 greedy: move 1 1, move 2 1
+    p2 mcts: move 2 1, move 4
+      search (8000 visits): psychic,0;protect,1 224v 104 | protect,0;protect,1 164v 68 | psychic,1;protect,1 162v 67 | switch metagross;protect,1 157v 64
+      p2b Tornadus used Protect
+      p2a Latias used Psychic -> p1a: Thundurus
+      p1a Thundurus used Thunderbolt -> p2a: Latias
+              p2a Latias is now par
+      p1b Metagross used Meteor Mash -> p2a: Latias  [[miss]]
+              p1b Metagross -- MISSED
+      after p1: Thundurus 238/347, Metagross 364/364
+      after p2: Latias 257/320, Tornadus 299/299
+
+  Turn 2
+    p1 greedy: move 1 1, move 2 1
+    p2 mcts: move 2 1, move 4
+      search (12000 visits): psychic,0;protect,1 256v 98 | psychic,1;protect,1 252v 96 | switch metagross;protect,1 248v 94 | protect,0;protect,1 231v 85
+      p2b Tornadus used Protect  [[still]]
+              p2b Tornadus -- IT FAILED
+      p1a Thundurus used Thunderbolt -> p2a: Latias
+      p1b Metagross used Meteor Mash -> p2a: Latias
+              p1b Metagross used up its Steel Gem
+      p2a Latias fainted
+      after p1: Thundurus 238/347, Metagross 364/364
+      after p2: Latias 0/320, Tornadus 299/299
+
+  Turn 3
+      p2a <- Liepard comes in (269/269)
+      after p1: Thundurus 238/347, Metagross 364/364
+      after p2: Liepard 269/269, Tornadus 299/299
+
+  Turn 4
+    p1 greedy: move 1 1, move 2 1
+    p2 mcts: switch 4, move 4   (slot0 Liepard -> Metagross)
+      search (14000 visits): switch metagross;protect,1 492v 174 | switch metagross;acrobatics,0 380v 124 | switch metagross;acrobatics,1 353v 112 | suckerpunch,0;acrobatics,0 330v 103
+      p2a <- Metagross comes in (364/364)
+      p2b Tornadus used Protect
+      p1a Thundurus used Thunderbolt -> p2a: Metagross
+              p2a Metagross is now par
+      p1b Metagross used Meteor Mash -> p2a: Metagross
+      after p1: Thundurus 238/347, Metagross 364/364
+      after p2: Metagross 135/364, Tornadus 299/299
+
+  Turn 5
+    p1 greedy: move 1 1, move 2 1
+    p2 mcts: move 2 1, move 4
+      search (15000 visits): meteormash,0;protect,1 605v 248 | meteormash,1;protect,1 478v 185 | zenheadbutt,0;protect,1 458v 175 | zenheadbutt,0;acrobatics,0 388v 142
+      p2b Tornadus used Protect  [[still]]
+              p2b Tornadus -- IT FAILED
+      p1a Thundurus used Thunderbolt -> p2a: Metagross
+      p2a Metagross fainted
+      p1b Metagross used Meteor Mash -> p2b: Tornadus
+      after p1: Thundurus 238/347, Metagross 364/364
+      after p2: Metagross 0/364, Tornadus 28/299
+
+  Turn 6
+      p2a <- Liepard comes in (269/269)
+      after p1: Thundurus 238/347, Metagross 364/364
+      after p2: Liepard 269/269, Tornadus 28/299
+
+  Turn 7
+    p1 greedy: move 1 2, move 2 2
+    p2 mcts: move 1 2, move 1 2
+      search (24000 visits): fakeout,1;acrobatics,1 982v 247 | fakeout,1;skydrop,0 792v 186 | fakeout,1;acrobatics,0 789v 185 | fakeout,1;skydrop,1 731v 167
+      p2a Liepard used Fake Out -> p1b: Metagross
+      p2b Tornadus used Acrobatics -> p1b: Metagross
+              p2b Tornadus used up its Flying Gem
+      p1a Thundurus used Thunderbolt -> p2b: Tornadus
+      p2b Tornadus fainted
+              p1b Metagross COULD NOT MOVE (flinch)
+      after p1: Thundurus 238/347, Metagross 247/364
+      after p2: Liepard 269/269, Tornadus 0/299
+
+  Turn 8
+    p1 greedy: move 1 1, move 2 1
+    p2 mcts: move 2 2, pass
+      search (135000 visits): suckerpunch,1;No Move 23697v 963 | fakeout,0;No Move 18228v 660 | suckerpunch,0;No Move 17984v 647 | faketears,1;No Move 17663v 629
+      p2a Liepard used Sucker Punch -> p1b: Metagross
+              p2a Liepard used up its Dark Gem
+      p1a Thundurus used Thunderbolt -> p2a: Liepard
+      p2a Liepard fainted
+      after p1: Thundurus 238/347, Metagross 124/364
+      after p2: Liepard 0/269, Tornadus 0/299
+
+  RESULT: p1 wins

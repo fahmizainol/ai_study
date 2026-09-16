@@ -1,0 +1,65 @@
+battle 0   p1=greedy vs p2=mcts   mcts 300 ms a decision
+  p1: tini kiss kyub ttar: Victini, Togekiss, Kyurem-Black, Tyranitar
+  p2: Pqs torn: Tornadus, Infernape, Metagross, Kyurem-Black
+
+  Turn 1
+    p1 greedy: move 1 1, move 1 1
+    p2 mcts: move 2 2, move 3 2
+      search (21000 visits): acrobatics,1;closecombat,1 1688v 1038 | acrobatics,0;closecombat,0 1170v 693 | acrobatics,1;switch metagross 1030v 601 | acrobatics,1;switch kyuremblack 945v 546
+      p2a Tornadus used Acrobatics -> p1b: Togekiss
+              p2a Tornadus used up its Flying Gem
+              p1b Togekiss used up its Sitrus Berry
+      p2b Infernape used Close Combat -> p1b: Togekiss
+              p2b Infernape def 1 fell
+              p2b Infernape spd 1 fell
+      p1b Togekiss fainted
+      p1a Victini used V-create -> p2a: Tornadus
+              p1a Victini spe 1 fell
+              p1a Victini def 1 fell
+              p1a Victini spd 1 fell
+      p2a Tornadus fainted
+      after p1: Victini 307/341, Togekiss 0/374
+      after p2: Tornadus 0/299, Infernape 264/293
+
+  Turn 2
+      p2a <- Metagross comes in (364/364)
+      p1b <- Kyurem-Black comes in (391/391)
+      after p1: Victini 307/341, Kyurem-Black 391/391
+      after p2: Metagross 364/364, Infernape 264/293
+
+  Turn 3
+    p1 greedy: move 1 2, move 2 2
+    p2 mcts: move 2 1, move 3 2
+      search (16000 visits): meteormash,0;closecombat,1 704v 411 | bulletpunch,1;closecombat,1 703v 410 | meteormash,1;fakeout,0 587v 333 | meteormash,1;switch kyuremblack 546v 306
+      p2b Infernape used Close Combat -> p1b: Kyurem
+              p2b Infernape def 1 fell
+              p2b Infernape spd 1 fell
+      p1b Kyurem fainted
+      p1a Victini used V-create -> p2b: Infernape
+              p1a Victini spe 1 fell
+              p1a Victini def 1 fell
+              p1a Victini spd 1 fell
+      p2b Infernape fainted
+      p2a Metagross used Meteor Mash -> p1a: Victini
+              p2a Metagross used up its Steel Gem
+      p1a Victini fainted
+      after p1: Victini 0/341, Kyurem-Black 0/391
+      after p2: Metagross 364/364, Infernape 0/293
+
+  Turn 4
+      p2b <- Kyurem-Black comes in (417/417)
+      p1a <- Tyranitar comes in (404/404)
+      after p1: Tyranitar 404/404, Kyurem-Black 0/391
+      after p2: Metagross 364/364, Kyurem-Black 417/417
+
+  Turn 5
+    p1 greedy: move 1 1, pass
+    p2 mcts: move 2 1, move 2 1
+      search (184000 visits): meteormash,0;dragonclaw,0 175507v 166562 | meteormash,0;fusionbolt,0 3894v 3317 | meteormash,0;icebeam,0 896v 695 | meteormash,0;protect,1 522v 380
+      p2b Kyurem used Dragon Claw -> p1a: Tyranitar
+      p2a Metagross used Meteor Mash -> p1a: Tyranitar
+      p1a Tyranitar fainted
+      after p1: Tyranitar 0/404, Kyurem-Black 0/391
+      after p2: Metagross 364/364, Kyurem-Black 417/417
+
+  RESULT: p2 wins

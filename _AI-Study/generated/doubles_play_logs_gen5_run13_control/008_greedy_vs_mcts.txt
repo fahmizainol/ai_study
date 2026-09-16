@@ -1,0 +1,129 @@
+battle 8   p1=greedy vs p2=mcts   mcts 300 ms a decision
+  p1: Pqs darkrai: Darkrai, Latios, Volcarona, Weavile
+  p2: Untitled 492: Conkeldurr, Cresselia, Weavile, Cradily
+
+  Turn 1
+    p1 greedy: move 3 1, move 2 1
+    p2 mcts: move 2 1, move 2 -1
+      search (17000 visits): machpunch,0;helpinghand,0 1308v 773 | detect,0;icebeam,1 883v 499 | detect,0;icebeam,0 567v 299 | drainpunch,0;icebeam,1 538v 281
+      p2b Cresselia used Helping Hand -> p2a: Conkeldurr
+      p2a Conkeldurr used Mach Punch -> p1a: Darkrai
+      p1a Darkrai used Focus Blast -> p2a: Conkeldurr  [[miss]]
+              p1a Darkrai -- MISSED
+      p1b Latios used Draco Meteor -> p2a: Conkeldurr
+              p1b Latios used up its Dragon Gem
+              p1b Latios spa 2 fell
+      p2a Conkeldurr fainted
+      after p1: Darkrai 5/281, Latios 301/301
+      after p2: Conkeldurr 0/414, Cresselia 444/444
+
+  Turn 2
+      p2a <- Weavile comes in (340/340)
+      after p1: Darkrai 5/281, Latios 301/301
+      after p2: Weavile 340/340, Cresselia 444/444
+
+  Turn 3
+    p1 greedy: move 3 1, move 2 1
+    p2 mcts: move 3 2, move 2 -1
+      search (27000 visits): nightslash,1;helpinghand,0 1097v 513 | fakeout,0;switch cradily 854v 384 | nightslash,1;switch cradily 808v 359 | fakeout,0;icebeam,1 766v 337
+      p2b Cresselia used Helping Hand -> p2a: Weavile
+      p1a Darkrai used Focus Blast -> p2a: Weavile
+      p2a Weavile fainted
+      p1a Darkrai fainted
+      p1b Latios used Draco Meteor -> p2b: Cresselia
+              p1b Latios spa 2 fell
+      after p1: Darkrai 0/281, Latios 301/301
+      after p2: Weavile 0/340, Cresselia 365/444
+
+  Turn 4
+      p1a <- Volcarona comes in (317/317)
+      p2a <- Cradily comes in (375/375)
+      after p1: Volcarona 317/317, Latios 301/301
+      after p2: Cradily 375/375, Cresselia 365/444
+
+  Turn 5
+    p1 greedy: move 4 2, move 2 2
+    p2 mcts: move 3, move 4 2
+      search (11000 visits): protect,0;icebeam,1 1269v 613 | protect,0;icebeam,0 1064v 502 | protect,0;protect,1 981v 457 | protect,0;trickroom,1 895v 412
+      p2a Cradily used Protect
+      p1b Latios used Draco Meteor -> p2b: Cresselia
+              p1b Latios spa 2 fell
+      p1a Volcarona used Fire Blast -> p2b: Cresselia
+              p2b Cresselia -- critical hit
+      p2b Cresselia used Ice Beam -> p1b: Latios
+      after p1: Volcarona 317/317, Latios 193/301
+      after p2: Cradily 375/375, Cresselia 69/444
+
+  Turn 6
+    p1 greedy: move 4 2, move 2 2
+    p2 mcts: move 3, move 1
+      search (22000 visits): protect,0;trickroom,0 3039v 1306 | protect,0;trickroom,1 2561v 1082 | protect,0;protect,1 2315v 968 | protect,0;icebeam,1 1935v 792
+      p2a Cradily used Protect
+      p1b Latios used Draco Meteor -> p2b: Cresselia
+      p1a Volcarona used Fire Blast -> p2b: Cresselia
+      p2b Cresselia fainted
+      after p1: Volcarona 317/317, Latios 193/301
+      after p2: Cradily 375/375, Cresselia 0/444
+
+  Turn 7
+    p1 greedy: move 4 1, move 2 1
+    p2 mcts: move 3, pass
+      search (398000 visits): protect,0;No Move 291140v 7380 | rockslide,0;No Move 31021v 184 | seedbomb,1;No Move 25756v 80 | seedbomb,0;No Move 25457v 75
+      p2a Cradily used Protect
+      p1b Latios used Draco Meteor -> p2a: Cradily
+              p2a Cradily -- move: Protect
+      p1a Volcarona used Fire Blast -> p2a: Cradily
+              p2a Cradily -- move: Protect
+      after p1: Volcarona 317/317, Latios 193/301
+      after p2: Cradily 375/375, Cresselia 0/444
+
+  Turn 8
+    p1 greedy: move 4 1, move 2 1
+    p2 mcts: move 3, pass
+      search (442000 visits): protect,0;No Move 320172v 7554 | rockslide,0;No Move 35761v 202 | earthquake,0;No Move 29181v 80 | seedbomb,1;No Move 28926v 76
+      p2a Cradily used Protect  [[still]]
+              p2a Cradily -- IT FAILED
+      p1b Latios used Draco Meteor -> p2a: Cradily
+      p1a Volcarona used Fire Blast -> p2a: Cradily  [[miss]]
+              p1a Volcarona -- MISSED
+      after p1: Volcarona 317/317, Latios 193/301
+      after p2: Cradily 312/375, Cresselia 0/444
+
+  Turn 9
+    p1 greedy: move 4 1, move 2 1
+    p2 mcts: move 3, pass
+      search (256000 visits): protect,0;No Move 195284v 7049 | rockslide,0;No Move 18599v 201 | earthquake,0;No Move 14583v 88 | seedbomb,1;No Move 14413v 84
+      p2a Cradily used Protect
+      p1b Latios used Draco Meteor -> p2a: Cradily
+              p2a Cradily -- move: Protect
+      p1a Volcarona used Fire Blast -> p2a: Cradily
+              p2a Cradily -- move: Protect
+      after p1: Volcarona 317/317, Latios 193/301
+      after p2: Cradily 312/375, Cresselia 0/444
+
+  Turn 10
+    p1 greedy: move 4 1, move 2 1
+    p2 mcts: move 3, pass
+      search (287000 visits): protect,0;No Move 218097v 7320 | rockslide,0;No Move 19279v 158 | seedbomb,1;No Move 17007v 100 | earthquake,0;No Move 16680v 91
+      p2a Cradily used Protect
+      p1b Latios used Draco Meteor -> p2a: Cradily
+              p2a Cradily -- move: Protect
+      p1a Volcarona used Fire Blast -> p2a: Cradily
+              p2a Cradily -- move: Protect
+      after p1: Volcarona 317/317, Latios 193/301
+      after p2: Cradily 312/375, Cresselia 0/444
+
+  Turn 11
+    p1 greedy: move 4 1, move 3 1
+    p2 mcts: move 3, pass
+      search (287000 visits): protect,0;No Move 217802v 7015 | rockslide,0;No Move 20039v 151 | seedbomb,1;No Move 16479v 64 | earthquake,0;No Move 16440v 63
+      p2a Cradily used Protect  [[still]]
+              p2a Cradily -- IT FAILED
+      p1b Latios used Psychic -> p2a: Cradily
+              p2a Cradily -- critical hit
+      p1a Volcarona used Fire Blast -> p2a: Cradily
+      p2a Cradily fainted
+      after p1: Volcarona 317/317, Latios 193/301
+      after p2: Cradily 0/375, Cresselia 0/444
+
+  RESULT: p1 wins

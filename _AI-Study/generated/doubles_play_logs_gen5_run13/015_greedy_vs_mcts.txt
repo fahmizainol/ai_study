@@ -1,0 +1,57 @@
+battle 15   p1=greedy vs p2=mcts   mcts 300 ms a decision
+  p1: 2v2 Pool League II/2v2 Pools - BW 7: Snorlax, Chandelure, Darkrai, Infernape
+  p2: Fuck it: Rotom-Heat, Scrafty, Crobat, Jellicent
+
+  Turn 1
+    p1 greedy: move 1 1, move 1 1
+    p2 mcts: move 2 2, move 3 1
+      search (15000 visits): thunderbolt,1;highjumpkick,0 651v 392 | switch jellicent;crunch,1 642v 386 | switch jellicent;highjumpkick,0 500v 289 | thunderbolt,1;crunch,1 433v 244
+      p2a Rotom used Thunderbolt -> p1b: Chandelure
+              p2a Rotom used up its Electric Gem
+      p2b Scrafty used High Jump Kick -> p1a: Snorlax
+              p1a Snorlax used up its Chople Berry
+              p1a Snorlax used up its Chople Berry
+      p1b Chandelure used Overheat -> p2a: Rotom
+              p1b Chandelure spa 2 fell
+      p1a Snorlax used Double-Edge -> p2a: Rotom
+      p2a Rotom fainted
+      after p1: Snorlax 189/524, Chandelure 102/324
+      after p2: Rotom-Heat 0/253, Scrafty 334/334
+
+  Turn 2
+      p2a <- Crobat comes in (311/311)
+      after p1: Snorlax 189/524, Chandelure 102/324
+      after p2: Crobat 311/311, Scrafty 334/334
+
+  Turn 3
+    p1 greedy: move 1 1, move 1 1
+    p2 mcts: move 1 1, move 2 2
+      search (24000 visits): bravebird,0;crunch,1 1191v 548 | bravebird,1;fakeout,0 933v 413 | bravebird,1;crunch,0 913v 403 | switch jellicent;crunch,1 848v 370
+      p2a Crobat used Brave Bird -> p1a: Snorlax
+              p2a Crobat used up its Flying Gem
+      p1a Snorlax fainted
+      p2b Scrafty used Crunch -> p1b: Chandelure
+      p1b Chandelure fainted
+      after p1: Snorlax 0/524, Chandelure 0/324
+      after p2: Crobat 249/311, Scrafty 334/334
+
+  Turn 4
+      p1b <- Infernape comes in (293/293)
+      p1a <- Darkrai comes in (281/281)
+      after p1: Darkrai 281/281, Infernape 293/293
+      after p2: Crobat 249/311, Scrafty 334/334
+
+  Turn 5
+    p1 greedy: move 3 1, move 4 1
+    p2 mcts: move 1 2, move 3 2
+      search (45000 visits): bravebird,1;highjumpkick,1 7541v 6927 | bravebird,1;switch jellicent 7440v 6832 | bravebird,1;crunch,1 3243v 2888 | bravebird,1;crunch,0 1350v 1142
+      p2a Crobat used Brave Bird -> p1b: Infernape
+      p1b Infernape fainted
+      p1a Darkrai used Focus Blast -> p2a: Crobat  [[miss]]
+              p1a Darkrai -- MISSED
+      p2b Scrafty used High Jump Kick -> p1a: Darkrai
+      p1a Darkrai fainted
+      after p1: Darkrai 0/281, Infernape 0/293
+      after p2: Crobat 152/311, Scrafty 334/334
+
+  RESULT: p2 wins

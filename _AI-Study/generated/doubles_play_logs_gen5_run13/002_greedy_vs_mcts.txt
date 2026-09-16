@@ -1,0 +1,73 @@
+battle 2   p1=greedy vs p2=mcts   mcts 300 ms a decision
+  p1: 2v2 Pool League II/2v2 Pools - BW 9: Volcarona, Tornadus, Tyranitar, Rotom-Wash
+  p2: 2v2 Pool League II/2v2 Pools - BW 6: Latios, Scrafty, Metagross, Thundurus
+
+  Turn 1
+    p1 greedy: move 1 1, move 2 1
+    p2 mcts: move 3 2, move 1 2
+      search (13000 visits): icebeam,1;fakeout,1 611v 348 | dracometeor,1;fakeout,1 358v 184 | icebeam,1;drainpunch,1 269v 129 | psychic,1;fakeout,1 266v 127
+      p2b Scrafty used Fake Out -> p1b: Tornadus
+              p1b Tornadus COULD NOT MOVE (flinch)
+      p2a Latios used Ice Beam -> p1b: Tornadus
+      p1b Tornadus fainted
+      p1a Volcarona used Fire Blast -> p2a: Latios
+              p2a Latios is now brn
+      after p1: Volcarona 311/311, Tornadus 0/299
+      after p2: Latios 155/301, Scrafty 334/334
+
+  Turn 2
+      p1b <- Tyranitar comes in (404/404)
+      after p1: Volcarona 311/311, Tyranitar 404/404
+      after p2: Latios 155/301, Scrafty 334/334
+
+  Turn 3
+    p1 greedy: move 1 1, move 1 1
+    p2 mcts: move 1 1, move 3 2
+      search (8000 visits): dracometeor,0;drainpunch,1 342v 217 | psychic,0;drainpunch,1 334v 211 | protect,0;drainpunch,1 328v 206 | psychic,1;drainpunch,1 274v 166
+      p2a Latios used Draco Meteor -> p1a: Volcarona
+              p2a Latios spa 2 fell
+      p1a Volcarona used Fire Blast -> p2a: Latios
+      p2b Scrafty used Drain Punch -> p1b: Tyranitar
+      p1b Tyranitar fainted
+      p2a Latios fainted
+      after p1: Volcarona 54/311, Tyranitar 0/404
+      after p2: Latios 0/301, Scrafty 314/334
+
+  Turn 4
+      p2a <- Metagross comes in (364/364)
+      p1b <- Rotom-Wash comes in (241/241)
+      after p1: Volcarona 54/311, Rotom-Wash 241/241
+      after p2: Metagross 364/364, Scrafty 314/334
+
+  Turn 5
+    p1 greedy: move 1 2, move 2 2
+    p2 mcts: move 3, move 1 1
+      search (11000 visits): rockslide,0;fakeout,0 2153v 1324 | rockslide,0;drainpunch,1 993v 567 | bulletpunch,0;drainpunch,1 570v 301 | rockslide,0;crunch,1 337v 159
+      p2b Scrafty used Fake Out  [[still]]
+              p2b Scrafty -- IT FAILED
+      p1b Rotom used Hydro Pump -> p2b: Scrafty
+      p1a Volcarona used Fire Blast -> p2b: Scrafty
+      p2b Scrafty fainted
+      p2a Metagross used Rock Slide -> p1b: Rotom  [[spread] p1a,p1b]
+              p1a Volcarona -- critical hit
+      p1a Volcarona fainted
+      after p1: Volcarona 0/311, Rotom-Wash 156/241
+      after p2: Metagross 364/364, Scrafty 0/334
+
+  Turn 6
+      p2b <- Thundurus comes in (299/299)
+      after p1: Volcarona 0/311, Rotom-Wash 156/241
+      after p2: Metagross 364/364, Thundurus 299/299
+
+  Turn 7
+    p1 greedy: pass, move 2 1
+    p2 mcts: move 3, move 1 2
+      search (1506000 visits): rockslide,1;thunderbolt,1 971218v 964943 | meteormash,1;thunderbolt,1 453084v 449018 | bulletpunch,1;thunderbolt,1 31698v 30715 | protect,0;thunderbolt,1 27910v 26989
+      p1b Rotom used Hydro Pump -> p2a: Metagross
+      p2b Thundurus used Thunderbolt -> p1b: Rotom
+              p2b Thundurus used up its Electric Gem
+      p1b Rotom fainted
+      after p1: Volcarona 0/311, Rotom-Wash 0/241
+      after p2: Metagross 171/364, Thundurus 299/299
+
+  RESULT: p2 wins

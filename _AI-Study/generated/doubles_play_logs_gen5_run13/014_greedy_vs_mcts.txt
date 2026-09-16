@@ -1,0 +1,87 @@
+battle 14   p1=greedy vs p2=mcts   mcts 300 ms a decision
+  p1: Untitled 544: Deoxys-Attack, Mr. Mime, Cradily, Hariyama
+  p2: LKJC - LIMT: Latios, Infernape, Metagross, Thundurus
+
+  Turn 1
+    p1 greedy: move 2 1, move 4 1
+    p2 mcts: move 2 1, switch 3   (slot1 Infernape -> Metagross)
+      search (20000 visits): psychic,0;switch metagross 1544v 1000 | calmmind,0;fakeout,0 957v 591 | psychic,0;fakeout,0 929v 572 | protect,0;switch metagross 584v 337
+      p2b <- Metagross comes in (364/364)
+      p1a Deoxys used Psycho Boost -> p2a: Latios
+              p1a Deoxys spa 2 fell
+      p2a Latios used Psychic -> p1a: Deoxys
+      p1a Deoxys fainted
+      p1b Mr. Mime used Psychic -> p2a: Latios
+      after p1: Deoxys-Attack 0/241, Mr. Mime 284/284
+      after p2: Latios 66/301, Metagross 364/364
+
+  Turn 2
+      p1a <- Cradily comes in (375/375)
+      after p1: Cradily 375/375, Mr. Mime 284/284
+      after p2: Latios 66/301, Metagross 364/364
+
+  Turn 3
+    p1 greedy: move 3 1, move 4 1
+    p2 mcts: move 4, move 1 1
+      search (23000 visits): calmmind,0;meteormash,0 1543v 1162 | dracometeor,1;meteormash,0 1456v 1091 | psychic,1;meteormash,0 1342v 1000 | psychic,0;meteormash,1 966v 698
+      p2a Latios used Calm Mind
+              p2a Latios spa 1 rose
+              p2a Latios spd 1 rose
+      p1b Mr. Mime used Psychic -> p2a: Latios
+      p2b Metagross used Meteor Mash -> p1a: Cradily
+              p2b Metagross used up its Steel Gem
+      p1a Cradily fainted
+      after p1: Cradily 0/375, Mr. Mime 284/284
+      after p2: Latios 32/301, Metagross 364/364
+
+  Turn 4
+      p1a <- Hariyama comes in (492/492)
+      after p1: Hariyama 492/492, Mr. Mime 284/284
+      after p2: Latios 32/301, Metagross 364/364
+
+  Turn 5
+    p1 greedy: move 2 1, move 4 1
+    p2 mcts: move 3, move 1 2
+      search (26000 visits): protect,0;meteormash,1 2738v 1851 | protect,0;meteormash,0 1992v 1317 | psychic,0;meteormash,1 990v 613 | psychic,0;meteormash,0 962v 594
+      p2a Latios used Protect
+      p1b Mr. Mime used Psychic -> p2a: Latios
+              p2a Latios -- move: Protect
+      p2b Metagross used Meteor Mash -> p1b: Mr. Mime
+              p1b Mr. Mime used up its Sitrus Berry
+      p1a Hariyama used Close Combat -> p2a: Latios
+              p2a Latios -- move: Protect
+              p1a Hariyama is now tox
+      after p1: Hariyama 492/492, Mr. Mime 177/284
+      after p2: Latios 32/301, Metagross 364/364
+
+  Turn 6
+    p1 greedy: move 2 1, move 4 1
+    p2 mcts: move 1 2, move 1 1
+      search (40000 visits): dracometeor,1;meteormash,0 6301v 5421 | psychic,0;meteormash,1 4399v 3734 | dracometeor,0;meteormash,0 2986v 2490 | protect,0;meteormash,1 2575v 2131
+      p2a Latios used Draco Meteor -> p1b: Mr. Mime
+              p2a Latios spa 2 fell
+      p1b Mr. Mime fainted
+      p2b Metagross used Meteor Mash -> p1a: Hariyama
+      p1a Hariyama used Close Combat -> p2a: Latios
+              p1a Hariyama def 1 fell
+              p1a Hariyama spd 1 fell
+      p2a Latios fainted
+      after p1: Hariyama 132/492, Mr. Mime 0/284
+      after p2: Latios 0/301, Metagross 364/364
+
+  Turn 7
+      p2a <- Infernape comes in (293/293)
+      after p1: Hariyama 132/492, Mr. Mime 0/284
+      after p2: Infernape 293/293, Metagross 364/364
+
+  Turn 8
+    p1 greedy: move 2 1, pass
+    p2 mcts: move 1 1, move 1 1
+      search (675000 visits): fakeout,0;meteormash,0 32680v 32680 | fakeout,0;bulletpunch,0 32680v 32680 | fakeout,0;protect,1 32680v 32680 | fakeout,0;rockslide,0 32680v 32680
+      p2a Infernape used Fake Out -> p1a: Hariyama
+              p1a Hariyama -- critical hit
+      p1a Hariyama fainted
+      after p1: Hariyama 0/492, Mr. Mime 0/284
+      after p2: Infernape 264/293, Metagross 364/364
+
+  RESULT: p2 wins

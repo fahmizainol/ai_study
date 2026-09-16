@@ -1,0 +1,106 @@
+battle 12   p1=greedy vs p2=mcts   mcts 300 ms a decision
+  p1: Itchyfoot genesect: Genesect, Tornadus, Victini, Latios
+  p2: 2v2 Pool League II/2v2 Pools - BW 10: Braviary, Togetic, Kyurem-Black, Arcanine
+
+  Turn 1
+    p1 greedy: move 3 1, move 3 1
+    p2 mcts: move 4, switch 3   (slot1 Togetic -> Kyurem-Black)
+      search (24000 visits): protect,0;switch kyuremblack 2802v 1895 | protect,0;tailwind,1 1778v 1164 | return,1;tailwind,1 1329v 848 | bravebird,0;tailwind,1 1216v 769
+      p2b <- Kyurem-Black comes in (391/391)
+      p2a Braviary used Protect
+      p1a Genesect used Ice Beam -> p2a: Braviary
+              p2a Braviary -- move: Protect
+      p1b Tornadus used Superpower -> p2a: Braviary
+              p2a Braviary -- move: Protect
+      after p1: Genesect 283/283, Tornadus 299/299
+      after p2: Braviary 341/341, Kyurem-Black 391/391
+
+  Turn 2
+    p1 greedy: move 3 1, move 3 1
+    p2 mcts: move 4, move 4
+      search (23000 visits): protect,0;outrage,0 909v 707 | protect,0;rockslide,0 780v 597 | switch togetic;rockslide,0 731v 556 | bravebird,0;rockslide,0 660v 496
+      p2a Braviary used Protect
+      p1a Genesect used Ice Beam -> p2a: Braviary
+              p2a Braviary -- move: Protect
+      p1b Tornadus used Superpower -> p2a: Braviary
+              p2a Braviary -- move: Protect
+      p2b Kyurem used Outrage -> p1b: Tornadus
+      p1b Tornadus fainted
+      after p1: Genesect 283/283, Tornadus 0/299
+      after p2: Braviary 341/341, Kyurem-Black 391/391
+
+  Turn 3
+      p1b <- Victini comes in (341/341)
+      after p1: Genesect 283/283, Victini 341/341
+      after p2: Braviary 341/341, Kyurem-Black 391/391
+
+  Turn 4
+    p1 greedy: move 3 1, move 1 1
+    p2 mcts: switch 4, move 1   (slot0 Braviary -> Arcanine)
+      search (25000 visits): switch arcanine;outrage,0 7872v 6590 | protect,0;outrage,0 3850v 3139 | switch togetic;outrage,0 2670v 2138 | switch arcanine;outrage,1 1854v 1452
+      p2a <- Arcanine comes in (339/339)
+              p1a Genesect atk 1 fell
+              p1b Victini atk 1 fell
+      p1a Genesect used Ice Beam -> p2a: Arcanine
+              p2a Arcanine is now frz
+      p1b Victini used V-create -> p2a: Arcanine
+              p1b Victini used up its Fire Gem
+              p1b Victini spe 1 fell
+              p1b Victini def 1 fell
+              p1b Victini spd 1 fell
+              p2a Arcanine is cured of frz
+      p2b Kyurem used Outrage -> p1a: Genesect  [[from] lockedmove]
+              p2b Kyurem gained confusion
+      after p1: Genesect 65/283, Victini 341/341
+      after p2: Arcanine 124/339, Kyurem-Black 391/391
+
+  Turn 5
+    p1 greedy: move 3 1, move 1 1
+    p2 mcts: move 3 1, move 4
+      search (29000 visits): flareblitz,0;outrage,1 7948v 5997 | closecombat,0;outrage,1 5113v 3794 | switch togetic;outrage,0 2295v 1631 | protect,0;outrage,0 2157v 1526
+      p1a Genesect used Ice Beam -> p2a: Arcanine
+              p2b Kyurem -- confusion
+      p2b Kyurem used Outrage -> p1a: Genesect
+      p1a Genesect fainted
+      p2a Arcanine used Flare Blitz -> p1b: Victini
+      p1b Victini used V-create -> p2a: Arcanine
+              p1b Victini spe 1 fell
+              p1b Victini def 1 fell
+              p1b Victini spd 1 fell
+      p2a Arcanine fainted
+      after p1: Genesect 0/283, Victini 206/341
+      after p2: Arcanine 0/339, Kyurem-Black 391/391
+
+  Turn 6
+      p1a <- Latios comes in (301/301)
+      p2a <- Togetic comes in (314/314)
+      after p1: Latios 301/301, Victini 206/341
+      after p2: Togetic 314/314, Kyurem-Black 391/391
+
+  Turn 7
+    p1 greedy: move 1 1, move 1 1
+    p2 mcts: move 3, move 1
+      search (71000 visits): tailwind,0;outrage,1 60598v 49771 | followme,0;outrage,1 6381v 4985 | tailwind,0;outrage,0 1217v 858 | followme,0;outrage,0 912v 624
+      p1a Latios used Draco Meteor -> p2a: Togetic
+              p1a Latios spa 2 fell
+              p2b Kyurem lost confusion
+      p2b Kyurem used Outrage -> p1b: Victini  [[from] lockedmove]
+      p1b Victini fainted
+      p2a Togetic used Tailwind
+      -sidestart p2: B move: Tailwind
+      after p1: Latios 301/301, Victini 0/341
+      after p2: Togetic 206/314, Kyurem-Black 391/391
+
+  Turn 8
+    p1 greedy: move 1 1, pass
+    p2 mcts: move 2, move 1
+      search (1195000 visits): roost,0;outrage,0 248797v 248559 | helpinghand,1;outrage,0 246121v 245870 | followme,0;outrage,0 244648v 244392 | tailwind,0;outrage,0 241773v 241504
+      p2b Kyurem used Outrage -> p1a: Latios  [[from] lockedmove]
+              p1a Latios used up its Haban Berry
+              p1a Latios used up its Haban Berry
+      p1a Latios fainted
+              p2b Kyurem gained confusion
+      after p1: Latios 0/301, Victini 0/341
+      after p2: Togetic 206/314, Kyurem-Black 391/391
+
+  RESULT: p2 wins

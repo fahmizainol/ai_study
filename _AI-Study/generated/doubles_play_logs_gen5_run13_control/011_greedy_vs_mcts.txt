@@ -1,0 +1,84 @@
+battle 11   p1=greedy vs p2=mcts   mcts 300 ms a decision
+  p1: Untitled 626: Liepard, Thundurus, Keldeo, Kyurem-Black
+  p2: Vs Z strats Hydreigon: Hydreigon, Togekiss, Mamoswine, Rotom-Wash
+
+  Turn 1
+    p1 greedy: move 2 1, move 1 1
+    p2 mcts: move 2 2, switch 3   (slot1 Togekiss -> Mamoswine)
+      search (22000 visits): darkpulse,1;switch mamoswine 1011v 677 | flamethrower,1;switch mamoswine 851v 559 | dracometeor,1;switch mamoswine 767v 498 | focusblast,0;switch mamoswine 766v 497
+      p2b <- Mamoswine comes in (361/361)
+      p1a Liepard used Sucker Punch -> p2a: Hydreigon
+              p1a Liepard used up its Dark Gem
+      p2a Hydreigon used Dark Pulse -> p1b: Thundurus
+      p1b Thundurus used Thunderbolt -> p2a: Hydreigon
+              p1b Thundurus used up its Electric Gem
+      after p1: Liepard 269/269, Thundurus 121/299
+      after p2: Hydreigon 115/325, Mamoswine 361/361
+
+  Turn 2
+    p1 greedy: move 2 1, move 1 1
+    p2 mcts: move 2 2, move 1
+      search (29000 visits): darkpulse,1;earthquake,0 7047v 5240 | darkpulse,1;iciclecrash,0 2792v 1987 | switch rotomwash;earthquake,0 2286v 1606 | switch rotomwash;iceshard,1 1530v 1043
+      p1a Liepard used Sucker Punch -> p2a: Hydreigon
+      p2a Hydreigon used Dark Pulse -> p1b: Thundurus
+      p1b Thundurus fainted
+      p2b Mamoswine used Earthquake -> p1a: Liepard  [[spread] p1a]
+              p2a Hydreigon -- IMMUNE
+              p2b Mamoswine used up its Ground Gem
+      p1a Liepard fainted
+      after p1: Liepard 0/269, Thundurus 0/299
+      after p2: Hydreigon 59/325, Mamoswine 361/361
+
+  Turn 3
+      p1b <- Kyurem-Black comes in (391/391)
+      p1a <- Keldeo comes in (323/323)
+      after p1: Keldeo 323/323, Kyurem-Black 391/391
+      after p2: Hydreigon 59/325, Mamoswine 361/361
+
+  Turn 4
+    p1 greedy: move 2 1, move 2 1
+    p2 mcts: move 2 2, move 2
+      search (28000 visits): darkpulse,1;protect,1 12211v 5870 | darkpulse,1;earthquake,0 2534v 1094 | darkpulse,1;iciclecrash,1 1097v 422 | switch rotomwash;earthquake,0 937v 350
+      p2b Mamoswine used Protect
+      p2a Hydreigon used Dark Pulse -> p1b: Kyurem
+      p1b Kyurem used Draco Meteor -> p2a: Hydreigon
+              p1b Kyurem spa 2 fell
+      p2a Hydreigon fainted
+      p1a Keldeo used Hydro Pump -> p2b: Mamoswine
+              p2b Mamoswine -- move: Protect
+      after p1: Keldeo 323/323, Kyurem-Black 241/391
+      after p2: Hydreigon 0/325, Mamoswine 361/361
+
+  Turn 5
+      p2a <- Togekiss comes in (374/374)
+      after p1: Keldeo 323/323, Kyurem-Black 241/391
+      after p2: Togekiss 374/374, Mamoswine 361/361
+
+  Turn 6
+    p1 greedy: move 2 1, move 2 1
+    p2 mcts: move 3 1, move 1
+      search (22000 visits): airslash,0;earthquake,0 2958v 1691 | airslash,0;protect,1 2517v 1421 | thunderwave,0;protect,1 979v 500 | airslash,0;switch rotomwash 887v 446
+      p1b Kyurem used Draco Meteor -> p2a: Togekiss
+              p1b Kyurem spa 2 fell
+      p1a Keldeo used Hydro Pump -> p2a: Togekiss
+      p2b Mamoswine used Earthquake -> p1a: Keldeo  [[spread] p1a,p1b]
+              p2a Togekiss -- IMMUNE
+      p2a Togekiss used Air Slash -> p1a: Keldeo
+      p1a Keldeo fainted
+      after p1: Keldeo 0/323, Kyurem-Black 117/391
+      after p2: Togekiss 155/374, Mamoswine 361/361
+
+  Turn 7
+    p1 greedy: pass, move 2 1
+    p2 mcts: move 1, move 1
+      search (589000 visits): followme,0;earthquake,1 75497v 75497 | airslash,1;earthquake,1 65689v 65600 | airslash,1;iceshard,1 57819v 57664 | switch rotomwash;earthquake,1 55554v 55381
+      p2a Togekiss used Follow Me
+      p1b Kyurem used Draco Meteor -> p2a: Togekiss  [[miss]]
+              p1b Kyurem -- MISSED
+      p2b Mamoswine used Earthquake -> p1b: Kyurem  [[spread] p1b]
+              p2a Togekiss -- IMMUNE
+      p1b Kyurem fainted
+      after p1: Keldeo 0/323, Kyurem-Black 0/391
+      after p2: Togekiss 155/374, Mamoswine 361/361
+
+  RESULT: p2 wins

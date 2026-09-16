@@ -1,0 +1,137 @@
+battle 21   p1=greedy vs p2=mcts   mcts 300 ms a decision
+  p1: Metagross chansey but different: Metagross, Chansey, Keldeo, Landorus-Therian
+  p2: Untitled 1072: Scrafty, Kyurem-Black, Tornadus, Victini
+
+  Turn 1
+    p1 greedy: move 1 1, move 1 1
+    p2 mcts: move 3 2, move 4 1
+      search (18000 visits): crunch,1;earthpower,0 227v 31 | fakeout,1;earthpower,0 222v 29 | crunch,1;switch tornadus 221v 29 | fakeout,0;switch tornadus 220v 29
+      p2b Kyurem used Earth Power -> p1a: Metagross
+      p1a Metagross used Meteor Mash -> p2a: Scrafty
+              p1a Metagross used up its Steel Gem
+      p2a Scrafty used Crunch -> p1b: Chansey
+      p1b Chansey used Seismic Toss -> p2a: Scrafty
+      p2a Scrafty fainted
+      after p1: Metagross 140/364, Chansey 528/703
+      after p2: Scrafty 0/327, Kyurem-Black 391/391
+
+  Turn 2
+      p2a <- Tornadus comes in (299/299)
+      after p1: Metagross 140/364, Chansey 528/703
+      after p2: Tornadus 299/299, Kyurem-Black 391/391
+
+  Turn 3
+    p1 greedy: move 1 1, move 1 1
+    p2 mcts: move 2 1, move 4 1
+      search (33000 visits): superpower,0;earthpower,0 2020v 412 | protect,0;earthpower,0 1963v 398 | superpower,1;earthpower,0 1937v 391 | acrobatics,0;earthpower,0 1898v 381
+      p2b Kyurem used Earth Power -> p1a: Metagross
+      p1a Metagross fainted
+      p2a Tornadus used Superpower -> p1b: Chansey
+              p2a Tornadus atk 1 fell
+              p2a Tornadus def 1 fell
+      p1b Chansey used Seismic Toss -> p2a: Tornadus
+      after p1: Metagross 0/364, Chansey 168/703
+      after p2: Tornadus 199/299, Kyurem-Black 391/391
+
+  Turn 4
+      p1a <- Keldeo comes in (323/323)
+      after p1: Keldeo 323/323, Chansey 168/703
+      after p2: Tornadus 199/299, Kyurem-Black 391/391
+
+  Turn 5
+    p1 greedy: move 2 1, move 1 1
+    p2 mcts: move 3 1, switch 4   (slot1 Kyurem-Black -> Victini)
+      search (39000 visits): skydrop,0;switch victini 2574v 607 | superpower,0;switch victini 2365v 549 | acrobatics,0;switch victini 2292v 528 | acrobatics,1;switch victini 2229v 511
+      p2b <- Victini comes in (341/341)
+      p2a Tornadus used Sky Drop  [[still]]
+      p1b Chansey used Seismic Toss -> p2a: Tornadus  [[miss]]
+              p1b Chansey -- MISSED
+      after p1: Keldeo 323/323, Chansey 168/703
+      after p2: Tornadus 199/299, Victini 341/341
+
+  Turn 6
+    p1 greedy: move 2 1, move 1 1
+    p2 mcts: move 1, move 4
+      search (45000 visits): skydrop,0;protect,1 13380v 4134 | skydrop,0;boltstrike,0 11816v 3621 | skydrop,0;switch kyuremblack 11394v 3483 | skydrop,0;glaciate,0 5215v 1486
+      p2b Victini used Protect
+      p2a Tornadus used Sky Drop -> p1a: Keldeo  [[from] lockedmove]
+              p2a Tornadus used up its Flying Gem
+              p1a Keldeo lost Sky Drop
+      p1a Keldeo used Hydro Pump -> p2a: Tornadus  [[miss]]
+              p1a Keldeo -- MISSED
+      p1b Chansey used Seismic Toss -> p2a: Tornadus
+      after p1: Keldeo 113/323, Chansey 168/703
+      after p2: Tornadus 99/299, Victini 341/341
+
+  Turn 7
+    p1 greedy: move 2 1, move 1 1
+    p2 mcts: switch 4, move 4   (slot0 Tornadus -> Kyurem-Black)
+      search (53000 visits): switch kyuremblack;protect,1 3936v 1365 | acrobatics,0;switch kyuremblack 2352v 764 | superpower,1;switch kyuremblack 2329v 756 | skydrop,1;switch kyuremblack 2263v 731
+      p2a <- Kyurem-Black comes in (391/391)
+      p2b Victini used Protect  [[still]]
+              p2b Victini -- IT FAILED
+      p1a Keldeo used Hydro Pump -> p2a: Kyurem
+      p1b Chansey used Seismic Toss -> p2a: Kyurem
+      after p1: Keldeo 81/323, Chansey 168/703
+      after p2: Kyurem-Black 134/391, Victini 341/341
+
+  Turn 8
+    p1 greedy: move 2 1, move 1 1
+    p2 mcts: move 4 1, move 4
+      search (47000 visits): earthpower,0;protect,1 1409v 354 | dracometeor,0;protect,1 1407v 354 | earthpower,1;protect,1 1358v 338 | icebeam,1;protect,1 1344v 334
+      p2b Victini used Protect
+      p2a Kyurem used Earth Power -> p1a: Keldeo
+      p1a Keldeo fainted
+      p1b Chansey used Seismic Toss -> p2a: Kyurem
+      after p1: Keldeo 0/323, Chansey 168/703
+      after p2: Kyurem-Black 34/391, Victini 341/341
+
+  Turn 9
+      p1a <- Landorus-Therian comes in (319/319)
+              p2a Kyurem atk 1 fell
+              p2b Victini atk 1 fell
+      after p1: Landorus-Therian 319/319, Chansey 168/703
+      after p2: Kyurem-Black 34/391, Victini 341/341
+
+  Turn 10
+    p1 greedy: move 2, move 1 1
+    p2 mcts: move 4 2, move 3
+      search (45000 visits): earthpower,1;glaciate,0 10005v 4447 | earthpower,1;switch tornadus 9430v 4177 | switch tornadus;glaciate,0 6392v 2766 | earthpower,0;switch tornadus 4819v 2043
+      p2a Kyurem used Earth Power -> p1b: Chansey
+      p2b Victini used Glaciate -> p1a: Landorus  [[spread] p1a,p1b]
+              p1a Landorus spe 1 fell
+              p1b Chansey spe 1 fell
+      p1a Landorus used Earthquake -> p2a: Kyurem  [[spread] p1b,p2a,p2b]
+      p1b Chansey fainted
+      p2a Kyurem fainted
+      after p1: Landorus-Therian 167/319, Chansey 0/703
+      after p2: Kyurem-Black 0/391, Victini 39/341
+
+  Turn 11
+      p2a <- Tornadus comes in (99/299)
+      after p1: Landorus-Therian 167/319, Chansey 0/703
+      after p2: Tornadus 99/299, Victini 39/341
+
+  Turn 12
+    p1 greedy: move 2, pass
+    p2 mcts: move 3 1, move 1 1
+      search (538000 visits): skydrop,0;vcreate,0 78452v 78078 | skydrop,0;glaciate,0 73428v 73032 | protect,0;vcreate,0 51753v 51287 | acrobatics,0;protect,1 50378v 49909
+      p2a Tornadus used Sky Drop  [[still]]
+      p2b Victini used V-create -> p1a: Landorus  [[miss]]
+              p2b Victini -- MISSED
+      after p1: Landorus-Therian 167/319, Chansey 0/703
+      after p2: Tornadus 99/299, Victini 39/341
+
+  Turn 13
+    p1 greedy: move 2, pass
+    p2 mcts: move 1, move 3
+      search (1391000 visits): skydrop,0;glaciate,0 698958v 698558 | skydrop,0;vcreate,0 645085v 644548 | skydrop,0;protect,1 42958v 42104 | skydrop,0;boltstrike,0 3999v 3685
+      p2a Tornadus used Sky Drop -> p1a: Landorus  [[from] lockedmove]
+              p1a Landorus -- IMMUNE
+              p1a Landorus lost Sky Drop
+      p2b Victini used Glaciate -> p1a: Landorus
+      p1a Landorus fainted
+      after p1: Landorus-Therian 0/319, Chansey 0/703
+      after p2: Tornadus 99/299, Victini 39/341
+
+  RESULT: p2 wins

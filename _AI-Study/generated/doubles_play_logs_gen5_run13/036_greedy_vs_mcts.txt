@@ -1,0 +1,110 @@
+battle 36   p1=greedy vs p2=mcts   mcts 300 ms a decision
+  p1: LKJC - LSGT: Latios, Scrafty, Genesect, Thundurus
+  p2: 2v2PL 2025/W5 g3: Arcanine, Kyurem-Black, Togetic, Tornadus
+
+  Turn 1
+    p1 greedy: move 1 1, move 2 1
+    p2 mcts: switch 3, move 4   (slot0 Arcanine -> Togetic)
+      search (15000 visits): switch togetic;outrage,0 643v 426 | switch togetic;dragonclaw,0 533v 344 | switch togetic;outrage,1 505v 323 | switch togetic;rockslide,0 470v 297
+      p2a <- Togetic comes in (314/314)
+      p1a Latios used Draco Meteor -> p2a: Togetic
+              p1a Latios spa 2 fell
+      p2b Kyurem used Outrage -> p1a: Latios
+              p1a Latios used up its Haban Berry
+              p1a Latios used up its Haban Berry
+      p1a Latios fainted
+      p1b Scrafty used Crunch -> p2a: Togetic
+      after p1: Latios 0/301, Scrafty 334/334
+      after p2: Togetic 136/314, Kyurem-Black 391/391
+
+  Turn 2
+      p1a <- Genesect comes in (283/283)
+              p1a Genesect atk 1 rose
+      after p1: Genesect 283/283, Scrafty 334/334
+      after p2: Togetic 136/314, Kyurem-Black 391/391
+
+  Turn 3
+    p1 greedy: move 3 1, move 2 1
+    p2 mcts: move 4 -2, move 1
+      search (24000 visits): helpinghand,1;outrage,1 6629v 5078 | roost,0;outrage,1 4929v 3731 | roost,0;outrage,0 2514v 1839 | helpinghand,1;outrage,0 2060v 1487
+      p2a Togetic used Helping Hand -> p2b: Kyurem
+      p1a Genesect used Ice Beam -> p2a: Togetic
+      p2b Kyurem used Outrage -> p1a: Genesect  [[from] lockedmove]
+      p1b Scrafty used Crunch -> p2a: Togetic
+      p2a Togetic fainted
+      after p1: Genesect 70/283, Scrafty 334/334
+      after p2: Togetic 0/314, Kyurem-Black 391/391
+
+  Turn 4
+      p2a <- Arcanine comes in (339/339)
+              p1a Genesect atk 1 fell
+              p1b Scrafty atk 1 fell
+      after p1: Genesect 70/283, Scrafty 334/334
+      after p2: Arcanine 339/339, Kyurem-Black 391/391
+
+  Turn 5
+    p1 greedy: move 3 1, move 2 1
+    p2 mcts: move 1 2, move 1
+      search (32000 visits): closecombat,1;outrage,0 15589v 11009 | flareblitz,0;outrage,1 3521v 2343 | extremespeed,1;outrage,1 2336v 1514 | closecombat,0;outrage,1 2081v 1337
+      p1a Genesect used Ice Beam -> p2a: Arcanine
+      p2b Kyurem used Outrage -> p1a: Genesect  [[from] lockedmove]
+      p1a Genesect fainted
+              p2b Kyurem gained confusion
+      p2a Arcanine used Close Combat -> p1b: Scrafty
+              p2a Arcanine used up its Fighting Gem
+              p1b Scrafty used up its Chople Berry
+              p1b Scrafty used up its Chople Berry
+              p2a Arcanine def 1 fell
+              p2a Arcanine spd 1 fell
+      p1b Scrafty used Crunch -> p2a: Arcanine
+              p2a Arcanine def 1 fell
+      after p1: Genesect 0/283, Scrafty 175/334
+      after p2: Arcanine 185/339, Kyurem-Black 391/391
+
+  Turn 6
+      p1a <- Thundurus comes in (298/298)
+      after p1: Thundurus 298/298, Scrafty 175/334
+      after p2: Arcanine 185/339, Kyurem-Black 391/391
+
+  Turn 7
+    p1 greedy: move 3 1, move 2 1
+    p2 mcts: move 4, move 4
+      search (31000 visits): protect,0;outrage,0 5974v 4582 | protect,0;outrage,1 5901v 4523 | switch tornadus;outrage,0 4148v 3132 | switch tornadus;outrage,1 2208v 1609
+      p2a Arcanine used Protect
+      p1a Thundurus used Thunderbolt -> p2a: Arcanine
+              p2a Arcanine -- move: Protect
+              p2b Kyurem -- confusion
+      p1b Scrafty used Crunch -> p2a: Arcanine
+              p2a Arcanine -- move: Protect
+      after p1: Thundurus 298/298, Scrafty 175/334
+      after p2: Arcanine 185/339, Kyurem-Black 351/391
+
+  Turn 8
+    p1 greedy: move 3 1, move 2 1
+    p2 mcts: move 1 2, move 4
+      search (68000 visits): closecombat,1;outrage,0 55381v 51414 | extremespeed,0;outrage,0 4112v 3585 | flareblitz,0;outrage,0 960v 764 | closecombat,0;outrage,0 806v 630
+      p1a Thundurus used Thunderbolt -> p2a: Arcanine
+      p2a Arcanine fainted
+              p2b Kyurem lost confusion
+      p2b Kyurem used Outrage -> p1b: Scrafty
+      p1b Scrafty fainted
+      after p1: Thundurus 298/298, Scrafty 0/334
+      after p2: Arcanine 0/339, Kyurem-Black 351/391
+
+  Turn 9
+      p2a <- Tornadus comes in (299/299)
+      after p1: Thundurus 298/298, Scrafty 0/334
+      after p2: Tornadus 299/299, Kyurem-Black 351/391
+
+  Turn 10
+    p1 greedy: move 3 2, pass
+    p2 mcts: move 1, move 1
+      search (580000 visits): protect,0;outrage,0 228341v 226856 | superpower,0;outrage,0 143313v 141975 | acrobatics,0;outrage,0 133868v 132556 | bulkup,0;outrage,0 74478v 73391
+      p2a Tornadus used Protect
+      p1a Thundurus used Thunderbolt -> p2b: Kyurem
+      p2b Kyurem used Outrage -> p1a: Thundurus  [[from] lockedmove]
+      p1a Thundurus fainted
+      after p1: Thundurus 0/298, Scrafty 0/334
+      after p2: Tornadus 299/299, Kyurem-Black 256/391
+
+  RESULT: p2 wins

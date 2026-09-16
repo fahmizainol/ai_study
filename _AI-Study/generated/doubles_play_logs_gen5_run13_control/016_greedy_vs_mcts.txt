@@ -1,0 +1,60 @@
+battle 16   p1=greedy vs p2=mcts   mcts 300 ms a decision
+  p1: Untitled 492: Conkeldurr, Cresselia, Weavile, Cradily
+  p2: Untitled 1072: Scrafty, Kyurem-Black, Tornadus, Victini
+
+  Turn 1
+    p1 greedy: move 3 1, move 4 1
+    p2 mcts: move 3 2, move 2 1
+      search (13000 visits): crunch,1;icebeam,0 410v 239 | drainpunch,0;icebeam,0 382v 219 | fakeout,0;icebeam,0 313v 172 | drainpunch,0;dracometeor,0 280v 150
+      p2b Kyurem used Ice Beam -> p1a: Conkeldurr
+      p2a Scrafty used Crunch -> p1b: Cresselia
+      p1b Cresselia used Ice Beam -> p2a: Scrafty
+      p1a Conkeldurr used Ice Punch -> p2a: Scrafty
+              p1a Conkeldurr is now brn
+      after p1: Conkeldurr 180/414, Cresselia 240/444
+      after p2: Scrafty 213/327, Kyurem-Black 391/391
+
+  Turn 2
+    p1 greedy: move 3 1, move 4 1
+    p2 mcts: move 3 2, move 2 1
+      search (26000 visits): crunch,1;icebeam,0 4399v 3208 | drainpunch,1;icebeam,0 3615v 2612 | drainpunch,0;icebeam,0 2486v 1757 | drainpunch,0;icebeam,1 1927v 1338
+      p2b Kyurem used Ice Beam -> p1a: Conkeldurr
+      p1a Conkeldurr fainted
+      p2a Scrafty used Crunch -> p1b: Cresselia
+      p1b Cresselia used Ice Beam -> p2a: Scrafty
+      after p1: Conkeldurr 0/414, Cresselia 42/444
+      after p2: Scrafty 160/327, Kyurem-Black 391/391
+
+  Turn 3
+      p1a <- Weavile comes in (340/340)
+      after p1: Weavile 340/340, Cresselia 42/444
+      after p2: Scrafty 160/327, Kyurem-Black 391/391
+
+  Turn 4
+    p1 greedy: move 2 1, move 4 1
+    p2 mcts: move 2 1, move 2 2
+      search (29000 visits): drainpunch,0;icebeam,1 10846v 6986 | drainpunch,0;icebeam,0 2121v 1249 | drainpunch,0;switch victini 1868v 1088 | switch victini;icebeam,1 1624v 934
+      p2b Kyurem used Ice Beam -> p1b: Cresselia
+      p1b Cresselia fainted
+      p1a Weavile used Ice Punch -> p2a: Scrafty
+      p2a Scrafty used Drain Punch -> p1a: Weavile
+      p1a Weavile fainted
+      after p1: Weavile 0/340, Cresselia 0/444
+      after p2: Scrafty 183/327, Kyurem-Black 391/391
+
+  Turn 5
+      p1a <- Cradily comes in (375/375)
+      after p1: Cradily 375/375, Cresselia 0/444
+      after p2: Scrafty 183/327, Kyurem-Black 391/391
+
+  Turn 6
+    p1 greedy: move 4, pass
+    p2 mcts: move 2 1, move 2 1
+      search (381000 visits): drainpunch,0;icebeam,0 367506v 364194 | switch victini;icebeam,0 4694v 4203 | crunch,0;icebeam,0 4421v 3950 | switch tornadus;icebeam,0 1458v 1230
+      p2b Kyurem used Ice Beam -> p1a: Cradily
+      p2a Scrafty used Drain Punch -> p1a: Cradily
+      p1a Cradily fainted
+      after p1: Cradily 0/375, Cresselia 0/444
+      after p2: Scrafty 215/327, Kyurem-Black 391/391
+
+  RESULT: p2 wins

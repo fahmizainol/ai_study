@@ -1,0 +1,87 @@
+battle 20   p1=greedy vs p2=mcts   mcts 300 ms a decision
+  p1: tran liepard torn: Heatran, Liepard, Tornadus, Kyurem-Black
+  p2: Untitled 1079: Raikou, Togekiss, Infernape, Kyurem-Black
+
+  Turn 1
+    p1 greedy: move 1, move 3 1
+    p2 mcts: move 2 2, move 2
+      search (15000 visits): aurasphere,1;followme,1 663v 415 | aurasphere,0;followme,1 643v 401 | aurasphere,0;airslash,1 563v 344 | aurasphere,0;helpinghand,0 542v 330
+      p2b Togekiss used Follow Me
+      p1b Liepard used Sucker Punch  [[still]]
+              p1b Liepard -- IT FAILED
+      p1a Heatran used Eruption -> p2a: Raikou  [[spread] p2a,p2b]
+      p2a Raikou used Aura Sphere -> p1b: Liepard
+      after p1: Heatran 323/323, Liepard 15/317
+      after p2: Raikou 28/321, Togekiss 233/374
+
+  Turn 2
+    p1 greedy: move 1, move 3 1
+    p2 mcts: move 1 1, move 4
+      search (26000 visits): thunderbolt,0;protect,1 1280v 575 | aurasphere,0;protect,1 1203v 535 | extrasensory,0;protect,1 1148v 508 | thunderbolt,1;protect,1 1142v 505
+      p2b Togekiss used Protect
+      p1b Liepard used Sucker Punch -> p2a: Raikou
+              p1b Liepard used up its Dark Gem
+      p2a Raikou fainted
+      p1a Heatran used Eruption -> p2b: Togekiss
+              p2b Togekiss -- move: Protect
+      after p1: Heatran 323/323, Liepard 15/317
+      after p2: Raikou 0/321, Togekiss 233/374
+
+  Turn 3
+      p2a <- Infernape comes in (293/293)
+      after p1: Heatran 323/323, Liepard 15/317
+      after p2: Infernape 293/293, Togekiss 233/374
+
+  Turn 4
+    p1 greedy: move 1, move 3 2
+    p2 mcts: move 3 1, move 1 1
+      search (34000 visits): closecombat,0;airslash,0 13338v 8559 | closecombat,0;switch kyuremblack 6223v 3878 | closecombat,0;airslash,1 2302v 1349 | closecombat,0;helpinghand,0 2275v 1332
+      p1b Liepard used Sucker Punch -> p2b: Togekiss
+      p2a Infernape used Close Combat -> p1a: Heatran
+              p2a Infernape def 1 fell
+              p2a Infernape spd 1 fell
+      p1a Heatran fainted
+      p2b Togekiss used Air Slash -> p1b: Liepard
+      p1b Liepard fainted
+      after p1: Heatran 0/323, Liepard 0/317
+      after p2: Infernape 264/293, Togekiss 139/374
+
+  Turn 5
+      p1b <- Kyurem-Black comes in (391/391)
+      p1a <- Tornadus comes in (299/299)
+      after p1: Tornadus 299/299, Kyurem-Black 391/391
+      after p2: Infernape 264/293, Togekiss 139/374
+
+  Turn 6
+    p1 greedy: move 3 2, move 2 2
+    p2 mcts: move 3 2, move 2
+      search (39000 visits): closecombat,1;followme,1 16676v 9846 | closecombat,0;airslash,0 1271v 632 | closecombat,1;airslash,0 1175v 578 | closecombat,1;switch kyuremblack 976v 467
+      p2b Togekiss used Follow Me
+      p1a Tornadus used Superpower -> p2b: Togekiss
+              p1a Tornadus atk 1 fell
+              p1a Tornadus def 1 fell
+      p2b Togekiss fainted
+      p2a Infernape used Close Combat -> p1b: Kyurem
+              p2a Infernape def 1 fell
+              p2a Infernape spd 1 fell
+      p1b Kyurem fainted
+      after p1: Tornadus 299/299, Kyurem-Black 0/391
+      after p2: Infernape 235/293, Togekiss 0/374
+
+  Turn 7
+      p2b <- Kyurem-Black comes in (391/391)
+      after p1: Tornadus 299/299, Kyurem-Black 0/391
+      after p2: Infernape 235/293, Kyurem-Black 391/391
+
+  Turn 8
+    p1 greedy: move 3 1, pass
+    p2 mcts: move 1 1, move 4 1
+      search (432000 visits): fakeout,0;fusionbolt,0 39656v 39306 | closecombat,0;icebeam,0 39383v 39032 | overheat,0;fusionbolt,0 39198v 38846 | closecombat,0;fusionbolt,0 39118v 38766
+      p2a Infernape used Fake Out  [[still]]
+              p2a Infernape -- IT FAILED
+      p2b Kyurem used Fusion Bolt -> p1a: Tornadus
+      p1a Tornadus fainted
+      after p1: Tornadus 0/299, Kyurem-Black 0/391
+      after p2: Infernape 235/293, Kyurem-Black 391/391
+
+  RESULT: p2 wins

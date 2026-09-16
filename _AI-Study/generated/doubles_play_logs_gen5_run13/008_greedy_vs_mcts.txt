@@ -1,0 +1,173 @@
+battle 8   p1=greedy vs p2=mcts   mcts 300 ms a decision
+  p1: Pqs darkrai: Darkrai, Latios, Volcarona, Weavile
+  p2: Untitled 492: Conkeldurr, Cresselia, Weavile, Cradily
+
+  Turn 1
+    p1 greedy: move 3 1, move 2 1
+    p2 mcts: move 1, move 4 2
+      search (18000 visits): detect,0;icebeam,1 1709v 1108 | machpunch,0;helpinghand,0 1054v 653 | detect,0;icebeam,0 987v 606 | detect,0;protect,1 690v 405
+      p2a Conkeldurr used Detect
+      p1a Darkrai used Focus Blast -> p2a: Conkeldurr
+              p2a Conkeldurr -- move: Protect
+      p1b Latios used Draco Meteor -> p2a: Conkeldurr
+              p2a Conkeldurr -- move: Protect
+      p2b Cresselia used Ice Beam -> p1b: Latios
+              p2a Conkeldurr is now brn
+      after p1: Darkrai 281/281, Latios 191/301
+      after p2: Conkeldurr 414/414, Cresselia 444/444
+
+  Turn 2
+    p1 greedy: move 3 1, move 2 1
+    p2 mcts: move 2 1, move 4 2
+      search (22000 visits): machpunch,0;icebeam,1 1379v 721 | machpunch,0;helpinghand,0 1066v 540 | detect,0;icebeam,1 1029v 519 | switch weavile;icebeam,1 767v 369
+      p2a Conkeldurr used Mach Punch -> p1a: Darkrai
+      p1a Darkrai fainted
+      p1b Latios used Draco Meteor -> p2a: Conkeldurr
+              p1b Latios used up its Dragon Gem
+              p1b Latios spa 2 fell
+      p2a Conkeldurr fainted
+      p2b Cresselia used Ice Beam -> p1b: Latios
+      after p1: Darkrai 0/281, Latios 79/301
+      after p2: Conkeldurr 0/414, Cresselia 444/444
+
+  Turn 3
+      p1a <- Volcarona comes in (317/317)
+      p2a <- Weavile comes in (340/340)
+      after p1: Volcarona 317/317, Latios 79/301
+      after p2: Weavile 340/340, Cresselia 444/444
+
+  Turn 4
+    p1 greedy: move 4 1, move 2 1
+    p2 mcts: move 3 1, move 2 -1
+      search (19000 visits): nightslash,0;helpinghand,0 1436v 653 | nightslash,0;protect,1 743v 304 | nightslash,0;icebeam,1 542v 206 | nightslash,0;icebeam,0 496v 185
+      p2b Cresselia used Helping Hand -> p2a: Weavile
+      p2a Weavile used Night Slash -> p1a: Volcarona
+              p2a Weavile is now brn
+      p1b Latios used Draco Meteor -> p2a: Weavile
+              p1b Latios spa 2 fell
+      p1a Volcarona used Fire Blast -> p2a: Weavile
+      p2a Weavile fainted
+      after p1: Volcarona 8/317, Latios 79/301
+      after p2: Weavile 0/340, Cresselia 444/444
+
+  Turn 5
+      p2a <- Cradily comes in (375/375)
+      after p1: Volcarona 8/317, Latios 79/301
+      after p2: Cradily 375/375, Cresselia 444/444
+
+  Turn 6
+    p1 greedy: move 4 1, move 2 1
+    p2 mcts: move 3, move 4 1
+      search (28000 visits): protect,0;icebeam,0 11805v 5765 | protect,0;trickroom,1 1454v 598 | protect,0;icebeam,1 1243v 499 | protect,0;trickroom,0 1239v 497
+      p2a Cradily used Protect
+      p1b Latios used Draco Meteor -> p2a: Cradily
+              p2a Cradily -- move: Protect
+      p1a Volcarona used Fire Blast -> p2a: Cradily
+              p2a Cradily -- move: Protect
+      p2b Cresselia used Ice Beam -> p1a: Volcarona
+      p1a Volcarona fainted
+      after p1: Volcarona 0/317, Latios 79/301
+      after p2: Cradily 375/375, Cresselia 444/444
+
+  Turn 7
+      p1a <- Weavile comes in (284/284)
+      after p1: Weavile 284/284, Latios 79/301
+      after p2: Cradily 375/375, Cresselia 444/444
+
+  Turn 8
+    p1 greedy: move 2 1, move 2 1
+    p2 mcts: move 3, move 4 2
+      search (25000 visits): protect,0;icebeam,1 6642v 4499 | protect,0;trickroom,1 1968v 1242 | protect,0;trickroom,0 1965v 1240 | protect,0;icebeam,0 1765v 1104
+      p2a Cradily used Protect  [[still]]
+              p2a Cradily -- IT FAILED
+      p1a Weavile used Ice Punch -> p2a: Cradily
+      p1b Latios used Draco Meteor -> p2a: Cradily
+              p1b Latios spa 2 fell
+      p2a Cradily fainted
+      p2b Cresselia used Ice Beam -> p1b: Latios
+      p1b Latios fainted
+      after p1: Weavile 256/284, Latios 0/301
+      after p2: Cradily 0/375, Cresselia 444/444
+
+  Turn 9
+    p1 greedy: move 2 2, pass
+    p2 mcts: pass, move 3
+      search (96000 visits): No Move;protect,1 94711v 52819 | No Move;icebeam,0 717v 283 | No Move;trickroom,0 572v 213
+      p2b Cresselia used Protect
+      p1a Weavile used Ice Punch -> p2b: Cresselia
+              p2b Cresselia -- move: Protect
+      after p1: Weavile 256/284, Latios 0/301
+      after p2: Cradily 0/375, Cresselia 444/444
+
+  Turn 10
+    p1 greedy: move 2 2, pass
+    p2 mcts: pass, move 3
+      search (103000 visits): No Move;protect,1 101614v 56825 | No Move;icebeam,0 752v 300 | No Move;trickroom,0 634v 243
+      p2b Cresselia used Protect  [[still]]
+              p2b Cresselia -- IT FAILED
+      p1a Weavile used Ice Punch -> p2b: Cresselia
+      after p1: Weavile 228/284, Latios 0/301
+      after p2: Cradily 0/375, Cresselia 310/444
+
+  Turn 11
+    p1 greedy: move 2 2, pass
+    p2 mcts: pass, move 3
+      search (86000 visits): No Move;protect,1 84957v 47253 | No Move;icebeam,0 527v 192 | No Move;trickroom,0 516v 187
+      p2b Cresselia used Protect
+      p1a Weavile used Ice Punch -> p2b: Cresselia
+              p2b Cresselia -- move: Protect
+      after p1: Weavile 228/284, Latios 0/301
+      after p2: Cradily 0/375, Cresselia 310/444
+
+  Turn 12
+    p1 greedy: move 2 2, pass
+    p2 mcts: pass, move 3
+      search (90000 visits): No Move;protect,1 88944v 49533 | No Move;icebeam,0 534v 196 | No Move;trickroom,0 522v 190
+      p2b Cresselia used Protect
+      p1a Weavile used Ice Punch -> p2b: Cresselia
+              p2b Cresselia -- move: Protect
+      after p1: Weavile 228/284, Latios 0/301
+      after p2: Cradily 0/375, Cresselia 310/444
+
+  Turn 13
+    p1 greedy: move 2 2, pass
+    p2 mcts: pass, move 3
+      search (88000 visits): No Move;protect,1 86924v 48378 | No Move;icebeam,0 561v 208 | No Move;trickroom,0 515v 186
+      p2b Cresselia used Protect  [[still]]
+              p2b Cresselia -- IT FAILED
+      p1a Weavile used Ice Punch -> p2b: Cresselia
+      after p1: Weavile 200/284, Latios 0/301
+      after p2: Cradily 0/375, Cresselia 164/444
+
+  Turn 14
+    p1 greedy: move 2 2, pass
+    p2 mcts: pass, move 3
+      search (87000 visits): No Move;protect,1 86561v 48167 | No Move;trickroom,0 233v 61 | No Move;icebeam,0 206v 49
+      p2b Cresselia used Protect
+      p1a Weavile used Ice Punch -> p2b: Cresselia
+              p2b Cresselia -- move: Protect
+      after p1: Weavile 200/284, Latios 0/301
+      after p2: Cradily 0/375, Cresselia 164/444
+
+  Turn 15
+    p1 greedy: move 2 2, pass
+    p2 mcts: pass, move 3
+      search (88000 visits): No Move;protect,1 87591v 48757 | No Move;trickroom,0 212v 52 | No Move;icebeam,0 197v 46
+      p2b Cresselia used Protect  [[still]]
+              p2b Cresselia -- IT FAILED
+      p1a Weavile used Ice Punch -> p2b: Cresselia
+              p2b Cresselia is now frz
+      after p1: Weavile 172/284, Latios 0/301
+      after p2: Cradily 0/375, Cresselia 30/444
+
+  Turn 16
+    p1 greedy: move 2 2, pass
+    p2 mcts: pass, move 3
+      search (88000 visits): No Move;protect,1 87823v 48887 | No Move;icebeam,0 89v 6 | No Move;trickroom,0 88v 6
+              p2b Cresselia COULD NOT MOVE (frz)
+      p1a Weavile used Ice Punch -> p2b: Cresselia
+      p2b Cresselia fainted
+      after p1: Weavile 144/284, Latios 0/301
+      after p2: Cradily 0/375, Cresselia 0/444
+
+  RESULT: p1 wins
