@@ -51,6 +51,51 @@ class CheckScenariosGateTest(unittest.TestCase):
         self.assertIn("SKIP", result.stdout)
 
 
+class TeamOverrideBattleFormatTest(unittest.TestCase):
+    def record(self, battle_format):
+        return [{
+            "id": "double_boss", "map": 1, "type_id": 2, "name": "Boss",
+            "orig_ace_level": 20, "battle_format": battle_format,
+            "mons": [{"species": "PIKACHU", "level": 20,
+                      "moves": ["TACKLE"], "item": None, "ability": 0,
+                      "nature": "HARDY", "iv": 31, "ev": [0] * 6}],
+        }]
+
+    def emit(self, battle_format):
+        import emit_registry
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            teams = root / "teams.json"
+            output = root / "Team_Overrides.rb"
+            teams.write_text(json.dumps(self.record(battle_format)), encoding="utf-8")
+            emit_registry.main(str(output), str(teams))
+            return output.read_text(encoding="utf-8")
+
+    def test_double_format_is_compiled_and_applied_to_custom_battle(self):
+        source = self.emit("double")
+        self.assertIn('TEAM_OVERRIDE_FORMATS[[1,2,"Boss",20]] = :double', source)
+        self.assertIn("def customTrainerBattle(trainer, endspeech, doublebattle=false", source)
+        self.assertIn("doublebattle = (fmt == :double)", source)
+
+    def test_inherit_format_leaves_the_event_unforced(self):
+        source = self.emit("inherit")
+        self.assertNotIn('TEAM_OVERRIDE_FORMATS[[1,2,"Boss",20]]', source)
+
+    def test_unknown_format_is_rejected(self):
+        with self.assertRaisesRegex(ValueError, "invalid battle_format"):
+            self.emit("triple")
+
+    def test_studio_export_imports_politoed_from_poliwhirl_family(self):
+        import boss_studio
+        path = STUDY / "generated" / "teams_bosses_studio.json"
+        if not path.exists():
+            self.skipTest("Studio export is absent")
+        loaded = boss_studio.team_load(path.name, boss_studio.defaults())
+        self.assertEqual(9, loaded["gyms"])
+        self.assertEqual(54, loaded["mons"])
+        self.assertTrue(loaded["settings"]["PICKS"]["g2"]["keep"]["POLITOED"])
+
+
 class RealideaHiddenPowerTest(unittest.TestCase):
     """The IV solver in showdown_names.Realidea.
 

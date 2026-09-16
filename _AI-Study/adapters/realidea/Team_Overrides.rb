@@ -7,6 +7,7 @@
 
 TEAM_OVERRIDES = {}
 TEAM_OVERRIDE_ITEMS = {}
+TEAM_OVERRIDE_FORMATS = {}
 TEAM_OVERRIDES_DAT = {}
 TEAM_OVERRIDES_DISABLE_FILE = "Data/original_teams.txt"
 
@@ -1170,6 +1171,7 @@ def createTrainer(trainerid, trainername, party, items=[])
   if !team_overrides_enabled?
     return team_override_orig_createTrainer(trainerid, trainername, party, items)
   end
+  override_format = nil
   begin
     ace = nil
     for p in party
@@ -1189,6 +1191,7 @@ def createTrainer(trainerid, trainername, party, items=[])
       newparty = team_override_build(spec)
       if newparty.length == spec.length
         party = newparty
+        override_format = TEAM_OVERRIDE_FORMATS[key]
         ti = TEAM_OVERRIDE_ITEMS[key]
         if ti && items.length == 0
           items = ti.collect { |s| getConst(PBItems, s) }
@@ -1198,7 +1201,24 @@ def createTrainer(trainerid, trainername, party, items=[])
   rescue
     # any failure -> keep the original party untouched
   end
-  return team_override_orig_createTrainer(trainerid, trainername, party, items)
+  result = team_override_orig_createTrainer(trainerid, trainername, party, items)
+  if override_format && result && result[0]
+    result[0].instance_variable_set(:@team_override_format, override_format)
+  end
+  return result
+end
+
+# The event supplies the original format as customTrainerBattle's third
+# argument. An explicit Studio choice on the matched override wins; inherit
+# leaves the event untouched. The tag lives on the trainer object so concurrent
+# or queued encounters cannot leak a format through a process-wide global.
+alias team_override_orig_customTrainerBattle customTrainerBattle
+def customTrainerBattle(trainer, endspeech, doublebattle=false, canlose=false)
+  if team_overrides_enabled? && trainer && trainer[0]
+    fmt = trainer[0].instance_variable_get(:@team_override_format)
+    doublebattle = (fmt == :double) if fmt == :single || fmt == :double
+  end
+  return team_override_orig_customTrainerBattle(trainer, endspeech, doublebattle, canlose)
 end
 
 # Path 2: dat fights via pbTrainerBattle -> pbLoadTrainer. Let the original
