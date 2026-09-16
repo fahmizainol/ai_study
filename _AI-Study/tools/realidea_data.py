@@ -6,7 +6,30 @@ against these tables, so nothing can be emitted that the game can't resolve.
 import os, re
 from functools import lru_cache
 
-PBS = "/mnt/c/Users/kny/Documents/Games/Norm/Realidea V4.1/PBS"
+
+def _find_pbs():
+    """Find a complete Realidea game copy and return its PBS directory."""
+    study = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    workspace = os.path.dirname(study)
+    candidates = [
+        os.environ.get("REALIDEA_PBS"),
+        os.path.join(workspace, "Realidea V4.1", "PBS"),
+        os.path.join(workspace, "Realidea", "PBS"),
+    ]
+    for candidate in candidates:
+        game_root = os.path.dirname(candidate) if candidate else None
+        if (candidate and os.path.isfile(os.path.join(candidate, "pokemon.txt"))
+                and os.path.isfile(os.path.join(game_root, "Data", "MapInfos.rxdata"))):
+            return os.path.abspath(candidate)
+    locations = ", ".join(path for path in candidates if path)
+    raise FileNotFoundError(
+        "Could not find a complete Realidea copy containing PBS/pokemon.txt and "
+        "Data/MapInfos.rxdata. Set REALIDEA_PBS to that copy's PBS directory or "
+        f"place the game beside _AI-Study. Checked: {locations}"
+    )
+
+
+PBS = _find_pbs()
 
 NATURES = ["HARDY","LONELY","BRAVE","ADAMANT","NAUGHTY","BOLD","DOCILE","RELAXED",
            "IMPISH","LAX","TIMID","HASTY","SERIOUS","JOLLY","NAIVE","MODEST",
@@ -110,6 +133,29 @@ def items():
         f = line.split(",")
         if len(f) > 2 and f[0].isdigit():
             out.add(f[1])
+    return out
+
+
+@lru_cache(maxsize=1)
+def held_items():
+    """Item IDs from pockets that the engine permits Pokémon to hold.
+
+    Essentials v16 stores ordinary held items in pocket 1, berries in pocket 5,
+    and mail in pocket 6. Excluding medicine, balls, TMs, battle items, and key
+    items keeps editors from offering meaningless choices such as BICYCLE.
+    """
+    out = set()
+    for line in open(os.path.join(PBS, "items.txt"), encoding="utf-8-sig",
+                     errors="replace"):
+        fields = line.rstrip("\n").split(",")
+        if len(fields) > 8 and fields[0].isdigit() and fields[4] in {"1", "5", "6"}:
+            out.add(fields[1])
+    # Berry Juice is filed with medicine in this PBS (pocket 2), but unlike Potion
+    # it is a real held item with an in-battle trigger. Keep the pocket filter strict
+    # and name this one intentional exception rather than exposing every medicine in
+    # the Studio item picker.
+    if "BERRYJUICE" in items():
+        out.add("BERRYJUICE")
     return out
 
 

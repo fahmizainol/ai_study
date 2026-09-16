@@ -463,8 +463,10 @@ def ebst(mon):
 def _remap_anchors(mode=None):
     """Anchors for remap(). `mode` overrides the curve file's own active_mode, which
     is what lets a caller preview the other level ladder without editing the file."""
-    caps = json.load(open(os.path.join(GEN, "realidea_level_caps.json")))
-    curve = json.load(open(os.path.join(GEN, "realidea_level_curve.json")))
+    caps = json.load(open(os.path.join(GEN, "realidea_level_caps.json"),
+                          encoding="utf-8"))
+    curve = json.load(open(os.path.join(GEN, "realidea_level_curve.json"),
+                           encoding="utf-8"))
     prog = {p["stage"]: p for p in curve["progression"]}
     mode = mode or curve["active_mode"]
     xs = [0] + [c["cap"] for c in caps] + [66]
@@ -1806,7 +1808,8 @@ def _type_ids():
     """{trainer class: type_id} from the extracted battle list -- the same numeric id
     the Ruby registry keys on. realidea_level_caps.json records the class name only,
     which is why emit_registry.py could not key the boss teams before."""
-    battles = json.load(open(os.path.join(EXTRACTED, "realidea-battles.json")))
+    battles = json.load(open(os.path.join(EXTRACTED, "realidea-battles.json"),
+                             encoding="utf-8"))
     return {b["type"]: b["type_id"] for b in battles}
 
 

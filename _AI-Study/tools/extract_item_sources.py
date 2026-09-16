@@ -33,9 +33,9 @@ from marshal_rb import load
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 STUDY = os.path.dirname(HERE)
-GAME = os.path.join(os.path.dirname(os.path.dirname(D.PBS)), "Realidea V4.1", "Data")
-if not os.path.isdir(GAME):
-    GAME = os.path.join(os.path.dirname(D.PBS), "Data")
+# realidea_data has already selected a complete game copy, so keep PBS and map
+# data from that same root rather than preferring any similarly named directory.
+GAME = os.path.join(os.path.dirname(D.PBS), "Data")
 
 ACQUIRE = ("pbItemBall", "pbReceiveItem", "pbHiddenItem", "pbAddItem", "pbStoreItem",
            "pbPokemonMart")

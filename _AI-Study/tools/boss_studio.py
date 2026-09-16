@@ -39,6 +39,7 @@ import fight_context as FC
 import free_team as FT
 import generate_bosses as G
 import generate_trainers as T
+import realidea_data as D
 import smogon_corpus as SC
 import team_shape as TS
 import validate_team as V
@@ -158,7 +159,54 @@ def _fight_picks(raw):
             continue
         sets = {sp: ([lbl] if isinstance(lbl, str) else list(lbl))
                 for sp, lbl in (v.get("sets") or {}).items() if lbl}
-        out[key] = {"keep": v.get("keep") or {}, "sets": sets}
+        items = {}
+        for species, item in (v.get("items") or {}).items():
+            if item is not None and item not in D.held_items():
+                raise ValueError(f"unknown held item {item} for {species}")
+            items[species] = item
+        moves = {}
+        for species, chosen in (v.get("moves") or {}).items():
+            chosen = list(chosen) if isinstance(chosen, list) else []
+            if not 1 <= len(chosen) <= 4 or len(set(chosen)) != len(chosen):
+                raise ValueError(f"{species} needs 1-4 distinct moves")
+            unknown = [move for move in chosen if move not in G._mv]
+            if unknown:
+                raise ValueError(f"unknown move {unknown[0]} for {species}")
+            moves[species] = chosen
+        abilities = {}
+        for species, slot in (v.get("abilities") or {}).items():
+            sp = G._sp.get(species)
+            slot = int(slot)
+            legal = set(range(len(sp["abilities"]))) if sp else set()
+            if sp and sp.get("hidden_ability"):
+                legal.add(2)
+            if slot not in legal:
+                raise ValueError(f"invalid ability slot {slot} for {species}")
+            abilities[species] = slot
+        natures = {species: str(nature).upper()
+                   for species, nature in (v.get("natures") or {}).items()
+                   if nature}
+        ivs, evs, levels = {}, {}, {}
+        for species, value in (v.get("ivs") or {}).items():
+            values = value if isinstance(value, list) else [value]
+            if not values or len(values) not in (1, 6) or any(
+                    not isinstance(x, int) or not 0 <= x <= 31 for x in values):
+                raise ValueError(f"invalid IVs for {species}")
+            ivs[species] = value
+        for species, value in (v.get("evs") or {}).items():
+            if not isinstance(value, list) or len(value) != 6 or any(
+                    not isinstance(x, int) or not 0 <= x <= 252 for x in value
+            ) or sum(value) > 510:
+                raise ValueError(f"invalid EVs for {species}")
+            evs[species] = value
+        for species, value in (v.get("levels") or {}).items():
+            if not isinstance(value, int) or not 1 <= value <= 100:
+                raise ValueError(f"invalid level for {species}")
+            levels[species] = value
+        out[key] = {"keep": v.get("keep") or {}, "sets": sets, "items": items,
+                    "moves": moves, "abilities": abilities,
+                    "natures": natures, "ivs": ivs, "evs": evs,
+                    "levels": levels}
     return out
 
 
@@ -246,6 +294,16 @@ def _ordinal(n):
     return f"{n}{'th' if 10 <= n % 100 <= 20 else {1:'st',2:'nd',3:'rd'}.get(n % 10, 'th')}"
 
 
+def _ability_options(species):
+    sp = G._sp.get(species)
+    if not sp:
+        return []
+    out = [{"slot": i, "name": name} for i, name in enumerate(sp["abilities"])]
+    if sp.get("hidden_ability") and len(sp["abilities"]) <= 2:
+        out.append({"slot": 2, "name": sp["hidden_ability"], "hidden": True})
+    return out
+
+
 def _card(build, **extra):
     """One team's Builder card.
 
@@ -294,19 +352,92 @@ def _card(build, **extra):
             {m["species"]: m["moves"] for m in real}))["axes"].items()},
         "mons": [{"species": m["species"], "level": T.show_level(m["level"]),
                   "item": m.get("item"), "nature": m.get("nature"),
-                  "ev": m.get("ev"), "moves": m.get("moves") or [],
+                  "iv": m.get("iv"), "ev": m.get("ev"),
+                  "moves": m.get("moves") or [],
                   "kept": m.get("kept"), "why": m.get("why"),
                   "fidelity": m.get("fidelity"), "src": m.get("src"),
                   "dynamic": G.is_dynamic(m["species"]),
                   "pinned": bool(m.get("pinned")),
                   "ability": None if G.is_dynamic(m["species"])
-                             else G.ability_name(m)} for m in team],
+                             else G.ability_name(m),
+                  "ability_slot": m.get("ability"),
+                  "ability_options": _ability_options(m["species"]),
+                  "move_level": (m.get("level") if isinstance(m.get("level"), int)
+                                 else m.get("design_level"))} for m in team],
     }, **extra)
+
+
+def _ordered_team(team, requested):
+    """Return ``team`` in the requested party order, keeping unknown/new slots.
+
+    The browser stores species names because generated team dictionaries have no
+    stable row id. Buckets make repeated species deterministic, while appending
+    unmatched rows means an old preset remains useful after a generator change.
+    """
+    if not isinstance(requested, list):
+        return team
+    buckets = collections.defaultdict(list)
+    for mon in team:
+        buckets[mon["species"]].append(mon)
+    ordered = []
+    used = set()
+    for species in requested:
+        if not isinstance(species, str) or not buckets[species]:
+            continue
+        mon = buckets[species].pop(0)
+        ordered.append(mon)
+        used.add(id(mon))
+    ordered.extend(mon for mon in team if id(mon) not in used)
+    return ordered
+
+
+def _apply_loadout(build, fight_key):
+    """Apply Studio item/move/ability choices before rendering and export."""
+    choices = G.PICKS.get(fight_key) or {}
+    items, moves = choices.get("items") or {}, choices.get("moves") or {}
+    abilities = choices.get("abilities") or {}
+    natures, ivs = choices.get("natures") or {}, choices.get("ivs") or {}
+    evs, levels = choices.get("evs") or {}, choices.get("levels") or {}
+    for mon in build["team"]:
+        species = mon["species"]
+        if species in items:
+            mon["item"] = items[species]
+        if species in abilities:
+            mon["ability"] = abilities[species]
+        if species in natures:
+            mon["nature"] = natures[species]
+        if species in ivs:
+            mon["iv"] = ivs[species]
+        if species in evs:
+            mon["ev"] = list(evs[species])
+        if species in levels:
+            mon["level"] = levels[species]
+        if species in moves:
+            level = mon.get("level") if isinstance(mon.get("level"), int) \
+                else mon.get("design_level")
+            illegal = [move for move in moves[species]
+                       if not G._knows(species, move, level or 50,
+                                       bool(G.EARLY_MOVES))]
+            if illegal:
+                raise ValueError(f"{species} cannot learn {illegal[0]} at level {level}")
+            mon["moves"] = list(moves[species])
+            mon["src"] = "Boss Studio custom moves"
+            mon["fidelity"] = len(mon["moves"])
+        if not G.is_dynamic(species):
+            mon["roles"] = G.roles_of(mon["moves"], mon.get("item"),
+                                      G.ability_name(mon), build.get("mode"),
+                                      G._sp[species])
+    build["roles"] = collections.Counter(
+        role for mon in build["team"] for role in mon.get("roles", ()))
 
 
 def run(over):
     with _LOCK, settings(over):
         gyms = [G.make_gym(i) for i in range(9)]
+        orders = over.get("ORDER") if isinstance(over.get("ORDER"), dict) else {}
+        for i, gym in enumerate(gyms):
+            _apply_loadout(gym, G.gym_id(i))
+            gym["team"] = _ordered_team(gym["team"], orders.get(f"g{i}"))
         type_ids = G._type_ids()
         records = [G.as_team_record(g, type_ids) for g in gyms]
         out = [_card(g, idx=g["idx"], theme=g["theme"]) for g in gyms]
@@ -325,6 +456,8 @@ def run(over):
             pick = tplans.get(i)
             got = T.make_trainer(b, (pick[0] or None, pick[1] or None) if pick else None)
             if got:
+                _apply_loadout(got, T.fight_id(b))
+                got["team"] = _ordered_team(got["team"], orders.get(f"t{i}"))
                 trainers.append(_card(got, slot=i, who=_alias(b["type"]),
                                       ace=got["ace"], dynamic=got["dynamic"]))
         trainers.sort(key=lambda c: (c["target"], c["who"]))
@@ -511,7 +644,8 @@ def free_build(payload):
 def defaults():
     with open(SHIPPED, encoding="utf-8") as fh:
         shipped = json.load(fh)
-    curve = json.load(open(os.path.join(GENDIR, "realidea_level_curve.json")))
+    curve = json.load(open(os.path.join(GENDIR, "realidea_level_curve.json"),
+                           encoding="utf-8"))
     return {
         "scalars": {k: (TS.CHASE if k == "CHASE" else getattr(G, k))
                     for k in SCALARS},
@@ -535,6 +669,7 @@ def defaults():
         # Every role any archetype can make mandatory, so the UI can offer to turn
         # each one off. `mega` is in here for the same reason the others are.
         "set_tiers": SC.set_tiers(),
+        "items": sorted(D.held_items()),
         "floor_roles": sorted({r for a in TS.ARCHETYPES
                                for r in G.plan_for(a, True, None)[0]}),
         "shipped": {t["id"]: [m["species"] for m in t["mons"]] for t in shipped},
@@ -598,6 +733,170 @@ def preset_load(name):
             "settings": got.get("settings") or {}}
 
 
+def _team_path(name):
+    """A JSON file directly under generated/, never an arbitrary path."""
+    name = os.path.basename((name or "").strip())
+    if not name.endswith(".json"):
+        name += ".json"
+    return os.path.join(GENDIR, name)
+
+
+def _read_team_file(name):
+    with open(_team_path(name), encoding="utf-8") as fh:
+        records = json.load(fh)
+    if not isinstance(records, list):
+        raise ValueError("top level must be a list of team records")
+    expected = {G.gym_id(i): i for i in range(9)}
+    found = {}
+    for record in records:
+        if not isinstance(record, dict) or record.get("id") not in expected:
+            continue
+        idx = expected[record["id"]]
+        if idx in found:
+            raise ValueError(f"duplicate record {record['id']}")
+        mons = record.get("mons")
+        if not isinstance(mons, list) or not mons:
+            raise ValueError(f"{record['id']} has no mons")
+        found[idx] = record
+    missing = [G.gym_id(i) for i in range(9) if i not in found]
+    if missing:
+        raise ValueError(f"needs all 9 gyms; missing {missing[0]}")
+    return [found[i] for i in range(9)]
+
+
+def team_file_list():
+    """Compatible full gym exports in generated/, newest first."""
+    out = []
+    try:
+        names = [n for n in os.listdir(GENDIR) if n.endswith(".json")]
+    except FileNotFoundError:
+        return out
+    for name in names:
+        try:
+            records = _read_team_file(name)
+            stamp = datetime.datetime.fromtimestamp(
+                os.path.getmtime(_team_path(name))).replace(microsecond=0).isoformat()
+            out.append({"name": name, "saved": stamp,
+                        "mons": sum(len(r["mons"]) for r in records)})
+        except (OSError, ValueError, TypeError):
+            continue
+    return sorted(out, key=lambda x: (x["saved"], x["name"]), reverse=True)
+
+
+_IMPORTED_MON_FIELDS = ("species", "level", "moves", "item", "ability",
+                        "nature", "iv", "ev")
+
+
+def _team_payload(records):
+    """Only fields the Studio promises to reproduce from an exported team."""
+    return [[{k: mon.get(k) for k in _IMPORTED_MON_FIELDS} for mon in r["mons"]]
+            for r in records]
+
+
+def team_load(name, over):
+    """Turn a full gym export into editable card overrides and prove it round-trips."""
+    records = _read_team_file(name)
+    sizes = {len(r["mons"]) for r in records}
+    if len(sizes) != 1 or not 1 <= next(iter(sizes)) <= 6:
+        raise ValueError("all gyms must use the same team size from 1 to 6")
+
+    # Build once without gym card edits to learn which generated/original species
+    # must be explicitly dropped. Imported species are then pinned, so all slots are
+    # controlled even if the generator or corpus has changed since the export.
+    base_over = dict(over or {})
+    base_over["PICKS"] = {k: v for k, v in (base_over.get("PICKS") or {}).items()
+                          if str(k).startswith("t")}
+    base_over["ORDER"] = {k: v for k, v in (base_over.get("ORDER") or {}).items()
+                          if str(k).startswith("t")}
+    base = run(base_over)["records"]
+
+    merged = dict(over or {})
+    picks = {k: v for k, v in (merged.get("PICKS") or {}).items()
+             if str(k).startswith("t")}
+    orders = {k: v for k, v in (merged.get("ORDER") or {}).items()
+              if str(k).startswith("t")}
+    targets = list(merged.get("TARGET") or G.TARGET)
+    spreads = list(merged.get("SPREAD") or G.SPREAD)
+    themes = list(merged.get("THEME") or theme_list())
+    for i, record in enumerate(records):
+        mons = record["mons"]
+        species = [m.get("species") for m in mons]
+        if any(not isinstance(sp, str) or sp not in G._sp for sp in species):
+            bad = next((sp for sp in species if not isinstance(sp, str)
+                        or sp not in G._sp), None)
+            raise ValueError(f"gym {i + 1} has unknown species {bad}")
+        if len(set(species)) != len(species):
+            raise ValueError(f"gym {i + 1} repeats a species; card overrides need unique species")
+        keep = {sp: True for sp in species}
+        for old in (m["species"] for m in base[i]["mons"]):
+            if old not in keep:
+                keep[old] = False
+        picks[f"g{i}"] = {
+            "keep": keep,
+            "sets": {},
+            "items": {m["species"]: m.get("item") for m in mons},
+            "moves": {m["species"]: list(m.get("moves") or []) for m in mons},
+            "abilities": {m["species"]: m.get("ability", 0) for m in mons},
+            "natures": {m["species"]: m.get("nature") for m in mons
+                        if m.get("nature")},
+            "ivs": {m["species"]: m.get("iv") for m in mons
+                    if m.get("iv") is not None},
+            "evs": {m["species"]: m.get("ev") for m in mons
+                    if m.get("ev") is not None},
+            "levels": {m["species"]: m.get("level") for m in mons
+                       if isinstance(m.get("level"), int)},
+        }
+        orders[f"g{i}"] = species
+        design = record.get("design") or {}
+        if design.get("target_ebst") is not None:
+            targets[i] = design["target_ebst"]
+        if design.get("theme") in G.WEAK:
+            themes[i] = design["theme"]
+        # A hand-edited export may deliberately contain a body outside the current
+        # generator band (the late-game Regigigas and Dialga teams are examples).
+        # Pinned species still obey that band, so widen only this fight enough to
+        # admit every imported body instead of silently replacing it.
+        spreads[i] = max(spreads[i], 2 * max(
+            abs(G.ebst(mon) - targets[i]) for mon in mons) + 2)
+    merged.update({"PICKS": picks, "ORDER": orders, "TARGET": targets,
+                   "SPREAD": spreads, "THEME": themes,
+                   "TEAM_SIZE": next(iter(sizes))})
+
+    # Widening a band can make dev-roster species eligible that the first baseline
+    # never contained. Build once under the final bands and explicitly drop those
+    # too, otherwise a six-mon import can become an eight- or nine-mon team.
+    wide_base_over = dict(merged)
+    wide_base_over["PICKS"] = {k: v for k, v in picks.items()
+                               if str(k).startswith("t")}
+    wide_base_over["ORDER"] = {k: v for k, v in orders.items()
+                               if str(k).startswith("t")}
+    wide_base = run(wide_base_over)["records"]
+    for i, record in enumerate(records):
+        wanted = {m["species"] for m in record["mons"]}
+        keep = picks[f"g{i}"]["keep"]
+        baseline = {m["species"] for m in wide_base[i]["mons"]}
+        # If an original evolves into the imported species, pinning that evolved
+        # name adds a second copy (POLIWHIRL -> POLIWRATH plus pinned POLIWRATH).
+        # Do not generalise this to generated baseline picks: once another baseline
+        # mon is dropped, those may be rerolled and still need their explicit pin.
+        raw_originals = [m["species"] for m in G.CAPS[i]["team"]
+                         if m["species"] in G._sp]
+        for species in wanted:
+            if species not in raw_originals and any(
+                    species in G.family(original) for original in raw_originals):
+                keep.pop(species, None)
+        for old in baseline:
+            if old not in wanted:
+                keep[old] = False
+    merged["PICKS"] = picks
+
+    rebuilt = run(merged)["records"]
+    if _team_payload(rebuilt) != _team_payload(records):
+        raise ValueError("the imported teams could not be reproduced by this generator")
+    return {"name": os.path.basename(_team_path(name)), "settings": merged,
+            "gyms": len(records), "mons": sum(len(r["mons"]) for r in records)}
+
+
 class Handler(http.server.BaseHTTPRequestHandler):
     def _send(self, code, body, ctype="application/json"):
         raw = body if isinstance(body, bytes) else body.encode("utf-8")
@@ -618,6 +917,8 @@ class Handler(http.server.BaseHTTPRequestHandler):
             return self._send(200, json.dumps(defaults()))
         if path == "/api/presets":
             return self._send(200, json.dumps({"presets": preset_list()}))
+        if path == "/api/team-files":
+            return self._send(200, json.dumps({"files": team_file_list()}))
         if path == "/api/preset":
             q = urllib.parse.parse_qs(urllib.parse.urlparse(self.path).query)
             try:
@@ -657,6 +958,14 @@ class Handler(http.server.BaseHTTPRequestHandler):
                     {"species": sp,
                      "sets": FT.sets_for(sp, max(1, int(body.get("level") or 50)),
                                          bool(body.get("allow_mega", True)))}))
+            if path == "/api/moves":
+                sp = FT.fold(body.get("species") or "")
+                level = max(1, min(100, int(body.get("level") or 50)))
+                return self._send(200, json.dumps({
+                    "species": sp,
+                    "moves": sorted(move for move in G._mv
+                                    if sp and G._knows(sp, move, level,
+                                                      bool(G.EARLY_MOVES)))}))
             if path == "/api/free":
                 return self._send(200, json.dumps(free_build(body)))
             if path == "/api/plan":
@@ -675,6 +984,11 @@ class Handler(http.server.BaseHTTPRequestHandler):
                         {"error": f"{os.path.basename(dest)} exists — tick overwrite"}))
                 return self._send(200, json.dumps(preset_save(
                     body["name"], body.get("settings") or {}, body.get("note") or "")))
+            if path == "/api/team-load":
+                if not (body.get("name") or "").strip():
+                    return self._send(400, json.dumps({"error": "choose a team JSON"}))
+                return self._send(200, json.dumps(team_load(
+                    body["name"], body.get("settings") or {})))
             if path == "/api/export":
                 name = os.path.basename(body.get("name") or "teams_bosses_studio.json")
                 if not name.endswith(".json"):
@@ -785,22 +1099,33 @@ td.n{text-align:right;font-variant-numeric:tabular-nums}
 button.tiny[disabled]{opacity:.35;cursor:default}
 /* An overridden row is marked on its edge as well as with a tag: the tag says WHAT
    and the stripe says WHERE, so a card with one pinned mon reads at a glance. */
-.mon.ispin,.mon.isset{padding-left:9px;margin-left:-12px;padding-right:5px;
+.mon.ispin,.mon.isset,.mon.isitem{padding-left:9px;margin-left:-12px;padding-right:5px;
   margin-right:-5px;border-radius:0 3px 3px 0}
 .mon.ispin{border-left:4px solid var(--accent);
   background:color-mix(in srgb,var(--accent) 12%,transparent)}
 .mon.isset{border-left:4px dashed var(--accent);
   background:color-mix(in srgb,var(--accent) 6%,transparent)}
+.mon.isitem{border-left:4px dotted var(--accent)}
 .mon.ispin.isset{border-left-style:solid}
 /* The row is the affordance: no furniture until you click it. */
 .mon.editable{cursor:pointer}
 .mon.editable:hover{background:color-mix(in srgb,var(--accent) 7%,transparent)}
 .mon.open{background:color-mix(in srgb,var(--accent) 10%,transparent)}
+.mon.dragging{opacity:.35;background:color-mix(in srgb,var(--accent) 15%,transparent)}
+.draghandle{display:inline-block;margin-right:5px;color:var(--dim);cursor:grab;
+  user-select:none;touch-action:none;font-weight:700}
+.draghandle:active{cursor:grabbing}
+.orderpos{display:inline-block;min-width:28px;margin-right:4px;color:var(--accent);
+  font-size:9px;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
+.makelead{float:right;margin:0 0 2px 6px!important;padding:1px 5px!important;
+  opacity:.7}
+.makelead:hover{opacity:1}
 .edit{display:grid;gap:5px;margin:6px 0 2px;padding:7px;border-radius:3px;
   background:var(--bg);border:1px solid var(--line);cursor:default}
 .edit label{display:grid;gap:2px;font-size:10px;color:var(--dim)}
 .edit label.keep{display:flex;gap:5px;align-items:center}
 .edit input[list],.edit select{font-size:11px;padding:2px 4px;min-width:0}
+.movegrid{display:grid;grid-template-columns:1fr 1fr;gap:4px}
 /* A build in flight: the cards below are a picture of the PREVIOUS answer, so they
    are dimmed and made inert rather than left looking current and clickable. */
 .busy #gyms,.busy #trainers{opacity:.4;pointer-events:none}
@@ -826,6 +1151,8 @@ button.tiny[disabled]{opacity:.35;cursor:default}
 .mon{padding:4px 0;border-top:1px solid var(--line)}
 .mon .sp{font-weight:600}
 .mon .mv{color:var(--dim);font-size:11px}
+.mon .training{color:var(--dim);font-size:10px;font-variant-numeric:tabular-nums;
+  margin-top:1px}
 .new{color:var(--accent)}
 .ok{color:var(--ok)}.warn{color:var(--warn)}.bad{color:var(--bad)}
 button{background:var(--accent);color:#fff;border:0;border-radius:6px;padding:6px 11px;
@@ -861,7 +1188,7 @@ button.tiny{padding:2px 7px;font-size:11px;font-weight:500}
 
 <div class="wrap" id="v_build">
 <div class="panel">
-  <div class="sub">every control regenerates all nine fights</div>
+  <div class="sub">every control regenerates all nine fights · drag ⠿ to set the lead and party order</div>
   <div id="slot_build"></div>
   <div id="globals"></div>
   <fieldset><legend>export</legend>
@@ -870,6 +1197,11 @@ button.tiny{padding:2px 7px;font-size:11px;font-weight:500}
     <div class="exp"><button id="save">Write to generated/</button>
       <button class="ghost" id="reset">Reset</button></div>
     <div id="msg"></div>
+    <div class="sub" style="margin-top:12px">load a full nine-gym team export back
+      into editable cards</div>
+    <select id="tload"></select>
+    <div class="exp"><button class="ghost" id="tget">Load team JSON</button></div>
+    <div id="tmsg"></div>
   </fieldset>
   <fieldset><legend>preset</legend>
     <div class="sub">the whole Builder in one file under generated/studio_presets/ —
@@ -1003,12 +1335,32 @@ const whyPanel=tr=>`<details class="picks"><summary>why these picks</summary>
     <td>${band(r.marg,r.marg_band,1)}</td><td>${band(r.gap,r.gap_band,0)}</td>
     <td>${esc(r.tier)}</td></tr>`).join('')}</table>`).join('')}
 </details>`;
-const monLine=(m,cls,isNew,detail,editKey)=>{
+const STATNAMES=['HP','Atk','Def','Spe','SpA','SpD'];
+const trainingLine=m=>{
+  const bits=[];
+  if(m.nature) bits.push('Nature '+esc(m.nature));
+  if(Array.isArray(m.iv)){
+    if(m.iv.length&&m.iv.every(v=>v===m.iv[0])) bits.push('IV '+m.iv[0]+' all');
+    else bits.push('IV '+m.iv.map((v,i)=>STATNAMES[i]+' '+v).join(' / '));
+  } else if(m.iv!=null) bits.push('IV '+m.iv+' all');
+  if(Array.isArray(m.ev)){
+    const used=m.ev.map((v,i)=>[STATNAMES[i],v]).filter(x=>+x[1]);
+    bits.push(used.length?'EV '+used.map(x=>x[0]+' '+x[1]).join(' / '):'EV 0');
+  }
+  return bits.length?`<div class="training">${bits.join(' · ')}</div>`:'';
+};
+const monLine=(m,cls,isNew,detail,editKey,orderIndex,orderKey=editKey)=>{
   // Two different overrides a person can have put on this mon, and the row says so
   // without being opened: pinned (you put this species here) and a fixed set (you
   // named which one it must use). Both are read from CARD, so they show even on a
   // card whose editor has never been opened this session.
   const fixed=editKey&&((CARD[editKey]||{}).sets||{})[m.species];
+  const itemMap=editKey&&((CARD[editKey]||{}).items||{});
+  const fixedItem=!!itemMap&&Object.prototype.hasOwnProperty.call(itemMap,m.species);
+  const fixedMoves=editKey&&Object.prototype.hasOwnProperty.call(
+    ((CARD[editKey]||{}).moves||{}),m.species);
+  const fixedAbility=editKey&&Object.prototype.hasOwnProperty.call(
+    ((CARD[editKey]||{}).abilities||{}),m.species);
   // The generator only flags `pinned` for a species that is not on the dev's own
   // roster -- ticking one that IS on it adds nothing for it to send back -- so a
   // held vanilla core had no mark at all. Read the tick off CARD like `fixed` does:
@@ -1016,15 +1368,24 @@ const monLine=(m,cls,isNew,detail,editKey)=>{
   // they are two tags rather than one winning over the other.
   const held=editKey&&((CARD[editKey]||{}).keep||{})[m.species]===true;
   return `<div class="${cls}${editKey?' editable':''}${m.pinned||held?' ispin':''}${
-    fixed?' isset':''}" title="${esc(m.src||m.why||'')}"${
-    editKey?` data-edit="${editKey}" data-sp="${esc(m.species)}"`:''}>
+    fixed?' isset':''}${fixedItem||fixedMoves||fixedAbility?' isitem':''}" title="${esc(m.src||m.why||'')}"${editKey?` data-edit="${editKey}"`:''}${
+    orderKey?` draggable="true" data-order-card="${orderKey}" data-sp="${esc(m.species)}"`:''}>
+  ${orderKey?`<span class="draghandle" draggable="true" title="Drag to reorder"
+    aria-label="Drag ${esc(m.species)} to reorder">⠿</span><span class="orderpos">${
+      orderIndex===0?'lead':'#'+(orderIndex+1)}</span>${orderIndex===0?'':
+      `<button type="button" class="tiny ghost makelead" data-make-lead="1"
+        title="Move ${esc(m.species)} to slot 1">make lead</button>`}`:''}
   <span class="sp ${isNew?'new':''}">${esc(m.species)}</span>
   ${m.kept&&!m.pinned?'<span class="tag van">vanilla</span>':''}
   ${m.pinned||held?'<span class="tag van">pinned</span>':''}
   ${fixed?'<span class="tag van">set fixed</span>':''}
+  ${fixedItem?'<span class="tag van">item fixed</span>':''}
+  ${fixedMoves?'<span class="tag van">moves fixed</span>':''}
+  ${fixedAbility?'<span class="tag van">ability fixed</span>':''}
   <span class="tag">L${m.level}${m.item?' @ '+esc(m.item):''}${
     m.fidelity===0?' · no published set':m.fidelity<=1?' · thin set':''}</span>
   <div class="mv">${esc(m.moves.join(' / '))||'(engine default)'}</div>
+  ${trainingLine(m)}
   ${detail?`<div class="why">${[
     m.ability?esc(m.ability):null,
     m.kept?'your core':esc(m.why||''),
@@ -1041,14 +1402,25 @@ function checkStale(){ if(builtAs) $('cwarn').hidden = sig()===builtAs; }
 // would lose it the moment a build replaced the node. The gyms are a full list
 // because the generator reads ARCHETYPE[i]/MODE[i]; the trainers are sparse.
 let PLAN={gym:[],tr:{}};
-// Per-card, per-species overrides: {cardKey: {keep:{SPECIES:bool}, sets:{SPECIES:label}}}
+// Per-card, per-species overrides. An item value of null deliberately clears the
+// slot; a missing item key leaves whatever the generated set chose.
 let CARD={};
+// Party order per card. The first species is the battle lead. Kept separate from
+// PICKS because order changes neither species selection nor set selection.
+let ORDER={};
 // The last build's mons, by card key + species, so an editor opened after the
 // fact shows the set and level that build actually used.
 let MONS={};
-const cardOf=fk=>CARD[fk]=CARD[fk]||{keep:{},sets:{}};
+const cardOf=fk=>{
+  const c=CARD[fk]=CARD[fk]||{};
+  c.keep=c.keep||{}; c.sets=c.sets||{}; c.items=c.items||{};
+  c.moves=c.moves||{}; c.abilities=c.abilities||{};
+  c.natures=c.natures||{}; c.ivs=c.ivs||{}; c.evs=c.evs||{};
+  c.levels=c.levels||{};
+  return c;
+};
 const get=()=>{
-  const o={level_mode:$('level_mode').value,TRAINER_PLANS:PLAN.tr,PICKS:CARD,
+  const o={level_mode:$('level_mode').value,TRAINER_PLANS:PLAN.tr,PICKS:CARD,ORDER,
     SET_FORMATS:[...$('setfmt').querySelectorAll('input:checked')].map(e=>e.value)};
   for(const k in S.meta) o[k]=+$('s_'+k).value;
   for(const k of ['TARGET','SPREAD','THEME'])
@@ -1082,6 +1454,7 @@ function setAll(o){
        m:S.modes.includes(o.MODE[i])?o.MODE[i]:p.m}));
   PLAN.tr=(o.TRAINER_PLANS&&typeof o.TRAINER_PLANS==='object')?o.TRAINER_PLANS:{};
   CARD=(o.PICKS&&typeof o.PICKS==='object')?o.PICKS:{};
+  ORDER=(o.ORDER&&typeof o.ORDER==='object')?o.ORDER:{};
   buildSave();               // a loaded preset survives a reload like anything else
   return true;
 }
@@ -1092,6 +1465,14 @@ async function presetList(sel){
     `<option value="${esc(p.name)}" ${p.name===now?'selected':''}>${esc(p.name)}${
       p.saved?' · '+esc(p.saved.slice(0,10)):''}</option>`).join('')
     ||'<option value="">(none saved yet)</option>';
+}
+async function teamFileList(sel){
+  const d=await (await fetch('/api/team-files')).json();
+  const now=sel||$('tload').value;
+  $('tload').innerHTML=(d.files||[]).map(f=>
+    `<option value="${esc(f.name)}" ${f.name===now?'selected':''}>${esc(f.name)} · ${
+      f.mons} mons${f.saved?' · '+esc(f.saved.slice(0,10)):''}</option>`).join('')
+    ||'<option value="">(no compatible team JSON found)</option>';
 }
 const deb=()=>{clearTimeout(timer);timer=setTimeout(go,120);};
 // A rebuild is ~2s for 27 fights, and every tick, every dropdown and every knob asks
@@ -1160,32 +1541,60 @@ const planPick=(kind,slot,a,m)=>`<div class="plan">
 // Changing the species is expressed as the two picks that already work -- drop the
 // one that is there, pin the one you want -- so it needs no new server machinery and
 // obeys the same rules (a swapped-in mon is `pinned`, not `vanilla`).
-const monEditor=(fk,m)=>`<div class="edit">
-  <label>species<input list="dex" value="${esc(m.species)}"
-    data-swap="${fk}" data-sp="${esc(m.species)}" spellcheck="false"></label>
+const monEditor=(fk,m)=>{
+  const c=CARD[fk]||{}, customMoves=(c.moves||{})[m.species];
+  const chosen=customMoves||m.moves||[], customAbility=(c.abilities||{})[m.species];
+  return `<div class="edit">
+  <label>Pokémon<select data-swap="${fk}" data-sp="${esc(m.species)}">
+    ${S.dex.map(species=>`<option value="${esc(species)}"${
+      species===m.species?' selected':''}>${esc(species)}</option>`).join('')}
+  </select></label>
   <label>set<select data-set="${fk}" data-sp="${esc(m.species)}" data-lv="${m.level}">
     <option value="">${esc(m.src||'whatever ranks best')}</option></select></label>
+  <label>ability<select data-ability="${fk}" data-sp="${esc(m.species)}">
+    <option value="">generated: ${esc(m.ability||'none')}</option>
+    ${(m.ability_options||[]).map(a=>`<option value="${a.slot}" ${
+      customAbility===a.slot?'selected':''}>${esc(a.name)}${a.hidden?' (hidden)':''}</option>`).join('')}
+  </select></label>
+  <label>moves<div class="movegrid">${[0,1,2,3].map(i=>`<select data-move="${fk}"
+    data-sp="${esc(m.species)}" data-slot="${i}" data-lv="${m.move_level||m.level}">
+    <option value="${esc(chosen[i]||'')}">${esc(chosen[i]||'empty slot')}</option>
+  </select>`).join('')}</div></label>
+  <label>held item<select data-item="${fk}" data-sp="${esc(m.species)}">
+    <option value="">generated: ${esc(m.item||'no item')}</option>
+    <option value="__NONE__" ${Object.prototype.hasOwnProperty.call(
+      ((CARD[fk]||{}).items||{}),m.species)&&((CARD[fk]||{}).items||{})[m.species]===null
+        ?'selected':''}>no held item</option>
+    ${S.items.map(item=>`<option value="${esc(item)}" ${
+      (((CARD[fk]||{}).items||{})[m.species]===item)?'selected':''}>${esc(item)}</option>`).join('')}
+  </select></label>
   <label class="keep"><input type="checkbox" data-pin="${fk}"
     data-sp="${esc(m.species)}" ${m.kept?'checked':''}>keep this Pokémon on the fight</label>
-</div>`;
+</div>`;};
 // One Builder card, for a gym and for a named trainer alike.
 // What this card has been told to do that the globals did not ask for. Counted, not
 // just flagged: "edited" alone makes you open the card to find out what you changed,
 // and after a reload that is every card you ever touched.
 const dirtyOf=(fk,i)=>{
   const c=CARD[fk]||{};
-  const mons=Object.keys(c.keep||{}).length+Object.keys(c.sets||{}).length;
+  const mons=Object.keys(c.keep||{}).length+Object.keys(c.sets||{}).length
+    +Object.keys(c.items||{}).length+Object.keys(c.moves||{}).length
+    +Object.keys(c.abilities||{}).length+Object.keys(c.natures||{}).length
+    +Object.keys(c.ivs||{}).length+Object.keys(c.evs||{}).length
+    +Object.keys(c.levels||{}).length;
   const p=fk[0]==='g'?PLAN.gym[i]:PLAN.tr[fk.slice(1)];
   const plan=fk[0]==='g'
     ? !!(p&&(p.a!==S.lists.ARCHETYPE[i]||(p.m||'')!==(S.lists.MODE[i]||'')))
     : !!p;
-  return (mons||plan)?{mons,plan}:null;
+  const order=Array.isArray(ORDER[fk])&&ORDER[fk].length>0;
+  return (mons||plan||order)?{mons,plan,order}:null;
 };
 const teamCard=(g,title,was,pick,fk,i)=>{
   const gap=g.ebst-g.target, j=g.judge, d=fk?dirtyOf(fk,i):null;
   return `<div class="gym${d?' dirty':''}"><h3><span>${title}${d?
       ` <span class="tag edited">edited${d.plan?' · plan':''}${
-        d.mons?' · '+d.mons+' mon'+(d.mons>1?'s':''):''}</span>`:''}</span>
+        d.mons?' · '+d.mons+' mon'+(d.mons>1?'s':''):''}${
+        d.order?' · order':''}</span>`:''}</span>
     <span>${pick||''}</span></h3>
     <div class="meta">eBST <b class="${Math.abs(gap)<=3?'ok':Math.abs(gap)<=12?'warn':'bad'}">${g.ebst}</b>/${g.target}
       · lv ${g.level}${g.ace?' · ace '+esc(String(g.ace)):''} · EV off ${g.offence}%${
@@ -1195,8 +1604,8 @@ const teamCard=(g,title,was,pick,fk,i)=>{
     <div class="meta">unresisted <b class="${j.nobody_resists>4?'bad':'ok'}">${
       j.nobody_resists}</b> · repeats <b class="${j.dup_types?'bad':'ok'}">${
       j.dup_types}</b> · worst shared ${j.worst_shared} · hits ${j.off_se}/18</div>
-    ${g.mons.map(m=>monLine(m,'mon',!!was&&!was.includes(m.species),true,
-                            fk&&!m.dynamic?fk:'')).join('')}
+    ${g.mons.map((m,mi)=>monLine(m,'mon',!!was&&!was.includes(m.species),true,
+                            fk&&!m.dynamic?fk:'',mi,fk)).join('')}
     <div class="exp"><button class="tiny ${d?'':'ghost'}" data-reset="${fk}"${
       d?'':' disabled'}>reset this card to the global settings</button></div>
     </div>`;}
@@ -1314,7 +1723,7 @@ const freeSave=()=>saveForm(FREE_KEY,freeControls);
 // save of its own that could fall out of step with them.
 function buildSave(){
   saveForm(BUILD_KEY,buildControls);
-  try{localStorage.setItem(PLAN_KEY,JSON.stringify({PLAN,CARD}));}catch(e){}
+  try{localStorage.setItem(PLAN_KEY,JSON.stringify({PLAN,CARD,ORDER}));}catch(e){}
 }
 const freeRestore=()=>restoreForm(FREE_KEY,freeControls);
 // Restoring knobs means the Builder no longer shows what the repo ships, so say so
@@ -1328,6 +1737,7 @@ function buildRestore(){
   // than silently discarding someone's saved per-fight plans on the first reload.
   const plan=saved&&saved.PLAN?saved.PLAN:saved;
   if(saved&&saved.CARD&&typeof saved.CARD==='object') CARD=saved.CARD;
+  if(saved&&saved.ORDER&&typeof saved.ORDER==='object') ORDER=saved.ORDER;
   // Shape-check rather than trust: a saved PLAN from an older page could be missing
   // halves, and a bad ARCHETYPE entry reaches the generator as a dict key.
   if(plan&&Array.isArray(plan.gym)&&plan.gym.length===9){
@@ -1502,7 +1912,7 @@ async function init(){
   // the first time they disagree. Moving the node keeps its listeners and its values.
   // Naming a file is not a knob: these live inside #v_build and so get the same
   // listener, but none of them changes what a team is.
-  const NOBUILD=new Set(['fname','ow','pname','pow','pload']);
+  const NOBUILD=new Set(['fname','ow','pname','pow','pload','tload']);
   const onKnob=e=>{
     const k=e.target.id.replace(/^s_/,'');
     if($('val_'+k))$('val_'+k).textContent=e.target.value;
@@ -1518,6 +1928,17 @@ async function init(){
   // Delegated: the cards (and their selects) are replaced wholesale by every build,
   // so a listener bound to a select would be thrown away with it.
   for(const host of ['gyms','trainers']) {
+    const commitOrder=row=>{
+      const fk=row.dataset.orderCard, parent=row.parentNode;
+      const rows=[...parent.querySelectorAll('.mon[data-order-card]')]
+        .filter(r=>r.dataset.orderCard===fk);
+      ORDER[fk]=rows.map(r=>r.dataset.sp);
+      rows.forEach((r,i)=>{
+        const pos=r.querySelector('.orderpos'); if(pos) pos.textContent=i?'#'+(i+1):'lead';
+        const button=r.querySelector('.makelead'); if(button) button.hidden=i===0;
+      });
+      buildSave(); checkStale(); deb();
+    };
     $(host).addEventListener('change',e=>{
       const el=e.target, d=el.dataset;
       if(d.plan){
@@ -1534,14 +1955,43 @@ async function init(){
             `<span class="bad">${esc(to)} is not in this game's dex</span>`;
           return;
         }
+        const row=el.closest('.mon'), teammates=[...row.parentNode.querySelectorAll(
+          `.mon[data-order-card="${d.swap}"]`)].map(r=>r.dataset.sp);
+        if(teammates.includes(to)){
+          el.value=from; $('msg').innerHTML=
+            `<span class="bad">${esc(to)} is already on this team</span>`;
+          return;
+        }
         const c=cardOf(d.swap);
         c.keep[from]=false; c.keep[to]=true;
         // The set was chosen for the species that is leaving; it means nothing to
         // the one arriving, and a stale label would silently match no set at all.
         delete c.sets[from];
+        delete c.items[from];
+        delete c.moves[from];
+        delete c.abilities[from];
+        delete c.natures[from];
+        delete c.ivs[from];
+        delete c.evs[from];
+        delete c.levels[from];
+        // A species change replaces this row, so carry its party position forward.
+        ORDER[d.swap]=teammates.map(species=>species===from?to:species);
       } else if(d.set!==undefined){
         const c=cardOf(d.set);
         if(el.value) c.sets[d.sp]=el.value; else delete c.sets[d.sp];
+      } else if(d.item!==undefined){
+        const c=cardOf(d.item);
+        if(!el.value) delete c.items[d.sp];
+        else c.items[d.sp]=el.value==='__NONE__'?null:el.value;
+      } else if(d.ability!==undefined){
+        const c=cardOf(d.ability);
+        if(el.value==='') delete c.abilities[d.sp];
+        else c.abilities[d.sp]=+el.value;
+      } else if(d.move!==undefined){
+        const c=cardOf(d.move);
+        const chosen=[...el.closest('.movegrid').querySelectorAll('select[data-move]')]
+          .map(x=>x.value).filter(Boolean);
+        if(chosen.length) c.moves[d.sp]=chosen; else delete c.moves[d.sp];
       } else return;
       buildSave(); checkStale(); deb();
     });
@@ -1550,6 +2000,21 @@ async function init(){
     // a payload nobody reads. `focus` fires before the list is drawn.
     $(host).addEventListener('focusin',async e=>{
       const el=e.target, d=el.dataset;
+      if(d.move!==undefined&&!el.dataset.loaded){
+        const grid=el.closest('.movegrid'), boxes=[...grid.querySelectorAll('select[data-move]')];
+        boxes.forEach(box=>box.dataset.loaded='1');
+        const chosen=boxes.map(box=>box.value);
+        const r=await fetch('/api/moves',{method:'POST',body:JSON.stringify(
+          {species:d.sp,level:+String(d.lv).replace(/[^0-9]/g,'')||50})});
+        const got=await r.json();
+        boxes.forEach((box,i)=>{
+          const current=chosen[i]||'';
+          box.innerHTML='<option value="">empty slot</option>'+(got.moves||[]).map(move=>
+            `<option value="${esc(move)}"${move===current?' selected':''}>${esc(move)}</option>`
+          ).join('');
+        });
+        return;
+      }
       if(d.set===undefined||el.dataset.loaded) return;
       el.dataset.loaded='1';
       const r=await fetch('/api/sets',{method:'POST',body:JSON.stringify(
@@ -1561,8 +2026,17 @@ async function init(){
           cur[d.sp]===x.label?' selected':''}>${esc(x.label)}</option>`).join('');
     });
     $(host).addEventListener('click',e=>{
+      const makeLead=e.target.closest('.makelead');
+      if(makeLead){
+        const row=makeLead.closest('.mon[data-order-card]'), parent=row.parentNode;
+        const first=[...parent.querySelectorAll('.mon[data-order-card]')]
+          .find(r=>r.dataset.orderCard===row.dataset.orderCard);
+        if(first&&first!==row) parent.insertBefore(row,first);
+        commitOrder(row); return;
+      }
       const fk=e.target.dataset&&e.target.dataset.reset;
-      if(fk){ delete CARD[fk]; buildSave(); deb(); return; }
+      if(fk){ delete CARD[fk]; delete ORDER[fk]; buildSave(); deb(); return; }
+      if(e.target.closest('.draghandle')) return;
       // Inside an open editor is not a click ON the row.
       if(e.target.closest('.edit')) return;
       const row=e.target.closest('.mon.editable');
@@ -1577,6 +2051,42 @@ async function init(){
       row.classList.add('open');
       row.insertAdjacentHTML('beforeend', monEditor(row.dataset.edit, MONS[
         row.dataset.edit+'|'+row.dataset.sp]||{species:row.dataset.sp,level:50}));
+    });
+    let dragged=null;
+    $(host).addEventListener('dragstart',e=>{
+      if(e.target.closest('.edit,.makelead')){ e.preventDefault(); return; }
+      const row=e.target.closest('.mon[data-order-card]');
+      if(!row) return;
+      dragged=row;
+      row.classList.add('dragging');
+      e.dataTransfer.effectAllowed='move';
+      e.dataTransfer.setData('text/plain',row.dataset.orderCard);
+    });
+    $(host).addEventListener('dragover',e=>{
+      if(!dragged) return;
+      const row=e.target.closest('.mon[data-order-card]');
+      if(!row||row===dragged||row.dataset.orderCard!==dragged.dataset.orderCard) return;
+      e.preventDefault();
+      e.dataTransfer.dropEffect='move';
+      const after=e.clientY>row.getBoundingClientRect().top+row.offsetHeight/2;
+      row.parentNode.insertBefore(dragged,after?row.nextSibling:row);
+    });
+    $(host).addEventListener('drop',e=>{
+      if(!dragged) return;
+      e.preventDefault();
+      const row=dragged;
+      dragged.classList.remove('dragging'); dragged=null;
+      commitOrder(row);
+    });
+    $(host).addEventListener('dragend',()=>{
+      if(dragged){
+        // Chromium's embedded view can finish a valid drag without sending `drop`
+        // to the row. The DOM is already in the chosen order after dragover, so
+        // commit that order here as well instead of regenerating the old lead.
+        const row=dragged;
+        dragged.classList.remove('dragging'); dragged=null;
+        commitOrder(row);
+      }
     });
   }
   for(const id of ['cf','cs']) $(id).addEventListener('input',checkStale);
@@ -1642,6 +2152,21 @@ async function init(){
     try{localStorage.removeItem(BUILD_KEY);localStorage.removeItem(PLAN_KEY);}catch(e){}
     location.reload();};
   presetList();
+  teamFileList('teams_bosses_studio.json');
+  $('tget').onclick=async()=>{
+    const name=$('tload').value;
+    if(!name) return void($('tmsg').innerHTML='<span class="warn">no compatible team JSON</span>');
+    $('tmsg').innerHTML='loading and checking round trip…';
+    const r=await fetch('/api/team-load',{method:'POST',body:JSON.stringify(
+      {name,settings:get()})});
+    const d=await r.json();
+    if(d.error) return void($('tmsg').innerHTML='<span class="bad">'+esc(d.error)+'</span>');
+    if(!setAll(d.settings))
+      return void($('tmsg').innerHTML='<span class="bad">that file produced no settings</span>');
+    await go();
+    $('tmsg').innerHTML=`<span class="ok">loaded ${esc(d.name)} — ${d.gyms} gyms, ${
+      d.mons} Pokémon, exact round trip</span>`;
+  };
   // Load is the half that matters: it applies the file, rebuilds, and then says
   // whether the teams it got are the ones the preset recorded. Without that last
   // step "loaded" only means "the knobs moved", which is not what was asked for.
@@ -1688,7 +2213,9 @@ if __name__ == "__main__":
         port = int(sys.argv[sys.argv.index("--port") + 1])
     TS.profile()
     srv = http.server.ThreadingHTTPServer(("127.0.0.1", port), Handler)
-    print(f"boss studio → http://127.0.0.1:{port}    (ctrl-c to stop)")
+    # Keep startup ASCII-safe: a detached Windows process inherits cp1252 and the
+    # decorative arrow otherwise crashes the server before serve_forever().
+    print(f"boss studio: http://127.0.0.1:{port}    (ctrl-c to stop)")
     try:
         srv.serve_forever()
     except KeyboardInterrupt:
