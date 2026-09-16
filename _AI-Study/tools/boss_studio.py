@@ -781,12 +781,28 @@ def _team_path(name):
     return os.path.join(GENDIR, name)
 
 
-def _read_team_file(name):
+def _gym_slots():
+    """Gym record id -> card index, the keyspace an export of the nine uses."""
+    return {G.gym_id(i): i for i in range(9)}
+
+
+def _trainer_slots():
+    """Trainer record id -> `slot`, the index into load_fights() the t<n> card
+    keys use. fight_id() is the stable handle: the cards are anonymised and are
+    reordered up the curve, so position in the file means nothing."""
+    return {T.fight_id(b): i for i, b in enumerate(T.load_fights())}
+
+
+def _read_records(name, expected, what, whole=True):
+    """{index: record} for the records of `expected` this file carries.
+
+    `whole` is the gym contract -- the nine are a curve and importing eight of
+    them is meaningless. Trainers are independent fights, so a file holding a
+    subset of them is a legitimate thing to hand back."""
     with open(_team_path(name), encoding="utf-8") as fh:
         records = json.load(fh)
     if not isinstance(records, list):
         raise ValueError("top level must be a list of team records")
-    expected = {G.gym_id(i): i for i in range(9)}
     found = {}
     for record in records:
         if not isinstance(record, dict) or record.get("id") not in expected:
@@ -798,14 +814,23 @@ def _read_team_file(name):
         if not isinstance(mons, list) or not mons:
             raise ValueError(f"{record['id']} has no mons")
         found[idx] = record
-    missing = [G.gym_id(i) for i in range(9) if i not in found]
-    if missing:
-        raise ValueError(f"needs all 9 gyms; missing {missing[0]}")
+    if whole:
+        missing = [rid for rid, idx in sorted(expected.items(), key=lambda kv: kv[1])
+                   if idx not in found]
+        if missing:
+            raise ValueError(f"needs all {len(expected)} {what}; missing {missing[0]}")
+    elif not found:
+        raise ValueError(f"no {what} in this file")
+    return found
+
+
+def _read_team_file(name):
+    found = _read_records(name, _gym_slots(), "gyms")
     return [found[i] for i in range(9)]
 
 
-def team_file_list():
-    """Compatible full gym exports in generated/, newest first."""
+def _file_list(reader):
+    """generated/*.json that `reader` accepts, newest first."""
     out = []
     try:
         names = [n for n in os.listdir(GENDIR) if n.endswith(".json")]
@@ -813,7 +838,7 @@ def team_file_list():
         return out
     for name in names:
         try:
-            records = _read_team_file(name)
+            records = reader(name)
             stamp = datetime.datetime.fromtimestamp(
                 os.path.getmtime(_team_path(name))).replace(microsecond=0).isoformat()
             out.append({"name": name, "saved": stamp,
@@ -821,6 +846,19 @@ def team_file_list():
         except (OSError, ValueError, TypeError):
             continue
     return sorted(out, key=lambda x: (x["saved"], x["name"]), reverse=True)
+
+
+def team_file_list():
+    """Compatible full gym exports in generated/, newest first."""
+    return _file_list(_read_team_file)
+
+
+def trainer_file_list():
+    """Files carrying named-trainer records, newest first. Filler and .dat teams
+    are keyed by map, not by fight_id, so they never match."""
+    return _file_list(
+        lambda n: list(_read_records(n, _trainer_slots(), "named trainers",
+                                     whole=False).values()))
 
 
 _IMPORTED_MON_FIELDS = ("species", "level", "moves", "item", "ability",
@@ -949,6 +987,128 @@ def team_load(name, over):
             "gyms": len(records), "mons": sum(len(r["mons"]) for r in records)}
 
 
+def _card_overrides(mons, keep):
+    """The per-species half of a card override, for the real bodies only.
+
+    A starter slot is a method name, not a species: it has no dex entry, no
+    ability slots and an empty movelist that _fight_picks would reject outright.
+    The generator fills it from the player's starter, so it is carried by ORDER
+    alone and never pinned."""
+    real = [m for m in mons if m["species"] in G._sp]
+    return {
+        "keep": keep, "sets": {},
+        "items": {m["species"]: m.get("item") for m in real},
+        "moves": {m["species"]: list(m.get("moves") or []) for m in real
+                  if m.get("moves")},
+        "abilities": {m["species"]: m.get("ability", 0) for m in real},
+        "natures": {m["species"]: m.get("nature") for m in real if m.get("nature")},
+        "ivs": {m["species"]: m.get("iv") for m in real if m.get("iv") is not None},
+        "evs": {m["species"]: m.get("ev") for m in real if m.get("ev") is not None},
+        "levels": {m["species"]: m.get("level") for m in real
+                   if isinstance(m.get("level"), int)},
+    }
+
+
+def trainer_load(name, over):
+    """Turn a named-trainer export into editable card overrides and prove it
+    round-trips. The twin of team_load, and deliberately not the same function.
+
+    A trainer has no per-fight TARGET or THEME knob. Its band comes from the story
+    stage it sits in -- G.TARGET[stage] +/- G.SPREAD[stage]/2 -- which it SHARES with
+    the gym at that stage and with every other trainer there. So the only lever is
+    widening that stage's spread, which loosens and never tightens, and the widening
+    has to take the max across every fight at the stage rather than assign per-fight
+    the way the gym importer can.
+
+    Gym cards are left exactly as they are: this writes t<slot> keys only."""
+    fights = T.load_fights()
+    found = _read_records(name, _trainer_slots(), "named trainers", whole=False)
+    sizes = {len(r["mons"]) for r in found.values()}
+    if len(sizes) != 1 or not 1 <= next(iter(sizes)) <= 6:
+        raise ValueError("all trainers must use the same team size from 1 to 6")
+
+    base_over = dict(over or {})
+    base_over["PICKS"] = {k: v for k, v in (base_over.get("PICKS") or {}).items()
+                          if not str(k).startswith("t")}
+    base_over["ORDER"] = {k: v for k, v in (base_over.get("ORDER") or {}).items()
+                          if not str(k).startswith("t")}
+    base = {r["id"]: r for r in run(base_over)["trainer_records"]}
+
+    merged = dict(over or {})
+    picks = {k: v for k, v in (merged.get("PICKS") or {}).items()
+             if not str(k).startswith("t")}
+    orders = {k: v for k, v in (merged.get("ORDER") or {}).items()
+              if not str(k).startswith("t")}
+    spreads = list(merged.get("SPREAD") or G.SPREAD)
+    targets = list(merged.get("TARGET") or G.TARGET)
+    for slot, record in sorted(found.items()):
+        who = record["id"]
+        mons = record["mons"]
+        species = [m.get("species") for m in mons]
+        if any(not isinstance(sp, str) or (sp not in G._sp and not G.is_dynamic(sp))
+               for sp in species):
+            bad = next(sp for sp in species if not isinstance(sp, str)
+                       or (sp not in G._sp and not G.is_dynamic(sp)))
+            raise ValueError(f"{who} has unknown species {bad}")
+        if len(set(species)) != len(species):
+            raise ValueError(
+                f"{who} repeats a species; card overrides need unique species")
+        keep = {sp: True for sp in species if sp in G._sp}
+        for old in (m["species"] for m in base.get(who, {}).get("mons", [])):
+            if old in G._sp and old not in keep:
+                keep[old] = False
+        picks[f"t{slot}"] = _card_overrides(mons, keep)
+        orders[f"t{slot}"] = species
+        stage = (record.get("design") or {}).get("stage")
+        if not isinstance(stage, int) or not 0 <= stage < len(spreads):
+            continue
+        real = [m for m in mons if m["species"] in G._sp]
+        if real:
+            spreads[stage] = max(spreads[stage], 2 * max(
+                abs(G.ebst(mon) - targets[stage]) for mon in real) + 2)
+    merged.update({"PICKS": picks, "ORDER": orders, "SPREAD": spreads,
+                   "TEAM_SIZE": next(iter(sizes))})
+
+    # Same second pass as the gyms: a widened band can admit species the first
+    # baseline never had, so drop those explicitly or a six-mon import grows.
+    wide_over = dict(merged)
+    wide_over["PICKS"] = {k: v for k, v in picks.items() if not str(k).startswith("t")}
+    wide_over["ORDER"] = {k: v for k, v in orders.items() if not str(k).startswith("t")}
+    wide_base = {r["id"]: r for r in run(wide_over)["trainer_records"]}
+    for slot, record in sorted(found.items()):
+        who = record["id"]
+        wanted = {m["species"] for m in record["mons"] if m["species"] in G._sp}
+        keep = picks[f"t{slot}"]["keep"]
+        baseline = {m["species"] for m in wide_base.get(who, {}).get("mons", [])
+                    if m["species"] in G._sp}
+        # The branching-evolution rule from team_load, with the fight's OWN party
+        # standing in for the gym caps table: only a species the baseline actually
+        # contains can be duplicated by pinning it, so only that one may be un-pinned.
+        raw_originals = [m["species"] for m in fights[slot]["party"]
+                         if m["species"] in G._sp]
+        for sp in wanted:
+            if sp in baseline and sp not in raw_originals and any(
+                    sp in G.family(original) for original in raw_originals):
+                keep.pop(sp, None)
+        for old in baseline:
+            if old not in wanted:
+                keep[old] = False
+    merged["PICKS"] = picks
+
+    rebuilt = {r["id"]: r for r in run(merged)["trainer_records"]}
+    order = [found[s]["id"] for s in sorted(found)]
+    missing = [who for who in order if who not in rebuilt]
+    if missing:
+        raise ValueError(f"{missing[0]} is no longer built by this generator")
+    if _team_payload([rebuilt[w] for w in order]) != \
+            _team_payload([found[s] for s in sorted(found)]):
+        raise ValueError(
+            "the imported trainers could not be reproduced by this generator")
+    return {"name": os.path.basename(_team_path(name)), "settings": merged,
+            "trainers": len(found),
+            "mons": sum(len(r["mons"]) for r in found.values())}
+
+
 def _read_bytes(path):
     with open(path, "rb") as fh:
         return fh.read()
@@ -1064,6 +1224,8 @@ class Handler(http.server.BaseHTTPRequestHandler):
             return self._send(200, json.dumps({"presets": preset_list()}))
         if path == "/api/team-files":
             return self._send(200, json.dumps({"files": team_file_list()}))
+        if path == "/api/trainer-files":
+            return self._send(200, json.dumps({"files": trainer_file_list()}))
         if path == "/api/preset":
             q = urllib.parse.parse_qs(urllib.parse.urlparse(self.path).query)
             try:
@@ -1135,6 +1297,12 @@ class Handler(http.server.BaseHTTPRequestHandler):
                     return self._send(400, json.dumps({"error": "choose a team JSON"}))
                 return self._send(200, json.dumps(team_load(
                     body["name"], body.get("settings") or {})))
+            if path == "/api/trainer-load":
+                if not (body.get("name") or "").strip():
+                    return self._send(400,
+                                      json.dumps({"error": "choose a trainer JSON"}))
+                return self._send(200, json.dumps(trainer_load(
+                    body["name"], body.get("settings") or {})))
             if path == "/api/install":
                 return self._send(200, json.dumps(
                     install_game(body.get("settings") or {})))
@@ -1145,7 +1313,7 @@ class Handler(http.server.BaseHTTPRequestHandler):
                 # second must not leave the first already replaced.
                 dests = []
                 for key, fallback, rows in (
-                        ("name", "teams_bosses_studio.json", "records"),
+                        ("name", "teams_bosses_gyms.json", "records"),
                         ("tname", "teams_trainers_studio.json", "trainer_records")):
                     name = os.path.basename(body.get(key) or fallback)
                     if not name.endswith(".json"):
@@ -1352,7 +1520,7 @@ button.tiny{padding:2px 7px;font-size:11px;font-weight:500}
   <div id="slot_build"></div>
   <div id="globals"></div>
   <fieldset><legend>export</legend>
-    <input type="text" id="fname" value="teams_bosses_studio.json">
+    <input type="text" id="fname" value="teams_bosses_gyms.json">
     <input type="text" id="tfname" value="teams_trainers_studio.json"
            title="the 18 named trainers, written alongside the gyms">
     <div class="exp"><label><input type="checkbox" id="ow"> overwrite if it exists</label></div>
@@ -1368,6 +1536,9 @@ button.tiny{padding:2px 7px;font-size:11px;font-weight:500}
     <select id="tload"></select>
     <div class="exp"><button class="ghost" id="tget">Load team JSON</button></div>
     <div id="tmsg"></div>
+    <select id="trload"></select>
+    <div class="exp"><button class="ghost" id="trget">Load trainer JSON</button></div>
+    <div id="trmsg"></div>
   </fieldset>
   <fieldset><legend>preset</legend>
     <div class="sub">the whole Builder in one file under generated/studio_presets/ —
@@ -1632,14 +1803,18 @@ async function presetList(sel){
       p.saved?' · '+esc(p.saved.slice(0,10)):''}</option>`).join('')
     ||'<option value="">(none saved yet)</option>';
 }
-async function teamFileList(sel){
-  const d=await (await fetch('/api/team-files')).json();
-  const now=sel||$('tload').value;
-  $('tload').innerHTML=(d.files||[]).map(f=>
+async function fileList(url,id,sel,empty){
+  const d=await (await fetch(url)).json();
+  const now=sel||$(id).value;
+  $(id).innerHTML=(d.files||[]).map(f=>
     `<option value="${esc(f.name)}" ${f.name===now?'selected':''}>${esc(f.name)} · ${
       f.mons} mons${f.saved?' · '+esc(f.saved.slice(0,10)):''}</option>`).join('')
-    ||'<option value="">(no compatible team JSON found)</option>';
+    ||`<option value="">(${empty})</option>`;
 }
+const teamFileList=sel=>fileList('/api/team-files','tload',sel,
+  'no compatible team JSON found');
+const trainerFileList=sel=>fileList('/api/trainer-files','trload',sel,
+  'no trainer JSON found');
 const deb=()=>{clearTimeout(timer);timer=setTimeout(go,120);};
 // A rebuild is ~2s for 27 fights, and every tick, every dropdown and every knob asks
 // for one. Without a guard a person clicking four boxes gets four concurrent builds
@@ -2088,7 +2263,7 @@ async function init(){
   // the first time they disagree. Moving the node keeps its listeners and its values.
   // Naming a file is not a knob: these live inside #v_build and so get the same
   // listener, but none of them changes what a team is.
-  const NOBUILD=new Set(['fname','tfname','ow','pname','pow','pload','tload']);
+  const NOBUILD=new Set(['fname','tfname','ow','pname','pow','pload','tload','trload']);
   const onKnob=e=>{
     const k=e.target.id.replace(/^s_/,'');
     if($('val_'+k))$('val_'+k).textContent=e.target.value;
@@ -2331,7 +2506,8 @@ async function init(){
     try{localStorage.removeItem(BUILD_KEY);localStorage.removeItem(PLAN_KEY);}catch(e){}
     location.reload();};
   presetList();
-  teamFileList('teams_bosses_studio.json');
+  teamFileList('teams_bosses_gyms.json');
+  trainerFileList('teams_trainers_studio.json');
   $('tget').onclick=async()=>{
     const name=$('tload').value;
     if(!name) return void($('tmsg').innerHTML='<span class="warn">no compatible team JSON</span>');
@@ -2344,6 +2520,20 @@ async function init(){
       return void($('tmsg').innerHTML='<span class="bad">that file produced no settings</span>');
     await go();
     $('tmsg').innerHTML=`<span class="ok">loaded ${esc(d.name)} — ${d.gyms} gyms, ${
+      d.mons} Pokémon, exact round trip</span>`;
+  };
+  $('trget').onclick=async()=>{
+    const name=$('trload').value;
+    if(!name) return void($('trmsg').innerHTML='<span class="warn">no trainer JSON</span>');
+    $('trmsg').innerHTML='loading and checking round trip…';
+    const r=await fetch('/api/trainer-load',{method:'POST',body:JSON.stringify(
+      {name,settings:get()})});
+    const d=await r.json();
+    if(d.error) return void($('trmsg').innerHTML='<span class="bad">'+esc(d.error)+'</span>');
+    if(!setAll(d.settings))
+      return void($('trmsg').innerHTML='<span class="bad">that file produced no settings</span>');
+    await go();
+    $('trmsg').innerHTML=`<span class="ok">loaded ${esc(d.name)} — ${d.trainers} trainers, ${
       d.mons} Pokémon, exact round trip</span>`;
   };
   // Load is the half that matters: it applies the file, rebuilds, and then says
