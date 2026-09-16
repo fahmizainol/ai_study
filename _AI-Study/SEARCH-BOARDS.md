@@ -1393,6 +1393,90 @@ is unseeded and the games diverge from the first decision, so the comparable fig
 held item that is not a mega stone — is now the leading known crash, and it did not fire in this gen 5
 pool (megas are gen 6).
 
+### Run 14 fixed one of defect 1's two faults — and did not close it
+
+**Status first: defect 1 is NOT closed.** One real fault is found, evidenced and fixed; the panic
+it was blamed for survives. Two further hypotheses were tested and **both were refuted by
+instruments**, which is the part worth keeping — the alternative was shipping a confident wrong
+cause, as runs 4, 7, 8 and 10 each did once.
+
+**Fault A, fixed.** `mega_evolve` (`genx/generate_instructions.rs:4609` patched / `:4289`
+pristine) computed `act_slot = state.actor_slot()`, stamped its FormeChange / ChangeAbility /
+ChangeType instructions with it, and then read the body through `side.get_active()` — slot 0.
+Both halves are wrong, and independently:
+
+- `actor_slot()` is the transient set **per actor during move resolution**, but `mega_evolve` runs
+  during action **setup**, before any actor has been stamped. The instrument caught it holding a
+  leftover `0` while the only body that could mega was in slot 1.
+- the read is slot 0 unconditionally, so a slot-1 mega read its partner.
+
+The instrument at the panic (temporary, removed before the patch):
+
+```
+DBG mega_evolve act_slot=1 | slot0 TOGEKISS/NONE can_mega=false | slot1 CHARIZARD/CHARIZARDITEY can_mega=true
+DBG mega_evolve act_slot=0 | slot0 GARCHOMP/LIFEORB can_mega=false | slot1 CHARIZARD/CHARIZARDITEY can_mega=true
+```
+
+Row 1 is the slot-0 read; row 2 is the stale `actor_slot`, and it shows why indexing by
+`act_slot` would have been a second bug rather than a fix. **The caller already has the right
+slot and already uses it** — `build_actor_choice(state, side_ref, slot, &move_choice)` reads the
+acting body correctly through `get_active_slot(slot)`, and the tera branch one line above
+the `mega_evolve` call uses `get_active_slot(slot)` too. Only the mega call dropped it. Fix:
+`mega_evolve` takes `slot`; the doubles caller passes the loop's own, the singles caller
+(`#[cfg(not(feature = "doubles"))]`) passes `0`, which is what `actor_slot()` is defined as there,
+so **singles is identical by construction**. Same unfinished `get_active()` conversion as defects
+6, 14, 20, 23, 26 and 33.
+
+**Fault B, open — and two wrong causes for it, both killed by instruments rather than by reading.**
+On the identical gen 6 arm the mega panics barely move (30 → 28 across 20 battles, not comparable
+battle-for-battle), and their signature *changes*: the control panics on bodies that never asked to
+mega (`CAMERUPTMEGA with CAMERUPTITE`, `TOGEKISS with SITRUSBERRY`), the fixed build on
+mega-capable species holding nothing (`KANGASKHAN with NONE`, `CHARIZARD with NONE`).
+
+| hypothesis | instrument | verdict |
+|---|---|---|
+| `FormeChangeInstruction` names a (side, slot) and carries a **relative** delta, so a switch between apply and reverse subtracts it from a stranger — which would explain a CHARIZARD appearing on a team that has none | LIFO stack pushing the body's party index at apply, comparing it at reverse | **refuted — 0 mismatches** in 6 battles |
+| my own translator misaligns species and items (the stone sits one body off) | built a State from a dumped root position and read the party back | **refuted** — every species↔item pair exactly right on both sides |
+
+The numerology that made the second hypothesis attractive is worth naming as a trap: in one
+snapshot the stone sat exactly one party slot before Charizard, and a second snapshot fit too. Two
+points is not a pattern, and the direct check took ten minutes.
+
+**What survives, stated as a lead and not a cause.** The enriched panic prints the whole side, and
+the stone is *present but on a body that cannot use it*:
+
+```
+cannot mega evolve CHARIZARD with NONE | slot=1 active_indices="[P0, P2]"
+  party=[0:GARCHOMP/NONE 1:TOGEKISS/CHARIZARDITEY 2:CHARIZARD/NONE 3:VENUSAUR/LIFEORB ...]
+```
+
+At the root Charizard holds that stone (verified above). So a `MoveMega` generated at a node where
+the body still had its stone is being applied at a state where the item has moved — an item
+mutation landing on the wrong body, the same family as the rest of this table but on the item axis.
+`ChangeItemInstruction`'s slot handling is the place to instrument next, the way run 12 instrumented
+`Side::apply_boost`: one print at the sole mutator beats another round of caller reading.
+
+**A second finding the gen 6 pool exposed, recorded because it contradicts a closed row.** Run 12's
+fix is in this build, and gen 6 **still** throws `Invalid boost value: -12 / -9 / 12` and
+`Invalid boost number: 8 / 7 / 12`. So **defect 2 has a second cause that the gen 5 pool cannot
+see**. Run 12's own audit names the candidate without knowing it: of the four emits that bypass the
+clamp, `BELLYDRUM` is the only one that can move ±12 in a single step, and it was dismissed as
+"0/183 teams **in this pool**" — a gen 5 pool. Gen 6 doubles has Azumarill. **This is a lead, not a
+measurement**; nobody has instrumented it.
+
+**And one that is mine, not the engine's:** the harness cannot read back a mega label —
+`unparsed label 'shadowball-mega,0'`, 5 of them in 20 battles — so those decisions fall back even
+when the engine is fine. `patches/poke_engine_doubles_choice_labels.patch` teaches the label its
+slot but not its mega suffix.
+
+**Controls, all green and all re-run because this touches a shared path.** cargo doubles
+**216/1 + 46/1**, both failures the known-wrong fixtures (`test_switching_in_with_intimidate`,
+`test_doubles_storm_drain_redirects_nullifies_and_boosts`) and no third; singles **220 + 611 + 15**
+(+17 +1) fully green; `cargo check` green for doubles×{gen5,gen6} and singles×{gen5,gen6}; corpus
+**306/316 + 315/316 byte-identical**; stage 0 **19/19, 0 disagree**. The gen 5 controls cannot
+exercise `mega_evolve` at all, which is exactly why they are the right no-regression check and the
+wrong existence check. Patch now **1160 lines**.
+
 ## Backlog
 
 Recorded, not done. In the order they are worth doing.
@@ -1490,7 +1574,7 @@ here is a regression, only unfinished work.
 
 | # | site | trigger |
 |---|---|---|
-| 1 | `genx/generate_instructions.rs:4289` `mega_evolve` | computes `act_slot`, discards it, then reads `side.get_active()` — slot 0 — and panics at `:4301` on any held item that is not a mega stone (`RHYPERIOR`/`ASSAULTVEST`, `TALONFLAME`/`CHOICEBAND`, …). Note the second, quieter half: were slot 0 *also* holding a stone, this would mega-evolve the wrong body and not panic at all |
+| 1 | `genx/generate_instructions.rs:4289` `mega_evolve` | computes `act_slot`, discards it, then reads `side.get_active()` — slot 0 — and panics at `:4301` on any held item that is not a mega stone (`RHYPERIOR`/`ASSAULTVEST`, `TALONFLAME`/`CHOICEBAND`, …). Note the second, quieter half: were slot 0 *also* holding a stone, this would mega-evolve the wrong body and not panic at all. **PARTIALLY FIXED 2026-09-16 (run 14) — the row stays OPEN.** Fault A is real and fixed: the function took its slot from `state.actor_slot()`, a transient set per actor during MOVE resolution while this runs during action SETUP (an instrument caught it holding a leftover `0` while only slot 1 could mega), and read the body through `get_active()`, slot 0 — so a slot-1 mega read its partner. `mega_evolve` now takes the acting `slot`; the doubles caller passes the loop's own (it already uses it for the tera branch one line above, and `build_actor_choice` reads the right body correctly), the singles caller passes `0`, so singles is identical by construction. **Fault B survives and the panic with it** — 30 → 28 on the identical gen 6 arm — with the signature changing from bodies that never asked to mega to mega-capable bodies holding nothing. TWO CAUSES WERE PROPOSED AND BOTH REFUTED BY INSTRUMENT: a slot-indexed `FormeChange` carrying a relative delta reversing onto a stranger (0 mismatches on a LIFO apply/reverse instrument) and my own translator misaligning species and items (a State built from a dumped root has every pair exactly right). What survives as a LEAD: the stone is present on the side but sitting on a body that cannot use it, so a `MoveMega` generated when the body still held it is applied after the item moved — instrument `ChangeItemInstruction`'s slot handling at the sole mutator next, the way run 12 did `Side::apply_boost` |
 | 2 | `genx/evaluate.rs:107` **and `genx/state.rs:43`** | `Invalid boost value: -7 / -8 / **-11 / -12**` at the first site, `Invalid boost number: 7 / 8` at the second. Boosts escape the ±6 clamp somewhere upstream and blow up at whichever reader reaches them first — **run 9's roster re-run panicked twice at `genx/state.rs:43`, so evaluation is not the only victim and "only blow up at evaluation" was too narrow**. Seen in gen 6 **and** gen 5, so not generation-specific. The −12 (`doubles_play_logs_gen5_seed23/002`, turn 1) matters: it is exactly **double** the legal floor, so this is not a clamp that is off by one or two but drops being stacked with no bound at all — look for a per-slot drop applied once per target. **Run 11 narrowed where to look**: `--dump-panics` captured the root state of the surviving `Invalid boost number: 7` and **all seven boosts are zero on all four bodies**, so the escape is generated *during the search* and not supplied by the translator — which also clears my own instrument as a candidate. **ROOT-CAUSED AND FIXED 2026-09-14 (run 12); IN THE PATCH AND RE-ESTABLISHED FROM A CLEAN CLONE 2026-09-16 (run 13), with a paired control 12/12 → 0/12 built from the same commit differing only in these two lines.** Cause: `ability_end_of_turn` (`genx/abilities.rs:1175`) and `item_end_of_turn` (`genx/items.rs:885`) both derive `owner_slot` from `state.actor_slot()` — a transient set per actor during move resolution, hence by end of turn a leftover naming whichever body acted LAST — while every read in both functions is `attacking_side.get_active()`, slot 0, with not one `get_active_slot` call between them. So instructions were stamped with one body and described another, which breaks apply/reverse: the reversal subtracts from the slot the instruction names while generation mutated the slot the read named. Speed Boost makes it a runaway because its `< 6` guard bounds slot 0 while the instruction accumulates elsewhere (`slot 0: 1 +6 -> 7 … 6 +6 -> 12`, `slot 1: -6 -1 -> -7 … -11 -1 -> -12`). **Both signs come from this one defect**, which is why source-reading failed: all four emits that bypass the clamp ADD, and the negatives are *reversals of a positive stamped on the wrong body*. **The "exactly double the floor" reading above was mine and is wrong** — −7/−8 are one or two steps past the limit, and Belly Drum, the only site that can emit ±12 at once, is 0/183 teams here. Found by instrumenting `Side::apply_boost`, the sole mutator, after a correct-but-insufficient caller audit; deterministic repro `tools/pe_doubles_boost_range.py` on the opening position of the tracked `doubles_play_logs_gen5_tailwind/000`, **12/12 panics → 0/12**. Controls green: cargo 216/1 + 46/1 (baseline), singles 220 + 611 + 15, corpus 306/316 and 315/316 byte-identical, stage 0 19/19. Fix: `let owner_slot = 0;` in both functions; singles identical by construction — and confirmed independently in run 13 by reading the caller, which iterates SIDES behind a slot-0 hp guard, so slot 0 is the only self-consistent value while that loop stands. **RE-PRICED 2026-09-16 (run 13) on the identical arm, and the prediction held: the last fallback is gone — control 1 panic in 247 decisions (this exact site, `genx/state.rs:43`) vs fixed 0 in 275, total fallbacks 0.4% → 0.0%** |
 | 3 | **FIXED 2026-09-14 (run 10)** — cause at `genx/generate_instructions.rs:2504`, assert at `state.rs:1722` | `assert_ne!(a_idx, b_idx, "get_two_actives called with the same position")` — reached in ordinary play (×5 in the gen 5 run). **Run 9's roster re-run makes this the dominant crash by a wide margin: 19 of the 23 panics across 488 decisions, panicking at `state.rs:1724` with `left: 0, right: 0` — both positions resolving to party index 0.** Once the Choice lock stopped masking turns, this became the single largest reason a decision is not the search's. **Root cause, found by instrumenting the engine after four wrong hypotheses: Encore substitutes the move but not its TARGET.** `generate_instructions_from_move` holds the only whole-`Choice` replacement in `src/genx/` — `*choice = MOVES.get(…).clone()` — which swaps in the encored move, `target` class included, while `state.target_position` still holds what the per-actor setup (`:5276`) computed for the move the player actually *chose*. Choosing RECOVER (`MoveTarget::User`, whose nominal target correctly **is** the user's own position) while locked into EARTH POWER (`MoveTarget::Opponent`) therefore leaves a damaging foe-move aimed at its own user, and the damage path calls `get_two_actives(attacker, attacker)`. The state is **not** corrupt — the enriched assert prints `active_indices=[P0, P1]`; the party indices matched because attacker and target were the *same position*. Singles never needed a refresh: its `defender_position` ignores `target_position` and returns the opposing slot 0, so a substituted move always targeted the foe — an unfinished doubles conversion, the family of defects 6, 14, 20, 23 and 26. **Adjudicated against Showdown, not assumed:** `sim/battle-actions.ts:228` runs the `OverrideAction` event and then re-derives the target with `target = this.battle.getRandomTarget(pokemon, baseMove)`. Fix re-derives via `legal_targets` (now `pub(crate)`), the same primitive option generation uses, so the swapped-in move gets a **living** foe — which matters rather than being theoretical, since in the captured state the directly-opposite slot is the fainted one and `.opposing()` would have aimed at a corpse. Showdown picks at random among legal targets where this takes the first: a recorded simplification, like `redirect_target`'s speed-tie note. Priced on the identical arm (seed 101, same pool and budget): **11 `get_two_actives` panics → 0**, total fallbacks 21 of 242 (8.7%) → 7 of 235 (**3.0%**). Probe `tools/pe_doubles_encore_target.py`; 12 captured real positions went 5/5 → 0/6 |
 
@@ -1698,7 +1782,7 @@ once a transcript says where to look.
 ### 4. ~~Close the rest of the spread-move divergence~~ — DONE 2026-09-13, residual 0.8 points
 
 Defects 15, 5, 16, 17, 18, 19, 20, 23, 7, 6 and 27 are all fixed in
-`patches/poke_engine_doubles_spread_per_target.patch` (1115 lines, 12 files; reverses cleanly).
+`patches/poke_engine_doubles_spread_per_target.patch` (1160 lines, 12 files; reverses cleanly).
 **Bodies-damaged 74.1% → 96.8% across runs 1–8, and boosts 88.0% → 99.7% on the fainted-guarded
 instrument run 8 introduced. Stage 0 went 11-of-12 → 19-of-19.** The residual spread gap is 0.8
 points on bodies and 0.3 on boosts — one row, and an artefact — so spread is no longer the

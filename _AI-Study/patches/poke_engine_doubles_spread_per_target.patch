@@ -177,7 +177,7 @@ index d7fc3e1..9cd66f2 100644
          Choices::REST => {
              let electric_terrain_active = state.terrain_is_active(&Terrain::ELECTRICTERRAIN);
 diff --git a/src/genx/generate_instructions.rs b/src/genx/generate_instructions.rs
-index fa0676e..fcf49c9 100644
+index fa0676e..d3361a1 100644
 --- a/src/genx/generate_instructions.rs
 +++ b/src/genx/generate_instructions.rs
 @@ -328,30 +328,35 @@ fn generate_instructions_from_switch(
@@ -801,7 +801,47 @@ index fa0676e..fcf49c9 100644
              incoming_instructions
                  .instruction_list
                  .push(Instruction::ChangeSideCondition(
-@@ -4578,10 +4898,19 @@ pub fn generate_instructions_from_move_pair(
+@@ -4286,11 +4606,23 @@ fn handle_both_moves(
+     }
+ }
+ 
+-fn mega_evolve(state: &mut State, side_ref: SideReference, instructions: &mut StateInstructions) {
+-    let act_slot = state.actor_slot();
++/// `slot` is the body that chose to mega-evolve, and it must be passed in rather than
++/// recovered from `state.actor_slot()`. That is a transient set per actor during MOVE
++/// resolution, and this runs during action SETUP, before any actor has been stamped — an
++/// instrument at the panic caught it reading a leftover `0` while the only body that could
++/// mega was in slot 1. The caller has the real slot in scope and already uses it for the
++/// tera branch immediately above; this is the same unfinished `get_active()` conversion as
++/// defects 6, 14, 20, 23, 26 and 33.
++fn mega_evolve(
++    state: &mut State,
++    side_ref: SideReference,
++    slot: u8,
++    instructions: &mut StateInstructions,
++) {
++    let act_slot = slot;
+     let _def_pos = state.defender_position(&side_ref);
+     let side = state.get_side(&side_ref);
+-    let active_pkmn = side.get_active();
++    let active_pkmn = side.get_active_slot(slot);
+ 
+     // assumes that you can mega-evolve if this function is called
+     let mega_evolve_data = active_pkmn
+@@ -4443,10 +4775,10 @@ pub fn generate_instructions_from_move_pair(
+             ));
+     }
+     if s1_mega {
+-        mega_evolve(state, SideReference::SideOne, &mut incoming_instructions);
++        mega_evolve(state, SideReference::SideOne, 0, &mut incoming_instructions);
+     }
+     if s2_mega {
+-        mega_evolve(state, SideReference::SideTwo, &mut incoming_instructions);
++        mega_evolve(state, SideReference::SideTwo, 0, &mut incoming_instructions);
+     }
+ 
+     modify_choice_priority(&state, &SideReference::SideOne, &mut side_one_choice);
+@@ -4578,10 +4910,19 @@ pub fn generate_instructions_from_move_pair(
  /// One actor in a turn: a battle position plus the fully-built `Choice` it will
  /// execute, and the position its move primarily targets (used to find the
  /// "defender choice" the way the singles path passes the opposing side's choice).
@@ -821,7 +861,7 @@ index fa0676e..fcf49c9 100644
      choice: Choice,
      target: Option<BattlePosition>,
  }
-@@ -4934,12 +5263,44 @@ fn resolve_ordered_actors(
+@@ -4934,12 +5275,44 @@ fn resolve_ordered_actors(
              .unwrap_or_default();
  
          let mut next: Vec<StateInstructions> = Vec::with_capacity(work.len());
@@ -871,7 +911,12 @@ index fa0676e..fcf49c9 100644
              let mut choice = actor.choice.clone();
              choice.first_move = idx == 0;
              generate_instructions_from_move(
-@@ -5057,6 +5418,8 @@ pub fn generate_instructions_from_actions(
+@@ -5053,10 +5426,12 @@ pub fn generate_instructions_from_actions(
+                     ));
+             }
+             if mega {
+-                mega_evolve(state, side_ref, &mut incoming_instructions);
++                mega_evolve(state, side_ref, slot, &mut incoming_instructions);
              }
              actors.push(Actor {
                  position: BattlePosition::new(side_ref, slot),
