@@ -131,6 +131,26 @@ def fight_id(battle):
             f'_{battle["name"] or "x"}_map{battle["map"]:03d}')
 
 
+def as_team_record(result, type_ids):
+    """One make_trainer() result -> the team JSON shape validate_team.py and
+    emit_registry.py both consume; the trainer twin of generate_bosses.as_team_record.
+
+    orig_ace_level stays whatever make_trainer put there: an int for a pinned fight,
+    but the string 'balanceo+1' for a scaled one, which emit_registry turns into a
+    Ruby nil on purpose so createTrainer's fallback lookup matches. Coercing it to an
+    int silently unhooks the fight."""
+    b = result["battle"]
+    mons = [{k: (sorted(v) if isinstance(v, set) else v) for k, v in m.items()}
+            for m in result["team"]]
+    return {"id": fight_id(b),
+            "map": b["map"], "type_id": b.get("type_id") or type_ids.get(b["type"]),
+            "class": b["type"], "name": b["name"],
+            "orig_ace_level": result["ace"], "cheat_tier": False,
+            "trainer_items": [], "mons": mons,
+            "design": {"target_ebst": result["target"], "stage": result["stage"],
+                       "notes": result["notes"]}}
+
+
 def dynamic_level(level):
     """('balanceo', offset) for a level that scales to the player, else None.
 
@@ -355,17 +375,7 @@ def main(argv):
 
     if out_path:
         for r in results:
-            b = r["battle"]
-            mons = [{k: (sorted(v) if isinstance(v, set) else v) for k, v in m.items()}
-                    for m in r["team"]]
-            records.append({
-                "id": fight_id(b),
-                "map": b["map"], "type_id": b.get("type_id") or type_ids.get(b["type"]),
-                "class": b["type"], "name": b["name"],
-                "orig_ace_level": r["ace"], "cheat_tier": False,
-                "trainer_items": [], "mons": mons,
-                "design": {"target_ebst": r["target"], "stage": r["stage"],
-                           "notes": r["notes"]}})
+            records.append(as_team_record(r, type_ids))
         json.dump(records, open(out_path, "w"), indent=1)
         print(f"\n{len(records)} trainer teams -> {out_path}")
 

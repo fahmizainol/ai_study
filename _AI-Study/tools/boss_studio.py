@@ -56,8 +56,12 @@ REPO = os.path.abspath(os.path.join(GENDIR, ".."))
 REGISTRY = os.path.join(REPO, "adapters", "realidea", "Team_Overrides.rb")
 GAME_BUNDLE = os.path.abspath(os.path.join(REPO, "..", "Realidea V4.1", "Data",
                                            "Scripts.rxdata"))
-OTHER_TEAMS = [os.path.join(GENDIR, name) for name in
-               ("teams_trainers.json", "teams_filler.json", "teams_dat.json")]
+SHIPPED_TRAINERS = os.path.join(GENDIR, "teams_trainers.json")
+# The two the Studio has no cards for, so they can only ever come off disk. The named
+# trainers used to sit here too, which is why editing one changed the preview and the
+# sha but never reached the game: install re-read this list and the live edit was lost.
+DISK_TEAMS = [os.path.join(GENDIR, name) for name in
+              ("teams_filler.json", "teams_dat.json")]
 # Saved Builder configurations, shared between people through the repo the same way
 # everything else here is. A preset is an INPUT, not an artifact, but it lives under
 # generated/ so that one directory is the whole of what the studio writes.
@@ -468,22 +472,28 @@ def run(over):
         out = [_card(g, idx=g["idx"], theme=g["theme"],
                      battle_format=formats[i]) for i, g in enumerate(gyms)]
         # The named non-gym trainers -- rivals, the recurring bosses, the post-game
-        # superboss. A different generator owns them and a DIFFERENT file ships them,
-        # so they are reported beside the gyms and deliberately kept out of
-        # `records`, which is what /api/export writes to teams_bosses_gyms.json.
+        # superboss. A different generator owns them and a different file ships them,
+        # so they are built beside the gyms and kept out of `records`, which is what
+        # /api/export writes to teams_bosses_gyms.json. They ship from
+        # `trainer_records` to teams_trainers.json instead -- same pipeline, same
+        # install transaction, separate file.
         # Sparse on purpose: an entry means "you chose this on the card", and its
         # absence means "use the plan on file". A full list would silently freeze all
         # 18 fights at whatever they happened to derive to the first time the page
         # loaded. `slot` is the index into load_fights() -- a stable handle that is
         # not a name, since the cards no longer carry one.
         tplans = {int(k): v for k, v in (over.get("TRAINER_PLANS") or {}).items()}
-        trainers = []
+        trainers, trainer_records = [], []
         for i, b in enumerate(T.load_fights()):
             pick = tplans.get(i)
             got = T.make_trainer(b, (pick[0] or None, pick[1] or None) if pick else None)
             if got:
                 _apply_loadout(got, T.fight_id(b))
                 got["team"] = _ordered_team(got["team"], orders.get(f"t{i}"))
+                # Records stay in load_fights() order while the cards below get
+                # sorted up the curve: the file is what ships and what git diffs,
+                # so it must not reshuffle when a target moves.
+                trainer_records.append(T.as_team_record(got, type_ids))
                 trainers.append(_card(got, slot=i, who=_alias(b["type"]),
                                       ace=got["ace"], dynamic=got["dynamic"]))
         trainers.sort(key=lambda c: (c["target"], c["who"]))
@@ -503,6 +513,7 @@ def run(over):
         got = BD.spread(vec)
         return {
             "gyms": out, "trainers": trainers, "records": records,
+            "trainer_records": trainer_records,
             # A fingerprint of the TEAMS, not of the settings that asked for them.
             # Those are different claims: identical settings reproduce identical
             # teams only while the PBS tables, the Smogon dump and this generator all
@@ -965,17 +976,22 @@ def _replace_all(payloads):
 
 
 def install_game(over):
-    """Build and install the current nine cards through the shipped override pipeline.
+    """Build and install the current 27 cards through the shipped override pipeline.
 
     Nothing live is touched until the roster, complete 161-team corpus, generated Ruby
-    and replacement bundle have all been built successfully. The three live files are
+    and replacement bundle have all been built successfully. The four live files are
     then replaced together, with rollback if Windows has one of them locked.
+
+    The nine gyms and the 18 named trainers both ship from the LIVE cards. Only the
+    filler and .dat teams, which the Studio cannot edit, are read off disk -- those
+    stay the committed files they have always been.
     """
     with _INSTALL_LOCK:
         result = run(over or {})
         records = result["records"]
-        other_records = []
-        for path in OTHER_TEAMS:
+        trainer_records = result["trainer_records"]
+        other_records = list(trainer_records)
+        for path in DISK_TEAMS:
             with open(path, encoding="utf-8") as fh:
                 rows = json.load(fh)
             if not isinstance(rows, list):
@@ -987,11 +1003,14 @@ def install_game(over):
 
         with tempfile.TemporaryDirectory(prefix="boss-studio-install-") as stage:
             staged_teams = os.path.join(stage, "teams_bosses_gyms.json")
+            staged_trainers = os.path.join(stage, "teams_trainers.json")
             staged_registry = os.path.join(stage, "Team_Overrides.rb")
-            with open(staged_teams, "w", encoding="utf-8", newline="\n") as fh:
-                json.dump(records, fh, indent=1)
-                fh.write("\n")
-            ER.main(staged_registry, staged_teams, *OTHER_TEAMS)
+            for path, rows in ((staged_teams, records),
+                               (staged_trainers, trainer_records)):
+                with open(path, "w", encoding="utf-8", newline="\n") as fh:
+                    json.dump(rows, fh, indent=1)
+                    fh.write("\n")
+            ER.main(staged_registry, staged_teams, staged_trainers, *DISK_TEAMS)
             registry_bytes = _read_bytes(staged_registry)
 
         raw, count, spans = PR.scan(GAME_BUNDLE)
@@ -1011,10 +1030,13 @@ def install_game(over):
             raise AssertionError("bundle sections before Team_Overrides changed")
 
         shipped_bytes = (json.dumps(records, indent=1) + "\n").encode("utf-8")
-        _replace_all({SHIPPED: shipped_bytes, REGISTRY: registry_bytes,
-                      GAME_BUNDLE: bundle_bytes})
+        trainer_bytes = (json.dumps(trainer_records, indent=1) + "\n").encode("utf-8")
+        _replace_all({SHIPPED: shipped_bytes, SHIPPED_TRAINERS: trainer_bytes,
+                      REGISTRY: registry_bytes, GAME_BUNDLE: bundle_bytes})
         return {"ok": True, "gyms": len(records),
-                "mons": sum(len(row["mons"]) for row in records),
+                "trainers": len(trainer_records),
+                "mons": sum(len(row["mons"]) for row in records)
+                + sum(len(row["mons"]) for row in trainer_records),
                 "teams": len(records) + len(other_records),
                 "warnings": len(warnings),
                 "bundle": os.path.relpath(GAME_BUNDLE, REPO)}
@@ -1072,6 +1094,7 @@ class Handler(http.server.BaseHTTPRequestHandler):
             if path == "/api/generate":
                 r = run(body)
                 r.pop("records")
+                r.pop("trainer_records")
                 return self._send(200, json.dumps(r))
             if path == "/api/sets":
                 sp = FT.fold(body.get("species") or "")
@@ -1116,19 +1139,30 @@ class Handler(http.server.BaseHTTPRequestHandler):
                 return self._send(200, json.dumps(
                     install_game(body.get("settings") or {})))
             if path == "/api/export":
-                name = os.path.basename(body.get("name") or "teams_bosses_studio.json")
-                if not name.endswith(".json"):
-                    name += ".json"
-                dest = os.path.join(GENDIR, name)
-                if os.path.exists(dest) and not body.get("overwrite"):
-                    return self._send(409, json.dumps(
-                        {"error": f"{name} exists — tick overwrite to replace it"}))
+                # Two drafts, one action: the nine gyms and the 18 named trainers are
+                # one editing session, so exporting half of it would be a trap. Both
+                # names are checked before either file is written -- a 409 on the
+                # second must not leave the first already replaced.
+                dests = []
+                for key, fallback, rows in (
+                        ("name", "teams_bosses_studio.json", "records"),
+                        ("tname", "teams_trainers_studio.json", "trainer_records")):
+                    name = os.path.basename(body.get(key) or fallback)
+                    if not name.endswith(".json"):
+                        name += ".json"
+                    dest = os.path.join(GENDIR, name)
+                    if os.path.exists(dest) and not body.get("overwrite"):
+                        return self._send(409, json.dumps(
+                            {"error": f"{name} exists — tick overwrite to replace it"}))
+                    dests.append((dest, rows))
                 r = run(body.get("settings") or {})
-                with open(dest, "w", encoding="utf-8") as fh:
-                    json.dump(r["records"], fh, indent=1)
-                    fh.write("\n")
+                for dest, rows in dests:
+                    with open(dest, "w", encoding="utf-8") as fh:
+                        json.dump(r[rows], fh, indent=1)
+                        fh.write("\n")
                 return self._send(200, json.dumps(
-                    {"ok": os.path.relpath(dest), "errors": len(r["errors"])}))
+                    {"ok": ", ".join(os.path.relpath(d) for d, _ in dests),
+                     "errors": len(r["errors"])}))
         except Exception as exc:                       # noqa: BLE001 - show it in the UI
             return self._send(500, json.dumps({"error": f"{type(exc).__name__}: {exc}"}))
         self._send(404, '{"error":"not found"}')
@@ -1319,6 +1353,8 @@ button.tiny{padding:2px 7px;font-size:11px;font-weight:500}
   <div id="globals"></div>
   <fieldset><legend>export</legend>
     <input type="text" id="fname" value="teams_bosses_studio.json">
+    <input type="text" id="tfname" value="teams_trainers_studio.json"
+           title="the 18 named trainers, written alongside the gyms">
     <div class="exp"><label><input type="checkbox" id="ow"> overwrite if it exists</label></div>
     <div class="exp"><button id="save">Write to generated/</button>
       <button class="ghost" id="reset">Reset</button></div>
@@ -1349,7 +1385,7 @@ button.tiny{padding:2px 7px;font-size:11px;font-weight:500}
   <div class="stats" id="stats"></div>
   <div class="gyms" id="gyms"></div>
   <h3 class="sect">named trainers &middot; <span id="tcount">0</span>
-    <span class="tag">ships to teams_trainers.json, not exported here</span></h3>
+    <span class="tag">edits ship on Install, same as the gyms</span></h3>
   <div class="gyms" id="trainers"></div>
 </div>
 </div>
@@ -1833,7 +1869,7 @@ const freeControls=()=>[...$('v_free').querySelectorAll('input,select')]
 // #v_build at all and a subtree query would silently save nothing. `ow` is left out
 // on purpose: an overwrite flag that survives a reload is a foot-gun, not a setting.
 const buildControls=()=>[...$('globals').querySelectorAll('input,select'),
-                         ...$('per').querySelectorAll('input,select'), $('fname')];
+                         ...$('per').querySelectorAll('input,select'), $('fname'), $('tfname')];
 // Checkbox groups (#f_gens, #f_floors) are built without ids, so they key off their
 // container plus their value.
 const ctlKey=el=>el.id||((el.closest('[id]')||{}).id+':'+el.value);
@@ -2052,7 +2088,7 @@ async function init(){
   // the first time they disagree. Moving the node keeps its listeners and its values.
   // Naming a file is not a knob: these live inside #v_build and so get the same
   // listener, but none of them changes what a team is.
-  const NOBUILD=new Set(['fname','ow','pname','pow','pload','tload']);
+  const NOBUILD=new Set(['fname','tfname','ow','pname','pow','pload','tload']);
   const onKnob=e=>{
     const k=e.target.id.replace(/^s_/,'');
     if($('val_'+k))$('val_'+k).textContent=e.target.value;
@@ -2341,7 +2377,8 @@ async function init(){
   };
   $('save').onclick=async()=>{
     const r=await fetch('/api/export',{method:'POST',body:JSON.stringify(
-      {name:$('fname').value,overwrite:$('ow').checked,settings:get()})});
+      {name:$('fname').value,tname:$('tfname').value,
+       overwrite:$('ow').checked,settings:get()})});
     const d=await r.json();
     $('msg').innerHTML=d.error?`<span class="bad">${d.error}</span>`
       :`<span class="ok">wrote ${d.ok} — ${d.errors} validator errors</span>`;};
