@@ -153,6 +153,16 @@ LISTS = ["TARGET", "SPREAD", "ARCHETYPE", "MODE", "SET_FORMATS"]
 # the mode for truthiness), but the generator's own default is None and a round trip
 # through the UI should not quietly change its type.
 NO_MODE = ""
+BATTLE_FORMATS = ("inherit", "single", "double")
+
+
+def battle_formats(over, fallback=None):
+    """Nine safe format choices; old presets/exports inherit the map event."""
+    raw = over.get("FORMAT") if isinstance(over, dict) else None
+    if not isinstance(raw, list):
+        raw = fallback or ["inherit"] * 9
+    return [value if value in BATTLE_FORMATS else "inherit"
+            for value in (list(raw) + ["inherit"] * 9)[:9]]
 
 
 def _fight_picks(raw):
@@ -445,6 +455,7 @@ def _apply_loadout(build, fight_key):
 
 def run(over):
     with _LOCK, settings(over):
+        formats = battle_formats(over)
         gyms = [G.make_gym(i) for i in range(9)]
         orders = over.get("ORDER") if isinstance(over.get("ORDER"), dict) else {}
         for i, gym in enumerate(gyms):
@@ -452,7 +463,10 @@ def run(over):
             gym["team"] = _ordered_team(gym["team"], orders.get(f"g{i}"))
         type_ids = G._type_ids()
         records = [G.as_team_record(g, type_ids) for g in gyms]
-        out = [_card(g, idx=g["idx"], theme=g["theme"]) for g in gyms]
+        for i, record in enumerate(records):
+            record["battle_format"] = formats[i]
+        out = [_card(g, idx=g["idx"], theme=g["theme"],
+                     battle_format=formats[i]) for i, g in enumerate(gyms)]
         # The named non-gym trainers -- rivals, the recurring bosses, the post-game
         # superboss. A different generator owns them and a DIFFERENT file ships them,
         # so they are reported beside the gyms and deliberately kept out of
@@ -665,10 +679,13 @@ def defaults():
         "groups": GROUPS,
         "lists": dict({k: [v if v is not None else NO_MODE
                             for v in getattr(G, k)] for k in LISTS},
-                      THEME=theme_list()),
+                      THEME=theme_list(),
+                      FORMAT=battle_formats({}, [t.get("battle_format", "inherit")
+                                                 for t in shipped])),
         "types": sorted(G.WEAK),
         "archetypes": TS.ARCHETYPES,
         "modes": [NO_MODE] + list(TS.MODE_ROLES),
+        "battle_formats": list(BATTLE_FORMATS),
         "any": FT.ANY,
         "fights": [{"id": f["id"], "label": f["label"], "kind": f["kind"]}
                    for f in FC.fights()],
@@ -872,6 +889,9 @@ def team_load(name, over):
             abs(G.ebst(mon) - targets[i]) for mon in mons) + 2)
     merged.update({"PICKS": picks, "ORDER": orders, "TARGET": targets,
                    "SPREAD": spreads, "THEME": themes,
+                   "FORMAT": battle_formats(
+                       {"FORMAT": [r.get("battle_format", "inherit")
+                                   for r in records]}),
                    "TEAM_SIZE": next(iter(sizes))})
 
     # Widening a band can make dev-roster species eligible that the first baseline
@@ -894,7 +914,11 @@ def team_load(name, over):
         raw_originals = [m["species"] for m in G.CAPS[i]["team"]
                          if m["species"] in G._sp]
         for species in wanted:
-            if species not in raw_originals and any(
+            # Only remove the pin when the baseline actually evolves into this
+            # species. Poliwhirl's family also contains Politoed, but this
+            # generator evolves it to Poliwrath; dropping a Politoed pin loses
+            # the imported mon and fills the last slot with another species.
+            if species in baseline and species not in raw_originals and any(
                     species in G.family(original) for original in raw_originals):
                 keep.pop(species, None)
         for old in baseline:
@@ -1524,7 +1548,7 @@ const get=()=>{
   const o={level_mode:$('level_mode').value,TRAINER_PLANS:PLAN.tr,PICKS:CARD,ORDER,
     SET_FORMATS:[...$('setfmt').querySelectorAll('input:checked')].map(e=>e.value)};
   for(const k in S.meta) o[k]=+$('s_'+k).value;
-  for(const k of ['TARGET','SPREAD','THEME'])
+  for(const k of ['TARGET','SPREAD','THEME','FORMAT'])
     o[k]=[...Array(9).keys()].map(i=>{
       const el=$(k+'_'+i); return (k==='TARGET'||k==='SPREAD')?+el.value:el.value;});
   o.ARCHETYPE=PLAN.gym.map(p=>p.a);
@@ -1545,7 +1569,7 @@ function setAll(o){
     $('s_'+k).value=o[k];
     if($('val_'+k)) $('val_'+k).textContent=$('s_'+k).value;
   }
-  for(const k of ['TARGET','SPREAD','THEME']) if(Array.isArray(o[k]))
+  for(const k of ['TARGET','SPREAD','THEME','FORMAT']) if(Array.isArray(o[k]))
     o[k].forEach((v,i)=>{const el=$(k+'_'+i); if(el&&v!=null) el.value=v;});
   const fmts=new Set(Array.isArray(o.SET_FORMATS)?o.SET_FORMATS:[]);
   $('setfmt').querySelectorAll('input').forEach(e=>{e.checked=fmts.has(e.value);});
@@ -1633,7 +1657,10 @@ const planPick=(kind,slot,a,m)=>`<div class="plan">
   <select data-plan="${kind}" data-slot="${slot}" data-f="a">${
     opts(kind==='tr'?[''].concat(S.archetypes):S.archetypes,a||'','flat quota')}</select>
   <select data-plan="${kind}" data-slot="${slot}" data-f="m">${
-    opts(S.modes,m||'','no mode')}</select></div>`;
+    opts(S.modes,m||'','no mode')}</select>${kind==='gym'?`<select data-format="${slot}"
+    title="battle format">${S.battle_formats.map(v=>`<option value="${v}" ${
+      v===$('FORMAT_'+slot).value?'selected':''}>${v==='inherit'?'original':v}</option>`
+    ).join('')}</select>`:''}</div>`;
 // Per-mon controls open on CLICK, one row at a time. They used to sit in a row under
 // every name: 27 cards x 6 mons is 162 always-visible checkboxes and set menus, for
 // something used on a handful of them, and it buried the moves the card exists to
@@ -1687,17 +1714,21 @@ const dirtyOf=(fk,i)=>{
   const plan=fk[0]==='g'
     ? !!(p&&(p.a!==S.lists.ARCHETYPE[i]||(p.m||'')!==(S.lists.MODE[i]||'')))
     : !!p;
+  const format=fk[0]==='g'&&$('FORMAT_'+i)
+    &&$('FORMAT_'+i).value!==(S.lists.FORMAT[i]||'inherit');
   const order=Array.isArray(ORDER[fk])&&ORDER[fk].length>0;
-  return (mons||plan||order)?{mons,plan,order}:null;
+  return (mons||plan||format||order)?{mons,plan,format,order}:null;
 };
 const teamCard=(g,title,was,pick,fk,i)=>{
   const gap=g.ebst-g.target, j=g.judge, d=fk?dirtyOf(fk,i):null;
   return `<div class="gym${d?' dirty':''}"><h3><span>${title}${d?
       ` <span class="tag edited">edited${d.plan?' · plan':''}${
+        d.format?' · format':''}${
         d.mons?' · '+d.mons+' mon'+(d.mons>1?'s':''):''}${
         d.order?' · order':''}</span>`:''}</span>
     <span>${pick||''}</span></h3>
     <div class="meta">eBST <b class="${Math.abs(gap)<=3?'ok':Math.abs(gap)<=12?'warn':'bad'}">${g.ebst}</b>/${g.target}
+      · <span class="tag">${esc(g.battle_format==='inherit'?'original format':g.battle_format)}</span>
       · lv ${g.level}${g.ace?' · ace '+esc(String(g.ace)):''} · EV off ${g.offence}%${
       g.ev_target==null?'':` <span class="${Math.abs(g.offence-g.ev_target)<=12?'ok':'warn'}">(want ${g.ev_target}%)</span>`}
       · floors ${g.met}/${Object.keys(g.floors).length}
@@ -1719,7 +1750,7 @@ function knobDiff(o,fight){
   if(o.level_mode!==S.level_mode) out.push('ladder '+o.level_mode);
   const i=S.fights.findIndex(f=>f.id===fight);
   if(i>=0&&S.fights[i].kind==='gym')
-    for(const k of ['TARGET','SPREAD','THEME'])
+    for(const k of ['TARGET','SPREAD','THEME','FORMAT'])
       if(String(o[k][i])!==String(S.lists[k][i]))
         out.push('gym '+(i+1)+' '+k+' '+o[k][i]);
   return out;
@@ -1998,8 +2029,11 @@ async function init(){
       return slider(k);}).join('')}</fieldset>`).join('');
   // archetype and mode are chosen ON THE CARD, so they are not here as well: two
   // controls for one value is two states and a sync bug the first time they disagree.
-  $('per').innerHTML='<tr><th></th><th>theme</th><th>tgt</th><th>±</th></tr>'
+  $('per').innerHTML='<tr><th></th><th>format</th><th>theme</th><th>tgt</th><th>±</th></tr>'
     +[...Array(9).keys()].map(i=>`<tr><td class="tag">${i+1}</td>
+      <td><select id="FORMAT_${i}">${S.battle_formats.map(v=>
+        `<option value="${v}" ${v===S.lists.FORMAT[i]?'selected':''}>${
+          v==='inherit'?'original':v}</option>`).join('')}</select></td>
       <td><select id="THEME_${i}">${opts(S.types,S.lists.THEME[i])}</select></td>
       <td><input type="text" id="TARGET_${i}" value="${S.lists.TARGET[i]}" style="width:46px"></td>
       <td><input type="text" id="SPREAD_${i}" value="${S.lists.SPREAD[i]}" style="width:44px"></td>
@@ -2045,6 +2079,9 @@ async function init(){
       if(d.plan){
         if(d.plan==='gym') PLAN.gym[+d.slot][d.f]=el.value;
         else (PLAN.tr[d.slot]=PLAN.tr[d.slot]||['',''])[d.f==='a'?0:1]=el.value;
+      } else if(d.format!==undefined){
+        const left=$('FORMAT_'+d.format);
+        if(left) left.value=el.value;
       } else if(d.pin!==undefined){
         cardOf(d.pin).keep[d.sp]=el.checked;
       } else if(d.swap!==undefined){

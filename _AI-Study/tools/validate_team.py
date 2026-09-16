@@ -24,6 +24,8 @@ def validate(teams, slack=2):
         tid = t.get("id", "?")
         def err(rule, msg): errs.append(f"{tid}: [{rule}] {msg}")
         def warn(rule, msg): warns.append(f"{tid}: [{rule}] {msg}")
+        if t.get("battle_format", "inherit") not in ("inherit", "single", "double"):
+            err("FORMAT", f"unknown battle format {t.get('battle_format')!r}")
         cheat = t.get("cheat_tier", False)
         for item in t.get("trainer_items", []):
             if item not in it: err("TITEM", f"trainer item {item} not in items.txt")
