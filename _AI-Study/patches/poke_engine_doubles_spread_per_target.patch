@@ -80,7 +80,7 @@ index 760dea4..6a2fd9e 100644
          );
      }
 diff --git a/src/genx/abilities.rs b/src/genx/abilities.rs
-index ee644cb..bbc18e4 100644
+index ee644cb..768710d 100644
 --- a/src/genx/abilities.rs
 +++ b/src/genx/abilities.rs
 @@ -1172,7 +1172,15 @@ pub fn ability_end_of_turn(
@@ -100,7 +100,42 @@ index ee644cb..bbc18e4 100644
      let def_pos = state.defender_position(side_ref);
      let (attacking_side, defending_side) = state.get_both_sides(side_ref);
      let active_pkmn = attacking_side.get_active();
-@@ -2303,18 +2311,27 @@ pub fn ability_modify_attack_against(
+@@ -1516,16 +1524,24 @@ pub fn ability_on_switch_in(
+             );
+         }
+         Abilities::INTREPIDSWORD => {
+-            // no need to check for boost at +6 because we are switching in
+-            attacking_side.get_active().attack_boost += 1;
+-            instructions
+-                .instruction_list
+-                .push(Instruction::Boost(BoostInstruction::new(
+-                    *side_ref,
+-                    owner_slot,
+-                    PokemonBoostableStat::Attack,
+-                    1,
+-                )));
++            // Run 17: this hand-rolled its own boost, and both halves were wrong. It mutated
++            // `get_active()` — slot 0 — while stamping `owner_slot`, the defect 2 shape; and it
++            // skipped the clamp on the reasoning in the comment it used to carry, "no need to
++            // check for boost at +6 because we are switching in". That reasoning holds only if
++            // the body being mutated IS the one switching in, which is exactly what the slot-0
++            // read breaks — so a partner already at +6 went to +7 and +8. Measured: 44 Attack
++            // writes past ±6, all on slot 0. `apply_boost_instruction` is the clamping helper
++            // this file already uses two arms above (EMBODYASPECTHEARTHFLAME), and it names the
++            // slot it mutates, so it fixes both halves at once.
++            apply_boost_instruction(
++                attacking_side,
++                owner_slot,
++                &PokemonBoostableStat::Attack,
++                &1,
++                side_ref,
++                side_ref,
++                instructions,
++            );
+         }
+         Abilities::SLOWSTART => {
+             instructions
+@@ -2303,18 +2319,27 @@ pub fn ability_modify_attack_against(
      defender_choice: &Choice,
      attacking_side_ref: &SideReference,
  ) {
