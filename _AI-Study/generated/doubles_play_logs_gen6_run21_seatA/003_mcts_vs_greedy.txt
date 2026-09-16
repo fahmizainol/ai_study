@@ -1,0 +1,146 @@
+battle 3   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: dpl ::/Untitled 858: Diancie-Mega, Thundurus, Aegislash, Talonflame, Mew, Landorus
+  p2: dwcop 69/Untitled 411: Diancie-Mega, Gothitelle, Lapras, Braviary, Landorus-Therian, Raichu
+
+  Turn 1
+    p1 mcts: move 1, move 4 1
+      search (20000 visits): diamondstorm,0;uturn,0 7167v 5441 | diamondstorm,0;uturn,1 2369v 1706 | moonblast,0;uturn,0 589v 370 | moonblast,0;uturn,1 585v 367
+    p2 greedy: move 1, move 3 1
+      p1b Thundurus used U-turn -> p2a: Diancie
+      after p1: Diancie-Mega 259/259, Thundurus 299/299
+      after p2: Diancie-Mega 248/304, Gothitelle 344/344
+
+  Turn 2
+      p1b <- Aegislash comes in (324/324)
+      p2a Diancie used Diamond Storm -> p1a: Diancie  [[spread] p1a,p1b]
+              p2a Diancie def 1 rose
+      p1a Diancie used Diamond Storm -> p2b: Gothitelle  [[spread] p2a]
+              p1a Diancie -- MISSED
+      p2b Gothitelle used Psychic -> p1a: Diancie
+      after p1: Diancie-Mega 15/259, Aegislash 301/324
+      after p2: Diancie-Mega 148/304, Gothitelle 344/344
+
+  Turn 3
+    p1 mcts: move 4, move 3 1
+      search (14000 visits): protect,0;flashcannon,0 1320v 920 | diamondstorm,0;flashcannon,0 983v 666 | moonblast,1;flashcannon,0 673v 436 | hiddenpower,1;flashcannon,0 538v 338
+    p2 greedy: move 1, move 3 1
+      p1a Diancie used Protect
+      p2a Diancie used Diamond Storm -> p1a: Diancie  [[spread] p1b]
+              p1a Diancie -- move: Protect
+              p2a Diancie def 1 rose
+      p2b Gothitelle used Psychic -> p1a: Diancie
+              p1a Diancie -- move: Protect
+      p1b Aegislash used Flash Cannon -> p2a: Diancie
+      p2a Diancie fainted
+      after p1: Diancie-Mega 15/259, Aegislash-Blade 278/324
+      after p2: Diancie-Mega 0/304, Gothitelle 344/344
+
+  Turn 4
+      p2a <- Lapras comes in (405/405)
+      after p1: Diancie-Mega 15/259, Aegislash-Blade 278/324
+      after p2: Lapras 405/405, Gothitelle 344/344
+
+  Turn 5
+    p1 mcts: move 1, move 2 2
+      search (15000 visits): diamondstorm,0;shadowball,1 1299v 1008 | diamondstorm,0;shadowball,0 1018v 774 | diamondstorm,0;flashcannon,0 986v 748 | diamondstorm,0;flashcannon,1 743v 548
+    p2 greedy: move 4 1, move 3 1
+      p1a Diancie used Diamond Storm -> p2a: Lapras  [[spread] p2a,p2b]
+              p1a Diancie def 1 rose
+              p2a Lapras used up its Sitrus Berry
+      p2b Gothitelle used Psychic -> p1a: Diancie
+      p1a Diancie fainted
+      p2a Lapras used Hydro Pump -> p1b: Aegislash  [[miss]]
+              p2a Lapras -- MISSED
+      p1b Aegislash used Shadow Ball -> p2b: Gothitelle
+      p2b Gothitelle fainted
+      after p1: Diancie-Mega 0/259, Aegislash-Blade 298/324
+      after p2: Lapras 234/405, Gothitelle 0/344
+
+  Turn 6
+      p1a <- Thundurus comes in (299/299)
+      p2b <- Braviary comes in (347/347)
+      after p1: Thundurus 299/299, Aegislash-Blade 298/324
+      after p2: Lapras 234/405, Braviary 347/347
+
+  Turn 7
+    p1 mcts: move 4 2, move 3 2
+      search (31000 visits): uturn,1;flashcannon,1 1974v 1236 | uturn,0;flashcannon,1 1117v 662 | uturn,1;shadowball,0 896v 517 | uturn,1;flashcannon,0 815v 464
+    p2 greedy: move 4 2, move 1 2
+      p1a Thundurus used U-turn -> p2b: Braviary
+      after p1: Thundurus 299/299, Aegislash-Blade 298/324
+      after p2: Lapras 234/405, Braviary 271/347
+
+  Turn 8
+      p1a <- Talonflame comes in (359/359)
+      p2b Braviary used Brave Bird -> p1b: Aegislash
+      p2a Lapras used Hydro Pump -> p1b: Aegislash
+      p1b Aegislash fainted
+      after p1: Talonflame 359/359, Aegislash 0/324
+      after p2: Lapras 234/405, Braviary 148/347
+
+  Turn 9
+      p1b <- Thundurus comes in (299/299)
+      after p1: Talonflame 359/359, Thundurus 299/299
+      after p2: Lapras 234/405, Braviary 148/347
+
+  Turn 10
+    p1 mcts: move 3 2, move 3 1
+      search (48000 visits): flareblitz,1;superpower,0 4601v 2960 | flareblitz,1;wildcharge,0 4173v 2670 | bravebird,1;wildcharge,0 2716v 1691 | bravebird,1;superpower,0 2714v 1690
+    p2 greedy: move 4 1, move 1 1
+      p1b Thundurus used Superpower -> p2a: Lapras
+              p1b Thundurus atk 1 fell
+              p1b Thundurus def 1 fell
+      p2a Lapras fainted
+      p1a Talonflame used Flare Blitz -> p2b: Braviary
+      p2b Braviary fainted
+      after p1: Talonflame 275/359, Thundurus 299/299
+      after p2: Lapras 0/405, Braviary 0/347
+
+  Turn 11
+      p2b <- Raichu comes in (324/324)
+      p2a <- Landorus-Therian comes in (382/382)
+              p1a Talonflame atk 1 fell
+              p1b Thundurus atk 1 fell
+              p1b Thundurus atk 2 rose
+      after p1: Talonflame 275/359, Thundurus 299/299
+      after p2: Landorus-Therian 382/382, Raichu 324/324
+
+  Turn 12
+    p1 mcts: switch 5, switch 6   (slot0 Talonflame -> Mew; slot1 Thundurus -> Landorus)
+      search (59000 visits): switch mew;switch landorus 40604v 32414 | flareblitz,1;switch mew 2788v 1971 | protect,0;switch landorus 1646v 1122 | bravebird,1;superpower,1 1504v 1036
+    p2 greedy: move 1, move 2 1
+      p1b <- Landorus comes in (319/319)
+      p1a <- Mew comes in (404/404)
+      p2b Raichu used Volt Switch -> p1a: Mew
+      p2a Landorus used Earthquake -> p1b: Landorus  [[spread] p2b,p1a]
+              p1b Landorus -- IMMUNE
+              p2b Raichu -- critical hit
+              p1a Mew -- critical hit
+              p1a Mew used up its Sitrus Berry
+      p2b Raichu fainted
+      after p1: Mew 214/404, Landorus 319/319
+      after p2: Landorus-Therian 382/382, Raichu 0/324
+
+  Turn 13
+    p1 mcts: move 4 1, move 3 1
+      search (114000 visits): icebeam,0;psychic,0 108116v 101532 | icebeam,0;calmmind,1 861v 646 | superfang,0;calmmind,1 568v 407 | icebeam,0;switch talonflame 400v 273
+    p2 greedy: move 1, pass
+      p1b Landorus used Psychic -> p2a: Landorus
+      p1a Mew used Ice Beam -> p2a: Landorus
+      p2a Landorus used Earthquake -> p1b: Landorus  [[spread] p1a]
+              p1b Landorus -- IMMUNE
+      after p1: Mew 64/404, Landorus 319/319
+      after p2: Landorus-Therian 60/382, Raichu 0/324
+
+  Turn 14
+    p1 mcts: move 1 1, move 3 1
+      search (1040000 visits): fakeout,0;psychic,0 92918v 92918 | stealthrock,0;psychic,0 92918v 92918 | superfang,0;psychic,0 92918v 92918 | icebeam,0;calmmind,1 92916v 92916
+    p2 greedy: move 1, pass
+      p1a Mew used Fake Out  [[still]]
+              p1a Mew -- IT FAILED
+      p1b Landorus used Psychic -> p2a: Landorus
+      p2a Landorus fainted
+      after p1: Mew 64/404, Landorus 319/319
+      after p2: Landorus-Therian 0/382, Raichu 0/324
+
+  RESULT: p1 wins

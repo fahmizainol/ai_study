@@ -1,0 +1,123 @@
+battle 15   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: diancie gastro 5: this time it&#39;s personal: Gengar-Mega, Kyurem-Black, Gastrodon-East, Diancie, Genesect, Conkeldurr
+  p2: dpl rejects/terracott week 1 reject: Gengar-Mega, Whimsicott, Terrakion, Landorus-Therian, Hoopa-Unbound, Kyurem-Black
+
+  Turn 1
+    p1 mcts: move 2 1, move 2 2
+      search (12000 visits): shadowball,0;icebeam,1 1124v 749 | shadowball,0;substitute,1 596v 368 | sludgebomb,1;earthpower,0 515v 311 | sludgebomb,1;icebeam,0 504v 303
+    p2 greedy: move 3 1, move 1 1
+      p1a Gengar used Shadow Ball -> p2a: Gengar
+      p2a Gengar fainted
+      p2b Whimsicott used Moonblast -> p1a: Gengar
+      p1b Kyurem used Ice Beam -> p2b: Whimsicott
+              p2b Whimsicott used up its Focus Sash
+      after p1: Gengar-Mega 263/322, Kyurem-Black 392/392
+      after p2: Gengar-Mega 0/261, Whimsicott 1/261
+
+  Turn 2
+      p2a <- Terrakion comes in (323/323)
+      after p1: Gengar-Mega 263/322, Kyurem-Black 392/392
+      after p2: Terrakion 323/323, Whimsicott 1/261
+
+  Turn 3
+    p1 mcts: move 2 2, switch 5   (slot1 Kyurem-Black -> Genesect)
+      search (53000 visits): shadowball,1;switch genesect 2240v 1637 | switch diancie;substitute,1 1734v 1134 | switch gastrodoneast;substitute,1 1595v 1035 | protect,0;earthpower,1 1490v 961
+    p2 greedy: move 3 1, move 1 1
+      p1b <- Genesect comes in (283/283)
+              p1b Genesect spa 1 rose
+      p1a Gengar used Shadow Ball -> p2b: Whimsicott
+      p2b Whimsicott fainted
+      p2a Terrakion used Close Combat -> p1a: Gengar
+              p1a Gengar -- IMMUNE
+      after p1: Gengar-Mega 263/322, Genesect 283/283
+      after p2: Terrakion 323/323, Whimsicott 0/261
+
+  Turn 4
+      p2b <- Landorus-Therian comes in (319/319)
+              p1a Gengar atk 1 fell
+              p1b Genesect atk 1 fell
+      after p1: Gengar-Mega 263/322, Genesect 283/283
+      after p2: Terrakion 323/323, Landorus-Therian 319/319
+
+  Turn 5
+    p1 mcts: move 1 2, move 1
+      search (66000 visits): sludgebomb,1;explosion,0 1746v 1564 | sludgebomb,0;explosion,0 1707v 1527 | protect,0;ironhead,1 1703v 1524 | shadowball,1;explosion,0 1649v 1472
+    p2 greedy: move 3 1, move 3
+      p1a Gengar used Sludge Bomb -> p2b: Landorus
+      p2a Terrakion used Close Combat -> p1a: Gengar
+              p1a Gengar -- IMMUNE
+      p1b Genesect used Explosion -> p2b: Landorus  [[spread] p2a,p2b]
+              p1a Gengar -- IMMUNE
+      p1b Genesect fainted
+      p2b Landorus fainted
+      after p1: Gengar-Mega 263/322, Genesect 0/283
+      after p2: Terrakion 214/323, Landorus-Therian 0/319
+
+  Turn 6
+      p1b <- Gastrodon-East comes in (421/421)
+      p2b <- Hoopa-Unbound comes in (301/301)
+      after p1: Gengar-Mega 263/322, Gastrodon-East 421/421
+      after p2: Terrakion 214/323, Hoopa-Unbound 301/301
+
+  Turn 7
+    p1 mcts: switch 6, move 2 1   (slot0 Gengar-Mega -> Conkeldurr)
+      search (16000 visits): switch conkeldurr;earthpower,0 831v 532 | switch diancie;earthpower,0 693v 434 | shadowball,1;earthpower,0 556v 337 | sludgebomb,1;earthpower,0 506v 302
+    p2 greedy: move 3 1, move 1 1
+      p1a <- Conkeldurr comes in (414/414)
+      p2a Terrakion used Close Combat -> p1a: Conkeldurr
+              p2a Terrakion def 1 fell
+              p2a Terrakion spd 1 fell
+      p2b Hoopa used Hyperspace Fury -> p1a: Conkeldurr
+              p2b Hoopa def 1 fell
+      p1b Gastrodon used Earth Power -> p2a: Terrakion
+      p2a Terrakion fainted
+      after p1: Conkeldurr 67/414, Gastrodon-East 421/421
+      after p2: Terrakion 0/323, Hoopa-Unbound 271/301
+
+  Turn 8
+      p2a <- Kyurem-Black comes in (391/391)
+      after p1: Conkeldurr 67/414, Gastrodon-East 421/421
+      after p2: Kyurem-Black 391/391, Hoopa-Unbound 271/301
+
+  Turn 9
+    p1 mcts: move 2 2, move 2 2
+      search (26000 visits): machpunch,1;earthpower,1 1430v 992 | machpunch,1;earthpower,0 1211v 827 | machpunch,1;icebeam,1 1152v 783 | machpunch,1;recover,1 943v 628
+    p2 greedy: move 2 1, move 1 1
+      p1a Conkeldurr used Mach Punch -> p2b: Hoopa
+      p2a Kyurem used Fusion Bolt -> p1a: Conkeldurr
+      p1a Conkeldurr fainted
+      p2b Hoopa used Hyperspace Fury -> p1b: Gastrodon
+              p2b Hoopa def 1 fell
+      p1b Gastrodon used Earth Power -> p2b: Hoopa
+      p2b Hoopa fainted
+      after p1: Conkeldurr 0/414, Gastrodon-East 135/421
+      after p2: Kyurem-Black 352/391, Hoopa-Unbound 0/301
+
+  Turn 10
+      p1a <- Diancie comes in (304/304)
+      after p1: Diancie 304/304, Gastrodon-East 135/421
+      after p2: Kyurem-Black 352/391, Hoopa-Unbound 0/301
+
+  Turn 11
+    p1 mcts: move 2 1, move 4
+      search (93000 visits): moonblast,0;recover,1 78758v 74933 | moonblast,0;switch gengarmega 3404v 2983 | moonblast,0;switch kyuremblack 1471v 1230 | diamondstorm,0;recover,1 1000v 811
+    p2 greedy: move 2 2, pass
+      p2a Kyurem used Fusion Bolt -> p1b: Gastrodon
+              p1b Gastrodon -- IMMUNE
+      p1a Diancie used Moonblast -> p2a: Kyurem
+      p1b Gastrodon used Recover
+      after p1: Diancie 304/304, Gastrodon-East 346/421
+      after p2: Kyurem-Black 80/391, Hoopa-Unbound 0/301
+
+  Turn 12
+    p1 mcts: move 3, move 3 1
+      search (131000 visits): trickroom,0;icebeam,0 12072v 11711 | trickroom,0;earthpower,0 11234v 10880 | moonblast,0;switch gengarmega 8125v 7803 | switch gengarmega;icebeam,0 6835v 6531
+    p2 greedy: move 2 2, pass
+      p2a Kyurem used Fusion Bolt -> p1b: Gastrodon
+              p1b Gastrodon -- IMMUNE
+      p1b Gastrodon used Ice Beam -> p2a: Kyurem
+      p2a Kyurem fainted
+      after p1: Diancie 304/304, Gastrodon-East 346/421
+      after p2: Kyurem-Black 0/391, Hoopa-Unbound 0/301
+
+  RESULT: p1 wins

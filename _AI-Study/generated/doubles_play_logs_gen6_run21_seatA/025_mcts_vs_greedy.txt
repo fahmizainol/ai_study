@@ -1,0 +1,171 @@
+battle 25   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: ORAS Doubles OU: Mawile-Mega, Dusclops, Sylveon, Amoonguss, Chandelure, Scrafty
+  p2: ORAS Doubles OU: Gardevoir-Mega, Amoonguss, Aegislash, Zapdos, Landorus-Therian, Volcanion
+
+  Turn 1
+    p1 mcts: move 1, switch 6   (slot1 Dusclops -> Scrafty)
+      search (48000 visits): swordsdance,0;switch scrafty 492v 486 | swordsdance,0;switch amoonguss 478v 471 | swordsdance,0;switch chandelure 476v 469 | swordsdance,0;disable,0 473v 465
+    p2 greedy: move 2, move 1 1
+      p1b <- Scrafty comes in (333/333)
+              p2a Gardevoir atk 1 fell
+              p2b Amoonguss atk 1 fell
+      p2a Gardevoir used Hyper Voice -> p1b: Scrafty  [[spread] p1a,p1b]
+      p1b Scrafty fainted
+      p1a Mawile used Swords Dance
+              p1a Mawile atk 2 rose
+      p2b Amoonguss used Giga Drain -> p1a: Mawile
+      after p1: Mawile-Mega 155/303, Scrafty 0/333
+      after p2: Gardevoir-Mega 338/338, Amoonguss 432/432
+
+  Turn 2
+      p1b <- Sylveon comes in (345/345)
+      after p1: Mawile-Mega 155/303, Sylveon 345/345
+      after p2: Gardevoir-Mega 338/338, Amoonguss 432/432
+
+  Turn 3
+    p1 mcts: move 2 1, switch 6   (slot1 Sylveon -> Dusclops)
+      search (44000 visits): suckerpunch,0;switch dusclops 29096v 24135 | playrough,0;hypervoice,0 915v 390 | playrough,0;psyshock,1 407v 144 | playrough,1;hypervoice,0 389v 136
+    p2 greedy: move 2, move 1 1
+      p1b <- Dusclops comes in (284/284)
+      p1a Mawile used Sucker Punch -> p2a: Gardevoir
+      p2a Gardevoir used Hyper Voice -> p1b: Dusclops  [[spread] p1a,p1b]
+      p2b Amoonguss used Giga Drain -> p1a: Mawile
+      after p1: Mawile-Mega 13/303, Dusclops 196/284
+      after p2: Gardevoir-Mega 73/338, Amoonguss 432/432
+
+  Turn 4
+    p1 mcts: move 1, switch 6   (slot1 Dusclops -> Sylveon)
+      search (63000 visits): swordsdance,0;switch sylveon 953v 889 | swordsdance,0;switch amoonguss 948v 884 | swordsdance,0;switch chandelure 942v 878 | swordsdance,0;willowisp,1 901v 837
+    p2 greedy: move 2, move 1 1
+      p1b <- Sylveon comes in (345/345)
+      p2a Gardevoir used Hyper Voice -> p1a: Mawile  [[spread] p1a,p1b]
+      p1a Mawile fainted
+      p2b Amoonguss used Giga Drain -> p1b: Sylveon
+      after p1: Mawile-Mega 0/303, Sylveon 141/345
+      after p2: Gardevoir-Mega 73/338, Amoonguss 432/432
+
+  Turn 5
+      p1a <- Amoonguss comes in (432/432)
+      after p1: Amoonguss 432/432, Sylveon 141/345
+      after p2: Gardevoir-Mega 73/338, Amoonguss 432/432
+
+  Turn 6
+    p1 mcts: move 4, move 4
+      search (58000 visits): protect,0;protect,1 44340v 40903 | switch dusclops;hiddenpower,1 1008v 617 | spore,1;hypervoice,0 767v 454 | spore,0;hypervoice,0 493v 273
+    p2 greedy: move 2, move 1 2
+      p1b Sylveon used Protect
+      p1a Amoonguss used Protect
+      p2a Gardevoir used Hyper Voice -> p1a: Amoonguss  [[spread] ]
+              p1a Amoonguss -- move: Protect
+              p1b Sylveon -- move: Protect
+      p2b Amoonguss used Giga Drain -> p1b: Sylveon
+              p1b Sylveon -- move: Protect
+      after p1: Amoonguss 432/432, Sylveon 141/345
+      after p2: Gardevoir-Mega 73/338, Amoonguss 432/432
+
+  Turn 7
+    p1 mcts: move 4, move 3 2
+      search (45000 visits): protect,0;hiddenpower,1 24363v 18813 | protect,0;hypervoice,0 6485v 4324 | switch dusclops;psyshock,1 840v 477 | spore,0;hypervoice,0 711v 395
+    p2 greedy: move 2, move 1 2
+      p1a Amoonguss used Protect  [[still]]
+              p1a Amoonguss -- IT FAILED
+      p2a Gardevoir used Hyper Voice -> p1a: Amoonguss  [[spread] p1a,p1b]
+      p1b Sylveon fainted
+      p2b Amoonguss used Giga Drain -> p1a: Amoonguss
+      after p1: Amoonguss 324/432, Sylveon 0/345
+      after p2: Gardevoir-Mega 73/338, Amoonguss 432/432
+
+  Turn 8
+      p1b <- Chandelure comes in (324/324)
+      after p1: Amoonguss 324/432, Chandelure 324/324
+      after p2: Gardevoir-Mega 73/338, Amoonguss 432/432
+
+  Turn 9
+    p1 mcts: move 4, move 3 2
+      search (39000 visits): protect,0;shadowball,1 21084v 15677 | protect,0;heatwave,0 1300v 555 | switch dusclops;heatwave,0 969v 395 | spore,0;heatwave,0 726v 280
+    p2 greedy: move 2, move 1 1
+      p1a Amoonguss used Protect
+      p2a Gardevoir used Hyper Voice -> p1a: Amoonguss  [[spread] p1b]
+              p1a Amoonguss -- move: Protect
+              p1b Chandelure -- critical hit
+      p1b Chandelure used Shadow Ball -> p2b: Amoonguss
+      p2b Amoonguss used Giga Drain -> p1a: Amoonguss
+              p1a Amoonguss -- move: Protect
+      after p1: Amoonguss 324/432, Chandelure 157/324
+      after p2: Gardevoir-Mega 73/338, Amoonguss 266/432
+
+  Turn 10
+    p1 mcts: move 4, move 1
+      search (56000 visits): protect,0;trickroom,1 47087v 44630 | switch dusclops;heatwave,0 455v 286 | protect,0;heatwave,0 434v 271 | spore,1;heatwave,0 383v 234
+    p2 greedy: move 2, move 1 2
+      p1a Amoonguss used Protect
+      p2a Gardevoir used Hyper Voice -> p1b: Chandelure  [[spread] p1b]
+              p1a Amoonguss -- move: Protect
+      p2b Amoonguss used Giga Drain -> p1b: Chandelure
+      p1b Chandelure used Trick Room
+      after p1: Amoonguss 324/432, Chandelure 17/324
+      after p2: Gardevoir-Mega 73/338, Amoonguss 286/432
+
+  Turn 11
+    p1 mcts: move 3 1, move 2
+      search (57000 visits): gigadrain,0;heatwave,0 1559v 1526 | gigadrain,0;shadowball,1 1513v 1478 | ragepowder,0;trickroom,1 1480v 1444 | gigadrain,0;protect,1 1477v 1441
+    p2 greedy: move 2, move 1 2
+      p1a Amoonguss used Giga Drain -> p2a: Gardevoir
+      p2b Amoonguss used Giga Drain -> p1b: Chandelure
+      p1b Chandelure fainted
+      p2a Gardevoir used Hyper Voice -> p1a: Amoonguss
+      after p1: Amoonguss 232/432, Chandelure 0/324
+      after p2: Gardevoir-Mega 12/338, Amoonguss 295/432
+
+  Turn 12
+      p1b <- Dusclops comes in (196/284)
+      after p1: Amoonguss 232/432, Dusclops 196/284
+      after p2: Gardevoir-Mega 12/338, Amoonguss 295/432
+
+  Turn 13
+    p1 mcts: move 3 2, move 4 1
+      search (61000 visits): gigadrain,1;disable,0 1461v 1250 | gigadrain,0;trickroom,0 1439v 1230 | gigadrain,1;trickroom,0 1426v 1218 | gigadrain,1;nightshade,1 1421v 1214
+    p2 greedy: move 2, move 1 1
+      p1b Dusclops used Disable -> p2a: Gardevoir
+              p2a Gardevoir gained Disable Hyper Voice
+      p2b Amoonguss used Giga Drain -> p1a: Amoonguss
+      p1a Amoonguss used Giga Drain -> p2b: Amoonguss
+              p2a Gardevoir COULD NOT MOVE (Disable Hyper Voice)
+      after p1: Amoonguss 223/432, Dusclops 196/284
+      after p2: Gardevoir-Mega 12/338, Amoonguss 287/432
+
+  Turn 14
+    p1 mcts: move 3 2, move 2 2
+      search (67000 visits): gigadrain,1;willowisp,1 1768v 1542 | gigadrain,1;trickroom,0 1580v 1368 | gigadrain,0;nightshade,1 1558v 1347 | gigadrain,0;disable,0 1558v 1347
+    p2 greedy: move 3 1, move 1 1
+      p1b Dusclops used Will-O-Wisp -> p2b: Amoonguss
+              p2b Amoonguss is now brn
+      p1a Amoonguss used Giga Drain -> p2b: Amoonguss
+      p2b Amoonguss used Giga Drain -> p1a: Amoonguss
+      p2a Gardevoir used Psychic -> p1a: Amoonguss
+      p1a Amoonguss fainted
+      after p1: Amoonguss 0/432, Dusclops 196/284
+      after p2: Gardevoir-Mega 12/338, Amoonguss 223/432
+
+  Turn 15
+    p1 mcts: pass, move 2 2
+      search (115000 visits): No Move;willowisp,1 37924v 34044 | No Move;trickroom,1 26442v 23607 | No Move;disable,0 18484v 16395 | No Move;trickroom,0 8638v 7537
+    p2 greedy: move 3 2, move 1 2
+      p1b Dusclops used Will-O-Wisp -> p2b: Amoonguss  [[miss]]
+              p1b Dusclops -- MISSED
+      p2b Amoonguss used Giga Drain -> p1b: Dusclops
+      p2a Gardevoir used Psychic -> p1b: Dusclops
+              p2b Amoonguss used up its Sitrus Berry
+      after p1: Amoonguss 0/432, Dusclops 64/284
+      after p2: Gardevoir-Mega 12/338, Amoonguss 298/432
+
+  Turn 16
+    p1 mcts: pass, move 1
+      search (730000 visits): No Move;trickroom,1 99765v 1428 | No Move;trickroom,0 94993v 1321 | No Move;disable,1 93620v 1290 | No Move;disable,0 92651v 1301
+    p2 greedy: move 3 2, move 1 2
+      p2a Gardevoir used Psychic -> p1b: Dusclops
+      p1b Dusclops fainted
+      after p1: Amoonguss 0/432, Dusclops 0/284
+      after p2: Gardevoir-Mega 12/338, Amoonguss 298/432
+
+  RESULT: p2 wins

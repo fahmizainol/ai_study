@@ -1,0 +1,194 @@
+battle 14   p1=greedy vs p2=mcts   mcts 300 ms a decision
+  p1: ORAS Doubles OU: Charizard-Mega-Y, Whimsicott, Terrakion, Aegislash, Zapdos, Latios
+  p2: ORAS Doubles OU: Gengar, Bisharp, Landorus-Therian, Keldeo-Resolute, Thundurus, Talonflame
+
+  Turn 1
+    p1 greedy: move 2 1, move 2 1
+    p2 mcts: move 1 2 mega, switch 4   (slot1 Bisharp -> Keldeo-Resolute)
+      search (15000 visits): shadowball-mega,1;switch keldeoresolute 180v 103 | shadowball-mega,1;ironhead,1 151v 82 | shadowball-mega,1;switch thundurus 138v 72 | shadowball-mega,1;switch landorustherian 135v 70
+      p2b <- Keldeo-Resolute comes in (323/323)
+      p1b Whimsicott used Moonblast -> p2a: Gengar
+              p2a Gengar spa 1 fell
+      p2a Gengar used Shadow Ball -> p1b: Whimsicott
+      p1a Charizard used Solar Beam  [[still]]
+      after p1: Charizard-Mega-Y 360/360, Whimsicott 177/324
+      after p2: Gengar-Mega 246/291, Keldeo-Resolute 323/323
+
+  Turn 2
+    p1 greedy: move 1, move 2 1
+    p2 mcts: move 1 2, move 1 1
+      search (24000 visits): shadowball,1;hydropump,0 740v 503 | switch bisharp;hydropump,0 633v 422 | switch talonflame;switch landorustherian 570v 374 | shadowball,1;protect,1 553v 361
+      p2a Gengar used Shadow Ball -> p1b: Whimsicott
+      p1b Whimsicott used Moonblast -> p2a: Gengar
+      p2b Keldeo used Hydro Pump -> p1a: Charizard
+      p1a Charizard fainted
+      after p1: Charizard-Mega-Y 0/360, Whimsicott 32/324
+      after p2: Gengar-Mega 197/291, Keldeo-Resolute 291/323
+
+  Turn 3
+      p1a <- Terrakion comes in (323/323)
+      after p1: Terrakion 323/323, Whimsicott 32/324
+      after p2: Gengar-Mega 197/291, Keldeo-Resolute 291/323
+
+  Turn 4
+    p1 greedy: move 2 1, move 2 1
+    p2 mcts: move 1 2, move 2 1
+      search (20000 visits): shadowball,1;secretsword,0 1108v 865 | shadowball,1;hydropump,0 846v 644 | switch landorustherian;secretsword,0 552v 400 | switch landorustherian;switch thundurus 536v 387
+      p2a Gengar used Shadow Ball -> p1b: Whimsicott
+      p1b Whimsicott fainted
+      p1a Terrakion used Close Combat -> p2a: Gengar
+              p2a Gengar -- IMMUNE
+      p2b Keldeo used Secret Sword -> p1a: Terrakion
+      p1a Terrakion fainted
+      after p1: Terrakion 0/323, Whimsicott 0/324
+      after p2: Gengar-Mega 197/291, Keldeo-Resolute 259/323
+
+  Turn 5
+      p1b <- Zapdos comes in (384/384)
+      p1a <- Aegislash comes in (324/324)
+      after p1: Aegislash 324/324, Zapdos 384/384
+      after p2: Gengar-Mega 197/291, Keldeo-Resolute 259/323
+
+  Turn 6
+    p1 greedy: move 1 1, move 2 1
+    p2 mcts: switch 5, switch 3   (slot0 Gengar-Mega -> Thundurus; slot1 Keldeo-Resolute -> Landorus-Therian)
+      search (16000 visits): switch thundurus;switch landorustherian 749v 469 | switch bisharp;hydropump,1 648v 398 | switch landorustherian;switch thundurus 546v 327 | switch bisharp;switch landorustherian 498v 293
+      p2a <- Thundurus comes in (299/299)
+      p2b <- Landorus-Therian comes in (319/319)
+              p1a Aegislash atk 1 fell
+              p1b Zapdos atk 1 fell
+      p1b Zapdos used Thunderbolt -> p2a: Thundurus
+              p2a Thundurus -- critical hit
+      p1a Aegislash used Shadow Ball -> p2a: Thundurus
+      p2a Thundurus fainted
+      after p1: Aegislash-Blade 324/324, Zapdos 384/384
+      after p2: Thundurus 0/299, Landorus-Therian 319/319
+
+  Turn 7
+      p2a <- Keldeo-Resolute comes in (259/323)
+      after p1: Aegislash-Blade 324/324, Zapdos 384/384
+      after p2: Keldeo-Resolute 259/323, Landorus-Therian 319/319
+
+  Turn 8
+    p1 greedy: move 1 1, move 2 1
+    p2 mcts: move 1 2, move 4 1
+      search (24000 visits): hydropump,1;uturn,0 1924v 1331 | hydropump,0;uturn,0 1760v 1208 | hydropump,0;uturn,1 1662v 1136 | switch gengarmega;uturn,1 1574v 1071
+      p2b Landorus used U-turn -> p1a: Aegislash
+      after p1: Aegislash-Blade 278/324, Zapdos 384/384
+      after p2: Keldeo-Resolute 259/323, Landorus-Therian 319/319
+
+  Turn 9
+      p2b <- Bisharp comes in (271/271)
+      p2a Keldeo used Hydro Pump -> p1b: Zapdos
+              p1b Zapdos used up its Sitrus Berry
+      p1b Zapdos used Thunderbolt -> p2a: Keldeo
+      p2a Keldeo fainted
+      p1a Aegislash used Shadow Ball -> p2b: Bisharp
+      after p1: Aegislash-Blade 278/324, Zapdos 262/384
+      after p2: Keldeo-Resolute 0/323, Bisharp 163/271
+
+  Turn 10
+      p2a <- Landorus-Therian comes in (319/319)
+              p1a Aegislash atk 1 fell
+              p1b Zapdos atk 1 fell
+      after p1: Aegislash-Blade 278/324, Zapdos 262/384
+      after p2: Landorus-Therian 319/319, Bisharp 163/271
+
+  Turn 11
+    p1 greedy: move 1 2, move 2 2
+    p2 mcts: move 4 2, move 1 1
+      search (39000 visits): uturn,1;knockoff,0 18750v 13348 | uturn,0;knockoff,0 3004v 1987 | uturn,1;suckerpunch,0 1380v 858 | uturn,1;ironhead,0 1017v 611
+      p2a Landorus used U-turn -> p1b: Zapdos
+      after p1: Aegislash-Blade 278/324, Zapdos 208/384
+      after p2: Landorus-Therian 319/319, Bisharp 163/271
+
+  Turn 12
+      p2a <- Gengar-Mega comes in (197/291)
+      p1b Zapdos used Thunderbolt -> p2b: Bisharp
+      p2b Bisharp fainted
+      p1a Aegislash used Shadow Ball -> p2a: Gengar
+      p2a Gengar fainted
+      after p1: Aegislash-Blade 278/324, Zapdos 208/384
+      after p2: Gengar 0/291, Bisharp 0/271
+
+  Turn 13
+      p2a <- Landorus-Therian comes in (319/319)
+      p2b <- Talonflame comes in (297/297)
+              p1a Aegislash atk 1 fell
+              p1b Zapdos atk 1 fell
+      after p1: Aegislash-Blade 278/324, Zapdos 208/384
+      after p2: Landorus-Therian 319/319, Talonflame 297/297
+
+  Turn 14
+    p1 greedy: move 1 1, move 2 1
+    p2 mcts: move 4 1, move 2 1
+      search (46000 visits): uturn,0;flareblitz,0 5274v 3280 | uturn,1;flareblitz,0 4585v 2830 | uturn,1;uturn,0 2910v 1745 | uturn,0;uturn,1 2658v 1584
+      p2a Landorus used U-turn -> p1a: Aegislash
+      p2b Talonflame used Flare Blitz -> p1a: Aegislash
+              p1a Aegislash -- critical hit
+      p1a Aegislash fainted
+      p1b Zapdos used Thunderbolt -> p2a: Landorus
+              p2a Landorus -- IMMUNE
+      after p1: Aegislash 0/324, Zapdos 208/384
+      after p2: Landorus-Therian 319/319, Talonflame 220/297
+
+  Turn 15
+      p1a <- Latios comes in (302/302)
+      after p1: Latios 302/302, Zapdos 208/384
+      after p2: Landorus-Therian 319/319, Talonflame 220/297
+
+  Turn 16
+    p1 greedy: move 1 2, move 2 2
+    p2 mcts: move 4 2, move 2 1
+      search (94000 visits): uturn,1;flareblitz,0 79540v 42014 | uturn,1;flareblitz,1 10567v 5269 | uturn,0;flareblitz,0 2125v 938 | uturn,0;flareblitz,1 1768v 762
+      p2a Landorus used U-turn -> p1b: Zapdos
+      p2b Talonflame used Flare Blitz -> p1a: Latios
+      p1a Latios used Draco Meteor -> p2b: Talonflame
+              p1a Latios spa 2 fell
+      p2b Talonflame fainted
+      p1b Zapdos used Thunderbolt -> p2a: Landorus
+              p2a Landorus -- IMMUNE
+      after p1: Latios 143/302, Zapdos 149/384
+      after p2: Landorus-Therian 319/319, Talonflame 0/297
+
+  Turn 17
+    p1 greedy: move 1 1, move 2 1
+    p2 mcts: move 4 1, pass
+      search (263000 visits): uturn,0;No Move 137225v 3897 | uturn,1;No Move 125775v 3497
+      p2a Landorus used U-turn -> p1a: Latios
+      p1a Latios fainted
+      p1b Zapdos used Thunderbolt -> p2a: Landorus
+              p2a Landorus -- IMMUNE
+      after p1: Latios 0/302, Zapdos 149/384
+      after p2: Landorus-Therian 319/319, Talonflame 0/297
+
+  Turn 18
+    p1 greedy: pass, move 2 1
+    p2 mcts: move 4 2, pass
+      search (283000 visits): uturn,1;No Move 283000v 14957
+      p2a Landorus used U-turn -> p1b: Zapdos
+      p1b Zapdos used Thunderbolt -> p2a: Landorus
+              p2a Landorus -- IMMUNE
+      after p1: Latios 0/302, Zapdos 93/384
+      after p2: Landorus-Therian 319/319, Talonflame 0/297
+
+  Turn 19
+    p1 greedy: pass, move 2 1
+    p2 mcts: move 4 2, pass
+      search (286000 visits): uturn,1;No Move 286000v 15488
+      p2a Landorus used U-turn -> p1b: Zapdos
+      p1b Zapdos used Thunderbolt -> p2a: Landorus
+              p2a Landorus -- IMMUNE
+      after p1: Latios 0/302, Zapdos 41/384
+      after p2: Landorus-Therian 319/319, Talonflame 0/297
+
+  Turn 20
+    p1 greedy: pass, move 2 1
+    p2 mcts: move 4 2, pass
+      search (3209000 visits): uturn,1;No Move 3209000v 3209000
+      p2a Landorus used U-turn -> p1b: Zapdos
+      p1b Zapdos fainted
+      after p1: Latios 0/302, Zapdos 0/384
+      after p2: Landorus-Therian 319/319, Talonflame 0/297
+
+  RESULT: p2 wins

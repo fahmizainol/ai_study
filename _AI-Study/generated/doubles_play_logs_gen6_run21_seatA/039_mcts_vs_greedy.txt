@@ -1,0 +1,128 @@
+battle 39   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: ORAS Doubles OU: Steelix, Bronzong, Azumarill, Hariyama, Tyranitar, Gothitelle
+  p2: ORAS Doubles OU: Mawile-Mega, Dusclops, Sylveon, Amoonguss, Chandelure, Scrafty
+
+  Turn 1
+    p1 mcts: switch 3, switch 6   (slot0 Steelix -> Azumarill; slot1 Bronzong -> Gothitelle)
+      search (37000 visits): switch azumarill;switch gothitelle 347v 110 | heavyslam,0;switch hariyama 341v 108 | switch azumarill;switch hariyama 339v 107 | firefang,0;switch hariyama 338v 106
+    p2 greedy: move 3 1, move 1
+      p1b <- Gothitelle comes in (344/344)
+      p1a <- Azumarill comes in (404/404)
+      p2a Mawile used Play Rough -> p1a: Azumarill
+      p2b Dusclops used Trick Room
+      after p1: Azumarill 218/404, Gothitelle 344/344
+      after p2: Mawile-Mega 303/303, Dusclops 284/284
+
+  Turn 2
+    p1 mcts: move 2 2, switch 3   (slot1 Gothitelle -> Steelix)
+      search (48000 visits): playrough,1;switch steelix 899v 177 | playrough,1;switch bronzong 886v 173 | playrough,1;switch hariyama 875v 170 | playrough,1;psychic,1 848v 163
+    p2 greedy: move 3 1, move 1
+      p1b <- Steelix comes in (353/353)
+      p1a Azumarill used Play Rough -> p2b: Dusclops
+      p2a Mawile used Play Rough -> p1a: Azumarill
+              p1a Azumarill used up its Sitrus Berry
+      p2b Dusclops used Trick Room
+      after p1: Azumarill 148/404, Steelix 353/353
+      after p2: Mawile-Mega 303/303, Dusclops 190/284
+
+  Turn 3
+    p1 mcts: move 3 2, move 2 mega
+      search (40000 visits): aquajet,1;earthquake-mega,0 943v 264 | switch bronzong;earthquake,0 937v 261 | switch bronzong;earthquake-mega,0 876v 240 | playrough,0;earthquake-mega,0 839v 227
+    p2 greedy: move 3 1, move 1
+      p1a Azumarill used Aqua Jet -> p2b: Dusclops
+      p2a Mawile used Play Rough -> p1a: Azumarill
+      p1a Azumarill fainted
+      p1b Steelix used Earthquake -> p2b: Dusclops  [[spread] p2a,p2b]
+      p2b Dusclops used Trick Room
+      after p1: Azumarill 0/404, Steelix-Mega 353/353
+      after p2: Mawile-Mega 61/303, Dusclops 90/284
+
+  Turn 4
+      p1a <- Gothitelle comes in (344/344)
+      after p1: Gothitelle 344/344, Steelix-Mega 353/353
+      after p2: Mawile-Mega 61/303, Dusclops 90/284
+
+  Turn 5
+    p1 mcts: move 3 -2, move 2
+      search (55000 visits): helpinghand,1;earthquake,0 2648v 874 | switch bronzong;earthquake,0 2635v 869 | trickroom,0;earthquake,0 2518v 825 | protect,0;earthquake,0 2477v 809
+    p2 greedy: move 3 1, move 1
+      p1a Gothitelle used Helping Hand -> p1b: Steelix
+      p1b Steelix used Earthquake -> p2b: Dusclops  [[spread] p1a,p2a,p2b]
+      p2a Mawile fainted
+      p2b Dusclops fainted
+      after p1: Gothitelle 103/344, Steelix-Mega 353/353
+      after p2: Mawile-Mega 0/303, Dusclops 0/284
+
+  Turn 6
+      p2b <- Amoonguss comes in (432/432)
+      p2a <- Sylveon comes in (345/345)
+      after p1: Gothitelle 103/344, Steelix-Mega 353/353
+      after p2: Sylveon 345/345, Amoonguss 432/432
+
+  Turn 7
+    p1 mcts: switch 5, move 1 1   (slot0 Gothitelle -> Tyranitar)
+      search (18000 visits): switch tyranitar;heavyslam,0 1896v 1093 | switch bronzong;heavyslam,0 1854v 1067 | switch hariyama;heavyslam,0 1014v 547 | switch bronzong;earthquake,0 628v 315
+    p2 greedy: move 1, move 3 1
+      p1a <- Tyranitar comes in (404/404)
+      p2b Amoonguss used Giga Drain -> p1a: Tyranitar
+      p1b Steelix used Heavy Slam -> p2a: Sylveon
+      p2a Sylveon fainted
+      after p1: Tyranitar 290/404, Steelix-Mega 353/353
+      after p2: Sylveon 0/345, Amoonguss 405/432
+
+  Turn 8
+      p2a <- Chandelure comes in (324/324)
+      after p1: Tyranitar 290/404, Steelix-Mega 353/353
+      after p2: Chandelure 324/324, Amoonguss 405/432
+
+  Turn 9
+    p1 mcts: move 4, move 2
+      search (14000 visits): protect,0;earthquake,0 559v 355 | rockslide,0;heavyslam,0 476v 295 | crunch,0;heavyslam,1 424v 258 | rockslide,0;heavyslam,1 421v 256
+    p2 greedy: move 2, move 3 1
+      p1a Tyranitar used Protect
+      p2b Amoonguss used Giga Drain -> p1a: Tyranitar
+              p1a Tyranitar -- move: Protect
+      p1b Steelix used Earthquake -> p2a: Chandelure  [[spread] p2a,p2b]
+              p1a Tyranitar -- move: Protect
+              p2a Chandelure used up its Focus Sash
+      p2a Chandelure used Heat Wave -> p1a: Tyranitar  [[spread] ]
+              p1a Tyranitar -- move: Protect
+              p2a Chandelure -- MISSED
+      p2a Chandelure fainted
+      after p1: Tyranitar 290/404, Steelix-Mega 353/353
+      after p2: Chandelure 0/324, Amoonguss 195/432
+
+  Turn 10
+      p2a <- Scrafty comes in (333/333)
+              p1a Tyranitar atk 1 fell
+              p1b Steelix atk 1 fell
+      after p1: Tyranitar 290/404, Steelix-Mega 353/353
+      after p2: Scrafty 333/333, Amoonguss 195/432
+
+  Turn 11
+    p1 mcts: switch 4, move 1 2   (slot0 Tyranitar -> Hariyama)
+      search (14000 visits): switch hariyama;heavyslam,1 1187v 946 | switch hariyama;heavyslam,0 496v 361 | switch bronzong;heavyslam,0 483v 350 | switch bronzong;heavyslam,1 460v 331
+    p2 greedy: move 3 1, move 3 1
+      p1a <- Hariyama comes in (429/429)
+      p1b Steelix used Heavy Slam -> p2b: Amoonguss
+      p2b Amoonguss fainted
+      p2a Scrafty used Head Smash -> p1a: Hariyama  [[miss]]
+              p2a Scrafty -- MISSED
+      after p1: Hariyama 403/429, Steelix-Mega 295/353
+      after p2: Scrafty 313/333, Amoonguss 0/432
+
+  Turn 12
+    p1 mcts: move 1 1, switch 5   (slot1 Steelix-Mega -> Gothitelle)
+      search (234000 visits): closecombat,0;switch gothitelle 29601v 29009 | closecombat,0;heavyslam,0 28930v 28342 | closecombat,0;earthquake,0 28754v 28167 | closecombat,0;switch bronzong 28107v 27524
+    p2 greedy: move 3 2, pass
+      p1b <- Gothitelle comes in (103/344)
+      p2a Scrafty used Head Smash -> p1b: Gothitelle
+      p1b Gothitelle fainted
+      p1a Hariyama used Close Combat -> p2a: Scrafty
+              p1a Hariyama def 1 fell
+              p1a Hariyama spd 1 fell
+      p2a Scrafty fainted
+      after p1: Hariyama 403/429, Gothitelle 0/344
+      after p2: Scrafty 0/333, Amoonguss 0/432
+
+  RESULT: p1 wins

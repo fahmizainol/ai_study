@@ -1,0 +1,132 @@
+battle 5   p1=greedy vs p2=mcts   mcts 300 ms a decision
+  p1: Copy of Untitled 488: Thundurus, Lucario-Mega, Talonflame, Amoonguss, Kingdra, Politoed
+  p2: XY Doubles: Raichu, Crobat, Typhlosion, Blastoise-Mega, Latias, Parasect
+
+  Turn 1
+    p1 greedy: move 2 1, move 1 1
+    p2 mcts: switch 4, move 2 2   (slot0 Raichu -> Blastoise-Mega)
+      search (17000 visits): switch blastoisemega;bravebird,1 422v 249 | thunderbolt,1;bravebird,1 406v 238 | switch blastoisemega;tailwind,1 346v 197 | thunderbolt,0;bravebird,0 334v 188
+      p2a <- Blastoise-Mega comes in (355/355)
+      p2b Crobat used Brave Bird -> p1b: Lucario
+      p1b Lucario used Close Combat -> p2a: Blastoise
+              p1b Lucario def 1 fell
+              p1b Lucario spd 1 fell
+      p1a Thundurus used Wild Charge -> p2a: Blastoise
+      p2a Blastoise fainted
+      after p1: Thundurus 259/299, Lucario-Mega 95/281
+      after p2: Blastoise-Mega 0/355, Crobat 251/312
+
+  Turn 2
+      p2a <- Typhlosion comes in (298/298)
+      after p1: Thundurus 259/299, Lucario-Mega 95/281
+      after p2: Typhlosion 298/298, Crobat 251/312
+
+  Turn 3
+    p1 greedy: move 2 2, move 1 2
+    p2 mcts: move 1, move 2 2
+      search (26000 visits): eruption,0;bravebird,1 828v 292 | protect,0;tailwind,1 649v 216 | fireblast,0;bravebird,1 592v 192 | eruption,0;bravebird,0 557v 178
+      p2b Crobat used Brave Bird -> p1b: Lucario
+      p1b Lucario fainted
+      p1a Thundurus used Wild Charge -> p2b: Crobat
+      p2b Crobat fainted
+      p2a Typhlosion used Eruption -> p1a: Thundurus
+      p1a Thundurus fainted
+      after p1: Thundurus 0/299, Lucario-Mega 0/281
+      after p2: Typhlosion 298/298, Crobat 0/312
+
+  Turn 4
+      p2b <- Raichu comes in (262/262)
+      p1b <- Amoonguss comes in (432/432)
+      p1a <- Talonflame comes in (319/319)
+      after p1: Talonflame 319/319, Amoonguss 432/432
+      after p2: Typhlosion 298/298, Raichu 262/262
+
+  Turn 5
+    p1 greedy: move 2 1, move 3 1
+    p2 mcts: move 2 2, move 2 1
+      search (10000 visits): fireblast,1;thunderbolt,0 401v 264 | switch parasect;thunderbolt,0 348v 224 | eruption,0;thunderbolt,0 316v 200 | extrasensory,1;thunderbolt,0 304v 190
+      p1a Talonflame used Brave Bird -> p2a: Typhlosion
+      p2b Raichu used Thunderbolt -> p1a: Talonflame
+      p1a Talonflame fainted
+      p2a Typhlosion used Fire Blast -> p1b: Amoonguss
+              p1b Amoonguss -- critical hit
+      p1b Amoonguss fainted
+      after p1: Talonflame 0/319, Amoonguss 0/432
+      after p2: Typhlosion 6/298, Raichu 262/262
+
+  Turn 6
+      p1a <- Kingdra comes in (291/291)
+      p1b <- Politoed comes in (384/384)
+      after p1: Kingdra 291/291, Politoed 384/384
+      after p2: Typhlosion 6/298, Raichu 262/262
+
+  Turn 7
+    p1 greedy: move 3 1, move 1 1
+    p2 mcts: move 3 1, move 4
+      search (15000 visits): extrasensory,0;protect,1 730v 346 | switch latias;protect,1 644v 298 | extrasensory,1;protect,1 566v 256 | fireblast,1;protect,1 494v 217
+      p2b Raichu used Protect
+      p1a Kingdra used Draco Meteor -> p2a: Typhlosion
+              p1a Kingdra spa 2 fell
+      p2a Typhlosion fainted
+      p1b Politoed used Scald -> p2b: Raichu
+              p2b Raichu -- move: Protect
+      after p1: Kingdra 291/291, Politoed 384/384
+      after p2: Typhlosion 0/298, Raichu 262/262
+
+  Turn 8
+      p2a <- Latias comes in (302/302)
+      after p1: Kingdra 291/291, Politoed 384/384
+      after p2: Latias 302/302, Raichu 262/262
+
+  Turn 9
+    p1 greedy: move 3 1, move 1 1
+    p2 mcts: move 1 2, move 2 2
+      search (25000 visits): dracometeor,1;thunderbolt,1 3410v 1969 | psyshock,0;fakeout,1 1688v 920 | psyshock,1;fakeout,1 1275v 674 | psyshock,1;thunderbolt,1 995v 509
+      p1a Kingdra used Draco Meteor -> p2a: Latias
+              p2a Latias used up its Haban Berry
+              p2a Latias used up its Haban Berry
+              p1a Kingdra spa 2 fell
+      p2b Raichu used Thunderbolt -> p1b: Politoed
+              p1b Politoed used up its Sitrus Berry
+      p2a Latias used Draco Meteor -> p1b: Politoed
+              p2a Latias spa 2 fell
+      p1b Politoed used Scald -> p2a: Latias
+      after p1: Kingdra 291/291, Politoed 27/384
+      after p2: Latias 129/302, Raichu 262/262
+
+  Turn 10
+    p1 greedy: move 3 1, move 1 1
+    p2 mcts: switch 6, move 2 2   (slot0 Latias -> Parasect)
+      search (28000 visits): switch parasect;thunderbolt,1 3588v 2551 | switch parasect;hiddenpower,1 3587v 2551 | dracometeor,0;thunderbolt,1 2092v 1438 | dracometeor,0;hiddenpower,1 1363v 905
+      p2a <- Parasect comes in (324/324)
+      p1a Kingdra used Draco Meteor -> p2a: Parasect  [[miss]]
+              p1a Kingdra -- MISSED
+      p2b Raichu used Thunderbolt -> p1b: Politoed
+      p1b Politoed fainted
+      after p1: Kingdra 291/291, Politoed 0/384
+      after p2: Parasect 324/324, Raichu 262/262
+
+  Turn 11
+    p1 greedy: move 3 1, pass
+    p2 mcts: move 3 1, move 2 1
+      search (185000 visits): seedbomb,0;thunderbolt,0 179750v 174278 | spore,0;thunderbolt,0 529v 405 | spore,0;fakeout,0 405v 298 | switch latias;thunderbolt,0 362v 261
+      p1a Kingdra used Draco Meteor -> p2a: Parasect
+              p1a Kingdra spa 2 fell
+      p2b Raichu used Thunderbolt -> p1a: Kingdra
+              p1a Kingdra -- critical hit
+      p2a Parasect used Seed Bomb -> p1a: Kingdra
+      after p1: Kingdra 14/291, Politoed 0/384
+      after p2: Parasect 233/324, Raichu 262/262
+
+  Turn 12
+    p1 greedy: move 3 1, pass
+    p2 mcts: move 1 1, move 2 1
+      search (809000 visits): spore,0;thunderbolt,0 55211v 55211 | spore,0;hiddenpower,0 55211v 55211 | ragepowder,0;thunderbolt,0 55211v 55211 | ragepowder,0;hiddenpower,0 55211v 55211
+      p1a Kingdra used Draco Meteor -> p2a: Parasect
+      p2b Raichu used Thunderbolt -> p1a: Kingdra
+              p1a Kingdra -- critical hit
+      p1a Kingdra fainted
+      after p1: Kingdra 0/291, Politoed 0/384
+      after p2: Parasect 164/324, Raichu 262/262
+
+  RESULT: p2 wins

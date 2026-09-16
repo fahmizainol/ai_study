@@ -1,0 +1,104 @@
+battle 2   p1=greedy vs p2=mcts   mcts 300 ms a decision
+  p1: oraspl/Untitled 369: Meowstic, Kangaskhan-Mega, Aromatisse, Amoonguss, Landorus-Therian, Volcanion
+  p2: oraspl/Untitled 307: Politoed, Kingdra, Salamence-Mega, Aegislash, Landorus, Thundurus
+
+  Turn 1
+    p1 greedy: move 1 1, move 4 1
+    p2 mcts: switch 5, move 1   (slot0 Politoed -> Landorus)
+      search (14000 visits): switch landorus;muddywater,0 518v 349 | switch salamencemega;muddywater,0 461v 305 | scald,1;muddywater,0 391v 252 | scald,1;hydropump,0 358v 228
+      p2a <- Landorus comes in (319/319)
+      p1a Meowstic used Fake Out -> p2a: Landorus
+      p1b Kangaskhan used Sucker Punch  [[still]]
+              p1b Kangaskhan -- IT FAILED
+      p2b Kingdra used Muddy Water -> p1b: Kangaskhan  [[spread] p1a,p1b]
+      after p1: Meowstic 121/352, Kangaskhan-Mega 211/414
+      after p2: Landorus 298/319, Kingdra 263/292
+
+  Turn 2
+    p1 greedy: move 1 2, move 4 2
+    p2 mcts: move 1 2, move 1
+      search (42000 visits): earthpower,1;muddywater,0 2336v 1180 | psychic,1;muddywater,0 1647v 802 | earthpower,0;muddywater,0 1429v 684 | earthpower,0;hydropump,1 1390v 662
+      p1a Meowstic used Fake Out  [[still]]
+              p1a Meowstic -- IT FAILED
+      p1b Kangaskhan used Sucker Punch -> p2b: Kingdra
+      p2b Kingdra used Muddy Water -> p1b: Kangaskhan  [[spread] p1a,p1b]
+      p1a Meowstic fainted
+      p2a Landorus used Earth Power -> p1b: Kangaskhan
+      p1b Kangaskhan fainted
+      after p1: Meowstic 0/352, Kangaskhan-Mega 0/414
+      after p2: Landorus 298/319, Kingdra 132/292
+
+  Turn 3
+      p1a <- Aromatisse comes in (406/406)
+      p1b <- Amoonguss comes in (432/432)
+      after p1: Aromatisse 406/406, Amoonguss 432/432
+      after p2: Landorus 298/319, Kingdra 132/292
+
+  Turn 4
+    p1 greedy: move 3 2, move 3 2
+    p2 mcts: move 1 1, move 1
+      search (18000 visits): earthpower,0;muddywater,0 941v 720 | psychic,1;muddywater,0 838v 634 | earthpower,1;muddywater,0 578v 419 | psychic,1;hydropump,0 470v 332
+      p2b Kingdra used Muddy Water -> p1a: Aromatisse  [[spread] p1a,p1b]
+      p2a Landorus used Earth Power -> p1a: Aromatisse
+      p1a Aromatisse fainted
+      p1b Amoonguss used Energy Ball -> p2b: Kingdra
+      after p1: Aromatisse 0/406, Amoonguss 323/432
+      after p2: Landorus 298/319, Kingdra 13/292
+
+  Turn 5
+      p1a <- Landorus-Therian comes in (329/329)
+              p2a Landorus atk 1 fell
+              p2b Kingdra atk 1 fell
+      after p1: Landorus-Therian 329/329, Amoonguss 323/432
+      after p2: Landorus 298/319, Kingdra 13/292
+
+  Turn 6
+    p1 greedy: move 4 2, move 3 2
+    p2 mcts: move 3 2, move 1
+      search (21000 visits): psychic,1;muddywater,0 599v 493 | psychic,1;hydropump,0 567v 464 | switch thundurus;muddywater,0 555v 453 | switch salamencemega;muddywater,0 542v 441
+      p2b Kingdra used Muddy Water -> p1b: Amoonguss  [[spread] p1b]
+              p2b Kingdra -- MISSED
+      p2b Kingdra fainted
+      p1a Landorus used Stone Edge -> p2a: Landorus
+      p2a Landorus used Psychic -> p1b: Amoonguss
+      p1b Amoonguss fainted
+      after p1: Landorus-Therian 329/329, Amoonguss 0/432
+      after p2: Landorus 186/319, Kingdra 0/292
+
+  Turn 7
+      p2b <- Salamence-Mega comes in (393/393)
+      p1b <- Volcanion comes in (363/363)
+      after p1: Landorus-Therian 329/329, Volcanion 363/363
+      after p2: Landorus 186/319, Salamence-Mega 393/393
+
+  Turn 8
+    p1 greedy: move 4 1, move 4 1
+    p2 mcts: move 1 2, move 1 1
+      search (44000 visits): earthpower,1;doubleedge,0 10603v 10345 | earthpower,1;dracometeor,0 4070v 3859 | earthpower,1;hypervoice,0 3249v 3052 | psychic,0;hypervoice,0 2163v 1992
+      p1a Landorus used Stone Edge -> p2a: Landorus
+      p2b Salamence used Double-Edge -> p1a: Landorus
+      p2a Landorus used Earth Power -> p1b: Volcanion
+      p1b Volcanion used Overheat -> p2a: Landorus
+              p1b Volcanion spa 2 fell
+      p2a Landorus fainted
+      after p1: Landorus-Therian 77/329, Volcanion 2/363
+      after p2: Landorus 0/319, Salamence-Mega 310/393
+
+  Turn 9
+      p2a <- Aegislash comes in (324/324)
+      after p1: Landorus-Therian 77/329, Volcanion 2/363
+      after p2: Aegislash 324/324, Salamence-Mega 310/393
+
+  Turn 10
+    p1 greedy: move 4 2, move 4 2
+    p2 mcts: move 1 1, move 1 2
+      search (231000 visits): shadowball,0;doubleedge,1 13886v 13886 | shadowball,0;hypervoice,0 13886v 13886 | shadowball,1;hypervoice,0 13886v 13886 | flashcannon,0;doubleedge,1 13886v 13886
+      p1a Landorus used Stone Edge -> p2b: Salamence
+      p2b Salamence used Double-Edge -> p1b: Volcanion
+      p1b Volcanion fainted
+      p2a Aegislash used Shadow Ball -> p1a: Landorus
+      p1a Landorus fainted
+      after p1: Landorus-Therian 0/329, Volcanion 0/363
+      after p2: Aegislash-Blade 324/324, Salamence-Mega 151/393
+
+  RESULT: p2 wins

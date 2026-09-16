@@ -1,0 +1,174 @@
+battle 10   p1=greedy vs p2=mcts   mcts 300 ms a decision
+  p1: ORAS Doubles OU: Abomasnow-Mega, Heatran, Hitmontop, Kyurem-Black, Cresselia, Azumarill
+  p2: ORAS Doubles OU: Azumarill, Aromatisse, Diancie, Sylveon, Mawile, Togekiss
+
+  Turn 1
+    p1 greedy: move 4, move 1
+    p2 mcts: move 4, switch 5   (slot1 Aromatisse -> Mawile)
+      search (24000 visits): protect,0;switch mawile 1438v 888 | protect,0;moonblast,0 675v 380 | protect,0;moonblast,1 651v 365 | protect,0;switch togekiss 644v 360
+      p2b <- Mawile comes in (304/304)
+              p1a Abomasnow atk 1 fell
+              p1b Heatran atk 1 fell
+      p2a Azumarill used Protect
+      p1b Heatran used Heat Wave -> p2b: Mawile  [[spread] p2b]
+              p2a Azumarill -- move: Protect
+      p2b Mawile fainted
+      p1a Abomasnow used Blizzard -> p2a: Azumarill
+              p2a Azumarill -- move: Protect
+      after p1: Abomasnow-Mega 384/384, Heatran 386/386
+      after p2: Azumarill 379/404, Mawile 0/304
+
+  Turn 2
+      p2b <- Diancie comes in (304/304)
+      after p1: Abomasnow-Mega 384/384, Heatran 386/386
+      after p2: Azumarill 379/404, Diancie 304/304
+
+  Turn 3
+    p1 greedy: move 4, move 1
+    p2 mcts: move 4, move 4
+      search (26000 visits): protect,0;protect,1 6966v 4281 | protect,0;diamondstorm,0 740v 372 | protect,0;switch sylveon 610v 296 | protect,0;switch togekiss 552v 263
+      p2b Diancie used Protect
+      p2a Azumarill used Protect  [[still]]
+              p2a Azumarill -- IT FAILED
+      p1b Heatran used Heat Wave -> p2a: Azumarill  [[spread] p2a]
+              p2b Diancie -- move: Protect
+              p2a Azumarill -- critical hit
+      p1a Abomasnow used Blizzard -> p2b: Diancie  [[spread] p2a]
+              p2b Diancie -- move: Protect
+              p2a Azumarill is now frz
+              p2a Azumarill used up its Sitrus Berry
+      after p1: Abomasnow-Mega 384/384, Heatran 386/386
+      after p2: Azumarill 226/404, Diancie 285/304
+
+  Turn 4
+    p1 greedy: move 4, move 1
+    p2 mcts: switch 6, move 4   (slot0 Azumarill -> Togekiss)
+      search (24000 visits): switch togekiss;protect,1 1084v 475 | switch sylveon;protect,1 732v 299 | switch aromatisse;protect,1 690v 278 | protect,0;protect,1 476v 175
+      p2a <- Togekiss comes in (374/374)
+      p2b Diancie used Protect  [[still]]
+              p2b Diancie -- IT FAILED
+      p1b Heatran used Heat Wave -> p2a: Togekiss  [[spread] p2a,p2b]
+      p1a Abomasnow used Blizzard -> p2b: Diancie  [[spread] p2a,p2b]
+      after p1: Abomasnow-Mega 384/384, Heatran 386/386
+      after p2: Togekiss 20/374, Diancie 105/304
+
+  Turn 5
+    p1 greedy: move 4, move 1
+    p2 mcts: move 2, move 2
+      search (39000 visits): followme,0;diamondstorm,0 2587v 1324 | airslash,1;protect,1 2482v 1265 | protect,0;protect,1 1761v 867 | fireblast,0;protect,1 1697v 832
+      p2a Togekiss used Follow Me
+      p1b Heatran used Heat Wave -> p2b: Diancie  [[spread] p2a,p2b]
+              p2b Diancie -- critical hit
+              p2b Diancie is now brn
+      p2a Togekiss fainted
+      p2b Diancie used Diamond Storm -> p1b: Heatran  [[spread] p1a]
+              p2b Diancie -- MISSED
+              p1a Abomasnow -- critical hit
+      p1a Abomasnow used Blizzard -> p2b: Diancie
+      p2b Diancie fainted
+      after p1: Abomasnow-Mega 172/384, Heatran 386/386
+      after p2: Togekiss 0/374, Diancie 0/304
+
+  Turn 6
+      p2a <- Sylveon comes in (345/345)
+      p2b <- Aromatisse comes in (406/406)
+      after p1: Abomasnow-Mega 172/384, Heatran 386/386
+      after p2: Sylveon 345/345, Aromatisse 406/406
+
+  Turn 7
+    p1 greedy: move 4, move 1
+    p2 mcts: move 1, switch 6   (slot1 Aromatisse -> Azumarill)
+      search (27000 visits): hypervoice,0;switch azumarill 9643v 6389 | hypervoice,0;moonblast,1 993v 561 | hypervoice,0;healpulse,1 781v 427 | hypervoice,0;moonblast,0 748v 406
+      p2b <- Azumarill comes in (226/404)
+      p2a Sylveon used Hyper Voice -> p1a: Abomasnow  [[spread] p1a,p1b]
+      p1a Abomasnow fainted
+      p1b Heatran used Heat Wave -> p2a: Sylveon  [[spread] p2a,p2b]
+              p2b Azumarill is cured of frz
+      after p1: Abomasnow-Mega 0/384, Heatran 355/386
+      after p2: Sylveon 228/345, Azumarill 138/404
+
+  Turn 8
+      p1a <- Hitmontop comes in (304/304)
+              p2a Sylveon atk 1 fell
+              p2b Azumarill atk 1 fell
+      after p1: Hitmontop 304/304, Heatran 355/386
+      after p2: Sylveon 228/345, Azumarill 138/404
+
+  Turn 9
+    p1 greedy: move 2 2, move 1
+    p2 mcts: move 1, switch 6   (slot1 Azumarill -> Aromatisse)
+      search (36000 visits): hypervoice,0;switch aromatisse 8693v 4950 | hypervoice,0;aquajet,1 5180v 2875 | hypervoice,0;knockoff,0 4972v 2752 | hypervoice,0;bellydrum,1 4303v 2361
+      p2b <- Aromatisse comes in (406/406)
+      p2a Sylveon used Hyper Voice -> p1a: Hitmontop  [[spread] p1a,p1b]
+      p1a Hitmontop fainted
+      p1b Heatran used Heat Wave -> p2a: Sylveon  [[spread] p2a,p2b]
+      after p1: Hitmontop 0/304, Heatran 322/386
+      after p2: Sylveon 116/345, Aromatisse 250/406
+
+  Turn 10
+      p1a <- Kyurem-Black comes in (454/454)
+      after p1: Kyurem-Black 454/454, Heatran 322/386
+      after p2: Sylveon 116/345, Aromatisse 250/406
+
+  Turn 11
+    p1 greedy: move 2 1, move 1
+    p2 mcts: move 1, switch 6   (slot1 Aromatisse -> Azumarill)
+      search (47000 visits): hypervoice,0;switch azumarill 6182v 1996 | switch azumarill;moonblast,0 4748v 1494 | hypervoice,0;trickroom,1 3503v 1063 | switch azumarill;trickroom,1 3000v 892
+      p2b <- Azumarill comes in (138/404)
+      p1a Kyurem used Draco Meteor -> p2a: Sylveon
+              p2a Sylveon -- IMMUNE
+      p2a Sylveon used Hyper Voice -> p1a: Kyurem  [[spread] p1a,p1b]
+      p1a Kyurem fainted
+      p1b Heatran used Heat Wave -> p2a: Sylveon  [[spread] p2a,p2b]
+              p2b Azumarill -- critical hit
+      after p1: Kyurem-Black 0/454, Heatran 295/386
+      after p2: Sylveon 1/345, Azumarill 17/404
+
+  Turn 12
+      p1a <- Cresselia comes in (443/443)
+      after p1: Cresselia 443/443, Heatran 295/386
+      after p2: Sylveon 1/345, Azumarill 17/404
+
+  Turn 13
+    p1 greedy: move 3 1, move 1
+    p2 mcts: move 1, move 4
+      search (62000 visits): hypervoice,0;protect,1 21224v 4865 | switch aromatisse;protect,1 5914v 1185 | hypervoice,0;aquajet,1 5472v 1083 | switch aromatisse;aquajet,1 4309v 818
+      p2b Azumarill used Protect
+      p1a Cresselia used Psychic -> p2a: Sylveon
+      p2a Sylveon fainted
+      p1b Heatran used Heat Wave -> p2b: Azumarill
+              p2b Azumarill -- move: Protect
+      after p1: Cresselia 443/443, Heatran 319/386
+      after p2: Sylveon 0/345, Azumarill 17/404
+
+  Turn 14
+      p2a <- Aromatisse comes in (250/406)
+      after p1: Cresselia 443/443, Heatran 319/386
+      after p2: Aromatisse 250/406, Azumarill 17/404
+
+  Turn 15
+    p1 greedy: move 3 2, move 1
+    p2 mcts: move 4 2, move 4
+      search (62000 visits): moonblast,1;protect,1 4284v 834 | moonblast,0;protect,1 3823v 728 | disable,0;protect,1 3228v 593 | disable,1;protect,1 3063v 556
+      p2b Azumarill used Protect  [[still]]
+              p2b Azumarill -- IT FAILED
+      p1a Cresselia used Psychic -> p2b: Azumarill
+      p2b Azumarill fainted
+      p1b Heatran used Heat Wave -> p2a: Aromatisse
+              p2a Aromatisse used up its Sitrus Berry
+      p2a Aromatisse used Moonblast -> p1b: Heatran
+              p1b Heatran spa 1 fell
+      after p1: Cresselia 443/443, Heatran 318/386
+      after p2: Aromatisse 147/406, Azumarill 0/404
+
+  Turn 16
+    p1 greedy: move 3 1, move 1
+    p2 mcts: move 4 1, pass
+      search (506000 visits): moonblast,0;No Move 67803v 638 | healpulse,0;No Move 66264v 608 | moonblast,1;No Move 65530v 594 | disable,1;No Move 63965v 565
+      p1a Cresselia used Psychic -> p2a: Aromatisse
+      p1b Heatran used Heat Wave -> p2a: Aromatisse
+      p2a Aromatisse fainted
+      after p1: Cresselia 443/443, Heatran 318/386
+      after p2: Aromatisse 0/406, Azumarill 0/404
+
+  RESULT: p1 wins

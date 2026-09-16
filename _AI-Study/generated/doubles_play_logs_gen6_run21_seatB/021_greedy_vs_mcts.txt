@@ -1,0 +1,130 @@
+battle 21   p1=greedy vs p2=mcts   mcts 300 ms a decision
+  p1: ORAS Doubles OU: Abomasnow-Mega, Heatran, Hitmontop, Kyurem-Black, Cresselia, Azumarill
+  p2: dpl rejects/azu week 4 reject: Gengar-Mega, Raichu, Landorus-Therian, Azumarill, Amoonguss, Talonflame
+
+  Turn 1
+    p1 greedy: move 4, move 1
+    p2 mcts: switch 6, move 2 2   (slot0 Gengar-Mega -> Talonflame)
+      search (39000 visits): switch talonflame;voltswitch,1 8065v 4958 | switch azumarill;voltswitch,0 7259v 4459 | switch talonflame;switch amoonguss 2212v 1466 | shadowball,1;voltswitch,1 1052v 551
+      p2a <- Talonflame comes in (351/351)
+      p2b Raichu used Volt Switch -> p1b: Heatran
+      after p1: Abomasnow-Mega 384/384, Heatran 319/386
+      after p2: Talonflame 351/351, Raichu 324/324
+
+  Turn 2
+      p2b <- Landorus-Therian comes in (319/319)
+              p1a Abomasnow atk 1 fell
+              p1b Heatran atk 1 fell
+      p1b Heatran used Heat Wave -> p2a: Talonflame  [[spread] p2a,p2b]
+      p1a Abomasnow used Blizzard -> p2a: Talonflame  [[spread] p2a,p2b]
+      p2b Landorus fainted
+      after p1: Abomasnow-Mega 384/384, Heatran 319/386
+      after p2: Talonflame 29/351, Landorus-Therian 0/319
+
+  Turn 3
+      p2b <- Raichu comes in (324/324)
+      after p1: Abomasnow-Mega 384/384, Heatran 319/386
+      after p2: Talonflame 29/351, Raichu 324/324
+
+  Turn 4
+    p1 greedy: move 4, move 1
+    p2 mcts: move 1 2, move 2 1
+      search (50000 visits): bravebird,1;voltswitch,0 8784v 7204 | switch gengarmega;voltswitch,1 3090v 2416 | flareblitz,0;fakeout,1 2127v 1634 | switch amoonguss;voltswitch,0 1947v 1482
+      p2a Talonflame used Brave Bird -> p1b: Heatran
+              p1b Heatran -- critical hit
+      p2a Talonflame fainted
+      p2b Raichu used Volt Switch -> p1a: Abomasnow
+      after p1: Abomasnow-Mega 345/384, Heatran 142/386
+      after p2: Talonflame 0/351, Raichu 324/324
+
+  Turn 5
+      p2b <- Azumarill comes in (404/404)
+      p1b Heatran used Heat Wave -> p2b: Azumarill
+              p2b Azumarill is now brn
+      p1a Abomasnow used Blizzard -> p2b: Azumarill
+              p2b Azumarill used up its Sitrus Berry
+      after p1: Abomasnow-Mega 345/384, Heatran 142/386
+      after p2: Talonflame 0/351, Azumarill 188/404
+
+  Turn 6
+      p2a <- Raichu comes in (324/324)
+      after p1: Abomasnow-Mega 345/384, Heatran 142/386
+      after p2: Raichu 324/324, Azumarill 188/404
+
+  Turn 7
+    p1 greedy: move 4, move 1
+    p2 mcts: move 2 2, move 2 2
+      search (46000 visits): voltswitch,1;knockoff,1 2012v 1803 | voltswitch,1;knockoff,0 1958v 1752 | voltswitch,0;knockoff,1 1790v 1593 | voltswitch,0;aquajet,1 1763v 1568
+      p2a Raichu used Volt Switch -> p1b: Heatran
+      after p1: Abomasnow-Mega 345/384, Heatran 69/386
+      after p2: Raichu 324/324, Azumarill 188/404
+
+  Turn 8
+      p2a <- Amoonguss comes in (432/432)
+      p1b Heatran used Heat Wave -> p2a: Amoonguss  [[spread] p2a,p2b]
+              p2b Azumarill -- critical hit
+      p2b Azumarill used Knock Off -> p1b: Heatran
+              p1b Heatran used up its Leftovers
+      p1b Heatran fainted
+      p1a Abomasnow used Blizzard -> p2b: Azumarill  [[spread] p2a,p2b]
+      p2a Amoonguss fainted
+      p2b Azumarill fainted
+      after p1: Abomasnow-Mega 345/384, Heatran 0/386
+      after p2: Amoonguss 0/432, Azumarill 0/404
+
+  Turn 9
+      p1b <- Hitmontop comes in (304/304)
+      p2b <- Gengar-Mega comes in (306/306)
+      p2a <- Raichu comes in (324/324)
+              p2a Raichu atk 1 fell
+              p2b Gengar atk 1 fell
+      after p1: Abomasnow-Mega 345/384, Hitmontop 304/304
+      after p2: Raichu 324/324, Gengar-Mega 306/306
+
+  Turn 10
+    p1 greedy: move 4, move 2 1
+    p2 mcts: move 2 2, move 2 1
+      search (42000 visits): voltswitch,1;sludgebomb,0 6318v 4372 | voltswitch,1;sludgebomb,1 4960v 3395 | voltswitch,1;shadowball,1 4174v 2832 | fakeout,0;sludgebomb,0 2026v 1312
+      p2b Gengar used Sludge Bomb -> p1a: Abomasnow
+              p1a Abomasnow is now psn
+      p2a Raichu used Volt Switch -> p1b: Hitmontop
+      p1b Hitmontop used Close Combat -> p2a: Raichu
+              p1b Hitmontop def 1 fell
+              p1b Hitmontop spd 1 fell
+              p2a Raichu used up its Air Balloon
+      p2a Raichu fainted
+      p1a Abomasnow used Blizzard -> p2b: Gengar
+      p1a Abomasnow fainted
+      after p1: Abomasnow-Mega 0/384, Hitmontop 219/304
+      after p2: Raichu 0/324, Gengar-Mega 76/306
+
+  Turn 11
+      p1a <- Kyurem-Black comes in (454/454)
+      after p1: Kyurem-Black 454/454, Hitmontop 219/304
+      after p2: Raichu 0/324, Gengar-Mega 76/306
+
+  Turn 12
+    p1 greedy: move 2 2, move 2 2
+    p2 mcts: pass, move 4
+      search (72000 visits): No Move;protect,1 71702v 51323 | No Move;sludgebomb,1 59v 7 | No Move;shadowball,1 51v 4 | No Move;disable,0 49v 2
+      p2b Gengar used Protect
+      p1a Kyurem used Draco Meteor -> p2b: Gengar
+              p2b Gengar -- move: Protect
+      p1b Hitmontop used Close Combat -> p2b: Gengar
+              p2b Gengar -- IMMUNE
+      after p1: Kyurem-Black 454/454, Hitmontop 219/304
+      after p2: Raichu 0/324, Gengar-Mega 76/306
+
+  Turn 13
+    p1 greedy: move 2 2, move 2 2
+    p2 mcts: pass, move 4
+      search (71000 visits): No Move;protect,1 70695v 50530 | No Move;sludgebomb,1 55v 5 | No Move;shadowball,0 52v 4 | No Move;shadowball,1 51v 4
+      p2b Gengar used Protect  [[still]]
+              p2b Gengar -- IT FAILED
+      p1a Kyurem used Draco Meteor -> p2b: Gengar
+              p1a Kyurem spa 2 fell
+      p2b Gengar fainted
+      after p1: Kyurem-Black 409/454, Hitmontop 219/304
+      after p2: Raichu 0/324, Gengar-Mega 0/306
+
+  RESULT: p1 wins

@@ -1,0 +1,138 @@
+battle 17   p1=greedy vs p2=mcts   mcts 300 ms a decision
+  p1: Untitled 708: Metagross-Mega, Landorus, Scrafty, Thundurus, Volcanion, Amoonguss
+  p2: ORAS Doubles OU: Gengar, Rotom-Heat, Togekiss, Mamoswine, Genesect, Gardevoir
+
+  Turn 1
+    p1 greedy: move 2 1, move 1 1
+    p2 mcts: move 1 2, switch 5   (slot1 Rotom-Heat -> Genesect)
+      search (17000 visits): shadowball,1;switch genesect 436v 241 | shadowball,0;switch genesect 380v 204 | sludgebomb,1;switch genesect 343v 180 | willowisp,0;switch genesect 270v 133
+      p2b <- Genesect comes in (283/283)
+              p2b Genesect spa 1 rose
+      p1a Metagross used Iron Head -> p2a: Gengar
+      p2a Gengar used Shadow Ball -> p1b: Landorus
+      p1b Landorus used Earth Power -> p2a: Gengar
+              p2a Gengar -- IMMUNE
+      after p1: Metagross-Mega 302/302, Landorus 217/382
+      after p2: Gengar 40/262, Genesect 283/283
+
+  Turn 2
+    p1 greedy: move 2 1, move 1 1
+    p2 mcts: move 1 2, move 2 1
+      search (31000 visits): shadowball,1;flamethrower,0 712v 331 | sludgebomb,1;flamethrower,0 610v 275 | shadowball,0;thunderbolt,0 540v 238 | shadowball,0;icebeam,1 518v 226
+      p2b Genesect used Flamethrower -> p1a: Metagross
+              p1a Metagross -- critical hit
+      p1a Metagross fainted
+      p2a Gengar used Shadow Ball -> p1b: Landorus
+              p1b Landorus spd 1 fell
+      p1b Landorus used Earth Power -> p2a: Gengar
+              p2a Gengar -- IMMUNE
+      after p1: Metagross-Mega 0/302, Landorus 48/382
+      after p2: Gengar 40/262, Genesect 283/283
+
+  Turn 3
+      p1a <- Scrafty comes in (334/334)
+              p2a Gengar atk 1 fell
+              p2b Genesect atk 1 fell
+      after p1: Scrafty 334/334, Landorus 48/382
+      after p2: Gengar 40/262, Genesect 283/283
+
+  Turn 4
+    p1 greedy: move 2 1, move 1 1
+    p2 mcts: move 3 1, move 2 2
+      search (28000 visits): willowisp,0;flamethrower,1 1014v 314 | willowisp,0;flamethrower,0 821v 241 | sludgebomb,0;flamethrower,0 800v 233 | willowisp,0;switch togekiss 789v 229
+      p2b Genesect used Flamethrower -> p1b: Landorus
+              p1b Landorus -- critical hit
+      p1b Landorus fainted
+      p2a Gengar used Will-O-Wisp -> p1a: Scrafty
+              p1a Scrafty is now brn
+      p1a Scrafty used Knock Off -> p2a: Gengar
+              p2a Gengar used up its Focus Sash
+      p2a Gengar fainted
+      after p1: Scrafty 293/334, Landorus 0/382
+      after p2: Gengar 0/262, Genesect 283/283
+
+  Turn 5
+      p2a <- Togekiss comes in (373/373)
+      p1b <- Thundurus comes in (362/362)
+      after p1: Scrafty 293/334, Thundurus 362/362
+      after p2: Togekiss 373/373, Genesect 283/283
+
+  Turn 6
+    p1 greedy: move 2 1, move 2 1
+    p2 mcts: switch 6, move 2 2   (slot0 Togekiss -> Gardevoir)
+      search (15000 visits): switch gardevoir;flamethrower,1 2371v 1304 | switch gardevoir;switch mamoswine 837v 409 | switch gardevoir;switch rotomheat 626v 291 | switch rotomheat;flamethrower,1 575v 263
+      p2a <- Gardevoir comes in (278/278)
+              p1a Scrafty atk 1 fell
+              p1b Thundurus atk 1 fell
+      p2b Genesect used Flamethrower -> p1b: Thundurus
+      p1b Thundurus used Thunderbolt -> p2a: Gardevoir
+      p1a Scrafty used Knock Off -> p2a: Gardevoir
+      after p1: Scrafty 252/334, Thundurus 182/362
+      after p2: Gardevoir 103/278, Genesect 283/283
+
+  Turn 7
+    p1 greedy: move 2 1, move 2 1
+    p2 mcts: move 2 mega, move 2 2
+      search (25000 visits): hypervoice-mega,0;flamethrower,1 618v 136 | psychic-mega,1;flamethrower,0 495v 98 | psychic-mega,1;flamethrower,1 473v 92 | psychic,1;flamethrower,0 461v 88
+      p2b Genesect used Flamethrower -> p1b: Thundurus
+              p1b Thundurus -- critical hit
+      p1b Thundurus fainted
+      p2a Gardevoir used Hyper Voice -> p1a: Scrafty
+      p1a Scrafty fainted
+      after p1: Scrafty 0/334, Thundurus 0/362
+      after p2: Gardevoir-Mega 103/278, Genesect 283/283
+
+  Turn 8
+      p1b <- Amoonguss comes in (432/432)
+      p1a <- Volcanion comes in (364/364)
+      after p1: Volcanion 364/364, Amoonguss 432/432
+      after p2: Gardevoir-Mega 103/278, Genesect 283/283
+
+  Turn 9
+    p1 greedy: move 4 1, move 3 1
+    p2 mcts: move 1 2, move 2 2
+      search (12000 visits): psychic,1;flamethrower,1 1034v 485 | psychic,1;switch togekiss 717v 317 | protect,0;switch togekiss 562v 236 | psychic,0;switch togekiss 525v 217
+      p2b Genesect used Flamethrower -> p1b: Amoonguss
+      p2a Gardevoir used Psychic -> p1b: Amoonguss
+      p1b Amoonguss fainted
+      p1a Volcanion used Overheat -> p2a: Gardevoir
+              p2a Gardevoir -- critical hit
+              p1a Volcanion spa 2 fell
+      p2a Gardevoir fainted
+      after p1: Volcanion 364/364, Amoonguss 0/432
+      after p2: Gardevoir 0/278, Genesect 283/283
+
+  Turn 10
+      p2a <- Mamoswine comes in (362/362)
+      after p1: Volcanion 364/364, Amoonguss 0/432
+      after p2: Mamoswine 362/362, Genesect 283/283
+
+  Turn 11
+    p1 greedy: move 4 1, pass
+    p2 mcts: move 2, move 2 1
+      search (441000 visits): earthquake,0;flamethrower,0 439448v 434977 | earthquake,0;switch togekiss 363v 265 | earthquake,0;switch rotomheat 314v 223 | protect,0;switch togekiss 100v 49
+      p2b Genesect used Flamethrower -> p1a: Volcanion
+      p2a Mamoswine used Earthquake -> p1a: Volcanion  [[spread] p2b,p1a]
+      p1a Volcanion used Overheat -> p2a: Mamoswine
+              p2a Mamoswine -- critical hit
+              p1a Volcanion spa 2 fell
+      p2a Mamoswine fainted
+      after p1: Volcanion 45/364, Amoonguss 0/432
+      after p2: Mamoswine 0/362, Genesect 83/283
+
+  Turn 12
+      p2a <- Rotom-Heat comes in (302/302)
+      after p1: Volcanion 45/364, Amoonguss 0/432
+      after p2: Rotom-Heat 302/302, Genesect 83/283
+
+  Turn 13
+    p1 greedy: move 4 2, pass
+    p2 mcts: move 3 1, move 2 1
+      search (1549000 visits): thunderbolt,0;flamethrower,0 592849v 592849 | thunderbolt,0;switch togekiss 592849v 592849 | overheat,0;flamethrower,0 279145v 278260 | willowisp,0;flamethrower,0 61602v 60704
+      p2b Genesect used Flamethrower -> p1a: Volcanion
+      p2a Rotom used Thunderbolt -> p1a: Volcanion
+      p1a Volcanion fainted
+      after p1: Volcanion 0/364, Amoonguss 0/432
+      after p2: Rotom-Heat 302/302, Genesect 83/283
+
+  RESULT: p2 wins

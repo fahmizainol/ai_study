@@ -1,0 +1,192 @@
+battle 9   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: XY Doubles: Regirock, Jirachi, Talonflame, Breloom, Blastoise, Aromatisse
+  p2: XY Doubles: Abomasnow, Jirachi, Rotom-Heat, Keldeo, Weavile, Landorus-Therian
+
+  Turn 1
+    p1 mcts: move 2, move 1
+      search (13000 visits): rockslide,0;followme,1 439v 271 | rockslide,0;ironhead,0 423v 259 | drainpunch,0;ironhead,0 397v 241 | drainpunch,0;followme,1 329v 192
+    p2 greedy: move 2 1, move 3 1
+      p1b Jirachi used Follow Me
+      p2b Jirachi used Iron Head -> p1b: Jirachi
+      p2a Abomasnow used Wood Hammer -> p1b: Jirachi
+      p1a Regirock used Rock Slide -> p2a: Abomasnow  [[spread] p2a,p2b]
+      after p1: Regirock 342/364, Jirachi 281/404
+      after p2: Abomasnow 143/384, Jirachi 357/399
+
+  Turn 2
+    p1 mcts: move 2, move 2 1
+      search (23000 visits): rockslide,0;ironhead,0 1087v 684 | rockslide,0;followme,1 1072v 673 | switch blastoise;ironhead,0 793v 480 | rockslide,0;switch blastoise 723v 432
+    p2 greedy: move 2 2, move 3 2
+      p2b Jirachi used Iron Head -> p1b: Jirachi
+              p1b Jirachi COULD NOT MOVE (flinch)
+      p2a Abomasnow used Wood Hammer -> p1b: Jirachi
+      p1a Regirock used Rock Slide -> p2a: Abomasnow  [[spread] p2a,p2b]
+      p2a Abomasnow fainted
+      after p1: Regirock 320/364, Jirachi 164/404
+      after p2: Abomasnow 0/384, Jirachi 316/399
+
+  Turn 3
+      p2a <- Rotom-Heat comes in (271/271)
+      after p1: Regirock 320/364, Jirachi 164/404
+      after p2: Rotom-Heat 271/271, Jirachi 316/399
+
+  Turn 4
+    p1 mcts: move 2, switch 5   (slot1 Jirachi -> Blastoise)
+      search (19000 visits): rockslide,0;switch blastoise 809v 511 | drainpunch,1;switch blastoise 676v 417 | drainpunch,0;switch blastoise 603v 366 | switch blastoise;followme,1 532v 317
+    p2 greedy: move 1 2, move 3 2
+      p1b <- Blastoise comes in (362/362)
+      p2b Jirachi used Iron Head -> p1b: Blastoise
+      p2a Rotom used Overheat -> p1b: Blastoise
+              p2a Rotom spa 2 fell
+      p1a Regirock used Rock Slide -> p2b: Jirachi  [[spread] p2a,p2b]
+      after p1: Regirock 298/364, Blastoise 183/362
+      after p2: Rotom-Heat 113/271, Jirachi 271/399
+
+  Turn 5
+    p1 mcts: move 2, move 1
+      search (18000 visits): rockslide,0;waterspout,0 327v 204 | switch talonflame;waterspout,0 316v 196 | protect,0;waterspout,0 313v 193 | protect,0;waterspout-mega,0 298v 182
+    p2 greedy: move 1 2, move 3 2
+      p2b Jirachi used Iron Head -> p1b: Blastoise
+      p2a Rotom used Overheat -> p1b: Blastoise
+              p2a Rotom spa 2 fell
+      p1b Blastoise used Water Spout -> p2b: Jirachi  [[spread] p2a,p2b]
+      p1a Regirock used Rock Slide -> p2b: Jirachi  [[spread] p2a,p2b]
+      p2a Rotom fainted
+      after p1: Regirock 276/364, Blastoise 55/362
+      after p2: Rotom-Heat 0/271, Jirachi 183/399
+
+  Turn 6
+      p2a <- Keldeo comes in (324/324)
+      after p1: Regirock 276/364, Blastoise 55/362
+      after p2: Keldeo 324/324, Jirachi 183/399
+
+  Turn 7
+    p1 mcts: move 1, move 1
+      search (23000 visits): protect,0;waterspout,0 600v 343 | switch aromatisse;waterspout,0 336v 171 | protect,0;darkpulse-mega,1 334v 170 | protect,0;waterspout-mega,0 323v 163
+    p2 greedy: move 1 2, move 3 2
+      p1a Regirock used Protect
+      p2a Keldeo used Secret Sword -> p1b: Blastoise
+      p1b Blastoise fainted
+      p2b Jirachi used Iron Head -> p1a: Regirock
+              p1a Regirock -- move: Protect
+      after p1: Regirock 276/364, Blastoise 0/362
+      after p2: Keldeo 292/324, Jirachi 207/399
+
+  Turn 8
+      p1b <- Talonflame comes in (360/360)
+      after p1: Regirock 276/364, Talonflame 360/360
+      after p2: Keldeo 292/324, Jirachi 207/399
+
+  Turn 9
+    p1 mcts: move 1, switch 4   (slot1 Talonflame -> Breloom)
+      search (23000 visits): protect,0;switch breloom 798v 409 | drainpunch,1;switch breloom 722v 364 | protect,0;bravebird,0 675v 336 | rockslide,0;switch breloom 666v 331
+    p2 greedy: move 1 1, move 3 1
+      p1b <- Breloom comes in (324/324)
+      p1a Regirock used Protect  [[still]]
+              p1a Regirock -- IT FAILED
+      p2a Keldeo used Secret Sword -> p1a: Regirock
+              p1a Regirock used up its Weakness Policy
+              p1a Regirock atk 2 rose
+              p1a Regirock spa 2 rose
+      p2b Jirachi used Iron Head -> p1a: Regirock
+      p1a Regirock fainted
+      after p1: Regirock 0/364, Breloom 324/324
+      after p2: Keldeo 260/324, Jirachi 231/399
+
+  Turn 10
+      p1a <- Talonflame comes in (360/360)
+      after p1: Talonflame 360/360, Breloom 324/324
+      after p2: Keldeo 260/324, Jirachi 231/399
+
+  Turn 11
+    p1 mcts: move 1 1, move 1 2
+      search (19000 visits): bravebird,0;bulletseed,1 723v 424 | protect,0;bulletseed,0 715v 418 | swordsdance,0;bulletseed,0 635v 365 | flareblitz,1;bulletseed,0 605v 345
+    p2 greedy: move 1 1, move 3 1
+      p1a Talonflame used Brave Bird -> p2a: Keldeo
+              p2a Keldeo -- critical hit
+      p2a Keldeo fainted
+      p2b Jirachi used Iron Head -> p1a: Talonflame
+      p1b Breloom used Bullet Seed -> p2b: Jirachi
+      after p1: Talonflame 168/360, Breloom 324/324
+      after p2: Keldeo 0/324, Jirachi 188/399
+
+  Turn 12
+      p2a <- Weavile comes in (282/282)
+      after p1: Talonflame 168/360, Breloom 324/324
+      after p2: Weavile 282/282, Jirachi 188/399
+
+  Turn 13
+    p1 mcts: move 2 2, move 1 1
+      search (31000 visits): flareblitz,1;bulletseed,0 1416v 805 | swordsdance,0;bulletseed,0 1096v 605 | swordsdance,0;machpunch,0 1071v 589 | swordsdance,0;protect,1 895v 481
+    p2 greedy: move 2 1, move 3 1
+      p2a Weavile used Ice Punch -> p1a: Talonflame
+      p1a Talonflame used Flare Blitz -> p2b: Jirachi
+      p2b Jirachi fainted
+      p1a Talonflame fainted
+      p1b Breloom used Bullet Seed -> p2a: Weavile
+              p2a Weavile -- critical hit
+      after p1: Talonflame 0/360, Breloom 324/324
+      after p2: Weavile 21/282, Jirachi 0/399
+
+  Turn 14
+      p1a <- Jirachi comes in (164/404)
+      p2b <- Landorus-Therian comes in (367/367)
+              p1a Jirachi atk 1 fell
+              p1b Breloom atk 1 fell
+      after p1: Jirachi 164/404, Breloom 324/324
+      after p2: Weavile 21/282, Landorus-Therian 367/367
+
+  Turn 15
+    p1 mcts: switch 6, move 2 1   (slot0 Jirachi -> Aromatisse)
+      search (33000 visits): switch aromatisse;machpunch,0 4237v 2487 | protect,0;machpunch,0 1494v 805 | switch aromatisse;protect,1 1288v 683 | switch aromatisse;bulletseed,1 1037v 534
+    p2 greedy: move 2 1, move 2 1
+      p1a <- Aromatisse comes in (406/406)
+      p1b Breloom used Mach Punch -> p2a: Weavile
+      p2a Weavile fainted
+      p2b Landorus used Stone Edge -> p1a: Aromatisse
+              p1a Aromatisse -- critical hit
+      after p1: Aromatisse 238/406, Breloom 324/324
+      after p2: Weavile 0/282, Landorus-Therian 367/367
+
+  Turn 16
+    p1 mcts: move 4 2, switch 6   (slot1 Breloom -> Jirachi)
+      search (60000 visits): moonblast,1;switch jirachi 3655v 1434 | trickroom,1;switch jirachi 3399v 1323 | healpulse,1;switch jirachi 3383v 1316 | moonblast,1;bulletseed,1 3380v 1315
+    p2 greedy: pass, move 2 1
+      p1b <- Jirachi comes in (164/404)
+      p2b Landorus used Stone Edge -> p1a: Aromatisse
+              p1a Aromatisse used up its Sitrus Berry
+      p1a Aromatisse used Moonblast -> p2b: Landorus
+      after p1: Aromatisse 227/406, Jirachi 164/404
+      after p2: Weavile 0/282, Landorus-Therian 276/367
+
+  Turn 17
+    p1 mcts: move 4 2, switch 6   (slot1 Jirachi -> Breloom)
+      search (56000 visits): moonblast,1;switch breloom 4195v 1379 | trickroom,1;switch breloom 3405v 1093 | healpulse,1;switch breloom 3282v 1048 | protect,0;switch breloom 2846v 892
+    p2 greedy: pass, move 2 2
+      p1b <- Breloom comes in (324/324)
+      p2b Landorus used Stone Edge -> p1b: Breloom
+      p1a Aromatisse used Moonblast -> p2b: Landorus
+              p2b Landorus spa 1 fell
+      after p1: Aromatisse 227/406, Breloom 254/324
+      after p2: Weavile 0/282, Landorus-Therian 191/367
+
+  Turn 18
+    p1 mcts: move 1, move 1 2
+      search (51000 visits): trickroom,1;bulletseed,1 2769v 910 | healpulse,1;bulletseed,1 2744v 901 | moonblast,1;bulletseed,1 2716v 891 | moonblast,1;machpunch,1 2690v 881
+    p2 greedy: pass, move 2 1
+      p2b Landorus used Stone Edge -> p1a: Aromatisse
+      p1b Breloom used Bullet Seed -> p2b: Landorus
+      p1a Aromatisse used Trick Room
+      after p1: Aromatisse 123/406, Breloom 254/324
+      after p2: Weavile 0/282, Landorus-Therian 45/367
+
+  Turn 19
+    p1 mcts: move 1, move 1 2
+      search (66000 visits): trickroom,1;bulletseed,1 3517v 1142 | moonblast,1;bulletseed,1 3517v 1142 | moonblast,1;machpunch,1 3509v 1139 | moonblast,1;spore,1 3486v 1131
+    p2 greedy: pass, move 2 1
+      p1b Breloom used Bullet Seed -> p2b: Landorus
+      p2b Landorus fainted
+      after p1: Aromatisse 123/406, Breloom 254/324
+      after p2: Weavile 0/282, Landorus-Therian 0/367
+
+  RESULT: p1 wins

@@ -1,0 +1,98 @@
+battle 28   p1=greedy vs p2=mcts   mcts 300 ms a decision
+  p1: ORAS Doubles OU: Lucario, Talonflame, Latios, Thundurus, Landorus-Therian, Ferrothorn
+  p2: diancie gastro 5: this time it&#39;s personal: Gengar-Mega, Kyurem-Black, Gastrodon-East, Diancie, Genesect, Conkeldurr
+
+  Turn 1
+    p1 greedy: move 1 1, move 1 1
+    p2 mcts: move 2 2, switch 3   (slot1 Kyurem-Black -> Gastrodon-East)
+      search (46000 visits): shadowball,1;switch gastrodoneast 6016v 3836 | sludgebomb,1;earthpower,0 1786v 1050 | sludgebomb,1;substitute,1 1267v 719 | sludgebomb,1;icebeam,0 1233v 697
+      p2b <- Gastrodon-East comes in (421/421)
+      p1b Talonflame used Brave Bird -> p2a: Gengar
+      p2a Gengar used Shadow Ball -> p1b: Talonflame
+              p1b Talonflame -- critical hit
+      p1b Talonflame fainted
+      p1a Lucario used Close Combat -> p2a: Gengar
+              p2a Gengar -- IMMUNE
+      after p1: Lucario 281/281, Talonflame 0/298
+      after p2: Gengar-Mega 69/322, Gastrodon-East 421/421
+
+  Turn 2
+      p1b <- Latios comes in (301/301)
+      after p1: Lucario 281/281, Latios 301/301
+      after p2: Gengar-Mega 69/322, Gastrodon-East 421/421
+
+  Turn 3
+    p1 greedy: move 1 1, move 1 1
+    p2 mcts: move 2 2, move 2 1
+      search (48000 visits): shadowball,1;earthpower,0 7179v 4916 | sludgebomb,1;earthpower,0 1787v 1125 | switch diancie;earthpower,0 1581v 985 | shadowball,1;earthpower,1 1319v 807
+      p2a Gengar used Shadow Ball -> p1b: Latios
+              p1b Latios -- critical hit
+      p1b Latios fainted
+      p1a Lucario used Close Combat -> p2a: Gengar
+              p2a Gengar -- IMMUNE
+      p2b Gastrodon used Earth Power -> p1a: Lucario
+      p1a Lucario fainted
+      after p1: Lucario 0/281, Latios 0/301
+      after p2: Gengar-Mega 69/322, Gastrodon-East 421/421
+
+  Turn 4
+      p1b <- Landorus-Therian comes in (319/319)
+      p1a <- Thundurus comes in (299/299)
+              p2a Gengar atk 1 fell
+              p2b Gastrodon atk 1 fell
+      after p1: Thundurus 299/299, Landorus-Therian 319/319
+      after p2: Gengar-Mega 69/322, Gastrodon-East 421/421
+
+  Turn 5
+    p1 greedy: move 1 1, move 3 1
+    p2 mcts: move 4, move 3 2
+      search (55000 visits): protect,0;icebeam,1 6775v 5672 | sludgebomb,0;protect,1 1509v 1167 | protect,0;icebeam,0 1381v 1061 | sludgebomb,0;icebeam,1 1362v 1045
+      p2a Gengar used Protect
+      p1b Landorus used Superpower -> p2a: Gengar
+              p2a Gengar -- IMMUNE
+      p1a Thundurus used Thunderbolt -> p2a: Gengar
+              p2a Gengar -- move: Protect
+      p2b Gastrodon used Ice Beam -> p1b: Landorus
+      p1b Landorus fainted
+      after p1: Thundurus 299/299, Landorus-Therian 0/319
+      after p2: Gengar-Mega 69/322, Gastrodon-East 421/421
+
+  Turn 6
+      p1b <- Ferrothorn comes in (352/352)
+      after p1: Thundurus 299/299, Ferrothorn 352/352
+      after p2: Gengar-Mega 69/322, Gastrodon-East 421/421
+
+  Turn 7
+    p1 greedy: move 1 1, move 1 1
+    p2 mcts: move 2 2, move 3 1
+      search (55000 visits): shadowball,1;icebeam,0 1759v 1301 | shadowball,0;icebeam,0 1556v 1140 | sludgebomb,0;icebeam,0 1443v 1050 | protect,0;icebeam,0 1351v 978
+      p2a Gengar used Shadow Ball -> p1b: Ferrothorn
+              p1b Ferrothorn spd 1 fell
+      p1a Thundurus used Thunderbolt -> p2a: Gengar
+      p2a Gengar fainted
+      p2b Gastrodon used Ice Beam -> p1a: Thundurus
+      p1b Ferrothorn used Power Whip -> p2b: Gastrodon
+      p2b Gastrodon fainted
+      after p1: Thundurus 121/299, Ferrothorn 158/352
+      after p2: Gengar-Mega 0/322, Gastrodon-East 0/421
+
+  Turn 8
+      p2a <- Kyurem-Black comes in (392/392)
+      p2b <- Diancie comes in (304/304)
+      after p1: Thundurus 121/299, Ferrothorn 158/352
+      after p2: Kyurem-Black 392/392, Diancie 304/304
+
+  Turn 9
+    p1 greedy: move 1 1, move 1 1
+    p2 mcts: move 1 2, move 1
+      search (54000 visits): earthpower,1;diamondstorm,0 4685v 3609 | icebeam,1;moonblast,0 4368v 3354 | icebeam,1;diamondstorm,0 2708v 2027 | earthpower,1;moonblast,0 2320v 1720
+      p1a Thundurus used Thunderbolt -> p2a: Kyurem
+      p2a Kyurem used Earth Power -> p1b: Ferrothorn
+      p2b Diancie used Diamond Storm -> p1a: Thundurus  [[spread] p1a,p1b]
+              p2b Diancie def 1 rose
+      p1a Thundurus fainted
+      p1b Ferrothorn fainted
+      after p1: Thundurus 0/299, Ferrothorn 0/352
+      after p2: Kyurem-Black 314/392, Diancie 304/304
+
+  RESULT: p2 wins

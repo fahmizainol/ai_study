@@ -1,0 +1,183 @@
+battle 35   p1=greedy vs p2=mcts   mcts 300 ms a decision
+  p1: ORAS Doubles OU: Charizard-Mega-Y, Sylveon, Aegislash, Landorus-Therian, Zapdos, Cresselia
+  p2: ORAS Doubles OU: Rotom-Heat, Excadrill, Tyranitar, Salamence, Latias, Jirachi
+
+  Turn 1
+    p1 greedy: move 2 1, move 2
+    p2 mcts: switch 3, move 2   (slot0 Rotom-Heat -> Tyranitar)
+      search (30000 visits): switch tyranitar;protect,1 5279v 3022 | switch tyranitar;switch salamence 1492v 772 | switch tyranitar;switch latias 1077v 535 | switch tyranitar;ironhead,1 963v 470
+      p2a <- Tyranitar comes in (404/404)
+      p2b Excadrill used Protect
+      p1a Charizard used Solar Beam  [[still]]
+      p1b Sylveon used Hyper Voice -> p2b: Excadrill  [[spread] p2a]
+              p2b Excadrill -- move: Protect
+      after p1: Charizard-Mega-Y 337/359, Sylveon 393/393
+      after p2: Tyranitar 282/404, Excadrill 416/416
+
+  Turn 2
+    p1 greedy: move 1, move 2
+    p2 mcts: move 2 2, move 1 2
+      search (35000 visits): stoneedge,1;ironhead,1 1511v 1088 | icebeam,1;ironhead,1 1416v 1014 | stoneedge,0;ironhead,1 1412v 1011 | fireblast,1;ironhead,1 1399v 1001
+      p2b Excadrill used Iron Head -> p1b: Sylveon
+      p1b Sylveon fainted
+      p1a Charizard used Solar Beam -> p2a: Tyranitar  [[from] lockedmove]
+      p2a Tyranitar used Stone Edge -> p1a: Charizard  [[miss]]
+              p2a Tyranitar -- MISSED
+      after p1: Charizard-Mega-Y 315/359, Sylveon 0/393
+      after p2: Tyranitar 206/404, Excadrill 375/416
+
+  Turn 3
+      p1b <- Aegislash comes in (324/324)
+      after p1: Charizard-Mega-Y 315/359, Aegislash 324/324
+      after p2: Tyranitar 206/404, Excadrill 375/416
+
+  Turn 4
+    p1 greedy: move 2 1, move 1 1
+    p2 mcts: move 4 2, move 4
+      search (6000 visits): icebeam,1;rockslide,0 105v 66 | stoneedge,0;switch salamence 102v 63 | darkpulse,1;rockslide,0 97v 59 | darkpulse,1;switch salamence 95v 57
+      p2b Excadrill used Rock Slide -> p1b: Aegislash  [[spread] p1a,p1b]
+      p1a Charizard fainted
+              p1b Aegislash COULD NOT MOVE (flinch)
+      p2a Tyranitar used Ice Beam -> p1b: Aegislash
+      after p1: Charizard-Mega-Y 0/359, Aegislash-Blade 220/324
+      after p2: Tyranitar 206/404, Excadrill 334/416
+
+  Turn 5
+      p1a <- Landorus-Therian comes in (361/361)
+              p2a Tyranitar atk 1 fell
+              p2b Excadrill atk 1 fell
+      after p1: Landorus-Therian 361/361, Aegislash-Blade 220/324
+      after p2: Tyranitar 206/404, Excadrill 334/416
+
+  Turn 6
+    p1 greedy: move 2 1, move 1 1
+    p2 mcts: switch 4, move 3   (slot0 Tyranitar -> Salamence)
+      search (11000 visits): switch salamence;earthquake,0 251v 174 | icebeam,0;switch salamence 244v 168 | switch salamence;switch latias 224v 151 | switch salamence;switch rotomheat 205v 136
+      p2a <- Salamence comes in (331/331)
+              p1a Landorus atk 1 fell
+              p1b Aegislash atk 1 fell
+      p2b Excadrill used Earthquake -> p1a: Landorus  [[spread] p1b]
+              p2a Salamence -- IMMUNE
+              p1a Landorus -- IMMUNE
+      p1b Aegislash fainted
+      p1a Landorus used Superpower -> p2a: Salamence
+              p1a Landorus atk 1 fell
+              p1a Landorus def 1 fell
+      after p1: Landorus-Therian 361/361, Aegislash 0/324
+      after p2: Salamence 252/331, Excadrill 293/416
+
+  Turn 7
+      p1b <- Zapdos comes in (384/384)
+      after p1: Landorus-Therian 361/361, Zapdos 384/384
+      after p2: Salamence 252/331, Excadrill 293/416
+
+  Turn 8
+    p1 greedy: move 2 2, move 1 2
+    p2 mcts: switch 6, move 1 1   (slot0 Salamence -> Jirachi)
+      search (10000 visits): switch jirachi;ironhead,0 193v 85 | hydropump,0;rockslide,0 154v 62 | switch jirachi;rockslide,0 152v 61 | hydropump,0;ironhead,0 148v 58
+      p2a <- Jirachi comes in (343/343)
+      p2b Excadrill used Iron Head -> p1a: Landorus
+              p1a Landorus COULD NOT MOVE (flinch)
+      p1b Zapdos used Thunderbolt -> p2b: Excadrill
+              p2b Excadrill -- IMMUNE
+      after p1: Landorus-Therian 137/361, Zapdos 384/384
+      after p2: Jirachi 343/343, Excadrill 252/416
+
+  Turn 9
+    p1 greedy: move 2 2, move 1 2
+    p2 mcts: move 1 1, switch 4   (slot1 Excadrill -> Tyranitar)
+      search (19000 visits): doomdesire,0;switch tyranitar 1104v 601 | doomdesire,0;switch salamence 1044v 564 | protect,0;switch salamence 581v 287 | doomdesire,0;rockslide,0 484v 231
+      p2b <- Tyranitar comes in (206/404)
+      p2a Jirachi used Doom Desire -> p1a: Landorus
+              p2a Jirachi gained Doom Desire
+      p1a Landorus used Superpower -> p2b: Tyranitar
+              p1a Landorus atk 1 fell
+              p1a Landorus def 1 fell
+      p2b Tyranitar fainted
+      p1b Zapdos used Thunderbolt -> p2a: Jirachi
+      after p1: Landorus-Therian 137/361, Zapdos 360/384
+      after p2: Jirachi 205/343, Tyranitar 0/404
+
+  Turn 10
+      p2b <- Rotom-Heat comes in (273/273)
+      after p1: Landorus-Therian 137/361, Zapdos 360/384
+      after p2: Jirachi 205/343, Rotom-Heat 273/273
+
+  Turn 11
+    p1 greedy: move 2 1, move 1 1
+    p2 mcts: move 1 1, switch 6   (slot1 Rotom-Heat -> Salamence)
+      search (13000 visits): doomdesire,0;switch salamence 235v 86 | doomdesire,0;thunderbolt,1 221v 79 | protect,0;switch salamence 209v 73 | psychic,1;switch salamence 196v 67
+      p2b <- Salamence comes in (252/331)
+              p1a Landorus atk 1 fell
+              p1b Zapdos atk 1 fell
+      p2a Jirachi used Doom Desire  [[still]]
+              p2a Jirachi -- IT FAILED
+      p1a Landorus used Superpower -> p2a: Jirachi
+              p1a Landorus atk 1 fell
+              p1a Landorus def 1 fell
+      p1b Zapdos used Thunderbolt -> p2a: Jirachi
+      after p1: Landorus-Therian 137/361, Zapdos 336/384
+      after p2: Jirachi 19/343, Salamence 232/331
+
+  Turn 12
+    p1 greedy: move 2 1, move 1 1
+    p2 mcts: move 1 1, switch 4   (slot1 Salamence -> Excadrill)
+      search (18000 visits): doomdesire,0;switch excadrill 263v 70 | psychic,1;switch excadrill 255v 67 | psychic,1;fireblast,0 250v 65 | psychic,0;tailwind,1 241v 61
+      p2b <- Excadrill comes in (252/416)
+      p1a Landorus used Superpower -> p2a: Jirachi
+              p1a Landorus atk 1 fell
+              p1a Landorus def 1 fell
+      p2a Jirachi fainted
+      p1b Zapdos used Thunderbolt -> p2b: Excadrill
+              p2b Excadrill -- IMMUNE
+              p1a Landorus lost move: Doom Desire
+      p1a Landorus fainted
+      after p1: Landorus-Therian 0/361, Zapdos 312/384
+      after p2: Jirachi 0/343, Excadrill 252/416
+
+  Turn 13
+      p2a <- Salamence comes in (232/331)
+      p1a <- Cresselia comes in (444/444)
+              p1a Cresselia atk 1 fell
+              p1b Zapdos atk 1 fell
+      after p1: Cresselia 444/444, Zapdos 312/384
+      after p2: Salamence 232/331, Excadrill 252/416
+
+  Turn 14
+    p1 greedy: move 3 2, move 1 2
+    p2 mcts: move 2 2, move 4
+      search (11000 visits): dracometeor,1;rockslide,0 1266v 690 | dracometeor,0;rockslide,0 364v 160 | fireblast,1;rockslide,0 297v 123 | fireblast,0;rockslide,0 291v 120
+      p2a Salamence used Draco Meteor -> p1b: Zapdos
+              p2a Salamence spa 2 fell
+              p1b Zapdos used up its Sitrus Berry
+      p2b Excadrill used Rock Slide -> p1a: Cresselia  [[spread] p1a,p1b]
+              p1b Zapdos COULD NOT MOVE (flinch)
+      p1a Cresselia used Psychic -> p2b: Excadrill
+      p1b Zapdos fainted
+      after p1: Cresselia 383/444, Zapdos 0/384
+      after p2: Salamence 212/331, Excadrill 150/416
+
+  Turn 15
+    p1 greedy: move 3 2, pass
+    p2 mcts: move 2 1, move 1 1
+      search (39000 visits): dracometeor,0;ironhead,0 29872v 24327 | switch latias;ironhead,0 1793v 1287 | switch rotomheat;ironhead,0 1406v 990 | dracometeor,0;rockslide,0 1236v 861
+      p2a Salamence used Draco Meteor -> p1a: Cresselia
+              p2a Salamence spa 2 fell
+      p2b Excadrill used Iron Head -> p1a: Cresselia
+      p1a Cresselia used Psychic -> p2b: Excadrill
+      after p1: Cresselia 162/444, Zapdos 0/384
+      after p2: Salamence 212/331, Excadrill 49/416
+
+  Turn 16
+    p1 greedy: move 3 2, pass
+    p2 mcts: move 2 1, move 1 1
+      search (63000 visits): dracometeor,0;ironhead,0 46745v 34864 | switch latias;ironhead,0 2389v 1604 | switch rotomheat;ironhead,0 2166v 1444 | dracometeor,0;rockslide,0 1556v 1009
+      p2a Salamence used Draco Meteor -> p1a: Cresselia
+              p2a Salamence spa 2 fell
+      p2b Excadrill used Iron Head -> p1a: Cresselia
+              p1a Cresselia -- critical hit
+      p1a Cresselia fainted
+      after p1: Cresselia 0/444, Zapdos 0/384
+      after p2: Salamence 212/331, Excadrill 8/416
+
+  RESULT: p2 wins

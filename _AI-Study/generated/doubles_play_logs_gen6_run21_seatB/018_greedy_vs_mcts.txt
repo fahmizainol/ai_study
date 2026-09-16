@@ -1,0 +1,197 @@
+battle 18   p1=greedy vs p2=mcts   mcts 300 ms a decision
+  p1: Untitled 468: Kangaskhan-Mega, Aegislash, Sylveon, Volcanion, Landorus-Therian, Thundurus
+  p2: for akaru 1: Gengar-Mega, Volcanion, Genesect, Landorus-Therian, Cresselia, Conkeldurr
+
+  Turn 1
+    p1 greedy: move 3 1, move 1 1
+    p2 mcts: move 1 2, move 1
+      search (32000 visits): shadowball,1;heatwave,0 473v 70 | switch landorustherian;heatwave,0 400v 52 | shadowball,1;switch landorustherian 390v 49 | shadowball,1;earthpower,1 388v 49
+      p1a Kangaskhan used Sucker Punch -> p2a: Gengar
+      p2a Gengar used Shadow Ball -> p1b: Aegislash
+      p2b Volcanion used Heat Wave -> p1b: Aegislash  [[spread] p1a,p1b]
+      p1b Aegislash used Shadow Ball -> p2a: Gengar
+      p2a Gengar fainted
+      after p1: Kangaskhan-Mega 294/414, Aegislash-Blade 24/324
+      after p2: Gengar-Mega 0/324, Volcanion 364/364
+
+  Turn 2
+      p2a <- Genesect comes in (283/283)
+              p2a Genesect atk 1 rose
+      after p1: Kangaskhan-Mega 294/414, Aegislash-Blade 24/324
+      after p2: Genesect 283/283, Volcanion 364/364
+
+  Turn 3
+    p1 greedy: move 3 1, move 1 1
+    p2 mcts: switch 4, move 1   (slot0 Genesect -> Landorus-Therian)
+      search (36000 visits): switch landorustherian;heatwave,0 677v 100 | switch conkeldurr;heatwave,0 616v 85 | explosion,0;heatwave,0 602v 82 | ironhead,0;heatwave,0 575v 76
+      p2a <- Landorus-Therian comes in (319/319)
+              p1a Kangaskhan atk 1 fell
+              p1b Aegislash atk 1 fell
+      p1a Kangaskhan used Sucker Punch  [[still]]
+              p1a Kangaskhan -- IT FAILED
+      p2b Volcanion used Heat Wave -> p1a: Kangaskhan  [[spread] p1a,p1b]
+      p1b Aegislash fainted
+      after p1: Kangaskhan-Mega 180/414, Aegislash 0/324
+      after p2: Landorus-Therian 319/319, Volcanion 364/364
+
+  Turn 4
+      p1b <- Sylveon comes in (394/394)
+      after p1: Kangaskhan-Mega 180/414, Sylveon 394/394
+      after p2: Landorus-Therian 319/319, Volcanion 364/364
+
+  Turn 5
+    p1 greedy: move 3 1, move 1
+    p2 mcts: move 2 1, move 2 2
+      search (44000 visits): stoneedge,0;steameruption,1 866v 179 | superpower,1;switch cresselia 863v 178 | uturn,0;heatwave,0 770v 152 | switch cresselia;heatwave,0 685v 128
+      p1a Kangaskhan used Sucker Punch -> p2a: Landorus
+      p2a Landorus used Stone Edge -> p1a: Kangaskhan
+      p2b Volcanion used Steam Eruption -> p1b: Sylveon
+      p1b Sylveon used Hyper Voice -> p2a: Landorus  [[spread] p2a,p2b]
+      after p1: Kangaskhan-Mega 56/414, Sylveon 283/394
+      after p2: Landorus-Therian 55/319, Volcanion 325/364
+
+  Turn 6
+    p1 greedy: move 3 1, move 1
+    p2 mcts: move 2 1, move 1
+      search (43000 visits): stoneedge,0;heatwave,0 2085v 435 | switch cresselia;heatwave,0 1695v 335 | switch genesect;heatwave,0 1570v 303 | switch conkeldurr;heatwave,0 1340v 246
+      p1a Kangaskhan used Sucker Punch -> p2a: Landorus
+      p2a Landorus fainted
+      p2b Volcanion used Heat Wave -> p1a: Kangaskhan  [[spread] p1a]
+              p2b Volcanion -- MISSED
+      p1a Kangaskhan fainted
+      p1b Sylveon used Hyper Voice -> p2b: Volcanion
+      after p1: Kangaskhan-Mega 0/414, Sylveon 307/394
+      after p2: Landorus-Therian 0/319, Volcanion 269/364
+
+  Turn 7
+      p1a <- Volcanion comes in (363/363)
+      p2a <- Genesect comes in (283/283)
+              p2a Genesect atk 1 rose
+      after p1: Volcanion 363/363, Sylveon 307/394
+      after p2: Genesect 283/283, Volcanion 269/364
+
+  Turn 8
+    p1 greedy: move 4 2, move 1
+    p2 mcts: move 1 1, move 2 2
+      search (29000 visits): uturn,0;steameruption,1 1194v 515 | uturn,0;heatwave,0 1003v 421 | uturn,0;earthpower,1 966v 403 | uturn,0;earthpower,0 908v 374
+      p2a Genesect used U-turn -> p1a: Volcanion
+      after p1: Volcanion 253/363, Sylveon 307/394
+      after p2: Genesect 283/283, Volcanion 269/364
+
+  Turn 9
+      p2a <- Cresselia comes in (444/444)
+      p2b Volcanion used Steam Eruption -> p1b: Sylveon
+              p1b Sylveon is now brn
+      p1a Volcanion used Overheat -> p2b: Volcanion
+              p1a Volcanion spa 2 fell
+      p1b Sylveon used Hyper Voice -> p2a: Cresselia  [[spread] p2a,p2b]
+      after p1: Volcanion 253/363, Sylveon 140/394
+      after p2: Cresselia 350/444, Volcanion 197/364
+
+  Turn 10
+    p1 greedy: move 4 2, move 1
+    p2 mcts: move 4, move 2 2
+      search (46000 visits): moonlight,0;steameruption,1 2741v 1690 | moonlight,0;overheat,1 2318v 1412 | psyshock,1;overheat,1 1873v 1120 | psyshock,1;steameruption,1 1617v 954
+      p2a Cresselia used Moonlight
+      p2b Volcanion used Steam Eruption -> p1b: Sylveon
+      p1b Sylveon fainted
+      p1a Volcanion used Overheat -> p2b: Volcanion
+              p1a Volcanion spa 2 fell
+      after p1: Volcanion 253/363, Sylveon 0/394
+      after p2: Cresselia 444/444, Volcanion 182/364
+
+  Turn 11
+      p1b <- Landorus-Therian comes in (320/320)
+              p2a Cresselia atk 1 fell
+              p2b Volcanion atk 1 fell
+      after p1: Volcanion 253/363, Landorus-Therian 320/320
+      after p2: Cresselia 444/444, Volcanion 182/364
+
+  Turn 12
+    p1 greedy: move 4 2, move 4 2
+    p2 mcts: switch 6, move 2 2   (slot0 Cresselia -> Conkeldurr)
+      search (31000 visits): switch conkeldurr;steameruption,1 1609v 1053 | switch conkeldurr;overheat,1 914v 564 | psyshock,1;steameruption,1 710v 424 | psyshock,0;steameruption,1 690v 410
+      p2a <- Conkeldurr comes in (414/414)
+      p1b Landorus used Stone Edge -> p2b: Volcanion
+      p2b Volcanion fainted
+      p1a Volcanion used Overheat -> p2a: Conkeldurr
+              p1a Volcanion spa 2 fell
+      after p1: Volcanion 253/363, Landorus-Therian 320/320
+      after p2: Conkeldurr 363/414, Volcanion 0/364
+
+  Turn 13
+      p2b <- Genesect comes in (283/283)
+              p2b Genesect spa 1 rose
+      after p1: Volcanion 253/363, Landorus-Therian 320/320
+      after p2: Conkeldurr 363/414, Genesect 283/283
+
+  Turn 14
+    p1 greedy: move 4 1, move 4 1
+    p2 mcts: move 4 2, move 4
+      search (37000 visits): knockoff,1;explosion,0 4643v 2835 | drainpunch,0;explosion,0 2952v 1752 | knockoff,0;explosion,0 2852v 1689 | machpunch,1;explosion,0 2560v 1503
+      p1b Landorus used Stone Edge -> p2a: Conkeldurr
+      p2b Genesect used Explosion -> p1b: Landorus  [[spread] p2a,p1a,p1b]
+              p2a Conkeldurr -- critical hit
+      p2b Genesect fainted
+      p2a Conkeldurr fainted
+      p1a Volcanion fainted
+      p1b Landorus fainted
+      after p1: Volcanion 0/363, Landorus-Therian 0/320
+      after p2: Conkeldurr 0/414, Genesect 0/283
+
+  Turn 15
+      p1a <- Thundurus comes in (361/361)
+      p2a <- Cresselia comes in (444/444)
+      after p1: Thundurus 361/361, Landorus-Therian 0/320
+      after p2: Cresselia 444/444, Genesect 0/283
+
+  Turn 16
+    p1 greedy: move 1 1, pass
+    p2 mcts: move 2 1, pass
+      search (136000 visits): toxic,0;No Move 134533v 108395 | psyshock,0;No Move 706v 339 | moonlight,0;No Move 420v 182 | trickroom,0;No Move 341v 141
+      p1a Thundurus used Thunderbolt -> p2a: Cresselia
+      p2a Cresselia used Toxic -> p1a: Thundurus
+              p1a Thundurus is now tox
+      after p1: Thundurus 339/361, Landorus-Therian 0/320
+      after p2: Cresselia 371/444, Genesect 0/283
+
+  Turn 17
+    p1 greedy: move 1 1, pass
+    p2 mcts: move 1 1, pass
+      search (202000 visits): psyshock,0;No Move 201053v 189432 | moonlight,0;No Move 413v 220 | toxic,0;No Move 281v 138 | trickroom,0;No Move 253v 121
+      p1a Thundurus used Thunderbolt -> p2a: Cresselia
+              p2a Cresselia is now par
+              p2a Cresselia COULD NOT MOVE (par)
+      after p1: Thundurus 295/361, Landorus-Therian 0/320
+      after p2: Cresselia 295/444, Genesect 0/283
+
+  Turn 18
+    p1 greedy: move 1 1, pass
+    p2 mcts: move 1 1, pass
+      search (236000 visits): psyshock,0;No Move 234255v 215714 | moonlight,0;No Move 976v 630 | toxic,0;No Move 403v 231 | trickroom,0;No Move 366v 206
+      p1a Thundurus used Thunderbolt -> p2a: Cresselia
+      p2a Cresselia used Psyshock -> p1a: Thundurus
+              p1a Thundurus used up its Sitrus Berry
+      after p1: Thundurus 222/361, Landorus-Therian 0/320
+      after p2: Cresselia 213/444, Genesect 0/283
+
+  Turn 19
+    p1 greedy: move 1 1, pass
+    p2 mcts: move 1 1, pass
+      search (620000 visits): psyshock,0;No Move 320479v 301023 | moonlight,0;No Move 290605v 272841 | trickroom,0;No Move 7449v 6619 | toxic,0;No Move 1467v 1193
+      p1a Thundurus used Thunderbolt -> p2a: Cresselia
+      p2a Cresselia used Psyshock -> p1a: Thundurus
+      after p1: Thundurus 37/361, Landorus-Therian 0/320
+      after p2: Cresselia 129/444, Genesect 0/283
+
+  Turn 20
+    p1 greedy: move 1 1, pass
+    p2 mcts: move 1 1, pass
+      search (1540000 visits): psyshock,0;No Move 385340v 385340 | moonlight,0;No Move 384951v 384949 | toxic,0;No Move 384860v 384858 | trickroom,0;No Move 384849v 384847
+      p1a Thundurus used Thunderbolt -> p2a: Cresselia
+      p2a Cresselia used Psyshock -> p1a: Thundurus
+      p1a Thundurus fainted
+      after p1: Thundurus 0/361, Landorus-Therian 0/320
+      after p2: Cresselia 50/444, Genesect 0/283
+
+  RESULT: p2 wins

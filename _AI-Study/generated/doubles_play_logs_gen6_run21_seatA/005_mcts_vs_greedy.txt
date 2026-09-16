@@ -1,0 +1,158 @@
+battle 5   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: Copy of Untitled 488: Thundurus, Lucario-Mega, Talonflame, Amoonguss, Kingdra, Politoed
+  p2: XY Doubles: Raichu, Crobat, Typhlosion, Blastoise-Mega, Latias, Parasect
+
+  Turn 1
+    p1 mcts: move 4 1, move 1 1
+      search (24000 visits): uturn,0;closecombat,0 705v 472 | knockoff,0;closecombat,0 656v 435 | knockoff,1;closecombat,0 554v 358 | switch kingdra;switch politoed 529v 340
+    p2 greedy: move 2 1, move 2 1
+      p2b Crobat used Brave Bird -> p1a: Thundurus
+      p1b Lucario used Close Combat -> p2a: Raichu
+              p2a Raichu used up its Focus Sash
+              p1b Lucario def 1 fell
+              p1b Lucario spd 1 fell
+      p1a Thundurus used U-turn -> p2a: Raichu
+      p2a Raichu fainted
+      after p1: Thundurus 188/299, Lucario-Mega 281/281
+      after p2: Raichu 0/262, Crobat 275/312
+
+  Turn 2
+      p1a <- Talonflame comes in (319/319)
+      after p1: Talonflame 319/319, Lucario-Mega 281/281
+      after p2: Raichu 0/262, Crobat 275/312
+
+  Turn 3
+      p2a <- Typhlosion comes in (298/298)
+      after p1: Talonflame 319/319, Lucario-Mega 281/281
+      after p2: Typhlosion 298/298, Crobat 275/312
+
+  Turn 4
+    p1 mcts: switch 6, move 1 1   (slot0 Talonflame -> Politoed)
+      search (40000 visits): switch politoed;closecombat,0 2968v 2649 | bravebird,1;closecombat,0 2718v 2416 | flareblitz,1;closecombat,0 1819v 1581 | switch kingdra;closecombat,0 1439v 1231
+    p2 greedy: move 1, move 2 1
+      p1a <- Politoed comes in (384/384)
+      p2b Crobat used Brave Bird -> p1a: Politoed
+      p1b Lucario used Close Combat -> p2a: Typhlosion
+              p1b Lucario def 1 fell
+              p1b Lucario spd 1 fell
+      p2a Typhlosion used Eruption -> p1a: Politoed  [[spread] p1a,p1b]
+      after p1: Politoed 238/384, Lucario-Mega 197/281
+      after p2: Typhlosion 33/298, Crobat 229/312
+
+  Turn 5
+    p1 mcts: move 2, move 1 1
+      search (28000 visits): icywind,0;closecombat,0 1203v 987 | scald,1;closecombat,0 1194v 979 | icywind,0;bulletpunch,1 960v 773 | icywind,0;closecombat,1 931v 748
+    p2 greedy: move 1, move 2 1
+      p2b Crobat used Brave Bird -> p1a: Politoed
+              p1a Politoed used up its Sitrus Berry
+      p1b Lucario used Close Combat -> p2a: Typhlosion
+              p1b Lucario def 1 fell
+              p1b Lucario spd 1 fell
+      p2a Typhlosion fainted
+      p1a Politoed used Icy Wind -> p2b: Crobat
+              p2b Crobat spe 1 fell
+      after p1: Politoed 177/384, Lucario-Mega 197/281
+      after p2: Typhlosion 0/298, Crobat 89/312
+
+  Turn 6
+      p2a <- Blastoise-Mega comes in (355/355)
+      after p1: Politoed 177/384, Lucario-Mega 197/281
+      after p2: Blastoise-Mega 355/355, Crobat 89/312
+
+  Turn 7
+    p1 mcts: move 3 -2, move 1 1
+      search (32000 visits): helpinghand,1;closecombat,0 2671v 2232 | protect,0;closecombat,0 1599v 1295 | icywind,0;closecombat,0 1499v 1208 | scald,0;closecombat,0 1470v 1183
+    p2 greedy: move 1, move 2 1
+      p1a Politoed used Helping Hand -> p1b: Lucario
+      p1b Lucario used Close Combat -> p2a: Blastoise
+              p1b Lucario def 1 fell
+              p1b Lucario spd 1 fell
+      p2b Crobat used Brave Bird -> p1a: Politoed
+      p2a Blastoise used Water Spout -> p1a: Politoed  [[spread] p1a,p1b]
+              p1b Lucario -- critical hit
+      p1b Lucario fainted
+      after p1: Politoed 23/384, Lucario-Mega 0/281
+      after p2: Blastoise-Mega 40/355, Crobat 43/312
+
+  Turn 8
+      p1b <- Thundurus comes in (188/299)
+      after p1: Politoed 23/384, Thundurus 188/299
+      after p2: Blastoise-Mega 40/355, Crobat 43/312
+
+  Turn 9
+    p1 mcts: move 2, move 4 1
+      search (34000 visits): icywind,0;uturn,0 2141v 1540 | scald,1;uturn,0 1616v 1138 | icywind,0;knockoff,0 1543v 1082 | icywind,0;wildcharge,0 1148v 784
+    p2 greedy: move 1, move 2 1
+      p1b Thundurus used U-turn -> p2a: Blastoise
+              p2a Blastoise -- critical hit
+      p2a Blastoise fainted
+      after p1: Politoed 23/384, Thundurus 188/299
+      after p2: Blastoise-Mega 0/355, Crobat 43/312
+
+  Turn 10
+      p1b <- Amoonguss comes in (432/432)
+      p2b Crobat used Brave Bird -> p1a: Politoed
+      p1a Politoed fainted
+      after p1: Politoed 0/384, Amoonguss 432/432
+      after p2: Blastoise-Mega 0/355, Crobat 35/312
+
+  Turn 11
+      p2a <- Latias comes in (302/302)
+      p1a <- Thundurus comes in (188/299)
+      after p1: Thundurus 188/299, Amoonguss 432/432
+      after p2: Latias 302/302, Crobat 35/312
+
+  Turn 12
+    p1 mcts: move 4 1, move 2 1
+      search (19000 visits): uturn,0;spore,0 1022v 667 | uturn,0;switch kingdra 630v 387 | uturn,0;energyball,0 560v 338 | uturn,0;energyball,1 538v 323
+    p2 greedy: move 1 1, move 2 1
+      p1a Thundurus used U-turn -> p2a: Latias
+      after p1: Thundurus 188/299, Amoonguss 432/432
+      after p2: Latias 130/302, Crobat 35/312
+
+  Turn 13
+      p1a <- Kingdra comes in (291/291)
+      p2a Latias used Draco Meteor -> p1a: Kingdra  [[miss]]
+              p2a Latias -- MISSED
+      p2b Crobat used Brave Bird -> p1a: Kingdra
+      p2b Crobat fainted
+      p1b Amoonguss used Spore -> p2a: Latias
+              p2a Latias is now slp
+      after p1: Kingdra 105/291, Amoonguss 432/432
+      after p2: Latias 130/302, Crobat 0/312
+
+  Turn 14
+      p2b <- Parasect comes in (324/324)
+      after p1: Kingdra 105/291, Amoonguss 432/432
+      after p2: Latias 130/302, Parasect 324/324
+
+  Turn 15
+    p1 mcts: move 4 1, switch 6   (slot1 Amoonguss -> Talonflame)
+      search (20000 visits): icebeam,0;switch talonflame 3423v 2668 | icebeam,0;switch thundurus 1501v 1112 | icebeam,1;switch talonflame 698v 479 | icebeam,1;switch thundurus 662v 452
+    p2 greedy: move 1 1, move 3 1
+      p1b <- Talonflame comes in (319/319)
+              p2a Latias COULD NOT MOVE (slp)
+      p1a Kingdra used Ice Beam -> p2a: Latias
+      p2a Latias fainted
+      p2b Parasect used Seed Bomb -> p1a: Kingdra
+              p1a Kingdra -- critical hit
+      p1a Kingdra fainted
+      after p1: Kingdra 0/291, Talonflame 319/319
+      after p2: Latias 0/302, Parasect 324/324
+
+  Turn 16
+      p1a <- Thundurus comes in (188/299)
+      after p1: Thundurus 188/299, Talonflame 319/319
+      after p2: Latias 0/302, Parasect 324/324
+
+  Turn 17
+    p1 mcts: switch 6, move 3 2   (slot0 Thundurus -> Amoonguss)
+      search (89000 visits): switch amoonguss;flareblitz,1 6096v 2872 | switch amoonguss;bravebird,1 6086v 2867 | switch amoonguss;tailwind,1 5451v 2549 | switch amoonguss;protect,1 4926v 2287
+    p2 greedy: pass, move 3 1
+      p1a <- Amoonguss comes in (432/432)
+      p1b Talonflame used Flare Blitz -> p2b: Parasect
+      p2b Parasect fainted
+      after p1: Amoonguss 432/432, Talonflame 181/319
+      after p2: Latias 0/302, Parasect 0/324
+
+  RESULT: p1 wins

@@ -1,0 +1,178 @@
+battle 7   p1=greedy vs p2=mcts   mcts 300 ms a decision
+  p1: Untitled 1002: Diancie-Mega, Genesect, Talonflame, Landorus-Therian, Hoopa-Unbound, Gastrodon-East
+  p2: Copy of Untitled 577: Kangaskhan-Mega, Bisharp, Deoxys-Attack, Amoonguss, Landorus, Talonflame
+
+  Turn 1
+    p1 greedy: move 1, move 1 1
+    p2 mcts: switch 4, switch 3   (slot0 Kangaskhan-Mega -> Amoonguss; slot1 Bisharp -> Deoxys-Attack)
+      search (64000 visits): switch amoonguss;switch deoxysattack 3477v 3415 | switch deoxysattack;switch amoonguss 1966v 1877 | fakeout,1;ironhead,1 1748v 1660 | switch talonflame;switch deoxysattack 1357v 1267
+      p2a <- Amoonguss comes in (432/432)
+      p2b <- Deoxys-Attack comes in (241/241)
+      p1b Genesect used Ice Beam -> p2a: Amoonguss
+      p1a Diancie used Diamond Storm -> p2a: Amoonguss  [[spread] p2a,p2b]
+      p2a Amoonguss fainted
+      p2b Deoxys fainted
+      after p1: Diancie-Mega 287/287, Genesect 283/283
+      after p2: Amoonguss 0/432, Deoxys-Attack 0/241
+
+  Turn 2
+      p2b <- Kangaskhan-Mega comes in (414/414)
+      p2a <- Bisharp comes in (271/271)
+      after p1: Diancie-Mega 287/287, Genesect 283/283
+      after p2: Bisharp 271/271, Kangaskhan-Mega 414/414
+
+  Turn 3
+    p1 greedy: move 1, move 1 1
+    p2 mcts: move 1 2, switch 6   (slot1 Kangaskhan-Mega -> Talonflame)
+      search (47000 visits): knockoff,1;switch talonflame 1756v 1342 | knockoff,1;lowkick,1 1531v 1158 | knockoff,1;suckerpunch,1 1505v 1137 | knockoff,1;fakeout,1 1383v 1037
+      p2b <- Talonflame comes in (320/320)
+      p1b Genesect used Ice Beam -> p2a: Bisharp
+      p1a Diancie used Diamond Storm -> p2a: Bisharp  [[spread] p2a,p2b]
+              p1a Diancie def 1 rose
+      p2b Talonflame fainted
+      p2a Bisharp used Knock Off -> p1b: Genesect
+              p1b Genesect used up its Choice Scarf
+      after p1: Diancie-Mega 287/287, Genesect 84/283
+      after p2: Bisharp 101/271, Talonflame 0/320
+
+  Turn 4
+      p2b <- Landorus comes in (382/382)
+      after p1: Diancie-Mega 287/287, Genesect 84/283
+      after p2: Bisharp 101/271, Landorus 382/382
+
+  Turn 5
+    p1 greedy: move 1, move 1 1
+    p2 mcts: move 2 2, move 1 2
+      search (48000 visits): suckerpunch,1;earthpower,1 8040v 4020 | protect,0;switch kangaskhanmega 7583v 3690 | suckerpunch,1;switch kangaskhanmega 2798v 1266 | knockoff,1;switch kangaskhanmega 1962v 854
+      p2a Bisharp used Sucker Punch -> p1b: Genesect
+      p1b Genesect fainted
+      p1a Diancie used Diamond Storm -> p2a: Bisharp  [[spread] p2a,p2b]
+      p2b Landorus used Earth Power -> p1a: Diancie
+      p1a Diancie fainted
+      after p1: Diancie-Mega 0/287, Genesect 0/283
+      after p2: Bisharp 32/271, Landorus 246/382
+
+  Turn 6
+      p1a <- Talonflame comes in (359/359)
+      p1b <- Landorus-Therian comes in (382/382)
+              p2a Bisharp atk 1 fell
+              p2a Bisharp atk 2 rose
+              p2b Landorus atk 1 fell
+      after p1: Talonflame 359/359, Landorus-Therian 382/382
+      after p2: Bisharp 32/271, Landorus 246/382
+
+  Turn 7
+    p1 greedy: move 1 1, move 1
+    p2 mcts: move 3, move 2 2
+      search (43000 visits): protect,0;psychic,1 4638v 3537 | protect,0;switch kangaskhanmega 4476v 3405 | protect,0;substitute,1 3029v 2259 | protect,0;earthpower,0 2731v 2025
+      p2a Bisharp used Protect
+      p1a Talonflame used Brave Bird -> p2a: Bisharp
+              p2a Bisharp -- move: Protect
+      p2b Landorus used Psychic -> p1b: Landorus
+      p1b Landorus used Earthquake -> p2a: Bisharp  [[spread] ]
+              p1a Talonflame -- IMMUNE
+              p2b Landorus -- IMMUNE
+              p2a Bisharp -- move: Protect
+      after p1: Talonflame 359/359, Landorus-Therian 225/382
+      after p2: Bisharp 32/271, Landorus 246/382
+
+  Turn 8
+    p1 greedy: move 1 1, move 1
+    p2 mcts: move 3, switch 6   (slot1 Landorus -> Kangaskhan-Mega)
+      search (45000 visits): protect,0;switch kangaskhanmega 11753v 8838 | protect,0;psychic,1 4698v 3416 | protect,0;psychic,0 4538v 3294 | protect,0;protect,1 3488v 2498
+      p2b <- Kangaskhan-Mega comes in (414/414)
+      p2a Bisharp used Protect  [[still]]
+              p2a Bisharp -- IT FAILED
+      p1a Talonflame used Brave Bird -> p2a: Bisharp
+      p2a Bisharp fainted
+      p1b Landorus used Earthquake -> p2b: Kangaskhan  [[spread] p2b]
+              p1a Talonflame -- IMMUNE
+      after p1: Talonflame 348/359, Landorus-Therian 225/382
+      after p2: Bisharp 0/271, Kangaskhan-Mega 287/414
+
+  Turn 9
+      p2a <- Landorus comes in (246/382)
+      after p1: Talonflame 348/359, Landorus-Therian 225/382
+      after p2: Landorus 246/382, Kangaskhan-Mega 287/414
+
+  Turn 10
+    p1 greedy: move 1 1, move 1
+    p2 mcts: move 3, move 1 1
+      search (57000 visits): substitute,0;fakeout,0 5001v 3884 | substitute,0;fakeout,1 4786v 3710 | psychic,1;fakeout,1 2662v 2002 | psychic,0;fakeout,1 2655v 1996
+      p2b Kangaskhan used Fake Out -> p1a: Talonflame
+              p1a Talonflame -- critical hit
+              p1a Talonflame COULD NOT MOVE (flinch)
+      p2a Landorus used Substitute
+              p2a Landorus gained Substitute
+      p1b Landorus used Earthquake -> p2a: Landorus  [[spread] p2b]
+              p1a Talonflame -- IMMUNE
+              p2a Landorus -- IMMUNE
+      after p1: Talonflame 225/359, Landorus-Therian 225/382
+      after p2: Landorus 151/382, Kangaskhan-Mega 148/414
+
+  Turn 11
+    p1 greedy: move 1 2, move 1
+    p2 mcts: move 1 1, move 4 2
+      search (64000 visits): earthpower,0;lowkick,1 2628v 1233 | psychic,0;seismictoss,0 2099v 962 | earthpower,1;lowkick,0 2046v 935 | psychic,1;suckerpunch,1 1750v 785
+      p1a Talonflame used Brave Bird -> p2b: Kangaskhan
+              p2b Kangaskhan -- critical hit
+      p2b Kangaskhan fainted
+      p2a Landorus used Earth Power -> p1a: Talonflame
+              p1a Talonflame -- IMMUNE
+      p1b Landorus used Earthquake -> p2a: Landorus  [[spread] ]
+              p1a Talonflame -- IMMUNE
+              p2a Landorus -- IMMUNE
+      after p1: Talonflame 176/359, Landorus-Therian 225/382
+      after p2: Landorus 151/382, Kangaskhan-Mega 0/414
+
+  Turn 12
+    p1 greedy: move 1 1, move 1
+    p2 mcts: move 3, pass
+      search (247000 visits): substitute,0;No Move 71145v 2127 | psychic,0;No Move 48103v 1244 | earthpower,1;No Move 39213v 918 | psychic,1;No Move 30999v 628
+      p1a Talonflame used Brave Bird -> p2a: Landorus
+              p2a Landorus lost Substitute
+      p2a Landorus used Substitute
+              p2a Landorus gained Substitute
+      p1b Landorus used Earthquake -> p2a: Landorus  [[spread] ]
+              p1a Talonflame -- IMMUNE
+              p2a Landorus -- IMMUNE
+      after p1: Talonflame 145/359, Landorus-Therian 225/382
+      after p2: Landorus 56/382, Kangaskhan-Mega 0/414
+
+  Turn 13
+    p1 greedy: move 1 1, move 1
+    p2 mcts: move 4, pass
+      search (571000 visits): protect,0;No Move 103598v 693 | substitute,0;No Move 100910v 653 | psychic,1;No Move 96590v 591 | earthpower,1;No Move 95509v 575
+      p2a Landorus used Protect
+      p1a Talonflame used Brave Bird -> p2a: Landorus
+              p2a Landorus -- move: Protect
+      p1b Landorus used Earthquake -> p2a: Landorus  [[spread] ]
+              p1a Talonflame -- IMMUNE
+              p2a Landorus -- IMMUNE
+      after p1: Talonflame 145/359, Landorus-Therian 225/382
+      after p2: Landorus 56/382, Kangaskhan-Mega 0/414
+
+  Turn 14
+    p1 greedy: move 1 1, move 1
+    p2 mcts: move 1 2, pass
+      search (713000 visits): earthpower,1;No Move 127825v 726 | psychic,1;No Move 124038v 677 | protect,0;No Move 120546v 632 | substitute,0;No Move 119200v 615
+      p1a Talonflame used Brave Bird -> p2a: Landorus
+              p2a Landorus lost Substitute
+      p2a Landorus used Earth Power -> p1b: Landorus
+              p1b Landorus -- IMMUNE
+      p1b Landorus used Earthquake -> p2a: Landorus  [[spread] ]
+              p1a Talonflame -- IMMUNE
+              p2a Landorus -- IMMUNE
+      after p1: Talonflame 114/359, Landorus-Therian 225/382
+      after p2: Landorus 56/382, Kangaskhan-Mega 0/414
+
+  Turn 15
+    p1 greedy: move 1 1, move 1
+    p2 mcts: move 1 2, pass
+      search (400000 visits): earthpower,1;No Move 73768v 409 | substitute,0;No Move 73367v 403 | protect,0;No Move 72369v 388 | psychic,0;No Move 61760v 235
+      p1a Talonflame used Brave Bird -> p2a: Landorus
+      p2a Landorus fainted
+      after p1: Talonflame 96/359, Landorus-Therian 225/382
+      after p2: Landorus 0/382, Kangaskhan-Mega 0/414
+
+  RESULT: p1 wins

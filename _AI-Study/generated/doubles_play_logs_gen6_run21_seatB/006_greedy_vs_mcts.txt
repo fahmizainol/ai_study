@@ -1,0 +1,172 @@
+battle 6   p1=greedy vs p2=mcts   mcts 300 ms a decision
+  p1: i am speed: Kangaskhan-Mega, Genesect, Landorus-Therian, Diancie, Volcanion, Deoxys-Speed
+  p2: XY Doubles: Hydreigon, Heatran, Gyarados, Trevenant, Rhyperior, Charizard-Mega-Y
+
+  Turn 1
+    p1 greedy: move 4 1, move 4 1
+    p2 mcts: switch 3, switch 4   (slot0 Hydreigon -> Gyarados; slot1 Heatran -> Trevenant)
+      search (45000 visits): switch gyarados;switch trevenant 23798v 16525 | dracometeor,0;switch gyarados 1976v 1147 | switch charizardmegay;heatwave,0 1141v 625 | switch gyarados;heatwave,0 969v 520
+      p2a <- Gyarados comes in (394/394)
+              p1a Kangaskhan atk 1 fell
+              p1b Genesect atk 1 fell
+      p2b <- Trevenant comes in (374/374)
+      p1a Kangaskhan used Sucker Punch  [[still]]
+              p1a Kangaskhan -- IT FAILED
+      p1b Genesect used Thunderbolt -> p2a: Gyarados
+      p2a Gyarados fainted
+      after p1: Kangaskhan-Mega 414/414, Genesect 338/338
+      after p2: Gyarados 0/394, Trevenant 374/374
+
+  Turn 2
+      p2a <- Hydreigon comes in (384/384)
+      after p1: Kangaskhan-Mega 414/414, Genesect 338/338
+      after p2: Hydreigon 384/384, Trevenant 374/374
+
+  Turn 3
+    p1 greedy: move 4 1, move 4 1
+    p2 mcts: move 4, move 2 1
+      search (33000 visits): protect,0;willowisp,0 546v 87 | thunderwave,1;willowisp,0 538v 85 | dracometeor,1;willowisp,0 534v 84 | darkpulse,0;willowisp,0 528v 82
+      p2a Hydreigon used Protect
+      p1a Kangaskhan used Sucker Punch  [[still]]
+              p1a Kangaskhan -- IT FAILED
+      p1b Genesect used Thunderbolt -> p2a: Hydreigon
+              p2a Hydreigon -- move: Protect
+      p2b Trevenant used Will-O-Wisp -> p1a: Kangaskhan  [[miss]]
+              p2b Trevenant -- MISSED
+      after p1: Kangaskhan-Mega 414/414, Genesect 338/338
+      after p2: Hydreigon 384/384, Trevenant 374/374
+
+  Turn 4
+    p1 greedy: move 4 1, move 4 1
+    p2 mcts: move 1 2, move 2 1
+      search (27000 visits): thunderwave,1;willowisp,0 448v 76 | dracometeor,0;willowisp,0 443v 75 | darkpulse,0;willowisp,0 428v 71 | protect,0;willowisp,0 424v 69
+      p1a Kangaskhan used Sucker Punch  [[still]]
+              p1a Kangaskhan -- IT FAILED
+      p1b Genesect used Thunderbolt -> p2a: Hydreigon
+      p2a Hydreigon used Thunder Wave -> p1b: Genesect
+              p1b Genesect is now par
+      p2b Trevenant used Will-O-Wisp -> p1a: Kangaskhan
+              p1a Kangaskhan is now brn
+      after p1: Kangaskhan-Mega 363/414, Genesect 338/338
+      after p2: Hydreigon 342/384, Trevenant 374/374
+
+  Turn 5
+    p1 greedy: move 4 1, move 4 1
+    p2 mcts: move 1 1, switch 4   (slot1 Trevenant -> Heatran)
+      search (29000 visits): thunderwave,0;switch heatran 3453v 1218 | switch rhyperior;leechseed,1 304v 35 | thunderwave,0;leechseed,1 288v 31 | dracometeor,1;switch rhyperior 286v 31
+      p2b <- Heatran comes in (384/384)
+      p1a Kangaskhan used Sucker Punch  [[still]]
+              p1a Kangaskhan -- IT FAILED
+      p2a Hydreigon used Thunder Wave  [[still]]
+              p2a Hydreigon -- IT FAILED
+      p1b Genesect used Thunderbolt -> p2a: Hydreigon
+      after p1: Kangaskhan-Mega 312/414, Genesect 338/338
+      after p2: Hydreigon 302/384, Heatran 384/384
+
+  Turn 6
+    p1 greedy: move 4 1, move 4 1
+    p2 mcts: switch 4, move 2   (slot0 Hydreigon -> Trevenant)
+      search (37000 visits): switch trevenant;heatwave,0 1859v 557 | switch charizardmegay;heatwave,0 1625v 475 | thunderwave,1;heatwave,0 1502v 432 | dracometeor,1;heatwave,0 1278v 355
+      p2a <- Trevenant comes in (374/374)
+      p1a Kangaskhan used Sucker Punch  [[still]]
+              p1a Kangaskhan -- IT FAILED
+      p2b Heatran used Heat Wave -> p1a: Kangaskhan  [[spread] p1a,p1b]
+      p1b Genesect fainted
+      after p1: Kangaskhan-Mega 134/414, Genesect 0/338
+      after p2: Trevenant 374/374, Heatran 384/384
+
+  Turn 7
+      p1b <- Landorus-Therian comes in (319/319)
+              p2a Trevenant atk 1 fell
+              p2b Heatran atk 1 fell
+      after p1: Kangaskhan-Mega 134/414, Landorus-Therian 319/319
+      after p2: Trevenant 374/374, Heatran 384/384
+
+  Turn 8
+    p1 greedy: move 4 1, move 4 1
+    p2 mcts: move 2 2, switch 5   (slot1 Heatran -> Rhyperior)
+      search (39000 visits): willowisp,1;switch rhyperior 1661v 650 | willowisp,1;switch hydreigon 1354v 513 | hornleech,1;switch rhyperior 1151v 424 | willowisp,1;switch charizardmegay 1087v 396
+      p2b <- Rhyperior comes in (434/434)
+      p1a Kangaskhan used Sucker Punch  [[still]]
+              p1a Kangaskhan -- IT FAILED
+      p1b Landorus used Superpower -> p2a: Trevenant
+              p2a Trevenant -- IMMUNE
+      p2a Trevenant used Will-O-Wisp -> p1b: Landorus
+              p1b Landorus is now brn
+      after p1: Kangaskhan-Mega 83/414, Landorus-Therian 280/319
+      after p2: Trevenant 374/374, Rhyperior 434/434
+
+  Turn 9
+    p1 greedy: move 4 1, move 4 1
+    p2 mcts: move 3 2, move 1
+      search (25000 visits): hornleech,1;rockslide,0 752v 220 | hornleech,1;earthquake,0 651v 182 | leechseed,1;rockslide,0 622v 172 | leechseed,1;earthquake,0 533v 139
+      p1a Kangaskhan used Sucker Punch -> p2a: Trevenant
+      p1b Landorus used Superpower -> p2a: Trevenant
+              p2a Trevenant -- IMMUNE
+      p2a Trevenant used Horn Leech -> p1b: Landorus
+      p2b Rhyperior used Rock Slide -> p1b: Landorus  [[spread] p1a,p1b]
+      p1a Kangaskhan fainted
+      after p1: Kangaskhan-Mega 0/414, Landorus-Therian 37/319
+      after p2: Trevenant 354/374, Rhyperior 434/434
+
+  Turn 10
+      p1a <- Diancie comes in (303/303)
+      after p1: Diancie 303/303, Landorus-Therian 37/319
+      after p2: Trevenant 354/374, Rhyperior 434/434
+
+  Turn 11
+    p1 greedy: move 1, move 4 1
+    p2 mcts: move 3 1, move 2
+      search (28000 visits): hornleech,0;earthquake,0 1398v 1027 | leechseed,1;earthquake,0 1299v 949 | willowisp,0;earthquake,0 1238v 900 | leechseed,0;earthquake,0 1226v 891
+      p1b Landorus used Superpower -> p2a: Trevenant
+              p2a Trevenant -- IMMUNE
+      p2a Trevenant used Horn Leech -> p1a: Diancie
+              p1a Diancie -- critical hit
+      p1a Diancie used Diamond Storm -> p2a: Trevenant  [[spread] p2a,p2b]
+      p2b Rhyperior used Earthquake -> p1b: Landorus  [[spread] p2a,p1a]
+              p1b Landorus -- IMMUNE
+              p2a Trevenant used up its Sitrus Berry
+      p1a Diancie fainted
+      p1b Landorus fainted
+      after p1: Diancie 0/303, Landorus-Therian 0/319
+      after p2: Trevenant 247/374, Rhyperior 392/434
+
+  Turn 12
+      p1b <- Deoxys-Speed comes in (303/303)
+      p1a <- Volcanion comes in (363/363)
+      after p1: Volcanion 363/363, Deoxys-Speed 303/303
+      after p2: Trevenant 247/374, Rhyperior 392/434
+
+  Turn 13
+    p1 greedy: move 2 1, move 2 1
+    p2 mcts: move 4 1, move 2
+      search (30000 visits): leechseed,0;earthquake,0 2153v 1131 | leechseed,0;rockslide,0 1087v 528 | hornleech,1;earthquake,0 893v 424 | leechseed,0;icepunch,1 678v 304
+      p1b Deoxys used Psycho Boost -> p2a: Trevenant
+              p1b Deoxys spa 2 fell
+      p1a Volcanion used Steam Eruption -> p2a: Trevenant
+      p2a Trevenant fainted
+      p2b Rhyperior used Earthquake -> p1a: Volcanion  [[spread] p1a,p1b]
+      after p1: Volcanion 129/363, Deoxys-Speed 168/303
+      after p2: Trevenant 0/374, Rhyperior 392/434
+
+  Turn 14
+      p2a <- Hydreigon comes in (302/384)
+      after p1: Volcanion 129/363, Deoxys-Speed 168/303
+      after p2: Hydreigon 302/384, Rhyperior 392/434
+
+  Turn 15
+    p1 greedy: move 2 1, move 2 1
+    p2 mcts: move 2 2, move 1
+      search (64000 visits): darkpulse,1;rockslide,0 50795v 40052 | darkpulse,1;earthquake,0 1558v 966 | dracometeor,0;earthquake,0 483v 256 | dracometeor,1;earthquake,0 328v 160
+      p1b Deoxys used Psycho Boost -> p2a: Hydreigon
+              p2a Hydreigon -- IMMUNE
+      p2a Hydreigon used Dark Pulse -> p1b: Deoxys
+      p1b Deoxys fainted
+      p1a Volcanion used Steam Eruption -> p2a: Hydreigon
+              p2a Hydreigon is now brn
+      p2b Rhyperior used Rock Slide -> p1a: Volcanion
+      p1a Volcanion fainted
+      after p1: Volcanion 0/363, Deoxys-Speed 0/303
+      after p2: Hydreigon 203/384, Rhyperior 392/434
+
+  RESULT: p2 wins

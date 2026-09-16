@@ -1,0 +1,157 @@
+battle 7   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: Untitled 1002: Diancie-Mega, Genesect, Talonflame, Landorus-Therian, Hoopa-Unbound, Gastrodon-East
+  p2: Copy of Untitled 577: Kangaskhan-Mega, Bisharp, Deoxys-Attack, Amoonguss, Landorus, Talonflame
+
+  Turn 1
+    p1 mcts: switch 6, move 2 2   (slot0 Diancie-Mega -> Gastrodon-East)
+      search (52000 visits): switch gastrodoneast;flamethrower,1 1137v 226 | switch landorustherian;flamethrower,1 828v 145 | protect,0;flamethrower,1 796v 137 | switch gastrodoneast;icebeam,0 771v 131
+    p2 greedy: move 3 1, move 2 1
+      p1a <- Gastrodon-East comes in (426/426)
+      p2a Kangaskhan used Sucker Punch  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p2b Bisharp used Sucker Punch  [[still]]
+              p2b Bisharp -- IT FAILED
+      p1b Genesect used Flamethrower -> p2b: Bisharp
+              p2b Bisharp used up its Focus Sash
+      after p1: Gastrodon-East 426/426, Genesect 283/283
+      after p2: Kangaskhan-Mega 414/414, Bisharp 1/271
+
+  Turn 2
+    p1 mcts: switch 4, move 2 1   (slot0 Gastrodon-East -> Landorus-Therian)
+      search (71000 visits): switch landorustherian;flamethrower,0 2254v 174 | icebeam,0;flamethrower,0 2062v 150 | icebeam,1;flamethrower,0 2062v 150 | earthpower,1;flamethrower,0 1985v 140
+    p2 greedy: move 3 1, move 2 1
+      p1a <- Landorus-Therian comes in (382/382)
+              p2a Kangaskhan atk 1 fell
+              p2b Bisharp atk 1 fell
+              p2b Bisharp atk 2 rose
+      p2a Kangaskhan used Sucker Punch  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p2b Bisharp used Sucker Punch  [[still]]
+              p2b Bisharp -- IT FAILED
+      p1b Genesect used Flamethrower -> p2a: Kangaskhan
+              p2a Kangaskhan is now brn
+      after p1: Landorus-Therian 382/382, Genesect 283/283
+      after p2: Kangaskhan-Mega 215/414, Bisharp 1/271
+
+  Turn 3
+    p1 mcts: move 4, move 2 2
+      search (77000 visits): stealthrock,0;flamethrower,1 2143v 152 | earthquake,0;flamethrower,1 2138v 152 | stoneedge,1;flamethrower,1 2030v 139 | stoneedge,0;flamethrower,1 1938v 128
+    p2 greedy: move 3 1, move 2 1
+      p2a Kangaskhan used Sucker Punch  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p2b Bisharp used Sucker Punch  [[still]]
+              p2b Bisharp -- IT FAILED
+      p1b Genesect used Flamethrower -> p2b: Bisharp
+      p2b Bisharp fainted
+      p1a Landorus used Stealth Rock -> p2a: Kangaskhan
+      -sidestart p2: B move: Stealth Rock
+      after p1: Landorus-Therian 382/382, Genesect 283/283
+      after p2: Kangaskhan-Mega 164/414, Bisharp 0/271
+
+  Turn 4
+      p2b <- Deoxys-Attack comes in (241/241)
+      after p1: Landorus-Therian 382/382, Genesect 283/283
+      after p2: Kangaskhan-Mega 164/414, Deoxys-Attack 211/241
+
+  Turn 5
+    p1 mcts: move 3 2, switch 4   (slot1 Genesect -> Gastrodon-East)
+      search (67000 visits): uturn,1;switch gastrodoneast 13280v 11127 | stoneedge,1;flamethrower,1 2061v 319 | switch gastrodoneast;flamethrower,1 2034v 313 | stoneedge,0;flamethrower,1 1999v 306
+    p2 greedy: move 3 1, move 2 1
+      p1b <- Gastrodon-East comes in (426/426)
+      p2a Kangaskhan used Sucker Punch -> p1a: Landorus
+      p2b Deoxys used Psycho Boost -> p1a: Landorus
+              p2b Deoxys spa 2 fell
+      p1a Landorus fainted
+      after p1: Landorus-Therian 0/382, Gastrodon-East 426/426
+      after p2: Kangaskhan-Mega 44/414, Deoxys-Attack 187/241
+
+  Turn 6
+      p1a <- Talonflame comes in (359/359)
+      after p1: Talonflame 359/359, Gastrodon-East 426/426
+      after p2: Kangaskhan-Mega 44/414, Deoxys-Attack 187/241
+
+  Turn 7
+    p1 mcts: move 1 2, move 2 2
+      search (70000 visits): bravebird,1;icebeam,1 861v 15 | uturn,1;icebeam,1 861v 15 | flareblitz,0;icebeam,1 860v 14 | switch genesect;icebeam,1 859v 14
+    p2 greedy: move 3 1, move 2 1
+      p2a Kangaskhan used Sucker Punch -> p1a: Talonflame
+      p1a Talonflame used Brave Bird -> p2b: Deoxys
+      p2b Deoxys fainted
+      p1b Gastrodon used Ice Beam -> p2a: Kangaskhan
+      p2a Kangaskhan fainted
+      after p1: Talonflame 264/359, Gastrodon-East 426/426
+      after p2: Kangaskhan-Mega 0/414, Deoxys-Attack 0/241
+
+  Turn 8
+      p2b <- Landorus comes in (382/382)
+      p2a <- Amoonguss comes in (432/432)
+      after p1: Talonflame 264/359, Gastrodon-East 426/426
+      after p2: Amoonguss 378/432, Landorus 335/382
+
+  Turn 9
+    p1 mcts: switch 4, move 2 2   (slot0 Talonflame -> Genesect)
+      search (18000 visits): switch genesect;icebeam,1 722v 75 | switch hoopaunbound;icebeam,1 603v 54 | switch dianciemega;icebeam,1 603v 54 | bravebird,1;switch genesect 578v 49
+    p2 greedy: move 3 1, move 1 1
+      p1a <- Genesect comes in (283/283)
+              p1a Genesect spa 1 rose
+      p2b Landorus used Earth Power -> p1a: Genesect
+      p1b Gastrodon used Ice Beam -> p2b: Landorus
+      p2b Landorus fainted
+      p2a Amoonguss used Energy Ball -> p1a: Genesect
+      after p1: Genesect 24/283, Gastrodon-East 426/426
+      after p2: Amoonguss 378/432, Landorus 0/382
+
+  Turn 10
+      p2b <- Talonflame comes in (320/320)
+      after p1: Genesect 24/283, Gastrodon-East 426/426
+      after p2: Amoonguss 378/432, Talonflame 160/320
+
+  Turn 11
+    p1 mcts: move 1 2, move 1 2
+      search PANICKED (assertion `left != right` failed: get_two_actives called wit); greedy took the turn
+    p2 greedy: move 3 1, move 1 1
+      p2b Talonflame used Brave Bird -> p1a: Genesect
+      p1a Genesect fainted
+      p1b Gastrodon used Earth Power -> p2b: Talonflame
+              p2b Talonflame -- IMMUNE
+      p2a Amoonguss used Energy Ball -> p1b: Gastrodon
+      p1b Gastrodon fainted
+      after p1: Genesect 0/283, Gastrodon-East 0/426
+      after p2: Amoonguss 378/432, Talonflame 120/320
+
+  Turn 12
+      p1a <- Talonflame comes in (264/359)
+      p1b <- Hoopa-Unbound comes in (301/301)
+      after p1: Talonflame 264/359, Hoopa-Unbound 301/301
+      after p2: Amoonguss 378/432, Talonflame 120/320
+
+  Turn 13
+    p1 mcts: move 1 2, move 1 2
+      search PANICKED (assertion `left != right` failed: get_two_actives called wit); greedy took the turn
+    p2 greedy: move 3 1, move 1 1
+      p2b Talonflame used Brave Bird -> p1a: Talonflame
+              p1a Talonflame -- critical hit
+      p1a Talonflame fainted
+      p1b Hoopa used Hyperspace Fury -> p2b: Talonflame
+              p1b Hoopa def 1 fell
+      p2b Talonflame fainted
+      p2a Amoonguss used Energy Ball -> p1b: Hoopa
+      after p1: Talonflame 0/359, Hoopa-Unbound 195/301
+      after p2: Amoonguss 378/432, Talonflame 0/320
+
+  Turn 14
+      p1a <- Diancie-Mega comes in (287/287)
+      after p1: Diancie-Mega 287/287, Hoopa-Unbound 195/301
+      after p2: Amoonguss 378/432, Talonflame 0/320
+
+  Turn 15
+    p1 mcts: move 3 1, move 2 1
+      search (202000 visits): earthpower,0;hyperspacehole,0 35178v 35165 | moonblast,0;hyperspacehole,0 35147v 35134 | diamondstorm,0;hyperspacehole,0 33360v 33324 | protect,0;hyperspacehole,0 28243v 28146
+    p2 greedy: move 3 2, pass
+      p1a Diancie used Earth Power -> p2a: Amoonguss
+      p1b Hoopa used Hyperspace Hole -> p2a: Amoonguss
+      p2a Amoonguss fainted
+      after p1: Diancie-Mega 287/287, Hoopa-Unbound 165/301
+      after p2: Amoonguss 0/432, Talonflame 0/320
+
+  RESULT: p1 wins

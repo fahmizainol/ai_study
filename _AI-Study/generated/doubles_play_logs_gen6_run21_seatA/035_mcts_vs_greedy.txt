@@ -1,0 +1,118 @@
+battle 35   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: ORAS Doubles OU: Charizard-Mega-Y, Sylveon, Aegislash, Landorus-Therian, Zapdos, Cresselia
+  p2: ORAS Doubles OU: Rotom-Heat, Excadrill, Tyranitar, Salamence, Latias, Jirachi
+
+  Turn 1
+    p1 mcts: move 1, move 2
+      search (29000 visits): heatwave,0;hypervoice,0 6094v 4446 | heatwave,0;calmmind,1 3461v 2459 | heatwave,0;substitute,1 3173v 2244 | heatwave,0;protect,1 1157v 757
+    p2 greedy: move 1 1, move 3
+      p1a Charizard used Heat Wave -> p2a: Rotom  [[spread] p2a,p2b]
+      p2a Rotom used Overheat -> p1a: Charizard
+              p2a Rotom spa 2 fell
+      p2b Excadrill used Earthquake -> p1a: Charizard  [[spread] p1b]
+              p2a Rotom -- IMMUNE
+              p1a Charizard -- IMMUNE
+      p2b Excadrill fainted
+      p1b Sylveon used Hyper Voice -> p2a: Rotom
+      after p1: Charizard-Mega-Y 269/359, Sylveon 199/393
+      after p2: Rotom-Heat 112/273, Excadrill 0/416
+
+  Turn 2
+      p2b <- Tyranitar comes in (404/404)
+      after p1: Charizard-Mega-Y 269/359, Sylveon 199/393
+      after p2: Rotom-Heat 112/273, Tyranitar 404/404
+
+  Turn 3
+    p1 mcts: move 1, move 2
+      search (17000 visits): heatwave,0;hypervoice,0 2028v 1448 | heatwave,0;calmmind,1 1008v 678 | hiddenpower,1;hypervoice,0 917v 611 | protect,0;hypervoice,0 729v 473
+    p2 greedy: move 1 2, move 1 2
+      p1a Charizard used Heat Wave -> p2b: Tyranitar  [[spread] p2a,p2b]
+      p2a Rotom used Overheat -> p1b: Sylveon
+              p2a Rotom spa 2 fell
+      p1b Sylveon used Hyper Voice -> p2a: Rotom  [[spread] p2a,p2b]
+      p2a Rotom fainted
+      p2b Tyranitar used Fire Blast -> p1b: Sylveon
+      after p1: Charizard-Mega-Y 247/359, Sylveon 31/393
+      after p2: Rotom-Heat 0/273, Tyranitar 249/404
+
+  Turn 4
+      p2a <- Salamence comes in (331/331)
+              p1a Charizard atk 1 fell
+              p1b Sylveon atk 1 fell
+      after p1: Charizard-Mega-Y 247/359, Sylveon 31/393
+      after p2: Salamence 331/331, Tyranitar 249/404
+
+  Turn 5
+    p1 mcts: move 1, move 2
+      search (24000 visits): heatwave,0;hypervoice,0 5669v 5180 | hiddenpower,1;hypervoice,0 1490v 1277 | switch zapdos;hypervoice,0 1314v 1116 | protect,0;hypervoice,0 1313v 1115
+    p2 greedy: move 2 2, move 1 2
+      p2a Salamence used Draco Meteor -> p1b: Sylveon
+              p1b Sylveon -- IMMUNE
+      p1a Charizard used Heat Wave -> p2b: Tyranitar  [[spread] p2a,p2b]
+      p1b Sylveon used Hyper Voice -> p2b: Tyranitar  [[spread] p2a,p2b]
+              p2b Tyranitar -- critical hit
+      p2a Salamence fainted
+      p2b Tyranitar used Fire Blast -> p1b: Sylveon
+      p1b Sylveon fainted
+      after p1: Charizard-Mega-Y 225/359, Sylveon 0/393
+      after p2: Salamence 0/331, Tyranitar 47/404
+
+  Turn 6
+      p2a <- Latias comes in (337/337)
+      p1b <- Aegislash comes in (324/324)
+      after p1: Charizard-Mega-Y 225/359, Aegislash 324/324
+      after p2: Latias 337/337, Tyranitar 47/404
+
+  Turn 7
+    p1 mcts: switch 4, move 2 2   (slot0 Charizard-Mega-Y -> Landorus-Therian)
+      search (12000 visits): switch landorustherian;flashcannon,1 887v 730 | heatwave,0;shadowball,0 668v 535 | switch cresselia;flashcannon,1 387v 290 | heatwave,0;switch landorustherian 379v 283
+    p2 greedy: move 1 1, move 1 1
+      p1a <- Landorus-Therian comes in (361/361)
+              p2a Latias atk 1 fell
+              p2b Tyranitar atk 1 fell
+      p2a Latias used Draco Meteor -> p1a: Landorus
+              p2a Latias spa 2 fell
+      p1b Aegislash used Flash Cannon -> p2b: Tyranitar
+      p2b Tyranitar fainted
+      after p1: Landorus-Therian 213/361, Aegislash-Blade 324/324
+      after p2: Latias 316/337, Tyranitar 0/404
+
+  Turn 8
+      p2b <- Jirachi comes in (343/343)
+      after p1: Landorus-Therian 213/361, Aegislash-Blade 324/324
+      after p2: Latias 316/337, Jirachi 343/343
+
+  Turn 9
+    p1 mcts: move 3 1, move 1 2
+      search (9000 visits): uturn,0;shadowball,1 750v 614 | switch charizardmegay;shadowball,1 440v 339 | switch cresselia;shadowball,1 438v 338 | uturn,1;shadowball,1 295v 214
+    p2 greedy: move 1 1, move 1 1
+      p2a Latias used Draco Meteor -> p1a: Landorus
+              p2a Latias spa 2 fell
+      p2b Jirachi used Doom Desire -> p1a: Landorus
+              p2b Jirachi gained Doom Desire
+      p1a Landorus used U-turn -> p2a: Latias
+      after p1: Landorus-Therian 146/361, Aegislash-Blade 324/324
+      after p2: Latias 134/337, Jirachi 343/343
+
+  Turn 10
+      p1a <- Charizard-Mega-Y comes in (225/359)
+      p1b Aegislash used Shadow Ball -> p2b: Jirachi
+              p2b Jirachi -- critical hit
+      p2b Jirachi fainted
+      after p1: Charizard-Mega-Y 203/359, Aegislash-Blade 324/324
+      after p2: Latias 113/337, Jirachi 0/343
+
+  Turn 11
+    p1 mcts: move 4 1, move 1 1
+      search (220000 visits): hiddenpower,0;shadowball,0 115722v 115722 | heatwave,0;shadowball,0 54954v 54592 | solarbeam,0;shadowball,0 27389v 26967 | switch landorustherian;shadowball,0 3495v 3252
+    p2 greedy: move 1 1, pass
+      p2a Latias used Draco Meteor -> p1a: Charizard
+              p2a Latias spa 2 fell
+      p1a Charizard used Hidden Power -> p2a: Latias
+              p2a Latias -- IMMUNE
+      p1b Aegislash used Shadow Ball -> p2a: Latias
+      p2a Latias fainted
+      after p1: Charizard-Mega-Y 149/359, Aegislash-Blade 324/324
+      after p2: Latias 0/337, Jirachi 0/343
+
+  RESULT: p1 wins

@@ -1,0 +1,182 @@
+battle 12   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: never cook again: Kangaskhan-Mega, Bisharp, Togekiss, Thundurus, Landorus-Therian, Gastrodon-East
+  p2: XY Doubles: Aromatisse, Conkeldurr, Camerupt, Slowbro, Porygon2, Breloom
+
+  Turn 1
+    p1 mcts: switch 6, switch 4   (slot0 Kangaskhan-Mega -> Gastrodon-East; slot1 Bisharp -> Thundurus)
+      search (37000 visits): switch gastrodoneast;switch thundurus 357v 351 | switch togekiss;switch landorustherian 353v 346 | switch togekiss;switch gastrodoneast 352v 345 | switch gastrodoneast;switch togekiss 351v 344
+    p2 greedy: move 1 1, move 4 1
+      p1a <- Gastrodon-East comes in (426/426)
+      p1b <- Thundurus comes in (361/361)
+      p2b Conkeldurr used Poison Jab -> p1a: Gastrodon
+      p2a Aromatisse used Draining Kiss -> p1a: Gastrodon
+      after p1: Gastrodon-East 286/426, Thundurus 361/361
+      after p2: Aromatisse 364/406, Conkeldurr 304/414
+
+  Turn 2
+    p1 mcts: move 2 2, move 1 2
+      search (7000 visits): earthpower,1;thunderbolt,1 141v 97 | earthpower,1;switch landorustherian 106v 67 | recover,0;switch landorustherian 101v 63 | recover,0;thunderbolt,1 98v 60
+    p2 greedy: move 1 1, move 4 1
+      p1b Thundurus used Thunderbolt -> p2b: Conkeldurr
+      p1a Gastrodon used Earth Power -> p2b: Conkeldurr
+      p2b Conkeldurr fainted
+      p2a Aromatisse used Draining Kiss -> p1a: Gastrodon
+      after p1: Gastrodon-East 220/426, Thundurus 361/361
+      after p2: Aromatisse 364/406, Conkeldurr 0/414
+
+  Turn 3
+      p2b <- Camerupt comes in (344/344)
+      after p1: Gastrodon-East 220/426, Thundurus 361/361
+      after p2: Aromatisse 364/406, Camerupt 344/344
+
+  Turn 4
+    p1 mcts: move 4, switch 5   (slot1 Thundurus -> Landorus-Therian)
+      search (9000 visits): recover,0;switch landorustherian 185v 117 | earthpower,1;switch landorustherian 161v 98 | recover,0;thunderwave,0 152v 91 | earthpower,1;thunderwave,0 142v 83
+    p2 greedy: move 1 1, move 1
+      p1b <- Landorus-Therian comes in (358/358)
+              p2a Aromatisse atk 1 fell
+              p2b Camerupt atk 1 fell
+      p1a Gastrodon used Recover
+      p2b Camerupt used Heat Wave -> p1b: Landorus  [[spread] p1a,p1b]
+      p2a Aromatisse used Draining Kiss -> p1a: Gastrodon
+      after p1: Gastrodon-East 303/426, Landorus-Therian 210/358
+      after p2: Aromatisse 364/406, Camerupt 344/344
+
+  Turn 5
+    p1 mcts: move 4, move 1
+      search (12000 visits): recover,0;earthquake,0 411v 277 | icebeam,0;earthquake,0 312v 200 | earthpower,0;earthquake,0 293v 186 | switch thundurus;earthquake,0 286v 181
+    p2 greedy: move 1 2, move 1
+      p1b Landorus used Earthquake -> p2a: Aromatisse  [[spread] p1a,p2a,p2b]
+      p1a Gastrodon used Recover
+      p2b Camerupt used Heat Wave -> p1a: Gastrodon  [[spread] p1a,p1b]
+      p2a Aromatisse used Draining Kiss -> p1b: Landorus
+      p1b Landorus fainted
+      after p1: Gastrodon-East 306/426, Landorus-Therian 0/358
+      after p2: Aromatisse 278/406, Camerupt 101/344
+
+  Turn 6
+      p1b <- Togekiss comes in (374/374)
+      after p1: Gastrodon-East 306/426, Togekiss 374/374
+      after p2: Aromatisse 278/406, Camerupt 101/344
+
+  Turn 7
+    p1 mcts: move 2 2, move 1 1
+      search (8000 visits): earthpower,1;airslash,0 290v 165 | recover,0;airslash,0 275v 155 | icebeam,0;airslash,0 216v 114 | earthpower,0;airslash,0 208v 109
+    p2 greedy: move 1 1, move 1
+      p1b Togekiss used Air Slash -> p2a: Aromatisse
+      p1a Gastrodon used Earth Power -> p2b: Camerupt
+      p2b Camerupt fainted
+              p2a Aromatisse COULD NOT MOVE (flinch)
+      after p1: Gastrodon-East 306/426, Togekiss 374/374
+      after p2: Aromatisse 219/406, Camerupt 0/344
+
+  Turn 8
+      p2b <- Slowbro comes in (394/394)
+      after p1: Gastrodon-East 306/426, Togekiss 374/374
+      after p2: Aromatisse 219/406, Slowbro 394/394
+
+  Turn 9
+    p1 mcts: move 4, move 1 2
+      search (15000 visits): recover,0;airslash,1 1237v 951 | recover,0;airslash,0 1069v 811 | recover,0;switch kangaskhanmega 912v 682 | recover,0;switch bisharp 735v 538
+    p2 greedy: move 1 1, move 1 1
+      p1b Togekiss used Air Slash -> p2b: Slowbro
+      p1a Gastrodon used Recover
+      p2b Slowbro used Scald -> p1a: Gastrodon
+              p1a Gastrodon spa 1 rose
+      p2a Aromatisse used Draining Kiss -> p1a: Gastrodon
+      after p1: Gastrodon-East 369/426, Togekiss 374/374
+      after p2: Aromatisse 220/406, Slowbro 303/394
+
+  Turn 10
+    p1 mcts: move 2 2, move 1 2
+      search (8000 visits): earthpower,1;airslash,1 405v 276 | earthpower,1;airslash,0 310v 202 | icebeam,1;airslash,1 241v 149 | icebeam,0;airslash,1 228v 140
+    p2 greedy: move 1 1, move 1 1
+      p1b Togekiss used Air Slash -> p2b: Slowbro
+      p1a Gastrodon used Earth Power -> p2b: Slowbro
+      p2b Slowbro fainted
+      p2a Aromatisse used Draining Kiss -> p1a: Gastrodon
+      after p1: Gastrodon-East 306/426, Togekiss 374/374
+      after p2: Aromatisse 225/406, Slowbro 0/394
+
+  Turn 11
+      p2b <- Porygon2 comes in (374/374)
+              p2b Porygon2 atk 1 rose
+      after p1: Gastrodon-East 306/426, Togekiss 374/374
+      after p2: Aromatisse 225/406, Porygon2 374/374
+
+  Turn 12
+    p1 mcts: move 2 2, move 1 2
+      search (5000 visits): earthpower,1;airslash,1 190v 128 | icebeam,1;airslash,1 154v 99 | recover,0;airslash,1 152v 97 | earthpower,0;airslash,1 145v 92
+    p2 greedy: move 1 1, move 1 1
+      p1b Togekiss used Air Slash -> p2b: Porygon2
+      p1a Gastrodon used Earth Power -> p2b: Porygon2
+      p2b Porygon2 used Thunderbolt -> p1a: Gastrodon
+              p1a Gastrodon -- IMMUNE
+      p2a Aromatisse used Draining Kiss -> p1a: Gastrodon
+      after p1: Gastrodon-East 240/426, Togekiss 374/374
+      after p2: Aromatisse 233/406, Porygon2 199/374
+
+  Turn 13
+    p1 mcts: move 4, move 1 2
+      search (19000 visits): recover,0;airslash,1 3018v 2268 | icebeam,1;airslash,1 1032v 716 | earthpower,1;airslash,1 1024v 710 | recover,0;airslash,0 990v 684
+    p2 greedy: move 1 1, move 1 1
+      p1b Togekiss used Air Slash -> p2b: Porygon2
+      p1a Gastrodon used Recover
+              p2b Porygon2 COULD NOT MOVE (flinch)
+      p2a Aromatisse used Draining Kiss -> p1a: Gastrodon
+      after p1: Gastrodon-East 366/426, Togekiss 374/374
+      after p2: Aromatisse 236/406, Porygon2 121/374
+
+  Turn 14
+    p1 mcts: move 2 2, move 1 1
+      search (22000 visits): earthpower,1;airslash,0 2298v 1827 | earthpower,1;airslash,1 1797v 1407 | icebeam,1;airslash,1 1630v 1268 | earthpower,1;magiccoat,1 1124v 849
+    p2 greedy: move 1 1, move 1 1
+      p1b Togekiss used Air Slash -> p2a: Aromatisse  [[miss]]
+              p1b Togekiss -- MISSED
+      p1a Gastrodon used Earth Power -> p2b: Porygon2
+      p2b Porygon2 used Thunderbolt -> p1a: Gastrodon
+              p1a Gastrodon -- IMMUNE
+      p2a Aromatisse used Draining Kiss -> p1a: Gastrodon
+              p1a Gastrodon -- critical hit
+      after p1: Gastrodon-East 275/426, Togekiss 374/374
+      after p2: Aromatisse 262/406, Porygon2 9/374
+
+  Turn 15
+    p1 mcts: move 1 2, move 1 1
+      search (28000 visits): icebeam,1;airslash,0 2273v 1565 | earthpower,1;airslash,0 2149v 1474 | recover,0;airslash,1 1805v 1222 | icebeam,0;airslash,1 1263v 828
+    p2 greedy: move 1 1, move 1 1
+      p1b Togekiss used Air Slash -> p2a: Aromatisse
+      p1a Gastrodon used Ice Beam -> p2b: Porygon2
+      p2b Porygon2 fainted
+      p2a Aromatisse used Draining Kiss -> p1a: Gastrodon
+      after p1: Gastrodon-East 215/426, Togekiss 374/374
+      after p2: Aromatisse 184/406, Porygon2 0/374
+
+  Turn 16
+      p2b <- Breloom comes in (324/324)
+      after p1: Gastrodon-East 215/426, Togekiss 374/374
+      after p2: Aromatisse 184/406, Breloom 324/324
+
+  Turn 17
+    p1 mcts: move 4, move 1 2
+      search (32000 visits): recover,0;airslash,1 11597v 9168 | earthpower,0;airslash,1 4267v 3256 | icebeam,0;airslash,1 2574v 1913 | earthpower,1;airslash,1 1163v 813
+    p2 greedy: move 1 1, move 2 1
+      p1b Togekiss used Air Slash -> p2b: Breloom
+      p2b Breloom fainted
+      p1a Gastrodon used Recover
+      p2a Aromatisse used Draining Kiss -> p1a: Gastrodon
+      after p1: Gastrodon-East 362/426, Togekiss 374/374
+      after p2: Aromatisse 190/406, Breloom 0/324
+
+  Turn 18
+    p1 mcts: move 2 1, move 1 1
+      search (343000 visits): earthpower,0;airslash,0 336703v 329754 | icebeam,0;airslash,0 709v 566 | earthpower,0;switch kangaskhanmega 409v 302 | earthpower,0;switch bisharp 354v 254
+    p2 greedy: move 1 1, pass
+      p1b Togekiss used Air Slash -> p2a: Aromatisse
+      p1a Gastrodon used Earth Power -> p2a: Aromatisse
+      p2a Aromatisse used Draining Kiss -> p1a: Gastrodon
+      p2a Aromatisse fainted
+      after p1: Gastrodon-East 301/426, Togekiss 374/374
+      after p2: Aromatisse 0/406, Breloom 0/324
+
+  RESULT: p1 wins

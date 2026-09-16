@@ -1,0 +1,134 @@
+battle 33   p1=greedy vs p2=mcts   mcts 300 ms a decision
+  p1: Untitled 706: Deoxys-Speed, Sceptile-Mega, Aegislash, Keldeo-Resolute, Landorus, Talonflame
+  p2: hh kang offcress: Kangaskhan, Volcanion, Kyurem-Black, Aegislash, Cresselia, Landorus-Therian
+
+  Turn 1
+    p1 greedy: move 4 1, move 3 1
+    p2 mcts: move 4 -2 mega, move 2
+      search (29000 visits): helpinghand-mega,1;heatwave,0 200v 175 | lowkick-mega,1;heatwave,0 194v 169 | switch landorustherian;heatwave,0 194v 169 | fakeout,1;heatwave,0 190v 165
+      p2a Kangaskhan used Helping Hand -> p2b: Volcanion
+      p1a Deoxys used Psycho Boost -> p2a: Kangaskhan
+              p1a Deoxys spa 2 fell
+      p1b Sceptile used Leaf Storm -> p2a: Kangaskhan
+              p1b Sceptile spa 2 fell
+      p2a Kangaskhan fainted
+      p2b Volcanion used Heat Wave -> p1b: Sceptile  [[spread] p1a]
+              p2b Volcanion -- MISSED
+      after p1: Deoxys-Speed 1/247, Sceptile-Mega 281/281
+      after p2: Kangaskhan 0/414, Volcanion 363/363
+
+  Turn 2
+      p2a <- Kyurem-Black comes in (391/391)
+      after p1: Deoxys-Speed 1/247, Sceptile-Mega 281/281
+      after p2: Kyurem-Black 391/391, Volcanion 363/363
+
+  Turn 3
+    p1 greedy: move 4 1, move 3 1
+    p2 mcts: move 1 2, move 2
+      search (15000 visits): icebeam,1;heatwave,0 447v 249 | icebeam,1;steameruption,0 353v 187 | icebeam,1;switch landorustherian 328v 171 | icebeam,1;earthpower,1 320v 166
+      p1a Deoxys used Psycho Boost -> p2a: Kyurem
+              p1a Deoxys spa 2 fell
+      p1a Deoxys fainted
+      p2a Kyurem used Ice Beam -> p1b: Sceptile
+      p1b Sceptile fainted
+      p2b Volcanion used Heat Wave -> p1: Deoxys  [[notarget]]
+              p2b Volcanion -- IT FAILED
+      after p1: Deoxys-Speed 0/247, Sceptile-Mega 0/281
+      after p2: Kyurem-Black 251/391, Volcanion 363/363
+
+  Turn 4
+      p1a <- Aegislash comes in (324/324)
+      p1b <- Keldeo-Resolute comes in (338/338)
+      after p1: Aegislash 324/324, Keldeo-Resolute 338/338
+      after p2: Kyurem-Black 251/391, Volcanion 363/363
+
+  Turn 5
+    p1 greedy: move 1 1, move 4 1
+    p2 mcts: switch 6, move 2   (slot0 Kyurem-Black -> Landorus-Therian)
+      search (5000 visits): switch landorustherian;heatwave,0 253v 174 | switch landorustherian;steameruption,0 214v 142 | switch landorustherian;steameruption,1 173v 109 | switch landorustherian;earthpower,0 167v 104
+      p2a <- Landorus-Therian comes in (382/382)
+              p1a Aegislash atk 1 fell
+              p1b Keldeo atk 1 fell
+      p1b Keldeo used Hydro Pump -> p2a: Landorus
+      p2a Landorus fainted
+      p2b Volcanion used Heat Wave -> p1a: Aegislash  [[spread] p1a,p1b]
+      p1a Aegislash used Shadow Ball -> p2b: Volcanion
+      after p1: Aegislash-Blade 182/324, Keldeo-Resolute 271/338
+      after p2: Landorus-Therian 0/382, Volcanion 263/363
+
+  Turn 6
+      p2a <- Aegislash comes in (324/324)
+      after p1: Aegislash-Blade 182/324, Keldeo-Resolute 271/338
+      after p2: Aegislash 324/324, Volcanion 263/363
+
+  Turn 7
+    p1 greedy: move 1 2, move 4 2
+    p2 mcts: move 1 2, move 1 1
+      search (26000 visits): shadowball,1;steameruption,0 1313v 721 | shadowball,1;heatwave,0 1300v 713 | toxic,1;heatwave,0 1251v 683 | toxic,1;steameruption,0 1118v 602
+      p1b Keldeo used Hydro Pump -> p2b: Volcanion
+      p2b Volcanion used Steam Eruption -> p1a: Aegislash
+              p1a Aegislash -- critical hit
+      p1a Aegislash fainted
+      p2a Aegislash used Shadow Ball -> p1b: Keldeo
+      after p1: Aegislash 0/324, Keldeo-Resolute 118/338
+      after p2: Aegislash-Blade 324/324, Volcanion 353/363
+
+  Turn 8
+      p1a <- Landorus comes in (319/319)
+      after p1: Landorus 319/319, Keldeo-Resolute 118/338
+      after p2: Aegislash-Blade 324/324, Volcanion 353/363
+
+  Turn 9
+    p1 greedy: move 1 2, move 4 2
+    p2 mcts: switch 6, switch 5   (slot0 Aegislash-Blade -> Kyurem-Black; slot1 Volcanion -> Cresselia)
+      search (26000 visits): switch kyuremblack;switch cresselia 1561v 632 | shadowball,0;switch cresselia 1455v 583 | shadowball,1;switch cresselia 1093v 418 | switch cresselia;steameruption,0 871v 319
+      p2b <- Cresselia comes in (410/410)
+      p2a <- Kyurem-Black comes in (251/391)
+      p1b Keldeo used Hydro Pump -> p2b: Cresselia
+      p1a Landorus used Earth Power -> p2b: Cresselia
+              p2b Cresselia -- IMMUNE
+      after p1: Landorus 319/319, Keldeo-Resolute 118/338
+      after p2: Kyurem-Black 251/391, Cresselia 247/410
+
+  Turn 10
+    p1 greedy: move 1 2, move 4 2
+    p2 mcts: move 1 1, move 2
+      search (29000 visits): icebeam,0;icywind,0 4307v 2652 | icebeam,0;psyshock,1 3105v 1873 | icebeam,0;thunderwave,1 1190v 658 | icebeam,0;switch volcanion 1161v 640
+      p2a Kyurem used Ice Beam -> p1a: Landorus
+      p1a Landorus fainted
+      p1b Keldeo used Hydro Pump -> p2b: Cresselia
+      p2b Cresselia used Icy Wind -> p1b: Keldeo
+              p1b Keldeo spe 1 fell
+      after p1: Landorus 0/319, Keldeo-Resolute 89/338
+      after p2: Kyurem-Black 251/391, Cresselia 93/410
+
+  Turn 11
+      p1a <- Talonflame comes in (360/360)
+      after p1: Talonflame 360/360, Keldeo-Resolute 89/338
+      after p2: Kyurem-Black 251/391, Cresselia 93/410
+
+  Turn 12
+    p1 greedy: move 1 2, move 4 2
+    p2 mcts: move 1 1, switch 5   (slot1 Cresselia -> Volcanion)
+      search (47000 visits): icebeam,0;switch volcanion 13378v 5854 | icebeam,0;switch aegislash 3545v 1416 | icebeam,1;switch volcanion 2202v 834 | icebeam,0;icywind,0 1795v 660
+      p2b <- Volcanion comes in (353/363)
+      p1a Talonflame used Brave Bird -> p2b: Volcanion
+      p2a Kyurem used Ice Beam -> p1a: Talonflame
+      p1b Keldeo used Hydro Pump -> p2b: Volcanion
+      after p1: Talonflame 61/360, Keldeo-Resolute 89/338
+      after p2: Kyurem-Black 251/391, Volcanion 236/363
+
+  Turn 13
+    p1 greedy: move 1 1, move 4 1
+    p2 mcts: move 1 1, move 2
+      search (389000 visits): icebeam,0;heatwave,0 344313v 324811 | icebeam,1;heatwave,0 16724v 15265 | switch aegislash;steameruption,1 6630v 5898 | icebeam,0;earthpower,1 5004v 4405
+      p1a Talonflame used Brave Bird -> p2a: Kyurem
+      p2a Kyurem fainted
+      p1a Talonflame fainted
+      p1b Keldeo used Hydro Pump -> p2b: Volcanion
+      p2b Volcanion used Heat Wave -> p1b: Keldeo
+      p1b Keldeo fainted
+      after p1: Talonflame 0/360, Keldeo-Resolute 0/338
+      after p2: Kyurem-Black 0/391, Volcanion 326/363
+
+  RESULT: p2 wins

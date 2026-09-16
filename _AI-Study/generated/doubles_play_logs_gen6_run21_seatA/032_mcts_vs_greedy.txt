@@ -1,0 +1,119 @@
+battle 32   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: ORAS Doubles OU: Weavile, Breloom, Gengar, Jirachi, Azumarill, Talonflame
+  p2: XY Doubles: Meloetta, Keldeo-Resolute, Bisharp, Heatran, Venusaur, Zapdos
+
+  Turn 1
+    p1 mcts: move 2 1, move 3 2
+      search (20000 visits): knockoff,0;bulletseed,1 1270v 801 | knockoff,0;machpunch,0 537v 303 | knockoff,0;bulletseed,0 501v 279 | knockoff,0;spore,0 486v 269
+    p2 greedy: move 2, move 2 1
+      p1a Weavile used Knock Off -> p2a: Meloetta
+              p2a Meloetta used up its Sitrus Berry
+      p2b Keldeo used Secret Sword -> p1a: Weavile
+              p1a Weavile used up its Focus Sash
+      p1b Breloom used Bullet Seed -> p2b: Keldeo
+      p2b Keldeo fainted
+      p2a Meloetta used Hyper Voice -> p1b: Breloom  [[spread] p1a,p1b]
+              p1a Weavile -- critical hit
+      p1a Weavile fainted
+      after p1: Weavile 0/282, Breloom 77/261
+      after p2: Meloetta 8/404, Keldeo-Resolute 0/324
+
+  Turn 2
+      p1a <- Gengar comes in (262/262)
+      p2b <- Bisharp comes in (272/272)
+      after p1: Gengar 262/262, Breloom 77/261
+      after p2: Meloetta 8/404, Bisharp 272/272
+
+  Turn 3
+    p1 mcts: move 1 1 mega, move 2 2
+      search (34000 visits): sludgebomb-mega,0;machpunch,1 1855v 1222 | sludgebomb,0;machpunch,1 1433v 923 | switch jirachi;machpunch,1 686v 405 | switch azumarill;machpunch,1 594v 343
+    p2 greedy: move 2, move 2 2
+      p1b Breloom used Mach Punch -> p2b: Bisharp
+              p2b Bisharp -- critical hit
+      p2b Bisharp fainted
+      p1a Gengar used Sludge Bomb -> p2a: Meloetta
+      p2a Meloetta fainted
+      after p1: Gengar-Mega 262/262, Breloom 77/261
+      after p2: Meloetta 0/404, Bisharp 0/272
+
+  Turn 4
+      p2b <- Venusaur comes in (364/364)
+      p2a <- Heatran comes in (367/367)
+      after p1: Gengar-Mega 262/262, Breloom 77/261
+      after p2: Heatran 367/367, Venusaur 364/364
+
+  Turn 5
+    p1 mcts: move 2 1, move 2 1
+      search (27000 visits): shadowball,0;machpunch,0 3394v 1850 | switch talonflame;machpunch,0 1126v 549 | shadowball,1;machpunch,0 833v 388 | protect,0;machpunch,0 773v 355
+    p2 greedy: move 1, move 2 2
+      p1b Breloom used Mach Punch -> p2a: Heatran
+      p1a Gengar used Shadow Ball -> p2a: Heatran
+      p2a Heatran used Heat Wave -> p1a: Gengar  [[spread] p1a,p1b]
+      p1b Breloom fainted
+      p2b Venusaur used Sludge Bomb -> p1a: Gengar
+      after p1: Gengar-Mega 72/262, Breloom 0/261
+      after p2: Heatran 21/367, Venusaur 364/364
+
+  Turn 6
+      p1b <- Jirachi comes in (404/404)
+      after p1: Gengar-Mega 72/262, Jirachi 404/404
+      after p2: Heatran 21/367, Venusaur 364/364
+
+  Turn 7
+    p1 mcts: move 1 2, move 2 1
+      search (26000 visits): sludgebomb,1;ironhead,0 3561v 2140 | shadowball,0;icywind,0 2997v 1780 | shadowball,1;ironhead,0 2781v 1643 | shadowball,0;ironhead,1 1037v 556
+    p2 greedy: move 1, move 2 1
+      p1a Gengar used Sludge Bomb -> p2b: Venusaur
+      p1b Jirachi used Iron Head -> p2a: Heatran
+      p2a Heatran fainted
+      p2b Venusaur used Sludge Bomb -> p1a: Gengar
+      after p1: Gengar-Mega 34/262, Jirachi 404/404
+      after p2: Heatran 0/367, Venusaur 156/364
+
+  Turn 8
+      p2a <- Zapdos comes in (357/357)
+      after p1: Gengar-Mega 34/262, Jirachi 404/404
+      after p2: Zapdos 357/357, Venusaur 156/364
+
+  Turn 9
+    p1 mcts: move 1 2, move 3
+      search (29000 visits): sludgebomb,1;icywind,0 5304v 3969 | shadowball,1;icywind,0 3582v 2632 | sludgebomb,0;icywind,0 2030v 1441 | shadowball,0;icywind,0 1527v 1060
+    p2 greedy: move 1 1, move 2 1
+      p1a Gengar used Sludge Bomb -> p2b: Venusaur
+      p2b Venusaur fainted
+      p2a Zapdos used Thunderbolt -> p1a: Gengar
+      p1a Gengar fainted
+      p1b Jirachi used Icy Wind -> p2a: Zapdos
+              p2a Zapdos spe 1 fell
+      after p1: Gengar 0/262, Jirachi 404/404
+      after p2: Zapdos 273/357, Venusaur 0/364
+
+  Turn 10
+      p1a <- Azumarill comes in (404/404)
+      after p1: Azumarill 404/404, Jirachi 404/404
+      after p2: Zapdos 273/357, Venusaur 0/364
+
+  Turn 11
+    p1 mcts: move 3, move 1
+      search (106000 visits): bellydrum,0;followme,1 78343v 66763 | knockoff,0;ironhead,0 7829v 6150 | bellydrum,0;ironhead,0 5392v 4177 | knockoff,0;icywind,0 5009v 3868
+    p2 greedy: move 1 1, pass
+      p1b Jirachi used Follow Me
+      p2a Zapdos used Thunderbolt -> p1b: Jirachi
+      p1a Azumarill used Belly Drum
+              p1a Azumarill used up its Sitrus Berry
+      after p1: Azumarill 303/404, Jirachi 257/404
+      after p2: Zapdos 273/357, Venusaur 0/364
+
+  Turn 12
+    p1 mcts: move 2 1, move 1
+      search (543000 visits): knockoff,0;followme,1 499547v 494134 | aquajet,0;followme,1 8958v 8247 | aquajet,0;protect,1 8841v 8137 | aquajet,0;ironhead,0 6205v 5651
+    p2 greedy: move 1 2, pass
+      p1b Jirachi used Follow Me
+      p2a Zapdos used Thunderbolt -> p1b: Jirachi
+      p1a Azumarill used Knock Off -> p2a: Zapdos
+              p2a Zapdos used up its Sitrus Berry
+      p2a Zapdos fainted
+      after p1: Azumarill 303/404, Jirachi 107/404
+      after p2: Zapdos 0/357, Venusaur 0/364
+
+  RESULT: p1 wins

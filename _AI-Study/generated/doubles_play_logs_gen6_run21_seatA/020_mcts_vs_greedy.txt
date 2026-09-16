@@ -1,0 +1,130 @@
+battle 20   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: Untitled 579: Kangaskhan-Mega, Amoonguss, Kyurem-Black, Volcanion, Landorus, Mew
+  p2: ORAS Doubles OU: Charizard-Mega-Y, Venusaur, Aegislash, Zapdos, Keldeo, Landorus-Therian
+
+  Turn 1
+    p1 mcts: move 2 1, move 1 2
+      search (29000 visits): seismictoss,0;sludgebomb,1 565v 507 | seismictoss,1;sludgebomb,1 536v 478 | wish,0;sludgebomb,1 533v 475 | seismictoss,1;gigadrain,1 506v 448
+    p2 greedy: move 2 1, move 2 1
+      p2a Charizard used Solar Beam  [[still]]
+      p1a Kangaskhan used Seismic Toss -> p2a: Charizard
+      p2b Venusaur used Sludge Bomb -> p1a: Kangaskhan
+              p1a Kangaskhan is now psn
+      p1b Amoonguss used Sludge Bomb -> p2b: Venusaur
+      after p1: Kangaskhan-Mega 207/414, Amoonguss 432/432
+      after p2: Charizard-Mega-Y 259/359, Venusaur 195/319
+
+  Turn 2
+    p1 mcts: switch 5, switch 4   (slot0 Kangaskhan-Mega -> Landorus; slot1 Amoonguss -> Volcanion)
+      search (32000 visits): switch landorus;switch volcanion 15884v 15790 | switch volcanion;switch landorus 1201v 951 | wish,0;sludgebomb,1 527v 382 | switch volcanion;gigadrain,1 439v 311
+    p2 greedy: move 1, move 2 1
+      p1a <- Landorus comes in (319/319)
+      p1b <- Volcanion comes in (364/364)
+      p2a Charizard used Solar Beam -> p1a: Landorus  [[from] lockedmove]
+      p2b Venusaur used Sludge Bomb -> p1a: Landorus
+              p1a Landorus is now psn
+      p1a Landorus fainted
+      after p1: Landorus 0/319, Volcanion 364/364
+      after p2: Charizard-Mega-Y 259/359, Venusaur 164/319
+
+  Turn 3
+      p1a <- Kyurem-Black comes in (418/418)
+      after p1: Kyurem-Black 418/418, Volcanion 364/364
+      after p2: Charizard-Mega-Y 259/359, Venusaur 164/319
+
+  Turn 4
+    p1 mcts: move 2 2, move 1 1
+      search (45000 visits): icebeam,1;steameruption,0 563v 552 | icebeam,1;heatwave,0 544v 531 | icebeam,1;overheat,1 532v 518 | icebeam,1;overheat,0 531v 517
+    p2 greedy: move 2 1, move 2 1
+      p1a Kyurem used Ice Beam -> p2b: Venusaur
+      p2b Venusaur fainted
+      p2a Charizard used Solar Beam  [[still]]
+      p1b Volcanion used Steam Eruption -> p2a: Charizard
+      p2a Charizard fainted
+      after p1: Kyurem-Black 418/418, Volcanion 364/364
+      after p2: Charizard-Mega-Y 0/359, Venusaur 0/319
+
+  Turn 5
+      p2a <- Aegislash comes in (324/324)
+      p2b <- Zapdos comes in (384/384)
+      after p1: Kyurem-Black 418/418, Volcanion 364/364
+      after p2: Aegislash 324/324, Zapdos 384/384
+
+  Turn 6
+    p1 mcts: move 2 2, switch 4   (slot1 Volcanion -> Amoonguss)
+      search (30000 visits): icebeam,1;switch amoonguss 1161v 1031 | earthpower,0;earthpower,1 888v 771 | earthpower,0;switch kangaskhanmega 844v 729 | switch mew;earthpower,0 828v 714
+    p2 greedy: move 1 1, move 1 1
+      p1b <- Amoonguss comes in (432/432)
+      p1a Kyurem used Ice Beam -> p2b: Zapdos
+      p2b Zapdos used Thunderbolt -> p1a: Kyurem
+      p2a Aegislash used Shadow Ball -> p1a: Kyurem
+      after p1: Kyurem-Black 155/418, Amoonguss 432/432
+      after p2: Aegislash-Blade 324/324, Zapdos 52/384
+
+  Turn 7
+    p1 mcts: move 2 2, switch 4   (slot1 Amoonguss -> Volcanion)
+      search (31000 visits): icebeam,1;switch volcanion 19260v 19109 | earthpower,0;sludgebomb,0 637v 481 | earthpower,0;spore,1 409v 292 | earthpower,0;sludgebomb,1 402v 286
+    p2 greedy: move 1 1, move 1 1
+      p1b <- Volcanion comes in (364/364)
+      p1a Kyurem used Ice Beam -> p2b: Zapdos
+      p2b Zapdos fainted
+      p2a Aegislash used Shadow Ball -> p1a: Kyurem
+              p1a Kyurem -- critical hit
+      p1a Kyurem fainted
+      after p1: Kyurem-Black 0/418, Volcanion 364/364
+      after p2: Aegislash-Blade 324/324, Zapdos 0/384
+
+  Turn 8
+      p1a <- Amoonguss comes in (432/432)
+      p2b <- Keldeo comes in (323/323)
+      after p1: Amoonguss 432/432, Volcanion 364/364
+      after p2: Aegislash-Blade 324/324, Keldeo 323/323
+
+  Turn 9
+    p1 mcts: switch 5, move 1 1   (slot0 Amoonguss -> Kangaskhan-Mega)
+      search (252000 visits): switch kangaskhanmega;steameruption,0 38167v 3874 | switch kangaskhanmega;heatwave,0 11115v 886 | gigadrain,1;overheat,0 9182v 689 | switch kangaskhanmega;earthpower,0 7806v 551
+    p2 greedy: move 1 1, move 1 1
+      p1a <- Kangaskhan-Mega comes in (207/414)
+      p2b Keldeo used Hydro Pump -> p1a: Kangaskhan
+      p1a Kangaskhan fainted
+      p1b Volcanion used Steam Eruption -> p2a: Aegislash
+      p2a Aegislash used Shadow Ball -> p1b: Volcanion
+      after p1: Kangaskhan-Mega 0/414, Volcanion 234/364
+      after p2: Aegislash-Blade 18/324, Keldeo 291/323
+
+  Turn 10
+      p1a <- Amoonguss comes in (432/432)
+      after p1: Amoonguss 432/432, Volcanion 234/364
+      after p2: Aegislash-Blade 18/324, Keldeo 291/323
+
+  Turn 11
+    p1 mcts: move 2 2, move 1 1
+      search (16000 visits): gigadrain,1;steameruption,0 1070v 653 | gigadrain,1;heatwave,0 905v 542 | gigadrain,1;earthpower,0 629v 358 | gigadrain,1;steameruption,1 627v 357
+    p2 greedy: move 1 2, move 1 2
+      p2b Keldeo used Hydro Pump -> p1b: Volcanion
+      p1b Volcanion used Steam Eruption -> p2a: Aegislash
+      p2a Aegislash fainted
+      p1a Amoonguss used Giga Drain -> p2b: Keldeo
+      after p1: Amoonguss 432/432, Volcanion 325/364
+      after p2: Aegislash 0/324, Keldeo 127/323
+
+  Turn 12
+      p2a <- Landorus-Therian comes in (319/319)
+              p1a Amoonguss atk 1 fell
+              p1b Volcanion atk 1 fell
+      after p1: Amoonguss 432/432, Volcanion 325/364
+      after p2: Landorus-Therian 319/319, Keldeo 127/323
+
+  Turn 13
+    p1 mcts: move 1 2, move 1 1
+      search (26000 visits): sludgebomb,1;steameruption,0 1090v 749 | ragepowder,0;steameruption,0 1048v 717 | sludgebomb,1;overheat,0 971v 659 | gigadrain,1;steameruption,0 923v 623
+    p2 greedy: move 1, move 1 2
+      p2b Keldeo used Hydro Pump -> p1b: Volcanion
+      p2a Landorus used Earthquake -> p1a: Amoonguss  [[spread] p2b,p1a,p1b]
+      p2b Keldeo fainted
+      p1b Volcanion used Steam Eruption -> p2a: Landorus
+      p2a Landorus fainted
+      after p1: Amoonguss 257/432, Volcanion 73/364
+      after p2: Landorus-Therian 0/319, Keldeo 0/323
+
+  RESULT: p1 wins

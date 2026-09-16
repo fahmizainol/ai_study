@@ -1,0 +1,134 @@
+battle 9   p1=greedy vs p2=mcts   mcts 300 ms a decision
+  p1: XY Doubles: Regirock, Jirachi, Talonflame, Breloom, Blastoise, Aromatisse
+  p2: XY Doubles: Abomasnow, Jirachi, Rotom-Heat, Keldeo, Weavile, Landorus-Therian
+
+  Turn 1
+    p1 greedy: move 3, move 2 1
+    p2 mcts: move 1 mega, switch 6   (slot1 Jirachi -> Landorus-Therian)
+      search (14000 visits): blizzard-mega,0;switch landorustherian 265v 192 | blizzard-mega,0;thunderwave,0 232v 164 | blizzard,0;switch landorustherian 189v 127 | blizzard-mega,0;ironhead,0 188v 127
+      p2b <- Landorus-Therian comes in (367/367)
+              p1a Regirock -- IT FAILED
+              p1b Jirachi atk 1 fell
+      p1b Jirachi used Iron Head -> p2a: Abomasnow
+              p2a Abomasnow COULD NOT MOVE (flinch)
+      p1a Regirock used Earthquake -> p2a: Abomasnow  [[spread] p1b,p2a]
+              p2b Landorus -- IMMUNE
+      after p1: Regirock 342/364, Jirachi 254/404
+      after p2: Abomasnow-Mega 237/384, Landorus-Therian 345/367
+
+  Turn 2
+    p1 greedy: move 3, move 2 1
+    p2 mcts: move 1, move 1
+      search (25000 visits): blizzard,0;stealthrock,0 2452v 1781 | blizzard,0;earthquake,0 1963v 1405 | protect,0;earthquake,0 1375v 957 | blizzard,0;stoneedge,1 1197v 823
+      p2b Landorus used Stealth Rock -> p1b: Jirachi
+      -sidestart p1: A move: Stealth Rock
+      p1b Jirachi used Iron Head -> p2a: Abomasnow
+      p1a Regirock used Earthquake -> p2a: Abomasnow  [[spread] p1b,p2a]
+              p2b Landorus -- IMMUNE
+              p2a Abomasnow COULD NOT MOVE (flinch)
+      after p1: Regirock 320/364, Jirachi 102/404
+      after p2: Abomasnow-Mega 91/384, Landorus-Therian 323/367
+
+  Turn 3
+    p1 greedy: move 3, move 2 1
+    p2 mcts: move 1, move 3
+      search (29000 visits): blizzard,0;earthquake,0 5623v 3944 | protect,0;earthquake,0 2201v 1464 | woodhammer,0;earthquake,0 1265v 802 | blizzard,0;stoneedge,1 898v 548
+      p2b Landorus used Earthquake -> p1a: Regirock  [[spread] p2a,p1a,p1b]
+              p1a Regirock used up its Weakness Policy
+              p1a Regirock atk 2 rose
+              p1a Regirock spa 2 rose
+      p1b Jirachi fainted
+      p1a Regirock used Earthquake -> p2a: Abomasnow  [[spread] p2a]
+              p2b Landorus -- IMMUNE
+      p2a Abomasnow fainted
+      after p1: Regirock 160/364, Jirachi 0/404
+      after p2: Abomasnow 0/384, Landorus-Therian 301/367
+
+  Turn 4
+      p1b <- Talonflame comes in (360/360)
+      p2a <- Rotom-Heat comes in (271/271)
+      after p1: Regirock 160/364, Talonflame 180/360
+      after p2: Rotom-Heat 271/271, Landorus-Therian 301/367
+
+  Turn 5
+    p1 greedy: move 3, move 1 2
+    p2 mcts: move 2 1, move 2 2
+      search (23000 visits): thunderbolt,0;stoneedge,1 3148v 2408 | thunderbolt,0;earthquake,0 1829v 1353 | thunderbolt,1;earthquake,0 1788v 1321 | thunderbolt,0;stoneedge,0 1105v 784
+      p1b Talonflame used Brave Bird -> p2b: Landorus
+      p2a Rotom used Thunderbolt -> p1a: Regirock
+      p2b Landorus used Stone Edge -> p1b: Talonflame
+      p1b Talonflame fainted
+      p1a Regirock used Earthquake -> p2b: Landorus  [[spread] ]
+              p2a Rotom -- IMMUNE
+              p2b Landorus -- IMMUNE
+      p1a Regirock fainted
+      after p1: Regirock 0/364, Talonflame 0/360
+      after p2: Rotom-Heat 271/271, Landorus-Therian 57/367
+
+  Turn 6
+      p1b <- Blastoise comes in (362/362)
+      p1a <- Breloom comes in (324/324)
+      after p1: Breloom 304/324, Blastoise 317/362
+      after p2: Rotom-Heat 271/271, Landorus-Therian 57/367
+
+  Turn 7
+    p1 greedy: move 2 2, move 1
+    p2 mcts: move 2 2, move 3
+      search (15000 visits): thunderbolt,1;earthquake,0 3488v 2515 | thunderbolt,1;stoneedge,1 809v 518 | thunderbolt,0;earthquake,0 392v 225 | overheat,0;earthquake,0 323v 178
+      p1a Breloom used Mach Punch -> p2b: Landorus
+              p2b Landorus -- critical hit
+      p2b Landorus fainted
+      p2a Rotom used Thunderbolt -> p1b: Blastoise
+      p1b Blastoise used Water Spout -> p2a: Rotom
+              p2a Rotom -- critical hit
+      after p1: Breloom 304/324, Blastoise 15/362
+      after p2: Rotom-Heat 229/271, Landorus-Therian 0/367
+
+  Turn 8
+      p2b <- Keldeo comes in (324/324)
+      after p1: Breloom 304/324, Blastoise 15/362
+      after p2: Rotom-Heat 229/271, Keldeo 324/324
+
+  Turn 9
+    p1 greedy: move 2 1, move 1
+    p2 mcts: move 2 1, move 1 1
+      search (26000 visits): thunderbolt,0;secretsword,0 2099v 1452 | overheat,0;scald,1 1672v 1136 | overheat,0;secretsword,1 1616v 1095 | thunderbolt,1;secretsword,0 923v 592
+      p1a Breloom used Mach Punch -> p2a: Rotom
+      p2b Keldeo used Secret Sword -> p1a: Breloom
+      p2a Rotom used Thunderbolt -> p1a: Breloom
+      p1a Breloom fainted
+      p1b Blastoise used Water Spout -> p2a: Rotom  [[spread] p2a,p2b]
+      after p1: Breloom 0/324, Blastoise 15/362
+      after p2: Rotom-Heat 94/271, Keldeo 286/324
+
+  Turn 10
+      p1a <- Aromatisse comes in (406/406)
+      after p1: Aromatisse 356/406, Blastoise 15/362
+      after p2: Rotom-Heat 94/271, Keldeo 286/324
+
+  Turn 11
+    p1 greedy: move 4 1, move 1
+    p2 mcts: move 2 2, move 2 1
+      search (18000 visits): thunderbolt,1;scald,0 1511v 1073 | thunderbolt,0;scald,1 1416v 1000 | thunderbolt,0;secretsword,1 1387v 978 | thunderbolt,1;secretsword,0 880v 594
+      p2b Keldeo used Scald -> p1a: Aromatisse
+              p1a Aromatisse used up its Sitrus Berry
+      p2a Rotom used Thunderbolt -> p1b: Blastoise
+      p1b Blastoise fainted
+      p1a Aromatisse used Moonblast -> p2a: Rotom
+              p2a Rotom spa 1 fell
+      after p1: Aromatisse 253/406, Blastoise 0/362
+      after p2: Rotom-Heat 42/271, Keldeo 254/324
+
+  Turn 12
+    p1 greedy: move 4 1, pass
+    p2 mcts: move 1 1, move 2 1
+      search (109000 visits): overheat,0;scald,0 88295v 82870 | thunderbolt,0;scald,0 5383v 4412 | willowisp,0;scald,0 1259v 949 | switch jirachi;scald,0 1090v 811
+      p2b Keldeo used Scald -> p1a: Aromatisse
+      p2a Rotom used Overheat -> p1a: Aromatisse
+              p1a Aromatisse -- critical hit
+              p2a Rotom spa 2 fell
+      p1a Aromatisse fainted
+      after p1: Aromatisse 0/406, Blastoise 0/362
+      after p2: Rotom-Heat 42/271, Keldeo 222/324
+
+  RESULT: p2 wins

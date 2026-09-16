@@ -1,0 +1,222 @@
+battle 25   p1=greedy vs p2=mcts   mcts 300 ms a decision
+  p1: ORAS Doubles OU: Mawile-Mega, Dusclops, Sylveon, Amoonguss, Chandelure, Scrafty
+  p2: ORAS Doubles OU: Gardevoir-Mega, Amoonguss, Aegislash, Zapdos, Landorus-Therian, Volcanion
+
+  Turn 1
+    p1 greedy: move 3 1, move 1
+    p2 mcts: move 2, switch 5   (slot1 Amoonguss -> Landorus-Therian)
+      search (50000 visits): hypervoice,0;switch landorustherian 741v 48 | psychic,1;switch landorustherian 724v 45 | switch aegislash;switch landorustherian 720v 45 | switch zapdos;switch landorustherian 720v 45
+      p2b <- Landorus-Therian comes in (360/360)
+              p1a Mawile atk 1 fell
+              p1b Dusclops atk 1 fell
+      p2a Gardevoir used Hyper Voice -> p1b: Dusclops  [[spread] p1a,p1b]
+      p1a Mawile used Play Rough -> p2a: Gardevoir
+      p1b Dusclops used Trick Room
+      after p1: Mawile-Mega 198/303, Dusclops 197/284
+      after p2: Gardevoir-Mega 184/338, Landorus-Therian 360/360
+
+  Turn 2
+    p1 greedy: move 3 1, move 1
+    p2 mcts: switch 5, switch 6   (slot0 Gardevoir-Mega -> Amoonguss; slot1 Landorus-Therian -> Volcanion)
+      search (45000 visits): switch amoonguss;switch volcanion 21993v 14462 | psychic,1;switch amoonguss 560v 204 | switch zapdos;switch aegislash 556v 202 | trickroom,1;switch volcanion 547v 198
+      p2a <- Amoonguss comes in (432/432)
+      p2b <- Volcanion comes in (364/364)
+      p1a Mawile used Play Rough -> p2a: Amoonguss
+      p1b Dusclops used Trick Room
+      after p1: Mawile-Mega 198/303, Dusclops 197/284
+      after p2: Amoonguss 378/432, Volcanion 364/364
+
+  Turn 3
+    p1 greedy: move 3 1, move 1
+    p2 mcts: move 1 1, move 1
+      search (38000 visits): gigadrain,0;heatwave,0 18470v 17538 | spore,0;switch gardevoirmega 3767v 2431 | gigadrain,1;steameruption,1 1077v 627 | spore,0;steameruption,0 1046v 607
+      p2b Volcanion used Heat Wave -> p1b: Dusclops  [[spread] p1a,p1b]
+      p1a Mawile fainted
+      p2a Amoonguss used Giga Drain -> p1b: Dusclops
+      p1b Dusclops used Trick Room
+      after p1: Mawile-Mega 0/303, Dusclops 103/284
+      after p2: Amoonguss 397/432, Volcanion 364/364
+
+  Turn 4
+      p1a <- Sylveon comes in (345/345)
+      after p1: Sylveon 345/345, Dusclops 103/284
+      after p2: Amoonguss 397/432, Volcanion 364/364
+
+  Turn 5
+    p1 greedy: move 1, move 1
+    p2 mcts: move 3 2, switch 6   (slot1 Volcanion -> Landorus-Therian)
+      search (38000 visits): spore,1;switch landorustherian 2305v 720 | spore,0;switch landorustherian 1077v 289 | switch landorustherian;steameruption,0 1011v 266 | switch gardevoirmega;switch landorustherian 923v 237
+      p2b <- Landorus-Therian comes in (360/360)
+              p1a Sylveon atk 1 fell
+              p1b Dusclops atk 1 fell
+      p2a Amoonguss used Spore -> p1b: Dusclops
+              p1b Dusclops is now slp
+      p1a Sylveon used Hyper Voice -> p2b: Landorus  [[spread] p2a,p2b]
+              p1b Dusclops COULD NOT MOVE (slp)
+      after p1: Sylveon 345/345, Dusclops 103/284
+      after p2: Amoonguss 312/432, Landorus-Therian 218/360
+
+  Turn 6
+    p1 greedy: move 1, move 1
+    p2 mcts: switch 3, switch 4   (slot0 Amoonguss -> Aegislash; slot1 Landorus-Therian -> Zapdos)
+      search (43000 visits): switch aegislash;switch zapdos 3178v 1103 | switch gardevoirmega;switch zapdos 2482v 881 | switch volcanion;switch zapdos 2419v 809 | switch gardevoirmega;switch volcanion 1913v 618
+      p2a <- Aegislash comes in (304/304)
+      p2b <- Zapdos comes in (384/384)
+      p1a Sylveon used Hyper Voice -> p2a: Aegislash  [[spread] p2a,p2b]
+              p1b Dusclops COULD NOT MOVE (slp)
+      after p1: Sylveon 345/345, Dusclops 103/284
+      after p2: Aegislash 237/304, Zapdos 201/384
+
+  Turn 7
+    p1 greedy: move 1, move 1
+    p2 mcts: switch 3, switch 4   (slot0 Aegislash -> Amoonguss; slot1 Zapdos -> Landorus-Therian)
+      search (47000 visits): switch amoonguss;switch landorustherian 16814v 6271 | switch landorustherian;thunderbolt,0 1831v 550 | switch landorustherian;switch gardevoirmega 1828v 549 | flashcannon,1;switch landorustherian 1603v 469
+      p2a <- Amoonguss comes in (432/432)
+      p2b <- Landorus-Therian comes in (218/360)
+              p1a Sylveon atk 1 fell
+              p1b Dusclops atk 1 fell
+      p1a Sylveon used Hyper Voice -> p2b: Landorus  [[spread] p2a,p2b]
+              p1b Dusclops COULD NOT MOVE (slp)
+      after p1: Sylveon 345/345, Dusclops 103/284
+      after p2: Amoonguss 342/432, Landorus-Therian 74/360
+
+  Turn 8
+    p1 greedy: move 1, move 1
+    p2 mcts: move 2, switch 6   (slot1 Landorus-Therian -> Volcanion)
+      search (41000 visits): ragepowder,0;switch volcanion 26062v 14946 | switch aegislash;switch gardevoirmega 1394v 667 | spore,0;earthquake,0 641v 269 | ragepowder,0;switch gardevoirmega 597v 247
+      p2b <- Volcanion comes in (364/364)
+      p2a Amoonguss used Rage Powder
+      p1a Sylveon used Hyper Voice -> p2a: Amoonguss  [[spread] p2a,p2b]
+              p1b Dusclops is cured of slp
+      p1b Dusclops used Trick Room
+      after p1: Sylveon 345/345, Dusclops 103/284
+      after p2: Amoonguss 262/432, Volcanion 273/364
+
+  Turn 9
+    p1 greedy: move 1, move 1
+    p2 mcts: move 2, switch 3   (slot1 Volcanion -> Aegislash)
+      search (40000 visits): ragepowder,0;switch aegislash 29213v 29075 | gigadrain,1;switch gardevoirmega 1267v 799 | spore,1;protect,1 951v 582 | gigadrain,0;heatwave,0 621v 360
+      p2b <- Aegislash comes in (237/304)
+      p2a Amoonguss used Rage Powder
+      p1a Sylveon used Hyper Voice -> p2b: Aegislash  [[spread] p2a,p2b]
+              p2a Amoonguss used up its Sitrus Berry
+      p1b Dusclops used Trick Room
+      after p1: Sylveon 345/345, Dusclops 103/284
+      after p2: Amoonguss 283/432, Aegislash 169/304
+
+  Turn 10
+    p1 greedy: move 1, move 1
+    p2 mcts: move 4, move 1 2
+      search (40000 visits): protect,0;shadowball,1 4788v 2585 | gigadrain,1;shadowball,1 4758v 2568 | protect,0;kingsshield,1 3770v 2003 | ragepowder,0;switch gardevoirmega 3131v 1641
+      p2a Amoonguss used Protect
+      p1a Sylveon used Hyper Voice -> p2b: Aegislash  [[spread] p2b]
+              p2a Amoonguss -- move: Protect
+      p2b Aegislash used Shadow Ball -> p1b: Dusclops
+      p1b Dusclops fainted
+      after p1: Sylveon 345/345, Dusclops 0/284
+      after p2: Amoonguss 283/432, Aegislash-Blade 106/304
+
+  Turn 11
+      p1b <- Amoonguss comes in (432/432)
+      after p1: Sylveon 345/345, Amoonguss 432/432
+      after p2: Amoonguss 283/432, Aegislash-Blade 106/304
+
+  Turn 12
+    p1 greedy: move 1, move 3 2
+    p2 mcts: switch 3, switch 4   (slot0 Amoonguss -> Volcanion; slot1 Aegislash-Blade -> Zapdos)
+      search (37000 visits): switch volcanion;switch zapdos 1381v 1318 | switch volcanion;switch gardevoirmega 1295v 1230 | switch zapdos;switch volcanion 1294v 1229 | switch gardevoirmega;switch volcanion 1225v 1160
+      p2a <- Volcanion comes in (273/364)
+      p2b <- Zapdos comes in (201/384)
+      p1b Amoonguss used Giga Drain -> p2b: Zapdos
+      p1a Sylveon used Hyper Voice -> p2b: Zapdos  [[spread] p2a,p2b]
+      p2b Zapdos fainted
+      after p1: Sylveon 345/345, Amoonguss 432/432
+      after p2: Volcanion 177/364, Zapdos 0/384
+
+  Turn 13
+      p2b <- Amoonguss comes in (427/432)
+      after p1: Sylveon 345/345, Amoonguss 432/432
+      after p2: Volcanion 177/364, Amoonguss 427/432
+
+  Turn 14
+    p1 greedy: move 1, move 3 1
+    p2 mcts: move 1, move 3 1
+      search (17000 visits): heatwave,0;spore,0 1270v 690 | steameruption,0;spore,0 668v 331 | switch landorustherian;spore,0 536v 255 | steameruption,1;spore,0 474v 220
+      p1b Amoonguss used Giga Drain -> p2a: Volcanion
+      p2b Amoonguss used Spore -> p1a: Sylveon
+              p1a Sylveon is now slp
+              p1a Sylveon COULD NOT MOVE (slp)
+      p2a Volcanion used Heat Wave -> p1a: Sylveon  [[spread] p1a,p1b]
+      after p1: Sylveon 242/345, Amoonguss 178/432
+      after p2: Volcanion 93/364, Amoonguss 427/432
+
+  Turn 15
+    p1 greedy: move 1, move 3 1
+    p2 mcts: move 1, move 1 1
+      search (19000 visits): heatwave,0;gigadrain,0 793v 387 | heatwave,0;gigadrain,1 609v 283 | heatwave,0;ragepowder,1 573v 263 | heatwave,0;protect,1 571v 262
+      p1b Amoonguss used Giga Drain -> p2a: Volcanion
+      p2b Amoonguss used Giga Drain -> p1a: Sylveon
+              p1a Sylveon COULD NOT MOVE (slp)
+      p2a Volcanion used Heat Wave -> p1a: Sylveon  [[spread] p1a,p1b]
+      p1b Amoonguss fainted
+      after p1: Sylveon 73/345, Amoonguss 0/432
+      after p2: Volcanion 3/364, Amoonguss 432/432
+
+  Turn 16
+      p1b <- Chandelure comes in (324/324)
+      after p1: Sylveon 73/345, Chandelure 324/324
+      after p2: Volcanion 3/364, Amoonguss 432/432
+
+  Turn 17
+    p1 greedy: move 1, move 2
+    p2 mcts: move 2 2, switch 6   (slot1 Amoonguss -> Landorus-Therian)
+      search (30000 visits): steameruption,1;switch landorustherian 5955v 3395 | steameruption,1;protect,1 1802v 940 | steameruption,1;gigadrain,1 1660v 859 | steameruption,1;switch gardevoirmega 1544v 793
+      p2b <- Landorus-Therian comes in (74/360)
+              p1a Sylveon atk 1 fell
+              p1b Chandelure atk 1 fell
+      p2a Volcanion used Steam Eruption -> p1b: Chandelure
+              p1b Chandelure used up its Focus Sash
+      p1b Chandelure used Heat Wave -> p2b: Landorus  [[spread] p2a,p2b]
+      p2a Volcanion fainted
+      p2b Landorus fainted
+              p1a Sylveon COULD NOT MOVE (slp)
+      after p1: Sylveon 73/345, Chandelure 1/324
+      after p2: Volcanion 0/364, Landorus-Therian 0/360
+
+  Turn 18
+      p2b <- Gardevoir-Mega comes in (184/338)
+      p2a <- Aegislash comes in (106/304)
+      after p1: Sylveon 73/345, Chandelure 1/324
+      after p2: Aegislash 106/304, Gardevoir-Mega 184/338
+
+  Turn 19
+    p1 greedy: move 1, move 2
+    p2 mcts: move 2 1, move 2
+      search (53000 visits): flashcannon,0;hypervoice,0 22905v 11453 | shadowball,1;hypervoice,0 5037v 2427 | shadowball,0;hypervoice,0 2914v 1295 | flashcannon,1;hypervoice,0 2019v 862
+      p2b Gardevoir used Hyper Voice -> p1b: Chandelure  [[spread] p1a,p1b]
+      p1a Sylveon fainted
+      p1b Chandelure fainted
+      p2a Aegislash used Flash Cannon -> p1: Sylveon  [[notarget]]
+              p2a Aegislash -- IT FAILED
+      after p1: Sylveon 0/345, Chandelure 0/324
+      after p2: Aegislash-Blade 106/304, Gardevoir-Mega 184/338
+
+  Turn 20
+      p1a <- Scrafty comes in (333/333)
+              p2a Aegislash atk 1 fell
+              p2b Gardevoir atk 1 fell
+      after p1: Scrafty 333/333, Chandelure 0/324
+      after p2: Aegislash-Blade 106/304, Gardevoir-Mega 184/338
+
+  Turn 21
+    p1 greedy: move 3 1, pass
+    p2 mcts: move 3, move 2
+      search (1310000 visits): wideguard,0;hypervoice,0 432828v 432828 | kingsshield,0;hypervoice,0 432821v 432821 | switch amoonguss;hypervoice,0 432821v 432821 | flashcannon,0;hypervoice,0 5470v 5121
+      p2a Aegislash used Wide Guard
+      p2b Gardevoir used Hyper Voice -> p1a: Scrafty
+              p1a Scrafty -- critical hit
+      p1a Scrafty fainted
+      after p1: Scrafty 0/333, Chandelure 0/324
+      after p2: Aegislash-Blade 106/304, Gardevoir-Mega 184/338
+
+  RESULT: p2 wins

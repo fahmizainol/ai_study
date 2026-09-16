@@ -1,0 +1,133 @@
+battle 34   p1=greedy vs p2=mcts   mcts 300 ms a decision
+  p1: oraspl/Untitled 352: Kangaskhan-Mega, Darkrai, Landorus, Amoonguss, Volcanion, Scrafty
+  p2: Copy of Untitled 480: Kyurem-Black, Manectric-Mega, Volcarona, Blastoise, Landorus, Mew
+
+  Turn 1
+    p1 greedy: move 4 1, move 1 1
+    p2 mcts: move 4, move 3
+      search (15000 visits): icywind,0;snarl,0 466v 341 | icywind,0;voltswitch,1 447v 325 | icywind,0;switch volcarona 383v 272 | icebeam,1;voltswitch,1 360v 254
+      p1a Kangaskhan used Sucker Punch -> p2a: Kyurem
+      p1b Darkrai used Ice Beam -> p2a: Kyurem
+      p2b Manectric used Snarl -> p1b: Darkrai  [[spread] p1a,p1b]
+              p1a Kangaskhan spa 1 fell
+              p1b Darkrai spa 1 fell
+      p2a Kyurem used Icy Wind -> p1b: Darkrai  [[spread] p1a,p1b]
+              p1a Kangaskhan spe 1 fell
+              p1b Darkrai spe 1 fell
+      after p1: Kangaskhan-Mega 236/351, Darkrai 178/281
+      after p2: Kyurem-Black 253/440, Manectric-Mega 344/344
+
+  Turn 2
+    p1 greedy: move 4 1, move 1 1
+    p2 mcts: move 4, move 1 1
+      search (31000 visits): icywind,0;voltswitch,0 1013v 350 | icebeam,0;voltswitch,0 653v 202 | icebeam,0;voltswitch,1 647v 200 | earthpower,0;voltswitch,0 606v 184
+      p1a Kangaskhan used Sucker Punch -> p2a: Kyurem
+              p2a Kyurem -- critical hit
+      p2b Manectric used Volt Switch -> p1a: Kangaskhan
+      after p1: Kangaskhan-Mega 113/351, Darkrai 178/281
+      after p2: Kyurem-Black 92/440, Manectric-Mega 344/344
+
+  Turn 3
+      p2b <- Volcarona comes in (311/311)
+      p1b Darkrai used Ice Beam -> p2a: Kyurem
+      p2a Kyurem used Icy Wind -> p1b: Darkrai  [[spread] p1a,p1b]
+              p1a Kangaskhan spe 1 fell
+              p1b Darkrai spe 1 fell
+      after p1: Kangaskhan-Mega 41/351, Darkrai 102/281
+      after p2: Kyurem-Black 41/440, Volcarona 311/311
+
+  Turn 4
+    p1 greedy: move 4 1, move 1 1
+    p2 mcts: move 4, move 2
+      search (39000 visits): icywind,0;quiverdance,1 974v 155 | icebeam,1;quiverdance,1 887v 135 | earthpower,1;quiverdance,1 872v 132 | fusionbolt,1;quiverdance,1 765v 108
+      p1a Kangaskhan used Sucker Punch -> p2a: Kyurem
+      p2a Kyurem fainted
+      p2b Volcarona used Quiver Dance
+              p2b Volcarona spa 1 rose
+              p2b Volcarona spd 1 rose
+              p2b Volcarona spe 1 rose
+      p1b Darkrai used Ice Beam -> p2b: Volcarona
+      after p1: Kangaskhan-Mega 41/351, Darkrai 102/281
+      after p2: Kyurem-Black 0/440, Volcarona 287/311
+
+  Turn 5
+      p2a <- Manectric-Mega comes in (344/344)
+      after p1: Kangaskhan-Mega 41/351, Darkrai 102/281
+      after p2: Manectric-Mega 344/344, Volcarona 287/311
+
+  Turn 6
+    p1 greedy: move 4 2, move 1 2
+    p2 mcts: move 1 2, move 2
+      search (37000 visits): voltswitch,1;quiverdance,1 1658v 275 | snarl,0;quiverdance,1 1085v 151 | hiddenpower,1;quiverdance,1 1059v 145 | voltswitch,0;quiverdance,1 1002v 134
+      p1a Kangaskhan used Sucker Punch  [[still]]
+              p1a Kangaskhan -- IT FAILED
+      p2b Volcarona used Quiver Dance
+              p2b Volcarona spa 1 rose
+              p2b Volcarona spd 1 rose
+              p2b Volcarona spe 1 rose
+      p2a Manectric used Volt Switch -> p1b: Darkrai
+      p1b Darkrai fainted
+      after p1: Kangaskhan-Mega 41/351, Darkrai 0/281
+      after p2: Manectric-Mega 344/344, Volcarona 287/311
+
+  Turn 7
+      p2a <- Blastoise comes in (362/362)
+      after p1: Kangaskhan-Mega 41/351, Darkrai 0/281
+      after p2: Blastoise 362/362, Volcarona 287/311
+
+  Turn 8
+      p1b <- Landorus comes in (319/319)
+      after p1: Kangaskhan-Mega 41/351, Landorus 319/319
+      after p2: Blastoise 362/362, Volcarona 287/311
+
+  Turn 9
+    p1 greedy: move 4 2, move 1 2
+    p2 mcts: move 3 2, move 1
+      search (28000 visits): scald,1;heatwave,0 680v 50 | protect,0;heatwave,0 604v 38 | followme,0;heatwave,0 580v 35 | followme,0;gigadrain,0 555v 31
+      p1a Kangaskhan used Sucker Punch -> p2b: Volcarona
+      p2b Volcarona used Heat Wave -> p1a: Kangaskhan  [[spread] p1b]
+              p2b Volcarona -- MISSED
+      p1b Landorus fainted
+      p2a Blastoise used Scald -> p1a: Kangaskhan
+      p1a Kangaskhan fainted
+      after p1: Kangaskhan-Mega 0/351, Landorus 0/319
+      after p2: Blastoise 362/362, Volcarona 128/311
+
+  Turn 10
+      p1b <- Volcanion comes in (301/301)
+      p1a <- Amoonguss comes in (432/432)
+      after p1: Amoonguss 432/432, Volcanion 301/301
+      after p2: Blastoise 362/362, Volcarona 128/311
+
+  Turn 11
+    p1 greedy: move 3 2, move 1 2
+    p2 mcts: move 2, move 3 2
+      search (23000 visits): followme,0;gigadrain,1 1263v 406 | scald,0;gigadrain,1 868v 256 | protect,0;gigadrain,1 867v 256 | followme,0;heatwave,0 826v 241
+      p2a Blastoise used Follow Me
+      p2b Volcarona used Giga Drain -> p1b: Volcanion
+      p1b Volcanion fainted
+      p1a Amoonguss used Energy Ball -> p2a: Blastoise
+      after p1: Amoonguss 432/432, Volcanion 0/301
+      after p2: Blastoise 210/362, Volcarona 248/311
+
+  Turn 12
+      p1b <- Scrafty comes in (334/334)
+              p2a Blastoise atk 1 fell
+              p2b Volcarona atk 1 fell
+      after p1: Amoonguss 432/432, Scrafty 334/334
+      after p2: Blastoise 210/362, Volcarona 248/311
+
+  Turn 13
+    p1 greedy: move 3 1, move 2 1
+    p2 mcts: switch 6, move 1   (slot0 Blastoise -> Mew)
+      search (19000 visits): switch mew;heatwave,0 1537v 1183 | switch manectricmega;heatwave,0 1347v 1026 | scald,1;heatwave,0 1313v 998 | switch landorus;heatwave,0 1228v 928
+      p2a <- Mew comes in (401/401)
+      p2b Volcarona used Heat Wave -> p1b: Scrafty  [[spread] p1a,p1b]
+      p1a Amoonguss fainted
+      p1b Scrafty used High Jump Kick -> p2a: Mew  [[miss]]
+              p1b Scrafty -- MISSED
+      p1b Scrafty fainted
+      after p1: Amoonguss 0/432, Scrafty 0/334
+      after p2: Mew 401/401, Volcarona 217/311
+
+  RESULT: p2 wins

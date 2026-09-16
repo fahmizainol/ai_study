@@ -1,0 +1,278 @@
+battle 0   p1=greedy vs p2=mcts   mcts 300 ms a decision
+  p1: dpl ::/Untitled 174: Kangaskhan-Mega, Deoxys-Speed, Sylveon, Amoonguss, Landorus, Volcanion
+  p2: ORAS Doubles OU: Diancie-Mega, Jirachi, Landorus-Therian, Azumarill, Talonflame, Kyurem-Black
+
+  Turn 1
+    p1 greedy: move 1 1, move 3 1
+    p2 mcts: switch 4, move 3   (slot0 Diancie-Mega -> Azumarill)
+      search (30000 visits): switch azumarill;icywind,0 465v 37 | switch landorustherian;icywind,0 440v 32 | protect,0;icywind,0 437v 32 | diamondstorm,0;icywind,0 436v 32
+      p2a <- Azumarill comes in (402/402)
+      p1a Kangaskhan used Fake Out -> p2a: Azumarill
+      p1b Deoxys used Psycho Boost -> p2a: Azumarill
+              p1b Deoxys spa 2 fell
+              p2a Azumarill used up its Sitrus Berry
+      p2b Jirachi used Icy Wind -> p1b: Deoxys  [[spread] p1a,p1b]
+              p1a Kangaskhan spe 1 fell
+              p1b Deoxys spe 1 fell
+      after p1: Kangaskhan-Mega 391/414, Deoxys-Speed 205/259
+      after p2: Azumarill 114/402, Jirachi 404/404
+
+  Turn 2
+    p1 greedy: move 1 1, move 3 1
+    p2 mcts: switch 3, move 3   (slot0 Azumarill -> Landorus-Therian)
+      search (50000 visits): switch landorustherian;icywind,0 679v 18 | switch dianciemega;icywind,0 637v 14 | switch landorustherian;ironhead,1 627v 12 | switch dianciemega;ironhead,1 617v 11
+      p2a <- Landorus-Therian comes in (319/319)
+              p1a Kangaskhan atk 1 fell
+              p1b Deoxys atk 1 fell
+      p1a Kangaskhan used Fake Out  [[still]]
+              p1a Kangaskhan -- IT FAILED
+      p1b Deoxys used Psycho Boost -> p2a: Landorus
+              p1b Deoxys spa 2 fell
+      p2b Jirachi used Icy Wind -> p1a: Kangaskhan  [[spread] p1a,p1b]
+              p1a Kangaskhan spe 1 fell
+              p1b Deoxys spe 1 fell
+      after p1: Kangaskhan-Mega 367/414, Deoxys-Speed 148/259
+      after p2: Landorus-Therian 171/319, Jirachi 404/404
+
+  Turn 3
+    p1 greedy: move 1 1, move 3 1
+    p2 mcts: switch 4, move 2 2   (slot0 Landorus-Therian -> Diancie-Mega)
+      search (43000 visits): switch dianciemega;ironhead,1 528v 7 | switch dianciemega;icywind,0 528v 7 | uturn,0;ironhead,1 515v 6 | uturn,1;icywind,0 515v 6
+      p2a <- Diancie-Mega comes in (241/241)
+      p1a Kangaskhan used Fake Out  [[still]]
+              p1a Kangaskhan -- IT FAILED
+      p1b Deoxys used Psycho Boost -> p2a: Diancie
+              p1b Deoxys spa 2 fell
+      p2b Jirachi used Iron Head -> p1b: Deoxys
+      after p1: Kangaskhan-Mega 367/414, Deoxys-Speed 15/259
+      after p2: Diancie-Mega 163/241, Jirachi 404/404
+
+  Turn 4
+    p1 greedy: move 1 1, move 3 1
+    p2 mcts: move 2 1, switch 4   (slot1 Jirachi -> Landorus-Therian)
+      search (57000 visits): earthpower,0;switch landorustherian 679v 3 | diamondstorm,0;switch talonflame 672v 2 | diamondstorm,0;switch landorustherian 671v 2 | moonblast,0;switch landorustherian 671v 2
+      p2b <- Landorus-Therian comes in (171/319)
+              p1a Kangaskhan atk 1 fell
+              p1b Deoxys atk 1 fell
+      p1a Kangaskhan used Fake Out  [[still]]
+              p1a Kangaskhan -- IT FAILED
+      p2a Diancie used Earth Power -> p1a: Kangaskhan
+      p1b Deoxys used Psycho Boost -> p2a: Diancie
+      p1b Deoxys fainted
+      after p1: Kangaskhan-Mega 271/414, Deoxys-Speed 0/259
+      after p2: Diancie-Mega 99/241, Landorus-Therian 171/319
+
+  Turn 5
+      p1b <- Sylveon comes in (393/393)
+      after p1: Kangaskhan-Mega 271/414, Sylveon 393/393
+      after p2: Diancie-Mega 99/241, Landorus-Therian 171/319
+
+  Turn 6
+    p1 greedy: move 1 1, move 1
+    p2 mcts: switch 6, move 3 1   (slot0 Diancie-Mega -> Kyurem-Black)
+      search (57000 visits): switch kyuremblack;uturn,0 18866v 6205 | earthpower,0;earthquake,0 427v 7 | diamondstorm,0;uturn,1 423v 6 | earthpower,1;earthquake,0 423v 6
+      p2a <- Kyurem-Black comes in (391/391)
+      p1a Kangaskhan used Fake Out  [[still]]
+              p1a Kangaskhan -- IT FAILED
+      p2b Landorus used U-turn -> p1a: Kangaskhan
+      after p1: Kangaskhan-Mega 183/414, Sylveon 393/393
+      after p2: Kyurem-Black 391/391, Landorus-Therian 171/319
+
+  Turn 7
+      p2b <- Azumarill comes in (114/402)
+      p1b Sylveon used Hyper Voice -> p2a: Kyurem  [[spread] p2a,p2b]
+      p2b Azumarill fainted
+      after p1: Kangaskhan-Mega 183/414, Sylveon 393/393
+      after p2: Kyurem-Black 59/391, Azumarill 0/402
+
+  Turn 8
+      p2b <- Landorus-Therian comes in (171/319)
+              p1a Kangaskhan atk 1 fell
+              p1b Sylveon atk 1 fell
+      after p1: Kangaskhan-Mega 183/414, Sylveon 393/393
+      after p2: Kyurem-Black 59/391, Landorus-Therian 171/319
+
+  Turn 9
+    p1 greedy: move 1 1, move 1
+    p2 mcts: move 4 1, switch 5   (slot1 Landorus-Therian -> Talonflame)
+      search (54000 visits): earthpower,0;switch talonflame 21646v 5458 | switch dianciemega;superpower,0 421v 14 | icebeam,0;uturn,1 355v 5 | dracometeor,1;uturn,1 354v 4
+      p2b <- Talonflame comes in (297/297)
+      p1a Kangaskhan used Fake Out  [[still]]
+              p1a Kangaskhan -- IT FAILED
+      p2a Kyurem used Earth Power -> p1a: Kangaskhan
+      p1b Sylveon used Hyper Voice -> p2a: Kyurem  [[spread] p2a,p2b]
+      p2a Kyurem fainted
+      after p1: Kangaskhan-Mega 96/414, Sylveon 393/393
+      after p2: Kyurem-Black 0/391, Talonflame 209/297
+
+  Turn 10
+      p2a <- Jirachi comes in (404/404)
+      after p1: Kangaskhan-Mega 96/414, Sylveon 393/393
+      after p2: Jirachi 404/404, Talonflame 209/297
+
+  Turn 11
+    p1 greedy: move 1 2, move 1
+    p2 mcts: move 2 1, move 2 2
+      search (58000 visits): ironhead,0;flareblitz,1 1109v 7 | followme,0;bravebird,1 1107v 7 | icywind,0;flareblitz,1 1093v 6 | switch landorustherian;tailwind,1 1091v 5
+      p1a Kangaskhan used Fake Out  [[still]]
+              p1a Kangaskhan -- IT FAILED
+      p2b Talonflame used Flare Blitz -> p1b: Sylveon
+      p2a Jirachi used Iron Head -> p1a: Kangaskhan
+      p1b Sylveon used Hyper Voice -> p2b: Talonflame  [[spread] p2a,p2b]
+      after p1: Kangaskhan-Mega 24/414, Sylveon 175/393
+      after p2: Jirachi 352/404, Talonflame 11/297
+
+  Turn 12
+    p1 greedy: move 1 2, move 1
+    p2 mcts: move 2 2, switch 5   (slot1 Talonflame -> Landorus-Therian)
+      search (54000 visits): ironhead,1;switch landorustherian 1038v 8 | protect,0;bravebird,1 1034v 8 | switch dianciemega;tailwind,1 1034v 8 | ironhead,1;bravebird,1 1032v 7
+      p2b <- Landorus-Therian comes in (171/319)
+              p1a Kangaskhan atk 1 fell
+              p1b Sylveon atk 1 fell
+      p1a Kangaskhan used Fake Out  [[still]]
+              p1a Kangaskhan -- IT FAILED
+      p2a Jirachi used Iron Head -> p1b: Sylveon
+      p1b Sylveon fainted
+      after p1: Kangaskhan-Mega 24/414, Sylveon 0/393
+      after p2: Jirachi 352/404, Landorus-Therian 171/319
+
+  Turn 13
+      p1b <- Amoonguss comes in (432/432)
+      after p1: Kangaskhan-Mega 24/414, Amoonguss 432/432
+      after p2: Jirachi 352/404, Landorus-Therian 171/319
+
+  Turn 14
+    p1 greedy: move 1 2, move 4 2
+    p2 mcts: switch 6, switch 5   (slot0 Jirachi -> Diancie-Mega; slot1 Landorus-Therian -> Talonflame)
+      search (45000 visits): switch dianciemega;switch talonflame 1524v 241 | icywind,0;switch talonflame 1433v 222 | ironhead,0;switch talonflame 1401v 215 | ironhead,1;switch talonflame 1366v 207
+      p2b <- Talonflame comes in (11/297)
+      p2a <- Diancie-Mega comes in (99/241)
+      p1a Kangaskhan used Fake Out  [[still]]
+              p1a Kangaskhan -- IT FAILED
+      p1b Amoonguss used Foul Play -> p2b: Talonflame
+      p2b Talonflame fainted
+      after p1: Kangaskhan-Mega 24/414, Amoonguss 432/432
+      after p2: Diancie-Mega 99/241, Talonflame 0/297
+
+  Turn 15
+      p2b <- Landorus-Therian comes in (171/319)
+              p1a Kangaskhan atk 1 fell
+              p1b Amoonguss atk 1 fell
+      after p1: Kangaskhan-Mega 24/414, Amoonguss 432/432
+      after p2: Diancie-Mega 99/241, Landorus-Therian 171/319
+
+  Turn 16
+    p1 greedy: move 1 1, move 4 1
+    p2 mcts: move 1, switch 6   (slot1 Landorus-Therian -> Jirachi)
+      search (39000 visits): diamondstorm,0;switch jirachi 1382v 224 | earthpower,1;switch jirachi 1366v 220 | protect,0;switch jirachi 1331v 212 | moonblast,1;switch jirachi 1325v 211
+      p2b <- Jirachi comes in (352/404)
+      p1a Kangaskhan used Fake Out  [[still]]
+              p1a Kangaskhan -- IT FAILED
+      p2a Diancie used Diamond Storm -> p1a: Kangaskhan  [[spread] p1a,p1b]
+              p2a Diancie def 1 rose
+      p1a Kangaskhan fainted
+      p1b Amoonguss used Foul Play -> p2a: Diancie
+      after p1: Kangaskhan-Mega 0/414, Amoonguss 255/432
+      after p2: Diancie-Mega 64/241, Jirachi 352/404
+
+  Turn 17
+      p1a <- Landorus comes in (321/321)
+      after p1: Landorus 321/321, Amoonguss 255/432
+      after p2: Diancie-Mega 64/241, Jirachi 352/404
+
+  Turn 18
+    p1 greedy: move 1 1, move 4 1
+    p2 mcts: move 1, move 4
+      search (26000 visits): diamondstorm,0;protect,1 6292v 4398 | moonblast,0;protect,1 3222v 2179 | moonblast,0;icywind,0 1915v 1250 | diamondstorm,0;icywind,0 1425v 907
+      p2b Jirachi used Protect
+      p2a Diancie used Diamond Storm -> p1a: Landorus  [[spread] p1a,p1b]
+              p2a Diancie def 1 rose
+      p1a Landorus used Earth Power -> p2a: Diancie
+      p2a Diancie fainted
+      p1b Amoonguss used Foul Play -> p2b: Jirachi
+              p2b Jirachi -- move: Protect
+      after p1: Landorus 165/321, Amoonguss 87/432
+      after p2: Diancie-Mega 0/241, Jirachi 352/404
+
+  Turn 19
+      p2a <- Landorus-Therian comes in (171/319)
+              p1a Landorus atk 1 fell
+              p1b Amoonguss atk 1 fell
+      after p1: Landorus 165/321, Amoonguss 87/432
+      after p2: Landorus-Therian 171/319, Jirachi 352/404
+
+  Turn 20
+    p1 greedy: move 1 1, move 4 1
+    p2 mcts: move 3 1, move 3
+      search (51000 visits): uturn,0;icywind,0 31924v 19884 | uturn,1;icywind,0 6394v 3776 | uturn,0;ironhead,0 1822v 983 | uturn,1;ironhead,0 1164v 596
+      p2a Landorus used U-turn -> p1a: Landorus
+      p1a Landorus used Earth Power -> p2a: Landorus
+              p2a Landorus -- IMMUNE
+      p2b Jirachi used Icy Wind -> p1a: Landorus  [[spread] p1a,p1b]
+              p1b Amoonguss spe 1 fell
+      p1a Landorus fainted
+      p1b Amoonguss used Foul Play -> p2a: Landorus
+      after p1: Landorus 0/321, Amoonguss 31/432
+      after p2: Landorus-Therian 20/319, Jirachi 352/404
+
+  Turn 21
+      p1a <- Volcanion comes in (364/364)
+      after p1: Volcanion 364/364, Amoonguss 31/432
+      after p2: Landorus-Therian 20/319, Jirachi 352/404
+
+  Turn 22
+    p1 greedy: move 2 1, move 4 1
+    p2 mcts: move 3 2, move 3
+      search (115000 visits): uturn,1;icywind,0 80378v 42495 | uturn,0;ironhead,0 13302v 6670 | uturn,0;followme,1 6082v 2929 | uturn,0;protect,1 5834v 2802
+      p2a Landorus used U-turn -> p1b: Amoonguss
+      p2a Landorus fainted
+      p1b Amoonguss fainted
+      p2b Jirachi used Icy Wind -> p1a: Volcanion
+              p1a Volcanion -- critical hit
+              p1a Volcanion spe 1 fell
+      p1a Volcanion used Steam Eruption -> p2b: Jirachi
+      after p1: Volcanion 356/364, Amoonguss 0/432
+      after p2: Landorus-Therian 0/319, Jirachi 201/404
+
+  Turn 23
+    p1 greedy: move 2 2, pass
+    p2 mcts: pass, move 4
+      search (101000 visits): No Move;protect,1 100499v 63116 | No Move;ironhead,0 241v 80 | No Move;icywind,0 140v 33 | No Move;followme,1 120v 24
+      p2b Jirachi used Protect
+      p1a Volcanion used Steam Eruption -> p2b: Jirachi
+              p2b Jirachi -- move: Protect
+      after p1: Volcanion 356/364, Amoonguss 0/432
+      after p2: Landorus-Therian 0/319, Jirachi 201/404
+
+  Turn 24
+    p1 greedy: move 2 2, pass
+    p2 mcts: pass, move 4
+      search (97000 visits): No Move;protect,1 96504v 60544 | No Move;ironhead,0 230v 75 | No Move;followme,1 133v 30 | No Move;icywind,0 133v 30
+      p2b Jirachi used Protect  [[still]]
+              p2b Jirachi -- IT FAILED
+      p1a Volcanion used Steam Eruption -> p2b: Jirachi
+      after p1: Volcanion 356/364, Amoonguss 0/432
+      after p2: Landorus-Therian 0/319, Jirachi 56/404
+
+  Turn 25
+    p1 greedy: move 2 2, pass
+    p2 mcts: pass, move 4
+      search (73000 visits): No Move;protect,1 72732v 45304 | No Move;ironhead,0 133v 30 | No Move;icywind,0 70v 5 | No Move;followme,1 65v 3
+      p2b Jirachi used Protect
+      p1a Volcanion used Steam Eruption -> p2b: Jirachi
+              p2b Jirachi -- move: Protect
+      after p1: Volcanion 356/364, Amoonguss 0/432
+      after p2: Landorus-Therian 0/319, Jirachi 56/404
+
+  Turn 26
+    p1 greedy: move 2 2, pass
+    p2 mcts: pass, move 4
+      search (83000 visits): No Move;protect,1 82713v 51697 | No Move;ironhead,0 137v 32 | No Move;followme,1 76v 7 | No Move;icywind,0 74v 6
+      p2b Jirachi used Protect  [[still]]
+              p2b Jirachi -- IT FAILED
+      p1a Volcanion used Steam Eruption -> p2b: Jirachi
+      p2b Jirachi fainted
+      after p1: Volcanion 356/364, Amoonguss 0/432
+      after p2: Landorus-Therian 0/319, Jirachi 0/404
+
+  RESULT: p1 wins

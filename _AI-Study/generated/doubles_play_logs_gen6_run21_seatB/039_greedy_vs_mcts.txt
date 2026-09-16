@@ -1,0 +1,165 @@
+battle 39   p1=greedy vs p2=mcts   mcts 300 ms a decision
+  p1: ORAS Doubles OU: Steelix, Bronzong, Azumarill, Hariyama, Tyranitar, Gothitelle
+  p2: ORAS Doubles OU: Mawile-Mega, Dusclops, Sylveon, Amoonguss, Chandelure, Scrafty
+
+  Turn 1
+    p1 greedy: move 2, move 1
+    p2 mcts: move 1, switch 5   (slot1 Dusclops -> Chandelure)
+      search (39000 visits): swordsdance,0;switch chandelure 1466v 1270 | swordsdance,0;switch scrafty 1351v 1164 | swordsdance,0;willowisp,1 1094v 927 | swordsdance,0;switch sylveon 1037v 875
+      p2b <- Chandelure comes in (324/324)
+      p2a Mawile used Swords Dance
+              p2a Mawile atk 2 rose
+      p1a Steelix used Earthquake -> p2a: Mawile  [[spread] p2a,p2b]
+              p1b Bronzong -- IMMUNE
+      p1b Bronzong used Trick Room
+      after p1: Steelix 353/353, Bronzong 337/337
+      after p2: Mawile-Mega 181/303, Chandelure 162/324
+
+  Turn 2
+    p1 greedy: move 2, move 1
+    p2 mcts: move 3 2, switch 6   (slot1 Chandelure -> Scrafty)
+      search (15000 visits): playrough,1;switch scrafty 786v 516 | playrough,1;heatwave,0 701v 454 | playrough,0;heatwave,0 453v 275 | playrough,1;shadowball,1 387v 228
+      p2b <- Scrafty comes in (333/333)
+              p1a Steelix atk 1 fell
+              p1b Bronzong atk 1 fell
+      p1a Steelix used Earthquake -> p2b: Scrafty  [[spread] p2a,p2b]
+              p1b Bronzong -- IMMUNE
+      p2a Mawile used Play Rough -> p1b: Bronzong
+              p1b Bronzong atk 1 fell
+      p1b Bronzong used Trick Room
+      after p1: Steelix 353/353, Bronzong 203/337
+      after p2: Mawile-Mega 95/303, Scrafty 285/333
+
+  Turn 3
+    p1 greedy: move 2, move 1
+    p2 mcts: move 3 2, move 2 1
+      search (22000 visits): playrough,1;drainpunch,0 524v 175 | playrough,1;icepunch,1 354v 103 | playrough,0;drainpunch,0 353v 103 | playrough,0;drainpunch,1 352v 102
+      p2b Scrafty used Drain Punch -> p1a: Steelix
+      p2a Mawile used Play Rough -> p1b: Bronzong
+              p1b Bronzong atk 1 fell
+      p1a Steelix used Earthquake -> p2a: Mawile  [[spread] p2a,p2b]
+              p1b Bronzong -- IMMUNE
+      p1b Bronzong used Trick Room
+      after p1: Steelix 221/353, Bronzong 75/337
+      after p2: Mawile-Mega 9/303, Scrafty 282/333
+
+  Turn 4
+    p1 greedy: move 2, move 1
+    p2 mcts: move 3 2, move 2 1
+      search (16000 visits): playrough,1;drainpunch,0 287v 103 | protect,0;drainpunch,0 279v 99 | protect,0;drainpunch,1 224v 73 | playrough,0;drainpunch,0 216v 69
+      p1a Steelix used Earthquake -> p2b: Scrafty  [[spread] p2a,p2b]
+              p1b Bronzong -- IMMUNE
+              p2b Scrafty -- critical hit
+      p2a Mawile fainted
+      p2b Scrafty used Drain Punch -> p1a: Steelix
+      p1b Bronzong used Trick Room
+      after p1: Steelix 95/353, Bronzong 75/337
+      after p2: Mawile-Mega 0/303, Scrafty 194/333
+
+  Turn 5
+      p2a <- Sylveon comes in (345/345)
+      after p1: Steelix 95/353, Bronzong 75/337
+      after p2: Sylveon 345/345, Scrafty 194/333
+
+  Turn 6
+    p1 greedy: move 2, move 1
+    p2 mcts: move 3 2, move 2 1
+      search (17000 visits): hiddenpower,1;drainpunch,0 536v 282 | hypervoice,0;drainpunch,0 379v 186 | hypervoice,0;icepunch,0 347v 166 | hypervoice,0;drainpunch,1 329v 156
+      p2a Sylveon used Hidden Power -> p1b: Bronzong
+              p1b Bronzong -- IMMUNE
+      p2b Scrafty used Drain Punch -> p1a: Steelix
+      p1a Steelix fainted
+      p1b Bronzong used Trick Room
+      after p1: Steelix 0/353, Bronzong 75/337
+      after p2: Sylveon 345/345, Scrafty 242/333
+
+  Turn 7
+      p1a <- Azumarill comes in (404/404)
+      after p1: Azumarill 404/404, Bronzong 75/337
+      after p2: Sylveon 345/345, Scrafty 242/333
+
+  Turn 8
+    p1 greedy: move 2 2, move 1
+    p2 mcts: move 1, switch 4   (slot1 Scrafty -> Amoonguss)
+      search (17000 visits): hypervoice,0;switch amoonguss 462v 237 | hypervoice,0;drainpunch,1 407v 203 | hiddenpower,0;switch amoonguss 363v 177 | hypervoice,0;switch dusclops 337v 161
+      p2b <- Amoonguss comes in (432/432)
+      p1a Azumarill used Play Rough -> p2b: Amoonguss
+      p2a Sylveon used Hyper Voice -> p1a: Azumarill  [[spread] p1a,p1b]
+              p1a Azumarill used up its Sitrus Berry
+      p1b Bronzong fainted
+      after p1: Azumarill 203/404, Bronzong 0/337
+      after p2: Sylveon 345/345, Amoonguss 330/432
+
+  Turn 9
+      p1b <- Hariyama comes in (429/429)
+      after p1: Azumarill 203/404, Hariyama 429/429
+      after p2: Sylveon 345/345, Amoonguss 330/432
+
+  Turn 10
+    p1 greedy: move 2 2, move 1 2
+    p2 mcts: move 1, move 1 1
+      search (27000 visits): hypervoice,0;spore,0 2854v 2500 | hypervoice,0;ragepowder,1 1844v 1577 | hiddenpower,1;spore,0 1460v 1230 | hypervoice,0;gigadrain,0 1091v 898
+      p2b Amoonguss used Spore -> p1a: Azumarill
+              p1a Azumarill is now slp
+              p1a Azumarill COULD NOT MOVE (slp)
+      p1b Hariyama used Close Combat -> p2b: Amoonguss
+              p1b Hariyama def 1 fell
+              p1b Hariyama spd 1 fell
+      p2a Sylveon used Hyper Voice -> p1a: Azumarill  [[spread] p1a,p1b]
+              p1b Hariyama -- critical hit
+      p1a Azumarill fainted
+      p1b Hariyama fainted
+      after p1: Azumarill 0/404, Hariyama 0/429
+      after p2: Sylveon 345/345, Amoonguss 210/432
+
+  Turn 11
+      p1a <- Tyranitar comes in (404/404)
+      p1b <- Gothitelle comes in (344/344)
+      after p1: Tyranitar 404/404, Gothitelle 344/344
+      after p2: Sylveon 345/345, Amoonguss 210/432
+
+  Turn 12
+    p1 greedy: move 3 2, move 2 2
+    p2 mcts: move 1, move 1 1
+      search (26000 visits): hypervoice,0;spore,0 3197v 2160 | hypervoice,0;gigadrain,1 2289v 1514 | hypervoice,0;spore,1 1582v 1016 | hypervoice,0;gigadrain,0 1342v 849
+      p2b Amoonguss used Spore -> p1a: Tyranitar
+              p1a Tyranitar is now slp
+      p2a Sylveon used Hyper Voice -> p1a: Tyranitar  [[spread] p1a,p1b]
+              p1a Tyranitar COULD NOT MOVE (slp)
+      p1b Gothitelle used Psychic -> p2b: Amoonguss
+      p2b Amoonguss fainted
+      after p1: Tyranitar 164/404, Gothitelle 212/344
+      after p2: Sylveon 324/345, Amoonguss 0/432
+
+  Turn 13
+      p2b <- Scrafty comes in (242/333)
+              p1a Tyranitar atk 1 fell
+              p1b Gothitelle atk 1 fell
+      after p1: Tyranitar 164/404, Gothitelle 212/344
+      after p2: Sylveon 324/345, Scrafty 242/333
+
+  Turn 14
+    p1 greedy: move 3 2, move 2 2
+    p2 mcts: move 1, move 2 1
+      search (70000 visits): hypervoice,0;drainpunch,0 26568v 26334 | hypervoice,0;drainpunch,1 5381v 5143 | hypervoice,0;icepunch,1 4854v 4623 | hypervoice,0;headsmash,1 4568v 4341
+      p2b Scrafty used Drain Punch -> p1a: Tyranitar
+      p1a Tyranitar fainted
+      p2a Sylveon used Hyper Voice -> p1b: Gothitelle
+      p1b Gothitelle used Psychic -> p2b: Scrafty
+              p2b Scrafty -- IMMUNE
+      after p1: Tyranitar 0/404, Gothitelle 37/344
+      after p2: Sylveon 303/345, Scrafty 304/333
+
+  Turn 15
+    p1 greedy: pass, move 2 1
+    p2 mcts: move 4, move 2 2
+      search (74000 visits): protect,0;drainpunch,1 4797v 2062 | protect,0;icepunch,1 4766v 2048 | hypervoice,1;headsmash,1 4697v 2016 | hypervoice,1;drainpunch,1 4685v 2010
+      p2a Sylveon used Protect
+      p1b Gothitelle used Psychic -> p2a: Sylveon
+              p2a Sylveon -- move: Protect
+      p2b Scrafty used Drain Punch -> p1b: Gothitelle
+      p1b Gothitelle fainted
+      after p1: Tyranitar 0/404, Gothitelle 0/344
+      after p2: Sylveon 303/345, Scrafty 323/333
+
+  RESULT: p2 wins

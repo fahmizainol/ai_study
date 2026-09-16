@@ -1,0 +1,146 @@
+battle 23   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: XY Doubles: Regirock, Jirachi, Talonflame, Breloom, Blastoise, Aromatisse
+  p2: Untitled 1448: Keldeo, Talonflame, Gengar-Mega, Bisharp, Raichu, Kyurem-Black
+
+  Turn 1
+    p1 mcts: move 2, move 1
+      search (23000 visits): rockslide,0;followme,1 1378v 834 | rockslide,0;switch blastoise 900v 519 | rockslide,0;protect,1 659v 363 | rockslide,0;switch aromatisse 532v 283
+    p2 greedy: move 1 1, move 1 1
+      p1b Jirachi used Follow Me
+      p2b Talonflame used Brave Bird -> p1b: Jirachi
+      p2a Keldeo used Hydro Pump -> p1b: Jirachi
+      p1a Regirock used Rock Slide -> p2a: Keldeo  [[spread] p2a,p2b]
+      p2b Talonflame fainted
+      after p1: Regirock 364/364, Jirachi 97/404
+      after p2: Keldeo 245/323, Talonflame 0/360
+
+  Turn 2
+      p2b <- Gengar-Mega comes in (314/314)
+      after p1: Regirock 364/364, Jirachi 97/404
+      after p2: Keldeo 245/323, Gengar-Mega 314/314
+
+  Turn 3
+    p1 mcts: move 3, move 1
+      search (22000 visits): earthquake,0;followme,1 3374v 1685 | earthquake,0;ironhead,1 1614v 751 | rockslide,0;followme,1 1395v 637 | earthquake,0;ironhead,0 1351v 614
+    p2 greedy: move 1 2, move 2 2
+      p1b Jirachi used Follow Me
+      p2b Gengar used Sludge Bomb -> p1b: Jirachi
+              p1b Jirachi -- IMMUNE
+      p2a Keldeo used Hydro Pump -> p1b: Jirachi
+      p1b Jirachi fainted
+      p1a Regirock used Earthquake -> p2b: Gengar  [[spread] p2a,p2b]
+              p2b Gengar -- critical hit
+      after p1: Regirock 364/364, Jirachi 0/404
+      after p2: Keldeo 127/323, Gengar-Mega 6/314
+
+  Turn 4
+      p1b <- Talonflame comes in (360/360)
+      after p1: Regirock 364/364, Talonflame 360/360
+      after p2: Keldeo 127/323, Gengar-Mega 6/314
+
+  Turn 5
+    p1 mcts: move 3, move 4
+      search (22000 visits): earthquake,0;swordsdance,1 1622v 767 | protect,0;bravebird,0 1276v 585 | earthquake,0;protect,1 1181v 536 | earthquake,0;flareblitz,0 1042v 464
+    p2 greedy: move 1 1, move 2 1
+      p2b Gengar used Sludge Bomb -> p1a: Regirock
+              p1a Regirock is now psn
+      p2a Keldeo used Hydro Pump -> p1a: Regirock  [[miss]]
+              p2a Keldeo -- MISSED
+      p1b Talonflame used Swords Dance
+              p1b Talonflame atk 2 rose
+      p1a Regirock used Earthquake -> p2b: Gengar  [[spread] p2a,p2b]
+              p1b Talonflame -- IMMUNE
+      p2b Gengar fainted
+      after p1: Regirock 229/364, Talonflame 360/360
+      after p2: Keldeo 35/323, Gengar-Mega 0/314
+
+  Turn 6
+      p2b <- Bisharp comes in (271/271)
+      after p1: Regirock 229/364, Talonflame 360/360
+      after p2: Keldeo 35/323, Bisharp 271/271
+
+  Turn 7
+    p1 mcts: move 4 2, move 3
+      search (30000 visits): drainpunch,1;protect,1 2013v 1020 | earthquake,0;protect,1 1407v 685 | earthquake,0;flareblitz,1 1232v 589 | switch blastoise;flareblitz,1 1060v 496
+    p2 greedy: move 1 1, move 2 1
+      p1b Talonflame used Protect
+      p2b Bisharp used Sucker Punch -> p1a: Regirock
+      p2a Keldeo used Hydro Pump -> p1a: Regirock  [[miss]]
+              p2a Keldeo -- MISSED
+      p1a Regirock used Drain Punch -> p2b: Bisharp
+      p2b Bisharp fainted
+      after p1: Regirock 201/364, Talonflame 360/360
+      after p2: Keldeo 35/323, Bisharp 0/271
+
+  Turn 8
+      p2b <- Raichu comes in (324/324)
+      after p1: Regirock 201/364, Talonflame 360/360
+      after p2: Keldeo 35/323, Raichu 324/324
+
+  Turn 9
+    p1 mcts: move 3, move 3
+      search (31000 visits): earthquake,0;protect,1 3214v 1493 | rockslide,0;protect,1 2288v 1029 | drainpunch,0;protect,1 1241v 516 | drainpunch,1;protect,1 1202v 497
+    p2 greedy: move 1 1, move 2 1
+      p1b Talonflame used Protect  [[still]]
+              p1b Talonflame -- IT FAILED
+      p2a Keldeo used Hydro Pump -> p1a: Regirock  [[miss]]
+              p2a Keldeo -- MISSED
+      p2b Raichu used Volt Switch -> p1a: Regirock
+      after p1: Regirock 119/364, Talonflame 360/360
+      after p2: Keldeo 35/323, Raichu 324/324
+
+  Turn 10
+      p2b <- Kyurem-Black comes in (391/391)
+      p1a Regirock used Earthquake -> p2b: Kyurem  [[spread] p2a,p2b]
+              p1b Talonflame -- IMMUNE
+      p2a Keldeo fainted
+      after p1: Regirock 74/364, Talonflame 360/360
+      after p2: Keldeo 0/323, Kyurem-Black 313/391
+
+  Turn 11
+      p2a <- Raichu comes in (324/324)
+      after p1: Regirock 74/364, Talonflame 360/360
+      after p2: Raichu 324/324, Kyurem-Black 313/391
+
+  Turn 12
+    p1 mcts: move 2, move 3
+      search (33000 visits): rockslide,0;protect,1 3285v 1630 | drainpunch,0;protect,1 2785v 1363 | drainpunch,1;protect,1 2393v 1155 | switch blastoise;protect,1 2254v 1081
+    p2 greedy: move 2 1, move 2 1
+      p1b Talonflame used Protect
+      p2b Kyurem used Fusion Bolt -> p1a: Regirock
+      p2a Raichu used Volt Switch -> p1a: Regirock
+      p1a Regirock fainted
+      after p1: Regirock 0/364, Talonflame 360/360
+      after p2: Raichu 324/324, Kyurem-Black 313/391
+
+  Turn 13
+      p1a <- Breloom comes in (324/324)
+      after p1: Breloom 324/324, Talonflame 360/360
+      after p2: Raichu 324/324, Kyurem-Black 313/391
+
+  Turn 14
+    p1 mcts: move 2 1, move 3
+      search (46000 visits): machpunch,0;protect,1 11294v 9609 | machpunch,1;protect,1 8178v 6895 | machpunch,0;bravebird,1 1512v 1172 | bulletseed,0;protect,1 1369v 1053
+    p2 greedy: move 2 1, move 2 1
+      p1b Talonflame used Protect  [[still]]
+              p1b Talonflame -- IT FAILED
+      p1a Breloom used Mach Punch -> p2a: Raichu
+              p2a Raichu used up its Air Balloon
+      p2b Kyurem used Fusion Bolt -> p1a: Breloom
+      p2a Raichu used Volt Switch -> p1a: Breloom
+      after p1: Breloom 184/324, Talonflame 360/360
+      after p2: Raichu 125/324, Kyurem-Black 313/391
+
+  Turn 15
+    p1 mcts: move 2 1, move 2 2
+      search (324000 visits): machpunch,0;flareblitz,1 142797v 140898 | machpunch,0;bravebird,1 142613v 140716 | switch aromatisse;bravebird,1 3929v 3613 | machpunch,1;flareblitz,1 3732v 3424
+    p2 greedy: move 2 1, move 2 1
+      p1a Breloom used Mach Punch -> p2a: Raichu
+      p2a Raichu fainted
+      p2b Kyurem used Fusion Bolt -> p1a: Breloom
+      p1b Talonflame used Flare Blitz -> p2b: Kyurem
+      p2b Kyurem fainted
+      after p1: Breloom 113/324, Talonflame 221/360
+      after p2: Raichu 0/324, Kyurem-Black 0/391
+
+  RESULT: p1 wins

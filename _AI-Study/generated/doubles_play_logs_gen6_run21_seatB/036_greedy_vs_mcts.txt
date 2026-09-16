@@ -1,0 +1,236 @@
+battle 36   p1=greedy vs p2=mcts   mcts 300 ms a decision
+  p1: ORAS Doubles OU: Cresselia, Rhyperior, Heatran, Scrafty, Porygon2, Venusaur-Mega
+  p2: not minesamplesetc/cm garde 2x: Gardevoir-Mega, Thundurus, Amoonguss, Blastoise, Landorus-Therian, Genesect
+
+  Turn 1
+    p1 greedy: move 2 1, move 2 1
+    p2 mcts: move 3, move 2 1
+      search (15000 visits): calmmind,0;thunderwave,0 316v 171 | calmmind,0;switch landorustherian 307v 165 | switch genesect;switch landorustherian 306v 165 | calmmind,0;switch genesect 302v 162
+      p2b Thundurus used Thunder Wave -> p1a: Cresselia
+              p1a Cresselia is now par
+      p2a Gardevoir used Calm Mind
+              p2a Gardevoir spa 1 rose
+              p2a Gardevoir spd 1 rose
+      p1a Cresselia used Psychic -> p2a: Gardevoir
+      p1b Rhyperior used Stone Edge -> p2a: Gardevoir  [[miss]]
+              p1b Rhyperior -- MISSED
+      after p1: Cresselia 444/444, Rhyperior 429/429
+      after p2: Gardevoir-Mega 317/340, Thundurus 339/339
+
+  Turn 2
+    p1 greedy: move 2 1, move 2 1
+    p2 mcts: move 1, switch 6   (slot1 Thundurus -> Genesect)
+      search (15000 visits): hypervoice,0;switch genesect 458v 278 | calmmind,0;switch genesect 452v 273 | psyshock,1;switch landorustherian 351v 203 | psyshock,1;switch genesect 339v 194
+      p2b <- Genesect comes in (284/284)
+              p2b Genesect spa 1 rose
+      p2a Gardevoir used Hyper Voice -> p1b: Rhyperior  [[spread] p1a,p1b]
+      p1b Rhyperior used Stone Edge -> p2a: Gardevoir
+              p1a Cresselia COULD NOT MOVE (par)
+      after p1: Cresselia 325/444, Rhyperior 275/429
+      after p2: Gardevoir-Mega 4/340, Genesect 284/284
+
+  Turn 3
+    p1 greedy: move 2 1, move 2 1
+    p2 mcts: move 1, move 1 1
+      search (21000 visits): hypervoice,0;uturn,0 844v 490 | hypervoice,0;uturn,1 709v 401 | psyshock,1;uturn,0 705v 399 | psyshock,1;ironhead,1 674v 379
+      p2b Genesect used U-turn -> p1a: Cresselia
+      after p1: Cresselia 83/444, Rhyperior 275/429
+      after p2: Gardevoir-Mega 4/340, Genesect 284/284
+
+  Turn 4
+      p2b <- Amoonguss comes in (432/432)
+      p2a Gardevoir used Hyper Voice -> p1a: Cresselia  [[spread] p1a,p1b]
+      p1a Cresselia fainted
+      p1b Rhyperior used Stone Edge -> p2a: Gardevoir
+              p2a Gardevoir -- critical hit
+      p2a Gardevoir fainted
+      after p1: Cresselia 0/444, Rhyperior 116/429
+      after p2: Gardevoir-Mega 0/340, Amoonguss 432/432
+
+  Turn 5
+      p2a <- Genesect comes in (284/284)
+      p1a <- Heatran comes in (385/385)
+              p2a Genesect spa 1 rose
+      after p1: Heatran 385/385, Rhyperior 116/429
+      after p2: Genesect 284/284, Amoonguss 432/432
+
+  Turn 6
+    p1 greedy: move 1, move 2 1
+    p2 mcts: move 1 1, switch 5   (slot1 Amoonguss -> Landorus-Therian)
+      search (9000 visits): uturn,0;switch landorustherian 491v 321 | uturn,1;switch landorustherian 428v 274 | uturn,1;spore,0 220v 123 | uturn,1;switch blastoise 194v 105
+      p2b <- Landorus-Therian comes in (320/320)
+              p1a Heatran atk 1 fell
+              p1b Rhyperior atk 1 fell
+      p2a Genesect used U-turn -> p1a: Heatran
+      after p1: Heatran 345/385, Rhyperior 116/429
+      after p2: Genesect 284/284, Landorus-Therian 320/320
+
+  Turn 7
+      p2a <- Blastoise comes in (362/362)
+      p1a Heatran used Heat Wave -> p2b: Landorus  [[spread] p2a,p2b]
+      p1b Rhyperior used Stone Edge -> p2a: Blastoise
+              p2a Blastoise used up its Sitrus Berry
+      after p1: Heatran 345/385, Rhyperior 74/429
+      after p2: Blastoise 237/362, Landorus-Therian 134/320
+
+  Turn 8
+    p1 greedy: move 1, move 2 2
+    p2 mcts: switch 4, move 4 1   (slot0 Blastoise -> Genesect)
+      search (22000 visits): switch genesect;superpower,0 2735v 2152 | icywind,0;superpower,0 1138v 842 | scald,1;superpower,0 689v 484 | scald,0;superpower,0 631v 438
+      p2a <- Genesect comes in (284/284)
+              p2a Genesect spa 1 rose
+      p2b Landorus used Superpower -> p1a: Heatran
+              p2b Landorus atk 1 fell
+              p2b Landorus def 1 fell
+      p1a Heatran used Heat Wave -> p2b: Landorus  [[spread] p2a]
+              p1a Heatran -- MISSED
+      p2a Genesect fainted
+      p1b Rhyperior used Stone Edge -> p2b: Landorus
+      p2b Landorus fainted
+      after p1: Heatran 13/385, Rhyperior 32/429
+      after p2: Genesect 0/284, Landorus-Therian 0/320
+
+  Turn 9
+      p2a <- Blastoise comes in (237/362)
+      p2b <- Amoonguss comes in (432/432)
+      after p1: Heatran 13/385, Rhyperior 32/429
+      after p2: Blastoise 237/362, Amoonguss 432/432
+
+  Turn 10
+    p1 greedy: move 1, move 2 1
+    p2 mcts: move 3, move 2 1
+      search (15000 visits): icywind,0;spore,0 544v 192 | icywind,0;protect,1 536v 188 | scald,0;spore,1 507v 175 | icywind,0;switch thundurus 497v 171
+      p2a Blastoise used Icy Wind -> p1a: Heatran  [[spread] p1a,p1b]
+              p1a Heatran spe 1 fell
+      p1b Rhyperior fainted
+      p1a Heatran used Heat Wave -> p2b: Amoonguss  [[spread] p2a,p2b]
+      p2b Amoonguss used Spore -> p1a: Heatran
+              p1a Heatran is now slp
+      after p1: Heatran 7/385, Rhyperior 0/429
+      after p2: Blastoise 176/362, Amoonguss 84/432
+
+  Turn 11
+      p1b <- Scrafty comes in (332/332)
+              p2a Blastoise atk 1 fell
+              p2b Amoonguss atk 1 fell
+      after p1: Heatran 7/385, Scrafty 332/332
+      after p2: Blastoise 176/362, Amoonguss 84/432
+
+  Turn 12
+    p1 greedy: move 1, move 4 2
+    p2 mcts: move 1 2, switch 6   (slot1 Amoonguss -> Thundurus)
+      search (14000 visits): scald,1;switch thundurus 925v 445 | icywind,0;switch thundurus 775v 363 | icywind,0;sludgebomb,1 592v 264 | scald,1;sludgebomb,1 569v 251
+      p2b <- Thundurus comes in (339/339)
+      p2a Blastoise used Scald -> p1b: Scrafty
+      p1b Scrafty used Stone Edge -> p2b: Thundurus
+              p1a Heatran COULD NOT MOVE (slp)
+      after p1: Heatran 7/385, Scrafty 257/332
+      after p2: Blastoise 176/362, Thundurus 81/339
+
+  Turn 13
+    p1 greedy: move 1, move 4 2
+    p2 mcts: move 3, move 1 2
+      search (26000 visits): icywind,0;thunderbolt,1 1202v 1019 | scald,1;thunderbolt,1 1164v 985 | icywind,0;thunderwave,1 955v 795 | icywind,0;flashcannon,1 908v 752
+      p2b Thundurus used Thunderbolt -> p1b: Scrafty
+              p1b Scrafty -- critical hit
+              p1b Scrafty is now par
+              p1b Scrafty used up its Sitrus Berry
+      p2a Blastoise used Icy Wind -> p1a: Heatran  [[spread] p1a,p1b]
+              p1a Heatran spe 1 fell
+              p1b Scrafty spe 1 fell
+      p1b Scrafty used Stone Edge -> p2b: Thundurus  [[miss]]
+              p1b Scrafty -- MISSED
+              p1a Heatran COULD NOT MOVE (slp)
+      after p1: Heatran 1/385, Scrafty 119/332
+      after p2: Blastoise 176/362, Thundurus 81/339
+
+  Turn 14
+    p1 greedy: move 1, move 4 2
+    p2 mcts: switch 6, move 2 1   (slot0 Blastoise -> Amoonguss)
+      search (30000 visits): switch amoonguss;thunderwave,0 1745v 1171 | switch amoonguss;thunderbolt,1 1454v 961 | switch amoonguss;thunderwave,1 1191v 772 | switch amoonguss;flashcannon,1 1151v 744
+      p2a <- Amoonguss comes in (228/432)
+      p2b Thundurus used Thunder Wave  [[still]]
+              p2b Thundurus -- IT FAILED
+              p1a Heatran COULD NOT MOVE (slp)
+              p1b Scrafty COULD NOT MOVE (par)
+      after p1: Heatran 1/385, Scrafty 119/332
+      after p2: Amoonguss 228/432, Thundurus 81/339
+
+  Turn 15
+    p1 greedy: move 1, move 4 2
+    p2 mcts: move 3 1, move 2 1
+      search (27000 visits): sludgebomb,0;thunderwave,0 1372v 905 | sludgebomb,0;thunderbolt,1 968v 616 | sludgebomb,1;thunderwave,0 883v 556 | sludgebomb,1;thunderbolt,1 818v 510
+      p2b Thundurus used Thunder Wave  [[still]]
+              p2b Thundurus -- IT FAILED
+              p1a Heatran is cured of slp
+      p1a Heatran used Heat Wave -> p2b: Thundurus  [[spread] p2a,p2b]
+      p2a Amoonguss fainted
+      p2b Thundurus fainted
+              p1b Scrafty COULD NOT MOVE (par)
+      after p1: Heatran 1/385, Scrafty 119/332
+      after p2: Amoonguss 0/432, Thundurus 0/339
+
+  Turn 16
+      p2a <- Blastoise comes in (176/362)
+      after p1: Heatran 1/385, Scrafty 119/332
+      after p2: Blastoise 176/362, Thundurus 0/339
+
+  Turn 17
+    p1 greedy: move 1, move 4 1
+    p2 mcts: move 4, pass
+      search (46000 visits): protect,0;No Move 17030v 1916 | icywind,0;No Move 10221v 1044 | scald,0;No Move 7583v 719 | scald,1;No Move 6587v 599
+      p2a Blastoise used Protect
+      p1a Heatran used Heat Wave -> p2a: Blastoise
+              p2a Blastoise -- move: Protect
+      p1b Scrafty used Stone Edge -> p2a: Blastoise
+              p2a Blastoise -- move: Protect
+      after p1: Heatran 1/385, Scrafty 119/332
+      after p2: Blastoise 176/362, Thundurus 0/339
+
+  Turn 18
+    p1 greedy: move 1, move 4 1
+    p2 mcts: move 4, pass
+      search (41000 visits): protect,0;No Move 15039v 1771 | icywind,0;No Move 9467v 1022 | scald,0;No Move 6619v 653 | scald,1;No Move 5919v 565
+      p2a Blastoise used Protect
+      p1a Heatran used Heat Wave -> p2a: Blastoise
+              p2a Blastoise -- move: Protect
+      p1b Scrafty used Stone Edge -> p2a: Blastoise
+              p2a Blastoise -- move: Protect
+      after p1: Heatran 1/385, Scrafty 119/332
+      after p2: Blastoise 176/362, Thundurus 0/339
+
+  Turn 19
+    p1 greedy: move 1, move 4 1
+    p2 mcts: move 4, pass
+      search (44000 visits): protect,0;No Move 16240v 1855 | icywind,0;No Move 9945v 1036 | scald,0;No Move 7051v 673 | scald,1;No Move 6367v 590
+      p2a Blastoise used Protect  [[still]]
+              p2a Blastoise -- IT FAILED
+      p1a Heatran used Heat Wave -> p2a: Blastoise
+      p1b Scrafty used Stone Edge -> p2a: Blastoise
+      after p1: Heatran 1/385, Scrafty 119/332
+      after p2: Blastoise 6/362, Thundurus 0/339
+
+  Turn 20
+    p1 greedy: move 1, move 4 1
+    p2 mcts: move 4, pass
+      search (106000 visits): protect,0;No Move 45989v 1596 | icywind,0;No Move 20930v 500 | scald,0;No Move 16802v 336 | scald,1;No Move 12626v 181
+      p2a Blastoise used Protect
+      p1a Heatran used Heat Wave -> p2a: Blastoise
+              p2a Blastoise -- move: Protect
+      p1b Scrafty used Stone Edge -> p2a: Blastoise
+              p2a Blastoise -- move: Protect
+      after p1: Heatran 1/385, Scrafty 119/332
+      after p2: Blastoise 6/362, Thundurus 0/339
+
+  Turn 21
+    p1 greedy: move 1, move 4 1
+    p2 mcts: move 4, pass
+      search (80000 visits): protect,0;No Move 34191v 1303 | icywind,0;No Move 15834v 412 | scald,0;No Move 12721v 276 | scald,1;No Move 9753v 153
+      p2a Blastoise used Protect  [[still]]
+              p2a Blastoise -- IT FAILED
+      p1a Heatran used Heat Wave -> p2a: Blastoise
+      p2a Blastoise fainted
+      after p1: Heatran 1/385, Scrafty 119/332
+      after p2: Blastoise 0/362, Thundurus 0/339
+
+  RESULT: p1 wins

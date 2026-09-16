@@ -1,0 +1,159 @@
+battle 31   p1=greedy vs p2=mcts   mcts 300 ms a decision
+  p1: dpl rejects/terracott week 1 reject: Gengar-Mega, Whimsicott, Terrakion, Landorus-Therian, Hoopa-Unbound, Kyurem-Black
+  p2: ORAS Doubles OU: Gardevoir-Mega, Weavile, Breloom, Gyarados, Aegislash, Rotom-Wash
+
+  Turn 1
+    p1 greedy: move 3 1, move 1 1
+    p2 mcts: move 4, move 1 2
+      search (33000 visits): protect,0;iciclecrash,1 19557v 15484 | psyshock,0;iciclecrash,1 868v 433 | protect,0;knockoff,0 793v 390 | psyshock,1;knockoff,0 573v 266
+      p2a Gardevoir used Protect
+      p1a Gengar used Sludge Bomb -> p2a: Gardevoir
+              p2a Gardevoir -- move: Protect
+      p2b Weavile used Icicle Crash -> p1b: Whimsicott
+              p1b Whimsicott used up its Focus Sash
+      p1b Whimsicott used Moonblast -> p2a: Gardevoir
+              p2a Gardevoir -- move: Protect
+      after p1: Gengar-Mega 261/261, Whimsicott 1/261
+      after p2: Gardevoir-Mega 279/279, Weavile 253/281
+
+  Turn 2
+    p1 greedy: move 3 2, move 1 2
+    p2 mcts: move 4, move 3 2
+      search (38000 visits): protect,0;knockoff,1 22974v 18188 | protect,0;iciclecrash,1 1132v 549 | protect,0;knockoff,0 948v 448 | psyshock,0;knockoff,1 610v 267
+      p2a Gardevoir used Protect  [[still]]
+              p2a Gardevoir -- IT FAILED
+      p1a Gengar used Sludge Bomb -> p2b: Weavile
+              p2b Weavile is now psn
+      p2b Weavile used Knock Off -> p1b: Whimsicott
+      p1b Whimsicott fainted
+      p2b Weavile fainted
+      after p1: Gengar-Mega 261/261, Whimsicott 0/261
+      after p2: Gardevoir-Mega 279/279, Weavile 0/281
+
+  Turn 3
+      p2b <- Breloom comes in (261/261)
+      p1b <- Terrakion comes in (323/323)
+      after p1: Gengar-Mega 261/261, Terrakion 323/323
+      after p2: Gardevoir-Mega 279/279, Breloom 261/261
+
+  Turn 4
+    p1 greedy: move 3 1, move 3 1
+    p2 mcts: move 2 2, move 1 1
+      search (58000 visits): psyshock,1;spore,0 20788v 18232 | protect,0;spore,0 8355v 7171 | protect,0;protect,1 7007v 5981 | focusblast,1;spore,0 4066v 3400
+      p1a Gengar used Sludge Bomb -> p2a: Gardevoir
+      p2a Gardevoir fainted
+      p1b Terrakion used Close Combat -> p2b: Breloom
+              p1b Terrakion def 1 fell
+              p1b Terrakion spd 1 fell
+      p2b Breloom used Spore -> p1a: Gengar
+              p1a Gengar is now slp
+      after p1: Gengar-Mega 261/261, Terrakion 323/323
+      after p2: Gardevoir-Mega 0/279, Breloom 3/261
+
+  Turn 5
+      p2a <- Gyarados comes in (394/394)
+              p1a Gengar atk 1 fell
+              p1b Terrakion atk 1 fell
+      after p1: Gengar-Mega 261/261, Terrakion 323/323
+      after p2: Gyarados 394/394, Breloom 3/261
+
+  Turn 6
+    p1 greedy: move 3 2, move 3 2
+    p2 mcts: move 3 2, move 4
+      search (36000 visits): waterfall,1;protect,1 22811v 16534 | waterfall,0;bulletseed,1 521v 266 | waterfall,0;machpunch,1 489v 246 | waterfall,0;bulletseed,0 444v 219
+      p2b Breloom used Protect
+              p1a Gengar COULD NOT MOVE (slp)
+      p1b Terrakion used Close Combat -> p2b: Breloom
+              p2b Breloom -- move: Protect
+      p2a Gyarados used Waterfall -> p1b: Terrakion
+      p1b Terrakion fainted
+      after p1: Gengar-Mega 261/261, Terrakion 0/323
+      after p2: Gyarados 394/394, Breloom 3/261
+
+  Turn 7
+      p1b <- Landorus-Therian comes in (319/319)
+              p2a Gyarados atk 1 fell
+              p2b Breloom atk 1 fell
+      after p1: Gengar-Mega 261/261, Landorus-Therian 319/319
+      after p2: Gyarados 394/394, Breloom 3/261
+
+  Turn 8
+    p1 greedy: move 3 2, move 3
+    p2 mcts: move 3 2, move 3 2
+      search (58000 visits): waterfall,1;bulletseed,1 2806v 2386 | waterfall,1;spore,1 2406v 2029 | waterfall,1;machpunch,1 2344v 1974 | waterfall,1;machpunch,0 2146v 1797
+              p1a Gengar is cured of slp
+      p1a Gengar used Sludge Bomb -> p2b: Breloom
+      p2b Breloom fainted
+      p1b Landorus used Explosion -> p2a: Gyarados  [[spread] p2a]
+              p1a Gengar -- IMMUNE
+              p2a Gyarados used up its Sitrus Berry
+      p1b Landorus fainted
+      p2a Gyarados used Waterfall -> p1a: Gengar
+      after p1: Gengar-Mega 161/261, Landorus-Therian 0/319
+      after p2: Gyarados 254/394, Breloom 0/261
+
+  Turn 9
+      p1b <- Hoopa-Unbound comes in (301/301)
+      p2b <- Aegislash comes in (324/324)
+      after p1: Gengar-Mega 161/261, Hoopa-Unbound 301/301
+      after p2: Gyarados 254/394, Aegislash 324/324
+
+  Turn 10
+    p1 greedy: move 3 1, move 1 1
+    p2 mcts: move 3 1, switch 6   (slot1 Aegislash -> Rotom-Wash)
+      search (48000 visits): waterfall,0;switch rotomwash 1476v 286 | waterfall,0;shadowball,0 1465v 284 | thunderwave,0;shadowball,0 1373v 260 | thunderwave,0;switch rotomwash 1354v 256
+      p2b <- Rotom-Wash comes in (304/304)
+      p1a Gengar used Sludge Bomb -> p2a: Gyarados
+      p1b Hoopa used Hyperspace Fury -> p2a: Gyarados
+              p1b Hoopa def 1 fell
+      p2a Gyarados fainted
+      after p1: Gengar-Mega 161/261, Hoopa-Unbound 271/301
+      after p2: Gyarados 0/394, Rotom-Wash 304/304
+
+  Turn 11
+      p2a <- Aegislash comes in (324/324)
+      after p1: Gengar-Mega 161/261, Hoopa-Unbound 271/301
+      after p2: Aegislash 324/324, Rotom-Wash 304/304
+
+  Turn 12
+    p1 greedy: move 3 1, move 1 1
+    p2 mcts: move 1 1, move 3 1
+      search (39000 visits): shadowball,0;thunderbolt,0 1763v 288 | shadowball,0;protect,1 1560v 244 | shadowball,0;hydropump,0 1532v 238 | flashcannon,0;thunderbolt,0 1273v 183
+      p1a Gengar used Sludge Bomb -> p2a: Aegislash
+              p2a Aegislash -- IMMUNE
+      p1b Hoopa used Hyperspace Fury -> p2a: Aegislash
+              p1b Hoopa def 1 fell
+      p2a Aegislash fainted
+      p2b Rotom used Thunderbolt -> p1a: Gengar
+      after p1: Gengar-Mega 14/261, Hoopa-Unbound 241/301
+      after p2: Aegislash 0/324, Rotom-Wash 304/304
+
+  Turn 13
+    p1 greedy: move 3 2, move 1 2
+    p2 mcts: pass, move 4
+      search (148000 visits): No Move;protect,1 85532v 4470 | No Move;thunderbolt,0 11089v 251 | No Move;thunderbolt,1 10981v 246 | No Move;hydropump,1 10746v 235
+      p2b Rotom used Protect
+      p1a Gengar used Sludge Bomb -> p2b: Rotom
+              p2b Rotom -- move: Protect
+      p1b Hoopa used Hyperspace Fury -> p2b: Rotom
+              p2b Rotom -- move: Hyperspace Fury
+              p1b Hoopa def 1 fell
+              p2b Rotom used up its Sitrus Berry
+      after p1: Gengar-Mega 14/261, Hoopa-Unbound 211/301
+      after p2: Aegislash 0/324, Rotom-Wash 149/304
+
+  Turn 14
+    p1 greedy: move 3 2, move 1 2
+    p2 mcts: pass, move 4
+      search (463000 visits): No Move;protect,1 186710v 3125 | No Move;hydropump,1 48324v 257 | No Move;hydropump,0 46501v 227 | No Move;thunderbolt,1 46372v 224
+      p2b Rotom used Protect
+      p1a Gengar used Sludge Bomb -> p2b: Rotom
+              p2b Rotom -- move: Protect
+      p1b Hoopa used Hyperspace Fury -> p2b: Rotom
+              p2b Rotom -- move: Hyperspace Fury
+              p1b Hoopa def 1 fell
+      p2b Rotom fainted
+      after p1: Gengar-Mega 14/261, Hoopa-Unbound 181/301
+      after p2: Aegislash 0/324, Rotom-Wash 0/304
+
+  RESULT: p1 wins

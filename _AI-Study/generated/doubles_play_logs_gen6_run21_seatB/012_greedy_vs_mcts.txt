@@ -1,0 +1,670 @@
+battle 12   p1=greedy vs p2=mcts   mcts 300 ms a decision
+  p1: never cook again: Kangaskhan-Mega, Bisharp, Togekiss, Thundurus, Landorus-Therian, Gastrodon-East
+  p2: XY Doubles: Aromatisse, Conkeldurr, Camerupt, Slowbro, Porygon2, Breloom
+
+  Turn 1
+    p1 greedy: move 3 1, move 1 1
+    p2 mcts: move 1 2, switch 3   (slot1 Conkeldurr -> Camerupt)
+      search (41000 visits): drainingkiss,1;switch camerupt 387v 17 | drainingkiss,1;switch porygon2 387v 17 | trickroom,1;switch porygon2 386v 16 | switch porygon2;switch slowbro 385v 16
+      p2b <- Camerupt comes in (344/344)
+      p1b Bisharp used Sucker Punch -> p2a: Aromatisse
+      p1a Kangaskhan used Fire Punch -> p2a: Aromatisse
+      p2a Aromatisse used Draining Kiss -> p1b: Bisharp
+      after p1: Kangaskhan-Mega 413/413, Bisharp 178/278
+      after p2: Aromatisse 271/406, Camerupt 344/344
+
+  Turn 2
+    p1 greedy: move 3 1, move 1 1
+    p2 mcts: switch 5, move 1 mega   (slot0 Aromatisse -> Porygon2)
+      search (38000 visits): switch porygon2;heatwave-mega,0 611v 200 | drainingkiss,1;heatwave-mega,0 577v 186 | switch porygon2;heatwave,0 555v 177 | healpulse,1;heatwave-mega,0 541v 171
+      p2a <- Porygon2 comes in (374/374)
+              p2a Porygon2 spa 1 rose
+      p1b Bisharp used Sucker Punch  [[still]]
+              p1b Bisharp -- IT FAILED
+      p1a Kangaskhan used Fire Punch -> p2a: Porygon2
+      p2b Camerupt used Heat Wave -> p1b: Bisharp  [[spread] p1a,p1b]
+      p1b Bisharp fainted
+      after p1: Kangaskhan-Mega 230/413, Bisharp 0/278
+      after p2: Porygon2 322/374, Camerupt-Mega 344/344
+
+  Turn 3
+      p1b <- Togekiss comes in (374/374)
+      after p1: Kangaskhan-Mega 230/413, Togekiss 374/374
+      after p2: Porygon2 322/374, Camerupt-Mega 344/344
+
+  Turn 4
+    p1 greedy: move 3 1, move 1 1
+    p2 mcts: switch 4, switch 6   (slot0 Porygon2 -> Slowbro; slot1 Camerupt-Mega -> Breloom)
+      search (33000 visits): switch slowbro;switch breloom 25248v 24451 | trickroom,1;heatwave,0 846v 560 | thunderbolt,1;heatwave,0 251v 136 | trickroom,1;hiddenpower,0 213v 111
+      p2a <- Slowbro comes in (394/394)
+      p2b <- Breloom comes in (324/324)
+      p1a Kangaskhan used Fire Punch -> p2a: Slowbro
+      p1b Togekiss used Air Slash -> p2a: Slowbro
+      after p1: Kangaskhan-Mega 230/413, Togekiss 374/374
+      after p2: Slowbro 267/394, Breloom 324/324
+
+  Turn 5
+    p1 greedy: move 3 1, move 1 1
+    p2 mcts: switch 4, move 4   (slot0 Slowbro -> Porygon2)
+      search (47000 visits): switch porygon2;swordsdance,1 1074v 238 | scald,0;swordsdance,1 820v 165 | scald,1;swordsdance,1 816v 164 | calmmind,0;swordsdance,1 766v 150
+      p2a <- Porygon2 comes in (322/374)
+              p2a Porygon2 atk 1 rose
+      p1a Kangaskhan used Fire Punch -> p2a: Porygon2
+      p1b Togekiss used Air Slash -> p2a: Porygon2
+      p2b Breloom used Swords Dance
+              p2b Breloom atk 2 rose
+      after p1: Kangaskhan-Mega 230/413, Togekiss 374/374
+      after p2: Porygon2 202/374, Breloom 324/324
+
+  Turn 6
+    p1 greedy: move 3 1, move 1 1
+    p2 mcts: move 3, move 2 1
+      search (51000 visits): trickroom,1;seedbomb,0 854v 153 | thunderbolt,1;seedbomb,0 834v 148 | thunderbolt,0;seedbomb,0 831v 147 | trickroom,0;seedbomb,0 800v 139
+      p1a Kangaskhan used Fire Punch -> p2a: Porygon2
+      p1b Togekiss used Air Slash -> p2a: Porygon2
+      p2b Breloom used Seed Bomb -> p1a: Kangaskhan
+      p1a Kangaskhan fainted
+              p2a Porygon2 COULD NOT MOVE (flinch)
+      after p1: Kangaskhan-Mega 0/413, Togekiss 374/374
+      after p2: Porygon2 80/374, Breloom 292/324
+
+  Turn 7
+      p1a <- Thundurus comes in (361/361)
+      after p1: Thundurus 361/361, Togekiss 374/374
+      after p2: Porygon2 80/374, Breloom 292/324
+
+  Turn 8
+    p1 greedy: move 1 1, move 1 1
+    p2 mcts: switch 6, move 1 1   (slot0 Porygon2 -> Camerupt-Mega)
+      search (26000 visits): switch cameruptmega;machpunch,0 1177v 583 | icebeam,0;machpunch,0 713v 326 | switch cameruptmega;seedbomb,1 585v 257 | switch cameruptmega;seedbomb,0 558v 243
+      p2a <- Camerupt-Mega comes in (344/344)
+      p2b Breloom used Mach Punch -> p1a: Thundurus
+              p1a Thundurus used up its Sitrus Berry
+      p1a Thundurus used Thunderbolt -> p2a: Camerupt
+              p2a Camerupt -- IMMUNE
+      p1b Togekiss used Air Slash -> p2a: Camerupt
+      after p1: Thundurus 259/361, Togekiss 374/374
+      after p2: Camerupt-Mega 244/344, Breloom 260/324
+
+  Turn 9
+    p1 greedy: move 1 1, move 1 1
+    p2 mcts: move 1, switch 6   (slot1 Breloom -> Porygon2)
+      search (22000 visits): heatwave,0;switch porygon2 1186v 623 | heatwave,0;machpunch,1 920v 467 | heatwave,0;spore,0 884v 446 | heatwave,0;swordsdance,1 853v 428
+      p2b <- Porygon2 comes in (80/374)
+              p2b Porygon2 atk 1 rose
+      p1a Thundurus used Thunderbolt -> p2a: Camerupt
+              p2a Camerupt -- IMMUNE
+      p1b Togekiss used Air Slash -> p2a: Camerupt
+              p2a Camerupt COULD NOT MOVE (flinch)
+      after p1: Thundurus 259/361, Togekiss 374/374
+      after p2: Camerupt-Mega 148/344, Porygon2 80/374
+
+  Turn 10
+    p1 greedy: move 1 2, move 1 2
+    p2 mcts: move 1, move 2 1
+      search (22000 visits): heatwave,0;icebeam,0 1097v 777 | heatwave,0;icebeam,1 958v 670 | heatwave,0;thunderbolt,0 742v 504 | heatwave,0;switch aromatisse 731v 496
+      p1a Thundurus used Thunderbolt -> p2b: Porygon2
+      p2b Porygon2 fainted
+      p1b Togekiss used Air Slash -> p2a: Camerupt
+      p2a Camerupt used Heat Wave -> p1a: Thundurus  [[spread] p1a,p1b]
+      after p1: Thundurus 3/361, Togekiss 223/374
+      after p2: Camerupt-Mega 57/344, Porygon2 0/374
+
+  Turn 11
+      p2b <- Conkeldurr comes in (414/414)
+      after p1: Thundurus 3/361, Togekiss 223/374
+      after p2: Camerupt-Mega 57/344, Conkeldurr 414/414
+
+  Turn 12
+    p1 greedy: move 1 1, move 1 1
+    p2 mcts: switch 6, move 3 2   (slot0 Camerupt-Mega -> Breloom)
+      search (26000 visits): switch breloom;icepunch,1 749v 359 | heatwave,0;switch breloom 582v 266 | switch breloom;poisonjab,1 549v 248 | heatwave,0;poisonjab,1 536v 240
+      p2a <- Breloom comes in (260/324)
+      p1a Thundurus used Thunderbolt -> p2a: Breloom
+      p1b Togekiss used Air Slash -> p2a: Breloom
+      p2a Breloom fainted
+      p2b Conkeldurr used Ice Punch -> p1b: Togekiss
+      p1b Togekiss fainted
+      after p1: Thundurus 3/361, Togekiss 0/374
+      after p2: Breloom 0/324, Conkeldurr 304/414
+
+  Turn 13
+      p1b <- Landorus-Therian comes in (358/358)
+      p2a <- Slowbro comes in (394/394)
+              p2a Slowbro atk 1 fell
+              p2b Conkeldurr atk 1 fell
+      after p1: Thundurus 3/361, Landorus-Therian 358/358
+      after p2: Slowbro 394/394, Conkeldurr 304/414
+
+  Turn 14
+    p1 greedy: move 1 2, move 2 2
+    p2 mcts: switch 5, switch 6   (slot0 Slowbro -> Aromatisse; slot1 Conkeldurr -> Camerupt-Mega)
+      search (25000 visits): switch aromatisse;switch cameruptmega 2282v 1738 | switch cameruptmega;icepunch,1 1774v 1329 | switch cameruptmega;protect,1 1631v 1214 | switch cameruptmega;switch aromatisse 1196v 868
+      p2b <- Camerupt-Mega comes in (57/344)
+      p2a <- Aromatisse comes in (271/406)
+      p1b Landorus used Superpower -> p2b: Camerupt
+              p1b Landorus atk 1 fell
+              p1b Landorus def 1 fell
+      p2b Camerupt fainted
+      p1a Thundurus used Thunderbolt -> p2a: Aromatisse
+      after p1: Thundurus 3/361, Landorus-Therian 358/358
+      after p2: Aromatisse 197/406, Camerupt 0/344
+
+  Turn 15
+      p2b <- Slowbro comes in (394/394)
+      after p1: Thundurus 3/361, Landorus-Therian 358/358
+      after p2: Aromatisse 197/406, Slowbro 394/394
+
+  Turn 16
+    p1 greedy: move 1 1, move 2 1
+    p2 mcts: move 4, move 2
+      search (24000 visits): reflect,0;calmmind,1 1806v 744 | reflect,0;switch conkeldurr 1783v 733 | reflect,0;slackoff,1 1207v 469 | drainingkiss,0;calmmind,1 986v 369
+      p1b Landorus used Superpower -> p2a: Aromatisse
+              p1b Landorus atk 1 fell
+              p1b Landorus def 1 fell
+      p1a Thundurus used Thunderbolt -> p2a: Aromatisse
+              p2a Aromatisse is now par
+      p2b Slowbro used Calm Mind
+              p2b Slowbro spa 1 rose
+              p2b Slowbro spd 1 rose
+      p2a Aromatisse used Reflect
+      -sidestart p2: B Reflect
+      after p1: Thundurus 3/361, Landorus-Therian 358/358
+      after p2: Aromatisse 54/406, Slowbro 394/394
+
+  Turn 17
+    p1 greedy: move 1 1, move 2 1
+    p2 mcts: move 1 1, move 2
+      search (22000 visits): drainingkiss,0;calmmind,1 842v 197 | drainingkiss,1;calmmind,1 763v 173 | trickroom,1;calmmind,1 608v 126 | switch conkeldurr;calmmind,1 594v 122
+      p1b Landorus used Superpower -> p2a: Aromatisse
+              p1b Landorus atk 1 fell
+              p1b Landorus def 1 fell
+      p1a Thundurus used Thunderbolt -> p2a: Aromatisse
+      p2a Aromatisse fainted
+      p2b Slowbro used Calm Mind
+              p2b Slowbro spa 1 rose
+              p2b Slowbro spd 1 rose
+      after p1: Thundurus 3/361, Landorus-Therian 358/358
+      after p2: Aromatisse 0/406, Slowbro 394/394
+
+  Turn 18
+      p2a <- Conkeldurr comes in (304/414)
+      after p1: Thundurus 3/361, Landorus-Therian 358/358
+      after p2: Conkeldurr 304/414, Slowbro 394/394
+
+  Turn 19
+    p1 greedy: move 1 1, move 2 1
+    p2 mcts: move 2 2, move 2
+      search (24000 visits): drainpunch,1;calmmind,1 2493v 685 | drainpunch,1;trickroom,1 1633v 414 | drainpunch,1;slackoff,1 1489v 370 | drainpunch,1;trickroom,0 1392v 340
+      p1b Landorus used Superpower -> p2a: Conkeldurr
+              p1b Landorus atk 1 fell
+              p1b Landorus def 1 fell
+      p1a Thundurus used Thunderbolt -> p2a: Conkeldurr
+              p2a Conkeldurr is now par
+      p2a Conkeldurr used Drain Punch -> p1b: Landorus
+      p1b Landorus fainted
+      p2b Slowbro used Calm Mind
+              p2b Slowbro spa 1 rose
+              p2b Slowbro spd 1 rose
+      after p1: Thundurus 3/361, Landorus-Therian 0/358
+      after p2: Conkeldurr 216/414, Slowbro 394/394
+
+  Turn 20
+      p1b <- Gastrodon-East comes in (426/426)
+      after p1: Thundurus 3/361, Gastrodon-East 426/426
+      after p2: Conkeldurr 216/414, Slowbro 394/394
+
+  Turn 21
+    p1 greedy: move 1 1, move 1 1
+    p2 mcts: move 2 2, move 2
+      search (19000 visits): drainpunch,1;calmmind,1 1621v 659 | drainpunch,1;slackoff,1 1147v 442 | drainpunch,1;trickroom,0 1020v 385 | drainpunch,1;trickroom,1 981v 368
+      p1a Thundurus used Thunderbolt -> p2a: Conkeldurr
+      p1b Gastrodon used Ice Beam -> p2a: Conkeldurr
+      p2a Conkeldurr fainted
+      p2b Slowbro used Calm Mind
+              p2b Slowbro spa 1 rose
+              p2b Slowbro spd 1 rose
+      after p1: Thundurus 3/361, Gastrodon-East 426/426
+      after p2: Conkeldurr 0/414, Slowbro 394/394
+
+  Turn 22
+    p1 greedy: move 1 2, move 1 2
+    p2 mcts: pass, move 4
+      search (55000 visits): No Move;slackoff,1 18491v 4052 | No Move;calmmind,1 12986v 2759 | No Move;trickroom,1 7494v 1495 | No Move;trickroom,0 7352v 1463
+      p1a Thundurus used Thunderbolt -> p2b: Slowbro
+              p2b Slowbro is now par
+      p1b Gastrodon used Ice Beam -> p2b: Slowbro
+              p2b Slowbro -- critical hit
+      p2b Slowbro used Slack Off
+      -sideend p2: B Reflect
+      after p1: Thundurus 3/361, Gastrodon-East 426/426
+      after p2: Conkeldurr 0/414, Slowbro 394/394
+
+  Turn 23
+    p1 greedy: move 1 2, move 1 2
+    p2 mcts: pass, move 4
+      search (65000 visits): No Move;slackoff,1 22063v 5932 | No Move;calmmind,1 17064v 4514 | No Move;trickroom,1 8373v 2086 | No Move;trickroom,0 8216v 2043
+      p1a Thundurus used Thunderbolt -> p2b: Slowbro
+      p1b Gastrodon used Ice Beam -> p2b: Slowbro
+      p2b Slowbro used Slack Off
+      after p1: Thundurus 3/361, Gastrodon-East 426/426
+      after p2: Conkeldurr 0/414, Slowbro 394/394
+
+  Turn 24
+    p1 greedy: move 1 2, move 1 2
+    p2 mcts: pass, move 4
+      search (61000 visits): No Move;slackoff,1 20921v 5685 | No Move;calmmind,1 16121v 4308 | No Move;trickroom,1 7836v 1968 | No Move;trickroom,0 7224v 1799
+      p1a Thundurus used Thunderbolt -> p2b: Slowbro
+      p1b Gastrodon used Ice Beam -> p2b: Slowbro
+              p2b Slowbro COULD NOT MOVE (par)
+      after p1: Thundurus 3/361, Gastrodon-East 426/426
+      after p2: Conkeldurr 0/414, Slowbro 289/394
+
+  Turn 25
+    p1 greedy: move 1 2, move 1 2
+    p2 mcts: pass, move 4
+      search (85000 visits): No Move;slackoff,1 22409v 4121 | No Move;calmmind,1 14077v 2471 | No Move;trickroom,0 13278v 2315 | No Move;trickroom,1 13162v 2293
+      p1a Thundurus used Thunderbolt -> p2b: Slowbro
+      p1b Gastrodon used Ice Beam -> p2b: Slowbro
+      p2b Slowbro used Slack Off
+      after p1: Thundurus 3/361, Gastrodon-East 426/426
+      after p2: Conkeldurr 0/414, Slowbro 380/394
+
+  Turn 26
+    p1 greedy: move 1 2, move 1 2
+    p2 mcts: pass, move 4
+      search (74000 visits): No Move;slackoff,1 24030v 6258 | No Move;calmmind,1 16822v 4281 | No Move;trickroom,0 11571v 2858 | No Move;trickroom,1 10765v 2641
+      p1a Thundurus used Thunderbolt -> p2b: Slowbro
+      p1b Gastrodon used Ice Beam -> p2b: Slowbro
+      p2b Slowbro used Slack Off
+      after p1: Thundurus 3/361, Gastrodon-East 426/426
+      after p2: Conkeldurr 0/414, Slowbro 394/394
+
+  Turn 27
+    p1 greedy: move 1 2, move 1 2
+    p2 mcts: pass, move 4
+      search (62000 visits): No Move;slackoff,1 21426v 5815 | No Move;calmmind,1 15889v 4230 | No Move;trickroom,1 7861v 1969 | No Move;trickroom,0 7761v 1942
+      p1a Thundurus used Thunderbolt -> p2b: Slowbro
+      p1b Gastrodon used Ice Beam -> p2b: Slowbro
+      p2b Slowbro used Slack Off
+      after p1: Thundurus 3/361, Gastrodon-East 426/426
+      after p2: Conkeldurr 0/414, Slowbro 394/394
+
+  Turn 28
+    p1 greedy: move 1 2, move 1 2
+    p2 mcts: pass, move 4
+      search (59000 visits): No Move;slackoff,1 21031v 5765 | No Move;calmmind,1 15334v 4119 | No Move;trickroom,0 7173v 1801 | No Move;trickroom,1 6888v 1722
+      p1a Thundurus used Thunderbolt -> p2b: Slowbro
+      p1b Gastrodon used Ice Beam -> p2b: Slowbro
+      p2b Slowbro used Slack Off
+      after p1: Thundurus 3/361, Gastrodon-East 426/426
+      after p2: Conkeldurr 0/414, Slowbro 394/394
+
+  Turn 29
+    p1 greedy: move 1 2, move 1 2
+    p2 mcts: pass, move 4
+      search (59000 visits): No Move;slackoff,1 21120v 5776 | No Move;calmmind,1 14155v 3770 | No Move;trickroom,0 7591v 1912 | No Move;trickroom,1 7255v 1819
+      p1a Thundurus used Thunderbolt -> p2b: Slowbro
+      p1b Gastrodon used Ice Beam -> p2b: Slowbro
+      p2b Slowbro used Slack Off
+      after p1: Thundurus 3/361, Gastrodon-East 426/426
+      after p2: Conkeldurr 0/414, Slowbro 394/394
+
+  Turn 30
+    p1 greedy: move 1 2, move 1 2
+    p2 mcts: pass, move 4
+      search (62000 visits): No Move;slackoff,1 21679v 5864 | No Move;calmmind,1 15968v 4235 | No Move;trickroom,0 7809v 1946 | No Move;trickroom,1 7262v 1796
+      p1a Thundurus used Thunderbolt -> p2b: Slowbro
+      p1b Gastrodon used Ice Beam -> p2b: Slowbro
+      p2b Slowbro used Slack Off
+      after p1: Thundurus 3/361, Gastrodon-East 426/426
+      after p2: Conkeldurr 0/414, Slowbro 394/394
+
+  Turn 31
+    p1 greedy: move 1 2, move 1 2
+    p2 mcts: pass, move 4
+      search (56000 visits): No Move;slackoff,1 20129v 5543 | No Move;calmmind,1 14107v 3794 | No Move;trickroom,1 6970v 1759 | No Move;trickroom,0 6601v 1655
+      p1a Thundurus used Thunderbolt -> p2b: Slowbro
+      p1b Gastrodon used Ice Beam -> p2b: Slowbro
+      p2b Slowbro used Slack Off
+      after p1: Thundurus 3/361, Gastrodon-East 426/426
+      after p2: Conkeldurr 0/414, Slowbro 394/394
+
+  Turn 32
+    p1 greedy: move 1 2, move 1 2
+    p2 mcts: pass, move 4
+      search (44000 visits): No Move;slackoff,1 15994v 4608 | No Move;calmmind,1 10288v 2871 | No Move;trickroom,1 5661v 1490 | No Move;trickroom,0 5287v 1380
+      p1a Thundurus used Thunderbolt -> p2b: Slowbro
+      p1b Gastrodon used Ice Beam -> p2b: Slowbro
+      p2b Slowbro used Slack Off
+      after p1: Thundurus 3/361, Gastrodon-East 426/426
+      after p2: Conkeldurr 0/414, Slowbro 394/394
+
+  Turn 33
+    p1 greedy: move 1 2, move 1 2
+    p2 mcts: pass, move 4
+      search (71000 visits): No Move;slackoff,1 23592v 6267 | No Move;calmmind,1 17803v 4646 | No Move;trickroom,1 9928v 2472 | No Move;trickroom,0 9744v 2421
+      p1a Thundurus used Thunderbolt -> p2b: Slowbro
+      p1b Gastrodon used Ice Beam -> p2b: Slowbro
+              p2b Slowbro COULD NOT MOVE (par)
+      after p1: Thundurus 3/361, Gastrodon-East 426/426
+      after p2: Conkeldurr 0/414, Slowbro 290/394
+
+  Turn 34
+    p1 greedy: move 1 2, move 1 2
+    p2 mcts: pass, move 4
+      search (78000 visits): No Move;slackoff,1 21643v 4114 | No Move;calmmind,1 13008v 2351 | No Move;trickroom,1 11612v 2070 | No Move;trickroom,0 11470v 2042
+      p1a Thundurus used Thunderbolt -> p2b: Slowbro
+      p1b Gastrodon used Ice Beam -> p2b: Slowbro
+      p2b Slowbro used Slack Off
+      after p1: Thundurus 3/361, Gastrodon-East 426/426
+      after p2: Conkeldurr 0/414, Slowbro 394/394
+
+  Turn 35
+    p1 greedy: move 1 2, move 1 2
+    p2 mcts: pass, move 4
+      search (63000 visits): No Move;slackoff,1 21787v 6124 | No Move;calmmind,1 16855v 4664 | No Move;trickroom,1 7724v 2004 | No Move;trickroom,0 7583v 1963
+      p1a Thundurus used Thunderbolt -> p2b: Slowbro
+      p1b Gastrodon used Ice Beam -> p2b: Slowbro
+      p2b Slowbro used Slack Off
+      after p1: Thundurus 3/361, Gastrodon-East 426/426
+      after p2: Conkeldurr 0/414, Slowbro 394/394
+
+  Turn 36
+    p1 greedy: move 1 2, move 1 2
+    p2 mcts: pass, move 4
+      search (71000 visits): No Move;slackoff,1 22597v 6648 | No Move;calmmind,1 18948v 5519 | No Move;trickroom,0 9344v 2586 | No Move;trickroom,1 9213v 2546
+      p1a Thundurus used Thunderbolt -> p2b: Slowbro
+      p1b Gastrodon used Ice Beam -> p2b: Slowbro
+      p2b Slowbro used Slack Off
+      after p1: Thundurus 3/361, Gastrodon-East 426/426
+      after p2: Conkeldurr 0/414, Slowbro 394/394
+
+  Turn 37
+    p1 greedy: move 2 2, move 2 2
+    p2 mcts: pass, move 2
+      search (81000 visits): No Move;calmmind,1 17521v 5336 | No Move;slackoff,1 17011v 5172 | No Move;trickroom,1 14077v 4229 | No Move;trickroom,0 13615v 4081
+      p1a Thundurus used Hidden Power -> p2b: Slowbro
+      p1b Gastrodon used Earth Power -> p2b: Slowbro
+              p2b Slowbro COULD NOT MOVE (par)
+      after p1: Thundurus 3/361, Gastrodon-East 426/426
+      after p2: Conkeldurr 0/414, Slowbro 365/394
+
+  Turn 38
+    p1 greedy: move 2 2, move 2 2
+    p2 mcts: pass, move 4
+      search (59000 visits): No Move;slackoff,1 14606v 4678 | No Move;calmmind,1 12219v 3870 | No Move;trickroom,0 9892v 3086 | No Move;trickroom,1 8895v 2752
+      p1a Thundurus used Hidden Power -> p2b: Slowbro
+      p1b Gastrodon used Earth Power -> p2b: Slowbro
+      p2b Slowbro used Slack Off
+      after p1: Thundurus 3/361, Gastrodon-East 426/426
+      after p2: Conkeldurr 0/414, Slowbro 394/394
+
+  Turn 39
+    p1 greedy: move 2 2, move 2 2
+    p2 mcts: pass, move 2
+      search (48000 visits): No Move;calmmind,1 11007v 3579 | No Move;slackoff,1 10866v 3530 | No Move;trickroom,0 8347v 2659 | No Move;trickroom,1 8318v 2649
+      p1a Thundurus used Hidden Power -> p2b: Slowbro
+      p1b Gastrodon used Earth Power -> p2b: Slowbro
+              p2b Slowbro -- critical hit
+              p2b Slowbro spd 1 fell
+      p2b Slowbro used Calm Mind
+              p2b Slowbro spa 1 rose
+              p2b Slowbro spd 1 rose
+      after p1: Thundurus 3/361, Gastrodon-East 426/426
+      after p2: Conkeldurr 0/414, Slowbro 217/394
+
+  Turn 40
+    p1 greedy: move 2 2, move 2 2
+    p2 mcts: pass, move 4
+      search (65000 visits): No Move;slackoff,1 13596v 3414 | No Move;calmmind,1 11203v 2767 | No Move;trickroom,0 10723v 2638 | No Move;trickroom,1 10573v 2598
+      p1a Thundurus used Hidden Power -> p2b: Slowbro
+      p1b Gastrodon used Earth Power -> p2b: Slowbro
+      p2b Slowbro used Slack Off
+      after p1: Thundurus 3/361, Gastrodon-East 426/426
+      after p2: Conkeldurr 0/414, Slowbro 383/394
+
+  Turn 41
+    p1 greedy: move 2 2, move 2 2
+    p2 mcts: pass, move 4
+      search (69000 visits): No Move;slackoff,1 15175v 4724 | No Move;calmmind,1 14807v 4602 | No Move;trickroom,1 11743v 3594 | No Move;trickroom,0 11550v 3531
+      p1a Thundurus used Hidden Power -> p2b: Slowbro
+      p1b Gastrodon used Earth Power -> p2b: Slowbro
+      p2b Slowbro used Slack Off
+      after p1: Thundurus 3/361, Gastrodon-East 426/426
+      after p2: Conkeldurr 0/414, Slowbro 394/394
+
+  Turn 42
+    p1 greedy: move 2 2, move 2 2
+    p2 mcts: pass, move 2
+      search (81000 visits): No Move;calmmind,1 22327v 6602 | No Move;trickroom,1 18191v 5317 | No Move;trickroom,0 17909v 5229 | No Move;scald,0 11330v 3205
+      p1a Thundurus used Hidden Power -> p2b: Slowbro
+      p1b Gastrodon used Earth Power -> p2b: Slowbro
+      p2b Slowbro used Calm Mind
+              p2b Slowbro spa 1 rose
+              p2b Slowbro spd 1 rose
+      after p1: Thundurus 3/361, Gastrodon-East 426/426
+      after p2: Conkeldurr 0/414, Slowbro 367/394
+
+  Turn 43
+    p1 greedy: move 2 2, move 2 2
+    p2 mcts: pass, move 2
+      search (69000 visits): No Move;calmmind,1 18186v 5631 | No Move;trickroom,1 16483v 5075 | No Move;trickroom,0 16460v 5067 | No Move;scald,0 8953v 2639
+      p1a Thundurus used Hidden Power -> p2b: Slowbro
+      p1b Gastrodon used Earth Power -> p2b: Slowbro
+              p2b Slowbro COULD NOT MOVE (par)
+      after p1: Thundurus 3/361, Gastrodon-East 426/426
+      after p2: Conkeldurr 0/414, Slowbro 344/394
+
+  Turn 44
+    p1 greedy: move 2 2, move 2 2
+    p2 mcts: pass, move 2
+      search (70000 visits): No Move;calmmind,1 18670v 5767 | No Move;trickroom,1 16969v 5212 | No Move;trickroom,0 16223v 4970 | No Move;scald,1 9089v 2671
+      p1a Thundurus used Hidden Power -> p2b: Slowbro
+      p1b Gastrodon used Earth Power -> p2b: Slowbro
+      p2b Slowbro used Calm Mind
+              p2b Slowbro spa 0 rose
+              p2b Slowbro spd 1 rose
+      after p1: Thundurus 3/361, Gastrodon-East 426/426
+      after p2: Conkeldurr 0/414, Slowbro 322/394
+
+  Turn 45
+    p1 greedy: move 2 2, move 2 2
+    p2 mcts: pass, move 2
+      search (73000 visits): No Move;calmmind,1 18771v 5971 | No Move;trickroom,0 18168v 5768 | No Move;trickroom,1 18041v 5726 | No Move;scald,1 9062v 2745
+      p1a Thundurus used Hidden Power -> p2b: Slowbro
+      p1b Gastrodon used Earth Power -> p2b: Slowbro
+      p2b Slowbro used Calm Mind
+              p2b Slowbro spa 0 rose
+              p2b Slowbro spd 0 rose
+      after p1: Thundurus 3/361, Gastrodon-East 426/426
+      after p2: Conkeldurr 0/414, Slowbro 305/394
+
+  Turn 46
+    p1 greedy: move 2 2, move 2 2
+    p2 mcts: pass, move 2
+      search (71000 visits): No Move;calmmind,1 18154v 5785 | No Move;trickroom,0 17616v 5604 | No Move;trickroom,1 17557v 5584 | No Move;scald,1 8862v 2690
+      p1a Thundurus used Hidden Power -> p2b: Slowbro
+      p1b Gastrodon used Earth Power -> p2b: Slowbro
+      p2b Slowbro used Calm Mind
+              p2b Slowbro spa 0 rose
+              p2b Slowbro spd 0 rose
+      after p1: Thundurus 3/361, Gastrodon-East 426/426
+      after p2: Conkeldurr 0/414, Slowbro 288/394
+
+  Turn 47
+    p1 greedy: move 2 2, move 2 2
+    p2 mcts: pass, move 2
+      search (53000 visits): No Move;calmmind,1 13585v 4500 | No Move;trickroom,1 13319v 4406 | No Move;trickroom,0 13243v 4380 | No Move;scald,0 6466v 2025
+      p1a Thundurus used Hidden Power -> p2b: Slowbro
+      p1b Gastrodon used Earth Power -> p2b: Slowbro
+              p2b Slowbro spd 1 fell
+              p2b Slowbro COULD NOT MOVE (par)
+      after p1: Thundurus 3/361, Gastrodon-East 426/426
+      after p2: Conkeldurr 0/414, Slowbro 275/394
+
+  Turn 48
+    p1 greedy: move 2 2, move 2 2
+    p2 mcts: pass, move 2
+      search (66000 visits): No Move;calmmind,1 18115v 5581 | No Move;trickroom,1 15322v 4674 | No Move;trickroom,0 15229v 4644 | No Move;scald,0 8792v 2575
+      p1a Thundurus used Hidden Power -> p2b: Slowbro
+      p1b Gastrodon used Earth Power -> p2b: Slowbro
+      p2b Slowbro used Calm Mind
+              p2b Slowbro spa 0 rose
+              p2b Slowbro spd 1 rose
+      after p1: Thundurus 3/361, Gastrodon-East 426/426
+      after p2: Conkeldurr 0/414, Slowbro 256/394
+
+  Turn 49
+    p1 greedy: move 2 2, move 2 2
+    p2 mcts: pass, move 2
+      search (58000 visits): No Move;calmmind,1 14753v 4787 | No Move;trickroom,1 14528v 4709 | No Move;trickroom,0 14017v 4534 | No Move;scald,1 7369v 2273
+      p1a Thundurus used Hidden Power -> p2b: Slowbro
+              p2b Slowbro -- critical hit
+      p1b Gastrodon used Earth Power -> p2b: Slowbro
+      p2b Slowbro used Calm Mind
+              p2b Slowbro spa 0 rose
+              p2b Slowbro spd 0 rose
+      after p1: Thundurus 3/361, Gastrodon-East 426/426
+      after p2: Conkeldurr 0/414, Slowbro 199/394
+
+  Turn 50
+    p1 greedy: move 2 2, move 2 2
+    p2 mcts: pass, move 3
+      search (76000 visits): No Move;trickroom,0 18891v 5694 | No Move;calmmind,1 18703v 5634 | No Move;trickroom,1 18502v 5570 | No Move;scald,0 10002v 2885
+      p1a Thundurus used Hidden Power -> p2b: Slowbro
+      p1b Gastrodon used Earth Power -> p2b: Slowbro
+              p2b Slowbro spd 1 fell
+      p2b Slowbro used Trick Room
+      after p1: Thundurus 3/361, Gastrodon-East 426/426
+      after p2: Conkeldurr 0/414, Slowbro 183/394
+
+  Turn 51
+    p1 greedy: move 2 2, move 2 2
+    p2 mcts: pass, move 2
+      search (89000 visits): No Move;calmmind,1 26178v 7726 | No Move;trickroom,1 21687v 6337 | No Move;trickroom,0 19637v 5706 | No Move;scald,1 11020v 3076
+      p2b Slowbro used Calm Mind
+              p2b Slowbro spa 0 rose
+              p2b Slowbro spd 1 rose
+      p1b Gastrodon used Earth Power -> p2b: Slowbro
+      p1a Thundurus used Hidden Power -> p2b: Slowbro
+      after p1: Thundurus 3/361, Gastrodon-East 426/426
+      after p2: Conkeldurr 0/414, Slowbro 167/394
+
+  Turn 52
+    p1 greedy: move 2 2, move 2 2
+    p2 mcts: pass, move 3
+      search (96000 visits): No Move;trickroom,1 27372v 8911 | No Move;trickroom,0 26893v 8748 | No Move;calmmind,1 25203v 8174 | No Move;scald,0 8274v 2497
+      p1b Gastrodon used Earth Power -> p2b: Slowbro
+      p1a Thundurus used Hidden Power -> p2b: Slowbro
+      p2b Slowbro used Trick Room
+      after p1: Thundurus 3/361, Gastrodon-East 426/426
+      after p2: Conkeldurr 0/414, Slowbro 151/394
+
+  Turn 53
+    p1 greedy: move 2 2, move 3
+    p2 mcts: pass, move 2
+      search (97000 visits): No Move;calmmind,1 36066v 12978 | No Move;trickroom,0 20620v 7253 | No Move;trickroom,1 19302v 6767 | No Move;scald,0 10539v 3566
+      p1a Thundurus used Hidden Power -> p2b: Slowbro
+      p1b Gastrodon used Stockpile
+              p1b Gastrodon gained stockpile1
+              p1b Gastrodon def 1 rose
+              p1b Gastrodon spd 1 rose
+              p2b Slowbro COULD NOT MOVE (par)
+      after p1: Thundurus 3/361, Gastrodon-East 426/426
+      after p2: Conkeldurr 0/414, Slowbro 167/394
+
+  Turn 54
+    p1 greedy: move 2 2, move 3
+    p2 mcts: pass, move 1 1
+      search skipped (volatile stockpile); greedy took the turn
+      p1a Thundurus used Hidden Power -> p2b: Slowbro
+      p1b Gastrodon used Stockpile
+              p1b Gastrodon gained stockpile2
+              p1b Gastrodon def 1 rose
+              p1b Gastrodon spd 1 rose
+      p2b Slowbro used Scald -> p1b: Gastrodon
+              p1b Gastrodon -- ability: Storm Drain
+              p1b Gastrodon spa 1 rose
+      after p1: Thundurus 3/361, Gastrodon-East 426/426
+      after p2: Conkeldurr 0/414, Slowbro 182/394
+
+  Turn 55
+    p1 greedy: move 2 2, move 3
+    p2 mcts: pass, move 1 1
+      search skipped (volatile stockpile); greedy took the turn
+      p1a Thundurus used Hidden Power -> p2b: Slowbro
+      p1b Gastrodon used Stockpile
+              p1b Gastrodon gained stockpile3
+              p1b Gastrodon def 1 rose
+              p1b Gastrodon spd 1 rose
+      p2b Slowbro used Scald -> p1b: Gastrodon
+              p1b Gastrodon -- ability: Storm Drain
+              p1b Gastrodon spa 1 rose
+      after p1: Thundurus 3/361, Gastrodon-East 426/426
+      after p2: Conkeldurr 0/414, Slowbro 198/394
+
+  Turn 56
+    p1 greedy: move 2 2, move 3
+    p2 mcts: pass, move 1 1
+      search skipped (volatile stockpile); greedy took the turn
+      p1a Thundurus used Hidden Power -> p2b: Slowbro
+      p1b Gastrodon used Stockpile  [[still]]
+              p1b Gastrodon -- IT FAILED
+              p2b Slowbro COULD NOT MOVE (par)
+      after p1: Thundurus 3/361, Gastrodon-East 426/426
+      after p2: Conkeldurr 0/414, Slowbro 213/394
+
+  Turn 57
+    p1 greedy: move 2 2, move 3
+    p2 mcts: pass, move 1 1
+      search skipped (volatile stockpile); greedy took the turn
+      p1a Thundurus used Hidden Power -> p2b: Slowbro
+      p1b Gastrodon used Stockpile  [[still]]
+              p1b Gastrodon -- IT FAILED
+      p2b Slowbro used Scald -> p1b: Gastrodon
+              p1b Gastrodon -- ability: Storm Drain
+              p1b Gastrodon spa 1 rose
+      after p1: Thundurus 3/361, Gastrodon-East 426/426
+      after p2: Conkeldurr 0/414, Slowbro 228/394
+
+  Turn 58
+    p1 greedy: move 2 2, move 3
+    p2 mcts: pass, move 1 1
+      search skipped (volatile stockpile); greedy took the turn
+      p1a Thundurus used Hidden Power -> p2b: Slowbro
+      p1b Gastrodon used Stockpile  [[still]]
+              p1b Gastrodon -- IT FAILED
+      p2b Slowbro used Scald -> p1b: Gastrodon
+              p1b Gastrodon -- ability: Storm Drain
+              p1b Gastrodon spa 1 rose
+      after p1: Thundurus 3/361, Gastrodon-East 426/426
+      after p2: Conkeldurr 0/414, Slowbro 244/394
+
+  Turn 59
+    p1 greedy: move 2 2, move 3
+    p2 mcts: pass, move 1 1
+      search skipped (volatile stockpile); greedy took the turn
+      p1a Thundurus used Hidden Power -> p2b: Slowbro
+      p1b Gastrodon used Stockpile  [[still]]
+              p1b Gastrodon -- IT FAILED
+      p2b Slowbro used Scald -> p1b: Gastrodon
+              p1b Gastrodon -- ability: Storm Drain
+              p1b Gastrodon spa 1 rose
+      after p1: Thundurus 3/361, Gastrodon-East 426/426
+      after p2: Conkeldurr 0/414, Slowbro 258/394
+
+  Turn 60
+    p1 greedy: move 2 2, move 3
+    p2 mcts: pass, move 1 1
+      search skipped (volatile stockpile); greedy took the turn
+      p1a Thundurus used Hidden Power -> p2b: Slowbro
+      p1b Gastrodon used Stockpile  [[still]]
+              p1b Gastrodon -- IT FAILED
+      p2b Slowbro used Scald -> p1b: Gastrodon
+              p1b Gastrodon -- ability: Storm Drain
+              p1b Gastrodon spa 1 rose
+      after p1: Thundurus 3/361, Gastrodon-East 426/426
+      after p2: Conkeldurr 0/414, Slowbro 274/394
+
+  RESULT: turn limit

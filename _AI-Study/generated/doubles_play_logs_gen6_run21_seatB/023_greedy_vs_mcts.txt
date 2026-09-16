@@ -1,0 +1,190 @@
+battle 23   p1=greedy vs p2=mcts   mcts 300 ms a decision
+  p1: XY Doubles: Regirock, Jirachi, Talonflame, Breloom, Blastoise, Aromatisse
+  p2: Untitled 1448: Keldeo, Talonflame, Gengar-Mega, Bisharp, Raichu, Kyurem-Black
+
+  Turn 1
+    p1 greedy: move 3, move 2 1
+    p2 mcts: move 1 1, move 2 2
+      search (25000 visits): hydropump,0;flareblitz,1 1524v 1097 | hydropump,0;uturn,1 783v 528 | hydropump,0;switch bisharp 675v 447 | secretsword,0;flareblitz,1 654v 431
+      p2a Keldeo used Hydro Pump -> p1a: Regirock  [[miss]]
+              p2a Keldeo -- MISSED
+      p2b Talonflame used Flare Blitz -> p1b: Jirachi
+      p1b Jirachi fainted
+      p1a Regirock used Earthquake -> p2a: Keldeo  [[spread] p2a]
+              p2b Talonflame -- IMMUNE
+      after p1: Regirock 364/364, Jirachi 0/404
+      after p2: Keldeo 238/323, Talonflame 227/360
+
+  Turn 2
+      p1b <- Talonflame comes in (360/360)
+      after p1: Regirock 364/364, Talonflame 360/360
+      after p2: Keldeo 238/323, Talonflame 227/360
+
+  Turn 3
+    p1 greedy: move 3, move 1 2
+    p2 mcts: move 1 1, switch 6   (slot1 Talonflame -> Kyurem-Black)
+      search (16000 visits): hydropump,0;switch kyuremblack 1414v 870 | hydropump,0;switch gengarmega 1122v 675 | hydropump,0;flareblitz,1 973v 576 | hydropump,1;switch gengarmega 853v 496
+      p2b <- Kyurem-Black comes in (391/391)
+      p1b Talonflame used Brave Bird -> p2b: Kyurem
+      p2a Keldeo used Hydro Pump -> p1a: Regirock  [[miss]]
+              p2a Keldeo -- MISSED
+      p1a Regirock used Earthquake -> p2b: Kyurem  [[spread] p2a,p2b]
+              p1b Talonflame -- IMMUNE
+      after p1: Regirock 364/364, Talonflame 247/360
+      after p2: Keldeo 141/323, Kyurem-Black 83/391
+
+  Turn 4
+    p1 greedy: move 3, move 1 2
+    p2 mcts: move 1 1, move 2 2
+      search (23000 visits): hydropump,0;fusionbolt,1 2305v 1850 | hydropump,0;icebeam,1 2033v 1620 | secretsword,0;icebeam,1 782v 575 | secretsword,0;fusionbolt,1 768v 564
+      p1b Talonflame used Brave Bird -> p2b: Kyurem
+      p2b Kyurem fainted
+      p2a Keldeo used Hydro Pump -> p1a: Regirock  [[miss]]
+              p2a Keldeo -- MISSED
+      p1a Regirock used Earthquake -> p2a: Keldeo  [[spread] p2a]
+              p1b Talonflame -- IMMUNE
+      after p1: Regirock 364/364, Talonflame 184/360
+      after p2: Keldeo 45/323, Kyurem-Black 0/391
+
+  Turn 5
+      p2b <- Gengar-Mega comes in (314/314)
+      after p1: Regirock 364/364, Talonflame 184/360
+      after p2: Keldeo 45/323, Gengar-Mega 314/314
+
+  Turn 6
+    p1 greedy: move 3, move 1 1
+    p2 mcts: move 1 1, move 1 2
+      search (28000 visits): hydropump,0;shadowball,1 4083v 2983 | hydropump,0;sludgebomb,1 3899v 2842 | secretsword,0;shadowball,0 1097v 729 | hydropump,0;protect,1 967v 634
+      p1b Talonflame used Brave Bird -> p2a: Keldeo
+      p2a Keldeo fainted
+      p2b Gengar used Shadow Ball -> p1b: Talonflame
+      p1b Talonflame fainted
+      p1a Regirock used Earthquake -> p2b: Gengar
+      after p1: Regirock 364/364, Talonflame 0/360
+      after p2: Keldeo 0/323, Gengar-Mega 36/314
+
+  Turn 7
+      p2a <- Bisharp comes in (271/271)
+      p1b <- Breloom comes in (324/324)
+      after p1: Regirock 364/364, Breloom 324/324
+      after p2: Bisharp 271/271, Gengar-Mega 36/314
+
+  Turn 8
+    p1 greedy: move 3, move 2 2
+    p2 mcts: move 4, move 1 2
+      search (34000 visits): protect,0;shadowball,1 4881v 2637 | protect,0;sludgebomb,1 4242v 2272 | protect,0;shadowball,0 2421v 1242 | ironhead,0;shadowball,0 1548v 758
+      p2a Bisharp used Protect
+      p1b Breloom used Mach Punch -> p2b: Gengar
+              p2b Gengar -- IMMUNE
+      p2b Gengar used Shadow Ball -> p1b: Breloom
+      p1a Regirock used Earthquake -> p2a: Bisharp  [[spread] p1b,p2b]
+              p2a Bisharp -- move: Protect
+      p2b Gengar fainted
+      after p1: Regirock 364/364, Breloom 23/324
+      after p2: Bisharp 271/271, Gengar-Mega 0/314
+
+  Turn 9
+      p2b <- Raichu comes in (324/324)
+      after p1: Regirock 364/364, Breloom 23/324
+      after p2: Bisharp 271/271, Raichu 324/324
+
+  Turn 10
+    p1 greedy: move 3, move 2 1
+    p2 mcts: move 4, move 2 2
+      search (27000 visits): protect,0;voltswitch,1 1717v 843 | suckerpunch,1;voltswitch,0 1655v 809 | protect,0;voltswitch,0 1620v 790 | switch talonflame;voltswitch,0 1525v 739
+      p2a Bisharp used Protect
+      p1b Breloom used Mach Punch -> p2a: Bisharp
+              p2a Bisharp -- move: Protect
+      p2b Raichu used Volt Switch -> p1b: Breloom
+      p1b Breloom fainted
+      after p1: Regirock 364/364, Breloom 0/324
+      after p2: Bisharp 271/271, Raichu 324/324
+
+  Turn 11
+      p2b <- Talonflame comes in (227/360)
+      p1a Regirock used Earthquake -> p2a: Bisharp  [[spread] ]
+              p2b Talonflame -- IMMUNE
+              p2a Bisharp -- move: Protect
+      after p1: Regirock 364/364, Breloom 0/324
+      after p2: Bisharp 271/271, Talonflame 227/360
+
+  Turn 12
+      p1b <- Blastoise comes in (362/362)
+      after p1: Regirock 364/364, Blastoise 362/362
+      after p2: Bisharp 271/271, Talonflame 227/360
+
+  Turn 13
+    p1 greedy: move 3, move 1
+    p2 mcts: move 3 1, move 3 2
+      search (22000 visits): ironhead,0;uturn,1 2706v 1482 | ironhead,0;uturn,0 2317v 1253 | knockoff,1;uturn,1 1796v 949 | knockoff,1;bravebird,1 1240v 628
+      p2b Talonflame used U-turn -> p1b: Blastoise
+      after p1: Regirock 364/364, Blastoise 269/362
+      after p2: Bisharp 271/271, Talonflame 227/360
+
+  Turn 14
+      p2b <- Raichu comes in (324/324)
+      p2a Bisharp used Iron Head -> p1a: Regirock
+              p1a Regirock used up its Weakness Policy
+              p1a Regirock atk 2 rose
+              p1a Regirock spa 2 rose
+      p1b Blastoise used Water Spout -> p2b: Raichu  [[spread] p2a,p2b]
+              p2b Raichu used up its Air Balloon
+              p1a Regirock COULD NOT MOVE (flinch)
+      after p1: Regirock 130/364, Blastoise 269/362
+      after p2: Bisharp 82/271, Raichu 179/324
+
+  Turn 15
+    p1 greedy: move 3, move 1
+    p2 mcts: move 3 1, move 2 2
+      search (33000 visits): ironhead,0;voltswitch,1 15701v 11870 | knockoff,1;voltswitch,1 1336v 892 | suckerpunch,0;voltswitch,1 749v 468 | ironhead,0;voltswitch,0 673v 415
+      p2b Raichu used Volt Switch -> p1b: Blastoise
+      after p1: Regirock 130/364, Blastoise 107/362
+      after p2: Bisharp 82/271, Raichu 179/324
+
+  Turn 16
+      p2b <- Talonflame comes in (227/360)
+      p2a Bisharp used Iron Head -> p1a: Regirock
+      p1a Regirock fainted
+      p1b Blastoise used Water Spout -> p2b: Talonflame  [[spread] p2a,p2b]
+      p2a Bisharp fainted
+      after p1: Regirock 0/364, Blastoise 107/362
+      after p2: Bisharp 0/271, Talonflame 23/360
+
+  Turn 17
+      p2a <- Raichu comes in (179/324)
+      p1a <- Aromatisse comes in (406/406)
+      after p1: Aromatisse 406/406, Blastoise 107/362
+      after p2: Raichu 179/324, Talonflame 23/360
+
+  Turn 18
+    p1 greedy: move 4 2, move 1
+    p2 mcts: move 2 2, move 3 1
+      search (41000 visits): voltswitch,1;uturn,0 9379v 6169 | voltswitch,0;uturn,1 3505v 2199 | voltswitch,1;tailwind,1 2668v 1643 | voltswitch,0;bravebird,1 2445v 1497
+      p2a Raichu used Volt Switch -> p1b: Blastoise
+      p1b Blastoise fainted
+      p2b Talonflame used U-turn -> p1a: Aromatisse
+      p1a Aromatisse used Moonblast -> p2b: Talonflame
+      p2b Talonflame fainted
+      after p1: Aromatisse 360/406, Blastoise 0/362
+      after p2: Raichu 179/324, Talonflame 0/360
+
+  Turn 19
+    p1 greedy: move 4 1, pass
+    p2 mcts: move 4 1, pass
+      search (1100000 visits): hiddenpower,0;No Move 295832v 1463 | voltswitch,0;No Move 293279v 1438 | encore,0;No Move 255447v 1075 | fakeout,0;No Move 255442v 1075
+      p2a Raichu used Hidden Power -> p1a: Aromatisse
+      p1a Aromatisse used Moonblast -> p2a: Raichu
+      after p1: Aromatisse 311/406, Blastoise 0/362
+      after p2: Raichu 46/324, Talonflame 0/360
+
+  Turn 20
+    p1 greedy: move 4 1, pass
+    p2 mcts: move 2 1, pass
+      search (1793000 visits): voltswitch,0;No Move 461760v 1099 | hiddenpower,0;No Move 461189v 1096 | fakeout,0;No Move 436975v 944 | encore,0;No Move 433076v 919
+      p2a Raichu used Volt Switch -> p1a: Aromatisse
+      p1a Aromatisse used Moonblast -> p2a: Raichu
+      p2a Raichu fainted
+      after p1: Aromatisse 218/406, Blastoise 0/362
+      after p2: Raichu 0/324, Talonflame 0/360
+
+  RESULT: p1 wins

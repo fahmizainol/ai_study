@@ -1,0 +1,176 @@
+battle 14   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: ORAS Doubles OU: Charizard-Mega-Y, Whimsicott, Terrakion, Aegislash, Zapdos, Latios
+  p2: ORAS Doubles OU: Gengar, Bisharp, Landorus-Therian, Keldeo-Resolute, Thundurus, Talonflame
+
+  Turn 1
+    p1 mcts: move 1, move 4
+      search (15000 visits): heatwave,0;tailwind,1 1662v 1369 | heatwave,0;moonblast,0 897v 704 | heatwave,0;switch zapdos 878v 688 | heatwave,0;switch terrakion 667v 508
+    p2 greedy: move 1 1, move 2 1
+      p1b Whimsicott used Tailwind
+      -sidestart p1: A move: Tailwind
+      p2b Bisharp used Sucker Punch -> p1a: Charizard
+      p2a Gengar used Shadow Ball -> p1a: Charizard
+      p1a Charizard fainted
+      after p1: Charizard-Mega-Y 0/360, Whimsicott 324/324
+      after p2: Gengar 291/291, Bisharp 244/271
+
+  Turn 2
+      p1a <- Terrakion comes in (323/323)
+      after p1: Terrakion 323/323, Whimsicott 324/324
+      after p2: Gengar 291/291, Bisharp 244/271
+
+  Turn 3
+    p1 mcts: move 1, move 2 2
+      search (19000 visits): rockslide,0;moonblast,1 1044v 599 | closecombat,1;moonblast,0 812v 451 | closecombat,1;switch zapdos 700v 380 | closecombat,1;moonblast,1 575v 303
+    p2 greedy: move 1 1, move 2 1
+      p2b Bisharp used Sucker Punch -> p1a: Terrakion
+              p1a Terrakion atk 1 rose
+      p1b Whimsicott used Moonblast -> p2b: Bisharp
+      p1a Terrakion used Rock Slide -> p2a: Gengar  [[spread] p2b]
+              p1a Terrakion -- MISSED
+      p2a Gengar used Shadow Ball -> p1a: Terrakion
+              p1a Terrakion spd 1 fell
+      after p1: Terrakion 59/323, Whimsicott 324/324
+      after p2: Gengar 291/291, Bisharp 22/271
+
+  Turn 4
+    p1 mcts: move 1, switch 5   (slot1 Whimsicott -> Zapdos)
+      search (30000 visits): rockslide,0;switch zapdos 3705v 2357 | rockslide,0;moonblast,1 2725v 1700 | rockslide,0;switch aegislash 1971v 1199 | rockslide,0;moonblast,0 1966v 1196
+    p2 greedy: move 1 1, move 2 1
+      p1b <- Zapdos comes in (384/384)
+      p2b Bisharp used Sucker Punch -> p1a: Terrakion
+      p1a Terrakion fainted
+      p2b Bisharp fainted
+      p2a Gengar used Shadow Ball -> p1b: Zapdos
+              p1b Zapdos spd 1 fell
+      after p1: Terrakion 0/323, Zapdos 246/384
+      after p2: Gengar 291/291, Bisharp 0/271
+
+  Turn 5
+      p1a <- Aegislash comes in (324/324)
+      p2b <- Landorus-Therian comes in (319/319)
+              p1a Aegislash atk 1 fell
+              p1b Zapdos atk 1 fell
+      after p1: Aegislash 324/324, Zapdos 246/384
+      after p2: Gengar 291/291, Landorus-Therian 319/319
+
+  Turn 6
+    p1 mcts: move 1 1, move 2 1
+      search (22000 visits): shadowball,0;thunderbolt,0 1327v 935 | flashcannon,0;thunderbolt,0 824v 553 | wideguard,0;thunderbolt,0 820v 550 | shadowball,0;roost,1 749v 497
+    p2 greedy: move 1 2, move 2 2
+      p1b Zapdos used Thunderbolt -> p2a: Gengar
+      p2b Landorus used Superpower -> p1b: Zapdos
+              p2b Landorus atk 1 fell
+              p2b Landorus def 1 fell
+              p1b Zapdos used up its Sitrus Berry
+      p2a Gengar used Shadow Ball -> p1b: Zapdos
+      p1a Aegislash used Shadow Ball -> p2a: Gengar
+      p2a Gengar fainted
+      -sideend p1: A move: Tailwind
+      after p1: Aegislash-Blade 324/324, Zapdos 67/384
+      after p2: Gengar 0/291, Landorus-Therian 319/319
+
+  Turn 7
+      p2a <- Keldeo-Resolute comes in (323/323)
+      after p1: Aegislash-Blade 324/324, Zapdos 67/384
+      after p2: Keldeo-Resolute 323/323, Landorus-Therian 319/319
+
+  Turn 8
+    p1 mcts: switch 6, move 2 1   (slot0 Aegislash-Blade -> Latios)
+      search (26000 visits): switch latios;thunderbolt,0 1940v 1248 | switch latios;thunderbolt,1 1832v 1173 | shadowball,1;thunderbolt,0 1429v 895 | switch latios;roost,1 1034v 626
+    p2 greedy: move 1 2, move 2 2
+      p1a <- Latios comes in (302/302)
+      p2b Landorus used Superpower -> p1b: Zapdos
+              p1b Zapdos -- critical hit
+              p2b Landorus atk 1 fell
+              p2b Landorus def 1 fell
+      p1b Zapdos fainted
+      p2a Keldeo used Hydro Pump -> p1a: Latios
+      after p1: Latios 193/302, Zapdos 0/384
+      after p2: Keldeo-Resolute 291/323, Landorus-Therian 319/319
+
+  Turn 9
+      p1b <- Whimsicott comes in (324/324)
+      after p1: Latios 193/302, Whimsicott 324/324
+      after p2: Keldeo-Resolute 291/323, Landorus-Therian 319/319
+
+  Turn 10
+    p1 mcts: move 2 1, move 4
+      search (19000 visits): psychic,0;tailwind,1 1457v 814 | psychic,1;moonblast,0 1317v 728 | psychic,1;tailwind,1 1282v 707 | psychic,0;moonblast,1 926v 491
+    p2 greedy: move 1 1, move 2 1
+      p1b Whimsicott used Tailwind
+      -sidestart p1: A move: Tailwind
+      p2b Landorus used Superpower -> p1a: Latios
+              p2b Landorus atk 1 fell
+              p2b Landorus def 1 fell
+      p1a Latios used Psychic -> p2a: Keldeo
+      p2a Keldeo fainted
+      after p1: Latios 116/302, Whimsicott 324/324
+      after p2: Keldeo-Resolute 0/323, Landorus-Therian 319/319
+
+  Turn 11
+      p2a <- Thundurus comes in (299/299)
+      after p1: Latios 116/302, Whimsicott 324/324
+      after p2: Thundurus 299/299, Landorus-Therian 319/319
+
+  Turn 12
+    p1 mcts: move 2 2, move 2 1
+      search (18000 visits): psychic,1;moonblast,0 790v 271 | dracometeor,0;moonblast,1 754v 256 | psychic,0;moonblast,0 705v 235 | dracometeor,1;moonblast,0 681v 225
+    p2 greedy: move 1 1, move 2 1
+      p1b Whimsicott used Moonblast -> p2a: Thundurus
+      p1a Latios used Psychic -> p2b: Landorus
+      p2b Landorus used Superpower -> p1a: Latios
+              p2b Landorus atk 1 fell
+              p2b Landorus def 1 fell
+      p2a Thundurus used Thunderbolt -> p1a: Latios
+      p1a Latios fainted
+      after p1: Latios 0/302, Whimsicott 324/324
+      after p2: Thundurus 190/299, Landorus-Therian 46/319
+
+  Turn 13
+      p1a <- Aegislash comes in (324/324)
+      after p1: Aegislash 324/324, Whimsicott 324/324
+      after p2: Thundurus 190/299, Landorus-Therian 46/319
+
+  Turn 14
+    p1 mcts: move 1 1, move 2 1
+      search (8000 visits): shadowball,0;moonblast,0 516v 160 | flashcannon,0;moonblast,0 306v 78 | shadowball,1;moonblast,0 296v 74 | kingsshield,0;moonblast,0 261v 61
+    p2 greedy: move 1 1, move 2 1
+      p1b Whimsicott used Moonblast -> p2a: Thundurus
+      p2b Landorus used Superpower -> p1a: Aegislash
+              p1a Aegislash -- IMMUNE
+      p2a Thundurus used Thunderbolt -> p1a: Aegislash
+      p1a Aegislash used Shadow Ball -> p2a: Thundurus
+      p2a Thundurus fainted
+      after p1: Aegislash-Blade 198/324, Whimsicott 324/324
+      after p2: Thundurus 0/299, Landorus-Therian 46/319
+
+  Turn 15
+      p2a <- Talonflame comes in (297/297)
+      after p1: Aegislash-Blade 198/324, Whimsicott 324/324
+      after p2: Talonflame 297/297, Landorus-Therian 46/319
+
+  Turn 16
+    p1 mcts: move 1 1, move 2 1
+      search (118000 visits): shadowball,0;moonblast,0 78538v 44504 | flashcannon,1;moonblast,0 3253v 1139 | shadowball,1;moonblast,0 2944v 1019 | kingsshield,0;moonblast,0 2692v 921
+    p2 greedy: move 1 1, move 2 1
+      p2a Talonflame used Brave Bird -> p1a: Aegislash
+      p1a Aegislash fainted
+      p1b Whimsicott used Moonblast -> p2a: Talonflame
+      p2b Landorus used Superpower -> p1b: Whimsicott
+              p2b Landorus atk 1 fell
+              p2b Landorus def 1 fell
+      -sideend p1: A move: Tailwind
+      after p1: Aegislash 0/324, Whimsicott 291/324
+      after p2: Talonflame 175/297, Landorus-Therian 46/319
+
+  Turn 17
+    p1 mcts: pass, move 1 1
+      search (1925000 visits): No Move;beatup,0 275000v 0 | No Move;beatup,1 275000v 0 | No Move;moonblast,0 275000v 0 | No Move;moonblast,1 275000v 0
+    p2 greedy: move 1 2, move 1
+      p2a Talonflame used Brave Bird -> p1b: Whimsicott
+      p1b Whimsicott fainted
+      after p1: Aegislash 0/324, Whimsicott 0/324
+      after p2: Talonflame 79/297, Landorus-Therian 46/319
+
+  RESULT: p2 wins

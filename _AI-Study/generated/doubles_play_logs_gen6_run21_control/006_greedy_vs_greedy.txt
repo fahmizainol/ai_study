@@ -1,0 +1,147 @@
+battle 6   p1=greedy vs p2=greedy
+  p1: i am speed: Kangaskhan-Mega, Genesect, Landorus-Therian, Diancie, Volcanion, Deoxys-Speed
+  p2: XY Doubles: Hydreigon, Heatran, Gyarados, Trevenant, Rhyperior, Charizard-Mega-Y
+
+  Turn 1
+    p1 greedy: move 4 1, move 4 1
+    p2 greedy: move 3 1, move 2
+      p1a Kangaskhan used Sucker Punch -> p2a: Hydreigon
+      p1b Genesect used Thunderbolt -> p2a: Hydreigon
+      p2a Hydreigon used Draco Meteor -> p1a: Kangaskhan
+              p2a Hydreigon spa 2 fell
+      p2b Heatran used Heat Wave -> p1a: Kangaskhan  [[spread] p1a,p1b]
+      p1b Genesect fainted
+      after p1: Kangaskhan-Mega 77/414, Genesect 0/338
+      after p2: Hydreigon 309/384, Heatran 384/384
+
+  Turn 2
+      p1b <- Landorus-Therian comes in (319/319)
+              p2a Hydreigon atk 1 fell
+              p2b Heatran atk 1 fell
+      after p1: Kangaskhan-Mega 77/414, Landorus-Therian 319/319
+      after p2: Hydreigon 309/384, Heatran 384/384
+
+  Turn 3
+    p1 greedy: move 4 1, move 4 1
+    p2 greedy: move 3 1, move 2
+      p1a Kangaskhan used Sucker Punch -> p2a: Hydreigon
+      p1b Landorus used Superpower -> p2a: Hydreigon
+              p1b Landorus atk 1 fell
+              p1b Landorus def 1 fell
+      p2a Hydreigon used Draco Meteor -> p1a: Kangaskhan  [[miss]]
+              p2a Hydreigon -- MISSED
+      p2b Heatran used Heat Wave -> p1b: Landorus  [[spread] p1a]
+              p2b Heatran -- MISSED
+      p1a Kangaskhan fainted
+      after p1: Kangaskhan-Mega 0/414, Landorus-Therian 319/319
+      after p2: Hydreigon 48/384, Heatran 384/384
+
+  Turn 4
+      p1a <- Diancie comes in (303/303)
+      after p1: Diancie 303/303, Landorus-Therian 319/319
+      after p2: Hydreigon 48/384, Heatran 384/384
+
+  Turn 5
+    p1 greedy: move 1, move 4 1
+    p2 greedy: move 3 1, move 2
+      p1b Landorus used Superpower -> p2a: Hydreigon
+              p1b Landorus atk 1 fell
+              p1b Landorus def 1 fell
+      p2a Hydreigon fainted
+      p2b Heatran used Heat Wave -> p1b: Landorus  [[spread] p1a,p1b]
+      p1a Diancie used Diamond Storm -> p2b: Heatran
+      after p1: Diancie 261/303, Landorus-Therian 126/319
+      after p2: Hydreigon 0/384, Heatran 266/384
+
+  Turn 6
+      p2a <- Gyarados comes in (394/394)
+              p1a Diancie -- IT FAILED
+              p1b Landorus atk 1 fell
+      after p1: Diancie 261/303, Landorus-Therian 126/319
+      after p2: Gyarados 394/394, Heatran 266/384
+
+  Turn 7
+    p1 greedy: move 1, move 4 2
+    p2 greedy: move 2 2, move 2
+      p1b Landorus used Superpower -> p2b: Heatran
+              p1b Landorus atk 1 fell
+              p1b Landorus def 1 fell
+      p2a Gyarados used Stone Edge -> p1b: Landorus
+      p1b Landorus fainted
+      p2b Heatran used Heat Wave -> p1a: Diancie
+      p1a Diancie used Diamond Storm -> p2b: Heatran  [[spread] p2a,p2b]
+              p2b Heatran -- critical hit
+              p1a Diancie def 1 rose
+              p2a Gyarados used up its Sitrus Berry
+      after p1: Diancie 207/303, Landorus-Therian 0/319
+      after p2: Gyarados 226/394, Heatran 47/384
+
+  Turn 8
+      p1b <- Volcanion comes in (363/363)
+      after p1: Diancie 207/303, Volcanion 363/363
+      after p2: Gyarados 226/394, Heatran 47/384
+
+  Turn 9
+    p1 greedy: move 1, move 2 2
+    p2 greedy: move 2 1, move 2
+      p2a Gyarados used Stone Edge -> p1a: Diancie
+      p2b Heatran used Heat Wave -> p1b: Volcanion  [[spread] p1b]
+              p2b Heatran -- MISSED
+      p1b Volcanion used Steam Eruption -> p2b: Heatran
+      p2b Heatran fainted
+      p1a Diancie used Diamond Storm -> p2a: Gyarados
+              p1a Diancie def 1 rose
+      p2a Gyarados fainted
+      after p1: Diancie 150/303, Volcanion 342/363
+      after p2: Gyarados 0/394, Heatran 0/384
+
+  Turn 10
+      p2a <- Trevenant comes in (374/374)
+      p2b <- Rhyperior comes in (434/434)
+      after p1: Diancie 150/303, Volcanion 342/363
+      after p2: Trevenant 374/374, Rhyperior 434/434
+
+  Turn 11
+    p1 greedy: move 1, move 2 1
+    p2 greedy: move 3 1, move 2
+      p1b Volcanion used Steam Eruption -> p2a: Trevenant
+      p2a Trevenant used Horn Leech -> p1a: Diancie
+      p1a Diancie used Diamond Storm -> p2a: Trevenant  [[spread] p2a]
+              p1a Diancie -- MISSED
+      p2b Rhyperior used Earthquake -> p1b: Volcanion  [[spread] p2a,p1a,p1b]
+              p2a Trevenant used up its Sitrus Berry
+      p1a Diancie fainted
+      after p1: Diancie 0/303, Volcanion 124/363
+      after p2: Trevenant 210/374, Rhyperior 434/434
+
+  Turn 12
+      p1a <- Deoxys-Speed comes in (303/303)
+      after p1: Deoxys-Speed 303/303, Volcanion 124/363
+      after p2: Trevenant 210/374, Rhyperior 434/434
+
+  Turn 13
+    p1 greedy: move 2 1, move 2 1
+    p2 greedy: move 3 2, move 2
+      p1a Deoxys used Psycho Boost -> p2a: Trevenant  [[miss]]
+              p1a Deoxys -- MISSED
+      p1b Volcanion used Steam Eruption -> p2a: Trevenant
+      p2a Trevenant used Horn Leech -> p1b: Volcanion
+      p2b Rhyperior used Earthquake -> p1a: Deoxys  [[spread] p2a,p1a,p1b]
+      p1b Volcanion fainted
+              p2a Trevenant used up its Sitrus Berry
+      after p1: Deoxys-Speed 165/303, Volcanion 0/363
+      after p2: Trevenant 191/374, Rhyperior 434/434
+
+  Turn 14
+    p1 greedy: move 2 1, pass
+    p2 greedy: move 3 1, move 2
+      p1a Deoxys used Psycho Boost -> p2a: Trevenant
+              p1a Deoxys spa 2 fell
+      p2a Trevenant used Horn Leech -> p1a: Deoxys
+      p2b Rhyperior used Earthquake -> p1a: Deoxys  [[spread] p2a,p1a]
+      p2a Trevenant fainted
+      p1a Deoxys fainted
+      after p1: Deoxys-Speed 0/303, Volcanion 0/363
+      after p2: Trevenant 0/374, Rhyperior 434/434
+
+  RESULT: p2 wins

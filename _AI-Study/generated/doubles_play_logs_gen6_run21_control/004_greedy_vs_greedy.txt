@@ -1,0 +1,97 @@
+battle 4   p1=greedy vs p2=greedy
+  p1: ORAS Doubles OU: Dunsparce, Greninja, Garchomp, Togekiss, Charizard, Venusaur
+  p2: ORAS Doubles OU: Politoed, Kingdra, Amoonguss, Diancie-Mega, Scrafty, Heatran
+
+  Turn 1
+    p1 greedy: move 2, move 1 1
+    p2 greedy: move 3 1, move 2 1
+      p2b Kingdra used Draco Meteor -> p1a: Dunsparce
+              p2b Kingdra spa 2 fell
+      p1b Greninja used Hydro Pump -> p2a: Politoed
+              p1b Greninja gained typechange Water
+      p2a Politoed used Scald -> p1a: Dunsparce
+              p1a Dunsparce is now brn
+      p1a Dunsparce used Rock Slide -> p2b: Kingdra  [[spread] p2a,p2b]
+      after p1: Dunsparce 12/404, Greninja 257/285
+      after p2: Politoed 233/384, Kingdra 245/292
+
+  Turn 2
+    p1 greedy: move 2, move 1 1
+    p2 greedy: move 3 1, move 2 1
+      p2b Kingdra used Draco Meteor -> p1a: Dunsparce
+              p2b Kingdra spa 2 fell
+      p1a Dunsparce fainted
+      p1b Greninja used Hydro Pump -> p2a: Politoed
+      p2a Politoed used Scald -> p1b: Greninja
+      after p1: Dunsparce 0/404, Greninja 144/285
+      after p2: Politoed 100/384, Kingdra 216/292
+
+  Turn 3
+      p1a <- Garchomp comes in (357/357)
+      after p1: Garchomp 357/357, Greninja 144/285
+      after p2: Politoed 100/384, Kingdra 216/292
+
+  Turn 4
+    p1 greedy: move 1, move 1 1
+    p2 greedy: move 3 2, move 2 2
+      p2b Kingdra used Draco Meteor -> p1b: Greninja
+              p2b Kingdra spa 2 fell
+      p1b Greninja used Hydro Pump -> p2a: Politoed
+      p2a Politoed fainted
+      p1b Greninja fainted
+      p1a Garchomp used Earthquake -> p2b: Kingdra
+      p2b Kingdra fainted
+      after p1: Garchomp 322/357, Greninja 0/285
+      after p2: Politoed 0/384, Kingdra 0/292
+
+  Turn 5
+      p1b <- Togekiss comes in (373/373)
+      p2b <- Diancie-Mega comes in (241/241)
+      p2a <- Amoonguss comes in (432/432)
+      after p1: Garchomp 322/357, Togekiss 373/373
+      after p2: Amoonguss 432/432, Diancie-Mega 241/241
+
+  Turn 6
+    p1 greedy: move 1, move 1 1
+    p2 greedy: move 1 1, move 2
+      p2b Diancie used Diamond Storm -> p1b: Togekiss  [[spread] p1a,p1b]
+      p1a Garchomp used Earthquake -> p2a: Amoonguss  [[spread] p2a,p2b]
+              p1b Togekiss -- IMMUNE
+      p2b Diancie fainted
+      p1b Togekiss used Air Slash -> p2a: Amoonguss
+              p2a Amoonguss used up its Sitrus Berry
+              p2a Amoonguss COULD NOT MOVE (flinch)
+      after p1: Garchomp 215/357, Togekiss 127/373
+      after p2: Amoonguss 152/432, Diancie-Mega 0/241
+
+  Turn 7
+      p2b <- Scrafty comes in (334/334)
+      after p1: Garchomp 215/357, Togekiss 127/373
+      after p2: Amoonguss 152/432, Scrafty 334/334
+
+  Turn 8
+    p1 greedy: move 1, move 1 1
+    p2 greedy: move 1 2, move 2 2
+      p1a Garchomp used Earthquake -> p2b: Scrafty  [[spread] p2a,p2b]
+              p1b Togekiss -- IMMUNE
+      p2a Amoonguss fainted
+      p1b Togekiss used Air Slash -> p2b: Scrafty
+      p2b Scrafty fainted
+      after p1: Garchomp 180/357, Togekiss 127/373
+      after p2: Amoonguss 0/432, Scrafty 0/334
+
+  Turn 9
+      p2a <- Heatran comes in (386/386)
+      after p1: Garchomp 180/357, Togekiss 127/373
+      after p2: Heatran 386/386, Scrafty 0/334
+
+  Turn 10
+    p1 greedy: move 1, move 1 1
+    p2 greedy: move 1 2, pass
+      p1a Garchomp used Earthquake -> p2a: Heatran  [[spread] p2a]
+              p1b Togekiss -- IMMUNE
+      p2a Heatran fainted
+      after p1: Garchomp 145/357, Togekiss 127/373
+      after p2: Heatran 0/386, Scrafty 0/334
+
+  RESULT: p1 wins

@@ -1,0 +1,138 @@
+battle 2   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: oraspl/Untitled 369: Meowstic, Kangaskhan-Mega, Aromatisse, Amoonguss, Landorus-Therian, Volcanion
+  p2: oraspl/Untitled 307: Politoed, Kingdra, Salamence-Mega, Aegislash, Landorus, Thundurus
+
+  Turn 1
+    p1 mcts: switch 6, move 3 2   (slot0 Meowstic -> Volcanion)
+      search (11000 visits): switch volcanion;return,1 323v 223 | lightscreen,0;switch landorustherian 272v 182 | lightscreen,0;return,1 237v 154 | switch volcanion;poweruppunch,0 218v 139
+    p2 greedy: move 1 1, move 2 1
+      p1a <- Volcanion comes in (363/363)
+      p2b Kingdra used Draco Meteor -> p1a: Volcanion
+              p2b Kingdra spa 2 fell
+      p1b Kangaskhan used Return -> p2b: Kingdra
+      p2a Politoed used Scald -> p1a: Volcanion
+      after p1: Volcanion 261/363, Kangaskhan-Mega 414/414
+      after p2: Politoed 384/384, Kingdra 70/292
+
+  Turn 2
+    p1 mcts: move 1 1, move 2 2
+      search (11000 visits): steameruption,0;poweruppunch,1 274v 195 | steameruption,0;switch landorustherian 266v 188 | steameruption,0;poweruppunch,0 222v 151 | steameruption,1;return,0 203v 136
+    p2 greedy: move 1 1, move 2 1
+      p2b Kingdra used Draco Meteor -> p1a: Volcanion
+              p2b Kingdra spa 2 fell
+      p1b Kangaskhan used Power-Up Punch -> p2b: Kingdra
+              p1b Kangaskhan atk 1 rose
+      p2b Kingdra fainted
+      p2a Politoed used Scald -> p1a: Volcanion
+      p1a Volcanion used Steam Eruption -> p2a: Politoed
+              p2a Politoed used up its Eject Button
+      after p1: Volcanion 261/363, Kangaskhan-Mega 414/414
+      after p2: Politoed 251/384, Kingdra 0/292
+
+  Turn 3
+      p2a <- Salamence-Mega comes in (393/393)
+      after p1: Volcanion 261/363, Kangaskhan-Mega 414/414
+      after p2: Salamence-Mega 393/393, Kingdra 0/292
+
+  Turn 4
+      p2b <- Politoed comes in (251/384)
+      after p1: Volcanion 261/363, Kangaskhan-Mega 414/414
+      after p2: Salamence-Mega 393/393, Politoed 251/384
+
+  Turn 5
+    p1 mcts: move 1 1, move 3 2
+      search (11000 visits): steameruption,0;return,1 257v 182 | steameruption,1;return,0 238v 166 | steameruption,0;return,0 189v 126 | steameruption,1;poweruppunch,1 187v 124
+    p2 greedy: move 3 1, move 1 1
+      p2a Salamence used Draco Meteor -> p1a: Volcanion
+              p2a Salamence spa 2 fell
+      p1b Kangaskhan used Return -> p2b: Politoed
+      p1a Volcanion used Steam Eruption -> p2a: Salamence
+      p2b Politoed used Scald -> p1a: Volcanion
+      after p1: Volcanion 228/363, Kangaskhan-Mega 414/414
+      after p2: Salamence-Mega 232/393, Politoed 29/384
+
+  Turn 6
+    p1 mcts: move 1 1, move 3 2
+      search (21000 visits): steameruption,0;return,1 527v 315 | steameruption,0;poweruppunch,1 506v 300 | steameruption,1;return,0 453v 264 | switch landorustherian;poweruppunch,1 394v 224
+    p2 greedy: move 3 1, move 1 1
+      p2a Salamence used Draco Meteor -> p1a: Volcanion
+              p2a Salamence spa 2 fell
+      p1b Kangaskhan used Return -> p2b: Politoed
+      p2b Politoed fainted
+      p1a Volcanion used Steam Eruption -> p2a: Salamence
+      after p1: Volcanion 158/363, Kangaskhan-Mega 414/414
+      after p2: Salamence-Mega 81/393, Politoed 0/384
+
+  Turn 7
+      p2b <- Aegislash comes in (324/324)
+      after p1: Volcanion 158/363, Kangaskhan-Mega 414/414
+      after p2: Salamence-Mega 81/393, Aegislash 324/324
+
+  Turn 8
+    p1 mcts: move 1 2, move 2 2
+      search (26000 visits): steameruption,1;poweruppunch,1 567v 230 | switch landorustherian;poweruppunch,1 567v 230 | overheat,1;poweruppunch,1 455v 175 | heatwave,0;poweruppunch,1 448v 171
+    p2 greedy: move 3 1, move 1 1
+      p2a Salamence used Draco Meteor -> p1a: Volcanion
+              p2a Salamence spa 2 fell
+      p1b Kangaskhan used Power-Up Punch -> p2b: Aegislash
+              p1b Kangaskhan atk 1 rose
+      p1a Volcanion used Steam Eruption -> p2b: Aegislash
+      p2b Aegislash used Shadow Ball -> p1a: Volcanion
+      after p1: Volcanion 8/363, Kangaskhan-Mega 414/414
+      after p2: Salamence-Mega 81/393, Aegislash-Blade 55/324
+
+  Turn 9
+    p1 mcts: move 2, move 2 2
+      search (37000 visits): heatwave,0;poweruppunch,1 1690v 825 | overheat,1;poweruppunch,1 1253v 589 | earthpower,1;poweruppunch,1 1245v 585 | steameruption,1;poweruppunch,1 1234v 579
+    p2 greedy: move 3 1, move 1 1
+      p2a Salamence used Draco Meteor -> p1a: Volcanion  [[miss]]
+              p2a Salamence -- MISSED
+      p1b Kangaskhan used Power-Up Punch -> p2b: Aegislash
+              p1b Kangaskhan atk 1 rose
+      p2b Aegislash fainted
+      p1a Volcanion used Heat Wave -> p2a: Salamence
+              p2a Salamence -- critical hit
+      p2a Salamence fainted
+      after p1: Volcanion 8/363, Kangaskhan-Mega 414/414
+      after p2: Salamence-Mega 0/393, Aegislash 0/324
+
+  Turn 10
+      p2a <- Landorus comes in (319/319)
+      p2b <- Thundurus comes in (299/299)
+      after p1: Volcanion 8/363, Kangaskhan-Mega 414/414
+      after p2: Landorus 319/319, Thundurus 299/299
+
+  Turn 11
+    p1 mcts: switch 5, move 3 1   (slot0 Volcanion -> Landorus-Therian)
+      search (48000 visits): switch landorustherian;return,0 4049v 2926 | switch landorustherian;return,1 2636v 1859 | steameruption,0;return,1 2385v 1672 | heatwave,0;return,0 2147v 1493
+    p2 greedy: move 1 1, move 1 1
+      p1a <- Landorus-Therian comes in (329/329)
+              p2a Landorus atk 1 fell
+              p2b Thundurus atk 1 fell
+      p2b Thundurus used Thunder -> p1a: Landorus
+              p1a Landorus -- IMMUNE
+      p2a Landorus used Earth Power -> p1a: Landorus
+              p1a Landorus -- IMMUNE
+      p1b Kangaskhan used Return -> p2a: Landorus
+      p2a Landorus fainted
+      after p1: Landorus-Therian 329/329, Kangaskhan-Mega 414/414
+      after p2: Landorus 0/319, Thundurus 299/299
+
+  Turn 12
+    p1 mcts: move 1 2, move 3 2
+      search (518000 visits): uturn,1;return,1 86106v 86106 | hiddenpower,1;fakeout,1 86106v 86106 | hiddenpower,1;return,1 86106v 86106 | earthpower,1;return,1 86106v 86106
+    p2 greedy: pass, move 1 1
+      p1a Landorus used U-turn -> p2b: Thundurus
+      after p1: Landorus-Therian 329/329, Kangaskhan-Mega 414/414
+      after p2: Landorus 0/319, Thundurus 253/299
+
+  Turn 13
+      p1a <- Aromatisse comes in (406/406)
+      p2b Thundurus used Thunder -> p1a: Aromatisse
+              p1a Aromatisse is now par
+      p1b Kangaskhan used Return -> p2b: Thundurus
+      p2b Thundurus fainted
+      after p1: Aromatisse 211/406, Kangaskhan-Mega 414/414
+      after p2: Landorus 0/319, Thundurus 0/299
+
+  RESULT: p1 wins

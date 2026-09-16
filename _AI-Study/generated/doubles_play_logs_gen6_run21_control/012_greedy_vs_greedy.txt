@@ -1,0 +1,172 @@
+battle 12   p1=greedy vs p2=greedy
+  p1: never cook again: Kangaskhan-Mega, Bisharp, Togekiss, Thundurus, Landorus-Therian, Gastrodon-East
+  p2: XY Doubles: Aromatisse, Conkeldurr, Camerupt, Slowbro, Porygon2, Breloom
+
+  Turn 1
+    p1 greedy: move 3 1, move 1 1
+    p2 greedy: move 1 1, move 4 1
+      p1b Bisharp used Sucker Punch -> p2a: Aromatisse
+      p1a Kangaskhan used Fire Punch -> p2a: Aromatisse
+      p2b Conkeldurr used Poison Jab -> p1a: Kangaskhan
+      p2a Aromatisse used Draining Kiss -> p1a: Kangaskhan
+      after p1: Kangaskhan-Mega 215/413, Bisharp 251/278
+      after p2: Aromatisse 263/406, Conkeldurr 373/414
+
+  Turn 2
+    p1 greedy: move 3 1, move 1 1
+    p2 greedy: move 1 1, move 4 1
+      p1b Bisharp used Sucker Punch -> p2a: Aromatisse
+      p1a Kangaskhan used Fire Punch -> p2a: Aromatisse
+      p2b Conkeldurr used Poison Jab -> p1a: Kangaskhan
+      p2a Aromatisse used Draining Kiss -> p1a: Kangaskhan
+      after p1: Kangaskhan-Mega 20/413, Bisharp 224/278
+      after p2: Aromatisse 106/406, Conkeldurr 332/414
+
+  Turn 3
+    p1 greedy: move 3 1, move 1 1
+    p2 greedy: move 1 1, move 4 1
+      p1b Bisharp used Sucker Punch -> p2a: Aromatisse
+      p2a Aromatisse fainted
+      p1a Kangaskhan used Fire Punch -> p2b: Conkeldurr
+      p2b Conkeldurr used Poison Jab -> p1a: Kangaskhan
+      p1a Kangaskhan fainted
+      after p1: Kangaskhan-Mega 0/413, Bisharp 197/278
+      after p2: Aromatisse 0/406, Conkeldurr 215/414
+
+  Turn 4
+      p1a <- Togekiss comes in (374/374)
+      p2a <- Camerupt comes in (344/344)
+      after p1: Togekiss 374/374, Bisharp 197/278
+      after p2: Camerupt 344/344, Conkeldurr 215/414
+
+  Turn 5
+    p1 greedy: move 1 2, move 1 2
+    p2 greedy: move 1, move 4 2
+      p1b Bisharp used Sucker Punch -> p2b: Conkeldurr
+      p1a Togekiss used Air Slash -> p2b: Conkeldurr  [[miss]]
+              p1a Togekiss -- MISSED
+      p2a Camerupt used Heat Wave -> p1a: Togekiss  [[spread] p1a,p1b]
+      p1b Bisharp fainted
+      p2b Conkeldurr used Poison Jab -> p1a: Togekiss
+      after p1: Togekiss 27/374, Bisharp 0/278
+      after p2: Camerupt 344/344, Conkeldurr 6/414
+
+  Turn 6
+      p1b <- Thundurus comes in (361/361)
+      after p1: Togekiss 27/374, Thundurus 361/361
+      after p2: Camerupt 344/344, Conkeldurr 6/414
+
+  Turn 7
+    p1 greedy: move 1 2, move 1 2
+    p2 greedy: move 1, move 4 1
+      p1b Thundurus used Thunderbolt -> p2b: Conkeldurr
+      p2b Conkeldurr fainted
+      p1a Togekiss used Air Slash -> p2a: Camerupt
+      p2a Camerupt used Heat Wave -> p1b: Thundurus  [[spread] p1a]
+              p2a Camerupt -- MISSED
+      p1a Togekiss fainted
+      after p1: Togekiss 0/374, Thundurus 361/361
+      after p2: Camerupt 211/344, Conkeldurr 0/414
+
+  Turn 8
+      p1a <- Landorus-Therian comes in (358/358)
+      p2b <- Slowbro comes in (394/394)
+              p2a Camerupt atk 1 fell
+              p2b Slowbro atk 1 fell
+      after p1: Landorus-Therian 358/358, Thundurus 361/361
+      after p2: Camerupt 211/344, Slowbro 394/394
+
+  Turn 9
+    p1 greedy: move 2 1, move 1 1
+    p2 greedy: move 1, move 1 1
+      p1a Landorus used Superpower -> p2a: Camerupt
+              p1a Landorus atk 1 fell
+              p1a Landorus def 1 fell
+      p1b Thundurus used Thunderbolt -> p2a: Camerupt
+              p2a Camerupt -- IMMUNE
+      p2a Camerupt used Heat Wave -> p1b: Thundurus  [[spread] p1a,p1b]
+      p2b Slowbro used Scald -> p1a: Landorus
+      p1a Landorus fainted
+      after p1: Landorus-Therian 0/358, Thundurus 219/361
+      after p2: Camerupt 9/344, Slowbro 394/394
+
+  Turn 10
+      p1a <- Gastrodon-East comes in (426/426)
+      after p1: Gastrodon-East 426/426, Thundurus 219/361
+      after p2: Camerupt 9/344, Slowbro 394/394
+
+  Turn 11
+    p1 greedy: move 1 1, move 1 1
+    p2 greedy: move 1, move 1 2
+      p1b Thundurus used Thunderbolt -> p2a: Camerupt
+              p2a Camerupt -- IMMUNE
+      p1a Gastrodon used Ice Beam -> p2a: Camerupt
+      p2a Camerupt fainted
+      p2b Slowbro used Scald -> p1a: Gastrodon
+              p1a Gastrodon -- ability: Storm Drain
+              p1a Gastrodon spa 1 rose
+      after p1: Gastrodon-East 426/426, Thundurus 219/361
+      after p2: Camerupt 0/344, Slowbro 394/394
+
+  Turn 12
+      p2a <- Porygon2 comes in (374/374)
+              p2a Porygon2 atk 1 rose
+      after p1: Gastrodon-East 426/426, Thundurus 219/361
+      after p2: Porygon2 374/374, Slowbro 394/394
+
+  Turn 13
+    p1 greedy: move 1 1, move 1 1
+    p2 greedy: move 1 2, move 1 2
+      p1b Thundurus used Thunderbolt -> p2a: Porygon2
+      p1a Gastrodon used Ice Beam -> p2a: Porygon2
+              p2a Porygon2 -- critical hit
+      p2a Porygon2 used Thunderbolt -> p1b: Thundurus
+              p1b Thundurus used up its Sitrus Berry
+      p2b Slowbro used Scald -> p1a: Gastrodon
+              p1a Gastrodon -- ability: Storm Drain
+              p1a Gastrodon spa 1 rose
+      after p1: Gastrodon-East 426/426, Thundurus 187/361
+      after p2: Porygon2 189/374, Slowbro 394/394
+
+  Turn 14
+    p1 greedy: move 1 1, move 1 1
+    p2 greedy: move 1 2, move 1 2
+      p1b Thundurus used Thunderbolt -> p2a: Porygon2
+      p1a Gastrodon used Ice Beam -> p2a: Porygon2
+      p2a Porygon2 fainted
+      p2b Slowbro used Scald -> p1a: Gastrodon
+              p1a Gastrodon -- ability: Storm Drain
+              p1a Gastrodon spa 1 rose
+      after p1: Gastrodon-East 426/426, Thundurus 187/361
+      after p2: Porygon2 0/374, Slowbro 394/394
+
+  Turn 15
+      p2a <- Breloom comes in (324/324)
+      after p1: Gastrodon-East 426/426, Thundurus 187/361
+      after p2: Breloom 324/324, Slowbro 394/394
+
+  Turn 16
+    p1 greedy: move 1 1, move 1 1
+    p2 greedy: move 2 2, move 1 2
+      p1b Thundurus used Thunderbolt -> p2a: Breloom
+      p2a Breloom used Seed Bomb -> p1b: Thundurus
+              p1b Thundurus -- critical hit
+      p1a Gastrodon used Ice Beam -> p2a: Breloom
+      p2a Breloom fainted
+      p2b Slowbro used Scald -> p1a: Gastrodon
+              p1a Gastrodon -- ability: Storm Drain
+              p1a Gastrodon spa 1 rose
+      after p1: Gastrodon-East 426/426, Thundurus 8/361
+      after p2: Breloom 0/324, Slowbro 394/394
+
+  Turn 17
+    p1 greedy: move 1 2, move 1 2
+    p2 greedy: pass, move 1 2
+      p1b Thundurus used Thunderbolt -> p2b: Slowbro
+      p1a Gastrodon used Ice Beam -> p2b: Slowbro
+              p2b Slowbro -- critical hit
+      p2b Slowbro fainted
+      after p1: Gastrodon-East 426/426, Thundurus 8/361
+      after p2: Breloom 0/324, Slowbro 0/394
+
+  RESULT: p1 wins

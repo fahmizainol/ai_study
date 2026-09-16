@@ -1,0 +1,98 @@
+battle 7   p1=greedy vs p2=greedy
+  p1: Untitled 1002: Diancie-Mega, Genesect, Talonflame, Landorus-Therian, Hoopa-Unbound, Gastrodon-East
+  p2: Copy of Untitled 577: Kangaskhan-Mega, Bisharp, Deoxys-Attack, Amoonguss, Landorus, Talonflame
+
+  Turn 1
+    p1 greedy: move 1, move 1 1
+    p2 greedy: move 3 1, move 2 1
+      p2a Kangaskhan used Sucker Punch -> p1a: Diancie
+      p2b Bisharp used Sucker Punch -> p1a: Diancie
+      p1b Genesect used Ice Beam -> p2a: Kangaskhan
+      p1a Diancie used Diamond Storm -> p2a: Kangaskhan  [[spread] p2a,p2b]
+              p1a Diancie def 1 rose
+      after p1: Diancie-Mega 175/287, Genesect 283/283
+      after p2: Kangaskhan-Mega 153/414, Bisharp 203/271
+
+  Turn 2
+    p1 greedy: move 1, move 1 1
+    p2 greedy: move 3 1, move 2 1
+      p2a Kangaskhan used Sucker Punch -> p1a: Diancie
+      p2b Bisharp used Sucker Punch -> p1a: Diancie
+      p1b Genesect used Ice Beam -> p2a: Kangaskhan
+      p1a Diancie used Diamond Storm -> p2b: Bisharp  [[spread] p2a,p2b]
+      p2a Kangaskhan fainted
+      after p1: Diancie-Mega 99/287, Genesect 283/283
+      after p2: Kangaskhan-Mega 0/414, Bisharp 134/271
+
+  Turn 3
+      p2a <- Deoxys-Attack comes in (241/241)
+      after p1: Diancie-Mega 99/287, Genesect 283/283
+      after p2: Deoxys-Attack 241/241, Bisharp 134/271
+
+  Turn 4
+    p1 greedy: move 1, move 1 2
+    p2 greedy: move 2 1, move 2 1
+      p2b Bisharp used Sucker Punch -> p1a: Diancie
+      p1b Genesect used Ice Beam -> p2b: Bisharp
+      p2a Deoxys used Psycho Boost -> p1a: Diancie  [[miss]]
+              p2a Deoxys -- MISSED
+      p1a Diancie used Diamond Storm -> p2b: Bisharp  [[spread] p2a,p2b]
+              p1a Diancie def 1 rose
+      p2a Deoxys fainted
+      p2b Bisharp fainted
+      after p1: Diancie-Mega 55/287, Genesect 283/283
+      after p2: Deoxys-Attack 0/241, Bisharp 0/271
+
+  Turn 5
+      p2a <- Amoonguss comes in (432/432)
+      p2b <- Landorus comes in (382/382)
+      after p1: Diancie-Mega 55/287, Genesect 283/283
+      after p2: Amoonguss 432/432, Landorus 382/382
+
+  Turn 6
+    p1 greedy: move 1, move 1 1
+    p2 greedy: move 3 1, move 1 1
+      p1b Genesect used Ice Beam -> p2a: Amoonguss
+      p1a Diancie used Diamond Storm -> p2b: Landorus  [[spread] p2a,p2b]
+              p2b Landorus -- critical hit
+              p1a Diancie def 1 rose
+      p2a Amoonguss fainted
+      p2b Landorus used Earth Power -> p1a: Diancie
+      p1a Diancie fainted
+      after p1: Diancie-Mega 0/287, Genesect 283/283
+      after p2: Amoonguss 0/432, Landorus 184/382
+
+  Turn 7
+      p1a <- Talonflame comes in (359/359)
+      p2a <- Talonflame comes in (320/320)
+      after p1: Talonflame 359/359, Genesect 283/283
+      after p2: Talonflame 320/320, Landorus 184/382
+
+  Turn 8
+    p1 greedy: move 1 2, move 1 2
+    p2 greedy: move 1 1, move 1 1
+      p2a Talonflame used Brave Bird -> p1a: Talonflame
+      p1a Talonflame used Brave Bird -> p2b: Landorus
+      p2b Landorus fainted
+      p1a Talonflame fainted
+      p1b Genesect used Ice Beam -> p2a: Talonflame
+              p2a Talonflame is now frz
+      after p1: Talonflame 0/359, Genesect 283/283
+      after p2: Talonflame 2/320, Landorus 0/382
+
+  Turn 9
+      p1a <- Landorus-Therian comes in (382/382)
+              p2a Talonflame atk 1 fell
+      after p1: Landorus-Therian 382/382, Genesect 283/283
+      after p2: Talonflame 2/320, Landorus 0/382
+
+  Turn 10
+    p1 greedy: move 1, move 1 1
+    p2 greedy: move 1 1, pass
+              p2a Talonflame COULD NOT MOVE (frz)
+      p1b Genesect used Ice Beam -> p2a: Talonflame
+      p2a Talonflame fainted
+      after p1: Landorus-Therian 382/382, Genesect 283/283
+      after p2: Talonflame 0/320, Landorus 0/382
+
+  RESULT: p1 wins

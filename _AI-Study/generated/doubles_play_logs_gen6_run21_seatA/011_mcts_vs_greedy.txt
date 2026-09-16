@@ -1,0 +1,123 @@
+battle 11   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: draft v pichu: Blastoise, Gardevoir-Mega, Landorus, Arcanine, Porygon2, Conkeldurr
+  p2: XY Doubles: Sableye, Togekiss, Jirachi, Thundurus, Tyranitar, Kangaskhan
+
+  Turn 1
+    p1 mcts: switch 5, move 1   (slot0 Blastoise -> Porygon2)
+      search (15000 visits): switch porygon2;hypervoice,0 806v 692 | scald,0;hypervoice,0 769v 657 | rapidspin,1;hypervoice,0 604v 504 | scald,1;hypervoice,0 582v 484
+    p2 greedy: move 1 1, move 2 1
+      p1a <- Porygon2 comes in (374/374)
+              p1a Porygon2 atk 1 rose
+      p1b Gardevoir used Hyper Voice -> p2a: Sableye  [[spread] p2a,p2b]
+      p2a Sableye fainted
+      p2b Togekiss used Air Slash -> p1a: Porygon2
+      after p1: Porygon2 305/374, Gardevoir-Mega 340/340
+      after p2: Sableye 0/304, Togekiss 226/373
+
+  Turn 2
+      p2a <- Jirachi comes in (342/342)
+      after p1: Porygon2 305/374, Gardevoir-Mega 340/340
+      after p2: Jirachi 342/342, Togekiss 226/373
+
+  Turn 3
+    p1 mcts: move 2 1, move 1
+      search (9000 visits): shadowball,0;hypervoice,0 288v 223 | shadowball,0;icywind,0 250v 189 | recover,0;hypervoice,0 240v 180 | shadowball,1;hypervoice,0 217v 159
+    p2 greedy: move 1 1, move 2 1
+      p2a Jirachi used Iron Head -> p1a: Porygon2
+      p1b Gardevoir used Hyper Voice -> p2b: Togekiss  [[spread] p2a,p2b]
+              p2b Togekiss used up its Sitrus Berry
+      p2b Togekiss used Air Slash -> p1a: Porygon2
+              p1a Porygon2 COULD NOT MOVE (flinch)
+      after p1: Porygon2 163/374, Gardevoir-Mega 340/340
+      after p2: Jirachi 252/342, Togekiss 178/373
+
+  Turn 4
+    p1 mcts: move 4, move 1
+      search (14000 visits): recover,0;hypervoice,0 623v 450 | shadowball,0;hypervoice,0 434v 298 | icebeam,0;hypervoice,0 359v 239 | icebeam,1;hypervoice,0 342v 226
+    p2 greedy: move 1 1, move 2 1
+      p2a Jirachi used Iron Head -> p1a: Porygon2
+      p1b Gardevoir used Hyper Voice -> p2a: Jirachi  [[spread] p2a,p2b]
+      p2b Togekiss used Air Slash -> p1a: Porygon2
+      p1a Porygon2 used Recover
+      after p1: Porygon2 209/374, Gardevoir-Mega 340/340
+      after p2: Jirachi 161/342, Togekiss 40/373
+
+  Turn 5
+    p1 mcts: move 4, move 1
+      search (15000 visits): recover,0;hypervoice,0 546v 389 | recover,0;protect,1 367v 247 | shadowball,0;hypervoice,0 364v 244 | shadowball,0;protect,1 352v 235
+    p2 greedy: move 1 1, move 2 1
+      p2a Jirachi used Iron Head -> p1a: Porygon2
+      p1b Gardevoir used Hyper Voice -> p2b: Togekiss  [[spread] p2a,p2b]
+      p2b Togekiss fainted
+      p1a Porygon2 used Recover
+      after p1: Porygon2 315/374, Gardevoir-Mega 340/340
+      after p2: Jirachi 64/342, Togekiss 0/373
+
+  Turn 6
+      p2b <- Thundurus comes in (362/362)
+      after p1: Porygon2 315/374, Gardevoir-Mega 340/340
+      after p2: Jirachi 64/342, Thundurus 362/362
+
+  Turn 7
+    p1 mcts: move 1 2, move 4
+      search (22000 visits): icebeam,1;protect,1 1013v 676 | icebeam,1;switch arcanine 709v 454 | icebeam,1;hypervoice,0 690v 440 | shadowball,1;protect,1 685v 436
+    p2 greedy: move 1 1, move 3 1
+      p1b Gardevoir used Protect
+      p2a Jirachi used Iron Head -> p1a: Porygon2
+      p2b Thundurus used Foul Play -> p1a: Porygon2
+      p1a Porygon2 used Ice Beam -> p2b: Thundurus
+      after p1: Porygon2 204/374, Gardevoir-Mega 340/340
+      after p2: Jirachi 64/342, Thundurus 220/362
+
+  Turn 8
+    p1 mcts: move 4, move 1
+      search (19000 visits): recover,0;hypervoice,0 724v 489 | icebeam,1;protect,1 712v 480 | recover,0;protect,1 681v 456 | icebeam,1;hypervoice,0 640v 425
+    p2 greedy: move 1 1, move 3 1
+      p2a Jirachi used Iron Head -> p1a: Porygon2
+      p1b Gardevoir used Hyper Voice -> p2a: Jirachi  [[spread] p2a,p2b]
+              p2b Thundurus -- critical hit
+      p2a Jirachi fainted
+      p2b Thundurus fainted
+              p1a Porygon2 COULD NOT MOVE (flinch)
+      after p1: Porygon2 135/374, Gardevoir-Mega 340/340
+      after p2: Jirachi 0/342, Thundurus 0/362
+
+  Turn 9
+      p2a <- Tyranitar comes in (361/361)
+      p2b <- Kangaskhan comes in (352/352)
+      after p1: Porygon2 135/374, Gardevoir-Mega 340/340
+      after p2: Tyranitar 361/361, Kangaskhan 352/352
+
+  Turn 10
+    p1 mcts: move 4, move 1
+      search (10000 visits): recover,0;hypervoice,0 771v 638 | trickroom,0;hypervoice,0 420v 325 | trickroom,1;hypervoice,0 416v 321 | shadowball,0;hypervoice,0 374v 284
+    p2 greedy: move 1 1, move 4 1
+      p2b Kangaskhan used Sucker Punch  [[still]]
+              p2b Kangaskhan -- IT FAILED
+      p1b Gardevoir used Hyper Voice -> p2a: Tyranitar  [[spread] p2a,p2b]
+              p2a Tyranitar used up its Weakness Policy
+              p2a Tyranitar atk 2 rose
+              p2a Tyranitar spa 2 rose
+      p2a Tyranitar used Crunch -> p1a: Porygon2
+      p1a Porygon2 fainted
+      after p1: Porygon2 0/374, Gardevoir-Mega 319/340
+      after p2: Tyranitar 133/361, Kangaskhan 123/352
+
+  Turn 11
+      p1a <- Landorus comes in (338/338)
+      after p1: Landorus 338/338, Gardevoir-Mega 319/340
+      after p2: Tyranitar 133/361, Kangaskhan 123/352
+
+  Turn 12
+    p1 mcts: switch 6, move 1   (slot0 Landorus -> Conkeldurr)
+      search (32000 visits): switch conkeldurr;hypervoice,0 1821v 1501 | uturn,1;hypervoice,0 1734v 1424 | earthpower,0;switch conkeldurr 1098v 871 | earthpower,0;hypervoice,0 1001v 788
+    p2 greedy: move 1 2, move 4 2
+      p1a <- Conkeldurr comes in (414/414)
+      p2b Kangaskhan used Sucker Punch -> p1b: Gardevoir
+      p1b Gardevoir used Hyper Voice -> p2a: Tyranitar  [[spread] p2a,p2b]
+      p2a Tyranitar fainted
+      p2b Kangaskhan fainted
+      after p1: Conkeldurr 414/414, Gardevoir-Mega 202/340
+      after p2: Tyranitar 0/361, Kangaskhan 0/352
+
+  RESULT: p1 wins

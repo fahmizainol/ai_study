@@ -1,0 +1,134 @@
+battle 19   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: glurak gaming: Charizard-Mega-Y, Conkeldurr, Aegislash, Landorus-Therian, Thundurus, Deoxys-Speed
+  p2: ORAS Doubles OU: Diancie, Deoxys-Attack, Ferrothorn, Landorus-Therian, Keldeo-Resolute, Bisharp
+
+  Turn 1
+    p1 mcts: switch 5, switch 4   (slot0 Charizard-Mega-Y -> Thundurus; slot1 Conkeldurr -> Landorus-Therian)
+      search (30000 visits): switch thundurus;switch landorustherian 350v 31 | switch thundurus;icepunch,1 342v 29 | switch landorustherian;icepunch,1 331v 27 | solarbeam,0;switch landorustherian 327v 26
+    p2 greedy: move 1, move 1 1
+      p1a <- Thundurus comes in (361/361)
+      p1b <- Landorus-Therian comes in (358/358)
+              p2a Diancie -- IT FAILED
+              p2b Deoxys atk 1 fell
+      p2b Deoxys used Psycho Boost -> p1a: Thundurus
+              p2b Deoxys spa 2 fell
+              p1a Thundurus used up its Sitrus Berry
+      p2a Diancie used Diamond Storm -> p1a: Thundurus  [[spread] p1a,p1b]
+              p2a Diancie def 1 rose
+      p1a Thundurus fainted
+      after p1: Thundurus 0/361, Landorus-Therian 243/358
+      after p2: Diancie 241/241, Deoxys-Attack 241/241
+
+  Turn 2
+      p1a <- Aegislash comes in (324/324)
+      after p1: Aegislash 324/324, Landorus-Therian 243/358
+      after p2: Diancie 241/241, Deoxys-Attack 241/241
+
+  Turn 3
+    p1 mcts: move 1 1, move 1
+      search (31000 visits): shadowball,0;earthquake,0 926v 216 | shadowsneak,0;earthquake,0 890v 205 | kingsshield,0;earthquake,0 879v 202 | shadowball,1;earthquake,0 872v 199
+    p2 greedy: move 1, move 1 2
+      p1b Landorus used Earthquake -> p2b: Deoxys  [[spread] p1a,p2a,p2b]
+              p2b Deoxys -- critical hit
+              p2b Deoxys used up its Focus Sash
+      p2b Deoxys used Psycho Boost -> p1b: Landorus
+              p2b Deoxys spa 2 fell
+      p2a Diancie used Diamond Storm -> p1b: Landorus  [[spread] p1a,p1b]
+              p1b Landorus -- critical hit
+              p2a Diancie def 1 rose
+      p1b Landorus fainted
+      p1a Aegislash used Shadow Ball -> p2a: Diancie
+      after p1: Aegislash-Blade 109/324, Landorus-Therian 0/358
+      after p2: Diancie 1/241, Deoxys-Attack 1/241
+
+  Turn 4
+      p1b <- Conkeldurr comes in (413/413)
+      after p1: Aegislash-Blade 109/324, Conkeldurr 413/413
+      after p2: Diancie 1/241, Deoxys-Attack 1/241
+
+  Turn 5
+    p1 mcts: move 1 1, move 2 1
+      search (41000 visits): shadowball,0;machpunch,0 897v 99 | wideguard,0;machpunch,0 879v 95 | shadowsneak,0;machpunch,0 871v 94 | shadowsneak,1;machpunch,0 863v 92
+    p2 greedy: move 1, move 1 1
+      p1b Conkeldurr used Mach Punch -> p2a: Diancie
+      p2a Diancie fainted
+      p2b Deoxys used Psycho Boost -> p1a: Aegislash  [[miss]]
+              p2b Deoxys -- MISSED
+      p1a Aegislash used Shadow Ball -> p2b: Deoxys
+      p2b Deoxys fainted
+      after p1: Aegislash-Blade 129/324, Conkeldurr 413/413
+      after p2: Diancie 0/241, Deoxys-Attack 0/241
+
+  Turn 6
+      p2b <- Landorus-Therian comes in (320/320)
+      p2a <- Ferrothorn comes in (352/352)
+              p1a Aegislash atk 1 fell
+              p1b Conkeldurr atk 1 fell
+      after p1: Aegislash-Blade 129/324, Conkeldurr 413/413
+      after p2: Ferrothorn 352/352, Landorus-Therian 320/320
+
+  Turn 7
+    p1 mcts: move 2 2, switch 5   (slot1 Conkeldurr -> Charizard-Mega-Y)
+      search (42000 visits): shadowsneak,1;switch charizardmegay 1044v 120 | shadowball,0;switch deoxysspeed 1014v 114 | shadowsneak,1;switch deoxysspeed 1003v 112 | shadowball,1;switch deoxysspeed 1002v 112
+    p2 greedy: move 1 1, move 1
+      p1b <- Charizard-Mega-Y comes in (351/351)
+      p1a Aegislash used Shadow Sneak -> p2b: Landorus
+      p2b Landorus used Earthquake -> p1b: Charizard  [[spread] p2a,p1a]
+              p1b Charizard -- IMMUNE
+      p1a Aegislash fainted
+      p2a Ferrothorn used Power Whip -> p1b: Charizard
+      after p1: Aegislash 0/324, Charizard-Mega-Y 299/351
+      after p2: Ferrothorn 240/352, Landorus-Therian 266/320
+
+  Turn 8
+      p1a <- Conkeldurr comes in (413/413)
+      after p1: Conkeldurr 413/413, Charizard-Mega-Y 299/351
+      after p2: Ferrothorn 240/352, Landorus-Therian 266/320
+
+  Turn 9
+    p1 mcts: move 1 2, move 1
+      search (31000 visits): drainpunch,1;heatwave,0 2413v 1957 | icepunch,1;heatwave,0 1649v 1306 | drainpunch,0;heatwave,0 1606v 1269 | knockoff,1;heatwave,0 1552v 1223
+    p2 greedy: move 1 2, move 1
+      p2b Landorus used Earthquake -> p1b: Charizard  [[spread] p2a,p1a]
+              p1b Charizard -- IMMUNE
+      p1b Charizard used Heat Wave -> p2b: Landorus  [[spread] p2a,p2b]
+      p2a Ferrothorn fainted
+      p1a Conkeldurr used Drain Punch -> p2b: Landorus
+      p2b Landorus fainted
+      after p1: Conkeldurr 250/413, Charizard-Mega-Y 299/351
+      after p2: Ferrothorn 0/352, Landorus-Therian 0/320
+
+  Turn 10
+      p2b <- Bisharp comes in (272/272)
+      p2a <- Keldeo-Resolute comes in (324/324)
+      after p1: Conkeldurr 250/413, Charizard-Mega-Y 299/351
+      after p2: Keldeo-Resolute 324/324, Bisharp 272/272
+
+  Turn 11
+    p1 mcts: move 1 1, move 1
+      search (23000 visits): drainpunch,0;heatwave,0 2237v 1606 | machpunch,1;heatwave,0 1062v 716 | machpunch,1;solarbeam,1 1014v 681 | drainpunch,0;overheat,1 875v 578
+    p2 greedy: move 1 1, move 2 1
+      p2b Bisharp used Sucker Punch -> p1a: Conkeldurr
+      p2a Keldeo used Hydro Pump -> p1a: Conkeldurr
+      p1a Conkeldurr fainted
+      p1b Charizard used Heat Wave -> p2a: Keldeo  [[spread] p2a,p2b]
+      p2b Bisharp fainted
+      after p1: Conkeldurr 0/413, Charizard-Mega-Y 299/351
+      after p2: Keldeo-Resolute 225/324, Bisharp 0/272
+
+  Turn 12
+      p1a <- Deoxys-Speed comes in (304/304)
+      after p1: Deoxys-Speed 304/304, Charizard-Mega-Y 299/351
+      after p2: Keldeo-Resolute 225/324, Bisharp 0/272
+
+  Turn 13
+    p1 mcts: move 1 1, move 3 1
+      search (346000 visits): psychoboost,0;solarbeam,0 318225v 313269 | psychoboost,0;heatwave,0 6230v 5790 | psychoboost,0;overheat,0 6032v 5600 | psychoboost,0;protect,1 5182v 4784
+    p2 greedy: move 1 2, pass
+      p1a Deoxys used Psycho Boost -> p2a: Keldeo
+              p1a Deoxys spa 2 fell
+      p2a Keldeo fainted
+      after p1: Deoxys-Speed 304/304, Charizard-Mega-Y 299/351
+      after p2: Keldeo-Resolute 0/324, Bisharp 0/272
+
+  RESULT: p1 wins

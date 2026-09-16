@@ -1,0 +1,210 @@
+battle 15   p1=greedy vs p2=mcts   mcts 300 ms a decision
+  p1: diancie gastro 5: this time it&#39;s personal: Gengar-Mega, Kyurem-Black, Gastrodon-East, Diancie, Genesect, Conkeldurr
+  p2: dpl rejects/terracott week 1 reject: Gengar-Mega, Whimsicott, Terrakion, Landorus-Therian, Hoopa-Unbound, Kyurem-Black
+
+  Turn 1
+    p1 greedy: move 1 1, move 1 1
+    p2 mcts: move 2 1, move 1 2
+      search (17000 visits): shadowball,0;moonblast,1 2680v 1673 | shadowball,1;moonblast,1 1945v 1186 | protect,0;moonblast,1 951v 567 | protect,0;protect,1 895v 503
+      p1a Gengar used Sludge Bomb -> p2a: Gengar
+      p2a Gengar used Shadow Ball -> p1a: Gengar
+      p1a Gengar fainted
+      p2b Whimsicott used Moonblast -> p1b: Kyurem
+      p1b Kyurem used Earth Power -> p2a: Gengar
+              p2a Gengar -- critical hit
+      p2a Gengar fainted
+      after p1: Gengar-Mega 0/322, Kyurem-Black 144/392
+      after p2: Gengar-Mega 0/261, Whimsicott 261/261
+
+  Turn 2
+      p1a <- Gastrodon-East comes in (421/421)
+      p2a <- Terrakion comes in (323/323)
+      after p1: Gastrodon-East 421/421, Kyurem-Black 144/392
+      after p2: Terrakion 323/323, Whimsicott 261/261
+
+  Turn 3
+    p1 greedy: move 2 1, move 1 1
+    p2 mcts: move 1 1, move 3 2
+      search (75000 visits): stoneedge,0;beatup,1 5584v 1818 | closecombat,1;moonblast,0 5478v 1780 | protect,0;protect,1 4899v 1574 | stoneedge,1;protect,1 3788v 1182
+      p2b Whimsicott used Beat Up -> p1b: Kyurem
+      p2a Terrakion used Stone Edge -> p1a: Gastrodon
+      p1b Kyurem used Earth Power -> p2a: Terrakion
+      p1a Gastrodon used Earth Power -> p2a: Terrakion
+      p2a Terrakion fainted
+      after p1: Gastrodon-East 329/421, Kyurem-Black 103/392
+      after p2: Terrakion 0/323, Whimsicott 261/261
+
+  Turn 4
+      p2a <- Landorus-Therian comes in (319/319)
+              p1a Gastrodon atk 1 fell
+              p1b Kyurem atk 1 fell
+      after p1: Gastrodon-East 329/421, Kyurem-Black 103/392
+      after p2: Landorus-Therian 319/319, Whimsicott 261/261
+
+  Turn 5
+    p1 greedy: move 2 1, move 1 1
+    p2 mcts: move 4, move 4
+      search (57000 visits): protect,0;protect,1 1992v 462 | protect,0;switch kyuremblack 1807v 409 | switch kyuremblack;protect,1 1624v 358 | protect,0;moonblast,1 1440v 307
+      p2b Whimsicott used Protect
+      p2a Landorus used Protect
+      p1b Kyurem used Earth Power -> p2a: Landorus
+              p2a Landorus -- IMMUNE
+      p1a Gastrodon used Earth Power -> p2a: Landorus
+              p2a Landorus -- IMMUNE
+      after p1: Gastrodon-East 329/421, Kyurem-Black 103/392
+      after p2: Landorus-Therian 319/319, Whimsicott 261/261
+
+  Turn 6
+    p1 greedy: move 2 1, move 1 1
+    p2 mcts: switch 6, move 2   (slot0 Landorus-Therian -> Kyurem-Black)
+      search (55000 visits): switch kyuremblack;tailwind,1 2109v 507 | protect,0;protect,1 1756v 405 | switch kyuremblack;protect,1 1624v 367 | protect,0;moonblast,1 1585v 356
+      p2a <- Kyurem-Black comes in (391/391)
+      p2b Whimsicott used Tailwind
+      -sidestart p2: B move: Tailwind
+      p1b Kyurem used Earth Power -> p2a: Kyurem
+              p2a Kyurem spd 1 fell
+      p1a Gastrodon used Earth Power -> p2a: Kyurem
+      after p1: Gastrodon-East 329/421, Kyurem-Black 103/392
+      after p2: Kyurem-Black 54/391, Whimsicott 261/261
+
+  Turn 7
+    p1 greedy: move 2 1, move 1 1
+    p2 mcts: move 3 2, move 1 2
+      search (74000 visits): earthpower,1;moonblast,1 1726v 334 | switch hoopaunbound;moonblast,1 1560v 293 | icebeam,1;moonblast,1 1519v 283 | fusionbolt,1;moonblast,1 1494v 277
+      p2b Whimsicott used Moonblast -> p1b: Kyurem
+      p1b Kyurem fainted
+      p2a Kyurem used Earth Power -> p1a: Gastrodon
+      p1a Gastrodon used Earth Power -> p2a: Kyurem
+      p2a Kyurem fainted
+      after p1: Gastrodon-East 195/421, Kyurem-Black 0/392
+      after p2: Kyurem-Black 0/391, Whimsicott 261/261
+
+  Turn 8
+      p2a <- Hoopa-Unbound comes in (301/301)
+      p1b <- Diancie comes in (304/304)
+      after p1: Gastrodon-East 195/421, Diancie 304/304
+      after p2: Hoopa-Unbound 301/301, Whimsicott 261/261
+
+  Turn 9
+    p1 greedy: move 2 1, move 1
+    p2 mcts: move 4, move 2
+      search (74000 visits): protect,0;tailwind,1 3641v 799 | protect,0;protect,1 2819v 588 | allyswitch,0;moonblast,0 2760v 573 | hyperspacehole,1;moonblast,0 2215v 437
+      p2a Hoopa used Protect
+      p2b Whimsicott used Tailwind  [[still]]
+              p2b Whimsicott -- IT FAILED
+      p1b Diancie used Diamond Storm -> p2a: Hoopa  [[spread] p2b]
+              p2a Hoopa -- move: Protect
+      p1a Gastrodon used Earth Power -> p2a: Hoopa
+              p2a Hoopa -- move: Protect
+      after p1: Gastrodon-East 195/421, Diancie 304/304
+      after p2: Hoopa-Unbound 301/301, Whimsicott 150/261
+
+  Turn 10
+    p1 greedy: move 2 2, move 1
+    p2 mcts: move 1 2, move 1 2
+      search (70000 visits): hyperspacefury,1;moonblast,1 2327v 428 | allyswitch,0;protect,1 2281v 417 | protect,0;protect,1 2264v 413 | allyswitch,0;moonblast,1 2115v 379
+      p2b Whimsicott used Moonblast -> p1b: Diancie
+      p2a Hoopa used Hyperspace Fury -> p1b: Diancie
+              p2a Hoopa def 1 fell
+      p1b Diancie used Diamond Storm -> p2a: Hoopa  [[spread] p2a,p2b]
+              p1b Diancie def 1 rose
+      p1a Gastrodon used Earth Power -> p2b: Whimsicott
+      p2b Whimsicott fainted
+      -sideend p2: B move: Tailwind
+      after p1: Gastrodon-East 195/421, Diancie 146/304
+      after p2: Hoopa-Unbound 21/301, Whimsicott 0/261
+
+  Turn 11
+      p2b <- Landorus-Therian comes in (319/319)
+              p1a Gastrodon atk 1 fell
+              p1b Diancie -- IT FAILED
+      after p1: Gastrodon-East 195/421, Diancie 146/304
+      after p2: Hoopa-Unbound 21/301, Landorus-Therian 319/319
+
+  Turn 12
+    p1 greedy: move 2 1, move 1
+    p2 mcts: move 2 2, move 4
+      search (101000 visits): hyperspacehole,1;protect,1 89089v 48214 | hyperspacefury,0;protect,1 1100v 433 | hyperspacehole,0;protect,1 973v 375 | allyswitch,0;protect,1 824v 307
+      p2b Landorus used Protect
+      p2a Hoopa used Hyperspace Hole -> p1b: Diancie
+      p2a Hoopa fainted
+      p1b Diancie used Diamond Storm -> p2b: Landorus
+              p2b Landorus -- move: Protect
+      p1a Gastrodon used Earth Power -> p2b: Landorus
+              p2b Landorus -- IMMUNE
+      after p1: Gastrodon-East 195/421, Diancie 25/304
+      after p2: Hoopa-Unbound 0/301, Landorus-Therian 319/319
+
+  Turn 13
+    p1 greedy: move 2 2, move 1
+    p2 mcts: pass, move 4
+      search (87000 visits): No Move;protect,1 85257v 44111 | No Move;explosion,0 464v 144 | No Move;earthpower,0 386v 112 | No Move;earthpower,1 338v 92
+      p2b Landorus used Protect  [[still]]
+              p2b Landorus -- IT FAILED
+      p1b Diancie used Diamond Storm -> p2b: Landorus
+      p1a Gastrodon used Earth Power -> p2b: Landorus
+              p2b Landorus -- IMMUNE
+      after p1: Gastrodon-East 195/421, Diancie 25/304
+      after p2: Hoopa-Unbound 0/301, Landorus-Therian 181/319
+
+  Turn 14
+    p1 greedy: move 2 2, move 1
+    p2 mcts: pass, move 4
+      search (89000 visits): No Move;protect,1 85668v 28632 | No Move;explosion,0 918v 158 | No Move;earthpower,1 804v 129 | No Move;hiddenpower,0 572v 74
+      p2b Landorus used Protect
+      p1b Diancie used Diamond Storm -> p2b: Landorus
+              p2b Landorus -- move: Protect
+      p1a Gastrodon used Earth Power -> p2b: Landorus
+              p2b Landorus -- IMMUNE
+      after p1: Gastrodon-East 195/421, Diancie 25/304
+      after p2: Hoopa-Unbound 0/301, Landorus-Therian 181/319
+
+  Turn 15
+    p1 greedy: move 2 2, move 1
+    p2 mcts: pass, move 4
+      search (109000 visits): No Move;protect,1 95358v 41359 | No Move;explosion,0 11120v 4484 | No Move;earthpower,1 972v 286 | No Move;hiddenpower,0 683v 181
+      p2b Landorus used Protect
+      p1b Diancie used Diamond Storm -> p2b: Landorus
+              p2b Landorus -- move: Protect
+      p1a Gastrodon used Earth Power -> p2b: Landorus
+              p2b Landorus -- IMMUNE
+      after p1: Gastrodon-East 195/421, Diancie 25/304
+      after p2: Hoopa-Unbound 0/301, Landorus-Therian 181/319
+
+  Turn 16
+    p1 greedy: move 2 2, move 1
+    p2 mcts: pass, move 4
+      search (108000 visits): No Move;protect,1 94258v 41870 | No Move;earthpower,0 10957v 4532 | No Move;earthpower,1 986v 302 | No Move;explosion,0 755v 215
+      p2b Landorus used Protect  [[still]]
+              p2b Landorus -- IT FAILED
+      p1b Diancie used Diamond Storm -> p2b: Landorus
+              p1b Diancie def 1 rose
+      p1a Gastrodon used Earth Power -> p2b: Landorus
+              p2b Landorus -- IMMUNE
+      after p1: Gastrodon-East 195/421, Diancie 25/304
+      after p2: Hoopa-Unbound 0/301, Landorus-Therian 49/319
+
+  Turn 17
+    p1 greedy: move 2 2, move 1
+    p2 mcts: pass, move 4
+      search (332000 visits): No Move;protect,1 159441v 5382 | No Move;earthpower,1 39192v 820 | No Move;explosion,0 38495v 796 | No Move;hiddenpower,1 33420v 628
+      p2b Landorus used Protect
+      p1b Diancie used Diamond Storm -> p2b: Landorus
+              p2b Landorus -- move: Protect
+      p1a Gastrodon used Earth Power -> p2b: Landorus
+              p2b Landorus -- IMMUNE
+      after p1: Gastrodon-East 195/421, Diancie 25/304
+      after p2: Hoopa-Unbound 0/301, Landorus-Therian 49/319
+
+  Turn 18
+    p1 greedy: move 2 2, move 2 2
+    p2 mcts: pass, move 4
+      search (373000 visits): No Move;protect,1 133119v 3268 | No Move;earthpower,1 57175v 986 | No Move;earthpower,0 49987v 789 | No Move;hiddenpower,0 48786v 756
+      p2b Landorus used Protect  [[still]]
+              p2b Landorus -- IT FAILED
+      p1b Diancie used Moonblast -> p2b: Landorus
+      p2b Landorus fainted
+      after p1: Gastrodon-East 195/421, Diancie 25/304
+      after p2: Hoopa-Unbound 0/301, Landorus-Therian 0/319
+
+  RESULT: p1 wins

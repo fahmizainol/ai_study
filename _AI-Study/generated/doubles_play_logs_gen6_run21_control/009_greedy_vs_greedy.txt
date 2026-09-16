@@ -1,0 +1,113 @@
+battle 9   p1=greedy vs p2=greedy
+  p1: XY Doubles: Regirock, Jirachi, Talonflame, Breloom, Blastoise, Aromatisse
+  p2: XY Doubles: Abomasnow, Jirachi, Rotom-Heat, Keldeo, Weavile, Landorus-Therian
+
+  Turn 1
+    p1 greedy: move 3, move 2 1
+    p2 greedy: move 2 1, move 3 1
+      p2b Jirachi used Iron Head -> p1a: Regirock
+              p1a Regirock used up its Weakness Policy
+              p1a Regirock atk 2 rose
+              p1a Regirock spa 2 rose
+      p1b Jirachi used Iron Head -> p2a: Abomasnow
+              p2a Abomasnow COULD NOT MOVE (flinch)
+      p1a Regirock used Earthquake -> p2b: Jirachi  [[spread] p1b,p2a,p2b]
+      after p1: Regirock 222/364, Jirachi 96/404
+      after p2: Abomasnow 32/384, Jirachi 113/399
+
+  Turn 2
+    p1 greedy: move 3, move 2 1
+    p2 greedy: move 2 2, move 3 2
+      p2b Jirachi used Iron Head -> p1b: Jirachi
+      p1b Jirachi used Iron Head -> p2a: Abomasnow
+      p2a Abomasnow fainted
+      p1a Regirock used Earthquake -> p2b: Jirachi  [[spread] p1b,p2b]
+      p1b Jirachi fainted
+      p2b Jirachi fainted
+      after p1: Regirock 200/364, Jirachi 0/404
+      after p2: Abomasnow 0/384, Jirachi 0/399
+
+  Turn 3
+      p2b <- Keldeo comes in (324/324)
+      p1b <- Talonflame comes in (360/360)
+      p2a <- Rotom-Heat comes in (271/271)
+      after p1: Regirock 200/364, Talonflame 360/360
+      after p2: Rotom-Heat 271/271, Keldeo 324/324
+
+  Turn 4
+    p1 greedy: move 3, move 1 1
+    p2 greedy: move 1 1, move 1 1
+      p1b Talonflame used Brave Bird -> p2a: Rotom
+              p2a Rotom -- critical hit
+      p2b Keldeo used Secret Sword -> p1a: Regirock
+      p1a Regirock fainted
+      p2a Rotom used Overheat -> p1b: Talonflame
+              p2a Rotom spa 2 fell
+      after p1: Regirock 0/364, Talonflame 105/360
+      after p2: Rotom-Heat 111/271, Keldeo 272/324
+
+  Turn 5
+      p1a <- Breloom comes in (324/324)
+      after p1: Breloom 324/324, Talonflame 105/360
+      after p2: Rotom-Heat 111/271, Keldeo 272/324
+
+  Turn 6
+    p1 greedy: move 2 1, move 1 1
+    p2 greedy: move 1 2, move 1 2
+      p1b Talonflame used Brave Bird -> p2a: Rotom
+      p1a Breloom used Mach Punch -> p2a: Rotom
+      p2a Rotom fainted
+      p2b Keldeo used Secret Sword -> p1b: Talonflame
+      p1b Talonflame fainted
+      after p1: Breloom 304/324, Talonflame 0/360
+      after p2: Rotom-Heat 0/271, Keldeo 220/324
+
+  Turn 7
+      p1b <- Blastoise comes in (362/362)
+      p2a <- Weavile comes in (282/282)
+      after p1: Breloom 304/324, Blastoise 362/362
+      after p2: Weavile 282/282, Keldeo 220/324
+
+  Turn 8
+    p1 greedy: move 2 2, move 1
+    p2 greedy: move 2 1, move 1 1
+      p1a Breloom used Mach Punch -> p2b: Keldeo
+      p2a Weavile used Ice Punch -> p1a: Breloom
+      p2b Keldeo used Secret Sword -> p1a: Breloom
+      p1a Breloom fainted
+      p1b Blastoise used Water Spout -> p2b: Keldeo  [[spread] p2a,p2b]
+      p2b Keldeo fainted
+      after p1: Breloom 0/324, Blastoise 362/362
+      after p2: Weavile 78/282, Keldeo 0/324
+
+  Turn 9
+      p2b <- Landorus-Therian comes in (367/367)
+      p1a <- Aromatisse comes in (406/406)
+              p1a Aromatisse atk 1 fell
+              p1b Blastoise atk 1 fell
+      after p1: Aromatisse 406/406, Blastoise 362/362
+      after p2: Weavile 78/282, Landorus-Therian 367/367
+
+  Turn 10
+    p1 greedy: move 4 1, move 1
+    p2 greedy: move 2 1, move 2 1
+      p2a Weavile used Ice Punch -> p1a: Aromatisse
+              p1a Aromatisse -- critical hit
+      p2b Landorus used Stone Edge -> p1a: Aromatisse
+              p1a Aromatisse used up its Sitrus Berry
+      p1b Blastoise used Water Spout -> p2a: Weavile  [[spread] p2a,p2b]
+      p2a Weavile fainted
+      p1a Aromatisse used Moonblast -> p2b: Landorus
+      after p1: Aromatisse 215/406, Blastoise 362/362
+      after p2: Weavile 0/282, Landorus-Therian 18/367
+
+  Turn 11
+    p1 greedy: move 4 2, move 1
+    p2 greedy: pass, move 2 1
+      p2b Landorus used Stone Edge -> p1a: Aromatisse
+      p1b Blastoise used Water Spout -> p2b: Landorus
+      p2b Landorus fainted
+      after p1: Aromatisse 108/406, Blastoise 362/362
+      after p2: Weavile 0/282, Landorus-Therian 0/367
+
+  RESULT: p1 wins

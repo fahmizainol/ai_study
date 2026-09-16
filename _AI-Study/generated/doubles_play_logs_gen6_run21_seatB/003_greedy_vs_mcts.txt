@@ -1,0 +1,202 @@
+battle 3   p1=greedy vs p2=mcts   mcts 300 ms a decision
+  p1: dpl ::/Untitled 858: Diancie-Mega, Thundurus, Aegislash, Talonflame, Mew, Landorus
+  p2: dwcop 69/Untitled 411: Diancie-Mega, Gothitelle, Lapras, Braviary, Landorus-Therian, Raichu
+
+  Turn 1
+    p1 greedy: move 1, move 3 1
+    p2 mcts: move 1, move 4
+      search (26000 visits): diamondstorm,0;protect,1 2918v 1540 | protect,0;protect,1 1084v 514 | protect,0;switch raichu 869v 398 | earthpower,0;protect,1 750v 335
+      p2b Gothitelle used Protect
+      p1b Thundurus used Superpower -> p2a: Diancie
+              p1b Thundurus atk 1 fell
+              p1b Thundurus def 1 fell
+      p2a Diancie used Diamond Storm -> p1b: Thundurus  [[spread] p1a,p1b]
+              p1a Diancie -- critical hit
+              p2a Diancie def 1 rose
+      p1b Thundurus fainted
+      p1a Diancie used Diamond Storm -> p2b: Gothitelle  [[spread] ]
+              p2b Gothitelle -- move: Protect
+              p1a Diancie -- MISSED
+      after p1: Diancie-Mega 51/259, Thundurus 0/299
+      after p2: Diancie-Mega 113/304, Gothitelle 344/344
+
+  Turn 2
+      p1b <- Aegislash comes in (324/324)
+      after p1: Diancie-Mega 51/259, Aegislash 324/324
+      after p2: Diancie-Mega 113/304, Gothitelle 344/344
+
+  Turn 3
+    p1 greedy: move 1, move 2 1
+    p2 mcts: move 4, move 4
+      search (17000 visits): protect,0;protect,1 492v 291 | diamondstorm,0;switch landorustherian 411v 235 | protect,0;psychic,0 407v 233 | diamondstorm,0;psychic,0 396v 225
+      p2a Diancie used Protect
+      p2b Gothitelle used Protect
+      p1a Diancie used Diamond Storm -> p2b: Gothitelle  [[spread] ]
+              p2a Diancie -- move: Protect
+              p2b Gothitelle -- move: Protect
+      p1b Aegislash used Shadow Ball -> p2a: Diancie
+              p2a Diancie -- move: Protect
+      after p1: Diancie-Mega 51/259, Aegislash-Blade 324/324
+      after p2: Diancie-Mega 113/304, Gothitelle 344/344
+
+  Turn 4
+    p1 greedy: move 1, move 2 1
+    p2 mcts: move 3 2, move 2 -1
+      search (25000 visits): earthpower,1;helpinghand,0 3126v 2188 | diamondstorm,0;protect,1 837v 523 | diamondstorm,0;switch landorustherian 811v 504 | protect,0;protect,1 760v 469
+      p2b Gothitelle used Helping Hand -> p2a: Diancie
+      p2a Diancie used Earth Power -> p1b: Aegislash
+      p1b Aegislash fainted
+      p1a Diancie used Diamond Storm -> p2a: Diancie  [[spread] p2a,p2b]
+              p1a Diancie def 1 rose
+      after p1: Diancie-Mega 51/259, Aegislash 0/324
+      after p2: Diancie-Mega 5/304, Gothitelle 206/344
+
+  Turn 5
+      p1b <- Talonflame comes in (359/359)
+      after p1: Diancie-Mega 51/259, Talonflame 359/359
+      after p2: Diancie-Mega 5/304, Gothitelle 206/344
+
+  Turn 6
+    p1 greedy: move 1, move 1 1
+    p2 mcts: move 1, switch 5   (slot1 Gothitelle -> Landorus-Therian)
+      search (38000 visits): diamondstorm,0;switch landorustherian 4020v 3438 | diamondstorm,0;switch lapras 3257v 2759 | diamondstorm,0;switch braviary 2859v 2406 | diamondstorm,0;protect,1 2691v 2258
+      p2b <- Landorus-Therian comes in (382/382)
+              p1a Diancie -- IT FAILED
+              p1b Talonflame atk 1 fell
+      p1b Talonflame used Brave Bird -> p2a: Diancie
+      p2a Diancie fainted
+      p1a Diancie used Diamond Storm -> p2b: Landorus
+              p1a Diancie def 1 rose
+      after p1: Diancie-Mega 51/259, Talonflame 322/359
+      after p2: Diancie-Mega 0/304, Landorus-Therian 142/382
+
+  Turn 7
+      p2a <- Lapras comes in (405/405)
+      after p1: Diancie-Mega 51/259, Talonflame 322/359
+      after p2: Lapras 405/405, Landorus-Therian 142/382
+
+  Turn 8
+    p1 greedy: move 1, move 1 2
+    p2 mcts: move 3, move 2 2
+      search (41000 visits): protect,0;uturn,1 9246v 5280 | protect,0;hiddenpower,0 4510v 2482 | freezedry,0;rockslide,0 1888v 968 | freezedry,1;switch gothitelle 1125v 542
+      p2a Lapras used Protect
+      p1b Talonflame used Brave Bird -> p2b: Landorus
+      p2b Landorus fainted
+      p1a Diancie used Diamond Storm -> p2a: Lapras
+              p2a Lapras -- move: Protect
+      after p1: Diancie-Mega 51/259, Talonflame 240/359
+      after p2: Lapras 405/405, Landorus-Therian 0/382
+
+  Turn 9
+      p2b <- Braviary comes in (347/347)
+      after p1: Diancie-Mega 51/259, Talonflame 240/359
+      after p2: Lapras 405/405, Braviary 347/347
+
+  Turn 10
+    p1 greedy: move 1, move 1 1
+    p2 mcts: move 3, switch 5   (slot1 Braviary -> Gothitelle)
+      search (41000 visits): protect,0;switch gothitelle 3950v 1603 | protect,0;superpower,1 1926v 721 | hydropump,1;switch gothitelle 1923v 719 | protect,0;superpower,0 1264v 465
+      p2b <- Gothitelle comes in (206/344)
+      p2a Lapras used Protect
+      p1b Talonflame used Brave Bird -> p2a: Lapras
+              p2a Lapras -- move: Protect
+      p1a Diancie used Diamond Storm -> p2b: Gothitelle  [[spread] ]
+              p2a Lapras -- move: Protect
+              p1a Diancie -- MISSED
+      after p1: Diancie-Mega 51/259, Talonflame 240/359
+      after p2: Lapras 405/405, Gothitelle 206/344
+
+  Turn 11
+    p1 greedy: move 1, move 1 2
+    p2 mcts: move 3, move 4
+      search (21000 visits): protect,0;protect,1 5501v 3857 | freezedry,1;protect,1 1781v 1154 | freezedry,0;protect,1 1209v 755 | freezedry,0;psychic,1 737v 434
+      p2b Gothitelle used Protect
+      p2a Lapras used Protect  [[still]]
+              p2a Lapras -- IT FAILED
+      p1b Talonflame used Brave Bird -> p2b: Gothitelle
+              p2b Gothitelle -- move: Protect
+      p1a Diancie used Diamond Storm -> p2b: Gothitelle  [[spread] p2a]
+              p2b Gothitelle -- move: Protect
+              p2a Lapras used up its Sitrus Berry
+      after p1: Diancie-Mega 51/259, Talonflame 240/359
+      after p2: Lapras 222/405, Gothitelle 206/344
+
+  Turn 12
+    p1 greedy: move 1, move 1 1
+    p2 mcts: move 1 1, move 4
+      search (38000 visits): freezedry,0;protect,1 3403v 1670 | hydropump,0;protect,1 2607v 1250 | protect,0;psychic,0 2195v 1035 | freezedry,1;protect,1 1455v 653
+      p2b Gothitelle used Protect  [[still]]
+              p2b Gothitelle -- IT FAILED
+      p1b Talonflame used Brave Bird -> p2a: Lapras
+      p1a Diancie used Diamond Storm -> p2a: Lapras  [[spread] p2a,p2b]
+              p2a Lapras -- critical hit
+              p2b Gothitelle -- critical hit
+              p1a Diancie def 1 rose
+              p2b Gothitelle used up its Sitrus Berry
+      p2a Lapras fainted
+      after p1: Diancie-Mega 51/259, Talonflame 164/359
+      after p2: Lapras 0/405, Gothitelle 100/344
+
+  Turn 13
+      p2a <- Braviary comes in (347/347)
+      after p1: Diancie-Mega 51/259, Talonflame 164/359
+      after p2: Braviary 347/347, Gothitelle 100/344
+
+  Turn 14
+    p1 greedy: move 2 2, move 1 2
+    p2 mcts: switch 6, move 3 1   (slot0 Braviary -> Raichu)
+      search (32000 visits): switch raichu;psychic,0 2423v 1062 | switch raichu;protect,1 1949v 833 | tailwind,0;trickroom,1 1416v 580 | switch raichu;psychic,1 929v 354
+      p2a <- Raichu comes in (324/324)
+      p1b Talonflame used Brave Bird -> p2b: Gothitelle
+      p2b Gothitelle fainted
+      p1a Diancie used Moonblast -> p2a: Raichu
+      after p1: Diancie-Mega 51/259, Talonflame 96/359
+      after p2: Raichu 183/324, Gothitelle 0/344
+
+  Turn 15
+      p2b <- Braviary comes in (347/347)
+      after p1: Diancie-Mega 51/259, Talonflame 96/359
+      after p2: Raichu 183/324, Braviary 347/347
+
+  Turn 16
+    p1 greedy: move 2 1, move 1 1
+    p2 mcts: move 2 1, move 3 2
+      search (50000 visits): voltswitch,0;return,1 12200v 8421 | voltswitch,0;tailwind,1 4376v 2897 | voltswitch,1;tailwind,1 3297v 2147 | voltswitch,0;bravebird,1 3274v 2132
+      p1b Talonflame used Brave Bird -> p2a: Raichu
+      p2a Raichu used Volt Switch -> p1a: Diancie
+      p1a Diancie fainted
+      p2b Braviary used Return -> p1b: Talonflame
+      p1b Talonflame fainted
+      after p1: Diancie-Mega 0/259, Talonflame 0/359
+      after p2: Raichu 70/324, Braviary 313/347
+
+  Turn 17
+      p1a <- Mew comes in (404/404)
+      p1b <- Landorus comes in (319/319)
+      after p1: Mew 404/404, Landorus 319/319
+      after p2: Raichu 70/324, Braviary 313/347
+
+  Turn 18
+    p1 greedy: move 4 1, move 2 1
+    p2 mcts: move 2 1, move 3 2
+      search (95000 visits): voltswitch,0;return,1 12574v 3870 | fakeout,0;return,1 7249v 2133 | voltswitch,0;bravebird,1 5571v 1595 | fakeout,1;return,1 5232v 1487
+      p2a Raichu used Volt Switch -> p1a: Mew
+      p1b Landorus used Earth Power -> p2a: Raichu
+      p2a Raichu fainted
+      p1a Mew used Ice Beam -> p2b: Braviary
+      p2b Braviary used Return -> p1b: Landorus
+      after p1: Mew 323/404, Landorus 66/319
+      after p2: Raichu 0/324, Braviary 83/347
+
+  Turn 19
+    p1 greedy: move 4 2, move 2 2
+    p2 mcts: pass, move 1 2
+      search (1358000 visits): No Move;bravebird,1 216304v 523 | No Move;superpower,1 209756v 470 | No Move;superpower,0 191172v 323 | No Move;return,0 190751v 319
+      p1b Landorus used Earth Power -> p2b: Braviary
+              p2b Braviary -- IMMUNE
+      p1a Mew used Ice Beam -> p2b: Braviary
+      p2b Braviary fainted
+      after p1: Mew 323/404, Landorus 66/319
+      after p2: Raichu 0/324, Braviary 0/347
+
+  RESULT: p1 wins

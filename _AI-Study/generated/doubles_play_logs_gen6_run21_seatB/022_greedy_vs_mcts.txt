@@ -1,0 +1,166 @@
+battle 22   p1=greedy vs p2=mcts   mcts 300 ms a decision
+  p1: oraspl/Untitled 252: Salamence-Mega, Landorus-Therian, Cresselia, Heatran, Keldeo-Resolute, Weavile
+  p2: ORAS Doubles OU: Gengar-Mega, Weavile, Sylveon, Thundurus, Landorus-Therian, Volcanion
+
+  Turn 1
+    p1 greedy: move 1 1, move 4 1
+    p2 mcts: move 1 2, switch 5   (slot1 Weavile -> Landorus-Therian)
+      search (12000 visits): shadowball,1;switch landorustherian 312v 264 | willowisp,1;switch landorustherian 309v 261 | shadowball,0;switch landorustherian 269v 223 | sludgebomb,0;switch landorustherian 249v 204
+      p2b <- Landorus-Therian comes in (319/319)
+              p1a Salamence atk 1 fell
+              p1b Landorus atk 1 fell
+      p2a Gengar used Shadow Ball -> p1b: Landorus
+      p1a Salamence used Double-Edge -> p2a: Gengar
+              p2a Gengar -- IMMUNE
+      p1b Landorus used Superpower -> p2a: Gengar
+              p2a Gengar -- IMMUNE
+      after p1: Salamence-Mega 331/331, Landorus-Therian 262/382
+      after p2: Gengar-Mega 261/261, Landorus-Therian 319/319
+
+  Turn 2
+    p1 greedy: move 1 1, move 4 1
+    p2 mcts: move 1 1, move 1
+      search (23000 visits): shadowball,0;rockslide,0 828v 629 | shadowball,1;rockslide,0 809v 613 | switch sylveon;rockslide,0 624v 460 | sludgebomb,0;rockslide,0 548v 397
+      p2b Landorus used Rock Slide -> p1a: Salamence  [[spread] p1b]
+              p2b Landorus -- MISSED
+      p2a Gengar used Shadow Ball -> p1a: Salamence
+              p1a Salamence spd 1 fell
+      p1a Salamence used Double-Edge -> p2a: Gengar
+              p2a Gengar -- IMMUNE
+              p1b Landorus COULD NOT MOVE (flinch)
+      after p1: Salamence-Mega 121/331, Landorus-Therian 183/382
+      after p2: Gengar-Mega 261/261, Landorus-Therian 319/319
+
+  Turn 3
+    p1 greedy: move 1 1, move 4 1
+    p2 mcts: switch 3, move 1   (slot0 Gengar-Mega -> Sylveon)
+      search (24000 visits): switch sylveon;rockslide,0 2038v 1305 | shadowball,1;rockslide,0 1887v 1201 | switch volcanion;rockslide,0 1843v 1172 | sludgebomb,1;rockslide,0 1461v 909
+      p2a <- Sylveon comes in (345/345)
+      p2b Landorus used Rock Slide -> p1a: Salamence  [[spread] p1a,p1b]
+      p1a Salamence fainted
+      p1b Landorus used Superpower -> p2a: Sylveon
+              p1b Landorus atk 1 fell
+              p1b Landorus def 1 fell
+      after p1: Salamence-Mega 0/331, Landorus-Therian 90/382
+      after p2: Sylveon 297/345, Landorus-Therian 319/319
+
+  Turn 4
+      p1a <- Cresselia comes in (444/444)
+      after p1: Cresselia 444/444, Landorus-Therian 90/382
+      after p2: Sylveon 297/345, Landorus-Therian 319/319
+
+  Turn 5
+    p1 greedy: move 2 1, move 4 1
+    p2 mcts: move 3, move 1
+      search (24000 visits): calmmind,0;rockslide,0 3497v 1660 | hypervoice,0;rockslide,0 1814v 808 | hiddenpower,0;rockslide,0 1239v 524 | calmmind,0;switch gengarmega 1169v 490
+      p2b Landorus used Rock Slide -> p1a: Cresselia  [[spread] p1a,p1b]
+      p1b Landorus fainted
+              p1a Cresselia COULD NOT MOVE (flinch)
+      p2a Sylveon used Calm Mind
+              p2a Sylveon spa 1 rose
+              p2a Sylveon spd 1 rose
+      after p1: Cresselia 379/444, Landorus-Therian 0/382
+      after p2: Sylveon 297/345, Landorus-Therian 319/319
+
+  Turn 6
+      p1b <- Heatran comes in (386/386)
+      after p1: Cresselia 379/444, Heatran 386/386
+      after p2: Sylveon 297/345, Landorus-Therian 319/319
+
+  Turn 7
+    p1 greedy: move 2 1, move 1
+    p2 mcts: move 1, switch 6   (slot1 Landorus-Therian -> Volcanion)
+      search (20000 visits): hypervoice,0;switch volcanion 2449v 1519 | hypervoice,0;rockslide,0 2073v 1270 | calmmind,0;switch volcanion 2018v 1234 | calmmind,0;rockslide,0 1785v 1080
+      p2b <- Volcanion comes in (364/364)
+      p1b Heatran used Eruption -> p2a: Sylveon  [[spread] p2a,p2b]
+      p1a Cresselia used Ice Beam -> p2a: Sylveon
+      p2a Sylveon used Hyper Voice -> p1a: Cresselia  [[spread] p1a,p1b]
+              p1a Cresselia used up its Sitrus Berry
+      after p1: Cresselia 294/444, Heatran 319/386
+      after p2: Sylveon 123/345, Volcanion 288/364
+
+  Turn 8
+    p1 greedy: move 2 1, move 1
+    p2 mcts: move 1, move 1 2
+      search (24000 visits): hypervoice,0;earthpower,1 2622v 2192 | hypervoice,0;steameruption,1 2202v 1822 | hiddenpower,0;earthpower,1 1803v 1474 | hiddenpower,0;steameruption,1 1383v 1110
+      p2b Volcanion used Earth Power -> p1b: Heatran
+      p1b Heatran fainted
+      p1a Cresselia used Ice Beam -> p2a: Sylveon
+      p2a Sylveon used Hyper Voice -> p1a: Cresselia
+      after p1: Cresselia 41/444, Heatran 0/386
+      after p2: Sylveon 83/345, Volcanion 288/364
+
+  Turn 9
+      p1b <- Keldeo-Resolute comes in (323/323)
+      after p1: Cresselia 41/444, Keldeo-Resolute 323/323
+      after p2: Sylveon 83/345, Volcanion 288/364
+
+  Turn 10
+    p1 greedy: move 2 1, move 2 1
+    p2 mcts: move 4, move 2 2
+      search (28000 visits): protect,0;steameruption,1 2086v 1341 | protect,0;earthpower,1 1933v 1235 | hiddenpower,1;steameruption,0 1094v 662 | protect,0;protect,1 1035v 622
+      p2a Sylveon used Protect
+      p1b Keldeo used Hydro Pump -> p2a: Sylveon
+              p2a Sylveon -- move: Protect
+      p2b Volcanion used Steam Eruption -> p1b: Keldeo
+      p1a Cresselia used Ice Beam -> p2a: Sylveon
+              p2a Sylveon -- move: Protect
+      after p1: Cresselia 41/444, Keldeo-Resolute 206/323
+      after p2: Sylveon 83/345, Volcanion 288/364
+
+  Turn 11
+    p1 greedy: move 2 1, move 2 1
+    p2 mcts: move 4, move 2 2
+      search (31000 visits): protect,0;steameruption,1 2103v 1241 | protect,0;earthpower,1 1891v 1105 | hypervoice,0;steameruption,0 1562v 896 | hiddenpower,1;steameruption,0 1103v 609
+      p2a Sylveon used Protect  [[still]]
+              p2a Sylveon -- IT FAILED
+      p1b Keldeo used Hydro Pump -> p2a: Sylveon
+      p2a Sylveon fainted
+      p2b Volcanion used Steam Eruption -> p1b: Keldeo
+      p1a Cresselia used Ice Beam -> p2b: Volcanion
+      after p1: Cresselia 41/444, Keldeo-Resolute 55/323
+      after p2: Sylveon 0/345, Volcanion 269/364
+
+  Turn 12
+      p2a <- Gengar-Mega comes in (261/261)
+      after p1: Cresselia 41/444, Keldeo-Resolute 55/323
+      after p2: Gengar-Mega 261/261, Volcanion 269/364
+
+  Turn 13
+    p1 greedy: move 2 2, move 2 2
+    p2 mcts: move 2 2, move 2 1
+      search (32000 visits): sludgebomb,1;steameruption,0 2450v 1760 | shadowball,1;steameruption,0 2023v 1435 | sludgebomb,0;steameruption,1 1338v 918 | sludgebomb,0;earthpower,1 1271v 867
+      p2a Gengar used Sludge Bomb -> p1b: Keldeo
+      p1b Keldeo fainted
+      p2b Volcanion used Steam Eruption -> p1a: Cresselia
+      p1a Cresselia fainted
+      after p1: Cresselia 0/444, Keldeo-Resolute 0/323
+      after p2: Gengar-Mega 261/261, Volcanion 269/364
+
+  Turn 14
+      p1a <- Weavile comes in (281/281)
+      after p1: Weavile 281/281, Keldeo-Resolute 0/323
+      after p2: Gengar-Mega 261/261, Volcanion 269/364
+
+  Turn 15
+    p1 greedy: move 1 2, pass
+    p2 mcts: switch 5, move 2 1   (slot0 Gengar-Mega -> Weavile)
+      search (57000 visits): switch weavile;steameruption,0 10428v 9805 | switch landorustherian;steameruption,0 7624v 7109 | sludgebomb,0;steameruption,0 5499v 5075 | sludgebomb,0;overheat,0 3027v 2727
+      p2a <- Weavile comes in (281/281)
+      p1a Weavile used Icicle Crash -> p2b: Volcanion
+              p2b Volcanion COULD NOT MOVE (flinch)
+      after p1: Weavile 281/281, Keldeo-Resolute 0/323
+      after p2: Weavile 281/281, Volcanion 236/364
+
+  Turn 16
+    p1 greedy: move 1 2, pass
+    p2 mcts: move 1 1, move 2 1
+      search (142000 visits): fakeout,0;steameruption,0 44379v 43859 | metalclaw,0;steameruption,0 19903v 19442 | fakeout,0;overheat,0 18921v 18467 | knockoff,0;steameruption,0 9763v 9393
+      p2a Weavile used Fake Out -> p1a: Weavile
+              p1a Weavile COULD NOT MOVE (flinch)
+      p2b Volcanion used Steam Eruption -> p1a: Weavile
+      p1a Weavile fainted
+      after p1: Weavile 0/281, Keldeo-Resolute 0/323
+      after p2: Weavile 253/281, Volcanion 236/364
+
+  RESULT: p2 wins

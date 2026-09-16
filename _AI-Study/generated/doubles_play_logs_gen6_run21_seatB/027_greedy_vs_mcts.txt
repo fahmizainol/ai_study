@@ -1,0 +1,206 @@
+battle 27   p1=greedy vs p2=mcts   mcts 300 ms a decision
+  p1: Untitled 488: Bisharp, Medicham-Mega, Talonflame, Amoonguss, Kingdra, Politoed
+  p2: ORAS Doubles OU: Charizard, Venusaur, Landorus-Therian, Rotom-Heat, Gastrodon, Aegislash
+
+  Turn 1
+    p1 greedy: move 2 1, move 2 1
+    p2 mcts: move 4 mega, move 2
+      search (26000 visits): heatwave-mega,0;protect,1 596v 317 | heatwave-mega,0;switch aegislash 568v 300 | heatwave-mega,0;switch landorustherian 529v 276 | heatwave,0;protect,1 465v 236
+      p2b Venusaur used Protect
+      p1a Bisharp used Sucker Punch -> p2a: Charizard
+      p1b Medicham used High Jump Kick -> p2a: Charizard
+      p2a Charizard fainted
+      after p1: Bisharp 244/271, Medicham-Mega 262/262
+      after p2: Charizard 0/359, Venusaur 301/301
+
+  Turn 2
+      p2a <- Landorus-Therian comes in (320/320)
+              p1a Bisharp atk 1 fell
+              p1a Bisharp atk 2 rose
+              p1b Medicham atk 1 fell
+      after p1: Bisharp 244/271, Medicham-Mega 262/262
+      after p2: Landorus-Therian 320/320, Venusaur 301/301
+
+  Turn 3
+    p1 greedy: move 2 1, move 2 1
+    p2 mcts: move 1, switch 4   (slot1 Venusaur -> Rotom-Heat)
+      search (29000 visits): earthquake,0;switch rotomheat 3152v 2394 | earthquake,0;protect,1 1506v 1089 | superpower,0;switch aegislash 800v 544 | uturn,0;switch aegislash 716v 480
+      p2b <- Rotom-Heat comes in (304/304)
+      p1a Bisharp used Sucker Punch -> p2a: Landorus
+      p2a Landorus fainted
+      p1b Medicham used High Jump Kick -> p2b: Rotom  [[miss]]
+              p1b Medicham -- MISSED
+      after p1: Bisharp 217/271, Medicham-Mega 131/262
+      after p2: Landorus-Therian 0/320, Rotom-Heat 304/304
+
+  Turn 4
+      p2a <- Venusaur comes in (301/301)
+      after p1: Bisharp 217/271, Medicham-Mega 131/262
+      after p2: Venusaur 301/301, Rotom-Heat 304/304
+
+  Turn 5
+    p1 greedy: move 2 1, move 2 1
+    p2 mcts: move 4 1, move 1 1
+      search (36000 visits): sleeppowder,0;thunderbolt,0 1172v 346 | sleeppowder,0;overheat,0 1031v 295 | protect,0;overheat,0 945v 264 | protect,0;thunderbolt,0 918v 255
+      p1a Bisharp used Sucker Punch  [[still]]
+              p1a Bisharp -- IT FAILED
+      p2a Venusaur used Sleep Powder -> p1a: Bisharp  [[miss]]
+              p2a Venusaur -- MISSED
+      p1b Medicham used High Jump Kick -> p2a: Venusaur
+      p2b Rotom used Thunderbolt -> p1a: Bisharp
+      after p1: Bisharp 69/271, Medicham-Mega 131/262
+      after p2: Venusaur 145/301, Rotom-Heat 304/304
+
+  Turn 6
+    p1 greedy: move 2 1, move 2 1
+    p2 mcts: move 3 1, move 4
+      search (40000 visits): solarbeam,0;protect,1 1331v 355 | sleeppowder,0;thunderbolt,0 1200v 312 | solarbeam,0;switch aegislash 1084v 275 | solarbeam,0;thunderbolt,1 1020v 254
+      p2b Rotom used Protect
+      p1a Bisharp used Sucker Punch -> p2a: Venusaur
+      p2a Venusaur fainted
+      p1b Medicham used High Jump Kick -> p2b: Rotom
+              p2b Rotom -- move: Protect
+      p1b Medicham fainted
+      after p1: Bisharp 42/271, Medicham-Mega 0/262
+      after p2: Venusaur 0/301, Rotom-Heat 304/304
+
+  Turn 7
+      p1b <- Talonflame comes in (319/319)
+      p2a <- Gastrodon comes in (425/425)
+      after p1: Bisharp 42/271, Talonflame 319/319
+      after p2: Gastrodon 425/425, Rotom-Heat 304/304
+
+  Turn 8
+    p1 greedy: move 2 1, move 2 1
+    p2 mcts: move 1, move 1 1
+      search (33000 visits): protect,0;thunderbolt,0 6315v 3703 | surf,0;protect,1 1870v 1006 | protect,0;thunderbolt,1 1759v 941 | earthpower,0;protect,1 1575v 833
+      p2a Gastrodon used Protect
+      p1b Talonflame used Brave Bird -> p2a: Gastrodon
+              p2a Gastrodon -- move: Protect
+      p1a Bisharp used Sucker Punch  [[still]]
+              p1a Bisharp -- IT FAILED
+      p2b Rotom used Thunderbolt -> p1a: Bisharp
+      p1a Bisharp fainted
+      after p1: Bisharp 0/271, Talonflame 319/319
+      after p2: Gastrodon 425/425, Rotom-Heat 304/304
+
+  Turn 9
+      p1a <- Amoonguss comes in (432/432)
+      after p1: Amoonguss 432/432, Talonflame 319/319
+      after p2: Gastrodon 425/425, Rotom-Heat 304/304
+
+  Turn 10
+    p1 greedy: move 3 1, move 2 1
+    p2 mcts: switch 6, move 3 1   (slot0 Gastrodon -> Aegislash)
+      search (28000 visits): switch aegislash;willowisp,0 1246v 548 | protect,0;thunderbolt,0 1235v 542 | protect,0;willowisp,0 1224v 537 | switch aegislash;thunderbolt,0 1105v 477
+      p2a <- Aegislash comes in (324/324)
+      p1b Talonflame used Brave Bird -> p2a: Aegislash
+      p2b Rotom used Will-O-Wisp -> p1a: Amoonguss
+              p1a Amoonguss is now brn
+      p1a Amoonguss used Energy Ball -> p2a: Aegislash
+              p2a Aegislash spd 1 fell
+      after p1: Amoonguss 378/432, Talonflame 261/319
+      after p2: Aegislash 212/324, Rotom-Heat 304/304
+
+  Turn 11
+    p1 greedy: move 3 1, move 2 1
+    p2 mcts: switch 6, move 1 1   (slot0 Aegislash -> Gastrodon)
+      search (27000 visits): switch gastrodon;thunderbolt,0 1465v 496 | switch gastrodon;protect,1 938v 290 | switch gastrodon;thunderbolt,1 915v 281 | shadowball,0;thunderbolt,0 815v 243
+      p2a <- Gastrodon comes in (425/425)
+      p1b Talonflame used Brave Bird -> p2a: Gastrodon
+      p2b Rotom used Thunderbolt -> p1a: Amoonguss
+      p1a Amoonguss used Energy Ball -> p2a: Gastrodon
+      p2a Gastrodon fainted
+      after p1: Amoonguss 267/432, Talonflame 134/319
+      after p2: Gastrodon 0/425, Rotom-Heat 304/304
+
+  Turn 12
+      p2a <- Aegislash comes in (212/324)
+      after p1: Amoonguss 267/432, Talonflame 134/319
+      after p2: Aegislash 212/324, Rotom-Heat 304/304
+
+  Turn 13
+    p1 greedy: move 3 1, move 2 1
+    p2 mcts: move 1 1, move 1 1
+      search (22000 visits): shadowball,0;thunderbolt,0 778v 128 | flashcannon,0;thunderbolt,0 707v 110 | shadowball,0;thunderbolt,1 701v 109 | shadowball,0;willowisp,0 627v 91
+      p1b Talonflame used Brave Bird -> p2a: Aegislash
+      p2b Rotom used Thunderbolt -> p1a: Amoonguss
+      p2a Aegislash used Shadow Ball -> p1a: Amoonguss
+      p1a Amoonguss used Energy Ball -> p2a: Aegislash
+      p1a Amoonguss fainted
+      after p1: Amoonguss 0/432, Talonflame 77/319
+      after p2: Aegislash-Blade 56/324, Rotom-Heat 304/304
+
+  Turn 14
+      p1a <- Kingdra comes in (291/291)
+      after p1: Kingdra 291/291, Talonflame 77/319
+      after p2: Aegislash-Blade 56/324, Rotom-Heat 304/304
+
+  Turn 15
+    p1 greedy: move 3 1, move 2 1
+    p2 mcts: move 3, move 4
+      search (42000 visits): wideguard,0;protect,1 15507v 6261 | shadowball,0;protect,1 2972v 1058 | wideguard,0;thunderbolt,0 2926v 1040 | flashcannon,0;protect,1 2316v 799
+      p2b Rotom used Protect
+      p2a Aegislash used Wide Guard
+      p1b Talonflame used Brave Bird -> p2a: Aegislash
+      p2a Aegislash fainted
+      p1a Kingdra used Draco Meteor -> p2b: Rotom
+              p2b Rotom -- move: Protect
+      after p1: Kingdra 291/291, Talonflame 28/319
+      after p2: Aegislash 0/324, Rotom-Heat 304/304
+
+  Turn 16
+    p1 greedy: move 3 2, move 2 2
+    p2 mcts: pass, move 4
+      search (45000 visits): No Move;protect,1 43995v 27299 | No Move;thunderbolt,0 272v 96 | No Move;willowisp,1 193v 58 | No Move;willowisp,0 186v 54
+      p2b Rotom used Protect
+      p1b Talonflame used Brave Bird -> p2b: Rotom
+              p2b Rotom -- move: Protect
+      p1a Kingdra used Draco Meteor -> p2b: Rotom
+              p2b Rotom -- move: Protect
+      after p1: Kingdra 291/291, Talonflame 28/319
+      after p2: Aegislash 0/324, Rotom-Heat 304/304
+
+  Turn 17
+    p1 greedy: move 3 2, move 2 2
+    p2 mcts: pass, move 4
+      search (50000 visits): No Move;protect,1 48591v 30341 | No Move;willowisp,1 295v 106 | No Move;overheat,1 270v 94 | No Move;willowisp,0 268v 93
+      p2b Rotom used Protect  [[still]]
+              p2b Rotom -- IT FAILED
+      p1b Talonflame used Brave Bird -> p2b: Rotom
+      p1b Talonflame fainted
+      p1a Kingdra used Draco Meteor -> p2b: Rotom  [[miss]]
+              p1a Kingdra -- MISSED
+      after p1: Kingdra 291/291, Talonflame 0/319
+      after p2: Aegislash 0/324, Rotom-Heat 214/304
+
+  Turn 18
+      p1b <- Politoed comes in (384/384)
+      after p1: Kingdra 291/291, Politoed 384/384
+      after p2: Aegislash 0/324, Rotom-Heat 214/304
+
+  Turn 19
+    p1 greedy: move 3 2, move 1 2
+    p2 mcts: pass, move 4
+      search (87000 visits): No Move;protect,1 86734v 63196 | No Move;willowisp,0 48v 2 | No Move;thunderbolt,0 45v 1 | No Move;thunderbolt,1 45v 1
+      p2b Rotom used Protect
+      p1a Kingdra used Draco Meteor -> p2b: Rotom
+              p2b Rotom -- move: Protect
+      p1b Politoed used Scald -> p2b: Rotom
+              p2b Rotom -- move: Protect
+      after p1: Kingdra 291/291, Politoed 384/384
+      after p2: Aegislash 0/324, Rotom-Heat 214/304
+
+  Turn 20
+    p1 greedy: move 3 2, move 1 2
+    p2 mcts: pass, move 4
+      search (102000 visits): No Move;protect,1 101745v 74897 | No Move;thunderbolt,0 46v 2 | No Move;thunderbolt,1 43v 1 | No Move;overheat,1 43v 1
+      p2b Rotom used Protect  [[still]]
+              p2b Rotom -- IT FAILED
+      p1a Kingdra used Draco Meteor -> p2b: Rotom
+              p1a Kingdra spa 2 fell
+      p2b Rotom fainted
+      after p1: Kingdra 291/291, Politoed 384/384
+      after p2: Aegislash 0/324, Rotom-Heat 0/304
+
+  RESULT: p1 wins

@@ -1,0 +1,250 @@
+battle 37   p1=greedy vs p2=mcts   mcts 300 ms a decision
+  p1: ORAS Doubles OU: Cresselia, Rotom-Wash, Ferrothorn, Camerupt-Mega, Hariyama, Porygon2
+  p2: Untitled 481: Manectric-Mega, Gastrodon, Volcarona, Hariyama, Aegislash, Amoonguss
+
+  Turn 1
+    p1 greedy: move 1 1, move 2 1
+    p2 mcts: move 3, move 1
+      search (14000 visits): snarl,0;stringshot,0 449v 404 | snarl,0;stringshot,1 431v 386 | snarl,0;recover,1 402v 357 | snarl,0;icebeam,0 333v 288
+      p2a Manectric used Snarl -> p1b: Rotom  [[spread] p1a,p1b]
+              p1a Cresselia spa 1 fell
+              p1b Rotom spa 1 fell
+      p1b Rotom used Hydro Pump -> p2b: Gastrodon
+              p2b Gastrodon -- ability: Storm Drain
+              p2b Gastrodon spa 1 rose
+      p1a Cresselia used Psychic -> p2a: Manectric
+      p2b Gastrodon used String Shot -> p1b: Rotom  [[spread] p1a,p1b]
+              p1a Cresselia spe 2 fell
+              p1b Rotom spe 2 fell
+      after p1: Cresselia 375/443, Rotom-Wash 256/301
+      after p2: Manectric-Mega 248/344, Gastrodon 426/426
+
+  Turn 2
+    p1 greedy: move 1 1, move 2 1
+    p2 mcts: move 3, move 1
+      search (13000 visits): snarl,0;stringshot,0 1098v 757 | snarl,0;stringshot,1 621v 398 | snarl,0;earthpower,0 312v 178 | hiddenpower,0;stringshot,1 298v 168
+      p2a Manectric used Snarl -> p1b: Rotom  [[spread] p1a,p1b]
+              p1a Cresselia spa 1 fell
+              p1b Rotom spa 1 fell
+      p2b Gastrodon used String Shot -> p1b: Rotom  [[spread] p1a,p1b]
+              p1a Cresselia spe 2 fell
+              p1b Rotom spe 2 fell
+      p1b Rotom used Hydro Pump -> p2b: Gastrodon
+              p2b Gastrodon -- ability: Storm Drain
+              p2b Gastrodon spa 1 rose
+      p1a Cresselia used Psychic -> p2a: Manectric
+              p2a Manectric spd 1 fell
+      after p1: Cresselia 303/443, Rotom-Wash 214/301
+      after p2: Manectric-Mega 185/344, Gastrodon 426/426
+
+  Turn 3
+    p1 greedy: move 1 1, move 2 1
+    p2 mcts: move 2 2, move 2 2
+      search (22000 visits): overheat,1;earthpower,1 10523v 10310 | snarl,0;earthpower,0 376v 201 | snarl,0;stringshot,0 272v 135 | overheat,1;earthpower,0 239v 114
+      p2a Manectric used Overheat -> p1b: Rotom  [[miss]]
+              p2a Manectric -- MISSED
+      p2b Gastrodon used Earth Power -> p1b: Rotom
+              p1b Rotom -- IMMUNE
+      p1b Rotom used Hydro Pump -> p2b: Gastrodon
+              p2b Gastrodon -- ability: Storm Drain
+              p2b Gastrodon spa 1 rose
+      p1a Cresselia used Psychic -> p2a: Manectric
+      after p1: Cresselia 303/443, Rotom-Wash 214/301
+      after p2: Manectric-Mega 94/344, Gastrodon 426/426
+
+  Turn 4
+    p1 greedy: move 1 1, move 2 1
+    p2 mcts: switch 6, move 2 2   (slot0 Manectric-Mega -> Amoonguss)
+      search (24000 visits): switch amoonguss;earthpower,1 7839v 7435 | snarl,0;earthpower,0 991v 559 | hiddenpower,0;earthpower,0 622v 328 | snarl,0;earthpower,1 581v 303
+      p2a <- Amoonguss comes in (432/432)
+      p2b Gastrodon used Earth Power -> p1b: Rotom
+              p1b Rotom -- IMMUNE
+      p1b Rotom used Hydro Pump -> p2b: Gastrodon
+              p2b Gastrodon -- ability: Storm Drain
+              p2b Gastrodon spa 1 rose
+      p1a Cresselia used Psychic -> p2a: Amoonguss
+      after p1: Cresselia 303/443, Rotom-Wash 214/301
+      after p2: Amoonguss 316/432, Gastrodon 426/426
+
+  Turn 5
+    p1 greedy: move 1 1, move 2 1
+    p2 mcts: move 3 1, switch 6   (slot1 Gastrodon -> Manectric-Mega)
+      search (96000 visits): gigadrain,0;switch manectricmega 30476v 7272 | gigadrain,1;earthpower,0 10073v 2199 | switch aegislash;switch hariyama 6421v 1325 | switch hariyama;icebeam,1 4187v 804
+      p2b <- Manectric-Mega comes in (94/344)
+      p2a Amoonguss used Giga Drain -> p1a: Cresselia
+      p1b Rotom used Hydro Pump -> p2a: Amoonguss
+      p1a Cresselia used Psychic -> p2a: Amoonguss
+              p2a Amoonguss -- critical hit
+      p2a Amoonguss fainted
+      after p1: Cresselia 248/443, Rotom-Wash 214/301
+      after p2: Amoonguss 0/432, Manectric-Mega 94/344
+
+  Turn 6
+      p2a <- Volcarona comes in (334/334)
+      after p1: Cresselia 248/443, Rotom-Wash 214/301
+      after p2: Volcarona 334/334, Manectric-Mega 94/344
+
+  Turn 7
+    p1 greedy: move 1 2, move 2 2
+    p2 mcts: move 3, move 3
+      search (17000 visits): quiverdance,0;snarl,0 1073v 443 | heatwave,0;snarl,0 699v 266 | quiverdance,0;hiddenpower,0 693v 264 | quiverdance,0;hiddenpower,1 573v 208
+      p2b Manectric used Snarl -> p1b: Rotom  [[spread] p1a,p1b]
+              p1b Rotom -- critical hit
+              p1a Cresselia spa 1 fell
+              p1b Rotom spa 1 fell
+              p1b Rotom used up its Sitrus Berry
+              p1a Cresselia used up its Sitrus Berry
+      p2a Volcarona used Quiver Dance
+              p2a Volcarona spa 1 rose
+              p2a Volcarona spd 1 rose
+              p2a Volcarona spe 1 rose
+      p1b Rotom used Hydro Pump -> p2b: Manectric
+      p2b Manectric fainted
+      p1a Cresselia used Psychic -> p2a: Volcarona
+      after p1: Cresselia 290/443, Rotom-Wash 220/301
+      after p2: Volcarona 326/334, Manectric-Mega 0/344
+
+  Turn 8
+      p2b <- Hariyama comes in (429/429)
+      after p1: Cresselia 290/443, Rotom-Wash 220/301
+      after p2: Volcarona 326/334, Hariyama 429/429
+
+  Turn 9
+    p1 greedy: move 1 1, move 2 1
+    p2 mcts: move 3, switch 5   (slot1 Hariyama -> Aegislash)
+      search (26000 visits): quiverdance,0;switch aegislash 522v 29 | gigadrain,0;switch gastrodon 499v 25 | gigadrain,0;switch aegislash 498v 25 | gigadrain,1;switch gastrodon 494v 25
+      p2b <- Aegislash comes in (324/324)
+      p2a Volcarona used Quiver Dance
+              p2a Volcarona spa 1 rose
+              p2a Volcarona spd 1 rose
+              p2a Volcarona spe 1 rose
+      p1b Rotom used Hydro Pump -> p2a: Volcarona
+      p1a Cresselia used Psychic -> p2a: Volcarona
+              p2a Volcarona spd 1 fell
+      after p1: Cresselia 290/443, Rotom-Wash 220/301
+      after p2: Volcarona 253/334, Aegislash 324/324
+
+  Turn 10
+    p1 greedy: move 1 1, move 2 1
+    p2 mcts: move 2 2, move 1
+      search (21000 visits): gigadrain,1;substitute,1 1963v 573 | gigadrain,1;flashcannon,0 1082v 278 | gigadrain,1;shadowball,0 960v 239 | gigadrain,1;flashcannon,1 905v 221
+      p2a Volcarona used Giga Drain -> p1b: Rotom
+      p1b Rotom fainted
+      p2b Aegislash used Substitute
+              p2b Aegislash gained Substitute
+      p1a Cresselia used Psychic -> p2a: Volcarona
+      after p1: Cresselia 290/443, Rotom-Wash 0/301
+      after p2: Volcarona 324/334, Aegislash 263/324
+
+  Turn 11
+      p1b <- Ferrothorn comes in (351/351)
+      after p1: Cresselia 290/443, Ferrothorn 351/351
+      after p2: Volcarona 324/334, Aegislash 263/324
+
+  Turn 12
+    p1 greedy: move 1 2, move 3 2
+    p2 mcts: move 1, move 1
+      search (23000 visits): heatwave,0;substitute,1 1557v 460 | heatwave,0;flashcannon,0 1379v 397 | heatwave,0;shadowball,0 1243v 350 | heatwave,0;shadowball,1 1124v 309
+      p2a Volcarona used Heat Wave -> p1b: Ferrothorn  [[spread] p1b]
+              p2a Volcarona -- MISSED
+      p1b Ferrothorn fainted
+      p2b Aegislash used Substitute
+              p2b Aegislash -- IT FAILED
+      p1a Cresselia used Psychic -> p2b: Aegislash
+              p2b Aegislash -- move: Substitute
+      after p1: Cresselia 290/443, Ferrothorn 0/351
+      after p2: Volcarona 334/334, Aegislash 283/324
+
+  Turn 13
+      p1b <- Camerupt-Mega comes in (343/343)
+      after p1: Cresselia 290/443, Camerupt-Mega 343/343
+      after p2: Volcarona 334/334, Aegislash 283/324
+
+  Turn 14
+    p1 greedy: move 1 2, move 1
+    p2 mcts: move 2 2, move 3 2
+      search (19000 visits): gigadrain,1;flashcannon,1 933v 227 | gigadrain,1;substitute,1 854v 202 | gigadrain,1;shadowball,1 854v 202 | gigadrain,1;flashcannon,0 799v 185
+      p2a Volcarona used Giga Drain -> p1b: Camerupt
+      p2b Aegislash used Flash Cannon -> p1b: Camerupt
+      p1a Cresselia used Psychic -> p2b: Aegislash
+              p2b Aegislash -- move: Substitute
+      p1b Camerupt used Heat Wave -> p2b: Aegislash  [[spread] p2a,p2b]
+              p2b Aegislash lost Substitute
+      after p1: Cresselia 290/443, Camerupt-Mega 115/343
+      after p2: Volcarona 249/334, Aegislash-Blade 303/324
+
+  Turn 15
+    p1 greedy: move 1 1, move 1
+    p2 mcts: move 1, move 2 2
+      search (26000 visits): heatwave,0;shadowball,1 1216v 277 | heatwave,0;substitute,1 1100v 243 | gigadrain,0;shadowball,1 1028v 222 | heatwave,0;flashcannon,0 894v 184
+      p2a Volcarona used Heat Wave -> p1a: Cresselia  [[spread] p1a]
+              p2a Volcarona -- MISSED
+      p2b Aegislash used Shadow Ball -> p1b: Camerupt
+      p1b Camerupt fainted
+      p1a Cresselia used Psychic -> p2a: Volcarona
+      after p1: Cresselia 124/443, Camerupt-Mega 0/343
+      after p2: Volcarona 242/334, Aegislash-Blade 323/324
+
+  Turn 16
+      p1b <- Hariyama comes in (429/429)
+      after p1: Cresselia 124/443, Hariyama 429/429
+      after p2: Volcarona 242/334, Aegislash-Blade 323/324
+
+  Turn 17
+    p1 greedy: move 1 1, move 2 1
+    p2 mcts: move 2 2, move 1
+      search (25000 visits): gigadrain,1;substitute,1 3197v 952 | gigadrain,1;shadowball,1 1669v 447 | gigadrain,1;flashcannon,1 1428v 369 | gigadrain,1;flashcannon,0 1392v 357
+      p2a Volcarona used Giga Drain -> p1b: Hariyama
+      p2b Aegislash used Substitute
+              p2b Aegislash gained Substitute
+      p1b Hariyama used Close Combat -> p2a: Volcarona
+              p1b Hariyama def 1 fell
+              p1b Hariyama spd 1 fell
+              p1b Hariyama is now brn
+      p1a Cresselia used Psychic -> p2a: Volcarona
+      after p1: Cresselia 124/443, Hariyama 170/429
+      after p2: Volcarona 222/334, Aegislash-Blade 262/324
+
+  Turn 18
+    p1 greedy: move 1 1, move 2 1
+    p2 mcts: move 2 1, move 1
+      search (35000 visits): gigadrain,0;substitute,1 8618v 4142 | gigadrain,0;flashcannon,1 4304v 1979 | gigadrain,0;shadowball,1 3562v 1613 | gigadrain,1;substitute,1 1593v 661
+      p2a Volcarona used Giga Drain -> p1a: Cresselia
+      p1a Cresselia fainted
+      p2b Aegislash used Substitute
+              p2b Aegislash -- IT FAILED
+      p1b Hariyama used Close Combat -> p2a: Volcarona
+              p2a Volcarona -- critical hit
+              p1b Hariyama def 1 fell
+              p1b Hariyama spd 1 fell
+      after p1: Cresselia 0/443, Hariyama 117/429
+      after p2: Volcarona 36/334, Aegislash-Blade 282/324
+
+  Turn 19
+      p1a <- Porygon2 comes in (374/374)
+              p1a Porygon2 atk 1 rose
+      after p1: Porygon2 374/374, Hariyama 117/429
+      after p2: Volcarona 36/334, Aegislash-Blade 282/324
+
+  Turn 20
+    p1 greedy: move 2 1, move 2 1
+    p2 mcts: move 2 1, move 3 2
+      search (41000 visits): gigadrain,0;flashcannon,1 9930v 5654 | gigadrain,0;shadowball,1 5891v 3191 | gigadrain,0;substitute,1 3161v 1643 | gigadrain,0;flashcannon,0 2529v 1290
+      p2a Volcarona used Giga Drain -> p1a: Porygon2
+      p2b Aegislash used Flash Cannon -> p1b: Hariyama
+      p1b Hariyama fainted
+      p1a Porygon2 used Ice Beam -> p2a: Volcarona
+      after p1: Porygon2 268/374, Hariyama 0/429
+      after p2: Volcarona 85/334, Aegislash-Blade 302/324
+
+  Turn 21
+    p1 greedy: move 2 1, pass
+    p2 mcts: move 1, move 3 1
+      search (446000 visits): heatwave,0;flashcannon,0 440623v 421037 | gigadrain,0;kingsshield,1 1180v 960 | heatwave,0;switch hariyama 419v 299 | heatwave,0;switch gastrodon 332v 227
+      p2a Volcarona used Heat Wave -> p1a: Porygon2
+      p2b Aegislash used Flash Cannon -> p1a: Porygon2
+      p1a Porygon2 fainted
+      after p1: Porygon2 0/374, Hariyama 0/429
+      after p2: Volcarona 85/334, Aegislash-Blade 302/324
+
+  RESULT: p2 wins

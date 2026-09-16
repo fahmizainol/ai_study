@@ -1,0 +1,106 @@
+battle 24   p1=greedy vs p2=mcts   mcts 300 ms a decision
+  p1: Untitled 574: Altaria-Mega, Amoonguss, Genesect, Scrafty, Thundurus, Volcanion
+  p2: Untitled 404: Gardevoir-Mega, Landorus, Porygon2, Tyranitar, Scizor, Blastoise
+
+  Turn 1
+    p1 greedy: move 1, move 3 1
+    p2 mcts: move 1, move 1 2
+      search (24000 visits): hypervoice,0;earthpower,1 1552v 1244 | hypervoice,0;earthpower,0 1154v 904 | hypervoice,0;rockslide,0 1053v 818 | hypervoice,0;uturn,1 1040v 807
+      p2b Landorus used Earth Power -> p1b: Amoonguss
+      p1a Altaria used Dragon Dance
+              p1a Altaria atk 1 rose
+              p1a Altaria spe 1 rose
+      p2a Gardevoir used Hyper Voice -> p1b: Amoonguss  [[spread] p1a,p1b]
+      p1a Altaria fainted
+      p1b Amoonguss used Energy Ball -> p2a: Gardevoir
+      after p1: Altaria-Mega 0/348, Amoonguss 189/432
+      after p2: Gardevoir-Mega 271/340, Landorus 319/319
+
+  Turn 2
+      p1a <- Genesect comes in (283/283)
+              p1a Genesect atk 1 rose
+      after p1: Genesect 283/283, Amoonguss 189/432
+      after p2: Gardevoir-Mega 271/340, Landorus 319/319
+
+  Turn 3
+    p1 greedy: move 3 1, move 3 1
+    p2 mcts: move 4, move 1 1
+      search (26000 visits): protect,0;earthpower,0 3634v 2488 | hypervoice,0;earthpower,0 2396v 1599 | switch porygon2;earthpower,0 2293v 1526 | psyshock,1;earthpower,0 1375v 877
+      p2a Gardevoir used Protect
+      p2b Landorus used Earth Power -> p1a: Genesect
+      p1a Genesect used Ice Beam -> p2a: Gardevoir
+              p2a Gardevoir -- move: Protect
+      p1b Amoonguss used Energy Ball -> p2a: Gardevoir
+              p2a Gardevoir -- move: Protect
+      after p1: Genesect 93/283, Amoonguss 189/432
+      after p2: Gardevoir-Mega 271/340, Landorus 319/319
+
+  Turn 4
+    p1 greedy: move 3 1, move 3 1
+    p2 mcts: move 3 2, move 1 1
+      search (22000 visits): psyshock,1;earthpower,0 1874v 1465 | hypervoice,0;earthpower,0 1414v 1083 | hypervoice,0;switch porygon2 1069v 800 | hypervoice,0;switch scizor 880v 646
+      p2b Landorus used Earth Power -> p1a: Genesect
+      p1a Genesect fainted
+      p2a Gardevoir used Psyshock -> p1b: Amoonguss
+      p1b Amoonguss fainted
+      after p1: Genesect 0/283, Amoonguss 0/432
+      after p2: Gardevoir-Mega 271/340, Landorus 319/319
+
+  Turn 5
+      p1a <- Scrafty comes in (334/334)
+      p1b <- Thundurus comes in (342/342)
+              p2a Gardevoir atk 1 fell
+              p2b Landorus atk 1 fell
+      after p1: Scrafty 334/334, Thundurus 342/342
+      after p2: Gardevoir-Mega 271/340, Landorus 319/319
+
+  Turn 6
+    p1 greedy: move 2 1, move 2 1
+    p2 mcts: move 1, move 1 1
+      search (18000 visits): hypervoice,0;earthpower,0 1349v 1162 | hypervoice,0;switch porygon2 1325v 1140 | hypervoice,0;switch tyranitar 1106v 939 | hypervoice,0;switch scizor 986v 829
+      p2b Landorus used Earth Power -> p1a: Scrafty
+      p1b Thundurus used Thunderbolt -> p2a: Gardevoir
+      p2a Gardevoir used Hyper Voice -> p1b: Thundurus  [[spread] p1a,p1b]
+      p1a Scrafty fainted
+      after p1: Scrafty 0/334, Thundurus 129/342
+      after p2: Gardevoir-Mega 168/340, Landorus 319/319
+
+  Turn 7
+      p1a <- Volcanion comes in (364/364)
+      after p1: Volcanion 364/364, Thundurus 129/342
+      after p2: Gardevoir-Mega 168/340, Landorus 319/319
+
+  Turn 8
+    p1 greedy: move 4 1, move 2 1
+    p2 mcts: move 3 1, move 1 1
+      search (34000 visits): psyshock,0;earthpower,0 16007v 13976 | hypervoice,0;earthpower,0 6324v 5386 | psyshock,1;earthpower,0 1428v 1126 | switch tyranitar;earthpower,0 651v 475
+      p2b Landorus used Earth Power -> p1a: Volcanion
+      p1b Thundurus used Thunderbolt -> p2a: Gardevoir
+      p2a Gardevoir used Psyshock -> p1a: Volcanion
+      p1a Volcanion fainted
+      after p1: Volcanion 0/364, Thundurus 129/342
+      after p2: Gardevoir-Mega 54/340, Landorus 319/319
+
+  Turn 9
+    p1 greedy: pass, move 2 1
+    p2 mcts: switch 4, switch 3   (slot0 Gardevoir-Mega -> Tyranitar; slot1 Landorus -> Porygon2)
+      search (43000 visits): switch tyranitar;switch porygon2 12381v 10173 | protect,0;switch porygon2 2310v 1727 | protect,0;switch tyranitar 2307v 1725 | switch tyranitar;switch scizor 1807v 1329
+      p2b <- Porygon2 comes in (374/374)
+              p2b Porygon2 atk 1 rose
+      p2a <- Tyranitar comes in (404/404)
+      p1b Thundurus used Thunderbolt -> p2a: Tyranitar
+      after p1: Volcanion 0/364, Thundurus 108/342
+      after p2: Tyranitar 307/404, Porygon2 351/374
+
+  Turn 10
+    p1 greedy: pass, move 2 1
+    p2 mcts: move 1, move 3 2
+      search (89000 visits): rockslide,1;hiddenpower,1 19930v 19067 | rockslide,1;thunderbolt,1 18075v 17258 | lowkick,1;thunderbolt,1 6928v 6464 | rockslide,1;switch landorus 5504v 5096
+      p1b Thundurus used Thunderbolt -> p2a: Tyranitar
+      p2b Porygon2 used Hidden Power -> p1b: Thundurus
+      p2a Tyranitar used Rock Slide -> p1b: Thundurus
+      p1b Thundurus fainted
+      after p1: Volcanion 0/364, Thundurus 0/342
+      after p2: Tyranitar 217/404, Porygon2 351/374
+
+  RESULT: p2 wins

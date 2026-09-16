@@ -1,0 +1,327 @@
+battle 18   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: Untitled 468: Kangaskhan-Mega, Aegislash, Sylveon, Volcanion, Landorus-Therian, Thundurus
+  p2: for akaru 1: Gengar-Mega, Volcanion, Genesect, Landorus-Therian, Cresselia, Conkeldurr
+
+  Turn 1
+    p1 mcts: move 1 2, move 3
+      search (33000 visits): fakeout,1;substitute,1 479v 457 | switch thundurus;switch volcanion 446v 422 | protect,0;substitute,1 432v 407 | fakeout,1;shadowball,0 428v 403
+    p2 greedy: move 1 1, move 4 1
+      p1a Kangaskhan used Fake Out -> p2b: Volcanion
+      p2a Gengar used Shadow Ball -> p1a: Kangaskhan
+              p1a Kangaskhan -- IMMUNE
+              p2b Volcanion COULD NOT MOVE (flinch)
+      p1b Aegislash used Substitute
+              p1b Aegislash gained Substitute
+      after p1: Kangaskhan-Mega 414/414, Aegislash 263/324
+      after p2: Gengar-Mega 324/324, Volcanion 288/364
+
+  Turn 2
+    p1 mcts: switch 6, switch 4   (slot0 Kangaskhan-Mega -> Thundurus; slot1 Aegislash -> Volcanion)
+      search (28000 visits): switch thundurus;switch volcanion 427v 390 | suckerpunch,0;substitute,1 413v 376 | switch thundurus;switch landorustherian 409v 371 | protect,0;substitute,1 402v 364
+    p2 greedy: move 1 2, move 4 2
+      p1a <- Thundurus comes in (361/361)
+      p1b <- Volcanion comes in (363/363)
+      p2a Gengar used Shadow Ball -> p1b: Volcanion
+      p2b Volcanion used Overheat -> p1b: Volcanion
+              p2b Volcanion spa 2 fell
+      after p1: Thundurus 361/361, Volcanion 236/363
+      after p2: Gengar-Mega 324/324, Volcanion 288/364
+
+  Turn 3
+    p1 mcts: move 1 2, move 2 1
+      search (6000 visits): thunderbolt,1;steameruption,0 87v 53 | thunderbolt,1;heatwave,0 86v 52 | thunderbolt,0;heatwave,0 84v 50 | toxic,1;heatwave,0 83v 49
+    p2 greedy: move 1 2, move 4 2
+      p2a Gengar used Shadow Ball -> p1b: Volcanion
+      p1a Thundurus used Thunderbolt -> p2b: Volcanion
+      p2b Volcanion used Overheat -> p1b: Volcanion
+              p2b Volcanion spa 2 fell
+      p1b Volcanion used Steam Eruption -> p2a: Gengar
+      after p1: Thundurus 361/361, Volcanion 138/363
+      after p2: Gengar-Mega 159/324, Volcanion 132/364
+
+  Turn 4
+    p1 mcts: move 2 1, move 1
+      search (11000 visits): thunderwave,0;heatwave,0 210v 122 | thunderbolt,0;heatwave,0 187v 105 | toxic,1;heatwave,0 163v 88 | thunderwave,1;heatwave,0 158v 84
+    p2 greedy: move 1 2, move 4 2
+      p1a Thundurus used Thunder Wave -> p2a: Gengar
+              p2a Gengar is now par
+      p2a Gengar used Shadow Ball -> p1b: Volcanion
+              p1b Volcanion spd 1 fell
+      p2b Volcanion used Overheat -> p1b: Volcanion
+              p2b Volcanion spa 2 fell
+      p1b Volcanion used Heat Wave -> p2a: Gengar  [[spread] p2a,p2b]
+      after p1: Thundurus 361/361, Volcanion 37/363
+      after p2: Gengar-Mega 57/324, Volcanion 114/364
+
+  Turn 5
+    p1 mcts: move 1 2, move 1
+      search (18000 visits): thunderbolt,1;heatwave,0 419v 245 | thunderwave,1;heatwave,0 380v 218 | hiddenpower,1;heatwave,0 366v 209 | toxic,1;heatwave,0 362v 206
+    p2 greedy: move 1 2, move 4 2
+      p1a Thundurus used Thunderbolt -> p2b: Volcanion
+      p2b Volcanion fainted
+      p1b Volcanion used Heat Wave -> p2a: Gengar  [[miss]]
+              p1b Volcanion -- MISSED
+      p2a Gengar used Shadow Ball -> p1b: Volcanion
+      p1b Volcanion fainted
+      after p1: Thundurus 361/361, Volcanion 0/363
+      after p2: Gengar-Mega 57/324, Volcanion 0/364
+
+  Turn 6
+      p2b <- Genesect comes in (283/283)
+      p1b <- Sylveon comes in (394/394)
+              p2b Genesect atk 1 rose
+      after p1: Thundurus 361/361, Sylveon 394/394
+      after p2: Gengar-Mega 57/324, Genesect 283/283
+
+  Turn 7
+    p1 mcts: move 1 2, move 3
+      search (41000 visits): thunderbolt,1;substitute,1 3899v 2703 | thunderbolt,1;protect,1 2806v 1909 | thunderwave,1;substitute,1 1712v 1123 | thunderwave,1;protect,1 1379v 887
+    p2 greedy: move 1 1, move 4
+      p2b Genesect used Explosion -> p1b: Sylveon  [[spread] p1a,p1b]
+              p2a Gengar -- IMMUNE
+      p2b Genesect fainted
+      p1a Thundurus fainted
+      p1b Sylveon fainted
+      p2a Gengar used Shadow Ball -> p1: Thundurus  [[notarget]]
+              p2a Gengar -- IT FAILED
+      after p1: Thundurus 0/361, Sylveon 0/394
+      after p2: Gengar-Mega 57/324, Genesect 0/283
+
+  Turn 8
+      p2b <- Landorus-Therian comes in (319/319)
+      p1a <- Aegislash comes in (263/324)
+      p1b <- Landorus-Therian comes in (320/320)
+              p1a Aegislash atk 1 fell
+              p1b Landorus atk 1 fell
+              p2a Gengar atk 1 fell
+              p2b Landorus atk 1 fell
+      after p1: Aegislash 263/324, Landorus-Therian 320/320
+      after p2: Gengar-Mega 57/324, Landorus-Therian 319/319
+
+  Turn 9
+    p1 mcts: switch 6, move 2 2   (slot0 Aegislash -> Kangaskhan-Mega)
+      search (17000 visits): switch kangaskhanmega;uturn,1 2011v 1353 | shadowball,1;uturn,1 936v 587 | shadowball,1;uturn,0 778v 477 | switch kangaskhanmega;uturn,0 740v 450
+    p2 greedy: move 1 1, move 4 1
+      p1a <- Kangaskhan-Mega comes in (414/414)
+      p2b Landorus used Superpower -> p1a: Kangaskhan
+              p2b Landorus atk 1 fell
+              p2b Landorus def 1 fell
+      p1b Landorus used U-turn -> p2b: Landorus
+      after p1: Kangaskhan-Mega 206/414, Landorus-Therian 320/320
+      after p2: Gengar-Mega 57/324, Landorus-Therian 275/319
+
+  Turn 10
+      p1b <- Aegislash comes in (263/324)
+      p2a Gengar used Shadow Ball -> p1a: Kangaskhan
+              p1a Kangaskhan -- IMMUNE
+      after p1: Kangaskhan-Mega 206/414, Aegislash 283/324
+      after p2: Gengar-Mega 57/324, Landorus-Therian 275/319
+
+  Turn 11
+    p1 mcts: move 4, move 3
+      search (48000 visits): protect,0;substitute,1 21354v 13230 | suckerpunch,0;substitute,1 3477v 1988 | seismictoss,0;substitute,1 3019v 1709 | suckerpunch,1;substitute,1 2591v 1449
+    p2 greedy: move 1 1, move 4 1
+      p1a Kangaskhan used Protect
+      p2b Landorus used Superpower -> p1a: Kangaskhan
+              p1a Kangaskhan -- move: Protect
+      p1b Aegislash used Substitute
+              p1b Aegislash gained Substitute
+      p2a Gengar used Shadow Ball -> p1a: Kangaskhan
+              p1a Kangaskhan -- IMMUNE
+      after p1: Kangaskhan-Mega 206/414, Aegislash 222/324
+      after p2: Gengar-Mega 57/324, Landorus-Therian 275/319
+
+  Turn 12
+    p1 mcts: move 4, move 3
+      search (50000 visits): protect,0;substitute,1 14927v 7744 | suckerpunch,0;substitute,1 4727v 2312 | seismictoss,0;substitute,1 3442v 1643 | fakeout,1;substitute,1 3217v 1527
+    p2 greedy: move 1 1, move 4 1
+      p1a Kangaskhan used Protect
+      p2b Landorus used Superpower -> p1a: Kangaskhan
+              p1a Kangaskhan -- move: Protect
+      p1b Aegislash used Substitute
+              p1b Aegislash -- IT FAILED
+      p2a Gengar used Shadow Ball -> p1a: Kangaskhan
+              p1a Kangaskhan -- IMMUNE
+      after p1: Kangaskhan-Mega 206/414, Aegislash 242/324
+      after p2: Gengar-Mega 57/324, Landorus-Therian 275/319
+
+  Turn 13
+    p1 mcts: move 4, move 3
+      search (48000 visits): protect,0;substitute,1 18654v 9587 | suckerpunch,0;substitute,1 3065v 1423 | fakeout,1;substitute,1 2549v 1162 | fakeout,0;substitute,1 2288v 1031
+    p2 greedy: move 1 1, move 4 1
+      p1a Kangaskhan used Protect  [[still]]
+              p1a Kangaskhan -- IT FAILED
+      p2b Landorus used Superpower -> p1a: Kangaskhan
+              p2b Landorus atk 1 fell
+              p2b Landorus def 1 fell
+      p1b Aegislash used Substitute
+              p1b Aegislash -- IT FAILED
+      p2a Gengar used Shadow Ball -> p1a: Kangaskhan
+              p1a Kangaskhan -- IMMUNE
+      after p1: Kangaskhan-Mega 56/414, Aegislash 262/324
+      after p2: Gengar-Mega 57/324, Landorus-Therian 275/319
+
+  Turn 14
+    p1 mcts: move 4, move 3
+      search (49000 visits): protect,0;substitute,1 7487v 2833 | suckerpunch,0;substitute,1 4565v 1659 | seismictoss,0;substitute,1 3960v 1419 | fakeout,0;substitute,1 3414v 1204
+    p2 greedy: move 1 1, move 4 1
+      p1a Kangaskhan used Protect
+      p2b Landorus used Superpower -> p1a: Kangaskhan
+              p1a Kangaskhan -- move: Protect
+      p1b Aegislash used Substitute
+              p1b Aegislash -- IT FAILED
+      p2a Gengar used Shadow Ball -> p1a: Kangaskhan
+              p1a Kangaskhan -- IMMUNE
+      after p1: Kangaskhan-Mega 56/414, Aegislash 282/324
+      after p2: Gengar-Mega 57/324, Landorus-Therian 275/319
+
+  Turn 15
+    p1 mcts: move 4, move 3
+      search (52000 visits): protect,0;substitute,1 6563v 2509 | suckerpunch,0;substitute,1 5421v 2041 | seismictoss,0;substitute,1 4266v 1572 | fakeout,1;substitute,1 3733v 1357
+    p2 greedy: move 1 1, move 4 1
+      p1a Kangaskhan used Protect  [[still]]
+              p1a Kangaskhan -- IT FAILED
+      p2b Landorus used Superpower -> p1a: Kangaskhan
+              p2b Landorus atk 1 fell
+              p2b Landorus def 1 fell
+      p1a Kangaskhan fainted
+      p1b Aegislash used Substitute
+              p1b Aegislash -- IT FAILED
+      p2a Gengar used Shadow Ball -> p1b: Aegislash
+              p1b Aegislash lost Substitute
+      after p1: Kangaskhan-Mega 0/414, Aegislash 302/324
+      after p2: Gengar-Mega 57/324, Landorus-Therian 275/319
+
+  Turn 16
+      p1a <- Landorus-Therian comes in (320/320)
+              p2a Gengar atk 1 fell
+              p2b Landorus atk 1 fell
+      after p1: Landorus-Therian 320/320, Aegislash 302/324
+      after p2: Gengar-Mega 57/324, Landorus-Therian 275/319
+
+  Turn 17
+    p1 mcts: move 2 2, move 3
+      search (40000 visits): uturn,1;substitute,1 4186v 1351 | uturn,0;substitute,1 2562v 776 | earthpower,1;substitute,1 2077v 608 | uturn,1;shadowball,1 1902v 548
+    p2 greedy: move 1 2, move 4 2
+      p2b Landorus used Superpower -> p1b: Aegislash
+              p1b Aegislash -- IMMUNE
+      p1a Landorus used U-turn -> p2b: Landorus
+      p1b Aegislash used Substitute
+              p1b Aegislash gained Substitute
+              p2a Gengar COULD NOT MOVE (par)
+      after p1: Landorus-Therian 320/320, Aegislash 241/324
+      after p2: Gengar-Mega 57/324, Landorus-Therian 175/319
+
+  Turn 18
+    p1 mcts: move 2 2, move 3
+      search (50000 visits): uturn,1;substitute,1 18328v 4311 | uturn,0;substitute,1 7323v 1576 | uturn,1;shadowball,1 6099v 1281 | uturn,0;shadowball,1 3602v 692
+    p2 greedy: move 1 2, move 4 2
+      p1a Landorus used U-turn -> p2b: Landorus
+      p2b Landorus used Superpower -> p1b: Aegislash
+              p1b Aegislash -- IMMUNE
+      p1b Aegislash used Substitute
+              p1b Aegislash -- IT FAILED
+              p2a Gengar COULD NOT MOVE (par)
+      after p1: Landorus-Therian 320/320, Aegislash 261/324
+      after p2: Gengar-Mega 57/324, Landorus-Therian 65/319
+
+  Turn 19
+    p1 mcts: move 2 1, move 3
+      search (46000 visits): uturn,0;substitute,1 16808v 4383 | uturn,1;substitute,1 8782v 2169 | uturn,0;kingsshield,1 3478v 758 | uturn,0;wideguard,1 3399v 737
+    p2 greedy: move 1 2, move 1
+              p2b Landorus -- move: Struggle
+      p2b Landorus used Struggle -> p1a: Landorus
+      p2b Landorus fainted
+      p1a Landorus used U-turn -> p2a: Gengar
+      p1b Aegislash used Substitute
+              p1b Aegislash -- IT FAILED
+      p2a Gengar used Shadow Ball -> p1b: Aegislash
+              p1b Aegislash lost Substitute
+      after p1: Landorus-Therian 300/320, Aegislash 281/324
+      after p2: Gengar-Mega 35/324, Landorus-Therian 0/319
+
+  Turn 20
+      p2b <- Cresselia comes in (444/444)
+      after p1: Landorus-Therian 300/320, Aegislash 281/324
+      after p2: Gengar-Mega 35/324, Cresselia 444/444
+
+  Turn 21
+    p1 mcts: move 2 2, move 3
+      search (51000 visits): uturn,1;substitute,1 27711v 20028 | uturn,1;shadowball,1 8547v 5986 | uturn,0;substitute,1 3554v 2390 | uturn,1;kingsshield,1 2909v 1933
+    p2 greedy: move 1 2, move 1 2
+      p1a Landorus used U-turn -> p2b: Cresselia
+      p2b Cresselia used Psyshock -> p1b: Aegislash
+      p1b Aegislash used Substitute
+              p1b Aegislash gained Substitute
+      p2a Gengar used Shadow Ball -> p1b: Aegislash
+              p1b Aegislash lost Substitute
+      after p1: Landorus-Therian 247/320, Aegislash 192/324
+      after p2: Gengar-Mega 35/324, Cresselia 308/444
+
+  Turn 22
+    p1 mcts: move 2 2, move 3
+      search (49000 visits): uturn,1;substitute,1 26194v 18851 | uturn,1;shadowball,1 9060v 6338 | uturn,0;substitute,1 3286v 2193 | uturn,1;kingsshield,1 2639v 1736
+    p2 greedy: move 1 2, move 1 2
+      p1a Landorus used U-turn -> p2b: Cresselia
+      p2b Cresselia used Psyshock -> p1b: Aegislash
+      p1b Aegislash used Substitute
+              p1b Aegislash gained Substitute
+      p2a Gengar used Shadow Ball -> p1b: Aegislash
+              p1b Aegislash lost Substitute
+      after p1: Landorus-Therian 194/320, Aegislash 105/324
+      after p2: Gengar-Mega 35/324, Cresselia 172/444
+
+  Turn 23
+    p1 mcts: move 2 2, move 1 2
+      search (64000 visits): uturn,1;shadowball,1 45876v 35493 | uturn,1;substitute,1 9383v 7010 | uturn,1;wideguard,1 1850v 1270 | uturn,1;kingsshield,1 1807v 1238
+    p2 greedy: move 1 2, move 1 2
+      p1a Landorus used U-turn -> p2b: Cresselia
+      p2b Cresselia used Psyshock -> p1b: Aegislash
+      p1b Aegislash used Shadow Ball -> p2b: Cresselia
+      p2b Cresselia fainted
+              p2a Gengar COULD NOT MOVE (par)
+      after p1: Landorus-Therian 141/320, Aegislash-Blade 97/324
+      after p2: Gengar-Mega 35/324, Cresselia 0/444
+
+  Turn 24
+      p2b <- Conkeldurr comes in (414/414)
+      after p1: Landorus-Therian 141/320, Aegislash-Blade 97/324
+      after p2: Gengar-Mega 35/324, Conkeldurr 414/414
+
+  Turn 25
+    p1 mcts: move 2 2, move 1 2
+      search (72000 visits): uturn,1;shadowball,1 50445v 39691 | uturn,1;substitute,1 9470v 7187 | uturn,0;shadowball,1 3898v 2853 | uturn,0;substitute,1 2907v 2093
+    p2 greedy: move 1 2, move 1 2
+      p1a Landorus used U-turn -> p2b: Conkeldurr
+      p1b Aegislash used Shadow Ball -> p2b: Conkeldurr
+      p2b Conkeldurr used Drain Punch -> p1b: Aegislash
+              p1b Aegislash -- IMMUNE
+              p2a Gengar COULD NOT MOVE (par)
+      after p1: Landorus-Therian 141/320, Aegislash-Blade 117/324
+      after p2: Gengar-Mega 35/324, Conkeldurr 279/414
+
+  Turn 26
+    p1 mcts: move 2 2, move 1 2
+      search (94000 visits): uturn,1;shadowball,1 83147v 68772 | uturn,1;substitute,1 3760v 2864 | uturn,0;shadowball,1 2238v 1655 | uturn,0;substitute,1 1342v 954
+    p2 greedy: move 1 2, move 1 2
+      p1a Landorus used U-turn -> p2b: Conkeldurr
+      p1b Aegislash used Shadow Ball -> p2b: Conkeldurr
+      p2b Conkeldurr used Drain Punch -> p1b: Aegislash
+              p1b Aegislash -- IMMUNE
+      p2a Gengar used Shadow Ball -> p1b: Aegislash
+      p1b Aegislash fainted
+      after p1: Landorus-Therian 141/320, Aegislash 0/324
+      after p2: Gengar-Mega 35/324, Conkeldurr 136/414
+
+  Turn 27
+    p1 mcts: move 2 1, pass
+      search (327000 visits): uturn,0;No Move 195845v 3578 | uturn,1;No Move 131155v 2066
+    p2 greedy: move 1 1, move 1 1
+      p1a Landorus used U-turn -> p2a: Gengar
+      p2b Conkeldurr used Drain Punch -> p1a: Landorus
+      p2a Gengar used Shadow Ball -> p1a: Landorus
+      p1a Landorus fainted
+      after p1: Landorus-Therian 0/320, Aegislash 0/324
+      after p2: Gengar-Mega 13/324, Conkeldurr 171/414
+
+  RESULT: p2 wins

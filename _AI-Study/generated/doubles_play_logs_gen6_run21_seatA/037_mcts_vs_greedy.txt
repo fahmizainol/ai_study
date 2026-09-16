@@ -1,0 +1,406 @@
+battle 37   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: ORAS Doubles OU: Cresselia, Rotom-Wash, Ferrothorn, Camerupt-Mega, Hariyama, Porygon2
+  p2: Untitled 481: Manectric-Mega, Gastrodon, Volcarona, Hariyama, Aegislash, Amoonguss
+
+  Turn 1
+    p1 mcts: move 1 2, switch 6   (slot1 Rotom-Wash -> Porygon2)
+      search (22000 visits): psychic,1;switch porygon2 503v 181 | psychic,1;protect,1 414v 140 | psychic,0;switch porygon2 333v 105 | psychic,1;switch cameruptmega 304v 92
+    p2 greedy: move 2 1, move 2 1
+      p1b <- Porygon2 comes in (374/374)
+              p1b Porygon2 spa 1 rose
+      p2a Manectric used Overheat -> p1a: Cresselia
+              p2a Manectric spa 2 fell
+      p1a Cresselia used Psychic -> p2b: Gastrodon
+      p2b Gastrodon used Earth Power -> p1a: Cresselia
+              p1a Cresselia -- IMMUNE
+      after p1: Cresselia 334/443, Porygon2 374/374
+      after p2: Manectric-Mega 344/344, Gastrodon 299/426
+
+  Turn 2
+    p1 mcts: move 2 2, move 3 1
+      search (37000 visits): icebeam,1;thunderbolt,0 8576v 8293 | psychic,1;icebeam,1 398v 47 | psychic,0;icebeam,1 317v 29 | switch hariyama;icebeam,1 316v 29
+    p2 greedy: move 2 1, move 2 1
+      p2a Manectric used Overheat -> p1a: Cresselia
+              p2a Manectric spa 2 fell
+      p1a Cresselia used Ice Beam -> p2b: Gastrodon
+              p2b Gastrodon is now frz
+      p1b Porygon2 used Thunderbolt -> p2a: Manectric
+              p2a Manectric spa 1 rose
+              p2b Gastrodon COULD NOT MOVE (frz)
+      after p1: Cresselia 282/443, Porygon2 374/374
+      after p2: Manectric-Mega 344/344, Gastrodon 224/426
+
+  Turn 3
+    p1 mcts: switch 4, move 4   (slot0 Cresselia -> Camerupt-Mega)
+      search (45000 visits): switch cameruptmega;recover,1 14158v 7801 | switch hariyama;icebeam,1 312v 15 | psychic,0;icebeam,0 304v 14 | psychic,1;icebeam,0 301v 13
+    p2 greedy: move 2 1, move 2 1
+      p1a <- Camerupt-Mega comes in (343/343)
+      p2a Manectric used Overheat -> p1a: Camerupt
+              p2a Manectric spa 2 fell
+      p1b Porygon2 used Recover  [[still]]
+              p1b Porygon2 -- IT FAILED
+              p2b Gastrodon COULD NOT MOVE (frz)
+      after p1: Camerupt-Mega 313/343, Porygon2 374/374
+      after p2: Manectric-Mega 344/344, Gastrodon 224/426
+
+  Turn 4
+    p1 mcts: move 2 2, move 2 2
+      search (39000 visits): ancientpower,1;icebeam,1 2296v 1913 | ancientpower,0;icebeam,0 402v 15 | switch hariyama;icebeam,1 398v 15 | heatwave,0;icebeam,0 391v 14
+    p2 greedy: move 2 1, move 2 1
+      p2a Manectric used Overheat -> p1a: Camerupt
+              p2a Manectric spa 1 fell
+      p1b Porygon2 used Ice Beam -> p2b: Gastrodon
+              p2b Gastrodon COULD NOT MOVE (frz)
+      p1a Camerupt used Ancient Power -> p2b: Gastrodon
+              p2b Gastrodon -- critical hit
+      after p1: Camerupt-Mega 294/343, Porygon2 374/374
+      after p2: Manectric-Mega 344/344, Gastrodon 19/426
+
+  Turn 5
+    p1 mcts: switch 6, move 1   (slot0 Camerupt-Mega -> Rotom-Wash)
+      search (37000 visits): switch rotomwash;trickroom,1 6933v 6605 | heatwave,0;icebeam,1 361v 22 | heatwave,0;trickroom,1 347v 19 | ancientpower,0;icebeam,1 346v 19
+    p2 greedy: move 2 1, move 2 1
+      p1a <- Rotom-Wash comes in (301/301)
+      p2a Manectric used Overheat -> p1a: Rotom
+              p2b Gastrodon is cured of frz
+      p2b Gastrodon used Earth Power -> p1a: Rotom
+              p1a Rotom -- IMMUNE
+      p1b Porygon2 used Trick Room
+      after p1: Rotom-Wash 284/301, Porygon2 374/374
+      after p2: Manectric-Mega 344/344, Gastrodon 19/426
+
+  Turn 6
+    p1 mcts: move 1 2, switch 5   (slot1 Porygon2 -> Hariyama)
+      search (41000 visits): thunderbolt,1;switch hariyama 11898v 11416 | switch hariyama;icebeam,0 309v 22 | hydropump,0;icebeam,1 303v 21 | switch hariyama;icebeam,1 303v 21
+    p2 greedy: move 2 1, move 2 1
+      p1b <- Hariyama comes in (429/429)
+      p2b Gastrodon used Earth Power -> p1a: Rotom
+              p1a Rotom -- IMMUNE
+      p1a Rotom used Thunderbolt -> p2a: Manectric
+              p2a Manectric -- ability: Lightning Rod
+              p2a Manectric spa 1 rose
+      p2a Manectric used Overheat -> p1a: Rotom  [[miss]]
+              p2a Manectric -- MISSED
+              p1b Hariyama is now brn
+      after p1: Rotom-Wash 284/301, Hariyama 429/429
+      after p2: Manectric-Mega 344/344, Gastrodon 19/426
+
+  Turn 7
+    p1 mcts: move 2 1, move 3 2
+      search (40000 visits): hydropump,0;knockoff,1 464v 31 | switch porygon2;knockoff,1 448v 28 | switch cameruptmega;knockoff,1 411v 22 | switch porygon2;fakeout,1 401v 20
+    p2 greedy: move 2 1, move 2 1
+      p1b Hariyama used Knock Off -> p2b: Gastrodon
+              p2b Gastrodon used up its Rocky Helmet
+      p2b Gastrodon fainted
+      p1a Rotom used Hydro Pump -> p2a: Manectric
+      p2a Manectric used Overheat -> p1a: Rotom
+              p2a Manectric spa 1 fell
+      after p1: Rotom-Wash 265/301, Hariyama 305/429
+      after p2: Manectric-Mega 118/344, Gastrodon 0/426
+
+  Turn 8
+      p2b <- Volcarona comes in (334/334)
+      after p1: Rotom-Wash 265/301, Hariyama 305/429
+      after p2: Manectric-Mega 118/344, Volcarona 334/334
+
+  Turn 9
+    p1 mcts: move 4 1, move 2 1
+      search (37000 visits): voltswitch,0;closecombat,0 17109v 6210 | hydropump,1;switch cameruptmega 214v 16 | hydropump,1;switch porygon2 209v 15 | hydropump,1;fakeout,1 208v 14
+    p2 greedy: move 2 2, move 1
+      p1b Hariyama used Close Combat -> p2a: Manectric
+              p1b Hariyama def 1 fell
+              p1b Hariyama spd 1 fell
+      p2a Manectric fainted
+      p1a Rotom used Volt Switch -> p2b: Volcarona
+      after p1: Rotom-Wash 265/301, Hariyama 305/429
+      after p2: Manectric-Mega 0/344, Volcarona 210/334
+
+  Turn 10
+      p1a <- Ferrothorn comes in (351/351)
+      p2b Volcarona used Heat Wave -> p1b: Hariyama  [[spread] p1a,p1b]
+              p1b Hariyama -- critical hit
+      p1a Ferrothorn fainted
+      p1b Hariyama fainted
+      after p1: Ferrothorn 0/351, Hariyama 0/429
+      after p2: Manectric-Mega 0/344, Volcarona 230/334
+
+  Turn 11
+      p1a <- Rotom-Wash comes in (265/301)
+      p1b <- Cresselia comes in (282/443)
+      p2a <- Hariyama comes in (429/429)
+      after p1: Rotom-Wash 265/301, Cresselia 282/443
+      after p2: Hariyama 429/429, Volcarona 230/334
+
+  Turn 12
+    p1 mcts: move 4 1, move 1 2
+      search (26000 visits): voltswitch,0;psychic,1 431v 47 | thunderbolt,0;psychic,1 418v 44 | voltswitch,0;psychic,0 417v 44 | voltswitch,1;psychic,0 409v 42
+    p2 greedy: move 3 2, move 1
+      p2a Hariyama used Close Combat -> p1b: Cresselia
+              p1b Cresselia -- critical hit
+              p2a Hariyama def 1 fell
+              p2a Hariyama spd 1 fell
+              p1b Cresselia used up its Sitrus Berry
+      p1b Cresselia used Psychic -> p2b: Volcarona
+      p1a Rotom used Volt Switch -> p2a: Hariyama
+      after p1: Rotom-Wash 265/301, Cresselia 264/443
+      after p2: Hariyama 233/429, Volcarona 121/334
+
+  Turn 13
+      p1a <- Porygon2 comes in (374/374)
+              p1a Porygon2 atk 1 rose
+      p2b Volcarona used Heat Wave -> p1b: Cresselia  [[spread] p1a,p1b]
+              p1b Cresselia -- critical hit
+      after p1: Porygon2 307/374, Cresselia 132/443
+      after p2: Hariyama 233/429, Volcarona 141/334
+
+  Turn 14
+    p1 mcts: move 1, move 1 1
+      search (34000 visits): trickroom,1;psychic,0 2776v 574 | icebeam,1;psychic,0 1106v 172 | icebeam,1;switch cameruptmega 1027v 155 | switch cameruptmega;psychic,1 1025v 154
+    p2 greedy: move 3 2, move 1
+      p2b Volcarona used Heat Wave -> p1b: Cresselia  [[spread] p1b]
+              p2b Volcarona -- MISSED
+      p1b Cresselia used Psychic -> p2a: Hariyama
+      p2a Hariyama fainted
+      p1a Porygon2 used Trick Room
+      after p1: Porygon2 307/374, Cresselia 39/443
+      after p2: Hariyama 0/429, Volcarona 161/334
+
+  Turn 15
+      p2a <- Aegislash comes in (324/324)
+      after p1: Porygon2 307/374, Cresselia 39/443
+      after p2: Aegislash 324/324, Volcarona 161/334
+
+  Turn 16
+    p1 mcts: move 3 2, move 1 2
+      search (28000 visits): thunderbolt,1;psychic,1 644v 73 | thunderbolt,1;switch cameruptmega 481v 41 | icebeam,1;switch cameruptmega 430v 32 | icebeam,0;psychic,1 427v 31
+    p2 greedy: move 2 2, move 1
+      p1a Porygon2 used Thunderbolt -> p2b: Volcarona
+              p2b Volcarona is now par
+      p2a Aegislash used Shadow Ball -> p1b: Cresselia
+      p1b Cresselia fainted
+      p2b Volcarona used Heat Wave -> p1a: Porygon2
+      after p1: Porygon2 201/374, Cresselia 0/443
+      after p2: Aegislash-Blade 324/324, Volcarona 112/334
+
+  Turn 17
+      p1b <- Rotom-Wash comes in (265/301)
+      after p1: Porygon2 201/374, Rotom-Wash 265/301
+      after p2: Aegislash-Blade 324/324, Volcarona 112/334
+
+  Turn 18
+    p1 mcts: move 1, move 3
+      search (24000 visits): trickroom,0;protect,1 3707v 3098 | recover,0;hydropump,0 412v 31 | recover,0;voltswitch,0 402v 29 | recover,0;thunderbolt,0 395v 28
+    p2 greedy: move 2 1, move 1
+      p1b Rotom used Protect
+              p2b Volcarona COULD NOT MOVE (par)
+      p2a Aegislash used Shadow Ball -> p1a: Porygon2
+              p1a Porygon2 -- IMMUNE
+      p1a Porygon2 used Trick Room
+      after p1: Porygon2 201/374, Rotom-Wash 265/301
+      after p2: Aegislash-Blade 324/324, Volcarona 132/334
+
+  Turn 19
+    p1 mcts: switch 6, move 4 2   (slot0 Porygon2 -> Camerupt-Mega)
+      search (36000 visits): switch cameruptmega;voltswitch,1 6726v 5731 | trickroom,1;hydropump,1 4831v 1019 | trickroom,1;switch cameruptmega 2931v 566 | recover,0;voltswitch,0 466v 31
+    p2 greedy: move 2 1, move 1
+      p1a <- Camerupt-Mega comes in (294/343)
+      p1b Rotom used Volt Switch -> p2b: Volcarona
+      after p1: Camerupt-Mega 294/343, Rotom-Wash 265/301
+      after p2: Aegislash-Blade 324/324, Volcarona 24/334
+
+  Turn 20
+      p1b <- Porygon2 comes in (201/374)
+              p1b Porygon2 atk 1 rose
+      p2a Aegislash used Shadow Ball -> p1a: Camerupt
+              p2b Volcarona COULD NOT MOVE (par)
+      after p1: Camerupt-Mega 162/343, Porygon2 201/374
+      after p2: Aegislash-Blade 324/324, Volcarona 44/334
+
+  Turn 21
+    p1 mcts: move 2 2, move 2 1
+      search (33000 visits): ancientpower,1;icebeam,0 9938v 2172 | switch rotomwash;trickroom,0 3588v 2551 | earthpower,0;switch rotomwash 477v 26 | heatwave,0;icebeam,1 471v 26
+    p2 greedy: move 2 1, move 1
+      p2a Aegislash used Shadow Ball -> p1a: Camerupt
+              p1a Camerupt spd 1 fell
+      p1b Porygon2 used Ice Beam -> p2a: Aegislash
+      p2b Volcarona used Heat Wave -> p1b: Porygon2  [[spread] p1a]
+              p2b Volcarona -- MISSED
+      p1a Camerupt fainted
+      after p1: Camerupt-Mega 0/343, Porygon2 201/374
+      after p2: Aegislash-Blade 297/324, Volcarona 64/334
+
+  Turn 22
+      p1a <- Rotom-Wash comes in (265/301)
+      after p1: Rotom-Wash 265/301, Porygon2 201/374
+      after p2: Aegislash-Blade 297/324, Volcarona 64/334
+
+  Turn 23
+    p1 mcts: move 4 1, move 4
+      search (38000 visits): voltswitch,0;recover,1 1023v 44 | voltswitch,0;thunderbolt,0 939v 34 | voltswitch,0;icebeam,0 912v 31 | voltswitch,1;recover,1 867v 26
+    p2 greedy: move 2 2, move 1
+      p1a Rotom used Volt Switch -> p2a: Aegislash
+      p2a Aegislash used Shadow Ball -> p1b: Porygon2
+              p1b Porygon2 -- IMMUNE
+      p1b Porygon2 used Recover
+      p2b Volcarona used Heat Wave -> p1a: Rotom  [[spread] p1a,p1b]
+      after p1: Rotom-Wash 205/301, Porygon2 307/374
+      after p2: Aegislash-Blade 178/324, Volcarona 84/334
+
+  Turn 24
+    p1 mcts: move 4 1, move 2 1
+      search (31000 visits): voltswitch,0;icebeam,0 810v 42 | voltswitch,0;thunderbolt,0 809v 42 | voltswitch,0;recover,1 757v 35 | thunderbolt,0;thunderbolt,1 716v 30
+    p2 greedy: move 2 1, move 1
+      p1a Rotom used Volt Switch -> p2a: Aegislash
+      p2a Aegislash used Shadow Ball -> p1a: Rotom
+              p1a Rotom used up its Sitrus Berry
+      p1b Porygon2 used Ice Beam -> p2a: Aegislash
+      p2a Aegislash fainted
+              p2b Volcarona COULD NOT MOVE (par)
+      after p1: Rotom-Wash 130/301, Porygon2 307/374
+      after p2: Aegislash 0/324, Volcarona 104/334
+
+  Turn 25
+      p2a <- Amoonguss comes in (432/432)
+      after p1: Rotom-Wash 130/301, Porygon2 307/374
+      after p2: Amoonguss 432/432, Volcarona 104/334
+
+  Turn 26
+    p1 mcts: move 4 1, move 2 1
+      search (21000 visits): voltswitch,0;icebeam,0 2738v 1709 | voltswitch,1;icebeam,0 1270v 741 | voltswitch,0;recover,1 1189v 689 | voltswitch,0;thunderbolt,0 920v 517
+    p2 greedy: move 3 1, move 1
+      p1a Rotom used Volt Switch -> p2a: Amoonguss
+      p1b Porygon2 used Ice Beam -> p2a: Amoonguss
+      p2b Volcarona used Heat Wave -> p1b: Porygon2  [[spread] p1a,p1b]
+      p2a Amoonguss used Giga Drain -> p1a: Rotom
+              p1a Rotom -- critical hit
+      p1a Rotom fainted
+      after p1: Rotom-Wash 0/301, Porygon2 235/374
+      after p2: Amoonguss 253/432, Volcarona 124/334
+
+  Turn 27
+    p1 mcts: pass, move 2 1
+      search (61000 visits): No Move;icebeam,0 20203v 3091 | No Move;recover,1 15877v 2362 | No Move;thunderbolt,1 10603v 1489 | No Move;thunderbolt,0 4838v 573
+    p2 greedy: move 3 2, move 1
+      p1b Porygon2 used Ice Beam -> p2a: Amoonguss
+      p2b Volcarona used Heat Wave -> p1b: Porygon2
+      p2a Amoonguss used Giga Drain -> p1b: Porygon2
+      after p1: Rotom-Wash 0/301, Porygon2 84/374
+      after p2: Amoonguss 106/432, Volcarona 144/334
+
+  Turn 28
+    p1 mcts: pass, move 4
+      search (94000 visits): No Move;recover,1 63299v 7127 | No Move;icebeam,0 13108v 1177 | No Move;thunderbolt,1 4661v 287 | No Move;thunderbolt,0 4109v 234
+    p2 greedy: move 3 2, move 1
+      p1b Porygon2 used Recover
+      p2b Volcarona used Heat Wave -> p1b: Porygon2
+      p2a Amoonguss used Giga Drain -> p1b: Porygon2
+      after p1: Rotom-Wash 0/301, Porygon2 137/374
+      after p2: Amoonguss 128/432, Volcarona 164/334
+
+  Turn 29
+    p1 mcts: pass, move 4
+      search (91000 visits): No Move;recover,1 51767v 5937 | No Move;icebeam,0 16639v 1641 | No Move;thunderbolt,0 6683v 516 | No Move;thunderbolt,1 6047v 449
+    p2 greedy: move 3 2, move 1
+      p1b Porygon2 used Recover
+      p2b Volcarona used Heat Wave -> p1b: Porygon2
+      p2a Amoonguss used Giga Drain -> p1b: Porygon2
+      after p1: Rotom-Wash 0/301, Porygon2 178/374
+      after p2: Amoonguss 150/432, Volcarona 184/334
+
+  Turn 30
+    p1 mcts: pass, move 4
+      search (81000 visits): No Move;recover,1 37288v 4531 | No Move;icebeam,0 21749v 2477 | No Move;thunderbolt,0 6523v 569 | No Move;thunderbolt,1 5480v 449
+    p2 greedy: move 3 2, move 1
+      p1b Porygon2 used Recover
+      p2b Volcarona used Heat Wave -> p1b: Porygon2
+      p2a Amoonguss used Giga Drain -> p1b: Porygon2
+      after p1: Rotom-Wash 0/301, Porygon2 228/374
+      after p2: Amoonguss 172/432, Volcarona 204/334
+
+  Turn 31
+    p1 mcts: pass, move 2 1
+      search (64000 visits): No Move;icebeam,0 23935v 3416 | No Move;recover,1 18151v 2508 | No Move;thunderbolt,0 6126v 692 | No Move;thunderbolt,1 5594v 617
+    p2 greedy: move 3 2, move 1
+      p1b Porygon2 used Ice Beam -> p2a: Amoonguss
+              p2a Amoonguss -- critical hit
+      p2a Amoonguss fainted
+      p2b Volcarona used Heat Wave -> p1b: Porygon2
+      after p1: Rotom-Wash 0/301, Porygon2 129/374
+      after p2: Amoonguss 0/432, Volcarona 224/334
+
+  Turn 32
+    p1 mcts: pass, move 4
+      search (149000 visits): No Move;recover,1 57313v 3418 | No Move;thunderbolt,1 40633v 2267 | No Move;icebeam,1 36396v 1981 | No Move;trickroom,1 14658v 582
+    p2 greedy: pass, move 1
+      p1b Porygon2 used Recover
+      p2b Volcarona used Heat Wave -> p1b: Porygon2
+      after p1: Rotom-Wash 0/301, Porygon2 213/374
+      after p2: Amoonguss 0/432, Volcarona 244/334
+
+  Turn 33
+    p1 mcts: pass, move 4
+      search (127000 visits): No Move;recover,1 39147v 2311 | No Move;thunderbolt,1 39122v 2310 | No Move;icebeam,1 32928v 1871 | No Move;trickroom,1 15803v 711
+    p2 greedy: pass, move 1
+      p1b Porygon2 used Recover
+      p2b Volcarona used Heat Wave -> p1b: Porygon2
+              p1b Porygon2 is now brn
+      after p1: Rotom-Wash 0/301, Porygon2 234/374
+      after p2: Amoonguss 0/432, Volcarona 264/334
+
+  Turn 34
+    p1 mcts: pass, move 3 2
+      search (117000 visits): No Move;thunderbolt,1 33123v 1994 | No Move;recover,1 32747v 1967 | No Move;icebeam,1 29611v 1738 | No Move;trickroom,1 21519v 1158
+    p2 greedy: pass, move 1
+      p1b Porygon2 used Thunderbolt -> p2b: Volcarona
+      p2b Volcarona used Heat Wave -> p1b: Porygon2
+      after p1: Rotom-Wash 0/301, Porygon2 91/374
+      after p2: Amoonguss 0/432, Volcarona 210/334
+
+  Turn 35
+    p1 mcts: pass, move 4
+      search (162000 visits): No Move;recover,1 65760v 3820 | No Move;thunderbolt,1 49764v 2749 | No Move;icebeam,1 38795v 2030 | No Move;trickroom,1 7681v 164
+    p2 greedy: pass, move 1
+      p1b Porygon2 used Recover
+      p2b Volcarona used Heat Wave -> p1b: Porygon2
+      after p1: Rotom-Wash 0/301, Porygon2 129/374
+      after p2: Amoonguss 0/432, Volcarona 230/334
+
+  Turn 36
+    p1 mcts: pass, move 4
+      search (136000 visits): No Move;recover,1 50722v 4103 | No Move;thunderbolt,1 35695v 2739 | No Move;icebeam,1 29675v 2204 | No Move;trickroom,1 19908v 1354
+    p2 greedy: pass, move 2 2
+      p1b Porygon2 used Recover
+      p2b Volcarona used Giga Drain -> p1b: Porygon2
+      after p1: Rotom-Wash 0/301, Porygon2 216/374
+      after p2: Amoonguss 0/432, Volcarona 277/334
+
+  Turn 37
+    p1 mcts: pass, move 3 2
+      search (124000 visits): No Move;thunderbolt,1 36669v 2926 | No Move;recover,1 35490v 2817 | No Move;icebeam,1 29293v 2250 | No Move;trickroom,1 22548v 1642
+    p2 greedy: pass, move 2 2
+      p1b Porygon2 used Thunderbolt -> p2b: Volcarona
+              p2b Volcarona -- critical hit
+              p2b Volcarona COULD NOT MOVE (par)
+      after p1: Rotom-Wash 0/301, Porygon2 170/374
+      after p2: Amoonguss 0/432, Volcarona 190/334
+
+  Turn 38
+    p1 mcts: pass, move 3 2
+      search (115000 visits): No Move;thunderbolt,1 39030v 3303 | No Move;recover,1 33275v 2749 | No Move;icebeam,1 26032v 2061 | No Move;trickroom,1 16663v 1194
+    p2 greedy: pass, move 2 2
+      p1b Porygon2 used Thunderbolt -> p2b: Volcarona
+      p2b Volcarona used Giga Drain -> p1b: Porygon2
+      after p1: Rotom-Wash 0/301, Porygon2 76/374
+      after p2: Amoonguss 0/432, Volcarona 155/334
+
+  Turn 39
+    p1 mcts: pass, move 3 2
+      search (135000 visits): No Move;thunderbolt,1 54383v 4327 | No Move;recover,1 51710v 4085 | No Move;icebeam,1 24581v 1705 | No Move;trickroom,1 4326v 114
+    p2 greedy: pass, move 2 2
+      p1b Porygon2 used Thunderbolt -> p2b: Volcarona
+      p2b Volcarona used Giga Drain -> p1b: Porygon2
+      p1b Porygon2 fainted
+      after p1: Rotom-Wash 0/301, Porygon2 0/374
+      after p2: Amoonguss 0/432, Volcarona 123/334
+
+  RESULT: p2 wins

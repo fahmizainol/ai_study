@@ -1,0 +1,155 @@
+battle 32   p1=greedy vs p2=mcts   mcts 300 ms a decision
+  p1: ORAS Doubles OU: Weavile, Breloom, Gengar, Jirachi, Azumarill, Talonflame
+  p2: XY Doubles: Meloetta, Keldeo-Resolute, Bisharp, Heatran, Venusaur, Zapdos
+
+  Turn 1
+    p1 greedy: move 3 1, move 2 1
+    p2 mcts: switch 5, move 1 2   (slot0 Meloetta -> Venusaur)
+      search (20000 visits): switch venusaur;scald,1 621v 421 | hypervoice,0;scald,0 611v 414 | switch heatran;scald,1 469v 306 | switch heatran;protect,1 446v 288
+      p2a <- Venusaur comes in (364/364)
+      p1b Breloom used Mach Punch -> p2a: Venusaur
+      p1a Weavile used Icicle Crash -> p2a: Venusaur
+      p2a Venusaur fainted
+      p2b Keldeo used Scald -> p1b: Breloom
+              p1b Breloom is now brn
+      after p1: Weavile 282/282, Breloom 93/261
+      after p2: Venusaur 0/364, Keldeo-Resolute 292/324
+
+  Turn 2
+      p2a <- Bisharp comes in (272/272)
+      after p1: Weavile 282/282, Breloom 93/261
+      after p2: Bisharp 272/272, Keldeo-Resolute 292/324
+
+  Turn 3
+    p1 greedy: move 3 2, move 2 2
+    p2 mcts: move 2 2, move 2 2
+      search PANICKED (cannot mega evolve GENGAR with NONE); greedy took the turn
+      p1b Breloom used Mach Punch -> p2b: Keldeo
+      p1a Weavile used Icicle Crash -> p2b: Keldeo
+      p2b Keldeo used Secret Sword -> p1b: Breloom
+              p1b Breloom -- critical hit
+      p1b Breloom fainted
+      p2a Bisharp used Iron Head -> p1a: Weavile
+              p1a Weavile -- critical hit
+              p1a Weavile used up its Focus Sash
+              p2a Bisharp used up its Life Orb
+      after p1: Weavile 1/282, Breloom 0/261
+      after p2: Bisharp 272/272, Keldeo-Resolute 131/324
+
+  Turn 4
+      p1b <- Gengar comes in (262/262)
+      after p1: Weavile 1/282, Gengar 262/262
+      after p2: Bisharp 272/272, Keldeo-Resolute 131/324
+
+  Turn 5
+    p1 greedy: move 3 2, move 1 2
+    p2 mcts: move 1 2, switch 4   (slot1 Keldeo-Resolute -> Heatran)
+      search (23000 visits): knockoff,1;switch heatran 1880v 1483 | knockoff,1;scald,0 1576v 1228 | knockoff,1;protect,1 1272v 975 | knockoff,1;secretsword,0 1218v 930
+      p2b <- Heatran comes in (367/367)
+      p1a Weavile used Icicle Crash -> p2b: Heatran
+      p1a Weavile fainted
+      p1b Gengar used Sludge Bomb -> p2b: Heatran
+              p2b Heatran -- IMMUNE
+      p2a Bisharp used Knock Off -> p1b: Gengar
+      p1b Gengar fainted
+      after p1: Weavile 0/282, Gengar 0/262
+      after p2: Bisharp 272/272, Heatran 327/367
+
+  Turn 6
+      p1a <- Jirachi comes in (404/404)
+      p1b <- Azumarill comes in (404/404)
+      after p1: Jirachi 404/404, Azumarill 404/404
+      after p2: Bisharp 272/272, Heatran 327/367
+
+  Turn 7
+    p1 greedy: move 2 2, move 2 2
+    p2 mcts: move 2 2, move 1
+      search (17000 visits): ironhead,1;heatwave,0 710v 562 | knockoff,1;heatwave,0 590v 458 | knockoff,0;heatwave,0 572v 442 | ironhead,1;earthpower,1 554v 426
+      p2a Bisharp used Iron Head -> p1b: Azumarill
+      p1a Jirachi used Iron Head -> p2b: Heatran
+              p2b Heatran COULD NOT MOVE (flinch)
+      p1b Azumarill used Knock Off -> p2b: Heatran
+              p2b Heatran used up its Shuca Berry
+      after p1: Jirachi 404/404, Azumarill 209/404
+      after p2: Bisharp 272/272, Heatran 180/367
+
+  Turn 8
+    p1 greedy: move 2 2, move 2 2
+    p2 mcts: move 1 1, move 4
+      search (28000 visits): knockoff,0;protect,1 1109v 823 | knockoff,0;heatwave,0 942v 688 | ironhead,1;heatwave,0 750v 534 | ironhead,1;protect,1 729v 518
+      p2b Heatran used Protect
+      p2a Bisharp used Knock Off -> p1a: Jirachi
+              p1a Jirachi used up its Safety Goggles
+      p1a Jirachi used Iron Head -> p2b: Heatran
+              p2b Heatran -- move: Protect
+      p1b Azumarill used Knock Off -> p2b: Heatran
+              p2b Heatran -- move: Protect
+      after p1: Jirachi 120/404, Azumarill 209/404
+      after p2: Bisharp 272/272, Heatran 180/367
+
+  Turn 9
+    p1 greedy: move 2 2, move 2 2
+    p2 mcts: move 1 1, move 1
+      search (35000 visits): knockoff,0;heatwave,0 1865v 1342 | ironhead,1;heatwave,0 1139v 786 | suckerpunch,0;heatwave,0 1050v 719 | knockoff,0;ancientpower,1 1039v 710
+      p2a Bisharp used Knock Off -> p1a: Jirachi
+      p1a Jirachi fainted
+      p2b Heatran used Heat Wave -> p1b: Azumarill
+              p1b Azumarill used up its Sitrus Berry
+      p1b Azumarill used Knock Off -> p2b: Heatran
+      after p1: Jirachi 0/404, Azumarill 192/404
+      after p2: Bisharp 272/272, Heatran 84/367
+
+  Turn 10
+      p1a <- Talonflame comes in (297/297)
+      after p1: Talonflame 297/297, Azumarill 192/404
+      after p2: Bisharp 272/272, Heatran 84/367
+
+  Turn 11
+    p1 greedy: move 1 2, move 2 2
+    p2 mcts: move 3 1, move 3 1
+      search (41000 visits): suckerpunch,0;ancientpower,0 2287v 1363 | suckerpunch,0;heatwave,0 1837v 1074 | protect,0;ancientpower,0 1759v 1024 | suckerpunch,0;earthpower,1 1700v 987
+      p1a Talonflame used Brave Bird -> p2b: Heatran
+      p2b Heatran fainted
+      p2a Bisharp used Sucker Punch  [[still]]
+              p2a Bisharp -- IT FAILED
+      p1b Azumarill used Knock Off -> p2a: Bisharp
+              p2a Bisharp -- critical hit
+      after p1: Talonflame 240/297, Azumarill 192/404
+      after p2: Bisharp 201/272, Heatran 0/367
+
+  Turn 12
+      p2b <- Keldeo-Resolute comes in (131/324)
+      after p1: Talonflame 240/297, Azumarill 192/404
+      after p2: Bisharp 201/272, Keldeo-Resolute 131/324
+
+  Turn 13
+    p1 greedy: move 1 2, move 2 2
+    p2 mcts: move 4, move 1 1
+      search (29000 visits): protect,0;scald,0 1604v 1094 | ironhead,1;scald,0 1450v 981 | knockoff,0;scald,0 886v 570 | suckerpunch,0;scald,0 878v 564
+      p2a Bisharp used Protect
+      p1a Talonflame used Brave Bird -> p2b: Keldeo
+      p2b Keldeo fainted
+      p1b Azumarill used Knock Off -> p2a: Bisharp
+              p2a Bisharp -- move: Protect
+      after p1: Talonflame 168/297, Azumarill 192/404
+      after p2: Bisharp 201/272, Keldeo-Resolute 0/324
+
+  Turn 14
+      p2b <- Meloetta comes in (404/404)
+      after p1: Talonflame 168/297, Azumarill 192/404
+      after p2: Bisharp 201/272, Meloetta 404/404
+
+  Turn 15
+    p1 greedy: move 1 1, move 2 1
+    p2 mcts: move 1 1, move 2
+      search (47000 visits): knockoff,0;hypervoice,0 3729v 2618 | ironhead,1;protect,1 2289v 1559 | ironhead,0;hypervoice,0 2254v 1533 | ironhead,0;protect,1 2234v 1519
+      p1a Talonflame used Brave Bird -> p2a: Bisharp
+      p2a Bisharp used Knock Off -> p1a: Talonflame
+              p1a Talonflame used up its Life Orb
+      p1a Talonflame fainted
+      p2b Meloetta used Hyper Voice -> p1b: Azumarill
+      p1b Azumarill fainted
+      after p1: Talonflame 0/297, Azumarill 0/404
+      after p2: Bisharp 92/272, Meloetta 404/404
+
+  RESULT: p2 wins

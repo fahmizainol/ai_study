@@ -1,0 +1,155 @@
+battle 1   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: ORAS Doubles OU: Diancie-Mega, Gastrodon-East, Aegislash, Kyurem-Black, Talonflame, Thundurus
+  p2: A Faraway Place: Gengar-Mega, Terrakion, Scizor, Whimsicott, Landorus-Therian, Latios
+
+  Turn 1
+    p1 mcts: move 2 2, move 2 1
+      search (11000 visits): moonblast,1;earthpower,0 659v 504 | diamondstorm,0;scald,1 633v 482 | diamondstorm,0;icebeam,1 536v 400 | diamondstorm,0;scald,0 531v 396
+    p2 greedy: move 1 1, move 1 1
+      p1a Diancie used Moonblast -> p2b: Terrakion
+      p2b Terrakion fainted
+      p2a Gengar used Shadow Ball -> p1a: Diancie
+      p1b Gastrodon used Earth Power -> p2a: Gengar
+      after p1: Diancie-Mega 57/241, Gastrodon-East 421/421
+      after p2: Gengar-Mega 70/324, Terrakion 0/323
+
+  Turn 2
+      p2b <- Scizor comes in (311/311)
+      after p1: Diancie-Mega 57/241, Gastrodon-East 421/421
+      after p2: Gengar-Mega 70/324, Scizor 311/311
+
+  Turn 3
+    p1 mcts: move 4, move 1 2
+      search (22000 visits): protect,0;scald,1 1750v 1128 | diamondstorm,0;scald,1 1484v 943 | diamondstorm,0;icebeam,0 1320v 829 | diamondstorm,0;earthpower,1 1231v 768
+    p2 greedy: move 1 1, move 4 1
+      p1a Diancie used Protect
+      p2a Gengar used Shadow Ball -> p1a: Diancie
+              p1a Diancie -- move: Protect
+      p2b Scizor used Superpower -> p1a: Diancie
+              p1a Diancie -- move: Protect
+      p1b Gastrodon used Scald -> p2b: Scizor
+              p2b Scizor -- critical hit
+      after p1: Diancie-Mega 57/241, Gastrodon-East 421/421
+      after p2: Gengar-Mega 70/324, Scizor 127/311
+
+  Turn 4
+    p1 mcts: move 1, move 3 2
+      search (19000 visits): diamondstorm,0;icebeam,1 2177v 1798 | diamondstorm,0;icebeam,0 2082v 1714 | diamondstorm,0;scald,0 1501v 1210 | diamondstorm,0;scald,1 1351v 1081
+    p2 greedy: move 1 1, move 4 1
+      p1a Diancie used Diamond Storm -> p2b: Scizor  [[spread] p2a,p2b]
+              p1a Diancie def 1 rose
+      p2a Gengar fainted
+      p2b Scizor fainted
+      p1b Gastrodon used Ice Beam -> p2: Gengar  [[notarget]]
+              p1b Gastrodon -- IT FAILED
+      after p1: Diancie-Mega 57/241, Gastrodon-East 421/421
+      after p2: Gengar-Mega 0/324, Scizor 0/311
+
+  Turn 5
+      p2a <- Whimsicott comes in (324/324)
+      p2b <- Landorus-Therian comes in (382/382)
+              p1a Diancie -- IT FAILED
+              p1b Gastrodon atk 1 fell
+      after p1: Diancie-Mega 57/241, Gastrodon-East 421/421
+      after p2: Whimsicott 324/324, Landorus-Therian 382/382
+
+  Turn 6
+    p1 mcts: move 4, move 3 2
+      search (18000 visits): protect,0;icebeam,1 817v 540 | protect,0;scald,1 642v 411 | protect,0;icebeam,0 549v 344 | diamondstorm,0;icebeam,1 513v 318
+    p2 greedy: move 1 1, move 1
+      p1a Diancie used Protect
+      p2a Whimsicott used Moonblast -> p1a: Diancie
+              p1a Diancie -- move: Protect
+      p2b Landorus used Earthquake -> p1a: Diancie  [[spread] p2a,p1b]
+              p1a Diancie -- move: Protect
+      p1b Gastrodon used Ice Beam -> p2b: Landorus
+              p2b Landorus is now frz
+      after p1: Diancie-Mega 57/241, Gastrodon-East 279/421
+      after p2: Whimsicott 245/324, Landorus-Therian 178/382
+
+  Turn 7
+    p1 mcts: move 4, move 3 1
+      search (22000 visits): protect,0;icebeam,0 1012v 591 | protect,0;icebeam,1 776v 438 | protect,0;scald,1 743v 417 | protect,0;recover,1 524v 277
+    p2 greedy: move 1 1, move 1
+      p1a Diancie used Protect
+      p2a Whimsicott used Moonblast -> p1a: Diancie
+              p1a Diancie -- move: Protect
+              p2b Landorus is cured of frz
+      p2b Landorus used Earthquake -> p1a: Diancie  [[spread] p2a,p1b]
+              p1a Diancie -- move: Protect
+              p2a Whimsicott -- critical hit
+              p1b Gastrodon used up its Sitrus Berry
+      p1b Gastrodon used Ice Beam -> p2a: Whimsicott
+      p2a Whimsicott fainted
+      after p1: Diancie-Mega 57/241, Gastrodon-East 228/421
+      after p2: Whimsicott 0/324, Landorus-Therian 178/382
+
+  Turn 8
+      p2a <- Latios comes in (360/360)
+      after p1: Diancie-Mega 57/241, Gastrodon-East 228/421
+      after p2: Latios 360/360, Landorus-Therian 178/382
+
+  Turn 9
+    p1 mcts: move 2 1, move 4
+      search (19000 visits): moonblast,0;recover,1 1234v 937 | moonblast,1;icebeam,0 1039v 777 | moonblast,0;scald,1 1035v 774 | moonblast,0;icebeam,1 699v 502
+    p2 greedy: move 1 1, move 1
+      p1a Diancie used Moonblast -> p2a: Latios
+              p2a Latios spa 1 fell
+      p2a Latios used Draco Meteor -> p1a: Diancie
+              p1a Diancie -- IMMUNE
+      p2b Landorus used Earthquake -> p1b: Gastrodon  [[spread] p1a,p1b]
+              p2a Latios -- IMMUNE
+      p1a Diancie fainted
+      p1b Gastrodon used Recover
+      after p1: Diancie-Mega 0/241, Gastrodon-East 277/421
+      after p2: Latios 54/360, Landorus-Therian 178/382
+
+  Turn 10
+      p1a <- Aegislash comes in (324/324)
+      after p1: Aegislash 324/324, Gastrodon-East 277/421
+      after p2: Latios 54/360, Landorus-Therian 178/382
+
+  Turn 11
+    p1 mcts: move 3, move 1 2
+      search (33000 visits): wideguard,0;scald,1 1106v 468 | shadowball,0;icebeam,1 1058v 444 | wideguard,0;icebeam,1 1027v 429 | flashcannon,0;scald,1 976v 405
+    p2 greedy: move 1 2, move 1
+      p1a Aegislash used Wide Guard
+      p2a Latios used Draco Meteor -> p1b: Gastrodon
+              p2a Latios spa 2 fell
+      p2b Landorus used Earthquake -> p1a: Aegislash  [[spread] ]
+              p2a Latios -- IMMUNE
+              p1a Aegislash -- move: Wide Guard
+              p1b Gastrodon -- move: Wide Guard
+      p1b Gastrodon used Scald -> p2b: Landorus
+      after p1: Aegislash 324/324, Gastrodon-East 133/421
+      after p2: Latios 54/360, Landorus-Therian 38/382
+
+  Turn 12
+    p1 mcts: move 3, move 1 2
+      search (40000 visits): wideguard,0;scald,1 1275v 502 | shadowball,1;icebeam,0 1220v 476 | flashcannon,1;scald,0 1187v 462 | flashcannon,1;icebeam,0 1176v 457
+    p2 greedy: move 1 2, move 1
+      p1a Aegislash used Wide Guard
+      p2a Latios used Draco Meteor -> p1b: Gastrodon
+              p2a Latios spa 2 fell
+      p2b Landorus used Earthquake -> p1b: Gastrodon  [[spread] ]
+              p2a Latios -- IMMUNE
+              p1a Aegislash -- move: Wide Guard
+              p1b Gastrodon -- move: Wide Guard
+      p1b Gastrodon used Scald -> p2b: Landorus
+      p2b Landorus fainted
+      after p1: Aegislash 324/324, Gastrodon-East 49/421
+      after p2: Latios 54/360, Landorus-Therian 0/382
+
+  Turn 13
+    p1 mcts: move 1 1, move 1 1
+      search (469000 visits): shadowball,0;scald,0 42128v 42128 | shadowball,0;recover,1 42128v 42128 | flashcannon,0;recover,1 42127v 42127 | flashcannon,0;scald,0 35212v 35130
+    p2 greedy: move 1 2, pass
+      p2a Latios used Draco Meteor -> p1b: Gastrodon
+              p2a Latios spa 1 fell
+      p1b Gastrodon fainted
+      p1a Aegislash used Shadow Ball -> p2a: Latios
+      p2a Latios fainted
+      after p1: Aegislash-Blade 324/324, Gastrodon-East 0/421
+      after p2: Latios 0/360, Landorus-Therian 0/382
+
+  RESULT: p1 wins

@@ -1,0 +1,136 @@
+battle 32   p1=greedy vs p2=greedy
+  p1: ORAS Doubles OU: Weavile, Breloom, Gengar, Jirachi, Azumarill, Talonflame
+  p2: XY Doubles: Meloetta, Keldeo-Resolute, Bisharp, Heatran, Venusaur, Zapdos
+
+  Turn 1
+    p1 greedy: move 3 1, move 2 1
+    p2 greedy: move 2, move 2 1
+      p1b Breloom used Mach Punch -> p2a: Meloetta
+      p1a Weavile used Icicle Crash -> p2a: Meloetta  [[miss]]
+              p1a Weavile -- MISSED
+      p2b Keldeo used Secret Sword -> p1a: Weavile
+              p1a Weavile used up its Focus Sash
+      p2a Meloetta used Hyper Voice -> p1b: Breloom  [[spread] p1a,p1b]
+      p1a Weavile fainted
+      after p1: Weavile 0/282, Breloom 57/261
+      after p2: Meloetta 274/404, Keldeo-Resolute 292/324
+
+  Turn 2
+      p1a <- Gengar comes in (262/262)
+      after p1: Gengar 262/262, Breloom 57/261
+      after p2: Meloetta 274/404, Keldeo-Resolute 292/324
+
+  Turn 3
+    p1 greedy: move 1 1, move 2 1
+    p2 greedy: move 2, move 2 2
+      p1b Breloom used Mach Punch -> p2a: Meloetta
+              p2a Meloetta -- critical hit
+              p2a Meloetta used up its Sitrus Berry
+      p1a Gengar used Sludge Bomb -> p2a: Meloetta
+      p2b Keldeo used Secret Sword -> p1b: Breloom
+              p1b Breloom -- critical hit
+      p1b Breloom fainted
+      p2a Meloetta used Hyper Voice -> p1a: Gengar
+              p1a Gengar -- IMMUNE
+      after p1: Gengar 262/262, Breloom 0/261
+      after p2: Meloetta 26/404, Keldeo-Resolute 260/324
+
+  Turn 4
+      p1b <- Jirachi comes in (404/404)
+      after p1: Gengar 262/262, Jirachi 404/404
+      after p2: Meloetta 26/404, Keldeo-Resolute 260/324
+
+  Turn 5
+    p1 greedy: move 1 1, move 2 1
+    p2 greedy: move 2, move 2 1
+      p1a Gengar used Sludge Bomb -> p2a: Meloetta
+      p2a Meloetta fainted
+      p2b Keldeo used Secret Sword -> p1a: Gengar
+              p1a Gengar -- IMMUNE
+      p1b Jirachi used Iron Head -> p2b: Keldeo
+      after p1: Gengar 262/262, Jirachi 404/404
+      after p2: Meloetta 0/404, Keldeo-Resolute 209/324
+
+  Turn 6
+      p2a <- Bisharp comes in (272/272)
+      after p1: Gengar 262/262, Jirachi 404/404
+      after p2: Bisharp 272/272, Keldeo-Resolute 209/324
+
+  Turn 7
+    p1 greedy: move 1 2, move 2 2
+    p2 greedy: move 2 1, move 2 1
+      p1a Gengar used Sludge Bomb -> p2b: Keldeo
+              p2b Keldeo -- critical hit
+      p2b Keldeo fainted
+      p2a Bisharp used Iron Head -> p1a: Gengar
+      p1a Gengar fainted
+      p1b Jirachi used Iron Head -> p2a: Bisharp
+      after p1: Gengar 0/262, Jirachi 404/404
+      after p2: Bisharp 200/272, Keldeo-Resolute 0/324
+
+  Turn 8
+      p1a <- Azumarill comes in (404/404)
+      p2b <- Heatran comes in (367/367)
+      after p1: Azumarill 404/404, Jirachi 404/404
+      after p2: Bisharp 200/272, Heatran 367/367
+
+  Turn 9
+    p1 greedy: move 2 1, move 2 1
+    p2 greedy: move 2 1, move 1
+      p2a Bisharp used Iron Head -> p1a: Azumarill
+              p1a Azumarill used up its Sitrus Berry
+      p1b Jirachi used Iron Head -> p2a: Bisharp
+      p2b Heatran used Heat Wave -> p1a: Azumarill  [[spread] p1a,p1b]
+      p1a Azumarill used Knock Off -> p2a: Bisharp
+              p2a Bisharp used up its Life Orb
+      after p1: Azumarill 175/404, Jirachi 146/404
+      after p2: Bisharp 57/272, Heatran 367/367
+
+  Turn 10
+    p1 greedy: move 2 1, move 2 1
+    p2 greedy: move 2 2, move 1
+      p2a Bisharp used Iron Head -> p1b: Jirachi
+      p1b Jirachi used Iron Head -> p2a: Bisharp
+      p2b Heatran used Heat Wave -> p1b: Jirachi  [[spread] p1a,p1b]
+      p1b Jirachi fainted
+      p1a Azumarill used Knock Off -> p2a: Bisharp
+      p2a Bisharp fainted
+      after p1: Azumarill 87/404, Jirachi 0/404
+      after p2: Bisharp 0/272, Heatran 367/367
+
+  Turn 11
+      p2a <- Venusaur comes in (364/364)
+      p1b <- Talonflame comes in (297/297)
+      after p1: Azumarill 87/404, Talonflame 297/297
+      after p2: Venusaur 364/364, Heatran 367/367
+
+  Turn 12
+    p1 greedy: move 2 1, move 1 1
+    p2 greedy: move 2 1, move 1
+      p1b Talonflame used Brave Bird -> p2a: Venusaur
+      p2a Venusaur fainted
+      p2b Heatran used Heat Wave -> p1b: Talonflame  [[spread] ]
+              p2b Heatran -- MISSED
+              p2b Heatran -- MISSED
+      p1a Azumarill used Knock Off -> p2b: Heatran
+              p2b Heatran used up its Shuca Berry
+      after p1: Azumarill 87/404, Talonflame 148/297
+      after p2: Venusaur 0/364, Heatran 237/367
+
+  Turn 13
+      p2a <- Zapdos comes in (357/357)
+      after p1: Azumarill 87/404, Talonflame 148/297
+      after p2: Zapdos 357/357, Heatran 237/367
+
+  Turn 14
+    p1 greedy: move 2 2, move 1 2
+    p2 greedy: move 1 1, move 1
+      p1b Talonflame used Brave Bird -> p2b: Heatran
+      p2a Zapdos used Thunderbolt -> p1a: Azumarill
+      p1a Azumarill fainted
+      p2b Heatran used Heat Wave -> p1b: Talonflame
+      p1b Talonflame fainted
+      after p1: Azumarill 0/404, Talonflame 0/297
+      after p2: Zapdos 357/357, Heatran 130/367
+
+  RESULT: p2 wins

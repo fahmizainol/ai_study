@@ -1,0 +1,101 @@
+battle 10   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: ORAS Doubles OU: Abomasnow-Mega, Heatran, Hitmontop, Kyurem-Black, Cresselia, Azumarill
+  p2: ORAS Doubles OU: Azumarill, Aromatisse, Diancie, Sylveon, Mawile, Togekiss
+
+  Turn 1
+    p1 mcts: move 2 1, move 2 2
+      search (21000 visits): gigadrain,0;flashcannon,1 2874v 2048 | gigadrain,1;heatwave,0 1181v 786 | gigadrain,1;flashcannon,1 1084v 716 | gigadrain,1;flashcannon,0 839v 538
+    p2 greedy: move 3 1, move 4 1
+      p1b Heatran used Flash Cannon -> p2b: Aromatisse
+              p2b Aromatisse used up its Sitrus Berry
+      p2a Azumarill used Knock Off -> p1a: Abomasnow
+      p1a Abomasnow used Giga Drain -> p2a: Azumarill
+              p2a Azumarill used up its Sitrus Berry
+      p2b Aromatisse used Moonblast -> p1a: Abomasnow
+      after p1: Abomasnow-Mega 272/384, Heatran 386/386
+      after p2: Azumarill 138/404, Aromatisse 152/406
+
+  Turn 2
+    p1 mcts: move 2 2, move 2 1
+      search (30000 visits): gigadrain,1;flashcannon,0 8270v 6466 | gigadrain,1;substitute,1 3005v 2250 | gigadrain,0;flashcannon,1 1491v 1064 | gigadrain,1;protect,1 972v 667
+    p2 greedy: move 3 1, move 4 1
+      p1b Heatran used Flash Cannon -> p2a: Azumarill
+      p2a Azumarill fainted
+      p1a Abomasnow used Giga Drain -> p2b: Aromatisse
+      p2b Aromatisse fainted
+      after p1: Abomasnow-Mega 348/384, Heatran 386/386
+      after p2: Azumarill 0/404, Aromatisse 0/406
+
+  Turn 3
+      p2a <- Diancie comes in (304/304)
+      p2b <- Sylveon comes in (345/345)
+      after p1: Abomasnow-Mega 348/384, Heatran 386/386
+      after p2: Diancie 304/304, Sylveon 345/345
+
+  Turn 4
+    p1 mcts: switch 3, move 2 1   (slot0 Abomasnow-Mega -> Hitmontop)
+      search (32000 visits): switch hitmontop;flashcannon,0 2199v 1309 | switch azumarill;flashcannon,0 1965v 1158 | protect,0;flashcannon,0 1791v 1047 | blizzard,0;flashcannon,0 1530v 880
+    p2 greedy: move 2, move 1
+      p1a <- Hitmontop comes in (304/304)
+              p2a Diancie -- IT FAILED
+              p2b Sylveon atk 1 fell
+      p2b Sylveon used Hyper Voice -> p1b: Heatran  [[spread] p1a,p1b]
+              p1a Hitmontop -- critical hit
+      p1a Hitmontop fainted
+      p1b Heatran used Flash Cannon -> p2a: Diancie
+      p2a Diancie fainted
+      after p1: Hitmontop 0/304, Heatran 332/386
+      after p2: Diancie 0/304, Sylveon 324/345
+
+  Turn 5
+      p1a <- Abomasnow-Mega comes in (348/384)
+      p2a <- Mawile comes in (304/304)
+              p1a Abomasnow atk 1 fell
+              p1b Heatran atk 1 fell
+      after p1: Abomasnow-Mega 348/384, Heatran 332/386
+      after p2: Mawile 304/304, Sylveon 324/345
+
+  Turn 6
+    p1 mcts: move 2 2, move 1
+      search (28000 visits): gigadrain,1;heatwave,0 2085v 1779 | blizzard,0;heatwave,0 1994v 1696 | switch azumarill;heatwave,0 1450v 1208 | protect,0;heatwave,0 1430v 1190
+    p2 greedy: move 1 2, move 1
+      p2b Sylveon used Hyper Voice -> p1b: Heatran  [[spread] p1a,p1b]
+      p1b Heatran used Heat Wave -> p2b: Sylveon  [[spread] p2a,p2b]
+      p2a Mawile fainted
+      p1a Abomasnow used Giga Drain -> p2b: Sylveon
+      after p1: Abomasnow-Mega 205/384, Heatran 281/386
+      after p2: Mawile 0/304, Sylveon 67/345
+
+  Turn 7
+      p2a <- Togekiss comes in (374/374)
+      after p1: Abomasnow-Mega 205/384, Heatran 281/386
+      after p2: Togekiss 374/374, Sylveon 67/345
+
+  Turn 8
+    p1 mcts: move 3, move 1
+      search (51000 visits): protect,0;heatwave,0 32034v 26836 | protect,0;flashcannon,1 2706v 2093 | switch azumarill;heatwave,0 964v 687 | switch cresselia;heatwave,0 926v 658
+    p2 greedy: move 1 1, move 1
+      p1a Abomasnow used Protect
+      p2a Togekiss used Fire Blast -> p1a: Abomasnow
+              p1a Abomasnow -- move: Protect
+      p2b Sylveon used Hyper Voice -> p1b: Heatran  [[spread] p1b]
+              p1a Abomasnow -- move: Protect
+      p1b Heatran used Heat Wave -> p2b: Sylveon  [[spread] p2a,p2b]
+      p2b Sylveon fainted
+      after p1: Abomasnow-Mega 205/384, Heatran 253/386
+      after p2: Togekiss 265/374, Sylveon 0/345
+
+  Turn 9
+    p1 mcts: move 1 1, move 2 1
+      search (63000 visits): iceshard,0;flashcannon,0 6697v 6058 | switch azumarill;flashcannon,0 5156v 4623 | blizzard,0;substitute,1 3911v 3469 | blizzard,0;flashcannon,0 3898v 3456
+    p2 greedy: move 1 1, pass
+      p1a Abomasnow used Ice Shard -> p2a: Togekiss
+      p2a Togekiss used Fire Blast -> p1a: Abomasnow  [[miss]]
+              p2a Togekiss -- MISSED
+      p1b Heatran used Flash Cannon -> p2a: Togekiss
+              p2a Togekiss -- critical hit
+      p2a Togekiss fainted
+      after p1: Abomasnow-Mega 205/384, Heatran 253/386
+      after p2: Togekiss 0/374, Sylveon 0/345
+
+  RESULT: p1 wins

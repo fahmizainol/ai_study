@@ -1,0 +1,164 @@
+battle 1   p1=greedy vs p2=mcts   mcts 300 ms a decision
+  p1: ORAS Doubles OU: Diancie-Mega, Gastrodon-East, Aegislash, Kyurem-Black, Talonflame, Thundurus
+  p2: A Faraway Place: Gengar-Mega, Terrakion, Scizor, Whimsicott, Landorus-Therian, Latios
+
+  Turn 1
+    p1 greedy: move 1, move 2 1
+    p2 mcts: switch 3, switch 5   (slot0 Gengar-Mega -> Scizor; slot1 Terrakion -> Landorus-Therian)
+      search (10000 visits): switch scizor;switch landorustherian 329v 172 | switch landorustherian;switch scizor 204v 93 | switch landorustherian;stoneedge,0 186v 82 | switch scizor;switch latios 182v 80
+      p2b <- Landorus-Therian comes in (382/382)
+              p1a Diancie -- IT FAILED
+              p1b Gastrodon atk 1 fell
+      p2a <- Scizor comes in (311/311)
+      p1a Diancie used Diamond Storm -> p2b: Landorus  [[spread] p2a,p2b]
+              p1a Diancie def 1 rose
+      p1b Gastrodon used Earth Power -> p2a: Scizor
+      p2a Scizor fainted
+      after p1: Diancie-Mega 241/241, Gastrodon-East 421/421
+      after p2: Scizor 0/311, Landorus-Therian 211/382
+
+  Turn 2
+      p2a <- Gengar-Mega comes in (324/324)
+      after p1: Diancie-Mega 241/241, Gastrodon-East 421/421
+      after p2: Gengar-Mega 324/324, Landorus-Therian 211/382
+
+  Turn 3
+    p1 greedy: move 1, move 2 2
+    p2 mcts: move 4, move 1
+      search (14000 visits): protect,0;earthquake,0 762v 405 | shadowball,0;uturn,1 657v 341 | protect,0;uturn,1 430v 206 | shadowball,1;uturn,1 421v 201
+      p2a Gengar used Protect
+      p1a Diancie used Diamond Storm -> p2b: Landorus  [[spread] p2b]
+              p2a Gengar -- move: Protect
+              p1a Diancie def 1 rose
+      p2b Landorus used Earthquake -> p1b: Gastrodon  [[spread] p1a,p1b]
+              p2a Gengar -- move: Protect
+      p1b Gastrodon used Earth Power -> p2b: Landorus
+              p2b Landorus -- IMMUNE
+      after p1: Diancie-Mega 121/241, Gastrodon-East 261/421
+      after p2: Gengar-Mega 324/324, Landorus-Therian 46/382
+
+  Turn 4
+    p1 greedy: move 1, move 2 2
+    p2 mcts: move 1 1, move 4 2
+      search (22000 visits): shadowball,0;uturn,1 1447v 695 | shadowball,0;switch whimsicott 874v 391 | protect,0;earthquake,0 812v 358 | shadowball,0;uturn,0 698v 299
+      p1a Diancie used Diamond Storm -> p2b: Landorus  [[spread] p2a,p2b]
+      p2b Landorus fainted
+      p2a Gengar used Shadow Ball -> p1a: Diancie
+              p1a Diancie -- critical hit
+      p1a Diancie fainted
+      p1b Gastrodon used Earth Power -> p2a: Gengar
+              p2a Gengar -- critical hit
+      p2a Gengar fainted
+      after p1: Diancie-Mega 0/241, Gastrodon-East 261/421
+      after p2: Gengar-Mega 0/324, Landorus-Therian 0/382
+
+  Turn 5
+      p1a <- Aegislash comes in (324/324)
+      p2a <- Whimsicott comes in (324/324)
+      p2b <- Terrakion comes in (323/323)
+      after p1: Aegislash 324/324, Gastrodon-East 261/421
+      after p2: Whimsicott 324/324, Terrakion 323/323
+
+  Turn 6
+    p1 greedy: move 1 1, move 2 1
+    p2 mcts: move 1 2, move 1 2
+      search (13000 visits): moonblast,1;closecombat,1 1992v 1201 | uturn,1;closecombat,1 1106v 629 | uturn,1;stoneedge,0 477v 239 | uturn,1;stoneedge,1 456v 226
+      p2a Whimsicott used Moonblast -> p1b: Gastrodon
+              p1b Gastrodon spa 1 fell
+              p1b Gastrodon used up its Sitrus Berry
+      p2b Terrakion used Close Combat -> p1b: Gastrodon
+              p2b Terrakion def 1 fell
+              p2b Terrakion spd 1 fell
+      p1b Gastrodon fainted
+      p1a Aegislash used Shadow Ball -> p2a: Whimsicott
+              p2a Whimsicott spd 1 fell
+      after p1: Aegislash-Blade 324/324, Gastrodon-East 0/421
+      after p2: Whimsicott 116/324, Terrakion 291/323
+
+  Turn 7
+      p1b <- Kyurem-Black comes in (418/418)
+      after p1: Aegislash-Blade 324/324, Kyurem-Black 418/418
+      after p2: Whimsicott 116/324, Terrakion 291/323
+
+  Turn 8
+    p1 greedy: move 1 1, move 2 1
+    p2 mcts: move 2 1, move 1 2
+      search (20000 visits): uturn,0;closecombat,1 3864v 2781 | uturn,0;stoneedge,0 1942v 1341 | uturn,0;stoneedge,1 1277v 851 | uturn,1;closecombat,1 1065v 697
+      p2a Whimsicott used U-turn -> p1a: Aegislash
+      after p1: Aegislash-Blade 308/324, Kyurem-Black 418/418
+      after p2: Whimsicott 116/324, Terrakion 291/323
+
+  Turn 9
+      p2a <- Latios comes in (360/360)
+      p2b Terrakion used Close Combat -> p1b: Kyurem
+              p2b Terrakion def 1 fell
+              p2b Terrakion spd 1 fell
+      p1b Kyurem fainted
+      p1a Aegislash used Shadow Ball -> p2a: Latios
+      after p1: Aegislash-Blade 308/324, Kyurem-Black 0/418
+      after p2: Latios 64/360, Terrakion 259/323
+
+  Turn 10
+      p1b <- Talonflame comes in (297/297)
+      after p1: Aegislash-Blade 308/324, Talonflame 297/297
+      after p2: Latios 64/360, Terrakion 259/323
+
+  Turn 11
+    p1 greedy: move 1 1, move 1 1
+    p2 mcts: move 1 2, move 4
+      search (42000 visits): dracometeor,1;protect,1 4425v 1994 | dracometeor,0;protect,1 3928v 1753 | psyshock,0;protect,1 3484v 1539 | psyshock,1;protect,1 3454v 1525
+      p2b Terrakion used Protect
+      p1b Talonflame used Flare Blitz -> p2a: Latios
+      p2a Latios fainted
+      p1a Aegislash used Shadow Ball -> p2b: Terrakion
+              p2b Terrakion -- move: Protect
+      after p1: Aegislash-Blade 308/324, Talonflame 247/297
+      after p2: Latios 0/360, Terrakion 259/323
+
+  Turn 12
+      p2a <- Whimsicott comes in (116/324)
+      after p1: Aegislash-Blade 308/324, Talonflame 247/297
+      after p2: Whimsicott 116/324, Terrakion 259/323
+
+  Turn 13
+    p1 greedy: move 1 1, move 1 1
+    p2 mcts: move 2 1, move 2 1
+      search (40000 visits): uturn,0;stoneedge,0 16333v 11305 | uturn,0;stoneedge,1 10960v 7499 | uturn,0;closecombat,1 1699v 1047 | uturn,0;protect,1 1278v 766
+      p2a Whimsicott used U-turn -> p1a: Aegislash
+      p1b Talonflame used Flare Blitz -> p2a: Whimsicott
+      p2a Whimsicott fainted
+      p2b Terrakion used Stone Edge -> p1a: Aegislash
+              p1a Aegislash -- critical hit
+      p1a Aegislash fainted
+      after p1: Aegislash 0/324, Talonflame 131/297
+      after p2: Whimsicott 0/324, Terrakion 227/323
+
+  Turn 14
+      p1a <- Thundurus comes in (361/361)
+      after p1: Thundurus 361/361, Talonflame 131/297
+      after p2: Whimsicott 0/324, Terrakion 227/323
+
+  Turn 15
+    p1 greedy: move 1 2, move 1 2
+    p2 mcts: pass, move 4
+      search (92000 visits): No Move;protect,1 91681v 68821 | No Move;stoneedge,0 95v 26 | No Move;closecombat,1 69v 13 | No Move;stoneedge,1 56v 7
+      p2b Terrakion used Protect
+      p1b Talonflame used Flare Blitz -> p2b: Terrakion
+              p2b Terrakion -- move: Protect
+      p1a Thundurus used Thunderbolt -> p2b: Terrakion
+              p2b Terrakion -- move: Protect
+      after p1: Thundurus 361/361, Talonflame 131/297
+      after p2: Whimsicott 0/324, Terrakion 227/323
+
+  Turn 16
+    p1 greedy: move 1 2, move 1 2
+    p2 mcts: pass, move 4
+      search (84000 visits): No Move;protect,1 83674v 62559 | No Move;stoneedge,0 88v 22 | No Move;closecombat,1 77v 17 | No Move;stoneedge,1 64v 11
+      p2b Terrakion used Protect  [[still]]
+              p2b Terrakion -- IT FAILED
+      p1b Talonflame used Flare Blitz -> p2b: Terrakion
+      p2b Terrakion fainted
+      after p1: Thundurus 361/361, Talonflame 27/297
+      after p2: Whimsicott 0/324, Terrakion 0/323
+
+  RESULT: p1 wins

@@ -1,0 +1,337 @@
+battle 36   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: ORAS Doubles OU: Cresselia, Rhyperior, Heatran, Scrafty, Porygon2, Venusaur-Mega
+  p2: not minesamplesetc/cm garde 2x: Gardevoir-Mega, Thundurus, Amoonguss, Blastoise, Landorus-Therian, Genesect
+
+  Turn 1
+    p1 mcts: switch 4, move 2 2   (slot0 Cresselia -> Scrafty)
+      search (12000 visits): switch scrafty;stoneedge,1 312v 226 | switch scrafty;stoneedge,0 297v 213 | calmmind,0;stoneedge,1 282v 201 | switch scrafty;drillrun,0 248v 172
+    p2 greedy: move 1, move 1 1
+      p1a <- Scrafty comes in (332/332)
+              p2a Gardevoir atk 1 fell
+              p2b Thundurus atk 1 fell
+      p2b Thundurus used Thunderbolt -> p1a: Scrafty
+      p2a Gardevoir used Hyper Voice -> p1b: Rhyperior  [[spread] p1a,p1b]
+              p1a Scrafty used up its Sitrus Berry
+      p1b Rhyperior used Stone Edge -> p2b: Thundurus
+      p2b Thundurus fainted
+      after p1: Scrafty 205/332, Rhyperior 317/429
+      after p2: Gardevoir-Mega 340/340, Thundurus 0/339
+
+  Turn 2
+      p2b <- Amoonguss comes in (432/432)
+      after p1: Scrafty 205/332, Rhyperior 317/429
+      after p2: Gardevoir-Mega 340/340, Amoonguss 432/432
+
+  Turn 3
+    p1 mcts: switch 5, move 2 1   (slot0 Scrafty -> Porygon2)
+      search (20000 visits): switch porygon2;stoneedge,0 328v 160 | knockoff,0;stoneedge,0 309v 149 | switch heatran;stoneedge,1 292v 138 | knockoff,1;stoneedge,1 288v 136
+    p2 greedy: move 1, move 3 1
+      p1a <- Porygon2 comes in (374/374)
+              p1a Porygon2 atk 1 rose
+      p2a Gardevoir used Hyper Voice -> p1b: Rhyperior  [[spread] p1a,p1b]
+      p1b Rhyperior used Stone Edge -> p2a: Gardevoir
+      p2b Amoonguss used Sludge Bomb -> p1a: Porygon2
+              p1a Porygon2 is now psn
+      after p1: Porygon2 219/374, Rhyperior 197/429
+      after p2: Gardevoir-Mega 12/340, Amoonguss 432/432
+
+  Turn 4
+    p1 mcts: move 3 2, move 2 2
+      search (20000 visits): icebeam,1;stoneedge,1 376v 176 | icebeam,1;drillrun,0 362v 168 | switch scrafty;stoneedge,1 362v 168 | icebeam,1;stoneedge,0 359v 166
+    p2 greedy: move 1, move 3 2
+      p2a Gardevoir used Hyper Voice -> p1a: Porygon2  [[spread] p1a,p1b]
+      p1a Porygon2 used Ice Beam -> p2b: Amoonguss
+      p1b Rhyperior used Stone Edge -> p2b: Amoonguss
+      p2b Amoonguss used Sludge Bomb -> p1b: Rhyperior
+      after p1: Porygon2 122/374, Rhyperior 50/429
+      after p2: Gardevoir-Mega 12/340, Amoonguss 11/432
+
+  Turn 5
+    p1 mcts: move 2, switch 5   (slot1 Rhyperior -> Scrafty)
+      search (31000 visits): recover,0;switch scrafty 756v 342 | recover,0;stoneedge,1 596v 257 | recover,0;drillrun,0 552v 234 | icebeam,1;stoneedge,0 526v 220
+    p2 greedy: move 1, move 3 2
+      p1b <- Scrafty comes in (205/332)
+              p2a Gardevoir atk 1 fell
+              p2b Amoonguss atk 1 fell
+      p2a Gardevoir used Hyper Voice -> p1b: Scrafty  [[spread] p1a,p1b]
+      p1a Porygon2 used Recover
+      p2b Amoonguss used Sludge Bomb -> p1b: Scrafty
+      after p1: Porygon2 209/374, Scrafty 42/332
+      after p2: Gardevoir-Mega 12/340, Amoonguss 11/432
+
+  Turn 6
+    p1 mcts: move 2, move 2 2
+      search (32000 visits): recover,0;drainpunch,1 455v 138 | recover,0;knockoff,1 444v 133 | recover,0;drainpunch,0 420v 124 | icebeam,1;knockoff,0 420v 123
+    p2 greedy: move 1, move 3 2
+      p2a Gardevoir used Hyper Voice -> p1a: Porygon2  [[spread] p1a,p1b]
+      p1b Scrafty fainted
+      p1a Porygon2 used Recover
+      p2b Amoonguss used Sludge Bomb -> p1a: Porygon2
+      after p1: Porygon2 241/374, Scrafty 0/332
+      after p2: Gardevoir-Mega 12/340, Amoonguss 11/432
+
+  Turn 7
+      p1b <- Heatran comes in (385/385)
+      after p1: Porygon2 241/374, Heatran 385/385
+      after p2: Gardevoir-Mega 12/340, Amoonguss 11/432
+
+  Turn 8
+    p1 mcts: move 2, move 1
+      search (24000 visits): recover,0;heatwave,0 584v 236 | recover,0;ancientpower,0 526v 208 | icebeam,1;heatwave,0 513v 201 | recover,0;protect,1 475v 182
+    p2 greedy: move 1, move 3 1
+      p2a Gardevoir used Hyper Voice -> p1a: Porygon2  [[spread] p1a,p1b]
+      p1b Heatran used Heat Wave -> p2b: Amoonguss  [[spread] p2b]
+              p1b Heatran -- MISSED
+      p2b Amoonguss fainted
+      p1a Porygon2 used Recover
+      after p1: Porygon2 328/374, Heatran 341/385
+      after p2: Gardevoir-Mega 12/340, Amoonguss 0/432
+
+  Turn 9
+      p2b <- Blastoise comes in (362/362)
+      after p1: Porygon2 328/374, Heatran 341/385
+      after p2: Gardevoir-Mega 12/340, Blastoise 362/362
+
+  Turn 10
+    p1 mcts: switch 4, move 3 2   (slot0 Porygon2 -> Cresselia)
+      search (28000 visits): switch cresselia;ancientpower,1 576v 188 | icebeam,1;ancientpower,1 555v 179 | switch cresselia;heatwave,0 539v 172 | thunderbolt,1;heatwave,0 533v 170
+    p2 greedy: move 1, move 1 1
+      p1a <- Cresselia comes in (444/444)
+      p2a Gardevoir used Hyper Voice -> p1a: Cresselia  [[spread] p1a,p1b]
+              p1a Cresselia -- critical hit
+      p2b Blastoise used Scald -> p1a: Cresselia
+              p1a Cresselia -- critical hit
+              p1a Cresselia is now brn
+      p1b Heatran used Ancient Power -> p2b: Blastoise
+      after p1: Cresselia 175/444, Heatran 298/385
+      after p2: Gardevoir-Mega 12/340, Blastoise 297/362
+
+  Turn 11
+    p1 mcts: move 4, move 3 2
+      search (30000 visits): moonlight,0;ancientpower,1 1535v 647 | moonlight,0;earthpower,1 1340v 554 | moonlight,0;heatwave,0 1295v 532 | moonlight,0;switch porygon2 1027v 406
+    p2 greedy: move 1, move 1 1
+      p2a Gardevoir used Hyper Voice -> p1b: Heatran  [[spread] p1a,p1b]
+      p2b Blastoise used Scald -> p1a: Cresselia
+      p1a Cresselia used Moonlight
+      p1b Heatran used Ancient Power -> p2b: Blastoise
+      after p1: Cresselia 214/444, Heatran 252/385
+      after p2: Gardevoir-Mega 12/340, Blastoise 240/362
+
+  Turn 12
+    p1 mcts: move 4, move 3 2
+      search (30000 visits): moonlight,0;ancientpower,1 1432v 610 | moonlight,0;earthpower,1 1275v 534 | moonlight,0;heatwave,0 1214v 505 | moonlight,0;switch porygon2 984v 395
+    p2 greedy: move 1, move 1 1
+      p2a Gardevoir used Hyper Voice -> p1b: Heatran  [[spread] p1a,p1b]
+              p1b Heatran -- critical hit
+      p2b Blastoise used Scald -> p1a: Cresselia
+      p1a Cresselia used Moonlight
+      p1b Heatran used Ancient Power -> p2b: Blastoise
+              p2b Blastoise used up its Sitrus Berry
+      after p1: Cresselia 247/444, Heatran 179/385
+      after p2: Gardevoir-Mega 12/340, Blastoise 264/362
+
+  Turn 13
+    p1 mcts: move 4, move 1
+      search (24000 visits): moonlight,0;heatwave,0 821v 348 | moonlight,0;ancientpower,1 788v 332 | moonlight,0;earthpower,1 731v 303 | moonlight,0;switch porygon2 674v 275
+    p2 greedy: move 1, move 1 2
+      p2a Gardevoir used Hyper Voice -> p1b: Heatran  [[spread] p1a,p1b]
+      p2b Blastoise used Scald -> p1b: Heatran
+      p1b Heatran fainted
+      p1a Cresselia used Moonlight
+      after p1: Cresselia 338/444, Heatran 0/385
+      after p2: Gardevoir-Mega 12/340, Blastoise 264/362
+
+  Turn 14
+      p1b <- Porygon2 comes in (328/374)
+              p1b Porygon2 atk 1 rose
+      after p1: Cresselia 338/444, Porygon2 328/374
+      after p2: Gardevoir-Mega 12/340, Blastoise 264/362
+
+  Turn 15
+    p1 mcts: move 1, move 3 2
+      search (23000 visits): calmmind,0;icebeam,1 956v 363 | calmmind,0;thunderbolt,1 805v 295 | calmmind,0;recover,1 769v 279 | moonlight,0;icebeam,1 630v 218
+    p2 greedy: move 1, move 1 1
+      p2a Gardevoir used Hyper Voice -> p1a: Cresselia  [[spread] p1a,p1b]
+      p2b Blastoise used Scald -> p1a: Cresselia
+      p1a Cresselia used Calm Mind
+              p1a Cresselia spa 1 rose
+              p1a Cresselia spd 1 rose
+      p1b Porygon2 used Ice Beam -> p2b: Blastoise
+      after p1: Cresselia 150/444, Porygon2 229/374
+      after p2: Gardevoir-Mega 12/340, Blastoise 237/362
+
+  Turn 16
+    p1 mcts: move 4, move 2
+      search (31000 visits): moonlight,0;recover,1 3400v 1242 | moonlight,0;icebeam,1 2088v 718 | moonlight,0;thunderbolt,1 1799v 605 | moonlight,0;trickroom,1 1283v 406
+    p2 greedy: move 1, move 1 1
+      p2a Gardevoir used Hyper Voice -> p1b: Porygon2  [[spread] p1a,p1b]
+      p2b Blastoise used Scald -> p1a: Cresselia
+      p1a Cresselia used Moonlight
+      p1b Porygon2 used Recover
+      after p1: Cresselia 224/444, Porygon2 311/374
+      after p2: Gardevoir-Mega 12/340, Blastoise 237/362
+
+  Turn 17
+    p1 mcts: move 4, move 3 2
+      search (29000 visits): moonlight,0;icebeam,1 2023v 746 | moonlight,0;recover,1 1560v 553 | moonlight,0;thunderbolt,1 1358v 470 | moonlight,0;trickroom,0 977v 317
+    p2 greedy: move 1, move 1 1
+      p2a Gardevoir used Hyper Voice -> p1a: Cresselia  [[spread] p1a,p1b]
+      p2b Blastoise used Scald -> p1a: Cresselia
+      p1a Cresselia used Moonlight
+      p1b Porygon2 used Ice Beam -> p2b: Blastoise
+      after p1: Cresselia 299/444, Porygon2 210/374
+      after p2: Gardevoir-Mega 12/340, Blastoise 207/362
+
+  Turn 18
+    p1 mcts: move 4, move 2
+      search (30000 visits): moonlight,0;recover,1 1284v 427 | calmmind,0;recover,1 1219v 401 | moonlight,0;icebeam,1 1133v 368 | psychic,1;recover,1 926v 287
+    p2 greedy: move 1, move 1 2
+      p2a Gardevoir used Hyper Voice -> p1a: Cresselia  [[spread] p1a,p1b]
+      p2b Blastoise used Scald -> p1b: Porygon2
+              p1b Porygon2 -- critical hit
+      p1a Cresselia used Moonlight
+      p1b Porygon2 used Recover
+      after p1: Cresselia 389/444, Porygon2 221/374
+      after p2: Gardevoir-Mega 12/340, Blastoise 207/362
+
+  Turn 19
+    p1 mcts: move 1, move 2
+      search (28000 visits): calmmind,0;recover,1 1181v 394 | psychic,1;recover,1 982v 315 | calmmind,0;icebeam,1 911v 287 | moonlight,0;recover,1 790v 240
+    p2 greedy: move 1, move 1 2
+      p2a Gardevoir used Hyper Voice -> p1a: Cresselia  [[spread] p1a,p1b]
+      p2b Blastoise used Scald -> p1b: Porygon2
+      p1a Cresselia used Calm Mind
+              p1a Cresselia spa 1 rose
+              p1a Cresselia spd 1 rose
+      p1b Porygon2 used Recover
+      after p1: Cresselia 284/444, Porygon2 256/374
+      after p2: Gardevoir-Mega 12/340, Blastoise 207/362
+
+  Turn 20
+    p1 mcts: move 4, move 2
+      search (25000 visits): moonlight,0;recover,1 1176v 401 | moonlight,0;icebeam,1 1096v 369 | psychic,1;recover,1 881v 283 | moonlight,0;thunderbolt,1 761v 235
+    p2 greedy: move 1, move 1 1
+      p2a Gardevoir used Hyper Voice -> p1a: Cresselia  [[spread] p1a,p1b]
+              p1b Porygon2 -- critical hit
+      p2b Blastoise used Scald -> p1a: Cresselia
+      p1a Cresselia used Moonlight
+      p1b Porygon2 used Recover
+      after p1: Cresselia 383/444, Porygon2 314/374
+      after p2: Gardevoir-Mega 12/340, Blastoise 207/362
+
+  Turn 21
+    p1 mcts: move 2 2, move 2
+      search (25000 visits): psychic,1;recover,1 843v 262 | psychic,1;icebeam,1 794v 243 | calmmind,0;icebeam,1 781v 238 | moonlight,0;icebeam,1 698v 207
+    p2 greedy: move 2 2, move 1 2
+      p2a Gardevoir used Psyshock -> p1b: Porygon2
+      p2b Blastoise used Scald -> p1b: Porygon2
+      p1a Cresselia used Psychic -> p2b: Blastoise
+      p1b Porygon2 used Recover
+      after p1: Cresselia 328/444, Porygon2 301/374
+      after p2: Gardevoir-Mega 12/340, Blastoise 68/362
+
+  Turn 22
+    p1 mcts: move 4, move 3 2
+      search (30000 visits): moonlight,0;icebeam,1 1087v 324 | moonlight,0;recover,1 1028v 302 | calmmind,0;icebeam,1 952v 275 | calmmind,0;recover,1 879v 248
+    p2 greedy: move 2 1, move 1 1
+      p2a Gardevoir used Psyshock -> p1a: Cresselia
+      p2b Blastoise used Scald -> p1a: Cresselia
+      p1a Cresselia used Moonlight
+      p1b Porygon2 used Ice Beam -> p2b: Blastoise
+      after p1: Cresselia 384/444, Porygon2 255/374
+      after p2: Gardevoir-Mega 12/340, Blastoise 37/362
+
+  Turn 23
+    p1 mcts: move 1, move 2
+      search (33000 visits): calmmind,0;recover,1 1319v 338 | calmmind,0;icebeam,1 1099v 269 | trickroom,0;recover,1 1054v 254 | psychic,1;recover,1 1007v 240
+    p2 greedy: move 2 2, move 1 2
+      p2a Gardevoir used Psyshock -> p1b: Porygon2
+      p2b Blastoise used Scald -> p1b: Porygon2
+      p1a Cresselia used Calm Mind
+              p1a Cresselia spa 1 rose
+              p1a Cresselia spd 1 rose
+      p1b Porygon2 used Recover
+      after p1: Cresselia 329/444, Porygon2 224/374
+      after p2: Gardevoir-Mega 12/340, Blastoise 37/362
+
+  Turn 24
+    p1 mcts: move 1, move 2
+      search (35000 visits): calmmind,0;recover,1 1550v 404 | trickroom,0;recover,1 1381v 350 | psychic,1;recover,1 1323v 332 | trickroom,1;recover,1 1293v 323
+    p2 greedy: move 2 2, move 1 2
+      p2a Gardevoir used Psyshock -> p1b: Porygon2
+      p2b Blastoise used Scald -> p1b: Porygon2
+      p1a Cresselia used Calm Mind
+              p1a Cresselia spa 1 rose
+              p1a Cresselia spd 1 rose
+      p1b Porygon2 used Recover
+      after p1: Cresselia 274/444, Porygon2 178/374
+      after p2: Gardevoir-Mega 12/340, Blastoise 37/362
+
+  Turn 25
+    p1 mcts: move 3, move 2
+      search (36000 visits): trickroom,1;recover,1 1572v 389 | psychic,1;recover,1 1557v 384 | trickroom,0;recover,1 1557v 384 | calmmind,0;recover,1 1474v 359
+    p2 greedy: move 2 2, move 1 2
+      p2a Gardevoir used Psyshock -> p1b: Porygon2
+              p1b Porygon2 -- critical hit
+      p2b Blastoise used Scald -> p1b: Porygon2
+      p1b Porygon2 fainted
+      p1a Cresselia used Trick Room
+      after p1: Cresselia 219/444, Porygon2 0/374
+      after p2: Gardevoir-Mega 12/340, Blastoise 37/362
+
+  Turn 26
+      p1b <- Rhyperior comes in (50/429)
+      after p1: Cresselia 219/444, Rhyperior 50/429
+      after p2: Gardevoir-Mega 12/340, Blastoise 37/362
+
+  Turn 27
+    p1 mcts: move 2 2, move 2 1
+      search (37000 visits): psychic,1;stoneedge,0 1883v 541 | psychic,1;drillrun,0 1686v 474 | psychic,1;stoneedge,1 1649v 462 | psychic,0;drillrun,1 1647v 461
+    p2 greedy: move 2 2, move 1 2
+      p1b Rhyperior used Stone Edge -> p2a: Gardevoir
+      p2a Gardevoir fainted
+      p1a Cresselia used Psychic -> p2b: Blastoise
+              p2b Blastoise -- critical hit
+      p2b Blastoise fainted
+      after p1: Cresselia 164/444, Rhyperior 8/429
+      after p2: Gardevoir-Mega 0/340, Blastoise 0/362
+
+  Turn 28
+      p2b <- Genesect comes in (284/284)
+      p2a <- Landorus-Therian comes in (320/320)
+              p2b Genesect atk 1 rose
+              p1a Cresselia atk 1 fell
+              p1b Rhyperior atk 1 fell
+      after p1: Cresselia 164/444, Rhyperior 8/429
+      after p2: Landorus-Therian 320/320, Genesect 284/284
+
+  Turn 29
+    p1 mcts: move 2 2, move 2 2
+      search (55000 visits): psychic,1;stoneedge,1 10608v 4730 | psychic,0;stoneedge,1 8132v 3574 | psychic,0;drillrun,1 6099v 2631 | psychic,0;switch venusaurmega 3341v 1371
+    p2 greedy: move 4 2, move 4 2
+      p1b Rhyperior used Stone Edge -> p2b: Genesect
+      p1b Rhyperior fainted
+      p1a Cresselia used Psychic -> p2b: Genesect
+      p2b Genesect fainted
+      p2a Landorus used Superpower -> p1a: Cresselia
+              p2a Landorus atk 1 fell
+              p2a Landorus def 1 fell
+      after p1: Cresselia 50/444, Rhyperior 0/429
+      after p2: Landorus-Therian 320/320, Genesect 0/284
+
+  Turn 30
+      p1b <- Venusaur-Mega comes in (364/364)
+      after p1: Cresselia 50/444, Venusaur-Mega 364/364
+      after p2: Landorus-Therian 320/320, Genesect 0/284
+
+  Turn 31
+    p1 mcts: move 2 1, move 1 1
+      search (1269000 visits): psychic,0;gigadrain,0 423018v 423018 | psychic,0;sludgebomb,0 423010v 423010 | psychic,0;synthesis,1 227663v 226989 | psychic,0;sleeppowder,0 180543v 179762
+    p2 greedy: move 4 1, pass
+      p1b Venusaur used Giga Drain -> p2a: Landorus
+      p1a Cresselia used Psychic -> p2a: Landorus
+      p2a Landorus fainted
+      after p1: Cresselia 50/444, Venusaur-Mega 364/364
+      after p2: Landorus-Therian 0/320, Genesect 0/284
+
+  RESULT: p1 wins

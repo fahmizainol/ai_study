@@ -1,0 +1,189 @@
+battle 0   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: dpl ::/Untitled 174: Kangaskhan-Mega, Deoxys-Speed, Sylveon, Amoonguss, Landorus, Volcanion
+  p2: ORAS Doubles OU: Diancie-Mega, Jirachi, Landorus-Therian, Azumarill, Talonflame, Kyurem-Black
+
+  Turn 1
+    p1 mcts: switch 4, switch 6   (slot0 Kangaskhan-Mega -> Amoonguss; slot1 Deoxys-Speed -> Volcanion)
+      search (43000 visits): switch amoonguss;switch volcanion 457v 448 | switch amoonguss;switch sylveon 456v 447 | switch amoonguss;hiddenpower,1 450v 441 | switch amoonguss;switch landorus 448v 439
+    p2 greedy: move 1, move 2 1
+      p1b <- Volcanion comes in (364/364)
+      p1a <- Amoonguss comes in (432/432)
+      p2a Diancie used Diamond Storm -> p1a: Amoonguss  [[spread] p1a,p1b]
+      p2b Jirachi used Iron Head -> p1a: Amoonguss
+              p1a Amoonguss -- critical hit
+      after p1: Amoonguss 98/432, Volcanion 92/364
+      after p2: Diancie-Mega 241/241, Jirachi 337/404
+
+  Turn 2
+    p1 mcts: move 4 2, move 2 1
+      search (26000 visits): foulplay,1;steameruption,0 253v 235 | ragepowder,0;steameruption,0 252v 234 | foulplay,0;steameruption,0 247v 229 | foulplay,1;heatwave,0 247v 229
+    p2 greedy: move 1, move 2 1
+      p2a Diancie used Diamond Storm -> p1b: Volcanion  [[spread] p1a,p1b]
+              p2a Diancie def 1 rose
+      p1a Amoonguss fainted
+      p1b Volcanion fainted
+      p2b Jirachi used Iron Head -> p1: Amoonguss  [[notarget]]
+              p2b Jirachi -- IT FAILED
+      after p1: Amoonguss 0/432, Volcanion 0/364
+      after p2: Diancie-Mega 241/241, Jirachi 337/404
+
+  Turn 3
+      p1b <- Kangaskhan-Mega comes in (414/414)
+      p1a <- Sylveon comes in (393/393)
+      after p1: Sylveon 393/393, Kangaskhan-Mega 414/414
+      after p2: Diancie-Mega 241/241, Jirachi 337/404
+
+  Turn 4
+    p1 mcts: move 2, move 1 2
+      search (33000 visits): calmmind,0;fakeout,1 868v 852 | calmmind,0;protect,1 824v 805 | calmmind,0;wish,1 820v 801 | calmmind,0;seismictoss,1 814v 795
+    p2 greedy: move 1, move 2 1
+      p1b Kangaskhan used Fake Out -> p2b: Jirachi
+      p2a Diancie used Diamond Storm -> p1a: Sylveon  [[spread] p1a,p1b]
+              p2a Diancie def 1 rose
+              p2b Jirachi COULD NOT MOVE (flinch)
+      p1a Sylveon used Calm Mind
+              p1a Sylveon spa 1 rose
+              p1a Sylveon spd 1 rose
+      after p1: Sylveon 252/393, Kangaskhan-Mega 281/414
+      after p2: Diancie-Mega 241/241, Jirachi 315/404
+
+  Turn 5
+    p1 mcts: move 1, move 3
+      search (47000 visits): hypervoice,0;wish,1 1247v 1226 | calmmind,0;wish,1 1246v 1225 | hypervoice,0;protect,1 1221v 1198 | hypervoice,0;fakeout,0 1208v 1185
+    p2 greedy: move 1, move 2 1
+      p2a Diancie used Diamond Storm -> p1b: Kangaskhan  [[spread] p1a,p1b]
+              p2a Diancie def 1 rose
+      p1b Kangaskhan used Wish
+      p2b Jirachi used Iron Head -> p1a: Sylveon
+              p1a Sylveon -- critical hit
+      p1a Sylveon fainted
+      after p1: Sylveon 0/393, Kangaskhan-Mega 152/414
+      after p2: Diancie-Mega 241/241, Jirachi 315/404
+
+  Turn 6
+      p1a <- Landorus comes in (321/321)
+      after p1: Landorus 321/321, Kangaskhan-Mega 152/414
+      after p2: Diancie-Mega 241/241, Jirachi 315/404
+
+  Turn 7
+    p1 mcts: move 1 2, move 3
+      search (42000 visits): earthpower,1;wish,1 891v 878 | earthpower,1;fakeout,1 890v 877 | earthpower,1;seismictoss,1 879v 865 | earthpower,1;protect,1 870v 856
+    p2 greedy: move 1, move 2 2
+      p2a Diancie used Diamond Storm -> p1a: Landorus  [[spread] p1a]
+              p2a Diancie -- MISSED
+              p1a Landorus -- critical hit
+              p2a Diancie def 1 rose
+      p1a Landorus used Earth Power -> p2b: Jirachi
+      p2b Jirachi fainted
+      p1b Kangaskhan used Wish  [[still]]
+              p1b Kangaskhan -- IT FAILED
+      after p1: Landorus 65/321, Kangaskhan-Mega 359/414
+      after p2: Diancie-Mega 241/241, Jirachi 0/404
+
+  Turn 8
+      p2b <- Landorus-Therian comes in (319/319)
+              p1a Landorus atk 1 fell
+              p1b Kangaskhan atk 1 fell
+      after p1: Landorus 65/321, Kangaskhan-Mega 359/414
+      after p2: Diancie-Mega 241/241, Landorus-Therian 319/319
+
+  Turn 9
+    p1 mcts: move 2 2, move 4
+      search (46000 visits): psychic,1;protect,1 1416v 1247 | switch deoxysspeed;protect,1 1228v 1070 | psychic,1;wish,1 1226v 1068 | switch deoxysspeed;wish,1 1189v 1033
+    p2 greedy: move 1, move 4 1
+      p1b Kangaskhan used Protect
+      p2b Landorus used Superpower -> p1a: Landorus
+              p2b Landorus atk 1 fell
+              p2b Landorus def 1 fell
+      p1a Landorus fainted
+      p2a Diancie used Diamond Storm -> p1b: Kangaskhan
+              p1b Kangaskhan -- move: Protect
+      after p1: Landorus 0/321, Kangaskhan-Mega 359/414
+      after p2: Diancie-Mega 241/241, Landorus-Therian 319/319
+
+  Turn 10
+      p1a <- Deoxys-Speed comes in (259/259)
+      after p1: Deoxys-Speed 259/259, Kangaskhan-Mega 359/414
+      after p2: Diancie-Mega 241/241, Landorus-Therian 319/319
+
+  Turn 11
+    p1 mcts: move 2 2, move 1 2
+      search (36000 visits): icebeam,1;fakeout,1 2844v 1710 | icebeam,1;wish,1 2265v 1338 | hiddenpower,1;wish,1 1871v 1088 | hiddenpower,1;protect,1 1796v 1040
+    p2 greedy: move 1, move 4 2
+      p1b Kangaskhan used Fake Out  [[still]]
+              p1b Kangaskhan -- IT FAILED
+      p1a Deoxys used Ice Beam -> p2b: Landorus
+      p2b Landorus fainted
+      p2a Diancie used Diamond Storm -> p1b: Kangaskhan  [[spread] p1a,p1b]
+              p2a Diancie def 1 rose
+      after p1: Deoxys-Speed 78/259, Kangaskhan-Mega 242/414
+      after p2: Diancie-Mega 241/241, Landorus-Therian 0/319
+
+  Turn 12
+      p2b <- Azumarill comes in (402/402)
+      after p1: Deoxys-Speed 78/259, Kangaskhan-Mega 242/414
+      after p2: Diancie-Mega 241/241, Azumarill 402/402
+
+  Turn 13
+    p1 mcts: move 3 2, move 4
+      search (73000 visits): psychoboost,1;protect,1 4881v 4377 | icebeam,1;protect,1 3673v 3256 | hiddenpower,1;protect,1 3640v 3225 | icebeam,0;protect,1 3231v 2847
+    p2 greedy: move 3 1, move 3 1
+      p1b Kangaskhan used Protect
+      p1a Deoxys used Psycho Boost -> p2b: Azumarill
+              p1a Deoxys spa 2 fell
+              p2b Azumarill used up its Sitrus Berry
+      p2a Diancie used Moonblast -> p1a: Deoxys
+              p1a Deoxys -- critical hit
+      p1a Deoxys fainted
+      p2b Azumarill used Knock Off -> p1b: Kangaskhan
+              p1b Kangaskhan -- move: Protect
+      after p1: Deoxys-Speed 0/259, Kangaskhan-Mega 242/414
+      after p2: Diancie-Mega 241/241, Azumarill 210/402
+
+  Turn 14
+    p1 mcts: pass, move 4
+      search (110000 visits): No Move;protect,1 102285v 96012 | No Move;fakeout,1 1900v 1602 | No Move;wish,1 1680v 1404 | No Move;seismictoss,1 1640v 1369
+    p2 greedy: move 3 2, move 3 2
+      p1b Kangaskhan used Protect
+      p2a Diancie used Moonblast -> p1b: Kangaskhan
+              p1b Kangaskhan -- move: Protect
+      p2b Azumarill used Knock Off -> p1b: Kangaskhan
+              p1b Kangaskhan -- move: Protect
+      after p1: Deoxys-Speed 0/259, Kangaskhan-Mega 242/414
+      after p2: Diancie-Mega 241/241, Azumarill 210/402
+
+  Turn 15
+    p1 mcts: pass, move 4
+      search (97000 visits): No Move;protect,1 89145v 83680 | No Move;fakeout,1 2121v 1804 | No Move;wish,1 1666v 1395 | No Move;seismictoss,1 1640v 1371
+    p2 greedy: move 3 2, move 3 2
+      p1b Kangaskhan used Protect  [[still]]
+              p1b Kangaskhan -- IT FAILED
+      p2a Diancie used Moonblast -> p1b: Kangaskhan
+      p2b Azumarill used Knock Off -> p1b: Kangaskhan
+      after p1: Deoxys-Speed 0/259, Kangaskhan-Mega 22/414
+      after p2: Diancie-Mega 241/241, Azumarill 210/402
+
+  Turn 16
+    p1 mcts: pass, move 4
+      search (90000 visits): No Move;protect,1 86461v 54052 | No Move;seismictoss,1 1744v 919 | No Move;seismictoss,0 530v 230 | No Move;fakeout,0 431v 177
+    p2 greedy: move 3 2, move 3 2
+      p1b Kangaskhan used Protect
+      p2a Diancie used Moonblast -> p1b: Kangaskhan
+              p1b Kangaskhan -- move: Protect
+      p2b Azumarill used Knock Off -> p1b: Kangaskhan
+              p1b Kangaskhan -- move: Protect
+      after p1: Deoxys-Speed 0/259, Kangaskhan-Mega 22/414
+      after p2: Diancie-Mega 241/241, Azumarill 210/402
+
+  Turn 17
+    p1 mcts: pass, move 4
+      search (90000 visits): No Move;protect,1 85829v 53388 | No Move;seismictoss,1 2318v 1248 | No Move;wish,1 540v 233 | No Move;seismictoss,0 532v 229
+    p2 greedy: move 3 2, move 3 2
+      p1b Kangaskhan used Protect  [[still]]
+              p1b Kangaskhan -- IT FAILED
+      p2a Diancie used Moonblast -> p1b: Kangaskhan
+      p1b Kangaskhan fainted
+      after p1: Deoxys-Speed 0/259, Kangaskhan-Mega 0/414
+      after p2: Diancie-Mega 241/241, Azumarill 210/402
+
+  RESULT: p2 wins

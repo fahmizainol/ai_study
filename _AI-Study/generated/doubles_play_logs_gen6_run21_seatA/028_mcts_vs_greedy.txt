@@ -1,0 +1,299 @@
+battle 28   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: ORAS Doubles OU: Lucario, Talonflame, Latios, Thundurus, Landorus-Therian, Ferrothorn
+  p2: diancie gastro 5: this time it&#39;s personal: Gengar-Mega, Kyurem-Black, Gastrodon-East, Diancie, Genesect, Conkeldurr
+
+  Turn 1
+    p1 mcts: move 4, move 4
+      search (40000 visits): protect,0;protect,1 3591v 2107 | closecombat-mega,1;protect,1 2916v 1522 | protect-mega,0;protect,1 1365v 659 | closecombat-mega,1;bravebird,0 1082v 506
+    p2 greedy: move 1 1, move 1 1
+      p1b Talonflame used Protect
+      p1a Lucario used Protect
+      p2a Gengar used Sludge Bomb -> p1a: Lucario
+              p1a Lucario -- IMMUNE
+      p2b Kyurem used Earth Power -> p1a: Lucario
+              p1a Lucario -- move: Protect
+      after p1: Lucario 281/281, Talonflame 298/298
+      after p2: Gengar-Mega 322/322, Kyurem-Black 392/392
+
+  Turn 2
+    p1 mcts: move 1 2 mega, move 4
+      search (36000 visits): closecombat-mega,1;protect,1 3571v 2217 | protect-mega,0;protect,1 2559v 1553 | protect,0;protect,1 2081v 1243 | protect-mega,0;bravebird,1 1734v 1019
+    p2 greedy: move 1 1, move 1 1
+      p1b Talonflame used Protect  [[still]]
+              p1b Talonflame -- IT FAILED
+      p2a Gengar used Sludge Bomb -> p1a: Lucario
+              p1a Lucario -- IMMUNE
+      p1a Lucario used Close Combat -> p2b: Kyurem
+              p2b Kyurem -- critical hit
+              p1a Lucario def 1 fell
+              p1a Lucario spd 1 fell
+      p2b Kyurem fainted
+      after p1: Lucario-Mega 281/281, Talonflame 298/298
+      after p2: Gengar-Mega 322/322, Kyurem-Black 0/392
+
+  Turn 3
+      p2b <- Gastrodon-East comes in (421/421)
+      after p1: Lucario-Mega 281/281, Talonflame 298/298
+      after p2: Gengar-Mega 322/322, Gastrodon-East 421/421
+
+  Turn 4
+    p1 mcts: move 4, move 4
+      search (54000 visits): protect,0;protect,1 36350v 21583 | protect,0;flareblitz,0 1819v 924 | protect,0;bravebird,0 1178v 567 | protect,0;tailwind,1 966v 452
+    p2 greedy: move 1 1, move 2 1
+      p1a Lucario used Protect
+      p1b Talonflame used Protect
+      p2a Gengar used Sludge Bomb -> p1a: Lucario
+              p1a Lucario -- IMMUNE
+      p2b Gastrodon used Earth Power -> p1a: Lucario
+              p1a Lucario -- move: Protect
+      after p1: Lucario-Mega 281/281, Talonflame 298/298
+      after p2: Gengar-Mega 322/322, Gastrodon-East 421/421
+
+  Turn 5
+    p1 mcts: move 4, move 4
+      search (50000 visits): protect,0;protect,1 33447v 21015 | closecombat,1;flareblitz,1 1047v 508 | closecombat,1;protect,1 1016v 491 | closecombat,1;bravebird,1 933v 445
+    p2 greedy: move 1 1, move 2 1
+      p1a Lucario used Protect  [[still]]
+              p1a Lucario -- IT FAILED
+      p1b Talonflame used Protect  [[still]]
+              p1b Talonflame -- IT FAILED
+      p2a Gengar used Sludge Bomb -> p1a: Lucario
+              p1a Lucario -- IMMUNE
+      p2b Gastrodon used Earth Power -> p1a: Lucario
+      p1a Lucario fainted
+      after p1: Lucario 0/281, Talonflame 298/298
+      after p2: Gengar-Mega 322/322, Gastrodon-East 421/421
+
+  Turn 6
+      p1a <- Latios comes in (301/301)
+      after p1: Latios 301/301, Talonflame 298/298
+      after p2: Gengar-Mega 322/322, Gastrodon-East 421/421
+
+  Turn 7
+    p1 mcts: move 4, move 4
+      search (41000 visits): protect,0;protect,1 13889v 7475 | psyshock,0;tailwind,1 3601v 1802 | psyshock,0;protect,1 3067v 1515 | protect,0;tailwind,1 2403v 1161
+    p2 greedy: move 1 1, move 2 1
+      p1b Talonflame used Protect
+      p1a Latios used Protect
+      p2a Gengar used Sludge Bomb -> p1a: Latios
+              p1a Latios -- move: Protect
+      p2b Gastrodon used Earth Power -> p1a: Latios
+              p1a Latios -- IMMUNE
+      after p1: Latios 301/301, Talonflame 298/298
+      after p2: Gengar-Mega 322/322, Gastrodon-East 421/421
+
+  Turn 8
+    p1 mcts: move 4, move 4
+      search (44000 visits): protect,0;protect,1 12289v 6459 | psyshock,0;protect,1 4796v 2400 | protect,0;tailwind,1 3599v 1764 | psyshock,0;tailwind,1 3373v 1645
+    p2 greedy: move 1 1, move 2 1
+      p1b Talonflame used Protect
+      p1a Latios used Protect
+      p2a Gengar used Sludge Bomb -> p1a: Latios
+              p1a Latios -- move: Protect
+      p2b Gastrodon used Earth Power -> p1a: Latios
+              p1a Latios -- IMMUNE
+      after p1: Latios 301/301, Talonflame 298/298
+      after p2: Gengar-Mega 322/322, Gastrodon-East 421/421
+
+  Turn 9
+    p1 mcts: move 4, move 4
+      search (47000 visits): protect,0;protect,1 16846v 9014 | psyshock,0;protect,1 4368v 2174 | psyshock,0;tailwind,1 3874v 1911 | protect,0;tailwind,1 2776v 1332
+    p2 greedy: move 1 1, move 2 1
+      p1b Talonflame used Protect  [[still]]
+              p1b Talonflame -- IT FAILED
+      p1a Latios used Protect  [[still]]
+              p1a Latios -- IT FAILED
+      p2a Gengar used Sludge Bomb -> p1a: Latios
+      p2b Gastrodon used Earth Power -> p1a: Latios
+              p1a Latios -- IMMUNE
+      after p1: Latios 142/301, Talonflame 298/298
+      after p2: Gengar-Mega 322/322, Gastrodon-East 421/421
+
+  Turn 10
+    p1 mcts: move 4, move 4
+      search (50000 visits): protect,0;protect,1 11476v 6329 | hiddenpower,1;protect,1 7696v 4170 | psyshock,1;protect,1 7528v 4075 | psyshock,0;protect,1 2165v 1107
+    p2 greedy: move 1 1, move 2 1
+      p1b Talonflame used Protect
+      p1a Latios used Protect
+      p2a Gengar used Sludge Bomb -> p1a: Latios
+              p1a Latios -- move: Protect
+      p2b Gastrodon used Earth Power -> p1a: Latios
+              p1a Latios -- IMMUNE
+      after p1: Latios 142/301, Talonflame 298/298
+      after p2: Gengar-Mega 322/322, Gastrodon-East 421/421
+
+  Turn 11
+    p1 mcts: move 4, move 4
+      search (49000 visits): protect,0;protect,1 15919v 8959 | psyshock,1;protect,1 9580v 5284 | hiddenpower,1;protect,1 6677v 3620 | protect,0;tailwind,1 1806v 884
+    p2 greedy: move 1 1, move 2 1
+      p1b Talonflame used Protect  [[still]]
+              p1b Talonflame -- IT FAILED
+      p1a Latios used Protect  [[still]]
+              p1a Latios -- IT FAILED
+      p2a Gengar used Sludge Bomb -> p1a: Latios
+      p1a Latios fainted
+      p2b Gastrodon used Earth Power -> p1b: Talonflame
+              p1b Talonflame -- IMMUNE
+      after p1: Latios 0/301, Talonflame 298/298
+      after p2: Gengar-Mega 322/322, Gastrodon-East 421/421
+
+  Turn 12
+      p1a <- Thundurus comes in (299/299)
+      after p1: Thundurus 299/299, Talonflame 298/298
+      after p2: Gengar-Mega 322/322, Gastrodon-East 421/421
+
+  Turn 13
+    p1 mcts: move 4, move 4
+      search (46000 visits): protect,0;protect,1 28842v 17073 | protect,0;tailwind,1 907v 393 | thunderwave,0;protect,1 865v 372 | flashcannon,0;protect,1 746v 312
+    p2 greedy: move 1 1, move 2 1
+      p1a Thundurus used Protect
+      p1b Talonflame used Protect
+      p2a Gengar used Sludge Bomb -> p1a: Thundurus
+              p1a Thundurus -- move: Protect
+      p2b Gastrodon used Earth Power -> p1a: Thundurus
+              p1a Thundurus -- IMMUNE
+      after p1: Thundurus 299/299, Talonflame 298/298
+      after p2: Gengar-Mega 322/322, Gastrodon-East 421/421
+
+  Turn 14
+    p1 mcts: move 4, move 4
+      search (38000 visits): protect,0;protect,1 17158v 9894 | thunderwave,0;protect,1 1627v 810 | protect,0;tailwind,1 1007v 470 | thunderbolt,1;protect,1 885v 405
+    p2 greedy: move 1 1, move 2 1
+      p1a Thundurus used Protect  [[still]]
+              p1a Thundurus -- IT FAILED
+      p1b Talonflame used Protect  [[still]]
+              p1b Talonflame -- IT FAILED
+      p2a Gengar used Sludge Bomb -> p1a: Thundurus
+      p2b Gastrodon used Earth Power -> p1a: Thundurus
+              p1a Thundurus -- IMMUNE
+      after p1: Thundurus 113/299, Talonflame 298/298
+      after p2: Gengar-Mega 322/322, Gastrodon-East 421/421
+
+  Turn 15
+    p1 mcts: move 4, move 4
+      search (54000 visits): protect,0;protect,1 20623v 12223 | thunderbolt,1;protect,1 14713v 8569 | thunderwave,0;protect,1 1579v 795 | protect,0;tailwind,1 1248v 610
+    p2 greedy: move 1 1, move 2 1
+      p1a Thundurus used Protect
+      p1b Talonflame used Protect
+      p2a Gengar used Sludge Bomb -> p1a: Thundurus
+              p1a Thundurus -- move: Protect
+      p2b Gastrodon used Earth Power -> p1a: Thundurus
+              p1a Thundurus -- IMMUNE
+      after p1: Thundurus 113/299, Talonflame 298/298
+      after p2: Gengar-Mega 322/322, Gastrodon-East 421/421
+
+  Turn 16
+    p1 mcts: move 3 2, move 4
+      search (52000 visits): thunderwave,1;protect,1 19645v 12102 | protect,0;protect,1 15743v 9325 | thunderwave,0;protect,1 1000v 484 | protect,0;tailwind,1 985v 476
+    p2 greedy: move 1 1, move 2 1
+      p1b Talonflame used Protect
+      p1a Thundurus used Thunder Wave -> p2b: Gastrodon
+              p2b Gastrodon -- IMMUNE
+      p2a Gengar used Sludge Bomb -> p1a: Thundurus
+              p1a Thundurus -- critical hit
+      p1a Thundurus fainted
+      p2b Gastrodon used Earth Power -> p1b: Talonflame
+              p1b Talonflame -- IMMUNE
+      after p1: Thundurus 0/299, Talonflame 298/298
+      after p2: Gengar-Mega 322/322, Gastrodon-East 421/421
+
+  Turn 17
+      p1a <- Landorus-Therian comes in (319/319)
+              p2a Gengar atk 1 fell
+              p2b Gastrodon atk 1 fell
+      after p1: Landorus-Therian 319/319, Talonflame 298/298
+      after p2: Gengar-Mega 322/322, Gastrodon-East 421/421
+
+  Turn 18
+    p1 mcts: move 4 2, move 4
+      search (48000 visits): uturn,1;protect,1 13646v 7303 | uturn,0;tailwind,1 11702v 6223 | uturn,1;bravebird,1 9350v 5181 | earthquake,0;bravebird,0 1855v 863
+    p2 greedy: move 1 1, move 2 1
+      p1b Talonflame used Protect
+      p1a Landorus used U-turn -> p2b: Gastrodon
+      after p1: Landorus-Therian 266/319, Talonflame 298/298
+      after p2: Gengar-Mega 322/322, Gastrodon-East 309/421
+
+  Turn 19
+      p1a <- Ferrothorn comes in (352/352)
+      p2a Gengar used Sludge Bomb -> p1a: Ferrothorn
+              p1a Ferrothorn -- IMMUNE
+      p2b Gastrodon used Earth Power -> p1a: Ferrothorn
+      after p1: Ferrothorn 249/352, Talonflame 298/298
+      after p2: Gengar-Mega 322/322, Gastrodon-East 309/421
+
+  Turn 20
+    p1 mcts: move 4, move 3
+      search (55000 visits): protect,0;tailwind,1 37508v 25803 | gyroball,0;bravebird,0 3128v 1965 | gyroball,0;flareblitz,0 1561v 927 | protect,0;flareblitz,1 862v 477
+    p2 greedy: move 1 1, move 2 1
+      p1a Ferrothorn used Protect
+      p1b Talonflame used Tailwind
+      -sidestart p1: A move: Tailwind
+      p2a Gengar used Sludge Bomb -> p1a: Ferrothorn
+              p1a Ferrothorn -- IMMUNE
+      p2b Gastrodon used Earth Power -> p1a: Ferrothorn
+              p1a Ferrothorn -- move: Protect
+      after p1: Ferrothorn 249/352, Talonflame 298/298
+      after p2: Gengar-Mega 322/322, Gastrodon-East 309/421
+
+  Turn 21
+    p1 mcts: move 1 2, move 4
+      search (56000 visits): powerwhip,1;protect,1 19573v 13024 | protect,0;tailwind,1 2919v 1788 | powerwhip,1;tailwind,1 2915v 1785 | leechseed,1;protect,1 2897v 1773
+    p2 greedy: move 1 1, move 2 1
+      p1b Talonflame used Protect
+      p2a Gengar used Sludge Bomb -> p1a: Ferrothorn
+              p1a Ferrothorn -- IMMUNE
+      p1a Ferrothorn used Power Whip -> p2b: Gastrodon
+      p2b Gastrodon fainted
+      after p1: Ferrothorn 191/352, Talonflame 298/298
+      after p2: Gengar-Mega 322/322, Gastrodon-East 0/421
+
+  Turn 22
+      p2b <- Diancie comes in (304/304)
+      after p1: Ferrothorn 191/352, Talonflame 298/298
+      after p2: Gengar-Mega 322/322, Diancie 304/304
+
+  Turn 23
+    p1 mcts: move 1 2, move 4
+      search (58000 visits): powerwhip,1;protect,1 27423v 20368 | gyroball,1;protect,1 10041v 7211 | protect,0;protect,1 5687v 3998 | powerwhip,0;protect,1 2959v 2011
+    p2 greedy: move 2 1, move 1
+      p1b Talonflame used Protect  [[still]]
+              p1b Talonflame -- IT FAILED
+      p2a Gengar used Shadow Ball -> p1a: Ferrothorn
+              p1a Ferrothorn spd 1 fell
+      p2b Diancie used Diamond Storm -> p1b: Talonflame  [[spread] p1a,p1b]
+              p2b Diancie def 1 rose
+      p1b Talonflame fainted
+      p1a Ferrothorn used Power Whip -> p2b: Diancie
+      after p1: Ferrothorn 17/352, Talonflame 0/298
+      after p2: Gengar-Mega 322/322, Diancie 178/304
+
+  Turn 24
+      p1b <- Landorus-Therian comes in (266/319)
+              p2a Gengar atk 1 fell
+              p2b Diancie -- IT FAILED
+      after p1: Ferrothorn 17/352, Landorus-Therian 266/319
+      after p2: Gengar-Mega 322/322, Diancie 178/304
+
+  Turn 25
+    p1 mcts: move 2 2, move 4 2
+      search (62000 visits): gyroball,1;uturn,1 7510v 4390 | powerwhip,0;uturn,1 5520v 3177 | leechseed,1;uturn,1 5112v 2929 | gyroball,0;uturn,1 5036v 2883
+    p2 greedy: move 2 1, move 1
+      p1b Landorus used U-turn -> p2b: Diancie
+      p2a Gengar used Shadow Ball -> p1a: Ferrothorn
+      p1a Ferrothorn fainted
+      p2b Diancie used Diamond Storm -> p1b: Landorus
+      -sideend p1: A move: Tailwind
+      after p1: Ferrothorn 0/352, Landorus-Therian 119/319
+      after p2: Gengar-Mega 322/322, Diancie 160/304
+
+  Turn 26
+    p1 mcts: pass, move 4 2
+      search (768000 visits): No Move;uturn,1 392139v 1636 | No Move;uturn,0 375861v 1501
+    p2 greedy: move 2 2, move 1
+      p1b Landorus used U-turn -> p2b: Diancie
+      p2a Gengar used Shadow Ball -> p1b: Landorus
+      p1b Landorus fainted
+      after p1: Ferrothorn 0/352, Landorus-Therian 0/319
+      after p2: Gengar-Mega 322/322, Diancie 141/304
+
+  RESULT: p2 wins

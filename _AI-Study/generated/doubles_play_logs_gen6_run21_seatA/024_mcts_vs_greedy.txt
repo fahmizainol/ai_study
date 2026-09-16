@@ -1,0 +1,114 @@
+battle 24   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: Untitled 574: Altaria-Mega, Amoonguss, Genesect, Scrafty, Thundurus, Volcanion
+  p2: Untitled 404: Gardevoir-Mega, Landorus, Porygon2, Tyranitar, Scizor, Blastoise
+
+  Turn 1
+    p1 mcts: switch 3, switch 4   (slot0 Altaria-Mega -> Genesect; slot1 Amoonguss -> Scrafty)
+      search (25000 visits): switch genesect;switch scrafty 900v 418 | switch scrafty;protect,1 847v 390 | switch volcanion;switch genesect 779v 353 | switch volcanion;spore,0 738v 331
+    p2 greedy: move 1, move 1 1
+      p1a <- Genesect comes in (283/283)
+              p1a Genesect atk 1 rose
+      p1b <- Scrafty comes in (334/334)
+              p2a Gardevoir atk 1 fell
+              p2b Landorus atk 1 fell
+      p2b Landorus used Earth Power -> p1a: Genesect
+      p2a Gardevoir used Hyper Voice -> p1b: Scrafty  [[spread] p1a,p1b]
+      p1a Genesect fainted
+      p1b Scrafty fainted
+      after p1: Genesect 0/283, Scrafty 0/334
+      after p2: Gardevoir-Mega 340/340, Landorus 319/319
+
+  Turn 2
+      p1a <- Altaria-Mega comes in (348/348)
+      p1b <- Amoonguss comes in (432/432)
+      after p1: Altaria-Mega 348/348, Amoonguss 432/432
+      after p2: Gardevoir-Mega 340/340, Landorus 319/319
+
+  Turn 3
+    p1 mcts: move 1, move 2 1
+      search (25000 visits): dragondance,0;spore,0 2098v 853 | switch volcanion;spore,0 1300v 494 | dragondance,0;protect,1 1202v 451 | dragondance,0;energyball,1 1165v 434
+    p2 greedy: move 1, move 1 1
+      p2b Landorus used Earth Power -> p1a: Altaria
+      p1a Altaria used Dragon Dance
+              p1a Altaria atk 1 rose
+              p1a Altaria spe 1 rose
+      p2a Gardevoir used Hyper Voice -> p1b: Amoonguss  [[spread] p1a,p1b]
+      p1a Altaria fainted
+      p1b Amoonguss used Spore -> p2a: Gardevoir
+              p2a Gardevoir is now slp
+      after p1: Altaria-Mega 0/348, Amoonguss 353/432
+      after p2: Gardevoir-Mega 340/340, Landorus 319/319
+
+  Turn 4
+      p1a <- Thundurus comes in (342/342)
+      after p1: Thundurus 342/342, Amoonguss 353/432
+      after p2: Gardevoir-Mega 340/340, Landorus 319/319
+
+  Turn 5
+    p1 mcts: switch 6, move 3 2   (slot0 Thundurus -> Volcanion)
+      search (16000 visits): switch volcanion;energyball,1 665v 296 | switch volcanion;energyball,0 603v 264 | thunderbolt,0;energyball,1 444v 181 | thunderbolt,1;energyball,1 436v 177
+    p2 greedy: move 1, move 1 2
+      p1a <- Volcanion comes in (364/364)
+      p2b Landorus used Earth Power -> p1b: Amoonguss
+              p2a Gardevoir COULD NOT MOVE (slp)
+      p1b Amoonguss used Energy Ball -> p2b: Landorus
+      after p1: Volcanion 364/364, Amoonguss 178/432
+      after p2: Gardevoir-Mega 340/340, Landorus 204/319
+
+  Turn 6
+    p1 mcts: move 1 2, move 3 1
+      search (13000 visits): steameruption,1;energyball,0 600v 326 | heatwave,0;energyball,0 599v 325 | heatwave,0;energyball,1 573v 309 | steameruption,0;energyball,1 545v 291
+    p2 greedy: move 1, move 1 2
+      p2b Landorus used Earth Power -> p1b: Amoonguss
+      p1b Amoonguss fainted
+              p2a Gardevoir COULD NOT MOVE (slp)
+      p1a Volcanion used Steam Eruption -> p2b: Landorus
+      p2b Landorus fainted
+      after p1: Volcanion 364/364, Amoonguss 0/432
+      after p2: Gardevoir-Mega 340/340, Landorus 0/319
+
+  Turn 7
+      p2b <- Porygon2 comes in (374/374)
+      p1b <- Thundurus comes in (342/342)
+              p2b Porygon2 spa 1 rose
+      after p1: Volcanion 364/364, Thundurus 342/342
+      after p2: Gardevoir-Mega 340/340, Porygon2 374/374
+
+  Turn 8
+    p1 mcts: move 1 1, move 2 2
+      search (11000 visits): steameruption,0;thunderbolt,1 463v 329 | steameruption,1;thunderbolt,1 346v 235 | heatwave,0;thunderbolt,0 332v 224 | steameruption,1;thunderbolt,0 325v 219
+    p2 greedy: move 1, move 2 1
+      p1b Thundurus used Thunderbolt -> p2b: Porygon2
+              p2b Porygon2 -- critical hit
+              p2a Gardevoir COULD NOT MOVE (slp)
+      p1a Volcanion used Steam Eruption -> p2a: Gardevoir
+      p2b Porygon2 used Thunderbolt -> p1a: Volcanion
+      after p1: Volcanion 204/364, Thundurus 342/342
+      after p2: Gardevoir-Mega 189/340, Porygon2 224/374
+
+  Turn 9
+    p1 mcts: move 3 2, move 2 2
+      search (16000 visits): earthpower,1;thunderbolt,1 1411v 1035 | steameruption,1;flashcannon,1 938v 663 | heatwave,0;thunderbolt,1 873v 613 | steameruption,1;thunderbolt,1 781v 542
+    p2 greedy: move 1, move 2 1
+      p1b Thundurus used Thunderbolt -> p2b: Porygon2
+              p2b Porygon2 is now par
+              p2a Gardevoir is cured of slp
+      p2a Gardevoir used Hyper Voice -> p1a: Volcanion  [[spread] p1a,p1b]
+      p1a Volcanion used Earth Power -> p2b: Porygon2
+      p2b Porygon2 used Thunderbolt -> p1a: Volcanion
+      p1a Volcanion fainted
+      after p1: Volcanion 0/364, Thundurus 119/342
+      after p2: Gardevoir-Mega 189/340, Porygon2 64/374
+
+  Turn 10
+    p1 mcts: pass, move 1 1
+      search (227000 visits): No Move;thunderwave,0 151657v 8145 | No Move;flashcannon,0 22209v 736 | No Move;thunderbolt,1 10217v 177 | No Move;thunderbolt,0 10106v 172
+    p2 greedy: move 1, move 2 2
+      p1b Thundurus used Thunder Wave -> p2a: Gardevoir
+              p2a Gardevoir is now par
+      p2a Gardevoir used Hyper Voice -> p1b: Thundurus
+      p1b Thundurus fainted
+      after p1: Volcanion 0/364, Thundurus 0/342
+      after p2: Gardevoir-Mega 189/340, Porygon2 64/374
+
+  RESULT: p2 wins

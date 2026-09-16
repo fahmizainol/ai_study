@@ -1,0 +1,127 @@
+battle 4   p1=greedy vs p2=mcts   mcts 300 ms a decision
+  p1: ORAS Doubles OU: Dunsparce, Greninja, Garchomp, Togekiss, Charizard, Venusaur
+  p2: ORAS Doubles OU: Politoed, Kingdra, Amoonguss, Diancie-Mega, Scrafty, Heatran
+
+  Turn 1
+    p1 greedy: move 2, move 1 1
+    p2 mcts: move 1, move 1
+      search (8000 visits): icywind,0;muddywater,0 323v 256 | scald,0;muddywater,0 321v 254 | helpinghand,1;muddywater,0 286v 222 | scald,0;icebeam,0 250v 190
+      p2b Kingdra used Muddy Water -> p1b: Greninja  [[spread] p1a,p1b]
+              p1a Dunsparce -- critical hit
+              p1b Greninja accuracy 1 fell
+      p1b Greninja used Hydro Pump -> p2a: Politoed  [[miss]]
+              p1b Greninja gained typechange Water
+              p1b Greninja -- MISSED
+      p2a Politoed used Icy Wind -> p1b: Greninja  [[spread] p1a,p1b]
+              p1a Dunsparce spe 1 fell
+              p1b Greninja spe 1 fell
+      p1a Dunsparce used Rock Slide -> p2b: Kingdra  [[spread] p2a]
+              p1a Dunsparce -- MISSED
+      after p1: Dunsparce 126/404, Greninja 118/285
+      after p2: Politoed 347/384, Kingdra 263/292
+
+  Turn 2
+    p1 greedy: move 2, move 1 2
+    p2 mcts: switch 5, move 1   (slot0 Politoed -> Scrafty)
+      search (15000 visits): switch scrafty;muddywater,0 1153v 858 | icywind,0;muddywater,0 850v 615 | scald,0;muddywater,0 598v 415 | helpinghand,1;muddywater,0 566v 390
+      p2a <- Scrafty comes in (334/334)
+      p2b Kingdra used Muddy Water -> p1b: Greninja  [[spread] p1a]
+              p2b Kingdra -- MISSED
+              p1a Dunsparce -- critical hit
+      p1a Dunsparce fainted
+      p1b Greninja used Hydro Pump -> p2b: Kingdra
+      after p1: Dunsparce 0/404, Greninja 90/285
+      after p2: Scrafty 334/334, Kingdra 166/292
+
+  Turn 3
+      p1a <- Garchomp comes in (357/357)
+      after p1: Garchomp 357/357, Greninja 90/285
+      after p2: Scrafty 334/334, Kingdra 166/292
+
+  Turn 4
+    p1 greedy: move 1, move 1 2
+    p2 mcts: switch 3, move 1   (slot0 Scrafty -> Amoonguss)
+      search (35000 visits): switch amoonguss;muddywater,0 9750v 6761 | drainpunch,1;switch dianciemega 4795v 3230 | fakeout,1;switch dianciemega 2760v 1801 | drainpunch,0;switch dianciemega 1427v 883
+      p2a <- Amoonguss comes in (432/432)
+      p2b Kingdra used Muddy Water -> p1b: Greninja  [[spread] p1a]
+              p2b Kingdra -- MISSED
+      p1a Garchomp used Earthquake -> p2a: Amoonguss  [[spread] p1b,p2a,p2b]
+      p1b Greninja fainted
+      p2b Kingdra fainted
+      after p1: Garchomp 92/357, Greninja 0/285
+      after p2: Amoonguss 268/432, Kingdra 0/292
+
+  Turn 5
+      p1b <- Togekiss comes in (373/373)
+      p2b <- Scrafty comes in (334/334)
+      after p1: Garchomp 92/357, Togekiss 373/373
+      after p2: Amoonguss 268/432, Scrafty 334/334
+
+  Turn 6
+    p1 greedy: move 1, move 1 1
+    p2 mcts: move 2, switch 6   (slot1 Scrafty -> Heatran)
+      search (43000 visits): ragepowder,0;switch heatran 6740v 3106 | gigadrain,0;switch dianciemega 3365v 1472 | switch politoed;knockoff,0 1732v 703 | gigadrain,1;switch dianciemega 1662v 671
+      p2b <- Heatran comes in (386/386)
+      p2a Amoonguss used Rage Powder
+      p1a Garchomp used Earthquake -> p2a: Amoonguss  [[spread] p2a,p2b]
+              p1b Togekiss -- IMMUNE
+              p2a Amoonguss used up its Sitrus Berry
+      p2b Heatran fainted
+      p1b Togekiss used Air Slash -> p2a: Amoonguss
+      p2a Amoonguss fainted
+      after p1: Garchomp 57/357, Togekiss 373/373
+      after p2: Amoonguss 0/432, Heatran 0/386
+
+  Turn 7
+      p2b <- Politoed comes in (347/384)
+      p2a <- Diancie-Mega comes in (241/241)
+      after p1: Garchomp 57/357, Togekiss 373/373
+      after p2: Diancie-Mega 241/241, Politoed 347/384
+
+  Turn 8
+    p1 greedy: move 1, move 1 2
+    p2 mcts: move 2, move 1
+      search (50000 visits): diamondstorm,0;icywind,0 6704v 2162 | moonblast,0;icywind,0 5494v 1739 | diamondstorm,0;scald,1 2287v 645 | diamondstorm,0;switch scrafty 1976v 543
+      p2a Diancie used Diamond Storm -> p1b: Togekiss  [[spread] p1a,p1b]
+              p2a Diancie def 1 rose
+      p1a Garchomp fainted
+      p1b Togekiss used Air Slash -> p2b: Politoed
+              p2b Politoed COULD NOT MOVE (flinch)
+      after p1: Garchomp 0/357, Togekiss 109/373
+      after p2: Diancie-Mega 241/241, Politoed 260/384
+
+  Turn 9
+      p1a <- Charizard comes in (359/359)
+      after p1: Charizard 359/359, Togekiss 109/373
+      after p2: Diancie-Mega 241/241, Politoed 260/384
+
+  Turn 10
+    p1 greedy: move 2 2, move 1 2
+    p2 mcts: move 2, move 1
+      search (14000 visits): diamondstorm,0;icywind,0 3467v 2912 | diamondstorm,0;helpinghand,0 1862v 1514 | diamondstorm,0;scald,0 1351v 1074 | diamondstorm,0;protect,1 1330v 1056
+      p2a Diancie used Diamond Storm -> p1a: Charizard  [[spread] p1a,p1b]
+              p2a Diancie def 1 rose
+      p1a Charizard fainted
+      p1b Togekiss fainted
+      p2b Politoed used Icy Wind -> p1: Charizard  [[notarget]]
+              p2b Politoed -- IT FAILED
+      after p1: Charizard 0/359, Togekiss 0/373
+      after p2: Diancie-Mega 241/241, Politoed 260/384
+
+  Turn 11
+      p1a <- Venusaur comes in (301/301)
+      after p1: Venusaur 301/301, Togekiss 0/373
+      after p2: Diancie-Mega 241/241, Politoed 260/384
+
+  Turn 12
+    p1 greedy: move 2 2, pass
+    p2 mcts: move 2, move 2 -1
+      search (203000 visits): diamondstorm,0;helpinghand,0 198768v 191053 | diamondstorm,0;icywind,0 365v 238 | diamondstorm,0;scald,0 332v 212 | switch scrafty;icywind,0 312v 198
+      p2b Politoed used Helping Hand -> p2a: Diancie
+      p2a Diancie used Diamond Storm -> p1a: Venusaur
+              p2a Diancie def 1 rose
+      p1a Venusaur fainted
+      after p1: Venusaur 0/301, Togekiss 0/373
+      after p2: Diancie-Mega 241/241, Politoed 260/384
+
+  RESULT: p2 wins

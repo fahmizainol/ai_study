@@ -1,0 +1,206 @@
+battle 8   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: ORAS Doubles OU: Gardevoir-Mega, Weavile, Breloom, Gyarados, Aegislash, Rotom-Wash
+  p2: ORAS Doubles OU: Charizard-Mega-Y, Sylveon, Aegislash, Landorus-Therian, Zapdos, Cresselia
+
+  Turn 1
+    p1 mcts: move 1, switch 4   (slot1 Weavile -> Gyarados)
+      search (28000 visits): hypervoice,0;switch gyarados 1672v 1021 | hypervoice,0;switch aegislash 1388v 833 | hypervoice,0;fakeout,1 1245v 739 | hypervoice,0;switch rotomwash 962v 554
+    p2 greedy: move 2 1, move 2
+      p1b <- Gyarados comes in (394/394)
+              p2a Charizard atk 1 fell
+              p2b Sylveon atk 1 fell
+      p1a Gardevoir used Hyper Voice -> p2a: Charizard  [[spread] p2a,p2b]
+      p2a Charizard used Solar Beam  [[still]]
+      p2b Sylveon used Hyper Voice -> p1a: Gardevoir  [[spread] p1a,p1b]
+      after p1: Gardevoir-Mega 173/279, Gyarados 268/394
+      after p2: Charizard-Mega-Y 280/359, Sylveon 267/393
+
+  Turn 2
+    p1 mcts: move 1, move 3 2
+      search (31000 visits): hypervoice,0;waterfall,1 1717v 1007 | hypervoice,0;stoneedge,1 1473v 851 | hypervoice,0;waterfall,0 804v 431 | hypervoice,0;stoneedge,0 775v 413
+    p2 greedy: move 1, move 2
+      p1a Gardevoir used Hyper Voice -> p2b: Sylveon  [[spread] p2a,p2b]
+      p2a Charizard used Solar Beam -> p1a: Gardevoir  [[from] lockedmove]
+      p1b Gyarados used Waterfall -> p2b: Sylveon
+      p2b Sylveon fainted
+      after p1: Gardevoir-Mega 50/279, Gyarados 268/394
+      after p2: Charizard-Mega-Y 195/359, Sylveon 0/393
+
+  Turn 3
+      p2b <- Aegislash comes in (324/324)
+      after p1: Gardevoir-Mega 50/279, Gyarados 268/394
+      after p2: Charizard-Mega-Y 195/359, Aegislash 324/324
+
+  Turn 4
+    p1 mcts: move 2 1, move 3 2
+      search (20000 visits): psyshock,0;waterfall,1 480v 262 | protect,0;waterfall,0 379v 197 | hypervoice,0;waterfall,1 333v 169 | psyshock,0;thunderwave,1 332v 168
+    p2 greedy: move 2 1, move 1 1
+      p1a Gardevoir used Psyshock -> p2a: Charizard
+      p2a Charizard used Solar Beam  [[still]]
+      p1b Gyarados used Waterfall -> p2b: Aegislash
+      p2b Aegislash used Shadow Ball -> p1a: Gardevoir
+      p1a Gardevoir fainted
+      after p1: Gardevoir-Mega 0/279, Gyarados 268/394
+      after p2: Charizard-Mega-Y 3/359, Aegislash-Blade 228/324
+
+  Turn 5
+      p1a <- Breloom comes in (261/261)
+      after p1: Breloom 261/261, Gyarados 268/394
+      after p2: Charizard-Mega-Y 3/359, Aegislash-Blade 228/324
+
+  Turn 6
+    p1 mcts: move 4, move 3 2
+      search (30000 visits): protect,0;waterfall,1 1701v 931 | machpunch,0;waterfall,1 1655v 904 | bulletseed,1;waterfall,1 1316v 701 | switch aegislash;waterfall,1 991v 509
+    p2 greedy: move 1, move 1 2
+      p1a Breloom used Protect
+      p2a Charizard used Solar Beam -> p1a: Breloom  [[from] lockedmove]
+              p1a Breloom -- move: Protect
+      p1b Gyarados used Waterfall -> p2b: Aegislash
+      p2b Aegislash fainted
+      after p1: Breloom 261/261, Gyarados 268/394
+      after p2: Charizard-Mega-Y 3/359, Aegislash 0/324
+
+  Turn 7
+      p2b <- Landorus-Therian comes in (361/361)
+              p1a Breloom atk 1 fell
+              p1b Gyarados atk 1 fell
+      after p1: Breloom 261/261, Gyarados 268/394
+      after p2: Charizard-Mega-Y 3/359, Landorus-Therian 361/361
+
+  Turn 8
+    p1 mcts: move 2 1, switch 6   (slot1 Gyarados -> Rotom-Wash)
+      search (23000 visits): machpunch,0;switch rotomwash 1249v 710 | machpunch,0;waterfall,1 1105v 619 | machpunch,0;switch aegislash 591v 302 | machpunch,0;stoneedge,1 524v 262
+    p2 greedy: move 2 2, move 2 2
+      p1b <- Rotom-Wash comes in (304/304)
+      p1a Breloom used Mach Punch -> p2a: Charizard
+              p2a Charizard -- critical hit
+      p2a Charizard fainted
+      p2b Landorus used Superpower -> p1b: Rotom
+              p2b Landorus atk 1 fell
+              p2b Landorus def 1 fell
+      after p1: Breloom 261/261, Rotom-Wash 179/304
+      after p2: Charizard-Mega-Y 0/359, Landorus-Therian 361/361
+
+  Turn 9
+      p2a <- Zapdos comes in (384/384)
+      after p1: Breloom 261/261, Rotom-Wash 179/304
+      after p2: Zapdos 384/384, Landorus-Therian 361/361
+
+  Turn 10
+    p1 mcts: switch 6, move 4   (slot0 Breloom -> Gyarados)
+      search (26000 visits): switch gyarados;protect,1 1945v 1223 | protect,0;switch gyarados 897v 521 | switch aegislash;switch gyarados 667v 371 | switch gyarados;switch aegislash 588v 320
+    p2 greedy: move 1 2, move 2 2
+      p1a <- Gyarados comes in (268/394)
+              p2a Zapdos atk 1 fell
+              p2b Landorus atk 1 fell
+      p1b Rotom used Protect
+      p2b Landorus used Superpower -> p1b: Rotom
+              p1b Rotom -- move: Protect
+      p2a Zapdos used Thunderbolt -> p1b: Rotom
+              p1b Rotom -- move: Protect
+      after p1: Gyarados 268/394, Rotom-Wash 179/304
+      after p2: Zapdos 384/384, Landorus-Therian 361/361
+
+  Turn 11
+    p1 mcts: move 3 2, move 4
+      search (26000 visits): waterfall,1;protect,1 787v 342 | stoneedge,0;protect,1 761v 329 | stoneedge,1;protect,1 655v 274 | waterfall,0;protect,1 603v 248
+    p2 greedy: move 1 2, move 2 2
+      p1b Rotom used Protect  [[still]]
+              p1b Rotom -- IT FAILED
+      p2b Landorus used Superpower -> p1b: Rotom
+              p2b Landorus atk 1 fell
+              p2b Landorus def 1 fell
+              p1b Rotom used up its Sitrus Berry
+      p2a Zapdos used Thunderbolt -> p1b: Rotom
+      p1a Gyarados used Waterfall -> p2b: Landorus
+      p2b Landorus fainted
+      after p1: Gyarados 268/394, Rotom-Wash 41/304
+      after p2: Zapdos 384/384, Landorus-Therian 0/361
+
+  Turn 12
+      p2b <- Cresselia comes in (444/444)
+      after p1: Gyarados 268/394, Rotom-Wash 41/304
+      after p2: Zapdos 384/384, Cresselia 444/444
+
+  Turn 13
+    p1 mcts: move 4 1, move 4
+      search (24000 visits): stoneedge,0;protect,1 507v 239 | thunderwave,1;protect,1 379v 167 | waterfall,0;protect,1 363v 158 | stoneedge,0;switch weavile 353v 153
+    p2 greedy: move 1 2, move 3 2
+      p1b Rotom used Protect
+      p2a Zapdos used Thunderbolt -> p1b: Rotom
+              p1b Rotom -- move: Protect
+      p1a Gyarados used Stone Edge -> p2a: Zapdos
+              p2a Zapdos used up its Sitrus Berry
+      p2b Cresselia used Psychic -> p1b: Rotom
+              p1b Rotom -- move: Protect
+      after p1: Gyarados 268/394, Rotom-Wash 41/304
+      after p2: Zapdos 254/384, Cresselia 444/444
+
+  Turn 14
+    p1 mcts: move 4 1, move 4
+      search (24000 visits): stoneedge,0;protect,1 448v 196 | waterfall,0;protect,1 397v 168 | stoneedge,0;switch weavile 379v 159 | stoneedge,0;switch aegislash 353v 145
+    p2 greedy: move 1 2, move 3 2
+      p1b Rotom used Protect
+      p2a Zapdos used Thunderbolt -> p1b: Rotom
+              p1b Rotom -- move: Protect
+      p1a Gyarados used Stone Edge -> p2a: Zapdos  [[miss]]
+              p1a Gyarados -- MISSED
+      p2b Cresselia used Psychic -> p1b: Rotom
+              p1b Rotom -- move: Protect
+      after p1: Gyarados 268/394, Rotom-Wash 41/304
+      after p2: Zapdos 254/384, Cresselia 444/444
+
+  Turn 15
+    p1 mcts: move 4 1, move 4
+      search (20000 visits): stoneedge,0;protect,1 384v 182 | waterfall,0;protect,1 333v 152 | thunderwave,1;protect,1 310v 139 | waterfall,1;protect,1 281v 122
+    p2 greedy: move 1 2, move 3 2
+      p1b Rotom used Protect  [[still]]
+              p1b Rotom -- IT FAILED
+      p2a Zapdos used Thunderbolt -> p1b: Rotom
+      p1b Rotom fainted
+      p1a Gyarados used Stone Edge -> p2a: Zapdos  [[miss]]
+              p1a Gyarados -- MISSED
+      p2b Cresselia used Psychic -> p1a: Gyarados
+              p1a Gyarados used up its Sitrus Berry
+      after p1: Gyarados 281/394, Rotom-Wash 0/304
+      after p2: Zapdos 254/384, Cresselia 444/444
+
+  Turn 16
+      p1b <- Weavile comes in (281/281)
+      after p1: Gyarados 281/394, Weavile 281/281
+      after p2: Zapdos 254/384, Cresselia 444/444
+
+  Turn 17
+    p1 mcts: move 1 2, move 1 1
+      search (17000 visits): thunderwave,1;iciclecrash,0 1276v 892 | switch aegislash;iciclecrash,0 1156v 800 | stoneedge,1;iciclecrash,0 1084v 746 | waterfall,1;iciclecrash,0 939v 637
+    p2 greedy: move 1 1, move 3 1
+      p1b Weavile used Icicle Crash -> p2a: Zapdos
+      p2a Zapdos fainted
+      p1a Gyarados used Thunder Wave -> p2b: Cresselia
+              p2b Cresselia is now par
+              p2b Cresselia COULD NOT MOVE (par)
+      after p1: Gyarados 281/394, Weavile 253/281
+      after p2: Zapdos 0/384, Cresselia 444/444
+
+  Turn 18
+    p1 mcts: move 2 2, move 3 2
+      search (46000 visits): taunt,1;knockoff,1 20889v 14501 | switch aegislash;knockoff,1 4824v 3107 | waterfall,1;knockoff,1 2167v 1325 | taunt,1;iciclecrash,1 1574v 935
+    p2 greedy: pass, move 3 1
+      p1b Weavile used Knock Off -> p2b: Cresselia
+              p2b Cresselia used up its Safety Goggles
+      p1a Gyarados used Taunt -> p2b: Cresselia
+              p2b Cresselia gained move: Taunt
+      p2b Cresselia used Psychic -> p1a: Gyarados
+      after p1: Gyarados 190/394, Weavile 225/281
+      after p2: Zapdos 0/384, Cresselia 153/444
+
+  Turn 19
+    p1 mcts: move 3 2, move 3 2
+      search (458000 visits): waterfall,1;knockoff,1 160325v 160325 | stoneedge,1;knockoff,1 82909v 82496 | waterfall,1;iciclecrash,1 60748v 60264 | switch aegislash;knockoff,1 41819v 41308
+    p2 greedy: pass, move 3 1
+      p1b Weavile used Knock Off -> p2b: Cresselia
+      p2b Cresselia fainted
+      after p1: Gyarados 190/394, Weavile 197/281
+      after p2: Zapdos 0/384, Cresselia 0/444
+
+  RESULT: p1 wins

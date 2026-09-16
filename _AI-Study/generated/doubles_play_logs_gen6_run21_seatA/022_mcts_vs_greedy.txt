@@ -1,0 +1,224 @@
+battle 22   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: oraspl/Untitled 252: Salamence-Mega, Landorus-Therian, Cresselia, Heatran, Keldeo-Resolute, Weavile
+  p2: ORAS Doubles OU: Gengar-Mega, Weavile, Sylveon, Thundurus, Landorus-Therian, Volcanion
+
+  Turn 1
+    p1 mcts: switch 4, move 2 2   (slot0 Salamence-Mega -> Heatran)
+      search (13000 visits): switch heatran;uturn,1 291v 146 | fireblast,0;uturn,1 215v 98 | switch keldeoresolute;uturn,1 204v 92 | switch cresselia;uturn,1 203v 91
+    p2 greedy: move 2 1, move 3 1
+      p1a <- Heatran comes in (386/386)
+      p2b Weavile used Icicle Crash -> p1a: Heatran
+      p2a Gengar used Sludge Bomb -> p1a: Heatran
+              p1a Heatran -- IMMUNE
+      p1b Landorus used U-turn -> p2b: Weavile
+      after p1: Heatran 365/386, Landorus-Therian 382/382
+      after p2: Gengar-Mega 261/261, Weavile 1/281
+
+  Turn 2
+      p1b <- Cresselia comes in (444/444)
+      after p1: Heatran 365/386, Cresselia 444/444
+      after p2: Gengar-Mega 261/261, Weavile 1/281
+
+  Turn 3
+    p1 mcts: move 1, switch 3   (slot1 Cresselia -> Landorus-Therian)
+      search (19000 visits): eruption,0;switch landorustherian 476v 244 | eruption,0;switch salamencemega 449v 227 | switch landorustherian;psychic,0 439v 221 | eruption,0;psychic,0 423v 212
+    p2 greedy: move 2 1, move 3 1
+      p1b <- Landorus-Therian comes in (382/382)
+              p2a Gengar atk 1 fell
+              p2b Weavile atk 1 fell
+      p2b Weavile used Icicle Crash -> p1a: Heatran
+      p2b Weavile fainted
+      p2a Gengar used Sludge Bomb -> p1a: Heatran
+              p1a Heatran -- IMMUNE
+      p1a Heatran used Eruption -> p2a: Gengar
+      p2a Gengar fainted
+      after p1: Heatran 347/386, Landorus-Therian 382/382
+      after p2: Gengar-Mega 0/261, Weavile 0/281
+
+  Turn 4
+      p2b <- Thundurus comes in (330/330)
+      p2a <- Sylveon comes in (345/345)
+      after p1: Heatran 347/386, Landorus-Therian 382/382
+      after p2: Sylveon 345/345, Thundurus 330/330
+
+  Turn 5
+    p1 mcts: move 1, move 2 2
+      search (24000 visits): eruption,0;uturn,1 3272v 2502 | eruption,0;uturn,0 2286v 1713 | eruption,0;stoneedge,0 1437v 1041 | eruption,0;stoneedge,1 1304v 937
+    p2 greedy: move 1, move 2 1
+      p2b Thundurus used Thunderbolt -> p1a: Heatran
+      p1b Landorus used U-turn -> p2b: Thundurus
+      after p1: Heatran 209/386, Landorus-Therian 382/382
+      after p2: Sylveon 345/345, Thundurus 270/330
+
+  Turn 6
+      p1b <- Cresselia comes in (444/444)
+      p1a Heatran used Eruption -> p2b: Thundurus  [[spread] p2a,p2b]
+              p2b Thundurus used up its Sitrus Berry
+      p2a Sylveon used Hyper Voice -> p1b: Cresselia  [[spread] p1a,p1b]
+      after p1: Heatran 170/386, Cresselia 306/444
+      after p2: Sylveon 233/345, Thundurus 195/330
+
+  Turn 7
+    p1 mcts: switch 3, move 3 1   (slot0 Heatran -> Landorus-Therian)
+      search (20000 visits): switch landorustherian;psychic,0 1235v 848 | switch landorustherian;icebeam,1 1009v 679 | switch landorustherian;icebeam,0 691v 445 | heatwave,0;psychic,0 667v 427
+    p2 greedy: move 1, move 2 1
+      p1a <- Landorus-Therian comes in (382/382)
+              p2a Sylveon atk 1 fell
+              p2b Thundurus atk 1 fell
+      p2b Thundurus used Thunderbolt -> p1a: Landorus
+              p1a Landorus -- IMMUNE
+      p1b Cresselia used Psychic -> p2a: Sylveon
+              p2a Sylveon -- critical hit
+      p2a Sylveon used Hyper Voice -> p1b: Cresselia  [[spread] p1a,p1b]
+              p1b Cresselia used up its Sitrus Berry
+      after p1: Landorus-Therian 253/382, Cresselia 291/444
+      after p2: Sylveon 98/345, Thundurus 195/330
+
+  Turn 8
+    p1 mcts: move 2 1, move 2 2
+      search (27000 visits): uturn,0;icebeam,1 1617v 1031 | earthquake,0;icebeam,1 1148v 708 | stoneedge,0;icebeam,1 982v 595 | uturn,1;icebeam,1 798v 471
+    p2 greedy: move 1, move 2 2
+      p2b Thundurus used Thunderbolt -> p1b: Cresselia
+      p1a Landorus used U-turn -> p2a: Sylveon
+      after p1: Landorus-Therian 253/382, Cresselia 194/444
+      after p2: Sylveon 51/345, Thundurus 195/330
+
+  Turn 9
+      p1a <- Heatran comes in (170/386)
+      p1b Cresselia used Ice Beam -> p2b: Thundurus
+      p2a Sylveon used Hyper Voice -> p1b: Cresselia  [[spread] p1a,p1b]
+      after p1: Heatran 128/386, Cresselia 61/444
+      after p2: Sylveon 51/345, Thundurus 35/330
+
+  Turn 10
+    p1 mcts: switch 3, move 2 1   (slot0 Heatran -> Landorus-Therian)
+      search (32000 visits): switch landorustherian;icebeam,0 1965v 1058 | switch landorustherian;psychic,0 1183v 602 | switch landorustherian;sunnyday,1 616v 282 | switch landorustherian;switch salamencemega 588v 267
+    p2 greedy: move 1, move 2 2
+      p1a <- Landorus-Therian comes in (253/382)
+              p2a Sylveon atk 1 fell
+              p2b Thundurus atk 1 fell
+      p2b Thundurus used Thunderbolt -> p1b: Cresselia
+      p1b Cresselia fainted
+      p2a Sylveon used Hyper Voice -> p1a: Landorus
+      after p1: Landorus-Therian 100/382, Cresselia 0/444
+      after p2: Sylveon 51/345, Thundurus 35/330
+
+  Turn 11
+      p1b <- Heatran comes in (128/386)
+      after p1: Landorus-Therian 100/382, Heatran 128/386
+      after p2: Sylveon 51/345, Thundurus 35/330
+
+  Turn 12
+    p1 mcts: move 2 1, switch 4   (slot1 Heatran -> Salamence-Mega)
+      search (30000 visits): uturn,0;switch salamencemega 1148v 427 | uturn,1;protect,1 960v 345 | uturn,1;heatwave,0 898v 318 | uturn,0;earthpower,1 875v 308
+    p2 greedy: move 1, move 2 1
+      p1b <- Salamence-Mega comes in (331/331)
+              p2a Sylveon atk 1 fell
+              p2b Thundurus atk 1 fell
+      p2b Thundurus used Thunderbolt -> p1a: Landorus
+              p1a Landorus -- IMMUNE
+      p1a Landorus used U-turn -> p2a: Sylveon
+      after p1: Landorus-Therian 100/382, Salamence-Mega 331/331
+      after p2: Sylveon 7/345, Thundurus 35/330
+
+  Turn 13
+      p1a <- Heatran comes in (128/386)
+      p2a Sylveon used Hyper Voice -> p1a: Heatran  [[spread] p1a,p1b]
+      p1b Salamence fainted
+      after p1: Heatran 82/386, Salamence-Mega 0/331
+      after p2: Sylveon 7/345, Thundurus 35/330
+
+  Turn 14
+      p1b <- Landorus-Therian comes in (100/382)
+              p2a Sylveon atk 1 fell
+              p2b Thundurus atk 1 fell
+      after p1: Heatran 82/386, Landorus-Therian 100/382
+      after p2: Sylveon 7/345, Thundurus 35/330
+
+  Turn 15
+    p1 mcts: move 3 1, move 2 1
+      search (29000 visits): earthpower,0;uturn,0 762v 144 | earthpower,1;stoneedge,0 745v 139 | earthpower,0;stoneedge,0 736v 137 | protect,0;stoneedge,0 734v 136
+    p2 greedy: move 1, move 2 1
+      p2b Thundurus used Thunderbolt -> p1a: Heatran
+      p1a Heatran fainted
+      p1b Landorus used U-turn -> p2a: Sylveon
+      p2a Sylveon fainted
+      after p1: Heatran 0/386, Landorus-Therian 100/382
+      after p2: Sylveon 0/345, Thundurus 35/330
+
+  Turn 16
+      p1b <- Keldeo-Resolute comes in (323/323)
+      after p1: Heatran 0/386, Keldeo-Resolute 323/323
+      after p2: Sylveon 0/345, Thundurus 35/330
+
+  Turn 17
+      p1a <- Landorus-Therian comes in (100/382)
+      p2a <- Landorus-Therian comes in (319/319)
+              p1a Landorus atk 1 fell
+              p1b Keldeo atk 1 fell
+              p2a Landorus atk 1 fell
+              p2b Thundurus atk 1 fell
+      after p1: Landorus-Therian 100/382, Keldeo-Resolute 323/323
+      after p2: Landorus-Therian 319/319, Thundurus 35/330
+
+  Turn 18
+    p1 mcts: move 3 1, move 3
+      search (30000 visits): stoneedge,0;protect,1 1467v 547 | stoneedge,0;hydropump,0 1271v 463 | uturn,0;protect,1 1234v 447 | uturn,0;hydropump,0 1168v 419
+    p2 greedy: move 4 1, move 2 1
+      p1b Keldeo used Protect
+      p2a Landorus used Superpower -> p1a: Landorus
+              p2a Landorus atk 1 fell
+              p2a Landorus def 1 fell
+      p2b Thundurus used Thunderbolt -> p1a: Landorus
+              p1a Landorus -- IMMUNE
+      p1a Landorus used Stone Edge -> p2a: Landorus
+              p2a Landorus -- critical hit
+      after p1: Landorus-Therian 44/382, Keldeo-Resolute 323/323
+      after p2: Landorus-Therian 4/319, Thundurus 35/330
+
+  Turn 19
+    p1 mcts: move 3 1, move 3
+      search (30000 visits): stoneedge,0;protect,1 1247v 329 | uturn,0;protect,1 1097v 281 | earthquake,0;protect,1 1000v 249 | stoneedge,0;secretsword,0 867v 207
+    p2 greedy: move 4 1, move 2 1
+      p1b Keldeo used Protect  [[still]]
+              p1b Keldeo -- IT FAILED
+      p2a Landorus used Superpower -> p1a: Landorus
+              p2a Landorus atk 1 fell
+              p2a Landorus def 1 fell
+      p1a Landorus fainted
+      p2b Thundurus used Thunderbolt -> p1b: Keldeo
+      p1b Keldeo fainted
+      after p1: Landorus-Therian 0/382, Keldeo-Resolute 0/323
+      after p2: Landorus-Therian 4/319, Thundurus 35/330
+
+  Turn 20
+      p1a <- Weavile comes in (281/281)
+      after p1: Weavile 281/281, Keldeo-Resolute 0/323
+      after p2: Landorus-Therian 4/319, Thundurus 35/330
+
+  Turn 21
+    p1 mcts: move 3 1, pass
+      search (116000 visits): fakeout,0;No Move 29830v 658 | knockoff,0;No Move 16225v 197 | lowkick,0;No Move 14868v 155 | iciclecrash,0;No Move 14303v 138
+    p2 greedy: move 4 1, move 2 1
+      p1a Weavile used Fake Out -> p2a: Landorus
+      p2a Landorus fainted
+      p2b Thundurus used Thunderbolt -> p1a: Weavile
+      after p1: Weavile 112/281, Keldeo-Resolute 0/323
+      after p2: Landorus-Therian 0/319, Thundurus 35/330
+
+  Turn 22
+      p2a <- Volcanion comes in (364/364)
+      after p1: Weavile 112/281, Keldeo-Resolute 0/323
+      after p2: Volcanion 364/364, Thundurus 35/330
+
+  Turn 23
+    p1 mcts: move 1 1, pass
+      search (599000 visits): iciclecrash,0;No Move 92301v 473 | iciclecrash,1;No Move 79257v 300 | knockoff,1;No Move 77667v 279 | lowkick,1;No Move 77511v 277
+    p2 greedy: move 3 1, move 2 1
+      p1a Weavile used Icicle Crash -> p2a: Volcanion
+      p2b Thundurus used Thunderbolt -> p1a: Weavile
+      p1a Weavile fainted
+      after p1: Weavile 0/281, Keldeo-Resolute 0/323
+      after p2: Volcanion 334/364, Thundurus 35/330
+
+  RESULT: p2 wins

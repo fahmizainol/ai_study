@@ -1,0 +1,184 @@
+battle 26   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: ORAS Doubles OU: Kangaskhan-Mega, Jirachi, Hydreigon, Sylveon, Talonflame, Rotom-Wash
+  p2: ORAS Doubles OU: Gengar, Rotom-Heat, Togekiss, Mamoswine, Genesect, Gardevoir
+
+  Turn 1
+    p1 mcts: move 2 2, switch 4   (slot1 Jirachi -> Sylveon)
+      search (12000 visits): poweruppunch,1;switch sylveon 286v 175 | switch rotomwash;icywind,0 259v 155 | poweruppunch,1;switch rotomwash 228v 132 | fakeout,1;icywind,0 220v 126
+    p2 greedy: move 4 1, move 2 1
+      p1b <- Sylveon comes in (394/394)
+      p2a Gengar used Sludge Bomb -> p1a: Kangaskhan
+      p1a Kangaskhan used Power-Up Punch -> p2b: Rotom
+              p1a Kangaskhan atk 1 rose
+      p2b Rotom used Overheat -> p1a: Kangaskhan
+              p2b Rotom spa 2 fell
+      p1a Kangaskhan fainted
+      after p1: Kangaskhan-Mega 0/352, Sylveon 394/394
+      after p2: Gengar 262/262, Rotom-Heat 260/302
+
+  Turn 2
+      p1a <- Hydreigon comes in (326/326)
+      after p1: Hydreigon 326/326, Sylveon 394/394
+      after p2: Gengar 262/262, Rotom-Heat 260/302
+
+  Turn 3
+    p1 mcts: move 4 1, move 2
+      search (14000 visits): darkpulse,0;hypervoice,0 1691v 1220 | darkpulse,1;hypervoice,0 686v 453 | darkpulse,0;calmmind,1 496v 313 | dracometeor,0;hypervoice,0 472v 296
+    p2 greedy: move 4 1, move 2 1
+      p2a Gengar used Sludge Bomb -> p1a: Hydreigon
+      p1a Hydreigon used Dark Pulse -> p2a: Gengar
+              p2a Gengar used up its Focus Sash
+      p2b Rotom used Overheat -> p1a: Hydreigon
+              p2b Rotom spa 2 fell
+      p1b Sylveon used Hyper Voice -> p2b: Rotom  [[spread] p2a,p2b]
+      p2a Gengar fainted
+      after p1: Hydreigon 50/326, Sylveon 394/394
+      after p2: Gengar 0/262, Rotom-Heat 177/302
+
+  Turn 4
+      p2a <- Togekiss comes in (373/373)
+      after p1: Hydreigon 50/326, Sylveon 394/394
+      after p2: Togekiss 373/373, Rotom-Heat 177/302
+
+  Turn 5
+    p1 mcts: move 4 2, move 2
+      search (21000 visits): darkpulse,1;hypervoice,0 1269v 705 | switch rotomwash;hypervoice,0 1011v 548 | earthpower,1;hypervoice,0 881v 468 | darkpulse,1;calmmind,1 699v 358
+    p2 greedy: move 3 1, move 2 1
+      p1a Hydreigon used Dark Pulse -> p2b: Rotom
+      p2b Rotom used Overheat -> p1a: Hydreigon
+              p1a Hydreigon -- critical hit
+              p2b Rotom spa 2 fell
+      p1a Hydreigon fainted
+      p2a Togekiss used Air Slash -> p1b: Sylveon
+              p1b Sylveon COULD NOT MOVE (flinch)
+      after p1: Hydreigon 0/326, Sylveon 318/394
+      after p2: Togekiss 373/373, Rotom-Heat 24/302
+
+  Turn 6
+      p1a <- Jirachi comes in (403/403)
+      after p1: Jirachi 403/403, Sylveon 318/394
+      after p2: Togekiss 373/373, Rotom-Heat 24/302
+
+  Turn 7
+    p1 mcts: move 2 1, move 1
+      search (19000 visits): ironhead,0;calmmind,1 1395v 715 | icywind,0;calmmind,1 1269v 643 | ironhead,1;calmmind,1 1059v 524 | switch rotomwash;calmmind,1 982v 481
+    p2 greedy: move 3 2, move 2 2
+      p1a Jirachi used Iron Head -> p2a: Togekiss
+      p2b Rotom used Overheat -> p1b: Sylveon
+              p2a Togekiss COULD NOT MOVE (flinch)
+      p1b Sylveon used Calm Mind
+              p1b Sylveon spa 1 rose
+              p1b Sylveon spd 1 rose
+      after p1: Jirachi 403/403, Sylveon 279/394
+      after p2: Togekiss 229/373, Rotom-Heat 24/302
+
+  Turn 8
+    p1 mcts: move 4, move 2
+      search (18000 visits): icywind,0;hypervoice,0 1376v 744 | ironhead,0;hypervoice,0 1118v 590 | icywind,0;calmmind,1 953v 493 | ironhead,0;calmmind,1 920v 473
+    p2 greedy: move 3 2, move 2 2
+      p1a Jirachi used Icy Wind -> p2a: Togekiss  [[spread] p2a,p2b]
+              p2a Togekiss spe 1 fell
+              p2b Rotom spe 1 fell
+              p2a Togekiss used up its Sitrus Berry
+      p2b Rotom used Overheat -> p1b: Sylveon
+      p2a Togekiss used Air Slash -> p1b: Sylveon
+      p1b Sylveon used Hyper Voice -> p2a: Togekiss  [[spread] p2a,p2b]
+      p2b Rotom fainted
+      after p1: Jirachi 403/403, Sylveon 198/394
+      after p2: Togekiss 71/373, Rotom-Heat 0/302
+
+  Turn 9
+      p2b <- Mamoswine comes in (362/362)
+      after p1: Jirachi 403/403, Sylveon 198/394
+      after p2: Togekiss 71/373, Mamoswine 362/362
+
+  Turn 10
+    p1 mcts: switch 6, move 3   (slot0 Jirachi -> Rotom-Wash)
+      search (21000 visits): switch rotomwash;protect,1 2239v 1097 | icywind,0;protect,1 1975v 956 | ironhead,1;protect,1 1905v 919 | protect,0;protect,1 1555v 733
+    p2 greedy: move 3 2, move 2
+      p1a <- Rotom-Wash comes in (304/304)
+      p1b Sylveon used Protect
+      p2b Mamoswine used Earthquake -> p1a: Rotom  [[spread] ]
+              p2a Togekiss -- IMMUNE
+              p1a Rotom -- IMMUNE
+              p1b Sylveon -- move: Protect
+      p2a Togekiss used Air Slash -> p1b: Sylveon
+              p1b Sylveon -- move: Protect
+      after p1: Rotom-Wash 304/304, Sylveon 198/394
+      after p2: Togekiss 71/373, Mamoswine 362/362
+
+  Turn 11
+    p1 mcts: move 1 2, move 3
+      search (25000 visits): hydropump,1;protect,1 3857v 2242 | willowisp,1;protect,1 2086v 1158 | hydropump,0;protect,1 1318v 698 | thunderbolt,0;protect,1 1101v 570
+    p2 greedy: move 3 2, move 2
+      p1b Sylveon used Protect  [[still]]
+              p1b Sylveon -- IT FAILED
+      p2b Mamoswine used Earthquake -> p1a: Rotom  [[spread] p1b]
+              p2a Togekiss -- IMMUNE
+              p1a Rotom -- IMMUNE
+      p1b Sylveon fainted
+      p1a Rotom used Hydro Pump -> p2b: Mamoswine
+      p2b Mamoswine fainted
+      p2a Togekiss used Air Slash -> p1a: Rotom
+      after p1: Rotom-Wash 254/304, Sylveon 0/394
+      after p2: Togekiss 71/373, Mamoswine 0/362
+
+  Turn 12
+      p2b <- Genesect comes in (283/283)
+      p1b <- Talonflame comes in (297/297)
+              p2b Genesect spa 1 rose
+      after p1: Rotom-Wash 254/304, Talonflame 297/297
+      after p2: Togekiss 71/373, Genesect 283/283
+
+  Turn 13
+    p1 mcts: move 2 2, move 3
+      search (25000 visits): thunderbolt,1;protect,1 1619v 802 | thunderbolt,1;switch jirachi 1462v 716 | hydropump,1;protect,1 1380v 671 | hydropump,1;switch jirachi 1261v 606
+    p2 greedy: move 3 1, move 1 1
+      p1b Talonflame used Protect
+      p2b Genesect used Ice Beam -> p1a: Rotom
+      p1a Rotom used Thunderbolt -> p2b: Genesect
+              p2b Genesect -- critical hit
+      p2a Togekiss used Air Slash -> p1a: Rotom
+              p1a Rotom used up its Sitrus Berry
+      after p1: Rotom-Wash 218/304, Talonflame 297/297
+      after p2: Togekiss 71/373, Genesect 51/283
+
+  Turn 14
+    p1 mcts: move 2 2, move 1 1
+      search (21000 visits): thunderbolt,1;bravebird,0 2275v 1401 | thunderbolt,1;switch jirachi 1835v 1111 | hydropump,1;switch jirachi 1019v 580 | hydropump,1;bravebird,0 880v 491
+    p2 greedy: move 3 1, move 1 1
+      p1b Talonflame used Brave Bird -> p2a: Togekiss
+      p2a Togekiss fainted
+      p2b Genesect used Ice Beam -> p1a: Rotom
+              p1a Rotom -- critical hit
+              p1a Rotom is now frz
+              p1a Rotom COULD NOT MOVE (frz)
+      after p1: Rotom-Wash 111/304, Talonflame 245/297
+      after p2: Togekiss 0/373, Genesect 51/283
+
+  Turn 15
+      p2a <- Gardevoir comes in (278/278)
+      after p1: Rotom-Wash 111/304, Talonflame 245/297
+      after p2: Gardevoir 278/278, Genesect 51/283
+
+  Turn 16
+    p1 mcts: switch 6, move 1 2   (slot0 Rotom-Wash -> Jirachi)
+      search (15000 visits): switch jirachi;bravebird,1 2227v 1153 | thunderbolt,1;switch jirachi 564v 240 | hydropump,1;switch jirachi 553v 234 | willowisp,0;switch jirachi 537v 226
+    p2 greedy: move 3 1, move 1 1
+      p1a <- Jirachi comes in (403/403)
+      p1b Talonflame used Brave Bird -> p2b: Genesect
+      p2b Genesect fainted
+      p2a Gardevoir used Focus Blast -> p1a: Jirachi
+      after p1: Jirachi 284/403, Talonflame 199/297
+      after p2: Gardevoir 278/278, Genesect 0/283
+
+  Turn 17
+    p1 mcts: move 2 1, move 1 1
+      search (160000 visits): ironhead,0;bravebird,0 152500v 147047 | ironhead,0;overheat,0 1627v 1261 | icywind,0;bravebird,0 1019v 761 | followme,0;bravebird,0 504v 347
+    p2 greedy: move 3 2, pass
+      p1b Talonflame used Brave Bird -> p2a: Gardevoir
+      p2a Gardevoir fainted
+      after p1: Jirachi 284/403, Talonflame 78/297
+      after p2: Gardevoir 0/278, Genesect 0/283
+
+  RESULT: p1 wins

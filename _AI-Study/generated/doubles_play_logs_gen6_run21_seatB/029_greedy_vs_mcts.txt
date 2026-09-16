@@ -1,0 +1,244 @@
+battle 29   p1=greedy vs p2=mcts   mcts 300 ms a decision
+  p1: Untitled 480: Kyurem-Black, Manectric-Mega, Volcarona, Blastoise, Landorus, Mew
+  p2: XY Doubles: Politoed, Manectric, Aegislash, Ludicolo, Rotom-Wash, Landorus-Therian
+
+  Turn 1
+    p1 greedy: move 2 1, move 1 1
+    p2 mcts: move 4, switch 6   (slot1 Manectric -> Landorus-Therian)
+      search (14000 visits): protect,0;switch landorustherian 230v 134 | icywind,0;switch landorustherian 189v 105 | switch landorustherian;protect,1 183v 100 | scald,1;protect,1 182v 99
+      p2b <- Landorus-Therian comes in (330/330)
+              p1a Kyurem atk 1 fell
+              p1b Manectric atk 1 fell
+      p2a Politoed used Protect
+      p1b Manectric used Volt Switch -> p2a: Politoed
+              p2a Politoed -- move: Protect
+      p1a Kyurem used Freeze Shock  [[still]]
+              p1a Kyurem used up its Power Herb
+              p2a Politoed -- move: Protect
+      after p1: Kyurem-Black 391/391, Manectric-Mega 344/344
+      after p2: Politoed 384/384, Landorus-Therian 330/330
+
+  Turn 2
+    p1 greedy: move 2 1, move 1 1
+    p2 mcts: move 2, move 4 1
+      search (17000 visits): icywind,0;uturn,0 589v 377 | switch rotomwash;earthquake,0 512v 321 | icywind,0;earthquake,0 503v 314 | protect,0;earthquake,0 489v 304
+      p2b Landorus used U-turn -> p1a: Kyurem
+      after p1: Kyurem-Black 273/391, Manectric-Mega 344/344
+      after p2: Politoed 384/384, Landorus-Therian 330/330
+
+  Turn 3
+      p2b <- Aegislash comes in (324/324)
+      p1b Manectric used Volt Switch -> p2a: Politoed
+      after p1: Kyurem-Black 273/391, Manectric-Mega 344/344
+      after p2: Politoed 184/384, Aegislash 324/324
+
+  Turn 4
+      p1b <- Volcarona comes in (334/334)
+      p1a Kyurem used Freeze Shock  [[still]]
+      p2a Politoed used Icy Wind -> p1b: Volcarona  [[spread] p1b]
+              p2a Politoed -- MISSED
+              p1b Volcarona spe 1 fell
+      after p1: Kyurem-Black 273/391, Volcarona 319/334
+      after p2: Politoed 184/384, Aegislash 324/324
+
+  Turn 5
+    p1 greedy: move 1, move 1
+    p2 mcts: move 1 2, switch 3   (slot1 Aegislash -> Landorus-Therian)
+      search (14000 visits): scald,1;switch landorustherian 783v 475 | scald,1;flashcannon,0 448v 249 | icywind,0;switch landorustherian 376v 202 | scald,0;switch landorustherian 374v 201
+      p2b <- Landorus-Therian comes in (330/330)
+              p1a Kyurem atk 1 fell
+              p1b Volcarona atk 1 fell
+      p1a Kyurem used Freeze Shock -> p2a: Politoed  [[from] lockedmove]
+      p2a Politoed used Scald -> p1b: Volcarona
+      p1b Volcarona used Heat Wave -> p2b: Landorus  [[spread] p2a]
+              p1b Volcarona -- MISSED
+      after p1: Kyurem-Black 273/391, Volcarona 38/334
+      after p2: Politoed 85/384, Landorus-Therian 330/330
+
+  Turn 6
+    p1 greedy: move 2 1, move 1
+    p2 mcts: move 2, move 4 1
+      search (28000 visits): icywind,0;uturn,0 1288v 641 | switch rotomwash;earthquake,0 1081v 526 | scald,0;uturn,0 1065v 517 | scald,1;stoneedge,0 903v 427
+      p2b Landorus used U-turn -> p1a: Kyurem
+      after p1: Kyurem-Black 169/391, Volcarona 38/334
+      after p2: Politoed 85/384, Landorus-Therian 330/330
+
+  Turn 7
+      p2b <- Aegislash comes in (324/324)
+      p1a Kyurem used Freeze Shock  [[still]]
+      p2a Politoed used Icy Wind -> p1a: Kyurem  [[spread] p1a]
+              p2a Politoed -- MISSED
+              p1a Kyurem -- critical hit
+              p1a Kyurem spe 1 fell
+      p1b Volcarona used Heat Wave -> p2b: Aegislash  [[spread] p2a,p2b]
+              p2b Aegislash -- critical hit
+              p2b Aegislash used up its Weakness Policy
+              p2b Aegislash atk 2 rose
+              p2b Aegislash spa 2 rose
+      after p1: Kyurem-Black 121/391, Volcarona 5/334
+      after p2: Politoed 42/384, Aegislash 145/324
+
+  Turn 8
+    p1 greedy: move 1, move 1
+    p2 mcts: move 2, move 4 2
+      search (24000 visits): icywind,0;shadowsneak,1 680v 217 | scald,0;shadowsneak,1 585v 179 | switch rotomwash;shadowsneak,1 565v 171 | protect,0;shadowball,1 530v 157
+      p2b Aegislash used Shadow Sneak -> p1b: Volcarona
+              p1b Volcarona -- critical hit
+      p1b Volcarona fainted
+      p2a Politoed used Icy Wind -> p1a: Kyurem
+              p1a Kyurem spe 1 fell
+      p1a Kyurem used Freeze Shock -> p2a: Politoed  [[from] lockedmove]
+      p2a Politoed fainted
+      after p1: Kyurem-Black 78/391, Volcarona 0/334
+      after p2: Politoed 0/384, Aegislash-Blade 145/324
+
+  Turn 9
+      p1b <- Manectric-Mega comes in (344/344)
+      p2a <- Landorus-Therian comes in (330/330)
+              p1a Kyurem atk 1 fell
+              p1b Manectric atk 1 fell
+      after p1: Kyurem-Black 78/391, Manectric-Mega 344/344
+      after p2: Landorus-Therian 330/330, Aegislash-Blade 145/324
+
+  Turn 10
+    p1 greedy: move 2 2, move 1 2
+    p2 mcts: move 4 2, move 2 2
+      search (31000 visits): uturn,1;shadowball,1 4252v 1767 | uturn,0;shadowball,1 2445v 961 | uturn,1;flashcannon,1 1647v 615 | uturn,1;shadowsneak,1 1070v 370
+      p2a Landorus used U-turn -> p1b: Manectric
+      after p1: Kyurem-Black 78/391, Manectric-Mega 228/344
+      after p2: Landorus-Therian 330/330, Aegislash-Blade 145/324
+
+  Turn 11
+      p2a <- Ludicolo comes in (327/327)
+      p1b Manectric used Volt Switch -> p2b: Aegislash
+      p2b Aegislash fainted
+      after p1: Kyurem-Black 78/391, Manectric-Mega 228/344
+      after p2: Ludicolo 327/327, Aegislash 0/324
+
+  Turn 12
+      p1b <- Blastoise comes in (362/362)
+      p1a Kyurem used Freeze Shock  [[still]]
+      after p1: Kyurem-Black 78/391, Blastoise 362/362
+      after p2: Ludicolo 327/327, Aegislash 0/324
+
+  Turn 13
+      p2b <- Landorus-Therian comes in (330/330)
+              p1a Kyurem atk 1 fell
+              p1b Blastoise atk 1 fell
+      after p1: Kyurem-Black 78/391, Blastoise 362/362
+      after p2: Ludicolo 327/327, Landorus-Therian 330/330
+
+  Turn 14
+    p1 greedy: move 1, move 3 1
+    p2 mcts: move 3 2, move 4 2
+      search (29000 visits): gigadrain,1;uturn,1 914v 315 | icebeam,0;rockslide,0 897v 307 | hydropump,1;uturn,1 750v 246 | hydropump,0;rockslide,0 712v 231
+      p2a Ludicolo used Giga Drain -> p1b: Blastoise
+      p2b Landorus used U-turn -> p1b: Blastoise
+      after p1: Kyurem-Black 78/391, Blastoise 94/362
+      after p2: Ludicolo 327/327, Landorus-Therian 330/330
+
+  Turn 15
+      p2b <- Rotom-Wash comes in (300/300)
+      p1b Blastoise used Scald -> p2a: Ludicolo
+      p1a Kyurem used Freeze Shock -> p2b: Rotom  [[from] lockedmove]
+      after p1: Kyurem-Black 78/391, Blastoise 94/362
+      after p2: Ludicolo 300/327, Rotom-Wash 256/300
+
+  Turn 16
+    p1 greedy: move 2 2, move 3 2
+    p2 mcts: move 2 2, move 1 1
+      search (27000 visits): hydropump,1;hydropump,0 927v 333 | gigadrain,1;hydropump,0 740v 252 | hydropump,0;hydropump,1 699v 235 | hydropump,1;hydropump,1 624v 203
+      p2a Ludicolo used Hydro Pump -> p1b: Blastoise
+      p1b Blastoise fainted
+      p2b Rotom used Hydro Pump -> p1a: Kyurem
+      p1a Kyurem fainted
+      after p1: Kyurem-Black 0/391, Blastoise 0/362
+      after p2: Ludicolo 320/327, Rotom-Wash 256/300
+
+  Turn 17
+      p1a <- Manectric-Mega comes in (228/344)
+      p1b <- Landorus comes in (319/319)
+      after p1: Manectric-Mega 228/344, Landorus 319/319
+      after p2: Ludicolo 320/327, Rotom-Wash 256/300
+
+  Turn 18
+    p1 greedy: move 1 2, move 1 2
+    p2 mcts: move 4 2, switch 6   (slot1 Rotom-Wash -> Manectric)
+      search (33000 visits): icebeam,1;switch manectric 4836v 2910 | switch landorustherian;hydropump,1 3449v 2034 | icebeam,1;switch landorustherian 2413v 1387 | hydropump,1;switch landorustherian 1304v 705
+      p2b <- Manectric comes in (287/287)
+      p1a Manectric used Volt Switch -> p2b: Manectric
+              p2b Manectric spa 1 rose
+      p1b Landorus used Earth Power -> p2b: Manectric
+      p2b Manectric fainted
+      p2a Ludicolo used Ice Beam -> p1b: Landorus
+      p1b Landorus fainted
+      after p1: Manectric-Mega 228/344, Landorus 0/319
+      after p2: Ludicolo 327/327, Manectric 0/287
+
+  Turn 19
+      p2b <- Landorus-Therian comes in (330/330)
+      p1b <- Mew comes in (401/401)
+              p1a Manectric atk 1 fell
+              p1b Mew atk 1 fell
+      after p1: Manectric-Mega 228/344, Mew 401/401
+      after p2: Ludicolo 327/327, Landorus-Therian 330/330
+
+  Turn 20
+    p1 greedy: move 1 1, move 2 1
+    p2 mcts: move 3 2, move 4 2
+      search (34000 visits): gigadrain,1;uturn,1 4562v 3310 | hydropump,1;uturn,1 4483v 3250 | icebeam,1;uturn,1 3208v 2286 | gigadrain,0;uturn,1 2358v 1649
+      p2b Landorus used U-turn -> p1b: Mew
+      after p1: Manectric-Mega 228/344, Mew 185/401
+      after p2: Ludicolo 327/327, Landorus-Therian 275/330
+
+  Turn 21
+      p2b <- Rotom-Wash comes in (256/300)
+      p1a Manectric used Volt Switch -> p2a: Ludicolo
+      p1b Mew used Ice Beam -> p2a: Ludicolo
+      p2a Ludicolo used Giga Drain -> p1b: Mew
+      after p1: Manectric-Mega 228/344, Mew 79/401
+      after p2: Ludicolo 234/327, Rotom-Wash 256/300
+
+  Turn 22
+    p1 greedy: move 1 1, move 2 1
+    p2 mcts: switch 6, move 1 1   (slot0 Ludicolo -> Landorus-Therian)
+      search (25000 visits): switch landorustherian;hydropump,0 2442v 1321 | switch landorustherian;hydropump,1 1480v 762 | gigadrain,0;switch landorustherian 1248v 630 | hydropump,0;switch landorustherian 1100v 546
+      p2a <- Landorus-Therian comes in (275/330)
+              p1a Manectric atk 1 fell
+              p1b Mew atk 1 fell
+      p1a Manectric used Volt Switch -> p2a: Landorus
+              p2a Landorus -- IMMUNE
+      p1b Mew used Ice Beam -> p2a: Landorus
+      p2a Landorus fainted
+      p2b Rotom used Hydro Pump -> p1a: Manectric
+      after p1: Manectric-Mega 68/344, Mew 79/401
+      after p2: Landorus-Therian 0/330, Rotom-Wash 256/300
+
+  Turn 23
+      p2a <- Ludicolo comes in (234/327)
+      after p1: Manectric-Mega 68/344, Mew 79/401
+      after p2: Ludicolo 234/327, Rotom-Wash 256/300
+
+  Turn 24
+    p1 greedy: move 1 1, move 2 1
+    p2 mcts: move 1 1, move 1 1
+      search (31000 visits): fakeout,0;hydropump,0 4679v 2357 | fakeout,0;hydropump,1 2479v 1187 | icebeam,0;protect,1 1071v 462 | gigadrain,1;protect,1 1018v 435
+      p2a Ludicolo used Fake Out -> p1a: Manectric
+              p1a Manectric COULD NOT MOVE (flinch)
+      p1b Mew used Ice Beam -> p2a: Ludicolo
+      p2b Rotom used Hydro Pump -> p1a: Manectric
+      p1a Manectric fainted
+      after p1: Manectric-Mega 0/344, Mew 79/401
+      after p2: Ludicolo 187/327, Rotom-Wash 256/300
+
+  Turn 25
+    p1 greedy: pass, move 2 1
+    p2 mcts: move 3 2, move 2 2
+      search (419000 visits): gigadrain,1;thunderbolt,1 41048v 40320 | icebeam,1;thunderbolt,1 39197v 38479 | icebeam,1;hydropump,1 38736v 38020 | gigadrain,1;electroweb,1 37881v 37170
+      p1b Mew used Ice Beam -> p2a: Ludicolo
+      p2b Rotom used Thunderbolt -> p1b: Mew
+      p1b Mew fainted
+      after p1: Manectric-Mega 0/344, Mew 0/401
+      after p2: Ludicolo 113/327, Rotom-Wash 256/300
+
+  RESULT: p2 wins

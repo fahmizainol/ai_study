@@ -1,0 +1,201 @@
+battle 34   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: oraspl/Untitled 352: Kangaskhan-Mega, Darkrai, Landorus, Amoonguss, Volcanion, Scrafty
+  p2: Copy of Untitled 480: Kyurem-Black, Manectric-Mega, Volcarona, Blastoise, Landorus, Mew
+
+  Turn 1
+    p1 mcts: switch 6, move 3 2   (slot0 Kangaskhan-Mega -> Scrafty)
+      search (10000 visits): switch scrafty;darkpulse,1 175v 111 | switch scrafty;hypnosis,0 153v 94 | switch scrafty;icebeam,1 151v 92 | switch scrafty;darkpulse,0 148v 90
+    p2 greedy: move 2 1, move 4 1
+      p1a <- Scrafty comes in (334/334)
+              p2a Kyurem atk 1 fell
+              p2b Manectric atk 1 fell
+      p1b Darkrai used Dark Pulse -> p2b: Manectric
+      p2b Manectric used Overheat -> p1a: Scrafty
+              p2b Manectric spa 2 fell
+      p2a Kyurem used Fusion Bolt -> p1a: Scrafty
+      after p1: Scrafty 186/334, Darkrai 281/281
+      after p2: Kyurem-Black 440/440, Manectric-Mega 170/344
+
+  Turn 2
+    p1 mcts: move 2 1, move 1 2
+      search (13000 visits): highjumpkick,0;icebeam,1 203v 91 | highjumpkick,0;darkpulse,1 197v 87 | highjumpkick,0;hypnosis,0 196v 87 | highjumpkick,0;darkpulse,0 179v 77
+    p2 greedy: move 2 1, move 4 1
+      p1b Darkrai used Ice Beam -> p2b: Manectric
+      p2b Manectric used Overheat -> p1a: Scrafty
+              p2b Manectric spa 2 fell
+      p2a Kyurem used Fusion Bolt -> p1a: Scrafty
+      p1a Scrafty used High Jump Kick -> p2a: Kyurem
+      after p1: Scrafty 82/334, Darkrai 281/281
+      after p2: Kyurem-Black 84/440, Manectric-Mega 39/344
+
+  Turn 3
+    p1 mcts: move 3 1, move 3 1
+      search (24000 visits): knockoff,0;darkpulse,0 356v 115 | knockoff,1;darkpulse,0 347v 111 | switch landorus;darkpulse,0 343v 109 | icepunch,0;darkpulse,0 336v 106
+    p2 greedy: move 2 1, move 4 1
+      p1b Darkrai used Dark Pulse -> p2a: Kyurem
+      p2a Kyurem fainted
+      p2b Manectric used Overheat -> p1a: Scrafty
+              p2b Manectric spa 2 fell
+      p1a Scrafty used Knock Off -> p2b: Manectric
+      p2b Manectric fainted
+      after p1: Scrafty 52/334, Darkrai 281/281
+      after p2: Kyurem-Black 0/440, Manectric-Mega 0/344
+
+  Turn 4
+      p2b <- Blastoise comes in (362/362)
+      p2a <- Volcarona comes in (311/311)
+      after p1: Scrafty 52/334, Darkrai 281/281
+      after p2: Volcarona 311/311, Blastoise 362/362
+
+  Turn 5
+    p1 mcts: switch 6, move 2 1   (slot0 Scrafty -> Kangaskhan-Mega)
+      search (31000 visits): switch kangaskhanmega;hypnosis,0 3287v 2693 | switch volcanion;darkpulse,0 1223v 939 | switch kangaskhanmega;icebeam,0 1148v 878 | switch kangaskhanmega;hypnosis,1 826v 612
+    p2 greedy: move 1, move 3 1
+      p1a <- Kangaskhan-Mega comes in (351/351)
+      p1b Darkrai used Hypnosis -> p2a: Volcarona  [[miss]]
+              p1b Darkrai -- MISSED
+      p2a Volcarona used Heat Wave -> p1b: Darkrai  [[spread] p1a,p1b]
+      p2b Blastoise used Scald -> p1a: Kangaskhan
+      after p1: Kangaskhan-Mega 80/351, Darkrai 89/281
+      after p2: Volcarona 280/311, Blastoise 362/362
+
+  Turn 6
+    p1 mcts: move 3 1, move 3 1
+      search (33000 visits): return,0;darkpulse,0 857v 799 | return,0;darkpulse,1 574v 516 | return,0;icebeam,0 552v 494 | fakeout,0;darkpulse,0 505v 447
+    p2 greedy: move 1, move 3 1
+      p1b Darkrai used Dark Pulse -> p2a: Volcarona
+      p1a Kangaskhan used Return -> p2a: Volcarona
+              p1a Kangaskhan is now brn
+      p2a Volcarona fainted
+      p2b Blastoise used Scald -> p1a: Kangaskhan
+      p1a Kangaskhan fainted
+      after p1: Kangaskhan-Mega 0/351, Darkrai 89/281
+      after p2: Volcarona 0/311, Blastoise 362/362
+
+  Turn 7
+      p1a <- Landorus comes in (319/319)
+      p2a <- Landorus comes in (319/319)
+      after p1: Landorus 319/319, Darkrai 89/281
+      after p2: Landorus 319/319, Blastoise 362/362
+
+  Turn 8
+    p1 mcts: switch 4, move 1 2   (slot0 Landorus -> Amoonguss)
+      search (34000 visits): switch amoonguss;icebeam,1 4509v 4455 | switch amoonguss;willowisp,0 4437v 4370 | switch amoonguss;hypnosis,1 1207v 1110 | switch scrafty;icebeam,0 1008v 914
+    p2 greedy: move 1 2, move 3 2
+      p1a <- Amoonguss comes in (432/432)
+      p1b Darkrai used Ice Beam -> p2b: Blastoise
+      p2a Landorus used Earth Power -> p1b: Darkrai
+      p1b Darkrai fainted
+      p2b Blastoise used Scald -> p1a: Amoonguss
+      after p1: Amoonguss 389/432, Darkrai 0/281
+      after p2: Landorus 319/319, Blastoise 314/362
+
+  Turn 9
+      p1b <- Landorus comes in (319/319)
+      after p1: Amoonguss 389/432, Landorus 319/319
+      after p2: Landorus 319/319, Blastoise 314/362
+
+  Turn 10
+    p1 mcts: move 3 1, move 2 1
+      search (20000 visits): energyball,0;psychic,0 416v 400 | energyball,1;psychic,0 389v 371 | energyball,0;earthpower,1 388v 370 | energyball,1;earthpower,1 383v 365
+    p2 greedy: move 1 1, move 3 1
+      p2a Landorus used Earth Power -> p1a: Amoonguss
+      p1b Landorus used Psychic -> p2a: Landorus
+      p2b Blastoise used Scald -> p1a: Amoonguss
+      p1a Amoonguss used Energy Ball -> p2a: Landorus
+              p2a Landorus spd 1 fell
+      after p1: Amoonguss 71/432, Landorus 319/319
+      after p2: Landorus 10/319, Blastoise 314/362
+
+  Turn 11
+    p1 mcts: switch 5, move 3   (slot0 Amoonguss -> Volcanion)
+      search (38000 visits): switch volcanion;substitute,1 2263v 2224 | spore,0;switch scrafty 2224v 2173 | switch volcanion;psychic,0 2099v 2069 | switch volcanion;earthpower,0 2025v 1997
+    p2 greedy: move 1 1, move 3 1
+      p1a <- Volcanion comes in (301/301)
+      p1b Landorus used Substitute
+              p1b Landorus gained Substitute
+      p2a Landorus used Earth Power -> p1a: Volcanion
+      p1a Volcanion fainted
+      p2b Blastoise used Scald -> p1b: Landorus
+              p1b Landorus lost Substitute
+      after p1: Volcanion 0/301, Landorus 240/319
+      after p2: Landorus 10/319, Blastoise 314/362
+
+  Turn 12
+      p1a <- Amoonguss comes in (215/432)
+      after p1: Amoonguss 215/432, Landorus 240/319
+      after p2: Landorus 10/319, Blastoise 314/362
+
+  Turn 13
+    p1 mcts: move 3 2, move 1 2
+      search (30000 visits): energyball,1;earthpower,1 1405v 1016 | energyball,0;earthpower,1 1362v 983 | spore,0;earthpower,1 1258v 902 | energyball,1;psychic,0 1242v 889
+    p2 greedy: move 1 1, move 3 1
+      p1b Landorus used Earth Power -> p2b: Blastoise
+      p2a Landorus used Earth Power -> p1a: Amoonguss
+      p1a Amoonguss fainted
+      p2b Blastoise used Scald -> p1b: Landorus
+      after p1: Amoonguss 0/432, Landorus 42/319
+      after p2: Landorus 10/319, Blastoise 123/362
+
+  Turn 14
+      p1a <- Scrafty comes in (52/334)
+              p2a Landorus atk 1 fell
+              p2b Blastoise atk 1 fell
+      after p1: Scrafty 52/334, Landorus 42/319
+      after p2: Landorus 10/319, Blastoise 123/362
+
+  Turn 15
+    p1 mcts: move 3 2, move 1 2
+      search (116000 visits): knockoff,1;earthpower,1 11044v 1554 | icepunch,1;earthpower,1 10708v 1500 | highjumpkick,1;earthpower,1 10383v 1446 | fakeout,0;earthpower,1 7995v 1061
+    p2 greedy: move 1 2, move 3 2
+      p1b Landorus used Earth Power -> p2b: Blastoise
+              p2b Blastoise -- critical hit
+      p2b Blastoise fainted
+      p2a Landorus used Earth Power -> p1b: Landorus
+              p1b Landorus -- IMMUNE
+      p1a Scrafty used Knock Off -> p2a: Landorus
+              p2a Landorus used up its Life Orb
+      p2a Landorus fainted
+      after p1: Scrafty 52/334, Landorus 42/319
+      after p2: Landorus 0/319, Blastoise 0/362
+
+  Turn 16
+      p2a <- Mew comes in (401/401)
+      after p1: Scrafty 52/334, Landorus 42/319
+      after p2: Mew 401/401, Blastoise 0/362
+
+  Turn 17
+    p1 mcts: move 1 1, move 1 1
+      search (1165000 visits): fakeout,0;earthpower,0 91441v 267 | fakeout,0;psychic,0 85816v 202 | fakeout,0;substitute,1 80764v 145 | fakeout,0;protect,1 79413v 130
+    p2 greedy: move 2 2, pass
+      p1a Scrafty used Fake Out  [[still]]
+              p1a Scrafty -- IT FAILED
+      p1b Landorus used Earth Power -> p2a: Mew
+      p2a Mew used Ice Beam -> p1b: Landorus
+              p1b Landorus -- critical hit
+      p1b Landorus fainted
+      after p1: Scrafty 52/334, Landorus 0/319
+      after p2: Mew 167/401, Blastoise 0/362
+
+  Turn 18
+    p1 mcts: move 1 1, pass
+      search (1601000 visits): fakeout,0;No Move 472994v 557 | highjumpkick,0;No Move 376057v 88 | icepunch,0;No Move 375985v 87 | knockoff,0;No Move 375964v 87
+    p2 greedy: move 2 1, pass
+      p1a Scrafty used Fake Out  [[still]]
+              p1a Scrafty -- IT FAILED
+      p2a Mew used Ice Beam -> p1a: Scrafty
+              p1a Scrafty is now frz
+      after p1: Scrafty 9/334, Landorus 0/319
+      after p2: Mew 167/401, Blastoise 0/362
+
+  Turn 19
+    p1 mcts: move 1 1, pass
+      search (1891000 visits): fakeout,0;No Move 475698v 587 | knockoff,0;No Move 472204v 569 | icepunch,0;No Move 471961v 568 | highjumpkick,0;No Move 471137v 563
+    p2 greedy: move 2 1, pass
+              p1a Scrafty COULD NOT MOVE (frz)
+      p2a Mew used Ice Beam -> p1a: Scrafty
+      p1a Scrafty fainted
+      after p1: Scrafty 0/334, Landorus 0/319
+      after p2: Mew 167/401, Blastoise 0/362
+
+  RESULT: p2 wins

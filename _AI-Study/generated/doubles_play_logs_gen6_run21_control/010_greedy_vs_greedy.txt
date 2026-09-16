@@ -1,0 +1,120 @@
+battle 10   p1=greedy vs p2=greedy
+  p1: ORAS Doubles OU: Abomasnow-Mega, Heatran, Hitmontop, Kyurem-Black, Cresselia, Azumarill
+  p2: ORAS Doubles OU: Azumarill, Aromatisse, Diancie, Sylveon, Mawile, Togekiss
+
+  Turn 1
+    p1 greedy: move 4, move 1
+    p2 greedy: move 3 1, move 4 1
+      p1b Heatran used Heat Wave -> p2b: Aromatisse  [[spread] p2a,p2b]
+      p2a Azumarill used Knock Off -> p1a: Abomasnow
+      p1a Abomasnow used Blizzard -> p2b: Aromatisse  [[spread] p2a,p2b]
+              p2b Aromatisse used up its Sitrus Berry
+      p2b Aromatisse used Moonblast -> p1a: Abomasnow
+              p1a Abomasnow spa 1 fell
+      after p1: Abomasnow-Mega 186/384, Heatran 386/386
+      after p2: Azumarill 209/404, Aromatisse 172/406
+
+  Turn 2
+    p1 greedy: move 4, move 1
+    p2 greedy: move 3 1, move 4 1
+      p1b Heatran used Heat Wave -> p2a: Azumarill  [[spread] p2a,p2b]
+              p2a Azumarill used up its Sitrus Berry
+      p2a Azumarill used Knock Off -> p1a: Abomasnow
+      p1a Abomasnow used Blizzard -> p2a: Azumarill  [[spread] p2a,p2b]
+      p2b Aromatisse fainted
+      after p1: Abomasnow-Mega 96/384, Heatran 386/386
+      after p2: Azumarill 137/404, Aromatisse 0/406
+
+  Turn 3
+      p2b <- Diancie comes in (304/304)
+      after p1: Abomasnow-Mega 96/384, Heatran 386/386
+      after p2: Azumarill 137/404, Diancie 304/304
+
+  Turn 4
+    p1 greedy: move 4, move 1
+    p2 greedy: move 3 1, move 2
+      p1b Heatran used Heat Wave -> p2b: Diancie  [[spread] p2a,p2b]
+      p2b Diancie used Diamond Storm -> p1b: Heatran  [[spread] p1a,p1b]
+              p1b Heatran -- critical hit
+              p2b Diancie def 1 rose
+      p1a Abomasnow fainted
+      p2a Azumarill used Knock Off -> p1b: Heatran
+              p1b Heatran used up its Leftovers
+      after p1: Abomasnow-Mega 0/384, Heatran 36/386
+      after p2: Azumarill 32/404, Diancie 205/304
+
+  Turn 5
+      p1a <- Hitmontop comes in (304/304)
+              p2a Azumarill atk 1 fell
+              p2b Diancie -- IT FAILED
+      after p1: Hitmontop 304/304, Heatran 36/386
+      after p2: Azumarill 32/404, Diancie 205/304
+
+  Turn 6
+    p1 greedy: move 2 1, move 1
+    p2 greedy: move 3 2, move 2
+      p1a Hitmontop used Close Combat -> p2a: Azumarill
+              p1a Hitmontop def 1 fell
+              p1a Hitmontop spd 1 fell
+      p2a Azumarill fainted
+      p1b Heatran used Heat Wave -> p2b: Diancie
+      p2b Diancie used Diamond Storm -> p1b: Heatran  [[spread] p1a,p1b]
+              p1b Heatran -- critical hit
+      p1b Heatran fainted
+      after p1: Hitmontop 160/304, Heatran 0/386
+      after p2: Azumarill 0/404, Diancie 95/304
+
+  Turn 7
+      p1b <- Kyurem-Black comes in (454/454)
+      p2a <- Sylveon comes in (345/345)
+      after p1: Hitmontop 160/304, Kyurem-Black 454/454
+      after p2: Sylveon 345/345, Diancie 95/304
+
+  Turn 8
+    p1 greedy: move 2 2, move 2 2
+    p2 greedy: move 1, move 2
+      p1b Kyurem used Draco Meteor -> p2b: Diancie
+              p2b Diancie -- IMMUNE
+      p2a Sylveon used Hyper Voice -> p1b: Kyurem  [[spread] p1a,p1b]
+      p1a Hitmontop fainted
+      p1b Kyurem fainted
+      p2b Diancie used Diamond Storm -> p1: Hitmontop  [[notarget]]
+              p2b Diancie -- IT FAILED
+      after p1: Hitmontop 0/304, Kyurem-Black 0/454
+      after p2: Sylveon 345/345, Diancie 95/304
+
+  Turn 9
+      p1b <- Azumarill comes in (404/404)
+      p1a <- Cresselia comes in (443/443)
+      after p1: Cresselia 443/443, Azumarill 404/404
+      after p2: Sylveon 345/345, Diancie 95/304
+
+  Turn 10
+    p1 greedy: move 3 2, move 4 2
+    p2 greedy: move 1, move 2
+      p1a Cresselia used Psychic -> p2b: Diancie
+      p2a Sylveon used Hyper Voice -> p1a: Cresselia  [[spread] p1a,p1b]
+              p1b Azumarill -- critical hit
+      p1b Azumarill fainted
+      p2b Diancie used Diamond Storm -> p1a: Cresselia
+              p2b Diancie def 1 rose
+      p2b Diancie fainted
+      after p1: Cresselia 84/443, Azumarill 0/404
+      after p2: Sylveon 345/345, Diancie 0/304
+
+  Turn 11
+      p2b <- Mawile comes in (304/304)
+              p1a Cresselia atk 1 fell
+      after p1: Cresselia 84/443, Azumarill 0/404
+      after p2: Sylveon 345/345, Mawile 304/304
+
+  Turn 12
+    p1 greedy: move 3 1, pass
+    p2 greedy: move 1, move 1 1
+      p1a Cresselia used Psychic -> p2a: Sylveon
+      p2a Sylveon used Hyper Voice -> p1a: Cresselia
+      p1a Cresselia fainted
+      after p1: Cresselia 0/443, Azumarill 0/404
+      after p2: Sylveon 245/345, Mawile 304/304
+
+  RESULT: p2 wins

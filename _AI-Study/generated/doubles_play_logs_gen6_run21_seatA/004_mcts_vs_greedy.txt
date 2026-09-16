@@ -1,0 +1,166 @@
+battle 4   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: ORAS Doubles OU: Dunsparce, Greninja, Garchomp, Togekiss, Charizard, Venusaur
+  p2: ORAS Doubles OU: Politoed, Kingdra, Amoonguss, Diancie-Mega, Scrafty, Heatran
+
+  Turn 1
+    p1 mcts: move 3, move 1 1
+      search (9000 visits): coil,0;hydropump,0 186v 98 | coil,0;protect,1 171v 87 | coil,0;icebeam,1 163v 82 | coil,0;hydropump,1 162v 81
+    p2 greedy: move 3 1, move 2 1
+      p2b Kingdra used Draco Meteor -> p1a: Dunsparce
+              p2b Kingdra spa 2 fell
+      p1b Greninja used Hydro Pump -> p2a: Politoed
+              p1b Greninja gained typechange Water
+      p2a Politoed used Scald -> p1a: Dunsparce
+      p1a Dunsparce used Coil
+              p1a Dunsparce atk 1 rose
+              p1a Dunsparce def 1 rose
+              p1a Dunsparce accuracy 1 rose
+      after p1: Dunsparce 44/404, Greninja 257/285
+      after p2: Politoed 250/384, Kingdra 263/292
+
+  Turn 2
+    p1 mcts: move 4, move 1 1
+      search (18000 visits): roost,0;hydropump,0 479v 194 | roost,0;hydropump,1 389v 148 | coil,0;hydropump,0 326v 118 | glare,0;hydropump,0 319v 114
+    p2 greedy: move 3 1, move 2 1
+      p2b Kingdra used Draco Meteor -> p1a: Dunsparce
+              p2b Kingdra spa 2 fell
+      p1a Dunsparce fainted
+      p1b Greninja used Hydro Pump -> p2a: Politoed  [[miss]]
+              p1b Greninja -- MISSED
+      p2a Politoed used Scald -> p1b: Greninja
+              p1b Greninja is now brn
+      after p1: Dunsparce 0/404, Greninja 132/285
+      after p2: Politoed 250/384, Kingdra 234/292
+
+  Turn 3
+      p1a <- Garchomp comes in (357/357)
+      after p1: Garchomp 357/357, Greninja 132/285
+      after p2: Politoed 250/384, Kingdra 234/292
+
+  Turn 4
+    p1 mcts: move 1, switch 4   (slot1 Greninja -> Togekiss)
+      search (37000 visits): earthquake,0;switch togekiss 711v 59 | earthquake,0;protect,1 703v 58 | dragonclaw,0;switch charizard 699v 92 | earthquake,0;switch charizard 663v 51
+    p2 greedy: move 3 2, move 2 2
+      p1b <- Togekiss comes in (373/373)
+      p2b Kingdra used Draco Meteor -> p1b: Togekiss
+              p1b Togekiss -- IMMUNE
+      p1a Garchomp used Earthquake -> p2a: Politoed  [[spread] p2a,p2b]
+              p1b Togekiss -- IMMUNE
+      p2a Politoed used Scald -> p1b: Togekiss
+              p1b Togekiss is now brn
+      after p1: Garchomp 322/357, Togekiss 236/373
+      after p2: Politoed 85/384, Kingdra 43/292
+
+  Turn 5
+    p1 mcts: move 3, move 3
+      search (31000 visits): swordsdance,0;tailwind,1 689v 44 | earthquake,0;airslash,1 670v 41 | earthquake,0;protect,1 631v 35 | earthquake,0;tailwind,1 626v 35
+    p2 greedy: move 3 2, move 2 2
+      p2b Kingdra used Draco Meteor -> p1b: Togekiss
+              p1b Togekiss -- IMMUNE
+      p1a Garchomp used Swords Dance
+              p1a Garchomp atk 2 rose
+      p1b Togekiss used Tailwind
+      -sidestart p1: A move: Tailwind
+      p2a Politoed used Scald -> p1b: Togekiss
+      after p1: Garchomp 322/357, Togekiss 94/373
+      after p2: Politoed 85/384, Kingdra 43/292
+
+  Turn 6
+    p1 mcts: move 1, move 4
+      search (29000 visits): earthquake,0;protect,1 776v 60 | earthquake,0;switch charizard 748v 56 | earthquake,0;switch greninja 702v 49 | dragonclaw,0;airslash,0 618v 36
+    p2 greedy: move 3 2, move 2 2
+      p1b Togekiss used Protect
+      p1a Garchomp used Earthquake -> p2a: Politoed  [[spread] p2a,p2b]
+              p1b Togekiss -- IMMUNE
+      p2a Politoed fainted
+      p2b Kingdra fainted
+      after p1: Garchomp 287/357, Togekiss 48/373
+      after p2: Politoed 0/384, Kingdra 0/292
+
+  Turn 7
+      p2b <- Diancie-Mega comes in (241/241)
+      p2a <- Amoonguss comes in (432/432)
+      after p1: Garchomp 287/357, Togekiss 48/373
+      after p2: Amoonguss 432/432, Diancie-Mega 241/241
+
+  Turn 8
+    p1 mcts: move 2 1, switch 6   (slot1 Togekiss -> Venusaur)
+      search (112000 visits): dragonclaw,0;switch venusaur 105992v 104542 | earthquake,0;protect,1 158v 26 | earthquake,0;airslash,0 156v 25 | earthquake,0;airslash,1 150v 23
+    p2 greedy: move 1 2, move 2
+      p1b <- Venusaur comes in (301/301)
+      p1a Garchomp used Dragon Claw -> p2a: Amoonguss
+              p2a Amoonguss used up its Sitrus Berry
+      p2b Diancie used Diamond Storm -> p1b: Venusaur  [[spread] p1a,p1b]
+      p2a Amoonguss used Giga Drain -> p1b: Venusaur
+      after p1: Garchomp 180/357, Venusaur 117/301
+      after p2: Amoonguss 202/432, Diancie-Mega 241/241
+
+  Turn 9
+    p1 mcts: switch 4, move 2 2   (slot0 Garchomp -> Greninja)
+      search (29000 visits): switch greninja;sludgebomb,1 1028v 132 | switch charizard;sludgebomb,1 1008v 128 | protect,0;gigadrain,1 865v 100 | dragonclaw,1;gigadrain,1 701v 69
+    p2 greedy: move 1 2, move 2
+      p1a <- Greninja comes in (132/285)
+      p1b Venusaur used Sludge Bomb -> p2b: Diancie
+      p2b Diancie used Diamond Storm -> p1b: Venusaur  [[spread] p1a,p1b]
+              p2b Diancie def 1 rose
+      p1a Greninja fainted
+      p1b Venusaur fainted
+      p2a Amoonguss used Giga Drain -> p1: Greninja  [[notarget]]
+              p2a Amoonguss -- IT FAILED
+      -sideend p1: A move: Tailwind
+      after p1: Greninja 0/285, Venusaur 0/301
+      after p2: Amoonguss 202/432, Diancie-Mega 77/241
+
+  Turn 10
+      p1a <- Garchomp comes in (180/357)
+      p1b <- Charizard comes in (359/359)
+      after p1: Garchomp 180/357, Charizard 359/359
+      after p2: Amoonguss 202/432, Diancie-Mega 77/241
+
+  Turn 11
+    p1 mcts: switch 6, move 4 mega   (slot0 Garchomp -> Togekiss)
+      search (252000 visits): switch togekiss;protect-mega,1 245620v 245265 | dragonclaw,1;heatwave-mega,0 101v 11 | swordsdance,0;heatwave-mega,0 99v 10 | earthquake,0;focusblast-mega,0 97v 9
+    p2 greedy: move 1 1, move 2
+      p1a <- Togekiss comes in (48/373)
+      p1b Charizard used Protect
+      p2b Diancie used Diamond Storm -> p1b: Charizard  [[spread] p1a]
+              p1b Charizard -- move: Protect
+      p1a Togekiss fainted
+      p2a Amoonguss used Giga Drain -> p1b: Charizard
+              p1b Charizard -- move: Protect
+      after p1: Togekiss 0/373, Charizard-Mega-Y 359/359
+      after p2: Amoonguss 202/432, Diancie-Mega 77/241
+
+  Turn 12
+      p1a <- Garchomp comes in (180/357)
+      after p1: Garchomp 180/357, Charizard-Mega-Y 359/359
+      after p2: Amoonguss 202/432, Diancie-Mega 77/241
+
+  Turn 13
+    p1 mcts: move 4, move 1
+      search (400000 visits): protect,0;heatwave,0 395140v 394678 | earthquake,0;heatwave,0 241v 33 | swordsdance,0;heatwave,0 232v 31 | swordsdance,0;protect,1 223v 28
+    p2 greedy: move 1 1, move 2
+      p1a Garchomp used Protect
+      p2b Diancie used Diamond Storm -> p1b: Charizard  [[spread] p1b]
+              p1a Garchomp -- move: Protect
+              p2b Diancie def 1 rose
+      p1b Charizard fainted
+      p2a Amoonguss used Giga Drain -> p1a: Garchomp
+              p1a Garchomp -- move: Protect
+      after p1: Garchomp 180/357, Charizard 0/359
+      after p2: Amoonguss 202/432, Diancie-Mega 77/241
+
+  Turn 14
+    p1 mcts: move 4, pass
+      search (80000 visits): protect,0;No Move 60226v 4924 | swordsdance,0;No Move 5215v 93 | earthquake,0;No Move 5037v 84 | dragonclaw,0;No Move 4946v 80
+    p2 greedy: move 1 1, move 2
+      p1a Garchomp used Protect  [[still]]
+              p1a Garchomp -- IT FAILED
+      p2b Diancie used Diamond Storm -> p1a: Garchomp
+              p2b Diancie def 1 rose
+      p2a Amoonguss used Giga Drain -> p1a: Garchomp
+      p1a Garchomp fainted
+      after p1: Garchomp 0/357, Charizard 0/359
+      after p2: Amoonguss 242/432, Diancie-Mega 77/241
+
+  RESULT: p2 wins

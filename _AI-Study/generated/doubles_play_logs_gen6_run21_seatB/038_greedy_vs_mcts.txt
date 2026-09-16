@@ -1,0 +1,193 @@
+battle 38   p1=greedy vs p2=mcts   mcts 300 ms a decision
+  p1: ORAS Doubles OU: Salamence, Sylveon, Weavile, Keldeo, Jirachi, Thundurus
+  p2: Untitled 609: Ferrothorn, Politoed, Gothitelle, Kingdra, Kangaskhan-Mega, Scrafty
+
+  Turn 1
+    p1 greedy: move 3 1, move 1
+    p2 mcts: move 2 2, switch 6   (slot1 Politoed -> Scrafty)
+      search (9000 visits): gyroball,1;switch scrafty 204v 172 | gyroball,1;scald,0 150v 119 | switch scrafty;scald,1 142v 111 | gyroball,0;switch scrafty 140v 109
+      p2b <- Scrafty comes in (334/334)
+              p1a Salamence atk 1 fell
+              p1b Sylveon atk 1 fell
+      p1a Salamence used Fire Blast -> p2a: Ferrothorn
+              p2a Ferrothorn -- critical hit
+              p2a Ferrothorn is now brn
+      p1b Sylveon used Hyper Voice -> p2a: Ferrothorn  [[spread] p2a,p2b]
+      p2a Ferrothorn fainted
+      p2b Scrafty fainted
+      after p1: Salamence 331/331, Sylveon 344/344
+      after p2: Ferrothorn 0/352, Scrafty 0/334
+
+  Turn 2
+      p2b <- Kingdra comes in (291/291)
+      p2a <- Gothitelle comes in (343/343)
+      after p1: Salamence 331/331, Sylveon 344/344
+      after p2: Gothitelle 343/343, Kingdra 291/291
+
+  Turn 3
+    p1 greedy: move 3 1, move 1
+    p2 mcts: move 4 2, move 4
+      search (16000 visits): psychic,1;protect,1 629v 264 | psychic,0;protect,1 621v 261 | protect,0;protect,1 600v 250 | switch kangaskhanmega;protect,1 512v 205
+      p2b Kingdra used Protect
+      p1a Salamence used Fire Blast -> p2a: Gothitelle
+      p1b Sylveon used Hyper Voice -> p2a: Gothitelle  [[spread] p2a]
+              p2b Kingdra -- move: Protect
+              p2a Gothitelle used up its Sitrus Berry
+      p2a Gothitelle used Psychic -> p1b: Sylveon
+              p1b Sylveon -- critical hit
+      after p1: Salamence 331/331, Sylveon 215/344
+      after p2: Gothitelle 201/343, Kingdra 291/291
+
+  Turn 4
+    p1 greedy: move 3 1, move 1
+    p2 mcts: move 2, move 4
+      search (23000 visits): protect,0;protect,1 1268v 547 | switch kangaskhanmega;dracometeor,0 1066v 448 | psychic,1;dracometeor,0 908v 371 | protect,0;hydropump,1 732v 287
+      p2b Kingdra used Protect
+      p2a Gothitelle used Protect
+      p1a Salamence used Fire Blast -> p2a: Gothitelle
+              p2a Gothitelle -- move: Protect
+      p1b Sylveon used Hyper Voice -> p2a: Gothitelle  [[spread] ]
+              p2a Gothitelle -- move: Protect
+              p2b Kingdra -- move: Protect
+      after p1: Salamence 331/331, Sylveon 215/344
+      after p2: Gothitelle 201/343, Kingdra 291/291
+
+  Turn 5
+    p1 greedy: move 3 1, move 1
+    p2 mcts: move 2, move 4
+      search (19000 visits): protect,0;protect,1 850v 362 | psychic,1;dracometeor,0 785v 329 | protect,0;hydropump,1 673v 274 | switch politoed;dracometeor,0 635v 255
+      p2b Kingdra used Protect  [[still]]
+              p2b Kingdra -- IT FAILED
+      p2a Gothitelle used Protect  [[still]]
+              p2a Gothitelle -- IT FAILED
+      p1a Salamence used Fire Blast -> p2a: Gothitelle
+      p1b Sylveon used Hyper Voice -> p2b: Kingdra  [[spread] p2a,p2b]
+              p2b Kingdra -- critical hit
+      p2a Gothitelle fainted
+      p2b Kingdra fainted
+      after p1: Salamence 331/331, Sylveon 215/344
+      after p2: Gothitelle 0/343, Kingdra 0/291
+
+  Turn 6
+      p2b <- Politoed comes in (383/383)
+      p2a <- Kangaskhan-Mega comes in (401/401)
+      after p1: Salamence 331/331, Sylveon 215/344
+      after p2: Kangaskhan-Mega 401/401, Politoed 383/383
+
+  Turn 7
+    p1 greedy: move 3 1, move 1
+    p2 mcts: move 3 2, move 3 2
+      search (22000 visits): return,1;scald,1 3666v 2405 | poweruppunch,1;scald,0 1387v 846 | poweruppunch,1;scald,1 1099v 654 | return,1;scald,0 1084v 644
+      p2a Kangaskhan used Return -> p1b: Sylveon
+              p1b Sylveon -- critical hit
+      p1b Sylveon fainted
+      p1a Salamence used Fire Blast -> p2a: Kangaskhan
+      p2b Politoed used Scald -> p1a: Salamence
+              p1a Salamence is now brn
+      after p1: Salamence 197/331, Sylveon 0/344
+      after p2: Kangaskhan-Mega 340/401, Politoed 383/383
+
+  Turn 8
+      p1b <- Weavile comes in (281/281)
+      after p1: Salamence 197/331, Weavile 281/281
+      after p2: Kangaskhan-Mega 340/401, Politoed 383/383
+
+  Turn 9
+    p1 greedy: move 3 1, move 1 1
+    p2 mcts: move 2 2, move 3 2
+      search (15000 visits): poweruppunch,1;scald,1 2058v 1601 | return,1;scald,1 976v 717 | poweruppunch,1;hypnosis,1 853v 618 | poweruppunch,1;scald,0 838v 606
+      p1b Weavile used Icicle Crash -> p2a: Kangaskhan
+              p2a Kangaskhan COULD NOT MOVE (flinch)
+      p1a Salamence used Fire Blast -> p2a: Kangaskhan
+              p2a Kangaskhan is now brn
+      p2b Politoed used Scald -> p1b: Weavile
+      after p1: Salamence 156/331, Weavile 178/281
+      after p2: Kangaskhan-Mega 14/401, Politoed 383/383
+
+  Turn 10
+    p1 greedy: move 3 1, move 1 1
+    p2 mcts: move 3 2, move 3 2
+      search (26000 visits): return,1;scald,1 2135v 1202 | poweruppunch,1;scald,1 1804v 1000 | return,1;protect,1 1502v 817 | poweruppunch,1;protect,1 1298v 695
+      p1b Weavile used Icicle Crash -> p2a: Kangaskhan
+      p2a Kangaskhan fainted
+      p1a Salamence used Fire Blast -> p2b: Politoed
+      p2b Politoed used Scald -> p1b: Weavile
+      after p1: Salamence 115/331, Weavile 87/281
+      after p2: Kangaskhan-Mega 0/401, Politoed 324/383
+
+  Turn 11
+    p1 greedy: move 3 2, move 1 2
+    p2 mcts: pass, move 2
+      search (40000 visits): No Move;protect,1 28193v 15695 | No Move;scald,1 7314v 3878 | No Move;hypnosis,1 1119v 500 | No Move;scald,0 1068v 473
+      p2b Politoed used Protect
+      p1b Weavile used Icicle Crash -> p2b: Politoed
+              p2b Politoed -- move: Protect
+      p1a Salamence used Fire Blast -> p2b: Politoed
+              p2b Politoed -- move: Protect
+      after p1: Salamence 74/331, Weavile 87/281
+      after p2: Kangaskhan-Mega 0/401, Politoed 324/383
+
+  Turn 12
+    p1 greedy: move 2, move 1 2
+    p2 mcts: pass, move 2
+      search (45000 visits): No Move;protect,1 36547v 21348 | No Move;scald,1 4569v 2297 | No Move;hypnosis,1 988v 420 | No Move;hypnosis,0 884v 369
+      p2b Politoed used Protect  [[still]]
+              p2b Politoed -- IT FAILED
+      p1b Weavile used Icicle Crash -> p2b: Politoed
+      p1a Salamence used Hyper Voice -> p2b: Politoed
+      after p1: Salamence 33/331, Weavile 87/281
+      after p2: Kangaskhan-Mega 0/401, Politoed 168/383
+
+  Turn 13
+    p1 greedy: move 2, move 1 2
+    p2 mcts: pass, move 2
+      search (51000 visits): No Move;protect,1 47951v 26171 | No Move;scald,1 921v 376 | No Move;hypnosis,1 511v 182 | No Move;hypnosis,0 494v 174
+      p2b Politoed used Protect
+      p1b Weavile used Icicle Crash -> p2b: Politoed
+              p2b Politoed -- move: Protect
+      p1a Salamence used Hyper Voice -> p2b: Politoed
+              p2b Politoed -- move: Protect
+      p1a Salamence fainted
+      after p1: Salamence 0/331, Weavile 87/281
+      after p2: Kangaskhan-Mega 0/401, Politoed 168/383
+
+  Turn 14
+      p1a <- Keldeo comes in (323/323)
+      after p1: Keldeo 323/323, Weavile 87/281
+      after p2: Kangaskhan-Mega 0/401, Politoed 168/383
+
+  Turn 15
+    p1 greedy: move 1 2, move 1 2
+    p2 mcts: pass, move 2
+      search (53000 visits): No Move;protect,1 51938v 30801 | No Move;scald,1 256v 82 | No Move;hypnosis,0 213v 62 | No Move;perishsong,0 149v 34
+      p2b Politoed used Protect  [[still]]
+              p2b Politoed -- IT FAILED
+      p1b Weavile used Icicle Crash -> p2b: Politoed
+      p1a Keldeo used Hydro Pump -> p2b: Politoed
+      after p1: Keldeo 323/323, Weavile 87/281
+      after p2: Kangaskhan-Mega 0/401, Politoed 12/383
+
+  Turn 16
+    p1 greedy: move 1 2, move 1 2
+    p2 mcts: pass, move 2
+      search (49000 visits): No Move;protect,1 48538v 28709 | No Move;scald,1 84v 9 | No Move;hypnosis,0 79v 7 | No Move;hypnosis,1 77v 6
+      p2b Politoed used Protect
+      p1b Weavile used Icicle Crash -> p2b: Politoed
+              p2b Politoed -- move: Protect
+      p1a Keldeo used Hydro Pump -> p2b: Politoed
+              p2b Politoed -- move: Protect
+      after p1: Keldeo 323/323, Weavile 87/281
+      after p2: Kangaskhan-Mega 0/401, Politoed 12/383
+
+  Turn 17
+    p1 greedy: move 1 2, move 1 2
+    p2 mcts: pass, move 2
+      search (45000 visits): No Move;protect,1 44527v 26263 | No Move;hypnosis,0 94v 13 | No Move;scald,0 80v 7 | No Move;perishsong,0 80v 7
+      p2b Politoed used Protect  [[still]]
+              p2b Politoed -- IT FAILED
+      p1b Weavile used Icicle Crash -> p2b: Politoed
+      p2b Politoed fainted
+      after p1: Keldeo 323/323, Weavile 87/281
+      after p2: Kangaskhan-Mega 0/401, Politoed 0/383
+
+  RESULT: p1 wins

@@ -1,0 +1,144 @@
+battle 6   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: i am speed: Kangaskhan-Mega, Genesect, Landorus-Therian, Diancie, Volcanion, Deoxys-Speed
+  p2: XY Doubles: Hydreigon, Heatran, Gyarados, Trevenant, Rhyperior, Charizard-Mega-Y
+
+  Turn 1
+    p1 mcts: move 3 2, move 1 2
+      search (38000 visits): lowkick,1;uturn,1 626v 401 | switch landorustherian;uturn,1 566v 357 | lowkick,1;switch landorustherian 473v 290 | switch landorustherian;switch diancie 453v 275
+    p2 greedy: move 3 1, move 2
+      p1a Kangaskhan used Low Kick -> p2b: Heatran
+      p1b Genesect used U-turn -> p2b: Heatran
+      after p1: Kangaskhan-Mega 414/414, Genesect 338/338
+      after p2: Hydreigon 384/384, Heatran 119/384
+
+  Turn 2
+      p1b <- Landorus-Therian comes in (319/319)
+              p2a Hydreigon atk 1 fell
+              p2b Heatran atk 1 fell
+      p2a Hydreigon used Draco Meteor -> p1a: Kangaskhan  [[miss]]
+              p2a Hydreigon -- MISSED
+      p2b Heatran used Heat Wave -> p1b: Landorus  [[spread] p1a,p1b]
+      after p1: Kangaskhan-Mega 273/414, Landorus-Therian 132/319
+      after p2: Hydreigon 384/384, Heatran 143/384
+
+  Turn 3
+    p1 mcts: move 3 2, move 1 2
+      search (46000 visits): lowkick,1;earthpower,1 581v 258 | lowkick,1;uturn,1 542v 237 | switch volcanion;earthpower,1 530v 231 | suckerpunch,1;earthpower,1 512v 221
+    p2 greedy: move 3 2, move 2
+      p1b Landorus used Earth Power -> p2b: Heatran
+      p2b Heatran fainted
+      p1a Kangaskhan used Low Kick -> p2a: Hydreigon
+      p2a Hydreigon used Draco Meteor -> p1b: Landorus
+              p2a Hydreigon spa 2 fell
+      p1b Landorus fainted
+      after p1: Kangaskhan-Mega 273/414, Landorus-Therian 0/319
+      after p2: Hydreigon 250/384, Heatran 0/384
+
+  Turn 4
+      p1b <- Genesect comes in (338/338)
+      p2b <- Gyarados comes in (394/394)
+              p1b Genesect atk 1 rose
+              p1a Kangaskhan atk 1 fell
+              p1b Genesect atk 1 fell
+      after p1: Kangaskhan-Mega 273/414, Genesect 338/338
+      after p2: Hydreigon 250/384, Gyarados 394/394
+
+  Turn 5
+    p1 mcts: switch 4, move 1 2   (slot0 Kangaskhan-Mega -> Diancie)
+      search (33000 visits): switch diancie;uturn,1 1351v 1095 | switch diancie;thunderbolt,1 1328v 1074 | switch volcanion;thunderbolt,1 1182v 948 | switch volcanion;uturn,1 1077v 857
+    p2 greedy: move 3 1, move 2 1
+      p1a <- Diancie comes in (303/303)
+      p1b Genesect used U-turn -> p2b: Gyarados
+      after p1: Diancie 303/303, Genesect 338/338
+      after p2: Hydreigon 250/384, Gyarados 295/394
+
+  Turn 6
+      p1b <- Kangaskhan-Mega comes in (273/414)
+      p2a Hydreigon used Draco Meteor -> p1a: Diancie
+              p1a Diancie -- IMMUNE
+      p2b Gyarados used Stone Edge -> p1a: Diancie
+      after p1: Diancie 218/303, Kangaskhan-Mega 273/414
+      after p2: Hydreigon 274/384, Gyarados 295/394
+
+  Turn 7
+    p1 mcts: move 1, move 1 2
+      search (41000 visits): diamondstorm,0;fakeout,1 1251v 967 | diamondstorm,0;switch genesect 1208v 931 | switch volcanion;switch genesect 1185v 912 | protect,0;switch genesect 1170v 899
+    p2 greedy: move 3 2, move 2 2
+      p1b Kangaskhan used Fake Out -> p2b: Gyarados
+      p2a Hydreigon used Draco Meteor -> p1b: Kangaskhan
+              p2a Hydreigon spa 2 fell
+              p2b Gyarados COULD NOT MOVE (flinch)
+      p1a Diancie used Diamond Storm -> p2b: Gyarados  [[spread] p2a,p2b]
+              p1a Diancie def 1 rose
+      p2b Gyarados fainted
+      after p1: Diancie 218/303, Kangaskhan-Mega 183/414
+      after p2: Hydreigon 201/384, Gyarados 0/394
+
+  Turn 8
+      p2b <- Trevenant comes in (374/374)
+      after p1: Diancie 218/303, Kangaskhan-Mega 183/414
+      after p2: Hydreigon 201/384, Trevenant 374/374
+
+  Turn 9
+    p1 mcts: move 1, switch 4   (slot1 Kangaskhan-Mega -> Genesect)
+      search (32000 visits): diamondstorm,0;switch genesect 1627v 1226 | diamondstorm,0;switch volcanion 1351v 1003 | moonblast,1;switch volcanion 1321v 979 | moonblast,1;switch genesect 1238v 913
+    p2 greedy: move 3 2, move 3 2
+      p1b <- Genesect comes in (338/338)
+              p1b Genesect atk 1 rose
+      p2a Hydreigon used Draco Meteor -> p1b: Genesect
+              p2a Hydreigon spa 2 fell
+      p2b Trevenant used Horn Leech -> p1b: Genesect
+      p1a Diancie used Diamond Storm -> p2a: Hydreigon  [[spread] p2b]
+              p1a Diancie -- MISSED
+              p1a Diancie def 1 rose
+      after p1: Diancie 218/303, Genesect 269/338
+      after p2: Hydreigon 225/384, Trevenant 253/374
+
+  Turn 10
+    p1 mcts: move 1, move 3 2
+      search (19000 visits): diamondstorm,0;ironhead,1 1920v 1188 | diamondstorm,0;uturn,1 1039v 605 | moonblast,1;ironhead,1 833v 472 | protect,0;ironhead,1 798v 449
+    p2 greedy: move 3 1, move 3 1
+      p1b Genesect used Iron Head -> p2b: Trevenant
+      p2b Trevenant fainted
+      p2a Hydreigon used Draco Meteor -> p1a: Diancie
+              p1a Diancie -- IMMUNE
+      p1a Diancie used Diamond Storm -> p2a: Hydreigon
+              p2a Hydreigon -- critical hit
+      after p1: Diancie 218/303, Genesect 269/338
+      after p2: Hydreigon 68/384, Trevenant 0/374
+
+  Turn 11
+      p2b <- Rhyperior comes in (434/434)
+      after p1: Diancie 218/303, Genesect 269/338
+      after p2: Hydreigon 68/384, Rhyperior 434/434
+
+  Turn 12
+    p1 mcts: move 2 2, move 3 2
+      search (26000 visits): moonblast,1;ironhead,1 5559v 2876 | diamondstorm,0;ironhead,1 4565v 2333 | trickroom,0;ironhead,1 959v 414 | protect,0;ironhead,1 945v 407
+    p2 greedy: move 3 1, move 2
+      p1b Genesect used Iron Head -> p2b: Rhyperior
+      p2b Rhyperior fainted
+      p2a Hydreigon used Draco Meteor -> p1a: Diancie
+              p1a Diancie -- IMMUNE
+      p1a Diancie used Moonblast -> p2a: Hydreigon
+      p2a Hydreigon fainted
+      after p1: Diancie 218/303, Genesect 269/338
+      after p2: Hydreigon 0/384, Rhyperior 0/434
+
+  Turn 13
+      p2a <- Charizard-Mega-Y comes in (298/298)
+      after p1: Diancie 218/303, Genesect 269/338
+      after p2: Charizard-Mega-Y 298/298, Rhyperior 0/434
+
+  Turn 14
+    p1 mcts: move 1, move 3 1
+      search (215000 visits): diamondstorm,0;ironhead,0 209476v 194976 | diamondstorm,0;switch volcanion 1823v 1403 | trickroom,0;ironhead,0 720v 511 | diamondstorm,0;switch kangaskhanmega 334v 212
+    p2 greedy: move 2 1, pass
+      p2a Charizard used Solar Beam  [[still]]
+      p1b Genesect used Iron Head -> p2a: Charizard
+      p1a Diancie used Diamond Storm -> p2a: Charizard
+      p2a Charizard fainted
+      after p1: Diancie 20/303, Genesect 269/338
+      after p2: Charizard-Mega-Y 0/298, Rhyperior 0/434
+
+  RESULT: p1 wins

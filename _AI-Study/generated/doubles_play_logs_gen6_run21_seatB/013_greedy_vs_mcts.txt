@@ -1,0 +1,142 @@
+battle 13   p1=greedy vs p2=mcts   mcts 300 ms a decision
+  p1: ORAS Doubles OU: Deoxys-Attack, Diancie-Mega, Keldeo, Weavile, Salamence, Aegislash
+  p2: DPL vs talkingtree: Kangaskhan-Mega, Conkeldurr, Landorus, Deoxys-Speed, Volcanion, Genesect
+
+  Turn 1
+    p1 greedy: move 1 1, move 1
+    p2 mcts: move 1 2, move 1 2
+      search (37000 visits): fakeout,1;drainpunch,1 826v 639 | switch landorus;switch genesect 751v 575 | fakeout,1;icepunch,1 652v 491 | switch genesect;drainpunch,1 644v 485
+      p2a Kangaskhan used Fake Out -> p1b: Diancie
+      p1a Deoxys used Psycho Boost -> p2a: Kangaskhan
+              p1a Deoxys spa 2 fell
+              p1b Diancie COULD NOT MOVE (flinch)
+      p2b Conkeldurr used Drain Punch -> p1b: Diancie
+      after p1: Deoxys-Attack 241/241, Diancie-Mega 71/241
+      after p2: Kangaskhan-Mega 89/414, Conkeldurr 401/401
+
+  Turn 2
+    p1 greedy: move 1 1, move 1
+    p2 mcts: switch 3, switch 6   (slot0 Kangaskhan-Mega -> Landorus; slot1 Conkeldurr -> Genesect)
+      search (39000 visits): switch landorus;switch genesect 1720v 1076 | switch genesect;drainpunch,1 832v 480 | protect,0;drainpunch,1 797v 457 | lowkick,1;drainpunch,1 588v 321
+      p2a <- Landorus comes in (319/319)
+      p2b <- Genesect comes in (323/323)
+              p2b Genesect atk 1 rose
+      p1a Deoxys used Psycho Boost -> p2a: Landorus
+              p1a Deoxys spa 2 fell
+      p1b Diancie used Diamond Storm -> p2b: Genesect  [[spread] p2a,p2b]
+              p1b Diancie def 1 rose
+      p2a Landorus fainted
+      after p1: Deoxys-Attack 241/241, Diancie-Mega 71/241
+      after p2: Landorus 0/319, Genesect 137/323
+
+  Turn 3
+      p2a <- Kangaskhan-Mega comes in (89/414)
+      after p1: Deoxys-Attack 241/241, Diancie-Mega 71/241
+      after p2: Kangaskhan-Mega 89/414, Genesect 137/323
+
+  Turn 4
+    p1 greedy: move 1 1, move 1
+    p2 mcts: move 1 2, move 2 2
+      search (31000 visits): fakeout,1;ironhead,1 1868v 792 | protect,0;ironhead,1 636v 222 | lowkick,1;ironhead,1 562v 190 | switch conkeldurr;ironhead,1 530v 176
+      p2a Kangaskhan used Fake Out -> p1b: Diancie
+      p1a Deoxys used Psycho Boost -> p2a: Kangaskhan
+              p2a Kangaskhan -- critical hit
+              p1a Deoxys spa 2 fell
+      p2a Kangaskhan fainted
+              p1b Diancie COULD NOT MOVE (flinch)
+      p2b Genesect used Iron Head -> p1b: Diancie
+      p1b Diancie fainted
+      after p1: Deoxys-Attack 241/241, Diancie-Mega 0/241
+      after p2: Kangaskhan-Mega 0/414, Genesect 137/323
+
+  Turn 5
+      p1b <- Keldeo comes in (324/324)
+      p2a <- Deoxys-Speed comes in (303/303)
+      after p1: Deoxys-Attack 241/241, Keldeo 324/324
+      after p2: Deoxys-Speed 303/303, Genesect 137/323
+
+  Turn 6
+    p1 greedy: move 1 2, move 1 2
+    p2 mcts: move 1 2, move 2 1
+      search (13000 visits): psychoboost,1;ironhead,0 1900v 856 | psychoboost,1;ironhead,1 1107v 465 | switch volcanion;ironhead,0 670v 256 | psychoboost,1;switch volcanion 654v 249
+      p2a Deoxys used Psycho Boost -> p1b: Keldeo
+              p2a Deoxys spa 2 fell
+      p1b Keldeo fainted
+      p1a Deoxys used Psycho Boost -> p2b: Genesect
+              p2b Genesect -- critical hit
+      p2b Genesect fainted
+      after p1: Deoxys-Attack 241/241, Keldeo 0/324
+      after p2: Deoxys-Speed 303/303, Genesect 0/323
+
+  Turn 7
+      p1b <- Weavile comes in (282/282)
+      p2b <- Volcanion comes in (363/363)
+      after p1: Deoxys-Attack 241/241, Weavile 282/282
+      after p2: Deoxys-Speed 303/303, Volcanion 363/363
+
+  Turn 8
+    p1 greedy: move 1 1, move 3 1
+    p2 mcts: switch 6, move 1   (slot0 Deoxys-Speed -> Conkeldurr)
+      search (9000 visits): switch conkeldurr;heatwave,0 1041v 754 | stealthrock,0;heatwave,0 554v 374 | switch conkeldurr;steameruption,1 529v 355 | icebeam,1;heatwave,0 324v 200
+      p2a <- Conkeldurr comes in (401/401)
+      p1a Deoxys used Psycho Boost -> p2a: Conkeldurr
+      p1b Weavile used Icicle Crash -> p2a: Conkeldurr  [[miss]]
+              p1b Weavile -- MISSED
+      p2b Volcanion used Heat Wave -> p1a: Deoxys  [[spread] p1a]
+              p2b Volcanion -- MISSED
+              p1a Deoxys used up its Focus Sash
+      after p1: Deoxys-Attack 1/241, Weavile 282/282
+      after p2: Conkeldurr 299/401, Volcanion 363/363
+
+  Turn 9
+    p1 greedy: move 1 1, move 3 1
+    p2 mcts: move 1 2, move 3 2
+      search (12000 visits): drainpunch,1;earthpower,1 517v 258 | drainpunch,1;steameruption,1 481v 237 | machpunch,1;steameruption,1 429v 206 | icepunch,1;steameruption,1 413v 197
+      p1a Deoxys used Psycho Boost -> p2a: Conkeldurr
+      p1b Weavile used Icicle Crash -> p2a: Conkeldurr
+      p2b Volcanion used Earth Power -> p1b: Weavile
+      p2a Conkeldurr used Drain Punch -> p1b: Weavile
+      p1b Weavile fainted
+      after p1: Deoxys-Attack 1/241, Weavile 0/282
+      after p2: Conkeldurr 135/401, Volcanion 363/363
+
+  Turn 10
+      p1b <- Salamence comes in (331/331)
+              p2a Conkeldurr atk 1 fell
+              p2b Volcanion atk 1 fell
+      after p1: Deoxys-Attack 1/241, Salamence 331/331
+      after p2: Conkeldurr 135/401, Volcanion 363/363
+
+  Turn 11
+    p1 greedy: move 1 1, move 1 1
+    p2 mcts: move 4 1, move 1
+      search (17000 visits): machpunch,0;heatwave,0 3673v 2204 | icepunch,1;steameruption,1 776v 399 | icepunch,1;switch deoxysspeed 518v 248 | icepunch,1;heatwave,0 501v 238
+      p2a Conkeldurr used Mach Punch -> p1a: Deoxys
+              p1a Deoxys -- critical hit
+      p1a Deoxys fainted
+      p1b Salamence used Draco Meteor -> p2a: Conkeldurr
+              p1b Salamence spa 2 fell
+      p2a Conkeldurr fainted
+      p2b Volcanion used Heat Wave -> p1b: Salamence
+      after p1: Deoxys-Attack 0/241, Salamence 201/331
+      after p2: Conkeldurr 0/401, Volcanion 363/363
+
+  Turn 12
+      p1a <- Aegislash comes in (320/320)
+      p2a <- Deoxys-Speed comes in (303/303)
+      after p1: Aegislash 320/320, Salamence 201/331
+      after p2: Deoxys-Speed 303/303, Volcanion 363/363
+
+  Turn 13
+    p1 greedy: move 2 1, move 1 1
+    p2 mcts: move 4 2, move 4 1
+      search (3000 visits): icebeam,1;overheat,0 797v 743 | icebeam,1;heatwave,0 182v 141 | icebeam,1;earthpower,0 125v 89 | icebeam,0;overheat,0 123v 87
+      p2a Deoxys used Ice Beam -> p1b: Salamence
+      p1b Salamence fainted
+      p2b Volcanion used Overheat -> p1a: Aegislash
+              p2b Volcanion spa 2 fell
+      p1a Aegislash fainted
+      after p1: Aegislash 0/320, Salamence 0/331
+      after p2: Deoxys-Speed 303/303, Volcanion 363/363
+
+  RESULT: p2 wins

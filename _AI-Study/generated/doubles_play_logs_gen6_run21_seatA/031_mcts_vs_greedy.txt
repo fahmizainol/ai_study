@@ -1,0 +1,135 @@
+battle 31   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: dpl rejects/terracott week 1 reject: Gengar-Mega, Whimsicott, Terrakion, Landorus-Therian, Hoopa-Unbound, Kyurem-Black
+  p2: ORAS Doubles OU: Gardevoir-Mega, Weavile, Breloom, Gyarados, Aegislash, Rotom-Wash
+
+  Turn 1
+    p1 mcts: move 3 1, move 1 2
+      search (40000 visits): sludgebomb,0;moonblast,1 4100v 1976 | sludgebomb,1;moonblast,1 1389v 598 | sludgebomb,1;protect,1 1150v 480 | shadowball,0;moonblast,1 1139v 475
+    p2 greedy: move 3 1, move 1 1
+      p1a Gengar used Sludge Bomb -> p2a: Gardevoir
+      p2a Gardevoir fainted
+      p2b Weavile used Icicle Crash -> p1a: Gengar
+      p1b Whimsicott used Moonblast -> p2b: Weavile
+              p2b Weavile -- critical hit
+      p2b Weavile fainted
+      after p1: Gengar-Mega 27/261, Whimsicott 261/261
+      after p2: Gardevoir-Mega 0/279, Weavile 0/281
+
+  Turn 2
+      p2b <- Gyarados comes in (394/394)
+      p2a <- Breloom comes in (261/261)
+              p1a Gengar atk 1 fell
+              p1b Whimsicott atk 1 fell
+      after p1: Gengar-Mega 27/261, Whimsicott 261/261
+      after p2: Breloom 261/261, Gyarados 394/394
+
+  Turn 3
+    p1 mcts: move 3 2, move 1 1
+      search (51000 visits): sludgebomb,1;moonblast,0 1405v 508 | shadowball,0;switch landorustherian 1208v 425 | sludgebomb,0;switch landorustherian 1177v 412 | shadowball,1;switch kyuremblack 1138v 396
+    p2 greedy: move 2 1, move 4 1
+      p2a Breloom used Mach Punch -> p1a: Gengar
+              p1a Gengar -- IMMUNE
+      p1a Gengar used Sludge Bomb -> p2b: Gyarados
+      p1b Whimsicott used Moonblast -> p2a: Breloom
+              p2a Breloom used up its Focus Sash
+      p2b Gyarados used Stone Edge -> p1a: Gengar
+      p1a Gengar fainted
+      after p1: Gengar-Mega 0/261, Whimsicott 261/261
+      after p2: Breloom 1/261, Gyarados 199/394
+
+  Turn 4
+      p1a <- Terrakion comes in (323/323)
+      after p1: Terrakion 323/323, Whimsicott 261/261
+      after p2: Breloom 1/261, Gyarados 199/394
+
+  Turn 5
+    p1 mcts: move 2, move 1 2
+      search (58000 visits): rockslide,0;moonblast,1 2157v 821 | rockslide,0;switch landorustherian 2036v 769 | stoneedge,1;moonblast,0 1665v 610 | rockslide,0;tailwind,1 1481v 533
+    p2 greedy: move 2 1, move 4 1
+      p2a Breloom used Mach Punch -> p1a: Terrakion
+              p1a Terrakion -- critical hit
+      p1b Whimsicott used Moonblast -> p2b: Gyarados
+              p2b Gyarados used up its Sitrus Berry
+      p1a Terrakion used Rock Slide -> p2b: Gyarados  [[spread] p2b]
+              p1a Terrakion -- MISSED
+      p2b Gyarados fainted
+      after p1: Terrakion 3/323, Whimsicott 261/261
+      after p2: Breloom 1/261, Gyarados 0/394
+
+  Turn 6
+      p2b <- Aegislash comes in (324/324)
+      after p1: Terrakion 3/323, Whimsicott 261/261
+      after p2: Breloom 1/261, Aegislash 324/324
+
+  Turn 7
+    p1 mcts: move 3 1, move 1 2
+      search (70000 visits): closecombat,0;moonblast,1 1977v 468 | rockslide,0;moonblast,0 1898v 445 | rockslide,0;switch landorustherian 1632v 369 | closecombat,0;tailwind,1 1526v 339
+    p2 greedy: move 2 1, move 1 1
+      p2a Breloom used Mach Punch -> p1a: Terrakion
+      p1a Terrakion fainted
+      p1b Whimsicott used Moonblast -> p2b: Aegislash
+              p2b Aegislash spa 1 fell
+      p2b Aegislash used Shadow Ball -> p1b: Whimsicott
+      after p1: Terrakion 0/323, Whimsicott 113/261
+      after p2: Breloom 1/261, Aegislash-Blade 302/324
+
+  Turn 8
+      p1a <- Landorus-Therian comes in (319/319)
+              p2a Breloom atk 1 fell
+              p2b Aegislash atk 1 fell
+      after p1: Landorus-Therian 319/319, Whimsicott 113/261
+      after p2: Breloom 1/261, Aegislash-Blade 302/324
+
+  Turn 9
+    p1 mcts: move 1 2, move 1 1
+      search (62000 visits): earthpower,1;moonblast,0 45216v 31371 | earthpower,1;switch kyuremblack 1702v 1024 | earthpower,1;tailwind,1 1333v 783 | earthpower,1;switch hoopaunbound 1304v 764
+    p2 greedy: move 2 2, move 1 2
+      p2a Breloom used Mach Punch -> p1b: Whimsicott
+      p1b Whimsicott used Moonblast -> p2a: Breloom
+      p2a Breloom fainted
+      p1a Landorus used Earth Power -> p2b: Aegislash
+      p2b Aegislash fainted
+      after p1: Landorus-Therian 288/319, Whimsicott 71/261
+      after p2: Breloom 0/261, Aegislash 0/324
+
+  Turn 10
+      p2a <- Rotom-Wash comes in (304/304)
+      after p1: Landorus-Therian 288/319, Whimsicott 71/261
+      after p2: Rotom-Wash 304/304, Aegislash 0/324
+
+  Turn 11
+    p1 mcts: move 2 1, switch 6   (slot1 Whimsicott -> Kyurem-Black)
+      search (101000 visits): hiddenpower,0;switch kyuremblack 44326v 18328 | switch hoopaunbound;moonblast,0 16096v 6411 | explosion,0;moonblast,0 9782v 3791 | switch kyuremblack;moonblast,0 3937v 1416
+    p2 greedy: move 1 2, pass
+      p1b <- Kyurem-Black comes in (391/391)
+      p1a Landorus used Hidden Power -> p2a: Rotom
+      p2a Rotom used Hydro Pump -> p1b: Kyurem
+      after p1: Landorus-Therian 257/319, Kyurem-Black 295/391
+      after p2: Rotom-Wash 266/304, Aegislash 0/324
+
+  Turn 12
+    p1 mcts: move 2 1, move 3 1
+      search (819000 visits): hiddenpower,0;earthpower,0 813542v 810963 | switch hoopaunbound;earthpower,0 338v 197 | switch hoopaunbound;icebeam,0 306v 174 | switch whimsicott;earthpower,0 295v 167
+    p2 greedy: move 1 2, pass
+      p1b Kyurem used Earth Power -> p2a: Rotom
+              p2a Rotom used up its Sitrus Berry
+      p1a Landorus used Hidden Power -> p2a: Rotom
+              p2a Rotom -- critical hit
+      p2a Rotom used Hydro Pump -> p1b: Kyurem  [[miss]]
+              p2a Rotom -- MISSED
+      after p1: Landorus-Therian 226/319, Kyurem-Black 256/391
+      after p2: Rotom-Wash 30/304, Aegislash 0/324
+
+  Turn 13
+    p1 mcts: move 3, switch 6   (slot1 Kyurem-Black -> Whimsicott)
+      search (495000 visits): explosion,0;switch whimsicott 447583v 445213 | explosion,0;switch hoopaunbound 3753v 3443 | protect,0;fusionbolt,0 3309v 3019 | earthpower,0;icebeam,0 3184v 2900
+    p2 greedy: move 1 2, pass
+      p1b <- Whimsicott comes in (71/261)
+      p1a Landorus used Explosion -> p2a: Rotom  [[spread] p1b,p2a]
+      p1a Landorus fainted
+      p1b Whimsicott fainted
+      p2a Rotom fainted
+      after p1: Landorus-Therian 0/319, Whimsicott 0/261
+      after p2: Rotom-Wash 0/304, Aegislash 0/324
+
+  RESULT: p1 wins

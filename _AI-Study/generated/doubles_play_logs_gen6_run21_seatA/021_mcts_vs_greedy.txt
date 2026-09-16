@@ -1,0 +1,241 @@
+battle 21   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: ORAS Doubles OU: Abomasnow-Mega, Heatran, Hitmontop, Kyurem-Black, Cresselia, Azumarill
+  p2: dpl rejects/azu week 4 reject: Gengar-Mega, Raichu, Landorus-Therian, Azumarill, Amoonguss, Talonflame
+
+  Turn 1
+    p1 mcts: move 4, move 3
+      search (35000 visits): blizzard,0;protect,1 2710v 947 | blizzard,0;substitute,1 1838v 607 | protect,0;substitute,1 1733v 567 | blizzard,0;flashcannon,0 1640v 532
+    p2 greedy: move 2 1, move 2 1
+      p1b Heatran used Protect
+      p2a Gengar used Sludge Bomb -> p1a: Abomasnow
+              p1a Abomasnow -- critical hit
+      p1a Abomasnow fainted
+      p2b Raichu used Volt Switch -> p1b: Heatran
+              p1b Heatran -- move: Protect
+      after p1: Abomasnow-Mega 0/384, Heatran 386/386
+      after p2: Gengar-Mega 287/306, Raichu 304/324
+
+  Turn 2
+      p1a <- Hitmontop comes in (304/304)
+              p2a Gengar atk 1 fell
+              p2b Raichu atk 1 fell
+      after p1: Hitmontop 304/304, Heatran 386/386
+      after p2: Gengar-Mega 287/306, Raichu 304/324
+
+  Turn 3
+    p1 mcts: move 2 2, move 3
+      search (28000 visits): closecombat,1;protect,1 5365v 3021 | fakeout,1;protect,1 2209v 1168 | fakeout,0;protect,1 1367v 687 | suckerpunch,1;protect,1 1225v 607
+    p2 greedy: move 2 1, move 2 1
+      p1b Heatran used Protect  [[still]]
+              p1b Heatran -- IT FAILED
+      p2a Gengar used Sludge Bomb -> p1a: Hitmontop
+      p2b Raichu used Volt Switch -> p1a: Hitmontop
+              p1a Hitmontop used up its Sitrus Berry
+      after p1: Hitmontop 158/304, Heatran 386/386
+      after p2: Gengar-Mega 287/306, Raichu 304/324
+
+  Turn 4
+      p2b <- Landorus-Therian comes in (319/319)
+              p1a Hitmontop atk 1 fell
+              p1b Heatran atk 1 fell
+      p1a Hitmontop used Close Combat -> p2b: Landorus
+              p1a Hitmontop def 1 fell
+              p1a Hitmontop spd 1 fell
+      after p1: Hitmontop 139/304, Heatran 386/386
+      after p2: Gengar-Mega 268/306, Landorus-Therian 234/319
+
+  Turn 5
+    p1 mcts: move 1, move 1
+      search (35000 visits): wideguard,0;heatwave,0 1954v 843 | closecombat,0;protect,1 1937v 834 | fakeout,1;protect,1 1843v 789 | wideguard,0;protect,1 1835v 785
+    p2 greedy: move 2 1, move 4 1
+      p1a Hitmontop used Wide Guard
+      p2a Gengar used Sludge Bomb -> p1a: Hitmontop
+      p1a Hitmontop fainted
+      p2b Landorus used Superpower -> p1b: Heatran
+              p1b Heatran -- critical hit
+              p2b Landorus atk 1 fell
+              p2b Landorus def 1 fell
+      p1b Heatran fainted
+      after p1: Hitmontop 0/304, Heatran 0/386
+      after p2: Gengar-Mega 249/306, Landorus-Therian 215/319
+
+  Turn 6
+      p1a <- Kyurem-Black comes in (454/454)
+      p1b <- Cresselia comes in (443/443)
+      after p1: Kyurem-Black 454/454, Cresselia 443/443
+      after p2: Gengar-Mega 249/306, Landorus-Therian 215/319
+
+  Turn 7
+    p1 mcts: move 4, move 1
+      search (32000 visits): blizzard,0;calmmind,1 2397v 547 | protect,0;psychic,0 1864v 402 | protect,0;calmmind,1 1454v 293 | blizzard,0;psychic,0 1442v 290
+    p2 greedy: move 2 1, move 4 1
+      p2a Gengar used Sludge Bomb -> p1a: Kyurem
+      p2b Landorus used Superpower -> p1a: Kyurem
+              p2b Landorus atk 1 fell
+              p2b Landorus def 1 fell
+      p1a Kyurem used Blizzard -> p2a: Gengar  [[spread] p2a,p2b]
+      p2b Landorus fainted
+      p1a Kyurem fainted
+      p1b Cresselia used Calm Mind
+              p1b Cresselia spa 1 rose
+              p1b Cresselia spd 1 rose
+      after p1: Kyurem-Black 0/454, Cresselia 443/443
+      after p2: Gengar-Mega 14/306, Landorus-Therian 0/319
+
+  Turn 8
+      p2b <- Raichu comes in (304/324)
+      p1a <- Azumarill comes in (404/404)
+      after p1: Azumarill 404/404, Cresselia 443/443
+      after p2: Gengar-Mega 14/306, Raichu 304/324
+
+  Turn 9
+    p1 mcts: move 3, move 1
+      search (45000 visits): protect,0;calmmind,1 10267v 5259 | aquajet,0;calmmind,1 4464v 2181 | aquajet,0;psychic,1 2248v 1035 | protect,0;psychic,0 1899v 858
+    p2 greedy: move 2 1, move 2 1
+      p1a Azumarill used Protect
+      p2a Gengar used Sludge Bomb -> p1a: Azumarill
+              p1a Azumarill -- move: Protect
+      p2b Raichu used Volt Switch -> p1a: Azumarill
+              p1a Azumarill -- move: Protect
+      p1b Cresselia used Calm Mind
+              p1b Cresselia spa 1 rose
+              p1b Cresselia spd 1 rose
+      after p1: Azumarill 404/404, Cresselia 443/443
+      after p2: Gengar-Mega 14/306, Raichu 304/324
+
+  Turn 10
+    p1 mcts: move 3, move 3 1
+      search (45000 visits): protect,0;psychic,0 3341v 1288 | aquajet,0;psychic,1 3172v 1216 | aquajet,0;calmmind,1 2984v 1136 | protect,0;psychic,1 2778v 1049
+    p2 greedy: move 2 1, move 2 1
+      p1a Azumarill used Protect  [[still]]
+              p1a Azumarill -- IT FAILED
+      p2a Gengar used Sludge Bomb -> p1a: Azumarill
+      p1a Azumarill fainted
+      p2b Raichu used Volt Switch -> p1b: Cresselia
+      after p1: Azumarill 0/404, Cresselia 409/443
+      after p2: Gengar-Mega 14/306, Raichu 304/324
+
+  Turn 11
+      p2b <- Azumarill comes in (404/404)
+      p1b Cresselia used Psychic -> p2a: Gengar
+      p2a Gengar fainted
+      after p1: Azumarill 0/404, Cresselia 409/443
+      after p2: Gengar-Mega 0/306, Azumarill 404/404
+
+  Turn 12
+      p2a <- Raichu comes in (304/324)
+      after p1: Azumarill 0/404, Cresselia 409/443
+      after p2: Raichu 304/324, Azumarill 404/404
+
+  Turn 13
+    p1 mcts: pass, move 3 2
+      search (308000 visits): No Move;psychic,1 56572v 1417 | No Move;psychic,0 56486v 1414 | No Move;moonlight,1 49786v 1177 | No Move;calmmind,1 48651v 1138
+    p2 greedy: move 2 2, move 2 2
+      p2a Raichu used Volt Switch -> p1b: Cresselia
+      after p1: Azumarill 0/404, Cresselia 375/443
+      after p2: Raichu 304/324, Azumarill 404/404
+
+  Turn 14
+      p2a <- Amoonguss comes in (432/432)
+      p1b Cresselia used Psychic -> p2b: Azumarill
+              p2b Azumarill used up its Sitrus Berry
+      p2b Azumarill used Knock Off -> p1b: Cresselia
+              p1b Cresselia used up its Safety Goggles
+      after p1: Azumarill 0/404, Cresselia 127/443
+      after p2: Amoonguss 432/432, Azumarill 217/404
+
+  Turn 15
+    p1 mcts: pass, move 4
+      search (44000 visits): No Move;moonlight,1 23308v 5853 | No Move;psychic,1 7918v 1817 | No Move;psychic,0 4287v 904 | No Move;calmmind,1 3737v 769
+    p2 greedy: move 3 2, move 2 2
+      p1b Cresselia used Moonlight
+      p2b Azumarill used Knock Off -> p1b: Cresselia
+      p2a Amoonguss used Energy Ball -> p1b: Cresselia
+              p1b Cresselia spd 1 fell
+      after p1: Azumarill 0/404, Cresselia 150/443
+      after p2: Amoonguss 432/432, Azumarill 217/404
+
+  Turn 16
+    p1 mcts: pass, move 4
+      search (34000 visits): No Move;moonlight,1 22781v 13696 | No Move;psychic,1 6570v 3778 | No Move;psychic,0 1884v 991 | No Move;calmmind,1 1196v 597
+    p2 greedy: move 3 2, move 2 2
+      p1b Cresselia used Moonlight
+      p2b Azumarill used Knock Off -> p1b: Cresselia
+      p2a Amoonguss used Energy Ball -> p1b: Cresselia
+      after p1: Azumarill 0/404, Cresselia 153/443
+      after p2: Amoonguss 432/432, Azumarill 217/404
+
+  Turn 17
+    p1 mcts: pass, move 4
+      search (39000 visits): No Move;moonlight,1 26434v 10299 | No Move;psychic,1 9807v 3643 | No Move;psychic,0 1787v 552 | No Move;calmmind,1 470v 97
+    p2 greedy: move 3 2, move 2 2
+      p1b Cresselia used Moonlight
+      p2b Azumarill used Knock Off -> p1b: Cresselia
+      p2a Amoonguss used Energy Ball -> p1b: Cresselia
+      after p1: Azumarill 0/404, Cresselia 171/443
+      after p2: Amoonguss 432/432, Azumarill 217/404
+
+  Turn 18
+    p1 mcts: pass, move 4
+      search (37000 visits): No Move;moonlight,1 26092v 10597 | No Move;psychic,1 7268v 2767 | No Move;psychic,0 2495v 855 | No Move;calmmind,1 637v 161
+    p2 greedy: move 3 2, move 2 2
+      p1b Cresselia used Moonlight
+      p2b Azumarill used Knock Off -> p1b: Cresselia
+      p2a Amoonguss used Energy Ball -> p1b: Cresselia
+      after p1: Azumarill 0/404, Cresselia 173/443
+      after p2: Amoonguss 432/432, Azumarill 217/404
+
+  Turn 19
+    p1 mcts: pass, move 4
+      search (44000 visits): No Move;moonlight,1 33532v 13081 | No Move;psychic,1 6780v 2435 | No Move;psychic,0 2612v 848 | No Move;calmmind,1 613v 140
+    p2 greedy: move 3 2, move 2 2
+      p1b Cresselia used Moonlight
+      p2b Azumarill used Knock Off -> p1b: Cresselia
+      p2a Amoonguss used Energy Ball -> p1b: Cresselia
+      after p1: Azumarill 0/404, Cresselia 200/443
+      after p2: Amoonguss 432/432, Azumarill 217/404
+
+  Turn 20
+    p1 mcts: pass, move 4
+      search (41000 visits): No Move;moonlight,1 29113v 10614 | No Move;psychic,1 7190v 2425 | No Move;psychic,0 3330v 1038 | No Move;calmmind,1 746v 166
+    p2 greedy: move 3 2, move 2 2
+      p1b Cresselia used Moonlight
+      p2b Azumarill used Knock Off -> p1b: Cresselia
+              p1b Cresselia -- critical hit
+      p2a Amoonguss used Energy Ball -> p1b: Cresselia
+      after p1: Azumarill 0/404, Cresselia 136/443
+      after p2: Amoonguss 432/432, Azumarill 217/404
+
+  Turn 21
+    p1 mcts: pass, move 4
+      search (41000 visits): No Move;moonlight,1 32856v 11355 | No Move;psychic,1 5249v 1614 | No Move;psychic,0 1780v 466 | No Move;calmmind,1 551v 96
+    p2 greedy: move 3 2, move 2 2
+      p1b Cresselia used Moonlight
+      p2b Azumarill used Knock Off -> p1b: Cresselia
+      p2a Amoonguss used Energy Ball -> p1b: Cresselia
+      after p1: Azumarill 0/404, Cresselia 135/443
+      after p2: Amoonguss 432/432, Azumarill 217/404
+
+  Turn 22
+    p1 mcts: pass, move 4
+      search (38000 visits): No Move;moonlight,1 29521v 10418 | No Move;psychic,1 5602v 1783 | No Move;psychic,0 1805v 490 | No Move;calmmind,1 522v 93
+    p2 greedy: move 3 2, move 2 2
+      p1b Cresselia used Moonlight
+      p2b Azumarill used Knock Off -> p1b: Cresselia
+      p2a Amoonguss used Energy Ball -> p1b: Cresselia
+      after p1: Azumarill 0/404, Cresselia 134/443
+      after p2: Amoonguss 432/432, Azumarill 217/404
+
+  Turn 23
+    p1 mcts: pass, move 1
+      search (107000 visits): No Move;calmmind,1 49881v 4519 | No Move;psychic,1 31749v 2703 | No Move;psychic,0 20750v 1634 | No Move;trickroom,1 2330v 29
+    p2 greedy: move 3 2, move 2 2
+      p1b Cresselia used Calm Mind
+              p1b Cresselia spa 1 rose
+              p1b Cresselia spd 1 rose
+      p2b Azumarill used Knock Off -> p1b: Cresselia
+      p1b Cresselia fainted
+      after p1: Azumarill 0/404, Cresselia 0/443
+      after p2: Amoonguss 432/432, Azumarill 217/404
+
+  RESULT: p2 wins

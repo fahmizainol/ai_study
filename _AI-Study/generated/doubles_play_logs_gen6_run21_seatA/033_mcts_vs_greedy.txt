@@ -1,0 +1,168 @@
+battle 33   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: Untitled 706: Deoxys-Speed, Sceptile-Mega, Aegislash, Keldeo-Resolute, Landorus, Talonflame
+  p2: hh kang offcress: Kangaskhan, Volcanion, Kyurem-Black, Aegislash, Cresselia, Landorus-Therian
+
+  Turn 1
+    p1 mcts: switch 4, move 2 2   (slot0 Deoxys-Speed -> Keldeo-Resolute)
+      search (35000 visits): switch keldeoresolute;dragonpulse,1 631v 158 | switch talonflame;dragonpulse,1 607v 150 | switch keldeoresolute;dragonpulse,0 547v 130 | switch talonflame;dragonpulse,0 526v 123
+    p2 greedy: move 1 1, move 1 1
+      p1a <- Keldeo-Resolute comes in (338/338)
+      p2a Kangaskhan used Fake Out -> p1a: Keldeo
+      p1b Sceptile used Dragon Pulse -> p2b: Volcanion
+      p2b Volcanion used Steam Eruption -> p1a: Keldeo
+      after p1: Keldeo-Resolute 165/338, Sceptile-Mega 281/281
+      after p2: Kangaskhan 414/414, Volcanion 240/363
+
+  Turn 2
+    p1 mcts: move 4 2, move 2 2
+      search (35000 visits): hydropump,1;dragonpulse,1 672v 176 | calmmind,0;dragonpulse,1 660v 171 | hydropump,0;dragonpulse,1 649v 168 | secretsword,1;dragonpulse,1 648v 167
+    p2 greedy: move 1 1, move 1 1
+      p2a Kangaskhan used Fake Out  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p1b Sceptile used Dragon Pulse -> p2b: Volcanion
+      p1a Keldeo used Hydro Pump -> p2b: Volcanion
+      p2b Volcanion used Steam Eruption -> p1a: Keldeo
+      after p1: Keldeo-Resolute 45/338, Sceptile-Mega 281/281
+      after p2: Kangaskhan 414/414, Volcanion 206/363
+
+  Turn 3
+    p1 mcts: move 4 2, move 2 2
+      search (35000 visits): hydropump,1;dragonpulse,1 603v 140 | secretsword,1;dragonpulse,1 601v 139 | protect,0;dragonpulse,1 596v 138 | secretsword,0;dragonpulse,1 583v 134
+    p2 greedy: move 1 1, move 1 1
+      p2a Kangaskhan used Fake Out  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p1b Sceptile used Dragon Pulse -> p2b: Volcanion
+      p1a Keldeo used Hydro Pump -> p2b: Volcanion
+      p2b Volcanion used Steam Eruption -> p1a: Keldeo
+      p1a Keldeo fainted
+      after p1: Keldeo-Resolute 0/338, Sceptile-Mega 281/281
+      after p2: Kangaskhan 414/414, Volcanion 181/363
+
+  Turn 4
+      p1a <- Aegislash comes in (324/324)
+      after p1: Aegislash 324/324, Sceptile-Mega 281/281
+      after p2: Kangaskhan 414/414, Volcanion 181/363
+
+  Turn 5
+    p1 mcts: move 1 2, move 2 2
+      search (20000 visits): shadowball,1;dragonpulse,1 767v 287 | substitute,0;dragonpulse,1 709v 261 | switch talonflame;dragonpulse,1 543v 187 | ironhead,0;dragonpulse,1 540v 186
+    p2 greedy: move 1 1, move 1 1
+      p2a Kangaskhan used Fake Out  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p1b Sceptile used Dragon Pulse -> p2b: Volcanion
+      p2b Volcanion used Steam Eruption -> p1a: Aegislash
+              p1a Aegislash is now brn
+      p1a Aegislash used Shadow Ball -> p2b: Volcanion
+      p2b Volcanion fainted
+      after p1: Aegislash-Blade 169/324, Sceptile-Mega 281/281
+      after p2: Kangaskhan 414/414, Volcanion 0/363
+
+  Turn 6
+      p2b <- Kyurem-Black comes in (391/391)
+      after p1: Aegislash-Blade 169/324, Sceptile-Mega 281/281
+      after p2: Kangaskhan 414/414, Kyurem-Black 391/391
+
+  Turn 7
+    p1 mcts: move 1 2, move 2 2
+      search (25000 visits): shadowball,1;dragonpulse,1 784v 226 | switch talonflame;dragonpulse,1 742v 211 | ironhead,1;dragonpulse,1 705v 197 | shadowball,1;switch deoxysspeed 582v 153
+    p2 greedy: move 1 1, move 2 1
+      p2a Kangaskhan used Fake Out  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p2b Kyurem used Draco Meteor -> p1a: Aegislash
+              p2b Kyurem spa 2 fell
+      p1b Sceptile used Dragon Pulse -> p2b: Kyurem
+      p1a Aegislash used Shadow Ball -> p2b: Kyurem
+      p2b Kyurem fainted
+      after p1: Aegislash-Blade 24/324, Sceptile-Mega 281/281
+      after p2: Kangaskhan 414/414, Kyurem-Black 0/391
+
+  Turn 8
+      p2b <- Aegislash comes in (324/324)
+      after p1: Aegislash-Blade 24/324, Sceptile-Mega 281/281
+      after p2: Kangaskhan 414/414, Aegislash 324/324
+
+  Turn 9
+    p1 mcts: move 1 2, move 2 1
+      search (34000 visits): shadowball,1;dragonpulse,0 7140v 3128 | shadowball,1;dragonpulse,1 1837v 708 | shadowball,1;grasswhistle,0 898v 305 | shadowball,1;grasswhistle,1 771v 253
+    p2 greedy: move 1 1, move 1 1
+      p2a Kangaskhan used Fake Out  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p1b Sceptile used Dragon Pulse -> p2a: Kangaskhan
+              p2a Kangaskhan -- critical hit
+      p1a Aegislash used Shadow Ball -> p2b: Aegislash
+              p2b Aegislash spd 1 fell
+      p2b Aegislash used Shadow Ball -> p1a: Aegislash
+      p1a Aegislash fainted
+      after p1: Aegislash 0/324, Sceptile-Mega 281/281
+      after p2: Kangaskhan 156/414, Aegislash-Blade 160/324
+
+  Turn 10
+      p1a <- Deoxys-Speed comes in (247/247)
+      after p1: Deoxys-Speed 247/247, Sceptile-Mega 281/281
+      after p2: Kangaskhan 156/414, Aegislash-Blade 160/324
+
+  Turn 11
+    p1 mcts: switch 6, move 2 1   (slot0 Deoxys-Speed -> Talonflame)
+      search (34000 visits): switch talonflame;dragonpulse,0 2109v 642 | switch talonflame;dragonpulse,1 1374v 386 | psychoboost,1;switch talonflame 698v 161 | switch talonflame;switch landorus 693v 160
+    p2 greedy: move 1 1, move 1 1
+      p1a <- Talonflame comes in (360/360)
+      p2a Kangaskhan used Fake Out  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p1b Sceptile used Dragon Pulse -> p2a: Kangaskhan
+      p2a Kangaskhan fainted
+      p2b Aegislash used Shadow Ball -> p1a: Talonflame
+              p1a Talonflame -- critical hit
+      after p1: Talonflame 39/360, Sceptile-Mega 281/281
+      after p2: Kangaskhan 0/414, Aegislash-Blade 160/324
+
+  Turn 12
+      p2a <- Cresselia comes in (410/410)
+      after p1: Talonflame 39/360, Sceptile-Mega 281/281
+      after p2: Cresselia 410/410, Aegislash-Blade 160/324
+
+  Turn 13
+    p1 mcts: move 4 1, move 2 1
+      search (31000 visits): uturn,0;dragonpulse,0 3154v 1900 | uturn,0;dragonpulse,1 2904v 1740 | uturn,0;grasswhistle,0 1338v 748 | uturn,0;leafstorm,0 994v 536
+    p2 greedy: move 3 1, move 1 1
+      p1b Sceptile used Dragon Pulse -> p2a: Cresselia
+      p1a Talonflame used U-turn -> p2a: Cresselia
+      after p1: Talonflame 39/360, Sceptile-Mega 281/281
+      after p2: Cresselia 109/410, Aegislash-Blade 160/324
+
+  Turn 14
+      p1a <- Landorus comes in (319/319)
+      p2a Cresselia used Psyshock -> p1a: Landorus
+      p2b Aegislash used Shadow Ball -> p1a: Landorus
+      after p1: Landorus 44/319, Sceptile-Mega 281/281
+      after p2: Cresselia 109/410, Aegislash-Blade 160/324
+
+  Turn 15
+    p1 mcts: move 1 2, move 2 1
+      search (37000 visits): earthpower,1;dragonpulse,0 18766v 11586 | psychic,1;dragonpulse,0 2365v 1316 | switch talonflame;dragonpulse,0 788v 384 | psychic,0;dragonpulse,0 771v 374
+    p2 greedy: move 3 1, move 1 1
+      p1b Sceptile used Dragon Pulse -> p2a: Cresselia
+      p2a Cresselia fainted
+      p1a Landorus used Earth Power -> p2b: Aegislash
+      p2b Aegislash fainted
+      after p1: Landorus 44/319, Sceptile-Mega 281/281
+      after p2: Cresselia 0/410, Aegislash 0/324
+
+  Turn 16
+      p2a <- Landorus-Therian comes in (382/382)
+              p1a Landorus atk 1 fell
+              p1b Sceptile atk 1 fell
+      after p1: Landorus 44/319, Sceptile-Mega 281/281
+      after p2: Landorus-Therian 382/382, Aegislash 0/324
+
+  Turn 17
+    p1 mcts: move 2 1, move 3 1
+      search (246000 visits): psychic,0;leafstorm,0 190545v 188021 | psychic,0;dragonpulse,0 26844v 25979 | psychic,0;switch deoxysspeed 8285v 7816 | psychic,0;switch talonflame 6112v 5711
+    p2 greedy: move 3 1, pass
+      p1b Sceptile used Leaf Storm -> p2a: Landorus
+              p1b Sceptile spa 2 fell
+      p1a Landorus used Psychic -> p2a: Landorus
+      p2a Landorus fainted
+      after p1: Landorus 44/319, Sceptile-Mega 281/281
+      after p2: Landorus-Therian 0/382, Aegislash 0/324
+
+  RESULT: p1 wins

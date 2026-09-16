@@ -1,0 +1,176 @@
+battle 13   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: ORAS Doubles OU: Deoxys-Attack, Diancie-Mega, Keldeo, Weavile, Salamence, Aegislash
+  p2: DPL vs talkingtree: Kangaskhan-Mega, Conkeldurr, Landorus, Deoxys-Speed, Volcanion, Genesect
+
+  Turn 1
+    p1 mcts: switch 4, move 2 2   (slot0 Deoxys-Attack -> Weavile)
+      search (36000 visits): switch weavile;moonblast,1 1673v 800 | detect,0;moonblast,1 1432v 672 | switch aegislash;moonblast,1 1414v 663 | switch aegislash;diamondstorm,0 1346v 627
+    p2 greedy: move 1 1, move 1 1
+      p1a <- Weavile comes in (282/282)
+      p2a Kangaskhan used Fake Out -> p1a: Weavile
+      p1b Diancie used Moonblast -> p2b: Conkeldurr
+      p2b Conkeldurr used Drain Punch -> p1a: Weavile
+      p1a Weavile fainted
+      after p1: Weavile 0/282, Diancie-Mega 241/241
+      after p2: Kangaskhan-Mega 414/414, Conkeldurr 263/401
+
+  Turn 2
+      p1a <- Keldeo comes in (324/324)
+      after p1: Keldeo 324/324, Diancie-Mega 241/241
+      after p2: Kangaskhan-Mega 414/414, Conkeldurr 263/401
+
+  Turn 3
+    p1 mcts: switch 4, move 2 2   (slot0 Keldeo -> Deoxys-Attack)
+      search (23000 visits): switch deoxysattack;moonblast,1 2494v 1424 | switch aegislash;moonblast,1 2346v 1333 | switch deoxysattack;diamondstorm,0 2090v 1176 | switch aegislash;diamondstorm,0 1705v 941
+    p2 greedy: move 1 1, move 1 1
+      p1a <- Deoxys-Attack comes in (241/241)
+      p2a Kangaskhan used Fake Out  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p1b Diancie used Moonblast -> p2b: Conkeldurr
+              p2b Conkeldurr spa 1 fell
+      p2b Conkeldurr used Drain Punch -> p1a: Deoxys
+      after p1: Deoxys-Attack 49/241, Diancie-Mega 241/241
+      after p2: Kangaskhan-Mega 414/414, Conkeldurr 113/401
+
+  Turn 4
+    p1 mcts: move 1 1, move 1
+      search (30000 visits): psychoboost,0;diamondstorm,0 1384v 721 | extremespeed,1;diamondstorm,0 1253v 645 | extremespeed,0;diamondstorm,0 1251v 644 | superpower,0;diamondstorm,0 1225v 629
+    p2 greedy: move 1 1, move 1 1
+      p2a Kangaskhan used Fake Out  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p1a Deoxys used Psycho Boost -> p2a: Kangaskhan
+              p1a Deoxys spa 2 fell
+      p1b Diancie used Diamond Storm -> p2b: Conkeldurr  [[spread] p2a,p2b]
+              p1b Diancie def 1 rose
+      p2a Kangaskhan fainted
+      p2b Conkeldurr used Drain Punch -> p1a: Deoxys
+      p1a Deoxys fainted
+      after p1: Deoxys-Attack 0/241, Diancie-Mega 241/241
+      after p2: Kangaskhan-Mega 0/414, Conkeldurr 57/401
+
+  Turn 5
+      p1a <- Keldeo comes in (324/324)
+      p2a <- Landorus comes in (319/319)
+      after p1: Keldeo 324/324, Diancie-Mega 241/241
+      after p2: Landorus 319/319, Conkeldurr 57/401
+
+  Turn 6
+    p1 mcts: move 1 1, move 4
+      search (23000 visits): hydropump,0;protect,1 2679v 1700 | hydropump,0;diamondstorm,0 1134v 667 | hydropump,0;switch salamence 865v 492 | protect,0;protect,1 763v 427
+    p2 greedy: move 1 1, move 1 1
+      p1b Diancie used Protect
+      p2a Landorus used Earth Power -> p1a: Keldeo
+      p1a Keldeo used Hydro Pump -> p2a: Landorus  [[miss]]
+              p1a Keldeo -- MISSED
+      p2b Conkeldurr used Drain Punch -> p1a: Keldeo
+      p1a Keldeo fainted
+      after p1: Keldeo 0/324, Diancie-Mega 241/241
+      after p2: Landorus 319/319, Conkeldurr 110/401
+
+  Turn 7
+      p1a <- Salamence comes in (331/331)
+              p2a Landorus atk 1 fell
+              p2b Conkeldurr atk 1 fell
+      after p1: Salamence 331/331, Diancie-Mega 241/241
+      after p2: Landorus 319/319, Conkeldurr 110/401
+
+  Turn 8
+    p1 mcts: move 2 1, move 4
+      search (12000 visits): fireblast,0;protect,1 869v 387 | fireblast,1;protect,1 784v 343 | stoneedge,0;protect,1 564v 231 | dracometeor,0;protect,1 555v 227
+    p2 greedy: move 1 1, move 1 1
+      p1b Diancie used Protect
+      p2a Landorus used Earth Power -> p1a: Salamence
+              p1a Salamence -- IMMUNE
+      p1a Salamence used Fire Blast -> p2a: Landorus
+      p2b Conkeldurr used Drain Punch -> p1a: Salamence
+      after p1: Salamence 247/331, Diancie-Mega 241/241
+      after p2: Landorus 146/319, Conkeldurr 136/401
+
+  Turn 9
+    p1 mcts: move 2 1, move 4
+      search (18000 visits): fireblast,0;protect,1 1653v 690 | fireblast,1;protect,1 1361v 553 | stoneedge,0;protect,1 1185v 471 | switch aegislash;protect,1 805v 298
+    p2 greedy: move 1 1, move 1 1
+      p1b Diancie used Protect  [[still]]
+              p1b Diancie -- IT FAILED
+      p2a Landorus used Earth Power -> p1a: Salamence
+              p1a Salamence -- IMMUNE
+      p1a Salamence used Fire Blast -> p2a: Landorus
+      p2a Landorus fainted
+      p2b Conkeldurr used Drain Punch -> p1a: Salamence
+      after p1: Salamence 158/331, Diancie-Mega 241/241
+      after p2: Landorus 0/319, Conkeldurr 164/401
+
+  Turn 10
+      p2a <- Deoxys-Speed comes in (303/303)
+      after p1: Salamence 158/331, Diancie-Mega 241/241
+      after p2: Deoxys-Speed 303/303, Conkeldurr 164/401
+
+  Turn 11
+    p1 mcts: switch 6, move 1   (slot0 Salamence -> Aegislash)
+      search (14000 visits): switch aegislash;diamondstorm,0 1675v 1212 | stoneedge,0;diamondstorm,0 816v 553 | fireblast,0;diamondstorm,0 752v 504 | tailwind,0;diamondstorm,0 660v 436
+    p2 greedy: move 1 1, move 1 1
+      p1a <- Aegislash comes in (320/320)
+      p2a Deoxys used Psycho Boost -> p1a: Aegislash
+              p2a Deoxys spa 2 fell
+      p1b Diancie used Diamond Storm -> p2b: Conkeldurr  [[spread] p2a,p2b]
+              p1b Diancie def 1 rose
+      p2b Conkeldurr used Drain Punch -> p1a: Aegislash
+              p1a Aegislash -- IMMUNE
+      after p1: Aegislash 263/320, Diancie-Mega 241/241
+      after p2: Deoxys-Speed 149/303, Conkeldurr 82/401
+
+  Turn 12
+    p1 mcts: move 2 1, move 1
+      search (21000 visits): shadowball,0;diamondstorm,0 1216v 666 | flashcannon,0;diamondstorm,0 1098v 594 | shadowball,1;diamondstorm,0 1034v 555 | kingsshield,0;diamondstorm,0 1011v 541
+    p2 greedy: move 1 1, move 1 1
+      p2a Deoxys used Psycho Boost -> p1a: Aegislash
+              p2a Deoxys spa 2 fell
+      p1b Diancie used Diamond Storm -> p2b: Conkeldurr  [[spread] p2a,p2b]
+              p1b Diancie def 1 rose
+      p2a Deoxys fainted
+      p2b Conkeldurr used Drain Punch -> p1a: Aegislash
+              p1a Aegislash -- IMMUNE
+      p1a Aegislash used Shadow Ball -> p2b: Conkeldurr
+      p2b Conkeldurr fainted
+      after p1: Aegislash-Blade 233/320, Diancie-Mega 241/241
+      after p2: Deoxys-Speed 0/303, Conkeldurr 0/401
+
+  Turn 13
+      p2a <- Volcanion comes in (363/363)
+      p2b <- Genesect comes in (323/323)
+              p2b Genesect spa 1 rose
+      after p1: Aegislash-Blade 233/320, Diancie-Mega 241/241
+      after p2: Volcanion 363/363, Genesect 323/323
+
+  Turn 14
+    p1 mcts: switch 6, move 1   (slot0 Aegislash-Blade -> Salamence)
+      search (17000 visits): switch salamence;diamondstorm,0 3199v 1916 | shadowball,0;diamondstorm,0 1292v 716 | switch salamence;protect,1 1145v 625 | shadowball,1;diamondstorm,0 1123v 612
+    p2 greedy: move 4 1, move 4 1
+      p1a <- Salamence comes in (158/331)
+              p2a Volcanion atk 1 fell
+              p2b Genesect atk 1 fell
+      p1b Diancie used Diamond Storm -> p2a: Volcanion  [[spread] p2a,p2b]
+      p2b Genesect used Psychic -> p1a: Salamence
+      p2a Volcanion used Overheat -> p1a: Salamence
+              p2a Volcanion spa 2 fell
+      p1a Salamence fainted
+      after p1: Salamence 0/331, Diancie-Mega 241/241
+      after p2: Volcanion 91/363, Genesect 143/323
+
+  Turn 15
+      p1a <- Aegislash comes in (233/320)
+      after p1: Aegislash 233/320, Diancie-Mega 241/241
+      after p2: Volcanion 91/363, Genesect 143/323
+
+  Turn 16
+    p1 mcts: move 2 2, move 1
+      search (66000 visits): shadowball,1;diamondstorm,0 11450v 11114 | shadowball,0;diamondstorm,0 10413v 10085 | flashcannon,1;diamondstorm,0 10305v 9978 | flashcannon,0;diamondstorm,0 10239v 9912
+    p2 greedy: move 4 1, move 4 1
+      p1b Diancie used Diamond Storm -> p2b: Genesect  [[spread] p2a,p2b]
+              p1b Diancie def 1 rose
+      p2a Volcanion fainted
+      p2b Genesect fainted
+      after p1: Aegislash 233/320, Diancie-Mega 241/241
+      after p2: Volcanion 0/363, Genesect 0/323
+
+  RESULT: p1 wins

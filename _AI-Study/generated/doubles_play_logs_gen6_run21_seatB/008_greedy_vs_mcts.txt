@@ -1,0 +1,123 @@
+battle 8   p1=greedy vs p2=mcts   mcts 300 ms a decision
+  p1: ORAS Doubles OU: Gardevoir-Mega, Weavile, Breloom, Gyarados, Aegislash, Rotom-Wash
+  p2: ORAS Doubles OU: Charizard-Mega-Y, Sylveon, Aegislash, Landorus-Therian, Zapdos, Cresselia
+
+  Turn 1
+    p1 greedy: move 3 1, move 1 1
+    p2 mcts: move 3, move 2
+      search (34000 visits): protect,0;hypervoice,0 6418v 3881 | switch zapdos;hypervoice,0 3098v 1796 | heatwave,0;hypervoice,0 2750v 1580 | switch landorustherian;hypervoice,0 1343v 721
+      p2a Charizard used Protect
+      p1b Weavile used Icicle Crash -> p2a: Charizard
+              p2a Charizard -- move: Protect
+      p1a Gardevoir used Focus Blast -> p2a: Charizard
+              p2a Charizard -- move: Protect
+      p2b Sylveon used Hyper Voice -> p1b: Weavile  [[spread] p1a,p1b]
+      p1b Weavile fainted
+      after p1: Gardevoir-Mega 174/279, Weavile 0/281
+      after p2: Charizard-Mega-Y 359/359, Sylveon 393/393
+
+  Turn 2
+      p1b <- Breloom comes in (261/261)
+      after p1: Gardevoir-Mega 174/279, Breloom 261/261
+      after p2: Charizard-Mega-Y 359/359, Sylveon 393/393
+
+  Turn 3
+    p1 greedy: move 3 1, move 2 1
+    p2 mcts: move 3, move 2
+      search (41000 visits): protect,0;hypervoice,0 12468v 6913 | heatwave,0;hypervoice,0 2514v 1266 | switch zapdos;hypervoice,0 1487v 708 | heatwave,0;protect,1 975v 437
+      p2a Charizard used Protect
+      p1b Breloom used Mach Punch -> p2a: Charizard
+              p2a Charizard -- move: Protect
+      p1a Gardevoir used Focus Blast -> p2a: Charizard
+              p2a Charizard -- move: Protect
+      p2b Sylveon used Hyper Voice -> p1a: Gardevoir  [[spread] p1a,p1b]
+              p1b Breloom -- critical hit
+              p1b Breloom used up its Focus Sash
+      after p1: Gardevoir-Mega 78/279, Breloom 1/261
+      after p2: Charizard-Mega-Y 359/359, Sylveon 393/393
+
+  Turn 4
+    p1 greedy: move 3 1, move 2 1
+    p2 mcts: move 3, move 2
+      search (50000 visits): protect,0;hypervoice,0 5587v 2343 | switch zapdos;hypervoice,0 2218v 848 | heatwave,0;protect,1 2018v 762 | switch cresselia;hypervoice,0 1981v 746
+      p2a Charizard used Protect  [[still]]
+              p2a Charizard -- IT FAILED
+      p1b Breloom used Mach Punch -> p2a: Charizard
+      p1a Gardevoir used Focus Blast -> p2a: Charizard  [[miss]]
+              p1a Gardevoir -- MISSED
+      p2b Sylveon used Hyper Voice -> p1a: Gardevoir  [[spread] p1a,p1b]
+      p1a Gardevoir fainted
+      p1b Breloom fainted
+      after p1: Gardevoir-Mega 0/279, Breloom 0/261
+      after p2: Charizard-Mega-Y 297/359, Sylveon 393/393
+
+  Turn 5
+      p1a <- Gyarados comes in (394/394)
+      p1b <- Aegislash comes in (324/324)
+              p2a Charizard atk 1 fell
+              p2b Sylveon atk 1 fell
+      after p1: Gyarados 394/394, Aegislash 324/324
+      after p2: Charizard-Mega-Y 297/359, Sylveon 393/393
+
+  Turn 6
+    p1 greedy: move 4 1, move 1 1
+    p2 mcts: move 1, move 2
+      search (39000 visits): heatwave,0;hypervoice,0 9928v 6749 | heatwave,0;calmmind,1 1587v 969 | protect,0;hypervoice,0 1485v 901 | heatwave,0;substitute,1 1461v 885
+      p2a Charizard used Heat Wave -> p1a: Gyarados  [[spread] p1a,p1b]
+      p1a Gyarados used Stone Edge -> p2a: Charizard
+              p2a Charizard -- critical hit
+      p2a Charizard fainted
+      p2b Sylveon used Hyper Voice -> p1a: Gyarados  [[spread] p1a,p1b]
+              p1a Gyarados -- critical hit
+              p1a Gyarados used up its Sitrus Berry
+      p1b Aegislash used Shadow Ball -> p2b: Sylveon
+      after p1: Gyarados 214/394, Aegislash-Blade 90/324
+      after p2: Charizard-Mega-Y 0/359, Sylveon 267/393
+
+  Turn 7
+      p2a <- Aegislash comes in (324/324)
+      after p1: Gyarados 214/394, Aegislash-Blade 90/324
+      after p2: Aegislash 324/324, Sylveon 267/393
+
+  Turn 8
+    p1 greedy: move 4 2, move 1 2
+    p2 mcts: move 1 2, move 2
+      search (40000 visits): shadowball,1;hypervoice,0 22715v 19243 | flashcannon,1;hypervoice,0 1592v 1213 | shadowball,1;substitute,1 1309v 982 | shadowball,1;calmmind,1 1247v 932
+      p1a Gyarados used Stone Edge -> p2b: Sylveon
+      p2b Sylveon used Hyper Voice -> p1b: Aegislash  [[spread] p1a,p1b]
+      p1b Aegislash fainted
+      p2a Aegislash used Shadow Ball -> p1a: Gyarados
+      p1a Gyarados fainted
+      after p1: Gyarados 0/394, Aegislash 0/324
+      after p2: Aegislash-Blade 324/324, Sylveon 174/393
+
+  Turn 9
+      p1a <- Rotom-Wash comes in (304/304)
+      after p1: Rotom-Wash 304/304, Aegislash 0/324
+      after p2: Aegislash-Blade 324/324, Sylveon 174/393
+
+  Turn 10
+    p1 greedy: move 1 2, pass
+    p2 mcts: move 1 1, move 2
+      search (489000 visits): shadowball,0;hypervoice,0 480342v 475601 | shadowball,0;calmmind,1 648v 453 | shadowball,0;substitute,1 438v 290 | flashcannon,0;calmmind,1 382v 247
+      p1a Rotom used Hydro Pump -> p2b: Sylveon
+      p2b Sylveon used Hyper Voice -> p1a: Rotom
+              p1a Rotom used up its Sitrus Berry
+      p2a Aegislash used Shadow Ball -> p1a: Rotom
+      after p1: Rotom-Wash 43/304, Aegislash 0/324
+      after p2: Aegislash-Blade 324/324, Sylveon 68/393
+
+  Turn 11
+    p1 greedy: move 1 2, pass
+    p2 mcts: switch 4, move 2   (slot0 Aegislash-Blade -> Landorus-Therian)
+      search (304000 visits): switch landorustherian;hypervoice,0 274687v 271248 | shadowball,0;substitute,1 3347v 3046 | shadowball,0;hypervoice,0 2476v 2218 | shadowball,0;calmmind,1 2403v 2149
+      p2a <- Landorus-Therian comes in (361/361)
+              p1a Rotom atk 1 fell
+      p1a Rotom used Hydro Pump -> p2b: Sylveon  [[miss]]
+              p1a Rotom -- MISSED
+      p2b Sylveon used Hyper Voice -> p1a: Rotom
+      p1a Rotom fainted
+      after p1: Rotom-Wash 0/304, Aegislash 0/324
+      after p2: Landorus-Therian 361/361, Sylveon 68/393
+
+  RESULT: p2 wins

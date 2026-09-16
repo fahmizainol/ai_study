@@ -1,0 +1,86 @@
+battle 38   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: ORAS Doubles OU: Salamence, Sylveon, Weavile, Keldeo, Jirachi, Thundurus
+  p2: Untitled 609: Ferrothorn, Politoed, Gothitelle, Kingdra, Kangaskhan-Mega, Scrafty
+
+  Turn 1
+    p1 mcts: move 2 mega, move 1
+      search (9000 visits): hypervoice-mega,0;hypervoice,0 105v 55 | hypervoice-mega,0;shadowball,1 103v 53 | hypervoice-mega,0;shadowball,0 89v 43 | hypervoice-mega,0;psyshock,1 89v 43
+    p2 greedy: move 3 1, move 3 1
+      p1a Salamence used Hyper Voice -> p2b: Politoed  [[spread] p2a,p2b]
+      p2b Politoed used Scald -> p1a: Salamence
+              p1a Salamence is now brn
+      p1b Sylveon used Hyper Voice -> p2b: Politoed  [[spread] p2a,p2b]
+      p2a Ferrothorn used Power Whip -> p1a: Salamence
+      after p1: Salamence-Mega 188/331, Sylveon 344/344
+      after p2: Ferrothorn 128/352, Politoed 20/383
+
+  Turn 2
+    p1 mcts: move 2, move 1
+      search (52000 visits): hypervoice,0;hypervoice,0 27201v 12043 | fireblast,0;hypervoice,0 1151v 253 | switch keldeo;hypervoice,0 1146v 252 | switch thundurus;hypervoice,0 1146v 252
+    p2 greedy: move 3 1, move 3 1
+      p1a Salamence used Hyper Voice -> p2b: Politoed  [[spread] p2a,p2b]
+      p2a Ferrothorn fainted
+      p2b Politoed fainted
+      p1b Sylveon used Hyper Voice -> p2: Ferrothorn  [[notarget]]
+              p1b Sylveon -- IT FAILED
+      after p1: Salamence-Mega 147/331, Sylveon 344/344
+      after p2: Ferrothorn 0/352, Politoed 0/383
+
+  Turn 3
+      p2b <- Kingdra comes in (291/291)
+      p2a <- Gothitelle comes in (343/343)
+      after p1: Salamence-Mega 147/331, Sylveon 344/344
+      after p2: Gothitelle 343/343, Kingdra 291/291
+
+  Turn 4
+    p1 mcts: move 2, move 1
+      search (37000 visits): hypervoice,0;hypervoice,0 23624v 17441 | protect,0;hypervoice,0 4985v 3505 | fireblast,0;hypervoice,0 2329v 1567 | fireblast,1;hypervoice,0 2073v 1383
+    p2 greedy: move 4 1, move 3 1
+      p2b Kingdra used Draco Meteor -> p1a: Salamence
+              p2b Kingdra spa 2 fell
+      p1a Salamence fainted
+      p1b Sylveon used Hyper Voice -> p2b: Kingdra  [[spread] p2a,p2b]
+              p2a Gothitelle -- critical hit
+              p2a Gothitelle used up its Sitrus Berry
+      p2b Kingdra fainted
+      p2a Gothitelle used Psychic -> p1b: Sylveon
+      after p1: Salamence 0/331, Sylveon 260/344
+      after p2: Gothitelle 181/343, Kingdra 0/291
+
+  Turn 5
+      p1a <- Weavile comes in (281/281)
+      p2b <- Kangaskhan-Mega comes in (401/401)
+      after p1: Weavile 281/281, Sylveon 260/344
+      after p2: Gothitelle 181/343, Kangaskhan-Mega 401/401
+
+  Turn 6
+    p1 mcts: move 2 2, move 1
+      search (28000 visits): fakeout,1;hypervoice,0 9024v 6990 | iciclecrash,1;hypervoice,0 6823v 5236 | lowkick,1;hypervoice,0 5109v 3877 | knockoff,1;hypervoice,0 4087v 3071
+    p2 greedy: move 4 2, move 4 2
+      p1a Weavile used Fake Out -> p2b: Kangaskhan
+              p2b Kangaskhan COULD NOT MOVE (flinch)
+      p1b Sylveon used Hyper Voice -> p2a: Gothitelle  [[spread] p2a,p2b]
+      p2a Gothitelle fainted
+      after p1: Weavile 281/281, Sylveon 260/344
+      after p2: Gothitelle 0/343, Kangaskhan-Mega 131/401
+
+  Turn 7
+      p2a <- Scrafty comes in (334/334)
+              p1a Weavile atk 1 fell
+              p1b Sylveon atk 1 fell
+      after p1: Weavile 281/281, Sylveon 260/344
+      after p2: Scrafty 334/334, Kangaskhan-Mega 131/401
+
+  Turn 8
+    p1 mcts: switch 6, move 1   (slot0 Weavile -> Thundurus)
+      search (61000 visits): switch thundurus;hypervoice,0 11032v 10020 | switch jirachi;hypervoice,0 9837v 8908 | switch keldeo;hypervoice,0 9257v 8370 | fakeout,0;hypervoice,0 7269v 6527
+    p2 greedy: move 2 2, move 4 2
+      p1a <- Thundurus comes in (356/356)
+      p2b Kangaskhan used Sucker Punch -> p1b: Sylveon
+      p1b Sylveon used Hyper Voice -> p2b: Kangaskhan  [[spread] p2a,p2b]
+      p2a Scrafty fainted
+      p2b Kangaskhan fainted
+      after p1: Thundurus 356/356, Sylveon 215/344
+      after p2: Scrafty 0/334, Kangaskhan-Mega 0/401
+
+  RESULT: p1 wins

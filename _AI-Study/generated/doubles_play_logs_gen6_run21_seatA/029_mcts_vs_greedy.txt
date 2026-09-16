@@ -1,0 +1,200 @@
+battle 29   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: Untitled 480: Kyurem-Black, Manectric-Mega, Volcarona, Blastoise, Landorus, Mew
+  p2: XY Doubles: Politoed, Manectric, Aegislash, Ludicolo, Rotom-Wash, Landorus-Therian
+
+  Turn 1
+    p1 mcts: move 1 2, move 3
+      search (15000 visits): icebeam,1;snarl,0 701v 543 | freezeshock,1;snarl,0 466v 343 | icebeam,0;snarl,0 446v 326 | earthpower,1;snarl,0 419v 304
+    p2 greedy: move 1 1, move 2 1
+      p1b Manectric used Snarl -> p2b: Manectric  [[spread] p2a,p2b]
+              p2a Politoed spa 1 fell
+              p2b Manectric spa 1 fell
+      p2b Manectric used Thunderbolt -> p1b: Manectric
+              p1b Manectric -- ability: Lightning Rod
+              p1b Manectric spa 1 rose
+      p1a Kyurem used Ice Beam -> p2b: Manectric
+      p2b Manectric fainted
+      p2a Politoed used Scald -> p1a: Kyurem
+      after p1: Kyurem-Black 341/391, Manectric-Mega 344/344
+      after p2: Politoed 341/384, Manectric 0/287
+
+  Turn 2
+      p2b <- Aegislash comes in (324/324)
+      after p1: Kyurem-Black 341/391, Manectric-Mega 344/344
+      after p2: Politoed 341/384, Aegislash 324/324
+
+  Turn 3
+    p1 mcts: move 2 2, move 3
+      search (11000 visits): freezeshock,1;snarl,0 452v 325 | icebeam,1;snarl,0 425v 303 | earthpower,1;snarl,0 291v 195 | icebeam,1;voltswitch,0 286v 191
+    p2 greedy: move 1 1, move 2 1
+      p1b Manectric used Snarl -> p2b: Aegislash  [[spread] p2a,p2b]
+              p2a Politoed spa 1 fell
+              p2b Aegislash spa 1 fell
+              p2b Aegislash used up its Weakness Policy
+              p2b Aegislash atk 2 rose
+              p2b Aegislash spa 2 rose
+      p1a Kyurem used Freeze Shock  [[still]]
+              p1a Kyurem used up its Power Herb
+      p2a Politoed used Scald -> p1a: Kyurem
+      p2b Aegislash used Shadow Ball -> p1a: Kyurem
+              p1a Kyurem spd 1 fell
+      after p1: Kyurem-Black 41/391, Manectric-Mega 344/344
+      after p2: Politoed 279/384, Aegislash-Blade 132/324
+
+  Turn 4
+    p1 mcts: move 1 1, move 3
+      search (28000 visits): icebeam,0;snarl,0 2899v 2134 | icebeam,0;voltswitch,1 1601v 1132 | icebeam,1;snarl,0 897v 600 | icebeam,1;voltswitch,1 801v 529
+    p2 greedy: move 1 1, move 2 1
+      p1b Manectric used Snarl -> p2b: Aegislash  [[spread] p2a,p2b]
+              p2b Aegislash -- critical hit
+              p2a Politoed spa 1 fell
+      p2b Aegislash fainted
+      p1a Kyurem used Ice Beam -> p2a: Politoed
+      p2a Politoed used Scald -> p1a: Kyurem
+              p1a Kyurem -- critical hit
+      p1a Kyurem fainted
+      after p1: Kyurem-Black 0/391, Manectric-Mega 344/344
+      after p2: Politoed 131/384, Aegislash 0/324
+
+  Turn 5
+      p1a <- Volcarona comes in (334/334)
+      p2b <- Ludicolo comes in (327/327)
+      after p1: Volcarona 334/334, Manectric-Mega 344/344
+      after p2: Politoed 131/384, Ludicolo 327/327
+
+  Turn 6
+    p1 mcts: move 2, move 3
+      search (20000 visits): quiverdance,0;snarl,0 1902v 860 | quiverdance,0;voltswitch,1 887v 359 | quiverdance,0;protect,1 669v 255 | protect,0;snarl,0 551v 201
+    p2 greedy: move 1 1, move 2 1
+      p2b Ludicolo used Hydro Pump -> p1a: Volcarona
+      p1a Volcarona fainted
+      p1b Manectric used Snarl -> p2b: Ludicolo  [[spread] p2a,p2b]
+              p2a Politoed spa 1 fell
+              p2b Ludicolo spa 1 fell
+      p2a Politoed used Scald -> p1b: Manectric
+      after p1: Volcarona 0/334, Manectric-Mega 295/344
+      after p2: Politoed 68/384, Ludicolo 284/327
+
+  Turn 7
+      p1a <- Blastoise comes in (362/362)
+      after p1: Blastoise 362/362, Manectric-Mega 295/344
+      after p2: Politoed 68/384, Ludicolo 284/327
+
+  Turn 8
+    p1 mcts: move 3 2, move 3
+      search (21000 visits): scald,1;snarl,0 1360v 523 | scald,0;snarl,0 837v 294 | scald,1;hiddenpower,1 692v 233 | switch mew;snarl,0 655v 217
+    p2 greedy: move 1 2, move 2 2
+      p2b Ludicolo used Hydro Pump -> p1b: Manectric
+      p1b Manectric used Snarl -> p2a: Politoed  [[spread] p2a,p2b]
+              p2b Ludicolo -- critical hit
+              p2a Politoed spa 1 fell
+              p2b Ludicolo spa 1 fell
+      p1a Blastoise used Scald -> p2b: Ludicolo
+      p2a Politoed used Scald -> p1b: Manectric
+      after p1: Blastoise 362/362, Manectric-Mega 57/344
+      after p2: Politoed 9/384, Ludicolo 179/327
+
+  Turn 9
+    p1 mcts: move 3 2, move 3
+      search (27000 visits): scald,1;snarl,0 915v 236 | scald,1;hiddenpower,1 899v 231 | scald,0;snarl,0 774v 189 | scald,1;protect,1 726v 174
+    p2 greedy: move 1 2, move 2 2
+      p2b Ludicolo used Hydro Pump -> p1b: Manectric
+      p1b Manectric fainted
+      p1a Blastoise used Scald -> p2b: Ludicolo
+      p2a Politoed used Scald -> p1a: Blastoise
+      after p1: Blastoise 347/362, Manectric-Mega 0/344
+      after p2: Politoed 9/384, Ludicolo 170/327
+
+  Turn 10
+      p1b <- Landorus comes in (319/319)
+      after p1: Blastoise 347/362, Landorus 319/319
+      after p2: Politoed 9/384, Ludicolo 170/327
+
+  Turn 11
+    p1 mcts: move 3 2, move 2 2
+      search (22000 visits): scald,1;psychic,1 675v 165 | scald,0;psychic,1 609v 143 | followme,0;psychic,1 605v 142 | followme,0;sludgebomb,1 574v 132
+    p2 greedy: move 1 1, move 2 1
+      p2b Ludicolo used Hydro Pump -> p1a: Blastoise  [[miss]]
+              p2b Ludicolo -- MISSED
+      p1b Landorus used Psychic -> p2b: Ludicolo
+      p1a Blastoise used Scald -> p2b: Ludicolo
+      p2b Ludicolo fainted
+      p2a Politoed used Scald -> p1a: Blastoise
+      after p1: Blastoise 332/362, Landorus 319/319
+      after p2: Politoed 9/384, Ludicolo 0/327
+
+  Turn 12
+      p2b <- Rotom-Wash comes in (300/300)
+      after p1: Blastoise 332/362, Landorus 319/319
+      after p2: Politoed 9/384, Rotom-Wash 300/300
+
+  Turn 13
+    p1 mcts: move 4, move 2 2
+      search (29000 visits): protect,0;psychic,1 1222v 281 | protect,0;sludgebomb,1 1115v 249 | scald,1;sludgebomb,1 1016v 221 | scald,1;psychic,1 999v 216
+    p2 greedy: move 1 1, move 1 1
+      p1a Blastoise used Protect
+      p1b Landorus used Psychic -> p2b: Rotom
+      p2b Rotom used Hydro Pump -> p1a: Blastoise
+              p1a Blastoise -- move: Protect
+      p2a Politoed used Scald -> p1a: Blastoise
+              p1a Blastoise -- move: Protect
+      after p1: Blastoise 332/362, Landorus 319/319
+      after p2: Politoed 9/384, Rotom-Wash 183/300
+
+  Turn 14
+    p1 mcts: move 4, move 3 2
+      search (29000 visits): protect,0;sludgebomb,1 1256v 299 | protect,0;psychic,1 1165v 272 | followme,0;sludgebomb,1 1053v 239 | followme,0;psychic,1 1051v 238
+    p2 greedy: move 1 1, move 1 1
+      p1a Blastoise used Protect
+      p1b Landorus used Sludge Bomb -> p2b: Rotom
+              p2b Rotom used up its Sitrus Berry
+      p2b Rotom used Hydro Pump -> p1a: Blastoise
+              p1a Blastoise -- move: Protect
+      p2a Politoed used Scald -> p1a: Blastoise
+              p1a Blastoise -- move: Protect
+      after p1: Blastoise 332/362, Landorus 319/319
+      after p2: Politoed 9/384, Rotom-Wash 142/300
+
+  Turn 15
+    p1 mcts: move 4, move 3 2
+      search (29000 visits): protect,0;sludgebomb,1 1358v 333 | protect,0;psychic,1 1226v 293 | followme,0;psychic,1 1092v 252 | scald,1;psychic,1 1010v 228
+    p2 greedy: move 1 1, move 1 1
+      p1a Blastoise used Protect  [[still]]
+              p1a Blastoise -- IT FAILED
+      p1b Landorus used Sludge Bomb -> p2b: Rotom
+      p2b Rotom used Hydro Pump -> p1a: Blastoise
+      p2a Politoed used Scald -> p1a: Blastoise
+      after p1: Blastoise 258/362, Landorus 319/319
+      after p2: Politoed 9/384, Rotom-Wash 17/300
+
+  Turn 16
+    p1 mcts: move 3 1, move 2 2
+      search (30000 visits): scald,0;psychic,1 2536v 791 | scald,0;sludgebomb,1 2051v 618 | scald,1;psychic,1 1054v 276 | switch mew;psychic,1 958v 244
+    p2 greedy: move 1 1, move 1 1
+      p1b Landorus used Psychic -> p2b: Rotom
+      p2b Rotom fainted
+      p1a Blastoise used Scald -> p2a: Politoed
+      p2a Politoed fainted
+      after p1: Blastoise 258/362, Landorus 319/319
+      after p2: Politoed 0/384, Rotom-Wash 0/300
+
+  Turn 17
+      p2a <- Landorus-Therian comes in (330/330)
+              p1a Blastoise atk 1 fell
+              p1b Landorus atk 1 fell
+      after p1: Blastoise 258/362, Landorus 319/319
+      after p2: Landorus-Therian 330/330, Rotom-Wash 0/300
+
+  Turn 18
+    p1 mcts: move 3 1, move 2 1
+      search (753000 visits): scald,0;psychic,0 710242v 709052 | scald,0;sludgebomb,0 38195v 37350 | scald,0;switch mew 706v 571 | scald,0;earthpower,0 602v 477
+    p2 greedy: move 1, pass
+      p2a Landorus used Earthquake -> p1a: Blastoise  [[spread] p1a]
+              p1b Landorus -- IMMUNE
+      p1b Landorus used Psychic -> p2a: Landorus
+      p1a Blastoise used Scald -> p2a: Landorus
+      p2a Landorus fainted
+      after p1: Blastoise 120/362, Landorus 319/319
+      after p2: Landorus-Therian 0/330, Rotom-Wash 0/300
+
+  RESULT: p1 wins

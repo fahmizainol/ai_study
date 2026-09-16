@@ -1,0 +1,149 @@
+battle 27   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: Untitled 488: Bisharp, Medicham-Mega, Talonflame, Amoonguss, Kingdra, Politoed
+  p2: ORAS Doubles OU: Charizard, Venusaur, Landorus-Therian, Rotom-Heat, Gastrodon, Aegislash
+
+  Turn 1
+    p1 mcts: move 3, move 2 2
+      search (22000 visits): protect,0;highjumpkick,1 520v 370 | knockoff,1;zenheadbutt,0 505v 358 | protect,0;zenheadbutt,0 443v 308 | switch talonflame;zenheadbutt,1 425v 294
+    p2 greedy: move 3 1, move 3 1
+      p1a Bisharp used Protect
+      p1b Medicham used High Jump Kick -> p2b: Venusaur
+      p2a Charizard used Overheat -> p1a: Bisharp
+              p1a Bisharp -- move: Protect
+      p2b Venusaur used Solar Beam  [[still]]
+      after p1: Bisharp 271/271, Medicham-Mega 262/262
+      after p2: Charizard 359/359, Venusaur 70/301
+
+  Turn 2
+    p1 mcts: move 3, move 3 1
+      search (35000 visits): protect,0;zenheadbutt,0 1882v 1555 | protect,0;highjumpkick,0 1795v 1478 | switch kingdra;fakeout,1 1039v 820 | switch kingdra;highjumpkick,1 894v 696
+    p2 greedy: move 3 1, move 1
+      p1a Bisharp used Protect
+      p1b Medicham used Zen Headbutt -> p2a: Charizard
+      p2a Charizard used Overheat -> p1a: Bisharp
+              p1a Bisharp -- move: Protect
+      p2b Venusaur used Solar Beam -> p1a: Bisharp  [[from] lockedmove]
+              p1a Bisharp -- move: Protect
+      after p1: Bisharp 271/271, Medicham-Mega 262/262
+      after p2: Charizard 109/359, Venusaur 70/301
+
+  Turn 3
+    p1 mcts: move 1 2, move 3 1
+      search (42000 visits): knockoff,1;zenheadbutt,0 3473v 2848 | knockoff,1;highjumpkick,0 2404v 1933 | ironhead,1;zenheadbutt,0 1592v 1245 | ironhead,1;highjumpkick,0 1555v 1215
+    p2 greedy: move 3 1, move 3 1
+      p1b Medicham used Zen Headbutt -> p2a: Charizard
+              p2a Charizard -- critical hit
+      p2a Charizard fainted
+      p2b Venusaur used Solar Beam  [[still]]
+      p1a Bisharp used Knock Off -> p2b: Venusaur
+              p2b Venusaur used up its Life Orb
+      p2b Venusaur fainted
+      after p1: Bisharp 244/271, Medicham-Mega 262/262
+      after p2: Charizard 0/359, Venusaur 0/301
+
+  Turn 4
+      p2a <- Landorus-Therian comes in (320/320)
+      p2b <- Rotom-Heat comes in (304/304)
+              p1a Bisharp atk 1 fell
+              p1a Bisharp atk 2 rose
+              p1b Medicham atk 1 fell
+      after p1: Bisharp 244/271, Medicham-Mega 262/262
+      after p2: Landorus-Therian 320/320, Rotom-Heat 304/304
+
+  Turn 5
+    p1 mcts: move 3, move 3 1
+      search (35000 visits): protect,0;zenheadbutt,0 3097v 2179 | protect,0;highjumpkick,1 2617v 1822 | protect,0;highjumpkick,0 2253v 1553 | protect,0;zenheadbutt,1 2204v 1516
+    p2 greedy: move 4 1, move 2 1
+      p1a Bisharp used Protect
+      p2a Landorus used Superpower -> p1a: Bisharp
+              p1a Bisharp -- move: Protect
+      p1b Medicham used Zen Headbutt -> p2a: Landorus
+      p2b Rotom used Overheat -> p1a: Bisharp
+              p1a Bisharp -- move: Protect
+      after p1: Bisharp 244/271, Medicham-Mega 262/262
+      after p2: Landorus-Therian 140/320, Rotom-Heat 304/304
+
+  Turn 6
+    p1 mcts: move 3, switch 4   (slot1 Medicham-Mega -> Amoonguss)
+      search (25000 visits): protect,0;switch amoonguss 1076v 628 | protect,0;zenheadbutt,0 951v 547 | protect,0;switch kingdra 782v 438 | protect,0;highjumpkick,1 755v 420
+    p2 greedy: move 4 1, move 2 1
+      p1b <- Amoonguss comes in (432/432)
+      p1a Bisharp used Protect  [[still]]
+              p1a Bisharp -- IT FAILED
+      p2a Landorus used Superpower -> p1a: Bisharp
+              p2a Landorus atk 1 fell
+              p2a Landorus def 1 fell
+      p1a Bisharp fainted
+      p2b Rotom used Overheat -> p1b: Amoonguss
+              p1b Amoonguss -- critical hit
+              p2b Rotom spa 2 fell
+      p1b Amoonguss fainted
+      after p1: Bisharp 0/271, Amoonguss 0/432
+      after p2: Landorus-Therian 140/320, Rotom-Heat 304/304
+
+  Turn 7
+      p1a <- Talonflame comes in (319/319)
+      p1b <- Medicham-Mega comes in (262/262)
+      after p1: Talonflame 319/319, Medicham-Mega 262/262
+      after p2: Landorus-Therian 140/320, Rotom-Heat 304/304
+
+  Turn 8
+    p1 mcts: switch 6, move 2 2   (slot0 Talonflame -> Politoed)
+      search (14000 visits): switch politoed;highjumpkick,1 318v 127 | switch kingdra;switch politoed 304v 119 | tailwind,0;highjumpkick,1 303v 119 | flareblitz,1;zenheadbutt,1 301v 118
+    p2 greedy: move 4 1, move 2 1
+      p1a <- Politoed comes in (384/384)
+      p2a Landorus used Superpower -> p1a: Politoed
+              p2a Landorus atk 1 fell
+              p2a Landorus def 1 fell
+      p1b Medicham used High Jump Kick -> p2b: Rotom
+              p2b Rotom -- critical hit
+      p2b Rotom fainted
+      after p1: Politoed 293/384, Medicham-Mega 262/262
+      after p2: Landorus-Therian 140/320, Rotom-Heat 0/304
+
+  Turn 9
+      p2b <- Gastrodon comes in (425/425)
+      after p1: Politoed 293/384, Medicham-Mega 262/262
+      after p2: Landorus-Therian 140/320, Gastrodon 425/425
+
+  Turn 10
+    p1 mcts: move 2, move 2 2
+      search (20000 visits): icywind,0;highjumpkick,1 995v 359 | helpinghand,1;zenheadbutt,1 934v 332 | scald,0;highjumpkick,1 875v 307 | icywind,0;zenheadbutt,1 716v 240
+    p2 greedy: move 4 1, move 2 1
+      p2a Landorus used Superpower -> p1a: Politoed
+              p2a Landorus atk 1 fell
+              p2a Landorus def 1 fell
+      p1b Medicham used High Jump Kick -> p2b: Gastrodon
+      p2b Gastrodon fainted
+      p1a Politoed used Icy Wind -> p2a: Landorus
+      p2a Landorus fainted
+      after p1: Politoed 225/384, Medicham-Mega 262/262
+      after p2: Landorus-Therian 0/320, Gastrodon 0/425
+
+  Turn 11
+      p2a <- Aegislash comes in (324/324)
+      after p1: Politoed 225/384, Medicham-Mega 262/262
+      after p2: Aegislash 324/324, Gastrodon 0/425
+
+  Turn 12
+    p1 mcts: move 1 1, switch 5   (slot1 Medicham-Mega -> Kingdra)
+      search (36000 visits): scald,0;switch kingdra 30781v 25253 | scald,0;zenheadbutt,0 589v 362 | icywind,0;switch kingdra 469v 279 | scald,0;switch talonflame 411v 239
+    p2 greedy: move 1 1, pass
+      p1b <- Kingdra comes in (291/291)
+      p1a Politoed used Scald -> p2a: Aegislash
+      p2a Aegislash used Shadow Ball -> p1a: Politoed
+              p1a Politoed used up its Sitrus Berry
+      after p1: Politoed 149/384, Kingdra 291/291
+      after p2: Aegislash-Blade 233/324, Gastrodon 0/425
+
+  Turn 13
+    p1 mcts: move 1 1, move 4 1
+      search (332000 visits): scald,0;icebeam,0 93479v 93479 | scald,0;dracometeor,0 63526v 63302 | scald,0;hydropump,0 52182v 51891 | scald,0;muddywater,0 43997v 43665
+    p2 greedy: move 1 1, pass
+      p1b Kingdra used Ice Beam -> p2a: Aegislash
+      p1a Politoed used Scald -> p2a: Aegislash
+      p2a Aegislash fainted
+      after p1: Politoed 149/384, Kingdra 291/291
+      after p2: Aegislash 0/324, Gastrodon 0/425
+
+  RESULT: p1 wins
