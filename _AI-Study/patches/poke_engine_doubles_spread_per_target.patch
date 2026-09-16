@@ -204,7 +204,7 @@ index ee644cb..3c8229a 100644
      }
      if (attacking_pkmn.ability == Abilities::MOLDBREAKER
 diff --git a/src/genx/choice_effects.rs b/src/genx/choice_effects.rs
-index d7fc3e1..01658e1 100644
+index d7fc3e1..2814e65 100644
 --- a/src/genx/choice_effects.rs
 +++ b/src/genx/choice_effects.rs
 @@ -773,7 +773,12 @@ pub fn choice_after_damage_hit(
@@ -297,6 +297,31 @@ index d7fc3e1..01658e1 100644
          }
          Choices::REST => {
              let electric_terrain_active = state.terrain_is_active(&Terrain::ELECTRICTERRAIN);
+@@ -1654,11 +1683,21 @@ pub fn choice_special_effect(
+             }
+         }
+         Choices::TRICK | Choices::SWITCHEROO => {
++            // Run 19: every one of these four reads was `get_active()` — slot 0 — while the
++            // two instructions below stamp `act_slot` and `def_pos.slot`. Trick is the worst
++            // shape in this class because it is a two-body SWAP: with a slot-1 actor it read
++            // slot 0's item on BOTH sides, swapped them IN PLACE on slot 0, and emitted
++            // instructions naming the real slots carrying slot 0's values — so reversing
++            // planted a stranger's item on each. Caught as `CONKELDURR ASSAULTVEST ->
++            // KANGASKHANITE` under PE_DBG_ITEM while Kangaskhan itself went to NONE, which is
++            // then `cannot mega evolve KANGASKHAN with NONE` one ply later. The guard is read
++            // at the real slot too: it decided whether the swap happens at all from the wrong
++            // bodies' items and Substitute.
+             let defender_has_sub = defending_side
+-                .get_active().volatile_statuses
++                .get_active_slot_immutable(def_pos.slot).volatile_statuses
+                 .contains(&PokemonVolatileStatus::SUBSTITUTE);
+-            let attacker = attacking_side.get_active();
+-            let defender = defending_side.get_active();
++            let attacker = attacking_side.get_active_slot(act_slot);
++            let defender = defending_side.get_active_slot(def_pos.slot);
+             let attacker_item = attacker.item;
+             let defender_item = defender.item;
+             if attacker_item == defender_item || !defender.item_can_be_removed() || defender_has_sub
 diff --git a/src/genx/generate_instructions.rs b/src/genx/generate_instructions.rs
 index fa0676e..acbae24 100644
 --- a/src/genx/generate_instructions.rs

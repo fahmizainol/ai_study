@@ -305,9 +305,13 @@ def policy_mcts(req, position, side, rng, ms, stats, note=None, reqs=None):
             note.append(f"      search skipped ({exc}); greedy took the turn")
         return policy_greedy(req, position, side, rng)
     except Exception as exc:
-        stats[f"fallback: state build {type(exc).__name__}"] += 1
+        # Carry the MESSAGE, not just the class name. A bare `state build TypeError` is a count
+        # of a summary rather than a count of the thing (run 9's lesson) and cost a diagnostic
+        # re-run: 37 of ~400 decisions on the run-19 arm arrived under that label saying nothing.
+        stats[f"fallback: state build {type(exc).__name__}: {str(exc)[:70]}"] += 1
         if note is not None:
-            note.append(f"      position could not be built ({type(exc).__name__}); greedy took the turn")
+            note.append(f"      position could not be built ({type(exc).__name__}: {exc}); "
+                        "greedy took the turn")
         return policy_greedy(req, position, side, rng)
     try:
         result = monte_carlo_tree_search(state, duration_ms=ms)
