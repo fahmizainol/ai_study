@@ -1698,7 +1698,9 @@ to Showdown sets almost directly. Two known obstacles:
 Doing this is what would make the play result mean something: same referee, same search, real
 teams. It is more valuable than re-running the toy version with transcripts attached.
 
-### 3. Fix the thirty-three confirmed defects — 16 resolved (2, 3, 4, 5, 6, 7, 10, 11, 15, 16, 17, 18, 19, 20, 23, 27 — rows 10 and 11 are symptom-level and were closed by the site-level fixes; row 2 is now in the patch and re-established from a clean clone, see run 13), 17 open
+### 3. Fix the thirty-four confirmed defects — 16 resolved (2, 3, 4, 5, 6, 7, 10, 11, 15, 16, 17, 18, 19, 20, 23, 27 — rows 10 and 11 are symptom-level and were closed by the site-level fixes; row 2 is in the patch, re-established from a clean clone in run 13, and had its SECOND cause fixed in run 16), 18 open
+
+**Count as of run 16**: 34 rows, **16 resolved, 18 open**. Two movements this round that the arithmetic hides. **Defect 1 is partially fixed and deliberately still counted OPEN** — run 14 fixed its slot read, run 15 root-caused its real cause elsewhere, and 3 mega panics survive on the gen 6 arm. **Defect 34 is new and is a CLASS of 25 sites, 3 of them fixed** (`KNOCKOFF`, `THIEF`, `BELLYDRUM`), so the open count understates the work and overstates the number of independent bugs: defects 1 and 2 both turned out to be instances of 34, found five runs apart under unrelated symptoms
 
 Every line number below was read out of the `main-doubles` clone, not remembered. Three are
 crashes, so they stop a bridge outright; seventeen are silent wrong answers, which is worse to ship;
