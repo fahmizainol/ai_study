@@ -1865,6 +1865,59 @@ claim it does.
 
 Transcripts for all three arms are tracked at `generated/doubles_play_logs_gen6_run21_{seatA,seatB,control}`.
 
+### What the search actually plays: the eval's blind spots, measured on 80 real gen 6 battles
+
+The doc has claimed since 2026-09-13 that PR #10 left the singles evaluation verbatim and that a
+doubles search therefore ignores positional play. **The evidence was thin** — five battles on the
+synthetic roster, in which Tailwind was used zero times. Run 21's transcripts allow the real
+measurement: 80 battles where one side is the search, on scraped teams, with a 20-20 seat control.
+
+Counting only battles where **a carrier of the move actually reached the field** (a conservative
+species-name match, so the counts are approximate; the unconditioned version gives the same split):
+
+| move | carrier on field | used | rate | what its payoff is |
+|---|---|---|---|---|
+| Helping Hand | 5 | 3 | **60%** | the ally's damage — **HP** |
+| Protect | 42 | 22 | **52%** | damage not taken — **HP** |
+| Fake Out | 18 | 6 | **33%** | a turn denied — **HP** |
+| Wide Guard | 15 | 3 | 20% | team protection — positional |
+| Follow Me | 5 | 1 | 20% | redirection — positional |
+| Tailwind | 12 | 2 | 17% | speed order — positional |
+| **Rage Powder** | 11 | **0** | **0%** | redirection — positional |
+| **Trick Room** | 8 | **0** | **0%** | speed order — positional |
+
+Quick Guard, Ally Switch and Light Screen were never used at all.
+
+**The split is the evaluation, line for line.** Everything the search plays has a payoff that
+becomes **HP inside the simulation**; everything it ignores has a payoff that is **positional** and
+has no term in `evaluate()`. `grep -ci doubles src/genx/evaluate.rs` is **0**, and so is
+`grep -ciE 'switch|tempo|pivot'`. Trick Room, weather and terrain have **no term at all**; Tailwind
+is **7**, less than one Spikes layer; redirection is worth nothing.
+
+**`Rage Powder` at 0 for 11 is the cleanest single point in this study**: a move that exists purely
+to redirect, in a format built on redirection, never chosen once.
+
+**The same structure explains the switch behaviour** in the loss at
+`doubles_play_logs_gen6_run21_seatA/000`. `evaluate()` scores HP, alive, status and hazards for
+**every living party member, benched ones included**, and adds boosts / Substitute / Leech Seed /
+Confusion **only for bodies on the field**. So a switch is positionally free: on turn 1, with no
+boosts to surrender, switching costs literally nothing in eval terms, and the damage it invites
+exists only inside the simulation. That is why a turn-1 double switch scored 448 against 447 / 441
+/ 439 — the evaluation could not tell those four actions apart. **A related quirk falls out of the
+same loop: hazards are charged continuously to the whole team rather than on entry**, so Stealth
+Rock against six bodies is −60 every ply whether you switch or not, and cannot discourage switching
+at all.
+
+**Two caveats that belong with the table.** The per-move samples are small — Helping Hand is 3 of 5
+— so the **grouping** is the finding, not any individual rate. And the greedy column of the raw
+counts is uninformative, because that policy only reaches a status move when nothing damaging is
+legal.
+
+**This is the strongest evidence yet that the evaluation, not the search, is what caps gen 6 at
+67.1%**, and it names a cheap experiment nobody has run: add Trick Room, redirection and a real
+Tailwind weight to `evaluate.rs` and re-run this identical arm. The control, the pool and the
+transcripts all already exist.
+
 ## Backlog
 
 Recorded, not done. In the order they are worth doing.
