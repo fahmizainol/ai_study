@@ -138,10 +138,37 @@ index ee644cb..bbc18e4 100644
      }
      if (attacking_pkmn.ability == Abilities::MOLDBREAKER
 diff --git a/src/genx/choice_effects.rs b/src/genx/choice_effects.rs
-index d7fc3e1..9cd66f2 100644
+index d7fc3e1..989978c 100644
 --- a/src/genx/choice_effects.rs
 +++ b/src/genx/choice_effects.rs
-@@ -818,8 +818,12 @@ pub fn choice_after_damage_hit(
+@@ -773,7 +773,12 @@ pub fn choice_after_damage_hit(
+             }
+         }
+         Choices::KNOCKOFF => {
+-            let defender_active = defending_side.get_active();
++            // Run 15: was `get_active()` — slot 0 — while the instruction below stamps
++            // `def_pos.slot` and takes `current_item` from whatever this returns. Knocking a
++            // slot-1 body therefore tested slot 0's item, cleared slot 0 in place, named slot 1
++            // in the instruction, and on reverse planted SLOT 0's item on slot 1's body. Caught
++            // at the sole mutator as `GOTHITELLE NONE -> DIANCITE`.
++            let defender_active = defending_side.get_active_slot(def_pos.slot);
+             if defender_active.item_can_be_removed()
+                 && defender_active.item != Items::NONE
+                 && !hit_sub
+@@ -789,8 +794,10 @@ pub fn choice_after_damage_hit(
+             }
+         }
+         Choices::THIEF => {
+-            let attacker_active = attacking_side.get_active();
+-            let defender_active = defending_side.get_active();
++            // Run 15: same fault as KNOCKOFF above, on both bodies — the two instructions
++            // stamp `def_pos.slot` and `act_slot` while both reads were slot 0.
++            let attacker_active = attacking_side.get_active_slot(act_slot);
++            let defender_active = defending_side.get_active_slot(def_pos.slot);
+             if defender_active.item_can_be_removed()
+                 && defender_active.item != Items::NONE
+                 && attacker_active.item == Items::NONE
+@@ -818,8 +825,12 @@ pub fn choice_after_damage_hit(
              }
          }
          Choices::CLEARSMOG => {
@@ -155,7 +182,7 @@ index d7fc3e1..9cd66f2 100644
                  &mut instructions.instruction_list,
              );
          }
-@@ -1385,8 +1389,18 @@ pub fn choice_special_effect(
+@@ -1385,8 +1396,18 @@ pub fn choice_special_effect(
              }
          }
          Choices::HAZE => {
@@ -177,7 +204,7 @@ index d7fc3e1..9cd66f2 100644
          Choices::REST => {
              let electric_terrain_active = state.terrain_is_active(&Terrain::ELECTRICTERRAIN);
 diff --git a/src/genx/generate_instructions.rs b/src/genx/generate_instructions.rs
-index fa0676e..d3361a1 100644
+index fa0676e..acbae24 100644
 --- a/src/genx/generate_instructions.rs
 +++ b/src/genx/generate_instructions.rs
 @@ -328,30 +328,35 @@ fn generate_instructions_from_switch(
@@ -348,7 +375,24 @@ index fa0676e..d3361a1 100644
      // The boost lands on the user's own slot for User/UserSide, and on the move's
      // resolved target otherwise — which for an `Ally` target is the partner slot.
      // All slots are 0 in singles, so this is bit-for-bit identical there.
-@@ -1161,7 +1223,15 @@ fn get_instructions_from_heal(
+@@ -1131,7 +1193,15 @@ fn get_instructions_from_secondaries(
+                         } else {
+                             def_pos.slot
+                         };
+-                        let target_pkmn = state.get_side(&secondary_target_side_ref).get_active();
++                        // Run 15: this was `get_active()` — slot 0 — while the instruction
++                        // below stamps `secondary_target_slot` and `current_item` is read from
++                        // whatever this returns. With a slot-1 target that mutated slot 0 in
++                        // place, named slot 1 in the instruction, and recorded SLOT 0's item as
++                        // the one to restore, so reversing planted slot 0's item on slot 1's
++                        // body: `GOTHITELLE NONE -> DIANCITE`, caught at the sole mutator.
++                        let target_pkmn = state
++                            .get_side(&secondary_target_side_ref)
++                            .get_active_slot(secondary_target_slot);
+                         secondary_hit_instructions
+                             .instruction_list
+                             .push(Instruction::ChangeItem(ChangeItemInstruction::new(
+@@ -1161,7 +1231,15 @@ fn get_instructions_from_heal(
  ) {
      let act_slot = state.actor_slot();
      let def_pos = state.defender_position(attacking_side_reference);
@@ -365,7 +409,7 @@ index fa0676e..d3361a1 100644
      // User/UserSide heals the acting slot; an `Ally`/`Opponent` heal lands on the
      // move's resolved target (the partner for an ally-target move). Slot 0 in singles.
      let target_slot = match heal.target {
-@@ -1711,6 +1781,65 @@ fn terastallized_base_power_floor(
+@@ -1711,6 +1789,65 @@ fn terastallized_base_power_floor(
      }
  }
  
@@ -431,7 +475,7 @@ index fa0676e..d3361a1 100644
  fn before_move(
      state: &mut State,
      choice: &mut Choice,
-@@ -1728,28 +1857,83 @@ fn before_move(
+@@ -1728,28 +1865,83 @@ fn before_move(
      modify_choice(state, choice, defender_choice, attacking_side);
  
      ability_modify_attack_being_used(state, choice, defender_choice, attacking_side);
@@ -529,7 +573,7 @@ index fa0676e..d3361a1 100644
              choice.remove_effects_for_protect();
              if choice.crash.is_some() {
                  choice.accuracy = 0.0;
-@@ -1785,8 +1969,13 @@ fn before_move(
+@@ -1785,8 +1977,13 @@ fn before_move(
          }
      }
  
@@ -545,7 +589,7 @@ index fa0676e..d3361a1 100644
          .get_active_slot_immutable(def_slot).volatile_statuses
          .contains(&PokemonVolatileStatus::PROTECT)
          || defending_side
-@@ -2136,18 +2325,39 @@ fn redirect_target(
+@@ -2136,18 +2333,39 @@ fn redirect_target(
      let target_side_ref = nominal.side;
      let target_side = state.get_side_immutable(&target_side_ref);
  
@@ -595,7 +639,7 @@ index fa0676e..d3361a1 100644
          }
      }
  
-@@ -2156,6 +2366,13 @@ fn redirect_target(
+@@ -2156,6 +2374,13 @@ fn redirect_target(
          return ability_redirect.unwrap_or(nominal);
      }
  
@@ -609,7 +653,7 @@ index fa0676e..d3361a1 100644
      let attacker_is_grass =
          attacker.types.0 == PokemonType::GRASS || attacker.types.1 == PokemonType::GRASS;
      let attacker_ignores_powder = attacker_is_grass || attacker.ability == Abilities::OVERCOAT;
-@@ -2264,6 +2481,13 @@ pub fn generate_instructions_from_move(
+@@ -2264,6 +2489,13 @@ pub fn generate_instructions_from_move(
  
      state.apply_instructions(&incoming_instructions.instruction_list);
  
@@ -623,7 +667,7 @@ index fa0676e..d3361a1 100644
      let side = state.get_side(&attacking_side);
      if side
          .get_active_slot(acting_slot).volatile_statuses
-@@ -2277,6 +2501,10 @@ pub fn generate_instructions_from_move(
+@@ -2277,6 +2509,10 @@ pub fn generate_instructions_from_move(
                          .unwrap()
                          .clone();
                      choice.move_index = last_used_move;
@@ -634,7 +678,7 @@ index fa0676e..d3361a1 100644
                  }
              }
              _ => panic!("Encore should not be active when last used move is not a move"),
-@@ -2547,12 +2775,18 @@ pub fn generate_instructions_from_move(
+@@ -2547,12 +2783,18 @@ pub fn generate_instructions_from_move(
          return;
      }
      choice_special_effect(state, choice, &attacking_side, &mut incoming_instructions);
@@ -654,7 +698,7 @@ index fa0676e..d3361a1 100644
          &mut incoming_instructions,
          &mut final_instructions,
      );
-@@ -2599,6 +2833,20 @@ pub fn generate_instructions_from_move(
+@@ -2599,6 +2841,20 @@ pub fn generate_instructions_from_move(
          }
      }
  
@@ -675,7 +719,7 @@ index fa0676e..d3361a1 100644
      // Doubles spread moves (Earthquake, Rock Slide, …) hit every living adjacent
      // target. Resolve the damage against each target in turn (reusing the normal
      // per-target damage path, which already applies the 0.75x spread reduction in
-@@ -2611,10 +2859,62 @@ pub fn generate_instructions_from_move(
+@@ -2611,10 +2867,62 @@ pub fn generate_instructions_from_move(
          if targets.len() > 1 {
              for target in targets {
                  state.target_position = target;
@@ -739,7 +783,7 @@ index fa0676e..d3361a1 100644
                      DamageRolls::Max,
                  ) {
                      Some((max_damage_dealt, _)) => (max_damage_dealt as f32 * 0.925) as i16,
-@@ -3893,25 +4193,45 @@ fn add_end_of_turn_instructions(
+@@ -3893,25 +4201,45 @@ fn add_end_of_turn_instructions(
              PokemonVolatileStatus::ENDURE,
          ];
  
@@ -801,7 +845,7 @@ index fa0676e..d3361a1 100644
              incoming_instructions
                  .instruction_list
                  .push(Instruction::ChangeSideCondition(
-@@ -4286,11 +4606,23 @@ fn handle_both_moves(
+@@ -4286,11 +4614,23 @@ fn handle_both_moves(
      }
  }
  
@@ -828,7 +872,7 @@ index fa0676e..d3361a1 100644
  
      // assumes that you can mega-evolve if this function is called
      let mega_evolve_data = active_pkmn
-@@ -4443,10 +4775,10 @@ pub fn generate_instructions_from_move_pair(
+@@ -4443,10 +4783,10 @@ pub fn generate_instructions_from_move_pair(
              ));
      }
      if s1_mega {
@@ -841,7 +885,7 @@ index fa0676e..d3361a1 100644
      }
  
      modify_choice_priority(&state, &SideReference::SideOne, &mut side_one_choice);
-@@ -4578,10 +4910,19 @@ pub fn generate_instructions_from_move_pair(
+@@ -4578,10 +4918,19 @@ pub fn generate_instructions_from_move_pair(
  /// One actor in a turn: a battle position plus the fully-built `Choice` it will
  /// execute, and the position its move primarily targets (used to find the
  /// "defender choice" the way the singles path passes the opposing side's choice).
@@ -861,7 +905,7 @@ index fa0676e..d3361a1 100644
      choice: Choice,
      target: Option<BattlePosition>,
  }
-@@ -4934,12 +5275,44 @@ fn resolve_ordered_actors(
+@@ -4934,12 +5283,44 @@ fn resolve_ordered_actors(
              .unwrap_or_default();
  
          let mut next: Vec<StateInstructions> = Vec::with_capacity(work.len());
@@ -911,7 +955,7 @@ index fa0676e..d3361a1 100644
              let mut choice = actor.choice.clone();
              choice.first_move = idx == 0;
              generate_instructions_from_move(
-@@ -5053,10 +5426,12 @@ pub fn generate_instructions_from_actions(
+@@ -5053,10 +5434,12 @@ pub fn generate_instructions_from_actions(
                      ));
              }
              if mega {
