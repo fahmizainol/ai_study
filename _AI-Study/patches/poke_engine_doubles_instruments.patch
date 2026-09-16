@@ -1,0 +1,106 @@
+--- a/src/state.rs
++++ b/src/state.rs
+@@ -1633,6 +1633,28 @@
+         s
+     }
+ }
++// ---------------------------------------------------------------------------------------
++// Diagnostic instruments (poke_engine_doubles_instruments.patch). All OFF unless the matching
++// environment variable is set, and each reads it once, so an un-set build pays one atomic load
++// per call and prints nothing. Runs 15-17 each rebuilt these by hand; they live here now.
++//
++//   PE_DBG_BOOST_RANGE=1        report every boost write that leaves +-6 (runs 16, 17)
++//   PE_DBG_ITEM=1               report every item write with the body it lands on (run 15)
++//   PE_DBG_CTOR=<InstrName>     report every construction of that instruction WITH ITS SOURCE
++//                               SITE -- the mutator names the victim, only the constructor
++//                               names the culprit (runs 15, 16, 17)
++//
++// The PAIR is the method: mutator to prove a bad write exists, constructor to find who asked.
++// ---------------------------------------------------------------------------------------
++pub fn dbg_boost_range() -> bool {
++    static V: std::sync::OnceLock<bool> = std::sync::OnceLock::new();
++    *V.get_or_init(|| std::env::var("PE_DBG_BOOST_RANGE").is_ok())
++}
++pub fn dbg_item() -> bool {
++    static V: std::sync::OnceLock<bool> = std::sync::OnceLock::new();
++    *V.get_or_init(|| std::env::var("PE_DBG_ITEM").is_ok())
++}
++
+ impl State {
+     pub fn battle_is_over(&self) -> f32 {
+         //  0 if battle is not over
+@@ -2043,6 +2065,24 @@
+         stat: &PokemonBoostableStat,
+         amount: i8,
+     ) {
++        if dbg_boost_range() {
++            let before = {
++                let a = self.get_side_immutable(side_ref).get_active_slot_immutable(slot);
++                match stat {
++                    PokemonBoostableStat::Attack => a.attack_boost,
++                    PokemonBoostableStat::Defense => a.defense_boost,
++                    PokemonBoostableStat::SpecialAttack => a.special_attack_boost,
++                    PokemonBoostableStat::SpecialDefense => a.special_defense_boost,
++                    PokemonBoostableStat::Speed => a.speed_boost,
++                    PokemonBoostableStat::Evasion => a.evasion_boost,
++                    _ => a.accuracy_boost,
++                }
++            };
++            if (before + amount) > 6 || (before + amount) < -6 {
++                eprintln!("DBG boost OUT OF RANGE slot={} stat={:?} {} {:+} -> {}",
++                          slot, stat, before, amount, before + amount);
++            }
++        }
+         let active = self.get_side(&side_ref).get_active_slot(slot);
+         match stat {
+             PokemonBoostableStat::Attack => active.attack_boost += amount,
+@@ -2133,6 +2173,14 @@
+     }
+ 
+     fn change_item(&mut self, side_reference: &SideReference, slot: u8, new_item: Items) {
++        if dbg_item() {
++            let sref = match side_reference { SideReference::SideOne => 0u8, _ => 1u8 };
++            let side_i = self.get_side_immutable(side_reference);
++            let idx = side_i.active_indices[slot as usize];
++            let body = side_i.get_active_slot_immutable(slot);
++            eprintln!("DBG change_item side={} slot={} party_idx={:?} body={:?} {:?} -> {:?}",
++                      sref, slot, idx, body.id, body.item, new_item);
++        }
+         self.get_side(side_reference).get_active_slot(slot).item = new_item;
+     }
+ 
+--- a/src/instruction.rs
++++ b/src/instruction.rs
+@@ -16,12 +16,32 @@
+ ///
+ /// The matching struct definition must declare the field as:
+ /// `#[cfg(feature = "doubles")] pub slot: u8,`
++/// `PE_DBG_CTOR=<InstructionName>` tags every construction of that instruction with its SOURCE
++/// SITE via `#[track_caller]`. One env read, matched against `stringify!` of the type the
++/// `slotted_instruction!` macro is generating, so a single hook covers every slotted instruction
++/// in the engine at once. Found `choice_effects.rs:781` (Knock Off, run 15) and
++/// `abilities.rs:1531` (Intrepid Sword, run 17) with no source reading at all.
++pub fn dbg_ctor_name() -> &'static str {
++    static V: std::sync::OnceLock<String> = std::sync::OnceLock::new();
++    V.get_or_init(|| std::env::var("PE_DBG_CTOR").unwrap_or_default()).as_str()
++}
++
+ macro_rules! slotted_instruction {
+     ($name:ident { $($field:ident : $ty:ty),* $(,)? }) => {
+         impl $name {
+             #[allow(clippy::too_many_arguments)]
+             #[inline]
++            #[track_caller]
+             pub fn new(side_ref: SideReference, slot: u8, $($field: $ty),*) -> Self {
++                #[cfg(feature = "doubles")]
++                {
++                    if crate::instruction::dbg_ctor_name() == stringify!($name) {
++                        let fields: Vec<String> = vec![$(format!("{:?}", $field)),*];
++                        eprintln!("DBG ctor {} slot={} fields={} at {}",
++                                  stringify!($name), slot, fields.join(","),
++                                  std::panic::Location::caller());
++                    }
++                }
+                 #[cfg(not(feature = "doubles"))]
+                 let _ = slot;
+                 Self {

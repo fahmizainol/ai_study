@@ -2119,8 +2119,32 @@ shape will read as a mechanics disagreement when it is a roll-model one.
 - `showdown_teams.js` holds the two gen 5 teams the others share.
 - `ruby ../tools/search_bench.rb` for the Ruby projection numbers.
 
-For PR #10: `git clone --single-branch --branch main-doubles --depth 6
-https://github.com/0neCr1t/engine` (or `git fetch origin refs/pull/10/head` against
+**For PR #10, one command**: `tools/build_doubles_engine.sh [target] [gen] [--instruments]`
+clones `main-doubles` at `bf863be`, applies this study's three patches (plus the instruments
+on request), and builds the wheel into a venv — **38 seconds from nothing**. The scratchpad
+holding the clone, venv and wheel has been wiped mid-project three times now (runs 12 and 17,
+costing a regenerated patch and an hour respectively), which is why this is a script and not a
+paragraph. Everything it needs is tracked.
+
+**The instruments are a patch now, not something to retype.**
+`patches/poke_engine_doubles_instruments.patch` is inert unless an environment variable is set
+at *run* time, so one build serves both measurement and diagnosis:
+
+| variable | what it reports | what it found |
+|---|---|---|
+| `PE_DBG_BOOST_RANGE=1` | every boost write leaving ±6 | Belly Drum (run 16); Intrepid Sword and Dauntless Shield (run 17) |
+| `PE_DBG_ITEM=1` | every item write, with the body it lands on | Knock Off (run 15) |
+| `PE_DBG_CTOR=<InstrName>` | every construction of that instruction, tagged with its **source site** | `choice_effects.rs:781`, `abilities.rs:1531` |
+
+**Use them as a pair — that is the method three runs converged on.** The mutator proves a bad
+write exists and names the **victim**; only the constructor names the **culprit**. Reaching for
+the mutator alone is what gave runs 14 and 15 their wrong hypotheses, and `reset_boosts` looked
+guilty in mutator output twice while being innocent both times. `PE_DBG_CTOR` works for *any*
+slotted instruction because the hook lives in the `slotted_instruction!` macro. Verified inert:
+0 `DBG` lines with nothing set, 274,981 with `PE_DBG_CTOR=BoostInstruction`.
+
+Raw equivalent, if the script is unavailable: `git clone --single-branch --branch main-doubles
+--depth 6 https://github.com/0neCr1t/engine` (or `git fetch origin refs/pull/10/head` against
 upstream), then `cargo test --features doubles,gen5` and `cargo test --features gen5` for
 the two rows above. Nothing in it is installed and nothing in the study depends on it.
 
