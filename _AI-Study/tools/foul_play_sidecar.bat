@@ -7,9 +7,9 @@ REM Data\ai_foulplay_state.json and the sidecar answers Data\ai_foulplay_reply.t
 REM so crossing the WSL boundary costs nothing but the file. That is the same
 REM arrangement the 0.8.0 measurement ran on (540 battles, ~10 ms a decision).
 REM
-REM   foul_play_sidecar.bat                      the campaign copy, gen 5 wheel
+REM   foul_play_sidecar.bat                      the campaign copy, gen 6 wheel
 REM   foul_play_sidecar.bat "C:\path\to\game"    another copy
-REM   foul_play_sidecar.bat "" gen6              the gen 6 wheel
+REM   foul_play_sidecar.bat "" gen5              the gen 5 wheel
 REM
 REM Start this BEFORE Game.exe: the first decision waits 3 s for a reply and then
 REM hands the battle to the rule engine. Close the window to stop it.
@@ -28,7 +28,7 @@ set "GAME=%~1"
 if "%GAME%"=="" set "GAME=%~dp0..\..\Realidea V4.1"
 for %%i in ("%GAME%") do set "GAME=%%~fi"
 set "GEN=%~2"
-if "%GEN%"=="" set "GEN=gen5"
+if "%GEN%"=="" set "GEN=gen6"
 
 if not exist "%GAME%\Data" (
   echo ERROR: no Data folder in "%GAME%".
