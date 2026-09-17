@@ -171,6 +171,17 @@ EARLY_MOVES = 0
 # almost no species; a pick seed moves 32-41 of 54 species.
 SET_SEED = 0
 PICK_SEED = 0
+# How hard a fight is pushed off a family another fight already has, in AFFINITY_BAND
+# units per prior use. Nothing else in either generator counts species ACROSS fights:
+# `dedupe` is about move roles and team_shape's worst_shared is type overlap inside
+# one team, so before this a hazards floor asked 27 fights the same question and got
+# Blissey 27 times. One band per use means "prefer someone new among the ones near
+# enough" -- a body a whole band better still wins, and nothing is ever banned.
+#
+# A penalty rather than a reroll on purpose: it keeps the tail's vote, so the second
+# fight gets the second-BEST body for the role instead of a random one. 0 restores
+# the one-fight-at-a-time behaviour every shipped team before this was built with.
+REPEAT_BAND = 1
 # Per-fight overrides a person made on a Builder card, keyed by fight:
 #   {"keep": {SPECIES: bool}, "sets": {SPECIES: [label, ...]}}
 # `keep` is a TRISTATE by omission -- absent means "whatever this fight does by
@@ -1308,6 +1319,10 @@ def assemble(spec):
                         shipped
       protected         species keep_drop will never spend, whatever the budget
       dedupe            strip moves that duplicate an already-capped role
+      seen              {family root: how many OTHER fights already have it}, which
+                        pushes a repeat down the ranking by REPEAT_BAND bands per
+                        use. Absent means this fight is built alone, which is what
+                        every caller did before Boss Studio built all 27 at once
       ace_level         promote the strongest to this level, or None
       mega_ok           past the item/mega unlock. Decides the item pool and the
                         stone ban with it -- they are the same question.
@@ -1337,6 +1352,10 @@ def assemble(spec):
     off = spec.get("offence")
     sset = spec.get("set_seed")
     pseed = spec.get("pick_seed")
+    # Families the fights built BEFORE this one already claimed. Read-only here: the
+    # caller that owns the loop owns the tally, so assemble() stays a pure function
+    # of its spec and a fight can still be rebuilt on its own.
+    seen = spec.get("seen") or {}
     # Which published-set FORMATS this build may draw from. A parameter all the
     # way down rather than a global, because usable_sets() is lru_cached.
     fmts = frozenset(spec.get("set_formats") or ()) or None
@@ -1412,7 +1431,15 @@ def assemble(spec):
             return spec["rank"](state, tail)
 
         def key(n):
-            gap = abs(projected(n) - deficit())
+            # The repeat penalty rides INSIDE the distance, for the same reason the
+            # seed's jitter does: every branch below either compares `gap` directly
+            # or buckets it by AFFINITY_BAND, so charging a repeat in band units
+            # costs it exactly one bucket here and one band's worth of distance
+            # there. Adding it as its own leading term instead would make ANY unused
+            # body beat a used one, however far off target -- a ban, not a
+            # preference.
+            gap = (abs(projected(n) - deficit())
+                   + AFFINITY_BAND * REPEAT_BAND * seen.get(root(n), 0))
             if not pseed:
                 if mode:
                     return (gap // AFFINITY_BAND, -species_affinity(n)) + tail(n)
@@ -1774,12 +1801,28 @@ def assemble(spec):
     return {"team": team, "roles": have, "notes": notes, "band": (lo, hi)}
 
 
-def make_gym(idx):
+def claim(seen, team):
+    """Count a built team's families into a cross-fight tally, in place.
+
+    Keyed by FAMILY, not species: a second fight reaching for Chansey where the
+    first took Blissey is the repetition players actually see. Engine-resolved
+    starter slots carry no species anyone chose, so they claim nothing."""
+    for mon in team:
+        if mon["species"] in _sp:
+            key = root(mon["species"])
+            seen[key] = seen.get(key, 0) + 1
+    return seen
+
+
+def make_gym(idx, seen=None):
     """Build one gym team. idx is the badge count (0 = gym 1, 8 = Champion).
 
     ARCHETYPE[idx] and MODE[idx] are read HERE rather than captured at import, so a
     caller that wants to try a different plan -- boss_diagnostic.matrix,
-    fight_context.score, boss_studio -- swaps the global and calls this."""
+    fight_context.score, boss_studio -- swaps the global and calls this.
+
+    `seen` is the running tally from claim(); pass it to build the nine as a set that
+    does not repeat itself, omit it to build this one alone."""
     _keep, _sets = picks_for(gym_id(idx))
     cap = CAPS[idx]
     leader = cap["trainer"]
@@ -1823,7 +1866,14 @@ def make_gym(idx):
         # own evidence is held back.
         "keep_drop": KEEP_DROP, "keep_test": keep_filter(_keep),
         "set_formats": SET_FORMATS, "early_moves": EARLY_MOVES,
-        "set_seed": SET_SEED or None, "pick_seed": PICK_SEED or None,
+        "set_seed": SET_SEED or None,
+        # Salted with the fight, because the rng inside ranked() is keyed
+        # "{seed}:{species}" -- so an UNSALTED seed gives every fight the same
+        # perturbation and rerolls who everybody's favourite is, never that they
+        # share one. The salt is what makes a reroll vary the nine against each
+        # other; seed 0 still means "no jitter, best-ranked body wins".
+        "pick_seed": f"{PICK_SEED}:{gym_id(idx)}" if PICK_SEED else None,
+        "seen": seen,
         "protected": [n for n in originals if mode_evidence(n, mode)],
     })
     return {"idx": idx, "cap": cap, "leader": leader, "theme": theme, "level": level,
@@ -1916,7 +1966,14 @@ def main(argv):
         out_path = args[i + 1]
         del args[i:i + 2]
 
-    gyms = [make_gym(i) for i in range(len(CAPS))]
+    # One tally down the nine, so gym 4 knows what gyms 1-3 already took. Boss Studio
+    # carries the same tally on through the eighteen trainers; this CLI writes only
+    # the gym file, so its tally can only span what it writes.
+    seen, gyms = {}, []
+    for i in range(len(CAPS)):
+        gym = make_gym(i, seen)
+        claim(seen, gym["team"])
+        gyms.append(gym)
     print(preview(gyms))
     for g in gyms:
         if g["leader"] in args or g["cap"]["next_battle"] in args:

@@ -207,7 +207,7 @@ def fight_band(battle):
     return party_levels, ranked[-1], median, G.stage_of(median), how
 
 
-def make_trainer(battle, plan=None):
+def make_trainer(battle, plan=None, seen=None):
     band = fight_band(battle)
     if band is None:
         return None
@@ -258,7 +258,13 @@ def make_trainer(battle, plan=None):
         # of their own fights are held back on top of the mode's evidence.
         "keep_drop": G.KEEP_DROP, "keep_test": G.keep_filter(keep),
         "set_formats": G.SET_FORMATS, "early_moves": G.EARLY_MOVES,
-        "set_seed": G.SET_SEED or None, "pick_seed": G.PICK_SEED or None,
+        "set_seed": G.SET_SEED or None,
+        # Salted with the fight -- see make_gym. A rival needs it more than a gym
+        # does: nine gyms are pulled apart by nine different themes, and these
+        # eighteen pass theme=None, so an unsalted seed leaves them identical.
+        "pick_seed": (f"{G.PICK_SEED}:{fight_id(battle)}"
+                      if G.PICK_SEED else None),
+        "seen": seen,
         "set_filter": sets_,
         "protected": ([m["species"] for m in battle["party"]
                        if G.root(m["species"]) in recurring(battle["type"])]
@@ -332,9 +338,14 @@ def main(argv):
 
     results, records = [], []
     type_ids = G._type_ids()
+    # One tally down the eighteen -- see the same loop in generate_bosses.main().
+    # This CLI cannot see the gym teams, so a family can still be shared with a gym;
+    # Boss Studio builds all 27 against one tally and does not have that seam.
+    seen = {}
     for b in load_fights():
-        r = make_trainer(b)
+        r = make_trainer(b, seen=seen)
         if r:
+            G.claim(seen, r["team"])
             results.append(r)
 
     print(f'{"trainer":10}{"map":>5}{"lv":>9}{"stage":>7}{"mean":>6}{"tgt":>5}{"gap":>6}'

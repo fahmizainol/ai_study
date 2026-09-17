@@ -110,6 +110,16 @@ SCALARS = {
                   "nearest body. Only the 35 GENERATED slots move; the dev's own "
                   "roster, the type theme and the band all still hold. Costs about "
                   "2 BST of mean deviation for a different team every notch"),
+    "REPEAT_BAND": ("int", 0, 4, 1,
+                    "How hard a fight is pushed off a family an EARLIER fight "
+                    "already took, in eBST bands per use. 0 builds each fight as if "
+                    "it were the only one, which is how every team here was made "
+                    "before this existed -- and why a hazards floor answered "
+                    "Blissey in 7 of 27 fights and Florges in 9. At 1 the 27 field "
+                    "124 distinct species instead of 105, for about 4 eBST of extra "
+                    "mean deviation. Frozen fights claim first, so a team "
+                    "you pinned by hand keeps its species and the rest work around "
+                    "it"),
     "UBER_FROM": ("int", 0, 9, 1, "badge from which Ubers are legal"),
     "LEGEND_FROM": ("int", 0, 9, 1,
                     "badge from which a GENERATED pick may be a legendary or a "
@@ -137,9 +147,11 @@ GROUPS = [
     ("team", ["TEAM_SIZE", "ON_THEME_MIN", "CHASE", "MIN_CORR", "SET_FORMATS",
               "KEEP_DROP", "KEEP_NEED_SET", "KEEP_MIN_BAND"]),
     # A third question, and the reason these are not filed under "team": every other
-    # knob here says what a team must BE, and these two only say "give me a different
-    # one". Both are off at 0, and off is the shipped generator byte-for-byte.
-    ("reroll", ["SET_SEED", "PICK_SEED"]),
+    # knob here says what a team must BE, and these three only say "give me a
+    # different one". All are off at 0. The two seeds ship off; REPEAT_BAND ships at
+    # 1, because "do not repeat what the last fight did" is a default worth having
+    # and 0 is there to get the old teams back.
+    ("reroll", ["SET_SEED", "PICK_SEED", "REPEAT_BAND"]),
 ]
 assert {k for _, ks in GROUPS for k in ks} == set(SCALARS) | {
     "level_mode", "SET_FORMATS", "per_fight"}
@@ -639,8 +651,25 @@ def run(over):
         frozen = _thaw(over.get("FROZEN"))
         formats = battle_formats(over)
         orders = over.get("ORDER") if isinstance(over.get("ORDER"), dict) else {}
-        gyms = [frozen[f"g{i}"] if f"g{i}" in frozen else G.make_gym(i)
-                for i in range(9)]
+        # One variety tally across all 27 fights: each build is ranked knowing what
+        # the fights before it already took, so a hazards floor stops answering
+        # "Blissey" twenty-seven times. See generate_bosses.REPEAT_BAND.
+        #
+        # FROZEN claims first, and that is the whole reason this is a tally rather
+        # than a reroll: a fight you pinned by hand owns its species outright, and
+        # the generator routes the rest around it instead of competing with it.
+        # A frozen team claims what it was frozen WITH -- a mon you have since
+        # unticked still holds its family, which only ever buys more variety.
+        seen = {}
+        for build in frozen.values():
+            G.claim(seen, build["team"])
+        gyms = []
+        for i in range(9):
+            gym = frozen.get(f"g{i}")
+            if gym is None:
+                gym = G.make_gym(i, seen)
+                G.claim(seen, gym["team"])
+            gyms.append(gym)
         for i, gym in enumerate(gyms):
             if f"g{i}" in frozen:
                 _edit_frozen(gym, G.gym_id(i), orders.get(f"g{i}"))
@@ -668,8 +697,13 @@ def run(over):
         trainers, trainer_records, tbuilds = [], [], {}
         for i, b in enumerate(T.load_fights()):
             pick = tplans.get(i)
-            got = frozen.get(f"t{i}") or T.make_trainer(
-                b, (pick[0] or None, pick[1] or None) if pick else None)
+            got = frozen.get(f"t{i}")
+            if got is None:
+                got = T.make_trainer(
+                    b, (pick[0] or None, pick[1] or None) if pick else None,
+                    seen=seen)
+                if got:
+                    G.claim(seen, got["team"])
             if got:
                 if f"t{i}" in frozen:
                     _edit_frozen(got, T.fight_id(b), orders.get(f"t{i}"))

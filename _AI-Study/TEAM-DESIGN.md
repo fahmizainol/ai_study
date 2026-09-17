@@ -870,6 +870,38 @@ modes       10 of 27 fights, unchanged in count: sun 5, trickroom 4, sand 1, sno
 validator   27 teams, 0 errors, 13 warnings (the pre-existing 13)
 ```
 
+### Repetition across fights
+
+Every knob above shapes ONE fight. Nothing counted a species across fights — `dedupe`
+is about move roles, `worst_shared` is type overlap inside a team — so 27 fights put
+the same question to the same pool and got the same answer: a `hazards` floor filled
+by BLISSEY in 7 of them, `power`/`recovery` by FLORGES in 9. Gyms hid it because nine
+type themes pull them apart; the eighteen named trainers pass `theme: None` and had
+nothing pulling them apart at all.
+
+`generate_bosses.claim()` keeps a tally of families already used, which `assemble()`
+charges at `REPEAT_BAND` × `AFFINITY_BAND` eBST per prior use — inside the distance
+term, so a body a whole band better still wins and nothing is ever banned. A penalty
+rather than a reroll keeps the tail's vote: the second fight gets the second-*best*
+body for the role, not a random one.
+
+The caller owns the tally, so `assemble()` stays a pure function of its spec and
+`fight_context`/`boss_diagnostic` still score a fight on its own. Boss Studio is the
+only caller that sees all 27; the two CLIs can only tally what they write. **Frozen
+fights claim first** — a fight pinned by hand owns its species and the generator
+routes around it.
+
+```
+REPEAT_BAND   0            1 (ships)     3
+distinct      105          124           130      species across the 27 fights
+worst repeat  FLORGES 9    3             3        (at 1, the 3s are dev-chosen)
+mean eBST     -27.6        -31.6                  gap to target; floors met either way
+```
+
+`PICK_SEED` is salted with the fight id for the same reason. The rng in `ranked()` is
+keyed `"{seed}:{species}"`, so an unsalted seed perturbs every fight identically — it
+rerolls *who everyone's favourite is*, never *that they share one*.
+
 ## 7. Files
 
 | file | what |

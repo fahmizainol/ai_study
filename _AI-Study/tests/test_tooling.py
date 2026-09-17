@@ -998,5 +998,87 @@ class FoulPlaySidecarTest(unittest.TestCase):
         self.assertIsNotNone(by_move[("out", "SHADOWPUNCH")]["diff"])
 
 
+class CrossFightVarietyTest(unittest.TestCase):
+    """A family another fight already took is ranked one AFFINITY_BAND worse.
+
+    Nothing counted species across fights before this: `dedupe` is about move roles
+    and team_shape's worst_shared is type overlap inside one team. So 27 fights asked
+    a hazards floor the same question and got Blissey 7 times and Florges 9."""
+
+    @classmethod
+    def setUpClass(cls):
+        sys.path.insert(0, str(STUDY / "tools"))
+        import generate_bosses, boss_studio
+        cls.G, cls.BS = generate_bosses, boss_studio
+
+    def setUp(self):
+        self.addCleanup(setattr, self.G, "REPEAT_BAND", self.G.REPEAT_BAND)
+
+    @staticmethod
+    def families(build, G):
+        return {G.root(m["species"]) for m in build["team"] if m["species"] in G._sp}
+
+    def test_band_zero_is_exactly_building_the_fight_alone(self):
+        """The escape hatch has to be real: every team this repo shipped before the
+        tally existed was built one fight at a time, so band 0 must reproduce it."""
+        self.G.REPEAT_BAND = 0
+        alone = self.G.make_gym(3)
+        # A tally claiming this fight's own picks -- which would move it at band 1.
+        loaded = self.G.claim({}, alone["team"])
+        self.assertEqual([m["species"] for m in alone["team"]],
+                         [m["species"] for m in self.G.make_gym(3, loaded)["team"]])
+
+    def test_a_taken_family_is_given_up_when_something_else_is_near_enough(self):
+        self.G.REPEAT_BAND = 1
+        alone = self.G.make_gym(3)
+        taken = self.families(alone, self.G)
+        after = self.families(self.G.make_gym(3, self.G.claim({}, alone["team"])),
+                              self.G)
+        self.assertTrue(taken - after,
+                        "every family was re-picked despite each being charged a band")
+
+    def test_claim_counts_families_not_spellings(self):
+        """Blissey and Chansey are one claim: a second fight reaching for the
+        pre-evolution is the same repetition a player sees."""
+        seen = self.G.claim({}, [{"species": "BLISSEY"}, {"species": "CHANSEY"},
+                                 {"species": "owenpoke2"}])
+        self.assertEqual({self.G.root("BLISSEY"): 2}, seen,
+                         "an engine-resolved starter slot claims nothing")
+
+    def test_the_pick_seed_is_salted_per_fight(self):
+        """The rng inside ranked() is keyed "{seed}:{species}", so an unsalted seed
+        perturbs every fight identically and rerolls who everyone's favourite is
+        rather than that they share one."""
+        self.addCleanup(setattr, self.G, "PICK_SEED", self.G.PICK_SEED)
+        seeds = []
+        real = self.G.assemble
+        def spy(spec):
+            seeds.append(spec.get("pick_seed"))
+            return real(spec)
+        self.G.assemble = spy
+        self.addCleanup(setattr, self.G, "assemble", real)
+        self.G.PICK_SEED = 0
+        self.G.make_gym(0), self.G.make_gym(1)
+        self.assertEqual([None, None], seeds, "seed 0 still means no jitter at all")
+        seeds.clear()
+        self.G.PICK_SEED = 4
+        self.G.make_gym(0), self.G.make_gym(1)
+        self.assertEqual(2, len(set(seeds)), "two fights, two seeds")
+
+    def test_frozen_fights_claim_their_families_before_anything_is_built(self):
+        """A fight pinned by hand owns its species outright and the generator routes
+        around it -- which is why this is a tally and not a reroll."""
+        self.G.REPEAT_BAND = 1
+        frozen = self.BS.set_frozen({}, ["g0"], True)["settings"]
+        seen = {}
+        for build in self.BS._thaw(frozen["FROZEN"]).values():
+            self.G.claim(seen, build["team"])
+        self.assertTrue(seen, "freezing gym 1 claimed nothing")
+        got = self.BS.run(frozen)
+        gym1 = {m["species"] for m in got["records"][0]["mons"]}
+        self.assertEqual(gym1, {m["species"] for m in
+                                self.BS.run({})["records"][0]["mons"]},
+                         "the frozen fight itself must not move")
+
 if __name__ == "__main__":
     unittest.main()
