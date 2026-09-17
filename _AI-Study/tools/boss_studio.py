@@ -2009,9 +2009,15 @@ button.tiny{padding:2px 7px;font-size:11px;font-weight:500}
     <div class="sub" style="margin-top:12px">freezing pins a fight to the team it is
       showing now &mdash; nothing rerolls it, and a preset carrying it rebuilds the
       same teams anywhere. Freeze what you have settled, keep rerolling the rest.</div>
-    <div class="exp"><button class="ghost" id="frzall">Freeze all 27</button>
-      <button class="ghost" id="frznone">Unfreeze all</button>
-      <button class="ghost" id="unpin">Unpin all</button></div>
+    <div class="exp">freeze
+      <button class="ghost" id="frzall">all 27</button>
+      <button class="ghost" id="frzgyms">gyms</button>
+      <button class="ghost" id="frztr">trainers</button></div>
+    <div class="exp">unfreeze
+      <button class="ghost" id="frznone">all</button>
+      <button class="ghost" id="thawgyms">gyms</button>
+      <button class="ghost" id="thawtr">trainers</button></div>
+    <div class="exp"><button class="ghost" id="unpin">Unpin all</button></div>
     <div id="frzmsg"></div>
   </fieldset>
 </div>
@@ -2463,9 +2469,13 @@ async function toggleFreeze(keys,on){
   if(d.error){ if(box) box.innerHTML='<span class="bad">'+esc(d.error)+'</span>'; return; }
   setAll(d.settings);
   await go();
-  if(box) box.innerHTML=d.count
-    ?`<span class="ok">${d.count} of 27 fights frozen</span>`
-    :'<span class="warn">nothing frozen — every fight regenerates</span>';
+  if(box){
+    const g=(d.frozen||[]).filter(k=>k[0]==='g').length;
+    const t=(d.frozen||[]).filter(k=>k[0]==='t').length;
+    box.innerHTML=d.count
+      ?`<span class="ok">frozen: ${g} gyms, ${t} trainers</span>`
+      :'<span class="warn">nothing frozen — every fight regenerates</span>';
+  }
 }
 const teamCard=(g,title,was,pick,fk,i)=>{
   const gap=g.ebst-g.target, j=g.judge;
@@ -3106,8 +3116,18 @@ async function init(){
       ?` <span class="sub">${loose.length} were not frozen and may have rerolled</span>`:'');
     go();
   };
+  // Half at a time, because the two halves are settled at different times: the
+  // gyms are a curve you tune together, a rival is one fight you are done with.
+  // t<slot> keys come from the cards rather than a count -- make_trainer can decline
+  // a fight, so the slots present are not always 0..17.
+  const gymKeys=()=>[...Array(9).keys()].map(i=>'g'+i);
+  const trainerKeys=()=>((lastBuild&&lastBuild.trainers)||[]).map(t=>'t'+t.slot);
   $('frzall').onclick=()=>toggleFreeze(null,true);
   $('frznone').onclick=()=>toggleFreeze(null,false);
+  $('frzgyms').onclick=()=>toggleFreeze(gymKeys(),true);
+  $('thawgyms').onclick=()=>toggleFreeze(gymKeys(),false);
+  $('frztr').onclick=()=>toggleFreeze(trainerKeys(),true);
+  $('thawtr').onclick=()=>toggleFreeze(trainerKeys(),false);
   $('imget').onclick=async()=>{
     const name=$('imload').value;
     if(!name) return void($('immsg').innerHTML='<span class="warn">no importable team JSON</span>');
