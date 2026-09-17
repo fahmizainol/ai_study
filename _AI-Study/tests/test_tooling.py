@@ -1,5 +1,6 @@
 import json
 import os
+import re
 import shutil
 import subprocess
 import sys
@@ -248,6 +249,67 @@ class BossStudioCompanionPresetTest(unittest.TestCase):
         with open(path, "w", encoding="utf-8") as fh:
             json.dump(rows, fh, indent=1)
         self.assertIsNone(self.BS._pointed_preset("teams_bosses_gyms.json"))
+
+
+class BossStudioInstallScopeTest(unittest.TestCase):
+    """Scoping the view has to scope the WRITE too, or it is a trap: loading a
+    trainers JSON, hiding the gym cards and installing would still rewrite the
+    gyms from cards nobody can see."""
+
+    HOSTILE = {"THEME": ["STEEL"] * 9, "TARGET": [300] * 9, "SET_SEED": 99}
+
+    def setUp(self):
+        sys.path.insert(0, str(STUDY / "tools"))
+        import boss_studio
+        self.BS = boss_studio
+        self.captured = {}
+        self._real = boss_studio._replace_all
+        boss_studio._replace_all = self.captured.update
+        self._presets = boss_studio.PRESETS
+        boss_studio.PRESETS = tempfile.mkdtemp(prefix="scope-presets-")
+
+    def tearDown(self):
+        self.BS._replace_all = self._real
+        shutil.rmtree(self.BS.PRESETS, ignore_errors=True)
+        self.BS.PRESETS = self._presets
+
+    @staticmethod
+    def sig(records):
+        return [[mon["species"] for mon in r["mons"]] for r in records]
+
+    def test_gyms_scope_leaves_the_trainer_file_alone(self):
+        res = self.BS.install_game(self.HOSTILE, "gyms")
+        self.assertNotIn("teams_trainers.json", res["replaced"])
+        self.assertIn("teams_bosses_gyms.json", res["replaced"])
+        self.assertNotIn(self.BS.SHIPPED_TRAINERS, self.captured)
+
+    def test_trainers_scope_leaves_the_gym_file_alone(self):
+        res = self.BS.install_game(self.HOSTILE, "trainers")
+        self.assertNotIn("teams_bosses_gyms.json", res["replaced"])
+        self.assertNotIn(self.BS.SHIPPED, self.captured)
+
+    def test_the_registry_still_carries_every_fight_and_takes_the_out_of_scope_half_from_disk(self):
+        """The registry is one flat hash of all 161 teams, so scope cannot drop
+        fights from it -- it only decides whether a half comes from the cards or
+        off disk."""
+        disk = json.loads(Path(self.BS.SHIPPED_TRAINERS).read_text(encoding="utf-8"))
+        want = {r["id"]: [m["species"] for m in r["mons"]] for r in disk}
+        self.BS.install_game(self.HOSTILE, "gyms")
+        registry = self.captured[self.BS.REGISTRY].decode("utf-8")
+        self.assertEqual(146, registry.count("TEAM_OVERRIDES[["))
+        # Teresa's lead must be what the committed file says, not what the
+        # hidden live cards built under HOSTILE.
+        block = re.search(r"^# rival_TERESA_Teresa_map164\n.*?\n((?:  \[.*\n)+)",
+                          registry, re.M)
+        self.assertIsNotNone(block)
+        lead = block.group(1).splitlines()[0].split('"')[1]
+        self.assertEqual(want["rival_TERESA_Teresa_map164"][0], lead)
+
+    def test_all_scope_writes_both(self):
+        res = self.BS.install_game(self.HOSTILE, "all")
+        for name in ("teams_bosses_gyms.json", "teams_trainers.json",
+                     "Team_Overrides.rb", "Scripts.rxdata"):
+            self.assertIn(name, res["replaced"])
 
 
 class RealideaHiddenPowerTest(unittest.TestCase):

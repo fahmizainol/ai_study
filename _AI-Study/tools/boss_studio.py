@@ -1410,16 +1410,35 @@ def _replace_all(payloads):
         raise
 
 
-def install_game(over):
-    """Build and install the current 27 cards through the shipped override pipeline.
+SCOPES = ("all", "gyms", "trainers")
+
+
+def _in_scope(scope, half):
+    """Whether `half` ("gyms"/"trainers") is what the person is authoring."""
+    return scope not in SCOPES or scope == "all" or scope == half
+
+
+def _disk_records(path):
+    rows = json.load(open(path, encoding="utf-8"))
+    if not isinstance(rows, list):
+        raise ValueError(f"{os.path.basename(path)} is not a team list")
+    return rows
+
+
+def install_game(over, scope="all"):
+    """Build and install the current cards through the shipped override pipeline.
 
     Nothing live is touched until the roster, complete 161-team corpus, generated Ruby
-    and replacement bundle have all been built successfully. The four live files are
-    then replaced together, with rollback if Windows has one of them locked.
+    and replacement bundle have all been built successfully. The live files are then
+    replaced together, with rollback if Windows has one of them locked.
 
-    The nine gyms and the 18 named trainers both ship from the LIVE cards. Only the
-    filler and .dat teams, which the Studio cannot edit, are read off disk -- those
-    stay the committed files they have always been.
+    SCOPE is which half the person is authoring. The registry always needs all 161
+    teams -- it is one flat hash keyed by map and trainer -- but a half that is out of
+    scope is read off DISK rather than taken from the live cards, and its file is left
+    alone. Without that, scoping the view would be a trap: loading a trainers JSON,
+    hiding the gym cards and installing would still rewrite the gyms from whatever the
+    hidden cards happened to hold. Filler and .dat have no cards at all and have
+    always come off disk, so this is the same rule applied to one more axis.
     """
     with _INSTALL_LOCK:
         result = run(over or {})
@@ -1429,15 +1448,14 @@ def install_game(over):
         # at the end, because a snapshot saying "this is installed" should not
         # survive an install that then failed to replace anything.
         preset = _companion(SHIPPED)
-        records = _tie(result["records"], preset)
-        trainer_records = _tie(result["trainer_records"], preset)
+        do_gyms, do_trainers = _in_scope(scope, "gyms"), _in_scope(scope, "trainers")
+        records = _tie(result["records"], preset) if do_gyms \
+            else _disk_records(SHIPPED)
+        trainer_records = _tie(result["trainer_records"], preset) if do_trainers \
+            else _disk_records(SHIPPED_TRAINERS)
         other_records = list(trainer_records)
         for path in DISK_TEAMS:
-            with open(path, encoding="utf-8") as fh:
-                rows = json.load(fh)
-            if not isinstance(rows, list):
-                raise ValueError(f"{os.path.basename(path)} is not a team list")
-            other_records.extend(rows)
+            other_records.extend(_disk_records(path))
         errors, warnings = V.validate(records + other_records)
         if errors:
             raise ValueError(f"validation failed with {len(errors)} errors: {errors[0]}")
@@ -1472,11 +1490,17 @@ def install_game(over):
 
         shipped_bytes = (json.dumps(records, indent=1) + "\n").encode("utf-8")
         trainer_bytes = (json.dumps(trainer_records, indent=1) + "\n").encode("utf-8")
-        _replace_all({SHIPPED: shipped_bytes, SHIPPED_TRAINERS: trainer_bytes,
-                      REGISTRY: registry_bytes, GAME_BUNDLE: bundle_bytes})
+        live = {REGISTRY: registry_bytes, GAME_BUNDLE: bundle_bytes}
+        if do_gyms:
+            live[SHIPPED] = shipped_bytes
+        if do_trainers:
+            live[SHIPPED_TRAINERS] = trainer_bytes
+        _replace_all(live)
         preset_save(preset, _snapshot(over or {}, result),
                     "companion snapshot written by Install")
-        return {"ok": True, "preset": preset, "gyms": len(records),
+        return {"ok": True, "preset": preset, "scope": scope,
+                "replaced": sorted(os.path.basename(k) for k in live),
+                "gyms": len(records),
                 "trainers": len(trainer_records),
                 "mons": sum(len(row["mons"]) for row in records)
                 + sum(len(row["mons"]) for row in trainer_records),
@@ -1584,17 +1608,21 @@ class Handler(http.server.BaseHTTPRequestHandler):
                 return self._send(200, json.dumps(import_teams(
                     body["name"], body.get("settings") or {})))
             if path == "/api/install":
-                return self._send(200, json.dumps(
-                    install_game(body.get("settings") or {})))
+                return self._send(200, json.dumps(install_game(
+                    body.get("settings") or {}, body.get("scope") or "all")))
             if path == "/api/export":
                 # Two drafts, one action: the nine gyms and the 18 named trainers are
                 # one editing session, so exporting half of it would be a trap. Both
                 # names are checked before either file is written -- a 409 on the
                 # second must not leave the first already replaced.
+                scope = body.get("scope") or "all"
                 dests = []
-                for key, fallback, rows in (
-                        ("name", "teams_bosses_gyms.json", "records"),
-                        ("tname", "teams_trainers.json", "trainer_records")):
+                for key, fallback, rows, half in (
+                        ("name", "teams_bosses_gyms.json", "records", "gyms"),
+                        ("tname", "teams_trainers.json", "trainer_records",
+                         "trainers")):
+                    if not _in_scope(scope, half):
+                        continue
                     name = os.path.basename(body.get(key) or fallback)
                     if not name.endswith(".json"):
                         name += ".json"
@@ -1818,6 +1846,15 @@ button.tiny{padding:2px 7px;font-size:11px;font-weight:500}
     <select id="imload"></select>
     <div class="exp"><button class="ghost" id="imget">Load into cards</button></div>
     <div id="immsg"></div>
+    <div class="sub" style="margin-top:10px">what you are authoring. Loading a team
+      JSON sets this to match it. A half that is out of scope is hidden below AND left
+      alone by Export and Install &mdash; its file is read off disk instead of taken
+      from cards you cannot see.</div>
+    <select id="scope">
+      <option value="all">all 27 fights</option>
+      <option value="gyms">the nine gyms only</option>
+      <option value="trainers">the 18 named trainers only</option>
+    </select>
   </fieldset>
   <fieldset><legend>preset &middot; your settings</legend>
     <div class="sub">the whole Builder in one file under generated/studio_presets/ &mdash;
@@ -1833,10 +1870,10 @@ button.tiny{padding:2px 7px;font-size:11px;font-weight:500}
       <button class="ghost" id="reset">Reset Builder</button></div>
     <div id="pmsg"></div>
   </fieldset>
-  <fieldset><legend>ship &middot; the two files the game reads</legend>
+  <fieldset><legend>export &middot; write the team files</legend>
     <div class="sub">every fight the Studio owns lives in exactly two files: the nine
-      gyms, and the 18 named trainers. Write them out, or write them out AND inject
-      them. There is no third draft file to keep in sync.</div>
+      gyms, and the 18 named trainers. These names are for Export only &mdash; Install
+      always writes the shipped pair, whatever is typed here.</div>
     <input type="text" id="fname" value="teams_bosses_gyms.json"
            title="the nine gym fights">
     <input type="text" id="tfname" value="teams_trainers.json"
@@ -1844,9 +1881,13 @@ button.tiny{padding:2px 7px;font-size:11px;font-weight:500}
     <div class="exp"><label><input type="checkbox" id="ow"> overwrite if it exists</label></div>
     <div class="exp"><button id="save">Write to generated/</button></div>
     <div id="msg"></div>
-    <div class="sub" style="margin-top:12px">Install does the same write and then
-      injects both into Realidea V4.1&rsquo;s compiled Team_Overrides section. All four
-      live files are replaced together, or none of them are.</div>
+  </fieldset>
+  <fieldset><legend>install &middot; into the game</legend>
+    <div class="sub">builds what the cards are showing, regenerates the registry and
+      injects it into Realidea V4.1&rsquo;s compiled Team_Overrides section. Every live
+      file is replaced together or none of them are. It reads no team JSON: load one
+      first if you want a file&rsquo;s teams installed.</div>
+    <div id="scopenote" class="sub"></div>
     <div class="exp"><button id="install">Install into game</button></div>
     <div id="imsg"></div>
     <div class="sub" style="margin-top:12px">freezing pins a fight to the team it is
@@ -1862,7 +1903,7 @@ button.tiny{padding:2px 7px;font-size:11px;font-weight:500}
 <div>
   <div class="stats" id="stats"></div>
   <div class="gyms" id="gyms"></div>
-  <h3 class="sect">named trainers &middot; <span id="tcount">0</span>
+  <h3 class="sect" id="tsect">named trainers &middot; <span id="tcount">0</span>
     <span class="tag">edits ship on Install, same as the gyms</span></h3>
   <div class="gyms" id="trainers"></div>
 </div>
@@ -2057,6 +2098,9 @@ let ORDER={};
 // them reproduce under PBS or Smogon data that has since moved. Server-filled: only
 // it has a build, so freezing is a round trip rather than a checkbox.
 let FROZEN={};
+// Which half is being authored. A VIEW-and-ACTION setting, not a generator knob:
+// it never enters `over`, so it cannot leak into a preset or change a team.
+let SCOPE='all';
 // The last build's mons, by card key + species, so an editor opened after the
 // fact shows the set and level that build actually used.
 let MONS={};
@@ -2247,6 +2291,24 @@ const dirtyOf=(fk,i)=>{
 };
 // Global because the card buttons are inline onclick, and the cards are re-rendered
 // wholesale on every build so a bound listener would not survive.
+// One place that moves the control, the sections and the install note together, so
+// the hidden half and the untouched file can never disagree about what is in scope.
+function setScope(v){
+  SCOPE=['all','gyms','trainers'].includes(v)?v:'all';
+  if($('scope')) $('scope').value=SCOPE;
+  const showG=SCOPE!=='trainers', showT=SCOPE!=='gyms';
+  // #gyms has no header of its own -- the cards are the section -- while the
+  // trainers carry an <h3>, so that hides with them or it labels an empty gap.
+  for(const [id,on] of [['gyms',showG],['trainers',showT],['tsect',showT]])
+    if($(id)) $(id).hidden=!on;
+  const note=$('scopenote');
+  if(note) note.innerHTML=SCOPE==='all'
+    ? 'replaces both team files, the registry and the bundle.'
+    : `<b>${SCOPE} only</b> — replaces ${SCOPE==='gyms'
+        ?'teams_bosses_gyms.json':'teams_trainers.json'}, the registry and the bundle.
+       The other file is read off disk and left as it is.`;
+  buildSave();
+}
 async function toggleFreeze(keys,on){
   const box=$('frzmsg');
   if(box) box.innerHTML=on?'freezing…':'unfreezing…';
@@ -2405,7 +2467,7 @@ const freeSave=()=>saveForm(FREE_KEY,freeControls);
 // save of its own that could fall out of step with them.
 function buildSave(){
   saveForm(BUILD_KEY,buildControls);
-  try{localStorage.setItem(PLAN_KEY,JSON.stringify({PLAN,CARD,ORDER,FROZEN}));}catch(e){}
+  try{localStorage.setItem(PLAN_KEY,JSON.stringify({PLAN,CARD,ORDER,FROZEN,SCOPE}));}catch(e){}
 }
 const freeRestore=()=>restoreForm(FREE_KEY,freeControls);
 // Restoring knobs means the Builder no longer shows what the repo ships, so say so
@@ -2421,6 +2483,7 @@ function buildRestore(){
   if(saved&&saved.CARD&&typeof saved.CARD==='object') CARD=saved.CARD;
   if(saved&&saved.ORDER&&typeof saved.ORDER==='object') ORDER=saved.ORDER;
   if(saved&&saved.FROZEN&&typeof saved.FROZEN==='object') FROZEN=saved.FROZEN;
+  if(saved&&typeof saved.SCOPE==='string') setScope(saved.SCOPE);
   // Shape-check rather than trust: a saved PLAN from an older page could be missing
   // halves, and a bad ARCHETYPE entry reaches the generator as a dict key.
   if(plan&&Array.isArray(plan.gym)&&plan.gym.length===9){
@@ -2598,7 +2661,7 @@ async function init(){
   // the first time they disagree. Moving the node keeps its listeners and its values.
   // Naming a file is not a knob: these live inside #v_build and so get the same
   // listener, but none of them changes what a team is.
-  const NOBUILD=new Set(['fname','tfname','ow','pname','pow','pload','imload']);
+  const NOBUILD=new Set(['fname','tfname','ow','pname','pow','pload','imload','scope']);
   const onKnob=e=>{
     const k=e.target.id.replace(/^s_/,'');
     if($('val_'+k))$('val_'+k).textContent=e.target.value;
@@ -2842,6 +2905,7 @@ async function init(){
     location.reload();};
   presetList();
   importFileList('teams_bosses_gyms.json');
+  $('scope').onchange=()=>setScope($('scope').value);
   $('frzall').onclick=()=>toggleFreeze(null,true);
   $('frznone').onclick=()=>toggleFreeze(null,false);
   $('imget').onclick=async()=>{
@@ -2854,6 +2918,9 @@ async function init(){
     if(d.error) return void($('immsg').innerHTML='<span class="bad">'+esc(d.error)+'</span>');
     if(!setAll(d.settings))
       return void($('immsg').innerHTML='<span class="bad">that file produced no settings</span>');
+    // Scope follows the file: a trainers JSON puts you in trainers, so the gyms you
+    // did not load are neither shown nor shipped.
+    setScope(d.gyms&&d.trainers?'all':d.gyms?'gyms':'trainers');
     await go();
     const what=[d.gyms?d.gyms+' gyms':'',d.trainers?d.trainers+' trainers':'']
       .filter(Boolean).join(' + ');
@@ -2900,7 +2967,7 @@ async function init(){
   };
   $('save').onclick=async()=>{
     const r=await fetch('/api/export',{method:'POST',body:JSON.stringify(
-      {name:$('fname').value,tname:$('tfname').value,
+      {name:$('fname').value,tname:$('tfname').value,scope:SCOPE,
        overwrite:$('ow').checked,settings:get()})});
     const d=await r.json();
     $('msg').innerHTML=d.error?`<span class="bad">${d.error}</span>`
@@ -2911,7 +2978,7 @@ async function init(){
     $('imsg').innerHTML='validating and rebuilding Scripts.rxdata…';
     try{
       const r=await fetch('/api/install',{method:'POST',body:JSON.stringify(
-        {settings:get()})});
+        {settings:get(),scope:SCOPE})});
       const d=await r.json();
       $('imsg').innerHTML=d.error
         ?`<span class="bad">${esc(d.error)}</span>`
