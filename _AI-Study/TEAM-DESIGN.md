@@ -889,13 +889,13 @@ validator   27 teams, 0 errors, 13 warnings (the pre-existing 13)
 | `generated/realidea_item_sources.json` | 304 obtainable items; 426 in `items.txt` with no route at all |
 | `tools/smogon_corpus.py` | tiers + published sets + teammate correlation (three vendored corpora) |
 | `tools/generate_bosses.py` | §6.6 boss generator: eBST curve → nine validated gym teams |
-| `generated/teams_bosses_gyms.json` | the nine generated boss teams (validator-clean, slack 0) |
+| `generated/teams_bosses_gyms.json` | the nine generated boss teams (validator-clean, slack 0) — written by `generate_bosses.py --json` **and by Boss Studio's Export and Install** |
 | `tools/generate_trainers.py` | the same machinery for every named non-gym trainer: three rivals, Jeremiah/Simon/Cintia, and the three `balanceo` bosses |
-| `generated/teams_trainers.json` | those 18 teams (validator-clean, slack 0) |
+| `generated/teams_trainers.json` | those 18 teams (validator-clean, slack 0) — written by `generate_trainers.py --json` **and by Boss Studio's Export and Install**, which ship the live cards rather than re-reading this file |
 | `tools/fight_context.py` | §6.8 deriver: each fight's context → candidate archetype x mode plans, built and scored |
 | `generated/fight_plans.json` | the chosen plan per fight — the only thing both generators read for archetype/mode |
 | `tools/team_shape.py` | the role/mode vocabulary and the corpus reference both the generator and the diagnostic read |
-| `tools/boss_studio.py` | local UI (127.0.0.1:8731): the knobs, the nine rosters live, and the §6.8 candidates panel |
+| `tools/boss_studio.py` | local UI (127.0.0.1:8731): the knobs, all 27 rosters live (nine gyms + 18 named trainers), the §6.8 candidates panel, and Install, which writes both team files, regenerates the registry and injects it into the game bundle — all four replaced together or none |
 | `extracted/smogon-sets/` | `@smogon/sets` gen 6-9 — set corpus (**`dex` half is copyrighted**) |
 | `extracted/smogon-stats/` | Smogon 2019-06 gen-7 moveset stats — teammate correlation |
 | `extracted/smogon-formats/` | Showdown `formats-data.ts` — the authoritative competitive tier |

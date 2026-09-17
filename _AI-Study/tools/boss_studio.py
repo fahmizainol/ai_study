@@ -848,17 +848,36 @@ def _file_list(reader):
     return sorted(out, key=lambda x: (x["saved"], x["name"]), reverse=True)
 
 
-def team_file_list():
-    """Compatible full gym exports in generated/, newest first."""
-    return _file_list(_read_team_file)
+def _read_team_or_trainers(name):
+    """Whatever this file carries of either keyspace, for the file lister."""
+    gyms, trainers = _file_kinds(name)
+    out = []
+    if gyms:
+        out += _read_team_file(name)
+    if trainers:
+        out += list(_read_records(name, _trainer_slots(), "named trainers",
+                                  whole=False).values())
+    if not out:
+        raise ValueError("no gym or named-trainer teams in this file")
+    return out
 
 
-def trainer_file_list():
-    """Files carrying named-trainer records, newest first. Filler and .dat teams
-    are keyed by map, not by fight_id, so they never match."""
-    return _file_list(
-        lambda n: list(_read_records(n, _trainer_slots(), "named trainers",
-                                     whole=False).values()))
+def _file_kinds(name):
+    """(has_gyms, has_trainers) for a team file, without building anything.
+
+    Filler and .dat teams are keyed by map and partyid, never by gym_id or
+    fight_id, so they answer (False, False) and stay out of the import list."""
+    with open(_team_path(name), encoding="utf-8") as fh:
+        records = json.load(fh)
+    if not isinstance(records, list):
+        raise ValueError("top level must be a list of team records")
+    ids = {r.get("id") for r in records if isinstance(r, dict)}
+    return bool(ids & set(_gym_slots())), bool(ids & set(_trainer_slots()))
+
+
+def import_file_list():
+    """Files the import control can read, newest first -- either keyspace."""
+    return _file_list(_read_team_or_trainers)
 
 
 _IMPORTED_MON_FIELDS = ("species", "level", "moves", "item", "ability",
@@ -985,6 +1004,88 @@ def team_load(name, over):
         raise ValueError("the imported teams could not be reproduced by this generator")
     return {"name": os.path.basename(_team_path(name)), "settings": merged,
             "gyms": len(records), "mons": sum(len(r["mons"]) for r in records)}
+
+
+def _trainer_payload(settings, found):
+    """The imported trainers as the generator currently builds them, or None if
+    it no longer builds one of them at all."""
+    built = {r["id"]: r for r in run(settings)["trainer_records"]}
+    order = [found[slot]["id"] for slot in sorted(found)]
+    if any(who not in built for who in order):
+        return None
+    return _team_payload([built[who] for who in order])
+
+
+def import_teams(name, over):
+    """Read whatever a team JSON carries back into the cards.
+
+    One door instead of two. A gym export, a trainer export and a file holding
+    both are the same gesture to whoever is using this, so the dispatch belongs
+    here rather than in the person's head: the record ids say which keyspace a
+    file is in, and team_load/trainer_load do the rest.
+
+    Importing is the RECOVERY path, not the restore path -- a preset carries the
+    settings themselves and replays them exactly, while this reverse-engineers
+    card overrides from finished teams and has to prove the generator still
+    reproduces them. Reach for it for a file someone handed you, or when the
+    teams outlived the preset that made them.
+
+    TRAINERS GO FIRST, and the order is load-bearing. SPREAD is indexed by story
+    stage and the two halves SHARE it, but they want opposite things: a themed
+    gym team is tight, while a rival's party is spread wide enough to need a band
+    of 364 where the gym at that stage ships 61. Both importers only ever widen,
+    so running the trainers first settles the band at its final width and the gym
+    pass then picks its baseline drops under that. The other order measurably
+    does not work -- the gyms stop reproducing -- which is why the finish checks
+    both rather than trusting this comment."""
+    has_gyms, has_trainers = _file_kinds(name)
+    if not (has_gyms or has_trainers):
+        raise ValueError("no gym or named-trainer teams in this file")
+    settings = over or {}
+    out = {"name": os.path.basename(_team_path(name)),
+           "gyms": 0, "trainers": 0, "mons": 0, "warning": ""}
+
+    # What the half this file does NOT carry looks like before we touch anything,
+    # so a one-sided import cannot quietly move the other half through SPREAD.
+    # Snapshot every card of that half, not just the ones a file names -- there is
+    # no file for it here, and the question is only whether any of them moved.
+    other = "t" if has_gyms and not has_trainers else \
+            "g" if has_trainers and not has_gyms else ""
+    other_key = "trainer_records" if other == "t" else "records"
+    before = None
+    if other and any(str(k).startswith(other)
+                     for k in (settings.get("PICKS") or {})):
+        before = _team_payload(run(settings)[other_key])
+
+    if has_trainers:
+        got = trainer_load(name, settings)
+        settings = got["settings"]
+        out["trainers"], out["mons"] = got["trainers"], out["mons"] + got["mons"]
+    if has_gyms:
+        got = team_load(name, settings)
+        settings = got["settings"]
+        out["gyms"], out["mons"] = got["gyms"], out["mons"] + got["mons"]
+
+    if has_gyms and has_trainers:
+        # Both importers widened the shared band; prove neither half broke the
+        # other rather than trusting the order that made it work.
+        found = _read_records(name, _trainer_slots(), "named trainers",
+                              whole=False)
+        if _team_payload(run(settings)["records"]) != \
+                _team_payload(_read_team_file(name)):
+            raise ValueError("the trainers imported but doing so disturbed the gyms")
+        want = _team_payload([found[slot] for slot in sorted(found)])
+        if _trainer_payload(settings, found) != want:
+            raise ValueError("the gyms imported but doing so disturbed the trainers")
+    elif before is not None and _team_payload(run(settings)[other_key]) != before:
+        # Widening is monotonic and trainers settle the band, so the way back is
+        # always to re-import in that order rather than to undo anything.
+        moved = "trainer" if other == "t" else "gym"
+        out["warning"] = (
+            f"this widened the shared story bands and your {moved} cards moved with "
+            f"them -- import the trainers first, then the gyms, to resettle both")
+    out["settings"] = settings
+    return out
 
 
 def _card_overrides(mons, keep):
@@ -1222,10 +1323,8 @@ class Handler(http.server.BaseHTTPRequestHandler):
             return self._send(200, json.dumps(defaults()))
         if path == "/api/presets":
             return self._send(200, json.dumps({"presets": preset_list()}))
-        if path == "/api/team-files":
-            return self._send(200, json.dumps({"files": team_file_list()}))
-        if path == "/api/trainer-files":
-            return self._send(200, json.dumps({"files": trainer_file_list()}))
+        if path == "/api/import-files":
+            return self._send(200, json.dumps({"files": import_file_list()}))
         if path == "/api/preset":
             q = urllib.parse.parse_qs(urllib.parse.urlparse(self.path).query)
             try:
@@ -1292,16 +1391,10 @@ class Handler(http.server.BaseHTTPRequestHandler):
                         {"error": f"{os.path.basename(dest)} exists — tick overwrite"}))
                 return self._send(200, json.dumps(preset_save(
                     body["name"], body.get("settings") or {}, body.get("note") or "")))
-            if path == "/api/team-load":
+            if path == "/api/import":
                 if not (body.get("name") or "").strip():
                     return self._send(400, json.dumps({"error": "choose a team JSON"}))
-                return self._send(200, json.dumps(team_load(
-                    body["name"], body.get("settings") or {})))
-            if path == "/api/trainer-load":
-                if not (body.get("name") or "").strip():
-                    return self._send(400,
-                                      json.dumps({"error": "choose a trainer JSON"}))
-                return self._send(200, json.dumps(trainer_load(
+                return self._send(200, json.dumps(import_teams(
                     body["name"], body.get("settings") or {})))
             if path == "/api/install":
                 return self._send(200, json.dumps(
@@ -1314,7 +1407,7 @@ class Handler(http.server.BaseHTTPRequestHandler):
                 dests = []
                 for key, fallback, rows in (
                         ("name", "teams_bosses_gyms.json", "records"),
-                        ("tname", "teams_trainers_studio.json", "trainer_records")):
+                        ("tname", "teams_trainers.json", "trainer_records")):
                     name = os.path.basename(body.get(key) or fallback)
                     if not name.endswith(".json"):
                         name += ".json"
@@ -1519,37 +1612,44 @@ button.tiny{padding:2px 7px;font-size:11px;font-weight:500}
   <div class="sub">every control regenerates all nine fights · drag ⠿ to set the lead and party order</div>
   <div id="slot_build"></div>
   <div id="globals"></div>
-  <fieldset><legend>export</legend>
-    <input type="text" id="fname" value="teams_bosses_gyms.json">
-    <input type="text" id="tfname" value="teams_trainers_studio.json"
-           title="the 18 named trainers, written alongside the gyms">
-    <div class="exp"><label><input type="checkbox" id="ow"> overwrite if it exists</label></div>
-    <div class="exp"><button id="save">Write to generated/</button>
-      <button class="ghost" id="reset">Reset</button></div>
-    <div id="msg"></div>
-    <div class="sub" style="margin-top:12px">validate these cards and install them
-      into Realidea V4.1's compiled Team_Overrides section</div>
-    <div class="exp"><button id="install">Install into game</button></div>
-    <div id="imsg"></div>
-    <div class="sub" style="margin-top:12px">load a full nine-gym team export back
-      into editable cards</div>
-    <select id="tload"></select>
-    <div class="exp"><button class="ghost" id="tget">Load team JSON</button></div>
-    <div id="tmsg"></div>
-    <select id="trload"></select>
-    <div class="exp"><button class="ghost" id="trget">Load trainer JSON</button></div>
-    <div id="trmsg"></div>
-  </fieldset>
-  <fieldset><legend>preset</legend>
-    <div class="sub">the whole Builder in one file under generated/studio_presets/ —
+  <fieldset><legend>preset &middot; your settings</legend>
+    <div class="sub">the whole Builder in one file under generated/studio_presets/ &mdash;
       every knob, every per-fight plan and every card override. Commit it and someone
-      else Loads it and gets these teams.</div>
+      else Loads it and gets these teams. This is the one to reach for: it replays the
+      settings themselves, so it restores exactly and cannot fail to.</div>
     <select id="pload"></select>
     <div class="exp"><button class="ghost" id="pget">Load</button></div>
     <input type="text" id="pname" placeholder="name this preset">
     <div class="exp"><label><input type="checkbox" id="pow"> overwrite if it exists</label></div>
-    <div class="exp"><button id="pset">Save preset</button></div>
+    <div class="exp"><button id="pset">Save preset</button>
+      <button class="ghost" id="reset">Reset Builder</button></div>
     <div id="pmsg"></div>
+  </fieldset>
+  <fieldset><legend>ship &middot; the two files the game reads</legend>
+    <div class="sub">every fight the Studio owns lives in exactly two files: the nine
+      gyms, and the 18 named trainers. Write them out, or write them out AND inject
+      them. There is no third draft file to keep in sync.</div>
+    <input type="text" id="fname" value="teams_bosses_gyms.json"
+           title="the nine gym fights">
+    <input type="text" id="tfname" value="teams_trainers.json"
+           title="the 18 named trainers -- rivals and story bosses">
+    <div class="exp"><label><input type="checkbox" id="ow"> overwrite if it exists</label></div>
+    <div class="exp"><button id="save">Write to generated/</button></div>
+    <div id="msg"></div>
+    <div class="sub" style="margin-top:12px">Install does the same write and then
+      injects both into Realidea V4.1&rsquo;s compiled Team_Overrides section. All four
+      live files are replaced together, or none of them are.</div>
+    <div class="exp"><button id="install">Install into game</button></div>
+    <div id="imsg"></div>
+  </fieldset>
+  <fieldset><legend>import &middot; recover cards from teams</legend>
+    <div class="sub">for a team JSON someone handed you, or when the teams outlived
+      the preset that built them. Gyms, trainers or a file holding both &mdash; it reads
+      the ids and works out which. Unlike a preset this reverse-engineers the card
+      overrides from finished teams, so it proves the round trip and says so.</div>
+    <select id="imload"></select>
+    <div class="exp"><button class="ghost" id="imget">Load into cards</button></div>
+    <div id="immsg"></div>
   </fieldset>
 </div>
 <div>
@@ -1803,18 +1903,14 @@ async function presetList(sel){
       p.saved?' · '+esc(p.saved.slice(0,10)):''}</option>`).join('')
     ||'<option value="">(none saved yet)</option>';
 }
-async function fileList(url,id,sel,empty){
-  const d=await (await fetch(url)).json();
-  const now=sel||$(id).value;
-  $(id).innerHTML=(d.files||[]).map(f=>
+async function importFileList(sel){
+  const d=await (await fetch('/api/import-files')).json();
+  const now=sel||$('imload').value;
+  $('imload').innerHTML=(d.files||[]).map(f=>
     `<option value="${esc(f.name)}" ${f.name===now?'selected':''}>${esc(f.name)} · ${
       f.mons} mons${f.saved?' · '+esc(f.saved.slice(0,10)):''}</option>`).join('')
-    ||`<option value="">(${empty})</option>`;
+    ||'<option value="">(no importable team JSON found)</option>';
 }
-const teamFileList=sel=>fileList('/api/team-files','tload',sel,
-  'no compatible team JSON found');
-const trainerFileList=sel=>fileList('/api/trainer-files','trload',sel,
-  'no trainer JSON found');
 const deb=()=>{clearTimeout(timer);timer=setTimeout(go,120);};
 // A rebuild is ~2s for 27 fights, and every tick, every dropdown and every knob asks
 // for one. Without a guard a person clicking four boxes gets four concurrent builds
@@ -2263,7 +2359,7 @@ async function init(){
   // the first time they disagree. Moving the node keeps its listeners and its values.
   // Naming a file is not a knob: these live inside #v_build and so get the same
   // listener, but none of them changes what a team is.
-  const NOBUILD=new Set(['fname','tfname','ow','pname','pow','pload','tload','trload']);
+  const NOBUILD=new Set(['fname','tfname','ow','pname','pow','pload','imload']);
   const onKnob=e=>{
     const k=e.target.id.replace(/^s_/,'');
     if($('val_'+k))$('val_'+k).textContent=e.target.value;
@@ -2506,35 +2602,23 @@ async function init(){
     try{localStorage.removeItem(BUILD_KEY);localStorage.removeItem(PLAN_KEY);}catch(e){}
     location.reload();};
   presetList();
-  teamFileList('teams_bosses_gyms.json');
-  trainerFileList('teams_trainers_studio.json');
-  $('tget').onclick=async()=>{
-    const name=$('tload').value;
-    if(!name) return void($('tmsg').innerHTML='<span class="warn">no compatible team JSON</span>');
-    $('tmsg').innerHTML='loading and checking round trip…';
-    const r=await fetch('/api/team-load',{method:'POST',body:JSON.stringify(
+  importFileList('teams_bosses_gyms.json');
+  $('imget').onclick=async()=>{
+    const name=$('imload').value;
+    if(!name) return void($('immsg').innerHTML='<span class="warn">no importable team JSON</span>');
+    $('immsg').innerHTML='loading and checking round trip…';
+    const r=await fetch('/api/import',{method:'POST',body:JSON.stringify(
       {name,settings:get()})});
     const d=await r.json();
-    if(d.error) return void($('tmsg').innerHTML='<span class="bad">'+esc(d.error)+'</span>');
+    if(d.error) return void($('immsg').innerHTML='<span class="bad">'+esc(d.error)+'</span>');
     if(!setAll(d.settings))
-      return void($('tmsg').innerHTML='<span class="bad">that file produced no settings</span>');
+      return void($('immsg').innerHTML='<span class="bad">that file produced no settings</span>');
     await go();
-    $('tmsg').innerHTML=`<span class="ok">loaded ${esc(d.name)} — ${d.gyms} gyms, ${
-      d.mons} Pokémon, exact round trip</span>`;
-  };
-  $('trget').onclick=async()=>{
-    const name=$('trload').value;
-    if(!name) return void($('trmsg').innerHTML='<span class="warn">no trainer JSON</span>');
-    $('trmsg').innerHTML='loading and checking round trip…';
-    const r=await fetch('/api/trainer-load',{method:'POST',body:JSON.stringify(
-      {name,settings:get()})});
-    const d=await r.json();
-    if(d.error) return void($('trmsg').innerHTML='<span class="bad">'+esc(d.error)+'</span>');
-    if(!setAll(d.settings))
-      return void($('trmsg').innerHTML='<span class="bad">that file produced no settings</span>');
-    await go();
-    $('trmsg').innerHTML=`<span class="ok">loaded ${esc(d.name)} — ${d.trainers} trainers, ${
-      d.mons} Pokémon, exact round trip</span>`;
+    const what=[d.gyms?d.gyms+' gyms':'',d.trainers?d.trainers+' trainers':'']
+      .filter(Boolean).join(' + ');
+    $('immsg').innerHTML=`<span class="ok">loaded ${esc(d.name)} — ${what}, ${
+      d.mons} Pokémon, exact round trip</span>`
+      +(d.warning?`<br><span class="warn">${esc(d.warning)}</span>`:'');
   };
   // Load is the half that matters: it applies the file, rebuilds, and then says
   // whether the teams it got are the ones the preset recorded. Without that last
