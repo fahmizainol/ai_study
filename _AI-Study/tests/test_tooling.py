@@ -365,6 +365,56 @@ def _shipped_is_valid():
     return errors
 
 
+class OversizeTeamTest(unittest.TestCase):
+    """A dropped original coming back as its evolution, which shipped a seven-mon
+    gym 3 (Poliwhirl unticked, Poliwrath kept) and a gym 4 holding Mamoswine twice
+    (unticked Piloswine evolved into it while a card pin added it as well)."""
+
+    def setUp(self):
+        sys.path.insert(0, str(STUDY / "tools"))
+        import generate_bosses, validate_team
+        self.G, self.V = generate_bosses, validate_team
+
+    def test_an_untick_covers_the_family_not_just_the_spelling(self):
+        test = self.G.keep_filter({"POLIWHIRL": False})
+        self.assertTrue(test("POLIWHIRL", {}), "the name itself")
+        self.assertTrue(test("POLIWRATH", {}), "what it evolves into")
+        self.assertTrue(test("POLITOED", {}), "the other branch too")
+
+    def test_an_explicit_tick_still_wins_over_a_family_drop(self):
+        """Unticking the pre-evolution while pinning the evolution is coherent."""
+        test = self.G.keep_filter({"POLIWHIRL": False, "POLITOED": True})
+        self.assertTrue(test("POLIWHIRL", {}))
+        self.assertIsNone(test("POLITOED", {}))
+
+    def test_an_unrelated_species_is_untouched(self):
+        test = self.G.keep_filter({"POLIWHIRL": False})
+        self.assertIsNone(test("TENTACRUEL", {}))
+
+    def test_the_validator_sees_a_duplicate_species(self):
+        """It saw only SIZE before, so a six-mon team with a duplicate passed."""
+        team = [{"id": "t", "map": 1, "type_id": 1, "name": "x",
+                 "orig_ace_level": 5, "mons": [
+                     {"species": "MAMOSWINE", "level": 5, "moves": ["TACKLE"],
+                      "nature": "HARDY"},
+                     {"species": "MAMOSWINE", "level": 5, "moves": ["TACKLE"],
+                      "nature": "HARDY"}]}]
+        errors, _warnings = self.V.validate(team)
+        self.assertTrue(any("[DUPLICATE]" in e and "MAMOSWINE" in e for e in errors),
+                        f"expected a DUPLICATE error, got {errors}")
+
+    def test_starter_slots_may_repeat(self):
+        """They are engine method names, not species."""
+        team = [{"id": "t", "map": 1, "type_id": 1, "name": "x",
+                 "orig_ace_level": 5, "mons": [
+                     {"species": "albapoke1", "level": 5, "moves": [],
+                      "nature": "HARDY"},
+                     {"species": "albapoke1", "level": 5, "moves": [],
+                      "nature": "HARDY"}]}]
+        errors, _warnings = self.V.validate(team)
+        self.assertFalse([e for e in errors if "[DUPLICATE]" in e])
+
+
 class ShippedTeamFilesTest(unittest.TestCase):
     def test_the_shipped_team_files_pass_the_install_gate(self):
         """If this is the only thing red, generated/ needs repairing, not the code:

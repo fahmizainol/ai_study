@@ -1223,9 +1223,24 @@ def keep_filter(keep):
     An explicit untick also outranks `protected`. Protection exists to stop the
     generator deleting the reason a fight is what it is; it is not there to overrule
     a person who has looked at the card and said no."""
+    dropped_families = {}
+    for other, on in (keep or {}).items():
+        if on is False and other in _sp:
+            for kin in family(other):
+                dropped_families.setdefault(kin, other)
+
     def test(name, mon, protect=()):
         if keep.get(name) is False:
             return "unticked on the card"
+        # An untick names ONE form, and the roster can arrive as another: evolve_
+        # into_band turns a dropped Poliwhirl into a Poliwrath, which no untick ever
+        # mentioned, so the drop missed it and the fight came out seven strong. The
+        # card's list is a blocklist of names, and a name it never saw is kept by
+        # default -- so a drop has to cover the family, not the spelling. An explicit
+        # tick still wins: unticking the pre-evolution and pinning the evolution is a
+        # coherent thing to ask for.
+        if keep.get(name) is not True and name in dropped_families:
+            return f"unticked on the card (as {dropped_families[name]})"
         return keep_competent(name, mon, protect)
     return test
 
@@ -1336,6 +1351,20 @@ def assemble(spec):
         return {r for r, n in caps.items() if have[r] >= n}
 
     def add(name, mon, why, kept):
+        # Two invariants nothing else enforces, and both were being broken: a species
+        # can reach the team by more than one route (pinned on the card AND evolved
+        # from an original the card dropped) which shipped Douglas a team with
+        # Mamoswine in it twice, and `size` is only ever used to decide when to STOP
+        # padding, so a roster that arrives over-length is never trimmed. Refusing
+        # here is a backstop -- the family-aware drop above is what should make it
+        # unreachable -- but a backstop that fires silently is worse than none, so it
+        # says so in the notes.
+        if name in used:
+            notes.append(f"skipped a second {name} -- already on this team")
+            return
+        if len(team) >= size:
+            notes.append(f"skipped {name} -- team is already {size}")
+            return
         mon["kept"], mon["why"] = kept, why
         if mon["item"] in MEGASTONE:
             banned.update(MEGASTONE)

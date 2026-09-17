@@ -31,6 +31,16 @@ def validate(teams, slack=2):
             if item not in it: err("TITEM", f"trainer item {item} not in items.txt")
         if not 1 <= len(t.get("mons", [])) <= 6:
             err("SIZE", f"{len(t.get('mons', []))} mons")
+        # The engine is happy to run the same species twice and the player just sees
+        # a trainer with two of them, so nothing downstream catches this -- a boss
+        # shipped with Mamoswine in it twice and only tripped SIZE, and a six-mon
+        # team carrying a duplicate would have passed outright. Engine-resolved
+        # starter slots are exempt: they are method names, not species, and a fight
+        # can legitimately hold more than one.
+        seen = [m.get("species") for m in t.get("mons", [])
+                if isinstance(m.get("species"), str) and not m["species"].islower()]
+        for name in sorted({n for n in seen if seen.count(n) > 1}):
+            err("DUPLICATE", f"{name} appears {seen.count(name)} times")
         for i, m in enumerate(t.get("mons", [])):
             tag = f"mon{i} {m.get('species')}"
             # A lowercase species is an engine-resolved slot, not a species: the
