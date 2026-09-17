@@ -2662,6 +2662,72 @@ percent is already enough. Use the gen 5 wheel for gen 5 rosters from here (the 
 script takes the generation as its second argument); the gen 6 roster keeps the gen 6
 wheel, which is the one that knows megas and Fairy.
 
+**Amended 2026-09-18 — the gen 6 roster arm, and why the default is gen 6 anyway.**
+The cell this addendum left empty is now measured: `gen6uu_a`, 5000 iterations, both arms
+re-run on freshly built wheels (the old numbers are not comparable — see "the venv
+outliving the patch" below), paired on `(matchup, seed)`.
+
+| `gen6uu_a` | gen 6 wheel | gen 5 wheel |
+|---|---|---|
+| Foul Play wins of 60 | 52 (1 error, 2 draws) | 54 (0 errors, 2 draws) |
+| damage within 3% / 10% | 64% / 77% | 78% / 84% |
+| stock control | 31-29 | 31-29, all 60 battles identical |
+
+Paired: the gen 5 wheel gained 5, lost 3, p = 0.73 — **a tie, the same verdict the gen 5
+rosters gave.** So on the measured criterion the gen 5 wheel is at least as good
+everywhere, and it is better on damage everywhere.
+
+**The default is gen 6 regardless, because the measurement was aimed at the wrong layer.**
+Realidea is not "gen 5", it is three generations at once: a **gen 7 dex** (Mimikyu, Tapu
+Koko, Magearna, Kommo-o, Stakeout — no gen 8, and no Z-moves), **gen 6 mechanics**
+(`USENEWBATTLEMECHANICS = true`, crit ×1.5 not ×2.0, paralysis `speedmult/4` not `/2`,
+Steel with no Dark or Ghost resistance, Fairy), and a **gen 5 move table** (Knock Off 20,
+Thunderbolt/Ice Beam/Flamethrower/Surf 95, Fire Blast/Thunder/Hurricane 120 — 8 of 8
+tested at the gen 5 value). The gen 5 wheel wins the damage check because base power
+dominates it; it is wrong about two *mechanics* the check cannot see or barely sees:
+
+- **crit multiplier.** `CRIT_MULTIPLIER` is gen-gated 2.0 (gen4/5) against 1.5 (gen6+),
+  and Realidea uses 1.5. The search therefore over-values every critical hit by 1.33x.
+  **The damage check is blind to this** — it compares `engine_max_pct`, the non-crit roll.
+- **Dark/Ghost into Steel.** The two charts differ in exactly 2 of 361 cells
+  (`GHOST→STEEL`, `DARK→STEEL`: 0.5 gen5 / 1.0 gen6) and `PBS/types.txt` gives Steel
+  neither resistance. Measured: 131 such cells on `gen6uu_a` all at ratio 0.50, and 89 of
+  89 at 0.496 on `gen5ru_a`, where the gen 6 wheel had them at 1.00 — so this
+  **contaminates the gen5-build numbers published above.** Worth 3 points of the damage
+  agreement (78% → 81% excluding those rows).
+
+Fairy is not a reason to prefer either wheel: `build_state` passes types in from the game
+and never consults the engine dex, and the gen 5 chart keeps its full Fairy row. Nor is
+the gen 7 dex: poke-engine's species enum is not gen-gated, so Mimikyu and friends
+resolve in every build.
+
+**Verify which wheel a run actually used from the artefact, not the filename:**
+`engine_crit_pct / engine_max_pct` is 2.000 for a gen 5 build and 1.500 for gen 6.
+
+Artefacts: `generated/realidea_{tier_gen6uu_a_0_8_1_foul_play_5000,foulplay_check_gen6uu_a_0_8_1}_{gen5,gen6}wheel.ndjson`.
+
+**The venv outliving the patch — the failure that blocked this run, and will block the
+next one.** `generated/foul_play/` is git-ignored and built once, so a commit that adds to
+`patches/poke_engine_permanent_fields.patch` leaves a wheel that *imports perfectly* and
+rejects every state. Here the wheels were built 09-09 and the patch landed 09-12 in
+`e970ae1`; the sidecar started, printed its banner, published its ready marker, and then
+answered `TypeError: State.__new__() got an unexpected keyword argument 'base_weather'`
+to **every** decision — 102 fallbacks in 3 battles, the bridge silently 100% rule engine.
+Both wheels were dead, so a symptom that looks generation-specific may be neither.
+
+Two fixes, both in `tools/foul_play_sidecar.py`:
+
+- `serve()` now calls `check_engine_build()` **before** publishing the ready marker and
+  refuses to start on a stale engine, naming the rebuild command. The launcher could only
+  ever check that a venv *existed*, which is not the same as matching — this is the layer
+  that knows which fields it sends.
+- the every-50-decisions progress line dereferenced `elapsed`, which the error path never
+  binds, so the 50th consecutive error killed the sidecar with `UnboundLocalError` —
+  turning "this decision falls back to the rules" into "every later decision waits out its
+  full 60 s timeout", the exact failure that `except BaseException` exists to prevent.
+
+Rebuild both wheels after any pull that touches the patch (~25 s each).
+
 **Things that went wrong on the way.** (1) The first gen5ru_a run lost two turns to
 `Errno::EACCES` on the reply file — Windows refusing a delete or open while the sidecar's
 rename landed; `retrying` now waits 4 ms and tries again. (2) The gen6uu_a run killed the
@@ -2795,9 +2861,9 @@ installed sections and is tracked.
 or a different copy is being served. It takes no arguments for the campaign copy.
 
 ```bat
-foul_play_sidecar.bat                      the campaign copy, gen 5 wheel
+foul_play_sidecar.bat                      the campaign copy, gen 6 wheel
 foul_play_sidecar.bat "C:\path\to\game"    another copy (a gauntlet worker)
-foul_play_sidecar.bat "" gen6              the gen 6 wheel
+foul_play_sidecar.bat "" gen5              the gen 5 wheel
 ```
 
 The game is a Windows process and the search is a Linux wheel, so the `.bat` runs the
@@ -2837,6 +2903,223 @@ Limits to know before playing, none of them new:
 `with_config` still winning, and the silent sidecar being dropped for the battle but not
 the process), Reborn 53, tooling 34. Install backup:
 `backups/realidea_Scripts.rxdata.pre-0.8.1`.
+
+### 0.8.2 — the marker tells the truth, and the game says when it doesn't, 2026-09-18
+
+A campaign was played to completion against the rule engine with the bridge believed to
+be on. Nothing on screen distinguished it, and the evidence was sitting in
+`Data/ai_foulplay_log.txt` the whole time: 156 `sidecar error: TypeError:
+State.__new__() got an unexpected keyword argument 'base_weather'`, against only 7
+`sidecar silent` and zero `sidecar not ready`. An *error reply* proves the sidecar was
+alive and answering — so this was never the launcher being skipped. The wheels were built
+09-09, `patches/poke_engine_permanent_fields.patch` landed 09-12 in `e970ae1`, and the
+game was played 09-17: the "venv outliving the patch" failure the 0.8.1 addendum
+describes, in the wild, for three days, invisible.
+
+**Three separate things all failed quietly, and each one has to be fixed on its own
+layer.**
+
+**1. The marker meant "a sidecar once started here", not "a sidecar is serving."**
+`serve()` wrote it and nothing ever removed it — no `atexit`, no `signal`, no `finally`.
+The dominant exit is the launcher's own `pkill`, whose SIGTERM runs neither `finally` nor
+`atexit`; a closed console window and a WSL shutdown are not catchable at all. So a marker
+outlived its process on essentially every exit. That is invisible while the *next* launch
+rewrites it, and bites only when no sidecar runs at all — at which point the adapter
+believed a dead file, handed over every turn, waited out the full 3 s, and played the
+battle on the rules.
+
+Fixed by making freshness a property the sidecar can actually keep: the serve loop
+restamps the marker every second (`HEARTBEAT_SECONDS`) and `FoulPlay.ready?` ignores one
+older than `READY_STALE_AFTER` (10 s) instead of testing `File.exist?`. Removal on exit is
+now done too — SIGTERM and SIGINT are converted to `SystemExit` so the `finally` runs —
+but it is the tidy path, not the guarantee. Only the upper bound is tested: the marker is
+stamped from Linux and read from Windows, so a timestamp slightly in the future is fresh,
+not stale.
+
+**2. The 0.8.1 guard made the failure it was written for *worse*.**
+`check_engine_build()` was called *before* the `unlink`, so a stale engine exited and left
+the previous session's marker in place. The guard exists to turn a silent failure loud; as
+ordered it converted 156 visible log lines into silent 3 s stalls on every battle. The
+`clear_marker()` now happens first, before the build check — a sidecar that refuses to
+start leaves *no* marker, which is the honest state.
+
+**3. Nothing told the player.** Every failure mode above is invisible from inside the
+game: the sidecar window sits behind `Game.exe` and the log is a file nobody opens. The
+adapter already knew — it set `@portable_ai_foul_play_off` and logged. `FoulPlay.fall_back`
+now also says so once per battle, naming the reason. This is the smallest change here and
+the only one that would have caught the three lost days.
+
+It is a **modal `print`, not `battle.pbDisplay`**. The battle text box scrolls past in a
+second and reads like flavour text, which is exactly how the original failure stayed
+invisible; a message box stops the game until acknowledged. The guard that makes this safe
+is `$PORTABLE_AI_CONFIG`, a Hash for the duration of `Harness.with_config` and nil in live
+play: a gauntlet may legitimately run `foul_play=true` against a dead sidecar, and a modal
+dialog there would block a 180-battle set forever waiting for a keypress nobody is present
+to give. Measured runs keep the log and the ndjson.
+
+**4. The wrong door — and why the check belongs in the game.** The remaining hole was the
+player starting `Game.exe` directly: the two marker files persist, so the adapter engages,
+finds no sidecar, and plays on the rules. Neither the sidecar nor the launcher runs in that
+case, so neither can report it. A **boot check** closes it: top-level code in this section
+runs when RGSS loads the scripts, before `Main` starts the game loop and before `Graphics`
+exists, so it is a `print` too. However the game was started, this runs.
+
+**It refuses rather than warns — it `exit`s.** A dismissable warning is how the original
+failure survived three days: a player who wants to play does not stop to read. The timing
+is what makes refusing cheap: at script load no save has been touched and there is no
+progress to lose, so the cost of being wrong is one relaunch. This is deliberately *not*
+what a mid-battle fallback does — `FoulPlay.fall_back` only alerts, because by then a save
+and a run are in progress and killing the process to enforce an AI preference would
+destroy real work. Same condition, opposite remedy, decided by what a stop would cost.
+
+Refusing put weight on two things that a warning did not, and both are structural rather
+than stylistic:
+
+- **The `exit` sits outside the `rescue Exception`.** `SystemExit` descends from
+  `Exception`, so leaving it inside would have had the guard swallow the enforcement and
+  silently resume booting. The block now only *decides*; the acting happens after it.
+- **A failure to decide is not grounds to refuse.** If the gate itself raises, the refusal
+  is abandoned and boot continues — an unanswered question must not become a locked door.
+  The dialog and the log line are likewise best-effort and separately guarded, with the log
+  written *first*: if `print` is what fails, a refusal with no dialog would otherwise look
+  like the game simply failing to launch, and `Data/ai_foulplay_log.txt` is then the only
+  explanation available.
+
+The dialog names both ways out — start the launcher, or set `foul_play=false` — so the
+check cannot lock anyone out of their own game.
+
+The alternative considered and rejected as the *primary* fix was renaming `Game.exe` so the
+launcher is the only door. It works, but it is a convention rather than a guarantee, and it
+carries two traps worth recording since the exe here is **mkxp-z, not stock RGSS**: the
+binary contains `%s.ini`, deriving its config filename from its own basename, so the rename
+must include `Game.ini`; and `Title=Realidea System` keys the save location, so the *file*
+may be renamed but never that line. `Game (old).exe` is a second door (the stock 2004
+player). Worth doing as defence in depth, not as the mechanism.
+
+Having the game launch the sidecar itself was rejected outright: Ruby 1.8 shelling
+non-blocking into `wsl.exe`, path translation, distro resolution and a process the game
+must also reap — a great deal of fragile machinery inside a script section, against the
+stated scope ("a study instrument… not a shippable AI").
+
+The boot check is gated on `Harness.live_overrides`, which returns `{}` unless
+`Data/portable_ai.txt` is present, so **no measured run can be stopped by it** — the
+gauntlet and the probe run with that marker absent and set `$PORTABLE_AI_ENABLED`
+themselves. That gate is also the opt-out, which is why refusing needs no second knob:
+`foul_play=false` makes the condition stop holding. Calling `live_overrides` here moves its
+memoised read from the first battle to boot, which is the documented intent enforced from
+the earliest point.
+
+The launcher polls for the marker instead of `sleep 5`, and reports a sidecar that never
+came up rather than starting the game into silent rules — it previously `start`ed the
+sidecar, slept a flat 5 s, and launched the game whether or not the sidecar lived.
+
+**What is proven, and what is not.** The marker lifecycle is measured, not argued: a
+2-hour-old marker replaced on start; mtime advancing 3 s over 3 s; removed on SIGTERM;
+cleared before a simulated stale-engine refusal; and `ready?` exercised against the real
+adapter source at six ages (absent, fresh, 3 s, 30 s, 2 h, and 5 s in the future) — then
+the whole thing repeated against the real game directory with the real sidecar. Both
+wheels are rebuilt and `State` accepts `base_weather` again.
+
+The two dialogs are exercised the same way, by extracting the real source and running its
+truth table. Boot check, 6 of 6 on `exit` *and* dialog *and* log line: silent for a measured
+run, for `foul_play=false`, for no harness file at all, and for a correct launch with a
+fresh marker; refusing only for `foul_play=true` with a missing or stale marker.
+`fall_back`, 3 of 3 plus the repeat case: alerts once in live play, never twice in the same
+battle, and never at all while `$PORTABLE_AI_CONFIG` is set.
+
+One warning about that method. The first run of the refusal table reported the two
+wrong-door rows as **failing**, and the code was correct — the *extractor* was wrong. A
+non-greedy `.*?^end$` stopped at the first column-0 `end`, which is the `rescue` block's,
+so the harness was running the half that decides and not the half that acts. Pulling live
+source into a test is worth doing, but the extraction is itself untested code: assert that
+what you pulled contains the thing under test (`assert "  exit" in boot`) before believing
+a red result about it.
+
+**Three things are not proven here.** A **played turn** — that needs `Game.exe`, and the
+check is inverted: a working bridge shows *nothing*, so seeing either dialog means the
+bridge is off and the reason is on screen. And **`print` under mkxp-z at script-load
+time** — RGSS implements it as a message box and mkxp-z reimplements RGSS, but that
+specific timing is untested here. Its failure direction is safe: the dialog is separately
+guarded, the log line still records the refusal, and the `exit` happens regardless. **And
+`exit` itself under mkxp-z at load time** — `SystemExit` raised out of a script eval should
+terminate the player, but if something upstream catches it the game boots and the
+per-battle alert becomes the backstop, which is the old behaviour rather than a new
+failure. Likewise, the boot check reads
+`Data/portable_ai.txt` relatively, so if mkxp-z's working directory at load time were not
+the game folder the check would silently not fire rather than misfire.
+
+### 0.8.3 — the bridge answers forced replacements, 2026-09-18
+
+Through 0.8.2 the search chose the moves and the rule core chose who came in after a KO —
+about five decisions a battle, and the higher-leverage five. `FoulPlay.plan` was reachable
+only from `plan_for`, on the command path; `pbDefaultChooseNewEnemy` routes to
+`choose_replacement`, which ran `run_planner` directly.
+
+**The engine already did this, which was the surprise.** `get_all_options`
+(`src/genx/state.rs`) derives a forced switch from the active's own HP, not from a flag:
+
+```rust
+let side_one_force_switch = self.side_one.get_active_immutable().hp <= 0;
+...
+if side_one_force_switch {
+    self.side_one.add_switches(&mut side_one_options);
+    side_two_options.push(MoveChoice::None);   // the foe does not act
+    return (side_one_options, side_two_options);
+}
+```
+
+That is Realidea's replacement turn exactly — we pick a body, the foe does not act, the
+punishment arrives next turn — so the fix was to stop declining. `state_for`'s guard
+dropped `own.isFainted?` and keeps `foe.isFainted?`: a fainted foe is the *opponent*
+choosing their replacement, which is not ours to plan. **No engine patch and no new binding
+field.** `add_switches` (`p.hp > 0 && index != active_index`) already yields precisely the
+legal set, `action_for` already matches on `type`/`slot` generically, and the sidecar
+already maps a switch choice back to a party slot — all because the search has planned
+*voluntary* switches since 0.8.0. `choose_replacement` now mirrors `plan_for` line for
+line: try the bridge, fall through to the rule core on nil.
+
+**A latent bug had to be fixed first, and the new path is what made it load-bearing.**
+`side_for` built its party with `next if member.isEgg?`, while `"active"` is the unshifted
+`active.pokemonIndex`. Position is identity across this bridge — the sidecar answers
+`switch:<i>` as an index into that array and the adapter reads it back as a party slot — so
+a skipped entry shifts every later slot and silently names a different Pokemon on each
+side. It was invisible because enemy trainers carry no eggs, **but `side_two` is the
+PLAYER's party, where an egg is ordinary.** Eggs and empty slots are now emitted as
+`blank_pokemon` placeholders at hp 0, which `add_switches` excludes by the same test it
+uses for fainted members — so they hold their index without becoming selectable.
+
+**`foul_play_replacement` follows `foul_play` unless set.** A bridge that searches the
+moves and leaves the replacements to the rule core is two players in one coat. Setting it
+explicitly wins either way, so `foul_play_replacement=false` is the 0.8.2 control and is
+what an ablation runs. The battle-level kill switch applies here too: one silent sidecar
+turns the whole battle over to the rules, replacements included.
+
+**Proven against the real engine, not argued.** A hand-built state with the active at hp 0
+and an egg placeholder at slot 1 returns `type=switch`, offers `switch:2` and `switch:3`
+only — slot 0 (fainted) and slot 1 (egg) both excluded — and gives the foe `No Move`.
+
+The discrimination control is the part worth keeping. The first fixture "chose the Ground
+type over the Water type", which proved nothing: the same board with a Grass attacker
+scored an exact 2500/2500 tie and it picked slot 2 anyway, so the apparent reasoning could
+have been a preference for the low index. **Swapping the two bodies between slots swapped
+the answer with mirrored visit counts** (2525/2475 → 2475/2525), which is what actually
+shows the choice tracks the Pokemon and not the position. The margins are small because
+these fixtures are winning either way; whether the search replaces *well* is a gauntlet
+question, not a unit-test one, and is not claimed here.
+
+**Not measured.** No gauntlet has run on this. Given that eight versions of search bought
+parity and never a lead, the expectation for a ninth should be parity until a paired run
+on all three rosters says otherwise — `foul_play_replacement=false` against unset, same
+seeds. That is the next job, and the number belongs in this section when it exists.
+
+**Tests.** Adapter 133 (three new: the fainted-active state and the fainted-foe decline,
+the `foul_play_replacement?` precedence table, and the egg holding its party slot — that
+last one mutation-checked, failing `<3> expected but was 2` against the pre-0.8.3 skip),
+core 213, tooling 75.
+
+**Tests.** Adapter 130, tooling 75, `pack_rxdata --selftest` byte-identical, plus the
+two dialog truth tables above run against the extracted source. Install
+backup: `Realidea V4.1/Data/Scripts.rxdata.bak-20260918-011418`.
 
 ## Future-agent handoff
 

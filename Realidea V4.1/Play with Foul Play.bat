@@ -40,13 +40,39 @@ set "DFILE=%STUDY%\generated\foul_play\distro.txt"
 if exist "%DFILE%" for /f "usebackq delims=" %%i in ("%DFILE%") do set "DISTRO=%%i"
 if defined DISTRO (set "D=-d %DISTRO%") else (set "D=")
 
+REM The sidecar publishes this once it is genuinely able to answer -- after the engine
+REM build check and the id list, not merely on process start. Waiting for the FILE
+REM rather than for a fixed number of seconds is what makes the difference between
+REM "the search is running" and "a window opened".
+set "MARKER=%~dp0Data\ai_foulplay_ready.txt"
+if exist "%MARKER%" del /q "%MARKER%" >nul 2>&1
+
 echo Starting the Foul Play sidecar...
 start "Foul Play sidecar" cmd /c ""%STUDY%\tools\foul_play_sidecar.bat" "%~dp0.""
 
-REM poke_engine takes a moment to import. The game would wait for it anyway -- its
-REM first decision blocks for 60 s before giving up -- but starting cold looks like
-REM a hang, so pause here where there is something to read.
-wsl.exe %D% -e sleep 5
+REM poke_engine takes a few seconds to import. Poll rather than sleep a flat 5: a cold
+REM machine can take longer, and a sidecar that died on startup (no venv, stale engine,
+REM wrong distro) should not be waited out at all -- it should be reported.
+echo Waiting for the search engine...
+set "READY="
+for /l %%s in (1,1,30) do (
+  if not defined READY (
+    if exist "%MARKER%" set "READY=1"
+    if not defined READY wsl.exe %D% -e sleep 1
+  )
+)
+
+if not defined READY (
+  echo.
+  echo WARNING: the sidecar did not come up within 30 seconds.
+  echo Check the "Foul Play sidecar" window -- it prints the reason, usually a
+  echo missing or out-of-date engine build and the exact command to rebuild it.
+  echo.
+  echo Starting the game anyway. Enemy trainers will use the BACKUP rule AI, and
+  echo the game will say so on the first turn of each battle.
+  echo.
+  pause
+)
 
 echo Starting the game...
 "%~dp0Game.exe"

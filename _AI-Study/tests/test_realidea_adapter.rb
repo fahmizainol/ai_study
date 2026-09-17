@@ -2156,6 +2156,58 @@ class PortableAIRealideaAdapterTest < Test::Unit::TestCase
     assert_equal(["grassyterrain", 127], state["base_terrain"])
   end
 
+  def test_foul_play_plans_a_forced_replacement_from_a_fainted_active
+    # The engine derives a forced switch from the active's own hp (genx/state.rs
+    # get_all_options), so a fainted OWN active is a state to send, not a reason to
+    # decline. A fainted FOE still declines: that is the opponent picking their own
+    # replacement.
+    battle = foul_play_battle
+    snapshot, _skill = PortableAIRealidea.build_snapshot(battle)
+    battle.battlers[1].hp = 0
+    state = PortableAIRealidea::FoulPlay.state_for(battle, 1, snapshot)
+    assert_not_nil(state, "our fainted active is the replacement question itself")
+    active = state["side_one"]["active"]
+    assert_equal(0, state["side_one"]["pokemon"][active]["hp"],
+                 "the fainted body is sent AS the active, at hp 0")
+    battle.battlers[0].hp = 0
+    assert_nil(PortableAIRealidea::FoulPlay.state_for(battle, 1, snapshot),
+               "a fainted foe is not our replacement to plan")
+  end
+
+  def test_foul_play_replacement_follows_foul_play_unless_set
+    battle = foul_play_battle
+    assert_equal(true, PortableAIRealidea.foul_play_replacement?(battle, {"foul_play" => true}))
+    assert_equal(false, PortableAIRealidea.foul_play_replacement?(battle, {"foul_play" => false}))
+    assert_equal(false, PortableAIRealidea.foul_play_replacement?(battle, {}))
+    # An explicit setting wins in both directions -- foul_play_replacement=false is the
+    # 0.8.2 control an ablation runs.
+    assert_equal(false, PortableAIRealidea.foul_play_replacement?(
+      battle, {"foul_play" => true, "foul_play_replacement" => false}))
+    assert_equal(true, PortableAIRealidea.foul_play_replacement?(
+      battle, {"foul_play" => false, "foul_play_replacement" => true}))
+    # A battle whose sidecar went silent keeps its replacements on the rules too.
+    battle.instance_variable_set(:@portable_ai_foul_play_off, true)
+    assert_equal(false, PortableAIRealidea.foul_play_replacement?(
+      battle, {"foul_play" => true, "foul_play_replacement" => true}))
+  end
+
+  def test_foul_play_party_slots_survive_an_egg
+    # The sidecar answers a switch as an index into this array and the adapter reads it
+    # back as a party slot, so a skipped entry would silently name a different Pokemon.
+    battle = foul_play_battle
+    snapshot, _skill = PortableAIRealidea.build_snapshot(battle)
+    party = battle.pbParty(1)
+    egg = party[0].clone
+    def egg.isEgg?; true; end
+    party.insert(0, egg)
+    battle.battlers[1].pokemonIndex = 2 if battle.battlers[1].respond_to?(:pokemonIndex=)
+    state = PortableAIRealidea::FoulPlay.state_for(battle, 1, snapshot)
+    mons = state["side_one"]["pokemon"]
+    assert_equal(party.length, mons.length, "every slot is emitted, held not dropped")
+    assert_equal(0, mons[0]["hp"], "the egg is unselectable by hp, not by absence")
+    assert_nil(mons[0]["species"])
+  end
+
   def test_foul_play_declines_without_a_foe_on_the_field
     battle = foul_play_battle
     battle.battlers[0].hp = 0

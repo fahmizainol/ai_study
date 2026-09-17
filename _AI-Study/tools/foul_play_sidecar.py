@@ -30,6 +30,7 @@ import argparse
 import json
 import os
 import re
+import signal
 import sys
 import time
 from pathlib import Path
@@ -42,6 +43,20 @@ REPLY_NAME = "ai_foulplay_reply.txt"
 READY_NAME = "ai_foulplay_ready.txt"
 LOG_NAME = "ai_foulplay_log.txt"
 CHECK_NAME = "ai_foulplay_check.ndjson"
+
+# How often the serve loop restamps the ready marker. The adapter reads the marker as
+# "a sidecar is serving RIGHT NOW" and ignores one older than its own staleness
+# window (FoulPlay::READY_STALE_AFTER, 10 s), so this must stay well under it.
+#
+# A marker that only means "a sidecar once started here" is worse than no marker: the
+# adapter hands over the turn, waits out its full timeout, and plays the battle on the
+# rule engine with nothing on screen to say so. The process cannot promise to clean up
+# after itself -- the launcher stops it with pkill, whose SIGTERM runs neither `finally`
+# nor atexit unless the handler installed in serve() converts it, and a SIGKILL, a WSL
+# shutdown or a closed console window are not catchable at all. A heartbeat is true by
+# construction in every one of those cases; removal on exit (which serve() also does) is
+# only the tidy path.
+HEARTBEAT_SECONDS = 1.0
 
 # Realidea names that poke-engine cannot represent directly. Pokemon constructors
 # below still receive Realidea's exported stats, typing, ability, moves and weight;
@@ -462,24 +477,90 @@ def handle_state(doc, ids, iterations, check, data_dir=None):
     return reply_text(best, own, foe, total, wanted), elapsed, problems
 
 
+def check_engine_build():
+    """Refuse to serve with a poke-engine that predates the fields we send.
+
+    The venv outliving the patch is the expected failure, not an exotic one: the wheel
+    is git-ignored and built once, so a `git pull` that lands a new
+    patches/poke_engine_permanent_fields.patch leaves a venv that imports fine and
+    rejects every state. Checked here rather than in the launcher because the launcher
+    can only see that a venv exists, while this is the code that knows which fields it
+    sends -- and because dying now is far better than publishing the ready marker and
+    turning each decision into a rules fallback nobody sees.
+    """
+    try:
+        build_state({"side_one": {}, "side_two": {}}, load_ids(), set())
+    except TypeError as error:
+        raise SystemExit(
+            f"poke-engine in this venv is out of date with the sidecar ({error}).\n"
+            "Rebuild it from the study root:\n"
+            "    tools/build_poke_engine.sh generated/foul_play gen5   # or gen6"
+        )
+    except Exception:
+        # Anything else means the probe state was too empty to build, not that the
+        # engine is stale. Real states are validated per decision.
+        pass
+
+
+def clear_marker(ready_path):
+    try:
+        ready_path.unlink()
+    except OSError:
+        pass
+
+
+def beat(ready_path):
+    """Restamp the ready marker. Recreates it if something removed it underneath us."""
+    try:
+        os.utime(ready_path, None)
+    except OSError:
+        write_atomic(ready_path, f"pid={os.getpid()}\n")
+
+
 def serve(game_dir, iterations, check, keep_states=None, poll=0.004):
     data_dir = Path(game_dir) / "Data"
     state_path = data_dir / STATE_NAME
     reply_path = data_dir / REPLY_NAME
     ready_path = data_dir / READY_NAME
+    # Before the build check, not after it. This clears any marker a previous session
+    # left behind, so a sidecar that refuses to start (a stale engine below, a missing
+    # id list) leaves the adapter seeing no marker at all rather than the last run's --
+    # which is the difference between the next battle falling to the rules instantly
+    # and with a log line, or doing it after a 3 s stall on every single battle.
+    clear_marker(ready_path)
+    check_engine_build()
     ids = load_ids()
     if keep_states:
         Path(keep_states).mkdir(parents=True, exist_ok=True)
+    # pkill (how the launcher stops us) sends SIGTERM, whose default handler exits
+    # without unwinding -- so `finally` below never runs unless the signal is turned
+    # into an exception first. SIGINT is already one, but is routed here too so both
+    # stops take the identical path.
+    def stop(signum, frame):
+        raise SystemExit(0)
+
+    signal.signal(signal.SIGTERM, stop)
+    signal.signal(signal.SIGINT, stop)
+    try:
+        serve_loop(data_dir, state_path, reply_path, ready_path, ids, iterations,
+                   check, keep_states, poll)
+    finally:
+        clear_marker(ready_path)
+
+
+def serve_loop(data_dir, state_path, reply_path, ready_path, ids, iterations,
+               check, keep_states, poll):
     # The adapter checks this before handing over a turn. It makes a failed launcher
     # an immediate rules fallback instead of blocking the RGSS game loop.
-    try:
-        ready_path.unlink()
-    except FileNotFoundError:
-        pass
     write_atomic(ready_path, f"pid={os.getpid()}\n")
+    last_beat = time.time()
     print(f"foul_play sidecar watching {state_path}", flush=True)
     decisions = 0
     while True:
+        now = time.time()
+        if now - last_beat >= HEARTBEAT_SECONDS:
+            beat(ready_path)
+            last_beat = now
         if not state_path.exists():
             time.sleep(poll)
             continue
@@ -508,10 +589,21 @@ def serve(game_dir, iterations, check, keep_states=None, poll=0.004):
                 with open(Path(keep_states) / f"crash_{decisions:05d}.json", "w", encoding="utf-8") as handle:
                     json.dump(doc, handle)
             text = f"type=error\nmessage={type(error).__name__}: {str(error).splitlines()[0] if str(error) else ''}\n"
+            # No timing for a decision that raised. Leaving `elapsed` unbound here used
+            # to kill the sidecar at the next progress print -- turning "this decision
+            # falls back to the rules" into "every remaining decision waits out its 60 s
+            # timeout", which is the failure this whole except branch exists to avoid.
+            elapsed = None
         write_atomic(reply_path, text)
+        # A decision runs ~10 ms, so the idle heartbeat above covers it many times
+        # over; restamping here as well means even a pathologically slow search cannot
+        # let the marker go stale while we are demonstrably alive and working on it.
+        beat(ready_path)
+        last_beat = time.time()
         decisions += 1
         if decisions % 50 == 0:
-            print(f"{decisions} decisions, last {elapsed * 1000:.0f} ms", flush=True)
+            last = "error" if elapsed is None else f"{elapsed * 1000:.0f} ms"
+            print(f"{decisions} decisions, last {last}", flush=True)
 
 
 def main(argv=None):

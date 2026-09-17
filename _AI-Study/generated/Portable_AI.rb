@@ -20,7 +20,7 @@
 # Everything else is optional evidence used to improve the score.
 
 module PortableAI
-  VERSION = "0.8.1" unless const_defined?(:VERSION)
+  VERSION = "0.8.3" unless const_defined?(:VERSION)
 
   module Model
     DEFAULT_CONFIG = {
@@ -5681,6 +5681,23 @@ module PortableAIRealidea
     $PORTABLE_AI_REPLACEMENT != false
   end
 
+  # Whether the Foul Play bridge answers forced replacements, not just commands.
+  #
+  # Unset it FOLLOWS foul_play, because a bridge that searches the moves and leaves the
+  # replacements to the rule core is two different players wearing one coat -- and the
+  # replacement is the higher-leverage decision of the two. Setting it explicitly wins
+  # either way, so `foul_play_replacement=false` is the 0.8.2 control and is what an
+  # ablation of this feature runs.
+  #
+  # Same battle-level kill switch as the command path: one silent sidecar turns the
+  # whole battle over to the rules, replacements included, rather than paying the
+  # timeout again on every faint.
+  def self.foul_play_replacement?(battle, config)
+    return false if battle.instance_variable_get(:@portable_ai_foul_play_off)
+    return config["foul_play"] ? true : false if !config.key?("foul_play_replacement")
+    config["foul_play_replacement"] ? true : false
+  end
+
   # The party slot the core would send in for the fainted battler at `index`, or nil
   # when it has nothing to say. nil means the stock chooser -- never a slot the engine
   # would refuse, which is re-checked on the way out.
@@ -5711,7 +5728,16 @@ module PortableAIRealidea
     # the decision the sole-answer rule was written for.
     snapshot["matrix"] = party_matrix(battle, index, foe_indices, skill) if
       matrix_wanted?(battle)
-    plan = run_planner(snapshot, config_for(skill), BattleRNG.new(battle))
+    # 0.8.3. The bridge answers replacements too, and declines by returning nil exactly
+    # as it does on the command path (plan_for:527) -- so a silent sidecar, a doubles
+    # battle or an unmappable reply still lands on the rule core below. This needed no
+    # new machinery on either side: FoulPlay.plan already takes a snapshot whose actor
+    # carries only switch actions, and the sidecar already maps a switch choice back to a
+    # party slot, because the search has planned voluntary switches since 0.8.0.
+    config = config_for(skill)
+    plan = foul_play_replacement?(battle, config) ?
+           FoulPlay.plan(battle, snapshot, config) : nil
+    plan ||= run_planner(snapshot, config, BattleRNG.new(battle))
     chosen = nil
     (plan["actions"] || []).each do |action|
       chosen = action if action["actor_index"] == index && action["type"] == "switch"
@@ -7963,6 +7989,62 @@ module PortableAIRealidea
       attr_accessor :timeout
     end
 
+    # How old the ready marker may be and still mean "a sidecar is serving". The
+    # sidecar restamps it every second (foul_play_sidecar.py, HEARTBEAT_SECONDS), so
+    # ten is a wide margin against a slow decision or a second of clock skew across the
+    # WSL boundary, and still rejects a marker left behind minutes or days ago.
+    #
+    # Mere EXISTENCE is not enough, which is what this file tested through 0.8.1. The
+    # sidecar cannot promise to delete its own marker -- the launcher stops it with
+    # pkill, and a SIGKILL or a closed console window are not catchable at all -- so a
+    # marker outlives its process on most exits. The next launch rewrites it and the
+    # staleness never shows; but when NO sidecar runs (the player started Game.exe
+    # directly, or it refused to start), the adapter believed a dead marker, handed over
+    # every turn, waited out the full timeout, and played the battle on the rule engine.
+    # Freshness is a property the sidecar can actually keep.
+    READY_STALE_AFTER = 10.0
+
+    def self.ready?
+      return false if !File.exist?(READY_FILE)
+      # A marker stamped slightly in the future (the sidecar writes it from Linux, this
+      # reads it from Windows) is fresh, not stale -- so only test the upper bound.
+      (Time.now - File.mtime(READY_FILE)) <= READY_STALE_AFTER
+    rescue
+      false
+    end
+
+    # Stop asking for the rest of this battle, and tell the player once.
+    #
+    # Every way the bridge can fail is invisible from inside the game: the sidecar
+    # window sits behind Game.exe, and the log is a file nobody opens. A campaign has
+    # been played to completion against the rule engine because nothing on screen
+    # distinguished it from the search. One message on the first fallback of a battle
+    # is the whole difference, and it costs a line.
+    # A modal alert rather than the battle text box, for the same reason the boot check
+    # is one: the battle box scrolls past in a second and reads like flavour text, and
+    # the failure this announces cost a whole campaign precisely because it looked
+    # ordinary. `print` is RGSS's message box -- it stops the game until acknowledged,
+    # which is proportionate for "you are not playing against the AI you think you are".
+    #
+    # MEASURED RUNS MUST NOT SEE IT. $PORTABLE_AI_CONFIG is a Hash for the duration of
+    # Harness.with_config and nil in live play, so this is the exact live-play test. A
+    # gauntlet can legitimately run foul_play=true against a dead sidecar, and a modal
+    # dialog there would block a 180-battle set forever waiting for a keypress nobody is
+    # there to give; the run has the log and the ndjson instead.
+    def self.fall_back(battle, reason)
+      battle.instance_variable_set(:@portable_ai_foul_play_off, true)
+      return if battle.instance_variable_get(:@portable_ai_foul_play_told)
+      battle.instance_variable_set(:@portable_ai_foul_play_told, true)
+      return if defined?($PORTABLE_AI_CONFIG) && $PORTABLE_AI_CONFIG
+      print("The Foul Play search is unavailable: #{reason}.\n\n" \
+            "This trainer is using the backup rule AI. The reason is logged to " \
+            "Data/ai_foulplay_log.txt.\n\n" \
+            "To play against the search, quit and start the game with " \
+            "\"Play with Foul Play.bat\".")
+    rescue Exception
+      nil
+    end
+
     # Battler effect -> poke-engine volatile name, with the test that means "on".
     # :positive is > 0, :set is >= 0 (effects that hold an index, -1 when off),
     # :flag is Ruby truth. Effects this engine lacks are skipped by safe_effect.
@@ -8039,9 +8121,9 @@ module PortableAIRealidea
 
     def self.plan(battle, snapshot, config)
       return nil if battle.doublebattle
-      if !File.exist?(READY_FILE)
+      if !ready?
         log("turn=#{battle.turncount rescue '?'} sidecar not ready; rules took the battle")
-        battle.instance_variable_set(:@portable_ai_foul_play_off, true)
+        fall_back(battle, "not ready")
         return nil
       end
       actor = (snapshot["actors"] || [])[0]
@@ -8059,7 +8141,7 @@ module PortableAIRealidea
         # rules answer. Give up for this battle only, so the next one asks again. An
         # error reply is not silence and does not disable anything -- poke-engine
         # panics on particular positions, not on the whole battle.
-        battle.instance_variable_set(:@portable_ai_foul_play_off, true)
+        fall_back(battle, "silent")
         return nil
       end
       if reply["type"] == "error"
@@ -8096,7 +8178,19 @@ module PortableAIRealidea
     def self.state_for(battle, index, snapshot)
       own = battle.battlers[index]
       foe = battle.battlers[index ^ 1]
-      return nil if !own || !foe || own.isFainted? || foe.isFainted?
+      # OUR side may be fainted; the foe's may not. poke-engine derives a forced switch
+      # from the active's own hp -- get_all_options (genx/state.rs) reads
+      # `side_one.get_active_immutable().hp <= 0` and then offers switches for that side
+      # and MoveChoice::None for the other, which is exactly Realidea's replacement turn:
+      # we pick a body, the foe does not act, and the punishment comes next turn. So the
+      # fainted active is sent AS the active at hp 0 rather than being a reason to
+      # decline, and add_switches (`p.hp > 0 && index != active_index`) yields precisely
+      # the legal replacement set.
+      #
+      # A fainted FOE still declines. The engine has a both-sides branch for it, but that
+      # position is the opponent choosing their own replacement, which is not ours to
+      # plan; the rule core keeps it.
+      return nil if !own || !foe || foe.isFainted?
       {
         "version" => 2,
         "turn" => battle.turncount,
@@ -8153,7 +8247,25 @@ module PortableAIRealidea
       stages = active.stages || []
       pokemon = []
       party.each_with_index do |member, slot|
-        next if !member || (member.isEgg? rescue false)
+        # POSITION IS IDENTITY HERE. The sidecar answers a switch as an index into THIS
+        # array (label_for, "switch:<i>"), the adapter reads that index back as a party
+        # slot, and "active" below is the unshifted active.pokemonIndex -- so an entry
+        # that is skipped rather than held shifts every later slot and silently means a
+        # different Pokemon on each side of the bridge.
+        #
+        # Eggs and empty slots are therefore emitted as placeholders rather than
+        # dropped. hp 0 makes them unselectable by construction: poke-engine's
+        # add_switches takes only `p.hp > 0 && index != active_index`, which is the same
+        # test that excludes fainted party members, so nothing downstream needs to know
+        # these entries are special.
+        #
+        # Latent until now because enemy trainers carry no eggs -- but side_two is the
+        # PLAYER's party, where an egg is ordinary, and 0.8.3 puts party slots on the
+        # critical path for forced replacements.
+        if !member || (member.isEgg? rescue false)
+          pokemon << blank_pokemon
+          next
+        end
         body = (active.pokemonIndex == slot) ? active : nil
         pokemon << pokemon_for(battle, member, body, index)
       end
@@ -8205,6 +8317,23 @@ module PortableAIRealidea
         return "move:#{slot}" if move && move.id == id
       end
       "move:none"
+    end
+
+    # An egg or an empty party slot, as a body poke-engine will accept and never choose.
+    # Every field the translator reads is present so it cannot fall into an unknown-name
+    # branch; hp 0 is what actually makes it unselectable.
+    def self.blank_pokemon
+      {
+        "species" => nil, "form" => 0, "mega" => false, "level" => 1,
+        "types" => ["TYPELESS", "TYPELESS"],
+        "hp" => 0, "maxhp" => 1,
+        "attack" => 1, "defense" => 1, "special_attack" => 1,
+        "special_defense" => 1, "speed" => 1,
+        "ability" => nil, "item" => nil, "nature" => nil,
+        "evs" => [0, 0, 0, 0, 0, 0],
+        "status" => "none", "status_count" => 0, "weight_kg" => 0.0,
+        "moves" => []
+      }
     end
 
     def self.pokemon_for(battle, member, body, index)
@@ -8533,7 +8662,10 @@ module PortableAIRealidea
       # 0.8.0. The Foul Play bridge (FoulPlay module). False is 0.7.9, which is the
       # control run; search_planner and foul_play are never on together.
       ["foul_play",            :boolean],
-      ["foul_play_iterations", :float]
+      ["foul_play_iterations", :float],
+      # 0.8.3. Whether the bridge also answers forced replacements. Unset follows
+      # foul_play; false is the 0.8.2 control, where replacements stay with the rules.
+      ["foul_play_replacement", :boolean]
     ]
 
     def self.config
@@ -8724,6 +8856,68 @@ class PokeBattle_Battle
     end
     result
   end
+end
+
+# ---- boot check --------------------------------------------------------------
+#
+# Top-level code in this section runs when RGSS loads the scripts, before Main starts the
+# game loop and before Graphics exists -- so this is a modal `print`, not a pbMessage.
+# That timing is the point twice over: it catches a mis-launch seconds after it happens
+# rather than on the first turn of the first battle, and it is early enough that REFUSING
+# costs the player nothing. No save has been touched and no progress exists to lose.
+#
+# This closes the last hole in the 0.8.2 work. The other four failure modes are things
+# the sidecar or the launcher can detect and report; this one is the player starting
+# Game.exe directly, where neither of them runs at all. The check belongs in the game
+# because the game is the only party present in every case -- a launcher can be bypassed
+# and a filename is a convention, but this runs however the game was started.
+#
+# It refuses rather than warns. A warning that can be dismissed is how the original
+# failure survived three days: a player who wants to play does not stop to read. There
+# are two ways out and the dialog names both -- start the launcher, or set
+# foul_play=false. Refusing is deliberately NOT what a mid-battle fallback does
+# (FoulPlay.fall_back only alerts): by then a save and a run are in progress, and killing
+# the process to enforce an AI preference would cost the player real work.
+#
+# The gate is exactly Harness.live_overrides', which returns {} unless
+# Data/portable_ai.txt is present: the gauntlet and the probe run with that marker absent
+# and set $PORTABLE_AI_ENABLED themselves, so no measured run can be stopped by this.
+#
+# live_overrides memoises for the session, so calling it here moves that read from the
+# first battle to boot. That is the documented intent ("read once per session, so an edit
+# mid-session cannot apply to half a battle"), now enforced from the earliest point.
+portable_ai_boot_refusal = nil
+begin
+  if PortableAIRealidea::Harness.live_overrides["foul_play"] &&
+     !PortableAIRealidea::FoulPlay.ready?
+    portable_ai_boot_refusal =
+      "The Foul Play search is NOT running, so the game will not start.\n\n" \
+      "Start it with \"Play with Foul Play.bat\" instead of Game.exe.\n\n" \
+      "To play WITHOUT the search -- enemy trainers using the backup rule AI -- open " \
+      "Data\\ai_harness.txt and set:\n\n" \
+      "    foul_play=false\n\n" \
+      "Details are logged to Data\\ai_foulplay_log.txt."
+  end
+rescue Exception
+  # Deciding whether to refuse must never itself be the reason the game will not boot.
+  # A raise here means the question could not be answered, and an unanswered question is
+  # not grounds to refuse -- fall through and let the per-battle alert do its job.
+  portable_ai_boot_refusal = nil
+end
+if portable_ai_boot_refusal
+  # Both of these are best-effort and separately guarded, because the exit below is the
+  # enforcement and must happen either way. The log is written FIRST: if `print` is the
+  # thing that fails, a refusal with no dialog would otherwise look like the game simply
+  # failing to launch, and this file is then the only explanation available.
+  begin
+    PortableAIRealidea::FoulPlay.log("boot: refused to start -- sidecar not ready")
+  rescue Exception
+  end
+  begin
+    print(portable_ai_boot_refusal)
+  rescue Exception
+  end
+  exit
 end
 # ===== END adapters/realidea/Portable_AI_Adapter.rb =====
 
