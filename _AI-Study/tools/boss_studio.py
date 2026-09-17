@@ -1808,11 +1808,23 @@ button.tiny{padding:2px 7px;font-size:11px;font-weight:500}
   <div class="sub">every control regenerates all nine fights · drag ⠿ to set the lead and party order</div>
   <div id="slot_build"></div>
   <div id="globals"></div>
+  <fieldset><legend>load &middot; a team JSON</legend>
+    <div class="sub">pick a team JSON and get those teams back. Anything Export or
+      Install wrote names a companion preset holding them frozen, and loading the
+      team file follows that &mdash; exact, and it cannot fail. A file with no
+      companion (someone hand-edited one, or it predates this) is reverse-engineered
+      from the knobs instead, which has to prove the round trip; the message says
+      which of the two you got. Gyms, trainers or a file holding both.</div>
+    <select id="imload"></select>
+    <div class="exp"><button class="ghost" id="imget">Load into cards</button></div>
+    <div id="immsg"></div>
+  </fieldset>
   <fieldset><legend>preset &middot; your settings</legend>
     <div class="sub">the whole Builder in one file under generated/studio_presets/ &mdash;
       every knob, every per-fight plan and every card override. Commit it and someone
-      else Loads it and gets these teams. This is the one to reach for: it replays the
-      settings themselves, so it restores exactly and cannot fail to.</div>
+      else Loads it and gets these teams. Loading a team JSON above already follows
+      the preset tied to it, so reach for this when you want a SESSION rather than a
+      team &mdash; the knobs and plans you were working with, not a finished roster.</div>
     <select id="pload"></select>
     <div class="exp"><button class="ghost" id="pget">Load</button></div>
     <input type="text" id="pname" placeholder="name this preset">
@@ -1845,17 +1857,6 @@ button.tiny{padding:2px 7px;font-size:11px;font-weight:500}
     <div class="exp"><button class="ghost" id="frzall">Freeze all 27</button>
       <button class="ghost" id="frznone">Unfreeze all</button></div>
     <div id="frzmsg"></div>
-  </fieldset>
-  <fieldset><legend>import &middot; recover cards from teams</legend>
-    <div class="sub">pick a team JSON and get those teams back. Anything Export or
-      Install wrote names a companion preset holding them frozen, and loading the
-      team file follows that &mdash; exact, and it cannot fail. A file with no
-      companion (someone hand-edited one, or it predates this) is reverse-engineered
-      from the knobs instead, which has to prove the round trip; the message says
-      which of the two you got. Gyms, trainers or a file holding both.</div>
-    <select id="imload"></select>
-    <div class="exp"><button class="ghost" id="imget">Load into cards</button></div>
-    <div id="immsg"></div>
   </fieldset>
 </div>
 <div>
