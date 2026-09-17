@@ -481,6 +481,14 @@ def _snapshot(over, result):
     for slot, build in result["_trainer_builds"].items():
         frozen.setdefault(f"t{slot}", _freezable(build))
     snap["FROZEN"] = frozen
+    # Every fight in a snapshot is frozen, so every pin in it holds nothing. Dropping
+    # them here is what keeps a companion preset from handing the next person a board
+    # of locked cards -- the pins were only ever scaffolding for a reproduction the
+    # freeze now does outright. The live session keeps its own; exporting must not
+    # reach back and edit the cards you are working on.
+    snap["PICKS"] = {k: ({**v, "keep": {}} if isinstance(v, dict) and k in frozen
+                         else v)
+                     for k, v in (snap.get("PICKS") or {}).items()}
     return snap
 
 
@@ -660,7 +668,10 @@ def run(over):
                 c["who"] += f" ({_ordinal(nth[c['who']])})"
         # `slot` stays -- it is how a card sends its override back -- but nothing
         # that spells the trainer out does.
-        errs, warns = V.validate(records)
+        # All 27, not just the nine. The trainers ship through the same pipeline
+        # and the same legality gate, so a count that covered only the gyms was
+        # reporting "clean" about two thirds of what Install would check.
+        errs, warns = V.validate(records + trainer_records)
         vec = [[TS.role_counts(g["team"], lambda m: m["moves"])[k] for k in TS.ROLES]
                for g in gyms]
         null = _NULL.setdefault(len(vec), _null(len(vec)))
@@ -1205,6 +1216,26 @@ def _trainer_payload(settings, found):
     return _team_payload([built[who] for who in order])
 
 
+def _settle(settings, keys):
+    """Freeze what was just loaded, and drop the pins that were only holding it.
+
+    Pinning every species is the reverse-engineering path's ONLY lever -- it has to
+    persuade the generator to re-derive the team -- so a load used to hand back cards
+    with every mon locked under 154 synthetic overrides. Freezing holds the same teams
+    outright, so once it is on those pins hold nothing. Clearing them leaves the cards
+    legible: what is pinned is then what YOU pinned.
+
+    Only `keep` goes. The per-species item, move and spread overrides are inert while a
+    fight is frozen, and are what the team falls back on if it is ever unfrozen."""
+    out = set_frozen(settings, keys, True)["settings"]
+    picks = dict(out.get("PICKS") or {})
+    for key in keys:
+        if isinstance(picks.get(key), dict):
+            picks[key] = {**picks[key], "keep": {}}
+    out["PICKS"] = picks
+    return out
+
+
 def import_teams(name, over):
     """Read whatever a team JSON carries back into the cards.
 
@@ -1234,9 +1265,19 @@ def import_teams(name, over):
     # A file written by Export or Install names its companion preset, which holds
     # these teams frozen. Following that is exact and cannot fail, so it beats
     # reverse-engineering the knobs whenever the tie is intact.
+    keys = ([f"g{i}" for i in range(9)] if has_gyms else []) + (
+        [f"t{slot}" for slot in _read_records(
+            name, _trainer_slots(), "named trainers", whole=False)]
+        if has_trainers else [])
+
     tied = _pointed_preset(name)
     if tied:
         got = preset_load(tied)
+        # Everything the preset froze, not just this file's halves: a companion
+        # written before snapshots were cleaned still carries pins for the other
+        # half, and they are just as redundant.
+        got["settings"] = _settle(got["settings"], sorted(
+            set(keys) | set(_thaw(got["settings"].get("FROZEN")))))
         counted = run(got["settings"])
         return {"name": os.path.basename(_team_path(name)), "preset": tied,
                 "exact": True, "warning": "",
@@ -1290,7 +1331,10 @@ def import_teams(name, over):
         out["warning"] = (
             f"this widened the shared story bands and your {moved} cards moved with "
             f"them -- import the trainers first, then the gyms, to resettle both")
-    out["settings"] = settings
+    # Settled only now: the round trip has to be PROVED against the reconstructed
+    # pins before they are thrown away, or a file that does not reproduce would be
+    # frozen at whatever it happened to build instead of raising.
+    out["settings"] = _settle(settings, keys)
     return out
 
 
@@ -1709,6 +1753,14 @@ class Handler(http.server.BaseHTTPRequestHandler):
                     dests.append((dest, rows))
                 settings = body.get("settings") or {}
                 r = run(settings)
+                # Install refuses on validation errors; Export used to write anyway
+                # and merely report a count, which is how a file with two seven-mon
+                # gyms reached disk AND its companion preset. A team file that
+                # cannot be installed is not worth writing.
+                if r["errors"]:
+                    return self._send(400, json.dumps({"error":
+                        f"{len(r['errors'])} validation errors, first: "
+                        f"{r['errors'][0]}"}))
                 # The tie is made in the same operation that writes the teams, so
                 # the pointer and the file it points from cannot disagree.
                 preset = _companion(dests[0][0])
@@ -1958,7 +2010,8 @@ button.tiny{padding:2px 7px;font-size:11px;font-weight:500}
       showing now &mdash; nothing rerolls it, and a preset carrying it rebuilds the
       same teams anywhere. Freeze what you have settled, keep rerolling the rest.</div>
     <div class="exp"><button class="ghost" id="frzall">Freeze all 27</button>
-      <button class="ghost" id="frznone">Unfreeze all</button></div>
+      <button class="ghost" id="frznone">Unfreeze all</button>
+      <button class="ghost" id="unpin">Unpin all</button></div>
     <div id="frzmsg"></div>
   </fieldset>
 </div>
@@ -3029,6 +3082,30 @@ async function init(){
   await importFileList('teams_bosses_gyms.json');
   $('imload').onchange=syncLoadButton;
   $('scope').onchange=()=>setScope($('scope').value);
+  // Loading an untied file pins every species, because pinning is the only lever
+  // the reverse-engineering path has. Once the fights are frozen those pins hold
+  // nothing -- the freeze does -- so clearing them is how the cards get back to
+  // being editable without the teams moving.
+  $('unpin').onclick=()=>{
+    const pinnedCards=Object.keys(CARD).filter(k=>
+      CARD[k]&&CARD[k].keep&&Object.keys(CARD[k].keep).length);
+    const box=$('frzmsg');
+    if(!pinnedCards.length)
+      return void(box.innerHTML='<span class="warn">nothing is pinned</span>');
+    const loose=pinnedCards.filter(k=>!FROZEN[k]);
+    if(loose.length&&!confirm(
+        `${loose.length} of these fights are not frozen.\n\n`
+        +`Unpinning lets the generator reroll them, so those teams will change. `
+        +`Freeze first if you want to keep them exactly as they are.\n\nUnpin anyway?`))
+      return;
+    let n=0;
+    pinnedCards.forEach(k=>{n+=Object.keys(CARD[k].keep).length; CARD[k].keep={};});
+    buildSave();
+    box.innerHTML=`<span class="ok">unpinned ${n} species across ${
+      pinnedCards.length} fights</span>`+(loose.length
+      ?` <span class="sub">${loose.length} were not frozen and may have rerolled</span>`:'');
+    go();
+  };
   $('frzall').onclick=()=>toggleFreeze(null,true);
   $('frznone').onclick=()=>toggleFreeze(null,false);
   $('imget').onclick=async()=>{

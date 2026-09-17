@@ -97,6 +97,8 @@ class TeamOverrideBattleFormatTest(unittest.TestCase):
         was the draft and is gone, and guarding this on a file that can vanish is
         how the regression stopped being covered at all."""
         import boss_studio
+        if _shipped_is_valid():
+            self.skipTest("generated/ is invalid — see ShippedTeamFilesTest")
         path = STUDY / "generated" / "teams_bosses_gyms.json"
         self.assertTrue(path.exists(), f"{path.name} is the shipped gym file")
         team = json.loads(path.read_text(encoding="utf-8"))
@@ -284,6 +286,8 @@ class BossStudioInstallScopeTest(unittest.TestCase):
         self.assertNotIn(self.BS.SHIPPED_TRAINERS, self.captured)
 
     def test_trainers_scope_leaves_the_gym_file_alone(self):
+        if _shipped_is_valid():
+            self.skipTest("generated/ is invalid — see ShippedTeamFilesTest")
         res = self.BS.install_game(self.HOSTILE, "trainers")
         self.assertNotIn("teams_bosses_gyms.json", res["replaced"])
         self.assertNotIn(self.BS.SHIPPED, self.captured)
@@ -344,6 +348,88 @@ class BossStudioLoadInstalledTest(unittest.TestCase):
         never loaded anything."""
         fresh = self.sig(self.BS.run({})["records"])
         self.assertNotEqual(self.sig(self._disk(self.BS.SHIPPED)), fresh)
+
+
+def _shipped_is_valid():
+    """Whether generated/'s shipped team files would pass Install's own gate.
+
+    generated/ is working data a person edits through the Studio, so a test that
+    builds on it should say plainly that it is broken rather than fail somewhere
+    deep in install with a SIZE error."""
+    sys.path.insert(0, str(STUDY / "tools"))
+    import boss_studio, validate_team
+    rows = []
+    for path in (boss_studio.SHIPPED, boss_studio.SHIPPED_TRAINERS):
+        rows += json.loads(Path(path).read_text(encoding="utf-8"))
+    errors, _warnings = validate_team.validate(rows)
+    return errors
+
+
+class ShippedTeamFilesTest(unittest.TestCase):
+    def test_the_shipped_team_files_pass_the_install_gate(self):
+        """If this is the only thing red, generated/ needs repairing, not the code:
+        open the Studio, fix the named fight and Export again."""
+        errors = _shipped_is_valid()
+        self.assertEqual([], errors,
+                         "generated/ holds teams Install would refuse: "
+                         + "; ".join(errors[:3]))
+
+
+class BossStudioLoadUnpinsTest(unittest.TestCase):
+    """Loading used to hand back a board of locked cards. Pinning every species is
+    the reverse-engineering path's only lever, but freezing holds the same teams
+    outright, so once it is on the pins hold nothing and are cleared."""
+
+    def setUp(self):
+        sys.path.insert(0, str(STUDY / "tools"))
+        import boss_studio
+        self.BS = boss_studio
+
+    @staticmethod
+    def pins(settings):
+        return sum(1 for v in (settings.get("PICKS") or {}).values()
+                   if isinstance(v, dict)
+                   for _sp, on in (v.get("keep") or {}).items() if on)
+
+    @staticmethod
+    def sig(records):
+        return [[mon["species"] for mon in r["mons"]] for r in records]
+
+    def test_loading_leaves_no_pins_and_freezes_instead(self):
+        for name, key, shipped in (
+                ("teams_bosses_gyms.json", "records", self.BS.SHIPPED),
+                ("teams_trainers.json", "trainer_records",
+                 self.BS.SHIPPED_TRAINERS)):
+            with self.subTest(name):
+                got = self.BS.import_teams(name, {})
+                settings = got["settings"]
+                self.assertEqual(0, self.pins(settings), "no pins survive a load")
+                self.assertTrue(settings.get("FROZEN"), "frozen instead")
+                disk = json.loads(Path(shipped).read_text(encoding="utf-8"))
+                self.assertEqual(self.sig(disk),
+                                 self.sig(self.BS.run(settings)[key]))
+
+    def test_the_freeze_is_what_holds_them_now(self):
+        """Unpinned teams must survive knobs that would otherwise reroll them --
+        otherwise clearing the pins quietly threw the teams away."""
+        got = self.BS.import_teams("teams_trainers.json", {})
+        hostile = {**got["settings"], "THEME": ["STEEL"] * 9,
+                   "TARGET": [300] * 9, "SET_SEED": 5150}
+        disk = json.loads(
+            Path(self.BS.SHIPPED_TRAINERS).read_text(encoding="utf-8"))
+        self.assertEqual(self.sig(disk),
+                         self.sig(self.BS.run(hostile)["trainer_records"]))
+
+    def test_a_companion_snapshot_carries_no_pins(self):
+        """Fixed at the source: every fight in a snapshot is frozen, so every pin
+        in it is redundant and must not reach whoever loads it."""
+        built = self.BS.run({})
+        pinned = {"PICKS": {"g0": {"keep": {"KLEFKI": True}}}}
+        snap = self.BS._snapshot(pinned, built)
+        self.assertEqual(27, len(snap["FROZEN"]))
+        self.assertEqual(0, self.pins(snap))
+        # and the caller's own settings are untouched
+        self.assertEqual(1, self.pins(pinned))
 
 
 class RealideaHiddenPowerTest(unittest.TestCase):
