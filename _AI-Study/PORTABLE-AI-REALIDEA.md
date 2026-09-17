@@ -2726,7 +2726,30 @@ Two fixes, both in `tools/foul_play_sidecar.py`:
   turning "this decision falls back to the rules" into "every later decision waits out its
   full 60 s timeout", the exact failure that `except BaseException` exists to prevent.
 
-Rebuild both wheels after any pull that touches the patch (~25 s each).
+**0.8.4 removes the need to remember this:** `foul_play_sidecar.bat` now builds the
+engine itself when it is missing or out of date. Staleness is not guessed from a stamp --
+`foul_play_sidecar.py --check-engine` runs the real constructor with the real fields and
+answers exit 3 for "out of date" specifically, so a broken import or a missing id list is
+still reported rather than silently "fixed" by a rebuild that cannot fix it. While
+building it holds `Data/ai_foulplay_building.txt`, and the game launcher restarts its
+30-second countdown for as long as that exists, so a one-time build does not read as a
+sidecar that failed.
+
+Two things the live test caught that reasoning had not. `wsl.exe -e bash script.sh` reads
+neither `~/.profile` nor `~/.bashrc`, so `uv` and `cargo` can be installed and still not be
+on PATH -- the build failed with `uv: command not found`, which looks exactly like they are
+absent. `build_poke_engine.sh` now puts `~/.local/bin` and `~/.cargo/bin` on PATH itself,
+because the script is what knows its own dependencies. And a probe run WITHOUT
+`-d <distro>` lands in a different distro with a different `$HOME` entirely (`/home/kny`
+rather than `/home/afahmi`), which briefly made a PATH problem look like a distro problem:
+`distro.txt` exists precisely for this, and any probe that skips it measures the wrong
+machine.
+
+Measured end to end with the venv renamed away: breadcrumb present at t+10 s, gone and the
+ready marker published by t+20 s, engine verified afterwards by `--check-engine`.
+
+Rebuild both wheels by hand after any pull that touches the patch if you would rather not
+wait on first launch (~25 s each).
 
 **Things that went wrong on the way.** (1) The first gen5ru_a run lost two turns to
 `Errno::EACCES` on the reply file — Windows refusing a delete or open while the sidecar's

@@ -51,16 +51,25 @@ echo Starting the Foul Play sidecar...
 start "Foul Play sidecar" cmd /c ""%STUDY%\tools\foul_play_sidecar.bat" "%~dp0.""
 
 REM poke_engine takes a few seconds to import. Poll rather than sleep a flat 5: a cold
-REM machine can take longer, and a sidecar that died on startup (no venv, stale engine,
-REM wrong distro) should not be waited out at all -- it should be reported.
+REM machine can take longer, and a sidecar that died on startup (wrong distro, a build
+REM that cannot run) should not be waited out at all -- it should be reported.
+REM
+REM The sidecar builds the engine itself when it is missing or out of date, which takes
+REM about a minute. While that is happening it holds ai_foulplay_building.txt, and the
+REM countdown below restarts for as long as it exists -- so a first run on a new machine
+REM waits as long as the build needs, while a genuinely dead sidecar is still reported in
+REM thirty seconds. A goto loop rather than for /l because this one has to reset.
 echo Waiting for the search engine...
 set "READY="
-for /l %%s in (1,1,30) do (
-  if not defined READY (
-    if exist "%MARKER%" set "READY=1"
-    if not defined READY wsl.exe %D% -e sleep 1
-  )
-)
+set /a WAITED=0
+:waitloop
+if exist "%MARKER%" set "READY=1"
+if defined READY goto ready
+if exist "%~dp0Data\ai_foulplay_building.txt" set /a WAITED=0
+wsl.exe %D% -e sleep 1
+set /a WAITED+=1
+if %WAITED% lss 30 goto waitloop
+:ready
 
 if not defined READY (
   echo.

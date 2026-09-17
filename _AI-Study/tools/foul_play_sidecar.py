@@ -58,6 +58,10 @@ CHECK_NAME = "ai_foulplay_check.ndjson"
 # only the tidy path.
 HEARTBEAT_SECONDS = 1.0
 
+# --check-engine's answer for "the engine is importable but older than the fields this
+# sidecar sends". Distinct from 1 so a launcher can rebuild on this and only this.
+STALE_ENGINE_EXIT = 3
+
 # Realidea names that poke-engine cannot represent directly. Pokemon constructors
 # below still receive Realidea's exported stats, typing, ability, moves and weight;
 # the species surrogate only supplies a valid enum for mechanics keyed by identity.
@@ -614,12 +618,27 @@ def main(argv=None):
     parser.add_argument("--check", action="store_true", help="also write the damage comparison")
     parser.add_argument("--extract-ids", metavar="CLONE", help="rebuild the id list from a poke-engine clone")
     parser.add_argument("--keep-states", metavar="DIR", help="save every exported state under DIR (serve mode)")
+    parser.add_argument("--check-engine", action="store_true",
+                        help="exit 0 if the installed poke_engine matches this sidecar, "
+                             f"{STALE_ENGINE_EXIT} if it is out of date and needs rebuilding")
     args = parser.parse_args(argv)
     if args.extract_ids:
         ids = extract_ids(args.extract_ids)
         with open(IDS_FILE, "w", encoding="utf-8") as handle:
             json.dump(ids, handle)
         print({key: len(values) for key, values in ids.items()})
+        return 0
+    if args.check_engine:
+        # The launcher's question, answered by the only code that knows: whether THIS
+        # sidecar's fields are the ones the installed engine accepts. A distinct exit
+        # code so a caller can rebuild on staleness alone and still report anything else
+        # as the failure it is -- an import error or a missing id list is not something
+        # a rebuild fixes, and silently rebuilding on it would hide it.
+        try:
+            check_engine_build()
+        except SystemExit as error:
+            print(error)
+            return STALE_ENGINE_EXIT
         return 0
     if args.once:
         with open(args.once, encoding="utf-8") as handle:

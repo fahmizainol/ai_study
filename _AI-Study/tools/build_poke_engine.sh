@@ -10,6 +10,20 @@
 # gen 6 roster (megas, Fairy). Needs cargo, uv and python3. Regenerate generated/poke_engine_ids_gen6.json
 # from the same clone with `tools/foul_play_sidecar.py --extract-ids <target>/poke-engine`.
 set -euo pipefail
+# Not every caller is a login shell. `wsl.exe -e bash build_poke_engine.sh` -- how
+# tools/foul_play_sidecar.bat builds the engine on demand -- reads neither ~/.profile
+# nor ~/.bashrc, so uv and cargo can be installed and still not be on PATH; the failure
+# reads "uv: command not found" and looks like they are missing. Put the two standard
+# user install dirs on PATH here rather than making every caller arrange it.
+for _dir in "$HOME/.local/bin" "$HOME/.cargo/bin"; do
+  if [ -d "$_dir" ]; then
+    case ":$PATH:" in
+      *":$_dir:"*) ;;
+      *) PATH="$_dir:$PATH" ;;
+    esac
+  fi
+done
+export PATH
 HERE="$(cd "$(dirname "$0")/.." && pwd)"
 TARGET="${1:-$HERE/generated/foul_play}"
 GEN="${2:-gen6}"

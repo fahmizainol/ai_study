@@ -40,11 +40,44 @@ for /f "usebackq delims=" %%i in (`wsl.exe %D% -e wslpath -a -u "%~dp0."`) do se
 for /f "usebackq delims=" %%i in (`wsl.exe %D% -e wslpath -a -u "%GAME%"`) do set "GAMEDIR=%%i"
 set "PY=%TOOLS%/../generated/foul_play/venv-%GEN%/bin/python"
 
+REM Build the engine when it is missing or older than this sidecar, rather than
+REM telling the user to. The wheel is git-ignored and built once, so a pull that
+REM touches patches/poke_engine_permanent_fields.patch leaves a venv that imports
+REM perfectly and rejects every state -- the failure that cost three days of play.
+REM
+REM Staleness is not guessed from a stamp: --check-engine runs the real constructor
+REM with the real fields, and answers 3 for "out of date" specifically, so anything
+REM else (a broken import, a missing id list) is still reported rather than silently
+REM "fixed" by a rebuild that cannot fix it.
+set "BUILDING=%GAME%\Data\ai_foulplay_building.txt"
+set "NEEDBUILD="
 wsl.exe %D% -e test -x "%PY%"
-if errorlevel 1 (
-  echo ERROR: no %GEN% venv. Build it once, from the study root:
-  echo     tools/build_poke_engine.sh _AI-Study/generated/foul_play %GEN%
-  goto :done
+if errorlevel 1 set "NEEDBUILD=missing"
+if not defined NEEDBUILD (
+  wsl.exe %D% -e "%PY%" "%TOOLS%/foul_play_sidecar.py" --check-engine
+  if errorlevel 3 set "NEEDBUILD=out of date"
+)
+
+if defined NEEDBUILD (
+  echo The %GEN% search engine is %NEEDBUILD%. Building it now -- this takes about a
+  echo minute, and only happens when the engine changes.
+  echo.
+  REM A breadcrumb the game launcher watches: it stops counting down its wait while
+  REM this exists, so a one-time build does not look like a sidecar that failed.
+  >"%BUILDING%" echo building
+  wsl.exe %D% -e bash "%TOOLS%/build_poke_engine.sh" "%TOOLS%/../generated/foul_play" %GEN%
+  set "BUILDFAILED="
+  if errorlevel 1 set "BUILDFAILED=1"
+  del "%BUILDING%" >nul 2>&1
+  if defined BUILDFAILED (
+    echo.
+    echo ERROR: could not build the %GEN% engine. It needs cargo, uv and python3 in
+    echo WSL. Build it by hand from the study root to see the full error:
+    echo     tools/build_poke_engine.sh generated/foul_play %GEN%
+    goto :done
+  )
+  echo.
+  echo Engine built.
 )
 
 REM Two sidecars on the SAME game answer the same file and their replies cross,
