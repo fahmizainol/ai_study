@@ -1,0 +1,300 @@
+battle 127   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: dpl rejects/deoa week 1 reject: Kangaskhan-Mega, Deoxys-Attack, Volcanion, Landorus-Therian, Amoonguss, Thundurus
+  p2: stax week: Gengar-Mega, Diancie, Gastrodon-East, Genesect, Kyurem-Black, Cresselia
+
+  Turn 1
+    p1 mcts: move 1 2, move 1 1
+      search (21000 visits): fakeout,1;psychoboost,0 1257v 600 | crunch,0;protect,1 835v 375 | protect,0;psychoboost,0 775v 343 | fakeout,0;psychoboost,0 734v 322
+    p2 greedy: move 1 1, move 1
+      p1a Kangaskhan used Fake Out -> p2b: Diancie
+      p1b Deoxys used Psycho Boost -> p2a: Gengar
+              p1b Deoxys spa 2 fell
+      p2a Gengar fainted
+              p2b Diancie COULD NOT MOVE (flinch)
+      after p1: Kangaskhan-Mega 414/414, Deoxys-Attack 241/241
+      after p2: Gengar-Mega 0/261, Diancie 284/304
+
+  Turn 2
+      p2a <- Gastrodon-East comes in (421/421)
+      after p1: Kangaskhan-Mega 414/414, Deoxys-Attack 241/241
+      after p2: Gastrodon-East 421/421, Diancie 284/304
+
+  Turn 3
+    p1 mcts: move 4, move 3 2
+      search (34000 visits): protect,0;superpower,1 1263v 702 | protect,0;psychoboost,1 1253v 696 | crunch,1;superpower,1 710v 364 | protect,0;extremespeed,1 644v 324
+    p2 greedy: move 2 1, move 1
+      p1a Kangaskhan used Protect
+      p1b Deoxys used Superpower -> p2b: Diancie
+              p1b Deoxys atk 1 fell
+              p1b Deoxys def 1 fell
+      p2b Diancie used Diamond Storm -> p1a: Kangaskhan  [[spread] p1b]
+              p1a Kangaskhan -- move: Protect
+              p1b Deoxys -- critical hit
+              p1b Deoxys used up its Focus Sash
+      p2a Gastrodon used Earth Power -> p1a: Kangaskhan
+              p1a Kangaskhan -- move: Protect
+      after p1: Kangaskhan-Mega 414/414, Deoxys-Attack 1/241
+      after p2: Gastrodon-East 421/421, Diancie 182/304
+
+  Turn 4
+    p1 mcts: move 4, move 1 2
+      search (28000 visits): protect,0;psychoboost,1 508v 450 | protect,0;superpower,1 467v 410 | crunch,1;psychoboost,1 409v 353 | switch amoonguss;psychoboost,1 406v 350
+    p2 greedy: move 2 2, move 1
+      p1a Kangaskhan used Protect
+      p1b Deoxys used Psycho Boost -> p2b: Diancie
+              p1b Deoxys spa 2 fell
+      p2b Diancie used Diamond Storm -> p1a: Kangaskhan  [[spread] p1b]
+              p1a Kangaskhan -- move: Protect
+              p1b Deoxys -- critical hit
+              p2b Diancie def 1 rose
+      p1b Deoxys fainted
+      p2a Gastrodon used Earth Power -> p1a: Kangaskhan
+              p1a Kangaskhan -- move: Protect
+      after p1: Kangaskhan-Mega 414/414, Deoxys-Attack 0/241
+      after p2: Gastrodon-East 421/421, Diancie 80/304
+
+  Turn 5
+      p1b <- Volcanion comes in (363/363)
+      after p1: Kangaskhan-Mega 414/414, Volcanion 363/363
+      after p2: Gastrodon-East 421/421, Diancie 80/304
+
+  Turn 6
+    p1 mcts: switch 5, move 2 2   (slot0 Kangaskhan-Mega -> Amoonguss)
+      search (13000 visits): switch amoonguss;steameruption,1 418v 204 | protect,0;steameruption,1 318v 145 | fakeout,1;steameruption,1 267v 116 | crunch,1;steameruption,1 251v 107
+    p2 greedy: move 2 1, move 1
+      p1a <- Amoonguss comes in (432/432)
+      p1b Volcanion used Steam Eruption -> p2a: Gastrodon
+              p2a Gastrodon -- ability: Storm Drain
+              p2a Gastrodon spa 1 rose
+      p2b Diancie used Diamond Storm -> p1b: Volcanion  [[spread] p1a,p1b]
+      p2a Gastrodon used Earth Power -> p1a: Amoonguss
+      after p1: Amoonguss 146/432, Volcanion 187/363
+      after p2: Gastrodon-East 421/421, Diancie 80/304
+
+  Turn 7
+    p1 mcts: move 3 1, move 1
+      search (37000 visits): energyball,0;heatwave,0 2050v 1786 | energyball,0;earthpower,1 1705v 1468 | energyball,0;earthpower,0 1508v 1288 | protect,0;heatwave,0 1468v 1252
+    p2 greedy: move 2 1, move 1
+      p1b Volcanion used Heat Wave -> p2b: Diancie  [[spread] p2a,p2b]
+              p2a Gastrodon is now brn
+      p2b Diancie used Diamond Storm -> p1a: Amoonguss  [[spread] p1a,p1b]
+              p2b Diancie def 1 rose
+      p2a Gastrodon used Earth Power -> p1a: Amoonguss
+      p1a Amoonguss fainted
+      after p1: Amoonguss 0/432, Volcanion 13/363
+      after p2: Gastrodon-East 295/421, Diancie 43/304
+
+  Turn 8
+      p1a <- Landorus-Therian comes in (319/319)
+              p2a Gastrodon atk 1 fell
+              p2b Diancie -- IT FAILED
+      after p1: Landorus-Therian 319/319, Volcanion 13/363
+      after p2: Gastrodon-East 295/421, Diancie 43/304
+
+  Turn 9
+    p1 mcts: move 4 1, move 1
+      search (22000 visits): uturn,0;heatwave,0 2878v 1883 | uturn,0;earthpower,0 1288v 789 | uturn,0;earthpower,1 1190v 723 | uturn,1;heatwave,0 907v 534
+    p2 greedy: move 2 2, move 1
+      p1a Landorus used U-turn -> p2a: Gastrodon
+              p2a Gastrodon used up its Sitrus Berry
+      after p1: Landorus-Therian 319/319, Volcanion 13/363
+      after p2: Gastrodon-East 306/421, Diancie 43/304
+
+  Turn 10
+      p1a <- Kangaskhan-Mega comes in (414/414)
+      p1b Volcanion used Heat Wave -> p2b: Diancie  [[spread] p2b]
+              p1b Volcanion -- MISSED
+      p2b Diancie fainted
+      p2a Gastrodon used Earth Power -> p1b: Volcanion
+              p1b Volcanion used up its Shuca Berry
+              p1b Volcanion used up its Shuca Berry
+      p1b Volcanion fainted
+      after p1: Kangaskhan-Mega 414/414, Volcanion 0/363
+      after p2: Gastrodon-East 254/421, Diancie 0/304
+
+  Turn 11
+      p1b <- Landorus-Therian comes in (319/319)
+      p2b <- Genesect comes in (283/283)
+              p2b Genesect spa 1 rose
+              p2a Gastrodon atk 1 fell
+              p2b Genesect atk 1 fell
+      after p1: Kangaskhan-Mega 414/414, Landorus-Therian 319/319
+      after p2: Gastrodon-East 254/421, Genesect 283/283
+
+  Turn 12
+    p1 mcts: move 1 2, move 3 2
+      search (40000 visits): fakeout,1;knockoff,1 3950v 1280 | fakeout,1;uturn,1 2269v 682 | fakeout,1;stealthrock,0 1481v 411 | fakeout,1;earthquake,0 1327v 360
+    p2 greedy: move 2 1, move 1 1
+      p1a Kangaskhan used Fake Out -> p2b: Genesect
+              p2b Genesect COULD NOT MOVE (flinch)
+      p1b Landorus used Knock Off -> p2b: Genesect
+              p2b Genesect used up its Choice Scarf
+      p2a Gastrodon used Earth Power -> p1a: Kangaskhan
+      after p1: Kangaskhan-Mega 245/414, Landorus-Therian 319/319
+      after p2: Gastrodon-East 202/421, Genesect 122/283
+
+  Turn 13
+    p1 mcts: move 3 2, move 4 2
+      search (36000 visits): crunch,1;uturn,1 6891v 3122 | protect,0;uturn,1 1800v 720 | seismictoss,0;uturn,1 1736v 691 | switch thundurus;uturn,1 1729v 688
+    p2 greedy: move 2 1, move 1 1
+      p1a Kangaskhan used Crunch -> p2b: Genesect
+              p2b Genesect -- critical hit
+      p2b Genesect fainted
+      p1b Landorus used U-turn -> p2a: Gastrodon
+      after p1: Kangaskhan-Mega 245/414, Landorus-Therian 319/319
+      after p2: Gastrodon-East 110/421, Genesect 0/283
+
+  Turn 14
+      p1b <- Thundurus comes in (299/299)
+      p2a Gastrodon used Earth Power -> p1a: Kangaskhan
+      after p1: Kangaskhan-Mega 65/414, Thundurus 299/299
+      after p2: Gastrodon-East 58/421, Genesect 0/283
+
+  Turn 15
+      p2b <- Kyurem-Black comes in (392/392)
+      after p1: Kangaskhan-Mega 65/414, Thundurus 299/299
+      after p2: Gastrodon-East 58/421, Kyurem-Black 392/392
+
+  Turn 16
+    p1 mcts: switch 6, move 3 2   (slot0 Kangaskhan-Mega -> Landorus-Therian)
+      search (38000 visits): switch landorustherian;flashcannon,1 4832v 3037 | switch landorustherian;protect,1 3646v 2255 | switch landorustherian;thunderbolt,1 2128v 1266 | switch landorustherian;hiddenpower,1 1768v 1035
+    p2 greedy: move 2 1, move 1
+      p1a <- Landorus-Therian comes in (319/319)
+              p2a Gastrodon atk 1 fell
+              p2b Kyurem atk 1 fell
+      p1b Thundurus used Flash Cannon -> p2b: Kyurem
+      p2b Kyurem used Outrage -> p1a: Landorus
+              p1a Landorus -- critical hit
+      p1a Landorus fainted
+      p2a Gastrodon used Earth Power -> p1b: Thundurus
+              p1b Thundurus -- IMMUNE
+      after p1: Landorus-Therian 0/319, Thundurus 270/299
+      after p2: Gastrodon-East 6/421, Kyurem-Black 41/392
+
+  Turn 17
+      p1a <- Kangaskhan-Mega comes in (65/414)
+      after p1: Kangaskhan-Mega 65/414, Thundurus 270/299
+      after p2: Gastrodon-East 6/421, Kyurem-Black 41/392
+
+  Turn 18
+    p1 mcts: move 1 2, move 1 2
+      search (71000 visits): fakeout,1;thunderbolt,1 52722v 36167 | fakeout,1;flashcannon,1 3984v 2420 | crunch,1;protect,1 2267v 1325 | crunch,0;protect,1 1790v 1026
+    p2 greedy: move 2 1, move 1
+      p1a Kangaskhan used Fake Out -> p2b: Kyurem
+      p2b Kyurem fainted
+      p1b Thundurus used Thunderbolt -> p2a: Gastrodon
+              p2a Gastrodon -- IMMUNE
+      p2a Gastrodon used Earth Power -> p1a: Kangaskhan
+      p1a Kangaskhan fainted
+      p2a Gastrodon fainted
+      after p1: Kangaskhan-Mega 0/414, Thundurus 270/299
+      after p2: Gastrodon-East 0/421, Kyurem-Black 0/392
+
+  Turn 19
+      p2a <- Cresselia comes in (444/444)
+      after p1: Kangaskhan-Mega 0/414, Thundurus 270/299
+      after p2: Cresselia 444/444, Kyurem-Black 0/392
+
+  Turn 20
+    p1 mcts: pass, move 4
+      search (76000 visits): No Move;protect,1 63094v 34150 | No Move;thunderbolt,0 6681v 3354 | No Move;flashcannon,0 3669v 1767 | No Move;hiddenpower,0 2556v 1192
+    p2 greedy: move 4 2, pass
+      p1b Thundurus used Protect
+      p2a Cresselia used Psyshock -> p1b: Thundurus
+              p1b Thundurus -- move: Protect
+      after p1: Kangaskhan-Mega 0/414, Thundurus 270/299
+      after p2: Cresselia 444/444, Kyurem-Black 0/392
+
+  Turn 21
+    p1 mcts: pass, move 4
+      search (86000 visits): No Move;protect,1 73270v 39720 | No Move;thunderbolt,0 6688v 3353 | No Move;flashcannon,0 3547v 1701 | No Move;hiddenpower,0 2495v 1158
+    p2 greedy: move 4 2, pass
+      p1b Thundurus used Protect
+      p2a Cresselia used Psyshock -> p1b: Thundurus
+              p1b Thundurus -- move: Protect
+      after p1: Kangaskhan-Mega 0/414, Thundurus 270/299
+      after p2: Cresselia 444/444, Kyurem-Black 0/392
+
+  Turn 22
+    p1 mcts: pass, move 4
+      search (91000 visits): No Move;protect,1 78321v 42489 | No Move;thunderbolt,0 6609v 3309 | No Move;flashcannon,0 3527v 1690 | No Move;hiddenpower,0 2543v 1182
+    p2 greedy: move 4 2, pass
+      p1b Thundurus used Protect  [[still]]
+              p1b Thundurus -- IT FAILED
+      p2a Cresselia used Psyshock -> p1b: Thundurus
+              p1b Thundurus -- critical hit
+      after p1: Kangaskhan-Mega 0/414, Thundurus 132/299
+      after p2: Cresselia 444/444, Kyurem-Black 0/392
+
+  Turn 23
+    p1 mcts: pass, move 4
+      search (92000 visits): No Move;protect,1 87118v 47290 | No Move;thunderbolt,0 1996v 902 | No Move;flashcannon,0 1541v 674 | No Move;hiddenpower,0 1345v 577
+    p2 greedy: move 4 2, pass
+      p1b Thundurus used Protect
+      p2a Cresselia used Psyshock -> p1b: Thundurus
+              p1b Thundurus -- move: Protect
+      after p1: Kangaskhan-Mega 0/414, Thundurus 132/299
+      after p2: Cresselia 444/444, Kyurem-Black 0/392
+
+  Turn 24
+    p1 mcts: pass, move 4
+      search (58000 visits): No Move;protect,1 53196v 28728 | No Move;thunderbolt,0 2051v 937 | No Move;flashcannon,0 1440v 629 | No Move;hiddenpower,0 1313v 566
+    p2 greedy: move 4 2, pass
+      p1b Thundurus used Protect
+      p2a Cresselia used Psyshock -> p1b: Thundurus
+              p1b Thundurus -- move: Protect
+      after p1: Kangaskhan-Mega 0/414, Thundurus 132/299
+      after p2: Cresselia 444/444, Kyurem-Black 0/392
+
+  Turn 25
+    p1 mcts: pass, move 4
+      search (76000 visits): No Move;protect,1 69509v 37725 | No Move;thunderbolt,0 2599v 1215 | No Move;hiddenpower,0 2339v 1082 | No Move;flashcannon,0 1553v 684
+    p2 greedy: move 4 2, pass
+      p1b Thundurus used Protect
+      p2a Cresselia used Psyshock -> p1b: Thundurus
+              p1b Thundurus -- move: Protect
+      after p1: Kangaskhan-Mega 0/414, Thundurus 132/299
+      after p2: Cresselia 444/444, Kyurem-Black 0/392
+
+  Turn 26
+    p1 mcts: pass, move 4
+      search (81000 visits): No Move;protect,1 76428v 41440 | No Move;thunderbolt,0 2000v 906 | No Move;flashcannon,0 1415v 612 | No Move;hiddenpower,0 1157v 485
+    p2 greedy: move 4 2, pass
+      p1b Thundurus used Protect  [[still]]
+              p1b Thundurus -- IT FAILED
+      p2a Cresselia used Psyshock -> p1b: Thundurus
+      after p1: Kangaskhan-Mega 0/414, Thundurus 27/299
+      after p2: Cresselia 444/444, Kyurem-Black 0/392
+
+  Turn 27
+    p1 mcts: pass, move 4
+      search (70000 visits): No Move;protect,1 68962v 37354 | No Move;thunderbolt,0 418v 137 | No Move;flashcannon,0 322v 95 | No Move;hiddenpower,0 298v 85
+    p2 greedy: move 4 2, pass
+      p1b Thundurus used Protect
+      p2a Cresselia used Psyshock -> p1b: Thundurus
+              p1b Thundurus -- move: Protect
+      after p1: Kangaskhan-Mega 0/414, Thundurus 27/299
+      after p2: Cresselia 444/444, Kyurem-Black 0/392
+
+  Turn 28
+    p1 mcts: pass, move 4
+      search (82000 visits): No Move;protect,1 80724v 43748 | No Move;thunderbolt,0 488v 167 | No Move;hiddenpower,0 402v 129 | No Move;flashcannon,0 386v 122
+    p2 greedy: move 4 2, pass
+      p1b Thundurus used Protect
+      p2a Cresselia used Psyshock -> p1b: Thundurus
+              p1b Thundurus -- move: Protect
+      after p1: Kangaskhan-Mega 0/414, Thundurus 27/299
+      after p2: Cresselia 444/444, Kyurem-Black 0/392
+
+  Turn 29
+    p1 mcts: pass, move 4
+      search (86000 visits): No Move;protect,1 84841v 46001 | No Move;thunderbolt,0 411v 133 | No Move;flashcannon,0 401v 128 | No Move;hiddenpower,0 347v 105
+    p2 greedy: move 4 2, pass
+      p1b Thundurus used Protect  [[still]]
+              p1b Thundurus -- IT FAILED
+      p2a Cresselia used Psyshock -> p1b: Thundurus
+      p1b Thundurus fainted
+      after p1: Kangaskhan-Mega 0/414, Thundurus 0/299
+      after p2: Cresselia 444/444, Kyurem-Black 0/392
+
+  RESULT: p2 wins

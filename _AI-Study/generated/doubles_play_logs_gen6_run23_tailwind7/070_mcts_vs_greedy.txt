@@ -1,0 +1,237 @@
+battle 70   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: ORAS Doubles OU: Kangaskhan-Mega, Jirachi, Hydreigon, Sylveon, Talonflame, Rotom-Wash
+  p2: Copy of Untitled 579: Kangaskhan-Mega, Amoonguss, Kyurem-Black, Volcanion, Landorus-Therian, Gengar
+
+  Turn 1
+    p1 mcts: switch 6, move 4   (slot0 Kangaskhan-Mega -> Rotom-Wash)
+      search (51000 visits): switch rotomwash;icywind,0 864v 78 | poweruppunch,0;icywind,0 659v 44 | poweruppunch,1;icywind,0 651v 43 | frustration,1;icywind,0 651v 43
+    p2 greedy: move 1, move 1 1
+      p1a <- Rotom-Wash comes in (304/304)
+      p2a Kangaskhan used Substitute
+              p2a Kangaskhan gained Substitute
+      p1b Jirachi used Icy Wind -> p2b: Amoonguss  [[spread] p2b]
+              p1b Jirachi -- MISSED
+              p2b Amoonguss spe 1 fell
+      p2b Amoonguss used Sludge Bomb -> p1a: Rotom
+              p1a Rotom is now psn
+      after p1: Rotom-Wash 190/304, Jirachi 403/403
+      after p2: Kangaskhan-Mega 311/414, Amoonguss 360/432
+
+  Turn 2
+    p1 mcts: move 2 2, move 4
+      search (50000 visits): thunderbolt,1;icywind,0 930v 103 | hydropump,0;icywind,0 919v 101 | thunderbolt,0;icywind,0 909v 99 | hydropump,1;icywind,0 860v 90
+    p2 greedy: move 1, move 1 1
+      p2a Kangaskhan used Substitute
+              p2a Kangaskhan -- IT FAILED
+      p1b Jirachi used Icy Wind -> p2a: Kangaskhan  [[spread] p2a,p2b]
+              p2a Kangaskhan -- critical hit
+              p2a Kangaskhan -- move: Substitute
+              p2b Amoonguss spe 1 fell
+      p1a Rotom used Thunderbolt -> p2b: Amoonguss
+      p2b Amoonguss used Sludge Bomb -> p1a: Rotom
+              p1a Rotom used up its Sitrus Berry
+      after p1: Rotom-Wash 143/304, Jirachi 403/403
+      after p2: Kangaskhan-Mega 311/414, Amoonguss 220/432
+
+  Turn 3
+    p1 mcts: switch 6, move 4   (slot0 Rotom-Wash -> Kangaskhan-Mega)
+      search (63000 visits): switch kangaskhanmega;icywind,0 772v 31 | hydropump,1;icywind,0 771v 31 | thunderbolt,1;icywind,0 768v 31 | hydropump,0;icywind,0 765v 30
+    p2 greedy: move 1, move 1 1
+      p1a <- Kangaskhan-Mega comes in (352/352)
+      p2a Kangaskhan used Substitute
+              p2a Kangaskhan -- IT FAILED
+      p1b Jirachi used Icy Wind -> p2a: Kangaskhan  [[spread] p2a,p2b]
+              p2a Kangaskhan -- move: Substitute
+              p2b Amoonguss spe 1 fell
+      p2b Amoonguss used Sludge Bomb -> p1a: Kangaskhan
+      after p1: Kangaskhan-Mega 265/352, Jirachi 403/403
+      after p2: Kangaskhan-Mega 311/414, Amoonguss 150/432
+
+  Turn 4
+    p1 mcts: move 3 2, switch 3   (slot1 Jirachi -> Hydreigon)
+      search (60000 visits): fakeout,1;switch hydreigon 736v 174 | poweruppunch,0;icywind,0 669v 29 | poweruppunch,1;icywind,0 668v 29 | frustration,1;icywind,0 662v 28
+    p2 greedy: move 1, move 1 1
+      p1b <- Hydreigon comes in (326/326)
+      p1a Kangaskhan used Fake Out -> p2b: Amoonguss
+      p2a Kangaskhan used Substitute
+              p2a Kangaskhan -- IT FAILED
+              p2b Amoonguss COULD NOT MOVE (flinch)
+      after p1: Kangaskhan-Mega 207/352, Hydreigon 326/326
+      after p2: Kangaskhan-Mega 311/414, Amoonguss 84/432
+
+  Turn 5
+    p1 mcts: move 4 2, move 4 1
+      search (43000 visits): frustration,1;darkpulse,0 452v 69 | switch rotomwash;darkpulse,1 443v 67 | frustration,0;darkpulse,0 441v 66 | fakeout,0;darkpulse,0 437v 65
+    p2 greedy: move 1, move 1 1
+      p1a Kangaskhan used Frustration -> p2b: Amoonguss
+      p2b Amoonguss fainted
+      p1b Hydreigon used Dark Pulse -> p2a: Kangaskhan
+              p2a Kangaskhan lost Substitute
+      p2a Kangaskhan used Substitute
+              p2a Kangaskhan gained Substitute
+      after p1: Kangaskhan-Mega 149/352, Hydreigon 294/326
+      after p2: Kangaskhan-Mega 208/414, Amoonguss 0/432
+
+  Turn 6
+      p2b <- Kyurem-Black comes in (418/418)
+      after p1: Kangaskhan-Mega 149/352, Hydreigon 294/326
+      after p2: Kangaskhan-Mega 208/414, Kyurem-Black 418/418
+
+  Turn 7
+    p1 mcts: switch 6, move 3   (slot0 Kangaskhan-Mega -> Rotom-Wash)
+      search (40000 visits): switch rotomwash;protect,1 792v 264 | switch sylveon;protect,1 725v 237 | switch jirachi;protect,1 655v 208 | poweruppunch,0;protect,1 644v 203
+    p2 greedy: move 1, move 2 1
+      p1a <- Rotom-Wash comes in (143/304)
+      p1b Hydreigon used Protect
+      p2b Kyurem used Ice Beam -> p1a: Rotom
+      p2a Kangaskhan used Substitute
+              p2a Kangaskhan -- IT FAILED
+      after p1: Rotom-Wash 24/304, Hydreigon 294/326
+      after p2: Kangaskhan-Mega 208/414, Kyurem-Black 418/418
+
+  Turn 8
+    p1 mcts: switch 6, move 3   (slot0 Rotom-Wash -> Kangaskhan-Mega)
+      search (39000 visits): switch kangaskhanmega;protect,1 790v 261 | switch sylveon;protect,1 757v 247 | thunderbolt,0;protect,1 740v 240 | switch jirachi;protect,1 728v 235
+    p2 greedy: move 1, move 2 1
+      p1a <- Kangaskhan-Mega comes in (149/352)
+      p1b Hydreigon used Protect  [[still]]
+              p1b Hydreigon -- IT FAILED
+      p2b Kyurem used Ice Beam -> p1a: Kangaskhan
+      p1a Kangaskhan fainted
+      p2a Kangaskhan used Substitute
+              p2a Kangaskhan -- IT FAILED
+      after p1: Kangaskhan-Mega 0/352, Hydreigon 294/326
+      after p2: Kangaskhan-Mega 208/414, Kyurem-Black 418/418
+
+  Turn 9
+      p1a <- Jirachi comes in (403/403)
+      after p1: Jirachi 403/403, Hydreigon 294/326
+      after p2: Kangaskhan-Mega 208/414, Kyurem-Black 418/418
+
+  Turn 10
+    p1 mcts: move 3, move 3
+      search (55000 visits): protect,0;protect,1 14772v 7961 | followme,0;protect,1 6644v 3413 | ironhead,0;protect,1 2096v 984 | ironhead,1;protect,1 2083v 977
+    p2 greedy: move 1, move 2 2
+      p1b Hydreigon used Protect
+      p1a Jirachi used Protect
+      p2b Kyurem used Ice Beam -> p1b: Hydreigon
+              p1b Hydreigon -- move: Protect
+      p2a Kangaskhan used Substitute
+              p2a Kangaskhan -- IT FAILED
+      after p1: Jirachi 403/403, Hydreigon 294/326
+      after p2: Kangaskhan-Mega 208/414, Kyurem-Black 418/418
+
+  Turn 11
+    p1 mcts: move 2 2, move 3
+      search (58000 visits): ironhead,1;protect,1 2834v 1198 | switch rotomwash;protect,1 2588v 1083 | switch sylveon;protect,1 2515v 1050 | icywind,0;protect,1 2293v 947
+    p2 greedy: move 1, move 2 2
+      p1b Hydreigon used Protect  [[still]]
+              p1b Hydreigon -- IT FAILED
+      p2b Kyurem used Ice Beam -> p1b: Hydreigon
+      p1b Hydreigon fainted
+      p2a Kangaskhan used Substitute
+              p2a Kangaskhan -- IT FAILED
+      p1a Jirachi used Iron Head -> p2b: Kyurem
+              p2b Kyurem -- critical hit
+      after p1: Jirachi 403/403, Hydreigon 0/326
+      after p2: Kangaskhan-Mega 208/414, Kyurem-Black 180/418
+
+  Turn 12
+      p1b <- Sylveon comes in (394/394)
+      after p1: Jirachi 403/403, Sylveon 394/394
+      after p2: Kangaskhan-Mega 208/414, Kyurem-Black 180/418
+
+  Turn 13
+    p1 mcts: move 2 2, move 1
+      search (66000 visits): ironhead,1;calmmind,1 8193v 5244 | followme,0;calmmind,1 5737v 3614 | switch rotomwash;calmmind,1 5012v 3135 | ironhead,0;calmmind,1 4283v 2656
+    p2 greedy: move 1, move 2 1
+      p2b Kyurem used Ice Beam -> p1a: Jirachi
+      p2a Kangaskhan used Substitute
+              p2a Kangaskhan -- IT FAILED
+      p1a Jirachi used Iron Head -> p2b: Kyurem
+      p2b Kyurem fainted
+      p1b Sylveon used Calm Mind
+              p1b Sylveon spa 1 rose
+              p1b Sylveon spd 1 rose
+      after p1: Jirachi 331/403, Sylveon 394/394
+      after p2: Kangaskhan-Mega 208/414, Kyurem-Black 0/418
+
+  Turn 14
+      p2b <- Volcanion comes in (364/364)
+      after p1: Jirachi 331/403, Sylveon 394/394
+      after p2: Kangaskhan-Mega 208/414, Volcanion 364/364
+
+  Turn 15
+    p1 mcts: switch 6, move 2   (slot0 Jirachi -> Rotom-Wash)
+      search (30000 visits): switch rotomwash;hypervoice,0 10924v 6150 | ironhead,1;hypervoice,0 5851v 2996 | followme,0;hypervoice,0 1139v 499 | protect,0;hypervoice,0 1001v 430
+    p2 greedy: move 1, move 3 1
+      p1a <- Rotom-Wash comes in (24/304)
+      p2a Kangaskhan used Substitute
+              p2a Kangaskhan -- IT FAILED
+      p2b Volcanion used Overheat -> p1a: Rotom
+              p2b Volcanion spa 2 fell
+      p1a Rotom fainted
+      p1b Sylveon used Hyper Voice -> p2a: Kangaskhan  [[spread] p2a,p2b]
+      p2a Kangaskhan fainted
+      after p1: Rotom-Wash 0/304, Sylveon 394/394
+      after p2: Kangaskhan-Mega 0/414, Volcanion 276/364
+
+  Turn 16
+      p2a <- Landorus-Therian comes in (338/338)
+      p1a <- Talonflame comes in (297/297)
+              p1a Talonflame atk 1 fell
+              p1b Sylveon atk 1 fell
+      after p1: Talonflame 297/297, Sylveon 394/394
+      after p2: Landorus-Therian 338/338, Volcanion 276/364
+
+  Turn 17
+    p1 mcts: move 3, move 2
+      search (21000 visits): protect,0;hypervoice,0 2918v 1709 | bravebird,1;hypervoice,0 1216v 657 | bravebird,0;hypervoice,0 1075v 572 | taunt,1;hypervoice,0 750v 379
+    p2 greedy: move 4 1, move 3 1
+      p1a Talonflame used Protect
+      p2a Landorus used Superpower -> p1a: Talonflame
+              p1a Talonflame -- move: Protect
+      p2b Volcanion used Overheat -> p1a: Talonflame
+              p1a Talonflame -- move: Protect
+      p1b Sylveon used Hyper Voice -> p2b: Volcanion  [[spread] p2a,p2b]
+      p2a Landorus fainted
+      after p1: Talonflame 297/297, Sylveon 394/394
+      after p2: Landorus-Therian 0/338, Volcanion 188/364
+
+  Turn 18
+      p2a <- Gengar comes in (261/261)
+      after p1: Talonflame 297/297, Sylveon 394/394
+      after p2: Gengar 261/261, Volcanion 188/364
+
+  Turn 19
+    p1 mcts: move 1 1, move 2
+      search (231000 visits): bravebird,0;hypervoice,0 200351v 200336 | overheat,0;hypervoice,0 18375v 17904 | bravebird,1;hypervoice,0 1486v 1311 | overheat,1;hypervoice,0 1012v 865
+    p2 greedy: move 4 1, move 3 1
+      p1a Talonflame used Brave Bird -> p2a: Gengar
+      p2a Gengar used Shadow Ball -> p1a: Talonflame
+      p1a Talonflame fainted
+      p2b Volcanion used Overheat -> p1b: Sylveon
+              p2b Volcanion spa 2 fell
+      p1b Sylveon used Hyper Voice -> p2a: Gengar  [[spread] p2a,p2b]
+      p2a Gengar fainted
+      after p1: Talonflame 0/297, Sylveon 334/394
+      after p2: Gengar 0/261, Volcanion 94/364
+
+  Turn 20
+      p1a <- Jirachi comes in (331/403)
+      after p1: Jirachi 331/403, Sylveon 334/394
+      after p2: Gengar 0/261, Volcanion 94/364
+
+  Turn 21
+    p1 mcts: move 1, move 2
+      search (986000 visits): followme,0;hypervoice,1 122257v 122257 | followme,0;psyshock,1 122257v 122257 | ironhead,1;hypervoice,1 122257v 122257 | ironhead,1;psyshock,1 122257v 122257
+    p2 greedy: pass, move 3 1
+      p1a Jirachi used Follow Me
+      p2b Volcanion used Overheat -> p1a: Jirachi
+              p2b Volcanion spa 2 fell
+      p1b Sylveon used Hyper Voice -> p2b: Volcanion
+      p2b Volcanion fainted
+      after p1: Jirachi 199/403, Sylveon 334/394
+      after p2: Gengar 0/261, Volcanion 0/364
+
+  RESULT: p1 wins

@@ -1,0 +1,209 @@
+battle 98   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: dpl ::/Untitled 887: Talonflame, Gyarados-Mega, Pachirisu, Gothitelle, Deoxys-Attack, Landorus-Therian
+  p2: Untitled 468: Kangaskhan-Mega, Aegislash, Sylveon, Volcanion, Landorus-Therian, Thundurus
+
+  Turn 1
+    p1 mcts: switch 3, move 3   (slot0 Talonflame -> Pachirisu)
+      search (44000 visits): switch pachirisu;dragondance,1 494v 18 | uturn,0;crunch,1 481v 17 | switch pachirisu;crunch,1 478v 16 | bravebird,0;crunch,1 477v 16
+    p2 greedy: move 3 1, move 1 1
+      p1a <- Pachirisu comes in (324/324)
+      p2a Kangaskhan used Sucker Punch  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p1b Gyarados used Dragon Dance
+              p1b Gyarados atk 1 rose
+              p1b Gyarados spe 1 rose
+      p2b Aegislash used Shadow Ball -> p1a: Pachirisu
+      after p1: Pachirisu 188/324, Gyarados-Mega 394/394
+      after p2: Kangaskhan-Mega 414/414, Aegislash-Blade 324/324
+
+  Turn 2
+    p1 mcts: switch 3, move 1 2   (slot0 Pachirisu -> Talonflame)
+      search (51000 visits): switch talonflame;crunch,1 4670v 1213 | switch talonflame;dragondance,1 3659v 918 | switch landorustherian;crunch,1 1530v 319 | nuzzle,1;crunch,1 1264v 249
+    p2 greedy: move 3 1, move 1 1
+      p1a <- Talonflame comes in (360/360)
+      p2a Kangaskhan used Sucker Punch  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p1b Gyarados used Crunch -> p2b: Aegislash
+      p2b Aegislash fainted
+      after p1: Talonflame 360/360, Gyarados-Mega 394/394
+      after p2: Kangaskhan-Mega 414/414, Aegislash 0/324
+
+  Turn 3
+      p2b <- Sylveon comes in (394/394)
+      after p1: Talonflame 360/360, Gyarados-Mega 394/394
+      after p2: Kangaskhan-Mega 414/414, Sylveon 394/394
+
+  Turn 4
+    p1 mcts: move 1 1, move 2 2
+      search (47000 visits): bravebird,0;waterfall,1 706v 68 | sleeptalk,0;waterfall,1 676v 63 | uturn,0;waterfall,1 674v 62 | switch landorustherian;dragondance,1 670v 62
+    p2 greedy: move 3 1, move 1
+      p2a Kangaskhan used Sucker Punch -> p1a: Talonflame
+      p1a Talonflame used Brave Bird -> p2a: Kangaskhan
+      p1b Gyarados used Waterfall -> p2b: Sylveon
+      p2b Sylveon used Hyper Voice -> p1b: Gyarados  [[spread] p1a,p1b]
+      after p1: Talonflame 73/360, Gyarados-Mega 164/394
+      after p2: Kangaskhan-Mega 137/414, Sylveon 120/394
+
+  Turn 5
+    p1 mcts: move 1 2, move 3
+      search (49000 visits): bravebird,1;dragondance,1 3131v 449 | switch landorustherian;dragondance,1 2499v 333 | bravebird,1;waterfall,1 1811v 212 | switch pachirisu;dragondance,1 1772v 205
+    p2 greedy: move 3 1, move 1
+      p2a Kangaskhan used Sucker Punch -> p1a: Talonflame
+      p1a Talonflame fainted
+      p1b Gyarados used Dragon Dance
+              p1b Gyarados atk 1 rose
+              p1b Gyarados spe 1 rose
+      p2b Sylveon used Hyper Voice -> p1b: Gyarados
+      p1b Gyarados fainted
+      after p1: Talonflame 0/360, Gyarados-Mega 0/394
+      after p2: Kangaskhan-Mega 137/414, Sylveon 144/394
+
+  Turn 6
+      p1a <- Pachirisu comes in (188/324)
+      p1b <- Gothitelle comes in (344/344)
+      after p1: Pachirisu 188/324, Gothitelle 344/344
+      after p2: Kangaskhan-Mega 137/414, Sylveon 144/394
+
+  Turn 7
+    p1 mcts: switch 6, move 1 1   (slot0 Pachirisu -> Landorus-Therian)
+      search (64000 visits): switch landorustherian;psyshock,0 6720v 1403 | nuzzle,1;switch landorustherian 4401v 859 | superfang,0;switch deoxysattack 4245v 1391 | switch landorustherian;psyshock,1 2228v 371
+    p2 greedy: move 3 1, move 1
+      p1a <- Landorus-Therian comes in (382/382)
+              p2a Kangaskhan atk 1 fell
+              p2b Sylveon atk 1 fell
+      p2a Kangaskhan used Sucker Punch  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p1b Gothitelle used Psyshock -> p2a: Kangaskhan
+      p2b Sylveon used Hyper Voice -> p1b: Gothitelle  [[spread] p1a,p1b]
+      after p1: Landorus-Therian 292/382, Gothitelle 235/344
+      after p2: Kangaskhan-Mega 58/414, Sylveon 168/394
+
+  Turn 8
+    p1 mcts: switch 6, move 3 1   (slot0 Landorus-Therian -> Pachirisu)
+      search (55000 visits): switch pachirisu;healpulse,0 2422v 423 | earthquake,0;magiccoat,1 1809v 289 | uturn,0;psyshock,1 1306v 183 | superpower,0;psyshock,1 1218v 165
+    p2 greedy: move 3 2, move 1
+      p1a <- Pachirisu comes in (188/324)
+      p2a Kangaskhan used Sucker Punch  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p1b Gothitelle used Heal Pulse -> p2a: Kangaskhan
+      p2b Sylveon used Hyper Voice -> p1b: Gothitelle  [[spread] p1a,p1b]
+              p1a Pachirisu used up its Sitrus Berry
+      after p1: Pachirisu 157/324, Gothitelle 111/344
+      after p2: Kangaskhan-Mega 265/414, Sylveon 192/394
+
+  Turn 9
+    p1 mcts: switch 6, move 1 2   (slot0 Pachirisu -> Landorus-Therian)
+      search (68000 visits): switch landorustherian;psyshock,1 2329v 262 | superfang,1;switch landorustherian 1702v 163 | switch landorustherian;protect,1 1666v 158 | followme,0;switch landorustherian 1569v 143
+    p2 greedy: move 3 2, move 1
+      p1a <- Landorus-Therian comes in (292/382)
+              p2a Kangaskhan atk 1 fell
+              p2b Sylveon atk 1 fell
+      p2a Kangaskhan used Sucker Punch -> p1b: Gothitelle
+      p1b Gothitelle used Psyshock -> p2b: Sylveon
+      p2b Sylveon used Hyper Voice -> p1b: Gothitelle  [[spread] p1a,p1b]
+      p1b Gothitelle fainted
+      after p1: Landorus-Therian 205/382, Gothitelle 0/344
+      after p2: Kangaskhan-Mega 127/414, Sylveon 104/394
+
+  Turn 10
+      p1b <- Deoxys-Attack comes in (241/241)
+      after p1: Landorus-Therian 205/382, Deoxys-Attack 241/241
+      after p2: Kangaskhan-Mega 127/414, Sylveon 104/394
+
+  Turn 11
+    p1 mcts: move 3 2, move 4
+      search (47000 visits): stoneedge,1;protect,1 1578v 362 | stoneedge,0;protect,1 1555v 355 | earthquake,0;protect,1 1546v 353 | uturn,1;protect,1 1536v 350
+    p2 greedy: move 3 1, move 1
+      p1b Deoxys used Protect
+      p2a Kangaskhan used Sucker Punch -> p1a: Landorus
+              p1a Landorus -- critical hit
+      p1a Landorus used Stone Edge -> p2b: Sylveon
+      p2b Sylveon fainted
+      after p1: Landorus-Therian 74/382, Deoxys-Attack 241/241
+      after p2: Kangaskhan-Mega 127/414, Sylveon 0/394
+
+  Turn 12
+      p2b <- Volcanion comes in (363/363)
+      after p1: Landorus-Therian 74/382, Deoxys-Attack 241/241
+      after p2: Kangaskhan-Mega 127/414, Volcanion 363/363
+
+  Turn 13
+    p1 mcts: switch 6, move 4   (slot0 Landorus-Therian -> Pachirisu)
+      search (40000 visits): switch pachirisu;protect,1 3482v 974 | superpower,0;protect,1 2437v 635 | stoneedge,0;protect,1 2434v 634 | uturn,1;protect,1 2371v 615
+    p2 greedy: move 1 1, move 4 1
+      p1a <- Pachirisu comes in (157/324)
+      p1b Deoxys used Protect
+      p2a Kangaskhan used Fake Out  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p2b Volcanion used Overheat -> p1a: Pachirisu
+              p2b Volcanion spa 2 fell
+      p1a Pachirisu fainted
+      after p1: Pachirisu 0/324, Deoxys-Attack 241/241
+      after p2: Kangaskhan-Mega 127/414, Volcanion 363/363
+
+  Turn 14
+      p1a <- Landorus-Therian comes in (74/382)
+              p2a Kangaskhan atk 1 fell
+              p2b Volcanion atk 1 fell
+      after p1: Landorus-Therian 74/382, Deoxys-Attack 241/241
+      after p2: Kangaskhan-Mega 127/414, Volcanion 363/363
+
+  Turn 15
+    p1 mcts: move 2 1, move 4
+      search (34000 visits): uturn,0;protect,1 1820v 377 | superpower,1;protect,1 1799v 371 | stoneedge,0;protect,1 1776v 365 | stoneedge,1;protect,1 1744v 357
+    p2 greedy: move 1 1, move 4 1
+      p1b Deoxys used Protect  [[still]]
+              p1b Deoxys -- IT FAILED
+      p2a Kangaskhan used Fake Out  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p1a Landorus used U-turn -> p2a: Kangaskhan
+      p2b Volcanion used Overheat -> p1a: Landorus
+              p2b Volcanion spa 2 fell
+      after p1: Landorus-Therian 5/382, Deoxys-Attack 241/241
+      after p2: Kangaskhan-Mega 39/414, Volcanion 363/363
+
+  Turn 16
+    p1 mcts: move 2 1, move 4
+      search (44000 visits): uturn,0;protect,1 1990v 323 | uturn,1;protect,1 1950v 314 | superpower,0;protect,1 1908v 305 | stoneedge,1;protect,1 1890v 301
+    p2 greedy: move 1 1, move 4 1
+      p1b Deoxys used Protect
+      p2a Kangaskhan used Fake Out  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p1a Landorus used U-turn -> p2a: Kangaskhan
+      p2a Kangaskhan fainted
+      p2b Volcanion used Overheat -> p1a: Landorus
+              p2b Volcanion spa 2 fell
+      p1a Landorus fainted
+      after p1: Landorus-Therian 0/382, Deoxys-Attack 241/241
+      after p2: Kangaskhan-Mega 0/414, Volcanion 363/363
+
+  Turn 17
+      p2a <- Landorus-Therian comes in (320/320)
+              p1b Deoxys atk 1 fell
+      after p1: Landorus-Therian 0/382, Deoxys-Attack 241/241
+      after p2: Landorus-Therian 320/320, Volcanion 363/363
+
+  Turn 18
+    p1 mcts: pass, move 4
+      search (63000 visits): No Move;protect,1 61842v 23678 | No Move;icebeam,0 274v 27 | No Move;psychoboost,0 183v 7 | No Move;psychoboost,1 182v 6
+    p2 greedy: move 4 2, move 4 2
+      p1b Deoxys used Protect
+      p2a Landorus used Stone Edge -> p1b: Deoxys
+              p1b Deoxys -- move: Protect
+      p2b Volcanion used Overheat -> p1b: Deoxys
+              p1b Deoxys -- move: Protect
+      after p1: Landorus-Therian 0/382, Deoxys-Attack 241/241
+      after p2: Landorus-Therian 320/320, Volcanion 363/363
+
+  Turn 19
+    p1 mcts: pass, move 4
+      search (67000 visits): No Move;protect,1 66090v 28813 | No Move;icebeam,0 185v 18 | No Move;hiddenpower,1 155v 11 | No Move;hiddenpower,0 149v 9
+    p2 greedy: move 4 2, move 4 2
+      p1b Deoxys used Protect  [[still]]
+              p1b Deoxys -- IT FAILED
+      p2a Landorus used Stone Edge -> p1b: Deoxys
+      p1b Deoxys fainted
+      after p1: Landorus-Therian 0/382, Deoxys-Attack 0/241
+      after p2: Landorus-Therian 320/320, Volcanion 363/363
+
+  RESULT: p2 wins

@@ -1,0 +1,385 @@
+battle 147   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: XY Doubles: Breloom, Gengar, Landorus-Therian, Rotom-Wash, Bisharp, Talonflame
+  p2: hoopa semiroom: Kangaskhan-Mega, Landorus, Conkeldurr, Genesect, Gothitelle, Thundurus
+
+  Turn 1
+    p1 mcts: switch 3, move 4   (slot0 Breloom -> Landorus-Therian)
+      search (59000 visits): switch landorustherian;protect,1 27153v 16650 | switch landorustherian;shadowball,1 1250v 549 | switch rotomwash;shadowball,1 1191v 520 | switch landorustherian;sludgewave,0 538v 200
+    p2 greedy: move 1 1, move 1 1
+      p1a <- Landorus-Therian comes in (320/320)
+              p2a Kangaskhan atk 1 fell
+              p2b Landorus atk 1 fell
+      p1b Gengar used Protect
+      p2a Kangaskhan used Fake Out -> p1a: Landorus
+      p2b Landorus used Earth Power -> p1a: Landorus
+              p1a Landorus -- IMMUNE
+      after p1: Landorus-Therian 277/320, Gengar 262/262
+      after p2: Kangaskhan-Mega 414/414, Landorus 319/319
+
+  Turn 2
+    p1 mcts: switch 4, move 4 mega   (slot0 Landorus-Therian -> Rotom-Wash)
+      search (51000 visits): switch rotomwash;protect-mega,1 14956v 6620 | switch rotomwash;willowisp,0 4656v 1910 | switch rotomwash;protect,1 1988v 816 | switch rotomwash;shadowball,1 699v 213
+    p2 greedy: move 1 1, move 1 1
+      p1a <- Rotom-Wash comes in (304/304)
+      p1b Gengar used Protect  [[still]]
+              p1b Gengar -- IT FAILED
+      p2a Kangaskhan used Fake Out  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p2b Landorus used Earth Power -> p1a: Rotom
+              p1a Rotom -- IMMUNE
+      after p1: Rotom-Wash 304/304, Gengar-Mega 262/262
+      after p2: Kangaskhan-Mega 414/414, Landorus 319/319
+
+  Turn 3
+    p1 mcts: switch 4, move 4   (slot0 Rotom-Wash -> Landorus-Therian)
+      search (69000 visits): switch landorustherian;protect,1 24807v 9750 | hydropump,1;switch landorustherian 2319v 754 | electroweb,0;protect,1 1888v 593 | hydropump,0;switch landorustherian 1220v 351
+    p2 greedy: move 1 1, move 1 1
+      p1a <- Landorus-Therian comes in (277/320)
+              p2a Kangaskhan atk 1 fell
+              p2b Landorus atk 1 fell
+      p1b Gengar used Protect
+      p2a Kangaskhan used Fake Out  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p2b Landorus used Earth Power -> p1a: Landorus
+              p1a Landorus -- IMMUNE
+      after p1: Landorus-Therian 277/320, Gengar-Mega 262/262
+      after p2: Kangaskhan-Mega 414/414, Landorus 319/319
+
+  Turn 4
+    p1 mcts: move 3 2, move 4
+      search (53000 visits): superpower,1;protect,1 4215v 1487 | earthquake,0;protect,1 2405v 792 | uturn,1;protect,1 2232v 727 | uturn,0;protect,1 2070v 667
+    p2 greedy: move 1 1, move 1 1
+      p1b Gengar used Protect  [[still]]
+              p1b Gengar -- IT FAILED
+      p2a Kangaskhan used Fake Out  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p1a Landorus used Superpower -> p2b: Landorus
+              p1a Landorus atk 1 fell
+              p1a Landorus def 1 fell
+      p2b Landorus used Earth Power -> p1a: Landorus
+              p1a Landorus -- IMMUNE
+      after p1: Landorus-Therian 277/320, Gengar-Mega 262/262
+      after p2: Kangaskhan-Mega 414/414, Landorus 239/319
+
+  Turn 5
+    p1 mcts: switch 5, move 4   (slot0 Landorus-Therian -> Bisharp)
+      search (59000 visits): switch bisharp;protect,1 13151v 5452 | switch rotomwash;protect,1 6219v 2463 | superpower,1;protect,1 5580v 2191 | superpower,0;protect,1 4879v 1895
+    p2 greedy: move 1 1, move 1 1
+      p1a <- Bisharp comes in (272/272)
+      p1b Gengar used Protect
+      p2a Kangaskhan used Fake Out  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p2b Landorus used Earth Power -> p1a: Bisharp
+              p1a Bisharp used up its Focus Sash
+      after p1: Bisharp 1/272, Gengar-Mega 262/262
+      after p2: Kangaskhan-Mega 414/414, Landorus 239/319
+
+  Turn 6
+    p1 mcts: switch 5, move 4   (slot0 Bisharp -> Landorus-Therian)
+      search (73000 visits): switch landorustherian;protect,1 3438v 994 | switch rotomwash;protect,1 3388v 977 | suckerpunch,1;protect,1 2182v 586 | suckerpunch,0;protect,1 2054v 545
+    p2 greedy: move 1 1, move 1 1
+      p1a <- Landorus-Therian comes in (277/320)
+              p2a Kangaskhan atk 1 fell
+              p2b Landorus atk 1 fell
+      p1b Gengar used Protect  [[still]]
+              p1b Gengar -- IT FAILED
+      p2a Kangaskhan used Fake Out  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p2b Landorus used Earth Power -> p1a: Landorus
+              p1a Landorus -- IMMUNE
+      after p1: Landorus-Therian 277/320, Gengar-Mega 262/262
+      after p2: Kangaskhan-Mega 414/414, Landorus 239/319
+
+  Turn 7
+    p1 mcts: switch 5, move 4   (slot0 Landorus-Therian -> Bisharp)
+      search (67000 visits): switch bisharp;protect,1 11111v 3623 | switch rotomwash;protect,1 6019v 2173 | uturn,0;protect,1 2175v 587 | uturn,1;protect,1 1789v 464
+    p2 greedy: move 1 1, move 1 1
+      p1a <- Bisharp comes in (1/272)
+      p1b Gengar used Protect
+      p2a Kangaskhan used Fake Out  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p2b Landorus used Earth Power -> p1a: Bisharp
+      p1a Bisharp fainted
+      after p1: Bisharp 0/272, Gengar-Mega 262/262
+      after p2: Kangaskhan-Mega 414/414, Landorus 239/319
+
+  Turn 8
+      p1a <- Breloom comes in (262/262)
+      after p1: Breloom 262/262, Gengar-Mega 262/262
+      after p2: Kangaskhan-Mega 414/414, Landorus 239/319
+
+  Turn 9
+    p1 mcts: switch 4, move 4   (slot0 Breloom -> Rotom-Wash)
+      search (56000 visits): switch rotomwash;protect,1 25498v 11307 | switch landorustherian;protect,1 5268v 2151 | rocktomb,1;protect,1 746v 225 | switch landorustherian;sludgewave,0 653v 189
+    p2 greedy: move 1 1, move 1 1
+      p1a <- Rotom-Wash comes in (304/304)
+      p1b Gengar used Protect  [[still]]
+              p1b Gengar -- IT FAILED
+      p2a Kangaskhan used Fake Out  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p2b Landorus used Earth Power -> p1a: Rotom
+              p1a Rotom -- IMMUNE
+      after p1: Rotom-Wash 304/304, Gengar-Mega 262/262
+      after p2: Kangaskhan-Mega 414/414, Landorus 239/319
+
+  Turn 10
+    p1 mcts: move 2 2, move 4
+      search (68000 visits): thunderbolt,1;protect,1 10220v 3296 | switch landorustherian;protect,1 3991v 1175 | hydropump,0;protect,1 2232v 601 | protect,0;protect,1 2096v 558
+    p2 greedy: move 1 1, move 1 1
+      p1b Gengar used Protect
+      p2a Kangaskhan used Fake Out  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p2b Landorus used Earth Power -> p1a: Rotom
+              p1a Rotom -- IMMUNE
+      p1a Rotom used Thunderbolt -> p2b: Landorus
+              p2b Landorus -- IMMUNE
+      after p1: Rotom-Wash 304/304, Gengar-Mega 262/262
+      after p2: Kangaskhan-Mega 414/414, Landorus 239/319
+
+  Turn 11
+    p1 mcts: switch 5, move 4   (slot0 Rotom-Wash -> Landorus-Therian)
+      search (59000 visits): switch landorustherian;protect,1 8243v 3692 | electroweb,0;protect,1 7606v 3501 | protect,0;protect,1 4851v 2097 | thunderbolt,1;protect,1 3298v 1378
+    p2 greedy: move 1 1, move 1 1
+      p1a <- Landorus-Therian comes in (277/320)
+              p2a Kangaskhan atk 1 fell
+              p2b Landorus atk 1 fell
+      p1b Gengar used Protect
+      p2a Kangaskhan used Fake Out  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p2b Landorus used Earth Power -> p1a: Landorus
+              p1a Landorus -- IMMUNE
+      after p1: Landorus-Therian 277/320, Gengar-Mega 262/262
+      after p2: Kangaskhan-Mega 414/414, Landorus 239/319
+
+  Turn 12
+    p1 mcts: move 4 1, move 4
+      search (46000 visits): uturn,0;protect,1 9469v 4509 | superpower,0;protect,1 4829v 2207 | earthquake,0;protect,1 4482v 2038 | uturn,1;protect,1 4048v 1826
+    p2 greedy: move 1 1, move 1 1
+      p1b Gengar used Protect  [[still]]
+              p1b Gengar -- IT FAILED
+      p2a Kangaskhan used Fake Out  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p1a Landorus used U-turn -> p2a: Kangaskhan
+      after p1: Landorus-Therian 277/320, Gengar-Mega 262/262
+      after p2: Kangaskhan-Mega 318/414, Landorus 239/319
+
+  Turn 13
+      p1a <- Breloom comes in (262/262)
+      p2b Landorus used Earth Power -> p1a: Breloom
+      after p1: Breloom 66/262, Gengar-Mega 262/262
+      after p2: Kangaskhan-Mega 318/414, Landorus 239/319
+
+  Turn 14
+    p1 mcts: switch 5, move 4   (slot0 Breloom -> Rotom-Wash)
+      search (60000 visits): switch rotomwash;protect,1 23450v 9476 | switch landorustherian;protect,1 6932v 2623 | switch rotomwash;switch talonflame 775v 206 | switch rotomwash;switch landorustherian 728v 190
+    p2 greedy: move 1 1, move 1 1
+      p1a <- Rotom-Wash comes in (304/304)
+      p1b Gengar used Protect
+      p2a Kangaskhan used Fake Out  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p2b Landorus used Earth Power -> p1a: Rotom
+              p1a Rotom -- IMMUNE
+      after p1: Rotom-Wash 304/304, Gengar-Mega 262/262
+      after p2: Kangaskhan-Mega 318/414, Landorus 239/319
+
+  Turn 15
+    p1 mcts: switch 4, move 4   (slot0 Rotom-Wash -> Landorus-Therian)
+      search (63000 visits): switch landorustherian;protect,1 2707v 613 | protect,0;protect,1 2378v 524 | electroweb,0;protect,1 2337v 513 | thunderbolt,0;protect,1 2335v 513
+    p2 greedy: move 1 1, move 1 1
+      p1a <- Landorus-Therian comes in (277/320)
+              p2a Kangaskhan atk 1 fell
+              p2b Landorus atk 1 fell
+      p1b Gengar used Protect  [[still]]
+              p1b Gengar -- IT FAILED
+      p2a Kangaskhan used Fake Out  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p2b Landorus used Earth Power -> p1a: Landorus
+              p1a Landorus -- IMMUNE
+      after p1: Landorus-Therian 277/320, Gengar-Mega 262/262
+      after p2: Kangaskhan-Mega 318/414, Landorus 239/319
+
+  Turn 16
+    p1 mcts: move 4 1, move 4
+      search (59000 visits): uturn,0;protect,1 36594v 19755 | rockslide,0;protect,1 1121v 427 | superpower,0;protect,1 1072v 405 | uturn,1;protect,1 1063v 401
+    p2 greedy: move 1 1, move 1 1
+      p1b Gengar used Protect
+      p2a Kangaskhan used Fake Out  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p1a Landorus used U-turn -> p2a: Kangaskhan
+      after p1: Landorus-Therian 277/320, Gengar-Mega 262/262
+      after p2: Kangaskhan-Mega 222/414, Landorus 239/319
+
+  Turn 17
+      p1a <- Rotom-Wash comes in (304/304)
+      p2b Landorus used Earth Power -> p1a: Rotom
+              p1a Rotom -- IMMUNE
+      after p1: Rotom-Wash 304/304, Gengar-Mega 262/262
+      after p2: Kangaskhan-Mega 222/414, Landorus 239/319
+
+  Turn 18
+    p1 mcts: move 2 2, move 4
+      search (82000 visits): thunderbolt,1;protect,1 16314v 5244 | thunderbolt,0;protect,1 11967v 3918 | hydropump,0;protect,1 5435v 1597 | switch landorustherian;protect,1 2230v 576
+    p2 greedy: move 1 1, move 1 1
+      p1b Gengar used Protect  [[still]]
+              p1b Gengar -- IT FAILED
+      p2a Kangaskhan used Fake Out  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p2b Landorus used Earth Power -> p1a: Rotom
+              p1a Rotom -- IMMUNE
+      p1a Rotom used Thunderbolt -> p2b: Landorus
+              p2b Landorus -- IMMUNE
+      after p1: Rotom-Wash 304/304, Gengar-Mega 262/262
+      after p2: Kangaskhan-Mega 222/414, Landorus 239/319
+
+  Turn 19
+    p1 mcts: move 3, move 4
+      search (67000 visits): electroweb,0;protect,1 2901v 724 | hydropump,1;protect,1 2769v 685 | protect,0;protect,1 2532v 616 | thunderbolt,0;protect,1 2529v 616
+    p2 greedy: move 1 1, move 1 1
+      p1b Gengar used Protect
+      p2a Kangaskhan used Fake Out  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p2b Landorus used Earth Power -> p1a: Rotom
+              p1a Rotom -- IMMUNE
+      p1a Rotom used Electroweb -> p2b: Landorus  [[spread] p2a]
+              p2b Landorus -- IMMUNE
+              p2a Kangaskhan spe 1 fell
+      after p1: Rotom-Wash 304/304, Gengar-Mega 262/262
+      after p2: Kangaskhan-Mega 171/414, Landorus 239/319
+
+  Turn 20
+    p1 mcts: move 1 2, switch 6   (slot1 Gengar-Mega -> Talonflame)
+      search (57000 visits): hydropump,1;switch talonflame 3148v 904 | hydropump,1;switch breloom 2668v 747 | electroweb,0;switch breloom 2378v 653 | protect,0;switch breloom 1816v 473
+    p2 greedy: move 2 1, move 2 1
+      p1b <- Talonflame comes in (318/318)
+      p2b Landorus used Psychic -> p1a: Rotom
+      p2a Kangaskhan used Seismic Toss -> p1a: Rotom
+              p1a Rotom used up its Sitrus Berry
+      p1a Rotom used Hydro Pump -> p2b: Landorus  [[miss]]
+              p1a Rotom -- MISSED
+      after p1: Rotom-Wash 159/304, Talonflame 318/318
+      after p2: Kangaskhan-Mega 171/414, Landorus 239/319
+
+  Turn 21
+    p1 mcts: switch 4, move 3   (slot0 Rotom-Wash -> Landorus-Therian)
+      search (48000 visits): switch landorustherian;tailwind,1 993v 93 | thunderbolt,1;tailwind,1 955v 86 | hydropump,1;tailwind,1 909v 79 | switch landorustherian;protect,1 870v 72
+    p2 greedy: move 2 1, move 2 1
+      p1a <- Landorus-Therian comes in (277/320)
+              p2a Kangaskhan atk 1 fell
+              p2b Landorus atk 1 fell
+      p1b Talonflame used Tailwind
+      -sidestart p1: A move: Tailwind
+      p2b Landorus used Psychic -> p1a: Landorus
+      p2a Kangaskhan used Seismic Toss -> p1a: Landorus
+      p1a Landorus fainted
+      after p1: Landorus-Therian 0/320, Talonflame 318/318
+      after p2: Kangaskhan-Mega 171/414, Landorus 239/319
+
+  Turn 22
+      p1a <- Rotom-Wash comes in (159/304)
+      after p1: Rotom-Wash 159/304, Talonflame 318/318
+      after p2: Kangaskhan-Mega 171/414, Landorus 239/319
+
+  Turn 23
+    p1 mcts: move 1 2, move 2
+      search (44000 visits): hydropump,1;protect,1 868v 50 | electroweb,0;protect,1 867v 50 | electroweb,0;fireblast,1 845v 47 | thunderbolt,0;fireblast,1 838v 46
+    p2 greedy: move 2 1, move 2 1
+      p1b Talonflame used Protect
+      p1a Rotom used Hydro Pump -> p2b: Landorus
+      p2b Landorus fainted
+      p2a Kangaskhan used Seismic Toss -> p1a: Rotom
+      after p1: Rotom-Wash 59/304, Talonflame 318/318
+      after p2: Kangaskhan-Mega 171/414, Landorus 0/319
+
+  Turn 24
+      p2b <- Conkeldurr comes in (414/414)
+      after p1: Rotom-Wash 59/304, Talonflame 318/318
+      after p2: Kangaskhan-Mega 171/414, Conkeldurr 414/414
+
+  Turn 25
+    p1 mcts: move 1 1, move 2
+      search (47000 visits): hydropump,0;protect,1 13915v 3587 | switch breloom;bravebird,1 1882v 355 | protect,0;switch breloom 1300v 259 | switch gengarmega;fireblast,1 783v 102
+    p2 greedy: move 2 1, move 1 1
+      p1b Talonflame used Protect
+      p1a Rotom used Hydro Pump -> p2a: Kangaskhan
+      p2a Kangaskhan used Seismic Toss -> p1a: Rotom
+      p1a Rotom fainted
+      p2b Conkeldurr used Drain Punch -> p1b: Talonflame
+              p1b Talonflame -- move: Protect
+      after p1: Rotom-Wash 0/304, Talonflame 318/318
+      after p2: Kangaskhan-Mega 33/414, Conkeldurr 414/414
+
+  Turn 26
+      p1a <- Breloom comes in (66/262)
+      after p1: Breloom 66/262, Talonflame 318/318
+      after p2: Kangaskhan-Mega 33/414, Conkeldurr 414/414
+
+  Turn 27
+    p1 mcts: move 2 2, move 2
+      search (33000 visits): machpunch,1;protect,1 2120v 542 | bulletseed,1;bravebird,1 1420v 272 | spore,0;bravebird,1 1178v 211 | bulletseed,0;bravebird,1 1058v 182
+    p2 greedy: move 2 1, move 1 1
+      p1b Talonflame used Protect  [[still]]
+              p1b Talonflame -- IT FAILED
+      p1a Breloom used Mach Punch -> p2b: Conkeldurr
+      p2a Kangaskhan used Seismic Toss -> p1a: Breloom
+      p1a Breloom fainted
+      p2b Conkeldurr used Drain Punch -> p1b: Talonflame
+      -sideend p1: A move: Tailwind
+      after p1: Breloom 0/262, Talonflame 158/318
+      after p2: Kangaskhan-Mega 33/414, Conkeldurr 297/414
+
+  Turn 28
+      p1a <- Gengar-Mega comes in (262/262)
+      after p1: Gengar-Mega 262/262, Talonflame 158/318
+      after p2: Kangaskhan-Mega 33/414, Conkeldurr 297/414
+
+  Turn 29
+    p1 mcts: move 1 2, move 1 2
+      search (48000 visits): shadowball,1;bravebird,1 6126v 1673 | shadowball,1;fireblast,1 4397v 1154 | shadowball,0;bravebird,1 2769v 676 | willowisp,1;bravebird,1 2652v 643
+    p2 greedy: move 2 2, move 1 2
+      p1b Talonflame used Brave Bird -> p2b: Conkeldurr
+      p2b Conkeldurr fainted
+      p1a Gengar used Shadow Ball -> p2a: Kangaskhan
+              p2a Kangaskhan -- IMMUNE
+      p2a Kangaskhan used Seismic Toss -> p1b: Talonflame
+      p1b Talonflame fainted
+      after p1: Gengar-Mega 262/262, Talonflame 0/318
+      after p2: Kangaskhan-Mega 33/414, Conkeldurr 0/414
+
+  Turn 30
+      p2b <- Genesect comes in (323/323)
+              p2b Genesect atk 1 rose
+      after p1: Gengar-Mega 262/262, Talonflame 0/318
+      after p2: Kangaskhan-Mega 33/414, Genesect 323/323
+
+  Turn 31
+    p1 mcts: move 3 2, pass
+      search (350000 visits): willowisp,1;No Move 96934v 1941 | shadowball,1;No Move 68993v 1174 | sludgewave,0;No Move 64509v 1055 | willowisp,0;No Move 60912v 961
+    p2 greedy: move 2 1, move 2
+      p1a Gengar used Will-O-Wisp -> p2b: Genesect
+              p2b Genesect is now brn
+      p2b Genesect used Explosion -> p1a: Gengar  [[spread] p2a]
+              p1a Gengar -- IMMUNE
+      p2b Genesect fainted
+      p2a Kangaskhan fainted
+      after p1: Gengar-Mega 262/262, Talonflame 0/318
+      after p2: Kangaskhan-Mega 0/414, Genesect 0/323
+
+  Turn 32
+      p2a <- Gothitelle comes in (344/344)
+      p2b <- Thundurus comes in (299/299)
+      after p1: Gengar-Mega 262/262, Talonflame 0/318
+      after p2: Gothitelle 344/344, Thundurus 299/299
+
+  Turn 33
+    p1 mcts: move 1 2, pass
+      search (1393000 visits): shadowball,1;No Move 375316v 1330 | willowisp,1;No Move 313020v 850 | shadowball,0;No Move 240598v 332 | sludgewave,0;No Move 239778v 326
+    p2 greedy: move 3 1, move 1 1
+      p1a Gengar used Shadow Ball -> p2b: Thundurus
+              p2b Thundurus spd 1 fell
+      p2b Thundurus used Thunderbolt -> p1a: Gengar
+      p2a Gothitelle used Psychic -> p1a: Gengar
+      p1a Gengar fainted
+      after p1: Gengar 0/262, Talonflame 0/318
+      after p2: Gothitelle 344/344, Thundurus 59/299
+
+  RESULT: p2 wins

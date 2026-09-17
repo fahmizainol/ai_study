@@ -1,0 +1,217 @@
+battle 91   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: never cook again: Kangaskhan-Mega, Bisharp, Togekiss, Thundurus, Landorus-Therian, Gastrodon-East
+  p2: ORAS Doubles OU: Cresselia, Scrafty, Thundurus, Metagross, Landorus-Therian, Heatran
+
+  Turn 1
+    p1 mcts: switch 4, move 3 2   (slot0 Kangaskhan-Mega -> Thundurus)
+      search (58000 visits): switch thundurus;ironhead,1 687v 661 | switch gastrodoneast;ironhead,1 648v 620 | switch landorustherian;ironhead,1 646v 618 | switch togekiss;ironhead,1 645v 617
+    p2 greedy: move 2 1, move 2 1
+      p1a <- Thundurus comes in (361/361)
+      p1b Bisharp used Iron Head -> p2b: Scrafty
+              p2b Scrafty -- critical hit
+      p2a Cresselia used Psychic -> p1a: Thundurus
+              p2b Scrafty COULD NOT MOVE (flinch)
+      after p1: Thundurus 265/361, Bisharp 251/278
+      after p2: Cresselia 440/440, Scrafty 83/334
+
+  Turn 2
+    p1 mcts: move 1 2, move 2 1
+      search (26000 visits): thunderbolt,1;knockoff,0 364v 357 | thunderbolt,0;ironhead,1 326v 315 | thunderbolt,1;knockoff,1 309v 296 | hiddenpower,1;knockoff,1 307v 294
+    p2 greedy: move 2 1, move 2 1
+      p1a Thundurus used Thunderbolt -> p2b: Scrafty
+      p1b Bisharp used Knock Off -> p2a: Cresselia
+              p2a Cresselia -- critical hit
+              p2a Cresselia used up its Mental Herb
+      p2a Cresselia fainted
+      p2b Scrafty used Drain Punch -> p1a: Thundurus
+      after p1: Thundurus 190/361, Bisharp 224/278
+      after p2: Cresselia 0/440, Scrafty 42/334
+
+  Turn 3
+      p2a <- Thundurus comes in (358/358)
+      after p1: Thundurus 190/361, Bisharp 224/278
+      after p2: Thundurus 358/358, Scrafty 42/334
+
+  Turn 4
+    p1 mcts: move 2 2, move 2 1
+      search (25000 visits): hiddenpower,1;knockoff,0 337v 326 | thunderbolt,1;knockoff,0 334v 323 | thunderbolt,0;switch landorustherian 299v 285 | thunderbolt,0;ironhead,1 293v 278
+    p2 greedy: move 1 1, move 2 1
+      p1a Thundurus used Hidden Power -> p2b: Scrafty
+      p2a Thundurus used Thunderbolt -> p1a: Thundurus
+              p1a Thundurus used up its Sitrus Berry
+      p1b Bisharp used Knock Off -> p2a: Thundurus
+              p2a Thundurus used up its Sitrus Berry
+      p2b Scrafty used Drain Punch -> p1a: Thundurus
+      after p1: Thundurus 58/361, Bisharp 197/278
+      after p2: Thundurus 73/358, Scrafty 42/334
+
+  Turn 5
+    p1 mcts: move 1 1, move 3 2
+      search (33000 visits): thunderbolt,0;ironhead,1 505v 473 | thunderbolt,1;knockoff,0 501v 469 | hiddenpower,1;knockoff,0 459v 425 | thunderbolt,1;switch landorustherian 445v 411
+    p2 greedy: move 1 1, move 2 1
+      p1a Thundurus used Thunderbolt -> p2a: Thundurus
+      p2a Thundurus fainted
+      p1b Bisharp used Iron Head -> p2b: Scrafty
+      p2b Scrafty fainted
+      after p1: Thundurus 58/361, Bisharp 170/278
+      after p2: Thundurus 0/358, Scrafty 0/334
+
+  Turn 6
+      p2a <- Metagross comes in (346/346)
+      p2b <- Landorus-Therian comes in (344/344)
+              p1a Thundurus atk 1 fell
+              p1b Bisharp atk 1 fell
+              p1b Bisharp atk 2 rose
+      after p1: Thundurus 58/361, Bisharp 170/278
+      after p2: Metagross 346/346, Landorus-Therian 344/344
+
+  Turn 7
+    p1 mcts: switch 6, switch 4   (slot0 Thundurus -> Gastrodon-East; slot1 Bisharp -> Kangaskhan-Mega)
+      search (29000 visits): switch gastrodoneast;switch kangaskhanmega 1758v 1255 | switch gastrodoneast;protect,1 1544v 1105 | switch gastrodoneast;switch landorustherian 1123v 771 | switch togekiss;switch landorustherian 871v 582
+    p2 greedy: move 1 1, move 3 1
+      p1a <- Gastrodon-East comes in (426/426)
+      p1b <- Kangaskhan-Mega comes in (413/413)
+      p2b Landorus used Superpower -> p1a: Gastrodon
+              p2b Landorus atk 1 fell
+              p2b Landorus def 1 fell
+      p2a Metagross used Iron Head -> p1a: Gastrodon
+      after p1: Gastrodon-East 165/426, Kangaskhan-Mega 413/413
+      after p2: Metagross 289/346, Landorus-Therian 287/344
+
+  Turn 8
+    p1 mcts: move 4, move 1 2
+      search (47000 visits): recover,0;fakeout,1 4795v 3512 | recover,0;substitute,1 3495v 2520 | recover,0;seismictoss,1 1479v 1004 | recover,0;fakeout,0 1416v 957
+    p2 greedy: move 1 1, move 3 1
+      p1b Kangaskhan used Fake Out -> p2b: Landorus
+              p2b Landorus COULD NOT MOVE (flinch)
+      p2a Metagross used Iron Head -> p1a: Gastrodon
+              p1a Gastrodon COULD NOT MOVE (flinch)
+      after p1: Gastrodon-East 75/426, Kangaskhan-Mega 413/413
+      after p2: Metagross 232/346, Landorus-Therian 197/344
+
+  Turn 9
+    p1 mcts: move 4, move 4
+      search (50000 visits): recover,0;substitute,1 8211v 7500 | recover,0;seismictoss,1 2382v 2071 | recover,0;firepunch,1 2353v 2044 | recover,0;fakeout,0 2248v 1948
+    p2 greedy: move 1 1, move 3 1
+      p2b Landorus used Superpower -> p1a: Gastrodon
+              p2b Landorus atk 1 fell
+              p2b Landorus def 1 fell
+      p1a Gastrodon fainted
+      p1b Kangaskhan used Substitute
+              p1b Kangaskhan gained Substitute
+      p2a Metagross used Iron Head -> p1b: Kangaskhan
+              p1b Kangaskhan lost Substitute
+      after p1: Gastrodon-East 0/426, Kangaskhan-Mega 310/413
+      after p2: Metagross 232/346, Landorus-Therian 140/344
+
+  Turn 10
+      p1a <- Togekiss comes in (374/374)
+      after p1: Togekiss 374/374, Kangaskhan-Mega 310/413
+      after p2: Metagross 232/346, Landorus-Therian 140/344
+
+  Turn 11
+    p1 mcts: move 2, move 4
+      search (41000 visits): followme,0;substitute,1 4122v 3030 | protect,0;substitute,1 2368v 1686 | airslash,0;substitute,1 2222v 1575 | airslash,1;substitute,1 2121v 1499
+    p2 greedy: move 1 2, move 3 2
+      p1a Togekiss used Follow Me
+      p2b Landorus used Superpower -> p1a: Togekiss
+              p2b Landorus atk 1 fell
+              p2b Landorus def 1 fell
+      p1b Kangaskhan used Substitute
+              p1b Kangaskhan gained Substitute
+      p2a Metagross used Iron Head -> p1a: Togekiss
+      after p1: Togekiss 77/374, Kangaskhan-Mega 207/413
+      after p2: Metagross 175/346, Landorus-Therian 83/344
+
+  Turn 12
+    p1 mcts: move 4, move 4
+      search (44000 visits): protect,0;substitute,1 8668v 6283 | airslash,1;substitute,1 3330v 2270 | magiccoat,0;substitute,1 1585v 1023 | airslash,0;substitute,1 1447v 927
+    p2 greedy: move 1 1, move 3 1
+      p1a Togekiss used Protect
+      p2b Landorus used Superpower -> p1a: Togekiss
+              p1a Togekiss -- move: Protect
+      p1b Kangaskhan used Substitute
+              p1b Kangaskhan -- IT FAILED
+      p2a Metagross used Iron Head -> p1a: Togekiss
+              p1a Togekiss -- move: Protect
+      after p1: Togekiss 77/374, Kangaskhan-Mega 207/413
+      after p2: Metagross 175/346, Landorus-Therian 83/344
+
+  Turn 13
+    p1 mcts: move 2, move 4
+      search (45000 visits): followme,0;substitute,1 1755v 693 | airslash,1;substitute,1 1373v 522 | airslash,0;substitute,1 1371v 522 | magiccoat,0;substitute,1 1107v 405
+    p2 greedy: move 1 1, move 3 1
+      p1a Togekiss used Follow Me
+      p2b Landorus used Superpower -> p1a: Togekiss
+              p2b Landorus atk 1 fell
+              p2b Landorus def 1 fell
+      p1b Kangaskhan used Substitute
+              p1b Kangaskhan -- IT FAILED
+      p2a Metagross used Iron Head -> p1a: Togekiss
+      p1a Togekiss fainted
+      after p1: Togekiss 0/374, Kangaskhan-Mega 207/413
+      after p2: Metagross 118/346, Landorus-Therian 26/344
+
+  Turn 14
+      p1a <- Bisharp comes in (170/278)
+      after p1: Bisharp 170/278, Kangaskhan-Mega 207/413
+      after p2: Metagross 118/346, Landorus-Therian 26/344
+
+  Turn 15
+    p1 mcts: move 1 2, move 4
+      search (47000 visits): suckerpunch,1;substitute,1 11919v 7622 | knockoff,0;substitute,1 1731v 811 | protect,0;substitute,1 1511v 696 | knockoff,1;substitute,1 1458v 669
+    p2 greedy: move 1 2, move 3 2
+      p1a Bisharp used Sucker Punch -> p2b: Landorus
+      p2b Landorus fainted
+      p1b Kangaskhan used Substitute
+              p1b Kangaskhan -- IT FAILED
+      p2a Metagross used Iron Head -> p1b: Kangaskhan
+              p1b Kangaskhan lost Substitute
+      after p1: Bisharp 143/278, Kangaskhan-Mega 207/413
+      after p2: Metagross 118/346, Landorus-Therian 0/344
+
+  Turn 16
+      p2b <- Heatran comes in (386/386)
+      after p1: Bisharp 143/278, Kangaskhan-Mega 207/413
+      after p2: Metagross 118/346, Heatran 386/386
+
+  Turn 17
+    p1 mcts: move 2 2, move 4
+      search (44000 visits): knockoff,1;substitute,1 3358v 2386 | knockoff,1;switch thundurus 2315v 1607 | knockoff,1;switch landorustherian 2265v 1570 | suckerpunch,1;substitute,1 1576v 1062
+    p2 greedy: move 1 2, move 2 2
+      p1b Kangaskhan used Substitute
+              p1b Kangaskhan gained Substitute
+      p1a Bisharp used Knock Off -> p2b: Heatran
+              p2b Heatran used up its Shuca Berry
+      p2a Metagross used Iron Head -> p1b: Kangaskhan
+              p1b Kangaskhan lost Substitute
+      p2b Heatran used Solar Beam  [[still]]
+      after p1: Bisharp 116/278, Kangaskhan-Mega 104/413
+      after p2: Metagross 118/346, Heatran 147/386
+
+  Turn 18
+    p1 mcts: move 2 2, switch 5   (slot1 Kangaskhan-Mega -> Landorus-Therian)
+      search (87000 visits): knockoff,1;switch landorustherian 27249v 26095 | knockoff,1;substitute,1 18039v 17155 | knockoff,1;seismictoss,0 6078v 5624 | knockoff,1;fakeout,0 5488v 5061
+    p2 greedy: move 1 2, move 1
+      p1b <- Landorus-Therian comes in (358/358)
+              p2a Metagross -- IT FAILED
+              p2b Heatran atk 1 fell
+      p1a Bisharp used Knock Off -> p2b: Heatran
+      p2a Metagross used Iron Head -> p1b: Landorus
+      p2b Heatran used Solar Beam -> p1b: Landorus  [[from] lockedmove]
+      after p1: Bisharp 89/278, Landorus-Therian 12/358
+      after p2: Metagross 118/346, Heatran 3/386
+
+  Turn 19
+    p1 mcts: switch 6, move 1   (slot0 Bisharp -> Thundurus)
+      search (45000 visits): switch thundurus;earthquake,0 4359v 3164 | switch kangaskhanmega;earthquake,0 2396v 1681 | protect,0;switch thundurus 2378v 1667 | suckerpunch,1;switch thundurus 2296v 1606
+    p2 greedy: move 1 2, move 2 2
+      p1a <- Thundurus comes in (58/361)
+      p1b Landorus used Earthquake -> p2b: Heatran  [[spread] p2a,p2b]
+              p1a Thundurus -- IMMUNE
+      p2a Metagross fainted
+      p2b Heatran fainted
+      after p1: Thundurus 58/361, Landorus-Therian 12/358
+      after p2: Metagross 0/346, Heatran 0/386
+
+  RESULT: p1 wins

@@ -1,0 +1,146 @@
+battle 93   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: Untitled 725: Charizard-Mega-Y, Heatran, Cresselia, Blastoise, Landorus-Therian, Venusaur
+  p2: Untitled 708: Metagross-Mega, Landorus, Scrafty, Thundurus, Volcanion, Amoonguss
+
+  Turn 1
+    p1 mcts: move 1, move 1
+      search (25000 visits): heatwave,0;heatwave,0 619v 213 | tailwind,0;heatwave,0 614v 211 | heatwave,0;magmastorm,0 556v 186 | tailwind,0;magmastorm,0 550v 184
+    p2 greedy: move 2 1, move 1 1
+      p1b Heatran used Heat Wave -> p2a: Metagross  [[spread] p2a]
+              p1b Heatran -- MISSED
+      p2a Metagross used Iron Head -> p1a: Charizard
+      p1a Charizard used Heat Wave -> p2b: Landorus  [[spread] p2a,p2b]
+              p2b Landorus is now brn
+      p2a Metagross fainted
+      p2b Landorus used Earth Power -> p1a: Charizard
+              p1a Charizard -- IMMUNE
+      after p1: Charizard-Mega-Y 199/297, Heatran 323/323
+      after p2: Metagross-Mega 0/302, Landorus 166/382
+
+  Turn 2
+      p2a <- Scrafty comes in (334/334)
+              p1a Charizard atk 1 fell
+              p1b Heatran atk 1 fell
+      after p1: Charizard-Mega-Y 199/297, Heatran 323/323
+      after p2: Scrafty 334/334, Landorus 166/382
+
+  Turn 3
+    p1 mcts: move 1, switch 5   (slot1 Heatran -> Landorus-Therian)
+      search (24000 visits): heatwave,0;switch landorustherian 1655v 555 | switch landorustherian;heatwave,0 1396v 454 | tailwind,0;switch landorustherian 1256v 400 | switch landorustherian;switch cresselia 1222v 387
+    p2 greedy: move 2 1, move 1 1
+      p1b <- Landorus-Therian comes in (382/382)
+              p2a Scrafty atk 1 fell
+              p2b Landorus atk 1 fell
+      p1a Charizard used Heat Wave -> p2a: Scrafty  [[spread] p2a,p2b]
+      p2b Landorus fainted
+      p2a Scrafty used Knock Off -> p1a: Charizard
+      after p1: Charizard-Mega-Y 129/297, Landorus-Therian 382/382
+      after p2: Scrafty 213/334, Landorus 0/382
+
+  Turn 4
+      p2b <- Thundurus comes in (362/362)
+      after p1: Charizard-Mega-Y 129/297, Landorus-Therian 382/382
+      after p2: Scrafty 213/334, Thundurus 362/362
+
+  Turn 5
+    p1 mcts: move 1, move 1
+      search (28000 visits): heatwave,0;earthquake,0 1356v 583 | tailwind,0;earthquake,0 958v 389 | switch cresselia;earthquake,0 748v 290 | protect,0;earthquake,0 633v 236
+    p2 greedy: move 2 1, move 2 1
+      p1a Charizard used Heat Wave -> p2a: Scrafty  [[spread] ]
+              p1a Charizard -- MISSED
+              p1a Charizard -- MISSED
+      p2b Thundurus used Thunderbolt -> p1a: Charizard
+      p1a Charizard fainted
+      p1b Landorus used Earthquake -> p2a: Scrafty  [[spread] p2a]
+              p2b Thundurus -- IMMUNE
+              p2a Scrafty -- critical hit
+      p2a Scrafty used Knock Off -> p1b: Landorus
+              p1b Landorus used up its Assault Vest
+      after p1: Charizard-Mega-Y 0/297, Landorus-Therian 294/382
+      after p2: Scrafty 11/334, Thundurus 362/362
+
+  Turn 6
+      p1a <- Cresselia comes in (444/444)
+      after p1: Cresselia 444/444, Landorus-Therian 294/382
+      after p2: Scrafty 11/334, Thundurus 362/362
+
+  Turn 7
+    p1 mcts: move 3, move 3 2
+      search (20000 visits): icywind,0;stoneedge,1 1654v 1235 | calmmind,0;stoneedge,1 1562v 1161 | calmmind,0;earthquake,0 1066v 767 | icywind,0;earthquake,0 867v 611
+    p2 greedy: move 2 2, move 2 2
+      p2b Thundurus used Thunderbolt -> p1b: Landorus
+              p1b Landorus -- IMMUNE
+      p1b Landorus used Stone Edge -> p2b: Thundurus
+      p1a Cresselia used Icy Wind -> p2b: Thundurus  [[spread] p2a,p2b]
+              p2b Thundurus -- critical hit
+              p2b Thundurus spe 1 fell
+      p2a Scrafty fainted
+      after p1: Cresselia 444/444, Landorus-Therian 294/382
+      after p2: Scrafty 0/334, Thundurus 2/362
+
+  Turn 8
+      p2a <- Volcanion comes in (364/364)
+      after p1: Cresselia 444/444, Landorus-Therian 294/382
+      after p2: Volcanion 364/364, Thundurus 2/362
+
+  Turn 9
+    p1 mcts: move 1, move 1
+      search (29000 visits): calmmind,0;earthquake,0 2492v 1143 | calmmind,0;uturn,0 1968v 880 | calmmind,0;stoneedge,0 1342v 571 | calmmind,0;uturn,1 1275v 539
+    p2 greedy: move 4 2, move 2 2
+      p1b Landorus used Earthquake -> p2b: Thundurus  [[spread] p2a]
+              p1a Cresselia -- IMMUNE
+              p2b Thundurus -- IMMUNE
+      p1a Cresselia used Calm Mind
+              p1a Cresselia spa 1 rose
+              p1a Cresselia spd 1 rose
+      p2a Volcanion used Overheat -> p1b: Landorus
+              p2a Volcanion spa 2 fell
+      p2b Thundurus used Thunderbolt -> p1b: Landorus
+              p1b Landorus -- IMMUNE
+      after p1: Cresselia 444/444, Landorus-Therian 38/382
+      after p2: Volcanion 154/364, Thundurus 2/362
+
+  Turn 10
+    p1 mcts: move 1, move 1
+      search (33000 visits): calmmind,0;earthquake,0 1877v 651 | psyshock,1;earthquake,0 1176v 375 | calmmind,0;stoneedge,0 1089v 342 | calmmind,0;uturn,0 1000v 308
+    p2 greedy: move 4 2, move 2 2
+      p1b Landorus used Earthquake -> p2b: Thundurus  [[spread] p2a]
+              p1a Cresselia -- IMMUNE
+              p2b Thundurus -- IMMUNE
+      p2a Volcanion fainted
+      p1a Cresselia used Calm Mind
+              p1a Cresselia spa 1 rose
+              p1a Cresselia spd 1 rose
+      p2b Thundurus used Thunderbolt -> p1b: Landorus
+              p1b Landorus -- IMMUNE
+      after p1: Cresselia 444/444, Landorus-Therian 38/382
+      after p2: Volcanion 0/364, Thundurus 2/362
+
+  Turn 11
+      p2a <- Amoonguss comes in (432/432)
+      after p1: Cresselia 444/444, Landorus-Therian 38/382
+      after p2: Amoonguss 432/432, Thundurus 2/362
+
+  Turn 12
+    p1 mcts: move 3, switch 5   (slot1 Landorus-Therian -> Heatran)
+      search (40000 visits): icywind,0;switch heatran 4411v 3053 | psyshock,0;earthquake,0 2611v 1753 | psyshock,0;stoneedge,0 1946v 1279 | psyshock,0;stoneedge,1 1888v 1237
+    p2 greedy: move 3 2, move 2 2
+      p1b <- Heatran comes in (323/323)
+      p1a Cresselia used Icy Wind -> p2b: Thundurus  [[spread] p2a,p2b]
+              p2a Amoonguss spe 1 fell
+      p2b Thundurus fainted
+      p2a Amoonguss used Energy Ball -> p1b: Heatran
+      after p1: Cresselia 444/444, Heatran 301/323
+      after p2: Amoonguss 292/432, Thundurus 0/362
+
+  Turn 13
+    p1 mcts: move 3, move 3 1
+      search (103000 visits): icywind,0;earthpower,0 8558v 7716 | psyshock,0;heatwave,0 8491v 7654 | calmmind,0;heatwave,0 8178v 7364 | psyshock,0;magmastorm,0 8132v 7322
+    p2 greedy: move 3 2, pass
+      p1b Heatran used Earth Power -> p2a: Amoonguss
+      p1a Cresselia used Icy Wind -> p2a: Amoonguss
+      p2a Amoonguss fainted
+      after p1: Cresselia 444/444, Heatran 301/323
+      after p2: Amoonguss 0/432, Thundurus 0/362
+
+  RESULT: p1 wins

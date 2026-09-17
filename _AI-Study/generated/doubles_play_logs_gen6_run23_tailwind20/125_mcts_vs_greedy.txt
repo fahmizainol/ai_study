@@ -1,0 +1,213 @@
+battle 125   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: ORAS Doubles OU: Rotom-Heat, Excadrill, Tyranitar, Salamence, Latias, Jirachi
+  p2: manelock: Manectric-Mega, Gothitelle, Sylveon, Hydreigon, Terrakion, Genesect
+
+  Turn 1
+    p1 mcts: move 4, move 2
+      search (41000 visits): protect,0;protect,1 8213v 5569 | willowisp,0;protect,1 4552v 3007 | thunderbolt,1;protect,1 2841v 1825 | willowisp,0;rockslide,0 2082v 1307
+    p2 greedy: move 1 1, move 4 1
+      p1a Rotom used Protect
+      p1b Excadrill used Protect
+      p2a Manectric used Volt Switch -> p1a: Rotom
+              p1a Rotom -- move: Protect
+      p2b Gothitelle used Psyshock -> p1a: Rotom
+              p1a Rotom -- move: Protect
+      after p1: Rotom-Heat 273/273, Excadrill 416/416
+      after p2: Manectric-Mega 281/281, Gothitelle 344/344
+
+  Turn 2
+    p1 mcts: move 4, move 2
+      search (37000 visits): protect,0;protect,1 10978v 7491 | willowisp,1;protect,1 7030v 4720 | protect,0;earthquake,0 3342v 2162 | thunderbolt,0;protect,1 1315v 789
+    p2 greedy: move 1 1, move 4 1
+      p1a Rotom used Protect  [[still]]
+              p1a Rotom -- IT FAILED
+      p1b Excadrill used Protect  [[still]]
+              p1b Excadrill -- IT FAILED
+      p2a Manectric used Volt Switch -> p1a: Rotom
+      after p1: Rotom-Heat 209/273, Excadrill 416/416
+      after p2: Manectric-Mega 281/281, Gothitelle 344/344
+
+  Turn 3
+      p2a <- Sylveon comes in (393/393)
+      p2b Gothitelle used Psyshock -> p1a: Rotom
+              p1a Rotom -- critical hit
+      after p1: Rotom-Heat 89/273, Excadrill 416/416
+      after p2: Sylveon 393/393, Gothitelle 344/344
+
+  Turn 4
+    p1 mcts: move 4, move 2
+      search (38000 visits): protect,0;protect,1 9067v 6098 | protect,0;earthquake,0 6424v 4261 | thunderbolt,1;earthquake,0 4282v 2781 | thunderbolt,0;earthquake,0 1866v 1146
+    p2 greedy: move 1, move 4 1
+      p1a Rotom used Protect
+      p1b Excadrill used Protect
+      p2b Gothitelle used Psyshock -> p1a: Rotom
+              p1a Rotom -- move: Protect
+      p2a Sylveon used Hyper Voice -> p1b: Excadrill  [[spread] ]
+              p1a Rotom -- move: Protect
+              p1b Excadrill -- move: Protect
+      after p1: Rotom-Heat 89/273, Excadrill 416/416
+      after p2: Sylveon 393/393, Gothitelle 344/344
+
+  Turn 5
+    p1 mcts: move 2 2, move 3
+      search (27000 visits): thunderbolt,1;earthquake,0 4297v 2623 | protect,0;earthquake,0 2585v 1526 | thunderbolt,0;earthquake,0 2041v 1182 | willowisp,0;earthquake,0 1091v 591
+    p2 greedy: move 1, move 4 1
+      p1a Rotom used Thunderbolt -> p2b: Gothitelle
+              p2b Gothitelle is now par
+      p1b Excadrill used Earthquake -> p2b: Gothitelle  [[spread] p2a,p2b]
+              p1a Rotom -- IMMUNE
+              p2b Gothitelle used up its Sitrus Berry
+      p2b Gothitelle used Psyshock -> p1a: Rotom
+      p2a Sylveon used Hyper Voice -> p1a: Rotom  [[spread] p1a,p1b]
+      p1a Rotom fainted
+      after p1: Rotom-Heat 0/273, Excadrill 280/416
+      after p2: Sylveon 190/393, Gothitelle 139/344
+
+  Turn 6
+      p1a <- Tyranitar comes in (404/404)
+      after p1: Tyranitar 404/404, Excadrill 280/416
+      after p2: Sylveon 190/393, Gothitelle 139/344
+
+  Turn 7
+    p1 mcts: move 2 2, move 1 1
+      search (36000 visits): stoneedge,1;ironhead,0 1863v 1147 | fireblast,1;ironhead,0 1798v 1103 | darkpulse,1;ironhead,0 1747v 1069 | icebeam,1;ironhead,0 1640v 998
+    p2 greedy: move 1, move 4 2
+      p1b Excadrill used Iron Head -> p2a: Sylveon
+      p2a Sylveon fainted
+      p1a Tyranitar used Stone Edge -> p2b: Gothitelle
+      p2b Gothitelle used Psyshock -> p1b: Excadrill
+      p2b Gothitelle fainted
+      after p1: Tyranitar 404/404, Excadrill 170/416
+      after p2: Sylveon 0/393, Gothitelle 0/344
+
+  Turn 8
+      p2b <- Hydreigon comes in (325/325)
+      p2a <- Manectric-Mega comes in (281/281)
+      after p1: Tyranitar 404/404, Excadrill 170/416
+      after p2: Manectric-Mega 281/281, Hydreigon 325/325
+
+  Turn 9
+    p1 mcts: move 4 2, switch 4   (slot1 Excadrill -> Salamence)
+      search (25000 visits): icebeam,1;switch salamence 610v 300 | icebeam,1;protect,1 564v 273 | stoneedge,1;protect,1 553v 267 | stoneedge,0;switch salamence 549v 264
+    p2 greedy: move 1 2, move 1 2
+      p1b <- Salamence comes in (331/331)
+              p2a Manectric atk 1 fell
+              p2b Hydreigon atk 1 fell
+      p2b Hydreigon used Draco Meteor -> p1b: Salamence
+              p2b Hydreigon spa 2 fell
+      p1b Salamence fainted
+      p2a Manectric used Volt Switch -> p1a: Tyranitar
+      after p1: Tyranitar 350/404, Salamence 0/331
+      after p2: Manectric-Mega 281/281, Hydreigon 325/325
+
+  Turn 10
+      p2a <- Terrakion comes in (323/323)
+      p1a Tyranitar used Ice Beam -> p2b: Hydreigon
+      after p1: Tyranitar 350/404, Salamence 0/331
+      after p2: Terrakion 323/323, Hydreigon 115/325
+
+  Turn 11
+      p1b <- Excadrill comes in (170/416)
+      after p1: Tyranitar 350/404, Excadrill 170/416
+      after p2: Terrakion 323/323, Hydreigon 115/325
+
+  Turn 12
+    p1 mcts: move 1 2, move 1 1
+      search (40000 visits): fireblast,1;ironhead,0 2830v 1274 | switch jirachi;ironhead,0 2296v 1012 | fireblast,0;ironhead,0 1537v 645 | stoneedge,1;ironhead,0 1484v 619
+    p2 greedy: move 1 2, move 1 2
+      p2b Hydreigon used Draco Meteor -> p1b: Excadrill
+              p2b Hydreigon spa 2 fell
+      p1b Excadrill used Iron Head -> p2a: Terrakion
+      p2a Terrakion fainted
+      p1a Tyranitar used Fire Blast -> p2b: Hydreigon  [[miss]]
+              p1a Tyranitar -- MISSED
+      after p1: Tyranitar 350/404, Excadrill 45/416
+      after p2: Terrakion 0/323, Hydreigon 95/325
+
+  Turn 13
+      p2a <- Manectric-Mega comes in (281/281)
+      after p1: Tyranitar 350/404, Excadrill 45/416
+      after p2: Manectric-Mega 281/281, Hydreigon 95/325
+
+  Turn 14
+    p1 mcts: move 1 2, move 1 1
+      search (30000 visits): fireblast,1;ironhead,0 985v 321 | fireblast,1;rockslide,0 919v 294 | stoneedge,1;rockslide,0 883v 280 | fireblast,0;ironhead,0 815v 254
+    p2 greedy: move 1 2, move 1 2
+      p2b Hydreigon used Draco Meteor -> p1b: Excadrill
+              p2b Hydreigon spa 2 fell
+      p1b Excadrill fainted
+      p2a Manectric used Volt Switch -> p1a: Tyranitar
+      after p1: Tyranitar 292/404, Excadrill 0/416
+      after p2: Manectric-Mega 281/281, Hydreigon 95/325
+
+  Turn 15
+      p2a <- Genesect comes in (284/284)
+              p2a Genesect spa 1 rose
+      p1a Tyranitar used Fire Blast -> p2b: Hydreigon
+      after p1: Tyranitar 292/404, Excadrill 0/416
+      after p2: Genesect 284/284, Hydreigon 25/325
+
+  Turn 16
+      p1b <- Latias comes in (337/337)
+      after p1: Tyranitar 292/404, Latias 337/337
+      after p2: Genesect 284/284, Hydreigon 25/325
+
+  Turn 17
+    p1 mcts: switch 6, move 2 2 mega   (slot0 Tyranitar -> Jirachi)
+      search (28000 visits): switch jirachi;psyshock-mega,1 419v 81 | switch jirachi;psyshock,0 399v 75 | switch jirachi;psyshock-mega,0 388v 72 | switch jirachi;calmmind,1 385v 71
+    p2 greedy: move 4, move 1 1
+      p1a <- Jirachi comes in (343/343)
+      p2b Hydreigon used Draco Meteor -> p1a: Jirachi
+      p1b Latias used Psyshock -> p2b: Hydreigon
+              p2b Hydreigon -- IMMUNE
+      p2a Genesect used Explosion -> p1b: Latias  [[spread] p2b,p1a,p1b]
+      p2a Genesect fainted
+      p2b Hydreigon fainted
+      after p1: Jirachi 181/343, Latias-Mega 73/337
+      after p2: Genesect 0/284, Hydreigon 0/325
+
+  Turn 18
+      p2a <- Manectric-Mega comes in (281/281)
+      after p1: Jirachi 181/343, Latias-Mega 73/337
+      after p2: Manectric-Mega 281/281, Hydreigon 0/325
+
+  Turn 19
+    p1 mcts: move 1 1, move 2 1
+      search (124000 visits): doomdesire,0;psyshock,0 58571v 57928 | doomdesire,0;dracometeor,0 22688v 22163 | psychic,0;psyshock,0 6163v 5838 | switch tyranitar;dracometeor,0 5699v 5385
+    p2 greedy: move 1 2, pass
+      p2a Manectric used Volt Switch -> p1b: Latias
+      p1b Latias used Psyshock -> p2a: Manectric
+      p1a Jirachi used Doom Desire -> p2a: Manectric
+              p1a Jirachi gained Doom Desire
+      after p1: Jirachi 181/343, Latias-Mega 25/337
+      after p2: Manectric-Mega 128/281, Hydreigon 0/325
+
+  Turn 20
+    p1 mcts: move 1 1, move 2 1
+      search (286000 visits): doomdesire,0;psyshock,0 28210v 28210 | doomdesire,0;dracometeor,0 27596v 27587 | doomdesire,0;roost,1 27145v 27129 | doomdesire,0;calmmind,1 26935v 26916
+    p2 greedy: move 1 2, pass
+      p2a Manectric used Volt Switch -> p1b: Latias
+      p1b Latias fainted
+      p1a Jirachi used Doom Desire  [[still]]
+              p1a Jirachi -- IT FAILED
+      after p1: Jirachi 181/343, Latias 0/337
+      after p2: Manectric-Mega 128/281, Hydreigon 0/325
+
+  Turn 21
+      p1b <- Tyranitar comes in (292/404)
+      after p1: Jirachi 181/343, Tyranitar 292/404
+      after p2: Manectric-Mega 128/281, Hydreigon 0/325
+
+  Turn 22
+    p1 mcts: move 1 1, move 3 1
+      search (459000 visits): doomdesire,0;darkpulse,0 34549v 34549 | doomdesire,0;icebeam,0 34548v 34548 | doomdesire,0;fireblast,0 34114v 34108 | doomdesire,0;stoneedge,0 33829v 33819
+    p2 greedy: move 1 1, pass
+      p2a Manectric used Volt Switch -> p1a: Jirachi
+      p1a Jirachi used Doom Desire  [[still]]
+              p1a Jirachi -- IT FAILED
+      p1b Tyranitar used Dark Pulse -> p2a: Manectric
+      p2a Manectric fainted
+      after p1: Jirachi 51/343, Tyranitar 292/404
+      after p2: Manectric-Mega 0/281, Hydreigon 0/325
+
+  RESULT: p1 wins

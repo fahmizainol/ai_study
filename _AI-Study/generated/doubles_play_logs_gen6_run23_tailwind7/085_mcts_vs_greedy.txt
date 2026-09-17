@@ -1,0 +1,176 @@
+battle 85   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: XY Doubles: Mew, Hydreigon, Gardevoir, Kyurem-Black, Talonflame, Keldeo
+  p2: Copy of GLURAK LO Lando Flash Deo: Deoxys-Speed, Kangaskhan-Mega, Genesect, Landorus-Therian, Thundurus, Volcanion
+
+  Turn 1
+    p1 mcts: move 3 2, move 1
+      search (47000 visits): willowisp,1;tailwind,1 1575v 1287 | willowisp,1;darkpulse,0 1554v 1268 | willowisp,1;darkpulse,1 1301v 1048 | willowisp,1;fireblast,0 1202v 962
+    p2 greedy: move 1 1, move 2 1
+      p2a Deoxys used Psycho Boost -> p1a: Mew
+              p2a Deoxys spa 2 fell
+      p2b Kangaskhan used Bite -> p1a: Mew
+      p1b Hydreigon used Tailwind
+      -sidestart p1: A move: Tailwind
+              p1a Mew COULD NOT MOVE (flinch)
+      after p1: Mew 218/404, Hydreigon 331/331
+      after p2: Deoxys-Speed 289/289, Kangaskhan-Mega 414/414
+
+  Turn 2
+    p1 mcts: move 3 2, switch 3   (slot1 Hydreigon -> Gardevoir)
+      search (43000 visits): willowisp,1;switch gardevoir 1402v 824 | willowisp,1;switch talonflame 1354v 793 | willowisp,1;switch keldeo 1342v 785 | willowisp,1;switch kyuremblack 1237v 717
+    p2 greedy: move 1 1, move 2 1
+      p1b <- Gardevoir comes in (278/278)
+      p1a Mew used Will-O-Wisp -> p2b: Kangaskhan
+              p2b Kangaskhan is now brn
+      p2a Deoxys used Psycho Boost -> p1a: Mew  [[miss]]
+              p2a Deoxys -- MISSED
+      p2b Kangaskhan used Bite -> p1a: Mew
+              p1a Mew used up its Sitrus Berry
+      after p1: Mew 270/404, Gardevoir 278/278
+      after p2: Deoxys-Speed 289/289, Kangaskhan-Mega 363/414
+
+  Turn 3
+    p1 mcts: move 3 1, move 1 mega
+      search (31000 visits): willowisp,0;hypervoice-mega,0 415v 124 | tailwind,0;hypervoice-mega,0 389v 113 | superfang,1;hypervoice-mega,0 376v 108 | willowisp,1;hypervoice-mega,0 367v 104
+    p2 greedy: move 1 1, move 2 1
+      p1b Gardevoir used Hyper Voice -> p2b: Kangaskhan  [[spread] p2a,p2b]
+      p2a Deoxys used Psycho Boost -> p1a: Mew
+              p1a Mew -- critical hit
+              p2a Deoxys spa 2 fell
+      p1a Mew used Will-O-Wisp -> p2a: Deoxys
+              p2a Deoxys is now brn
+      p2b Kangaskhan used Bite -> p1a: Mew
+      after p1: Mew 110/404, Gardevoir-Mega 278/278
+      after p2: Deoxys-Speed 18/289, Kangaskhan-Mega 116/414
+
+  Turn 4
+    p1 mcts: move 1 2, move 1
+      search (48000 visits): fakeout,1;hypervoice,0 747v 115 | superfang,0;hypervoice,0 741v 113 | tailwind,0;hypervoice,0 740v 113 | willowisp,1;hypervoice,0 736v 112
+    p2 greedy: move 1 1, move 2 1
+      p1a Mew used Fake Out  [[still]]
+              p1a Mew -- IT FAILED
+      p1b Gardevoir used Hyper Voice -> p2a: Deoxys  [[spread] p2a,p2b]
+      p2a Deoxys fainted
+      p2b Kangaskhan fainted
+      -sideend p1: A move: Tailwind
+      after p1: Mew 110/404, Gardevoir-Mega 278/278
+      after p2: Deoxys-Speed 0/289, Kangaskhan-Mega 0/414
+
+  Turn 5
+      p2a <- Genesect comes in (284/284)
+      p2b <- Landorus-Therian comes in (369/369)
+              p1a Mew atk 1 fell
+              p1b Gardevoir atk 1 fell
+              p2a Genesect atk 1 rose
+      after p1: Mew 110/404, Gardevoir-Mega 278/278
+      after p2: Genesect 284/284, Landorus-Therian 369/369
+
+  Turn 6
+    p1 mcts: move 1 1, switch 6   (slot1 Gardevoir-Mega -> Keldeo)
+      search (44000 visits): fakeout,0;switch keldeo 4136v 3268 | fakeout,0;switch talonflame 3361v 2629 | fakeout,0;switch hydreigon 3234v 2525 | fakeout,0;switch kyuremblack 3073v 2393
+    p2 greedy: move 4 1, move 3 1
+      p1b <- Keldeo comes in (323/323)
+      p1a Mew used Fake Out  [[still]]
+              p1a Mew -- IT FAILED
+      p2b Landorus used Superpower -> p1a: Mew
+              p2b Landorus atk 1 fell
+              p2b Landorus def 1 fell
+      p2a Genesect used Blaze Kick -> p1a: Mew
+      p1a Mew fainted
+      after p1: Mew 0/404, Keldeo 323/323
+      after p2: Genesect 284/284, Landorus-Therian 369/369
+
+  Turn 7
+      p1a <- Hydreigon comes in (331/331)
+      after p1: Hydreigon 331/331, Keldeo 323/323
+      after p2: Genesect 284/284, Landorus-Therian 369/369
+
+  Turn 8
+    p1 mcts: move 2 2, move 3 1
+      search (15000 visits): darkpulse,1;secretsword,0 629v 384 | darkpulse,0;secretsword,0 615v 375 | fireblast,0;secretsword,1 546v 327 | darkpulse,1;hydropump,0 431v 248
+    p2 greedy: move 4 1, move 3 1
+      p2b Landorus used Superpower -> p1a: Hydreigon
+              p2b Landorus atk 1 fell
+              p2b Landorus def 1 fell
+      p1b Keldeo used Secret Sword -> p2a: Genesect
+      p2a Genesect used Blaze Kick -> p1a: Hydreigon
+      p1a Hydreigon used Dark Pulse -> p2b: Landorus
+      p1a Hydreigon fainted
+      after p1: Hydreigon 0/331, Keldeo 291/323
+      after p2: Genesect 41/284, Landorus-Therian 139/369
+
+  Turn 9
+      p1a <- Kyurem-Black comes in (391/391)
+      after p1: Kyurem-Black 391/391, Keldeo 291/323
+      after p2: Genesect 41/284, Landorus-Therian 139/369
+
+  Turn 10
+    p1 mcts: move 2 2, move 3 1
+      search (29000 visits): fusionbolt,1;secretsword,0 3751v 2023 | fusionbolt,1;hydropump,0 1880v 957 | icebeam,1;secretsword,0 1769v 894 | earthpower,1;secretsword,0 1614v 807
+    p2 greedy: move 4 2, move 3 2
+      p2b Landorus used Superpower -> p1b: Keldeo
+              p2b Landorus atk 1 fell
+              p2b Landorus def 1 fell
+      p1b Keldeo used Secret Sword -> p2a: Genesect
+      p2a Genesect fainted
+      p1a Kyurem used Fusion Bolt -> p2b: Landorus
+              p2b Landorus -- IMMUNE
+      after p1: Kyurem-Black 391/391, Keldeo 182/323
+      after p2: Genesect 0/284, Landorus-Therian 139/369
+
+  Turn 11
+      p2a <- Thundurus comes in (361/361)
+      after p1: Kyurem-Black 391/391, Keldeo 182/323
+      after p2: Thundurus 361/361, Landorus-Therian 139/369
+
+  Turn 12
+    p1 mcts: move 3 1, switch 6   (slot1 Keldeo -> Gardevoir-Mega)
+      search (19000 visits): icebeam,0;switch gardevoirmega 1328v 584 | icebeam,0;secretsword,1 1014v 428 | icebeam,0;protect,1 971v 407 | fusionbolt,1;hydropump,0 676v 264
+    p2 greedy: move 1 2, move 3 2
+      p1b <- Gardevoir-Mega comes in (278/278)
+      p2b Landorus used Superpower -> p1b: Gardevoir
+              p2b Landorus atk 1 fell
+              p2b Landorus def 1 fell
+      p2a Thundurus used Thunderbolt -> p1b: Gardevoir
+      p1a Kyurem used Ice Beam -> p2a: Thundurus
+      p2a Thundurus fainted
+      after p1: Kyurem-Black 352/391, Gardevoir-Mega 156/278
+      after p2: Thundurus 0/361, Landorus-Therian 139/369
+
+  Turn 13
+      p2a <- Volcanion comes in (363/363)
+      after p1: Kyurem-Black 352/391, Gardevoir-Mega 156/278
+      after p2: Volcanion 363/363, Landorus-Therian 139/369
+
+  Turn 14
+    p1 mcts: move 2 1, move 1
+      search (244000 visits): fusionbolt,0;hypervoice,0 231436v 226229 | fusionbolt,0;psyshock,0 4473v 4031 | earthpower,0;psyshock,0 3673v 3283 | fusionbolt,0;protect,1 195v 123
+    p2 greedy: move 4 2, move 3 2
+      p2b Landorus used Superpower -> p1b: Gardevoir
+              p2b Landorus atk 1 fell
+              p2b Landorus def 1 fell
+      p1b Gardevoir used Hyper Voice -> p2b: Landorus  [[spread] p2a,p2b]
+      p2b Landorus fainted
+      p1a Kyurem used Fusion Bolt -> p2a: Volcanion
+      p2a Volcanion used Overheat -> p1b: Gardevoir
+              p2a Volcanion spa 2 fell
+      p1b Gardevoir fainted
+      after p1: Kyurem-Black 313/391, Gardevoir 0/278
+      after p2: Volcanion 28/363, Landorus-Therian 0/369
+
+  Turn 15
+      p1b <- Talonflame comes in (298/298)
+      after p1: Kyurem-Black 313/391, Talonflame 298/298
+      after p2: Volcanion 28/363, Landorus-Therian 0/369
+
+  Turn 16
+    p1 mcts: move 1, move 2 1
+      search (952000 visits): protect,0;bravebird,0 49218v 49218 | protect,0;flareblitz,0 49218v 49218 | fusionbolt,0;tailwind,1 49218v 49218 | fusionbolt,0;bravebird,0 49218v 49218
+    p2 greedy: move 4 1, pass
+      p1a Kyurem used Protect
+      p1b Talonflame used Brave Bird -> p2a: Volcanion
+      p2a Volcanion fainted
+      after p1: Kyurem-Black 313/391, Talonflame 260/298
+      after p2: Volcanion 0/363, Landorus-Therian 0/369
+
+  RESULT: p1 wins

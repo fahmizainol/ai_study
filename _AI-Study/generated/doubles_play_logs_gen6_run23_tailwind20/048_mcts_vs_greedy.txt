@@ -1,0 +1,670 @@
+battle 48   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: ORAS Doubles OU: Shedinja, Audino, Whimsicott, Electivire, Plusle, Chansey
+  p2: dwcop 69/Untitled 348: Gengar-Mega, Pangoro, Landorus, Volcanion, Sylveon, Genesect
+
+  Turn 1
+    p1 mcts: move 4 2, move 4 mega
+      search (28000 visits): return,1;dazzlinggleam-mega,0 1534v 1228 | shadowclaw,0;dazzlinggleam-mega,0 1232v 971 | return,0;dazzlinggleam-mega,0 947v 728 | shadowclaw,1;dazzlinggleam-mega,0 885v 676
+    p2 greedy: move 4 1, move 3 1
+      p2a Gengar used Shadow Ball -> p1a: Shedinja
+              p1a Shedinja used up its Focus Sash
+      p1a Shedinja used Return -> p2b: Pangoro
+      p1a Shedinja fainted
+      p2b Pangoro used Drain Punch -> p1b: Audino
+      p1b Audino used Dazzling Gleam -> p2a: Gengar  [[spread] p2a,p2b]
+      after p1: Shedinja 0/1, Audino-Mega 322/410
+      after p2: Gengar-Mega 292/323, Pangoro 78/394
+
+  Turn 2
+      p1a <- Whimsicott comes in (324/324)
+      after p1: Whimsicott 324/324, Audino-Mega 322/410
+      after p2: Gengar-Mega 292/323, Pangoro 78/394
+
+  Turn 3
+    p1 mcts: switch 6, move 4   (slot0 Whimsicott -> Chansey)
+      search (32000 visits): switch chansey;dazzlinggleam,0 6264v 4807 | taunt,1;entrainment,1 1848v 1329 | sunnyday,1;safeguard,1 1597v 1135 | taunt,1;safeguard,1 1523v 1079
+    p2 greedy: move 4 2, move 3 2
+      p1a <- Chansey comes in (642/642)
+      p2a Gengar used Shadow Ball -> p1b: Audino
+              p1b Audino -- IMMUNE
+      p2b Pangoro used Drain Punch -> p1b: Audino
+      p1b Audino used Dazzling Gleam -> p2b: Pangoro  [[spread] p2a,p2b]
+      p2b Pangoro fainted
+      after p1: Chansey 642/642, Audino-Mega 235/410
+      after p2: Gengar-Mega 261/323, Pangoro 0/394
+
+  Turn 4
+      p2b <- Landorus comes in (319/319)
+      after p1: Chansey 642/642, Audino-Mega 235/410
+      after p2: Gengar-Mega 261/323, Landorus 319/319
+
+  Turn 5
+    p1 mcts: move 3 2, move 3
+      search (30000 visits): toxic,1;safeguard,1 1153v 931 | toxic,1;dazzlinggleam,0 1126v 907 | softboiled,0;dazzlinggleam,0 906v 716 | protect,0;dazzlinggleam,0 890v 702
+    p2 greedy: move 4 2, move 1 2
+      p2a Gengar used Shadow Ball -> p1b: Audino
+              p1b Audino -- IMMUNE
+      p2b Landorus used Earth Power -> p1b: Audino
+      p1a Chansey used Toxic -> p2b: Landorus
+              p2b Landorus is now tox
+      p1b Audino used Safeguard
+      -sidestart p1: A Safeguard
+      after p1: Chansey 642/642, Audino-Mega 31/410
+      after p2: Gengar-Mega 261/323, Landorus 300/319
+
+  Turn 6
+    p1 mcts: move 2, move 1
+      search (30000 visits): protect,0;protect,1 843v 585 | softboiled,0;protect,1 839v 582 | seismictoss,1;protect,1 797v 549 | toxic,0;protect,1 789v 543
+    p2 greedy: move 4 2, move 1 2
+      p1a Chansey used Protect
+      p1b Audino used Protect
+      p2a Gengar used Shadow Ball -> p1b: Audino
+              p1b Audino -- IMMUNE
+      p2b Landorus used Earth Power -> p1b: Audino
+              p1b Audino -- move: Protect
+      after p1: Chansey 642/642, Audino-Mega 31/410
+      after p2: Gengar-Mega 261/323, Landorus 262/319
+
+  Turn 7
+    p1 mcts: move 4, move 1
+      search (33000 visits): softboiled,0;protect,1 971v 674 | protect,0;protect,1 956v 663 | seismictoss,0;protect,1 907v 625 | toxic,0;protect,1 896v 617
+    p2 greedy: move 4 2, move 1 2
+      p1b Audino used Protect  [[still]]
+              p1b Audino -- IT FAILED
+      p2a Gengar used Shadow Ball -> p1b: Audino
+              p1b Audino -- IMMUNE
+      p2b Landorus used Earth Power -> p1b: Audino
+      p1b Audino fainted
+      p1a Chansey used Soft-Boiled  [[still]]
+              p1a Chansey -- IT FAILED
+      after p1: Chansey 642/642, Audino 0/410
+      after p2: Gengar-Mega 261/323, Landorus 205/319
+
+  Turn 8
+      p1b <- Electivire comes in (292/292)
+      after p1: Chansey 642/642, Electivire 292/292
+      after p2: Gengar-Mega 261/323, Landorus 205/319
+
+  Turn 9
+    p1 mcts: move 1 2, switch 6   (slot1 Electivire -> Whimsicott)
+      search (42000 visits): seismictoss,1;switch whimsicott 2621v 1503 | softboiled,0;switch whimsicott 2620v 1503 | protect,0;switch whimsicott 2513v 1437 | toxic,0;switch whimsicott 2490v 1423
+    p2 greedy: move 4 1, move 1 1
+      p1b <- Whimsicott comes in (324/324)
+      p2a Gengar used Shadow Ball -> p1a: Chansey
+              p1a Chansey -- IMMUNE
+      p2b Landorus used Earth Power -> p1a: Chansey
+      p1a Chansey used Seismic Toss -> p2b: Landorus
+      after p1: Chansey 506/642, Whimsicott 324/324
+      after p2: Gengar-Mega 261/323, Landorus 29/319
+
+  Turn 10
+    p1 mcts: move 4, move 1
+      search (44000 visits): softboiled,0;tailwind,1 4099v 3009 | protect,0;tailwind,1 1566v 1080 | toxic,0;tailwind,1 1492v 1024 | seismictoss,0;tailwind,1 1489v 1022
+    p2 greedy: move 4 1, move 1 1
+      p1b Whimsicott used Tailwind
+      -sidestart p1: A move: Tailwind
+      p2a Gengar used Shadow Ball -> p1a: Chansey
+              p1a Chansey -- IMMUNE
+      p2b Landorus used Earth Power -> p1a: Chansey
+      p1a Chansey used Soft-Boiled
+      p2b Landorus fainted
+      -sideend p1: A Safeguard
+      after p1: Chansey 642/642, Whimsicott 324/324
+      after p2: Gengar-Mega 261/323, Landorus 0/319
+
+  Turn 11
+      p2b <- Volcanion comes in (363/363)
+      after p1: Chansey 642/642, Whimsicott 324/324
+      after p2: Gengar-Mega 261/323, Volcanion 363/363
+
+  Turn 12
+    p1 mcts: move 3 2, move 2 2
+      search (20000 visits): toxic,1;memento,1 584v 344 | toxic,1;taunt,1 558v 326 | toxic,1;switch electivire 502v 288 | toxic,1;taunt,0 500v 287
+    p2 greedy: move 4 1, move 3 1
+      p1b Whimsicott used Memento -> p2b: Volcanion
+              p2b Volcanion atk 2 fell
+              p2b Volcanion spa 2 fell
+      p1b Whimsicott fainted
+      p2a Gengar used Shadow Ball -> p1a: Chansey
+              p1a Chansey -- IMMUNE
+      p1a Chansey used Toxic -> p2b: Volcanion
+              p2b Volcanion is now tox
+      p2b Volcanion used Overheat -> p1a: Chansey
+              p2b Volcanion spa 2 fell
+      after p1: Chansey 585/642, Whimsicott 0/324
+      after p2: Gengar-Mega 261/323, Volcanion 341/363
+
+  Turn 13
+      p1b <- Plusle comes in (262/262)
+      after p1: Chansey 585/642, Plusle 262/262
+      after p2: Gengar-Mega 261/323, Volcanion 341/363
+
+  Turn 14
+    p1 mcts: move 4, move 4
+      search (38000 visits): softboiled,0;nastyplot,1 2302v 648 | toxic,1;nastyplot,1 2150v 598 | seismictoss,0;nastyplot,1 2035v 560 | protect,0;nastyplot,1 1994v 547
+    p2 greedy: move 4 1, move 3 1
+      p1b Plusle used Nasty Plot
+              p1b Plusle spa 2 rose
+      p2a Gengar used Shadow Ball -> p1a: Chansey
+              p1a Chansey -- IMMUNE
+      p1a Chansey used Soft-Boiled
+      p2b Volcanion used Overheat -> p1a: Chansey
+              p2b Volcanion spa 2 fell
+      after p1: Chansey 606/642, Plusle 262/262
+      after p2: Gengar-Mega 261/323, Volcanion 297/363
+
+  Turn 15
+    p1 mcts: move 4, move 4
+      search (44000 visits): softboiled,0;nastyplot,1 1543v 285 | protect,0;nastyplot,1 1524v 280 | seismictoss,0;nastyplot,1 1458v 264 | seismictoss,1;nastyplot,1 1425v 256
+    p2 greedy: move 4 1, move 3 1
+      p1b Plusle used Nasty Plot
+              p1b Plusle spa 2 rose
+      p2a Gengar used Shadow Ball -> p1a: Chansey
+              p1a Chansey -- IMMUNE
+      p1a Chansey used Soft-Boiled
+      p2b Volcanion used Overheat -> p1a: Chansey
+      -sideend p1: A move: Tailwind
+      after p1: Chansey 615/642, Plusle 262/262
+      after p2: Gengar-Mega 261/323, Volcanion 231/363
+
+  Turn 16
+    p1 mcts: move 4, move 4
+      search (36000 visits): softboiled,0;nastyplot,1 1059v 197 | protect,0;nastyplot,1 1009v 184 | seismictoss,0;nastyplot,1 958v 171 | toxic,0;nastyplot,1 946v 168
+    p2 greedy: move 4 1, move 3 1
+      p2a Gengar used Shadow Ball -> p1a: Chansey
+              p1a Chansey -- IMMUNE
+      p1b Plusle used Nasty Plot
+              p1b Plusle spa 2 rose
+      p2b Volcanion used Overheat -> p1a: Chansey
+      p1a Chansey used Soft-Boiled
+      after p1: Chansey 642/642, Plusle 262/262
+      after p2: Gengar-Mega 261/323, Volcanion 143/363
+
+  Turn 17
+    p1 mcts: move 3 2, move 2 2
+      search (22000 visits): toxic,1;hiddenpower,1 585v 119 | seismictoss,1;entrainment,1 564v 113 | toxic,1;hiddenpower,0 562v 112 | toxic,1;entrainment,0 561v 112
+    p2 greedy: move 4 1, move 3 1
+      p2a Gengar used Shadow Ball -> p1a: Chansey
+              p1a Chansey -- IMMUNE
+      p1b Plusle used Hidden Power -> p2b: Volcanion
+      p2b Volcanion used Overheat -> p1a: Chansey
+      p1a Chansey used Toxic -> p2b: Volcanion
+              p2b Volcanion -- IT FAILED
+      after p1: Chansey 614/642, Plusle 262/262
+      after p2: Gengar-Mega 261/323, Volcanion 2/363
+
+  Turn 18
+    p1 mcts: move 2, move 3
+      search (32000 visits): protect,0;magnetrise,1 937v 183 | softboiled,0;entrainment,1 842v 157 | softboiled,0;hiddenpower,0 834v 155 | seismictoss,1;hiddenpower,1 828v 154
+    p2 greedy: move 4 1, move 3 1
+      p1a Chansey used Protect
+      p2a Gengar used Shadow Ball -> p1a: Chansey
+              p1a Chansey -- IMMUNE
+      p1b Plusle used Magnet Rise
+              p1b Plusle gained Magnet Rise
+      p2b Volcanion used Overheat -> p1a: Chansey
+              p1a Chansey -- move: Protect
+      p2b Volcanion fainted
+      after p1: Chansey 614/642, Plusle 262/262
+      after p2: Gengar-Mega 261/323, Volcanion 0/363
+
+  Turn 19
+      p2b <- Sylveon comes in (393/393)
+      after p1: Chansey 614/642, Plusle 262/262
+      after p2: Gengar-Mega 261/323, Sylveon 393/393
+
+  Turn 20
+    p1 mcts: move 1 1, move 2 1
+      search skipped (volatile magnetrise); greedy took the turn
+    p2 greedy: move 4 1, move 1
+      p2a Gengar used Shadow Ball -> p1a: Chansey
+              p1a Chansey -- IMMUNE
+      p1b Plusle used Hidden Power -> p2a: Gengar
+      p2b Sylveon used Hyper Voice -> p1a: Chansey  [[spread] p1a,p1b]
+      p1a Chansey used Seismic Toss -> p2a: Gengar
+              p2a Gengar -- IMMUNE
+      after p1: Chansey 544/642, Plusle 93/262
+      after p2: Gengar-Mega 30/323, Sylveon 393/393
+
+  Turn 21
+    p1 mcts: move 1 1, move 2 1
+      search skipped (volatile magnetrise); greedy took the turn
+    p2 greedy: move 4 2, move 1
+      p2a Gengar used Shadow Ball -> p1b: Plusle
+      p1b Plusle fainted
+      p2b Sylveon used Hyper Voice -> p1a: Chansey
+      p1a Chansey used Seismic Toss -> p2a: Gengar
+              p2a Gengar -- IMMUNE
+      after p1: Chansey 456/642, Plusle 0/262
+      after p2: Gengar-Mega 30/323, Sylveon 393/393
+
+  Turn 22
+      p1b <- Electivire comes in (292/292)
+      after p1: Chansey 456/642, Electivire 292/292
+      after p2: Gengar-Mega 30/323, Sylveon 393/393
+
+  Turn 23
+    p1 mcts: move 4, move 4 2
+      search (41000 visits): softboiled,0;thunderpunch,1 3899v 1781 | softboiled,0;thunderpunch,0 3565v 1617 | toxic,1;thunderpunch,0 2652v 1170 | softboiled,0;poweruppunch,1 2566v 1128
+    p2 greedy: move 4 1, move 1
+      p2a Gengar used Shadow Ball -> p1a: Chansey
+              p1a Chansey -- IMMUNE
+      p1b Electivire used Thunder Punch -> p2b: Sylveon
+      p2b Sylveon used Hyper Voice -> p1b: Electivire  [[spread] p1a,p1b]
+      p1a Chansey used Soft-Boiled
+      after p1: Chansey 642/642, Electivire 150/292
+      after p2: Gengar-Mega 30/323, Sylveon 263/393
+
+  Turn 24
+    p1 mcts: move 3 2, move 4 1
+      search (42000 visits): toxic,1;thunderpunch,0 3398v 1344 | toxic,1;thunderpunch,1 3321v 1311 | softboiled,0;thunderpunch,1 1947v 721 | protect,0;thunderpunch,0 1906v 703
+    p2 greedy: move 4 2, move 1
+      p2a Gengar used Shadow Ball -> p1b: Electivire
+      p1b Electivire fainted
+      p2b Sylveon used Hyper Voice -> p1a: Chansey
+      p1a Chansey used Toxic -> p2b: Sylveon
+              p2b Sylveon is now tox
+      after p1: Chansey 542/642, Electivire 0/292
+      after p2: Gengar-Mega 30/323, Sylveon 263/393
+
+  Turn 25
+    p1 mcts: move 4, pass
+      search (55000 visits): softboiled,0;No Move 15381v 5615 | seismictoss,1;No Move 9721v 3454 | toxic,1;No Move 8351v 2936 | protect,0;No Move 7511v 2620
+    p2 greedy: move 4 1, move 1
+      p2a Gengar used Shadow Ball -> p1a: Chansey
+              p1a Chansey -- IMMUNE
+      p2b Sylveon used Hyper Voice -> p1a: Chansey
+      p1a Chansey used Soft-Boiled
+      after p1: Chansey 642/642, Electivire 0/292
+      after p2: Gengar-Mega 30/323, Sylveon 239/393
+
+  Turn 26
+    p1 mcts: move 1 2, pass
+      search (52000 visits): seismictoss,1;No Move 9453v 3011 | toxic,0;No Move 9361v 2979 | toxic,1;No Move 8790v 2784 | protect,0;No Move 8265v 2605
+    p2 greedy: move 4 1, move 1
+      p2a Gengar used Shadow Ball -> p1a: Chansey
+              p1a Chansey -- IMMUNE
+      p2b Sylveon used Hyper Voice -> p1a: Chansey
+      p1a Chansey used Seismic Toss -> p2b: Sylveon
+      after p1: Chansey 551/642, Electivire 0/292
+      after p2: Gengar-Mega 30/323, Sylveon 91/393
+
+  Turn 27
+    p1 mcts: move 4, pass
+      search (58000 visits): softboiled,0;No Move 15871v 5687 | seismictoss,1;No Move 9827v 3423 | protect,0;No Move 9505v 3303 | toxic,0;No Move 7689v 2630
+    p2 greedy: move 4 1, move 1
+      p2a Gengar used Shadow Ball -> p1a: Chansey
+              p1a Chansey -- IMMUNE
+      p2b Sylveon used Hyper Voice -> p1a: Chansey
+      p1a Chansey used Soft-Boiled
+      after p1: Chansey 642/642, Electivire 0/292
+      after p2: Gengar-Mega 30/323, Sylveon 19/393
+
+  Turn 28
+    p1 mcts: move 1 2, pass
+      search (69000 visits): seismictoss,1;No Move 13523v 4970 | protect,0;No Move 11738v 4279 | toxic,0;No Move 11646v 4243 | softboiled,0;No Move 10868v 3943
+    p2 greedy: move 4 1, move 1
+      p2a Gengar used Shadow Ball -> p1a: Chansey
+              p1a Chansey -- IMMUNE
+      p2b Sylveon used Hyper Voice -> p1a: Chansey
+      p1a Chansey used Seismic Toss -> p2b: Sylveon
+      p2b Sylveon fainted
+      after p1: Chansey 554/642, Electivire 0/292
+      after p2: Gengar-Mega 30/323, Sylveon 0/393
+
+  Turn 29
+      p2b <- Genesect comes in (283/283)
+              p2b Genesect atk 1 rose
+      after p1: Chansey 554/642, Electivire 0/292
+      after p2: Gengar-Mega 30/323, Genesect 283/283
+
+  Turn 30
+    p1 mcts: move 2, pass
+      search (52000 visits): protect,0;No Move 33942v 12115 | softboiled,0;No Move 6614v 2149 | seismictoss,1;No Move 2912v 861 | toxic,0;No Move 2894v 855
+    p2 greedy: move 4 1, move 3 1
+      p1a Chansey used Protect
+      p2b Genesect used Ice Beam -> p1a: Chansey
+              p1a Chansey -- move: Protect
+      p2a Gengar used Shadow Ball -> p1a: Chansey
+              p1a Chansey -- IMMUNE
+      after p1: Chansey 554/642, Electivire 0/292
+      after p2: Gengar-Mega 30/323, Genesect 283/283
+
+  Turn 31
+    p1 mcts: move 4, pass
+      search (60000 visits): softboiled,0;No Move 12767v 1400 | seismictoss,1;No Move 10351v 1088 | toxic,1;No Move 10005v 1043 | seismictoss,0;No Move 9915v 1032
+    p2 greedy: move 4 1, move 3 1
+      p2b Genesect used Ice Beam -> p1a: Chansey
+      p2a Gengar used Shadow Ball -> p1a: Chansey
+              p1a Chansey -- IMMUNE
+      p1a Chansey used Soft-Boiled
+      after p1: Chansey 642/642, Electivire 0/292
+      after p2: Gengar-Mega 30/323, Genesect 283/283
+
+  Turn 32
+    p1 mcts: move 4, pass
+      search (42000 visits): softboiled,0;No Move 8559v 1086 | seismictoss,1;No Move 7361v 905 | seismictoss,0;No Move 6941v 842 | toxic,0;No Move 6878v 833
+    p2 greedy: move 4 1, move 3 1
+      p2b Genesect used Ice Beam -> p1a: Chansey
+      p2a Gengar used Shadow Ball -> p1a: Chansey
+              p1a Chansey -- IMMUNE
+      p1a Chansey used Soft-Boiled
+      after p1: Chansey 642/642, Electivire 0/292
+      after p2: Gengar-Mega 30/323, Genesect 283/283
+
+  Turn 33
+    p1 mcts: move 1 1, pass
+      search (66000 visits): seismictoss,0;No Move 12892v 966 | toxic,1;No Move 11654v 848 | seismictoss,1;No Move 11529v 836 | softboiled,0;No Move 11427v 827
+    p2 greedy: move 1, move 3 1
+      p2a Gengar used Protect
+      p2b Genesect used Ice Beam -> p1a: Chansey
+      p1a Chansey used Seismic Toss -> p2a: Gengar
+              p2a Gengar -- IMMUNE
+      after p1: Chansey 590/642, Electivire 0/292
+      after p2: Gengar-Mega 30/323, Genesect 283/283
+
+  Turn 34
+    p1 mcts: move 4, pass
+      search (66000 visits): softboiled,0;No Move 12659v 906 | seismictoss,0;No Move 12146v 859 | toxic,0;No Move 12016v 847 | toxic,1;No Move 11116v 764
+    p2 greedy: move 1, move 3 1
+      p2a Gengar used Protect  [[still]]
+              p2a Gengar -- IT FAILED
+      p2b Genesect used Ice Beam -> p1a: Chansey
+      p1a Chansey used Soft-Boiled
+      after p1: Chansey 642/642, Electivire 0/292
+      after p2: Gengar-Mega 30/323, Genesect 283/283
+
+  Turn 35
+    p1 mcts: move 1 2, pass
+      search (91000 visits): seismictoss,1;No Move 17125v 1047 | toxic,1;No Move 16756v 1017 | softboiled,0;No Move 16431v 991 | toxic,0;No Move 16249v 977
+    p2 greedy: move 1, move 3 1
+      p2a Gengar used Protect
+      p2b Genesect used Ice Beam -> p1a: Chansey
+              p1a Chansey is now frz
+              p1a Chansey COULD NOT MOVE (frz)
+      after p1: Chansey 587/642, Electivire 0/292
+      after p2: Gengar-Mega 30/323, Genesect 283/283
+
+  Turn 36
+    p1 mcts: move 3 2, pass
+      search (110000 visits): toxic,1;No Move 19319v 1096 | softboiled,0;No Move 19095v 1080 | seismictoss,1;No Move 18339v 1024 | seismictoss,0;No Move 17887v 991
+    p2 greedy: move 1, move 3 1
+      p2a Gengar used Protect
+      p2b Genesect used Ice Beam -> p1a: Chansey
+              p1a Chansey COULD NOT MOVE (frz)
+      after p1: Chansey 532/642, Electivire 0/292
+      after p2: Gengar-Mega 30/323, Genesect 283/283
+
+  Turn 37
+    p1 mcts: move 1 2, pass
+      search (103000 visits): seismictoss,1;No Move 17699v 1043 | protect,0;No Move 17398v 1020 | softboiled,0;No Move 17377v 1019 | seismictoss,0;No Move 17348v 1016
+    p2 greedy: move 1, move 3 1
+      p2a Gengar used Protect
+      p2b Genesect used Ice Beam -> p1a: Chansey
+              p1a Chansey is cured of frz
+      p1a Chansey used Seismic Toss -> p2b: Genesect
+      after p1: Chansey 476/642, Electivire 0/292
+      after p2: Gengar-Mega 30/323, Genesect 183/283
+
+  Turn 38
+    p1 mcts: move 4, pass
+      search (101000 visits): softboiled,0;No Move 20334v 1115 | seismictoss,0;No Move 18422v 979 | toxic,0;No Move 18086v 955 | toxic,1;No Move 17108v 886
+    p2 greedy: move 1, move 3 1
+      p2a Gengar used Protect  [[still]]
+              p2a Gengar -- IT FAILED
+      p2b Genesect used Ice Beam -> p1a: Chansey
+      p1a Chansey used Soft-Boiled
+      after p1: Chansey 642/642, Electivire 0/292
+      after p2: Gengar-Mega 30/323, Genesect 183/283
+
+  Turn 39
+    p1 mcts: move 1 1, pass
+      search (95000 visits): seismictoss,0;No Move 17533v 1038 | softboiled,0;No Move 17522v 1037 | toxic,1;No Move 17229v 1015 | seismictoss,1;No Move 17116v 1006
+    p2 greedy: move 1, move 3 1
+      p2a Gengar used Protect
+      p2b Genesect used Ice Beam -> p1a: Chansey
+      p1a Chansey used Seismic Toss -> p2a: Gengar
+              p2a Gengar -- IMMUNE
+      after p1: Chansey 593/642, Electivire 0/292
+      after p2: Gengar-Mega 30/323, Genesect 183/283
+
+  Turn 40
+    p1 mcts: move 3 2, pass
+      search (97000 visits): toxic,1;No Move 18639v 1055 | softboiled,0;No Move 17977v 1006 | seismictoss,1;No Move 17377v 962 | seismictoss,0;No Move 17018v 936
+    p2 greedy: move 1, move 3 1
+      p2a Gengar used Protect  [[still]]
+              p2a Gengar -- IT FAILED
+      p2b Genesect used Ice Beam -> p1a: Chansey
+      p1a Chansey used Toxic -> p2b: Genesect
+              p2b Genesect -- IMMUNE
+      after p1: Chansey 539/642, Electivire 0/292
+      after p2: Gengar-Mega 30/323, Genesect 183/283
+
+  Turn 41
+    p1 mcts: move 4, pass
+      search (72000 visits): softboiled,0;No Move 14506v 995 | seismictoss,0;No Move 13319v 891 | toxic,0;No Move 12465v 817 | seismictoss,1;No Move 12135v 788
+    p2 greedy: move 1, move 3 1
+      p2a Gengar used Protect
+      p2b Genesect used Ice Beam -> p1a: Chansey
+      p1a Chansey used Soft-Boiled
+      after p1: Chansey 642/642, Electivire 0/292
+      after p2: Gengar-Mega 30/323, Genesect 183/283
+
+  Turn 42
+    p1 mcts: move 3 1, pass
+      search (80000 visits): toxic,0;No Move 15475v 999 | seismictoss,1;No Move 14673v 933 | seismictoss,0;No Move 14303v 902 | softboiled,0;No Move 13814v 861
+    p2 greedy: move 1, move 3 1
+      p2a Gengar used Protect  [[still]]
+              p2a Gengar -- IT FAILED
+      p2b Genesect used Ice Beam -> p1a: Chansey
+      p1a Chansey used Toxic -> p2a: Gengar
+              p2a Gengar -- IMMUNE
+      after p1: Chansey 592/642, Electivire 0/292
+      after p2: Gengar-Mega 30/323, Genesect 183/283
+
+  Turn 43
+    p1 mcts: move 3 1, pass
+      search (113000 visits): toxic,0;No Move 21050v 1072 | toxic,1;No Move 21027v 1071 | softboiled,0;No Move 20660v 1046 | seismictoss,0;No Move 20125v 1010
+    p2 greedy: move 1, move 3 1
+      p2a Gengar used Protect
+      p2b Genesect used Ice Beam -> p1a: Chansey
+      p1a Chansey used Toxic -> p2a: Gengar
+              p2a Gengar -- move: Protect
+      after p1: Chansey 540/642, Electivire 0/292
+      after p2: Gengar-Mega 30/323, Genesect 183/283
+
+  Turn 44
+    p1 mcts: move 4, pass
+      search (181000 visits): softboiled,0;No Move 36050v 1338 | seismictoss,0;No Move 32412v 1157 | toxic,0;No Move 32234v 1148 | toxic,1;No Move 31849v 1129
+    p2 greedy: move 1, move 3 1
+      p2a Gengar used Protect  [[still]]
+              p2a Gengar -- IT FAILED
+      p2b Genesect used Ice Beam -> p1a: Chansey
+      p1a Chansey used Soft-Boiled
+      after p1: Chansey 642/642, Electivire 0/292
+      after p2: Gengar-Mega 30/323, Genesect 183/283
+
+  Turn 45
+    p1 mcts: move 3 1, pass
+      search (217000 visits): toxic,0;No Move 41175v 768 | seismictoss,1;No Move 39688v 722 | toxic,1;No Move 39673v 722 | seismictoss,0;No Move 39138v 705
+    p2 greedy: move 1, move 3 1
+      p2a Gengar used Protect
+      p2b Genesect used Ice Beam -> p1a: Chansey
+      p1a Chansey used Toxic -> p2a: Gengar
+              p2a Gengar -- move: Protect
+      after p1: Chansey 590/642, Electivire 0/292
+      after p2: Gengar-Mega 30/323, Genesect 183/283
+
+  Turn 46
+    p1 mcts: move 2, pass
+      search (92000 visits): protect,0;No Move 49509v 8998 | softboiled,0;No Move 10747v 1688 | seismictoss,1;No Move 8253v 1243 | toxic,0;No Move 7956v 1190
+    p2 greedy: move 1, move 1
+      p2a Gengar used Protect
+      p1a Chansey used Protect
+              p2b Genesect -- move: Struggle
+      p2b Genesect used Struggle -> p1a: Chansey
+              p1a Chansey -- move: Protect
+      after p1: Chansey 590/642, Electivire 0/292
+      after p2: Gengar-Mega 30/323, Genesect 183/283
+
+  Turn 47
+    p1 mcts: move 2, pass
+      search (97000 visits): protect,0;No Move 35711v 5484 | softboiled,0;No Move 14636v 2039 | toxic,0;No Move 11806v 1592 | seismictoss,0;No Move 11685v 1572
+    p2 greedy: move 1, move 1
+      p2a Gengar used Protect  [[still]]
+              p2a Gengar -- IT FAILED
+      p1a Chansey used Protect
+              p2b Genesect -- move: Struggle
+      p2b Genesect used Struggle -> p1a: Chansey
+              p1a Chansey -- move: Protect
+      after p1: Chansey 590/642, Electivire 0/292
+      after p2: Gengar-Mega 30/323, Genesect 183/283
+
+  Turn 48
+    p1 mcts: move 2, pass
+      search (74000 visits): protect,0;No Move 16135v 3389 | softboiled,0;No Move 15996v 3358 | seismictoss,1;No Move 10881v 2197 | toxic,1;No Move 10439v 2098
+    p2 greedy: move 1, move 1
+      p2a Gengar used Protect
+      p1a Chansey used Protect  [[still]]
+              p1a Chansey -- IT FAILED
+              p2b Genesect -- move: Struggle
+      p2b Genesect used Struggle -> p1a: Chansey
+      after p1: Chansey 497/642, Electivire 0/292
+      after p2: Gengar-Mega 30/323, Genesect 112/283
+
+  Turn 49
+    p1 mcts: move 4, pass
+      search (102000 visits): softboiled,0;No Move 35732v 4387 | protect,0;No Move 26308v 3119 | seismictoss,0;No Move 10109v 1015 | seismictoss,1;No Move 9984v 999
+    p2 greedy: move 2, move 1
+              p2b Genesect -- move: Struggle
+      p2b Genesect used Struggle -> p1a: Chansey
+              p1a Chansey -- critical hit
+      p2a Gengar used Substitute
+              p2a Gengar -- IT FAILED
+      p1a Chansey used Soft-Boiled
+      after p1: Chansey 642/642, Electivire 0/292
+      after p2: Gengar-Mega 30/323, Genesect 41/283
+
+  Turn 50
+    p1 mcts: move 2, pass
+      search (85000 visits): protect,0;No Move 23232v 3348 | softboiled,0;No Move 17591v 2453 | seismictoss,1;No Move 11072v 1440 | toxic,1;No Move 11056v 1438
+    p2 greedy: move 2, move 1
+      p1a Chansey used Protect
+              p2b Genesect -- move: Struggle
+      p2b Genesect used Struggle -> p1a: Chansey
+              p1a Chansey -- move: Protect
+      p2a Gengar used Substitute
+              p2a Gengar -- IT FAILED
+      after p1: Chansey 642/642, Electivire 0/292
+      after p2: Gengar-Mega 30/323, Genesect 41/283
+
+  Turn 51
+    p1 mcts: move 2, pass
+      search (88000 visits): protect,0;No Move 22748v 3097 | softboiled,0;No Move 18124v 2398 | toxic,1;No Move 11940v 1482 | toxic,0;No Move 11928v 1480
+    p2 greedy: move 2, move 1
+      p1a Chansey used Protect  [[still]]
+              p1a Chansey -- IT FAILED
+              p2b Genesect -- move: Struggle
+      p2b Genesect used Struggle -> p1a: Chansey
+      p2b Genesect fainted
+      p2a Gengar used Substitute
+              p2a Gengar -- IT FAILED
+      after p1: Chansey 547/642, Electivire 0/292
+      after p2: Gengar-Mega 30/323, Genesect 0/283
+
+  Turn 52
+    p1 mcts: move 2, pass
+      search (435000 visits): protect,0;No Move 110066v 71 | seismictoss,0;No Move 108449v 57 | toxic,0;No Move 108449v 57 | softboiled,0;No Move 108036v 54
+    p2 greedy: move 2, pass
+      p1a Chansey used Protect
+      p2a Gengar used Substitute
+              p2a Gengar -- IT FAILED
+      after p1: Chansey 547/642, Electivire 0/292
+      after p2: Gengar-Mega 30/323, Genesect 0/283
+
+  Turn 53
+    p1 mcts: move 2, pass
+      search (607000 visits): protect,0;No Move 153754v 74 | softboiled,0;No Move 151452v 57 | seismictoss,0;No Move 151238v 56 | toxic,0;No Move 150556v 51
+    p2 greedy: move 2, pass
+      p1a Chansey used Protect  [[still]]
+              p1a Chansey -- IT FAILED
+      p2a Gengar used Substitute
+              p2a Gengar -- IT FAILED
+      after p1: Chansey 547/642, Electivire 0/292
+      after p2: Gengar-Mega 30/323, Genesect 0/283
+
+  Turn 54
+    p1 mcts: move 2, pass
+      search (501000 visits): protect,0;No Move 126895v 73 | seismictoss,0;No Move 124802v 57 | toxic,0;No Move 124661v 56 | softboiled,0;No Move 124642v 56
+    p2 greedy: move 2, pass
+      p1a Chansey used Protect
+      p2a Gengar used Substitute
+              p2a Gengar -- IT FAILED
+      after p1: Chansey 547/642, Electivire 0/292
+      after p2: Gengar-Mega 30/323, Genesect 0/283
+
+  Turn 55
+    p1 mcts: move 2, pass
+      search (511000 visits): protect,0;No Move 129341v 72 | seismictoss,0;No Move 127250v 56 | toxic,0;No Move 127250v 56 | softboiled,0;No Move 127159v 55
+    p2 greedy: move 2, pass
+      p1a Chansey used Protect  [[still]]
+              p1a Chansey -- IT FAILED
+      p2a Gengar used Substitute
+              p2a Gengar -- IT FAILED
+      after p1: Chansey 547/642, Electivire 0/292
+      after p2: Gengar-Mega 30/323, Genesect 0/283
+
+  Turn 56
+    p1 mcts: move 2, pass
+      search (512000 visits): protect,0;No Move 129624v 72 | seismictoss,0;No Move 127656v 57 | toxic,0;No Move 127584v 56 | softboiled,0;No Move 127136v 53
+    p2 greedy: move 2, pass
+      p1a Chansey used Protect
+      p2a Gengar used Substitute
+              p2a Gengar -- IT FAILED
+      after p1: Chansey 547/642, Electivire 0/292
+      after p2: Gengar-Mega 30/323, Genesect 0/283
+
+  Turn 57
+    p1 mcts: move 2, pass
+      search (529000 visits): protect,0;No Move 133643v 70 | seismictoss,0;No Move 132006v 58 | toxic,0;No Move 131940v 57 | softboiled,0;No Move 131411v 54
+    p2 greedy: move 2, pass
+      p1a Chansey used Protect
+      p2a Gengar used Substitute
+              p2a Gengar -- IT FAILED
+      after p1: Chansey 547/642, Electivire 0/292
+      after p2: Gengar-Mega 30/323, Genesect 0/283
+
+  Turn 58
+    p1 mcts: move 2, pass
+      search (530000 visits): protect,0;No Move 133082v 63 | softboiled,0;No Move 132439v 58 | seismictoss,0;No Move 132312v 57 | toxic,0;No Move 132167v 56
+    p2 greedy: move 2, pass
+      p1a Chansey used Protect  [[still]]
+              p1a Chansey -- IT FAILED
+      p2a Gengar used Substitute
+              p2a Gengar -- IT FAILED
+      after p1: Chansey 547/642, Electivire 0/292
+      after p2: Gengar-Mega 30/323, Genesect 0/283
+
+  Turn 59
+    p1 mcts: move 1 1, pass
+      search (572000 visits): seismictoss,0;No Move 143991v 48 | toxic,0;No Move 143697v 46 | softboiled,0;No Move 143068v 42 | protect,0;No Move 141244v 29
+    p2 greedy: move 2, pass
+      p2a Gengar used Substitute
+              p2a Gengar -- IT FAILED
+      p1a Chansey used Seismic Toss -> p2a: Gengar
+              p2a Gengar -- IMMUNE
+      after p1: Chansey 547/642, Electivire 0/292
+      after p2: Gengar-Mega 30/323, Genesect 0/283
+
+  Turn 60
+    p1 mcts: move 1 1, pass
+      search (563000 visits): seismictoss,0;No Move 141733v 48 | toxic,0;No Move 141442v 46 | softboiled,0;No Move 140817v 42 | protect,0;No Move 139008v 29
+    p2 greedy: move 2, pass
+      p2a Gengar used Substitute
+              p2a Gengar -- IT FAILED
+      p1a Chansey used Seismic Toss -> p2a: Gengar
+              p2a Gengar -- IMMUNE
+      after p1: Chansey 547/642, Electivire 0/292
+      after p2: Gengar-Mega 30/323, Genesect 0/283
+
+  RESULT: turn limit

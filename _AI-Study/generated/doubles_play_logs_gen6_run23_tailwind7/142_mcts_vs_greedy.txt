@@ -1,0 +1,124 @@
+battle 142   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: sdef aegi fire punch kang 2x incarnate: Conkeldurr, Aegislash, Kangaskhan-Mega, Thundurus, Landorus, Volcanion
+  p2: ORAS Doubles OU: Diancie-Mega, Landorus-Therian, Talonflame, Aegislash, Hydreigon, Keldeo
+
+  Turn 1
+    p1 mcts: move 2 2, switch 3   (slot1 Aegislash -> Kangaskhan-Mega)
+      search (24000 visits): icepunch,1;switch kangaskhanmega 403v 270 | icepunch,1;switch landorus 357v 235 | switch volcanion;switch landorus 351v 230 | switch landorus;switch kangaskhanmega 333v 216
+    p2 greedy: move 1, move 3 1
+      p1b <- Kangaskhan-Mega comes in (414/414)
+      p2b Landorus used Superpower -> p1a: Conkeldurr
+              p2b Landorus atk 1 fell
+              p2b Landorus def 1 fell
+      p2a Diancie used Diamond Storm -> p1b: Kangaskhan  [[spread] p1a,p1b]
+              p2a Diancie def 1 rose
+      p1a Conkeldurr used Ice Punch -> p2b: Landorus
+      p2b Landorus fainted
+      after p1: Conkeldurr 163/401, Kangaskhan-Mega 269/414
+      after p2: Diancie-Mega 241/241, Landorus-Therian 0/319
+
+  Turn 2
+      p2b <- Talonflame comes in (297/297)
+      after p1: Conkeldurr 163/401, Kangaskhan-Mega 269/414
+      after p2: Diancie-Mega 241/241, Talonflame 297/297
+
+  Turn 3
+    p1 mcts: switch 5, switch 4   (slot0 Conkeldurr -> Landorus; slot1 Kangaskhan-Mega -> Thundurus)
+      search (40000 visits): switch landorus;switch thundurus 406v 387 | switch landorus;switch volcanion 401v 382 | switch landorus;switch aegislash 400v 381 | switch aegislash;switch volcanion 385v 365
+    p2 greedy: move 1, move 2 1
+      p1b <- Thundurus comes in (361/361)
+      p1a <- Landorus comes in (319/319)
+      p2b Talonflame used Brave Bird -> p1a: Landorus
+      p2a Diancie used Diamond Storm -> p1b: Thundurus  [[spread] p1a,p1b]
+              p2a Diancie def 1 rose
+      p1a Landorus fainted
+      p1b Thundurus fainted
+      after p1: Landorus 0/319, Thundurus 0/361
+      after p2: Diancie-Mega 241/241, Talonflame 185/297
+
+  Turn 4
+      p1a <- Aegislash comes in (324/324)
+      p1b <- Kangaskhan-Mega comes in (269/414)
+      after p1: Aegislash 324/324, Kangaskhan-Mega 269/414
+      after p2: Diancie-Mega 241/241, Talonflame 185/297
+
+  Turn 5
+    p1 mcts: move 1 2, switch 6   (slot1 Kangaskhan-Mega -> Volcanion)
+      search (40000 visits): shadowball,1;switch volcanion 565v 534 | toxic,1;switch volcanion 558v 527 | shadowball,0;switch volcanion 547v 515 | shadowsneak,1;fakeout,1 546v 514
+    p2 greedy: move 1, move 2 2
+      p1b <- Volcanion comes in (364/364)
+      p2b Talonflame used Brave Bird -> p1b: Volcanion
+      p2a Diancie used Diamond Storm -> p1a: Aegislash  [[spread] p1a,p1b]
+              p2a Diancie def 1 rose
+      p1b Volcanion fainted
+      p1a Aegislash used Shadow Ball -> p2b: Talonflame
+      p2b Talonflame fainted
+      after p1: Aegislash-Blade 291/324, Volcanion 0/364
+      after p2: Diancie-Mega 241/241, Talonflame 0/297
+
+  Turn 6
+      p2b <- Aegislash comes in (324/324)
+      p1b <- Conkeldurr comes in (163/401)
+      after p1: Aegislash-Blade 291/324, Conkeldurr 163/401
+      after p2: Diancie-Mega 241/241, Aegislash 324/324
+
+  Turn 7
+    p1 mcts: move 1 2, switch 6   (slot1 Conkeldurr -> Kangaskhan-Mega)
+      search (29000 visits): shadowball,1;switch kangaskhanmega 2375v 2164 | shadowball,1;machpunch,1 2023v 1829 | shadowsneak,1;knockoff,1 1372v 1207 | toxic,1;knockoff,1 1215v 1062
+    p2 greedy: move 1, move 2 2
+      p1b <- Kangaskhan-Mega comes in (269/414)
+      p2a Diancie used Diamond Storm -> p1a: Aegislash  [[spread] p1a,p1b]
+      p1a Aegislash used Shadow Ball -> p2b: Aegislash
+              p2b Aegislash -- critical hit
+      p2b Aegislash used Shadow Ball -> p1b: Kangaskhan
+              p1b Kangaskhan -- IMMUNE
+      after p1: Aegislash-Blade 175/324, Kangaskhan-Mega 116/414
+      after p2: Diancie-Mega 241/241, Aegislash-Blade 24/324
+
+  Turn 8
+    p1 mcts: move 1 2, move 4 2
+      search (41000 visits): shadowball,1;lowkick,1 952v 941 | shadowball,1;firepunch,1 882v 867 | shadowsneak,1;firepunch,1 864v 848 | shadowball,1;switch conkeldurr 859v 843
+    p2 greedy: move 1, move 2 2
+      p2a Diancie used Diamond Storm -> p1b: Kangaskhan  [[spread] p1a,p1b]
+      p1b Kangaskhan fainted
+      p1a Aegislash used Shadow Ball -> p2b: Aegislash
+      p2b Aegislash fainted
+      after p1: Aegislash-Blade 60/324, Kangaskhan-Mega 0/414
+      after p2: Diancie-Mega 241/241, Aegislash 0/324
+
+  Turn 9
+      p1b <- Conkeldurr comes in (163/401)
+      p2b <- Hydreigon comes in (325/325)
+      after p1: Aegislash-Blade 60/324, Conkeldurr 163/401
+      after p2: Diancie-Mega 241/241, Hydreigon 325/325
+
+  Turn 10
+    p1 mcts: move 1 1, move 1 2
+      search (49000 visits): shadowball,0;drainpunch,1 1819v 211 | shadowsneak,1;drainpunch,1 1753v 199 | shadowsneak,0;drainpunch,1 1655v 183 | kingsshield,0;drainpunch,1 1601v 174
+    p2 greedy: move 1, move 2 1
+      p2a Diancie used Diamond Storm -> p1b: Conkeldurr  [[spread] p1a,p1b]
+              p2a Diancie def 1 rose
+      p1a Aegislash fainted
+      p2b Hydreigon used Draco Meteor -> p1b: Conkeldurr  [[miss]]
+              p2b Hydreigon -- MISSED
+      p1b Conkeldurr used Drain Punch -> p2b: Hydreigon
+      p2b Hydreigon fainted
+      after p1: Aegislash 0/324, Conkeldurr 247/401
+      after p2: Diancie-Mega 241/241, Hydreigon 0/325
+
+  Turn 11
+      p2b <- Keldeo comes in (323/323)
+      after p1: Aegislash 0/324, Conkeldurr 247/401
+      after p2: Diancie-Mega 241/241, Keldeo 323/323
+
+  Turn 12
+    p1 mcts: pass, move 1 2
+      search (607000 visits): No Move;drainpunch,1 100255v 713 | No Move;machpunch,1 85047v 486 | No Move;icepunch,0 75996v 357 | No Move;drainpunch,0 75988v 357
+    p2 greedy: move 1, move 2 2
+      p2a Diancie used Diamond Storm -> p1b: Conkeldurr
+      p2b Keldeo used Hydro Pump -> p1b: Conkeldurr
+      p1b Conkeldurr fainted
+      after p1: Aegislash 0/324, Conkeldurr 0/401
+      after p2: Diancie-Mega 241/241, Keldeo 291/323
+
+  RESULT: p2 wins

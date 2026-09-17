@@ -1,0 +1,184 @@
+battle 110   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: dpl ::/Untitled 887: Talonflame, Gyarados-Mega, Pachirisu, Gothitelle, Deoxys-Attack, Landorus-Therian
+  p2: ORAS Doubles OU: Volcarona, Pikachu, Greninja, Gallade-Mega, Togekiss, Garchomp
+
+  Turn 1
+    p1 mcts: move 1 2, switch 6   (slot1 Gyarados-Mega -> Landorus-Therian)
+      search (23000 visits): bravebird,1;switch landorustherian 301v 39 | bravebird,0;switch landorustherian 299v 38 | uturn,1;switch landorustherian 294v 37 | switch landorustherian;dragondance,1 288v 35
+    p2 greedy: move 4, move 4 1
+      p1b <- Landorus-Therian comes in (382/382)
+              p2a Volcarona atk 1 fell
+              p2b Pikachu atk 1 fell
+      p1a Talonflame used Brave Bird -> p2b: Pikachu
+      p2b Pikachu fainted
+      p2a Volcarona used Heat Wave -> p1a: Talonflame  [[spread] p1a,p1b]
+              p1b Landorus is now brn
+      after p1: Talonflame 200/360, Landorus-Therian 251/382
+      after p2: Volcarona 311/311, Pikachu 0/211
+
+  Turn 2
+      p2b <- Greninja comes in (285/285)
+      after p1: Talonflame 200/360, Landorus-Therian 251/382
+      after p2: Volcarona 311/311, Greninja 285/285
+
+  Turn 3
+    p1 mcts: move 1 2, switch 6   (slot1 Landorus-Therian -> Gyarados-Mega)
+      search (30000 visits): bravebird,1;switch gyaradosmega 1852v 374 | bravebird,1;switch pachirisu 1293v 235 | bravebird,1;switch gothitelle 1202v 212 | bravebird,0;switch gyaradosmega 923v 146
+    p2 greedy: move 4, move 2 1
+      p1b <- Gyarados-Mega comes in (394/394)
+              p2a Volcarona atk 1 fell
+              p2b Greninja atk 1 fell
+      p1a Talonflame used Brave Bird -> p2b: Greninja
+              p2b Greninja -- critical hit
+      p2b Greninja fainted
+      p2a Volcarona used Heat Wave -> p1b: Gyarados  [[spread] p1b]
+              p2a Volcarona -- MISSED
+      after p1: Talonflame 106/360, Gyarados-Mega 346/394
+      after p2: Volcarona 311/311, Greninja 0/285
+
+  Turn 4
+      p2b <- Gallade-Mega comes in (278/278)
+      after p1: Talonflame 106/360, Gyarados-Mega 346/394
+      after p2: Volcarona 311/311, Gallade-Mega 278/278
+
+  Turn 5
+    p1 mcts: move 1 1, switch 6   (slot1 Gyarados-Mega -> Landorus-Therian)
+      search (31000 visits): bravebird,0;switch landorustherian 3422v 983 | bravebird,1;switch landorustherian 2841v 794 | switch landorustherian;dragondance,1 1379v 334 | bravebird,1;switch gothitelle 1052v 236
+    p2 greedy: move 4, move 2 1
+      p1b <- Landorus-Therian comes in (251/382)
+              p2a Volcarona atk 1 fell
+              p2b Gallade atk 1 fell
+      p1a Talonflame used Brave Bird -> p2a: Volcarona
+              p2a Volcarona used up its Focus Sash
+      p2b Gallade used Close Combat -> p1a: Talonflame
+              p2b Gallade def 1 fell
+              p2b Gallade spd 1 fell
+      p1a Talonflame fainted
+      p2a Volcarona used Heat Wave -> p1b: Landorus
+      after p1: Talonflame 0/360, Landorus-Therian 95/382
+      after p2: Volcarona 1/311, Gallade-Mega 278/278
+
+  Turn 6
+      p1a <- Pachirisu comes in (324/324)
+      after p1: Pachirisu 324/324, Landorus-Therian 95/382
+      after p2: Volcarona 1/311, Gallade-Mega 278/278
+
+  Turn 7
+    p1 mcts: switch 4, move 1   (slot0 Pachirisu -> Gothitelle)
+      search (39000 visits): switch gothitelle;earthquake,0 720v 53 | switch gothitelle;uturn,1 657v 43 | switch gothitelle;stoneedge,1 633v 39 | nuzzle,1;uturn,1 547v 26
+    p2 greedy: move 4, move 2 2
+      p1a <- Gothitelle comes in (344/344)
+      p2b Gallade used Close Combat -> p1b: Landorus
+              p2b Gallade def 1 fell
+              p2b Gallade spd 1 fell
+      p1b Landorus used Earthquake -> p2a: Volcarona  [[spread] p1a,p2a,p2b]
+      p2a Volcarona fainted
+      p1b Landorus fainted
+      after p1: Gothitelle 287/344, Landorus-Therian 0/382
+      after p2: Volcarona 0/311, Gallade-Mega 133/278
+
+  Turn 8
+      p1b <- Pachirisu comes in (324/324)
+      p2a <- Togekiss comes in (311/311)
+      after p1: Gothitelle 287/344, Pachirisu 324/324
+      after p2: Togekiss 311/311, Gallade-Mega 133/278
+
+  Turn 9
+    p1 mcts: move 1 2, switch 6   (slot1 Pachirisu -> Gyarados-Mega)
+      search (43000 visits): psyshock,1;switch gyaradosmega 4435v 1562 | psyshock,1;nuzzle,0 3787v 1313 | psyshock,1;nuzzle,1 1865v 587 | protect,0;switch gyaradosmega 1410v 421
+    p2 greedy: move 1 1, move 2 1
+      p1b <- Gyarados-Mega comes in (346/394)
+              p2a Togekiss atk 1 fell
+              p2b Gallade atk 1 fell
+      p2b Gallade used Close Combat -> p1a: Gothitelle
+              p2b Gallade def 1 fell
+              p2b Gallade spd 1 fell
+      p2a Togekiss used Shadow Ball -> p1a: Gothitelle
+              p1a Gothitelle spd 1 fell
+      p1a Gothitelle used Psyshock -> p2b: Gallade
+      p2b Gallade fainted
+      after p1: Gothitelle 87/344, Gyarados-Mega 346/394
+      after p2: Togekiss 311/311, Gallade-Mega 0/278
+
+  Turn 10
+      p2b <- Garchomp comes in (357/357)
+      after p1: Gothitelle 87/344, Gyarados-Mega 346/394
+      after p2: Togekiss 311/311, Garchomp 357/357
+
+  Turn 11
+    p1 mcts: move 4, move 4
+      search (39000 visits): protect,0;protect,1 5357v 2282 | psyshock,0;waterfall,0 2155v 840 | protect,0;dragondance,1 1824v 695 | protect,0;crunch,1 1416v 519
+    p2 greedy: move 1 1, move 4
+      p1b Gyarados used Protect
+      p1a Gothitelle used Protect
+      p2b Garchomp used Earthquake -> p1b: Gyarados  [[spread] ]
+              p2a Togekiss -- IMMUNE
+              p1a Gothitelle -- move: Protect
+              p1b Gyarados -- move: Protect
+      p2a Togekiss used Shadow Ball -> p1a: Gothitelle
+              p1a Gothitelle -- move: Protect
+      after p1: Gothitelle 87/344, Gyarados-Mega 346/394
+      after p2: Togekiss 311/311, Garchomp 357/357
+
+  Turn 12
+    p1 mcts: move 4, move 4
+      search (38000 visits): protect,0;protect,1 5935v 2538 | protect,0;dragondance,1 1634v 610 | protect,0;crunch,1 1394v 507 | protect,0;waterfall,0 1170v 413
+    p2 greedy: move 1 1, move 4
+      p1b Gyarados used Protect
+      p1a Gothitelle used Protect
+      p2b Garchomp used Earthquake -> p1a: Gothitelle  [[spread] ]
+              p2a Togekiss -- IMMUNE
+              p1a Gothitelle -- move: Protect
+              p1b Gyarados -- move: Protect
+      p2a Togekiss used Shadow Ball -> p1a: Gothitelle
+              p1a Gothitelle -- move: Protect
+      after p1: Gothitelle 87/344, Gyarados-Mega 346/394
+      after p2: Togekiss 311/311, Garchomp 357/357
+
+  Turn 13
+    p1 mcts: move 4, move 4
+      search (39000 visits): protect,0;protect,1 6257v 2668 | protect,0;dragondance,1 1815v 683 | protect,0;crunch,1 1462v 533 | protect,0;waterfall,1 1200v 422
+    p2 greedy: move 1 1, move 4
+      p1b Gyarados used Protect  [[still]]
+              p1b Gyarados -- IT FAILED
+      p1a Gothitelle used Protect  [[still]]
+              p1a Gothitelle -- IT FAILED
+      p2b Garchomp used Earthquake -> p1b: Gyarados  [[spread] p1a,p1b]
+              p2a Togekiss -- IMMUNE
+      p1a Gothitelle fainted
+      p2a Togekiss used Shadow Ball -> p1b: Gyarados
+              p1b Gyarados -- critical hit
+              p1b Gyarados spd 1 fell
+      after p1: Gothitelle 0/344, Gyarados-Mega 159/394
+      after p2: Togekiss 311/311, Garchomp 357/357
+
+  Turn 14
+      p1a <- Deoxys-Attack comes in (241/241)
+      after p1: Deoxys-Attack 241/241, Gyarados-Mega 159/394
+      after p2: Togekiss 311/311, Garchomp 357/357
+
+  Turn 15
+    p1 mcts: move 4, move 2 1
+      search (44000 visits): protect,0;waterfall,0 14503v 7192 | icebeam,1;waterfall,0 3052v 1375 | icebeam,1;protect,1 2146v 932 | protect,0;protect,1 1718v 726
+    p2 greedy: move 1 2, move 4
+      p1a Deoxys used Protect
+      p2b Garchomp used Earthquake -> p1b: Gyarados  [[spread] p1b]
+              p2a Togekiss -- IMMUNE
+              p1a Deoxys -- move: Protect
+      p1b Gyarados used Waterfall -> p2a: Togekiss
+              p2a Togekiss COULD NOT MOVE (flinch)
+      after p1: Deoxys-Attack 241/241, Gyarados-Mega 30/394
+      after p2: Togekiss 139/311, Garchomp 357/357
+
+  Turn 16
+    p1 mcts: move 2 2, move 2 1
+      search (65000 visits): icebeam,1;waterfall,0 27258v 13708 | psychoboost,1;waterfall,0 4110v 1882 | icebeam,0;switch pachirisu 2837v 1257 | icebeam,0;dragondance,1 1995v 850
+    p2 greedy: move 1 2, move 4
+      p1a Deoxys used Ice Beam -> p2b: Garchomp
+      p2b Garchomp fainted
+      p1b Gyarados used Waterfall -> p2a: Togekiss
+      p2a Togekiss fainted
+      after p1: Deoxys-Attack 217/241, Gyarados-Mega 30/394
+      after p2: Togekiss 0/311, Garchomp 0/357
+
+  RESULT: p1 wins

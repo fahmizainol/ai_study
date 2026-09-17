@@ -1,0 +1,186 @@
+battle 132   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: Whims Garde CB Lando: Gardevoir-Mega, Landorus-Therian, Whimsicott, Volcanion, Thundurus, Terrakion
+  p2: ORAS Doubles OU: Mawile-Mega, Dusclops, Sylveon, Amoonguss, Chandelure, Scrafty
+
+  Turn 1
+    p1 mcts: move 1, switch 6   (slot1 Landorus-Therian -> Terrakion)
+      search (25000 visits): hypervoice,0;switch terrakion 1032v 321 | psychic,0;switch whimsicott 417v 96 | protect,0;switch thundurus 402v 91 | disable,1;switch whimsicott 400v 90
+    p2 greedy: move 3 1, move 1
+      p1b <- Terrakion comes in (323/323)
+      p1a Gardevoir used Hyper Voice -> p2b: Dusclops  [[spread] p2a]
+              p2b Dusclops -- IMMUNE
+      p2a Mawile used Play Rough -> p1a: Gardevoir
+      p2b Dusclops used Trick Room
+      after p1: Gardevoir-Mega 133/277, Terrakion 323/323
+      after p2: Mawile-Mega 254/303, Dusclops 284/284
+
+  Turn 2
+    p1 mcts: switch 6, move 3   (slot0 Gardevoir-Mega -> Landorus-Therian)
+      search (29000 visits): switch landorustherian;earthquake,0 1984v 535 | switch landorustherian;rockslide,0 880v 192 | switch landorustherian;closecombat,0 516v 89 | switch landorustherian;protect,1 508v 87
+    p2 greedy: move 3 1, move 1
+      p1a <- Landorus-Therian comes in (319/319)
+              p2a Mawile atk 1 fell
+              p2b Dusclops atk 1 fell
+      p2a Mawile used Play Rough -> p1a: Landorus  [[miss]]
+              p2a Mawile -- MISSED
+      p1b Terrakion used Earthquake -> p2b: Dusclops  [[spread] p2a,p2b]
+              p1a Landorus -- IMMUNE
+      p2b Dusclops used Trick Room
+      after p1: Landorus-Therian 319/319, Terrakion 323/323
+      after p2: Mawile-Mega 116/303, Dusclops 242/284
+
+  Turn 3
+    p1 mcts: move 3 2, move 3
+      search (30000 visits): uturn,1;earthquake,0 443v 44 | stoneedge,0;earthquake,0 441v 43 | uturn,0;earthquake,0 441v 43 | superpower,0;earthquake,0 433v 42
+    p2 greedy: move 3 1, move 1
+      p1b Terrakion used Earthquake -> p2a: Mawile  [[spread] p2a,p2b]
+              p1a Landorus -- IMMUNE
+      p2a Mawile fainted
+      p1a Landorus used U-turn -> p2b: Dusclops
+      after p1: Landorus-Therian 319/319, Terrakion 323/323
+      after p2: Mawile-Mega 0/303, Dusclops 174/284
+
+  Turn 4
+      p1a <- Whimsicott comes in (324/324)
+      p2b Dusclops used Trick Room
+      after p1: Whimsicott 324/324, Terrakion 323/323
+      after p2: Mawile-Mega 0/303, Dusclops 174/284
+
+  Turn 5
+      p2a <- Sylveon comes in (345/345)
+      after p1: Whimsicott 324/324, Terrakion 323/323
+      after p2: Sylveon 345/345, Dusclops 174/284
+
+  Turn 6
+    p1 mcts: switch 3, move 4   (slot0 Whimsicott -> Landorus-Therian)
+      search (35000 visits): switch landorustherian;protect,1 580v 73 | switch thundurus;switch landorustherian 532v 62 | tailwind,0;switch landorustherian 524v 61 | beatup,0;switch landorustherian 499v 55
+    p2 greedy: move 1, move 1
+      p1a <- Landorus-Therian comes in (319/319)
+              p2a Sylveon atk 1 fell
+              p2b Dusclops atk 1 fell
+      p1b Terrakion used Protect
+      p2a Sylveon used Hyper Voice -> p1b: Terrakion  [[spread] p1a]
+              p1b Terrakion -- move: Protect
+      p2b Dusclops used Trick Room
+      after p1: Landorus-Therian 96/319, Terrakion 323/323
+      after p2: Sylveon 345/345, Dusclops 174/284
+
+  Turn 7
+    p1 mcts: move 3 1, move 4
+      search (47000 visits): uturn,0;protect,1 597v 42 | uturn,0;rockslide,0 589v 41 | earthquake,0;protect,1 588v 41 | stoneedge,1;protect,1 580v 40
+    p2 greedy: move 1, move 1
+      p1b Terrakion used Protect  [[still]]
+              p1b Terrakion -- IT FAILED
+      p1a Landorus used U-turn -> p2a: Sylveon
+      after p1: Landorus-Therian 96/319, Terrakion 323/323
+      after p2: Sylveon 273/345, Dusclops 174/284
+
+  Turn 8
+      p1a <- Whimsicott comes in (324/324)
+      p2a Sylveon used Hyper Voice -> p1a: Whimsicott  [[spread] p1a,p1b]
+      p1b Terrakion fainted
+      p2b Dusclops used Trick Room
+      after p1: Whimsicott 108/324, Terrakion 0/323
+      after p2: Sylveon 273/345, Dusclops 174/284
+
+  Turn 9
+      p1b <- Landorus-Therian comes in (96/319)
+              p2a Sylveon atk 1 fell
+              p2b Dusclops atk 1 fell
+      after p1: Whimsicott 108/324, Landorus-Therian 96/319
+      after p2: Sylveon 273/345, Dusclops 174/284
+
+  Turn 10
+    p1 mcts: move 4 2, switch 5   (slot1 Landorus-Therian -> Thundurus)
+      search (30000 visits): beatup,1;switch thundurus 409v 46 | beatup,1;switch gardevoirmega 406v 45 | tailwind,0;switch thundurus 399v 44 | beatup,0;switch volcanion 396v 43
+    p2 greedy: move 1, move 1
+      p1b <- Thundurus comes in (299/299)
+      p2a Sylveon used Hyper Voice -> p1b: Thundurus  [[spread] p1a,p1b]
+      p1a Whimsicott fainted
+      p2b Dusclops used Trick Room
+      after p1: Whimsicott 0/324, Thundurus 140/299
+      after p2: Sylveon 273/345, Dusclops 174/284
+
+  Turn 11
+      p1a <- Volcanion comes in (343/343)
+      after p1: Volcanion 343/343, Thundurus 140/299
+      after p2: Sylveon 273/345, Dusclops 174/284
+
+  Turn 12
+    p1 mcts: move 3 2, switch 5   (slot1 Thundurus -> Landorus-Therian)
+      search (31000 visits): earthpower,1;switch landorustherian 546v 65 | steameruption,1;switch landorustherian 542v 64 | protect,0;switch landorustherian 542v 64 | heatwave,0;switch landorustherian 539v 63
+    p2 greedy: move 1, move 1
+      p1b <- Landorus-Therian comes in (96/319)
+              p2a Sylveon atk 1 fell
+              p2b Dusclops atk 1 fell
+      p1a Volcanion used Earth Power -> p2b: Dusclops
+              p2b Dusclops -- critical hit
+              p2b Dusclops spd 1 fell
+      p2a Sylveon used Hyper Voice -> p1a: Volcanion  [[spread] p1a,p1b]
+      p1b Landorus fainted
+      p2b Dusclops used Trick Room
+      after p1: Volcanion 238/343, Landorus-Therian 0/319
+      after p2: Sylveon 273/345, Dusclops 91/284
+
+  Turn 13
+      p1b <- Thundurus comes in (140/299)
+      after p1: Volcanion 238/343, Thundurus 140/299
+      after p2: Sylveon 273/345, Dusclops 91/284
+
+  Turn 14
+    p1 mcts: move 2, switch 6   (slot1 Thundurus -> Gardevoir-Mega)
+      search (29000 visits): heatwave,0;switch gardevoirmega 683v 92 | protect,0;switch gardevoirmega 676v 90 | earthpower,1;switch gardevoirmega 675v 90 | steameruption,1;switch gardevoirmega 669v 89
+    p2 greedy: move 1, move 1
+      p1b <- Gardevoir-Mega comes in (133/277)
+      p2a Sylveon used Hyper Voice -> p1b: Gardevoir  [[spread] p1a,p1b]
+      p1b Gardevoir fainted
+      p1a Volcanion used Heat Wave -> p2a: Sylveon  [[spread] p2a,p2b]
+      p2b Dusclops fainted
+      after p1: Volcanion 141/343, Gardevoir-Mega 0/277
+      after p2: Sylveon 171/345, Dusclops 0/284
+
+  Turn 15
+      p2b <- Amoonguss comes in (432/432)
+      p1b <- Thundurus comes in (140/299)
+      after p1: Volcanion 141/343, Thundurus 140/299
+      after p2: Sylveon 171/345, Amoonguss 432/432
+
+  Turn 16
+    p1 mcts: move 4, move 2 2
+      search (30000 visits): protect,0;knockoff,1 2020v 486 | protect,0;knockoff,0 1432v 318 | protect,0;wildcharge,0 1349v 294 | protect,0;skydrop,0 1293v 279
+    p2 greedy: move 1, move 3 1
+      p1a Volcanion used Protect
+      p2b Amoonguss used Giga Drain -> p1a: Volcanion
+              p1a Volcanion -- move: Protect
+      p2a Sylveon used Hyper Voice -> p1b: Thundurus  [[spread] p1b]
+              p1a Volcanion -- move: Protect
+      p1b Thundurus used Knock Off -> p2b: Amoonguss
+      p1b Thundurus fainted
+      after p1: Volcanion 141/343, Thundurus 0/299
+      after p2: Sylveon 171/345, Amoonguss 327/432
+
+  Turn 17
+    p1 mcts: move 4, pass
+      search (47000 visits): protect,0;No Move 33648v 6106 | steameruption,0;No Move 3115v 385 | heatwave,0;No Move 2980v 363 | steameruption,1;No Move 2709v 318
+    p2 greedy: move 1, move 3 1
+      p1a Volcanion used Protect
+      p2b Amoonguss used Giga Drain -> p1a: Volcanion
+              p1a Volcanion -- move: Protect
+      p2a Sylveon used Hyper Voice -> p1a: Volcanion
+              p1a Volcanion -- move: Protect
+      after p1: Volcanion 141/343, Thundurus 0/299
+      after p2: Sylveon 171/345, Amoonguss 327/432
+
+  Turn 18
+    p1 mcts: move 4, pass
+      search (49000 visits): protect,0;No Move 35316v 6455 | steameruption,0;No Move 3117v 387 | heatwave,0;No Move 3022v 371 | earthpower,1;No Move 2624v 306
+    p2 greedy: move 1, move 3 1
+      p1a Volcanion used Protect  [[still]]
+              p1a Volcanion -- IT FAILED
+      p2b Amoonguss used Giga Drain -> p1a: Volcanion
+      p2a Sylveon used Hyper Voice -> p1a: Volcanion
+      p1a Volcanion fainted
+      after p1: Volcanion 0/343, Thundurus 0/299
+      after p2: Sylveon 171/345, Amoonguss 367/432
+
+  RESULT: p2 wins

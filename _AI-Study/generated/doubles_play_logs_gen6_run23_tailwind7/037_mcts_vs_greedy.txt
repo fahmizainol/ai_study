@@ -1,0 +1,167 @@
+battle 37   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: dpl rejects/mdiancie sucks week 2 reject: Diancie-Mega, Talonflame, Shaymin-Sky, Landorus-Therian, Bisharp, Suicune
+  p2: ORAS Doubles OU: Gardevoir-Mega, Weavile, Breloom, Gyarados, Aegislash, Rotom-Wash
+
+  Turn 1
+    p1 mcts: move 1, switch 4   (slot1 Talonflame -> Landorus-Therian)
+      search (15000 visits): diamondstorm,0;switch landorustherian 1104v 890 | diamondstorm,0;switch bisharp 985v 786 | diamondstorm,0;switch suicune 791v 619 | diamondstorm,0;flareblitz,1 562v 423
+    p2 greedy: move 3 1, move 1 1
+      p1b <- Landorus-Therian comes in (382/382)
+              p2a Gardevoir atk 1 fell
+              p2b Weavile atk 1 fell
+      p2b Weavile used Icicle Crash -> p1a: Diancie
+      p1a Diancie used Diamond Storm -> p2b: Weavile  [[spread] p2a,p2b]
+      p2b Weavile fainted
+      p2a Gardevoir used Focus Blast -> p1a: Diancie  [[miss]]
+              p2a Gardevoir -- MISSED
+      after p1: Diancie-Mega 123/241, Landorus-Therian 382/382
+      after p2: Gardevoir-Mega 42/279, Weavile 0/281
+
+  Turn 2
+      p2b <- Breloom comes in (261/261)
+      after p1: Diancie-Mega 123/241, Landorus-Therian 382/382
+      after p2: Gardevoir-Mega 42/279, Breloom 261/261
+
+  Turn 3
+    p1 mcts: move 1, move 3 2
+      search (25000 visits): diamondstorm,0;uturn,1 1782v 1056 | diamondstorm,0;switch bisharp 763v 409 | diamondstorm,0;switch shayminsky 708v 375 | moonblast,1;uturn,0 694v 366
+    p2 greedy: move 3 1, move 2 1
+      p2b Breloom used Mach Punch -> p1a: Diancie
+      p1a Diancie used Diamond Storm -> p2a: Gardevoir  [[spread] p2a,p2b]
+              p1a Diancie def 1 rose
+      p2a Gardevoir fainted
+      p1b Landorus used U-turn -> p2b: Breloom
+      after p1: Diancie-Mega 5/241, Landorus-Therian 382/382
+      after p2: Gardevoir-Mega 0/279, Breloom 84/261
+
+  Turn 4
+      p1b <- Shaymin-Sky comes in (341/341)
+      after p1: Diancie-Mega 5/241, Shaymin-Sky 341/341
+      after p2: Gardevoir-Mega 0/279, Breloom 84/261
+
+  Turn 5
+      p2a <- Gyarados comes in (394/394)
+              p1a Diancie atk 1 fell
+              p1b Shaymin atk 1 fell
+      after p1: Diancie-Mega 5/241, Shaymin-Sky 341/341
+      after p2: Gyarados 394/394, Breloom 84/261
+
+  Turn 6
+    p1 mcts: move 4, move 2 1
+      search (24000 visits): protect,0;seedflare,0 699v 475 | switch landorustherian;seedflare,0 687v 466 | diamondstorm,0;seedflare,0 656v 442 | protect,0;switch landorustherian 623v 417
+    p2 greedy: move 4 1, move 2 1
+      p1a Diancie used Protect
+      p2b Breloom used Mach Punch -> p1a: Diancie
+              p1a Diancie -- move: Protect
+      p1b Shaymin used Seed Flare -> p2a: Gyarados
+              p2a Gyarados spd 2 fell
+      p2a Gyarados used Stone Edge -> p1a: Diancie
+              p1a Diancie -- move: Protect
+      after p1: Diancie-Mega 5/241, Shaymin-Sky 341/341
+      after p2: Gyarados 201/394, Breloom 84/261
+
+  Turn 7
+    p1 mcts: switch 3, move 2 1   (slot0 Diancie-Mega -> Landorus-Therian)
+      search (22000 visits): switch landorustherian;seedflare,0 537v 366 | protect,0;switch landorustherian 504v 340 | diamondstorm,0;switch landorustherian 503v 340 | diamondstorm,0;airslash,1 492v 331
+    p2 greedy: move 4 1, move 2 1
+      p1a <- Landorus-Therian comes in (382/382)
+              p2a Gyarados atk 1 fell
+              p2b Breloom atk 1 fell
+      p2b Breloom used Mach Punch -> p1a: Landorus
+      p1b Shaymin used Seed Flare -> p2a: Gyarados  [[miss]]
+              p1b Shaymin -- MISSED
+      p2a Gyarados used Stone Edge -> p1a: Landorus  [[miss]]
+              p2a Gyarados -- MISSED
+      after p1: Landorus-Therian 342/382, Shaymin-Sky 341/341
+      after p2: Gyarados 201/394, Breloom 41/261
+
+  Turn 8
+    p1 mcts: move 1, move 2 2
+      search PANICKED (assertion `left != right` failed: get_two_actives called wit); greedy took the turn
+    p2 greedy: move 4 1, move 2 1
+      p2b Breloom used Mach Punch -> p1a: Landorus
+      p2b Breloom fainted
+      p1b Shaymin used Seed Flare -> p2a: Gyarados  [[miss]]
+              p1b Shaymin -- MISSED
+      p1a Landorus used Earthquake -> p2a: Gyarados  [[spread] ]
+              p1b Shaymin -- IMMUNE
+              p2a Gyarados -- IMMUNE
+      p2a Gyarados used Stone Edge -> p1a: Landorus  [[miss]]
+              p2a Gyarados -- MISSED
+      after p1: Landorus-Therian 305/382, Shaymin-Sky 341/341
+      after p2: Gyarados 201/394, Breloom 0/261
+
+  Turn 9
+      p2b <- Aegislash comes in (324/324)
+      after p1: Landorus-Therian 305/382, Shaymin-Sky 341/341
+      after p2: Gyarados 201/394, Aegislash 324/324
+
+  Turn 10
+    p1 mcts: move 1, move 2 2
+      search (16000 visits): earthquake,0;seedflare,1 677v 420 | earthquake,0;airslash,1 515v 307 | earthquake,0;protect,1 403v 230 | uturn,1;seedflare,1 386v 219
+    p2 greedy: move 4 1, move 1 1
+      p1b Shaymin used Seed Flare -> p2b: Aegislash  [[miss]]
+              p1b Shaymin -- MISSED
+      p1a Landorus used Earthquake -> p2b: Aegislash  [[spread] p2b]
+              p1b Shaymin -- IMMUNE
+              p2a Gyarados -- IMMUNE
+              p2b Aegislash -- critical hit
+      p2a Gyarados used Stone Edge -> p1a: Landorus  [[miss]]
+              p2a Gyarados -- MISSED
+      p2b Aegislash used Shadow Ball -> p1a: Landorus
+              p1a Landorus -- critical hit
+              p1a Landorus spd 1 fell
+      after p1: Landorus-Therian 16/382, Shaymin-Sky 341/341
+      after p2: Gyarados 201/394, Aegislash-Blade 96/324
+
+  Turn 11
+    p1 mcts: move 1, move 1 2
+      search (20000 visits): earthquake,0;airslash,1 1751v 1383 | earthquake,0;seedflare,1 1632v 1283 | earthquake,0;protect,1 1089v 829 | earthquake,0;seedflare,0 999v 755
+    p2 greedy: move 4 1, move 1 1
+      p1b Shaymin used Air Slash -> p2b: Aegislash
+              p2b Aegislash -- critical hit
+      p2b Aegislash fainted
+      p1a Landorus used Earthquake -> p2a: Gyarados  [[spread] ]
+              p1b Shaymin -- IMMUNE
+              p2a Gyarados -- IMMUNE
+      p2a Gyarados used Stone Edge -> p1a: Landorus
+      p1a Landorus fainted
+      after p1: Landorus-Therian 0/382, Shaymin-Sky 341/341
+      after p2: Gyarados 201/394, Aegislash 0/324
+
+  Turn 12
+      p1a <- Diancie-Mega comes in (5/241)
+      p2b <- Rotom-Wash comes in (304/304)
+      after p1: Diancie-Mega 5/241, Shaymin-Sky 341/341
+      after p2: Gyarados 201/394, Rotom-Wash 304/304
+
+  Turn 13
+    p1 mcts: move 1, move 1 1
+      search (60000 visits): diamondstorm,0;airslash,0 33466v 32417 | diamondstorm,0;seedflare,0 8465v 7985 | diamondstorm,0;seedflare,1 1250v 1077 | protect,0;seedflare,1 1130v 965
+    p2 greedy: move 4 1, move 1 1
+      p1b Shaymin used Air Slash -> p2a: Gyarados
+      p2a Gyarados fainted
+      p1a Diancie used Diamond Storm -> p2b: Rotom
+              p2b Rotom used up its Sitrus Berry
+      p2b Rotom used Hydro Pump -> p1a: Diancie
+      p1a Diancie fainted
+      after p1: Diancie-Mega 0/241, Shaymin-Sky 341/341
+      after p2: Gyarados 0/394, Rotom-Wash 197/304
+
+  Turn 14
+      p1a <- Talonflame comes in (355/355)
+      after p1: Talonflame 355/355, Shaymin-Sky 341/341
+      after p2: Gyarados 0/394, Rotom-Wash 197/304
+
+  Turn 15
+    p1 mcts: move 1 2, move 2 2
+      search (44000 visits): bravebird,1;seedflare,1 38093v 26725 | switch suicune;seedflare,1 583v 297 | flareblitz,1;seedflare,1 540v 272 | sleeptalk,0;seedflare,1 480v 236
+    p2 greedy: pass, move 1 1
+      p1a Talonflame used Brave Bird -> p2b: Rotom
+              p2b Rotom -- critical hit
+      p1b Shaymin used Seed Flare -> p2b: Rotom
+      p2b Rotom fainted
+      after p1: Talonflame 301/355, Shaymin-Sky 341/341
+      after p2: Gyarados 0/394, Rotom-Wash 0/304
+
+  RESULT: p1 wins

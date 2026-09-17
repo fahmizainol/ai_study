@@ -1,0 +1,151 @@
+battle 39   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: ORAS Doubles OU: Politoed, Ludicolo, Omastar, Amoonguss, Rhydon, Talonflame
+  p2: dpl ::/Untitled 57: Latios, Diancie-Mega, Talonflame, Keldeo-Resolute, Thundurus, Amoonguss
+
+  Turn 1
+    p1 mcts: move 1 2, move 3 1
+      search (14000 visits): scald,1;icebeam,0 475v 312 | scald,1;hydropump,1 375v 237 | scald,1;fakeout,1 338v 210 | scald,0;hydropump,1 331v 204
+    p2 greedy: move 2 1, move 1
+      p2a Latios used Draco Meteor -> p1a: Politoed
+              p2a Latios spa 2 fell
+      p1b Ludicolo used Ice Beam -> p2a: Latios
+      p2b Diancie used Diamond Storm -> p1a: Politoed  [[spread] p1a,p1b]
+              p1b Ludicolo -- critical hit
+      p1a Politoed used Scald -> p2b: Diancie
+              p2b Diancie is now brn
+      after p1: Politoed 26/384, Ludicolo 53/309
+      after p2: Latios 129/301, Diancie-Mega 30/303
+
+  Turn 2
+    p1 mcts: move 1 1, move 3 2
+      search (39000 visits): scald,0;icebeam,1 1056v 367 | scald,0;gigadrain,1 996v 342 | scald,0;hydropump,1 832v 274 | scald,0;icebeam,0 564v 166
+    p2 greedy: move 2 1, move 1
+      p2a Latios used Draco Meteor -> p1a: Politoed
+              p2a Latios spa 2 fell
+      p1a Politoed fainted
+      p1b Ludicolo used Ice Beam -> p2b: Diancie
+      p2b Diancie fainted
+      after p1: Politoed 0/384, Ludicolo 53/309
+      after p2: Latios 129/301, Diancie-Mega 0/303
+
+  Turn 3
+      p2b <- Talonflame comes in (297/297)
+      p1a <- Omastar comes in (287/287)
+      after p1: Omastar 287/287, Ludicolo 53/309
+      after p2: Latios 129/301, Talonflame 297/297
+
+  Turn 4
+    p1 mcts: move 3, move 2 1
+      search (23000 visits): shellsmash,0;gigadrain,0 4961v 4371 | shellsmash,0;hydropump,0 3133v 2709 | shellsmash,0;icebeam,0 1871v 1574 | shellsmash,0;hydropump,1 943v 753
+    p2 greedy: move 2 2, move 1 2
+      p2b Talonflame used Brave Bird -> p1b: Ludicolo
+      p1b Ludicolo fainted
+      p2a Latios used Draco Meteor -> p1a: Omastar
+              p2a Latios spa 2 fell
+      p1a Omastar used Shell Smash
+              p1a Omastar def 1 fell
+              p1a Omastar spd 1 fell
+              p1a Omastar atk 2 rose
+              p1a Omastar spa 2 rose
+              p1a Omastar spe 2 rose
+      after p1: Omastar 178/287, Ludicolo 0/309
+      after p2: Latios 129/301, Talonflame 280/297
+
+  Turn 5
+      p1b <- Amoonguss comes in (432/432)
+      after p1: Omastar 178/287, Amoonguss 432/432
+      after p2: Latios 129/301, Talonflame 280/297
+
+  Turn 6
+    p1 mcts: move 1, move 4 1
+      search (26000 visits): muddywater,0;sludgebomb,0 2406v 861 | muddywater,0;raindance,1 1479v 492 | muddywater,0;spore,0 1455v 482 | muddywater,0;switch rhydon 1137v 360
+    p2 greedy: move 2 1, move 1 1
+      p2b Talonflame used Brave Bird -> p1a: Omastar
+      p1a Omastar used Muddy Water -> p2b: Talonflame  [[spread] p2a,p2b]
+      p2a Latios fainted
+      p2b Talonflame fainted
+      p1a Omastar fainted
+      p1b Amoonguss used Sludge Bomb -> p2: Latios  [[notarget]]
+              p1b Amoonguss -- IT FAILED
+      after p1: Omastar 0/287, Amoonguss 432/432
+      after p2: Latios 0/301, Talonflame 0/297
+
+  Turn 7
+      p2b <- Thundurus comes in (361/361)
+      p2a <- Keldeo-Resolute comes in (323/323)
+      p1a <- Rhydon comes in (414/414)
+      after p1: Rhydon 414/414, Amoonguss 432/432
+      after p2: Keldeo-Resolute 323/323, Thundurus 361/361
+
+  Turn 8
+    p1 mcts: move 3, move 2
+      search (25000 visits): rockslide,0;ragepowder,1 4110v 2583 | protect,0;spore,0 2832v 1739 | rockslide,0;spore,0 1759v 1040 | switch talonflame;ragepowder,1 1112v 627
+    p2 greedy: move 1 1, move 2 1
+      p1b Amoonguss used Rage Powder
+      p2a Keldeo used Hydro Pump -> p1b: Amoonguss
+      p2b Thundurus used Thunderbolt -> p1b: Amoonguss
+              p1b Amoonguss used up its Sitrus Berry
+      p1a Rhydon used Rock Slide -> p2a: Keldeo  [[spread] p2a,p2b]
+              p2b Thundurus used up its Sitrus Berry
+      after p1: Rhydon 414/414, Amoonguss 297/432
+      after p2: Keldeo-Resolute 226/323, Thundurus 227/361
+
+  Turn 9
+    p1 mcts: move 4, move 3 1
+      search (36000 visits): protect,0;spore,0 4478v 2583 | drillrun,0;sludgebomb,0 3646v 2076 | switch talonflame;ragepowder,1 2119v 1157 | protect,0;sludgebomb,0 1956v 1060
+    p2 greedy: move 1 2, move 2 2
+      p1a Rhydon used Protect
+      p2a Keldeo used Hydro Pump -> p1b: Amoonguss
+      p2b Thundurus used Thunderbolt -> p1a: Rhydon
+              p1a Rhydon -- ability: Lightning Rod
+              p1a Rhydon -- IMMUNE
+      p1b Amoonguss used Spore -> p2a: Keldeo
+              p2a Keldeo is now slp
+      after p1: Rhydon 414/414, Amoonguss 136/432
+      after p2: Keldeo-Resolute 194/323, Thundurus 227/361
+
+  Turn 10
+    p1 mcts: move 2 1, move 4 1
+      search (32000 visits): drillrun,0;sludgebomb,0 8284v 5376 | switch talonflame;sludgebomb,0 1244v 709 | rockslide,0;sludgebomb,0 1183v 670 | switch talonflame;ragepowder,1 949v 523
+    p2 greedy: move 1 2, move 2 2
+              p2a Keldeo COULD NOT MOVE (slp)
+      p2b Thundurus used Thunderbolt -> p1a: Rhydon
+              p1a Rhydon -- ability: Lightning Rod
+              p1a Rhydon -- IMMUNE
+      p1a Rhydon used Drill Run -> p2a: Keldeo
+      p1b Amoonguss used Sludge Bomb -> p2a: Keldeo
+      p2a Keldeo fainted
+      after p1: Rhydon 414/414, Amoonguss 136/432
+      after p2: Keldeo-Resolute 0/323, Thundurus 227/361
+
+  Turn 11
+      p2a <- Amoonguss comes in (432/432)
+      after p1: Rhydon 414/414, Amoonguss 136/432
+      after p2: Amoonguss 432/432, Thundurus 227/361
+
+  Turn 12
+    p1 mcts: move 3, switch 6   (slot1 Amoonguss -> Talonflame)
+      search (35000 visits): rockslide,0;switch talonflame 8345v 4841 | rockslide,0;sludgebomb,0 4096v 2288 | rockslide,0;sludgebomb,1 1728v 899 | rockslide,0;spore,1 1606v 829
+    p2 greedy: move 3 2, move 2 2
+      p1b <- Talonflame comes in (319/319)
+      p2b Thundurus used Thunderbolt -> p1a: Rhydon
+              p1a Rhydon -- ability: Lightning Rod
+              p1a Rhydon -- IMMUNE
+      p1a Rhydon used Rock Slide -> p2b: Thundurus  [[spread] p2a,p2b]
+              p2a Amoonguss -- critical hit
+      p2b Thundurus fainted
+      p2a Amoonguss used Giga Drain -> p1b: Talonflame
+      after p1: Rhydon 414/414, Talonflame 292/319
+      after p2: Amoonguss 281/432, Thundurus 0/361
+
+  Turn 13
+    p1 mcts: switch 6, move 1 1   (slot0 Rhydon -> Amoonguss)
+      search (628000 visits): switch amoonguss;bravebird,0 616011v 611369 | protect,0;bravebird,0 2173v 1869 | rockslide,0;bravebird,0 2065v 1772 | hammerarm,0;bravebird,0 1877v 1602
+    p2 greedy: move 3 2, pass
+      p1a <- Amoonguss comes in (280/432)
+      p1b Talonflame used Brave Bird -> p2a: Amoonguss
+      p2a Amoonguss fainted
+      after p1: Amoonguss 280/432, Talonflame 146/319
+      after p2: Amoonguss 0/432, Thundurus 0/361
+
+  RESULT: p1 wins

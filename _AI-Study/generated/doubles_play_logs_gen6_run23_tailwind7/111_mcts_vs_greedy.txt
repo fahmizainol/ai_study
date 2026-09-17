@@ -1,0 +1,162 @@
+battle 111   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: oraspl/Untitled 254: Gengar-Mega, Talonflame, Kingdra, Politoed, Thundurus, Landorus
+  p2: ORAS Doubles OU: Gengar-Mega, Pelipper, Kingdra, Tapu Koko, Heatran, Landorus-Therian
+
+  Turn 1
+    p1 mcts: switch 3, move 1 1   (slot0 Gengar-Mega -> Kingdra)
+      search (23000 visits): switch kingdra;bravebird,0 946v 470 | shadowball,0;uturn,1 642v 298 | switch kingdra;flareblitz,0 614v 283 | thunder,1;bravebird,0 569v 258
+    p2 greedy: move 2 1, move 1 1
+      p1a <- Kingdra comes in (292/292)
+      p1b Talonflame used Brave Bird -> p2a: Gengar
+      p2a Gengar fainted
+      p2b Pelipper used Hurricane -> p1a: Kingdra
+      after p1: Kingdra 171/292, Talonflame 273/359
+      after p2: Gengar-Mega 0/262, Pelipper 324/324
+
+  Turn 2
+      p2a <- Kingdra comes in (306/306)
+      after p1: Kingdra 171/292, Talonflame 273/359
+      after p2: Kingdra 306/306, Pelipper 324/324
+
+  Turn 3
+    p1 mcts: move 2 1, switch 4   (slot1 Talonflame -> Politoed)
+      search (12000 visits): dracometeor,0;switch politoed 589v 303 | hydropump,1;switch politoed 447v 218 | muddywater,0;switch politoed 442v 215 | hydropump,1;bravebird,1 413v 198
+    p2 greedy: move 2 1, move 1 1
+      p1b <- Politoed comes in (384/384)
+      p2a Kingdra used Draco Meteor -> p1a: Kingdra
+              p1a Kingdra -- critical hit
+              p2a Kingdra spa 2 fell
+      p1a Kingdra fainted
+      p2b Pelipper used Hurricane -> p1b: Politoed
+              p1b Politoed used up its Eject Button
+      after p1: Kingdra 0/292, Politoed 287/384
+      after p2: Kingdra 276/306, Pelipper 324/324
+
+  Turn 4
+      p1b <- Gengar-Mega comes in (267/267)
+      after p1: Kingdra 0/292, Gengar-Mega 267/267
+      after p2: Kingdra 276/306, Pelipper 324/324
+
+  Turn 5
+      p1a <- Politoed comes in (287/384)
+      after p1: Politoed 287/384, Gengar-Mega 267/267
+      after p2: Kingdra 276/306, Pelipper 324/324
+
+  Turn 6
+    p1 mcts: move 1 2, move 2 2
+      search (9000 visits): scald,1;thunder,1 447v 307 | scald,0;thunder,1 393v 265 | helpinghand,1;thunder,1 261v 163 | switch thundurus;thunder,1 255v 159
+    p2 greedy: move 2 1, move 1 1
+      p2a Kingdra used Draco Meteor -> p1a: Politoed
+              p1a Politoed -- critical hit
+              p2a Kingdra spa 2 fell
+      p1a Politoed fainted
+      p1b Gengar used Thunder -> p2b: Pelipper
+      p2b Pelipper fainted
+      after p1: Politoed 0/384, Gengar-Mega 267/267
+      after p2: Kingdra 246/306, Pelipper 0/324
+
+  Turn 7
+      p1a <- Talonflame comes in (273/359)
+      p2b <- Tapu Koko comes in (282/282)
+      after p1: Talonflame 273/359, Gengar-Mega 267/267
+      after p2: Kingdra 246/306, Tapu Koko 282/282
+
+  Turn 8
+    p1 mcts: move 1 1, move 2 1
+      search skipped (terrain electricterrain); greedy took the turn
+    p2 greedy: move 2 1, move 1 1
+      p1a Talonflame used Brave Bird -> p2a: Kingdra
+      p2a Kingdra fainted
+      p2b Tapu Koko used Thunderbolt -> p1a: Talonflame
+      p1a Talonflame fainted
+      p1b Gengar used Thunder -> p2b: Tapu Koko
+      after p1: Talonflame 0/359, Gengar-Mega 267/267
+      after p2: Kingdra 0/306, Tapu Koko 138/282
+
+  Turn 9
+      p1a <- Thundurus comes in (362/362)
+      p2a <- Heatran comes in (329/329)
+      after p1: Thundurus 362/362, Gengar-Mega 267/267
+      after p2: Heatran 329/329, Tapu Koko 138/282
+
+  Turn 10
+    p1 mcts: move 1 2, move 2 2
+      search skipped (terrain electricterrain); greedy took the turn
+    p2 greedy: move 4 1, move 1 1
+      p2b Tapu Koko used Thunderbolt -> p1a: Thundurus
+              p1a Thundurus used up its Sitrus Berry
+      p1b Gengar used Thunder -> p2b: Tapu Koko
+      p2b Tapu Koko fainted
+      p1a Thundurus used Thunder -> p2a: Heatran
+              p2a Heatran is now par
+              p2a Heatran COULD NOT MOVE (par)
+      after p1: Thundurus 135/362, Gengar-Mega 267/267
+      after p2: Heatran 152/329, Tapu Koko 0/282
+
+  Turn 11
+      p2b <- Landorus-Therian comes in (320/320)
+              p1a Thundurus atk 1 fell
+              p1b Gengar atk 1 fell
+      after p1: Thundurus 135/362, Gengar-Mega 267/267
+      after p2: Heatran 152/329, Landorus-Therian 320/320
+
+  Turn 12
+    p1 mcts: move 1 1, move 2 1
+      search skipped (terrain electricterrain); greedy took the turn
+    p2 greedy: move 4 1, move 2 1
+      p2b Landorus used Superpower -> p1a: Thundurus
+              p2b Landorus atk 1 fell
+              p2b Landorus def 1 fell
+      p1b Gengar used Thunder -> p2a: Heatran
+      p2a Heatran fainted
+      p1a Thundurus used Thunder -> p2b: Landorus
+              p2b Landorus -- IMMUNE
+      after p1: Thundurus 50/362, Gengar-Mega 267/267
+      after p2: Heatran 0/329, Landorus-Therian 320/320
+
+  Turn 13
+    p1 mcts: move 1 2, move 2 2
+      search skipped (terrain electricterrain); greedy took the turn
+    p2 greedy: pass, move 2 1
+      p2b Landorus used Superpower -> p1a: Thundurus
+              p2b Landorus atk 1 fell
+              p2b Landorus def 1 fell
+      p1a Thundurus fainted
+      p1b Gengar used Thunder -> p2b: Landorus
+              p2b Landorus -- IMMUNE
+      after p1: Thundurus 0/362, Gengar-Mega 267/267
+      after p2: Heatran 0/329, Landorus-Therian 320/320
+
+  Turn 14
+      p1a <- Landorus comes in (319/319)
+      after p1: Landorus 319/319, Gengar-Mega 267/267
+      after p2: Heatran 0/329, Landorus-Therian 320/320
+
+  Turn 15
+    p1 mcts: move 1 2, move 2 2
+      search skipped (terrain electricterrain); greedy took the turn
+    p2 greedy: pass, move 2 1
+      p2b Landorus used Superpower -> p1a: Landorus
+              p2b Landorus atk 1 fell
+              p2b Landorus def 1 fell
+      p1b Gengar used Thunder -> p2b: Landorus
+              p2b Landorus -- IMMUNE
+      p1a Landorus used Earth Power -> p2b: Landorus
+              p2b Landorus -- IMMUNE
+      after p1: Landorus 276/319, Gengar-Mega 267/267
+      after p2: Heatran 0/329, Landorus-Therian 320/320
+
+  Turn 16
+    p1 mcts: move 2 2, move 1 2
+      search (586000 visits): sludgebomb,1;shadowball,1 61694v 61694 | psychic,1;shadowball,1 61694v 61694 | earthpower,1;shadowball,1 57890v 57851 | protect,0;shadowball,1 57825v 57786
+    p2 greedy: pass, move 2 1
+      p2b Landorus used Superpower -> p1a: Landorus
+              p2b Landorus atk 1 fell
+              p2b Landorus def 1 fell
+      p1b Gengar used Shadow Ball -> p2b: Landorus
+              p2b Landorus -- critical hit
+      p2b Landorus fainted
+      after p1: Landorus 242/319, Gengar-Mega 267/267
+      after p2: Heatran 0/329, Landorus-Therian 0/320
+
+  RESULT: p1 wins

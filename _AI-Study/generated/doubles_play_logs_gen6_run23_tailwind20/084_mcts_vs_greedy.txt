@@ -1,0 +1,274 @@
+battle 84   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: Untitled 1132: Charizard-Mega-X, Aegislash, Hydreigon, Landorus-Therian, Raichu, Amoonguss
+  p2: Copy of Untitled 577: Kangaskhan-Mega, Bisharp, Deoxys-Attack, Amoonguss, Landorus, Talonflame
+
+  Turn 1
+    p1 mcts: switch 6, switch 4   (slot0 Charizard-Mega-X -> Amoonguss; slot1 Aegislash -> Landorus-Therian)
+      search (43000 visits): switch amoonguss;switch landorustherian 26348v 20217 | roost,0;switch hydreigon 414v 114 | firepunch,0;switch hydreigon 391v 105 | firepunch,1;toxic,0 241v 50
+    p2 greedy: move 3 1, move 2 1
+      p1a <- Amoonguss comes in (432/432)
+      p1b <- Landorus-Therian comes in (319/319)
+              p2a Kangaskhan atk 1 fell
+              p2b Bisharp atk 1 fell
+              p2b Bisharp atk 2 rose
+      p2a Kangaskhan used Sucker Punch  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p2b Bisharp used Sucker Punch  [[still]]
+              p2b Bisharp -- IT FAILED
+      after p1: Amoonguss 432/432, Landorus-Therian 319/319
+      after p2: Kangaskhan-Mega 414/414, Bisharp 271/271
+
+  Turn 2
+    p1 mcts: move 2, switch 5   (slot1 Landorus-Therian -> Raichu)
+      search (38000 visits): ragepowder,0;switch raichu 3111v 1199 | ragepowder,0;earthpower,1 966v 309 | sludgebomb,0;earthpower,1 906v 285 | spore,0;earthpower,1 895v 281
+    p2 greedy: move 3 1, move 2 1
+      p1b <- Raichu comes in (324/324)
+      p1a Amoonguss used Rage Powder
+      p2a Kangaskhan used Sucker Punch  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p2b Bisharp used Sucker Punch  [[still]]
+              p2b Bisharp -- IT FAILED
+      after p1: Amoonguss 432/432, Raichu 324/324
+      after p2: Kangaskhan-Mega 414/414, Bisharp 271/271
+
+  Turn 3
+    p1 mcts: move 2, move 2 2
+      search (35000 visits): ragepowder,0;encore,1 472v 90 | spore,0;encore,1 469v 90 | protect,0;encore,1 465v 88 | switch landorustherian;encore,1 464v 88
+    p2 greedy: move 3 1, move 2 1
+      p1a Amoonguss used Rage Powder
+      p2a Kangaskhan used Sucker Punch  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p2b Bisharp used Sucker Punch  [[still]]
+              p2b Bisharp -- IT FAILED
+      p1b Raichu used Encore -> p2b: Bisharp
+              p2b Bisharp gained Encore
+      after p1: Amoonguss 432/432, Raichu 324/324
+      after p2: Kangaskhan-Mega 414/414, Bisharp 271/271
+
+  Turn 4
+    p1 mcts: switch 5, move 4 2   (slot0 Amoonguss -> Landorus-Therian)
+      search (35000 visits): switch landorustherian;hiddenpower,1 597v 152 | switch landorustherian;hiddenpower,0 551v 136 | switch landorustherian;nuzzle,1 465v 107 | switch aegislash;hiddenpower,1 435v 97
+    p2 greedy: move 3 1, move 2 1
+      p1a <- Landorus-Therian comes in (319/319)
+              p2a Kangaskhan atk 1 fell
+              p2b Bisharp atk 1 fell
+              p2b Bisharp atk 2 rose
+      p2a Kangaskhan used Sucker Punch  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p2b Bisharp used Sucker Punch  [[still]]
+              p2b Bisharp -- IT FAILED
+      p1b Raichu used Hidden Power -> p2b: Bisharp
+              p2b Bisharp -- critical hit
+      after p1: Landorus-Therian 319/319, Raichu 324/324
+      after p2: Kangaskhan-Mega 414/414, Bisharp 226/271
+
+  Turn 5
+    p1 mcts: switch 5, switch 4   (slot0 Landorus-Therian -> Amoonguss; slot1 Raichu -> Aegislash)
+      search (34000 visits): switch amoonguss;switch aegislash 671v 210 | switch amoonguss;hiddenpower,1 581v 174 | switch aegislash;switch amoonguss 433v 117 | switch aegislash;hiddenpower,1 384v 98
+    p2 greedy: move 3 1, move 2 1
+      p1a <- Amoonguss comes in (432/432)
+      p1b <- Aegislash comes in (324/324)
+      p2a Kangaskhan used Sucker Punch  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p2b Bisharp used Sucker Punch  [[still]]
+              p2b Bisharp -- IT FAILED
+      after p1: Amoonguss 432/432, Aegislash 324/324
+      after p2: Kangaskhan-Mega 414/414, Bisharp 226/271
+
+  Turn 6
+    p1 mcts: move 3 2, switch 5   (slot1 Aegislash -> Landorus-Therian)
+      search (35000 visits): sludgebomb,1;switch landorustherian 15574v 14866 | spore,1;switch charizardmegax 824v 438 | protect,0;switch landorustherian 420v 197 | spore,1;switch landorustherian 391v 180
+    p2 greedy: move 3 1, move 2 1
+      p1b <- Landorus-Therian comes in (319/319)
+              p2a Kangaskhan atk 1 fell
+              p2b Bisharp atk 1 fell
+              p2b Bisharp atk 2 rose
+      p2a Kangaskhan used Sucker Punch -> p1a: Amoonguss
+      p2b Bisharp used Sucker Punch -> p1a: Amoonguss
+      p1a Amoonguss fainted
+              p2b Bisharp lost Encore
+      after p1: Amoonguss 0/432, Landorus-Therian 319/319
+      after p2: Kangaskhan-Mega 345/414, Bisharp 181/271
+
+  Turn 7
+      p1a <- Hydreigon comes in (325/325)
+      after p1: Hydreigon 325/325, Landorus-Therian 319/319
+      after p2: Kangaskhan-Mega 345/414, Bisharp 181/271
+
+  Turn 8
+    p1 mcts: move 1 1, switch 6   (slot1 Landorus-Therian -> Charizard-Mega-X)
+      search (53000 visits): dracometeor,0;switch charizardmegax 4483v 1093 | switch charizardmegax;earthpower,1 4136v 997 | switch raichu;earthpower,1 3869v 923 | switch aegislash;earthpower,1 3837v 914
+    p2 greedy: move 3 1, move 2 1
+      p1b <- Charizard-Mega-X comes in (360/360)
+      p2a Kangaskhan used Sucker Punch -> p1a: Hydreigon
+      p2b Bisharp used Sucker Punch -> p1a: Hydreigon
+      p1a Hydreigon used Draco Meteor -> p2a: Kangaskhan
+              p1a Hydreigon spa 2 fell
+      after p1: Hydreigon 42/325, Charizard-Mega-X 360/360
+      after p2: Kangaskhan-Mega 63/414, Bisharp 181/271
+
+  Turn 9
+    p1 mcts: switch 6, move 1 2   (slot0 Hydreigon -> Landorus-Therian)
+      search (44000 visits): switch landorustherian;firepunch,1 2846v 666 | switch raichu;firepunch,1 2581v 593 | switch aegislash;firepunch,1 2479v 565 | protect,0;switch landorustherian 2078v 456
+    p2 greedy: move 3 1, move 2 1
+      p1a <- Landorus-Therian comes in (319/319)
+              p2a Kangaskhan atk 1 fell
+              p2b Bisharp atk 1 fell
+              p2b Bisharp atk 2 rose
+      p2a Kangaskhan used Sucker Punch  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p2b Bisharp used Sucker Punch  [[still]]
+              p2b Bisharp -- IT FAILED
+      p1b Charizard used Fire Punch -> p2b: Bisharp
+      p2b Bisharp fainted
+      after p1: Landorus-Therian 319/319, Charizard-Mega-X 360/360
+      after p2: Kangaskhan-Mega 63/414, Bisharp 0/271
+
+  Turn 10
+      p2b <- Deoxys-Attack comes in (241/241)
+      after p1: Landorus-Therian 319/319, Charizard-Mega-X 360/360
+      after p2: Kangaskhan-Mega 63/414, Deoxys-Attack 241/241
+
+  Turn 11
+    p1 mcts: move 4 2, move 1 2
+      search (40000 visits): uturn,1;firepunch,1 853v 128 | stoneedge,1;firepunch,1 823v 121 | hiddenpower,1;firepunch,1 820v 120 | earthpower,0;firepunch,1 807v 118
+    p2 greedy: move 1 1, move 2 1
+      p2a Kangaskhan used Fake Out  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p1a Landorus used U-turn -> p2b: Deoxys
+      p2b Deoxys fainted
+      after p1: Landorus-Therian 319/319, Charizard-Mega-X 360/360
+      after p2: Kangaskhan-Mega 63/414, Deoxys-Attack 0/241
+
+  Turn 12
+      p1a <- Raichu comes in (324/324)
+      p1b Charizard used Fire Punch -> p2a: Kangaskhan
+      p2a Kangaskhan fainted
+      after p1: Raichu 324/324, Charizard-Mega-X 360/360
+      after p2: Kangaskhan-Mega 0/414, Deoxys-Attack 0/241
+
+  Turn 13
+      p2b <- Landorus comes in (382/382)
+      p2a <- Amoonguss comes in (432/432)
+      after p1: Raichu 324/324, Charizard-Mega-X 360/360
+      after p2: Amoonguss 432/432, Landorus 382/382
+
+  Turn 14
+    p1 mcts: move 3 1, move 3
+      search (29000 visits): nuzzle,0;roost,1 1785v 504 | fakeout,1;dragondance,1 1143v 292 | switch landorustherian;switch hydreigon 555v 109 | fakeout,1;firepunch,1 541v 105
+    p2 greedy: move 3 1, move 1 1
+      p1a Raichu used Nuzzle -> p2a: Amoonguss
+              p2a Amoonguss is now par
+      p1b Charizard used Roost  [[still]]
+              p1b Charizard -- IT FAILED
+      p2b Landorus used Earth Power -> p1a: Raichu
+      p1a Raichu fainted
+      p2a Amoonguss used Energy Ball -> p1b: Charizard
+      after p1: Raichu 0/324, Charizard-Mega-X 333/360
+      after p2: Amoonguss 421/432, Landorus 382/382
+
+  Turn 15
+      p1a <- Landorus-Therian comes in (319/319)
+              p2a Amoonguss atk 1 fell
+              p2b Landorus atk 1 fell
+      after p1: Landorus-Therian 319/319, Charizard-Mega-X 333/360
+      after p2: Amoonguss 421/432, Landorus 382/382
+
+  Turn 16
+    p1 mcts: move 4 2, move 2
+      search (19000 visits): uturn,1;dragondance,1 565v 115 | uturn,0;dragondance,1 500v 96 | switch aegislash;dragondance,1 427v 75 | uturn,1;firepunch,1 383v 63
+    p2 greedy: move 3 2, move 1 2
+      p1a Landorus used U-turn -> p2b: Landorus
+      after p1: Landorus-Therian 319/319, Charizard-Mega-X 333/360
+      after p2: Amoonguss 421/432, Landorus 347/382
+
+  Turn 17
+      p1a <- Aegislash comes in (324/324)
+      p1b Charizard used Dragon Dance
+              p1b Charizard atk 1 rose
+              p1b Charizard spe 1 rose
+      p2b Landorus used Earth Power -> p1b: Charizard
+      p1b Charizard fainted
+              p2a Amoonguss COULD NOT MOVE (par)
+      after p1: Aegislash 324/324, Charizard-Mega-X 0/360
+      after p2: Amoonguss 421/432, Landorus 347/382
+
+  Turn 18
+      p1b <- Landorus-Therian comes in (319/319)
+              p2a Amoonguss atk 1 fell
+              p2b Landorus atk 1 fell
+      after p1: Aegislash 324/324, Landorus-Therian 319/319
+      after p2: Amoonguss 421/432, Landorus 347/382
+
+  Turn 19
+    p1 mcts: move 4 2, move 4 2
+      search (24000 visits): toxic,1;uturn,1 462v 63 | toxic,1;stoneedge,1 454v 61 | shadowball,1;uturn,1 438v 57 | shadowball,1;uturn,0 420v 53
+    p2 greedy: move 3 1, move 1 1
+      p1b Landorus used U-turn -> p2b: Landorus
+      after p1: Aegislash 324/324, Landorus-Therian 319/319
+      after p2: Amoonguss 421/432, Landorus 312/382
+
+  Turn 20
+      p1b <- Hydreigon comes in (42/325)
+      p2b Landorus used Earth Power -> p1a: Aegislash
+      p1a Aegislash used Toxic -> p2b: Landorus
+              p2b Landorus is now tox
+      p2a Amoonguss used Energy Ball -> p1a: Aegislash
+      after p1: Aegislash 59/324, Hydreigon 42/325
+      after p2: Amoonguss 421/432, Landorus 289/382
+
+  Turn 21
+    p1 mcts: move 1 2, move 2 2
+      search (23000 visits): shadowball,1;darkpulse,1 560v 73 | shadowsneak,1;darkpulse,1 492v 58 | kingsshield,0;darkpulse,1 478v 55 | toxic,1;darkpulse,1 464v 52
+    p2 greedy: move 3 2, move 1 2
+      p1b Hydreigon used Dark Pulse -> p2b: Landorus
+      p2b Landorus used Earth Power -> p1b: Hydreigon
+              p1b Hydreigon -- IMMUNE
+      p1a Aegislash used Shadow Ball -> p2b: Landorus
+      p2b Landorus fainted
+      p2a Amoonguss used Energy Ball -> p1b: Hydreigon
+      p1b Hydreigon fainted
+      after p1: Aegislash-Blade 79/324, Hydreigon 0/325
+      after p2: Amoonguss 421/432, Landorus 0/382
+
+  Turn 22
+      p1b <- Landorus-Therian comes in (319/319)
+      p2b <- Talonflame comes in (320/320)
+              p2a Amoonguss atk 1 fell
+              p2b Talonflame atk 1 fell
+      after p1: Aegislash-Blade 79/324, Landorus-Therian 319/319
+      after p2: Amoonguss 421/432, Talonflame 320/320
+
+  Turn 23
+    p1 mcts: move 1 1, move 2 2
+      search (9000 visits): shadowball,0;stoneedge,1 714v 556 | shadowball,1;stoneedge,1 452v 333 | shadowball,1;uturn,1 419v 306 | toxic,1;stoneedge,1 419v 305
+    p2 greedy: move 3 1, move 1 1
+      p2b Talonflame used Brave Bird -> p1a: Aegislash
+      p1a Aegislash fainted
+      p1b Landorus used Stone Edge -> p2b: Talonflame
+      p2b Talonflame fainted
+      p2a Amoonguss used Energy Ball -> p1b: Landorus
+      after p1: Aegislash 0/324, Landorus-Therian 198/319
+      after p2: Amoonguss 421/432, Talonflame 0/320
+
+  Turn 24
+    p1 mcts: pass, move 2 1
+      search (393000 visits): No Move;stoneedge,0 393000v 44861
+    p2 greedy: move 3 2, pass
+      p1b Landorus used Stone Edge -> p2a: Amoonguss
+      p2a Amoonguss used Energy Ball -> p1b: Landorus
+              p1b Landorus spd 1 fell
+      after p1: Aegislash 0/324, Landorus-Therian 69/319
+      after p2: Amoonguss 310/432, Talonflame 0/320
+
+  Turn 25
+    p1 mcts: pass, move 2 1
+      search (1311000 visits): No Move;stoneedge,0 1311000v 54000
+    p2 greedy: move 3 2, pass
+      p1b Landorus used Stone Edge -> p2a: Amoonguss
+      p2a Amoonguss used Energy Ball -> p1b: Landorus
+      p1b Landorus fainted
+      after p1: Aegislash 0/324, Landorus-Therian 0/319
+      after p2: Amoonguss 196/432, Talonflame 0/320
+
+  RESULT: p2 wins

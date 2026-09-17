@@ -1,0 +1,144 @@
+battle 121   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: ORAS Doubles OU: Keldeo, Landorus-Therian, Diancie-Mega, Thundurus, Aegislash, Talonflame
+  p2: pup kang: Kangaskhan-Mega, Volcanion, Landorus-Therian, Mew, Amoonguss, Thundurus
+
+  Turn 1
+    p1 mcts: switch 3, move 4   (slot0 Keldeo -> Diancie-Mega)
+      search (42000 visits): switch dianciemega;explosion,0 2042v 476 | switch thundurus;explosion,0 1843v 420 | switch dianciemega;earthquake,0 1126v 223 | switch thundurus;earthquake,0 1100v 216
+    p2 greedy: move 4 1, move 4 1
+      p1a <- Diancie-Mega comes in (241/241)
+      p2a Kangaskhan used Sucker Punch  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p1b Landorus used Explosion -> p2b: Volcanion  [[spread] p1a,p2a,p2b]
+      p1b Landorus fainted
+      p2b Volcanion used Overheat -> p1a: Diancie
+              p2b Volcanion spa 2 fell
+      after p1: Diancie-Mega 8/241, Landorus-Therian 0/319
+      after p2: Kangaskhan-Mega 210/414, Volcanion 135/358
+
+  Turn 2
+      p1b <- Keldeo comes in (323/323)
+      after p1: Diancie-Mega 8/241, Keldeo 323/323
+      after p2: Kangaskhan-Mega 210/414, Volcanion 135/358
+
+  Turn 3
+    p1 mcts: move 2 2, move 2 1
+      search (42000 visits): moonblast,1;secretsword,0 1345v 355 | diamondstorm,0;secretsword,0 1229v 317 | diamondstorm,0;hydropump,0 1150v 292 | earthpower,1;secretsword,0 1043v 257
+    p2 greedy: move 4 1, move 4 1
+      p2a Kangaskhan used Sucker Punch -> p1a: Diancie
+      p1a Diancie fainted
+      p1b Keldeo used Secret Sword -> p2a: Kangaskhan
+      p2a Kangaskhan fainted
+      p2b Volcanion used Overheat -> p1b: Keldeo
+              p2b Volcanion spa 2 fell
+      after p1: Diancie-Mega 0/241, Keldeo 229/323
+      after p2: Kangaskhan-Mega 0/414, Volcanion 135/358
+
+  Turn 4
+      p1a <- Thundurus comes in (360/360)
+      p2a <- Landorus-Therian comes in (319/319)
+              p1a Thundurus atk 1 fell
+              p1b Keldeo atk 1 fell
+      after p1: Thundurus 360/360, Keldeo 229/323
+      after p2: Landorus-Therian 319/319, Volcanion 135/358
+
+  Turn 5
+    p1 mcts: move 1 2, move 1 1
+      search (27000 visits): thunderwave,1;hydropump,0 858v 359 | switch aegislash;hydropump,0 823v 342 | thunderbolt,0;hydropump,0 754v 308 | thunderwave,0;hydropump,0 636v 250
+    p2 greedy: move 4 2, move 4 2
+      p1a Thundurus used Thunder Wave -> p2b: Volcanion
+              p2b Volcanion is now par
+      p2a Landorus used Superpower -> p1b: Keldeo
+              p2a Landorus atk 1 fell
+              p2a Landorus def 1 fell
+      p1b Keldeo used Hydro Pump -> p2a: Landorus
+      p2a Landorus fainted
+      p2b Volcanion used Overheat -> p1b: Keldeo
+              p2b Volcanion spa 2 fell
+      p1b Keldeo fainted
+      after p1: Thundurus 360/360, Keldeo 0/323
+      after p2: Landorus-Therian 0/319, Volcanion 135/358
+
+  Turn 6
+      p1b <- Aegislash comes in (324/324)
+      p2a <- Mew comes in (404/404)
+      after p1: Thundurus 360/360, Aegislash 324/324
+      after p2: Mew 404/404, Volcanion 135/358
+
+  Turn 7
+    p1 mcts: move 4 1, move 2 1
+      search (8000 visits): thunderbolt,0;shadowball,0 370v 203 | thunderbolt,0;flashcannon,0 292v 151 | hiddenpower,0;shadowball,0 269v 137 | switch talonflame;shadowball,0 242v 120
+    p2 greedy: move 1 1, move 4 1
+      p2a Mew used Overheat -> p1a: Thundurus
+              p2a Mew spa 2 fell
+      p1a Thundurus used Thunderbolt -> p2a: Mew
+      p1b Aegislash used Shadow Ball -> p2a: Mew
+              p2a Mew -- critical hit
+      p2a Mew fainted
+      p2b Volcanion used Overheat -> p1a: Thundurus
+      after p1: Thundurus 193/360, Aegislash-Blade 292/324
+      after p2: Mew 0/404, Volcanion 135/358
+
+  Turn 8
+      p2a <- Amoonguss comes in (432/432)
+      after p1: Thundurus 193/360, Aegislash-Blade 292/324
+      after p2: Amoonguss 432/432, Volcanion 135/358
+
+  Turn 9
+    p1 mcts: move 4 2, move 2 1
+      search (31000 visits): thunderbolt,1;shadowball,0 814v 163 | thunderbolt,0;shadowball,0 727v 139 | hiddenpower,1;shadowball,0 700v 131 | thunderbolt,1;flashcannon,0 683v 127
+    p2 greedy: move 3 1, move 4 1
+      p1a Thundurus used Thunderbolt -> p2b: Volcanion
+      p2b Volcanion fainted
+      p1b Aegislash used Shadow Ball -> p2a: Amoonguss
+      p2a Amoonguss used Giga Drain -> p1a: Thundurus
+              p1a Thundurus used up its Sitrus Berry
+      after p1: Thundurus 250/360, Aegislash-Blade 260/324
+      after p2: Amoonguss 249/432, Volcanion 0/358
+
+  Turn 10
+      p2b <- Thundurus comes in (299/299)
+      after p1: Thundurus 250/360, Aegislash-Blade 260/324
+      after p2: Amoonguss 249/432, Thundurus 299/299
+
+  Turn 11
+    p1 mcts: move 4 2, move 2 2
+      search (32000 visits): thunderbolt,1;shadowball,1 4570v 2037 | thunderwave,0;shadowball,1 2310v 966 | thunderbolt,1;shadowball,0 918v 333 | thunderbolt,1;flashcannon,0 882v 317
+    p2 greedy: move 3 1, move 1 1
+      p2b Thundurus used Thunderbolt -> p1a: Thundurus
+      p1a Thundurus used Thunderbolt -> p2b: Thundurus
+      p1b Aegislash used Shadow Ball -> p2b: Thundurus
+      p2b Thundurus fainted
+      p2a Amoonguss used Giga Drain -> p1a: Thundurus
+      after p1: Thundurus 46/360, Aegislash-Blade 228/324
+      after p2: Amoonguss 266/432, Thundurus 0/299
+
+  Turn 12
+    p1 mcts: move 2 1, switch 6   (slot1 Aegislash-Blade -> Talonflame)
+      search (332000 visits): taunt,0;switch talonflame 319865v 313445 | switch talonflame;flashcannon,0 3906v 3409 | switch talonflame;shadowball,0 1949v 1644 | taunt,0;flashcannon,0 473v 350
+    p2 greedy: move 3 1, pass
+      p1b <- Talonflame comes in (297/297)
+      p1a Thundurus used Taunt -> p2a: Amoonguss
+              p2a Amoonguss gained move: Taunt
+      p2a Amoonguss used Giga Drain -> p1a: Thundurus
+              p1a Thundurus -- critical hit
+      p1a Thundurus fainted
+      after p1: Thundurus 0/360, Talonflame 297/297
+      after p2: Amoonguss 289/432, Thundurus 0/299
+
+  Turn 13
+      p1a <- Aegislash comes in (228/324)
+      after p1: Aegislash 228/324, Talonflame 297/297
+      after p2: Amoonguss 289/432, Thundurus 0/299
+
+  Turn 14
+    p1 mcts: move 1, move 2 1
+      search (1412000 visits): wideguard,0;flareblitz,0 169676v 169676 | wideguard,0;bravebird,0 169676v 169676 | shadowball,0;flareblitz,0 169673v 169673 | shadowball,0;bravebird,0 169673v 169673
+    p2 greedy: move 3 1, pass
+      p1a Aegislash used Wide Guard
+      p1b Talonflame used Flare Blitz -> p2a: Amoonguss
+      p2a Amoonguss fainted
+      after p1: Aegislash 228/324, Talonflame 124/297
+      after p2: Amoonguss 0/432, Thundurus 0/299
+
+  RESULT: p1 wins

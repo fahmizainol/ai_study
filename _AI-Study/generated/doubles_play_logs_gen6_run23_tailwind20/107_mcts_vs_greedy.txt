@@ -1,0 +1,204 @@
+battle 107   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: diancie bisharp goodstuffs: Diancie-Mega, Landorus-Therian, Amoonguss, Thundurus, Volcanion, Bisharp
+  p2: dpl vs singlethunder: Kangaskhan-Mega, Conkeldurr, Landorus-Therian, Deoxys-Speed, Jellicent, Genesect
+
+  Turn 1
+    p1 mcts: switch 3, move 1   (slot0 Diancie-Mega -> Amoonguss)
+      search (35000 visits): switch amoonguss;earthquake,0 439v 41 | switch thundurus;earthquake,0 419v 37 | switch amoonguss;switch bisharp 415v 36 | switch amoonguss;switch thundurus 396v 32
+    p2 greedy: move 3 1, move 1 1
+      p1a <- Amoonguss comes in (432/432)
+      p1b Landorus used Earthquake -> p2a: Kangaskhan  [[spread] p1a,p2a,p2b]
+      p2a Kangaskhan used Crunch -> p1a: Amoonguss
+      p2b Conkeldurr used Drain Punch -> p1a: Amoonguss
+      after p1: Amoonguss 175/432, Landorus-Therian 366/366
+      after p2: Kangaskhan-Mega 218/414, Conkeldurr 220/401
+
+  Turn 2
+    p1 mcts: switch 4, move 1   (slot0 Amoonguss -> Thundurus)
+      search (13000 visits): switch thundurus;earthquake,0 287v 284 | energyball,0;earthquake,0 285v 282 | energyball,1;earthquake,0 285v 282 | spore,0;earthquake,0 284v 281
+    p2 greedy: move 3 1, move 1 1
+      p1a <- Thundurus comes in (361/361)
+      p1b Landorus used Earthquake -> p2a: Kangaskhan  [[spread] p2a,p2b]
+              p1a Thundurus -- IMMUNE
+      p2a Kangaskhan used Crunch -> p1a: Thundurus
+      p2b Conkeldurr used Drain Punch -> p1a: Thundurus
+      after p1: Thundurus 242/361, Landorus-Therian 366/366
+      after p2: Kangaskhan-Mega 80/414, Conkeldurr 101/401
+
+  Turn 3
+    p1 mcts: move 2 2, switch 4   (slot1 Landorus-Therian -> Amoonguss)
+      search (42000 visits): hiddenpower,1;switch amoonguss 18782v 8215 | thunderbolt,0;switch dianciemega 877v 205 | thunderbolt,0;switch bisharp 759v 169 | thunderwave,0;switch dianciemega 719v 157
+    p2 greedy: move 3 1, move 1 1
+      p1b <- Amoonguss comes in (319/432)
+      p1a Thundurus used Hidden Power -> p2b: Conkeldurr
+              p2b Conkeldurr -- critical hit
+      p2a Kangaskhan used Crunch -> p1a: Thundurus
+              p1a Thundurus -- critical hit
+              p1a Thundurus used up its Sitrus Berry
+      p2b Conkeldurr used Drain Punch -> p1a: Thundurus
+      after p1: Thundurus 146/361, Amoonguss 319/432
+      after p2: Kangaskhan-Mega 80/414, Conkeldurr 72/401
+
+  Turn 4
+    p1 mcts: move 2 1, switch 4   (slot1 Amoonguss -> Landorus-Therian)
+      search (52000 visits): hiddenpower,0;switch landorustherian 12159v 5177 | taunt,0;switch landorustherian 504v 47 | thunderwave,1;switch landorustherian 498v 46 | thunderbolt,0;switch landorustherian 479v 42
+    p2 greedy: move 3 1, move 1 1
+      p1b <- Landorus-Therian comes in (366/366)
+              p2a Kangaskhan atk 1 fell
+              p2b Conkeldurr atk 1 fell
+      p1a Thundurus used Hidden Power -> p2a: Kangaskhan
+      p2a Kangaskhan used Crunch -> p1a: Thundurus
+      p2b Conkeldurr used Drain Punch -> p1a: Thundurus
+      after p1: Thundurus 54/361, Landorus-Therian 366/366
+      after p2: Kangaskhan-Mega 27/414, Conkeldurr 95/401
+
+  Turn 5
+    p1 mcts: switch 4, switch 6   (slot0 Thundurus -> Amoonguss; slot1 Landorus-Therian -> Bisharp)
+      search (43000 visits): switch amoonguss;switch bisharp 372v 19 | switch bisharp;switch volcanion 369v 19 | thunderwave,1;switch bisharp 368v 19 | switch volcanion;switch bisharp 366v 18
+    p2 greedy: move 3 1, move 1 1
+      p1b <- Bisharp comes in (272/272)
+      p1a <- Amoonguss comes in (432/432)
+      p2a Kangaskhan used Crunch -> p1a: Amoonguss
+              p1a Amoonguss -- critical hit
+      p2a Kangaskhan fainted
+      p2b Conkeldurr used Drain Punch -> p1a: Amoonguss
+      after p1: Amoonguss 248/432, Bisharp 272/272
+      after p2: Kangaskhan-Mega 0/414, Conkeldurr 49/401
+
+  Turn 6
+      p2a <- Landorus-Therian comes in (320/320)
+              p1a Amoonguss atk 1 fell
+              p1b Bisharp atk 1 fell
+              p1b Bisharp atk 2 rose
+      after p1: Amoonguss 248/432, Bisharp 272/272
+      after p2: Landorus-Therian 320/320, Conkeldurr 49/401
+
+  Turn 7
+    p1 mcts: switch 4, move 1 2   (slot0 Amoonguss -> Thundurus)
+      search (30000 visits): switch thundurus;knockoff,1 2315v 1480 | switch landorustherian;knockoff,0 1311v 798 | switch landorustherian;ironhead,0 966v 568 | switch landorustherian;protect,1 917v 535
+    p2 greedy: move 4 1, move 1 1
+      p1a <- Thundurus comes in (54/361)
+      p2a Landorus used Stone Edge -> p1a: Thundurus  [[miss]]
+              p2a Landorus -- MISSED
+      p1b Bisharp used Knock Off -> p2b: Conkeldurr
+              p2b Conkeldurr used up its Assault Vest
+      p2b Conkeldurr fainted
+      after p1: Thundurus 54/361, Bisharp 272/272
+      after p2: Landorus-Therian 320/320, Conkeldurr 0/401
+
+  Turn 8
+      p2b <- Deoxys-Speed comes in (303/303)
+      after p1: Thundurus 54/361, Bisharp 272/272
+      after p2: Landorus-Therian 320/320, Deoxys-Speed 303/303
+
+  Turn 9
+    p1 mcts: switch 4, switch 5   (slot0 Thundurus -> Amoonguss; slot1 Bisharp -> Volcanion)
+      search (27000 visits): switch amoonguss;switch volcanion 967v 654 | switch dianciemega;knockoff,0 640v 412 | switch dianciemega;ironhead,0 522v 326 | switch amoonguss;suckerpunch,1 522v 326
+    p2 greedy: move 4 1, move 1 1
+      p1a <- Amoonguss comes in (392/432)
+      p1b <- Volcanion comes in (363/363)
+      p2b Deoxys used Psycho Boost -> p1a: Amoonguss
+              p2b Deoxys spa 2 fell
+      p2a Landorus used Stone Edge -> p1a: Amoonguss  [[miss]]
+              p2a Landorus -- MISSED
+      after p1: Amoonguss 108/432, Volcanion 363/363
+      after p2: Landorus-Therian 320/320, Deoxys-Speed 303/303
+
+  Turn 10
+    p1 mcts: move 4, move 1 2
+      search (25000 visits): protect,0;steameruption,1 546v 437 | protect,0;heatwave,0 499v 395 | protect,0;overheat,1 466v 366 | spore,1;heatwave,0 438v 341
+    p2 greedy: move 4 1, move 1 1
+      p1a Amoonguss used Protect
+      p2b Deoxys used Psycho Boost -> p1a: Amoonguss
+              p1a Amoonguss -- move: Protect
+      p2a Landorus used Stone Edge -> p1a: Amoonguss
+              p1a Amoonguss -- move: Protect
+      p1b Volcanion used Steam Eruption -> p2b: Deoxys
+      after p1: Amoonguss 108/432, Volcanion 363/363
+      after p2: Landorus-Therian 320/320, Deoxys-Speed 125/303
+
+  Turn 11
+    p1 mcts: move 4, move 1 1
+      search (41000 visits): protect,0;steameruption,0 2486v 2147 | protect,0;steameruption,1 1682v 1419 | protect,0;heatwave,0 1439v 1201 | protect,0;earthpower,0 1438v 1200
+    p2 greedy: move 4 1, move 1 1
+      p1a Amoonguss used Protect
+      p2b Deoxys used Psycho Boost -> p1a: Amoonguss
+              p1a Amoonguss -- move: Protect
+      p2a Landorus used Stone Edge -> p1a: Amoonguss
+              p1a Amoonguss -- move: Protect
+      p1b Volcanion used Steam Eruption -> p2a: Landorus
+      p2a Landorus fainted
+      after p1: Amoonguss 108/432, Volcanion 363/363
+      after p2: Landorus-Therian 0/320, Deoxys-Speed 125/303
+
+  Turn 12
+      p2a <- Jellicent comes in (403/403)
+      after p1: Amoonguss 108/432, Volcanion 363/363
+      after p2: Jellicent 403/403, Deoxys-Speed 125/303
+
+  Turn 13
+    p1 mcts: move 4, move 2
+      search (34000 visits): protect,0;heatwave,0 1520v 1071 | energyball,0;heatwave,0 962v 649 | switch dianciemega;heatwave,0 924v 620 | switch dianciemega;steameruption,1 619v 395
+    p2 greedy: move 4 1, move 1 1
+      p1a Amoonguss used Protect  [[still]]
+              p1a Amoonguss -- IT FAILED
+      p2b Deoxys used Psycho Boost -> p1a: Amoonguss
+              p1a Amoonguss -- critical hit
+              p2b Deoxys spa 2 fell
+      p1a Amoonguss fainted
+      p1b Volcanion used Heat Wave -> p2b: Deoxys  [[spread] p2a,p2b]
+      p2a Jellicent used Shadow Ball -> p1b: Volcanion
+      after p1: Amoonguss 0/432, Volcanion 306/363
+      after p2: Jellicent 356/403, Deoxys-Speed 10/303
+
+  Turn 14
+      p1a <- Diancie-Mega comes in (287/287)
+      after p1: Diancie-Mega 287/287, Volcanion 306/363
+      after p2: Jellicent 356/403, Deoxys-Speed 10/303
+
+  Turn 15
+    p1 mcts: move 2 1, switch 5   (slot1 Volcanion -> Bisharp)
+      search (9000 visits): moonblast,0;switch bisharp 273v 157 | moonblast,0;earthpower,0 261v 148 | moonblast,0;switch thundurus 217v 118 | earthpower,0;switch bisharp 209v 112
+    p2 greedy: move 4 2, move 1 2
+      p1b <- Bisharp comes in (272/272)
+      p2b Deoxys used Psycho Boost -> p1b: Bisharp
+              p1b Bisharp -- IMMUNE
+      p1a Diancie used Moonblast -> p2a: Jellicent
+      p2a Jellicent used Shadow Ball -> p1b: Bisharp
+              p1b Bisharp -- critical hit
+      after p1: Diancie-Mega 287/287, Bisharp 189/272
+      after p2: Jellicent 236/403, Deoxys-Speed 10/303
+
+  Turn 16
+    p1 mcts: move 1, move 1 1
+      search (26000 visits): diamondstorm,0;knockoff,0 2858v 2035 | diamondstorm,0;ironhead,0 2518v 1779 | switch volcanion;knockoff,0 2409v 1697 | moonblast,0;knockoff,0 1490v 1012
+    p2 greedy: move 4 2, move 1 2
+      p2b Deoxys used Psycho Boost -> p1b: Bisharp
+              p1b Bisharp -- IMMUNE
+      p1a Diancie used Diamond Storm -> p2a: Jellicent  [[spread] p2a,p2b]
+              p1a Diancie def 1 rose
+      p2b Deoxys fainted
+      p1b Bisharp used Knock Off -> p2a: Jellicent
+              p2a Jellicent used up its Safety Goggles
+      p2a Jellicent fainted
+      after p1: Diancie-Mega 287/287, Bisharp 189/272
+      after p2: Jellicent 0/403, Deoxys-Speed 0/303
+
+  Turn 17
+      p2a <- Genesect comes in (323/323)
+              p2a Genesect spa 1 rose
+      after p1: Diancie-Mega 287/287, Bisharp 189/272
+      after p2: Genesect 323/323, Deoxys-Speed 0/303
+
+  Turn 18
+    p1 mcts: move 1, move 1 1
+      search (128000 visits): diamondstorm,0;knockoff,0 63498v 62983 | earthpower,0;knockoff,0 32008v 31497 | diamondstorm,0;suckerpunch,0 13023v 12614 | moonblast,0;knockoff,0 2390v 2179
+    p2 greedy: move 4, pass
+      p1a Diancie used Diamond Storm -> p2a: Genesect
+              p1a Diancie def 1 rose
+      p2a Genesect used Explosion -> p1b: Bisharp  [[spread] p1a,p1b]
+      p2a Genesect fainted
+      after p1: Diancie-Mega 218/287, Bisharp 35/272
+      after p2: Genesect 0/323, Deoxys-Speed 0/303
+
+  RESULT: p1 wins

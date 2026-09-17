@@ -1,0 +1,157 @@
+battle 148   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: Untitled 571: Metagross-Mega, Keldeo-Resolute, Landorus, Talonflame, Scrafty, Volcanion
+  p2: Mega Diancie: Diancie-Mega, Gastrodon-East, Landorus-Therian, Ferrothorn, Talonflame, Thundurus
+
+  Turn 1
+    p1 mcts: move 2 1, move 3
+      search (15000 visits): ironhead,0;protect,1 692v 466 | ironhead,0;switch scrafty 464v 295 | ironhead,0;secretsword,1 429v 269 | ironhead,0;switch landorus 395v 245
+    p2 greedy: move 1, move 2 1
+      p1b Keldeo used Protect
+      p2a Diancie used Diamond Storm -> p1b: Keldeo  [[spread] p1a]
+              p1b Keldeo -- move: Protect
+      p1a Metagross used Iron Head -> p2a: Diancie
+      p2a Diancie fainted
+      p2b Gastrodon used Earth Power -> p1a: Metagross
+      after p1: Metagross-Mega 110/364, Keldeo-Resolute 323/323
+      after p2: Diancie-Mega 0/241, Gastrodon-East 421/421
+
+  Turn 2
+      p2a <- Landorus-Therian comes in (382/382)
+              p1a Metagross -- IT FAILED
+              p1b Keldeo atk 1 fell
+      after p1: Metagross-Mega 110/364, Keldeo-Resolute 323/323
+      after p2: Landorus-Therian 382/382, Gastrodon-East 421/421
+
+  Turn 3
+    p1 mcts: move 1 1, move 2 2
+      search (43000 visits): icepunch,0;secretsword,1 1224v 507 | icepunch,0;switch scrafty 1150v 472 | icepunch,0;switch volcanion 1069v 433 | icepunch,0;switch talonflame 1054v 426
+    p2 greedy: move 2 1, move 2 1
+      p1b Keldeo used Secret Sword -> p2b: Gastrodon
+              p2b Gastrodon -- critical hit
+      p1a Metagross used Ice Punch -> p2a: Landorus
+      p2a Landorus fainted
+      p2b Gastrodon used Earth Power -> p1a: Metagross
+      p1a Metagross fainted
+      after p1: Metagross-Mega 0/364, Keldeo-Resolute 291/323
+      after p2: Landorus-Therian 0/382, Gastrodon-East 74/421
+
+  Turn 4
+      p1a <- Landorus comes in (382/382)
+      p2a <- Ferrothorn comes in (352/352)
+      after p1: Landorus 382/382, Keldeo-Resolute 291/323
+      after p2: Ferrothorn 352/352, Gastrodon-East 74/421
+
+  Turn 5
+    p1 mcts: switch 6, move 3   (slot0 Landorus -> Volcanion)
+      search (52000 visits): switch volcanion;protect,1 12822v 7816 | switch scrafty;protect,1 4218v 2442 | psychic,1;secretsword,0 3230v 1837 | switch scrafty;secretsword,1 2759v 1550
+    p2 greedy: move 1 2, move 2 2
+      p1a <- Volcanion comes in (364/364)
+      p1b Keldeo used Protect
+      p2b Gastrodon used Earth Power -> p1b: Keldeo
+              p1b Keldeo -- move: Protect
+      p2a Ferrothorn used Power Whip -> p1b: Keldeo
+              p1b Keldeo -- move: Protect
+      after p1: Volcanion 364/364, Keldeo-Resolute 291/323
+      after p2: Ferrothorn 352/352, Gastrodon-East 74/421
+
+  Turn 6
+    p1 mcts: switch 5, move 3   (slot0 Volcanion -> Scrafty)
+      search (40000 visits): switch scrafty;protect,1 5540v 3465 | heatwave,0;switch landorus 1015v 549 | heatwave,0;secretsword,1 954v 512 | switch talonflame;secretsword,0 813v 426
+    p2 greedy: move 1 2, move 2 2
+      p1a <- Scrafty comes in (334/334)
+              p2a Ferrothorn atk 1 fell
+              p2b Gastrodon atk 1 fell
+      p1b Keldeo used Protect  [[still]]
+              p1b Keldeo -- IT FAILED
+      p2b Gastrodon used Earth Power -> p1b: Keldeo
+      p2a Ferrothorn used Power Whip -> p1b: Keldeo
+      p1b Keldeo fainted
+      after p1: Scrafty 334/334, Keldeo-Resolute 0/323
+      after p2: Ferrothorn 352/352, Gastrodon-East 74/421
+
+  Turn 7
+      p1b <- Talonflame comes in (321/321)
+      after p1: Scrafty 334/334, Talonflame 321/321
+      after p2: Ferrothorn 352/352, Gastrodon-East 74/421
+
+  Turn 8
+    p1 mcts: move 4 1, move 4 2
+      search (34000 visits): superfang,0;bravebird,1 1258v 426 | lowkick,1;bravebird,1 949v 302 | fakeout,0;willowisp,0 757v 227 | superfang,0;willowisp,0 752v 225
+    p2 greedy: move 1 1, move 2 1
+      p1b Talonflame used Brave Bird -> p2b: Gastrodon
+      p2b Gastrodon fainted
+      p1a Scrafty used Super Fang -> p2a: Ferrothorn
+      p2a Ferrothorn used Power Whip -> p1a: Scrafty  [[miss]]
+              p2a Ferrothorn -- MISSED
+      after p1: Scrafty 293/334, Talonflame 244/321
+      after p2: Ferrothorn 198/352, Gastrodon-East 0/421
+
+  Turn 9
+      p2b <- Talonflame comes in (360/360)
+      after p1: Scrafty 293/334, Talonflame 244/321
+      after p2: Ferrothorn 198/352, Talonflame 360/360
+
+  Turn 10
+    p1 mcts: move 3 1, move 4 2
+      search (29000 visits): knockoff,0;bravebird,1 772v 269 | knockoff,1;bravebird,1 764v 266 | superfang,0;bravebird,1 760v 264 | fakeout,0;willowisp,0 749v 260
+    p2 greedy: move 1 2, move 1 2
+      p1b Talonflame used Brave Bird -> p2b: Talonflame
+      p2b Talonflame used Brave Bird -> p1b: Talonflame
+      p1b Talonflame fainted
+      p1a Scrafty used Knock Off -> p2a: Ferrothorn
+              p2a Ferrothorn used up its Leftovers
+      p2a Ferrothorn used Power Whip -> p1a: Scrafty
+              p1a Scrafty -- critical hit
+      after p1: Scrafty 81/334, Talonflame 0/321
+      after p2: Ferrothorn 58/352, Talonflame 50/360
+
+  Turn 11
+      p1b <- Volcanion comes in (364/364)
+      after p1: Scrafty 81/334, Volcanion 364/364
+      after p2: Ferrothorn 58/352, Talonflame 50/360
+
+  Turn 12
+    p1 mcts: move 3 2, move 1
+      search (31000 visits): knockoff,1;heatwave,0 1355v 870 | lowkick,1;heatwave,0 1250v 797 | knockoff,0;heatwave,0 1045v 653 | fakeout,1;heatwave,0 928v 572
+    p2 greedy: move 1 1, move 1 1
+      p2b Talonflame used Brave Bird -> p1a: Scrafty
+      p2b Talonflame fainted
+      p1a Scrafty fainted
+      p1b Volcanion used Heat Wave -> p2a: Ferrothorn
+      p2a Ferrothorn fainted
+      after p1: Scrafty 0/334, Volcanion 364/364
+      after p2: Ferrothorn 0/352, Talonflame 0/360
+
+  Turn 13
+      p1a <- Landorus comes in (382/382)
+      p2a <- Thundurus comes in (299/299)
+      after p1: Landorus 382/382, Volcanion 364/364
+      after p2: Thundurus 299/299, Talonflame 0/360
+
+  Turn 14
+    p1 mcts: move 3, move 2 1
+      search (151000 visits): calmmind,0;steameruption,0 19306v 18826 | psychic,0;steameruption,0 18272v 17800 | psychic,0;overheat,0 16380v 15923 | psychic,0;heatwave,0 16293v 15838
+    p2 greedy: move 2 1, pass
+      p2a Thundurus used Superpower -> p1a: Landorus
+              p2a Thundurus atk 1 fell
+              p2a Thundurus def 1 fell
+      p1a Landorus used Calm Mind
+              p1a Landorus spa 1 rose
+              p1a Landorus spd 1 rose
+      p1b Volcanion used Steam Eruption -> p2a: Thundurus
+              p2a Thundurus is now brn
+      after p1: Landorus 301/382, Volcanion 364/364
+      after p2: Thundurus 14/299, Talonflame 0/360
+
+  Turn 15
+    p1 mcts: move 1 1, move 1
+      search (1412000 visits): earthpower,0;heatwave,0 88250v 88250 | earthpower,0;steameruption,0 88250v 88250 | earthpower,0;earthpower,0 88250v 88250 | earthpower,0;overheat,0 88250v 88250
+    p2 greedy: move 2 1, pass
+      p2a Thundurus used Superpower -> p1a: Landorus
+              p2a Thundurus atk 1 fell
+              p2a Thundurus def 1 fell
+      p2a Thundurus fainted
+      after p1: Landorus 275/382, Volcanion 364/364
+      after p2: Thundurus 0/299, Talonflame 0/360
+
+  RESULT: p1 wins

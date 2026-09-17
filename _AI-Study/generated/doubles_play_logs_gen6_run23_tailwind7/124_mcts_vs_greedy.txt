@@ -1,0 +1,189 @@
+battle 124   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: Copy of Untitled 580: Salamence-Mega, Clefable, Ferrothorn, Tyranitar, Volcanion, Landorus-Therian
+  p2: ORAS Doubles OU: Manaphy, Talonflame, Jirachi, Hoopa-Unbound, Gardevoir-Mega, Kyurem-Black
+
+  Turn 1
+    p1 mcts: switch 3, switch 5   (slot0 Salamence-Mega -> Ferrothorn; slot1 Clefable -> Volcanion)
+      search (44000 visits): switch ferrothorn;switch volcanion 3004v 2552 | switch ferrothorn;protect,1 2367v 1986 | switch ferrothorn;switch tyranitar 2155v 1798 | dragondance,0;followme,1 2123v 1770
+    p2 greedy: move 3 1, move 1 1
+      p1a <- Ferrothorn comes in (352/352)
+      p1b <- Volcanion comes in (364/364)
+      p2b Talonflame used Brave Bird -> p1a: Ferrothorn
+      p2a Manaphy used Ice Beam -> p1a: Ferrothorn
+      after p1: Ferrothorn 176/352, Volcanion 364/364
+      after p2: Manaphy 341/341, Talonflame 148/297
+
+  Turn 2
+    p1 mcts: move 4, move 3 2
+      search (43000 visits): protect,0;earthpower,1 802v 685 | protect,0;overheat,0 802v 685 | gyroball,1;steameruption,1 786v 670 | leechseed,0;heatwave,0 786v 670
+    p2 greedy: move 3 1, move 1 1
+      p1a Ferrothorn used Protect
+      p2b Talonflame used Brave Bird -> p1a: Ferrothorn
+              p1a Ferrothorn -- move: Protect
+      p2a Manaphy used Ice Beam -> p1a: Ferrothorn
+              p1a Ferrothorn -- move: Protect
+      p1b Volcanion used Earth Power -> p2b: Talonflame
+              p2b Talonflame -- IMMUNE
+      after p1: Ferrothorn 176/352, Volcanion 364/364
+      after p2: Manaphy 341/341, Talonflame 148/297
+
+  Turn 3
+    p1 mcts: move 2 1, move 2
+      search (43000 visits): gyroball,0;heatwave,0 763v 654 | gyroball,0;earthpower,0 762v 653 | protect,0;steameruption,1 762v 653 | protect,0;heatwave,0 755v 646
+    p2 greedy: move 3 1, move 1 1
+      p2b Talonflame used Brave Bird -> p1a: Ferrothorn
+              p1a Ferrothorn -- critical hit
+      p1a Ferrothorn fainted
+      p2b Talonflame fainted
+      p2a Manaphy used Ice Beam -> p1b: Volcanion
+              p1b Volcanion is now frz
+              p1b Volcanion COULD NOT MOVE (frz)
+      after p1: Ferrothorn 0/352, Volcanion 350/364
+      after p2: Manaphy 341/341, Talonflame 0/297
+
+  Turn 4
+      p2b <- Jirachi comes in (404/404)
+      p1a <- Salamence-Mega comes in (369/369)
+              p2a Manaphy atk 1 fell
+              p2b Jirachi atk 1 fell
+      after p1: Salamence-Mega 369/369, Volcanion 350/364
+      after p2: Manaphy 341/341, Jirachi 404/404
+
+  Turn 5
+    p1 mcts: move 2 1, move 2
+      search (17000 visits): doubleedge,0;heatwave,0 652v 327 | protect,0;heatwave,0 542v 262 | switch landorustherian;heatwave,0 527v 254 | switch landorustherian;steameruption,0 428v 197
+    p2 greedy: move 3 2, move 2 2
+      p1a Salamence used Double-Edge -> p2a: Manaphy
+      p2a Manaphy used Ice Beam -> p1b: Volcanion
+      p2b Jirachi used Iron Head -> p1b: Volcanion
+              p1b Volcanion COULD NOT MOVE (frz)
+      after p1: Salamence-Mega 321/369, Volcanion 323/364
+      after p2: Manaphy 196/341, Jirachi 404/404
+
+  Turn 6
+    p1 mcts: move 2 1, move 2
+      search (18000 visits): doubleedge,0;heatwave,0 760v 389 | protect,0;heatwave,0 592v 290 | switch landorustherian;heatwave,0 562v 273 | switch landorustherian;steameruption,1 443v 205
+    p2 greedy: move 3 1, move 2 1
+      p1a Salamence used Double-Edge -> p2a: Manaphy
+              p2a Manaphy used up its Sitrus Berry
+      p2a Manaphy used Ice Beam -> p1a: Salamence
+      p1a Salamence fainted
+      p2b Jirachi used Iron Head -> p1b: Volcanion
+              p1b Volcanion COULD NOT MOVE (frz)
+      after p1: Salamence-Mega 0/369, Volcanion 310/364
+      after p2: Manaphy 110/341, Jirachi 404/404
+
+  Turn 7
+      p1a <- Tyranitar comes in (342/342)
+      after p1: Tyranitar 342/342, Volcanion 310/364
+      after p2: Manaphy 110/341, Jirachi 404/404
+
+  Turn 8
+    p1 mcts: move 1 2, move 2
+      search (16000 visits): crunch,1;heatwave,0 638v 386 | rockslide,0;heatwave,0 542v 320 | crunch,1;earthpower,1 460v 264 | crunch,1;steameruption,1 439v 250
+    p2 greedy: move 3 2, move 2 2
+      p1a Tyranitar used Crunch -> p2b: Jirachi
+      p2a Manaphy used Ice Beam -> p1b: Volcanion
+      p2b Jirachi used Iron Head -> p1b: Volcanion
+              p1b Volcanion COULD NOT MOVE (frz)
+      after p1: Tyranitar 342/342, Volcanion 262/364
+      after p2: Manaphy 89/341, Jirachi 134/404
+
+  Turn 9
+    p1 mcts: move 1 2, move 2
+      search (23000 visits): crunch,1;heatwave,0 2282v 1243 | crunch,0;heatwave,0 1694v 897 | crunch,1;steameruption,0 1311v 675 | crunch,0;steameruption,1 1281v 658
+    p2 greedy: move 3 2, move 2 2
+      p1a Tyranitar used Crunch -> p2b: Jirachi
+      p2b Jirachi fainted
+      p2a Manaphy used Ice Beam -> p1b: Volcanion
+              p1b Volcanion COULD NOT MOVE (frz)
+      after p1: Tyranitar 342/342, Volcanion 227/364
+      after p2: Manaphy 68/341, Jirachi 0/404
+
+  Turn 10
+      p2b <- Hoopa-Unbound comes in (301/301)
+      after p1: Tyranitar 342/342, Volcanion 227/364
+      after p2: Manaphy 68/341, Hoopa-Unbound 301/301
+
+  Turn 11
+    p1 mcts: move 1 2, move 2
+      search (25000 visits): crunch,1;heatwave,0 3498v 2068 | crunch,0;switch landorustherian 2232v 1277 | crunch,1;earthpower,1 1909v 1077 | crunch,1;steameruption,1 1875v 1056
+    p2 greedy: move 3 2, move 3 2
+      p1a Tyranitar used Crunch -> p2b: Hoopa
+      p2a Manaphy used Ice Beam -> p1b: Volcanion
+      p2b Hoopa used Gunk Shot -> p1b: Volcanion
+              p1b Volcanion COULD NOT MOVE (frz)
+      p2b Hoopa fainted
+      after p1: Tyranitar 342/342, Volcanion 29/364
+      after p2: Manaphy 47/341, Hoopa-Unbound 0/301
+
+  Turn 12
+      p2b <- Gardevoir-Mega comes in (277/277)
+      after p1: Tyranitar 342/342, Volcanion 29/364
+      after p2: Manaphy 47/341, Gardevoir-Mega 277/277
+
+  Turn 13
+    p1 mcts: move 1 2, move 2
+      search (36000 visits): crunch,1;heatwave,0 3479v 1295 | crunch,1;steameruption,1 2431v 868 | crunch,1;earthpower,1 2269v 802 | crunch,1;earthpower,0 2184v 768
+    p2 greedy: move 3 2, move 1
+      p1a Tyranitar used Crunch -> p2b: Gardevoir
+      p2a Manaphy used Ice Beam -> p1b: Volcanion
+      p2b Gardevoir used Hyper Voice -> p1a: Tyranitar  [[spread] p1a,p1b]
+      p1b Volcanion fainted
+      after p1: Tyranitar 72/342, Volcanion 0/364
+      after p2: Manaphy 26/341, Gardevoir-Mega 37/277
+
+  Turn 14
+      p1b <- Clefable comes in (392/392)
+      after p1: Tyranitar 72/342, Clefable 392/392
+      after p2: Manaphy 26/341, Gardevoir-Mega 37/277
+
+  Turn 15
+    p1 mcts: move 1 2, move 1 1
+      search (35000 visits): crunch,1;icebeam,0 9568v 4660 | crunch,0;icebeam,1 5018v 2353 | crunch,1;protect,1 3367v 1531 | crunch,0;protect,1 2986v 1343
+    p2 greedy: move 3 1, move 1
+      p1a Tyranitar used Crunch -> p2b: Gardevoir
+      p2b Gardevoir fainted
+      p2a Manaphy used Ice Beam -> p1a: Tyranitar
+      p1b Clefable used Ice Beam -> p2a: Manaphy
+      p2a Manaphy fainted
+      after p1: Tyranitar 9/342, Clefable 392/392
+      after p2: Manaphy 0/341, Gardevoir-Mega 0/277
+
+  Turn 16
+      p2a <- Kyurem-Black comes in (391/391)
+      after p1: Tyranitar 9/342, Clefable 392/392
+      after p2: Kyurem-Black 391/391, Gardevoir-Mega 0/277
+
+  Turn 17
+    p1 mcts: move 1 1, move 1 1
+      search (137000 visits): crunch,0;icebeam,0 135984v 129046 | switch landorustherian;icebeam,0 149v 70 | crunch,0;protect,1 141v 65 | crunch,0;switch landorustherian 139v 63
+    p2 greedy: move 2 1, pass
+      p2a Kyurem used Draco Meteor -> p1a: Tyranitar
+              p2a Kyurem spa 2 fell
+      p1a Tyranitar fainted
+      p1b Clefable used Ice Beam -> p2a: Kyurem
+      after p1: Tyranitar 0/342, Clefable 392/392
+      after p2: Kyurem-Black 306/391, Gardevoir-Mega 0/277
+
+  Turn 18
+      p1a <- Landorus-Therian comes in (382/382)
+              p2a Kyurem atk 1 fell
+      after p1: Landorus-Therian 382/382, Clefable 392/392
+      after p2: Kyurem-Black 306/391, Gardevoir-Mega 0/277
+
+  Turn 19
+    p1 mcts: move 4 1, move 1 1
+      search (357000 visits): superpower,0;icebeam,0 30090v 30090 | superpower,0;helpinghand,0 30089v 30089 | superpower,0;followme,1 29750v 29745 | superpower,0;protect,1 29600v 29593
+    p2 greedy: move 2 1, pass
+      p2a Kyurem used Draco Meteor -> p1a: Landorus
+              p2a Kyurem spa 2 fell
+      p1a Landorus used Superpower -> p2a: Kyurem
+              p1a Landorus atk 1 fell
+              p1a Landorus def 1 fell
+      p1b Clefable used Ice Beam -> p2a: Kyurem
+      p2a Kyurem fainted
+      after p1: Landorus-Therian 304/382, Clefable 392/392
+      after p2: Kyurem-Black 0/391, Gardevoir-Mega 0/277
+
+  RESULT: p1 wins

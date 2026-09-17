@@ -1,0 +1,215 @@
+battle 90   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: XY Doubles: Politoed, Manectric, Aegislash, Ludicolo, Rotom-Wash, Landorus-Therian
+  p2: hoopa semiroom: Kangaskhan-Mega, Landorus, Conkeldurr, Genesect, Gothitelle, Thundurus
+
+  Turn 1
+    p1 mcts: switch 5, move 4 mega   (slot0 Politoed -> Rotom-Wash)
+      search (52000 visits): switch rotomwash;protect-mega,1 1344v 456 | switch rotomwash;protect,1 1263v 424 | switch landorustherian;protect-mega,1 842v 257 | switch rotomwash;hiddenpower-mega,1 773v 231
+    p2 greedy: move 1 1, move 1 1
+      p1a <- Rotom-Wash comes in (300/300)
+              p2a Kangaskhan atk 1 fell
+              p2b Landorus atk 1 fell
+      p1b Manectric used Protect
+      p2a Kangaskhan used Fake Out -> p1a: Rotom
+      p2b Landorus used Earth Power -> p1a: Rotom
+              p1a Rotom -- IMMUNE
+      after p1: Rotom-Wash 266/300, Manectric-Mega 287/287
+      after p2: Kangaskhan-Mega 414/414, Landorus 319/319
+
+  Turn 2
+    p1 mcts: move 1 1, move 4
+      search (70000 visits): hydropump,0;protect,1 2652v 2275 | thunderbolt,0;protect,1 2142v 1815 | switch ludicolo;protect,1 2035v 1719 | switch aegislash;switch politoed 1963v 1655
+    p2 greedy: move 1 1, move 1 1
+      p1b Manectric used Protect  [[still]]
+              p1b Manectric -- IT FAILED
+      p2a Kangaskhan used Fake Out  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p2b Landorus used Earth Power -> p1a: Rotom
+              p1a Rotom -- IMMUNE
+      p1a Rotom used Hydro Pump -> p2a: Kangaskhan
+      after p1: Rotom-Wash 266/300, Manectric-Mega 287/287
+      after p2: Kangaskhan-Mega 191/414, Landorus 319/319
+
+  Turn 3
+    p1 mcts: move 2 2, switch 3   (slot1 Manectric-Mega -> Aegislash)
+      search (70000 visits): thunderbolt,1;switch aegislash 1228v 1130 | protect,0;protect,1 1198v 1101 | hydropump,1;protect,1 1193v 1096 | hydropump,0;switch politoed 1176v 1079
+    p2 greedy: move 1 1, move 1 1
+      p1b <- Aegislash comes in (324/324)
+      p2a Kangaskhan used Fake Out  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p2b Landorus used Earth Power -> p1a: Rotom
+              p1a Rotom -- IMMUNE
+      p1a Rotom used Thunderbolt -> p2b: Landorus
+              p2b Landorus -- IMMUNE
+      after p1: Rotom-Wash 266/300, Aegislash 324/324
+      after p2: Kangaskhan-Mega 191/414, Landorus 319/319
+
+  Turn 4
+    p1 mcts: switch 3, switch 6   (slot0 Rotom-Wash -> Manectric-Mega; slot1 Aegislash -> Landorus-Therian)
+      search (43000 visits): switch manectricmega;switch landorustherian 610v 99 | hydropump,1;shadowball,1 606v 98 | switch landorustherian;switch manectricmega 599v 96 | hydropump,1;switch landorustherian 597v 96
+    p2 greedy: move 1 1, move 1 1
+      p1a <- Manectric-Mega comes in (287/287)
+              p2a Kangaskhan atk 1 fell
+              p2b Landorus atk 1 fell
+      p1b <- Landorus-Therian comes in (330/330)
+              p2a Kangaskhan atk 1 fell
+              p2b Landorus atk 1 fell
+      p2a Kangaskhan used Fake Out  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p2b Landorus used Earth Power -> p1a: Manectric
+      p1a Manectric fainted
+      after p1: Manectric 0/287, Landorus-Therian 330/330
+      after p2: Kangaskhan-Mega 191/414, Landorus 319/319
+
+  Turn 5
+      p1a <- Rotom-Wash comes in (266/300)
+      after p1: Rotom-Wash 266/300, Landorus-Therian 330/330
+      after p2: Kangaskhan-Mega 191/414, Landorus 319/319
+
+  Turn 6
+    p1 mcts: move 1 1, switch 6   (slot1 Landorus-Therian -> Aegislash)
+      search (34000 visits): hydropump,0;switch aegislash 23667v 16737 | hydropump,1;uturn,1 1007v 503 | thunderbolt,1;stoneedge,1 199v 66 | electroweb,0;stoneedge,1 199v 66
+    p2 greedy: move 1 1, move 1 1
+      p1b <- Aegislash comes in (324/324)
+      p2a Kangaskhan used Fake Out  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p2b Landorus used Earth Power -> p1a: Rotom
+              p1a Rotom -- IMMUNE
+      p1a Rotom used Hydro Pump -> p2a: Kangaskhan  [[miss]]
+              p1a Rotom -- MISSED
+      after p1: Rotom-Wash 266/300, Aegislash 324/324
+      after p2: Kangaskhan-Mega 191/414, Landorus 319/319
+
+  Turn 7
+    p1 mcts: move 3, move 2 2
+      search (44000 visits): electroweb,0;shadowball,1 867v 133 | hydropump,1;shadowball,1 836v 126 | hydropump,1;flashcannon,1 835v 126 | electroweb,0;flashcannon,1 782v 113
+    p2 greedy: move 1 1, move 1 1
+      p2a Kangaskhan used Fake Out  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p2b Landorus used Earth Power -> p1a: Rotom
+              p1a Rotom -- IMMUNE
+      p1a Rotom used Electroweb -> p2b: Landorus  [[spread] p2a]
+              p2b Landorus -- IMMUNE
+              p2a Kangaskhan spe 1 fell
+      p1b Aegislash used Shadow Ball -> p2b: Landorus
+              p2b Landorus spd 1 fell
+      after p1: Rotom-Wash 266/300, Aegislash-Blade 324/324
+      after p2: Kangaskhan-Mega 134/414, Landorus 118/319
+
+  Turn 8
+    p1 mcts: move 3, switch 6   (slot1 Aegislash-Blade -> Landorus-Therian)
+      search (51000 visits): electroweb,0;switch landorustherian 763v 68 | electroweb,0;switch ludicolo 754v 67 | hydropump,1;shadowball,1 749v 66 | hydropump,0;switch landorustherian 741v 65
+    p2 greedy: move 1 1, move 1 1
+      p1b <- Landorus-Therian comes in (330/330)
+              p2a Kangaskhan atk 1 fell
+              p2b Landorus atk 1 fell
+      p2a Kangaskhan used Fake Out  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p2b Landorus used Earth Power -> p1a: Rotom
+              p1a Rotom -- IMMUNE
+      p1a Rotom used Electroweb -> p2a: Kangaskhan  [[spread] p2a]
+              p2b Landorus -- IMMUNE
+              p2a Kangaskhan spe 1 fell
+      after p1: Rotom-Wash 266/300, Landorus-Therian 330/330
+      after p2: Kangaskhan-Mega 82/414, Landorus 118/319
+
+  Turn 9
+    p1 mcts: move 3, switch 5   (slot1 Landorus-Therian -> Politoed)
+      search (50000 visits): electroweb,0;switch politoed 910v 85 | electroweb,0;switch ludicolo 893v 83 | protect,0;uturn,1 800v 67 | thunderbolt,1;rockslide,0 797v 66
+    p2 greedy: move 1 1, move 1 1
+      p1b <- Politoed comes in (384/384)
+      p2a Kangaskhan used Fake Out  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p2b Landorus used Earth Power -> p1a: Rotom
+              p1a Rotom -- IMMUNE
+      p1a Rotom used Electroweb -> p2b: Landorus  [[spread] p2a]
+              p2b Landorus -- IMMUNE
+              p2a Kangaskhan spe 1 fell
+      after p1: Rotom-Wash 266/300, Politoed 384/384
+      after p2: Kangaskhan-Mega 31/414, Landorus 118/319
+
+  Turn 10
+    p1 mcts: move 1 2, move 1 2
+      search (38000 visits): hydropump,1;scald,1 655v 39 | thunderbolt,1;icywind,0 626v 35 | electroweb,0;icywind,0 620v 34 | switch landorustherian;icywind,0 619v 34
+    p2 greedy: move 1 1, move 1 1
+      p2a Kangaskhan used Fake Out  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p2b Landorus used Earth Power -> p1a: Rotom
+              p1a Rotom -- IMMUNE
+      p1a Rotom used Hydro Pump -> p2b: Landorus
+              p2b Landorus -- critical hit
+      p2b Landorus fainted
+      p1b Politoed used Scald -> p2a: Kangaskhan
+      p2a Kangaskhan fainted
+      after p1: Rotom-Wash 266/300, Politoed 384/384
+      after p2: Kangaskhan-Mega 0/414, Landorus 0/319
+
+  Turn 11
+      p2b <- Genesect comes in (323/323)
+      p2a <- Conkeldurr comes in (414/414)
+              p2b Genesect atk 1 rose
+      after p1: Rotom-Wash 266/300, Politoed 384/384
+      after p2: Conkeldurr 414/414, Genesect 323/323
+
+  Turn 12
+    p1 mcts: move 4, move 4
+      search (33000 visits): protect,0;protect,1 4301v 3369 | protect,0;switch aegislash 2627v 2007 | switch aegislash;protect,1 2311v 1751 | switch aegislash;helpinghand,0 1555v 1146
+    p2 greedy: move 1 1, move 2
+      p1a Rotom used Protect
+      p1b Politoed used Protect
+      p2b Genesect used Explosion -> p1b: Politoed  [[spread] p2a]
+              p1a Rotom -- move: Protect
+              p1b Politoed -- move: Protect
+      p2b Genesect fainted
+      p2a Conkeldurr fainted
+      after p1: Rotom-Wash 266/300, Politoed 384/384
+      after p2: Conkeldurr 0/414, Genesect 0/323
+
+  Turn 13
+      p2b <- Thundurus comes in (299/299)
+      p2a <- Gothitelle comes in (344/344)
+      after p1: Rotom-Wash 266/300, Politoed 384/384
+      after p2: Gothitelle 344/344, Thundurus 299/299
+
+  Turn 14
+    p1 mcts: move 3, move 2
+      search (7000 visits): electroweb,0;icywind,0 604v 437 | electroweb,0;protect,1 460v 321 | thunderbolt,1;icywind,0 415v 286 | thunderbolt,1;protect,1 366v 247
+    p2 greedy: move 3 1, move 1 1
+      p2b Thundurus used Thunderbolt -> p1a: Rotom
+              p1a Rotom used up its Sitrus Berry
+      p1a Rotom used Electroweb -> p2a: Gothitelle  [[spread] p2a,p2b]
+              p2a Gothitelle spe 1 fell
+              p2b Thundurus spe 1 fell
+      p1b Politoed used Icy Wind -> p2a: Gothitelle  [[spread] p2a,p2b]
+              p2a Gothitelle spe 1 fell
+              p2b Thundurus spe 1 fell
+      p2a Gothitelle used Psychic -> p1a: Rotom
+      after p1: Rotom-Wash 96/300, Politoed 384/384
+      after p2: Gothitelle 262/344, Thundurus 138/299
+
+  Turn 15
+    p1 mcts: move 2 2, move 1 1
+      search (13000 visits): thunderbolt,1;scald,0 1507v 1020 | hydropump,1;scald,0 1174v 777 | thunderbolt,1;icywind,0 1006v 656 | electroweb,0;icywind,0 901v 580
+    p2 greedy: move 3 1, move 1 1
+      p1a Rotom used Thunderbolt -> p2b: Thundurus
+      p2b Thundurus fainted
+      p1b Politoed used Scald -> p2a: Gothitelle
+              p2a Gothitelle is now brn
+      p2a Gothitelle used Psychic -> p1a: Rotom
+              p2a Gothitelle used up its Sitrus Berry
+      after p1: Rotom-Wash 24/300, Politoed 384/384
+      after p2: Gothitelle 227/344, Thundurus 0/299
+
+  Turn 16
+    p1 mcts: move 2 1, move 1 1
+      search (79000 visits): thunderbolt,0;scald,0 13168v 12905 | thunderbolt,0;helpinghand,0 12741v 12478 | thunderbolt,0;icywind,0 10541v 10279 | electroweb,0;scald,0 9622v 9362
+    p2 greedy: move 3 1, pass
+      p1a Rotom used Thunderbolt -> p2a: Gothitelle
+      p1b Politoed used Scald -> p2a: Gothitelle
+      p2a Gothitelle used Psychic -> p1a: Rotom
+      p1a Rotom fainted
+      p2a Gothitelle fainted
+      after p1: Rotom-Wash 0/300, Politoed 384/384
+      after p2: Gothitelle 0/344, Thundurus 0/299
+
+  RESULT: p1 wins

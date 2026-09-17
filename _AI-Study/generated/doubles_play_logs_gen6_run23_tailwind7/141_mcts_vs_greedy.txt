@@ -1,0 +1,174 @@
+battle 141   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: A Faraway Place: Gengar-Mega, Terrakion, Scizor, Whimsicott, Landorus-Therian, Latios
+  p2: ORAS Doubles OU: Aegislash, Deoxys-Attack, Amoonguss, Gardevoir, Talonflame, Landorus-Therian
+
+  Turn 1
+    p1 mcts: switch 6, switch 3   (slot0 Gengar-Mega -> Latios; slot1 Terrakion -> Scizor)
+      search (26000 visits): switch latios;switch scizor 3409v 2497 | switch scizor;switch latios 3137v 2288 | hiddenpower,1;switch scizor 1966v 1520 | switch landorustherian;switch latios 909v 600
+    p2 greedy: move 1 1, move 1 1
+      p1b <- Scizor comes in (311/311)
+      p1a <- Latios comes in (360/360)
+      p2b Deoxys used Psycho Boost -> p1a: Latios
+              p2b Deoxys spa 2 fell
+      p2a Aegislash used Shadow Ball -> p1a: Latios
+      p1a Latios fainted
+      after p1: Latios 0/360, Scizor 311/311
+      after p2: Aegislash-Blade 324/324, Deoxys-Attack 241/241
+
+  Turn 2
+      p1a <- Terrakion comes in (323/323)
+      after p1: Terrakion 323/323, Scizor 311/311
+      after p2: Aegislash-Blade 324/324, Deoxys-Attack 241/241
+
+  Turn 3
+    p1 mcts: switch 5, move 2 1   (slot0 Terrakion -> Landorus-Therian)
+      search (27000 visits): switch landorustherian;uturn,0 2036v 1270 | switch landorustherian;uturn,1 1852v 1146 | switch landorustherian;bulletpunch,0 1041v 607 | stoneedge,0;uturn,1 908v 521
+    p2 greedy: move 1 1, move 1 1
+      p1a <- Landorus-Therian comes in (382/382)
+              p2a Aegislash atk 1 fell
+              p2b Deoxys atk 1 fell
+      p2b Deoxys used Psycho Boost -> p1a: Landorus
+              p2b Deoxys spa 2 fell
+      p1b Scizor used U-turn -> p2a: Aegislash
+      after p1: Landorus-Therian 265/382, Scizor 311/311
+      after p2: Aegislash-Blade 243/324, Deoxys-Attack 241/241
+
+  Turn 4
+      p1b <- Whimsicott comes in (324/324)
+      p2a Aegislash used Shadow Ball -> p1a: Landorus
+      after p1: Landorus-Therian 151/382, Whimsicott 324/324
+      after p2: Aegislash-Blade 243/324, Deoxys-Attack 241/241
+
+  Turn 5
+    p1 mcts: move 1, move 3
+      search (21000 visits): earthquake,0;tailwind,1 496v 198 | stoneedge,1;tailwind,1 392v 147 | stoneedge,1;moonblast,0 385v 144 | uturn,0;moonblast,0 356v 130
+    p2 greedy: move 1 1, move 1 1
+      p1b Whimsicott used Tailwind
+      -sidestart p1: A move: Tailwind
+      p2b Deoxys used Psycho Boost -> p1a: Landorus
+              p2b Deoxys spa 2 fell
+      p1a Landorus used Earthquake -> p2b: Deoxys  [[spread] p1b,p2a,p2b]
+              p2b Deoxys used up its Focus Sash
+      p2a Aegislash fainted
+      after p1: Landorus-Therian 72/382, Whimsicott 241/324
+      after p2: Aegislash 0/324, Deoxys-Attack 1/241
+
+  Turn 6
+      p2a <- Amoonguss comes in (432/432)
+      after p1: Landorus-Therian 72/382, Whimsicott 241/324
+      after p2: Amoonguss 432/432, Deoxys-Attack 1/241
+
+  Turn 7
+    p1 mcts: switch 4, move 1 2   (slot0 Landorus-Therian -> Scizor)
+      search (36000 visits): switch scizor;moonblast,1 591v 86 | stoneedge,0;moonblast,0 540v 74 | stoneedge,0;moonblast,1 540v 74 | switch scizor;moonblast,0 528v 71
+    p2 greedy: move 3 1, move 1 1
+      p1a <- Scizor comes in (311/311)
+      p1b Whimsicott used Moonblast -> p2b: Deoxys
+      p2b Deoxys fainted
+      p2a Amoonguss used Giga Drain -> p1a: Scizor
+              p1a Scizor -- critical hit
+      after p1: Scizor 279/311, Whimsicott 241/324
+      after p2: Amoonguss 432/432, Deoxys-Attack 0/241
+
+  Turn 8
+      p2b <- Gardevoir comes in (279/279)
+      after p1: Scizor 279/311, Whimsicott 241/324
+      after p2: Amoonguss 432/432, Gardevoir 279/279
+
+  Turn 9
+    p1 mcts: move 1 2, move 1 1
+      search (28000 visits): bulletpunch,1;moonblast,0 810v 558 | uturn,0;moonblast,0 784v 538 | uturn,1;moonblast,0 768v 526 | uturn,0;uturn,1 734v 500
+    p2 greedy: move 3 2, move 3 2
+      p1a Scizor used Bullet Punch -> p2b: Gardevoir
+      p2b Gardevoir fainted
+      p1b Whimsicott used Moonblast -> p2a: Amoonguss
+      p2a Amoonguss used Giga Drain -> p1b: Whimsicott
+      after p1: Scizor 279/311, Whimsicott 196/324
+      after p2: Amoonguss 410/432, Gardevoir 0/279
+
+  Turn 10
+      p2b <- Talonflame comes in (297/297)
+      after p1: Scizor 279/311, Whimsicott 196/324
+      after p2: Amoonguss 410/432, Talonflame 297/297
+
+  Turn 11
+    p1 mcts: move 1 2, move 2 2
+      search (25000 visits): bulletpunch,1;uturn,1 2597v 1574 | bulletpunch,0;uturn,1 2103v 1254 | bulletpunch,0;uturn,0 1818v 1071 | bulletpunch,1;uturn,0 1621v 944
+    p2 greedy: move 3 2, move 1 2
+      p1a Scizor used Bullet Punch -> p2b: Talonflame
+      p2b Talonflame used Brave Bird -> p1b: Whimsicott
+      p1b Whimsicott fainted
+      p2a Amoonguss used Giga Drain -> p1a: Scizor
+      -sideend p1: A move: Tailwind
+      after p1: Scizor 256/311, Whimsicott 0/324
+      after p2: Amoonguss 422/432, Talonflame 40/297
+
+  Turn 12
+      p1b <- Landorus-Therian comes in (72/382)
+              p2a Amoonguss atk 1 fell
+              p2b Talonflame atk 1 fell
+      after p1: Scizor 256/311, Landorus-Therian 72/382
+      after p2: Amoonguss 422/432, Talonflame 40/297
+
+  Turn 13
+    p1 mcts: move 1 2, switch 6   (slot1 Landorus-Therian -> Gengar-Mega)
+      search (40000 visits): bulletpunch,1;switch gengarmega 5331v 1028 | bulletpunch,1;switch terrakion 3435v 609 | bulletpunch,0;switch gengarmega 2684v 448 | bulletpunch,0;switch terrakion 1898v 285
+    p2 greedy: move 3 2, move 1 2
+      p1b <- Gengar-Mega comes in (324/324)
+      p2b Talonflame used Brave Bird -> p1b: Gengar
+      p2b Talonflame fainted
+      p1a Scizor used Bullet Punch -> p2a: Amoonguss
+      p2a Amoonguss used Giga Drain -> p1b: Gengar
+      after p1: Scizor 205/311, Gengar-Mega 127/324
+      after p2: Amoonguss 273/432, Talonflame 0/297
+
+  Turn 14
+      p2b <- Landorus-Therian comes in (319/319)
+              p1a Scizor atk 1 fell
+              p1b Gengar atk 1 fell
+      after p1: Scizor 205/311, Gengar-Mega 127/324
+      after p2: Amoonguss 273/432, Landorus-Therian 319/319
+
+  Turn 15
+    p1 mcts: move 1 2, switch 6   (slot1 Gengar-Mega -> Landorus-Therian)
+      search (39000 visits): bulletpunch,1;switch landorustherian 7641v 5238 | switch landorustherian;protect,1 7591v 5203 | switch landorustherian;shadowball,1 3513v 2321 | bulletpunch,0;switch landorustherian 2655v 1723
+    p2 greedy: move 3 2, move 4 2
+      p1b <- Landorus-Therian comes in (72/382)
+              p2a Amoonguss atk 1 fell
+              p2b Landorus atk 1 fell
+      p1a Scizor used Bullet Punch -> p2b: Landorus
+      p2b Landorus used Superpower -> p1b: Landorus
+              p2b Landorus atk 1 fell
+              p2b Landorus def 1 fell
+      p2a Amoonguss used Giga Drain -> p1b: Landorus
+      p1b Landorus fainted
+      after p1: Scizor 205/311, Landorus-Therian 0/382
+      after p2: Amoonguss 280/432, Landorus-Therian 184/319
+
+  Turn 16
+      p1b <- Terrakion comes in (323/323)
+      after p1: Scizor 205/311, Terrakion 323/323
+      after p2: Amoonguss 280/432, Landorus-Therian 184/319
+
+  Turn 17
+    p1 mcts: move 1 2, move 2 1
+      search (48000 visits): bulletpunch,1;stoneedge,0 27972v 20037 | bulletpunch,1;switch gengarmega 9891v 6900 | bulletpunch,1;protect,1 1699v 1073 | bulletpunch,0;stoneedge,0 1681v 1060
+    p2 greedy: move 3 1, move 4 1
+      p1a Scizor used Bullet Punch -> p2b: Landorus
+      p2b Landorus fainted
+      p1b Terrakion used Stone Edge -> p2a: Amoonguss
+      p2a Amoonguss used Giga Drain -> p1a: Scizor
+      after p1: Scizor 181/311, Terrakion 291/323
+      after p2: Amoonguss 62/432, Landorus-Therian 0/319
+
+  Turn 18
+    p1 mcts: move 1 1, switch 6   (slot1 Terrakion -> Gengar-Mega)
+      search (659000 visits): bulletpunch,0;switch gengarmega 147624v 147255 | bulletpunch,0;protect,1 110026v 109516 | bulletpunch,0;closecombat,0 108212v 107697 | bulletpunch,0;stoneedge,0 107060v 106541
+    p2 greedy: move 3 1, pass
+      p1b <- Gengar-Mega comes in (127/324)
+      p1a Scizor used Bullet Punch -> p2a: Amoonguss
+      p2a Amoonguss fainted
+      after p1: Scizor 130/311, Gengar-Mega 127/324
+      after p2: Amoonguss 0/432, Landorus-Therian 0/319
+
+  RESULT: p1 wins

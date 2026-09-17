@@ -1,0 +1,444 @@
+battle 25   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: dpl vs singlethunder: Kangaskhan-Mega, Conkeldurr, Landorus-Therian, Deoxys-Speed, Jellicent, Genesect
+  p2: dd mence: Amoonguss, Salamence-Mega, Gastrodon-East, Genesect, Diancie, Mew
+
+  Turn 1
+    p1 mcts: switch 4, switch 5   (slot0 Kangaskhan-Mega -> Deoxys-Speed; slot1 Conkeldurr -> Jellicent)
+      search (55000 visits): switch deoxysspeed;switch jellicent 606v 579 | switch deoxysspeed;icepunch,1 575v 547 | fakeout,1;icepunch,1 567v 538 | crunch,0;icepunch,1 529v 499
+    p2 greedy: move 3 1, move 3 1
+      p1a <- Deoxys-Speed comes in (303/303)
+      p1b <- Jellicent comes in (403/403)
+      p2b Salamence used Draco Meteor -> p1a: Deoxys
+              p2b Salamence spa 2 fell
+      p2a Amoonguss used Sludge Bomb -> p1a: Deoxys
+      after p1: Deoxys-Speed 31/303, Jellicent 403/403
+      after p2: Amoonguss 432/432, Salamence-Mega 394/394
+
+  Turn 2
+    p1 mcts: move 3, switch 3   (slot1 Jellicent -> Landorus-Therian)
+      search (26000 visits): stealthrock,0;switch landorustherian 788v 339 | stealthrock,0;shadowball,1 550v 219 | stealthrock,0;willowisp,0 517v 203 | stealthrock,0;shadowball,0 492v 191
+    p2 greedy: move 3 1, move 3 1
+      p1b <- Landorus-Therian comes in (320/320)
+              p2a Amoonguss atk 1 fell
+              p2b Salamence atk 1 fell
+      p1a Deoxys used Stealth Rock -> p2a: Amoonguss
+      -sidestart p2: B move: Stealth Rock
+      p2b Salamence used Draco Meteor -> p1a: Deoxys
+              p2b Salamence spa 2 fell
+      p1a Deoxys fainted
+      p2a Amoonguss used Sludge Bomb -> p1b: Landorus
+      after p1: Deoxys-Speed 0/303, Landorus-Therian 258/320
+      after p2: Amoonguss 432/432, Salamence-Mega 394/394
+
+  Turn 3
+      p1a <- Jellicent comes in (403/403)
+      after p1: Jellicent 403/403, Landorus-Therian 258/320
+      after p2: Amoonguss 432/432, Salamence-Mega 394/394
+
+  Turn 4
+    p1 mcts: move 1 2, move 1 1
+      search (14000 visits): willowisp,1;earthpower,0 208v 77 | shadowball,1;switch genesect 193v 69 | switch genesect;uturn,0 190v 67 | shadowball,1;earthpower,1 189v 67
+    p2 greedy: move 3 2, move 3 2
+      p1b Landorus used Earth Power -> p2a: Amoonguss
+      p2b Salamence used Draco Meteor -> p1b: Landorus
+              p2b Salamence spa 2 fell
+      p1a Jellicent used Will-O-Wisp -> p2b: Salamence
+              p2b Salamence is now brn
+      p2a Amoonguss used Sludge Bomb -> p1b: Landorus
+              p1b Landorus is now psn
+      after p1: Jellicent 403/403, Landorus-Therian 76/320
+      after p2: Amoonguss 312/432, Salamence-Mega 345/394
+
+  Turn 5
+    p1 mcts: move 4 2, move 1 2
+      search (30000 visits): shadowball,1;earthpower,1 1454v 480 | shadowball,1;earthpower,0 1349v 442 | shadowball,0;earthpower,0 1152v 364 | willowisp,1;earthpower,0 1048v 324
+    p2 greedy: move 3 2, move 3 2
+      p1b Landorus used Earth Power -> p2b: Salamence
+              p2b Salamence -- IMMUNE
+      p2b Salamence used Draco Meteor -> p1b: Landorus
+      p1a Jellicent used Shadow Ball -> p2b: Salamence
+      p2a Amoonguss used Sludge Bomb -> p1b: Landorus
+      p1b Landorus fainted
+      after p1: Jellicent 403/403, Landorus-Therian 0/320
+      after p2: Amoonguss 312/432, Salamence-Mega 212/394
+
+  Turn 6
+      p1b <- Kangaskhan-Mega comes in (414/414)
+      after p1: Jellicent 403/403, Kangaskhan-Mega 414/414
+      after p2: Amoonguss 312/432, Salamence-Mega 212/394
+
+  Turn 7
+    p1 mcts: switch 6, move 1 2   (slot0 Jellicent -> Genesect)
+      search (31000 visits): switch genesect;fakeout,1 480v 32 | switch genesect;crunch,1 473v 30 | shadowball,0;protect,1 461v 28 | switch genesect;crunch,0 456v 28
+    p2 greedy: move 3 1, move 3 1
+      p1a <- Genesect comes in (323/323)
+              p1a Genesect atk 1 rose
+      p1b Kangaskhan used Fake Out -> p2b: Salamence
+              p2b Salamence COULD NOT MOVE (flinch)
+      p2a Amoonguss used Sludge Bomb -> p1a: Genesect
+              p1a Genesect -- IMMUNE
+      after p1: Genesect 323/323, Kangaskhan-Mega 414/414
+      after p2: Amoonguss 312/432, Salamence-Mega 109/394
+
+  Turn 8
+    p1 mcts: move 2 1, switch 6   (slot1 Kangaskhan-Mega -> Jellicent)
+      search (28000 visits): ironhead,0;switch jellicent 2531v 523 | extremespeed,1;switch jellicent 854v 121 | ironhead,0;switch conkeldurr 641v 75 | ironhead,1;switch conkeldurr 558v 59
+    p2 greedy: move 3 1, move 3 1
+      p1b <- Jellicent comes in (403/403)
+      p2b Salamence used Draco Meteor -> p1a: Genesect
+      p1a Genesect used Iron Head -> p2a: Amoonguss
+      p2a Amoonguss fainted
+      after p1: Genesect 246/323, Jellicent 403/403
+      after p2: Amoonguss 0/432, Salamence-Mega 60/394
+
+  Turn 9
+      p2a <- Gastrodon-East comes in (426/426)
+      after p1: Genesect 246/323, Jellicent 403/403
+      after p2: Gastrodon-East 400/426, Salamence-Mega 60/394
+
+  Turn 10
+    p1 mcts: move 2 2, switch 6   (slot1 Jellicent -> Kangaskhan-Mega)
+      search (17000 visits): ironhead,1;switch kangaskhanmega 1051v 320 | ironhead,1;shadowball,0 813v 232 | ironhead,0;switch kangaskhanmega 745v 208 | ironhead,1;switch conkeldurr 676v 183
+    p2 greedy: move 1 1, move 3 1
+      p1b <- Kangaskhan-Mega comes in (414/414)
+      p2b Salamence used Draco Meteor -> p1a: Genesect
+      p1a Genesect used Iron Head -> p2b: Salamence
+      p2b Salamence fainted
+      p2a Gastrodon used Earth Power -> p1a: Genesect
+              p1a Genesect spd 1 fell
+      after p1: Genesect 118/323, Kangaskhan-Mega 414/414
+      after p2: Gastrodon-East 400/426, Salamence-Mega 0/394
+
+  Turn 11
+      p2b <- Genesect comes in (284/284)
+              p2b Genesect spa 1 rose
+      after p1: Genesect 118/323, Kangaskhan-Mega 414/414
+      after p2: Gastrodon-East 400/426, Genesect 249/284
+
+  Turn 12
+    p1 mcts: move 2 2, move 3 2
+      search (34000 visits): ironhead,1;crunch,1 4884v 2552 | switch conkeldurr;protect,1 3801v 1953 | switch jellicent;protect,1 3154v 1599 | ironhead,1;protect,1 1896v 916
+    p2 greedy: move 1 1, move 3 1
+      p1b Kangaskhan used Crunch -> p2b: Genesect
+      p2b Genesect used Blaze Kick -> p1a: Genesect  [[miss]]
+              p2b Genesect -- MISSED
+      p1a Genesect used Iron Head -> p2b: Genesect
+      p2b Genesect fainted
+      p2a Gastrodon used Earth Power -> p1a: Genesect
+      p1a Genesect fainted
+      after p1: Genesect 0/323, Kangaskhan-Mega 414/414
+      after p2: Gastrodon-East 400/426, Genesect 0/284
+
+  Turn 13
+      p2b <- Diancie comes in (304/304)
+      p1a <- Conkeldurr comes in (401/401)
+      after p1: Conkeldurr 401/401, Kangaskhan-Mega 414/414
+      after p2: Gastrodon-East 400/426, Diancie 266/304
+
+  Turn 14
+    p1 mcts: move 1 2, move 1 2
+      search (50000 visits): drainpunch,1;fakeout,1 1707v 776 | drainpunch,1;protect,1 1571v 706 | icepunch,1;fakeout,1 1367v 603 | knockoff,1;fakeout,1 1219v 529
+    p2 greedy: move 1 1, move 1
+      p1b Kangaskhan used Fake Out  [[still]]
+              p1b Kangaskhan -- IT FAILED
+      p2a Gastrodon used Earth Power -> p1a: Conkeldurr
+      p1a Conkeldurr used Drain Punch -> p2b: Diancie
+              p2b Diancie -- critical hit
+      p2b Diancie used Diamond Storm -> p1b: Kangaskhan  [[spread] p1a,p1b]
+              p1a Conkeldurr -- critical hit
+              p2b Diancie def 1 rose
+      after p1: Conkeldurr 305/401, Kangaskhan-Mega 284/414
+      after p2: Gastrodon-East 400/426, Diancie 116/304
+
+  Turn 15
+    p1 mcts: switch 6, move 4   (slot0 Conkeldurr -> Jellicent)
+      search (51000 visits): switch jellicent;protect,1 1193v 402 | drainpunch,1;protect,1 1095v 362 | drainpunch,1;switch jellicent 987v 319 | switch jellicent;crunch,0 982v 317
+    p2 greedy: move 1 2, move 1
+      p1a <- Jellicent comes in (403/403)
+      p1b Kangaskhan used Protect
+      p2a Gastrodon used Earth Power -> p1b: Kangaskhan
+              p1b Kangaskhan -- move: Protect
+      p2b Diancie used Diamond Storm -> p1a: Jellicent  [[spread] p1a]
+              p1b Kangaskhan -- move: Protect
+              p2b Diancie def 1 rose
+      after p1: Jellicent 259/403, Kangaskhan-Mega 284/414
+      after p2: Gastrodon-East 400/426, Diancie 116/304
+
+  Turn 16
+    p1 mcts: move 3, move 4
+      search (43000 visits): recover,0;protect,1 2387v 1042 | recover,0;fakeout,1 2019v 865 | willowisp,1;protect,1 1276v 513 | recover,0;seismictoss,1 1254v 502
+    p2 greedy: move 1 1, move 1
+      p1b Kangaskhan used Protect  [[still]]
+              p1b Kangaskhan -- IT FAILED
+      p1a Jellicent used Recover
+      p2a Gastrodon used Earth Power -> p1a: Jellicent
+      p2b Diancie used Diamond Storm -> p1b: Kangaskhan  [[spread] p1a,p1b]
+              p2b Diancie def 1 rose
+      after p1: Jellicent 174/403, Kangaskhan-Mega 166/414
+      after p2: Gastrodon-East 400/426, Diancie 116/304
+
+  Turn 17
+    p1 mcts: move 3, move 4
+      search (47000 visits): recover,0;protect,1 4897v 2039 | recover,0;switch conkeldurr 2470v 961 | recover,0;seismictoss,1 1887v 709 | recover,0;crunch,0 1810v 676
+    p2 greedy: move 1 2, move 1
+      p1b Kangaskhan used Protect
+      p1a Jellicent used Recover
+      p2a Gastrodon used Earth Power -> p1b: Kangaskhan
+              p1b Kangaskhan -- move: Protect
+      p2b Diancie used Diamond Storm -> p1a: Jellicent  [[spread] p1a]
+              p1b Kangaskhan -- move: Protect
+              p2b Diancie def 1 rose
+      after p1: Jellicent 238/403, Kangaskhan-Mega 166/414
+      after p2: Gastrodon-East 400/426, Diancie 116/304
+
+  Turn 18
+    p1 mcts: move 3, move 4
+      search (50000 visits): recover,0;protect,1 4177v 1966 | willowisp,1;protect,1 2319v 1035 | recover,0;switch conkeldurr 1965v 860 | recover,0;seismictoss,0 1832v 795
+    p2 greedy: move 1 2, move 1
+      p1b Kangaskhan used Protect
+      p1a Jellicent used Recover
+      p2a Gastrodon used Earth Power -> p1b: Kangaskhan
+              p1b Kangaskhan -- move: Protect
+      p2b Diancie used Diamond Storm -> p1a: Jellicent  [[spread] p1a]
+              p1b Kangaskhan -- move: Protect
+              p2b Diancie def 1 rose
+      after p1: Jellicent 256/403, Kangaskhan-Mega 166/414
+      after p2: Gastrodon-East 400/426, Diancie 116/304
+
+  Turn 19
+    p1 mcts: move 3, move 4
+      search (51000 visits): recover,0;protect,1 4829v 2258 | willowisp,1;protect,1 2512v 1110 | recover,0;switch conkeldurr 1844v 786 | shadowball,1;protect,1 1819v 774
+    p2 greedy: move 1 2, move 1
+      p1b Kangaskhan used Protect  [[still]]
+              p1b Kangaskhan -- IT FAILED
+      p1a Jellicent used Recover
+      p2a Gastrodon used Earth Power -> p1b: Kangaskhan
+      p2b Diancie used Diamond Storm -> p1b: Kangaskhan  [[spread] p1a,p1b]
+      p1b Kangaskhan fainted
+      after p1: Jellicent 246/403, Kangaskhan-Mega 0/414
+      after p2: Gastrodon-East 400/426, Diancie 116/304
+
+  Turn 20
+      p1b <- Conkeldurr comes in (305/401)
+      after p1: Jellicent 246/403, Conkeldurr 305/401
+      after p2: Gastrodon-East 400/426, Diancie 116/304
+
+  Turn 21
+    p1 mcts: move 3, move 2 1
+      search (7000 visits): recover,0;knockoff,0 279v 132 | recover,0;drainpunch,0 273v 128 | willowisp,1;drainpunch,0 211v 92 | willowisp,1;knockoff,0 210v 91
+    p2 greedy: move 1 1, move 1
+      p1a Jellicent used Recover
+      p2a Gastrodon used Earth Power -> p1a: Jellicent
+      p1b Conkeldurr used Knock Off -> p2a: Gastrodon
+              p2a Gastrodon used up its Rocky Helmet
+      p2b Diancie used Diamond Storm -> p1b: Conkeldurr  [[spread] p1a,p1b]
+      after p1: Jellicent 187/403, Conkeldurr 178/401
+      after p2: Gastrodon-East 277/426, Diancie 116/304
+
+  Turn 22
+    p1 mcts: move 3, move 1 1
+      search (11000 visits): recover,0;drainpunch,0 856v 461 | recover,0;icepunch,0 493v 242 | recover,0;knockoff,0 419v 199 | recover,0;drainpunch,1 392v 183
+    p2 greedy: move 1 2, move 1
+      p1a Jellicent used Recover
+      p2a Gastrodon used Earth Power -> p1b: Conkeldurr
+      p1b Conkeldurr used Drain Punch -> p2a: Gastrodon
+      p2b Diancie used Diamond Storm -> p1b: Conkeldurr  [[spread] p1a,p1b]
+      after p1: Jellicent 239/403, Conkeldurr 116/401
+      after p2: Gastrodon-East 148/426, Diancie 116/304
+
+  Turn 23
+    p1 mcts: move 4 1, move 4 1
+      search (15000 visits): shadowball,0;machpunch,0 983v 549 | recover,0;drainpunch,0 649v 341 | shadowball,0;drainpunch,0 445v 218 | recover,0;icepunch,0 432v 210
+    p2 greedy: move 1 2, move 2 2
+      p1b Conkeldurr used Mach Punch -> p2a: Gastrodon
+      p1a Jellicent used Shadow Ball -> p2a: Gastrodon
+      p2a Gastrodon fainted
+      p2b Diancie used Moonblast -> p1b: Conkeldurr
+      p1b Conkeldurr fainted
+      after p1: Jellicent 239/403, Conkeldurr 0/401
+      after p2: Gastrodon-East 0/426, Diancie 116/304
+
+  Turn 24
+      p2a <- Mew comes in (386/386)
+      after p1: Jellicent 239/403, Conkeldurr 0/401
+      after p2: Mew 338/386, Diancie 116/304
+
+  Turn 25
+    p1 mcts: move 3, pass
+      search (53000 visits): recover,0;No Move 34091v 11091 | shadowball,0;No Move 8399v 2517 | willowisp,0;No Move 3775v 1046 | shadowball,1;No Move 2973v 788
+    p2 greedy: move 1 1, move 2 1
+      p2a Mew used Overheat -> p1a: Jellicent
+              p2a Mew spa 2 fell
+      p1a Jellicent used Recover
+      p2b Diancie used Moonblast -> p1a: Jellicent
+      after p1: Jellicent 309/403, Conkeldurr 0/401
+      after p2: Mew 338/386, Diancie 116/304
+
+  Turn 26
+    p1 mcts: move 4 1, pass
+      search (42000 visits): shadowball,0;No Move 19211v 7368 | recover,0;No Move 9885v 3661 | willowisp,0;No Move 5067v 1784 | shadowball,1;No Move 3083v 1029
+    p2 greedy: move 1 1, move 2 1
+      p2a Mew used Overheat -> p1a: Jellicent
+              p1a Jellicent -- critical hit
+              p2a Mew spa 2 fell
+      p1a Jellicent used Shadow Ball -> p2a: Mew
+              p2a Mew spd 1 fell
+      p2b Diancie used Moonblast -> p1a: Jellicent
+      after p1: Jellicent 173/403, Conkeldurr 0/401
+      after p2: Mew 176/386, Diancie 116/304
+
+  Turn 27
+    p1 mcts: move 3, pass
+      search (41000 visits): recover,0;No Move 35779v 13322 | willowisp,0;No Move 2140v 635 | taunt,1;No Move 726v 164 | willowisp,1;No Move 701v 156
+    p2 greedy: move 1 1, move 2 1
+      p2a Mew used Overheat -> p1a: Jellicent
+              p2a Mew spa 2 fell
+      p1a Jellicent used Recover
+      p2b Diancie used Moonblast -> p1a: Jellicent
+              p1a Jellicent spa 1 fell
+      after p1: Jellicent 275/403, Conkeldurr 0/401
+      after p2: Mew 176/386, Diancie 116/304
+
+  Turn 28
+    p1 mcts: move 3, pass
+      search (45000 visits): recover,0;No Move 22413v 7563 | willowisp,1;No Move 6059v 1871 | willowisp,0;No Move 4937v 1493 | shadowball,1;No Move 4813v 1451
+    p2 greedy: move 1 1, move 2 1
+      p2a Mew used Overheat -> p1a: Jellicent
+      p1a Jellicent used Recover
+      p2b Diancie used Moonblast -> p1a: Jellicent
+              p1a Jellicent spa 1 fell
+      after p1: Jellicent 313/403, Conkeldurr 0/401
+      after p2: Mew 176/386, Diancie 116/304
+
+  Turn 29
+    p1 mcts: move 4 1, pass
+      search (37000 visits): shadowball,0;No Move 10728v 3990 | recover,0;No Move 9244v 3407 | willowisp,1;No Move 5963v 2128 | willowisp,0;No Move 5365v 1897
+    p2 greedy: move 1 1, move 2 1
+      p2a Mew used Overheat -> p1a: Jellicent
+      p1a Jellicent used Shadow Ball -> p2a: Mew
+      p2b Diancie used Moonblast -> p1a: Jellicent
+      after p1: Jellicent 222/403, Conkeldurr 0/401
+      after p2: Mew 48/386, Diancie 116/304
+
+  Turn 30
+    p1 mcts: move 3, pass
+      search (47000 visits): recover,0;No Move 39156v 13075 | willowisp,1;No Move 2694v 722 | shadowball,1;No Move 2193v 566 | taunt,0;No Move 1059v 227
+    p2 greedy: move 1 1, move 2 1
+      p2a Mew used Overheat -> p1a: Jellicent
+      p1a Jellicent used Recover
+      p2b Diancie used Moonblast -> p1a: Jellicent
+              p1a Jellicent -- critical hit
+      after p1: Jellicent 273/403, Conkeldurr 0/401
+      after p2: Mew 48/386, Diancie 116/304
+
+  Turn 31
+    p1 mcts: move 3, pass
+      search (48000 visits): recover,0;No Move 30813v 9502 | willowisp,1;No Move 7408v 2080 | shadowball,1;No Move 4902v 1316 | taunt,0;No Move 1738v 388
+    p2 greedy: move 1 1, move 2 1
+      p2a Mew used Overheat -> p1a: Jellicent
+      p1a Jellicent used Recover
+      p2b Diancie used Moonblast -> p1a: Jellicent
+      after p1: Jellicent 324/403, Conkeldurr 0/401
+      after p2: Mew 48/386, Diancie 116/304
+
+  Turn 32
+    p1 mcts: move 3, pass
+      search (46000 visits): recover,0;No Move 16287v 4707 | willowisp,1;No Move 13635v 3895 | shadowball,1;No Move 9237v 2560 | taunt,0;No Move 2397v 553
+    p2 greedy: move 1 1, move 2 1
+      p2a Mew used Overheat -> p1a: Jellicent
+      p1a Jellicent used Recover
+      p2b Diancie used Moonblast -> p1a: Jellicent
+      after p1: Jellicent 312/403, Conkeldurr 0/401
+      after p2: Mew 48/386, Diancie 116/304
+
+  Turn 33
+    p1 mcts: move 3, pass
+      search (54000 visits): recover,0;No Move 21454v 5668 | willowisp,1;No Move 16264v 4220 | shadowball,1;No Move 9479v 2352 | willowisp,0;No Move 2047v 395
+    p2 greedy: move 3, move 2 1
+      p2a Mew used Snarl -> p1a: Jellicent
+              p1a Jellicent spa 1 fell
+      p1a Jellicent used Recover
+      p2b Diancie used Moonblast -> p1a: Jellicent
+      after p1: Jellicent 312/403, Conkeldurr 0/401
+      after p2: Mew 48/386, Diancie 116/304
+
+  Turn 34
+    p1 mcts: move 3, pass
+      search (39000 visits): recover,0;No Move 17296v 4807 | willowisp,1;No Move 10091v 2695 | shadowball,1;No Move 5889v 1490 | taunt,0;No Move 1810v 371
+    p2 greedy: move 3, move 2 1
+      p2a Mew used Snarl -> p1a: Jellicent
+              p1a Jellicent spa 1 fell
+      p1a Jellicent used Recover
+      p2b Diancie used Moonblast -> p1a: Jellicent
+      after p1: Jellicent 312/403, Conkeldurr 0/401
+      after p2: Mew 48/386, Diancie 116/304
+
+  Turn 35
+    p1 mcts: move 1 2, pass
+      search (40000 visits): willowisp,1;No Move 14895v 4298 | recover,0;No Move 13954v 4009 | shadowball,1;No Move 5501v 1453 | taunt,0;No Move 1977v 440
+    p2 greedy: move 3, move 2 1
+      p2a Mew used Snarl -> p1a: Jellicent
+              p1a Jellicent spa 1 fell
+      p1a Jellicent used Will-O-Wisp -> p2b: Diancie  [[miss]]
+              p1a Jellicent -- MISSED
+      p2b Diancie used Moonblast -> p1a: Jellicent
+              p1a Jellicent spa 1 fell
+      after p1: Jellicent 200/403, Conkeldurr 0/401
+      after p2: Mew 48/386, Diancie 116/304
+
+  Turn 36
+    p1 mcts: move 3, pass
+      search (60000 visits): recover,0;No Move 33999v 7400 | willowisp,1;No Move 10338v 2036 | shadowball,1;No Move 9229v 1793 | willowisp,0;No Move 2127v 301
+    p2 greedy: move 3, move 2 1
+      p2a Mew used Snarl -> p1a: Jellicent
+      p1a Jellicent used Recover
+      p2b Diancie used Moonblast -> p1a: Jellicent
+      after p1: Jellicent 292/403, Conkeldurr 0/401
+      after p2: Mew 48/386, Diancie 116/304
+
+  Turn 37
+    p1 mcts: move 1 2, pass
+      search (90000 visits): willowisp,1;No Move 28866v 4111 | shadowball,1;No Move 23243v 3236 | recover,0;No Move 16962v 2271 | willowisp,0;No Move 6464v 718
+    p2 greedy: move 3, move 2 1
+      p2a Mew used Snarl -> p1a: Jellicent  [[miss]]
+              p2a Mew -- MISSED
+      p1a Jellicent used Will-O-Wisp -> p2b: Diancie
+              p2b Diancie is now brn
+      p2b Diancie used Moonblast -> p1a: Jellicent
+              p1a Jellicent -- critical hit
+      after p1: Jellicent 165/403, Conkeldurr 0/401
+      after p2: Mew 48/386, Diancie 78/304
+
+  Turn 38
+    p1 mcts: move 4 2, pass
+      search (192000 visits): shadowball,1;No Move 98455v 8323 | recover,0;No Move 55015v 4358 | willowisp,1;No Move 13356v 769 | willowisp,0;No Move 9009v 435
+    p2 greedy: move 3, move 2 1
+      p2a Mew used Snarl -> p1a: Jellicent
+      p1a Jellicent used Shadow Ball -> p2b: Diancie
+      p2b Diancie used Moonblast -> p1a: Jellicent
+      after p1: Jellicent 57/403, Conkeldurr 0/401
+      after p2: Mew 48/386, Diancie 24/304
+
+  Turn 39
+    p1 mcts: move 3, pass
+      search (506000 visits): recover,0;No Move 221705v 4896 | shadowball,1;No Move 100432v 1687 | willowisp,1;No Move 52504v 557 | willowisp,0;No Move 38827v 270
+    p2 greedy: move 3, move 2 1
+      p2a Mew used Snarl -> p1a: Jellicent  [[miss]]
+              p2a Mew -- MISSED
+      p1a Jellicent used Recover
+      p2b Diancie used Moonblast -> p1a: Jellicent
+      p2b Diancie fainted
+      after p1: Jellicent 180/403, Conkeldurr 0/401
+      after p2: Mew 48/386, Diancie 0/304
+
+  Turn 40
+    p1 mcts: move 4 1, pass
+      search (1961000 visits): shadowball,0;No Move 1393057v 1393057 | willowisp,0;No Move 416590v 415016 | taunt,0;No Move 151353v 149949
+    p2 greedy: move 3, pass
+      p2a Mew used Snarl -> p1a: Jellicent
+      p1a Jellicent used Shadow Ball -> p2a: Mew
+      p2a Mew fainted
+      after p1: Jellicent 160/403, Conkeldurr 0/401
+      after p2: Mew 0/386, Diancie 0/304
+
+  RESULT: p1 wins

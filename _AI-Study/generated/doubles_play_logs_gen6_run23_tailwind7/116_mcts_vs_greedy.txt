@@ -1,0 +1,134 @@
+battle 116   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: BUREIZAKIN: Blaziken-Mega, Bisharp, Amoonguss, Raichu, Scrafty, Kyurem-Black
+  p2: ORAS Doubles OU: Hariyama, Kyurem-Black, Heatran, Mawile, Amoonguss, Jellicent
+
+  Turn 1
+    p1 mcts: move 3, move 4
+      search (28000 visits): swordsdance,0;protect,1 414v 61 | highjumpkick,1;protect,1 397v 57 | highjumpkick,1;ironhead,1 372v 51 | swordsdance,0;knockoff,1 368v 50
+    p2 greedy: move 2 1, move 1 1
+      p1b Bisharp used Protect
+      p1a Blaziken used Swords Dance
+              p1a Blaziken atk 2 rose
+      p2b Kyurem used Ice Beam -> p1a: Blaziken
+      p2a Hariyama used Close Combat -> p1a: Blaziken
+              p2a Hariyama def 1 fell
+              p2a Hariyama spd 1 fell
+      p1a Blaziken fainted
+      after p1: Blaziken-Mega 0/301, Bisharp 272/272
+      after p2: Hariyama 429/429, Kyurem-Black 432/432
+
+  Turn 2
+      p1a <- Amoonguss comes in (432/432)
+      after p1: Amoonguss 432/432, Bisharp 272/272
+      after p2: Hariyama 429/429, Kyurem-Black 432/432
+
+  Turn 3
+    p1 mcts: switch 4, switch 5   (slot0 Amoonguss -> Raichu; slot1 Bisharp -> Scrafty)
+      search (32000 visits): switch raichu;switch scrafty 13296v 13032 | switch scrafty;knockoff,1 387v 121 | protect,0;knockoff,1 386v 121 | protect,0;ironhead,0 363v 111
+    p2 greedy: move 2 1, move 1 1
+      p1b <- Scrafty comes in (334/334)
+              p2a Hariyama atk 1 fell
+              p2b Kyurem atk 1 fell
+      p1a <- Raichu comes in (262/262)
+      p2b Kyurem used Ice Beam -> p1a: Raichu
+      p2a Hariyama used Close Combat -> p1a: Raichu
+              p2a Hariyama def 1 fell
+              p2a Hariyama spd 1 fell
+      p1a Raichu fainted
+      after p1: Raichu 0/262, Scrafty 334/334
+      after p2: Hariyama 429/429, Kyurem-Black 432/432
+
+  Turn 4
+      p1a <- Amoonguss comes in (432/432)
+      after p1: Amoonguss 432/432, Scrafty 334/334
+      after p2: Hariyama 429/429, Kyurem-Black 432/432
+
+  Turn 5
+    p1 mcts: move 2 2, move 2 2
+      search (34000 visits): spore,1;drainpunch,1 555v 27 | spore,0;drainpunch,1 545v 25 | protect,0;knockoff,0 545v 25 | switch bisharp;drainpunch,1 541v 25
+    p2 greedy: move 2 1, move 1 1
+      p2b Kyurem used Ice Beam -> p1a: Amoonguss
+      p1b Scrafty used Drain Punch -> p2b: Kyurem
+              p2b Kyurem -- critical hit
+      p2a Hariyama used Close Combat -> p1a: Amoonguss
+              p2a Hariyama def 1 fell
+              p2a Hariyama spd 1 fell
+      p1a Amoonguss fainted
+      after p1: Amoonguss 0/432, Scrafty 334/334
+      after p2: Hariyama 358/429, Kyurem-Black 139/432
+
+  Turn 6
+      p1a <- Bisharp comes in (272/272)
+      after p1: Bisharp 272/272, Scrafty 334/334
+      after p2: Hariyama 358/429, Kyurem-Black 139/432
+
+  Turn 7
+    p1 mcts: move 3 2, move 1 2
+      search (24000 visits): ironhead,1;fakeout,1 871v 251 | ironhead,1;drainpunch,1 800v 225 | protect,0;drainpunch,1 782v 218 | knockoff,1;fakeout,1 592v 151
+    p2 greedy: move 2 1, move 1 1
+      p1b Scrafty used Fake Out  [[still]]
+              p1b Scrafty -- IT FAILED
+      p2b Kyurem used Ice Beam -> p1a: Bisharp
+              p1a Bisharp is now frz
+              p1a Bisharp is cured of frz
+      p1a Bisharp used Iron Head -> p2b: Kyurem
+      p2b Kyurem fainted
+      p2a Hariyama used Close Combat -> p1a: Bisharp
+              p2a Hariyama def 1 fell
+              p2a Hariyama spd 1 fell
+      p1a Bisharp fainted
+      after p1: Bisharp 0/272, Scrafty 334/334
+      after p2: Hariyama 358/429, Kyurem-Black 0/432
+
+  Turn 8
+      p2b <- Heatran comes in (386/386)
+      p1a <- Kyurem-Black comes in (391/391)
+      after p1: Kyurem-Black 391/391, Scrafty 334/334
+      after p2: Hariyama 358/429, Heatran 386/386
+
+  Turn 9
+    p1 mcts: move 3 2, move 3 1
+      search (34000 visits): earthpower,1;knockoff,0 1460v 288 | fusionbolt,1;knockoff,0 1138v 207 | icebeam,0;knockoff,1 1009v 175 | icebeam,1;knockoff,0 1007v 174
+    p2 greedy: move 2 1, move 1
+      p1a Kyurem used Earth Power -> p2b: Heatran
+              p2b Heatran used up its Shuca Berry
+              p2b Heatran used up its Shuca Berry
+      p1b Scrafty used Knock Off -> p2a: Hariyama
+              p2a Hariyama used up its Assault Vest
+      p2b Heatran used Heat Wave -> p1b: Scrafty  [[spread] p1a,p1b]
+      p2a Hariyama used Close Combat -> p1a: Kyurem
+              p2a Hariyama def 1 fell
+              p2a Hariyama spd 1 fell
+      p1a Kyurem fainted
+      after p1: Kyurem-Black 0/391, Scrafty 216/334
+      after p2: Hariyama 70/429, Heatran 198/386
+
+  Turn 10
+    p1 mcts: pass, move 2 1
+      search (55000 visits): No Move;drainpunch,0 15527v 3021 | No Move;knockoff,0 13836v 2662 | No Move;drainpunch,1 12222v 2320 | No Move;fakeout,0 6447v 1121
+    p2 greedy: move 2 2, move 1
+      p1b Scrafty used Drain Punch -> p2a: Hariyama
+      p2a Hariyama fainted
+      p2b Heatran used Heat Wave -> p1b: Scrafty
+      after p1: Kyurem-Black 0/391, Scrafty 85/334
+      after p2: Hariyama 0/429, Heatran 198/386
+
+  Turn 11
+      p2a <- Mawile comes in (304/304)
+              p1b Scrafty atk 1 fell
+      after p1: Kyurem-Black 0/391, Scrafty 85/334
+      after p2: Mawile 304/304, Heatran 198/386
+
+  Turn 12
+    p1 mcts: pass, move 2 2
+      search (279000 visits): No Move;drainpunch,1 111116v 5586 | No Move;fakeout,1 66257v 3037 | No Move;fakeout,0 33055v 1248 | No Move;knockoff,1 21918v 690
+    p2 greedy: move 1 2, move 1
+      p1b Scrafty used Drain Punch -> p2b: Heatran
+      p2b Heatran used Heat Wave -> p1b: Scrafty
+      p2a Mawile used Play Rough -> p1b: Scrafty
+              p1b Scrafty -- critical hit
+      p1b Scrafty fainted
+      after p1: Kyurem-Black 0/391, Scrafty 0/334
+      after p2: Mawile 304/304, Heatran 58/386
+
+  RESULT: p2 wins

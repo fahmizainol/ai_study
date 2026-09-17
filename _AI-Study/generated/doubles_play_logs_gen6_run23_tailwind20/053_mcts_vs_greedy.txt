@@ -1,0 +1,170 @@
+battle 53   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: Copy of tvalks: Kangaskhan-Mega, Volcanion, Thundurus, Sylveon, Landorus-Therian, Bisharp
+  p2: ORAS Doubles OU: Metagross, Breloom, Rotom-Wash, Landorus-Therian, Talonflame, Hydreigon
+
+  Turn 1
+    p1 mcts: switch 3, move 1   (slot0 Kangaskhan-Mega -> Thundurus)
+      search (34000 visits): switch thundurus;heatwave,0 1088v 931 | fakeout,1;heatwave,0 934v 789 | lowkick,1;heatwave,0 818v 682 | seismictoss,0;heatwave,0 727v 599
+    p2 greedy: move 1 1, move 1 1
+      p1a <- Thundurus comes in (362/362)
+      p2b Breloom used Mach Punch -> p1a: Thundurus
+      p2a Metagross used Iron Head -> p1a: Thundurus
+      p1b Volcanion used Heat Wave -> p2a: Metagross  [[spread] p2a,p2b]
+      p2a Metagross fainted
+      p2b Breloom fainted
+      after p1: Thundurus 200/362, Volcanion 364/364
+      after p2: Metagross 0/305, Breloom 0/261
+
+  Turn 2
+      p2b <- Landorus-Therian comes in (330/330)
+      p2a <- Rotom-Wash comes in (304/304)
+              p1a Thundurus atk 1 fell
+              p1b Volcanion atk 1 fell
+      after p1: Thundurus 200/362, Volcanion 364/364
+      after p2: Rotom-Wash 304/304, Landorus-Therian 330/330
+
+  Turn 3
+    p1 mcts: switch 4, switch 5   (slot0 Thundurus -> Sylveon; slot1 Volcanion -> Landorus-Therian)
+      search (15000 visits): switch sylveon;switch landorustherian 430v 305 | hiddenpower,1;switch landorustherian 332v 226 | thunderbolt,0;switch landorustherian 326v 221 | thunderwave,0;switch landorustherian 313v 210
+    p2 greedy: move 1 1, move 4 1
+      p1a <- Sylveon comes in (394/394)
+      p1b <- Landorus-Therian comes in (319/319)
+              p2a Rotom atk 1 fell
+              p2b Landorus atk 1 fell
+      p2b Landorus used Superpower -> p1a: Sylveon
+              p2b Landorus atk 1 fell
+              p2b Landorus def 1 fell
+      p2a Rotom used Hydro Pump -> p1a: Sylveon
+      after p1: Sylveon 227/394, Landorus-Therian 319/319
+      after p2: Rotom-Wash 304/304, Landorus-Therian 330/330
+
+  Turn 4
+    p1 mcts: move 3, move 4 2
+      search (24000 visits): calmmind,0;uturn,1 1750v 841 | hypervoice,0;uturn,0 1433v 673 | switch thundurus;uturn,0 1074v 484 | hypervoice,0;uturn,1 932v 411
+    p2 greedy: move 1 1, move 4 1
+      p1b Landorus used U-turn -> p2b: Landorus
+              p2b Landorus -- critical hit
+      after p1: Sylveon 227/394, Landorus-Therian 319/319
+      after p2: Rotom-Wash 304/304, Landorus-Therian 220/330
+
+  Turn 5
+      p1b <- Kangaskhan-Mega comes in (414/414)
+      p2b Landorus used Superpower -> p1a: Sylveon
+              p2b Landorus atk 1 fell
+              p2b Landorus def 1 fell
+      p2a Rotom used Hydro Pump -> p1a: Sylveon  [[miss]]
+              p2a Rotom -- MISSED
+      p1a Sylveon used Calm Mind
+              p1a Sylveon spa 1 rose
+              p1a Sylveon spd 1 rose
+      after p1: Sylveon 193/394, Kangaskhan-Mega 414/414
+      after p2: Rotom-Wash 304/304, Landorus-Therian 220/330
+
+  Turn 6
+    p1 mcts: move 3, move 3 1
+      search (35000 visits): calmmind,0;seismictoss,0 1964v 915 | calmmind,0;lowkick,0 1559v 707 | calmmind,0;crunch,0 1423v 637 | switch thundurus;switch volcanion 1188v 518
+    p2 greedy: move 1 1, move 4 1
+      p2b Landorus used Superpower -> p1a: Sylveon
+              p2b Landorus atk 1 fell
+              p2b Landorus def 1 fell
+      p1b Kangaskhan used Seismic Toss -> p2a: Rotom
+      p2a Rotom used Hydro Pump -> p1a: Sylveon  [[miss]]
+              p2a Rotom -- MISSED
+      p1a Sylveon used Calm Mind
+              p1a Sylveon spa 1 rose
+              p1a Sylveon spd 1 rose
+      after p1: Sylveon 168/394, Kangaskhan-Mega 414/414
+      after p2: Rotom-Wash 204/304, Landorus-Therian 220/330
+
+  Turn 7
+    p1 mcts: move 2, switch 6   (slot1 Kangaskhan-Mega -> Bisharp)
+      search (49000 visits): substitute,0;switch bisharp 2539v 1409 | hypervoice,0;switch bisharp 1752v 939 | switch thundurus;switch volcanion 1712v 915 | calmmind,0;crunch,0 1613v 857
+    p2 greedy: move 1 1, move 4 1
+      p1b <- Bisharp comes in (271/271)
+      p2b Landorus used Superpower -> p1a: Sylveon
+              p2b Landorus atk 1 fell
+              p2b Landorus def 1 fell
+      p2a Rotom used Hydro Pump -> p1a: Sylveon
+      p1a Sylveon used Substitute
+              p1a Sylveon -- IT FAILED
+      after p1: Sylveon 87/394, Bisharp 271/271
+      after p2: Rotom-Wash 204/304, Landorus-Therian 220/330
+
+  Turn 8
+    p1 mcts: move 1, move 4
+      search (22000 visits): hypervoice,0;protect,1 1331v 552 | hypervoice,0;switch volcanion 1092v 439 | hypervoice,0;suckerpunch,1 1083v 435 | hypervoice,0;ironhead,1 961v 378
+    p2 greedy: move 1 1, move 4 1
+      p1b Bisharp used Protect
+      p2b Landorus used Superpower -> p1a: Sylveon
+              p2b Landorus atk 1 fell
+              p2b Landorus def 1 fell
+      p2a Rotom used Hydro Pump -> p1a: Sylveon
+      p1a Sylveon fainted
+      after p1: Sylveon 0/394, Bisharp 271/271
+      after p2: Rotom-Wash 204/304, Landorus-Therian 220/330
+
+  Turn 9
+      p1a <- Landorus-Therian comes in (319/319)
+              p2a Rotom atk 1 fell
+              p2b Landorus atk 0 fell
+      after p1: Landorus-Therian 319/319, Bisharp 271/271
+      after p2: Rotom-Wash 204/304, Landorus-Therian 220/330
+
+  Turn 10
+    p1 mcts: move 4 2, move 2 2
+      search (25000 visits): uturn,1;knockoff,1 961v 288 | uturn,1;ironhead,1 663v 179 | uturn,1;knockoff,0 608v 160 | uturn,0;knockoff,1 572v 147
+    p2 greedy: move 1 1, move 4 1
+      p1a Landorus used U-turn -> p2b: Landorus
+      after p1: Landorus-Therian 319/319, Bisharp 271/271
+      after p2: Rotom-Wash 204/304, Landorus-Therian 32/330
+
+  Turn 11
+      p1a <- Thundurus comes in (200/362)
+      p2b Landorus used Superpower -> p1a: Thundurus
+              p2b Landorus def 1 fell
+      p2b Landorus fainted
+      p1b Bisharp used Knock Off -> p2a: Rotom
+              p2a Rotom used up its Sitrus Berry
+      p2a Rotom fainted
+      after p1: Thundurus 170/362, Bisharp 244/271
+      after p2: Rotom-Wash 0/304, Landorus-Therian 0/330
+
+  Turn 12
+      p2b <- Hydreigon comes in (379/379)
+      p2a <- Talonflame comes in (297/297)
+      after p1: Thundurus 170/362, Bisharp 244/271
+      after p2: Talonflame 297/297, Hydreigon 379/379
+
+  Turn 13
+    p1 mcts: move 1 1, move 4
+      search (25000 visits): thunderbolt,0;protect,1 1165v 771 | thunderbolt,0;switch landorustherian 673v 417 | thunderwave,0;protect,1 479v 281 | thunderbolt,0;switch volcanion 478v 281
+    p2 greedy: move 1 1, move 1 1
+      p1b Bisharp used Protect
+      p2a Talonflame used Brave Bird -> p1a: Thundurus
+      p1a Thundurus used Thunderbolt -> p2a: Talonflame
+      p2a Talonflame fainted
+      p2b Hydreigon used Draco Meteor -> p1a: Thundurus
+              p1a Thundurus -- critical hit
+              p2b Hydreigon spa 2 fell
+      p1a Thundurus fainted
+      after p1: Thundurus 0/362, Bisharp 244/271
+      after p2: Talonflame 0/297, Hydreigon 342/379
+
+  Turn 14
+      p1a <- Landorus-Therian comes in (319/319)
+              p2b Hydreigon atk 1 fell
+      after p1: Landorus-Therian 319/319, Bisharp 244/271
+      after p2: Talonflame 0/297, Hydreigon 342/379
+
+  Turn 15
+    p1 mcts: move 2 2, move 2 2
+      search (47000 visits): superpower,1;knockoff,1 1935v 943 | superpower,1;ironhead,1 1932v 941 | switch kangaskhanmega;knockoff,1 1897v 922 | uturn,1;ironhead,1 1882v 914
+    p2 greedy: pass, move 1 2
+      p1a Landorus used Superpower -> p2b: Hydreigon
+              p1a Landorus atk 1 fell
+              p1a Landorus def 1 fell
+      p2b Hydreigon fainted
+      after p1: Landorus-Therian 319/319, Bisharp 244/271
+      after p2: Talonflame 0/297, Hydreigon 0/379
+
+  RESULT: p1 wins

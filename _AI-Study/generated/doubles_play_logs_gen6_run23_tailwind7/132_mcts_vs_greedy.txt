@@ -1,0 +1,100 @@
+battle 132   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: Whims Garde CB Lando: Gardevoir-Mega, Landorus-Therian, Whimsicott, Volcanion, Thundurus, Terrakion
+  p2: ORAS Doubles OU: Mawile-Mega, Dusclops, Sylveon, Amoonguss, Chandelure, Scrafty
+
+  Turn 1
+    p1 mcts: move 2 2, switch 5   (slot1 Landorus-Therian -> Thundurus)
+      search (41000 visits): psychic,1;switch thundurus 702v 136 | disable,1;switch thundurus 696v 135 | hypervoice,0;switch thundurus 693v 134 | disable,0;switch whimsicott 688v 132
+    p2 greedy: move 3 1, move 1
+      p1b <- Thundurus comes in (299/299)
+      p1a Gardevoir used Psychic -> p2b: Dusclops
+      p2a Mawile used Play Rough -> p1a: Gardevoir
+      p2b Dusclops used Trick Room
+      after p1: Gardevoir-Mega 124/277, Thundurus 299/299
+      after p2: Mawile-Mega 303/303, Dusclops 196/284
+
+  Turn 2
+    p1 mcts: switch 5, move 2 2   (slot0 Gardevoir-Mega -> Landorus-Therian)
+      search (46000 visits): switch landorustherian;knockoff,1 1173v 249 | switch landorustherian;wildcharge,0 831v 155 | switch landorustherian;switch volcanion 719v 126 | switch landorustherian;switch terrakion 719v 126
+    p2 greedy: move 3 1, move 1
+      p1a <- Landorus-Therian comes in (319/319)
+              p2a Mawile atk 1 fell
+              p2b Dusclops atk 1 fell
+      p2a Mawile used Play Rough -> p1a: Landorus
+      p1b Thundurus used Knock Off -> p2b: Dusclops
+              p2b Dusclops used up its Eviolite
+      p2b Dusclops used Trick Room
+      after p1: Landorus-Therian 240/319, Thundurus 299/299
+      after p2: Mawile-Mega 303/303, Dusclops 106/284
+
+  Turn 3
+    p1 mcts: move 1, move 1 1
+      search (54000 visits): earthquake,0;wildcharge,0 514v 38 | uturn,0;wildcharge,0 508v 37 | stoneedge,0;wildcharge,0 507v 37 | uturn,1;wildcharge,0 504v 36
+    p2 greedy: move 3 1, move 1
+      p1b Thundurus used Wild Charge -> p2a: Mawile
+      p1a Landorus used Earthquake -> p2b: Dusclops  [[spread] p2a,p2b]
+              p1b Thundurus -- IMMUNE
+              p2a Mawile -- critical hit
+      p2a Mawile fainted
+      p2b Dusclops fainted
+      after p1: Landorus-Therian 240/319, Thundurus 267/299
+      after p2: Mawile-Mega 0/303, Dusclops 0/284
+
+  Turn 4
+      p2a <- Sylveon comes in (345/345)
+      p2b <- Amoonguss comes in (432/432)
+      after p1: Landorus-Therian 240/319, Thundurus 267/299
+      after p2: Sylveon 345/345, Amoonguss 432/432
+
+  Turn 5
+    p1 mcts: move 1, move 1 1
+      search (28000 visits): earthquake,0;wildcharge,0 10516v 6148 | earthquake,0;switch gardevoirmega 2446v 1314 | earthquake,0;knockoff,1 1727v 898 | earthquake,0;knockoff,0 1135v 561
+    p2 greedy: move 1, move 3 1
+      p1b Thundurus used Wild Charge -> p2a: Sylveon
+      p1a Landorus used Earthquake -> p2b: Amoonguss  [[spread] p2a,p2b]
+              p1b Thundurus -- IMMUNE
+      p2a Sylveon fainted
+      p2b Amoonguss used Giga Drain -> p1a: Landorus
+      after p1: Landorus-Therian 141/319, Thundurus 225/299
+      after p2: Sylveon 0/345, Amoonguss 263/432
+
+  Turn 6
+      p2a <- Chandelure comes in (324/324)
+      after p1: Landorus-Therian 141/319, Thundurus 225/299
+      after p2: Chandelure 324/324, Amoonguss 263/432
+
+  Turn 7
+    p1 mcts: move 1, move 2 1
+      search (30000 visits): earthquake,0;knockoff,0 4487v 2693 | earthquake,0;wildcharge,0 3353v 1976 | earthquake,0;switch gardevoirmega 1354v 737 | earthquake,0;knockoff,1 1334v 725
+    p2 greedy: move 2, move 3 1
+      p1b Thundurus used Knock Off -> p2a: Chandelure
+              p2a Chandelure used up its Focus Sash
+      p1a Landorus used Earthquake -> p2b: Amoonguss  [[spread] p2a,p2b]
+              p1b Thundurus -- IMMUNE
+      p2a Chandelure fainted
+      p2b Amoonguss used Giga Drain -> p1a: Landorus
+      after p1: Landorus-Therian 41/319, Thundurus 225/299
+      after p2: Chandelure 0/324, Amoonguss 87/432
+
+  Turn 8
+      p2a <- Scrafty comes in (333/333)
+              p1a Landorus atk 1 fell
+              p1b Thundurus atk 1 fell
+              p1b Thundurus atk 2 rose
+      after p1: Landorus-Therian 41/319, Thundurus 225/299
+      after p2: Scrafty 333/333, Amoonguss 87/432
+
+  Turn 9
+    p1 mcts: move 1, move 1 1
+      search (41000 visits): earthquake,0;wildcharge,0 4369v 3554 | earthquake,0;superpower,0 4005v 3246 | earthquake,0;skydrop,0 3569v 2877 | earthquake,0;skydrop,1 2896v 2310
+    p2 greedy: move 3 1, move 3 1
+      p1b Thundurus used Wild Charge -> p2a: Scrafty
+              p2a Scrafty -- critical hit
+      p1a Landorus used Earthquake -> p2a: Scrafty  [[spread] p2a,p2b]
+              p1b Thundurus -- IMMUNE
+      p2a Scrafty fainted
+      p2b Amoonguss fainted
+      after p1: Landorus-Therian 41/319, Thundurus 151/299
+      after p2: Scrafty 0/333, Amoonguss 0/432
+
+  RESULT: p1 wins

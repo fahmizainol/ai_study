@@ -1,0 +1,227 @@
+battle 32   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: Untitled 509: Charizard-Mega-Y, Hitmontop, Thundurus, Tyrantrum, Cresselia, Garchomp
+  p2: Untitled 1002: Diancie-Mega, Genesect, Talonflame, Landorus-Therian, Hoopa-Unbound, Gastrodon-East
+
+  Turn 1
+    p1 mcts: move 2 2, switch 3   (slot1 Hitmontop -> Thundurus)
+      search (23000 visits): overheat,1;switch thundurus 2238v 1914 | overheat,1;fakeout,1 2082v 1773 | overheat,1;switch tyrantrum 1251v 1030 | overheat,1;switch cresselia 1246v 1025
+    p2 greedy: move 1, move 1 1
+      p1b <- Thundurus comes in (299/299)
+      p2b Genesect used Ice Beam -> p1a: Charizard
+      p2a Diancie used Diamond Storm -> p1a: Charizard  [[spread] p1a,p1b]
+              p2a Diancie def 1 rose
+      p1a Charizard fainted
+      after p1: Charizard-Mega-Y 0/297, Thundurus 59/299
+      after p2: Diancie-Mega 287/287, Genesect 283/283
+
+  Turn 2
+      p1a <- Hitmontop comes in (304/304)
+              p2a Diancie atk 1 fell
+              p2b Genesect atk 1 fell
+      after p1: Hitmontop 304/304, Thundurus 59/299
+      after p2: Diancie-Mega 287/287, Genesect 283/283
+
+  Turn 3
+    p1 mcts: move 1 1, move 3 2
+      search (34000 visits): fakeout,0;thunderwave,1 2480v 1640 | switch cresselia;flashcannon,1 1491v 829 | switch cresselia;thunderwave,1 1221v 664 | switch cresselia;flashcannon,0 1174v 635
+    p2 greedy: move 1, move 1 2
+      p1a Hitmontop used Fake Out -> p2a: Diancie
+      p1b Thundurus used Thunder Wave -> p2b: Genesect
+              p2b Genesect is now par
+              p2b Genesect COULD NOT MOVE (par)
+              p2a Diancie COULD NOT MOVE (flinch)
+      after p1: Hitmontop 304/304, Thundurus 59/299
+      after p2: Diancie-Mega 276/287, Genesect 283/283
+
+  Turn 4
+    p1 mcts: switch 5, move 2 1   (slot0 Hitmontop -> Cresselia)
+      search (22000 visits): switch cresselia;flashcannon,0 955v 516 | switch cresselia;thunderbolt,1 623v 315 | switch tyrantrum;flashcannon,0 544v 268 | switch cresselia;flashcannon,1 453v 215
+    p2 greedy: move 1, move 1 2
+      p1a <- Cresselia comes in (444/444)
+      p1b Thundurus used Flash Cannon -> p2a: Diancie
+      p2a Diancie fainted
+              p2b Genesect COULD NOT MOVE (par)
+      after p1: Cresselia 444/444, Thundurus 30/299
+      after p2: Diancie-Mega 0/287, Genesect 283/283
+
+  Turn 5
+      p2a <- Talonflame comes in (359/359)
+      after p1: Cresselia 444/444, Thundurus 30/299
+      after p2: Talonflame 359/359, Genesect 283/283
+
+  Turn 6
+    p1 mcts: move 1, move 1 1
+      search (21000 visits): calmmind,0;thunderbolt,0 2611v 1810 | icywind,0;thunderbolt,0 1560v 1041 | psyshock,1;thunderbolt,0 794v 494 | psyshock,0;thunderbolt,0 693v 423
+    p2 greedy: move 1 2, move 1 2
+      p2a Talonflame used Brave Bird -> p1b: Thundurus
+      p1b Thundurus fainted
+      p1a Cresselia used Calm Mind
+              p1a Cresselia spa 1 rose
+              p1a Cresselia spd 1 rose
+      p2b Genesect used Ice Beam -> p1a: Cresselia
+      after p1: Cresselia 395/444, Thundurus 0/299
+      after p2: Talonflame 349/359, Genesect 283/283
+
+  Turn 7
+      p1b <- Tyrantrum comes in (305/305)
+      after p1: Cresselia 395/444, Tyrantrum 305/305
+      after p2: Talonflame 349/359, Genesect 283/283
+
+  Turn 8
+    p1 mcts: move 2, move 2
+      search (14000 visits): icywind,0;rockslide,0 942v 584 | icywind,0;headsmash,1 690v 411 | icywind,0;headsmash,0 653v 386 | calmmind,0;headsmash,1 524v 299
+    p2 greedy: move 1 1, move 1 1
+      p2a Talonflame used Brave Bird -> p1a: Cresselia
+      p1b Tyrantrum used Rock Slide -> p2a: Talonflame  [[spread] p2a]
+              p1b Tyrantrum -- MISSED
+      p2a Talonflame fainted
+      p1a Cresselia used Icy Wind -> p2b: Genesect
+              p2b Genesect spe 1 fell
+              p2b Genesect COULD NOT MOVE (par)
+      after p1: Cresselia 187/444, Tyrantrum 305/305
+      after p2: Talonflame 0/359, Genesect 248/283
+
+  Turn 9
+      p2a <- Landorus-Therian comes in (382/382)
+              p1a Cresselia atk 1 fell
+              p1b Tyrantrum atk 1 fell
+      after p1: Cresselia 187/444, Tyrantrum 305/305
+      after p2: Landorus-Therian 382/382, Genesect 248/283
+
+  Turn 10
+    p1 mcts: move 4, switch 5   (slot1 Tyrantrum -> Hitmontop)
+      search (28000 visits): moonlight,0;switch hitmontop 3248v 1230 | icywind,0;switch hitmontop 2699v 1002 | calmmind,0;switch hitmontop 2550v 940 | psyshock,0;switch hitmontop 2196v 794
+    p2 greedy: move 1, move 1 1
+      p1b <- Hitmontop comes in (304/304)
+              p2a Landorus atk 1 fell
+              p2b Genesect atk 1 fell
+      p2a Landorus used Earthquake -> p1b: Hitmontop  [[spread] p2b,p1b]
+              p1a Cresselia -- IMMUNE
+      p1a Cresselia used Moonlight
+      p2b Genesect used Ice Beam -> p1a: Cresselia
+              p1a Cresselia is now frz
+      after p1: Cresselia 358/444, Hitmontop 205/304
+      after p2: Landorus-Therian 382/382, Genesect 139/283
+
+  Turn 11
+    p1 mcts: move 4, move 4 -1
+      search (26000 visits): moonlight,0;helpinghand,0 1028v 313 | calmmind,0;wideguard,1 860v 251 | psyshock,1;helpinghand,0 817v 235 | calmmind,0;fakeout,0 805v 230
+    p2 greedy: move 1, move 1 2
+      p1b Hitmontop used Helping Hand -> p1a: Cresselia
+      p2a Landorus used Earthquake -> p1a: Cresselia  [[spread] p2b,p1b]
+              p1a Cresselia -- IMMUNE
+              p1a Cresselia is cured of frz
+      p1a Cresselia used Moonlight
+      p2b Genesect used Ice Beam -> p1b: Hitmontop
+      after p1: Cresselia 444/444, Hitmontop 23/304
+      after p2: Landorus-Therian 382/382, Genesect 39/283
+
+  Turn 12
+    p1 mcts: move 1, move 2 1
+      search (28000 visits): calmmind,0;closecombat,0 801v 196 | icywind,0;helpinghand,0 795v 194 | icywind,0;switch garchomp 773v 187 | icywind,0;closecombat,0 755v 181
+    p2 greedy: move 1, move 1 2
+      p2a Landorus used Earthquake -> p1b: Hitmontop  [[spread] p2b,p1b]
+              p1a Cresselia -- IMMUNE
+      p2b Genesect fainted
+      p1b Hitmontop fainted
+      p1a Cresselia used Calm Mind
+              p1a Cresselia spa 1 rose
+              p1a Cresselia spd 1 rose
+      after p1: Cresselia 444/444, Hitmontop 0/304
+      after p2: Landorus-Therian 382/382, Genesect 0/283
+
+  Turn 13
+      p2b <- Hoopa-Unbound comes in (301/301)
+      p1b <- Tyrantrum comes in (305/305)
+      after p1: Cresselia 444/444, Tyrantrum 305/305
+      after p2: Landorus-Therian 382/382, Hoopa-Unbound 301/301
+
+  Turn 14
+    p1 mcts: move 2, move 1 2
+      search (43000 visits): icywind,0;headsmash,1 6152v 3525 | icywind,0;rockslide,0 5673v 3237 | icywind,0;switch garchomp 3079v 1689 | icywind,0;superpower,1 2767v 1507
+    p2 greedy: move 1, move 1 1
+      p1b Tyrantrum used Head Smash -> p2b: Hoopa
+      p2b Hoopa fainted
+      p2a Landorus used Earthquake -> p1b: Tyrantrum  [[spread] p1b]
+              p1a Cresselia -- IMMUNE
+      p1a Cresselia used Icy Wind -> p2a: Landorus
+              p2a Landorus spe 1 fell
+      after p1: Cresselia 444/444, Tyrantrum 159/305
+      after p2: Landorus-Therian 38/382, Hoopa-Unbound 0/301
+
+  Turn 15
+      p2b <- Gastrodon-East comes in (426/426)
+      after p1: Cresselia 444/444, Tyrantrum 159/305
+      after p2: Landorus-Therian 38/382, Gastrodon-East 426/426
+
+  Turn 16
+    p1 mcts: move 2, move 1 1
+      search (61000 visits): icywind,0;headsmash,0 46514v 27326 | icywind,0;switch garchomp 3738v 1990 | icywind,0;headsmash,1 2277v 1163 | calmmind,0;switch garchomp 1404v 679
+    p2 greedy: move 1, move 1 2
+      p1b Tyrantrum used Head Smash -> p2a: Landorus
+      p2a Landorus fainted
+      p1a Cresselia used Icy Wind -> p2b: Gastrodon
+              p2b Gastrodon spe 1 fell
+      p2b Gastrodon used Earth Power -> p1b: Tyrantrum
+      p1b Tyrantrum fainted
+      after p1: Cresselia 444/444, Tyrantrum 0/305
+      after p2: Landorus-Therian 0/382, Gastrodon-East 320/426
+
+  Turn 17
+      p1b <- Garchomp comes in (357/357)
+      after p1: Cresselia 444/444, Garchomp 357/357
+      after p2: Landorus-Therian 0/382, Gastrodon-East 320/426
+
+  Turn 18
+    p1 mcts: move 1, move 1
+      search (76000 visits): calmmind,0;swordsdance,1 13179v 6760 | icywind,1;swordsdance,1 8075v 4049 | psyshock,1;swordsdance,1 8044v 4033 | moonlight,0;swordsdance,1 7702v 3852
+    p2 greedy: pass, move 1 1
+      p1b Garchomp used Swords Dance
+              p1b Garchomp atk 2 rose
+      p1a Cresselia used Calm Mind
+              p1a Cresselia spa 1 rose
+              p1a Cresselia spd 1 rose
+      p2b Gastrodon used Earth Power -> p1a: Cresselia
+              p1a Cresselia -- IMMUNE
+      after p1: Cresselia 444/444, Garchomp 357/357
+      after p2: Landorus-Therian 0/382, Gastrodon-East 320/426
+
+  Turn 19
+    p1 mcts: move 1, move 1
+      search (79000 visits): calmmind,0;swordsdance,1 8510v 3364 | psyshock,1;swordsdance,1 6650v 2584 | icywind,1;swordsdance,1 6629v 2575 | moonlight,0;swordsdance,1 6620v 2571
+    p2 greedy: pass, move 1 1
+      p1b Garchomp used Swords Dance
+              p1b Garchomp atk 2 rose
+      p1a Cresselia used Calm Mind
+              p1a Cresselia spa 1 rose
+              p1a Cresselia spd 1 rose
+      p2b Gastrodon used Earth Power -> p1a: Cresselia
+              p1a Cresselia -- IMMUNE
+      after p1: Cresselia 444/444, Garchomp 357/357
+      after p2: Landorus-Therian 0/382, Gastrodon-East 320/426
+
+  Turn 20
+    p1 mcts: move 1, move 1
+      search (80000 visits): calmmind,0;swordsdance,1 6559v 2116 | psyshock,1;swordsdance,1 6379v 2053 | moonlight,0;swordsdance,1 6137v 1968 | icywind,1;swordsdance,1 6019v 1927
+    p2 greedy: pass, move 1 1
+      p1b Garchomp used Swords Dance
+              p1b Garchomp atk 2 rose
+      p1a Cresselia used Calm Mind
+              p1a Cresselia spa 1 rose
+              p1a Cresselia spd 1 rose
+      p2b Gastrodon used Earth Power -> p1a: Cresselia
+              p1a Cresselia -- IMMUNE
+      after p1: Cresselia 444/444, Garchomp 357/357
+      after p2: Landorus-Therian 0/382, Gastrodon-East 320/426
+
+  Turn 21
+    p1 mcts: move 1, move 2
+      search (78000 visits): calmmind,0;earthquake,1 5896v 1794 | moonlight,0;earthquake,1 5788v 1758 | moonlight,0;dragonclaw,1 5744v 1743 | icywind,1;earthquake,1 5729v 1738
+    p2 greedy: pass, move 1 1
+      p1b Garchomp used Earthquake -> p2b: Gastrodon  [[spread] p2b]
+              p1a Cresselia -- IMMUNE
+      p2b Gastrodon fainted
+      after p1: Cresselia 444/444, Garchomp 357/357
+      after p2: Landorus-Therian 0/382, Gastrodon-East 0/426
+
+  RESULT: p1 wins

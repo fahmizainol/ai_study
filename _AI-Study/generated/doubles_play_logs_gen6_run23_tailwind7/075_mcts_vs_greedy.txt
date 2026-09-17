@@ -1,0 +1,256 @@
+battle 75   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: Untitled 572: Kyurem-Black, Sableye-Mega, Ferrothorn, Landorus-Therian, Chansey, Volcanion
+  p2: ORAS Doubles OU: Politoed, Kingdra, Amoonguss, Diancie-Mega, Scrafty, Heatran
+
+  Turn 1
+    p1 mcts: move 2, move 2
+      search (7000 visits): icywind,0;calmmind,1 147v 111 | icebeam,1;snarl,0 125v 91 | fusionbolt,1;calmmind,1 122v 88 | icebeam,1;calmmind,1 121v 88
+    p2 greedy: move 3 1, move 2 1
+      p1b Sableye used Calm Mind
+              p1b Sableye spa 1 rose
+              p1b Sableye spd 1 rose
+      p2b Kingdra used Draco Meteor -> p1a: Kyurem
+              p2b Kingdra spa 2 fell
+      p1a Kyurem used Icy Wind -> p2a: Politoed  [[spread] p2a,p2b]
+              p2a Politoed spe 1 fell
+              p2b Kingdra spe 1 fell
+      p2a Politoed used Scald -> p1a: Kyurem
+      after p1: Kyurem-Black 45/454, Sableye-Mega 304/304
+      after p2: Politoed 356/384, Kingdra 209/292
+
+  Turn 2
+    p1 mcts: switch 6, move 2   (slot0 Kyurem-Black -> Volcanion)
+      search (25000 visits): switch volcanion;calmmind,1 9445v 6387 | switch chansey;snarl,0 573v 301 | icywind,0;calmmind,1 537v 279 | switch ferrothorn;calmmind,1 528v 273
+    p2 greedy: move 3 1, move 2 1
+      p1a <- Volcanion comes in (364/364)
+      p1b Sableye used Calm Mind
+              p1b Sableye spa 1 rose
+              p1b Sableye spd 1 rose
+      p2b Kingdra used Draco Meteor -> p1a: Volcanion
+              p2b Kingdra spa 2 fell
+      p2a Politoed used Scald -> p1a: Volcanion
+      after p1: Volcanion 356/364, Sableye-Mega 304/304
+      after p2: Politoed 356/384, Kingdra 180/292
+
+  Turn 3
+    p1 mcts: move 1 2, move 3
+      search (17000 visits): steameruption,1;snarl,0 365v 75 | earthpower,1;calmmind,1 304v 56 | steameruption,0;snarl,0 296v 53 | steameruption,0;calmmind,1 288v 51
+    p2 greedy: move 3 1, move 2 1
+      p2b Kingdra used Draco Meteor -> p1a: Volcanion
+              p2b Kingdra spa 2 fell
+      p1a Volcanion used Steam Eruption -> p2b: Kingdra
+              p2b Kingdra is now brn
+      p2a Politoed used Scald -> p1a: Volcanion
+      p1b Sableye used Snarl -> p2a: Politoed  [[spread] p2a,p2b]
+              p2a Politoed spa 1 fell
+      p2b Kingdra fainted
+      after p1: Volcanion 364/364, Sableye-Mega 304/304
+      after p2: Politoed 284/384, Kingdra 0/292
+
+  Turn 4
+      p2b <- Amoonguss comes in (432/432)
+      after p1: Volcanion 364/364, Sableye-Mega 304/304
+      after p2: Politoed 284/384, Amoonguss 432/432
+
+  Turn 5
+    p1 mcts: move 1 2, move 3
+      search (24000 visits): steameruption,1;snarl,0 813v 675 | switch ferrothorn;snarl,0 749v 617 | steameruption,1;calmmind,1 662v 538 | steameruption,1;recover,1 626v 506
+    p2 greedy: move 3 1, move 1 1
+      p1a Volcanion used Steam Eruption -> p2b: Amoonguss
+              p2b Amoonguss is now brn
+      p2a Politoed used Scald -> p1a: Volcanion
+              p1a Volcanion -- IMMUNE
+      p2b Amoonguss used Giga Drain -> p1a: Volcanion
+      p1b Sableye used Snarl -> p2a: Politoed  [[spread] p2a,p2b]
+              p2a Politoed spa 1 fell
+              p2b Amoonguss spa 1 fell
+              p2b Amoonguss used up its Sitrus Berry
+      after p1: Volcanion 309/364, Sableye-Mega 304/304
+      after p2: Politoed 211/384, Amoonguss 253/432
+
+  Turn 6
+    p1 mcts: switch 5, move 4   (slot0 Volcanion -> Chansey)
+      search (27000 visits): switch chansey;recover,1 4816v 3526 | steameruption,0;willowisp,0 1906v 1176 | earthpower,0;willowisp,1 1171v 690 | switch ferrothorn;calmmind,1 926v 530
+    p2 greedy: move 3 1, move 1 1
+      p1a <- Chansey comes in (643/643)
+      p1b Sableye used Recover  [[still]]
+              p1b Sableye -- IT FAILED
+      p2a Politoed used Scald -> p1a: Chansey
+      p2b Amoonguss used Giga Drain -> p1a: Chansey
+      after p1: Chansey 579/643, Sableye-Mega 304/304
+      after p2: Politoed 211/384, Amoonguss 213/432
+
+  Turn 7
+    p1 mcts: switch 3, move 3   (slot0 Chansey -> Ferrothorn)
+      search (33000 visits): switch ferrothorn;snarl,0 609v 547 | switch kyuremblack;snarl,0 593v 531 | switch landorustherian;snarl,0 591v 530 | softboiled,0;snarl,0 541v 480
+    p2 greedy: move 3 1, move 1 1
+      p1a <- Ferrothorn comes in (352/352)
+      p2a Politoed used Scald -> p1a: Ferrothorn
+      p2b Amoonguss used Giga Drain -> p1a: Ferrothorn
+      p1b Sableye used Snarl -> p2b: Amoonguss  [[spread] p2a,p2b]
+              p2a Politoed spa 1 fell
+              p2b Amoonguss spa 1 fell
+      after p1: Ferrothorn 319/352, Sableye-Mega 304/304
+      after p2: Politoed 141/384, Amoonguss 71/432
+
+  Turn 8
+    p1 mcts: move 2 1, move 2
+      search (45000 visits): leechseed,0;calmmind,1 3902v 2665 | switch kyuremblack;recover,1 3835v 2641 | leechseed,1;willowisp,1 3088v 2092 | leechseed,1;willowisp,0 3020v 2050
+    p2 greedy: move 3 1, move 1 1
+      p1b Sableye used Calm Mind
+              p1b Sableye spa 1 rose
+              p1b Sableye spd 1 rose
+      p2a Politoed used Scald -> p1a: Ferrothorn
+      p2b Amoonguss used Giga Drain -> p1a: Ferrothorn
+      p1a Ferrothorn used Leech Seed -> p2a: Politoed
+              p2a Politoed gained move: Leech Seed
+      after p1: Ferrothorn 342/352, Sableye-Mega 304/304
+      after p2: Politoed 93/384, Amoonguss 20/432
+
+  Turn 9
+    p1 mcts: move 1, move 2
+      search (43000 visits): spikes,0;calmmind,1 3422v 2097 | spikes,0;recover,1 2520v 1511 | gyroball,1;snarl,0 2263v 1346 | gyroball,1;calmmind,1 2041v 1203
+    p2 greedy: move 3 1, move 1 1
+      p1b Sableye used Calm Mind
+              p1b Sableye spa 1 rose
+              p1b Sableye spd 1 rose
+      p2a Politoed used Scald -> p1a: Ferrothorn
+      p2b Amoonguss used Giga Drain -> p1a: Ferrothorn
+      p1a Ferrothorn used Spikes -> p2b: Amoonguss
+      -sidestart p2: B Spikes
+      p2b Amoonguss fainted
+      after p1: Ferrothorn 352/352, Sableye-Mega 304/304
+      after p2: Politoed 45/384, Amoonguss 0/432
+
+  Turn 10
+      p2b <- Diancie-Mega comes in (241/241)
+      after p1: Ferrothorn 352/352, Sableye-Mega 304/304
+      after p2: Politoed 45/384, Diancie-Mega 211/241
+
+  Turn 11
+    p1 mcts: move 1, move 3
+      search (21000 visits): spikes,0;snarl,0 1923v 973 | gyroball,1;recover,1 1325v 642 | gyroball,1;snarl,0 1138v 541 | protect,0;snarl,0 1092v 516
+    p2 greedy: move 3 1, move 2
+      p2b Diancie used Diamond Storm -> p1b: Sableye  [[spread] p1a,p1b]
+      p2a Politoed used Scald -> p1a: Ferrothorn
+              p1a Ferrothorn -- critical hit
+      p1b Sableye used Snarl -> p2a: Politoed  [[spread] p2a,p2b]
+      p2a Politoed fainted
+      p1a Ferrothorn used Spikes -> p2b: Diancie
+      -sidestart p2: B Spikes
+      after p1: Ferrothorn 253/352, Sableye-Mega 195/304
+      after p2: Politoed 0/384, Diancie-Mega 156/241
+
+  Turn 12
+      p2a <- Scrafty comes in (334/334)
+      after p1: Ferrothorn 253/352, Sableye-Mega 195/304
+      after p2: Scrafty 279/334, Diancie-Mega 156/241
+
+  Turn 13
+    p1 mcts: move 3, move 4
+      search (23000 visits): protect,0;recover,1 730v 262 | gyroball,1;recover,1 645v 225 | protect,0;snarl,0 596v 203 | spikes,0;recover,1 580v 196
+    p2 greedy: move 2 2, move 2
+      p1a Ferrothorn used Protect
+      p1b Sableye used Recover
+      p2b Diancie used Diamond Storm -> p1a: Ferrothorn  [[spread] p1b]
+              p1a Ferrothorn -- move: Protect
+              p2b Diancie def 1 rose
+      p2a Scrafty used Drain Punch -> p1b: Sableye
+              p1b Sableye -- IMMUNE
+      after p1: Ferrothorn 253/352, Sableye-Mega 183/304
+      after p2: Scrafty 279/334, Diancie-Mega 156/241
+
+  Turn 14
+    p1 mcts: move 3, move 3
+      search (25000 visits): protect,0;snarl,0 660v 211 | spikes,0;recover,1 640v 203 | spikes,0;snarl,0 589v 182 | protect,0;recover,1 585v 181
+    p2 greedy: move 2 2, move 2
+      p1a Ferrothorn used Protect  [[still]]
+              p1a Ferrothorn -- IT FAILED
+      p2b Diancie used Diamond Storm -> p1b: Sableye  [[spread] p1a,p1b]
+      p2a Scrafty used Drain Punch -> p1b: Sableye
+              p1b Sableye -- IMMUNE
+      p1b Sableye used Snarl -> p2b: Diancie  [[spread] p2a,p2b]
+              p2a Scrafty -- critical hit
+              p2a Scrafty spa 1 fell
+      after p1: Ferrothorn 202/352, Sableye-Mega 72/304
+      after p2: Scrafty 240/334, Diancie-Mega 102/241
+
+  Turn 15
+    p1 mcts: move 4 2, move 1 1
+      search (29000 visits): gyroball,1;willowisp,0 578v 107 | gyroball,1;snarl,0 534v 95 | protect,0;recover,1 526v 93 | gyroball,1;recover,1 525v 92
+    p2 greedy: move 2 2, move 2
+      p1b Sableye used Will-O-Wisp -> p2a: Scrafty
+              p2a Scrafty is now brn
+      p2b Diancie used Diamond Storm -> p1b: Sableye  [[spread] p1a,p1b]
+              p2b Diancie def 1 rose
+      p1b Sableye fainted
+      p2a Scrafty used Drain Punch -> p1a: Ferrothorn
+      p1a Ferrothorn used Gyro Ball -> p2b: Diancie
+      p2b Diancie fainted
+      after p1: Ferrothorn 43/352, Sableye-Mega 0/304
+      after p2: Scrafty 123/334, Diancie-Mega 0/241
+
+  Turn 16
+      p2b <- Heatran comes in (386/386)
+      p1b <- Chansey comes in (579/643)
+      after p1: Ferrothorn 43/352, Chansey 579/643
+      after p2: Scrafty 123/334, Heatran 322/386
+
+  Turn 17
+    p1 mcts: switch 5, switch 4   (slot0 Ferrothorn -> Volcanion; slot1 Chansey -> Landorus-Therian)
+      search (41000 visits): switch volcanion;switch landorustherian 2970v 1491 | switch volcanion;softboiled,1 1899v 913 | switch volcanion;seismictoss,0 1637v 774 | switch volcanion;healpulse,0 1588v 748
+    p2 greedy: move 2 1, move 1 1
+      p1b <- Landorus-Therian comes in (367/367)
+              p2a Scrafty atk 1 fell
+              p2b Heatran atk 1 fell
+      p1a <- Volcanion comes in (309/364)
+      p2b Heatran used Earth Power -> p1a: Volcanion
+      p2a Scrafty used Drain Punch -> p1a: Volcanion
+      after p1: Volcanion 45/364, Landorus-Therian 367/367
+      after p2: Scrafty 69/334, Heatran 284/386
+
+  Turn 18
+    p1 mcts: move 3 2, move 1 1
+      search (42000 visits): earthpower,1;uturn,0 1249v 518 | steameruption,0;earthpower,1 1140v 465 | heatwave,0;earthpower,1 1091v 442 | earthpower,0;earthpower,1 1048v 422
+    p2 greedy: move 2 1, move 1 1
+      p1b Landorus used U-turn -> p2a: Scrafty
+      after p1: Volcanion 45/364, Landorus-Therian 367/367
+      after p2: Scrafty 13/334, Heatran 284/386
+
+  Turn 19
+      p1b <- Chansey comes in (579/643)
+      p2b Heatran used Earth Power -> p1a: Volcanion
+      p1a Volcanion fainted
+      p2a Scrafty used Drain Punch -> p1b: Chansey
+              p1b Chansey -- critical hit
+      after p1: Volcanion 0/364, Chansey 262/643
+      after p2: Scrafty 98/334, Heatran 246/386
+
+  Turn 20
+      p1a <- Landorus-Therian comes in (367/367)
+              p2a Scrafty atk 1 fell
+              p2b Heatran atk 1 fell
+      after p1: Landorus-Therian 367/367, Chansey 262/643
+      after p2: Scrafty 98/334, Heatran 246/386
+
+  Turn 21
+    p1 mcts: move 2 2, move 2
+      search (43000 visits): earthpower,1;softboiled,1 3466v 1248 | earthpower,1;toxic,0 1742v 571 | earthpower,1;healpulse,0 1742v 571 | earthpower,1;seismictoss,1 1719v 562
+    p2 greedy: move 2 2, move 1 2
+      p1a Landorus used Earth Power -> p2b: Heatran
+      p2b Heatran fainted
+      p2a Scrafty used Drain Punch -> p1b: Chansey
+      p1b Chansey used Soft-Boiled
+      after p1: Landorus-Therian 367/367, Chansey 483/643
+      after p2: Scrafty 75/334, Heatran 0/386
+
+  Turn 22
+    p1 mcts: move 2 1, move 1 1
+      search (373000 visits): earthpower,0;seismictoss,0 27015v 27015 | switch ferrothorn;seismictoss,0 27015v 27015 | earthpower,0;switch kyuremblack 26947v 26946 | earthpower,0;switch ferrothorn 26840v 26837
+    p2 greedy: move 2 2, pass
+      p1a Landorus used Earth Power -> p2a: Scrafty
+      p2a Scrafty fainted
+      after p1: Landorus-Therian 367/367, Chansey 483/643
+      after p2: Scrafty 0/334, Heatran 0/386
+
+  RESULT: p1 wins

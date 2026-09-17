@@ -1,0 +1,118 @@
+battle 10   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: ORAS Doubles OU: Charizard-Mega-Y, Venusaur, Aegislash, Zapdos, Keldeo, Landorus-Therian
+  p2: ORAS Doubles OU: Gardevoir-Mega, Weavile, Breloom, Gyarados, Aegislash, Rotom-Wash
+
+  Turn 1
+    p1 mcts: move 1, switch 6   (slot1 Venusaur -> Landorus-Therian)
+      search (18000 visits): heatwave,0;switch landorustherian 1526v 1029 | heatwave,0;switch aegislash 1322v 880 | heatwave,0;protect,1 1289v 857 | heatwave,0;switch zapdos 555v 333
+    p2 greedy: move 3 1, move 1 1
+      p1b <- Landorus-Therian comes in (319/319)
+              p2a Gardevoir atk 1 fell
+              p2b Weavile atk 1 fell
+      p2b Weavile used Icicle Crash -> p1a: Charizard
+      p2a Gardevoir used Focus Blast -> p1a: Charizard
+      p1a Charizard used Heat Wave -> p2a: Gardevoir  [[spread] p2a,p2b]
+      p2b Weavile fainted
+      after p1: Charizard-Mega-Y 149/359, Landorus-Therian 319/319
+      after p2: Gardevoir-Mega 164/279, Weavile 0/281
+
+  Turn 2
+      p2b <- Breloom comes in (261/261)
+      after p1: Charizard-Mega-Y 149/359, Landorus-Therian 319/319
+      after p2: Gardevoir-Mega 164/279, Breloom 261/261
+
+  Turn 3
+    p1 mcts: move 1, move 1
+      search (26000 visits): heatwave,0;earthquake,0 803v 376 | heatwave,0;switch aegislash 749v 347 | protect,0;protect,1 715v 328 | protect,0;earthquake,0 710v 326
+    p2 greedy: move 3 1, move 2 1
+      p2b Breloom used Mach Punch -> p1a: Charizard
+      p2a Gardevoir used Focus Blast -> p1a: Charizard
+              p1a Charizard -- critical hit
+      p1a Charizard fainted
+      p1b Landorus used Earthquake -> p2a: Gardevoir  [[spread] p2a,p2b]
+      p2a Gardevoir fainted
+      after p1: Charizard-Mega-Y 0/359, Landorus-Therian 288/319
+      after p2: Gardevoir-Mega 0/279, Breloom 139/261
+
+  Turn 4
+      p2a <- Gyarados comes in (394/394)
+      p1a <- Aegislash comes in (324/324)
+              p1a Aegislash atk 1 fell
+              p1b Landorus atk 1 fell
+      after p1: Aegislash 324/324, Landorus-Therian 288/319
+      after p2: Gyarados 394/394, Breloom 139/261
+
+  Turn 5
+    p1 mcts: switch 6, switch 4   (slot0 Aegislash -> Venusaur; slot1 Landorus-Therian -> Zapdos)
+      search (13000 visits): switch venusaur;switch zapdos 505v 329 | switch zapdos;switch venusaur 431v 274 | shadowball,1;switch zapdos 343v 209 | flashcannon,1;switch zapdos 338v 205
+    p2 greedy: move 4 2, move 2 2
+      p1b <- Zapdos comes in (384/384)
+      p1a <- Venusaur comes in (319/319)
+      p2b Breloom used Mach Punch -> p1b: Zapdos
+      p2a Gyarados used Stone Edge -> p1b: Zapdos
+      after p1: Venusaur 319/319, Zapdos 120/384
+      after p2: Gyarados 394/394, Breloom 139/261
+
+  Turn 6
+    p1 mcts: move 2 2, move 1 1
+      search (23000 visits): sludgebomb,1;thunderbolt,0 1225v 890 | gigadrain,1;thunderbolt,0 1076v 773 | switch aegislash;thunderbolt,0 662v 450 | sleeppowder,0;thunderbolt,0 593v 398
+    p2 greedy: move 4 2, move 2 2
+      p2b Breloom used Mach Punch -> p1b: Zapdos
+              p2b Breloom is now par
+      p1b Zapdos used Thunderbolt -> p2a: Gyarados
+      p2a Gyarados fainted
+      p1a Venusaur used Sludge Bomb -> p2b: Breloom
+              p2b Breloom -- critical hit
+      p2b Breloom fainted
+      after p1: Venusaur 288/319, Zapdos 66/384
+      after p2: Gyarados 0/394, Breloom 0/261
+
+  Turn 7
+      p2b <- Rotom-Wash comes in (304/304)
+      p2a <- Aegislash comes in (324/324)
+      after p1: Venusaur 288/319, Zapdos 66/384
+      after p2: Aegislash 324/324, Rotom-Wash 304/304
+
+  Turn 8
+    p1 mcts: move 1 2, move 4
+      search (6000 visits): gigadrain,1;roost,1 195v 148 | gigadrain,1;tailwind,1 164v 120 | gigadrain,1;thunderbolt,0 161v 117 | switch aegislash;roost,1 150v 107
+    p2 greedy: move 1 2, move 1 2
+      p1b Zapdos used Roost
+      p1a Venusaur used Giga Drain -> p2b: Rotom
+              p2b Rotom used up its Sitrus Berry
+      p2b Rotom used Hydro Pump -> p1b: Zapdos  [[miss]]
+              p2b Rotom -- MISSED
+      p2a Aegislash used Shadow Ball -> p1b: Zapdos
+      after p1: Venusaur 288/319, Zapdos 78/384
+      after p2: Aegislash-Blade 324/324, Rotom-Wash 97/304
+
+  Turn 9
+    p1 mcts: move 2 2, move 1 1
+      search (34000 visits): sludgebomb,1;thunderbolt,0 5349v 4818 | gigadrain,1;thunderbolt,0 5118v 4603 | gigadrain,0;thunderbolt,0 2560v 2235 | sleeppowder,1;thunderbolt,0 2026v 1746
+    p2 greedy: move 1 2, move 1 2
+      p1b Zapdos used Thunderbolt -> p2a: Aegislash
+      p1a Venusaur used Sludge Bomb -> p2b: Rotom
+      p2b Rotom fainted
+      p2a Aegislash used Shadow Ball -> p1b: Zapdos
+      p1b Zapdos fainted
+      after p1: Venusaur 257/319, Zapdos 0/384
+      after p2: Aegislash-Blade 88/324, Rotom-Wash 0/304
+
+  Turn 10
+      p1b <- Landorus-Therian comes in (288/319)
+              p2a Aegislash atk 1 fell
+      after p1: Venusaur 257/319, Landorus-Therian 288/319
+      after p2: Aegislash-Blade 88/324, Rotom-Wash 0/304
+
+  Turn 11
+    p1 mcts: move 1 1, move 1
+      search (723000 visits): gigadrain,0;earthquake,0 43159v 43159 | gigadrain,0;stoneedge,0 43159v 43159 | gigadrain,0;knockoff,0 43158v 43158 | gigadrain,0;protect,1 43158v 43158
+    p2 greedy: move 1 1, pass
+      p1b Landorus used Earthquake -> p2a: Aegislash  [[spread] p1a,p2a]
+              p1a Venusaur -- critical hit
+      p1a Venusaur fainted
+      p2a Aegislash fainted
+      after p1: Venusaur 0/319, Landorus-Therian 257/319
+      after p2: Aegislash 0/324, Rotom-Wash 0/304
+
+  RESULT: p1 wins

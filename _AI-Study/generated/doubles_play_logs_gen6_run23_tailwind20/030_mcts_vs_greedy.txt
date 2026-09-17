@@ -1,0 +1,222 @@
+battle 30   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: ORAS Doubles OU: Charizard-Mega-Y, Venusaur, Terrakion, Cresselia, Sylveon, Sableye
+  p2: Untitled 661: Gengar-Mega, Thundurus, Landorus, Kyurem-Black, Arcanine, Keldeo-Resolute
+
+  Turn 1
+    p1 mcts: move 1, move 1 2
+      search (13000 visits): heatwave,0;sludgebomb,1 655v 423 | heatwave,0;sleeppowder,0 359v 210 | heatwave,0;gigadrain,1 319v 182 | heatwave,0;gigadrain,0 307v 174
+    p2 greedy: move 2 1, move 2 1
+      p2a Gengar used Sludge Bomb -> p1a: Charizard
+      p2b Thundurus used Thunderbolt -> p1a: Charizard
+      p1a Charizard fainted
+      p1b Venusaur used Sludge Bomb -> p2b: Thundurus
+              p2b Thundurus is now psn
+      after p1: Charizard-Mega-Y 0/359, Venusaur 297/329
+      after p2: Gengar-Mega 281/281, Thundurus 89/342
+
+  Turn 2
+      p1a <- Terrakion comes in (323/323)
+      after p1: Terrakion 323/323, Venusaur 297/329
+      after p2: Gengar-Mega 281/281, Thundurus 89/342
+
+  Turn 3
+    p1 mcts: move 4, move 2 2
+      search (24000 visits): protect,0;gigadrain,1 1310v 736 | rockslide,0;sleeppowder,0 1058v 579 | rockslide,0;protect,1 994v 540 | rockslide,0;gigadrain,0 971v 526
+    p2 greedy: move 2 2, move 2 2
+      p1a Terrakion used Protect
+      p2a Gengar used Sludge Bomb -> p1b: Venusaur
+      p2b Thundurus used Thunderbolt -> p1b: Venusaur
+      p1b Venusaur used Giga Drain -> p2b: Thundurus
+      p2b Thundurus fainted
+      after p1: Terrakion 323/323, Venusaur 31/329
+      after p2: Gengar-Mega 281/281, Thundurus 0/342
+
+  Turn 4
+      p2b <- Landorus comes in (373/373)
+      after p1: Terrakion 323/323, Venusaur 31/329
+      after p2: Gengar-Mega 281/281, Landorus 373/373
+
+  Turn 5
+    p1 mcts: move 4, move 2 2
+      search (31000 visits): protect,0;gigadrain,1 1205v 483 | protect,0;protect,1 1192v 476 | protect,0;switch cresselia 966v 372 | rockslide,0;gigadrain,1 869v 328
+    p2 greedy: move 2 2, move 1 2
+      p1a Terrakion used Protect  [[still]]
+              p1a Terrakion -- IT FAILED
+      p2a Gengar used Sludge Bomb -> p1b: Venusaur
+      p1b Venusaur fainted
+      p2b Landorus used Earth Power -> p1a: Terrakion
+      p1a Terrakion fainted
+      after p1: Terrakion 0/323, Venusaur 0/329
+      after p2: Gengar-Mega 281/281, Landorus 373/373
+
+  Turn 6
+      p1a <- Cresselia comes in (444/444)
+      p1b <- Sylveon comes in (345/345)
+      after p1: Cresselia 444/444, Sylveon 345/345
+      after p2: Gengar-Mega 281/281, Landorus 373/373
+
+  Turn 7
+    p1 mcts: move 3, move 4
+      search (31000 visits): calmmind,0;protect,1 10289v 6154 | calmmind,0;hypervoice,0 4231v 2424 | psyshock,0;protect,1 1297v 670 | psyshock,1;hypervoice,0 971v 484
+    p2 greedy: move 2 1, move 1 1
+      p1b Sylveon used Protect
+      p2a Gengar used Sludge Bomb -> p1a: Cresselia
+      p2b Landorus used Earth Power -> p1a: Cresselia
+              p1a Cresselia -- IMMUNE
+      p1a Cresselia used Calm Mind
+              p1a Cresselia spa 1 rose
+              p1a Cresselia spd 1 rose
+      after p1: Cresselia 288/444, Sylveon 345/345
+      after p2: Gengar-Mega 281/281, Landorus 373/373
+
+  Turn 8
+    p1 mcts: move 3, move 4
+      search (34000 visits): calmmind,0;protect,1 6465v 3841 | moonlight,0;protect,1 4044v 2343 | calmmind,0;hypervoice,0 3384v 1937 | moonlight,0;hypervoice,0 2343v 1304
+    p2 greedy: move 2 1, move 1 1
+      p1b Sylveon used Protect
+      p2a Gengar used Sludge Bomb -> p1a: Cresselia
+      p2b Landorus used Earth Power -> p1a: Cresselia
+              p1a Cresselia -- IMMUNE
+      p1a Cresselia used Calm Mind
+              p1a Cresselia spa 1 rose
+              p1a Cresselia spd 1 rose
+      after p1: Cresselia 186/444, Sylveon 345/345
+      after p2: Gengar-Mega 281/281, Landorus 373/373
+
+  Turn 9
+    p1 mcts: move 2, move 4
+      search (34000 visits): moonlight,0;protect,1 12813v 7886 | moonlight,0;hypervoice,0 4674v 2752 | psyshock,1;protect,1 1370v 729 | calmmind,0;hypervoice,0 1105v 572
+    p2 greedy: move 2 1, move 1 1
+      p1b Sylveon used Protect  [[still]]
+              p1b Sylveon -- IT FAILED
+      p2a Gengar used Sludge Bomb -> p1a: Cresselia
+              p1a Cresselia is now psn
+      p2b Landorus used Earth Power -> p1a: Cresselia
+              p1a Cresselia -- IMMUNE
+      p1a Cresselia used Moonlight
+      after p1: Cresselia 283/444, Sylveon 345/345
+      after p2: Gengar-Mega 281/281, Landorus 373/373
+
+  Turn 10
+    p1 mcts: move 2, move 4
+      search (38000 visits): moonlight,0;protect,1 18187v 9077 | moonlight,0;hypervoice,0 5602v 2643 | psyshock,1;hypervoice,0 1263v 510 | trickroom,1;hypervoice,0 687v 246
+    p2 greedy: move 2 1, move 1 1
+      p1b Sylveon used Protect
+      p2a Gengar used Sludge Bomb -> p1a: Cresselia
+              p1a Cresselia -- critical hit
+      p2b Landorus used Earth Power -> p1a: Cresselia
+              p1a Cresselia -- IMMUNE
+      p1a Cresselia used Moonlight
+      after p1: Cresselia 240/444, Sylveon 345/345
+      after p2: Gengar-Mega 281/281, Landorus 373/373
+
+  Turn 11
+    p1 mcts: move 2, move 2
+      search (41000 visits): moonlight,0;hypervoice,0 10068v 4230 | moonlight,0;protect,1 10021v 4208 | psyshock,1;hypervoice,0 1682v 595 | switch sableye;hypervoice,0 1118v 367
+    p2 greedy: move 2 1, move 1 1
+      p2a Gengar used Sludge Bomb -> p1a: Cresselia
+      p2b Landorus used Earth Power -> p1a: Cresselia
+              p1a Cresselia -- IMMUNE
+      p1a Cresselia used Moonlight
+      p1b Sylveon used Hyper Voice -> p2a: Gengar  [[spread] p2a,p2b]
+      after p1: Cresselia 331/444, Sylveon 345/345
+      after p2: Gengar-Mega 189/281, Landorus 136/373
+
+  Turn 12
+    p1 mcts: move 2, move 4
+      search (39000 visits): moonlight,0;protect,1 11358v 5233 | moonlight,0;hypervoice,0 4395v 1909 | psyshock,1;hypervoice,0 2114v 853 | psyshock,1;protect,1 2014v 808
+    p2 greedy: move 2 1, move 1 1
+      p1b Sylveon used Protect
+      p2a Gengar used Sludge Bomb -> p1a: Cresselia
+      p2b Landorus used Earth Power -> p1a: Cresselia
+              p1a Cresselia -- IMMUNE
+      p1a Cresselia used Moonlight
+      after p1: Cresselia 389/444, Sylveon 345/345
+      after p2: Gengar-Mega 189/281, Landorus 136/373
+
+  Turn 13
+    p1 mcts: move 4 1, move 4
+      search (39000 visits): psyshock,0;protect,1 4641v 1990 | psyshock,1;protect,1 4319v 1841 | moonlight,0;hypervoice,0 3110v 1287 | psyshock,1;hypervoice,0 2624v 1067
+    p2 greedy: move 2 1, move 1 1
+      p1b Sylveon used Protect  [[still]]
+              p1b Sylveon -- IT FAILED
+      p2a Gengar used Sludge Bomb -> p1a: Cresselia
+      p2b Landorus used Earth Power -> p1a: Cresselia
+              p1a Cresselia -- IMMUNE
+      p1a Cresselia used Psyshock -> p2a: Gengar
+      p2a Gengar fainted
+      after p1: Cresselia 256/444, Sylveon 345/345
+      after p2: Gengar-Mega 0/281, Landorus 136/373
+
+  Turn 14
+      p2a <- Kyurem-Black comes in (418/418)
+      after p1: Cresselia 256/444, Sylveon 345/345
+      after p2: Kyurem-Black 418/418, Landorus 136/373
+
+  Turn 15
+    p1 mcts: move 2, move 2
+      search (35000 visits): moonlight,0;hypervoice,0 10469v 5354 | psyshock,1;hypervoice,0 3284v 1564 | calmmind,0;hypervoice,0 2925v 1379 | trickroom,1;hypervoice,0 1467v 641
+    p2 greedy: move 2 1, move 1 1
+      p2b Landorus used Earth Power -> p1a: Cresselia
+              p1a Cresselia -- IMMUNE
+      p2a Kyurem used Ice Beam -> p1a: Cresselia
+      p1a Cresselia used Moonlight
+      p1b Sylveon used Hyper Voice -> p2a: Kyurem  [[spread] p2a,p2b]
+      p2b Landorus fainted
+      after p1: Cresselia 362/444, Sylveon 345/345
+      after p2: Kyurem-Black 130/418, Landorus 0/373
+
+  Turn 16
+      p2b <- Arcanine comes in (383/383)
+              p1a Cresselia atk 1 fell
+              p1b Sylveon atk 1 fell
+      after p1: Cresselia 362/444, Sylveon 345/345
+      after p2: Kyurem-Black 130/418, Arcanine 383/383
+
+  Turn 17
+    p1 mcts: move 4 1, move 2
+      search (34000 visits): psyshock,0;hypervoice,0 13820v 10225 | psyshock,1;hypervoice,0 3721v 2619 | psyshock,0;calmmind,1 2321v 1587 | moonlight,0;hypervoice,0 1805v 1211
+    p2 greedy: move 2 1, move 4 1
+      p2a Kyurem used Ice Beam -> p1a: Cresselia
+      p2b Arcanine used Flare Blitz -> p1a: Cresselia
+      p1a Cresselia used Psyshock -> p2a: Kyurem
+              p2a Kyurem -- critical hit
+      p2a Kyurem fainted
+      p1b Sylveon used Hyper Voice -> p2b: Arcanine
+      after p1: Cresselia 147/444, Sylveon 345/345
+      after p2: Kyurem-Black 0/418, Arcanine 230/383
+
+  Turn 18
+      p2a <- Keldeo-Resolute comes in (323/323)
+      after p1: Cresselia 147/444, Sylveon 345/345
+      after p2: Keldeo-Resolute 323/323, Arcanine 230/383
+
+  Turn 19
+    p1 mcts: move 4 2, move 2
+      search (40000 visits): psyshock,1;hypervoice,0 19874v 14588 | moonlight,0;hypervoice,0 4030v 2795 | psyshock,0;hypervoice,0 1933v 1278 | moonlight,0;calmmind,1 1502v 972
+    p2 greedy: move 2 1, move 4 1
+      p2a Keldeo used Hydro Pump -> p1a: Cresselia
+      p2b Arcanine used Flare Blitz -> p1a: Cresselia
+      p1a Cresselia fainted
+      p1b Sylveon used Hyper Voice -> p2b: Arcanine  [[spread] p2a,p2b]
+      p2a Keldeo fainted
+      after p1: Cresselia 0/444, Sylveon 345/345
+      after p2: Keldeo-Resolute 0/323, Arcanine 127/383
+
+  Turn 20
+      p1a <- Sableye comes in (304/304)
+      after p1: Sableye 304/304, Sylveon 345/345
+      after p2: Keldeo-Resolute 0/323, Arcanine 127/383
+
+  Turn 21
+    p1 mcts: move 2 2, move 2
+      search (448000 visits): fakeout,1;hypervoice,1 435966v 431954 | fakeout,1;hiddenpower,1 5664v 5272 | fakeout,1;calmmind,1 2864v 2586 | willowisp,1;hiddenpower,1 432v 325
+    p2 greedy: pass, move 4 1
+      p1a Sableye used Fake Out -> p2b: Arcanine
+              p2b Arcanine COULD NOT MOVE (flinch)
+      p1b Sylveon used Hyper Voice -> p2b: Arcanine
+      p2b Arcanine fainted
+      after p1: Sableye 254/304, Sylveon 345/345
+      after p2: Keldeo-Resolute 0/323, Arcanine 0/383
+
+  RESULT: p1 wins

@@ -1,0 +1,183 @@
+battle 48   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: ORAS Doubles OU: Shedinja, Audino, Whimsicott, Electivire, Plusle, Chansey
+  p2: dwcop 69/Untitled 348: Gengar-Mega, Pangoro, Landorus, Volcanion, Sylveon, Genesect
+
+  Turn 1
+    p1 mcts: switch 6, move 3   (slot0 Shedinja -> Chansey)
+      search (29000 visits): switch chansey;safeguard,1 841v 680 | mimic,1;safeguard-mega,1 740v 593 | mimic,0;safeguard-mega,1 649v 514 | mimic,1;protect-mega,1 643v 505
+    p2 greedy: move 4 1, move 3 1
+      p1a <- Chansey comes in (642/642)
+      p2a Gengar used Shadow Ball -> p1a: Chansey
+              p1a Chansey -- IMMUNE
+      p2b Pangoro used Drain Punch -> p1a: Chansey
+      p1b Audino used Safeguard
+      -sidestart p1: A Safeguard
+      after p1: Chansey 246/642, Audino 410/410
+      after p2: Gengar-Mega 323/323, Pangoro 394/394
+
+  Turn 2
+    p1 mcts: move 4, move 4 mega
+      search (34000 visits): softboiled,0;dazzlinggleam-mega,0 397v 370 | switch shedinja;dazzlinggleam-mega,0 377v 349 | protect,0;dazzlinggleam-mega,0 374v 346 | toxic,1;dazzlinggleam-mega,0 356v 328
+    p2 greedy: move 4 1, move 3 1
+      p2a Gengar used Shadow Ball -> p1a: Chansey
+              p1a Chansey -- IMMUNE
+      p2b Pangoro used Drain Punch -> p1a: Chansey
+              p1a Chansey -- critical hit
+      p1a Chansey fainted
+      p1b Audino used Dazzling Gleam -> p2b: Pangoro  [[spread] p2a,p2b]
+              p2b Pangoro -- critical hit
+      p2b Pangoro fainted
+      after p1: Chansey 0/642, Audino-Mega 410/410
+      after p2: Gengar-Mega 293/323, Pangoro 0/394
+
+  Turn 3
+      p2b <- Landorus comes in (319/319)
+      p1a <- Whimsicott comes in (324/324)
+      after p1: Whimsicott 324/324, Audino-Mega 410/410
+      after p2: Gengar-Mega 293/323, Landorus 319/319
+
+  Turn 4
+    p1 mcts: switch 6, move 4   (slot0 Whimsicott -> Shedinja)
+      search (37000 visits): switch shedinja;dazzlinggleam,0 24166v 17780 | switch shedinja;protect,1 407v 215 | memento,1;dazzlinggleam,0 364v 187 | sunnyday,1;dazzlinggleam,0 346v 176
+    p2 greedy: move 4 1, move 1 1
+      p1a <- Shedinja comes in (1/1)
+      p2a Gengar used Shadow Ball -> p1a: Shedinja
+              p1a Shedinja used up its Focus Sash
+      p2b Landorus used Earth Power -> p1a: Shedinja
+              p1a Shedinja -- IMMUNE
+      p1b Audino used Dazzling Gleam -> p2b: Landorus  [[spread] p2a,p2b]
+      after p1: Shedinja 1/1, Audino-Mega 410/410
+      after p2: Gengar-Mega 263/323, Landorus 252/319
+
+  Turn 5
+    p1 mcts: move 2, move 4
+      search (34000 visits): protect,0;dazzlinggleam,0 19576v 13525 | shadowclaw,1;dazzlinggleam,0 507v 249 | protect,0;protect,1 472v 228 | shadowclaw,0;dazzlinggleam,0 419v 198
+    p2 greedy: move 4 1, move 1 1
+      p1a Shedinja used Protect
+      p2a Gengar used Shadow Ball -> p1a: Shedinja
+              p1a Shedinja -- move: Protect
+      p2b Landorus used Earth Power -> p1a: Shedinja
+              p1a Shedinja -- move: Protect
+      p1b Audino used Dazzling Gleam -> p2a: Gengar  [[spread] p2a,p2b]
+      after p1: Shedinja 1/1, Audino-Mega 410/410
+      after p2: Gengar-Mega 230/323, Landorus 188/319
+
+  Turn 6
+    p1 mcts: move 2, move 4
+      search (34000 visits): protect,0;dazzlinggleam,0 17708v 11702 | protect,0;protect,1 820v 427 | protect,0;safeguard,1 562v 275 | protect,0;entrainment,1 561v 274
+    p2 greedy: move 4 1, move 1 1
+      p1a Shedinja used Protect  [[still]]
+              p1a Shedinja -- IT FAILED
+      p2a Gengar used Shadow Ball -> p1a: Shedinja
+      p1a Shedinja fainted
+      p2b Landorus used Earth Power -> p1b: Audino
+      p1b Audino used Dazzling Gleam -> p2b: Landorus  [[spread] p2a,p2b]
+      -sideend p1: A Safeguard
+      after p1: Shedinja 0/1, Audino-Mega 218/410
+      after p2: Gengar-Mega 198/323, Landorus 115/319
+
+  Turn 7
+      p1a <- Electivire comes in (292/292)
+      after p1: Electivire 292/292, Audino-Mega 218/410
+      after p2: Gengar-Mega 198/323, Landorus 115/319
+
+  Turn 8
+    p1 mcts: switch 6, move 4   (slot0 Electivire -> Whimsicott)
+      search (34000 visits): switch whimsicott;dazzlinggleam,0 11384v 5365 | switch whimsicott;safeguard,1 1663v 623 | thunderpunch,0;dazzlinggleam,0 1044v 361 | thunderpunch,0;safeguard,1 902v 302
+    p2 greedy: move 4 2, move 1 2
+      p1a <- Whimsicott comes in (324/324)
+      p2a Gengar used Shadow Ball -> p1b: Audino
+              p1b Audino -- IMMUNE
+      p2b Landorus used Earth Power -> p1b: Audino
+      p1b Audino used Dazzling Gleam -> p2b: Landorus  [[spread] p2a,p2b]
+      after p1: Whimsicott 324/324, Audino-Mega 14/410
+      after p2: Gengar-Mega 170/323, Landorus 49/319
+
+  Turn 9
+    p1 mcts: move 1, move 4
+      search (32000 visits): tailwind,0;dazzlinggleam,0 1610v 676 | sunnyday,1;dazzlinggleam,0 1353v 554 | tailwind,0;protect,1 1288v 523 | sunnyday,0;dazzlinggleam,0 1234v 498
+    p2 greedy: move 4 2, move 1 2
+      p1a Whimsicott used Tailwind
+      -sidestart p1: A move: Tailwind
+      p2a Gengar used Shadow Ball -> p1b: Audino
+              p1b Audino -- IMMUNE
+      p2b Landorus used Earth Power -> p1b: Audino
+      p1b Audino fainted
+      after p1: Whimsicott 324/324, Audino 0/410
+      after p2: Gengar-Mega 170/323, Landorus 49/319
+
+  Turn 10
+      p1b <- Plusle comes in (262/262)
+      after p1: Whimsicott 324/324, Plusle 262/262
+      after p2: Gengar-Mega 170/323, Landorus 49/319
+
+  Turn 11
+    p1 mcts: move 4, move 2 2
+      search (31000 visits): sunnyday,0;hiddenpower,1 2254v 883 | memento,0;hiddenpower,1 2086v 810 | sunnyday,1;hiddenpower,1 2018v 780 | taunt,1;hiddenpower,1 1948v 749
+    p2 greedy: move 4 1, move 1 1
+      p1a Whimsicott used Sunny Day
+      p1b Plusle used Hidden Power -> p2b: Landorus
+      p2b Landorus fainted
+      p2a Gengar used Shadow Ball -> p1a: Whimsicott
+              p1a Whimsicott used up its Eject Button
+      after p1: Whimsicott 123/324, Plusle 262/262
+      after p2: Gengar-Mega 170/323, Landorus 0/319
+
+  Turn 12
+      p1a <- Electivire comes in (292/292)
+      after p1: Electivire 292/292, Plusle 262/262
+      after p2: Gengar-Mega 170/323, Landorus 0/319
+
+  Turn 13
+      p2b <- Volcanion comes in (363/363)
+      after p1: Electivire 292/292, Plusle 262/262
+      after p2: Gengar-Mega 170/323, Volcanion 363/363
+
+  Turn 14
+    p1 mcts: move 4 2, switch 6   (slot1 Plusle -> Whimsicott)
+      search (24000 visits): thunderpunch,1;switch whimsicott 2991v 1050 | earthquake,0;switch whimsicott 1152v 346 | switch whimsicott;nastyplot,1 1026v 300 | poweruppunch,1;nastyplot,1 945v 271
+    p2 greedy: move 4 1, move 3 1
+      p1b <- Whimsicott comes in (123/324)
+      p1a Electivire used Thunder Punch -> p2b: Volcanion
+      p2a Gengar used Shadow Ball -> p1a: Electivire
+      p2b Volcanion used Overheat -> p1a: Electivire
+              p2b Volcanion spa 2 fell
+      p1a Electivire fainted
+      after p1: Electivire 0/292, Whimsicott 123/324
+      after p2: Gengar-Mega 170/323, Volcanion 139/363
+
+  Turn 15
+      p1a <- Plusle comes in (262/262)
+      after p1: Plusle 262/262, Whimsicott 123/324
+      after p2: Gengar-Mega 170/323, Volcanion 139/363
+
+  Turn 16
+    p1 mcts: move 4, move 2 1
+      search (80000 visits): nastyplot,0;memento,0 7158v 1026 | magnetrise,0;memento,0 4050v 506 | hiddenpower,1;memento,0 3714v 451 | nastyplot,0;memento,1 3217v 372
+    p2 greedy: move 4 2, move 3 2
+      p1b Whimsicott used Memento -> p2a: Gengar
+              p2a Gengar atk 2 fell
+              p2a Gengar spa 2 fell
+      p1b Whimsicott fainted
+      p1a Plusle used Nasty Plot
+              p1a Plusle spa 2 rose
+      p2a Gengar used Shadow Ball -> p1a: Plusle
+      p2b Volcanion used Overheat -> p1a: Plusle  [[miss]]
+              p2b Volcanion -- MISSED
+      -sideend p1: A move: Tailwind
+      after p1: Plusle 172/262, Whimsicott 0/324
+      after p2: Gengar-Mega 170/323, Volcanion 139/363
+
+  Turn 17
+    p1 mcts: move 2 2, pass
+      search (105000 visits): hiddenpower,1;No Move 21215v 746 | magnetrise,0;No Move 21028v 737 | nastyplot,0;No Move 19902v 679 | hiddenpower,0;No Move 15167v 442
+    p2 greedy: move 4 1, move 3 1
+      p2a Gengar used Shadow Ball -> p1a: Plusle
+      p1a Plusle used Hidden Power -> p2b: Volcanion
+      p2b Volcanion used Overheat -> p1a: Plusle
+              p2b Volcanion spa 2 fell
+      p1a Plusle fainted
+      after p1: Plusle 0/262, Whimsicott 0/324
+      after p2: Gengar-Mega 170/323, Volcanion 124/363
+
+  RESULT: p2 wins

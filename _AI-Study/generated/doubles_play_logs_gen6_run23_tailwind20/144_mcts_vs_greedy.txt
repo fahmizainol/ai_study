@@ -1,0 +1,111 @@
+battle 144   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: lati: Latias-Mega, Genesect, Thundurus-Therian, Amoonguss, Volcanion, Scrafty
+  p2: ORAS Doubles OU: Tornadus, Thundurus-Therian, Landorus, Genesect, Lopunny, Milotic
+
+  Turn 1
+    p1 mcts: move 3 2, move 1 2
+      search (9000 visits): psychic,1;extremespeed,1 267v 198 | icebeam,1;extremespeed,1 225v 162 | icebeam,1;extremespeed,0 151v 99 | icebeam,0;extremespeed,1 135v 86
+    p2 greedy: move 1 1, move 2 1
+      p1b Genesect used Extreme Speed -> p2b: Thundurus
+      p1a Latias used Psychic -> p2b: Thundurus
+      p2b Thundurus fainted
+      p2a Tornadus used Hurricane -> p1a: Latias  [[miss]]
+              p2a Tornadus -- MISSED
+      after p1: Latias-Mega 364/364, Genesect 284/284
+      after p2: Tornadus 362/362, Thundurus-Therian 0/300
+
+  Turn 2
+      p2b <- Landorus comes in (319/319)
+      after p1: Latias-Mega 364/364, Genesect 284/284
+      after p2: Tornadus 362/362, Landorus 319/319
+
+  Turn 3
+    p1 mcts: move 2 2, move 1 1
+      search (11000 visits): icebeam,1;extremespeed,0 866v 609 | psychic,1;extremespeed,1 565v 377 | icebeam,1;extremespeed,1 502v 330 | psychic,1;extremespeed,0 437v 281
+    p2 greedy: move 1 1, move 1 1
+      p1b Genesect used Extreme Speed -> p2a: Tornadus
+              p2a Tornadus used up its Sitrus Berry
+      p1a Latias used Ice Beam -> p2b: Landorus
+      p2b Landorus fainted
+      p2a Tornadus used Hurricane -> p1a: Latias
+      after p1: Latias-Mega 247/364, Genesect 284/284
+      after p2: Tornadus 234/362, Landorus 0/319
+
+  Turn 4
+      p2b <- Genesect comes in (283/283)
+              p2b Genesect atk 1 rose
+      after p1: Latias-Mega 247/364, Genesect 284/284
+      after p2: Tornadus 234/362, Genesect 283/283
+
+  Turn 5
+    p1 mcts: switch 5, move 1 1   (slot0 Latias-Mega -> Volcanion)
+      search (13000 visits): switch volcanion;extremespeed,0 855v 490 | switch volcanion;switch scrafty 690v 384 | switch scrafty;extremespeed,0 592v 321 | psychic,0;extremespeed,0 585v 317
+    p2 greedy: move 1 1, move 4 1
+      p1a <- Volcanion comes in (363/363)
+      p1b Genesect used Extreme Speed -> p2a: Tornadus
+      p2a Tornadus fainted
+      p2b Genesect used Ice Beam -> p1a: Volcanion
+              p1a Volcanion -- critical hit
+      after p1: Volcanion 328/363, Genesect 284/284
+      after p2: Tornadus 0/362, Genesect 283/283
+
+  Turn 6
+      p2a <- Lopunny comes in (271/271)
+      after p1: Volcanion 328/363, Genesect 284/284
+      after p2: Lopunny 271/271, Genesect 283/283
+
+  Turn 7
+    p1 mcts: move 1, move 1 2
+      search (32000 visits): heatwave,0;extremespeed,1 3133v 1733 | heatwave,0;extremespeed,0 2721v 1489 | steameruption,1;extremespeed,1 1595v 830 | steameruption,1;extremespeed,0 1335v 681
+    p2 greedy: move 1 1, move 4 1
+      p1b Genesect used Extreme Speed -> p2b: Genesect
+      p2a Lopunny used Drain Punch -> p1a: Volcanion
+      p2b Genesect used Ice Beam -> p1a: Volcanion
+      p1a Volcanion used Heat Wave -> p2a: Lopunny  [[spread] p2a,p2b]
+      p2b Genesect fainted
+      after p1: Volcanion 256/363, Genesect 284/284
+      after p2: Lopunny 93/271, Genesect 0/283
+
+  Turn 8
+      p2b <- Milotic comes in (394/394)
+      after p1: Volcanion 256/363, Genesect 284/284
+      after p2: Lopunny 93/271, Milotic 394/394
+
+  Turn 9
+    p1 mcts: move 1, move 1 2
+      search (13000 visits): heatwave,0;extremespeed,1 1025v 662 | heatwave,0;extremespeed,0 987v 635 | earthpower,1;extremespeed,0 557v 333 | steameruption,1;extremespeed,0 553v 330
+    p2 greedy: move 1 1, move 2 1
+      p1b Genesect used Extreme Speed -> p2b: Milotic
+      p2a Lopunny used Drain Punch -> p1a: Volcanion
+      p2b Milotic used Ice Beam -> p1a: Volcanion
+      p1a Volcanion used Heat Wave -> p2b: Milotic  [[spread] ]
+              p1a Volcanion -- MISSED
+              p1a Volcanion -- MISSED
+      after p1: Volcanion 171/363, Genesect 284/284
+      after p2: Lopunny 76/271, Milotic 188/394
+
+  Turn 10
+    p1 mcts: move 1, move 1 2
+      search (19000 visits): heatwave,0;extremespeed,1 4028v 2837 | heatwave,0;extremespeed,0 1887v 1268 | steameruption,1;extremespeed,1 1394v 913 | earthpower,1;extremespeed,1 1305v 850
+    p2 greedy: move 1 1, move 2 1
+      p1b Genesect used Extreme Speed -> p2b: Milotic
+      p2b Milotic fainted
+      p2a Lopunny used Drain Punch -> p1a: Volcanion
+      p1a Volcanion used Heat Wave -> p2a: Lopunny  [[miss]]
+              p1a Volcanion -- MISSED
+      after p1: Volcanion 117/363, Genesect 284/284
+      after p2: Lopunny 58/271, Milotic 0/394
+
+  Turn 11
+    p1 mcts: move 3 1, switch 3   (slot1 Genesect -> Thundurus-Therian)
+      search (81000 visits): earthpower,0;switch thundurustherian 17484v 16358 | switch latiasmega;extremespeed,0 17385v 16248 | heatwave,0;switch thundurustherian 16412v 15321 | steameruption,0;switch thundurustherian 6427v 5857
+    p2 greedy: move 1 1, pass
+      p1b <- Thundurus-Therian comes in (299/299)
+      p2a Lopunny used Drain Punch -> p1a: Volcanion
+      p1a Volcanion used Earth Power -> p2a: Lopunny
+              p2a Lopunny -- critical hit
+      p2a Lopunny fainted
+      after p1: Volcanion 63/363, Thundurus-Therian 299/299
+      after p2: Lopunny 0/271, Milotic 0/394
+
+  RESULT: p1 wins

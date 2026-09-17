@@ -1,0 +1,109 @@
+battle 140   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: ORAS Doubles OU: Charizard-Mega-Y, Cresselia, Landorus-Therian, Aegislash, Zapdos, Keldeo
+  p2: ORAS Doubles OU: Kangaskhan, Landorus-Therian, Mew, Heatran, Azumarill, Jirachi
+
+  Turn 1
+    p1 mcts: switch 5, switch 3   (slot0 Charizard-Mega-Y -> Zapdos; slot1 Cresselia -> Landorus-Therian)
+      search (25000 visits): switch zapdos;switch landorustherian 837v 713 | switch zapdos;calmmind,1 818v 695 | switch zapdos;icywind,0 645v 535 | heatwave,0;switch landorustherian 619v 512
+    p2 greedy: move 4 1, move 4
+      p1a <- Zapdos comes in (384/384)
+      p1b <- Landorus-Therian comes in (347/347)
+              p2a Kangaskhan atk 1 fell
+              p2b Landorus atk 1 fell
+      p2a Kangaskhan used Sucker Punch  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p2b Landorus used Explosion -> p1b: Landorus  [[spread] p2a,p1a,p1b]
+      p2b Landorus fainted
+      after p1: Zapdos 217/384, Landorus-Therian 173/347
+      after p2: Kangaskhan 158/352, Landorus-Therian 0/320
+
+  Turn 2
+      p2b <- Mew comes in (404/404)
+      after p1: Zapdos 217/384, Landorus-Therian 173/347
+      after p2: Kangaskhan 158/352, Mew 404/404
+
+  Turn 3
+    p1 mcts: move 4, move 1
+      search (16000 visits): tailwind,0;earthquake,0 1427v 1225 | roost,0;earthquake,0 1075v 904 | thunderbolt,1;earthquake,0 580v 459 | tailwind,0;rockslide,0 454v 349
+    p2 greedy: move 4 2, move 4 2
+      p2a Kangaskhan used Sucker Punch -> p1b: Landorus
+      p2b Mew used Knock Off -> p1b: Landorus
+              p1b Landorus used up its Assault Vest
+      p1b Landorus used Earthquake -> p2b: Mew  [[spread] p2a,p2b]
+              p1a Zapdos -- IMMUNE
+      p2a Kangaskhan fainted
+      p1a Zapdos used Tailwind
+      -sidestart p1: A move: Tailwind
+      after p1: Zapdos 217/384, Landorus-Therian 36/347
+      after p2: Kangaskhan 0/352, Mew 265/404
+
+  Turn 4
+      p2a <- Heatran comes in (324/324)
+      after p1: Zapdos 217/384, Landorus-Therian 36/347
+      after p2: Heatran 324/324, Mew 265/404
+
+  Turn 5
+    p1 mcts: switch 5, move 1   (slot0 Zapdos -> Charizard-Mega-Y)
+      search (21000 visits): switch charizardmegay;earthquake,0 2610v 1791 | switch cresselia;earthquake,0 2547v 1745 | thunderbolt,1;earthquake,0 722v 439 | roost,0;earthquake,0 581v 342
+    p2 greedy: move 1, move 4 2
+      p1a <- Charizard-Mega-Y comes in (359/359)
+      p1b Landorus used Earthquake -> p2b: Mew  [[spread] p2a,p2b]
+              p1a Charizard -- IMMUNE
+              p2b Mew used up its Sitrus Berry
+      p2a Heatran fainted
+      p2b Mew used Knock Off -> p1b: Landorus
+      p1b Landorus fainted
+      after p1: Charizard-Mega-Y 359/359, Landorus-Therian 0/347
+      after p2: Heatran 0/324, Mew 227/404
+
+  Turn 6
+      p1b <- Cresselia comes in (444/444)
+      p2a <- Azumarill comes in (394/394)
+      after p1: Charizard-Mega-Y 359/359, Cresselia 444/444
+      after p2: Azumarill 394/394, Mew 227/404
+
+  Turn 7
+    p1 mcts: move 2 1, switch 5   (slot1 Cresselia -> Zapdos)
+      search (16000 visits): solarbeam,0;switch zapdos 1097v 773 | solarbeam,0;icywind,0 909v 629 | solarbeam,0;calmmind,1 887v 612 | solarbeam,0;switch aegislash 712v 479
+    p2 greedy: move 2 1, move 4 1
+      p1b <- Zapdos comes in (217/384)
+      p1a Charizard used Solar Beam  [[still]]
+              p2a Azumarill used up its Sitrus Berry
+      p2b Mew used Knock Off -> p1a: Charizard
+      p2a Azumarill used Play Rough -> p1a: Charizard
+      after p1: Charizard-Mega-Y 198/359, Zapdos 217/384
+      after p2: Azumarill 108/394, Mew 227/404
+
+  Turn 8
+    p1 mcts: move 1, move 3
+      search (27000 visits): heatwave,0;roost,1 3000v 2561 | heatwave,0;hiddenpower,1 2500v 2114 | heatwave,0;thunderbolt,1 2439v 2060 | heatwave,0;thunderbolt,0 1539v 1263
+    p2 greedy: move 2 1, move 4 1
+      p1a Charizard used Heat Wave -> p2a: Azumarill  [[spread] p2a,p2b]
+      p2a Azumarill fainted
+      p1b Zapdos used Roost
+      p2b Mew used Knock Off -> p1a: Charizard
+      -sideend p1: A move: Tailwind
+      after p1: Charizard-Mega-Y 137/359, Zapdos 384/384
+      after p2: Azumarill 0/394, Mew 38/404
+
+  Turn 9
+      p2a <- Jirachi comes in (404/404)
+      after p1: Charizard-Mega-Y 137/359, Zapdos 384/384
+      after p2: Jirachi 404/404, Mew 38/404
+
+  Turn 10
+    p1 mcts: move 3 1, move 2 2
+      search (21000 visits): overheat,0;hiddenpower,1 1135v 852 | overheat,0;thunderbolt,1 1079v 806 | overheat,0;tailwind,1 774v 559 | heatwave,0;thunderbolt,0 767v 553
+    p2 greedy: move 1 1, move 4 1
+      p2b Mew used Knock Off -> p1a: Charizard
+      p1a Charizard used Overheat -> p2a: Jirachi
+              p2a Jirachi -- critical hit
+              p1a Charizard spa 2 fell
+      p2a Jirachi fainted
+      p1b Zapdos used Hidden Power -> p2b: Mew
+              p2b Mew -- critical hit
+      p2b Mew fainted
+      after p1: Charizard-Mega-Y 74/359, Zapdos 384/384
+      after p2: Jirachi 0/404, Mew 0/404
+
+  RESULT: p1 wins

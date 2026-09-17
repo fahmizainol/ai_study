@@ -1,0 +1,223 @@
+battle 106   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: XY Draft Finals vs Idyll: Gardevoir-Mega, Arcanine, Porygon2, Blastoise, Tyranitar, Landorus
+  p2: ORAS Doubles OU: Heatran, Diancie, Thundurus, Amoonguss, Bisharp, Kyurem-Black
+
+  Turn 1
+    p1 mcts: move 3 2, switch 3   (slot1 Arcanine -> Porygon2)
+      search (30000 visits): psychic,1;switch porygon2 473v 79 | hypervoice,0;switch porygon2 468v 78 | shadowball,1;switch porygon2 440v 70 | hypervoice,0;hiddenpower,1 417v 64
+    p2 greedy: move 1, move 1
+      p1b <- Porygon2 comes in (374/374)
+              p1b Porygon2 atk 1 rose
+      p2a Heatran used Heat Wave -> p1a: Gardevoir  [[spread] p1b]
+              p1a Gardevoir gained ability: Flash Fire
+      p1a Gardevoir used Psychic -> p2b: Diancie
+      p2b Diancie used Diamond Storm -> p1a: Gardevoir  [[spread] p1a]
+              p2b Diancie -- MISSED
+      after p1: Gardevoir-Mega 199/340, Porygon2 271/374
+      after p2: Heatran 337/337, Diancie 94/241
+
+  Turn 2
+    p1 mcts: move 4, move 4
+      search (31000 visits): protect,0;recover,1 616v 154 | hypervoice,0;recover,1 557v 134 | shadowball,1;recover,1 554v 133 | shadowball,0;recover,1 507v 117
+    p2 greedy: move 1, move 1
+      p1a Gardevoir used Protect
+      p2a Heatran used Heat Wave -> p1a: Gardevoir  [[spread] p1b]
+              p1a Gardevoir -- move: Protect
+      p2b Diancie used Diamond Storm -> p1b: Porygon2  [[spread] p1b]
+              p1a Gardevoir -- move: Protect
+      p1b Porygon2 used Recover
+      after p1: Gardevoir-Mega 199/340, Porygon2 290/374
+      after p2: Heatran 337/337, Diancie 94/241
+
+  Turn 3
+    p1 mcts: move 4, move 4
+      search (38000 visits): protect,0;recover,1 717v 143 | hypervoice,0;recover,1 667v 128 | psychic,0;recover,1 616v 114 | shadowball,0;recover,1 605v 111
+    p2 greedy: move 1, move 1
+      p1a Gardevoir used Protect  [[still]]
+              p1a Gardevoir -- IT FAILED
+      p2a Heatran used Heat Wave -> p1b: Porygon2  [[spread] p1b]
+              p1a Gardevoir -- IMMUNE
+      p2b Diancie used Diamond Storm -> p1a: Gardevoir  [[spread] p1a,p1b]
+      p1b Porygon2 used Recover
+      after p1: Gardevoir-Mega 43/340, Porygon2 323/374
+      after p2: Heatran 337/337, Diancie 94/241
+
+  Turn 4
+    p1 mcts: move 1, move 4
+      search (37000 visits): hypervoice,0;recover,1 631v 133 | psychic,0;recover,1 590v 120 | hypervoice,0;thunderbolt,1 571v 115 | protect,0;recover,1 547v 108
+    p2 greedy: move 1, move 1
+      p2a Heatran used Heat Wave -> p1a: Gardevoir  [[spread] p1b]
+              p1a Gardevoir -- IMMUNE
+      p1a Gardevoir used Hyper Voice -> p2b: Diancie  [[spread] p2a,p2b]
+              p2a Heatran -- critical hit
+      p2b Diancie used Diamond Storm -> p1b: Porygon2  [[spread] p1a,p1b]
+      p1a Gardevoir fainted
+      p1b Porygon2 used Recover
+      after p1: Gardevoir-Mega 0/340, Porygon2 348/374
+      after p2: Heatran 287/337, Diancie 58/241
+
+  Turn 5
+      p1a <- Arcanine comes in (371/371)
+              p2a Heatran atk 1 fell
+              p2b Diancie -- IT FAILED
+      after p1: Arcanine 371/371, Porygon2 348/374
+      after p2: Heatran 287/337, Diancie 58/241
+
+  Turn 6
+    p1 mcts: move 3, move 4
+      search (18000 visits): heatwave,0;recover,1 260v 33 | safeguard,0;shadowball,1 258v 33 | heatwave,0;thunderbolt,1 258v 33 | hiddenpower,1;thunderbolt,1 257v 33
+    p2 greedy: move 1, move 1
+      p1a Arcanine used Heat Wave -> p2a: Heatran  [[spread] p2b]
+              p2a Heatran gained ability: Flash Fire
+      p2a Heatran used Heat Wave -> p1b: Porygon2  [[spread] p1a]
+              p2a Heatran -- MISSED
+      p2b Diancie used Diamond Storm -> p1b: Porygon2  [[spread] p1a,p1b]
+              p2b Diancie def 1 rose
+      p1b Porygon2 used Recover
+      after p1: Arcanine 1/371, Porygon2 374/374
+      after p2: Heatran 308/337, Diancie 20/241
+
+  Turn 7
+    p1 mcts: switch 6, move 3   (slot0 Arcanine -> Landorus)
+      search (41000 visits): switch landorus;trickroom,0 13191v 12545 | heatwave,0;recover,1 1272v 128 | heatwave,0;shadowball,0 1238v 122 | heatwave,0;thunderbolt,0 1219v 119
+    p2 greedy: move 1, move 1
+      p1a <- Landorus comes in (380/380)
+      p2a Heatran used Heat Wave -> p1a: Landorus  [[spread] p1b]
+              p2a Heatran -- MISSED
+      p2b Diancie used Diamond Storm -> p1b: Porygon2  [[spread] p1a,p1b]
+              p1b Porygon2 -- critical hit
+              p2b Diancie def 1 rose
+      p1b Porygon2 used Trick Room
+      after p1: Landorus 271/380, Porygon2 148/374
+      after p2: Heatran 329/337, Diancie 20/241
+
+  Turn 8
+    p1 mcts: move 2 1, switch 4   (slot1 Porygon2 -> Blastoise)
+      search (38000 visits): sludgebomb,0;switch blastoise 19592v 19445 | earthpower,0;recover,1 380v 156 | switch arcanine;recover,1 343v 136 | stoneedge,0;recover,1 340v 135
+    p2 greedy: move 1, move 1
+      p1b <- Blastoise comes in (362/362)
+      p2b Diancie used Diamond Storm -> p1b: Blastoise  [[spread] p1a,p1b]
+      p2a Heatran used Heat Wave -> p1b: Blastoise  [[spread] p1a,p1b]
+      p1a Landorus fainted
+      after p1: Landorus 0/380, Blastoise 175/362
+      after p2: Heatran 337/337, Diancie 20/241
+
+  Turn 9
+      p1a <- Porygon2 comes in (148/374)
+              p1a Porygon2 spa 1 rose
+      after p1: Porygon2 148/374, Blastoise 175/362
+      after p2: Heatran 337/337, Diancie 20/241
+
+  Turn 10
+    p1 mcts: move 1 2, switch 5   (slot1 Blastoise -> Tyranitar)
+      search (65000 visits): thunderbolt,1;switch tyranitar 41641v 41350 | recover,0;scald,1 581v 112 | recover,0;scald,0 503v 90 | recover,0;roar,0 467v 80
+    p2 greedy: move 1, move 1
+      p1b <- Tyranitar comes in (404/404)
+      p1a Porygon2 used Thunderbolt -> p2b: Diancie
+      p2b Diancie fainted
+      p2a Heatran used Heat Wave -> p1b: Tyranitar  [[spread] p1b]
+              p2a Heatran -- MISSED
+      after p1: Porygon2 125/374, Tyranitar 338/404
+      after p2: Heatran 337/337, Diancie 0/241
+
+  Turn 11
+      p2b <- Thundurus comes in (362/362)
+      after p1: Porygon2 125/374, Tyranitar 338/404
+      after p2: Heatran 337/337, Thundurus 362/362
+
+  Turn 12
+    p1 mcts: move 1 2, switch 5   (slot1 Tyranitar -> Blastoise)
+      search (44000 visits): thunderbolt,1;switch blastoise 25806v 16125 | recover,0;rockslide,0 481v 71 | recover,0;foulplay,1 406v 53 | recover,0;protect,1 363v 43
+    p2 greedy: move 1, move 3 1
+      p1b <- Blastoise comes in (175/362)
+      p1a Porygon2 used Thunderbolt -> p2b: Thundurus
+      p2a Heatran used Heat Wave -> p1a: Porygon2  [[spread] p1a,p1b]
+      p1a Porygon2 fainted
+      p2b Thundurus used Thunderbolt -> p1b: Blastoise
+      p1b Blastoise fainted
+      after p1: Porygon2 0/374, Blastoise 0/362
+      after p2: Heatran 337/337, Thundurus 207/362
+
+  Turn 13
+      p1a <- Tyranitar comes in (338/404)
+      p1b <- Arcanine comes in (1/371)
+              p2a Heatran atk 1 fell
+              p2b Thundurus atk 1 fell
+      after p1: Tyranitar 338/404, Arcanine 1/371
+      after p2: Heatran 337/337, Thundurus 207/362
+
+  Turn 14
+    p1 mcts: move 2, move 4 2
+      search (250000 visits): rockslide,0;hiddenpower,1 237732v 232702 | rockslide,0;safeguard,1 480v 52 | rockslide,0;heatwave,0 475v 51 | rockslide,0;overheat,0 453v 46
+    p2 greedy: move 1, move 3 2
+      p1a Tyranitar used Rock Slide -> p2b: Thundurus  [[spread] p2a,p2b]
+      p2b Thundurus fainted
+      p2a Heatran used Heat Wave -> p1a: Tyranitar  [[spread] p1a,p1b]
+      p1b Arcanine fainted
+      after p1: Tyranitar 264/404, Arcanine 0/371
+      after p2: Heatran 274/337, Thundurus 0/362
+
+  Turn 15
+      p2b <- Amoonguss comes in (432/432)
+      after p1: Tyranitar 264/404, Arcanine 0/371
+      after p2: Heatran 274/337, Amoonguss 432/432
+
+  Turn 16
+    p1 mcts: move 4, pass
+      search (72000 visits): protect,0;No Move 22396v 708 | rockslide,0;No Move 11814v 233 | toxic,1;No Move 9768v 150 | foulplay,1;No Move 9529v 141
+    p2 greedy: move 1, move 3 1
+      p1a Tyranitar used Protect
+      p2a Heatran used Heat Wave -> p1a: Tyranitar
+              p1a Tyranitar -- move: Protect
+      p2b Amoonguss used Giga Drain -> p1a: Tyranitar
+              p1a Tyranitar -- move: Protect
+      after p1: Tyranitar 264/404, Arcanine 0/371
+      after p2: Heatran 295/337, Amoonguss 405/432
+
+  Turn 17
+    p1 mcts: move 4, pass
+      search (72000 visits): protect,0;No Move 16999v 356 | rockslide,0;No Move 14031v 243 | foulplay,1;No Move 11057v 135 | foulplay,0;No Move 10268v 108
+    p2 greedy: move 1, move 3 1
+      p1a Tyranitar used Protect  [[still]]
+              p1a Tyranitar -- IT FAILED
+      p2a Heatran used Heat Wave -> p1a: Tyranitar
+      p2b Amoonguss used Giga Drain -> p1a: Tyranitar
+      after p1: Tyranitar 69/404, Arcanine 0/371
+      after p2: Heatran 316/337, Amoonguss 432/432
+
+  Turn 18
+    p1 mcts: move 4, pass
+      search (344000 visits): protect,0;No Move 298876v 18614 | toxic,0;No Move 18889v 657 | foulplay,0;No Move 6897v 74 | toxic,1;No Move 6635v 63
+    p2 greedy: move 1, move 3 1
+      p1a Tyranitar used Protect
+      p2a Heatran used Heat Wave -> p1a: Tyranitar
+              p1a Tyranitar -- move: Protect
+      p2b Amoonguss used Giga Drain -> p1a: Tyranitar
+              p1a Tyranitar -- move: Protect
+      after p1: Tyranitar 69/404, Arcanine 0/371
+      after p2: Heatran 337/337, Amoonguss 432/432
+
+  Turn 19
+    p1 mcts: move 4, pass
+      search (318000 visits): protect,0;No Move 290384v 22108 | rockslide,0;No Move 5898v 53 | toxic,0;No Move 5707v 45 | foulplay,1;No Move 5360v 32
+    p2 greedy: move 1, move 3 1
+      p1a Tyranitar used Protect
+      p2a Heatran used Heat Wave -> p1a: Tyranitar
+              p1a Tyranitar -- move: Protect
+      p2b Amoonguss used Giga Drain -> p1a: Tyranitar
+              p1a Tyranitar -- move: Protect
+      after p1: Tyranitar 69/404, Arcanine 0/371
+      after p2: Heatran 337/337, Amoonguss 432/432
+
+  Turn 20
+    p1 mcts: move 4, pass
+      search (381000 visits): protect,0;No Move 343645v 27380 | rockslide,0;No Move 7997v 62 | foulplay,0;No Move 7547v 47 | toxic,0;No Move 7435v 43
+    p2 greedy: move 1, move 3 1
+      p1a Tyranitar used Protect  [[still]]
+              p1a Tyranitar -- IT FAILED
+      p2a Heatran used Heat Wave -> p1a: Tyranitar
+      p1a Tyranitar fainted
+      after p1: Tyranitar 0/404, Arcanine 0/371
+      after p2: Heatran 337/337, Amoonguss 432/432
+
+  RESULT: p2 wins

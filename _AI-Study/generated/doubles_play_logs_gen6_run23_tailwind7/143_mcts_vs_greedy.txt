@@ -1,0 +1,169 @@
+battle 143   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: Copy of tvalks: Kangaskhan-Mega, Volcanion, Thundurus, Sylveon, Landorus-Therian, Bisharp
+  p2: WhimGar Lock: Gengar-Mega, Whimsicott, Thundurus, Scrafty, Landorus, Genesect
+
+  Turn 1
+    p1 mcts: move 2 1, move 1
+      search (34000 visits): crunch,0;heatwave,0 976v 938 | fakeout,1;heatwave,0 906v 866 | fakeout,0;heatwave,0 904v 864 | crunch,1;heatwave,0 897v 857
+    p2 greedy: move 2 1, move 1 1
+      p2b Whimsicott used Taunt -> p1a: Kangaskhan
+              p1a Kangaskhan gained move: Taunt
+      p2a Gengar used Sludge Bomb -> p1a: Kangaskhan
+      p1a Kangaskhan used Crunch -> p2a: Gengar
+      p1b Volcanion used Heat Wave -> p2a: Gengar  [[spread] p2a,p2b]
+      p2b Whimsicott fainted
+      after p1: Kangaskhan-Mega 236/414, Volcanion 364/364
+      after p2: Gengar-Mega 11/323, Whimsicott 0/324
+
+  Turn 2
+      p2b <- Thundurus comes in (299/299)
+      after p1: Kangaskhan-Mega 236/414, Volcanion 364/364
+      after p2: Gengar-Mega 11/323, Thundurus 299/299
+
+  Turn 3
+    p1 mcts: move 2 2, move 1
+      search (26000 visits): crunch,1;heatwave,0 1122v 933 | crunch,0;steameruption,1 1016v 838 | crunch,0;protect,1 1009v 832 | lowkick,0;protect,1 980v 806
+    p2 greedy: move 2 1, move 1 1
+      p2a Gengar used Sludge Bomb -> p1a: Kangaskhan
+      p2b Thundurus used Thunderbolt -> p1a: Kangaskhan
+      p1a Kangaskhan fainted
+      p1b Volcanion used Heat Wave -> p2b: Thundurus  [[spread] p2a,p2b]
+      p2a Gengar fainted
+      after p1: Kangaskhan-Mega 0/414, Volcanion 364/364
+      after p2: Gengar-Mega 0/323, Thundurus 131/299
+
+  Turn 4
+      p2a <- Scrafty comes in (334/334)
+      p1a <- Thundurus comes in (362/362)
+              p1a Thundurus atk 1 fell
+              p1b Volcanion atk 1 fell
+      after p1: Thundurus 362/362, Volcanion 364/364
+      after p2: Scrafty 334/334, Thundurus 131/299
+
+  Turn 5
+    p1 mcts: switch 4, switch 5   (slot0 Thundurus -> Sylveon; slot1 Volcanion -> Landorus-Therian)
+      search (18000 visits): switch sylveon;switch landorustherian 595v 444 | thunderwave,0;heatwave,0 449v 322 | thunderbolt,0;switch landorustherian 380v 266 | thunderbolt,0;heatwave,0 379v 265
+    p2 greedy: move 4 1, move 1 1
+      p1a <- Sylveon comes in (394/394)
+      p1b <- Landorus-Therian comes in (319/319)
+              p2a Scrafty atk 1 fell
+              p2b Thundurus atk 1 fell
+      p2b Thundurus used Thunderbolt -> p1a: Sylveon
+      p2a Scrafty used High Jump Kick -> p1a: Sylveon
+      after p1: Sylveon 203/394, Landorus-Therian 319/319
+      after p2: Scrafty 334/334, Thundurus 131/299
+
+  Turn 6
+    p1 mcts: move 3, move 3 1
+      search (25000 visits): calmmind,0;stoneedge,0 2070v 1328 | hypervoice,0;uturn,0 1854v 1180 | hypervoice,0;stoneedge,0 1448v 901 | hypervoice,0;stoneedge,1 1385v 858
+    p2 greedy: move 4 1, move 1 1
+      p1b Landorus used Stone Edge -> p2a: Scrafty  [[miss]]
+              p1b Landorus -- MISSED
+      p2b Thundurus used Thunderbolt -> p1a: Sylveon
+      p1a Sylveon used Calm Mind
+              p1a Sylveon spa 1 rose
+              p1a Sylveon spd 1 rose
+      p2a Scrafty used High Jump Kick -> p1a: Sylveon
+              p1a Sylveon -- critical hit
+      p1a Sylveon fainted
+      after p1: Sylveon 0/394, Landorus-Therian 319/319
+      after p2: Scrafty 334/334, Thundurus 131/299
+
+  Turn 7
+      p1a <- Thundurus comes in (362/362)
+      after p1: Thundurus 362/362, Landorus-Therian 319/319
+      after p2: Scrafty 334/334, Thundurus 131/299
+
+  Turn 8
+    p1 mcts: move 1 1, move 3 2
+      search (16000 visits): thunderbolt,0;stoneedge,1 1566v 913 | thunderwave,0;stoneedge,1 1348v 774 | thunderbolt,0;stoneedge,0 1062v 594 | thunderwave,0;stoneedge,0 901v 493
+    p2 greedy: move 4 1, move 1 1
+      p1b Landorus used Stone Edge -> p2b: Thundurus
+      p2b Thundurus fainted
+      p1a Thundurus used Thunderbolt -> p2a: Scrafty
+              p2a Scrafty used up its Eject Button
+      after p1: Thundurus 362/362, Landorus-Therian 319/319
+      after p2: Scrafty 223/334, Thundurus 0/299
+
+  Turn 9
+      p2a <- Landorus comes in (319/319)
+      after p1: Thundurus 362/362, Landorus-Therian 319/319
+      after p2: Landorus 319/319, Thundurus 0/299
+
+  Turn 10
+      p2b <- Scrafty comes in (223/334)
+              p1a Thundurus atk 1 fell
+              p1b Landorus atk 1 fell
+      after p1: Thundurus 362/362, Landorus-Therian 319/319
+      after p2: Landorus 319/319, Scrafty 223/334
+
+  Turn 11
+    p1 mcts: move 1 2, move 3 1
+      search (30000 visits): thunderbolt,1;stoneedge,0 3102v 1670 | thunderbolt,1;switch volcanion 2140v 1116 | thunderbolt,1;switch bisharp 1932v 998 | hiddenpower,0;stoneedge,0 1591v 805
+    p2 greedy: move 1 1, move 4 1
+      p1b Landorus used Stone Edge -> p2a: Landorus
+      p2a Landorus used Earth Power -> p1a: Thundurus
+              p1a Thundurus -- IMMUNE
+      p1a Thundurus used Thunderbolt -> p2b: Scrafty
+      p2b Scrafty used High Jump Kick -> p1a: Thundurus
+      after p1: Thundurus 233/362, Landorus-Therian 319/319
+      after p2: Landorus 229/319, Scrafty 51/334
+
+  Turn 12
+    p1 mcts: move 1 2, move 3 1
+      search (36000 visits): thunderbolt,1;stoneedge,0 4161v 2104 | hiddenpower,0;stoneedge,0 2246v 1078 | hiddenpower,1;stoneedge,0 2209v 1059 | thunderbolt,1;switch bisharp 1842v 865
+    p2 greedy: move 1 1, move 4 1
+      p1b Landorus used Stone Edge -> p2a: Landorus
+      p2a Landorus used Earth Power -> p1a: Thundurus
+              p1a Thundurus -- IMMUNE
+      p1a Thundurus used Thunderbolt -> p2b: Scrafty
+              p2b Scrafty -- critical hit
+      p2b Scrafty fainted
+      after p1: Thundurus 233/362, Landorus-Therian 319/319
+      after p2: Landorus 133/319, Scrafty 0/334
+
+  Turn 13
+      p2b <- Genesect comes in (283/283)
+              p2b Genesect atk 1 rose
+      after p1: Thundurus 233/362, Landorus-Therian 319/319
+      after p2: Landorus 133/319, Genesect 283/283
+
+  Turn 14
+    p1 mcts: move 4 2, switch 5   (slot1 Landorus-Therian -> Volcanion)
+      search (23000 visits): thunderwave,1;switch volcanion 1681v 829 | thunderbolt,1;switch volcanion 1491v 725 | thunderwave,1;switch bisharp 1108v 518 | thunderbolt,1;switch bisharp 1083v 505
+    p2 greedy: move 1 1, move 2 1
+      p1b <- Volcanion comes in (364/364)
+      p1a Thundurus used Thunder Wave -> p2b: Genesect
+              p2b Genesect is now par
+              p2b Genesect COULD NOT MOVE (par)
+      p2a Landorus used Earth Power -> p1a: Thundurus
+              p1a Thundurus -- IMMUNE
+      after p1: Thundurus 233/362, Volcanion 364/364
+      after p2: Landorus 133/319, Genesect 283/283
+
+  Turn 15
+    p1 mcts: move 1 2, move 4
+      search (34000 visits): thunderbolt,1;protect,1 4726v 3149 | thunderbolt,1;switch landorustherian 3081v 2004 | switch landorustherian;protect,1 1806v 1129 | hiddenpower,0;protect,1 1031v 608
+    p2 greedy: move 1 1, move 2 1
+      p1b Volcanion used Protect
+      p2a Landorus used Earth Power -> p1a: Thundurus
+              p1a Thundurus -- IMMUNE
+      p1a Thundurus used Thunderbolt -> p2b: Genesect
+              p2b Genesect COULD NOT MOVE (par)
+      after p1: Thundurus 233/362, Volcanion 364/364
+      after p2: Landorus 133/319, Genesect 145/283
+
+  Turn 16
+    p1 mcts: move 1 2, move 1
+      search (63000 visits): thunderbolt,1;heatwave,0 28276v 24027 | thunderbolt,1;switch landorustherian 11811v 9436 | thunderbolt,1;steameruption,0 4870v 3775 | thunderbolt,1;protect,1 1552v 1124
+    p2 greedy: move 1 1, move 2 1
+      p2a Landorus used Earth Power -> p1a: Thundurus
+              p1a Thundurus -- IMMUNE
+      p1a Thundurus used Thunderbolt -> p2b: Genesect
+      p2b Genesect fainted
+      p1b Volcanion used Heat Wave -> p2a: Landorus
+      p2a Landorus fainted
+      after p1: Thundurus 233/362, Volcanion 364/364
+      after p2: Landorus 0/319, Genesect 0/283
+
+  RESULT: p1 wins

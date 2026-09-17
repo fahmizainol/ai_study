@@ -1,0 +1,151 @@
+battle 46   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: Untitled 606: Kangaskhan-Mega, Thundurus, Volcanion, Deoxys-Speed, Genesect, Landorus
+  p2: ORAS Doubles OU: Porygon2, Heatran, Kangaskhan-Mega, Azumarill, Victini, Sylveon
+
+  Turn 1
+    p1 mcts: switch 3, move 1 2   (slot0 Kangaskhan-Mega -> Volcanion)
+      search (31000 visits): switch volcanion;thunderbolt,1 308v 289 | switch volcanion;thunderwave,1 307v 288 | switch volcanion;switch landorus 304v 285 | switch volcanion;hiddenpower,0 288v 268
+    p2 greedy: move 1 1, move 1
+      p1a <- Volcanion comes in (364/364)
+      p1b Thundurus used Thunderbolt -> p2b: Heatran
+              p2b Heatran -- critical hit
+      p2b Heatran used Eruption -> p1b: Thundurus  [[spread] p1a,p1b]
+      p2a Porygon2 used Thunderbolt -> p1a: Volcanion
+      after p1: Volcanion 258/364, Thundurus 231/361
+      after p2: Porygon2 374/374, Heatran 205/386
+
+  Turn 2
+    p1 mcts: move 1 2, switch 5   (slot1 Thundurus -> Genesect)
+      search (5000 visits): steameruption,1;switch genesect 82v 61 | earthpower,1;thunderwave,0 82v 61 | steameruption,1;thunderbolt,0 81v 60 | steameruption,1;thunderwave,0 81v 60
+    p2 greedy: move 1 2, move 1
+      p1b <- Genesect comes in (283/283)
+              p1b Genesect atk 1 rose
+      p1a Volcanion used Steam Eruption -> p2b: Heatran
+      p2b Heatran fainted
+      p2a Porygon2 used Thunderbolt -> p1b: Genesect
+      after p1: Volcanion 258/364, Genesect 211/283
+      after p2: Porygon2 374/374, Heatran 0/386
+
+  Turn 3
+      p2b <- Kangaskhan-Mega comes in (414/414)
+      after p1: Volcanion 258/364, Genesect 211/283
+      after p2: Porygon2 374/374, Kangaskhan-Mega 414/414
+
+  Turn 4
+    p1 mcts: move 2, move 3 1
+      search (5000 visits): heatwave,0;ironhead,0 67v 47 | steameruption,1;uturn,1 66v 46 | steameruption,0;ironhead,0 64v 44 | heatwave,0;uturn,0 64v 44
+    p2 greedy: move 1 1, move 2 1
+      p1b Genesect used Iron Head -> p2a: Porygon2
+      p2b Kangaskhan used Double-Edge -> p1a: Volcanion
+      p1a Volcanion used Heat Wave -> p2b: Kangaskhan  [[spread] p2a,p2b]
+      p2a Porygon2 used Thunderbolt -> p1a: Volcanion
+              p1a Volcanion -- critical hit
+      p1a Volcanion fainted
+      after p1: Volcanion 0/364, Genesect 211/283
+      after p2: Porygon2 118/374, Kangaskhan-Mega 241/414
+
+  Turn 5
+      p1a <- Kangaskhan-Mega comes in (414/414)
+      after p1: Kangaskhan-Mega 414/414, Genesect 211/283
+      after p2: Porygon2 118/374, Kangaskhan-Mega 241/414
+
+  Turn 6
+    p1 mcts: switch 4, move 3 2   (slot0 Kangaskhan-Mega -> Deoxys-Speed)
+      search (28000 visits): switch deoxysspeed;ironhead,1 1771v 1719 | switch deoxysspeed;switch landorus 1678v 1624 | switch deoxysspeed;switch thundurus 1643v 1588 | switch deoxysspeed;ironhead,0 1493v 1435
+    p2 greedy: move 1 2, move 2 2
+      p1a <- Deoxys-Speed comes in (303/303)
+      p1b Genesect used Iron Head -> p2b: Kangaskhan
+      p2b Kangaskhan fainted
+      p2a Porygon2 used Thunderbolt -> p1b: Genesect
+      after p1: Deoxys-Speed 303/303, Genesect 138/283
+      after p2: Porygon2 118/374, Kangaskhan-Mega 0/414
+
+  Turn 7
+      p2b <- Azumarill comes in (404/404)
+      after p1: Deoxys-Speed 303/303, Genesect 138/283
+      after p2: Porygon2 118/374, Azumarill 404/404
+
+  Turn 8
+    p1 mcts: move 2, move 3 1
+      search (25000 visits): stealthrock,0;ironhead,0 8916v 5953 | stealthrock,0;ironhead,1 1668v 1009 | icebeam,1;ironhead,0 967v 552 | icebeam,0;ironhead,0 879v 495
+    p2 greedy: move 1 2, move 2 2
+      p1a Deoxys used Stealth Rock -> p2b: Azumarill
+      -sidestart p2: B move: Stealth Rock
+      p1b Genesect used Iron Head -> p2a: Porygon2
+      p2a Porygon2 fainted
+      p2b Azumarill used Play Rough -> p1b: Genesect
+      after p1: Deoxys-Speed 303/303, Genesect 26/283
+      after p2: Porygon2 0/374, Azumarill 404/404
+
+  Turn 9
+      p2a <- Victini comes in (404/404)
+      after p1: Deoxys-Speed 303/303, Genesect 26/283
+      after p2: Victini 303/404, Azumarill 404/404
+
+  Turn 10
+    p1 mcts: move 4 2, move 3 2
+      search (32000 visits): icebeam,1;ironhead,1 2047v 887 | switch kangaskhanmega;ironhead,1 1958v 844 | icebeam,0;ironhead,1 1588v 666 | psychoboost,1;ironhead,1 1409v 581
+    p2 greedy: move 1 2, move 2 2
+      p1a Deoxys used Ice Beam -> p2b: Azumarill
+      p1b Genesect used Iron Head -> p2b: Azumarill
+      p2b Azumarill fainted
+      p2a Victini used V-create -> p1b: Genesect
+              p2a Victini spe 1 fell
+              p2a Victini def 1 fell
+              p2a Victini spd 1 fell
+      p1b Genesect fainted
+      after p1: Deoxys-Speed 303/303, Genesect 0/283
+      after p2: Victini 263/404, Azumarill 0/404
+
+  Turn 11
+      p1b <- Kangaskhan-Mega comes in (414/414)
+      p2b <- Sylveon comes in (393/393)
+      after p1: Deoxys-Speed 303/303, Kangaskhan-Mega 414/414
+      after p2: Victini 263/404, Sylveon 344/393
+
+  Turn 12
+    p1 mcts: switch 5, move 3 2   (slot0 Deoxys-Speed -> Thundurus)
+      search (39000 visits): switch thundurus;toxic,1 1774v 616 | switch landorus;toxic,1 1508v 510 | switch thundurus;lowkick,1 987v 306 | switch thundurus;seismictoss,1 895v 271
+    p2 greedy: move 1 1, move 4 1
+      p1a <- Thundurus comes in (231/361)
+      p1b Kangaskhan used Toxic -> p2b: Sylveon
+              p2b Sylveon is now tox
+      p2a Victini used V-create -> p1a: Thundurus
+              p2a Victini spe 1 fell
+              p2a Victini def 1 fell
+              p2a Victini spd 1 fell
+      p1a Thundurus fainted
+      p2b Sylveon used Hyper Beam -> p1b: Kangaskhan
+      p1b Kangaskhan fainted
+      after p1: Thundurus 0/361, Kangaskhan-Mega 0/414
+      after p2: Victini 223/404, Sylveon 320/393
+
+  Turn 13
+      p1a <- Deoxys-Speed comes in (303/303)
+      p1b <- Landorus comes in (319/319)
+      after p1: Deoxys-Speed 303/303, Landorus 319/319
+      after p2: Victini 223/404, Sylveon 320/393
+
+  Turn 14
+    p1 mcts: move 4 2, move 1 1
+      search (80000 visits): icebeam,1;earthpower,0 63389v 55370 | psychoboost,1;sludgebomb,1 1807v 1108 | icebeam,1;sludgebomb,0 1380v 825 | psychoboost,1;earthpower,0 977v 562
+    p2 greedy: move 1 1, move 1
+      p1a Deoxys used Ice Beam -> p2b: Sylveon
+      p1b Landorus used Earth Power -> p2a: Victini
+      p2a Victini fainted
+              p2b Sylveon COULD NOT MOVE (recharge)
+      after p1: Deoxys-Speed 303/303, Landorus 319/319
+      after p2: Victini 0/404, Sylveon 219/393
+
+  Turn 15
+    p1 mcts: move 2, move 3 2
+      search (1090000 visits): stealthrock,0;sludgebomb,1 117683v 117683 | psychoboost,1;sludgebomb,1 117683v 117683 | icebeam,1;earthpower,1 117683v 117683 | icebeam,1;sludgebomb,1 117683v 117683
+    p2 greedy: pass, move 4 1
+      p1a Deoxys used Stealth Rock  [[still]]
+              p1a Deoxys -- IT FAILED
+      p1b Landorus used Sludge Bomb -> p2b: Sylveon
+      p2b Sylveon fainted
+      after p1: Deoxys-Speed 303/303, Landorus 319/319
+      after p2: Victini 0/404, Sylveon 0/393
+
+  RESULT: p1 wins

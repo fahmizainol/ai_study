@@ -1,0 +1,124 @@
+battle 142   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: sdef aegi fire punch kang 2x incarnate: Conkeldurr, Aegislash, Kangaskhan-Mega, Thundurus, Landorus, Volcanion
+  p2: ORAS Doubles OU: Diancie-Mega, Landorus-Therian, Talonflame, Aegislash, Hydreigon, Keldeo
+
+  Turn 1
+    p1 mcts: switch 3, switch 5   (slot0 Conkeldurr -> Kangaskhan-Mega; slot1 Aegislash -> Landorus)
+      search (15000 visits): switch kangaskhanmega;switch landorus 201v 116 | icepunch,1;shadowball,0 183v 103 | icepunch,1;shadowsneak,1 180v 101 | icepunch,1;switch landorus 176v 98
+    p2 greedy: move 1, move 3 1
+      p1a <- Kangaskhan-Mega comes in (414/414)
+      p1b <- Landorus comes in (319/319)
+      p2b Landorus used Superpower -> p1a: Kangaskhan
+              p2b Landorus atk 1 fell
+              p2b Landorus def 1 fell
+      p2a Diancie used Diamond Storm -> p1b: Landorus  [[spread] p1a,p1b]
+              p2a Diancie def 1 rose
+      p1a Kangaskhan fainted
+      after p1: Kangaskhan-Mega 0/414, Landorus 160/319
+      after p2: Diancie-Mega 241/241, Landorus-Therian 319/319
+
+  Turn 2
+      p1a <- Conkeldurr comes in (401/401)
+      after p1: Conkeldurr 401/401, Landorus 160/319
+      after p2: Diancie-Mega 241/241, Landorus-Therian 319/319
+
+  Turn 3
+    p1 mcts: move 4 2, switch 5   (slot1 Landorus -> Aegislash)
+      search (16000 visits): knockoff,1;switch aegislash 373v 162 | drainpunch,1;earthpower,0 353v 151 | drainpunch,1;switch aegislash 333v 141 | icepunch,1;switch aegislash 318v 132
+    p2 greedy: move 1, move 3 2
+      p1b <- Aegislash comes in (324/324)
+      p2b Landorus used Superpower -> p1b: Aegislash
+              p1b Aegislash -- IMMUNE
+      p2a Diancie used Diamond Storm -> p1b: Aegislash  [[spread] p1a,p1b]
+              p2a Diancie def 1 rose
+      p1a Conkeldurr used Knock Off -> p2b: Landorus
+              p2b Landorus used up its Choice Scarf
+      after p1: Conkeldurr 324/401, Aegislash 292/324
+      after p2: Diancie-Mega 241/241, Landorus-Therian 130/319
+
+  Turn 4
+    p1 mcts: move 1 2, move 3 1
+      search (17000 visits): drainpunch,1;toxic,0 264v 112 | drainpunch,1;shadowball,0 247v 103 | drainpunch,0;toxic,1 238v 98 | drainpunch,0;shadowball,1 232v 95
+    p2 greedy: move 1, move 3 1
+      p2a Diancie used Diamond Storm -> p1b: Aegislash  [[spread] p1a,p1b]
+              p2a Diancie def 1 rose
+      p2b Landorus used Superpower -> p1a: Conkeldurr
+              p2b Landorus atk 1 fell
+              p2b Landorus def 1 fell
+      p1a Conkeldurr used Drain Punch -> p2b: Landorus
+      p2b Landorus fainted
+      p1b Aegislash used Toxic -> p2a: Diancie
+              p2a Diancie is now tox
+      after p1: Conkeldurr 203/401, Aegislash 257/324
+      after p2: Diancie-Mega 226/241, Landorus-Therian 0/319
+
+  Turn 5
+      p2b <- Talonflame comes in (297/297)
+      after p1: Conkeldurr 203/401, Aegislash 257/324
+      after p2: Diancie-Mega 226/241, Talonflame 297/297
+
+  Turn 6
+    p1 mcts: switch 6, move 1 2   (slot0 Conkeldurr -> Volcanion)
+      search (13000 visits): switch volcanion;shadowball,1 232v 114 | drainpunch,1;shadowball,1 188v 86 | switch volcanion;toxic,1 188v 87 | machpunch,0;shadowball,1 174v 78
+    p2 greedy: move 1, move 2 1
+      p1a <- Volcanion comes in (364/364)
+      p2b Talonflame used Brave Bird -> p1a: Volcanion
+      p2a Diancie used Diamond Storm -> p1b: Aegislash  [[spread] p1a,p1b]
+              p2a Diancie def 1 rose
+      p1a Volcanion fainted
+      p1b Aegislash used Shadow Ball -> p2b: Talonflame
+      after p1: Volcanion 0/364, Aegislash-Blade 220/324
+      after p2: Diancie-Mega 196/241, Talonflame 6/297
+
+  Turn 7
+      p1a <- Thundurus comes in (361/361)
+      after p1: Thundurus 361/361, Aegislash-Blade 220/324
+      after p2: Diancie-Mega 196/241, Talonflame 6/297
+
+  Turn 8
+    p1 mcts: switch 6, move 1 1   (slot0 Thundurus -> Conkeldurr)
+      search (28000 visits): switch conkeldurr;shadowball,0 3365v 1477 | switch conkeldurr;shadowsneak,1 1927v 798 | thunderbolt,0;shadowball,0 922v 339 | switch conkeldurr;shadowball,1 610v 204
+    p2 greedy: move 1, move 2 2
+      p1a <- Conkeldurr comes in (203/401)
+      p2b Talonflame used Brave Bird -> p1b: Aegislash
+      p2b Talonflame fainted
+      p2a Diancie used Diamond Storm -> p1a: Conkeldurr  [[spread] p1a,p1b]
+      p1b Aegislash fainted
+      after p1: Conkeldurr 125/401, Aegislash 0/324
+      after p2: Diancie-Mega 151/241, Talonflame 0/297
+
+  Turn 9
+      p2b <- Aegislash comes in (324/324)
+      p1b <- Landorus comes in (160/319)
+      after p1: Conkeldurr 125/401, Landorus 160/319
+      after p2: Diancie-Mega 151/241, Aegislash 324/324
+
+  Turn 10
+    p1 mcts: move 4 2, move 1 1
+      search (31000 visits): knockoff,1;earthpower,0 2187v 835 | drainpunch,0;earthpower,0 1612v 590 | knockoff,1;earthpower,1 1310v 463 | icepunch,0;earthpower,0 1219v 425
+    p2 greedy: move 1, move 2 1
+      p2a Diancie used Diamond Storm -> p1b: Landorus  [[spread] p1a,p1b]
+      p1b Landorus fainted
+      p1a Conkeldurr used Knock Off -> p2b: Aegislash
+              p2b Aegislash used up its Safety Goggles
+      p2b Aegislash used Shadow Ball -> p1a: Conkeldurr
+              p1a Conkeldurr -- critical hit
+      p1a Conkeldurr fainted
+      after p1: Conkeldurr 0/401, Landorus 0/319
+      after p2: Diancie-Mega 91/241, Aegislash-Blade 164/324
+
+  Turn 11
+      p1a <- Thundurus comes in (361/361)
+      after p1: Thundurus 361/361, Landorus 0/319
+      after p2: Diancie-Mega 91/241, Aegislash-Blade 164/324
+
+  Turn 12
+    p1 mcts: move 1 2, pass
+      search (465000 visits): thunderbolt,1;No Move 119304v 2787 | thunderbolt,0;No Move 97890v 2136 | thunderwave,1;No Move 45958v 658 | hiddenpower,0;No Move 43665v 598
+    p2 greedy: move 1, move 2 1
+      p2a Diancie used Diamond Storm -> p1a: Thundurus
+      p1a Thundurus fainted
+      after p1: Thundurus 0/361, Landorus 0/319
+      after p2: Diancie-Mega 91/241, Aegislash-Blade 164/324
+
+  RESULT: p2 wins

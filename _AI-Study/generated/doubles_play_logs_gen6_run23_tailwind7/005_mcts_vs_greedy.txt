@@ -1,0 +1,297 @@
+battle 5   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: Untitled 650: Kyurem-Black, Diancie-Mega, Volcanion, Amoonguss, Landorus-Therian, Thundurus
+  p2: oraspl/Untitled 330: Kangaskhan-Mega, Suicune, Landorus-Therian, Zapdos, Volcanion, Amoonguss
+
+  Turn 1
+    p1 mcts: move 2 1, move 1
+      search (8000 visits): icebeam,0;diamondstorm,0 260v 182 | icebeam,0;moonblast,0 186v 121 | icebeam,1;diamondstorm,0 181v 117 | icebeam,1;moonblast,0 171v 109
+    p2 greedy: move 3 1, move 3 1
+      p2a Kangaskhan used Sucker Punch -> p1a: Kyurem
+      p1b Diancie used Diamond Storm -> p2b: Suicune  [[spread] p2a,p2b]
+              p1b Diancie def 1 rose
+      p1a Kyurem used Ice Beam -> p2a: Kangaskhan
+      p2b Suicune used Scald -> p1a: Kyurem
+      after p1: Kyurem-Black 300/418, Diancie-Mega 293/293
+      after p2: Kangaskhan-Mega 100/380, Suicune 327/404
+
+  Turn 2
+    p1 mcts: move 2 2, move 1
+      search (16000 visits): icebeam,1;diamondstorm,0 686v 494 | icebeam,0;moonblast,1 472v 324 | earthpower,1;diamondstorm,0 406v 272 | icebeam,0;diamondstorm,0 402v 269
+    p2 greedy: move 3 1, move 3 1
+      p2a Kangaskhan used Sucker Punch -> p1a: Kyurem
+      p1b Diancie used Diamond Storm -> p2a: Kangaskhan  [[spread] p2b]
+              p1b Diancie -- MISSED
+              p1b Diancie def 1 rose
+      p1a Kyurem used Ice Beam -> p2b: Suicune
+      p2b Suicune used Scald -> p1a: Kyurem
+              p1a Kyurem -- critical hit
+              p1a Kyurem is now brn
+      after p1: Kyurem-Black 101/418, Diancie-Mega 293/293
+      after p2: Kangaskhan-Mega 100/380, Suicune 176/404
+
+  Turn 3
+    p1 mcts: switch 4, move 2 1   (slot0 Kyurem-Black -> Amoonguss)
+      search (41000 visits): switch amoonguss;moonblast,0 6536v 5880 | icebeam,1;moonblast,0 1334v 554 | icebeam,1;diamondstorm,0 1193v 487 | switch volcanion;moonblast,0 982v 387
+    p2 greedy: move 3 1, move 3 1
+      p1a <- Amoonguss comes in (431/431)
+      p2a Kangaskhan used Sucker Punch  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p1b Diancie used Moonblast -> p2a: Kangaskhan
+      p2a Kangaskhan fainted
+      p2b Suicune used Scald -> p1a: Amoonguss
+      after p1: Amoonguss 379/431, Diancie-Mega 293/293
+      after p2: Kangaskhan-Mega 0/380, Suicune 201/404
+
+  Turn 4
+      p2a <- Landorus-Therian comes in (319/319)
+              p1a Amoonguss atk 1 fell
+              p1b Diancie atk 1 fell
+      after p1: Amoonguss 379/431, Diancie-Mega 293/293
+      after p2: Landorus-Therian 319/319, Suicune 201/404
+
+  Turn 5
+    p1 mcts: switch 6, move 3 1   (slot0 Amoonguss -> Thundurus)
+      search (35000 visits): switch thundurus;hiddenpower,0 12114v 8443 | switch thundurus;switch landorustherian 777v 438 | switch kyuremblack;diamondstorm,0 610v 332 | switch kyuremblack;switch landorustherian 461v 238
+    p2 greedy: move 4 1, move 3 1
+      p1a <- Thundurus comes in (359/359)
+      p2a Landorus used Superpower -> p1a: Thundurus
+              p2a Landorus atk 1 fell
+              p2a Landorus def 1 fell
+      p1b Diancie used Hidden Power -> p2a: Landorus
+      p2a Landorus fainted
+      p2b Suicune used Scald -> p1a: Thundurus
+              p1a Thundurus used up its Sitrus Berry
+      after p1: Thundurus 257/359, Diancie-Mega 293/293
+      after p2: Landorus-Therian 0/319, Suicune 226/404
+
+  Turn 6
+      p2a <- Zapdos comes in (384/384)
+      after p1: Thundurus 257/359, Diancie-Mega 293/293
+      after p2: Zapdos 384/384, Suicune 226/404
+
+  Turn 7
+    p1 mcts: switch 6, move 1   (slot0 Thundurus -> Amoonguss)
+      search (41000 visits): switch amoonguss;diamondstorm,0 7537v 4500 | taunt,0;switch kyuremblack 6627v 3933 | thunderbolt,1;moonblast,0 3510v 2009 | switch kyuremblack;hiddenpower,1 2042v 1119
+    p2 greedy: move 2, move 3 1
+      p1a <- Amoonguss comes in (431/431)
+      p1b Diancie used Diamond Storm -> p2a: Zapdos  [[spread] p2a,p2b]
+              p1b Diancie def 1 rose
+      p2a Zapdos used Heat Wave -> p1a: Amoonguss  [[spread] p1a,p1b]
+      p2b Suicune used Scald -> p1a: Amoonguss
+      after p1: Amoonguss 222/431, Diancie-Mega 260/293
+      after p2: Zapdos 178/384, Suicune 179/404
+
+  Turn 8
+    p1 mcts: switch 3, switch 5   (slot0 Amoonguss -> Volcanion; slot1 Diancie-Mega -> Landorus-Therian)
+      search (43000 visits): switch volcanion;switch landorustherian 2625v 884 | switch thundurus;protect,1 1840v 587 | switch volcanion;hiddenpower,1 840v 224 | switch landorustherian;hiddenpower,1 799v 210
+    p2 greedy: move 2, move 3 1
+      p1b <- Landorus-Therian comes in (319/319)
+              p2a Zapdos atk 1 fell
+              p2b Suicune atk 1 fell
+      p1a <- Volcanion comes in (363/363)
+      p2a Zapdos used Heat Wave -> p1a: Volcanion  [[spread] p1a,p1b]
+              p1b Landorus is now brn
+      p2b Suicune used Scald -> p1a: Volcanion
+      after p1: Volcanion 363/363, Landorus-Therian 182/319
+      after p2: Zapdos 178/384, Suicune 204/404
+
+  Turn 9
+    p1 mcts: move 1 2, switch 5   (slot1 Landorus-Therian -> Diancie-Mega)
+      search (51000 visits): steameruption,1;switch dianciemega 8589v 7641 | switch amoonguss;superpower,1 3475v 2478 | switch thundurus;switch amoonguss 3340v 2376 | heatwave,0;switch kyuremblack 3200v 2271
+    p2 greedy: move 2, move 3 2
+      p1b <- Diancie-Mega comes in (260/293)
+      p2a Zapdos used Heat Wave -> p1b: Diancie  [[spread] p1a,p1b]
+              p1b Diancie is now brn
+      p2b Suicune used Scald -> p1b: Diancie
+      p1a Volcanion used Steam Eruption -> p2b: Suicune
+      p1b Diancie fainted
+      after p1: Volcanion 351/363, Diancie-Mega 0/293
+      after p2: Zapdos 178/384, Suicune 145/404
+
+  Turn 10
+      p1b <- Amoonguss comes in (365/431)
+      after p1: Volcanion 351/363, Amoonguss 365/431
+      after p2: Zapdos 178/384, Suicune 145/404
+
+  Turn 11
+    p1 mcts: switch 5, switch 6   (slot0 Volcanion -> Landorus-Therian; slot1 Amoonguss -> Thundurus)
+      search (22000 visits): switch landorustherian;switch thundurus 13321v 13231 | heatwave,0;gigadrain,1 198v 96 | earthpower,0;switch landorustherian 190v 91 | heatwave,0;spore,0 188v 90
+    p2 greedy: move 2, move 3 2
+      p1a <- Landorus-Therian comes in (182/319)
+              p2a Zapdos atk 1 fell
+              p2b Suicune atk 1 fell
+      p1b <- Thundurus comes in (257/359)
+      p2a Zapdos used Heat Wave -> p1b: Thundurus  [[spread] p1b]
+              p2a Zapdos -- MISSED
+      p2b Suicune used Scald -> p1b: Thundurus
+      after p1: Landorus-Therian 143/319, Thundurus 62/359
+      after p2: Zapdos 178/384, Suicune 170/404
+
+  Turn 12
+    p1 mcts: switch 4, switch 6   (slot0 Landorus-Therian -> Kyurem-Black; slot1 Thundurus -> Amoonguss)
+      search (51000 visits): switch kyuremblack;switch amoonguss 1713v 508 | switch kyuremblack;switch volcanion 1583v 462 | switch volcanion;switch kyuremblack 1484v 428 | superpower,1;switch volcanion 1478v 425
+    p2 greedy: move 2, move 3 2
+      p1a <- Kyurem-Black comes in (101/418)
+      p1b <- Amoonguss comes in (431/431)
+      p2a Zapdos used Heat Wave -> p1b: Amoonguss  [[spread] p1a,p1b]
+      p2b Suicune used Scald -> p1b: Amoonguss
+      p1a Kyurem fainted
+      after p1: Kyurem-Black 0/418, Amoonguss 216/431
+      after p2: Zapdos 178/384, Suicune 195/404
+
+  Turn 13
+      p1a <- Landorus-Therian comes in (143/319)
+              p2a Zapdos atk 1 fell
+              p2b Suicune atk 1 fell
+      after p1: Landorus-Therian 143/319, Amoonguss 216/431
+      after p2: Zapdos 178/384, Suicune 195/404
+
+  Turn 14
+    p1 mcts: move 2 1, move 3 2
+      search (24000 visits): uturn,0;gigadrain,1 647v 102 | uturn,1;spore,0 630v 97 | uturn,0;spore,0 616v 94 | uturn,0;gigadrain,0 583v 86
+    p2 greedy: move 2, move 3 1
+      p1a Landorus used U-turn -> p2a: Zapdos
+      after p1: Landorus-Therian 90/319, Amoonguss 216/431
+      after p2: Zapdos 153/384, Suicune 195/404
+
+  Turn 15
+      p1a <- Volcanion comes in (351/363)
+      p2a Zapdos used Heat Wave -> p1b: Amoonguss  [[spread] p1a,p1b]
+      p2b Suicune used Scald -> p1a: Volcanion
+      p1b Amoonguss used Giga Drain -> p2b: Suicune
+      after p1: Volcanion 363/363, Amoonguss 108/431
+      after p2: Zapdos 153/384, Suicune 80/404
+
+  Turn 16
+    p1 mcts: move 2, switch 5   (slot1 Amoonguss -> Landorus-Therian)
+      search (23000 visits): heatwave,0;switch landorustherian 494v 62 | earthpower,0;switch landorustherian 454v 53 | steameruption,0;switch landorustherian 441v 50 | heatwave,0;spore,0 414v 44
+    p2 greedy: move 2, move 3 2
+      p1b <- Landorus-Therian comes in (90/319)
+              p2a Zapdos atk 1 fell
+              p2b Suicune atk 1 fell
+      p2a Zapdos used Heat Wave -> p1a: Volcanion  [[spread] p1a,p1b]
+      p2b Suicune used Scald -> p1b: Landorus
+      p1b Landorus fainted
+      p1a Volcanion used Heat Wave -> p2b: Suicune  [[spread] p2a,p2b]
+      after p1: Volcanion 351/363, Landorus-Therian 0/319
+      after p2: Zapdos 42/384, Suicune 52/404
+
+  Turn 17
+      p1b <- Amoonguss comes in (251/431)
+      after p1: Volcanion 351/363, Amoonguss 251/431
+      after p2: Zapdos 42/384, Suicune 52/404
+
+  Turn 18
+    p1 mcts: move 4 2, move 4
+      search (20000 visits): earthpower,1;protect,1 422v 23 | heatwave,0;ragepowder,1 419v 23 | steameruption,1;protect,1 411v 22 | earthpower,0;spore,0 409v 21
+    p2 greedy: move 2, move 3 2
+      p1b Amoonguss used Protect
+      p2a Zapdos used Heat Wave -> p1a: Volcanion  [[spread] p1a]
+              p1b Amoonguss -- move: Protect
+      p2b Suicune used Scald -> p1b: Amoonguss
+              p1b Amoonguss -- move: Protect
+      p1a Volcanion used Earth Power -> p2b: Suicune
+      p2b Suicune fainted
+      after p1: Volcanion 339/363, Amoonguss 251/431
+      after p2: Zapdos 42/384, Suicune 0/404
+
+  Turn 19
+      p2b <- Volcanion comes in (364/364)
+      after p1: Volcanion 339/363, Amoonguss 251/431
+      after p2: Zapdos 42/384, Volcanion 364/364
+
+  Turn 20
+    p1 mcts: move 1 2, move 4
+      search (10000 visits): steameruption,1;protect,1 801v 339 | steameruption,1;gigadrain,1 712v 295 | steameruption,1;gigadrain,0 575v 228 | steameruption,1;ragepowder,1 518v 200
+    p2 greedy: move 2, move 1 2
+      p1b Amoonguss used Protect
+      p2a Zapdos used Heat Wave -> p1a: Volcanion  [[spread] p1a]
+              p1b Amoonguss -- move: Protect
+      p2b Volcanion used Steam Eruption -> p1b: Amoonguss
+              p1b Amoonguss -- move: Protect
+      p1a Volcanion used Steam Eruption -> p2b: Volcanion
+              p2b Volcanion -- IMMUNE
+      after p1: Volcanion 327/363, Amoonguss 251/431
+      after p2: Zapdos 42/384, Volcanion 364/364
+
+  Turn 21
+    p1 mcts: move 1 2, move 4
+      search (10000 visits): steameruption,1;protect,1 758v 316 | steameruption,1;gigadrain,1 685v 281 | steameruption,1;gigadrain,0 573v 226 | steameruption,1;switch thundurus 546v 213
+    p2 greedy: move 2, move 1 2
+      p1b Amoonguss used Protect  [[still]]
+              p1b Amoonguss -- IT FAILED
+      p2a Zapdos used Heat Wave -> p1b: Amoonguss  [[spread] p1a,p1b]
+      p1a Volcanion used Steam Eruption -> p2b: Volcanion
+              p2b Volcanion -- IMMUNE
+      p2b Volcanion used Steam Eruption -> p1b: Amoonguss
+      p1b Amoonguss fainted
+      after p1: Volcanion 315/363, Amoonguss 0/431
+      after p2: Zapdos 42/384, Volcanion 364/364
+
+  Turn 22
+      p1b <- Thundurus comes in (62/359)
+      after p1: Volcanion 315/363, Thundurus 62/359
+      after p2: Zapdos 42/384, Volcanion 364/364
+
+  Turn 23
+    p1 mcts: move 1 2, move 2 1
+      search (20000 visits): steameruption,1;hiddenpower,0 1243v 474 | steameruption,1;thunderwave,1 1228v 467 | steameruption,1;thunderbolt,0 1072v 398 | steameruption,1;taunt,0 1010v 371
+    p2 greedy: move 2, move 1 2
+      p1b Thundurus used Hidden Power -> p2a: Zapdos
+      p2a Zapdos fainted
+      p1a Volcanion used Steam Eruption -> p2b: Volcanion
+              p2b Volcanion -- IMMUNE
+      p2b Volcanion used Steam Eruption -> p1b: Thundurus
+      p1b Thundurus fainted
+      after p1: Volcanion 315/363, Thundurus 0/359
+      after p2: Zapdos 0/384, Volcanion 364/364
+
+  Turn 24
+      p2a <- Amoonguss comes in (432/432)
+      after p1: Volcanion 315/363, Thundurus 0/359
+      after p2: Amoonguss 432/432, Volcanion 364/364
+
+  Turn 25
+    p1 mcts: move 1 2, pass
+      search (25000 visits): steameruption,1;No Move 8400v 2738 | heatwave,0;No Move 5984v 1896 | earthpower,1;No Move 4326v 1326 | steameruption,0;No Move 1955v 534
+    p2 greedy: move 4 1, move 1 1
+      p2b Volcanion used Steam Eruption -> p1a: Volcanion
+      p1a Volcanion used Steam Eruption -> p2b: Volcanion
+              p2b Volcanion -- IMMUNE
+      p2a Amoonguss used Energy Ball -> p1a: Volcanion
+      after p1: Volcanion 300/363, Thundurus 0/359
+      after p2: Amoonguss 432/432, Volcanion 364/364
+
+  Turn 26
+    p1 mcts: move 4 2, pass
+      search (32000 visits): earthpower,1;No Move 9382v 2895 | steameruption,1;No Move 8551v 2619 | heatwave,0;No Move 6237v 1858 | earthpower,0;No Move 2574v 684
+    p2 greedy: move 4 1, move 1 1
+      p2b Volcanion used Steam Eruption -> p1a: Volcanion
+      p1a Volcanion used Earth Power -> p2b: Volcanion
+      p2a Amoonguss used Energy Ball -> p1a: Volcanion
+      after p1: Volcanion 305/363, Thundurus 0/359
+      after p2: Amoonguss 432/432, Volcanion 186/364
+
+  Turn 27
+    p1 mcts: move 4 2, pass
+      search (31000 visits): earthpower,1;No Move 11037v 3681 | heatwave,0;No Move 9722v 3215 | steameruption,1;No Move 5029v 1572 | earthpower,0;No Move 1685v 448
+    p2 greedy: move 4 1, move 1 1
+      p2b Volcanion used Steam Eruption -> p1a: Volcanion
+      p1a Volcanion used Earth Power -> p2b: Volcanion
+      p2b Volcanion fainted
+      p2a Amoonguss used Energy Ball -> p1a: Volcanion
+              p1a Volcanion spd 1 fell
+      after p1: Volcanion 306/363, Thundurus 0/359
+      after p2: Amoonguss 432/432, Volcanion 0/364
+
+  Turn 28
+    p1 mcts: move 3 1, pass
+      search (651000 visits): overheat,0;No Move 606258v 591163 | heatwave,0;No Move 21832v 20632 | earthpower,0;No Move 21266v 20087 | steameruption,0;No Move 1644v 1404
+    p2 greedy: move 4 1, pass
+      p1a Volcanion used Overheat -> p2a: Amoonguss
+              p1a Volcanion spa 2 fell
+      p2a Amoonguss fainted
+      after p1: Volcanion 306/363, Thundurus 0/359
+      after p2: Amoonguss 0/432, Volcanion 0/364
+
+  RESULT: p1 wins

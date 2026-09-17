@@ -1,0 +1,255 @@
+battle 114   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: XY Doubles: Sableye, Togekiss, Jirachi, Thundurus, Tyranitar, Kangaskhan
+  p2: Untitled 1416: Gardevoir-Mega, Amoonguss, Blastoise, Landorus, Volcanion, Scrafty
+
+  Turn 1
+    p1 mcts: move 1 1, move 2 2
+      search (15000 visits): foulplay,0;airslash,1 264v 148 | switch tyranitar;airslash,1 260v 145 | foulplay,0;switch tyranitar 229v 124 | foulplay,1;airslash,1 221v 119
+    p2 greedy: move 1, move 3 1
+      p2a Gardevoir used Hyper Voice -> p1a: Sableye  [[spread] p1b]
+              p1a Sableye -- IMMUNE
+      p1b Togekiss used Air Slash -> p2b: Amoonguss
+      p1a Sableye used Foul Play -> p2a: Gardevoir
+      p2b Amoonguss used Sludge Bomb -> p1a: Sableye
+      after p1: Sableye 281/304, Togekiss 306/373
+      after p2: Gardevoir-Mega 250/340, Amoonguss 222/432
+
+  Turn 2
+    p1 mcts: move 1 1, move 2 2
+      search (16000 visits): foulplay,0;airslash,1 324v 193 | foulplay,1;airslash,1 306v 180 | switch tyranitar;airslash,1 292v 170 | taunt,1;airslash,1 257v 145
+    p2 greedy: move 1, move 3 2
+      p2a Gardevoir used Hyper Voice -> p1a: Sableye  [[spread] p1b]
+              p1a Sableye -- IMMUNE
+      p1b Togekiss used Air Slash -> p2b: Amoonguss
+      p2b Amoonguss fainted
+      p1a Sableye used Foul Play -> p2a: Gardevoir
+      after p1: Sableye 300/304, Togekiss 230/373
+      after p2: Gardevoir-Mega 165/340, Amoonguss 0/432
+
+  Turn 3
+      p2b <- Blastoise comes in (362/362)
+      after p1: Sableye 300/304, Togekiss 230/373
+      after p2: Gardevoir-Mega 165/340, Blastoise 362/362
+
+  Turn 4
+    p1 mcts: switch 5, move 1 1   (slot0 Sableye -> Tyranitar)
+      search (13000 visits): switch tyranitar;thunderwave,0 539v 376 | switch tyranitar;airslash,1 427v 288 | switch tyranitar;thunderwave,1 353v 231 | switch tyranitar;airslash,0 332v 215
+    p2 greedy: move 1, move 1 2
+      p1a <- Tyranitar comes in (361/361)
+      p2a Gardevoir used Hyper Voice -> p1a: Tyranitar  [[spread] p1a,p1b]
+              p1b Togekiss used up its Sitrus Berry
+      p1b Togekiss used Thunder Wave -> p2a: Gardevoir
+              p2a Gardevoir is now par
+      p2b Blastoise used Scald -> p1b: Togekiss
+      after p1: Tyranitar 331/361, Togekiss 167/373
+      after p2: Gardevoir-Mega 144/340, Blastoise 362/362
+
+  Turn 5
+    p1 mcts: move 3, move 2 2
+      search (12000 visits): dragondance,0;airslash,1 497v 394 | dragondance,0;airslash,0 413v 320 | dragondance,0;thunderwave,1 376v 288 | dragondance,0;encore,1 336v 253
+    p2 greedy: move 1, move 1 2
+      p1a Tyranitar used Dragon Dance
+              p1a Tyranitar atk 1 rose
+              p1a Tyranitar spe 1 rose
+      p1b Togekiss used Air Slash -> p2b: Blastoise
+              p2b Blastoise COULD NOT MOVE (flinch)
+              p2a Gardevoir COULD NOT MOVE (par)
+      after p1: Tyranitar 331/361, Togekiss 144/373
+      after p2: Gardevoir-Mega 123/340, Blastoise 277/362
+
+  Turn 6
+    p1 mcts: move 2, move 1 1
+      search (16000 visits): rockslide,0;thunderwave,0 656v 476 | rockslide,0;airslash,0 470v 326 | crunch,1;protect,1 461v 319 | dragondance,0;airslash,1 423v 289
+    p2 greedy: move 1, move 1 2
+      p1a Tyranitar used Rock Slide -> p2b: Blastoise  [[spread] p2a,p2b]
+              p2b Blastoise -- critical hit
+      p2a Gardevoir fainted
+      p1b Togekiss used Thunder Wave -> p2b: Blastoise
+              p2b Blastoise is now par
+      p2b Blastoise used Scald -> p1b: Togekiss
+              p1b Togekiss is now brn
+      p1b Togekiss fainted
+      after p1: Tyranitar 331/361, Togekiss 0/373
+      after p2: Gardevoir-Mega 0/340, Blastoise 94/362
+
+  Turn 7
+      p2a <- Landorus comes in (319/319)
+      p1b <- Jirachi comes in (342/342)
+      after p1: Tyranitar 331/361, Jirachi 342/342
+      after p2: Landorus 319/319, Blastoise 94/362
+
+  Turn 8
+    p1 mcts: move 4, move 3 1
+      search (20000 visits): protect,0;icepunch,0 1050v 596 | protect,0;switch thundurus 721v 389 | protect,0;switch sableye 683v 366 | protect,0;switch kangaskhan 646v 342
+    p2 greedy: move 1 1, move 1 1
+      p1a Tyranitar used Protect
+      p2a Landorus used Earth Power -> p1a: Tyranitar
+              p1a Tyranitar -- move: Protect
+      p1b Jirachi used Ice Punch -> p2a: Landorus
+      p2a Landorus fainted
+      p2b Blastoise used Scald -> p1a: Tyranitar
+              p1a Tyranitar -- move: Protect
+      after p1: Tyranitar 331/361, Jirachi 342/342
+      after p2: Landorus 0/319, Blastoise 94/362
+
+  Turn 9
+      p2a <- Volcanion comes in (363/363)
+      after p1: Tyranitar 331/361, Jirachi 342/342
+      after p2: Volcanion 363/363, Blastoise 94/362
+
+  Turn 10
+    p1 mcts: move 4, switch 6   (slot1 Jirachi -> Kangaskhan)
+      search (10000 visits): protect,0;switch kangaskhan 1294v 783 | rockslide,0;switch kangaskhan 1045v 619 | protect,0;switch thundurus 696v 391 | rockslide,0;switch thundurus 545v 294
+    p2 greedy: move 2 1, move 1 1
+      p1b <- Kangaskhan comes in (352/352)
+      p1a Tyranitar used Protect
+      p2a Volcanion used Overheat -> p1a: Tyranitar
+              p1a Tyranitar -- move: Protect
+      p2b Blastoise used Scald -> p1a: Tyranitar
+              p1a Tyranitar -- move: Protect
+      after p1: Tyranitar 331/361, Kangaskhan 352/352
+      after p2: Volcanion 363/363, Blastoise 94/362
+
+  Turn 11
+    p1 mcts: move 4, move 2 1
+      search (10000 visits): protect,0;headbutt,0 294v 185 | protect,0;headbutt,1 291v 183 | protect,0;mudslap,0 228v 136 | protect,0;headbutt-mega,0 207v 120
+    p2 greedy: move 2 1, move 1 1
+      p1a Tyranitar used Protect  [[still]]
+              p1a Tyranitar -- IT FAILED
+      p1b Kangaskhan used Headbutt -> p2a: Volcanion
+      p2a Volcanion used Overheat -> p1a: Tyranitar  [[miss]]
+              p2a Volcanion -- MISSED
+      p2b Blastoise used Scald -> p1a: Tyranitar
+              p1a Tyranitar -- critical hit
+      p1a Tyranitar fainted
+      after p1: Tyranitar 0/361, Kangaskhan 352/352
+      after p2: Volcanion 263/363, Blastoise 94/362
+
+  Turn 12
+      p1a <- Thundurus comes in (362/362)
+      after p1: Thundurus 362/362, Kangaskhan 352/352
+      after p2: Volcanion 263/363, Blastoise 94/362
+
+  Turn 13
+    p1 mcts: move 4, move 2 2
+      search (12000 visits): substitute,0;headbutt,1 173v 74 | substitute,0;mudslap,0 142v 55 | thunderwave,0;headbutt,1 134v 51 | substitute,0;headbutt,0 132v 50
+    p2 greedy: move 2 1, move 1 1
+      p1a Thundurus used Substitute
+              p1a Thundurus gained Substitute
+      p1b Kangaskhan used Headbutt -> p2b: Blastoise
+      p2b Blastoise fainted
+      p2a Volcanion used Overheat -> p1a: Thundurus
+              p1a Thundurus lost Substitute
+              p2a Volcanion spa 2 fell
+      after p1: Thundurus 294/362, Kangaskhan 352/352
+      after p2: Volcanion 263/363, Blastoise 0/362
+
+  Turn 14
+      p2b <- Scrafty comes in (334/334)
+              p1a Thundurus atk 1 fell
+              p1b Kangaskhan atk 1 fell
+      after p1: Thundurus 294/362, Kangaskhan 352/352
+      after p2: Volcanion 263/363, Scrafty 334/334
+
+  Turn 15
+    p1 mcts: move 1 1, switch 5   (slot1 Kangaskhan -> Sableye)
+      search (13000 visits): thunderwave,0;switch sableye 161v 85 | thunderwave,1;switch sableye 157v 82 | substitute,0;switch sableye 155v 81 | substitute,0;protect,1 150v 78
+    p2 greedy: move 2 1, move 2 1
+      p1b <- Sableye comes in (300/304)
+      p1a Thundurus used Thunder Wave -> p2a: Volcanion
+              p2a Volcanion is now par
+      p2a Volcanion used Overheat -> p1a: Thundurus
+              p2a Volcanion spa 2 fell
+      p2b Scrafty used High Jump Kick -> p1a: Thundurus
+      after p1: Thundurus 92/362, Sableye 304/304
+      after p2: Volcanion 263/363, Scrafty 334/334
+
+  Turn 16
+    p1 mcts: move 1 2, move 1 1
+      search (11000 visits): thunderwave,1;foulplay,0 260v 140 | substitute,0;foulplay,0 259v 139 | thunderwave,1;foulplay,1 226v 117 | thunderwave,1;swagger,0 215v 110
+    p2 greedy: move 2 1, move 2 1
+      p1a Thundurus used Thunder Wave -> p2b: Scrafty
+              p2b Scrafty is now par
+              p2b Scrafty COULD NOT MOVE (par)
+      p1b Sableye used Foul Play -> p2a: Volcanion
+      p2a Volcanion used Overheat -> p1a: Thundurus
+              p2a Volcanion spa 2 fell
+      after p1: Thundurus 33/362, Sableye 304/304
+      after p2: Volcanion 176/363, Scrafty 334/334
+
+  Turn 17
+    p1 mcts: switch 5, move 1 2   (slot0 Thundurus -> Kangaskhan)
+      search (17000 visits): switch kangaskhan;foulplay,1 396v 192 | foulplay,0;foulplay,1 386v 187 | switch kangaskhan;foulplay,0 363v 173 | foulplay,1;foulplay,0 354v 168
+    p2 greedy: move 2 1, move 2 1
+      p1a <- Kangaskhan comes in (352/352)
+      p1b Sableye used Foul Play -> p2b: Scrafty
+              p2a Volcanion COULD NOT MOVE (par)
+      p2b Scrafty used High Jump Kick -> p1a: Kangaskhan
+      p1a Kangaskhan fainted
+      after p1: Kangaskhan 0/352, Sableye 304/304
+      after p2: Volcanion 176/363, Scrafty 304/334
+
+  Turn 18
+      p1a <- Thundurus comes in (33/362)
+      after p1: Thundurus 33/362, Sableye 304/304
+      after p2: Volcanion 176/363, Scrafty 304/334
+
+  Turn 19
+    p1 mcts: move 3 1, move 1 2
+      search (18000 visits): foulplay,0;foulplay,1 503v 211 | foulplay,1;foulplay,0 447v 182 | foulplay,1;foulplay,1 428v 172 | foulplay,1;swagger,0 404v 160
+    p2 greedy: move 2 1, move 2 1
+      p1a Thundurus used Foul Play -> p2a: Volcanion
+      p1b Sableye used Foul Play -> p2b: Scrafty
+      p2a Volcanion used Overheat -> p1a: Thundurus
+      p1a Thundurus fainted
+              p2b Scrafty COULD NOT MOVE (par)
+      after p1: Thundurus 0/362, Sableye 304/304
+      after p2: Volcanion 119/363, Scrafty 273/334
+
+  Turn 20
+      p1a <- Jirachi comes in (342/342)
+      after p1: Jirachi 342/342, Sableye 304/304
+      after p2: Volcanion 119/363, Scrafty 273/334
+
+  Turn 21
+    p1 mcts: move 1 2, move 1 2
+      search (15000 visits): ironhead,1;foulplay,1 819v 389 | ironhead,1;taunt,1 587v 262 | ironhead,1;recover,1 580v 259 | ironhead,1;taunt,0 579v 258
+    p2 greedy: move 2 1, move 2 1
+      p1a Jirachi used Iron Head -> p2b: Scrafty
+      p1b Sableye used Foul Play -> p2b: Scrafty
+              p2a Volcanion COULD NOT MOVE (par)
+              p2b Scrafty COULD NOT MOVE (flinch)
+      after p1: Jirachi 342/342, Sableye 304/304
+      after p2: Volcanion 119/363, Scrafty 124/334
+
+  Turn 22
+    p1 mcts: move 1 2, move 1 2
+      search (57000 visits): ironhead,1;foulplay,1 51556v 33741 | ironhead,1;swagger,0 1178v 628 | ironhead,1;foulplay,0 984v 513 | ironhead,1;taunt,1 509v 238
+    p2 greedy: move 2 1, move 2 1
+      p1a Jirachi used Iron Head -> p2b: Scrafty
+      p1b Sableye used Foul Play -> p2b: Scrafty
+      p2b Scrafty fainted
+              p2a Volcanion COULD NOT MOVE (par)
+      after p1: Jirachi 342/342, Sableye 304/304
+      after p2: Volcanion 119/363, Scrafty 0/334
+
+  Turn 23
+    p1 mcts: move 1 1, move 1 1
+      search (844000 visits): ironhead,0;foulplay,0 843504v 833468 | ironhead,0;swagger,0 277v 188 | ironhead,0;taunt,0 114v 57 | ironhead,0;recover,1 105v 51
+    p2 greedy: move 2 1, pass
+      p1a Jirachi used Iron Head -> p2a: Volcanion
+      p1b Sableye used Foul Play -> p2a: Volcanion
+      p2a Volcanion used Overheat -> p1a: Jirachi
+      after p1: Jirachi 234/342, Sableye 304/304
+      after p2: Volcanion 10/363, Scrafty 0/334
+
+  Turn 24
+    p1 mcts: move 1 1, move 1 1
+      search (2291000 visits): ironhead,0;foulplay,0 572759v 572759 | ironhead,0;swagger,0 572747v 572747 | ironhead,0;recover,1 572747v 572747 | ironhead,0;taunt,0 572747v 572747
+    p2 greedy: move 2 1, pass
+      p1a Jirachi used Iron Head -> p2a: Volcanion
+      p2a Volcanion fainted
+      after p1: Jirachi 234/342, Sableye 304/304
+      after p2: Volcanion 0/363, Scrafty 0/334
+
+  RESULT: p1 wins

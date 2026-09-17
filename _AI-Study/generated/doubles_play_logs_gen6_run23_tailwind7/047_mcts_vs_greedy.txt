@@ -1,0 +1,137 @@
+battle 47   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: ORAS Doubles OU: Raikou, Diancie, Heatran, Breloom, Cresselia, Gyarados
+  p2: XY Doubles: Abomasnow, Magnezone, Chandelure, Cresselia, Marowak, Scrafty
+
+  Turn 1
+    p1 mcts: move 2 1, move 2
+      search (13000 visits): voltswitch,0;diamondstorm,0 203v 152 | thunderwave,0;earthpower,1 197v 147 | voltswitch,1;diamondstorm,0 190v 141 | voltswitch,0;earthpower,1 183v 134
+    p2 greedy: move 2, move 2 1
+      p1a Raikou used Volt Switch -> p2a: Abomasnow
+      after p1: Raikou 384/384, Diancie 241/241
+      after p2: Abomasnow 324/381, Magnezone 344/344
+
+  Turn 2
+      p1a <- Heatran comes in (368/368)
+      p1b Diancie used Diamond Storm -> p2b: Magnezone  [[spread] p2a,p2b]
+      p2b Magnezone used Thunderbolt -> p1a: Heatran
+      p2a Abomasnow used Blizzard -> p1b: Diancie  [[spread] p1b]
+              p2a Abomasnow -- MISSED
+              p1b Diancie is now frz
+      after p1: Heatran 183/368, Diancie 156/241
+      after p2: Abomasnow 48/381, Magnezone 264/344
+
+  Turn 3
+    p1 mcts: move 3, move 2
+      search (15000 visits): heatwave,0;diamondstorm,0 596v 483 | heatwave,0;diamondstorm-mega,0 510v 406 | heatwave,0;moonblast-mega,0 501v 397 | earthpower,1;diamondstorm,0 464v 365
+    p2 greedy: move 2, move 2 1
+              p1b Diancie COULD NOT MOVE (frz)
+      p1a Heatran used Heat Wave -> p2b: Magnezone  [[spread] p2a,p2b]
+              p2a Abomasnow -- critical hit
+              p2b Magnezone -- critical hit
+      p2a Abomasnow fainted
+      p2b Magnezone fainted
+      after p1: Heatran 206/368, Diancie 156/241
+      after p2: Abomasnow 0/381, Magnezone 0/344
+
+  Turn 4
+      p2a <- Chandelure comes in (324/324)
+      p2b <- Cresselia comes in (444/444)
+      after p1: Heatran 206/368, Diancie 156/241
+      after p2: Chandelure 324/324, Cresselia 444/444
+
+  Turn 5
+    p1 mcts: switch 6, move 2   (slot0 Heatran -> Gyarados)
+      search (17000 visits): switch gyarados;diamondstorm,0 549v 444 | earthpower,0;diamondstorm,0 398v 309 | switch gyarados;diamondstorm-mega,0 350v 266 | earthpower,0;earthpower,0 302v 224
+    p2 greedy: move 2, move 2 1
+      p1a <- Gyarados comes in (352/352)
+              p2a Chandelure atk 1 fell
+              p2b Cresselia atk 1 fell
+              p1b Diancie COULD NOT MOVE (frz)
+      p2b Cresselia used Psyshock -> p1a: Gyarados
+      p2a Chandelure used Heat Wave -> p1a: Gyarados  [[spread] p1a,p1b]
+              p1b Diancie is cured of frz
+      after p1: Gyarados 175/352, Diancie 100/241
+      after p2: Chandelure 324/324, Cresselia 444/444
+
+  Turn 6
+    p1 mcts: move 1 1, move 2
+      search (12000 visits): waterfall,0;diamondstorm,0 196v 148 | waterfall,0;diamondstorm-mega,0 170v 124 | waterfall,0;moonblast-mega,0 169v 123 | icefang,0;diamondstorm-mega,0 148v 104
+    p2 greedy: move 2, move 2 2
+      p1a Gyarados used Waterfall -> p2a: Chandelure
+              p2a Chandelure used up its Focus Sash
+      p1b Diancie used Diamond Storm -> p2b: Cresselia  [[spread] p2a,p2b]
+              p1b Diancie def 1 rose
+      p2a Chandelure fainted
+      p2b Cresselia used Psyshock -> p1b: Diancie
+      after p1: Gyarados 175/352, Diancie 70/241
+      after p2: Chandelure 0/324, Cresselia 357/444
+
+  Turn 7
+      p2a <- Marowak comes in (324/324)
+      after p1: Gyarados 175/352, Diancie 70/241
+      after p2: Marowak 324/324, Cresselia 357/444
+
+  Turn 8
+    p1 mcts: move 1 1, move 2
+      search (15000 visits): waterfall,0;diamondstorm,0 512v 334 | waterfall,0;moonblast,0 479v 309 | waterfall,0;moonblast-mega,1 478v 308 | waterfall,0;earthpower,0 436v 277
+    p2 greedy: move 2 2, move 2 2
+      p1a Gyarados used Waterfall -> p2a: Marowak
+              p2a Marowak -- critical hit
+      p2a Marowak fainted
+      p1b Diancie used Diamond Storm -> p2b: Cresselia
+      p2b Cresselia used Psyshock -> p1b: Diancie
+      after p1: Gyarados 175/352, Diancie 39/241
+      after p2: Marowak 0/324, Cresselia 236/444
+
+  Turn 9
+      p2a <- Scrafty comes in (331/331)
+              p1a Gyarados atk 1 fell
+              p1b Diancie -- IT FAILED
+      after p1: Gyarados 175/352, Diancie 39/241
+      after p2: Scrafty 331/331, Cresselia 236/444
+
+  Turn 10
+    p1 mcts: switch 3, move 3 1   (slot0 Gyarados -> Raikou)
+      search (20000 visits): switch raikou;moonblast,0 1293v 1135 | switch raikou;moonblast-mega,0 1264v 1108 | switch heatran;moonblast,0 1258v 1102 | switch heatran;moonblast-mega,0 1258v 1102
+    p2 greedy: move 3 2, move 2 2
+      p1a <- Raikou comes in (384/384)
+      p1b Diancie used Moonblast -> p2a: Scrafty
+      p2b Cresselia used Psyshock -> p1b: Diancie
+      p2a Scrafty used Drain Punch -> p1b: Diancie
+      p1b Diancie fainted
+      after p1: Raikou 384/384, Diancie 0/241
+      after p2: Scrafty 57/331, Cresselia 236/444
+
+  Turn 11
+      p1b <- Gyarados comes in (175/352)
+              p2a Scrafty atk 1 fell
+              p2b Cresselia atk 1 fell
+      after p1: Raikou 384/384, Gyarados 175/352
+      after p2: Scrafty 57/331, Cresselia 236/444
+
+  Turn 12
+    p1 mcts: move 2 1, move 4 2
+      search (36000 visits): voltswitch,0;crunch,1 4109v 2409 | voltswitch,0;waterfall,1 1181v 619 | snarl,0;icefang,0 1094v 568 | snarl,0;waterfall,0 1065v 551
+    p2 greedy: move 3 2, move 2 2
+      p1a Raikou used Volt Switch -> p2a: Scrafty
+      after p1: Raikou 384/384, Gyarados 175/352
+      after p2: Scrafty 2/331, Cresselia 236/444
+
+  Turn 13
+      p1a <- Breloom comes in (262/262)
+      p1b Gyarados used Crunch -> p2b: Cresselia
+      p2b Cresselia fainted
+      p2a Scrafty used Drain Punch -> p1b: Gyarados
+      after p1: Breloom 262/262, Gyarados 133/352
+      after p2: Scrafty 23/331, Cresselia 0/444
+
+  Turn 14
+    p1 mcts: move 3 1, move 4 1
+      search (1097000 visits): machpunch,0;crunch,0 136769v 136769 | machpunch,0;switch raikou 136769v 136769 | machpunch,0;switch cresselia 136769v 136769 | machpunch,0;switch heatran 136769v 136769
+    p2 greedy: move 3 2, pass
+      p1a Breloom used Mach Punch -> p2a: Scrafty
+      p2a Scrafty fainted
+      after p1: Breloom 262/262, Gyarados 133/352
+      after p2: Scrafty 0/331, Cresselia 0/444
+
+  RESULT: p1 wins

@@ -1,0 +1,271 @@
+battle 87   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: ORAS Doubles OU: Gyarados, Tyranitar, Excadrill, Talonflame, Hitmontop, Diancie
+  p2: Untitled 610: Heracross-Mega, Gothitelle, Volcanion, Landorus-Therian, Diancie, Amoonguss
+
+  Turn 1
+    p1 mcts: move 1, move 4
+      search (6000 visits): icywind,0;protect,1 311v 177 | icywind,0;rockslide,0 291v 163 | icywind,0;crunch,1 278v 154 | waterfall,0;rockslide,0 250v 136
+    p2 greedy: move 1 1, move 4 1
+      p1b Tyranitar used Protect
+      p1a Gyarados used Icy Wind -> p2b: Gothitelle  [[spread] p2a,p2b]
+              p2a Heracross spe 1 fell
+              p2b Gothitelle spe 1 fell
+      p2a Heracross used Close Combat -> p1a: Gyarados
+              p2a Heracross def 1 fell
+              p2a Heracross spd 1 fell
+      p2b Gothitelle used Psychic -> p1a: Gyarados
+              p1a Gyarados -- critical hit
+              p1a Gyarados used up its Sitrus Berry
+      after p1: Gyarados 229/394, Tyranitar 404/404
+      after p2: Heracross-Mega 324/364, Gothitelle 307/344
+
+  Turn 2
+    p1 mcts: move 1, move 4
+      search (5000 visits): icywind,0;protect,1 236v 102 | icywind,0;rockslide,0 214v 89 | icywind,0;crunch,1 195v 79 | waterfall,0;crunch,1 184v 72
+    p2 greedy: move 1 1, move 4 1
+      p1b Tyranitar used Protect  [[still]]
+              p1b Tyranitar -- IT FAILED
+      p1a Gyarados used Icy Wind -> p2a: Heracross  [[spread] p2a,p2b]
+              p2a Heracross spe 1 fell
+              p2b Gothitelle spe 1 fell
+      p2a Heracross used Close Combat -> p1a: Gyarados
+              p2a Heracross def 1 fell
+              p2a Heracross spd 1 fell
+      p2b Gothitelle used Psychic -> p1a: Gyarados
+      after p1: Gyarados 12/394, Tyranitar 404/404
+      after p2: Heracross-Mega 271/364, Gothitelle 270/344
+
+  Turn 3
+    p1 mcts: move 1, move 1
+      search (21000 visits): icywind,0;rockslide,0 1370v 362 | waterfall,1;rockslide,0 1083v 270 | waterfall,0;crunch,1 891v 209 | waterfall,0;rockslide,0 807v 184
+    p2 greedy: move 1 1, move 4 1
+      p1a Gyarados used Icy Wind -> p2b: Gothitelle  [[spread] p2a,p2b]
+              p2a Heracross spe 1 fell
+              p2b Gothitelle spe 1 fell
+      p1b Tyranitar used Rock Slide -> p2b: Gothitelle  [[spread] p2b]
+              p1b Tyranitar -- MISSED
+              p2b Gothitelle used up its Sitrus Berry
+      p2a Heracross used Close Combat -> p1a: Gyarados
+              p2a Heracross def 1 fell
+              p2a Heracross spd 1 fell
+      p1a Gyarados fainted
+      p2b Gothitelle used Psychic -> p1b: Tyranitar
+              p1b Tyranitar -- IMMUNE
+      after p1: Gyarados 0/394, Tyranitar 404/404
+      after p2: Heracross-Mega 215/364, Gothitelle 232/344
+
+  Turn 4
+      p1a <- Excadrill comes in (361/361)
+      after p1: Excadrill 361/361, Tyranitar 404/404
+      after p2: Heracross-Mega 215/364, Gothitelle 232/344
+
+  Turn 5
+    p1 mcts: move 1, move 4
+      search (22000 visits): earthquake,0;protect,1 1103v 122 | rockslide,0;icebeam,1 956v 97 | ironhead,1;icebeam,1 863v 81 | ironhead,1;protect,1 855v 79
+    p2 greedy: move 1 1, move 4 1
+      p1b Tyranitar used Protect
+      p1a Excadrill used Earthquake -> p2b: Gothitelle  [[spread] p2a,p2b]
+              p1b Tyranitar -- move: Protect
+      p2a Heracross used Close Combat -> p1a: Excadrill
+              p1a Excadrill used up its Focus Sash
+              p2a Heracross def 1 fell
+              p2a Heracross spd 1 fell
+      p2b Gothitelle used Psychic -> p1a: Excadrill
+      p1a Excadrill fainted
+      after p1: Excadrill 0/361, Tyranitar 404/404
+      after p2: Heracross-Mega 24/364, Gothitelle 102/344
+
+  Turn 6
+      p1a <- Talonflame comes in (298/298)
+      after p1: Talonflame 298/298, Tyranitar 404/404
+      after p2: Heracross-Mega 24/364, Gothitelle 102/344
+
+  Turn 7
+    p1 mcts: move 4, move 4
+      search (18000 visits): protect,0;protect,1 579v 17 | protect,0;icebeam,1 567v 16 | bravebird,1;crunch,1 560v 15 | bravebird,1;icebeam,1 554v 14
+    p2 greedy: move 1 1, move 4 1
+      p1a Talonflame used Protect
+      p1b Tyranitar used Protect  [[still]]
+              p1b Tyranitar -- IT FAILED
+      p2a Heracross used Close Combat -> p1a: Talonflame
+              p1a Talonflame -- move: Protect
+      p2b Gothitelle used Psychic -> p1a: Talonflame
+              p1a Talonflame -- move: Protect
+      after p1: Talonflame 298/298, Tyranitar 404/404
+      after p2: Heracross-Mega 24/364, Gothitelle 102/344
+
+  Turn 8
+    p1 mcts: move 4, move 2 2
+      search (22000 visits): protect,0;icebeam,1 765v 31 | protect,0;protect,1 762v 31 | quickguard,0;icebeam,1 709v 24 | quickguard,0;protect,1 703v 24
+    p2 greedy: move 1 1, move 4 1
+      p1a Talonflame used Protect  [[still]]
+              p1a Talonflame -- IT FAILED
+      p1b Tyranitar used Ice Beam -> p2b: Gothitelle
+      p2a Heracross used Close Combat -> p1a: Talonflame
+              p2a Heracross def 1 fell
+              p2a Heracross spd 1 fell
+      p2b Gothitelle used Psychic -> p1a: Talonflame
+      after p1: Talonflame 9/298, Tyranitar 404/404
+      after p2: Heracross-Mega 24/364, Gothitelle 35/344
+
+  Turn 9
+    p1 mcts: move 1 2, move 2 2
+      search (21000 visits): bravebird,1;icebeam,1 748v 30 | bravebird,1;protect,1 735v 29 | bravebird,1;crunch,1 712v 26 | overheat,1;crunch,1 674v 22
+    p2 greedy: move 1 1, move 4 1
+      p1a Talonflame used Brave Bird -> p2b: Gothitelle
+      p2b Gothitelle fainted
+      p1a Talonflame fainted
+      p1b Tyranitar used Ice Beam -> p2a: Heracross
+      p2a Heracross fainted
+      after p1: Talonflame 0/298, Tyranitar 404/404
+      after p2: Heracross-Mega 0/364, Gothitelle 0/344
+
+  Turn 10
+      p1a <- Hitmontop comes in (304/304)
+      p2a <- Volcanion comes in (363/363)
+      p2b <- Landorus-Therian comes in (319/319)
+              p1a Hitmontop atk 1 fell
+              p1b Tyranitar atk 1 fell
+              p2a Volcanion atk 1 fell
+              p2b Landorus atk 1 fell
+      after p1: Hitmontop 304/304, Tyranitar 404/404
+      after p2: Volcanion 363/363, Landorus-Therian 319/319
+
+  Turn 11
+    p1 mcts: move 2 2, move 2 2
+      search (7000 visits): fakeout,1;icebeam,1 301v 149 | fakeout,0;icebeam,1 254v 120 | switch diancie;icebeam,1 235v 109 | fakeout,1;rockslide,0 227v 104
+    p2 greedy: move 4 1, move 3 1
+      p1a Hitmontop used Fake Out -> p2b: Landorus
+              p2b Landorus COULD NOT MOVE (flinch)
+      p2a Volcanion used Overheat -> p1a: Hitmontop
+              p1a Hitmontop -- critical hit
+              p2a Volcanion spa 2 fell
+              p1a Hitmontop used up its Sitrus Berry
+      p1b Tyranitar used Ice Beam -> p2b: Landorus
+      p2b Landorus fainted
+      after p1: Hitmontop 106/304, Tyranitar 404/404
+      after p2: Volcanion 363/363, Landorus-Therian 0/319
+
+  Turn 12
+      p2b <- Diancie comes in (304/304)
+      after p1: Hitmontop 106/304, Tyranitar 404/404
+      after p2: Volcanion 363/363, Diancie 304/304
+
+  Turn 13
+    p1 mcts: switch 6, move 1   (slot0 Hitmontop -> Diancie)
+      search (7000 visits): switch diancie;rockslide,0 295v 152 | wideguard,0;switch diancie 244v 120 | closecombat,1;rockslide,0 205v 95 | wideguard,0;rockslide,0 195v 89
+    p2 greedy: move 4 1, move 1
+      p1a <- Diancie comes in (241/241)
+      p2a Volcanion used Overheat -> p1a: Diancie
+              p2a Volcanion spa 2 fell
+      p1b Tyranitar used Rock Slide -> p2b: Diancie  [[spread] p2a,p2b]
+      p2b Diancie used Diamond Storm -> p1a: Diancie  [[spread] p1a,p1b]
+      after p1: Diancie 113/241, Tyranitar 281/404
+      after p2: Volcanion 243/363, Diancie 252/304
+
+  Turn 14
+    p1 mcts: move 1 mega, switch 6   (slot1 Tyranitar -> Hitmontop)
+      search (6000 visits): diamondstorm-mega,0;switch hitmontop 134v 65 | diamondstorm-mega,0;icebeam,1 90v 37 | protect,0;switch hitmontop 89v 36 | diamondstorm,0;switch hitmontop 88v 35
+    p2 greedy: move 4 1, move 1
+      p1b <- Hitmontop comes in (106/304)
+              p2a Volcanion atk 1 fell
+              p2b Diancie -- IT FAILED
+      p1a Diancie used Diamond Storm -> p2b: Diancie  [[spread] p2a,p2b]
+              p1a Diancie def 1 rose
+      p2a Volcanion used Overheat -> p1a: Diancie
+              p2a Volcanion spa 2 fell
+      p2b Diancie used Diamond Storm -> p1b: Hitmontop  [[spread] p1a,p1b]
+              p2b Diancie def 1 rose
+      after p1: Diancie-Mega 7/241, Hitmontop 46/304
+      after p2: Volcanion 3/363, Diancie 153/304
+
+  Turn 15
+    p1 mcts: move 4, move 1
+      search (23000 visits): protect,0;wideguard,1 1008v 273 | protect,0;closecombat,1 927v 246 | protect,0;fakeout,0 879v 229 | protect,0;quickguard,1 878v 229
+    p2 greedy: move 4 1, move 1
+      p1a Diancie used Protect
+      p1b Hitmontop used Wide Guard
+      p2a Volcanion used Overheat -> p1a: Diancie
+              p1a Diancie -- move: Protect
+      p2b Diancie used Diamond Storm -> p1a: Diancie  [[spread] ]
+              p1a Diancie -- move: Wide Guard
+              p1b Hitmontop -- move: Wide Guard
+      after p1: Diancie-Mega 7/241, Hitmontop 46/304
+      after p2: Volcanion 3/363, Diancie 153/304
+
+  Turn 16
+    p1 mcts: move 4, move 1
+      search (26000 visits): protect,0;wideguard,1 1178v 317 | protect,0;closecombat,1 1068v 281 | protect,0;fakeout,0 1030v 268 | protect,0;fakeout,1 1027v 267
+    p2 greedy: move 4 1, move 1
+      p1a Diancie used Protect
+      p1b Hitmontop used Wide Guard
+      p2a Volcanion used Overheat -> p1a: Diancie
+              p1a Diancie -- move: Protect
+      p2b Diancie used Diamond Storm -> p1b: Hitmontop  [[spread] ]
+              p1a Diancie -- move: Wide Guard
+              p1b Hitmontop -- move: Wide Guard
+      after p1: Diancie-Mega 7/241, Hitmontop 46/304
+      after p2: Volcanion 3/363, Diancie 153/304
+
+  Turn 17
+    p1 mcts: move 4, move 1
+      search (20000 visits): protect,0;wideguard,1 828v 224 | protect,0;closecombat,1 770v 204 | protect,0;fakeout,1 753v 198 | protect,0;quickguard,1 733v 192
+    p2 greedy: move 4 1, move 1
+      p1a Diancie used Protect  [[still]]
+              p1a Diancie -- IT FAILED
+      p1b Hitmontop used Wide Guard
+      p2a Volcanion used Overheat -> p1a: Diancie
+      p1a Diancie fainted
+      p2b Diancie used Diamond Storm -> p1b: Hitmontop
+              p1b Hitmontop -- move: Wide Guard
+      after p1: Diancie 0/241, Hitmontop 46/304
+      after p2: Volcanion 3/363, Diancie 153/304
+
+  Turn 18
+      p1a <- Tyranitar comes in (281/404)
+      after p1: Tyranitar 281/404, Hitmontop 46/304
+      after p2: Volcanion 3/363, Diancie 153/304
+
+  Turn 19
+    p1 mcts: move 1, move 2 1
+      search (29000 visits): rockslide,0;fakeout,0 1183v 227 | icebeam,1;fakeout,0 1140v 216 | rockslide,0;fakeout,1 1081v 200 | protect,0;wideguard,1 1058v 195
+    p2 greedy: move 4 2, move 1
+      p1b Hitmontop used Fake Out  [[still]]
+              p1b Hitmontop -- IT FAILED
+      p2a Volcanion used Overheat -> p1b: Hitmontop
+      p1b Hitmontop fainted
+      p1a Tyranitar used Rock Slide -> p2a: Volcanion  [[spread] p2a,p2b]
+      p2a Volcanion fainted
+      p2b Diancie used Diamond Storm -> p1a: Tyranitar
+      after p1: Tyranitar 124/404, Hitmontop 0/304
+      after p2: Volcanion 0/363, Diancie 105/304
+
+  Turn 20
+      p2a <- Amoonguss comes in (432/432)
+      after p1: Tyranitar 124/404, Hitmontop 0/304
+      after p2: Amoonguss 432/432, Diancie 105/304
+
+  Turn 21
+    p1 mcts: move 4, pass
+      search (135000 visits): protect,0;No Move 61426v 3158 | icebeam,0;No Move 36335v 1651 | rockslide,0;No Move 12418v 339 | icebeam,1;No Move 9548v 202
+    p2 greedy: move 4 1, move 1
+      p1a Tyranitar used Protect
+      p2b Diancie used Diamond Storm -> p1a: Tyranitar
+              p1a Tyranitar -- move: Protect
+      p2a Amoonguss used Sludge Bomb -> p1a: Tyranitar
+              p1a Tyranitar -- move: Protect
+      after p1: Tyranitar 124/404, Hitmontop 0/304
+      after p2: Amoonguss 405/432, Diancie 105/304
+
+  Turn 22
+    p1 mcts: move 4, pass
+      search (155000 visits): protect,0;No Move 73944v 3829 | icebeam,0;No Move 42894v 1980 | rockslide,0;No Move 12646v 332 | icebeam,1;No Move 9629v 192
+    p2 greedy: move 4 1, move 1
+      p1a Tyranitar used Protect  [[still]]
+              p1a Tyranitar -- IT FAILED
+      p2b Diancie used Diamond Storm -> p1a: Tyranitar
+      p1a Tyranitar fainted
+      after p1: Tyranitar 0/404, Hitmontop 0/304
+      after p2: Amoonguss 405/432, Diancie 105/304
+
+  RESULT: p2 wins

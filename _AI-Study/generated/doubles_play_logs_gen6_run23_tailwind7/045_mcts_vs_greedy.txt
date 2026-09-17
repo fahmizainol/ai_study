@@ -1,0 +1,172 @@
+battle 45   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: ORAS Doubles OU: Keldeo, Genesect, Amoonguss, Heatran, Kangaskhan, Thundurus
+  p2: never cook again: Kangaskhan-Mega, Bisharp, Togekiss, Thundurus, Landorus-Therian, Gastrodon-East
+
+  Turn 1
+    p1 mcts: switch 3, move 3 1   (slot0 Keldeo -> Amoonguss)
+      search (31000 visits): switch amoonguss;icebeam,0 1249v 490 | switch thundurus;icebeam,0 1145v 435 | switch thundurus;icebeam,1 963v 354 | switch kangaskhan;icebeam,1 722v 249
+    p2 greedy: move 3 1, move 1 1
+      p1a <- Amoonguss comes in (432/432)
+      p2b Bisharp used Sucker Punch  [[still]]
+              p2b Bisharp -- IT FAILED
+      p1b Genesect used Ice Beam -> p2a: Kangaskhan
+      p2a Kangaskhan used Fire Punch -> p1a: Amoonguss
+      after p1: Amoonguss 280/432, Genesect 283/283
+      after p2: Kangaskhan-Mega 225/413, Bisharp 278/278
+
+  Turn 2
+    p1 mcts: move 2, switch 3   (slot1 Genesect -> Keldeo)
+      search (32000 visits): ragepowder,0;switch keldeo 9681v 9647 | ragepowder,0;switch kangaskhan 6520v 6480 | gigadrain,1;switch kangaskhan 6250v 6056 | protect,0;switch heatran 4079v 4049
+    p2 greedy: move 3 1, move 1 1
+      p1b <- Keldeo comes in (329/329)
+      p1a Amoonguss used Rage Powder
+      p2b Bisharp used Sucker Punch  [[still]]
+              p2b Bisharp -- IT FAILED
+      p2a Kangaskhan used Fire Punch -> p1a: Amoonguss
+      after p1: Amoonguss 132/432, Keldeo 329/329
+      after p2: Kangaskhan-Mega 157/413, Bisharp 278/278
+
+  Turn 3
+    p1 mcts: move 1 2, switch 6   (slot1 Keldeo -> Thundurus)
+      search (39000 visits): spore,1;switch thundurus 27283v 23410 | protect,0;secretsword,1 758v 359 | spore,0;secretsword,1 260v 94 | gigadrain,0;secretsword,1 244v 86
+    p2 greedy: move 3 1, move 1 1
+      p1b <- Thundurus comes in (352/352)
+      p2b Bisharp used Sucker Punch  [[still]]
+              p2b Bisharp -- IT FAILED
+      p2a Kangaskhan used Fire Punch -> p1a: Amoonguss
+      p1a Amoonguss fainted
+      after p1: Amoonguss 0/432, Thundurus 352/352
+      after p2: Kangaskhan-Mega 89/413, Bisharp 278/278
+
+  Turn 4
+      p1a <- Genesect comes in (283/283)
+              p1a Genesect spa 1 rose
+      after p1: Genesect 283/283, Thundurus 352/352
+      after p2: Kangaskhan-Mega 89/413, Bisharp 278/278
+
+  Turn 5
+    p1 mcts: move 2 1, move 4 2
+      search (41000 visits): extremespeed,0;thunderbolt,1 489v 59 | extremespeed,1;thunderbolt,1 487v 59 | switch kangaskhan;thunderbolt,1 480v 57 | uturn,0;thunderbolt,1 471v 55
+    p2 greedy: move 3 1, move 1 1
+      p1a Genesect used Extreme Speed -> p2a: Kangaskhan
+      p2a Kangaskhan fainted
+      p2b Bisharp used Sucker Punch  [[still]]
+              p2b Bisharp -- IT FAILED
+      p1b Thundurus used Thunderbolt -> p2b: Bisharp
+      after p1: Genesect 283/283, Thundurus 352/352
+      after p2: Kangaskhan-Mega 0/413, Bisharp 92/278
+
+  Turn 6
+      p2a <- Togekiss comes in (374/374)
+      after p1: Genesect 283/283, Thundurus 352/352
+      after p2: Togekiss 374/374, Bisharp 92/278
+
+  Turn 7
+    p1 mcts: switch 4, switch 5   (slot0 Genesect -> Heatran; slot1 Thundurus -> Kangaskhan)
+      search (25000 visits): switch heatran;switch kangaskhan 1780v 861 | switch heatran;thunderbolt,1 1712v 825 | switch kangaskhan;thunderbolt,1 1438v 679 | switch heatran;flashcannon,1 837v 364
+    p2 greedy: move 1 1, move 1 1
+      p1a <- Heatran comes in (368/368)
+      p1b <- Kangaskhan comes in (387/387)
+      p2b Bisharp used Sucker Punch  [[still]]
+              p2b Bisharp -- IT FAILED
+      p2a Togekiss used Air Slash -> p1a: Heatran
+      after p1: Heatran 346/368, Kangaskhan 387/387
+      after p2: Togekiss 374/374, Bisharp 92/278
+
+  Turn 8
+    p1 mcts: move 1, switch 6   (slot1 Kangaskhan -> Keldeo)
+      search (32000 visits): heatwave,0;switch keldeo 897v 593 | heatwave,0;switch genesect 776v 505 | earthpower,1;switch keldeo 627v 396 | heatwave,0;seismictoss,1 564v 351
+    p2 greedy: move 1 1, move 1 1
+      p1b <- Keldeo comes in (329/329)
+      p2b Bisharp used Sucker Punch -> p1a: Heatran
+      p1a Heatran used Heat Wave -> p2a: Togekiss  [[spread] p2b]
+              p1a Heatran -- MISSED
+      p2b Bisharp fainted
+      p2a Togekiss used Air Slash -> p1a: Heatran
+      after p1: Heatran 125/368, Keldeo 329/329
+      after p2: Togekiss 374/374, Bisharp 0/278
+
+  Turn 9
+      p2b <- Thundurus comes in (361/361)
+      after p1: Heatran 125/368, Keldeo 329/329
+      after p2: Togekiss 374/374, Thundurus 361/361
+
+  Turn 10
+    p1 mcts: move 1, switch 4   (slot1 Keldeo -> Genesect)
+      search (12000 visits): heatwave,0;switch genesect 916v 615 | heatwave,0;scald,1 425v 257 | heatwave,0;protect,1 422v 254 | protect,0;switch genesect 389v 231
+    p2 greedy: move 1 1, move 1 1
+      p1b <- Genesect comes in (283/283)
+              p1b Genesect atk 1 rose
+      p2b Thundurus used Thunderbolt -> p1a: Heatran
+      p1a Heatran used Heat Wave -> p2a: Togekiss  [[spread] p2a,p2b]
+              p2b Thundurus is now brn
+      p2a Togekiss used Air Slash -> p1a: Heatran
+      p1a Heatran fainted
+              p2b Thundurus used up its Sitrus Berry
+      after p1: Heatran 0/368, Genesect 283/283
+      after p2: Togekiss 274/374, Thundurus 237/361
+
+  Turn 11
+      p1a <- Keldeo comes in (329/329)
+      after p1: Keldeo 329/329, Genesect 283/283
+      after p2: Togekiss 274/374, Thundurus 237/361
+
+  Turn 12
+    p1 mcts: move 2 1, move 3 2
+      search (21000 visits): scald,0;icebeam,1 1194v 748 | scald,1;ironhead,0 877v 531 | switch kangaskhan;ironhead,0 743v 440 | switch thundurus;icebeam,1 639v 370
+    p2 greedy: move 1 1, move 1 1
+      p1b Genesect used Ice Beam -> p2b: Thundurus
+      p1a Keldeo used Scald -> p2a: Togekiss
+      p2b Thundurus used Thunderbolt -> p1a: Keldeo
+      p1a Keldeo fainted
+      p2a Togekiss used Air Slash -> p1b: Genesect
+      p2b Thundurus fainted
+      after p1: Keldeo 0/329, Genesect 172/283
+      after p2: Togekiss 138/374, Thundurus 0/361
+
+  Turn 13
+      p1a <- Thundurus comes in (352/352)
+      p2b <- Landorus-Therian comes in (358/358)
+              p1a Thundurus atk 1 fell
+              p1b Genesect atk 1 fell
+      after p1: Thundurus 352/352, Genesect 172/283
+      after p2: Togekiss 138/374, Landorus-Therian 358/358
+
+  Turn 14
+    p1 mcts: move 4 1, move 3 2
+      search (32000 visits): thunderbolt,0;icebeam,1 9465v 6823 | switch kangaskhan;icebeam,1 3851v 2674 | flashcannon,0;icebeam,1 2540v 1720 | thunderwave,0;icebeam,1 2294v 1543
+    p2 greedy: move 1 2, move 2 2
+      p1b Genesect used Ice Beam -> p2b: Landorus
+      p2b Landorus fainted
+      p1a Thundurus used Thunderbolt -> p2a: Togekiss
+              p2a Togekiss -- critical hit
+      p2a Togekiss fainted
+      after p1: Thundurus 352/352, Genesect 172/283
+      after p2: Togekiss 0/374, Landorus-Therian 0/358
+
+  Turn 15
+      p2a <- Gastrodon-East comes in (426/426)
+      after p1: Thundurus 352/352, Genesect 172/283
+      after p2: Gastrodon-East 426/426, Landorus-Therian 0/358
+
+  Turn 16
+    p1 mcts: switch 6, move 3 1   (slot0 Thundurus -> Kangaskhan)
+      search (50000 visits): switch kangaskhan;icebeam,0 47476v 36417 | flashcannon,0;icebeam,0 522v 274 | thunderwave,0;icebeam,0 422v 212 | thunderbolt,0;icebeam,0 382v 188
+    p2 greedy: move 1 2, pass
+      p1a <- Kangaskhan comes in (387/387)
+      p1b Genesect used Ice Beam -> p2a: Gastrodon
+      p2a Gastrodon used Ice Beam -> p1b: Genesect
+      after p1: Kangaskhan 387/387, Genesect 135/283
+      after p2: Gastrodon-East 337/426, Landorus-Therian 0/358
+
+  Turn 17
+    p1 mcts: move 3 1 mega, move 3 1
+      search (502000 visits): doubleedge-mega,0;icebeam,0 494456v 492061 | doubleedge,0;icebeam,0 4913v 4566 | fakeout-mega,0;icebeam,0 886v 735 | fakeout,0;icebeam,0 474v 363
+    p2 greedy: move 1 2, pass
+      p1b Genesect used Ice Beam -> p2a: Gastrodon
+      p1a Kangaskhan used Double-Edge -> p2a: Gastrodon
+      p2a Gastrodon fainted
+      after p1: Kangaskhan-Mega 176/387, Genesect 135/283
+      after p2: Gastrodon-East 0/426, Landorus-Therian 0/358
+
+  RESULT: p1 wins

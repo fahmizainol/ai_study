@@ -1,0 +1,199 @@
+battle 8   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: XY Doubles: Politoed, Manectric, Aegislash, Ludicolo, Rotom-Wash, Landorus-Therian
+  p2: Untitled 468: Kangaskhan-Mega, Aegislash, Sylveon, Volcanion, Landorus-Therian, Thundurus
+
+  Turn 1
+    p1 mcts: switch 5, move 1 1 mega   (slot0 Politoed -> Rotom-Wash)
+      search (45000 visits): switch rotomwash;voltswitch-mega,0 686v 192 | switch rotomwash;thunderbolt-mega,1 653v 180 | switch landorustherian;voltswitch-mega,0 640v 175 | switch rotomwash;voltswitch-mega,1 589v 157
+    p2 greedy: move 3 1, move 1 1
+      p1a <- Rotom-Wash comes in (300/300)
+              p2a Kangaskhan atk 1 fell
+              p2b Aegislash atk 1 fell
+      p2a Kangaskhan used Sucker Punch  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p1b Manectric used Volt Switch -> p2a: Kangaskhan
+      after p1: Rotom-Wash 300/300, Manectric-Mega 287/287
+      after p2: Kangaskhan-Mega 293/414, Aegislash 324/324
+
+  Turn 2
+      p1b <- Aegislash comes in (324/324)
+      p2b Aegislash used Shadow Ball -> p1a: Rotom
+              p1a Rotom spd 1 fell
+      after p1: Rotom-Wash 194/300, Aegislash 324/324
+      after p2: Kangaskhan-Mega 293/414, Aegislash-Blade 324/324
+
+  Turn 3
+    p1 mcts: move 3, switch 6   (slot1 Aegislash -> Landorus-Therian)
+      search (47000 visits): electroweb,0;switch landorustherian 638v 67 | hydropump,1;switch manectricmega 621v 64 | electroweb,0;shadowball,1 612v 62 | hydropump,1;switch landorustherian 602v 60
+    p2 greedy: move 3 1, move 1 1
+      p1b <- Landorus-Therian comes in (330/330)
+              p2a Kangaskhan atk 1 fell
+              p2b Aegislash atk 1 fell
+      p2a Kangaskhan used Sucker Punch -> p1a: Rotom
+              p1a Rotom used up its Sitrus Berry
+      p1a Rotom used Electroweb -> p2a: Kangaskhan  [[spread] p2a,p2b]
+              p2a Kangaskhan spe 1 fell
+              p2b Aegislash spe 1 fell
+      p2b Aegislash used Shadow Ball -> p1a: Rotom
+      after p1: Rotom-Wash 63/300, Landorus-Therian 330/330
+      after p2: Kangaskhan-Mega 236/414, Aegislash-Blade 281/324
+
+  Turn 4
+    p1 mcts: switch 3, move 1   (slot0 Rotom-Wash -> Manectric-Mega)
+      search (43000 visits): switch manectricmega;earthquake,0 844v 95 | protect,0;earthquake,0 842v 94 | hydropump,1;earthquake,0 805v 87 | switch politoed;earthquake,0 801v 87
+    p2 greedy: move 3 1, move 1 1
+      p1a <- Manectric-Mega comes in (287/287)
+              p2a Kangaskhan atk 1 fell
+              p2b Aegislash atk 1 fell
+      p2a Kangaskhan used Sucker Punch  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p1b Landorus used Earthquake -> p2a: Kangaskhan  [[spread] p1a,p2a,p2b]
+      p1a Manectric fainted
+      p2b Aegislash fainted
+      after p1: Manectric 0/287, Landorus-Therian 330/330
+      after p2: Kangaskhan-Mega 73/414, Aegislash 0/324
+
+  Turn 5
+      p1a <- Rotom-Wash comes in (63/300)
+      p2b <- Sylveon comes in (394/394)
+      after p1: Rotom-Wash 63/300, Landorus-Therian 330/330
+      after p2: Kangaskhan-Mega 73/414, Sylveon 394/394
+
+  Turn 6
+    p1 mcts: move 1 1, switch 4   (slot1 Landorus-Therian -> Ludicolo)
+      search (42000 visits): hydropump,0;switch ludicolo 1876v 388 | hydropump,1;switch ludicolo 1870v 386 | electroweb,0;switch ludicolo 1799v 368 | protect,0;switch ludicolo 1792v 366
+    p2 greedy: move 3 1, move 1
+      p1b <- Ludicolo comes in (327/327)
+      p2a Kangaskhan used Sucker Punch -> p1a: Rotom
+      p1a Rotom used Hydro Pump -> p2a: Kangaskhan  [[miss]]
+              p1a Rotom -- MISSED
+      p2b Sylveon used Hyper Voice -> p1b: Ludicolo  [[spread] p1a,p1b]
+              p1b Ludicolo -- critical hit
+      p1a Rotom fainted
+      after p1: Rotom-Wash 0/300, Ludicolo 130/327
+      after p2: Kangaskhan-Mega 73/414, Sylveon 394/394
+
+  Turn 7
+      p1a <- Landorus-Therian comes in (330/330)
+              p2a Kangaskhan atk 1 fell
+              p2b Sylveon atk 1 fell
+      after p1: Landorus-Therian 330/330, Ludicolo 130/327
+      after p2: Kangaskhan-Mega 73/414, Sylveon 394/394
+
+  Turn 8
+    p1 mcts: switch 5, move 2 2   (slot0 Landorus-Therian -> Politoed)
+      search (40000 visits): switch politoed;hydropump,1 720v 112 | uturn,0;hydropump,1 686v 104 | uturn,1;hydropump,1 678v 102 | earthquake,0;hydropump,1 675v 101
+    p2 greedy: move 3 2, move 1
+      p1a <- Politoed comes in (384/384)
+      p2a Kangaskhan used Sucker Punch -> p1b: Ludicolo
+              p1b Ludicolo -- critical hit
+      p1b Ludicolo fainted
+      p2b Sylveon used Hyper Voice -> p1a: Politoed
+      after p1: Politoed 195/384, Ludicolo 0/327
+      after p2: Kangaskhan-Mega 73/414, Sylveon 394/394
+
+  Turn 9
+      p1b <- Landorus-Therian comes in (330/330)
+              p2a Kangaskhan atk 1 fell
+              p2b Sylveon atk 1 fell
+      after p1: Politoed 195/384, Landorus-Therian 330/330
+      after p2: Kangaskhan-Mega 73/414, Sylveon 394/394
+
+  Turn 10
+    p1 mcts: move 1 2, move 4 2
+      search (39000 visits): scald,1;uturn,1 1951v 468 | scald,0;uturn,1 1901v 453 | protect,0;uturn,1 1819v 430 | icywind,0;uturn,1 1736v 405
+    p2 greedy: move 3 1, move 1
+      p2a Kangaskhan used Sucker Punch -> p1a: Politoed
+              p1a Politoed -- critical hit
+      p1b Landorus used U-turn -> p2b: Sylveon
+      after p1: Politoed 93/384, Landorus-Therian 330/330
+      after p2: Kangaskhan-Mega 73/414, Sylveon 334/394
+
+  Turn 11
+      p1b <- Aegislash comes in (324/324)
+      p1a Politoed used Scald -> p2b: Sylveon
+      p2b Sylveon used Hyper Voice -> p1b: Aegislash  [[spread] p1a,p1b]
+      p1a Politoed fainted
+      after p1: Politoed 0/384, Aegislash 270/324
+      after p2: Kangaskhan-Mega 73/414, Sylveon 259/394
+
+  Turn 12
+      p1a <- Landorus-Therian comes in (330/330)
+              p2a Kangaskhan atk 1 fell
+              p2b Sylveon atk 1 fell
+      after p1: Landorus-Therian 330/330, Aegislash 270/324
+      after p2: Kangaskhan-Mega 73/414, Sylveon 259/394
+
+  Turn 13
+    p1 mcts: move 3 2, move 3 2
+      search (41000 visits): stoneedge,1;flashcannon,1 1292v 198 | uturn,1;flashcannon,1 1262v 191 | rockslide,0;flashcannon,1 1230v 184 | stoneedge,0;flashcannon,1 1217v 182
+    p2 greedy: move 3 2, move 1
+      p2a Kangaskhan used Sucker Punch -> p1b: Aegislash
+              p1b Aegislash used up its Weakness Policy
+              p1b Aegislash atk 2 rose
+              p1b Aegislash spa 2 rose
+      p1a Landorus used Stone Edge -> p2b: Sylveon
+      p2b Sylveon used Hyper Voice -> p1a: Landorus  [[spread] p1a,p1b]
+      p1b Aegislash used Flash Cannon -> p2b: Sylveon
+      p2b Sylveon fainted
+      after p1: Landorus-Therian 168/330, Aegislash-Blade 180/324
+      after p2: Kangaskhan-Mega 73/414, Sylveon 0/394
+
+  Turn 14
+      p2b <- Volcanion comes in (363/363)
+      after p1: Landorus-Therian 168/330, Aegislash-Blade 180/324
+      after p2: Kangaskhan-Mega 73/414, Volcanion 363/363
+
+  Turn 15
+    p1 mcts: move 3 2, move 2 2
+      search (129000 visits): stoneedge,1;shadowball,1 21671v 1264 | stoneedge,0;shadowball,1 20499v 1176 | stoneedge,1;shadowsneak,1 9435v 390 | stoneedge,0;shadowsneak,1 8296v 315
+    p2 greedy: move 3 1, move 4 1
+      p2a Kangaskhan used Sucker Punch -> p1a: Landorus
+      p1a Landorus used Stone Edge -> p2b: Volcanion
+      p2b Volcanion used Overheat -> p1a: Landorus
+              p2b Volcanion spa 2 fell
+      p1b Aegislash used Shadow Ball -> p2b: Volcanion
+              p2b Volcanion -- critical hit
+      p2b Volcanion fainted
+      after p1: Landorus-Therian 9/330, Aegislash-Blade 180/324
+      after p2: Kangaskhan-Mega 73/414, Volcanion 0/363
+
+  Turn 16
+      p2b <- Landorus-Therian comes in (320/320)
+              p1a Landorus atk 1 fell
+              p1b Aegislash atk 1 fell
+      after p1: Landorus-Therian 9/330, Aegislash-Blade 180/324
+      after p2: Kangaskhan-Mega 73/414, Landorus-Therian 320/320
+
+  Turn 17
+    p1 mcts: move 3 2, move 3 1
+      search (317000 visits): stoneedge,1;flashcannon,0 37004v 711 | stoneedge,1;shadowball,1 30128v 493 | stoneedge,1;flashcannon,1 27560v 415 | stoneedge,0;shadowball,1 26643v 387
+    p2 greedy: move 1 1, move 4 1
+      p2a Kangaskhan used Fake Out  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p2b Landorus used Stone Edge -> p1a: Landorus  [[miss]]
+              p2b Landorus -- MISSED
+      p1a Landorus used Stone Edge -> p2b: Landorus
+      p1b Aegislash used Flash Cannon -> p2a: Kangaskhan
+      p2a Kangaskhan fainted
+      after p1: Landorus-Therian 9/330, Aegislash-Blade 180/324
+      after p2: Kangaskhan-Mega 0/414, Landorus-Therian 213/320
+
+  Turn 18
+      p2a <- Thundurus comes in (361/361)
+      after p1: Landorus-Therian 9/330, Aegislash-Blade 180/324
+      after p2: Thundurus 361/361, Landorus-Therian 213/320
+
+  Turn 19
+    p1 mcts: move 3 1, move 4 1
+      search (523000 visits): stoneedge,0;shadowsneak,0 453275v 73288 | stoneedge,1;shadowball,0 13526v 1693 | stoneedge,0;shadowball,0 7675v 850 | stoneedge,1;shadowball,1 5452v 544
+    p2 greedy: move 1 1, move 4 1
+      p1b Aegislash used Shadow Sneak -> p2a: Thundurus
+      p2b Landorus used Stone Edge -> p1a: Landorus
+      p1a Landorus fainted
+      p2a Thundurus used Thunderbolt -> p1b: Aegislash
+      p1b Aegislash fainted
+      after p1: Landorus-Therian 0/330, Aegislash 0/324
+      after p2: Thundurus 237/361, Landorus-Therian 213/320
+
+  RESULT: p2 wins

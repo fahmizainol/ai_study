@@ -1,0 +1,166 @@
+battle 4   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: ORAS Doubles OU: Diancie-Mega, Landorus-Therian, Talonflame, Aegislash, Hydreigon, Keldeo
+  p2: trick room garde + super fang scrafty: Gardevoir-Mega, Volcanion, Thundurus, Scrafty, Amoonguss, Genesect
+
+  Turn 1
+    p1 mcts: move 1, move 4 1
+      search (22000 visits): diamondstorm,0;uturn,0 3028v 2283 | diamondstorm,0;uturn,1 2072v 1527 | diamondstorm,0;switch aegislash 801v 542 | moonblast,0;uturn,0 786v 531
+    p2 greedy: move 1, move 1 1
+      p1b Landorus used U-turn -> p2a: Gardevoir
+      after p1: Diancie-Mega 241/241, Landorus-Therian 319/319
+      after p2: Gardevoir-Mega 264/339, Volcanion 363/363
+
+  Turn 2
+      p1b <- Talonflame comes in (297/297)
+      p1a Diancie used Diamond Storm -> p2b: Volcanion  [[spread] p2a,p2b]
+              p1a Diancie def 1 rose
+      p2a Gardevoir used Hyper Voice -> p1a: Diancie  [[spread] p1a,p1b]
+      p2b Volcanion used Steam Eruption -> p1a: Diancie
+      p1a Diancie fainted
+      after p1: Diancie-Mega 0/241, Talonflame 171/297
+      after p2: Gardevoir-Mega 102/339, Volcanion 81/363
+
+  Turn 3
+      p1a <- Landorus-Therian comes in (319/319)
+              p2a Gardevoir atk 1 fell
+              p2b Volcanion atk 1 fell
+      after p1: Landorus-Therian 319/319, Talonflame 171/297
+      after p2: Gardevoir-Mega 102/339, Volcanion 81/363
+
+  Turn 4
+    p1 mcts: move 4 1, move 3
+      search (36000 visits): uturn,0;tailwind,1 1211v 223 | uturn,1;tailwind,1 1022v 177 | earthquake,0;tailwind,1 960v 161 | earthquake,0;bravebird,1 868v 139
+    p2 greedy: move 1, move 1 2
+      p1b Talonflame used Tailwind
+      -sidestart p1: A move: Tailwind
+      p1a Landorus used U-turn -> p2a: Gardevoir
+      after p1: Landorus-Therian 319/319, Talonflame 171/297
+      after p2: Gardevoir-Mega 1/339, Volcanion 81/363
+
+  Turn 5
+      p1a <- Aegislash comes in (324/324)
+      p2a Gardevoir used Hyper Voice -> p1a: Aegislash  [[spread] p1b]
+              p1a Aegislash -- IMMUNE
+      p2b Volcanion used Steam Eruption -> p1b: Talonflame  [[miss]]
+              p2b Volcanion -- MISSED
+      after p1: Aegislash 324/324, Talonflame 40/297
+      after p2: Gardevoir-Mega 1/339, Volcanion 81/363
+
+  Turn 6
+    p1 mcts: move 2 2, move 2 2
+      search (38000 visits): shadowball,1;bravebird,1 771v 89 | flashcannon,1;bravebird,1 744v 84 | switch landorustherian;bravebird,1 672v 70 | wideguard,0;bravebird,1 670v 69
+    p2 greedy: move 1, move 1 2
+      p1b Talonflame used Brave Bird -> p2b: Volcanion
+      p2b Volcanion fainted
+      p1b Talonflame fainted
+      p2a Gardevoir used Hyper Voice -> p1a: Aegislash
+              p1a Aegislash -- IMMUNE
+      p1a Aegislash used Shadow Ball -> p2a: Gardevoir
+              p2a Gardevoir -- critical hit
+      p2a Gardevoir fainted
+      after p1: Aegislash-Blade 324/324, Talonflame 0/297
+      after p2: Gardevoir-Mega 0/339, Volcanion 0/363
+
+  Turn 7
+      p1b <- Landorus-Therian comes in (319/319)
+      p2a <- Thundurus comes in (361/361)
+      p2b <- Scrafty comes in (334/334)
+              p2a Thundurus atk 1 fell
+              p2b Scrafty atk 1 fell
+              p1a Aegislash atk 1 fell
+              p1b Landorus atk 1 fell
+      after p1: Aegislash-Blade 324/324, Landorus-Therian 319/319
+      after p2: Thundurus 361/361, Scrafty 334/334
+
+  Turn 8
+    p1 mcts: move 2 1, move 4 2
+      search (28000 visits): shadowball,0;uturn,1 1621v 831 | switch keldeo;switch hydreigon 1330v 666 | switch hydreigon;switch keldeo 1224v 607 | shadowball,0;uturn,0 1076v 524
+    p2 greedy: move 1 1, move 3 1
+      p1b Landorus used U-turn -> p2b: Scrafty
+      after p1: Aegislash-Blade 324/324, Landorus-Therian 319/319
+      after p2: Thundurus 361/361, Scrafty 283/334
+
+  Turn 9
+      p1b <- Hydreigon comes in (325/325)
+      p2a Thundurus used Thunderbolt -> p1a: Aegislash
+      p1a Aegislash used Shadow Ball -> p2a: Thundurus
+              p2a Thundurus spd 1 fell
+              p2a Thundurus used up its Sitrus Berry
+      p2b Scrafty used Knock Off -> p1a: Aegislash
+              p1a Aegislash used up its Safety Goggles
+      p1a Aegislash fainted
+      after p1: Aegislash 0/324, Hydreigon 325/325
+      after p2: Thundurus 259/361, Scrafty 283/334
+
+  Turn 10
+      p1a <- Landorus-Therian comes in (319/319)
+              p2a Thundurus atk 1 fell
+              p2b Scrafty atk 1 fell
+      after p1: Landorus-Therian 319/319, Hydreigon 325/325
+      after p2: Thundurus 259/361, Scrafty 283/334
+
+  Turn 11
+    p1 mcts: move 4 2, move 4 1
+      search (29000 visits): uturn,1;fireblast,0 1247v 396 | rockslide,0;switch keldeo 1110v 344 | uturn,1;fireblast,1 998v 302 | earthquake,0;fireblast,0 967v 290
+    p2 greedy: move 1 1, move 3 1
+      p1a Landorus used U-turn -> p2b: Scrafty
+      after p1: Landorus-Therian 319/319, Hydreigon 325/325
+      after p2: Thundurus 259/361, Scrafty 213/334
+
+  Turn 12
+      p1a <- Keldeo comes in (323/323)
+      p1b Hydreigon used Fire Blast -> p2a: Thundurus
+      p2a Thundurus fainted
+      p2b Scrafty used Knock Off -> p1a: Keldeo
+              p1a Keldeo atk 1 rose
+              p1a Keldeo used up its Life Orb
+      -sideend p1: A move: Tailwind
+      after p1: Keldeo 295/323, Hydreigon 293/325
+      after p2: Thundurus 0/361, Scrafty 213/334
+
+  Turn 13
+      p2a <- Amoonguss comes in (432/432)
+      after p1: Keldeo 295/323, Hydreigon 293/325
+      after p2: Amoonguss 432/432, Scrafty 213/334
+
+  Turn 14
+    p1 mcts: move 4, move 4 1
+      search (31000 visits): protect,0;fireblast,0 1388v 349 | secretsword,0;fireblast,0 1313v 326 | quickguard,0;fireblast,0 1311v 325 | secretsword,1;fireblast,0 1300v 322
+    p2 greedy: move 1 2, move 3 2
+      p1a Keldeo used Protect
+      p1b Hydreigon used Fire Blast -> p2a: Amoonguss
+      p2b Scrafty used Knock Off -> p1b: Hydreigon
+              p1b Hydreigon used up its Life Orb
+      p2a Amoonguss used Energy Ball -> p1b: Hydreigon
+      after p1: Keldeo 295/323, Hydreigon 180/325
+      after p2: Amoonguss 81/432, Scrafty 213/334
+
+  Turn 15
+    p1 mcts: move 1 2, move 4 1
+      search (30000 visits): secretsword,1;fireblast,0 1005v 123 | secretsword,0;fireblast,0 986v 120 | hydropump,0;fireblast,0 936v 110 | protect,0;fireblast,0 838v 91
+    p2 greedy: move 1 2, move 3 2
+      p1a Keldeo used Secret Sword -> p2b: Scrafty
+      p2b Scrafty fainted
+      p1b Hydreigon used Fire Blast -> p2a: Amoonguss
+      p2a Amoonguss fainted
+      after p1: Keldeo 295/323, Hydreigon 180/325
+      after p2: Amoonguss 0/432, Scrafty 0/334
+
+  Turn 16
+      p2a <- Genesect comes in (283/283)
+              p2a Genesect spa 1 rose
+      after p1: Keldeo 295/323, Hydreigon 180/325
+      after p2: Genesect 283/283, Scrafty 0/334
+
+  Turn 17
+    p1 mcts: move 1 1, move 4 1
+      search (243000 visits): secretsword,0;fireblast,0 78344v 77685 | secretsword,0;dracometeor,0 66420v 65759 | hydropump,0;fireblast,0 30835v 30250 | secretsword,0;switch landorustherian 26528v 25966
+    p2 greedy: move 3 2, pass
+      p1a Keldeo used Secret Sword -> p2a: Genesect
+      p2a Genesect used Blaze Kick -> p1b: Hydreigon
+      p1b Hydreigon used Fire Blast -> p2a: Genesect
+      p2a Genesect fainted
+      after p1: Keldeo 295/323, Hydreigon 104/325
+      after p2: Genesect 0/283, Scrafty 0/334
+
+  RESULT: p1 wins

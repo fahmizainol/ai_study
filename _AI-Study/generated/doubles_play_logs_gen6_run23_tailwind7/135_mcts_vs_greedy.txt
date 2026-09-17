@@ -1,0 +1,267 @@
+battle 135   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: dpl ::/Untitled 195: Mawile-Mega, Zapdos, Zygarde, Keldeo-Resolute, Talonflame, Aegislash
+  p2: ORAS Doubles OU: Gengar-Mega, Scrafty, Sylveon, Thundurus, Landorus-Therian, Volcanion
+
+  Turn 1
+    p1 mcts: move 2, move 3 1
+      search (16000 visits): swordsdance,0;hiddenpower,0 534v 392 | swordsdance,0;thunderbolt,1 364v 252 | swordsdance,0;tailwind,1 348v 239 | swordsdance,0;hiddenpower,1 343v 235
+    p2 greedy: move 2 1, move 2 1
+      p2a Gengar used Sludge Bomb -> p1a: Mawile
+              p1a Mawile -- IMMUNE
+      p1b Zapdos used Hidden Power -> p2a: Gengar
+      p2b Scrafty used Drain Punch -> p1a: Mawile
+      p1a Mawile used Swords Dance
+              p1a Mawile atk 2 rose
+      after p1: Mawile-Mega 218/304, Zapdos 384/384
+      after p2: Gengar-Mega 195/261, Scrafty 301/334
+
+  Turn 2
+    p1 mcts: move 4, move 1
+      search (28000 visits): protect,0;roost,1 4870v 3762 | protect,0;thunderbolt,1 1210v 896 | protect,0;thunderbolt,0 1196v 843 | suckerpunch,0;hiddenpower,0 1096v 766
+    p2 greedy: move 2 1, move 2 1
+      p1a Mawile used Protect
+      p2a Gengar used Sludge Bomb -> p1a: Mawile
+              p1a Mawile -- IMMUNE
+      p1b Zapdos used Roost  [[still]]
+              p1b Zapdos -- IT FAILED
+      p2b Scrafty used Drain Punch -> p1a: Mawile
+              p1a Mawile -- move: Protect
+      after p1: Mawile-Mega 218/304, Zapdos 384/384
+      after p2: Gengar-Mega 195/261, Scrafty 301/334
+
+  Turn 3
+    p1 mcts: move 4, move 2 2
+      search (27000 visits): protect,0;thunderbolt,1 7427v 5858 | protect,0;roost,1 1720v 1298 | swordsdance,0;tailwind,1 782v 529 | protect,0;thunderbolt,0 579v 378
+    p2 greedy: move 2 1, move 2 1
+      p1a Mawile used Protect
+      p2a Gengar used Sludge Bomb -> p1a: Mawile
+              p1a Mawile -- IMMUNE
+      p1b Zapdos used Thunderbolt -> p2b: Scrafty
+      p2b Scrafty used Drain Punch -> p1a: Mawile
+              p1a Mawile -- move: Protect
+      after p1: Mawile-Mega 218/304, Zapdos 384/384
+      after p2: Gengar-Mega 195/261, Scrafty 180/334
+
+  Turn 4
+    p1 mcts: move 4, move 4
+      search (27000 visits): protect,0;tailwind,1 3186v 2483 | protect,0;thunderbolt,1 2210v 1689 | protect,0;roost,1 1981v 1502 | protect,0;thunderbolt,0 601v 406
+    p2 greedy: move 2 1, move 2 1
+      p1a Mawile used Protect  [[still]]
+              p1a Mawile -- IT FAILED
+      p2a Gengar used Sludge Bomb -> p1a: Mawile
+              p1a Mawile -- IMMUNE
+      p1b Zapdos used Tailwind
+      -sidestart p1: A move: Tailwind
+      p2b Scrafty used Drain Punch -> p1a: Mawile
+      after p1: Mawile-Mega 132/304, Zapdos 384/384
+      after p2: Gengar-Mega 195/261, Scrafty 190/334
+
+  Turn 5
+    p1 mcts: move 4, move 3 2
+      search (28000 visits): protect,0;hiddenpower,1 2949v 2216 | protect,0;tailwind,1 2750v 2057 | protect,0;hiddenpower,0 1731v 1256 | protect,0;thunderbolt,1 663v 437
+    p2 greedy: move 2 1, move 2 1
+      p1a Mawile used Protect
+      p1b Zapdos used Hidden Power -> p2b: Scrafty
+      p2a Gengar used Sludge Bomb -> p1a: Mawile
+              p1a Mawile -- IMMUNE
+      p2b Scrafty used Drain Punch -> p1a: Mawile
+              p1a Mawile -- move: Protect
+      after p1: Mawile-Mega 132/304, Zapdos 384/384
+      after p2: Gengar-Mega 195/261, Scrafty 137/334
+
+  Turn 6
+    p1 mcts: move 4, move 3 2
+      search (25000 visits): protect,0;hiddenpower,1 5944v 4426 | protect,0;hiddenpower,0 3746v 2752 | protect,0;tailwind,1 1971v 1505 | suckerpunch,0;switch talonflame 438v 259
+    p2 greedy: move 2 1, move 2 1
+      p1a Mawile used Protect
+      p1b Zapdos used Hidden Power -> p2b: Scrafty
+      p2a Gengar used Sludge Bomb -> p1a: Mawile
+              p1a Mawile -- IMMUNE
+      p2b Scrafty used Drain Punch -> p1a: Mawile
+              p1a Mawile -- move: Protect
+      after p1: Mawile-Mega 132/304, Zapdos 384/384
+      after p2: Gengar-Mega 195/261, Scrafty 80/334
+
+  Turn 7
+    p1 mcts: move 4, move 2 2
+      search (29000 visits): protect,0;thunderbolt,1 11908v 9167 | protect,0;hiddenpower,1 720v 433 | swordsdance,0;thunderbolt,0 559v 323 | playrough,1;switch aegislash 412v 225
+    p2 greedy: move 2 1, move 2 1
+      p1a Mawile used Protect
+      p1b Zapdos used Thunderbolt -> p2b: Scrafty
+      p2b Scrafty fainted
+      p2a Gengar used Sludge Bomb -> p1a: Mawile
+              p1a Mawile -- IMMUNE
+      -sideend p1: A move: Tailwind
+      after p1: Mawile-Mega 132/304, Zapdos 384/384
+      after p2: Gengar-Mega 195/261, Scrafty 0/334
+
+  Turn 8
+      p2b <- Sylveon comes in (394/394)
+      after p1: Mawile-Mega 132/304, Zapdos 384/384
+      after p2: Gengar-Mega 195/261, Sylveon 394/394
+
+  Turn 9
+    p1 mcts: move 4, switch 6   (slot1 Zapdos -> Aegislash)
+      search (36000 visits): protect,0;switch aegislash 19653v 15041 | protect,0;hiddenpower,0 1299v 800 | protect,0;thunderbolt,1 567v 313 | protect,0;tailwind,1 532v 291
+    p2 greedy: move 2 1, move 2
+      p1b <- Aegislash comes in (324/324)
+      p1a Mawile used Protect  [[still]]
+              p1a Mawile -- IT FAILED
+      p2a Gengar used Sludge Bomb -> p1a: Mawile
+              p1a Mawile -- IMMUNE
+      p2b Sylveon used Hyper Voice -> p1a: Mawile  [[spread] p1a,p1b]
+      after p1: Mawile-Mega 50/304, Aegislash 299/324
+      after p2: Gengar-Mega 195/261, Sylveon 394/394
+
+  Turn 10
+    p1 mcts: move 4, move 2
+      search (32000 visits): protect,0;substitute,1 6813v 4971 | protect,0;flashcannon,1 1527v 1020 | protect,0;kingsshield,1 1405v 932 | protect,0;shadowball,1 1301v 857
+    p2 greedy: move 2 1, move 2
+      p1a Mawile used Protect
+      p2a Gengar used Sludge Bomb -> p1a: Mawile
+              p1a Mawile -- IMMUNE
+      p1b Aegislash used Substitute
+              p1b Aegislash gained Substitute
+      p2b Sylveon used Hyper Voice -> p1a: Mawile  [[spread] p1b]
+              p1a Mawile -- move: Protect
+      after p1: Mawile-Mega 50/304, Aegislash 193/324
+      after p2: Gengar-Mega 195/261, Sylveon 394/394
+
+  Turn 11
+    p1 mcts: move 4, move 1 2
+      search (27000 visits): protect,0;flashcannon,1 2443v 1308 | protect,0;shadowball,1 1639v 844 | protect,0;substitute,1 1021v 496 | protect,0;shadowball,0 928v 444
+    p2 greedy: move 2 1, move 2
+      p1a Mawile used Protect  [[still]]
+              p1a Mawile -- IT FAILED
+      p2a Gengar used Sludge Bomb -> p1a: Mawile
+              p1a Mawile -- IMMUNE
+      p2b Sylveon used Hyper Voice -> p1a: Mawile  [[spread] p1a,p1b]
+              p1a Mawile -- critical hit
+      p1a Mawile fainted
+      p1b Aegislash used Flash Cannon -> p2b: Sylveon
+      after p1: Mawile-Mega 0/304, Aegislash-Blade 166/324
+      after p2: Gengar-Mega 195/261, Sylveon 152/394
+
+  Turn 12
+      p1a <- Zygarde comes in (357/357)
+      after p1: Zygarde 357/357, Aegislash-Blade 166/324
+      after p2: Gengar-Mega 195/261, Sylveon 152/394
+
+  Turn 13
+    p1 mcts: move 2 2, switch 6   (slot1 Aegislash-Blade -> Zapdos)
+      search (32000 visits): extremespeed,1;switch zapdos 1578v 890 | landswrath,1;switch zapdos 981v 523 | stoneedge,1;switch zapdos 943v 500 | stoneedge,0;switch zapdos 799v 414
+    p2 greedy: move 2 2, move 2
+      p1b <- Zapdos comes in (384/384)
+      p1a Zygarde used Extreme Speed -> p2b: Sylveon
+      p2b Sylveon fainted
+      p2a Gengar used Sludge Bomb -> p1b: Zapdos
+      after p1: Zygarde 357/357, Zapdos 204/384
+      after p2: Gengar-Mega 195/261, Sylveon 0/394
+
+  Turn 14
+      p2b <- Thundurus comes in (321/321)
+      after p1: Zygarde 357/357, Zapdos 204/384
+      after p2: Gengar-Mega 195/261, Thundurus 321/321
+
+  Turn 15
+    p1 mcts: move 2 1, move 1
+      search (45000 visits): extremespeed,0;roost,1 5577v 3663 | switch aegislash;roost,1 5043v 3296 | extremespeed,0;tailwind,1 2775v 1751 | extremespeed,1;roost,1 2253v 1400
+    p2 greedy: move 2 2, move 4 2
+      p1a Zygarde used Extreme Speed -> p2a: Gengar
+              p2a Gengar -- IMMUNE
+      p2a Gengar used Sludge Bomb -> p1b: Zapdos
+      p2b Thundurus used Thunderbolt -> p1b: Zapdos
+      p1b Zapdos fainted
+      after p1: Zygarde 357/357, Zapdos 0/384
+      after p2: Gengar-Mega 195/261, Thundurus 289/321
+
+  Turn 16
+      p1b <- Keldeo-Resolute comes in (339/339)
+      after p1: Zygarde 357/357, Keldeo-Resolute 339/339
+      after p2: Gengar-Mega 195/261, Thundurus 289/321
+
+  Turn 17
+    p1 mcts: switch 6, move 4   (slot0 Zygarde -> Aegislash)
+      search (43000 visits): switch aegislash;protect,1 18280v 12012 | extremespeed,0;protect,1 2397v 1431 | extremespeed,1;protect,1 2048v 1207 | switch aegislash;hydropump,1 1440v 820
+    p2 greedy: move 2 1, move 4 1
+      p1a <- Aegislash comes in (166/324)
+      p1b Keldeo used Protect
+      p2a Gengar used Sludge Bomb -> p1a: Aegislash
+              p1a Aegislash -- IMMUNE
+      p2b Thundurus used Thunderbolt -> p1a: Aegislash
+      after p1: Aegislash 61/324, Keldeo-Resolute 339/339
+      after p2: Gengar-Mega 195/261, Thundurus 257/321
+
+  Turn 18
+    p1 mcts: move 4 1, move 4
+      search (36000 visits): shadowball,0;protect,1 16666v 11390 | shadowball,1;protect,1 1314v 677 | flashcannon,0;switch zygarde 1101v 554 | flashcannon,1;protect,1 752v 358
+    p2 greedy: move 2 1, move 4 1
+      p1b Keldeo used Protect
+      p2a Gengar used Sludge Bomb -> p1a: Aegislash
+              p1a Aegislash -- IMMUNE
+      p2b Thundurus used Thunderbolt -> p1a: Aegislash
+      p1a Aegislash fainted
+      after p1: Aegislash 0/324, Keldeo-Resolute 339/339
+      after p2: Gengar-Mega 195/261, Thundurus 225/321
+
+  Turn 19
+      p1a <- Talonflame comes in (297/297)
+      after p1: Talonflame 297/297, Keldeo-Resolute 339/339
+      after p2: Gengar-Mega 195/261, Thundurus 225/321
+
+  Turn 20
+    p1 mcts: switch 6, move 4   (slot0 Talonflame -> Zygarde)
+      search (25000 visits): switch zygarde;protect,1 3053v 1541 | bravebird,0;hydropump,1 1557v 735 | bravebird,0;protect,1 1329v 615 | bravebird,1;protect,1 947v 417
+    p2 greedy: move 2 1, move 4 1
+      p1a <- Zygarde comes in (357/357)
+      p1b Keldeo used Protect  [[still]]
+              p1b Keldeo -- IT FAILED
+      p2a Gengar used Sludge Bomb -> p1a: Zygarde
+      p2b Thundurus used Thunderbolt -> p1a: Zygarde
+              p1a Zygarde -- IMMUNE
+      after p1: Zygarde 239/357, Keldeo-Resolute 339/339
+      after p2: Gengar-Mega 195/261, Thundurus 225/321
+
+  Turn 21
+    p1 mcts: move 4 1, move 4
+      search (33000 visits): superpower,0;protect,1 2292v 1122 | switch talonflame;protect,1 2105v 1020 | stoneedge,0;protect,1 2015v 972 | extremespeed,0;protect,1 1949v 937
+    p2 greedy: move 2 1, move 4 1
+      p1b Keldeo used Protect
+      p2a Gengar used Sludge Bomb -> p1a: Zygarde
+      p2b Thundurus used Thunderbolt -> p1a: Zygarde
+              p1a Zygarde -- IMMUNE
+      p1a Zygarde used Superpower -> p2a: Gengar
+              p2a Gengar -- IMMUNE
+      after p1: Zygarde 137/357, Keldeo-Resolute 339/339
+      after p2: Gengar-Mega 195/261, Thundurus 225/321
+
+  Turn 22
+    p1 mcts: move 4 1, move 4
+      search (35000 visits): superpower,0;protect,1 11974v 5517 | switch talonflame;protect,1 6783v 3032 | superpower,1;protect,1 5342v 2350 | switch talonflame;hydropump,0 919v 323
+    p2 greedy: move 1 1, move 4 1
+      p1b Keldeo used Protect  [[still]]
+              p1b Keldeo -- IT FAILED
+      p2a Gengar used Shadow Ball -> p1a: Zygarde
+      p1a Zygarde fainted
+      p2b Thundurus used Thunderbolt -> p1b: Keldeo
+      p1b Keldeo fainted
+      after p1: Zygarde 0/357, Keldeo-Resolute 0/339
+      after p2: Gengar-Mega 195/261, Thundurus 193/321
+
+  Turn 23
+      p1a <- Talonflame comes in (297/297)
+      after p1: Talonflame 297/297, Keldeo-Resolute 0/339
+      after p2: Gengar-Mega 195/261, Thundurus 193/321
+
+  Turn 24
+    p1 mcts: move 2 2, pass
+      search (636000 visits): flareblitz,1;No Move 90309v 717 | flareblitz,0;No Move 81348v 571 | uturn,1;No Move 81253v 570 | bravebird,0;No Move 79312v 538
+    p2 greedy: move 1 1, move 4 1
+      p2a Gengar used Shadow Ball -> p1a: Talonflame
+              p1a Talonflame spd 1 fell
+      p2b Thundurus used Thunderbolt -> p1a: Talonflame
+      p1a Talonflame fainted
+      after p1: Talonflame 0/297, Keldeo-Resolute 0/339
+      after p2: Gengar-Mega 195/261, Thundurus 161/321
+
+  RESULT: p2 wins

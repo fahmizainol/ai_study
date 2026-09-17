@@ -1,0 +1,209 @@
+battle 138   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: Untitled 1416: Gardevoir-Mega, Amoonguss, Blastoise, Landorus, Volcanion, Scrafty
+  p2: XY Doubles: Deoxys-Attack, Talonflame, Manectric, Keldeo-Resolute, Amoonguss, Bisharp
+
+  Turn 1
+    p1 mcts: move 3, switch 6   (slot1 Amoonguss -> Scrafty)
+      search (31000 visits): calmmind,0;switch scrafty 1654v 1157 | psyshock,0;switch scrafty 1181v 802 | hypervoice,0;switch scrafty 986v 657 | psyshock,0;switch volcanion 858v 562
+    p2 greedy: move 1 1, move 1 1
+      p1b <- Scrafty comes in (334/334)
+              p2a Deoxys atk 1 fell
+              p2b Talonflame atk 1 fell
+      p2b Talonflame used Brave Bird -> p1a: Gardevoir
+      p2a Deoxys used Psycho Boost -> p1a: Gardevoir
+              p2a Deoxys spa 2 fell
+      p1a Gardevoir used Calm Mind
+              p1a Gardevoir spa 1 rose
+              p1a Gardevoir spd 1 rose
+      after p1: Gardevoir-Mega 37/340, Scrafty 334/334
+      after p2: Deoxys-Attack 241/241, Talonflame 205/297
+
+  Turn 2
+    p1 mcts: move 4, move 2 1
+      search (37000 visits): protect,0;highjumpkick,0 790v 172 | protect,0;knockoff,0 746v 159 | calmmind,0;knockoff,0 744v 158 | psyshock,1;knockoff,0 689v 142
+    p2 greedy: move 1 1, move 1 1
+      p1a Gardevoir used Protect
+      p2b Talonflame used Brave Bird -> p1a: Gardevoir
+              p1a Gardevoir -- move: Protect
+      p2a Deoxys used Psycho Boost -> p1a: Gardevoir
+              p1a Gardevoir -- move: Protect
+      p1b Scrafty used High Jump Kick -> p2a: Deoxys  [[miss]]
+              p1b Scrafty -- MISSED
+      after p1: Gardevoir-Mega 37/340, Scrafty 167/334
+      after p2: Deoxys-Attack 241/241, Talonflame 205/297
+
+  Turn 3
+    p1 mcts: move 4, move 2 1
+      search (43000 visits): protect,0;highjumpkick,0 3282v 2179 | switch volcanion;knockoff,0 2863v 1885 | hypervoice,0;knockoff,0 1937v 1239 | psyshock,1;knockoff,0 1729v 1095
+    p2 greedy: move 1 1, move 1 1
+      p1a Gardevoir used Protect  [[still]]
+              p1a Gardevoir -- IT FAILED
+      p2b Talonflame used Brave Bird -> p1a: Gardevoir
+      p1a Gardevoir fainted
+      p2a Deoxys used Psycho Boost -> p1b: Scrafty
+              p1b Scrafty -- IMMUNE
+      p1b Scrafty used High Jump Kick -> p2a: Deoxys
+              p2a Deoxys used up its Focus Sash
+      after p1: Gardevoir-Mega 0/340, Scrafty 167/334
+      after p2: Deoxys-Attack 1/241, Talonflame 164/297
+
+  Turn 4
+      p1a <- Blastoise comes in (362/362)
+      after p1: Blastoise 362/362, Scrafty 167/334
+      after p2: Deoxys-Attack 1/241, Talonflame 164/297
+
+  Turn 5
+    p1 mcts: switch 5, move 1 1   (slot0 Blastoise -> Volcanion)
+      search (37000 visits): switch volcanion;fakeout,0 6175v 3935 | scald,0;fakeout,0 1983v 1115 | icywind,0;fakeout,1 1477v 806 | scald,0;fakeout,1 1443v 787
+    p2 greedy: move 1 2, move 1 2
+      p1a <- Volcanion comes in (363/363)
+      p1b Scrafty used Fake Out  [[still]]
+              p1b Scrafty -- IT FAILED
+      p2b Talonflame used Brave Bird -> p1b: Scrafty
+      p1b Scrafty fainted
+      p2a Deoxys used Psycho Boost -> p1a: Volcanion
+              p2a Deoxys spa 2 fell
+      after p1: Volcanion 281/363, Scrafty 0/334
+      after p2: Deoxys-Attack 1/241, Talonflame 80/297
+
+  Turn 6
+      p1b <- Landorus comes in (319/319)
+      after p1: Volcanion 281/363, Landorus 319/319
+      after p2: Deoxys-Attack 1/241, Talonflame 80/297
+
+  Turn 7
+    p1 mcts: move 4 2, move 3 2
+      search (46000 visits): earthpower,1;hiddenpower,1 915v 102 | steameruption,1;psychic,1 909v 101 | earthpower,1;psychic,1 904v 100 | steameruption,1;hiddenpower,1 841v 88
+    p2 greedy: move 1 1, move 1 1
+      p2b Talonflame used Brave Bird -> p1a: Volcanion
+      p1b Landorus used Hidden Power -> p2b: Talonflame
+      p2b Talonflame fainted
+      p2a Deoxys used Psycho Boost -> p1a: Volcanion
+              p2a Deoxys spa 2 fell
+      p1a Volcanion used Earth Power -> p2a: Deoxys
+              p2a Deoxys -- critical hit
+      p2a Deoxys fainted
+      after p1: Volcanion 87/363, Landorus 319/319
+      after p2: Deoxys-Attack 0/241, Talonflame 0/297
+
+  Turn 8
+      p2a <- Manectric comes in (281/281)
+      p2b <- Keldeo-Resolute comes in (323/323)
+      after p1: Volcanion 87/363, Landorus 319/319
+      after p2: Manectric 281/281, Keldeo-Resolute 323/323
+
+  Turn 9
+    p1 mcts: move 4 1, switch 6   (slot1 Landorus -> Amoonguss)
+      search (22000 visits): earthpower,0;switch amoonguss 1058v 327 | heatwave,0;hiddenpower,0 1011v 309 | heatwave,0;switch amoonguss 990v 301 | earthpower,0;hiddenpower,0 956v 288
+    p2 greedy: move 1 1, move 1 1
+      p1b <- Amoonguss comes in (432/432)
+      p2b Keldeo used Hydro Pump -> p1a: Volcanion
+      p2a Manectric used Thunderbolt -> p1a: Volcanion
+      p1a Volcanion used Earth Power -> p2a: Manectric
+      p2a Manectric fainted
+      after p1: Volcanion 19/363, Amoonguss 432/432
+      after p2: Manectric 0/281, Keldeo-Resolute 323/323
+
+  Turn 10
+      p2a <- Amoonguss comes in (432/432)
+      after p1: Volcanion 19/363, Amoonguss 432/432
+      after p2: Amoonguss 432/432, Keldeo-Resolute 323/323
+
+  Turn 11
+    p1 mcts: move 2 1, move 1
+      search (29000 visits): overheat,0;ragepowder,1 1269v 789 | heatwave,0;ragepowder,1 1225v 759 | overheat,0;sludgebomb,1 975v 588 | heatwave,0;sludgebomb,1 814v 480
+    p2 greedy: move 3 1, move 1 1
+      p1b Amoonguss used Rage Powder
+      p2b Keldeo used Hydro Pump -> p1b: Amoonguss
+      p1a Volcanion used Overheat -> p2a: Amoonguss
+              p1a Volcanion spa 2 fell
+      p2a Amoonguss fainted
+      after p1: Volcanion 19/363, Amoonguss 286/432
+      after p2: Amoonguss 0/432, Keldeo-Resolute 291/323
+
+  Turn 12
+      p2a <- Bisharp comes in (272/272)
+      after p1: Volcanion 19/363, Amoonguss 286/432
+      after p2: Bisharp 272/272, Keldeo-Resolute 291/323
+
+  Turn 13
+    p1 mcts: move 1, move 4
+      search (32000 visits): heatwave,0;protect,1 1132v 748 | overheat,0;protect,1 1124v 743 | steameruption,0;protect,1 1048v 687 | earthpower,0;protect,1 997v 650
+    p2 greedy: move 1 1, move 1 1
+      p1b Amoonguss used Protect
+      p2a Bisharp used Sucker Punch -> p1a: Volcanion
+      p1a Volcanion fainted
+      p2b Keldeo used Hydro Pump -> p1b: Amoonguss
+              p1b Amoonguss -- move: Protect
+      after p1: Volcanion 0/363, Amoonguss 286/432
+      after p2: Bisharp 272/272, Keldeo-Resolute 291/323
+
+  Turn 14
+      p1a <- Blastoise comes in (362/362)
+      after p1: Blastoise 362/362, Amoonguss 286/432
+      after p2: Bisharp 272/272, Keldeo-Resolute 291/323
+
+  Turn 15
+    p1 mcts: move 1 1, move 4
+      search (18000 visits): scald,0;protect,1 1278v 762 | scald,0;sludgebomb,1 1255v 747 | scald,0;spore,0 1031v 600 | scald,0;spore,1 825v 467
+    p2 greedy: move 1 2, move 1 2
+      p1b Amoonguss used Protect  [[still]]
+              p1b Amoonguss -- IT FAILED
+      p2a Bisharp used Sucker Punch  [[still]]
+              p2a Bisharp -- IT FAILED
+      p2b Keldeo used Hydro Pump -> p1b: Amoonguss  [[miss]]
+              p2b Keldeo -- MISSED
+      p1a Blastoise used Scald -> p2a: Bisharp
+      after p1: Blastoise 362/362, Amoonguss 286/432
+      after p2: Bisharp 169/272, Keldeo-Resolute 291/323
+
+  Turn 16
+    p1 mcts: move 1 1, move 4
+      search (15000 visits): scald,0;protect,1 976v 577 | scald,0;sludgebomb,1 930v 547 | icywind,0;spore,0 785v 452 | icywind,0;sludgebomb,1 747v 427
+    p2 greedy: move 1 2, move 1 2
+      p1b Amoonguss used Protect
+      p2a Bisharp used Sucker Punch  [[still]]
+              p2a Bisharp -- IT FAILED
+      p2b Keldeo used Hydro Pump -> p1b: Amoonguss
+              p1b Amoonguss -- move: Protect
+      p1a Blastoise used Scald -> p2a: Bisharp
+      after p1: Blastoise 362/362, Amoonguss 286/432
+      after p2: Bisharp 55/272, Keldeo-Resolute 291/323
+
+  Turn 17
+    p1 mcts: move 1 1, move 3 2
+      search (33000 visits): scald,0;sludgebomb,1 3352v 1864 | scald,0;protect,1 3252v 1804 | scald,0;spore,1 1672v 875 | icywind,0;spore,0 1550v 804
+    p2 greedy: move 1 2, move 1 2
+      p2a Bisharp used Sucker Punch -> p1b: Amoonguss
+      p2b Keldeo used Hydro Pump -> p1b: Amoonguss
+      p1a Blastoise used Scald -> p2a: Bisharp
+      p2a Bisharp fainted
+      p1b Amoonguss used Sludge Bomb -> p2b: Keldeo
+      after p1: Blastoise 362/362, Amoonguss 2/432
+      after p2: Bisharp 0/272, Keldeo-Resolute 166/323
+
+  Turn 18
+    p1 mcts: move 1 2, move 3 2
+      search (62000 visits): scald,1;sludgebomb,1 3272v 1428 | icywind,1;sludgebomb,1 3215v 1401 | icywind,1;switch landorus 3162v 1375 | scald,1;switch landorus 3071v 1332
+    p2 greedy: pass, move 1 2
+      p2b Keldeo used Hydro Pump -> p1b: Amoonguss
+      p1b Amoonguss fainted
+      p1a Blastoise used Scald -> p2b: Keldeo
+      after p1: Blastoise 362/362, Amoonguss 0/432
+      after p2: Bisharp 0/272, Keldeo-Resolute 89/323
+
+  Turn 19
+      p1b <- Landorus comes in (319/319)
+      after p1: Blastoise 362/362, Landorus 319/319
+      after p2: Bisharp 0/272, Keldeo-Resolute 89/323
+
+  Turn 20
+    p1 mcts: move 3, move 1 2
+      search (99000 visits): icywind,1;earthpower,1 6639v 2135 | icywind,1;psychic,1 6571v 2111 | followme,0;earthpower,1 6441v 2065 | scald,1;hiddenpower,1 6320v 2023
+    p2 greedy: pass, move 1 1
+      p1b Landorus used Earth Power -> p2b: Keldeo
+      p2b Keldeo fainted
+      after p1: Blastoise 362/362, Landorus 319/319
+      after p2: Bisharp 0/272, Keldeo-Resolute 0/323
+
+  RESULT: p1 wins

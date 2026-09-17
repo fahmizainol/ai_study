@@ -1,0 +1,143 @@
+battle 32   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: Untitled 509: Charizard-Mega-Y, Hitmontop, Thundurus, Tyrantrum, Cresselia, Garchomp
+  p2: Untitled 1002: Diancie-Mega, Genesect, Talonflame, Landorus-Therian, Hoopa-Unbound, Gastrodon-East
+
+  Turn 1
+    p1 mcts: move 2 2, switch 6   (slot1 Hitmontop -> Garchomp)
+      search (30000 visits): overheat,1;switch garchomp 3350v 2651 | overheat,1;fakeout,1 3330v 2635 | overheat,1;switch tyrantrum 2703v 2115 | overheat,1;switch cresselia 2555v 1993
+    p2 greedy: move 1, move 1 1
+      p1b <- Garchomp comes in (357/357)
+      p2b Genesect used Ice Beam -> p1a: Charizard
+      p2a Diancie used Diamond Storm -> p1a: Charizard  [[spread] p1a,p1b]
+              p2a Diancie def 1 rose
+      p1a Charizard fainted
+      after p1: Charizard-Mega-Y 0/297, Garchomp 312/357
+      after p2: Diancie-Mega 287/287, Genesect 283/283
+
+  Turn 2
+      p1a <- Thundurus comes in (299/299)
+      after p1: Thundurus 299/299, Garchomp 312/357
+      after p2: Diancie-Mega 287/287, Genesect 283/283
+
+  Turn 3
+    p1 mcts: move 2 1, switch 5   (slot1 Garchomp -> Cresselia)
+      search (18000 visits): flashcannon,0;switch cresselia 884v 475 | flashcannon,0;switch hitmontop 879v 472 | flashcannon,0;swordsdance,1 557v 278 | flashcannon,0;protect,1 541v 268
+    p2 greedy: move 1, move 1 2
+      p1b <- Cresselia comes in (444/444)
+      p2b Genesect used Ice Beam -> p1b: Cresselia
+      p1a Thundurus used Flash Cannon -> p2a: Diancie
+              p2a Diancie -- critical hit
+      p2a Diancie fainted
+      after p1: Thundurus 270/299, Cresselia 372/444
+      after p2: Diancie-Mega 0/287, Genesect 283/283
+
+  Turn 4
+      p2a <- Talonflame comes in (359/359)
+      after p1: Thundurus 270/299, Cresselia 372/444
+      after p2: Talonflame 359/359, Genesect 283/283
+
+  Turn 5
+    p1 mcts: move 1 1, move 1
+      search (22000 visits): thunderbolt,0;calmmind,1 1096v 551 | thunderbolt,0;icywind,0 1004v 499 | thunderbolt,0;moonlight,1 641v 296 | thunderbolt,0;psyshock,1 593v 270
+    p2 greedy: move 1 2, move 1 2
+      p2a Talonflame used Brave Bird -> p1b: Cresselia
+              p1b Cresselia -- critical hit
+      p2b Genesect used Ice Beam -> p1b: Cresselia
+              p1b Cresselia -- critical hit
+      p1b Cresselia fainted
+      p1a Thundurus used Thunderbolt -> p2a: Talonflame
+      p2a Talonflame fainted
+      after p1: Thundurus 241/299, Cresselia 0/444
+      after p2: Talonflame 0/359, Genesect 283/283
+
+  Turn 6
+      p2a <- Landorus-Therian comes in (382/382)
+      p1b <- Tyrantrum comes in (305/305)
+              p1a Thundurus atk 1 fell
+              p1b Tyrantrum atk 1 fell
+      after p1: Thundurus 241/299, Tyrantrum 305/305
+      after p2: Landorus-Therian 382/382, Genesect 283/283
+
+  Turn 7
+    p1 mcts: move 1 2, switch 6   (slot1 Tyrantrum -> Hitmontop)
+      search (28000 visits): thunderbolt,1;switch hitmontop 1780v 960 | switch hitmontop;headsmash,1 1174v 604 | switch hitmontop;rockslide,0 934v 466 | thunderbolt,1;rockslide,0 847v 416
+    p2 greedy: move 1, move 1 1
+      p1b <- Hitmontop comes in (304/304)
+              p2a Landorus atk 1 fell
+              p2b Genesect atk 1 fell
+      p2b Genesect used Ice Beam -> p1a: Thundurus
+      p1a Thundurus used Thunderbolt -> p2b: Genesect
+      p1a Thundurus fainted
+      p2a Landorus used Earthquake -> p1b: Hitmontop  [[spread] p2b,p1b]
+      p2b Genesect fainted
+      after p1: Thundurus 0/299, Hitmontop 214/304
+      after p2: Landorus-Therian 382/382, Genesect 0/283
+
+  Turn 8
+      p1a <- Garchomp comes in (312/357)
+      p2b <- Hoopa-Unbound comes in (301/301)
+      after p1: Garchomp 312/357, Hitmontop 214/304
+      after p2: Landorus-Therian 382/382, Hoopa-Unbound 301/301
+
+  Turn 9
+    p1 mcts: move 1, move 1 2
+      search (64000 visits): swordsdance,0;fakeout,1 6276v 2840 | swordsdance,0;switch tyrantrum 4461v 1970 | dragonclaw,1;fakeout,1 3963v 1733 | swordsdance,0;closecombat,1 3415v 1474
+    p2 greedy: move 1, move 1 2
+      p1b Hitmontop used Fake Out -> p2b: Hoopa
+      p1a Garchomp used Swords Dance
+              p1a Garchomp atk 2 rose
+              p2b Hoopa COULD NOT MOVE (flinch)
+      p2a Landorus used Earthquake -> p1b: Hitmontop  [[spread] p2b,p1a,p1b]
+      after p1: Garchomp 209/357, Hitmontop 120/304
+      after p2: Landorus-Therian 382/382, Hoopa-Unbound 112/301
+
+  Turn 10
+    p1 mcts: move 1, switch 6   (slot1 Hitmontop -> Tyrantrum)
+      search (64000 visits): swordsdance,0;switch tyrantrum 4198v 1490 | dragonclaw,1;helpinghand,0 4143v 1469 | dragonclaw,1;switch tyrantrum 3912v 1379 | protect,0;closecombat,0 3498v 1218
+    p2 greedy: move 1, move 1 2
+      p1b <- Tyrantrum comes in (305/305)
+      p1a Garchomp used Swords Dance
+              p1a Garchomp atk 2 rose
+      p2b Hoopa used Hyperspace Fury -> p1b: Tyrantrum
+              p2b Hoopa def 1 fell
+      p2a Landorus used Earthquake -> p1a: Garchomp  [[spread] p2b,p1a,p1b]
+      p2b Hoopa fainted
+      p1b Tyrantrum fainted
+      after p1: Garchomp 109/357, Tyrantrum 0/305
+      after p2: Landorus-Therian 382/382, Hoopa-Unbound 0/301
+
+  Turn 11
+      p1b <- Hitmontop comes in (120/304)
+      p2b <- Gastrodon-East comes in (426/426)
+              p2a Landorus atk 1 fell
+              p2b Gastrodon atk 1 fell
+      after p1: Garchomp 109/357, Hitmontop 120/304
+      after p2: Landorus-Therian 382/382, Gastrodon-East 426/426
+
+  Turn 12
+    p1 mcts: move 2, move 3
+      search (54000 visits): earthquake,0;wideguard,1 13538v 6220 | protect,0;wideguard,1 9319v 4205 | protect,0;fakeout,1 3177v 1324 | protect,0;helpinghand,0 2808v 1155
+    p2 greedy: move 1, move 1 1
+      p1b Hitmontop used Wide Guard
+      p1a Garchomp used Earthquake -> p2b: Gastrodon  [[spread] p2b]
+              p2a Landorus -- IMMUNE
+              p1b Hitmontop -- move: Wide Guard
+      p2b Gastrodon fainted
+      p2a Landorus used Earthquake -> p1a: Garchomp  [[spread] ]
+              p1a Garchomp -- move: Wide Guard
+              p1b Hitmontop -- move: Wide Guard
+      after p1: Garchomp 109/357, Hitmontop 120/304
+      after p2: Landorus-Therian 382/382, Gastrodon-East 0/426
+
+  Turn 13
+    p1 mcts: move 3 1, move 1 1
+      search (1670000 visits): dragonclaw,0;fakeout,0 417151v 417151 | dragonclaw,0;closecombat,0 417151v 417151 | dragonclaw,0;wideguard,1 417150v 417150 | dragonclaw,0;helpinghand,0 417148v 417148
+    p2 greedy: move 1, pass
+      p1b Hitmontop used Fake Out  [[still]]
+              p1b Hitmontop -- IT FAILED
+      p1a Garchomp used Dragon Claw -> p2a: Landorus
+      p2a Landorus fainted
+      after p1: Garchomp 50/357, Hitmontop 120/304
+      after p2: Landorus-Therian 0/382, Gastrodon-East 0/426
+
+  RESULT: p1 wins

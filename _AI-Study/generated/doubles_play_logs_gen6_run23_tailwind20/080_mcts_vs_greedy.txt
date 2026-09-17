@@ -1,0 +1,289 @@
+battle 80   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: Sand: Excadrill, Tyranitar, Salamence-Mega, Gastrodon-East, Cresselia, Thundurus
+  p2: Untitled 577: Kangaskhan-Mega, Bisharp, Deoxys-Attack, Greninja, Landorus-Therian, Talonflame
+
+  Turn 1
+    p1 mcts: move 1, switch 6   (slot1 Tyranitar -> Thundurus)
+      search (41000 visits): earthquake,0;switch thundurus 6606v 4494 | switch gastrodoneast;stealthrock,0 4208v 2802 | ironhead,1;stealthrock,0 3174v 2080 | switch thundurus;stealthrock,0 1473v 908
+    p2 greedy: move 3 1, move 2 1
+      p1b <- Thundurus comes in (299/299)
+      p2a Kangaskhan used Sucker Punch -> p1a: Excadrill
+      p2b Bisharp used Sucker Punch -> p1a: Excadrill
+      p1a Excadrill fainted
+      after p1: Excadrill 0/361, Thundurus 281/299
+      after p2: Kangaskhan-Mega 389/414, Bisharp 271/271
+
+  Turn 2
+      p1a <- Salamence-Mega comes in (394/394)
+              p2a Kangaskhan atk 1 fell
+              p2b Bisharp atk 1 fell
+              p2b Bisharp atk 2 rose
+      after p1: Salamence-Mega 394/394, Thundurus 281/299
+      after p2: Kangaskhan-Mega 389/414, Bisharp 271/271
+
+  Turn 3
+    p1 mcts: move 4, move 4
+      search (44000 visits): protect,0;protect,1 6263v 4538 | switch gastrodoneast;protect,1 4759v 3330 | roost,0;protect,1 4228v 2941 | switch cresselia;protect,1 3603v 2485
+    p2 greedy: move 3 2, move 2 2
+      p1b Thundurus used Protect
+      p1a Salamence used Protect
+      p2a Kangaskhan used Sucker Punch  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p2b Bisharp used Sucker Punch  [[still]]
+              p2b Bisharp -- IT FAILED
+      after p1: Salamence-Mega 370/394, Thundurus 263/299
+      after p2: Kangaskhan-Mega 364/414, Bisharp 271/271
+
+  Turn 4
+    p1 mcts: switch 5, move 4   (slot0 Salamence-Mega -> Cresselia)
+      search (38000 visits): switch cresselia;protect,1 9624v 7082 | doubleedge,0;protect,1 3219v 2259 | hypervoice,0;protect,1 2133v 1457 | doubleedge,1;protect,1 1890v 1279
+    p2 greedy: move 3 2, move 2 2
+      p1a <- Cresselia comes in (444/444)
+      p1b Thundurus used Protect  [[still]]
+              p1b Thundurus -- IT FAILED
+      p2a Kangaskhan used Sucker Punch  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p2b Bisharp used Sucker Punch  [[still]]
+              p2b Bisharp -- IT FAILED
+      after p1: Cresselia 444/444, Thundurus 245/299
+      after p2: Kangaskhan-Mega 339/414, Bisharp 271/271
+
+  Turn 5
+    p1 mcts: switch 6, move 4   (slot0 Cresselia -> Tyranitar)
+      search (41000 visits): switch tyranitar;protect,1 2486v 1632 | icywind,0;protect,1 2107v 1366 | icebeam,1;protect,1 1974v 1274 | thunderwave,1;protect,1 1874v 1204
+    p2 greedy: move 3 2, move 2 2
+      p1a <- Tyranitar comes in (404/404)
+      p1b Thundurus used Protect
+      p2a Kangaskhan used Sucker Punch  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p2b Bisharp used Sucker Punch  [[still]]
+              p2b Bisharp -- IT FAILED
+      after p1: Tyranitar 404/404, Thundurus 227/299
+      after p2: Kangaskhan-Mega 314/414, Bisharp 271/271
+
+  Turn 6
+    p1 mcts: move 3 1, move 4
+      search (43000 visits): crunch,0;protect,1 6453v 4650 | counter,0;protect,1 4476v 3174 | stoneedge,1;protect,1 4419v 3159 | switch gastrodoneast;protect,1 2044v 1382
+    p2 greedy: move 3 2, move 2 2
+      p1b Thundurus used Protect
+      p2a Kangaskhan used Sucker Punch  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p2b Bisharp used Sucker Punch  [[still]]
+              p2b Bisharp -- IT FAILED
+      p1a Tyranitar used Crunch -> p2a: Kangaskhan
+      after p1: Tyranitar 404/404, Thundurus 227/299
+      after p2: Kangaskhan-Mega 176/414, Bisharp 271/271
+
+  Turn 7
+    p1 mcts: switch 6, move 4   (slot0 Tyranitar -> Cresselia)
+      search (32000 visits): switch cresselia;protect,1 2514v 1651 | stoneedge,0;protect,1 1085v 661 | stoneedge,1;protect,1 1048v 636 | counter,0;protect,1 1048v 636
+    p2 greedy: move 3 2, move 2 2
+      p1a <- Cresselia comes in (444/444)
+      p1b Thundurus used Protect  [[still]]
+              p1b Thundurus -- IT FAILED
+      p2a Kangaskhan used Sucker Punch  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p2b Bisharp used Sucker Punch  [[still]]
+              p2b Bisharp -- IT FAILED
+      after p1: Cresselia 444/444, Thundurus 227/299
+      after p2: Kangaskhan-Mega 176/414, Bisharp 271/271
+
+  Turn 8
+    p1 mcts: move 1 2, move 4
+      search (43000 visits): psyshock,1;protect,1 6464v 4497 | switch salamencemega;protect,1 5080v 3558 | icebeam,0;protect,1 4718v 3231 | switch tyranitar;protect,1 1085v 665
+    p2 greedy: move 3 2, move 2 2
+      p1b Thundurus used Protect
+      p2a Kangaskhan used Sucker Punch  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p2b Bisharp used Sucker Punch  [[still]]
+              p2b Bisharp -- IT FAILED
+      p1a Cresselia used Psyshock -> p2b: Bisharp
+              p2b Bisharp -- IMMUNE
+      after p1: Cresselia 444/444, Thundurus 227/299
+      after p2: Kangaskhan-Mega 176/414, Bisharp 271/271
+
+  Turn 9
+    p1 mcts: move 3 2, move 4
+      search (32000 visits): icebeam,1;protect,1 2281v 1482 | switch tyranitar;protect,1 1937v 1243 | psyshock,0;protect,1 1240v 763 | icywind,0;protect,1 1082v 656
+    p2 greedy: move 3 2, move 2 2
+      p1b Thundurus used Protect
+      p2a Kangaskhan used Sucker Punch  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p2b Bisharp used Sucker Punch  [[still]]
+              p2b Bisharp -- IT FAILED
+      p1a Cresselia used Ice Beam -> p2b: Bisharp
+      after p1: Cresselia 444/444, Thundurus 227/299
+      after p2: Kangaskhan-Mega 176/414, Bisharp 232/271
+
+  Turn 10
+    p1 mcts: move 1 1, move 4
+      search (36000 visits): psyshock,0;protect,1 2300v 1588 | thunderwave,1;superpower,1 1582v 1061 | switch gastrodoneast;superpower,1 1515v 1012 | thunderwave,0;superpower,1 1344v 888
+    p2 greedy: move 1 2, move 4 2
+      p1b Thundurus used Protect  [[still]]
+              p1b Thundurus -- IT FAILED
+      p2a Kangaskhan used Fake Out  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p1a Cresselia used Psyshock -> p2a: Kangaskhan
+      p2b Bisharp used Iron Head -> p1b: Thundurus
+              p1b Thundurus -- critical hit
+      after p1: Cresselia 444/444, Thundurus 17/299
+      after p2: Kangaskhan-Mega 88/414, Bisharp 232/271
+
+  Turn 11
+    p1 mcts: move 3 1, move 4
+      search (45000 visits): icebeam,0;protect,1 3802v 2639 | icebeam,1;protect,1 2603v 1766 | thunderwave,1;superpower,1 1744v 1148 | psyshock,0;superpower,1 1567v 1022
+    p2 greedy: move 1 2, move 4 2
+      p1b Thundurus used Protect
+      p2a Kangaskhan used Fake Out  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p1a Cresselia used Ice Beam -> p2a: Kangaskhan
+      p2b Bisharp used Iron Head -> p1b: Thundurus
+              p1b Thundurus -- move: Protect
+      after p1: Cresselia 444/444, Thundurus 17/299
+      after p2: Kangaskhan-Mega 24/414, Bisharp 232/271
+
+  Turn 12
+    p1 mcts: move 2, move 4
+      search (50000 visits): icywind,0;protect,1 6533v 4726 | icebeam,1;protect,1 6039v 4355 | icebeam,0;superpower,1 1689v 1128 | thunderwave,1;superpower,1 1518v 1004
+    p2 greedy: move 1 2, move 4 2
+      p1b Thundurus used Protect  [[still]]
+              p1b Thundurus -- IT FAILED
+      p2a Kangaskhan used Fake Out  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p1a Cresselia used Icy Wind -> p2b: Bisharp  [[spread] p2a]
+              p1a Cresselia -- MISSED
+      p2a Kangaskhan fainted
+      p2b Bisharp used Iron Head -> p1b: Thundurus
+      p1b Thundurus fainted
+      after p1: Cresselia 444/444, Thundurus 0/299
+      after p2: Kangaskhan-Mega 0/414, Bisharp 232/271
+
+  Turn 13
+      p1b <- Gastrodon-East comes in (421/421)
+      p2a <- Deoxys-Attack comes in (241/241)
+      after p1: Cresselia 444/444, Gastrodon-East 421/421
+      after p2: Deoxys-Attack 241/241, Bisharp 232/271
+
+  Turn 14
+    p1 mcts: move 3 1, move 2 2
+      search (24000 visits): icebeam,0;earthpower,1 1016v 519 | psyshock,1;earthpower,1 855v 426 | icebeam,0;protect,1 790v 388 | switch tyranitar;earthpower,1 690v 331
+    p2 greedy: move 2 1, move 4 1
+      p2a Deoxys used Psycho Boost -> p1a: Cresselia
+              p2a Deoxys spa 2 fell
+      p1a Cresselia used Ice Beam -> p2a: Deoxys
+      p2a Deoxys fainted
+      p2b Bisharp used Iron Head -> p1a: Cresselia
+      p1b Gastrodon used Earth Power -> p2b: Bisharp
+              p2b Bisharp -- critical hit
+      p2b Bisharp fainted
+      after p1: Cresselia 80/444, Gastrodon-East 421/421
+      after p2: Deoxys-Attack 0/241, Bisharp 0/271
+
+  Turn 15
+      p2a <- Greninja comes in (285/285)
+      p2b <- Landorus-Therian comes in (382/382)
+              p1a Cresselia atk 1 fell
+              p1b Gastrodon atk 1 fell
+      after p1: Cresselia 80/444, Gastrodon-East 421/421
+      after p2: Greninja 285/285, Landorus-Therian 382/382
+
+  Turn 16
+    p1 mcts: move 1 1, switch 5   (slot1 Gastrodon-East -> Salamence-Mega)
+      search (22000 visits): psyshock,0;switch salamencemega 553v 417 | psyshock,0;earthpower,0 532v 399 | psyshock,0;protect,1 506v 377 | thunderwave,1;switch salamencemega 487v 361
+    p2 greedy: move 3 1, move 4 1
+      p1b <- Salamence-Mega comes in (370/394)
+              p2a Greninja atk 1 fell
+              p2b Landorus atk 1 fell
+      p2a Greninja used Hydro Pump -> p1a: Cresselia  [[miss]]
+              p2a Greninja gained typechange Water
+              p2a Greninja -- MISSED
+      p1a Cresselia used Psyshock -> p2a: Greninja
+      p2b Landorus used Superpower -> p1a: Cresselia
+              p2b Landorus atk 1 fell
+              p2b Landorus def 1 fell
+      after p1: Cresselia 38/444, Salamence-Mega 370/394
+      after p2: Greninja 168/285, Landorus-Therian 382/382
+
+  Turn 17
+    p1 mcts: move 1 2, move 4
+      search (24000 visits): psyshock,1;protect,1 1366v 717 | psyshock,1;switch gastrodoneast 834v 409 | psyshock,0;protect,1 783v 380 | thunderwave,0;protect,1 733v 352
+    p2 greedy: move 3 1, move 4 1
+      p1b Salamence used Protect
+      p2a Greninja used Hydro Pump -> p1a: Cresselia
+      p1a Cresselia fainted
+      p2b Landorus used Superpower -> p1b: Salamence
+              p1b Salamence -- move: Protect
+      after p1: Cresselia 0/444, Salamence-Mega 370/394
+      after p2: Greninja 140/285, Landorus-Therian 382/382
+
+  Turn 18
+      p1a <- Gastrodon-East comes in (421/421)
+      after p1: Gastrodon-East 421/421, Salamence-Mega 370/394
+      after p2: Greninja 140/285, Landorus-Therian 382/382
+
+  Turn 19
+    p1 mcts: move 2 1, move 4
+      search (26000 visits): earthpower,0;protect,1 1891v 860 | protect,0;protect,1 1724v 776 | icebeam,0;protect,1 1520v 673 | earthpower,1;protect,1 1433v 630
+    p2 greedy: move 3 2, move 4 2
+      p1b Salamence used Protect
+      p2a Greninja used Hydro Pump -> p1a: Gastrodon
+              p1a Gastrodon -- ability: Storm Drain
+              p1a Gastrodon spa 1 rose
+      p2b Landorus used Superpower -> p1b: Salamence
+              p1b Salamence -- move: Protect
+      p1a Gastrodon used Earth Power -> p2a: Greninja
+      p2a Greninja fainted
+      after p1: Gastrodon-East 421/421, Salamence-Mega 370/394
+      after p2: Greninja 0/285, Landorus-Therian 382/382
+
+  Turn 20
+      p2a <- Talonflame comes in (320/320)
+      after p1: Gastrodon-East 421/421, Salamence-Mega 370/394
+      after p2: Talonflame 320/320, Landorus-Therian 382/382
+
+  Turn 21
+    p1 mcts: move 1, move 1 1
+      search (41000 visits): protect,0;doubleedge,0 8666v 5081 | icebeam,1;doubleedge,0 3274v 1818 | protect,0;hypervoice,0 2734v 1497 | protect,0;doubleedge,1 2575v 1403
+    p2 greedy: move 1 2, move 4 2
+      p1a Gastrodon used Protect
+      p2a Talonflame used Brave Bird -> p1b: Salamence
+      p1b Salamence used Double-Edge -> p2a: Talonflame
+      p2b Landorus used Superpower -> p1b: Salamence
+              p2b Landorus atk 1 fell
+              p2b Landorus def 1 fell
+      after p1: Gastrodon-East 421/421, Salamence-Mega 88/394
+      after p2: Talonflame 54/320, Landorus-Therian 382/382
+
+  Turn 22
+    p1 mcts: move 3 2, move 2
+      search (451000 visits): icebeam,1;hypervoice,0 161510v 160942 | icebeam,1;switch tyranitar 107405v 106718 | icebeam,1;doubleedge,0 106893v 106205 | icebeam,1;roost,1 61236v 60535
+    p2 greedy: move 1 2, move 4 2
+      p2a Talonflame used Brave Bird -> p1b: Salamence
+              p1b Salamence -- critical hit
+      p1b Salamence fainted
+      p2b Landorus used Superpower -> p1a: Gastrodon
+              p2b Landorus atk 1 fell
+              p2b Landorus def 1 fell
+      p1a Gastrodon used Ice Beam -> p2b: Landorus
+      after p1: Gastrodon-East 362/421, Salamence-Mega 0/394
+      after p2: Talonflame 25/320, Landorus-Therian 11/382
+
+  Turn 23
+      p1b <- Tyranitar comes in (404/404)
+      after p1: Gastrodon-East 362/421, Tyranitar 404/404
+      after p2: Talonflame 25/320, Landorus-Therian 11/382
+
+  Turn 24
+    p1 mcts: move 3 1, move 3 2
+      search (232000 visits): icebeam,0;crunch,1 16895v 16891 | earthpower,1;crunch,1 16736v 16729 | recover,0;crunch,1 16629v 16620 | icebeam,1;crunch,1 16469v 16457
+    p2 greedy: move 1 1, move 4 1
+      p2a Talonflame used Brave Bird -> p1a: Gastrodon
+      p2a Talonflame fainted
+      p2b Landorus used Superpower -> p1a: Gastrodon
+              p2b Landorus atk 1 fell
+              p2b Landorus def 1 fell
+      p2b Landorus fainted
+      after p1: Gastrodon-East 37/421, Tyranitar 404/404
+      after p2: Talonflame 0/320, Landorus-Therian 0/382
+
+  RESULT: p1 wins

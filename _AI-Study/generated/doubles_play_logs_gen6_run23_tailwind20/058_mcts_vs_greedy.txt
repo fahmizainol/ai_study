@@ -1,0 +1,226 @@
+battle 58   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: ORAS Doubles OU: Diancie-Mega, Keldeo-Resolute, Serperior, Talonflame, Aegislash, Hydreigon
+  p2: ORAS Doubles OU: Gengar-Mega, Rotom-Wash, Sylveon, Scrafty, Latios, Heatran
+
+  Turn 1
+    p1 mcts: move 4, move 4
+      search (16000 visits): protect,0;protect,1 2134v 1325 | protect,0;secretsword,1 1438v 863 | diamondstorm,0;protect,1 1079v 629 | diamondstorm,0;secretsword,1 922v 527
+    p2 greedy: move 2 1, move 3 1
+      p1a Diancie used Protect
+      p1b Keldeo used Protect
+      p2a Gengar used Sludge Bomb -> p1a: Diancie
+              p1a Diancie -- move: Protect
+      p2b Rotom used Hydro Pump -> p1a: Diancie
+              p1a Diancie -- move: Protect
+      after p1: Diancie-Mega 241/241, Keldeo-Resolute 324/324
+      after p2: Gengar-Mega 261/261, Rotom-Wash 304/304
+
+  Turn 2
+    p1 mcts: move 4, move 4
+      search (19000 visits): protect,0;protect,1 1541v 891 | protect,0;hydropump,0 1407v 806 | diamondstorm,0;protect,1 1394v 797 | protect,0;secretsword,1 1295v 735
+    p2 greedy: move 2 1, move 3 1
+      p1a Diancie used Protect
+      p1b Keldeo used Protect  [[still]]
+              p1b Keldeo -- IT FAILED
+      p2a Gengar used Sludge Bomb -> p1a: Diancie
+              p1a Diancie -- move: Protect
+      p2b Rotom used Hydro Pump -> p1a: Diancie
+              p1a Diancie -- move: Protect
+      after p1: Diancie-Mega 241/241, Keldeo-Resolute 324/324
+      after p2: Gengar-Mega 261/261, Rotom-Wash 304/304
+
+  Turn 3
+    p1 mcts: move 4, move 4
+      search (21000 visits): protect,0;protect,1 1966v 1170 | diamondstorm,0;protect,1 1766v 1042 | protect,0;hydropump,0 1700v 999 | protect,0;secretsword,1 1432v 828
+    p2 greedy: move 2 1, move 3 1
+      p1a Diancie used Protect
+      p1b Keldeo used Protect
+      p2a Gengar used Sludge Bomb -> p1a: Diancie
+              p1a Diancie -- move: Protect
+      p2b Rotom used Hydro Pump -> p1a: Diancie
+              p1a Diancie -- move: Protect
+      after p1: Diancie-Mega 241/241, Keldeo-Resolute 324/324
+      after p2: Gengar-Mega 261/261, Rotom-Wash 304/304
+
+  Turn 4
+    p1 mcts: move 4, move 2 2
+      search (18000 visits): protect,0;secretsword,1 1973v 1187 | protect,0;protect,1 1592v 940 | diamondstorm,0;secretsword,1 964v 539 | diamondstorm,0;protect,1 890v 492
+    p2 greedy: move 2 1, move 3 1
+      p1a Diancie used Protect  [[still]]
+              p1a Diancie -- IT FAILED
+      p2a Gengar used Sludge Bomb -> p1a: Diancie
+              p1a Diancie is now psn
+      p1b Keldeo used Secret Sword -> p2b: Rotom
+              p2b Rotom used up its Sitrus Berry
+      p2b Rotom used Hydro Pump -> p1a: Diancie  [[miss]]
+              p2b Rotom -- MISSED
+      after p1: Diancie-Mega 31/241, Keldeo-Resolute 292/324
+      after p2: Gengar-Mega 261/261, Rotom-Wash 205/304
+
+  Turn 5
+    p1 mcts: move 1, move 4
+      search (24000 visits): diamondstorm,0;protect,1 2160v 1141 | diamondstorm,0;secretsword,1 1954v 1023 | protect,0;protect,1 1509v 769 | moonblast,1;protect,1 1471v 747
+    p2 greedy: move 2 1, move 3 1
+      p1b Keldeo used Protect
+      p2a Gengar used Sludge Bomb -> p1a: Diancie
+      p1a Diancie fainted
+      p2b Rotom used Hydro Pump -> p1b: Keldeo
+              p1b Keldeo -- move: Protect
+      after p1: Diancie-Mega 0/241, Keldeo-Resolute 292/324
+      after p2: Gengar-Mega 261/261, Rotom-Wash 205/304
+
+  Turn 6
+      p1a <- Serperior comes in (291/291)
+      after p1: Serperior 291/291, Keldeo-Resolute 292/324
+      after p2: Gengar-Mega 261/261, Rotom-Wash 205/304
+
+  Turn 7
+    p1 mcts: move 1 2, move 4
+      search (23000 visits): leafstorm,1;protect,1 2291v 1494 | leafstorm,1;hydropump,0 1954v 1259 | leafstorm,1;secretsword,1 1644v 1044 | protect,0;protect,1 1612v 1022
+    p2 greedy: move 2 2, move 3 2
+      p1b Keldeo used Protect  [[still]]
+              p1b Keldeo -- IT FAILED
+      p2a Gengar used Sludge Bomb -> p1b: Keldeo
+      p1a Serperior used Leaf Storm -> p2b: Rotom
+              p1a Serperior spa 2 rose
+      p2b Rotom fainted
+      after p1: Serperior 291/291, Keldeo-Resolute 70/324
+      after p2: Gengar-Mega 261/261, Rotom-Wash 0/304
+
+  Turn 8
+      p2b <- Sylveon comes in (375/375)
+      after p1: Serperior 291/291, Keldeo-Resolute 70/324
+      after p2: Gengar-Mega 261/261, Sylveon 375/375
+
+  Turn 9
+    p1 mcts: move 4, move 4
+      search (27000 visits): protect,0;protect,1 3574v 1996 | protect,0;hydropump,1 3405v 1895 | protect,0;secretsword,1 2702v 1478 | protect,0;hydropump,0 2521v 1371
+    p2 greedy: move 2 2, move 1
+      p1a Serperior used Protect
+      p1b Keldeo used Protect
+      p2a Gengar used Sludge Bomb -> p1b: Keldeo
+              p1b Keldeo -- move: Protect
+      p2b Sylveon used Hyper Voice -> p1b: Keldeo  [[spread] ]
+              p1a Serperior -- move: Protect
+              p1b Keldeo -- move: Protect
+      after p1: Serperior 291/291, Keldeo-Resolute 70/324
+      after p2: Gengar-Mega 261/261, Sylveon 375/375
+
+  Turn 10
+    p1 mcts: move 4, move 1 2
+      search (22000 visits): protect,0;hydropump,1 2909v 1682 | protect,0;protect,1 2673v 1536 | protect,0;secretsword,1 2154v 1217 | protect,0;hydropump,0 1828v 1018
+    p2 greedy: move 2 2, move 1
+      p1a Serperior used Protect  [[still]]
+              p1a Serperior -- IT FAILED
+      p2a Gengar used Sludge Bomb -> p1b: Keldeo
+      p1b Keldeo fainted
+      p2b Sylveon used Hyper Voice -> p1a: Serperior
+      after p1: Serperior 18/291, Keldeo-Resolute 0/324
+      after p2: Gengar-Mega 261/261, Sylveon 375/375
+
+  Turn 11
+      p1b <- Talonflame comes in (297/297)
+      after p1: Serperior 18/291, Talonflame 297/297
+      after p2: Gengar-Mega 261/261, Sylveon 375/375
+
+  Turn 12
+    p1 mcts: move 4, move 4
+      search (31000 visits): protect,0;protect,1 4728v 2376 | protect,0;tailwind,1 3598v 1773 | protect,0;bravebird,1 2911v 1410 | leafstorm,1;protect,1 2687v 1292
+    p2 greedy: move 2 1, move 1
+      p1a Serperior used Protect
+      p1b Talonflame used Protect
+      p2a Gengar used Sludge Bomb -> p1a: Serperior
+              p1a Serperior -- move: Protect
+      p2b Sylveon used Hyper Voice -> p1a: Serperior  [[spread] ]
+              p1a Serperior -- move: Protect
+              p1b Talonflame -- move: Protect
+      after p1: Serperior 18/291, Talonflame 297/297
+      after p2: Gengar-Mega 261/261, Sylveon 375/375
+
+  Turn 13
+    p1 mcts: move 4, move 4
+      search (27000 visits): protect,0;protect,1 3834v 1962 | protect,0;tailwind,1 3207v 1619 | protect,0;bravebird,1 2607v 1293 | leafstorm,1;protect,1 1930v 930
+    p2 greedy: move 2 1, move 1
+      p1a Serperior used Protect  [[still]]
+              p1a Serperior -- IT FAILED
+      p1b Talonflame used Protect  [[still]]
+              p1b Talonflame -- IT FAILED
+      p2a Gengar used Sludge Bomb -> p1a: Serperior
+      p1a Serperior fainted
+      p2b Sylveon used Hyper Voice -> p1b: Talonflame
+      after p1: Serperior 0/291, Talonflame 113/297
+      after p2: Gengar-Mega 261/261, Sylveon 375/375
+
+  Turn 14
+      p1a <- Aegislash comes in (324/324)
+      after p1: Aegislash 324/324, Talonflame 113/297
+      after p2: Gengar-Mega 261/261, Sylveon 375/375
+
+  Turn 15
+    p1 mcts: move 2 2, move 4
+      search (30000 visits): flashcannon,1;protect,1 1912v 783 | shadowball,0;protect,1 1530v 608 | flashcannon,0;protect,1 1457v 575 | shadowsneak,0;protect,1 1329v 517
+    p2 greedy: move 2 2, move 1
+      p1b Talonflame used Protect
+      p2a Gengar used Sludge Bomb -> p1b: Talonflame
+              p1b Talonflame -- move: Protect
+      p2b Sylveon used Hyper Voice -> p1b: Talonflame  [[spread] p1a]
+              p1b Talonflame -- move: Protect
+      p1a Aegislash used Flash Cannon -> p2b: Sylveon
+      p2b Sylveon fainted
+      after p1: Aegislash-Blade 223/324, Talonflame 113/297
+      after p2: Gengar-Mega 261/261, Sylveon 0/375
+
+  Turn 16
+      p2b <- Scrafty comes in (333/333)
+              p1a Aegislash atk 1 fell
+              p1b Talonflame atk 1 fell
+      after p1: Aegislash-Blade 223/324, Talonflame 113/297
+      after p2: Gengar-Mega 261/261, Scrafty 333/333
+
+  Turn 17
+    p1 mcts: switch 6, move 3   (slot0 Aegislash-Blade -> Hydreigon)
+      search (32000 visits): switch hydreigon;tailwind,1 3340v 1531 | switch hydreigon;protect,1 2231v 983 | shadowsneak,0;protect,1 1382v 573 | switch hydreigon;bravebird,1 1182v 478
+    p2 greedy: move 2 2, move 3 2
+      p1a <- Hydreigon comes in (358/358)
+      p1b Talonflame used Tailwind
+      -sidestart p1: A move: Tailwind
+      p2a Gengar used Sludge Bomb -> p1b: Talonflame
+      p1b Talonflame fainted
+      p2b Scrafty used Drain Punch -> p1a: Hydreigon
+      after p1: Hydreigon 154/358, Talonflame 0/297
+      after p2: Gengar-Mega 261/261, Scrafty 333/333
+
+  Turn 18
+      p1b <- Aegislash comes in (223/324)
+      after p1: Hydreigon 154/358, Aegislash 223/324
+      after p2: Gengar-Mega 261/261, Scrafty 333/333
+
+  Turn 19
+    p1 mcts: move 2 1, move 4 1
+      search (59000 visits): darkpulse,0;shadowsneak,0 5311v 1200 | fireblast,0;shadowsneak,0 3436v 723 | protect,0;shadowsneak,0 2993v 612 | darkpulse,0;kingsshield,1 2793v 563
+    p2 greedy: move 2 1, move 3 1
+      p1b Aegislash used Shadow Sneak -> p2a: Gengar
+      p1a Hydreigon used Dark Pulse -> p2a: Gengar
+      p2a Gengar fainted
+      p2b Scrafty used Drain Punch -> p1a: Hydreigon
+      p1a Hydreigon fainted
+      after p1: Hydreigon 0/358, Aegislash-Blade 191/324
+      after p2: Gengar-Mega 0/261, Scrafty 333/333
+
+  Turn 20
+      p2a <- Latios comes in (301/301)
+      after p1: Hydreigon 0/358, Aegislash-Blade 191/324
+      after p2: Latios 301/301, Scrafty 333/333
+
+  Turn 21
+    p1 mcts: pass, move 4 1
+      search (553000 visits): No Move;shadowsneak,0 106697v 916 | No Move;kingsshield,1 81840v 520 | No Move;flashcannon,1 76895v 444 | No Move;flashcannon,0 75798v 428
+    p2 greedy: move 1 2, move 3 2
+      p1b Aegislash used Shadow Sneak -> p2a: Latios
+      p2a Latios used Draco Meteor -> p1b: Aegislash
+              p2a Latios spa 2 fell
+      p1b Aegislash fainted
+      after p1: Hydreigon 0/358, Aegislash 0/324
+      after p2: Latios 60/301, Scrafty 333/333
+
+  RESULT: p2 wins

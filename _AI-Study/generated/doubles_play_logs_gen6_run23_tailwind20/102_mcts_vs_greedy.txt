@@ -1,0 +1,181 @@
+battle 102   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: ORAS Doubles OU: Amoonguss, Politoed, Kingdra, Gothitelle, Bisharp, Kangaskhan-Mega
+  p2: ORAS Doubles OU: Heatran, Diancie, Thundurus, Amoonguss, Bisharp, Kyurem-Black
+
+  Turn 1
+    p1 mcts: switch 3, switch 4   (slot0 Amoonguss -> Kingdra; slot1 Politoed -> Gothitelle)
+      search (31000 visits): switch kingdra;switch gothitelle 3887v 1689 | protect,0;scald,0 460v 136 | protect,0;protect,1 453v 133 | protect,0;scald,1 432v 125
+    p2 greedy: move 1, move 1
+      p1b <- Gothitelle comes in (344/344)
+      p1a <- Kingdra comes in (292/292)
+      p2a Heatran used Heat Wave -> p1b: Gothitelle  [[spread] p1a,p1b]
+      p2b Diancie used Diamond Storm -> p1a: Kingdra  [[spread] p1a,p1b]
+              p2b Diancie def 1 rose
+      after p1: Kingdra 158/292, Gothitelle 231/344
+      after p2: Heatran 337/337, Diancie 241/241
+
+  Turn 2
+    p1 mcts: move 1, move 4
+      search (12000 visits): muddywater,0;protect,1 526v 449 | muddywater,0;switch kangaskhanmega 515v 439 | flashcannon,1;psychic,1 514v 438 | flashcannon,1;helpinghand,0 511v 435
+    p2 greedy: move 1, move 1
+      p1b Gothitelle used Protect
+      p1a Kingdra used Muddy Water -> p2a: Heatran  [[spread] p2a,p2b]
+      p2a Heatran fainted
+      p2b Diancie fainted
+      after p1: Kingdra 129/292, Gothitelle 252/344
+      after p2: Heatran 0/337, Diancie 0/241
+
+  Turn 3
+      p2a <- Thundurus comes in (362/362)
+      p2b <- Amoonguss comes in (432/432)
+      after p1: Kingdra 129/292, Gothitelle 252/344
+      after p2: Thundurus 362/362, Amoonguss 432/432
+
+  Turn 4
+    p1 mcts: move 1, move 2 2
+      search (23000 visits): muddywater,0;psychic,1 903v 522 | protect,0;psychic,0 601v 328 | muddywater,0;psychic,0 588v 319 | flashcannon,0;psychic,1 581v 314
+    p2 greedy: move 3 1, move 3 1
+      p1a Kingdra used Muddy Water -> p2a: Thundurus  [[spread] p2b]
+              p1a Kingdra -- MISSED
+              p2b Amoonguss accuracy 1 fell
+      p2a Thundurus used Thunderbolt -> p1a: Kingdra
+      p1a Kingdra fainted
+      p1b Gothitelle used Psychic -> p2b: Amoonguss
+              p2b Amoonguss used up its Sitrus Berry
+      p2b Amoonguss used Giga Drain -> p1b: Gothitelle
+      after p1: Kingdra 0/292, Gothitelle 203/344
+      after p2: Thundurus 362/362, Amoonguss 272/432
+
+  Turn 5
+      p1a <- Amoonguss comes in (432/432)
+      after p1: Amoonguss 432/432, Gothitelle 203/344
+      after p2: Thundurus 362/362, Amoonguss 272/432
+
+  Turn 6
+    p1 mcts: move 3 1, move 2 2
+      search (26000 visits): gigadrain,0;psychic,1 1837v 982 | gigadrain,0;protect,1 1153v 584 | spore,0;psychic,0 858v 417 | spore,0;psychic,1 778v 372
+    p2 greedy: move 3 2, move 3 2
+      p2a Thundurus used Thunderbolt -> p1b: Gothitelle
+      p1b Gothitelle used Psychic -> p2b: Amoonguss
+              p2b Amoonguss spd 1 fell
+      p1a Amoonguss used Giga Drain -> p2a: Thundurus
+      p2b Amoonguss used Giga Drain -> p1b: Gothitelle
+      after p1: Amoonguss 432/432, Gothitelle 30/344
+      after p2: Thundurus 318/362, Amoonguss 109/432
+
+  Turn 7
+    p1 mcts: move 4, move 2 1
+      search (33000 visits): protect,0;psychic,0 2010v 1401 | ragepowder,0;psychic,0 1696v 1167 | spore,0;psychic,0 1488v 1013 | protect,0;psychic,1 1427v 967
+    p2 greedy: move 3 2, move 3 2
+      p1a Amoonguss used Protect
+      p2a Thundurus used Thunderbolt -> p1b: Gothitelle
+      p1b Gothitelle fainted
+      p2b Amoonguss used Giga Drain -> p1a: Amoonguss
+              p1a Amoonguss -- move: Protect
+      after p1: Amoonguss 432/432, Gothitelle 0/344
+      after p2: Thundurus 318/362, Amoonguss 109/432
+
+  Turn 8
+      p1b <- Politoed comes in (321/321)
+      after p1: Amoonguss 432/432, Politoed 321/321
+      after p2: Thundurus 318/362, Amoonguss 109/432
+
+  Turn 9
+    p1 mcts: move 1 1, move 3 1
+      search (34000 visits): spore,0;scald,0 701v 80 | protect,0;scald,0 628v 66 | gigadrain,0;scald,0 602v 61 | switch kangaskhanmega;scald,0 599v 60
+    p2 greedy: move 3 1, move 3 1
+      p2a Thundurus used Thunderbolt -> p1a: Amoonguss
+      p1b Politoed used Scald -> p2a: Thundurus
+      p1a Amoonguss used Spore -> p2a: Thundurus
+              p2a Thundurus is now slp
+      p2b Amoonguss used Giga Drain -> p1a: Amoonguss  [[miss]]
+              p2b Amoonguss -- MISSED
+      after p1: Amoonguss 356/432, Politoed 321/321
+      after p2: Thundurus 185/362, Amoonguss 109/432
+
+  Turn 10
+    p1 mcts: move 3 1, move 3 1
+      search (32000 visits): gigadrain,0;scald,0 818v 119 | switch kangaskhanmega;scald,0 748v 103 | gigadrain,1;scald,0 629v 77 | spore,1;scald,0 620v 75
+    p2 greedy: move 3 1, move 3 1
+              p2a Thundurus COULD NOT MOVE (slp)
+      p1b Politoed used Scald -> p2a: Thundurus
+              p2a Thundurus used up its Sitrus Berry
+      p1a Amoonguss used Giga Drain -> p2a: Thundurus
+      p2b Amoonguss used Giga Drain -> p1a: Amoonguss
+      after p1: Amoonguss 356/432, Politoed 321/321
+      after p2: Thundurus 98/362, Amoonguss 119/432
+
+  Turn 11
+    p1 mcts: move 3 1, move 3 1
+      search (25000 visits): gigadrain,0;scald,0 550v 65 | switch kangaskhanmega;scald,0 474v 49 | spore,1;scald,0 455v 45 | gigadrain,1;scald,0 440v 42
+    p2 greedy: move 3 1, move 3 1
+              p2a Thundurus COULD NOT MOVE (slp)
+      p1b Politoed used Scald -> p2a: Thundurus
+      p2a Thundurus fainted
+      p1a Amoonguss used Giga Drain -> p2b: Amoonguss
+      p2b Amoonguss used Giga Drain -> p1a: Amoonguss
+      after p1: Amoonguss 348/432, Politoed 321/321
+      after p2: Thundurus 0/362, Amoonguss 103/432
+
+  Turn 12
+      p2a <- Bisharp comes in (271/271)
+      after p1: Amoonguss 348/432, Politoed 321/321
+      after p2: Bisharp 271/271, Amoonguss 103/432
+
+  Turn 13
+    p1 mcts: move 4, move 3 1
+      search (44000 visits): protect,0;scald,0 2157v 1311 | spore,0;scald,0 1857v 1114 | switch bisharp;scald,0 1824v 1093 | protect,0;scald,1 1558v 919
+    p2 greedy: move 3 1, move 3 1
+      p1a Amoonguss used Protect
+      p2a Bisharp used Sucker Punch  [[still]]
+              p2a Bisharp -- IT FAILED
+      p1b Politoed used Scald -> p2a: Bisharp
+              p2a Bisharp is now brn
+      p2b Amoonguss used Giga Drain -> p1a: Amoonguss
+              p1a Amoonguss -- move: Protect
+      after p1: Amoonguss 348/432, Politoed 321/321
+      after p2: Bisharp 115/271, Amoonguss 103/432
+
+  Turn 14
+    p1 mcts: move 3 1, switch 5   (slot1 Politoed -> Bisharp)
+      search (34000 visits): gigadrain,0;switch bisharp 878v 338 | spore,0;switch bisharp 877v 337 | gigadrain,1;switch bisharp 863v 331 | switch bisharp;protect,1 818v 310
+    p2 greedy: move 3 1, move 3 1
+      p1b <- Bisharp comes in (329/329)
+      p2a Bisharp used Sucker Punch -> p1a: Amoonguss
+      p1a Amoonguss used Giga Drain -> p2a: Bisharp
+      p2b Amoonguss used Giga Drain -> p1a: Amoonguss  [[miss]]
+              p2b Amoonguss -- MISSED
+      after p1: Amoonguss 307/432, Bisharp 329/329
+      after p2: Bisharp 27/271, Amoonguss 103/432
+
+  Turn 15
+    p1 mcts: switch 6, move 2 2   (slot0 Amoonguss -> Kangaskhan-Mega)
+      search (44000 visits): switch kangaskhanmega;ironhead,1 1359v 679 | protect,0;ironhead,1 1325v 659 | protect,0;knockoff,1 1304v 648 | switch kangaskhanmega;knockoff,1 1249v 617
+    p2 greedy: move 3 1, move 3 1
+      p1a <- Kangaskhan-Mega comes in (414/414)
+      p2a Bisharp used Sucker Punch  [[still]]
+              p2a Bisharp -- IT FAILED
+      p1b Bisharp used Iron Head -> p2b: Amoonguss
+      p2b Amoonguss fainted
+      p2a Bisharp fainted
+      after p1: Kangaskhan-Mega 414/414, Bisharp 297/329
+      after p2: Bisharp 0/271, Amoonguss 0/432
+
+  Turn 16
+      p2a <- Kyurem-Black comes in (416/416)
+      after p1: Kangaskhan-Mega 414/414, Bisharp 297/329
+      after p2: Kyurem-Black 416/416, Amoonguss 0/432
+
+  Turn 17
+    p1 mcts: move 2 1, move 1 1
+      search (63000 visits): return,0;knockoff,0 48647v 37406 | fakeout,0;ironhead,0 1319v 736 | return,0;ironhead,0 1159v 638 | fakeout,0;knockoff,0 871v 462
+    p2 greedy: move 3 2, pass
+      p2a Kyurem used Ice Beam -> p1b: Bisharp
+      p1a Kangaskhan used Return -> p2a: Kyurem
+      p1b Bisharp used Knock Off -> p2a: Kyurem
+              p2a Kyurem used up its Leftovers
+      p2a Kyurem fainted
+      after p1: Kangaskhan-Mega 414/414, Bisharp 163/329
+      after p2: Kyurem-Black 0/416, Amoonguss 0/432
+
+  RESULT: p1 wins

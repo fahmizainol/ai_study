@@ -1,0 +1,199 @@
+battle 129   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: ORAS Doubles OU: Sylveon, Heatran, Zapdos, Gengar, Keldeo, Shaymin-Sky
+  p2: ORAS Doubles OU: Politoed, Kingdra, Amoonguss, Diancie-Mega, Scrafty, Heatran
+
+  Turn 1
+    p1 mcts: move 1, move 4
+      search (22000 visits): hypervoice,0;protect,1 1166v 721 | hypervoice,0;earthpower,0 888v 532 | switch zapdos;substitute,1 840v 500 | hypervoice,0;substitute,1 695v 403
+    p2 greedy: move 3 1, move 2 1
+      p1b Heatran used Protect
+      p2b Kingdra used Draco Meteor -> p1a: Sylveon
+              p1a Sylveon -- IMMUNE
+      p2a Politoed used Scald -> p1a: Sylveon
+      p1a Sylveon used Hyper Voice -> p2b: Kingdra  [[spread] p2a,p2b]
+      p2b Kingdra fainted
+      after p1: Sylveon 242/345, Heatran 335/335
+      after p2: Politoed 209/384, Kingdra 0/292
+
+  Turn 2
+      p2b <- Amoonguss comes in (432/432)
+      after p1: Sylveon 242/345, Heatran 335/335
+      after p2: Politoed 209/384, Amoonguss 432/432
+
+  Turn 3
+    p1 mcts: move 1, move 3 1
+      search (25000 visits): hypervoice,0;earthpower,0 3436v 2067 | hypervoice,0;heatwave,0 3013v 1797 | hypervoice,0;switch zapdos 1856v 1065 | switch zapdos;earthpower,1 1491v 837
+    p2 greedy: move 3 1, move 1 1
+      p1b Heatran used Earth Power -> p2a: Politoed
+      p1a Sylveon used Hyper Voice -> p2a: Politoed  [[spread] p2a,p2b]
+      p2a Politoed fainted
+      p2b Amoonguss used Giga Drain -> p1a: Sylveon
+              p1a Sylveon -- critical hit
+      after p1: Sylveon 151/345, Heatran 335/335
+      after p2: Politoed 0/384, Amoonguss 354/432
+
+  Turn 4
+      p2a <- Diancie-Mega comes in (241/241)
+      after p1: Sylveon 151/345, Heatran 335/335
+      after p2: Diancie-Mega 241/241, Amoonguss 354/432
+
+  Turn 5
+    p1 mcts: move 1, move 2
+      search (23000 visits): hypervoice,0;heatwave,0 3772v 2212 | hypervoice,0;earthpower,0 3507v 2046 | hypervoice,0;earthpower,1 1554v 847 | switch zapdos;earthpower,0 1253v 667
+    p2 greedy: move 2, move 1 1
+      p2a Diancie used Diamond Storm -> p1a: Sylveon  [[spread] p1a,p1b]
+              p2a Diancie def 1 rose
+      p1a Sylveon fainted
+      p1b Heatran used Heat Wave -> p2b: Amoonguss  [[spread] p2a]
+              p1b Heatran -- MISSED
+      p2b Amoonguss used Giga Drain -> p1b: Heatran
+      after p1: Sylveon 0/345, Heatran 162/335
+      after p2: Diancie-Mega 210/241, Amoonguss 364/432
+
+  Turn 6
+      p1a <- Zapdos comes in (384/384)
+      after p1: Zapdos 384/384, Heatran 162/335
+      after p2: Diancie-Mega 210/241, Amoonguss 364/432
+
+  Turn 7
+    p1 mcts: move 3, move 3 1
+      search (23000 visits): roost,0;earthpower,0 2220v 1617 | roost,0;protect,1 1024v 699 | roost,0;switch keldeo 1007v 687 | roost,0;switch gengar 853v 571
+    p2 greedy: move 2, move 1 2
+      p2a Diancie used Diamond Storm -> p1a: Zapdos  [[spread] p1a,p1b]
+              p2a Diancie def 1 rose
+              p1a Zapdos used up its Sitrus Berry
+      p1a Zapdos used Roost
+      p1b Heatran used Earth Power -> p2a: Diancie
+      p2a Diancie fainted
+      p2b Amoonguss used Giga Drain -> p1b: Heatran
+      after p1: Zapdos 358/384, Heatran 9/335
+      after p2: Diancie-Mega 0/241, Amoonguss 373/432
+
+  Turn 8
+      p2a <- Scrafty comes in (334/334)
+      after p1: Zapdos 358/384, Heatran 9/335
+      after p2: Scrafty 334/334, Amoonguss 373/432
+
+  Turn 9
+    p1 mcts: move 3, move 1
+      search (21000 visits): roost,0;substitute,1 2528v 1938 | roost,0;earthpower,1 1565v 1162 | roost,0;earthpower,0 1052v 755 | roost,0;heatwave,0 1042v 747
+    p2 greedy: move 2 2, move 1 2
+      p1a Zapdos used Roost
+      p1b Heatran used Substitute
+              p1b Heatran -- IT FAILED
+      p2a Scrafty used Drain Punch -> p1b: Heatran
+      p1b Heatran fainted
+              p2a Scrafty atk 1 rose
+      p2b Amoonguss used Giga Drain -> p1a: Zapdos
+      after p1: Zapdos 302/384, Heatran 0/335
+      after p2: Scrafty 301/334, Amoonguss 414/432
+
+  Turn 10
+      p1b <- Gengar comes in (261/261)
+      after p1: Zapdos 302/384, Gengar 261/261
+      after p2: Scrafty 301/334, Amoonguss 414/432
+
+  Turn 11
+    p1 mcts: move 1 1, move 2 1 mega
+      search (11000 visits): thunderbolt,0;sludgebomb-mega,0 260v 164 | drillpeck,0;sludgebomb-mega,0 260v 163 | drillpeck,0;sludgebomb,0 259v 163 | thunderbolt,0;sludgebomb,0 229v 140
+    p2 greedy: move 2 1, move 1 1
+      p1b Gengar used Sludge Bomb -> p2a: Scrafty
+              p2a Scrafty is now psn
+      p1a Zapdos used Thunderbolt -> p2a: Scrafty
+      p2a Scrafty fainted
+      p2b Amoonguss used Giga Drain -> p1a: Zapdos
+      after p1: Zapdos 264/384, Gengar-Mega 261/261
+      after p2: Scrafty 0/334, Amoonguss 432/432
+
+  Turn 12
+      p2a <- Heatran comes in (386/386)
+      after p1: Zapdos 264/384, Gengar-Mega 261/261
+      after p2: Heatran 386/386, Amoonguss 432/432
+
+  Turn 13
+    p1 mcts: move 1 1, move 4
+      search (12000 visits): thunderbolt,0;protect,1 425v 254 | thunderbolt,0;switch shayminsky 378v 221 | drillpeck,1;switch shayminsky 361v 209 | drillpeck,1;protect,1 336v 192
+    p2 greedy: move 1 1, move 1 1
+      p1b Gengar used Protect
+      p1a Zapdos used Thunderbolt -> p2a: Heatran
+      p2a Heatran used Earth Power -> p1a: Zapdos
+              p1a Zapdos -- IMMUNE
+      p2b Amoonguss used Giga Drain -> p1a: Zapdos
+      after p1: Zapdos 228/384, Gengar-Mega 261/261
+      after p2: Heatran 259/386, Amoonguss 432/432
+
+  Turn 14
+    p1 mcts: move 1 1, move 1 1
+      search (15000 visits): thunderbolt,0;shadowball,0 2394v 1748 | thunderbolt,0;protect,1 444v 272 | thunderbolt,0;switch shayminsky 360v 212 | roost,0;protect,1 358v 211
+    p2 greedy: move 1 1, move 1 1
+      p1b Gengar used Shadow Ball -> p2a: Heatran
+      p1a Zapdos used Thunderbolt -> p2a: Heatran
+      p2a Heatran fainted
+      p2b Amoonguss used Giga Drain -> p1a: Zapdos
+      after p1: Zapdos 191/384, Gengar-Mega 261/261
+      after p2: Heatran 0/386, Amoonguss 432/432
+
+  Turn 15
+    p1 mcts: move 3, move 1 2
+      search (63000 visits): roost,0;shadowball,1 8169v 5010 | roost,0;switch shayminsky 8044v 4930 | roost,0;sludgebomb,1 7904v 4841 | roost,0;taunt,1 7003v 4266
+    p2 greedy: pass, move 1 1
+      p1b Gengar used Shadow Ball -> p2b: Amoonguss
+      p1a Zapdos used Roost
+      p2b Amoonguss used Giga Drain -> p1a: Zapdos
+      after p1: Zapdos 308/384, Gengar-Mega 261/261
+      after p2: Heatran 0/386, Amoonguss 266/432
+
+  Turn 16
+    p1 mcts: move 3, switch 6   (slot1 Gengar-Mega -> Shaymin-Sky)
+      search (52000 visits): roost,0;switch shayminsky 3057v 1554 | roost,0;sludgebomb,1 2870v 1451 | switch keldeo;sludgebomb,1 2752v 1386 | roost,0;shadowball,1 2652v 1332
+    p2 greedy: pass, move 1 1
+      p1b <- Shaymin-Sky comes in (341/341)
+      p1a Zapdos used Roost
+      p2b Amoonguss used Giga Drain -> p1a: Zapdos
+      after p1: Zapdos 314/384, Shaymin-Sky 341/341
+      after p2: Heatran 0/386, Amoonguss 301/432
+
+  Turn 17
+    p1 mcts: move 3, move 2 2
+      search (70000 visits): roost,0;airslash,1 4682v 2406 | roost,0;seedflare,1 4068v 2070 | roost,0;earthpower,1 4065v 2068 | roost,0;protect,1 3905v 1981
+    p2 greedy: pass, move 1 1
+      p1b Shaymin used Air Slash -> p2b: Amoonguss
+              p2b Amoonguss used up its Sitrus Berry
+      p1a Zapdos used Roost
+      p2b Amoonguss used Giga Drain -> p1a: Zapdos
+      after p1: Zapdos 305/384, Shaymin-Sky 341/341
+      after p2: Heatran 0/386, Amoonguss 191/432
+
+  Turn 18
+    p1 mcts: move 3, switch 5   (slot1 Shaymin-Sky -> Keldeo)
+      search (83000 visits): roost,0;switch keldeo 5594v 3013 | roost,0;airslash,1 5265v 2825 | roost,0;earthpower,1 5007v 2678 | roost,0;seedflare,1 4975v 2660
+    p2 greedy: pass, move 2
+      p1b <- Keldeo comes in (323/323)
+      p2b Amoonguss used Rage Powder
+      p1a Zapdos used Roost
+      after p1: Zapdos 384/384, Keldeo 323/323
+      after p2: Heatran 0/386, Amoonguss 191/432
+
+  Turn 19
+    p1 mcts: move 4, move 1 2
+      search (93000 visits): tailwind,0;hydropump,1 3478v 1677 | tailwind,0;secretsword,1 3444v 1659 | tailwind,0;switch shayminsky 3309v 1588 | tailwind,0;roar,1 3299v 1583
+    p2 greedy: pass, move 2
+      p2b Amoonguss used Rage Powder
+      p1b Keldeo used Hydro Pump -> p2b: Amoonguss
+      p1a Zapdos used Tailwind
+      -sidestart p1: A move: Tailwind
+      after p1: Zapdos 384/384, Keldeo 291/323
+      after p2: Heatran 0/386, Amoonguss 58/432
+
+  Turn 20
+    p1 mcts: switch 5, move 2 2   (slot0 Zapdos -> Shaymin-Sky)
+      search (92000 visits): switch shayminsky;secretsword,1 2988v 1347 | thunderbolt,1;roar,1 2972v 1339 | switch shayminsky;hydropump,1 2924v 1316 | thunderbolt,1;secretsword,1 2903v 1305
+    p2 greedy: pass, move 2
+      p1a <- Shaymin-Sky comes in (341/341)
+      p2b Amoonguss used Rage Powder
+      p1b Keldeo used Secret Sword -> p2b: Amoonguss
+      p2b Amoonguss fainted
+      after p1: Shaymin-Sky 341/341, Keldeo 259/323
+      after p2: Heatran 0/386, Amoonguss 0/432
+
+  RESULT: p1 wins

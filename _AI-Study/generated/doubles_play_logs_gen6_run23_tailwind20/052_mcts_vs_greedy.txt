@@ -1,0 +1,181 @@
+battle 52   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: dpl ::/Untitled 228: Camerupt-Mega, Genesect, Diancie, Amoonguss, Hariyama, Porygon2
+  p2: ORAS Doubles OU: Cresselia, Abomasnow, Scrafty, Diancie, Sylveon, Chandelure
+
+  Turn 1
+    p1 mcts: move 2, move 1 1
+      search (17000 visits): heatwave,0;uturn,0 729v 536 | heatwave,0;ironhead,0 457v 316 | heatwave,0;uturn,1 445v 307 | heatwave,0;blazekick,0 440v 303
+    p2 greedy: move 3 1, move 1
+      p1b Genesect used U-turn -> p2a: Cresselia
+      after p1: Camerupt-Mega 344/344, Genesect 284/284
+      after p2: Cresselia 226/444, Abomasnow 384/384
+
+  Turn 2
+      p1b <- Diancie comes in (304/304)
+      p2a Cresselia used Psychic -> p1a: Camerupt
+      p2b Abomasnow used Blizzard -> p1b: Diancie  [[spread] p1a,p1b]
+              p1a Camerupt is now frz
+              p1a Camerupt COULD NOT MOVE (frz)
+      after p1: Camerupt-Mega 115/344, Diancie 197/304
+      after p2: Cresselia 226/444, Abomasnow 384/384
+
+  Turn 3
+    p1 mcts: switch 3, move 1   (slot0 Camerupt-Mega -> Genesect)
+      search (22000 visits): switch genesect;diamondstorm,0 6625v 6144 | switch genesect;switch porygon2 891v 742 | switch porygon2;switch genesect 872v 724 | switch porygon2;diamondstorm,0 610v 489
+    p2 greedy: move 3 1, move 1
+      p1a <- Genesect comes in (284/284)
+              p1a Genesect spa 1 rose
+      p2a Cresselia used Psychic -> p1a: Genesect
+      p2b Abomasnow used Blizzard -> p1a: Genesect  [[spread] p1a,p1b]
+              p1a Genesect is now frz
+      p1b Diancie used Diamond Storm -> p2a: Cresselia  [[spread] p2a,p2b]
+      after p1: Genesect 159/284, Diancie 84/304
+      after p2: Cresselia 139/444, Abomasnow 96/384
+
+  Turn 4
+    p1 mcts: switch 5, move 1   (slot0 Genesect -> Hariyama)
+      search (22000 visits): switch hariyama;diamondstorm,0 626v 462 | switch porygon2;diamondstorm,0 557v 405 | switch porygon2;moonblast,0 363v 248 | switch hariyama;moonblast,1 350v 237
+    p2 greedy: move 3 2, move 1
+      p1a <- Hariyama comes in (429/429)
+      p2a Cresselia used Psychic -> p1b: Diancie
+      p2b Abomasnow used Blizzard -> p1a: Hariyama  [[spread] p1a,p1b]
+      p1b Diancie fainted
+              p1a Hariyama is now brn
+      after p1: Hariyama 258/429, Diancie 0/304
+      after p2: Cresselia 139/444, Abomasnow 96/384
+
+  Turn 5
+      p1b <- Camerupt-Mega comes in (115/344)
+      after p1: Hariyama 258/429, Camerupt-Mega 115/344
+      after p2: Cresselia 139/444, Abomasnow 96/384
+
+  Turn 6
+    p1 mcts: switch 5, move 3   (slot0 Hariyama -> Genesect)
+      search (33000 visits): switch genesect;substitute,1 399v 382 | closecombat,0;earthpower,1 398v 381 | switch genesect;heatwave,0 395v 378 | switch porygon2;earthpower,1 394v 377
+    p2 greedy: move 3 2, move 1
+      p1a <- Genesect comes in (159/284)
+              p1a Genesect spa 1 rose
+      p2a Cresselia used Psychic -> p1b: Camerupt
+      p2b Abomasnow used Blizzard -> p1b: Camerupt  [[spread] p1a,p1b]
+      p1b Camerupt fainted
+      after p1: Genesect 73/284, Camerupt-Mega 0/344
+      after p2: Cresselia 139/444, Abomasnow 96/384
+
+  Turn 7
+      p1b <- Amoonguss comes in (429/429)
+      after p1: Genesect 73/284, Amoonguss 429/429
+      after p2: Cresselia 139/444, Abomasnow 96/384
+
+  Turn 8
+    p1 mcts: move 1 2, switch 6   (slot1 Amoonguss -> Porygon2)
+      search (14000 visits): uturn,1;switch porygon2 298v 136 | uturn,0;switch porygon2 281v 126 | switch porygon2;spore,0 277v 123 | ironhead,1;switch porygon2 267v 117
+    p2 greedy: move 3 1, move 1
+      p1b <- Porygon2 comes in (374/374)
+              p1b Porygon2 spa 1 rose
+              p1a Genesect COULD NOT MOVE (frz)
+      p2a Cresselia used Psychic -> p1a: Genesect
+      p2b Abomasnow used Blizzard -> p1a: Genesect  [[spread] p1a,p1b]
+      p1a Genesect fainted
+      after p1: Genesect 0/284, Porygon2 299/374
+      after p2: Cresselia 139/444, Abomasnow 96/384
+
+  Turn 9
+      p1a <- Hariyama comes in (258/429)
+      after p1: Hariyama 258/429, Porygon2 299/374
+      after p2: Cresselia 139/444, Abomasnow 96/384
+
+  Turn 10
+    p1 mcts: move 3 1, move 2 2
+      search (17000 visits): knockoff,0;icebeam,1 460v 203 | knockoff,0;thunderbolt,0 358v 148 | switch amoonguss;icebeam,1 342v 140 | knockoff,0;recover,1 340v 139
+    p2 greedy: move 3 1, move 1
+      p2a Cresselia used Psychic -> p1a: Hariyama
+      p1b Porygon2 used Ice Beam -> p2b: Abomasnow
+      p2b Abomasnow fainted
+      p1a Hariyama used Knock Off -> p2a: Cresselia
+              p2a Cresselia used up its Safety Goggles
+      p2a Cresselia fainted
+      after p1: Hariyama 7/429, Porygon2 299/374
+      after p2: Cresselia 0/444, Abomasnow 0/384
+
+  Turn 11
+      p2a <- Scrafty comes in (334/334)
+      p2b <- Diancie comes in (304/304)
+              p1a Hariyama atk 1 fell
+              p1b Porygon2 atk 1 fell
+      after p1: Hariyama 7/429, Porygon2 299/374
+      after p2: Scrafty 334/334, Diancie 304/304
+
+  Turn 12
+    p1 mcts: switch 6, move 2 1   (slot0 Hariyama -> Amoonguss)
+      search (24000 visits): switch amoonguss;icebeam,0 3002v 1836 | switch amoonguss;thunderbolt,0 2970v 1815 | switch amoonguss;recover,1 2145v 1280 | switch amoonguss;thunderbolt,1 1858v 1095
+    p2 greedy: move 1 1, move 1
+      p1a <- Amoonguss comes in (429/429)
+      p1b Porygon2 used Ice Beam -> p2a: Scrafty
+              p2a Scrafty is now frz
+              p2a Scrafty is cured of frz
+      p2a Scrafty used Drain Punch -> p1a: Amoonguss
+      p2b Diancie used Diamond Storm -> p1b: Porygon2  [[spread] p1a,p1b]
+              p2b Diancie def 1 rose
+      after p1: Amoonguss 242/429, Porygon2 236/374
+      after p2: Scrafty 178/334, Diancie 304/304
+
+  Turn 13
+    p1 mcts: move 2 1, move 1 2
+      search (25000 visits): spore,0;thunderbolt,1 2287v 1721 | spore,0;icebeam,1 2264v 1703 | spore,0;thunderbolt,0 1041v 736 | spore,0;icebeam,0 867v 601
+    p2 greedy: move 1 1, move 1
+      p1b Porygon2 used Thunderbolt -> p2b: Diancie
+      p2a Scrafty used Drain Punch -> p1a: Amoonguss
+      p2b Diancie used Diamond Storm -> p1b: Porygon2  [[spread] p1a,p1b]
+              p2b Diancie def 1 rose
+      p1a Amoonguss used Spore -> p2a: Scrafty
+              p2a Scrafty is now slp
+      after p1: Amoonguss 64/429, Porygon2 170/374
+      after p2: Scrafty 125/334, Diancie 213/304
+
+  Turn 14
+    p1 mcts: move 3 2, move 2 2
+      search (29000 visits): grassknot,1;icebeam,1 2061v 1506 | grassknot,1;thunderbolt,1 1892v 1374 | grassknot,1;thunderbolt,0 1846v 1338 | grassknot,1;icebeam,0 1481v 1055
+    p2 greedy: move 1 1, move 1
+      p1b Porygon2 used Ice Beam -> p2b: Diancie
+              p2a Scrafty COULD NOT MOVE (slp)
+      p2b Diancie used Diamond Storm -> p1b: Porygon2  [[spread] p1b]
+              p2b Diancie -- MISSED
+              p2b Diancie def 1 rose
+      p1a Amoonguss used Grass Knot -> p2b: Diancie
+              p2b Diancie used up its Weakness Policy
+              p2b Diancie atk 2 rose
+              p2b Diancie spa 2 rose
+      after p1: Amoonguss 64/429, Porygon2 110/374
+      after p2: Scrafty 125/334, Diancie 98/304
+
+  Turn 15
+    p1 mcts: move 4 2, move 2 2
+      search (31000 visits): foulplay,1;icebeam,1 2970v 2768 | grassknot,1;icebeam,1 2965v 2763 | foulplay,1;thunderbolt,1 2947v 2745 | grassknot,1;thunderbolt,1 2860v 2660
+    p2 greedy: move 1 1, move 1
+      p1b Porygon2 used Ice Beam -> p2b: Diancie
+              p2a Scrafty is cured of slp
+      p2a Scrafty used Drain Punch -> p1a: Amoonguss
+      p1a Amoonguss fainted
+      p2b Diancie used Diamond Storm -> p1b: Porygon2
+      p1b Porygon2 fainted
+      after p1: Amoonguss 0/429, Porygon2 0/374
+      after p2: Scrafty 69/334, Diancie 9/304
+
+  Turn 16
+      p1a <- Hariyama comes in (7/429)
+      after p1: Hariyama 7/429, Porygon2 0/374
+      after p2: Scrafty 69/334, Diancie 9/304
+
+  Turn 17
+    p1 mcts: move 1 1, pass
+      search (900000 visits): fakeout,0;No Move 112500v 0 | fakeout,1;No Move 112500v 0 | closecombat,0;No Move 112500v 0 | closecombat,1;No Move 112500v 0
+    p2 greedy: move 1 1, move 1
+      p1a Hariyama used Fake Out -> p2a: Scrafty
+              p2a Scrafty COULD NOT MOVE (flinch)
+      p2b Diancie used Diamond Storm -> p1a: Hariyama
+              p2b Diancie def 1 rose
+      p1a Hariyama fainted
+      after p1: Hariyama 0/429, Porygon2 0/374
+      after p2: Scrafty 9/334, Diancie 9/304
+
+  RESULT: p2 wins

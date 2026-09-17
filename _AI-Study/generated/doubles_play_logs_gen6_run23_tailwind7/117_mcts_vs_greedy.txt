@@ -1,0 +1,167 @@
+battle 117   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: XY Doubles: Hitmontop, Latios, Thundurus, Suicune, Gengar, Terrakion
+  p2: XY Doubles: Politoed, Manectric, Aegislash, Ludicolo, Rotom-Wash, Landorus-Therian
+
+  Turn 1
+    p1 mcts: switch 5, move 2 2   (slot0 Hitmontop -> Gengar)
+      search (17000 visits): switch gengar;psyshock,1 245v 89 | fakeout,1;psyshock,1 241v 87 | closecombat,1;psyshock,1 237v 85 | switch terrakion;dracometeor,0 234v 84
+    p2 greedy: move 1 1, move 2 1
+      p1a <- Gengar comes in (262/262)
+      p2b Manectric used Thunderbolt -> p1a: Gengar
+      p1b Latios used Psyshock -> p2b: Manectric
+      p2a Politoed used Scald -> p1a: Gengar
+              p1a Gengar -- critical hit
+      p1a Gengar fainted
+      after p1: Gengar 0/262, Latios 345/345
+      after p2: Politoed 384/384, Manectric 34/287
+
+  Turn 2
+      p1a <- Thundurus comes in (360/360)
+      after p1: Thundurus 360/360, Latios 345/345
+      after p2: Politoed 384/384, Manectric 34/287
+
+  Turn 3
+    p1 mcts: switch 5, move 2 1   (slot0 Thundurus -> Hitmontop)
+      search (20000 visits): switch hitmontop;psyshock,0 595v 256 | thunderbolt,0;psyshock,1 418v 165 | switch hitmontop;dracometeor,0 378v 145 | switch hitmontop;protect,1 377v 145
+    p2 greedy: move 1 1, move 2 1
+      p1a <- Hitmontop comes in (304/304)
+              p2a Politoed atk 1 fell
+              p2b Manectric atk 1 fell
+      p2b Manectric used Thunderbolt -> p1a: Hitmontop
+      p1b Latios used Psyshock -> p2a: Politoed
+              p2a Politoed -- critical hit
+      p2a Politoed used Scald -> p1a: Hitmontop
+              p1a Hitmontop used up its Sitrus Berry
+      after p1: Hitmontop 163/304, Latios 345/345
+      after p2: Politoed 195/384, Manectric 34/287
+
+  Turn 4
+    p1 mcts: move 1 2, move 2 1
+      search (23000 visits): fakeout,1;psyshock,0 515v 153 | switch terrakion;psyshock,0 473v 136 | fakeout,0;psyshock,0 417v 114 | closecombat,0;psyshock,0 396v 107
+    p2 greedy: move 1 1, move 2 1
+      p1a Hitmontop used Fake Out -> p2b: Manectric
+      p2b Manectric fainted
+      p1b Latios used Psyshock -> p2a: Politoed
+      p2a Politoed used Scald -> p1a: Hitmontop
+              p1a Hitmontop is now brn
+      after p1: Hitmontop 10/304, Latios 345/345
+      after p2: Politoed 71/384, Manectric 0/287
+
+  Turn 5
+      p2b <- Aegislash comes in (324/324)
+      after p1: Hitmontop 10/304, Latios 345/345
+      after p2: Politoed 71/384, Aegislash 324/324
+
+  Turn 6
+    p1 mcts: switch 4, move 2 1   (slot0 Hitmontop -> Suicune)
+      search (23000 visits): switch suicune;psyshock,0 706v 281 | switch thundurus;psyshock,0 662v 260 | switch suicune;psyshock,1 438v 155 | switch suicune;switch thundurus 429v 150
+    p2 greedy: move 1 1, move 2 1
+      p1a <- Suicune comes in (399/399)
+      p1b Latios used Psyshock -> p2a: Politoed
+      p2a Politoed fainted
+      p2b Aegislash used Shadow Ball -> p1a: Suicune
+      after p1: Suicune 288/399, Latios 345/345
+      after p2: Politoed 0/384, Aegislash-Blade 324/324
+
+  Turn 7
+      p2a <- Ludicolo comes in (327/327)
+      after p1: Suicune 288/399, Latios 345/345
+      after p2: Ludicolo 327/327, Aegislash-Blade 324/324
+
+  Turn 8
+    p1 mcts: move 2 2, switch 4   (slot1 Latios -> Hitmontop)
+      search (13000 visits): scald,1;switch hitmontop 1227v 948 | scald,1;psyshock,0 707v 518 | scald,1;protect,1 551v 392 | scald,1;psyshock,1 505v 355
+    p2 greedy: move 2 1, move 2 1
+      p1b <- Hitmontop comes in (10/304)
+              p2a Ludicolo atk 1 fell
+              p2b Aegislash atk 1 fell
+      p2a Ludicolo used Hydro Pump -> p1a: Suicune
+      p1a Suicune used Scald -> p2b: Aegislash
+      p2b Aegislash used Shadow Ball -> p1a: Suicune
+              p1a Suicune spd 1 fell
+      p1b Hitmontop fainted
+      after p1: Suicune 62/399, Hitmontop 0/304
+      after p2: Ludicolo 327/327, Aegislash-Blade 56/324
+
+  Turn 9
+      p1b <- Latios comes in (345/345)
+      after p1: Suicune 62/399, Latios 345/345
+      after p2: Ludicolo 327/327, Aegislash-Blade 56/324
+
+  Turn 10
+    p1 mcts: move 2 2, move 2 1
+      search (23000 visits): scald,1;psyshock,0 1308v 705 | icebeam,1;psyshock,0 1143v 607 | switch thundurus;psyshock,0 809v 409 | protect,0;psyshock,0 779v 392
+    p2 greedy: move 2 1, move 2 1
+      p2a Ludicolo used Hydro Pump -> p1a: Suicune
+      p1a Suicune fainted
+      p1b Latios used Psyshock -> p2a: Ludicolo
+      p2b Aegislash used Shadow Ball -> p1b: Latios
+      after p1: Suicune 0/399, Latios 25/345
+      after p2: Ludicolo 131/327, Aegislash-Blade 56/324
+
+  Turn 11
+      p1a <- Thundurus comes in (360/360)
+      after p1: Thundurus 360/360, Latios 25/345
+      after p2: Ludicolo 131/327, Aegislash-Blade 56/324
+
+  Turn 12
+    p1 mcts: move 1 1, move 3
+      search (21000 visits): thunderbolt,0;roost,1 1080v 510 | thunderwave,0;roost,1 872v 398 | thunderbolt,1;roost,1 793v 356 | hiddenpower,0;roost,1 734v 325
+    p2 greedy: move 2 2, move 2 2
+      p2a Ludicolo used Hydro Pump -> p1b: Latios  [[miss]]
+              p2a Ludicolo -- MISSED
+      p1a Thundurus used Thunderbolt -> p2a: Ludicolo
+      p2a Ludicolo fainted
+      p1b Latios used Roost
+      p2b Aegislash used Shadow Ball -> p1b: Latios
+      p1b Latios fainted
+      after p1: Thundurus 360/360, Latios 0/345
+      after p2: Ludicolo 0/327, Aegislash-Blade 56/324
+
+  Turn 13
+      p1b <- Terrakion comes in (323/323)
+      p2a <- Rotom-Wash comes in (300/300)
+      after p1: Thundurus 360/360, Terrakion 323/323
+      after p2: Rotom-Wash 300/300, Aegislash-Blade 56/324
+
+  Turn 14
+    p1 mcts: move 1 1, move 1 1
+      search (27000 visits): thunderbolt,0;closecombat,0 1683v 483 | thunderbolt,0;protect,1 1596v 453 | hiddenpower,1;protect,1 1010v 257 | hiddenpower,0;protect,1 993v 252
+    p2 greedy: move 1 1, move 2 1
+      p1b Terrakion used Close Combat -> p2a: Rotom
+              p1b Terrakion def 1 fell
+              p1b Terrakion spd 1 fell
+              p2a Rotom used up its Sitrus Berry
+      p1a Thundurus used Thunderbolt -> p2a: Rotom
+      p2a Rotom used Hydro Pump -> p1a: Thundurus
+              p1a Thundurus -- critical hit
+              p1a Thundurus used up its Sitrus Berry
+      p2b Aegislash used Shadow Ball -> p1a: Thundurus
+      p1a Thundurus fainted
+      after p1: Thundurus 0/360, Terrakion 291/323
+      after p2: Rotom-Wash 12/300, Aegislash-Blade 56/324
+
+  Turn 15
+    p1 mcts: pass, move 4
+      search (66000 visits): No Move;protect,1 64623v 31079 | No Move;rockslide,0 771v 252 | No Move;closecombat,0 171v 24 | No Move;taunt,0 161v 21
+    p2 greedy: move 1 2, move 2 2
+      p1b Terrakion used Protect
+      p2a Rotom used Hydro Pump -> p1b: Terrakion
+              p1b Terrakion -- move: Protect
+      p2b Aegislash used Shadow Ball -> p1b: Terrakion
+              p1b Terrakion -- move: Protect
+      after p1: Thundurus 0/360, Terrakion 291/323
+      after p2: Rotom-Wash 12/300, Aegislash-Blade 56/324
+
+  Turn 16
+    p1 mcts: pass, move 4
+      search (63000 visits): No Move;protect,1 61778v 29668 | No Move;rockslide,0 639v 199 | No Move;closecombat,0 180v 27 | No Move;taunt,0 140v 14
+    p2 greedy: move 1 2, move 2 2
+      p1b Terrakion used Protect  [[still]]
+              p1b Terrakion -- IT FAILED
+      p2a Rotom used Hydro Pump -> p1b: Terrakion
+      p1b Terrakion fainted
+      after p1: Thundurus 0/360, Terrakion 0/323
+      after p2: Rotom-Wash 12/300, Aegislash-Blade 56/324
+
+  RESULT: p2 wins

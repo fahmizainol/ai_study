@@ -1,0 +1,159 @@
+battle 53   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: Copy of tvalks: Kangaskhan-Mega, Volcanion, Thundurus, Sylveon, Landorus-Therian, Bisharp
+  p2: ORAS Doubles OU: Metagross, Breloom, Rotom-Wash, Landorus-Therian, Talonflame, Hydreigon
+
+  Turn 1
+    p1 mcts: move 4 2, move 1
+      search (20000 visits): lowkick,1;heatwave,0 401v 360 | fakeout,1;heatwave,0 343v 301 | fakeout,1;steameruption,1 315v 273 | crunch,0;heatwave,0 311v 269
+    p2 greedy: move 1 1, move 1 1
+      p2b Breloom used Mach Punch -> p1a: Kangaskhan
+              p1a Kangaskhan -- critical hit
+      p1a Kangaskhan used Low Kick -> p2b: Breloom
+      p2a Metagross used Iron Head -> p1a: Kangaskhan
+              p1a Kangaskhan -- critical hit
+      p1a Kangaskhan fainted
+      p1b Volcanion used Heat Wave -> p2a: Metagross  [[spread] p2a,p2b]
+      p2b Breloom fainted
+      after p1: Kangaskhan-Mega 0/414, Volcanion 364/364
+      after p2: Metagross 9/305, Breloom 0/261
+
+  Turn 2
+      p1a <- Thundurus comes in (362/362)
+      p2b <- Rotom-Wash comes in (304/304)
+      after p1: Thundurus 362/362, Volcanion 364/364
+      after p2: Metagross 9/305, Rotom-Wash 304/304
+
+  Turn 3
+    p1 mcts: move 1 1, move 1
+      search (18000 visits): thunderbolt,0;heatwave,0 872v 711 | hiddenpower,0;heatwave,0 872v 711 | thunderbolt,1;steameruption,1 439v 331 | thunderbolt,1;heatwave,0 420v 315
+    p2 greedy: move 1 1, move 1 1
+      p1a Thundurus used Thunderbolt -> p2a: Metagross
+      p2a Metagross fainted
+      p2b Rotom used Hydro Pump -> p1a: Thundurus
+              p1a Thundurus -- critical hit
+      p1b Volcanion used Heat Wave -> p2b: Rotom
+      after p1: Thundurus 136/362, Volcanion 364/364
+      after p2: Metagross 0/305, Rotom-Wash 238/304
+
+  Turn 4
+      p2a <- Landorus-Therian comes in (330/330)
+              p1a Thundurus atk 1 fell
+              p1b Volcanion atk 1 fell
+      after p1: Thundurus 136/362, Volcanion 364/364
+      after p2: Landorus-Therian 330/330, Rotom-Wash 238/304
+
+  Turn 5
+    p1 mcts: switch 4, switch 5   (slot0 Thundurus -> Sylveon; slot1 Volcanion -> Landorus-Therian)
+      search (19000 visits): switch sylveon;switch landorustherian 618v 467 | thunderbolt,1;protect,1 491v 360 | thunderbolt,1;switch landorustherian 486v 356 | hiddenpower,0;switch landorustherian 474v 346
+    p2 greedy: move 4 1, move 1 1
+      p1a <- Sylveon comes in (394/394)
+      p1b <- Landorus-Therian comes in (319/319)
+              p2a Landorus atk 1 fell
+              p2b Rotom atk 1 fell
+      p2a Landorus used Superpower -> p1a: Sylveon
+              p2a Landorus atk 1 fell
+              p2a Landorus def 1 fell
+      p2b Rotom used Hydro Pump -> p1a: Sylveon  [[miss]]
+              p2b Rotom -- MISSED
+      after p1: Sylveon 337/394, Landorus-Therian 319/319
+      after p2: Landorus-Therian 330/330, Rotom-Wash 238/304
+
+  Turn 6
+    p1 mcts: move 1, move 4 2
+      search (20000 visits): hypervoice,0;uturn,1 1703v 942 | hypervoice,0;uturn,0 1397v 757 | calmmind,0;uturn,0 1170v 621 | calmmind,0;stoneedge,0 1159v 614
+    p2 greedy: move 4 1, move 1 1
+      p1b Landorus used U-turn -> p2b: Rotom
+      after p1: Sylveon 337/394, Landorus-Therian 319/319
+      after p2: Landorus-Therian 330/330, Rotom-Wash 156/304
+
+  Turn 7
+      p1b <- Thundurus comes in (136/362)
+      p2a Landorus used Superpower -> p1a: Sylveon
+              p2a Landorus atk 1 fell
+              p2a Landorus def 1 fell
+      p2b Rotom used Hydro Pump -> p1a: Sylveon  [[miss]]
+              p2b Rotom -- MISSED
+      p1a Sylveon used Hyper Voice -> p2b: Rotom  [[spread] p2a,p2b]
+              p2b Rotom used up its Sitrus Berry
+      after p1: Sylveon 299/394, Thundurus 136/362
+      after p2: Landorus-Therian 165/330, Rotom-Wash 121/304
+
+  Turn 8
+    p1 mcts: move 1, move 1 1
+      search (15000 visits): hypervoice,0;thunderbolt,0 1777v 1041 | calmmind,0;thunderbolt,0 838v 451 | hypervoice,0;thunderwave,0 436v 209 | substitute,0;thunderbolt,0 413v 196
+    p2 greedy: move 4 2, move 1 2
+      p2a Landorus used Superpower -> p1b: Thundurus
+              p1b Thundurus -- critical hit
+              p2a Landorus atk 1 fell
+              p2a Landorus def 1 fell
+      p1b Thundurus fainted
+      p2b Rotom used Hydro Pump -> p1a: Sylveon
+      p1a Sylveon used Hyper Voice -> p2a: Landorus  [[spread] p2a,p2b]
+      p2a Landorus fainted
+      after p1: Sylveon 203/394, Thundurus 0/362
+      after p2: Landorus-Therian 0/330, Rotom-Wash 12/304
+
+  Turn 9
+      p1b <- Landorus-Therian comes in (319/319)
+      p2a <- Talonflame comes in (297/297)
+              p2a Talonflame atk 1 fell
+              p2b Rotom atk 1 fell
+      after p1: Sylveon 203/394, Landorus-Therian 319/319
+      after p2: Talonflame 297/297, Rotom-Wash 12/304
+
+  Turn 10
+    p1 mcts: move 3, move 3 1
+      search (25000 visits): calmmind,0;stoneedge,0 2509v 1588 | calmmind,0;uturn,1 2223v 1395 | calmmind,0;stoneedge,1 1728v 1062 | hypervoice,0;uturn,1 1558v 948
+    p2 greedy: move 1 1, move 1 1
+      p2a Talonflame used Brave Bird -> p1a: Sylveon
+      p1a Sylveon fainted
+      p1b Landorus used Stone Edge -> p2a: Talonflame
+      p2a Talonflame fainted
+      p2b Rotom used Hydro Pump -> p1b: Landorus
+      p1b Landorus fainted
+      after p1: Sylveon 0/394, Landorus-Therian 0/319
+      after p2: Talonflame 0/297, Rotom-Wash 12/304
+
+  Turn 11
+      p2a <- Hydreigon comes in (379/379)
+      p1b <- Bisharp comes in (271/271)
+      p1a <- Volcanion comes in (364/364)
+      after p1: Volcanion 364/364, Bisharp 271/271
+      after p2: Hydreigon 379/379, Rotom-Wash 12/304
+
+  Turn 12
+    p1 mcts: move 2 1, move 2 2
+      search (13000 visits): steameruption,0;knockoff,1 918v 489 | steameruption,0;ironhead,1 887v 470 | steameruption,0;ironhead,0 766v 398 | heatwave,0;knockoff,1 535v 261
+    p2 greedy: move 1 1, move 1 1
+      p2a Hydreigon used Draco Meteor -> p1a: Volcanion
+              p2a Hydreigon spa 2 fell
+      p1b Bisharp used Knock Off -> p2b: Rotom
+      p2b Rotom fainted
+      p1a Volcanion used Steam Eruption -> p2a: Hydreigon
+      after p1: Volcanion 36/364, Bisharp 244/271
+      after p2: Hydreigon 234/379, Rotom-Wash 0/304
+
+  Turn 13
+    p1 mcts: move 4, move 3 1
+      search (34000 visits): protect,0;ironhead,0 9248v 6584 | steameruption,0;ironhead,0 5955v 4170 | heatwave,0;ironhead,0 4418v 3051 | protect,0;knockoff,0 1861v 1216
+    p2 greedy: move 1 1, pass
+      p1a Volcanion used Protect
+      p2a Hydreigon used Draco Meteor -> p1a: Volcanion
+              p1a Volcanion -- move: Protect
+      p1b Bisharp used Iron Head -> p2a: Hydreigon
+      after p1: Volcanion 36/364, Bisharp 217/271
+      after p2: Hydreigon 47/379, Rotom-Wash 0/304
+
+  Turn 14
+    p1 mcts: move 2 1, move 3 1
+      search (224000 visits): steameruption,0;ironhead,0 198849v 194278 | heatwave,0;ironhead,0 9759v 9117 | steameruption,0;knockoff,0 2505v 2222 | heatwave,0;knockoff,0 1676v 1450
+    p2 greedy: move 1 1, pass
+      p2a Hydreigon used Draco Meteor -> p1a: Volcanion
+              p2a Hydreigon spa 2 fell
+      p1a Volcanion fainted
+      p1b Bisharp used Iron Head -> p2a: Hydreigon
+      p2a Hydreigon fainted
+      after p1: Volcanion 0/364, Bisharp 190/271
+      after p2: Hydreigon 0/379, Rotom-Wash 0/304
+
+  RESULT: p1 wins

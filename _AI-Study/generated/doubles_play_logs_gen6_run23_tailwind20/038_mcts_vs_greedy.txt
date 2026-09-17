@@ -1,0 +1,126 @@
+battle 38   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: ORAS Doubles OU: Raikou, Diancie, Heatran, Breloom, Cresselia, Gyarados
+  p2: Untitled 502: Kangaskhan-Mega, Scizor, Landorus, Conkeldurr, Latias, Tyranitar
+
+  Turn 1
+    p1 mcts: switch 6, move 2   (slot0 Raikou -> Gyarados)
+      search (23000 visits): switch gyarados;diamondstorm,0 395v 342 | switch gyarados;diamondstorm-mega,0 384v 331 | switch gyarados;protect,1 278v 229 | snarl,0;switch gyarados 276v 227
+    p2 greedy: move 4 1, move 2 1
+      p1a <- Gyarados comes in (352/352)
+              p2a Kangaskhan atk 1 fell
+              p2b Scizor atk 1 fell
+      p2a Kangaskhan used Rock Tomb -> p1a: Gyarados
+              p1a Gyarados spe 1 fell
+      p1b Diancie used Diamond Storm -> p2b: Scizor  [[spread] p2a,p2b]
+      p2b Scizor used Bug Bite -> p1a: Gyarados
+      after p1: Gyarados 187/352, Diancie 241/241
+      after p2: Kangaskhan-Mega 303/414, Scizor 254/344
+
+  Turn 2
+    p1 mcts: move 3 2, move 2 mega
+      search (26000 visits): icefang,1;diamondstorm-mega,0 416v 342 | switch cresselia;protect-mega,1 360v 290 | switch cresselia;diamondstorm-mega,0 334v 266 | switch raikou;diamondstorm-mega,0 333v 265
+    p2 greedy: move 4 1, move 2 1
+      p2a Kangaskhan used Rock Tomb -> p1a: Gyarados
+              p1a Gyarados spe 1 fell
+      p1b Diancie used Diamond Storm -> p2a: Kangaskhan  [[spread] p2a,p2b]
+              p1b Diancie def 1 rose
+      p2b Scizor used Bug Bite -> p1a: Gyarados
+      p1a Gyarados used Ice Fang -> p2b: Scizor
+      after p1: Gyarados 21/352, Diancie-Mega 241/241
+      after p2: Kangaskhan-Mega 146/414, Scizor 66/344
+
+  Turn 3
+    p1 mcts: move 3 2, move 2
+      search (35000 visits): icefang,1;diamondstorm,0 1639v 1466 | icefang,0;diamondstorm,0 1524v 1357 | switch raikou;diamondstorm,0 1367v 1208 | switch cresselia;diamondstorm,0 1340v 1183
+    p2 greedy: move 4 1, move 2 1
+      p1b Diancie used Diamond Storm -> p2b: Scizor  [[spread] p2a]
+              p1b Diancie -- MISSED
+              p1b Diancie def 1 rose
+      p2a Kangaskhan used Rock Tomb -> p1a: Gyarados
+      p1a Gyarados fainted
+      p2b Scizor used Bug Bite -> p1b: Diancie
+      after p1: Gyarados 0/352, Diancie-Mega 209/241
+      after p2: Kangaskhan-Mega 1/414, Scizor 87/344
+
+  Turn 4
+      p1a <- Heatran comes in (368/368)
+      after p1: Heatran 368/368, Diancie-Mega 209/241
+      after p2: Kangaskhan-Mega 1/414, Scizor 87/344
+
+  Turn 5
+    p1 mcts: switch 5, move 2   (slot0 Heatran -> Cresselia)
+      search (39000 visits): switch cresselia;diamondstorm,0 1415v 1209 | switch raikou;diamondstorm,0 1329v 1131 | substitute,0;diamondstorm,0 1287v 1092 | switch breloom;diamondstorm,0 1171v 986
+    p2 greedy: move 4 2, move 2 2
+      p1a <- Cresselia comes in (444/444)
+      p1b Diancie used Diamond Storm -> p2b: Scizor  [[spread] p2a,p2b]
+              p1b Diancie def 1 rose
+      p2a Kangaskhan fainted
+      p2b Scizor fainted
+      after p1: Cresselia 444/444, Diancie-Mega 209/241
+      after p2: Kangaskhan-Mega 0/414, Scizor 0/344
+
+  Turn 6
+      p2a <- Landorus comes in (319/319)
+      p2b <- Conkeldurr comes in (352/352)
+      after p1: Cresselia 444/444, Diancie-Mega 209/241
+      after p2: Landorus 319/319, Conkeldurr 352/352
+
+  Turn 7
+    p1 mcts: move 2 1, move 3 2
+      search (32000 visits): icebeam,0;moonblast,1 6859v 4263 | icebeam,0;protect,1 2997v 1778 | psyshock,1;protect,1 1152v 624 | sunnyday,0;moonblast,1 725v 367
+    p2 greedy: move 2, move 1 2
+      p1b Diancie used Moonblast -> p2b: Conkeldurr
+      p2b Conkeldurr fainted
+      p2a Landorus used Sludge Wave -> p1b: Diancie  [[spread] p1a,p1b]
+      p1a Cresselia used Ice Beam -> p2a: Landorus
+      after p1: Cresselia 360/444, Diancie-Mega 86/241
+      after p2: Landorus 19/319, Conkeldurr 0/352
+
+  Turn 8
+      p2b <- Latias comes in (361/361)
+      after p1: Cresselia 360/444, Diancie-Mega 86/241
+      after p2: Landorus 19/319, Latias 361/361
+
+  Turn 9
+    p1 mcts: move 2 2, move 2
+      search (26000 visits): icebeam,1;diamondstorm,0 1255v 717 | icebeam,1;moonblast,1 995v 553 | psyshock,1;diamondstorm,0 826v 447 | sunnyday,1;diamondstorm,0 664v 347
+    p2 greedy: move 2, move 2 2
+      p1b Diancie used Diamond Storm -> p2b: Latias  [[spread] p2a,p2b]
+              p1b Diancie def 1 rose
+      p2a Landorus fainted
+              p2b Latias used up its Kee Berry
+              p2b Latias def 1 rose
+      p2b Latias used Draco Meteor -> p1b: Diancie
+              p1b Diancie -- IMMUNE
+      p1a Cresselia used Ice Beam -> p2b: Latias
+      after p1: Cresselia 360/444, Diancie-Mega 86/241
+      after p2: Landorus 0/319, Latias 107/361
+
+  Turn 10
+      p2a <- Tyranitar comes in (404/404)
+      after p1: Cresselia 360/444, Diancie-Mega 86/241
+      after p2: Tyranitar 404/404, Latias 107/361
+
+  Turn 11
+    p1 mcts: move 3, move 2
+      search (32000 visits): sunnyday,0;diamondstorm,0 2732v 2016 | sunnyday,1;diamondstorm,0 2567v 1887 | icebeam,0;diamondstorm,0 1842v 1324 | switch breloom;diamondstorm,0 1589v 1129
+    p2 greedy: move 2 2, move 2 2
+      p1b Diancie used Diamond Storm -> p2b: Latias  [[spread] p2a,p2b]
+              p1b Diancie def 1 rose
+      p2b Latias fainted
+      p2a Tyranitar used Crunch -> p1b: Diancie
+      p1a Cresselia used Sunny Day
+      after p1: Cresselia 360/444, Diancie-Mega 66/241
+      after p2: Tyranitar 257/404, Latias 0/361
+
+  Turn 12
+    p1 mcts: switch 4, move 3 1   (slot0 Cresselia -> Breloom)
+      search (281000 visits): switch breloom;moonblast,0 274626v 269839 | icebeam,0;earthpower,0 347v 247 | switch breloom;earthpower,0 334v 236 | switch heatran;moonblast,0 312v 218
+    p2 greedy: move 2 2, pass
+      p1a <- Breloom comes in (262/262)
+      p1b Diancie used Moonblast -> p2a: Tyranitar
+      p2a Tyranitar fainted
+      after p1: Breloom 262/262, Diancie-Mega 66/241
+      after p2: Tyranitar 0/404, Latias 0/361
+
+  RESULT: p1 wins

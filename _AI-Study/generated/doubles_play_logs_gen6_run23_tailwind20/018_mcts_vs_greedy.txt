@@ -1,0 +1,190 @@
+battle 18   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: ORAS Doubles OU: Heatran, Diancie, Thundurus, Amoonguss, Bisharp, Kyurem-Black
+  p2: ORAS Doubles OU: Lucario, Suicune, Landorus-Therian, Latios, Thundurus, Talonflame
+
+  Turn 1
+    p1 mcts: switch 4, move 3 2 mega   (slot0 Heatran -> Amoonguss)
+      search (26000 visits): switch amoonguss;earthpower-mega,1 6289v 6179 | earthpower,0;moonblast,0 996v 717 | switch thundurus;diamondstorm,0 732v 511 | heatwave,0;diamondstorm,0 608v 414
+    p2 greedy: move 1 1, move 3 1
+      p1a <- Amoonguss comes in (432/432)
+      p2a Lucario used Close Combat -> p1a: Amoonguss
+              p2a Lucario def 1 fell
+              p2a Lucario spd 1 fell
+      p1b Diancie used Earth Power -> p2b: Suicune
+      p2b Suicune used Ice Beam -> p1a: Amoonguss
+              p1a Amoonguss used up its Sitrus Berry
+      after p1: Amoonguss 291/432, Diancie-Mega 241/241
+      after p2: Lucario 282/282, Suicune 304/404
+
+  Turn 2
+    p1 mcts: move 3 1, switch 4   (slot1 Diancie-Mega -> Heatran)
+      search (37000 visits): gigadrain,0;switch heatran 632v 386 | gigadrain,1;switch heatran 628v 384 | gigadrain,1;switch bisharp 628v 384 | gigadrain,0;switch kyuremblack 626v 382
+    p2 greedy: move 1 1, move 3 1
+      p1b <- Heatran comes in (337/337)
+      p2a Lucario used Close Combat -> p1a: Amoonguss
+              p2a Lucario def 1 fell
+              p2a Lucario spd 1 fell
+      p2b Suicune used Ice Beam -> p1a: Amoonguss
+      p1a Amoonguss used Giga Drain -> p2a: Lucario
+      after p1: Amoonguss 94/432, Heatran 337/337
+      after p2: Lucario 179/282, Suicune 304/404
+
+  Turn 3
+    p1 mcts: move 1, switch 5   (slot1 Heatran -> Bisharp)
+      search (28000 visits): ragepowder,0;switch bisharp 510v 489 | gigadrain,0;earthpower,1 495v 475 | protect,0;switch thundurus 473v 451 | gigadrain,1;earthpower,1 470v 448
+    p2 greedy: move 1 1, move 3 1
+      p1b <- Bisharp comes in (271/271)
+      p1a Amoonguss used Rage Powder
+      p2a Lucario used Close Combat -> p1a: Amoonguss
+              p2a Lucario def 1 fell
+              p2a Lucario spd 1 fell
+      p1a Amoonguss fainted
+      p2b Suicune used Ice Beam -> p1b: Bisharp
+      after p1: Amoonguss 0/432, Bisharp 222/271
+      after p2: Lucario 179/282, Suicune 304/404
+
+  Turn 4
+      p1a <- Thundurus comes in (362/362)
+      after p1: Thundurus 362/362, Bisharp 222/271
+      after p2: Lucario 179/282, Suicune 304/404
+
+  Turn 5
+    p1 mcts: move 3 2, move 4 2
+      search (24000 visits): thunderbolt,1;ironhead,1 865v 438 | thunderbolt,1;protect,1 825v 415 | thunderbolt,1;knockoff,1 757v 375 | thunderbolt,1;knockoff,0 572v 270
+    p2 greedy: move 1 2, move 3 2
+      p2a Lucario used Close Combat -> p1b: Bisharp
+              p2a Lucario def 1 fell
+              p2a Lucario spd 1 fell
+      p1b Bisharp fainted
+      p1a Thundurus used Thunderbolt -> p2b: Suicune
+              p2b Suicune used up its Sitrus Berry
+      p2b Suicune used Ice Beam -> p1a: Thundurus
+              p1a Thundurus is now frz
+      after p1: Thundurus 206/362, Bisharp 0/271
+      after p2: Lucario 179/282, Suicune 165/404
+
+  Turn 6
+      p1b <- Diancie-Mega comes in (241/241)
+      after p1: Thundurus 206/362, Diancie-Mega 241/241
+      after p2: Lucario 179/282, Suicune 165/404
+
+  Turn 7
+    p1 mcts: switch 5, move 1   (slot0 Thundurus -> Heatran)
+      search (12000 visits): switch heatran;diamondstorm,0 275v 139 | thunderbolt,1;diamondstorm,0 257v 127 | switch kyuremblack;diamondstorm,0 237v 115 | thunderbolt,1;earthpower,0 228v 109
+    p2 greedy: move 1 1, move 3 1
+      p1a <- Heatran comes in (337/337)
+      p1b Diancie used Diamond Storm -> p2b: Suicune  [[spread] p2a,p2b]
+              p2a Lucario -- critical hit
+      p2a Lucario fainted
+      p2b Suicune used Ice Beam -> p1a: Heatran
+      after p1: Heatran 337/337, Diancie-Mega 241/241
+      after p2: Lucario 0/282, Suicune 56/404
+
+  Turn 8
+      p2a <- Landorus-Therian comes in (319/319)
+              p1a Heatran atk 1 fell
+              p1b Diancie atk 1 fell
+      after p1: Heatran 337/337, Diancie-Mega 241/241
+      after p2: Landorus-Therian 319/319, Suicune 56/404
+
+  Turn 9
+    p1 mcts: move 1, move 2
+      search (31000 visits): heatwave,0;protect,1 6027v 4006 | protect,0;protect,1 1500v 909 | heatwave,0;moonblast,0 1238v 735 | protect,0;moonblast,0 1182v 698
+    p2 greedy: move 4 1, move 3 1
+      p1b Diancie used Protect
+      p2a Landorus used Superpower -> p1a: Heatran
+              p2a Landorus atk 1 fell
+              p2a Landorus def 1 fell
+      p1a Heatran used Heat Wave -> p2b: Suicune  [[spread] p2a,p2b]
+      p2b Suicune fainted
+      after p1: Heatran 38/337, Diancie-Mega 241/241
+      after p2: Landorus-Therian 150/319, Suicune 0/404
+
+  Turn 10
+      p2b <- Latios comes in (301/301)
+      after p1: Heatran 38/337, Diancie-Mega 241/241
+      after p2: Landorus-Therian 150/319, Latios 301/301
+
+  Turn 11
+    p1 mcts: move 1, move 1
+      search (19000 visits): heatwave,0;diamondstorm,0 2077v 1581 | heatwave,0;moonblast,1 1420v 1052 | protect,0;diamondstorm,0 1221v 893 | earthpower,0;diamondstorm,0 872v 618
+    p2 greedy: move 4 1, move 1 1
+      p2a Landorus used Superpower -> p1a: Heatran
+              p2a Landorus atk 1 fell
+              p2a Landorus def 1 fell
+      p1a Heatran fainted
+      p1b Diancie used Diamond Storm -> p2a: Landorus  [[spread] p2a,p2b]
+              p1b Diancie def 1 rose
+      p2a Landorus fainted
+      p2b Latios used Draco Meteor -> p1b: Diancie
+              p1b Diancie -- IMMUNE
+      after p1: Heatran 0/337, Diancie-Mega 241/241
+      after p2: Landorus-Therian 0/319, Latios 181/301
+
+  Turn 12
+      p2a <- Thundurus comes in (299/299)
+      p1a <- Thundurus comes in (206/362)
+      after p1: Thundurus 206/362, Diancie-Mega 241/241
+      after p2: Thundurus 299/299, Latios 181/301
+
+  Turn 13
+    p1 mcts: move 3 1, move 2
+      search (29000 visits): thunderbolt,0;protect,1 920v 431 | hiddenpower,0;protect,1 758v 343 | thunderbolt,1;protect,1 748v 338 | hiddenpower,1;protect,1 711v 318
+    p2 greedy: move 2 1, move 1 1
+      p1b Diancie used Protect
+      p2a Thundurus used Thunderbolt -> p1a: Thundurus
+              p1a Thundurus used up its Sitrus Berry
+      p2b Latios used Draco Meteor -> p1a: Thundurus
+              p2b Latios spa 2 fell
+      p1a Thundurus fainted
+      after p1: Thundurus 0/362, Diancie-Mega 241/241
+      after p2: Thundurus 299/299, Latios 151/301
+
+  Turn 14
+      p1a <- Kyurem-Black comes in (416/416)
+      after p1: Kyurem-Black 416/416, Diancie-Mega 241/241
+      after p2: Thundurus 299/299, Latios 151/301
+
+  Turn 15
+    p1 mcts: move 3 1, move 2
+      search (17000 visits): icebeam,0;protect,1 6636v 4487 | icebeam,0;moonblast,1 846v 489 | icebeam,0;diamondstorm,0 729v 413 | substitute,0;protect,1 564v 307
+    p2 greedy: move 2 1, move 1 1
+      p1b Diancie used Protect  [[still]]
+              p1b Diancie -- IT FAILED
+      p2a Thundurus used Thunderbolt -> p1a: Kyurem
+      p2b Latios used Draco Meteor -> p1a: Kyurem
+              p2b Latios spa 2 fell
+      p1a Kyurem used Ice Beam -> p2a: Thundurus
+      p2a Thundurus fainted
+      after p1: Kyurem-Black 41/416, Diancie-Mega 241/241
+      after p2: Thundurus 0/299, Latios 121/301
+
+  Turn 16
+      p2a <- Talonflame comes in (297/297)
+      after p1: Kyurem-Black 41/416, Diancie-Mega 241/241
+      after p2: Talonflame 297/297, Latios 121/301
+
+  Turn 17
+    p1 mcts: move 2, move 1
+      search (37000 visits): protect,0;diamondstorm,0 16529v 13638 | icebeam,1;diamondstorm,0 2693v 2080 | earthpower,1;diamondstorm,0 2539v 1954 | substitute,0;diamondstorm,0 2425v 1862
+    p2 greedy: move 1 1, move 1 1
+      p1a Kyurem used Protect
+      p2a Talonflame used Brave Bird -> p1a: Kyurem
+              p1a Kyurem -- move: Protect
+      p2b Latios used Draco Meteor -> p1a: Kyurem
+              p1a Kyurem -- move: Protect
+      p1b Diancie used Diamond Storm -> p2a: Talonflame  [[spread] p2a,p2b]
+      p2a Talonflame fainted
+      after p1: Kyurem-Black 67/416, Diancie-Mega 241/241
+      after p2: Talonflame 0/297, Latios 10/301
+
+  Turn 18
+    p1 mcts: move 3 2, move 4 2
+      search (71000 visits): icebeam,1;moonblast,1 26042v 20286 | icebeam,1;earthpower,1 14343v 11525 | earthpower,1;protect,1 2723v 1955 | icebeam,1;protect,1 2704v 1941
+    p2 greedy: pass, move 1 1
+      p1b Diancie used Moonblast -> p2b: Latios
+      p2b Latios fainted
+      after p1: Kyurem-Black 67/416, Diancie-Mega 241/241
+      after p2: Talonflame 0/297, Latios 0/301
+
+  RESULT: p1 wins

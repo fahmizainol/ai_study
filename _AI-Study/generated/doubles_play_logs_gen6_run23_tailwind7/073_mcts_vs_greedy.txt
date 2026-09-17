@@ -1,0 +1,184 @@
+battle 73   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: ORAS Doubles OU: Ampharos-Mega, Gothitelle, Azumarill, Volcarona, Greninja, Landorus-Therian
+  p2: Copy of Untitled 708: Metagross-Mega, Landorus-Therian, Thundurus, Volcanion, Amoonguss, Terrakion
+
+  Turn 1
+    p1 mcts: switch 4, switch 6   (slot0 Ampharos-Mega -> Volcarona; slot1 Gothitelle -> Landorus-Therian)
+      search (20000 visits): switch volcarona;switch landorustherian 454v 275 | dragonpulse,1;switch landorustherian 409v 243 | protect,0;switch landorustherian 398v 235 | thunderbolt,0;switch landorustherian 380v 223
+    p2 greedy: move 2 1, move 4 1
+      p1b <- Landorus-Therian comes in (319/319)
+              p2a Metagross -- IT FAILED
+              p2b Landorus atk 1 fell
+      p1a <- Volcarona comes in (329/329)
+      p2a Metagross used Iron Head -> p1a: Volcarona
+      p2b Landorus used Superpower -> p1a: Volcarona
+              p2b Landorus atk 1 fell
+              p2b Landorus def 1 fell
+      after p1: Volcarona 156/329, Landorus-Therian 319/319
+      after p2: Metagross-Mega 302/302, Landorus-Therian 380/380
+
+  Turn 2
+    p1 mcts: move 2 2, move 4 2
+      search (43000 visits): gigadrain,1;uturn,1 23289v 23086 | quiverdance,0;uturn,0 1055v 432 | heatwave,0;uturn,0 766v 295 | heatwave,0;uturn,1 765v 295
+    p2 greedy: move 2 1, move 4 1
+      p1b Landorus used U-turn -> p2b: Landorus
+      after p1: Volcarona 156/329, Landorus-Therian 319/319
+      after p2: Metagross-Mega 302/302, Landorus-Therian 292/380
+
+  Turn 3
+      p1b <- Azumarill comes in (404/404)
+      p2a Metagross used Iron Head -> p1a: Volcarona
+      p1a Volcarona used Giga Drain -> p2b: Landorus
+      p2b Landorus used Superpower -> p1a: Volcarona
+              p2b Landorus atk 1 fell
+              p2b Landorus def 1 fell
+      after p1: Volcarona 6/329, Azumarill 404/404
+      after p2: Metagross-Mega 302/302, Landorus-Therian 209/380
+
+  Turn 4
+    p1 mcts: move 1, move 3
+      search (34000 visits): heatwave,0;bellydrum,1 788v 134 | quiverdance,0;bellydrum,1 705v 113 | quiverdance,0;aquajet,1 641v 97 | protect,0;bellydrum,1 597v 87
+    p2 greedy: move 2 1, move 4 1
+      p2a Metagross used Iron Head -> p1a: Volcarona
+              p2a Metagross is now brn
+      p1a Volcarona fainted
+      p2b Landorus used Superpower -> p1b: Azumarill
+              p2b Landorus atk 1 fell
+              p2b Landorus def 1 fell
+      p1b Azumarill used Belly Drum
+              p1b Azumarill used up its Sitrus Berry
+      after p1: Volcarona 0/329, Azumarill 270/404
+      after p2: Metagross-Mega 265/302, Landorus-Therian 209/380
+
+  Turn 5
+      p1a <- Landorus-Therian comes in (319/319)
+              p2a Metagross -- IT FAILED
+              p2b Landorus atk 1 fell
+      after p1: Landorus-Therian 319/319, Azumarill 270/404
+      after p2: Metagross-Mega 265/302, Landorus-Therian 209/380
+
+  Turn 6
+    p1 mcts: move 4 1, move 2 1
+      search (34000 visits): uturn,0;playrough,0 871v 136 | earthquake,0;protect,1 806v 121 | uturn,0;aquajet,0 779v 114 | uturn,1;playrough,0 758v 110
+    p2 greedy: move 2 2, move 4 2
+      p1a Landorus used U-turn -> p2a: Metagross
+      after p1: Landorus-Therian 319/319, Azumarill 270/404
+      after p2: Metagross-Mega 192/302, Landorus-Therian 209/380
+
+  Turn 7
+      p1a <- Ampharos-Mega comes in (383/383)
+      p2a Metagross used Iron Head -> p1b: Azumarill
+      p2b Landorus used Superpower -> p1b: Azumarill
+              p2b Landorus atk 1 fell
+              p2b Landorus def 1 fell
+      p1b Azumarill used Play Rough -> p2a: Metagross
+      p2a Metagross fainted
+      after p1: Ampharos-Mega 383/383, Azumarill 147/404
+      after p2: Metagross-Mega 0/302, Landorus-Therian 209/380
+
+  Turn 8
+      p2a <- Thundurus comes in (362/362)
+      after p1: Ampharos-Mega 383/383, Azumarill 147/404
+      after p2: Thundurus 362/362, Landorus-Therian 209/380
+
+  Turn 9
+    p1 mcts: move 2 1, move 1 1
+      search (33000 visits): dragonpulse,0;aquajet,0 1176v 288 | thunderbolt,0;aquajet,0 1072v 256 | protect,0;aquajet,0 957v 221 | dragonpulse,1;aquajet,0 910v 206
+    p2 greedy: move 2 2, move 4 2
+      p1b Azumarill used Aqua Jet -> p2a: Thundurus
+      p2a Thundurus fainted
+      p2b Landorus used Superpower -> p1b: Azumarill
+              p2b Landorus def 1 fell
+      p1a Ampharos used Dragon Pulse -> p2b: Landorus
+      after p1: Ampharos-Mega 383/383, Azumarill 128/404
+      after p2: Thundurus 0/362, Landorus-Therian 86/380
+
+  Turn 10
+      p2a <- Volcanion comes in (364/364)
+      after p1: Ampharos-Mega 383/383, Azumarill 128/404
+      after p2: Volcanion 364/364, Landorus-Therian 86/380
+
+  Turn 11
+    p1 mcts: move 1 1, move 4
+      search (24000 visits): thunderbolt,0;protect,1 565v 81 | thunderbolt,0;aquajet,1 473v 59 | thunderbolt,0;playrough,0 469v 58 | dragonpulse,0;protect,1 389v 40
+    p2 greedy: move 4 2, move 4 2
+      p1b Azumarill used Protect
+      p2b Landorus used Superpower -> p1b: Azumarill
+              p1b Azumarill -- move: Protect
+      p2a Volcanion used Overheat -> p1b: Azumarill
+              p1b Azumarill -- move: Protect
+      p1a Ampharos used Thunderbolt -> p2a: Volcanion
+      after p1: Ampharos-Mega 383/383, Azumarill 128/404
+      after p2: Volcanion 58/364, Landorus-Therian 86/380
+
+  Turn 12
+    p1 mcts: move 1 1, move 4
+      search (28000 visits): thunderbolt,0;protect,1 595v 72 | dragonpulse,0;protect,1 582v 69 | focusblast,0;protect,1 494v 51 | protect,0;playrough,0 438v 39
+    p2 greedy: move 4 2, move 4 2
+      p1b Azumarill used Protect  [[still]]
+              p1b Azumarill -- IT FAILED
+      p2b Landorus used Superpower -> p1b: Azumarill
+              p2b Landorus def 1 fell
+      p2a Volcanion used Overheat -> p1b: Azumarill
+              p2a Volcanion spa 2 fell
+      p1b Azumarill fainted
+      p1a Ampharos used Thunderbolt -> p2a: Volcanion
+      p2a Volcanion fainted
+      after p1: Ampharos-Mega 383/383, Azumarill 0/404
+      after p2: Volcanion 0/364, Landorus-Therian 86/380
+
+  Turn 13
+      p2a <- Amoonguss comes in (432/432)
+      p1b <- Landorus-Therian comes in (319/319)
+              p2a Amoonguss atk 1 fell
+              p2b Landorus atk 0 fell
+      after p1: Ampharos-Mega 383/383, Landorus-Therian 319/319
+      after p2: Amoonguss 432/432, Landorus-Therian 86/380
+
+  Turn 14
+    p1 mcts: move 2 1, move 4 1
+      search (25000 visits): dragonpulse,0;uturn,0 475v 52 | dragonpulse,0;stoneedge,0 467v 51 | dragonpulse,0;stoneedge,1 435v 44 | focusblast,0;uturn,0 417v 40
+    p2 greedy: move 3 1, move 4 1
+      p1b Landorus used U-turn -> p2a: Amoonguss
+      after p1: Ampharos-Mega 383/383, Landorus-Therian 266/319
+      after p2: Amoonguss 340/432, Landorus-Therian 86/380
+
+  Turn 15
+      p1b <- Greninja comes in (285/285)
+      p2b Landorus used Superpower -> p1a: Ampharos
+      p1a Ampharos used Dragon Pulse -> p2a: Amoonguss
+      p2a Amoonguss used Energy Ball -> p1a: Ampharos
+      after p1: Ampharos-Mega 307/383, Greninja 285/285
+      after p2: Amoonguss 127/432, Landorus-Therian 86/380
+
+  Turn 16
+    p1 mcts: move 2 1, move 2 1
+      search (17000 visits): dragonpulse,0;icebeam,0 251v 16 | switch landorustherian;switch gothitelle 243v 14 | dragonpulse,0;switch landorustherian 239v 13 | thunderbolt,0;icebeam,0 237v 13
+    p2 greedy: move 3 1, move 1
+      p1b Greninja used Ice Beam -> p2a: Amoonguss
+              p1b Greninja gained typechange Ice
+      p2a Amoonguss fainted
+      p2b Landorus used Earthquake -> p1b: Greninja  [[spread] p1a,p1b]
+      p1a Ampharos used Dragon Pulse -> p2b: Landorus
+      p2b Landorus fainted
+      after p1: Ampharos-Mega 241/383, Greninja 214/285
+      after p2: Amoonguss 0/432, Landorus-Therian 0/380
+
+  Turn 17
+      p2a <- Terrakion comes in (324/324)
+      after p1: Ampharos-Mega 241/383, Greninja 214/285
+      after p2: Terrakion 324/324, Landorus-Therian 0/380
+
+  Turn 18
+    p1 mcts: move 1 1, move 2 1
+      search (40000 visits): thunderbolt,0;icebeam,0 3993v 3485 | thunderbolt,0;switch landorustherian 3686v 3206 | dragonpulse,0;icebeam,0 3636v 3160 | dragonpulse,0;switch landorustherian 3364v 2914
+    p2 greedy: move 1 1, pass
+      p1b Greninja used Ice Beam -> p2a: Terrakion
+              p2a Terrakion is now frz
+              p2a Terrakion COULD NOT MOVE (frz)
+      p1a Ampharos used Thunderbolt -> p2a: Terrakion
+      p2a Terrakion fainted
+      after p1: Ampharos-Mega 241/383, Greninja 186/285
+      after p2: Terrakion 0/324, Landorus-Therian 0/380
+
+  RESULT: p1 wins

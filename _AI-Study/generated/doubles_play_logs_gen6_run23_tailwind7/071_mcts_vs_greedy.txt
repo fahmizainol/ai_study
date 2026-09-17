@@ -1,0 +1,161 @@
+battle 71   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: dpl rejects/sub aegi week 4 reject: Gengar-Mega, Shaymin-Sky, Hydreigon, Volcanion, Aegislash, Landorus-Therian
+  p2: Untitled 1416: Gardevoir-Mega, Amoonguss, Blastoise, Landorus, Volcanion, Scrafty
+
+  Turn 1
+    p1 mcts: move 1 1, move 1 2
+      search (17000 visits): shadowball,0;airslash,1 878v 578 | shadowball,1;airslash,1 795v 517 | sludgebomb,1;airslash,1 777v 504 | sludgebomb,0;airslash,1 759v 491
+    p2 greedy: move 1, move 3 1
+      p1a Gengar used Shadow Ball -> p2a: Gardevoir
+      p1b Shaymin used Air Slash -> p2b: Amoonguss
+      p2a Gardevoir used Hyper Voice -> p1b: Shaymin  [[spread] p1b]
+              p1a Gengar -- IMMUNE
+              p2b Amoonguss COULD NOT MOVE (flinch)
+      after p1: Gengar-Mega 262/262, Shaymin-Sky 226/341
+      after p2: Gardevoir-Mega 50/340, Amoonguss 142/432
+
+  Turn 2
+    p1 mcts: move 1 2, move 1 1
+      search (29000 visits): shadowball,1;airslash,0 4169v 2937 | shadowball,1;seedflare,0 2064v 1393 | sludgebomb,1;airslash,0 1995v 1343 | sludgebomb,1;seedflare,0 1000v 631
+    p2 greedy: move 1, move 3 2
+      p1a Gengar used Shadow Ball -> p2b: Amoonguss
+              p2b Amoonguss -- critical hit
+      p2b Amoonguss fainted
+      p1b Shaymin used Air Slash -> p2a: Gardevoir
+      p2a Gardevoir fainted
+      after p1: Gengar-Mega 262/262, Shaymin-Sky 226/341
+      after p2: Gardevoir-Mega 0/340, Amoonguss 0/432
+
+  Turn 3
+      p2a <- Blastoise comes in (362/362)
+      p2b <- Landorus comes in (319/319)
+      after p1: Gengar-Mega 262/262, Shaymin-Sky 226/341
+      after p2: Blastoise 362/362, Landorus 319/319
+
+  Turn 4
+    p1 mcts: move 4, move 2 2
+      search (18000 visits): protect,0;seedflare,1 634v 372 | protect,0;seedflare,0 609v 355 | switch landorustherian;seedflare,0 435v 239 | switch landorustherian;seedflare,1 406v 220
+    p2 greedy: move 1 2, move 1 2
+      p1a Gengar used Protect
+      p2b Landorus used Earth Power -> p1b: Shaymin
+              p1b Shaymin -- IMMUNE
+      p1b Shaymin used Seed Flare -> p2b: Landorus
+              p2b Landorus spd 2 fell
+      p2a Blastoise used Scald -> p1b: Shaymin
+              p1b Shaymin -- critical hit
+      after p1: Gengar-Mega 262/262, Shaymin-Sky 144/341
+      after p2: Blastoise 362/362, Landorus 76/319
+
+  Turn 5
+    p1 mcts: switch 3, move 2 1   (slot0 Gengar-Mega -> Hydreigon)
+      search (24000 visits): switch hydreigon;seedflare,0 2713v 1751 | switch volcanion;seedflare,0 933v 545 | switch landorustherian;seedflare,0 841v 485 | protect,0;seedflare,0 823v 473
+    p2 greedy: move 1 2, move 1 2
+      p1a <- Hydreigon comes in (325/325)
+      p2b Landorus used Earth Power -> p1b: Shaymin
+              p1b Shaymin -- IMMUNE
+      p1b Shaymin used Seed Flare -> p2a: Blastoise
+              p2a Blastoise spd 2 fell
+      p2a Blastoise used Scald -> p1b: Shaymin
+              p1b Shaymin is now brn
+      after p1: Hydreigon 325/325, Shaymin-Sky 29/341
+      after p2: Blastoise 48/362, Landorus 76/319
+
+  Turn 6
+    p1 mcts: switch 6, move 2 1   (slot0 Hydreigon -> Landorus-Therian)
+      search (26000 visits): switch landorustherian;seedflare,0 2535v 1618 | switch landorustherian;airslash,0 2436v 1550 | switch landorustherian;seedflare,1 987v 577 | switch landorustherian;airslash,1 706v 394
+    p2 greedy: move 1 2, move 1 2
+      p1a <- Landorus-Therian comes in (319/319)
+              p2a Blastoise atk 1 fell
+              p2b Landorus atk 1 fell
+      p2b Landorus used Earth Power -> p1b: Shaymin
+              p1b Shaymin -- IMMUNE
+      p1b Shaymin used Seed Flare -> p2a: Blastoise
+      p2a Blastoise fainted
+      p1b Shaymin fainted
+      after p1: Landorus-Therian 319/319, Shaymin-Sky 0/341
+      after p2: Blastoise 0/362, Landorus 76/319
+
+  Turn 7
+      p1b <- Gengar-Mega comes in (262/262)
+      p2a <- Volcanion comes in (363/363)
+      after p1: Landorus-Therian 319/319, Gengar-Mega 262/262
+      after p2: Volcanion 363/363, Landorus 76/319
+
+  Turn 8
+    p1 mcts: move 3, move 4
+      search (33000 visits): earthquake,0;protect,1 4352v 2979 | stoneedge,0;protect,1 2175v 1427 | earthquake,0;switch volcanion 1633v 1046 | earthquake,0;switch hydreigon 1545v 985
+    p2 greedy: move 2 1, move 1 1
+      p1b Gengar used Protect
+      p2b Landorus used Earth Power -> p1a: Landorus
+              p1a Landorus -- IMMUNE
+      p1a Landorus used Earthquake -> p2a: Volcanion  [[spread] p2a]
+              p2b Landorus -- IMMUNE
+              p1b Gengar -- move: Protect
+      p2a Volcanion used Overheat -> p1a: Landorus
+              p2a Volcanion spa 2 fell
+      after p1: Landorus-Therian 27/319, Gengar-Mega 262/262
+      after p2: Volcanion 135/363, Landorus 76/319
+
+  Turn 9
+    p1 mcts: move 4 2, move 4
+      search (36000 visits): stoneedge,1;protect,1 4193v 2594 | earthquake,0;switch hydreigon 2620v 1572 | stealthrock,0;protect,1 1650v 951 | earthquake,0;protect,1 1544v 885
+    p2 greedy: move 2 1, move 1 1
+      p1b Gengar used Protect  [[still]]
+              p1b Gengar -- IT FAILED
+      p2b Landorus used Earth Power -> p1a: Landorus
+              p1a Landorus -- IMMUNE
+      p1a Landorus used Stone Edge -> p2b: Landorus
+      p2b Landorus fainted
+      p2a Volcanion used Overheat -> p1a: Landorus
+              p2a Volcanion spa 2 fell
+      p1a Landorus fainted
+      after p1: Landorus-Therian 0/319, Gengar-Mega 262/262
+      after p2: Volcanion 135/363, Landorus 0/319
+
+  Turn 10
+      p2b <- Scrafty comes in (334/334)
+      p1a <- Volcanion comes in (343/343)
+              p1a Volcanion atk 1 fell
+              p1b Gengar atk 1 fell
+      after p1: Volcanion 343/343, Gengar-Mega 262/262
+      after p2: Volcanion 135/363, Scrafty 334/334
+
+  Turn 11
+    p1 mcts: move 1 2, move 4
+      search (13000 visits): steameruption,1;protect,1 799v 644 | steameruption,1;switch hydreigon 565v 439 | heatwave,0;protect,1 547v 423 | steameruption,1;switch aegislash 542v 419
+    p2 greedy: move 2 1, move 2 1
+      p1b Gengar used Protect
+      p1a Volcanion used Steam Eruption -> p2b: Scrafty
+      p2a Volcanion used Overheat -> p1a: Volcanion
+              p2a Volcanion spa 2 fell
+      p2b Scrafty used High Jump Kick -> p1a: Volcanion
+      after p1: Volcanion 160/343, Gengar-Mega 262/262
+      after p2: Volcanion 135/363, Scrafty 141/334
+
+  Turn 12
+    p1 mcts: move 2, move 2 1
+      search (21000 visits): heatwave,0;sludgebomb,0 3109v 2595 | steameruption,1;sludgebomb,1 1862v 1511 | heatwave,0;sludgebomb,1 1694v 1366 | steameruption,1;shadowball,1 1667v 1343
+    p2 greedy: move 2 1, move 2 1
+      p1b Gengar used Sludge Bomb -> p2a: Volcanion
+      p1a Volcanion used Heat Wave -> p2b: Scrafty  [[spread] p2a,p2b]
+      p2a Volcanion fainted
+      p2b Scrafty used High Jump Kick -> p1a: Volcanion
+      p1a Volcanion fainted
+      after p1: Volcanion 0/343, Gengar-Mega 262/262
+      after p2: Volcanion 0/363, Scrafty 23/334
+
+  Turn 13
+      p1a <- Aegislash comes in (324/324)
+      after p1: Aegislash 324/324, Gengar-Mega 262/262
+      after p2: Volcanion 0/363, Scrafty 23/334
+
+  Turn 14
+    p1 mcts: move 1 2, move 1 2
+      search (539000 visits): shadowball,1;shadowball,1 38535v 38535 | shadowball,1;sludgebomb,1 38535v 38535 | wideguard,0;shadowball,1 38535v 38535 | wideguard,0;sludgebomb,1 38535v 38535
+    p2 greedy: pass, move 2 1
+      p1b Gengar used Shadow Ball -> p2b: Scrafty
+      p2b Scrafty fainted
+      after p1: Aegislash 324/324, Gengar-Mega 262/262
+      after p2: Volcanion 0/363, Scrafty 0/334
+
+  RESULT: p1 wins

@@ -1,0 +1,126 @@
+battle 23   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: DPL vs laptops: Kangaskhan-Mega, Conkeldurr, Landorus, Deoxys-Speed, Volcanion, Genesect
+  p2: Untitled 294: Diancie-Mega, Terrakion, Talonflame, Bisharp, Kyurem-Black, Gastrodon-East
+
+  Turn 1
+    p1 mcts: switch 3, move 1 2   (slot0 Kangaskhan-Mega -> Landorus)
+      search (36000 visits): switch landorus;drainpunch,1 463v 436 | switch deoxysspeed;drainpunch,1 451v 424 | switch genesect;drainpunch,1 426v 397 | switch deoxysspeed;switch genesect 424v 395
+    p2 greedy: move 1, move 3 1
+      p1a <- Landorus comes in (319/319)
+      p2a Diancie used Diamond Storm -> p1b: Conkeldurr  [[spread] p1a,p1b]
+              p1a Landorus -- critical hit
+              p2a Diancie def 1 rose
+      p2b Terrakion used Close Combat -> p1a: Landorus
+              p1a Landorus -- critical hit
+              p2b Terrakion def 1 fell
+              p2b Terrakion spd 1 fell
+      p1a Landorus fainted
+      p1b Conkeldurr used Drain Punch -> p2b: Terrakion
+              p2b Terrakion used up its Focus Sash
+      after p1: Landorus 0/319, Conkeldurr 401/401
+      after p2: Diancie-Mega 304/304, Terrakion 1/323
+
+  Turn 2
+      p1a <- Kangaskhan-Mega comes in (414/414)
+      after p1: Kangaskhan-Mega 414/414, Conkeldurr 401/401
+      after p2: Diancie-Mega 304/304, Terrakion 1/323
+
+  Turn 3
+    p1 mcts: switch 6, move 1 2   (slot0 Kangaskhan-Mega -> Genesect)
+      search (32000 visits): switch genesect;drainpunch,1 418v 396 | switch deoxysspeed;switch genesect 414v 392 | switch deoxysspeed;machpunch,1 409v 387 | switch deoxysspeed;drainpunch,1 408v 386
+    p2 greedy: move 1, move 3 1
+      p1a <- Genesect comes in (323/323)
+              p1a Genesect spa 1 rose
+      p2a Diancie used Diamond Storm -> p1a: Genesect  [[spread] p1a,p1b]
+      p2b Terrakion used Close Combat -> p1a: Genesect
+              p2b Terrakion def 1 fell
+              p2b Terrakion spd 1 fell
+      p1a Genesect fainted
+      p1b Conkeldurr used Drain Punch -> p2b: Terrakion
+      p2b Terrakion fainted
+      after p1: Genesect 0/323, Conkeldurr 338/401
+      after p2: Diancie-Mega 304/304, Terrakion 0/323
+
+  Turn 4
+      p2b <- Talonflame comes in (359/359)
+      p1a <- Deoxys-Speed comes in (303/303)
+      after p1: Deoxys-Speed 303/303, Conkeldurr 338/401
+      after p2: Diancie-Mega 304/304, Talonflame 359/359
+
+  Turn 5
+    p1 mcts: switch 5, switch 6   (slot0 Deoxys-Speed -> Volcanion; slot1 Conkeldurr -> Kangaskhan-Mega)
+      search (12000 visits): switch volcanion;switch kangaskhanmega 4433v 3722 | icebeam,0;drainpunch,1 148v 60 | icebeam,1;drainpunch,1 142v 57 | icebeam,0;knockoff,1 141v 56
+    p2 greedy: move 1, move 1 2
+      p1a <- Volcanion comes in (363/363)
+      p1b <- Kangaskhan-Mega comes in (414/414)
+      p2b Talonflame used Brave Bird -> p1b: Kangaskhan
+      p2a Diancie used Diamond Storm -> p1b: Kangaskhan  [[spread] p1a,p1b]
+              p2a Diancie def 1 rose
+      after p1: Volcanion 157/363, Kangaskhan-Mega 87/414
+      after p2: Diancie-Mega 304/304, Talonflame 257/359
+
+  Turn 6
+    p1 mcts: switch 5, switch 6   (slot0 Volcanion -> Deoxys-Speed; slot1 Kangaskhan-Mega -> Conkeldurr)
+      search (39000 visits): switch deoxysspeed;switch conkeldurr 857v 835 | steameruption,1;fakeout,1 843v 820 | switch deoxysspeed;crunch,1 809v 785 | switch deoxysspeed;fakeout,1 804v 780
+    p2 greedy: move 1, move 1 2
+      p1b <- Conkeldurr comes in (338/401)
+      p1a <- Deoxys-Speed comes in (303/303)
+      p2b Talonflame used Brave Bird -> p1b: Conkeldurr
+      p1b Conkeldurr fainted
+      p2a Diancie used Diamond Storm -> p1a: Deoxys
+              p2a Diancie def 1 rose
+      after p1: Deoxys-Speed 123/303, Conkeldurr 0/401
+      after p2: Diancie-Mega 304/304, Talonflame 110/359
+
+  Turn 7
+      p1b <- Volcanion comes in (157/363)
+      after p1: Deoxys-Speed 123/303, Volcanion 157/363
+      after p2: Diancie-Mega 304/304, Talonflame 110/359
+
+  Turn 8
+    p1 mcts: move 1 1, move 3 2
+      search (54000 visits): psychoboost,0;earthpower,1 17505v 10361 | icebeam,0;steameruption,1 10829v 6128 | psychoboost,1;switch kangaskhanmega 2097v 1065 | psychoboost,1;earthpower,0 1487v 728
+    p2 greedy: move 1, move 1 1
+      p2b Talonflame used Brave Bird -> p1a: Deoxys
+              p1a Deoxys -- critical hit
+      p1a Deoxys fainted
+      p2b Talonflame fainted
+      p2a Diancie used Diamond Storm -> p1b: Volcanion
+              p2a Diancie def 1 rose
+      p1b Volcanion fainted
+      after p1: Deoxys-Speed 0/303, Volcanion 0/363
+      after p2: Diancie-Mega 304/304, Talonflame 0/359
+
+  Turn 9
+      p1a <- Kangaskhan-Mega comes in (87/414)
+      p2b <- Bisharp comes in (271/271)
+      after p1: Kangaskhan-Mega 87/414, Volcanion 0/363
+      after p2: Diancie-Mega 304/304, Bisharp 271/271
+
+  Turn 10
+    p1 mcts: move 4, pass
+      search (499000 visits): protect,0;No Move 266350v 7515 | fakeout,1;No Move 61318v 1068 | fakeout,0;No Move 47129v 684 | crunch,1;No Move 34044v 352
+    p2 greedy: move 1, move 1 1
+      p1a Kangaskhan used Protect
+      p2b Bisharp used Sucker Punch  [[still]]
+              p2b Bisharp -- IT FAILED
+      p2a Diancie used Diamond Storm -> p1a: Kangaskhan
+              p1a Kangaskhan -- move: Protect
+      after p1: Kangaskhan-Mega 87/414, Volcanion 0/363
+      after p2: Diancie-Mega 304/304, Bisharp 271/271
+
+  Turn 11
+    p1 mcts: move 4, pass
+      search (464000 visits): protect,0;No Move 293887v 8151 | fakeout,0;No Move 33922v 320 | fakeout,1;No Move 29920v 228 | crunch,1;No Move 28821v 204
+    p2 greedy: move 1, move 1 1
+      p1a Kangaskhan used Protect  [[still]]
+              p1a Kangaskhan -- IT FAILED
+      p2b Bisharp used Sucker Punch  [[still]]
+              p2b Bisharp -- IT FAILED
+      p2a Diancie used Diamond Storm -> p1a: Kangaskhan
+              p2a Diancie def 1 rose
+      p1a Kangaskhan fainted
+      after p1: Kangaskhan-Mega 0/414, Volcanion 0/363
+      after p2: Diancie-Mega 304/304, Bisharp 271/271
+
+  RESULT: p2 wins

@@ -1,0 +1,211 @@
+battle 112   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: XY Doubles: Suicune, Breloom, Victini, Landorus-Therian, Rotom-Wash, Kangaskhan
+  p2: ORAS Doubles OU: Diancie-Mega, Jirachi, Landorus-Therian, Azumarill, Talonflame, Kyurem-Black
+
+  Turn 1
+    p1 mcts: move 1 1, switch 4   (slot1 Breloom -> Landorus-Therian)
+      search (15000 visits): hydropump,0;switch landorustherian 403v 253 | hydropump,1;switch landorustherian 394v 247 | tailwind,0;switch landorustherian 370v 229 | hydropump,1;bulletseed,0 366v 226
+    p2 greedy: move 1, move 2 1
+      p1b <- Landorus-Therian comes in (319/319)
+              p2a Diancie atk 1 fell
+              p2b Jirachi atk 1 fell
+      p2a Diancie used Diamond Storm -> p1a: Suicune  [[spread] p1a,p1b]
+              p1b Landorus -- critical hit
+              p2a Diancie def 1 rose
+      p1a Suicune used Hydro Pump -> p2a: Diancie
+      p2a Diancie fainted
+      p2b Jirachi used Iron Head -> p1a: Suicune
+      after p1: Suicune 249/370, Landorus-Therian 76/319
+      after p2: Diancie-Mega 0/241, Jirachi 404/404
+
+  Turn 2
+      p2a <- Landorus-Therian comes in (319/319)
+              p1a Suicune atk 1 fell
+              p1b Landorus atk 1 fell
+      after p1: Suicune 249/370, Landorus-Therian 76/319
+      after p2: Landorus-Therian 319/319, Jirachi 404/404
+
+  Turn 3
+    p1 mcts: move 2 1, move 1 1
+      search (25000 visits): icebeam,0;uturn,0 1038v 724 | icebeam,0;uturn,1 868v 594 | hydropump,0;uturn,0 739v 496 | hydropump,0;uturn,1 715v 478
+    p2 greedy: move 4 2, move 2 2
+      p1b Landorus used U-turn -> p2a: Landorus
+      after p1: Suicune 249/370, Landorus-Therian 76/319
+      after p2: Landorus-Therian 280/319, Jirachi 404/404
+
+  Turn 4
+      p1b <- Victini comes in (341/341)
+      p2a Landorus used Superpower -> p1b: Victini
+              p2a Landorus atk 1 fell
+              p2a Landorus def 1 fell
+      p1a Suicune used Ice Beam -> p2a: Landorus
+      p2a Landorus fainted
+      p2b Jirachi used Iron Head -> p1b: Victini
+              p1b Victini -- critical hit
+      after p1: Suicune 249/370, Victini 176/341
+      after p2: Landorus-Therian 0/319, Jirachi 404/404
+
+  Turn 5
+      p2a <- Azumarill comes in (402/402)
+      after p1: Suicune 249/370, Victini 176/341
+      after p2: Azumarill 402/402, Jirachi 404/404
+
+  Turn 6
+    p1 mcts: switch 3, move 1 1   (slot0 Suicune -> Landorus-Therian)
+      search (22000 visits): switch landorustherian;uturn,0 1104v 759 | switch landorustherian;uturn,1 916v 618 | switch landorustherian;boltstrike,0 780v 517 | switch landorustherian;switch rotomwash 346v 201
+    p2 greedy: move 3 2, move 2 2
+      p1a <- Landorus-Therian comes in (76/319)
+              p2a Azumarill atk 1 fell
+              p2b Jirachi atk 1 fell
+      p1b Victini used U-turn -> p2a: Azumarill
+      after p1: Landorus-Therian 76/319, Victini 176/341
+      after p2: Azumarill 343/402, Jirachi 404/404
+
+  Turn 7
+      p1b <- Suicune comes in (249/370)
+      p2b Jirachi used Iron Head -> p1b: Suicune
+      p2a Azumarill used Knock Off -> p1b: Suicune
+              p1b Suicune used up its Sitrus Berry
+      after p1: Landorus-Therian 76/319, Suicune 149/370
+      after p2: Azumarill 343/402, Jirachi 404/404
+
+  Turn 8
+    p1 mcts: move 1 2, move 1 2
+      search (22000 visits): uturn,1;hydropump,1 521v 227 | switch kangaskhan;hydropump,1 450v 190 | uturn,0;hydropump,1 449v 189 | uturn,1;tailwind,1 372v 149
+    p2 greedy: move 3 1, move 2 1
+      p1a Landorus used U-turn -> p2b: Jirachi
+      after p1: Landorus-Therian 76/319, Suicune 149/370
+      after p2: Azumarill 343/402, Jirachi 326/404
+
+  Turn 9
+      p1a <- Victini comes in (176/341)
+      p1b Suicune used Hydro Pump -> p2b: Jirachi  [[miss]]
+              p1b Suicune -- MISSED
+      p2b Jirachi used Iron Head -> p1a: Victini
+      p2a Azumarill used Knock Off -> p1a: Victini
+              p1a Victini used up its Choice Band
+      p1a Victini fainted
+      after p1: Victini 0/341, Suicune 149/370
+      after p2: Azumarill 343/402, Jirachi 326/404
+
+  Turn 10
+      p1a <- Landorus-Therian comes in (76/319)
+              p2a Azumarill atk 1 fell
+              p2b Jirachi atk 1 fell
+      after p1: Landorus-Therian 76/319, Suicune 149/370
+      after p2: Azumarill 343/402, Jirachi 326/404
+
+  Turn 11
+    p1 mcts: move 1 2, move 1 2
+      search (22000 visits): uturn,1;hydropump,1 599v 236 | switch kangaskhan;hydropump,1 561v 217 | uturn,0;hydropump,1 524v 200 | uturn,1;hydropump,0 505v 191
+    p2 greedy: move 3 1, move 2 1
+      p1a Landorus used U-turn -> p2b: Jirachi
+      after p1: Landorus-Therian 76/319, Suicune 149/370
+      after p2: Azumarill 343/402, Jirachi 249/404
+
+  Turn 12
+      p1a <- Breloom comes in (262/262)
+      p1b Suicune used Hydro Pump -> p2b: Jirachi  [[miss]]
+              p1b Suicune -- MISSED
+      p2b Jirachi used Iron Head -> p1a: Breloom
+      p2a Azumarill used Knock Off -> p1a: Breloom
+              p1a Breloom used up its Focus Sash
+      after p1: Breloom 174/262, Suicune 149/370
+      after p2: Azumarill 343/402, Jirachi 249/404
+
+  Turn 13
+    p1 mcts: move 2 1, move 1 2
+      search (22000 visits): bulletseed,0;hydropump,1 1121v 536 | bulletseed,0;tailwind,1 809v 367 | bulletseed,0;icebeam,1 703v 311 | bulletseed,0;hydropump,0 628v 272
+    p2 greedy: move 3 2, move 2 2
+      p1a Breloom used Bullet Seed -> p2a: Azumarill
+              p2a Azumarill used up its Sitrus Berry
+      p1b Suicune used Hydro Pump -> p2b: Jirachi  [[miss]]
+              p1b Suicune -- MISSED
+      p2b Jirachi used Iron Head -> p1b: Suicune
+      p2a Azumarill used Knock Off -> p1b: Suicune
+              p1b Suicune -- critical hit
+      after p1: Breloom 174/262, Suicune 18/370
+      after p2: Azumarill 109/402, Jirachi 249/404
+
+  Turn 14
+    p1 mcts: move 1 1, move 1 2
+      search (17000 visits): spore,0;hydropump,1 418v 195 | machpunch,1;hydropump,1 357v 160 | spore,0;hydropump,0 328v 144 | spore,0;icebeam,1 300v 128
+    p2 greedy: move 3 2, move 2 2
+      p1a Breloom used Spore -> p2a: Azumarill
+              p2a Azumarill is now slp
+      p1b Suicune used Hydro Pump -> p2b: Jirachi
+      p2b Jirachi used Iron Head -> p1b: Suicune
+              p2a Azumarill COULD NOT MOVE (slp)
+      after p1: Breloom 174/262, Suicune 2/370
+      after p2: Azumarill 109/402, Jirachi 108/404
+
+  Turn 15
+    p1 mcts: switch 5, move 1 2   (slot0 Breloom -> Rotom-Wash)
+      search (21000 visits): switch rotomwash;hydropump,1 430v 176 | switch landorustherian;hydropump,0 386v 154 | switch rotomwash;hydropump,0 368v 145 | switch kangaskhan;hydropump,1 364v 143
+    p2 greedy: move 3 2, move 2 2
+      p1a <- Rotom-Wash comes in (304/304)
+      p1b Suicune used Hydro Pump -> p2b: Jirachi
+      p2b Jirachi fainted
+              p2a Azumarill is cured of slp
+      p2a Azumarill used Knock Off -> p1b: Suicune
+      p1b Suicune fainted
+      after p1: Rotom-Wash 304/304, Suicune 0/370
+      after p2: Azumarill 109/402, Jirachi 0/404
+
+  Turn 16
+      p1b <- Landorus-Therian comes in (76/319)
+      p2b <- Talonflame comes in (297/297)
+              p2a Azumarill atk 1 fell
+              p2b Talonflame atk 1 fell
+      after p1: Rotom-Wash 304/304, Landorus-Therian 76/319
+      after p2: Azumarill 109/402, Talonflame 297/297
+
+  Turn 17
+    p1 mcts: move 2 2, move 1 2
+      search (26000 visits): thunderbolt,1;uturn,1 987v 499 | thunderbolt,1;switch kangaskhan 902v 450 | thunderbolt,1;rockslide,0 891v 443 | thunderbolt,1;switch breloom 846v 418
+    p2 greedy: move 3 2, move 1 2
+      p2b Talonflame used Brave Bird -> p1b: Landorus
+      p1b Landorus fainted
+      p1a Rotom used Thunderbolt -> p2b: Talonflame
+      p2b Talonflame fainted
+      p2a Azumarill used Knock Off -> p1a: Rotom
+              p1a Rotom used up its Sitrus Berry
+      after p1: Rotom-Wash 254/304, Landorus-Therian 0/319
+      after p2: Azumarill 109/402, Talonflame 0/297
+
+  Turn 18
+      p2b <- Kyurem-Black comes in (391/391)
+      p1b <- Breloom comes in (174/262)
+      after p1: Rotom-Wash 254/304, Breloom 174/262
+      after p2: Azumarill 109/402, Kyurem-Black 391/391
+
+  Turn 19
+    p1 mcts: move 2 1, move 3 2
+      search (23000 visits): thunderbolt,0;machpunch,1 2636v 1415 | hydropump,1;machpunch,1 1182v 583 | thunderbolt,1;machpunch,1 989v 476 | willowisp,1;machpunch,1 966v 463
+    p2 greedy: move 3 2, move 2 2
+      p1b Breloom used Mach Punch -> p2b: Kyurem
+      p2b Kyurem used Draco Meteor -> p1b: Breloom
+              p2b Kyurem spa 2 fell
+      p1b Breloom fainted
+      p1a Rotom used Thunderbolt -> p2a: Azumarill
+      p2a Azumarill fainted
+      after p1: Rotom-Wash 254/304, Breloom 0/262
+      after p2: Azumarill 0/402, Kyurem-Black 191/391
+
+  Turn 20
+      p1b <- Kangaskhan comes in (414/414)
+      after p1: Rotom-Wash 254/304, Kangaskhan 414/414
+      after p2: Azumarill 0/402, Kyurem-Black 191/391
+
+  Turn 21
+    p1 mcts: move 2 2, move 3 2 mega
+      search (335000 visits): thunderbolt,1;drainpunch-mega,1 76229v 76180 | thunderbolt,1;drainpunch,1 73058v 72983 | hydropump,1;drainpunch-mega,1 50020v 49774 | hydropump,1;drainpunch,1 40367v 40065
+    p2 greedy: pass, move 2 1
+      p2b Kyurem used Draco Meteor -> p1a: Rotom  [[miss]]
+              p2b Kyurem -- MISSED
+      p1b Kangaskhan used Drain Punch -> p2b: Kyurem
+      p2b Kyurem fainted
+      after p1: Rotom-Wash 254/304, Kangaskhan-Mega 414/414
+      after p2: Azumarill 0/402, Kyurem-Black 0/391
+
+  RESULT: p1 wins

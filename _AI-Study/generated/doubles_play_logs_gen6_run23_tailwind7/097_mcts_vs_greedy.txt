@@ -1,0 +1,106 @@
+battle 97   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: XY Doubles: Gardevoir, Darkrai, Heatran, Suicune, Kyurem-Black, Aegislash
+  p2: Untitled 662: Thundurus, Terrakion, Volcanion, Kangaskhan-Mega, Whimsicott, Landorus
+
+  Turn 1
+    p1 mcts: move 4 mega, move 1 1
+      search (14000 visits): hypervoice-mega,0;darkpulse,0 294v 221 | hypervoice-mega,0;protect,1 290v 217 | hypervoice-mega,0;willowisp,1 290v 217 | hypervoice-mega,0;focusblast,1 276v 205
+    p2 greedy: move 1 1, move 2 1
+      p1b Darkrai used Dark Pulse -> p2a: Thundurus
+      p2b Terrakion used Close Combat -> p1a: Gardevoir
+              p2b Terrakion def 1 fell
+              p2b Terrakion spd 1 fell
+      p1a Gardevoir used Hyper Voice -> p2a: Thundurus  [[spread] p2a,p2b]
+              p2a Thundurus -- critical hit
+      p2a Thundurus fainted
+      p2b Terrakion fainted
+      after p1: Gardevoir-Mega 183/278, Darkrai 276/306
+      after p2: Thundurus 0/362, Terrakion 0/323
+
+  Turn 2
+      p2b <- Kangaskhan-Mega comes in (414/414)
+      p2a <- Volcanion comes in (363/363)
+      after p1: Gardevoir-Mega 183/278, Darkrai 276/306
+      after p2: Volcanion 363/363, Kangaskhan-Mega 414/414
+
+  Turn 3
+    p1 mcts: switch 3, move 3 2   (slot0 Gardevoir-Mega -> Heatran)
+      search (27000 visits): switch heatran;willowisp,1 516v 149 | switch suicune;willowisp,1 450v 124 | protect,0;willowisp,1 438v 119 | switch kyuremblack;willowisp,1 423v 114
+    p2 greedy: move 4 1, move 3 1
+      p1a <- Heatran comes in (337/337)
+      p1b Darkrai used Will-O-Wisp -> p2b: Kangaskhan
+              p2b Kangaskhan is now brn
+      p2b Kangaskhan used Bite -> p1a: Heatran
+      p2a Volcanion used Overheat -> p1a: Heatran
+              p1a Heatran gained ability: Flash Fire
+      after p1: Heatran 311/337, Darkrai 276/306
+      after p2: Volcanion 363/363, Kangaskhan-Mega 363/414
+
+  Turn 4
+    p1 mcts: move 3 2, move 1 1
+      search (27000 visits): earthpower,1;darkpulse,0 385v 99 | flashcannon,1;darkpulse,0 380v 97 | heatwave,0;darkpulse,0 370v 94 | flashcannon,0;darkpulse,0 365v 92
+    p2 greedy: move 4 2, move 3 2
+      p1b Darkrai used Dark Pulse -> p2a: Volcanion
+      p2b Kangaskhan used Bite -> p1b: Darkrai
+      p1a Heatran used Earth Power -> p2b: Kangaskhan
+              p2b Kangaskhan spd 1 fell
+      p2a Volcanion used Overheat -> p1b: Darkrai
+              p2a Volcanion spa 2 fell
+      p1b Darkrai fainted
+      after p1: Heatran 311/337, Darkrai 0/306
+      after p2: Volcanion 237/363, Kangaskhan-Mega 213/414
+
+  Turn 5
+      p1b <- Gardevoir-Mega comes in (183/278)
+      after p1: Heatran 311/337, Gardevoir-Mega 183/278
+      after p2: Volcanion 237/363, Kangaskhan-Mega 213/414
+
+  Turn 6
+    p1 mcts: move 4 2, move 4
+      search (43000 visits): flashcannon,1;hypervoice,0 1144v 305 | protect,0;hypervoice,0 1139v 304 | earthpower,1;hypervoice,0 1107v 293 | switch suicune;hypervoice,0 1107v 293
+    p2 greedy: move 4 2, move 3 2
+      p1b Gardevoir used Hyper Voice -> p2b: Kangaskhan  [[spread] p2a,p2b]
+      p2b Kangaskhan fainted
+      p1a Heatran used Flash Cannon -> p2a: Volcanion
+      p2a Volcanion used Overheat -> p1b: Gardevoir
+              p2a Volcanion spa 2 fell
+      after p1: Heatran 311/337, Gardevoir-Mega 96/278
+      after p2: Volcanion 145/363, Kangaskhan-Mega 0/414
+
+  Turn 7
+      p2b <- Whimsicott comes in (301/301)
+      after p1: Heatran 311/337, Gardevoir-Mega 96/278
+      after p2: Volcanion 145/363, Whimsicott 301/301
+
+  Turn 8
+    p1 mcts: move 1, move 4
+      search (20000 visits): heatwave,0;hypervoice,0 1524v 1040 | heatwave,0;psyshock,0 1339v 904 | heatwave,0;protect,1 1008v 661 | heatwave,0;psyshock,1 928v 604
+    p2 greedy: move 4 2, move 4 2
+      p2b Whimsicott used Moonblast -> p1b: Gardevoir
+              p1b Gardevoir spa 1 fell
+      p1b Gardevoir used Hyper Voice -> p2a: Volcanion  [[spread] p2a,p2b]
+      p1a Heatran used Heat Wave -> p2a: Volcanion  [[spread] p2a,p2b]
+      p2b Whimsicott fainted
+      p2a Volcanion used Overheat -> p1b: Gardevoir  [[miss]]
+              p2a Volcanion -- MISSED
+      after p1: Heatran 311/337, Gardevoir-Mega 9/278
+      after p2: Volcanion 74/363, Whimsicott 0/301
+
+  Turn 9
+      p2b <- Landorus comes in (382/382)
+      after p1: Heatran 311/337, Gardevoir-Mega 9/278
+      after p2: Volcanion 74/363, Landorus 382/382
+
+  Turn 10
+    p1 mcts: move 1, move 4
+      search (43000 visits): heatwave,0;hypervoice,0 33675v 26372 | heatwave,0;psyshock,1 267v 125 | protect,0;psyshock,1 248v 114 | protect,0;hypervoice,0 244v 112
+    p2 greedy: move 4 2, move 1 2
+      p1b Gardevoir used Hyper Voice -> p2a: Volcanion  [[spread] p2a,p2b]
+      p1a Heatran used Heat Wave -> p2b: Landorus  [[spread] p2a,p2b]
+              p2b Landorus -- critical hit
+      p2a Volcanion fainted
+      p2b Landorus fainted
+      after p1: Heatran 311/337, Gardevoir-Mega 9/278
+      after p2: Volcanion 0/363, Landorus 0/382
+
+  RESULT: p1 wins

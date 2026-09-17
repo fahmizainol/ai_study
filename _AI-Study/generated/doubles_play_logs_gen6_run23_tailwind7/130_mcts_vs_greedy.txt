@@ -1,0 +1,104 @@
+battle 130   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: ORAS Doubles OU: Abomasnow-Mega, Heatran, Hitmontop, Kyurem-Black, Cresselia, Azumarill
+  p2: XY Doubles: Meloetta, Gyarados, Chandelure, Gardevoir, Garchomp, Parasect
+
+  Turn 1
+    p1 mcts: switch 3, move 1   (slot0 Abomasnow-Mega -> Hitmontop)
+      search (21000 visits): switch hitmontop;heatwave,0 845v 491 | switch azumarill;switch hitmontop 749v 428 | blizzard,0;switch hitmontop 742v 423 | switch hitmontop;substitute,1 717v 407
+    p2 greedy: move 3 1, move 2 1
+      p1a <- Hitmontop comes in (304/304)
+              p2a Meloetta atk 1 fell
+              p2b Gyarados atk 1 fell
+      p2a Meloetta used Focus Blast -> p1a: Hitmontop
+              p1a Hitmontop spd 1 fell
+              p1a Hitmontop used up its Sitrus Berry
+      p2b Gyarados used Waterfall -> p1a: Hitmontop
+      p1b Heatran used Heat Wave -> p2a: Meloetta  [[spread] p2a]
+              p1b Heatran -- MISSED
+      after p1: Hitmontop 45/304, Heatran 386/386
+      after p2: Meloetta 219/351, Gyarados 331/353
+
+  Turn 2
+    p1 mcts: switch 6, move 2 1   (slot0 Hitmontop -> Azumarill)
+      search (20000 visits): switch azumarill;flashcannon,0 1000v 609 | switch azumarill;heatwave,0 771v 455 | switch azumarill;substitute,1 593v 336 | switch azumarill;flashcannon,1 462v 251
+    p2 greedy: move 3 1, move 2 1
+      p1a <- Azumarill comes in (404/404)
+      p2a Meloetta used Focus Blast -> p1a: Azumarill
+              p1a Azumarill spd 1 fell
+      p2b Gyarados used Waterfall -> p1a: Azumarill
+      p1b Heatran used Flash Cannon -> p2a: Meloetta
+              p1a Azumarill used up its Sitrus Berry
+      after p1: Azumarill 287/404, Heatran 386/386
+      after p2: Meloetta 72/351, Gyarados 309/353
+
+  Turn 3
+    p1 mcts: move 4 2, move 1
+      search (23000 visits): playrough,1;heatwave,0 691v 372 | playrough,0;switch hitmontop 654v 349 | playrough,1;switch hitmontop 596v 313 | aquajet,0;substitute,1 571v 298
+    p2 greedy: move 3 1, move 2 1
+      p2a Meloetta used Focus Blast -> p1a: Azumarill
+      p2b Gyarados used Waterfall -> p1a: Azumarill
+      p1b Heatran used Heat Wave -> p2b: Gyarados  [[spread] p2a,p2b]
+      p2a Meloetta fainted
+      p1a Azumarill used Play Rough -> p2b: Gyarados
+      p2b Gyarados fainted
+      p1a Azumarill fainted
+      after p1: Azumarill 0/404, Heatran 386/386
+      after p2: Meloetta 0/351, Gyarados 0/353
+
+  Turn 4
+      p2a <- Chandelure comes in (281/281)
+      p2b <- Gardevoir comes in (278/278)
+      p1a <- Abomasnow-Mega comes in (384/384)
+      after p1: Abomasnow-Mega 384/384, Heatran 386/386
+      after p2: Chandelure 281/281, Gardevoir 278/278
+
+  Turn 5
+    p1 mcts: move 3, move 2 2
+      search (36000 visits): protect,0;flashcannon,1 2689v 2064 | iceshard,1;flashcannon,1 1470v 1082 | blizzard,0;flashcannon,1 1410v 1034 | switch hitmontop;flashcannon,1 1269v 923
+    p2 greedy: move 3, move 1
+      p1a Abomasnow used Protect
+      p2b Gardevoir used Hyper Voice -> p1b: Heatran  [[spread] p1b]
+              p1a Abomasnow -- move: Protect
+      p2a Chandelure used Heat Wave -> p1b: Heatran  [[spread] ]
+              p1a Abomasnow -- move: Protect
+              p1b Heatran gained ability: Flash Fire
+      p1b Heatran used Flash Cannon -> p2b: Gardevoir
+      p2b Gardevoir fainted
+      after p1: Abomasnow-Mega 384/384, Heatran 346/386
+      after p2: Chandelure 264/281, Gardevoir 0/278
+
+  Turn 6
+      p2b <- Garchomp comes in (369/369)
+      after p1: Abomasnow-Mega 384/384, Heatran 346/386
+      after p2: Chandelure 264/281, Garchomp 369/369
+
+  Turn 7
+    p1 mcts: move 4, move 4
+      search (32000 visits): blizzard,0;substitute,1 1938v 1452 | blizzard,0;protect,1 1257v 910 | gigadrain,0;substitute,1 1112v 796 | blizzard,0;switch cresselia 1020v 724
+    p2 greedy: move 3, move 2
+      p2b Garchomp used Earthquake -> p1b: Heatran  [[spread] p2a,p1a,p1b]
+      p2a Chandelure fainted
+      p1b Heatran fainted
+      p1a Abomasnow used Blizzard -> p2b: Garchomp
+      p2b Garchomp fainted
+      after p1: Abomasnow-Mega 325/384, Heatran 0/386
+      after p2: Chandelure 0/281, Garchomp 0/369
+
+  Turn 8
+      p2a <- Parasect comes in (316/316)
+      p1b <- Kyurem-Black comes in (454/454)
+      after p1: Abomasnow-Mega 325/384, Kyurem-Black 454/454
+      after p2: Parasect 316/316, Garchomp 0/369
+
+  Turn 9
+    p1 mcts: move 1 1, move 2 1
+      search (181000 visits): iceshard,0;dracometeor,0 161830v 159481 | blizzard,0;blizzard,0 2598v 2341 | iceshard,0;blizzard,0 2544v 2290 | blizzard,0;dracometeor,0 1820v 1606
+    p2 greedy: move 4 1, pass
+      p1a Abomasnow used Ice Shard -> p2a: Parasect
+      p1b Kyurem used Draco Meteor -> p2a: Parasect
+              p1b Kyurem spa 2 fell
+      p2a Parasect fainted
+      after p1: Abomasnow-Mega 325/384, Kyurem-Black 409/454
+      after p2: Parasect 0/316, Garchomp 0/369
+
+  RESULT: p1 wins

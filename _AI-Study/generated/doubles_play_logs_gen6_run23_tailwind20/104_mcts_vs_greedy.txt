@@ -1,0 +1,149 @@
+battle 104   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: ORAS Doubles OU: Gengar, Bisharp, Landorus-Therian, Keldeo-Resolute, Thundurus, Talonflame
+  p2: Untitled 476: Gengar-Mega, Whimsicott, Conkeldurr, Landorus, Talonflame, Bisharp
+
+  Turn 1
+    p1 mcts: move 1 1 mega, move 3 2
+      search (17000 visits): shadowball-mega,0;ironhead,1 315v 231 | protect-mega,0;ironhead,1 290v 209 | switch landorustherian;knockoff,0 287v 207 | shadowball-mega,1;knockoff,0 277v 198
+    p2 greedy: move 3 1, move 4 1
+      p2a Gengar used Sludge Bomb -> p1a: Gengar
+      p1a Gengar used Shadow Ball -> p2a: Gengar
+              p2a Gengar -- critical hit
+      p2a Gengar fainted
+      p2b Whimsicott used Moonblast -> p1a: Gengar
+      p1b Bisharp used Iron Head -> p2b: Whimsicott
+      p2b Whimsicott fainted
+      after p1: Gengar-Mega 198/291, Bisharp 244/271
+      after p2: Gengar-Mega 0/324, Whimsicott 0/324
+
+  Turn 2
+      p2a <- Conkeldurr comes in (401/401)
+      p2b <- Landorus comes in (319/319)
+      after p1: Gengar-Mega 198/291, Bisharp 244/271
+      after p2: Conkeldurr 401/401, Landorus 319/319
+
+  Turn 3
+    p1 mcts: switch 6, switch 3   (slot0 Gengar-Mega -> Talonflame; slot1 Bisharp -> Landorus-Therian)
+      search (22000 visits): switch talonflame;switch landorustherian 1074v 597 | protect,0;switch landorustherian 706v 370 | shadowball,1;switch landorustherian 629v 323 | switch landorustherian;switch talonflame 617v 316
+    p2 greedy: move 1 1, move 3 1
+      p1a <- Talonflame comes in (297/297)
+      p1b <- Landorus-Therian comes in (319/319)
+              p2a Conkeldurr atk 1 fell
+              p2b Landorus atk 1 fell
+      p2b Landorus used Stone Edge -> p1a: Talonflame
+      p1a Talonflame fainted
+      p2a Conkeldurr used Drain Punch -> p1b: Landorus
+      after p1: Talonflame 0/297, Landorus-Therian 270/319
+      after p2: Conkeldurr 401/401, Landorus 288/319
+
+  Turn 4
+      p1a <- Bisharp comes in (244/271)
+      after p1: Bisharp 244/271, Landorus-Therian 270/319
+      after p2: Conkeldurr 401/401, Landorus 288/319
+
+  Turn 5
+    p1 mcts: move 1 2, move 4 2
+      search (21000 visits): knockoff,1;uturn,1 1296v 780 | knockoff,1;uturn,0 977v 570 | ironhead,1;uturn,1 897v 518 | ironhead,1;uturn,0 610v 333
+    p2 greedy: move 1 2, move 3 2
+      p1b Landorus used U-turn -> p2b: Landorus
+      after p1: Bisharp 244/271, Landorus-Therian 270/319
+      after p2: Conkeldurr 401/401, Landorus 232/319
+
+  Turn 6
+      p1b <- Keldeo-Resolute comes in (323/323)
+      p2b Landorus used Stone Edge -> p1b: Keldeo
+      p1a Bisharp used Knock Off -> p2b: Landorus
+              p2b Landorus used up its Life Orb
+      p2b Landorus fainted
+      p2a Conkeldurr used Drain Punch -> p1b: Keldeo
+      after p1: Bisharp 217/271, Keldeo-Resolute 187/323
+      after p2: Conkeldurr 401/401, Landorus 0/319
+
+  Turn 7
+      p2b <- Talonflame comes in (359/359)
+      after p1: Bisharp 217/271, Keldeo-Resolute 187/323
+      after p2: Conkeldurr 401/401, Talonflame 359/359
+
+  Turn 8
+    p1 mcts: move 3 1, move 1 2
+      search (20000 visits): ironhead,0;hydropump,1 1205v 803 | knockoff,0;hydropump,1 950v 617 | switch gengarmega;hydropump,1 829v 530 | protect,0;hydropump,1 784v 498
+    p2 greedy: move 1 2, move 1 2
+      p2b Talonflame used Brave Bird -> p1b: Keldeo
+      p1b Keldeo fainted
+      p1a Bisharp used Iron Head -> p2a: Conkeldurr
+      p2a Conkeldurr used Drain Punch -> p1a: Bisharp
+      p1a Bisharp fainted
+      after p1: Bisharp 0/271, Keldeo-Resolute 0/323
+      after p2: Conkeldurr 284/401, Talonflame 297/359
+
+  Turn 9
+      p1b <- Thundurus comes in (299/299)
+      p1a <- Landorus-Therian comes in (270/319)
+              p2a Conkeldurr atk 1 fell
+              p2b Talonflame atk 1 fell
+      after p1: Landorus-Therian 270/319, Thundurus 299/299
+      after p2: Conkeldurr 284/401, Talonflame 297/359
+
+  Turn 10
+    p1 mcts: move 1, move 1 2
+      search (27000 visits): earthquake,0;thunderbolt,1 3334v 2168 | uturn,0;thunderbolt,1 1790v 1113 | uturn,1;thunderbolt,1 1664v 1028 | earthquake,0;thunderbolt,0 820v 468
+    p2 greedy: move 1 1, move 1 1
+      p2b Talonflame used Brave Bird -> p1a: Landorus
+      p1a Landorus used Earthquake -> p2b: Talonflame  [[spread] p2a]
+              p1b Thundurus -- IMMUNE
+              p2b Talonflame -- IMMUNE
+      p1b Thundurus used Thunderbolt -> p2b: Talonflame
+      p2b Talonflame fainted
+      p2a Conkeldurr used Drain Punch -> p1a: Landorus
+      after p1: Landorus-Therian 65/319, Thundurus 299/299
+      after p2: Conkeldurr 143/401, Talonflame 0/359
+
+  Turn 11
+      p2b <- Bisharp comes in (272/272)
+      after p1: Landorus-Therian 65/319, Thundurus 299/299
+      after p2: Conkeldurr 143/401, Bisharp 272/272
+
+  Turn 12
+    p1 mcts: switch 6, move 3 1   (slot0 Landorus-Therian -> Gengar-Mega)
+      search (26000 visits): switch gengarmega;thunderwave,0 4436v 1799 | earthquake,0;protect,1 3394v 1343 | earthquake,0;thunderbolt,1 2199v 829 | switch gengarmega;thunderbolt,0 1625v 587
+    p2 greedy: move 1 1, move 2 1
+      p1a <- Gengar-Mega comes in (198/291)
+      p1b Thundurus used Thunder Wave -> p2a: Conkeldurr
+              p2a Conkeldurr is now par
+      p2b Bisharp used Sucker Punch  [[still]]
+              p2b Bisharp -- IT FAILED
+      p2a Conkeldurr used Drain Punch -> p1a: Gengar
+              p1a Gengar -- IMMUNE
+      after p1: Gengar-Mega 198/291, Thundurus 299/299
+      after p2: Conkeldurr 143/401, Bisharp 272/272
+
+  Turn 13
+    p1 mcts: move 1 2, move 1 2
+      search (13000 visits): shadowball,1;thunderbolt,1 889v 494 | willowisp,1;protect,1 851v 471 | willowisp,1;thunderbolt,1 593v 310 | willowisp,1;switch landorustherian 532v 273
+    p2 greedy: move 1 1, move 2 1
+      p2b Bisharp used Sucker Punch -> p1a: Gengar
+      p1a Gengar fainted
+      p1b Thundurus used Thunderbolt -> p2b: Bisharp
+              p2b Bisharp -- critical hit
+      p2b Bisharp fainted
+              p2a Conkeldurr COULD NOT MOVE (par)
+      after p1: Gengar 0/291, Thundurus 299/299
+      after p2: Conkeldurr 143/401, Bisharp 0/272
+
+  Turn 14
+      p1a <- Landorus-Therian comes in (65/319)
+              p2a Conkeldurr atk 1 fell
+      after p1: Landorus-Therian 65/319, Thundurus 299/299
+      after p2: Conkeldurr 143/401, Bisharp 0/272
+
+  Turn 15
+    p1 mcts: move 1, move 1 1
+      search (1101000 visits): earthquake,0;thunderbolt,0 123501v 123462 | superpower,0;thunderbolt,0 123289v 123249 | uturn,0;thunderbolt,0 123044v 123002 | earthquake,0;flashcannon,0 117715v 117635
+    p2 greedy: move 1 1, pass
+      p1a Landorus used Earthquake -> p2a: Conkeldurr  [[spread] p2a]
+              p1b Thundurus -- IMMUNE
+      p2a Conkeldurr fainted
+      after p1: Landorus-Therian 65/319, Thundurus 299/299
+      after p2: Conkeldurr 0/401, Bisharp 0/272
+
+  RESULT: p1 wins

@@ -1,0 +1,85 @@
+battle 49   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: oraspl/Untitled 214: Cresselia, Heatran, Amoonguss, Landorus-Therian, Kangaskhan-Mega, Thundurus
+  p2: XY Doubles: Aromatisse, Conkeldurr, Camerupt, Slowbro, Porygon2, Breloom
+
+  Turn 1
+    p1 mcts: move 3 2, move 1
+      search (12000 visits): psychic,1;eruption,0 642v 519 | psychic,1;heatwave,0 402v 307 | icebeam,1;eruption,0 365v 275 | psychic,0;eruption,0 341v 254
+    p2 greedy: move 1 1, move 4 1
+      p1b Heatran used Eruption -> p2b: Conkeldurr  [[spread] p2a,p2b]
+      p1a Cresselia used Psychic -> p2b: Conkeldurr
+      p2b Conkeldurr fainted
+      p2a Aromatisse used Draining Kiss -> p1a: Cresselia
+      after p1: Cresselia 398/444, Heatran 386/386
+      after p2: Aromatisse 252/406, Conkeldurr 0/414
+
+  Turn 2
+      p2b <- Camerupt comes in (344/344)
+      after p1: Cresselia 398/444, Heatran 386/386
+      after p2: Aromatisse 252/406, Camerupt 344/344
+
+  Turn 3
+    p1 mcts: move 2 1, move 1
+      search (16000 visits): icebeam,0;eruption,0 515v 352 | switch landorustherian;switch thundurus 478v 324 | psychic,0;eruption,0 474v 320 | psychic,1;switch landorustherian 392v 257
+    p2 greedy: move 1 1, move 1
+      p1b Heatran used Eruption -> p2b: Camerupt  [[spread] p2a,p2b]
+      p1a Cresselia used Ice Beam -> p2a: Aromatisse
+              p2a Aromatisse -- critical hit
+      p2a Aromatisse fainted
+      p2b Camerupt used Heat Wave -> p1b: Heatran  [[spread] p1a]
+              p1b Heatran gained ability: Flash Fire
+      after p1: Cresselia 311/444, Heatran 386/386
+      after p2: Aromatisse 0/406, Camerupt 173/344
+
+  Turn 4
+      p2a <- Slowbro comes in (394/394)
+      after p1: Cresselia 311/444, Heatran 386/386
+      after p2: Slowbro 394/394, Camerupt 173/344
+
+  Turn 5
+    p1 mcts: switch 3, move 1   (slot0 Cresselia -> Amoonguss)
+      search (27000 visits): switch amoonguss;eruption,0 870v 318 | psychic,1;eruption,0 796v 285 | icebeam,1;eruption,0 682v 236 | switch landorustherian;eruption,0 653v 223
+    p2 greedy: move 1 1, move 1
+      p1a <- Amoonguss comes in (432/432)
+      p1b Heatran used Eruption -> p2a: Slowbro  [[spread] p2a,p2b]
+      p2b Camerupt fainted
+      p2a Slowbro used Scald -> p1a: Amoonguss
+      after p1: Amoonguss 362/432, Heatran 386/386
+      after p2: Slowbro 180/394, Camerupt 0/344
+
+  Turn 6
+      p2b <- Porygon2 comes in (374/374)
+              p2b Porygon2 spa 1 rose
+      after p1: Amoonguss 362/432, Heatran 386/386
+      after p2: Slowbro 180/394, Porygon2 374/374
+
+  Turn 7
+    p1 mcts: move 4 1, move 1
+      search (26000 visits): foulplay,0;eruption,0 947v 361 | ragepowder,0;eruption,0 836v 311 | spore,0;eruption,0 787v 289 | spore,1;eruption,0 745v 270
+    p2 greedy: move 1 1, move 1 1
+      p1b Heatran used Eruption -> p2b: Porygon2  [[spread] p2a,p2b]
+      p2a Slowbro fainted
+      p2b Porygon2 used Thunderbolt -> p1a: Amoonguss
+      p1a Amoonguss used Foul Play -> p2b: Porygon2
+      after p1: Amoonguss 284/432, Heatran 386/386
+      after p2: Slowbro 0/394, Porygon2 55/374
+
+  Turn 8
+      p2a <- Breloom comes in (324/324)
+      after p1: Amoonguss 284/432, Heatran 386/386
+      after p2: Breloom 324/324, Porygon2 55/374
+
+  Turn 9
+    p1 mcts: switch 4, move 1   (slot0 Amoonguss -> Landorus-Therian)
+      search (41000 visits): switch landorustherian;eruption,0 6028v 5248 | switch landorustherian;earthpower,1 3391v 2885 | switch cresselia;eruption,0 1398v 1127 | switch landorustherian;heatwave,0 1380v 1112
+    p2 greedy: move 2 1, move 1 1
+      p1a <- Landorus-Therian comes in (382/382)
+              p2a Breloom atk 1 fell
+              p2b Porygon2 atk 1 fell
+      p1b Heatran used Eruption -> p2b: Porygon2  [[spread] p2a,p2b]
+      p2a Breloom fainted
+      p2b Porygon2 fainted
+      after p1: Landorus-Therian 382/382, Heatran 386/386
+      after p2: Breloom 0/324, Porygon2 0/374
+
+  RESULT: p1 wins

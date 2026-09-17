@@ -1,0 +1,152 @@
+battle 131   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: ORAS Doubles OU: Hariyama, Cresselia, Mawile, Landorus-Therian, Milotic, Shaymin-Sky
+  p2: ORAS Doubles OU: Aromatisse, Abomasnow, Victini, Cresselia, Jellicent, Rhyperior
+
+  Turn 1
+    p1 mcts: move 1 2, move 2
+      search (23000 visits): closecombat,1;calmmind,1 1035v 647 | wideguard,0;calmmind,1 538v 307 | switch landorustherian;calmmind,1 538v 307 | closecombat,1;psyshock,0 490v 275
+    p2 greedy: move 4, move 1
+      p1b Cresselia used Calm Mind
+              p1b Cresselia spa 1 rose
+              p1b Cresselia spd 1 rose
+      p2b Abomasnow used Blizzard -> p1b: Cresselia  [[spread] p1a,p1b]
+      p1a Hariyama used Close Combat -> p2b: Abomasnow
+              p1a Hariyama def 1 fell
+              p1a Hariyama spd 1 fell
+      p2b Abomasnow fainted
+      p2a Aromatisse used Dazzling Gleam -> p1a: Hariyama  [[spread] p1a,p1b]
+      p1a Hariyama fainted
+      after p1: Hariyama 0/429, Cresselia 337/443
+      after p2: Aromatisse 380/405, Abomasnow 0/384
+
+  Turn 2
+      p2b <- Victini comes in (404/404)
+      p1a <- Mawile comes in (304/304)
+      after p1: Mawile 304/304, Cresselia 337/443
+      after p2: Aromatisse 380/405, Victini 404/404
+
+  Turn 3
+    p1 mcts: switch 4, move 2   (slot0 Mawile -> Landorus-Therian)
+      search (20000 visits): switch landorustherian;calmmind,1 875v 670 | switch landorustherian;psyshock,0 769v 581 | switch landorustherian;moonlight,1 723v 543 | switch landorustherian;psyshock,1 613v 451
+    p2 greedy: move 4, move 1 2
+      p1a <- Landorus-Therian comes in (381/381)
+              p2a Aromatisse atk 1 fell
+              p2b Victini atk 1 fell
+      p2b Victini used V-create -> p1b: Cresselia
+              p2b Victini spe 1 fell
+              p2b Victini def 1 fell
+              p2b Victini spd 1 fell
+      p1b Cresselia used Calm Mind
+              p1b Cresselia spa 1 rose
+              p1b Cresselia spd 1 rose
+      p2a Aromatisse used Dazzling Gleam -> p1a: Landorus  [[spread] p1a,p1b]
+      after p1: Landorus-Therian 308/381, Cresselia 184/443
+      after p2: Aromatisse 355/405, Victini 379/404
+
+  Turn 4
+    p1 mcts: move 2, move 3 1
+      search (23000 visits): earthquake,0;psyshock,0 2546v 1407 | earthquake,0;moonlight,1 1322v 685 | earthquake,0;calmmind,1 1028v 516 | earthquake,0;psyshock,1 794v 383
+    p2 greedy: move 4, move 1 2
+      p1a Landorus used Earthquake -> p2a: Aromatisse  [[spread] p2a,p2b]
+              p1b Cresselia -- IMMUNE
+              p2b Victini used up its Shuca Berry
+              p2b Victini used up its Shuca Berry
+              p2a Aromatisse used up its Sitrus Berry
+      p2b Victini used V-create -> p1b: Cresselia
+              p2b Victini spe 1 fell
+              p2b Victini def 1 fell
+              p2b Victini spd 1 fell
+      p1b Cresselia used Psyshock -> p2a: Aromatisse
+      p2a Aromatisse used Dazzling Gleam -> p1a: Landorus  [[spread] p1a,p1b]
+      after p1: Landorus-Therian 224/381, Cresselia 21/443
+      after p2: Aromatisse 85/405, Victini 170/404
+
+  Turn 5
+    p1 mcts: move 4 2, move 4
+      search (35000 visits): uturn,1;moonlight,1 1535v 453 | earthquake,0;moonlight,1 1466v 428 | stoneedge,0;moonlight,1 1215v 341 | uturn,1;psyshock,0 1162v 322
+    p2 greedy: move 4, move 1 2
+      p1a Landorus used U-turn -> p2b: Victini
+      after p1: Landorus-Therian 224/381, Cresselia 21/443
+      after p2: Aromatisse 85/405, Victini 2/404
+
+  Turn 6
+      p1a <- Mawile comes in (304/304)
+      p1b Cresselia used Moonlight
+      p2b Victini used V-create -> p1b: Cresselia
+              p2b Victini spe 1 fell
+              p2b Victini def 1 fell
+              p2b Victini spd 1 fell
+      p2a Aromatisse used Dazzling Gleam -> p1a: Mawile  [[spread] p1a,p1b]
+      p1b Cresselia fainted
+      p2b Victini fainted
+      after p1: Mawile 228/304, Cresselia 0/443
+      after p2: Aromatisse 60/405, Victini 0/404
+
+  Turn 7
+      p2b <- Cresselia comes in (443/443)
+      p1b <- Landorus-Therian comes in (224/381)
+              p2a Aromatisse atk 1 fell
+              p2b Cresselia atk 1 fell
+      after p1: Mawile 228/304, Landorus-Therian 224/381
+      after p2: Aromatisse 60/405, Cresselia 443/443
+
+  Turn 8
+    p1 mcts: move 4, move 4 2
+      search (33000 visits): swordsdance,0;uturn,1 3305v 2216 | swordsdance-mega,0;uturn,1 2535v 1671 | swordsdance,0;uturn,0 1018v 618 | playrough-mega,1;uturn,1 932v 559
+    p2 greedy: move 4, move 4 2
+      p1b Landorus used U-turn -> p2b: Cresselia
+      after p1: Mawile 228/304, Landorus-Therian 224/381
+      after p2: Aromatisse 60/405, Cresselia 303/443
+
+  Turn 9
+      p1b <- Milotic comes in (394/394)
+      p2b Cresselia used Ice Beam -> p1b: Milotic
+      p1a Mawile used Swords Dance
+              p1a Mawile atk 2 rose
+      p2a Aromatisse used Dazzling Gleam -> p1b: Milotic  [[spread] p1a,p1b]
+      after p1: Mawile 172/304, Milotic 299/394
+      after p2: Aromatisse 60/405, Cresselia 303/443
+
+  Turn 10
+    p1 mcts: move 2 2 mega, switch 6   (slot1 Milotic -> Shaymin-Sky)
+      search (26000 visits): playrough-mega,1;switch shayminsky 755v 449 | playrough-mega,1;hydropump,1 730v 432 | playrough-mega,1;switch landorustherian 688v 404 | playrough-mega,1;recover,1 670v 392
+    p2 greedy: move 4, move 4 1
+      p1b <- Shaymin-Sky comes in (341/341)
+      p2b Cresselia used Ice Beam -> p1a: Mawile
+      p1a Mawile used Play Rough -> p2b: Cresselia
+      p2b Cresselia fainted
+      p2a Aromatisse used Dazzling Gleam -> p1b: Shaymin  [[spread] p1a,p1b]
+      after p1: Mawile-Mega 95/304, Shaymin-Sky 247/341
+      after p2: Aromatisse 60/405, Cresselia 0/443
+
+  Turn 11
+      p2b <- Jellicent comes in (403/403)
+      after p1: Mawile-Mega 95/304, Shaymin-Sky 247/341
+      after p2: Aromatisse 60/405, Jellicent 403/403
+
+  Turn 12
+    p1 mcts: move 3 2, move 2 2
+      search (40000 visits): suckerpunch,1;seedflare,1 2312v 1359 | protect,0;seedflare,1 2123v 1238 | swordsdance,0;seedflare,1 2039v 1185 | suckerpunch,1;seedflare,0 1951v 1129
+    p2 greedy: move 4, move 3
+      p1a Mawile used Sucker Punch -> p2b: Jellicent
+      p2b Jellicent fainted
+      p1b Shaymin used Seed Flare -> p2a: Aromatisse
+      p2a Aromatisse fainted
+      after p1: Mawile-Mega 95/304, Shaymin-Sky 247/341
+      after p2: Aromatisse 0/405, Jellicent 0/403
+
+  Turn 13
+      p2a <- Rhyperior comes in (433/433)
+      after p1: Mawile-Mega 95/304, Shaymin-Sky 247/341
+      after p2: Rhyperior 433/433, Jellicent 0/403
+
+  Turn 14
+    p1 mcts: move 4, move 2 1
+      search (101000 visits): swordsdance,0;seedflare,0 20027v 17684 | switch milotic;earthpower,0 10033v 8718 | playrough,0;seedflare,0 9430v 8180 | suckerpunch,0;earthpower,0 8556v 7400
+    p2 greedy: move 1 1, pass
+      p1b Shaymin used Seed Flare -> p2a: Rhyperior
+      p2a Rhyperior fainted
+      after p1: Mawile-Mega 95/304, Shaymin-Sky 247/341
+      after p2: Rhyperior 0/433, Jellicent 0/403
+
+  RESULT: p1 wins

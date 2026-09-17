@@ -1,0 +1,168 @@
+battle 6   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: GarGene Semiroom: Gengar-Mega, Porygon2, Genesect, Volcanion, Conkeldurr, Thundurus
+  p2: ORAS Doubles OU: Aromatisse, Tyranitar-Mega, Scrafty, Gourgeist-Super, Amoonguss, Sylveon
+
+  Turn 1
+    p1 mcts: switch 3, switch 5   (slot0 Gengar-Mega -> Genesect; slot1 Porygon2 -> Conkeldurr)
+      search (13000 visits): switch genesect;switch conkeldurr 334v 141 | switch genesect;icebeam,0 206v 73 | substitute,0;switch conkeldurr 196v 69 | substitute,0;icebeam,0 194v 68
+    p2 greedy: move 1 -2, move 2 1
+      p1a <- Genesect comes in (283/283)
+              p1a Genesect spa 1 rose
+      p1b <- Conkeldurr comes in (414/414)
+      p2a Aromatisse used Helping Hand -> p2b: Tyranitar
+      p2b Tyranitar used Crunch -> p1a: Genesect
+      p1a Genesect fainted
+      after p1: Genesect 0/283, Conkeldurr 389/414
+      after p2: Aromatisse 380/405, Tyranitar-Mega 403/403
+
+  Turn 2
+      p1a <- Gengar-Mega comes in (299/299)
+      after p1: Gengar-Mega 299/299, Conkeldurr 389/414
+      after p2: Aromatisse 380/405, Tyranitar-Mega 403/403
+
+  Turn 3
+    p1 mcts: switch 5, move 2 2   (slot0 Gengar-Mega -> Porygon2)
+      search (17000 visits): switch porygon2;drainpunch,1 2222v 1683 | protect,0;drainpunch,1 924v 652 | substitute,0;drainpunch,1 892v 627 | switch volcanion;drainpunch,1 816v 569
+    p2 greedy: move 1 -2, move 2 2
+      p1a <- Porygon2 comes in (374/374)
+              p1a Porygon2 spa 1 rose
+      p2a Aromatisse used Helping Hand -> p2b: Tyranitar
+      p2b Tyranitar used Crunch -> p1b: Conkeldurr
+      p1b Conkeldurr used Drain Punch -> p2b: Tyranitar
+      p2b Tyranitar fainted
+      after p1: Porygon2 351/374, Conkeldurr 389/414
+      after p2: Aromatisse 355/405, Tyranitar-Mega 0/403
+
+  Turn 4
+      p2b <- Scrafty comes in (331/331)
+              p1a Porygon2 atk 1 fell
+              p1b Conkeldurr atk 1 fell
+      after p1: Porygon2 351/374, Conkeldurr 389/414
+      after p2: Aromatisse 355/405, Scrafty 331/331
+
+  Turn 5
+    p1 mcts: move 3 2, switch 6   (slot1 Conkeldurr -> Thundurus)
+      search (22000 visits): icebeam,1;switch thundurus 479v 369 | icebeam,1;switch volcanion 422v 319 | icebeam,1;switch gengarmega 420v 317 | icebeam,0;drainpunch,1 399v 299
+    p2 greedy: move 1 -2, move 4 1
+      p1b <- Thundurus comes in (362/362)
+      p2a Aromatisse used Helping Hand -> p2b: Scrafty
+      p1a Porygon2 used Ice Beam -> p2b: Scrafty
+      p2b Scrafty used Stone Edge -> p1a: Porygon2
+      after p1: Porygon2 248/374, Thundurus 362/362
+      after p2: Aromatisse 330/405, Scrafty 244/331
+
+  Turn 6
+    p1 mcts: move 3 2, move 1 2
+      search (15000 visits): icebeam,1;thunderbolt,1 412v 285 | thunderbolt,1;thunderbolt,1 406v 281 | recover,0;thunderbolt,1 302v 198 | recover,0;thunderwave,0 269v 172
+    p2 greedy: move 1 -2, move 4 1
+      p2a Aromatisse used Helping Hand -> p2b: Scrafty
+      p1b Thundurus used Thunderbolt -> p2b: Scrafty
+              p2b Scrafty is now par
+      p1a Porygon2 used Ice Beam -> p2b: Scrafty
+              p2b Scrafty COULD NOT MOVE (par)
+      after p1: Porygon2 225/374, Thundurus 362/362
+      after p2: Aromatisse 305/405, Scrafty 75/331
+
+  Turn 7
+    p1 mcts: move 2, move 1 2
+      search (30000 visits): recover,0;thunderbolt,1 1298v 801 | recover,0;thunderwave,0 1166v 711 | recover,0;hiddenpower,1 962v 574 | recover,0;thunderbolt,0 952v 567
+    p2 greedy: move 1 -2, move 4 1
+      p2a Aromatisse used Helping Hand -> p2b: Scrafty
+      p1b Thundurus used Thunderbolt -> p2b: Scrafty
+      p2b Scrafty fainted
+      p1a Porygon2 used Recover
+      after p1: Porygon2 374/374, Thundurus 362/362
+      after p2: Aromatisse 305/405, Scrafty 0/331
+
+  Turn 8
+      p2b <- Gourgeist-Super comes in (373/373)
+      after p1: Porygon2 374/374, Thundurus 362/362
+      after p2: Aromatisse 305/405, Gourgeist-Super 373/373
+
+  Turn 9
+    p1 mcts: move 3 2, move 1 1
+      search (18000 visits): icebeam,1;thunderbolt,0 566v 431 | icebeam,1;thunderwave,0 543v 411 | icebeam,1;thunderbolt,1 437v 322 | icebeam,1;thunderwave,1 407v 296
+    p2 greedy: move 1 -2, move 1 1
+      p2a Aromatisse used Helping Hand -> p2b: Gourgeist
+      p1b Thundurus used Thunderbolt -> p2a: Aromatisse
+              p2a Aromatisse used up its Sitrus Berry
+      p1a Porygon2 used Ice Beam -> p2b: Gourgeist
+              p2b Gourgeist used up its Sitrus Berry
+      p2b Gourgeist used Will-O-Wisp -> p1a: Porygon2
+              p1a Porygon2 is now brn
+      after p1: Porygon2 328/374, Thundurus 362/362
+      after p2: Aromatisse 265/405, Gourgeist-Super 266/373
+
+  Turn 10
+    p1 mcts: move 3 2, move 1 1
+      search (22000 visits): icebeam,1;thunderbolt,0 742v 537 | icebeam,1;thunderwave,0 643v 458 | switch volcanion;thunderbolt,0 530v 367 | icebeam,1;thunderbolt,1 490v 336
+    p2 greedy: move 1 -2, move 1 1
+      p2a Aromatisse used Helping Hand -> p2b: Gourgeist
+      p1b Thundurus used Thunderbolt -> p2a: Aromatisse
+              p2a Aromatisse is now par
+      p1a Porygon2 used Ice Beam -> p2b: Gourgeist
+      p2b Gourgeist used Will-O-Wisp -> p1a: Porygon2
+              p1a Porygon2 -- IT FAILED
+      after p1: Porygon2 282/374, Thundurus 362/362
+      after p2: Aromatisse 124/405, Gourgeist-Super 82/373
+
+  Turn 11
+    p1 mcts: switch 4, move 1 1   (slot0 Porygon2 -> Volcanion)
+      search (36000 visits): switch volcanion;thunderbolt,0 1590v 925 | recover,0;thunderbolt,0 1086v 606 | recover,0;thunderbolt,1 631v 325 | switch volcanion;thunderbolt,1 592v 301
+    p2 greedy: move 1 -2, move 1 1
+      p1a <- Volcanion comes in (364/364)
+      p2a Aromatisse used Helping Hand -> p2b: Gourgeist
+      p1b Thundurus used Thunderbolt -> p2a: Aromatisse
+      p2a Aromatisse fainted
+      p2b Gourgeist used Will-O-Wisp -> p1a: Volcanion
+              p1a Volcanion -- IMMUNE
+      after p1: Volcanion 364/364, Thundurus 362/362
+      after p2: Aromatisse 0/405, Gourgeist-Super 82/373
+
+  Turn 12
+      p2a <- Amoonguss comes in (431/431)
+      after p1: Volcanion 364/364, Thundurus 362/362
+      after p2: Amoonguss 431/431, Gourgeist-Super 82/373
+
+  Turn 13
+    p1 mcts: move 2, move 3 1
+      search (30000 visits): heatwave,0;thunderwave,0 2614v 1548 | heatwave,0;thunderbolt,0 1242v 686 | heatwave,0;switch porygon2 1238v 683 | heatwave,0;thunderbolt,1 1192v 655
+    p2 greedy: move 4 1, move 1 1
+      p1b Thundurus used Thunder Wave -> p2a: Amoonguss
+              p2a Amoonguss is now par
+      p1a Volcanion used Heat Wave -> p2a: Amoonguss  [[spread] p2a,p2b]
+              p2a Amoonguss used up its Sitrus Berry
+      p2b Gourgeist fainted
+      p2a Amoonguss used Foul Play -> p1a: Volcanion
+      after p1: Volcanion 307/364, Thundurus 362/362
+      after p2: Amoonguss 320/431, Gourgeist-Super 0/373
+
+  Turn 14
+      p2b <- Sylveon comes in (345/345)
+      after p1: Volcanion 307/364, Thundurus 362/362
+      after p2: Amoonguss 320/431, Sylveon 345/345
+
+  Turn 15
+    p1 mcts: move 2, move 1 2
+      search (6000 visits): heatwave,0;thunderbolt,1 134v 87 | heatwave,0;switch porygon2 126v 80 | heatwave,0;thunderwave,1 116v 72 | heatwave,0;hiddenpower,1 100v 59
+    p2 greedy: move 4 1, move 1
+      p1b Thundurus used Thunderbolt -> p2b: Sylveon
+      p1a Volcanion used Heat Wave -> p2a: Amoonguss  [[spread] p2a,p2b]
+      p2b Sylveon used Hyper Voice -> p1b: Thundurus  [[spread] p1a,p1b]
+              p2a Amoonguss COULD NOT MOVE (par)
+      after p1: Volcanion 220/364, Thundurus 159/362
+      after p2: Amoonguss 98/431, Sylveon 88/345
+
+  Turn 16
+    p1 mcts: move 2, switch 4   (slot1 Thundurus -> Porygon2)
+      search (36000 visits): heatwave,0;switch porygon2 1789v 1520 | heatwave,0;thunderbolt,1 1621v 1368 | heatwave,0;switch gengarmega 1458v 1222 | earthpower,0;thunderbolt,1 1316v 1094
+    p2 greedy: move 4 2, move 1
+      p1b <- Porygon2 comes in (282/374)
+              p1b Porygon2 atk 1 rose
+      p1a Volcanion used Heat Wave -> p2a: Amoonguss  [[spread] p2a,p2b]
+      p2a Amoonguss fainted
+      p2b Sylveon fainted
+      after p1: Volcanion 220/364, Porygon2 282/374
+      after p2: Amoonguss 0/431, Sylveon 0/345
+
+  RESULT: p1 wins

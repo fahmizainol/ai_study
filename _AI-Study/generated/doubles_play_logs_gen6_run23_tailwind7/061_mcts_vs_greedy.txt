@@ -1,0 +1,90 @@
+battle 61   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: ORAS Doubles OU: Thundurus, Mienshao, Talonflame, Aerodactyl, Sylveon, Heatran
+  p2: Untitled 294: Diancie-Mega, Terrakion, Talonflame, Bisharp, Kyurem-Black, Gastrodon-East
+
+  Turn 1
+    p1 mcts: move 3 2, move 3 2
+      search (15000 visits): thunderbolt,1;highjumpkick,1 241v 93 | thunderbolt,0;highjumpkick,0 224v 84 | thunderbolt,0;highjumpkick,1 203v 73 | switch sylveon;switch heatran 203v 73
+    p2 greedy: move 1, move 3 1
+      p2a Diancie used Diamond Storm -> p1a: Thundurus  [[spread] p1a,p1b]
+              p2a Diancie def 1 rose
+      p2b Terrakion used Close Combat -> p1a: Thundurus
+              p2b Terrakion def 1 fell
+              p2b Terrakion spd 1 fell
+      p1a Thundurus fainted
+      p1b Mienshao used High Jump Kick -> p2b: Terrakion  [[miss]]
+              p1b Mienshao -- MISSED
+      after p1: Thundurus 0/362, Mienshao 60/324
+      after p2: Diancie-Mega 304/304, Terrakion 323/323
+
+  Turn 2
+      p1a <- Talonflame comes in (318/318)
+      after p1: Talonflame 318/318, Mienshao 60/324
+      after p2: Diancie-Mega 304/304, Terrakion 323/323
+
+  Turn 3
+    p1 mcts: switch 5, switch 6   (slot0 Talonflame -> Sylveon; slot1 Mienshao -> Heatran)
+      search (19000 visits): switch sylveon;switch heatran 692v 269 | bravebird,1;highjumpkick,1 328v 102 | bravebird,1;uturn,0 315v 97 | protect,0;highjumpkick,1 312v 95
+    p2 greedy: move 1, move 3 2
+      p1b <- Heatran comes in (329/329)
+      p1a <- Sylveon comes in (392/392)
+      p2a Diancie used Diamond Storm -> p1b: Heatran  [[spread] p1a,p1b]
+              p2a Diancie def 1 rose
+      p2b Terrakion used Close Combat -> p1b: Heatran
+              p2b Terrakion def 1 fell
+              p2b Terrakion spd 1 fell
+      p1b Heatran fainted
+      after p1: Sylveon 197/392, Heatran 0/329
+      after p2: Diancie-Mega 304/304, Terrakion 323/323
+
+  Turn 4
+      p1b <- Aerodactyl comes in (302/302)
+      after p1: Sylveon 197/392, Aerodactyl 302/302
+      after p2: Diancie-Mega 304/304, Terrakion 323/323
+
+  Turn 5
+    p1 mcts: move 1, move 4 1 mega
+      search (19000 visits): hypervoice,0;ironhead-mega,0 373v 129 | hypervoice,0;ironhead,0 303v 97 | hiddenpower,0;ironhead-mega,0 278v 86 | hypervoice,0;ironhead,1 228v 64
+    p2 greedy: move 1, move 3 1
+      p1b Aerodactyl used Iron Head -> p2a: Diancie
+      p2a Diancie used Diamond Storm -> p1a: Sylveon  [[spread] p1a,p1b]
+      p1b Aerodactyl fainted
+      p2b Terrakion used Close Combat -> p1a: Sylveon
+              p2b Terrakion def 1 fell
+              p2b Terrakion spd 1 fell
+      p1a Sylveon fainted
+      after p1: Sylveon 0/392, Aerodactyl 0/302
+      after p2: Diancie-Mega 92/304, Terrakion 323/323
+
+  Turn 6
+      p1b <- Mienshao comes in (60/324)
+      p1a <- Talonflame comes in (318/318)
+      after p1: Talonflame 318/318, Mienshao 60/324
+      after p2: Diancie-Mega 92/304, Terrakion 323/323
+
+  Turn 7
+    p1 mcts: move 4, move 4
+      search (26000 visits): tailwind,0;detect,1 5493v 1549 | bravebird,1;detect,1 1097v 227 | protect,0;uturn,1 821v 152 | bravebird,1;fakeout,1 800v 147
+    p2 greedy: move 1, move 3 2
+      p1b Mienshao used Detect
+      p1a Talonflame used Tailwind
+      -sidestart p1: A move: Tailwind
+      p2a Diancie used Diamond Storm -> p1a: Talonflame  [[spread] p1a]
+              p1b Mienshao -- move: Protect
+      p1a Talonflame fainted
+      p2b Terrakion used Close Combat -> p1b: Mienshao
+              p1b Mienshao -- move: Protect
+      after p1: Talonflame 0/318, Mienshao 60/324
+      after p2: Diancie-Mega 92/304, Terrakion 323/323
+
+  Turn 8
+    p1 mcts: pass, move 2 1
+      search (35000 visits): No Move;uturn,0 13240v 5717 | No Move;uturn,1 11133v 4767 | No Move;detect,1 9678v 4114 | No Move;highjumpkick,1 314v 67
+    p2 greedy: move 1, move 3 2
+      p1b Mienshao used U-turn -> p2a: Diancie
+      p2a Diancie used Diamond Storm -> p1b: Mienshao
+      p1b Mienshao fainted
+      after p1: Talonflame 0/318, Mienshao 0/324
+      after p2: Diancie-Mega 79/304, Terrakion 323/323
+
+  RESULT: p2 wins

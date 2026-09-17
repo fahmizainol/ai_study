@@ -1,0 +1,204 @@
+battle 58   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: ORAS Doubles OU: Diancie-Mega, Keldeo-Resolute, Serperior, Talonflame, Aegislash, Hydreigon
+  p2: ORAS Doubles OU: Gengar-Mega, Rotom-Wash, Sylveon, Scrafty, Latios, Heatran
+
+  Turn 1
+    p1 mcts: move 4, move 2 2
+      search (15000 visits): protect,0;secretsword,1 1366v 817 | protect,0;protect,1 1112v 651 | diamondstorm,0;protect,1 1073v 625 | diamondstorm,0;secretsword,1 836v 472
+    p2 greedy: move 2 1, move 3 1
+      p1a Diancie used Protect
+      p2a Gengar used Sludge Bomb -> p1a: Diancie
+              p1a Diancie -- move: Protect
+      p1b Keldeo used Secret Sword -> p2b: Rotom
+              p2b Rotom used up its Sitrus Berry
+      p2b Rotom used Hydro Pump -> p1a: Diancie
+              p1a Diancie -- move: Protect
+      after p1: Diancie-Mega 241/241, Keldeo-Resolute 292/324
+      after p2: Gengar-Mega 261/261, Rotom-Wash 197/304
+
+  Turn 2
+    p1 mcts: move 1, move 2 2
+      search (20000 visits): diamondstorm,0;secretsword,1 3640v 2276 | protect,0;protect,1 1570v 921 | moonblast,1;secretsword,1 1521v 889 | diamondstorm,0;protect,1 1103v 623
+    p2 greedy: move 2 2, move 3 2
+      p2a Gengar used Sludge Bomb -> p1b: Keldeo
+      p1a Diancie used Diamond Storm -> p2b: Rotom  [[spread] p2a,p2b]
+              p1a Diancie def 1 rose
+      p1b Keldeo used Secret Sword -> p2b: Rotom
+      p2b Rotom fainted
+      after p1: Diancie-Mega 241/241, Keldeo-Resolute 31/324
+      after p2: Gengar-Mega 86/261, Rotom-Wash 0/304
+
+  Turn 3
+      p2b <- Sylveon comes in (375/375)
+      after p1: Diancie-Mega 241/241, Keldeo-Resolute 31/324
+      after p2: Gengar-Mega 86/261, Sylveon 375/375
+
+  Turn 4
+    p1 mcts: move 4, move 1 2
+      search (28000 visits): protect,0;hydropump,1 3077v 1707 | protect,0;secretsword,1 2710v 1489 | protect,0;protect,1 2181v 1176 | protect,0;hydropump,0 1898v 1010
+    p2 greedy: move 2 2, move 1
+      p1a Diancie used Protect
+      p2a Gengar used Sludge Bomb -> p1b: Keldeo
+      p1b Keldeo fainted
+      p2b Sylveon used Hyper Voice -> p1a: Diancie
+              p1a Diancie -- move: Protect
+      after p1: Diancie-Mega 241/241, Keldeo-Resolute 0/324
+      after p2: Gengar-Mega 86/261, Sylveon 375/375
+
+  Turn 5
+      p1b <- Serperior comes in (291/291)
+      after p1: Diancie-Mega 241/241, Serperior 291/291
+      after p2: Gengar-Mega 86/261, Sylveon 375/375
+
+  Turn 6
+    p1 mcts: move 1, move 1 1
+      search (25000 visits): diamondstorm,0;leafstorm,0 2529v 1482 | protect,0;protect,1 2471v 1445 | protect,0;leafstorm,0 2106v 1216 | protect,0;leafstorm,1 2012v 1157
+    p2 greedy: move 2 1, move 1
+      p2a Gengar used Sludge Bomb -> p1a: Diancie
+      p1b Serperior used Leaf Storm -> p2a: Gengar
+              p1b Serperior spa 2 rose
+      p1a Diancie used Diamond Storm -> p2b: Sylveon  [[spread] p2a,p2b]
+              p2b Sylveon -- critical hit
+              p1a Diancie def 1 rose
+      p2a Gengar fainted
+      p2b Sylveon used Hyper Voice -> p1b: Serperior  [[spread] p1a,p1b]
+      p1a Diancie fainted
+      after p1: Diancie-Mega 0/241, Serperior 114/291
+      after p2: Gengar-Mega 0/261, Sylveon 74/375
+
+  Turn 7
+      p2a <- Scrafty comes in (333/333)
+      p1a <- Talonflame comes in (297/297)
+              p1a Talonflame atk 1 fell
+              p1b Serperior atk 1 rose
+      after p1: Talonflame 297/297, Serperior 114/291
+      after p2: Scrafty 333/333, Sylveon 74/375
+
+  Turn 8
+    p1 mcts: switch 5, move 4   (slot0 Talonflame -> Aegislash)
+      search (34000 visits): switch aegislash;protect,1 4407v 1792 | bravebird,1;protect,1 3561v 1419 | protect,0;protect,1 2636v 1017 | tailwind,0;protect,1 1368v 481
+    p2 greedy: move 3 2, move 1
+      p1a <- Aegislash comes in (324/324)
+      p1b Serperior used Protect
+      p2b Sylveon used Hyper Voice -> p1a: Aegislash  [[spread] p1a]
+              p1b Serperior -- move: Protect
+      p2a Scrafty used Drain Punch -> p1b: Serperior
+              p1b Serperior -- move: Protect
+      after p1: Aegislash 264/324, Serperior 114/291
+      after p2: Scrafty 333/333, Sylveon 74/375
+
+  Turn 9
+    p1 mcts: move 2 2, move 4
+      search (34000 visits): flashcannon,1;protect,1 3655v 1491 | shadowball,1;protect,1 3028v 1213 | shadowsneak,1;protect,1 1514v 554 | shadowball,0;protect,1 1376v 495
+    p2 greedy: move 3 2, move 1
+      p1b Serperior used Protect
+      p2b Sylveon used Hyper Voice -> p1a: Aegislash  [[spread] p1a]
+              p1b Serperior -- move: Protect
+      p2a Scrafty used Drain Punch -> p1b: Serperior
+              p1b Serperior -- move: Protect
+      p1a Aegislash used Flash Cannon -> p2b: Sylveon
+      p2b Sylveon fainted
+      after p1: Aegislash-Blade 165/324, Serperior 114/291
+      after p2: Scrafty 333/333, Sylveon 0/375
+
+  Turn 10
+      p2b <- Latios comes in (301/301)
+      after p1: Aegislash-Blade 165/324, Serperior 114/291
+      after p2: Scrafty 333/333, Latios 301/301
+
+  Turn 11
+    p1 mcts: move 4 2, move 4
+      search (34000 visits): shadowsneak,1;protect,1 2137v 661 | flashcannon,1;protect,1 1609v 474 | shadowball,1;protect,1 1557v 455 | switch hydreigon;protect,1 1005v 265
+    p2 greedy: move 3 2, move 1 2
+      p1b Serperior used Protect  [[still]]
+              p1b Serperior -- IT FAILED
+      p1a Aegislash used Shadow Sneak -> p2b: Latios
+      p2b Latios used Draco Meteor -> p1b: Serperior
+              p1b Serperior -- critical hit
+              p2b Latios spa 2 fell
+      p1b Serperior fainted
+      p2a Scrafty used Drain Punch -> p1a: Aegislash
+              p1a Aegislash -- IMMUNE
+      after p1: Aegislash-Blade 133/324, Serperior 0/291
+      after p2: Scrafty 333/333, Latios 60/301
+
+  Turn 12
+      p1b <- Talonflame comes in (297/297)
+      after p1: Aegislash-Blade 133/324, Talonflame 297/297
+      after p2: Scrafty 333/333, Latios 60/301
+
+  Turn 13
+    p1 mcts: move 4 2, move 4
+      search (26000 visits): shadowsneak,1;protect,1 959v 252 | shadowsneak,1;tailwind,1 787v 195 | shadowball,1;protect,1 781v 193 | kingsshield,0;protect,1 719v 173
+    p2 greedy: move 3 1, move 1 1
+      p1b Talonflame used Protect
+      p1a Aegislash used Shadow Sneak -> p2b: Latios
+      p2b Latios fainted
+      p2a Scrafty used Drain Punch -> p1a: Aegislash
+              p1a Aegislash -- IMMUNE
+      after p1: Aegislash-Blade 101/324, Talonflame 297/297
+      after p2: Scrafty 333/333, Latios 0/301
+
+  Turn 14
+      p2b <- Heatran comes in (324/324)
+      after p1: Aegislash-Blade 101/324, Talonflame 297/297
+      after p2: Scrafty 333/333, Heatran 324/324
+
+  Turn 15
+    p1 mcts: switch 6, move 4   (slot0 Aegislash-Blade -> Hydreigon)
+      search (33000 visits): switch hydreigon;protect,1 1796v 469 | shadowsneak,1;protect,1 1656v 425 | shadowball,1;protect,1 1170v 275 | flashcannon,1;protect,1 1021v 231
+    p2 greedy: move 3 1, move 2
+      p1a <- Hydreigon comes in (358/358)
+      p1b Talonflame used Protect
+      p2b Heatran used Heat Wave -> p1a: Hydreigon  [[spread] p1a]
+              p1b Talonflame -- move: Protect
+      p2a Scrafty used Drain Punch -> p1a: Hydreigon
+      after p1: Hydreigon 60/358, Talonflame 297/297
+      after p2: Scrafty 333/333, Heatran 324/324
+
+  Turn 16
+    p1 mcts: move 2 2, move 4
+      search (25000 visits): darkpulse,1;protect,1 880v 158 | protect,0;protect,1 845v 149 | dracometeor,1;protect,1 687v 110 | protect,0;tailwind,1 663v 104
+    p2 greedy: move 3 1, move 2
+      p1b Talonflame used Protect  [[still]]
+              p1b Talonflame -- IT FAILED
+      p2b Heatran used Heat Wave -> p1b: Talonflame  [[spread] p1a,p1b]
+      p1a Hydreigon fainted
+      p2a Scrafty used Drain Punch -> p1b: Talonflame
+      after p1: Hydreigon 0/358, Talonflame 142/297
+      after p2: Scrafty 333/333, Heatran 324/324
+
+  Turn 17
+      p1a <- Aegislash comes in (101/324)
+      after p1: Aegislash 101/324, Talonflame 142/297
+      after p2: Scrafty 333/333, Heatran 324/324
+
+  Turn 18
+    p1 mcts: move 4 2, move 4
+      search (42000 visits): shadowsneak,1;protect,1 2417v 310 | shadowball,1;protect,1 2276v 286 | flashcannon,0;protect,1 2151v 264 | flashcannon,1;protect,1 2084v 253
+    p2 greedy: move 3 1, move 2
+      p1b Talonflame used Protect
+      p1a Aegislash used Shadow Sneak -> p2b: Heatran
+      p2b Heatran used Heat Wave -> p1a: Aegislash  [[spread] ]
+              p1b Talonflame -- move: Protect
+              p2b Heatran -- MISSED
+      p2a Scrafty used Drain Punch -> p1a: Aegislash
+              p1a Aegislash -- IMMUNE
+      after p1: Aegislash-Blade 69/324, Talonflame 142/297
+      after p2: Scrafty 333/333, Heatran 237/324
+
+  Turn 19
+    p1 mcts: move 4 2, move 4
+      search (51000 visits): shadowsneak,1;protect,1 5540v 875 | shadowball,1;protect,1 3403v 479 | flashcannon,0;protect,1 2716v 356 | shadowball,0;protect,1 2583v 333
+    p2 greedy: move 3 1, move 2
+      p1b Talonflame used Protect  [[still]]
+              p1b Talonflame -- IT FAILED
+      p1a Aegislash used Shadow Sneak -> p2b: Heatran
+      p2b Heatran used Heat Wave -> p1a: Aegislash  [[spread] p1a,p1b]
+      p1a Aegislash fainted
+      p2a Scrafty used Drain Punch -> p1b: Talonflame
+      p1b Talonflame fainted
+      after p1: Aegislash 0/324, Talonflame 0/297
+      after p2: Scrafty 333/333, Heatran 154/324
+
+  RESULT: p2 wins

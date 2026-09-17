@@ -1,0 +1,133 @@
+battle 103   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: shroom diancie ltv: Diancie-Mega, Volcanion, Thundurus, Landorus-Therian, Amoonguss, Genesect
+  p2: dpl rejects/sub aegi week 4 reject: Gengar-Mega, Shaymin-Sky, Hydreigon, Volcanion, Aegislash, Landorus-Therian
+
+  Turn 1
+    p1 mcts: move 1, move 1
+      search (10000 visits): diamondstorm,0;heatwave,0 1008v 737 | protect,0;heatwave,0 827v 594 | diamondstorm,0;earthpower,0 508v 343 | diamondstorm,0;steameruption,0 493v 332
+    p2 greedy: move 2 1, move 2 1
+      p2a Gengar used Sludge Bomb -> p1a: Diancie
+              p1a Diancie is now psn
+      p2b Shaymin used Seed Flare -> p1a: Diancie
+      p1a Diancie fainted
+      p1b Volcanion used Heat Wave -> p2b: Shaymin  [[spread] p2a,p2b]
+      after p1: Diancie-Mega 0/301, Volcanion 363/363
+      after p2: Gengar-Mega 130/262, Shaymin-Sky 3/341
+
+  Turn 2
+      p1a <- Thundurus comes in (361/361)
+      after p1: Thundurus 361/361, Volcanion 363/363
+      after p2: Gengar-Mega 130/262, Shaymin-Sky 3/341
+
+  Turn 3
+    p1 mcts: move 3 1, move 1
+      search (12000 visits): thunderwave,0;heatwave,0 530v 310 | thunderbolt,0;heatwave,0 480v 276 | thunderbolt,1;steameruption,0 453v 258 | thunderbolt,1;heatwave,0 388v 215
+    p2 greedy: move 2 1, move 2 1
+      p1a Thundurus used Thunder Wave -> p2a: Gengar
+              p2a Gengar is now par
+      p2a Gengar used Sludge Bomb -> p1a: Thundurus
+              p1a Thundurus used up its Sitrus Berry
+      p2b Shaymin used Seed Flare -> p1a: Thundurus  [[miss]]
+              p2b Shaymin -- MISSED
+      p1b Volcanion used Heat Wave -> p2b: Shaymin  [[spread] p2a,p2b]
+      p2a Gengar fainted
+      p2b Shaymin fainted
+      after p1: Thundurus 217/361, Volcanion 363/363
+      after p2: Gengar-Mega 0/262, Shaymin-Sky 0/341
+
+  Turn 4
+      p2a <- Hydreigon comes in (325/325)
+      p2b <- Volcanion comes in (343/343)
+      after p1: Thundurus 217/361, Volcanion 363/363
+      after p2: Hydreigon 325/325, Volcanion 343/343
+
+  Turn 5
+    p1 mcts: move 1 2, move 2 1
+      search (11000 visits): thunderbolt,1;steameruption,0 347v 224 | thunderbolt,1;heatwave,0 284v 177 | thunderbolt,1;switch landorustherian 253v 153 | thunderbolt,1;switch genesect 213v 124
+    p2 greedy: move 1 1, move 1 1
+      p1a Thundurus used Thunderbolt -> p2b: Volcanion
+              p2b Volcanion is now par
+      p2a Hydreigon used Draco Meteor -> p1a: Thundurus
+              p2a Hydreigon spa 2 fell
+      p1a Thundurus fainted
+      p2b Volcanion used Steam Eruption -> p1b: Volcanion
+              p1b Volcanion -- IMMUNE
+      p1b Volcanion used Steam Eruption -> p2a: Hydreigon
+              p2a Hydreigon is now brn
+      after p1: Thundurus 0/361, Volcanion 363/363
+      after p2: Hydreigon 136/325, Volcanion 83/343
+
+  Turn 6
+      p1a <- Landorus-Therian comes in (382/382)
+              p2a Hydreigon atk 1 fell
+              p2b Volcanion atk 1 fell
+      after p1: Landorus-Therian 382/382, Volcanion 363/363
+      after p2: Hydreigon 136/325, Volcanion 83/343
+
+  Turn 7
+    p1 mcts: switch 6, move 1   (slot0 Landorus-Therian -> Genesect)
+      search (22000 visits): switch genesect;heatwave,0 528v 126 | switch genesect;earthpower,1 516v 122 | uturn,1;switch genesect 512v 121 | switch genesect;steameruption,0 512v 121
+    p2 greedy: move 1 1, move 1 1
+      p1a <- Genesect comes in (283/283)
+              p1a Genesect spa 1 rose
+      p2a Hydreigon used Draco Meteor -> p1a: Genesect
+              p2a Hydreigon spa 2 fell
+      p1b Volcanion used Heat Wave -> p2b: Volcanion  [[spread] p2a,p2b]
+      p2b Volcanion used Steam Eruption -> p1a: Genesect  [[miss]]
+              p2b Volcanion -- MISSED
+      p2a Hydreigon fainted
+      after p1: Genesect 210/283, Volcanion 363/363
+      after p2: Hydreigon 0/325, Volcanion 47/343
+
+  Turn 8
+      p2a <- Aegislash comes in (324/324)
+      after p1: Genesect 210/283, Volcanion 363/363
+      after p2: Aegislash 324/324, Volcanion 47/343
+
+  Turn 9
+    p1 mcts: move 3 1, move 2 1
+      search (14000 visits): uturn,0;steameruption,0 463v 222 | uturn,0;heatwave,0 377v 173 | uturn,0;switch landorustherian 377v 173 | blazekick,0;heatwave,0 370v 168
+    p2 greedy: move 1 1, move 1 1
+      p1a Genesect used U-turn -> p2a: Aegislash
+      after p1: Genesect 210/283, Volcanion 363/363
+      after p2: Aegislash 294/324, Volcanion 47/343
+
+  Turn 10
+      p1a <- Amoonguss comes in (432/432)
+      p1b Volcanion used Steam Eruption -> p2a: Aegislash
+      p2a Aegislash used Shadow Ball -> p1a: Amoonguss
+              p2b Volcanion COULD NOT MOVE (par)
+      after p1: Amoonguss 240/432, Volcanion 363/363
+      after p2: Aegislash-Blade 166/324, Volcanion 47/343
+
+  Turn 11
+    p1 mcts: move 1 2, move 2 1
+      search (17000 visits): energyball,1;steameruption,0 742v 410 | switch genesect;heatwave,0 628v 338 | spore,0;heatwave,0 531v 278 | energyball,1;earthpower,0 496v 256
+    p2 greedy: move 1 1, move 1 1
+      p1b Volcanion used Steam Eruption -> p2a: Aegislash
+      p2a Aegislash fainted
+      p1a Amoonguss used Energy Ball -> p2b: Volcanion
+      p2b Volcanion fainted
+      after p1: Amoonguss 240/432, Volcanion 363/363
+      after p2: Aegislash 0/324, Volcanion 0/343
+
+  Turn 12
+      p2a <- Landorus-Therian comes in (319/319)
+              p1a Amoonguss atk 1 fell
+              p1b Volcanion atk 1 fell
+      after p1: Amoonguss 240/432, Volcanion 363/363
+      after p2: Landorus-Therian 319/319, Volcanion 0/343
+
+  Turn 13
+    p1 mcts: move 1 1, move 4 1
+      search (136000 visits): energyball,0;overheat,0 111541v 107797 | protect,0;heatwave,0 8757v 8175 | spore,0;overheat,0 3328v 2986 | switch landorustherian;steameruption,0 2782v 2447
+    p2 greedy: move 3, pass
+      p2a Landorus used Earthquake -> p1b: Volcanion  [[spread] p1a,p1b]
+      p1b Volcanion used Overheat -> p2a: Landorus
+              p1b Volcanion spa 2 fell
+      p1a Amoonguss used Energy Ball -> p2a: Landorus
+      p2a Landorus fainted
+      after p1: Amoonguss 99/432, Volcanion 121/363
+      after p2: Landorus-Therian 0/319, Volcanion 0/343
+
+  RESULT: p1 wins

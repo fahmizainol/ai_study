@@ -1,0 +1,182 @@
+battle 0   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: ORAS Doubles OU: Metagross, Breloom, Rotom-Wash, Landorus-Therian, Talonflame, Hydreigon
+  p2: cb chu: Kangaskhan-Mega, Volcanion, Raichu, Bisharp, Cresselia, Landorus-Therian
+
+  Turn 1
+    p1 mcts: switch 3, move 3 1   (slot0 Metagross -> Rotom-Wash)
+      search (35000 visits): switch rotomwash;spore,0 987v 436 | switch rotomwash;protect,1 824v 353 | switch rotomwash;spore,1 379v 134 | switch rotomwash;bulletseed,1 356v 123
+    p2 greedy: move 1 1, move 1 1
+      p1a <- Rotom-Wash comes in (304/304)
+      p2a Kangaskhan used Fake Out -> p1a: Rotom
+      p1b Breloom used Spore -> p2a: Kangaskhan
+              p2a Kangaskhan is now slp
+      p2b Volcanion used Steam Eruption -> p1a: Rotom
+              p1a Rotom used up its Sitrus Berry
+      after p1: Rotom-Wash 213/304, Breloom 261/261
+      after p2: Kangaskhan-Mega 414/414, Volcanion 363/363
+
+  Turn 2
+    p1 mcts: move 2 2, move 2 2
+      search (12000 visits): thunderbolt,1;bulletseed,1 378v 287 | thunderbolt,1;bulletseed,0 246v 174 | hydropump,0;switch landorustherian 230v 160 | thunderbolt,1;switch landorustherian 207v 141
+    p2 greedy: move 1 1, move 1 1
+              p2a Kangaskhan COULD NOT MOVE (slp)
+      p1b Breloom used Bullet Seed -> p2b: Volcanion
+      p1a Rotom used Thunderbolt -> p2b: Volcanion
+      p2b Volcanion used Steam Eruption -> p1a: Rotom
+              p1a Rotom -- critical hit
+      after p1: Rotom-Wash 84/304, Breloom 261/261
+      after p2: Kangaskhan-Mega 414/414, Volcanion 29/363
+
+  Turn 3
+    p1 mcts: move 2 2, move 2 1
+      search (19000 visits): thunderbolt,1;bulletseed,0 428v 293 | hydropump,0;bulletseed,1 414v 282 | switch landorustherian;bulletseed,1 393v 265 | thunderbolt,1;machpunch,0 366v 244
+    p2 greedy: move 1 1, move 1 1
+              p2a Kangaskhan COULD NOT MOVE (slp)
+      p1b Breloom used Bullet Seed -> p2a: Kangaskhan
+      p1a Rotom used Thunderbolt -> p2b: Volcanion
+      p2b Volcanion fainted
+      after p1: Rotom-Wash 84/304, Breloom 261/261
+      after p2: Kangaskhan-Mega 215/414, Volcanion 0/363
+
+  Turn 4
+      p2b <- Raichu comes in (261/261)
+      after p1: Rotom-Wash 84/304, Breloom 261/261
+      after p2: Kangaskhan-Mega 215/414, Raichu 261/261
+
+  Turn 5
+    p1 mcts: switch 4, move 2 2   (slot0 Rotom-Wash -> Landorus-Therian)
+      search (39000 visits): switch landorustherian;bulletseed,1 2437v 1151 | thunderbolt,1;bulletseed,1 992v 416 | thunderbolt,0;bulletseed,1 967v 404 | willowisp,1;bulletseed,1 945v 393
+    p2 greedy: move 1 1, move 1 1
+      p1a <- Landorus-Therian comes in (330/330)
+              p2a Kangaskhan atk 1 fell
+              p2b Raichu atk 1 fell
+              p2a Kangaskhan is cured of slp
+      p2a Kangaskhan used Fake Out  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p2b Raichu used Volt Tackle -> p1a: Landorus
+              p1a Landorus -- IMMUNE
+      p1b Breloom used Bullet Seed -> p2b: Raichu
+      after p1: Landorus-Therian 330/330, Breloom 261/261
+      after p2: Kangaskhan-Mega 215/414, Raichu 44/261
+
+  Turn 6
+    p1 mcts: switch 4, move 3 1   (slot0 Landorus-Therian -> Rotom-Wash)
+      search (34000 visits): switch rotomwash;spore,0 402v 88 | earthquake,0;spore,0 396v 86 | earthquake,0;bulletseed,0 393v 85 | earthquake,0;protect,1 391v 85
+    p2 greedy: move 1 1, move 1 1
+      p1a <- Rotom-Wash comes in (84/304)
+      p2a Kangaskhan used Fake Out  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p2b Raichu used Volt Tackle -> p1a: Rotom
+              p1a Rotom -- critical hit
+      p1a Rotom fainted
+      p1b Breloom used Spore -> p2a: Kangaskhan
+              p2a Kangaskhan is now slp
+      after p1: Rotom-Wash 0/304, Breloom 261/261
+      after p2: Kangaskhan-Mega 215/414, Raichu 16/261
+
+  Turn 7
+      p1a <- Metagross comes in (305/305)
+      after p1: Metagross 305/305, Breloom 261/261
+      after p2: Kangaskhan-Mega 215/414, Raichu 16/261
+
+  Turn 8
+    p1 mcts: switch 4, switch 6   (slot0 Metagross -> Landorus-Therian; slot1 Breloom -> Hydreigon)
+      search (29000 visits): switch landorustherian;switch hydreigon 296v 66 | zenheadbutt,1;switch hydreigon 285v 62 | ironhead,1;switch hydreigon 283v 61 | ironhead-mega,1;switch hydreigon 279v 60
+    p2 greedy: move 1 1, move 1 1
+      p1a <- Landorus-Therian comes in (330/330)
+              p2a Kangaskhan atk 1 fell
+              p2b Raichu atk 1 fell
+      p1b <- Hydreigon comes in (379/379)
+              p2a Kangaskhan COULD NOT MOVE (slp)
+      p2b Raichu used Volt Tackle -> p1a: Landorus
+              p1a Landorus -- IMMUNE
+      after p1: Landorus-Therian 330/330, Hydreigon 379/379
+      after p2: Kangaskhan-Mega 215/414, Raichu 16/261
+
+  Turn 9
+    p1 mcts: move 1, move 2 1
+      search (33000 visits): earthquake,0;darkpulse,0 430v 17 | stoneedge,0;darkpulse,1 429v 17 | earthquake,0;darkpulse,1 424v 16 | stoneedge,0;darkpulse,0 424v 16
+    p2 greedy: move 1 1, move 1 1
+              p2a Kangaskhan is cured of slp
+      p2a Kangaskhan used Fake Out  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p1a Landorus used Earthquake -> p2a: Kangaskhan  [[spread] p2a,p2b]
+              p1b Hydreigon -- IMMUNE
+      p2b Raichu fainted
+      p1b Hydreigon used Dark Pulse -> p2a: Kangaskhan
+      p2a Kangaskhan fainted
+      after p1: Landorus-Therian 330/330, Hydreigon 342/379
+      after p2: Kangaskhan-Mega 0/414, Raichu 0/261
+
+  Turn 10
+      p2b <- Cresselia comes in (410/410)
+      p2a <- Bisharp comes in (272/272)
+      after p1: Landorus-Therian 330/330, Hydreigon 342/379
+      after p2: Bisharp 272/272, Cresselia 410/410
+
+  Turn 11
+    p1 mcts: switch 4, move 2 2   (slot0 Landorus-Therian -> Metagross)
+      search (22000 visits): switch metagross;darkpulse,1 5289v 3054 | earthquake,0;darkpulse,1 2157v 1171 | switch breloom;darkpulse,1 2003v 1080 | switch talonflame;darkpulse,1 1438v 752
+    p2 greedy: move 2 2, move 3 2
+      p1a <- Metagross comes in (305/305)
+      p2a Bisharp used Sucker Punch -> p1b: Hydreigon
+      p1b Hydreigon used Dark Pulse -> p2b: Cresselia
+      p2b Cresselia used Psychic -> p1b: Hydreigon
+              p1b Hydreigon -- IMMUNE
+      after p1: Metagross 305/305, Hydreigon 206/379
+      after p2: Bisharp 245/272, Cresselia 137/410
+
+  Turn 12
+    p1 mcts: move 3 mega, move 2 2
+      search (23000 visits): substitute-mega,0;darkpulse,1 564v 283 | switch breloom;darkpulse,1 537v 267 | substitute,0;darkpulse,1 452v 216 | protect,0;darkpulse,1 395v 183
+    p2 greedy: move 2 2, move 3 2
+      p2a Bisharp used Sucker Punch -> p1b: Hydreigon
+      p1b Hydreigon used Dark Pulse -> p2b: Cresselia
+      p2b Cresselia fainted
+      p1a Metagross used Substitute
+              p1a Metagross gained Substitute
+      after p1: Metagross-Mega 229/305, Hydreigon 68/379
+      after p2: Bisharp 218/272, Cresselia 0/410
+
+  Turn 13
+      p2b <- Landorus-Therian comes in (382/382)
+              p1a Metagross -- IMMUNE
+              p1b Hydreigon atk 1 fell
+      after p1: Metagross-Mega 229/305, Hydreigon 68/379
+      after p2: Bisharp 218/272, Landorus-Therian 382/382
+
+  Turn 14
+    p1 mcts: move 1 2, move 1 2
+      search (30000 visits): ironhead,1;dracometeor,1 3339v 2237 | zenheadbutt,1;dracometeor,1 1885v 1214 | ironhead,1;darkpulse,1 1581v 1003 | ironhead,1;protect,1 1445v 909
+    p2 greedy: move 2 2, move 3 2
+      p2a Bisharp used Sucker Punch -> p1b: Hydreigon
+      p1b Hydreigon fainted
+      p1a Metagross used Iron Head -> p2b: Landorus
+              p2b Landorus COULD NOT MOVE (flinch)
+      after p1: Metagross-Mega 179/305, Hydreigon 0/379
+      after p2: Bisharp 191/272, Landorus-Therian 163/382
+
+  Turn 15
+      p1b <- Landorus-Therian comes in (330/330)
+              p2a Bisharp atk 1 fell
+              p2a Bisharp atk 2 rose
+              p2b Landorus atk 1 fell
+      after p1: Metagross-Mega 179/305, Landorus-Therian 330/330
+      after p2: Bisharp 191/272, Landorus-Therian 163/382
+
+  Turn 16
+    p1 mcts: move 1 2, move 4 1
+      search (107000 visits): ironhead,1;superpower,0 80197v 71508 | protect,0;earthquake,0 3418v 2824 | switch talonflame;earthquake,0 3035v 2492 | zenheadbutt,1;superpower,0 2130v 1713
+    p2 greedy: move 2 1, move 3 1
+      p2a Bisharp used Sucker Punch -> p1a: Metagross
+              p1a Metagross lost Substitute
+      p1b Landorus used Superpower -> p2a: Bisharp
+              p1b Landorus atk 1 fell
+              p1b Landorus def 1 fell
+      p2a Bisharp fainted
+      p1a Metagross used Iron Head -> p2b: Landorus
+      p2b Landorus fainted
+      after p1: Metagross-Mega 129/305, Landorus-Therian 330/330
+      after p2: Bisharp 0/272, Landorus-Therian 0/382
+
+  RESULT: p1 wins

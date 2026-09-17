@@ -1,0 +1,134 @@
+battle 41   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: ORAS Doubles OU: Kingler, Camerupt, Cresselia, Aegislash, Hoopa-Unbound, Landorus-Therian
+  p2: landoi hazards: Deoxys-Speed, Genesect, Kangaskhan-Mega, Volcanion, Landorus, Thundurus
+
+  Turn 1
+    p1 mcts: switch 6, move 1   (slot0 Kingler -> Landorus-Therian)
+      search (27000 visits): switch landorustherian;heatwave,0 772v 449 | switch aegislash;heatwave,0 743v 429 | switch landorustherian;heatwave-mega,0 710v 408 | switch aegislash;heatwave-mega,0 706v 405
+    p2 greedy: move 3 1, move 4 1
+      p1a <- Landorus-Therian comes in (347/347)
+              p2a Deoxys atk 1 fell
+              p2b Genesect atk 1 fell
+      p2a Deoxys used Psycho Boost -> p1a: Landorus
+              p2a Deoxys spa 2 fell
+      p2b Genesect used Thunderbolt -> p1a: Landorus
+              p1a Landorus -- IMMUNE
+      p1b Camerupt used Heat Wave -> p2b: Genesect  [[spread] p2a,p2b]
+      p2b Genesect fainted
+      after p1: Landorus-Therian 176/347, Camerupt 336/336
+      after p2: Deoxys-Speed 185/303, Genesect 0/343
+
+  Turn 2
+      p2b <- Kangaskhan-Mega comes in (413/413)
+      after p1: Landorus-Therian 176/347, Camerupt 336/336
+      after p2: Deoxys-Speed 185/303, Kangaskhan-Mega 413/413
+
+  Turn 3
+    p1 mcts: move 2 1, move 1 mega
+      search (27000 visits): uturn,0;heatwave-mega,0 461v 101 | uturn,1;heatwave-mega,0 445v 96 | earthquake,0;heatwave-mega,0 438v 94 | switch aegislash;heatwave-mega,0 434v 93
+    p2 greedy: move 3 1, move 3 1
+      p2b Kangaskhan used Sucker Punch -> p1a: Landorus
+      p2a Deoxys used Psycho Boost -> p1a: Landorus
+              p2a Deoxys spa 2 fell
+      p1a Landorus used U-turn -> p2a: Deoxys
+      p1a Landorus fainted
+      p2a Deoxys fainted
+      p1b Camerupt used Heat Wave -> p2b: Kangaskhan
+      after p1: Landorus-Therian 0/347, Camerupt-Mega 336/336
+      after p2: Deoxys-Speed 0/303, Kangaskhan-Mega 140/413
+
+  Turn 4
+      p2a <- Volcanion comes in (363/363)
+      p1a <- Cresselia comes in (443/443)
+      after p1: Cresselia 443/443, Camerupt-Mega 336/336
+      after p2: Volcanion 363/363, Kangaskhan-Mega 140/413
+
+  Turn 5
+    p1 mcts: switch 4, move 2 1   (slot0 Cresselia -> Aegislash)
+      search (31000 visits): switch aegislash;earthpower,0 1807v 555 | switch aegislash;rockslide,0 947v 252 | switch aegislash;heatwave,0 944v 251 | calmmind,0;earthpower,0 869v 226
+    p2 greedy: move 1 1, move 3 1
+      p1a <- Aegislash comes in (324/324)
+      p2b Kangaskhan used Sucker Punch  [[still]]
+              p2b Kangaskhan -- IT FAILED
+      p2a Volcanion used Steam Eruption -> p1a: Aegislash
+      p1b Camerupt used Earth Power -> p2a: Volcanion
+      after p1: Aegislash 225/324, Camerupt-Mega 336/336
+      after p2: Volcanion 69/363, Kangaskhan-Mega 140/413
+
+  Turn 6
+    p1 mcts: move 1 2, move 3
+      search (23000 visits): flashcannon,1;rockslide,0 1060v 353 | shadowball,1;rockslide,0 846v 267 | wideguard,0;rockslide,0 788v 244 | shadowball,0;rockslide,0 776v 239
+    p2 greedy: move 1 1, move 3 1
+      p2b Kangaskhan used Sucker Punch -> p1a: Aegislash
+              p1a Aegislash used up its Weakness Policy
+              p1a Aegislash atk 2 rose
+              p1a Aegislash spa 2 rose
+      p2a Volcanion used Steam Eruption -> p1a: Aegislash
+              p1a Aegislash is now brn
+      p1a Aegislash used Flash Cannon -> p2b: Kangaskhan
+      p2b Kangaskhan fainted
+      p1b Camerupt used Rock Slide -> p2a: Volcanion  [[miss]]
+              p1b Camerupt -- MISSED
+      p1a Aegislash fainted
+      after p1: Aegislash 0/324, Camerupt-Mega 336/336
+      after p2: Volcanion 69/363, Kangaskhan-Mega 0/413
+
+  Turn 7
+      p2b <- Landorus comes in (319/319)
+      p1a <- Cresselia comes in (443/443)
+      after p1: Cresselia 443/443, Camerupt-Mega 336/336
+      after p2: Volcanion 69/363, Landorus 319/319
+
+  Turn 8
+    p1 mcts: move 3, switch 5   (slot1 Camerupt-Mega -> Hoopa-Unbound)
+      search (30000 visits): calmmind,0;switch hoopaunbound 5474v 1741 | psyshock,1;switch hoopaunbound 1306v 331 | calmmind,0;rockslide,0 1222v 305 | calmmind,0;heatwave,0 957v 223
+    p2 greedy: move 1 1, move 1 1
+      p1b <- Hoopa-Unbound comes in (335/335)
+      p2b Landorus used Earth Power -> p1a: Cresselia
+              p1a Cresselia -- IMMUNE
+      p2a Volcanion used Steam Eruption -> p1a: Cresselia
+      p1a Cresselia used Calm Mind
+              p1a Cresselia spa 1 rose
+              p1a Cresselia spd 1 rose
+      after p1: Cresselia 287/443, Hoopa-Unbound 335/335
+      after p2: Volcanion 69/363, Landorus 319/319
+
+  Turn 9
+    p1 mcts: move 3, move 1 2
+      search (22000 visits): calmmind,0;hyperspacefury,1 1466v 891 | psyshock,1;hyperspacefury,1 1403v 849 | moonlight,0;hyperspacefury,1 1250v 748 | calmmind,0;hyperspacehole,1 854v 488
+    p2 greedy: move 1 1, move 1 1
+      p2b Landorus used Earth Power -> p1a: Cresselia
+              p1a Cresselia -- IMMUNE
+      p2a Volcanion used Steam Eruption -> p1a: Cresselia
+              p1a Cresselia is now brn
+      p1a Cresselia used Calm Mind
+              p1a Cresselia spa 1 rose
+              p1a Cresselia spd 1 rose
+      p1b Hoopa used Hyperspace Fury -> p2b: Landorus
+              p1b Hoopa def 1 fell
+      p2b Landorus fainted
+      after p1: Cresselia 130/443, Hoopa-Unbound 302/335
+      after p2: Volcanion 69/363, Landorus 0/319
+
+  Turn 10
+      p2b <- Thundurus comes in (361/361)
+      after p1: Cresselia 130/443, Hoopa-Unbound 302/335
+      after p2: Volcanion 69/363, Thundurus 361/361
+
+  Turn 11
+    p1 mcts: move 2 1, move 1 2
+      search (51000 visits): psyshock,0;hyperspacefury,1 39597v 32596 | moonlight,0;drainpunch,0 864v 568 | moonlight,0;hyperspacehole,0 782v 508 | moonlight,0;hyperspacefury,1 499v 305
+    p2 greedy: move 1 1, move 4 1
+      p2b Thundurus used Superpower -> p1a: Cresselia
+              p2b Thundurus atk 1 fell
+              p2b Thundurus def 1 fell
+      p2a Volcanion used Steam Eruption -> p1a: Cresselia
+      p1a Cresselia used Psyshock -> p2a: Volcanion
+      p2a Volcanion fainted
+      p1b Hoopa used Hyperspace Fury -> p2b: Thundurus
+              p1b Hoopa def 1 fell
+      p2b Thundurus fainted
+      after p1: Cresselia 22/443, Hoopa-Unbound 269/335
+      after p2: Volcanion 0/363, Thundurus 0/361
+
+  RESULT: p1 wins

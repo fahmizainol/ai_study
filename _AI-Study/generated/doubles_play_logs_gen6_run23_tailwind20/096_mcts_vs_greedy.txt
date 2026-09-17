@@ -1,0 +1,252 @@
+battle 96   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: dpl ::/Untitled 880: Salamence-Mega, Sylveon, Landorus, Volcanion, Amoonguss, Hitmontop
+  p2: Untitled 574: Altaria-Mega, Amoonguss, Genesect, Scrafty, Thundurus, Volcanion
+
+  Turn 1
+    p1 mcts: switch 6, move 4   (slot0 Salamence-Mega -> Hitmontop)
+      search (38000 visits): switch hitmontop;protect,1 648v 600 | switch amoonguss;protect,1 643v 595 | switch amoonguss;switch volcanion 626v 577 | doubleedge,0;protect,1 594v 545
+    p2 greedy: move 1, move 3 1
+      p1a <- Hitmontop comes in (304/304)
+              p2a Altaria atk 1 fell
+              p2b Amoonguss atk 1 fell
+      p1b Sylveon used Protect
+      p2a Altaria used Dragon Dance
+              p2a Altaria atk 1 rose
+              p2a Altaria spe 1 rose
+      p2b Amoonguss used Energy Ball -> p1a: Hitmontop
+      after p1: Hitmontop 223/304, Sylveon 393/393
+      after p2: Altaria-Mega 348/348, Amoonguss 432/432
+
+  Turn 2
+    p1 mcts: switch 5, switch 6   (slot0 Hitmontop -> Amoonguss; slot1 Sylveon -> Salamence-Mega)
+      search (57000 visits): switch amoonguss;switch salamencemega 22034v 7667 | closecombat,0;hypervoice,0 4215v 1296 | helpinghand,1;hypervoice,0 1875v 509 | closecombat,1;hypervoice,0 1344v 338
+    p2 greedy: move 1, move 3 1
+      p1a <- Amoonguss comes in (432/432)
+      p1b <- Salamence-Mega comes in (394/394)
+              p2a Altaria atk 1 fell
+              p2b Amoonguss atk 1 fell
+      p2a Altaria used Dragon Dance
+              p2a Altaria atk 1 rose
+              p2a Altaria spe 1 rose
+      p2b Amoonguss used Energy Ball -> p1a: Amoonguss
+      after p1: Amoonguss 409/432, Salamence-Mega 394/394
+      after p2: Altaria-Mega 348/348, Amoonguss 432/432
+
+  Turn 3
+    p1 mcts: move 2 1, move 3 1
+      search (27000 visits): spore,0;stoneedge,0 16304v 11074 | spore,0;doubleedge,0 296v 134 | spore,0;roost,1 174v 65 | spore,0;stoneedge,1 172v 63
+    p2 greedy: move 1, move 3 1
+      p2a Altaria used Dragon Dance
+              p2a Altaria atk 1 rose
+              p2a Altaria spe 1 rose
+      p1b Salamence used Stone Edge -> p2a: Altaria
+      p2b Amoonguss used Energy Ball -> p1a: Amoonguss
+              p1a Amoonguss spd 1 fell
+      p1a Amoonguss used Spore -> p2a: Altaria
+              p2a Altaria is now slp
+      after p1: Amoonguss 385/432, Salamence-Mega 394/394
+      after p2: Altaria-Mega 231/348, Amoonguss 432/432
+
+  Turn 4
+    p1 mcts: move 1, move 2 1
+      search (18000 visits): ragepowder,0;doubleedge,0 6728v 6126 | ragepowder,0;switch landorus 1836v 1580 | switch sylveon;switch hitmontop 765v 615 | switch volcanion;switch landorus 456v 345
+    p2 greedy: move 1, move 3 1
+      p1a Amoonguss used Rage Powder
+              p2a Altaria COULD NOT MOVE (slp)
+      p1b Salamence used Double-Edge -> p2a: Altaria
+      p2b Amoonguss used Energy Ball -> p1a: Amoonguss
+      after p1: Amoonguss 347/432, Salamence-Mega 349/394
+      after p2: Altaria-Mega 95/348, Amoonguss 432/432
+
+  Turn 5
+    p1 mcts: move 2 2, move 3 2
+      search (23000 visits): spore,1;stoneedge,1 7313v 7177 | switch sylveon;switch hitmontop 881v 723 | switch sylveon;switch volcanion 716v 576 | switch sylveon;doubleedge,0 712v 572
+    p2 greedy: move 1, move 3 1
+              p2a Altaria is cured of slp
+      p2a Altaria used Dragon Dance
+              p2a Altaria atk 1 rose
+              p2a Altaria spe 1 rose
+      p1b Salamence used Stone Edge -> p2b: Amoonguss
+      p2b Amoonguss used Energy Ball -> p1a: Amoonguss
+      p1a Amoonguss used Spore -> p2b: Amoonguss
+              p2b Amoonguss -- IMMUNE
+      after p1: Amoonguss 313/432, Salamence-Mega 349/394
+      after p2: Altaria-Mega 95/348, Amoonguss 300/432
+
+  Turn 6
+    p1 mcts: move 2 2, switch 4   (slot1 Salamence-Mega -> Volcanion)
+      search (27000 visits): spore,1;switch volcanion 5184v 3049 | spore,0;protect,1 4218v 2453 | switch sylveon;doubleedge,1 1238v 647 | switch sylveon;switch hitmontop 803v 394
+    p2 greedy: move 1, move 3 1
+      p1b <- Volcanion comes in (363/363)
+      p2a Altaria used Dragon Dance
+              p2a Altaria atk 1 rose
+              p2a Altaria spe 1 rose
+      p1a Amoonguss used Spore -> p2b: Amoonguss
+              p2b Amoonguss -- IMMUNE
+      p2b Amoonguss used Energy Ball -> p1a: Amoonguss
+      after p1: Amoonguss 274/432, Volcanion 363/363
+      after p2: Altaria-Mega 95/348, Amoonguss 300/432
+
+  Turn 7
+    p1 mcts: move 3 2, switch 3   (slot1 Volcanion -> Landorus)
+      search (32000 visits): gigadrain,1;switch landorus 3278v 2176 | ragepowder,0;switch landorus 2997v 1979 | spore,1;switch sylveon 1998v 1282 | gigadrain,1;switch hitmontop 1226v 752
+    p2 greedy: move 1, move 3 1
+      p1b <- Landorus comes in (320/320)
+      p2a Altaria used Dragon Dance
+              p2a Altaria atk 1 rose
+              p2a Altaria spe 1 rose
+      p1a Amoonguss used Giga Drain -> p2b: Amoonguss
+      p2b Amoonguss used Energy Ball -> p1a: Amoonguss
+      after p1: Amoonguss 246/432, Landorus 320/320
+      after p2: Altaria-Mega 95/348, Amoonguss 283/432
+
+  Turn 8
+    p1 mcts: move 2 2, move 1 1
+      search (38000 visits): spore,1;earthpower,0 11074v 6670 | switch sylveon;psychic,1 4700v 2721 | gigadrain,1;switch salamencemega 4305v 2479 | switch sylveon;switch salamencemega 672v 315
+    p2 greedy: move 1, move 3 1
+      p2a Altaria used Dragon Dance
+              p2a Altaria atk 1 rose
+              p2a Altaria spe 0 rose
+      p1b Landorus used Earth Power -> p2a: Altaria
+      p2a Altaria fainted
+      p1a Amoonguss used Spore -> p2b: Amoonguss
+              p2b Amoonguss -- IMMUNE
+      p2b Amoonguss used Energy Ball -> p1a: Amoonguss
+              p1a Amoonguss -- critical hit
+      after p1: Amoonguss 193/432, Landorus 320/320
+      after p2: Altaria-Mega 0/348, Amoonguss 283/432
+
+  Turn 9
+      p2a <- Genesect comes in (283/283)
+              p2a Genesect spa 1 rose
+      after p1: Amoonguss 193/432, Landorus 320/320
+      after p2: Genesect 283/283, Amoonguss 283/432
+
+  Turn 10
+    p1 mcts: move 2 1, move 4
+      search (30000 visits): spore,0;protect,1 7212v 6057 | gigadrain,0;switch volcanion 6990v 5864 | switch sylveon;psychic,1 1467v 1136 | switch volcanion;calmmind,1 1147v 870
+    p2 greedy: move 3 1, move 3 1
+      p1b Landorus used Protect
+      p2a Genesect used Ice Beam -> p1a: Amoonguss
+      p1a Amoonguss fainted
+      p2b Amoonguss used Energy Ball -> p1b: Landorus
+              p1b Landorus -- move: Protect
+      after p1: Amoonguss 0/432, Landorus 320/320
+      after p2: Genesect 283/283, Amoonguss 283/432
+
+  Turn 11
+      p1a <- Volcanion comes in (363/363)
+      after p1: Volcanion 363/363, Landorus 320/320
+      after p2: Genesect 283/283, Amoonguss 283/432
+
+  Turn 12
+    p1 mcts: move 2, move 1 1
+      search (27000 visits): heatwave,0;earthpower,0 2567v 1742 | heatwave,0;calmmind,1 2026v 1352 | heatwave,0;switch sylveon 1508v 982 | heatwave,0;earthpower,1 1476v 960
+    p2 greedy: move 3 1, move 3 1
+      p2a Genesect used Ice Beam -> p1a: Volcanion
+      p1b Landorus used Earth Power -> p2a: Genesect
+      p1a Volcanion used Heat Wave -> p2a: Genesect  [[spread] p2a,p2b]
+      p2a Genesect fainted
+      p2b Amoonguss used Energy Ball -> p1a: Volcanion
+      after p1: Volcanion 290/363, Landorus 320/320
+      after p2: Genesect 0/283, Amoonguss 77/432
+
+  Turn 13
+      p2a <- Scrafty comes in (334/334)
+              p1a Volcanion atk 1 fell
+              p1b Landorus atk 1 fell
+      after p1: Volcanion 290/363, Landorus 320/320
+      after p2: Scrafty 334/334, Amoonguss 77/432
+
+  Turn 14
+    p1 mcts: switch 6, switch 4   (slot0 Volcanion -> Sylveon; slot1 Landorus -> Salamence-Mega)
+      search (29000 visits): switch sylveon;switch salamencemega 1070v 763 | steameruption,0;switch salamencemega 1044v 743 | switch sylveon;calmmind,1 873v 610 | switch sylveon;switch hitmontop 804v 556
+    p2 greedy: move 2 1, move 3 1
+      p1b <- Salamence-Mega comes in (349/394)
+              p2a Scrafty atk 1 fell
+              p2b Amoonguss atk 1 fell
+      p1a <- Sylveon comes in (393/393)
+      p2a Scrafty used High Jump Kick -> p1a: Sylveon  [[miss]]
+              p2a Scrafty -- MISSED
+      p2b Amoonguss used Energy Ball -> p1a: Sylveon
+      after p1: Sylveon 347/393, Salamence-Mega 349/394
+      after p2: Scrafty 167/334, Amoonguss 77/432
+
+  Turn 15
+    p1 mcts: move 2, move 3 1
+      search (19000 visits): calmmind,0;stoneedge,0 1131v 701 | calmmind,0;protect,1 832v 497 | calmmind,0;roost,1 794v 471 | calmmind,0;doubleedge,0 770v 455
+    p2 greedy: move 2 1, move 3 1
+      p1b Salamence used Stone Edge -> p2a: Scrafty
+      p1a Sylveon used Calm Mind
+              p1a Sylveon spa 1 rose
+              p1a Sylveon spd 1 rose
+      p2a Scrafty used High Jump Kick -> p1a: Sylveon
+              p1a Sylveon -- critical hit
+      p2b Amoonguss used Energy Ball -> p1a: Sylveon
+              p1a Sylveon spd 1 fell
+      after p1: Sylveon 178/393, Salamence-Mega 349/394
+      after p2: Scrafty 112/334, Amoonguss 77/432
+
+  Turn 16
+    p1 mcts: move 2, move 2 1
+      search (22000 visits): calmmind,0;doubleedge,0 1275v 769 | calmmind,0;stoneedge,0 1219v 732 | calmmind,0;roost,1 950v 554 | calmmind,0;protect,1 837v 480
+    p2 greedy: move 2 1, move 3 1
+      p1b Salamence used Double-Edge -> p2a: Scrafty
+      p2a Scrafty fainted
+      p1a Sylveon used Calm Mind
+              p1a Sylveon spa 1 rose
+              p1a Sylveon spd 1 rose
+      p2b Amoonguss used Energy Ball -> p1a: Sylveon
+      after p1: Sylveon 154/393, Salamence-Mega 312/394
+      after p2: Scrafty 0/334, Amoonguss 77/432
+
+  Turn 17
+      p2a <- Thundurus comes in (342/342)
+      after p1: Sylveon 154/393, Salamence-Mega 312/394
+      after p2: Thundurus 342/342, Amoonguss 77/432
+
+  Turn 18
+    p1 mcts: move 1, move 3 1
+      search (21000 visits): hypervoice,0;stoneedge,0 1692v 1149 | hypervoice,0;doubleedge,0 1251v 827 | hypervoice,0;stoneedge,1 1018v 659 | hypervoice,0;roost,1 982v 634
+    p2 greedy: move 2 1, move 3 1
+      p2a Thundurus used Thunderbolt -> p1a: Sylveon
+              p1a Sylveon is now par
+      p1b Salamence used Stone Edge -> p2a: Thundurus
+      p2a Thundurus fainted
+      p1a Sylveon used Hyper Voice -> p2b: Amoonguss
+      p2b Amoonguss fainted
+      after p1: Sylveon 106/393, Salamence-Mega 312/394
+      after p2: Thundurus 0/342, Amoonguss 0/432
+
+  Turn 19
+      p2a <- Volcanion comes in (364/364)
+      after p1: Sylveon 106/393, Salamence-Mega 312/394
+      after p2: Volcanion 364/364, Amoonguss 0/432
+
+  Turn 20
+    p1 mcts: move 1, move 3 1
+      search (30000 visits): hypervoice,0;stoneedge,0 14308v 9968 | switch landorus;stoneedge,0 2160v 1336 | protect,0;stoneedge,0 1245v 732 | hypervoice,0;doubleedge,0 689v 376
+    p2 greedy: move 4 1, pass
+      p1b Salamence used Stone Edge -> p2a: Volcanion
+      p2a Volcanion used Overheat -> p1a: Sylveon
+              p2a Volcanion spa 2 fell
+      p1a Sylveon fainted
+      after p1: Sylveon 0/393, Salamence-Mega 312/394
+      after p2: Volcanion 194/364, Amoonguss 0/432
+
+  Turn 21
+      p1a <- Landorus comes in (320/320)
+      after p1: Landorus 320/320, Salamence-Mega 312/394
+      after p2: Volcanion 194/364, Amoonguss 0/432
+
+  Turn 22
+    p1 mcts: move 1 1, move 1
+      search (684000 visits): earthpower,0;roost,1 91939v 91939 | earthpower,0;doubleedge,0 91939v 91939 | earthpower,0;stoneedge,0 91938v 91938 | earthpower,0;protect,1 91938v 91938
+    p2 greedy: move 4 2, pass
+      p1b Salamence used Roost
+      p1a Landorus used Earth Power -> p2a: Volcanion
+      p2a Volcanion fainted
+      after p1: Landorus 320/320, Salamence-Mega 394/394
+      after p2: Volcanion 0/364, Amoonguss 0/432
+
+  RESULT: p1 wins

@@ -1,0 +1,207 @@
+battle 17   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: ORAS Doubles OU: Politoed, Ludicolo, Aegislash, Diancie, Talonflame, Kyurem-Black
+  p2: DPL vs SMB: Kangaskhan-Mega, Conkeldurr, Thundurus, Deoxys-Speed, Volcanion, Bisharp
+
+  Turn 1
+    p1 mcts: move 1 2, move 2 1
+      search (20000 visits): scald,1;hydropump,0 524v 471 | icebeam,1;icebeam,1 425v 373 | icebeam,0;hydropump,1 401v 349 | icebeam,0;icebeam,1 358v 308
+    p2 greedy: move 1 1, move 1 1
+      p2a Kangaskhan used Fake Out -> p1a: Politoed
+      p1b Ludicolo used Hydro Pump -> p2a: Kangaskhan
+              p1a Politoed COULD NOT MOVE (flinch)
+      p2b Conkeldurr used Drain Punch -> p1a: Politoed
+              p1a Politoed -- critical hit
+              p1a Politoed used up its Sitrus Berry
+      after p1: Politoed 157/384, Ludicolo 330/330
+      after p2: Kangaskhan-Mega 176/414, Conkeldurr 414/414
+
+  Turn 2
+    p1 mcts: move 1 2, move 2 1
+      search (31000 visits): scald,1;hydropump,0 510v 116 | encore,0;hydropump,0 493v 110 | encore,1;hydropump,0 479v 106 | icebeam,0;hydropump,0 475v 104
+    p2 greedy: move 1 1, move 1 1
+      p2a Kangaskhan used Fake Out  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p1b Ludicolo used Hydro Pump -> p2a: Kangaskhan
+      p2a Kangaskhan fainted
+      p1a Politoed used Scald -> p2b: Conkeldurr
+              p2b Conkeldurr is now brn
+      p2b Conkeldurr used Drain Punch -> p1a: Politoed
+      after p1: Politoed 62/384, Ludicolo 330/330
+      after p2: Kangaskhan-Mega 0/414, Conkeldurr 299/414
+
+  Turn 3
+      p2a <- Thundurus comes in (361/361)
+      after p1: Politoed 62/384, Ludicolo 330/330
+      after p2: Thundurus 361/361, Conkeldurr 299/414
+
+  Turn 4
+    p1 mcts: switch 4, move 2 1   (slot0 Politoed -> Diancie)
+      search (12000 visits): switch diancie;hydropump,0 230v 143 | switch aegislash;hydropump,0 194v 116 | switch kyuremblack;hydropump,0 193v 115 | switch diancie;icebeam,0 187v 110
+    p2 greedy: move 1 1, move 1 1
+      p1a <- Diancie comes in (241/241)
+      p1b Ludicolo used Hydro Pump -> p2a: Thundurus  [[miss]]
+              p1b Ludicolo -- MISSED
+      p2a Thundurus used Thunderbolt -> p1a: Diancie
+      p2b Conkeldurr used Drain Punch -> p1a: Diancie
+      after p1: Diancie 84/241, Ludicolo 330/330
+      after p2: Thundurus 361/361, Conkeldurr 282/414
+
+  Turn 5
+    p1 mcts: move 1 mega, move 2 2
+      search (10000 visits): diamondstorm-mega,0;hydropump,1 94v 74 | diamondstorm-mega,0;hydropump,0 83v 63 | diamondstorm-mega,0;gigadrain,1 83v 63 | diamondstorm-mega,0;icebeam,1 83v 62
+    p2 greedy: move 1 1, move 1 1
+      p1b Ludicolo used Hydro Pump -> p2b: Conkeldurr
+              p2b Conkeldurr -- critical hit
+      p2a Thundurus used Thunderbolt -> p1a: Diancie
+      p1a Diancie fainted
+      p2b Conkeldurr used Drain Punch -> p1b: Ludicolo
+      after p1: Diancie 0/241, Ludicolo 213/330
+      after p2: Thundurus 361/361, Conkeldurr 19/414
+
+  Turn 6
+      p1a <- Aegislash comes in (320/320)
+      after p1: Aegislash 320/320, Ludicolo 213/330
+      after p2: Thundurus 361/361, Conkeldurr 19/414
+
+  Turn 7
+    p1 mcts: move 1 2, move 2 1
+      search (7000 visits): shadowball,1;hydropump,0 143v 98 | flashcannon,1;hydropump,0 134v 90 | shadowball,1;icebeam,0 120v 78 | shadowball,0;gigadrain,1 118v 77
+    p2 greedy: move 1 2, move 1 2
+      p1b Ludicolo used Hydro Pump -> p2a: Thundurus
+              p2a Thundurus used up its Sitrus Berry
+      p2a Thundurus used Thunderbolt -> p1b: Ludicolo
+      p1a Aegislash used Shadow Ball -> p2b: Conkeldurr
+      p2b Conkeldurr fainted
+      after p1: Aegislash-Blade 320/320, Ludicolo 128/330
+      after p2: Thundurus 163/361, Conkeldurr 0/414
+
+  Turn 8
+      p2b <- Deoxys-Speed comes in (303/303)
+      after p1: Aegislash-Blade 320/320, Ludicolo 128/330
+      after p2: Thundurus 163/361, Deoxys-Speed 303/303
+
+  Turn 9
+    p1 mcts: move 1 2, move 4 1
+      search (13000 visits): shadowball,1;icebeam,0 385v 247 | shadowball,1;hydropump,0 321v 199 | shadowball,1;gigadrain,1 297v 182 | shadowball,1;gigadrain,0 262v 156
+    p2 greedy: move 1 2, move 1 2
+      p2b Deoxys used Psycho Boost -> p1b: Ludicolo
+              p2b Deoxys spa 2 fell
+      p2a Thundurus used Thunderbolt -> p1b: Ludicolo
+      p1b Ludicolo fainted
+      p1a Aegislash used Shadow Ball -> p2b: Deoxys
+      p2b Deoxys fainted
+      after p1: Aegislash-Blade 320/320, Ludicolo 0/330
+      after p2: Thundurus 163/361, Deoxys-Speed 0/303
+
+  Turn 10
+      p2b <- Volcanion comes in (363/363)
+      p1b <- Politoed comes in (62/384)
+      after p1: Aegislash-Blade 320/320, Politoed 62/384
+      after p2: Thundurus 163/361, Volcanion 363/363
+
+  Turn 11
+    p1 mcts: switch 6, move 4   (slot0 Aegislash-Blade -> Kyurem-Black)
+      search (14000 visits): switch kyuremblack;protect,1 1469v 824 | switch kyuremblack;icebeam,1 797v 414 | switch kyuremblack;encore,0 755v 389 | switch kyuremblack;encore,1 741v 381
+    p2 greedy: move 1 2, move 4 2
+      p1a <- Kyurem-Black comes in (416/416)
+      p1b Politoed used Protect
+      p2a Thundurus used Thunderbolt -> p1b: Politoed
+              p1b Politoed -- move: Protect
+      p2b Volcanion used Overheat -> p1b: Politoed
+              p1b Politoed -- move: Protect
+      after p1: Kyurem-Black 416/416, Politoed 62/384
+      after p2: Thundurus 163/361, Volcanion 363/363
+
+  Turn 12
+    p1 mcts: move 2 2, move 4
+      search (8000 visits): earthpower,1;protect,1 396v 278 | earthpower,1;scald,0 276v 182 | icebeam,0;protect,1 271v 178 | earthpower,1;icebeam,0 253v 164
+    p2 greedy: move 1 2, move 4 2
+      p1b Politoed used Protect  [[still]]
+              p1b Politoed -- IT FAILED
+      p2a Thundurus used Thunderbolt -> p1b: Politoed
+      p1b Politoed fainted
+      p1a Kyurem used Earth Power -> p2b: Volcanion
+              p2b Volcanion -- critical hit
+      p2b Volcanion used Overheat -> p1a: Kyurem
+              p2b Volcanion spa 2 fell
+      after p1: Kyurem-Black 331/416, Politoed 0/384
+      after p2: Thundurus 163/361, Volcanion 169/363
+
+  Turn 13
+      p1b <- Talonflame comes in (319/319)
+      after p1: Kyurem-Black 331/416, Talonflame 319/319
+      after p2: Thundurus 163/361, Volcanion 169/363
+
+  Turn 14
+    p1 mcts: move 1 1, move 4
+      search (19000 visits): icebeam,0;protect,1 5560v 3990 | earthpower,1;bravebird,0 1376v 905 | earthpower,1;protect,1 936v 592 | earthpower,1;willowisp,1 568v 335
+    p2 greedy: move 1 1, move 4 1
+      p1b Talonflame used Protect
+      p2a Thundurus used Thunderbolt -> p1a: Kyurem
+      p1a Kyurem used Ice Beam -> p2a: Thundurus
+      p2a Thundurus fainted
+      p2b Volcanion used Overheat -> p1a: Kyurem
+              p1a Kyurem -- critical hit
+              p2b Volcanion spa 2 fell
+      after p1: Kyurem-Black 122/416, Talonflame 319/319
+      after p2: Thundurus 0/361, Volcanion 169/363
+
+  Turn 15
+      p2a <- Bisharp comes in (271/271)
+      after p1: Kyurem-Black 122/416, Talonflame 319/319
+      after p2: Bisharp 271/271, Volcanion 169/363
+
+  Turn 16
+    p1 mcts: move 2 1, move 4
+      search (22000 visits): earthpower,0;protect,1 2458v 1869 | earthpower,0;switch aegislash 1451v 1064 | earthpower,1;willowisp,0 1384v 1011 | earthpower,0;bravebird,1 1201v 866
+    p2 greedy: move 1 1, move 4 1
+      p1b Talonflame used Protect
+      p2a Bisharp used Sucker Punch -> p1a: Kyurem
+      p1a Kyurem fainted
+      p2b Volcanion used Overheat -> p1b: Talonflame
+              p1b Talonflame -- move: Protect
+      after p1: Kyurem-Black 0/416, Talonflame 319/319
+      after p2: Bisharp 244/271, Volcanion 169/363
+
+  Turn 17
+      p1a <- Aegislash comes in (320/320)
+      after p1: Aegislash 320/320, Talonflame 319/319
+      after p2: Bisharp 244/271, Volcanion 169/363
+
+  Turn 18
+    p1 mcts: move 3, move 3 1
+      search (19000 visits): substitute,0;willowisp,0 2387v 791 | substitute,0;protect,1 2081v 676 | shadowball,1;willowisp,0 895v 245 | kingsshield,0;willowisp,0 856v 231
+    p2 greedy: move 1 1, move 4 1
+      p2a Bisharp used Sucker Punch  [[still]]
+              p2a Bisharp -- IT FAILED
+      p1b Talonflame used Will-O-Wisp -> p2a: Bisharp
+              p2a Bisharp is now brn
+      p2b Volcanion used Overheat -> p1a: Aegislash
+              p2b Volcanion spa 2 fell
+      p1a Aegislash used Substitute
+              p1a Aegislash gained Substitute
+      after p1: Aegislash 206/320, Talonflame 319/319
+      after p2: Bisharp 211/271, Volcanion 169/363
+
+  Turn 19
+    p1 mcts: move 2 1, move 1 2
+      search (21000 visits): flashcannon,0;bravebird,1 7858v 5662 | shadowball,0;bravebird,1 3339v 2310 | shadowball,1;overheat,0 2280v 1541 | substitute,0;bravebird,1 558v 324
+    p2 greedy: move 1 1, move 4 1
+      p1b Talonflame used Brave Bird -> p2b: Volcanion
+      p2b Volcanion fainted
+      p2a Bisharp used Sucker Punch -> p1a: Aegislash
+              p1a Aegislash lost Substitute
+      p1a Aegislash used Flash Cannon -> p2a: Bisharp
+      after p1: Aegislash-Blade 226/320, Talonflame 232/319
+      after p2: Bisharp 31/271, Volcanion 0/363
+
+  Turn 20
+    p1 mcts: move 1 1, move 1 1
+      search (981000 visits): shadowball,0;bravebird,0 61313v 61313 | shadowball,0;overheat,0 61313v 61313 | shadowball,0;willowisp,0 61313v 61313 | shadowball,0;protect,1 61313v 61313
+    p2 greedy: move 1 1, pass
+      p1b Talonflame used Brave Bird -> p2a: Bisharp
+      p2a Bisharp fainted
+      after p1: Aegislash-Blade 226/320, Talonflame 191/319
+      after p2: Bisharp 0/271, Volcanion 0/363
+
+  RESULT: p1 wins

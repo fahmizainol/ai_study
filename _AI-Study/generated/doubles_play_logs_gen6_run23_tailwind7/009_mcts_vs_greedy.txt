@@ -1,0 +1,166 @@
+battle 9   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: ORAS Doubles OU: Dunsparce, Greninja, Garchomp, Togekiss, Charizard, Venusaur
+  p2: ORAS Doubles OU: Charizard-Mega-Y, Sylveon, Aegislash, Landorus-Therian, Zapdos, Cresselia
+
+  Turn 1
+    p1 mcts: switch 5, move 4   (slot0 Dunsparce -> Charizard)
+      search (34000 visits): switch charizard;protect,1 4186v 2673 | glare,1;protect,1 2223v 1361 | coil,0;switch charizard 1873v 1130 | coil,0;protect,1 1537v 911
+    p2 greedy: move 2 1, move 2
+      p1a <- Charizard comes in (359/359)
+      p1b Greninja used Protect
+              p1b Greninja gained typechange Normal
+      p2a Charizard used Solar Beam  [[still]]
+      p2b Sylveon used Hyper Voice -> p1a: Charizard  [[spread] p1a]
+              p1b Greninja -- move: Protect
+      after p1: Charizard 287/359, Greninja 285/285
+      after p2: Charizard-Mega-Y 359/359, Sylveon 393/393
+
+  Turn 2
+    p1 mcts: move 1 mega, move 4
+      search (27000 visits): heatwave-mega,0;protect,1 439v 308 | heatwave-mega,0;switch venusaur 375v 257 | heatwave-mega,0;switch togekiss 367v 250 | heatwave,0;protect,1 350v 237
+    p2 greedy: move 1, move 2
+      p1b Greninja used Protect  [[still]]
+              p1b Greninja -- IT FAILED
+      p2a Charizard used Solar Beam -> p1a: Charizard  [[from] lockedmove]
+      p1a Charizard used Heat Wave -> p2a: Charizard  [[spread] p2a,p2b]
+      p2b Sylveon used Hyper Voice -> p1b: Greninja  [[spread] p1a,p1b]
+      after p1: Charizard-Mega-Y 197/359, Greninja 116/285
+      after p2: Charizard-Mega-Y 263/359, Sylveon 252/393
+
+  Turn 3
+    p1 mcts: move 1, move 4
+      search (29000 visits): heatwave,0;protect,1 2065v 1414 | protect,0;protect,1 2032v 1389 | solarbeam,1;protect,1 1460v 972 | focusblast,1;protect,1 700v 429
+    p2 greedy: move 2 2, move 2
+      p1b Greninja used Protect
+      p2a Charizard used Solar Beam  [[still]]
+              p1b Greninja -- move: Protect
+      p1a Charizard used Heat Wave -> p2a: Charizard  [[spread] p2b]
+              p1a Charizard -- MISSED
+      p2b Sylveon used Hyper Voice -> p1a: Charizard  [[spread] p1a]
+              p1b Greninja -- move: Protect
+      after p1: Charizard-Mega-Y 138/359, Greninja 116/285
+      after p2: Charizard-Mega-Y 263/359, Sylveon 93/393
+
+  Turn 4
+    p1 mcts: move 4, move 4
+      search (25000 visits): protect,0;protect,1 3998v 2511 | heatwave,0;hydropump,0 1185v 673 | heatwave,0;protect,1 951v 526 | protect,0;icebeam,1 810v 438
+    p2 greedy: move 2 1, move 2
+      p1b Greninja used Protect  [[still]]
+              p1b Greninja -- IT FAILED
+      p1a Charizard used Protect
+      p2a Charizard used Solar Beam  [[still]]
+              p1a Charizard -- move: Protect
+      p2b Sylveon used Hyper Voice -> p1a: Charizard  [[spread] p1b]
+              p1a Charizard -- move: Protect
+      p1b Greninja fainted
+      after p1: Charizard-Mega-Y 138/359, Greninja 0/285
+      after p2: Charizard-Mega-Y 263/359, Sylveon 117/393
+
+  Turn 5
+      p1b <- Garchomp comes in (357/357)
+      after p1: Charizard-Mega-Y 138/359, Garchomp 357/357
+      after p2: Charizard-Mega-Y 263/359, Sylveon 117/393
+
+  Turn 6
+    p1 mcts: move 1, move 2 1
+      search (25000 visits): heatwave,0;dragonclaw,0 8816v 5058 | protect,0;protect,1 1315v 654 | heatwave,0;swordsdance,1 1108v 539 | heatwave,0;earthquake,0 861v 403
+    p2 greedy: move 2 1, move 2
+      p1b Garchomp used Dragon Claw -> p2a: Charizard
+      p1a Charizard used Heat Wave -> p2a: Charizard  [[spread] p2a,p2b]
+      p2a Charizard fainted
+      p2b Sylveon fainted
+      after p1: Charizard-Mega-Y 138/359, Garchomp 322/357
+      after p2: Charizard-Mega-Y 0/359, Sylveon 0/393
+
+  Turn 7
+      p2a <- Aegislash comes in (324/324)
+      p2b <- Landorus-Therian comes in (361/361)
+              p1a Charizard atk 1 fell
+              p1b Garchomp atk 1 fell
+      after p1: Charizard-Mega-Y 138/359, Garchomp 322/357
+      after p2: Aegislash 324/324, Landorus-Therian 361/361
+
+  Turn 8
+    p1 mcts: move 1, move 3
+      search (17000 visits): heatwave,0;swordsdance,1 1248v 1002 | heatwave,0;switch togekiss 757v 581 | heatwave,0;dragonclaw,1 676v 512 | protect,0;swordsdance,1 649v 490
+    p2 greedy: move 1 1, move 2 1
+      p1b Garchomp used Swords Dance
+              p1b Garchomp atk 2 rose
+      p2b Landorus used Superpower -> p1a: Charizard
+              p2b Landorus atk 1 fell
+              p2b Landorus def 1 fell
+      p1a Charizard used Heat Wave -> p2a: Aegislash  [[spread] p2a,p2b]
+      p2a Aegislash used Shadow Ball -> p1a: Charizard
+              p1a Charizard -- critical hit
+      p1a Charizard fainted
+      after p1: Charizard 0/359, Garchomp 322/357
+      after p2: Aegislash-Blade 42/324, Landorus-Therian 184/361
+
+  Turn 9
+      p1a <- Togekiss comes in (373/373)
+      after p1: Togekiss 373/373, Garchomp 322/357
+      after p2: Aegislash-Blade 42/324, Landorus-Therian 184/361
+
+  Turn 10
+    p1 mcts: move 1 1, move 2 2
+      search (27000 visits): airslash,0;dragonclaw,1 6137v 3680 | airslash,0;swordsdance,1 1484v 801 | tailwind,0;dragonclaw,1 1190v 626 | protect,0;dragonclaw,1 1089v 567
+    p2 greedy: move 1 2, move 2 2
+      p1b Garchomp used Dragon Claw -> p2b: Landorus
+      p2b Landorus fainted
+      p1a Togekiss used Air Slash -> p2a: Aegislash
+      p2a Aegislash fainted
+      after p1: Togekiss 373/373, Garchomp 287/357
+      after p2: Aegislash 0/324, Landorus-Therian 0/361
+
+  Turn 11
+      p2b <- Cresselia comes in (444/444)
+      p2a <- Zapdos comes in (384/384)
+      after p1: Togekiss 373/373, Garchomp 287/357
+      after p2: Zapdos 384/384, Cresselia 444/444
+
+  Turn 12
+    p1 mcts: move 4, move 3
+      search (11000 visits): protect,0;swordsdance,1 850v 411 | airslash,1;swordsdance,1 500v 219 | protect,0;dragonclaw,0 493v 215 | tailwind,0;swordsdance,1 479v 208
+    p2 greedy: move 1 2, move 3 2
+      p1a Togekiss used Protect
+      p1b Garchomp used Swords Dance
+              p1b Garchomp atk 2 rose
+      p2a Zapdos used Thunderbolt -> p1b: Garchomp
+              p1b Garchomp -- IMMUNE
+      p2b Cresselia used Psychic -> p1b: Garchomp
+      after p1: Togekiss 373/373, Garchomp 187/357
+      after p2: Zapdos 384/384, Cresselia 444/444
+
+  Turn 13
+    p1 mcts: move 3, move 2 1
+      search (13000 visits): tailwind,0;dragonclaw,0 1459v 805 | protect,0;dragonclaw,0 1118v 599 | airslash,1;dragonclaw,0 1051v 558 | airslash,0;dragonclaw,0 679v 338
+    p2 greedy: move 1 2, move 3 2
+      p1b Garchomp used Dragon Claw -> p2a: Zapdos
+      p2a Zapdos fainted
+      p1a Togekiss used Tailwind
+      -sidestart p1: A move: Tailwind
+      p2b Cresselia used Psychic -> p1b: Garchomp
+      after p1: Togekiss 373/373, Garchomp 59/357
+      after p2: Zapdos 0/384, Cresselia 444/444
+
+  Turn 14
+    p1 mcts: move 2, move 2 2
+      search (26000 visits): followme,0;dragonclaw,1 6409v 1922 | airslash,1;dragonclaw,1 1653v 405 | switch venusaur;dragonclaw,1 1198v 271 | followme,0;swordsdance,1 1083v 237
+    p2 greedy: pass, move 3 2
+      p1a Togekiss used Follow Me
+      p1b Garchomp used Dragon Claw -> p2b: Cresselia
+      p2b Cresselia used Psychic -> p1a: Togekiss
+      after p1: Togekiss 306/373, Garchomp 24/357
+      after p2: Zapdos 0/384, Cresselia 135/444
+
+  Turn 15
+    p1 mcts: move 1 2, move 2 2
+      search (931000 visits): airslash,1;dragonclaw,1 154988v 154988 | followme,0;dragonclaw,1 154988v 154988 | tailwind,0;dragonclaw,1 154988v 154988 | protect,0;dragonclaw,1 154988v 154988
+    p2 greedy: pass, move 3 2
+      p1b Garchomp used Dragon Claw -> p2b: Cresselia
+      p2b Cresselia fainted
+      p1b Garchomp fainted
+      after p1: Togekiss 306/373, Garchomp 0/357
+      after p2: Zapdos 0/384, Cresselia 0/444
+
+  RESULT: p1 wins

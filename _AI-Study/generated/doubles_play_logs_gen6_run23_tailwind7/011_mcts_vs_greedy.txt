@@ -1,0 +1,195 @@
+battle 11   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: XY Doubles: Kangaskhan, Latias, Dialga, Aegislash, Butterfree, Kyogre
+  p2: Untitled 1416: Gardevoir-Mega, Amoonguss, Blastoise, Landorus, Volcanion, Scrafty
+
+  Turn 1
+    p1 mcts: switch 6, move 3 2   (slot0 Kangaskhan -> Kyogre)
+      search (21000 visits): switch kyogre;psyshock,1 358v 199 | switch kyogre;psyshock,0 266v 138 | switch kyogre;tailwind,1 227v 112 | switch kyogre;switch aegislash 223v 110
+    p2 greedy: move 1, move 3 1
+      p1a <- Kyogre comes in (404/404)
+      p1b Latias used Psyshock -> p2b: Amoonguss
+      p2a Gardevoir used Hyper Voice -> p1b: Latias  [[spread] p1a,p1b]
+      p2b Amoonguss used Sludge Bomb -> p1a: Kyogre
+              p1a Kyogre is now psn
+      after p1: Kyogre 259/404, Latias 248/302
+      after p2: Gardevoir-Mega 340/340, Amoonguss 190/432
+
+  Turn 2
+    p1 mcts: move 4 1, move 3 2
+      search (25000 visits): scald,0;psyshock,1 545v 276 | switch kangaskhan;psyshock,1 506v 253 | switch aegislash;psyshock,1 504v 252 | waterspout,0;psyshock,1 477v 235
+    p2 greedy: move 1, move 3 1
+      p1b Latias used Psyshock -> p2b: Amoonguss
+      p2b Amoonguss fainted
+      p2a Gardevoir used Hyper Voice -> p1a: Kyogre  [[spread] p1a,p1b]
+      p1a Kyogre used Scald -> p2a: Gardevoir
+      after p1: Kyogre 163/404, Latias 189/302
+      after p2: Gardevoir-Mega 133/340, Amoonguss 0/432
+
+  Turn 3
+      p2b <- Blastoise comes in (362/362)
+      after p1: Kyogre 163/404, Latias 189/302
+      after p2: Gardevoir-Mega 133/340, Blastoise 362/362
+
+  Turn 4
+    p1 mcts: move 1, move 3 1
+      search (17000 visits): waterspout,0;psyshock,0 314v 148 | scald,0;psyshock,1 311v 146 | thunder,1;psyshock,1 297v 137 | switch kangaskhan;psyshock,0 288v 132
+    p2 greedy: move 1, move 1 1
+      p1b Latias used Psyshock -> p2a: Gardevoir
+      p2a Gardevoir used Hyper Voice -> p1a: Kyogre  [[spread] p1a,p1b]
+              p1b Latias used up its Sitrus Berry
+      p1a Kyogre used Water Spout -> p2b: Blastoise  [[spread] p2a,p2b]
+      p2a Gardevoir fainted
+      p2b Blastoise used Scald -> p1a: Kyogre
+      after p1: Kyogre 36/404, Latias 210/302
+      after p2: Gardevoir-Mega 0/340, Blastoise 324/362
+
+  Turn 5
+      p2a <- Landorus comes in (319/319)
+      after p1: Kyogre 36/404, Latias 210/302
+      after p2: Landorus 319/319, Blastoise 324/362
+
+  Turn 6
+    p1 mcts: move 4 1, move 4
+      search (31000 visits): scald,0;protect,1 1037v 496 | icebeam,0;protect,1 832v 384 | thunder,1;protect,1 547v 232 | scald,0;psyshock,1 458v 186
+    p2 greedy: move 1 1, move 1 1
+      p1b Latias used Protect
+      p2a Landorus used Earth Power -> p1a: Kyogre
+      p1a Kyogre fainted
+      p2b Blastoise used Scald -> p1b: Latias
+              p1b Latias -- move: Protect
+      after p1: Kyogre 0/404, Latias 210/302
+      after p2: Landorus 319/319, Blastoise 324/362
+
+  Turn 7
+      p1a <- Dialga comes in (341/341)
+      after p1: Dialga 341/341, Latias 210/302
+      after p2: Landorus 319/319, Blastoise 324/362
+
+  Turn 8
+    p1 mcts: move 4, move 3 1
+      search (13000 visits): protect,0;psyshock,0 300v 137 | switch butterfree;psyshock,0 262v 115 | flashcannon,0;psyshock,0 251v 109 | protect,0;psyshock,1 225v 94
+    p2 greedy: move 1 2, move 1 2
+      p1a Dialga used Protect
+      p2a Landorus used Earth Power -> p1b: Latias
+              p1b Latias -- IMMUNE
+      p1b Latias used Psyshock -> p2a: Landorus
+      p2b Blastoise used Scald -> p1b: Latias
+      after p1: Dialga 341/341, Latias 172/302
+      after p2: Landorus 177/319, Blastoise 324/362
+
+  Turn 9
+    p1 mcts: switch 5, move 3 1   (slot0 Dialga -> Butterfree)
+      search (16000 visits): switch butterfree;psyshock,0 389v 174 | switch aegislash;psyshock,0 378v 168 | protect,0;psyshock,0 372v 165 | switch kangaskhan;psyshock,0 353v 154
+    p2 greedy: move 1 2, move 1 2
+      p1a <- Butterfree comes in (262/262)
+      p2a Landorus used Earth Power -> p1b: Latias
+              p1b Latias -- IMMUNE
+      p1b Latias used Psyshock -> p2a: Landorus
+      p2b Blastoise used Scald -> p1b: Latias
+      after p1: Butterfree 262/262, Latias 147/302
+      after p2: Landorus 41/319, Blastoise 324/362
+
+  Turn 10
+    p1 mcts: move 1 1, move 3 2
+      search (15000 visits): sleeppowder,0;psyshock,1 374v 178 | bugbuzz,1;psyshock,1 317v 145 | sleeppowder,0;tailwind,1 291v 130 | bugbuzz,0;psyshock,1 287v 127
+    p2 greedy: move 1 2, move 1 2
+      p2a Landorus used Earth Power -> p1b: Latias
+              p1b Latias -- IMMUNE
+      p1a Butterfree used Sleep Powder -> p2a: Landorus
+              p2a Landorus is now slp
+      p1b Latias used Psyshock -> p2b: Blastoise
+              p2b Blastoise -- critical hit
+      p2b Blastoise used Scald -> p1b: Latias
+              p1b Latias -- critical hit
+      after p1: Butterfree 262/262, Latias 110/302
+      after p2: Landorus 41/319, Blastoise 167/362
+
+  Turn 11
+    p1 mcts: move 2 2, move 3 2
+      search (11000 visits): bugbuzz,1;psyshock,1 350v 163 | switch kangaskhan;psyshock,1 350v 163 | switch kangaskhan;psyshock,0 303v 136 | switch kangaskhan;tailwind,1 258v 110
+    p2 greedy: move 1 2, move 1 2
+              p2a Landorus COULD NOT MOVE (slp)
+      p1a Butterfree used Bug Buzz -> p2b: Blastoise
+      p1b Latias used Psyshock -> p2b: Blastoise
+      p2b Blastoise fainted
+      after p1: Butterfree 262/262, Latias 110/302
+      after p2: Landorus 41/319, Blastoise 0/362
+
+  Turn 12
+      p2b <- Volcanion comes in (363/363)
+      after p1: Butterfree 262/262, Latias 110/302
+      after p2: Landorus 41/319, Volcanion 363/363
+
+  Turn 13
+    p1 mcts: switch 6, move 3 2   (slot0 Butterfree -> Kangaskhan)
+      search (12000 visits): switch kangaskhan;psyshock,1 394v 175 | switch aegislash;psyshock,1 347v 149 | switch aegislash;psyshock,0 279v 113 | switch kangaskhan;tailwind,1 279v 112
+    p2 greedy: move 1 2, move 2 2
+      p1a <- Kangaskhan comes in (351/351)
+              p2a Landorus is cured of slp
+      p2a Landorus used Earth Power -> p1b: Latias
+              p1b Latias -- IMMUNE
+      p1b Latias used Psyshock -> p2b: Volcanion
+      p2b Volcanion used Overheat -> p1b: Latias
+              p1b Latias -- critical hit
+              p2b Volcanion spa 2 fell
+      after p1: Kangaskhan 351/351, Latias 4/302
+      after p2: Landorus 41/319, Volcanion 257/363
+
+  Turn 14
+    p1 mcts: move 1 1, move 3 2
+      search (25000 visits): fakeout,0;psyshock,1 428v 174 | fakeout,0;tailwind,1 344v 131 | fakeout-mega,0;psyshock,1 340v 129 | poweruppunch,1;psyshock,0 326v 122
+    p2 greedy: move 1 2, move 2 2
+      p1a Kangaskhan used Fake Out -> p2a: Landorus
+      p2a Landorus fainted
+      p1b Latias used Psyshock -> p2b: Volcanion
+              p2b Volcanion -- critical hit
+      p2b Volcanion used Overheat -> p1b: Latias
+              p2b Volcanion spa 2 fell
+      p1b Latias fainted
+      after p1: Kangaskhan 351/351, Latias 0/302
+      after p2: Landorus 0/319, Volcanion 94/363
+
+  Turn 15
+      p2a <- Scrafty comes in (334/334)
+      p1b <- Aegislash comes in (262/262)
+              p1a Kangaskhan atk 1 fell
+              p1b Aegislash atk 1 fell
+      after p1: Kangaskhan 351/351, Aegislash 262/262
+      after p2: Scrafty 334/334, Volcanion 94/363
+
+  Turn 16
+    p1 mcts: move 2 1 mega, switch 5   (slot1 Aegislash -> Dialga)
+      search (7000 visits): poweruppunch-mega,0;switch dialga 85v 45 | protect-mega,0;switch dialga 85v 45 | switch butterfree;switch dialga 81v 42 | poweruppunch,0;switch dialga 79v 41
+    p2 greedy: move 2 1, move 2 1
+      p1b <- Dialga comes in (341/341)
+      p1a Kangaskhan used Power-Up Punch -> p2a: Scrafty
+              p1a Kangaskhan atk 1 rose
+      p2b Volcanion used Overheat -> p1a: Kangaskhan
+              p2b Volcanion spa 2 fell
+      p2a Scrafty used High Jump Kick -> p1a: Kangaskhan
+      p1a Kangaskhan fainted
+      after p1: Kangaskhan 0/351, Dialga 341/341
+      after p2: Scrafty 232/334, Volcanion 94/363
+
+  Turn 17
+      p1a <- Aegislash comes in (262/262)
+      after p1: Aegislash 262/262, Dialga 341/341
+      after p2: Scrafty 232/334, Volcanion 94/363
+
+  Turn 18
+    p1 mcts: move 2 2, move 1 1
+      search (6000 visits): shadowball,1;dracometeor,0 347v 296 | shadowsneak,1;dracometeor,0 302v 253 | shadowsneak,0;dracometeor,0 280v 232 | shadowball,0;dracometeor,0 259v 212
+    p2 greedy: move 2 1, move 2 1
+      p1b Dialga used Draco Meteor -> p2a: Scrafty
+              p1b Dialga spa 2 fell
+      p2a Scrafty fainted
+      p2b Volcanion used Overheat -> p1a: Aegislash
+              p1a Aegislash used up its Weakness Policy
+              p1a Aegislash atk 2 rose
+              p1a Aegislash spa 2 rose
+      p1a Aegislash used Shadow Ball -> p2b: Volcanion
+      p2b Volcanion fainted
+      after p1: Aegislash-Blade 206/262, Dialga 341/341
+      after p2: Scrafty 0/334, Volcanion 0/363
+
+  RESULT: p1 wins

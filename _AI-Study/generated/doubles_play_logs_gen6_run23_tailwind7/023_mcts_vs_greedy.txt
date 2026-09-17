@@ -1,0 +1,165 @@
+battle 23   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: DPL vs laptops: Kangaskhan-Mega, Conkeldurr, Landorus, Deoxys-Speed, Volcanion, Genesect
+  p2: Untitled 294: Diancie-Mega, Terrakion, Talonflame, Bisharp, Kyurem-Black, Gastrodon-East
+
+  Turn 1
+    p1 mcts: switch 3, move 1 2   (slot0 Kangaskhan-Mega -> Landorus)
+      search (34000 visits): switch landorus;drainpunch,1 419v 395 | switch deoxysspeed;drainpunch,1 403v 378 | switch genesect;drainpunch,1 398v 373 | switch deoxysspeed;machpunch,1 393v 368
+    p2 greedy: move 1, move 3 1
+      p1a <- Landorus comes in (319/319)
+      p2a Diancie used Diamond Storm -> p1b: Conkeldurr  [[spread] p1a,p1b]
+              p1a Landorus -- critical hit
+              p2a Diancie def 1 rose
+      p2b Terrakion used Close Combat -> p1a: Landorus
+              p1a Landorus -- critical hit
+              p2b Terrakion def 1 fell
+              p2b Terrakion spd 1 fell
+      p1a Landorus fainted
+      p1b Conkeldurr used Drain Punch -> p2b: Terrakion
+              p2b Terrakion used up its Focus Sash
+      after p1: Landorus 0/319, Conkeldurr 401/401
+      after p2: Diancie-Mega 304/304, Terrakion 1/323
+
+  Turn 2
+      p1a <- Kangaskhan-Mega comes in (414/414)
+      after p1: Kangaskhan-Mega 414/414, Conkeldurr 401/401
+      after p2: Diancie-Mega 304/304, Terrakion 1/323
+
+  Turn 3
+    p1 mcts: switch 6, move 1 2   (slot0 Kangaskhan-Mega -> Genesect)
+      search (27000 visits): switch genesect;drainpunch,1 355v 337 | switch deoxysspeed;drainpunch,1 335v 316 | switch deoxysspeed;switch genesect 332v 313 | switch genesect;machpunch,1 329v 310
+    p2 greedy: move 1, move 3 1
+      p1a <- Genesect comes in (323/323)
+              p1a Genesect spa 1 rose
+      p2a Diancie used Diamond Storm -> p1a: Genesect  [[spread] p1a,p1b]
+      p2b Terrakion used Close Combat -> p1a: Genesect
+              p2b Terrakion def 1 fell
+              p2b Terrakion spd 1 fell
+      p1a Genesect fainted
+      p1b Conkeldurr used Drain Punch -> p2b: Terrakion
+      p2b Terrakion fainted
+      after p1: Genesect 0/323, Conkeldurr 338/401
+      after p2: Diancie-Mega 304/304, Terrakion 0/323
+
+  Turn 4
+      p2b <- Talonflame comes in (359/359)
+      p1a <- Deoxys-Speed comes in (303/303)
+      after p1: Deoxys-Speed 303/303, Conkeldurr 338/401
+      after p2: Diancie-Mega 304/304, Talonflame 359/359
+
+  Turn 5
+    p1 mcts: move 1 2, switch 5   (slot1 Conkeldurr -> Volcanion)
+      search (9000 visits): psychoboost,1;switch volcanion 850v 527 | icebeam,1;icepunch,1 251v 131 | switch kangaskhanmega;switch volcanion 161v 69 | icebeam,0;drainpunch,0 151v 63
+    p2 greedy: move 1, move 1 2
+      p1b <- Volcanion comes in (363/363)
+      p2b Talonflame used Brave Bird -> p1b: Volcanion
+      p1a Deoxys used Psycho Boost -> p2b: Talonflame
+              p1a Deoxys spa 2 fell
+      p2a Diancie used Diamond Storm -> p1b: Volcanion  [[spread] p1a,p1b]
+              p2a Diancie def 1 rose
+      p1b Volcanion fainted
+      after p1: Deoxys-Speed 165/303, Volcanion 0/363
+      after p2: Diancie-Mega 304/304, Talonflame 21/359
+
+  Turn 6
+      p1b <- Conkeldurr comes in (338/401)
+      after p1: Deoxys-Speed 165/303, Conkeldurr 338/401
+      after p2: Diancie-Mega 304/304, Talonflame 21/359
+
+  Turn 7
+    p1 mcts: switch 6, move 4 2   (slot0 Deoxys-Speed -> Kangaskhan-Mega)
+      search (23000 visits): switch kangaskhanmega;machpunch,1 12989v 10884 | switch kangaskhanmega;drainpunch,1 647v 452 | icebeam,1;switch kangaskhanmega 559v 384 | switch kangaskhanmega;drainpunch,0 489v 329
+    p2 greedy: move 1, move 1 1
+      p1a <- Kangaskhan-Mega comes in (414/414)
+      p2b Talonflame used Brave Bird -> p1a: Kangaskhan
+      p2b Talonflame fainted
+      p1b Conkeldurr used Mach Punch -> p2a: Diancie
+      p2a Diancie used Diamond Storm -> p1a: Kangaskhan  [[spread] p1a,p1b]
+              p2a Diancie def 1 rose
+      after p1: Kangaskhan-Mega 84/414, Conkeldurr 264/401
+      after p2: Diancie-Mega 276/304, Talonflame 0/359
+
+  Turn 8
+      p2b <- Bisharp comes in (271/271)
+      after p1: Kangaskhan-Mega 84/414, Conkeldurr 264/401
+      after p2: Diancie-Mega 276/304, Bisharp 271/271
+
+  Turn 9
+    p1 mcts: switch 6, move 1 2   (slot0 Kangaskhan-Mega -> Deoxys-Speed)
+      search (57000 visits): switch deoxysspeed;drainpunch,1 16450v 15480 | switch deoxysspeed;machpunch,1 4702v 4259 | switch deoxysspeed;knockoff,1 3528v 3159 | switch deoxysspeed;icepunch,1 3490v 3123
+    p2 greedy: move 1, move 1 1
+      p1a <- Deoxys-Speed comes in (165/303)
+      p2b Bisharp used Sucker Punch  [[still]]
+              p2b Bisharp -- IT FAILED
+      p2a Diancie used Diamond Storm -> p1a: Deoxys  [[spread] p1a,p1b]
+              p1a Deoxys -- critical hit
+              p2a Diancie def 1 rose
+      p1a Deoxys fainted
+      p1b Conkeldurr used Drain Punch -> p2b: Bisharp
+      p2b Bisharp fainted
+      after p1: Deoxys-Speed 0/303, Conkeldurr 337/401
+      after p2: Diancie-Mega 276/304, Bisharp 0/271
+
+  Turn 10
+      p1a <- Kangaskhan-Mega comes in (84/414)
+      p2b <- Kyurem-Black comes in (391/391)
+      after p1: Kangaskhan-Mega 84/414, Conkeldurr 337/401
+      after p2: Diancie-Mega 276/304, Kyurem-Black 391/391
+
+  Turn 11
+    p1 mcts: move 4, move 1 2
+      search (32000 visits): protect,0;drainpunch,1 3862v 3599 | protect,0;knockoff,1 1406v 1242 | protect,0;machpunch,1 1212v 1059 | protect,0;icepunch,1 1136v 988
+    p2 greedy: move 1, move 2 1
+      p1a Kangaskhan used Protect
+      p2b Kyurem used Draco Meteor -> p1a: Kangaskhan
+              p1a Kangaskhan -- move: Protect
+      p2a Diancie used Diamond Storm -> p1a: Kangaskhan  [[spread] p1b]
+              p1a Kangaskhan -- move: Protect
+      p1b Conkeldurr used Drain Punch -> p2b: Kyurem
+      after p1: Kangaskhan-Mega 84/414, Conkeldurr 400/401
+      after p2: Diancie-Mega 276/304, Kyurem-Black 121/391
+
+  Turn 12
+    p1 mcts: move 4, move 1 2
+      search (40000 visits): protect,0;drainpunch,1 3592v 3355 | seismictoss,1;drainpunch,1 2027v 1842 | fakeout,1;drainpunch,1 1667v 1497 | fakeout,0;drainpunch,1 1502v 1339
+    p2 greedy: move 2 1, move 2 1
+      p1a Kangaskhan used Protect
+      p2b Kyurem used Draco Meteor -> p1a: Kangaskhan
+              p1a Kangaskhan -- move: Protect
+      p2a Diancie used Moonblast -> p1a: Kangaskhan
+              p1a Kangaskhan -- move: Protect
+      p1b Conkeldurr used Drain Punch -> p2b: Kyurem
+      p2b Kyurem fainted
+      after p1: Kangaskhan-Mega 84/414, Conkeldurr 401/401
+      after p2: Diancie-Mega 276/304, Kyurem-Black 0/391
+
+  Turn 13
+      p2b <- Gastrodon-East comes in (426/426)
+      after p1: Kangaskhan-Mega 84/414, Conkeldurr 401/401
+      after p2: Diancie-Mega 276/304, Gastrodon-East 426/426
+
+  Turn 14
+    p1 mcts: move 4, move 1 2
+      search (35000 visits): protect,0;drainpunch,1 1029v 858 | crunch,1;knockoff,1 1006v 838 | protect,0;knockoff,1 990v 823 | crunch,1;drainpunch,1 948v 785
+    p2 greedy: move 2 1, move 1 1
+      p1a Kangaskhan used Protect  [[still]]
+              p1a Kangaskhan -- IT FAILED
+      p2a Diancie used Moonblast -> p1a: Kangaskhan
+      p1a Kangaskhan fainted
+      p1b Conkeldurr used Drain Punch -> p2b: Gastrodon
+      p2b Gastrodon used Earth Power -> p1b: Conkeldurr
+      after p1: Kangaskhan-Mega 0/414, Conkeldurr 265/401
+      after p2: Diancie-Mega 276/304, Gastrodon-East 263/426
+
+  Turn 15
+    p1 mcts: pass, move 1 1
+      search (1245000 visits): No Move;drainpunch,0 173506v 372 | No Move;knockoff,1 163397v 287 | No Move;drainpunch,1 158154v 244 | No Move;machpunch,0 157955v 242
+    p2 greedy: move 2 2, move 1 2
+      p2a Diancie used Moonblast -> p1b: Conkeldurr
+      p1b Conkeldurr used Drain Punch -> p2a: Diancie
+      p2b Gastrodon used Earth Power -> p1b: Conkeldurr
+      p1b Conkeldurr fainted
+      after p1: Kangaskhan-Mega 0/414, Conkeldurr 0/401
+      after p2: Diancie-Mega 237/304, Gastrodon-East 263/426
+
+  RESULT: p2 wins

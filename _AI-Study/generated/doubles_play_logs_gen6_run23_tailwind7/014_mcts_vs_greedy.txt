@@ -1,0 +1,191 @@
+battle 14   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: ORAS Doubles OU: Heatran, Diancie, Thundurus, Amoonguss, Bisharp, Kyurem-Black
+  p2: Untitled 879: Manectric-Mega, Sylveon, Landorus-Therian, Genesect, Volcanion, Porygon2
+
+  Turn 1
+    p1 mcts: switch 4, move 3 1 mega   (slot0 Heatran -> Amoonguss)
+      search (30000 visits): switch amoonguss;earthpower-mega,0 6339v 6130 | protect,0;diamondstorm-mega,0 520v 265 | heatwave,0;diamondstorm,0 415v 201 | protect,0;earthpower,1 387v 185
+    p2 greedy: move 3 1, move 3
+      p1a <- Amoonguss comes in (432/432)
+      p2a Manectric used Overheat -> p1a: Amoonguss  [[miss]]
+              p2a Manectric -- MISSED
+      p1b Diancie used Earth Power -> p2a: Manectric
+      p2b Sylveon used Hyper Voice -> p1a: Amoonguss  [[spread] p1a,p1b]
+      after p1: Amoonguss 372/432, Diancie-Mega 129/241
+      after p2: Manectric-Mega 84/344, Sylveon 394/394
+
+  Turn 2
+    p1 mcts: move 3 2, switch 4   (slot1 Diancie-Mega -> Heatran)
+      search (38000 visits): gigadrain,1;switch heatran 442v 422 | gigadrain,0;switch heatran 432v 411 | gigadrain,1;switch thundurus 430v 409 | ragepowder,0;switch kyuremblack 429v 408
+    p2 greedy: move 3 2, move 3
+      p1b <- Heatran comes in (337/337)
+      p2a Manectric used Overheat -> p1b: Heatran
+              p1b Heatran gained ability: Flash Fire
+      p2b Sylveon used Hyper Voice -> p1b: Heatran  [[spread] p1a,p1b]
+      p1a Amoonguss used Giga Drain -> p2b: Sylveon
+      after p1: Amoonguss 344/432, Heatran 330/337
+      after p2: Manectric-Mega 84/344, Sylveon 366/394
+
+  Turn 3
+    p1 mcts: switch 6, move 2   (slot0 Amoonguss -> Kyurem-Black)
+      search (45000 visits): switch kyuremblack;substitute,1 571v 554 | ragepowder,0;switch bisharp 565v 547 | protect,0;switch bisharp 562v 544 | switch bisharp;switch dianciemega 557v 539
+    p2 greedy: move 3 1, move 3
+      p1a <- Kyurem-Black comes in (416/416)
+      p2a Manectric used Overheat -> p1a: Kyurem
+              p2a Manectric spa 2 fell
+      p1b Heatran used Substitute
+              p1b Heatran gained Substitute
+      p2b Sylveon used Hyper Voice -> p1a: Kyurem  [[spread] p1a,p1b]
+              p1b Heatran -- critical hit
+      after p1: Kyurem-Black 35/416, Heatran 222/337
+      after p2: Manectric-Mega 84/344, Sylveon 390/394
+
+  Turn 4
+    p1 mcts: switch 3, switch 5   (slot0 Kyurem-Black -> Thundurus; slot1 Heatran -> Bisharp)
+      search (44000 visits): switch thundurus;switch bisharp 29170v 29100 | substitute,0;switch amoonguss 6898v 5820 | protect,0;heatwave,0 1213v 908 | switch bisharp;earthpower,1 387v 255
+    p2 greedy: move 3 1, move 3
+      p1a <- Thundurus comes in (362/362)
+              p1b Heatran lost ability: Flash Fire
+      p1b <- Bisharp comes in (271/271)
+      p2a Manectric used Overheat -> p1a: Thundurus
+              p2a Manectric spa 2 fell
+      p2b Sylveon used Hyper Voice -> p1a: Thundurus  [[spread] p1a,p1b]
+              p1a Thundurus used up its Sitrus Berry
+      after p1: Thundurus 249/362, Bisharp 127/271
+      after p2: Manectric-Mega 84/344, Sylveon 394/394
+
+  Turn 5
+    p1 mcts: switch 6, move 4 2   (slot0 Thundurus -> Amoonguss)
+      search (59000 visits): switch amoonguss;ironhead,1 32859v 22141 | switch kyuremblack;suckerpunch,0 10071v 6724 | switch heatran;ironhead,1 285v 120 | hiddenpower,0;ironhead,1 280v 118
+    p2 greedy: move 3 2, move 3
+      p1a <- Amoonguss comes in (432/432)
+      p2a Manectric used Overheat -> p1b: Bisharp
+              p2a Manectric spa 2 fell
+      p1b Bisharp fainted
+      p2b Sylveon used Hyper Voice -> p1a: Amoonguss
+      after p1: Amoonguss 360/432, Bisharp 0/271
+      after p2: Manectric-Mega 84/344, Sylveon 394/394
+
+  Turn 6
+      p1b <- Kyurem-Black comes in (35/416)
+      after p1: Amoonguss 360/432, Kyurem-Black 35/416
+      after p2: Manectric-Mega 84/344, Sylveon 394/394
+
+  Turn 7
+    p1 mcts: move 3 2, switch 6   (slot1 Kyurem-Black -> Thundurus)
+      search (48000 visits): gigadrain,1;switch thundurus 43528v 43455 | ragepowder,0;icebeam,0 126v 70 | protect,0;earthpower,0 99v 50 | gigadrain,0;earthpower,1 88v 42
+    p2 greedy: move 3 2, move 3
+      p1b <- Thundurus comes in (249/362)
+      p2a Manectric used Overheat -> p1b: Thundurus
+      p2b Sylveon used Hyper Voice -> p1b: Thundurus  [[spread] p1a,p1b]
+      p1a Amoonguss used Giga Drain -> p2b: Sylveon
+      after p1: Amoonguss 330/432, Thundurus 80/362
+      after p2: Manectric-Mega 84/344, Sylveon 357/394
+
+  Turn 8
+    p1 mcts: move 1, move 3 2
+      search (50000 visits): ragepowder,0;thunderbolt,1 17172v 17134 | switch kyuremblack;thunderwave,1 12686v 12084 | switch dianciemega;taunt,1 1391v 1201 | gigadrain,1;switch kyuremblack 346v 256
+    p2 greedy: move 3 2, move 3
+      p1a Amoonguss used Rage Powder
+      p2a Manectric used Overheat -> p1a: Amoonguss
+      p1b Thundurus used Thunderbolt -> p2a: Manectric
+              p2a Manectric -- ability: Lightning Rod
+              p2a Manectric spa 1 rose
+      p2b Sylveon used Hyper Voice -> p1b: Thundurus  [[spread] p1a,p1b]
+              p1a Amoonguss used up its Sitrus Berry
+      p1b Thundurus fainted
+      after p1: Amoonguss 307/432, Thundurus 0/362
+      after p2: Manectric-Mega 84/344, Sylveon 381/394
+
+  Turn 9
+      p1b <- Diancie-Mega comes in (129/241)
+      after p1: Amoonguss 307/432, Diancie-Mega 129/241
+      after p2: Manectric-Mega 84/344, Sylveon 381/394
+
+  Turn 10
+    p1 mcts: move 3 1, switch 6   (slot1 Diancie-Mega -> Kyurem-Black)
+      search (66000 visits): gigadrain,0;switch kyuremblack 1165v 1149 | gigadrain,1;switch heatran 1165v 1149 | spore,1;switch kyuremblack 1159v 1142 | protect,0;switch kyuremblack 1154v 1137
+    p2 greedy: move 3 2, move 3
+      p1b <- Kyurem-Black comes in (35/416)
+      p2a Manectric used Overheat -> p1b: Kyurem
+              p2a Manectric spa 1 fell
+      p1b Kyurem fainted
+      p2b Sylveon used Hyper Voice -> p1a: Amoonguss
+      p1a Amoonguss used Giga Drain -> p2a: Manectric
+      p2a Manectric fainted
+      after p1: Amoonguss 274/432, Kyurem-Black 0/416
+      after p2: Manectric-Mega 0/344, Sylveon 394/394
+
+  Turn 11
+      p2a <- Landorus-Therian comes in (382/382)
+      p1b <- Heatran comes in (222/337)
+              p1a Amoonguss atk 1 fell
+              p1b Heatran atk 1 fell
+      after p1: Amoonguss 274/432, Heatran 222/337
+      after p2: Landorus-Therian 382/382, Sylveon 394/394
+
+  Turn 12
+    p1 mcts: move 1, switch 6   (slot1 Heatran -> Diancie-Mega)
+      search (44000 visits): ragepowder,0;switch dianciemega 1148v 1129 | protect,0;switch dianciemega 1122v 1101 | spore,0;switch dianciemega 1119v 1098 | switch dianciemega;earthpower,1 1106v 1085
+    p2 greedy: move 1 1, move 3
+      p1b <- Diancie-Mega comes in (129/241)
+      p1a Amoonguss used Rage Powder
+      p2a Landorus used Earth Power -> p1a: Amoonguss
+      p2b Sylveon used Hyper Voice -> p1a: Amoonguss  [[spread] p1a,p1b]
+      after p1: Amoonguss 81/432, Diancie-Mega 26/241
+      after p2: Landorus-Therian 382/382, Sylveon 394/394
+
+  Turn 13
+    p1 mcts: move 1, move 1
+      search (39000 visits): ragepowder,0;diamondstorm,0 873v 870 | ragepowder,0;moonblast,0 855v 850 | ragepowder,0;moonblast,1 855v 850 | gigadrain,0;diamondstorm,0 847v 842
+    p2 greedy: move 1 2, move 3
+      p1a Amoonguss used Rage Powder
+      p1b Diancie used Diamond Storm -> p2b: Sylveon  [[spread] p2a,p2b]
+      p2a Landorus used Earth Power -> p1b: Diancie
+      p1b Diancie fainted
+      p2b Sylveon used Hyper Voice -> p1a: Amoonguss
+      p1a Amoonguss fainted
+      after p1: Amoonguss 0/432, Diancie 0/241
+      after p2: Landorus-Therian 214/382, Sylveon 247/394
+
+  Turn 14
+      p1a <- Heatran comes in (222/337)
+      after p1: Heatran 222/337, Diancie 0/241
+      after p2: Landorus-Therian 214/382, Sylveon 247/394
+
+  Turn 15
+    p1 mcts: move 3, pass
+      search (52000 visits): protect,0;No Move 48624v 32227 | substitute,0;No Move 1496v 842 | heatwave,0;No Move 900v 475 | earthpower,0;No Move 562v 274
+    p2 greedy: move 1 1, move 3
+      p1a Heatran used Protect
+      p2a Landorus used Earth Power -> p1a: Heatran
+              p1a Heatran -- move: Protect
+      p2b Sylveon used Hyper Voice -> p1a: Heatran
+              p1a Heatran -- move: Protect
+      after p1: Heatran 243/337, Diancie 0/241
+      after p2: Landorus-Therian 214/382, Sylveon 271/394
+
+  Turn 16
+    p1 mcts: move 3, pass
+      search (65000 visits): protect,0;No Move 63496v 44258 | substitute,0;No Move 574v 296 | earthpower,1;No Move 347v 160 | heatwave,0;No Move 340v 155
+    p2 greedy: move 1 1, move 3
+      p1a Heatran used Protect
+      p2a Landorus used Earth Power -> p1a: Heatran
+              p1a Heatran -- move: Protect
+      p2b Sylveon used Hyper Voice -> p1a: Heatran
+              p1a Heatran -- move: Protect
+      after p1: Heatran 264/337, Diancie 0/241
+      after p2: Landorus-Therian 214/382, Sylveon 295/394
+
+  Turn 17
+    p1 mcts: move 3, pass
+      search (63000 visits): protect,0;No Move 61078v 41852 | substitute,0;No Move 722v 379 | heatwave,0;No Move 599v 304 | earthpower,0;No Move 313v 136
+    p2 greedy: move 1 1, move 3
+      p1a Heatran used Protect  [[still]]
+              p1a Heatran -- IT FAILED
+      p2a Landorus used Earth Power -> p1a: Heatran
+      p1a Heatran fainted
+      after p1: Heatran 0/337, Diancie 0/241
+      after p2: Landorus-Therian 214/382, Sylveon 295/394
+
+  RESULT: p2 wins

@@ -1,0 +1,156 @@
+battle 137   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: oraspl/Untitled 241: Gardevoir-Mega, Aegislash, Landorus-Therian, Blastoise, Talonflame, Machamp
+  p2: ORAS Doubles OU: Kangaskhan-Mega, Ferrothorn, Talonflame, Zapdos, Landorus-Therian, Sylveon
+
+  Turn 1
+    p1 mcts: move 3, switch 3   (slot1 Aegislash -> Landorus-Therian)
+      search (16000 visits): calmmind,0;switch landorustherian 1289v 925 | hypervoice,0;switch landorustherian 1005v 705 | psyshock,0;switch landorustherian 777v 530 | psyshock,1;switch landorustherian 533v 346
+    p2 greedy: move 4 1, move 2 1
+      p1b <- Landorus-Therian comes in (382/382)
+              p2a Kangaskhan atk 1 fell
+              p2b Ferrothorn atk 1 fell
+      p2a Kangaskhan used Sucker Punch  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p1a Gardevoir used Calm Mind
+              p1a Gardevoir spa 1 rose
+              p1a Gardevoir spd 1 rose
+      p2b Ferrothorn used Power Whip -> p1a: Gardevoir
+      after p1: Gardevoir-Mega 204/340, Landorus-Therian 382/382
+      after p2: Kangaskhan-Mega 352/352, Ferrothorn 352/352
+
+  Turn 2
+    p1 mcts: move 2 1, move 4 2
+      search (25000 visits): psyshock,0;knockoff,1 879v 513 | hypervoice,0;earthquake,0 754v 431 | psyshock,0;uturn,0 739v 421 | psyshock,0;uturn,1 736v 419
+    p2 greedy: move 4 1, move 2 1
+      p2a Kangaskhan used Sucker Punch -> p1a: Gardevoir
+      p1a Gardevoir used Psyshock -> p2a: Kangaskhan
+      p1b Landorus used Knock Off -> p2b: Ferrothorn
+              p2b Ferrothorn used up its Lum Berry
+      p2b Ferrothorn used Power Whip -> p1a: Gardevoir
+      p1a Gardevoir fainted
+      after p1: Gardevoir-Mega 0/340, Landorus-Therian 335/382
+      after p2: Kangaskhan-Mega 121/352, Ferrothorn 264/352
+
+  Turn 3
+      p1a <- Aegislash comes in (324/324)
+      after p1: Aegislash 324/324, Landorus-Therian 335/382
+      after p2: Kangaskhan-Mega 121/352, Ferrothorn 264/352
+
+  Turn 4
+    p1 mcts: switch 5, move 1   (slot0 Aegislash -> Talonflame)
+      search (11000 visits): switch talonflame;earthquake,0 246v 126 | switch talonflame;knockoff,0 211v 104 | switch talonflame;knockoff,1 202v 98 | switch talonflame;stoneedge,0 200v 97
+    p2 greedy: move 4 2, move 2 2
+      p1a <- Talonflame comes in (360/360)
+      p2a Kangaskhan used Sucker Punch -> p1b: Landorus
+      p1b Landorus used Earthquake -> p2b: Ferrothorn  [[spread] p2a,p2b]
+              p1a Talonflame -- IMMUNE
+      p2a Kangaskhan fainted
+      p2b Ferrothorn used Power Whip -> p1b: Landorus
+      after p1: Talonflame 360/360, Landorus-Therian 127/382
+      after p2: Kangaskhan-Mega 0/352, Ferrothorn 165/352
+
+  Turn 5
+      p2a <- Talonflame comes in (297/297)
+      after p1: Talonflame 360/360, Landorus-Therian 127/382
+      after p2: Talonflame 297/297, Ferrothorn 165/352
+
+  Turn 6
+    p1 mcts: move 1, move 2 2
+      search (29000 visits): tailwind,0;uturn,1 847v 485 | tailwind,0;uturn,0 689v 383 | tailwind,0;earthquake,0 682v 378 | willowisp,1;stoneedge,0 617v 337
+    p2 greedy: move 1 2, move 2 2
+      p1a Talonflame used Tailwind
+      -sidestart p1: A move: Tailwind
+      p2a Talonflame used Brave Bird -> p1b: Landorus
+      p1b Landorus fainted
+      p2b Ferrothorn used Power Whip -> p1a: Talonflame
+      after p1: Talonflame 320/360, Landorus-Therian 0/382
+      after p2: Talonflame 226/297, Ferrothorn 165/352
+
+  Turn 7
+      p1b <- Blastoise comes in (362/362)
+      after p1: Talonflame 320/360, Blastoise 362/362
+      after p2: Talonflame 226/297, Ferrothorn 165/352
+
+  Turn 8
+    p1 mcts: move 4 2, move 3 1
+      search (23000 visits): flareblitz,1;scald,0 1008v 520 | willowisp,1;icywind,0 966v 495 | flareblitz,0;scald,0 854v 430 | willowisp,1;scald,0 796v 396
+    p2 greedy: move 1 1, move 2 1
+      p2a Talonflame used Brave Bird -> p1a: Talonflame
+              p1a Talonflame used up its Sitrus Berry
+      p1a Talonflame used Flare Blitz -> p2b: Ferrothorn
+      p2b Ferrothorn fainted
+      p1a Talonflame fainted
+      p1b Blastoise used Scald -> p2a: Talonflame
+      p2a Talonflame fainted
+      after p1: Talonflame 0/360, Blastoise 362/362
+      after p2: Talonflame 0/297, Ferrothorn 0/352
+
+  Turn 9
+      p1a <- Aegislash comes in (324/324)
+      p2a <- Zapdos comes in (384/384)
+      p2b <- Landorus-Therian comes in (319/319)
+              p1a Aegislash atk 1 fell
+              p1b Blastoise atk 1 fell
+      after p1: Aegislash 324/324, Blastoise 362/362
+      after p2: Zapdos 384/384, Landorus-Therian 319/319
+
+  Turn 10
+    p1 mcts: move 2 2, move 4
+      search (22000 visits): shadowball,1;protect,1 1280v 550 | wideguard,0;switch machamp 1035v 430 | switch machamp;scald,1 1019v 422 | flashcannon,1;protect,1 976v 401
+    p2 greedy: move 1 1, move 3 1
+      p1b Blastoise used Protect
+      p1a Aegislash used Shadow Ball -> p2b: Landorus
+      p2b Landorus used Superpower -> p1a: Aegislash
+              p1a Aegislash -- IMMUNE
+      p2a Zapdos used Thunderbolt -> p1a: Aegislash
+      after p1: Aegislash-Blade 128/324, Blastoise 362/362
+      after p2: Zapdos 384/384, Landorus-Therian 141/319
+
+  Turn 11
+    p1 mcts: move 1 2, switch 6   (slot1 Blastoise -> Machamp)
+      search (36000 visits): flashcannon,1;switch machamp 4098v 2095 | flashcannon,1;protect,1 2374v 1161 | shadowball,1;icywind,0 2089v 1008 | shadowball,1;switch machamp 1712v 808
+    p2 greedy: move 1 1, move 3 1
+      p1b <- Machamp comes in (383/383)
+      p1a Aegislash used Flash Cannon -> p2b: Landorus
+      p2b Landorus fainted
+      p2a Zapdos used Thunderbolt -> p1a: Aegislash
+      p1a Aegislash fainted
+      -sideend p1: A move: Tailwind
+      after p1: Aegislash 0/324, Machamp 383/383
+      after p2: Zapdos 384/384, Landorus-Therian 0/319
+
+  Turn 12
+      p2b <- Sylveon comes in (368/368)
+      p1a <- Blastoise comes in (362/362)
+      after p1: Blastoise 362/362, Machamp 383/383
+      after p2: Zapdos 384/384, Sylveon 368/368
+
+  Turn 13
+    p1 mcts: move 2, move 2 2
+      search (49000 visits): icywind,0;knockoff,1 6273v 1301 | icywind,0;stoneedge,1 3686v 698 | icywind,0;dynamicpunch,1 2654v 467 | scald,1;stoneedge,1 2023v 329
+    p2 greedy: move 1 1, move 3
+      p2a Zapdos used Thunderbolt -> p1a: Blastoise
+      p1a Blastoise used Icy Wind -> p2a: Zapdos  [[spread] p2a,p2b]
+              p2a Zapdos spe 1 fell
+              p2b Sylveon spe 1 fell
+      p2b Sylveon used Hyper Voice -> p1a: Blastoise  [[spread] p1a,p1b]
+      p1a Blastoise fainted
+      p1b Machamp used Knock Off -> p2b: Sylveon
+              p2b Sylveon used up its Leftovers
+      after p1: Blastoise 0/362, Machamp 147/383
+      after p2: Zapdos 328/384, Sylveon 263/368
+
+  Turn 14
+    p1 mcts: pass, move 1 2
+      search (771000 visits): No Move;icepunch,1 107561v 465 | No Move;stoneedge,1 105323v 438 | No Move;dynamicpunch,1 98986v 362 | No Move;knockoff,1 95703v 323
+    p2 greedy: move 1 2, move 3
+      p2a Zapdos used Thunderbolt -> p1b: Machamp
+              p1b Machamp is now par
+      p1b Machamp used Ice Punch -> p2b: Sylveon
+              p2b Sylveon -- critical hit
+      p2b Sylveon used Hyper Voice -> p1b: Machamp
+      p1b Machamp fainted
+      after p1: Blastoise 0/362, Machamp 0/383
+      after p2: Zapdos 328/384, Sylveon 49/368
+
+  RESULT: p2 wins

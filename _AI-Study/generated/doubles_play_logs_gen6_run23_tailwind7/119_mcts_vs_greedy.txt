@@ -1,0 +1,157 @@
+battle 119   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: ORAS Doubles OU: Diancie-Mega, Gastrodon-East, Aegislash, Kyurem-Black, Talonflame, Thundurus
+  p2: BUREIZAKIN: Blaziken-Mega, Bisharp, Amoonguss, Raichu, Scrafty, Kyurem-Black
+
+  Turn 1
+    p1 mcts: move 2 2, move 2 1
+      search (21000 visits): moonblast,1;earthpower,0 821v 535 | earthpower,1;earthpower,0 750v 484 | moonblast,1;scald,0 729v 468 | diamondstorm,0;earthpower,0 670v 426
+    p2 greedy: move 2 1, move 2 1
+      p2b Bisharp used Sucker Punch -> p1a: Diancie
+      p1a Diancie used Moonblast -> p2b: Bisharp
+      p2a Blaziken used High Jump Kick -> p1a: Diancie
+      p1a Diancie fainted
+      p1b Gastrodon used Earth Power -> p2a: Blaziken
+              p2a Blaziken -- critical hit
+      p2a Blaziken fainted
+      after p1: Diancie-Mega 0/241, Gastrodon-East 421/421
+      after p2: Blaziken-Mega 0/301, Bisharp 32/272
+
+  Turn 2
+      p1a <- Aegislash comes in (324/324)
+      p2a <- Amoonguss comes in (432/432)
+      after p1: Aegislash 324/324, Gastrodon-East 421/421
+      after p2: Amoonguss 432/432, Bisharp 32/272
+
+  Turn 3
+    p1 mcts: move 2 1, move 2 1
+      search (25000 visits): flashcannon,0;earthpower,0 524v 145 | shadowball,0;earthpower,0 519v 143 | flashcannon,0;icebeam,0 514v 141 | shadowball,0;icebeam,0 508v 139
+    p2 greedy: move 3 1, move 2 1
+      p2b Bisharp used Sucker Punch -> p1a: Aegislash
+      p1a Aegislash used Flash Cannon -> p2a: Amoonguss
+      p1b Gastrodon used Earth Power -> p2a: Amoonguss
+      p2a Amoonguss used Giga Drain -> p1a: Aegislash
+      p1a Aegislash fainted
+      after p1: Aegislash 0/324, Gastrodon-East 421/421
+      after p2: Amoonguss 149/432, Bisharp 5/272
+
+  Turn 4
+      p1a <- Kyurem-Black comes in (418/418)
+      after p1: Kyurem-Black 418/418, Gastrodon-East 421/421
+      after p2: Amoonguss 149/432, Bisharp 5/272
+
+  Turn 5
+    p1 mcts: move 2 1, move 3 1
+      search (26000 visits): icebeam,0;icebeam,0 563v 77 | icebeam,0;earthpower,0 542v 73 | icebeam,0;scald,0 490v 61 | icebeam,0;scald,1 484v 59
+    p2 greedy: move 3 1, move 2 1
+      p2b Bisharp used Sucker Punch -> p1a: Kyurem
+      p2b Bisharp fainted
+      p1a Kyurem used Ice Beam -> p2a: Amoonguss
+      p2a Amoonguss fainted
+      p1b Gastrodon used Ice Beam -> p2: Amoonguss  [[notarget]]
+              p1b Gastrodon -- IT FAILED
+      after p1: Kyurem-Black 261/418, Gastrodon-East 421/421
+      after p2: Amoonguss 0/432, Bisharp 0/272
+
+  Turn 6
+      p2b <- Scrafty comes in (334/334)
+      p2a <- Raichu comes in (262/262)
+              p1a Kyurem atk 1 fell
+              p1b Gastrodon atk 1 fell
+      after p1: Kyurem-Black 261/418, Gastrodon-East 421/421
+      after p2: Raichu 262/262, Scrafty 334/334
+
+  Turn 7
+    p1 mcts: move 4, move 2 1
+      search (11000 visits): protect,0;earthpower,0 349v 276 | earthpower,0;scald,1 314v 244 | icebeam,0;scald,1 262v 198 | earthpower,0;earthpower,0 261v 197
+    p2 greedy: move 3 1, move 2 1
+      p1a Kyurem used Protect
+      p2a Raichu used Thunderbolt -> p1a: Kyurem
+              p1a Kyurem -- move: Protect
+      p2b Scrafty used Drain Punch -> p1a: Kyurem
+              p1a Kyurem -- move: Protect
+      p1b Gastrodon used Earth Power -> p2a: Raichu
+              p2a Raichu used up its Focus Sash
+              p2a Raichu spd 1 fell
+      after p1: Kyurem-Black 287/418, Gastrodon-East 421/421
+      after p2: Raichu 1/262, Scrafty 334/334
+
+  Turn 8
+    p1 mcts: move 2 2, move 2 2
+      search (23000 visits): icebeam,1;earthpower,1 1062v 680 | icebeam,1;scald,1 972v 616 | protect,0;scald,1 873v 546 | protect,0;earthpower,1 720v 440
+    p2 greedy: move 3 1, move 2 1
+      p2a Raichu used Thunderbolt -> p1a: Kyurem
+      p1a Kyurem used Ice Beam -> p2b: Scrafty
+              p2b Scrafty used up its Eject Button
+      after p1: Kyurem-Black 222/418, Gastrodon-East 421/421
+      after p2: Raichu 1/262, Scrafty 184/334
+
+  Turn 9
+      p2b <- Kyurem-Black comes in (391/391)
+      p1b Gastrodon used Earth Power -> p2b: Kyurem
+      after p1: Kyurem-Black 248/418, Gastrodon-East 421/421
+      after p2: Raichu 1/262, Kyurem-Black 250/391
+
+  Turn 10
+    p1 mcts: move 4, move 2 2
+      search (20000 visits): protect,0;earthpower,1 685v 382 | icebeam,1;recover,1 628v 345 | icebeam,1;switch talonflame 606v 331 | icebeam,1;earthpower,1 584v 317
+    p2 greedy: move 3 1, move 2 1
+      p1a Kyurem used Protect
+      p2b Kyurem used Draco Meteor -> p1a: Kyurem
+              p1a Kyurem -- move: Protect
+      p2a Raichu used Thunderbolt -> p1a: Kyurem
+              p1a Kyurem -- move: Protect
+      p1b Gastrodon used Earth Power -> p2b: Kyurem
+              p2b Kyurem spd 1 fell
+      after p1: Kyurem-Black 274/418, Gastrodon-East 421/421
+      after p2: Raichu 1/262, Kyurem-Black 103/391
+
+  Turn 11
+    p1 mcts: switch 6, move 1 1   (slot0 Kyurem-Black -> Thundurus)
+      search (30000 visits): switch thundurus;scald,0 2429v 1554 | switch thundurus;earthpower,0 2234v 1420 | switch thundurus;icebeam,0 2109v 1335 | switch thundurus;scald,1 1274v 770
+    p2 greedy: move 3 1, move 2 1
+      p1a <- Thundurus comes in (361/361)
+      p2b Kyurem used Draco Meteor -> p1a: Thundurus
+              p2b Kyurem spa 2 fell
+              p1a Thundurus used up its Sitrus Berry
+      p2a Raichu used Thunderbolt -> p1a: Thundurus
+      p1b Gastrodon used Scald -> p2a: Raichu
+      p2a Raichu fainted
+      after p1: Thundurus 65/361, Gastrodon-East 421/421
+      after p2: Raichu 0/262, Kyurem-Black 103/391
+
+  Turn 12
+      p2a <- Scrafty comes in (184/334)
+              p1a Thundurus atk 1 fell
+              p1b Gastrodon atk 1 fell
+      after p1: Thundurus 65/361, Gastrodon-East 421/421
+      after p2: Scrafty 184/334, Kyurem-Black 103/391
+
+  Turn 13
+    p1 mcts: move 1 1, move 2 2
+      search (34000 visits): thunderbolt,0;earthpower,1 1031v 749 | switch talonflame;scald,0 905v 649 | switch talonflame;icebeam,1 790v 558 | thunderbolt,0;earthpower,0 786v 555
+    p2 greedy: move 2 1, move 2 1
+      p2b Kyurem used Draco Meteor -> p1a: Thundurus
+              p2b Kyurem spa 2 fell
+      p1a Thundurus fainted
+      p2a Scrafty used Drain Punch -> p1b: Gastrodon
+      p1b Gastrodon used Earth Power -> p2b: Kyurem
+              p2b Kyurem -- critical hit
+      p2b Kyurem fainted
+      after p1: Thundurus 0/361, Gastrodon-East 291/421
+      after p2: Scrafty 249/334, Kyurem-Black 0/391
+
+  Turn 14
+      p1a <- Talonflame comes in (297/297)
+      after p1: Talonflame 297/297, Gastrodon-East 291/421
+      after p2: Scrafty 249/334, Kyurem-Black 0/391
+
+  Turn 15
+    p1 mcts: move 2 1, move 1 1
+      search (521000 visits): bravebird,0;scald,0 75751v 75751 | bravebird,0;icebeam,0 75751v 75751 | bravebird,0;recover,1 75750v 75750 | flareblitz,0;earthpower,0 72237v 72205
+    p2 greedy: move 2 2, pass
+      p1a Talonflame used Brave Bird -> p2a: Scrafty
+      p2a Scrafty fainted
+      after p1: Talonflame 186/297, Gastrodon-East 291/421
+      after p2: Scrafty 0/334, Kyurem-Black 0/391
+
+  RESULT: p1 wins

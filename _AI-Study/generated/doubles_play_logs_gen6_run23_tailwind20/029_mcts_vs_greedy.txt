@@ -1,0 +1,143 @@
+battle 29   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: ORAS Doubles OU: Rotom-Heat, Excadrill, Tyranitar, Salamence, Latias, Jirachi
+  p2: dpl ::/Untitled 723: Spinda, Victini, Gothitelle, Amoonguss, Clefairy, Salamence-Mega
+
+  Turn 1
+    p1 mcts: move 2 1, switch 4   (slot1 Excadrill -> Salamence)
+      search (14000 visits): thunderbolt,0;switch salamence 495v 399 | willowisp,0;switch salamence 335v 256 | switch tyranitar;switch salamence 300v 225 | thunderbolt,0;earthquake,0 297v 222
+    p2 greedy: move 1 1, move 1 1
+      p1b <- Salamence comes in (331/331)
+              p2a Spinda atk 1 rose
+              p2b Victini atk 1 fell
+      p2a Spinda used Fake Out -> p1a: Rotom
+              p1a Rotom COULD NOT MOVE (flinch)
+      p2b Victini used V-create -> p1a: Rotom
+              p2b Victini spe 1 fell
+              p2b Victini def 1 fell
+              p2b Victini spd 1 fell
+      after p1: Rotom-Heat 171/273, Salamence 331/331
+      after p2: Spinda 324/324, Victini 404/404
+
+  Turn 2
+    p1 mcts: move 2 1, move 3 1
+      search (9000 visits): thunderbolt,0;fireblast,0 192v 139 | thunderbolt,0;hydropump,0 180v 129 | thunderbolt,1;fireblast,0 171v 121 | thunderbolt,0;tailwind,1 160v 111
+    p2 greedy: move 1 1, move 1 1
+      p2a Spinda used Fake Out  [[still]]
+              p2a Spinda -- IT FAILED
+      p1b Salamence used Fire Blast -> p2a: Spinda
+      p1a Rotom used Thunderbolt -> p2a: Spinda
+      p2a Spinda fainted
+      p2b Victini used V-create -> p1a: Rotom
+              p2b Victini spe 1 fell
+              p2b Victini def 1 fell
+              p2b Victini spd 1 fell
+      after p1: Rotom-Heat 114/273, Salamence 331/331
+      after p2: Spinda 0/324, Victini 404/404
+
+  Turn 3
+      p2a <- Gothitelle comes in (344/344)
+      after p1: Rotom-Heat 114/273, Salamence 331/331
+      after p2: Gothitelle 344/344, Victini 404/404
+
+  Turn 4
+    p1 mcts: move 2 2, move 3 1
+      search (12000 visits): thunderbolt,1;fireblast,0 1789v 806 | thunderbolt,0;fireblast,1 1395v 609 | thunderbolt,0;fireblast,0 1383v 603 | thunderbolt,1;fireblast,1 1162v 494
+    p2 greedy: move 4 1, move 1 1
+      p1b Salamence used Fire Blast -> p2a: Gothitelle
+              p2a Gothitelle is now brn
+      p2a Gothitelle used Psychic -> p1a: Rotom
+      p1a Rotom used Thunderbolt -> p2b: Victini
+              p2b Victini is now par
+              p2b Victini COULD NOT MOVE (par)
+      after p1: Rotom-Heat 18/273, Salamence 331/331
+      after p2: Gothitelle 188/344, Victini 245/404
+
+  Turn 5
+    p1 mcts: move 2 1, move 3 2
+      search (25000 visits): thunderbolt,0;fireblast,1 2509v 282 | protect,0;fireblast,0 2400v 265 | thunderbolt,0;fireblast,0 2347v 257 | thunderbolt,1;fireblast,0 2323v 253
+    p2 greedy: move 4 1, move 1 1
+      p1b Salamence used Fire Blast -> p2b: Victini
+      p2a Gothitelle used Psychic -> p1a: Rotom
+      p1a Rotom fainted
+      p2b Victini used V-create -> p1b: Salamence
+              p2b Victini spe 1 fell
+              p2b Victini def 1 fell
+              p2b Victini spd 1 fell
+      after p1: Rotom-Heat 0/273, Salamence 250/331
+      after p2: Gothitelle 145/344, Victini 184/404
+
+  Turn 6
+      p1a <- Tyranitar comes in (404/404)
+      after p1: Tyranitar 404/404, Salamence 250/331
+      after p2: Gothitelle 145/344, Victini 184/404
+
+  Turn 7
+    p1 mcts: move 4 2, move 3 1
+      search (18000 visits): icebeam,1;fireblast,0 2230v 979 | fireblast,0;fireblast,1 1836v 788 | stoneedge,0;fireblast,1 1832v 786 | fireblast,1;fireblast,0 1655v 701
+    p2 greedy: move 4 2, move 1 2
+      p1b Salamence used Fire Blast -> p2a: Gothitelle
+      p2a Gothitelle used Psychic -> p1b: Salamence
+      p1a Tyranitar used Ice Beam -> p2b: Victini
+      p2b Victini used V-create -> p1b: Salamence
+              p2b Victini spe 1 fell
+              p2b Victini def 1 fell
+              p2b Victini spd 1 fell
+      p2a Gothitelle fainted
+      after p1: Tyranitar 404/404, Salamence 32/331
+      after p2: Gothitelle 0/344, Victini 103/404
+
+  Turn 8
+      p2a <- Amoonguss comes in (432/432)
+      after p1: Tyranitar 404/404, Salamence 32/331
+      after p2: Amoonguss 432/432, Victini 103/404
+
+  Turn 9
+    p1 mcts: move 4 1, move 3 1
+      search (22000 visits): icebeam,0;fireblast,0 494v 23 | fireblast,0;fireblast,0 478v 21 | icebeam,0;switch latias 472v 20 | stoneedge,0;fireblast,0 467v 19
+    p2 greedy: move 3 2, move 1 2
+      p1b Salamence used Fire Blast -> p2a: Amoonguss
+      p1a Tyranitar used Ice Beam -> p2a: Amoonguss
+      p2a Amoonguss fainted
+      p2b Victini used V-create -> p1b: Salamence
+              p2b Victini spe 1 fell
+              p2b Victini def 1 fell
+              p2b Victini spd 1 fell
+      p1b Salamence fainted
+      after p1: Tyranitar 404/404, Salamence 0/331
+      after p2: Amoonguss 0/432, Victini 78/404
+
+  Turn 10
+      p1b <- Excadrill comes in (416/416)
+      p2a <- Clefairy comes in (344/344)
+      after p1: Tyranitar 404/404, Excadrill 416/416
+      after p2: Clefairy 344/344, Victini 78/404
+
+  Turn 11
+    p1 mcts: move 2 1, move 1 1
+      search (14000 visits): stoneedge,0;ironhead,0 657v 281 | icebeam,0;ironhead,0 606v 255 | fireblast,0;ironhead,0 542v 223 | icebeam,1;ironhead,0 535v 219
+    p2 greedy: move 4 1, move 1 1
+      p1b Excadrill used Iron Head -> p2a: Clefairy
+      p2a Clefairy fainted
+      p1a Tyranitar used Stone Edge -> p2b: Victini
+      p2b Victini fainted
+      after p1: Tyranitar 404/404, Excadrill 375/416
+      after p2: Clefairy 0/344, Victini 0/404
+
+  Turn 12
+      p2a <- Salamence-Mega comes in (331/331)
+      after p1: Tyranitar 404/404, Excadrill 375/416
+      after p2: Salamence-Mega 331/331, Victini 0/404
+
+  Turn 13
+    p1 mcts: move 4 1, switch 6   (slot1 Excadrill -> Jirachi)
+      search (74000 visits): icebeam,0;switch jirachi 37209v 35818 | icebeam,0;switch latias 7586v 7054 | icebeam,0;protect,1 2400v 2131 | icebeam,0;ironhead,0 2306v 2043
+    p2 greedy: move 1 2, pass
+      p1b <- Jirachi comes in (343/343)
+      p2a Salamence used Draco Meteor -> p1b: Jirachi
+              p2a Salamence spa 2 fell
+      p1a Tyranitar used Ice Beam -> p2a: Salamence
+      p2a Salamence fainted
+      after p1: Tyranitar 404/404, Jirachi 235/343
+      after p2: Salamence-Mega 0/331, Victini 0/404
+
+  RESULT: p1 wins

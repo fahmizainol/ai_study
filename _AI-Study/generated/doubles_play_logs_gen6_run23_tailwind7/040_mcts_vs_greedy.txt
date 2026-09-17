@@ -1,0 +1,151 @@
+battle 40   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: Untitled 579: Kangaskhan-Mega, Amoonguss, Kyurem-Black, Volcanion, Landorus, Mew
+  p2: dpl rejects/diancie jelli week 1 reject: Gengar-Mega, Tyranitar, Jellicent, Landorus-Therian, Kyurem-Black, Diancie
+
+  Turn 1
+    p1 mcts: move 3, move 2 2
+      search (27000 visits): wish,0;gigadrain,1 1517v 1265 | wish,0;spore,0 1415v 1175 | protect,0;spore,0 1139v 930 | protect,0;gigadrain,1 1132v 924
+    p2 greedy: move 2 1, move 2 1
+      p2a Gengar used Sludge Bomb -> p1a: Kangaskhan
+              p1a Kangaskhan is now psn
+      p1a Kangaskhan used Wish
+      p2b Tyranitar used Stone Edge -> p1a: Kangaskhan
+      p1b Amoonguss used Giga Drain -> p2b: Tyranitar
+      after p1: Kangaskhan-Mega 1/414, Amoonguss 405/432
+      after p2: Gengar-Mega 245/261, Tyranitar 332/404
+
+  Turn 2
+    p1 mcts: move 3, move 2 2
+      search (36000 visits): wish,0;gigadrain,1 2119v 1751 | protect,0;gigadrain,1 1668v 1357 | substitute,0;gigadrain,1 1609v 1306 | seismictoss,1;gigadrain,1 1522v 1230
+    p2 greedy: move 2 1, move 2 1
+      p2a Gengar used Sludge Bomb -> p1a: Kangaskhan
+      p1a Kangaskhan fainted
+      p2b Tyranitar used Stone Edge -> p1b: Amoonguss  [[miss]]
+              p2b Tyranitar -- MISSED
+      p1b Amoonguss used Giga Drain -> p2b: Tyranitar
+      after p1: Kangaskhan-Mega 0/414, Amoonguss 405/432
+      after p2: Gengar-Mega 229/261, Tyranitar 260/404
+
+  Turn 3
+      p1a <- Kyurem-Black comes in (418/418)
+      after p1: Kyurem-Black 418/418, Amoonguss 405/432
+      after p2: Gengar-Mega 229/261, Tyranitar 260/404
+
+  Turn 4
+    p1 mcts: move 2 1, move 3 1
+      search (9000 visits): icebeam,0;spore,0 443v 225 | earthpower,0;spore,0 391v 194 | earthpower,0;gigadrain,1 381v 187 | earthpower,0;spore,1 364v 177
+    p2 greedy: move 2 2, move 2 2
+      p2a Gengar used Sludge Bomb -> p1b: Amoonguss
+      p1a Kyurem used Ice Beam -> p2a: Gengar
+              p2a Gengar is now frz
+      p2b Tyranitar used Stone Edge -> p1b: Amoonguss
+      p1b Amoonguss fainted
+      after p1: Kyurem-Black 418/418, Amoonguss 0/432
+      after p2: Gengar-Mega 36/261, Tyranitar 260/404
+
+  Turn 5
+      p1b <- Volcanion comes in (364/364)
+      after p1: Kyurem-Black 418/418, Volcanion 364/364
+      after p2: Gengar-Mega 36/261, Tyranitar 260/404
+
+  Turn 6
+    p1 mcts: move 2 2, move 1 2
+      search (9000 visits): icebeam,1;steameruption,1 603v 413 | earthpower,1;steameruption,1 603v 413 | icebeam,0;steameruption,1 578v 393 | substitute,0;steameruption,1 455v 299
+    p2 greedy: move 2 1, move 2 1
+              p2a Gengar COULD NOT MOVE (frz)
+      p1a Kyurem used Ice Beam -> p2b: Tyranitar
+              p2b Tyranitar is now frz
+      p1b Volcanion used Steam Eruption -> p2b: Tyranitar
+              p2b Tyranitar is cured of frz
+      p2b Tyranitar used Stone Edge -> p1a: Kyurem
+      p1a Kyurem fainted
+      after p1: Kyurem-Black 0/418, Volcanion 342/364
+      after p2: Gengar-Mega 20/261, Tyranitar 7/404
+
+  Turn 7
+      p1a <- Landorus comes in (319/319)
+      after p1: Landorus 319/319, Volcanion 342/364
+      after p2: Gengar-Mega 20/261, Tyranitar 7/404
+
+  Turn 8
+    p1 mcts: move 1 1, move 1 2
+      search (27000 visits): earthpower,0;steameruption,1 1022v 639 | earthpower,0;heatwave,0 972v 605 | uturn,1;steameruption,0 942v 584 | earthpower,1;heatwave,0 898v 553
+    p2 greedy: move 2 2, move 2 2
+      p1a Landorus used Earth Power -> p2a: Gengar
+      p2a Gengar fainted
+      p1b Volcanion used Steam Eruption -> p2b: Tyranitar
+      p2b Tyranitar fainted
+      after p1: Landorus 319/319, Volcanion 342/364
+      after p2: Gengar-Mega 0/261, Tyranitar 0/404
+
+  Turn 9
+      p2a <- Jellicent comes in (404/404)
+      p2b <- Landorus-Therian comes in (350/350)
+              p1a Landorus atk 1 fell
+              p1b Volcanion atk 1 fell
+      after p1: Landorus 319/319, Volcanion 342/364
+      after p2: Jellicent 404/404, Landorus-Therian 350/350
+
+  Turn 10
+    p1 mcts: move 1 1, move 1 2
+      search (21000 visits): earthpower,0;steameruption,1 7664v 5281 | earthpower,0;switch mew 2155v 1388 | earthpower,0;heatwave,0 1881v 1199 | earthpower,0;earthpower,0 1349v 834
+    p2 greedy: move 2 2, move 2
+      p1a Landorus used Earth Power -> p2a: Jellicent
+      p2b Landorus used Earthquake -> p1b: Volcanion  [[spread] p2a,p1b]
+              p1a Landorus -- IMMUNE
+              p2a Jellicent -- critical hit
+      p1b Volcanion used Steam Eruption -> p2b: Landorus
+      p2b Landorus fainted
+      p2a Jellicent used Shadow Ball -> p1b: Volcanion
+              p1b Volcanion spd 1 fell
+      after p1: Landorus 319/319, Volcanion 68/364
+      after p2: Jellicent 33/404, Landorus-Therian 0/350
+
+  Turn 11
+      p2b <- Kyurem-Black comes in (391/391)
+      after p1: Landorus 319/319, Volcanion 68/364
+      after p2: Jellicent 33/404, Kyurem-Black 391/391
+
+  Turn 12
+    p1 mcts: move 1 2, move 2
+      search (26000 visits): earthpower,1;heatwave,0 8458v 5920 | earthpower,1;earthpower,0 1924v 1243 | switch mew;heatwave,0 1730v 1108 | earthpower,0;earthpower,1 1576v 1001
+    p2 greedy: move 2 2, move 3 2
+      p1a Landorus used Earth Power -> p2b: Kyurem
+      p2b Kyurem used Fusion Bolt -> p1b: Volcanion
+      p1b Volcanion fainted
+      p2a Jellicent used Shadow Ball -> p1a: Landorus
+      after p1: Landorus 214/319, Volcanion 0/364
+      after p2: Jellicent 33/404, Kyurem-Black 165/391
+
+  Turn 13
+      p1b <- Mew comes in (404/404)
+      after p1: Landorus 214/319, Mew 404/404
+      after p2: Jellicent 33/404, Kyurem-Black 165/391
+
+  Turn 14
+    p1 mcts: move 1 2, move 2
+      search (39000 visits): earthpower,1;snarl,0 17628v 10540 | earthpower,0;snarl,0 6713v 3869 | earthpower,1;willowisp,0 3313v 1831 | earthpower,0;willowisp,1 1422v 726
+    p2 greedy: move 2 1, move 3 1
+      p1a Landorus used Earth Power -> p2b: Kyurem
+      p2b Kyurem fainted
+      p1b Mew used Snarl -> p2a: Jellicent
+      p2a Jellicent fainted
+      after p1: Landorus 214/319, Mew 404/404
+      after p2: Jellicent 0/404, Kyurem-Black 0/391
+
+  Turn 15
+      p2a <- Diancie comes in (304/304)
+      after p1: Landorus 214/319, Mew 404/404
+      after p2: Diancie 304/304, Kyurem-Black 0/391
+
+  Turn 16
+    p1 mcts: move 1 1, move 3 1
+      search (69000 visits): earthpower,0;willowisp,0 19822v 9760 | earthpower,0;snarl,0 17484v 8571 | earthpower,0;fakeout,0 16186v 7912 | earthpower,0;softboiled,1 15508v 7569
+    p2 greedy: move 1, pass
+      p1a Landorus used Earth Power -> p2a: Diancie
+              p2a Diancie -- critical hit
+      p2a Diancie fainted
+      after p1: Landorus 214/319, Mew 404/404
+      after p2: Diancie 0/304, Kyurem-Black 0/391
+
+  RESULT: p1 wins

@@ -1,0 +1,237 @@
+battle 139   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: ORAS Doubles OU: Kangaskhan, Rotom-Wash, Volcarona, Jirachi, Aegislash, Landorus-Therian
+  p2: ORAS Doubles OU: Gengar-Mega, Weavile, Sylveon, Thundurus, Landorus-Therian, Volcanion
+
+  Turn 1
+    p1 mcts: move 3 2 mega, move 3 1
+      search (12000 visits): poweruppunch-mega,1;voltswitch,0 117v 83 | poweruppunch,1;voltswitch,1 114v 80 | poweruppunch,1;voltswitch,0 112v 78 | return-mega,1;voltswitch,1 111v 77
+    p2 greedy: move 2 1, move 3 1
+      p1b Rotom used Volt Switch -> p2a: Gengar
+      after p1: Kangaskhan-Mega 352/352, Rotom-Wash 241/241
+      after p2: Gengar-Mega 152/261, Weavile 281/281
+
+  Turn 2
+      p1b <- Volcarona comes in (327/327)
+      p2b Weavile used Icicle Crash -> p1a: Kangaskhan
+      p2a Gengar used Sludge Bomb -> p1a: Kangaskhan
+      p1a Kangaskhan fainted
+      after p1: Kangaskhan 0/352, Volcarona 327/327
+      after p2: Gengar-Mega 152/261, Weavile 253/281
+
+  Turn 3
+      p1a <- Rotom-Wash comes in (241/241)
+      after p1: Rotom-Wash 241/241, Volcarona 327/327
+      after p2: Gengar-Mega 152/261, Weavile 253/281
+
+  Turn 4
+    p1 mcts: move 3 1, move 2
+      search (16000 visits): voltswitch,0;heatwave,0 915v 710 | voltswitch,0;quiverdance,1 567v 418 | voltswitch,1;heatwave,0 473v 340 | hydropump,0;heatwave,0 454v 324
+    p2 greedy: move 2 1, move 3 1
+      p1a Rotom used Volt Switch -> p2a: Gengar
+      after p1: Rotom-Wash 241/241, Volcarona 327/327
+      after p2: Gengar-Mega 41/261, Weavile 253/281
+
+  Turn 5
+      p1a <- Jirachi comes in (397/397)
+      p2b Weavile used Icicle Crash -> p1a: Jirachi
+      p2a Gengar used Sludge Bomb -> p1a: Jirachi
+              p1a Jirachi -- IMMUNE
+      p1b Volcarona used Heat Wave -> p2a: Gengar  [[spread] p2a,p2b]
+      p2a Gengar fainted
+      p2b Weavile fainted
+      after p1: Jirachi 315/397, Volcarona 327/327
+      after p2: Gengar-Mega 0/261, Weavile 0/281
+
+  Turn 6
+      p2b <- Thundurus comes in (330/330)
+      p2a <- Sylveon comes in (345/345)
+      after p1: Jirachi 315/397, Volcarona 327/327
+      after p2: Sylveon 345/345, Thundurus 330/330
+
+  Turn 7
+    p1 mcts: switch 6, move 2   (slot0 Jirachi -> Landorus-Therian)
+      search (24000 visits): switch landorustherian;heatwave,0 3913v 2595 | switch landorustherian;quiverdance,1 2512v 1621 | icywind,0;quiverdance,1 1887v 1192 | icywind,0;heatwave,0 1611v 1004
+    p2 greedy: move 1, move 2 1
+      p1a <- Landorus-Therian comes in (338/338)
+              p2a Sylveon atk 1 fell
+              p2b Thundurus atk 1 fell
+      p2b Thundurus used Thunderbolt -> p1a: Landorus
+              p1a Landorus -- IMMUNE
+      p1b Volcarona used Heat Wave -> p2a: Sylveon  [[spread] p2a]
+              p1b Volcarona -- MISSED
+      p2a Sylveon used Hyper Voice -> p1b: Volcarona  [[spread] p1a,p1b]
+              p1b Volcarona -- critical hit
+      after p1: Landorus-Therian 200/338, Volcarona 189/327
+      after p2: Sylveon 249/345, Thundurus 330/330
+
+  Turn 8
+    p1 mcts: move 2 2, move 1
+      search (25000 visits): uturn,1;quiverdance,1 2074v 1210 | uturn,1;heatwave,0 1615v 921 | uturn,0;quiverdance,1 1606v 915 | uturn,0;heatwave,0 1406v 791
+    p2 greedy: move 1, move 2 2
+      p2b Thundurus used Thunderbolt -> p1b: Volcarona
+      p1b Volcarona used Quiver Dance
+              p1b Volcarona spa 1 rose
+              p1b Volcarona spd 1 rose
+              p1b Volcarona spe 1 rose
+      p1a Landorus used U-turn -> p2b: Thundurus
+      after p1: Landorus-Therian 200/338, Volcarona 54/327
+      after p2: Sylveon 249/345, Thundurus 276/330
+
+  Turn 9
+      p1a <- Rotom-Wash comes in (241/241)
+      p2a Sylveon used Hyper Voice -> p1b: Volcarona  [[spread] p1a,p1b]
+      p1b Volcarona fainted
+      after p1: Rotom-Wash 63/241, Volcarona 0/327
+      after p2: Sylveon 249/345, Thundurus 276/330
+
+  Turn 10
+      p1b <- Landorus-Therian comes in (200/338)
+              p2a Sylveon atk 1 fell
+              p2b Thundurus atk 1 fell
+      after p1: Rotom-Wash 63/241, Landorus-Therian 200/338
+      after p2: Sylveon 249/345, Thundurus 276/330
+
+  Turn 11
+    p1 mcts: move 2 2, move 2 1
+      search (29000 visits): hydropump,1;uturn,0 1452v 669 | hydropump,0;uturn,1 765v 318 | voltswitch,1;uturn,1 763v 317 | voltswitch,1;switch jirachi 675v 274
+    p2 greedy: move 1, move 2 1
+      p1a Rotom used Hydro Pump -> p2b: Thundurus
+              p2b Thundurus used up its Sitrus Berry
+      p2b Thundurus used Thunderbolt -> p1a: Rotom
+      p1a Rotom fainted
+      p1b Landorus used U-turn -> p2a: Sylveon
+      after p1: Rotom-Wash 0/241, Landorus-Therian 200/338
+      after p2: Sylveon 201/345, Thundurus 148/330
+
+  Turn 12
+      p1b <- Aegislash comes in (319/319)
+      p2a Sylveon used Hyper Voice -> p1b: Aegislash
+      after p1: Rotom-Wash 0/241, Aegislash 230/319
+      after p2: Sylveon 201/345, Thundurus 148/330
+
+  Turn 13
+      p1a <- Landorus-Therian comes in (200/338)
+              p2a Sylveon atk 1 fell
+              p2b Thundurus atk 1 fell
+      after p1: Landorus-Therian 200/338, Aegislash 230/319
+      after p2: Sylveon 201/345, Thundurus 148/330
+
+  Turn 14
+    p1 mcts: move 2 2, move 3 1
+      search (30000 visits): uturn,1;flashcannon,0 1480v 477 | uturn,1;shadowball,0 1350v 428 | uturn,0;shadowball,1 1235v 384 | uturn,0;shadowball,0 1185v 365
+    p2 greedy: move 1, move 2 1
+      p2b Thundurus used Thunderbolt -> p1a: Landorus
+              p1a Landorus -- IMMUNE
+      p1a Landorus used U-turn -> p2b: Thundurus
+      after p1: Landorus-Therian 200/338, Aegislash 230/319
+      after p2: Sylveon 201/345, Thundurus 95/330
+
+  Turn 15
+      p1a <- Jirachi comes in (315/397)
+      p2a Sylveon used Hyper Voice -> p1a: Jirachi  [[spread] p1a,p1b]
+      p1b Aegislash used Flash Cannon -> p2a: Sylveon
+      p2a Sylveon fainted
+      after p1: Jirachi 237/397, Aegislash-Blade 137/319
+      after p2: Sylveon 0/345, Thundurus 95/330
+
+  Turn 16
+      p2a <- Landorus-Therian comes in (319/319)
+              p1a Jirachi atk 1 fell
+              p1b Aegislash atk 1 fell
+      after p1: Jirachi 237/397, Aegislash-Blade 137/319
+      after p2: Landorus-Therian 319/319, Thundurus 95/330
+
+  Turn 17
+    p1 mcts: move 3, switch 6   (slot1 Aegislash-Blade -> Landorus-Therian)
+      search (29000 visits): icywind,0;switch landorustherian 2483v 1333 | switch landorustherian;shadowball,0 2452v 1315 | switch landorustherian;flashcannon,0 2295v 1224 | switch landorustherian;wideguard,1 2255v 1201
+    p2 greedy: move 4 2, move 2 2
+      p1b <- Landorus-Therian comes in (200/338)
+              p2a Landorus atk 1 fell
+              p2b Thundurus atk 1 fell
+      p2a Landorus used Superpower -> p1b: Landorus
+              p2a Landorus atk 1 fell
+              p2a Landorus def 1 fell
+      p2b Thundurus used Thunderbolt -> p1b: Landorus
+              p1b Landorus -- IMMUNE
+      p1a Jirachi used Icy Wind -> p2a: Landorus  [[spread] p2b]
+              p1a Jirachi -- MISSED
+              p2b Thundurus spe 1 fell
+      after p1: Jirachi 237/397, Landorus-Therian 138/338
+      after p2: Landorus-Therian 319/319, Thundurus 31/330
+
+  Turn 18
+    p1 mcts: switch 6, move 3 1   (slot0 Jirachi -> Aegislash)
+      search (33000 visits): switch aegislash;stoneedge,0 4912v 1607 | ironhead,0;stoneedge,0 2593v 785 | protect,0;stoneedge,0 2273v 674 | protect,0;earthquake,0 2241v 663
+    p2 greedy: move 4 2, move 2 2
+      p1a <- Aegislash comes in (137/319)
+      p2a Landorus used Superpower -> p1b: Landorus
+              p2a Landorus atk 1 fell
+              p2a Landorus def 1 fell
+      p1b Landorus used Stone Edge -> p2a: Landorus  [[miss]]
+              p1b Landorus -- MISSED
+      p2b Thundurus used Thunderbolt -> p1b: Landorus
+              p1b Landorus -- IMMUNE
+      after p1: Aegislash 137/319, Landorus-Therian 94/338
+      after p2: Landorus-Therian 319/319, Thundurus 31/330
+
+  Turn 19
+    p1 mcts: move 4 1, move 3 1
+      search (35000 visits): shadowball,0;stoneedge,0 2706v 627 | switch jirachi;stoneedge,0 1746v 367 | shadowball,0;uturn,0 1730v 363 | flashcannon,0;stoneedge,0 1405v 278
+    p2 greedy: move 4 2, move 2 2
+      p2a Landorus used Superpower -> p1b: Landorus
+              p2a Landorus atk 1 fell
+              p2a Landorus def 1 fell
+      p1b Landorus used Stone Edge -> p2a: Landorus
+      p2b Thundurus used Thunderbolt -> p1b: Landorus
+              p1b Landorus -- IMMUNE
+      p1a Aegislash used Shadow Ball -> p2a: Landorus
+      p2a Landorus fainted
+      after p1: Aegislash-Blade 106/319, Landorus-Therian 57/338
+      after p2: Landorus-Therian 0/319, Thundurus 31/330
+
+  Turn 20
+      p2a <- Volcanion comes in (364/364)
+      after p1: Aegislash-Blade 106/319, Landorus-Therian 57/338
+      after p2: Volcanion 364/364, Thundurus 31/330
+
+  Turn 21
+    p1 mcts: move 4 1, move 2 1
+      search (40000 visits): shadowball,0;uturn,0 4654v 1808 | shadowball,0;stoneedge,0 2735v 1007 | shadowball,0;uturn,1 1327v 437 | wideguard,0;stoneedge,0 1272v 416
+    p2 greedy: move 3 2, move 2 2
+      p1b Landorus used U-turn -> p2a: Volcanion
+      after p1: Aegislash-Blade 106/319, Landorus-Therian 57/338
+      after p2: Volcanion 325/364, Thundurus 31/330
+
+  Turn 22
+      p1b <- Jirachi comes in (237/397)
+      p2b Thundurus used Thunderbolt -> p1b: Jirachi
+              p1b Jirachi -- critical hit
+      p2a Volcanion used Overheat -> p1b: Jirachi
+              p2a Volcanion spa 2 fell
+      p1b Jirachi fainted
+      p1a Aegislash used Shadow Ball -> p2a: Volcanion
+      after p1: Aegislash-Blade 75/319, Jirachi 0/397
+      after p2: Volcanion 83/364, Thundurus 31/330
+
+  Turn 23
+      p1b <- Landorus-Therian comes in (57/338)
+              p2a Volcanion atk 1 fell
+              p2b Thundurus atk 1 fell
+      after p1: Aegislash-Blade 75/319, Landorus-Therian 57/338
+      after p2: Volcanion 83/364, Thundurus 31/330
+
+  Turn 24
+    p1 mcts: move 4 1, move 2 2
+      search (121000 visits): shadowball,0;uturn,1 45681v 20980 | shadowball,0;superpower,1 19070v 8522 | shadowball,0;stoneedge,1 5741v 2400 | flashcannon,0;superpower,1 3935v 1593
+    p2 greedy: move 3 2, move 2 2
+      p1b Landorus used U-turn -> p2b: Thundurus
+      p2b Thundurus fainted
+      p2a Volcanion used Overheat -> p1b: Landorus
+              p2a Volcanion spa 2 fell
+      p1b Landorus fainted
+      p1a Aegislash used Shadow Ball -> p2a: Volcanion
+      p2a Volcanion fainted
+      after p1: Aegislash-Blade 44/319, Landorus-Therian 0/338
+      after p2: Volcanion 0/364, Thundurus 0/330
+
+  RESULT: p1 wins

@@ -1,0 +1,109 @@
+battle 33   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: ORAS Doubles OU: Aegislash, Deoxys-Attack, Amoonguss, Gardevoir, Talonflame, Landorus-Therian
+  p2: dpl rejects/geng sylv week 4 reject: Gengar-Mega, Sylveon, Amoonguss, Volcanion, Landorus-Therian, Thundurus
+
+  Turn 1
+    p1 mcts: move 2 2, switch 3   (slot1 Deoxys-Attack -> Amoonguss)
+      search (38000 visits): flashcannon,1;switch amoonguss 432v 29 | shadowball,0;protect,1 431v 29 | flashcannon,0;switch amoonguss 431v 29 | shadowball,0;switch amoonguss 425v 28
+    p2 greedy: move 2 1, move 3
+      p1b <- Amoonguss comes in (432/432)
+      p2a Gengar used Sludge Bomb -> p1a: Aegislash
+              p1a Aegislash -- IMMUNE
+      p2b Sylveon used Hyper Voice -> p1a: Aegislash  [[spread] p1a,p1b]
+      p1a Aegislash used Flash Cannon -> p2b: Sylveon
+      after p1: Aegislash-Blade 279/324, Amoonguss 367/432
+      after p2: Gengar-Mega 306/306, Sylveon 163/393
+
+  Turn 2
+    p1 mcts: move 2 2, move 3 1
+      search (36000 visits): flashcannon,1;gigadrain,0 483v 46 | shadowball,1;ragepowder,1 478v 45 | flashcannon,1;ragepowder,1 477v 45 | flashcannon,0;ragepowder,1 458v 41
+    p2 greedy: move 2 2, move 3
+      p2a Gengar used Sludge Bomb -> p1b: Amoonguss
+      p2b Sylveon used Hyper Voice -> p1b: Amoonguss  [[spread] p1a,p1b]
+      p1a Aegislash used Flash Cannon -> p2b: Sylveon
+      p2b Sylveon fainted
+      p1b Amoonguss used Giga Drain -> p2a: Gengar
+      after p1: Aegislash-Blade 177/324, Amoonguss 138/432
+      after p2: Gengar-Mega 266/306, Sylveon 0/393
+
+  Turn 3
+      p2b <- Amoonguss comes in (432/432)
+      after p1: Aegislash-Blade 177/324, Amoonguss 138/432
+      after p2: Gengar-Mega 266/306, Amoonguss 432/432
+
+  Turn 4
+    p1 mcts: move 1 1, move 2 1
+      search (27000 visits): shadowball,0;spore,0 13796v 10961 | shadowball,0;switch landorustherian 476v 272 | shadowball,0;ragepowder,1 413v 230 | shadowball,1;switch landorustherian 274v 139
+    p2 greedy: move 2 2, move 3 2
+      p2a Gengar used Sludge Bomb -> p1b: Amoonguss
+      p1b Amoonguss fainted
+      p1a Aegislash used Shadow Ball -> p2a: Gengar
+      p2a Gengar fainted
+      p2b Amoonguss used Energy Ball -> p1a: Aegislash
+              p1a Aegislash -- critical hit
+              p1a Aegislash spd 1 fell
+      after p1: Aegislash-Blade 68/324, Amoonguss 0/432
+      after p2: Gengar-Mega 0/306, Amoonguss 432/432
+
+  Turn 5
+      p2a <- Volcanion comes in (363/363)
+      p1b <- Deoxys-Attack comes in (241/241)
+      after p1: Aegislash-Blade 68/324, Deoxys-Attack 241/241
+      after p2: Volcanion 363/363, Amoonguss 432/432
+
+  Turn 6
+    p1 mcts: move 1 1, move 1 2
+      search (22000 visits): shadowball,0;psychoboost,1 885v 461 | shadowball,0;protect,1 561v 270 | switch gardevoir;psychoboost,0 524v 249 | shadowball,1;psychoboost,0 515v 244
+    p2 greedy: move 2 1, move 3 1
+      p1b Deoxys used Psycho Boost -> p2b: Amoonguss
+              p1b Deoxys spa 2 fell
+      p2b Amoonguss fainted
+      p1a Aegislash used Shadow Ball -> p2a: Volcanion
+      p2a Volcanion used Steam Eruption -> p1a: Aegislash
+      p1a Aegislash fainted
+      after p1: Aegislash 0/324, Deoxys-Attack 241/241
+      after p2: Volcanion 164/363, Amoonguss 0/432
+
+  Turn 7
+      p1a <- Gardevoir comes in (279/279)
+      p2b <- Landorus-Therian comes in (333/333)
+              p1a Gardevoir atk 1 fell
+              p1b Deoxys atk 1 fell
+      after p1: Gardevoir 279/279, Deoxys-Attack 241/241
+      after p2: Volcanion 164/363, Landorus-Therian 333/333
+
+  Turn 8
+    p1 mcts: move 2 1 mega, switch 6   (slot1 Deoxys-Attack -> Landorus-Therian)
+      search (21000 visits): psychic-mega,0;switch landorustherian 652v 425 | protect-mega,0;switch landorustherian 577v 370 | psychic,1;switch landorustherian 536v 339 | hypervoice-mega,0;switch landorustherian 533v 338
+    p2 greedy: move 2 1, move 3 1
+      p1b <- Landorus-Therian comes in (319/319)
+              p2a Volcanion atk 1 fell
+              p2b Landorus atk 1 fell
+      p2b Landorus used Superpower -> p1a: Gardevoir
+              p2b Landorus atk 1 fell
+              p2b Landorus def 1 fell
+      p1a Gardevoir used Psychic -> p2a: Volcanion
+      p2a Volcanion fainted
+      after p1: Gardevoir-Mega 244/279, Landorus-Therian 319/319
+      after p2: Volcanion 0/363, Landorus-Therian 333/333
+
+  Turn 9
+      p2a <- Thundurus comes in (361/361)
+      after p1: Gardevoir-Mega 244/279, Landorus-Therian 319/319
+      after p2: Thundurus 361/361, Landorus-Therian 333/333
+
+  Turn 10
+    p1 mcts: move 1, move 2
+      search (23000 visits): hypervoice,0;rockslide,0 6398v 5891 | hypervoice,0;uturn,0 1165v 985 | psychic,0;rockslide,0 956v 795 | protect,0;rockslide,0 758v 617
+    p2 greedy: move 1 1, move 3 1
+      p2b Landorus used Superpower -> p1a: Gardevoir
+              p2b Landorus atk 1 fell
+              p2b Landorus def 1 fell
+      p1b Landorus used Rock Slide -> p2b: Landorus  [[spread] p2a,p2b]
+      p1a Gardevoir used Hyper Voice -> p2a: Thundurus  [[spread] p2a,p2b]
+      p2a Thundurus fainted
+      p2b Landorus fainted
+      after p1: Gardevoir-Mega 219/279, Landorus-Therian 319/319
+      after p2: Thundurus 0/361, Landorus-Therian 0/333
+
+  RESULT: p1 wins

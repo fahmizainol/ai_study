@@ -1,0 +1,208 @@
+battle 19   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: cleefable: Kangaskhan-Mega, Thundurus, Volcanion, Clefable, Bisharp, Terrakion
+  p2: goth diancie: Diancie-Mega, Gothitelle, Gastrodon-East, Genesect, Talonflame, Landorus-Therian
+
+  Turn 1
+    p1 mcts: move 3 1, move 1 1
+      search (12000 visits): poweruppunch,0;thunderbolt,0 486v 199 | return,0;thunderbolt,0 363v 137 | return,1;thunderbolt,0 328v 120 | return,1;thunderbolt,1 313v 113
+    p2 greedy: move 1, move 1 1
+      p2a Diancie used Diamond Storm -> p1b: Thundurus  [[spread] p1a,p1b]
+              p2a Diancie def 1 rose
+      p1b Thundurus fainted
+      p1a Kangaskhan used Power-Up Punch -> p2a: Diancie
+              p1a Kangaskhan atk 1 rose
+      p2b Gothitelle used Psychic -> p1a: Kangaskhan
+      after p1: Kangaskhan-Mega 137/385, Thundurus 0/362
+      after p2: Diancie-Mega 259/287, Gothitelle 344/344
+
+  Turn 2
+      p1b <- Volcanion comes in (363/363)
+      after p1: Kangaskhan-Mega 137/385, Volcanion 363/363
+      after p2: Diancie-Mega 259/287, Gothitelle 344/344
+
+  Turn 3
+    p1 mcts: move 1, move 1 1
+      search (16000 visits): protect,0;steameruption,0 1647v 794 | return,0;earthpower,0 746v 320 | return,1;steameruption,0 689v 291 | poweruppunch,0;steameruption,0 559v 226
+    p2 greedy: move 1, move 1 1
+      p1a Kangaskhan used Protect
+      p2a Diancie used Diamond Storm -> p1b: Volcanion  [[spread] p1b]
+              p1a Kangaskhan -- move: Protect
+      p1b Volcanion used Steam Eruption -> p2a: Diancie
+              p2a Diancie -- critical hit
+      p2a Diancie fainted
+      p2b Gothitelle used Psychic -> p1a: Kangaskhan
+              p1a Kangaskhan -- move: Protect
+      after p1: Kangaskhan-Mega 137/385, Volcanion 117/363
+      after p2: Diancie-Mega 0/287, Gothitelle 344/344
+
+  Turn 4
+      p2a <- Gastrodon-East comes in (426/426)
+      after p1: Kangaskhan-Mega 137/385, Volcanion 117/363
+      after p2: Gastrodon-East 426/426, Gothitelle 344/344
+
+  Turn 5
+    p1 mcts: move 2 1, move 2
+      search (28000 visits): return,0;heatwave,0 2944v 1427 | return,0;earthpower,0 2427v 1156 | return,1;heatwave,0 1758v 808 | protect,0;heatwave,0 1551v 703
+    p2 greedy: move 1 2, move 1 2
+      p1a Kangaskhan used Return -> p2a: Gastrodon
+      p1b Volcanion used Heat Wave -> p2b: Gothitelle  [[spread] p2b]
+              p1b Volcanion -- MISSED
+      p2b Gothitelle used Psychic -> p1b: Volcanion
+      p2a Gastrodon used Earth Power -> p1b: Volcanion
+      p1b Volcanion fainted
+      after p1: Kangaskhan-Mega 73/385, Volcanion 0/363
+      after p2: Gastrodon-East 161/426, Gothitelle 245/344
+
+  Turn 6
+      p1b <- Clefable comes in (394/394)
+      after p1: Kangaskhan-Mega 73/385, Clefable 394/394
+      after p2: Gastrodon-East 161/426, Gothitelle 245/344
+
+  Turn 7
+    p1 mcts: move 2 1, move 3 2
+      search (23000 visits): return,0;flamethrower,1 4190v 2345 | return,0;followme,1 2606v 1410 | return,0;flamethrower,0 1378v 700 | return,1;flamethrower,1 1182v 589
+    p2 greedy: move 1 1, move 1 1
+      p1a Kangaskhan used Return -> p2a: Gastrodon
+      p2a Gastrodon fainted
+      p2b Gothitelle used Psychic -> p1a: Kangaskhan
+      p1a Kangaskhan fainted
+      p1b Clefable used Flamethrower -> p2b: Gothitelle
+              p2b Gothitelle -- critical hit
+      after p1: Kangaskhan-Mega 0/385, Clefable 394/394
+      after p2: Gastrodon-East 0/426, Gothitelle 163/344
+
+  Turn 8
+      p1a <- Bisharp comes in (271/271)
+      p2a <- Genesect comes in (283/283)
+              p2a Genesect atk 1 rose
+      after p1: Bisharp 271/271, Clefable 394/394
+      after p2: Genesect 283/283, Gothitelle 163/344
+
+  Turn 9
+    p1 mcts: move 4, move 3 1
+      search (28000 visits): protect,0;flamethrower,0 10084v 6638 | knockoff,0;protect,1 2337v 1425 | protect,0;protect,1 1504v 882 | knockoff,1;protect,1 904v 500
+    p2 greedy: move 1 1, move 1 1
+      p1a Bisharp used Protect
+      p2a Genesect used Ice Beam -> p1a: Bisharp
+              p1a Bisharp -- move: Protect
+      p2b Gothitelle used Psychic -> p1a: Bisharp
+              p1a Bisharp -- IMMUNE
+      p1b Clefable used Flamethrower -> p2a: Genesect
+      p2a Genesect fainted
+      after p1: Bisharp 271/271, Clefable 394/394
+      after p2: Genesect 0/283, Gothitelle 163/344
+
+  Turn 10
+      p2a <- Talonflame comes in (359/359)
+      after p1: Bisharp 271/271, Clefable 394/394
+      after p2: Talonflame 359/359, Gothitelle 163/344
+
+  Turn 11
+    p1 mcts: move 4, move 4
+      search (32000 visits): protect,0;protect,1 5938v 3176 | knockoff,0;followme,1 4144v 2168 | protect,0;flamethrower,0 2345v 1172 | knockoff,1;followme,1 1990v 979
+    p2 greedy: move 1 1, move 1 1
+      p1a Bisharp used Protect  [[still]]
+              p1a Bisharp -- IT FAILED
+      p1b Clefable used Protect
+      p2a Talonflame used Brave Bird -> p1a: Bisharp
+      p2b Gothitelle used Psychic -> p1a: Bisharp
+              p1a Bisharp -- IMMUNE
+      after p1: Bisharp 145/271, Clefable 394/394
+      after p2: Talonflame 317/359, Gothitelle 163/344
+
+  Turn 12
+    p1 mcts: move 4, move 4
+      search (21000 visits): protect,0;protect,1 2414v 1349 | knockoff,0;followme,1 2380v 1329 | protect,0;flamethrower,1 1573v 845 | protect,0;flamethrower,0 1367v 723
+    p2 greedy: move 1 1, move 1 1
+      p1a Bisharp used Protect
+      p1b Clefable used Protect  [[still]]
+              p1b Clefable -- IT FAILED
+      p2a Talonflame used Brave Bird -> p1a: Bisharp
+              p1a Bisharp -- move: Protect
+      p2b Gothitelle used Psychic -> p1a: Bisharp
+              p1a Bisharp -- IMMUNE
+      after p1: Bisharp 145/271, Clefable 394/394
+      after p2: Talonflame 317/359, Gothitelle 163/344
+
+  Turn 13
+    p1 mcts: move 4, move 4
+      search (27000 visits): protect,0;protect,1 3225v 1778 | knockoff,0;followme,1 3064v 1683 | protect,0;flamethrower,1 2146v 1145 | knockoff,1;followme,1 1811v 950
+    p2 greedy: move 1 1, move 1 1
+      p1a Bisharp used Protect
+      p1b Clefable used Protect
+      p2a Talonflame used Brave Bird -> p1a: Bisharp
+              p1a Bisharp -- move: Protect
+      p2b Gothitelle used Psychic -> p1a: Bisharp
+              p1a Bisharp -- IMMUNE
+      after p1: Bisharp 145/271, Clefable 394/394
+      after p2: Talonflame 317/359, Gothitelle 163/344
+
+  Turn 14
+    p1 mcts: move 2 1, move 1
+      search (29000 visits): knockoff,0;followme,1 3478v 1907 | protect,0;protect,1 3398v 1859 | protect,0;flamethrower,1 2473v 1320 | protect,0;flamethrower,0 1981v 1036
+    p2 greedy: move 1 1, move 1 1
+      p1b Clefable used Follow Me
+      p2a Talonflame used Brave Bird -> p1b: Clefable
+      p1a Bisharp used Knock Off -> p2a: Talonflame
+              p2a Talonflame used up its Choice Band
+      p2a Talonflame fainted
+      p2b Gothitelle used Psychic -> p1b: Clefable
+      p1b Clefable fainted
+      after p1: Bisharp 118/271, Clefable 0/394
+      after p2: Talonflame 0/359, Gothitelle 163/344
+
+  Turn 15
+      p2a <- Landorus-Therian comes in (382/382)
+      p1b <- Terrakion comes in (323/323)
+              p1a Bisharp atk 1 fell
+              p1a Bisharp atk 2 rose
+              p1b Terrakion atk 1 fell
+      after p1: Bisharp 118/271, Terrakion 323/323
+      after p2: Landorus-Therian 382/382, Gothitelle 163/344
+
+  Turn 16
+    p1 mcts: move 3 2, move 4
+      search (48000 visits): ironhead,1;protect,1 6328v 2277 | ironhead,0;protect,1 5203v 1846 | knockoff,0;protect,1 4956v 1746 | protect,0;protect,1 4669v 1636
+    p2 greedy: move 1, move 1 1
+      p1b Terrakion used Protect
+      p2a Landorus used Earthquake -> p1a: Bisharp  [[spread] p2b,p1a]
+              p1b Terrakion -- move: Protect
+      p1a Bisharp fainted
+      p2b Gothitelle used Psychic -> p1b: Terrakion
+              p1b Terrakion -- move: Protect
+      after p1: Bisharp 0/271, Terrakion 323/323
+      after p2: Landorus-Therian 382/382, Gothitelle 43/344
+
+  Turn 17
+    p1 mcts: pass, move 4
+      search (68000 visits): No Move;protect,1 67508v 46263 | No Move;rockslide,0 121v 33 | No Move;closecombat,1 116v 30 | No Move;stoneedge,1 96v 21
+    p2 greedy: move 1, move 1 2
+      p1b Terrakion used Protect  [[still]]
+              p1b Terrakion -- IT FAILED
+      p2a Landorus used Earthquake -> p1b: Terrakion  [[spread] p2b,p1b]
+      p2b Gothitelle fainted
+      after p1: Bisharp 0/271, Terrakion 11/323
+      after p2: Landorus-Therian 382/382, Gothitelle 0/344
+
+  Turn 18
+    p1 mcts: pass, move 4
+      search (419000 visits): No Move;protect,1 304460v 5549 | No Move;stoneedge,0 40085v 63 | No Move;rockslide,0 38979v 48 | No Move;closecombat,0 35476v 0
+    p2 greedy: move 1, pass
+      p1b Terrakion used Protect
+      p2a Landorus used Earthquake -> p1b: Terrakion
+              p1b Terrakion -- move: Protect
+      after p1: Bisharp 0/271, Terrakion 11/323
+      after p2: Landorus-Therian 382/382, Gothitelle 0/344
+
+  Turn 19
+    p1 mcts: pass, move 4
+      search (449000 visits): No Move;protect,1 329190v 5835 | No Move;stoneedge,0 42233v 76 | No Move;rockslide,0 40834v 56 | No Move;closecombat,0 36743v 0
+    p2 greedy: move 1, pass
+      p1b Terrakion used Protect  [[still]]
+              p1b Terrakion -- IT FAILED
+      p2a Landorus used Earthquake -> p1b: Terrakion
+      p1b Terrakion fainted
+      after p1: Bisharp 0/271, Terrakion 0/323
+      after p2: Landorus-Therian 382/382, Gothitelle 0/344
+
+  RESULT: p2 wins

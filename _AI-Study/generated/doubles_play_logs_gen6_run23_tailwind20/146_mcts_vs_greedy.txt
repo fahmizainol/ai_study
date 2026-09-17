@@ -1,0 +1,193 @@
+battle 146   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: ORAS Doubles OU: Charizard, Venusaur, Azumarill, Thundurus, Aegislash, Excadrill
+  p2: choiced perish: Hoopa-Unbound, Kyurem-Black, Gengar-Mega, Raichu, Scrafty, Gothitelle
+
+  Turn 1
+    p1 mcts: move 2 1 mega, move 1
+      search (7000 visits): firepledge-mega,0;protect,1 56v 28 | dragonpulse-mega,1;sleeppowder,0 55v 27 | firepledge-mega,1;switch azumarill 54v 26 | dragonpulse,1;sleeppowder,0 54v 26
+    p2 greedy: move 1 1, move 3 1
+      p1b Venusaur used Protect
+      p2b Kyurem used Draco Meteor -> p1a: Charizard
+              p2b Kyurem spa 2 fell
+      p1a Charizard used Fire Pledge -> p2a: Hoopa
+      p2a Hoopa used Hyperspace Fury -> p1a: Charizard
+              p2a Hoopa def 1 fell
+      p1a Charizard fainted
+      after p1: Charizard 0/360, Venusaur 302/302
+      after p2: Hoopa-Unbound 111/301, Kyurem-Black 401/401
+
+  Turn 2
+      p1a <- Azumarill comes in (404/404)
+      after p1: Azumarill 404/404, Venusaur 302/302
+      after p2: Hoopa-Unbound 111/301, Kyurem-Black 401/401
+
+  Turn 3
+    p1 mcts: move 3 1, move 2 1
+      search (36000 visits): aquajet,0;grasspledge,0 1526v 655 | aquajet,0;sludgebomb,0 1351v 570 | playrough,1;sludgebomb,0 1198v 496 | switch aegislash;sludgebomb,0 1177v 486
+    p2 greedy: move 1 1, move 3 1
+      p1a Azumarill used Aqua Jet -> p2a: Hoopa
+              p2a Hoopa -- critical hit
+      p2a Hoopa fainted
+      p1b Venusaur used Grass Pledge -> p2b: Kyurem
+      p2b Kyurem used Draco Meteor -> p1a: Azumarill
+              p1a Azumarill -- IMMUNE
+      after p1: Azumarill 404/404, Venusaur 272/302
+      after p2: Hoopa-Unbound 0/301, Kyurem-Black 304/401
+
+  Turn 4
+      p2a <- Gengar-Mega comes in (324/324)
+      after p1: Azumarill 404/404, Venusaur 272/302
+      after p2: Gengar-Mega 324/324, Kyurem-Black 304/401
+
+  Turn 5
+    p1 mcts: move 2 2, move 4 1
+      search (21000 visits): playrough,1;sleeppowder,0 1731v 967 | playrough,1;grasspledge,0 1339v 728 | playrough,1;sludgebomb,0 1278v 692 | playrough,1;protect,1 953v 497
+    p2 greedy: move 3 2, move 3 2
+      p1b Venusaur used Sleep Powder -> p2a: Gengar
+              p2a Gengar is now slp
+      p2b Kyurem used Draco Meteor -> p1b: Venusaur
+              p2b Kyurem spa 2 fell
+              p2a Gengar COULD NOT MOVE (slp)
+      p1a Azumarill used Play Rough -> p2b: Kyurem
+      p2b Kyurem fainted
+      after p1: Azumarill 404/404, Venusaur 146/302
+      after p2: Gengar-Mega 324/324, Kyurem-Black 0/401
+
+  Turn 6
+      p2b <- Raichu comes in (324/324)
+      after p1: Azumarill 404/404, Venusaur 146/302
+      after p2: Gengar-Mega 324/324, Raichu 324/324
+
+  Turn 7
+    p1 mcts: move 2 1, move 3 2
+      search (22000 visits): playrough,0;sludgebomb,1 968v 549 | waterfall,0;sludgebomb,1 862v 481 | playrough,1;grasspledge,0 846v 471 | playrough,1;sludgebomb,1 839v 467
+    p2 greedy: move 3 2, move 3 2
+      p1b Venusaur used Sludge Bomb -> p2b: Raichu
+              p2b Raichu used up its Sitrus Berry
+              p2a Gengar COULD NOT MOVE (slp)
+      p2b Raichu used Volt Switch -> p1b: Venusaur
+      after p1: Azumarill 404/404, Venusaur 75/302
+      after p2: Gengar-Mega 324/324, Raichu 167/324
+
+  Turn 8
+      p2b <- Scrafty comes in (334/334)
+              p1a Azumarill atk 1 fell
+              p1b Venusaur atk 1 fell
+      p1a Azumarill used Play Rough -> p2a: Gengar
+      after p1: Azumarill 404/404, Venusaur 75/302
+      after p2: Gengar-Mega 249/324, Scrafty 334/334
+
+  Turn 9
+    p1 mcts: move 2 2, move 2 1
+      search (21000 visits): playrough,1;grasspledge,0 2305v 1649 | playrough,1;sludgebomb,0 1812v 1275 | playrough,1;sludgebomb,1 1258v 858 | playrough,1;grasspledge,1 1256v 857
+    p2 greedy: move 3 2, move 3 2
+      p1b Venusaur used Grass Pledge -> p2a: Gengar
+              p2a Gengar COULD NOT MOVE (slp)
+      p1a Azumarill used Play Rough -> p2b: Scrafty
+      p2b Scrafty fainted
+      after p1: Azumarill 404/404, Venusaur 45/302
+      after p2: Gengar-Mega 171/324, Scrafty 0/334
+
+  Turn 10
+      p2b <- Raichu comes in (167/324)
+      after p1: Azumarill 404/404, Venusaur 45/302
+      after p2: Gengar-Mega 171/324, Raichu 167/324
+
+  Turn 11
+    p1 mcts: move 1 1, move 3 2
+      search (24000 visits): waterfall,0;sludgebomb,1 838v 552 | waterfall,0;grasspledge,1 793v 519 | playrough,0;sludgebomb,1 669v 428 | aquajet,1;grasspledge,0 651v 415
+    p2 greedy: move 3 2, move 3 2
+              p2a Gengar is cured of slp
+      p2a Gengar used Shadow Ball -> p1b: Venusaur
+      p1b Venusaur fainted
+      p2b Raichu used Volt Switch -> p1a: Azumarill
+      after p1: Azumarill 290/404, Venusaur 0/302
+      after p2: Gengar-Mega 171/324, Raichu 167/324
+
+  Turn 12
+      p2b <- Gothitelle comes in (344/344)
+      p1a Azumarill used Waterfall -> p2a: Gengar
+              p2a Gengar -- critical hit
+      p2a Gengar fainted
+      after p1: Azumarill 290/404, Venusaur 0/302
+      after p2: Gengar-Mega 0/324, Gothitelle 344/344
+
+  Turn 13
+      p2a <- Raichu comes in (167/324)
+      p1b <- Thundurus comes in (360/360)
+      after p1: Azumarill 290/404, Thundurus 360/360
+      after p2: Raichu 167/324, Gothitelle 344/344
+
+  Turn 14
+    p1 mcts: move 3 1, move 4 2
+      search (47000 visits): aquajet,0;hiddenpower,1 1915v 1011 | aquajet,0;hiddenpower,0 1895v 999 | aquajet,0;taunt,0 1829v 961 | aquajet,0;thunderwave,0 1792v 939
+    p2 greedy: move 3 1, move 1
+      p2b Gothitelle used Protect
+      p1a Azumarill used Aqua Jet -> p2a: Raichu
+      p2a Raichu used Volt Switch -> p1a: Azumarill
+      p1b Thundurus used Hidden Power -> p2b: Gothitelle
+              p2b Gothitelle -- move: Protect
+      after p1: Azumarill 174/404, Thundurus 360/360
+      after p2: Raichu 67/324, Gothitelle 344/344
+
+  Turn 15
+    p1 mcts: move 3 1, move 2 2
+      search (50000 visits): aquajet,0;taunt,1 5874v 4116 | aquajet,0;thunderbolt,1 4675v 3241 | aquajet,0;thunderwave,1 3761v 2578 | aquajet,0;hiddenpower,1 3596v 2459
+    p2 greedy: move 3 1, move 1
+      p2b Gothitelle used Protect
+      p1b Thundurus used Taunt -> p2b: Gothitelle
+              p2b Gothitelle -- move: Protect
+      p1a Azumarill used Aqua Jet -> p2a: Raichu
+      p2a Raichu fainted
+      after p1: Azumarill 174/404, Thundurus 360/360
+      after p2: Raichu 0/324, Gothitelle 344/344
+
+  Turn 16
+    p1 mcts: move 2 2, move 3 2
+      search (96000 visits): playrough,1;thunderbolt,1 6432v 3255 | waterfall,1;thunderbolt,1 6423v 3250 | superpower,1;thunderwave,1 6309v 3189 | playrough,1;hiddenpower,1 6239v 3152
+    p2 greedy: pass, move 1
+      p2b Gothitelle used Protect  [[still]]
+              p2b Gothitelle -- IT FAILED
+      p1b Thundurus used Thunderbolt -> p2b: Gothitelle
+              p2b Gothitelle is now par
+      p1a Azumarill used Play Rough -> p2b: Gothitelle
+      after p1: Azumarill 174/404, Thundurus 324/360
+      after p2: Raichu 0/324, Gothitelle 100/344
+
+  Turn 17
+    p1 mcts: move 2 2, move 4 2
+      search (99000 visits): playrough,1;hiddenpower,1 6313v 3173 | superpower,1;taunt,1 6313v 3173 | playrough,1;thunderwave,1 6266v 3148 | playrough,1;thunderbolt,1 6255v 3142
+    p2 greedy: pass, move 1
+      p2b Gothitelle used Protect
+      p1b Thundurus used Hidden Power -> p2b: Gothitelle
+              p2b Gothitelle -- move: Protect
+      p1a Azumarill used Play Rough -> p2b: Gothitelle
+              p2b Gothitelle -- move: Protect
+      after p1: Azumarill 174/404, Thundurus 324/360
+      after p2: Raichu 0/324, Gothitelle 121/344
+
+  Turn 18
+    p1 mcts: move 1 2, move 4 2
+      search (89000 visits): waterfall,1;hiddenpower,1 5770v 2904 | playrough,1;hiddenpower,1 5715v 2875 | playrough,1;thunderbolt,1 5676v 2854 | aquajet,1;taunt,1 5634v 2832
+    p2 greedy: pass, move 1
+      p2b Gothitelle used Protect
+      p1b Thundurus used Hidden Power -> p2b: Gothitelle
+              p2b Gothitelle -- move: Protect
+      p1a Azumarill used Waterfall -> p2b: Gothitelle
+              p2b Gothitelle -- move: Protect
+      after p1: Azumarill 174/404, Thundurus 324/360
+      after p2: Raichu 0/324, Gothitelle 142/344
+
+  Turn 19
+    p1 mcts: move 1 2, move 4 2
+      search (88000 visits): waterfall,1;hiddenpower,1 5718v 2880 | playrough,1;hiddenpower,1 5678v 2858 | aquajet,1;thunderbolt,1 5675v 2856 | waterfall,1;thunderbolt,1 5647v 2842
+    p2 greedy: pass, move 1
+      p2b Gothitelle used Protect  [[still]]
+              p2b Gothitelle -- IT FAILED
+      p1b Thundurus used Hidden Power -> p2b: Gothitelle
+      p1a Azumarill used Waterfall -> p2b: Gothitelle
+      p2b Gothitelle fainted
+      after p1: Azumarill 174/404, Thundurus 288/360
+      after p2: Raichu 0/324, Gothitelle 0/344
+
+  RESULT: p1 wins

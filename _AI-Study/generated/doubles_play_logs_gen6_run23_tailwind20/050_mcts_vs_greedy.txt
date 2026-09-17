@@ -1,0 +1,256 @@
+battle 50   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: unfinished dbond gar: Cresselia, Gengar-Mega, Conkeldurr, Volcanion, Landorus-Therian, Thundurus
+  p2: Untitled 572: Kyurem-Black, Sableye-Mega, Ferrothorn, Landorus-Therian, Chansey, Volcanion
+
+  Turn 1
+    p1 mcts: move 4 1, move 4
+      search (20000 visits): toxic,0;protect,1 447v 278 | icywind,0;willowisp,0 430v 265 | moonlight,0;switch landorustherian 383v 231 | icywind,0;shadowball,0 381v 230
+    p2 greedy: move 4 1, move 3
+      p1b Gengar used Protect
+      p2a Kyurem used Fusion Bolt -> p1a: Cresselia
+      p1a Cresselia used Toxic -> p2a: Kyurem
+              p2a Kyurem is now tox
+      p2b Sableye used Snarl -> p1b: Gengar  [[spread] p1a]
+              p1b Gengar -- move: Protect
+              p1a Cresselia spa 1 fell
+      after p1: Cresselia 289/444, Gengar-Mega 323/323
+      after p2: Kyurem-Black 426/454, Sableye-Mega 304/304
+
+  Turn 2
+    p1 mcts: move 1, move 4
+      search (18000 visits): icywind,0;protect,1 443v 300 | icywind,0;shadowball,0 407v 272 | icywind,0;shadowball,1 349v 227 | toxic,1;protect,1 333v 215
+    p2 greedy: move 4 1, move 3
+      p1b Gengar used Protect
+      p2a Kyurem used Fusion Bolt -> p1a: Cresselia
+      p1a Cresselia used Icy Wind -> p2a: Kyurem  [[spread] p2a,p2b]
+              p2a Kyurem spe 1 fell
+              p2b Sableye spe 1 fell
+      p2b Sableye used Snarl -> p1b: Gengar  [[spread] p1a]
+              p1b Gengar -- move: Protect
+              p1a Cresselia spa 1 fell
+      after p1: Cresselia 136/444, Gengar-Mega 323/323
+      after p2: Kyurem-Black 356/454, Sableye-Mega 292/304
+
+  Turn 3
+    p1 mcts: move 1, switch 4   (slot1 Gengar-Mega -> Volcanion)
+      search (21000 visits): icywind,0;switch volcanion 585v 405 | icywind,0;protect,1 566v 390 | icywind,0;switch landorustherian 557v 383 | icywind,0;shadowball,1 545v 374
+    p2 greedy: move 4 1, move 3
+      p1b <- Volcanion comes in (363/363)
+      p1a Cresselia used Icy Wind -> p2a: Kyurem  [[spread] p2a,p2b]
+              p2a Kyurem spe 1 fell
+              p2b Sableye spe 1 fell
+      p2a Kyurem used Fusion Bolt -> p1a: Cresselia
+      p2b Sableye used Snarl -> p1b: Volcanion  [[spread] p1a,p1b]
+              p1b Volcanion spa 1 fell
+      p1a Cresselia fainted
+      after p1: Cresselia 0/444, Volcanion 336/363
+      after p2: Kyurem-Black 262/454, Sableye-Mega 282/304
+
+  Turn 4
+      p1a <- Conkeldurr comes in (413/413)
+      after p1: Conkeldurr 413/413, Volcanion 336/363
+      after p2: Kyurem-Black 262/454, Sableye-Mega 282/304
+
+  Turn 5
+    p1 mcts: move 3 2, switch 6   (slot1 Volcanion -> Thundurus)
+      search (17000 visits): knockoff,1;switch thundurus 361v 162 | icepunch,1;switch thundurus 329v 144 | knockoff,1;switch landorustherian 324v 141 | icepunch,1;switch landorustherian 318v 138
+    p2 greedy: move 4 2, move 3
+      p1b <- Thundurus comes in (361/361)
+      p1a Conkeldurr used Knock Off -> p2b: Sableye
+      p2a Kyurem used Fusion Bolt -> p1b: Thundurus
+      p2b Sableye used Snarl -> p1b: Thundurus  [[spread] p1a,p1b]
+              p1a Conkeldurr spa 1 fell
+              p1b Thundurus spa 1 fell
+              p1b Thundurus used up its Sitrus Berry
+      after p1: Conkeldurr 398/413, Thundurus 259/361
+      after p2: Kyurem-Black 150/454, Sableye-Mega 222/304
+
+  Turn 6
+    p1 mcts: move 3 2, switch 5   (slot1 Thundurus -> Landorus-Therian)
+      search (36000 visits): knockoff,1;switch landorustherian 556v 98 | drainpunch,1;switch landorustherian 541v 94 | icepunch,1;switch landorustherian 520v 88 | knockoff,0;switch landorustherian 511v 86
+    p2 greedy: move 4 2, move 3
+      p1b <- Landorus-Therian comes in (319/319)
+              p2a Kyurem atk 1 fell
+              p2b Sableye atk 1 fell
+      p1a Conkeldurr used Knock Off -> p2b: Sableye
+      p2a Kyurem used Fusion Bolt -> p1b: Landorus
+              p1b Landorus -- IMMUNE
+      p2b Sableye used Snarl -> p1b: Landorus  [[spread] p1a,p1b]
+              p1a Conkeldurr spa 1 fell
+              p1b Landorus spa 1 fell
+      after p1: Conkeldurr 383/413, Landorus-Therian 267/319
+      after p2: Kyurem-Black 10/454, Sableye-Mega 164/304
+
+  Turn 7
+    p1 mcts: switch 6, switch 5   (slot0 Conkeldurr -> Volcanion; slot1 Landorus-Therian -> Thundurus)
+      search (36000 visits): switch volcanion;switch thundurus 947v 226 | switch thundurus;switch volcanion 932v 221 | switch gengarmega;switch thundurus 835v 191 | switch thundurus;switch gengarmega 782v 175
+    p2 greedy: move 4 2, move 3
+      p1b <- Thundurus comes in (259/361)
+      p1a <- Volcanion comes in (336/363)
+      p2a Kyurem used Fusion Bolt -> p1b: Thundurus
+      p2b Sableye used Snarl -> p1a: Volcanion  [[spread] p1a,p1b]
+              p1a Volcanion spa 1 fell
+              p1b Thundurus spa 1 fell
+      p2a Kyurem fainted
+      after p1: Volcanion 312/363, Thundurus 123/361
+      after p2: Kyurem-Black 0/454, Sableye-Mega 164/304
+
+  Turn 8
+      p2a <- Ferrothorn comes in (352/352)
+      after p1: Volcanion 312/363, Thundurus 123/361
+      after p2: Ferrothorn 352/352, Sableye-Mega 164/304
+
+  Turn 9
+    p1 mcts: move 2, switch 5   (slot1 Thundurus -> Landorus-Therian)
+      search (43000 visits): heatwave,0;switch landorustherian 1018v 192 | hiddenpower,0;switch landorustherian 967v 179 | switch landorustherian;switch conkeldurr 798v 135 | hiddenpower,1;switch landorustherian 791v 134
+    p2 greedy: move 1, move 3
+      p1b <- Landorus-Therian comes in (267/319)
+              p2a Ferrothorn atk 1 fell
+              p2b Sableye atk 1 fell
+      p1a Volcanion used Heat Wave -> p2a: Ferrothorn  [[spread] p2a,p2b]
+              p2b Sableye is now brn
+      p2a Ferrothorn used Spikes -> p1b: Landorus
+      -sidestart p1: A Spikes
+      p2b Sableye used Snarl -> p1a: Volcanion  [[spread] p1a,p1b]
+              p1a Volcanion spa 1 fell
+              p1b Landorus spa 1 fell
+      after p1: Volcanion 288/363, Landorus-Therian 218/319
+      after p2: Ferrothorn 144/352, Sableye-Mega 72/304
+
+  Turn 10
+    p1 mcts: move 1 1, switch 4   (slot1 Landorus-Therian -> Gengar-Mega)
+      search (48000 visits): steameruption,0;switch gengarmega 1239v 259 | earthpower,0;switch thundurus 1214v 252 | hiddenpower,1;switch thundurus 1178v 242 | steameruption,1;switch thundurus 1170v 240
+    p2 greedy: move 1, move 3
+      p1b <- Gengar-Mega comes in (323/323)
+      p1a Volcanion used Steam Eruption -> p2a: Ferrothorn
+              p2a Ferrothorn is now brn
+      p2a Ferrothorn used Spikes -> p1a: Volcanion
+      -sidestart p1: A Spikes
+      p2b Sableye used Snarl -> p1b: Gengar  [[spread] p1a,p1b]
+              p1a Volcanion spa 1 fell
+              p1b Gengar spa 1 fell
+      after p1: Volcanion 263/363, Gengar-Mega 197/323
+      after p2: Ferrothorn 66/352, Sableye-Mega 34/304
+
+  Turn 11
+    p1 mcts: move 3 2, switch 5   (slot1 Gengar-Mega -> Thundurus)
+      search (37000 visits): earthpower,1;switch thundurus 776v 197 | steameruption,1;switch landorustherian 686v 167 | heatwave,0;switch thundurus 663v 159 | hiddenpower,0;switch thundurus 643v 152
+    p2 greedy: move 1, move 3
+      p1b <- Thundurus comes in (123/361)
+      p1a Volcanion used Earth Power -> p2b: Sableye
+              p2b Sableye spd 1 fell
+      p2a Ferrothorn used Spikes -> p1b: Thundurus
+      -sidestart p1: A Spikes
+      p2b Sableye used Snarl -> p1b: Thundurus  [[spread] p1a,p1b]
+              p1a Volcanion spa 1 fell
+              p1b Thundurus spa 1 fell
+      p2b Sableye fainted
+      after p1: Volcanion 239/363, Thundurus 83/361
+      after p2: Ferrothorn 22/352, Sableye-Mega 0/304
+
+  Turn 12
+      p2b <- Landorus-Therian comes in (367/367)
+              p1a Volcanion atk 1 fell
+              p1b Thundurus atk 1 fell
+      after p1: Volcanion 239/363, Thundurus 83/361
+      after p2: Ferrothorn 22/352, Landorus-Therian 367/367
+
+  Turn 13
+    p1 mcts: switch 4, switch 6   (slot0 Volcanion -> Landorus-Therian; slot1 Thundurus -> Conkeldurr)
+      search (47000 visits): switch landorustherian;switch conkeldurr 2144v 1414 | earthpower,1;switch landorustherian 1771v 1150 | earthpower,0;switch landorustherian 1622v 1045 | switch landorustherian;switch gengarmega 1575v 1012
+    p2 greedy: move 1, move 2 2
+      p1b <- Conkeldurr comes in (383/413)
+      p1a <- Landorus-Therian comes in (218/319)
+              p2a Ferrothorn atk 1 fell
+              p2b Landorus atk 1 fell
+      p2b Landorus used Earth Power -> p1b: Conkeldurr
+      p2a Ferrothorn used Spikes  [[still]]
+              p2a Ferrothorn -- IT FAILED
+      p2a Ferrothorn fainted
+      after p1: Landorus-Therian 218/319, Conkeldurr 177/413
+      after p2: Ferrothorn 0/352, Landorus-Therian 367/367
+
+  Turn 14
+      p2a <- Chansey comes in (643/643)
+      after p1: Landorus-Therian 218/319, Conkeldurr 177/413
+      after p2: Chansey 643/643, Landorus-Therian 367/367
+
+  Turn 15
+    p1 mcts: move 2 2, move 2 2
+      search (38000 visits): uturn,1;icepunch,1 830v 194 | earthquake,0;icepunch,1 810v 187 | superpower,0;icepunch,1 809v 187 | rockslide,0;icepunch,1 786v 180
+    p2 greedy: move 1 2, move 2 2
+      p1a Landorus used U-turn -> p2b: Landorus
+      after p1: Landorus-Therian 218/319, Conkeldurr 177/413
+      after p2: Chansey 643/643, Landorus-Therian 321/367
+
+  Turn 16
+      p1a <- Volcanion comes in (239/363)
+      p2b Landorus used Earth Power -> p1b: Conkeldurr
+      p2a Chansey used Seismic Toss -> p1b: Conkeldurr
+      p1b Conkeldurr fainted
+      after p1: Volcanion 149/363, Conkeldurr 0/413
+      after p2: Chansey 643/643, Landorus-Therian 321/367
+
+  Turn 17
+      p1b <- Landorus-Therian comes in (218/319)
+              p2a Chansey atk 1 fell
+              p2b Landorus atk 1 fell
+      after p1: Volcanion 149/363, Landorus-Therian 218/319
+      after p2: Chansey 643/643, Landorus-Therian 321/367
+
+  Turn 18
+    p1 mcts: move 3 2, switch 6   (slot1 Landorus-Therian -> Thundurus)
+      search (37000 visits): earthpower,1;switch thundurus 934v 304 | hiddenpower,0;switch thundurus 926v 300 | earthpower,0;switch thundurus 894v 288 | heatwave,0;switch gengarmega 877v 281
+    p2 greedy: move 1 1, move 2 1
+      p1b <- Thundurus comes in (83/361)
+      p2b Landorus used Earth Power -> p1a: Volcanion
+      p1a Volcanion fainted
+      p2a Chansey used Seismic Toss -> p1b: Thundurus
+      p1b Thundurus fainted
+      after p1: Volcanion 0/363, Thundurus 0/361
+      after p2: Chansey 643/643, Landorus-Therian 321/367
+
+  Turn 19
+      p1b <- Landorus-Therian comes in (218/319)
+      p1a <- Gengar-Mega comes in (197/323)
+              p2a Chansey atk 1 fell
+              p2b Landorus atk 1 fell
+      after p1: Gengar-Mega 117/323, Landorus-Therian 218/319
+      after p2: Chansey 643/643, Landorus-Therian 321/367
+
+  Turn 20
+    p1 mcts: move 1 2, move 2 1
+      search (46000 visits): shadowball,1;uturn,0 15859v 10502 | shadowball,1;uturn,1 5683v 3623 | protect,0;uturn,0 4381v 2756 | protect,0;uturn,1 2288v 1378
+    p2 greedy: move 1 1, move 2 1
+      p1b Landorus used U-turn -> p2a: Chansey
+      p2b Landorus used Earth Power -> p1a: Gengar
+      p1a Gengar fainted
+      p2a Chansey used Seismic Toss -> p1b: Landorus
+      after p1: Gengar-Mega 0/323, Landorus-Therian 118/319
+      after p2: Chansey 515/643, Landorus-Therian 321/367
+
+  Turn 21
+    p1 mcts: pass, move 2 1
+      search (257000 visits): No Move;uturn,0 129045v 2198 | No Move;uturn,1 127955v 2172
+    p2 greedy: move 1 2, move 2 2
+      p1b Landorus used U-turn -> p2a: Chansey
+              p2a Chansey -- critical hit
+      p2b Landorus used Earth Power -> p1b: Landorus
+              p1b Landorus -- IMMUNE
+      p2a Chansey used Seismic Toss -> p1b: Landorus
+      after p1: Gengar-Mega 0/323, Landorus-Therian 18/319
+      after p2: Chansey 332/643, Landorus-Therian 321/367
+
+  Turn 22
+    p1 mcts: pass, move 2 1
+      search (230000 visits): No Move;uturn,0 117198v 2182 | No Move;uturn,1 112802v 2068
+    p2 greedy: move 1 2, move 2 2
+      p1b Landorus used U-turn -> p2a: Chansey
+      p2b Landorus used Earth Power -> p1b: Landorus
+              p1b Landorus -- IMMUNE
+      p2a Chansey used Seismic Toss -> p1b: Landorus
+      p1b Landorus fainted
+      after p1: Gengar-Mega 0/323, Landorus-Therian 0/319
+      after p2: Chansey 214/643, Landorus-Therian 321/367
+
+  RESULT: p2 wins

@@ -1,0 +1,142 @@
+battle 64   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: ORAS Doubles OU: Gardevoir, Azumarill, Amoonguss, Heatran, Landorus-Therian, Thundurus
+  p2: ORAS Doubles OU: Cresselia, Scrafty, Thundurus, Metagross, Landorus-Therian, Heatran
+
+  Turn 1
+    p1 mcts: switch 3, switch 4   (slot0 Gardevoir -> Amoonguss; slot1 Azumarill -> Heatran)
+      search (20000 visits): switch amoonguss;switch heatran 2464v 2062 | hypervoice-mega,0;bellydrum,1 769v 402 | hypervoice-mega,0;knockoff,0 630v 319 | hypervoice-mega,0;knockoff,1 464v 221
+    p2 greedy: move 2 1, move 2 1
+      p1a <- Amoonguss comes in (432/432)
+      p1b <- Heatran comes in (323/323)
+      p2a Cresselia used Psychic -> p1a: Amoonguss
+      p2b Scrafty used Drain Punch -> p1a: Amoonguss
+      after p1: Amoonguss 185/432, Heatran 323/323
+      after p2: Cresselia 440/440, Scrafty 279/334
+
+  Turn 2
+    p1 mcts: move 2 1, move 1
+      search (14000 visits): spore,0;heatwave,0 656v 519 | switch gardevoir;heatwave,0 524v 404 | switch thundurus;switch landorustherian 501v 384 | switch landorustherian;switch gardevoir 475v 362
+    p2 greedy: move 2 1, move 2 1
+      p1b Heatran used Heat Wave -> p2b: Scrafty  [[spread] p2a,p2b]
+              p2b Scrafty is now brn
+      p2a Cresselia used Psychic -> p1a: Amoonguss
+      p1a Amoonguss fainted
+      p2b Scrafty used Drain Punch -> p1b: Heatran
+      after p1: Amoonguss 0/432, Heatran 220/323
+      after p2: Cresselia 343/440, Scrafty 220/334
+
+  Turn 3
+      p1a <- Gardevoir comes in (277/277)
+      after p1: Gardevoir 277/277, Heatran 220/323
+      after p2: Cresselia 343/440, Scrafty 220/334
+
+  Turn 4
+    p1 mcts: move 1 mega, move 1
+      search (22000 visits): hypervoice-mega,0;heatwave,0 740v 374 | icywind-mega,0;switch landorustherian 380v 167 | hypervoice-mega,0;earthpower,0 365v 159 | hypervoice-mega,0;earthpower,1 358v 155
+    p2 greedy: move 2 2, move 2 2
+      p1a Gardevoir used Hyper Voice -> p2a: Cresselia  [[spread] p2a,p2b]
+      p2b Scrafty fainted
+      p1b Heatran used Heat Wave -> p2a: Cresselia
+              p2a Cresselia -- critical hit
+      p2a Cresselia used Psychic -> p1b: Heatran
+              p1b Heatran -- critical hit
+      after p1: Gardevoir-Mega 277/277, Heatran 165/323
+      after p2: Cresselia 10/440, Scrafty 0/334
+
+  Turn 5
+      p2b <- Thundurus comes in (358/358)
+      after p1: Gardevoir-Mega 277/277, Heatran 165/323
+      after p2: Cresselia 10/440, Thundurus 358/358
+
+  Turn 6
+    p1 mcts: move 1, move 1
+      search (23000 visits): hypervoice,0;heatwave,0 2162v 1692 | psychic,1;heatwave,0 1171v 876 | icywind,0;heatwave,0 1077v 800 | hypervoice,0;overheat,1 723v 515
+    p2 greedy: move 2 2, move 1 2
+      p1a Gardevoir used Hyper Voice -> p2a: Cresselia  [[spread] p2a,p2b]
+      p2a Cresselia fainted
+      p1b Heatran used Heat Wave -> p2b: Thundurus
+              p2b Thundurus used up its Sitrus Berry
+      p2b Thundurus used Thunderbolt -> p1b: Heatran
+      after p1: Gardevoir-Mega 277/277, Heatran 42/323
+      after p2: Cresselia 0/440, Thundurus 109/358
+
+  Turn 7
+      p2a <- Metagross comes in (346/346)
+      after p1: Gardevoir-Mega 277/277, Heatran 42/323
+      after p2: Metagross 346/346, Thundurus 109/358
+
+  Turn 8
+    p1 mcts: move 1, move 1
+      search (25000 visits): hypervoice,0;heatwave,0 2453v 1840 | psychic,1;overheat,0 1142v 808 | icywind,0;overheat,0 1110v 784 | hypervoice,0;overheat,0 1032v 723
+    p2 greedy: move 1 2, move 1 2
+      p1a Gardevoir used Hyper Voice -> p2a: Metagross  [[spread] p2a,p2b]
+      p2b Thundurus fainted
+      p1b Heatran used Heat Wave -> p2a: Metagross
+      p2a Metagross fainted
+      after p1: Gardevoir-Mega 277/277, Heatran 42/323
+      after p2: Metagross 0/346, Thundurus 0/358
+
+  Turn 9
+      p2b <- Heatran comes in (386/386)
+      p2a <- Landorus-Therian comes in (344/344)
+              p1a Gardevoir atk 1 fell
+              p1b Heatran atk 1 fell
+      after p1: Gardevoir-Mega 277/277, Heatran 42/323
+      after p2: Landorus-Therian 344/344, Heatran 386/386
+
+  Turn 10
+    p1 mcts: move 4, switch 5   (slot1 Heatran -> Landorus-Therian)
+      search (32000 visits): protect,0;switch landorustherian 2692v 2049 | protect,0;earthpower,1 2635v 2003 | switch landorustherian;switch azumarill 1219v 876 | switch landorustherian;earthpower,1 1144v 817
+    p2 greedy: move 3 2, move 2 2
+      p1b <- Landorus-Therian comes in (330/330)
+              p2a Landorus atk 1 fell
+              p2b Heatran atk 1 fell
+      p1a Gardevoir used Protect
+      p2a Landorus used Superpower -> p1b: Landorus
+              p2a Landorus atk 1 fell
+              p2a Landorus def 1 fell
+      p2b Heatran used Solar Beam  [[still]]
+      after p1: Gardevoir-Mega 277/277, Landorus-Therian 272/330
+      after p2: Landorus-Therian 344/344, Heatran 386/386
+
+  Turn 11
+    p1 mcts: move 3, move 1
+      search (73000 visits): icywind,0;earthquake,0 18532v 18244 | hypervoice,0;earthquake,0 8557v 8284 | protect,0;earthquake,0 6375v 6120 | psychic,0;earthquake,0 5048v 4809
+    p2 greedy: move 3 2, move 1
+      p1b Landorus used Earthquake -> p2a: Landorus  [[spread] p1a,p2b]
+              p2a Landorus -- IMMUNE
+              p2b Heatran used up its Shuca Berry
+              p2b Heatran used up its Shuca Berry
+      p2a Landorus used Superpower -> p1b: Landorus
+              p2a Landorus atk 1 fell
+              p2a Landorus def 1 fell
+      p1a Gardevoir used Icy Wind -> p2a: Landorus  [[spread] p2b]
+              p1a Gardevoir -- MISSED
+              p2b Heatran spe 1 fell
+      p2b Heatran used Solar Beam -> p1b: Landorus  [[from] lockedmove]
+      after p1: Gardevoir-Mega 43/277, Landorus-Therian 50/330
+      after p2: Landorus-Therian 344/344, Heatran 65/386
+
+  Turn 12
+    p1 mcts: move 2 2, switch 4   (slot1 Landorus-Therian -> Azumarill)
+      search (83000 visits): psychic,1;switch azumarill 72639v 63332 | icywind,0;switch azumarill 1243v 919 | icywind,0;switch heatran 887v 636 | icywind,0;switch thundurus 767v 541
+    p2 greedy: move 3 2, move 2 2
+      p1b <- Azumarill comes in (404/404)
+      p2a Landorus used Superpower -> p1b: Azumarill
+              p2a Landorus atk 1 fell
+              p2a Landorus def 1 fell
+      p1a Gardevoir used Psychic -> p2b: Heatran
+      p2b Heatran fainted
+      after p1: Gardevoir-Mega 43/277, Azumarill 364/404
+      after p2: Landorus-Therian 344/344, Heatran 0/386
+
+  Turn 13
+    p1 mcts: move 1, move 2 1
+      search (434000 visits): hypervoice,0;aquajet,0 24530v 24530 | hypervoice,0;knockoff,0 24530v 24530 | psychic,0;aquajet,0 24530v 24530 | psychic,0;knockoff,0 24530v 24530
+    p2 greedy: move 3 1, pass
+      p1b Azumarill used Aqua Jet -> p2a: Landorus
+      p2a Landorus fainted
+      after p1: Gardevoir-Mega 43/277, Azumarill 364/404
+      after p2: Landorus-Therian 0/344, Heatran 0/386
+
+  RESULT: p1 wins

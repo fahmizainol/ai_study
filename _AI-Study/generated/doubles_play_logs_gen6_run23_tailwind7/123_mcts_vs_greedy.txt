@@ -1,0 +1,184 @@
+battle 123   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: dpl ::/Copy of Untitled 686: Salamence-Mega, Landorus, Volcanion, Genesect, Amoonguss, Diancie
+  p2: ORAS Doubles OU: Pelipper, Araquanid, Oranguru, Thundurus, Latias, Kingdra
+
+  Turn 1
+    p1 mcts: switch 3, move 2 1   (slot0 Salamence-Mega -> Volcanion)
+      search (20000 visits): switch volcanion;sludgebomb,0 403v 194 | doubleedge,1;sludgebomb,0 402v 193 | switch genesect;sludgebomb,0 391v 186 | doubleedge,1;psychic,0 376v 178
+    p2 greedy: move 1 1, move 1 1
+      p1a <- Volcanion comes in (363/363)
+      p1b Landorus used Sludge Bomb -> p2a: Pelipper
+      p2a Pelipper used Hurricane -> p1a: Volcanion
+      p2b Araquanid used Liquidation -> p1a: Volcanion
+      after p1: Volcanion 363/363, Landorus 319/319
+      after p2: Pelipper 113/324, Araquanid 339/339
+
+  Turn 2
+    p1 mcts: move 1 1, switch 3   (slot1 Landorus -> Salamence-Mega)
+      search (15000 visits): steameruption,0;switch salamencemega 379v 242 | steameruption,1;switch salamencemega 302v 184 | steameruption,0;switch genesect 288v 174 | steameruption,1;psychic,0 249v 146
+    p2 greedy: move 1 1, move 1 1
+      p1b <- Salamence-Mega comes in (332/332)
+              p2a Pelipper atk 1 fell
+              p2b Araquanid atk 1 fell
+      p1a Volcanion used Steam Eruption -> p2a: Pelipper
+      p2a Pelipper fainted
+      p2b Araquanid used Liquidation -> p1a: Volcanion
+              p1a Volcanion -- IMMUNE
+      after p1: Volcanion 363/363, Salamence-Mega 332/332
+      after p2: Pelipper 0/324, Araquanid 339/339
+
+  Turn 3
+      p2a <- Oranguru comes in (383/383)
+      after p1: Volcanion 363/363, Salamence-Mega 332/332
+      after p2: Oranguru 383/383, Araquanid 339/339
+
+  Turn 4
+    p1 mcts: move 1 1, move 1 2
+      search (15000 visits): steameruption,0;doubleedge,1 585v 420 | steameruption,0;doubleedge,0 453v 314 | steameruption,0;switch genesect 423v 290 | steameruption,1;doubleedge,0 405v 276
+    p2 greedy: move 1 1, move 1 1
+      p1b Salamence used Double-Edge -> p2b: Araquanid
+      p1a Volcanion used Steam Eruption -> p2a: Oranguru  [[miss]]
+              p1a Volcanion -- MISSED
+      p2b Araquanid used Liquidation -> p1a: Volcanion
+              p1a Volcanion -- IMMUNE
+      p2a Oranguru used Psyshock -> p1a: Volcanion
+      after p1: Volcanion 293/363, Salamence-Mega 276/332
+      after p2: Oranguru 383/383, Araquanid 168/339
+
+  Turn 5
+    p1 mcts: move 1 2, move 1 1
+      search (14000 visits): steameruption,1;doubleedge,0 384v 260 | steameruption,0;tailwind,1 362v 242 | steameruption,0;doubleedge,0 349v 232 | steameruption,0;roost,1 322v 211
+    p2 greedy: move 1 1, move 1 1
+      p1b Salamence used Double-Edge -> p2a: Oranguru
+      p1a Volcanion used Steam Eruption -> p2b: Araquanid
+      p2b Araquanid used Liquidation -> p1a: Volcanion
+      p2a Oranguru used Psyshock -> p1a: Volcanion
+      after p1: Volcanion 291/363, Salamence-Mega 212/332
+      after p2: Oranguru 190/383, Araquanid 51/339
+
+  Turn 6
+    p1 mcts: move 1 1, move 2
+      search (18000 visits): steameruption,0;roost,1 767v 557 | steameruption,0;switch genesect 522v 361 | steameruption,0;doubleedge,0 426v 286 | steameruption,0;tailwind,1 418v 280
+    p2 greedy: move 1 2, move 1 2
+      p1b Salamence used Roost
+      p1a Volcanion used Steam Eruption -> p2a: Oranguru
+              p2a Oranguru is now brn
+      p2b Araquanid used Liquidation -> p1b: Salamence
+      p2a Oranguru used Psyshock -> p1b: Salamence
+      p2a Oranguru fainted
+      after p1: Volcanion 291/363, Salamence-Mega 190/332
+      after p2: Oranguru 0/383, Araquanid 51/339
+
+  Turn 7
+      p2a <- Thundurus comes in (299/299)
+      after p1: Volcanion 291/363, Salamence-Mega 190/332
+      after p2: Thundurus 299/299, Araquanid 51/339
+
+  Turn 8
+    p1 mcts: move 1 1, move 2
+      search (19000 visits): steameruption,0;roost,1 1383v 1061 | steameruption,0;switch genesect 824v 603 | steameruption,0;doubleedge,1 639v 454 | steameruption,0;protect,1 611v 432
+    p2 greedy: move 2 2, move 1 2
+      p1b Salamence used Roost
+      p2a Thundurus used Thunder -> p1b: Salamence
+      p1a Volcanion used Steam Eruption -> p2a: Thundurus
+      p2a Thundurus fainted
+      p2b Araquanid used Liquidation -> p1b: Salamence
+      after p1: Volcanion 291/363, Salamence-Mega 156/332
+      after p2: Thundurus 0/299, Araquanid 51/339
+
+  Turn 9
+      p2a <- Latias comes in (362/362)
+      after p1: Volcanion 291/363, Salamence-Mega 156/332
+      after p2: Latias 362/362, Araquanid 51/339
+
+  Turn 10
+    p1 mcts: move 1 1, move 1 1
+      search (23000 visits): steameruption,0;doubleedge,0 993v 745 | steameruption,0;switch genesect 695v 502 | switch genesect;switch amoonguss 680v 490 | steameruption,0;roost,1 631v 451
+    p2 greedy: move 2 2, move 1 2
+      p1b Salamence used Double-Edge -> p2a: Latias
+              p2a Latias used up its Sitrus Berry
+      p2a Latias used Psychic -> p1b: Salamence
+      p1b Salamence fainted
+      p1a Volcanion used Steam Eruption -> p2a: Latias
+      p2b Araquanid used Liquidation -> p1a: Volcanion
+      after p1: Volcanion 363/363, Salamence-Mega 0/332
+      after p2: Latias 158/362, Araquanid 51/339
+
+  Turn 11
+      p1b <- Landorus comes in (319/319)
+      after p1: Volcanion 363/363, Landorus 319/319
+      after p2: Latias 158/362, Araquanid 51/339
+
+  Turn 12
+    p1 mcts: move 1 2, switch 4   (slot1 Landorus -> Genesect)
+      search (22000 visits): steameruption,1;switch genesect 606v 364 | steameruption,0;switch genesect 594v 356 | hiddenpower,1;switch genesect 580v 346 | hiddenpower,0;switch genesect 500v 291
+    p2 greedy: move 2 1, move 1 1
+      p1b <- Genesect comes in (284/284)
+              p1b Genesect atk 1 rose
+      p2a Latias used Psychic -> p1a: Volcanion
+      p1a Volcanion used Steam Eruption -> p2b: Araquanid
+      p2b Araquanid fainted
+      after p1: Volcanion 294/363, Genesect 284/284
+      after p2: Latias 158/362, Araquanid 0/339
+
+  Turn 13
+      p2b <- Kingdra comes in (292/292)
+      after p1: Volcanion 294/363, Genesect 284/284
+      after p2: Latias 158/362, Kingdra 292/292
+
+  Turn 14
+    p1 mcts: move 3 2, move 2 1
+      search (23000 visits): earthpower,1;ironhead,0 803v 529 | earthpower,1;uturn,0 660v 424 | hiddenpower,1;ironhead,0 605v 384 | earthpower,1;extremespeed,0 495v 305
+    p2 greedy: move 2 1, move 2 1
+      p2a Latias used Psychic -> p1a: Volcanion
+              p1a Volcanion -- critical hit
+      p1b Genesect used Iron Head -> p2a: Latias
+      p2a Latias fainted
+      p2b Kingdra used Draco Meteor -> p1a: Volcanion
+              p2b Kingdra spa 2 fell
+      p1a Volcanion used Earth Power -> p2b: Kingdra
+      after p1: Volcanion 10/363, Genesect 284/284
+      after p2: Latias 0/362, Kingdra 165/292
+
+  Turn 15
+    p1 mcts: move 3 2, switch 5   (slot1 Genesect -> Amoonguss)
+      search (58000 visits): earthpower,1;switch amoonguss 3100v 874 | hiddenpower,1;switch amoonguss 2992v 839 | steameruption,1;switch amoonguss 2958v 828 | heatwave,1;switch amoonguss 2887v 805
+    p2 greedy: pass, move 2 1
+      p1b <- Amoonguss comes in (432/432)
+      p2b Kingdra used Draco Meteor -> p1a: Volcanion
+              p2b Kingdra spa 2 fell
+      p1a Volcanion fainted
+      after p1: Volcanion 0/363, Amoonguss 432/432
+      after p2: Latias 0/362, Kingdra 136/292
+
+  Turn 16
+      p1a <- Landorus comes in (319/319)
+      after p1: Landorus 319/319, Amoonguss 432/432
+      after p2: Latias 0/362, Kingdra 136/292
+
+  Turn 17
+    p1 mcts: switch 6, switch 5   (slot0 Landorus -> Diancie; slot1 Amoonguss -> Genesect)
+      search (49000 visits): switch diancie;switch genesect 3282v 1568 | switch diancie;spore,1 2424v 1126 | switch diancie;grassknot,1 2174v 998 | switch diancie;ragepowder,1 2110v 966
+    p2 greedy: pass, move 2 1
+      p1a <- Diancie comes in (304/304)
+      p1b <- Genesect comes in (284/284)
+              p1b Genesect spa 1 rose
+      p2b Kingdra used Draco Meteor -> p1a: Diancie
+              p1a Diancie -- IMMUNE
+      after p1: Diancie 304/304, Genesect 284/284
+      after p2: Latias 0/362, Kingdra 136/292
+
+  Turn 18
+    p1 mcts: move 2 2, move 2 2
+      search (56000 visits): moonblast,1;ironhead,1 2222v 889 | moonblast,1;uturn,1 2193v 876 | trickroom,1;blazekick,1 2134v 850 | trickroom,1;extremespeed,1 2131v 848
+    p2 greedy: pass, move 2 1
+      p1b Genesect used Iron Head -> p2b: Kingdra
+      p2b Kingdra used Draco Meteor -> p1a: Diancie
+              p1a Diancie -- IMMUNE
+      p1a Diancie used Moonblast -> p2b: Kingdra
+              p2b Kingdra -- critical hit
+      p2b Kingdra fainted
+      after p1: Diancie 304/304, Genesect 284/284
+      after p2: Latias 0/362, Kingdra 0/292
+
+  RESULT: p1 wins

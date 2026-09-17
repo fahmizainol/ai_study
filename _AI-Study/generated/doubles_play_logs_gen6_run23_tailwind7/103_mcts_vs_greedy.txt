@@ -1,0 +1,148 @@
+battle 103   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: shroom diancie ltv: Diancie-Mega, Volcanion, Thundurus, Landorus-Therian, Amoonguss, Genesect
+  p2: dpl rejects/sub aegi week 4 reject: Gengar-Mega, Shaymin-Sky, Hydreigon, Volcanion, Aegislash, Landorus-Therian
+
+  Turn 1
+    p1 mcts: move 4, move 1
+      search (11000 visits): protect,0;heatwave,0 1242v 903 | diamondstorm,0;heatwave,0 1078v 774 | diamondstorm,0;earthpower,0 581v 389 | diamondstorm,0;steameruption,0 474v 309
+    p2 greedy: move 2 1, move 2 1
+      p1a Diancie used Protect
+      p2a Gengar used Sludge Bomb -> p1a: Diancie
+              p1a Diancie -- move: Protect
+      p2b Shaymin used Seed Flare -> p1a: Diancie
+              p1a Diancie -- move: Protect
+      p1b Volcanion used Heat Wave -> p2b: Shaymin  [[spread] p2a,p2b]
+      after p1: Diancie-Mega 301/301, Volcanion 363/363
+      after p2: Gengar-Mega 129/262, Shaymin-Sky 9/341
+
+  Turn 2
+    p1 mcts: move 4, move 1
+      search (23000 visits): protect,0;heatwave,0 3372v 1912 | diamondstorm,0;heatwave,0 1453v 765 | diamondstorm,0;earthpower,0 987v 495 | moonblast,0;heatwave,0 897v 443
+    p2 greedy: move 2 1, move 2 1
+      p1a Diancie used Protect
+      p2a Gengar used Sludge Bomb -> p1a: Diancie
+              p1a Diancie -- move: Protect
+      p2b Shaymin used Seed Flare -> p1a: Diancie
+              p1a Diancie -- move: Protect
+      p1b Volcanion used Heat Wave -> p2a: Gengar  [[spread] p2a]
+              p1b Volcanion -- MISSED
+      p2a Gengar fainted
+      after p1: Diancie-Mega 301/301, Volcanion 363/363
+      after p2: Gengar-Mega 0/262, Shaymin-Sky 9/341
+
+  Turn 3
+      p2a <- Hydreigon comes in (325/325)
+      after p1: Diancie-Mega 301/301, Volcanion 363/363
+      after p2: Hydreigon 325/325, Shaymin-Sky 9/341
+
+  Turn 4
+    p1 mcts: move 2 1, move 1
+      search (16000 visits): moonblast,0;heatwave,0 339v 197 | protect,0;steameruption,0 330v 191 | moonblast,0;earthpower,0 311v 178 | diamondstorm,0;switch genesect 309v 176
+    p2 greedy: move 1 1, move 2 1
+      p2b Shaymin used Seed Flare -> p1a: Diancie
+              p1a Diancie -- critical hit
+      p1a Diancie fainted
+      p2a Hydreigon used Draco Meteor -> p1b: Volcanion
+              p2a Hydreigon spa 2 fell
+      p1b Volcanion used Heat Wave -> p2b: Shaymin  [[spread] p2a]
+              p1b Volcanion -- MISSED
+              p2a Hydreigon is now brn
+      after p1: Diancie-Mega 0/301, Volcanion 159/363
+      after p2: Hydreigon 186/325, Shaymin-Sky 9/341
+
+  Turn 5
+      p1a <- Thundurus comes in (361/361)
+      after p1: Thundurus 361/361, Volcanion 159/363
+      after p2: Hydreigon 186/325, Shaymin-Sky 9/341
+
+  Turn 6
+    p1 mcts: move 1 2, move 4 1
+      search (27000 visits): thunderbolt,1;overheat,0 704v 399 | thunderbolt,1;steameruption,0 698v 395 | hiddenpower,1;steameruption,0 627v 349 | hiddenpower,1;overheat,0 601v 332
+    p2 greedy: move 1 2, move 2 2
+      p2b Shaymin used Seed Flare -> p1b: Volcanion
+              p1b Volcanion spd 2 fell
+      p1a Thundurus used Thunderbolt -> p2b: Shaymin
+      p2b Shaymin fainted
+      p2a Hydreigon used Draco Meteor -> p1b: Volcanion
+              p2a Hydreigon spa 2 fell
+      p1b Volcanion fainted
+      after p1: Thundurus 361/361, Volcanion 0/363
+      after p2: Hydreigon 114/325, Shaymin-Sky 0/341
+
+  Turn 7
+      p2b <- Volcanion comes in (343/343)
+      p1b <- Landorus-Therian comes in (382/382)
+              p2a Hydreigon atk 1 fell
+              p2b Volcanion atk 1 fell
+      after p1: Thundurus 361/361, Landorus-Therian 382/382
+      after p2: Hydreigon 114/325, Volcanion 343/343
+
+  Turn 8
+    p1 mcts: move 1 2, move 1
+      search (18000 visits): thunderbolt,1;earthquake,0 601v 171 | switch genesect;earthquake,0 532v 145 | thunderbolt,1;stoneedge,1 465v 121 | thunderbolt,1;switch genesect 445v 114
+    p2 greedy: move 1 1, move 1 1
+      p1a Thundurus used Thunderbolt -> p2b: Volcanion
+      p2a Hydreigon used Draco Meteor -> p1a: Thundurus
+              p2a Hydreigon spa 2 fell
+      p1b Landorus used Earthquake -> p2b: Volcanion  [[spread] p2b]
+              p1a Thundurus -- IMMUNE
+              p2a Hydreigon -- IMMUNE
+      p2b Volcanion fainted
+      after p1: Thundurus 248/361, Landorus-Therian 382/382
+      after p2: Hydreigon 42/325, Volcanion 0/343
+
+  Turn 9
+      p2b <- Aegislash comes in (324/324)
+      after p1: Thundurus 248/361, Landorus-Therian 382/382
+      after p2: Hydreigon 42/325, Aegislash 324/324
+
+  Turn 10
+    p1 mcts: move 1 2, move 2
+      search (39000 visits): thunderbolt,1;stealthrock,0 1794v 631 | hiddenpower,0;stealthrock,0 1228v 404 | thunderwave,1;stealthrock,0 1167v 380 | thunderbolt,1;uturn,0 1084v 347
+    p2 greedy: move 1 1, move 1 1
+      p1a Thundurus used Thunderbolt -> p2b: Aegislash
+      p2a Hydreigon used Draco Meteor -> p1a: Thundurus
+              p1a Thundurus used up its Sitrus Berry
+      p1b Landorus used Stealth Rock -> p2a: Hydreigon
+      -sidestart p2: B move: Stealth Rock
+      p2b Aegislash used Shadow Ball -> p1a: Thundurus
+      p2a Hydreigon fainted
+      after p1: Thundurus 47/361, Landorus-Therian 382/382
+      after p2: Hydreigon 0/325, Aegislash-Blade 260/324
+
+  Turn 11
+      p2a <- Landorus-Therian comes in (319/319)
+              p1a Thundurus atk 1 fell
+              p1b Landorus atk 1 fell
+      after p1: Thundurus 47/361, Landorus-Therian 382/382
+      after p2: Landorus-Therian 280/319, Aegislash-Blade 260/324
+
+  Turn 12
+    p1 mcts: move 1 2, move 1
+      search (51000 visits): thunderbolt,1;earthquake,0 12851v 7449 | switch amoonguss;earthquake,0 2321v 1216 | thunderbolt,1;uturn,0 2154v 1121 | thunderbolt,1;uturn,1 2144v 1115
+    p2 greedy: move 3, move 1 1
+      p1a Thundurus used Thunderbolt -> p2b: Aegislash
+      p2a Landorus used Earthquake -> p1a: Thundurus  [[spread] p2b]
+              p1a Thundurus -- IMMUNE
+              p1b Landorus -- IMMUNE
+      p2b Aegislash fainted
+      p1b Landorus used Earthquake -> p2a: Landorus  [[spread] ]
+              p1a Thundurus -- IMMUNE
+              p2a Landorus -- IMMUNE
+      after p1: Thundurus 47/361, Landorus-Therian 382/382
+      after p2: Landorus-Therian 280/319, Aegislash 0/324
+
+  Turn 13
+    p1 mcts: move 2 1, move 3 1
+      search (76000 visits): hiddenpower,0;uturn,0 62351v 54816 | switch genesect;switch amoonguss 1421v 957 | switch genesect;uturn,0 1075v 705 | hiddenpower,0;switch amoonguss 872v 559
+    p2 greedy: move 3, pass
+      p1a Thundurus used Hidden Power -> p2a: Landorus
+      p2a Landorus used Earthquake -> p1b: Landorus  [[spread] ]
+              p1a Thundurus -- IMMUNE
+              p1b Landorus -- IMMUNE
+      p1b Landorus used U-turn -> p2a: Landorus
+      p2a Landorus fainted
+      after p1: Thundurus 47/361, Landorus-Therian 319/382
+      after p2: Landorus-Therian 0/319, Aegislash 0/324
+
+  RESULT: p1 wins

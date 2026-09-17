@@ -1,0 +1,156 @@
+battle 105   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: ORAS Doubles OU: Charizard-Mega-Y, Cresselia, Landorus-Therian, Aegislash, Zapdos, Keldeo
+  p2: never cook again: Kangaskhan-Mega, Bisharp, Togekiss, Thundurus, Landorus-Therian, Gastrodon-East
+
+  Turn 1
+    p1 mcts: switch 5, move 3   (slot0 Charizard-Mega-Y -> Zapdos)
+      search (30000 visits): switch zapdos;calmmind,1 472v 41 | solarbeam,0;calmmind,1 454v 37 | solarbeam,1;calmmind,1 454v 37 | protect,0;calmmind,1 448v 36
+    p2 greedy: move 3 1, move 1 1
+      p1a <- Zapdos comes in (384/384)
+      p2b Bisharp used Sucker Punch  [[still]]
+              p2b Bisharp -- IT FAILED
+      p2a Kangaskhan used Fire Punch -> p1a: Zapdos
+      p1b Cresselia used Calm Mind
+              p1b Cresselia spa 1 rose
+              p1b Cresselia spd 1 rose
+      after p1: Zapdos 293/384, Cresselia 444/444
+      after p2: Kangaskhan-Mega 345/413, Bisharp 278/278
+
+  Turn 2
+    p1 mcts: move 2 2, move 3
+      search (30000 visits): hiddenpower,1;calmmind,1 512v 47 | hiddenpower,0;calmmind,1 509v 46 | roost,0;calmmind,1 500v 45 | switch charizardmegay;calmmind,1 499v 45
+    p2 greedy: move 3 1, move 1 1
+      p2b Bisharp used Sucker Punch -> p1a: Zapdos
+              p1a Zapdos -- critical hit
+              p2b Bisharp is now par
+      p2a Kangaskhan used Fire Punch -> p1a: Zapdos
+      p1a Zapdos fainted
+      p1b Cresselia used Calm Mind
+              p1b Cresselia spa 1 rose
+              p1b Cresselia spd 1 rose
+      after p1: Zapdos 0/384, Cresselia 444/444
+      after p2: Kangaskhan-Mega 277/413, Bisharp 205/278
+
+  Turn 3
+      p1a <- Landorus-Therian comes in (319/319)
+              p2a Kangaskhan atk 1 fell
+              p2b Bisharp atk 1 fell
+              p2b Bisharp atk 2 rose
+      after p1: Landorus-Therian 319/319, Cresselia 444/444
+      after p2: Kangaskhan-Mega 277/413, Bisharp 205/278
+
+  Turn 4
+    p1 mcts: move 4 2, move 1 1
+      search (27000 visits): uturn,1;psyshock,0 599v 69 | switch charizardmegay;psyshock,0 597v 69 | rockslide,0;psyshock,0 588v 67 | earthquake,0;psyshock,0 581v 65
+    p2 greedy: move 3 1, move 1 1
+      p2b Bisharp used Sucker Punch -> p1a: Landorus
+      p2a Kangaskhan used Fire Punch -> p1a: Landorus
+              p1a Landorus -- critical hit
+      p1a Landorus fainted
+      p1b Cresselia used Psyshock -> p2a: Kangaskhan
+      after p1: Landorus-Therian 0/319, Cresselia 444/444
+      after p2: Kangaskhan-Mega 132/413, Bisharp 178/278
+
+  Turn 5
+      p1a <- Aegislash comes in (324/324)
+      after p1: Aegislash 324/324, Cresselia 444/444
+      after p2: Kangaskhan-Mega 132/413, Bisharp 178/278
+
+  Turn 6
+    p1 mcts: switch 5, move 1 1   (slot0 Aegislash -> Charizard-Mega-Y)
+      search (19000 visits): switch charizardmegay;psyshock,0 673v 119 | switch charizardmegay;icywind,0 594v 99 | switch charizardmegay;calmmind,1 536v 84 | shadowball,1;psyshock,0 532v 83
+    p2 greedy: move 3 1, move 1 1
+      p1a <- Charizard-Mega-Y comes in (359/359)
+      p2b Bisharp used Sucker Punch  [[still]]
+              p2b Bisharp -- IT FAILED
+      p2a Kangaskhan used Fire Punch -> p1a: Charizard
+      p1b Cresselia used Psyshock -> p2a: Kangaskhan
+      p2a Kangaskhan fainted
+      after p1: Charizard-Mega-Y 319/359, Cresselia 444/444
+      after p2: Kangaskhan-Mega 0/413, Bisharp 178/278
+
+  Turn 7
+      p2a <- Togekiss comes in (374/374)
+      after p1: Charizard-Mega-Y 319/359, Cresselia 444/444
+      after p2: Togekiss 374/374, Bisharp 178/278
+
+  Turn 8
+    p1 mcts: move 1, move 1 1
+      search (23000 visits): heatwave,0;psyshock,0 4373v 3246 | heatwave,0;icywind,0 3330v 2439 | heatwave,0;calmmind,1 2714v 1965 | heatwave,0;psyshock,1 1906v 1348
+    p2 greedy: move 1 1, move 1 1
+      p2b Bisharp used Sucker Punch -> p1a: Charizard
+      p1a Charizard fainted
+      p1b Cresselia used Psyshock -> p2a: Togekiss
+      p2a Togekiss used Air Slash -> p1b: Cresselia
+      after p1: Charizard-Mega-Y 0/359, Cresselia 404/444
+      after p2: Togekiss 233/374, Bisharp 151/278
+
+  Turn 9
+      p1a <- Aegislash comes in (324/324)
+      after p1: Aegislash 324/324, Cresselia 404/444
+      after p2: Togekiss 233/374, Bisharp 151/278
+
+  Turn 10
+    p1 mcts: move 2 1, move 1 1
+      search (17000 visits): flashcannon,0;psyshock,0 1037v 358 | switch keldeo;psyshock,0 850v 281 | shadowball,0;psyshock,0 733v 234 | flashcannon,1;psyshock,0 708v 224
+    p2 greedy: move 1 2, move 1 2
+      p2b Bisharp used Sucker Punch -> p1b: Cresselia
+      p1b Cresselia fainted
+      p2a Togekiss used Air Slash -> p1a: Aegislash
+              p1a Aegislash COULD NOT MOVE (flinch)
+      after p1: Aegislash-Blade 291/324, Cresselia 0/444
+      after p2: Togekiss 233/374, Bisharp 78/278
+
+  Turn 11
+      p1b <- Keldeo comes in (323/323)
+      after p1: Aegislash-Blade 291/324, Keldeo 323/323
+      after p2: Togekiss 233/374, Bisharp 78/278
+
+  Turn 12
+    p1 mcts: move 2 2, move 4
+      search (19000 visits): flashcannon,1;protect,1 1818v 1007 | shadowball,1;protect,1 1388v 748 | flashcannon,0;protect,1 1362v 732 | flashcannon,0;secretsword,1 1127v 592
+    p2 greedy: move 1 1, move 1 1
+      p1b Keldeo used Protect
+      p2b Bisharp used Sucker Punch -> p1a: Aegislash
+      p1a Aegislash fainted
+      p2a Togekiss used Air Slash -> p1b: Keldeo
+              p1b Keldeo -- move: Protect
+      after p1: Aegislash 0/324, Keldeo 323/323
+      after p2: Togekiss 233/374, Bisharp 51/278
+
+  Turn 13
+    p1 mcts: pass, move 4
+      search (41000 visits): No Move;protect,1 39726v 24461 | No Move;secretsword,1 372v 149 | No Move;hydropump,1 283v 103 | No Move;hydropump,0 220v 72
+    p2 greedy: move 1 2, move 1 2
+      p1b Keldeo used Protect  [[still]]
+              p1b Keldeo -- IT FAILED
+      p2b Bisharp used Sucker Punch  [[still]]
+              p2b Bisharp -- IT FAILED
+      p2a Togekiss used Air Slash -> p1b: Keldeo
+      after p1: Aegislash 0/324, Keldeo 87/323
+      after p2: Togekiss 233/374, Bisharp 51/278
+
+  Turn 14
+    p1 mcts: pass, move 4
+      search (52000 visits): No Move;protect,1 51481v 32097 | No Move;secretsword,1 137v 34 | No Move;hydropump,1 131v 31 | No Move;icywind,0 90v 13
+    p2 greedy: move 1 2, move 3 2
+      p1b Keldeo used Protect
+      p2a Togekiss used Air Slash -> p1b: Keldeo
+              p1b Keldeo -- move: Protect
+      p2b Bisharp used Iron Head -> p1b: Keldeo
+              p1b Keldeo -- move: Protect
+      after p1: Aegislash 0/324, Keldeo 87/323
+      after p2: Togekiss 233/374, Bisharp 51/278
+
+  Turn 15
+    p1 mcts: pass, move 4
+      search (53000 visits): No Move;protect,1 52474v 32693 | No Move;hydropump,1 147v 38 | No Move;secretsword,1 138v 34 | No Move;secretsword,0 86v 12
+    p2 greedy: move 1 2, move 3 2
+      p1b Keldeo used Protect  [[still]]
+              p1b Keldeo -- IT FAILED
+      p2a Togekiss used Air Slash -> p1b: Keldeo
+      p1b Keldeo fainted
+      after p1: Aegislash 0/324, Keldeo 0/323
+      after p2: Togekiss 233/374, Bisharp 51/278
+
+  RESULT: p2 wins

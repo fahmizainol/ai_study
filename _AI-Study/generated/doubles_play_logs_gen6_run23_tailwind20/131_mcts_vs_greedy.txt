@@ -1,0 +1,213 @@
+battle 131   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: ORAS Doubles OU: Hariyama, Cresselia, Mawile, Landorus-Therian, Milotic, Shaymin-Sky
+  p2: ORAS Doubles OU: Aromatisse, Abomasnow, Victini, Cresselia, Jellicent, Rhyperior
+
+  Turn 1
+    p1 mcts: move 1 2, move 2
+      search (23000 visits): closecombat,1;calmmind,1 1353v 908 | closecombat,1;psyshock,0 728v 456 | closecombat,1;trickroom,0 532v 319 | switch landorustherian;calmmind,1 528v 316
+    p2 greedy: move 4, move 1
+      p1b Cresselia used Calm Mind
+              p1b Cresselia spa 1 rose
+              p1b Cresselia spd 1 rose
+      p2b Abomasnow used Blizzard -> p1b: Cresselia  [[spread] p1a,p1b]
+      p1a Hariyama used Close Combat -> p2b: Abomasnow
+              p1a Hariyama def 1 fell
+              p1a Hariyama spd 1 fell
+      p2b Abomasnow fainted
+      p2a Aromatisse used Dazzling Gleam -> p1a: Hariyama  [[spread] p1a,p1b]
+      p1a Hariyama fainted
+      after p1: Hariyama 0/429, Cresselia 337/443
+      after p2: Aromatisse 380/405, Abomasnow 0/384
+
+  Turn 2
+      p2b <- Victini comes in (404/404)
+      p1a <- Mawile comes in (304/304)
+      after p1: Mawile 304/304, Cresselia 337/443
+      after p2: Aromatisse 380/405, Victini 404/404
+
+  Turn 3
+    p1 mcts: switch 4, move 2   (slot0 Mawile -> Landorus-Therian)
+      search (20000 visits): switch landorustherian;calmmind,1 904v 693 | switch landorustherian;psyshock,0 789v 596 | switch landorustherian;moonlight,1 714v 534 | switch landorustherian;psyshock,1 677v 503
+    p2 greedy: move 4, move 1 2
+      p1a <- Landorus-Therian comes in (381/381)
+              p2a Aromatisse atk 1 fell
+              p2b Victini atk 1 fell
+      p2b Victini used V-create -> p1b: Cresselia
+              p2b Victini spe 1 fell
+              p2b Victini def 1 fell
+              p2b Victini spd 1 fell
+      p1b Cresselia used Calm Mind
+              p1b Cresselia spa 1 rose
+              p1b Cresselia spd 1 rose
+      p2a Aromatisse used Dazzling Gleam -> p1a: Landorus  [[spread] p1a,p1b]
+      after p1: Landorus-Therian 308/381, Cresselia 184/443
+      after p2: Aromatisse 355/405, Victini 379/404
+
+  Turn 4
+    p1 mcts: move 2, move 3 1
+      search (28000 visits): earthquake,0;psyshock,0 3335v 1780 | earthquake,0;moonlight,1 1574v 784 | earthquake,0;calmmind,1 1488v 736 | earthquake,0;psyshock,1 1181v 567
+    p2 greedy: move 4, move 1 2
+      p1a Landorus used Earthquake -> p2a: Aromatisse  [[spread] p2a,p2b]
+              p1b Cresselia -- IMMUNE
+              p2b Victini used up its Shuca Berry
+              p2b Victini used up its Shuca Berry
+              p2a Aromatisse used up its Sitrus Berry
+      p2b Victini used V-create -> p1b: Cresselia
+              p2b Victini spe 1 fell
+              p2b Victini def 1 fell
+              p2b Victini spd 1 fell
+      p1b Cresselia used Psyshock -> p2a: Aromatisse
+      p2a Aromatisse used Dazzling Gleam -> p1a: Landorus  [[spread] p1a,p1b]
+      after p1: Landorus-Therian 224/381, Cresselia 21/443
+      after p2: Aromatisse 85/405, Victini 170/404
+
+  Turn 5
+    p1 mcts: move 2, move 4
+      search (36000 visits): earthquake,0;moonlight,1 1486v 430 | uturn,1;moonlight,1 1473v 425 | stoneedge,0;moonlight,1 1151v 314 | uturn,1;psyshock,0 1128v 306
+    p2 greedy: move 4, move 1 2
+      p1a Landorus used Earthquake -> p2a: Aromatisse  [[spread] p2a,p2b]
+              p1b Cresselia -- IMMUNE
+      p2a Aromatisse fainted
+      p2b Victini fainted
+      p1b Cresselia used Moonlight
+      after p1: Landorus-Therian 224/381, Cresselia 132/443
+      after p2: Aromatisse 0/405, Victini 0/404
+
+  Turn 6
+      p2b <- Jellicent comes in (403/403)
+      p2a <- Cresselia comes in (443/443)
+      after p1: Landorus-Therian 224/381, Cresselia 132/443
+      after p2: Cresselia 443/443, Jellicent 403/403
+
+  Turn 7
+    p1 mcts: move 4 1, move 3 2
+      search (32000 visits): uturn,0;psyshock,1 4588v 2805 | uturn,0;calmmind,1 2520v 1481 | uturn,0;moonlight,1 1887v 1082 | uturn,1;psyshock,1 1843v 1055
+    p2 greedy: move 4 2, move 3
+      p1a Landorus used U-turn -> p2a: Cresselia
+      after p1: Landorus-Therian 224/381, Cresselia 132/443
+      after p2: Cresselia 303/443, Jellicent 403/403
+
+  Turn 8
+      p1a <- Mawile comes in (304/304)
+      p2a Cresselia used Ice Beam -> p1b: Cresselia
+      p1b Cresselia used Psyshock -> p2b: Jellicent
+      p2b Jellicent used Water Spout -> p1a: Mawile  [[spread] p1a,p1b]
+      after p1: Mawile 150/304, Cresselia 63/443
+      after p2: Cresselia 303/443, Jellicent 219/403
+
+  Turn 9
+    p1 mcts: move 1 mega, move 4
+      search (26000 visits): protect-mega,0;moonlight,1 1724v 1008 | swordsdance-mega,0;moonlight,1 1365v 780 | protect,0;moonlight,1 1254v 710 | switch milotic;moonlight,1 897v 487
+    p2 greedy: move 4 2, move 3
+      p1a Mawile used Protect
+      p2a Cresselia used Ice Beam -> p1b: Cresselia
+      p1b Cresselia used Moonlight
+      p2b Jellicent used Water Spout -> p1a: Mawile  [[spread] p1b]
+              p1a Mawile -- move: Protect
+      after p1: Mawile-Mega 150/304, Cresselia 213/443
+      after p2: Cresselia 303/443, Jellicent 219/403
+
+  Turn 10
+    p1 mcts: switch 5, move 3 2   (slot0 Mawile-Mega -> Milotic)
+      search (25000 visits): switch milotic;psyshock,1 1396v 896 | playrough,0;psyshock,0 1161v 731 | suckerpunch,1;moonlight,1 823v 498 | protect,0;moonlight,1 767v 460
+    p2 greedy: move 4 2, move 3
+      p1a <- Milotic comes in (394/394)
+      p2a Cresselia used Ice Beam -> p1b: Cresselia
+              p1b Cresselia is now frz
+              p1b Cresselia COULD NOT MOVE (frz)
+      p2b Jellicent used Water Spout -> p1a: Milotic  [[spread] p1a,p1b]
+      after p1: Milotic 356/394, Cresselia 145/443
+      after p2: Cresselia 303/443, Jellicent 219/403
+
+  Turn 11
+    p1 mcts: move 2 1, move 3 2
+      search (25000 visits): hydropump,0;psyshock,1 1618v 1073 | recover,0;psyshock,1 1050v 668 | icebeam,0;psyshock,1 1029v 653 | icebeam,1;psyshock,1 1018v 645
+    p2 greedy: move 4 2, move 3
+      p1a Milotic used Hydro Pump -> p2a: Cresselia
+              p2a Cresselia used up its Sitrus Berry
+              p1b Cresselia COULD NOT MOVE (frz)
+      p2a Cresselia used Ice Beam -> p1b: Cresselia
+      p2b Jellicent used Water Spout -> p1b: Cresselia  [[spread] p1a,p1b]
+      after p1: Milotic 281/394, Cresselia 78/443
+      after p2: Cresselia 241/443, Jellicent 219/403
+
+  Turn 12
+    p1 mcts: move 2 1, move 4
+      search (29000 visits): hydropump,0;moonlight,1 2132v 1399 | hydropump,0;psyshock,1 1545v 987 | recover,0;moonlight,1 1121v 694 | icebeam,0;psyshock,1 1084v 669
+    p2 greedy: move 4 2, move 3
+      p1a Milotic used Hydro Pump -> p2a: Cresselia
+              p1b Cresselia COULD NOT MOVE (frz)
+      p2a Cresselia used Ice Beam -> p1b: Cresselia
+      p2b Jellicent used Water Spout -> p1b: Cresselia  [[spread] p1a,p1b]
+              p1a Milotic -- critical hit
+      after p1: Milotic 184/394, Cresselia 9/443
+      after p2: Cresselia 81/443, Jellicent 219/403
+
+  Turn 13
+    p1 mcts: move 3 1, move 4
+      search (32000 visits): icebeam,0;moonlight,1 8846v 5856 | hydropump,0;moonlight,1 2923v 1830 | recover,0;moonlight,1 1886v 1142 | icebeam,0;psyshock,1 1312v 767
+    p2 greedy: move 4 2, move 3
+      p1a Milotic used Ice Beam -> p2a: Cresselia
+      p2a Cresselia fainted
+              p1b Cresselia COULD NOT MOVE (frz)
+      p2b Jellicent used Water Spout -> p1b: Cresselia  [[spread] p1a,p1b]
+      p1b Cresselia fainted
+      after p1: Milotic 107/394, Cresselia 0/443
+      after p2: Cresselia 0/443, Jellicent 219/403
+
+  Turn 14
+      p1b <- Landorus-Therian comes in (224/381)
+      p2a <- Rhyperior comes in (433/433)
+              p2a Rhyperior atk 1 fell
+              p2b Jellicent atk 1 fell
+      after p1: Milotic 107/394, Landorus-Therian 224/381
+      after p2: Rhyperior 433/433, Jellicent 219/403
+
+  Turn 15
+    p1 mcts: move 4, move 4 2
+      search (27000 visits): recover,0;uturn,1 2194v 1577 | protect,0;earthquake,0 1788v 1266 | recover,0;stoneedge,1 1401v 973 | hydropump,0;uturn,1 1232v 846
+    p2 greedy: move 1 1, move 3
+      p1b Landorus used U-turn -> p2b: Jellicent
+              p2b Jellicent used up its Sitrus Berry
+      after p1: Milotic 107/394, Landorus-Therian 224/381
+      after p2: Rhyperior 433/433, Jellicent 268/403
+
+  Turn 16
+      p1b <- Mawile-Mega comes in (150/304)
+      p1a Milotic used Recover
+      p2b Jellicent used Water Spout -> p1a: Milotic  [[spread] p1a,p1b]
+      p2a Rhyperior used Hammer Arm -> p1a: Milotic
+              p2a Rhyperior spe 1 fell
+      after p1: Milotic 111/394, Mawile-Mega 33/304
+      after p2: Rhyperior 390/433, Jellicent 268/403
+
+  Turn 17
+    p1 mcts: move 4, move 3 2
+      search (27000 visits): recover,0;suckerpunch,1 1320v 901 | recover,0;playrough,0 1269v 863 | hydropump,0;playrough,1 1231v 835 | recover,0;playrough,1 1228v 833
+    p2 greedy: move 1 2, move 3
+      p1b Mawile used Sucker Punch -> p2b: Jellicent
+      p2b Jellicent fainted
+      p1a Milotic used Recover
+      p2a Rhyperior used Hammer Arm -> p1b: Mawile
+              p2a Rhyperior spe 1 fell
+      p1b Mawile fainted
+      after p1: Milotic 308/394, Mawile 0/304
+      after p2: Rhyperior 347/433, Jellicent 0/403
+
+  Turn 18
+      p1b <- Landorus-Therian comes in (224/381)
+              p2a Rhyperior atk 1 fell
+      after p1: Milotic 308/394, Landorus-Therian 224/381
+      after p2: Rhyperior 347/433, Jellicent 0/403
+
+  Turn 19
+    p1 mcts: move 3 1, switch 6   (slot1 Landorus-Therian -> Shaymin-Sky)
+      search (143000 visits): icebeam,0;switch shayminsky 114495v 111989 | hydropump,0;switch shayminsky 7842v 7351 | icebeam,0;stoneedge,0 2724v 2449 | icebeam,0;uturn,0 2031v 1796
+    p2 greedy: move 1 2, pass
+      p1b <- Shaymin-Sky comes in (341/341)
+      p1a Milotic used Ice Beam -> p2a: Rhyperior
+      p2a Rhyperior fainted
+      after p1: Milotic 269/394, Shaymin-Sky 341/341
+      after p2: Rhyperior 0/433, Jellicent 0/403
+
+  RESULT: p1 wins

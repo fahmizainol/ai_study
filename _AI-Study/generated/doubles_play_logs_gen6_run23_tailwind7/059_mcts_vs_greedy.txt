@@ -1,0 +1,206 @@
+battle 59   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: dpl ::/Untitled 195: Mawile-Mega, Zapdos, Zygarde, Keldeo-Resolute, Talonflame, Aegislash
+  p2: ORAS Doubles OU: Mawile-Mega, Dusclops, Sylveon, Amoonguss, Chandelure, Scrafty
+
+  Turn 1
+    p1 mcts: move 1 2, switch 3   (slot1 Zapdos -> Zygarde)
+      search (25000 visits): playrough,1;switch zygarde 290v 14 | swordsdance,0;switch aegislash 290v 14 | suckerpunch,0;switch keldeoresolute 289v 14 | suckerpunch,0;switch talonflame 288v 14
+    p2 greedy: move 3 1, move 1
+      p1b <- Zygarde comes in (357/357)
+      p1a Mawile used Play Rough -> p2b: Dusclops
+      p2a Mawile used Play Rough -> p1a: Mawile
+      p2b Dusclops used Trick Room
+      after p1: Mawile-Mega 264/304, Zygarde 357/357
+      after p2: Mawile-Mega 303/303, Dusclops 241/284
+
+  Turn 2
+    p1 mcts: switch 5, move 1   (slot0 Mawile-Mega -> Talonflame)
+      search (31000 visits): switch talonflame;landswrath,0 463v 61 | switch zapdos;landswrath,0 362v 37 | suckerpunch,0;landswrath,0 361v 37 | playrough,0;landswrath,0 357v 36
+    p2 greedy: move 3 1, move 1
+      p1a <- Talonflame comes in (297/297)
+      p2a Mawile used Play Rough -> p1a: Talonflame
+      p1b Zygarde used Land's Wrath -> p2b: Dusclops  [[spread] p2a,p2b]
+      p2b Dusclops used Trick Room
+      after p1: Talonflame 228/297, Zygarde 357/357
+      after p2: Mawile-Mega 13/303, Dusclops 162/284
+
+  Turn 3
+    p1 mcts: move 3 2, move 1
+      search (49000 visits): uturn,1;landswrath,0 863v 57 | flareblitz,0;landswrath,0 844v 54 | uturn,0;landswrath,0 841v 54 | bravebird,1;switch mawilemega 836v 53
+    p2 greedy: move 3 1, move 1
+      p1a Talonflame used U-turn -> p2b: Dusclops
+      after p1: Talonflame 228/297, Zygarde 357/357
+      after p2: Mawile-Mega 13/303, Dusclops 138/284
+
+  Turn 4
+      p1a <- Zapdos comes in (384/384)
+      p1b Zygarde used Land's Wrath -> p2a: Mawile  [[spread] p2a,p2b]
+      p2a Mawile fainted
+      p2b Dusclops used Trick Room
+      after p1: Zapdos 384/384, Zygarde 357/357
+      after p2: Mawile-Mega 0/303, Dusclops 63/284
+
+  Turn 5
+      p2a <- Sylveon comes in (345/345)
+      after p1: Zapdos 384/384, Zygarde 357/357
+      after p2: Sylveon 345/345, Dusclops 63/284
+
+  Turn 6
+    p1 mcts: switch 5, move 1   (slot0 Zapdos -> Mawile-Mega)
+      search (42000 visits): switch mawilemega;landswrath,0 2987v 594 | switch mawilemega;switch aegislash 1692v 289 | hiddenpower,0;switch mawilemega 1314v 205 | thunderbolt,0;switch mawilemega 1226v 186
+    p2 greedy: move 1, move 1
+      p1a <- Mawile-Mega comes in (264/304)
+              p2a Sylveon atk 1 fell
+              p2b Dusclops atk 1 fell
+      p2a Sylveon used Hyper Voice -> p1a: Mawile  [[spread] p1a,p1b]
+      p1b Zygarde fainted
+      p2b Dusclops used Trick Room
+      after p1: Mawile-Mega 174/304, Zygarde 0/357
+      after p2: Sylveon 345/345, Dusclops 63/284
+
+  Turn 7
+      p1b <- Talonflame comes in (228/297)
+      after p1: Mawile-Mega 174/304, Talonflame 228/297
+      after p2: Sylveon 345/345, Dusclops 63/284
+
+  Turn 8
+    p1 mcts: move 1 2, switch 6   (slot1 Talonflame -> Aegislash)
+      search (34000 visits): playrough,1;switch aegislash 413v 35 | suckerpunch,1;switch zapdos 407v 34 | playrough,1;switch zapdos 406v 34 | playrough,0;switch aegislash 405v 33
+    p2 greedy: move 1, move 1
+      p1b <- Aegislash comes in (324/324)
+      p1a Mawile used Play Rough -> p2b: Dusclops
+      p2b Dusclops fainted
+      p2a Sylveon used Hyper Voice -> p1a: Mawile  [[spread] p1a,p1b]
+      after p1: Mawile-Mega 83/304, Aegislash 291/324
+      after p2: Sylveon 345/345, Dusclops 0/284
+
+  Turn 9
+      p2b <- Amoonguss comes in (432/432)
+      after p1: Mawile-Mega 83/304, Aegislash 291/324
+      after p2: Sylveon 345/345, Amoonguss 432/432
+
+  Turn 10
+    p1 mcts: move 1 1, move 2
+      search (14000 visits): playrough,0;substitute,1 457v 268 | playrough,0;flashcannon,0 433v 251 | protect,0;flashcannon,0 408v 234 | swordsdance,0;substitute,1 400v 229
+    p2 greedy: move 1, move 3 1
+      p1b Aegislash used Substitute
+              p1b Aegislash gained Substitute
+      p1a Mawile used Play Rough -> p2a: Sylveon
+      p2a Sylveon used Hyper Voice -> p1a: Mawile  [[spread] p1a,p1b]
+      p1a Mawile fainted
+      p2b Amoonguss used Giga Drain -> p1b: Aegislash
+              p1b Aegislash -- move: Substitute
+      after p1: Mawile-Mega 0/304, Aegislash 174/324
+      after p2: Sylveon 186/345, Amoonguss 432/432
+
+  Turn 11
+      p1a <- Keldeo-Resolute comes in (339/339)
+      after p1: Keldeo-Resolute 339/339, Aegislash 174/324
+      after p2: Sylveon 186/345, Amoonguss 432/432
+
+  Turn 12
+    p1 mcts: move 1 1, move 2
+      search (19000 visits): hydropump,0;substitute,1 1722v 738 | secretsword,0;switch zapdos 1520v 641 | hydropump,0;switch zapdos 879v 339 | hydropump,1;switch zapdos 879v 339
+    p2 greedy: move 1, move 3 2
+      p1a Keldeo used Hydro Pump -> p2a: Sylveon
+      p2a Sylveon fainted
+      p1b Aegislash used Substitute
+              p1b Aegislash -- IT FAILED
+      p2b Amoonguss used Giga Drain -> p1b: Aegislash
+              p1b Aegislash -- move: Substitute
+      after p1: Keldeo-Resolute 306/339, Aegislash 194/324
+      after p2: Sylveon 0/345, Amoonguss 432/432
+
+  Turn 13
+      p2a <- Chandelure comes in (324/324)
+      after p1: Keldeo-Resolute 306/339, Aegislash 194/324
+      after p2: Chandelure 324/324, Amoonguss 432/432
+
+  Turn 14
+    p1 mcts: move 1 1, switch 5   (slot1 Aegislash -> Zapdos)
+      search (16000 visits): hydropump,0;switch zapdos 1643v 816 | switch zapdos;substitute,1 1112v 526 | protect,0;switch zapdos 844v 383 | hydropump,0;substitute,1 603v 257
+    p2 greedy: move 2, move 3 2
+      p1b <- Zapdos comes in (384/384)
+      p1a Keldeo used Hydro Pump -> p2a: Chandelure
+              p2a Chandelure used up its Focus Sash
+      p2a Chandelure used Heat Wave -> p1b: Zapdos  [[spread] p1a,p1b]
+      p2b Amoonguss used Giga Drain -> p1b: Zapdos
+      after p1: Keldeo-Resolute 192/339, Zapdos 220/384
+      after p2: Chandelure 1/324, Amoonguss 432/432
+
+  Turn 15
+    p1 mcts: move 4, move 2 1
+      search (27000 visits): protect,0;thunderbolt,0 3202v 2017 | hydropump,1;hiddenpower,1 885v 494 | switch aegislash;roost,1 870v 484 | switch aegislash;thunderbolt,0 856v 475
+    p2 greedy: move 2, move 3 1
+      p1a Keldeo used Protect
+      p1b Zapdos used Thunderbolt -> p2a: Chandelure
+      p2a Chandelure fainted
+      p2b Amoonguss used Giga Drain -> p1a: Keldeo
+              p1a Keldeo -- move: Protect
+      after p1: Keldeo-Resolute 192/339, Zapdos 220/384
+      after p2: Chandelure 0/324, Amoonguss 432/432
+
+  Turn 16
+      p2a <- Scrafty comes in (333/333)
+              p1a Keldeo atk 1 fell
+              p1b Zapdos atk 1 fell
+      after p1: Keldeo-Resolute 192/339, Zapdos 220/384
+      after p2: Scrafty 333/333, Amoonguss 432/432
+
+  Turn 17
+    p1 mcts: move 2 1, move 3 2
+      search (29000 visits): secretsword,0;hiddenpower,1 1861v 1628 | secretsword,0;thunderbolt,1 1821v 1591 | secretsword,0;tailwind,1 1700v 1478 | secretsword,0;thunderbolt,0 1696v 1475
+    p2 greedy: move 3 1, move 3 1
+      p1a Keldeo used Secret Sword -> p2a: Scrafty
+      p2a Scrafty fainted
+      p1b Zapdos used Hidden Power -> p2b: Amoonguss
+      p2b Amoonguss used Giga Drain -> p1a: Keldeo
+      p1a Keldeo fainted
+      after p1: Keldeo-Resolute 0/339, Zapdos 220/384
+      after p2: Scrafty 0/333, Amoonguss 374/432
+
+  Turn 18
+      p1a <- Aegislash comes in (194/324)
+      after p1: Aegislash 194/324, Zapdos 220/384
+      after p2: Scrafty 0/333, Amoonguss 374/432
+
+  Turn 19
+    p1 mcts: move 4 2, move 1
+      search (48000 visits): shadowball,1;roost,1 4781v 3212 | flashcannon,1;roost,1 4532v 3036 | substitute,0;roost,1 4436v 2969 | kingsshield,0;roost,1 3691v 2445
+    p2 greedy: pass, move 3 2
+      p1b Zapdos used Roost
+      p1a Aegislash used Shadow Ball -> p2b: Amoonguss
+      p2b Amoonguss used Giga Drain -> p1b: Zapdos
+      after p1: Aegislash-Blade 214/324, Zapdos 317/384
+      after p2: Scrafty 0/333, Amoonguss 261/432
+
+  Turn 20
+    p1 mcts: move 4 2, switch 6   (slot1 Zapdos -> Talonflame)
+      search (54000 visits): shadowball,1;switch talonflame 4135v 2499 | flashcannon,1;switch talonflame 3981v 2400 | substitute,0;switch talonflame 3540v 2118 | kingsshield,0;switch talonflame 3379v 2016
+    p2 greedy: pass, move 3 1
+      p1b <- Talonflame comes in (228/297)
+      p1a Aegislash used Shadow Ball -> p2b: Amoonguss
+      p2b Amoonguss used Giga Drain -> p1a: Aegislash
+      after p1: Aegislash-Blade 192/324, Talonflame 228/297
+      after p2: Scrafty 0/333, Amoonguss 125/432
+
+  Turn 21
+    p1 mcts: switch 6, move 4 2   (slot0 Aegislash-Blade -> Zapdos)
+      search (59000 visits): switch zapdos;steelwing,1 4086v 2936 | switch zapdos;bravebird,1 3799v 2720 | shadowball,1;switch zapdos 3682v 2632 | flashcannon,1;switch zapdos 3570v 2547
+    p2 greedy: pass, move 3 1
+      p1a <- Zapdos comes in (317/384)
+      p1b Talonflame used Steel Wing -> p2b: Amoonguss
+      p2b Amoonguss used Giga Drain -> p1a: Zapdos
+      after p1: Zapdos 283/384, Talonflame 179/297
+      after p2: Scrafty 0/333, Amoonguss 30/432
+
+  Turn 22
+    p1 mcts: move 1, move 4 2
+      search (78000 visits): roost,0;steelwing,1 30809v 27665 | roost,0;switch aegislash 24025v 20682 | switch aegislash;steelwing,1 7524v 6298 | tailwind,0;switch aegislash 3927v 3207
+    p2 greedy: pass, move 3 2
+      p1b Talonflame used Steel Wing -> p2b: Amoonguss
+      p2b Amoonguss fainted
+      after p1: Zapdos 283/384, Talonflame 130/297
+      after p2: Scrafty 0/333, Amoonguss 0/432
+
+  RESULT: p1 wins

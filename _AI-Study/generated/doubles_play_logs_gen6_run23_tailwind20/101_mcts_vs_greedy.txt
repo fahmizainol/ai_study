@@ -1,0 +1,230 @@
+battle 101   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: Copy of Untitled 488: Thundurus, Lucario-Mega, Talonflame, Amoonguss, Kingdra, Politoed
+  p2: Untitled 609: Ferrothorn, Politoed, Gothitelle, Kingdra, Kangaskhan-Mega, Scrafty
+
+  Turn 1
+    p1 mcts: move 1 1, move 1 1
+      search (22000 visits): skydrop,0;closecombat,0 561v 283 | skydrop,1;closecombat,0 503v 249 | wildcharge,1;closecombat,0 501v 248 | uturn,1;closecombat,0 501v 248
+    p2 greedy: move 3 1, move 3 1
+      p1b Lucario used Close Combat -> p2a: Ferrothorn
+              p1b Lucario def 1 fell
+              p1b Lucario spd 1 fell
+      p1a Thundurus used Sky Drop  [[still]]
+      p2b Politoed used Scald -> p1a: Thundurus  [[miss]]
+              p2b Politoed -- MISSED
+      after p1: Thundurus 299/299, Lucario-Mega 246/281
+      after p2: Ferrothorn 24/352, Politoed 383/383
+
+  Turn 2
+    p1 mcts: move 1, switch 6   (slot1 Lucario-Mega -> Politoed)
+      search (28000 visits): skydrop,0;switch politoed 24721v 23753 | skydrop,0;bulletpunch,0 602v 293 | skydrop,0;switch kingdra 493v 232 | skydrop,0;switch amoonguss 466v 216
+    p2 greedy: move 3 2, move 3 2
+      p1b <- Politoed comes in (384/384)
+      p1a Thundurus used Sky Drop -> p2a: Ferrothorn  [[from] lockedmove]
+      p2a Ferrothorn fainted
+      p2b Politoed used Scald -> p1b: Politoed
+      after p1: Thundurus 262/299, Politoed 322/384
+      after p2: Ferrothorn 0/352, Politoed 383/383
+
+  Turn 3
+      p2a <- Gothitelle comes in (343/343)
+      after p1: Thundurus 262/299, Politoed 322/384
+      after p2: Gothitelle 343/343, Politoed 383/383
+
+  Turn 4
+    p1 mcts: move 4 1, move 2
+      search (10000 visits): uturn,0;icywind,0 493v 338 | knockoff,0;icywind,0 479v 327 | wildcharge,1;icywind,0 469v 319 | wildcharge,1;helpinghand,0 439v 296
+    p2 greedy: move 4 2, move 3 2
+      p1a Thundurus used U-turn -> p2a: Gothitelle
+      after p1: Thundurus 262/299, Politoed 322/384
+      after p2: Gothitelle 213/343, Politoed 383/383
+
+  Turn 5
+      p1a <- Talonflame comes in (319/319)
+      p1b Politoed used Icy Wind -> p2b: Politoed  [[spread] p2b]
+              p1b Politoed -- MISSED
+              p2b Politoed -- critical hit
+              p2b Politoed spe 1 fell
+      p2b Politoed used Scald -> p1b: Politoed
+      p2a Gothitelle used Psychic -> p1b: Politoed
+              p1b Politoed used up its Sitrus Berry
+      after p1: Talonflame 319/319, Politoed 246/384
+      after p2: Gothitelle 213/343, Politoed 361/383
+
+  Turn 6
+    p1 mcts: move 2 1, move 2
+      search (15000 visits): bravebird,0;icywind,0 1359v 786 | bravebird,1;icywind,0 896v 493 | protect,0;scald,0 796v 431 | bravebird,0;helpinghand,0 739v 396
+    p2 greedy: move 4 2, move 3 2
+      p1a Talonflame used Brave Bird -> p2a: Gothitelle
+              p2a Gothitelle used up its Sitrus Berry
+      p1b Politoed used Icy Wind -> p2b: Politoed  [[spread] p2a,p2b]
+              p2a Gothitelle spe 1 fell
+              p2b Politoed spe 1 fell
+      p2a Gothitelle used Psychic -> p1b: Politoed
+      p2b Politoed used Scald -> p1b: Politoed
+              p1b Politoed is now brn
+      after p1: Talonflame 226/319, Politoed 23/384
+      after p2: Gothitelle 87/343, Politoed 347/383
+
+  Turn 7
+    p1 mcts: move 2 2, move 3 -1
+      search (23000 visits): bravebird,1;helpinghand,0 2031v 947 | tailwind,0;scald,0 1644v 748 | tailwind,0;icywind,0 1615v 733 | tailwind,0;scald,1 1391v 620
+    p2 greedy: move 4 2, move 3 2
+      p1b Politoed used Helping Hand -> p1a: Talonflame
+      p1a Talonflame used Brave Bird -> p2b: Politoed
+      p2a Gothitelle used Psychic -> p1b: Politoed
+      p1b Politoed fainted
+      p2b Politoed used Scald -> p1a: Talonflame
+      p1a Talonflame fainted
+      after p1: Talonflame 0/319, Politoed 0/384
+      after p2: Gothitelle 87/343, Politoed 27/383
+
+  Turn 8
+      p1a <- Thundurus comes in (262/299)
+      p1b <- Amoonguss comes in (432/432)
+      after p1: Thundurus 262/299, Amoonguss 432/432
+      after p2: Gothitelle 87/343, Politoed 27/383
+
+  Turn 9
+    p1 mcts: move 4 1, move 2 2
+      search (22000 visits): uturn,0;spore,1 867v 339 | uturn,0;spore,0 795v 306 | uturn,1;spore,0 663v 245 | knockoff,0;spore,1 649v 239
+    p2 greedy: move 4 1, move 3 1
+      p1a Thundurus used U-turn -> p2a: Gothitelle
+      p2a Gothitelle fainted
+      after p1: Thundurus 262/299, Amoonguss 432/432
+      after p2: Gothitelle 0/343, Politoed 27/383
+
+  Turn 10
+      p1a <- Kingdra comes in (291/291)
+      p2b Politoed used Scald -> p1a: Kingdra
+              p1a Kingdra is now brn
+      p1b Amoonguss used Spore -> p2b: Politoed
+              p2b Politoed is now slp
+      after p1: Kingdra 233/291, Amoonguss 432/432
+      after p2: Gothitelle 0/343, Politoed 27/383
+
+  Turn 11
+      p2a <- Kingdra comes in (291/291)
+      after p1: Kingdra 233/291, Amoonguss 432/432
+      after p2: Kingdra 291/291, Politoed 27/383
+
+  Turn 12
+    p1 mcts: move 4 1, move 3 1
+      search (15000 visits): icebeam,0;energyball,0 518v 186 | dracometeor,0;switch lucariomega 385v 126 | dracometeor,0;protect,1 381v 125 | dracometeor,0;switch thundurus 336v 105
+    p2 greedy: move 3 1, move 3 1
+      p1a Kingdra used Ice Beam -> p2a: Kingdra
+      p2a Kingdra used Draco Meteor -> p1a: Kingdra
+              p2a Kingdra spa 2 fell
+      p1a Kingdra fainted
+              p2b Politoed COULD NOT MOVE (slp)
+      p1b Amoonguss used Energy Ball -> p2a: Kingdra
+      after p1: Kingdra 0/291, Amoonguss 432/432
+      after p2: Kingdra 35/291, Politoed 27/383
+
+  Turn 13
+      p1a <- Thundurus comes in (262/299)
+      after p1: Thundurus 262/299, Amoonguss 432/432
+      after p2: Kingdra 35/291, Politoed 27/383
+
+  Turn 14
+    p1 mcts: move 4 2, switch 6   (slot1 Amoonguss -> Lucario-Mega)
+      search (37000 visits): uturn,1;switch lucariomega 2942v 985 | knockoff,0;energyball,0 1189v 323 | knockoff,0;switch lucariomega 973v 251 | uturn,0;switch lucariomega 836v 206
+    p2 greedy: move 3 1, move 3 1
+      p1b <- Lucario-Mega comes in (246/281)
+      p1a Thundurus used U-turn -> p2b: Politoed
+      p2b Politoed fainted
+      after p1: Thundurus 213/299, Lucario-Mega 246/281
+      after p2: Kingdra 35/291, Politoed 0/383
+
+  Turn 15
+      p1a <- Amoonguss comes in (432/432)
+      p2a Kingdra used Draco Meteor -> p1a: Amoonguss
+              p2a Kingdra spa 2 fell
+      after p1: Amoonguss 280/432, Lucario-Mega 246/281
+      after p2: Kingdra 6/291, Politoed 0/383
+
+  Turn 16
+      p2b <- Kangaskhan-Mega comes in (401/401)
+      after p1: Amoonguss 280/432, Lucario-Mega 246/281
+      after p2: Kingdra 6/291, Kangaskhan-Mega 401/401
+
+  Turn 17
+    p1 mcts: move 2 2, move 1 1
+      search (31000 visits): spore,1;closecombat,0 24788v 24541 | protect,0;closecombat,1 467v 284 | energyball,0;closecombat,1 404v 240 | energyball,1;closecombat,1 400v 237
+    p2 greedy: move 3 1, move 4 1
+      p2b Kangaskhan used Sucker Punch  [[still]]
+              p2b Kangaskhan -- IT FAILED
+      p1b Lucario used Close Combat -> p2a: Kingdra
+              p1b Lucario def 1 fell
+              p1b Lucario spd 1 fell
+      p2a Kingdra fainted
+      p1a Amoonguss used Spore -> p2b: Kangaskhan
+              p2b Kangaskhan is now slp
+      after p1: Amoonguss 280/432, Lucario-Mega 246/281
+      after p2: Kingdra 0/291, Kangaskhan-Mega 401/401
+
+  Turn 18
+      p2a <- Scrafty comes in (334/334)
+              p1a Amoonguss atk 1 fell
+              p1b Lucario atk 1 fell
+      after p1: Amoonguss 280/432, Lucario-Mega 246/281
+      after p2: Scrafty 334/334, Kangaskhan-Mega 401/401
+
+  Turn 19
+    p1 mcts: move 3 2, switch 6   (slot1 Lucario-Mega -> Thundurus)
+      search (37000 visits): energyball,1;switch thundurus 848v 835 | energyball,0;switch thundurus 829v 815 | protect,0;switch thundurus 818v 803 | spore,0;switch thundurus 815v 800
+    p2 greedy: move 2 1, move 4 1
+      p1b <- Thundurus comes in (213/299)
+              p2b Kangaskhan COULD NOT MOVE (slp)
+      p2a Scrafty used Knock Off -> p1a: Amoonguss
+              p1a Amoonguss used up its Rocky Helmet
+      p1a Amoonguss used Energy Ball -> p2b: Kangaskhan
+      after p1: Amoonguss 168/432, Thundurus 213/299
+      after p2: Scrafty 279/334, Kangaskhan-Mega 314/401
+
+  Turn 20
+    p1 mcts: move 2 1, move 4 2
+      search (33000 visits): spore,0;uturn,1 1806v 1752 | protect,0;uturn,1 1754v 1709 | spore,1;uturn,1 1729v 1687 | spore,0;uturn,0 1715v 1674
+    p2 greedy: move 2 1, move 4 1
+              p2b Kangaskhan COULD NOT MOVE (slp)
+      p1b Thundurus used U-turn -> p2b: Kangaskhan
+      after p1: Amoonguss 168/432, Thundurus 213/299
+      after p2: Scrafty 279/334, Kangaskhan-Mega 238/401
+
+  Turn 21
+      p1b <- Lucario-Mega comes in (246/281)
+      p2a Scrafty used Knock Off -> p1a: Amoonguss
+      p1a Amoonguss used Spore -> p2a: Scrafty
+              p2a Scrafty -- item: Safety Goggles Spore
+      after p1: Amoonguss 89/432, Lucario-Mega 246/281
+      after p2: Scrafty 279/334, Kangaskhan-Mega 238/401
+
+  Turn 22
+    p1 mcts: switch 6, move 1 1   (slot0 Amoonguss -> Thundurus)
+      search (34000 visits): switch thundurus;closecombat,0 783v 760 | energyball,1;closecombat,0 734v 709 | ragepowder,0;closecombat,0 728v 703 | protect,0;closecombat,0 728v 703
+    p2 greedy: move 2 1, move 4 1
+      p1a <- Thundurus comes in (213/299)
+              p2b Kangaskhan COULD NOT MOVE (slp)
+      p1b Lucario used Close Combat -> p2a: Scrafty
+              p1b Lucario def 1 fell
+              p1b Lucario spd 1 fell
+      p2a Scrafty fainted
+      after p1: Thundurus 213/299, Lucario-Mega 246/281
+      after p2: Scrafty 0/334, Kangaskhan-Mega 238/401
+
+  Turn 23
+    p1 mcts: switch 6, move 1 2   (slot0 Thundurus -> Amoonguss)
+      search (62000 visits): switch amoonguss;closecombat,1 5569v 2035 | switch amoonguss;bulletpunch,1 4598v 1651 | switch amoonguss;followme,1 4518v 1620 | uturn,1;closecombat,1 3399v 1182
+    p2 greedy: pass, move 4 1
+      p1a <- Amoonguss comes in (233/432)
+              p2b Kangaskhan is cured of slp
+      p2b Kangaskhan used Sucker Punch  [[still]]
+              p2b Kangaskhan -- IT FAILED
+      p1b Lucario used Close Combat -> p2b: Kangaskhan
+              p1b Lucario def 1 fell
+              p1b Lucario spd 1 fell
+      p2b Kangaskhan fainted
+      after p1: Amoonguss 233/432, Lucario-Mega 246/281
+      after p2: Scrafty 0/334, Kangaskhan-Mega 0/401
+
+  RESULT: p1 wins

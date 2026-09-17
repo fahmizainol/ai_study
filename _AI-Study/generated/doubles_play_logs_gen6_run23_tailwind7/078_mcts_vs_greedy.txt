@@ -1,0 +1,161 @@
+battle 78   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: ORAS Doubles OU: Kangaskhan, Landorus-Therian, Mew, Heatran, Azumarill, Jirachi
+  p2: dpl ::/Untitled 177: Abomasnow-Mega, Diancie, Scrafty, Jellicent, Talonflame, Genesect
+
+  Turn 1
+    p1 mcts: switch 3, move 4   (slot0 Kangaskhan -> Mew)
+      search (20000 visits): switch mew;explosion,0 170v 59 | fakeout-mega,1;explosion,0 168v 58 | suckerpunch,1;explosion,0 167v 57 | poweruppunch-mega,1;explosion,0 165v 56
+    p2 greedy: move 3 1, move 1
+      p1a <- Mew comes in (404/404)
+      p1b Landorus used Explosion -> p2b: Diancie  [[spread] p1a,p2a,p2b]
+              p1a Mew used up its Sitrus Berry
+      p1b Landorus fainted
+      p2b Diancie used Diamond Storm -> p1a: Mew
+              p2b Diancie def 1 rose
+      p2a Abomasnow used Wood Hammer -> p1a: Mew
+      p1a Mew fainted
+      after p1: Mew 0/404, Landorus-Therian 0/320
+      after p2: Abomasnow-Mega 115/384, Diancie 188/304
+
+  Turn 2
+      p1a <- Kangaskhan comes in (352/352)
+      p1b <- Heatran comes in (324/324)
+      after p1: Kangaskhan 352/352, Heatran 324/324
+      after p2: Abomasnow-Mega 115/384, Diancie 188/304
+
+  Turn 3
+    p1 mcts: move 2 2 mega, move 2 2
+      search (19000 visits): return-mega,1;earthpower,1 486v 393 | return,0;heatwave,0 485v 392 | return,1;earthpower,1 477v 385 | return-mega,0;heatwave,0 387v 304
+    p2 greedy: move 3 1, move 1
+      p1a Kangaskhan used Return -> p2b: Diancie
+      p1b Heatran used Earth Power -> p2b: Diancie
+              p2b Diancie -- critical hit
+      p2b Diancie fainted
+      p2a Abomasnow used Wood Hammer -> p1a: Kangaskhan
+      after p1: Kangaskhan-Mega 174/352, Heatran 324/324
+      after p2: Abomasnow-Mega 64/384, Diancie 0/304
+
+  Turn 4
+      p2b <- Scrafty comes in (334/334)
+              p1a Kangaskhan atk 1 fell
+              p1b Heatran atk 1 fell
+      after p1: Kangaskhan-Mega 174/352, Heatran 324/324
+      after p2: Abomasnow-Mega 64/384, Scrafty 334/334
+
+  Turn 5
+    p1 mcts: move 2 1, move 1
+      search (21000 visits): return,0;heatwave,0 1138v 936 | poweruppunch,1;heatwave,0 1046v 854 | return,1;heatwave,0 907v 731 | poweruppunch,0;heatwave,0 868v 697
+    p2 greedy: move 3 1, move 3 1
+      p1a Kangaskhan used Return -> p2a: Abomasnow
+      p2a Abomasnow fainted
+      p1b Heatran used Heat Wave -> p2b: Scrafty
+      p2b Scrafty used Head Smash -> p1a: Kangaskhan
+      after p1: Kangaskhan-Mega 7/352, Heatran 324/324
+      after p2: Abomasnow-Mega 0/384, Scrafty 70/334
+
+  Turn 6
+      p2a <- Jellicent comes in (404/404)
+      after p1: Kangaskhan-Mega 7/352, Heatran 324/324
+      after p2: Jellicent 404/404, Scrafty 70/334
+
+  Turn 7
+    p1 mcts: move 2 2, switch 5   (slot1 Heatran -> Azumarill)
+      search (30000 visits): return,1;switch azumarill 1654v 1289 | switch azumarill;heatwave,0 1276v 975 | return,1;heatwave,0 838v 615 | fakeout,1;switch azumarill 819v 600
+    p2 greedy: move 4, move 3 1
+      p1b <- Azumarill comes in (394/394)
+      p1a Kangaskhan used Return -> p2b: Scrafty
+      p2b Scrafty fainted
+      p2a Jellicent used Water Spout -> p1b: Azumarill  [[spread] p1a,p1b]
+      p1a Kangaskhan fainted
+      after p1: Kangaskhan 0/352, Azumarill 304/394
+      after p2: Jellicent 404/404, Scrafty 0/334
+
+  Turn 8
+      p1a <- Heatran comes in (324/324)
+      p2b <- Talonflame comes in (298/298)
+      after p1: Heatran 324/324, Azumarill 304/394
+      after p2: Jellicent 404/404, Talonflame 298/298
+
+  Turn 9
+    p1 mcts: move 4, move 1 2
+      search (17000 visits): protect,0;aquajet,1 2909v 1941 | heatwave,0;aquajet,1 1446v 915 | earthpower,0;aquajet,1 1131v 699 | substitute,0;aquajet,1 1104v 681
+    p2 greedy: move 4, move 1 2
+      p1a Heatran used Protect
+      p2b Talonflame used Brave Bird -> p1b: Azumarill
+              p1b Azumarill used up its Sitrus Berry
+      p1b Azumarill used Aqua Jet -> p2b: Talonflame
+      p2b Talonflame fainted
+      p2a Jellicent used Water Spout -> p1a: Heatran  [[spread] p1b]
+              p1a Heatran -- move: Protect
+      after p1: Heatran 324/324, Azumarill 41/394
+      after p2: Jellicent 404/404, Talonflame 0/298
+
+  Turn 10
+      p2b <- Genesect comes in (283/283)
+              p2b Genesect atk 1 rose
+      after p1: Heatran 324/324, Azumarill 41/394
+      after p2: Jellicent 404/404, Genesect 283/283
+
+  Turn 11
+    p1 mcts: move 4, move 1 2
+      search (22000 visits): protect,0;aquajet,1 4476v 2817 | heatwave,0;protect,1 2270v 1366 | protect,0;protect,1 2196v 1318 | protect,0;playrough,0 1864v 1104
+    p2 greedy: move 4, move 1
+      p1a Heatran used Protect
+      p1b Azumarill used Aqua Jet -> p2b: Genesect
+      p2b Genesect used Blizzard -> p1b: Azumarill  [[spread] p1b]
+              p1a Heatran -- move: Protect
+      p1b Azumarill fainted
+      p2a Jellicent used Water Spout -> p1a: Heatran
+              p1a Heatran -- move: Protect
+      after p1: Heatran 324/324, Azumarill 0/394
+      after p2: Jellicent 404/404, Genesect 181/283
+
+  Turn 12
+      p1b <- Jirachi comes in (404/404)
+      after p1: Heatran 324/324, Jirachi 404/404
+      after p2: Jellicent 404/404, Genesect 181/283
+
+  Turn 13
+    p1 mcts: move 1, move 1 1
+      search (20000 visits): heatwave,0;ironhead,0 4413v 3284 | heatwave,0;protect,1 2221v 1591 | heatwave,0;stealthrock,0 1677v 1178 | heatwave,0;followme,1 1314v 904
+    p2 greedy: move 4, move 1
+      p2b Genesect used Blizzard -> p1a: Heatran  [[spread] p1a,p1b]
+              p1b Jirachi is now frz
+              p1b Jirachi COULD NOT MOVE (frz)
+      p1a Heatran used Heat Wave -> p2a: Jellicent  [[spread] p2a,p2b]
+      p2b Genesect fainted
+      p2a Jellicent used Water Spout -> p1b: Jirachi  [[spread] p1a,p1b]
+      after p1: Heatran 145/324, Jirachi 271/404
+      after p2: Jellicent 375/404, Genesect 0/283
+
+  Turn 14
+    p1 mcts: move 2 1, move 1 1
+      search (35000 visits): earthpower,0;ironhead,0 22558v 14605 | heatwave,0;ironhead,0 3193v 1905 | substitute,0;ironhead,0 2165v 1254 | protect,0;ironhead,0 854v 445
+    p2 greedy: move 4, pass
+              p1b Jirachi COULD NOT MOVE (frz)
+      p1a Heatran used Earth Power -> p2a: Jellicent
+      p2a Jellicent used Water Spout -> p1a: Heatran  [[spread] p1a,p1b]
+      p1a Heatran fainted
+      after p1: Heatran 0/324, Jirachi 205/404
+      after p2: Jellicent 304/404, Genesect 0/283
+
+  Turn 15
+    p1 mcts: pass, move 4
+      search (79000 visits): No Move;protect,1 55050v 25333 | No Move;ironhead,0 16524v 7328 | No Move;stealthrock,0 4343v 1773 | No Move;followme,1 3083v 1217
+    p2 greedy: move 4, pass
+              p1b Jirachi COULD NOT MOVE (frz)
+      p2a Jellicent used Water Spout -> p1b: Jirachi
+      after p1: Heatran 0/324, Jirachi 103/404
+      after p2: Jellicent 329/404, Genesect 0/283
+
+  Turn 16
+    p1 mcts: pass, move 4
+      search (69000 visits): No Move;protect,1 64832v 30840 | No Move;ironhead,0 3468v 1436 | No Move;stealthrock,0 368v 91 | No Move;followme,1 332v 78
+    p2 greedy: move 4, pass
+              p1b Jirachi COULD NOT MOVE (frz)
+      p2a Jellicent used Water Spout -> p1b: Jirachi
+      p1b Jirachi fainted
+      after p1: Heatran 0/324, Jirachi 0/404
+      after p2: Jellicent 329/404, Genesect 0/283
+
+  RESULT: p2 wins

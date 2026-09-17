@@ -1,0 +1,254 @@
+battle 54   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: Untitled 485: Manectric-Mega, Snorlax, Gothitelle, Genesect, Landorus, Volcanion
+  p2: Untitled 492: Charizard-Mega-Y, Cresselia, Landorus-Therian, Diancie, Heatran, Amoonguss
+
+  Turn 1
+    p1 mcts: move 1 1, switch 4   (slot1 Snorlax -> Genesect)
+      search (22000 visits): voltswitch,0;switch genesect 1397v 984 | voltswitch,0;bellydrum,1 940v 637 | voltswitch,0;return,0 862v 579 | voltswitch,0;return,1 813v 542
+    p2 greedy: move 3 1, move 3 1
+      p1b <- Genesect comes in (283/283)
+              p1b Genesect atk 1 rose
+      p1a Manectric used Volt Switch -> p2a: Charizard
+      after p1: Manectric-Mega 329/329, Genesect 283/283
+      after p2: Charizard-Mega-Y 97/297, Cresselia 444/444
+
+  Turn 2
+      p1a <- Gothitelle comes in (344/344)
+      p2a Charizard used Overheat -> p1a: Gothitelle
+              p2a Charizard spa 2 fell
+      p2b Cresselia used Psyshock -> p1a: Gothitelle
+      after p1: Gothitelle 50/344, Genesect 283/283
+      after p2: Charizard-Mega-Y 97/297, Cresselia 444/444
+
+  Turn 3
+    p1 mcts: switch 4, move 1 2   (slot0 Gothitelle -> Snorlax)
+      search (27000 visits): switch snorlax;uturn,1 2220v 1349 | switch manectricmega;uturn,1 2110v 1277 | switch landorus;uturn,1 1373v 799 | switch volcanion;uturn,1 1115v 634
+    p2 greedy: move 3 1, move 3 1
+      p1a <- Snorlax comes in (480/480)
+      p1b Genesect used U-turn -> p2b: Cresselia
+      after p1: Snorlax 480/480, Genesect 283/283
+      after p2: Charizard-Mega-Y 97/297, Cresselia 192/444
+
+  Turn 4
+      p1b <- Manectric-Mega comes in (329/329)
+      p2a Charizard used Overheat -> p1a: Snorlax
+              p2a Charizard spa 2 fell
+      p2b Cresselia used Psyshock -> p1a: Snorlax
+      after p1: Snorlax 320/480, Manectric-Mega 329/329
+      after p2: Charizard-Mega-Y 97/297, Cresselia 192/444
+
+  Turn 5
+    p1 mcts: move 1, move 1 2
+      search (21000 visits): bellydrum,0;voltswitch,1 1118v 538 | bellydrum,0;voltswitch,0 807v 369 | bellydrum,0;snarl,0 590v 254 | bellydrum,0;switch genesect 527v 221
+    p2 greedy: move 3 1, move 3 1
+      p1b Manectric used Volt Switch -> p2b: Cresselia
+      after p1: Snorlax 320/480, Manectric-Mega 329/329
+      after p2: Charizard-Mega-Y 97/297, Cresselia 95/444
+
+  Turn 6
+      p1b <- Genesect comes in (283/283)
+              p1b Genesect atk 1 rose
+      p2a Charizard used Overheat -> p1a: Snorlax
+              p2a Charizard spa 2 fell
+      p2b Cresselia used Psyshock -> p1a: Snorlax
+              p1a Snorlax used up its Sitrus Berry
+      p1a Snorlax used Belly Drum
+      after p1: Snorlax 64/480, Genesect 283/283
+      after p2: Charizard-Mega-Y 97/297, Cresselia 95/444
+
+  Turn 7
+    p1 mcts: move 2 2, move 1 1
+      search (42000 visits): return,1;uturn,0 816v 111 | return,1;uturn,1 806v 109 | return,1;icebeam,0 723v 91 | return,1;flamethrower,1 722v 91
+    p2 greedy: move 3 1, move 3 1
+      p1b Genesect used U-turn -> p2a: Charizard
+              p2a Charizard -- critical hit
+      after p1: Snorlax 64/480, Genesect 283/283
+      after p2: Charizard-Mega-Y 18/297, Cresselia 95/444
+
+  Turn 8
+      p1b <- Manectric-Mega comes in (329/329)
+      p2a Charizard used Overheat -> p1a: Snorlax
+      p2b Cresselia used Psyshock -> p1a: Snorlax
+      p1a Snorlax fainted
+      after p1: Snorlax 0/480, Manectric-Mega 329/329
+      after p2: Charizard-Mega-Y 18/297, Cresselia 95/444
+
+  Turn 9
+      p1a <- Genesect comes in (283/283)
+              p1a Genesect atk 1 rose
+      after p1: Genesect 283/283, Manectric-Mega 329/329
+      after p2: Charizard-Mega-Y 18/297, Cresselia 95/444
+
+  Turn 10
+    p1 mcts: move 3 2, move 1 2
+      search (40000 visits): icebeam,1;voltswitch,1 598v 99 | icebeam,0;voltswitch,1 536v 83 | uturn,1;voltswitch,1 521v 79 | icebeam,1;snarl,0 515v 78
+    p2 greedy: move 3 1, move 3 1
+      p1a Genesect used Ice Beam -> p2b: Cresselia
+      p1b Manectric used Volt Switch -> p2b: Cresselia
+      p2b Cresselia fainted
+      after p1: Genesect 283/283, Manectric-Mega 329/329
+      after p2: Charizard-Mega-Y 18/297, Cresselia 0/444
+
+  Turn 11
+      p1b <- Gothitelle comes in (50/344)
+      p2a Charizard used Overheat -> p1a: Genesect
+      p1a Genesect fainted
+      after p1: Genesect 0/283, Gothitelle 50/344
+      after p2: Charizard-Mega-Y 18/297, Cresselia 0/444
+
+  Turn 12
+      p1a <- Manectric-Mega comes in (329/329)
+      p2b <- Landorus-Therian comes in (319/319)
+              p1a Manectric atk 1 fell
+              p1b Gothitelle atk 1 fell
+      after p1: Manectric-Mega 329/329, Gothitelle 50/344
+      after p2: Charizard-Mega-Y 18/297, Landorus-Therian 319/319
+
+  Turn 13
+    p1 mcts: switch 5, move 4   (slot0 Manectric-Mega -> Landorus)
+      search (31000 visits): switch landorus;protect,1 3752v 1870 | switch landorus;psychic,1 1907v 893 | switch landorus;trickroom,0 1502v 684 | switch landorus;trickroom,1 1475v 670
+    p2 greedy: move 3 2, move 4 2
+      p1a <- Landorus comes in (382/382)
+      p1b Gothitelle used Protect
+      p2b Landorus used Superpower -> p1b: Gothitelle
+              p1b Gothitelle -- move: Protect
+      p2a Charizard used Overheat -> p1b: Gothitelle
+              p1b Gothitelle -- move: Protect
+      after p1: Landorus 382/382, Gothitelle 50/344
+      after p2: Charizard-Mega-Y 18/297, Landorus-Therian 319/319
+
+  Turn 14
+    p1 mcts: move 3 2, move 4
+      search (30000 visits): psychic,1;protect,1 2184v 1427 | calmmind,0;protect,1 1781v 1145 | calmmind,0;switch volcanion 1352v 848 | psychic,1;switch volcanion 1243v 773
+    p2 greedy: move 3 2, move 4 2
+      p1b Gothitelle used Protect  [[still]]
+              p1b Gothitelle -- IT FAILED
+      p2b Landorus used Superpower -> p1b: Gothitelle
+              p2b Landorus atk 1 fell
+              p2b Landorus def 1 fell
+      p1b Gothitelle fainted
+      p2a Charizard used Overheat -> p1a: Landorus
+      p1a Landorus used Psychic -> p2b: Landorus
+      after p1: Landorus 301/382, Gothitelle 0/344
+      after p2: Charizard-Mega-Y 18/297, Landorus-Therian 110/319
+
+  Turn 15
+      p1b <- Manectric-Mega comes in (329/329)
+      after p1: Landorus 301/382, Manectric-Mega 329/329
+      after p2: Charizard-Mega-Y 18/297, Landorus-Therian 110/319
+
+  Turn 16
+    p1 mcts: move 1, switch 6   (slot1 Manectric-Mega -> Volcanion)
+      search (31000 visits): calmmind,0;switch volcanion 1289v 235 | earthpower,1;switch volcanion 1070v 182 | calmmind,0;voltswitch,1 1012v 168 | earthpower,0;switch volcanion 910v 144
+    p2 greedy: move 3 1, move 4 1
+      p1b <- Volcanion comes in (364/364)
+      p2b Landorus used Superpower -> p1a: Landorus
+              p2b Landorus atk 1 fell
+              p2b Landorus def 1 fell
+      p2a Charizard used Overheat -> p1a: Landorus
+      p1a Landorus used Calm Mind
+              p1a Landorus spa 1 rose
+              p1a Landorus spd 1 rose
+      after p1: Landorus 165/382, Volcanion 364/364
+      after p2: Charizard-Mega-Y 18/297, Landorus-Therian 110/319
+
+  Turn 17
+    p1 mcts: move 2 1, move 4 2
+      search (28000 visits): earthpower,0;earthpower,1 804v 92 | calmmind,0;earthpower,1 801v 91 | earthpower,1;earthpower,0 786v 89 | calmmind,0;steameruption,1 737v 79
+    p2 greedy: move 2 1, move 4 1
+      p2b Landorus used Superpower -> p1a: Landorus
+              p2b Landorus atk 1 fell
+              p2b Landorus def 1 fell
+      p2a Charizard used Solar Beam  [[still]]
+      p1a Landorus used Earth Power -> p2a: Charizard
+              p2a Charizard -- IMMUNE
+      p1b Volcanion used Earth Power -> p2b: Landorus
+              p2b Landorus -- IMMUNE
+      after p1: Landorus 129/382, Volcanion 364/364
+      after p2: Charizard-Mega-Y 18/297, Landorus-Therian 110/319
+
+  Turn 18
+    p1 mcts: move 1, move 1 2
+      search (36000 visits): calmmind,0;steameruption,1 2517v 553 | calmmind,0;earthpower,1 1229v 222 | calmmind,0;steameruption,0 1181v 210 | earthpower,1;steameruption,1 1169v 207
+    p2 greedy: move 1, move 4 1
+      p2b Landorus used Superpower -> p1a: Landorus
+              p2b Landorus atk 1 fell
+              p2b Landorus def 1 fell
+      p2a Charizard used Solar Beam -> p1a: Landorus  [[from] lockedmove]
+      p1a Landorus used Calm Mind
+              p1a Landorus spa 1 rose
+              p1a Landorus spd 1 rose
+      p1b Volcanion used Steam Eruption -> p2b: Landorus
+      p2b Landorus fainted
+      after p1: Landorus 68/382, Volcanion 364/364
+      after p2: Charizard-Mega-Y 18/297, Landorus-Therian 0/319
+
+  Turn 19
+      p2b <- Diancie comes in (304/304)
+      after p1: Landorus 68/382, Volcanion 364/364
+      after p2: Charizard-Mega-Y 18/297, Diancie 304/304
+
+  Turn 20
+    p1 mcts: move 1, move 1 2
+      search (37000 visits): calmmind,0;steameruption,1 1321v 165 | earthpower,0;steameruption,1 1229v 148 | earthpower,1;earthpower,0 1140v 132 | calmmind,0;earthpower,1 1018v 109
+    p2 greedy: move 2 1, move 1
+      p2a Charizard used Solar Beam  [[still]]
+      p1a Landorus used Calm Mind
+              p1a Landorus spa 1 rose
+              p1a Landorus spd 1 rose
+      p1b Volcanion used Steam Eruption -> p2b: Diancie
+              p2b Diancie used up its Weakness Policy
+              p2b Diancie atk 2 rose
+              p2b Diancie spa 2 rose
+      p2b Diancie used Diamond Storm -> p1a: Landorus  [[spread] p1a]
+              p2b Diancie -- MISSED
+              p2b Diancie def 1 rose
+      p1a Landorus fainted
+      after p1: Landorus 0/382, Volcanion 364/364
+      after p2: Charizard-Mega-Y 18/297, Diancie 38/304
+
+  Turn 21
+      p1a <- Manectric-Mega comes in (329/329)
+      after p1: Manectric-Mega 329/329, Volcanion 364/364
+      after p2: Charizard-Mega-Y 18/297, Diancie 38/304
+
+  Turn 22
+    p1 mcts: move 1 1, move 2
+      search (34000 visits): voltswitch,0;heatwave,0 2517v 1220 | voltswitch,0;earthpower,0 2123v 1012 | voltswitch,0;steameruption,1 1823v 854 | voltswitch,0;earthpower,1 1816v 851
+    p2 greedy: move 1, move 1
+      p1a Manectric used Volt Switch -> p2a: Charizard
+      p2a Charizard fainted
+      p1b Volcanion used Heat Wave -> p2b: Diancie
+      p2b Diancie fainted
+      after p1: Manectric-Mega 329/329, Volcanion 364/364
+      after p2: Charizard-Mega-Y 0/297, Diancie 0/304
+
+  Turn 23
+      p2a <- Heatran comes in (386/386)
+      p2b <- Amoonguss comes in (432/432)
+      after p1: Manectric-Mega 329/329, Volcanion 364/364
+      after p2: Heatran 386/386, Amoonguss 432/432
+
+  Turn 24
+    p1 mcts: move 1 1, move 3 2
+      search (25000 visits): voltswitch,0;overheat,1 4894v 3663 | voltswitch,1;earthpower,0 1735v 1223 | snarl,0;earthpower,0 1455v 1011 | voltswitch,1;overheat,1 908v 602
+    p2 greedy: move 1, move 3 1
+      p1a Manectric used Volt Switch -> p2a: Heatran
+      p1b Volcanion used Overheat -> p2b: Amoonguss
+              p1b Volcanion spa 2 fell
+      p2b Amoonguss fainted
+      p2a Heatran used Eruption -> p1a: Manectric  [[spread] p1a,p1b]
+      after p1: Manectric-Mega 98/329, Volcanion 330/364
+      after p2: Heatran 286/386, Amoonguss 0/432
+
+  Turn 25
+    p1 mcts: move 1 1, move 4 1
+      search (852000 visits): voltswitch,0;earthpower,0 845503v 841831 | voltswitch,0;steameruption,0 1912v 1643 | snarl,0;earthpower,0 750v 600 | snarl,0;steameruption,0 486v 370
+    p2 greedy: move 1, pass
+      p1a Manectric used Volt Switch -> p2a: Heatran
+      p1b Volcanion used Earth Power -> p2a: Heatran
+      p2a Heatran fainted
+      after p1: Manectric-Mega 98/329, Volcanion 330/364
+      after p2: Heatran 0/386, Amoonguss 0/432
+
+  RESULT: p1 wins

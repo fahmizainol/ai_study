@@ -1,0 +1,247 @@
+battle 67   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: ORAS Doubles OU: Cresselia, Rotom-Wash, Ferrothorn, Camerupt-Mega, Hariyama, Porygon2
+  p2: tvalks: Kangaskhan-Mega, Volcanion, Thundurus, Sylveon, Landorus-Therian, Amoonguss
+
+  Turn 1
+    p1 mcts: move 2 1, move 4 1
+      search (21000 visits): icebeam,0;voltswitch,0 432v 250 | psychic,0;thunderbolt,1 425v 245 | psychic,0;voltswitch,1 414v 237 | psychic,1;hydropump,0 398v 226
+    p2 greedy: move 2 1, move 2 1
+      p2a Kangaskhan used Crunch -> p1a: Cresselia
+      p2b Volcanion used Steam Eruption -> p1a: Cresselia
+              p1a Cresselia used up its Sitrus Berry
+      p1b Rotom used Volt Switch -> p2a: Kangaskhan
+      after p1: Cresselia 299/443, Rotom-Wash 301/301
+      after p2: Kangaskhan-Mega 288/414, Volcanion 364/364
+
+  Turn 2
+      p1b <- Ferrothorn comes in (351/351)
+      p1a Cresselia used Ice Beam -> p2a: Kangaskhan
+      after p1: Cresselia 299/443, Ferrothorn 351/351
+      after p2: Kangaskhan-Mega 210/414, Volcanion 364/364
+
+  Turn 3
+    p1 mcts: switch 3, move 1   (slot0 Cresselia -> Rotom-Wash)
+      search (53000 visits): switch rotomwash;swordsdance,1 1463v 198 | switch rotomwash;powerwhip,1 683v 54 | switch rotomwash;powerwhip,0 649v 48 | trickroom,1;swordsdance,1 609v 42
+    p2 greedy: move 2 1, move 2 1
+      p1a <- Rotom-Wash comes in (301/301)
+      p2a Kangaskhan used Crunch -> p1a: Rotom
+      p2b Volcanion used Steam Eruption -> p1a: Rotom
+              p1a Rotom used up its Sitrus Berry
+      p1b Ferrothorn used Swords Dance
+              p1b Ferrothorn atk 2 rose
+      after p1: Rotom-Wash 225/301, Ferrothorn 351/351
+      after p2: Kangaskhan-Mega 210/414, Volcanion 364/364
+
+  Turn 4
+    p1 mcts: switch 5, move 2 1   (slot0 Rotom-Wash -> Hariyama)
+      search (55000 visits): switch hariyama;gyroball,0 2984v 2186 | switch porygon2;powerwhip,1 698v 51 | protect,0;powerwhip,1 669v 47 | switch cameruptmega;gyroball,0 662v 46
+    p2 greedy: move 2 1, move 2 1
+      p1a <- Hariyama comes in (429/429)
+      p2a Kangaskhan used Crunch -> p1a: Hariyama
+      p2b Volcanion used Steam Eruption -> p1a: Hariyama
+              p1a Hariyama is now brn
+      p1b Ferrothorn used Gyro Ball -> p2a: Kangaskhan
+      p2a Kangaskhan fainted
+      after p1: Hariyama 101/429, Ferrothorn 351/351
+      after p2: Kangaskhan-Mega 0/414, Volcanion 364/364
+
+  Turn 5
+      p2a <- Thundurus comes in (362/362)
+      after p1: Hariyama 101/429, Ferrothorn 351/351
+      after p2: Thundurus 362/362, Volcanion 364/364
+
+  Turn 6
+    p1 mcts: switch 6, move 3 2   (slot0 Hariyama -> Porygon2)
+      search (19000 visits): switch porygon2;powerwhip,1 1213v 604 | switch porygon2;protect,1 532v 231 | switch porygon2;powerwhip,0 524v 226 | switch porygon2;swordsdance,1 519v 223
+    p2 greedy: move 1 1, move 2 1
+      p1a <- Porygon2 comes in (374/374)
+              p1a Porygon2 atk 1 rose
+      p2a Thundurus used Thunderbolt -> p1a: Porygon2
+      p2b Volcanion used Steam Eruption -> p1a: Porygon2
+      p1b Ferrothorn used Power Whip -> p2b: Volcanion  [[miss]]
+              p1b Ferrothorn -- MISSED
+      after p1: Porygon2 176/374, Ferrothorn 351/351
+      after p2: Thundurus 362/362, Volcanion 364/364
+
+  Turn 7
+    p1 mcts: move 3 2, move 3 2
+      search (8000 visits): thunderbolt,1;powerwhip,1 277v 151 | recover,0;powerwhip,1 201v 101 | icebeam,0;powerwhip,0 196v 98 | icebeam,0;powerwhip,1 166v 78
+    p2 greedy: move 1 1, move 2 1
+      p2a Thundurus used Thunderbolt -> p1a: Porygon2
+      p2b Volcanion used Steam Eruption -> p1a: Porygon2
+      p1a Porygon2 fainted
+      p1b Ferrothorn used Power Whip -> p2b: Volcanion
+      after p1: Porygon2 0/374, Ferrothorn 351/351
+      after p2: Thundurus 362/362, Volcanion 42/364
+
+  Turn 8
+      p1a <- Cresselia comes in (299/443)
+      after p1: Cresselia 299/443, Ferrothorn 351/351
+      after p2: Thundurus 362/362, Volcanion 42/364
+
+  Turn 9
+    p1 mcts: move 2 1, move 4
+      search (25000 visits): icebeam,0;protect,1 570v 140 | icebeam,0;powerwhip,0 551v 134 | psychic,1;protect,1 474v 108 | psychic,0;protect,1 461v 104
+    p2 greedy: move 1 1, move 2 1
+      p1b Ferrothorn used Protect
+      p2a Thundurus used Thunderbolt -> p1a: Cresselia
+      p2b Volcanion used Steam Eruption -> p1a: Cresselia
+              p1a Cresselia is now brn
+      p1a Cresselia used Ice Beam -> p2a: Thundurus
+      after p1: Cresselia 24/443, Ferrothorn 351/351
+      after p2: Thundurus 220/362, Volcanion 42/364
+
+  Turn 10
+    p1 mcts: switch 4, move 4   (slot0 Cresselia -> Camerupt-Mega)
+      search (38000 visits): switch cameruptmega;protect,1 1123v 261 | switch cameruptmega;gyroball,0 863v 184 | psychic,0;powerwhip,0 838v 176 | icebeam,0;powerwhip,0 802v 166
+    p2 greedy: move 1 1, move 2 1
+      p1a <- Camerupt-Mega comes in (343/343)
+      p1b Ferrothorn used Protect  [[still]]
+              p1b Ferrothorn -- IT FAILED
+      p2a Thundurus used Thunderbolt -> p1a: Camerupt
+              p1a Camerupt -- IMMUNE
+      p2b Volcanion used Steam Eruption -> p1a: Camerupt
+      p1a Camerupt fainted
+      after p1: Camerupt-Mega 0/343, Ferrothorn 351/351
+      after p2: Thundurus 220/362, Volcanion 42/364
+
+  Turn 11
+      p1a <- Cresselia comes in (24/443)
+      after p1: Cresselia 24/443, Ferrothorn 351/351
+      after p2: Thundurus 220/362, Volcanion 42/364
+
+  Turn 12
+    p1 mcts: switch 5, move 3 1   (slot0 Cresselia -> Rotom-Wash)
+      search (40000 visits): switch rotomwash;powerwhip,0 962v 152 | psychic,1;powerwhip,0 868v 131 | helpinghand,1;powerwhip,0 818v 119 | icebeam,0;protect,1 817v 119
+    p2 greedy: move 1 1, move 2 1
+      p1a <- Rotom-Wash comes in (225/301)
+      p2a Thundurus used Thunderbolt -> p1a: Rotom
+      p2b Volcanion used Steam Eruption -> p1a: Rotom
+      p1b Ferrothorn used Power Whip -> p2a: Thundurus
+      p2a Thundurus fainted
+      after p1: Rotom-Wash 7/301, Ferrothorn 351/351
+      after p2: Thundurus 0/362, Volcanion 42/364
+
+  Turn 13
+      p2a <- Sylveon comes in (394/394)
+      after p1: Rotom-Wash 7/301, Ferrothorn 351/351
+      after p2: Sylveon 394/394, Volcanion 42/364
+
+  Turn 14
+    p1 mcts: move 2 1, move 4
+      search (34000 visits): hydropump,0;protect,1 714v 58 | protect,0;protect,1 712v 58 | thunderbolt,0;protect,1 687v 53 | voltswitch,1;protect,1 673v 51
+    p2 greedy: move 1, move 1
+      p1b Ferrothorn used Protect
+      p2b Volcanion used Heat Wave -> p1b: Ferrothorn  [[spread] p1a]
+              p1b Ferrothorn -- move: Protect
+      p1a Rotom fainted
+      p2a Sylveon used Hyper Voice -> p1b: Ferrothorn
+              p1b Ferrothorn -- move: Protect
+      after p1: Rotom-Wash 0/301, Ferrothorn 351/351
+      after p2: Sylveon 394/394, Volcanion 42/364
+
+  Turn 15
+      p1a <- Cresselia comes in (24/443)
+      after p1: Cresselia 24/443, Ferrothorn 351/351
+      after p2: Sylveon 394/394, Volcanion 42/364
+
+  Turn 16
+    p1 mcts: move 1 1, move 4
+      search (36000 visits): psychic,0;protect,1 796v 38 | icebeam,1;protect,1 793v 37 | icebeam,0;protect,1 784v 36 | trickroom,1;protect,1 776v 35
+    p2 greedy: move 1, move 1
+      p1b Ferrothorn used Protect
+      p2b Volcanion used Heat Wave -> p1b: Ferrothorn  [[spread] p1a]
+              p1b Ferrothorn -- move: Protect
+      p1a Cresselia fainted
+      p2a Sylveon used Hyper Voice -> p1b: Ferrothorn
+              p1b Ferrothorn -- move: Protect
+      after p1: Cresselia 0/443, Ferrothorn 351/351
+      after p2: Sylveon 394/394, Volcanion 42/364
+
+  Turn 17
+      p1a <- Hariyama comes in (101/429)
+      after p1: Hariyama 101/429, Ferrothorn 351/351
+      after p2: Sylveon 394/394, Volcanion 42/364
+
+  Turn 18
+    p1 mcts: move 1 2, move 1
+      search (108000 visits): fakeout,1;swordsdance,1 84489v 82117 | fakeout,1;powerwhip,0 739v 34 | fakeout,1;gyroball,0 706v 30 | fakeout,0;powerwhip,0 652v 23
+    p2 greedy: move 1, move 1
+      p1a Hariyama used Fake Out -> p2b: Volcanion
+      p2b Volcanion fainted
+      p2a Sylveon used Hyper Voice -> p1a: Hariyama  [[spread] p1a,p1b]
+      p1a Hariyama fainted
+      p1b Ferrothorn used Swords Dance
+              p1b Ferrothorn atk 2 rose
+      after p1: Hariyama 0/429, Ferrothorn 288/351
+      after p2: Sylveon 394/394, Volcanion 0/364
+
+  Turn 19
+      p2b <- Landorus-Therian comes in (382/382)
+              p1b Ferrothorn atk 1 fell
+      after p1: Hariyama 0/429, Ferrothorn 288/351
+      after p2: Sylveon 394/394, Landorus-Therian 382/382
+
+  Turn 20
+    p1 mcts: pass, move 4
+      search (73000 visits): No Move;protect,1 39199v 2293 | No Move;swordsdance,1 13923v 589 | No Move;powerwhip,1 5451v 100 | No Move;powerwhip,0 4985v 77
+    p2 greedy: move 1, move 2 2
+      p1b Ferrothorn used Protect
+      p2b Landorus used Superpower -> p1b: Ferrothorn
+              p1b Ferrothorn -- move: Protect
+      p2a Sylveon used Hyper Voice -> p1b: Ferrothorn
+              p1b Ferrothorn -- move: Protect
+      after p1: Hariyama 0/429, Ferrothorn 288/351
+      after p2: Sylveon 394/394, Landorus-Therian 382/382
+
+  Turn 21
+    p1 mcts: pass, move 4
+      search (56000 visits): No Move;protect,1 38400v 2800 | No Move;powerwhip,1 3924v 87 | No Move;gyroball,0 3566v 66 | No Move;gyroball,1 3561v 66
+    p2 greedy: move 1, move 2 2
+      p1b Ferrothorn used Protect  [[still]]
+              p1b Ferrothorn -- IT FAILED
+      p2b Landorus used Superpower -> p1b: Ferrothorn
+              p2b Landorus atk 1 fell
+              p2b Landorus def 1 fell
+      p2a Sylveon used Hyper Voice -> p1b: Ferrothorn
+      after p1: Hariyama 0/429, Ferrothorn 7/351
+      after p2: Sylveon 394/394, Landorus-Therian 335/382
+
+  Turn 22
+    p1 mcts: pass, move 4
+      search (114000 visits): No Move;protect,1 73121v 2630 | No Move;gyroball,1 8269v 6 | No Move;powerwhip,0 8181v 4 | No Move;swordsdance,1 8155v 3
+    p2 greedy: move 1, move 2 2
+      p1b Ferrothorn used Protect
+      p2b Landorus used Superpower -> p1b: Ferrothorn
+              p1b Ferrothorn -- move: Protect
+      p2a Sylveon used Hyper Voice -> p1b: Ferrothorn
+              p1b Ferrothorn -- move: Protect
+      after p1: Hariyama 0/429, Ferrothorn 7/351
+      after p2: Sylveon 394/394, Landorus-Therian 335/382
+
+  Turn 23
+    p1 mcts: pass, move 4
+      search (123000 visits): No Move;protect,1 73973v 2333 | No Move;powerwhip,1 9839v 5 | No Move;gyroball,1 9837v 5 | No Move;powerwhip,0 9815v 5
+    p2 greedy: move 1, move 2 2
+      p1b Ferrothorn used Protect
+      p2b Landorus used Superpower -> p1b: Ferrothorn
+              p1b Ferrothorn -- move: Protect
+      p2a Sylveon used Hyper Voice -> p1b: Ferrothorn
+              p1b Ferrothorn -- move: Protect
+      after p1: Hariyama 0/429, Ferrothorn 7/351
+      after p2: Sylveon 394/394, Landorus-Therian 335/382
+
+  Turn 24
+    p1 mcts: pass, move 4
+      search (116000 visits): No Move;protect,1 68187v 2130 | No Move;powerwhip,1 9646v 5 | No Move;gyroball,0 9559v 3 | No Move;swordsdance,1 9552v 3
+    p2 greedy: move 1, move 2 2
+      p1b Ferrothorn used Protect  [[still]]
+              p1b Ferrothorn -- IT FAILED
+      p2b Landorus used Superpower -> p1b: Ferrothorn
+              p2b Landorus atk 1 fell
+              p2b Landorus def 1 fell
+      p1b Ferrothorn fainted
+      after p1: Hariyama 0/429, Ferrothorn 0/351
+      after p2: Sylveon 394/394, Landorus-Therian 288/382
+
+  RESULT: p2 wins

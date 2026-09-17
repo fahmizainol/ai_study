@@ -1,0 +1,182 @@
+battle 77   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: XY Doubles: Abomasnow, Jirachi, Rotom-Heat, Keldeo, Weavile, Landorus-Therian
+  p2: ORAS Doubles OU: Diancie, Shaymin-Sky, Jirachi, Kyurem-Black, Rotom-Wash, Landorus-Therian
+
+  Turn 1
+    p1 mcts: move 1 mega, move 3 1
+      search (13000 visits): blizzard-mega,0;ironhead,0 172v 99 | blizzard-mega,0;switch landorustherian 161v 90 | blizzard-mega,0;ironhead,1 145v 79 | iceshard-mega,1;switch landorustherian 139v 74
+    p2 greedy: move 2, move 1 1
+      p2b Shaymin used Seed Flare -> p1a: Abomasnow
+              p1a Abomasnow spd 2 fell
+      p1b Jirachi used Iron Head -> p2a: Diancie
+      p2a Diancie fainted
+      p1a Abomasnow used Blizzard -> p2b: Shaymin
+              p2b Shaymin used up its Focus Sash
+      p2b Shaymin fainted
+      after p1: Abomasnow-Mega 287/384, Jirachi 399/399
+      after p2: Diancie 0/241, Shaymin-Sky 0/341
+
+  Turn 2
+      p2b <- Kyurem-Black comes in (448/448)
+      p2a <- Jirachi comes in (404/404)
+      after p1: Abomasnow-Mega 287/384, Jirachi 399/399
+      after p2: Jirachi 404/404, Kyurem-Black 448/448
+
+  Turn 3
+    p1 mcts: move 3, move 3 2
+      search (19000 visits): protect,0;ironhead,1 394v 289 | switch weavile;ironhead,1 341v 244 | switch landorustherian;ironhead,1 324v 230 | switch keldeo;ironhead,1 309v 217
+    p2 greedy: move 3 1, move 2 1
+      p1a Abomasnow used Protect
+      p2a Jirachi used Iron Head -> p1a: Abomasnow
+              p1a Abomasnow -- move: Protect
+      p1b Jirachi used Iron Head -> p2b: Kyurem
+              p2b Kyurem COULD NOT MOVE (flinch)
+      after p1: Abomasnow-Mega 287/384, Jirachi 399/399
+      after p2: Jirachi 379/404, Kyurem-Black 252/448
+
+  Turn 4
+    p1 mcts: move 3, move 3 2
+      search (18000 visits): protect,0;ironhead,1 351v 242 | switch landorustherian;ironhead,1 339v 232 | switch keldeo;ironhead,1 285v 189 | switch landorustherian;followme,1 277v 182
+    p2 greedy: move 3 1, move 2 1
+      p1a Abomasnow used Protect  [[still]]
+              p1a Abomasnow -- IT FAILED
+      p2a Jirachi used Iron Head -> p1a: Abomasnow
+      p1b Jirachi used Iron Head -> p2b: Kyurem
+              p2b Kyurem COULD NOT MOVE (flinch)
+      after p1: Abomasnow-Mega 113/384, Jirachi 399/399
+      after p2: Jirachi 354/404, Kyurem-Black 70/448
+
+  Turn 5
+    p1 mcts: switch 6, move 3 2   (slot0 Abomasnow-Mega -> Landorus-Therian)
+      search (24000 visits): switch landorustherian;ironhead,1 546v 383 | protect,0;ironhead,1 528v 369 | switch landorustherian;thunderwave,1 426v 288 | blizzard,0;ironhead,1 408v 274
+    p2 greedy: move 3 1, move 2 1
+      p1a <- Landorus-Therian comes in (367/367)
+              p2a Jirachi atk 1 fell
+              p2b Kyurem atk 1 fell
+      p2a Jirachi used Iron Head -> p1a: Landorus
+      p1b Jirachi used Iron Head -> p2b: Kyurem
+      p2b Kyurem fainted
+      after p1: Landorus-Therian 278/367, Jirachi 399/399
+      after p2: Jirachi 329/404, Kyurem-Black 0/448
+
+  Turn 6
+      p2b <- Rotom-Wash comes in (304/304)
+      after p1: Landorus-Therian 278/367, Jirachi 399/399
+      after p2: Jirachi 329/404, Rotom-Wash 304/304
+
+  Turn 7
+    p1 mcts: switch 6, move 2 1   (slot0 Landorus-Therian -> Abomasnow-Mega)
+      search (16000 visits): switch abomasnowmega;thunderwave,0 358v 165 | switch abomasnowmega;followme,1 321v 144 | protect,0;thunderwave,0 302v 133 | switch abomasnowmega;ironhead,0 271v 116
+    p2 greedy: move 3 1, move 1 1
+      p1a <- Abomasnow-Mega comes in (113/384)
+      p2a Jirachi used Iron Head -> p1a: Abomasnow
+      p1a Abomasnow fainted
+      p1b Jirachi used Thunder Wave -> p2a: Jirachi
+              p2a Jirachi is now par
+      p2b Rotom used Hydro Pump -> p1b: Jirachi
+      after p1: Abomasnow 0/384, Jirachi 305/399
+      after p2: Jirachi 329/404, Rotom-Wash 304/304
+
+  Turn 8
+      p1a <- Rotom-Heat comes in (271/271)
+      after p1: Rotom-Heat 271/271, Jirachi 305/399
+      after p2: Jirachi 329/404, Rotom-Wash 304/304
+
+  Turn 9
+    p1 mcts: move 3 1, switch 6   (slot1 Jirachi -> Landorus-Therian)
+      search (8000 visits): willowisp,0;switch landorustherian 170v 87 | switch landorustherian;ironhead,0 158v 79 | switch landorustherian;ironhead,1 153v 75 | switch landorustherian;switch keldeo 152v 74
+    p2 greedy: move 3 2, move 1 2
+      p1b <- Landorus-Therian comes in (278/367)
+              p2a Jirachi atk 1 fell
+              p2b Rotom atk 1 fell
+      p1a Rotom used Will-O-Wisp  [[still]]
+              p1a Rotom -- IT FAILED
+      p2b Rotom used Hydro Pump -> p1b: Landorus
+      p2a Jirachi used Iron Head -> p1b: Landorus
+      p1b Landorus fainted
+      after p1: Rotom-Heat 271/271, Landorus-Therian 0/367
+      after p2: Jirachi 329/404, Rotom-Wash 304/304
+
+  Turn 10
+      p1b <- Keldeo comes in (324/324)
+      after p1: Rotom-Heat 271/271, Keldeo 324/324
+      after p2: Jirachi 329/404, Rotom-Wash 304/304
+
+  Turn 11
+    p1 mcts: switch 6, move 2 1   (slot0 Rotom-Heat -> Jirachi)
+      search (10000 visits): switch jirachi;scald,0 291v 128 | thunderbolt,1;scald,0 273v 118 | thunderbolt,1;secretsword,1 254v 107 | switch jirachi;scald,1 241v 100
+    p2 greedy: move 3 1, move 1 1
+      p1a <- Jirachi comes in (305/399)
+      p1b Keldeo used Scald -> p2a: Jirachi
+              p2a Jirachi used up its Sitrus Berry
+      p2b Rotom used Hydro Pump -> p1a: Jirachi
+              p2a Jirachi COULD NOT MOVE (par)
+      after p1: Jirachi 199/399, Keldeo 292/324
+      after p2: Jirachi 273/404, Rotom-Wash 304/304
+
+  Turn 12
+    p1 mcts: move 4, move 2 1
+      search (14000 visits): followme,0;scald,0 469v 211 | ironhead,1;scald,0 437v 194 | skillswap,1;scald,0 381v 163 | skillswap,0;scald,0 369v 157
+    p2 greedy: move 3 1, move 1 1
+      p1a Jirachi used Follow Me
+      p1b Keldeo used Scald -> p2a: Jirachi
+      p2b Rotom used Hydro Pump -> p1a: Jirachi
+      p2a Jirachi used Iron Head -> p1a: Jirachi
+      after p1: Jirachi 69/399, Keldeo 260/324
+      after p2: Jirachi 116/404, Rotom-Wash 304/304
+
+  Turn 13
+    p1 mcts: move 3 2, move 1 2
+      search (25000 visits): ironhead,1;secretsword,1 653v 217 | followme,0;secretsword,1 632v 209 | ironhead,0;secretsword,1 601v 196 | ironhead,1;scald,1 563v 180
+    p2 greedy: move 3 1, move 1 1
+      p1b Keldeo used Secret Sword -> p2b: Rotom
+              p2b Rotom used up its Sitrus Berry
+      p1a Jirachi used Iron Head -> p2b: Rotom
+              p2b Rotom COULD NOT MOVE (flinch)
+      p2a Jirachi used Iron Head -> p1a: Jirachi
+      after p1: Jirachi 72/399, Keldeo 228/324
+      after p2: Jirachi 116/404, Rotom-Wash 168/304
+
+  Turn 14
+    p1 mcts: move 4, move 1 2
+      search (22000 visits): followme,0;secretsword,1 525v 174 | ironhead,1;secretsword,1 519v 172 | followme,0;scald,1 505v 166 | ironhead,0;secretsword,1 491v 160
+    p2 greedy: move 3 1, move 1 1
+      p1a Jirachi used Follow Me
+      p1b Keldeo used Secret Sword -> p2b: Rotom
+      p2b Rotom fainted
+      p2a Jirachi used Iron Head -> p1a: Jirachi
+      after p1: Jirachi 72/399, Keldeo 196/324
+      after p2: Jirachi 116/404, Rotom-Wash 0/304
+
+  Turn 15
+      p2b <- Landorus-Therian comes in (330/330)
+              p1a Jirachi atk 1 fell
+              p1b Keldeo atk 1 fell
+      after p1: Jirachi 72/399, Keldeo 196/324
+      after p2: Jirachi 116/404, Landorus-Therian 330/330
+
+  Turn 16
+    p1 mcts: switch 6, move 2 2   (slot0 Jirachi -> Rotom-Heat)
+      search (27000 visits): switch rotomheat;scald,1 4045v 2475 | ironhead,1;scald,1 1508v 854 | ironhead,0;scald,1 985v 531 | skillswap,1;scald,1 965v 519
+    p2 greedy: move 3 1, move 4 1
+      p1a <- Rotom-Heat comes in (271/271)
+      p2b Landorus used Superpower -> p1a: Rotom
+              p2b Landorus atk 1 fell
+              p2b Landorus def 1 fell
+      p1b Keldeo used Scald -> p2b: Landorus
+      p2b Landorus fainted
+      p2a Jirachi used Iron Head -> p1a: Rotom
+      after p1: Rotom-Heat 99/271, Keldeo 164/324
+      after p2: Jirachi 116/404, Landorus-Therian 0/330
+
+  Turn 17
+    p1 mcts: move 4, move 1 1
+      search (155000 visits): protect,0;secretsword,0 11933v 11700 | thunderbolt,0;protect,1 11170v 10935 | thunderbolt,0;secretsword,0 11017v 10782 | willowisp,0;secretsword,0 10636v 10400
+    p2 greedy: move 3 1, pass
+      p1a Rotom used Protect
+      p1b Keldeo used Secret Sword -> p2a: Jirachi
+      p2a Jirachi fainted
+      after p1: Rotom-Heat 99/271, Keldeo 132/324
+      after p2: Jirachi 0/404, Landorus-Therian 0/330
+
+  RESULT: p1 wins

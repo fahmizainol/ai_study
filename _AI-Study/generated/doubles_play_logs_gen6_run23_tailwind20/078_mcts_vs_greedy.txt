@@ -1,0 +1,122 @@
+battle 78   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: ORAS Doubles OU: Kangaskhan, Landorus-Therian, Mew, Heatran, Azumarill, Jirachi
+  p2: dpl ::/Untitled 177: Abomasnow-Mega, Diancie, Scrafty, Jellicent, Talonflame, Genesect
+
+  Turn 1
+    p1 mcts: move 4 2, move 4
+      search (23000 visits): suckerpunch,1;explosion,0 195v 62 | switch mew;explosion,0 195v 62 | fakeout-mega,1;explosion,0 192v 61 | poweruppunch-mega,0;explosion,0 189v 60
+    p2 greedy: move 3 1, move 1
+      p1a Kangaskhan used Sucker Punch -> p2b: Diancie
+      p1b Landorus used Explosion -> p2b: Diancie  [[spread] p1a,p2a,p2b]
+      p1b Landorus fainted
+      p2b Diancie used Diamond Storm -> p1a: Kangaskhan
+      p1a Kangaskhan fainted
+      p2a Abomasnow used Wood Hammer -> p1: Kangaskhan  [[notarget]]
+              p2a Abomasnow -- IT FAILED
+      after p1: Kangaskhan 0/352, Landorus-Therian 0/320
+      after p2: Abomasnow-Mega 141/384, Diancie 160/304
+
+  Turn 2
+      p1a <- Mew comes in (404/404)
+      p1b <- Heatran comes in (324/324)
+      after p1: Mew 404/404, Heatran 324/324
+      after p2: Abomasnow-Mega 141/384, Diancie 160/304
+
+  Turn 3
+    p1 mcts: move 4 2, move 2 2
+      search (15000 visits): knockoff,1;earthpower,1 522v 427 | thunderwave,1;heatwave,0 511v 417 | knockoff,0;earthpower,1 506v 412 | thunderwave,1;earthpower,1 493v 400
+    p2 greedy: move 3 1, move 1
+      p1a Mew used Knock Off -> p2b: Diancie
+              p2b Diancie used up its Hard Stone
+      p1b Heatran used Earth Power -> p2b: Diancie
+      p2b Diancie fainted
+      p2a Abomasnow used Wood Hammer -> p1a: Mew
+              p1a Mew -- critical hit
+              p1a Mew used up its Sitrus Berry
+      after p1: Mew 147/404, Heatran 324/324
+      after p2: Abomasnow-Mega 31/384, Diancie 0/304
+
+  Turn 4
+      p2b <- Scrafty comes in (334/334)
+              p1a Mew atk 1 fell
+              p1b Heatran atk 1 fell
+      after p1: Mew 147/404, Heatran 324/324
+      after p2: Abomasnow-Mega 31/384, Scrafty 334/334
+
+  Turn 5
+    p1 mcts: move 4 1, move 1
+      search (21000 visits): knockoff,0;heatwave,0 1342v 1110 | knockoff,1;heatwave,0 676v 526 | thunderwave,1;heatwave,0 622v 479 | switch azumarill;heatwave,0 616v 474
+    p2 greedy: move 3 1, move 3 1
+      p1a Mew used Knock Off -> p2a: Abomasnow
+      p2a Abomasnow fainted
+      p1b Heatran used Heat Wave -> p2b: Scrafty
+      p2b Scrafty used Head Smash -> p1a: Mew
+      p1a Mew fainted
+      after p1: Mew 0/404, Heatran 324/324
+      after p2: Abomasnow-Mega 0/384, Scrafty 63/334
+
+  Turn 6
+      p1a <- Azumarill comes in (394/394)
+      p2a <- Jellicent comes in (404/404)
+      after p1: Azumarill 394/394, Heatran 324/324
+      after p2: Jellicent 404/404, Scrafty 63/334
+
+  Turn 7
+    p1 mcts: move 2 1, move 1
+      search (24000 visits): playrough,0;heatwave,0 1621v 1408 | aquajet,1;substitute,1 1571v 1362 | playrough,0;protect,1 1149v 974 | aquajet,1;heatwave,0 1141v 966
+    p2 greedy: move 4, move 3 1
+      p1b Heatran used Heat Wave -> p2a: Jellicent  [[spread] p2a,p2b]
+              p2b Scrafty -- critical hit
+      p2b Scrafty fainted
+      p1a Azumarill used Play Rough -> p2a: Jellicent
+      p2a Jellicent used Water Spout -> p1b: Heatran  [[spread] p1a,p1b]
+      after p1: Azumarill 346/394, Heatran 238/324
+      after p2: Jellicent 151/404, Scrafty 0/334
+
+  Turn 8
+      p2b <- Talonflame comes in (298/298)
+      after p1: Azumarill 346/394, Heatran 238/324
+      after p2: Jellicent 151/404, Talonflame 298/298
+
+  Turn 9
+    p1 mcts: move 1 2, move 1
+      search (21000 visits): aquajet,1;heatwave,0 2753v 2366 | aquajet,1;earthpower,0 2365v 2016 | aquajet,1;substitute,1 2213v 1880 | aquajet,1;protect,1 1940v 1635
+    p2 greedy: move 4, move 1 2
+      p2b Talonflame used Brave Bird -> p1b: Heatran
+      p1a Azumarill used Aqua Jet -> p2b: Talonflame
+      p1b Heatran used Heat Wave -> p2a: Jellicent  [[spread] p2a,p2b]
+      p2b Talonflame fainted
+      p2a Jellicent used Water Spout -> p1a: Azumarill  [[spread] p1a,p1b]
+      after p1: Azumarill 332/394, Heatran 96/324
+      after p2: Jellicent 113/404, Talonflame 0/298
+
+  Turn 10
+      p2b <- Genesect comes in (283/283)
+              p2b Genesect atk 1 rose
+      after p1: Azumarill 332/394, Heatran 96/324
+      after p2: Jellicent 113/404, Genesect 283/283
+
+  Turn 11
+    p1 mcts: move 2 1, move 4
+      search (21000 visits): playrough,0;protect,1 3491v 2777 | protect,0;heatwave,0 1790v 1371 | aquajet,1;protect,1 1343v 1006 | aquajet,1;heatwave,0 1316v 984
+    p2 greedy: move 4, move 1
+      p1b Heatran used Protect
+      p2b Genesect used Blizzard -> p1b: Heatran  [[spread] p1a]
+              p1b Heatran -- move: Protect
+      p1a Azumarill used Play Rough -> p2a: Jellicent
+      p2a Jellicent fainted
+      after p1: Azumarill 279/394, Heatran 116/324
+      after p2: Jellicent 0/404, Genesect 283/283
+
+  Turn 12
+    p1 mcts: move 2 2, move 1
+      search (48000 visits): playrough,1;heatwave,1 5149v 5120 | bellydrum,0;heatwave,1 4666v 4625 | protect,0;heatwave,1 4644v 4602 | aquajet,1;heatwave,1 4259v 4208
+    p2 greedy: pass, move 1
+      p2b Genesect used Blizzard -> p1b: Heatran  [[spread] p1a]
+              p2b Genesect -- MISSED
+      p1b Heatran used Heat Wave -> p2b: Genesect
+      p2b Genesect fainted
+      after p1: Azumarill 226/394, Heatran 116/324
+      after p2: Jellicent 0/404, Genesect 0/283
+
+  RESULT: p1 wins

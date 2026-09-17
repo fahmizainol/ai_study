@@ -1,0 +1,165 @@
+battle 74   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: XY Doubles: Kangaskhan, Latias, Dialga, Aegislash, Butterfree, Kyogre
+  p2: oraspl/Untitled 370: Gardevoir, Kangaskhan-Mega, Volcanion, Amoonguss, Landorus-Therian, Raikou
+
+  Turn 1
+    p1 mcts: move 1 1, move 3 1
+      search (15000 visits): fakeout,0;psyshock,0 135v 68 | poweruppunch,1;protect,1 131v 65 | fakeout-mega,0;psyshock,0 125v 61 | fakeout,1;psyshock,0 124v 61
+    p2 greedy: move 3 1, move 4 1
+      p1a Kangaskhan used Fake Out -> p2a: Gardevoir
+      p2b Kangaskhan used Sucker Punch  [[still]]
+              p2b Kangaskhan -- IT FAILED
+              p2a Gardevoir COULD NOT MOVE (flinch)
+      p1b Latias used Psyshock -> p2a: Gardevoir
+      after p1: Kangaskhan 351/351, Latias 302/302
+      after p2: Gardevoir 106/277, Kangaskhan-Mega 414/414
+
+  Turn 2
+    p1 mcts: move 2 2 mega, move 4
+      search (17000 visits): poweruppunch-mega,1;protect,1 155v 76 | switch kyogre;psyshock,1 154v 75 | poweruppunch,1;protect,1 151v 73 | poweruppunch-mega,1;psyshock,0 150v 72
+    p2 greedy: move 3 1, move 4 1
+      p1b Latias used Protect
+      p2b Kangaskhan used Sucker Punch -> p1a: Kangaskhan
+      p2a Gardevoir used Moonblast -> p1a: Kangaskhan
+              p1a Kangaskhan spa 1 fell
+      p1a Kangaskhan used Power-Up Punch -> p2b: Kangaskhan
+              p1a Kangaskhan atk 1 rose
+      after p1: Kangaskhan-Mega 113/351, Latias 302/302
+      after p2: Gardevoir 106/277, Kangaskhan-Mega 242/414
+
+  Turn 3
+    p1 mcts: switch 6, move 1   (slot0 Kangaskhan-Mega -> Kyogre)
+      search (30000 visits): switch kyogre;tailwind,1 1087v 507 | fakeout,0;switch dialga 1000v 460 | fakeout,0;switch kyogre 999v 460 | fakeout,0;switch aegislash 961v 440
+    p2 greedy: move 3 1, move 4 1
+      p1a <- Kyogre comes in (404/404)
+      p2b Kangaskhan used Sucker Punch  [[still]]
+              p2b Kangaskhan -- IT FAILED
+      p2a Gardevoir used Moonblast -> p1a: Kyogre
+      p1b Latias used Tailwind
+      -sidestart p1: A move: Tailwind
+      after p1: Kyogre 325/404, Latias 302/302
+      after p2: Gardevoir 106/277, Kangaskhan-Mega 242/414
+
+  Turn 4
+    p1 mcts: move 1, move 3 2
+      search (35000 visits): waterspout,0;psyshock,1 1310v 653 | waterspout,0;protect,1 1029v 496 | waterspout,0;psyshock,0 838v 391 | scald,0;psyshock,1 801v 371
+    p2 greedy: move 3 1, move 4 1
+      p2b Kangaskhan used Sucker Punch -> p1a: Kyogre
+      p1b Latias used Psyshock -> p2b: Kangaskhan
+      p1a Kyogre used Water Spout -> p2a: Gardevoir  [[spread] p2a,p2b]
+      p2a Gardevoir fainted
+      p2b Kangaskhan fainted
+      after p1: Kyogre 223/404, Latias 302/302
+      after p2: Gardevoir 0/277, Kangaskhan-Mega 0/414
+
+  Turn 5
+      p2a <- Volcanion comes in (363/363)
+      p2b <- Amoonguss comes in (432/432)
+      after p1: Kyogre 223/404, Latias 302/302
+      after p2: Volcanion 363/363, Amoonguss 432/432
+
+  Turn 6
+    p1 mcts: move 3 2, move 3 2
+      search (12000 visits): icebeam,1;psyshock,1 385v 252 | waterspout,0;psyshock,1 329v 209 | thunder,0;psyshock,1 299v 187 | scald,1;psyshock,1 297v 185
+    p2 greedy: move 4 1, move 3 1
+      p1b Latias used Psyshock -> p2b: Amoonguss
+      p1a Kyogre used Ice Beam -> p2b: Amoonguss
+              p2b Amoonguss -- critical hit
+      p2b Amoonguss fainted
+      p2a Volcanion used Overheat -> p1a: Kyogre
+              p2a Volcanion spa 2 fell
+      after p1: Kyogre 199/404, Latias 302/302
+      after p2: Volcanion 363/363, Amoonguss 0/432
+
+  Turn 7
+      p2b <- Landorus-Therian comes in (329/329)
+              p1a Kyogre atk 1 fell
+              p1b Latias atk 1 fell
+      after p1: Kyogre 199/404, Latias 302/302
+      after p2: Volcanion 363/363, Landorus-Therian 329/329
+
+  Turn 8
+    p1 mcts: move 4 2, switch 5   (slot1 Latias -> Butterfree)
+      search (16000 visits): scald,1;switch butterfree 477v 359 | waterspout,0;psyshock,1 471v 354 | scald,1;psyshock,0 453v 339 | scald,1;switch dialga 441v 329
+    p2 greedy: move 4 1, move 4 1
+      p1b <- Butterfree comes in (262/262)
+      p1a Kyogre used Scald -> p2b: Landorus
+      p2b Landorus fainted
+      p2a Volcanion used Overheat -> p1a: Kyogre
+              p2a Volcanion spa 2 fell
+      -sideend p1: A move: Tailwind
+      after p1: Kyogre 187/404, Butterfree 262/262
+      after p2: Volcanion 363/363, Landorus-Therian 0/329
+
+  Turn 9
+      p2b <- Raikou comes in (384/384)
+      after p1: Kyogre 187/404, Butterfree 262/262
+      after p2: Volcanion 363/363, Raikou 384/384
+
+  Turn 10
+    p1 mcts: move 2 1, move 1 1
+      search (4000 visits): thunder,0;sleeppowder,0 55v 27 | scald,1;sleeppowder,0 55v 27 | scald,1;tailwind,1 54v 27 | switch kangaskhanmega;sleeppowder,0 50v 23
+    p2 greedy: move 4 1, move 4 1
+      p2b Raikou used Thunderbolt -> p1a: Kyogre
+      p1b Butterfree used Sleep Powder -> p2a: Volcanion
+              p2a Volcanion is now slp
+      p1a Kyogre used Thunder -> p2a: Volcanion
+              p2a Volcanion COULD NOT MOVE (slp)
+      after p1: Kyogre 77/404, Butterfree 262/262
+      after p2: Volcanion 155/363, Raikou 384/384
+
+  Turn 11
+    p1 mcts: switch 6, move 3   (slot0 Kyogre -> Kangaskhan-Mega)
+      search (10000 visits): switch kangaskhanmega;tailwind,1 203v 113 | switch kangaskhanmega;bugbuzz,1 192v 105 | switch latias;switch kangaskhanmega 178v 96 | switch latias;bugbuzz,1 174v 93
+    p2 greedy: move 4 1, move 4 1
+      p1a <- Kangaskhan-Mega comes in (113/351)
+      p2b Raikou used Thunderbolt -> p1a: Kangaskhan
+      p1b Butterfree used Tailwind
+      -sidestart p1: A move: Tailwind
+              p2a Volcanion COULD NOT MOVE (slp)
+      after p1: Kangaskhan-Mega 13/351, Butterfree 262/262
+      after p2: Volcanion 155/363, Raikou 384/384
+
+  Turn 12
+    p1 mcts: move 1 2, move 2 2
+      search (15000 visits): fakeout,1;bugbuzz,1 878v 527 | fakeout,1;bugbuzz,0 549v 308 | fakeout,1;tailwind,1 442v 238 | fakeout,1;sleeppowder,1 432v 232
+    p2 greedy: move 4 1, move 4 1
+      p1a Kangaskhan used Fake Out -> p2b: Raikou
+      p1b Butterfree used Bug Buzz -> p2b: Raikou
+              p2b Raikou COULD NOT MOVE (flinch)
+              p2a Volcanion COULD NOT MOVE (slp)
+      after p1: Kangaskhan-Mega 13/351, Butterfree 262/262
+      after p2: Volcanion 155/363, Raikou 109/384
+
+  Turn 13
+    p1 mcts: move 2 2, move 2 2
+      search (17000 visits): poweruppunch,1;bugbuzz,1 5274v 3771 | suckerpunch,1;bugbuzz,0 276v 141 | suckerpunch,1;bugbuzz,1 240v 118 | suckerpunch,1;sleeppowder,1 216v 103
+    p2 greedy: move 4 1, move 4 1
+      p1b Butterfree used Bug Buzz -> p2b: Raikou
+      p2b Raikou fainted
+      p1a Kangaskhan used Power-Up Punch -> p2a: Volcanion
+              p1a Kangaskhan atk 1 rose
+              p2a Volcanion is cured of slp
+      p2a Volcanion used Overheat -> p1a: Kangaskhan
+              p2a Volcanion spa 2 fell
+      p1a Kangaskhan fainted
+      after p1: Kangaskhan 0/351, Butterfree 262/262
+      after p2: Volcanion 84/363, Raikou 0/384
+
+  Turn 14
+      p1a <- Dialga comes in (341/341)
+      after p1: Dialga 341/341, Butterfree 262/262
+      after p2: Volcanion 84/363, Raikou 0/384
+
+  Turn 15
+    p1 mcts: move 3 1, move 1 1
+      search (326000 visits): ancientpower,0;sleeppowder,0 36963v 36963 | ancientpower,0;bugbuzz,0 36963v 36963 | ancientpower,0;tailwind,1 36963v 36963 | ancientpower,0;protect,1 36962v 36962
+    p2 greedy: move 4 1, pass
+      p1b Butterfree used Sleep Powder -> p2a: Volcanion
+              p2a Volcanion is now slp
+      p1a Dialga used Ancient Power -> p2a: Volcanion
+      p2a Volcanion fainted
+      after p1: Dialga 341/341, Butterfree 262/262
+      after p2: Volcanion 0/363, Raikou 0/384
+
+  RESULT: p1 wins

@@ -1,0 +1,125 @@
+battle 44   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: glurak gaming: Charizard-Mega-Y, Conkeldurr, Aegislash, Landorus-Therian, Thundurus, Deoxys-Speed
+  p2: Copy of Untitled 480: Kyurem-Black, Manectric-Mega, Volcarona, Blastoise, Landorus, Mew
+
+  Turn 1
+    p1 mcts: move 1, move 1 1
+      search (12000 visits): heatwave,0;drainpunch,0 290v 182 | heatwave,0;switch landorustherian 279v 174 | protect,0;drainpunch,0 203v 118 | heatwave,0;drainpunch,1 200v 116
+    p2 greedy: move 2 1, move 4 1
+      p2b Manectric used Overheat -> p1a: Charizard
+              p2b Manectric spa 2 fell
+      p1a Charizard used Heat Wave -> p2b: Manectric  [[spread] p2a,p2b]
+              p2b Manectric -- critical hit
+      p2b Manectric fainted
+      p2a Kyurem used Fusion Bolt -> p1a: Charizard
+      p1a Charizard fainted
+      p1b Conkeldurr used Drain Punch -> p2a: Kyurem
+      p2a Kyurem fainted
+      after p1: Charizard-Mega-Y 0/351, Conkeldurr 413/413
+      after p2: Kyurem-Black 0/440, Manectric-Mega 0/344
+
+  Turn 2
+      p2b <- Blastoise comes in (362/362)
+      p1a <- Aegislash comes in (324/324)
+      p2a <- Volcarona comes in (311/311)
+      after p1: Aegislash 324/324, Conkeldurr 413/413
+      after p2: Volcarona 311/311, Blastoise 362/362
+
+  Turn 3
+    p1 mcts: move 3, switch 4   (slot1 Conkeldurr -> Landorus-Therian)
+      search (8000 visits): wideguard,0;switch landorustherian 160v 62 | switch thundurus;switch landorustherian 154v 59 | shadowsneak,1;switch landorustherian 140v 51 | shadowball,0;switch landorustherian 126v 43
+    p2 greedy: move 1, move 3 1
+      p1b <- Landorus-Therian comes in (358/358)
+              p2a Volcarona atk 1 fell
+              p2b Blastoise atk 1 fell
+      p1a Aegislash used Wide Guard
+      p2a Volcarona used Heat Wave -> p1a: Aegislash  [[spread] ]
+              p1a Aegislash -- move: Wide Guard
+              p1b Landorus -- move: Wide Guard
+      p2b Blastoise used Scald -> p1a: Aegislash
+      after p1: Aegislash 323/324, Landorus-Therian 358/358
+      after p2: Volcarona 311/311, Blastoise 362/362
+
+  Turn 4
+    p1 mcts: switch 5, move 4 1   (slot0 Aegislash -> Thundurus)
+      search (9000 visits): switch thundurus;stoneedge,0 256v 134 | switch conkeldurr;stoneedge,0 242v 125 | shadowball,1;uturn,1 231v 118 | switch deoxysspeed;stoneedge,0 216v 108
+    p2 greedy: move 1, move 3 1
+      p1a <- Thundurus comes in (361/361)
+      p1b Landorus used Stone Edge -> p2a: Volcarona
+      p2a Volcarona fainted
+      p2b Blastoise used Scald -> p1a: Thundurus
+              p1a Thundurus is now brn
+      after p1: Thundurus 274/361, Landorus-Therian 358/358
+      after p2: Volcarona 0/311, Blastoise 362/362
+
+  Turn 5
+      p2a <- Landorus comes in (319/319)
+      after p1: Thundurus 274/361, Landorus-Therian 358/358
+      after p2: Landorus 319/319, Blastoise 362/362
+
+  Turn 6
+    p1 mcts: move 1 2, move 4 1
+      search (15000 visits): thunderbolt,1;stoneedge,0 1058v 623 | thunderbolt,1;stoneedge,1 647v 356 | hiddenpower,0;stoneedge,0 593v 322 | hiddenpower,1;stoneedge,0 512v 271
+    p2 greedy: move 1 1, move 3 1
+      p1b Landorus used Stone Edge -> p2a: Landorus
+      p2a Landorus used Earth Power -> p1a: Thundurus
+              p1a Thundurus -- IMMUNE
+      p1a Thundurus used Thunderbolt -> p2b: Blastoise
+      p2b Blastoise used Scald -> p1a: Thundurus
+      after p1: Thundurus 190/361, Landorus-Therian 358/358
+      after p2: Landorus 178/319, Blastoise 164/362
+
+  Turn 7
+    p1 mcts: move 1 2, move 4 1
+      search (25000 visits): thunderbolt,1;stoneedge,0 2376v 1371 | hiddenpower,0;stoneedge,0 1859v 1050 | switch conkeldurr;stoneedge,0 1038v 550 | thunderbolt,0;stoneedge,0 856v 441
+    p2 greedy: move 1 1, move 3 1
+      p1b Landorus used Stone Edge -> p2a: Landorus
+      p2a Landorus used Earth Power -> p1a: Thundurus
+              p1a Thundurus -- IMMUNE
+      p1a Thundurus used Thunderbolt -> p2b: Blastoise
+      p2b Blastoise fainted
+              p1a Thundurus used up its Sitrus Berry
+      after p1: Thundurus 235/361, Landorus-Therian 358/358
+      after p2: Landorus 39/319, Blastoise 0/362
+
+  Turn 8
+      p2b <- Mew comes in (401/401)
+      after p1: Thundurus 235/361, Landorus-Therian 358/358
+      after p2: Landorus 39/319, Mew 401/401
+
+  Turn 9
+    p1 mcts: switch 4, move 4 1   (slot0 Thundurus -> Conkeldurr)
+      search (22000 visits): switch conkeldurr;stoneedge,0 3630v 1970 | thunderbolt,1;stoneedge,0 1494v 748 | hiddenpower,0;switch aegislash 885v 412 | switch aegislash;stoneedge,0 884v 412
+    p2 greedy: move 1 1, move 2 1
+      p1a <- Conkeldurr comes in (413/413)
+      p1b Landorus used Stone Edge -> p2a: Landorus
+              p2a Landorus -- critical hit
+      p2a Landorus fainted
+      p2b Mew used Ice Beam -> p1a: Conkeldurr
+      after p1: Conkeldurr 356/413, Landorus-Therian 358/358
+      after p2: Landorus 0/319, Mew 401/401
+
+  Turn 10
+    p1 mcts: move 4 2, switch 4   (slot1 Landorus-Therian -> Thundurus)
+      search (50000 visits): knockoff,1;switch thundurus 38153v 35533 | knockoff,1;stoneedge,1 6478v 5746 | knockoff,1;switch aegislash 1543v 1280 | knockoff,1;switch deoxysspeed 819v 645
+    p2 greedy: pass, move 2 1
+      p1b <- Thundurus comes in (235/361)
+      p2b Mew used Ice Beam -> p1a: Conkeldurr
+      p1a Conkeldurr used Knock Off -> p2b: Mew
+              p2b Mew -- critical hit
+              p2b Mew used up its Rocky Helmet
+      after p1: Conkeldurr 230/413, Thundurus 190/361
+      after p2: Landorus 0/319, Mew 63/401
+
+  Turn 11
+    p1 mcts: move 2 2, move 1 2
+      search (276000 visits): machpunch,1;thunderbolt,1 8967v 8967 | machpunch,1;hiddenpower,1 8967v 8967 | knockoff,1;switch landorustherian 8590v 8580 | drainpunch,1;switch landorustherian 8473v 8460
+    p2 greedy: pass, move 2 2
+      p1a Conkeldurr used Mach Punch -> p2b: Mew
+      p2b Mew used Ice Beam -> p1b: Thundurus
+      p1b Thundurus used Thunderbolt -> p2b: Mew
+      p2b Mew fainted
+      after p1: Conkeldurr 230/413, Thundurus 44/361
+      after p2: Landorus 0/319, Mew 0/401
+
+  RESULT: p1 wins

@@ -1,0 +1,169 @@
+battle 67   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: ORAS Doubles OU: Cresselia, Rotom-Wash, Ferrothorn, Camerupt-Mega, Hariyama, Porygon2
+  p2: tvalks: Kangaskhan-Mega, Volcanion, Thundurus, Sylveon, Landorus-Therian, Amoonguss
+
+  Turn 1
+    p1 mcts: move 1 1, move 4 1
+      search (25000 visits): psychic,0;voltswitch,0 525v 255 | icebeam,0;voltswitch,0 519v 252 | icebeam,0;thunderbolt,0 495v 238 | psychic,0;hydropump,0 490v 235
+    p2 greedy: move 2 1, move 2 1
+      p2a Kangaskhan used Crunch -> p1a: Cresselia
+      p2b Volcanion used Steam Eruption -> p1a: Cresselia
+              p1a Cresselia used up its Sitrus Berry
+      p1b Rotom used Volt Switch -> p2a: Kangaskhan
+      after p1: Cresselia 299/443, Rotom-Wash 301/301
+      after p2: Kangaskhan-Mega 288/414, Volcanion 364/364
+
+  Turn 2
+      p1b <- Ferrothorn comes in (351/351)
+      p1a Cresselia used Psychic -> p2a: Kangaskhan
+      after p1: Cresselia 299/443, Ferrothorn 351/351
+      after p2: Kangaskhan-Mega 171/414, Volcanion 364/364
+
+  Turn 3
+    p1 mcts: switch 3, move 1   (slot0 Cresselia -> Rotom-Wash)
+      search (41000 visits): switch rotomwash;swordsdance,1 750v 90 | switch rotomwash;powerwhip,0 596v 59 | switch rotomwash;powerwhip,1 508v 42 | switch rotomwash;gyroball,0 505v 42
+    p2 greedy: move 2 1, move 2 1
+      p1a <- Rotom-Wash comes in (301/301)
+      p2a Kangaskhan used Crunch -> p1a: Rotom
+      p2b Volcanion used Steam Eruption -> p1a: Rotom
+              p1a Rotom used up its Sitrus Berry
+      p1b Ferrothorn used Swords Dance
+              p1b Ferrothorn atk 2 rose
+      after p1: Rotom-Wash 225/301, Ferrothorn 351/351
+      after p2: Kangaskhan-Mega 171/414, Volcanion 364/364
+
+  Turn 4
+    p1 mcts: move 1 2, move 3 2
+      search (62000 visits): thunderbolt,1;powerwhip,1 769v 43 | switch cameruptmega;gyroball,0 769v 43 | voltswitch,0;powerwhip,1 753v 41 | switch porygon2;powerwhip,1 750v 41
+    p2 greedy: move 2 1, move 2 1
+      p2a Kangaskhan used Crunch -> p1a: Rotom
+      p2b Volcanion used Steam Eruption -> p1a: Rotom
+              p1a Rotom is now brn
+      p1a Rotom used Thunderbolt -> p2b: Volcanion
+      p1b Ferrothorn used Power Whip -> p2b: Volcanion
+      p2b Volcanion fainted
+      after p1: Rotom-Wash 35/301, Ferrothorn 351/351
+      after p2: Kangaskhan-Mega 171/414, Volcanion 0/364
+
+  Turn 5
+      p2b <- Thundurus comes in (362/362)
+      after p1: Rotom-Wash 35/301, Ferrothorn 351/351
+      after p2: Kangaskhan-Mega 171/414, Thundurus 362/362
+
+  Turn 6
+    p1 mcts: switch 4, move 2 2   (slot0 Rotom-Wash -> Camerupt-Mega)
+      search (56000 visits): switch cameruptmega;gyroball,1 792v 63 | voltswitch,1;powerwhip,0 711v 50 | switch cameruptmega;gyroball,0 698v 48 | thunderbolt,0;powerwhip,0 682v 45
+    p2 greedy: move 2 1, move 1 1
+      p1a <- Camerupt-Mega comes in (343/343)
+      p2a Kangaskhan used Crunch -> p1a: Camerupt
+      p2b Thundurus used Thunderbolt -> p1a: Camerupt
+              p1a Camerupt -- IMMUNE
+      p1b Ferrothorn used Gyro Ball -> p2b: Thundurus
+              p2b Thundurus used up its Sitrus Berry
+      after p1: Camerupt-Mega 271/343, Ferrothorn 351/351
+      after p2: Kangaskhan-Mega 171/414, Thundurus 150/362
+
+  Turn 7
+    p1 mcts: move 3 2, move 2 1
+      search (62000 visits): earthpower,1;gyroball,0 871v 53 | protect,0;gyroball,0 870v 53 | earthpower,0;gyroball,0 838v 48 | ancientpower,1;gyroball,0 813v 45
+    p2 greedy: move 2 1, move 1 1
+      p2a Kangaskhan used Crunch -> p1a: Camerupt
+      p2b Thundurus used Thunderbolt -> p1a: Camerupt
+              p1a Camerupt -- IMMUNE
+      p1b Ferrothorn used Gyro Ball -> p2a: Kangaskhan
+      p2a Kangaskhan fainted
+      p1a Camerupt used Earth Power -> p2b: Thundurus
+              p2b Thundurus -- IMMUNE
+      after p1: Camerupt-Mega 193/343, Ferrothorn 351/351
+      after p2: Kangaskhan-Mega 0/414, Thundurus 150/362
+
+  Turn 8
+      p2a <- Sylveon comes in (394/394)
+      after p1: Camerupt-Mega 193/343, Ferrothorn 351/351
+      after p2: Sylveon 394/394, Thundurus 150/362
+
+  Turn 9
+    p1 mcts: move 1, move 2 1
+      search (29000 visits): heatwave,0;gyroball,0 651v 126 | switch hariyama;powerwhip,0 581v 106 | heatwave,0;powerwhip,0 579v 106 | ancientpower,1;gyroball,0 572v 104
+    p2 greedy: move 1, move 1 1
+      p2b Thundurus used Thunderbolt -> p1a: Camerupt
+              p1a Camerupt -- IMMUNE
+      p2a Sylveon used Hyper Voice -> p1a: Camerupt  [[spread] p1a,p1b]
+      p1b Ferrothorn used Gyro Ball -> p2a: Sylveon
+      p2a Sylveon fainted
+      p1a Camerupt used Heat Wave -> p2b: Thundurus
+              p2b Thundurus -- critical hit
+      p2b Thundurus fainted
+      after p1: Camerupt-Mega 128/343, Ferrothorn 289/351
+      after p2: Sylveon 0/394, Thundurus 0/362
+
+  Turn 10
+      p2b <- Amoonguss comes in (432/432)
+      p2a <- Landorus-Therian comes in (382/382)
+              p1a Camerupt atk 1 fell
+              p1b Ferrothorn atk 1 fell
+      after p1: Camerupt-Mega 128/343, Ferrothorn 289/351
+      after p2: Landorus-Therian 382/382, Amoonguss 432/432
+
+  Turn 11
+    p1 mcts: move 4, move 2 1
+      search (26000 visits): protect,0;gyroball,0 929v 566 | switch hariyama;protect,1 831v 499 | switch porygon2;protect,1 776v 462 | protect,0;gyroball,1 718v 423
+    p2 greedy: move 2 1, move 3 1
+      p1a Camerupt used Protect
+      p2a Landorus used Superpower -> p1a: Camerupt
+              p1a Camerupt -- move: Protect
+      p2b Amoonguss used Giga Drain -> p1a: Camerupt
+              p1a Camerupt -- move: Protect
+      p1b Ferrothorn used Gyro Ball -> p2a: Landorus
+      p2a Landorus fainted
+      after p1: Camerupt-Mega 128/343, Ferrothorn 289/351
+      after p2: Landorus-Therian 0/382, Amoonguss 432/432
+
+  Turn 12
+    p1 mcts: switch 5, move 1   (slot0 Camerupt-Mega -> Hariyama)
+      search (42000 visits): switch hariyama;swordsdance,1 3787v 2559 | switch hariyama;gyroball,1 2485v 1636 | protect,0;gyroball,1 2336v 1531 | switch hariyama;powerwhip,1 2253v 1472
+    p2 greedy: pass, move 3 1
+      p1a <- Hariyama comes in (429/429)
+      p2b Amoonguss used Giga Drain -> p1a: Hariyama
+      p1b Ferrothorn used Swords Dance
+              p1b Ferrothorn atk 2 rose
+              p1a Hariyama is now brn
+      after p1: Hariyama 338/429, Ferrothorn 289/351
+      after p2: Landorus-Therian 0/382, Amoonguss 432/432
+
+  Turn 13
+    p1 mcts: switch 6, move 1   (slot0 Hariyama -> Porygon2)
+      search (42000 visits): switch porygon2;swordsdance,1 2052v 878 | switch cameruptmega;swordsdance,1 1652v 688 | switch porygon2;powerwhip,1 1645v 684 | switch porygon2;gyroball,1 1636v 680
+    p2 greedy: pass, move 3 1
+      p1a <- Porygon2 comes in (374/374)
+              p1a Porygon2 atk 1 rose
+      p2b Amoonguss used Giga Drain -> p1a: Porygon2
+      p1b Ferrothorn used Swords Dance
+              p1b Ferrothorn atk 2 rose
+      after p1: Porygon2 323/374, Ferrothorn 289/351
+      after p2: Landorus-Therian 0/382, Amoonguss 432/432
+
+  Turn 14
+    p1 mcts: move 4, move 1
+      search (50000 visits): recover,0;swordsdance,1 2050v 704 | recover,0;powerwhip,1 2004v 686 | recover,0;protect,1 1971v 673 | recover,0;gyroball,1 1953v 666
+    p2 greedy: pass, move 3 2
+      p1a Porygon2 used Recover
+      p2b Amoonguss used Giga Drain -> p1b: Ferrothorn
+      p1b Ferrothorn used Swords Dance
+              p1b Ferrothorn atk 1 rose
+      after p1: Porygon2 374/374, Ferrothorn 274/351
+      after p2: Landorus-Therian 0/382, Amoonguss 432/432
+
+  Turn 15
+    p1 mcts: move 2 2, move 2 2
+      search (42000 visits): icebeam,1;gyroball,1 1484v 488 | thunderbolt,1;gyroball,1 1423v 465 | thunderbolt,1;powerwhip,1 1413v 461 | icebeam,1;powerwhip,1 1410v 459
+    p2 greedy: pass, move 3 2
+      p1a Porygon2 used Ice Beam -> p2b: Amoonguss
+      p2b Amoonguss used Giga Drain -> p1b: Ferrothorn
+      p1b Ferrothorn used Gyro Ball -> p2b: Amoonguss
+              p2b Amoonguss -- critical hit
+      p2b Amoonguss fainted
+      after p1: Porygon2 374/374, Ferrothorn 201/351
+      after p2: Landorus-Therian 0/382, Amoonguss 0/432
+
+  RESULT: p1 wins

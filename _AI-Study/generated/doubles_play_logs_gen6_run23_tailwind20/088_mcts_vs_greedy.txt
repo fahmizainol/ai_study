@@ -1,0 +1,163 @@
+battle 88   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: sdef aegi fire punch kang 2x incarnate: Conkeldurr, Aegislash, Kangaskhan-Mega, Thundurus, Landorus, Volcanion
+  p2: Untitled 468: Kangaskhan-Mega, Aegislash, Sylveon, Volcanion, Landorus-Therian, Thundurus
+
+  Turn 1
+    p1 mcts: switch 4, move 1 2   (slot0 Conkeldurr -> Thundurus)
+      search (43000 visits): switch thundurus;shadowball,1 1225v 306 | switch thundurus;shadowsneak,1 774v 167 | switch thundurus;toxic,1 722v 152 | switch thundurus;shadowball,0 718v 151
+    p2 greedy: move 3 1, move 1 1
+      p1a <- Thundurus comes in (361/361)
+      p2a Kangaskhan used Sucker Punch  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p2b Aegislash used Shadow Ball -> p1a: Thundurus
+      p1b Aegislash used Shadow Ball -> p2b: Aegislash
+      p2b Aegislash fainted
+      after p1: Thundurus 184/361, Aegislash-Blade 324/324
+      after p2: Kangaskhan-Mega 414/414, Aegislash 0/324
+
+  Turn 2
+      p2b <- Sylveon comes in (394/394)
+      after p1: Thundurus 184/361, Aegislash-Blade 324/324
+      after p2: Kangaskhan-Mega 414/414, Sylveon 394/394
+
+  Turn 3
+    p1 mcts: move 3 2, move 1 2
+      search (45000 visits): taunt,1;shadowball,1 814v 254 | thunderbolt,1;switch landorus 702v 210 | taunt,1;toxic,1 690v 205 | hiddenpower,1;toxic,1 655v 192
+    p2 greedy: move 3 1, move 1
+      p1a Thundurus used Taunt -> p2b: Sylveon
+              p2b Sylveon gained move: Taunt
+      p2a Kangaskhan used Sucker Punch  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p2b Sylveon used Hyper Voice -> p1b: Aegislash  [[spread] p1a,p1b]
+      p1a Thundurus fainted
+      p1b Aegislash used Shadow Ball -> p2b: Sylveon
+      after p1: Thundurus 0/361, Aegislash-Blade 253/324
+      after p2: Kangaskhan-Mega 414/414, Sylveon 300/394
+
+  Turn 4
+      p1a <- Kangaskhan-Mega comes in (414/414)
+      after p1: Kangaskhan-Mega 414/414, Aegislash-Blade 253/324
+      after p2: Kangaskhan-Mega 414/414, Sylveon 300/394
+
+  Turn 5
+    p1 mcts: switch 6, move 1 2   (slot0 Kangaskhan-Mega -> Volcanion)
+      search (14000 visits): switch volcanion;shadowball,1 203v 51 | switch conkeldurr;switch landorus 160v 34 | fakeout,0;shadowball,1 159v 34 | lowkick,1;switch landorus 159v 34
+    p2 greedy: move 3 2, move 1
+      p1a <- Volcanion comes in (364/364)
+      p2a Kangaskhan used Sucker Punch -> p1b: Aegislash
+              p1b Aegislash -- critical hit
+      p1b Aegislash fainted
+      p2b Sylveon used Hyper Voice -> p1a: Volcanion
+      after p1: Volcanion 304/364, Aegislash 0/324
+      after p2: Kangaskhan-Mega 414/414, Sylveon 324/394
+
+  Turn 6
+      p1b <- Conkeldurr comes in (401/401)
+      after p1: Volcanion 304/364, Conkeldurr 401/401
+      after p2: Kangaskhan-Mega 414/414, Sylveon 324/394
+
+  Turn 7
+    p1 mcts: move 2, move 2 2
+      search (22000 visits): heatwave,0;icepunch,1 489v 100 | earthpower,1;icepunch,1 485v 99 | hiddenpower,0;icepunch,1 481v 98 | steameruption,1;icepunch,1 480v 98
+    p2 greedy: move 3 1, move 1
+      p2a Kangaskhan used Sucker Punch -> p1a: Volcanion
+      p1a Volcanion used Heat Wave -> p2a: Kangaskhan  [[spread] p2a,p2b]
+              p2b Sylveon -- critical hit
+      p2b Sylveon used Hyper Voice -> p1b: Conkeldurr  [[spread] p1a,p1b]
+      p1b Conkeldurr used Ice Punch -> p2b: Sylveon
+              p2b Sylveon lost move: Taunt
+      after p1: Volcanion 168/364, Conkeldurr 203/401
+      after p2: Kangaskhan-Mega 284/414, Sylveon 56/394
+
+  Turn 8
+    p1 mcts: move 1 2, move 2 1
+      search (49000 visits): steameruption,1;icepunch,0 1053v 216 | steameruption,0;knockoff,0 1044v 213 | hiddenpower,0;icepunch,0 914v 177 | hiddenpower,0;icepunch,1 906v 175
+    p2 greedy: move 3 1, move 1
+      p2a Kangaskhan used Sucker Punch -> p1a: Volcanion
+      p1a Volcanion used Steam Eruption -> p2b: Sylveon
+      p2b Sylveon fainted
+      p1b Conkeldurr used Ice Punch -> p2a: Kangaskhan
+              p2a Kangaskhan is now frz
+      after p1: Volcanion 67/364, Conkeldurr 203/401
+      after p2: Kangaskhan-Mega 165/414, Sylveon 0/394
+
+  Turn 9
+      p2b <- Volcanion comes in (363/363)
+      after p1: Volcanion 67/364, Conkeldurr 203/401
+      after p2: Kangaskhan-Mega 165/414, Volcanion 363/363
+
+  Turn 10
+    p1 mcts: move 3 2, move 3 1
+      search (14000 visits): earthpower,1;machpunch,0 211v 34 | hiddenpower,1;machpunch,0 209v 33 | earthpower,0;machpunch,0 206v 33 | steameruption,0;machpunch,0 204v 32
+    p2 greedy: move 3 1, move 4 1
+              p2a Kangaskhan COULD NOT MOVE (frz)
+      p1b Conkeldurr used Mach Punch -> p2a: Kangaskhan
+      p2a Kangaskhan fainted
+      p1a Volcanion used Earth Power -> p2b: Volcanion
+      p2b Volcanion used Overheat -> p1a: Volcanion
+              p2b Volcanion spa 2 fell
+      after p1: Volcanion 31/364, Conkeldurr 203/401
+      after p2: Kangaskhan-Mega 0/414, Volcanion 233/363
+
+  Turn 11
+      p2a <- Landorus-Therian comes in (320/320)
+              p1a Volcanion atk 1 fell
+              p1b Conkeldurr atk 1 fell
+      after p1: Volcanion 31/364, Conkeldurr 203/401
+      after p2: Landorus-Therian 320/320, Volcanion 233/363
+
+  Turn 12
+    p1 mcts: switch 6, move 2 1   (slot0 Volcanion -> Kangaskhan-Mega)
+      search (19000 visits): switch kangaskhanmega;icepunch,0 461v 264 | switch landorus;icepunch,0 450v 257 | earthpower,1;icepunch,0 391v 217 | heatwave,0;icepunch,0 387v 214
+    p2 greedy: move 4 1, move 4 1
+      p1a <- Kangaskhan-Mega comes in (414/414)
+      p2a Landorus used Stone Edge -> p1a: Kangaskhan  [[miss]]
+              p2a Landorus -- MISSED
+      p2b Volcanion used Overheat -> p1a: Kangaskhan
+              p2b Volcanion spa 2 fell
+      p1b Conkeldurr used Ice Punch -> p2a: Landorus
+      p2a Landorus fainted
+      after p1: Kangaskhan-Mega 300/414, Conkeldurr 203/401
+      after p2: Landorus-Therian 0/320, Volcanion 233/363
+
+  Turn 13
+      p2a <- Thundurus comes in (361/361)
+      after p1: Kangaskhan-Mega 300/414, Conkeldurr 203/401
+      after p2: Thundurus 361/361, Volcanion 233/363
+
+  Turn 14
+    p1 mcts: move 1 2, move 2 1
+      search (16000 visits): fakeout,1;icepunch,0 1028v 750 | switch volcanion;icepunch,0 890v 640 | switch landorus;icepunch,0 808v 575 | switch landorus;drainpunch,0 746v 526
+    p2 greedy: move 1 2, move 4 2
+      p1a Kangaskhan used Fake Out -> p2b: Volcanion
+              p2b Volcanion -- critical hit
+      p2a Thundurus used Thunderbolt -> p1b: Conkeldurr
+              p2b Volcanion COULD NOT MOVE (flinch)
+      p1b Conkeldurr used Ice Punch -> p2a: Thundurus
+              p2a Thundurus -- critical hit
+      p2a Thundurus fainted
+      after p1: Kangaskhan-Mega 300/414, Conkeldurr 113/401
+      after p2: Thundurus 0/361, Volcanion 158/363
+
+  Turn 15
+    p1 mcts: switch 5, move 1 2   (slot0 Kangaskhan-Mega -> Landorus)
+      search (42000 visits): switch landorus;drainpunch,1 35715v 29357 | switch volcanion;drainpunch,1 492v 283 | switch landorus;machpunch,1 469v 268 | switch landorus;knockoff,1 442v 250
+    p2 greedy: pass, move 4 2
+      p1a <- Landorus comes in (319/319)
+      p2b Volcanion used Overheat -> p1b: Conkeldurr
+              p2b Volcanion spa 2 fell
+      p1b Conkeldurr used Drain Punch -> p2b: Volcanion
+      after p1: Landorus 319/319, Conkeldurr 110/401
+      after p2: Thundurus 0/361, Volcanion 56/363
+
+  Turn 16
+    p1 mcts: move 1 2, switch 6   (slot1 Conkeldurr -> Volcanion)
+      search (68000 visits): earthpower,1;switch volcanion 10726v 9136 | sludgebomb,1;switch volcanion 9381v 7961 | psychic,1;switch volcanion 8832v 7481 | earthpower,1;drainpunch,1 3413v 2787
+    p2 greedy: pass, move 4 2
+      p1b <- Volcanion comes in (31/364)
+      p1a Landorus used Earth Power -> p2b: Volcanion
+      p2b Volcanion fainted
+      after p1: Landorus 319/319, Volcanion 31/364
+      after p2: Thundurus 0/361, Volcanion 0/363
+
+  RESULT: p1 wins

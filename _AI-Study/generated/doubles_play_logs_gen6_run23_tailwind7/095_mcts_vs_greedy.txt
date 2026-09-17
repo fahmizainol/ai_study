@@ -1,0 +1,197 @@
+battle 95   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: XY Doubles: Hitmontop, Talonflame, Rotom-Wash, Gardevoir, Kyurem-Black, Shaymin-Sky
+  p2: not minesamplesetc/TVALKS: Kangaskhan-Mega, Amoonguss, Thundurus, Landorus-Therian, Volcanion, Sylveon
+
+  Turn 1
+    p1 mcts: switch 3, move 2 2   (slot0 Hitmontop -> Rotom-Wash)
+      search (43000 visits): switch rotomwash;bravebird,1 855v 136 | closecombat,0;bravebird,1 691v 97 | switch rotomwash;bravebird,0 656v 90 | switch rotomwash;tailwind,1 641v 86
+    p2 greedy: move 2 1, move 3 1
+      p1a <- Rotom-Wash comes in (304/304)
+      p1b Talonflame used Brave Bird -> p2b: Amoonguss
+      p2a Kangaskhan used Crunch -> p1a: Rotom
+      p2b Amoonguss used Energy Ball -> p1a: Rotom
+              p1a Rotom spd 1 fell
+              p1a Rotom used up its Sitrus Berry
+      after p1: Rotom-Wash 151/304, Talonflame 213/360
+      after p2: Kangaskhan-Mega 414/414, Amoonguss 102/432
+
+  Turn 2
+    p1 mcts: switch 3, move 2 2   (slot0 Rotom-Wash -> Hitmontop)
+      search (46000 visits): switch hitmontop;bravebird,1 848v 130 | switch hitmontop;willowisp,0 794v 118 | switch hitmontop;tailwind,1 755v 109 | switch hitmontop;bravebird,0 749v 108
+    p2 greedy: move 2 1, move 3 1
+      p1a <- Hitmontop comes in (304/304)
+              p2a Kangaskhan atk 1 fell
+              p2b Amoonguss atk 1 fell
+      p1b Talonflame used Brave Bird -> p2b: Amoonguss
+      p2b Amoonguss fainted
+      p2a Kangaskhan used Crunch -> p1a: Hitmontop
+      after p1: Hitmontop 284/304, Talonflame 141/360
+      after p2: Kangaskhan-Mega 414/414, Amoonguss 0/432
+
+  Turn 3
+      p2b <- Thundurus comes in (362/362)
+      after p1: Hitmontop 284/304, Talonflame 141/360
+      after p2: Kangaskhan-Mega 414/414, Thundurus 362/362
+
+  Turn 4
+    p1 mcts: move 4 1, move 2 2
+      search (31000 visits): closecombat,0;bravebird,1 434v 48 | closecombat,1;bravebird,1 415v 44 | closecombat,1;willowisp,0 393v 39 | closecombat,1;bravebird,0 385v 37
+    p2 greedy: move 2 2, move 1 2
+      p1b Talonflame used Brave Bird -> p2b: Thundurus
+      p2b Thundurus used Thunderbolt -> p1b: Talonflame
+      p1b Talonflame fainted
+      p2a Kangaskhan used Crunch -> p1a: Hitmontop
+      p1a Hitmontop used Close Combat -> p2a: Kangaskhan
+              p1a Hitmontop def 1 fell
+              p1a Hitmontop spd 1 fell
+      after p1: Hitmontop 263/304, Talonflame 0/360
+      after p2: Kangaskhan-Mega 36/414, Thundurus 256/362
+
+  Turn 5
+      p1b <- Rotom-Wash comes in (151/304)
+      after p1: Hitmontop 263/304, Rotom-Wash 151/304
+      after p2: Kangaskhan-Mega 36/414, Thundurus 256/362
+
+  Turn 6
+    p1 mcts: move 4 2, move 2 2
+      search (31000 visits): closecombat,1;thunderbolt,1 1499v 699 | closecombat,1;hydropump,1 929v 404 | wideguard,0;thunderbolt,1 748v 312 | feint,0;thunderbolt,1 661v 269
+    p2 greedy: move 2 2, move 1 2
+      p2b Thundurus used Thunderbolt -> p1b: Rotom
+      p2a Kangaskhan used Crunch -> p1b: Rotom
+      p1b Rotom fainted
+      p1a Hitmontop used Close Combat -> p2b: Thundurus
+              p1a Hitmontop def 1 fell
+              p1a Hitmontop spd 1 fell
+              p2b Thundurus used up its Sitrus Berry
+      after p1: Hitmontop 263/304, Rotom-Wash 0/304
+      after p2: Kangaskhan-Mega 36/414, Thundurus 223/362
+
+  Turn 7
+      p1b <- Gardevoir comes in (340/340)
+      after p1: Hitmontop 263/304, Gardevoir 340/340
+      after p2: Kangaskhan-Mega 36/414, Thundurus 223/362
+
+  Turn 8
+    p1 mcts: switch 6, move 1 mega   (slot0 Hitmontop -> Shaymin-Sky)
+      search (22000 visits): switch shayminsky;hypervoice-mega,0 510v 277 | switch kyuremblack;hypervoice-mega,0 491v 265 | closecombat,0;hypervoice-mega,0 414v 215 | closecombat,1;hypervoice-mega,0 401v 208
+    p2 greedy: move 2 1, move 1 1
+      p1a <- Shaymin-Sky comes in (341/341)
+      p2b Thundurus used Thunderbolt -> p1a: Shaymin
+              p1a Shaymin is now par
+      p2a Kangaskhan used Crunch -> p1a: Shaymin
+      p1b Gardevoir used Hyper Voice -> p2b: Thundurus  [[spread] p2a,p2b]
+      p2a Kangaskhan fainted
+      p2b Thundurus fainted
+      after p1: Shaymin-Sky 138/341, Gardevoir-Mega 340/340
+      after p2: Kangaskhan-Mega 0/414, Thundurus 0/362
+
+  Turn 9
+      p2b <- Volcanion comes in (363/363)
+      p2a <- Landorus-Therian comes in (319/319)
+              p1a Shaymin atk 1 fell
+              p1b Gardevoir atk 1 fell
+      after p1: Shaymin-Sky 138/341, Gardevoir-Mega 340/340
+      after p2: Landorus-Therian 319/319, Volcanion 363/363
+
+  Turn 10
+    p1 mcts: switch 5, move 3   (slot0 Shaymin-Sky -> Kyurem-Black)
+      search (16000 visits): switch kyuremblack;protect,1 1450v 1024 | switch hitmontop;protect,1 1140v 788 | switch kyuremblack;hypervoice,0 498v 311 | protect,0;protect,1 408v 246
+    p2 greedy: move 2 1, move 4 1
+      p1a <- Kyurem-Black comes in (454/454)
+      p1b Gardevoir used Protect
+      p2a Landorus used Superpower -> p1a: Kyurem
+              p2a Landorus atk 1 fell
+              p2a Landorus def 1 fell
+      p2b Volcanion used Overheat -> p1a: Kyurem
+              p2b Volcanion spa 2 fell
+      p1a Kyurem fainted
+      after p1: Kyurem-Black 0/454, Gardevoir-Mega 340/340
+      after p2: Landorus-Therian 319/319, Volcanion 363/363
+
+  Turn 11
+      p1a <- Shaymin-Sky comes in (138/341)
+      after p1: Shaymin-Sky 138/341, Gardevoir-Mega 340/340
+      after p2: Landorus-Therian 319/319, Volcanion 363/363
+
+  Turn 12
+    p1 mcts: switch 6, move 2 1   (slot0 Shaymin-Sky -> Hitmontop)
+      search (24000 visits): switch hitmontop;psyshock,0 2306v 891 | switch hitmontop;hypervoice,0 916v 304 | switch hitmontop;protect,1 782v 249 | switch hitmontop;energyball,0 742v 234
+    p2 greedy: move 2 1, move 4 1
+      p1a <- Hitmontop comes in (263/304)
+              p2a Landorus atk 1 fell
+              p2b Volcanion atk 1 fell
+      p2a Landorus used Superpower -> p1a: Hitmontop
+              p2a Landorus atk 1 fell
+              p2a Landorus def 1 fell
+      p1b Gardevoir used Psyshock -> p2a: Landorus
+      p2a Landorus fainted
+      p2b Volcanion used Overheat -> p1a: Hitmontop
+              p2b Volcanion spa 2 fell
+              p1a Hitmontop used up its Sitrus Berry
+      after p1: Hitmontop 136/304, Gardevoir-Mega 340/340
+      after p2: Landorus-Therian 0/319, Volcanion 363/363
+
+  Turn 13
+      p2a <- Sylveon comes in (394/394)
+      after p1: Hitmontop 136/304, Gardevoir-Mega 340/340
+      after p2: Sylveon 394/394, Volcanion 363/363
+
+  Turn 14
+    p1 mcts: move 3, move 2 1
+      search (18000 visits): wideguard,0;psyshock,0 2171v 1116 | closecombat,0;psyshock,0 1918v 974 | wideguard,0;hypervoice,0 1444v 711 | closecombat,0;hypervoice,0 890v 410
+    p2 greedy: move 1, move 4 1
+      p1a Hitmontop used Wide Guard
+      p1b Gardevoir used Psyshock -> p2a: Sylveon
+      p2b Volcanion used Overheat -> p1a: Hitmontop
+              p1a Hitmontop -- critical hit
+              p2b Volcanion spa 2 fell
+      p1a Hitmontop fainted
+      p2a Sylveon used Hyper Voice -> p1b: Gardevoir
+              p1b Gardevoir -- move: Wide Guard
+      after p1: Hitmontop 0/304, Gardevoir-Mega 340/340
+      after p2: Sylveon 162/394, Volcanion 363/363
+
+  Turn 15
+      p1a <- Shaymin-Sky comes in (138/341)
+      after p1: Shaymin-Sky 138/341, Gardevoir-Mega 340/340
+      after p2: Sylveon 162/394, Volcanion 363/363
+
+  Turn 16
+    p1 mcts: move 2 2, move 2 1
+      search (15000 visits): seedflare,1;psyshock,0 2316v 1316 | airslash,1;psyshock,0 1635v 901 | tailwind,0;psyshock,0 1296v 697 | protect,0;psyshock,0 1144v 607
+    p2 greedy: move 1, move 4 1
+      p1b Gardevoir used Psyshock -> p2a: Sylveon
+      p2a Sylveon fainted
+      p2b Volcanion used Overheat -> p1a: Shaymin
+      p1a Shaymin fainted
+      after p1: Shaymin-Sky 0/341, Gardevoir-Mega 340/340
+      after p2: Sylveon 0/394, Volcanion 363/363
+
+  Turn 17
+    p1 mcts: pass, move 2 2
+      search (309000 visits): No Move;psyshock,1 304906v 299603 | No Move;hypervoice,1 2504v 2231 | No Move;energyball,1 1347v 1151 | No Move;protect,1 243v 162
+    p2 greedy: pass, move 4 2
+      p1b Gardevoir used Psyshock -> p2b: Volcanion
+      p2b Volcanion used Overheat -> p1b: Gardevoir
+      after p1: Shaymin-Sky 0/341, Gardevoir-Mega 292/340
+      after p2: Sylveon 0/394, Volcanion 198/363
+
+  Turn 18
+    p1 mcts: pass, move 2 2
+      search (868000 visits): No Move;psyshock,1 292088v 291628 | No Move;energyball,1 256749v 256180 | No Move;hypervoice,1 253277v 252697 | No Move;protect,1 65886v 65077
+    p2 greedy: pass, move 4 2
+      p1b Gardevoir used Psyshock -> p2b: Volcanion
+      p2b Volcanion used Overheat -> p1b: Gardevoir
+      after p1: Shaymin-Sky 0/341, Gardevoir-Mega 246/340
+      after p2: Sylveon 0/394, Volcanion 41/363
+
+  Turn 19
+    p1 mcts: pass, move 1
+      search (2117000 visits): No Move;hypervoice,1 557566v 557566 | No Move;psyshock,1 557559v 557559 | No Move;energyball,1 557548v 557548 | No Move;protect,1 444327v 443941
+    p2 greedy: pass, move 4 2
+      p1b Gardevoir used Hyper Voice -> p2b: Volcanion
+      p2b Volcanion fainted
+      after p1: Shaymin-Sky 0/341, Gardevoir-Mega 246/340
+      after p2: Sylveon 0/394, Volcanion 0/363
+
+  RESULT: p1 wins

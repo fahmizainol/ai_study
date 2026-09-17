@@ -1,0 +1,161 @@
+battle 87   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: ORAS Doubles OU: Gyarados, Tyranitar, Excadrill, Talonflame, Hitmontop, Diancie
+  p2: Untitled 610: Heracross-Mega, Gothitelle, Volcanion, Landorus-Therian, Diancie, Amoonguss
+
+  Turn 1
+    p1 mcts: move 1, move 4
+      search (7000 visits): icywind,0;protect,1 378v 214 | waterfall,0;rockslide,0 320v 175 | icywind,0;crunch,1 296v 159 | icywind,0;rockslide,0 293v 157
+    p2 greedy: move 1 1, move 4 1
+      p1b Tyranitar used Protect
+      p1a Gyarados used Icy Wind -> p2b: Gothitelle  [[spread] p2a,p2b]
+              p2a Heracross spe 1 fell
+              p2b Gothitelle spe 1 fell
+      p2a Heracross used Close Combat -> p1a: Gyarados
+              p2a Heracross def 1 fell
+              p2a Heracross spd 1 fell
+      p2b Gothitelle used Psychic -> p1a: Gyarados
+              p1a Gyarados -- critical hit
+              p1a Gyarados used up its Sitrus Berry
+      after p1: Gyarados 229/394, Tyranitar 404/404
+      after p2: Heracross-Mega 324/364, Gothitelle 307/344
+
+  Turn 2
+    p1 mcts: move 1, move 1
+      search (7000 visits): icywind,0;rockslide,0 306v 122 | icywind,0;crunch,1 295v 117 | waterfall,0;rockslide,0 290v 114 | icywind,0;icebeam,1 270v 104
+    p2 greedy: move 1 1, move 4 1
+      p1a Gyarados used Icy Wind -> p2b: Gothitelle  [[spread] p2a,p2b]
+              p2a Heracross -- critical hit
+              p2a Heracross spe 1 fell
+              p2b Gothitelle spe 1 fell
+      p2a Heracross used Close Combat -> p1a: Gyarados
+              p2a Heracross def 1 fell
+              p2a Heracross spd 1 fell
+      p1b Tyranitar used Rock Slide -> p2a: Heracross  [[spread] p2a]
+              p1b Tyranitar -- MISSED
+      p2b Gothitelle used Psychic -> p1a: Gyarados
+              p1a Gyarados spd 1 fell
+      after p1: Gyarados 11/394, Tyranitar 404/404
+      after p2: Heracross-Mega 58/364, Gothitelle 269/344
+
+  Turn 3
+    p1 mcts: move 2 1, move 1
+      search (29000 visits): waterfall,0;rockslide,0 1576v 363 | waterfall,1;icebeam,1 1434v 323 | waterfall,1;protect,1 1270v 276 | taunt,1;crunch,1 1238v 267
+    p2 greedy: move 1 1, move 4 1
+      p1a Gyarados used Waterfall -> p2a: Heracross
+      p2a Heracross fainted
+      p1b Tyranitar used Rock Slide -> p2b: Gothitelle  [[miss]]
+              p1b Tyranitar -- MISSED
+      p2b Gothitelle used Psychic -> p1a: Gyarados
+      p1a Gyarados fainted
+      after p1: Gyarados 0/394, Tyranitar 404/404
+      after p2: Heracross-Mega 0/364, Gothitelle 248/344
+
+  Turn 4
+      p1a <- Excadrill comes in (361/361)
+      p2a <- Volcanion comes in (363/363)
+      after p1: Excadrill 361/361, Tyranitar 404/404
+      after p2: Volcanion 363/363, Gothitelle 248/344
+
+  Turn 5
+    p1 mcts: move 4, move 1
+      search (18000 visits): protect,0;rockslide,0 1215v 372 | earthquake,0;protect,1 1211v 371 | rockslide,0;rockslide,0 1201v 367 | ironhead,0;rockslide,0 1023v 302
+    p2 greedy: move 4 1, move 4 1
+      p1a Excadrill used Protect
+      p2a Volcanion used Overheat -> p1a: Excadrill
+              p1a Excadrill -- move: Protect
+      p1b Tyranitar used Rock Slide -> p2b: Gothitelle  [[spread] p2a,p2b]
+              p2b Gothitelle used up its Sitrus Berry
+      p2b Gothitelle used Psychic -> p1a: Excadrill
+              p1a Excadrill -- move: Protect
+      after p1: Excadrill 361/361, Tyranitar 404/404
+      after p2: Volcanion 171/363, Gothitelle 229/344
+
+  Turn 6
+    p1 mcts: move 1, move 4
+      search (25000 visits): earthquake,0;protect,1 1871v 558 | rockslide,0;icebeam,0 1404v 396 | protect,0;crunch,0 1326v 370 | rockslide,0;icebeam,1 1173v 318
+    p2 greedy: move 4 1, move 4 1
+      p1b Tyranitar used Protect
+      p1a Excadrill used Earthquake -> p2a: Volcanion  [[spread] p2a,p2b]
+              p1b Tyranitar -- move: Protect
+      p2a Volcanion fainted
+      p2b Gothitelle used Psychic -> p1a: Excadrill
+      after p1: Excadrill 290/361, Tyranitar 404/404
+      after p2: Volcanion 0/363, Gothitelle 117/344
+
+  Turn 7
+      p2a <- Landorus-Therian comes in (319/319)
+              p1a Excadrill atk 1 fell
+              p1b Tyranitar atk 1 fell
+      after p1: Excadrill 290/361, Tyranitar 404/404
+      after p2: Landorus-Therian 319/319, Gothitelle 117/344
+
+  Turn 8
+    p1 mcts: move 4, move 2 1
+      search (26000 visits): protect,0;icebeam,0 5225v 2811 | rockslide,0;icebeam,0 2029v 1015 | ironhead,0;icebeam,0 1988v 993 | ironhead,0;protect,1 1910v 950
+    p2 greedy: move 3 1, move 4 1
+      p1a Excadrill used Protect
+      p2a Landorus used Stone Edge -> p1a: Excadrill
+              p1a Excadrill -- move: Protect
+      p1b Tyranitar used Ice Beam -> p2a: Landorus
+      p2a Landorus fainted
+      p2b Gothitelle used Psychic -> p1a: Excadrill
+              p1a Excadrill -- move: Protect
+      after p1: Excadrill 290/361, Tyranitar 404/404
+      after p2: Landorus-Therian 0/319, Gothitelle 117/344
+
+  Turn 9
+      p2a <- Diancie comes in (304/304)
+      after p1: Excadrill 290/361, Tyranitar 404/404
+      after p2: Diancie 304/304, Gothitelle 117/344
+
+  Turn 10
+    p1 mcts: move 3 1, move 2 1
+      search (26000 visits): ironhead,0;icebeam,0 3553v 1153 | ironhead,0;rockslide,0 3048v 970 | ironhead,0;crunch,0 2776v 873 | ironhead,0;icebeam,1 2404v 741
+    p2 greedy: move 1, move 4 1
+      p1a Excadrill used Iron Head -> p2a: Diancie
+      p2a Diancie fainted
+      p1b Tyranitar used Ice Beam -> p2b: Gothitelle
+      p2b Gothitelle used Psychic -> p1a: Excadrill
+      after p1: Excadrill 215/361, Tyranitar 404/404
+      after p2: Diancie 0/304, Gothitelle 56/344
+
+  Turn 11
+      p2a <- Amoonguss comes in (432/432)
+      after p1: Excadrill 215/361, Tyranitar 404/404
+      after p2: Amoonguss 432/432, Gothitelle 56/344
+
+  Turn 12
+    p1 mcts: move 3 1, move 2 1
+      search (26000 visits): ironhead,0;icebeam,0 16966v 10862 | earthquake,0;icebeam,0 1708v 966 | rockslide,0;icebeam,0 956v 506 | ironhead,0;crunch,0 925v 487
+    p2 greedy: move 4 1, move 4 1
+      p1a Excadrill used Iron Head -> p2a: Amoonguss
+      p1b Tyranitar used Ice Beam -> p2a: Amoonguss
+      p2b Gothitelle used Psychic -> p1a: Excadrill
+      p2a Amoonguss used Sludge Bomb -> p1a: Excadrill
+              p1a Excadrill -- IMMUNE
+      after p1: Excadrill 87/361, Tyranitar 404/404
+      after p2: Amoonguss 158/432, Gothitelle 56/344
+
+  Turn 13
+    p1 mcts: move 4, move 1
+      search (46000 visits): protect,0;rockslide,0 22911v 19296 | protect,0;icebeam,0 2884v 2231 | ironhead,0;rockslide,0 2473v 1897 | protect,0;crunch,0 2247v 1713
+    p2 greedy: move 4 1, move 4 1
+      p1a Excadrill used Protect
+      p1b Tyranitar used Rock Slide -> p2a: Amoonguss  [[spread] p2a,p2b]
+      p2b Gothitelle fainted
+              p2a Amoonguss COULD NOT MOVE (flinch)
+      after p1: Excadrill 87/361, Tyranitar 404/404
+      after p2: Amoonguss 86/432, Gothitelle 0/344
+
+  Turn 14
+    p1 mcts: move 1, move 1
+      search (655000 visits): earthquake,0;rockslide,0 25347v 25347 | earthquake,0;icebeam,0 25347v 25347 | earthquake,0;crunch,0 25347v 25347 | earthquake,0;protect,1 25347v 25347
+    p2 greedy: move 4 1, pass
+      p1a Excadrill used Earthquake -> p2a: Amoonguss  [[spread] p1b,p2a]
+              p1b Tyranitar used up its Shuca Berry
+              p1b Tyranitar used up its Shuca Berry
+      p2a Amoonguss fainted
+      after p1: Excadrill 87/361, Tyranitar 319/404
+      after p2: Amoonguss 0/432, Gothitelle 0/344
+
+  RESULT: p1 wins

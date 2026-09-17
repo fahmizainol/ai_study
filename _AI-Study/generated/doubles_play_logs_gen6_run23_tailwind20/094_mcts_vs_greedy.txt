@@ -1,0 +1,112 @@
+battle 94   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: Untitled 475: Aegislash, Salamence-Mega, Volcanion, Mew, Conkeldurr, Sylveon
+  p2: Whims Garde CB Lando: Gardevoir-Mega, Landorus-Therian, Whimsicott, Volcanion, Thundurus, Terrakion
+
+  Turn 1
+    p1 mcts: move 1 2, move 1 1
+      search (30000 visits): shadowball,1;doubleedge,0 1490v 1051 | switch sylveon;doubleedge,0 1325v 925 | flashcannon,1;doubleedge,0 1087v 745 | switch mew;doubleedge,0 816v 542
+    p2 greedy: move 1, move 4 1
+      p1b Salamence used Double-Edge -> p2a: Gardevoir
+      p2a Gardevoir fainted
+      p2b Landorus used Superpower -> p1a: Aegislash
+              p1a Aegislash -- IMMUNE
+      p1a Aegislash used Shadow Ball -> p2b: Landorus
+      after p1: Aegislash-Blade 324/324, Salamence-Mega 241/332
+      after p2: Gardevoir-Mega 0/277, Landorus-Therian 130/319
+
+  Turn 2
+      p2a <- Whimsicott comes in (324/324)
+      after p1: Aegislash-Blade 324/324, Salamence-Mega 241/332
+      after p2: Whimsicott 324/324, Landorus-Therian 130/319
+
+  Turn 3
+    p1 mcts: move 3 1, move 2
+      search (28000 visits): flashcannon,0;dragondance,1 1345v 1028 | flashcannon,0;switch sylveon 957v 710 | flashcannon,1;doubleedge,0 912v 673 | shadowball,1;doubleedge,0 839v 614
+    p2 greedy: move 2 2, move 4 2
+      p2a Whimsicott used Moonblast -> p1b: Salamence
+      p1b Salamence used Dragon Dance
+              p1b Salamence atk 1 rose
+              p1b Salamence spe 1 rose
+      p2b Landorus used Superpower -> p1b: Salamence
+              p2b Landorus atk 1 fell
+              p2b Landorus def 1 fell
+      p1b Salamence fainted
+      p1a Aegislash used Flash Cannon -> p2a: Whimsicott
+      p2a Whimsicott fainted
+      after p1: Aegislash-Blade 324/324, Salamence-Mega 0/332
+      after p2: Whimsicott 0/324, Landorus-Therian 130/319
+
+  Turn 4
+      p2a <- Volcanion comes in (343/343)
+      p1b <- Volcanion comes in (363/363)
+      after p1: Aegislash-Blade 324/324, Volcanion 363/363
+      after p2: Volcanion 343/343, Landorus-Therian 130/319
+
+  Turn 5
+    p1 mcts: move 1 1, move 3 1
+      search (29000 visits): shadowball,0;earthpower,0 1305v 780 | flashcannon,1;earthpower,0 1299v 776 | switch sylveon;steameruption,1 1102v 646 | shadowball,0;steameruption,1 980v 567
+    p2 greedy: move 1 1, move 4 1
+      p2b Landorus used Superpower -> p1a: Aegislash
+              p1a Aegislash -- IMMUNE
+      p2a Volcanion used Steam Eruption -> p1a: Aegislash
+      p1b Volcanion used Earth Power -> p2a: Volcanion
+      p1a Aegislash used Shadow Ball -> p2a: Volcanion
+      p2a Volcanion fainted
+      after p1: Aegislash-Blade 80/324, Volcanion 363/363
+      after p2: Volcanion 0/343, Landorus-Therian 130/319
+
+  Turn 6
+      p2a <- Thundurus comes in (299/299)
+      after p1: Aegislash-Blade 80/324, Volcanion 363/363
+      after p2: Thundurus 299/299, Landorus-Therian 130/319
+
+  Turn 7
+    p1 mcts: move 3 2, move 2 2
+      search (29000 visits): flashcannon,1;steameruption,1 2148v 1551 | shadowball,1;steameruption,1 1881v 1346 | flashcannon,1;earthpower,1 1095v 748 | flashcannon,0;steameruption,0 951v 640
+    p2 greedy: move 4 1, move 4 1
+      p2a Thundurus used Superpower -> p1a: Aegislash
+              p1a Aegislash -- IMMUNE
+      p2b Landorus used Superpower -> p1a: Aegislash
+              p1a Aegislash -- IMMUNE
+      p1b Volcanion used Steam Eruption -> p2b: Landorus
+      p2b Landorus fainted
+      p1a Aegislash used Flash Cannon -> p2a: Thundurus
+      after p1: Aegislash-Blade 100/324, Volcanion 363/363
+      after p2: Thundurus 239/299, Landorus-Therian 0/319
+
+  Turn 8
+      p2b <- Terrakion comes in (323/323)
+      after p1: Aegislash-Blade 100/324, Volcanion 363/363
+      after p2: Thundurus 239/299, Terrakion 323/323
+
+  Turn 9
+    p1 mcts: switch 6, move 2 2   (slot0 Aegislash-Blade -> Sylveon)
+      search (29000 visits): switch sylveon;steameruption,1 1168v 793 | switch sylveon;steameruption,0 1163v 789 | switch mew;steameruption,1 1050v 705 | flashcannon,1;steameruption,0 1041v 699
+    p2 greedy: move 4 1, move 2 1
+      p1a <- Sylveon comes in (394/394)
+      p2a Thundurus used Superpower -> p1a: Sylveon
+              p2a Thundurus atk 1 fell
+              p2a Thundurus def 1 fell
+      p2b Terrakion used Close Combat -> p1a: Sylveon
+              p2b Terrakion def 1 fell
+              p2b Terrakion spd 1 fell
+      p1b Volcanion used Steam Eruption -> p2b: Terrakion
+      p2b Terrakion fainted
+      after p1: Sylveon 181/394, Volcanion 363/363
+      after p2: Thundurus 239/299, Terrakion 0/323
+
+  Turn 10
+    p1 mcts: move 1, move 4 1
+      search (181000 visits): hypervoice,0;overheat,0 50004v 49434 | hypervoice,0;heatwave,0 49335v 48766 | hypervoice,0;steameruption,0 44638v 44072 | switch mew;steameruption,0 4481v 4199
+    p2 greedy: move 4 1, pass
+      p2a Thundurus used Superpower -> p1a: Sylveon
+              p2a Thundurus atk 1 fell
+              p2a Thundurus def 1 fell
+      p1b Volcanion used Overheat -> p2a: Thundurus
+              p1b Volcanion spa 2 fell
+      p1a Sylveon used Hyper Voice -> p2a: Thundurus
+      p2a Thundurus fainted
+      after p1: Sylveon 123/394, Volcanion 363/363
+      after p2: Thundurus 0/299, Terrakion 0/323
+
+  RESULT: p1 wins

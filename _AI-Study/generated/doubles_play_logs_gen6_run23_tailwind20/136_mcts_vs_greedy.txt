@@ -1,0 +1,222 @@
+battle 136   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: DPL vs sir jelloton: Kangaskhan-Mega, Conkeldurr, Thundurus, Deoxys-Speed, Volcanion, Bisharp
+  p2: geneies: Thundurus, Kangaskhan-Mega, Volcanion, Landorus-Therian, Genesect, Cresselia
+
+  Turn 1
+    p1 mcts: switch 3, move 3 1   (slot0 Kangaskhan-Mega -> Thundurus)
+      search (29000 visits): switch thundurus;icepunch,0 312v 23 | switch thundurus;knockoff,0 271v 15 | switch volcanion;icepunch,0 262v 13 | switch thundurus;icepunch,1 259v 12
+    p2 greedy: move 1 1, move 1 1
+      p1a <- Thundurus comes in (361/361)
+      p2b Kangaskhan used Fake Out -> p1a: Thundurus
+      p2a Thundurus used Volt Switch -> p1a: Thundurus
+              p1a Thundurus used up its Sitrus Berry
+      after p1: Thundurus 251/361, Conkeldurr 414/414
+      after p2: Thundurus 362/362, Kangaskhan-Mega 414/414
+
+  Turn 2
+      p2a <- Volcanion comes in (363/363)
+      p1b Conkeldurr used Ice Punch -> p2a: Volcanion
+      after p1: Thundurus 251/361, Conkeldurr 414/414
+      after p2: Volcanion 341/363, Kangaskhan-Mega 414/414
+
+  Turn 3
+    p1 mcts: switch 5, switch 6   (slot0 Thundurus -> Volcanion; slot1 Conkeldurr -> Bisharp)
+      search (30000 visits): switch volcanion;switch bisharp 237v 10 | thunderwave,0;switch volcanion 236v 10 | thunderbolt,0;switch volcanion 234v 10 | hiddenpower,1;switch volcanion 234v 10
+    p2 greedy: move 1 1, move 1 1
+      p1a <- Volcanion comes in (363/363)
+      p1b <- Bisharp comes in (271/271)
+      p2b Kangaskhan used Fake Out  [[still]]
+              p2b Kangaskhan -- IT FAILED
+      p2a Volcanion used Steam Eruption -> p1a: Volcanion
+              p1a Volcanion -- IMMUNE
+      after p1: Volcanion 363/363, Bisharp 271/271
+      after p2: Volcanion 341/363, Kangaskhan-Mega 414/414
+
+  Turn 4
+    p1 mcts: move 2 2, move 4
+      search (45000 visits): steameruption,1;protect,1 4986v 2393 | steameruption,0;protect,1 2398v 1081 | overheat,1;protect,1 1641v 707 | earthpower,1;protect,1 1477v 630
+    p2 greedy: move 1 1, move 1 1
+      p1b Bisharp used Protect
+      p2b Kangaskhan used Fake Out  [[still]]
+              p2b Kangaskhan -- IT FAILED
+      p2a Volcanion used Steam Eruption -> p1a: Volcanion
+              p1a Volcanion -- IMMUNE
+      p1a Volcanion used Steam Eruption -> p2b: Kangaskhan  [[miss]]
+              p1a Volcanion -- MISSED
+      after p1: Volcanion 363/363, Bisharp 271/271
+      after p2: Volcanion 341/363, Kangaskhan-Mega 414/414
+
+  Turn 5
+    p1 mcts: move 2 2, move 4
+      search (42000 visits): steameruption,1;protect,1 2610v 1171 | earthpower,1;protect,1 1799v 774 | heatwave,0;protect,1 1739v 753 | overheat,0;protect,1 1704v 729
+    p2 greedy: move 1 1, move 1 1
+      p1b Bisharp used Protect
+      p2b Kangaskhan used Fake Out  [[still]]
+              p2b Kangaskhan -- IT FAILED
+      p2a Volcanion used Steam Eruption -> p1a: Volcanion
+              p1a Volcanion -- IMMUNE
+      p1a Volcanion used Steam Eruption -> p2b: Kangaskhan
+              p2b Kangaskhan -- critical hit
+      after p1: Volcanion 363/363, Bisharp 271/271
+      after p2: Volcanion 341/363, Kangaskhan-Mega 164/414
+
+  Turn 6
+    p1 mcts: move 2 1, move 4
+      search (40000 visits): steameruption,0;protect,1 2114v 949 | earthpower,1;protect,1 1822v 804 | overheat,0;protect,1 1547v 668 | earthpower,0;protect,1 1525v 657
+    p2 greedy: move 1 1, move 1 1
+      p1b Bisharp used Protect  [[still]]
+              p1b Bisharp -- IT FAILED
+      p2b Kangaskhan used Fake Out  [[still]]
+              p2b Kangaskhan -- IT FAILED
+      p2a Volcanion used Steam Eruption -> p1a: Volcanion
+              p1a Volcanion -- IMMUNE
+      p1a Volcanion used Steam Eruption -> p2a: Volcanion
+      after p1: Volcanion 363/363, Bisharp 271/271
+      after p2: Volcanion 363/363, Kangaskhan-Mega 164/414
+
+  Turn 7
+    p1 mcts: move 3 2, move 4
+      search (39000 visits): earthpower,1;protect,1 2422v 1116 | steameruption,1;protect,1 2280v 1045 | heatwave,0;protect,1 1732v 769 | steameruption,0;protect,1 1573v 690
+    p2 greedy: move 1 1, move 1 1
+      p1b Bisharp used Protect
+      p2b Kangaskhan used Fake Out  [[still]]
+              p2b Kangaskhan -- IT FAILED
+      p2a Volcanion used Steam Eruption -> p1a: Volcanion
+              p1a Volcanion -- IMMUNE
+      p1a Volcanion used Earth Power -> p2b: Kangaskhan
+      after p1: Volcanion 363/363, Bisharp 271/271
+      after p2: Volcanion 363/363, Kangaskhan-Mega 74/414
+
+  Turn 8
+    p1 mcts: move 3 2, move 4
+      search (45000 visits): earthpower,1;protect,1 2776v 1214 | steameruption,1;protect,1 2188v 933 | overheat,1;protect,1 1823v 760 | earthpower,0;protect,1 1820v 758
+    p2 greedy: move 1 1, move 1 1
+      p1b Bisharp used Protect  [[still]]
+              p1b Bisharp -- IT FAILED
+      p2b Kangaskhan used Fake Out  [[still]]
+              p2b Kangaskhan -- IT FAILED
+      p2a Volcanion used Steam Eruption -> p1a: Volcanion
+              p1a Volcanion -- IMMUNE
+      p1a Volcanion used Earth Power -> p2b: Kangaskhan
+      p2b Kangaskhan fainted
+      after p1: Volcanion 363/363, Bisharp 271/271
+      after p2: Volcanion 363/363, Kangaskhan-Mega 0/414
+
+  Turn 9
+      p2b <- Thundurus comes in (362/362)
+      after p1: Volcanion 363/363, Bisharp 271/271
+      after p2: Volcanion 363/363, Thundurus 362/362
+
+  Turn 10
+    p1 mcts: move 2 2, move 4
+      search (15000 visits): steameruption,1;protect,1 478v 284 | earthpower,0;protect,1 392v 224 | heatwave,0;protect,1 384v 219 | steameruption,1;knockoff,0 294v 158
+    p2 greedy: move 1 1, move 1 1
+      p1b Bisharp used Protect
+      p2b Thundurus used Volt Switch -> p1a: Volcanion
+      after p1: Volcanion 243/363, Bisharp 271/271
+      after p2: Volcanion 363/363, Thundurus 362/362
+
+  Turn 11
+      p2b <- Landorus-Therian comes in (319/319)
+              p1a Volcanion atk 1 fell
+              p1b Bisharp atk 1 fell
+              p1b Bisharp atk 2 rose
+      p2a Volcanion used Steam Eruption -> p1a: Volcanion
+      p1a Volcanion used Steam Eruption -> p2b: Landorus
+      p2b Landorus fainted
+      after p1: Volcanion 333/363, Bisharp 271/271
+      after p2: Volcanion 363/363, Landorus-Therian 0/319
+
+  Turn 12
+      p2b <- Thundurus comes in (362/362)
+      after p1: Volcanion 333/363, Bisharp 271/271
+      after p2: Volcanion 363/363, Thundurus 362/362
+
+  Turn 13
+    p1 mcts: move 3 1, move 4
+      search (13000 visits): earthpower,0;protect,1 354v 202 | heatwave,0;protect,1 313v 174 | steameruption,1;protect,1 310v 172 | switch thundurus;protect,1 304v 168
+    p2 greedy: move 1 1, move 1 1
+      p1b Bisharp used Protect  [[still]]
+              p1b Bisharp -- IT FAILED
+      p2b Thundurus used Volt Switch -> p1a: Volcanion
+      after p1: Volcanion 213/363, Bisharp 271/271
+      after p2: Volcanion 363/363, Thundurus 362/362
+
+  Turn 14
+      p2b <- Genesect comes in (340/340)
+              p2b Genesect spa 1 rose
+      p2a Volcanion used Steam Eruption -> p1a: Volcanion
+      p1a Volcanion used Earth Power -> p2a: Volcanion
+      after p1: Volcanion 303/363, Bisharp 271/271
+      after p2: Volcanion 203/363, Genesect 340/340
+
+  Turn 15
+    p1 mcts: move 1, move 4
+      search (19000 visits): heatwave,0;protect,1 1727v 1302 | overheat,1;protect,1 852v 604 | steameruption,1;protect,1 624v 426 | switch conkeldurr;protect,1 435v 282
+    p2 greedy: move 2, move 4 1
+      p1b Bisharp used Protect
+      p2b Genesect used Ice Beam -> p1a: Volcanion
+      p2a Volcanion used Heat Wave -> p1b: Bisharp  [[spread] p1a]
+              p1b Bisharp -- move: Protect
+      p1a Volcanion used Heat Wave -> p2b: Genesect  [[spread] p2a]
+              p1a Volcanion -- MISSED
+      after p1: Volcanion 263/363, Bisharp 271/271
+      after p2: Volcanion 181/363, Genesect 340/340
+
+  Turn 16
+    p1 mcts: move 2 2, move 2 1
+      search (13000 visits): steameruption,1;knockoff,0 611v 524 | overheat,1;knockoff,0 398v 325 | earthpower,1;knockoff,0 341v 272 | heatwave,0;knockoff,0 332v 264
+    p2 greedy: move 2, move 4 1
+      p2b Genesect used Ice Beam -> p1a: Volcanion
+              p1a Volcanion is now frz
+      p1b Bisharp used Knock Off -> p2a: Volcanion
+              p2a Volcanion used up its Assault Vest
+      p2a Volcanion fainted
+              p1a Volcanion is cured of frz
+      p1a Volcanion used Steam Eruption -> p2b: Genesect
+              p2b Genesect -- critical hit
+      after p1: Volcanion 246/363, Bisharp 244/271
+      after p2: Volcanion 0/363, Genesect 40/340
+
+  Turn 17
+      p2a <- Thundurus comes in (362/362)
+      after p1: Volcanion 246/363, Bisharp 244/271
+      after p2: Thundurus 362/362, Genesect 40/340
+
+  Turn 18
+    p1 mcts: move 1, move 2 1
+      search (18000 visits): heatwave,0;knockoff,0 341v 218 | steameruption,0;protect,1 318v 201 | heatwave,0;suckerpunch,0 301v 188 | heatwave,0;knockoff,1 296v 184
+    p2 greedy: move 1 1, move 4 1
+      p2a Thundurus used Volt Switch -> p1a: Volcanion
+      after p1: Volcanion 114/363, Bisharp 244/271
+      after p2: Thundurus 362/362, Genesect 40/340
+
+  Turn 19
+      p2a <- Cresselia comes in (444/444)
+      p2b Genesect used Ice Beam -> p1a: Volcanion
+      p1b Bisharp used Knock Off -> p2a: Cresselia
+              p2a Cresselia used up its Rocky Helmet
+      p2a Cresselia fainted
+      p1a Volcanion used Heat Wave -> p2b: Genesect
+      p2b Genesect fainted
+      after p1: Volcanion 95/363, Bisharp 172/271
+      after p2: Cresselia 0/444, Genesect 0/340
+
+  Turn 20
+      p2a <- Thundurus comes in (362/362)
+      after p1: Volcanion 95/363, Bisharp 172/271
+      after p2: Thundurus 362/362, Genesect 0/340
+
+  Turn 21
+    p1 mcts: switch 5, move 2 1   (slot0 Volcanion -> Thundurus)
+      search (68000 visits): switch thundurus;knockoff,0 24279v 23125 | heatwave,0;knockoff,0 12565v 11818 | steameruption,0;knockoff,0 8907v 8307 | overheat,0;knockoff,0 6053v 5581
+    p2 greedy: move 1 1, pass
+      p1a <- Thundurus comes in (251/361)
+      p2a Thundurus used Volt Switch -> p1a: Thundurus
+      p1b Bisharp used Knock Off -> p2a: Thundurus
+              p2a Thundurus used up its Sitrus Berry
+      p2a Thundurus fainted
+      after p1: Thundurus 136/361, Bisharp 145/271
+      after p2: Thundurus 0/362, Genesect 0/340
+
+  RESULT: p1 wins

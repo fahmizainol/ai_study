@@ -1,0 +1,149 @@
+battle 82   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: mence goth semiroom: Diancie, Aegislash, Salamence-Mega, Genesect, Conkeldurr, Gothitelle
+  p2: ORAS Doubles OU: Cresselia, Scrafty, Thundurus, Metagross, Landorus-Therian, Heatran
+
+  Turn 1
+    p1 mcts: move 2 2, move 3
+      search (17000 visits): moonblast,1;substitute,1 2441v 1691 | moonblast,1;shadowball,0 1597v 1073 | moonblast,1;shadowball,1 1154v 753 | moonblast,1;kingsshield,1 802v 502
+    p2 greedy: move 2 1, move 2 1
+      p1b Aegislash used Substitute
+              p1b Aegislash gained Substitute
+      p2a Cresselia used Psychic -> p1a: Diancie
+      p1a Diancie used Moonblast -> p2b: Scrafty
+      p2b Scrafty used Drain Punch -> p1a: Diancie
+      after p1: Diancie 164/304, Aegislash 263/324
+      after p2: Cresselia 440/440, Scrafty 109/334
+
+  Turn 2
+    p1 mcts: move 1, move 3
+      search (17000 visits): diamondstorm,0;substitute,1 1118v 577 | moonblast,1;substitute,1 991v 503 | diamondstorm,0;shadowball,0 877v 438 | moonblast,1;shadowball,0 796v 391
+    p2 greedy: move 2 1, move 2 1
+      p1b Aegislash used Substitute
+              p1b Aegislash -- IT FAILED
+      p2a Cresselia used Psychic -> p1a: Diancie
+      p1a Diancie used Diamond Storm -> p2a: Cresselia  [[spread] p2a,p2b]
+              p1a Diancie def 1 rose
+      p2b Scrafty used Drain Punch -> p1a: Diancie
+      after p1: Diancie 55/304, Aegislash 283/324
+      after p2: Cresselia 359/440, Scrafty 88/334
+
+  Turn 3
+    p1 mcts: move 1, move 1 1
+      search (19000 visits): diamondstorm,0;shadowball,0 2319v 1388 | moonblast,1;shadowball,0 1142v 639 | diamondstorm,0;shadowball,1 1067v 592 | moonblast,0;shadowball,0 672v 349
+    p2 greedy: move 2 1, move 2 1
+      p1b Aegislash used Shadow Ball -> p2a: Cresselia
+      p2a Cresselia used Psychic -> p1a: Diancie
+      p1a Diancie used Diamond Storm -> p2b: Scrafty  [[spread] p2a,p2b]
+              p1a Diancie def 1 rose
+      p2b Scrafty used Drain Punch -> p1a: Diancie
+      p1a Diancie fainted
+              p2b Scrafty atk 1 rose
+      after p1: Diancie 0/304, Aegislash-Blade 303/324
+      after p2: Cresselia 39/440, Scrafty 40/334
+
+  Turn 4
+      p1a <- Salamence-Mega comes in (394/394)
+      after p1: Salamence-Mega 394/394, Aegislash-Blade 303/324
+      after p2: Cresselia 39/440, Scrafty 40/334
+
+  Turn 5
+    p1 mcts: move 2, move 3
+      search (37000 visits): hypervoice,0;substitute,1 9023v 6022 | hypervoice,0;shadowball,0 2661v 1668 | hypervoice,0;shadowball,1 2514v 1569 | flamethrower,1;shadowball,0 2103v 1295
+    p2 greedy: move 2 2, move 2 2
+      p1a Salamence used Hyper Voice -> p2a: Cresselia  [[spread] p2a,p2b]
+      p2a Cresselia fainted
+      p2b Scrafty fainted
+      p1b Aegislash used Substitute
+              p1b Aegislash -- IT FAILED
+      after p1: Salamence-Mega 394/394, Aegislash-Blade 323/324
+      after p2: Cresselia 0/440, Scrafty 0/334
+
+  Turn 6
+      p2a <- Thundurus comes in (358/358)
+      p2b <- Metagross comes in (346/346)
+      after p1: Salamence-Mega 394/394, Aegislash-Blade 323/324
+      after p2: Thundurus 358/358, Metagross 346/346
+
+  Turn 7
+    p1 mcts: move 2, move 1 2
+      search (29000 visits): hypervoice,0;shadowball,1 10114v 6209 | flamethrower,1;shadowball,1 2137v 1199 | hypervoice,0;substitute,1 1495v 810 | flamethrower,0;shadowball,1 713v 349
+    p2 greedy: move 1 2, move 1 2
+      p1a Salamence used Hyper Voice -> p2a: Thundurus  [[spread] p2a,p2b]
+              p2b Metagross -- critical hit
+      p2a Thundurus used Thunderbolt -> p1b: Aegislash
+              p1b Aegislash lost Substitute
+      p2b Metagross used Iron Head -> p1b: Aegislash
+      p1b Aegislash used Shadow Ball -> p2b: Metagross
+      p2b Metagross fainted
+      after p1: Salamence-Mega 394/394, Aegislash-Blade 211/324
+      after p2: Thundurus 301/358, Metagross 0/346
+
+  Turn 8
+      p2b <- Landorus-Therian comes in (344/344)
+              p1a Salamence atk 1 fell
+              p1b Aegislash atk 1 fell
+      after p1: Salamence-Mega 394/394, Aegislash-Blade 211/324
+      after p2: Thundurus 301/358, Landorus-Therian 344/344
+
+  Turn 9
+    p1 mcts: move 2, move 1 2
+      search (42000 visits): hypervoice,0;shadowball,1 1711v 1136 | hypervoice,0;shadowball,0 1544v 1016 | flamethrower,1;shadowball,1 1264v 817 | hypervoice,0;substitute,1 1177v 755
+    p2 greedy: move 1 2, move 3 2
+      p2b Landorus used Superpower -> p1b: Aegislash
+              p1b Aegislash -- IMMUNE
+      p1a Salamence used Hyper Voice -> p2a: Thundurus  [[spread] p2a,p2b]
+      p2a Thundurus used Thunderbolt -> p1b: Aegislash
+      p1b Aegislash used Shadow Ball -> p2b: Landorus
+      after p1: Salamence-Mega 394/394, Aegislash-Blade 71/324
+      after p2: Thundurus 245/358, Landorus-Therian 22/344
+
+  Turn 10
+    p1 mcts: move 2, move 3
+      search (53000 visits): hypervoice,0;substitute,1 5730v 3905 | hypervoice,0;shadowball,1 2190v 1405 | hypervoice,0;shadowball,0 1908v 1211 | flamethrower,0;shadowball,0 1718v 1080
+    p2 greedy: move 1 2, move 3 2
+      p2b Landorus used Superpower -> p1b: Aegislash
+              p1b Aegislash -- IMMUNE
+      p1a Salamence used Hyper Voice -> p2b: Landorus  [[spread] p2a,p2b]
+      p2b Landorus fainted
+      p2a Thundurus used Thunderbolt -> p1b: Aegislash
+      p1b Aegislash fainted
+      after p1: Salamence-Mega 394/394, Aegislash 0/324
+      after p2: Thundurus 184/358, Landorus-Therian 0/344
+
+  Turn 11
+      p2b <- Heatran comes in (386/386)
+      p1b <- Genesect comes in (323/323)
+              p1b Genesect atk 1 rose
+      after p1: Salamence-Mega 394/394, Genesect 323/323
+      after p2: Thundurus 184/358, Heatran 386/386
+
+  Turn 12
+    p1 mcts: switch 5, move 2   (slot0 Salamence-Mega -> Conkeldurr)
+      search (42000 visits): switch conkeldurr;explosion,0 2369v 1059 | protect,0;explosion,0 1808v 783 | flamethrower,0;explosion,0 1672v 717 | hypervoice,0;explosion,0 1554v 660
+    p2 greedy: move 1 1, move 2 1
+      p1a <- Conkeldurr comes in (414/414)
+      p1b Genesect used Explosion -> p2b: Heatran  [[spread] p1a,p2a,p2b]
+      p1b Genesect fainted
+      p1a Conkeldurr fainted
+      p2a Thundurus fainted
+      p2b Heatran used Solar Beam  [[still]]
+      after p1: Conkeldurr 0/414, Genesect 0/323
+      after p2: Thundurus 0/358, Heatran 159/386
+
+  Turn 13
+      p1b <- Gothitelle comes in (344/344)
+      p1a <- Salamence-Mega comes in (394/394)
+      after p1: Salamence-Mega 394/394, Gothitelle 344/344
+      after p2: Thundurus 0/358, Heatran 159/386
+
+  Turn 14
+    p1 mcts: move 1 2, move 2 -1
+      search (1948000 visits): doubleedge,1;helpinghand,0 973174v 973174 | doubleedge,1;psychic,1 973171v 973171 | hypervoice,1;helpinghand,0 211v 134 | hypervoice,1;psychic,1 201v 126
+    p2 greedy: pass, move 1
+      p1b Gothitelle used Helping Hand -> p1a: Salamence
+      p1a Salamence used Double-Edge -> p2b: Heatran
+      p2b Heatran fainted
+      after p1: Salamence-Mega 342/394, Gothitelle 344/344
+      after p2: Thundurus 0/358, Heatran 0/386
+
+  RESULT: p1 wins

@@ -1,0 +1,223 @@
+battle 113   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: cm garde 2x: Gardevoir-Mega, Thundurus, Amoonguss, Blastoise, Landorus-Therian, Genesect
+  p2: draft v pichu: Blastoise, Gardevoir-Mega, Landorus, Arcanine, Porygon2, Conkeldurr
+
+  Turn 1
+    p1 mcts: move 1, move 1 1
+      search (26000 visits): hypervoice,0;thunderbolt,0 4219v 3085 | hypervoice,0;thunderbolt,1 1016v 669 | hypervoice,0;flashcannon,1 1011v 666 | calmmind,0;switch genesect 929v 606
+    p2 greedy: move 4 1, move 1
+      p1b Thundurus used Thunderbolt -> p2a: Blastoise
+              p2a Blastoise used up its Sitrus Berry
+      p2b Gardevoir used Hyper Voice -> p1b: Thundurus  [[spread] p1a,p1b]
+      p1a Gardevoir used Hyper Voice -> p2a: Blastoise  [[spread] p2a,p2b]
+      p2a Blastoise used Scald -> p1a: Gardevoir
+      after p1: Gardevoir-Mega 88/340, Thundurus 86/299
+      after p2: Blastoise 65/362, Gardevoir-Mega 204/340
+
+  Turn 2
+    p1 mcts: move 1, move 4 2
+      search (43000 visits): hypervoice,0;flashcannon,1 1417v 1148 | hypervoice,0;thunderwave,1 1327v 1070 | hypervoice,0;thunderbolt,1 1283v 1031 | hypervoice,0;thunderwave,0 1222v 979
+    p2 greedy: move 4 1, move 1
+      p1b Thundurus used Flash Cannon -> p2b: Gardevoir
+      p2b Gardevoir used Hyper Voice -> p1b: Thundurus  [[spread] p1a,p1b]
+              p1a Gardevoir -- critical hit
+      p1a Gardevoir fainted
+      p1b Thundurus fainted
+      p2a Blastoise used Scald -> p1: Gardevoir  [[notarget]]
+              p2a Blastoise -- IT FAILED
+      after p1: Gardevoir-Mega 0/340, Thundurus 0/299
+      after p2: Blastoise 65/362, Gardevoir-Mega 54/340
+
+  Turn 3
+      p1b <- Blastoise comes in (362/362)
+      p1a <- Amoonguss comes in (432/432)
+      after p1: Amoonguss 432/432, Blastoise 362/362
+      after p2: Blastoise 65/362, Gardevoir-Mega 54/340
+
+  Turn 4
+    p1 mcts: switch 6, switch 5   (slot0 Amoonguss -> Genesect; slot1 Blastoise -> Landorus-Therian)
+      search (23000 visits): switch genesect;switch landorustherian 3622v 2425 | switch landorustherian;icywind,0 1668v 1058 | protect,0;switch landorustherian 1546v 974 | spore,0;switch landorustherian 1511v 950
+    p2 greedy: move 4 1, move 1
+      p1b <- Landorus-Therian comes in (320/320)
+              p2a Blastoise atk 1 fell
+              p2b Gardevoir atk 1 fell
+      p1a <- Genesect comes in (284/284)
+              p1a Genesect atk 1 rose
+      p2b Gardevoir used Hyper Voice -> p1a: Genesect  [[spread] p1a,p1b]
+      p2a Blastoise used Scald -> p1a: Genesect
+      after p1: Genesect 58/284, Landorus-Therian 100/320
+      after p2: Blastoise 65/362, Gardevoir-Mega 54/340
+
+  Turn 5
+    p1 mcts: move 2 2, move 4 1
+      search (39000 visits): ironhead,1;superpower,0 3529v 2345 | extremespeed,0;superpower,1 2404v 1558 | extremespeed,1;superpower,0 2225v 1433 | ironhead,0;superpower,1 1133v 686
+    p2 greedy: move 4 1, move 1
+      p1b Landorus used Superpower -> p2a: Blastoise
+              p1b Landorus atk 1 fell
+              p1b Landorus def 1 fell
+      p2a Blastoise fainted
+      p1a Genesect used Iron Head -> p2b: Gardevoir
+      p2b Gardevoir fainted
+      after p1: Genesect 58/284, Landorus-Therian 100/320
+      after p2: Blastoise 0/362, Gardevoir-Mega 0/340
+
+  Turn 6
+      p2b <- Arcanine comes in (384/384)
+      p2a <- Landorus comes in (338/338)
+              p1a Genesect atk 1 fell
+              p1b Landorus atk 1 fell
+      after p1: Genesect 58/284, Landorus-Therian 100/320
+      after p2: Landorus 338/338, Arcanine 384/384
+
+  Turn 7
+    p1 mcts: move 2 1, move 4 2
+      search (29000 visits): ironhead,0;superpower,1 4147v 3756 | ironhead,0;superpower,0 3768v 3400 | ironhead,1;superpower,1 3311v 2971 | switch blastoise;superpower,0 3198v 2865
+    p2 greedy: move 1 1, move 1 1
+      p2a Landorus used Earth Power -> p1a: Genesect
+      p1a Genesect fainted
+      p1b Landorus used Superpower -> p2b: Arcanine
+              p1b Landorus atk 1 fell
+              p1b Landorus def 1 fell
+      p2b Arcanine used Overheat -> p1b: Landorus
+              p2b Arcanine spa 2 fell
+      p1b Landorus fainted
+      after p1: Genesect 0/284, Landorus-Therian 0/320
+      after p2: Landorus 338/338, Arcanine 296/384
+
+  Turn 8
+      p1a <- Blastoise comes in (362/362)
+      p1b <- Amoonguss comes in (432/432)
+      after p1: Blastoise 362/362, Amoonguss 432/432
+      after p2: Landorus 338/338, Arcanine 296/384
+
+  Turn 9
+    p1 mcts: move 3, move 2 1
+      search (8000 visits): icywind,0;spore,0 734v 350 | icywind,0;sludgebomb,1 434v 187 | icywind,0;protect,1 414v 176 | scald,0;spore,0 411v 175
+    p2 greedy: move 1 1, move 1 1
+      p2a Landorus used Earth Power -> p1a: Blastoise
+      p2b Arcanine used Overheat -> p1a: Blastoise
+              p2b Arcanine spa 2 fell
+              p1a Blastoise used up its Sitrus Berry
+      p1a Blastoise used Icy Wind -> p2b: Arcanine  [[spread] p2a,p2b]
+              p2a Landorus spe 1 fell
+              p2b Arcanine spe 1 fell
+      p1b Amoonguss used Spore -> p2a: Landorus
+              p2a Landorus is now slp
+      after p1: Blastoise 262/362, Amoonguss 432/432
+      after p2: Landorus 214/338, Arcanine 282/384
+
+  Turn 10
+    p1 mcts: move 3, move 3 2
+      search (5000 visits): icywind,0;sludgebomb,1 262v 78 | icywind,0;sludgebomb,0 232v 65 | icywind,0;protect,1 212v 57 | scald,1;sludgebomb,0 200v 52
+    p2 greedy: move 1 1, move 1 1
+              p2a Landorus COULD NOT MOVE (slp)
+      p1a Blastoise used Icy Wind -> p2b: Arcanine  [[spread] p2a,p2b]
+              p2a Landorus spe 1 fell
+              p2b Arcanine spe 1 fell
+      p2b Arcanine used Overheat -> p1a: Blastoise
+              p2b Arcanine spa 2 fell
+      p1b Amoonguss used Sludge Bomb -> p2b: Arcanine
+              p2b Arcanine used up its Sitrus Berry
+      after p1: Blastoise 239/362, Amoonguss 432/432
+      after p2: Landorus 78/338, Arcanine 267/384
+
+  Turn 11
+    p1 mcts: move 3, move 3 2
+      search (6000 visits): icywind,0;sludgebomb,1 267v 50 | icywind,0;sludgebomb,0 246v 44 | scald,1;sludgebomb,0 221v 36 | icywind,0;protect,1 221v 36
+    p2 greedy: move 1 1, move 1 1
+              p2a Landorus COULD NOT MOVE (slp)
+      p1a Blastoise used Icy Wind -> p2a: Landorus  [[spread] p2a,p2b]
+              p2b Arcanine spe 1 fell
+      p2a Landorus fainted
+      p2b Arcanine used Overheat -> p1a: Blastoise
+      p1b Amoonguss used Sludge Bomb -> p2b: Arcanine
+      after p1: Blastoise 223/362, Amoonguss 432/432
+      after p2: Landorus 0/338, Arcanine 153/384
+
+  Turn 12
+      p2a <- Porygon2 comes in (374/374)
+              p2a Porygon2 spa 1 rose
+      after p1: Blastoise 223/362, Amoonguss 432/432
+      after p2: Porygon2 374/374, Arcanine 153/384
+
+  Turn 13
+    p1 mcts: move 3, move 2 1
+      search (4000 visits): icywind,0;spore,0 218v 75 | scald,1;spore,0 171v 52 | scald,0;spore,0 169v 51 | icywind,0;sludgebomb,0 169v 52
+    p2 greedy: move 1 1, move 1 1
+      p1a Blastoise used Icy Wind -> p2b: Arcanine  [[spread] p2a,p2b]
+              p2a Porygon2 spe 1 fell
+              p2b Arcanine spe 1 fell
+      p2a Porygon2 used Ice Beam -> p1a: Blastoise
+      p2b Arcanine used Overheat -> p1a: Blastoise
+      p1b Amoonguss used Spore -> p2a: Porygon2
+              p2a Porygon2 is now slp
+      after p1: Blastoise 160/362, Amoonguss 432/432
+      after p2: Porygon2 353/374, Arcanine 139/384
+
+  Turn 14
+    p1 mcts: move 1 2, move 3 1
+      search (3000 visits): scald,1;sludgebomb,0 133v 44 | scald,0;sludgebomb,1 129v 42 | icywind,0;sludgebomb,1 125v 40 | icywind,0;sludgebomb,0 122v 39
+    p2 greedy: move 1 1, move 1 1
+      p1a Blastoise used Scald -> p2b: Arcanine
+      p2b Arcanine fainted
+              p2a Porygon2 COULD NOT MOVE (slp)
+      p1b Amoonguss used Sludge Bomb -> p2a: Porygon2
+      after p1: Blastoise 160/362, Amoonguss 432/432
+      after p2: Porygon2 283/374, Arcanine 0/384
+
+  Turn 15
+      p2b <- Conkeldurr comes in (414/414)
+      after p1: Blastoise 160/362, Amoonguss 432/432
+      after p2: Porygon2 283/374, Conkeldurr 414/414
+
+  Turn 16
+    p1 mcts: move 3, move 3 1
+      search (5000 visits): icywind,0;sludgebomb,0 379v 203 | icywind,0;spore,0 377v 202 | icywind,0;protect,1 272v 135 | icywind,0;spore,1 254v 124
+    p2 greedy: move 1 1, move 1 1
+      p1a Blastoise used Icy Wind -> p2b: Conkeldurr  [[spread] p2a,p2b]
+              p2a Porygon2 spe 1 fell
+              p2b Conkeldurr spe 1 fell
+      p2b Conkeldurr used Drain Punch -> p1a: Blastoise
+              p2a Porygon2 COULD NOT MOVE (slp)
+      p1b Amoonguss used Sludge Bomb -> p2a: Porygon2
+      after p1: Blastoise 46/362, Amoonguss 432/432
+      after p2: Porygon2 194/374, Conkeldurr 414/414
+
+  Turn 17
+    p1 mcts: move 1 1, move 3 1
+      search (10000 visits): scald,0;sludgebomb,0 734v 366 | icywind,0;sludgebomb,0 731v 364 | icywind,0;spore,0 721v 358 | icywind,0;protect,1 621v 301
+    p2 greedy: move 1 1, move 1 1
+      p1a Blastoise used Scald -> p2a: Porygon2
+      p2b Conkeldurr used Drain Punch -> p1a: Blastoise
+      p1a Blastoise fainted
+              p2a Porygon2 is cured of slp
+      p2a Porygon2 used Ice Beam -> p1b: Amoonguss
+              p1b Amoonguss -- critical hit
+      p1b Amoonguss used Sludge Bomb -> p2a: Porygon2
+      after p1: Blastoise 0/362, Amoonguss 26/432
+      after p2: Porygon2 42/374, Conkeldurr 414/414
+
+  Turn 18
+    p1 mcts: pass, move 4
+      search (77000 visits): No Move;protect,1 76330v 30071 | No Move;ragepowder,1 134v 0 | No Move;spore,0 134v 0 | No Move;spore,1 134v 0
+    p2 greedy: move 1 2, move 1 2
+      p1b Amoonguss used Protect
+      p2b Conkeldurr used Drain Punch -> p1b: Amoonguss
+              p1b Amoonguss -- move: Protect
+      p2a Porygon2 used Ice Beam -> p1b: Amoonguss
+              p1b Amoonguss -- move: Protect
+      after p1: Blastoise 0/362, Amoonguss 26/432
+      after p2: Porygon2 42/374, Conkeldurr 414/414
+
+  Turn 19
+    p1 mcts: pass, move 4
+      search (71000 visits): No Move;protect,1 70340v 27696 | No Move;ragepowder,1 132v 0 | No Move;spore,0 132v 0 | No Move;spore,1 132v 0
+    p2 greedy: move 1 2, move 1 2
+      p1b Amoonguss used Protect  [[still]]
+              p1b Amoonguss -- IT FAILED
+      p2b Conkeldurr used Drain Punch -> p1b: Amoonguss
+      p1b Amoonguss fainted
+      after p1: Blastoise 0/362, Amoonguss 0/432
+      after p2: Porygon2 42/374, Conkeldurr 345/414
+
+  RESULT: p2 wins

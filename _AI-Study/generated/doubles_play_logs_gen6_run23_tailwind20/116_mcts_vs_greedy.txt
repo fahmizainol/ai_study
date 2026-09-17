@@ -1,0 +1,137 @@
+battle 116   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: BUREIZAKIN: Blaziken-Mega, Bisharp, Amoonguss, Raichu, Scrafty, Kyurem-Black
+  p2: ORAS Doubles OU: Hariyama, Kyurem-Black, Heatran, Mawile, Amoonguss, Jellicent
+
+  Turn 1
+    p1 mcts: move 4, move 3 2
+      search (30000 visits): protect,0;ironhead,1 987v 621 | protect,0;knockoff,1 768v 468 | protect,0;knockoff,0 751v 457 | protect,0;ironhead,0 722v 437
+    p2 greedy: move 2 1, move 1 1
+      p1a Blaziken used Protect
+      p2b Kyurem used Ice Beam -> p1a: Blaziken
+              p1a Blaziken -- move: Protect
+      p1b Bisharp used Iron Head -> p2b: Kyurem
+      p2a Hariyama used Close Combat -> p1a: Blaziken
+              p1a Blaziken -- move: Protect
+              p1a Blaziken spe 1 rose
+      after p1: Blaziken-Mega 301/301, Bisharp 245/272
+      after p2: Hariyama 429/429, Kyurem-Black 74/432
+
+  Turn 2
+    p1 mcts: move 2 2, move 1 1
+      search (45000 visits): highjumpkick,1;knockoff,0 22273v 20808 | highjumpkick,1;ironhead,0 444v 147 | protect,0;protect,1 365v 113 | highjumpkick,1;protect,1 364v 113
+    p2 greedy: move 2 2, move 1 2
+      p1a Blaziken used High Jump Kick -> p2b: Kyurem
+      p2b Kyurem fainted
+      p1b Bisharp used Knock Off -> p2a: Hariyama
+              p2a Hariyama used up its Assault Vest
+      p2a Hariyama used Close Combat -> p1b: Bisharp
+              p2a Hariyama def 1 fell
+              p2a Hariyama spd 1 fell
+      p1b Bisharp fainted
+              p1a Blaziken spe 1 rose
+      after p1: Blaziken-Mega 301/301, Bisharp 0/272
+      after p2: Hariyama 265/429, Kyurem-Black 0/432
+
+  Turn 3
+      p2b <- Heatran comes in (386/386)
+      p1b <- Amoonguss comes in (432/432)
+      after p1: Blaziken-Mega 301/301, Amoonguss 432/432
+      after p2: Hariyama 265/429, Heatran 386/386
+
+  Turn 4
+    p1 mcts: move 3, move 2 1
+      search (18000 visits): swordsdance,0;spore,0 2596v 1820 | highjumpkick,1;spore,0 892v 570 | highjumpkick,1;gigadrain,0 886v 566 | swordsdance,0;switch scrafty 813v 514
+    p2 greedy: move 2 1, move 1
+      p1a Blaziken used Swords Dance
+              p1a Blaziken atk 2 rose
+      p2b Heatran used Heat Wave -> p1b: Amoonguss  [[spread] p1a,p1b]
+              p1b Amoonguss -- critical hit
+      p2a Hariyama used Close Combat -> p1a: Blaziken
+              p2a Hariyama def 1 fell
+              p2a Hariyama spd 1 fell
+      p1a Blaziken fainted
+      p1b Amoonguss used Spore -> p2a: Hariyama
+              p2a Hariyama is now slp
+      after p1: Blaziken-Mega 0/301, Amoonguss 10/432
+      after p2: Hariyama 265/429, Heatran 386/386
+
+  Turn 5
+      p1a <- Raichu comes in (262/262)
+      after p1: Raichu 262/262, Amoonguss 10/432
+      after p2: Hariyama 265/429, Heatran 386/386
+
+  Turn 6
+    p1 mcts: move 3 1, switch 5   (slot1 Amoonguss -> Scrafty)
+      search (17000 visits): thunderbolt,0;switch scrafty 378v 130 | switch kyuremblack;switch scrafty 355v 120 | thunderbolt,1;switch scrafty 350v 118 | hiddenpower,0;switch scrafty 320v 104
+    p2 greedy: move 2 2, move 1
+      p1b <- Scrafty comes in (334/334)
+              p2a Hariyama atk 1 fell
+              p2b Heatran atk 1 fell
+      p1a Raichu used Thunderbolt -> p2a: Hariyama
+      p2a Hariyama fainted
+      p2b Heatran used Heat Wave -> p1b: Scrafty  [[spread] p1b]
+              p2b Heatran -- MISSED
+              p1b Scrafty is now brn
+              p1b Scrafty used up its Eject Button
+      after p1: Raichu 262/262, Scrafty 205/334
+      after p2: Hariyama 0/429, Heatran 386/386
+
+  Turn 7
+      p1b <- Amoonguss comes in (154/432)
+      after p1: Raichu 262/262, Amoonguss 154/432
+      after p2: Hariyama 0/429, Heatran 386/386
+
+  Turn 8
+      p2a <- Mawile comes in (304/304)
+              p1a Raichu atk 1 fell
+              p1b Amoonguss atk 1 fell
+      after p1: Raichu 262/262, Amoonguss 154/432
+      after p2: Mawile 304/304, Heatran 386/386
+
+  Turn 9
+    p1 mcts: switch 5, move 2 1   (slot0 Raichu -> Scrafty)
+      search (15000 visits): switch scrafty;spore,0 996v 737 | thunderbolt,0;switch scrafty 890v 651 | switch kyuremblack;switch scrafty 816v 592 | switch scrafty;protect,1 800v 579
+    p2 greedy: move 1 2, move 1
+      p1a <- Scrafty comes in (205/334)
+              p2a Mawile atk 1 fell
+              p2b Heatran atk 1 fell
+      p2b Heatran used Heat Wave -> p1b: Amoonguss  [[spread] p1a,p1b]
+      p1b Amoonguss fainted
+      p2a Mawile used Play Rough -> p1a: Scrafty
+      p1a Scrafty fainted
+      after p1: Scrafty 0/334, Amoonguss 0/432
+      after p2: Mawile 304/304, Heatran 386/386
+
+  Turn 10
+      p1a <- Raichu comes in (262/262)
+      p1b <- Kyurem-Black comes in (391/391)
+      after p1: Raichu 262/262, Kyurem-Black 391/391
+      after p2: Mawile 304/304, Heatran 386/386
+
+  Turn 11
+    p1 mcts: move 3 1, move 3 2
+      search (9000 visits): thunderbolt,0;earthpower,1 688v 411 | thunderbolt,0;earthpower,0 465v 261 | hiddenpower,1;earthpower,1 362v 194 | hiddenpower,0;earthpower,1 357v 190
+    p2 greedy: move 1 1, move 1
+      p1b Kyurem used Earth Power -> p2b: Heatran
+              p2b Heatran used up its Shuca Berry
+              p2b Heatran used up its Shuca Berry
+      p1a Raichu used Thunderbolt -> p2a: Mawile
+      p2b Heatran used Heat Wave -> p1b: Kyurem  [[spread] p1a,p1b]
+              p1b Kyurem is now brn
+      p2a Mawile used Play Rough -> p1a: Raichu
+      p1a Raichu fainted
+      after p1: Raichu 0/262, Kyurem-Black 172/391
+      after p2: Mawile 111/304, Heatran 204/386
+
+  Turn 12
+    p1 mcts: pass, move 3 2
+      search (378000 visits): No Move;earthpower,1 334179v 9091 | No Move;earthpower,0 43821v 515
+    p2 greedy: move 1 2, move 1
+      p1b Kyurem used Earth Power -> p2b: Heatran
+      p2b Heatran fainted
+      p2a Mawile used Play Rough -> p1b: Kyurem
+      p1b Kyurem fainted
+      after p1: Raichu 0/262, Kyurem-Black 0/391
+      after p2: Mawile 111/304, Heatran 0/386
+
+  RESULT: p2 wins

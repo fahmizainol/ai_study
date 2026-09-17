@@ -1,0 +1,245 @@
+battle 51   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: Untitled 466: Kangaskhan-Mega, Thundurus, Bisharp, Deoxys-Attack, Conkeldurr, Volcanion
+  p2: Untitled 576: Kangaskhan-Mega, Deoxys-Speed, Landorus-Therian, Genesect, Amoonguss, Volcanion
+
+  Turn 1
+    p1 mcts: switch 5, move 1 2   (slot0 Kangaskhan-Mega -> Conkeldurr)
+      search (27000 visits): switch conkeldurr;thunderbolt,1 283v 30 | switch volcanion;thunderbolt,1 283v 30 | seismictoss,0;thunderbolt,1 278v 29 | fakeout,1;thunderbolt,1 275v 28
+    p2 greedy: move 1 1, move 4 1
+      p1a <- Conkeldurr comes in (414/414)
+      p2a Kangaskhan used Fake Out -> p1a: Conkeldurr
+      p2b Deoxys used Psycho Boost -> p1a: Conkeldurr
+              p2b Deoxys spa 2 fell
+      p1a Conkeldurr fainted
+      p1b Thundurus used Thunderbolt -> p2b: Deoxys
+              p2b Deoxys is now par
+      after p1: Conkeldurr 0/414, Thundurus 361/361
+      after p2: Kangaskhan-Mega 414/414, Deoxys-Speed 88/241
+
+  Turn 2
+      p1a <- Bisharp comes in (271/271)
+      after p1: Bisharp 271/271, Thundurus 361/361
+      after p2: Kangaskhan-Mega 414/414, Deoxys-Speed 88/241
+
+  Turn 3
+    p1 mcts: switch 6, move 1 1   (slot0 Bisharp -> Volcanion)
+      search (31000 visits): switch volcanion;thunderbolt,0 422v 37 | switch kangaskhanmega;thunderbolt,0 401v 33 | switch deoxysattack;thunderbolt,0 396v 32 | switch volcanion;thunderwave,0 374v 27
+    p2 greedy: move 1 1, move 4 1
+      p1a <- Volcanion comes in (363/363)
+      p2a Kangaskhan used Fake Out  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p1b Thundurus used Thunderbolt -> p2a: Kangaskhan
+      p2b Deoxys used Psycho Boost -> p1a: Volcanion
+              p2b Deoxys spa 2 fell
+      after p1: Volcanion 285/363, Thundurus 361/361
+      after p2: Kangaskhan-Mega 279/414, Deoxys-Speed 64/241
+
+  Turn 4
+    p1 mcts: switch 5, move 1 1   (slot0 Volcanion -> Kangaskhan-Mega)
+      search (29000 visits): switch kangaskhanmega;thunderbolt,0 328v 26 | overheat,1;thunderbolt,0 325v 25 | steameruption,0;thunderbolt,0 324v 25 | overheat,0;thunderbolt,0 323v 25
+    p2 greedy: move 1 1, move 4 1
+      p1a <- Kangaskhan-Mega comes in (414/414)
+      p2a Kangaskhan used Fake Out  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p1b Thundurus used Thunderbolt -> p2a: Kangaskhan
+      p2b Deoxys used Psycho Boost -> p1a: Kangaskhan
+              p2b Deoxys spa 2 fell
+      after p1: Kangaskhan-Mega 324/414, Thundurus 361/361
+      after p2: Kangaskhan-Mega 156/414, Deoxys-Speed 40/241
+
+  Turn 5
+    p1 mcts: switch 5, switch 6   (slot0 Kangaskhan-Mega -> Volcanion; slot1 Thundurus -> Bisharp)
+      search (27000 visits): switch volcanion;switch bisharp 8206v 5207 | switch volcanion;switch deoxysattack 345v 138 | switch volcanion;thunderbolt,1 282v 106 | fakeout,1;thunderbolt,1 244v 86
+    p2 greedy: move 1 1, move 4 1
+      p1a <- Volcanion comes in (285/363)
+      p1b <- Bisharp comes in (271/271)
+      p2a Kangaskhan used Fake Out  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p2b Deoxys used Psycho Boost -> p1a: Volcanion
+      after p1: Volcanion 246/363, Bisharp 271/271
+      after p2: Kangaskhan-Mega 156/414, Deoxys-Speed 16/241
+
+  Turn 6
+    p1 mcts: switch 6, move 2 1   (slot0 Volcanion -> Thundurus)
+      search (31000 visits): switch thundurus;knockoff,0 641v 179 | switch deoxysattack;protect,1 563v 150 | switch thundurus;protect,1 563v 150 | overheat,0;knockoff,0 521v 135
+    p2 greedy: move 1 1, move 4 1
+      p1a <- Thundurus comes in (361/361)
+      p2a Kangaskhan used Fake Out  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p1b Bisharp used Knock Off -> p2a: Kangaskhan
+      p2a Kangaskhan fainted
+      p2b Deoxys used Psycho Boost -> p1a: Thundurus
+      p2b Deoxys fainted
+      after p1: Thundurus 305/361, Bisharp 244/271
+      after p2: Kangaskhan-Mega 0/414, Deoxys-Speed 0/241
+
+  Turn 7
+      p2b <- Genesect comes in (284/284)
+      p2a <- Landorus-Therian comes in (338/338)
+              p1a Thundurus atk 1 fell
+              p1b Bisharp atk 1 fell
+              p1b Bisharp atk 2 rose
+              p2b Genesect atk 1 rose
+      after p1: Thundurus 305/361, Bisharp 244/271
+      after p2: Landorus-Therian 338/338, Genesect 284/284
+
+  Turn 8
+    p1 mcts: switch 6, move 4   (slot0 Thundurus -> Volcanion)
+      search (18000 visits): switch volcanion;protect,1 1546v 929 | thunderbolt,1;protect,1 623v 334 | thunderwave,1;protect,1 521v 271 | thunderbolt,1;suckerpunch,1 354v 169
+    p2 greedy: move 2 1, move 4 1
+      p1a <- Volcanion comes in (246/363)
+      p1b Bisharp used Protect
+      p2a Landorus used Earth Power -> p1a: Volcanion
+      p2b Genesect used Blaze Kick -> p1a: Volcanion
+      after p1: Volcanion 9/363, Bisharp 244/271
+      after p2: Landorus-Therian 338/338, Genesect 284/284
+
+  Turn 9
+    p1 mcts: move 3 2, move 4
+      search (22000 visits): earthpower,1;protect,1 1202v 626 | heatwave,0;protect,1 1105v 570 | steameruption,0;protect,1 1013v 516 | steameruption,1;protect,1 989v 502
+    p2 greedy: move 2 1, move 4 1
+      p1b Bisharp used Protect  [[still]]
+              p1b Bisharp -- IT FAILED
+      p2a Landorus used Earth Power -> p1a: Volcanion
+      p1a Volcanion fainted
+      p2b Genesect used Blaze Kick -> p1b: Bisharp
+      p1b Bisharp fainted
+      after p1: Volcanion 0/363, Bisharp 0/271
+      after p2: Landorus-Therian 338/338, Genesect 284/284
+
+  Turn 10
+      p1b <- Kangaskhan-Mega comes in (324/414)
+      p1a <- Deoxys-Attack comes in (241/241)
+      after p1: Deoxys-Attack 241/241, Kangaskhan-Mega 324/414
+      after p2: Landorus-Therian 338/338, Genesect 284/284
+
+  Turn 11
+    p1 mcts: move 1 1, move 2 1
+      search (23000 visits): psychoboost,0;seismictoss,0 3137v 939 | switch thundurus;suckerpunch,0 2574v 938 | superpower,1;switch thundurus 2129v 598 | switch thundurus;fakeout,0 1215v 306
+    p2 greedy: move 2 2, move 4 2
+      p1a Deoxys used Psycho Boost -> p2a: Landorus
+              p1a Deoxys spa 2 fell
+      p2a Landorus fainted
+      p1b Kangaskhan used Seismic Toss -> p2b: Genesect
+      p2b Genesect used Blaze Kick -> p1b: Kangaskhan  [[miss]]
+              p2b Genesect -- MISSED
+      after p1: Deoxys-Attack 241/241, Kangaskhan-Mega 324/414
+      after p2: Landorus-Therian 0/338, Genesect 184/284
+
+  Turn 12
+      p2a <- Amoonguss comes in (432/432)
+      after p1: Deoxys-Attack 241/241, Kangaskhan-Mega 324/414
+      after p2: Amoonguss 432/432, Genesect 184/284
+
+  Turn 13
+    p1 mcts: switch 6, move 4   (slot0 Deoxys-Attack -> Thundurus)
+      search (29000 visits): switch thundurus;protect,1 792v 52 | switch thundurus;seismictoss,0 747v 46 | switch thundurus;seismictoss,1 745v 46 | switch thundurus;suckerpunch,0 713v 41
+    p2 greedy: move 3 2, move 4 2
+      p1a <- Thundurus comes in (305/361)
+      p1b Kangaskhan used Protect
+      p2b Genesect used Blaze Kick -> p1b: Kangaskhan
+              p1b Kangaskhan -- move: Protect
+      p2a Amoonguss used Energy Ball -> p1b: Kangaskhan
+              p1b Kangaskhan -- move: Protect
+      after p1: Thundurus 305/361, Kangaskhan-Mega 324/414
+      after p2: Amoonguss 432/432, Genesect 184/284
+
+  Turn 14
+    p1 mcts: move 2 1, move 4
+      search (8000 visits): thunderwave,0;protect,1 125v 9 | thunderwave,0;seismictoss,0 124v 9 | thunderbolt,1;seismictoss,0 123v 9 | thunderbolt,0;seismictoss,0 122v 8
+    p2 greedy: move 3 2, move 4 2
+      p1b Kangaskhan used Protect  [[still]]
+              p1b Kangaskhan -- IT FAILED
+      p1a Thundurus used Thunder Wave -> p2a: Amoonguss
+              p2a Amoonguss is now par
+      p2b Genesect used Blaze Kick -> p1b: Kangaskhan
+              p2a Amoonguss COULD NOT MOVE (par)
+      after p1: Thundurus 305/361, Kangaskhan-Mega 127/414
+      after p2: Amoonguss 432/432, Genesect 184/284
+
+  Turn 15
+    p1 mcts: move 4 1, move 2 1
+      search (23000 visits): taunt,0;seismictoss,0 12361v 4236 | thunderbolt,1;fakeout,0 164v 5 | thunderbolt,1;protect,1 164v 5 | thunderbolt,1;seismictoss,1 161v 5
+    p2 greedy: move 3 2, move 4 2
+      p1a Thundurus used Taunt -> p2a: Amoonguss
+              p2a Amoonguss gained move: Taunt
+      p1b Kangaskhan used Seismic Toss -> p2a: Amoonguss
+      p2b Genesect used Blaze Kick -> p1b: Kangaskhan  [[miss]]
+              p2b Genesect -- MISSED
+      p2a Amoonguss used Energy Ball -> p1b: Kangaskhan
+      p1b Kangaskhan fainted
+      after p1: Thundurus 305/361, Kangaskhan-Mega 0/414
+      after p2: Amoonguss 332/432, Genesect 184/284
+
+  Turn 16
+      p1b <- Deoxys-Attack comes in (241/241)
+      after p1: Thundurus 305/361, Deoxys-Attack 241/241
+      after p2: Amoonguss 332/432, Genesect 184/284
+
+  Turn 17
+    p1 mcts: move 1 1, move 1 1
+      search (23000 visits): thunderbolt,0;psychoboost,0 1143v 203 | thunderbolt,0;protect,1 843v 131 | thunderwave,0;psychoboost,0 841v 131 | hiddenpower,0;psychoboost,0 810v 124
+    p2 greedy: move 3 1, move 4 1
+      p1b Deoxys used Psycho Boost -> p2a: Amoonguss
+              p1b Deoxys spa 2 fell
+      p2a Amoonguss fainted
+      p2b Genesect used Blaze Kick -> p1a: Thundurus
+      p1a Thundurus fainted
+      after p1: Thundurus 0/361, Deoxys-Attack 241/241
+      after p2: Amoonguss 0/432, Genesect 184/284
+
+  Turn 18
+      p2a <- Volcanion comes in (364/364)
+      after p1: Thundurus 0/361, Deoxys-Attack 241/241
+      after p2: Volcanion 364/364, Genesect 184/284
+
+  Turn 19
+    p1 mcts: pass, move 2 2
+      search (54000 visits): No Move;superpower,1 43723v 13913 | No Move;protect,1 9249v 2699 | No Move;psychoboost,0 319v 25 | No Move;superpower,0 253v 12
+    p2 greedy: move 4 2, move 4 2
+      p1b Deoxys used Superpower -> p2b: Genesect
+              p1b Deoxys atk 1 fell
+              p1b Deoxys def 1 fell
+      p2b Genesect used Blaze Kick -> p1b: Deoxys
+              p1b Deoxys used up its Focus Sash
+      p2a Volcanion used Overheat -> p1b: Deoxys  [[miss]]
+              p2a Volcanion -- MISSED
+      after p1: Thundurus 0/361, Deoxys-Attack 1/241
+      after p2: Volcanion 364/364, Genesect 13/284
+
+  Turn 20
+    p1 mcts: pass, move 4
+      search (112000 visits): No Move;protect,1 95306v 14216 | No Move;psychoboost,1 7146v 759 | No Move;superpower,1 6257v 640 | No Move;psychoboost,0 1220v 31
+    p2 greedy: move 4 2, move 4 2
+      p1b Deoxys used Protect
+      p2b Genesect used Blaze Kick -> p1b: Deoxys
+              p1b Deoxys -- move: Protect
+      p2a Volcanion used Overheat -> p1b: Deoxys
+              p1b Deoxys -- move: Protect
+      after p1: Thundurus 0/361, Deoxys-Attack 1/241
+      after p2: Volcanion 364/364, Genesect 13/284
+
+  Turn 21
+    p1 mcts: pass, move 4
+      search (93000 visits): No Move;protect,1 82753v 12621 | No Move;superpower,1 4002v 358 | No Move;psychoboost,1 3243v 263 | No Move;psychoboost,0 1072v 21
+    p2 greedy: move 4 2, move 4 2
+      p1b Deoxys used Protect
+      p2b Genesect used Blaze Kick -> p1b: Deoxys
+              p1b Deoxys -- move: Protect
+      p2a Volcanion used Overheat -> p1b: Deoxys
+              p1b Deoxys -- move: Protect
+      after p1: Thundurus 0/361, Deoxys-Attack 1/241
+      after p2: Volcanion 364/364, Genesect 13/284
+
+  Turn 22
+    p1 mcts: pass, move 4
+      search (130000 visits): No Move;protect,1 106782v 15513 | No Move;superpower,1 11901v 1362 | No Move;psychoboost,1 7471v 768 | No Move;psychoboost,0 1357v 37
+    p2 greedy: move 4 2, move 4 2
+      p1b Deoxys used Protect  [[still]]
+              p1b Deoxys -- IT FAILED
+      p2b Genesect used Blaze Kick -> p1b: Deoxys
+      p1b Deoxys fainted
+      after p1: Thundurus 0/361, Deoxys-Attack 0/241
+      after p2: Volcanion 364/364, Genesect 13/284
+
+  RESULT: p2 wins

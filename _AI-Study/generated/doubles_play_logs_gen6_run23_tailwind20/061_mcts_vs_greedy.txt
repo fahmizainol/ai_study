@@ -1,0 +1,86 @@
+battle 61   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: ORAS Doubles OU: Thundurus, Mienshao, Talonflame, Aerodactyl, Sylveon, Heatran
+  p2: Untitled 294: Diancie-Mega, Terrakion, Talonflame, Bisharp, Kyurem-Black, Gastrodon-East
+
+  Turn 1
+    p1 mcts: switch 5, switch 6   (slot0 Thundurus -> Sylveon; slot1 Mienshao -> Heatran)
+      search (22000 visits): switch sylveon;switch heatran 534v 201 | switch aerodactyl;highjumpkick,1 310v 98 | switch heatran;highjumpkick,1 308v 97 | switch sylveon;switch aerodactyl 279v 84
+    p2 greedy: move 1, move 3 1
+      p1b <- Heatran comes in (329/329)
+      p1a <- Sylveon comes in (392/392)
+      p2a Diancie used Diamond Storm -> p1a: Sylveon  [[spread] p1a,p1b]
+              p2a Diancie def 1 rose
+      p2b Terrakion used Close Combat -> p1a: Sylveon
+              p2b Terrakion def 1 fell
+              p2b Terrakion spd 1 fell
+      after p1: Sylveon 55/392, Heatran 246/329
+      after p2: Diancie-Mega 304/304, Terrakion 323/323
+
+  Turn 2
+    p1 mcts: move 1, move 2 1
+      search (16000 visits): hypervoice,0;flashcannon,0 354v 154 | shadowball,1;flashcannon,0 308v 129 | hiddenpower,1;flashcannon,0 294v 121 | psyshock,1;flashcannon,0 280v 113
+    p2 greedy: move 1, move 3 1
+      p2a Diancie used Diamond Storm -> p1a: Sylveon  [[spread] p1a,p1b]
+              p2a Diancie def 1 rose
+      p1a Sylveon fainted
+      p2b Terrakion used Close Combat -> p1b: Heatran
+              p2b Terrakion def 1 fell
+              p2b Terrakion spd 1 fell
+      p1b Heatran fainted
+      after p1: Sylveon 0/392, Heatran 0/329
+      after p2: Diancie-Mega 304/304, Terrakion 323/323
+
+  Turn 3
+      p1b <- Aerodactyl comes in (302/302)
+      p1a <- Talonflame comes in (318/318)
+      after p1: Talonflame 318/318, Aerodactyl 302/302
+      after p2: Diancie-Mega 304/304, Terrakion 323/323
+
+  Turn 4
+    p1 mcts: switch 6, move 4 1 mega   (slot0 Talonflame -> Mienshao)
+      search (13000 visits): switch mienshao;ironhead-mega,0 196v 65 | protect,0;ironhead-mega,0 185v 60 | switch mienshao;ironhead,0 181v 58 | tailwind,0;wingattack,1 180v 57
+    p2 greedy: move 1, move 3 1
+      p1a <- Mienshao comes in (324/324)
+      p1b Aerodactyl used Iron Head -> p2a: Diancie
+      p2a Diancie used Diamond Storm -> p1a: Mienshao  [[spread] p1a,p1b]
+      p1b Aerodactyl fainted
+      p2b Terrakion used Close Combat -> p1a: Mienshao
+              p2b Terrakion def 1 fell
+              p2b Terrakion spd 1 fell
+      p1a Mienshao fainted
+      after p1: Mienshao 0/324, Aerodactyl 0/302
+      after p2: Diancie-Mega 128/304, Terrakion 323/323
+
+  Turn 5
+      p1b <- Talonflame comes in (318/318)
+      p1a <- Thundurus comes in (362/362)
+      after p1: Thundurus 362/362, Talonflame 318/318
+      after p2: Diancie-Mega 128/304, Terrakion 323/323
+
+  Turn 6
+    p1 mcts: move 3 1, move 3
+      search (22000 visits): thunderbolt,0;protect,1 3032v 892 | thunderbolt,0;tailwind,1 1314v 331 | thunderbolt,0;willowisp,1 1062v 253 | thunderbolt,0;bravebird,0 953v 220
+    p2 greedy: move 1, move 3 1
+      p1b Talonflame used Protect
+      p2a Diancie used Diamond Storm -> p1a: Thundurus  [[spread] p1a]
+              p1b Talonflame -- move: Protect
+      p2b Terrakion used Close Combat -> p1a: Thundurus
+              p2b Terrakion def 1 fell
+              p2b Terrakion spd 1 fell
+      p1a Thundurus fainted
+      after p1: Thundurus 0/362, Talonflame 318/318
+      after p2: Diancie-Mega 128/304, Terrakion 323/323
+
+  Turn 7
+    p1 mcts: pass, move 3
+      search (49000 visits): No Move;protect,1 48010v 20773 | No Move;tailwind,1 228v 33 | No Move;bravebird,0 206v 27 | No Move;willowisp,1 196v 24
+    p2 greedy: move 1, move 3 2
+      p1b Talonflame used Protect  [[still]]
+              p1b Talonflame -- IT FAILED
+      p2a Diancie used Diamond Storm -> p1b: Talonflame
+              p2a Diancie def 1 rose
+      p1b Talonflame fainted
+      after p1: Thundurus 0/362, Talonflame 0/318
+      after p2: Diancie-Mega 128/304, Terrakion 323/323
+
+  RESULT: p2 wins

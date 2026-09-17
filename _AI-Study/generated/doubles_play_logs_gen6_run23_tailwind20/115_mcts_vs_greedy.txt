@@ -1,0 +1,207 @@
+battle 115   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: whim gar trap: Gengar-Mega, Bisharp, Whimsicott, Landorus-Therian, Talonflame, Keldeo-Resolute
+  p2: goth diancie: Diancie-Mega, Gothitelle, Gastrodon-East, Genesect, Talonflame, Landorus-Therian
+
+  Turn 1
+    p1 mcts: move 1 1, move 4
+      search (18000 visits): sludgebomb,0;protect,1 2061v 1138 | switch landorustherian;protect,1 1046v 536 | sludgebomb,0;suckerpunch,1 733v 356 | sludgebomb,1;protect,1 625v 295
+    p2 greedy: move 1, move 1 1
+      p1b Bisharp used Protect
+      p1a Gengar used Sludge Bomb -> p2a: Diancie
+      p2a Diancie used Diamond Storm -> p1a: Gengar  [[spread] p1a]
+              p1b Bisharp -- move: Protect
+              p2a Diancie def 1 rose
+      p2b Gothitelle used Psychic -> p1a: Gengar
+      p1a Gengar fainted
+      after p1: Gengar-Mega 0/323, Bisharp 272/272
+      after p2: Diancie-Mega 113/287, Gothitelle 344/344
+
+  Turn 2
+      p1a <- Whimsicott comes in (324/324)
+      after p1: Whimsicott 324/324, Bisharp 272/272
+      after p2: Diancie-Mega 113/287, Gothitelle 344/344
+
+  Turn 3
+    p1 mcts: move 3, move 4
+      search (23000 visits): tailwind,0;protect,1 3311v 1454 | tailwind,0;ironhead,0 2080v 870 | tailwind,0;knockoff,1 1526v 613 | protect,0;ironhead,0 752v 266
+    p2 greedy: move 1, move 1 1
+      p1b Bisharp used Protect
+      p1a Whimsicott used Tailwind
+      -sidestart p1: A move: Tailwind
+      p2a Diancie used Diamond Storm -> p1b: Bisharp  [[spread] p1a]
+              p1b Bisharp -- move: Protect
+              p2a Diancie def 1 rose
+      p2b Gothitelle used Psychic -> p1a: Whimsicott
+              p1a Whimsicott spd 1 fell
+      after p1: Whimsicott 42/324, Bisharp 272/272
+      after p2: Diancie-Mega 113/287, Gothitelle 344/344
+
+  Turn 4
+    p1 mcts: move 2 1, move 3 1
+      search (29000 visits): taunt,0;ironhead,0 5105v 2951 | encore,1;ironhead,0 3044v 1702 | taunt,1;ironhead,0 2074v 1124 | tailwind,0;ironhead,0 1966v 1060
+    p2 greedy: move 1, move 1 1
+      p1a Whimsicott used Taunt -> p2a: Diancie
+      p2a Diancie used Taunt -> p1a: Whimsicott  [[from] ability: Magic Bounce]
+              p1a Whimsicott gained move: Taunt
+      p1b Bisharp used Iron Head -> p2a: Diancie
+      p2a Diancie fainted
+      p2b Gothitelle used Psychic -> p1a: Whimsicott
+      p1a Whimsicott fainted
+      after p1: Whimsicott 0/324, Bisharp 245/272
+      after p2: Diancie-Mega 0/287, Gothitelle 344/344
+
+  Turn 5
+      p1a <- Landorus-Therian comes in (376/376)
+      p2a <- Gastrodon-East comes in (426/426)
+              p2a Gastrodon atk 1 fell
+              p2b Gothitelle atk 1 fell
+      after p1: Landorus-Therian 376/376, Bisharp 245/272
+      after p2: Gastrodon-East 426/426, Gothitelle 344/344
+
+  Turn 6
+    p1 mcts: move 2 1, move 1 2
+      search (29000 visits): uturn,0;knockoff,1 8295v 4417 | uturn,0;knockoff,0 2787v 1383 | uturn,1;knockoff,1 1803v 857 | uturn,1;knockoff,0 1662v 782
+    p2 greedy: move 1 2, move 1 2
+      p1a Landorus used U-turn -> p2a: Gastrodon
+      after p1: Landorus-Therian 314/376, Bisharp 245/272
+      after p2: Gastrodon-East 326/426, Gothitelle 344/344
+
+  Turn 7
+      p1a <- Talonflame comes in (297/297)
+      p1b Bisharp used Knock Off -> p2b: Gothitelle
+              p2b Gothitelle used up its Rocky Helmet
+      p2b Gothitelle fainted
+      p2a Gastrodon used Earth Power -> p1b: Bisharp
+      p1b Bisharp fainted
+      after p1: Talonflame 297/297, Bisharp 0/272
+      after p2: Gastrodon-East 326/426, Gothitelle 0/344
+
+  Turn 8
+      p1b <- Landorus-Therian comes in (314/376)
+      p2b <- Genesect comes in (283/283)
+              p2a Gastrodon atk 1 fell
+              p2b Genesect atk 1 fell
+              p2b Genesect spa 1 rose
+      after p1: Talonflame 297/297, Landorus-Therian 314/376
+      after p2: Gastrodon-East 326/426, Genesect 283/283
+
+  Turn 9
+    p1 mcts: move 2 2, move 2 1
+      search (24000 visits): flareblitz,1;uturn,0 1638v 827 | uturn,0;earthquake,0 1004v 476 | flareblitz,1;rockslide,0 972v 458 | flareblitz,1;uturn,1 960v 452
+    p2 greedy: move 1 2, move 1 2
+      p1b Landorus used U-turn -> p2a: Gastrodon
+      after p1: Talonflame 297/297, Landorus-Therian 252/376
+      after p2: Gastrodon-East 230/426, Genesect 283/283
+
+  Turn 10
+      p1b <- Keldeo-Resolute comes in (323/323)
+      p1a Talonflame used Flare Blitz -> p2b: Genesect
+      p2b Genesect fainted
+      p2a Gastrodon used Earth Power -> p1b: Keldeo
+      -sideend p1: A move: Tailwind
+      after p1: Talonflame 204/297, Keldeo-Resolute 199/323
+      after p2: Gastrodon-East 230/426, Genesect 0/283
+
+  Turn 11
+      p2b <- Talonflame comes in (359/359)
+      after p1: Talonflame 204/297, Keldeo-Resolute 199/323
+      after p2: Gastrodon-East 230/426, Talonflame 359/359
+
+  Turn 12
+    p1 mcts: move 2 1, move 2 1
+      search (32000 visits): flareblitz,0;secretsword,0 8016v 3119 | flareblitz,1;protect,1 3219v 1158 | flareblitz,1;secretsword,0 2586v 906 | flareblitz,1;secretsword,1 2488v 867
+    p2 greedy: move 1 2, move 1 2
+      p2b Talonflame used Brave Bird -> p1b: Keldeo
+      p1b Keldeo fainted
+      p1a Talonflame used Flare Blitz -> p2a: Gastrodon
+              p2a Gastrodon is now brn
+      p2a Gastrodon used Earth Power -> p1a: Talonflame
+              p1a Talonflame -- IMMUNE
+      after p1: Talonflame 108/297, Keldeo-Resolute 0/323
+      after p2: Gastrodon-East 36/426, Talonflame 293/359
+
+  Turn 13
+      p1b <- Landorus-Therian comes in (252/376)
+              p2a Gastrodon atk 1 fell
+              p2b Talonflame atk 1 fell
+      after p1: Talonflame 108/297, Landorus-Therian 252/376
+      after p2: Gastrodon-East 36/426, Talonflame 293/359
+
+  Turn 14
+    p1 mcts: move 2 2, move 3
+      search (82000 visits): flareblitz,1;rockslide,0 60812v 28002 | flareblitz,0;rockslide,0 18075v 8031 | flareblitz,1;uturn,1 622v 180 | flareblitz,1;uturn,0 401v 97
+    p2 greedy: move 1 1, move 1 1
+      p2b Talonflame used Brave Bird -> p1a: Talonflame
+      p1a Talonflame fainted
+      p1b Landorus used Rock Slide -> p2a: Gastrodon  [[spread] p2a,p2b]
+      p2a Gastrodon fainted
+      p2b Talonflame fainted
+      after p1: Talonflame 0/297, Landorus-Therian 252/376
+      after p2: Gastrodon-East 0/426, Talonflame 0/359
+
+  Turn 15
+      p2a <- Landorus-Therian comes in (382/382)
+              p1b Landorus atk 1 fell
+      after p1: Talonflame 0/297, Landorus-Therian 252/376
+      after p2: Landorus-Therian 382/382, Talonflame 0/359
+
+  Turn 16
+    p1 mcts: pass, move 3
+      search (601000 visits): No Move;rockslide,0 601000v 220590
+    p2 greedy: move 1, pass
+      p1b Landorus used Rock Slide -> p2a: Landorus
+      p2a Landorus used Earthquake -> p1b: Landorus
+              p1b Landorus -- IMMUNE
+      after p1: Talonflame 0/297, Landorus-Therian 252/376
+      after p2: Landorus-Therian 311/382, Talonflame 0/359
+
+  Turn 17
+    p1 mcts: pass, move 3
+      search (807000 visits): No Move;rockslide,0 807000v 499019
+    p2 greedy: move 1, pass
+      p1b Landorus used Rock Slide -> p2a: Landorus
+      p2a Landorus used Earthquake -> p1b: Landorus
+              p1b Landorus -- IMMUNE
+      after p1: Talonflame 0/297, Landorus-Therian 252/376
+      after p2: Landorus-Therian 244/382, Talonflame 0/359
+
+  Turn 18
+    p1 mcts: pass, move 3
+      search (825000 visits): No Move;rockslide,0 825000v 511418
+    p2 greedy: move 1, pass
+      p1b Landorus used Rock Slide -> p2a: Landorus
+      p2a Landorus used Earthquake -> p1b: Landorus
+              p1b Landorus -- IMMUNE
+      after p1: Talonflame 0/297, Landorus-Therian 252/376
+      after p2: Landorus-Therian 170/382, Talonflame 0/359
+
+  Turn 19
+    p1 mcts: pass, move 3
+      search (1187000 visits): No Move;rockslide,0 1187000v 1087118
+    p2 greedy: move 1, pass
+      p1b Landorus used Rock Slide -> p2a: Landorus
+      p2a Landorus used Earthquake -> p1b: Landorus
+              p1b Landorus -- IMMUNE
+      after p1: Talonflame 0/297, Landorus-Therian 252/376
+      after p2: Landorus-Therian 94/382, Talonflame 0/359
+
+  Turn 20
+    p1 mcts: pass, move 3
+      search (1699000 visits): No Move;rockslide,0 1699000v 1693500
+    p2 greedy: move 1, pass
+      p1b Landorus used Rock Slide -> p2a: Landorus
+      p2a Landorus used Earthquake -> p1b: Landorus
+              p1b Landorus -- IMMUNE
+      after p1: Talonflame 0/297, Landorus-Therian 252/376
+      after p2: Landorus-Therian 29/382, Talonflame 0/359
+
+  Turn 21
+    p1 mcts: pass, move 3
+      search (1985000 visits): No Move;rockslide,0 1985000v 1978254
+    p2 greedy: move 1, pass
+      p1b Landorus used Rock Slide -> p2a: Landorus
+      p2a Landorus fainted
+      after p1: Talonflame 0/297, Landorus-Therian 252/376
+      after p2: Landorus-Therian 0/382, Talonflame 0/359
+
+  RESULT: p1 wins

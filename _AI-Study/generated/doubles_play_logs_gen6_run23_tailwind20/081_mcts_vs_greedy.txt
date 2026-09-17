@@ -1,0 +1,124 @@
+battle 81   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: ORAS Doubles OU: Lucario, Suicune, Landorus-Therian, Latios, Thundurus, Talonflame
+  p2: ORAS Doubles OU: Steelix, Bronzong, Azumarill, Hariyama, Tyranitar, Gothitelle
+
+  Turn 1
+    p1 mcts: move 1 1 mega, move 2 1
+      search (5000 visits): closecombat-mega,0;scald,0 42v 30 | irontail-mega,1;scald,0 40v 28 | switch landorustherian;scald,0 40v 29 | switch landorustherian;snarl,0 40v 28
+    p2 greedy: move 2, move 1
+      p1a Lucario used Close Combat -> p2a: Steelix
+              p1a Lucario def 1 fell
+              p1a Lucario spd 1 fell
+      p1b Suicune used Scald -> p2a: Steelix
+      p2a Steelix fainted
+      p2b Bronzong used Trick Room
+      after p1: Lucario-Mega 282/282, Suicune 404/404
+      after p2: Steelix 0/353, Bronzong 337/337
+
+  Turn 2
+      p2a <- Azumarill comes in (404/404)
+      after p1: Lucario-Mega 282/282, Suicune 404/404
+      after p2: Azumarill 404/404, Bronzong 337/337
+
+  Turn 3
+    p1 mcts: switch 6, switch 3   (slot0 Lucario-Mega -> Talonflame; slot1 Suicune -> Landorus-Therian)
+      search (13000 visits): switch talonflame;switch landorustherian 415v 292 | switch landorustherian;switch thundurus 304v 203 | switch landorustherian;switch talonflame 250v 160 | irontail,0;switch landorustherian 246v 157
+    p2 greedy: move 2 1, move 1
+      p1b <- Landorus-Therian comes in (319/319)
+              p2a Azumarill atk 1 fell
+              p2b Bronzong atk 1 fell
+      p1a <- Talonflame comes in (297/297)
+      p2a Azumarill used Play Rough -> p1a: Talonflame  [[miss]]
+              p2a Azumarill -- MISSED
+      p2b Bronzong used Trick Room
+      after p1: Talonflame 297/297, Landorus-Therian 319/319
+      after p2: Azumarill 404/404, Bronzong 337/337
+
+  Turn 4
+    p1 mcts: move 2 2, move 1
+      search (21000 visits): flareblitz,1;earthquake,0 1841v 1311 | willowisp,1;earthquake,0 592v 375 | willowisp,0;earthquake,0 582v 367 | protect,0;earthquake,0 560v 351
+    p2 greedy: move 2 1, move 1
+      p1b Landorus used Earthquake -> p2a: Azumarill  [[spread] p2a]
+              p1a Talonflame -- IMMUNE
+              p2b Bronzong -- IMMUNE
+      p1a Talonflame used Flare Blitz -> p2b: Bronzong
+      p2b Bronzong fainted
+      p2a Azumarill used Play Rough -> p1a: Talonflame
+              p1a Talonflame -- critical hit
+      p1a Talonflame fainted
+      after p1: Talonflame 0/297, Landorus-Therian 319/319
+      after p2: Azumarill 239/404, Bronzong 0/337
+
+  Turn 5
+      p1a <- Suicune comes in (404/404)
+      p2b <- Hariyama comes in (429/429)
+      after p1: Suicune 404/404, Landorus-Therian 319/319
+      after p2: Azumarill 239/404, Hariyama 429/429
+
+  Turn 6
+    p1 mcts: switch 5, move 1   (slot0 Suicune -> Thundurus)
+      search (16000 visits): switch thundurus;earthquake,0 1402v 812 | snarl,0;earthquake,0 1358v 784 | icebeam,1;earthquake,0 1345v 775 | scald,1;earthquake,0 1203v 685
+    p2 greedy: move 2 1, move 1 1
+      p1a <- Thundurus comes in (299/299)
+      p1b Landorus used Earthquake -> p2a: Azumarill  [[spread] p2a,p2b]
+              p1a Thundurus -- IMMUNE
+              p2a Azumarill used up its Sitrus Berry
+      p2a Azumarill used Play Rough -> p1a: Thundurus
+      p2b Hariyama used Close Combat -> p1a: Thundurus
+              p2b Hariyama def 1 fell
+              p2b Hariyama spd 1 fell
+      p1a Thundurus fainted
+      after p1: Thundurus 0/299, Landorus-Therian 319/319
+      after p2: Azumarill 165/404, Hariyama 249/429
+
+  Turn 7
+      p1a <- Latios comes in (301/301)
+      after p1: Latios 301/301, Landorus-Therian 319/319
+      after p2: Azumarill 165/404, Hariyama 249/429
+
+  Turn 8
+    p1 mcts: move 3, move 1
+      search (34000 visits): tailwind,0;earthquake,0 18674v 15485 | psyshock,1;earthquake,0 2973v 2316 | psyshock,0;earthquake,0 2724v 2111 | protect,0;earthquake,0 2464v 1899
+    p2 greedy: move 2 1, move 1 1
+      p1b Landorus used Earthquake -> p2a: Azumarill  [[spread] p2a,p2b]
+              p1a Latios -- IMMUNE
+      p2a Azumarill fainted
+      p2b Hariyama fainted
+      p1a Latios used Tailwind
+      -sidestart p1: A move: Tailwind
+      after p1: Latios 301/301, Landorus-Therian 319/319
+      after p2: Azumarill 0/404, Hariyama 0/429
+
+  Turn 9
+      p2b <- Gothitelle comes in (344/344)
+      p2a <- Tyranitar comes in (404/404)
+      after p1: Latios 301/301, Landorus-Therian 319/319
+      after p2: Tyranitar 404/404, Gothitelle 344/344
+
+  Turn 10
+    p1 mcts: move 1 2, move 1
+      search (48000 visits): dracometeor,1;earthquake,0 42187v 32289 | protect,0;earthquake,0 2348v 1512 | dracometeor,0;earthquake,0 2089v 1334 | psyshock,1;earthquake,0 520v 284
+    p2 greedy: move 3 1, move 2 1
+      p1b Landorus used Earthquake -> p2b: Gothitelle  [[spread] p2a,p2b]
+              p1a Latios -- IMMUNE
+      p1a Latios used Draco Meteor -> p2b: Gothitelle
+              p2b Gothitelle -- critical hit
+              p1a Latios spa 2 fell
+      p2b Gothitelle fainted
+      p2a Tyranitar used Ice Beam -> p1a: Latios
+              p1a Latios is now frz
+      after p1: Latios 81/301, Landorus-Therian 319/319
+      after p2: Tyranitar 106/404, Gothitelle 0/344
+
+  Turn 11
+    p1 mcts: switch 6, move 1   (slot0 Latios -> Lucario-Mega)
+      search (694000 visits): switch lucariomega;earthquake,0 612405v 611211 | switch suicune;earthquake,0 62092v 61091 | protect,0;earthquake,0 10432v 9951 | switch lucariomega;switch suicune 3407v 3120
+    p2 greedy: move 3 1, pass
+      p1a <- Lucario-Mega comes in (282/282)
+      p1b Landorus used Earthquake -> p2a: Tyranitar  [[spread] p1a,p2a]
+      p1a Lucario fainted
+      p2a Tyranitar fainted
+      after p1: Lucario 0/282, Landorus-Therian 319/319
+      after p2: Tyranitar 0/404, Gothitelle 0/344
+
+  RESULT: p1 wins

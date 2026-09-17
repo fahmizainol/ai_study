@@ -1,0 +1,149 @@
+battle 134   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: ORAS Doubles OU: Charizard, Shiftry, Gengar, Rotom-Wash, Genesect, Landorus-Therian
+  p2: cleefable: Kangaskhan-Mega, Thundurus, Volcanion, Clefable, Bisharp, Terrakion
+
+  Turn 1
+    p1 mcts: move 2 mega, move 2 2
+      search (12000 visits): heatwave-mega,0;knockoff,1 204v 138 | heatwave-mega,0;switch landorustherian 190v 127 | heatwave-mega,0;switch genesect 144v 90 | switch landorustherian;switch genesect 141v 87
+    p2 greedy: move 4 1, move 1 1
+      p2a Kangaskhan used Sucker Punch -> p1a: Charizard
+      p2b Thundurus used Thunderbolt -> p1a: Charizard
+      p1a Charizard fainted
+      p1b Shiftry used Knock Off -> p2b: Thundurus
+              p2b Thundurus used up its Sitrus Berry
+      after p1: Charizard 0/297, Shiftry 321/321
+      after p2: Kangaskhan-Mega 385/385, Thundurus 149/362
+
+  Turn 2
+      p1a <- Gengar comes in (262/262)
+      after p1: Gengar 262/262, Shiftry 321/321
+      after p2: Kangaskhan-Mega 385/385, Thundurus 149/362
+
+  Turn 3
+    p1 mcts: move 4 1, move 2 2
+      search (24000 visits): willowisp,0;knockoff,1 1609v 1138 | willowisp,0;switch landorustherian 708v 460 | sludgebomb,0;knockoff,1 584v 370 | sludgebomb,1;knockoff,0 530v 331
+    p2 greedy: move 4 1, move 1 1
+      p2a Kangaskhan used Sucker Punch  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p1b Shiftry used Knock Off -> p2b: Thundurus
+      p1a Gengar used Will-O-Wisp -> p2a: Kangaskhan
+              p2a Kangaskhan is now brn
+      p2b Thundurus used Thunderbolt -> p1a: Gengar
+      after p1: Gengar 109/262, Shiftry 321/321
+      after p2: Kangaskhan-Mega 337/385, Thundurus 16/362
+
+  Turn 4
+    p1 mcts: move 2 2, switch 5   (slot1 Shiftry -> Genesect)
+      search (24000 visits): sludgebomb,1;switch genesect 587v 369 | switch genesect;leafblade,1 579v 363 | shadowball,1;switch genesect 573v 358 | switch genesect;knockoff,1 480v 292
+    p2 greedy: move 4 1, move 1 1
+      p1b <- Genesect comes in (283/283)
+              p1b Genesect atk 1 rose
+      p2a Kangaskhan used Sucker Punch -> p1a: Gengar
+      p1a Gengar fainted
+      p2b Thundurus used Thunderbolt -> p1b: Genesect
+      after p1: Gengar 0/262, Genesect 135/283
+      after p2: Kangaskhan-Mega 289/385, Thundurus 16/362
+
+  Turn 5
+      p1a <- Rotom-Wash comes in (304/304)
+      after p1: Rotom-Wash 304/304, Genesect 135/283
+      after p2: Kangaskhan-Mega 289/385, Thundurus 16/362
+
+  Turn 6
+    p1 mcts: move 1 2, move 2 2
+      search (31000 visits): thunderbolt,1;ironhead,1 710v 440 | thunderbolt,0;ironhead,1 662v 406 | protect,0;ironhead,1 638v 390 | thunderbolt,1;uturn,0 618v 376
+    p2 greedy: move 4 2, move 1 2
+      p2a Kangaskhan used Sucker Punch -> p1b: Genesect
+      p1b Genesect used Iron Head -> p2b: Thundurus
+      p2b Thundurus fainted
+      p1a Rotom used Thunderbolt -> p2a: Kangaskhan
+      after p1: Rotom-Wash 304/304, Genesect 89/283
+      after p2: Kangaskhan-Mega 102/385, Thundurus 0/362
+
+  Turn 7
+      p2b <- Volcanion comes in (363/363)
+      after p1: Rotom-Wash 304/304, Genesect 89/283
+      after p2: Kangaskhan-Mega 102/385, Volcanion 363/363
+
+  Turn 8
+    p1 mcts: move 1 2, move 2 1
+      search (31000 visits): thunderbolt,1;ironhead,0 15641v 10038 | thunderbolt,1;ironhead,1 3074v 1832 | thunderbolt,1;switch landorustherian 1488v 834 | thunderbolt,0;ironhead,1 1004v 537
+    p2 greedy: move 4 2, move 4 2
+      p2a Kangaskhan used Sucker Punch -> p1b: Genesect
+      p1b Genesect used Iron Head -> p2a: Kangaskhan
+      p2a Kangaskhan fainted
+      p1a Rotom used Thunderbolt -> p2b: Volcanion
+      p2b Volcanion used Overheat -> p1b: Genesect
+              p2b Volcanion spa 2 fell
+      p1b Genesect fainted
+      after p1: Rotom-Wash 304/304, Genesect 0/283
+      after p2: Kangaskhan-Mega 0/385, Volcanion 211/363
+
+  Turn 9
+      p2a <- Clefable comes in (394/394)
+      p1b <- Shiftry comes in (321/321)
+      after p1: Rotom-Wash 304/304, Shiftry 321/321
+      after p2: Clefable 394/394, Volcanion 211/363
+
+  Turn 10
+    p1 mcts: move 1 2, switch 6   (slot1 Shiftry -> Landorus-Therian)
+      search (12000 visits): thunderbolt,1;switch landorustherian 627v 450 | hydropump,0;switch landorustherian 604v 432 | thunderbolt,0;switch landorustherian 600v 428 | willowisp,0;switch landorustherian 482v 334
+    p2 greedy: move 3 1, move 4 1
+      p1b <- Landorus-Therian comes in (319/319)
+              p2a Clefable atk 1 fell
+              p2b Volcanion atk 1 fell
+      p1a Rotom used Thunderbolt -> p2b: Volcanion
+      p2b Volcanion used Overheat -> p1a: Rotom
+              p2b Volcanion spa 2 fell
+      p2a Clefable used Flamethrower -> p1a: Rotom
+      after p1: Rotom-Wash 229/304, Landorus-Therian 319/319
+      after p2: Clefable 394/394, Volcanion 59/363
+
+  Turn 11
+    p1 mcts: move 1 1, move 2
+      search (30000 visits): thunderbolt,0;earthquake,0 3281v 2036 | hydropump,0;earthquake,0 2481v 1510 | protect,0;earthquake,0 2034v 1219 | willowisp,0;earthquake,0 1833v 1088
+    p2 greedy: move 3 1, move 4 1
+      p1b Landorus used Earthquake -> p2b: Volcanion  [[spread] p2a,p2b]
+              p1a Rotom -- IMMUNE
+              p2b Volcanion -- critical hit
+      p2b Volcanion fainted
+      p1a Rotom used Thunderbolt -> p2a: Clefable
+      p2a Clefable used Flamethrower -> p1a: Rotom
+      after p1: Rotom-Wash 197/304, Landorus-Therian 319/319
+      after p2: Clefable 95/394, Volcanion 0/363
+
+  Turn 12
+      p2b <- Bisharp comes in (271/271)
+      after p1: Rotom-Wash 197/304, Landorus-Therian 319/319
+      after p2: Clefable 95/394, Bisharp 271/271
+
+  Turn 13
+    p1 mcts: move 4, move 2
+      search (44000 visits): protect,0;earthquake,0 6106v 4437 | willowisp,1;earthquake,0 6088v 4423 | thunderbolt,1;earthquake,0 5945v 4314 | hydropump,1;earthquake,0 5853v 4245
+    p2 greedy: move 3 1, move 1 1
+      p1a Rotom used Protect
+      p2b Bisharp used Sucker Punch  [[still]]
+              p2b Bisharp -- IT FAILED
+      p1b Landorus used Earthquake -> p2b: Bisharp  [[spread] p2a,p2b]
+              p1a Rotom -- IMMUNE
+      p2a Clefable fainted
+      p2b Bisharp fainted
+      after p1: Rotom-Wash 197/304, Landorus-Therian 319/319
+      after p2: Clefable 0/394, Bisharp 0/271
+
+  Turn 14
+      p2a <- Terrakion comes in (323/323)
+      after p1: Rotom-Wash 197/304, Landorus-Therian 319/319
+      after p2: Terrakion 323/323, Bisharp 0/271
+
+  Turn 15
+    p1 mcts: switch 6, move 2   (slot0 Rotom-Wash -> Shiftry)
+      search (1051000 visits): switch shiftry;earthquake,0 217408v 216798 | willowisp,0;earthquake,0 210262v 209631 | hydropump,0;earthquake,0 209716v 209084 | thunderbolt,0;earthquake,0 209487v 208854
+    p2 greedy: move 3 1, pass
+      p1a <- Shiftry comes in (321/321)
+      p1b Landorus used Earthquake -> p2a: Terrakion  [[spread] p1a,p2a]
+      p2a Terrakion fainted
+      after p1: Shiftry 198/321, Landorus-Therian 319/319
+      after p2: Terrakion 0/323, Bisharp 0/271
+
+  RESULT: p1 wins

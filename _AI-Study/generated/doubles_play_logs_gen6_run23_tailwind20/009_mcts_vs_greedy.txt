@@ -1,0 +1,308 @@
+battle 9   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: ORAS Doubles OU: Dunsparce, Greninja, Garchomp, Togekiss, Charizard, Venusaur
+  p2: ORAS Doubles OU: Charizard-Mega-Y, Sylveon, Aegislash, Landorus-Therian, Zapdos, Cresselia
+
+  Turn 1
+    p1 mcts: move 3, move 4
+      search (33000 visits): coil,0;protect,1 4238v 2685 | roost,0;protect,1 3859v 2442 | roost,0;switch charizard 2561v 1575 | glare,1;switch charizard 1635v 969
+    p2 greedy: move 2 1, move 2
+      p1b Greninja used Protect
+              p1b Greninja gained typechange Normal
+      p2a Charizard used Solar Beam  [[still]]
+      p2b Sylveon used Hyper Voice -> p1b: Greninja  [[spread] p1a]
+              p1b Greninja -- move: Protect
+      p1a Dunsparce used Coil
+              p1a Dunsparce atk 1 rose
+              p1a Dunsparce def 1 rose
+              p1a Dunsparce accuracy 1 rose
+      after p1: Dunsparce 296/404, Greninja 285/285
+      after p2: Charizard-Mega-Y 359/359, Sylveon 393/393
+
+  Turn 2
+    p1 mcts: move 4, move 4
+      search (39000 visits): roost,0;protect,1 4790v 2603 | roost,0;switch charizard 2997v 1576 | roost,0;switch togekiss 2674v 1393 | roost,0;switch venusaur 2392v 1234
+    p2 greedy: move 1, move 2
+      p1b Greninja used Protect  [[still]]
+              p1b Greninja -- IT FAILED
+      p2a Charizard used Solar Beam -> p1a: Dunsparce  [[from] lockedmove]
+      p2b Sylveon used Hyper Voice -> p1b: Greninja  [[spread] p1a,p1b]
+      p1a Dunsparce used Roost
+      after p1: Dunsparce 259/404, Greninja 114/285
+      after p2: Charizard-Mega-Y 359/359, Sylveon 393/393
+
+  Turn 3
+    p1 mcts: move 4, move 4
+      search (36000 visits): roost,0;protect,1 2738v 1195 | switch charizard;protect,1 1856v 776 | glare,0;protect,1 1349v 539 | glare,1;protect,1 1144v 445
+    p2 greedy: move 2 2, move 2
+      p1b Greninja used Protect
+      p2a Charizard used Solar Beam  [[still]]
+      p2b Sylveon used Hyper Voice -> p1b: Greninja  [[spread] p1a]
+              p1b Greninja -- move: Protect
+      p1a Dunsparce used Roost
+      after p1: Dunsparce 354/404, Greninja 114/285
+      after p2: Charizard-Mega-Y 359/359, Sylveon 393/393
+
+  Turn 4
+    p1 mcts: move 4, switch 5   (slot1 Greninja -> Charizard)
+      search (44000 visits): roost,0;switch charizard 25455v 18394 | roost,0;protect,1 993v 588 | roost,0;switch venusaur 716v 406 | roost,0;switch togekiss 694v 392
+    p2 greedy: move 1, move 2
+      p1b <- Charizard comes in (359/359)
+      p2a Charizard used Solar Beam -> p1b: Charizard  [[from] lockedmove]
+      p2b Sylveon used Hyper Voice -> p1a: Dunsparce  [[spread] p1a,p1b]
+      p1a Dunsparce used Roost
+      after p1: Dunsparce 404/404, Charizard 244/359
+      after p2: Charizard-Mega-Y 359/359, Sylveon 393/393
+
+  Turn 5
+    p1 mcts: switch 4, move 4   (slot0 Dunsparce -> Togekiss)
+      search (36000 visits): switch togekiss;protect,1 2858v 1506 | glare,0;heatwave-mega,0 1155v 552 | coil,0;protect,1 1099v 521 | switch togekiss;protect-mega,1 812v 367
+    p2 greedy: move 2 2, move 2
+      p1a <- Togekiss comes in (373/373)
+      p1b Charizard used Protect
+      p2a Charizard used Solar Beam  [[still]]
+      p2b Sylveon used Hyper Voice -> p1b: Charizard  [[spread] p1a]
+              p1b Charizard -- move: Protect
+      after p1: Togekiss 280/373, Charizard 244/359
+      after p2: Charizard-Mega-Y 359/359, Sylveon 393/393
+
+  Turn 6
+    p1 mcts: move 4, move 1 mega
+      search (36000 visits): protect,0;heatwave-mega,0 1577v 1136 | tailwind,0;heatwave-mega,0 1554v 1119 | tailwind,0;heatwave,0 958v 659 | protect,0;focusblast-mega,1 911v 623
+    p2 greedy: move 1, move 2
+      p1a Togekiss used Protect
+      p1b Charizard used Heat Wave -> p2a: Charizard  [[spread] p2a,p2b]
+      p2a Charizard used Solar Beam -> p1b: Charizard  [[from] lockedmove]
+      p2b Sylveon used Hyper Voice -> p1a: Togekiss  [[spread] p1b]
+              p1a Togekiss -- move: Protect
+      after p1: Togekiss 280/373, Charizard-Mega-Y 153/359
+      after p2: Charizard-Mega-Y 266/359, Sylveon 240/393
+
+  Turn 7
+    p1 mcts: move 3, move 4
+      search (29000 visits): tailwind,0;protect,1 3688v 2274 | protect,0;protect,1 2767v 1674 | tailwind,0;heatwave,0 1161v 648 | tailwind,0;solarbeam,1 1050v 579
+    p2 greedy: move 2 2, move 2
+      p1b Charizard used Protect
+      p2a Charizard used Solar Beam  [[still]]
+              p1b Charizard -- move: Protect
+      p1a Togekiss used Tailwind
+      -sidestart p1: A move: Tailwind
+      p2b Sylveon used Hyper Voice -> p1b: Charizard  [[spread] p1a]
+              p1b Charizard -- move: Protect
+              p1a Togekiss -- critical hit
+      after p1: Togekiss 123/373, Charizard-Mega-Y 153/359
+      after p2: Charizard-Mega-Y 266/359, Sylveon 264/393
+
+  Turn 8
+    p1 mcts: move 4, move 4
+      search (16000 visits): protect,0;protect,1 1856v 1064 | airslash,0;heatwave,0 410v 154 | tailwind,0;heatwave,0 289v 97 | switch greninja;heatwave,0 272v 89
+    p2 greedy: move 2 1, move 2
+      p1b Charizard used Protect  [[still]]
+              p1b Charizard -- IT FAILED
+      p1a Togekiss used Protect
+      p2a Charizard used Solar Beam  [[still]]
+              p1a Togekiss -- move: Protect
+      p2b Sylveon used Hyper Voice -> p1b: Charizard  [[spread] p1b]
+              p1a Togekiss -- move: Protect
+      after p1: Togekiss 123/373, Charizard-Mega-Y 98/359
+      after p2: Charizard-Mega-Y 266/359, Sylveon 288/393
+
+  Turn 9
+    p1 mcts: move 4, move 1
+      search (28000 visits): protect,0;heatwave,0 4729v 2518 | protect,0;protect,1 4642v 2469 | protect,0;solarbeam,1 1277v 602 | airslash,1;protect,1 935v 421
+    p2 greedy: move 2 2, move 2
+      p1a Togekiss used Protect  [[still]]
+              p1a Togekiss -- IT FAILED
+      p1b Charizard used Heat Wave -> p2a: Charizard  [[spread] p2a,p2b]
+      p2a Charizard used Solar Beam  [[still]]
+      p2b Sylveon used Hyper Voice -> p1b: Charizard  [[spread] p1a,p1b]
+      after p1: Togekiss 24/373, Charizard-Mega-Y 8/359
+      after p2: Charizard-Mega-Y 176/359, Sylveon 140/393
+
+  Turn 10
+    p1 mcts: move 4, move 4
+      search (42000 visits): protect,0;protect,1 2295v 1331 | airslash,1;solarbeam,1 1797v 1019 | protect,0;heatwave,0 1651v 929 | protect,0;solarbeam,1 1421v 787
+    p2 greedy: move 2 2, move 2
+      p1b Charizard used Protect
+      p1a Togekiss used Protect
+      p2a Charizard used Solar Beam  [[still]]
+              p1b Charizard -- move: Protect
+      p2b Sylveon used Hyper Voice -> p1a: Togekiss  [[spread] ]
+              p1a Togekiss -- move: Protect
+              p1b Charizard -- move: Protect
+      -sideend p1: A move: Tailwind
+      after p1: Togekiss 24/373, Charizard-Mega-Y 8/359
+      after p2: Charizard-Mega-Y 176/359, Sylveon 164/393
+
+  Turn 11
+    p1 mcts: move 4, move 4
+      search (40000 visits): protect,0;protect,1 2088v 1184 | tailwind,0;protect,1 1272v 684 | tailwind,0;focusblast,1 1078v 567 | protect,0;heatwave,0 1048v 550
+    p2 greedy: move 2 2, move 2
+      p1b Charizard used Protect  [[still]]
+              p1b Charizard -- IT FAILED
+      p1a Togekiss used Protect
+      p2a Charizard used Solar Beam  [[still]]
+      p2b Sylveon used Hyper Voice -> p1b: Charizard  [[spread] p1b]
+              p1a Togekiss -- move: Protect
+      p1b Charizard fainted
+      after p1: Togekiss 24/373, Charizard 0/359
+      after p2: Charizard-Mega-Y 176/359, Sylveon 188/393
+
+  Turn 12
+      p1b <- Garchomp comes in (357/357)
+      after p1: Togekiss 24/373, Garchomp 357/357
+      after p2: Charizard-Mega-Y 176/359, Sylveon 188/393
+
+  Turn 13
+    p1 mcts: move 4, switch 4   (slot1 Garchomp -> Dunsparce)
+      search (41000 visits): protect,0;switch dunsparce 7793v 4397 | protect,0;earthquake,0 2720v 1378 | protect,0;protect,1 2588v 1305 | protect,0;dragonclaw,0 1934v 948
+    p2 greedy: move 1, move 2
+      p1b <- Dunsparce comes in (404/404)
+      p1a Togekiss used Protect  [[still]]
+              p1a Togekiss -- IT FAILED
+      p2a Charizard used Solar Beam -> p1b: Dunsparce  [[from] lockedmove]
+      p2b Sylveon used Hyper Voice -> p1a: Togekiss  [[spread] p1a,p1b]
+      p1a Togekiss fainted
+      after p1: Togekiss 0/373, Dunsparce 149/404
+      after p2: Charizard-Mega-Y 176/359, Sylveon 212/393
+
+  Turn 14
+      p1a <- Garchomp comes in (357/357)
+      after p1: Garchomp 357/357, Dunsparce 149/404
+      after p2: Charizard-Mega-Y 176/359, Sylveon 212/393
+
+  Turn 15
+    p1 mcts: move 4, move 3
+      search (48000 visits): protect,0;coil,1 12347v 7555 | protect,0;roost,1 9061v 5480 | protect,0;glare,1 5164v 3042 | protect,0;rockslide,0 2178v 1207
+    p2 greedy: move 2 2, move 2
+      p1a Garchomp used Protect
+      p2a Charizard used Solar Beam  [[still]]
+      p2b Sylveon used Hyper Voice -> p1b: Dunsparce  [[spread] p1b]
+              p1a Garchomp -- move: Protect
+      p1b Dunsparce used Coil
+              p1b Dunsparce atk 1 rose
+              p1b Dunsparce def 1 rose
+              p1b Dunsparce accuracy 1 rose
+      after p1: Garchomp 357/357, Dunsparce 44/404
+      after p2: Charizard-Mega-Y 176/359, Sylveon 236/393
+
+  Turn 16
+    p1 mcts: move 4, move 4
+      search (47000 visits): protect,0;roost,1 6136v 2752 | protect,0;switch venusaur 5660v 2525 | protect,0;coil,1 4289v 1874 | protect,0;rockslide,0 4286v 1872
+    p2 greedy: move 1, move 2
+      p1a Garchomp used Protect  [[still]]
+              p1a Garchomp -- IT FAILED
+      p2a Charizard used Solar Beam -> p1b: Dunsparce  [[from] lockedmove]
+      p1b Dunsparce fainted
+      p2b Sylveon used Hyper Voice -> p1a: Garchomp
+      p1a Garchomp fainted
+      after p1: Garchomp 0/357, Dunsparce 0/404
+      after p2: Charizard-Mega-Y 176/359, Sylveon 260/393
+
+  Turn 17
+      p1a <- Greninja comes in (114/285)
+      p1b <- Venusaur comes in (301/301)
+      after p1: Greninja 114/285, Venusaur 301/301
+      after p2: Charizard-Mega-Y 176/359, Sylveon 260/393
+
+  Turn 18
+    p1 mcts: move 4, move 4
+      search (30000 visits): protect,0;protect,1 5293v 2127 | protect,0;sludgebomb,1 2076v 757 | protect,0;sludgebomb,0 1792v 640 | icebeam,0;protect,1 1438v 495
+    p2 greedy: move 2 1, move 2
+      p1a Greninja used Protect
+              p1a Greninja gained typechange Normal
+      p1b Venusaur used Protect
+      p2a Charizard used Solar Beam  [[still]]
+      p2b Sylveon used Hyper Voice -> p1b: Venusaur  [[spread] ]
+              p1a Greninja -- move: Protect
+              p1b Venusaur -- move: Protect
+      after p1: Greninja 114/285, Venusaur 301/301
+      after p2: Charizard-Mega-Y 176/359, Sylveon 284/393
+
+  Turn 19
+    p1 mcts: move 4, move 2 2
+      search (34000 visits): protect,0;sludgebomb,1 8404v 4796 | protect,0;sleeppowder,1 2913v 1561 | protect,0;protect,1 2131v 1111 | protect,0;gigadrain,1 2042v 1061
+    p2 greedy: move 1, move 2
+      p1a Greninja used Protect  [[still]]
+              p1a Greninja -- IT FAILED
+      p2a Charizard used Solar Beam -> p1a: Greninja  [[from] lockedmove]
+      p1a Greninja fainted
+      p1b Venusaur used Sludge Bomb -> p2b: Sylveon
+      p2b Sylveon fainted
+      after p1: Greninja 0/285, Venusaur 271/301
+      after p2: Charizard-Mega-Y 176/359, Sylveon 0/393
+
+  Turn 20
+      p2b <- Aegislash comes in (324/324)
+      after p1: Greninja 0/285, Venusaur 271/301
+      after p2: Charizard-Mega-Y 176/359, Aegislash 324/324
+
+  Turn 21
+    p1 mcts: pass, move 4
+      search (49000 visits): No Move;protect,1 45997v 22273 | No Move;sleeppowder,0 1185v 439 | No Move;gigadrain,0 429v 121 | No Move;sludgebomb,0 369v 97
+    p2 greedy: move 2 2, move 1 2
+      p1b Venusaur used Protect
+      p2a Charizard used Solar Beam  [[still]]
+      p2b Aegislash used Shadow Ball -> p1b: Venusaur
+              p1b Venusaur -- move: Protect
+      after p1: Greninja 0/285, Venusaur 271/301
+      after p2: Charizard-Mega-Y 176/359, Aegislash-Blade 324/324
+
+  Turn 22
+    p1 mcts: pass, move 4
+      search (59000 visits): No Move;protect,1 56446v 29858 | No Move;sleeppowder,0 712v 265 | No Move;sludgebomb,0 485v 163 | No Move;gigadrain,1 417v 133
+    p2 greedy: move 1, move 1 2
+      p1b Venusaur used Protect
+      p2a Charizard used Solar Beam -> p1b: Venusaur  [[from] lockedmove]
+              p1b Venusaur -- move: Protect
+      p2b Aegislash used Shadow Ball -> p1b: Venusaur
+              p1b Venusaur -- move: Protect
+      after p1: Greninja 0/285, Venusaur 271/301
+      after p2: Charizard-Mega-Y 176/359, Aegislash-Blade 324/324
+
+  Turn 23
+    p1 mcts: pass, move 4
+      search (52000 visits): No Move;protect,1 49708v 24617 | No Move;sleeppowder,0 692v 235 | No Move;gigadrain,1 472v 142 | No Move;gigadrain,0 335v 87
+    p2 greedy: move 2 2, move 1 2
+      p1b Venusaur used Protect  [[still]]
+              p1b Venusaur -- IT FAILED
+      p2a Charizard used Solar Beam  [[still]]
+      p2b Aegislash used Shadow Ball -> p1b: Venusaur
+      after p1: Greninja 0/285, Venusaur 99/301
+      after p2: Charizard-Mega-Y 176/359, Aegislash-Blade 324/324
+
+  Turn 24
+    p1 mcts: pass, move 4
+      search (62000 visits): No Move;protect,1 60936v 32503 | No Move;sleeppowder,0 381v 118 | No Move;sleeppowder,1 192v 41 | No Move;gigadrain,1 155v 27
+    p2 greedy: move 1, move 1 2
+      p1b Venusaur used Protect
+      p2a Charizard used Solar Beam -> p1b: Venusaur  [[from] lockedmove]
+              p1b Venusaur -- move: Protect
+      p2b Aegislash used Shadow Ball -> p1b: Venusaur
+              p1b Venusaur -- move: Protect
+      after p1: Greninja 0/285, Venusaur 99/301
+      after p2: Charizard-Mega-Y 176/359, Aegislash-Blade 324/324
+
+  Turn 25
+    p1 mcts: pass, move 4
+      search (50000 visits): No Move;protect,1 48807v 24610 | No Move;sleeppowder,0 380v 109 | No Move;gigadrain,1 192v 36 | No Move;gigadrain,0 183v 33
+    p2 greedy: move 2 2, move 1 2
+      p1b Venusaur used Protect
+      p2a Charizard used Solar Beam  [[still]]
+      p2b Aegislash used Shadow Ball -> p1b: Venusaur
+              p1b Venusaur -- move: Protect
+      after p1: Greninja 0/285, Venusaur 99/301
+      after p2: Charizard-Mega-Y 176/359, Aegislash-Blade 324/324
+
+  Turn 26
+    p1 mcts: pass, move 4
+      search (61000 visits): No Move;protect,1 59900v 31988 | No Move;sleeppowder,0 409v 131 | No Move;gigadrain,1 217v 51 | No Move;sludgebomb,0 138v 21
+    p2 greedy: move 1, move 1 2
+      p1b Venusaur used Protect  [[still]]
+              p1b Venusaur -- IT FAILED
+      p2a Charizard used Solar Beam -> p1b: Venusaur  [[from] lockedmove]
+      p2b Aegislash used Shadow Ball -> p1b: Venusaur
+      p1b Venusaur fainted
+      after p1: Greninja 0/285, Venusaur 0/301
+      after p2: Charizard-Mega-Y 176/359, Aegislash-Blade 324/324
+
+  RESULT: p2 wins

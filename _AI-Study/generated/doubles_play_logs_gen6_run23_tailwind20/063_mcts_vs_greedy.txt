@@ -1,0 +1,187 @@
+battle 63   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: Untitled 588: Deoxys-Speed, Kangaskhan-Mega, Darkrai, Volcanion, Amoonguss, Conkeldurr
+  p2: cleefable: Kangaskhan-Mega, Thundurus, Volcanion, Clefable, Bisharp, Terrakion
+
+  Turn 1
+    p1 mcts: move 2 2, move 2 2
+      search (25000 visits): icebeam,1;fakeout,1 218v 213 | stealthrock,0;fakeout,1 209v 203 | switch amoonguss;fakeout,1 209v 203 | icebeam,1;lowkick,1 208v 202
+    p2 greedy: move 4 1, move 1 1
+      p1b Kangaskhan used Fake Out -> p2b: Thundurus
+      p2a Kangaskhan used Sucker Punch -> p1a: Deoxys
+      p1a Deoxys used Ice Beam -> p2b: Thundurus
+              p2b Thundurus -- critical hit
+              p2b Thundurus used up its Sitrus Berry
+              p2b Thundurus COULD NOT MOVE (flinch)
+      after p1: Deoxys-Speed 117/303, Kangaskhan-Mega 414/414
+      after p2: Kangaskhan-Mega 385/385, Thundurus 136/362
+
+  Turn 2
+    p1 mcts: move 2 2, move 3 2
+      search (40000 visits): icebeam,1;sing,1 338v 325 | icebeam,1;lowkick,1 337v 324 | stealthrock,0;lowkick,1 336v 323 | stealthrock,0;sing,1 335v 322
+    p2 greedy: move 4 1, move 1 1
+      p2a Kangaskhan used Sucker Punch -> p1a: Deoxys
+      p1a Deoxys fainted
+      p2b Thundurus used Thunderbolt -> p1b: Kangaskhan
+              p1b Kangaskhan is now par
+              p1b Kangaskhan COULD NOT MOVE (par)
+      after p1: Deoxys-Speed 0/303, Kangaskhan-Mega 275/414
+      after p2: Kangaskhan-Mega 385/385, Thundurus 136/362
+
+  Turn 3
+      p1a <- Darkrai comes in (344/344)
+      after p1: Darkrai 344/344, Kangaskhan-Mega 275/414
+      after p2: Kangaskhan-Mega 385/385, Thundurus 136/362
+
+  Turn 4
+    p1 mcts: move 3, move 2 2
+      search (48000 visits): snarl,0;fakeout,1 478v 471 | icebeam,1;fakeout,1 478v 471 | icebeam,1;lowkick,1 471v 463 | darkpulse,1;fakeout,1 470v 462
+    p2 greedy: move 4 2, move 1 2
+              p1b Kangaskhan COULD NOT MOVE (par)
+      p2a Kangaskhan used Sucker Punch  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p1a Darkrai used Snarl -> p2a: Kangaskhan  [[spread] p2a,p2b]
+              p2a Kangaskhan spa 1 fell
+              p2b Thundurus spa 1 fell
+      p2b Thundurus used Thunderbolt -> p1b: Kangaskhan
+      after p1: Darkrai 344/344, Kangaskhan-Mega 197/414
+      after p2: Kangaskhan-Mega 327/385, Thundurus 61/362
+
+  Turn 5
+    p1 mcts: move 4 2, move 4 1
+      search (36000 visits): icebeam,1;lowkick,0 364v 342 | icebeam,1;seismictoss,0 358v 335 | icebeam,1;sing,1 358v 335 | icebeam,1;lowkick,1 358v 335
+    p2 greedy: move 4 2, move 1 2
+      p2a Kangaskhan used Sucker Punch -> p1b: Kangaskhan
+      p1a Darkrai used Ice Beam -> p2b: Thundurus
+      p2b Thundurus fainted
+      p1b Kangaskhan used Low Kick -> p2a: Kangaskhan
+      after p1: Darkrai 344/344, Kangaskhan-Mega 116/414
+      after p2: Kangaskhan-Mega 145/385, Thundurus 0/362
+
+  Turn 6
+      p2b <- Volcanion comes in (363/363)
+      after p1: Darkrai 344/344, Kangaskhan-Mega 116/414
+      after p2: Kangaskhan-Mega 145/385, Volcanion 363/363
+
+  Turn 7
+    p1 mcts: switch 4, switch 6   (slot0 Darkrai -> Volcanion; slot1 Kangaskhan-Mega -> Conkeldurr)
+      search (38000 visits): switch volcanion;switch conkeldurr 425v 417 | switch volcanion;switch amoonguss 419v 410 | snarl,0;switch volcanion 416v 407 | darkpulse,1;switch volcanion 396v 385
+    p2 greedy: move 4 2, move 4 2
+      p1a <- Volcanion comes in (364/364)
+      p1b <- Conkeldurr comes in (414/414)
+      p2a Kangaskhan used Sucker Punch  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p2b Volcanion used Overheat -> p1b: Conkeldurr
+              p2b Volcanion spa 2 fell
+      after p1: Volcanion 364/364, Conkeldurr 266/414
+      after p2: Kangaskhan-Mega 145/385, Volcanion 363/363
+
+  Turn 8
+    p1 mcts: move 1 1, switch 5   (slot1 Conkeldurr -> Amoonguss)
+      search (40000 visits): steameruption,0;switch amoonguss 743v 625 | steameruption,0;switch darkrai 707v 592 | earthpower,0;switch darkrai 664v 552 | heatwave,0;switch amoonguss 603v 496
+    p2 greedy: move 4 2, move 4 2
+      p1b <- Amoonguss comes in (432/432)
+      p2a Kangaskhan used Sucker Punch  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p2b Volcanion used Overheat -> p1b: Amoonguss
+              p2b Volcanion spa 2 fell
+      p1a Volcanion used Steam Eruption -> p2a: Kangaskhan
+      p2a Kangaskhan fainted
+      after p1: Volcanion 364/364, Amoonguss 208/432
+      after p2: Kangaskhan-Mega 0/385, Volcanion 363/363
+
+  Turn 9
+      p2a <- Clefable comes in (394/394)
+      after p1: Volcanion 364/364, Amoonguss 208/432
+      after p2: Clefable 394/394, Volcanion 363/363
+
+  Turn 10
+    p1 mcts: move 3 2, move 4 1
+      search (8000 visits): earthpower,1;sludgebomb,0 117v 105 | earthpower,1;sludgebomb,1 114v 102 | heatwave,0;energyball,1 111v 99 | earthpower,1;energyball,1 110v 98
+    p2 greedy: move 3 2, move 4 2
+      p2b Volcanion used Overheat -> p1b: Amoonguss
+              p2b Volcanion spa 2 fell
+      p1a Volcanion used Earth Power -> p2b: Volcanion
+      p2a Clefable used Flamethrower -> p1b: Amoonguss
+      p1b Amoonguss fainted
+      after p1: Volcanion 364/364, Amoonguss 0/432
+      after p2: Clefable 394/394, Volcanion 241/363
+
+  Turn 11
+      p1b <- Darkrai comes in (344/344)
+      after p1: Volcanion 364/364, Darkrai 344/344
+      after p2: Clefable 394/394, Volcanion 241/363
+
+  Turn 12
+    p1 mcts: move 1 1, move 4 2
+      search (5000 visits): steameruption,0;icebeam,1 109v 72 | earthpower,1;icebeam,0 107v 70 | earthpower,1;icebeam,1 99v 63 | steameruption,0;snarl,0 98v 62
+    p2 greedy: move 3 1, move 4 1
+      p1b Darkrai used Ice Beam -> p2b: Volcanion
+              p2b Volcanion is now frz
+              p2b Volcanion COULD NOT MOVE (frz)
+      p1a Volcanion used Steam Eruption -> p2a: Clefable
+      p2a Clefable used Flamethrower -> p1a: Volcanion
+      after p1: Volcanion 351/364, Darkrai 344/344
+      after p2: Clefable 232/394, Volcanion 227/363
+
+  Turn 13
+    p1 mcts: move 2, switch 5   (slot1 Darkrai -> Conkeldurr)
+      search (9000 visits): heatwave,0;switch conkeldurr 221v 145 | heatwave,0;snarl,0 220v 145 | earthpower,1;icebeam,0 208v 135 | steameruption,0;snarl,0 199v 128
+    p2 greedy: move 3 1, move 4 1
+      p1b <- Conkeldurr comes in (266/414)
+              p2b Volcanion COULD NOT MOVE (frz)
+      p1a Volcanion used Heat Wave -> p2a: Clefable  [[spread] p2a,p2b]
+              p2b Volcanion -- critical hit
+              p2b Volcanion is cured of frz
+      p2a Clefable used Flamethrower -> p1a: Volcanion
+      after p1: Volcanion 339/364, Conkeldurr 266/414
+      after p2: Clefable 129/394, Volcanion 201/363
+
+  Turn 14
+    p1 mcts: move 1 1, move 1 2
+      search (22000 visits): steameruption,0;drainpunch,1 1439v 923 | heatwave,0;drainpunch,0 668v 391 | heatwave,0;drainpunch,1 651v 380 | steameruption,0;machpunch,1 580v 332
+    p2 greedy: move 3 2, move 4 2
+      p2b Volcanion used Overheat -> p1b: Conkeldurr
+      p1a Volcanion used Steam Eruption -> p2a: Clefable
+      p2a Clefable fainted
+      p1b Conkeldurr used Drain Punch -> p2b: Volcanion
+      after p1: Volcanion 339/364, Conkeldurr 279/414
+      after p2: Clefable 0/394, Volcanion 98/363
+
+  Turn 15
+      p2a <- Bisharp comes in (271/271)
+      after p1: Volcanion 339/364, Conkeldurr 279/414
+      after p2: Bisharp 271/271, Volcanion 98/363
+
+  Turn 16
+    p1 mcts: move 3 2, move 4 1
+      search (22000 visits): earthpower,1;machpunch,0 1027v 619 | steameruption,1;machpunch,0 911v 542 | earthpower,0;machpunch,0 816v 478 | steameruption,0;machpunch,0 752v 436
+    p2 greedy: move 1 2, move 4 2
+      p2a Bisharp used Sucker Punch -> p1b: Conkeldurr
+      p1b Conkeldurr used Mach Punch -> p2a: Bisharp
+      p2a Bisharp fainted
+      p2b Volcanion used Overheat -> p1b: Conkeldurr
+      p1a Volcanion used Earth Power -> p2b: Volcanion
+              p2b Volcanion -- critical hit
+      p2b Volcanion fainted
+      after p1: Volcanion 339/364, Conkeldurr 142/414
+      after p2: Bisharp 0/271, Volcanion 0/363
+
+  Turn 17
+      p2a <- Terrakion comes in (323/323)
+      after p1: Volcanion 339/364, Conkeldurr 142/414
+      after p2: Terrakion 323/323, Volcanion 0/363
+
+  Turn 18
+    p1 mcts: move 1 1, move 1 1
+      search (745000 visits): steameruption,0;drainpunch,0 22150v 22143 | earthpower,0;drainpunch,0 22064v 22055 | heatwave,0;drainpunch,0 21996v 21986 | steameruption,0;knockoff,0 21983v 21973
+    p2 greedy: move 3 2, pass
+      p2a Terrakion used Close Combat -> p1b: Conkeldurr
+              p2a Terrakion def 1 fell
+              p2a Terrakion spd 1 fell
+      p1b Conkeldurr fainted
+      p1a Volcanion used Steam Eruption -> p2a: Terrakion
+      p2a Terrakion fainted
+      after p1: Volcanion 339/364, Conkeldurr 0/414
+      after p2: Terrakion 0/323, Volcanion 0/363
+
+  RESULT: p1 wins

@@ -1,0 +1,281 @@
+battle 35   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: ORAS Doubles OU: Pelipper, Araquanid, Oranguru, Thundurus, Latias, Kingdra
+  p2: Copy of Untitled 650: Kyurem-Black, Gardevoir-Mega, Volcanion, Amoonguss, Landorus-Therian, Thundurus
+
+  Turn 1
+    p1 mcts: switch 4, move 1 1   (slot0 Pelipper -> Thundurus)
+      search (26000 visits): switch thundurus;liquidation,0 658v 433 | switch latias;liquidation,0 629v 412 | hurricane,0;liquidation,1 618v 403 | switch oranguru;liquidation,1 519v 330
+    p2 greedy: move 2 1, move 1
+      p1a <- Thundurus comes in (299/299)
+      p2b Gardevoir used Hyper Voice -> p1b: Araquanid  [[spread] p1a,p1b]
+      p2a Kyurem used Ice Beam -> p1a: Thundurus
+      p1a Thundurus fainted
+      p1b Araquanid used Liquidation -> p2a: Kyurem
+      after p1: Thundurus 0/299, Araquanid 262/339
+      after p2: Kyurem-Black 282/418, Gardevoir-Mega 277/277
+
+  Turn 2
+      p1a <- Oranguru comes in (383/383)
+      after p1: Oranguru 383/383, Araquanid 262/339
+      after p2: Kyurem-Black 282/418, Gardevoir-Mega 277/277
+
+  Turn 3
+    p1 mcts: move 2, move 1 2
+      search (28000 visits): reflect,0;liquidation,1 1399v 939 | reflect,0;poisonjab,0 1294v 862 | reflect,0;liquidation,0 1196v 791 | reflect,0;poisonjab,1 992v 643
+    p2 greedy: move 2 2, move 1
+      p2b Gardevoir used Hyper Voice -> p1b: Araquanid  [[spread] p1a,p1b]
+      p2a Kyurem used Ice Beam -> p1b: Araquanid
+      p1b Araquanid used Liquidation -> p2b: Gardevoir
+      p2b Gardevoir fainted
+      p1a Oranguru used Reflect
+      -sidestart p1: A Reflect
+      after p1: Oranguru 315/383, Araquanid 117/339
+      after p2: Kyurem-Black 308/418, Gardevoir-Mega 0/277
+
+  Turn 4
+      p2b <- Volcanion comes in (363/363)
+      after p1: Oranguru 315/383, Araquanid 117/339
+      after p2: Kyurem-Black 308/418, Volcanion 363/363
+
+  Turn 5
+    p1 mcts: move 2, move 1 1
+      search (9000 visits): reflect,0;liquidation,0 500v 214 | switch kingdra;liquidation,0 476v 201 | switch latias;liquidation,0 450v 188 | switch pelipper;liquidation,0 433v 179
+    p2 greedy: move 2 2, move 3 2
+      p2a Kyurem used Ice Beam -> p1b: Araquanid
+      p2b Volcanion used Overheat -> p1b: Araquanid
+              p2b Volcanion spa 2 fell
+      p1b Araquanid used Liquidation -> p2a: Kyurem
+      p1a Oranguru used Reflect  [[still]]
+              p1a Oranguru -- IT FAILED
+      after p1: Oranguru 315/383, Araquanid 7/339
+      after p2: Kyurem-Black 169/418, Volcanion 363/363
+
+  Turn 6
+    p1 mcts: move 2, switch 6   (slot1 Araquanid -> Kingdra)
+      search (13000 visits): reflect,0;switch kingdra 876v 337 | reflect,0;switch pelipper 848v 324 | reflect,0;switch latias 744v 277 | switch kingdra;switch pelipper 557v 194
+    p2 greedy: move 2 2, move 3 2
+      p1b <- Kingdra comes in (292/292)
+      p2a Kyurem used Ice Beam -> p1b: Kingdra
+      p2b Volcanion used Overheat -> p1b: Kingdra
+              p2b Volcanion spa 2 fell
+      p1a Oranguru used Reflect  [[still]]
+              p1a Oranguru -- IT FAILED
+      after p1: Oranguru 315/383, Kingdra 91/292
+      after p2: Kyurem-Black 195/418, Volcanion 363/363
+
+  Turn 7
+    p1 mcts: switch 4, move 1   (slot0 Oranguru -> Pelipper)
+      search (16000 visits): switch pelipper;muddywater,0 992v 321 | reflect,0;switch latias 832v 259 | reflect,0;switch pelipper 805v 248 | switch latias;muddywater,0 674v 198
+    p2 greedy: move 2 2, move 3 2
+      p1a <- Pelipper comes in (324/324)
+      p1b Kingdra used Muddy Water -> p2a: Kyurem  [[spread] p2a]
+              p2b Volcanion -- IMMUNE
+      p2a Kyurem used Ice Beam -> p1b: Kingdra
+      p1b Kingdra fainted
+      p2b Volcanion used Overheat -> p1a: Pelipper
+              p2b Volcanion spa 2 fell
+      after p1: Pelipper 300/324, Kingdra 0/292
+      after p2: Kyurem-Black 108/418, Volcanion 363/363
+
+  Turn 8
+      p1b <- Oranguru comes in (315/383)
+      after p1: Pelipper 300/324, Oranguru 315/383
+      after p2: Kyurem-Black 108/418, Volcanion 363/363
+
+  Turn 9
+    p1 mcts: move 2 1, move 1 2
+      search (12000 visits): scald,0;psyshock,1 272v 91 | hurricane,1;psyshock,0 253v 82 | uturn,0;psyshock,0 241v 76 | scald,0;psyshock,0 232v 72
+    p2 greedy: move 2 2, move 3 2
+      p2a Kyurem used Ice Beam -> p1b: Oranguru
+      p2b Volcanion used Overheat -> p1b: Oranguru
+      p1a Pelipper used Scald -> p2a: Kyurem
+      p1b Oranguru used Psyshock -> p2b: Volcanion
+      -sideend p1: A Reflect
+      after p1: Pelipper 300/324, Oranguru 150/383
+      after p2: Kyurem-Black 86/418, Volcanion 285/363
+
+  Turn 10
+    p1 mcts: move 1 2, move 1 1
+      search (18000 visits): hurricane,1;psyshock,0 963v 328 | scald,0;psyshock,1 876v 293 | hurricane,0;psyshock,1 873v 291 | uturn,1;psyshock,0 686v 216
+    p2 greedy: move 2 2, move 3 2
+      p2a Kyurem used Ice Beam -> p1b: Oranguru
+      p2b Volcanion used Overheat -> p1b: Oranguru  [[miss]]
+              p2b Volcanion -- MISSED
+      p1a Pelipper used Hurricane -> p2b: Volcanion
+              p2b Volcanion gained confusion
+      p1b Oranguru used Psyshock -> p2a: Kyurem
+      after p1: Pelipper 300/324, Oranguru 41/383
+      after p2: Kyurem-Black 28/418, Volcanion 215/363
+
+  Turn 11
+    p1 mcts: move 3 1, move 1 2
+      search (29000 visits): uturn,0;psyshock,1 1185v 350 | hurricane,1;psyshock,0 1123v 327 | hurricane,1;switch latias 1115v 324 | scald,0;psyshock,1 1114v 324
+    p2 greedy: move 2 2, move 3 2
+      p2a Kyurem used Ice Beam -> p1b: Oranguru
+      p1b Oranguru fainted
+              p2b Volcanion -- confusion
+      p2b Volcanion used Overheat -> p1a: Pelipper
+      p1a Pelipper used U-turn -> p2a: Kyurem
+      p2a Kyurem fainted
+      after p1: Pelipper 260/324, Oranguru 0/383
+      after p2: Kyurem-Black 0/418, Volcanion 215/363
+
+  Turn 12
+      p1a <- Latias comes in (362/362)
+      after p1: Latias 362/362, Oranguru 0/383
+      after p2: Kyurem-Black 0/418, Volcanion 215/363
+
+  Turn 13
+      p2a <- Amoonguss comes in (431/431)
+      p1b <- Pelipper comes in (260/324)
+      after p1: Latias 362/362, Pelipper 260/324
+      after p2: Amoonguss 431/431, Volcanion 215/363
+
+  Turn 14
+    p1 mcts: move 3, move 1 1
+      search (26000 visits): tailwind,0;hurricane,0 1182v 406 | tailwind,0;uturn,1 863v 277 | psychic,0;roost,1 857v 275 | tailwind,0;hurricane,1 803v 253
+    p2 greedy: move 3 2, move 3 2
+      p1a Latias used Tailwind
+      -sidestart p1: A move: Tailwind
+              p2b Volcanion -- confusion
+      p2b Volcanion used Overheat -> p1b: Pelipper
+      p1b Pelipper used Hurricane -> p2a: Amoonguss
+      p2a Amoonguss used Giga Drain -> p1b: Pelipper
+      after p1: Latias 362/362, Pelipper 131/324
+      after p2: Amoonguss 228/431, Volcanion 215/363
+
+  Turn 15
+    p1 mcts: move 2 1, move 4
+      search (30000 visits): psychic,0;roost,1 880v 86 | psychic,0;hurricane,0 773v 68 | psychic,1;roost,1 763v 66 | psychic,0;scald,0 693v 54
+    p2 greedy: move 3 2, move 3 2
+      p1a Latias used Psychic -> p2a: Amoonguss
+      p2a Amoonguss fainted
+      p1b Pelipper used Roost
+              p2b Volcanion -- confusion
+      p2b Volcanion used Overheat -> p1b: Pelipper
+      after p1: Latias 362/362, Pelipper 274/324
+      after p2: Amoonguss 0/431, Volcanion 215/363
+
+  Turn 16
+      p2a <- Landorus-Therian comes in (319/319)
+              p1a Latias atk 1 fell
+              p1b Pelipper atk 1 fell
+      after p1: Latias 362/362, Pelipper 274/324
+      after p2: Landorus-Therian 319/319, Volcanion 215/363
+
+  Turn 17
+    p1 mcts: move 2 1, switch 6   (slot1 Pelipper -> Araquanid)
+      search (25000 visits): psychic,0;switch araquanid 905v 257 | psychic,1;scald,0 811v 223 | psychic,0;scald,0 772v 209 | psychic,0;hurricane,0 729v 194
+    p2 greedy: move 4 2, move 1 2
+      p1b <- Araquanid comes in (7/339)
+      p1a Latias used Psychic -> p2a: Landorus
+      p2a Landorus used Superpower -> p1b: Araquanid
+              p2a Landorus atk 1 fell
+              p2a Landorus def 1 fell
+      p1b Araquanid fainted
+              p2b Volcanion -- confusion
+      p2b Volcanion used Steam Eruption -> p1a: Latias
+      after p1: Latias 333/362, Araquanid 0/339
+      after p2: Landorus-Therian 168/319, Volcanion 215/363
+
+  Turn 18
+      p1b <- Pelipper comes in (274/324)
+      after p1: Latias 333/362, Pelipper 274/324
+      after p2: Landorus-Therian 168/319, Volcanion 215/363
+
+  Turn 19
+    p1 mcts: move 2 1, move 3 2
+      search (15000 visits): psychic,0;uturn,1 950v 415 | psychic,1;uturn,1 927v 404 | psychic,1;uturn,0 888v 384 | psychic,0;uturn,0 755v 317
+    p2 greedy: move 4 2, move 1 2
+      p1a Latias used Psychic -> p2a: Landorus
+              p2a Landorus -- critical hit
+      p2a Landorus fainted
+      p1b Pelipper used U-turn -> p2b: Volcanion
+              p2b Volcanion lost confusion
+      p2b Volcanion used Steam Eruption -> p1b: Pelipper
+      -sideend p1: A move: Tailwind
+      after p1: Latias 333/362, Pelipper 229/324
+      after p2: Landorus-Therian 0/319, Volcanion 202/363
+
+  Turn 20
+      p2a <- Thundurus comes in (359/359)
+      after p1: Latias 333/362, Pelipper 229/324
+      after p2: Thundurus 359/359, Volcanion 202/363
+
+  Turn 21
+    p1 mcts: move 3, move 3 1
+      search (4000 visits): tailwind,0;uturn,0 165v 82 | psychic,0;scald,0 148v 71 | tailwind,0;hurricane,0 132v 61 | tailwind,0;scald,0 132v 61
+    p2 greedy: move 1 2, move 1 2
+      p1a Latias used Tailwind
+      -sidestart p1: A move: Tailwind
+      p2a Thundurus used Thunderbolt -> p1b: Pelipper
+      p1b Pelipper fainted
+      p2b Volcanion used Steam Eruption -> p1a: Latias
+      after p1: Latias 305/362, Pelipper 0/324
+      after p2: Thundurus 359/359, Volcanion 202/363
+
+  Turn 22
+    p1 mcts: move 2 1, pass
+      search (25000 visits): psychic,0;No Move 17943v 8592 | psychic,1;No Move 3574v 1562 | tailwind,0;No Move 1194v 456 | healpulse,1;No Move 1181v 450
+    p2 greedy: move 1 1, move 1 1
+      p1a Latias used Psychic -> p2a: Thundurus
+              p2a Thundurus spd 1 fell
+      p2a Thundurus used Thunderbolt -> p1a: Latias
+      p2b Volcanion used Steam Eruption -> p1a: Latias  [[miss]]
+              p2b Volcanion -- MISSED
+      after p1: Latias 247/362, Pelipper 0/324
+      after p2: Thundurus 229/359, Volcanion 202/363
+
+  Turn 23
+    p1 mcts: move 2 1, pass
+      search (44000 visits): psychic,0;No Move 41407v 23916 | psychic,1;No Move 1115v 510 | healpulse,1;No Move 514v 203 | healpulse,0;No Move 484v 188
+    p2 greedy: move 1 1, move 1 1
+      p1a Latias used Psychic -> p2a: Thundurus
+              p2a Thundurus used up its Sitrus Berry
+      p2a Thundurus used Thunderbolt -> p1a: Latias
+      p2b Volcanion used Steam Eruption -> p1a: Latias
+              p1a Latias is now brn
+              p1a Latias used up its Sitrus Berry
+      after p1: Latias 209/362, Pelipper 0/324
+      after p2: Thundurus 128/359, Volcanion 202/363
+
+  Turn 24
+    p1 mcts: move 2 1, pass
+      search (661000 visits): psychic,0;No Move 660704v 587137 | psychic,1;No Move 89v 27 | healpulse,1;No Move 82v 24 | tailwind,0;No Move 68v 17
+    p2 greedy: move 1 1, move 1 1
+      p1a Latias used Psychic -> p2a: Thundurus
+      p2a Thundurus fainted
+      p2b Volcanion used Steam Eruption -> p1a: Latias
+      -sideend p1: A move: Tailwind
+      after p1: Latias 135/362, Pelipper 0/324
+      after p2: Thundurus 0/359, Volcanion 202/363
+
+  Turn 25
+    p1 mcts: move 2 2, pass
+      search (1591000 visits): psychic,1;No Move 1590870v 1497283 | tailwind,0;No Move 69v 20 | healpulse,1;No Move 61v 15
+    p2 greedy: pass, move 1 1
+      p1a Latias used Psychic -> p2b: Volcanion
+      p2b Volcanion used Steam Eruption -> p1a: Latias
+      after p1: Latias 69/362, Pelipper 0/324
+      after p2: Thundurus 0/359, Volcanion 130/363
+
+  Turn 26
+    p1 mcts: move 2 2, pass
+      search (1585000 visits): psychic,1;No Move 1572128v 98418 | tailwind,0;No Move 6444v 2 | healpulse,1;No Move 6428v 1
+    p2 greedy: pass, move 1 1
+      p1a Latias used Psychic -> p2b: Volcanion
+      p2b Volcanion used Steam Eruption -> p1a: Latias
+      after p1: Latias 4/362, Pelipper 0/324
+      after p2: Thundurus 0/359, Volcanion 54/363
+
+  Turn 27
+    p1 mcts: move 1 2, pass
+      search (3017000 visits): healpulse,1;No Move 1005667v 0 | psychic,1;No Move 1005667v 0 | tailwind,0;No Move 1005666v 0
+    p2 greedy: pass, move 2
+      p1a Latias used Heal Pulse -> p2b: Volcanion
+      p2b Volcanion used Heat Wave -> p1a: Latias
+      p1a Latias fainted
+      after p1: Latias 0/362, Pelipper 0/324
+      after p2: Thundurus 0/359, Volcanion 236/363
+
+  RESULT: p2 wins

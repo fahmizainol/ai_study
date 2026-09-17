@@ -1,0 +1,293 @@
+battle 66   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: dpl rejects/i really wish i ran this week 2 reject: Sableye-Mega, Talonflame, Blissey, Landorus-Therian, Ferrothorn, Scrafty
+  p2: XY Doubles: Aegislash, Venusaur, Rotom-Heat, Azumarill, Landorus-Therian, Thundurus
+
+  Turn 1
+    p1 mcts: switch 4, move 2 1   (slot0 Sableye-Mega -> Landorus-Therian)
+      search (9000 visits): switch landorustherian;flareblitz,0 266v 191 | switch scrafty;flareblitz,0 211v 145 | switch landorustherian;bravebird,1 191v 128 | switch scrafty;switch landorustherian 182v 121
+    p2 greedy: move 3 1, move 3 1
+      p1a <- Landorus-Therian comes in (382/382)
+              p2a Aegislash atk 1 fell
+              p2b Venusaur atk 1 fell
+      p1b Talonflame used Flare Blitz -> p2a: Aegislash
+      p2a Aegislash fainted
+      p2b Venusaur used Sludge Bomb -> p1a: Landorus
+      after p1: Landorus-Therian 310/382, Talonflame 244/351
+      after p2: Aegislash 0/324, Venusaur 364/364
+
+  Turn 2
+      p2a <- Rotom-Heat comes in (299/299)
+      after p1: Landorus-Therian 310/382, Talonflame 244/351
+      after p2: Rotom-Heat 299/299, Venusaur 364/364
+
+  Turn 3
+    p1 mcts: move 4, move 2 2
+      search (19000 visits): stealthrock,0;flareblitz,1 840v 579 | uturn,1;switch sableyemega 802v 550 | uturn,0;flareblitz,1 664v 445 | uturn,1;switch blissey 647v 432
+    p2 greedy: move 1 2, move 3 2
+      p1b Talonflame used Flare Blitz -> p2b: Venusaur
+      p2b Venusaur fainted
+      p2a Rotom used Overheat -> p1b: Talonflame
+              p2a Rotom spa 2 fell
+      p1a Landorus used Stealth Rock -> p2a: Rotom
+      -sidestart p2: B move: Stealth Rock
+      after p1: Landorus-Therian 310/382, Talonflame 3/351
+      after p2: Rotom-Heat 299/299, Venusaur 0/364
+
+  Turn 4
+      p2b <- Azumarill comes in (404/404)
+      after p1: Landorus-Therian 310/382, Talonflame 3/351
+      after p2: Rotom-Heat 299/299, Azumarill 354/404
+
+  Turn 5
+    p1 mcts: move 1, move 2 1
+      search (29000 visits): earthquake,0;flareblitz,0 1525v 913 | stoneedge,1;switch blissey 1219v 713 | stoneedge,1;switch scrafty 1097v 634 | stoneedge,1;switch ferrothorn 1095v 633
+    p2 greedy: move 1 2, move 1 2
+      p1b Talonflame used Flare Blitz -> p2a: Rotom
+      p1b Talonflame fainted
+      p2a Rotom used Overheat -> p1a: Landorus
+              p2a Rotom spa 2 fell
+      p1a Landorus used Earthquake -> p2b: Azumarill  [[spread] p2b]
+              p2a Rotom -- IMMUNE
+              p2b Azumarill -- critical hit
+              p2b Azumarill used up its Sitrus Berry
+      p2b Azumarill used Play Rough -> p1a: Landorus
+      after p1: Landorus-Therian 29/382, Talonflame 0/351
+      after p2: Rotom-Heat 171/299, Azumarill 154/404
+
+  Turn 6
+      p1b <- Blissey comes in (714/714)
+      after p1: Landorus-Therian 29/382, Blissey 714/714
+      after p2: Rotom-Heat 171/299, Azumarill 154/404
+
+  Turn 7
+    p1 mcts: move 2 2, move 1 1
+      search (24000 visits): stoneedge,1;psychic,0 641v 224 | stoneedge,0;psychic,1 598v 205 | uturn,0;psychic,1 557v 187 | stoneedge,0;seismictoss,0 513v 169
+    p2 greedy: move 1 1, move 1 1
+      p2a Rotom used Overheat -> p1a: Landorus
+              p2a Rotom spa 2 fell
+      p1a Landorus fainted
+      p1b Blissey used Psychic -> p2a: Rotom
+      p2b Azumarill used Play Rough -> p1b: Blissey
+      after p1: Landorus-Therian 0/382, Blissey 415/714
+      after p2: Rotom-Heat 122/299, Azumarill 154/404
+
+  Turn 8
+      p1a <- Sableye-Mega comes in (303/303)
+      after p1: Sableye-Mega 303/303, Blissey 415/714
+      after p2: Rotom-Heat 122/299, Azumarill 154/404
+
+  Turn 9
+    p1 mcts: move 3 2, move 3
+      search (29000 visits): willowisp,1;softboiled,1 383v 4 | fakeout,1;softboiled,1 380v 4 | willowisp,1;switch scrafty 379v 4 | switch scrafty;softboiled,1 378v 4
+    p2 greedy: move 1 2, move 1 2
+      p1a Sableye used Will-O-Wisp -> p2b: Azumarill
+              p2b Azumarill is now brn
+      p2a Rotom used Overheat -> p1b: Blissey
+      p1b Blissey used Soft-Boiled
+      p2b Azumarill used Play Rough -> p1b: Blissey
+      after p1: Sableye-Mega 303/303, Blissey 567/714
+      after p2: Rotom-Heat 122/299, Azumarill 104/404
+
+  Turn 10
+    p1 mcts: switch 6, move 3   (slot0 Sableye-Mega -> Scrafty)
+      search (38000 visits): switch scrafty;softboiled,1 492v 3 | switch scrafty;psychic,1 488v 3 | recover,0;switch scrafty 487v 3 | switch ferrothorn;switch scrafty 487v 3
+    p2 greedy: move 1 2, move 1 2
+      p1a <- Scrafty comes in (334/334)
+              p2a Rotom atk 1 fell
+              p2b Azumarill atk 1 fell
+      p2a Rotom used Overheat -> p1b: Blissey
+      p1b Blissey used Soft-Boiled
+      p2b Azumarill used Play Rough -> p1b: Blissey
+      after p1: Scrafty 334/334, Blissey 643/714
+      after p2: Rotom-Heat 122/299, Azumarill 54/404
+
+  Turn 11
+    p1 mcts: move 1 1, move 1 2
+      search (33000 visits): fakeout,0;psychic,1 385v 4 | fakeout,1;healpulse,1 385v 4 | drainpunch,0;psychic,1 382v 4 | stoneedge,1;healpulse,0 382v 4
+    p2 greedy: move 1 2, move 1 2
+      p1a Scrafty used Fake Out -> p2a: Rotom
+              p2a Rotom COULD NOT MOVE (flinch)
+      p1b Blissey used Psychic -> p2b: Azumarill
+      p2b Azumarill fainted
+      after p1: Scrafty 334/334, Blissey 687/714
+      after p2: Rotom-Heat 95/299, Azumarill 0/404
+
+  Turn 12
+      p2b <- Landorus-Therian comes in (320/320)
+              p1a Scrafty atk 1 fell
+              p1b Blissey atk 1 fell
+      after p1: Scrafty 334/334, Blissey 687/714
+      after p2: Rotom-Heat 95/299, Landorus-Therian 280/320
+
+  Turn 13
+    p1 mcts: switch 6, switch 5   (slot0 Scrafty -> Sableye-Mega; slot1 Blissey -> Ferrothorn)
+      search (30000 visits): switch sableyemega;switch ferrothorn 2944v 593 | switch ferrothorn;switch sableyemega 610v 62 | switch ferrothorn;psychic,1 529v 46 | stoneedge,1;switch sableyemega 499v 41
+    p2 greedy: move 1 2, move 3 2
+      p1a <- Sableye-Mega comes in (303/303)
+      p1b <- Ferrothorn comes in (352/352)
+      p2b Landorus used Superpower -> p1b: Ferrothorn
+              p2b Landorus atk 1 fell
+              p2b Landorus def 1 fell
+      p2a Rotom used Overheat -> p1b: Ferrothorn
+      p1b Ferrothorn fainted
+      after p1: Sableye-Mega 303/303, Ferrothorn 0/352
+      after p2: Rotom-Heat 95/299, Landorus-Therian 240/320
+
+  Turn 14
+      p1b <- Blissey comes in (687/714)
+      after p1: Sableye-Mega 303/303, Blissey 687/714
+      after p2: Rotom-Heat 95/299, Landorus-Therian 240/320
+
+  Turn 15
+    p1 mcts: move 3 2, move 3
+      search (44000 visits): willowisp,1;softboiled,1 1495v 301 | willowisp,1;seismictoss,1 1319v 255 | willowisp,1;switch scrafty 1308v 253 | willowisp,1;psychic,0 1223v 231
+    p2 greedy: move 1 2, move 3 2
+      p1a Sableye used Will-O-Wisp -> p2b: Landorus
+              p2b Landorus is now brn
+      p2b Landorus used Superpower -> p1b: Blissey
+              p2b Landorus atk 1 fell
+              p2b Landorus def 1 fell
+      p2a Rotom used Overheat -> p1b: Blissey  [[miss]]
+              p2a Rotom -- MISSED
+      p1b Blissey used Soft-Boiled
+      after p1: Sableye-Mega 303/303, Blissey 714/714
+      after p2: Rotom-Heat 95/299, Landorus-Therian 200/320
+
+  Turn 16
+    p1 mcts: move 3 1, move 1 1
+      search (35000 visits): willowisp,0;psychic,0 903v 148 | switch scrafty;healpulse,0 883v 144 | willowisp,1;softboiled,1 845v 135 | knockoff,0;seismictoss,0 793v 122
+    p2 greedy: move 1 1, move 3 1
+      p1a Sableye used Will-O-Wisp -> p2a: Rotom
+              p2a Rotom -- IMMUNE
+      p2b Landorus used Superpower -> p1a: Sableye
+              p1a Sableye -- IMMUNE
+      p2a Rotom used Overheat -> p1a: Sableye
+      p1b Blissey used Psychic -> p2a: Rotom
+      after p1: Sableye-Mega 273/303, Blissey 714/714
+      after p2: Rotom-Heat 43/299, Landorus-Therian 160/320
+
+  Turn 17
+    p1 mcts: move 4, move 2 1
+      search (36000 visits): recover,0;healpulse,0 1030v 169 | recover,0;seismictoss,1 750v 105 | willowisp,0;seismictoss,1 707v 95 | willowisp,0;healpulse,1 705v 95
+    p2 greedy: move 2 1, move 3 1
+      p1a Sableye used Recover
+      p2b Landorus used Superpower -> p1a: Sableye
+              p1a Sableye -- IMMUNE
+      p2a Rotom used Thunderbolt -> p1a: Sableye
+      p1b Blissey used Heal Pulse -> p2a: Rotom
+      after p1: Sableye-Mega 284/303, Blissey 714/714
+      after p2: Rotom-Heat 193/299, Landorus-Therian 120/320
+
+  Turn 18
+    p1 mcts: move 2 2, move 1 2
+      search (34000 visits): knockoff,1;psychic,1 901v 160 | knockoff,1;seismictoss,0 823v 141 | knockoff,1;healpulse,0 770v 127 | knockoff,1;switch scrafty 686v 107
+    p2 greedy: move 2 1, move 3 1
+      p2b Landorus used Superpower -> p1a: Sableye
+              p1a Sableye -- IMMUNE
+      p2a Rotom used Thunderbolt -> p1a: Sableye
+      p1b Blissey used Psychic -> p2b: Landorus
+      p1a Sableye used Knock Off -> p2b: Landorus
+              p2b Landorus used up its Choice Scarf
+      p2b Landorus fainted
+      after p1: Sableye-Mega 262/303, Blissey 714/714
+      after p2: Rotom-Heat 193/299, Landorus-Therian 0/320
+
+  Turn 19
+      p2b <- Thundurus comes in (360/360)
+      after p1: Sableye-Mega 262/303, Blissey 714/714
+      after p2: Rotom-Heat 193/299, Thundurus 270/360
+
+  Turn 20
+    p1 mcts: move 2 2, switch 6   (slot1 Blissey -> Scrafty)
+      search (31000 visits): knockoff,1;switch scrafty 2874v 1175 | knockoff,1;psychic,1 1510v 569 | switch scrafty;psychic,1 1274v 466 | recover,0;switch scrafty 928v 319
+    p2 greedy: move 2 1, move 1 1
+      p1b <- Scrafty comes in (334/334)
+              p2a Rotom atk 1 fell
+              p2b Thundurus atk 1 fell
+      p2a Rotom used Thunderbolt -> p1a: Sableye
+      p2b Thundurus used Thunderbolt -> p1a: Sableye
+      p1a Sableye used Knock Off -> p2b: Thundurus
+              p2b Thundurus used up its Sitrus Berry
+      after p1: Sableye-Mega 139/303, Scrafty 334/334
+      after p2: Rotom-Heat 193/299, Thundurus 153/360
+
+  Turn 21
+    p1 mcts: move 4, switch 6   (slot1 Scrafty -> Blissey)
+      search (8000 visits): recover,0;switch blissey 231v 103 | recover,0;stoneedge,1 210v 91 | recover,0;knockoff,1 174v 70 | switch blissey;stoneedge,1 173v 70
+    p2 greedy: move 2 1, move 1 1
+      p1b <- Blissey comes in (714/714)
+      p1a Sableye used Recover
+      p2a Rotom used Thunderbolt -> p1a: Sableye
+      p2b Thundurus used Thunderbolt -> p1a: Sableye
+      after p1: Sableye-Mega 175/303, Blissey 714/714
+      after p2: Rotom-Heat 193/299, Thundurus 153/360
+
+  Turn 22
+    p1 mcts: move 2 2, switch 6   (slot1 Blissey -> Scrafty)
+      search (31000 visits): knockoff,1;switch scrafty 9164v 3855 | recover,0;switch scrafty 1399v 468 | knockoff,1;psychic,1 875v 264 | recover,0;psychic,1 785v 231
+    p2 greedy: move 2 1, move 1 1
+      p1b <- Scrafty comes in (334/334)
+              p2a Rotom atk 1 fell
+              p2b Thundurus atk 1 fell
+      p2b Thundurus used Thunderbolt -> p1a: Sableye
+      p2a Rotom used Thunderbolt -> p1a: Sableye
+              p1a Sableye -- critical hit
+      p1a Sableye fainted
+      after p1: Sableye-Mega 0/303, Scrafty 334/334
+      after p2: Rotom-Heat 193/299, Thundurus 153/360
+
+  Turn 23
+      p1a <- Blissey comes in (714/714)
+      after p1: Blissey 714/714, Scrafty 334/334
+      after p2: Rotom-Heat 193/299, Thundurus 153/360
+
+  Turn 24
+    p1 mcts: move 1 2, move 4 2
+      search (25000 visits): psychic,1;stoneedge,1 17106v 9802 | psychic,1;knockoff,1 466v 179 | healpulse,1;stoneedge,1 391v 143 | seismictoss,1;stoneedge,1 321v 110
+    p2 greedy: move 2 1, move 1 1
+      p2a Rotom used Thunderbolt -> p1a: Blissey
+      p2b Thundurus used Thunderbolt -> p1a: Blissey
+      p1b Scrafty used Stone Edge -> p2b: Thundurus  [[miss]]
+              p1b Scrafty -- MISSED
+      p1a Blissey used Psychic -> p2b: Thundurus
+      after p1: Blissey 614/714, Scrafty 334/334
+      after p2: Rotom-Heat 193/299, Thundurus 93/360
+
+  Turn 25
+    p1 mcts: move 1 2, move 4 2
+      search (29000 visits): psychic,1;stoneedge,1 23579v 16312 | psychic,1;knockoff,1 833v 454 | healpulse,0;stoneedge,1 179v 66 | seismictoss,0;stoneedge,1 164v 58
+    p2 greedy: move 2 1, move 1 1
+      p2b Thundurus used Thunderbolt -> p1a: Blissey
+              p1a Blissey is now par
+      p2a Rotom used Thunderbolt -> p1a: Blissey
+      p1b Scrafty used Stone Edge -> p2b: Thundurus  [[miss]]
+              p1b Scrafty -- MISSED
+      p1a Blissey used Psychic -> p2b: Thundurus
+      after p1: Blissey 527/714, Scrafty 334/334
+      after p2: Rotom-Heat 193/299, Thundurus 27/360
+
+  Turn 26
+    p1 mcts: move 1 2, move 4 2
+      search (35000 visits): psychic,1;stoneedge,1 23970v 16000 | psychic,1;knockoff,1 1722v 1005 | seismictoss,1;stoneedge,1 996v 547 | softboiled,0;stoneedge,1 941v 513
+    p2 greedy: move 2 1, move 1 1
+      p2b Thundurus used Thunderbolt -> p1a: Blissey
+              p1a Blissey -- critical hit
+      p2a Rotom used Thunderbolt -> p1a: Blissey
+      p1b Scrafty used Stone Edge -> p2b: Thundurus
+      p2b Thundurus fainted
+              p1a Blissey COULD NOT MOVE (par)
+      after p1: Blissey 372/714, Scrafty 334/334
+      after p2: Rotom-Heat 193/299, Thundurus 0/360
+
+  Turn 27
+    p1 mcts: move 4 1, move 4 1
+      search (89000 visits): seismictoss,0;stoneedge,0 80113v 70004 | seismictoss,0;knockoff,0 5327v 4277 | seismictoss,0;drainpunch,0 636v 436 | seismictoss,0;fakeout,0 611v 417
+    p2 greedy: move 2 1, pass
+      p2a Rotom used Thunderbolt -> p1a: Blissey
+      p1b Scrafty used Stone Edge -> p2a: Rotom
+      p1a Blissey used Seismic Toss -> p2a: Rotom
+      p2a Rotom fainted
+      after p1: Blissey 345/714, Scrafty 334/334
+      after p2: Rotom-Heat 0/299, Thundurus 0/360
+
+  RESULT: p1 wins

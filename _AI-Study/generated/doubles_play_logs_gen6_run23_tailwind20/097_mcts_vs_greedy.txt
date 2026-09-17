@@ -1,0 +1,137 @@
+battle 97   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: XY Doubles: Gardevoir, Darkrai, Heatran, Suicune, Kyurem-Black, Aegislash
+  p2: Untitled 662: Thundurus, Terrakion, Volcanion, Kangaskhan-Mega, Whimsicott, Landorus
+
+  Turn 1
+    p1 mcts: move 4 mega, move 1 1
+      search (11000 visits): hypervoice-mega,0;darkpulse,0 249v 195 | hypervoice-mega,0;protect,1 200v 150 | hypervoice-mega,0;willowisp,1 193v 144 | hypervoice-mega,0;focusblast,1 177v 130
+    p2 greedy: move 1 1, move 2 1
+      p1b Darkrai used Dark Pulse -> p2a: Thundurus
+      p2b Terrakion used Close Combat -> p1a: Gardevoir
+              p2b Terrakion def 1 fell
+              p2b Terrakion spd 1 fell
+      p1a Gardevoir used Hyper Voice -> p2a: Thundurus  [[spread] p2a,p2b]
+              p2a Thundurus -- critical hit
+      p2a Thundurus fainted
+      p2b Terrakion fainted
+      after p1: Gardevoir-Mega 183/278, Darkrai 276/306
+      after p2: Thundurus 0/362, Terrakion 0/323
+
+  Turn 2
+      p2b <- Kangaskhan-Mega comes in (414/414)
+      p2a <- Volcanion comes in (363/363)
+      after p1: Gardevoir-Mega 183/278, Darkrai 276/306
+      after p2: Volcanion 363/363, Kangaskhan-Mega 414/414
+
+  Turn 3
+    p1 mcts: switch 3, move 3 2   (slot0 Gardevoir-Mega -> Heatran)
+      search (25000 visits): switch heatran;willowisp,1 465v 136 | switch suicune;willowisp,1 439v 126 | switch kyuremblack;willowisp,1 407v 113 | protect,0;willowisp,1 403v 112
+    p2 greedy: move 4 1, move 3 1
+      p1a <- Heatran comes in (337/337)
+      p1b Darkrai used Will-O-Wisp -> p2b: Kangaskhan
+              p2b Kangaskhan is now brn
+      p2b Kangaskhan used Bite -> p1a: Heatran
+      p2a Volcanion used Overheat -> p1a: Heatran
+              p1a Heatran gained ability: Flash Fire
+      after p1: Heatran 311/337, Darkrai 276/306
+      after p2: Volcanion 363/363, Kangaskhan-Mega 363/414
+
+  Turn 4
+    p1 mcts: move 3 1, move 1 1
+      search (26000 visits): earthpower,0;darkpulse,0 363v 91 | heatwave,0;darkpulse,0 361v 91 | flashcannon,0;darkpulse,0 356v 89 | protect,0;darkpulse,0 355v 88
+    p2 greedy: move 4 2, move 3 2
+      p1b Darkrai used Dark Pulse -> p2a: Volcanion
+      p2b Kangaskhan used Bite -> p1b: Darkrai
+      p1a Heatran used Earth Power -> p2a: Volcanion
+              p2a Volcanion spd 1 fell
+      p2a Volcanion used Overheat -> p1b: Darkrai
+              p2a Volcanion spa 2 fell
+      p1b Darkrai fainted
+      after p1: Heatran 311/337, Darkrai 0/306
+      after p2: Volcanion 103/363, Kangaskhan-Mega 312/414
+
+  Turn 5
+      p1b <- Gardevoir-Mega comes in (183/278)
+      after p1: Heatran 311/337, Gardevoir-Mega 183/278
+      after p2: Volcanion 103/363, Kangaskhan-Mega 312/414
+
+  Turn 6
+    p1 mcts: switch 4, move 4   (slot0 Heatran -> Suicune)
+      search (39000 visits): switch suicune;hypervoice,0 1178v 312 | heatwave,0;hypervoice,0 1143v 300 | protect,0;hypervoice,0 1094v 284 | flashcannon,0;hypervoice,0 1074v 277
+    p2 greedy: move 4 2, move 3 2
+              p1a Heatran lost ability: Flash Fire
+      p1a <- Suicune comes in (399/399)
+      p1b Gardevoir used Hyper Voice -> p2a: Volcanion  [[spread] p2a,p2b]
+      p2b Kangaskhan used Bite -> p1b: Gardevoir
+      p2a Volcanion used Overheat -> p1b: Gardevoir
+              p2a Volcanion spa 2 fell
+      after p1: Suicune 399/399, Gardevoir-Mega 51/278
+      after p2: Volcanion 6/363, Kangaskhan-Mega 87/414
+
+  Turn 7
+    p1 mcts: move 1 2, move 1 2
+      search (39000 visits): scald,1;psyshock,1 863v 163 | protect,0;psyshock,1 862v 163 | switch heatran;psyshock,1 852v 160 | snarl,0;psyshock,1 825v 153
+    p2 greedy: move 4 2, move 3 2
+      p2b Kangaskhan used Bite -> p1b: Gardevoir
+              p1b Gardevoir COULD NOT MOVE (flinch)
+      p1a Suicune used Scald -> p2b: Kangaskhan
+      p2b Kangaskhan fainted
+      p2a Volcanion used Overheat -> p1b: Gardevoir
+              p2a Volcanion spa 2 fell
+      p1b Gardevoir fainted
+      after p1: Suicune 399/399, Gardevoir 0/278
+      after p2: Volcanion 6/363, Kangaskhan-Mega 0/414
+
+  Turn 8
+      p2b <- Whimsicott comes in (301/301)
+      p1b <- Heatran comes in (311/337)
+      after p1: Suicune 399/399, Heatran 311/337
+      after p2: Volcanion 6/363, Whimsicott 301/301
+
+  Turn 9
+    p1 mcts: move 1 2, move 1
+      search (13000 visits): scald,1;heatwave,0 1169v 790 | tailwind,0;heatwave,0 1019v 679 | tailwind,0;flashcannon,1 1012v 674 | snarl,0;heatwave,0 834v 544
+    p2 greedy: move 4 2, move 4 2
+      p2b Whimsicott used Moonblast -> p1b: Heatran
+      p1b Heatran used Heat Wave -> p2b: Whimsicott  [[spread] p2a,p2b]
+              p2a Volcanion -- critical hit
+      p2a Volcanion fainted
+      p2b Whimsicott fainted
+      p1a Suicune used Scald -> p2: Volcanion  [[notarget]]
+              p1a Suicune -- IT FAILED
+      after p1: Suicune 399/399, Heatran 288/337
+      after p2: Volcanion 0/363, Whimsicott 0/301
+
+  Turn 10
+      p2a <- Landorus comes in (382/382)
+      after p1: Suicune 399/399, Heatran 288/337
+      after p2: Landorus 382/382, Whimsicott 0/301
+
+  Turn 11
+    p1 mcts: move 1 1, move 4 1
+      search (289000 visits): scald,0;flashcannon,0 269842v 267678 | scald,0;heatwave,0 12321v 11784 | switch kyuremblack;flashcannon,0 764v 627 | switch kyuremblack;heatwave,0 626v 501
+    p2 greedy: move 1 2, pass
+      p1b Heatran used Flash Cannon -> p2a: Landorus
+      p2a Landorus used Earth Power -> p1b: Heatran
+              p1b Heatran used up its Shuca Berry
+              p1b Heatran used up its Shuca Berry
+      p1b Heatran fainted
+      p1a Suicune used Scald -> p2a: Landorus
+      after p1: Suicune 399/399, Heatran 0/337
+      after p2: Landorus 49/382, Whimsicott 0/301
+
+  Turn 12
+      p1b <- Kyurem-Black comes in (391/391)
+      after p1: Suicune 399/399, Kyurem-Black 391/391
+      after p2: Landorus 49/382, Whimsicott 0/301
+
+  Turn 13
+    p1 mcts: move 1 1, move 1 1
+      search (471000 visits): scald,0;dragonclaw,0 29706v 29706 | scald,0;protect,1 29706v 29706 | scald,0;icebeam,0 29706v 29706 | scald,0;earthpower,0 29706v 29706
+    p2 greedy: move 1 1, pass
+      p1b Kyurem used Dragon Claw -> p2a: Landorus
+      p2a Landorus fainted
+      after p1: Suicune 399/399, Kyurem-Black 352/391
+      after p2: Landorus 0/382, Whimsicott 0/301
+
+  RESULT: p1 wins

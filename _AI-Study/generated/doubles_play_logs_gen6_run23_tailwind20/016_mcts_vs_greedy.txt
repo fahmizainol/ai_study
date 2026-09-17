@@ -1,0 +1,103 @@
+battle 16   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: XY Doubles: Gardevoir, Darkrai, Heatran, Suicune, Kyurem-Black, Aegislash
+  p2: Draft v Schister: Gardevoir-Mega, Landorus, Latias, Porygon2, Tyranitar, Conkeldurr
+
+  Turn 1
+    p1 mcts: move 4 mega, move 2
+      search (22000 visits): hypervoice-mega,0;protect,1 588v 341 | hypervoice-mega,0;darkpulse,1 548v 314 | hypervoice-mega,0;darkpulse,0 381v 204 | hypervoice-mega,0;focusblast,1 329v 170
+    p2 greedy: move 1, move 4 1
+      p1b Darkrai used Protect
+      p2b Landorus used Focus Blast -> p1a: Gardevoir  [[miss]]
+              p2b Landorus -- MISSED
+      p1a Gardevoir used Hyper Voice -> p2b: Landorus  [[spread] p2a,p2b]
+      p2a Gardevoir used Hyper Voice -> p1a: Gardevoir  [[spread] p1a]
+              p1b Darkrai -- move: Protect
+      after p1: Gardevoir-Mega 209/278, Darkrai 306/306
+      after p2: Gardevoir-Mega 208/340, Landorus 87/319
+
+  Turn 2
+    p1 mcts: move 4, move 2
+      search (27000 visits): hypervoice,0;protect,1 3212v 2339 | hypervoice,0;switch aegislash 2949v 2137 | hypervoice,0;darkpulse,0 1798v 1261 | hypervoice,0;switch suicune 1571v 1090
+    p2 greedy: move 1, move 4 1
+      p1b Darkrai used Protect  [[still]]
+              p1b Darkrai -- IT FAILED
+      p2b Landorus used Focus Blast -> p1a: Gardevoir
+      p1a Gardevoir used Hyper Voice -> p2b: Landorus  [[spread] p2a,p2b]
+      p2b Landorus fainted
+      p2a Gardevoir used Hyper Voice -> p1b: Darkrai  [[spread] p1a,p1b]
+      after p1: Gardevoir-Mega 99/278, Darkrai 206/306
+      after p2: Gardevoir-Mega 63/340, Landorus 0/319
+
+  Turn 3
+      p2b <- Latias comes in (364/364)
+      after p1: Gardevoir-Mega 99/278, Darkrai 206/306
+      after p2: Gardevoir-Mega 63/340, Latias 364/364
+
+  Turn 4
+    p1 mcts: move 4, move 4 1
+      search (23000 visits): hypervoice,0;focusblast,0 2273v 1905 | hypervoice,0;darkpulse,1 1860v 1540 | hypervoice,0;focusblast,1 1387v 1126 | hypervoice,0;willowisp,0 1259v 1014
+    p2 greedy: move 1, move 1 1
+      p1b Darkrai used Focus Blast -> p2a: Gardevoir
+      p1a Gardevoir used Hyper Voice -> p2b: Latias  [[spread] p2a,p2b]
+      p2a Gardevoir fainted
+      p2b Latias used Draco Meteor -> p1a: Gardevoir
+              p1a Gardevoir -- IMMUNE
+      after p1: Gardevoir-Mega 99/278, Darkrai 176/306
+      after p2: Gardevoir-Mega 0/340, Latias 56/364
+
+  Turn 5
+      p2a <- Porygon2 comes in (374/374)
+              p2a Porygon2 atk 1 rose
+      after p1: Gardevoir-Mega 99/278, Darkrai 176/306
+      after p2: Porygon2 374/374, Latias 56/364
+
+  Turn 6
+    p1 mcts: move 4, move 4 1
+      search (19000 visits): hypervoice,0;focusblast,0 1437v 1154 | hypervoice,0;darkpulse,0 849v 652 | hypervoice,0;willowisp,0 608v 450 | hypervoice,0;switch heatran 549v 401
+    p2 greedy: move 2 1, move 1 1
+      p1b Darkrai used Focus Blast -> p2a: Porygon2
+              p2a Porygon2 spd 1 fell
+      p1a Gardevoir used Hyper Voice -> p2b: Latias  [[spread] p2a,p2b]
+      p2a Porygon2 fainted
+      p2b Latias fainted
+      after p1: Gardevoir-Mega 99/278, Darkrai 146/306
+      after p2: Porygon2 0/374, Latias 0/364
+
+  Turn 7
+      p2b <- Conkeldurr comes in (352/352)
+      p2a <- Tyranitar comes in (404/404)
+      after p1: Gardevoir-Mega 99/278, Darkrai 146/306
+      after p2: Tyranitar 404/404, Conkeldurr 352/352
+
+  Turn 8
+    p1 mcts: move 4, move 2
+      search (37000 visits): hypervoice,0;protect,1 9986v 8607 | hypervoice,0;switch suicune 4788v 4029 | hypervoice,0;focusblast,0 3580v 2975 | hypervoice,0;switch aegislash 3474v 2883
+    p2 greedy: move 4 1, move 1 1
+      p1b Darkrai used Protect
+      p1a Gardevoir used Hyper Voice -> p2b: Conkeldurr  [[spread] p2a,p2b]
+      p2a Tyranitar used Superpower -> p1a: Gardevoir
+              p1a Gardevoir -- critical hit
+              p2a Tyranitar atk 1 fell
+              p2a Tyranitar def 1 fell
+      p2b Conkeldurr used Drain Punch -> p1a: Gardevoir
+      p1a Gardevoir fainted
+      after p1: Gardevoir 0/278, Darkrai 127/306
+      after p2: Tyranitar 188/404, Conkeldurr 106/352
+
+  Turn 9
+      p1a <- Heatran comes in (337/337)
+      after p1: Heatran 337/337, Darkrai 127/306
+      after p2: Tyranitar 188/404, Conkeldurr 106/352
+
+  Turn 10
+    p1 mcts: move 4 2, move 4 1
+      search (19000 visits): flashcannon,1;focusblast,0 1247v 935 | flashcannon,1;switch suicune 823v 593 | heatwave,0;switch suicune 681v 481 | flashcannon,1;protect,1 654v 459
+    p2 greedy: move 4 2, move 1 2
+      p1b Darkrai used Focus Blast -> p2a: Tyranitar
+      p2a Tyranitar fainted
+      p1a Heatran used Flash Cannon -> p2b: Conkeldurr
+      p2b Conkeldurr fainted
+      after p1: Heatran 337/337, Darkrai 97/306
+      after p2: Tyranitar 0/404, Conkeldurr 0/352
+
+  RESULT: p1 wins

@@ -1,0 +1,101 @@
+battle 83   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: team usa bo3 vs Memoric: Diancie-Mega, Bisharp, Talonflame, Conkeldurr, Amoonguss, Kyurem-Black
+  p2: XY Doubles: Abomasnow, Togekiss, Cresselia, Keldeo-Resolute, Scrafty, Diancie
+
+  Turn 1
+    p1 mcts: move 1, move 3 2
+      search (18000 visits): diamondstorm,0;ironhead,1 991v 814 | diamondstorm,0;ironhead,0 975v 800 | diamondstorm,0;knockoff,0 815v 658 | moonblast,1;ironhead,0 691v 549
+    p2 greedy: move 2 1, move 2 1
+      p1a Diancie used Diamond Storm -> p2b: Togekiss  [[spread] p2b]
+              p1a Diancie -- MISSED
+              p1a Diancie def 1 rose
+      p1b Bisharp used Iron Head -> p2b: Togekiss
+      p2b Togekiss fainted
+      p2a Abomasnow used Wood Hammer -> p1a: Diancie
+      after p1: Diancie-Mega 93/304, Bisharp 228/272
+      after p2: Abomasnow 321/384, Togekiss 0/374
+
+  Turn 2
+      p2b <- Cresselia comes in (444/444)
+      after p1: Diancie-Mega 93/304, Bisharp 228/272
+      after p2: Abomasnow 321/384, Cresselia 444/444
+
+  Turn 3
+    p1 mcts: move 1, move 3 1
+      search (24000 visits): diamondstorm,0;ironhead,0 1238v 898 | diamondstorm,0;knockoff,1 1194v 864 | diamondstorm,0;knockoff,0 1113v 800 | stealthrock,0;ironhead,0 892v 627
+    p2 greedy: move 2 1, move 3 1
+      p1a Diancie used Diamond Storm -> p2a: Abomasnow  [[spread] p2a,p2b]
+      p2a Abomasnow fainted
+      p1b Bisharp used Iron Head -> p2b: Cresselia
+              p2b Cresselia used up its Sitrus Berry
+      p2b Cresselia used Psychic -> p1a: Diancie
+      p1a Diancie fainted
+      after p1: Diancie-Mega 0/304, Bisharp 184/272
+      after p2: Abomasnow 0/384, Cresselia 286/444
+
+  Turn 4
+      p1a <- Talonflame comes in (349/349)
+      p2a <- Keldeo-Resolute comes in (323/323)
+      after p1: Talonflame 349/349, Bisharp 184/272
+      after p2: Keldeo-Resolute 323/323, Cresselia 286/444
+
+  Turn 5
+    p1 mcts: move 1 1, move 1 2
+      search (27000 visits): bravebird,0;knockoff,1 2520v 1698 | bravebird,0;ironhead,1 1781v 1170 | switch amoonguss;knockoff,1 777v 468 | bravebird,0;ironhead,0 765v 459
+    p2 greedy: move 1 2, move 3 2
+      p1a Talonflame used Brave Bird -> p2a: Keldeo
+      p2a Keldeo fainted
+      p1b Bisharp used Knock Off -> p2b: Cresselia
+      p2b Cresselia used Psychic -> p1b: Bisharp
+              p1b Bisharp -- IMMUNE
+      after p1: Talonflame 187/349, Bisharp 140/272
+      after p2: Keldeo-Resolute 0/323, Cresselia 33/444
+
+  Turn 6
+      p2a <- Scrafty comes in (334/334)
+              p1a Talonflame atk 1 fell
+              p1b Bisharp atk 1 fell
+              p1b Bisharp atk 2 rose
+      after p1: Talonflame 187/349, Bisharp 140/272
+      after p2: Scrafty 334/334, Cresselia 33/444
+
+  Turn 7
+    p1 mcts: switch 4, move 3 1   (slot0 Talonflame -> Conkeldurr)
+      search (33000 visits): switch conkeldurr;ironhead,0 3627v 2822 | switch kyuremblack;ironhead,0 2075v 1564 | switch amoonguss;ironhead,0 1695v 1259 | switch conkeldurr;knockoff,0 1521v 1121
+    p2 greedy: move 2 2, move 3 2
+      p1a <- Conkeldurr comes in (401/401)
+      p1b Bisharp used Iron Head -> p2a: Scrafty
+      p2b Cresselia used Psychic -> p1b: Bisharp
+              p1b Bisharp -- IMMUNE
+      p2a Scrafty used Crunch -> p1b: Bisharp
+      after p1: Conkeldurr 376/401, Bisharp 39/272
+      after p2: Scrafty 72/334, Cresselia 6/444
+
+  Turn 8
+    p1 mcts: move 2 2, move 3 1
+      search (44000 visits): machpunch,1;ironhead,0 1952v 1643 | drainpunch,1;ironhead,0 1724v 1440 | icepunch,1;ironhead,0 1675v 1396 | knockoff,1;ironhead,0 1659v 1382
+    p2 greedy: move 2 2, move 3 2
+      p1a Conkeldurr used Mach Punch -> p2b: Cresselia
+              p2b Cresselia -- critical hit
+      p2b Cresselia fainted
+      p1b Bisharp used Iron Head -> p2a: Scrafty
+      p2a Scrafty fainted
+      after p1: Conkeldurr 376/401, Bisharp 12/272
+      after p2: Scrafty 0/334, Cresselia 0/444
+
+  Turn 9
+      p2a <- Diancie comes in (304/304)
+      after p1: Conkeldurr 376/401, Bisharp 12/272
+      after p2: Diancie 304/304, Cresselia 0/444
+
+  Turn 10
+    p1 mcts: move 1 1, move 3 1
+      search (1033000 visits): drainpunch,0;ironhead,0 146934v 146934 | machpunch,0;ironhead,0 146934v 146934 | icepunch,0;ironhead,0 146934v 146934 | knockoff,0;ironhead,0 146934v 146934
+    p2 greedy: move 2, pass
+      p1b Bisharp used Iron Head -> p2a: Diancie
+      p2a Diancie fainted
+      p1b Bisharp fainted
+      after p1: Conkeldurr 376/401, Bisharp 0/272
+      after p2: Diancie 0/304, Cresselia 0/444
+
+  RESULT: p1 wins

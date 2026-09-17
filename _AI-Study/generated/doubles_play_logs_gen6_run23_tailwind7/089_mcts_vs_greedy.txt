@@ -1,0 +1,246 @@
+battle 89   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: DEOSHARP NEO: Kangaskhan-Mega, Amoonguss, Landorus-Therian, Bisharp, Deoxys-Speed, Sylveon
+  p2: Lavender Town: Gengar-Mega, Kyurem-Black, Thundurus, Porygon2, Landorus-Therian, Ferrothorn
+
+  Turn 1
+    p1 mcts: move 1 2, move 3 2
+      search (24000 visits): fakeout,1;sludgebomb,1 808v 664 | fakeout,1;spore,0 759v 620 | fakeout,1;spore,1 728v 592 | fakeout,1;sludgebomb,0 653v 525
+    p2 greedy: move 1 1, move 2 1
+      p1a Kangaskhan used Fake Out -> p2b: Kyurem
+      p2a Gengar used Shadow Ball -> p1a: Kangaskhan
+              p1a Kangaskhan -- IMMUNE
+              p2b Kyurem COULD NOT MOVE (flinch)
+      p1b Amoonguss used Sludge Bomb -> p2b: Kyurem
+      after p1: Kangaskhan-Mega 379/379, Amoonguss 432/432
+      after p2: Gengar-Mega 324/324, Kyurem-Black 230/392
+
+  Turn 2
+    p1 mcts: move 3 2, move 4
+      search (21000 visits): icebeam,1;protect,1 593v 491 | fireblast,1;spore,0 583v 482 | icebeam,0;protect,1 582v 481 | fireblast,0;protect,1 559v 460
+    p2 greedy: move 1 1, move 2 1
+      p1b Amoonguss used Protect
+      p2a Gengar used Shadow Ball -> p1a: Kangaskhan
+              p1a Kangaskhan -- IMMUNE
+      p1a Kangaskhan used Ice Beam -> p2b: Kyurem
+      p2b Kyurem used Earth Power -> p1a: Kangaskhan
+      after p1: Kangaskhan-Mega 268/379, Amoonguss 432/432
+      after p2: Gengar-Mega 324/324, Kyurem-Black 168/392
+
+  Turn 3
+    p1 mcts: move 3 2, move 4
+      search (21000 visits): icebeam,1;protect,1 586v 483 | icebeam,1;spore,0 573v 471 | fireblast,0;protect,1 566v 465 | fireblast,1;protect,1 531v 433
+    p2 greedy: move 1 1, move 2 1
+      p1b Amoonguss used Protect
+      p2a Gengar used Shadow Ball -> p1a: Kangaskhan
+              p1a Kangaskhan -- IMMUNE
+      p1a Kangaskhan used Ice Beam -> p2b: Kyurem
+      p2b Kyurem used Earth Power -> p1a: Kangaskhan
+      after p1: Kangaskhan-Mega 151/379, Amoonguss 432/432
+      after p2: Gengar-Mega 324/324, Kyurem-Black 99/392
+
+  Turn 4
+    p1 mcts: move 3 2, move 4
+      search (22000 visits): icebeam,1;protect,1 671v 552 | icebeam,0;protect,1 606v 493 | fireblast,0;protect,1 597v 485 | seismictoss,1;protect,1 568v 459
+    p2 greedy: move 1 1, move 2 1
+      p1b Amoonguss used Protect  [[still]]
+              p1b Amoonguss -- IT FAILED
+      p2a Gengar used Shadow Ball -> p1a: Kangaskhan
+              p1a Kangaskhan -- IMMUNE
+      p1a Kangaskhan used Ice Beam -> p2b: Kyurem
+      p2b Kyurem used Earth Power -> p1a: Kangaskhan
+      after p1: Kangaskhan-Mega 30/379, Amoonguss 432/432
+      after p2: Gengar-Mega 324/324, Kyurem-Black 37/392
+
+  Turn 5
+    p1 mcts: move 4 1, move 4
+      search (28000 visits): fireblast,0;protect,1 908v 660 | icebeam,0;protect,1 876v 635 | fireblast,1;protect,1 874v 633 | seismictoss,1;protect,1 843v 608
+    p2 greedy: move 1 1, move 2 1
+      p1b Amoonguss used Protect
+      p2a Gengar used Shadow Ball -> p1a: Kangaskhan
+              p1a Kangaskhan -- IMMUNE
+      p1a Kangaskhan used Fire Blast -> p2a: Gengar
+      p2b Kyurem used Earth Power -> p1a: Kangaskhan
+      p1a Kangaskhan fainted
+      after p1: Kangaskhan-Mega 0/379, Amoonguss 432/432
+      after p2: Gengar-Mega 263/324, Kyurem-Black 37/392
+
+  Turn 6
+      p1a <- Landorus-Therian comes in (359/359)
+              p2a Gengar atk 1 fell
+              p2b Kyurem atk 1 fell
+      after p1: Landorus-Therian 359/359, Amoonguss 432/432
+      after p2: Gengar-Mega 263/324, Kyurem-Black 37/392
+
+  Turn 7
+    p1 mcts: move 3 2, move 2 1
+      search (30000 visits): uturn,1;spore,0 4483v 1920 | uturn,0;spore,0 2833v 1164 | uturn,1;sludgebomb,0 1175v 427 | uturn,1;sludgebomb,1 1106v 398
+    p2 greedy: move 1 1, move 2 1
+      p1a Landorus used U-turn -> p2b: Kyurem
+      p2b Kyurem fainted
+      after p1: Landorus-Therian 359/359, Amoonguss 432/432
+      after p2: Gengar-Mega 263/324, Kyurem-Black 0/392
+
+  Turn 8
+      p1a <- Bisharp comes in (277/277)
+      p2a Gengar used Shadow Ball -> p1a: Bisharp
+      p1b Amoonguss used Spore -> p2a: Gengar
+              p2a Gengar is now slp
+      after p1: Bisharp 169/277, Amoonguss 432/432
+      after p2: Gengar-Mega 263/324, Kyurem-Black 0/392
+
+  Turn 9
+      p2b <- Thundurus comes in (299/299)
+      after p1: Bisharp 169/277, Amoonguss 432/432
+      after p2: Gengar-Mega 263/324, Thundurus 299/299
+
+  Turn 10
+    p1 mcts: move 1 2, move 1
+      search (18000 visits): knockoff,1;ragepowder,1 2145v 1139 | knockoff,1;sludgebomb,1 1097v 541 | knockoff,0;ragepowder,1 990v 481 | knockoff,1;sludgebomb,0 785v 368
+    p2 greedy: move 1 1, move 3 1
+      p1b Amoonguss used Rage Powder
+      p2b Thundurus used Superpower -> p1b: Amoonguss
+              p2b Thundurus atk 1 fell
+              p2b Thundurus def 1 fell
+              p2a Gengar COULD NOT MOVE (slp)
+      p1a Bisharp used Knock Off -> p2b: Thundurus
+              p2b Thundurus used up its Life Orb
+      p2b Thundurus fainted
+      after p1: Bisharp 142/277, Amoonguss 344/432
+      after p2: Gengar-Mega 263/324, Thundurus 0/299
+
+  Turn 11
+      p2b <- Porygon2 comes in (374/374)
+              p2b Porygon2 spa 1 rose
+      after p1: Bisharp 142/277, Amoonguss 344/432
+      after p2: Gengar-Mega 263/324, Porygon2 374/374
+
+  Turn 12
+    p1 mcts: move 1 2, move 3 2
+      search (18000 visits): knockoff,1;sludgebomb,1 1244v 653 | knockoff,0;sludgebomb,1 989v 504 | knockoff,0;protect,1 845v 421 | knockoff,0;spore,1 812v 402
+    p2 greedy: move 1 1, move 3 1
+              p2a Gengar COULD NOT MOVE (slp)
+      p1a Bisharp used Knock Off -> p2b: Porygon2
+              p2b Porygon2 used up its Eviolite
+      p2b Porygon2 used Ice Beam -> p1a: Bisharp
+      p1b Amoonguss used Sludge Bomb -> p2b: Porygon2
+      after p1: Bisharp 40/277, Amoonguss 344/432
+      after p2: Gengar-Mega 263/324, Porygon2 140/374
+
+  Turn 13
+    p1 mcts: move 1 1, move 3 2
+      search (24000 visits): knockoff,0;sludgebomb,1 1393v 627 | knockoff,1;protect,1 1200v 529 | knockoff,0;protect,1 996v 426 | ironhead,1;protect,1 994v 425
+    p2 greedy: move 1 1, move 3 1
+              p2a Gengar is cured of slp
+      p2a Gengar used Shadow Ball -> p1a: Bisharp
+      p1a Bisharp fainted
+      p2b Porygon2 used Ice Beam -> p1b: Amoonguss
+              p1b Amoonguss -- critical hit
+      p1b Amoonguss fainted
+      after p1: Bisharp 0/277, Amoonguss 0/432
+      after p2: Gengar-Mega 263/324, Porygon2 140/374
+
+  Turn 14
+      p1a <- Landorus-Therian comes in (359/359)
+      p1b <- Deoxys-Speed comes in (241/241)
+              p2a Gengar atk 1 fell
+              p2b Porygon2 atk 1 fell
+      after p1: Landorus-Therian 359/359, Deoxys-Speed 241/241
+      after p2: Gengar-Mega 263/324, Porygon2 140/374
+
+  Turn 15
+    p1 mcts: move 3 1, move 4
+      search (36000 visits): uturn,0;protect,1 3285v 1218 | uturn,1;protect,1 2436v 877 | superpower,0;protect,1 2240v 793 | stoneedge,0;protect,1 2224v 786
+    p2 greedy: move 1 1, move 3 1
+      p1b Deoxys used Protect
+      p1a Landorus used U-turn -> p2a: Gengar
+      after p1: Landorus-Therian 359/359, Deoxys-Speed 241/241
+      after p2: Gengar-Mega 236/324, Porygon2 140/374
+
+  Turn 16
+      p1a <- Sylveon comes in (393/393)
+      p2a Gengar used Shadow Ball -> p1a: Sylveon
+      p2b Porygon2 used Ice Beam -> p1a: Sylveon
+      after p1: Sylveon 222/393, Deoxys-Speed 241/241
+      after p2: Gengar-Mega 236/324, Porygon2 140/374
+
+  Turn 17
+    p1 mcts: move 1, move 4
+      search (37000 visits): hypervoice,0;protect,1 5913v 2135 | protect,0;protect,1 5253v 1877 | substitute,0;protect,1 5078v 1809 | calmmind,0;protect,1 4822v 1710
+    p2 greedy: move 1 1, move 3 1
+      p1b Deoxys used Protect  [[still]]
+              p1b Deoxys -- IT FAILED
+      p2a Gengar used Shadow Ball -> p1a: Sylveon
+      p1a Sylveon used Hyper Voice -> p2b: Porygon2  [[spread] p2a,p2b]
+      p2b Porygon2 used Ice Beam -> p1a: Sylveon
+      after p1: Sylveon 28/393, Deoxys-Speed 241/241
+      after p2: Gengar-Mega 176/324, Porygon2 20/374
+
+  Turn 18
+    p1 mcts: move 1, move 4
+      search (45000 visits): hypervoice,0;protect,1 7499v 2402 | calmmind,0;protect,1 7107v 2266 | protect,0;protect,1 5831v 1826 | substitute,0;protect,1 5000v 1542
+    p2 greedy: move 1 1, move 3 1
+      p1b Deoxys used Protect
+      p2a Gengar used Shadow Ball -> p1a: Sylveon
+      p1a Sylveon fainted
+      p2b Porygon2 used Ice Beam -> p1b: Deoxys
+              p1b Deoxys -- move: Protect
+      after p1: Sylveon 0/393, Deoxys-Speed 241/241
+      after p2: Gengar-Mega 176/324, Porygon2 20/374
+
+  Turn 19
+      p1a <- Landorus-Therian comes in (359/359)
+              p2a Gengar atk 1 fell
+              p2b Porygon2 atk 1 fell
+      after p1: Landorus-Therian 359/359, Deoxys-Speed 241/241
+      after p2: Gengar-Mega 176/324, Porygon2 20/374
+
+  Turn 20
+    p1 mcts: move 3 1, move 4
+      search (39000 visits): uturn,0;protect,1 3305v 843 | superpower,0;protect,1 2383v 574 | earthquake,0;protect,1 2340v 562 | stoneedge,0;protect,1 2335v 560
+    p2 greedy: move 1 1, move 3 1
+      p1b Deoxys used Protect  [[still]]
+              p1b Deoxys -- IT FAILED
+      p1a Landorus used U-turn -> p2a: Gengar
+      p2a Gengar used Shadow Ball -> p1a: Landorus
+              p1a Landorus spd 1 fell
+      p2b Porygon2 used Ice Beam -> p1a: Landorus
+      p1a Landorus fainted
+      after p1: Landorus-Therian 0/359, Deoxys-Speed 241/241
+      after p2: Gengar-Mega 149/324, Porygon2 20/374
+
+  Turn 21
+    p1 mcts: pass, move 4
+      search (63000 visits): No Move;protect,1 43258v 6306 | No Move;icebeam,1 6615v 731 | No Move;icebeam,0 4472v 439 | No Move;superpower,1 2417v 176
+    p2 greedy: move 1 2, move 3 2
+      p1b Deoxys used Protect
+      p2a Gengar used Shadow Ball -> p1b: Deoxys
+              p1b Deoxys -- move: Protect
+      p2b Porygon2 used Ice Beam -> p1b: Deoxys
+              p1b Deoxys -- move: Protect
+      after p1: Landorus-Therian 0/359, Deoxys-Speed 241/241
+      after p2: Gengar-Mega 149/324, Porygon2 20/374
+
+  Turn 22
+    p1 mcts: pass, move 4
+      search (69000 visits): No Move;protect,1 47283v 6749 | No Move;icebeam,1 6639v 707 | No Move;icebeam,0 5049v 495 | No Move;superpower,1 3040v 240
+    p2 greedy: move 1 2, move 3 2
+      p1b Deoxys used Protect
+      p2a Gengar used Shadow Ball -> p1b: Deoxys
+              p1b Deoxys -- move: Protect
+      p2b Porygon2 used Ice Beam -> p1b: Deoxys
+              p1b Deoxys -- move: Protect
+      after p1: Landorus-Therian 0/359, Deoxys-Speed 241/241
+      after p2: Gengar-Mega 149/324, Porygon2 20/374
+
+  Turn 23
+    p1 mcts: pass, move 4
+      search (67000 visits): No Move;protect,1 45346v 6475 | No Move;icebeam,1 7649v 849 | No Move;icebeam,0 4962v 486 | No Move;superpower,1 2480v 174
+    p2 greedy: move 1 2, move 3 2
+      p1b Deoxys used Protect  [[still]]
+              p1b Deoxys -- IT FAILED
+      p2a Gengar used Shadow Ball -> p1b: Deoxys
+      p1b Deoxys fainted
+      after p1: Landorus-Therian 0/359, Deoxys-Speed 0/241
+      after p2: Gengar-Mega 149/324, Porygon2 20/374
+
+  RESULT: p2 wins

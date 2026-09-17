@@ -1,0 +1,181 @@
+battle 21   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: Untitled 1448: Charizard-Mega-Y, Gothitelle, Scrafty, Genesect, Landorus-Therian, Zapdos
+  p2: ORAS Doubles OU: Aromatisse, Abomasnow, Victini, Cresselia, Jellicent, Rhyperior
+
+  Turn 1
+    p1 mcts: move 1, switch 4   (slot1 Gothitelle -> Genesect)
+      search (27000 visits): heatwave,0;switch genesect 1535v 1085 | heatwave,0;switch landorustherian 1454v 1023 | heatwave,0;switch scrafty 1110v 761 | heatwave,0;psychic,0 1041v 710
+    p2 greedy: move 4, move 1
+      p1b <- Genesect comes in (283/283)
+              p1b Genesect atk 1 rose
+      p1a Charizard used Heat Wave -> p2b: Abomasnow  [[spread] p2b]
+              p1a Charizard -- MISSED
+      p2b Abomasnow fainted
+      p2a Aromatisse used Dazzling Gleam -> p1b: Genesect  [[spread] p1a,p1b]
+      after p1: Charizard-Mega-Y 247/298, Genesect 231/283
+      after p2: Aromatisse 380/405, Abomasnow 0/384
+
+  Turn 2
+      p2b <- Victini comes in (404/404)
+      after p1: Charizard-Mega-Y 247/298, Genesect 231/283
+      after p2: Aromatisse 380/405, Victini 404/404
+
+  Turn 3
+    p1 mcts: switch 5, move 3 2   (slot0 Charizard-Mega-Y -> Landorus-Therian)
+      search (16000 visits): switch landorustherian;uturn,1 817v 645 | switch landorustherian;uturn,0 417v 303 | heatwave,0;uturn,1 386v 277 | switch landorustherian;switch zapdos 320v 223
+    p2 greedy: move 4, move 1 2
+      p1a <- Landorus-Therian comes in (347/347)
+              p2a Aromatisse atk 1 fell
+              p2b Victini atk 1 fell
+      p1b Genesect used U-turn -> p2b: Victini
+      after p1: Landorus-Therian 347/347, Genesect 231/283
+      after p2: Aromatisse 380/405, Victini 256/404
+
+  Turn 4
+      p1b <- Scrafty comes in (334/334)
+              p2a Aromatisse atk 1 fell
+              p2b Victini atk 1 fell
+      p2b Victini used V-create -> p1b: Scrafty
+              p2b Victini spe 1 fell
+              p2b Victini def 1 fell
+              p2b Victini spd 1 fell
+              p1b Scrafty used up its Eject Button
+      after p1: Landorus-Therian 347/347, Scrafty 210/334
+      after p2: Aromatisse 380/405, Victini 256/404
+
+  Turn 5
+      p1b <- Genesect comes in (231/283)
+              p1b Genesect atk 1 rose
+      p2a Aromatisse used Dazzling Gleam -> p1b: Genesect  [[spread] p1a,p1b]
+              p1b Genesect -- critical hit
+      after p1: Landorus-Therian 245/347, Genesect 163/283
+      after p2: Aromatisse 355/405, Victini 231/404
+
+  Turn 6
+    p1 mcts: move 3 2, move 2 1
+      search (17000 visits): uturn,1;flashcannon,0 552v 297 | stoneedge,0;icebeam,1 399v 202 | stoneedge,0;flashcannon,1 385v 193 | uturn,0;flashcannon,0 367v 182
+    p2 greedy: move 4, move 1 2
+      p1b Genesect used Flash Cannon -> p2a: Aromatisse
+              p2a Aromatisse -- critical hit
+              p2a Aromatisse used up its Sitrus Berry
+      p1a Landorus used U-turn -> p2b: Victini
+      after p1: Landorus-Therian 245/347, Genesect 163/283
+      after p2: Aromatisse 148/405, Victini 10/404
+
+  Turn 7
+      p1a <- Scrafty comes in (210/334)
+              p2a Aromatisse atk 1 fell
+              p2b Victini atk 1 fell
+      p2b Victini used V-create -> p1b: Genesect
+              p2b Victini spe 1 fell
+              p2b Victini def 1 fell
+              p2b Victini spd 1 fell
+      p1b Genesect fainted
+      p2a Aromatisse used Dazzling Gleam -> p1a: Scrafty
+      p1a Scrafty fainted
+      p2b Victini fainted
+      after p1: Scrafty 0/334, Genesect 0/283
+      after p2: Aromatisse 123/405, Victini 0/404
+
+  Turn 8
+      p1b <- Gothitelle comes in (344/344)
+      p2b <- Cresselia comes in (443/443)
+      p1a <- Landorus-Therian comes in (245/347)
+              p2a Aromatisse atk 1 fell
+              p2b Cresselia atk 1 fell
+      after p1: Landorus-Therian 245/347, Gothitelle 344/344
+      after p2: Aromatisse 123/405, Cresselia 443/443
+
+  Turn 9
+    p1 mcts: move 3 2, move 3 -1
+      search (41000 visits): uturn,1;helpinghand,0 20952v 14982 | uturn,1;switch zapdos 1952v 1254 | uturn,1;switch charizardmegay 1901v 1219 | uturn,1;psychic,1 1601v 1011
+    p2 greedy: move 4, move 4 1
+      p1b Gothitelle used Helping Hand -> p1a: Landorus
+      p1a Landorus used U-turn -> p2b: Cresselia
+              p2b Cresselia used up its Sitrus Berry
+      after p1: Landorus-Therian 245/347, Gothitelle 344/344
+      after p2: Aromatisse 123/405, Cresselia 163/443
+
+  Turn 10
+      p1a <- Charizard-Mega-Y comes in (247/298)
+      p2b Cresselia used Ice Beam -> p1a: Charizard
+              p1a Charizard -- critical hit
+      p2a Aromatisse used Dazzling Gleam -> p1b: Gothitelle  [[spread] p1a,p1b]
+      after p1: Charizard-Mega-Y 104/298, Gothitelle 281/344
+      after p2: Aromatisse 123/405, Cresselia 163/443
+
+  Turn 11
+    p1 mcts: move 1, move 1 2
+      search (36000 visits): heatwave,0;psychic,1 3068v 1720 | heatwave,0;helpinghand,0 2522v 1393 | heatwave,0;switch zapdos 2454v 1352 | heatwave,0;taunt,0 2162v 1178
+    p2 greedy: move 4, move 4 1
+      p1a Charizard used Heat Wave -> p2a: Aromatisse  [[spread] p2b]
+              p1a Charizard -- MISSED
+      p2b Cresselia fainted
+      p1b Gothitelle used Psychic -> p2a: Aromatisse
+      p2a Aromatisse used Dazzling Gleam -> p1b: Gothitelle  [[spread] p1a,p1b]
+      after p1: Charizard-Mega-Y 74/298, Gothitelle 224/344
+      after p2: Aromatisse 56/405, Cresselia 0/443
+
+  Turn 12
+      p2b <- Jellicent comes in (403/403)
+      after p1: Charizard-Mega-Y 74/298, Gothitelle 224/344
+      after p2: Aromatisse 56/405, Jellicent 403/403
+
+  Turn 13
+    p1 mcts: move 3 1, move 3 -1
+      search (49000 visits): solarbeam,0;helpinghand,0 3069v 1390 | solarbeam,1;psychic,1 2578v 1148 | solarbeam,1;helpinghand,0 2252v 988 | overheat,0;taunt,0 1661v 702
+    p2 greedy: move 4, move 3
+      p1b Gothitelle used Helping Hand -> p1a: Charizard
+      p1a Charizard used Solar Beam  [[still]]
+      p2a Aromatisse fainted
+      p2b Jellicent used Water Spout -> p1b: Gothitelle  [[spread] p1a,p1b]
+              p1b Gothitelle used up its Sitrus Berry
+      p1a Charizard fainted
+      after p1: Charizard-Mega-Y 0/298, Gothitelle 249/344
+      after p2: Aromatisse 0/405, Jellicent 403/403
+
+  Turn 14
+      p1a <- Landorus-Therian comes in (245/347)
+      p2a <- Rhyperior comes in (433/433)
+              p2a Rhyperior atk 1 fell
+              p2b Jellicent atk 1 fell
+      after p1: Landorus-Therian 245/347, Gothitelle 249/344
+      after p2: Rhyperior 433/433, Jellicent 403/403
+
+  Turn 15
+    p1 mcts: move 1, move 2
+      search (25000 visits): earthquake,0;protect,1 4818v 3426 | earthquake,0;helpinghand,0 1546v 1023 | earthquake,0;switch zapdos 1394v 914 | uturn,1;psychic,1 1360v 889
+    p2 greedy: move 1 1, move 3
+      p1b Gothitelle used Protect
+      p1a Landorus used Earthquake -> p2b: Jellicent  [[spread] p2a,p2b]
+              p1b Gothitelle -- move: Protect
+              p2b Jellicent used up its Sitrus Berry
+      p2b Jellicent used Water Spout -> p1a: Landorus  [[spread] p1a]
+              p1b Gothitelle -- move: Protect
+      p2a Rhyperior used Hammer Arm -> p1a: Landorus
+              p2a Rhyperior spe 1 fell
+      p2a Rhyperior fainted
+      after p1: Landorus-Therian 107/347, Gothitelle 249/344
+      after p2: Rhyperior 0/433, Jellicent 173/403
+
+  Turn 16
+    p1 mcts: switch 6, move 4 2   (slot0 Landorus-Therian -> Zapdos)
+      search (105000 visits): switch zapdos;taunt,1 22737v 9661 | switch zapdos;helpinghand,0 20430v 8645 | switch zapdos;psychic,1 19875v 8401 | earthquake,1;switch zapdos 12417v 5136
+    p2 greedy: pass, move 3
+      p1a <- Zapdos comes in (383/383)
+      p1b Gothitelle used Taunt -> p2b: Jellicent
+              p2b Jellicent gained move: Taunt
+      p2b Jellicent used Water Spout -> p1a: Zapdos  [[spread] p1a,p1b]
+      after p1: Zapdos 347/383, Gothitelle 222/344
+      after p2: Rhyperior 0/433, Jellicent 173/403
+
+  Turn 17
+    p1 mcts: move 1 2, move 1 2
+      search (838000 visits): thunderbolt,1;psychic,1 149224v 149224 | thunderbolt,1;protect,1 149224v 149224 | thunderbolt,1;helpinghand,0 149224v 149224 | thunderbolt,1;taunt,1 149224v 149224
+    p2 greedy: pass, move 3
+      p1a Zapdos used Thunderbolt -> p2b: Jellicent
+      p2b Jellicent fainted
+      after p1: Zapdos 347/383, Gothitelle 222/344
+      after p2: Rhyperior 0/433, Jellicent 0/403
+
+  RESULT: p1 wins

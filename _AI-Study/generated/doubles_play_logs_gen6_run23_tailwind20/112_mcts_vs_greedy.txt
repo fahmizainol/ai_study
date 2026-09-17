@@ -1,0 +1,208 @@
+battle 112   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: XY Doubles: Suicune, Breloom, Victini, Landorus-Therian, Rotom-Wash, Kangaskhan
+  p2: ORAS Doubles OU: Diancie-Mega, Jirachi, Landorus-Therian, Azumarill, Talonflame, Kyurem-Black
+
+  Turn 1
+    p1 mcts: move 3, switch 4   (slot1 Breloom -> Landorus-Therian)
+      search (13000 visits): tailwind,0;switch landorustherian 578v 419 | tailwind,0;bulletseed,0 551v 397 | hydropump,1;switch landorustherian 296v 193 | tailwind,0;protect,1 270v 173
+    p2 greedy: move 1, move 2 1
+      p1b <- Landorus-Therian comes in (319/319)
+              p2a Diancie atk 1 fell
+              p2b Jirachi atk 1 fell
+      p2a Diancie used Diamond Storm -> p1a: Suicune  [[spread] p1a,p1b]
+              p1b Landorus -- critical hit
+              p2a Diancie def 1 rose
+      p1a Suicune used Tailwind
+      -sidestart p1: A move: Tailwind
+      p2b Jirachi used Iron Head -> p1a: Suicune
+      after p1: Suicune 249/370, Landorus-Therian 76/319
+      after p2: Diancie-Mega 241/241, Jirachi 404/404
+
+  Turn 2
+    p1 mcts: move 1 1, move 1 1
+      search (19000 visits): hydropump,0;uturn,0 704v 403 | hydropump,0;rockslide,0 673v 383 | hydropump,0;uturn,1 670v 381 | protect,0;earthquake,0 510v 277
+    p2 greedy: move 1, move 2 2
+      p1b Landorus used U-turn -> p2a: Diancie
+      after p1: Suicune 249/370, Landorus-Therian 76/319
+      after p2: Diancie-Mega 205/241, Jirachi 404/404
+
+  Turn 3
+      p1b <- Victini comes in (341/341)
+      p1a Suicune used Hydro Pump -> p2a: Diancie
+              p2a Diancie -- critical hit
+      p2a Diancie fainted
+      p2b Jirachi used Iron Head -> p1b: Victini
+      after p1: Suicune 249/370, Victini 311/341
+      after p2: Diancie-Mega 0/241, Jirachi 404/404
+
+  Turn 4
+      p2a <- Landorus-Therian comes in (319/319)
+              p1a Suicune atk 1 fell
+              p1b Victini atk 1 fell
+      after p1: Suicune 249/370, Victini 311/341
+      after p2: Landorus-Therian 319/319, Jirachi 404/404
+
+  Turn 5
+    p1 mcts: move 2 1, move 1 1
+      search (20000 visits): icebeam,0;uturn,0 834v 642 | icebeam,0;uturn,1 659v 494 | hydropump,0;uturn,0 614v 457 | hydropump,0;uturn,1 545v 399
+    p2 greedy: move 4 1, move 2 1
+      p1b Victini used U-turn -> p2a: Landorus
+      after p1: Suicune 249/370, Victini 311/341
+      after p2: Landorus-Therian 280/319, Jirachi 404/404
+
+  Turn 6
+      p1b <- Landorus-Therian comes in (76/319)
+              p2a Landorus atk 1 fell
+              p2b Jirachi atk 1 fell
+      p1a Suicune used Ice Beam -> p2a: Landorus
+      p2a Landorus fainted
+      p2b Jirachi used Iron Head -> p1a: Suicune
+      after p1: Suicune 230/370, Landorus-Therian 76/319
+      after p2: Landorus-Therian 0/319, Jirachi 404/404
+
+  Turn 7
+      p2a <- Azumarill comes in (402/402)
+      after p1: Suicune 230/370, Landorus-Therian 76/319
+      after p2: Azumarill 402/402, Jirachi 404/404
+
+  Turn 8
+    p1 mcts: move 1 2, move 1 1
+      search (21000 visits): hydropump,1;uturn,0 374v 151 | switch rotomwash;earthquake,0 369v 149 | hydropump,1;uturn,1 368v 149 | switch kangaskhan;uturn,1 360v 144
+    p2 greedy: move 3 2, move 2 2
+      p1b Landorus used U-turn -> p2a: Azumarill
+              p2a Azumarill -- critical hit
+      after p1: Suicune 230/370, Landorus-Therian 76/319
+      after p2: Azumarill 306/402, Jirachi 404/404
+
+  Turn 9
+      p1b <- Victini comes in (311/341)
+      p1a Suicune used Hydro Pump -> p2b: Jirachi
+      p2b Jirachi used Iron Head -> p1b: Victini
+      p2a Azumarill used Knock Off -> p1b: Victini
+              p1b Victini used up its Choice Band
+      -sideend p1: A move: Tailwind
+      after p1: Suicune 230/370, Victini 23/341
+      after p2: Azumarill 306/402, Jirachi 265/404
+
+  Turn 10
+    p1 mcts: move 3, move 3 1
+      search (22000 visits): tailwind,0;boltstrike,0 769v 484 | tailwind,0;uturn,1 477v 280 | tailwind,0;uturn,0 410v 234 | tailwind,0;boltstrike,1 409v 233
+    p2 greedy: move 3 2, move 2 2
+      p1b Victini used Bolt Strike -> p2a: Azumarill
+              p2a Azumarill -- critical hit
+      p2a Azumarill fainted
+      p1a Suicune used Tailwind
+      -sidestart p1: A move: Tailwind
+      p2b Jirachi used Iron Head -> p1b: Victini
+      p1b Victini fainted
+      after p1: Suicune 230/370, Victini 0/341
+      after p2: Azumarill 0/402, Jirachi 265/404
+
+  Turn 11
+      p1b <- Landorus-Therian comes in (76/319)
+      p2a <- Talonflame comes in (297/297)
+              p2a Talonflame atk 1 fell
+              p2b Jirachi atk 1 fell
+      after p1: Suicune 230/370, Landorus-Therian 76/319
+      after p2: Talonflame 297/297, Jirachi 265/404
+
+  Turn 12
+    p1 mcts: move 1 1, switch 5   (slot1 Landorus-Therian -> Rotom-Wash)
+      search (20000 visits): hydropump,0;switch rotomwash 747v 340 | hydropump,0;uturn,1 549v 235 | switch kangaskhan;rockslide,0 522v 221 | switch rotomwash;rockslide,0 515v 218
+    p2 greedy: move 1 2, move 2 2
+      p1b <- Rotom-Wash comes in (304/304)
+      p2a Talonflame used Brave Bird -> p1b: Rotom
+      p1a Suicune used Hydro Pump -> p2a: Talonflame
+      p2a Talonflame fainted
+      p2b Jirachi used Iron Head -> p1b: Rotom
+      after p1: Suicune 230/370, Rotom-Wash 229/304
+      after p2: Talonflame 0/297, Jirachi 265/404
+
+  Turn 13
+      p2a <- Kyurem-Black comes in (391/391)
+      after p1: Suicune 230/370, Rotom-Wash 229/304
+      after p2: Kyurem-Black 391/391, Jirachi 265/404
+
+  Turn 14
+    p1 mcts: switch 5, move 3 1   (slot0 Suicune -> Landorus-Therian)
+      search (7000 visits): switch landorustherian;willowisp,0 157v 97 | icebeam,0;switch landorustherian 124v 71 | switch kangaskhan;switch landorustherian 124v 71 | switch landorustherian;thunderbolt,1 120v 68
+    p2 greedy: move 2 1, move 2 1
+      p1a <- Landorus-Therian comes in (76/319)
+              p2a Kyurem atk 1 fell
+              p2b Jirachi atk 1 fell
+      p2a Kyurem used Draco Meteor -> p1a: Landorus
+              p2a Kyurem spa 2 fell
+      p1a Landorus fainted
+      p1b Rotom used Will-O-Wisp -> p2a: Kyurem  [[miss]]
+              p1b Rotom -- MISSED
+      p2b Jirachi used Iron Head -> p1b: Rotom
+      after p1: Landorus-Therian 0/319, Rotom-Wash 222/304
+      after p2: Kyurem-Black 391/391, Jirachi 265/404
+
+  Turn 15
+      p1a <- Breloom comes in (262/262)
+      after p1: Breloom 262/262, Rotom-Wash 222/304
+      after p2: Kyurem-Black 391/391, Jirachi 265/404
+
+  Turn 16
+    p1 mcts: switch 5, move 3 1   (slot0 Breloom -> Suicune)
+      search (28000 visits): switch suicune;willowisp,0 1070v 608 | spore,0;hydropump,0 781v 426 | spore,0;thunderbolt,1 752v 407 | spore,0;thunderbolt,0 748v 405
+    p2 greedy: move 2 2, move 2 2
+      p1a <- Suicune comes in (230/370)
+      p2a Kyurem used Draco Meteor -> p1b: Rotom
+              p2a Kyurem spa 2 fell
+              p1b Rotom used up its Sitrus Berry
+      p1b Rotom used Will-O-Wisp -> p2a: Kyurem
+              p2a Kyurem is now brn
+      p2b Jirachi used Iron Head -> p1b: Rotom
+      -sideend p1: A move: Tailwind
+      after p1: Suicune 230/370, Rotom-Wash 197/304
+      after p2: Kyurem-Black 343/391, Jirachi 265/404
+
+  Turn 17
+    p1 mcts: move 3, move 2 2
+      search (15000 visits): tailwind,0;thunderbolt,1 511v 364 | tailwind,0;thunderbolt,0 476v 336 | tailwind,0;hydropump,1 469v 330 | tailwind,0;willowisp,1 469v 330
+    p2 greedy: move 2 1, move 2 1
+      p2a Kyurem used Draco Meteor -> p1a: Suicune
+              p2a Kyurem spa 2 fell
+              p1a Suicune used up its Sitrus Berry
+      p1a Suicune used Tailwind
+      -sidestart p1: A move: Tailwind
+      p2b Jirachi used Iron Head -> p1a: Suicune
+      p1b Rotom used Thunderbolt -> p2b: Jirachi
+      after p1: Suicune 237/370, Rotom-Wash 197/304
+      after p2: Kyurem-Black 295/391, Jirachi 141/404
+
+  Turn 18
+    p1 mcts: move 2 1, move 1 2
+      search (24000 visits): icebeam,0;hydropump,1 1844v 1151 | hydropump,1;hydropump,0 1001v 586 | hydropump,0;hydropump,1 982v 573 | hydropump,1;thunderbolt,0 741v 417
+    p2 greedy: move 2 1, move 2 1
+      p1a Suicune used Ice Beam -> p2a: Kyurem
+      p2a Kyurem used Draco Meteor -> p1a: Suicune
+      p1b Rotom used Hydro Pump -> p2b: Jirachi
+      p2b Jirachi used Iron Head -> p1a: Suicune
+      after p1: Suicune 173/370, Rotom-Wash 197/304
+      after p2: Kyurem-Black 141/391, Jirachi 2/404
+
+  Turn 19
+    p1 mcts: move 2 2, move 4
+      search (48000 visits): icebeam,1;protect,1 13110v 10158 | hydropump,1;thunderbolt,0 10443v 7101 | icebeam,1;thunderbolt,0 9224v 6246 | protect,0;thunderbolt,0 685v 377
+    p2 greedy: move 2 1, move 2 1
+      p1b Rotom used Protect
+      p1a Suicune used Ice Beam -> p2b: Jirachi
+      p2b Jirachi fainted
+      p2a Kyurem used Draco Meteor -> p1a: Suicune  [[miss]]
+              p2a Kyurem -- MISSED
+      after p1: Suicune 173/370, Rotom-Wash 197/304
+      after p2: Kyurem-Black 93/391, Jirachi 0/404
+
+  Turn 20
+    p1 mcts: move 2 1, move 1 1
+      search (209000 visits): icebeam,0;hydropump,0 6231v 6231 | icebeam,0;thunderbolt,0 6231v 6231 | icebeam,0;willowisp,0 6230v 6230 | icebeam,0;protect,1 6230v 6230
+    p2 greedy: move 1, pass
+      p1a Suicune used Ice Beam -> p2a: Kyurem
+      p2a Kyurem fainted
+      after p1: Suicune 173/370, Rotom-Wash 197/304
+      after p2: Kyurem-Black 0/391, Jirachi 0/404
+
+  RESULT: p1 wins

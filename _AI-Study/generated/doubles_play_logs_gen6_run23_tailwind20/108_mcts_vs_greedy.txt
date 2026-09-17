@@ -1,0 +1,164 @@
+battle 108   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: dpl rejects/terracott week 1 reject: Gengar-Mega, Whimsicott, Terrakion, Landorus-Therian, Hoopa-Unbound, Kyurem-Black
+  p2: ORAS Doubles OU: Ninetales, Liepard, Deoxys-Speed, Blastoise-Mega, Tangela, Victini
+
+  Turn 1
+    p1 mcts: move 3 2, move 4
+      search (33000 visits): sludgebomb,1;protect,1 2285v 1488 | sludgebomb,1;switch terrakion 1740v 1108 | protect,0;moonblast,1 1611v 1020 | sludgebomb,1;switch landorustherian 1593v 1007
+    p2 greedy: move 2 1, move 4 1
+      p1b Whimsicott used Protect
+      p2b Liepard used Sucker Punch -> p1a: Gengar
+      p1a Gengar fainted
+      p2a Ninetales used Overheat -> p1b: Whimsicott
+              p1b Whimsicott -- move: Protect
+      after p1: Gengar-Mega 0/261, Whimsicott 261/261
+      after p2: Ninetales 288/288, Liepard 243/269
+
+  Turn 2
+      p1a <- Terrakion comes in (323/323)
+      after p1: Terrakion 323/323, Whimsicott 261/261
+      after p2: Ninetales 288/288, Liepard 243/269
+
+  Turn 3
+    p1 mcts: move 2, move 1 2
+      search (17000 visits): rockslide,0;moonblast,1 1107v 952 | stoneedge,0;moonblast,1 983v 838 | rockslide,0;moonblast,0 930v 789 | stoneedge,0;tailwind,1 642v 525
+    p2 greedy: move 2 1, move 4 1
+      p2b Liepard used Sucker Punch -> p1a: Terrakion
+              p1a Terrakion atk 1 rose
+      p1b Whimsicott used Moonblast -> p2b: Liepard
+      p2b Liepard fainted
+      p1a Terrakion used Rock Slide -> p2a: Ninetales  [[miss]]
+              p1a Terrakion -- MISSED
+      p2a Ninetales used Overheat -> p1a: Terrakion
+              p2a Ninetales spa 2 fell
+      after p1: Terrakion 106/323, Whimsicott 261/261
+      after p2: Ninetales 288/288, Liepard 0/269
+
+  Turn 4
+      p2b <- Deoxys-Speed comes in (239/239)
+      after p1: Terrakion 106/323, Whimsicott 261/261
+      after p2: Ninetales 288/288, Deoxys-Speed 239/239
+
+  Turn 5
+    p1 mcts: move 2, move 2
+      search (30000 visits): rockslide,0;tailwind,1 1980v 1073 | rockslide,0;moonblast,1 1276v 659 | rockslide,0;protect,1 1052v 530 | rockslide,0;moonblast,0 999v 500
+    p2 greedy: move 2 1, move 1 1
+      p1b Whimsicott used Tailwind
+      -sidestart p1: A move: Tailwind
+      p2b Deoxys used Psycho Boost -> p1a: Terrakion
+              p2b Deoxys spa 2 fell
+      p1a Terrakion fainted
+      p2a Ninetales used Overheat -> p1b: Whimsicott
+              p1b Whimsicott used up its Focus Sash
+              p2a Ninetales spa 2 fell
+      after p1: Terrakion 0/323, Whimsicott 1/261
+      after p2: Ninetales 288/288, Deoxys-Speed 216/239
+
+  Turn 6
+      p1a <- Landorus-Therian comes in (319/319)
+              p2a Ninetales atk 1 fell
+              p2b Deoxys atk 1 fell
+      after p1: Landorus-Therian 319/319, Whimsicott 1/261
+      after p2: Ninetales 288/288, Deoxys-Speed 216/239
+
+  Turn 7
+    p1 mcts: move 1 1, move 1 2
+      search (23000 visits): earthpower,0;moonblast,1 927v 249 | switch hoopaunbound;moonblast,1 854v 224 | switch kyuremblack;moonblast,1 745v 187 | earthpower,1;moonblast,0 644v 154
+    p2 greedy: move 2 2, move 1 2
+      p1b Whimsicott used Moonblast -> p2b: Deoxys
+      p1a Landorus used Earth Power -> p2a: Ninetales
+      p2a Ninetales fainted
+      p2b Deoxys used Psycho Boost -> p1b: Whimsicott
+              p2b Deoxys spa 2 fell
+      p1b Whimsicott fainted
+      after p1: Landorus-Therian 288/319, Whimsicott 0/261
+      after p2: Ninetales 0/288, Deoxys-Speed 67/239
+
+  Turn 8
+      p1b <- Hoopa-Unbound comes in (301/301)
+      p2a <- Blastoise-Mega comes in (362/362)
+      after p1: Landorus-Therian 288/319, Hoopa-Unbound 301/301
+      after p2: Blastoise-Mega 362/362, Deoxys-Speed 67/239
+
+  Turn 9
+    p1 mcts: switch 6, move 2 2   (slot0 Landorus-Therian -> Kyurem-Black)
+      search (31000 visits): switch kyuremblack;hyperspacehole,1 1361v 200 | switch kyuremblack;hyperspacehole,0 1354v 198 | switch kyuremblack;hyperspacefury,0 1319v 191 | switch kyuremblack;hyperspacefury,1 1306v 188
+    p2 greedy: move 1, move 1 1
+      p1a <- Kyurem-Black comes in (391/391)
+      p1b Hoopa used Hyperspace Hole -> p2b: Deoxys
+      p2b Deoxys fainted
+      p2a Blastoise used Water Spout -> p1b: Hoopa  [[spread] p1a,p1b]
+      after p1: Kyurem-Black 322/391, Hoopa-Unbound 189/301
+      after p2: Blastoise-Mega 362/362, Deoxys-Speed 0/239
+
+  Turn 10
+      p2b <- Tangela comes in (334/334)
+      after p1: Kyurem-Black 322/391, Hoopa-Unbound 189/301
+      after p2: Blastoise-Mega 362/362, Tangela 334/334
+
+  Turn 11
+    p1 mcts: move 2 1, move 2 2
+      search (31000 visits): fusionbolt,0;hyperspacehole,1 3450v 2584 | icebeam,1;hyperspacefury,0 2752v 2035 | fusionbolt,0;hyperspacefury,1 1903v 1374 | icebeam,1;hyperspacehole,0 1635v 1167
+    p2 greedy: move 1, move 3 2
+      p1a Kyurem used Fusion Bolt -> p2a: Blastoise
+              p2a Blastoise -- critical hit
+      p2a Blastoise fainted
+      p1b Hoopa used Hyperspace Hole -> p2b: Tangela
+      p2b Tangela used Energy Ball -> p1b: Hoopa
+      -sideend p1: A move: Tailwind
+      after p1: Kyurem-Black 283/391, Hoopa-Unbound 53/301
+      after p2: Blastoise-Mega 0/362, Tangela 48/334
+
+  Turn 12
+      p2a <- Victini comes in (341/341)
+      after p1: Kyurem-Black 283/391, Hoopa-Unbound 53/301
+      after p2: Victini 341/341, Tangela 48/334
+
+  Turn 13
+    p1 mcts: move 4, move 1 1
+      search (61000 visits): protect,0;hyperspacefury,0 6225v 3587 | protect,0;hyperspacehole,1 3004v 1652 | earthpower,0;protect,1 2666v 1452 | protect,0;hyperspacefury,1 2631v 1432
+    p2 greedy: move 1 2, move 3 2
+      p1a Kyurem used Protect
+      p2a Victini used V-create -> p1b: Hoopa
+              p2a Victini spe 1 fell
+              p2a Victini def 1 fell
+              p2a Victini spd 1 fell
+      p1b Hoopa fainted
+      p2b Tangela used Energy Ball -> p1a: Kyurem
+              p1a Kyurem -- move: Protect
+      after p1: Kyurem-Black 283/391, Hoopa-Unbound 0/301
+      after p2: Victini 341/341, Tangela 48/334
+
+  Turn 14
+      p1b <- Landorus-Therian comes in (288/319)
+              p2a Victini atk 1 fell
+              p2b Tangela atk 1 fell
+      after p1: Kyurem-Black 283/391, Landorus-Therian 288/319
+      after p2: Victini 341/341, Tangela 48/334
+
+  Turn 15
+    p1 mcts: move 3 2, move 2 2
+      search (415000 visits): earthpower,1;hiddenpower,1 301152v 273175 | fusionbolt,0;protect,1 17347v 15226 | earthpower,1;explosion,0 16622v 14575 | protect,0;explosion,0 13178v 11492
+    p2 greedy: move 1 1, move 3 1
+      p2b Tangela used Energy Ball -> p1a: Kyurem
+      p2a Victini used V-create -> p1a: Kyurem
+              p1a Kyurem -- critical hit
+              p2a Victini spe 1 fell
+              p2a Victini def 1 fell
+              p2a Victini spd 1 fell
+      p1a Kyurem fainted
+      p1b Landorus used Hidden Power -> p2b: Tangela
+      p2b Tangela fainted
+      after p1: Kyurem-Black 0/391, Landorus-Therian 257/319
+      after p2: Victini 341/341, Tangela 0/334
+
+  Turn 16
+    p1 mcts: pass, move 1 1
+      search (1551000 visits): No Move;earthpower,0 521828v 521828 | No Move;explosion,0 521815v 521815 | No Move;protect,1 507325v 507272 | No Move;hiddenpower,0 32v 2
+    p2 greedy: move 1 2, pass
+      p1b Landorus used Earth Power -> p2a: Victini
+      p2a Victini fainted
+      after p1: Kyurem-Black 0/391, Landorus-Therian 226/319
+      after p2: Victini 0/341, Tangela 0/334
+
+  RESULT: p1 wins

@@ -1,0 +1,179 @@
+battle 41   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: ORAS Doubles OU: Kingler, Camerupt, Cresselia, Aegislash, Hoopa-Unbound, Landorus-Therian
+  p2: landoi hazards: Deoxys-Speed, Genesect, Kangaskhan-Mega, Volcanion, Landorus, Thundurus
+
+  Turn 1
+    p1 mcts: move 4, move 1 mega
+      search (20000 visits): protect,0;heatwave-mega,0 548v 379 | protect,0;heatwave,0 509v 348 | switch aegislash;heatwave-mega,0 473v 320 | switch landorustherian;heatwave,0 462v 312
+    p2 greedy: move 3 1, move 4 1
+      p1a Kingler used Protect
+      p2a Deoxys used Psycho Boost -> p1a: Kingler
+              p1a Kingler -- move: Protect
+      p2b Genesect used Thunderbolt -> p1a: Kingler
+              p1a Kingler -- move: Protect
+      p1b Camerupt used Heat Wave -> p2a: Deoxys  [[spread] p2a,p2b]
+      p2b Genesect fainted
+      after p1: Kingler 314/314, Camerupt-Mega 336/336
+      after p2: Deoxys-Speed 117/303, Genesect 0/343
+
+  Turn 2
+      p2b <- Kangaskhan-Mega comes in (413/413)
+      after p1: Kingler 314/314, Camerupt-Mega 336/336
+      after p2: Deoxys-Speed 117/303, Kangaskhan-Mega 413/413
+
+  Turn 3
+    p1 mcts: switch 6, move 1   (slot0 Kingler -> Landorus-Therian)
+      search (25000 visits): switch landorustherian;heatwave,0 3378v 1282 | switch cresselia;heatwave,0 1776v 622 | switch aegislash;heatwave,0 1615v 557 | switch landorustherian;earthpower,1 1018v 322
+    p2 greedy: move 3 1, move 3 1
+      p1a <- Landorus-Therian comes in (347/347)
+              p2a Deoxys atk 1 fell
+              p2b Kangaskhan atk 1 fell
+      p2b Kangaskhan used Sucker Punch  [[still]]
+              p2b Kangaskhan -- IT FAILED
+      p2a Deoxys used Psycho Boost -> p1a: Landorus
+              p2a Deoxys spa 2 fell
+      p1b Camerupt used Heat Wave -> p2a: Deoxys  [[spread] p2a,p2b]
+      p2a Deoxys fainted
+      after p1: Landorus-Therian 169/347, Camerupt-Mega 336/336
+      after p2: Deoxys-Speed 0/303, Kangaskhan-Mega 214/413
+
+  Turn 4
+      p2a <- Volcanion comes in (363/363)
+      after p1: Landorus-Therian 169/347, Camerupt-Mega 336/336
+      after p2: Volcanion 363/363, Kangaskhan-Mega 214/413
+
+  Turn 5
+    p1 mcts: switch 4, move 2 1   (slot0 Landorus-Therian -> Aegislash)
+      search (23000 visits): switch aegislash;earthpower,0 913v 222 | protect,0;earthpower,0 745v 169 | uturn,0;earthpower,0 698v 155 | switch cresselia;earthpower,0 660v 143
+    p2 greedy: move 1 1, move 3 1
+      p1a <- Aegislash comes in (324/324)
+      p2b Kangaskhan used Sucker Punch  [[still]]
+              p2b Kangaskhan -- IT FAILED
+      p2a Volcanion used Steam Eruption -> p1a: Aegislash
+              p1a Aegislash is now brn
+      p1b Camerupt used Earth Power -> p2a: Volcanion
+      after p1: Aegislash 173/324, Camerupt-Mega 336/336
+      after p2: Volcanion 91/363, Kangaskhan-Mega 214/413
+
+  Turn 6
+    p1 mcts: switch 4, move 3   (slot0 Aegislash -> Landorus-Therian)
+      search (29000 visits): switch landorustherian;rockslide,0 645v 143 | shadowball,0;switch cresselia 641v 142 | flashcannon,0;switch kingler 632v 139 | shadowball,1;rockslide,0 630v 138
+    p2 greedy: move 1 1, move 3 1
+      p1a <- Landorus-Therian comes in (169/347)
+              p2a Volcanion atk 1 fell
+              p2b Kangaskhan atk 1 fell
+      p2b Kangaskhan used Sucker Punch  [[still]]
+              p2b Kangaskhan -- IT FAILED
+      p2a Volcanion used Steam Eruption -> p1a: Landorus
+      p1a Landorus fainted
+      p1b Camerupt used Rock Slide -> p2b: Kangaskhan  [[spread] p2a,p2b]
+      p2a Volcanion fainted
+      after p1: Landorus-Therian 0/347, Camerupt-Mega 336/336
+      after p2: Volcanion 0/363, Kangaskhan-Mega 142/413
+
+  Turn 7
+      p1a <- Cresselia comes in (443/443)
+      p2a <- Landorus comes in (319/319)
+      after p1: Cresselia 443/443, Camerupt-Mega 336/336
+      after p2: Landorus 319/319, Kangaskhan-Mega 142/413
+
+  Turn 8
+    p1 mcts: switch 4, move 1   (slot0 Cresselia -> Aegislash)
+      search (39000 visits): switch aegislash;heatwave,0 1539v 559 | switch aegislash;rockslide,0 1419v 508 | trickroom,0;heatwave,0 1362v 485 | trickroom,0;rockslide,0 1283v 452
+    p2 greedy: move 1 1, move 3 1
+      p1a <- Aegislash comes in (173/324)
+      p2b Kangaskhan used Sucker Punch  [[still]]
+              p2b Kangaskhan -- IT FAILED
+      p2a Landorus used Earth Power -> p1a: Aegislash
+      p1a Aegislash fainted
+      p1b Camerupt used Heat Wave -> p2a: Landorus  [[spread] p2a]
+              p1b Camerupt -- MISSED
+      after p1: Aegislash 0/324, Camerupt-Mega 336/336
+      after p2: Landorus 103/319, Kangaskhan-Mega 142/413
+
+  Turn 9
+      p1a <- Cresselia comes in (443/443)
+      after p1: Cresselia 443/443, Camerupt-Mega 336/336
+      after p2: Landorus 103/319, Kangaskhan-Mega 142/413
+
+  Turn 10
+    p1 mcts: move 4, switch 5   (slot1 Camerupt-Mega -> Hoopa-Unbound)
+      search (54000 visits): moonlight,0;switch hoopaunbound 2042v 403 | trickroom,1;heatwave,0 1821v 348 | calmmind,0;heatwave,0 1743v 329 | psyshock,1;switch hoopaunbound 1733v 326
+    p2 greedy: move 1 1, move 3 1
+      p1b <- Hoopa-Unbound comes in (335/335)
+      p2b Kangaskhan used Sucker Punch  [[still]]
+              p2b Kangaskhan -- IT FAILED
+      p2a Landorus used Earth Power -> p1a: Cresselia
+              p1a Cresselia -- IMMUNE
+      p1a Cresselia used Moonlight
+              p1a Cresselia -- IT FAILED
+      after p1: Cresselia 443/443, Hoopa-Unbound 335/335
+      after p2: Landorus 103/319, Kangaskhan-Mega 142/413
+
+  Turn 11
+    p1 mcts: move 3, move 3 1
+      search (44000 visits): calmmind,0;hyperspacehole,0 917v 159 | moonlight,0;hyperspacehole,0 889v 152 | psyshock,1;hyperspacehole,0 888v 152 | trickroom,1;hyperspacehole,0 882v 150
+    p2 greedy: move 1 1, move 3 1
+      p2b Kangaskhan used Sucker Punch  [[still]]
+              p2b Kangaskhan -- IT FAILED
+      p2a Landorus used Earth Power -> p1a: Cresselia
+              p1a Cresselia -- IMMUNE
+      p1a Cresselia used Calm Mind
+              p1a Cresselia spa 1 rose
+              p1a Cresselia spd 1 rose
+      p1b Hoopa used Hyperspace Hole -> p2a: Landorus
+      p2a Landorus fainted
+      after p1: Cresselia 443/443, Hoopa-Unbound 302/335
+      after p2: Landorus 0/319, Kangaskhan-Mega 142/413
+
+  Turn 12
+      p2a <- Thundurus comes in (361/361)
+      after p1: Cresselia 443/443, Hoopa-Unbound 302/335
+      after p2: Thundurus 361/361, Kangaskhan-Mega 142/413
+
+  Turn 13
+    p1 mcts: switch 6, move 1 2   (slot0 Cresselia -> Kingler)
+      search (279000 visits): switch kingler;hyperspacefury,1 272059v 257925 | switch kingler;drainpunch,1 331v 125 | switch kingler;hyperspacehole,1 217v 70 | switch cameruptmega;hyperspacefury,0 134v 33
+    p2 greedy: move 4 2, move 3 2
+      p1a <- Kingler comes in (314/314)
+      p2b Kangaskhan used Sucker Punch -> p1b: Hoopa
+      p2a Thundurus used Superpower -> p1b: Hoopa
+              p2a Thundurus atk 1 fell
+              p2a Thundurus def 1 fell
+      p1b Hoopa used Hyperspace Fury -> p2b: Kangaskhan
+              p1b Hoopa def 1 fell
+      p2b Kangaskhan fainted
+      after p1: Kingler 314/314, Hoopa-Unbound 57/335
+      after p2: Thundurus 361/361, Kangaskhan-Mega 0/413
+
+  Turn 14
+    p1 mcts: move 3, move 1 1
+      search (361000 visits): rockslide,0;hyperspacefury,0 151916v 150169 | crabhammer,0;hyperspacefury,0 150774v 149035 | switch cameruptmega;hyperspacefury,0 7549v 7121 | rockslide,0;switch cresselia 5611v 5240
+    p2 greedy: move 4 2, pass
+      p2a Thundurus used Superpower -> p1b: Hoopa
+              p2a Thundurus atk 1 fell
+              p2a Thundurus def 1 fell
+      p1b Hoopa fainted
+      p1a Kingler used Rock Slide -> p2a: Thundurus  [[miss]]
+              p1a Kingler -- MISSED
+      after p1: Kingler 314/314, Hoopa-Unbound 0/335
+      after p2: Thundurus 361/361, Kangaskhan-Mega 0/413
+
+  Turn 15
+      p1b <- Camerupt-Mega comes in (336/336)
+      after p1: Kingler 314/314, Camerupt-Mega 336/336
+      after p2: Thundurus 361/361, Kangaskhan-Mega 0/413
+
+  Turn 16
+    p1 mcts: move 1 1, move 3
+      search (233000 visits): crabhammer,0;rockslide,0 70652v 69699 | rockslide,0;rockslide,0 63733v 62811 | protect,0;rockslide,0 34473v 33730 | superpower,0;rockslide,0 21844v 21223
+    p2 greedy: move 4 1, pass
+      p2a Thundurus used Superpower -> p1a: Kingler
+              p2a Thundurus atk 1 fell
+              p2a Thundurus def 1 fell
+      p1a Kingler used Crabhammer -> p2a: Thundurus
+      p2a Thundurus fainted
+      after p1: Kingler 238/314, Camerupt-Mega 336/336
+      after p2: Thundurus 0/361, Kangaskhan-Mega 0/413
+
+  RESULT: p1 wins

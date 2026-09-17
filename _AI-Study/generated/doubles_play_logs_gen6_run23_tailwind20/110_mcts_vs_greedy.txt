@@ -1,0 +1,188 @@
+battle 110   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: dpl ::/Untitled 887: Talonflame, Gyarados-Mega, Pachirisu, Gothitelle, Deoxys-Attack, Landorus-Therian
+  p2: ORAS Doubles OU: Volcarona, Pikachu, Greninja, Gallade-Mega, Togekiss, Garchomp
+
+  Turn 1
+    p1 mcts: move 3 2, switch 6   (slot1 Gyarados-Mega -> Landorus-Therian)
+      search (22000 visits): flareblitz,1;switch landorustherian 320v 49 | uturn,1;switch landorustherian 319v 48 | bravebird,1;switch landorustherian 302v 44 | switch landorustherian;dragondance,1 295v 42
+    p2 greedy: move 4, move 4 1
+      p1b <- Landorus-Therian comes in (382/382)
+              p2a Volcarona atk 1 fell
+              p2b Pikachu atk 1 fell
+      p2b Pikachu used Volt Switch -> p1a: Talonflame
+      p1a Talonflame fainted
+      after p1: Talonflame 0/360, Landorus-Therian 382/382
+      after p2: Volcarona 311/311, Pikachu 211/211
+
+  Turn 2
+      p2b <- Greninja comes in (285/285)
+      p2a Volcarona used Heat Wave -> p1b: Landorus
+      after p1: Talonflame 0/360, Landorus-Therian 267/382
+      after p2: Volcarona 311/311, Greninja 285/285
+
+  Turn 3
+      p1a <- Pachirisu comes in (324/324)
+      after p1: Pachirisu 324/324, Landorus-Therian 267/382
+      after p2: Volcarona 311/311, Greninja 285/285
+
+  Turn 4
+    p1 mcts: move 2 1, switch 6   (slot1 Landorus-Therian -> Gyarados-Mega)
+      search (34000 visits): nuzzle,0;switch gyaradosmega 736v 106 | superfang,0;switch gyaradosmega 728v 104 | nuzzle,1;switch gyaradosmega 694v 97 | switch gyaradosmega;switch gothitelle 655v 88
+    p2 greedy: move 4, move 2 2
+      p1b <- Gyarados-Mega comes in (394/394)
+              p2a Volcarona atk 1 fell
+              p2b Greninja atk 1 fell
+      p2b Greninja used Gunk Shot -> p1b: Gyarados
+              p2b Greninja gained typechange Poison
+      p2a Volcarona used Heat Wave -> p1a: Pachirisu  [[spread] p1a,p1b]
+      p1a Pachirisu used Nuzzle -> p2a: Volcarona
+              p2a Volcarona is now par
+      after p1: Pachirisu 221/324, Gyarados-Mega 250/394
+      after p2: Volcarona 292/311, Greninja 285/285
+
+  Turn 5
+    p1 mcts: switch 6, move 2 2   (slot0 Pachirisu -> Landorus-Therian)
+      search (24000 visits): switch landorustherian;waterfall,1 471v 54 | nuzzle,1;dragondance,1 451v 49 | nuzzle,1;waterfall,1 427v 45 | protect,0;waterfall,1 408v 40
+    p2 greedy: move 4, move 2 2
+      p1a <- Landorus-Therian comes in (267/382)
+              p2a Volcarona atk 1 fell
+              p2b Greninja atk 1 fell
+      p2b Greninja used Gunk Shot -> p1b: Gyarados
+      p1b Gyarados used Waterfall -> p2b: Greninja
+      p2a Volcarona used Heat Wave -> p1a: Landorus  [[spread] p1a,p1b]
+      after p1: Landorus-Therian 179/382, Gyarados-Mega 120/394
+      after p2: Volcarona 292/311, Greninja 42/285
+
+  Turn 6
+    p1 mcts: switch 6, move 3   (slot0 Landorus-Therian -> Pachirisu)
+      search (23000 visits): switch pachirisu;dragondance,1 330v 29 | uturn,1;dragondance,1 319v 27 | stoneedge,1;dragondance,1 316v 26 | uturn,0;dragondance,1 315v 26
+    p2 greedy: move 4, move 2 2
+      p1a <- Pachirisu comes in (221/324)
+      p2b Greninja used Gunk Shot -> p1b: Gyarados
+              p1b Gyarados is now psn
+      p1b Gyarados used Dragon Dance
+              p1b Gyarados atk 1 rose
+              p1b Gyarados spe 1 rose
+      p2a Volcarona used Heat Wave -> p1a: Pachirisu  [[spread] p1a,p1b]
+              p1a Pachirisu used up its Sitrus Berry
+      p1b Gyarados fainted
+      after p1: Pachirisu 184/324, Gyarados-Mega 0/394
+      after p2: Volcarona 292/311, Greninja 42/285
+
+  Turn 7
+      p1b <- Gothitelle comes in (344/344)
+      after p1: Pachirisu 184/324, Gothitelle 344/344
+      after p2: Volcarona 292/311, Greninja 42/285
+
+  Turn 8
+    p1 mcts: move 2 2, move 1 2
+      search (16000 visits): nuzzle,1;psyshock,1 987v 380 | protect,0;psyshock,1 797v 294 | nuzzle,0;psyshock,1 724v 261 | superfang,1;psyshock,1 509v 168
+    p2 greedy: move 4, move 2 1
+      p2b Greninja used Gunk Shot -> p1a: Pachirisu
+      p1a Pachirisu used Nuzzle -> p2b: Greninja
+              p2b Greninja is now par
+      p1b Gothitelle used Psyshock -> p2b: Greninja
+      p2b Greninja fainted
+      p2a Volcarona used Heat Wave -> p1b: Gothitelle  [[spread] p1a,p1b]
+      p1a Pachirisu fainted
+      after p1: Pachirisu 0/324, Gothitelle 239/344
+      after p2: Volcarona 292/311, Greninja 0/285
+
+  Turn 9
+      p2b <- Pikachu comes in (211/211)
+      p1a <- Deoxys-Attack comes in (241/241)
+      after p1: Deoxys-Attack 241/241, Gothitelle 239/344
+      after p2: Volcarona 292/311, Pikachu 211/211
+
+  Turn 10
+    p1 mcts: switch 6, move 1 2   (slot0 Deoxys-Attack -> Landorus-Therian)
+      search (22000 visits): switch landorustherian;psyshock,1 1990v 1275 | switch landorustherian;protect,1 1796v 1141 | switch landorustherian;psyshock,0 1441v 898 | switch landorustherian;healpulse,1 1208v 739
+    p2 greedy: move 4, move 4 2
+      p1a <- Landorus-Therian comes in (179/382)
+              p2a Volcarona atk 1 fell
+              p2b Pikachu atk 1 fell
+      p2b Pikachu used Volt Switch -> p1b: Gothitelle
+      after p1: Landorus-Therian 179/382, Gothitelle 122/344
+      after p2: Volcarona 292/311, Pikachu 211/211
+
+  Turn 11
+      p2b <- Gallade-Mega comes in (278/278)
+      p1b Gothitelle used Psyshock -> p2b: Gallade
+              p2a Volcarona COULD NOT MOVE (par)
+      after p1: Landorus-Therian 179/382, Gothitelle 122/344
+      after p2: Volcarona 292/311, Gallade-Mega 193/278
+
+  Turn 12
+    p1 mcts: move 1, move 4
+      search (22000 visits): earthquake,0;protect,1 3339v 1974 | earthquake,0;psyshock,1 1178v 634 | uturn,1;psyshock,1 1050v 557 | stoneedge,0;psyshock,1 964v 506
+    p2 greedy: move 4, move 2 2
+      p1b Gothitelle used Protect
+      p2b Gallade used Close Combat -> p1b: Gothitelle
+              p1b Gothitelle -- move: Protect
+      p1a Landorus used Earthquake -> p2b: Gallade  [[spread] p2a,p2b]
+              p1b Gothitelle -- move: Protect
+              p2a Volcarona COULD NOT MOVE (par)
+      after p1: Landorus-Therian 179/382, Gothitelle 122/344
+      after p2: Volcarona 108/311, Gallade-Mega 51/278
+
+  Turn 13
+    p1 mcts: move 2 2, move 4
+      search (32000 visits): uturn,1;protect,1 1918v 808 | stoneedge,0;psyshock,1 1701v 706 | stoneedge,1;protect,1 1606v 661 | uturn,1;switch deoxysattack 1500v 612
+    p2 greedy: move 4, move 2 2
+      p1b Gothitelle used Protect
+      p2b Gallade used Close Combat -> p1b: Gothitelle
+              p1b Gothitelle -- move: Protect
+      p1a Landorus used U-turn -> p2b: Gallade
+      p2b Gallade fainted
+      after p1: Landorus-Therian 179/382, Gothitelle 122/344
+      after p2: Volcarona 108/311, Gallade-Mega 0/278
+
+  Turn 14
+      p1a <- Deoxys-Attack comes in (241/241)
+      p2a Volcarona used Heat Wave -> p1b: Gothitelle  [[spread] p1a]
+              p1b Gothitelle -- move: Protect
+              p1a Deoxys -- critical hit
+      p1a Deoxys fainted
+      after p1: Deoxys-Attack 0/241, Gothitelle 122/344
+      after p2: Volcarona 108/311, Gallade-Mega 0/278
+
+  Turn 15
+      p1a <- Landorus-Therian comes in (179/382)
+      p2b <- Pikachu comes in (211/211)
+              p2a Volcarona atk 1 fell
+              p2b Pikachu atk 1 fell
+      after p1: Landorus-Therian 179/382, Gothitelle 122/344
+      after p2: Volcarona 108/311, Pikachu 211/211
+
+  Turn 16
+    p1 mcts: move 2 2, move 4
+      search (28000 visits): uturn,1;protect,1 11771v 7234 | stoneedge,1;protect,1 1598v 868 | uturn,1;psyshock,1 885v 446 | superpower,1;protect,1 853v 427
+    p2 greedy: move 4, move 4 2
+      p1b Gothitelle used Protect  [[still]]
+              p1b Gothitelle -- IT FAILED
+      p2b Pikachu used Volt Switch -> p1b: Gothitelle
+      after p1: Landorus-Therian 179/382, Gothitelle 1/344
+      after p2: Volcarona 108/311, Pikachu 211/211
+
+  Turn 17
+      p2b <- Togekiss comes in (311/311)
+      p1a Landorus used U-turn -> p2b: Togekiss
+      p2a Volcarona used Heat Wave -> p1a: Landorus  [[spread] p1a,p1b]
+      p1b Gothitelle fainted
+      after p1: Landorus-Therian 95/382, Gothitelle 0/344
+      after p2: Volcarona 108/311, Togekiss 291/311
+
+  Turn 18
+    p1 mcts: move 3 2, pass
+      search (197000 visits): stoneedge,1;No Move 89410v 3379 | earthquake,0;No Move 27381v 670 | stoneedge,0;No Move 23429v 517 | uturn,1;No Move 15848v 239
+    p2 greedy: move 4, move 1 1
+      p1a Landorus used Stone Edge -> p2b: Togekiss  [[miss]]
+              p1a Landorus -- MISSED
+      p2b Togekiss used Shadow Ball -> p1a: Landorus
+      p2a Volcarona used Heat Wave -> p1a: Landorus
+              p1a Landorus -- critical hit
+      p1a Landorus fainted
+      after p1: Landorus-Therian 0/382, Gothitelle 0/344
+      after p2: Volcarona 108/311, Togekiss 291/311
+
+  RESULT: p2 wins

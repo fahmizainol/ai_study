@@ -1,0 +1,102 @@
+battle 118   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: XY Doubles: Deoxys-Attack, Talonflame, Manectric, Keldeo-Resolute, Amoonguss, Bisharp
+  p2: XY Doubles: Kangaskhan, Latias, Dialga, Aegislash, Butterfree, Kyogre
+
+  Turn 1
+    p1 mcts: move 3 2, move 1 2
+      search (15000 visits): extremespeed,1;bravebird,1 411v 250 | protect,0;bravebird,1 280v 157 | superpower,0;flareblitz,0 248v 135 | superpower,0;bravebird,0 246v 134
+    p2 greedy: move 4 1, move 3 1
+      p1a Deoxys used Extreme Speed -> p2b: Latias
+      p1b Talonflame used Brave Bird -> p2b: Latias
+      p2b Latias fainted
+      p2a Kangaskhan used Sucker Punch  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      after p1: Deoxys-Attack 241/241, Talonflame 214/297
+      after p2: Kangaskhan 351/351, Latias 0/302
+
+  Turn 2
+      p2b <- Dialga comes in (341/341)
+      after p1: Deoxys-Attack 241/241, Talonflame 214/297
+      after p2: Kangaskhan 351/351, Dialga 341/341
+
+  Turn 3
+    p1 mcts: move 2 2, move 1 2
+      search (15000 visits): superpower,1;bravebird,1 470v 283 | superpower,1;flareblitz,1 462v 278 | superpower,0;flareblitz,0 227v 116 | extremespeed,0;bravebird,0 219v 111
+    p2 greedy: move 4 2, move 1 2
+      p1b Talonflame used Brave Bird -> p2b: Dialga
+      p2a Kangaskhan used Sucker Punch  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p1a Deoxys used Superpower -> p2b: Dialga
+              p1a Deoxys atk 1 fell
+              p1a Deoxys def 1 fell
+      p2b Dialga fainted
+      after p1: Deoxys-Attack 241/241, Talonflame 157/297
+      after p2: Kangaskhan 351/351, Dialga 0/341
+
+  Turn 4
+      p2b <- Aegislash comes in (262/262)
+      after p1: Deoxys-Attack 241/241, Talonflame 157/297
+      after p2: Kangaskhan 351/351, Aegislash 262/262
+
+  Turn 5
+    p1 mcts: switch 4, move 2 2   (slot0 Deoxys-Attack -> Keldeo-Resolute)
+      search (12000 visits): switch keldeoresolute;flareblitz,1 538v 410 | switch manectric;flareblitz,1 361v 260 | switch manectric;flareblitz,0 311v 219 | switch amoonguss;flareblitz,1 292v 203
+    p2 greedy: move 4 2, move 2 2
+      p1a <- Keldeo-Resolute comes in (323/323)
+      p2a Kangaskhan used Sucker Punch -> p1b: Talonflame
+      p1b Talonflame used Flare Blitz -> p2b: Aegislash
+      p2b Aegislash fainted
+      p1b Talonflame fainted
+      after p1: Keldeo-Resolute 323/323, Talonflame 0/297
+      after p2: Kangaskhan 351/351, Aegislash 0/262
+
+  Turn 6
+      p1b <- Manectric comes in (281/281)
+      p2b <- Butterfree comes in (262/262)
+      after p1: Keldeo-Resolute 323/323, Manectric 281/281
+      after p2: Kangaskhan 351/351, Butterfree 262/262
+
+  Turn 7
+    p1 mcts: move 2 1, move 3 2 mega
+      search (10000 visits): secretsword,0;flamethrower-mega,1 181v 152 | secretsword,0;thunderbolt-mega,1 174v 145 | secretsword,0;flamethrower,1 151v 122 | secretsword,0;thunderbolt,1 147v 118
+    p2 greedy: move 4 1, move 2 1
+              p2a Kangaskhan atk 1 fell
+              p2b Butterfree atk 1 fell
+      p2a Kangaskhan used Sucker Punch -> p1a: Keldeo
+              p1a Keldeo atk 1 rose
+      p1a Keldeo used Secret Sword -> p2a: Kangaskhan
+      p2a Kangaskhan fainted
+      p1b Manectric used Flamethrower -> p2b: Butterfree
+              p2b Butterfree used up its Focus Sash
+      p2b Butterfree used Bug Buzz -> p1a: Keldeo
+      after p1: Keldeo-Resolute 185/323, Manectric-Mega 281/281
+      after p2: Kangaskhan 0/351, Butterfree 1/262
+
+  Turn 8
+      p2a <- Kyogre comes in (404/404)
+      after p1: Keldeo-Resolute 185/323, Manectric-Mega 281/281
+      after p2: Kyogre 404/404, Butterfree 1/262
+
+  Turn 9
+    p1 mcts: move 2 1, move 1 1
+      search (46000 visits): secretsword,0;thunderbolt,0 37753v 26379 | protect,0;thunderbolt,0 295v 133 | secretsword,0;hiddenpower,1 174v 64 | secretsword,1;thunderbolt,0 171v 63
+    p2 greedy: move 1, move 2 1
+      p1b Manectric used Thunderbolt -> p2a: Kyogre
+      p1a Keldeo used Secret Sword -> p2a: Kyogre
+      p2b Butterfree used Bug Buzz -> p1a: Keldeo
+      p2a Kyogre used Water Spout -> p1a: Keldeo  [[spread] p1a,p1b]
+      after p1: Keldeo-Resolute 76/323, Manectric-Mega 259/281
+      after p2: Kyogre 24/404, Butterfree 1/262
+
+  Turn 10
+    p1 mcts: move 2 2, move 1 1
+      search (47000 visits): secretsword,1;thunderbolt,0 1742v 920 | secretsword,1;hiddenpower,0 1635v 858 | secretsword,0;flamethrower,1 1574v 822 | secretsword,0;hiddenpower,1 1526v 794
+    p2 greedy: move 1, move 2 1
+      p1b Manectric used Thunderbolt -> p2a: Kyogre
+      p2a Kyogre fainted
+      p1a Keldeo used Secret Sword -> p2b: Butterfree
+      p2b Butterfree fainted
+      after p1: Keldeo-Resolute 44/323, Manectric-Mega 259/281
+      after p2: Kyogre 0/404, Butterfree 0/262
+
+  RESULT: p1 wins

@@ -1,0 +1,167 @@
+battle 145   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: Copy of Untitled 577: Kangaskhan-Mega, Bisharp, Deoxys-Attack, Amoonguss, Landorus, Talonflame
+  p2: ORAS Doubles OU: Gengar-Mega, Rotom-Wash, Sylveon, Scrafty, Latios, Heatran
+
+  Turn 1
+    p1 mcts: move 1 2, move 1 2
+      search (30000 visits): fakeout,1;knockoff,1 2208v 1665 | fakeout,0;knockoff,1 1268v 917 | fakeout,1;knockoff,0 1248v 901 | fakeout,1;ironhead,0 1032v 732
+    p2 greedy: move 2 1, move 3 1
+      p1a Kangaskhan used Fake Out -> p2b: Rotom
+              p2b Rotom -- critical hit
+      p2a Gengar used Sludge Bomb -> p1a: Kangaskhan
+      p1b Bisharp used Knock Off -> p2b: Rotom
+              p2b Rotom used up its Sitrus Berry
+              p2b Rotom COULD NOT MOVE (flinch)
+      after p1: Kangaskhan-Mega 201/414, Bisharp 271/271
+      after p2: Gengar-Mega 261/261, Rotom-Wash 71/304
+
+  Turn 2
+    p1 mcts: move 3 1, move 1 2
+      search (36000 visits): suckerpunch,0;knockoff,1 1254v 992 | lowkick,1;knockoff,1 1127v 884 | lowkick,1;knockoff,0 1096v 857 | suckerpunch,1;knockoff,1 939v 724
+    p2 greedy: move 2 1, move 3 1
+      p1a Kangaskhan used Sucker Punch -> p2a: Gengar
+      p2a Gengar used Sludge Bomb -> p1a: Kangaskhan
+              p1a Kangaskhan is now psn
+      p1b Bisharp used Knock Off -> p2b: Rotom
+      p2b Rotom fainted
+      p1a Kangaskhan fainted
+      after p1: Kangaskhan-Mega 0/414, Bisharp 271/271
+      after p2: Gengar-Mega 85/261, Rotom-Wash 0/304
+
+  Turn 3
+      p1a <- Deoxys-Attack comes in (241/241)
+      p2b <- Sylveon comes in (375/375)
+      after p1: Deoxys-Attack 241/241, Bisharp 271/271
+      after p2: Gengar-Mega 85/261, Sylveon 375/375
+
+  Turn 4
+    p1 mcts: move 4, move 4 2
+      search (29000 visits): protect,0;ironhead,1 10296v 6876 | psychoboost,1;ironhead,1 2137v 1313 | icebeam,0;ironhead,1 2005v 1226 | psychoboost,0;ironhead,1 987v 561
+    p2 greedy: move 2 1, move 1
+      p1a Deoxys used Protect
+      p2a Gengar used Sludge Bomb -> p1a: Deoxys
+              p1a Deoxys -- move: Protect
+      p1b Bisharp used Iron Head -> p2b: Sylveon
+      p2b Sylveon fainted
+      after p1: Deoxys-Attack 241/241, Bisharp 271/271
+      after p2: Gengar-Mega 85/261, Sylveon 0/375
+
+  Turn 5
+      p2b <- Scrafty comes in (333/333)
+              p1a Deoxys atk 1 fell
+              p1b Bisharp atk 1 fell
+              p1b Bisharp atk 2 rose
+      after p1: Deoxys-Attack 241/241, Bisharp 271/271
+      after p2: Gengar-Mega 85/261, Scrafty 333/333
+
+  Turn 6
+    p1 mcts: move 3 1, move 3
+      search (38000 visits): icebeam,0;protect,1 4953v 2461 | protect,0;protect,1 4792v 2376 | icebeam,1;ironhead,1 2970v 1419 | psychoboost,0;protect,1 2343v 1095
+    p2 greedy: move 2 1, move 3 1
+      p1b Bisharp used Protect
+      p1a Deoxys used Ice Beam -> p2a: Gengar
+      p2a Gengar fainted
+      p2b Scrafty used Drain Punch -> p1a: Deoxys
+      after p1: Deoxys-Attack 59/241, Bisharp 271/271
+      after p2: Gengar-Mega 0/261, Scrafty 333/333
+
+  Turn 7
+      p2a <- Latios comes in (301/301)
+      after p1: Deoxys-Attack 59/241, Bisharp 271/271
+      after p2: Latios 301/301, Scrafty 333/333
+
+  Turn 8
+    p1 mcts: switch 4, switch 6   (slot0 Deoxys-Attack -> Amoonguss; slot1 Bisharp -> Talonflame)
+      search (51000 visits): switch amoonguss;switch talonflame 15358v 9188 | switch landorus;knockoff,0 8629v 5285 | superpower,0;switch landorus 8223v 4807 | superpower,1;switch landorus 3052v 1683
+    p2 greedy: move 1 1, move 3 1
+      p1a <- Amoonguss comes in (432/432)
+      p1b <- Talonflame comes in (320/320)
+      p2a Latios used Draco Meteor -> p1a: Amoonguss
+              p2a Latios spa 2 fell
+      p2b Scrafty used Drain Punch -> p1a: Amoonguss
+      after p1: Amoonguss 54/432, Talonflame 320/320
+      after p2: Latios 271/301, Scrafty 278/333
+
+  Turn 9
+    p1 mcts: move 4, switch 4   (slot1 Talonflame -> Deoxys-Attack)
+      search (37000 visits): protect,0;switch deoxysattack 1324v 859 | energyball,0;switch bisharp 1258v 812 | protect,0;switch landorus 1180v 756 | spore,0;switch bisharp 1178v 755
+    p2 greedy: move 1 1, move 3 1
+      p1b <- Deoxys-Attack comes in (59/241)
+      p1a Amoonguss used Protect
+      p2a Latios used Draco Meteor -> p1a: Amoonguss
+              p1a Amoonguss -- move: Protect
+      p2b Scrafty used Drain Punch -> p1a: Amoonguss
+              p1a Amoonguss -- move: Protect
+      after p1: Amoonguss 54/432, Deoxys-Attack 59/241
+      after p2: Latios 271/301, Scrafty 278/333
+
+  Turn 10
+    p1 mcts: move 4, move 1 2
+      search (36000 visits): protect,0;superpower,1 484v 473 | energyball,1;superpower,1 476v 464 | spore,1;superpower,1 475v 463 | energyball,0;superpower,1 474v 462
+    p2 greedy: move 1 1, move 3 1
+      p1a Amoonguss used Protect  [[still]]
+              p1a Amoonguss -- IT FAILED
+      p1b Deoxys used Superpower -> p2b: Scrafty
+              p1b Deoxys atk 1 fell
+              p1b Deoxys def 1 fell
+      p2b Scrafty fainted
+      p2a Latios used Draco Meteor -> p1a: Amoonguss
+              p2a Latios spa 2 fell
+      p1a Amoonguss fainted
+      after p1: Amoonguss 0/432, Deoxys-Attack 35/241
+      after p2: Latios 241/301, Scrafty 0/333
+
+  Turn 11
+      p2b <- Heatran comes in (324/324)
+      p1a <- Talonflame comes in (320/320)
+      after p1: Talonflame 320/320, Deoxys-Attack 35/241
+      after p2: Latios 241/301, Heatran 324/324
+
+  Turn 12
+    p1 mcts: move 3, move 1 2
+      search (42000 visits): tailwind,0;superpower,1 3402v 1135 | bravebird,1;superpower,1 1855v 567 | tailwind,0;switch landorus 1315v 375 | tailwind,0;switch bisharp 1219v 342
+    p2 greedy: move 1 2, move 2
+      p1a Talonflame used Tailwind
+      -sidestart p1: A move: Tailwind
+      p1b Deoxys used Superpower -> p2b: Heatran
+              p1b Deoxys atk 1 fell
+              p1b Deoxys def 1 fell
+      p2a Latios used Draco Meteor -> p1b: Deoxys  [[miss]]
+              p2a Latios -- MISSED
+      p2b Heatran used Heat Wave -> p1a: Talonflame  [[spread] p1a,p1b]
+              p1b Deoxys -- critical hit
+      p1b Deoxys fainted
+      after p1: Talonflame 229/320, Deoxys-Attack 0/241
+      after p2: Latios 241/301, Heatran 82/324
+
+  Turn 13
+      p1b <- Landorus comes in (382/382)
+      after p1: Talonflame 229/320, Landorus 382/382
+      after p2: Latios 241/301, Heatran 82/324
+
+  Turn 14
+    p1 mcts: switch 6, move 1 2   (slot0 Talonflame -> Bisharp)
+      search (42000 visits): switch bisharp;earthpower,1 4242v 1012 | flareblitz,1;earthpower,1 3380v 778 | bravebird,1;earthpower,1 2071v 431 | tailwind,0;earthpower,1 1855v 375
+    p2 greedy: move 1 1, move 2
+      p1a <- Bisharp comes in (271/271)
+      p1b Landorus used Earth Power -> p2b: Heatran
+      p2b Heatran fainted
+      p2a Latios used Draco Meteor -> p1a: Bisharp
+              p2a Latios spa 2 fell
+      after p1: Bisharp 206/271, Landorus 382/382
+      after p2: Latios 211/301, Heatran 0/324
+
+  Turn 15
+    p1 mcts: move 1 1, move 1 1
+      search (240000 visits): knockoff,0;earthpower,0 174559v 170263 | knockoff,0;protect,1 7390v 6676 | knockoff,0;substitute,1 6831v 6156 | knockoff,0;psychic,0 6163v 5535
+    p2 greedy: move 1 1, pass
+      p1b Landorus used Earth Power -> p2a: Latios
+              p2a Latios -- IMMUNE
+      p1a Bisharp used Knock Off -> p2a: Latios
+              p2a Latios -- critical hit
+              p2a Latios used up its Life Orb
+      p2a Latios fainted
+      after p1: Bisharp 206/271, Landorus 382/382
+      after p2: Latios 0/301, Heatran 0/324
+
+  RESULT: p1 wins

@@ -1,0 +1,206 @@
+battle 86   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: Untitled 579: Kangaskhan-Mega, Amoonguss, Kyurem-Black, Volcanion, Landorus, Mew
+  p2: dwcop 69/Copy of Untitled 411: Diancie-Mega, Amoonguss, Braviary, Landorus-Therian, Mew, Volcanion
+
+  Turn 1
+    p1 mcts: move 3, move 1 2
+      search (61000 visits): wish,0;sludgebomb,1 707v 693 | wish,0;gigadrain,1 703v 689 | wish,0;spore,1 702v 688 | wish,0;ragepowder,1 699v 685
+    p2 greedy: move 1, move 3 1
+      p2a Diancie used Diamond Storm -> p1b: Amoonguss  [[spread] p1a,p1b]
+              p2a Diancie def 1 rose
+      p1a Kangaskhan used Wish
+      p2b Amoonguss used Energy Ball -> p1a: Kangaskhan
+      p1b Amoonguss used Sludge Bomb -> p2b: Amoonguss
+      after p1: Kangaskhan-Mega 218/414, Amoonguss 285/432
+      after p2: Diancie-Mega 304/304, Amoonguss 335/432
+
+  Turn 2
+    p1 mcts: move 3, move 1 2
+      search (60000 visits): wish,0;sludgebomb,1 673v 666 | wish,0;gigadrain,1 671v 663 | protect,0;sludgebomb,1 671v 663 | wish,0;gigadrain,0 668v 660
+    p2 greedy: move 1, move 3 1
+      p2a Diancie used Diamond Storm -> p1b: Amoonguss  [[spread] p1a,p1b]
+      p1a Kangaskhan used Wish  [[still]]
+              p1a Kangaskhan -- IT FAILED
+      p2b Amoonguss used Energy Ball -> p1a: Kangaskhan
+      p1b Amoonguss used Sludge Bomb -> p2b: Amoonguss
+      after p1: Kangaskhan-Mega 229/414, Amoonguss 158/432
+      after p2: Diancie-Mega 304/304, Amoonguss 250/432
+
+  Turn 3
+    p1 mcts: move 3, move 1 2
+      search (65000 visits): wish,0;sludgebomb,1 728v 720 | wish,0;gigadrain,1 719v 710 | wish,0;spore,0 716v 707 | wish,0;spore,1 715v 706
+    p2 greedy: move 1, move 3 2
+      p2a Diancie used Diamond Storm -> p1b: Amoonguss  [[spread] p1a,p1b]
+              p2a Diancie def 1 rose
+      p1a Kangaskhan used Wish
+      p2b Amoonguss used Energy Ball -> p1b: Amoonguss
+      p1b Amoonguss fainted
+      after p1: Kangaskhan-Mega 100/414, Amoonguss 0/432
+      after p2: Diancie-Mega 304/304, Amoonguss 250/432
+
+  Turn 4
+      p1b <- Kyurem-Black comes in (418/418)
+      after p1: Kangaskhan-Mega 100/414, Kyurem-Black 418/418
+      after p2: Diancie-Mega 304/304, Amoonguss 250/432
+
+  Turn 5
+    p1 mcts: move 3, move 2 2
+      search (55000 visits): wish,0;icebeam,1 907v 885 | wish,0;substitute,1 899v 876 | seismictoss,1;icebeam,1 889v 866 | protect,0;icebeam,1 887v 864
+    p2 greedy: move 1, move 3 1
+      p2a Diancie used Diamond Storm -> p1b: Kyurem  [[spread] p1a,p1b]
+      p1a Kangaskhan fainted
+      p1b Kyurem used Ice Beam -> p2b: Amoonguss
+      p2b Amoonguss fainted
+      after p1: Kangaskhan-Mega 0/414, Kyurem-Black 154/418
+      after p2: Diancie-Mega 304/304, Amoonguss 0/432
+
+  Turn 6
+      p1a <- Volcanion comes in (364/364)
+      p2b <- Braviary comes in (347/347)
+      after p1: Volcanion 364/364, Kyurem-Black 154/418
+      after p2: Diancie-Mega 304/304, Braviary 347/347
+
+  Turn 7
+    p1 mcts: move 1 1, move 2 2
+      search (36000 visits): steameruption,0;icebeam,1 9267v 5093 | earthpower,0;icebeam,1 2611v 1325 | heatwave,0;icebeam,1 1209v 562 | overheat,0;icebeam,1 1181v 548
+    p2 greedy: move 1, move 1 2
+      p2a Diancie used Diamond Storm -> p1a: Volcanion  [[spread] p1a,p1b]
+      p1b Kyurem fainted
+      p2b Braviary used Brave Bird -> p1a: Volcanion
+      p1a Volcanion fainted
+      after p1: Volcanion 0/364, Kyurem-Black 0/418
+      after p2: Diancie-Mega 304/304, Braviary 263/347
+
+  Turn 8
+      p1b <- Mew comes in (404/404)
+      p1a <- Landorus comes in (319/319)
+      after p1: Landorus 319/319, Mew 404/404
+      after p2: Diancie-Mega 304/304, Braviary 263/347
+
+  Turn 9
+    p1 mcts: move 1 1, move 3 2
+      search (25000 visits): earthpower,0;willowisp,1 6059v 3753 | uturn,1;willowisp,1 5087v 3125 | uturn,1;willowisp,0 928v 491 | earthpower,0;willowisp,0 865v 453
+    p2 greedy: move 1, move 1 1
+      p1a Landorus used Earth Power -> p2a: Diancie
+      p2a Diancie fainted
+      p1b Mew used Will-O-Wisp -> p2b: Braviary
+              p2b Braviary is now brn
+      p2b Braviary used Brave Bird -> p1a: Landorus
+      after p1: Landorus 166/319, Mew 404/404
+      after p2: Diancie-Mega 0/304, Braviary 136/347
+
+  Turn 10
+      p2a <- Landorus-Therian comes in (382/382)
+              p1a Landorus atk 1 fell
+              p1b Mew atk 1 fell
+      after p1: Landorus 166/319, Mew 404/404
+      after p2: Landorus-Therian 382/382, Braviary 136/347
+
+  Turn 11
+    p1 mcts: move 1 1, move 3 1
+      search (39000 visits): earthpower,0;willowisp,0 22757v 10052 | earthpower,1;willowisp,0 10563v 4515 | earthpower,0;fakeout,1 749v 228 | earthpower,0;softboiled,1 712v 213
+    p2 greedy: move 1, move 1 1
+      p1a Landorus used Earth Power -> p2a: Landorus
+              p2a Landorus -- IMMUNE
+      p1b Mew used Will-O-Wisp -> p2a: Landorus
+              p2a Landorus is now brn
+      p2b Braviary used Brave Bird -> p1a: Landorus
+      p2a Landorus used Earthquake -> p1a: Landorus  [[spread] p1b]
+              p2b Braviary -- IMMUNE
+              p1a Landorus -- IMMUNE
+      after p1: Landorus 2/319, Mew 332/404
+      after p2: Landorus-Therian 335/382, Braviary 5/347
+
+  Turn 12
+    p1 mcts: move 1 1, move 2
+      search (36000 visits): earthpower,0;snarl,0 8470v 3248 | earthpower,1;snarl,0 7296v 2770 | earthpower,0;softboiled,1 3767v 1351 | earthpower,1;softboiled,1 3316v 1173
+    p2 greedy: move 1, move 1 1
+      p1a Landorus used Earth Power -> p2a: Landorus
+              p2a Landorus -- IMMUNE
+      p1b Mew used Snarl -> p2a: Landorus  [[spread] p2a,p2b]
+              p2a Landorus spa 1 fell
+      p2b Braviary fainted
+      p2a Landorus used Earthquake -> p1a: Landorus  [[spread] p1b]
+              p1a Landorus -- IMMUNE
+      after p1: Landorus 2/319, Mew 263/404
+      after p2: Landorus-Therian 265/382, Braviary 0/347
+
+  Turn 13
+      p2b <- Mew comes in (404/404)
+      after p1: Landorus 2/319, Mew 263/404
+      after p2: Landorus-Therian 265/382, Mew 404/404
+
+  Turn 14
+    p1 mcts: move 1 2, move 4
+      search (30000 visits): earthpower,1;softboiled,1 9292v 2699 | earthpower,1;snarl,0 5720v 1588 | earthpower,0;softboiled,1 2971v 755 | earthpower,0;snarl,0 2523v 624
+    p2 greedy: move 1, move 2 1
+      p1a Landorus used Earth Power -> p2b: Mew
+      p2b Mew used Flamethrower -> p1a: Landorus
+      p1a Landorus fainted
+      p1b Mew used Soft-Boiled
+      p2a Landorus used Earthquake -> p1b: Mew  [[spread] p2b,p1b]
+      after p1: Landorus 0/319, Mew 338/404
+      after p2: Landorus-Therian 218/382, Mew 138/404
+
+  Turn 15
+    p1 mcts: pass, move 2
+      search (26000 visits): No Move;snarl,0 8649v 2562 | No Move;fakeout,0 6102v 1751 | No Move;softboiled,1 4529v 1258 | No Move;fakeout,1 3303v 879
+    p2 greedy: move 1, move 2 2
+      p1b Mew used Snarl -> p2a: Landorus  [[spread] p2a,p2b]
+              p2a Landorus spa 1 fell
+              p2b Mew spa 1 fell
+      p2b Mew used Flamethrower -> p1b: Mew
+      p2a Landorus used Earthquake -> p1b: Mew  [[spread] p2b,p1b]
+      after p1: Landorus 0/319, Mew 222/404
+      after p2: Landorus-Therian 151/382, Mew 13/404
+
+  Turn 16
+    p1 mcts: pass, move 4
+      search (40000 visits): No Move;softboiled,1 24417v 5030 | No Move;fakeout,0 5539v 961 | No Move;snarl,0 3767v 604 | No Move;fakeout,1 2707v 398
+    p2 greedy: move 1, move 2 2
+      p2b Mew used Flamethrower -> p1b: Mew
+              p1b Mew -- critical hit
+      p1b Mew used Soft-Boiled
+      p2a Landorus used Earthquake -> p1b: Mew  [[spread] p2b,p1b]
+      p2b Mew fainted
+      after p1: Landorus 0/319, Mew 249/404
+      after p2: Landorus-Therian 104/382, Mew 0/404
+
+  Turn 17
+      p2b <- Volcanion comes in (364/364)
+      after p1: Landorus 0/319, Mew 249/404
+      after p2: Landorus-Therian 104/382, Volcanion 364/364
+
+  Turn 18
+    p1 mcts: pass, move 4
+      search (69000 visits): No Move;softboiled,1 35377v 7429 | No Move;fakeout,1 14721v 2888 | No Move;snarl,0 13669v 2661 | No Move;willowisp,1 1919v 244
+    p2 greedy: move 1, move 1 2
+      p1b Mew used Soft-Boiled
+      p2a Landorus used Earthquake -> p1b: Mew  [[spread] p2b,p1b]
+      p2b Volcanion used Steam Eruption -> p1b: Mew
+      after p1: Landorus 0/319, Mew 139/404
+      after p2: Landorus-Therian 57/382, Volcanion 247/364
+
+  Turn 19
+    p1 mcts: pass, move 4
+      search (298000 visits): No Move;softboiled,1 156222v 5729 | No Move;fakeout,1 78152v 2455 | No Move;fakeout,0 25195v 447 | No Move;snarl,0 15033v 127
+    p2 greedy: move 1, move 1 2
+      p1b Mew used Soft-Boiled
+      p2a Landorus used Earthquake -> p1b: Mew  [[spread] p2b,p1b]
+      p2b Volcanion used Steam Eruption -> p1b: Mew
+      after p1: Landorus 0/319, Mew 75/404
+      after p2: Landorus-Therian 10/382, Volcanion 127/364
+
+  Turn 20
+    p1 mcts: pass, move 2
+      search (685000 visits): No Move;snarl,0 323247v 9745 | No Move;softboiled,1 144854v 3714 | No Move;fakeout,1 96128v 2167 | No Move;fakeout,0 84304v 1805
+    p2 greedy: move 1, move 1 2
+      p1b Mew used Snarl -> p2a: Landorus  [[spread] p2a,p2b]
+              p2b Volcanion spa 1 fell
+      p2a Landorus fainted
+      p2b Volcanion used Steam Eruption -> p1b: Mew
+      p1b Mew fainted
+      after p1: Landorus 0/319, Mew 0/404
+      after p2: Landorus-Therian 0/382, Volcanion 99/364
+
+  RESULT: p2 wins

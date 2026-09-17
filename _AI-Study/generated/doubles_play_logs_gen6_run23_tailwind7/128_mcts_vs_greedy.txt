@@ -1,0 +1,299 @@
+battle 128   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: XY Doubles: Blastoise-Mega, Amoonguss, Talonflame, Tyranitar, Cresselia, Landorus-Therian
+  p2: trick room garde + super fang scrafty: Gardevoir-Mega, Volcanion, Thundurus, Scrafty, Amoonguss, Genesect
+
+  Turn 1
+    p1 mcts: move 2 2, switch 6   (slot1 Amoonguss -> Landorus-Therian)
+      search (12000 visits): aurasphere,1;switch landorustherian 413v 266 | switch tyranitar;switch landorustherian 320v 197 | dragonpulse,1;switch landorustherian 303v 184 | hydropump,0;switch landorustherian 293v 177
+    p2 greedy: move 1, move 1 1
+      p1b <- Landorus-Therian comes in (329/329)
+              p2a Gardevoir atk 1 fell
+              p2b Volcanion atk 1 fell
+      p2a Gardevoir used Hyper Voice -> p1b: Landorus  [[spread] p1a,p1b]
+      p1a Blastoise used Aura Sphere -> p2b: Volcanion
+      p2b Volcanion used Steam Eruption -> p1a: Blastoise
+      after p1: Blastoise-Mega 166/335, Landorus-Therian 210/329
+      after p2: Gardevoir-Mega 339/339, Volcanion 187/363
+
+  Turn 2
+    p1 mcts: move 1 1, move 1 1
+      search (37000 visits): hydropump,0;uturn,0 1178v 607 | hydropump,0;rockslide,0 928v 462 | hydropump,0;superpower,0 860v 423 | aurasphere,0;uturn,0 748v 360
+    p2 greedy: move 1, move 1 1
+      p1b Landorus used U-turn -> p2a: Gardevoir
+      after p1: Blastoise-Mega 166/335, Landorus-Therian 210/329
+      after p2: Gardevoir-Mega 238/339, Volcanion 187/363
+
+  Turn 3
+      p1b <- Talonflame comes in (359/359)
+      p2a Gardevoir used Hyper Voice -> p1b: Talonflame  [[spread] p1a,p1b]
+      p1a Blastoise used Hydro Pump -> p2a: Gardevoir
+      p2b Volcanion used Steam Eruption -> p1a: Blastoise
+              p1a Blastoise -- critical hit
+      p1a Blastoise fainted
+      after p1: Blastoise-Mega 0/335, Talonflame 232/359
+      after p2: Gardevoir-Mega 79/339, Volcanion 187/363
+
+  Turn 4
+      p1a <- Landorus-Therian comes in (210/329)
+              p2a Gardevoir atk 1 fell
+              p2b Volcanion atk 1 fell
+      after p1: Landorus-Therian 210/329, Talonflame 232/359
+      after p2: Gardevoir-Mega 79/339, Volcanion 187/363
+
+  Turn 5
+    p1 mcts: switch 6, move 2 2   (slot0 Landorus-Therian -> Amoonguss)
+      search (37000 visits): switch amoonguss;flareblitz,1 15771v 15001 | rockslide,0;flareblitz,1 453v 113 | uturn,0;flareblitz,0 447v 111 | uturn,1;tailwind,1 437v 108
+    p2 greedy: move 1, move 1 1
+      p1a <- Amoonguss comes in (431/431)
+      p1b Talonflame used Flare Blitz -> p2b: Volcanion
+      p2a Gardevoir used Hyper Voice -> p1a: Amoonguss  [[spread] p1a,p1b]
+      p2b Volcanion used Steam Eruption -> p1a: Amoonguss
+      after p1: Amoonguss 253/431, Talonflame 55/359
+      after p2: Gardevoir-Mega 79/339, Volcanion 142/363
+
+  Turn 6
+    p1 mcts: move 1 1, move 4
+      search (34000 visits): spore,0;protect,1 9160v 9017 | switch tyranitar;flareblitz,1 822v 684 | switch landorustherian;bravebird,1 801v 665 | switch landorustherian;flareblitz,1 796v 660
+    p2 greedy: move 1, move 1 2
+      p1b Talonflame used Protect
+      p2a Gardevoir used Hyper Voice -> p1a: Amoonguss  [[spread] p1a]
+              p1b Talonflame -- move: Protect
+              p1a Amoonguss used up its Sitrus Berry
+      p2b Volcanion used Steam Eruption -> p1b: Talonflame
+              p1b Talonflame -- move: Protect
+      p1a Amoonguss used Spore -> p2a: Gardevoir
+              p2a Gardevoir is now slp
+      after p1: Amoonguss 277/431, Talonflame 55/359
+      after p2: Gardevoir-Mega 79/339, Volcanion 142/363
+
+  Turn 7
+    p1 mcts: switch 6, move 1 1   (slot0 Amoonguss -> Landorus-Therian)
+      search (34000 visits): switch landorustherian;bravebird,0 12207v 10666 | switch landorustherian;bravebird,1 1400v 1053 | switch landorustherian;flareblitz,1 1248v 930 | switch tyranitar;flareblitz,1 794v 566
+    p2 greedy: move 1, move 1 2
+      p1a <- Landorus-Therian comes in (210/329)
+              p2a Gardevoir atk 1 fell
+              p2b Volcanion atk 1 fell
+      p1b Talonflame used Brave Bird -> p2a: Gardevoir
+      p2a Gardevoir fainted
+      p1b Talonflame fainted
+      p2b Volcanion used Steam Eruption -> p1a: Landorus
+      p1a Landorus fainted
+      after p1: Landorus-Therian 0/329, Talonflame 0/359
+      after p2: Gardevoir-Mega 0/339, Volcanion 142/363
+
+  Turn 8
+      p1b <- Cresselia comes in (444/444)
+      p1a <- Tyranitar comes in (404/404)
+      p2a <- Thundurus comes in (361/361)
+      after p1: Tyranitar 404/404, Cresselia 444/444
+      after p2: Thundurus 361/361, Volcanion 142/363
+
+  Turn 9
+    p1 mcts: move 1, move 3 1
+      search (7000 visits): rockslide,0;icebeam,0 204v 73 | icebeam,0;icebeam,0 199v 70 | rockslide,0;helpinghand,0 164v 53 | rockslide,0;psyshock,0 163v 52
+    p2 greedy: move 1 1, move 1 1
+      p2a Thundurus used Thunderbolt -> p1a: Tyranitar
+              p1a Tyranitar is now par
+      p1b Cresselia used Ice Beam -> p2a: Thundurus
+      p2b Volcanion used Steam Eruption -> p1a: Tyranitar
+      p1a Tyranitar used Rock Slide -> p2b: Volcanion  [[spread] p2a,p2b]
+      p2a Thundurus fainted
+      p2b Volcanion fainted
+      after p1: Tyranitar 166/404, Cresselia 444/444
+      after p2: Thundurus 0/361, Volcanion 0/363
+
+  Turn 10
+      p2a <- Scrafty comes in (334/334)
+      p2b <- Amoonguss comes in (432/432)
+              p1a Tyranitar atk 1 fell
+              p1b Cresselia atk 1 fell
+      after p1: Tyranitar 166/404, Cresselia 444/444
+      after p2: Scrafty 334/334, Amoonguss 432/432
+
+  Turn 11
+    p1 mcts: move 4 2, switch 6   (slot1 Cresselia -> Amoonguss)
+      search (22000 visits): fireblast,1;switch amoonguss 753v 457 | fireblast,0;switch amoonguss 606v 356 | icebeam,1;switch amoonguss 600v 352 | darkpulse,1;switch amoonguss 537v 309
+    p2 greedy: move 3 1, move 1 1
+      p1b <- Amoonguss comes in (420/431)
+      p2a Scrafty used Knock Off -> p1a: Tyranitar
+              p1a Tyranitar used up its Assault Vest
+      p2b Amoonguss used Energy Ball -> p1a: Tyranitar
+      p1a Tyranitar used Fire Blast -> p2b: Amoonguss
+              p2b Amoonguss -- critical hit
+      after p1: Tyranitar 5/404, Amoonguss 394/431
+      after p2: Scrafty 314/334, Amoonguss 69/432
+
+  Turn 12
+    p1 mcts: switch 6, move 1 1   (slot0 Tyranitar -> Cresselia)
+      search (30000 visits): switch cresselia;spore,0 1490v 756 | fireblast,1;ragepowder,1 886v 419 | fireblast,1;spore,0 870v 410 | fireblast,0;spore,0 851v 400
+    p2 greedy: move 3 1, move 1 1
+      p1a <- Cresselia comes in (444/444)
+      p2a Scrafty used Knock Off -> p1a: Cresselia
+              p1a Cresselia used up its Safety Goggles
+      p2b Amoonguss used Energy Ball -> p1a: Cresselia
+      p1b Amoonguss used Spore -> p2a: Scrafty
+              p2a Scrafty is now slp
+      after p1: Cresselia 173/444, Amoonguss 368/431
+      after p2: Scrafty 294/334, Amoonguss 42/432
+
+  Turn 13
+    p1 mcts: switch 6, move 1 1   (slot0 Cresselia -> Tyranitar)
+      search (22000 visits): switch tyranitar;spore,0 858v 390 | switch tyranitar;spore,1 763v 339 | switch tyranitar;ragepowder,1 709v 311 | switch tyranitar;protect,1 646v 278
+    p2 greedy: move 3 1, move 1 1
+      p1a <- Tyranitar comes in (5/404)
+              p2a Scrafty COULD NOT MOVE (slp)
+      p2b Amoonguss used Energy Ball -> p1a: Tyranitar
+      p1a Tyranitar fainted
+      p1b Amoonguss used Spore -> p2a: Scrafty
+              p2a Scrafty -- IT FAILED
+      after p1: Tyranitar 0/404, Amoonguss 342/431
+      after p2: Scrafty 274/334, Amoonguss 15/432
+
+  Turn 14
+      p1a <- Cresselia comes in (173/444)
+      after p1: Cresselia 173/444, Amoonguss 342/431
+      after p2: Scrafty 274/334, Amoonguss 15/432
+
+  Turn 15
+    p1 mcts: move 3 1, move 4
+      search (34000 visits): icebeam,0;protect,1 4867v 2427 | psyshock,1;protect,1 1408v 591 | icebeam,1;protect,1 1208v 495 | icebeam,0;spore,0 1092v 440
+    p2 greedy: move 3 1, move 1 1
+      p1b Amoonguss used Protect
+      p1a Cresselia used Ice Beam -> p2a: Scrafty
+              p2a Scrafty COULD NOT MOVE (slp)
+      p2b Amoonguss used Energy Ball -> p1a: Cresselia
+      after p1: Cresselia 107/444, Amoonguss 342/431
+      after p2: Scrafty 217/334, Amoonguss 15/432
+
+  Turn 16
+    p1 mcts: move 3 1, move 3 1
+      search (29000 visits): icebeam,0;gigadrain,0 1135v 494 | helpinghand,1;gigadrain,0 907v 380 | icebeam,1;gigadrain,0 829v 342 | psyshock,1;gigadrain,0 815v 335
+    p2 greedy: move 3 1, move 1 1
+      p1a Cresselia used Ice Beam -> p2a: Scrafty
+              p2a Scrafty used up its Sitrus Berry
+              p2a Scrafty is cured of slp
+      p2a Scrafty used Knock Off -> p1a: Cresselia
+      p1a Cresselia fainted
+      p2b Amoonguss used Energy Ball -> p1b: Amoonguss
+      p1b Amoonguss used Giga Drain -> p2a: Scrafty
+      after p1: Cresselia 0/444, Amoonguss 350/431
+      after p2: Scrafty 180/334, Amoonguss 15/432
+
+  Turn 17
+    p1 mcts: pass, move 4
+      search (63000 visits): No Move;protect,1 52656v 32500 | No Move;spore,0 4032v 2272 | No Move;gigadrain,0 3712v 2081 | No Move;spore,1 1134v 565
+    p2 greedy: move 3 2, move 1 2
+      p1b Amoonguss used Protect
+      p2a Scrafty used Knock Off -> p1b: Amoonguss
+              p1b Amoonguss -- move: Protect
+      p2b Amoonguss used Energy Ball -> p1b: Amoonguss
+              p1b Amoonguss -- move: Protect
+      after p1: Cresselia 0/444, Amoonguss 350/431
+      after p2: Scrafty 180/334, Amoonguss 15/432
+
+  Turn 18
+    p1 mcts: pass, move 4
+      search (46000 visits): No Move;protect,1 40633v 25011 | No Move;spore,0 1703v 896 | No Move;gigadrain,0 1610v 842 | No Move;spore,1 910v 441
+    p2 greedy: move 3 2, move 1 2
+      p1b Amoonguss used Protect
+      p2a Scrafty used Knock Off -> p1b: Amoonguss
+              p1b Amoonguss -- move: Protect
+      p2b Amoonguss used Energy Ball -> p1b: Amoonguss
+              p1b Amoonguss -- move: Protect
+      after p1: Cresselia 0/444, Amoonguss 350/431
+      after p2: Scrafty 180/334, Amoonguss 15/432
+
+  Turn 19
+    p1 mcts: pass, move 4
+      search (57000 visits): No Move;protect,1 49061v 30301 | No Move;spore,0 2814v 1549 | No Move;gigadrain,0 2627v 1438 | No Move;spore,1 1118v 558
+    p2 greedy: move 3 2, move 1 2
+      p1b Amoonguss used Protect  [[still]]
+              p1b Amoonguss -- IT FAILED
+      p2a Scrafty used Knock Off -> p1b: Amoonguss
+      p2b Amoonguss used Energy Ball -> p1b: Amoonguss
+      after p1: Cresselia 0/444, Amoonguss 246/431
+      after p2: Scrafty 180/334, Amoonguss 15/432
+
+  Turn 20
+    p1 mcts: pass, move 4
+      search (69000 visits): No Move;protect,1 60712v 37537 | No Move;spore,0 3022v 1667 | No Move;gigadrain,0 2604v 1419 | No Move;spore,1 961v 466
+    p2 greedy: move 3 2, move 1 2
+      p1b Amoonguss used Protect
+      p2a Scrafty used Knock Off -> p1b: Amoonguss
+              p1b Amoonguss -- move: Protect
+      p2b Amoonguss used Energy Ball -> p1b: Amoonguss
+              p1b Amoonguss -- move: Protect
+      after p1: Cresselia 0/444, Amoonguss 246/431
+      after p2: Scrafty 180/334, Amoonguss 15/432
+
+  Turn 21
+    p1 mcts: pass, move 4
+      search (76000 visits): No Move;protect,1 72204v 44697 | No Move;ragepowder,1 1123v 556 | No Move;spore,1 1001v 487 | No Move;spore,0 865v 407
+    p2 greedy: move 3 2, move 1 2
+      p1b Amoonguss used Protect  [[still]]
+              p1b Amoonguss -- IT FAILED
+      p2a Scrafty used Knock Off -> p1b: Amoonguss
+      p2b Amoonguss used Energy Ball -> p1b: Amoonguss
+              p1b Amoonguss spd 1 fell
+      after p1: Cresselia 0/444, Amoonguss 142/431
+      after p2: Scrafty 180/334, Amoonguss 15/432
+
+  Turn 22
+    p1 mcts: pass, move 4
+      search (75000 visits): No Move;protect,1 72480v 44430 | No Move;spore,0 1020v 456 | No Move;gigadrain,0 658v 273 | No Move;spore,1 372v 135
+    p2 greedy: move 3 2, move 1 2
+      p1b Amoonguss used Protect
+      p2a Scrafty used Knock Off -> p1b: Amoonguss
+              p1b Amoonguss -- move: Protect
+      p2b Amoonguss used Energy Ball -> p1b: Amoonguss
+              p1b Amoonguss -- move: Protect
+      after p1: Cresselia 0/444, Amoonguss 142/431
+      after p2: Scrafty 180/334, Amoonguss 15/432
+
+  Turn 23
+    p1 mcts: pass, move 4
+      search (69000 visits): No Move;protect,1 66236v 40596 | No Move;spore,0 1141v 508 | No Move;gigadrain,0 721v 298 | No Move;spore,1 400v 144
+    p2 greedy: move 3 2, move 1 2
+      p1b Amoonguss used Protect  [[still]]
+              p1b Amoonguss -- IT FAILED
+      p2a Scrafty used Knock Off -> p1b: Amoonguss
+      p2b Amoonguss used Energy Ball -> p1b: Amoonguss
+      after p1: Cresselia 0/444, Amoonguss 32/431
+      after p2: Scrafty 180/334, Amoonguss 15/432
+
+  Turn 24
+    p1 mcts: pass, move 4
+      search (68000 visits): No Move;protect,1 67422v 40161 | No Move;gigadrain,0 165v 39 | No Move;spore,0 109v 17 | No Move;ragepowder,1 109v 17
+    p2 greedy: move 3 2, move 1 2
+      p1b Amoonguss used Protect
+      p2a Scrafty used Knock Off -> p1b: Amoonguss
+              p1b Amoonguss -- move: Protect
+      p2b Amoonguss used Energy Ball -> p1b: Amoonguss
+              p1b Amoonguss -- move: Protect
+      after p1: Cresselia 0/444, Amoonguss 32/431
+      after p2: Scrafty 180/334, Amoonguss 15/432
+
+  Turn 25
+    p1 mcts: pass, move 4
+      search (75000 visits): No Move;protect,1 74162v 43571 | No Move;gigadrain,0 228v 66 | No Move;ragepowder,1 214v 60 | No Move;spore,0 164v 38
+    p2 greedy: move 3 2, move 1 2
+      p1b Amoonguss used Protect
+      p2a Scrafty used Knock Off -> p1b: Amoonguss
+              p1b Amoonguss -- move: Protect
+      p2b Amoonguss used Energy Ball -> p1b: Amoonguss
+              p1b Amoonguss -- move: Protect
+      after p1: Cresselia 0/444, Amoonguss 32/431
+      after p2: Scrafty 180/334, Amoonguss 15/432
+
+  Turn 26
+    p1 mcts: pass, move 4
+      search (73000 visits): No Move;protect,1 72288v 42530 | No Move;spore,0 177v 44 | No Move;gigadrain,0 158v 36 | No Move;ragepowder,1 144v 30
+    p2 greedy: move 3 2, move 1 2
+      p1b Amoonguss used Protect  [[still]]
+              p1b Amoonguss -- IT FAILED
+      p2a Scrafty used Knock Off -> p1b: Amoonguss
+      p1b Amoonguss fainted
+      after p1: Cresselia 0/444, Amoonguss 0/431
+      after p2: Scrafty 180/334, Amoonguss 15/432
+
+  RESULT: p2 wins

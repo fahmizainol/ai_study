@@ -1,0 +1,176 @@
+battle 12   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: XY Doubles: Aromatisse, Conkeldurr, Camerupt, Slowbro, Porygon2, Breloom
+  p2: dwcop 69/Copy of Untitled 411: Diancie-Mega, Amoonguss, Braviary, Landorus-Therian, Mew, Volcanion
+
+  Turn 1
+    p1 mcts: move 4, switch 5   (slot1 Conkeldurr -> Porygon2)
+      search (10000 visits): reflect,0;switch porygon2 175v 95 | switch porygon2;icepunch,1 171v 92 | reflect,0;icepunch,1 166v 89 | switch porygon2;drainpunch,0 159v 84
+    p2 greedy: move 1, move 3 1
+      p1b <- Porygon2 comes in (374/374)
+              p1b Porygon2 atk 1 rose
+      p2a Diancie used Diamond Storm -> p1a: Aromatisse  [[spread] p1a,p1b]
+              p2a Diancie def 1 rose
+      p2b Amoonguss used Energy Ball -> p1a: Aromatisse
+      p1a Aromatisse used Reflect
+      -sidestart p1: A Reflect
+      after p1: Aromatisse 179/406, Porygon2 274/374
+      after p2: Diancie-Mega 304/304, Amoonguss 432/432
+
+  Turn 2
+    p1 mcts: switch 3, move 2 2   (slot0 Aromatisse -> Camerupt)
+      search (9000 visits): switch camerupt;icebeam,1 137v 61 | drainingkiss,1;icebeam,1 122v 51 | trickroom,1;icebeam,1 122v 51 | drainingkiss,0;icebeam,1 117v 49
+    p2 greedy: move 1, move 3 1
+      p1a <- Camerupt comes in (344/344)
+      p2a Diancie used Diamond Storm -> p1a: Camerupt  [[spread] p1a,p1b]
+              p2a Diancie def 1 rose
+      p1b Porygon2 used Ice Beam -> p2b: Amoonguss
+      p2b Amoonguss used Energy Ball -> p1a: Camerupt
+      after p1: Camerupt 108/344, Porygon2 211/374
+      after p2: Diancie-Mega 304/304, Amoonguss 230/432
+
+  Turn 3
+    p1 mcts: move 2 1 mega, move 2 2
+      search (14000 visits): earthpower-mega,0;icebeam,1 381v 263 | earthpower-mega,0;recover,1 310v 206 | earthpower-mega,0;thunderbolt,1 264v 171 | earthpower-mega,0;icebeam,0 260v 168
+    p2 greedy: move 1, move 3 1
+      p2a Diancie used Diamond Storm -> p1a: Camerupt  [[spread] p1a,p1b]
+              p2a Diancie def 1 rose
+      p1b Porygon2 used Ice Beam -> p2b: Amoonguss
+      p1a Camerupt used Earth Power -> p2a: Diancie
+      p2a Diancie fainted
+      p2b Amoonguss used Energy Ball -> p1a: Camerupt
+      p1a Camerupt fainted
+      after p1: Camerupt 0/344, Porygon2 151/374
+      after p2: Diancie-Mega 0/304, Amoonguss 50/432
+
+  Turn 4
+      p2a <- Braviary comes in (347/347)
+      p1a <- Aromatisse comes in (179/406)
+      after p1: Aromatisse 179/406, Porygon2 151/374
+      after p2: Braviary 347/347, Amoonguss 50/432
+
+  Turn 5
+    p1 mcts: move 1 1, move 2 1
+      search (33000 visits): drainingkiss,0;icebeam,0 1455v 898 | drainingkiss,0;thunderbolt,0 986v 583 | drainingkiss,1;icebeam,0 972v 574 | trickroom,0;thunderbolt,0 946v 557
+    p2 greedy: move 1 2, move 3 2
+      p2a Braviary used Brave Bird -> p1b: Porygon2
+      p1b Porygon2 used Ice Beam -> p2a: Braviary
+      p2b Amoonguss used Energy Ball -> p1b: Porygon2
+      p1b Porygon2 fainted
+      p1a Aromatisse used Draining Kiss -> p2a: Braviary
+      p2a Braviary fainted
+      after p1: Aromatisse 221/406, Porygon2 0/374
+      after p2: Braviary 0/347, Amoonguss 50/432
+
+  Turn 6
+      p2a <- Landorus-Therian comes in (382/382)
+      p1b <- Slowbro comes in (394/394)
+              p1a Aromatisse atk 1 fell
+              p1b Slowbro atk 1 fell
+      after p1: Aromatisse 221/406, Slowbro 394/394
+      after p2: Landorus-Therian 382/382, Amoonguss 50/432
+
+  Turn 7
+    p1 mcts: switch 5, switch 6   (slot0 Aromatisse -> Conkeldurr; slot1 Slowbro -> Breloom)
+      search (21000 visits): switch conkeldurr;switch breloom 924v 515 | switch breloom;switch conkeldurr 707v 379 | switch conkeldurr;calmmind,1 559v 288 | switch conkeldurr;scald,0 542v 278
+    p2 greedy: move 1, move 3 1
+      p1b <- Breloom comes in (324/324)
+      p1a <- Conkeldurr comes in (414/414)
+      p2a Landorus used Earthquake -> p1b: Breloom  [[spread] p2b,p1a,p1b]
+      p2b Amoonguss fainted
+      -sideend p1: A Reflect
+      after p1: Conkeldurr 316/414, Breloom 262/324
+      after p2: Landorus-Therian 382/382, Amoonguss 0/432
+
+  Turn 8
+      p2b <- Mew comes in (404/404)
+      after p1: Conkeldurr 316/414, Breloom 262/324
+      after p2: Landorus-Therian 382/382, Mew 404/404
+
+  Turn 9
+    p1 mcts: move 3 1, move 1 2
+      search (27000 visits): icepunch,0;machpunch,1 790v 364 | icepunch,0;switch aromatisse 696v 313 | icepunch,0;machpunch,0 686v 308 | icepunch,0;spore,1 616v 270
+    p2 greedy: move 1, move 2 1
+      p1b Breloom used Mach Punch -> p2b: Mew
+      p2b Mew used Flamethrower -> p1a: Conkeldurr
+      p2a Landorus used Earthquake -> p1b: Breloom  [[spread] p2b,p1a,p1b]
+      p1a Conkeldurr used Ice Punch -> p2a: Landorus
+      p2a Landorus fainted
+      after p1: Conkeldurr 19/414, Breloom 86/324
+      after p2: Landorus-Therian 0/382, Mew 185/404
+
+  Turn 10
+      p2a <- Volcanion comes in (364/364)
+      after p1: Conkeldurr 19/414, Breloom 86/324
+      after p2: Volcanion 364/364, Mew 185/404
+
+  Turn 11
+    p1 mcts: move 1, move 1 1
+      search (32000 visits): protect,0;machpunch,0 1707v 913 | protect,0;seedbomb,1 1645v 877 | protect,0;machpunch,1 1449v 761 | protect,0;seedbomb,0 1019v 512
+    p2 greedy: move 1 1, move 2 1
+      p1a Conkeldurr used Protect
+      p1b Breloom used Mach Punch -> p2a: Volcanion
+      p2b Mew used Flamethrower -> p1a: Conkeldurr
+              p1a Conkeldurr -- move: Protect
+      p2a Volcanion used Steam Eruption -> p1a: Conkeldurr
+              p1a Conkeldurr -- move: Protect
+      after p1: Conkeldurr 19/414, Breloom 54/324
+      after p2: Volcanion 234/364, Mew 185/404
+
+  Turn 12
+    p1 mcts: move 1, move 1 1
+      search (26000 visits): protect,0;machpunch,0 1543v 953 | protect,0;seedbomb,1 1112v 664 | protect,0;machpunch,1 1109v 662 | protect,0;seedbomb,0 905v 527
+    p2 greedy: move 1 1, move 2 1
+      p1a Conkeldurr used Protect
+      p1b Breloom used Mach Punch -> p2a: Volcanion
+      p2b Mew used Flamethrower -> p1a: Conkeldurr
+              p1a Conkeldurr -- move: Protect
+      p2a Volcanion used Steam Eruption -> p1a: Conkeldurr
+              p1a Conkeldurr -- move: Protect
+      after p1: Conkeldurr 19/414, Breloom 22/324
+      after p2: Volcanion 92/364, Mew 185/404
+
+  Turn 13
+    p1 mcts: switch 5, move 1 1   (slot0 Conkeldurr -> Aromatisse)
+      search (26000 visits): switch aromatisse;machpunch,0 1789v 1194 | poisonjab,1;machpunch,0 1447v 949 | switch slowbro;machpunch,0 1427v 934 | icepunch,1;machpunch,0 1422v 931
+    p2 greedy: move 1 1, move 2 1
+      p1a <- Aromatisse comes in (221/406)
+      p1b Breloom used Mach Punch -> p2a: Volcanion
+      p2a Volcanion fainted
+      p1b Breloom fainted
+      p2b Mew used Flamethrower -> p1a: Aromatisse
+      after p1: Aromatisse 191/406, Breloom 0/324
+      after p2: Volcanion 0/364, Mew 185/404
+
+  Turn 14
+      p1b <- Conkeldurr comes in (19/414)
+      after p1: Aromatisse 191/406, Conkeldurr 19/414
+      after p2: Volcanion 0/364, Mew 185/404
+
+  Turn 15
+    p1 mcts: move 1 2, move 3 2
+      search (60000 visits): drainingkiss,1;icepunch,1 10562v 8153 | drainingkiss,1;poisonjab,1 9572v 7367 | drainingkiss,1;drainpunch,1 8625v 6616 | reflect,0;poisonjab,1 5006v 3761
+    p2 greedy: pass, move 2 2
+      p2b Mew used Flamethrower -> p1b: Conkeldurr
+      p1b Conkeldurr fainted
+      p1a Aromatisse used Draining Kiss -> p2b: Mew
+      after p1: Aromatisse 194/406, Conkeldurr 0/414
+      after p2: Volcanion 0/364, Mew 125/404
+
+  Turn 16
+      p1b <- Slowbro comes in (394/394)
+      after p1: Aromatisse 194/406, Slowbro 394/394
+      after p2: Volcanion 0/364, Mew 125/404
+
+  Turn 17
+    p1 mcts: move 1 2, move 1 2
+      search (68000 visits): drainingkiss,1;scald,1 16847v 11886 | drainingkiss,1;calmmind,1 12954v 9073 | drainingkiss,1;slackoff,1 11531v 8048 | drainingkiss,1;trickroom,1 10686v 7440
+    p2 greedy: pass, move 2 1
+      p2b Mew used Flamethrower -> p1a: Aromatisse
+              p1a Aromatisse -- critical hit
+      p1b Slowbro used Scald -> p2b: Mew
+      p1a Aromatisse used Draining Kiss -> p2b: Mew
+      p2b Mew fainted
+      after p1: Aromatisse 50/406, Slowbro 394/394
+      after p2: Volcanion 0/364, Mew 0/404
+
+  RESULT: p1 wins

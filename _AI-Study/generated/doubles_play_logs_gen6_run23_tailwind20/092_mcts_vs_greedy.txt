@@ -1,0 +1,142 @@
+battle 92   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: ORAS Doubles OU: Tyranitar, Gyarados, Excadrill, Latios, Aerodactyl-Mega, Amoonguss
+  p2: Copy of Untitled 577: Kangaskhan-Mega, Bisharp, Deoxys-Attack, Amoonguss, Landorus, Talonflame
+
+  Turn 1
+    p1 mcts: move 1, move 1
+      search (53000 visits): rockslide,0;dragondance,1 1197v 206 | switch amoonguss;dragondance,1 1162v 197 | taunt,0;dragondance,1 1070v 176 | protect,0;dragondance,1 982v 155
+    p2 greedy: move 3 1, move 2 1
+      p2a Kangaskhan used Sucker Punch -> p1a: Tyranitar
+      p2b Bisharp used Sucker Punch -> p1a: Tyranitar
+      p1b Gyarados used Dragon Dance
+              p1b Gyarados atk 1 rose
+              p1b Gyarados spe 1 rose
+      p1a Tyranitar used Rock Slide -> p2a: Kangaskhan  [[spread] p2a,p2b]
+      after p1: Tyranitar 280/404, Gyarados 336/336
+      after p2: Kangaskhan-Mega 292/414, Bisharp 227/271
+
+  Turn 2
+    p1 mcts: move 1, move 2 2
+      search (58000 visits): rockslide,0;waterfall,1 1133v 121 | taunt,0;waterfall,1 1114v 118 | thunderwave,1;waterfall,1 1092v 114 | protect,0;waterfall,1 1014v 100
+    p2 greedy: move 3 1, move 2 1
+      p2a Kangaskhan used Sucker Punch -> p1a: Tyranitar
+      p2b Bisharp used Sucker Punch -> p1a: Tyranitar
+      p1b Gyarados used Waterfall -> p2b: Bisharp
+      p1a Tyranitar used Rock Slide -> p2b: Bisharp  [[spread] p2a,p2b]
+      p2b Bisharp fainted
+      after p1: Tyranitar 156/404, Gyarados 336/336
+      after p2: Kangaskhan-Mega 182/414, Bisharp 0/271
+
+  Turn 3
+      p2b <- Deoxys-Attack comes in (241/241)
+      after p1: Tyranitar 156/404, Gyarados 336/336
+      after p2: Kangaskhan-Mega 182/414, Deoxys-Attack 241/241
+
+  Turn 4
+    p1 mcts: move 4, move 1
+      search (54000 visits): protect,0;dragondance,1 11769v 8339 | switch amoonguss;switch aerodactylmega 7616v 2356 | rockslide,0;dragondance,1 2323v 618 | thunderwave,1;dragondance,1 684v 127
+    p2 greedy: move 3 1, move 2 1
+      p1a Tyranitar used Protect
+      p2a Kangaskhan used Sucker Punch  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p2b Deoxys used Psycho Boost -> p1a: Tyranitar
+              p1a Tyranitar -- IMMUNE
+      p1b Gyarados used Dragon Dance
+              p1b Gyarados atk 1 rose
+              p1b Gyarados spe 1 rose
+      after p1: Tyranitar 156/404, Gyarados 336/336
+      after p2: Kangaskhan-Mega 157/414, Deoxys-Attack 226/241
+
+  Turn 5
+    p1 mcts: move 2 1, move 2 2
+      search (53000 visits): thunderwave,0;waterfall,1 1050v 126 | protect,0;waterfall,1 1023v 121 | switch amoonguss;waterfall,1 1005v 118 | thunderwave,1;waterfall,1 989v 115
+    p2 greedy: move 3 1, move 2 1
+      p2a Kangaskhan used Sucker Punch  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p1b Gyarados used Waterfall -> p2b: Deoxys
+      p2b Deoxys fainted
+      p1a Tyranitar used Thunder Wave -> p2a: Kangaskhan
+              p2a Kangaskhan is now par
+      after p1: Tyranitar 156/404, Gyarados 336/336
+      after p2: Kangaskhan-Mega 132/414, Deoxys-Attack 0/241
+
+  Turn 6
+      p2b <- Amoonguss comes in (432/432)
+      after p1: Tyranitar 156/404, Gyarados 336/336
+      after p2: Kangaskhan-Mega 132/414, Amoonguss 432/432
+
+  Turn 7
+    p1 mcts: move 2 2, move 2 2
+      search (42000 visits): thunderwave,1;waterfall,1 935v 169 | rockslide,0;waterfall,1 915v 164 | taunt,1;waterfall,1 893v 159 | protect,0;waterfall,1 865v 151
+    p2 greedy: move 3 1, move 3 1
+              p2a Kangaskhan COULD NOT MOVE (par)
+      p1b Gyarados used Waterfall -> p2b: Amoonguss
+              p2b Amoonguss -- critical hit
+      p1a Tyranitar used Thunder Wave -> p2b: Amoonguss
+              p2b Amoonguss is now par
+      p2b Amoonguss used Energy Ball -> p1a: Tyranitar
+      after p1: Tyranitar 64/404, Gyarados 280/336
+      after p2: Kangaskhan-Mega 132/414, Amoonguss 205/432
+
+  Turn 8
+    p1 mcts: switch 6, move 3 2   (slot0 Tyranitar -> Amoonguss)
+      search (51000 visits): switch amoonguss;doubleedge,1 1138v 178 | switch amoonguss;waterfall,1 1026v 153 | thunderwave,1;waterfall,1 1005v 149 | protect,0;waterfall,1 989v 145
+    p2 greedy: move 3 1, move 3 1
+      p1a <- Amoonguss comes in (432/432)
+      p2a Kangaskhan used Sucker Punch  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p1b Gyarados used Double-Edge -> p2b: Amoonguss
+      p2b Amoonguss fainted
+      after p1: Amoonguss 432/432, Gyarados 156/336
+      after p2: Kangaskhan-Mega 132/414, Amoonguss 0/432
+
+  Turn 9
+      p2b <- Landorus comes in (382/382)
+      after p1: Amoonguss 432/432, Gyarados 156/336
+      after p2: Kangaskhan-Mega 132/414, Landorus 382/382
+
+  Turn 10
+    p1 mcts: move 4, move 2 2
+      search (61000 visits): protect,0;waterfall,1 44855v 26706 | gigadrain,0;waterfall,1 2105v 969 | spore,0;waterfall,1 1644v 736 | gigadrain,1;waterfall,1 1489v 658
+    p2 greedy: move 3 2, move 1 2
+      p1a Amoonguss used Protect
+              p2a Kangaskhan COULD NOT MOVE (par)
+      p1b Gyarados used Waterfall -> p2b: Landorus
+      p2b Landorus fainted
+      after p1: Amoonguss 432/432, Gyarados 156/336
+      after p2: Kangaskhan-Mega 132/414, Landorus 0/382
+
+  Turn 11
+      p2b <- Talonflame comes in (320/320)
+      after p1: Amoonguss 432/432, Gyarados 156/336
+      after p2: Kangaskhan-Mega 132/414, Talonflame 320/320
+
+  Turn 12
+    p1 mcts: move 3 1, move 2 2
+      search (259000 visits): gigadrain,0;waterfall,1 233475v 228055 | spore,0;doubleedge,1 3318v 2986 | ragepowder,0;doubleedge,0 2949v 2637 | spore,1;doubleedge,0 2294v 2023
+    p2 greedy: move 3 2, move 1 2
+      p2b Talonflame used Brave Bird -> p1b: Gyarados
+      p1b Gyarados fainted
+      p2a Kangaskhan used Sucker Punch -> p1a: Amoonguss
+      p1a Amoonguss used Giga Drain -> p2a: Kangaskhan
+      p2a Kangaskhan fainted
+      after p1: Amoonguss 415/432, Gyarados 0/336
+      after p2: Kangaskhan-Mega 0/414, Talonflame 237/320
+
+  Turn 13
+      p1b <- Excadrill comes in (369/369)
+      after p1: Amoonguss 415/432, Excadrill 369/369
+      after p2: Kangaskhan-Mega 0/414, Talonflame 237/320
+
+  Turn 14
+    p1 mcts: switch 4, move 3 2   (slot0 Amoonguss -> Latios)
+      search (143000 visits): switch latios;ironhead,1 136332v 131410 | ragepowder,0;ironhead,1 388v 280 | switch latios;earthquake,1 324v 227 | switch latios;switch aerodactylmega 317v 222
+    p2 greedy: pass, move 1 1
+      p1a <- Latios comes in (301/301)
+      p2b Talonflame used Brave Bird -> p1a: Latios
+      p1b Excadrill used Iron Head -> p2b: Talonflame
+      p2b Talonflame fainted
+      after p1: Latios 48/301, Excadrill 333/369
+      after p2: Kangaskhan-Mega 0/414, Talonflame 0/320
+
+  RESULT: p1 wins

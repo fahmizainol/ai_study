@@ -1,0 +1,154 @@
+battle 3   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: dpl rejects/terracott 2 week 4 reject: Gengar-Mega, Bisharp, Terrakion, Whimsicott, Talonflame, Kyurem-Black
+  p2: dpl ::/Untitled 723: Spinda, Victini, Gothitelle, Amoonguss, Clefairy, Salamence-Mega
+
+  Turn 1
+    p1 mcts: move 2 1, switch 6   (slot1 Bisharp -> Kyurem-Black)
+      search (18000 visits): sludgebomb,0;switch kyuremblack 619v 500 | sludgebomb,0;switch terrakion 539v 428 | sludgebomb,0;switch talonflame 439v 340 | switch terrakion;switch kyuremblack 434v 335
+    p2 greedy: move 1 1, move 1 1
+      p1b <- Kyurem-Black comes in (423/423)
+      p2a Spinda used Fake Out -> p1a: Gengar
+              p1a Gengar -- IMMUNE
+      p1a Gengar used Sludge Bomb -> p2a: Spinda
+      p2b Victini used V-create -> p1a: Gengar
+              p2b Victini spe 1 fell
+              p2b Victini def 1 fell
+              p2b Victini spd 1 fell
+      after p1: Gengar-Mega 105/306, Kyurem-Black 423/423
+      after p2: Spinda 51/324, Victini 404/404
+
+  Turn 2
+    p1 mcts: move 2 2, move 2
+      search (33000 visits): sludgebomb,1;icywind,0 1634v 1442 | shadowball,1;icebeam,0 1595v 1406 | shadowball,1;fusionbolt,0 1552v 1365 | shadowball,1;earthpower,0 1547v 1361
+    p2 greedy: move 1 1, move 1 1
+      p2a Spinda used Fake Out  [[still]]
+              p2a Spinda -- IT FAILED
+      p1a Gengar used Sludge Bomb -> p2b: Victini
+      p1b Kyurem used Icy Wind -> p2b: Victini  [[spread] p2b]
+              p1b Kyurem -- MISSED
+              p2b Victini spe 1 fell
+      p2b Victini used V-create -> p1a: Gengar
+              p2b Victini spe 1 fell
+              p2b Victini def 1 fell
+              p2b Victini spd 1 fell
+      p1a Gengar fainted
+      after p1: Gengar-Mega 0/306, Kyurem-Black 423/423
+      after p2: Spinda 51/324, Victini 228/404
+
+  Turn 3
+      p1a <- Terrakion comes in (323/323)
+      after p1: Terrakion 323/323, Kyurem-Black 423/423
+      after p2: Spinda 51/324, Victini 228/404
+
+  Turn 4
+    p1 mcts: move 1, move 1 2
+      search (43000 visits): rockslide,0;icebeam,1 7464v 2455 | rockslide,0;icywind,0 1344v 344 | protect,0;icywind,0 1189v 295 | rockslide,0;fusionbolt,1 1000v 236
+    p2 greedy: move 1 1, move 1 1
+      p2a Spinda used Fake Out  [[still]]
+              p2a Spinda -- IT FAILED
+      p1a Terrakion used Rock Slide -> p2b: Victini  [[spread] p2a]
+              p1a Terrakion -- MISSED
+              p2a Spinda -- critical hit
+      p2a Spinda fainted
+      p1b Kyurem used Ice Beam -> p2b: Victini
+      p2b Victini used V-create -> p1a: Terrakion
+              p2b Victini spe 1 fell
+              p2b Victini def 1 fell
+              p2b Victini spd 1 fell
+      after p1: Terrakion 222/323, Kyurem-Black 423/423
+      after p2: Spinda 0/324, Victini 153/404
+
+  Turn 5
+      p2a <- Gothitelle comes in (344/344)
+      after p1: Terrakion 222/323, Kyurem-Black 423/423
+      after p2: Gothitelle 344/344, Victini 153/404
+
+  Turn 6
+    p1 mcts: move 1, move 2
+      search (31000 visits): rockslide,0;icywind,0 3526v 771 | rockslide,0;icebeam,0 2320v 466 | protect,0;icywind,0 2113v 415 | protect,0;icebeam,0 1677v 309
+    p2 greedy: move 4 1, move 1 1
+      p1a Terrakion used Rock Slide -> p2a: Gothitelle  [[spread] p2a,p2b]
+      p2b Victini fainted
+      p1b Kyurem used Icy Wind -> p2a: Gothitelle
+              p2a Gothitelle spe 1 fell
+      p2a Gothitelle used Psychic -> p1a: Terrakion
+      p1a Terrakion fainted
+      after p1: Terrakion 0/323, Kyurem-Black 423/423
+      after p2: Gothitelle 154/344, Victini 0/404
+
+  Turn 7
+      p1a <- Whimsicott comes in (261/261)
+      p2b <- Amoonguss comes in (432/432)
+      after p1: Whimsicott 261/261, Kyurem-Black 423/423
+      after p2: Gothitelle 154/344, Amoonguss 432/432
+
+  Turn 8
+    p1 mcts: move 1 -2, move 2
+      search (26000 visits): helpinghand,1;icywind,0 1881v 1346 | helpinghand,1;icebeam,1 1643v 1163 | tailwind,0;icywind,0 1414v 989 | protect,0;icywind,0 1335v 929
+    p2 greedy: move 4 1, move 3 1
+      p1a Whimsicott used Helping Hand -> p1b: Kyurem
+      p1b Kyurem used Icy Wind -> p2a: Gothitelle  [[spread] p2a,p2b]
+              p2a Gothitelle spe 1 fell
+              p2b Amoonguss spe 1 fell
+      p2a Gothitelle used Psychic -> p1a: Whimsicott
+      p2b Amoonguss used Giga Drain -> p1a: Whimsicott
+      after p1: Whimsicott 89/261, Kyurem-Black 423/423
+      after p2: Gothitelle 67/344, Amoonguss 248/432
+
+  Turn 9
+    p1 mcts: move 4, move 2
+      search (42000 visits): protect,0;icywind,0 4030v 2496 | helpinghand,1;icywind,0 3256v 1990 | protect,0;icebeam,1 2550v 1532 | tailwind,0;icywind,0 2203v 1308
+    p2 greedy: move 4 1, move 3 1
+      p1a Whimsicott used Protect
+      p1b Kyurem used Icy Wind -> p2a: Gothitelle  [[spread] p2a,p2b]
+              p2a Gothitelle spe 1 fell
+              p2b Amoonguss spe 1 fell
+      p2a Gothitelle used Psychic -> p1a: Whimsicott
+              p1a Whimsicott -- move: Protect
+      p2b Amoonguss used Giga Drain -> p1a: Whimsicott
+              p1a Whimsicott -- move: Protect
+      after p1: Whimsicott 89/261, Kyurem-Black 423/423
+      after p2: Gothitelle 3/344, Amoonguss 98/432
+
+  Turn 10
+    p1 mcts: move 2, move 2
+      search (40000 visits): tailwind,0;icywind,0 2859v 1400 | protect,0;icywind,0 1782v 832 | beatup,1;icywind,0 1691v 785 | tailwind,0;icebeam,0 1668v 773
+    p2 greedy: move 4 1, move 3 1
+      p1a Whimsicott used Tailwind
+      -sidestart p1: A move: Tailwind
+      p1b Kyurem used Icy Wind -> p2a: Gothitelle  [[spread] p2a,p2b]
+      p2a Gothitelle fainted
+      p2b Amoonguss fainted
+      after p1: Whimsicott 89/261, Kyurem-Black 423/423
+      after p2: Gothitelle 0/344, Amoonguss 0/432
+
+  Turn 11
+      p2a <- Clefairy comes in (344/344)
+      p2b <- Salamence-Mega comes in (331/331)
+      after p1: Whimsicott 89/261, Kyurem-Black 423/423
+      after p2: Clefairy 344/344, Salamence-Mega 331/331
+
+  Turn 12
+    p1 mcts: switch 6, move 1 2   (slot0 Whimsicott -> Bisharp)
+      search (22000 visits): switch bisharp;icebeam,1 3384v 2051 | helpinghand,1;icebeam,1 1621v 927 | switch bisharp;icywind,0 1369v 770 | protect,0;icywind,0 1130v 621
+    p2 greedy: move 4 1, move 1 1
+      p1a <- Bisharp comes in (311/311)
+      p1b Kyurem used Ice Beam -> p2b: Salamence
+      p2b Salamence fainted
+      p2a Clefairy used Moonblast -> p1a: Bisharp
+              p1a Bisharp spa 1 fell
+              p1a Bisharp atk 2 rose
+      after p1: Bisharp 211/311, Kyurem-Black 423/423
+      after p2: Clefairy 344/344, Salamence-Mega 0/331
+
+  Turn 13
+    p1 mcts: move 3 1, switch 5   (slot1 Kyurem-Black -> Talonflame)
+      search (158000 visits): ironhead,0;switch talonflame 142906v 138780 | ironhead,0;icebeam,0 1331v 1103 | ironhead,0;icywind,0 1266v 1045 | ironhead,0;earthpower,0 1148v 940
+    p2 greedy: move 4 1, pass
+      p1b <- Talonflame comes in (357/357)
+      p1a Bisharp used Iron Head -> p2a: Clefairy
+      p2a Clefairy fainted
+      after p1: Bisharp 180/311, Talonflame 357/357
+      after p2: Clefairy 0/344, Salamence-Mega 0/331
+
+  RESULT: p1 wins

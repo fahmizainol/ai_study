@@ -1,0 +1,167 @@
+battle 148   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: Untitled 571: Metagross-Mega, Keldeo-Resolute, Landorus, Talonflame, Scrafty, Volcanion
+  p2: Mega Diancie: Diancie-Mega, Gastrodon-East, Landorus-Therian, Ferrothorn, Talonflame, Thundurus
+
+  Turn 1
+    p1 mcts: move 2 1, move 3
+      search (19000 visits): ironhead,0;protect,1 713v 432 | ironhead,0;switch scrafty 523v 302 | ironhead,0;secretsword,1 502v 288 | ironhead,0;switch volcanion 464v 263
+    p2 greedy: move 1, move 2 1
+      p1b Keldeo used Protect
+      p2a Diancie used Diamond Storm -> p1b: Keldeo  [[spread] p1a]
+              p1b Keldeo -- move: Protect
+      p1a Metagross used Iron Head -> p2a: Diancie
+      p2a Diancie fainted
+      p2b Gastrodon used Earth Power -> p1a: Metagross
+      after p1: Metagross-Mega 110/364, Keldeo-Resolute 323/323
+      after p2: Diancie-Mega 0/241, Gastrodon-East 421/421
+
+  Turn 2
+      p2a <- Landorus-Therian comes in (382/382)
+              p1a Metagross -- IT FAILED
+              p1b Keldeo atk 1 fell
+      after p1: Metagross-Mega 110/364, Keldeo-Resolute 323/323
+      after p2: Landorus-Therian 382/382, Gastrodon-East 421/421
+
+  Turn 3
+    p1 mcts: move 1 1, move 2 2
+      search (46000 visits): icepunch,0;secretsword,1 1425v 594 | icepunch,0;secretsword,0 1172v 474 | icepunch,0;switch volcanion 1105v 442 | icepunch,0;switch landorus 1081v 431
+    p2 greedy: move 2 1, move 2 1
+      p1b Keldeo used Secret Sword -> p2b: Gastrodon
+              p2b Gastrodon -- critical hit
+      p1a Metagross used Ice Punch -> p2a: Landorus
+      p2a Landorus fainted
+      p2b Gastrodon used Earth Power -> p1a: Metagross
+      p1a Metagross fainted
+      after p1: Metagross-Mega 0/364, Keldeo-Resolute 291/323
+      after p2: Landorus-Therian 0/382, Gastrodon-East 74/421
+
+  Turn 4
+      p1a <- Landorus comes in (382/382)
+      p2a <- Ferrothorn comes in (352/352)
+      after p1: Landorus 382/382, Keldeo-Resolute 291/323
+      after p2: Ferrothorn 352/352, Gastrodon-East 74/421
+
+  Turn 5
+    p1 mcts: switch 5, switch 4   (slot0 Landorus -> Scrafty; slot1 Keldeo-Resolute -> Talonflame)
+      search (52000 visits): switch scrafty;switch talonflame 12842v 8850 | switch scrafty;secretsword,0 4079v 2260 | switch scrafty;secretsword,1 2553v 1366 | earthpower,1;protect,1 1206v 595
+    p2 greedy: move 1 2, move 2 2
+      p1b <- Talonflame comes in (321/321)
+      p1a <- Scrafty comes in (334/334)
+              p2a Ferrothorn atk 1 fell
+              p2b Gastrodon atk 1 fell
+      p2b Gastrodon used Earth Power -> p1b: Talonflame
+              p1b Talonflame -- IMMUNE
+      p2a Ferrothorn used Power Whip -> p1b: Talonflame
+      after p1: Scrafty 334/334, Talonflame 285/321
+      after p2: Ferrothorn 352/352, Gastrodon-East 74/421
+
+  Turn 6
+    p1 mcts: switch 6, move 3   (slot0 Scrafty -> Volcanion)
+      search (39000 visits): switch volcanion;tailwind,1 820v 221 | superfang,0;tailwind,1 745v 194 | lowkick,0;willowisp,0 731v 190 | fakeout,0;tailwind,1 729v 189
+    p2 greedy: move 1 2, move 2 2
+      p1a <- Volcanion comes in (364/364)
+      p1b Talonflame used Tailwind
+      -sidestart p1: A move: Tailwind
+      p2b Gastrodon used Earth Power -> p1b: Talonflame
+              p1b Talonflame -- IMMUNE
+      p2a Ferrothorn used Power Whip -> p1b: Talonflame
+      after p1: Volcanion 364/364, Talonflame 254/321
+      after p2: Ferrothorn 352/352, Gastrodon-East 74/421
+
+  Turn 7
+    p1 mcts: switch 6, move 1 1   (slot0 Volcanion -> Scrafty)
+      search (42000 visits): switch scrafty;willowisp,0 1619v 399 | switch scrafty;bravebird,1 1179v 267 | switch scrafty;bravebird,0 988v 212 | switch scrafty;willowisp,1 832v 167
+    p2 greedy: move 1 2, move 2 2
+      p1a <- Scrafty comes in (334/334)
+              p2a Ferrothorn atk 1 fell
+              p2b Gastrodon atk 1 fell
+      p1b Talonflame used Will-O-Wisp -> p2a: Ferrothorn
+              p2a Ferrothorn is now brn
+      p2b Gastrodon used Earth Power -> p1b: Talonflame
+              p1b Talonflame -- IMMUNE
+      p2a Ferrothorn used Power Whip -> p1b: Talonflame
+      after p1: Scrafty 334/334, Talonflame 241/321
+      after p2: Ferrothorn 308/352, Gastrodon-East 74/421
+
+  Turn 8
+    p1 mcts: move 4 2, move 1 1
+      search (36000 visits): superfang,1;willowisp,0 441v 56 | superfang,0;bravebird,1 439v 55 | knockoff,1;bravebird,1 437v 55 | superfang,1;bravebird,1 431v 53
+    p2 greedy: move 1 2, move 2 2
+      p1b Talonflame used Will-O-Wisp -> p2a: Ferrothorn  [[miss]]
+              p1b Talonflame -- MISSED
+      p1a Scrafty used Super Fang -> p2b: Gastrodon
+      p2b Gastrodon used Earth Power -> p1b: Talonflame
+              p1b Talonflame -- IMMUNE
+      p2a Ferrothorn used Power Whip -> p1b: Talonflame
+      after p1: Scrafty 279/334, Talonflame 228/321
+      after p2: Ferrothorn 286/352, Gastrodon-East 37/421
+
+  Turn 9
+    p1 mcts: move 1 2, move 1 2
+      search (28000 visits): fakeout,1;willowisp,1 354v 46 | lowkick,0;bravebird,1 329v 40 | superfang,1;bravebird,0 323v 38 | knockoff,1;willowisp,0 322v 38
+    p2 greedy: move 1 2, move 2 2
+      p1a Scrafty used Fake Out  [[still]]
+              p1a Scrafty -- IT FAILED
+      p1b Talonflame used Will-O-Wisp -> p2b: Gastrodon
+              p2b Gastrodon is now brn
+      p2b Gastrodon used Earth Power -> p1b: Talonflame
+              p1b Talonflame -- IMMUNE
+      p2a Ferrothorn used Power Whip -> p1b: Talonflame
+      p2b Gastrodon fainted
+      -sideend p1: A move: Tailwind
+      after p1: Scrafty 279/334, Talonflame 216/321
+      after p2: Ferrothorn 264/352, Gastrodon-East 0/421
+
+  Turn 10
+      p2b <- Talonflame comes in (360/360)
+      after p1: Scrafty 279/334, Talonflame 216/321
+      after p2: Ferrothorn 264/352, Talonflame 360/360
+
+  Turn 11
+    p1 mcts: move 3 1, move 4 2
+      search (35000 visits): knockoff,0;bravebird,1 1459v 435 | superfang,0;tailwind,1 1163v 330 | knockoff,0;tailwind,1 905v 241 | lowkick,1;tailwind,1 677v 164
+    p2 greedy: move 1 2, move 1 2
+      p1b Talonflame used Brave Bird -> p2b: Talonflame
+      p2b Talonflame used Brave Bird -> p1b: Talonflame
+      p1b Talonflame fainted
+      p1a Scrafty used Knock Off -> p2a: Ferrothorn
+              p2a Ferrothorn used up its Leftovers
+      p2a Ferrothorn used Power Whip -> p1a: Scrafty
+      after p1: Scrafty 208/334, Talonflame 0/321
+      after p2: Ferrothorn 86/352, Talonflame 37/360
+
+  Turn 12
+      p1b <- Keldeo-Resolute comes in (291/323)
+      after p1: Scrafty 208/334, Keldeo-Resolute 291/323
+      after p2: Ferrothorn 86/352, Talonflame 37/360
+
+  Turn 13
+    p1 mcts: switch 6, move 1 2   (slot0 Scrafty -> Volcanion)
+      search (48000 visits): switch volcanion;hydropump,1 4580v 1953 | knockoff,0;hydropump,1 3282v 1359 | lowkick,0;hydropump,1 2400v 960 | knockoff,1;hydropump,1 2000v 782
+    p2 greedy: move 1 1, move 1 1
+      p1a <- Volcanion comes in (364/364)
+      p2b Talonflame used Brave Bird -> p1a: Volcanion
+      p2b Talonflame fainted
+      p1b Keldeo used Hydro Pump -> p2a: Ferrothorn
+      p2a Ferrothorn fainted
+      after p1: Volcanion 168/364, Keldeo-Resolute 259/323
+      after p2: Ferrothorn 0/352, Talonflame 0/360
+
+  Turn 14
+      p2a <- Thundurus comes in (299/299)
+      after p1: Volcanion 168/364, Keldeo-Resolute 259/323
+      after p2: Thundurus 299/299, Talonflame 0/360
+
+  Turn 15
+    p1 mcts: move 2 1, move 1 1
+      search (87000 visits): steameruption,0;hydropump,0 63055v 55987 | overheat,0;hydropump,0 6545v 5090 | heatwave,0;hydropump,0 2395v 1775 | overheat,0;secretsword,0 1890v 1379
+    p2 greedy: move 2 1, pass
+      p2a Thundurus used Superpower -> p1a: Volcanion
+              p2a Thundurus atk 1 fell
+              p2a Thundurus def 1 fell
+      p1b Keldeo used Hydro Pump -> p2a: Thundurus
+      p2a Thundurus fainted
+      after p1: Volcanion 39/364, Keldeo-Resolute 227/323
+      after p2: Thundurus 0/299, Talonflame 0/360
+
+  RESULT: p1 wins

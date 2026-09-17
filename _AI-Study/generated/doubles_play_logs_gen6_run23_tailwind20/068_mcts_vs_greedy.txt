@@ -1,0 +1,141 @@
+battle 68   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: Untitled 1413: Salamence-Mega, Aegislash, Virizion, Volcanion, Sylveon, Thundurus
+  p2: Untitled 576: Kangaskhan-Mega, Deoxys-Speed, Landorus-Therian, Genesect, Amoonguss, Volcanion
+
+  Turn 1
+    p1 mcts: switch 6, move 1 2   (slot0 Salamence-Mega -> Thundurus)
+      search (23000 visits): switch thundurus;shadowball,1 807v 274 | switch thundurus;toxic,1 406v 112 | switch thundurus;shadowball,0 376v 100 | switch thundurus;toxic,0 360v 94
+    p2 greedy: move 1 1, move 4 1
+      p1a <- Thundurus comes in (362/362)
+      p2a Kangaskhan used Fake Out -> p1a: Thundurus
+      p2b Deoxys used Psycho Boost -> p1a: Thundurus
+              p2b Deoxys spa 2 fell
+      p1a Thundurus fainted
+      p1b Aegislash used Shadow Ball -> p2b: Deoxys
+      p2b Deoxys fainted
+      after p1: Thundurus 0/362, Aegislash-Blade 324/324
+      after p2: Kangaskhan-Mega 414/414, Deoxys-Speed 0/241
+
+  Turn 2
+      p2b <- Landorus-Therian comes in (338/338)
+      p1a <- Virizion comes in (323/323)
+              p1a Virizion atk 1 fell
+              p1b Aegislash atk 1 fell
+      after p1: Virizion 323/323, Aegislash-Blade 324/324
+      after p2: Kangaskhan-Mega 414/414, Landorus-Therian 338/338
+
+  Turn 3
+    p1 mcts: switch 4, move 1 2   (slot0 Virizion -> Volcanion)
+      search (24000 visits): switch volcanion;shadowball,1 476v 142 | switch volcanion;switch salamencemega 469v 140 | switch volcanion;switch sylveon 458v 135 | switch sylveon;switch salamencemega 449v 131
+    p2 greedy: move 1 1, move 2 1
+      p1a <- Volcanion comes in (363/363)
+      p2a Kangaskhan used Fake Out  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p2b Landorus used Earth Power -> p1a: Volcanion
+      p1b Aegislash used Shadow Ball -> p2b: Landorus
+      after p1: Volcanion 73/363, Aegislash-Blade 324/324
+      after p2: Kangaskhan-Mega 414/414, Landorus-Therian 173/338
+
+  Turn 4
+    p1 mcts: move 3 1, switch 6   (slot1 Aegislash-Blade -> Salamence-Mega)
+      search (35000 visits): earthpower,0;switch salamencemega 927v 234 | protect,0;switch salamencemega 860v 212 | steameruption,0;switch salamencemega 850v 209 | heatwave,0;switch virizion 812v 197
+    p2 greedy: move 1 1, move 2 1
+      p1b <- Salamence-Mega comes in (394/394)
+      p2a Kangaskhan used Fake Out  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p2b Landorus used Earth Power -> p1a: Volcanion
+      p1a Volcanion fainted
+      after p1: Volcanion 0/363, Salamence-Mega 394/394
+      after p2: Kangaskhan-Mega 414/414, Landorus-Therian 173/338
+
+  Turn 5
+      p1a <- Virizion comes in (323/323)
+      after p1: Virizion 323/323, Salamence-Mega 394/394
+      after p2: Kangaskhan-Mega 414/414, Landorus-Therian 173/338
+
+  Turn 6
+    p1 mcts: switch 5, move 1   (slot0 Virizion -> Sylveon)
+      search (31000 visits): switch sylveon;hypervoice,0 1208v 250 | switch sylveon;doubleedge,1 991v 192 | switch sylveon;doubleedge,0 990v 191 | switch aegislash;hypervoice,0 833v 150
+    p2 greedy: move 1 1, move 2 1
+      p1a <- Sylveon comes in (393/393)
+      p2a Kangaskhan used Fake Out  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p2b Landorus used Earth Power -> p1a: Sylveon
+      p1b Salamence used Hyper Voice -> p2a: Kangaskhan  [[spread] p2a,p2b]
+      after p1: Sylveon 297/393, Salamence-Mega 394/394
+      after p2: Kangaskhan-Mega 291/414, Landorus-Therian 16/338
+
+  Turn 7
+    p1 mcts: move 1, move 1
+      search (23000 visits): hypervoice,0;hypervoice,0 824v 128 | substitute,0;hypervoice,0 798v 122 | calmmind,0;hypervoice,0 795v 121 | protect,0;hypervoice,0 769v 115
+    p2 greedy: move 1 1, move 2 1
+      p2a Kangaskhan used Fake Out  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p2b Landorus used Earth Power -> p1a: Sylveon
+      p1b Salamence used Hyper Voice -> p2a: Kangaskhan  [[spread] p2a,p2b]
+      p2b Landorus fainted
+      p1a Sylveon used Hyper Voice -> p2a: Kangaskhan
+      p2a Kangaskhan fainted
+      after p1: Sylveon 210/393, Salamence-Mega 394/394
+      after p2: Kangaskhan-Mega 0/414, Landorus-Therian 0/338
+
+  Turn 8
+      p2a <- Genesect comes in (284/284)
+      p2b <- Amoonguss comes in (432/432)
+              p2a Genesect spa 1 rose
+      after p1: Sylveon 210/393, Salamence-Mega 394/394
+      after p2: Genesect 284/284, Amoonguss 432/432
+
+  Turn 9
+    p1 mcts: move 2, move 3 1
+      search (24000 visits): calmmind,0;flamethrower,0 2005v 1693 | calmmind,0;doubleedge,0 1871v 1573 | protect,0;hypervoice,0 1696v 1417 | protect,0;flamethrower,0 1661v 1386
+    p2 greedy: move 4 1, move 3 1
+      p1b Salamence used Flamethrower -> p2a: Genesect
+      p2a Genesect fainted
+      p1a Sylveon used Calm Mind
+              p1a Sylveon spa 1 rose
+              p1a Sylveon spd 1 rose
+      p2b Amoonguss used Energy Ball -> p1a: Sylveon
+      after p1: Sylveon 183/393, Salamence-Mega 394/394
+      after p2: Genesect 0/284, Amoonguss 432/432
+
+  Turn 10
+      p2a <- Volcanion comes in (364/364)
+      after p1: Sylveon 183/393, Salamence-Mega 394/394
+      after p2: Volcanion 364/364, Amoonguss 432/432
+
+  Turn 11
+    p1 mcts: move 2, move 2 2
+      search (15000 visits): calmmind,0;doubleedge,1 1532v 1148 | hypervoice,0;doubleedge,1 1137v 831 | protect,0;doubleedge,1 991v 715 | calmmind,0;hypervoice,0 838v 595
+    p2 greedy: move 4 1, move 3 1
+      p1b Salamence used Double-Edge -> p2b: Amoonguss
+      p2b Amoonguss fainted
+      p2a Volcanion used Overheat -> p1a: Sylveon
+              p2a Volcanion spa 2 fell
+      p1a Sylveon used Calm Mind
+              p1a Sylveon spa 1 rose
+              p1a Sylveon spd 1 rose
+      after p1: Sylveon 92/393, Salamence-Mega 186/394
+      after p2: Volcanion 364/364, Amoonguss 0/432
+
+  Turn 12
+    p1 mcts: move 1, move 2 1
+      search (71000 visits): hypervoice,0;doubleedge,0 62943v 59831 | switch virizion;doubleedge,0 991v 811 | hypervoice,0;hypervoice,0 845v 682 | calmmind,0;doubleedge,0 655v 514
+    p2 greedy: move 4 1, pass
+      p1b Salamence used Double-Edge -> p2a: Volcanion
+      p2a Volcanion used Overheat -> p1a: Sylveon
+              p2a Volcanion spa 2 fell
+      p1a Sylveon used Hyper Voice -> p2a: Volcanion
+      after p1: Sylveon 67/393, Salamence-Mega 123/394
+      after p2: Volcanion 46/364, Amoonguss 0/432
+
+  Turn 13
+    p1 mcts: move 1, move 1
+      search (725000 visits): hypervoice,0;hypervoice,0 47655v 47655 | hypervoice,0;doubleedge,0 47655v 47655 | calmmind,0;hypervoice,0 47655v 47655 | calmmind,0;doubleedge,0 47655v 47655
+    p2 greedy: move 4 1, pass
+      p1b Salamence used Hyper Voice -> p2a: Volcanion
+      p2a Volcanion fainted
+      after p1: Sylveon 67/393, Salamence-Mega 123/394
+      after p2: Volcanion 0/364, Amoonguss 0/432
+
+  RESULT: p1 wins

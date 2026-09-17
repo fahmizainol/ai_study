@@ -1,0 +1,149 @@
+battle 74   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: XY Doubles: Kangaskhan, Latias, Dialga, Aegislash, Butterfree, Kyogre
+  p2: oraspl/Untitled 370: Gardevoir, Kangaskhan-Mega, Volcanion, Amoonguss, Landorus-Therian, Raikou
+
+  Turn 1
+    p1 mcts: switch 6, move 1   (slot0 Kangaskhan -> Kyogre)
+      search (16000 visits): switch kyogre;tailwind,1 216v 127 | poweruppunch-mega,1;tailwind,1 156v 84 | fakeout-mega,0;psyshock,0 149v 79 | switch kyogre;psyshock,0 140v 72
+    p2 greedy: move 3 1, move 4 1
+      p1a <- Kyogre comes in (404/404)
+      p2b Kangaskhan used Sucker Punch  [[still]]
+              p2b Kangaskhan -- IT FAILED
+      p2a Gardevoir used Moonblast -> p1a: Kyogre
+      p1b Latias used Tailwind
+      -sidestart p1: A move: Tailwind
+      after p1: Kyogre 331/404, Latias 302/302
+      after p2: Gardevoir 277/277, Kangaskhan-Mega 414/414
+
+  Turn 2
+    p1 mcts: move 1, move 3 2
+      search (17000 visits): waterspout,0;psyshock,1 1316v 1007 | waterspout,0;psyshock,0 850v 625 | waterspout,0;protect,1 749v 543 | waterspout,0;switch kangaskhan 492v 338
+    p2 greedy: move 3 1, move 4 1
+      p2b Kangaskhan used Sucker Punch -> p1a: Kyogre
+      p1b Latias used Psyshock -> p2b: Kangaskhan
+      p1a Kyogre used Water Spout -> p2a: Gardevoir  [[spread] p2a,p2b]
+      p2a Gardevoir used Moonblast -> p1a: Kyogre
+      after p1: Kyogre 150/404, Latias 302/302
+      after p2: Gardevoir 103/277, Kangaskhan-Mega 95/414
+
+  Turn 3
+    p1 mcts: move 4 1, move 3 2
+      search (30000 visits): scald,0;psyshock,1 688v 224 | icebeam,0;psyshock,1 617v 195 | waterspout,0;psyshock,1 587v 183 | scald,0;protect,1 525v 158
+    p2 greedy: move 3 1, move 4 1
+      p2b Kangaskhan used Sucker Punch -> p1a: Kyogre
+      p1b Latias used Psyshock -> p2b: Kangaskhan
+      p2b Kangaskhan fainted
+      p1a Kyogre used Scald -> p2a: Gardevoir
+      p2a Gardevoir fainted
+      after p1: Kyogre 51/404, Latias 302/302
+      after p2: Gardevoir 0/277, Kangaskhan-Mega 0/414
+
+  Turn 4
+      p2a <- Volcanion comes in (363/363)
+      p2b <- Amoonguss comes in (432/432)
+      after p1: Kyogre 51/404, Latias 302/302
+      after p2: Volcanion 363/363, Amoonguss 432/432
+
+  Turn 5
+    p1 mcts: move 3 2, move 3 2
+      search (14000 visits): icebeam,1;psyshock,1 432v 245 | thunder,0;psyshock,1 396v 221 | scald,1;psyshock,1 342v 185 | thunder,0;psyshock,0 316v 168
+    p2 greedy: move 4 1, move 3 1
+      p1b Latias used Psyshock -> p2b: Amoonguss
+      p1a Kyogre used Ice Beam -> p2b: Amoonguss
+      p2b Amoonguss fainted
+      p2a Volcanion used Overheat -> p1a: Kyogre
+              p2a Volcanion spa 2 fell
+      -sideend p1: A move: Tailwind
+      after p1: Kyogre 27/404, Latias 302/302
+      after p2: Volcanion 363/363, Amoonguss 0/432
+
+  Turn 6
+      p2b <- Landorus-Therian comes in (329/329)
+              p1a Kyogre atk 1 fell
+              p1b Latias atk 1 fell
+      after p1: Kyogre 27/404, Latias 302/302
+      after p2: Volcanion 363/363, Landorus-Therian 329/329
+
+  Turn 7
+    p1 mcts: move 3 2, move 4
+      search (22000 visits): icebeam,1;protect,1 495v 252 | scald,1;protect,1 438v 218 | switch aegislash;switch dialga 395v 192 | icebeam,1;switch dialga 358v 170
+    p2 greedy: move 4 1, move 4 1
+      p1b Latias used Protect
+      p2b Landorus used Stone Edge -> p1a: Kyogre
+              p1a Kyogre -- critical hit
+      p1a Kyogre fainted
+      p2a Volcanion used Overheat -> p1b: Latias
+              p1b Latias -- move: Protect
+      after p1: Kyogre 0/404, Latias 302/302
+      after p2: Volcanion 363/363, Landorus-Therian 329/329
+
+  Turn 8
+      p1a <- Dialga comes in (341/341)
+      after p1: Dialga 341/341, Latias 302/302
+      after p2: Volcanion 363/363, Landorus-Therian 329/329
+
+  Turn 9
+    p1 mcts: move 2 2, move 3 2
+      search (7000 visits): flashcannon,1;psyshock,1 177v 108 | ancientpower,1;psyshock,1 159v 94 | ancientpower,0;psyshock,1 156v 91 | flashcannon,1;psyshock,0 146v 84
+    p2 greedy: move 4 1, move 4 1
+      p2b Landorus used Stone Edge -> p1a: Dialga
+      p1b Latias used Psyshock -> p2b: Landorus
+      p1a Dialga used Flash Cannon -> p2b: Landorus
+      p2b Landorus fainted
+      p2a Volcanion used Overheat -> p1a: Dialga  [[miss]]
+              p2a Volcanion -- MISSED
+      after p1: Dialga 302/341, Latias 302/302
+      after p2: Volcanion 363/363, Landorus-Therian 0/329
+
+  Turn 10
+      p2b <- Raikou comes in (384/384)
+      after p1: Dialga 302/341, Latias 302/302
+      after p2: Volcanion 363/363, Raikou 384/384
+
+  Turn 11
+    p1 mcts: move 3 1, move 3 2
+      search (7000 visits): ancientpower,0;psyshock,1 135v 58 | ancientpower,0;tailwind,1 120v 49 | ancientpower,1;tailwind,1 116v 46 | ancientpower,1;psyshock,1 116v 47
+    p2 greedy: move 4 1, move 4 1
+      p2b Raikou used Thunderbolt -> p1a: Dialga
+      p1b Latias used Psyshock -> p2b: Raikou
+      p1a Dialga used Ancient Power -> p2a: Volcanion
+      p2a Volcanion used Overheat -> p1a: Dialga
+              p2a Volcanion spa 2 fell
+      after p1: Dialga 168/341, Latias 302/302
+      after p2: Volcanion 243/363, Raikou 218/384
+
+  Turn 12
+    p1 mcts: move 3 2, move 3 2
+      search (7000 visits): ancientpower,1;psyshock,1 173v 82 | flashcannon,1;psyshock,1 134v 58 | switch aegislash;psyshock,1 131v 56 | switch kangaskhan;psyshock,1 119v 48
+    p2 greedy: move 4 1, move 4 1
+      p2b Raikou used Thunderbolt -> p1a: Dialga
+      p1b Latias used Psyshock -> p2b: Raikou
+      p1a Dialga used Ancient Power -> p2b: Raikou
+      p2b Raikou fainted
+      p2a Volcanion used Overheat -> p1a: Dialga
+              p2a Volcanion spa 2 fell
+      after p1: Dialga 50/341, Latias 302/302
+      after p2: Volcanion 243/363, Raikou 0/384
+
+  Turn 13
+    p1 mcts: move 1 1, move 3 1
+      search (65000 visits): dracometeor,0;psyshock,0 41654v 40571 | ancientpower,0;psyshock,0 2563v 2317 | dracometeor,0;tailwind,1 2557v 2311 | dracometeor,0;switch kangaskhan 2224v 1995
+    p2 greedy: move 1 1, pass
+      p1b Latias used Psyshock -> p2a: Volcanion
+      p1a Dialga used Draco Meteor -> p2a: Volcanion  [[miss]]
+              p1a Dialga -- MISSED
+      p2a Volcanion used Steam Eruption -> p1a: Dialga
+      after p1: Dialga 32/341, Latias 302/302
+      after p2: Volcanion 144/363, Raikou 0/384
+
+  Turn 14
+    p1 mcts: move 3 1, move 3 1
+      search (218000 visits): ancientpower,0;psyshock,0 150648v 150648 | dracometeor,0;psyshock,0 15944v 15521 | dracometeor,0;tailwind,1 10451v 10077 | dracometeor,0;switch kangaskhan 8199v 7855
+    p2 greedy: move 1 1, pass
+      p1b Latias used Psyshock -> p2a: Volcanion
+      p1a Dialga used Ancient Power -> p2a: Volcanion
+      p2a Volcanion fainted
+      after p1: Dialga 32/341, Latias 302/302
+      after p2: Volcanion 0/363, Raikou 0/384
+
+  RESULT: p1 wins

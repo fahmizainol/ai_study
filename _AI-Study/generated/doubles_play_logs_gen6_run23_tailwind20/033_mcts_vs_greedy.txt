@@ -1,0 +1,203 @@
+battle 33   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: ORAS Doubles OU: Aegislash, Deoxys-Attack, Amoonguss, Gardevoir, Talonflame, Landorus-Therian
+  p2: dpl rejects/geng sylv week 4 reject: Gengar-Mega, Sylveon, Amoonguss, Volcanion, Landorus-Therian, Thundurus
+
+  Turn 1
+    p1 mcts: move 1 1, move 1 1
+      search (35000 visits): shadowball,0;psychoboost,0 8072v 7831 | shadowball,0;switch amoonguss 335v 35 | flashcannon,1;switch amoonguss 314v 31 | flashcannon,1;switch landorustherian 313v 30
+    p2 greedy: move 2 1, move 3
+      p1b Deoxys used Psycho Boost -> p2a: Gengar
+              p1b Deoxys spa 2 fell
+      p2a Gengar fainted
+      p2b Sylveon used Hyper Voice -> p1a: Aegislash  [[spread] p1a,p1b]
+              p1b Deoxys used up its Focus Sash
+      p1a Aegislash used Shadow Ball -> p2b: Sylveon
+      after p1: Aegislash-Blade 279/324, Deoxys-Attack 1/241
+      after p2: Gengar-Mega 0/306, Sylveon 297/393
+
+  Turn 2
+      p2a <- Amoonguss comes in (432/432)
+      after p1: Aegislash-Blade 279/324, Deoxys-Attack 1/241
+      after p2: Amoonguss 432/432, Sylveon 297/393
+
+  Turn 3
+    p1 mcts: switch 6, move 1 1   (slot0 Aegislash-Blade -> Landorus-Therian)
+      search (53000 visits): switch landorustherian;psychoboost,0 41912v 41726 | shadowball,1;psychoboost,1 233v 52 | shadowball,0;extremespeed,1 119v 13 | flashcannon,1;superpower,1 117v 12
+    p2 greedy: move 3 2, move 3
+      p1a <- Landorus-Therian comes in (319/319)
+              p2a Amoonguss atk 1 fell
+              p2b Sylveon atk 1 fell
+      p1b Deoxys used Psycho Boost -> p2a: Amoonguss
+              p2a Amoonguss -- critical hit
+              p1b Deoxys spa 2 fell
+      p2a Amoonguss fainted
+      p2b Sylveon used Hyper Voice -> p1b: Deoxys  [[spread] p1a,p1b]
+      p1b Deoxys fainted
+      after p1: Landorus-Therian 166/319, Deoxys-Attack 0/241
+      after p2: Amoonguss 0/432, Sylveon 321/393
+
+  Turn 4
+      p1b <- Amoonguss comes in (432/432)
+      p2a <- Volcanion comes in (363/363)
+      after p1: Landorus-Therian 166/319, Amoonguss 432/432
+      after p2: Volcanion 363/363, Sylveon 321/393
+
+  Turn 5
+    p1 mcts: move 3 1, move 3 1
+      search (34000 visits): uturn,0;gigadrain,0 1979v 994 | uturn,1;switch gardevoir 1665v 821 | uturn,0;switch gardevoir 1599v 784 | uturn,1;gigadrain,0 1565v 766
+    p2 greedy: move 2 1, move 3
+      p1a Landorus used U-turn -> p2a: Volcanion
+      after p1: Landorus-Therian 166/319, Amoonguss 432/432
+      after p2: Volcanion 323/363, Sylveon 321/393
+
+  Turn 6
+      p1a <- Gardevoir comes in (279/279)
+      p2b Sylveon used Hyper Voice -> p1b: Amoonguss  [[spread] p1a,p1b]
+      p2a Volcanion used Steam Eruption -> p1a: Gardevoir
+              p1a Gardevoir -- critical hit
+      p1a Gardevoir fainted
+      p1b Amoonguss used Giga Drain -> p2a: Volcanion
+      after p1: Gardevoir 0/279, Amoonguss 406/432
+      after p2: Volcanion 232/363, Sylveon 345/393
+
+  Turn 7
+      p1a <- Landorus-Therian comes in (166/319)
+              p2a Volcanion atk 1 fell
+              p2b Sylveon atk 1 fell
+      after p1: Landorus-Therian 166/319, Amoonguss 406/432
+      after p2: Volcanion 232/363, Sylveon 345/393
+
+  Turn 8
+    p1 mcts: move 3 1, move 3 1
+      search (36000 visits): uturn,0;gigadrain,0 3617v 1540 | uturn,0;gigadrain,1 1525v 587 | uturn,0;spore,1 1506v 578 | uturn,0;switch talonflame 1328v 500
+    p2 greedy: move 2 1, move 3
+      p1a Landorus used U-turn -> p2a: Volcanion
+      after p1: Landorus-Therian 166/319, Amoonguss 406/432
+      after p2: Volcanion 192/363, Sylveon 345/393
+
+  Turn 9
+      p1a <- Talonflame comes in (297/297)
+      p2b Sylveon used Hyper Voice -> p1a: Talonflame  [[spread] p1a,p1b]
+              p1a Talonflame -- critical hit
+      p2a Volcanion used Steam Eruption -> p1a: Talonflame
+      p1a Talonflame fainted
+      p1b Amoonguss used Giga Drain -> p2a: Volcanion
+      after p1: Talonflame 0/297, Amoonguss 384/432
+      after p2: Volcanion 113/363, Sylveon 369/393
+
+  Turn 10
+      p1a <- Landorus-Therian comes in (166/319)
+              p2a Volcanion atk 1 fell
+              p2b Sylveon atk 1 fell
+      after p1: Landorus-Therian 166/319, Amoonguss 384/432
+      after p2: Volcanion 113/363, Sylveon 369/393
+
+  Turn 11
+    p1 mcts: move 3 2, move 2 1
+      search (39000 visits): uturn,1;spore,0 3102v 1041 | uturn,0;gigadrain,0 2841v 943 | uturn,0;gigadrain,1 2601v 853 | uturn,0;spore,1 2379v 770
+    p2 greedy: move 2 1, move 3
+      p1a Landorus used U-turn -> p2b: Sylveon
+      after p1: Landorus-Therian 166/319, Amoonguss 384/432
+      after p2: Volcanion 113/363, Sylveon 316/393
+
+  Turn 12
+      p1a <- Aegislash comes in (279/324)
+      p2b Sylveon used Hyper Voice -> p1b: Amoonguss  [[spread] p1a,p1b]
+      p2a Volcanion used Steam Eruption -> p1a: Aegislash
+      p1b Amoonguss used Spore -> p2a: Volcanion
+              p2a Volcanion -- item: Safety Goggles Spore
+      after p1: Aegislash 74/324, Amoonguss 317/432
+      after p2: Volcanion 113/363, Sylveon 340/393
+
+  Turn 13
+    p1 mcts: move 2 2, move 4
+      search (39000 visits): flashcannon,1;protect,1 1787v 482 | wideguard,0;switch landorustherian 1747v 469 | shadowball,0;protect,1 1651v 438 | wideguard,0;gigadrain,1 1640v 434
+    p2 greedy: move 2 1, move 3
+      p1b Amoonguss used Protect
+      p2b Sylveon used Hyper Voice -> p1a: Aegislash  [[spread] p1a]
+              p1b Amoonguss -- move: Protect
+      p1a Aegislash used Flash Cannon -> p2b: Sylveon
+      p2a Volcanion used Steam Eruption -> p1a: Aegislash
+      p1a Aegislash fainted
+      after p1: Aegislash 0/324, Amoonguss 317/432
+      after p2: Volcanion 113/363, Sylveon 104/393
+
+  Turn 14
+      p1a <- Landorus-Therian comes in (166/319)
+              p2a Volcanion atk 1 fell
+              p2b Sylveon atk 1 fell
+      after p1: Landorus-Therian 166/319, Amoonguss 317/432
+      after p2: Volcanion 113/363, Sylveon 104/393
+
+  Turn 15
+    p1 mcts: move 3 2, move 2 1
+      search (47000 visits): uturn,1;spore,0 3638v 810 | uturn,1;protect,1 3373v 741 | uturn,1;gigadrain,1 3141v 681 | uturn,1;spore,1 3031v 653
+    p2 greedy: move 2 1, move 3
+      p1a Landorus used U-turn -> p2b: Sylveon
+      p2b Sylveon used Hyper Voice -> p1a: Landorus  [[spread] p1a,p1b]
+      p2a Volcanion used Steam Eruption -> p1a: Landorus
+      p1a Landorus fainted
+      p1b Amoonguss used Spore -> p2a: Volcanion
+              p2a Volcanion -- item: Safety Goggles Spore
+      after p1: Landorus-Therian 0/319, Amoonguss 250/432
+      after p2: Volcanion 113/363, Sylveon 75/393
+
+  Turn 16
+    p1 mcts: pass, move 4
+      search (65000 visits): No Move;protect,1 50117v 9558 | No Move;gigadrain,0 3568v 474 | No Move;gigadrain,1 3267v 423 | No Move;spore,0 3249v 420
+    p2 greedy: move 2 2, move 3
+      p1b Amoonguss used Protect
+      p2b Sylveon used Hyper Voice -> p1b: Amoonguss
+              p1b Amoonguss -- move: Protect
+      p2a Volcanion used Steam Eruption -> p1b: Amoonguss
+              p1b Amoonguss -- move: Protect
+      after p1: Landorus-Therian 0/319, Amoonguss 250/432
+      after p2: Volcanion 113/363, Sylveon 99/393
+
+  Turn 17
+    p1 mcts: pass, move 4
+      search (56000 visits): No Move;protect,1 43784v 8438 | No Move;gigadrain,1 2814v 357 | No Move;spore,0 2771v 350 | No Move;gigadrain,0 2640v 327
+    p2 greedy: move 2 2, move 3
+      p1b Amoonguss used Protect
+      p2b Sylveon used Hyper Voice -> p1b: Amoonguss
+              p1b Amoonguss -- move: Protect
+      p2a Volcanion used Steam Eruption -> p1b: Amoonguss
+              p1b Amoonguss -- move: Protect
+      after p1: Landorus-Therian 0/319, Amoonguss 250/432
+      after p2: Volcanion 113/363, Sylveon 123/393
+
+  Turn 18
+    p1 mcts: pass, move 4
+      search (64000 visits): No Move;protect,1 48593v 9038 | No Move;spore,0 3485v 445 | No Move;gigadrain,0 3288v 412 | No Move;gigadrain,1 3199v 397
+    p2 greedy: move 2 2, move 3
+      p1b Amoonguss used Protect  [[still]]
+              p1b Amoonguss -- IT FAILED
+      p2b Sylveon used Hyper Voice -> p1b: Amoonguss
+      p2a Volcanion used Steam Eruption -> p1b: Amoonguss
+      after p1: Landorus-Therian 0/319, Amoonguss 34/432
+      after p2: Volcanion 113/363, Sylveon 147/393
+
+  Turn 19
+    p1 mcts: pass, move 4
+      search (81000 visits): No Move;protect,1 68626v 9899 | No Move;gigadrain,0 4162v 369 | No Move;spore,0 2660v 187 | No Move;ragepowder,1 2113v 125
+    p2 greedy: move 1, move 3
+      p1b Amoonguss used Protect
+      p2b Sylveon used Hyper Voice -> p1b: Amoonguss
+              p1b Amoonguss -- move: Protect
+      p2a Volcanion used Heat Wave -> p1b: Amoonguss
+              p1b Amoonguss -- move: Protect
+      after p1: Landorus-Therian 0/319, Amoonguss 34/432
+      after p2: Volcanion 113/363, Sylveon 171/393
+
+  Turn 20
+    p1 mcts: pass, move 4
+      search (81000 visits): No Move;protect,1 68478v 9988 | No Move;gigadrain,0 3451v 287 | No Move;spore,0 3377v 278 | No Move;ragepowder,1 2351v 155
+    p2 greedy: move 1, move 3
+      p1b Amoonguss used Protect  [[still]]
+              p1b Amoonguss -- IT FAILED
+      p2b Sylveon used Hyper Voice -> p1b: Amoonguss
+      p1b Amoonguss fainted
+      after p1: Landorus-Therian 0/319, Amoonguss 0/432
+      after p2: Volcanion 113/363, Sylveon 171/393
+
+  RESULT: p2 wins

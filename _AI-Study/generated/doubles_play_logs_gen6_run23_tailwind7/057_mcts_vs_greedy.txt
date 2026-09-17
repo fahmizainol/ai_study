@@ -1,0 +1,286 @@
+battle 57   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: Untitled 579: Kangaskhan-Mega, Amoonguss, Kyurem-Black, Volcanion, Landorus, Mew
+  p2: cb chu: Kangaskhan-Mega, Volcanion, Raichu, Bisharp, Cresselia, Landorus-Therian
+
+  Turn 1
+    p1 mcts: move 4, move 1 2
+      search (34000 visits): protect,0;sludgebomb,1 445v 417 | protect,0;gigadrain,1 444v 416 | switch volcanion;gigadrain,1 443v 415 | switch volcanion;spore,1 432v 403
+    p2 greedy: move 1 1, move 1 1
+      p1a Kangaskhan used Protect
+      p2a Kangaskhan used Fake Out -> p1a: Kangaskhan
+              p1a Kangaskhan -- move: Protect
+      p2b Volcanion used Steam Eruption -> p1a: Kangaskhan
+              p1a Kangaskhan -- move: Protect
+      p1b Amoonguss used Sludge Bomb -> p2b: Volcanion
+      after p1: Kangaskhan-Mega 414/414, Amoonguss 432/432
+      after p2: Kangaskhan-Mega 414/414, Volcanion 293/363
+
+  Turn 2
+    p1 mcts: move 4, move 1 2
+      search (30000 visits): protect,0;sludgebomb,1 412v 385 | protect,0;gigadrain,1 397v 369 | protect,0;spore,1 391v 363 | wish,0;gigadrain,1 381v 353
+    p2 greedy: move 1 1, move 1 1
+      p1a Kangaskhan used Protect
+      p2a Kangaskhan used Fake Out  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p2b Volcanion used Steam Eruption -> p1a: Kangaskhan
+              p1a Kangaskhan -- move: Protect
+      p1b Amoonguss used Sludge Bomb -> p2b: Volcanion
+              p2b Volcanion is now psn
+      after p1: Kangaskhan-Mega 414/414, Amoonguss 432/432
+      after p2: Kangaskhan-Mega 414/414, Volcanion 185/363
+
+  Turn 3
+    p1 mcts: move 4, move 1 2
+      search (39000 visits): protect,0;sludgebomb,1 478v 454 | protect,0;gigadrain,1 469v 444 | switch volcanion;gigadrain,1 461v 436 | wish,0;gigadrain,1 454v 429
+    p2 greedy: move 1 1, move 1 1
+      p1a Kangaskhan used Protect  [[still]]
+              p1a Kangaskhan -- IT FAILED
+      p2a Kangaskhan used Fake Out  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p2b Volcanion used Steam Eruption -> p1a: Kangaskhan
+      p1b Amoonguss used Sludge Bomb -> p2b: Volcanion
+      after p1: Kangaskhan-Mega 240/414, Amoonguss 432/432
+      after p2: Kangaskhan-Mega 414/414, Volcanion 76/363
+
+  Turn 4
+    p1 mcts: move 4, move 2 2
+      search (37000 visits): protect,0;gigadrain,1 447v 418 | protect,0;sludgebomb,1 438v 409 | switch volcanion;sludgebomb,1 434v 405 | switch volcanion;gigadrain,1 429v 400
+    p2 greedy: move 1 1, move 1 1
+      p1a Kangaskhan used Protect
+      p2a Kangaskhan used Fake Out  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p2b Volcanion used Steam Eruption -> p1a: Kangaskhan
+              p1a Kangaskhan -- move: Protect
+      p1b Amoonguss used Giga Drain -> p2b: Volcanion
+      p2b Volcanion fainted
+      after p1: Kangaskhan-Mega 240/414, Amoonguss 432/432
+      after p2: Kangaskhan-Mega 414/414, Volcanion 0/363
+
+  Turn 5
+      p2b <- Raichu comes in (261/261)
+      after p1: Kangaskhan-Mega 240/414, Amoonguss 432/432
+      after p2: Kangaskhan-Mega 414/414, Raichu 261/261
+
+  Turn 6
+    p1 mcts: switch 5, switch 3   (slot0 Kangaskhan-Mega -> Landorus; slot1 Amoonguss -> Kyurem-Black)
+      search (24000 visits): switch landorus;switch kyuremblack 1691v 1101 | switch landorus;switch volcanion 1147v 724 | switch volcanion;sludgebomb,1 945v 580 | switch landorus;sludgebomb,1 625v 363
+    p2 greedy: move 1 1, move 1 1
+      p1a <- Landorus comes in (319/319)
+      p1b <- Kyurem-Black comes in (418/418)
+      p2a Kangaskhan used Fake Out  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p2b Raichu used Volt Tackle -> p1a: Landorus
+              p1a Landorus -- IMMUNE
+      after p1: Landorus 319/319, Kyurem-Black 418/418
+      after p2: Kangaskhan-Mega 414/414, Raichu 261/261
+
+  Turn 7
+    p1 mcts: switch 3, move 2 2   (slot0 Landorus -> Amoonguss)
+      search (29000 visits): switch amoonguss;icebeam,1 415v 65 | switch amoonguss;earthpower,1 391v 58 | uturn,0;earthpower,1 372v 53 | hiddenpower,0;earthpower,1 366v 52
+    p2 greedy: move 1 1, move 1 1
+      p1a <- Amoonguss comes in (432/432)
+      p2a Kangaskhan used Fake Out  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p2b Raichu used Volt Tackle -> p1a: Amoonguss
+      p1b Kyurem used Ice Beam -> p2b: Raichu
+      p2b Raichu fainted
+      after p1: Amoonguss 304/432, Kyurem-Black 418/418
+      after p2: Kangaskhan-Mega 414/414, Raichu 0/261
+
+  Turn 8
+      p2b <- Bisharp comes in (272/272)
+      after p1: Amoonguss 304/432, Kyurem-Black 418/418
+      after p2: Kangaskhan-Mega 414/414, Bisharp 272/272
+
+  Turn 9
+    p1 mcts: move 2 1, switch 5   (slot1 Kyurem-Black -> Kangaskhan-Mega)
+      search (30000 visits): gigadrain,0;switch kangaskhanmega 10212v 9398 | sludgebomb,0;earthpower,1 602v 194 | spore,1;earthpower,1 578v 184 | spore,0;earthpower,1 561v 177
+    p2 greedy: move 1 1, move 2 1
+      p1b <- Kangaskhan-Mega comes in (240/414)
+      p2a Kangaskhan used Fake Out  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p2b Bisharp used Sucker Punch -> p1a: Amoonguss
+      p1a Amoonguss used Giga Drain -> p2a: Kangaskhan
+      after p1: Amoonguss 151/432, Kangaskhan-Mega 240/414
+      after p2: Kangaskhan-Mega 347/414, Bisharp 200/272
+
+  Turn 10
+    p1 mcts: move 3 2, move 1
+      search (83000 visits): spore,1;substitute,1 962v 218 | ragepowder,0;substitute,1 930v 209 | gigadrain,0;substitute,1 929v 208 | sludgebomb,0;substitute,1 928v 208
+    p2 greedy: move 1 1, move 2 1
+      p2a Kangaskhan used Fake Out  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p2b Bisharp used Sucker Punch  [[still]]
+              p2b Bisharp -- IT FAILED
+      p1b Kangaskhan used Substitute
+              p1b Kangaskhan gained Substitute
+      p1a Amoonguss used Spore -> p2b: Bisharp
+              p2b Bisharp is now slp
+      after p1: Amoonguss 151/432, Kangaskhan-Mega 137/414
+      after p2: Kangaskhan-Mega 347/414, Bisharp 200/272
+
+  Turn 11
+    p1 mcts: move 3 2, switch 4   (slot1 Kangaskhan-Mega -> Volcanion)
+      search (197000 visits): spore,1;switch volcanion 35046v 4332 | gigadrain,1;switch volcanion 6906v 625 | gigadrain,1;substitute,1 2705v 149 | switch landorus;seismictoss,1 2686v 147
+    p2 greedy: move 1 2, move 2 2
+      p1b <- Volcanion comes in (364/364)
+      p2a Kangaskhan used Fake Out  [[still]]
+              p2a Kangaskhan -- IT FAILED
+              p2b Bisharp COULD NOT MOVE (slp)
+      p1a Amoonguss used Spore -> p2b: Bisharp
+              p2b Bisharp -- IT FAILED
+      after p1: Amoonguss 151/432, Volcanion 364/364
+      after p2: Kangaskhan-Mega 347/414, Bisharp 200/272
+
+  Turn 12
+    p1 mcts: switch 4, move 4 1   (slot0 Amoonguss -> Kangaskhan-Mega)
+      search (36000 visits): switch kangaskhanmega;earthpower,0 410v 394 | ragepowder,0;switch landorus 395v 379 | switch kyuremblack;overheat,1 389v 373 | switch landorus;switch kangaskhanmega 372v 356
+    p2 greedy: move 1 1, move 2 1
+      p1a <- Kangaskhan-Mega comes in (137/414)
+      p2a Kangaskhan used Fake Out  [[still]]
+              p2a Kangaskhan -- IT FAILED
+              p2b Bisharp COULD NOT MOVE (slp)
+      p1b Volcanion used Earth Power -> p2a: Kangaskhan
+      after p1: Kangaskhan-Mega 137/414, Volcanion 364/364
+      after p2: Kangaskhan-Mega 252/414, Bisharp 200/272
+
+  Turn 13
+    p1 mcts: switch 5, move 1 2   (slot0 Kangaskhan-Mega -> Kyurem-Black)
+      search (72000 visits): switch kyuremblack;steameruption,1 1981v 767 | substitute,0;switch landorus 1682v 636 | switch kyuremblack;steameruption,0 1591v 596 | switch kyuremblack;switch mew 1197v 427
+    p2 greedy: move 1 1, move 2 1
+      p1a <- Kyurem-Black comes in (418/418)
+      p2a Kangaskhan used Fake Out  [[still]]
+              p2a Kangaskhan -- IT FAILED
+              p2b Bisharp is cured of slp
+      p2b Bisharp used Sucker Punch  [[still]]
+              p2b Bisharp -- IT FAILED
+      p1b Volcanion used Steam Eruption -> p2b: Bisharp
+      p2b Bisharp fainted
+      after p1: Kyurem-Black 418/418, Volcanion 364/364
+      after p2: Kangaskhan-Mega 252/414, Bisharp 0/272
+
+  Turn 14
+      p2b <- Cresselia comes in (410/410)
+      after p1: Kyurem-Black 418/418, Volcanion 364/364
+      after p2: Kangaskhan-Mega 252/414, Cresselia 410/410
+
+  Turn 15
+    p1 mcts: move 4, move 4 2
+      search (32000 visits): protect,0;earthpower,1 13030v 12893 | icebeam,0;heatwave,0 1635v 792 | substitute,0;switch mew 1563v 753 | switch mew;steameruption,0 534v 215
+    p2 greedy: move 1 1, move 3 1
+      p1a Kyurem used Protect
+      p2a Kangaskhan used Fake Out  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p2b Cresselia used Psychic -> p1a: Kyurem
+              p1a Kyurem -- move: Protect
+      p1b Volcanion used Earth Power -> p2b: Cresselia
+              p2b Cresselia -- IMMUNE
+      after p1: Kyurem-Black 418/418, Volcanion 364/364
+      after p2: Kangaskhan-Mega 252/414, Cresselia 410/410
+
+  Turn 16
+    p1 mcts: move 3 1, switch 5   (slot1 Volcanion -> Kangaskhan-Mega)
+      search (30000 visits): earthpower,0;switch kangaskhanmega 1679v 941 | switch amoonguss;steameruption,1 929v 461 | switch landorus;switch kangaskhanmega 842v 412 | switch mew;switch landorus 681v 321
+    p2 greedy: move 1 1, move 3 1
+      p1b <- Kangaskhan-Mega comes in (137/414)
+      p2a Kangaskhan used Fake Out  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p1a Kyurem used Earth Power -> p2a: Kangaskhan
+      p2b Cresselia used Psychic -> p1a: Kyurem
+      after p1: Kyurem-Black 311/418, Kangaskhan-Mega 137/414
+      after p2: Kangaskhan-Mega 155/414, Cresselia 410/410
+
+  Turn 17
+    p1 mcts: move 2 2, move 1
+      search (46000 visits): icebeam,1;substitute,1 564v 552 | icebeam,1;wish,1 561v 549 | earthpower,1;substitute,1 561v 549 | icebeam,1;protect,1 557v 545
+    p2 greedy: move 1 2, move 3 2
+      p2a Kangaskhan used Fake Out  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p1a Kyurem used Ice Beam -> p2b: Cresselia
+      p1b Kangaskhan used Substitute
+              p1b Kangaskhan gained Substitute
+      p2b Cresselia used Psychic -> p1b: Kangaskhan
+              p1b Kangaskhan -- move: Substitute
+      after p1: Kyurem-Black 337/418, Kangaskhan-Mega 34/414
+      after p2: Kangaskhan-Mega 155/414, Cresselia 275/410
+
+  Turn 18
+    p1 mcts: move 4, move 2 2
+      search (96000 visits): protect,0;seismictoss,1 10953v 2604 | switch amoonguss;seismictoss,1 6498v 1456 | switch landorus;protect,1 996v 131 | earthpower,0;switch amoonguss 995v 131
+    p2 greedy: move 1 2, move 3 2
+      p1a Kyurem used Protect
+      p2a Kangaskhan used Fake Out  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p1b Kangaskhan used Seismic Toss -> p2b: Cresselia
+      p2b Cresselia used Psychic -> p1b: Kangaskhan
+              p1b Kangaskhan lost Substitute
+      after p1: Kyurem-Black 363/418, Kangaskhan-Mega 34/414
+      after p2: Kangaskhan-Mega 155/414, Cresselia 175/410
+
+  Turn 19
+    p1 mcts: move 2 2, move 1
+      search (52000 visits): icebeam,1;substitute,1 633v 625 | earthpower,1;substitute,1 628v 619 | icebeam,1;wish,1 627v 618 | icebeam,1;protect,1 625v 616
+    p2 greedy: move 1 2, move 3 2
+      p2a Kangaskhan used Fake Out  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p1a Kyurem used Ice Beam -> p2b: Cresselia
+      p1b Kangaskhan used Substitute
+              p1b Kangaskhan -- IT FAILED
+      p2b Cresselia used Psychic -> p1b: Kangaskhan
+      p1b Kangaskhan fainted
+      after p1: Kyurem-Black 389/418, Kangaskhan-Mega 0/414
+      after p2: Kangaskhan-Mega 155/414, Cresselia 30/410
+
+  Turn 20
+      p1b <- Landorus comes in (319/319)
+      after p1: Kyurem-Black 389/418, Landorus 319/319
+      after p2: Kangaskhan-Mega 155/414, Cresselia 30/410
+
+  Turn 21
+    p1 mcts: switch 4, move 4 2   (slot0 Kyurem-Black -> Amoonguss)
+      search (46000 visits): switch amoonguss;hiddenpower,1 4808v 2302 | switch amoonguss;sludgebomb,1 3786v 1780 | switch mew;sludgebomb,1 1113v 453 | switch mew;hiddenpower,1 1095v 444
+    p2 greedy: move 2 1, move 3 1
+      p1a <- Amoonguss comes in (295/432)
+      p1b Landorus used Hidden Power -> p2b: Cresselia
+      p2b Cresselia fainted
+      p2a Kangaskhan used Seismic Toss -> p1a: Amoonguss
+      after p1: Amoonguss 95/432, Landorus 319/319
+      after p2: Kangaskhan-Mega 17/414, Cresselia 0/410
+
+  Turn 22
+      p2b <- Landorus-Therian comes in (382/382)
+              p1a Amoonguss atk 1 fell
+              p1b Landorus atk 1 fell
+      after p1: Amoonguss 95/432, Landorus 319/319
+      after p2: Kangaskhan-Mega 17/414, Landorus-Therian 382/382
+
+  Turn 23
+    p1 mcts: move 4, switch 5   (slot1 Landorus -> Volcanion)
+      search (35000 visits): ragepowder,0;switch volcanion 1956v 1884 | spore,0;switch volcanion 1949v 1878 | spore,1;hiddenpower,0 1528v 1451 | sludgebomb,0;switch mew 1291v 1220
+    p2 greedy: move 2 1, move 3 1
+      p1b <- Volcanion comes in (364/364)
+      p1a Amoonguss used Rage Powder
+      p2a Kangaskhan used Seismic Toss -> p1a: Amoonguss
+      p2a Kangaskhan fainted
+      p1a Amoonguss fainted
+      p2b Landorus used Superpower -> p1b: Volcanion
+              p2b Landorus atk 1 fell
+              p2b Landorus def 1 fell
+      after p1: Amoonguss 0/432, Volcanion 260/364
+      after p2: Kangaskhan-Mega 0/414, Landorus-Therian 382/382
+
+  Turn 24
+      p1a <- Kyurem-Black comes in (389/418)
+      after p1: Kyurem-Black 389/418, Volcanion 260/364
+      after p2: Kangaskhan-Mega 0/414, Landorus-Therian 382/382
+
+  Turn 25
+    p1 mcts: move 2 2, move 1 2
+      search (754000 visits): icebeam,1;steameruption,1 121654v 121654 | icebeam,1;heatwave,1 121652v 121652 | icebeam,1;overheat,1 121652v 121652 | icebeam,1;earthpower,1 121652v 121652
+    p2 greedy: pass, move 3 2
+      p1a Kyurem used Ice Beam -> p2b: Landorus
+      p2b Landorus fainted
+      after p1: Kyurem-Black 389/418, Volcanion 260/364
+      after p2: Kangaskhan-Mega 0/414, Landorus-Therian 0/382
+
+  RESULT: p1 wins

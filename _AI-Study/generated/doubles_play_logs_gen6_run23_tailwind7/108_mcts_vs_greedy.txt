@@ -1,0 +1,132 @@
+battle 108   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: dpl rejects/terracott week 1 reject: Gengar-Mega, Whimsicott, Terrakion, Landorus-Therian, Hoopa-Unbound, Kyurem-Black
+  p2: ORAS Doubles OU: Ninetales, Liepard, Deoxys-Speed, Blastoise-Mega, Tangela, Victini
+
+  Turn 1
+    p1 mcts: move 4, move 1 2
+      search (35000 visits): protect,0;moonblast,1 2906v 2377 | sludgebomb,1;protect,1 2814v 2298 | sludgebomb,1;switch hoopaunbound 2241v 1813 | sludgebomb,1;switch landorustherian 2222v 1790
+    p2 greedy: move 2 1, move 4 1
+      p1a Gengar used Protect
+      p2b Liepard used Sucker Punch  [[still]]
+              p2b Liepard -- IT FAILED
+      p1b Whimsicott used Moonblast -> p2b: Liepard
+      p2b Liepard fainted
+      p2a Ninetales used Overheat -> p1a: Gengar
+              p1a Gengar -- move: Protect
+      after p1: Gengar-Mega 261/261, Whimsicott 261/261
+      after p2: Ninetales 288/288, Liepard 0/269
+
+  Turn 2
+      p2b <- Deoxys-Speed comes in (239/239)
+      after p1: Gengar-Mega 261/261, Whimsicott 261/261
+      after p2: Ninetales 288/288, Deoxys-Speed 239/239
+
+  Turn 3
+    p1 mcts: move 4, switch 4   (slot1 Whimsicott -> Landorus-Therian)
+      search (30000 visits): protect,0;switch landorustherian 871v 418 | shadowball,1;switch landorustherian 818v 389 | sludgebomb,1;switch landorustherian 812v 385 | shadowball,1;protect,1 796v 376
+    p2 greedy: move 2 1, move 1 1
+      p1b <- Landorus-Therian comes in (319/319)
+              p2a Ninetales atk 1 fell
+              p2b Deoxys atk 1 fell
+      p1a Gengar used Protect  [[still]]
+              p1a Gengar -- IT FAILED
+      p2b Deoxys used Psycho Boost -> p1a: Gengar
+              p2b Deoxys spa 2 fell
+      p1a Gengar fainted
+      p2a Ninetales used Overheat -> p1b: Landorus
+              p2a Ninetales spa 2 fell
+      p1b Landorus fainted
+      after p1: Gengar-Mega 0/261, Landorus-Therian 0/319
+      after p2: Ninetales 288/288, Deoxys-Speed 216/239
+
+  Turn 4
+      p1a <- Terrakion comes in (323/323)
+      p1b <- Whimsicott comes in (261/261)
+      after p1: Terrakion 323/323, Whimsicott 261/261
+      after p2: Ninetales 288/288, Deoxys-Speed 216/239
+
+  Turn 5
+    p1 mcts: move 2, move 1 1
+      search (11000 visits): rockslide,0;moonblast,0 551v 278 | stoneedge,0;moonblast,1 451v 218 | rockslide,0;tailwind,1 318v 142 | stoneedge,1;moonblast,0 307v 136
+    p2 greedy: move 2 1, move 1 1
+      p2b Deoxys used Psycho Boost -> p1a: Terrakion
+              p2b Deoxys spa 2 fell
+      p1b Whimsicott used Moonblast -> p2a: Ninetales
+      p1a Terrakion used Rock Slide -> p2b: Deoxys  [[spread] p2a,p2b]
+      p2a Ninetales fainted
+      after p1: Terrakion 32/323, Whimsicott 261/261
+      after p2: Ninetales 0/288, Deoxys-Speed 93/239
+
+  Turn 6
+      p2a <- Blastoise-Mega comes in (362/362)
+      after p1: Terrakion 32/323, Whimsicott 261/261
+      after p2: Blastoise-Mega 362/362, Deoxys-Speed 93/239
+
+  Turn 7
+    p1 mcts: move 3 1, move 1 1
+      search (16000 visits): closecombat,0;moonblast,0 542v 210 | closecombat,0;protect,1 508v 193 | switch hoopaunbound;moonblast,0 477v 179 | stoneedge,0;moonblast,0 462v 171
+    p2 greedy: move 1, move 1 1
+      p2b Deoxys used Psycho Boost -> p1a: Terrakion  [[miss]]
+              p2b Deoxys -- MISSED
+      p1b Whimsicott used Moonblast -> p2a: Blastoise
+              p2a Blastoise spa 1 fell
+      p1a Terrakion used Close Combat -> p2a: Blastoise
+              p1a Terrakion def 1 fell
+              p1a Terrakion spd 1 fell
+      p2a Blastoise used Water Spout -> p1b: Whimsicott  [[spread] p1a,p1b]
+      p1a Terrakion fainted
+      after p1: Terrakion 0/323, Whimsicott 251/261
+      after p2: Blastoise-Mega 81/362, Deoxys-Speed 93/239
+
+  Turn 8
+      p1a <- Hoopa-Unbound comes in (301/301)
+      after p1: Hoopa-Unbound 301/301, Whimsicott 251/261
+      after p2: Blastoise-Mega 81/362, Deoxys-Speed 93/239
+
+  Turn 9
+    p1 mcts: move 2 1, move 2
+      search (26000 visits): hyperspacehole,0;tailwind,1 2407v 1095 | hyperspacefury,0;tailwind,1 2030v 907 | hyperspacefury,1;moonblast,0 1029v 418 | hyperspacehole,0;switch kyuremblack 853v 335
+    p2 greedy: move 1, move 1 2
+      p1b Whimsicott used Tailwind
+      -sidestart p1: A move: Tailwind
+      p2b Deoxys used Psycho Boost -> p1b: Whimsicott
+              p2b Deoxys spa 2 fell
+      p1a Hoopa used Hyperspace Hole -> p2a: Blastoise
+      p2a Blastoise fainted
+      after p1: Hoopa-Unbound 271/301, Whimsicott 148/261
+      after p2: Blastoise-Mega 0/362, Deoxys-Speed 70/239
+
+  Turn 10
+      p2a <- Tangela comes in (334/334)
+      after p1: Hoopa-Unbound 271/301, Whimsicott 148/261
+      after p2: Tangela 334/334, Deoxys-Speed 70/239
+
+  Turn 11
+    p1 mcts: move 2 1, move 1 1
+      search (17000 visits): hyperspacehole,0;moonblast,0 1283v 595 | hyperspacefury,0;moonblast,0 1123v 511 | hyperspacefury,1;moonblast,0 946v 420 | hyperspacehole,0;switch kyuremblack 630v 259
+    p2 greedy: move 3 2, move 1 2
+      p1b Whimsicott used Moonblast -> p2a: Tangela
+      p1a Hoopa used Hyperspace Hole -> p2a: Tangela
+      p2a Tangela fainted
+      p2b Deoxys used Psycho Boost -> p1b: Whimsicott
+      after p1: Hoopa-Unbound 241/301, Whimsicott 69/261
+      after p2: Tangela 0/334, Deoxys-Speed 47/239
+
+  Turn 12
+      p2a <- Victini comes in (341/341)
+      after p1: Hoopa-Unbound 241/301, Whimsicott 69/261
+      after p2: Victini 341/341, Deoxys-Speed 47/239
+
+  Turn 13
+    p1 mcts: move 1 1, move 1 2
+      search (159000 visits): hyperspacefury,0;moonblast,1 132598v 130661 | hyperspacefury,0;switch kyuremblack 9679v 9186 | hyperspacefury,0;protect,1 3350v 3063 | hyperspacefury,0;moonblast,0 3084v 2809
+    p2 greedy: move 1 2, move 1 2
+      p1b Whimsicott used Moonblast -> p2b: Deoxys
+      p2b Deoxys fainted
+      p1a Hoopa used Hyperspace Fury -> p2a: Victini
+              p1a Hoopa def 1 fell
+      p2a Victini fainted
+      after p1: Hoopa-Unbound 211/301, Whimsicott 69/261
+      after p2: Victini 0/341, Deoxys-Speed 0/239
+
+  RESULT: p1 wins

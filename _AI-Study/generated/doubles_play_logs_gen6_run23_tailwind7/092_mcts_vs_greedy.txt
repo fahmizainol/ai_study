@@ -1,0 +1,180 @@
+battle 92   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: ORAS Doubles OU: Tyranitar, Gyarados, Excadrill, Latios, Aerodactyl-Mega, Amoonguss
+  p2: Copy of Untitled 577: Kangaskhan-Mega, Bisharp, Deoxys-Attack, Amoonguss, Landorus, Talonflame
+
+  Turn 1
+    p1 mcts: move 4, move 1
+      search (58000 visits): protect,0;dragondance,1 1038v 124 | taunt,1;dragondance,1 993v 116 | switch amoonguss;dragondance,1 938v 105 | thunderwave,1;dragondance,1 883v 95
+    p2 greedy: move 3 1, move 2 1
+      p1a Tyranitar used Protect
+      p2a Kangaskhan used Sucker Punch  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p2b Bisharp used Sucker Punch  [[still]]
+              p2b Bisharp -- IT FAILED
+      p1b Gyarados used Dragon Dance
+              p1b Gyarados atk 1 rose
+              p1b Gyarados spe 1 rose
+      after p1: Tyranitar 404/404, Gyarados 336/336
+      after p2: Kangaskhan-Mega 389/414, Bisharp 271/271
+
+  Turn 2
+    p1 mcts: move 1, move 1
+      search (49000 visits): rockslide,0;dragondance,1 4733v 1391 | rockslide,0;switch excadrill 1921v 490 | protect,0;dragondance,1 1075v 236 | taunt,0;waterfall,1 996v 213
+    p2 greedy: move 3 1, move 2 1
+      p2a Kangaskhan used Sucker Punch -> p1a: Tyranitar
+      p2b Bisharp used Sucker Punch -> p1a: Tyranitar
+      p1b Gyarados used Dragon Dance
+              p1b Gyarados atk 1 rose
+              p1b Gyarados spe 1 rose
+      p1a Tyranitar used Rock Slide -> p2b: Bisharp  [[spread] p2a]
+              p1a Tyranitar -- MISSED
+              p2a Kangaskhan -- critical hit
+      after p1: Tyranitar 276/404, Gyarados 336/336
+      after p2: Kangaskhan-Mega 225/414, Bisharp 271/271
+
+  Turn 3
+    p1 mcts: move 2 1, move 2 1
+      search (61000 visits): thunderwave,0;waterfall,0 1211v 172 | switch amoonguss;waterfall,0 1194v 168 | protect,0;waterfall,0 1190v 167 | switch amoonguss;waterfall,1 1157v 161
+    p2 greedy: move 3 1, move 2 1
+      p2a Kangaskhan used Sucker Punch  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p2b Bisharp used Sucker Punch  [[still]]
+              p2b Bisharp -- IT FAILED
+      p1b Gyarados used Waterfall -> p2a: Kangaskhan
+      p2a Kangaskhan fainted
+      p1a Tyranitar used Thunder Wave -> p2b: Bisharp
+              p2b Bisharp is now par
+      after p1: Tyranitar 276/404, Gyarados 336/336
+      after p2: Kangaskhan-Mega 0/414, Bisharp 271/271
+
+  Turn 4
+      p2a <- Deoxys-Attack comes in (241/241)
+      after p1: Tyranitar 276/404, Gyarados 336/336
+      after p2: Deoxys-Attack 241/241, Bisharp 271/271
+
+  Turn 5
+    p1 mcts: switch 6, move 2 2   (slot0 Tyranitar -> Amoonguss)
+      search (32000 visits): switch amoonguss;waterfall,1 11061v 8446 | rockslide,0;waterfall,1 3048v 2175 | rockslide,0;doubleedge,0 1194v 795 | switch latios;doubleedge,1 940v 619
+    p2 greedy: move 2 1, move 2 1
+      p1a <- Amoonguss comes in (432/432)
+      p2b Bisharp used Sucker Punch  [[still]]
+              p2b Bisharp -- IT FAILED
+      p1b Gyarados used Waterfall -> p2b: Bisharp
+              p2b Bisharp used up its Focus Sash
+      p2a Deoxys used Psycho Boost -> p1a: Amoonguss
+              p2a Deoxys spa 2 fell
+      p1a Amoonguss fainted
+      after p1: Amoonguss 0/432, Gyarados 336/336
+      after p2: Deoxys-Attack 202/241, Bisharp 1/271
+
+  Turn 6
+      p1a <- Excadrill comes in (369/369)
+      after p1: Excadrill 369/369, Gyarados 336/336
+      after p2: Deoxys-Attack 202/241, Bisharp 1/271
+
+  Turn 7
+    p1 mcts: switch 6, move 3 2   (slot0 Excadrill -> Tyranitar)
+      search (42000 visits): switch tyranitar;doubleedge,1 1503v 307 | ironhead,1;waterfall,0 1164v 219 | ironhead,0;doubleedge,1 1026v 184 | protect,0;waterfall,0 1013v 181
+    p2 greedy: move 2 1, move 2 1
+      p1a <- Tyranitar comes in (276/404)
+      p2b Bisharp used Sucker Punch  [[still]]
+              p2b Bisharp -- IT FAILED
+      p1b Gyarados used Double-Edge -> p2b: Bisharp
+      p2b Bisharp fainted
+      p2a Deoxys used Psycho Boost -> p1a: Tyranitar
+              p1a Tyranitar -- IMMUNE
+      after p1: Tyranitar 276/404, Gyarados 335/336
+      after p2: Deoxys-Attack 202/241, Bisharp 0/271
+
+  Turn 8
+      p2b <- Amoonguss comes in (432/432)
+      after p1: Tyranitar 276/404, Gyarados 335/336
+      after p2: Deoxys-Attack 202/241, Amoonguss 432/432
+
+  Turn 9
+    p1 mcts: move 1, move 2 1
+      search (33000 visits): rockslide,0;waterfall,0 3184v 1673 | taunt,1;waterfall,0 1640v 809 | rockslide,0;doubleedge,0 1532v 750 | thunderwave,1;waterfall,0 1057v 492
+    p2 greedy: move 2 1, move 3 1
+      p1b Gyarados used Waterfall -> p2a: Deoxys
+      p2a Deoxys fainted
+      p1a Tyranitar used Rock Slide -> p2b: Amoonguss
+              p2b Amoonguss COULD NOT MOVE (flinch)
+      after p1: Tyranitar 276/404, Gyarados 335/336
+      after p2: Deoxys-Attack 0/241, Amoonguss 314/432
+
+  Turn 10
+      p2a <- Landorus comes in (382/382)
+      after p1: Tyranitar 276/404, Gyarados 335/336
+      after p2: Landorus 382/382, Amoonguss 314/432
+
+  Turn 11
+    p1 mcts: move 1, move 2 1
+      search (41000 visits): rockslide,0;waterfall,0 5202v 3122 | protect,0;waterfall,0 3190v 1857 | thunderwave,1;waterfall,0 2723v 1567 | switch latios;waterfall,0 2486v 1420
+    p2 greedy: move 1 1, move 3 1
+      p1b Gyarados used Waterfall -> p2a: Landorus
+      p2a Landorus fainted
+      p1a Tyranitar used Rock Slide -> p2b: Amoonguss
+      p2b Amoonguss used Energy Ball -> p1a: Tyranitar
+              p1a Tyranitar spd 1 fell
+      after p1: Tyranitar 126/404, Gyarados 335/336
+      after p2: Landorus 0/382, Amoonguss 184/432
+
+  Turn 12
+      p2a <- Talonflame comes in (320/320)
+      after p1: Tyranitar 126/404, Gyarados 335/336
+      after p2: Talonflame 320/320, Amoonguss 184/432
+
+  Turn 13
+    p1 mcts: move 1, move 2 1
+      search (185000 visits): rockslide,0;waterfall,0 125194v 114965 | rockslide,0;doubleedge,0 44124v 40098 | rockslide,0;doubleedge,1 1344v 1072 | rockslide,0;waterfall,1 998v 774
+    p2 greedy: move 1 1, move 3 1
+      p2a Talonflame used Brave Bird -> p1a: Tyranitar
+      p1b Gyarados used Waterfall -> p2a: Talonflame
+      p2a Talonflame fainted
+      p1a Tyranitar used Rock Slide -> p2b: Amoonguss
+      p2b Amoonguss used Energy Ball -> p1a: Tyranitar
+      p1a Tyranitar fainted
+      after p1: Tyranitar 0/404, Gyarados 335/336
+      after p2: Talonflame 0/320, Amoonguss 52/432
+
+  Turn 14
+      p1a <- Latios comes in (301/301)
+      after p1: Latios 301/301, Gyarados 335/336
+      after p2: Talonflame 0/320, Amoonguss 52/432
+
+  Turn 15
+    p1 mcts: switch 5, move 1   (slot0 Latios -> Aerodactyl-Mega)
+      search (66000 visits): switch aerodactylmega;dragondance,1 9278v 4332 | psyshock,1;dragondance,1 8149v 3768 | dracometeor,1;dragondance,1 8075v 3732 | hiddenpower,1;dragondance,1 8066v 3727
+    p2 greedy: pass, move 3 2
+      p1a <- Aerodactyl-Mega comes in (315/315)
+      p1b Gyarados used Dragon Dance
+              p1b Gyarados atk 1 rose
+              p1b Gyarados spe 1 rose
+      p2b Amoonguss used Energy Ball -> p1b: Gyarados
+      after p1: Aerodactyl-Mega 315/315, Gyarados 248/336
+      after p2: Talonflame 0/320, Amoonguss 52/432
+
+  Turn 16
+    p1 mcts: move 2 2, move 1
+      search (66000 visits): skydrop,1;dragondance,1 12995v 5697 | rockslide,1;dragondance,1 6347v 2696 | switch latios;dragondance,1 3658v 1470 | taunt,1;dragondance,1 3411v 1362
+    p2 greedy: pass, move 3 2
+      p1b Gyarados used Dragon Dance
+              p1b Gyarados atk 1 rose
+              p1b Gyarados spe 1 rose
+      p1a Aerodactyl used Sky Drop  [[still]]
+      after p1: Aerodactyl-Mega 315/315, Gyarados 248/336
+      after p2: Talonflame 0/320, Amoonguss 52/432
+
+  Turn 17
+    p1 mcts: move 1, move 1
+      search (60000 visits): skydrop,1;dragondance,1 29286v 11038 | skydrop,1;waterfall,1 10487v 3760 | skydrop,1;doubleedge,1 10166v 3637 | skydrop,1;protect,1 9505v 3386
+    p2 greedy: pass, move 3 2
+      p1b Gyarados used Dragon Dance
+              p1b Gyarados atk 1 rose
+              p1b Gyarados spe 1 rose
+      p1a Aerodactyl used Sky Drop -> p2b: Amoonguss  [[from] lockedmove]
+      p2b Amoonguss fainted
+      after p1: Aerodactyl-Mega 263/315, Gyarados 248/336
+      after p2: Talonflame 0/320, Amoonguss 0/432
+
+  RESULT: p1 wins

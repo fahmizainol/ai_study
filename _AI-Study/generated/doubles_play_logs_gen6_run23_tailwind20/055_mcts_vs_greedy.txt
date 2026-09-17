@@ -1,0 +1,248 @@
+battle 55   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: WhimGar Lock: Gengar-Mega, Whimsicott, Thundurus, Scrafty, Landorus, Genesect
+  p2: XY Doubles: Gyarados, Landorus-Therian, Aegislash, Venusaur-Mega, Heatran, Hydreigon
+
+  Turn 1
+    p1 mcts: switch 6, switch 4   (slot0 Gengar-Mega -> Genesect; slot1 Whimsicott -> Scrafty)
+      search (32000 visits): switch genesect;switch scrafty 4854v 3461 | switch thundurus;switch scrafty 2181v 1485 | switch scrafty;switch genesect 2130v 1448 | switch scrafty;switch thundurus 1519v 1005
+    p2 greedy: move 1 1, move 4 1
+      p1a <- Genesect comes in (283/283)
+              p1a Genesect atk 1 rose
+      p1b <- Scrafty comes in (334/334)
+              p2a Gyarados atk 1 fell
+              p2b Landorus atk 1 fell
+      p2b Landorus used Superpower -> p1a: Genesect
+              p2b Landorus atk 1 fell
+              p2b Landorus def 1 fell
+      p2a Gyarados used Waterfall -> p1a: Genesect
+      after p1: Genesect 41/283, Scrafty 334/334
+      after p2: Gyarados 393/393, Landorus-Therian 319/319
+
+  Turn 2
+    p1 mcts: move 1 2, move 4 2
+      search (28000 visits): uturn,1;highjumpkick,1 335v 80 | uturn,1;knockoff,1 324v 76 | uturn,0;knockoff,1 323v 76 | icebeam,0;knockoff,1 312v 72
+    p2 greedy: move 1 1, move 4 1
+      p1a Genesect used U-turn -> p2b: Landorus
+      after p1: Genesect 41/283, Scrafty 334/334
+      after p2: Gyarados 393/393, Landorus-Therian 193/319
+
+  Turn 3
+      p1a <- Thundurus comes in (299/299)
+      p2b Landorus used Superpower -> p1a: Thundurus
+              p2b Landorus atk 1 fell
+              p2b Landorus def 1 fell
+      p2a Gyarados used Waterfall -> p1a: Thundurus
+      p1b Scrafty used High Jump Kick -> p2b: Landorus  [[miss]]
+              p1b Scrafty -- MISSED
+      after p1: Thundurus 124/299, Scrafty 167/334
+      after p2: Gyarados 393/393, Landorus-Therian 193/319
+
+  Turn 4
+    p1 mcts: move 1 1, switch 3   (slot1 Scrafty -> Genesect)
+      search (30000 visits): thunderbolt,0;switch genesect 492v 124 | hiddenpower,0;switch genesect 388v 88 | thunderbolt,1;switch genesect 381v 86 | flashcannon,0;switch genesect 344v 73
+    p2 greedy: move 1 1, move 4 1
+      p1b <- Genesect comes in (41/283)
+              p1b Genesect atk 1 rose
+      p2b Landorus used Superpower -> p1a: Thundurus
+              p2b Landorus atk 1 fell
+              p2b Landorus def 1 fell
+      p1a Thundurus used Thunderbolt -> p2a: Gyarados
+      p2a Gyarados fainted
+      after p1: Thundurus 80/299, Genesect 41/283
+      after p2: Gyarados 0/393, Landorus-Therian 193/319
+
+  Turn 5
+      p2a <- Aegislash comes in (324/324)
+      after p1: Thundurus 80/299, Genesect 41/283
+      after p2: Aegislash 324/324, Landorus-Therian 193/319
+
+  Turn 6
+    p1 mcts: move 1 1, move 2 1
+      search (31000 visits): thunderbolt,0;flamethrower,0 672v 223 | thunderwave,1;flamethrower,0 451v 132 | thunderbolt,0;uturn,0 436v 126 | flashcannon,0;flamethrower,0 419v 119
+    p2 greedy: move 1 2, move 4 2
+      p1b Genesect used Flamethrower -> p2a: Aegislash
+      p2b Landorus used Superpower -> p1b: Genesect
+              p2b Landorus atk 1 fell
+              p2b Landorus def 1 fell
+      p1b Genesect fainted
+      p1a Thundurus used Thunderbolt -> p2a: Aegislash
+      p2a Aegislash used Shadow Ball -> p1a: Thundurus
+      p1a Thundurus fainted
+      after p1: Thundurus 0/299, Genesect 0/283
+      after p2: Aegislash-Blade 82/324, Landorus-Therian 193/319
+
+  Turn 7
+      p1a <- Scrafty comes in (167/334)
+      p1b <- Whimsicott comes in (324/324)
+              p2a Aegislash atk 1 fell
+              p2b Landorus atk 1 fell
+      after p1: Scrafty 167/334, Whimsicott 324/324
+      after p2: Aegislash-Blade 82/324, Landorus-Therian 193/319
+
+  Turn 8
+    p1 mcts: move 3 1, switch 5   (slot1 Whimsicott -> Landorus)
+      search (26000 visits): knockoff,0;switch landorus 552v 86 | knockoff,0;faketears,1 522v 79 | highjumpkick,1;switch landorus 477v 67 | knockoff,0;switch gengarmega 452v 61
+    p2 greedy: move 1 1, move 4 1
+      p1b <- Landorus comes in (319/319)
+      p2b Landorus used Superpower -> p1a: Scrafty
+              p2b Landorus def 1 fell
+              p1a Scrafty used up its Eject Button
+      after p1: Scrafty 83/334, Landorus 319/319
+      after p2: Aegislash-Blade 82/324, Landorus-Therian 193/319
+
+  Turn 9
+      p1a <- Whimsicott comes in (324/324)
+      p2a Aegislash used Shadow Ball -> p1a: Whimsicott
+              p1a Whimsicott used up its Sitrus Berry
+      after p1: Whimsicott 201/324, Landorus 319/319
+      after p2: Aegislash-Blade 82/324, Landorus-Therian 193/319
+
+  Turn 10
+    p1 mcts: move 3 2, move 1 1
+      search (31000 visits): faketears,1;earthpower,0 896v 190 | faketears,1;psychic,0 701v 135 | switch scrafty;earthpower,1 690v 131 | switch gengarmega;psychic,0 672v 127
+    p2 greedy: move 1 1, move 4 1
+      p1a Whimsicott used Fake Tears -> p2b: Landorus
+              p2b Landorus spd 2 fell
+      p2b Landorus used Superpower -> p1a: Whimsicott
+              p2b Landorus def 1 fell
+      p1b Landorus used Earth Power -> p2a: Aegislash
+      p2a Aegislash fainted
+      after p1: Whimsicott 179/324, Landorus 319/319
+      after p2: Aegislash 0/324, Landorus-Therian 193/319
+
+  Turn 11
+      p2a <- Venusaur-Mega comes in (364/364)
+      after p1: Whimsicott 179/324, Landorus 319/319
+      after p2: Venusaur-Mega 364/364, Landorus-Therian 193/319
+
+  Turn 12
+    p1 mcts: switch 5, move 1 2   (slot0 Whimsicott -> Scrafty)
+      search (32000 visits): switch scrafty;earthpower,1 766v 155 | protect,0;earthpower,1 684v 132 | switch gengarmega;earthpower,1 646v 121 | faketears,1;earthpower,1 642v 120
+    p2 greedy: move 2 1, move 4 1
+      p1a <- Scrafty comes in (83/334)
+              p2a Venusaur atk 1 fell
+              p2b Landorus atk 0 fell
+      p2b Landorus used Superpower -> p1a: Scrafty
+      p1b Landorus used Earth Power -> p2b: Landorus
+              p2b Landorus -- IMMUNE
+      p2a Venusaur used Sludge Bomb -> p1a: Scrafty
+      p1a Scrafty fainted
+      after p1: Scrafty 0/334, Landorus 319/319
+      after p2: Venusaur-Mega 364/364, Landorus-Therian 193/319
+
+  Turn 13
+      p1a <- Whimsicott comes in (179/324)
+      after p1: Whimsicott 179/324, Landorus 319/319
+      after p2: Venusaur-Mega 364/364, Landorus-Therian 193/319
+
+  Turn 14
+    p1 mcts: move 1 2, move 1 2
+      search PANICKED (index out of bounds: the len is 0 but the index is 0); greedy took the turn
+    p2 greedy: move 2 1, move 4 1
+      p1a Whimsicott used Taunt -> p2b: Landorus
+              p2b Landorus gained move: Taunt
+      p2b Landorus used Superpower -> p1a: Whimsicott
+      p1b Landorus used Earth Power -> p2b: Landorus
+              p2b Landorus -- IMMUNE
+      p2a Venusaur used Sludge Bomb -> p1a: Whimsicott
+      p1a Whimsicott fainted
+      after p1: Whimsicott 0/324, Landorus 319/319
+      after p2: Venusaur-Mega 364/364, Landorus-Therian 193/319
+
+  Turn 15
+      p1a <- Gengar-Mega comes in (323/323)
+      after p1: Gengar-Mega 323/323, Landorus 319/319
+      after p2: Venusaur-Mega 364/364, Landorus-Therian 193/319
+
+  Turn 16
+    p1 mcts: move 4, move 3 1
+      search (35000 visits): protect,0;psychic,0 1363v 208 | protect,0;sludgebomb,1 1277v 190 | protect,0;earthpower,0 1261v 186 | protect,0;sludgebomb,0 1240v 182
+    p2 greedy: move 2 1, move 1
+      p1a Gengar used Protect
+              p2b Landorus -- move: Struggle
+      p2b Landorus used Struggle -> p1a: Gengar
+              p1a Gengar -- move: Protect
+      p1b Landorus used Psychic -> p2a: Venusaur
+      p2a Venusaur used Sludge Bomb -> p1a: Gengar
+              p1a Gengar -- move: Protect
+      after p1: Gengar-Mega 323/323, Landorus 319/319
+      after p2: Venusaur-Mega 57/364, Landorus-Therian 193/319
+
+  Turn 17
+    p1 mcts: move 4, move 3 1
+      search (47000 visits): protect,0;psychic,0 1807v 237 | protect,0;sludgebomb,1 1763v 229 | protect,0;earthpower,0 1709v 219 | protect,0;sludgebomb,0 1669v 211
+    p2 greedy: move 2 1, move 1
+      p1a Gengar used Protect  [[still]]
+              p1a Gengar -- IT FAILED
+              p2b Landorus -- move: Struggle
+      p2b Landorus used Struggle -> p1a: Gengar
+      p1b Landorus used Psychic -> p2a: Venusaur
+      p2a Venusaur fainted
+              p2b Landorus lost move: Taunt
+      after p1: Gengar-Mega 304/323, Landorus 319/319
+      after p2: Venusaur-Mega 0/364, Landorus-Therian 113/319
+
+  Turn 18
+      p2a <- Heatran comes in (337/337)
+      after p1: Gengar-Mega 304/323, Landorus 319/319
+      after p2: Heatran 337/337, Landorus-Therian 113/319
+
+  Turn 19
+    p1 mcts: move 4, move 1 1
+      search (39000 visits): protect,0;earthpower,0 1987v 275 | protect,0;psychic,0 1579v 199 | protect,0;sludgebomb,0 1404v 167 | protect,0;protect,1 1390v 164
+    p2 greedy: move 2, move 1
+      p1a Gengar used Protect
+              p2b Landorus -- move: Struggle
+      p2b Landorus used Struggle -> p1a: Gengar
+              p1a Gengar -- move: Protect
+      p1b Landorus used Earth Power -> p2a: Heatran
+              p2a Heatran used up its Shuca Berry
+              p2a Heatran used up its Shuca Berry
+      p2a Heatran fainted
+      after p1: Gengar-Mega 304/323, Landorus 319/319
+      after p2: Heatran 0/337, Landorus-Therian 113/319
+
+  Turn 20
+      p2a <- Hydreigon comes in (388/388)
+      after p1: Gengar-Mega 304/323, Landorus 319/319
+      after p2: Hydreigon 388/388, Landorus-Therian 113/319
+
+  Turn 21
+    p1 mcts: move 4, move 2 1
+      search (54000 visits): protect,0;sludgebomb,0 8877v 3065 | protect,0;psychic,1 3748v 1194 | protect,0;sludgebomb,1 3592v 1141 | sludgebomb,0;sludgebomb,0 2327v 694
+    p2 greedy: move 1 1, move 1
+      p1a Gengar used Protect
+              p2b Landorus -- move: Struggle
+      p2b Landorus used Struggle -> p1b: Landorus
+      p1b Landorus used Sludge Bomb -> p2a: Hydreigon
+      p2a Hydreigon used Draco Meteor -> p1a: Gengar
+              p1a Gengar -- move: Protect
+      after p1: Gengar-Mega 304/323, Landorus 298/319
+      after p2: Hydreigon 206/388, Landorus-Therian 33/319
+
+  Turn 22
+    p1 mcts: move 4, move 2 2
+      search (85000 visits): protect,0;sludgebomb,1 8274v 2884 | protect,0;psychic,1 7607v 2635 | protect,0;sludgebomb,0 4885v 1626 | protect,0;psychic,0 2987v 937
+    p2 greedy: move 1 2, move 1
+      p1a Gengar used Protect  [[still]]
+              p1a Gengar -- IT FAILED
+              p2b Landorus -- move: Struggle
+      p2b Landorus used Struggle -> p1a: Gengar
+      p2b Landorus fainted
+      p1b Landorus used Sludge Bomb -> p2a: Hydreigon
+      p2a Hydreigon used Draco Meteor -> p1b: Landorus
+              p2a Hydreigon spa 2 fell
+      p1b Landorus fainted
+      after p1: Gengar-Mega 286/323, Landorus 0/319
+      after p2: Hydreigon 34/388, Landorus-Therian 0/319
+
+  Turn 23
+    p1 mcts: move 1 1, pass
+      search (2420000 visits): shadowball,0;No Move 889646v 889646 | sludgebomb,0;No Move 889624v 889624 | protect,0;No Move 635984v 635316 | disable,0;No Move 4746v 4399
+    p2 greedy: move 1 1, pass
+      p1a Gengar used Shadow Ball -> p2a: Hydreigon
+      p2a Hydreigon fainted
+      after p1: Gengar-Mega 286/323, Landorus 0/319
+      after p2: Hydreigon 0/388, Landorus-Therian 0/319
+
+  RESULT: p1 wins

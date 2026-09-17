@@ -1,0 +1,131 @@
+battle 106   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: XY Draft Finals vs Idyll: Gardevoir-Mega, Arcanine, Porygon2, Blastoise, Tyranitar, Landorus
+  p2: ORAS Doubles OU: Heatran, Diancie, Thundurus, Amoonguss, Bisharp, Kyurem-Black
+
+  Turn 1
+    p1 mcts: switch 3, move 3   (slot0 Gardevoir-Mega -> Porygon2)
+      search (26000 visits): switch porygon2;heatwave,0 1104v 466 | protect,0;switch porygon2 676v 260 | hypervoice,0;switch porygon2 539v 195 | switch porygon2;safeguard,1 452v 156
+    p2 greedy: move 1, move 1
+      p1a <- Porygon2 comes in (374/374)
+              p1a Porygon2 atk 1 rose
+      p1b Arcanine used Heat Wave -> p2a: Heatran  [[spread] p2b]
+              p2a Heatran gained ability: Flash Fire
+      p2a Heatran used Heat Wave -> p1b: Arcanine  [[spread] p1a,p1b]
+      p2b Diancie used Diamond Storm -> p1a: Porygon2  [[spread] p1b]
+              p2b Diancie -- MISSED
+              p1b Arcanine -- critical hit
+      p1b Arcanine fainted
+      after p1: Porygon2 239/374, Arcanine 0/371
+      after p2: Heatran 337/337, Diancie 199/241
+
+  Turn 2
+      p1b <- Gardevoir-Mega comes in (340/340)
+      after p1: Porygon2 239/374, Gardevoir-Mega 340/340
+      after p2: Heatran 337/337, Diancie 199/241
+
+  Turn 3
+    p1 mcts: move 4, move 1
+      search (20000 visits): recover,0;hypervoice,0 783v 331 | recover,0;psychic,1 562v 222 | recover,0;shadowball,0 495v 189 | recover,0;protect,1 478v 181
+    p2 greedy: move 1, move 1
+      p2a Heatran used Heat Wave -> p1a: Porygon2  [[spread] p1a]
+              p1b Gardevoir gained ability: Flash Fire
+      p1b Gardevoir used Hyper Voice -> p2b: Diancie  [[spread] p2a,p2b]
+      p2b Diancie used Diamond Storm -> p1a: Porygon2  [[spread] p1a,p1b]
+      p1a Porygon2 used Recover
+      after p1: Porygon2 210/374, Gardevoir-Mega 192/340
+      after p2: Heatran 309/337, Diancie 162/241
+
+  Turn 4
+    p1 mcts: move 4, move 3 2
+      search (25000 visits): recover,0;psychic,1 755v 277 | recover,0;hypervoice,0 673v 240 | recover,0;psychic,0 658v 233 | recover,0;shadowball,1 611v 213
+    p2 greedy: move 1, move 1
+      p2a Heatran used Heat Wave -> p1a: Porygon2  [[spread] p1a]
+              p1b Gardevoir -- IMMUNE
+              p1a Porygon2 -- critical hit
+      p1a Porygon2 fainted
+      p1b Gardevoir used Psychic -> p2b: Diancie
+      p2b Diancie used Diamond Storm -> p1b: Gardevoir
+      p1b Gardevoir fainted
+      after p1: Porygon2 0/374, Gardevoir-Mega 0/340
+      after p2: Heatran 330/337, Diancie 8/241
+
+  Turn 5
+      p1b <- Tyranitar comes in (404/404)
+      p1a <- Blastoise comes in (362/362)
+      after p1: Blastoise 362/362, Tyranitar 404/404
+      after p2: Heatran 330/337, Diancie 8/241
+
+  Turn 6
+    p1 mcts: move 3 1, move 4
+      search (35000 visits): scald,0;protect,1 12725v 11133 | roar,1;protect,1 644v 106 | roar,0;protect,1 634v 104 | scald,0;rockslide,0 585v 92
+    p2 greedy: move 1, move 1
+      p1b Tyranitar used Protect
+      p2a Heatran used Heat Wave -> p1b: Tyranitar  [[spread] ]
+              p1b Tyranitar -- move: Protect
+              p2a Heatran -- MISSED
+      p2b Diancie used Diamond Storm -> p1b: Tyranitar  [[spread] p1a]
+              p1b Tyranitar -- move: Protect
+      p1a Blastoise used Scald -> p2a: Heatran
+      after p1: Blastoise 256/362, Tyranitar 404/404
+      after p2: Heatran 183/337, Diancie 8/241
+
+  Turn 7
+    p1 mcts: move 1, move 1 2
+      search (32000 visits): followme,0;foulplay,1 6257v 5823 | scald,0;rockslide,0 698v 74 | roar,1;rockslide,0 614v 58 | scald,0;protect,1 610v 57
+    p2 greedy: move 1, move 1
+      p1a Blastoise used Follow Me
+      p2a Heatran used Heat Wave -> p1b: Tyranitar  [[spread] p1a,p1b]
+      p2b Diancie used Diamond Storm -> p1b: Tyranitar  [[spread] p1a,p1b]
+              p2b Diancie def 1 rose
+      p1b Tyranitar used Foul Play -> p2b: Diancie
+      p2b Diancie fainted
+      after p1: Blastoise 80/362, Tyranitar 244/404
+      after p2: Heatran 204/337, Diancie 0/241
+
+  Turn 8
+      p2b <- Thundurus comes in (362/362)
+      after p1: Blastoise 80/362, Tyranitar 244/404
+      after p2: Heatran 204/337, Thundurus 362/362
+
+  Turn 9
+    p1 mcts: move 2 2, move 2
+      search (48000 visits): roar,1;rockslide,0 1192v 74 | scald,1;rockslide,0 1187v 74 | roar,0;rockslide,0 1158v 70 | switch landorus;rockslide,0 1129v 66
+    p2 greedy: move 1, move 3 1
+      p2b Thundurus used Thunderbolt -> p1a: Blastoise
+      p1a Blastoise fainted
+      p2a Heatran used Heat Wave -> p1b: Tyranitar
+      p1b Tyranitar used Rock Slide -> p2b: Thundurus  [[spread] p2b]
+              p1b Tyranitar -- MISSED
+              p2b Thundurus used up its Sitrus Berry
+      after p1: Blastoise 0/362, Tyranitar 156/404
+      after p2: Heatran 225/337, Thundurus 196/362
+
+  Turn 10
+      p1a <- Landorus comes in (380/380)
+      after p1: Landorus 380/380, Tyranitar 156/404
+      after p2: Heatran 225/337, Thundurus 196/362
+
+  Turn 11
+    p1 mcts: move 3 2, move 2
+      search (65000 visits): uturn,1;rockslide,0 1965v 139 | uturn,0;rockslide,0 1960v 138 | earthpower,0;rockslide,0 1902v 131 | uturn,0;foulplay,1 1629v 98
+    p2 greedy: move 1, move 3 2
+      p1a Landorus used U-turn -> p2b: Thundurus
+      p2b Thundurus used Thunderbolt -> p1b: Tyranitar
+      p2a Heatran used Heat Wave -> p1a: Landorus  [[spread] p1a,p1b]
+      p1b Tyranitar fainted
+      after p1: Landorus 121/380, Tyranitar 0/404
+      after p2: Heatran 246/337, Thundurus 141/362
+
+  Turn 12
+    p1 mcts: move 3 1, pass
+      search (841000 visits): uturn,0;No Move 658170v 69088 | uturn,1;No Move 182830v 18148
+    p2 greedy: move 1, move 3 1
+      p1a Landorus used U-turn -> p2a: Heatran
+      p2b Thundurus used Thunderbolt -> p1a: Landorus
+              p1a Landorus -- IMMUNE
+      p2a Heatran used Heat Wave -> p1a: Landorus
+      p1a Landorus fainted
+      after p1: Landorus 0/380, Tyranitar 0/404
+      after p2: Heatran 232/337, Thundurus 141/362
+
+  RESULT: p2 wins

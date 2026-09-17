@@ -1,0 +1,108 @@
+battle 16   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: XY Doubles: Gardevoir, Darkrai, Heatran, Suicune, Kyurem-Black, Aegislash
+  p2: Draft v Schister: Gardevoir-Mega, Landorus, Latias, Porygon2, Tyranitar, Conkeldurr
+
+  Turn 1
+    p1 mcts: move 4 mega, move 1 2
+      search (21000 visits): hypervoice-mega,0;darkpulse,1 562v 325 | hypervoice-mega,0;protect,1 499v 283 | hypervoice-mega,0;darkpulse,0 357v 189 | psyshock-mega,1;darkpulse,1 274v 136
+    p2 greedy: move 1, move 4 1
+      p2b Landorus used Focus Blast -> p1a: Gardevoir  [[miss]]
+              p2b Landorus -- MISSED
+      p1b Darkrai used Dark Pulse -> p2b: Landorus
+      p1a Gardevoir used Hyper Voice -> p2b: Landorus  [[spread] p2a,p2b]
+      p2b Landorus fainted
+      p2a Gardevoir used Hyper Voice -> p1a: Gardevoir  [[spread] p1a,p1b]
+      after p1: Gardevoir-Mega 202/278, Darkrai 177/306
+      after p2: Gardevoir-Mega 193/340, Landorus 0/319
+
+  Turn 2
+      p2b <- Latias comes in (364/364)
+      after p1: Gardevoir-Mega 202/278, Darkrai 177/306
+      after p2: Gardevoir-Mega 193/340, Latias 364/364
+
+  Turn 3
+    p1 mcts: move 4, move 1 1
+      search (17000 visits): hypervoice,0;darkpulse,0 1929v 1628 | hypervoice,0;darkpulse,1 1081v 876 | hypervoice,0;focusblast,0 794v 625 | hypervoice,0;protect,1 705v 548
+    p2 greedy: move 1, move 1 2
+      p1b Darkrai used Dark Pulse -> p2a: Gardevoir
+      p1a Gardevoir used Hyper Voice -> p2b: Latias  [[spread] p2a,p2b]
+              p2b Latias -- critical hit
+      p2a Gardevoir fainted
+      p2b Latias fainted
+      after p1: Gardevoir-Mega 202/278, Darkrai 147/306
+      after p2: Gardevoir-Mega 0/340, Latias 0/364
+
+  Turn 4
+      p2b <- Tyranitar comes in (404/404)
+      p2a <- Porygon2 comes in (374/374)
+              p2a Porygon2 atk 1 rose
+      after p1: Gardevoir-Mega 202/278, Darkrai 147/306
+      after p2: Porygon2 374/374, Tyranitar 404/404
+
+  Turn 5
+    p1 mcts: move 4, move 3 2
+      search (11000 visits): hypervoice,0;willowisp,1 405v 279 | hypervoice,0;focusblast,0 261v 166 | hypervoice,0;darkpulse,0 216v 132 | hypervoice,0;protect,1 207v 125
+    p2 greedy: move 2 2, move 4 2
+      p1b Darkrai used Will-O-Wisp -> p2b: Tyranitar
+              p2b Tyranitar is now brn
+      p1a Gardevoir used Hyper Voice -> p2a: Porygon2  [[spread] p2a,p2b]
+              p2b Tyranitar used up its Eject Button
+      after p1: Gardevoir-Mega 202/278, Darkrai 147/306
+      after p2: Porygon2 248/374, Tyranitar 212/404
+
+  Turn 6
+      p2b <- Conkeldurr comes in (352/352)
+      p2a Porygon2 used Thunderbolt -> p1b: Darkrai
+      after p1: Gardevoir-Mega 185/278, Darkrai 53/306
+      after p2: Porygon2 225/374, Conkeldurr 330/352
+
+  Turn 7
+    p1 mcts: move 4, move 4 1
+      search (24000 visits): hypervoice,0;focusblast,0 4084v 3186 | hypervoice,0;focusblast,1 1435v 1050 | hypervoice,0;darkpulse,0 1211v 874 | hypervoice,0;protect,1 1085v 775
+    p2 greedy: move 2 2, move 1 2
+      p1b Darkrai used Focus Blast -> p2a: Porygon2  [[miss]]
+              p1b Darkrai -- MISSED
+      p1a Gardevoir used Hyper Voice -> p2b: Conkeldurr  [[spread] p2a,p2b]
+      p2a Porygon2 used Thunderbolt -> p1b: Darkrai
+      p1b Darkrai fainted
+      p2b Conkeldurr used Drain Punch -> p1a: Gardevoir
+      after p1: Gardevoir-Mega 117/278, Darkrai 0/306
+      after p2: Porygon2 73/374, Conkeldurr 98/352
+
+  Turn 8
+      p1b <- Heatran comes in (337/337)
+      after p1: Gardevoir-Mega 117/278, Heatran 337/337
+      after p2: Porygon2 73/374, Conkeldurr 98/352
+
+  Turn 9
+    p1 mcts: move 4, move 3 2
+      search (34000 visits): hypervoice,0;earthpower,1 2169v 1838 | hypervoice,0;flashcannon,1 2112v 1787 | hypervoice,0;heatwave,0 2099v 1775 | hypervoice,0;switch suicune 1994v 1681
+    p2 greedy: move 2 1, move 1 1
+      p1a Gardevoir used Hyper Voice -> p2b: Conkeldurr  [[spread] p2a,p2b]
+              p2b Conkeldurr -- critical hit
+      p2a Porygon2 fainted
+      p2b Conkeldurr fainted
+      p1b Heatran used Earth Power -> p2: Porygon2  [[notarget]]
+              p1b Heatran -- IT FAILED
+      after p1: Gardevoir-Mega 100/278, Heatran 337/337
+      after p2: Porygon2 0/374, Conkeldurr 0/352
+
+  Turn 10
+      p2a <- Tyranitar comes in (212/404)
+      after p1: Gardevoir-Mega 100/278, Heatran 337/337
+      after p2: Tyranitar 212/404, Conkeldurr 0/352
+
+  Turn 11
+    p1 mcts: switch 5, move 4 1   (slot0 Gardevoir-Mega -> Kyurem-Black)
+      search (43000 visits): switch kyuremblack;flashcannon,0 6472v 6181 | switch kyuremblack;earthpower,0 6445v 6155 | switch suicune;flashcannon,0 3704v 3469 | switch suicune;earthpower,0 3548v 3317
+    p2 greedy: move 4 1, pass
+      p1a <- Kyurem-Black comes in (391/391)
+      p1b Heatran used Flash Cannon -> p2a: Tyranitar
+      p2a Tyranitar used Superpower -> p1a: Kyurem
+              p2a Tyranitar atk 1 fell
+              p2a Tyranitar def 1 fell
+      p2a Tyranitar fainted
+      after p1: Kyurem-Black 212/391, Heatran 337/337
+      after p2: Tyranitar 0/404, Conkeldurr 0/352
+
+  RESULT: p1 wins

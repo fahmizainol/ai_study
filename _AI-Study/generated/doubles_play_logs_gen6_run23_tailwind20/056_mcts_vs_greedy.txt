@@ -1,0 +1,203 @@
+battle 56   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: ORAS Doubles OU: Mawile, Milotic, Hydreigon, Landorus-Therian, Amoonguss, Talonflame
+  p2: XY Doubles: Aegislash, Venusaur, Rotom-Heat, Azumarill, Landorus-Therian, Thundurus
+
+  Turn 1
+    p1 mcts: switch 4, move 2   (slot0 Mawile -> Landorus-Therian)
+      search (15000 visits): switch landorustherian;icywind,0 124v 95 | playrough-mega,0;icywind,0 110v 82 | playrough-mega,1;icywind,0 109v 81 | switch amoonguss;icywind,0 109v 81
+    p2 greedy: move 3 1, move 3 1
+      p1a <- Landorus-Therian comes in (321/321)
+              p2a Aegislash atk 1 fell
+              p2b Venusaur atk 1 fell
+      p1b Milotic used Icy Wind -> p2b: Venusaur  [[spread] p2a,p2b]
+              p2a Aegislash spe 1 fell
+              p2b Venusaur spe 1 fell
+      p2b Venusaur used Sludge Bomb -> p1a: Landorus
+      p2a Aegislash used Shadow Ball -> p1a: Landorus
+              p1a Landorus spd 1 fell
+      after p1: Landorus-Therian 17/321, Milotic 390/390
+      after p2: Aegislash-Blade 324/324, Venusaur 296/364
+
+  Turn 2
+    p1 mcts: move 3 2, move 2
+      search (17000 visits): uturn,1;icywind,0 619v 411 | rockslide,0;icywind,0 578v 380 | switch amoonguss;icywind,0 404v 251 | switch mawile;icywind,0 344v 207
+    p2 greedy: move 3 1, move 3 1
+      p1a Landorus used U-turn -> p2b: Venusaur
+      after p1: Landorus-Therian 17/321, Milotic 390/390
+      after p2: Aegislash-Blade 324/324, Venusaur 194/364
+
+  Turn 3
+      p1a <- Hydreigon comes in (325/325)
+      p1b Milotic used Icy Wind -> p2b: Venusaur  [[spread] p2a,p2b]
+              p2a Aegislash spe 1 fell
+              p2b Venusaur spe 1 fell
+      p2b Venusaur used Sludge Bomb -> p1a: Hydreigon
+      p2a Aegislash used Shadow Ball -> p1a: Hydreigon
+      after p1: Hydreigon 114/325, Milotic 390/390
+      after p2: Aegislash-Blade 312/324, Venusaur 124/364
+
+  Turn 4
+    p1 mcts: move 2 2, move 2
+      search (18000 visits): darkpulse,1;icywind,0 352v 162 | fireblast,1;icywind,0 313v 139 | switch landorustherian;icywind,0 284v 123 | protect,0;icywind,0 250v 104
+    p2 greedy: move 3 1, move 3 1
+      p1a Hydreigon used Dark Pulse -> p2b: Venusaur
+      p2b Venusaur fainted
+      p1b Milotic used Icy Wind -> p2a: Aegislash
+              p2a Aegislash spe 1 fell
+      p2a Aegislash used Shadow Ball -> p1a: Hydreigon
+      p1a Hydreigon fainted
+      after p1: Hydreigon 0/325, Milotic 390/390
+      after p2: Aegislash-Blade 288/324, Venusaur 0/364
+
+  Turn 5
+      p1a <- Landorus-Therian comes in (17/321)
+      p2b <- Rotom-Heat comes in (299/299)
+              p2a Aegislash atk 1 fell
+              p2b Rotom atk 1 fell
+      after p1: Landorus-Therian 17/321, Milotic 390/390
+      after p2: Aegislash-Blade 288/324, Rotom-Heat 299/299
+
+  Turn 6
+    p1 mcts: move 3 2, move 1 1
+      search (26000 visits): uturn,1;scald,0 1400v 524 | rockslide,0;hydropump,1 841v 261 | rockslide,0;scald,1 785v 239 | uturn,1;icywind,0 767v 233
+    p2 greedy: move 3 1, move 1 1
+      p1a Landorus used U-turn -> p2b: Rotom
+      after p1: Landorus-Therian 17/321, Milotic 390/390
+      after p2: Aegislash-Blade 288/324, Rotom-Heat 254/299
+
+  Turn 7
+      p1a <- Mawile comes in (249/249)
+      p2b Rotom used Overheat -> p1a: Mawile
+              p2b Rotom spa 2 fell
+      p1a Mawile fainted
+      p1b Milotic used Scald -> p2a: Aegislash
+      p2a Aegislash used Shadow Ball -> p1b: Milotic
+      after p1: Mawile 0/249, Milotic 300/390
+      after p2: Aegislash-Blade 110/324, Rotom-Heat 254/299
+
+  Turn 8
+      p1a <- Landorus-Therian comes in (17/321)
+              p2a Aegislash atk 1 fell
+              p2b Rotom atk 1 fell
+      after p1: Landorus-Therian 17/321, Milotic 300/390
+      after p2: Aegislash-Blade 110/324, Rotom-Heat 254/299
+
+  Turn 9
+    p1 mcts: move 3 1, move 2
+      search (28000 visits): uturn,0;icywind,0 3509v 1265 | rockslide,0;icywind,0 878v 229 | uturn,1;scald,1 772v 194 | uturn,1;icywind,0 649v 153
+    p2 greedy: move 3 1, move 1 1
+      p1a Landorus used U-turn -> p2a: Aegislash
+      after p1: Landorus-Therian 17/321, Milotic 300/390
+      after p2: Aegislash-Blade 65/324, Rotom-Heat 254/299
+
+  Turn 10
+      p1a <- Amoonguss comes in (432/432)
+      p2b Rotom used Overheat -> p1a: Amoonguss
+              p2b Rotom spa 2 fell
+      p1b Milotic used Icy Wind -> p2a: Aegislash  [[spread] p2a,p2b]
+              p2a Aegislash spe 1 fell
+              p2b Rotom spe 1 fell
+      p2a Aegislash used Shadow Ball -> p1a: Amoonguss
+      after p1: Amoonguss 3/432, Milotic 300/390
+      after p2: Aegislash-Blade 50/324, Rotom-Heat 235/299
+
+  Turn 11
+    p1 mcts: switch 5, move 1 2   (slot0 Amoonguss -> Landorus-Therian)
+      search (26000 visits): switch landorustherian;scald,1 1007v 324 | switch landorustherian;icywind,0 1005v 323 | switch landorustherian;hydropump,1 771v 232 | spore,0;scald,1 733v 218
+    p2 greedy: move 3 1, move 1 1
+      p1a <- Landorus-Therian comes in (17/321)
+              p2a Aegislash atk 1 fell
+              p2b Rotom atk 1 fell
+      p1b Milotic used Scald -> p2b: Rotom
+      p2b Rotom used Overheat -> p1a: Landorus
+              p2b Rotom spa 2 fell
+      p1a Landorus fainted
+      p2a Aegislash used Shadow Ball -> p1b: Milotic
+      after p1: Landorus-Therian 0/321, Milotic 209/390
+      after p2: Aegislash-Blade 70/324, Rotom-Heat 23/299
+
+  Turn 12
+      p1a <- Amoonguss comes in (147/432)
+      after p1: Amoonguss 147/432, Milotic 209/390
+      after p2: Aegislash-Blade 70/324, Rotom-Heat 23/299
+
+  Turn 13
+    p1 mcts: move 1 2, move 2
+      search (19000 visits): spore,1;icywind,0 743v 162 | protect,0;icywind,0 715v 154 | spore,0;icywind,0 695v 148 | switch talonflame;icywind,0 571v 112
+    p2 greedy: move 3 1, move 1 1
+      p1b Milotic used Icy Wind -> p2a: Aegislash  [[spread] p2a,p2b]
+              p2a Aegislash spe 1 fell
+              p2b Rotom spe 1 fell
+      p2b Rotom used Overheat -> p1a: Amoonguss
+      p1a Amoonguss used Spore -> p2b: Rotom
+              p2b Rotom -- item: Safety Goggles Spore
+      p2a Aegislash used Shadow Ball -> p1a: Amoonguss
+      p1a Amoonguss fainted
+      after p1: Amoonguss 0/432, Milotic 209/390
+      after p2: Aegislash-Blade 60/324, Rotom-Heat 4/299
+
+  Turn 14
+      p1a <- Talonflame comes in (297/297)
+      after p1: Talonflame 297/297, Milotic 209/390
+      after p2: Aegislash-Blade 60/324, Rotom-Heat 4/299
+
+  Turn 15
+    p1 mcts: move 3, move 2
+      search (24000 visits): tailwind,0;icywind,0 1261v 130 | tailwind,0;scald,0 1040v 94 | tailwind,0;hydropump,0 1034v 93 | tailwind,0;mirrorcoat,1 884v 70
+    p2 greedy: move 3 2, move 1 2
+      p1a Talonflame used Tailwind
+      -sidestart p1: A move: Tailwind
+      p1b Milotic used Icy Wind -> p2b: Rotom  [[spread] p2a,p2b]
+              p2a Aegislash spe 1 fell
+      p2b Rotom fainted
+      p2a Aegislash used Shadow Ball -> p1b: Milotic
+      after p1: Talonflame 297/297, Milotic 121/390
+      after p2: Aegislash-Blade 48/324, Rotom-Heat 0/299
+
+  Turn 16
+      p2b <- Azumarill comes in (404/404)
+      after p1: Talonflame 297/297, Milotic 121/390
+      after p2: Aegislash-Blade 48/324, Azumarill 404/404
+
+  Turn 17
+    p1 mcts: move 4, move 2
+      search (35000 visits): protect,0;icywind,0 1126v 62 | protect,0;scald,1 1069v 55 | bravebird,1;icywind,0 1066v 54 | bravebird,1;scald,1 1006v 47
+    p2 greedy: move 3 2, move 1 2
+      p1a Talonflame used Protect
+      p1b Milotic used Icy Wind -> p2b: Azumarill  [[spread] p2a,p2b]
+              p2b Azumarill -- critical hit
+              p2b Azumarill spe 1 fell
+      p2b Azumarill used Play Rough -> p1b: Milotic
+      p1b Milotic fainted
+      p2a Aegislash used Shadow Ball -> p1a: Talonflame
+              p1a Talonflame -- move: Protect
+      after p1: Talonflame 297/297, Milotic 0/390
+      after p2: Aegislash-Blade 35/324, Azumarill 367/404
+
+  Turn 18
+    p1 mcts: move 4, pass
+      search (51000 visits): protect,0;No Move 16916v 829 | tailwind,0;No Move 8281v 279 | bravebird,1;No Move 7807v 251 | overheat,1;No Move 7362v 225
+    p2 greedy: move 3 1, move 1 1
+      p1a Talonflame used Protect
+      p2b Azumarill used Play Rough -> p1a: Talonflame
+              p1a Talonflame -- move: Protect
+      p2a Aegislash used Shadow Ball -> p1a: Talonflame
+              p1a Talonflame -- move: Protect
+      after p1: Talonflame 297/297, Milotic 0/390
+      after p2: Aegislash-Blade 55/324, Azumarill 367/404
+
+  Turn 19
+    p1 mcts: move 4, pass
+      search (53000 visits): protect,0;No Move 17450v 843 | tailwind,0;No Move 8565v 285 | bravebird,1;No Move 8012v 253 | overheat,1;No Move 7636v 231
+    p2 greedy: move 3 1, move 1 1
+      p1a Talonflame used Protect  [[still]]
+              p1a Talonflame -- IT FAILED
+      p2b Azumarill used Play Rough -> p1a: Talonflame
+              p1a Talonflame -- critical hit
+      p2a Aegislash used Shadow Ball -> p1a: Talonflame
+              p1a Talonflame -- critical hit
+      p1a Talonflame fainted
+      after p1: Talonflame 0/297, Milotic 0/390
+      after p2: Aegislash-Blade 55/324, Azumarill 367/404
+
+  RESULT: p2 wins

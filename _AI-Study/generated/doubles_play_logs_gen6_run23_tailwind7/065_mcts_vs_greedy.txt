@@ -1,0 +1,293 @@
+battle 65   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: ORAS Doubles OU: Crobat, Excadrill, Gyarados, Rotom-Wash, Ferrothorn, Diancie-Mega
+  p2: Untitled 1448: Keldeo, Talonflame, Gengar-Mega, Bisharp, Raichu, Kyurem-Black
+
+  Turn 1
+    p1 mcts: move 2, switch 3   (slot1 Excadrill -> Gyarados)
+      search (29000 visits): tailwind,0;switch gyarados 374v 363 | switch gyarados;rockslide,0 359v 347 | tailwind,0;rockslide,0 356v 343 | bravebird,0;switch gyarados 354v 341
+    p2 greedy: move 1 1, move 1 1
+      p1b <- Gyarados comes in (394/394)
+              p2a Keldeo atk 1 fell
+              p2b Talonflame atk 1 fell
+      p2b Talonflame used Brave Bird -> p1a: Crobat
+      p2a Keldeo used Hydro Pump -> p1a: Crobat
+      p1a Crobat fainted
+      after p1: Crobat 0/374, Gyarados 394/394
+      after p2: Keldeo 291/323, Talonflame 304/360
+
+  Turn 2
+      p1a <- Excadrill comes in (362/362)
+      after p1: Excadrill 362/362, Gyarados 394/394
+      after p2: Keldeo 291/323, Talonflame 304/360
+
+  Turn 3
+    p1 mcts: move 2, move 2 2
+      search (31000 visits): earthquake,0;thunderwave,1 971v 697 | drillrun,1;taunt,0 833v 588 | switch dianciemega;taunt,0 634v 433 | rockslide,0;switch rotomwash 615v 418
+    p2 greedy: move 1 1, move 1 1
+      p2b Talonflame used Brave Bird -> p1a: Excadrill
+      p1a Excadrill used Earthquake -> p2b: Talonflame  [[spread] p2a]
+              p1b Gyarados -- IMMUNE
+              p2b Talonflame -- IMMUNE
+              p2a Keldeo -- critical hit
+      p2a Keldeo used Hydro Pump -> p1a: Excadrill
+      p1a Excadrill fainted
+      p1b Gyarados used Thunder Wave -> p2b: Talonflame
+              p2b Talonflame is now par
+      after p1: Excadrill 0/362, Gyarados 394/394
+      after p2: Keldeo 9/323, Talonflame 263/360
+
+  Turn 4
+      p1a <- Rotom-Wash comes in (304/304)
+      after p1: Rotom-Wash 304/304, Gyarados 394/394
+      after p2: Keldeo 9/323, Talonflame 263/360
+
+  Turn 5
+    p1 mcts: switch 6, move 3 2   (slot0 Rotom-Wash -> Diancie-Mega)
+      search (24000 visits): switch dianciemega;waterfall,1 539v 430 | switch dianciemega;thunderwave,1 506v 400 | willowisp,1;switch dianciemega 438v 340 | switch dianciemega;taunt,1 436v 338
+    p2 greedy: move 1 1, move 1 1
+      p1a <- Diancie-Mega comes in (241/241)
+      p2b Talonflame used Brave Bird -> p1a: Diancie
+      p2a Keldeo used Hydro Pump -> p1a: Diancie
+      p1a Diancie fainted
+      p2a Keldeo fainted
+      p1b Gyarados used Waterfall -> p2b: Talonflame
+      p2b Talonflame fainted
+      after p1: Diancie-Mega 0/241, Gyarados 394/394
+      after p2: Keldeo 0/323, Talonflame 0/360
+
+  Turn 6
+      p1a <- Ferrothorn comes in (352/352)
+      p2a <- Gengar-Mega comes in (314/314)
+      p2b <- Bisharp comes in (271/271)
+      after p1: Ferrothorn 352/352, Gyarados 394/394
+      after p2: Gengar-Mega 314/314, Bisharp 271/271
+
+  Turn 7
+    p1 mcts: move 2 2, move 3 2
+      search (38000 visits): gyroball,1;waterfall,1 2220v 1485 | gyroball,1;protect,1 1522v 987 | powerwhip,1;waterfall,1 1504v 975 | protect,0;waterfall,1 1467v 948
+    p2 greedy: move 2 1, move 2 1
+      p2b Bisharp used Sucker Punch -> p1a: Ferrothorn
+      p2a Gengar used Sludge Bomb -> p1a: Ferrothorn
+              p1a Ferrothorn -- IMMUNE
+      p1b Gyarados used Waterfall -> p2b: Bisharp
+      p1a Ferrothorn used Gyro Ball -> p2b: Bisharp
+      p2b Bisharp fainted
+      after p1: Ferrothorn 196/352, Gyarados 394/394
+      after p2: Gengar-Mega 314/314, Bisharp 0/271
+
+  Turn 8
+      p2b <- Raichu comes in (324/324)
+      after p1: Ferrothorn 196/352, Gyarados 394/394
+      after p2: Gengar-Mega 314/314, Raichu 324/324
+
+  Turn 9
+    p1 mcts: move 3 2, move 4
+      search (40000 visits): powerwhip,1;protect,1 8177v 5695 | protect,0;protect,1 7836v 5449 | gyroball,1;protect,1 5390v 3690 | gyroball,0;protect,1 1616v 1022
+    p2 greedy: move 2 1, move 2 1
+      p1b Gyarados used Protect
+      p2a Gengar used Sludge Bomb -> p1a: Ferrothorn
+              p1a Ferrothorn -- IMMUNE
+      p2b Raichu used Volt Switch -> p1a: Ferrothorn
+      after p1: Ferrothorn 159/352, Gyarados 394/394
+      after p2: Gengar-Mega 314/314, Raichu 324/324
+
+  Turn 10
+      p2b <- Kyurem-Black comes in (391/391)
+      p1a Ferrothorn used Power Whip -> p2b: Kyurem
+      after p1: Ferrothorn 159/352, Gyarados 394/394
+      after p2: Gengar-Mega 314/314, Kyurem-Black 311/391
+
+  Turn 11
+    p1 mcts: move 4, move 4
+      search (40000 visits): protect,0;protect,1 11949v 8718 | leechseed,1;protect,1 2816v 1929 | gyroball,0;protect,1 2609v 1778 | powerwhip,0;protect,1 2234v 1506
+    p2 greedy: move 2 1, move 2 1
+      p1b Gyarados used Protect  [[still]]
+              p1b Gyarados -- IT FAILED
+      p1a Ferrothorn used Protect
+      p2b Kyurem used Fusion Bolt -> p1a: Ferrothorn
+              p1a Ferrothorn -- move: Protect
+      p2a Gengar used Sludge Bomb -> p1a: Ferrothorn
+              p1a Ferrothorn -- IMMUNE
+      after p1: Ferrothorn 159/352, Gyarados 394/394
+      after p2: Gengar-Mega 314/314, Kyurem-Black 311/391
+
+  Turn 12
+    p1 mcts: move 4, move 4
+      search (51000 visits): protect,0;protect,1 32690v 24159 | gyroball,1;protect,1 3525v 2418 | gyroball,0;protect,1 2013v 1330 | powerwhip,0;protect,1 1687v 1098
+    p2 greedy: move 2 1, move 2 1
+      p1b Gyarados used Protect
+      p1a Ferrothorn used Protect
+      p2b Kyurem used Fusion Bolt -> p1a: Ferrothorn
+              p1a Ferrothorn -- move: Protect
+      p2a Gengar used Sludge Bomb -> p1a: Ferrothorn
+              p1a Ferrothorn -- IMMUNE
+      after p1: Ferrothorn 159/352, Gyarados 394/394
+      after p2: Gengar-Mega 314/314, Kyurem-Black 311/391
+
+  Turn 13
+    p1 mcts: move 4, move 4
+      search (53000 visits): protect,0;protect,1 32060v 23775 | leechseed,0;protect,1 3081v 2104 | powerwhip,1;protect,1 1879v 1239 | leechseed,1;protect,1 1574v 1023
+    p2 greedy: move 2 1, move 2 1
+      p1b Gyarados used Protect  [[still]]
+              p1b Gyarados -- IT FAILED
+      p1a Ferrothorn used Protect  [[still]]
+              p1a Ferrothorn -- IT FAILED
+      p2b Kyurem used Fusion Bolt -> p1a: Ferrothorn
+      p2a Gengar used Sludge Bomb -> p1a: Ferrothorn
+              p1a Ferrothorn -- IMMUNE
+      after p1: Ferrothorn 114/352, Gyarados 394/394
+      after p2: Gengar-Mega 314/314, Kyurem-Black 311/391
+
+  Turn 14
+    p1 mcts: move 4, move 4
+      search (44000 visits): protect,0;protect,1 31353v 23093 | leechseed,1;protect,1 906v 551 | gyroball,0;protect,1 796v 476 | powerwhip,1;protect,1 790v 472
+    p2 greedy: move 2 1, move 2 1
+      p1b Gyarados used Protect
+      p1a Ferrothorn used Protect
+      p2b Kyurem used Fusion Bolt -> p1a: Ferrothorn
+              p1a Ferrothorn -- move: Protect
+      p2a Gengar used Sludge Bomb -> p1a: Ferrothorn
+              p1a Ferrothorn -- IMMUNE
+      after p1: Ferrothorn 114/352, Gyarados 394/394
+      after p2: Gengar-Mega 314/314, Kyurem-Black 311/391
+
+  Turn 15
+    p1 mcts: move 4, move 4
+      search (41000 visits): protect,0;protect,1 33246v 24854 | gyroball,0;protect,1 541v 308 | powerwhip,0;protect,1 536v 305 | gyroball,1;protect,1 478v 267
+    p2 greedy: move 2 1, move 2 1
+      p1b Gyarados used Protect  [[still]]
+              p1b Gyarados -- IT FAILED
+      p1a Ferrothorn used Protect  [[still]]
+              p1a Ferrothorn -- IT FAILED
+      p2b Kyurem used Fusion Bolt -> p1a: Ferrothorn
+      p2a Gengar used Sludge Bomb -> p1a: Ferrothorn
+              p1a Ferrothorn -- IMMUNE
+      after p1: Ferrothorn 64/352, Gyarados 394/394
+      after p2: Gengar-Mega 314/314, Kyurem-Black 311/391
+
+  Turn 16
+    p1 mcts: move 4, move 4
+      search (50000 visits): protect,0;protect,1 38373v 28327 | powerwhip,0;protect,1 1212v 762 | protect,0;thunderwave,0 937v 572 | gyroball,0;protect,1 863v 531
+    p2 greedy: move 2 1, move 2 1
+      p1b Gyarados used Protect
+      p1a Ferrothorn used Protect
+      p2b Kyurem used Fusion Bolt -> p1a: Ferrothorn
+              p1a Ferrothorn -- move: Protect
+      p2a Gengar used Sludge Bomb -> p1a: Ferrothorn
+              p1a Ferrothorn -- IMMUNE
+      after p1: Ferrothorn 64/352, Gyarados 394/394
+      after p2: Gengar-Mega 314/314, Kyurem-Black 311/391
+
+  Turn 17
+    p1 mcts: move 4, move 4
+      search (53000 visits): protect,0;protect,1 41488v 30967 | leechseed,0;protect,1 1103v 694 | gyroball,1;protect,1 993v 617 | powerwhip,1;protect,1 887v 543
+    p2 greedy: move 2 1, move 2 1
+      p1b Gyarados used Protect  [[still]]
+              p1b Gyarados -- IT FAILED
+      p1a Ferrothorn used Protect  [[still]]
+              p1a Ferrothorn -- IT FAILED
+      p2b Kyurem used Fusion Bolt -> p1a: Ferrothorn
+      p2a Gengar used Sludge Bomb -> p1a: Ferrothorn
+              p1a Ferrothorn -- IMMUNE
+      after p1: Ferrothorn 19/352, Gyarados 394/394
+      after p2: Gengar-Mega 314/314, Kyurem-Black 311/391
+
+  Turn 18
+    p1 mcts: move 4, move 4
+      search (50000 visits): protect,0;protect,1 30529v 22489 | leechseed,1;protect,1 2025v 1336 | powerwhip,0;protect,1 2017v 1331 | powerwhip,1;protect,1 1786v 1167
+    p2 greedy: move 2 1, move 2 1
+      p1b Gyarados used Protect
+      p1a Ferrothorn used Protect
+      p2b Kyurem used Fusion Bolt -> p1a: Ferrothorn
+              p1a Ferrothorn -- move: Protect
+      p2a Gengar used Sludge Bomb -> p1a: Ferrothorn
+              p1a Ferrothorn -- IMMUNE
+      after p1: Ferrothorn 19/352, Gyarados 394/394
+      after p2: Gengar-Mega 314/314, Kyurem-Black 311/391
+
+  Turn 19
+    p1 mcts: move 4, move 4
+      search (44000 visits): protect,0;protect,1 19463v 13524 | protect,0;waterfall,0 1343v 808 | protect,0;taunt,1 1081v 635 | protect,0;taunt,0 1024v 597
+    p2 greedy: move 2 1, move 1
+      p1b Gyarados used Protect  [[still]]
+              p1b Gyarados -- IT FAILED
+      p1a Ferrothorn used Protect  [[still]]
+              p1a Ferrothorn -- IT FAILED
+              p2b Kyurem -- move: Struggle
+      p2b Kyurem used Struggle -> p1a: Ferrothorn
+      p1a Ferrothorn fainted
+      p2a Gengar used Sludge Bomb -> p1b: Gyarados
+      after p1: Ferrothorn 0/352, Gyarados 204/394
+      after p2: Gengar-Mega 314/314, Kyurem-Black 165/391
+
+  Turn 20
+      p1a <- Rotom-Wash comes in (304/304)
+      after p1: Rotom-Wash 304/304, Gyarados 204/394
+      after p2: Gengar-Mega 314/314, Kyurem-Black 165/391
+
+  Turn 21
+    p1 mcts: move 1 1, move 3 1
+      search (3000 visits): hydropump,0;waterfall,0 104v 57 | protect,0;waterfall,0 88v 45 | willowisp,1;waterfall,0 86v 44 | thunderbolt,0;waterfall,0 82v 41
+    p2 greedy: move 2 2, move 1
+              p2b Kyurem -- move: Struggle
+      p2b Kyurem used Struggle -> p1b: Gyarados
+              p1b Gyarados used up its Sitrus Berry
+      p2a Gengar used Sludge Bomb -> p1b: Gyarados
+      p1a Rotom used Hydro Pump -> p2a: Gengar
+      p1b Gyarados used Waterfall -> p2a: Gengar
+      after p1: Rotom-Wash 304/304, Gyarados 44/394
+      after p2: Gengar-Mega 9/314, Kyurem-Black 67/391
+
+  Turn 22
+    p1 mcts: move 1 2, move 3 1
+      search (11000 visits): hydropump,1;waterfall,0 389v 180 | hydropump,1;protect,1 386v 178 | willowisp,0;protect,1 361v 164 | hydropump,0;protect,1 338v 151
+    p2 greedy: move 2 2, move 1
+              p2b Kyurem -- move: Struggle
+      p2b Kyurem used Struggle -> p1b: Gyarados
+      p1b Gyarados fainted
+      p2b Kyurem fainted
+      p2a Gengar used Sludge Bomb -> p1a: Rotom
+      p1a Rotom used Hydro Pump -> p2a: Gengar
+      p2a Gengar fainted
+      after p1: Rotom-Wash 156/304, Gyarados 0/394
+      after p2: Gengar-Mega 0/314, Kyurem-Black 0/391
+
+  Turn 23
+      p2a <- Raichu comes in (324/324)
+      after p1: Rotom-Wash 156/304, Gyarados 0/394
+      after p2: Raichu 324/324, Kyurem-Black 0/391
+
+  Turn 24
+    p1 mcts: move 1 1, pass
+      search (220000 visits): hydropump,0;No Move 219221v 200307 | willowisp,0;No Move 382v 249 | protect,0;No Move 199v 114 | thunderbolt,0;No Move 198v 113
+    p2 greedy: move 2 1, pass
+      p2a Raichu used Volt Switch -> p1a: Rotom
+              p1a Rotom used up its Sitrus Berry
+      p1a Rotom used Hydro Pump -> p2a: Raichu  [[miss]]
+              p1a Rotom -- MISSED
+      after p1: Rotom-Wash 169/304, Gyarados 0/394
+      after p2: Raichu 324/324, Kyurem-Black 0/391
+
+  Turn 25
+    p1 mcts: move 1 1, pass
+      search (291000 visits): hydropump,0;No Move 279522v 184112 | willowisp,0;No Move 9115v 5611 | protect,0;No Move 2154v 1206 | thunderbolt,0;No Move 209v 67
+    p2 greedy: move 2 1, pass
+      p2a Raichu used Volt Switch -> p1a: Rotom
+              p1a Rotom -- critical hit
+      p1a Rotom used Hydro Pump -> p2a: Raichu
+              p2a Raichu used up its Air Balloon
+      after p1: Rotom-Wash 75/304, Gyarados 0/394
+      after p2: Raichu 129/324, Kyurem-Black 0/391
+
+  Turn 26
+    p1 mcts: move 1 1, pass
+      search (1253000 visits): hydropump,0;No Move 1251686v 940930 | protect,0;No Move 1060v 629 | willowisp,0;No Move 142v 44 | thunderbolt,0;No Move 112v 29
+    p2 greedy: move 2 1, pass
+      p2a Raichu used Volt Switch -> p1a: Rotom
+      p1a Rotom used Hydro Pump -> p2a: Raichu
+              p2a Raichu -- critical hit
+      p2a Raichu fainted
+      after p1: Rotom-Wash 11/304, Gyarados 0/394
+      after p2: Raichu 0/324, Kyurem-Black 0/391
+
+  RESULT: p1 wins

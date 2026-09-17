@@ -1,0 +1,196 @@
+battle 149   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: Lavender Town: Gengar-Mega, Kyurem-Black, Thundurus, Porygon2, Landorus-Therian, Ferrothorn
+  p2: XY Doubles: Kangaskhan, Landorus-Therian, Gyarados, Cresselia, Heatran, Kyurem-Black
+
+  Turn 1
+    p1 mcts: move 4, move 3 2
+      search (42000 visits): protect,0;icebeam,1 2549v 2021 | switch porygon2;icebeam,1 2297v 1810 | switch porygon2;switch landorustherian 1774v 1374 | switch porygon2;switch thundurus 1442v 1100
+    p2 greedy: move 4 1, move 4 1
+      p1a Gengar used Protect
+      p2b Landorus used Superpower -> p1a: Gengar
+              p1a Gengar -- IMMUNE
+      p1b Kyurem used Ice Beam -> p2b: Landorus
+      p2b Landorus fainted
+      p2a Kangaskhan used Ice Punch -> p1a: Gengar
+              p1a Gengar -- move: Protect
+      after p1: Gengar-Mega 324/324, Kyurem-Black 392/392
+      after p2: Kangaskhan 355/355, Landorus-Therian 0/337
+
+  Turn 2
+      p2b <- Gyarados comes in (394/394)
+              p1a Gengar atk 1 fell
+              p1b Kyurem atk 1 fell
+      after p1: Gengar-Mega 324/324, Kyurem-Black 392/392
+      after p2: Kangaskhan 355/355, Gyarados 394/394
+
+  Turn 3
+    p1 mcts: switch 4, switch 5   (slot0 Gengar-Mega -> Porygon2; slot1 Kyurem-Black -> Landorus-Therian)
+      search (27000 visits): switch porygon2;switch landorustherian 576v 554 | switch landorustherian;switch porygon2 519v 494 | switch ferrothorn;switch porygon2 507v 482 | switch porygon2;switch ferrothorn 501v 475
+    p2 greedy: move 4 1, move 2 1
+      p1a <- Porygon2 comes in (374/374)
+              p1a Porygon2 spa 1 rose
+      p1b <- Landorus-Therian comes in (382/382)
+              p2a Kangaskhan atk 1 fell
+              p2b Gyarados atk 1 fell
+      p2a Kangaskhan used Ice Punch -> p1a: Porygon2
+      p2b Gyarados used Stone Edge -> p1a: Porygon2
+      after p1: Porygon2 299/374, Landorus-Therian 382/382
+      after p2: Kangaskhan 355/355, Gyarados 394/394
+
+  Turn 4
+    p1 mcts: move 4 2, move 4 2
+      search (36000 visits): thunderbolt,1;stoneedge,1 774v 649 | recover,0;stoneedge,1 725v 604 | thunderbolt,1;switch thundurus 639v 525 | thunderbolt,1;switch ferrothorn 634v 521
+    p2 greedy: move 4 1, move 2 1
+      p2a Kangaskhan used Ice Punch -> p1a: Porygon2
+      p1b Landorus used Stone Edge -> p2b: Gyarados
+              p2b Gyarados used up its Sitrus Berry
+      p2b Gyarados used Stone Edge -> p1a: Porygon2
+      p1a Porygon2 used Thunderbolt -> p2b: Gyarados
+      p2b Gyarados fainted
+      after p1: Porygon2 219/374, Landorus-Therian 382/382
+      after p2: Kangaskhan 355/355, Gyarados 0/394
+
+  Turn 5
+      p2b <- Cresselia comes in (411/411)
+      after p1: Porygon2 219/374, Landorus-Therian 382/382
+      after p2: Kangaskhan 355/355, Cresselia 411/411
+
+  Turn 6
+    p1 mcts: move 2, move 1 1
+      search (2000 visits): recover,0;earthpower,0 23v 15 | thunderbolt,1;earthpower,0 23v 15 | recover,0;earthpower,1 22v 14 | recover,0;stoneedge,0 22v 14
+    p2 greedy: move 4 1, move 3 1
+      p2a Kangaskhan used Ice Punch -> p1a: Porygon2
+      p1b Landorus used Earth Power -> p2a: Kangaskhan
+      p2b Cresselia used Moonblast -> p1a: Porygon2
+      p1a Porygon2 used Recover
+      after p1: Porygon2 322/374, Landorus-Therian 382/382
+      after p2: Kangaskhan 210/355, Cresselia 411/411
+
+  Turn 7
+    p1 mcts: move 2, move 1 1
+      search (2000 visits): recover,0;earthpower,0 22v 13 | icebeam,0;earthpower,1 22v 13 | thunderbolt,1;earthpower,0 22v 13 | icebeam,0;earthpower,0 21v 12
+    p2 greedy: move 4 1, move 3 1
+      p2a Kangaskhan used Ice Punch -> p1a: Porygon2
+      p2b Cresselia used Moonblast -> p1a: Porygon2
+      p1b Landorus used Earth Power -> p2a: Kangaskhan
+      p1a Porygon2 used Recover
+      after p1: Porygon2 374/374, Landorus-Therian 382/382
+      after p2: Kangaskhan 62/355, Cresselia 411/411
+
+  Turn 8
+    p1 mcts: move 3 2, move 1 2
+      search (3000 visits): icebeam,1;earthpower,1 40v 25 | thunderbolt,0;earthpower,1 35v 20 | icebeam,1;earthpower,0 34v 19 | icebeam,1;stoneedge,0 33v 18
+    p2 greedy: move 4 1, move 3 1
+      p2a Kangaskhan used Ice Punch -> p1a: Porygon2
+      p1b Landorus used Earth Power -> p2b: Cresselia
+              p2b Cresselia -- IMMUNE
+      p2b Cresselia used Moonblast -> p1a: Porygon2
+      p1a Porygon2 used Ice Beam -> p2b: Cresselia
+      after p1: Porygon2 294/374, Landorus-Therian 382/382
+      after p2: Kangaskhan 62/355, Cresselia 325/411
+
+  Turn 9
+    p1 mcts: move 2, move 4 1
+      search (3000 visits): recover,0;stoneedge,0 36v 21 | recover,0;earthpower,0 35v 21 | icebeam,1;earthpower,1 34v 20 | thunderbolt,0;earthpower,1 33v 19
+    p2 greedy: move 4 1, move 3 1
+      p2a Kangaskhan used Ice Punch -> p1a: Porygon2
+      p1b Landorus used Stone Edge -> p2a: Kangaskhan
+      p2a Kangaskhan fainted
+      p2b Cresselia used Moonblast -> p1a: Porygon2
+      p1a Porygon2 used Recover
+      after p1: Porygon2 374/374, Landorus-Therian 382/382
+      after p2: Kangaskhan 0/355, Cresselia 325/411
+
+  Turn 10
+      p2a <- Heatran comes in (337/337)
+      after p1: Porygon2 374/374, Landorus-Therian 382/382
+      after p2: Heatran 337/337, Cresselia 325/411
+
+  Turn 11
+    p1 mcts: move 1, move 1 1
+      search (2000 visits): trickroom,0;earthpower,0 32v 23 | trickroom,1;earthpower,0 31v 22 | recover,0;earthpower,0 31v 22 | icebeam,0;earthpower,0 31v 22
+    p2 greedy: move 1, move 3 1
+      p2a Heatran used Heat Wave -> p1b: Landorus  [[spread] p1a,p1b]
+      p2b Cresselia used Moonblast -> p1a: Porygon2
+      p1b Landorus used Earth Power -> p2a: Heatran
+      p2a Heatran fainted
+      p1a Porygon2 used Trick Room
+      after p1: Porygon2 242/374, Landorus-Therian 288/382
+      after p2: Heatran 0/337, Cresselia 325/411
+
+  Turn 12
+      p2a <- Kyurem-Black comes in (448/448)
+      after p1: Porygon2 242/374, Landorus-Therian 288/382
+      after p2: Kyurem-Black 448/448, Cresselia 325/411
+
+  Turn 13
+    p1 mcts: move 2, move 4 1
+      search (2000 visits): recover,0;stoneedge,0 21v 10 | recover,0;earthpower,0 20v 9 | recover,0;stoneedge,1 20v 9 | recover,0;switch kyuremblack 20v 9
+    p2 greedy: move 1 1, move 3 1
+      p1a Porygon2 used Recover
+      p2a Kyurem used Ice Beam -> p1a: Porygon2
+      p2b Cresselia used Moonblast -> p1a: Porygon2
+              p1a Porygon2 spa 1 fell
+      p1b Landorus used Stone Edge -> p2a: Kyurem
+      after p1: Porygon2 228/374, Landorus-Therian 288/382
+      after p2: Kyurem-Black 288/448, Cresselia 325/411
+
+  Turn 14
+    p1 mcts: move 2, move 4 1
+      search (3000 visits): recover,0;stoneedge,0 33v 15 | recover,0;stoneedge,1 33v 15 | recover,0;switch kyuremblack 33v 15 | recover,0;switch ferrothorn 31v 13
+    p2 greedy: move 1 1, move 3 1
+      p1a Porygon2 used Recover
+      p2a Kyurem used Ice Beam -> p1a: Porygon2
+      p2b Cresselia used Moonblast -> p1a: Porygon2
+              p1a Porygon2 -- critical hit
+      p1b Landorus used Stone Edge -> p2a: Kyurem
+      after p1: Porygon2 190/374, Landorus-Therian 288/382
+      after p2: Kyurem-Black 134/448, Cresselia 325/411
+
+  Turn 15
+    p1 mcts: move 2, move 4 1
+      search (4000 visits): recover,0;stoneedge,0 56v 29 | recover,0;switch kyuremblack 48v 23 | recover,0;switch gengarmega 47v 22 | recover,0;stoneedge,1 46v 21
+    p2 greedy: move 1 1, move 3 1
+      p1a Porygon2 used Recover
+      p2a Kyurem used Ice Beam -> p1a: Porygon2
+      p2b Cresselia used Moonblast -> p1a: Porygon2
+      p1b Landorus used Stone Edge -> p2a: Kyurem
+      p2a Kyurem fainted
+      after p1: Porygon2 232/374, Landorus-Therian 288/382
+      after p2: Kyurem-Black 0/448, Cresselia 325/411
+
+  Turn 16
+    p1 mcts: move 3 2, switch 6   (slot1 Landorus-Therian -> Ferrothorn)
+      search (40000 visits): icebeam,1;switch ferrothorn 3271v 2200 | thunderbolt,1;switch ferrothorn 2649v 1758 | icebeam,1;switch gengarmega 1741v 1119 | recover,0;switch ferrothorn 1694v 1086
+    p2 greedy: pass, move 3 1
+      p1b <- Ferrothorn comes in (352/352)
+      p1a Porygon2 used Ice Beam -> p2b: Cresselia
+              p2b Cresselia -- critical hit
+      p2b Cresselia used Moonblast -> p1a: Porygon2
+              p1a Porygon2 spa 1 fell
+      after p1: Porygon2 183/374, Ferrothorn 352/352
+      after p2: Kyurem-Black 0/448, Cresselia 227/411
+
+  Turn 17
+    p1 mcts: move 2, move 1 2
+      search (38000 visits): recover,0;powerwhip,1 2797v 2358 | thunderbolt,1;powerwhip,1 2744v 2311 | icebeam,1;powerwhip,1 2345v 1958 | recover,0;gyroball,1 1670v 1365
+    p2 greedy: pass, move 3 1
+      p2b Cresselia used Moonblast -> p1a: Porygon2
+      p1a Porygon2 used Recover
+      p1b Ferrothorn used Power Whip -> p2b: Cresselia
+      after p1: Porygon2 322/374, Ferrothorn 352/352
+      after p2: Kyurem-Black 0/448, Cresselia 80/411
+
+  Turn 18
+    p1 mcts: switch 6, move 1 2   (slot0 Porygon2 -> Landorus-Therian)
+      search (145000 visits): switch landorustherian;powerwhip,1 36400v 35070 | switch thundurus;powerwhip,1 25152v 24102 | thunderbolt,1;gyroball,1 11649v 10995 | icebeam,1;gyroball,1 10585v 9967
+    p2 greedy: pass, move 3 1
+      p1a <- Landorus-Therian comes in (288/382)
+              p2b Cresselia atk 1 fell
+      p2b Cresselia used Moonblast -> p1a: Landorus
+      p1b Ferrothorn used Power Whip -> p2b: Cresselia
+      p2b Cresselia fainted
+      after p1: Landorus-Therian 228/382, Ferrothorn 352/352
+      after p2: Kyurem-Black 0/448, Cresselia 0/411
+
+  RESULT: p1 wins

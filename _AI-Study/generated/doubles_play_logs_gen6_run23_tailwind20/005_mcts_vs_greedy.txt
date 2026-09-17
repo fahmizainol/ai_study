@@ -1,0 +1,147 @@
+battle 5   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: Untitled 650: Kyurem-Black, Diancie-Mega, Volcanion, Amoonguss, Landorus-Therian, Thundurus
+  p2: oraspl/Untitled 330: Kangaskhan-Mega, Suicune, Landorus-Therian, Zapdos, Volcanion, Amoonguss
+
+  Turn 1
+    p1 mcts: move 2 1, move 1
+      search (12000 visits): icebeam,0;diamondstorm,0 366v 231 | icebeam,1;diamondstorm,0 260v 153 | switch amoonguss;diamondstorm,0 250v 146 | icebeam,0;moonblast,0 245v 142
+    p2 greedy: move 3 1, move 3 1
+      p2a Kangaskhan used Sucker Punch -> p1a: Kyurem
+      p1b Diancie used Diamond Storm -> p2b: Suicune  [[spread] p2a,p2b]
+              p1b Diancie def 1 rose
+      p1a Kyurem used Ice Beam -> p2a: Kangaskhan
+      p2b Suicune used Scald -> p1a: Kyurem
+      after p1: Kyurem-Black 300/418, Diancie-Mega 293/293
+      after p2: Kangaskhan-Mega 100/380, Suicune 327/404
+
+  Turn 2
+    p1 mcts: move 2 2, move 1
+      search (25000 visits): icebeam,1;diamondstorm,0 1330v 947 | substitute,0;diamondstorm,0 860v 586 | earthpower,1;diamondstorm,0 826v 560 | icebeam,0;diamondstorm,0 820v 556
+    p2 greedy: move 3 1, move 3 1
+      p2a Kangaskhan used Sucker Punch -> p1a: Kyurem
+      p1b Diancie used Diamond Storm -> p2a: Kangaskhan  [[spread] p2b]
+              p1b Diancie -- MISSED
+              p1b Diancie def 1 rose
+      p1a Kyurem used Ice Beam -> p2b: Suicune
+      p2b Suicune used Scald -> p1a: Kyurem
+              p1a Kyurem -- critical hit
+              p1a Kyurem is now brn
+      after p1: Kyurem-Black 101/418, Diancie-Mega 293/293
+      after p2: Kangaskhan-Mega 100/380, Suicune 176/404
+
+  Turn 3
+    p1 mcts: move 2 2, move 1
+      search (32000 visits): icebeam,1;diamondstorm,0 1484v 689 | earthpower,1;diamondstorm,0 1352v 620 | switch volcanion;diamondstorm,0 1076v 477 | switch landorustherian;diamondstorm,0 877v 376
+    p2 greedy: move 3 1, move 3 1
+      p2a Kangaskhan used Sucker Punch -> p1a: Kyurem
+      p1b Diancie used Diamond Storm -> p2a: Kangaskhan  [[spread] p2a,p2b]
+              p1b Diancie def 1 rose
+      p2a Kangaskhan fainted
+      p1a Kyurem used Ice Beam -> p2b: Suicune
+      p2b Suicune fainted
+      p1a Kyurem fainted
+      after p1: Kyurem-Black 0/418, Diancie-Mega 293/293
+      after p2: Kangaskhan-Mega 0/380, Suicune 0/404
+
+  Turn 4
+      p2a <- Landorus-Therian comes in (319/319)
+      p1a <- Volcanion comes in (363/363)
+      p2b <- Zapdos comes in (384/384)
+              p1a Volcanion atk 1 fell
+              p1b Diancie atk 1 fell
+      after p1: Volcanion 363/363, Diancie-Mega 293/293
+      after p2: Landorus-Therian 319/319, Zapdos 384/384
+
+  Turn 5
+    p1 mcts: move 1 2, move 2 1
+      search (25000 visits): steameruption,1;moonblast,0 6805v 3846 | switch landorustherian;diamondstorm,0 502v 179 | switch landorustherian;moonblast,0 458v 159 | switch landorustherian;moonblast,1 427v 145
+    p2 greedy: move 4 1, move 2
+      p2a Landorus used Superpower -> p1a: Volcanion
+              p2a Landorus atk 1 fell
+              p2a Landorus def 1 fell
+      p1b Diancie used Moonblast -> p2a: Landorus
+              p2a Landorus spa 1 fell
+      p2b Zapdos used Heat Wave -> p1b: Diancie  [[spread] p1a,p1b]
+      p1a Volcanion used Steam Eruption -> p2b: Zapdos
+      after p1: Volcanion 228/363, Diancie-Mega 256/293
+      after p2: Landorus-Therian 108/319, Zapdos 195/384
+
+  Turn 6
+    p1 mcts: move 1 1, move 2 2
+      search (24000 visits): steameruption,0;moonblast,1 472v 67 | heatwave,0;moonblast,1 426v 56 | steameruption,1;hiddenpower,0 355v 39 | steameruption,0;hiddenpower,1 352v 38
+    p2 greedy: move 4 1, move 2
+      p2a Landorus used Superpower -> p1a: Volcanion
+              p2a Landorus atk 1 fell
+              p2a Landorus def 1 fell
+      p1b Diancie used Moonblast -> p2b: Zapdos
+      p2b Zapdos used Heat Wave -> p1b: Diancie  [[spread] p1a,p1b]
+      p1a Volcanion used Steam Eruption -> p2a: Landorus
+      p2a Landorus fainted
+      after p1: Volcanion 133/363, Diancie-Mega 223/293
+      after p2: Landorus-Therian 0/319, Zapdos 32/384
+
+  Turn 7
+      p2a <- Volcanion comes in (364/364)
+      after p1: Volcanion 133/363, Diancie-Mega 223/293
+      after p2: Volcanion 364/364, Zapdos 32/384
+
+  Turn 8
+    p1 mcts: move 2, move 3 1
+      search (24000 visits): heatwave,0;hiddenpower,0 6297v 4315 | earthpower,0;diamondstorm,0 406v 99 | earthpower,0;hiddenpower,1 328v 72 | earthpower,0;protect,1 318v 68
+    p2 greedy: move 1 1, move 2
+      p1b Diancie used Hidden Power -> p2a: Volcanion
+      p2b Zapdos used Heat Wave -> p1b: Diancie  [[spread] p1a,p1b]
+      p2a Volcanion used Steam Eruption -> p1a: Volcanion
+      p1a Volcanion used Heat Wave -> p2a: Volcanion  [[spread] p2a]
+              p1a Volcanion -- MISSED
+      after p1: Volcanion 210/363, Diancie-Mega 188/293
+      after p2: Volcanion 339/364, Zapdos 32/384
+
+  Turn 9
+    p1 mcts: move 1 2, move 2 2
+      search (31000 visits): steameruption,1;moonblast,1 10366v 9819 | earthpower,0;diamondstorm,0 1011v 370 | earthpower,0;moonblast,0 497v 152 | earthpower,0;hiddenpower,1 479v 145
+    p2 greedy: move 1 1, move 2
+      p1b Diancie used Moonblast -> p2b: Zapdos
+      p2b Zapdos fainted
+      p1a Volcanion used Steam Eruption -> p2a: Volcanion
+      p2a Volcanion used Steam Eruption -> p1a: Volcanion
+      after p1: Volcanion 300/363, Diancie-Mega 188/293
+      after p2: Volcanion 364/364, Zapdos 0/384
+
+  Turn 10
+      p2b <- Amoonguss comes in (432/432)
+      after p1: Volcanion 300/363, Diancie-Mega 188/293
+      after p2: Volcanion 364/364, Amoonguss 432/432
+
+  Turn 11
+    p1 mcts: move 4 1, move 1
+      search (18000 visits): earthpower,0;diamondstorm,0 748v 596 | heatwave,0;diamondstorm,0 554v 427 | overheat,1;diamondstorm,0 471v 356 | earthpower,0;moonblast,0 408v 302
+    p2 greedy: move 1 2, move 4 2
+      p1b Diancie used Diamond Storm -> p2b: Amoonguss  [[spread] p2a,p2b]
+              p1b Diancie def 1 rose
+      p1a Volcanion used Earth Power -> p2a: Volcanion
+      p2a Volcanion used Steam Eruption -> p1b: Diancie
+      p1b Diancie fainted
+      p2b Amoonguss used Energy Ball -> p1a: Volcanion
+      after p1: Volcanion 242/363, Diancie-Mega 0/293
+      after p2: Volcanion 34/364, Amoonguss 351/432
+
+  Turn 12
+      p1b <- Amoonguss comes in (431/431)
+      after p1: Volcanion 242/363, Amoonguss 431/431
+      after p2: Volcanion 34/364, Amoonguss 351/432
+
+  Turn 13
+    p1 mcts: move 3 2, move 3 1
+      search (7000 visits): overheat,1;gigadrain,0 485v 387 | heatwave,0;gigadrain,0 281v 207 | heatwave,0;switch landorustherian 217v 153 | overheat,1;switch landorustherian 177v 119
+    p2 greedy: move 1 1, move 4 1
+      p2a Volcanion used Steam Eruption -> p1a: Volcanion
+      p1a Volcanion used Overheat -> p2b: Amoonguss
+              p1a Volcanion spa 2 fell
+      p2b Amoonguss fainted
+      p1b Amoonguss used Giga Drain -> p2a: Volcanion
+      p2a Volcanion fainted
+      after p1: Volcanion 332/363, Amoonguss 431/431
+      after p2: Volcanion 0/364, Amoonguss 0/432
+
+  RESULT: p1 wins

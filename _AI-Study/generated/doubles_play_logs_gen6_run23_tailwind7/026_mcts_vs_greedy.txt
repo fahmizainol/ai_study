@@ -1,0 +1,115 @@
+battle 26   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: ORAS Doubles OU: Porygon2, Heatran, Kangaskhan-Mega, Azumarill, Victini, Sylveon
+  p2: oraspl/Untitled 369: Meowstic, Kangaskhan-Mega, Aromatisse, Amoonguss, Landorus-Therian, Volcanion
+
+  Turn 1
+    p1 mcts: switch 6, move 1   (slot0 Porygon2 -> Sylveon)
+      search (10000 visits): switch sylveon;eruption,0 336v 245 | thunderbolt,0;eruption,0 294v 210 | icebeam,0;eruption,0 276v 195 | icebeam,1;eruption,0 271v 190
+    p2 greedy: move 1 1, move 4 1
+      p1a <- Sylveon comes in (393/393)
+      p2a Meowstic used Fake Out -> p1a: Sylveon
+      p2b Kangaskhan used Sucker Punch  [[still]]
+              p2b Kangaskhan -- IT FAILED
+      p1b Heatran used Eruption -> p2b: Kangaskhan  [[spread] p2a,p2b]
+      after p1: Sylveon 365/393, Heatran 386/386
+      after p2: Meowstic 100/352, Kangaskhan-Mega 201/414
+
+  Turn 2
+    p1 mcts: switch 6, move 1   (slot0 Sylveon -> Porygon2)
+      search (42000 visits): switch porygon2;eruption,0 898v 242 | hypervoice,0;switch porygon2 724v 183 | hypervoice,0;eruption,0 696v 173 | hyperbeam,0;switch porygon2 648v 157
+    p2 greedy: move 1 1, move 4 1
+      p1a <- Porygon2 comes in (374/374)
+              p1a Porygon2 spa 1 rose
+      p2a Meowstic used Fake Out  [[still]]
+              p2a Meowstic -- IT FAILED
+      p2b Kangaskhan used Sucker Punch  [[still]]
+              p2b Kangaskhan -- IT FAILED
+      p1b Heatran used Eruption -> p2b: Kangaskhan  [[spread] p2a,p2b]
+              p2a Meowstic -- critical hit
+      p2a Meowstic fainted
+      after p1: Porygon2 374/374, Heatran 386/386
+      after p2: Meowstic 0/352, Kangaskhan-Mega 3/414
+
+  Turn 3
+      p2a <- Aromatisse comes in (406/406)
+      after p1: Porygon2 374/374, Heatran 386/386
+      after p2: Aromatisse 406/406, Kangaskhan-Mega 3/414
+
+  Turn 4
+    p1 mcts: move 2 1, move 1
+      search (24000 visits): icebeam,0;eruption,0 526v 127 | thunderbolt,0;eruption,0 497v 117 | switch sylveon;eruption,0 461v 105 | icebeam,1;eruption,0 405v 87
+    p2 greedy: move 3 1, move 4 1
+      p2b Kangaskhan used Sucker Punch -> p1a: Porygon2
+      p1b Heatran used Eruption -> p2b: Kangaskhan  [[spread] p2a,p2b]
+      p2b Kangaskhan fainted
+      p1a Porygon2 used Ice Beam -> p2a: Aromatisse
+      p2a Aromatisse used Moonblast -> p1a: Porygon2
+      after p1: Porygon2 253/374, Heatran 386/386
+      after p2: Aromatisse 83/406, Kangaskhan-Mega 0/414
+
+  Turn 5
+      p2b <- Amoonguss comes in (432/432)
+      after p1: Porygon2 253/374, Heatran 386/386
+      after p2: Aromatisse 83/406, Amoonguss 432/432
+
+  Turn 6
+    p1 mcts: move 2 2, move 1
+      search (10000 visits): icebeam,1;eruption,0 281v 220 | switch kangaskhanmega;eruption,0 278v 218 | recover,0;eruption,0 277v 217 | icebeam,0;eruption,0 229v 173
+    p2 greedy: move 3 1, move 3 1
+      p1b Heatran used Eruption -> p2a: Aromatisse  [[spread] p2a,p2b]
+      p2a Aromatisse fainted
+      p2b Amoonguss fainted
+      p1a Porygon2 used Ice Beam -> p2: Aromatisse  [[notarget]]
+              p1a Porygon2 -- IT FAILED
+      after p1: Porygon2 253/374, Heatran 386/386
+      after p2: Aromatisse 0/406, Amoonguss 0/432
+
+  Turn 7
+      p2b <- Volcanion comes in (363/363)
+      p2a <- Landorus-Therian comes in (329/329)
+              p1a Porygon2 atk 1 fell
+              p1b Heatran atk 1 fell
+      after p1: Porygon2 253/374, Heatran 386/386
+      after p2: Landorus-Therian 329/329, Volcanion 363/363
+
+  Turn 8
+    p1 mcts: move 2 1, move 4
+      search (8000 visits): icebeam,0;protect,1 346v 255 | icebeam,0;switch kangaskhanmega 234v 161 | icebeam,0;switch sylveon 220v 150 | icebeam,0;switch azumarill 201v 134
+    p2 greedy: move 4 1, move 4 1
+      p1b Heatran used Protect
+      p2a Landorus used Stone Edge -> p1a: Porygon2
+      p2b Volcanion used Overheat -> p1a: Porygon2
+              p2b Volcanion spa 2 fell
+      p1a Porygon2 used Ice Beam -> p2a: Landorus
+      p2a Landorus fainted
+      after p1: Porygon2 61/374, Heatran 386/386
+      after p2: Landorus-Therian 0/329, Volcanion 363/363
+
+  Turn 9
+    p1 mcts: move 1 2, move 3 2
+      search (119000 visits): thunderbolt,1;earthpower,1 96130v 94261 | switch sylveon;earthpower,1 11542v 10952 | switch victini;earthpower,1 1224v 1050 | recover,0;earthpower,1 872v 726
+    p2 greedy: pass, move 4 1
+      p2b Volcanion used Overheat -> p1a: Porygon2
+              p2b Volcanion spa 2 fell
+      p1a Porygon2 fainted
+      p1b Heatran used Earth Power -> p2b: Volcanion
+      after p1: Porygon2 0/374, Heatran 386/386
+      after p2: Landorus-Therian 0/329, Volcanion 215/363
+
+  Turn 10
+      p1a <- Kangaskhan-Mega comes in (414/414)
+      after p1: Kangaskhan-Mega 414/414, Heatran 386/386
+      after p2: Landorus-Therian 0/329, Volcanion 215/363
+
+  Turn 11
+    p1 mcts: move 1 2, move 3 2
+      search (231000 visits): fakeout,1;earthpower,1 43568v 43568 | doubleedge,1;earthpower,1 35213v 35119 | doubleedge,1;eruption,1 25180v 24991 | hammerarm,1;earthpower,1 24790v 24598
+    p2 greedy: pass, move 4 1
+      p1a Kangaskhan used Fake Out -> p2b: Volcanion
+              p2b Volcanion COULD NOT MOVE (flinch)
+      p1b Heatran used Earth Power -> p2b: Volcanion
+      p2b Volcanion fainted
+      after p1: Kangaskhan-Mega 414/414, Heatran 386/386
+      after p2: Landorus-Therian 0/329, Volcanion 0/363
+
+  RESULT: p1 wins

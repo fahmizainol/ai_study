@@ -1,0 +1,257 @@
+battle 34   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: DPL vs jello: Kangaskhan-Mega, Amoonguss, Thundurus, Landorus-Therian, Volcanion, Sylveon
+  p2: ORAS Doubles OU: Charizard, Whimsicott, Landorus-Therian, Thundurus, Heatran, Gengar
+
+  Turn 1
+    p1 mcts: move 1 2, move 3 2
+      search (28000 visits): fakeout,1;energyball,1 472v 364 | crunch,1;energyball,1 426v 324 | lowkick,1;energyball,1 369v 274 | fakeout,1;spore,1 357v 264
+    p2 greedy: move 2 1, move 1 1
+      p1a Kangaskhan used Fake Out -> p2b: Whimsicott
+              p2b Whimsicott COULD NOT MOVE (flinch)
+      p2a Charizard used Solar Beam  [[still]]
+      p1b Amoonguss used Energy Ball -> p2b: Whimsicott
+      after p1: Kangaskhan-Mega 414/414, Amoonguss 432/432
+      after p2: Charizard 359/359, Whimsicott 138/262
+
+  Turn 2
+    p1 mcts: move 2 2, switch 3   (slot1 Amoonguss -> Thundurus)
+      search (35000 visits): crunch,1;switch thundurus 1121v 703 | switch thundurus;switch sylveon 926v 549 | switch sylveon;energyball,1 831v 485 | switch sylveon;switch landorustherian 754v 434
+    p2 greedy: move 1, move 1 1
+      p1b <- Thundurus comes in (362/362)
+      p2b Whimsicott used Energy Ball -> p1a: Kangaskhan
+      p1a Kangaskhan used Crunch -> p2b: Whimsicott
+      p2a Charizard used Solar Beam -> p1a: Kangaskhan  [[from] lockedmove]
+      after p1: Kangaskhan-Mega 199/414, Thundurus 362/362
+      after p2: Charizard 359/359, Whimsicott 96/262
+
+  Turn 3
+    p1 mcts: move 2 2, move 1 2
+      search (29000 visits): crunch,1;thunderbolt,1 397v 319 | crunch,1;hiddenpower,1 387v 310 | crunch,1;thunderwave,1 379v 303 | lowkick,1;thunderbolt,1 377v 301
+    p2 greedy: move 2 1, move 1 1
+      p2b Whimsicott used Energy Ball -> p1a: Kangaskhan
+      p1b Thundurus used Thunderbolt -> p2b: Whimsicott
+      p1a Kangaskhan used Crunch -> p2b: Whimsicott
+      p2b Whimsicott fainted
+      p2a Charizard used Solar Beam  [[still]]
+      after p1: Kangaskhan-Mega 78/414, Thundurus 362/362
+      after p2: Charizard 359/359, Whimsicott 0/262
+
+  Turn 4
+      p2b <- Landorus-Therian comes in (319/319)
+              p1a Kangaskhan atk 1 fell
+              p1b Thundurus atk 1 fell
+      after p1: Kangaskhan-Mega 78/414, Thundurus 362/362
+      after p2: Charizard 359/359, Landorus-Therian 319/319
+
+  Turn 5
+    p1 mcts: switch 3, switch 6   (slot0 Kangaskhan-Mega -> Amoonguss; slot1 Thundurus -> Sylveon)
+      search (37000 visits): switch amoonguss;switch sylveon 993v 956 | seismictoss,0;thunderbolt,0 992v 955 | switch volcanion;thunderwave,0 956v 917 | seismictoss,1;switch landorustherian 911v 871
+    p2 greedy: move 1, move 2 1
+      p1b <- Sylveon comes in (394/394)
+      p1a <- Amoonguss comes in (432/432)
+      p2b Landorus used Superpower -> p1a: Amoonguss
+              p2b Landorus atk 1 fell
+              p2b Landorus def 1 fell
+      p2a Charizard used Solar Beam -> p1a: Amoonguss  [[from] lockedmove]
+      after p1: Amoonguss 311/432, Sylveon 394/394
+      after p2: Charizard 359/359, Landorus-Therian 266/319
+
+  Turn 6
+    p1 mcts: switch 4, switch 5   (slot0 Amoonguss -> Landorus-Therian; slot1 Sylveon -> Volcanion)
+      search (35000 visits): switch landorustherian;switch volcanion 13539v 9680 | switch volcanion;switch kangaskhanmega 1639v 976 | switch thundurus;switch landorustherian 1184v 682 | switch volcanion;switch thundurus 380v 181
+    p2 greedy: move 2 1, move 2 1
+      p1b <- Volcanion comes in (363/363)
+      p1a <- Landorus-Therian comes in (319/319)
+              p2a Charizard atk 1 fell
+              p2b Landorus atk 1 fell
+      p2b Landorus used Superpower -> p1a: Landorus
+              p2b Landorus atk 1 fell
+              p2b Landorus def 1 fell
+      p2a Charizard used Solar Beam  [[still]]
+      after p1: Landorus-Therian 274/319, Volcanion 363/363
+      after p2: Charizard 359/359, Landorus-Therian 266/319
+
+  Turn 7
+    p1 mcts: switch 4, move 4 1   (slot0 Landorus-Therian -> Amoonguss)
+      search (31000 visits): switch amoonguss;overheat,0 16684v 9652 | switch sylveon;steameruption,1 261v 86 | switch amoonguss;steameruption,1 228v 71 | stoneedge,1;switch thundurus 211v 63
+    p2 greedy: move 1, move 2 1
+      p1a <- Amoonguss comes in (432/432)
+      p2b Landorus used Superpower -> p1a: Amoonguss
+              p2b Landorus atk 1 fell
+              p2b Landorus def 1 fell
+      p2a Charizard used Solar Beam -> p1a: Amoonguss  [[from] lockedmove]
+      p1b Volcanion used Overheat -> p2a: Charizard
+              p1b Volcanion spa 2 fell
+      after p1: Amoonguss 369/432, Volcanion 363/363
+      after p2: Charizard 232/359, Landorus-Therian 213/319
+
+  Turn 8
+    p1 mcts: switch 3, move 4 1   (slot0 Amoonguss -> Kangaskhan-Mega)
+      search (26000 visits): switch kangaskhanmega;overheat,0 496v 479 | switch kangaskhanmega;overheat,1 486v 470 | switch sylveon;overheat,1 483v 464 | switch sylveon;overheat,0 472v 457
+    p2 greedy: move 2 1, move 2 1
+      p1a <- Kangaskhan-Mega comes in (78/414)
+      p2b Landorus used Superpower -> p1a: Kangaskhan
+              p2b Landorus atk 1 fell
+              p2b Landorus def 1 fell
+      p1a Kangaskhan fainted
+      p2a Charizard used Solar Beam  [[still]]
+      p1b Volcanion used Overheat -> p2a: Charizard  [[miss]]
+              p1b Volcanion -- MISSED
+      after p1: Kangaskhan-Mega 0/414, Volcanion 363/363
+      after p2: Charizard 232/359, Landorus-Therian 213/319
+
+  Turn 9
+      p1a <- Amoonguss comes in (432/432)
+      after p1: Amoonguss 432/432, Volcanion 363/363
+      after p2: Charizard 232/359, Landorus-Therian 213/319
+
+  Turn 10
+    p1 mcts: move 2, move 1
+      search (33000 visits): ragepowder,0;heatwave,0 16892v 16065 | switch landorustherian;heatwave,0 201v 86 | protect,0;switch thundurus 198v 84 | ragepowder,0;switch thundurus 195v 82
+    p2 greedy: move 1, move 2 1
+      p1a Amoonguss used Rage Powder
+      p2b Landorus used Superpower -> p1a: Amoonguss
+              p2b Landorus atk 1 fell
+              p2b Landorus def 1 fell
+      p2a Charizard used Solar Beam -> p1a: Amoonguss  [[from] lockedmove]
+      p1b Volcanion used Heat Wave -> p2b: Landorus  [[spread] p2a,p2b]
+      after p1: Amoonguss 376/432, Volcanion 363/363
+      after p2: Charizard 199/359, Landorus-Therian 81/319
+
+  Turn 11
+    p1 mcts: move 1 1, move 4 1
+      search (35000 visits): spore,0;overheat,0 8875v 5919 | switch sylveon;heatwave,0 4491v 2907 | spore,0;switch sylveon 3977v 2557 | protect,0;switch sylveon 2911v 1903
+    p2 greedy: move 2 1, move 2 1
+      p2b Landorus used Superpower -> p1a: Amoonguss
+              p2b Landorus def 1 fell
+      p2a Charizard used Solar Beam  [[still]]
+      p1b Volcanion used Overheat -> p2a: Charizard
+              p1b Volcanion spa 2 fell
+      p1a Amoonguss used Spore -> p2a: Charizard
+              p2a Charizard is now slp
+      after p1: Amoonguss 355/432, Volcanion 363/363
+      after p2: Charizard 136/359, Landorus-Therian 28/319
+
+  Turn 12
+    p1 mcts: switch 5, move 2 2   (slot0 Amoonguss -> Sylveon)
+      search (19000 visits): switch sylveon;steameruption,1 6234v 6155 | switch thundurus;switch landorustherian 160v 77 | energyball,0;switch landorustherian 155v 73 | spore,0;switch landorustherian 153v 72
+    p2 greedy: move 1, move 2 1
+      p1a <- Sylveon comes in (394/394)
+      p2b Landorus used Superpower -> p1a: Sylveon
+              p2a Charizard COULD NOT MOVE (slp)
+      p1b Volcanion used Steam Eruption -> p2b: Landorus
+      p2b Landorus fainted
+      after p1: Sylveon 389/394, Volcanion 363/363
+      after p2: Charizard 136/359, Landorus-Therian 0/319
+
+  Turn 13
+      p2b <- Thundurus comes in (334/334)
+      after p1: Sylveon 389/394, Volcanion 363/363
+      after p2: Charizard 136/359, Thundurus 334/334
+
+  Turn 14
+    p1 mcts: move 3, switch 6   (slot1 Volcanion -> Thundurus)
+      search (9000 visits): calmmind,0;switch thundurus 455v 374 | calmmind,0;switch landorustherian 454v 373 | hypervoice,0;switch landorustherian 443v 363 | hypervoice,0;switch thundurus 402v 325
+    p2 greedy: move 2 1, move 1 1
+      p1b <- Thundurus comes in (362/362)
+      p2b Thundurus used Thunderbolt -> p1a: Sylveon
+              p2a Charizard COULD NOT MOVE (slp)
+      p1a Sylveon used Calm Mind
+              p1a Sylveon spa 1 rose
+              p1a Sylveon spd 1 rose
+      after p1: Sylveon 293/394, Thundurus 362/362
+      after p2: Charizard 136/359, Thundurus 334/334
+
+  Turn 15
+    p1 mcts: move 1, move 1 2
+      search (11000 visits): hypervoice,0;thunderbolt,1 788v 644 | calmmind,0;thunderbolt,1 504v 393 | hypervoice,0;hiddenpower,1 396v 298 | hypervoice,0;switch volcanion 368v 275
+    p2 greedy: move 2 1, move 1 1
+      p2b Thundurus used Thunderbolt -> p1a: Sylveon
+              p1a Sylveon -- critical hit
+      p1b Thundurus used Thunderbolt -> p2b: Thundurus
+              p2a Charizard COULD NOT MOVE (slp)
+      p1a Sylveon used Hyper Voice -> p2a: Charizard  [[spread] p2a,p2b]
+      p2b Thundurus fainted
+      after p1: Sylveon 134/394, Thundurus 362/362
+      after p2: Charizard 19/359, Thundurus 0/334
+
+  Turn 16
+      p2b <- Heatran comes in (329/329)
+      after p1: Sylveon 134/394, Thundurus 362/362
+      after p2: Charizard 19/359, Heatran 329/329
+
+  Turn 17
+    p1 mcts: move 1, switch 4   (slot1 Thundurus -> Landorus-Therian)
+      search (16000 visits): hypervoice,0;switch landorustherian 3275v 2462 | hypervoice,0;switch volcanion 688v 455 | hypervoice,0;thunderbolt,1 596v 386 | calmmind,0;switch volcanion 559v 359
+    p2 greedy: move 2 1, move 1
+      p1b <- Landorus-Therian comes in (274/319)
+              p2a Charizard atk 1 fell
+              p2b Heatran atk 1 fell
+      p2b Heatran used Heat Wave -> p1b: Landorus  [[spread] p1a,p1b]
+              p2a Charizard is cured of slp
+      p2a Charizard used Solar Beam  [[still]]
+      p1a Sylveon used Hyper Voice -> p2a: Charizard  [[spread] p2a,p2b]
+      p2a Charizard fainted
+      after p1: Sylveon 92/394, Landorus-Therian 136/319
+      after p2: Charizard 0/359, Heatran 297/329
+
+  Turn 18
+      p2a <- Gengar comes in (261/261)
+      after p1: Sylveon 92/394, Landorus-Therian 136/319
+      after p2: Gengar 261/261, Heatran 297/329
+
+  Turn 19
+    p1 mcts: move 1, move 4 2
+      search (31000 visits): hypervoice,0;uturn,1 2169v 1892 | hypervoice,0;superpower,1 2115v 1842 | protect,0;earthquake,0 1950v 1690 | protect,0;superpower,1 1698v 1459
+    p2 greedy: move 1 1, move 1
+      p1b Landorus used U-turn -> p2b: Heatran
+      after p1: Sylveon 92/394, Landorus-Therian 136/319
+      after p2: Gengar 261/261, Heatran 273/329
+
+  Turn 20
+      p1b <- Thundurus comes in (362/362)
+      p2a Gengar used Shadow Ball -> p1a: Sylveon
+      p2b Heatran used Heat Wave -> p1b: Thundurus  [[spread] p1a,p1b]
+      p1a Sylveon fainted
+      after p1: Sylveon 0/394, Thundurus 215/362
+      after p2: Gengar 261/261, Heatran 293/329
+
+  Turn 21
+      p1a <- Landorus-Therian comes in (136/319)
+              p2a Gengar atk 1 fell
+              p2b Heatran atk 1 fell
+      after p1: Landorus-Therian 136/319, Thundurus 215/362
+      after p2: Gengar 261/261, Heatran 293/329
+
+  Turn 22
+    p1 mcts: move 1, move 1 1
+      search (27000 visits): earthquake,0;thunderbolt,0 827v 457 | earthquake,0;hiddenpower,0 778v 426 | earthquake,0;thunderbolt,1 765v 418 | earthquake,0;thunderwave,0 763v 417
+    p2 greedy: move 1 1, move 1
+      p1a Landorus used Earthquake -> p2a: Gengar  [[spread] p2b]
+              p1b Thundurus -- IMMUNE
+              p2a Gengar -- IMMUNE
+      p2b Heatran fainted
+      p2a Gengar used Shadow Ball -> p1a: Landorus
+      p1a Landorus fainted
+      p1b Thundurus used Thunderbolt -> p2a: Gengar
+      after p1: Landorus-Therian 0/319, Thundurus 215/362
+      after p2: Gengar 92/261, Heatran 0/329
+
+  Turn 23
+      p1a <- Amoonguss comes in (432/432)
+      after p1: Amoonguss 432/432, Thundurus 215/362
+      after p2: Gengar 92/261, Heatran 0/329
+
+  Turn 24
+    p1 mcts: switch 6, move 1 1   (slot0 Amoonguss -> Volcanion)
+      search (300000 visits): switch volcanion;thunderbolt,0 260567v 258228 | switch volcanion;taunt,0 5838v 5459 | switch volcanion;thunderwave,0 5538v 5169 | spore,0;thunderbolt,0 4069v 3752
+    p2 greedy: move 1 2, pass
+      p1a <- Volcanion comes in (363/363)
+      p2a Gengar used Shadow Ball -> p1b: Thundurus
+              p1b Thundurus used up its Sitrus Berry
+      p1b Thundurus used Thunderbolt -> p2a: Gengar
+      p2a Gengar fainted
+      after p1: Volcanion 363/363, Thundurus 131/362
+      after p2: Gengar 0/261, Heatran 0/329
+
+  RESULT: p1 wins

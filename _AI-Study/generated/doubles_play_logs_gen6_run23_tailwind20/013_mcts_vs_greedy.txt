@@ -1,0 +1,272 @@
+battle 13   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: Untitled 404: Gardevoir-Mega, Landorus, Porygon2, Tyranitar, Scizor, Blastoise
+  p2: XY Doubles: Hydreigon, Heatran, Gyarados, Trevenant, Rhyperior, Charizard-Mega-Y
+
+  Turn 1
+    p1 mcts: move 1, move 4 1
+      search (39000 visits): hypervoice,0;uturn,0 1347v 1076 | hypervoice,0;earthpower,1 1275v 1014 | hypervoice,0;rockslide,0 982v 763 | switch tyranitar;earthpower,1 978v 760
+    p2 greedy: move 3 1, move 2
+      p1b Landorus used U-turn -> p2a: Hydreigon
+              p2a Hydreigon -- critical hit
+      after p1: Gardevoir-Mega 340/340, Landorus 319/319
+      after p2: Hydreigon 190/384, Heatran 384/384
+
+  Turn 2
+      p1b <- Porygon2 comes in (374/374)
+              p1b Porygon2 spa 1 rose
+      p2a Hydreigon used Draco Meteor -> p1a: Gardevoir
+              p1a Gardevoir -- IMMUNE
+      p1a Gardevoir used Hyper Voice -> p2a: Hydreigon  [[spread] p2a,p2b]
+      p2a Hydreigon fainted
+      p2b Heatran used Heat Wave -> p1b: Porygon2  [[spread] p1a,p1b]
+      after p1: Gardevoir-Mega 237/340, Porygon2 272/374
+      after p2: Hydreigon 0/384, Heatran 370/384
+
+  Turn 3
+      p2a <- Gyarados comes in (394/394)
+              p1a Gardevoir atk 1 fell
+              p1b Porygon2 atk 1 fell
+      after p1: Gardevoir-Mega 237/340, Porygon2 272/374
+      after p2: Gyarados 394/394, Heatran 370/384
+
+  Turn 4
+    p1 mcts: switch 4, move 4   (slot0 Gardevoir-Mega -> Tyranitar)
+      search (28000 visits): switch tyranitar;recover,1 1400v 814 | switch tyranitar;thunderbolt,1 878v 483 | hypervoice,0;recover,1 839v 458 | hypervoice,0;switch tyranitar 831v 454
+    p2 greedy: move 2 1, move 2
+      p1a <- Tyranitar comes in (404/404)
+      p2a Gyarados used Stone Edge -> p1a: Tyranitar  [[miss]]
+              p2a Gyarados -- MISSED
+      p2b Heatran used Heat Wave -> p1a: Tyranitar  [[spread] p1a,p1b]
+              p1b Porygon2 is now brn
+      p1b Porygon2 used Recover
+      after p1: Tyranitar 354/404, Porygon2 290/374
+      after p2: Gyarados 370/394, Heatran 384/384
+
+  Turn 5
+    p1 mcts: move 1, move 1
+      search (20000 visits): rockslide,0;trickroom,0 658v 315 | rockslide,0;thunderbolt,0 647v 308 | rockslide,0;trickroom,1 488v 220 | lowkick,0;thunderbolt,0 476v 213
+    p2 greedy: move 2 2, move 2
+      p2a Gyarados used Stone Edge -> p1b: Porygon2
+      p2b Heatran used Heat Wave -> p1b: Porygon2  [[spread] p1a,p1b]
+      p1a Tyranitar used Rock Slide -> p2a: Gyarados  [[spread] p2b]
+              p1a Tyranitar -- MISSED
+      p1b Porygon2 used Trick Room
+      after p1: Tyranitar 311/404, Porygon2 73/374
+      after p2: Gyarados 346/394, Heatran 309/384
+
+  Turn 6
+    p1 mcts: move 1, move 4
+      search (26000 visits): rockslide,0;recover,1 3442v 2256 | lowkick,1;recover,1 1269v 768 | rockslide,0;hiddenpower,0 1228v 741 | rockslide,0;thunderbolt,0 912v 531
+    p2 greedy: move 2 2, move 2
+      p1a Tyranitar used Rock Slide -> p2b: Heatran  [[spread] p2a,p2b]
+              p2a Gyarados used up its Sitrus Berry
+      p1b Porygon2 used Recover
+              p2b Heatran COULD NOT MOVE (flinch)
+      p2a Gyarados used Stone Edge -> p1b: Porygon2
+      after p1: Tyranitar 311/404, Porygon2 133/374
+      after p2: Gyarados 162/394, Heatran 222/384
+
+  Turn 7
+    p1 mcts: move 1, move 4
+      search (24000 visits): rockslide,0;recover,1 2962v 2015 | lowkick,1;recover,1 1512v 978 | rockslide,0;thunderbolt,0 1186v 750 | rockslide,0;hiddenpower,0 1026v 639
+    p2 greedy: move 2 2, move 2
+      p1a Tyranitar used Rock Slide -> p2a: Gyarados  [[spread] p2a]
+              p1a Tyranitar -- MISSED
+      p2a Gyarados fainted
+      p1b Porygon2 used Recover
+      p2b Heatran used Heat Wave -> p1a: Tyranitar  [[spread] p1a,p1b]
+      after p1: Tyranitar 263/404, Porygon2 160/374
+      after p2: Gyarados 0/394, Heatran 246/384
+
+  Turn 8
+      p2a <- Trevenant comes in (374/374)
+      after p1: Tyranitar 263/404, Porygon2 160/374
+      after p2: Trevenant 374/374, Heatran 246/384
+
+  Turn 9
+    p1 mcts: move 1, move 4
+      search (34000 visits): rockslide,0;recover,1 3533v 2149 | lowkick,1;recover,1 2095v 1226 | protect,0;recover,1 1700v 976 | ironhead,1;recover,1 785v 410
+    p2 greedy: move 3 2, move 2
+      p1a Tyranitar used Rock Slide -> p2b: Heatran  [[spread] p2a,p2b]
+      p2a Trevenant used Horn Leech -> p1b: Porygon2
+      p1b Porygon2 used Recover
+              p2b Heatran COULD NOT MOVE (flinch)
+      after p1: Tyranitar 263/404, Porygon2 240/374
+      after p2: Trevenant 263/374, Heatran 164/384
+
+  Turn 10
+    p1 mcts: move 1, move 4
+      search (33000 visits): rockslide,0;recover,1 1951v 1036 | protect,0;recover,1 1774v 933 | lowkick,1;recover,1 1183v 593 | protect,0;thunderbolt,1 1090v 540
+    p2 greedy: move 3 2, move 2
+      p1a Tyranitar used Rock Slide -> p2b: Heatran  [[spread] p2a,p2b]
+              p2a Trevenant used up its Sitrus Berry
+      p2a Trevenant used Horn Leech -> p1b: Porygon2
+              p1b Porygon2 -- critical hit
+      p1b Porygon2 used Recover
+              p2b Heatran COULD NOT MOVE (flinch)
+      after p1: Tyranitar 263/404, Porygon2 288/374
+      after p2: Trevenant 264/374, Heatran 82/384
+
+  Turn 11
+    p1 mcts: move 4, move 4
+      search (29000 visits): protect,0;recover,1 1093v 558 | protect,0;thunderbolt,1 1009v 509 | protect,0;switch landorus 857v 422 | protect,0;hiddenpower,1 744v 358
+    p2 greedy: move 3 1, move 2
+      p1a Tyranitar used Protect
+      p2b Heatran used Heat Wave -> p1a: Tyranitar  [[spread] ]
+              p1a Tyranitar -- move: Protect
+              p2b Heatran -- MISSED
+      p1b Porygon2 used Recover
+      p2a Trevenant used Horn Leech -> p1a: Tyranitar
+              p1a Tyranitar -- move: Protect
+      after p1: Tyranitar 263/404, Porygon2 328/374
+      after p2: Trevenant 264/374, Heatran 106/384
+
+  Turn 12
+    p1 mcts: move 4, move 4
+      search (31000 visits): protect,0;recover,1 1141v 569 | protect,0;thunderbolt,1 1086v 539 | protect,0;hiddenpower,1 885v 425 | protect,0;switch landorus 788v 372
+    p2 greedy: move 3 1, move 2
+      p1a Tyranitar used Protect  [[still]]
+              p1a Tyranitar -- IT FAILED
+      p2b Heatran used Heat Wave -> p1a: Tyranitar  [[spread] p1a,p1b]
+      p1b Porygon2 used Recover
+      p2a Trevenant used Horn Leech -> p1a: Tyranitar
+      p1a Tyranitar fainted
+      after p1: Tyranitar 0/404, Porygon2 328/374
+      after p2: Trevenant 360/374, Heatran 130/384
+
+  Turn 13
+      p1a <- Landorus comes in (319/319)
+      after p1: Landorus 319/319, Porygon2 328/374
+      after p2: Trevenant 360/374, Heatran 130/384
+
+  Turn 14
+    p1 mcts: move 1 2, switch 4   (slot1 Porygon2 -> Gardevoir-Mega)
+      search (29000 visits): earthpower,1;switch gardevoirmega 1105v 667 | uturn,0;thunderbolt,1 866v 507 | earthpower,1;switch blastoise 800v 464 | uturn,0;hiddenpower,1 729v 417
+    p2 greedy: move 3 2, move 2
+      p1b <- Gardevoir-Mega comes in (237/340)
+      p1a Landorus used Earth Power -> p2b: Heatran
+      p2b Heatran fainted
+      p2a Trevenant used Horn Leech -> p1b: Gardevoir
+      after p1: Landorus 319/319, Gardevoir-Mega 116/340
+      after p2: Trevenant 374/374, Heatran 0/384
+
+  Turn 15
+      p2b <- Rhyperior comes in (434/434)
+      after p1: Landorus 319/319, Gardevoir-Mega 116/340
+      after p2: Trevenant 374/374, Rhyperior 434/434
+
+  Turn 16
+    p1 mcts: move 1 2, move 1
+      search (33000 visits): earthpower,1;hypervoice,0 5217v 3159 | earthpower,1;psyshock,1 3290v 1938 | earthpower,1;psyshock,0 3214v 1890 | earthpower,0;hypervoice,0 2108v 1200
+    p2 greedy: move 3 2, move 2
+      p1a Landorus used Earth Power -> p2b: Rhyperior
+      p1b Gardevoir used Hyper Voice -> p2a: Trevenant  [[spread] p2a,p2b]
+      p2b Rhyperior fainted
+      p2a Trevenant used Horn Leech -> p1b: Gardevoir
+      p1b Gardevoir fainted
+      after p1: Landorus 319/319, Gardevoir-Mega 0/340
+      after p2: Trevenant 267/374, Rhyperior 0/434
+
+  Turn 17
+      p1b <- Porygon2 comes in (328/374)
+      p2b <- Charizard-Mega-Y comes in (298/298)
+              p1b Porygon2 atk 1 rose
+      after p1: Landorus 319/319, Porygon2 328/374
+      after p2: Trevenant 267/374, Charizard-Mega-Y 298/298
+
+  Turn 18
+    p1 mcts: switch 6, move 2 2   (slot0 Landorus -> Blastoise)
+      search (20000 visits): switch blastoise;thunderbolt,1 1208v 270 | switch scizor;thunderbolt,1 1201v 268 | switch scizor;recover,1 1012v 214 | switch blastoise;recover,1 846v 168
+    p2 greedy: move 3 2, move 2 2
+      p1a <- Blastoise comes in (362/362)
+      p2b Charizard used Solar Beam  [[still]]
+      p1b Porygon2 used Thunderbolt -> p2b: Charizard
+              p2b Charizard is now par
+      p2a Trevenant used Horn Leech -> p1b: Porygon2
+      after p1: Blastoise 362/362, Porygon2 99/374
+      after p2: Trevenant 299/374, Charizard-Mega-Y 166/298
+
+  Turn 19
+    p1 mcts: move 3 2, move 2 2
+      search (21000 visits): scald,1;thunderbolt,1 3256v 1628 | roar,1;thunderbolt,1 1118v 497 | roar,0;thunderbolt,1 1052v 464 | hiddenpower,1;thunderbolt,1 852v 362
+    p2 greedy: move 3 2, move 2 2
+      p1a Blastoise used Scald -> p2b: Charizard
+      p1b Porygon2 used Thunderbolt -> p2b: Charizard
+      p2b Charizard fainted
+      p2a Trevenant used Horn Leech -> p1b: Porygon2
+      p1b Porygon2 fainted
+      after p1: Blastoise 362/362, Porygon2 0/374
+      after p2: Trevenant 331/374, Charizard-Mega-Y 0/298
+
+  Turn 20
+      p1b <- Scizor comes in (344/344)
+      after p1: Blastoise 362/362, Scizor 344/344
+      after p2: Trevenant 331/374, Charizard-Mega-Y 0/298
+
+  Turn 21
+    p1 mcts: move 3 1, move 2 1
+      search (64000 visits): scald,0;acrobatics,0 22176v 12116 | roar,0;acrobatics,0 7703v 4007 | followme,0;acrobatics,0 7251v 3760 | scald,0;protect,1 3762v 1870
+    p2 greedy: move 3 1, pass
+      p1a Blastoise used Scald -> p2a: Trevenant
+      p1b Scizor used Acrobatics -> p2a: Trevenant
+              p2a Trevenant used up its Sitrus Berry
+      p2a Trevenant used Horn Leech -> p1a: Blastoise
+              p1a Blastoise used up its Eject Button
+      after p1: Blastoise 176/362, Scizor 344/344
+      after p2: Trevenant 328/374, Charizard-Mega-Y 0/298
+
+  Turn 22
+      p1a <- Landorus comes in (319/319)
+      after p1: Landorus 319/319, Scizor 344/344
+      after p2: Trevenant 328/374, Charizard-Mega-Y 0/298
+
+  Turn 23
+    p1 mcts: switch 6, move 2 1   (slot0 Landorus -> Blastoise)
+      search (928000 visits): switch blastoise;acrobatics,0 921686v 917668 | earthpower,0;acrobatics,0 953v 792 | rockslide,0;acrobatics,0 940v 780 | earthpower,0;protect,1 508v 390
+    p2 greedy: move 3 1, pass
+      p1a <- Blastoise comes in (176/362)
+      p1b Scizor used Acrobatics -> p2a: Trevenant
+              p2a Trevenant used up its Sitrus Berry
+      p2a Trevenant used Horn Leech -> p1a: Blastoise
+      p1a Blastoise fainted
+      after p1: Blastoise 0/362, Scizor 344/344
+      after p2: Trevenant 317/374, Charizard-Mega-Y 0/298
+
+  Turn 24
+      p1a <- Landorus comes in (319/319)
+      after p1: Landorus 319/319, Scizor 344/344
+      after p2: Trevenant 317/374, Charizard-Mega-Y 0/298
+
+  Turn 25
+    p1 mcts: move 4 1, move 2 1
+      search (675000 visits): uturn,0;acrobatics,0 655620v 651736 | earthpower,0;acrobatics,0 14855v 14230 | uturn,0;bulletpunch,0 2433v 2179 | rockslide,0;acrobatics,0 530v 411
+    p2 greedy: move 3 1, pass
+      p1a Landorus used U-turn -> p2a: Trevenant
+      p1b Scizor used Acrobatics -> p2a: Trevenant
+              p2a Trevenant used up its Sitrus Berry
+      p2a Trevenant used Horn Leech -> p1a: Landorus
+      after p1: Landorus 187/319, Scizor 344/344
+      after p2: Trevenant 216/374, Charizard-Mega-Y 0/298
+
+  Turn 26
+    p1 mcts: move 4 1, move 2 1
+      search (1885000 visits): uturn,0;acrobatics,0 1723050v 1723050 | uturn,0;bulletpunch,0 158279v 156788 | uturn,0;brickbreak,0 1867v 1642 | uturn,0;protect,1 1804v 1583
+    p2 greedy: move 3 1, pass
+      p1a Landorus used U-turn -> p2a: Trevenant
+              p2a Trevenant used up its Sitrus Berry
+      p1b Scizor used Acrobatics -> p2a: Trevenant
+      p2a Trevenant used Horn Leech -> p1a: Landorus
+      after p1: Landorus 69/319, Scizor 344/344
+      after p2: Trevenant 123/374, Charizard-Mega-Y 0/298
+
+  Turn 27
+    p1 mcts: move 4 1, move 1 1
+      search (1628000 visits): uturn,0;bulletpunch,0 744540v 744540 | uturn,0;acrobatics,0 744534v 744534 | uturn,0;brickbreak,0 69706v 68726 | uturn,0;protect,1 69220v 68242
+    p2 greedy: move 3 1, pass
+      p1b Scizor used Bullet Punch -> p2a: Trevenant
+      p1a Landorus used U-turn -> p2a: Trevenant
+      p2a Trevenant fainted
+      after p1: Landorus 69/319, Scizor 344/344
+      after p2: Trevenant 0/374, Charizard-Mega-Y 0/298
+
+  RESULT: p1 wins

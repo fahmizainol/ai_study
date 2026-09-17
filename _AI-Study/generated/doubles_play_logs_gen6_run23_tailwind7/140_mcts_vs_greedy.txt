@@ -1,0 +1,187 @@
+battle 140   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: ORAS Doubles OU: Charizard-Mega-Y, Cresselia, Landorus-Therian, Aegislash, Zapdos, Keldeo
+  p2: ORAS Doubles OU: Kangaskhan, Landorus-Therian, Mew, Heatran, Azumarill, Jirachi
+
+  Turn 1
+    p1 mcts: switch 5, move 3   (slot0 Charizard-Mega-Y -> Zapdos)
+      search (21000 visits): switch zapdos;calmmind,1 643v 548 | switch zapdos;switch landorustherian 616v 523 | switch zapdos;switch aegislash 532v 444 | heatwave,0;switch landorustherian 502v 416
+    p2 greedy: move 4 1, move 4
+      p1a <- Zapdos comes in (384/384)
+      p2a Kangaskhan used Sucker Punch  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p2b Landorus used Explosion -> p1b: Cresselia  [[spread] p2a,p1a,p1b]
+      p2b Landorus fainted
+      p1b Cresselia used Calm Mind
+              p1b Cresselia spa 1 rose
+              p1b Cresselia spd 1 rose
+      after p1: Zapdos 133/384, Cresselia 274/444
+      after p2: Kangaskhan 60/352, Landorus-Therian 0/320
+
+  Turn 2
+      p2b <- Mew comes in (404/404)
+      after p1: Zapdos 133/384, Cresselia 274/444
+      after p2: Kangaskhan 60/352, Mew 404/404
+
+  Turn 3
+    p1 mcts: switch 3, move 3   (slot0 Zapdos -> Landorus-Therian)
+      search (14000 visits): switch landorustherian;calmmind,1 717v 593 | switch landorustherian;moonlight,1 649v 531 | switch landorustherian;icywind,0 550v 442 | roost,0;icywind,0 415v 322
+    p2 greedy: move 4 1, move 4 1
+      p1a <- Landorus-Therian comes in (347/347)
+              p2a Kangaskhan atk 1 fell
+              p2b Mew atk 1 fell
+      p2a Kangaskhan used Sucker Punch  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p2b Mew used Knock Off -> p1a: Landorus
+              p1a Landorus used up its Assault Vest
+      p1b Cresselia used Calm Mind
+              p1b Cresselia spa 1 rose
+              p1b Cresselia spd 1 rose
+      after p1: Landorus-Therian 289/347, Cresselia 274/444
+      after p2: Kangaskhan 60/352, Mew 404/404
+
+  Turn 4
+    p1 mcts: move 1, move 4
+      search (22000 visits): earthquake,0;moonlight,1 4667v 3753 | earthquake,0;icywind,0 2814v 2224 | earthquake,0;calmmind,1 841v 602 | earthquake,0;psyshock,1 723v 509
+    p2 greedy: move 4 2, move 4 2
+      p2a Kangaskhan used Sucker Punch  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p2b Mew used Knock Off -> p1b: Cresselia
+              p1b Cresselia used up its Rocky Helmet
+      p1a Landorus used Earthquake -> p2b: Mew  [[spread] p2a,p2b]
+              p1b Cresselia -- IMMUNE
+              p2b Mew used up its Sitrus Berry
+      p2a Kangaskhan fainted
+      p1b Cresselia used Moonlight
+      after p1: Landorus-Therian 289/347, Cresselia 444/444
+      after p2: Kangaskhan 0/352, Mew 299/404
+
+  Turn 5
+      p2a <- Heatran comes in (324/324)
+      after p1: Landorus-Therian 289/347, Cresselia 444/444
+      after p2: Heatran 324/324, Mew 299/404
+
+  Turn 6
+    p1 mcts: move 1, move 2
+      search (21000 visits): earthquake,0;icywind,0 1670v 1288 | earthquake,0;calmmind,1 1411v 1075 | earthquake,0;psyshock,0 1404v 1068 | earthquake,0;psyshock,1 1346v 1021
+    p2 greedy: move 1, move 4 1
+      p2b Mew used Knock Off -> p1a: Landorus
+      p1a Landorus used Earthquake -> p2b: Mew  [[spread] p2a,p2b]
+              p1b Cresselia -- IMMUNE
+      p2a Heatran fainted
+      p1b Cresselia used Icy Wind -> p2b: Mew
+              p2b Mew spe 1 fell
+      after p1: Landorus-Therian 253/347, Cresselia 444/444
+      after p2: Heatran 0/324, Mew 95/404
+
+  Turn 7
+      p2a <- Azumarill comes in (394/394)
+      after p1: Landorus-Therian 253/347, Cresselia 444/444
+      after p2: Azumarill 394/394, Mew 95/404
+
+  Turn 8
+    p1 mcts: move 1, move 1 1
+      search (23000 visits): earthquake,0;psyshock,0 1266v 705 | uturn,1;psyshock,0 1067v 582 | switch zapdos;psyshock,0 1015v 551 | uturn,0;icywind,0 856v 453
+    p2 greedy: move 2 1, move 4 1
+      p1a Landorus used Earthquake -> p2a: Azumarill  [[spread] p2a,p2b]
+              p1b Cresselia -- IMMUNE
+      p2b Mew fainted
+      p1b Cresselia used Psyshock -> p2a: Azumarill
+              p2a Azumarill used up its Sitrus Berry
+      p2a Azumarill used Play Rough -> p1a: Landorus
+      after p1: Landorus-Therian 57/347, Cresselia 444/444
+      after p2: Azumarill 161/394, Mew 0/404
+
+  Turn 9
+      p2b <- Jirachi comes in (404/404)
+      after p1: Landorus-Therian 57/347, Cresselia 444/444
+      after p2: Azumarill 161/394, Jirachi 404/404
+
+  Turn 10
+    p1 mcts: switch 3, move 1 1   (slot0 Landorus-Therian -> Zapdos)
+      search (26000 visits): switch zapdos;psyshock,0 1243v 615 | switch charizardmegay;psyshock,0 1235v 610 | switch charizardmegay;icywind,0 1097v 533 | switch zapdos;icywind,0 887v 418
+    p2 greedy: move 2 1, move 1 1
+      p1a <- Zapdos comes in (133/384)
+      p2b Jirachi used Iron Head -> p1a: Zapdos
+      p1b Cresselia used Psyshock -> p2a: Azumarill
+      p2a Azumarill fainted
+      after p1: Zapdos 93/384, Cresselia 444/444
+      after p2: Azumarill 0/394, Jirachi 337/404
+
+  Turn 11
+    p1 mcts: move 3, move 2
+      search (48000 visits): roost,0;icywind,1 6626v 3391 | roost,0;calmmind,1 2569v 1226 | thunderbolt,1;icywind,1 2284v 1077 | roost,0;psyshock,1 2240v 1054
+    p2 greedy: pass, move 1 1
+      p2b Jirachi used Iron Head -> p1a: Zapdos
+              p1a Zapdos COULD NOT MOVE (flinch)
+      p1b Cresselia used Icy Wind -> p2b: Jirachi
+              p2b Jirachi spe 1 fell
+      after p1: Zapdos 54/384, Cresselia 444/444
+      after p2: Azumarill 0/394, Jirachi 237/404
+
+  Turn 12
+    p1 mcts: move 3, move 3
+      search (57000 visits): roost,0;calmmind,1 5372v 2579 | roost,0;icywind,1 4137v 1949 | roost,0;psyshock,1 3136v 1443 | roost,0;switch landorustherian 3101v 1426
+    p2 greedy: pass, move 1 1
+      p1a Zapdos used Roost
+      p1b Cresselia used Calm Mind
+              p1b Cresselia spa 1 rose
+              p1b Cresselia spd 1 rose
+      p2b Jirachi used Iron Head -> p1a: Zapdos
+      after p1: Zapdos 204/384, Cresselia 444/444
+      after p2: Azumarill 0/394, Jirachi 170/404
+
+  Turn 13
+    p1 mcts: move 3, move 3
+      search (58000 visits): roost,0;calmmind,1 3191v 1256 | roost,0;icywind,1 2824v 1097 | roost,0;moonlight,1 2757v 1068 | roost,0;psyshock,1 2724v 1054
+    p2 greedy: pass, move 1 1
+      p1a Zapdos used Roost
+      p1b Cresselia used Calm Mind
+              p1b Cresselia spa 1 rose
+              p1b Cresselia spd 1 rose
+      p2b Jirachi used Iron Head -> p1a: Zapdos
+      after p1: Zapdos 345/384, Cresselia 444/444
+      after p2: Azumarill 0/394, Jirachi 103/404
+
+  Turn 14
+    p1 mcts: switch 3, move 3   (slot0 Zapdos -> Landorus-Therian)
+      search (53000 visits): switch landorustherian;calmmind,1 1747v 552 | switch landorustherian;icywind,1 1585v 492 | switch landorustherian;moonlight,1 1573v 488 | switch landorustherian;psyshock,1 1563v 484
+    p2 greedy: pass, move 1 1
+      p1a <- Landorus-Therian comes in (57/347)
+              p2b Jirachi atk 1 fell
+      p1b Cresselia used Calm Mind
+              p1b Cresselia spa 1 rose
+              p1b Cresselia spd 1 rose
+      p2b Jirachi used Iron Head -> p1a: Landorus
+      p1a Landorus fainted
+      after p1: Landorus-Therian 0/347, Cresselia 444/444
+      after p2: Azumarill 0/394, Jirachi 103/404
+
+  Turn 15
+      p1a <- Zapdos comes in (345/384)
+      after p1: Zapdos 345/384, Cresselia 444/444
+      after p2: Azumarill 0/394, Jirachi 103/404
+
+  Turn 16
+    p1 mcts: move 3, move 3
+      search (65000 visits): roost,0;calmmind,1 3441v 1103 | roost,0;moonlight,1 2234v 673 | roost,0;icywind,1 2200v 661 | roost,0;psyshock,1 2154v 645
+    p2 greedy: pass, move 1 1
+      p1a Zapdos used Roost
+      p1b Cresselia used Calm Mind
+              p1b Cresselia spa 1 rose
+              p1b Cresselia spd 1 rose
+      p2b Jirachi used Iron Head -> p1a: Zapdos
+      after p1: Zapdos 355/384, Cresselia 444/444
+      after p2: Azumarill 0/394, Jirachi 36/404
+
+  Turn 17
+    p1 mcts: move 4, move 1 2
+      search (74000 visits): tailwind,0;psyshock,1 2757v 988 | tailwind,0;icywind,1 2745v 983 | tailwind,0;calmmind,1 2732v 977 | tailwind,0;moonlight,1 2719v 972
+    p2 greedy: pass, move 1 1
+      p1a Zapdos used Tailwind
+      -sidestart p1: A move: Tailwind
+      p1b Cresselia used Psyshock -> p2b: Jirachi
+      p2b Jirachi fainted
+      after p1: Zapdos 355/384, Cresselia 444/444
+      after p2: Azumarill 0/394, Jirachi 0/404
+
+  RESULT: p1 wins

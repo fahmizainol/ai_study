@@ -1,0 +1,231 @@
+battle 36   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: Copy of GLURAK LO Lando Flash Deo: Deoxys-Speed, Kangaskhan-Mega, Genesect, Landorus-Therian, Thundurus, Volcanion
+  p2: kang + LO deo, helmet ferro: Kangaskhan-Mega, Volcanion, Thundurus, Landorus-Therian, Ferrothorn, Deoxys-Speed
+
+  Turn 1
+    p1 mcts: move 3 2, switch 5   (slot1 Kangaskhan-Mega -> Thundurus)
+      search (49000 visits): icebeam,1;switch thundurus 1341v 544 | icebeam,0;switch volcanion 1170v 464 | flashcannon,1;switch landorustherian 1113v 437 | psychoboost,1;switch volcanion 986v 379
+    p2 greedy: move 4 1, move 4 1
+      p1b <- Thundurus comes in (361/361)
+      p2a Kangaskhan used Sucker Punch -> p1a: Deoxys
+      p1a Deoxys used Ice Beam -> p2b: Volcanion
+      p2b Volcanion used Overheat -> p1a: Deoxys  [[miss]]
+              p2b Volcanion -- MISSED
+      after p1: Deoxys-Speed 79/289, Thundurus 361/361
+      after p2: Kangaskhan-Mega 293/351, Volcanion 350/363
+
+  Turn 2
+    p1 mcts: switch 6, move 1 2   (slot0 Deoxys-Speed -> Volcanion)
+      search (22000 visits): switch volcanion;thunderbolt,1 278v 47 | switch landorustherian;thunderbolt,1 243v 36 | psychoboost,1;thunderbolt,1 234v 33 | stealthrock,0;thunderbolt,1 233v 33
+    p2 greedy: move 4 1, move 4 1
+      p1a <- Volcanion comes in (363/363)
+      p2a Kangaskhan used Sucker Punch  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p1b Thundurus used Thunderbolt -> p2b: Volcanion
+      p2b Volcanion used Overheat -> p1a: Volcanion  [[miss]]
+              p2b Volcanion -- MISSED
+      after p1: Volcanion 363/363, Thundurus 361/361
+      after p2: Kangaskhan-Mega 293/351, Volcanion 192/363
+
+  Turn 3
+    p1 mcts: switch 4, move 1 2   (slot0 Volcanion -> Landorus-Therian)
+      search (27000 visits): switch landorustherian;thunderbolt,1 365v 64 | earthpower,1;thunderbolt,1 305v 47 | overheat,0;thunderbolt,1 303v 46 | heatwave,0;thunderbolt,1 301v 46
+    p2 greedy: move 4 1, move 4 1
+      p1a <- Landorus-Therian comes in (369/369)
+              p2a Kangaskhan atk 1 fell
+              p2b Volcanion atk 1 fell
+      p2a Kangaskhan used Sucker Punch  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p1b Thundurus used Thunderbolt -> p2b: Volcanion
+      p2b Volcanion used Overheat -> p1a: Landorus
+              p2b Volcanion spa 2 fell
+      after p1: Landorus-Therian 108/369, Thundurus 361/361
+      after p2: Kangaskhan-Mega 293/351, Volcanion 18/363
+
+  Turn 4
+    p1 mcts: switch 4, move 1 1   (slot0 Landorus-Therian -> Volcanion)
+      search (29000 visits): switch volcanion;thunderbolt,0 264v 18 | superpower,1;thunderbolt,0 257v 17 | earthquake,0;thunderbolt,0 256v 17 | uturn,1;thunderbolt,0 253v 16
+    p2 greedy: move 4 1, move 4 1
+      p1a <- Volcanion comes in (363/363)
+      p2a Kangaskhan used Sucker Punch  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p1b Thundurus used Thunderbolt -> p2a: Kangaskhan
+      p2b Volcanion used Overheat -> p1a: Volcanion
+              p2b Volcanion spa 2 fell
+      after p1: Volcanion 344/363, Thundurus 361/361
+      after p2: Kangaskhan-Mega 175/351, Volcanion 18/363
+
+  Turn 5
+    p1 mcts: switch 4, move 1 1   (slot0 Volcanion -> Landorus-Therian)
+      search (30000 visits): switch landorustherian;thunderbolt,0 291v 23 | earthpower,0;thunderbolt,0 279v 20 | steameruption,0;switch landorustherian 278v 20 | switch landorustherian;thunderwave,0 275v 20
+    p2 greedy: move 4 1, move 4 1
+      p1a <- Landorus-Therian comes in (108/369)
+              p2a Kangaskhan atk 1 fell
+              p2b Volcanion atk 1 fell
+      p2a Kangaskhan used Sucker Punch  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p1b Thundurus used Thunderbolt -> p2a: Kangaskhan
+      p2b Volcanion used Overheat -> p1a: Landorus
+              p1a Landorus -- critical hit
+              p2b Volcanion spa 2 fell
+      p1a Landorus fainted
+      after p1: Landorus-Therian 0/369, Thundurus 361/361
+      after p2: Kangaskhan-Mega 39/351, Volcanion 18/363
+
+  Turn 6
+      p1a <- Genesect comes in (284/284)
+              p1a Genesect spa 1 rose
+      after p1: Genesect 284/284, Thundurus 361/361
+      after p2: Kangaskhan-Mega 39/351, Volcanion 18/363
+
+  Turn 7
+    p1 mcts: move 2 1, switch 6   (slot1 Thundurus -> Deoxys-Speed)
+      search (33000 visits): ironhead,0;switch deoxysspeed 312v 14 | blazekick,1;switch volcanion 312v 14 | uturn,0;switch volcanion 311v 14 | uturn,1;switch volcanion 311v 14
+    p2 greedy: move 4 1, move 4 1
+      p1b <- Deoxys-Speed comes in (79/289)
+      p2a Kangaskhan used Sucker Punch -> p1a: Genesect
+      p1a Genesect used Iron Head -> p2a: Kangaskhan
+      p2a Kangaskhan fainted
+      p2b Volcanion used Overheat -> p1a: Genesect
+      p1a Genesect fainted
+      after p1: Genesect 0/284, Deoxys-Speed 79/289
+      after p2: Kangaskhan-Mega 0/351, Volcanion 18/363
+
+  Turn 8
+      p2a <- Thundurus comes in (362/362)
+      p1a <- Volcanion comes in (344/363)
+      after p1: Volcanion 344/363, Deoxys-Speed 79/289
+      after p2: Thundurus 362/362, Volcanion 18/363
+
+  Turn 9
+    p1 mcts: move 1 1, move 3 1
+      search (7000 visits): steameruption,0;icebeam,0 277v 120 | steameruption,0;stealthrock,0 181v 67 | steameruption,0;switch thundurus 173v 63 | steameruption,0;flashcannon,0 165v 59
+    p2 greedy: move 1 2, move 4 2
+      p1b Deoxys used Ice Beam -> p2a: Thundurus
+      p2a Thundurus used Thunderbolt -> p1b: Deoxys
+      p1b Deoxys fainted
+      p2b Volcanion used Overheat -> p1a: Volcanion
+      p1a Volcanion used Steam Eruption -> p2a: Thundurus  [[miss]]
+              p1a Volcanion -- MISSED
+      after p1: Volcanion 335/363, Deoxys-Speed 0/289
+      after p2: Thundurus 184/362, Volcanion 18/363
+
+  Turn 10
+      p1b <- Kangaskhan-Mega comes in (414/414)
+      after p1: Volcanion 335/363, Kangaskhan-Mega 414/414
+      after p2: Thundurus 184/362, Volcanion 18/363
+
+  Turn 11
+    p1 mcts: move 4 1, switch 6   (slot1 Kangaskhan-Mega -> Thundurus)
+      search (58000 visits): overheat,0;switch thundurus 1690v 471 | earthpower,1;lowkick,0 1270v 332 | steameruption,0;lowkick,0 1206v 311 | overheat,0;bite,0 1163v 297
+    p2 greedy: move 1 1, move 2 1
+      p1b <- Thundurus comes in (361/361)
+      p2a Thundurus used Thunderbolt -> p1a: Volcanion
+      p2b Volcanion used Steam Eruption -> p1a: Volcanion
+      p1a Volcanion used Overheat -> p2a: Thundurus
+              p1a Volcanion spa 2 fell
+      p2a Thundurus fainted
+      after p1: Volcanion 255/363, Thundurus 361/361
+      after p2: Thundurus 0/362, Volcanion 18/363
+
+  Turn 12
+      p2a <- Landorus-Therian comes in (382/382)
+              p1a Volcanion atk 1 fell
+              p1b Thundurus atk 1 fell
+      after p1: Volcanion 255/363, Thundurus 361/361
+      after p2: Landorus-Therian 382/382, Volcanion 18/363
+
+  Turn 13
+    p1 mcts: move 1 2, move 4 2
+      search (37000 visits): steameruption,1;thunderwave,1 1488v 470 | steameruption,1;thunderwave,0 923v 262 | switch kangaskhanmega;thunderwave,1 923v 262 | steameruption,1;hiddenpower,0 805v 220
+    p2 greedy: move 1, move 2 1
+      p1b Thundurus used Thunder Wave -> p2b: Volcanion
+              p2b Volcanion is now par
+      p2a Landorus used Earthquake -> p1a: Volcanion  [[spread] p2b,p1a]
+              p1b Thundurus -- IMMUNE
+      p2b Volcanion fainted
+      p1a Volcanion used Steam Eruption -> p2a: Landorus
+      after p1: Volcanion 37/363, Thundurus 361/361
+      after p2: Landorus-Therian 244/382, Volcanion 0/363
+
+  Turn 14
+      p2b <- Ferrothorn comes in (352/352)
+      after p1: Volcanion 37/363, Thundurus 361/361
+      after p2: Landorus-Therian 244/382, Ferrothorn 352/352
+
+  Turn 15
+    p1 mcts: switch 6, move 1 2   (slot0 Volcanion -> Kangaskhan-Mega)
+      search (46000 visits): switch kangaskhanmega;thunderbolt,1 2473v 1865 | heatwave,0;thunderwave,1 1275v 915 | earthpower,1;thunderbolt,1 1275v 915 | switch kangaskhanmega;thunderwave,1 1230v 880
+    p2 greedy: move 1, move 1 1
+      p1a <- Kangaskhan-Mega comes in (414/414)
+      p1b Thundurus used Thunderbolt -> p2b: Ferrothorn
+      p2a Landorus used Earthquake -> p1b: Thundurus  [[spread] p2b,p1a]
+              p1b Thundurus -- IMMUNE
+      p2b Ferrothorn used Power Whip -> p1a: Kangaskhan
+      after p1: Kangaskhan-Mega 154/414, Thundurus 361/361
+      after p2: Landorus-Therian 244/382, Ferrothorn 211/352
+
+  Turn 16
+    p1 mcts: move 4 2, switch 6   (slot1 Thundurus -> Volcanion)
+      search (36000 visits): lowkick,1;switch volcanion 1177v 1015 | fakeout,1;thunderwave,1 907v 765 | bite,1;switch volcanion 818v 684 | fakeout,1;switch volcanion 771v 641
+    p2 greedy: move 1, move 1 1
+      p1b <- Volcanion comes in (37/363)
+      p1a Kangaskhan used Low Kick -> p2b: Ferrothorn
+      p2a Landorus used Earthquake -> p1a: Kangaskhan  [[spread] p2b,p1a,p1b]
+      p2b Ferrothorn fainted
+      p1a Kangaskhan fainted
+      p1b Volcanion fainted
+      after p1: Kangaskhan-Mega 0/414, Volcanion 0/363
+      after p2: Landorus-Therian 244/382, Ferrothorn 0/352
+
+  Turn 17
+      p1a <- Thundurus comes in (361/361)
+      p2b <- Deoxys-Speed comes in (242/242)
+      after p1: Thundurus 361/361, Volcanion 0/363
+      after p2: Landorus-Therian 244/382, Deoxys-Speed 242/242
+
+  Turn 18
+    p1 mcts: move 1 2, pass
+      search (352000 visits): thunderbolt,1;No Move 61943v 953 | thunderwave,1;No Move 53581v 742 | hiddenpower,1;No Move 44373v 519 | hiddenpower,0;No Move 43215v 492
+    p2 greedy: move 1, move 1 1
+      p2b Deoxys used Psycho Boost -> p1a: Thundurus
+              p2b Deoxys spa 2 fell
+              p1a Thundurus used up its Sitrus Berry
+      p1a Thundurus used Thunderbolt -> p2b: Deoxys
+      p2a Landorus used Earthquake -> p1a: Thundurus  [[spread] p2b]
+              p1a Thundurus -- IMMUNE
+      p2b Deoxys fainted
+      after p1: Thundurus 157/361, Volcanion 0/363
+      after p2: Landorus-Therian 244/382, Deoxys-Speed 0/242
+
+  Turn 19
+    p1 mcts: move 3 1, pass
+      search (1030000 visits): taunt,0;No Move 314253v 1924 | hiddenpower,0;No Move 253238v 1279 | thunderbolt,0;No Move 231657v 1133 | thunderwave,0;No Move 230852v 1052
+    p2 greedy: move 1, pass
+      p1a Thundurus used Taunt -> p2a: Landorus
+              p2a Landorus gained move: Taunt
+      p2a Landorus used Earthquake -> p1a: Thundurus
+              p1a Thundurus -- IMMUNE
+      after p1: Thundurus 157/361, Volcanion 0/363
+      after p2: Landorus-Therian 244/382, Deoxys-Speed 0/242
+
+  Turn 20
+    p1 mcts: move 2 1, pass
+      search (1181000 visits): hiddenpower,0;No Move 317834v 1471 | thunderbolt,0;No Move 289966v 1214 | taunt,0;No Move 288457v 1201 | thunderwave,0;No Move 284743v 1167
+    p2 greedy: move 1, pass
+      p1a Thundurus used Hidden Power -> p2a: Landorus
+      p2a Landorus used Earthquake -> p1a: Thundurus
+              p1a Thundurus -- IMMUNE
+      after p1: Thundurus 157/361, Volcanion 0/363
+      after p2: Landorus-Therian 64/382, Deoxys-Speed 0/242
+
+  Turn 21
+    p1 mcts: move 2 1, pass
+      search (2230000 visits): hiddenpower,0;No Move 2218056v 221435 | taunt,0;No Move 4061v 76 | thunderbolt,0;No Move 3947v 69 | thunderwave,0;No Move 3936v 68
+    p2 greedy: move 1, pass
+      p1a Thundurus used Hidden Power -> p2a: Landorus
+      p2a Landorus fainted
+      after p1: Thundurus 157/361, Volcanion 0/363
+      after p2: Landorus-Therian 0/382, Deoxys-Speed 0/242
+
+  RESULT: p1 wins

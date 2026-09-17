@@ -1923,9 +1923,11 @@ at all.
 counts is uninformative, because that policy only reaches a status move when nothing damaging is
 legal.
 
-**This is evidence that the evaluation limits what the search will play** — weakened from the
-"strongest evidence yet" this section originally claimed, since two of its four striking figures
-did not survive a second seed —, and it names a cheap experiment nobody has run: add Trick Room, redirection and a real
+**This is evidence that the evaluation decides WHICH MOVES the search picks — and run 23 shows
+that is not the same as deciding whether it wins.** Weakened twice: two of the four striking figures
+below did not survive a second seed (run 22), and the one eval change tested end to end moved usage
+12% → 71% while moving the win rate −4.3 points (run 23). Read the rest of this section as being
+about move selection only —, and it names a cheap experiment nobody has run: add Trick Room, redirection and a real
 Tailwind weight to `evaluate.rs` and re-run this identical arm. The control, the pool and the
 transcripts all already exist.
 
@@ -1970,6 +1972,47 @@ alone**, which is the clearest statement of this arm's resolution anyone has pro
 **What would settle it**: 150+ battles per arm, or a paired design on identical seeds so the
 variance from team pairing cancels. Until then the honest claim is the narrow one — **the Tailwind
 weight changes what the search plays, and nothing measured here shows whether that wins games.**
+
+### Run 23 tested the Tailwind weight properly and REVERTED it: changing what the search plays did not make it win
+
+The design run 22 asked for: **150 battles per arm, one seed (303, a third one — not the seed the
+observation came from nor the seed the weight was tuned on), identical team pairings so matchup
+luck cancels, two builds differing in exactly one constant.**
+
+| seed 303, mcts as p1, 150 battles, identical pairings | result | | vs coinflip |
+|---|---|---|---|
+| `TAILWIND = 7` (upstream) | **114-32** | 78.1% | p=5.4e-12 |
+| `TAILWIND = 20` (run 22) | **107-38** | 73.8% | p=8.6e-09 |
+
+**Difference: −4.3 points for the change, Fisher p=0.41, 95% CI [−5.5, +14.1].** No evidence of
+benefit, and the point estimate is *negative*. **The weight is reverted to upstream's 7.0**; the
+patch drops back to 1323 lines.
+
+**The finding is not "the weight is too small" — it is that the premise was wrong.** Run 22 already
+established that the weight *works as a lever*: Tailwind usage went 12% → 71% where a carrier
+reached the field, and that replicated. So the search can be made to play visibly more correct
+doubles, and doing so **did not make it win more games**. Those are separable claims and only the
+first survives.
+
+**This is the third correction in this thread and the largest.** The section above argues that the
+evaluation is what limits the search, on the strength of a usage table. Run 22 removed two of that
+table's four striking figures as noise. Run 23 now removes the inference itself: **the one eval
+change that could be tested end to end moved behaviour a lot and outcomes not at all.** What
+remains defensible is narrow — the eval decides *which* moves the search picks — and the leap from
+there to "the eval is what caps gen 6 at 67%" is unsupported.
+
+**Two possibilities the data does not distinguish**, and neither should be asserted: the search may
+already have been using Tailwind about as well as it is worth using on these teams, or a
+73.8%-vs-78.1% true difference may exist and this arm still cannot see it. **At n≈146 per arm the
+interval is ±8 points**, so a 4-point effect is exactly what this design was always going to leave
+open — worth recording as the practical ceiling of the whole harness, not just this run.
+
+**What the larger sample did buy: rarer defects became visible.** 1690 decisions per arm surfaced
+**defect 30's `index out of bounds`** (the empty-options crash, previously seen once in run 9, now
+in both arms), **three illegal proposals** of the `<move> in slot 1 not in this body's move list at
+all` kind — **defect 8's wrong-slot enumeration, caught in play for the first time** — plus five
+`terrain electricterrain` and two `volatile magnetrise` skips, both mine. Total fallbacks stayed
+around **0.65%**.
 
 ## Backlog
 

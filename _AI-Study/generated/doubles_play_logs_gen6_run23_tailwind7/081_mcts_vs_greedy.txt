@@ -1,0 +1,206 @@
+battle 81   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: ORAS Doubles OU: Lucario, Suicune, Landorus-Therian, Latios, Thundurus, Talonflame
+  p2: ORAS Doubles OU: Steelix, Bronzong, Azumarill, Hariyama, Tyranitar, Gothitelle
+
+  Turn 1
+    p1 mcts: move 1 1, move 2 1
+      search (4000 visits): closecombat,0;scald,0 33v 24 | closecombat-mega,0;scald,0 32v 23 | irontail-mega,1;scald,0 32v 23 | irontail-mega,0;scald,0 31v 22
+    p2 greedy: move 2, move 1
+      p1a Lucario used Close Combat -> p2a: Steelix
+              p1a Lucario def 1 fell
+              p1a Lucario spd 1 fell
+      p1b Suicune used Scald -> p2a: Steelix
+      p2a Steelix fainted
+      p2b Bronzong used Trick Room
+      after p1: Lucario 282/282, Suicune 404/404
+      after p2: Steelix 0/353, Bronzong 337/337
+
+  Turn 2
+      p2a <- Azumarill comes in (404/404)
+      after p1: Lucario 282/282, Suicune 404/404
+      after p2: Azumarill 404/404, Bronzong 337/337
+
+  Turn 3
+    p1 mcts: move 3 1 mega, move 4
+      search (8000 visits): irontail-mega,0;snarl,0 72v 44 | irontail-mega,0;scald,1 65v 38 | irontail,0;snarl,0 62v 36 | switch talonflame;snarl,0 60v 34
+    p2 greedy: move 2 1, move 1
+      p2a Azumarill used Play Rough -> p1a: Lucario
+      p1a Lucario fainted
+      p1b Suicune used Snarl -> p2b: Bronzong  [[spread] p2a,p2b]
+              p2a Azumarill spa 1 fell
+              p2b Bronzong spa 1 fell
+      p2b Bronzong used Trick Room
+      after p1: Lucario 0/282, Suicune 404/404
+      after p2: Azumarill 382/404, Bronzong 273/337
+
+  Turn 4
+      p1a <- Landorus-Therian comes in (319/319)
+              p2a Azumarill atk 1 fell
+              p2b Bronzong atk 1 fell
+      after p1: Landorus-Therian 319/319, Suicune 404/404
+      after p2: Azumarill 382/404, Bronzong 273/337
+
+  Turn 5
+    p1 mcts: move 1, switch 5   (slot1 Suicune -> Thundurus)
+      search (17000 visits): earthquake,0;switch thundurus 1239v 686 | earthquake,0;switch talonflame 1119v 612 | earthquake,0;switch latios 679v 346 | uturn,1;snarl,0 448v 210
+    p2 greedy: move 2 1, move 1
+      p1b <- Thundurus comes in (299/299)
+      p1a Landorus used Earthquake -> p2b: Bronzong  [[spread] p2a]
+              p1b Thundurus -- IMMUNE
+              p2b Bronzong -- IMMUNE
+      p2a Azumarill used Play Rough -> p1a: Landorus  [[miss]]
+              p2a Azumarill -- MISSED
+      p2b Bronzong used Trick Room
+      after p1: Landorus-Therian 319/319, Thundurus 299/299
+      after p2: Azumarill 207/404, Bronzong 273/337
+
+  Turn 6
+    p1 mcts: move 1, move 2 2
+      search (15000 visits): earthquake,0;thunderbolt,1 1354v 626 | earthquake,0;switch talonflame 1127v 508 | earthquake,0;switch latios 764v 323 | earthquake,0;thunderwave,0 742v 312
+    p2 greedy: move 2 1, move 1
+      p2a Azumarill used Play Rough -> p1a: Landorus
+      p1b Thundurus used Thunderbolt -> p2b: Bronzong
+      p1a Landorus used Earthquake -> p2a: Azumarill  [[spread] p2a]
+              p1b Thundurus -- IMMUNE
+              p2b Bronzong -- IMMUNE
+              p2a Azumarill used up its Sitrus Berry
+      p2b Bronzong used Trick Room
+      after p1: Landorus-Therian 183/319, Thundurus 299/299
+      after p2: Azumarill 131/404, Bronzong 138/337
+
+  Turn 7
+    p1 mcts: move 1, switch 6   (slot1 Thundurus -> Talonflame)
+      search (23000 visits): earthquake,0;switch talonflame 2671v 1237 | earthquake,0;switch latios 2011v 905 | earthquake,0;thunderbolt,1 1940v 869 | earthquake,0;flashcannon,1 1069v 441
+    p2 greedy: move 2 1, move 1
+      p1b <- Talonflame comes in (297/297)
+      p1a Landorus used Earthquake -> p2b: Bronzong  [[spread] p2a]
+              p1b Talonflame -- IMMUNE
+              p2b Bronzong -- IMMUNE
+      p2a Azumarill fainted
+      p2b Bronzong used Trick Room
+      after p1: Landorus-Therian 183/319, Talonflame 297/297
+      after p2: Azumarill 0/404, Bronzong 138/337
+
+  Turn 8
+      p2a <- Hariyama comes in (429/429)
+      after p1: Landorus-Therian 183/319, Talonflame 297/297
+      after p2: Hariyama 429/429, Bronzong 138/337
+
+  Turn 9
+    p1 mcts: move 1, switch 6   (slot1 Talonflame -> Thundurus)
+      search (20000 visits): earthquake,0;switch thundurus 1628v 814 | earthquake,0;bravebird,0 1583v 789 | switch suicune;bravebird,0 1512v 750 | earthquake,0;flareblitz,0 1249v 605
+    p2 greedy: move 1 1, move 1
+      p1b <- Thundurus comes in (299/299)
+      p2a Hariyama used Close Combat -> p1a: Landorus
+              p2a Hariyama def 1 fell
+              p2a Hariyama spd 1 fell
+      p1a Landorus used Earthquake -> p2a: Hariyama  [[spread] p2a]
+              p1b Thundurus -- IMMUNE
+              p2b Bronzong -- IMMUNE
+      p2b Bronzong used Trick Room
+      after p1: Landorus-Therian 64/319, Thundurus 299/299
+      after p2: Hariyama 134/429, Bronzong 138/337
+
+  Turn 10
+    p1 mcts: move 1, switch 6   (slot1 Thundurus -> Talonflame)
+      search (26000 visits): earthquake,0;switch talonflame 3254v 1696 | earthquake,0;switch latios 2269v 1147 | earthquake,0;thunderbolt,1 2217v 1118 | switch suicune;thunderbolt,0 1786v 881
+    p2 greedy: move 1 1, move 2 1
+      p1b <- Talonflame comes in (297/297)
+      p1a Landorus used Earthquake -> p2a: Hariyama  [[spread] p2a]
+              p1b Talonflame -- IMMUNE
+              p2b Bronzong -- IMMUNE
+      p2a Hariyama fainted
+      p2b Bronzong used Gyro Ball -> p1a: Landorus
+      p1a Landorus fainted
+      after p1: Landorus-Therian 0/319, Talonflame 297/297
+      after p2: Hariyama 0/429, Bronzong 138/337
+
+  Turn 11
+      p1a <- Latios comes in (301/301)
+      p2a <- Tyranitar comes in (404/404)
+      after p1: Latios 301/301, Talonflame 297/297
+      after p2: Tyranitar 404/404, Bronzong 138/337
+
+  Turn 12
+    p1 mcts: switch 5, move 4   (slot0 Latios -> Suicune)
+      search (16000 visits): switch suicune;protect,1 790v 280 | switch suicune;willowisp,0 587v 193 | dracometeor,0;protect,1 325v 87 | tailwind,0;willowisp,0 325v 87
+    p2 greedy: move 3 1, move 2 1
+      p1a <- Suicune comes in (404/404)
+      p1b Talonflame used Protect
+      p2a Tyranitar used Ice Beam -> p1a: Suicune
+      p2b Bronzong used Gyro Ball -> p1a: Suicune
+      after p1: Suicune 308/404, Talonflame 279/297
+      after p2: Tyranitar 364/404, Bronzong 138/337
+
+  Turn 13
+    p1 mcts: move 2 1, move 4
+      search (13000 visits): scald,0;protect,1 452v 218 | roar,1;willowisp,0 343v 155 | snarl,0;willowisp,0 332v 149 | roar,0;willowisp,0 330v 147
+    p2 greedy: move 3 1, move 2 1
+      p1b Talonflame used Protect  [[still]]
+              p1b Talonflame -- IT FAILED
+      p1a Suicune used Scald -> p2a: Tyranitar
+      p2a Tyranitar used Ice Beam -> p1a: Suicune
+      p2b Bronzong used Gyro Ball -> p1a: Suicune
+              p1a Suicune -- critical hit
+              p1a Suicune used up its Sitrus Berry
+      after p1: Suicune 275/404, Talonflame 261/297
+      after p2: Tyranitar 204/404, Bronzong 138/337
+
+  Turn 14
+    p1 mcts: move 2 1, move 2 1
+      search (15000 visits): scald,0;flareblitz,0 1329v 769 | scald,0;bravebird,0 1130v 642 | scald,0;protect,1 530v 270 | roar,1;willowisp,0 343v 158
+    p2 greedy: move 3 1, move 2 1
+      p1b Talonflame used Flare Blitz -> p2a: Tyranitar
+              p2a Tyranitar -- critical hit
+      p1a Suicune used Scald -> p2a: Tyranitar
+              p2a Tyranitar -- critical hit
+      p2a Tyranitar fainted
+      p2b Bronzong used Gyro Ball -> p1a: Suicune
+      after p1: Suicune 218/404, Talonflame 160/297
+      after p2: Tyranitar 0/404, Bronzong 138/337
+
+  Turn 15
+      p2a <- Gothitelle comes in (344/344)
+      after p1: Suicune 218/404, Talonflame 160/297
+      after p2: Gothitelle 344/344, Bronzong 138/337
+
+  Turn 16
+    p1 mcts: move 4, move 2 2
+      search (20000 visits): snarl,0;flareblitz,1 4688v 2931 | snarl,0;flareblitz,0 1032v 569 | snarl,0;bravebird,0 939v 512 | snarl,0;protect,1 773v 410
+    p2 greedy: move 2 2, move 2 2
+      p1b Talonflame used Flare Blitz -> p2b: Bronzong
+      p2b Bronzong fainted
+      p1a Suicune used Snarl -> p2a: Gothitelle
+              p2a Gothitelle spa 1 fell
+      p2a Gothitelle used Psychic -> p1b: Talonflame
+      p1b Talonflame fainted
+      after p1: Suicune 193/404, Talonflame 0/297
+      after p2: Gothitelle 286/344, Bronzong 0/337
+
+  Turn 17
+      p1b <- Latios comes in (301/301)
+      after p1: Suicune 193/404, Latios 301/301
+      after p2: Gothitelle 286/344, Bronzong 0/337
+
+  Turn 18
+    p1 mcts: move 2 1, move 1 1
+      search (60000 visits): scald,0;dracometeor,0 43459v 40075 | snarl,0;dracometeor,0 3128v 2465 | snarl,0;psyshock,0 2212v 1710 | scald,0;psyshock,0 2063v 1588
+    p2 greedy: move 2 1, pass
+      p1b Latios used Draco Meteor -> p2a: Gothitelle
+              p1b Latios spa 2 fell
+      p1a Suicune used Scald -> p2a: Gothitelle
+      p2a Gothitelle used Psychic -> p1a: Suicune
+      after p1: Suicune 135/404, Latios 271/301
+      after p2: Gothitelle 22/344, Bronzong 0/337
+
+  Turn 19
+    p1 mcts: move 3 1, move 1 1
+      search (374000 visits): icebeam,0;dracometeor,0 28225v 28092 | scald,0;tailwind,1 28080v 27945 | icebeam,0;tailwind,1 27917v 27781 | icebeam,0;protect,1 27837v 27700
+    p2 greedy: move 2 1, pass
+      p1b Latios used Draco Meteor -> p2a: Gothitelle
+              p1b Latios spa 2 fell
+      p2a Gothitelle fainted
+      after p1: Suicune 135/404, Latios 241/301
+      after p2: Gothitelle 0/344, Bronzong 0/337
+
+  RESULT: p1 wins

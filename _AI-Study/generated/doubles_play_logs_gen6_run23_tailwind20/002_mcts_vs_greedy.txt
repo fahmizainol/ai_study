@@ -1,0 +1,155 @@
+battle 2   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: manelock: Manectric-Mega, Gothitelle, Sylveon, Hydreigon, Terrakion, Genesect
+  p2: Untitled 571: Metagross-Mega, Keldeo-Resolute, Landorus, Talonflame, Scrafty, Volcanion
+
+  Turn 1
+    p1 mcts: move 2, move 4 2
+      search (29000 visits): snarl,0;psyshock,1 1781v 1089 | voltswitch,1;psyshock,1 1040v 602 | voltswitch,1;helpinghand,0 987v 567 | voltswitch,0;psyshock,1 957v 548
+    p2 greedy: move 3 1, move 1 1
+      p1a Manectric used Snarl -> p2b: Keldeo  [[spread] p2a,p2b]
+              p2b Keldeo -- critical hit
+              p2b Keldeo spa 1 fell
+              p2b Keldeo atk 1 rose
+      p2b Keldeo used Hydro Pump -> p1a: Manectric
+      p2a Metagross used Hammer Arm -> p1a: Manectric  [[miss]]
+              p2a Metagross -- MISSED
+      p1b Gothitelle used Psyshock -> p2b: Keldeo
+      after p1: Manectric-Mega 81/281, Gothitelle 344/344
+      after p2: Metagross-Mega 278/364, Keldeo-Resolute 30/323
+
+  Turn 2
+    p1 mcts: move 2, move 1 -1
+      search (43000 visits): snarl,0;helpinghand,0 1587v 839 | voltswitch,0;psyshock,1 1336v 692 | voltswitch,0;switch genesect 1114v 564 | snarl,0;protect,1 1037v 520
+    p2 greedy: move 3 1, move 1 1
+      p1b Gothitelle used Helping Hand -> p1a: Manectric
+      p1a Manectric used Snarl -> p2b: Keldeo  [[spread] p2a,p2b]
+      p2b Keldeo fainted
+      p2a Metagross used Hammer Arm -> p1a: Manectric
+              p2a Metagross spe 1 fell
+      p1a Manectric fainted
+      after p1: Manectric-Mega 0/281, Gothitelle 344/344
+      after p2: Metagross-Mega 144/364, Keldeo-Resolute 0/323
+
+  Turn 3
+      p1a <- Sylveon comes in (393/393)
+      p2b <- Landorus comes in (382/382)
+      after p1: Sylveon 393/393, Gothitelle 344/344
+      after p2: Metagross-Mega 144/364, Landorus 382/382
+
+  Turn 4
+    p1 mcts: move 1, move 4 2
+      search (36000 visits): hypervoice,0;psyshock,1 3311v 1723 | hypervoice,0;helpinghand,0 1840v 908 | hypervoice,0;psyshock,0 1477v 710 | protect,0;switch terrakion 1254v 590
+    p2 greedy: move 3 1, move 1 1
+      p2b Landorus used Earth Power -> p1a: Sylveon
+      p2a Metagross used Hammer Arm -> p1a: Sylveon
+              p2a Metagross spe 1 fell
+      p1b Gothitelle used Psyshock -> p2b: Landorus
+      p1a Sylveon used Hyper Voice -> p2b: Landorus  [[spread] p2a,p2b]
+      after p1: Sylveon 154/393, Gothitelle 344/344
+      after p2: Metagross-Mega 85/364, Landorus 154/382
+
+  Turn 5
+    p1 mcts: move 1, move 4 2
+      search (34000 visits): hypervoice,0;psyshock,1 7930v 4325 | hypervoice,0;helpinghand,0 2449v 1235 | hypervoice,0;taunt,0 1774v 866 | hypervoice,0;switch genesect 1423v 677
+    p2 greedy: move 3 1, move 1 1
+      p2b Landorus used Earth Power -> p1a: Sylveon
+      p1a Sylveon fainted
+      p1b Gothitelle used Psyshock -> p2b: Landorus
+      p2a Metagross used Hammer Arm -> p1b: Gothitelle
+              p2a Metagross spe 1 fell
+      after p1: Sylveon 0/393, Gothitelle 289/344
+      after p2: Metagross-Mega 85/364, Landorus 72/382
+
+  Turn 6
+      p1a <- Hydreigon comes in (325/325)
+      after p1: Hydreigon 325/325, Gothitelle 289/344
+      after p2: Metagross-Mega 85/364, Landorus 72/382
+
+  Turn 7
+    p1 mcts: move 3 2, switch 6   (slot1 Gothitelle -> Genesect)
+      search (31000 visits): hiddenpower,1;switch genesect 1479v 655 | darkpulse,0;psyshock,1 1371v 601 | earthpower,0;psyshock,1 1184v 508 | darkpulse,1;switch genesect 1178v 505
+    p2 greedy: move 3 2, move 1 2
+      p1b <- Genesect comes in (284/284)
+              p1b Genesect spa 1 rose
+      p1a Hydreigon used Hidden Power -> p2b: Landorus
+      p2b Landorus fainted
+      p2a Metagross used Hammer Arm -> p1b: Genesect
+              p2a Metagross spe 1 fell
+      after p1: Hydreigon 325/325, Genesect 117/284
+      after p2: Metagross-Mega 85/364, Landorus 0/382
+
+  Turn 8
+      p2b <- Talonflame comes in (321/321)
+      after p1: Hydreigon 325/325, Genesect 117/284
+      after p2: Metagross-Mega 85/364, Talonflame 321/321
+
+  Turn 9
+    p1 mcts: move 3 1, switch 6   (slot1 Genesect -> Gothitelle)
+      search (28000 visits): hiddenpower,0;switch gothitelle 3544v 775 | hiddenpower,0;explosion,0 1843v 349 | switch gothitelle;explosion,0 1780v 333 | hiddenpower,1;explosion,0 1657v 304
+    p2 greedy: move 3 2, move 4 2
+      p1b <- Gothitelle comes in (289/344)
+      p2b Talonflame used Brave Bird -> p1b: Gothitelle
+              p1b Gothitelle used up its Sitrus Berry
+      p1a Hydreigon used Hidden Power -> p2a: Metagross
+      p2a Metagross used Hammer Arm -> p1b: Gothitelle
+              p2a Metagross spe 1 fell
+      after p1: Hydreigon 325/325, Gothitelle 158/344
+      after p2: Metagross-Mega 53/364, Talonflame 267/321
+
+  Turn 10
+    p1 mcts: move 3 2, move 4 2
+      search (38000 visits): hiddenpower,1;psyshock,1 8662v 3242 | switch terrakion;psyshock,1 4381v 1552 | hiddenpower,1;helpinghand,0 1879v 597 | hiddenpower,0;psyshock,1 1871v 594
+    p2 greedy: move 3 2, move 4 2
+      p2b Talonflame used Brave Bird -> p1b: Gothitelle
+      p1b Gothitelle fainted
+      p1a Hydreigon used Hidden Power -> p2b: Talonflame
+              p2b Talonflame -- critical hit
+      p2a Metagross used Hammer Arm -> p1a: Hydreigon
+              p2a Metagross spe 1 fell
+      after p1: Hydreigon 33/325, Gothitelle 0/344
+      after p2: Metagross-Mega 53/364, Talonflame 179/321
+
+  Turn 11
+      p1b <- Terrakion comes in (323/323)
+      after p1: Hydreigon 33/325, Terrakion 323/323
+      after p2: Metagross-Mega 53/364, Talonflame 179/321
+
+  Turn 12
+    p1 mcts: move 3 2, move 3
+      search (33000 visits): hiddenpower,1;rockslide,0 4688v 1435 | hiddenpower,0;rockslide,0 4087v 1232 | hiddenpower,0;stoneedge,1 2575v 728 | hiddenpower,1;stoneedge,1 2436v 683
+    p2 greedy: move 3 1, move 4 1
+      p2b Talonflame used Brave Bird -> p1a: Hydreigon
+      p1a Hydreigon fainted
+      p1b Terrakion used Rock Slide -> p2a: Metagross  [[spread] p2a,p2b]
+      p2b Talonflame fainted
+      p2a Metagross used Hammer Arm -> p1b: Terrakion
+      after p1: Hydreigon 0/325, Terrakion 15/323
+      after p2: Metagross-Mega 17/364, Talonflame 0/321
+
+  Turn 13
+      p2b <- Scrafty comes in (334/334)
+      p1a <- Genesect comes in (117/284)
+              p1a Genesect spa 1 rose
+              p1a Genesect atk 1 fell
+              p1b Terrakion atk 1 fell
+      after p1: Genesect 117/284, Terrakion 15/323
+      after p2: Metagross-Mega 17/364, Scrafty 334/334
+
+  Turn 14
+    p1 mcts: move 1 1, move 1 2
+      search (54000 visits): uturn,0;closecombat,1 23750v 11465 | uturn,1;protect,1 6773v 3090 | uturn,1;stoneedge,1 5222v 2341 | uturn,1;closecombat,1 2426v 1014
+    p2 greedy: move 3 2, move 3 2
+      p1b Terrakion used Close Combat -> p2b: Scrafty
+              p1b Terrakion def 1 fell
+              p1b Terrakion spd 1 fell
+      p1b Terrakion fainted
+      p1a Genesect used U-turn -> p2a: Metagross
+              p2a Metagross -- critical hit
+      p2a Metagross fainted
+      p2b Scrafty used Knock Off -> p1a: Genesect
+              p1a Genesect used up its Choice Band
+      p1a Genesect fainted
+      after p1: Genesect 0/284, Terrakion 0/323
+      after p2: Metagross-Mega 0/364, Scrafty 122/334
+
+  RESULT: p2 wins

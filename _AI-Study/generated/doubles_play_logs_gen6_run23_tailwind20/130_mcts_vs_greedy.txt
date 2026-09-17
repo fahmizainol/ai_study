@@ -1,0 +1,256 @@
+battle 130   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: ORAS Doubles OU: Abomasnow-Mega, Heatran, Hitmontop, Kyurem-Black, Cresselia, Azumarill
+  p2: XY Doubles: Meloetta, Gyarados, Chandelure, Gardevoir, Garchomp, Parasect
+
+  Turn 1
+    p1 mcts: switch 3, move 1   (slot0 Abomasnow-Mega -> Hitmontop)
+      search (18000 visits): switch hitmontop;heatwave,0 729v 454 | switch hitmontop;switch azumarill 686v 424 | switch azumarill;switch hitmontop 673v 415 | switch hitmontop;flashcannon,0 664v 409
+    p2 greedy: move 3 1, move 2 1
+      p1a <- Hitmontop comes in (304/304)
+              p2a Meloetta atk 1 fell
+              p2b Gyarados atk 1 fell
+      p2a Meloetta used Focus Blast -> p1a: Hitmontop
+              p1a Hitmontop spd 1 fell
+              p1a Hitmontop used up its Sitrus Berry
+      p2b Gyarados used Waterfall -> p1a: Hitmontop
+      p1b Heatran used Heat Wave -> p2a: Meloetta  [[spread] p2a]
+              p1b Heatran -- MISSED
+      after p1: Hitmontop 45/304, Heatran 386/386
+      after p2: Meloetta 219/351, Gyarados 331/353
+
+  Turn 2
+    p1 mcts: switch 6, move 2 1   (slot0 Hitmontop -> Azumarill)
+      search (20000 visits): switch azumarill;flashcannon,0 988v 586 | switch azumarill;heatwave,0 786v 453 | switch azumarill;substitute,1 625v 348 | switch azumarill;flashcannon,1 507v 272
+    p2 greedy: move 3 1, move 2 1
+      p1a <- Azumarill comes in (404/404)
+      p2a Meloetta used Focus Blast -> p1a: Azumarill
+              p1a Azumarill spd 1 fell
+      p2b Gyarados used Waterfall -> p1a: Azumarill
+      p1b Heatran used Flash Cannon -> p2a: Meloetta
+              p1a Azumarill used up its Sitrus Berry
+      after p1: Azumarill 287/404, Heatran 386/386
+      after p2: Meloetta 72/351, Gyarados 309/353
+
+  Turn 3
+    p1 mcts: move 4 1, switch 6   (slot1 Heatran -> Hitmontop)
+      search (22000 visits): playrough,0;switch hitmontop 615v 352 | playrough,1;switch hitmontop 599v 341 | aquajet,0;flashcannon,0 580v 329 | aquajet,0;substitute,1 533v 298
+    p2 greedy: move 3 1, move 2 1
+      p1b <- Hitmontop comes in (45/304)
+              p2a Meloetta atk 1 fell
+              p2b Gyarados atk 1 fell
+      p2a Meloetta used Focus Blast -> p1a: Azumarill
+              p1a Azumarill spd 1 fell
+      p2b Gyarados used Waterfall -> p1a: Azumarill
+      p1a Azumarill used Play Rough -> p2a: Meloetta
+      p2a Meloetta fainted
+      after p1: Azumarill 19/404, Hitmontop 26/304
+      after p2: Meloetta 0/351, Gyarados 287/353
+
+  Turn 4
+      p2a <- Chandelure comes in (281/281)
+      after p1: Azumarill 19/404, Hitmontop 26/304
+      after p2: Chandelure 281/281, Gyarados 287/353
+
+  Turn 5
+    p1 mcts: switch 3, switch 4   (slot0 Azumarill -> Abomasnow-Mega; slot1 Hitmontop -> Kyurem-Black)
+      search (37000 visits): switch abomasnowmega;switch kyuremblack 1178v 561 | aquajet,0;switch cresselia 842v 381 | aquajet,0;switch kyuremblack 831v 375 | playrough,1;switch kyuremblack 829v 374
+    p2 greedy: move 3, move 2 1
+      p1b <- Kyurem-Black comes in (454/454)
+      p1a <- Abomasnow-Mega comes in (384/384)
+      p2a Chandelure used Heat Wave -> p1b: Kyurem  [[spread] p1a,p1b]
+      p1a Abomasnow fainted
+      p2b Gyarados used Waterfall -> p1b: Kyurem
+      after p1: Abomasnow-Mega 0/384, Kyurem-Black 254/454
+      after p2: Chandelure 264/281, Gyarados 265/353
+
+  Turn 6
+      p1a <- Azumarill comes in (19/404)
+      after p1: Azumarill 19/404, Kyurem-Black 254/454
+      after p2: Chandelure 264/281, Gyarados 265/353
+
+  Turn 7
+    p1 mcts: move 1 1, move 4
+      search (25000 visits): aquajet,0;blizzard,0 4183v 3298 | switch hitmontop;blizzard,0 1485v 1101 | switch heatran;blizzard,0 1107v 800 | switch cresselia;blizzard,0 883v 624
+    p2 greedy: move 3, move 2 1
+      p1a Azumarill used Aqua Jet -> p2a: Chandelure
+              p2a Chandelure -- critical hit
+      p2a Chandelure fainted
+      p2b Gyarados used Waterfall -> p1a: Azumarill
+      p1a Azumarill fainted
+      p1b Kyurem used Blizzard -> p2b: Gyarados
+      after p1: Azumarill 0/404, Kyurem-Black 209/454
+      after p2: Chandelure 0/281, Gyarados 19/353
+
+  Turn 8
+      p2a <- Gardevoir comes in (278/278)
+      p1a <- Hitmontop comes in (26/304)
+              p1a Hitmontop atk 1 fell
+              p1b Kyurem atk 1 fell
+              p2a Gardevoir atk 1 fell
+              p2b Gyarados atk 1 fell
+      after p1: Hitmontop 26/304, Kyurem-Black 209/454
+      after p2: Gardevoir 278/278, Gyarados 19/353
+
+  Turn 9
+    p1 mcts: switch 6, switch 5   (slot0 Hitmontop -> Heatran; slot1 Kyurem-Black -> Cresselia)
+      search (23000 visits): switch heatran;switch cresselia 2053v 1345 | switch heatran;blizzard,0 1618v 1040 | switch cresselia;switch heatran 1073v 663 | fakeout,0;blizzard,0 899v 544
+    p2 greedy: move 1, move 2 1
+      p1b <- Cresselia comes in (443/443)
+      p1a <- Heatran comes in (386/386)
+      p2a Gardevoir used Hyper Voice -> p1b: Cresselia  [[spread] p1a,p1b]
+      p2b Gyarados used Waterfall -> p1a: Heatran
+      after p1: Heatran 229/386, Cresselia 380/443
+      after p2: Gardevoir 278/278, Gyarados 19/353
+
+  Turn 10
+    p1 mcts: move 2 1, move 1
+      search (17000 visits): flashcannon,0;calmmind,1 1467v 882 | heatwave,0;calmmind,1 772v 431 | switch hitmontop;calmmind,1 712v 392 | flashcannon,0;trickroom,0 695v 382
+    p2 greedy: move 1, move 2 1
+      p2a Gardevoir used Hyper Voice -> p1b: Cresselia  [[spread] p1a,p1b]
+      p2b Gyarados used Waterfall -> p1a: Heatran
+              p1a Heatran -- critical hit
+      p1a Heatran fainted
+      p1b Cresselia used Calm Mind
+              p1b Cresselia spa 1 rose
+              p1b Cresselia spd 1 rose
+      after p1: Heatran 0/386, Cresselia 309/443
+      after p2: Gardevoir 278/278, Gyarados 19/353
+
+  Turn 11
+      p1a <- Kyurem-Black comes in (209/454)
+      after p1: Kyurem-Black 209/454, Cresselia 309/443
+      after p2: Gardevoir 278/278, Gyarados 19/353
+
+  Turn 12
+    p1 mcts: switch 6, move 1   (slot0 Kyurem-Black -> Hitmontop)
+      search (17000 visits): switch hitmontop;calmmind,1 1182v 634 | switch hitmontop;psychic,0 1083v 574 | switch hitmontop;moonlight,1 1017v 535 | blizzard,0;calmmind,1 1009v 530
+    p2 greedy: move 1, move 2 1
+      p1a <- Hitmontop comes in (26/304)
+              p2a Gardevoir atk 1 fell
+              p2b Gyarados atk 1 fell
+      p2a Gardevoir used Hyper Voice -> p1a: Hitmontop  [[spread] p1a,p1b]
+      p1a Hitmontop fainted
+      p2b Gyarados used Waterfall -> p1b: Cresselia
+      p1b Cresselia used Calm Mind
+              p1b Cresselia spa 1 rose
+              p1b Cresselia spd 1 rose
+      after p1: Hitmontop 0/304, Cresselia 221/443
+      after p2: Gardevoir 278/278, Gyarados 19/353
+
+  Turn 13
+      p1a <- Kyurem-Black comes in (209/454)
+      after p1: Kyurem-Black 209/454, Cresselia 221/443
+      after p2: Gardevoir 278/278, Gyarados 19/353
+
+  Turn 14
+    p1 mcts: move 3, move 4
+      search (16000 visits): protect,0;moonlight,1 1677v 777 | blizzard,0;moonlight,1 1462v 667 | protect,0;psychic,0 1249v 558 | protect,0;calmmind,1 838v 351
+    p2 greedy: move 1, move 2 1
+      p1a Kyurem used Protect
+      p2a Gardevoir used Hyper Voice -> p1b: Cresselia  [[spread] p1b]
+              p1a Kyurem -- move: Protect
+      p2b Gyarados used Waterfall -> p1a: Kyurem
+              p1a Kyurem -- move: Protect
+      p1b Cresselia used Moonlight
+      after p1: Kyurem-Black 209/454, Cresselia 408/443
+      after p2: Gardevoir 278/278, Gyarados 19/353
+
+  Turn 15
+    p1 mcts: move 3, move 3 1
+      search (19000 visits): protect,0;psychic,0 1332v 517 | blizzard,0;psychic,0 1101v 414 | blizzard,0;calmmind,1 1097v 412 | protect,0;calmmind,1 1031v 383
+    p2 greedy: move 1, move 2 1
+      p1a Kyurem used Protect  [[still]]
+              p1a Kyurem -- IT FAILED
+      p2a Gardevoir used Hyper Voice -> p1b: Cresselia  [[spread] p1a,p1b]
+              p1a Kyurem -- critical hit
+      p2b Gyarados used Waterfall -> p1a: Kyurem
+      p1b Cresselia used Psychic -> p2a: Gardevoir
+      after p1: Kyurem-Black 49/454, Cresselia 371/443
+      after p2: Gardevoir 168/278, Gyarados 19/353
+
+  Turn 16
+    p1 mcts: move 4, move 4
+      search (22000 visits): blizzard,0;moonlight,1 1020v 339 | blizzard,0;calmmind,1 996v 330 | blizzard,0;psychic,0 961v 316 | protect,0;psychic,0 837v 266
+    p2 greedy: move 1, move 2 1
+      p2a Gardevoir used Hyper Voice -> p1a: Kyurem  [[spread] p1a,p1b]
+              p1a Kyurem -- critical hit
+      p1a Kyurem fainted
+      p2b Gyarados used Waterfall -> p1b: Cresselia
+              p1b Cresselia COULD NOT MOVE (flinch)
+      after p1: Kyurem-Black 0/454, Cresselia 295/443
+      after p2: Gardevoir 168/278, Gyarados 19/353
+
+  Turn 17
+    p1 mcts: pass, move 4
+      search (33000 visits): No Move;moonlight,1 11893v 4429 | No Move;psychic,0 8909v 3257 | No Move;psychic,1 6096v 2167 | No Move;calmmind,1 3720v 1261
+    p2 greedy: move 1, move 2 2
+      p2a Gardevoir used Hyper Voice -> p1b: Cresselia
+      p2b Gyarados used Waterfall -> p1b: Cresselia
+      p1b Cresselia used Moonlight
+      after p1: Kyurem-Black 0/454, Cresselia 427/443
+      after p2: Gardevoir 168/278, Gyarados 19/353
+
+  Turn 18
+    p1 mcts: pass, move 3 2
+      search PANICKED (cannot mega evolve GARDEVOIR with NONE); greedy took the turn
+    p2 greedy: move 1, move 2 2
+      p2a Gardevoir used Hyper Voice -> p1b: Cresselia
+      p2b Gyarados used Waterfall -> p1b: Cresselia
+      p1b Cresselia used Psychic -> p2b: Gyarados
+      p2b Gyarados fainted
+      after p1: Kyurem-Black 0/454, Cresselia 336/443
+      after p2: Gardevoir 168/278, Gyarados 0/353
+
+  Turn 19
+      p2b <- Garchomp comes in (369/369)
+      after p1: Kyurem-Black 0/454, Cresselia 336/443
+      after p2: Gardevoir 168/278, Garchomp 369/369
+
+  Turn 20
+    p1 mcts: pass, move 3 2
+      search (44000 visits): No Move;psychic,1 29827v 15509 | No Move;moonlight,1 7958v 3938 | No Move;calmmind,1 2536v 1153 | No Move;psychic,0 1784v 780
+    p2 greedy: move 1, move 2
+      p2b Garchomp used Earthquake -> p1b: Cresselia  [[spread] p2a]
+              p1b Cresselia -- IMMUNE
+      p2a Gardevoir fainted
+      p1b Cresselia used Psychic -> p2b: Garchomp
+      after p1: Kyurem-Black 0/454, Cresselia 336/443
+      after p2: Gardevoir 0/278, Garchomp 95/369
+
+  Turn 21
+      p2a <- Parasect comes in (316/316)
+      after p1: Kyurem-Black 0/454, Cresselia 336/443
+      after p2: Parasect 316/316, Garchomp 95/369
+
+  Turn 22
+    p1 mcts: pass, move 3 2
+      search (55000 visits): No Move;psychic,1 37724v 24244 | No Move;psychic,0 14683v 9219 | No Move;calmmind,1 1046v 546 | No Move;moonlight,1 739v 365
+    p2 greedy: move 4 2, move 2
+      p2b Garchomp used Earthquake -> p1b: Cresselia  [[spread] p2a]
+              p1b Cresselia -- IMMUNE
+      p1b Cresselia used Psychic -> p2b: Garchomp
+      p2b Garchomp fainted
+      p2a Parasect used Cross Poison -> p1b: Cresselia
+      after p1: Kyurem-Black 0/454, Cresselia 291/443
+      after p2: Parasect 285/316, Garchomp 0/369
+
+  Turn 23
+    p1 mcts: pass, move 3 1
+      search (1537000 visits): No Move;psychic,0 1389062v 1387155 | No Move;trickroom,0 77768v 76525 | No Move;calmmind,1 67647v 66472 | No Move;moonlight,1 2523v 2263
+    p2 greedy: move 4 2, pass
+      p1b Cresselia used Psychic -> p2a: Parasect
+              p2a Parasect used up its Sitrus Berry
+      p2a Parasect used Cross Poison -> p1b: Cresselia
+      after p1: Kyurem-Black 0/454, Cresselia 248/443
+      after p2: Parasect 142/316, Garchomp 0/369
+
+  Turn 24
+    p1 mcts: pass, move 3 1
+      search (1813000 visits): No Move;psychic,0 1550158v 1550158 | No Move;moonlight,1 117322v 115989 | No Move;calmmind,1 81730v 80547 | No Move;trickroom,0 63790v 62709
+    p2 greedy: move 4 2, pass
+      p1b Cresselia used Psychic -> p2a: Parasect
+      p2a Parasect fainted
+      after p1: Kyurem-Black 0/454, Cresselia 248/443
+      after p2: Parasect 0/316, Garchomp 0/369
+
+  RESULT: p1 wins

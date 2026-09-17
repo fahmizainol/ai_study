@@ -1,0 +1,302 @@
+battle 50   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: unfinished dbond gar: Cresselia, Gengar-Mega, Conkeldurr, Volcanion, Landorus-Therian, Thundurus
+  p2: Untitled 572: Kyurem-Black, Sableye-Mega, Ferrothorn, Landorus-Therian, Chansey, Volcanion
+
+  Turn 1
+    p1 mcts: move 1, switch 5   (slot1 Gengar-Mega -> Landorus-Therian)
+      search (9000 visits): icywind,0;switch landorustherian 165v 97 | icywind,0;willowisp,0 150v 86 | icywind,0;protect,1 143v 81 | icywind,0;shadowball,0 140v 78
+    p2 greedy: move 4 1, move 3
+      p1b <- Landorus-Therian comes in (319/319)
+              p2a Kyurem atk 1 fell
+              p2b Sableye atk 1 fell
+      p2a Kyurem used Fusion Bolt -> p1a: Cresselia
+      p1a Cresselia used Icy Wind -> p2a: Kyurem  [[spread] p2a,p2b]
+              p2a Kyurem spe 1 fell
+              p2b Sableye spe 1 fell
+      p2b Sableye used Snarl -> p1a: Cresselia  [[spread] p1a,p1b]
+              p1a Cresselia -- critical hit
+              p1a Cresselia spa 1 fell
+              p1b Landorus spa 1 fell
+      after p1: Cresselia 293/444, Landorus-Therian 271/319
+      after p2: Kyurem-Black 435/454, Sableye-Mega 284/304
+
+  Turn 2
+    p1 mcts: move 1, switch 4   (slot1 Landorus-Therian -> Volcanion)
+      search (32000 visits): icywind,0;switch volcanion 837v 225 | moonlight,0;switch thundurus 599v 143 | moonlight,0;switch conkeldurr 594v 142 | switch thundurus;switch volcanion 558v 130
+    p2 greedy: move 4 1, move 3
+      p1b <- Volcanion comes in (363/363)
+      p1a Cresselia used Icy Wind -> p2b: Sableye  [[spread] p2a,p2b]
+              p2a Kyurem spe 1 fell
+              p2b Sableye spe 1 fell
+      p2a Kyurem used Fusion Bolt -> p1a: Cresselia
+      p2b Sableye used Snarl -> p1b: Volcanion  [[spread] p1a,p1b]
+              p1a Cresselia spa 1 fell
+              p1b Volcanion spa 1 fell
+      after p1: Cresselia 171/444, Volcanion 339/363
+      after p2: Kyurem-Black 422/454, Sableye-Mega 270/304
+
+  Turn 3
+    p1 mcts: move 4 1, switch 4   (slot1 Volcanion -> Landorus-Therian)
+      search (19000 visits): toxic,0;switch landorustherian 301v 88 | icywind,0;switch thundurus 275v 77 | icywind,0;switch landorustherian 265v 73 | icywind,0;switch gengarmega 262v 72
+    p2 greedy: move 4 1, move 3
+      p1b <- Landorus-Therian comes in (271/319)
+              p2a Kyurem atk 1 fell
+              p2b Sableye atk 1 fell
+      p1a Cresselia used Toxic -> p2a: Kyurem
+              p2a Kyurem is now tox
+      p2a Kyurem used Fusion Bolt -> p1a: Cresselia
+      p2b Sableye used Snarl -> p1a: Cresselia  [[spread] p1a,p1b]
+              p1a Cresselia spa 1 fell
+              p1b Landorus spa 1 fell
+      after p1: Cresselia 72/444, Landorus-Therian 222/319
+      after p2: Kyurem-Black 394/454, Sableye-Mega 270/304
+
+  Turn 4
+    p1 mcts: move 3, switch 3   (slot1 Landorus-Therian -> Conkeldurr)
+      search (36000 visits): moonlight,0;switch conkeldurr 576v 93 | moonlight,0;switch gengarmega 561v 89 | switch conkeldurr;switch gengarmega 557v 88 | switch gengarmega;switch thundurus 552v 87
+    p2 greedy: move 4 1, move 3
+      p1b <- Conkeldurr comes in (413/413)
+      p1a Cresselia used Moonlight
+      p2a Kyurem used Fusion Bolt -> p1a: Cresselia
+      p2b Sableye used Snarl -> p1a: Cresselia  [[spread] p1a,p1b]
+              p1b Conkeldurr -- critical hit
+              p1a Cresselia spa 1 fell
+              p1b Conkeldurr spa 1 fell
+      after p1: Cresselia 191/444, Conkeldurr 392/413
+      after p2: Kyurem-Black 338/454, Sableye-Mega 270/304
+
+  Turn 5
+    p1 mcts: move 1, switch 3   (slot1 Conkeldurr -> Landorus-Therian)
+      search (30000 visits): icywind,0;switch landorustherian 340v 27 | moonlight,0;switch landorustherian 338v 27 | switch gengarmega;switch landorustherian 335v 26 | toxic,0;switch landorustherian 334v 26
+    p2 greedy: move 4 1, move 3
+      p1b <- Landorus-Therian comes in (222/319)
+              p2a Kyurem atk 1 fell
+              p2b Sableye atk 1 fell
+      p1a Cresselia used Icy Wind -> p2a: Kyurem  [[spread] p2a,p2b]
+              p2a Kyurem spe 1 fell
+              p2b Sableye spe 1 fell
+      p2a Kyurem used Fusion Bolt -> p1a: Cresselia
+      p2b Sableye used Snarl -> p1b: Landorus  [[spread] p1a,p1b]
+              p1a Cresselia spa 1 fell
+              p1b Landorus spa 1 fell
+      after p1: Cresselia 96/444, Landorus-Therian 171/319
+      after p2: Kyurem-Black 248/454, Sableye-Mega 264/304
+
+  Turn 6
+    p1 mcts: move 4 1, switch 3   (slot1 Landorus-Therian -> Conkeldurr)
+      search (40000 visits): toxic,0;switch conkeldurr 658v 97 | toxic,1;switch gengarmega 632v 91 | psyshock,0;switch thundurus 624v 89 | toxic,1;switch thundurus 609v 86
+    p2 greedy: move 4 1, move 3
+      p1b <- Conkeldurr comes in (392/413)
+      p1a Cresselia used Toxic -> p2a: Kyurem  [[miss]]
+              p1a Cresselia -- MISSED
+      p2a Kyurem used Fusion Bolt -> p1a: Cresselia
+      p2b Sableye used Snarl -> p1a: Cresselia  [[spread] p1a,p1b]
+              p1b Conkeldurr spa 1 fell
+      p1a Cresselia fainted
+      after p1: Cresselia 0/444, Conkeldurr 377/413
+      after p2: Kyurem-Black 136/454, Sableye-Mega 264/304
+
+  Turn 7
+      p1a <- Landorus-Therian comes in (171/319)
+              p2a Kyurem atk 1 fell
+              p2b Sableye atk 1 fell
+      after p1: Landorus-Therian 171/319, Conkeldurr 377/413
+      after p2: Kyurem-Black 136/454, Sableye-Mega 264/304
+
+  Turn 8
+    p1 mcts: switch 6, switch 4   (slot0 Landorus-Therian -> Thundurus; slot1 Conkeldurr -> Volcanion)
+      search (33000 visits): switch thundurus;switch volcanion 404v 15 | superpower,1;switch volcanion 399v 14 | uturn,1;switch volcanion 397v 13 | uturn,0;switch gengarmega 396v 13
+    p2 greedy: move 4 1, move 3
+      p1a <- Thundurus comes in (361/361)
+      p1b <- Volcanion comes in (339/363)
+      p2a Kyurem used Fusion Bolt -> p1a: Thundurus
+      p2b Sableye used Snarl -> p1a: Thundurus  [[spread] p1a,p1b]
+              p1a Thundurus spa 1 fell
+              p1b Volcanion spa 1 fell
+      p2a Kyurem fainted
+      after p1: Thundurus 272/361, Volcanion 312/363
+      after p2: Kyurem-Black 0/454, Sableye-Mega 264/304
+
+  Turn 9
+      p2a <- Ferrothorn comes in (352/352)
+      after p1: Thundurus 272/361, Volcanion 312/363
+      after p2: Ferrothorn 352/352, Sableye-Mega 264/304
+
+  Turn 10
+    p1 mcts: move 4 1, move 2
+      search (33000 visits): superpower,0;heatwave,0 569v 101 | voltswitch,1;heatwave,0 461v 72 | voltswitch,1;switch landorustherian 456v 71 | superpower,0;switch landorustherian 454v 70
+    p2 greedy: move 1, move 3
+      p1a Thundurus used Superpower -> p2a: Ferrothorn
+              p1a Thundurus atk 1 fell
+              p1a Thundurus def 1 fell
+              p1a Thundurus used up its Sitrus Berry
+      p1b Volcanion used Heat Wave -> p2b: Sableye  [[spread] p2a,p2b]
+              p2b Sableye is now brn
+      p2a Ferrothorn used Spikes -> p1b: Volcanion
+      -sidestart p1: A Spikes
+      p2b Sableye used Snarl -> p1a: Thundurus  [[spread] p1a,p1b]
+              p1a Thundurus spa 1 fell
+              p1b Volcanion spa 1 fell
+      after p1: Thundurus 220/361, Volcanion 285/363
+      after p2: Ferrothorn 6/352, Sableye-Mega 165/304
+
+  Turn 11
+    p1 mcts: move 1 1, switch 4   (slot1 Volcanion -> Conkeldurr)
+      search (37000 visits): voltswitch,0;switch conkeldurr 835v 279 | voltswitch,0;switch landorustherian 727v 234 | hiddenpower,0;switch gengarmega 632v 196 | hiddenpower,0;switch landorustherian 629v 195
+    p2 greedy: move 1, move 3
+      p1b <- Conkeldurr comes in (377/413)
+      p1a Thundurus used Volt Switch -> p2a: Ferrothorn
+      p2a Ferrothorn fainted
+      after p1: Thundurus 220/361, Conkeldurr 326/413
+      after p2: Ferrothorn 0/352, Sableye-Mega 165/304
+
+  Turn 12
+      p1a <- Volcanion comes in (285/363)
+      p2b Sableye used Snarl -> p1b: Conkeldurr  [[spread] p1a,p1b]
+              p1a Volcanion spa 1 fell
+              p1b Conkeldurr spa 1 fell
+      after p1: Volcanion 215/363, Conkeldurr 313/413
+      after p2: Ferrothorn 0/352, Sableye-Mega 127/304
+
+  Turn 13
+      p2a <- Landorus-Therian comes in (367/367)
+              p1a Volcanion atk 1 fell
+              p1b Conkeldurr atk 1 fell
+      after p1: Volcanion 215/363, Conkeldurr 313/413
+      after p2: Landorus-Therian 367/367, Sableye-Mega 127/304
+
+  Turn 14
+    p1 mcts: switch 6, move 2 1   (slot0 Volcanion -> Landorus-Therian)
+      search (23000 visits): switch landorustherian;icepunch,0 586v 237 | steameruption,0;icepunch,0 496v 192 | steameruption,0;switch landorustherian 420v 156 | steameruption,1;switch thundurus 417v 154
+    p2 greedy: move 2 1, move 3
+      p1a <- Landorus-Therian comes in (171/319)
+              p2a Landorus atk 1 fell
+              p2b Sableye atk 1 fell
+      p2a Landorus used Earth Power -> p1a: Landorus
+              p1a Landorus -- IMMUNE
+      p1b Conkeldurr used Ice Punch -> p2a: Landorus
+              p2a Landorus is now frz
+      p2b Sableye used Snarl -> p1a: Landorus  [[spread] p1a,p1b]
+              p1a Landorus spa 1 fell
+              p1b Conkeldurr spa 1 fell
+      after p1: Landorus-Therian 120/319, Conkeldurr 299/413
+      after p2: Landorus-Therian 91/367, Sableye-Mega 89/304
+
+  Turn 15
+    p1 mcts: move 1, switch 4   (slot1 Conkeldurr -> Thundurus)
+      search (21000 visits): earthquake,0;switch thundurus 536v 166 | earthquake,0;switch volcanion 502v 152 | superpower,1;switch thundurus 415v 118 | superpower,1;switch volcanion 406v 114
+    p2 greedy: move 2 1, move 3
+      p1b <- Thundurus comes in (220/361)
+      p1a Landorus used Earthquake -> p2a: Landorus  [[spread] p2b]
+              p1b Thundurus -- IMMUNE
+              p2a Landorus -- IMMUNE
+      p2b Sableye fainted
+              p2a Landorus COULD NOT MOVE (frz)
+      after p1: Landorus-Therian 120/319, Thundurus 220/361
+      after p2: Landorus-Therian 91/367, Sableye-Mega 0/304
+
+  Turn 16
+      p2b <- Chansey comes in (643/643)
+      after p1: Landorus-Therian 120/319, Thundurus 220/361
+      after p2: Landorus-Therian 91/367, Chansey 643/643
+
+  Turn 17
+    p1 mcts: switch 5, move 4 2   (slot0 Landorus-Therian -> Gengar-Mega)
+      search (27000 visits): switch gengarmega;superpower,1 3333v 1443 | switch gengarmega;thunderwave,1 1625v 648 | switch gengarmega;voltswitch,0 1469v 578 | earthquake,0;superpower,1 1213v 463
+    p2 greedy: move 2 1, move 1 1
+      p1a <- Gengar-Mega comes in (323/323)
+              p2a Landorus COULD NOT MOVE (frz)
+      p1b Thundurus used Superpower -> p2b: Chansey
+              p1b Thundurus atk 1 fell
+              p1b Thundurus def 1 fell
+      p2b Chansey used Seismic Toss -> p1a: Gengar
+              p1a Gengar -- IMMUNE
+      after p1: Gengar-Mega 283/323, Thundurus 220/361
+      after p2: Landorus-Therian 91/367, Chansey 409/643
+
+  Turn 18
+    p1 mcts: switch 5, move 4 2   (slot0 Gengar-Mega -> Landorus-Therian)
+      search (38000 visits): switch landorustherian;superpower,1 6204v 4162 | switch landorustherian;thunderwave,1 2017v 1264 | switch conkeldurr;switch landorustherian 1484v 905 | switch landorustherian;hiddenpower,1 824v 469
+    p2 greedy: move 2 2, move 1 2
+      p1a <- Landorus-Therian comes in (120/319)
+              p2a Landorus atk 1 fell
+              p2b Chansey atk 1 fell
+              p2a Landorus COULD NOT MOVE (frz)
+      p1b Thundurus used Superpower -> p2b: Chansey
+              p1b Thundurus atk 1 fell
+              p1b Thundurus def 1 fell
+      p2b Chansey used Seismic Toss -> p1b: Thundurus
+      after p1: Landorus-Therian 120/319, Thundurus 120/361
+      after p2: Landorus-Therian 91/367, Chansey 251/643
+
+  Turn 19
+    p1 mcts: move 3 2, switch 4   (slot1 Thundurus -> Conkeldurr)
+      search (24000 visits): superpower,1;switch conkeldurr 560v 258 | superpower,1;switch volcanion 514v 232 | uturn,1;switch conkeldurr 489v 218 | uturn,0;switch conkeldurr 488v 218
+    p2 greedy: move 2 2, move 1 2
+      p1b <- Conkeldurr comes in (299/413)
+      p1a Landorus used Superpower -> p2b: Chansey
+              p1a Landorus atk 1 fell
+              p1a Landorus def 1 fell
+      p2b Chansey fainted
+              p2a Landorus COULD NOT MOVE (frz)
+      after p1: Landorus-Therian 120/319, Conkeldurr 248/413
+      after p2: Landorus-Therian 91/367, Chansey 0/643
+
+  Turn 20
+      p2b <- Volcanion comes in (364/364)
+      after p1: Landorus-Therian 120/319, Conkeldurr 248/413
+      after p2: Landorus-Therian 91/367, Volcanion 364/364
+
+  Turn 21
+    p1 mcts: switch 6, move 1 2   (slot0 Landorus-Therian -> Volcanion)
+      search (17000 visits): switch volcanion;drainpunch,1 1613v 971 | switch thundurus;drainpunch,1 838v 469 | switch volcanion;knockoff,1 814v 453 | switch thundurus;icepunch,0 645v 347
+    p2 greedy: move 2 1, move 4 1
+      p1a <- Volcanion comes in (215/363)
+              p2a Landorus COULD NOT MOVE (frz)
+      p2b Volcanion used Overheat -> p1a: Volcanion
+              p2b Volcanion spa 2 fell
+      p1b Conkeldurr used Drain Punch -> p2b: Volcanion
+      after p1: Volcanion 134/363, Conkeldurr 295/413
+      after p2: Landorus-Therian 91/367, Volcanion 270/364
+
+  Turn 22
+    p1 mcts: move 3 2, move 1 2
+      search (14000 visits): earthpower,1;drainpunch,1 1839v 1514 | earthpower,1;knockoff,1 1262v 1012 | earthpower,1;machpunch,1 523v 384 | switch thundurus;knockoff,0 265v 174
+    p2 greedy: move 2 1, move 4 1
+              p2a Landorus COULD NOT MOVE (frz)
+      p1a Volcanion used Earth Power -> p2b: Volcanion
+      p2b Volcanion used Overheat -> p1a: Volcanion
+              p2b Volcanion spa 2 fell
+      p1b Conkeldurr used Drain Punch -> p2b: Volcanion
+      after p1: Volcanion 116/363, Conkeldurr 346/413
+      after p2: Landorus-Therian 91/367, Volcanion 22/364
+
+  Turn 23
+    p1 mcts: move 3 2, move 2 1
+      search (30000 visits): earthpower,1;icepunch,0 2228v 2172 | earthpower,1;knockoff,0 2113v 2054 | hiddenpower,1;icepunch,0 2105v 2046 | hiddenpower,1;knockoff,0 1973v 1912
+    p2 greedy: move 2 1, move 4 1
+              p2a Landorus is cured of frz
+      p2a Landorus used Earth Power -> p1a: Volcanion
+      p1a Volcanion fainted
+      p2b Volcanion used Overheat -> p1b: Conkeldurr
+              p2b Volcanion spa 2 fell
+      p1b Conkeldurr used Ice Punch -> p2a: Landorus
+      p2a Landorus fainted
+      after p1: Volcanion 0/363, Conkeldurr 289/413
+      after p2: Landorus-Therian 0/367, Volcanion 22/364
+
+  Turn 24
+      p1a <- Thundurus comes in (120/361)
+      after p1: Thundurus 120/361, Conkeldurr 289/413
+      after p2: Landorus-Therian 0/367, Volcanion 22/364
+
+  Turn 25
+    p1 mcts: move 1 2, move 1 2
+      search (628000 visits): voltswitch,1;drainpunch,1 22538v 22538 | voltswitch,1;icepunch,1 22538v 22538 | voltswitch,1;knockoff,1 22538v 22538 | voltswitch,1;machpunch,1 22538v 22538
+    p2 greedy: pass, move 4 1
+      p1a Thundurus used Volt Switch -> p2b: Volcanion
+      p2b Volcanion fainted
+      after p1: Thundurus 120/361, Conkeldurr 289/413
+      after p2: Landorus-Therian 0/367, Volcanion 0/364
+
+  RESULT: p1 wins

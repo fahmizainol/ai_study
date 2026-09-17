@@ -1,0 +1,186 @@
+battle 100   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: ORAS Doubles OU: Gengar-Mega, Weavile, Sylveon, Thundurus, Landorus-Therian, Volcanion
+  p2: DEOSHARP NEO: Kangaskhan-Mega, Amoonguss, Landorus-Therian, Bisharp, Deoxys-Speed, Sylveon
+
+  Turn 1
+    p1 mcts: move 2 1, move 3 1
+      search (12000 visits): sludgebomb,0;iciclecrash,0 167v 86 | sludgebomb,0;switch landorustherian 167v 87 | sludgebomb,0;iciclecrash,1 166v 86 | sludgebomb,1;iciclecrash,1 156v 79
+    p2 greedy: move 4 1, move 3 1
+      p1b Weavile used Icicle Crash -> p2a: Kangaskhan
+      p1a Gengar used Sludge Bomb -> p2a: Kangaskhan
+      p2a Kangaskhan fainted
+      p2b Amoonguss used Sludge Bomb -> p1a: Gengar
+      after p1: Gengar-Mega 238/261, Weavile 253/281
+      after p2: Kangaskhan-Mega 0/379, Amoonguss 432/432
+
+  Turn 2
+      p2a <- Landorus-Therian comes in (359/359)
+              p1a Gengar atk 1 fell
+              p1b Weavile atk 1 fell
+      after p1: Gengar-Mega 238/261, Weavile 253/281
+      after p2: Landorus-Therian 359/359, Amoonguss 432/432
+
+  Turn 3
+    p1 mcts: switch 3, switch 5   (slot0 Gengar-Mega -> Sylveon; slot1 Weavile -> Landorus-Therian)
+      search (16000 visits): switch sylveon;switch landorustherian 452v 346 | shadowball,1;switch landorustherian 425v 322 | switch landorustherian;switch sylveon 380v 283 | protect,0;switch landorustherian 358v 265
+    p2 greedy: move 4 2, move 3 2
+      p1b <- Landorus-Therian comes in (319/319)
+              p2a Landorus atk 1 fell
+              p2b Amoonguss atk 1 fell
+      p1a <- Sylveon comes in (345/345)
+      p2a Landorus used Superpower -> p1b: Landorus
+              p2a Landorus atk 1 fell
+              p2a Landorus def 1 fell
+      p2b Amoonguss used Sludge Bomb -> p1b: Landorus
+      after p1: Sylveon 345/345, Landorus-Therian 211/319
+      after p2: Landorus-Therian 359/359, Amoonguss 432/432
+
+  Turn 4
+    p1 mcts: move 1, move 3 2
+      search (20000 visits): hypervoice,0;uturn,1 1209v 649 | calmmind,0;uturn,1 1088v 576 | hypervoice,0;uturn,0 826v 421 | protect,0;earthquake,0 789v 399
+    p2 greedy: move 4 2, move 3 2
+      p2a Landorus used Superpower -> p1b: Landorus
+              p2a Landorus atk 1 fell
+              p2a Landorus def 1 fell
+      p1b Landorus used U-turn -> p2b: Amoonguss
+      after p1: Sylveon 345/345, Landorus-Therian 113/319
+      after p2: Landorus-Therian 359/359, Amoonguss 341/432
+
+  Turn 5
+      p1b <- Gengar-Mega comes in (238/261)
+      p1a Sylveon used Hyper Voice -> p2b: Amoonguss  [[spread] p2a,p2b]
+      p2b Amoonguss used Sludge Bomb -> p1b: Gengar
+      after p1: Sylveon 345/345, Gengar-Mega 215/261
+      after p2: Landorus-Therian 142/359, Amoonguss 241/432
+
+  Turn 6
+    p1 mcts: move 3, move 2 2
+      search (18000 visits): calmmind,0;sludgebomb,1 719v 408 | calmmind,0;sludgebomb,0 594v 327 | hypervoice,0;shadowball,1 587v 322 | hypervoice,0;sludgebomb,1 571v 312
+    p2 greedy: move 4 2, move 3 2
+      p2a Landorus used Superpower -> p1b: Gengar
+              p1b Gengar -- IMMUNE
+      p1b Gengar used Sludge Bomb -> p2b: Amoonguss
+      p2b Amoonguss fainted
+      p1a Sylveon used Calm Mind
+              p1a Sylveon spa 1 rose
+              p1a Sylveon spd 1 rose
+      after p1: Sylveon 345/345, Gengar-Mega 215/261
+      after p2: Landorus-Therian 142/359, Amoonguss 0/432
+
+  Turn 7
+      p2b <- Bisharp comes in (277/277)
+      after p1: Sylveon 345/345, Gengar-Mega 215/261
+      after p2: Landorus-Therian 142/359, Bisharp 277/277
+
+  Turn 8
+    p1 mcts: move 1, move 3 2
+      search (16000 visits): hypervoice,0;willowisp,1 708v 310 | protect,0;willowisp,1 627v 268 | hiddenpower,1;willowisp,1 560v 234 | protect,0;sludgebomb,0 545v 226
+    p2 greedy: move 4 2, move 2 2
+      p2b Bisharp used Sucker Punch  [[still]]
+              p2b Bisharp -- IT FAILED
+      p2a Landorus used Superpower -> p1b: Gengar
+              p1b Gengar -- IMMUNE
+      p1b Gengar used Will-O-Wisp -> p2b: Bisharp
+              p2b Bisharp is now brn
+      p1a Sylveon used Hyper Voice -> p2b: Bisharp  [[spread] p2a,p2b]
+      p2a Landorus fainted
+      p2b Bisharp fainted
+      after p1: Sylveon 345/345, Gengar-Mega 215/261
+      after p2: Landorus-Therian 0/359, Bisharp 0/277
+
+  Turn 9
+      p2a <- Deoxys-Speed comes in (241/241)
+      p2b <- Sylveon comes in (393/393)
+      after p1: Sylveon 345/345, Gengar-Mega 215/261
+      after p2: Deoxys-Speed 241/241, Sylveon 393/393
+
+  Turn 10
+    p1 mcts: move 1, move 1 2
+      search (21000 visits): hypervoice,0;shadowball,1 911v 639 | hypervoice,0;sludgebomb,1 874v 610 | hypervoice,0;switch volcanion 854v 595 | calmmind,0;protect,1 809v 560
+    p2 greedy: move 1 2, move 1
+      p2a Deoxys used Psycho Boost -> p1b: Gengar
+              p2a Deoxys spa 2 fell
+      p1b Gengar fainted
+      p1a Sylveon used Hyper Voice -> p2a: Deoxys  [[spread] p2a,p2b]
+      p2a Deoxys fainted
+      p2b Sylveon used Hyper Voice -> p1a: Sylveon
+      after p1: Sylveon 246/345, Gengar-Mega 0/261
+      after p2: Deoxys-Speed 0/241, Sylveon 209/393
+
+  Turn 11
+      p1b <- Landorus-Therian comes in (113/319)
+              p2b Sylveon atk 1 fell
+      after p1: Sylveon 246/345, Landorus-Therian 113/319
+      after p2: Deoxys-Speed 0/241, Sylveon 209/393
+
+  Turn 12
+    p1 mcts: move 3, switch 6   (slot1 Landorus-Therian -> Volcanion)
+      search (41000 visits): calmmind,0;switch volcanion 5621v 1968 | calmmind,0;switch thundurus 3286v 1088 | calmmind,0;uturn,1 2259v 710 | calmmind,0;superpower,1 2185v 684
+    p2 greedy: pass, move 1
+      p1b <- Volcanion comes in (364/364)
+      p2b Sylveon used Hyper Voice -> p1b: Volcanion  [[spread] p1a,p1b]
+              p1b Volcanion -- critical hit
+      p1a Sylveon used Calm Mind
+              p1a Sylveon spa 1 rose
+              p1a Sylveon spd 1 rose
+      after p1: Sylveon 173/345, Volcanion 263/364
+      after p2: Deoxys-Speed 0/241, Sylveon 233/393
+
+  Turn 13
+    p1 mcts: move 3, switch 6   (slot1 Volcanion -> Landorus-Therian)
+      search (36000 visits): calmmind,0;switch landorustherian 2613v 853 | calmmind,0;earthpower,1 2574v 839 | calmmind,0;steameruption,1 2445v 791 | calmmind,0;overheat,1 2285v 732
+    p2 greedy: pass, move 1
+      p1b <- Landorus-Therian comes in (113/319)
+              p2b Sylveon atk 1 fell
+      p1a Sylveon used Calm Mind
+              p1a Sylveon spa 1 rose
+              p1a Sylveon spd 1 rose
+      p2b Sylveon used Hyper Voice -> p1a: Sylveon  [[spread] p1a,p1b]
+              p1a Sylveon -- critical hit
+      p1b Landorus fainted
+      after p1: Sylveon 11/345, Landorus-Therian 0/319
+      after p2: Deoxys-Speed 0/241, Sylveon 257/393
+
+  Turn 14
+      p1b <- Thundurus comes in (330/330)
+      after p1: Sylveon 11/345, Thundurus 330/330
+      after p2: Deoxys-Speed 0/241, Sylveon 257/393
+
+  Turn 15
+    p1 mcts: move 2 2, switch 6   (slot1 Thundurus -> Volcanion)
+      search (48000 visits): hiddenpower,1;switch volcanion 2206v 316 | calmmind,0;switch volcanion 2193v 313 | hypervoice,1;switch volcanion 2116v 299 | protect,0;switch volcanion 1810v 240
+    p2 greedy: pass, move 1
+      p1b <- Volcanion comes in (263/364)
+      p1a Sylveon used Hidden Power -> p2b: Sylveon
+      p2b Sylveon used Hyper Voice -> p1a: Sylveon  [[spread] p1a,p1b]
+      p1a Sylveon fainted
+      after p1: Sylveon 0/345, Volcanion 185/364
+      after p2: Deoxys-Speed 0/241, Sylveon 142/393
+
+  Turn 16
+      p1a <- Weavile comes in (253/281)
+      after p1: Weavile 253/281, Volcanion 185/364
+      after p2: Deoxys-Speed 0/241, Sylveon 142/393
+
+  Turn 17
+    p1 mcts: switch 6, move 2 2   (slot0 Weavile -> Thundurus)
+      search (56000 visits): switch thundurus;steameruption,1 3787v 627 | switch thundurus;overheat,1 3715v 612 | switch thundurus;earthpower,1 3697v 608 | switch thundurus;protect,1 3583v 585
+    p2 greedy: pass, move 1
+      p1a <- Thundurus comes in (330/330)
+      p1b Volcanion used Steam Eruption -> p2b: Sylveon  [[miss]]
+              p1b Volcanion -- MISSED
+      p2b Sylveon used Hyper Voice -> p1a: Thundurus  [[spread] p1a,p1b]
+      after p1: Thundurus 177/330, Volcanion 116/364
+      after p2: Deoxys-Speed 0/241, Sylveon 166/393
+
+  Turn 18
+    p1 mcts: move 2 2, move 2 2
+      search (62000 visits): thunderbolt,1;steameruption,1 2912v 318 | thunderwave,1;earthpower,1 2876v 312 | taunt,1;overheat,1 2876v 312 | hiddenpower,1;steameruption,1 2866v 311
+    p2 greedy: pass, move 1
+      p1a Thundurus used Thunderbolt -> p2b: Sylveon
+      p1b Volcanion used Steam Eruption -> p2b: Sylveon
+      p2b Sylveon fainted
+      after p1: Thundurus 177/330, Volcanion 116/364
+      after p2: Deoxys-Speed 0/241, Sylveon 0/393
+
+  RESULT: p1 wins

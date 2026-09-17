@@ -1,0 +1,197 @@
+battle 99   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: sdef aegi fire punch kang 2x incarnate: Conkeldurr, Aegislash, Kangaskhan-Mega, Thundurus, Landorus, Volcanion
+  p2: cb chu: Kangaskhan-Mega, Volcanion, Raichu, Bisharp, Cresselia, Landorus-Therian
+
+  Turn 1
+    p1 mcts: switch 4, move 1 2   (slot0 Conkeldurr -> Thundurus)
+      search (29000 visits): switch thundurus;shadowball,1 383v 97 | switch thundurus;toxic,0 379v 96 | switch thundurus;toxic,1 373v 94 | switch thundurus;shadowball,0 317v 73
+    p2 greedy: move 1 1, move 1 1
+      p1a <- Thundurus comes in (361/361)
+      p2a Kangaskhan used Fake Out -> p1a: Thundurus
+      p2b Volcanion used Steam Eruption -> p1a: Thundurus
+      p1a Thundurus fainted
+      p1b Aegislash used Shadow Ball -> p2b: Volcanion
+      after p1: Thundurus 0/361, Aegislash-Blade 324/324
+      after p2: Kangaskhan-Mega 414/414, Volcanion 258/363
+
+  Turn 2
+      p1a <- Kangaskhan-Mega comes in (414/414)
+      after p1: Kangaskhan-Mega 414/414, Aegislash-Blade 324/324
+      after p2: Kangaskhan-Mega 414/414, Volcanion 258/363
+
+  Turn 3
+    p1 mcts: switch 6, move 1 2   (slot0 Kangaskhan-Mega -> Volcanion)
+      search (29000 visits): switch volcanion;shadowball,1 537v 522 | switch volcanion;switch conkeldurr 513v 496 | switch volcanion;toxic,1 510v 493 | switch volcanion;shadowsneak,1 497v 479
+    p2 greedy: move 1 1, move 1 1
+      p1a <- Volcanion comes in (364/364)
+      p2a Kangaskhan used Fake Out  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p2b Volcanion used Steam Eruption -> p1a: Volcanion
+              p1a Volcanion -- IMMUNE
+      p1b Aegislash used Shadow Ball -> p2b: Volcanion
+      after p1: Volcanion 364/364, Aegislash-Blade 324/324
+      after p2: Kangaskhan-Mega 414/414, Volcanion 158/363
+
+  Turn 4
+    p1 mcts: move 4 1, move 1 2
+      search (35000 visits): hiddenpower,0;shadowball,1 1026v 288 | steameruption,0;shadowball,1 999v 279 | hiddenpower,1;shadowball,1 959v 265 | steameruption,1;shadowball,1 907v 247
+    p2 greedy: move 1 1, move 1 1
+      p2a Kangaskhan used Fake Out  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p1a Volcanion used Hidden Power -> p2a: Kangaskhan
+      p2b Volcanion used Steam Eruption -> p1a: Volcanion
+              p1a Volcanion -- IMMUNE
+      p1b Aegislash used Shadow Ball -> p2b: Volcanion
+      after p1: Volcanion 364/364, Aegislash-Blade 324/324
+      after p2: Kangaskhan-Mega 360/414, Volcanion 53/363
+
+  Turn 5
+    p1 mcts: move 3 1, move 1 2
+      search (38000 visits): earthpower,0;shadowball,1 736v 171 | heatwave,0;shadowball,1 710v 162 | steameruption,1;shadowball,1 702v 160 | hiddenpower,1;shadowball,1 694v 158
+    p2 greedy: move 1 1, move 1 1
+      p2a Kangaskhan used Fake Out  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p1a Volcanion used Earth Power -> p2a: Kangaskhan
+      p2b Volcanion used Steam Eruption -> p1a: Volcanion
+              p1a Volcanion -- IMMUNE
+      p1b Aegislash used Shadow Ball -> p2b: Volcanion
+      p2b Volcanion fainted
+      after p1: Volcanion 364/364, Aegislash-Blade 324/324
+      after p2: Kangaskhan-Mega 280/414, Volcanion 0/363
+
+  Turn 6
+      p2b <- Raichu comes in (261/261)
+      after p1: Volcanion 364/364, Aegislash-Blade 324/324
+      after p2: Kangaskhan-Mega 280/414, Raichu 261/261
+
+  Turn 7
+    p1 mcts: move 1 1, move 1 2
+      search (36000 visits): steameruption,0;shadowball,1 747v 170 | switch conkeldurr;shadowball,1 729v 165 | earthpower,0;shadowball,1 717v 161 | earthpower,1;shadowball,1 712v 160
+    p2 greedy: move 1 1, move 1 1
+      p2a Kangaskhan used Fake Out  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p2b Raichu used Volt Tackle -> p1a: Volcanion
+      p1a Volcanion fainted
+      p1b Aegislash used Shadow Ball -> p2b: Raichu
+      p2b Raichu fainted
+      after p1: Volcanion 0/364, Aegislash-Blade 324/324
+      after p2: Kangaskhan-Mega 280/414, Raichu 0/261
+
+  Turn 8
+      p2b <- Bisharp comes in (272/272)
+      p1a <- Conkeldurr comes in (401/401)
+      after p1: Conkeldurr 401/401, Aegislash-Blade 324/324
+      after p2: Kangaskhan-Mega 280/414, Bisharp 272/272
+
+  Turn 9
+    p1 mcts: move 1 1, switch 6   (slot1 Aegislash-Blade -> Kangaskhan-Mega)
+      search (57000 visits): drainpunch,0;switch kangaskhanmega 7114v 2151 | icepunch,1;switch landorus 2189v 565 | drainpunch,0;switch landorus 2051v 522 | machpunch,1;switch landorus 2033v 517
+    p2 greedy: move 1 1, move 2 1
+      p1b <- Kangaskhan-Mega comes in (414/414)
+      p2a Kangaskhan used Fake Out  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p2b Bisharp used Sucker Punch -> p1a: Conkeldurr
+      p1a Conkeldurr used Drain Punch -> p2a: Kangaskhan
+      p2a Kangaskhan fainted
+      after p1: Conkeldurr 401/401, Kangaskhan-Mega 414/414
+      after p2: Kangaskhan-Mega 0/414, Bisharp 245/272
+
+  Turn 10
+      p2a <- Cresselia comes in (410/410)
+      after p1: Conkeldurr 401/401, Kangaskhan-Mega 414/414
+      after p2: Cresselia 410/410, Bisharp 245/272
+
+  Turn 11
+    p1 mcts: move 1 2, move 2 2
+      search (43000 visits): drainpunch,1;seismictoss,1 1032v 452 | drainpunch,1;lowkick,0 812v 341 | drainpunch,1;fakeout,0 800v 335 | switch landorus;lowkick,1 785v 327
+    p2 greedy: move 3 1, move 2 1
+      p2b Bisharp used Sucker Punch -> p1a: Conkeldurr
+      p1b Kangaskhan used Seismic Toss -> p2b: Bisharp
+      p2a Cresselia used Psychic -> p1a: Conkeldurr
+      p1a Conkeldurr used Drain Punch -> p2b: Bisharp
+      p2b Bisharp fainted
+      after p1: Conkeldurr 130/401, Kangaskhan-Mega 414/414
+      after p2: Cresselia 410/410, Bisharp 0/272
+
+  Turn 12
+      p2b <- Landorus-Therian comes in (382/382)
+              p1a Conkeldurr atk 1 fell
+              p1b Kangaskhan atk 1 fell
+      after p1: Conkeldurr 130/401, Kangaskhan-Mega 414/414
+      after p2: Cresselia 410/410, Landorus-Therian 382/382
+
+  Turn 13
+    p1 mcts: switch 5, move 3 2   (slot0 Conkeldurr -> Landorus)
+      search (35000 visits): switch landorus;firepunch,1 1576v 1030 | icepunch,1;switch landorus 1326v 853 | drainpunch,1;switch landorus 1009v 630 | knockoff,1;switch landorus 936v 580
+    p2 greedy: move 3 1, move 3 1
+      p1a <- Landorus comes in (319/319)
+      p1b Kangaskhan used Fire Punch -> p2b: Landorus
+      p2b Landorus used Superpower -> p1a: Landorus
+              p2b Landorus atk 1 fell
+              p2b Landorus def 1 fell
+      p2a Cresselia used Psychic -> p1a: Landorus
+      after p1: Landorus 84/319, Kangaskhan-Mega 345/414
+      after p2: Cresselia 410/410, Landorus-Therian 332/382
+
+  Turn 14
+    p1 mcts: move 2 2, move 1 2
+      search (37000 visits): psychic,1;fakeout,1 1967v 1545 | psychic,1;switch conkeldurr 1885v 1477 | switch conkeldurr;firepunch,1 1515v 1168 | switch conkeldurr;fakeout,1 1071v 802
+    p2 greedy: move 3 1, move 3 1
+      p1b Kangaskhan used Fake Out  [[still]]
+              p1b Kangaskhan -- IT FAILED
+      p1a Landorus used Psychic -> p2b: Landorus
+      p2b Landorus used Superpower -> p1a: Landorus
+              p2b Landorus atk 1 fell
+              p2b Landorus def 1 fell
+      p2a Cresselia used Psychic -> p1a: Landorus
+      p1a Landorus fainted
+      after p1: Landorus 0/319, Kangaskhan-Mega 345/414
+      after p2: Cresselia 410/410, Landorus-Therian 179/382
+
+  Turn 15
+      p1a <- Conkeldurr comes in (130/401)
+      after p1: Conkeldurr 130/401, Kangaskhan-Mega 345/414
+      after p2: Cresselia 410/410, Landorus-Therian 179/382
+
+  Turn 16
+    p1 mcts: move 2 2, move 2 1
+      search (82000 visits): icepunch,1;seismictoss,0 7949v 7886 | icepunch,1;lowkick,1 7877v 7813 | icepunch,1;firepunch,0 7433v 7361 | icepunch,1;fakeout,0 7345v 7271
+    p2 greedy: move 3 1, move 3 1
+      p1b Kangaskhan used Seismic Toss -> p2a: Cresselia
+      p2b Landorus used Superpower -> p1a: Conkeldurr
+              p2b Landorus atk 1 fell
+              p2b Landorus def 1 fell
+      p2a Cresselia used Psychic -> p1a: Conkeldurr
+      p1a Conkeldurr fainted
+      after p1: Conkeldurr 0/401, Kangaskhan-Mega 345/414
+      after p2: Cresselia 310/410, Landorus-Therian 179/382
+
+  Turn 17
+      p1a <- Aegislash comes in (324/324)
+      after p1: Aegislash 324/324, Kangaskhan-Mega 345/414
+      after p2: Cresselia 310/410, Landorus-Therian 179/382
+
+  Turn 18
+    p1 mcts: move 2 2, move 1 2
+      search (32000 visits): shadowsneak,1;fakeout,1 2797v 2279 | shadowball,1;fakeout,1 2679v 2178 | toxic,1;fakeout,1 2601v 2111 | shadowsneak,1;firepunch,1 1348v 1047
+    p2 greedy: move 3 2, move 3 2
+      p1b Kangaskhan used Fake Out  [[still]]
+              p1b Kangaskhan -- IT FAILED
+      p1a Aegislash used Shadow Sneak -> p2b: Landorus
+      p2b Landorus fainted
+      p2a Cresselia used Psychic -> p1b: Kangaskhan
+      after p1: Aegislash-Blade 290/324, Kangaskhan-Mega 225/414
+      after p2: Cresselia 310/410, Landorus-Therian 0/382
+
+  Turn 19
+    p1 mcts: move 1 1, move 2 1
+      search (169000 visits): shadowball,0;seismictoss,0 70238v 70238 | shadowball,0;firepunch,0 37632v 37377 | shadowball,0;lowkick,0 24678v 24364 | shadowsneak,0;seismictoss,0 15161v 14837
+    p2 greedy: move 3 2, pass
+      p1b Kangaskhan used Seismic Toss -> p2a: Cresselia
+      p2a Cresselia used Psychic -> p1b: Kangaskhan
+      p1a Aegislash used Shadow Ball -> p2a: Cresselia
+      p2a Cresselia fainted
+      after p1: Aegislash-Blade 290/324, Kangaskhan-Mega 92/414
+      after p2: Cresselia 0/410, Landorus-Therian 0/382
+
+  RESULT: p1 wins

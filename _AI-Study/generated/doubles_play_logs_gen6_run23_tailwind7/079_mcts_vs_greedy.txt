@@ -1,0 +1,244 @@
+battle 79   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: dpl rejects/deoa week 1 reject: Kangaskhan-Mega, Deoxys-Attack, Volcanion, Landorus-Therian, Amoonguss, Thundurus
+  p2: XY Doubles: Mew, Hydreigon, Gardevoir, Kyurem-Black, Talonflame, Keldeo
+
+  Turn 1
+    p1 mcts: switch 4, switch 3   (slot0 Kangaskhan-Mega -> Landorus-Therian; slot1 Deoxys-Attack -> Volcanion)
+      search (39000 visits): switch landorustherian;switch volcanion 575v 569 | protect,0;switch landorustherian 573v 567 | fakeout,1;switch volcanion 571v 565 | fakeout,0;switch landorustherian 566v 559
+    p2 greedy: move 1 1, move 3 1
+      p1b <- Volcanion comes in (363/363)
+      p1a <- Landorus-Therian comes in (319/319)
+              p2a Mew atk 1 fell
+              p2b Hydreigon atk 1 fell
+      p2a Mew used Fake Out -> p1a: Landorus
+              p1a Landorus -- critical hit
+      p2b Hydreigon used Fire Blast -> p1a: Landorus
+      after p1: Landorus-Therian 85/319, Volcanion 363/363
+      after p2: Mew 337/404, Hydreigon 298/331
+
+  Turn 2
+    p1 mcts: switch 3, move 2 1   (slot0 Landorus-Therian -> Deoxys-Attack)
+      search (25000 visits): switch deoxysattack;steameruption,0 1977v 1202 | switch kangaskhanmega;heatwave,0 817v 451 | switch kangaskhanmega;earthpower,0 794v 436 | switch kangaskhanmega;steameruption,0 758v 414
+    p2 greedy: move 1 1, move 3 1
+      p1a <- Deoxys-Attack comes in (241/241)
+      p2a Mew used Fake Out  [[still]]
+              p2a Mew -- IT FAILED
+      p2b Hydreigon used Fire Blast -> p1a: Deoxys  [[miss]]
+              p2b Hydreigon -- MISSED
+      p1b Volcanion used Steam Eruption -> p2a: Mew
+              p2a Mew used up its Sitrus Berry
+      after p1: Deoxys-Attack 241/241, Volcanion 363/363
+      after p2: Mew 261/404, Hydreigon 298/331
+
+  Turn 3
+    p1 mcts: switch 5, switch 3   (slot0 Deoxys-Attack -> Amoonguss; slot1 Volcanion -> Landorus-Therian)
+      search (27000 visits): switch amoonguss;switch landorustherian 3056v 2147 | extremespeed,1;switch landorustherian 2195v 1510 | psychoboost,0;switch landorustherian 1460v 972 | superpower,1;switch landorustherian 1094v 709
+    p2 greedy: move 1 1, move 3 1
+      p1a <- Amoonguss comes in (432/432)
+      p1b <- Landorus-Therian comes in (85/319)
+              p2a Mew atk 1 fell
+              p2b Hydreigon atk 1 fell
+      p2a Mew used Fake Out  [[still]]
+              p2a Mew -- IT FAILED
+      p2b Hydreigon used Fire Blast -> p1a: Amoonguss  [[miss]]
+              p2b Hydreigon -- MISSED
+      after p1: Amoonguss 432/432, Landorus-Therian 85/319
+      after p2: Mew 261/404, Hydreigon 298/331
+
+  Turn 4
+    p1 mcts: move 2, switch 4   (slot1 Landorus-Therian -> Kangaskhan-Mega)
+      search (36000 visits): ragepowder,0;switch kangaskhanmega 1412v 1385 | protect,0;switch kangaskhanmega 1326v 1289 | protect,0;switch deoxysattack 1313v 1288 | switch thundurus;knockoff,1 1306v 1272
+    p2 greedy: move 1 2, move 3 2
+      p1b <- Kangaskhan-Mega comes in (414/414)
+      p2a Mew used Fake Out  [[still]]
+              p2a Mew -- IT FAILED
+      p1a Amoonguss used Rage Powder
+      p2b Hydreigon used Fire Blast -> p1a: Amoonguss
+              p1a Amoonguss is now brn
+      p1a Amoonguss fainted
+      after p1: Amoonguss 0/432, Kangaskhan-Mega 414/414
+      after p2: Mew 261/404, Hydreigon 265/331
+
+  Turn 5
+      p1a <- Volcanion comes in (363/363)
+      after p1: Volcanion 363/363, Kangaskhan-Mega 414/414
+      after p2: Mew 261/404, Hydreigon 265/331
+
+  Turn 6
+    p1 mcts: move 2 2, move 1 2
+      search (35000 visits): steameruption,1;fakeout,1 1006v 861 | heatwave,0;switch thundurus 829v 698 | heatwave,0;fakeout,1 813v 683 | steameruption,1;switch thundurus 706v 585
+    p2 greedy: move 1 1, move 3 1
+      p1b Kangaskhan used Fake Out -> p2b: Hydreigon
+      p2a Mew used Fake Out  [[still]]
+              p2a Mew -- IT FAILED
+              p2b Hydreigon COULD NOT MOVE (flinch)
+      p1a Volcanion used Steam Eruption -> p2b: Hydreigon
+      after p1: Volcanion 363/363, Kangaskhan-Mega 414/414
+      after p2: Mew 261/404, Hydreigon 83/331
+
+  Turn 7
+    p1 mcts: move 1, switch 6   (slot1 Kangaskhan-Mega -> Thundurus)
+      search (34000 visits): heatwave,0;switch thundurus 1067v 842 | steameruption,1;switch thundurus 1063v 839 | steameruption,1;switch landorustherian 863v 667 | heatwave,0;crunch,1 844v 652
+    p2 greedy: move 1 1, move 3 1
+      p1b <- Thundurus comes in (299/299)
+      p2a Mew used Fake Out  [[still]]
+              p2a Mew -- IT FAILED
+      p2b Hydreigon used Fire Blast -> p1a: Volcanion  [[miss]]
+              p2b Hydreigon -- MISSED
+      p1a Volcanion used Heat Wave -> p2b: Hydreigon  [[spread] p2a,p2b]
+              p2b Hydreigon -- critical hit
+      p2b Hydreigon fainted
+      after p1: Volcanion 363/363, Thundurus 299/299
+      after p2: Mew 146/404, Hydreigon 0/331
+
+  Turn 8
+      p2b <- Gardevoir comes in (278/278)
+      after p1: Volcanion 363/363, Thundurus 299/299
+      after p2: Mew 146/404, Gardevoir 278/278
+
+  Turn 9
+    p1 mcts: switch 4, move 4   (slot0 Volcanion -> Landorus-Therian)
+      search (20000 visits): switch landorustherian;protect,1 519v 305 | switch landorustherian;flashcannon,1 437v 249 | heatwave,0;switch landorustherian 395v 221 | switch landorustherian;thunderbolt,1 366v 202
+    p2 greedy: move 1 1, move 1
+      p1a <- Landorus-Therian comes in (85/319)
+              p2a Mew atk 1 fell
+              p2b Gardevoir atk 1 fell
+      p1b Thundurus used Protect
+      p2a Mew used Fake Out  [[still]]
+              p2a Mew -- IT FAILED
+      p2b Gardevoir used Hyper Voice -> p1b: Thundurus  [[spread] p1a]
+              p1b Thundurus -- move: Protect
+      p1a Landorus fainted
+      after p1: Landorus-Therian 0/319, Thundurus 299/299
+      after p2: Mew 146/404, Gardevoir 278/278
+
+  Turn 10
+      p1a <- Volcanion comes in (363/363)
+      after p1: Volcanion 363/363, Thundurus 299/299
+      after p2: Mew 146/404, Gardevoir 278/278
+
+  Turn 11
+    p1 mcts: move 1, move 1 1
+      search (18000 visits): heatwave,0;thunderbolt,0 410v 201 | protect,0;thunderbolt,0 405v 199 | heatwave,0;protect,1 391v 190 | protect,0;flashcannon,1 391v 190
+    p2 greedy: move 1 1, move 1
+      p2a Mew used Fake Out  [[still]]
+              p2a Mew -- IT FAILED
+      p1b Thundurus used Thunderbolt -> p2a: Mew
+      p2a Mew fainted
+      p2b Gardevoir used Hyper Voice -> p1b: Thundurus  [[spread] p1a,p1b]
+      p1a Volcanion used Heat Wave -> p2b: Gardevoir
+      after p1: Volcanion 268/363, Thundurus 169/299
+      after p2: Mew 0/404, Gardevoir 119/278
+
+  Turn 12
+      p2a <- Kyurem-Black comes in (391/391)
+      after p1: Volcanion 268/363, Thundurus 169/299
+      after p2: Kyurem-Black 391/391, Gardevoir 119/278
+
+  Turn 13
+    p1 mcts: move 1, move 3 2
+      search (18000 visits): heatwave,0;flashcannon,1 2340v 1569 | steameruption,0;flashcannon,1 941v 581 | earthpower,0;flashcannon,1 799v 484 | heatwave,0;thunderbolt,0 605v 352
+    p2 greedy: move 2 2, move 1
+      p1b Thundurus used Flash Cannon -> p2b: Gardevoir
+      p2b Gardevoir fainted
+      p2a Kyurem used Fusion Bolt -> p1b: Thundurus
+      p1b Thundurus fainted
+      p1a Volcanion used Heat Wave -> p2a: Kyurem  [[miss]]
+              p1a Volcanion -- MISSED
+      after p1: Volcanion 268/363, Thundurus 0/299
+      after p2: Kyurem-Black 352/391, Gardevoir 0/278
+
+  Turn 14
+      p1b <- Deoxys-Attack comes in (241/241)
+      p2b <- Talonflame comes in (298/298)
+      after p1: Volcanion 268/363, Deoxys-Attack 241/241
+      after p2: Kyurem-Black 352/391, Talonflame 298/298
+
+  Turn 15
+    p1 mcts: move 4, move 4
+      search (30000 visits): protect,0;protect,1 2743v 2036 | protect,0;switch kangaskhanmega 2013v 1465 | steameruption,1;psychoboost,0 1983v 1442 | heatwave,0;psychoboost,0 1383v 978
+    p2 greedy: move 2 1, move 2 1
+      p1b Deoxys used Protect
+      p1a Volcanion used Protect
+      p2b Talonflame used Brave Bird -> p1a: Volcanion
+              p1a Volcanion -- move: Protect
+      p2a Kyurem used Fusion Bolt -> p1a: Volcanion
+              p1a Volcanion -- move: Protect
+      after p1: Volcanion 268/363, Deoxys-Attack 241/241
+      after p2: Kyurem-Black 352/391, Talonflame 298/298
+
+  Turn 16
+    p1 mcts: move 4, move 4
+      search (32000 visits): protect,0;protect,1 4625v 3465 | protect,0;switch kangaskhanmega 3805v 2825 | steameruption,1;psychoboost,0 1525v 1067 | heatwave,0;psychoboost,0 1229v 843
+    p2 greedy: move 2 1, move 2 1
+      p1b Deoxys used Protect  [[still]]
+              p1b Deoxys -- IT FAILED
+      p1a Volcanion used Protect
+      p2b Talonflame used Brave Bird -> p1a: Volcanion
+              p1a Volcanion -- move: Protect
+      p2a Kyurem used Fusion Bolt -> p1a: Volcanion
+              p1a Volcanion -- move: Protect
+      after p1: Volcanion 268/363, Deoxys-Attack 241/241
+      after p2: Kyurem-Black 352/391, Talonflame 298/298
+
+  Turn 17
+    p1 mcts: move 4, move 4
+      search (30000 visits): protect,0;protect,1 5476v 4130 | protect,0;switch kangaskhanmega 1901v 1352 | steameruption,1;psychoboost,0 1507v 1053 | heatwave,0;psychoboost,0 1323v 914
+    p2 greedy: move 2 1, move 2 1
+      p1b Deoxys used Protect
+      p1a Volcanion used Protect  [[still]]
+              p1a Volcanion -- IT FAILED
+      p2b Talonflame used Brave Bird -> p1a: Volcanion
+      p2a Kyurem used Fusion Bolt -> p1a: Volcanion
+      p1a Volcanion fainted
+      after p1: Volcanion 0/363, Deoxys-Attack 241/241
+      after p2: Kyurem-Black 313/391, Talonflame 204/298
+
+  Turn 18
+      p1a <- Kangaskhan-Mega comes in (414/414)
+      after p1: Kangaskhan-Mega 414/414, Deoxys-Attack 241/241
+      after p2: Kyurem-Black 313/391, Talonflame 204/298
+
+  Turn 19
+    p1 mcts: move 3 2, move 2 2
+      search (42000 visits): crunch,1;extremespeed,1 2301v 1964 | crunch,1;psychoboost,1 2179v 1854 | fakeout,1;psychoboost,1 1849v 1558 | crunch,1;psychoboost,0 1380v 1139
+    p2 greedy: move 2 1, move 2 1
+      p1b Deoxys used Extreme Speed -> p2b: Talonflame
+      p2b Talonflame used Brave Bird -> p1a: Kangaskhan
+      p2b Talonflame fainted
+      p1a Kangaskhan used Crunch -> p2a: Kyurem
+      p2a Kyurem used Fusion Bolt -> p1a: Kangaskhan
+      after p1: Kangaskhan-Mega 28/414, Deoxys-Attack 241/241
+      after p2: Kyurem-Black 196/391, Talonflame 0/298
+
+  Turn 20
+      p2b <- Keldeo comes in (323/323)
+      after p1: Kangaskhan-Mega 28/414, Deoxys-Attack 241/241
+      after p2: Kyurem-Black 196/391, Keldeo 323/323
+
+  Turn 21
+    p1 mcts: move 1 1, move 1 2
+      search (53000 visits): fakeout,0;psychoboost,1 2519v 1623 | seismictoss,1;psychoboost,1 2438v 1567 | crunch,1;psychoboost,1 2398v 1539 | crunch,0;psychoboost,1 2364v 1516
+    p2 greedy: move 2 1, move 2 1
+      p1a Kangaskhan used Fake Out  [[still]]
+              p1a Kangaskhan -- IT FAILED
+      p1b Deoxys used Psycho Boost -> p2b: Keldeo
+              p1b Deoxys spa 2 fell
+      p2b Keldeo fainted
+      p2a Kyurem used Fusion Bolt -> p1a: Kangaskhan
+      p1a Kangaskhan fainted
+      after p1: Kangaskhan-Mega 0/414, Deoxys-Attack 241/241
+      after p2: Kyurem-Black 157/391, Keldeo 0/323
+
+  Turn 22
+    p1 mcts: pass, move 3 1
+      search (631000 visits): No Move;superpower,0 514786v 513301 | No Move;psychoboost,0 90893v 89727 | No Move;protect,1 12738v 12209 | No Move;extremespeed,0 12583v 12057
+    p2 greedy: move 2 2, pass
+      p1b Deoxys used Superpower -> p2a: Kyurem
+              p1b Deoxys atk 1 fell
+              p1b Deoxys def 1 fell
+      p2a Kyurem fainted
+      after p1: Kangaskhan-Mega 0/414, Deoxys-Attack 241/241
+      after p2: Kyurem-Black 0/391, Keldeo 0/323
+
+  RESULT: p1 wins

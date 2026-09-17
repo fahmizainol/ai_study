@@ -1,0 +1,262 @@
+battle 72   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: oraspl/Untitled 216: Diancie-Mega, Gothitelle, Aegislash, Lapras, Talonflame, Scrafty
+  p2: ORAS Doubles OU: Kangaskhan, Rotom-Wash, Volcarona, Jirachi, Aegislash, Landorus-Therian
+
+  Turn 1
+    p1 mcts: move 2, move 4 1
+      search (17000 visits): protect,0;foulplay,0 833v 577 | protect,0;protect,1 788v 542 | protect,0;foulplay,1 619v 413 | protect,0;switch scrafty 591v 392
+    p2 greedy: move 4 1, move 2 1
+      p1a Diancie used Protect
+      p2a Kangaskhan used Sucker Punch  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p2b Rotom used Hydro Pump -> p1a: Diancie
+              p1a Diancie -- move: Protect
+      p1b Gothitelle used Foul Play -> p2a: Kangaskhan
+      after p1: Diancie-Mega 258/258, Gothitelle 344/344
+      after p2: Kangaskhan 233/352, Rotom-Wash 241/241
+
+  Turn 2
+    p1 mcts: move 2, move 4 1
+      search (21000 visits): protect,0;foulplay,0 783v 564 | protect,0;switch scrafty 714v 509 | protect,0;switch lapras 564v 390 | protect,0;protect,1 483v 327
+    p2 greedy: move 4 1, move 2 1
+      p1a Diancie used Protect
+      p2a Kangaskhan used Sucker Punch  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p2b Rotom used Hydro Pump -> p1a: Diancie
+              p1a Diancie -- move: Protect
+      p1b Gothitelle used Foul Play -> p2a: Kangaskhan
+      after p1: Diancie-Mega 258/258, Gothitelle 344/344
+      after p2: Kangaskhan 118/352, Rotom-Wash 241/241
+
+  Turn 3
+    p1 mcts: move 1, move 2 1
+      search (22000 visits): diamondstorm,0;healpulse,0 693v 505 | protect,0;foulplay,0 646v 466 | switch lapras;switch scrafty 509v 356 | protect,0;protect,1 508v 355
+    p2 greedy: move 4 1, move 2 1
+      p2a Kangaskhan used Sucker Punch -> p1a: Diancie
+      p2b Rotom used Hydro Pump -> p1a: Diancie
+      p1a Diancie fainted
+      p1b Gothitelle used Heal Pulse -> p2a: Kangaskhan
+      after p1: Diancie-Mega 0/258, Gothitelle 344/344
+      after p2: Kangaskhan 294/352, Rotom-Wash 241/241
+
+  Turn 4
+      p1a <- Aegislash comes in (324/324)
+      after p1: Aegislash 324/324, Gothitelle 344/344
+      after p2: Kangaskhan 294/352, Rotom-Wash 241/241
+
+  Turn 5
+    p1 mcts: switch 4, switch 6   (slot0 Aegislash -> Lapras; slot1 Gothitelle -> Scrafty)
+      search (16000 visits): switch lapras;switch scrafty 545v 294 | shadowball,1;switch scrafty 510v 272 | flashcannon,0;switch scrafty 463v 242 | switch lapras;foulplay,0 443v 230
+    p2 greedy: move 4 1, move 2 1
+      p1a <- Lapras comes in (405/405)
+      p1b <- Scrafty comes in (334/334)
+              p2a Kangaskhan atk 1 fell
+              p2b Rotom atk 1 fell
+      p2a Kangaskhan used Sucker Punch  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p2b Rotom used Hydro Pump -> p1a: Lapras
+              p1a Lapras -- IMMUNE
+      after p1: Lapras 405/405, Scrafty 334/334
+      after p2: Kangaskhan 294/352, Rotom-Wash 241/241
+
+  Turn 6
+    p1 mcts: move 4 1, move 2 2
+      search (25000 visits): hydropump,0;knockoff,1 936v 589 | hydropump,1;knockoff,1 862v 537 | hydropump,1;highjumpkick,0 836v 518 | hydropump,1;knockoff,0 832v 516
+    p2 greedy: move 4 1, move 2 1
+      p2a Kangaskhan used Sucker Punch -> p1a: Lapras
+      p2b Rotom used Hydro Pump -> p1a: Lapras
+      p1a Lapras used Hydro Pump -> p2a: Kangaskhan
+      p1b Scrafty used Knock Off -> p2b: Rotom
+              p2b Rotom used up its Choice Scarf
+      after p1: Lapras 405/405, Scrafty 334/334
+      after p2: Kangaskhan 89/352, Rotom-Wash 115/241
+
+  Turn 7
+    p1 mcts: move 3, move 2 2
+      search (17000 visits): protect,0;knockoff,1 430v 241 | hydropump,0;knockoff,1 378v 206 | freezedry,0;knockoff,1 363v 196 | hydropump,1;knockoff,1 362v 196
+    p2 greedy: move 4 1, move 2 1
+      p1a Lapras used Protect
+      p2a Kangaskhan used Sucker Punch  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p2b Rotom used Hydro Pump -> p1a: Lapras
+              p1a Lapras -- move: Protect
+      p1b Scrafty used Knock Off -> p2b: Rotom
+      after p1: Lapras 405/405, Scrafty 334/334
+      after p2: Kangaskhan 89/352, Rotom-Wash 37/241
+
+  Turn 8
+    p1 mcts: move 3, move 2 1
+      search (22000 visits): protect,0;knockoff,0 618v 350 | hydropump,0;protect,1 537v 297 | protect,0;protect,1 531v 293 | freezedry,0;protect,1 487v 265
+    p2 greedy: move 4 1, move 2 1
+      p1a Lapras used Protect  [[still]]
+              p1a Lapras -- IT FAILED
+      p2a Kangaskhan used Sucker Punch  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p2b Rotom used Hydro Pump -> p1a: Lapras
+              p1a Lapras -- IMMUNE
+      p1b Scrafty used Knock Off -> p2a: Kangaskhan
+      p2a Kangaskhan fainted
+      after p1: Lapras 405/405, Scrafty 334/334
+      after p2: Kangaskhan 0/352, Rotom-Wash 37/241
+
+  Turn 9
+      p2a <- Volcarona comes in (327/327)
+      after p1: Lapras 405/405, Scrafty 334/334
+      after p2: Volcarona 327/327, Rotom-Wash 37/241
+
+  Turn 10
+    p1 mcts: move 4 1, move 3
+      search (25000 visits): hydropump,0;protect,1 912v 499 | hydropump,0;knockoff,0 645v 335 | hydropump,1;knockoff,0 576v 293 | hydropump,0;switch aegislash 538v 270
+    p2 greedy: move 2, move 2 1
+      p1b Scrafty used Protect
+      p2a Volcarona used Heat Wave -> p1b: Scrafty  [[spread] p1a]
+              p1b Scrafty -- move: Protect
+      p2b Rotom used Hydro Pump -> p1a: Lapras
+      p1a Lapras used Hydro Pump -> p2a: Volcarona
+      p2a Volcarona fainted
+      after p1: Lapras 371/405, Scrafty 334/334
+      after p2: Volcarona 0/327, Rotom-Wash 37/241
+
+  Turn 11
+      p2a <- Jirachi comes in (397/397)
+      after p1: Lapras 371/405, Scrafty 334/334
+      after p2: Jirachi 397/397, Rotom-Wash 37/241
+
+  Turn 12
+    p1 mcts: move 3, move 2 1
+      search (29000 visits): protect,0;knockoff,0 1196v 691 | protect,0;protect,1 766v 418 | protect,0;knockoff,1 761v 414 | freezedry,1;protect,1 631v 333
+    p2 greedy: move 4 1, move 1 1
+      p1a Lapras used Protect
+      p2b Rotom used Thunderbolt -> p1a: Lapras
+              p1a Lapras -- move: Protect
+      p2a Jirachi used Iron Head -> p1a: Lapras
+              p1a Lapras -- move: Protect
+      p1b Scrafty used Knock Off -> p2a: Jirachi
+              p2a Jirachi used up its Safety Goggles
+      after p1: Lapras 371/405, Scrafty 334/334
+      after p2: Jirachi 175/397, Rotom-Wash 37/241
+
+  Turn 13
+    p1 mcts: move 3, move 2 2
+      search (27000 visits): protect,0;knockoff,1 1301v 764 | protect,0;knockoff,0 923v 520 | protect,0;highjumpkick,1 756v 414 | protect,0;protect,1 726v 395
+    p2 greedy: move 4 1, move 1 1
+      p1a Lapras used Protect  [[still]]
+              p1a Lapras -- IT FAILED
+      p2b Rotom used Thunderbolt -> p1a: Lapras
+              p1a Lapras used up its Sitrus Berry
+      p2a Jirachi used Iron Head -> p1a: Lapras
+      p1b Scrafty used Knock Off -> p2b: Rotom
+      p2b Rotom fainted
+      after p1: Lapras 124/405, Scrafty 334/334
+      after p2: Jirachi 175/397, Rotom-Wash 0/241
+
+  Turn 14
+      p2b <- Aegislash comes in (319/319)
+      after p1: Lapras 124/405, Scrafty 334/334
+      after p2: Jirachi 175/397, Aegislash 319/319
+
+  Turn 15
+    p1 mcts: move 1 2, move 2 2
+      search (22000 visits): freezedry,1;knockoff,1 605v 418 | hydropump,1;knockoff,1 584v 402 | protect,0;knockoff,1 558v 382 | freezedry,0;knockoff,1 493v 331
+    p2 greedy: move 4 1, move 3 1
+      p2a Jirachi used Iron Head -> p1a: Lapras
+      p1a Lapras used Freeze-Dry -> p2b: Aegislash
+      p1b Scrafty used Knock Off -> p2b: Aegislash
+              p2b Aegislash used up its Life Orb
+      p2b Aegislash used Flash Cannon -> p1a: Lapras
+      p1a Lapras fainted
+      after p1: Lapras 0/405, Scrafty 334/334
+      after p2: Jirachi 175/397, Aegislash-Blade 96/319
+
+  Turn 16
+      p1a <- Aegislash comes in (324/324)
+      after p1: Aegislash 324/324, Scrafty 334/334
+      after p2: Jirachi 175/397, Aegislash-Blade 96/319
+
+  Turn 17
+    p1 mcts: move 2, move 2 2
+      search (20000 visits): substitute,0;knockoff,1 812v 439 | shadowball,1;knockoff,0 656v 343 | shadowball,0;knockoff,1 565v 288 | substitute,0;knockoff,0 518v 259
+    p2 greedy: move 4 1, move 3 1
+      p2a Jirachi used Iron Head -> p1a: Aegislash
+      p1a Aegislash used Substitute
+              p1a Aegislash gained Substitute
+      p1b Scrafty used Knock Off -> p2b: Aegislash
+      p2b Aegislash fainted
+      after p1: Aegislash 230/324, Scrafty 334/334
+      after p2: Jirachi 175/397, Aegislash 0/319
+
+  Turn 18
+      p2b <- Landorus-Therian comes in (338/338)
+              p1a Aegislash -- IMMUNE
+              p1b Scrafty atk 1 fell
+      after p1: Aegislash 230/324, Scrafty 334/334
+      after p2: Jirachi 175/397, Landorus-Therian 338/338
+
+  Turn 19
+    p1 mcts: move 1 2, move 3
+      search (24000 visits): shadowball,1;protect,1 1229v 651 | flashcannon,1;protect,1 1111v 581 | shadowball,0;protect,1 917v 467 | flashcannon,0;protect,1 688v 335
+    p2 greedy: move 4 1, move 4 1
+      p1b Scrafty used Protect
+      p2b Landorus used Superpower -> p1a: Aegislash
+              p1a Aegislash -- IMMUNE
+      p2a Jirachi used Iron Head -> p1a: Aegislash
+              p1a Aegislash -- move: Substitute
+      p1a Aegislash used Shadow Ball -> p2b: Landorus
+              p2b Landorus spd 1 fell
+      after p1: Aegislash-Blade 250/324, Scrafty 334/334
+      after p2: Jirachi 175/397, Landorus-Therian 218/338
+
+  Turn 20
+    p1 mcts: move 1 2, move 3
+      search (33000 visits): shadowball,1;protect,1 2043v 917 | flashcannon,1;protect,1 1539v 668 | shadowball,0;protect,1 1051v 430 | shadowball,1;fakeout,0 743v 284
+    p2 greedy: move 4 1, move 4 1
+      p1b Scrafty used Protect  [[still]]
+              p1b Scrafty -- IT FAILED
+      p2b Landorus used Superpower -> p1a: Aegislash
+              p1a Aegislash -- IMMUNE
+      p2a Jirachi used Iron Head -> p1a: Aegislash
+              p1a Aegislash lost Substitute
+      p1a Aegislash used Shadow Ball -> p2b: Landorus
+              p2b Landorus spd 1 fell
+      after p1: Aegislash-Blade 270/324, Scrafty 334/334
+      after p2: Jirachi 175/397, Landorus-Therian 46/338
+
+  Turn 21
+    p1 mcts: move 3 1, switch 5   (slot1 Scrafty -> Talonflame)
+      search (35000 visits): flashcannon,0;switch talonflame 1610v 798 | shadowball,1;protect,1 1500v 737 | flashcannon,1;switch talonflame 1472v 722 | shadowball,1;switch talonflame 1288v 621
+    p2 greedy: move 4 1, move 4 1
+      p1b <- Talonflame comes in (360/360)
+      p2b Landorus used Superpower -> p1a: Aegislash
+              p1a Aegislash -- IMMUNE
+      p2a Jirachi used Iron Head -> p1a: Aegislash
+              p1a Aegislash COULD NOT MOVE (flinch)
+      after p1: Aegislash-Blade 211/324, Talonflame 360/360
+      after p2: Jirachi 175/397, Landorus-Therian 46/338
+
+  Turn 22
+    p1 mcts: move 1 1, switch 5   (slot1 Talonflame -> Scrafty)
+      search (36000 visits): shadowball,0;switch scrafty 2468v 1388 | shadowball,1;switch scrafty 1935v 1065 | flashcannon,1;switch scrafty 1701v 925 | flashcannon,0;switch scrafty 1302v 687
+    p2 greedy: move 4 1, move 4 1
+      p1b <- Scrafty comes in (334/334)
+              p2a Jirachi atk 1 fell
+              p2b Landorus atk 1 fell
+      p2b Landorus used Superpower -> p1a: Aegislash
+              p1a Aegislash -- IMMUNE
+      p2a Jirachi used Iron Head -> p1a: Aegislash
+      p1a Aegislash used Shadow Ball -> p2a: Jirachi
+      p2a Jirachi fainted
+      after p1: Aegislash-Blade 178/324, Scrafty 334/334
+      after p2: Jirachi 0/397, Landorus-Therian 46/338
+
+  Turn 23
+    p1 mcts: move 1 2, move 2 2
+      search (536000 visits): shadowball,1;knockoff,1 45333v 45333 | flashcannon,1;knockoff,1 45333v 45333 | switch talonflame;fakeout,1 45333v 45333 | switch talonflame;knockoff,1 41897v 41856
+    p2 greedy: pass, move 4 1
+      p2b Landorus used Superpower -> p1a: Aegislash
+              p1a Aegislash -- IMMUNE
+      p1a Aegislash used Shadow Ball -> p2b: Landorus
+      p2b Landorus fainted
+      after p1: Aegislash-Blade 178/324, Scrafty 334/334
+      after p2: Jirachi 0/397, Landorus-Therian 0/338
+
+  RESULT: p1 wins

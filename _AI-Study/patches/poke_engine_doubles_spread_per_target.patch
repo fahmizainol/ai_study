@@ -322,27 +322,6 @@ index d7fc3e1..2814e65 100644
              let attacker_item = attacker.item;
              let defender_item = defender.item;
              if attacker_item == defender_item || !defender.item_can_be_removed() || defender_has_sub
-diff --git a/src/genx/evaluate.rs b/src/genx/evaluate.rs
-index 8cbaebe..d3cf966 100644
---- a/src/genx/evaluate.rs
-+++ b/src/genx/evaluate.rs
-@@ -43,6 +43,16 @@ const REFLECT: f32 = 20.0;
- const LIGHT_SCREEN: f32 = 20.0;
- const AURORA_VEIL: f32 = 40.0;
- const SAFE_GUARD: f32 = 5.0;
-+// Run 22: was 7.0, and DOUBLES ONLY -- singles keeps upstream's value byte for byte, since the
-+// singles board is the measured 0.8.0 Foul Play instrument. This term is multiplied by TURNS
-+// REMAINING (`side_conditions.tailwind -= 1` each turn), so 7 meant 28 on a fresh Tailwind
-+// against 100 for a fresh Reflect. Tailwind is x2 Speed = exactly +2 stages, worth 60 for ONE
-+// body by this file's own boost term, and it covers both actives plus whatever switches in;
-+// pricing it level with a screen is conservative against that.
-+// MEASURED on held-out seed 202: usage where a carrier reached the field 1/8 (12%) -> 5/7 (71%).
-+#[cfg(feature = "doubles")]
-+const TAILWIND: f32 = 20.0;
-+#[cfg(not(feature = "doubles"))]
- const TAILWIND: f32 = 7.0;
- const HEALING_WISH: f32 = 30.0;
- 
 diff --git a/src/genx/generate_instructions.rs b/src/genx/generate_instructions.rs
 index fa0676e..acbae24 100644
 --- a/src/genx/generate_instructions.rs

@@ -1,0 +1,142 @@
+battle 1   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: ORAS Doubles OU: Lucario, Talonflame, Latios, Thundurus, Landorus-Therian, Ferrothorn
+  p2: dpl ::/Untitled 193: Deoxys-Speed, Kangaskhan-Mega, Hitmontop, Volcarona, Landorus, Thundurus
+
+  Turn 1
+    p1 mcts: switch 6, move 3   (slot0 Lucario -> Ferrothorn)
+      search (65000 visits): switch ferrothorn;tailwind,1 4317v 3502 | switch ferrothorn;flareblitz,0 2000v 1555 | switch ferrothorn;bravebird,0 1368v 1033 | switch ferrothorn;switch latios 802v 574
+    p2 greedy: move 3 1, move 4 1
+      p1a <- Ferrothorn comes in (352/352)
+      p1b Talonflame used Tailwind
+      -sidestart p1: A move: Tailwind
+      p2a Deoxys used Psycho Boost -> p1a: Ferrothorn
+              p2a Deoxys spa 2 fell
+      p2b Kangaskhan used Giga Impact -> p1a: Ferrothorn
+      after p1: Ferrothorn 152/352, Talonflame 298/298
+      after p2: Deoxys-Speed 252/252, Kangaskhan-Mega 291/410
+
+  Turn 2
+    p1 mcts: move 2 2, move 1 1
+      search (21000 visits): gyroball,1;bravebird,0 492v 268 | gyroball,1;flareblitz,0 353v 180 | gyroball,0;flareblitz,1 344v 174 | powerwhip,1;bravebird,0 319v 159
+    p2 greedy: move 3 1, move 1
+      p1b Talonflame used Brave Bird -> p2a: Deoxys
+      p2a Deoxys used Psycho Boost -> p1a: Ferrothorn
+              p2a Deoxys spa 2 fell
+              p2b Kangaskhan COULD NOT MOVE (recharge)
+      p1a Ferrothorn used Gyro Ball -> p2b: Kangaskhan
+      after p1: Ferrothorn 111/352, Talonflame 137/298
+      after p2: Deoxys-Speed 2/252, Kangaskhan-Mega 180/410
+
+  Turn 3
+    p1 mcts: move 4, move 2 1
+      search (64000 visits): protect,0;flareblitz,0 1818v 611 | powerwhip,0;tailwind,1 1592v 523 | powerwhip,0;bravebird,0 1453v 469 | leechseed,0;bravebird,0 1436v 463
+    p2 greedy: move 3 1, move 4 1
+      p1a Ferrothorn used Protect
+      p1b Talonflame used Flare Blitz -> p2a: Deoxys
+      p2a Deoxys fainted
+      p2b Kangaskhan used Giga Impact -> p1a: Ferrothorn
+              p1a Ferrothorn -- move: Protect
+      after p1: Ferrothorn 111/352, Talonflame 58/298
+      after p2: Deoxys-Speed 0/252, Kangaskhan-Mega 180/410
+
+  Turn 4
+      p2a <- Hitmontop comes in (304/304)
+              p1a Ferrothorn atk 1 fell
+              p1b Talonflame atk 1 fell
+      after p1: Ferrothorn 111/352, Talonflame 58/298
+      after p2: Hitmontop 304/304, Kangaskhan-Mega 180/410
+
+  Turn 5
+    p1 mcts: move 3 2, move 2 2
+      search (65000 visits): leechseed,1;flareblitz,1 2335v 1779 | protect,0;flareblitz,1 2279v 1733 | gyroball,1;flareblitz,1 1949v 1467 | powerwhip,1;flareblitz,1 1855v 1391
+    p2 greedy: move 3 2, move 4 2
+      p1b Talonflame used Flare Blitz -> p2b: Kangaskhan
+      p1b Talonflame fainted
+      p2b Kangaskhan used Giga Impact -> p1a: Ferrothorn
+      p2b Kangaskhan fainted
+      p1a Ferrothorn fainted
+      p2a Hitmontop used Close Combat -> p1: Ferrothorn  [[notarget]]
+              p2a Hitmontop -- IT FAILED
+      -sideend p1: A move: Tailwind
+      after p1: Ferrothorn 0/352, Talonflame 0/298
+      after p2: Hitmontop 304/304, Kangaskhan-Mega 0/410
+
+  Turn 6
+      p1b <- Thundurus comes in (299/299)
+      p2b <- Volcarona comes in (346/346)
+      p1a <- Latios comes in (301/301)
+      after p1: Latios 301/301, Thundurus 299/299
+      after p2: Hitmontop 304/304, Volcarona 346/346
+
+  Turn 7
+    p1 mcts: move 2 2, move 1 2
+      search (15000 visits): psyshock,1;thunderbolt,1 2415v 1808 | psyshock,0;thunderbolt,1 677v 453 | psyshock,0;switch landorustherian 513v 330 | psyshock,1;switch landorustherian 465v 295
+    p2 greedy: move 3 1, move 2
+      p1b Thundurus used Thunderbolt -> p2b: Volcarona
+      p1a Latios used Psyshock -> p2b: Volcarona
+      p2b Volcarona fainted
+      p2a Hitmontop used Close Combat -> p1a: Latios
+              p1a Latios -- critical hit
+              p2a Hitmontop def 1 fell
+              p2a Hitmontop spd 1 fell
+      after p1: Latios 154/301, Thundurus 299/299
+      after p2: Hitmontop 304/304, Volcarona 0/346
+
+  Turn 8
+      p2b <- Landorus comes in (319/319)
+      after p1: Latios 154/301, Thundurus 299/299
+      after p2: Hitmontop 304/304, Landorus 319/319
+
+  Turn 9
+    p1 mcts: move 2 2, move 2 2
+      search (23000 visits): psyshock,1;flashcannon,1 2711v 1998 | dracometeor,1;thunderbolt,0 1075v 738 | psyshock,1;thunderbolt,0 817v 544 | psyshock,0;flashcannon,1 785v 520
+    p2 greedy: move 3 1, move 1 1
+      p1b Thundurus used Flash Cannon -> p2b: Landorus
+              p2b Landorus -- critical hit
+      p1a Latios used Psyshock -> p2b: Landorus
+      p2b Landorus fainted
+      p2a Hitmontop used Close Combat -> p1a: Latios
+              p2a Hitmontop def 1 fell
+              p2a Hitmontop spd 1 fell
+      after p1: Latios 43/301, Thundurus 299/299
+      after p2: Hitmontop 304/304, Landorus 0/319
+
+  Turn 10
+      p2b <- Thundurus comes in (362/362)
+      after p1: Latios 43/301, Thundurus 299/299
+      after p2: Hitmontop 304/304, Thundurus 362/362
+
+  Turn 11
+    p1 mcts: move 2 2, move 1 2
+      search (29000 visits): psyshock,1;thunderbolt,1 6430v 5852 | psyshock,0;thunderbolt,1 1924v 1661 | dracometeor,1;thunderbolt,1 1766v 1517 | psyshock,1;thunderbolt,0 1557v 1326
+    p2 greedy: move 3 1, move 3 1
+      p1b Thundurus used Thunderbolt -> p2b: Thundurus
+              p2b Thundurus -- critical hit
+              p2b Thundurus used up its Sitrus Berry
+      p1a Latios used Psyshock -> p2b: Thundurus
+      p2b Thundurus fainted
+      p2a Hitmontop used Close Combat -> p1a: Latios
+              p2a Hitmontop def 1 fell
+              p2a Hitmontop spd 1 fell
+      p1a Latios fainted
+      after p1: Latios 0/301, Thundurus 299/299
+      after p2: Hitmontop 304/304, Thundurus 0/362
+
+  Turn 12
+      p1a <- Landorus-Therian comes in (319/319)
+              p2a Hitmontop atk 1 fell
+      after p1: Landorus-Therian 319/319, Thundurus 299/299
+      after p2: Hitmontop 304/304, Thundurus 0/362
+
+  Turn 13
+    p1 mcts: move 3 1, move 1 1
+      search (227000 visits): superpower,0;thunderbolt,0 17420v 17420 | superpower,0;flashcannon,0 17420v 17420 | superpower,0;thunderwave,0 17420v 17420 | superpower,0;protect,1 17419v 17419
+    p2 greedy: move 3 1, pass
+      p1a Landorus used Superpower -> p2a: Hitmontop
+              p1a Landorus atk 1 fell
+              p1a Landorus def 1 fell
+      p2a Hitmontop fainted
+      after p1: Landorus-Therian 319/319, Thundurus 299/299
+      after p2: Hitmontop 0/304, Thundurus 0/362
+
+  RESULT: p1 wins

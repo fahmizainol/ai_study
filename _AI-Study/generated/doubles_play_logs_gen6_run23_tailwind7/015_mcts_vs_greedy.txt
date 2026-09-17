@@ -1,0 +1,470 @@
+battle 15   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: ORAS Doubles OU: Crobat, Excadrill, Gyarados, Rotom-Wash, Ferrothorn, Diancie-Mega
+  p2: goth diancie: Diancie-Mega, Gothitelle, Gastrodon-East, Genesect, Talonflame, Landorus-Therian
+
+  Turn 1
+    p1 mcts: move 4, move 4
+      search (34000 visits): protect,0;rockslide,0 15799v 11854 | superfang,1;ironhead,0 2201v 1518 | bravebird,1;earthquake,0 1871v 1268 | superfang,1;rockslide,0 880v 555
+    p2 greedy: move 1, move 1 1
+      p1a Crobat used Protect
+      p1b Excadrill used Rock Slide -> p2a: Diancie  [[spread] p2a,p2b]
+      p2a Diancie used Diamond Storm -> p1b: Excadrill  [[spread] p1b]
+              p1a Crobat -- move: Protect
+              p2a Diancie def 1 rose
+      p2b Gothitelle used Psychic -> p1a: Crobat
+              p1a Crobat -- move: Protect
+      after p1: Crobat 374/374, Excadrill 307/362
+      after p2: Diancie-Mega 221/287, Gothitelle 281/344
+
+  Turn 2
+    p1 mcts: move 2, move 4
+      search (31000 visits): tailwind,0;rockslide,0 22459v 16223 | bravebird,1;rockslide,0 3830v 2569 | protect,0;rockslide,0 1879v 1202 | superfang,1;rockslide,0 1002v 602
+    p2 greedy: move 1, move 1 2
+      p1b Excadrill used Rock Slide -> p2b: Gothitelle  [[spread] p2a,p2b]
+      p2a Diancie used Diamond Storm -> p1a: Crobat  [[spread] p1a,p1b]
+              p1b Excadrill -- critical hit
+              p2a Diancie def 1 rose
+              p1a Crobat used up its Sitrus Berry
+      p1a Crobat used Tailwind
+      -sidestart p1: A move: Tailwind
+      p2b Gothitelle used Psychic -> p1b: Excadrill
+      after p1: Crobat 191/374, Excadrill 156/362
+      after p2: Diancie-Mega 174/287, Gothitelle 218/344
+
+  Turn 3
+    p1 mcts: move 3 2, move 4
+      search (29000 visits): bravebird,1;rockslide,0 21709v 15272 | protect,0;rockslide,0 2268v 1449 | bravebird,0;rockslide,0 1768v 1107 | tailwind,0;rockslide,0 1169v 703
+    p2 greedy: move 1, move 1 2
+      p1b Excadrill used Rock Slide -> p2a: Diancie  [[spread] p2a,p2b]
+      p1a Crobat used Brave Bird -> p2b: Gothitelle
+      p2a Diancie used Diamond Storm -> p1b: Excadrill  [[spread] p1a,p1b]
+              p2a Diancie def 1 rose
+      p1a Crobat fainted
+      p2b Gothitelle used Psychic -> p1b: Excadrill
+      after p1: Crobat 0/374, Excadrill 37/362
+      after p2: Diancie-Mega 136/287, Gothitelle 49/344
+
+  Turn 4
+      p1a <- Gyarados comes in (394/394)
+              p2a Diancie atk 1 fell
+              p2b Gothitelle atk 1 fell
+      after p1: Gyarados 394/394, Excadrill 37/362
+      after p2: Diancie-Mega 136/287, Gothitelle 49/344
+
+  Turn 5
+    p1 mcts: move 4, move 4
+      search (22000 visits): protect,0;rockslide,0 11240v 5237 | waterfall,1;rockslide,0 2586v 1069 | waterfall,0;rockslide,0 2262v 921 | thunderwave,1;rockslide,0 2067v 833
+    p2 greedy: move 1, move 1 2
+      p1a Gyarados used Protect
+      p1b Excadrill used Rock Slide -> p2a: Diancie  [[spread] p2a,p2b]
+      p2b Gothitelle fainted
+      p2a Diancie used Diamond Storm -> p1a: Gyarados  [[spread] p1b]
+              p1a Gyarados -- move: Protect
+              p2a Diancie def 1 rose
+      after p1: Gyarados 394/394, Excadrill 5/362
+      after p2: Diancie-Mega 114/287, Gothitelle 0/344
+
+  Turn 6
+      p2b <- Gastrodon-East comes in (426/426)
+      after p1: Gyarados 394/394, Excadrill 5/362
+      after p2: Diancie-Mega 114/287, Gastrodon-East 426/426
+
+  Turn 7
+    p1 mcts: switch 5, switch 4   (slot0 Gyarados -> Ferrothorn; slot1 Excadrill -> Rotom-Wash)
+      search (26000 visits): switch ferrothorn;switch rotomwash 10532v 8728 | protect,0;rockslide,0 1248v 785 | switch ferrothorn;rockslide,0 1009v 620 | taunt,1;rockslide,0 934v 569
+    p2 greedy: move 1, move 1 2
+      p1b <- Rotom-Wash comes in (304/304)
+      p1a <- Ferrothorn comes in (352/352)
+      p2a Diancie used Diamond Storm -> p1a: Ferrothorn  [[spread] p1a,p1b]
+              p1a Ferrothorn -- critical hit
+      p2b Gastrodon used Earth Power -> p1b: Rotom
+              p1b Rotom -- IMMUNE
+      -sideend p1: A move: Tailwind
+      after p1: Ferrothorn 283/352, Rotom-Wash 226/304
+      after p2: Diancie-Mega 114/287, Gastrodon-East 426/426
+
+  Turn 8
+    p1 mcts: switch 6, move 2 1   (slot0 Ferrothorn -> Diancie-Mega)
+      search (44000 visits): switch dianciemega;thunderbolt,0 884v 798 | switch dianciemega;protect,1 884v 798 | switch dianciemega;thunderbolt,1 868v 782 | switch dianciemega;willowisp,0 726v 643
+    p2 greedy: move 1, move 1 2
+      p1a <- Diancie-Mega comes in (241/241)
+      p2a Diancie used Diamond Storm -> p1a: Diancie  [[spread] p1a]
+              p2a Diancie -- MISSED
+      p1b Rotom used Thunderbolt -> p2a: Diancie
+      p2a Diancie fainted
+      p2b Gastrodon used Earth Power -> p1b: Rotom
+              p1b Rotom -- IMMUNE
+      after p1: Diancie-Mega 159/241, Rotom-Wash 226/304
+      after p2: Diancie-Mega 0/287, Gastrodon-East 426/426
+
+  Turn 9
+      p2a <- Genesect comes in (283/283)
+              p2a Genesect atk 1 rose
+      after p1: Diancie-Mega 159/241, Rotom-Wash 226/304
+      after p2: Genesect 283/283, Gastrodon-East 426/426
+
+  Turn 10
+    p1 mcts: move 4, switch 4   (slot1 Rotom-Wash -> Excadrill)
+      search (26000 visits): protect,0;switch excadrill 1768v 1426 | protect,0;willowisp,0 1461v 1162 | protect,0;thunderbolt,0 1073v 833 | protect,0;thunderbolt,1 930v 712
+    p2 greedy: move 1 1, move 1 1
+      p1b <- Excadrill comes in (5/362)
+      p1a Diancie used Protect
+      p2a Genesect used Ice Beam -> p1a: Diancie
+              p1a Diancie -- move: Protect
+      p2b Gastrodon used Earth Power -> p1a: Diancie
+              p1a Diancie -- move: Protect
+      after p1: Diancie-Mega 159/241, Excadrill 5/362
+      after p2: Genesect 283/283, Gastrodon-East 426/426
+
+  Turn 11
+    p1 mcts: move 4, move 1 1
+      search (33000 visits): protect,0;drillrun,0 1303v 1013 | protect,0;switch rotomwash 1284v 997 | switch rotomwash;drillrun,0 1089v 833 | protect,0;ironhead,0 1009v 767
+    p2 greedy: move 1 2, move 1 2
+      p1a Diancie used Protect
+      p2a Genesect used Ice Beam -> p1b: Excadrill
+      p1b Excadrill fainted
+      p2b Gastrodon used Earth Power -> p1a: Diancie
+              p1a Diancie -- move: Protect
+      after p1: Diancie-Mega 159/241, Excadrill 0/362
+      after p2: Genesect 283/283, Gastrodon-East 426/426
+
+  Turn 12
+      p1b <- Rotom-Wash comes in (226/304)
+      after p1: Diancie-Mega 159/241, Rotom-Wash 226/304
+      after p2: Genesect 283/283, Gastrodon-East 426/426
+
+  Turn 13
+    p1 mcts: move 4, move 1 2
+      search (18000 visits): protect,0;hydropump,1 824v 665 | protect,0;thunderbolt,1 821v 662 | protect,0;willowisp,1 778v 624 | protect,0;protect,1 685v 543
+    p2 greedy: move 1 1, move 1 1
+      p1a Diancie used Protect  [[still]]
+              p1a Diancie -- IT FAILED
+      p2a Genesect used Ice Beam -> p1a: Diancie
+      p1b Rotom used Hydro Pump -> p2b: Gastrodon
+              p2b Gastrodon spa 1 rose
+      p2b Gastrodon used Earth Power -> p1a: Diancie
+      p1a Diancie fainted
+      after p1: Diancie-Mega 0/241, Rotom-Wash 226/304
+      after p2: Genesect 283/283, Gastrodon-East 426/426
+
+  Turn 14
+      p1a <- Gyarados comes in (394/394)
+              p2a Genesect atk 1 fell
+              p2b Gastrodon atk 1 fell
+      after p1: Gyarados 394/394, Rotom-Wash 226/304
+      after p2: Genesect 283/283, Gastrodon-East 426/426
+
+  Turn 15
+    p1 mcts: switch 6, move 2 2   (slot0 Gyarados -> Ferrothorn)
+      search (36000 visits): switch ferrothorn;thunderbolt,1 20061v 13747 | switch ferrothorn;willowisp,0 465v 225 | protect,0;willowisp,0 447v 214 | protect,0;thunderbolt,0 416v 196
+    p2 greedy: move 1 2, move 1 2
+      p1a <- Ferrothorn comes in (283/352)
+      p2a Genesect used Ice Beam -> p1b: Rotom
+              p1b Rotom -- critical hit
+      p1b Rotom used Thunderbolt -> p2b: Gastrodon
+              p2b Gastrodon -- IMMUNE
+      p2b Gastrodon used Earth Power -> p1b: Rotom
+              p1b Rotom -- IMMUNE
+      after p1: Ferrothorn 283/352, Rotom-Wash 168/304
+      after p2: Genesect 283/283, Gastrodon-East 426/426
+
+  Turn 16
+    p1 mcts: move 4, move 3 2
+      search (37000 visits): protect,0;willowisp,1 2554v 2016 | switch gyarados;thunderbolt,0 1322v 997 | protect,0;thunderbolt,1 1191v 890 | switch gyarados;hydropump,0 1175v 877
+    p2 greedy: move 1 2, move 1 2
+      p1a Ferrothorn used Protect
+      p2a Genesect used Ice Beam -> p1b: Rotom
+              p1b Rotom used up its Sitrus Berry
+      p1b Rotom used Will-O-Wisp -> p2b: Gastrodon
+              p2b Gastrodon is now brn
+      p2b Gastrodon used Earth Power -> p1b: Rotom
+              p1b Rotom -- IMMUNE
+      after p1: Ferrothorn 283/352, Rotom-Wash 205/304
+      after p2: Genesect 283/283, Gastrodon-East 373/426
+
+  Turn 17
+    p1 mcts: move 4, move 1 2
+      search (41000 visits): protect,0;hydropump,1 2695v 2082 | protect,0;willowisp,1 1830v 1379 | switch gyarados;willowisp,0 1422v 1051 | powerwhip,1;willowisp,1 1068v 769
+    p2 greedy: move 1 2, move 1 2
+      p1a Ferrothorn used Protect
+      p2a Genesect used Ice Beam -> p1b: Rotom
+      p1b Rotom used Hydro Pump -> p2b: Gastrodon
+              p2b Gastrodon spa 1 rose
+      p2b Gastrodon used Earth Power -> p1b: Rotom
+              p1b Rotom -- IMMUNE
+      after p1: Ferrothorn 283/352, Rotom-Wash 163/304
+      after p2: Genesect 283/283, Gastrodon-East 320/426
+
+  Turn 18
+    p1 mcts: move 3 2, move 2 2
+      search (43000 visits): powerwhip,1;thunderbolt,1 2200v 1748 | powerwhip,1;willowisp,1 1954v 1541 | powerwhip,1;hydropump,0 1893v 1490 | leechseed,0;protect,1 1802v 1413
+    p2 greedy: move 1 2, move 1 2
+      p2a Genesect used Ice Beam -> p1b: Rotom
+      p1b Rotom used Thunderbolt -> p2b: Gastrodon
+              p2b Gastrodon -- IMMUNE
+      p2b Gastrodon used Earth Power -> p1b: Rotom
+              p1b Rotom -- IMMUNE
+      p1a Ferrothorn used Power Whip -> p2b: Gastrodon  [[miss]]
+              p1a Ferrothorn -- MISSED
+      after p1: Ferrothorn 283/352, Rotom-Wash 127/304
+      after p2: Genesect 283/283, Gastrodon-East 267/426
+
+  Turn 19
+    p1 mcts: move 3 2, move 4
+      search (36000 visits): powerwhip,1;protect,1 4912v 3992 | powerwhip,1;thunderbolt,0 2333v 1827 | powerwhip,1;thunderbolt,1 2245v 1754 | powerwhip,1;willowisp,1 2101v 1634
+    p2 greedy: move 1 2, move 1 2
+      p1b Rotom used Protect
+      p2a Genesect used Ice Beam -> p1b: Rotom
+              p1b Rotom -- move: Protect
+      p2b Gastrodon used Earth Power -> p1b: Rotom
+              p1b Rotom -- IMMUNE
+      p1a Ferrothorn used Power Whip -> p2b: Gastrodon
+      p2b Gastrodon fainted
+      after p1: Ferrothorn 225/352, Rotom-Wash 127/304
+      after p2: Genesect 283/283, Gastrodon-East 0/426
+
+  Turn 20
+      p2b <- Talonflame comes in (359/359)
+      after p1: Ferrothorn 225/352, Rotom-Wash 127/304
+      after p2: Genesect 283/283, Talonflame 359/359
+
+  Turn 21
+    p1 mcts: switch 6, move 2 2   (slot0 Ferrothorn -> Gyarados)
+      search (41000 visits): switch gyarados;thunderbolt,1 2273v 1894 | switch gyarados;hydropump,1 1641v 1340 | protect,0;hydropump,1 1227v 980 | leechseed,1;thunderbolt,1 1183v 942
+    p2 greedy: move 1 2, move 1 2
+      p1a <- Gyarados comes in (394/394)
+              p2a Genesect atk 1 fell
+              p2b Talonflame atk 1 fell
+      p2b Talonflame used Brave Bird -> p1b: Rotom
+      p2a Genesect used Ice Beam -> p1b: Rotom
+      p1b Rotom used Thunderbolt -> p2b: Talonflame
+      after p1: Gyarados 394/394, Rotom-Wash 6/304
+      after p2: Genesect 283/283, Talonflame 23/359
+
+  Turn 22
+    p1 mcts: switch 6, move 2 1   (slot0 Gyarados -> Ferrothorn)
+      search (33000 visits): switch ferrothorn;thunderbolt,0 5836v 4594 | switch ferrothorn;thunderbolt,1 3922v 3037 | switch ferrothorn;hydropump,0 2940v 2243 | switch ferrothorn;hydropump,1 2037v 1519
+    p2 greedy: move 1 2, move 1 2
+      p1a <- Ferrothorn comes in (225/352)
+      p2b Talonflame used Brave Bird -> p1b: Rotom
+      p1b Rotom fainted
+      p2a Genesect used Ice Beam -> p1a: Ferrothorn
+      after p1: Ferrothorn 138/352, Rotom-Wash 0/304
+      after p2: Genesect 283/283, Talonflame 21/359
+
+  Turn 23
+      p1b <- Gyarados comes in (394/394)
+              p2a Genesect atk 1 fell
+              p2b Talonflame atk 1 fell
+      after p1: Ferrothorn 138/352, Gyarados 394/394
+      after p2: Genesect 283/283, Talonflame 21/359
+
+  Turn 24
+    p1 mcts: move 1 1, move 3 2
+      search (63000 visits): leechseed,0;waterfall,1 2074v 712 | gyroball,1;waterfall,1 1728v 576 | gyroball,0;waterfall,1 1666v 552 | powerwhip,0;waterfall,1 1610v 530
+    p2 greedy: move 1 1, move 1 1
+      p2b Talonflame used Brave Bird -> p1a: Ferrothorn
+      p2b Talonflame fainted
+      p2a Genesect used Ice Beam -> p1a: Ferrothorn
+      p1a Ferrothorn fainted
+      p1b Gyarados used Waterfall -> p2a: Genesect
+      after p1: Ferrothorn 0/352, Gyarados 394/394
+      after p2: Genesect 144/283, Talonflame 0/359
+
+  Turn 25
+      p2b <- Landorus-Therian comes in (382/382)
+              p1b Gyarados atk 1 fell
+      after p1: Ferrothorn 0/352, Gyarados 394/394
+      after p2: Genesect 144/283, Landorus-Therian 382/382
+
+  Turn 26
+    p1 mcts: pass, move 4
+      search (199000 visits): No Move;protect,1 197674v 180205 | No Move;waterfall,1 562v 295 | No Move;thunderwave,1 179v 70 | No Move;waterfall,0 159v 59
+    p2 greedy: move 1 2, move 1
+      p1b Gyarados used Protect
+      p2a Genesect used Ice Beam -> p1b: Gyarados
+              p1b Gyarados -- move: Protect
+      p2b Landorus used Earthquake -> p1b: Gyarados  [[spread] p2a]
+              p1b Gyarados -- IMMUNE
+              p2a Genesect -- critical hit
+      p2a Genesect fainted
+      after p1: Ferrothorn 0/352, Gyarados 394/394
+      after p2: Genesect 0/283, Landorus-Therian 382/382
+
+  Turn 27
+    p1 mcts: pass, move 4
+      search (239000 visits): No Move;protect,1 238002v 225362 | No Move;waterfall,1 709v 404 | No Move;taunt,1 151v 60 | No Move;thunderwave,1 138v 52
+    p2 greedy: pass, move 1
+      p1b Gyarados used Protect
+      p2b Landorus used Earthquake -> p1b: Gyarados
+              p1b Gyarados -- IMMUNE
+      after p1: Ferrothorn 0/352, Gyarados 394/394
+      after p2: Genesect 0/283, Landorus-Therian 382/382
+
+  Turn 28
+    p1 mcts: pass, move 4
+      search (279000 visits): No Move;protect,1 278090v 264532 | No Move;waterfall,1 602v 335 | No Move;taunt,1 168v 69 | No Move;thunderwave,1 140v 53
+    p2 greedy: pass, move 1
+      p1b Gyarados used Protect  [[still]]
+              p1b Gyarados -- IT FAILED
+      p2b Landorus used Earthquake -> p1b: Gyarados
+              p1b Gyarados -- IMMUNE
+      after p1: Ferrothorn 0/352, Gyarados 394/394
+      after p2: Genesect 0/283, Landorus-Therian 382/382
+
+  Turn 29
+    p1 mcts: pass, move 4
+      search (259000 visits): No Move;protect,1 257937v 244832 | No Move;waterfall,1 724v 413 | No Move;taunt,1 172v 71 | No Move;thunderwave,1 167v 69
+    p2 greedy: pass, move 1
+      p1b Gyarados used Protect
+      p2b Landorus used Earthquake -> p1b: Gyarados
+              p1b Gyarados -- IMMUNE
+      after p1: Ferrothorn 0/352, Gyarados 394/394
+      after p2: Genesect 0/283, Landorus-Therian 382/382
+
+  Turn 30
+    p1 mcts: pass, move 4
+      search (193000 visits): No Move;protect,1 192058v 180572 | No Move;waterfall,1 656v 370 | No Move;thunderwave,1 145v 56 | No Move;taunt,1 141v 54
+    p2 greedy: pass, move 1
+      p1b Gyarados used Protect
+      p2b Landorus used Earthquake -> p1b: Gyarados
+              p1b Gyarados -- IMMUNE
+      after p1: Ferrothorn 0/352, Gyarados 394/394
+      after p2: Genesect 0/283, Landorus-Therian 382/382
+
+  Turn 31
+    p1 mcts: pass, move 4
+      search (232000 visits): No Move;protect,1 230960v 218482 | No Move;waterfall,1 750v 432 | No Move;thunderwave,1 151v 60 | No Move;taunt,1 139v 53
+    p2 greedy: pass, move 1
+      p1b Gyarados used Protect  [[still]]
+              p1b Gyarados -- IT FAILED
+      p2b Landorus used Earthquake -> p1b: Gyarados
+              p1b Gyarados -- IMMUNE
+      after p1: Ferrothorn 0/352, Gyarados 394/394
+      after p2: Genesect 0/283, Landorus-Therian 382/382
+
+  Turn 32
+    p1 mcts: pass, move 4
+      search (196000 visits): No Move;protect,1 194991v 183434 | No Move;waterfall,1 689v 392 | No Move;taunt,1 166v 68 | No Move;thunderwave,1 154v 62
+    p2 greedy: pass, move 1
+      p1b Gyarados used Protect
+      p2b Landorus used Earthquake -> p1b: Gyarados
+              p1b Gyarados -- IMMUNE
+      after p1: Ferrothorn 0/352, Gyarados 394/394
+      after p2: Genesect 0/283, Landorus-Therian 382/382
+
+  Turn 33
+    p1 mcts: pass, move 4
+      search (137000 visits): No Move;protect,1 136127v 126255 | No Move;waterfall,1 555v 306 | No Move;taunt,1 165v 67 | No Move;thunderwave,1 153v 61
+    p2 greedy: pass, move 1
+      p1b Gyarados used Protect
+      p2b Landorus used Earthquake -> p1b: Gyarados
+              p1b Gyarados -- IMMUNE
+      after p1: Ferrothorn 0/352, Gyarados 394/394
+      after p2: Genesect 0/283, Landorus-Therian 382/382
+
+  Turn 34
+    p1 mcts: pass, move 4
+      search (208000 visits): No Move;protect,1 207068v 195182 | No Move;waterfall,1 614v 344 | No Move;taunt,1 162v 66 | No Move;thunderwave,1 156v 63
+    p2 greedy: pass, move 1
+      p1b Gyarados used Protect  [[still]]
+              p1b Gyarados -- IT FAILED
+      p2b Landorus used Earthquake -> p1b: Gyarados
+              p1b Gyarados -- IMMUNE
+      after p1: Ferrothorn 0/352, Gyarados 394/394
+      after p2: Genesect 0/283, Landorus-Therian 382/382
+
+  Turn 35
+    p1 mcts: pass, move 4
+      search (201000 visits): No Move;protect,1 199897v 188204 | No Move;waterfall,1 786v 455 | No Move;taunt,1 165v 68 | No Move;thunderwave,1 152v 60
+    p2 greedy: pass, move 1
+      p1b Gyarados used Protect
+      p2b Landorus used Earthquake -> p1b: Gyarados
+              p1b Gyarados -- IMMUNE
+      after p1: Ferrothorn 0/352, Gyarados 394/394
+      after p2: Genesect 0/283, Landorus-Therian 382/382
+
+  Turn 36
+    p1 mcts: pass, move 4
+      search (259000 visits): No Move;protect,1 257955v 244831 | No Move;waterfall,1 712v 404 | No Move;taunt,1 174v 72 | No Move;thunderwave,1 159v 64
+    p2 greedy: pass, move 1
+      p1b Gyarados used Protect  [[still]]
+              p1b Gyarados -- IT FAILED
+      p2b Landorus used Earthquake -> p1b: Gyarados
+              p1b Gyarados -- IMMUNE
+      after p1: Ferrothorn 0/352, Gyarados 394/394
+      after p2: Genesect 0/283, Landorus-Therian 382/382
+
+  Turn 37
+    p1 mcts: pass, move 4
+      search (194000 visits): No Move;protect,1 192907v 181390 | No Move;waterfall,1 761v 436 | No Move;thunderwave,1 175v 73 | No Move;taunt,1 157v 63
+    p2 greedy: pass, move 1
+      p1b Gyarados used Protect
+      p2b Landorus used Earthquake -> p1b: Gyarados
+              p1b Gyarados -- IMMUNE
+      after p1: Ferrothorn 0/352, Gyarados 394/394
+      after p2: Genesect 0/283, Landorus-Therian 382/382
+
+  Turn 38
+    p1 mcts: pass, move 4
+      search (264000 visits): No Move;protect,1 263001v 249763 | No Move;waterfall,1 719v 412 | No Move;taunt,1 144v 56 | No Move;thunderwave,1 136v 52
+    p2 greedy: pass, move 1
+      p1b Gyarados used Protect  [[still]]
+              p1b Gyarados -- IT FAILED
+      p2b Landorus used Earthquake -> p1b: Gyarados
+              p1b Gyarados -- IMMUNE
+      after p1: Ferrothorn 0/352, Gyarados 394/394
+      after p2: Genesect 0/283, Landorus-Therian 382/382
+
+  Turn 39
+    p1 mcts: pass, move 4
+      search (267000 visits): No Move;protect,1 266000v 252736 | No Move;waterfall,1 677v 383 | No Move;thunderwave,1 172v 72 | No Move;taunt,1 151v 60
+    p2 greedy: pass, move 1
+      p1b Gyarados used Protect
+      p2b Landorus used Earthquake -> p1b: Gyarados
+              p1b Gyarados -- IMMUNE
+      after p1: Ferrothorn 0/352, Gyarados 394/394
+      after p2: Genesect 0/283, Landorus-Therian 382/382
+
+  Turn 40
+    p1 mcts: pass, move 4
+      search (246000 visits): No Move;protect,1 245465v 236770 | No Move;waterfall,1 326v 183 | No Move;thunderwave,1 107v 43 | No Move;taunt,1 102v 40
+    p2 greedy: pass, move 1
+      p1b Gyarados used Protect  [[still]]
+              p1b Gyarados -- IT FAILED
+      p2b Landorus used Earthquake -> p1b: Gyarados
+              p1b Gyarados -- IMMUNE
+      after p1: Ferrothorn 0/352, Gyarados 394/394
+      after p2: Genesect 0/283, Landorus-Therian 382/382
+
+  Turn 41
+    p1 mcts: pass, move 3 2
+      search (952000 visits): No Move;waterfall,1 938098v 155442 | No Move;thunderwave,1 8115v 916 | No Move;taunt,1 5787v 591
+    p2 greedy: pass, move 1
+      p2b Landorus used Earthquake -> p1b: Gyarados
+              p1b Gyarados -- IMMUNE
+      p1b Gyarados used Waterfall -> p2b: Landorus
+      after p1: Ferrothorn 0/352, Gyarados 394/394
+      after p2: Genesect 0/283, Landorus-Therian 208/382
+
+  Turn 42
+    p1 mcts: pass, move 3 2
+      search (1433000 visits): No Move;waterfall,1 1431767v 545202 | No Move;thunderwave,1 744v 141 | No Move;taunt,1 489v 70
+    p2 greedy: pass, move 2 2
+      p2b Landorus used Stone Edge -> p1b: Gyarados
+              p1b Gyarados -- critical hit
+              p1b Gyarados used up its Sitrus Berry
+      p1b Gyarados used Waterfall -> p2b: Landorus
+      after p1: Ferrothorn 0/352, Gyarados 126/394
+      after p2: Genesect 0/283, Landorus-Therian 28/382
+
+  Turn 43
+    p1 mcts: pass, move 3 2
+      search (2368000 visits): No Move;waterfall,1 2365534v 473794 | No Move;thunderwave,1 1252v 63 | No Move;taunt,1 1214v 59
+    p2 greedy: pass, move 2 2
+      p2b Landorus used Stone Edge -> p1b: Gyarados
+      p1b Gyarados fainted
+      after p1: Ferrothorn 0/352, Gyarados 0/394
+      after p2: Genesect 0/283, Landorus-Therian 28/382
+
+  RESULT: p2 wins

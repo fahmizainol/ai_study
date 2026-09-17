@@ -1,0 +1,201 @@
+battle 65   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: ORAS Doubles OU: Crobat, Excadrill, Gyarados, Rotom-Wash, Ferrothorn, Diancie-Mega
+  p2: Untitled 1448: Keldeo, Talonflame, Gengar-Mega, Bisharp, Raichu, Kyurem-Black
+
+  Turn 1
+    p1 mcts: move 2, move 4
+      search (31000 visits): tailwind,0;rockslide,0 431v 422 | tailwind,0;switch gyarados 423v 413 | tailwind,0;drillrun,0 419v 409 | tailwind,0;switch rotomwash 411v 400
+    p2 greedy: move 1 1, move 1 1
+      p2b Talonflame used Brave Bird -> p1a: Crobat
+              p1a Crobat used up its Sitrus Berry
+      p1b Excadrill used Rock Slide -> p2a: Keldeo  [[spread] p2a,p2b]
+      p2b Talonflame fainted
+      p2a Keldeo used Hydro Pump -> p1a: Crobat
+      p1a Crobat fainted
+      after p1: Crobat 0/374, Excadrill 362/362
+      after p2: Keldeo 249/323, Talonflame 0/360
+
+  Turn 2
+      p1a <- Gyarados comes in (394/394)
+      p2b <- Gengar-Mega comes in (314/314)
+              p2a Keldeo atk 1 fell
+              p2b Gengar atk 1 fell
+      after p1: Gyarados 394/394, Excadrill 362/362
+      after p2: Keldeo 249/323, Gengar-Mega 314/314
+
+  Turn 3
+    p1 mcts: move 3 2, move 4
+      search (18000 visits): waterfall,1;rockslide,0 8714v 3254 | waterfall,0;rockslide,0 2266v 743 | thunderwave,0;rockslide,0 1977v 635 | thunderwave,1;rockslide,0 1745v 549
+    p2 greedy: move 1 1, move 2 1
+      p1b Excadrill used Rock Slide -> p2a: Keldeo  [[spread] p2a,p2b]
+      p2b Gengar used Sludge Bomb -> p1a: Gyarados
+              p2a Keldeo COULD NOT MOVE (flinch)
+      p1a Gyarados used Waterfall -> p2b: Gengar
+      after p1: Gyarados 199/394, Excadrill 362/362
+      after p2: Keldeo 207/323, Gengar-Mega 76/314
+
+  Turn 4
+    p1 mcts: move 3 1, move 4
+      search (23000 visits): waterfall,0;rockslide,0 5002v 1759 | waterfall,1;rockslide,0 4789v 1678 | thunderwave,0;rockslide,0 3939v 1354 | thunderwave,1;rockslide,0 2652v 870
+    p2 greedy: move 1 1, move 2 1
+      p1b Excadrill used Rock Slide -> p2a: Keldeo  [[spread] p2a,p2b]
+      p2b Gengar fainted
+      p2a Keldeo used Hydro Pump -> p1a: Gyarados
+              p1a Gyarados used up its Sitrus Berry
+      p1a Gyarados used Waterfall -> p2a: Keldeo
+      after p1: Gyarados 170/394, Excadrill 362/362
+      after p2: Keldeo 58/323, Gengar-Mega 0/314
+
+  Turn 5
+      p2b <- Bisharp comes in (271/271)
+      after p1: Gyarados 170/394, Excadrill 362/362
+      after p2: Keldeo 58/323, Bisharp 271/271
+
+  Turn 6
+    p1 mcts: move 3 2, move 4
+      search (35000 visits): waterfall,1;rockslide,0 5818v 3640 | waterfall,1;switch rotomwash 2000v 1166 | thunderwave,1;rockslide,0 1644v 943 | waterfall,1;switch ferrothorn 1638v 938
+    p2 greedy: move 1 1, move 2 1
+      p2b Bisharp used Sucker Punch -> p1a: Gyarados
+      p1a Gyarados fainted
+      p1b Excadrill used Rock Slide -> p2b: Bisharp  [[spread] p2a,p2b]
+      p2a Keldeo used Hydro Pump -> p1b: Excadrill
+      p1b Excadrill fainted
+      p2a Keldeo fainted
+      after p1: Gyarados 0/394, Excadrill 0/362
+      after p2: Keldeo 0/323, Bisharp 209/271
+
+  Turn 7
+      p2a <- Raichu comes in (324/324)
+      p1b <- Ferrothorn comes in (352/352)
+      p1a <- Rotom-Wash comes in (304/304)
+      after p1: Rotom-Wash 304/304, Ferrothorn 352/352
+      after p2: Raichu 324/324, Bisharp 209/271
+
+  Turn 8
+    p1 mcts: move 4, move 3 1
+      search (16000 visits): protect,0;powerwhip,0 1050v 658 | hydropump,1;protect,1 599v 349 | willowisp,1;protect,1 599v 349 | protect,0;leechseed,0 599v 349
+    p2 greedy: move 2 1, move 2 1
+      p1a Rotom used Protect
+      p2b Bisharp used Sucker Punch  [[still]]
+              p2b Bisharp -- IT FAILED
+      p2a Raichu used Volt Switch -> p1a: Rotom
+              p1a Rotom -- move: Protect
+      p1b Ferrothorn used Power Whip -> p2a: Raichu  [[miss]]
+              p1b Ferrothorn -- MISSED
+      after p1: Rotom-Wash 304/304, Ferrothorn 352/352
+      after p2: Raichu 324/324, Bisharp 209/271
+
+  Turn 9
+    p1 mcts: move 4, move 3 1
+      search (20000 visits): protect,0;powerwhip,0 1348v 819 | protect,0;powerwhip,1 889v 516 | protect,0;protect,1 800v 457 | hydropump,1;protect,1 729v 411
+    p2 greedy: move 2 1, move 2 1
+      p1a Rotom used Protect  [[still]]
+              p1a Rotom -- IT FAILED
+      p2b Bisharp used Sucker Punch  [[still]]
+              p2b Bisharp -- IT FAILED
+      p2a Raichu used Volt Switch -> p1a: Rotom
+      after p1: Rotom-Wash 240/304, Ferrothorn 352/352
+      after p2: Raichu 324/324, Bisharp 209/271
+
+  Turn 10
+      p2a <- Kyurem-Black comes in (391/391)
+      p1b Ferrothorn used Power Whip -> p2a: Kyurem
+      after p1: Rotom-Wash 240/304, Ferrothorn 352/352
+      after p2: Kyurem-Black 298/391, Bisharp 209/271
+
+  Turn 11
+    p1 mcts: move 3 2, move 1 1
+      search (8000 visits): willowisp,1;leechseed,0 265v 173 | willowisp,1;gyroball,0 255v 164 | hydropump,1;leechseed,0 235v 149 | willowisp,1;powerwhip,0 220v 138
+    p2 greedy: move 2 1, move 2 1
+      p2b Bisharp used Sucker Punch  [[still]]
+              p2b Bisharp -- IT FAILED
+      p2a Kyurem used Fusion Bolt -> p1a: Rotom
+              p1a Rotom used up its Sitrus Berry
+      p1a Rotom used Will-O-Wisp -> p2b: Bisharp
+              p2b Bisharp is now brn
+      p1b Ferrothorn used Leech Seed -> p2a: Kyurem
+              p2a Kyurem gained move: Leech Seed
+      after p1: Rotom-Wash 198/304, Ferrothorn 352/352
+      after p2: Kyurem-Black 250/391, Bisharp 176/271
+
+  Turn 12
+    p1 mcts: move 3 1, move 3 1
+      search (19000 visits): willowisp,0;powerwhip,0 913v 614 | hydropump,0;powerwhip,0 711v 464 | protect,0;powerwhip,0 688v 447 | hydropump,0;leechseed,0 644v 415
+    p2 greedy: move 2 1, move 2 1
+      p2b Bisharp used Sucker Punch  [[still]]
+              p2b Bisharp -- IT FAILED
+      p2a Kyurem used Fusion Bolt -> p1a: Rotom
+      p1a Rotom used Will-O-Wisp -> p2a: Kyurem
+              p2a Kyurem is now brn
+      p1b Ferrothorn used Power Whip -> p2a: Kyurem
+      after p1: Rotom-Wash 86/304, Ferrothorn 352/352
+      after p2: Kyurem-Black 66/391, Bisharp 143/271
+
+  Turn 13
+    p1 mcts: move 4, move 3 2
+      search (36000 visits): protect,0;powerwhip,1 2276v 1477 | protect,0;leechseed,1 1919v 1229 | protect,0;gyroball,1 1321v 818 | protect,0;protect,1 984v 589
+    p2 greedy: move 2 1, move 2 1
+      p1a Rotom used Protect
+      p2b Bisharp used Sucker Punch  [[still]]
+              p2b Bisharp -- IT FAILED
+      p2a Kyurem used Fusion Bolt -> p1a: Rotom
+              p1a Rotom -- move: Protect
+      p1b Ferrothorn used Power Whip -> p2b: Bisharp  [[miss]]
+              p1b Ferrothorn -- MISSED
+      p2a Kyurem fainted
+      after p1: Rotom-Wash 86/304, Ferrothorn 352/352
+      after p2: Kyurem-Black 0/391, Bisharp 110/271
+
+  Turn 14
+      p2a <- Raichu comes in (324/324)
+      after p1: Rotom-Wash 86/304, Ferrothorn 352/352
+      after p2: Raichu 324/324, Bisharp 110/271
+
+  Turn 15
+    p1 mcts: move 4, move 4
+      search (33000 visits): protect,0;protect,1 1981v 1350 | protect,0;powerwhip,1 1954v 1330 | protect,0;leechseed,1 1636v 1098 | protect,0;gyroball,1 1398v 925
+    p2 greedy: move 2 1, move 2 1
+      p1a Rotom used Protect  [[still]]
+              p1a Rotom -- IT FAILED
+      p1b Ferrothorn used Protect
+      p2b Bisharp used Sucker Punch  [[still]]
+              p2b Bisharp -- IT FAILED
+      p2a Raichu used Volt Switch -> p1a: Rotom
+      after p1: Rotom-Wash 23/304, Ferrothorn 352/352
+      after p2: Raichu 324/324, Bisharp 77/271
+
+  Turn 16
+    p1 mcts: move 4, move 3 2
+      search (37000 visits): protect,0;powerwhip,1 1847v 1297 | protect,0;leechseed,1 1567v 1086 | protect,0;protect,1 1564v 1084 | protect,0;gyroball,1 1426v 980
+    p2 greedy: move 2 1, move 2 1
+      p1a Rotom used Protect
+      p2b Bisharp used Sucker Punch  [[still]]
+              p2b Bisharp -- IT FAILED
+      p2a Raichu used Volt Switch -> p1a: Rotom
+              p1a Rotom -- move: Protect
+      p1b Ferrothorn used Power Whip -> p2b: Bisharp
+      p2b Bisharp fainted
+      after p1: Rotom-Wash 23/304, Ferrothorn 352/352
+      after p2: Raichu 324/324, Bisharp 0/271
+
+  Turn 17
+    p1 mcts: switch 6, move 3 1   (slot0 Rotom-Wash -> Diancie-Mega)
+      search (90000 visits): switch dianciemega;powerwhip,0 46206v 45160 | hydropump,0;powerwhip,0 17951v 17304 | willowisp,0;powerwhip,0 13789v 13222 | hydropump,0;leechseed,0 1369v 1192
+    p2 greedy: move 2 1, pass
+      p1a <- Diancie-Mega comes in (241/241)
+      p2a Raichu used Volt Switch -> p1a: Diancie
+      p1b Ferrothorn used Power Whip -> p2a: Raichu
+              p2a Raichu used up its Air Balloon
+      after p1: Diancie-Mega 160/241, Ferrothorn 352/352
+      after p2: Raichu 35/324, Bisharp 0/271
+
+  Turn 18
+    p1 mcts: move 2 1, move 1 1
+      search (626000 visits): moonblast,0;leechseed,0 33850v 33850 | moonblast,0;gyroball,0 33850v 33850 | moonblast,0;powerwhip,0 33850v 33850 | moonblast,0;protect,1 33850v 33850
+    p2 greedy: move 2 1, pass
+      p1a Diancie used Moonblast -> p2a: Raichu
+      p2a Raichu fainted
+      after p1: Diancie-Mega 160/241, Ferrothorn 352/352
+      after p2: Raichu 0/324, Bisharp 0/271
+
+  RESULT: p1 wins

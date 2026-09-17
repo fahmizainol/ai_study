@@ -1,0 +1,183 @@
+battle 76   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: Untitled 480: Kyurem-Black, Manectric-Mega, Volcarona, Blastoise, Landorus, Mew
+  p2: ORAS Doubles OU: Gardevoir, Azumarill, Amoonguss, Heatran, Landorus-Therian, Thundurus
+
+  Turn 1
+    p1 mcts: move 2 1, move 1 2
+      search (20000 visits): freezeshock,0;voltswitch,1 619v 475 | freezeshock,0;voltswitch,0 590v 450 | freezeshock,0;snarl,0 544v 411 | icebeam,0;voltswitch,1 433v 317
+    p2 greedy: move 1, move 3 1
+      p1b Manectric used Volt Switch -> p2b: Azumarill
+              p2b Azumarill used up its Sitrus Berry
+      after p1: Kyurem-Black 391/391, Manectric-Mega 344/344
+      after p2: Gardevoir 277/277, Azumarill 241/404
+
+  Turn 2
+      p1b <- Volcarona comes in (334/334)
+      p2a Gardevoir used Hyper Voice -> p1b: Volcarona  [[spread] p1a,p1b]
+      p1a Kyurem used Freeze Shock  [[still]]
+              p1a Kyurem used up its Power Herb
+      p2a Gardevoir fainted
+      p2b Azumarill used Knock Off -> p1a: Kyurem
+      after p1: Kyurem-Black 200/391, Volcarona 256/334
+      after p2: Gardevoir 0/277, Azumarill 241/404
+
+  Turn 3
+      p2a <- Amoonguss comes in (432/432)
+      after p1: Kyurem-Black 200/391, Volcarona 256/334
+      after p2: Amoonguss 432/432, Azumarill 241/404
+
+  Turn 4
+    p1 mcts: move 1 1, move 2
+      search (13000 visits): icebeam,0;quiverdance,1 576v 397 | icebeam,1;quiverdance,1 512v 347 | earthpower,0;quiverdance,1 426v 281 | earthpower,1;quiverdance,1 378v 244
+    p2 greedy: move 1 1, move 3 1
+      p1b Volcarona used Quiver Dance
+              p1b Volcarona spa 1 rose
+              p1b Volcarona spd 1 rose
+              p1b Volcarona spe 1 rose
+      p1a Kyurem used Ice Beam -> p2a: Amoonguss
+      p2b Azumarill used Knock Off -> p1a: Kyurem
+      p2a Amoonguss used Energy Ball -> p1a: Kyurem
+      after p1: Kyurem-Black 49/391, Volcarona 256/334
+      after p2: Amoonguss 48/432, Azumarill 241/404
+
+  Turn 5
+    p1 mcts: move 1 1, move 2
+      search (24000 visits): icebeam,0;quiverdance,1 1024v 244 | icebeam,0;heatwave,0 742v 158 | earthpower,1;quiverdance,1 545v 101 | icebeam,1;quiverdance,1 544v 101
+    p2 greedy: move 1 1, move 3 1
+      p1b Volcarona used Quiver Dance
+              p1b Volcarona spa 1 rose
+              p1b Volcarona spd 1 rose
+              p1b Volcarona spe 1 rose
+      p1a Kyurem used Ice Beam -> p2a: Amoonguss
+      p2a Amoonguss fainted
+      p2b Azumarill used Knock Off -> p1a: Kyurem
+      p1a Kyurem fainted
+      after p1: Kyurem-Black 0/391, Volcarona 256/334
+      after p2: Amoonguss 0/432, Azumarill 241/404
+
+  Turn 6
+      p1a <- Manectric-Mega comes in (344/344)
+      p2a <- Heatran comes in (323/323)
+      after p1: Manectric-Mega 344/344, Volcarona 256/334
+      after p2: Heatran 323/323, Azumarill 241/404
+
+  Turn 7
+    p1 mcts: move 1 1, move 3 2
+      search (20000 visits): voltswitch,0;gigadrain,1 1685v 1097 | voltswitch,0;heatwave,0 1049v 652 | snarl,0;gigadrain,1 789v 474 | voltswitch,0;quiverdance,1 733v 436
+    p2 greedy: move 3 2, move 3 2
+      p1b Volcarona used Giga Drain -> p2b: Azumarill
+      p2b Azumarill fainted
+      p1a Manectric used Volt Switch -> p2a: Heatran
+      after p1: Manectric-Mega 344/344, Volcarona 301/334
+      after p2: Heatran 229/323, Azumarill 0/404
+
+  Turn 8
+      p1a <- Blastoise comes in (362/362)
+      p2a Heatran used Overheat -> p1b: Volcarona
+              p2a Heatran spa 2 fell
+      after p1: Blastoise 362/362, Volcarona 187/334
+      after p2: Heatran 229/323, Azumarill 0/404
+
+  Turn 9
+      p2b <- Landorus-Therian comes in (330/330)
+              p1a Blastoise atk 1 fell
+              p1b Volcarona atk 1 fell
+      after p1: Blastoise 362/362, Volcarona 187/334
+      after p2: Heatran 229/323, Landorus-Therian 330/330
+
+  Turn 10
+    p1 mcts: switch 5, move 1   (slot0 Blastoise -> Landorus)
+      search (26000 visits): switch landorus;heatwave,0 16948v 12758 | scald,1;protect,1 401v 225 | switch landorus;protect,1 383v 213 | switch mew;heatwave,0 317v 169
+    p2 greedy: move 3 2, move 3 2
+      p1a <- Landorus comes in (319/319)
+      p1b Volcarona used Heat Wave -> p2b: Landorus  [[spread] p2b]
+              p2a Heatran gained ability: Flash Fire
+      p2b Landorus fainted
+      p2a Heatran used Overheat -> p1b: Volcarona
+              p2a Heatran spa 2 fell
+      after p1: Landorus 319/319, Volcarona 66/334
+      after p2: Heatran 229/323, Landorus-Therian 0/330
+
+  Turn 11
+      p2b <- Thundurus comes in (299/299)
+      after p1: Landorus 319/319, Volcarona 66/334
+      after p2: Heatran 229/323, Thundurus 299/299
+
+  Turn 12
+    p1 mcts: switch 4, move 2   (slot0 Landorus -> Manectric-Mega)
+      search (25000 visits): switch manectricmega;quiverdance,1 1178v 659 | earthpower,0;heatwave,0 1107v 615 | sludgebomb,1;gigadrain,1 946v 515 | switch manectricmega;heatwave,0 918v 498
+    p2 greedy: move 3 2, move 1 2
+      p1a <- Manectric-Mega comes in (344/344)
+      p1b Volcarona used Quiver Dance
+              p1b Volcarona spa 1 rose
+              p1b Volcarona spd 1 rose
+              p1b Volcarona spe 1 rose
+      p2b Thundurus used Thunderbolt -> p1a: Manectric
+              p1a Manectric -- ability: Lightning Rod
+              p1a Manectric spa 1 rose
+      p2a Heatran used Overheat -> p1b: Volcarona
+              p2a Heatran spa 2 fell
+      after p1: Manectric-Mega 344/344, Volcarona 17/334
+      after p2: Heatran 229/323, Thundurus 299/299
+
+  Turn 13
+    p1 mcts: move 3, move 4
+      search (28000 visits): snarl,0;protect,1 3532v 2108 | snarl,0;gigadrain,0 1889v 1074 | voltswitch,0;heatwave,0 1810v 1025 | voltswitch,1;gigadrain,0 1154v 623
+    p2 greedy: move 3 2, move 1 2
+      p1b Volcarona used Protect
+      p1a Manectric used Snarl -> p2a: Heatran  [[spread] p2a,p2b]
+              p2b Thundurus spa 1 fell
+      p2b Thundurus used Thunderbolt -> p1a: Manectric
+              p1a Manectric -- ability: Lightning Rod
+              p1a Manectric spa 1 rose
+      p2a Heatran used Overheat -> p1b: Volcarona
+              p1b Volcarona -- move: Protect
+      after p1: Manectric-Mega 344/344, Volcarona 17/334
+      after p2: Heatran 165/323, Thundurus 227/299
+
+  Turn 14
+    p1 mcts: move 3, move 3 1
+      search (28000 visits): snarl,0;gigadrain,0 4471v 2561 | snarl,0;protect,1 3007v 1677 | voltswitch,1;gigadrain,0 1740v 925 | hiddenpower,1;protect,1 1156v 586
+    p2 greedy: move 3 2, move 1 2
+      p1b Volcarona used Giga Drain -> p2a: Heatran
+      p1a Manectric used Snarl -> p2b: Thundurus  [[spread] p2a,p2b]
+              p2b Thundurus spa 1 fell
+      p2b Thundurus used Thunderbolt -> p1a: Manectric
+              p1a Manectric -- ability: Lightning Rod
+              p1a Manectric spa 1 rose
+      p2a Heatran used Overheat -> p1b: Volcarona
+      p1b Volcarona fainted
+      after p1: Manectric-Mega 344/344, Volcarona 0/334
+      after p2: Heatran 26/323, Thundurus 120/299
+
+  Turn 15
+      p1b <- Landorus comes in (319/319)
+      after p1: Manectric-Mega 344/344, Landorus 319/319
+      after p2: Heatran 26/323, Thundurus 120/299
+
+  Turn 16
+    p1 mcts: move 4, move 3 2
+      search (40000 visits): protect,0;sludgebomb,1 16734v 12109 | protect,0;psychic,1 2920v 1830 | hiddenpower,1;earthpower,1 928v 522 | hiddenpower,1;sludgebomb,0 883v 493
+    p2 greedy: move 3 1, move 1 1
+      p1a Manectric used Protect
+      p2b Thundurus used Thunderbolt -> p1a: Manectric
+              p1a Manectric -- move: Protect
+      p1b Landorus used Sludge Bomb -> p2b: Thundurus
+      p2b Thundurus fainted
+      p2a Heatran used Overheat -> p1a: Manectric
+              p1a Manectric -- move: Protect
+      after p1: Manectric-Mega 344/344, Landorus 319/319
+      after p2: Heatran 26/323, Thundurus 0/299
+
+  Turn 17
+    p1 mcts: move 4, move 1 1
+      search (188000 visits): protect,0;earthpower,0 9682v 9490 | protect,0;psychic,0 9669v 9477 | snarl,0;psychic,0 9638v 9446 | voltswitch,0;protect,1 9625v 9432
+    p2 greedy: move 3 1, pass
+      p1a Manectric used Protect  [[still]]
+              p1a Manectric -- IT FAILED
+      p1b Landorus used Earth Power -> p2a: Heatran
+      p2a Heatran fainted
+      after p1: Manectric-Mega 344/344, Landorus 319/319
+      after p2: Heatran 0/323, Thundurus 0/299
+
+  RESULT: p1 wins

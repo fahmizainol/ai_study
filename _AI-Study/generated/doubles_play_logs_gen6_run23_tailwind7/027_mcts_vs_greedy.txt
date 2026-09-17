@@ -1,0 +1,172 @@
+battle 27   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: Untitled 485: Manectric-Mega, Snorlax, Gothitelle, Genesect, Landorus, Volcanion
+  p2: Oh Nah: Charizard-Mega-Y, Landorus-Therian, Latios, Deoxys-Attack, Bisharp, Raichu
+
+  Turn 1
+    p1 mcts: move 1 1, move 2 2
+      search (22000 visits): voltswitch,0;return,1 1074v 727 | voltswitch,0;bellydrum,1 1037v 700 | voltswitch,0;switch genesect 980v 658 | voltswitch,0;return,0 971v 651
+    p2 greedy: move 2 1, move 1 1
+      p1a Manectric used Volt Switch -> p2a: Charizard
+      after p1: Manectric-Mega 329/329, Snorlax 480/480
+      after p2: Charizard-Mega-Y 97/297, Landorus-Therian 319/319
+
+  Turn 2
+      p1a <- Gothitelle comes in (344/344)
+      p2a Charizard used Overheat -> p1a: Gothitelle
+              p1a Gothitelle -- critical hit
+              p2a Charizard spa 2 fell
+      p1a Gothitelle fainted
+      p2b Landorus used Superpower -> p1b: Snorlax
+              p1b Snorlax -- critical hit
+              p2b Landorus atk 1 fell
+              p2b Landorus def 1 fell
+      p1b Snorlax fainted
+      after p1: Gothitelle 0/344, Snorlax 0/480
+      after p2: Charizard-Mega-Y 97/297, Landorus-Therian 319/319
+
+  Turn 3
+      p1a <- Manectric-Mega comes in (329/329)
+      p1b <- Genesect comes in (283/283)
+              p1b Genesect atk 1 rose
+      after p1: Manectric-Mega 329/329, Genesect 283/283
+      after p2: Charizard-Mega-Y 97/297, Landorus-Therian 319/319
+
+  Turn 4
+    p1 mcts: move 4, move 1 2
+      search (29000 visits): snarl,0;uturn,1 1566v 953 | hiddenpower,0;uturn,1 1417v 853 | voltswitch,1;uturn,1 1103v 647 | hiddenpower,1;uturn,1 1096v 642
+    p2 greedy: move 2 1, move 1 1
+      p1b Genesect used U-turn -> p2b: Landorus
+              p2b Landorus -- critical hit
+      after p1: Manectric-Mega 329/329, Genesect 283/283
+      after p2: Charizard-Mega-Y 97/297, Landorus-Therian 101/319
+
+  Turn 5
+      p1b <- Landorus comes in (382/382)
+      p1a Manectric used Snarl -> p2b: Landorus  [[spread] p2a]
+              p1a Manectric -- MISSED
+              p2a Charizard spa 1 fell
+      p2a Charizard used Overheat -> p1a: Manectric
+              p2a Charizard spa 2 fell
+      p2b Landorus used Superpower -> p1a: Manectric
+              p2b Landorus atk 1 fell
+              p2b Landorus def 1 fell
+      p1a Manectric fainted
+      after p1: Manectric-Mega 0/329, Landorus 382/382
+      after p2: Charizard-Mega-Y 59/297, Landorus-Therian 101/319
+
+  Turn 6
+      p1a <- Genesect comes in (283/283)
+              p1a Genesect atk 1 rose
+      after p1: Genesect 283/283, Landorus 382/382
+      after p2: Charizard-Mega-Y 59/297, Landorus-Therian 101/319
+
+  Turn 7
+    p1 mcts: move 1 2, move 1
+      search (23000 visits): uturn,1;calmmind,1 4911v 2479 | uturn,1;earthpower,0 1084v 469 | uturn,0;earthpower,1 981v 418 | ironhead,0;earthpower,1 745v 301
+    p2 greedy: move 2 1, move 1 1
+      p1a Genesect used U-turn -> p2b: Landorus
+      p2b Landorus fainted
+      after p1: Genesect 283/283, Landorus 382/382
+      after p2: Charizard-Mega-Y 59/297, Landorus-Therian 0/319
+
+  Turn 8
+      p1a <- Volcanion comes in (364/364)
+      p2a Charizard used Overheat -> p1a: Volcanion
+              p2a Charizard spa 1 fell
+      p1b Landorus used Calm Mind
+              p1b Landorus spa 1 rose
+              p1b Landorus spd 1 rose
+      after p1: Volcanion 343/364, Landorus 382/382
+      after p2: Charizard-Mega-Y 59/297, Landorus-Therian 0/319
+
+  Turn 9
+      p2b <- Latios comes in (360/360)
+      after p1: Volcanion 343/364, Landorus 382/382
+      after p2: Charizard-Mega-Y 59/297, Latios 360/360
+
+  Turn 10
+    p1 mcts: move 2, move 1
+      search (11000 visits): heatwave,0;calmmind,1 921v 551 | heatwave,0;psychic,1 459v 247 | heatwave,0;earthpower,0 395v 207 | steameruption,1;calmmind,1 386v 201
+    p2 greedy: move 2 1, move 1 1
+      p2b Latios used Draco Meteor -> p1a: Volcanion
+              p1a Volcanion -- critical hit
+              p2b Latios spa 2 fell
+      p2a Charizard used Overheat -> p1a: Volcanion
+      p1b Landorus used Calm Mind
+              p1b Landorus spa 1 rose
+              p1b Landorus spd 1 rose
+      p1a Volcanion used Heat Wave -> p2b: Latios  [[spread] p2a,p2b]
+              p2b Latios is now brn
+      p2a Charizard fainted
+      after p1: Volcanion 142/364, Landorus 382/382
+      after p2: Charizard-Mega-Y 0/297, Latios 228/360
+
+  Turn 11
+      p2a <- Deoxys-Attack comes in (241/241)
+      after p1: Volcanion 142/364, Landorus 382/382
+      after p2: Deoxys-Attack 241/241, Latios 228/360
+
+  Turn 12
+    p1 mcts: move 2, move 1
+      search (23000 visits): heatwave,0;calmmind,1 1212v 924 | heatwave,0;earthpower,0 1115v 843 | heatwave,0;psychic,1 1069v 806 | heatwave,0;psychic,0 1049v 789
+    p2 greedy: move 1 1, move 1 1
+      p2a Deoxys used Psycho Boost -> p1a: Volcanion
+              p2a Deoxys spa 2 fell
+      p1a Volcanion fainted
+      p2b Latios used Draco Meteor -> p1b: Landorus
+              p2b Latios spa 2 fell
+      p1b Landorus used Calm Mind
+              p1b Landorus spa 1 rose
+              p1b Landorus spd 1 rose
+      after p1: Volcanion 0/364, Landorus 319/382
+      after p2: Deoxys-Attack 217/241, Latios 183/360
+
+  Turn 13
+      p1a <- Genesect comes in (283/283)
+              p1a Genesect atk 1 rose
+      after p1: Genesect 283/283, Landorus 319/382
+      after p2: Deoxys-Attack 217/241, Latios 183/360
+
+  Turn 14
+    p1 mcts: move 1 2, move 2 1
+      search (43000 visits): uturn,1;earthpower,0 16400v 11402 | uturn,0;earthpower,1 2942v 1899 | uturn,1;psychic,0 2608v 1670 | uturn,0;calmmind,1 1445v 880
+    p2 greedy: move 1 2, move 1 2
+      p1a Genesect used U-turn -> p2b: Latios
+      p2b Latios fainted
+      p2a Deoxys used Psycho Boost -> p1b: Landorus
+              p2a Deoxys spa 2 fell
+      p1b Landorus used Earth Power -> p2a: Deoxys
+      p2a Deoxys fainted
+      after p1: Genesect 283/283, Landorus 237/382
+      after p2: Deoxys-Attack 0/241, Latios 0/360
+
+  Turn 15
+      p2a <- Bisharp comes in (272/272)
+      p2b <- Raichu comes in (262/262)
+      after p1: Genesect 283/283, Landorus 237/382
+      after p2: Bisharp 272/272, Raichu 262/262
+
+  Turn 16
+    p1 mcts: move 1 2, move 4
+      search (122000 visits): uturn,1;protect,1 64234v 55466 | uturn,1;earthpower,0 41842v 35939 | uturn,1;earthpower,1 3337v 2666 | uturn,1;calmmind,1 3286v 2623
+    p2 greedy: move 2 2, move 4 2
+      p1b Landorus used Protect
+      p2a Bisharp used Sucker Punch  [[still]]
+              p2a Bisharp -- IT FAILED
+      p1a Genesect used U-turn -> p2b: Raichu
+      p2b Raichu fainted
+      after p1: Genesect 283/283, Landorus 237/382
+      after p2: Bisharp 272/272, Raichu 0/262
+
+  Turn 17
+    p1 mcts: move 1 1, move 2 1
+      search (872000 visits): uturn,0;earthpower,0 684535v 658645 | uturn,0;calmmind,1 76546v 72686 | uturn,0;protect,1 55870v 52873 | uturn,0;psychic,0 55049v 52087
+    p2 greedy: move 2 2, pass
+      p2a Bisharp used Sucker Punch -> p1b: Landorus
+      p1a Genesect used U-turn -> p2a: Bisharp
+      p1b Landorus used Earth Power -> p2a: Bisharp
+      p2a Bisharp fainted
+      after p1: Genesect 283/283, Landorus 45/382
+      after p2: Bisharp 0/272, Raichu 0/262
+
+  RESULT: p1 wins

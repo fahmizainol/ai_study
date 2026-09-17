@@ -1,0 +1,111 @@
+battle 7   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: ORAS Doubles OU: Deoxys-Attack, Diancie-Mega, Keldeo, Weavile, Salamence, Aegislash
+  p2: XY Doubles: Breloom, Gengar, Landorus-Therian, Rotom-Wash, Bisharp, Talonflame
+
+  Turn 1
+    p1 mcts: move 1 2, move 2 1
+      search (18000 visits): psychoboost,1;moonblast,0 1585v 1266 | switch salamence;diamondstorm,0 916v 699 | extremespeed,0;diamondstorm,0 709v 527 | switch salamence;moonblast,0 499v 355
+    p2 greedy: move 3 1, move 2
+      p1a Deoxys used Psycho Boost -> p2b: Gengar
+              p1a Deoxys spa 2 fell
+      p2b Gengar fainted
+      p1b Diancie used Moonblast -> p2a: Breloom
+      p2a Breloom fainted
+      after p1: Deoxys-Attack 241/241, Diancie-Mega 241/241
+      after p2: Breloom 0/262, Gengar 0/262
+
+  Turn 2
+      p2b <- Rotom-Wash comes in (304/304)
+      p2a <- Landorus-Therian comes in (320/320)
+              p1a Deoxys atk 1 fell
+              p1b Diancie -- IT FAILED
+      after p1: Deoxys-Attack 241/241, Diancie-Mega 241/241
+      after p2: Landorus-Therian 320/320, Rotom-Wash 304/304
+
+  Turn 3
+    p1 mcts: switch 5, move 1   (slot0 Deoxys-Attack -> Salamence)
+      search (19000 visits): switch salamence;diamondstorm,0 1752v 1300 | switch salamence;protect,1 1675v 1239 | switch salamence;moonblast,0 960v 677 | switch salamence;moonblast,1 724v 494
+    p2 greedy: move 3 1, move 1 1
+      p1a <- Salamence comes in (331/331)
+              p2a Landorus atk 1 fell
+              p2b Rotom atk 1 fell
+      p2a Landorus used Superpower -> p1a: Salamence
+              p2a Landorus atk 1 fell
+              p2a Landorus def 1 fell
+      p1b Diancie used Diamond Storm -> p2a: Landorus  [[spread] p2a,p2b]
+      p2b Rotom used Hydro Pump -> p1a: Salamence  [[miss]]
+              p2b Rotom -- MISSED
+      after p1: Salamence 273/331, Diancie-Mega 241/241
+      after p2: Landorus-Therian 59/320, Rotom-Wash 168/304
+
+  Turn 4
+    p1 mcts: move 4, move 1
+      search (20000 visits): tailwind,0;diamondstorm,0 1421v 793 | fireblast,1;diamondstorm,0 552v 269 | tailwind,0;moonblast,1 517v 249 | dracometeor,1;diamondstorm,0 516v 248
+    p2 greedy: move 3 1, move 1 1
+      p2a Landorus used Superpower -> p1a: Salamence
+              p2a Landorus atk 1 fell
+              p2a Landorus def 1 fell
+      p1b Diancie used Diamond Storm -> p2b: Rotom  [[spread] p2a,p2b]
+              p1b Diancie def 1 rose
+              p2b Rotom used up its Sitrus Berry
+      p2a Landorus fainted
+      p1a Salamence used Tailwind
+      -sidestart p1: A move: Tailwind
+      p2b Rotom used Hydro Pump -> p1a: Salamence
+      after p1: Salamence 140/331, Diancie-Mega 241/241
+      after p2: Landorus-Therian 0/320, Rotom-Wash 108/304
+
+  Turn 5
+      p2a <- Bisharp comes in (272/272)
+      after p1: Salamence 140/331, Diancie-Mega 241/241
+      after p2: Bisharp 272/272, Rotom-Wash 108/304
+
+  Turn 6
+    p1 mcts: move 2 1, move 1
+      search (27000 visits): fireblast,0;diamondstorm,0 6726v 4380 | dracometeor,0;diamondstorm,0 1190v 684 | switch keldeo;diamondstorm,0 898v 499 | fireblast,0;protect,1 673v 358
+    p2 greedy: move 2 1, move 1 1
+      p2a Bisharp used Sucker Punch -> p1a: Salamence
+      p1a Salamence fainted
+      p1b Diancie used Diamond Storm -> p2b: Rotom  [[spread] p2a,p2b]
+              p1b Diancie def 1 rose
+      p2b Rotom fainted
+      after p1: Salamence 0/331, Diancie-Mega 241/241
+      after p2: Bisharp 196/272, Rotom-Wash 0/304
+
+  Turn 7
+      p1a <- Keldeo comes in (324/324)
+      p2b <- Talonflame comes in (318/318)
+      after p1: Keldeo 324/324, Diancie-Mega 241/241
+      after p2: Bisharp 196/272, Talonflame 318/318
+
+  Turn 8
+    p1 mcts: move 2 1, move 1
+      search (30000 visits): secretsword,0;diamondstorm,0 1430v 929 | hydropump,0;diamondstorm,0 1266v 813 | hydropump,1;earthpower,0 1207v 771 | hydropump,1;moonblast,0 1156v 735
+    p2 greedy: move 2 1, move 1 1
+      p2b Talonflame used Brave Bird -> p1a: Keldeo
+      p1a Keldeo fainted
+      p2a Bisharp used Sucker Punch -> p1b: Diancie
+      p1b Diancie used Diamond Storm -> p2a: Bisharp  [[spread] p2a,p2b]
+              p2b Talonflame -- critical hit
+              p1b Diancie def 1 rose
+      p2b Talonflame fainted
+      after p1: Keldeo 0/324, Diancie-Mega 210/241
+      after p2: Bisharp 118/272, Talonflame 0/318
+
+  Turn 9
+      p1a <- Weavile comes in (282/282)
+      after p1: Weavile 282/282, Diancie-Mega 210/241
+      after p2: Bisharp 118/272, Talonflame 0/318
+
+  Turn 10
+    p1 mcts: switch 5, move 3 1   (slot0 Weavile -> Deoxys-Attack)
+      search (106000 visits): switch deoxysattack;earthpower,0 12244v 11405 | switch deoxysattack;moonblast,0 10018v 9264 | iciclecrash,0;earthpower,0 8998v 8296 | iceshard,0;earthpower,0 8974v 8274
+    p2 greedy: move 2 2, pass
+      p1a <- Deoxys-Attack comes in (241/241)
+      p2a Bisharp used Sucker Punch -> p1b: Diancie
+      p1b Diancie used Earth Power -> p2a: Bisharp
+      p2a Bisharp fainted
+      after p1: Deoxys-Attack 241/241, Diancie-Mega 186/241
+      after p2: Bisharp 0/272, Talonflame 0/318
+
+  RESULT: p1 wins

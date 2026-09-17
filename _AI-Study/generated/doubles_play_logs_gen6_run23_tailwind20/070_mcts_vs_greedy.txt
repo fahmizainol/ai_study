@@ -1,0 +1,203 @@
+battle 70   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: ORAS Doubles OU: Kangaskhan-Mega, Jirachi, Hydreigon, Sylveon, Talonflame, Rotom-Wash
+  p2: Copy of Untitled 579: Kangaskhan-Mega, Amoonguss, Kyurem-Black, Volcanion, Landorus-Therian, Gengar
+
+  Turn 1
+    p1 mcts: move 1 2, move 4
+      search (61000 visits): suckerpunch,1;icywind,0 13796v 12509 | switch rotomwash;icywind,0 726v 67 | fakeout,0;icywind,0 611v 47 | switch sylveon;icywind,0 610v 46
+    p2 greedy: move 1, move 1 1
+      p1a Kangaskhan used Sucker Punch -> p2b: Amoonguss
+      p2a Kangaskhan used Substitute
+              p2a Kangaskhan gained Substitute
+      p1b Jirachi used Icy Wind -> p2b: Amoonguss  [[spread] p2a,p2b]
+              p2a Kangaskhan -- move: Substitute
+              p2b Amoonguss spe 1 fell
+      p2b Amoonguss used Sludge Bomb -> p1a: Kangaskhan
+              p1a Kangaskhan is now psn
+      after p1: Kangaskhan-Mega 166/352, Jirachi 403/403
+      after p2: Kangaskhan-Mega 311/414, Amoonguss 264/432
+
+  Turn 2
+    p1 mcts: switch 6, move 4   (slot0 Kangaskhan-Mega -> Rotom-Wash)
+      search (57000 visits): switch rotomwash;icywind,0 896v 73 | switch sylveon;icywind,0 705v 44 | frustration,0;icywind,0 696v 42 | poweruppunch,1;icywind,0 695v 42
+    p2 greedy: move 1, move 1 1
+      p1a <- Rotom-Wash comes in (304/304)
+      p2a Kangaskhan used Substitute
+              p2a Kangaskhan -- IT FAILED
+      p1b Jirachi used Icy Wind -> p2b: Amoonguss  [[spread] p2a,p2b]
+              p2a Kangaskhan -- move: Substitute
+              p2b Amoonguss spe 1 fell
+      p2b Amoonguss used Sludge Bomb -> p1a: Rotom
+      after p1: Rotom-Wash 219/304, Jirachi 403/403
+      after p2: Kangaskhan-Mega 311/414, Amoonguss 202/432
+
+  Turn 3
+    p1 mcts: switch 3, switch 4   (slot0 Rotom-Wash -> Hydreigon; slot1 Jirachi -> Sylveon)
+      search (60000 visits): switch hydreigon;switch sylveon 24055v 22657 | thunderbolt,0;icywind,0 661v 72 | hydropump,0;icywind,0 596v 59 | hydropump,1;icywind,0 589v 58
+    p2 greedy: move 1, move 1 1
+      p1b <- Sylveon comes in (394/394)
+      p1a <- Hydreigon comes in (326/326)
+      p2a Kangaskhan used Substitute
+              p2a Kangaskhan -- IT FAILED
+      p2b Amoonguss used Sludge Bomb -> p1a: Hydreigon
+      after p1: Hydreigon 229/326, Sylveon 394/394
+      after p2: Kangaskhan-Mega 311/414, Amoonguss 202/432
+
+  Turn 4
+    p1 mcts: switch 3, move 2   (slot0 Hydreigon -> Rotom-Wash)
+      search (53000 visits): switch rotomwash;hypervoice,0 1381v 151 | switch rotomwash;calmmind,1 1187v 118 | switch jirachi;hypervoice,0 869v 67 | switch kangaskhanmega;hypervoice,0 863v 66
+    p2 greedy: move 1, move 1 1
+      p1a <- Rotom-Wash comes in (219/304)
+      p2a Kangaskhan used Substitute
+              p2a Kangaskhan -- IT FAILED
+      p1b Sylveon used Hyper Voice -> p2a: Kangaskhan  [[spread] p2a,p2b]
+      p2b Amoonguss used Sludge Bomb -> p1a: Rotom
+              p1a Rotom used up its Sitrus Berry
+      after p1: Rotom-Wash 217/304, Sylveon 394/394
+      after p2: Kangaskhan-Mega 164/414, Amoonguss 109/432
+
+  Turn 5
+    p1 mcts: switch 4, move 2   (slot0 Rotom-Wash -> Jirachi)
+      search (64000 visits): switch jirachi;hypervoice,0 961v 62 | willowisp,1;hypervoice,0 933v 58 | thunderbolt,0;hypervoice,0 932v 58 | thunderbolt,1;hypervoice,0 931v 58
+    p2 greedy: move 1, move 1 1
+      p1a <- Jirachi comes in (403/403)
+      p2a Kangaskhan used Substitute
+              p2a Kangaskhan -- IT FAILED
+      p1b Sylveon used Hyper Voice -> p2a: Kangaskhan  [[spread] p2a,p2b]
+      p2b Amoonguss used Sludge Bomb -> p1a: Jirachi
+              p1a Jirachi -- IMMUNE
+      after p1: Jirachi 403/403, Sylveon 394/394
+      after p2: Kangaskhan-Mega 25/414, Amoonguss 16/432
+
+  Turn 6
+    p1 mcts: switch 6, move 2   (slot0 Jirachi -> Kangaskhan-Mega)
+      search (58000 visits): switch kangaskhanmega;hypervoice,0 952v 45 | ironhead,1;calmmind,1 946v 44 | protect,0;hypervoice,0 944v 44 | switch rotomwash;hypervoice,0 940v 43
+    p2 greedy: move 1, move 1 1
+      p1a <- Kangaskhan-Mega comes in (166/352)
+      p2a Kangaskhan used Substitute
+              p2a Kangaskhan -- IT FAILED
+      p1b Sylveon used Hyper Voice -> p2b: Amoonguss  [[spread] p2a,p2b]
+      p2a Kangaskhan fainted
+      p2b Amoonguss fainted
+      after p1: Kangaskhan-Mega 122/352, Sylveon 394/394
+      after p2: Kangaskhan-Mega 0/414, Amoonguss 0/432
+
+  Turn 7
+      p2a <- Kyurem-Black comes in (418/418)
+      p2b <- Volcanion comes in (364/364)
+      after p1: Kangaskhan-Mega 122/352, Sylveon 394/394
+      after p2: Kyurem-Black 418/418, Volcanion 364/364
+
+  Turn 8
+    p1 mcts: switch 3, move 2   (slot0 Kangaskhan-Mega -> Hydreigon)
+      search (19000 visits): switch hydreigon;hypervoice,0 2051v 1402 | switch talonflame;hypervoice,0 1032v 664 | fakeout,1;hypervoice,0 932v 593 | poweruppunch,0;hypervoice,0 657v 400
+    p2 greedy: move 2 1, move 3 1
+      p1a <- Hydreigon comes in (229/326)
+      p2a Kyurem used Ice Beam -> p1a: Hydreigon
+      p1a Hydreigon fainted
+      p2b Volcanion used Overheat -> p1b: Sylveon
+              p2b Volcanion spa 2 fell
+      p1b Sylveon used Hyper Voice -> p2b: Volcanion  [[spread] p2a,p2b]
+      p2a Kyurem fainted
+      after p1: Hydreigon 0/326, Sylveon 204/394
+      after p2: Kyurem-Black 0/418, Volcanion 304/364
+
+  Turn 9
+      p1a <- Kangaskhan-Mega comes in (122/352)
+      p2a <- Landorus-Therian comes in (338/338)
+              p1a Kangaskhan atk 1 fell
+              p1b Sylveon atk 1 fell
+      after p1: Kangaskhan-Mega 122/352, Sylveon 204/394
+      after p2: Landorus-Therian 338/338, Volcanion 304/364
+
+  Turn 10
+    p1 mcts: switch 4, move 3   (slot0 Kangaskhan-Mega -> Rotom-Wash)
+      search (23000 visits): switch rotomwash;protect,1 930v 489 | switch rotomwash;hypervoice,0 748v 381 | switch talonflame;switch rotomwash 615v 303 | switch rotomwash;calmmind,1 593v 290
+    p2 greedy: move 4 1, move 3 1
+      p1a <- Rotom-Wash comes in (217/304)
+      p1b Sylveon used Protect
+      p2a Landorus used Superpower -> p1a: Rotom
+              p2a Landorus atk 1 fell
+              p2a Landorus def 1 fell
+      p2b Volcanion used Overheat -> p1a: Rotom
+              p2b Volcanion spa 2 fell
+      after p1: Rotom-Wash 18/304, Sylveon 204/394
+      after p2: Landorus-Therian 338/338, Volcanion 304/364
+
+  Turn 11
+    p1 mcts: move 4, move 2
+      search (26000 visits): protect,0;hypervoice,0 855v 497 | hydropump,0;hypervoice,0 756v 432 | thunderbolt,1;psyshock,0 699v 394 | switch talonflame;hypervoice,0 667v 374
+    p2 greedy: move 4 1, move 3 1
+      p1a Rotom used Protect
+      p2a Landorus used Superpower -> p1a: Rotom
+              p1a Rotom -- move: Protect
+      p2b Volcanion used Overheat -> p1a: Rotom
+              p1a Rotom -- move: Protect
+      p1b Sylveon used Hyper Voice -> p2a: Landorus  [[spread] p2a,p2b]
+              p2b Volcanion -- critical hit
+      after p1: Rotom-Wash 18/304, Sylveon 204/394
+      after p2: Landorus-Therian 119/338, Volcanion 205/364
+
+  Turn 12
+    p1 mcts: move 4, move 4 2
+      search (25000 visits): protect,0;psyshock,1 1063v 554 | protect,0;hypervoice,0 964v 495 | hydropump,0;psyshock,1 749v 370 | thunderbolt,0;psyshock,1 688v 335
+    p2 greedy: move 4 1, move 3 1
+      p1a Rotom used Protect
+      p2a Landorus used Superpower -> p1a: Rotom
+              p1a Rotom -- move: Protect
+      p2b Volcanion used Overheat -> p1a: Rotom
+              p1a Rotom -- move: Protect
+      p1b Sylveon used Psyshock -> p2b: Volcanion
+      after p1: Rotom-Wash 18/304, Sylveon 204/394
+      after p2: Landorus-Therian 119/338, Volcanion 131/364
+
+  Turn 13
+    p1 mcts: move 4, move 2
+      search (25000 visits): protect,0;hypervoice,0 1024v 540 | protect,0;psyshock,1 928v 483 | hydropump,0;psyshock,1 670v 331 | willowisp,0;psyshock,1 649v 319
+    p2 greedy: move 4 1, move 3 1
+      p1a Rotom used Protect  [[still]]
+              p1a Rotom -- IT FAILED
+      p2a Landorus used Superpower -> p1a: Rotom
+              p2a Landorus atk 1 fell
+              p2a Landorus def 1 fell
+      p1a Rotom fainted
+      p2b Volcanion used Overheat -> p1b: Sylveon
+              p2b Volcanion spa 2 fell
+      p1b Sylveon used Hyper Voice -> p2b: Volcanion  [[spread] p2a,p2b]
+              p2a Landorus -- critical hit
+      p2a Landorus fainted
+      after p1: Rotom-Wash 0/304, Sylveon 140/394
+      after p2: Landorus-Therian 0/338, Volcanion 71/364
+
+  Turn 14
+      p2a <- Gengar comes in (261/261)
+      p1a <- Kangaskhan-Mega comes in (122/352)
+      after p1: Kangaskhan-Mega 122/352, Sylveon 140/394
+      after p2: Gengar 261/261, Volcanion 71/364
+
+  Turn 15
+    p1 mcts: move 3 2, move 4 1
+      search (23000 visits): fakeout,1;psyshock,0 3864v 2769 | suckerpunch,0;psyshock,0 2574v 1803 | suckerpunch,0;hypervoice,0 1595v 1079 | suckerpunch,1;psyshock,0 1032v 670
+    p2 greedy: move 4 1, move 3 1
+      p1a Kangaskhan used Fake Out -> p2b: Volcanion
+      p2a Gengar used Shadow Ball -> p1a: Kangaskhan
+              p1a Kangaskhan -- IMMUNE
+              p2b Volcanion COULD NOT MOVE (flinch)
+      p1b Sylveon used Psyshock -> p2a: Gengar
+      after p1: Kangaskhan-Mega 78/352, Sylveon 140/394
+      after p2: Gengar 1/261, Volcanion 17/364
+
+  Turn 16
+    p1 mcts: move 1 2, move 2
+      search (289000 visits): suckerpunch,1;hypervoice,0 56127v 55762 | poweruppunch,1;psyshock,0 55879v 55513 | poweruppunch,1;hypervoice,0 55254v 54887 | suckerpunch,1;psyshock,0 55130v 54762
+    p2 greedy: move 4 1, move 3 1
+      p1a Kangaskhan used Sucker Punch -> p2b: Volcanion
+      p2b Volcanion fainted
+      p2a Gengar used Shadow Ball -> p1a: Kangaskhan
+              p1a Kangaskhan -- IMMUNE
+      p1b Sylveon used Hyper Voice -> p2a: Gengar
+      p2a Gengar fainted
+      after p1: Kangaskhan-Mega 78/352, Sylveon 140/394
+      after p2: Gengar 0/261, Volcanion 0/364
+
+  RESULT: p1 wins

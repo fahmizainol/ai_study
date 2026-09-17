@@ -1,0 +1,143 @@
+battle 42   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: DPL vs SMB: Kangaskhan-Mega, Conkeldurr, Thundurus, Deoxys-Speed, Volcanion, Bisharp
+  p2: dpl rejects/diancie jelli week 1 reject: Gengar-Mega, Tyranitar, Jellicent, Landorus-Therian, Kyurem-Black, Diancie
+
+  Turn 1
+    p1 mcts: move 3 2, move 2 1
+      search (19000 visits): lowkick,1;knockoff,0 563v 517 | lowkick,1;drainpunch,1 552v 506 | fakeout,0;drainpunch,1 551v 505 | helpinghand,1;drainpunch,1 549v 503
+    p2 greedy: move 2 1, move 2 1
+      p2a Gengar used Sludge Bomb -> p1a: Kangaskhan
+      p1a Kangaskhan used Low Kick -> p2b: Tyranitar
+      p2b Tyranitar fainted
+      p1b Conkeldurr used Knock Off -> p2a: Gengar
+      after p1: Kangaskhan-Mega 184/414, Conkeldurr 389/414
+      after p2: Gengar-Mega 49/261, Tyranitar 0/404
+
+  Turn 2
+      p2b <- Jellicent comes in (404/404)
+      after p1: Kangaskhan-Mega 184/414, Conkeldurr 389/414
+      after p2: Gengar-Mega 49/261, Jellicent 404/404
+
+  Turn 3
+    p1 mcts: move 4 -2, move 2 2
+      search (27000 visits): helpinghand,1;knockoff,1 1072v 868 | lowkick,0;knockoff,1 910v 726 | fakeout,0;knockoff,1 776v 610 | lowkick,1;knockoff,1 760v 595
+    p2 greedy: move 2 1, move 2 1
+      p1a Kangaskhan used Helping Hand -> p1b: Conkeldurr
+      p2a Gengar used Sludge Bomb -> p1a: Kangaskhan
+      p1b Conkeldurr used Knock Off -> p2b: Jellicent
+              p2b Jellicent used up its Safety Goggles
+      p2b Jellicent used Shadow Ball -> p1a: Kangaskhan
+              p1a Kangaskhan -- IMMUNE
+      p1a Kangaskhan fainted
+      after p1: Kangaskhan-Mega 0/414, Conkeldurr 364/414
+      after p2: Gengar-Mega 33/261, Jellicent 67/404
+
+  Turn 4
+      p1a <- Thundurus comes in (361/361)
+      after p1: Thundurus 361/361, Conkeldurr 364/414
+      after p2: Gengar-Mega 33/261, Jellicent 67/404
+
+  Turn 5
+    p1 mcts: move 1 2, move 3 1
+      search (22000 visits): thunderbolt,1;icepunch,0 1158v 487 | thunderwave,0;knockoff,1 1005v 413 | thunderbolt,1;knockoff,0 709v 272 | thunderbolt,0;knockoff,1 629v 235
+    p2 greedy: move 2 2, move 2 2
+      p2a Gengar used Sludge Bomb -> p1b: Conkeldurr
+      p1a Thundurus used Thunderbolt -> p2b: Jellicent
+      p2b Jellicent fainted
+      p1b Conkeldurr used Ice Punch -> p2a: Gengar
+      p2a Gengar fainted
+      after p1: Thundurus 339/361, Conkeldurr 189/414
+      after p2: Gengar-Mega 0/261, Jellicent 0/404
+
+  Turn 6
+      p2a <- Landorus-Therian comes in (350/350)
+      p2b <- Kyurem-Black comes in (391/391)
+              p1a Thundurus atk 1 fell
+              p1b Conkeldurr atk 1 fell
+      after p1: Thundurus 339/361, Conkeldurr 189/414
+      after p2: Landorus-Therian 350/350, Kyurem-Black 391/391
+
+  Turn 7
+    p1 mcts: switch 5, move 3 1   (slot0 Thundurus -> Volcanion)
+      search (16000 visits): switch volcanion;icepunch,0 394v 203 | switch volcanion;drainpunch,1 290v 139 | switch bisharp;icepunch,0 284v 135 | hiddenpower,0;icepunch,0 254v 117
+    p2 greedy: move 2, move 3 2
+      p1a <- Volcanion comes in (363/363)
+      p2b Kyurem used Fusion Bolt -> p1b: Conkeldurr
+      p2a Landorus used Earthquake -> p1b: Conkeldurr  [[spread] p2b,p1a,p1b]
+      p1b Conkeldurr fainted
+      after p1: Volcanion 101/363, Conkeldurr 0/414
+      after p2: Landorus-Therian 350/350, Kyurem-Black 250/391
+
+  Turn 8
+      p1b <- Deoxys-Speed comes in (303/303)
+      after p1: Volcanion 101/363, Deoxys-Speed 303/303
+      after p2: Landorus-Therian 350/350, Kyurem-Black 250/391
+
+  Turn 9
+    p1 mcts: move 1, move 2 1
+      search (8000 visits): heatwave,0;icebeam,0 361v 193 | earthpower,1;icebeam,0 318v 165 | steameruption,1;icebeam,0 313v 162 | switch bisharp;icebeam,0 288v 146
+    p2 greedy: move 2, move 3 1
+      p1b Deoxys used Ice Beam -> p2a: Landorus
+      p2b Kyurem used Fusion Bolt -> p1a: Volcanion
+      p1a Volcanion fainted
+      p2a Landorus used Earthquake -> p1b: Deoxys  [[spread] p2b,p1b]
+      after p1: Volcanion 0/363, Deoxys-Speed 158/303
+      after p2: Landorus-Therian 10/350, Kyurem-Black 91/391
+
+  Turn 10
+      p1a <- Thundurus comes in (339/361)
+      after p1: Thundurus 339/361, Deoxys-Speed 158/303
+      after p2: Landorus-Therian 10/350, Kyurem-Black 91/391
+
+  Turn 11
+    p1 mcts: move 3 1, move 1 2
+      search (18000 visits): hiddenpower,0;psychoboost,1 2744v 1410 | switch bisharp;icebeam,1 462v 181 | hiddenpower,0;stealthrock,0 430v 165 | thunderbolt,1;icebeam,1 424v 162
+    p2 greedy: move 2, move 3 2
+      p1b Deoxys used Psycho Boost -> p2b: Kyurem
+              p1b Deoxys spa 2 fell
+      p2b Kyurem fainted
+      p1a Thundurus used Hidden Power -> p2a: Landorus
+      p2a Landorus fainted
+      after p1: Thundurus 339/361, Deoxys-Speed 158/303
+      after p2: Landorus-Therian 0/350, Kyurem-Black 0/391
+
+  Turn 12
+      p2a <- Diancie comes in (304/304)
+      after p1: Thundurus 339/361, Deoxys-Speed 158/303
+      after p2: Diancie 304/304, Kyurem-Black 0/391
+
+  Turn 13
+    p1 mcts: move 2 1, switch 6   (slot1 Deoxys-Speed -> Bisharp)
+      search (72000 visits): thunderwave,0;switch bisharp 65639v 55844 | skydrop,0;switch bisharp 1654v 1133 | thunderbolt,0;switch bisharp 1216v 811 | hiddenpower,0;switch bisharp 391v 223
+    p2 greedy: move 1, pass
+      p1b <- Bisharp comes in (271/271)
+      p1a Thundurus used Thunder Wave -> p2a: Diancie
+              p2a Diancie is now par
+      p2a Diancie used Diamond Storm -> p1b: Bisharp  [[spread] p1a,p1b]
+              p2a Diancie def 1 rose
+              p1a Thundurus used up its Sitrus Berry
+      after p1: Thundurus 103/361, Bisharp 206/271
+      after p2: Diancie 304/304, Kyurem-Black 0/391
+
+  Turn 14
+    p1 mcts: move 4 1, move 3 1
+      search (224000 visits): skydrop,0;ironhead,0 213748v 209702 | thunderbolt,0;ironhead,0 2891v 2600 | hiddenpower,0;ironhead,0 2154v 1906 | thunderwave,0;ironhead,0 1630v 1416
+    p2 greedy: move 1, pass
+      p1a Thundurus used Sky Drop  [[still]]
+      p1b Bisharp used Iron Head -> p2a: Diancie  [[miss]]
+              p1b Bisharp -- MISSED
+      after p1: Thundurus 103/361, Bisharp 206/271
+      after p2: Diancie 304/304, Kyurem-Black 0/391
+
+  Turn 15
+    p1 mcts: move 1, move 3 1
+      search (215000 visits): skydrop,0;ironhead,0 214552v 210486 | skydrop,0;suckerpunch,0 151v 89 | skydrop,0;protect,1 118v 63 | skydrop,0;knockoff,0 112v 58
+    p2 greedy: move 1, pass
+      p1a Thundurus used Sky Drop -> p2a: Diancie  [[from] lockedmove]
+              p2a Diancie lost Sky Drop
+      p1b Bisharp used Iron Head -> p2a: Diancie
+      p2a Diancie fainted
+      after p1: Thundurus 103/361, Bisharp 179/271
+      after p2: Diancie 0/304, Kyurem-Black 0/391
+
+  RESULT: p1 wins

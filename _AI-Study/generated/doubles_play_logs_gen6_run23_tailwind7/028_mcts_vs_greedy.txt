@@ -1,0 +1,134 @@
+battle 28   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: ORAS Doubles OU: Charizard, Venusaur, Landorus-Therian, Rotom-Heat, Gastrodon, Aegislash
+  p2: ORAS Doubles OU: Keldeo, Genesect, Amoonguss, Heatran, Kangaskhan, Thundurus
+
+  Turn 1
+    p1 mcts: move 4 mega, move 2
+      search (18000 visits): heatwave-mega,0;protect,1 197v 112 | solarbeam-mega,0;protect,1 192v 108 | heatwave-mega,0;switch landorustherian 177v 97 | heatwave-mega,0;switch aegislash 176v 96
+    p2 greedy: move 1 1, move 3 1
+      p1b Venusaur used Protect
+      p2b Genesect used Ice Beam -> p1a: Charizard
+      p2a Keldeo used Secret Sword -> p1a: Charizard
+      p1a Charizard used Heat Wave -> p2b: Genesect  [[spread] p2a,p2b]
+      p2b Genesect fainted
+      after p1: Charizard-Mega-Y 157/359, Venusaur 301/301
+      after p2: Keldeo 170/329, Genesect 0/283
+
+  Turn 2
+      p2b <- Amoonguss comes in (432/432)
+      after p1: Charizard-Mega-Y 157/359, Venusaur 301/301
+      after p2: Keldeo 170/329, Amoonguss 432/432
+
+  Turn 3
+    p1 mcts: move 4, move 4 1
+      search (34000 visits): heatwave,0;sleeppowder,0 1146v 804 | heatwave,0;sludgebomb,1 1061v 739 | heatwave,0;solarbeam,1 909v 623 | heatwave,0;switch landorustherian 909v 623
+    p2 greedy: move 1 1, move 3 1
+      p1b Venusaur used Sleep Powder -> p2a: Keldeo  [[miss]]
+              p1b Venusaur -- MISSED
+      p2a Keldeo used Secret Sword -> p1a: Charizard
+      p1a Charizard used Heat Wave -> p2a: Keldeo  [[spread] p2a,p2b]
+      p2b Amoonguss fainted
+      after p1: Charizard-Mega-Y 53/359, Venusaur 301/301
+      after p2: Keldeo 23/329, Amoonguss 0/432
+
+  Turn 4
+      p2b <- Heatran comes in (368/368)
+      after p1: Charizard-Mega-Y 53/359, Venusaur 301/301
+      after p2: Keldeo 23/329, Heatran 368/368
+
+  Turn 5
+    p1 mcts: move 4, move 2
+      search (27000 visits): heatwave,0;protect,1 2910v 1845 | heatwave,0;switch gastrodon 1670v 1014 | heatwave,0;switch rotomheat 889v 503 | solarbeam,1;protect,1 415v 206
+    p2 greedy: move 1 1, move 1
+      p1b Venusaur used Protect
+      p2a Keldeo used Secret Sword -> p1a: Charizard
+      p1a Charizard fainted
+      p2a Keldeo fainted
+      p2b Heatran used Heat Wave -> p1b: Venusaur
+              p1b Venusaur -- move: Protect
+      after p1: Charizard 0/359, Venusaur 301/301
+      after p2: Keldeo 0/329, Heatran 368/368
+
+  Turn 6
+      p2a <- Kangaskhan comes in (387/387)
+      p1a <- Landorus-Therian comes in (320/320)
+              p2a Kangaskhan atk 1 fell
+              p2b Heatran atk 1 fell
+      after p1: Landorus-Therian 320/320, Venusaur 301/301
+      after p2: Kangaskhan 387/387, Heatran 368/368
+
+  Turn 7
+    p1 mcts: switch 4, move 3 1   (slot0 Landorus-Therian -> Rotom-Heat)
+      search (37000 visits): switch rotomheat;solarbeam,0 1125v 336 | switch rotomheat;sludgebomb,0 1124v 335 | switch gastrodon;sludgebomb,0 987v 285 | switch gastrodon;solarbeam,0 880v 247
+    p2 greedy: move 3 1, move 1
+      p1a <- Rotom-Heat comes in (304/304)
+      p1b Venusaur used Solar Beam  [[still]]
+      p2a Kangaskhan used Double-Edge -> p1a: Rotom
+      p2b Heatran used Heat Wave -> p1a: Rotom  [[spread] p1a,p1b]
+      p1b Venusaur fainted
+      after p1: Rotom-Heat 126/304, Venusaur 0/301
+      after p2: Kangaskhan 24/387, Heatran 368/368
+
+  Turn 8
+      p1b <- Landorus-Therian comes in (320/320)
+              p2a Kangaskhan atk 1 fell
+              p2b Heatran atk 1 fell
+      after p1: Rotom-Heat 126/304, Landorus-Therian 320/320
+      after p2: Kangaskhan 24/387, Heatran 368/368
+
+  Turn 9
+    p1 mcts: move 1 1, move 1
+      search (38000 visits): thunderbolt,0;earthquake,0 1794v 776 | willowisp,0;earthquake,0 1651v 706 | overheat,1;earthquake,0 1380v 576 | overheat,0;earthquake,0 1343v 558
+    p2 greedy: move 3 1, move 1
+      p1b Landorus used Earthquake -> p2a: Kangaskhan  [[spread] p2a,p2b]
+              p1a Rotom -- IMMUNE
+      p2a Kangaskhan fainted
+      p2b Heatran fainted
+      p1a Rotom used Thunderbolt -> p2: Kangaskhan  [[notarget]]
+              p1a Rotom -- IT FAILED
+      after p1: Rotom-Heat 126/304, Landorus-Therian 320/320
+      after p2: Kangaskhan 0/387, Heatran 0/368
+
+  Turn 10
+      p2a <- Thundurus comes in (352/352)
+      after p1: Rotom-Heat 126/304, Landorus-Therian 320/320
+      after p2: Thundurus 352/352, Heatran 0/368
+
+  Turn 11
+    p1 mcts: move 1 1, switch 6   (slot1 Landorus-Therian -> Aegislash)
+      search (62000 visits): thunderbolt,0;switch aegislash 55861v 44026 | thunderbolt,0;switch gastrodon 1565v 1011 | willowisp,0;switch aegislash 580v 335 | thunderbolt,0;earthquake,0 531v 302
+    p2 greedy: move 4 1, pass
+      p1b <- Aegislash comes in (324/324)
+      p2a Thundurus used Thunderbolt -> p1a: Rotom
+      p1a Rotom used Thunderbolt -> p2a: Thundurus
+      after p1: Rotom-Heat 63/304, Aegislash 324/324
+      after p2: Thundurus 232/352, Heatran 0/368
+
+  Turn 12
+    p1 mcts: move 2 1, move 1 1
+      search (249000 visits): overheat,0;shadowball,0 241781v 233362 | thunderbolt,0;shadowball,0 672v 526 | thunderbolt,0;flashcannon,0 420v 307 | willowisp,0;shadowball,0 334v 234
+    p2 greedy: move 4 1, pass
+      p2a Thundurus used Thunderbolt -> p1a: Rotom
+      p1a Rotom fainted
+      p1b Aegislash used Shadow Ball -> p2a: Thundurus
+              p2a Thundurus used up its Sitrus Berry
+      after p1: Rotom-Heat 0/304, Aegislash-Blade 324/324
+      after p2: Thundurus 143/352, Heatran 0/368
+
+  Turn 13
+      p1a <- Gastrodon comes in (425/425)
+      after p1: Gastrodon 425/425, Aegislash-Blade 324/324
+      after p2: Thundurus 143/352, Heatran 0/368
+
+  Turn 14
+    p1 mcts: move 3, move 1 1
+      search (828000 visits): surf,0;shadowball,0 149834v 149787 | surf,0;flashcannon,0 149724v 149676 | toxic,0;shadowball,0 132217v 132060 | switch landorustherian;shadowball,0 120780v 120557
+    p2 greedy: move 4 1, pass
+      p2a Thundurus used Thunderbolt -> p1a: Gastrodon
+              p1a Gastrodon -- IMMUNE
+      p1b Aegislash used Shadow Ball -> p2a: Thundurus
+      p2a Thundurus fainted
+      after p1: Gastrodon 425/425, Aegislash-Blade 324/324
+      after p2: Thundurus 0/352, Heatran 0/368
+
+  RESULT: p1 wins

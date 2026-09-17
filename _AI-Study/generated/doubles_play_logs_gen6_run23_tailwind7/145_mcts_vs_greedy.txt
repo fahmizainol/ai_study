@@ -1,0 +1,156 @@
+battle 145   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: Copy of Untitled 577: Kangaskhan-Mega, Bisharp, Deoxys-Attack, Amoonguss, Landorus, Talonflame
+  p2: ORAS Doubles OU: Gengar-Mega, Rotom-Wash, Sylveon, Scrafty, Latios, Heatran
+
+  Turn 1
+    p1 mcts: move 1 2, move 1 2
+      search (34000 visits): fakeout,1;knockoff,1 5410v 4317 | fakeout,1;knockoff,0 1671v 1250 | fakeout,1;ironhead,0 1553v 1155 | suckerpunch,0;knockoff,1 1108v 801
+    p2 greedy: move 2 1, move 3 1
+      p1a Kangaskhan used Fake Out -> p2b: Rotom
+              p2b Rotom -- critical hit
+      p2a Gengar used Sludge Bomb -> p1a: Kangaskhan
+      p1b Bisharp used Knock Off -> p2b: Rotom
+              p2b Rotom used up its Sitrus Berry
+              p2b Rotom COULD NOT MOVE (flinch)
+      after p1: Kangaskhan-Mega 201/414, Bisharp 271/271
+      after p2: Gengar-Mega 261/261, Rotom-Wash 71/304
+
+  Turn 2
+    p1 mcts: move 3 1, move 1 2
+      search (43000 visits): suckerpunch,0;knockoff,1 2279v 1666 | suckerpunch,0;knockoff,0 2210v 1612 | lowkick,1;knockoff,1 1606v 1144 | suckerpunch,0;ironhead,0 1552v 1103
+    p2 greedy: move 2 1, move 3 1
+      p1a Kangaskhan used Sucker Punch -> p2a: Gengar
+      p2a Gengar used Sludge Bomb -> p1a: Kangaskhan
+              p1a Kangaskhan is now psn
+      p1b Bisharp used Knock Off -> p2b: Rotom
+      p2b Rotom fainted
+      p1a Kangaskhan fainted
+      after p1: Kangaskhan-Mega 0/414, Bisharp 271/271
+      after p2: Gengar-Mega 85/261, Rotom-Wash 0/304
+
+  Turn 3
+      p1a <- Deoxys-Attack comes in (241/241)
+      p2b <- Sylveon comes in (375/375)
+      after p1: Deoxys-Attack 241/241, Bisharp 271/271
+      after p2: Gengar-Mega 85/261, Sylveon 375/375
+
+  Turn 4
+    p1 mcts: move 4, move 4 2
+      search (36000 visits): protect,0;ironhead,1 12594v 7938 | psychoboost,1;ironhead,1 2877v 1685 | icebeam,0;ironhead,1 2153v 1232 | protect,0;protect,1 1081v 575
+    p2 greedy: move 2 1, move 1
+      p1a Deoxys used Protect
+      p2a Gengar used Sludge Bomb -> p1a: Deoxys
+              p1a Deoxys -- move: Protect
+      p1b Bisharp used Iron Head -> p2b: Sylveon
+      p2b Sylveon fainted
+      after p1: Deoxys-Attack 241/241, Bisharp 271/271
+      after p2: Gengar-Mega 85/261, Sylveon 0/375
+
+  Turn 5
+      p2b <- Scrafty comes in (333/333)
+              p1a Deoxys atk 1 fell
+              p1b Bisharp atk 1 fell
+              p1b Bisharp atk 2 rose
+      after p1: Deoxys-Attack 241/241, Bisharp 271/271
+      after p2: Gengar-Mega 85/261, Scrafty 333/333
+
+  Turn 6
+    p1 mcts: move 3 2, move 4 2
+      search (37000 visits): icebeam,1;ironhead,1 5747v 2882 | protect,0;protect,1 2880v 1373 | icebeam,1;protect,1 2718v 1289 | icebeam,0;protect,1 2708v 1284
+    p2 greedy: move 2 1, move 3 1
+      p1a Deoxys used Ice Beam -> p2b: Scrafty
+      p2a Gengar used Sludge Bomb -> p1a: Deoxys
+      p1a Deoxys fainted
+      p1b Bisharp used Iron Head -> p2b: Scrafty
+              p2b Scrafty used up its Sitrus Berry
+      p2b Scrafty used Drain Punch -> p1b: Bisharp
+              p1b Bisharp used up its Focus Sash
+      after p1: Deoxys-Attack 0/241, Bisharp 1/271
+      after p2: Gengar-Mega 85/261, Scrafty 219/333
+
+  Turn 7
+      p1a <- Amoonguss comes in (432/432)
+      after p1: Amoonguss 432/432, Bisharp 1/271
+      after p2: Gengar-Mega 85/261, Scrafty 219/333
+
+  Turn 8
+    p1 mcts: move 4, move 4 2
+      search (53000 visits): protect,0;ironhead,1 31159v 18250 | energyball,1;knockoff,0 1104v 521 | protect,0;knockoff,0 1075v 505 | energyball,1;ironhead,0 1020v 475
+    p2 greedy: move 2 2, move 3 2
+      p1a Amoonguss used Protect
+      p2a Gengar used Sludge Bomb -> p1b: Bisharp
+              p1b Bisharp -- IMMUNE
+      p1b Bisharp used Iron Head -> p2b: Scrafty
+      p2b Scrafty used Drain Punch -> p1b: Bisharp
+      p1b Bisharp fainted
+      after p1: Amoonguss 432/432, Bisharp 0/271
+      after p2: Gengar-Mega 85/261, Scrafty 31/333
+
+  Turn 9
+      p1b <- Landorus comes in (382/382)
+      after p1: Amoonguss 432/432, Landorus 382/382
+      after p2: Gengar-Mega 85/261, Scrafty 31/333
+
+  Turn 10
+    p1 mcts: move 2, move 1 2
+      search (39000 visits): ragepowder,0;earthpower,1 2839v 2115 | ragepowder,0;earthpower,0 2544v 1883 | ragepowder,0;psychic,0 2481v 1833 | energyball,0;earthpower,0 1931v 1403
+    p2 greedy: move 2 1, move 3 1
+      p1a Amoonguss used Rage Powder
+      p2a Gengar used Sludge Bomb -> p1a: Amoonguss
+      p1b Landorus used Earth Power -> p2b: Scrafty
+      p2b Scrafty fainted
+      after p1: Amoonguss 231/432, Landorus 382/382
+      after p2: Gengar-Mega 85/261, Scrafty 0/333
+
+  Turn 11
+      p2b <- Latios comes in (301/301)
+      after p1: Amoonguss 231/432, Landorus 382/382
+      after p2: Gengar-Mega 85/261, Latios 301/301
+
+  Turn 12
+    p1 mcts: move 1 2, move 2 1
+      search (35000 visits): spore,1;psychic,0 27163v 24646 | ragepowder,0;earthpower,0 442v 277 | ragepowder,0;psychic,1 408v 252 | ragepowder,0;psychic,0 379v 231
+    p2 greedy: move 2 1, move 1 1
+      p2a Gengar used Sludge Bomb -> p1a: Amoonguss
+              p1a Amoonguss -- critical hit
+      p1a Amoonguss fainted
+      p2b Latios used Draco Meteor -> p1b: Landorus
+              p2b Latios spa 2 fell
+      p1b Landorus fainted
+      after p1: Amoonguss 0/432, Landorus 0/382
+      after p2: Gengar-Mega 85/261, Latios 271/301
+
+  Turn 13
+      p1a <- Talonflame comes in (320/320)
+      after p1: Talonflame 320/320, Landorus 0/382
+      after p2: Gengar-Mega 85/261, Latios 271/301
+
+  Turn 14
+    p1 mcts: move 1 1, pass
+      search (147000 visits): bravebird,0;No Move 82705v 4181 | tailwind,0;No Move 19745v 648 | quickguard,0;No Move 11977v 275 | flareblitz,1;No Move 11616v 259
+    p2 greedy: move 2 1, move 1 1
+      p1a Talonflame used Brave Bird -> p2a: Gengar
+      p2a Gengar fainted
+      p2b Latios used Draco Meteor -> p1a: Talonflame
+              p2b Latios spa 2 fell
+      after p1: Talonflame 61/320, Landorus 0/382
+      after p2: Gengar-Mega 0/261, Latios 241/301
+
+  Turn 15
+      p2a <- Heatran comes in (324/324)
+      after p1: Talonflame 61/320, Landorus 0/382
+      after p2: Heatran 324/324, Latios 241/301
+
+  Turn 16
+    p1 mcts: move 2, pass
+      search (783000 visits): quickguard,0;No Move 159911v 799 | tailwind,0;No Move 159263v 792 | flareblitz,0;No Move 158350v 781 | bravebird,1;No Move 103588v 191
+    p2 greedy: move 2, move 1 1
+      p1a Talonflame used Quick Guard
+      p2b Latios used Draco Meteor -> p1a: Talonflame
+              p1a Talonflame -- critical hit
+              p2b Latios spa 2 fell
+      p1a Talonflame fainted
+      after p1: Talonflame 0/320, Landorus 0/382
+      after p2: Heatran 324/324, Latios 211/301
+
+  RESULT: p2 wins

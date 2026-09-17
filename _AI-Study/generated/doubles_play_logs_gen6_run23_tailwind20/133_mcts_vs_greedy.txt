@@ -1,0 +1,172 @@
+battle 133   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: ORAS Doubles OU: Amoonguss, Politoed, Kingdra, Gothitelle, Bisharp, Kangaskhan-Mega
+  p2: ORAS Doubles OU: Deoxys-Attack, Kangaskhan-Mega, Amoonguss, Talonflame, Bisharp, Keldeo-Resolute
+
+  Turn 1
+    p1 mcts: move 1 2, move 3 2
+      search (28000 visits): spore,1;scald,1 3732v 3005 | protect,0;protect,1 1363v 1034 | spore,1;perishsong,1 1006v 747 | spore,1;scald,0 847v 612
+    p2 greedy: move 2 1, move 3 1
+      p2b Kangaskhan used Sucker Punch  [[still]]
+              p2b Kangaskhan -- IT FAILED
+      p2a Deoxys used Psycho Boost -> p1a: Amoonguss
+              p2a Deoxys spa 2 fell
+      p1a Amoonguss fainted
+      p1b Politoed used Scald -> p2b: Kangaskhan
+      after p1: Amoonguss 0/432, Politoed 321/321
+      after p2: Deoxys-Attack 241/241, Kangaskhan-Mega 230/351
+
+  Turn 2
+      p1a <- Kingdra comes in (292/292)
+      after p1: Kingdra 292/292, Politoed 321/321
+      after p2: Deoxys-Attack 241/241, Kangaskhan-Mega 230/351
+
+  Turn 3
+    p1 mcts: move 1, switch 4   (slot1 Politoed -> Gothitelle)
+      search (23000 visits): muddywater,0;switch gothitelle 1369v 848 | muddywater,0;protect,1 1356v 840 | muddywater,0;encore,0 787v 457 | muddywater,0;switch kangaskhanmega 776v 450
+    p2 greedy: move 2 1, move 3 1
+      p1b <- Gothitelle comes in (344/344)
+      p2b Kangaskhan used Sucker Punch -> p1a: Kingdra
+      p2a Deoxys used Psycho Boost -> p1a: Kingdra
+              p2a Deoxys spa 2 fell
+      p1a Kingdra used Muddy Water -> p2a: Deoxys  [[spread] p2a,p2b]
+              p2a Deoxys used up its Focus Sash
+              p2a Deoxys accuracy 1 fell
+              p2b Kangaskhan accuracy 1 fell
+      after p1: Kingdra 46/292, Gothitelle 344/344
+      after p2: Deoxys-Attack 1/241, Kangaskhan-Mega 42/351
+
+  Turn 4
+    p1 mcts: move 3, move 2 2
+      search (21000 visits): protect,0;psychic,1 1368v 746 | flashcannon,1;psychic,1 1004v 527 | switch politoed;psychic,1 958v 500 | switch kangaskhanmega;psychic,1 777v 393
+    p2 greedy: move 2 1, move 3 1
+      p1a Kingdra used Protect
+      p2b Kangaskhan used Sucker Punch  [[still]]
+              p2b Kangaskhan -- IT FAILED
+      p2a Deoxys used Psycho Boost -> p1a: Kingdra
+              p1a Kingdra -- move: Protect
+      p1b Gothitelle used Psychic -> p2b: Kangaskhan
+      p2b Kangaskhan fainted
+      after p1: Kingdra 46/292, Gothitelle 344/344
+      after p2: Deoxys-Attack 1/241, Kangaskhan-Mega 0/351
+
+  Turn 5
+      p2b <- Amoonguss comes in (417/417)
+      after p1: Kingdra 46/292, Gothitelle 344/344
+      after p2: Deoxys-Attack 1/241, Amoonguss 417/417
+
+  Turn 6
+    p1 mcts: move 2 2, move 2 2
+      search (16000 visits): dracometeor,1;psychic,1 1215v 681 | flashcannon,1;psychic,1 877v 472 | protect,0;psychic,1 650v 334 | dracometeor,1;helpinghand,0 465v 224
+    p2 greedy: move 2 1, move 1 1
+      p2a Deoxys used Psycho Boost -> p1a: Kingdra  [[miss]]
+              p2a Deoxys -- MISSED
+      p1a Kingdra used Draco Meteor -> p2b: Amoonguss
+              p1a Kingdra spa 2 fell
+              p2b Amoonguss used up its Sitrus Berry
+      p1b Gothitelle used Psychic -> p2b: Amoonguss
+      p2b Amoonguss used Giga Drain -> p1a: Kingdra
+      p1a Kingdra fainted
+      after p1: Kingdra 0/292, Gothitelle 344/344
+      after p2: Deoxys-Attack 1/241, Amoonguss 101/417
+
+  Turn 7
+      p1a <- Politoed comes in (321/321)
+      after p1: Politoed 321/321, Gothitelle 344/344
+      after p2: Deoxys-Attack 1/241, Amoonguss 101/417
+
+  Turn 8
+    p1 mcts: move 3 2, move 2 2
+      search (14000 visits): scald,1;psychic,1 888v 481 | protect,0;psychic,1 742v 392 | encore,1;psychic,1 716v 376 | perishsong,1;psychic,1 703v 368
+    p2 greedy: move 2 1, move 1 1
+      p2a Deoxys used Psycho Boost -> p1a: Politoed  [[miss]]
+              p2a Deoxys -- MISSED
+      p1a Politoed used Scald -> p2b: Amoonguss
+      p1b Gothitelle used Psychic -> p2b: Amoonguss
+              p2b Amoonguss -- critical hit
+      p2b Amoonguss fainted
+      after p1: Politoed 321/321, Gothitelle 344/344
+      after p2: Deoxys-Attack 1/241, Amoonguss 0/417
+
+  Turn 9
+      p2b <- Talonflame comes in (297/297)
+      after p1: Politoed 321/321, Gothitelle 344/344
+      after p2: Deoxys-Attack 1/241, Talonflame 297/297
+
+  Turn 10
+    p1 mcts: move 3 2, move 1
+      search (15000 visits): scald,1;trickroom,0 1199v 709 | scald,1;trickroom,1 1108v 649 | scald,1;helpinghand,0 1074v 627 | scald,1;psychic,1 1068v 623
+    p2 greedy: move 2 1, move 1 1
+      p2b Talonflame used Brave Bird -> p1a: Politoed
+      p2a Deoxys used Psycho Boost -> p1a: Politoed
+              p2a Deoxys spa 2 fell
+      p1a Politoed fainted
+      p1b Gothitelle used Trick Room
+      after p1: Politoed 0/321, Gothitelle 344/344
+      after p2: Deoxys-Attack 1/241, Talonflame 172/297
+
+  Turn 11
+      p1a <- Bisharp comes in (329/329)
+      after p1: Bisharp 329/329, Gothitelle 344/344
+      after p2: Deoxys-Attack 1/241, Talonflame 172/297
+
+  Turn 12
+    p1 mcts: move 4, move 2 2
+      search (28000 visits): protect,0;psychic,1 4491v 2308 | knockoff,1;protect,1 1887v 903 | knockoff,1;trickroom,0 1415v 653 | knockoff,1;psychic,1 1354v 621
+    p2 greedy: move 2 1, move 1 1
+      p1a Bisharp used Protect
+      p2b Talonflame used Brave Bird -> p1a: Bisharp
+              p1a Bisharp -- move: Protect
+      p1b Gothitelle used Psychic -> p2b: Talonflame
+      p2a Deoxys used Psycho Boost -> p1a: Bisharp
+              p1a Bisharp -- IMMUNE
+      after p1: Bisharp 329/329, Gothitelle 344/344
+      after p2: Deoxys-Attack 1/241, Talonflame 22/297
+
+  Turn 13
+    p1 mcts: switch 6, move 2 2   (slot0 Bisharp -> Kangaskhan-Mega)
+      search (35000 visits): switch kangaskhanmega;psychic,1 5784v 2703 | protect,0;psychic,1 2680v 1165 | protect,0;protect,1 1693v 697 | ironhead,1;protect,1 830v 302
+    p2 greedy: move 2 1, move 1 1
+      p1a <- Kangaskhan-Mega comes in (414/414)
+      p2b Talonflame used Brave Bird -> p1a: Kangaskhan
+      p2b Talonflame fainted
+      p1b Gothitelle used Psychic -> p2a: Deoxys
+      p2a Deoxys fainted
+      after p1: Kangaskhan-Mega 206/414, Gothitelle 344/344
+      after p2: Deoxys-Attack 0/241, Talonflame 0/297
+
+  Turn 14
+      p2b <- Keldeo-Resolute comes in (324/324)
+      p2a <- Bisharp comes in (272/272)
+      after p1: Kangaskhan-Mega 206/414, Gothitelle 344/344
+      after p2: Bisharp 272/272, Keldeo-Resolute 324/324
+
+  Turn 15
+    p1 mcts: move 3 1, move 3 -1
+      search (40000 visits): poweruppunch,0;helpinghand,0 11540v 6466 | return,1;psychic,1 5897v 3203 | poweruppunch,0;psychic,1 3403v 1784 | poweruppunch,0;protect,1 1748v 862
+    p2 greedy: move 2 1, move 1 1
+      p1b Gothitelle used Helping Hand -> p1a: Kangaskhan
+      p1a Kangaskhan used Power-Up Punch -> p2a: Bisharp
+              p1a Kangaskhan atk 1 rose
+      p2a Bisharp fainted
+      p2b Keldeo used Hydro Pump -> p1a: Kangaskhan
+      p1a Kangaskhan fainted
+      after p1: Kangaskhan-Mega 0/414, Gothitelle 344/344
+      after p2: Bisharp 0/272, Keldeo-Resolute 292/324
+
+  Turn 16
+      p1a <- Bisharp comes in (329/329)
+      after p1: Bisharp 329/329, Gothitelle 344/344
+      after p2: Bisharp 0/272, Keldeo-Resolute 292/324
+
+  Turn 17
+    p1 mcts: move 1 2, move 2 2
+      search (82000 visits): knockoff,1;psychic,1 6859v 1593 | suckerpunch,1;psychic,1 6845v 1589 | ironhead,1;psychic,1 6686v 1548 | knockoff,1;trickroom,1 6341v 1458
+    p2 greedy: pass, move 1 1
+      p1b Gothitelle used Psychic -> p2b: Keldeo
+      p1a Bisharp used Knock Off -> p2b: Keldeo
+              p2b Keldeo used up its Life Orb
+      p2b Keldeo fainted
+      after p1: Bisharp 297/329, Gothitelle 344/344
+      after p2: Bisharp 0/272, Keldeo-Resolute 0/324
+
+  RESULT: p1 wins

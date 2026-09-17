@@ -1,0 +1,255 @@
+battle 101   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: Copy of Untitled 488: Thundurus, Lucario-Mega, Talonflame, Amoonguss, Kingdra, Politoed
+  p2: Untitled 609: Ferrothorn, Politoed, Gothitelle, Kingdra, Kangaskhan-Mega, Scrafty
+
+  Turn 1
+    p1 mcts: move 4 1, move 1 1
+      search (37000 visits): uturn,0;closecombat,0 1037v 486 | wildcharge,0;closecombat,0 991v 461 | skydrop,1;closecombat,0 955v 442 | skydrop,0;closecombat,0 946v 437
+    p2 greedy: move 3 1, move 3 1
+      p1b Lucario used Close Combat -> p2a: Ferrothorn
+              p1b Lucario def 1 fell
+              p1b Lucario spd 1 fell
+      p1a Thundurus used U-turn -> p2a: Ferrothorn
+      p2a Ferrothorn fainted
+      after p1: Thundurus 262/299, Lucario-Mega 246/281
+      after p2: Ferrothorn 0/352, Politoed 383/383
+
+  Turn 2
+      p1a <- Talonflame comes in (319/319)
+      p2b Politoed used Scald -> p1a: Talonflame
+      p1a Talonflame fainted
+      after p1: Talonflame 0/319, Lucario-Mega 246/281
+      after p2: Ferrothorn 0/352, Politoed 383/383
+
+  Turn 3
+      p1a <- Thundurus comes in (262/299)
+      p2a <- Gothitelle comes in (343/343)
+      after p1: Thundurus 262/299, Lucario-Mega 246/281
+      after p2: Gothitelle 343/343, Politoed 383/383
+
+  Turn 4
+    p1 mcts: move 4 1, move 1 2
+      search (24000 visits): uturn,0;closecombat,1 2538v 1724 | wildcharge,1;closecombat,1 2187v 1470 | uturn,0;closecombat,0 1631v 1071 | uturn,1;closecombat,1 1559v 1021
+    p2 greedy: move 4 2, move 3 2
+      p1b Lucario used Close Combat -> p2b: Politoed
+              p1b Lucario def 1 fell
+              p1b Lucario spd 1 fell
+      p1a Thundurus used U-turn -> p2a: Gothitelle
+      after p1: Thundurus 262/299, Lucario-Mega 200/281
+      after p2: Gothitelle 217/343, Politoed 181/383
+
+  Turn 5
+      p1a <- Amoonguss comes in (432/432)
+      p2b Politoed used Scald -> p1b: Lucario
+      p1b Lucario fainted
+      p2a Gothitelle used Psychic -> p1a: Amoonguss
+              p1a Amoonguss spd 1 fell
+      after p1: Amoonguss 190/432, Lucario-Mega 0/281
+      after p2: Gothitelle 217/343, Politoed 181/383
+
+  Turn 6
+      p1b <- Thundurus comes in (262/299)
+      after p1: Amoonguss 190/432, Thundurus 262/299
+      after p2: Gothitelle 217/343, Politoed 181/383
+
+  Turn 7
+    p1 mcts: move 3 1, move 1 2
+      search (30000 visits): energyball,0;skydrop,1 15359v 15238 | energyball,1;knockoff,0 612v 500 | energyball,1;uturn,0 584v 474 | spore,0;wildcharge,1 567v 459
+    p2 greedy: move 4 1, move 3 1
+      p1b Thundurus used Sky Drop  [[still]]
+      p2a Gothitelle used Psychic -> p1a: Amoonguss
+      p1a Amoonguss fainted
+      after p1: Amoonguss 0/432, Thundurus 262/299
+      after p2: Gothitelle 217/343, Politoed 181/383
+
+  Turn 8
+      p1a <- Kingdra comes in (291/291)
+      after p1: Kingdra 291/291, Thundurus 262/299
+      after p2: Gothitelle 217/343, Politoed 181/383
+
+  Turn 9
+    p1 mcts: move 3 2, move 1
+      search (37000 visits): dracometeor,1;skydrop,0 12744v 7651 | hydropump,1;skydrop,0 9831v 5847 | muddywater,0;skydrop,0 9555v 5676 | hydropump,0;skydrop,0 1601v 842
+    p2 greedy: move 4 2, move 3 2
+      p1a Kingdra used Draco Meteor -> p2b: Politoed  [[miss]]
+              p1a Kingdra -- MISSED
+      p1b Thundurus used Sky Drop -> p2b: Politoed  [[from] lockedmove]
+              p2b Politoed lost Sky Drop
+      p2b Politoed used Scald -> p1b: Thundurus
+      p2a Gothitelle used Psychic -> p1b: Thundurus
+      after p1: Kingdra 291/291, Thundurus 26/299
+      after p2: Gothitelle 217/343, Politoed 85/383
+
+  Turn 10
+    p1 mcts: move 3 1, move 3 2
+      search (34000 visits): dracometeor,0;knockoff,1 17786v 14167 | dracometeor,0;wildcharge,1 8975v 7024 | dracometeor,1;knockoff,0 1890v 1372 | dracometeor,0;uturn,1 1447v 1028
+    p2 greedy: move 4 2, move 3 2
+      p1a Kingdra used Draco Meteor -> p2a: Gothitelle
+              p1a Kingdra spa 2 fell
+      p2a Gothitelle fainted
+      p1b Thundurus used Knock Off -> p2b: Politoed
+      p1b Thundurus fainted
+      p2b Politoed fainted
+      after p1: Kingdra 291/291, Thundurus 0/299
+      after p2: Gothitelle 0/343, Politoed 0/383
+
+  Turn 11
+      p1b <- Politoed comes in (384/384)
+      p2b <- Kangaskhan-Mega comes in (401/401)
+      p2a <- Kingdra comes in (291/291)
+      after p1: Kingdra 291/291, Politoed 384/384
+      after p2: Kingdra 291/291, Kangaskhan-Mega 401/401
+
+  Turn 12
+    p1 mcts: move 3 1, move 1 2
+      search (27000 visits): dracometeor,0;scald,1 11953v 7378 | dracometeor,0;icywind,0 3612v 2107 | dracometeor,1;icywind,0 2388v 1352 | dracometeor,1;scald,1 2282v 1287
+    p2 greedy: move 3 1, move 4 1
+      p2b Kangaskhan used Sucker Punch -> p1a: Kingdra
+      p2a Kingdra used Draco Meteor -> p1a: Kingdra
+              p2a Kingdra spa 2 fell
+      p1a Kingdra fainted
+      p1b Politoed used Scald -> p2b: Kangaskhan
+              p2b Kangaskhan is now brn
+      after p1: Kingdra 0/291, Politoed 384/384
+      after p2: Kingdra 262/291, Kangaskhan-Mega 228/401
+
+  Turn 13
+    p1 mcts: pass, move 4
+      search (42000 visits): No Move;protect,1 33133v 15726 | No Move;scald,0 4681v 2024 | No Move;icywind,0 2886v 1195 | No Move;scald,1 1300v 483
+    p2 greedy: move 3 2, move 4 2
+      p1b Politoed used Protect
+      p2b Kangaskhan used Sucker Punch  [[still]]
+              p2b Kangaskhan -- IT FAILED
+      p2a Kingdra used Draco Meteor -> p1b: Politoed
+              p1b Politoed -- move: Protect
+      after p1: Kingdra 0/291, Politoed 384/384
+      after p2: Kingdra 262/291, Kangaskhan-Mega 178/401
+
+  Turn 14
+    p1 mcts: pass, move 4
+      search (50000 visits): No Move;protect,1 40246v 19581 | No Move;scald,0 5011v 2224 | No Move;icywind,0 2758v 1161 | No Move;scald,1 1985v 804
+    p2 greedy: move 3 2, move 4 2
+      p1b Politoed used Protect  [[still]]
+              p1b Politoed -- IT FAILED
+      p2b Kangaskhan used Sucker Punch  [[still]]
+              p2b Kangaskhan -- IT FAILED
+      p2a Kingdra used Draco Meteor -> p1b: Politoed
+              p2a Kingdra spa 2 fell
+      after p1: Kingdra 0/291, Politoed 251/384
+      after p2: Kingdra 233/291, Kangaskhan-Mega 128/401
+
+  Turn 15
+    p1 mcts: pass, move 4
+      search (51000 visits): No Move;protect,1 42619v 17216 | No Move;scald,0 4458v 1589 | No Move;icywind,0 2470v 822 | No Move;scald,1 1453v 442
+    p2 greedy: move 3 2, move 4 2
+      p1b Politoed used Protect
+      p2b Kangaskhan used Sucker Punch  [[still]]
+              p2b Kangaskhan -- IT FAILED
+      p2a Kingdra used Draco Meteor -> p1b: Politoed
+              p1b Politoed -- move: Protect
+      after p1: Kingdra 0/291, Politoed 251/384
+      after p2: Kingdra 233/291, Kangaskhan-Mega 78/401
+
+  Turn 16
+    p1 mcts: pass, move 4
+      search (52000 visits): No Move;protect,1 42920v 17280 | No Move;scald,0 5640v 2045 | No Move;icywind,0 2093v 676 | No Move;scald,1 1347v 401
+    p2 greedy: move 3 2, move 4 2
+      p1b Politoed used Protect
+      p2b Kangaskhan used Sucker Punch  [[still]]
+              p2b Kangaskhan -- IT FAILED
+      p2a Kingdra used Draco Meteor -> p1b: Politoed
+              p1b Politoed -- move: Protect
+      after p1: Kingdra 0/291, Politoed 251/384
+      after p2: Kingdra 233/291, Kangaskhan-Mega 28/401
+
+  Turn 17
+    p1 mcts: pass, move 4
+      search (55000 visits): No Move;protect,1 43288v 16478 | No Move;scald,0 5797v 1948 | No Move;icywind,0 3909v 1263 | No Move;scald,1 2006v 590
+    p2 greedy: move 3 2, move 4 2
+      p1b Politoed used Protect  [[still]]
+              p1b Politoed -- IT FAILED
+      p2b Kangaskhan used Sucker Punch  [[still]]
+              p2b Kangaskhan -- IT FAILED
+      p2a Kingdra used Draco Meteor -> p1b: Politoed
+              p2a Kingdra spa 2 fell
+              p1b Politoed used up its Sitrus Berry
+      p2b Kangaskhan fainted
+      after p1: Kingdra 0/291, Politoed 250/384
+      after p2: Kingdra 204/291, Kangaskhan-Mega 0/401
+
+  Turn 18
+      p2b <- Scrafty comes in (334/334)
+              p1b Politoed atk 1 fell
+      after p1: Kingdra 0/291, Politoed 250/384
+      after p2: Kingdra 204/291, Scrafty 334/334
+
+  Turn 19
+    p1 mcts: pass, move 4
+      search (64000 visits): No Move;protect,1 62743v 45171 | No Move;scald,1 618v 333 | No Move;icywind,0 397v 196 | No Move;scald,0 242v 104
+    p2 greedy: move 3 2, move 2 2
+      p1b Politoed used Protect
+      p2a Kingdra used Draco Meteor -> p1b: Politoed
+              p1b Politoed -- move: Protect
+      p2b Scrafty used Knock Off -> p1b: Politoed
+              p1b Politoed -- move: Protect
+      after p1: Kingdra 0/291, Politoed 250/384
+      after p2: Kingdra 204/291, Scrafty 334/334
+
+  Turn 20
+    p1 mcts: pass, move 4
+      search (44000 visits): No Move;protect,1 42572v 30129 | No Move;scald,1 655v 357 | No Move;icywind,0 446v 226 | No Move;scald,0 327v 154
+    p2 greedy: move 3 2, move 2 2
+      p1b Politoed used Protect  [[still]]
+              p1b Politoed -- IT FAILED
+      p2a Kingdra used Draco Meteor -> p1b: Politoed
+      p2b Scrafty used Knock Off -> p1b: Politoed
+      after p1: Kingdra 0/291, Politoed 110/384
+      after p2: Kingdra 175/291, Scrafty 334/334
+
+  Turn 21
+    p1 mcts: pass, move 4
+      search (47000 visits): No Move;protect,1 46740v 33993 | No Move;scald,1 100v 28 | No Move;icywind,0 81v 19 | No Move;scald,0 79v 17
+    p2 greedy: move 2 2, move 2 2
+      p1b Politoed used Protect
+      p2a Kingdra used Hydro Pump -> p1b: Politoed
+              p1b Politoed -- move: Protect
+      p2b Scrafty used Knock Off -> p1b: Politoed
+              p1b Politoed -- move: Protect
+      after p1: Kingdra 0/291, Politoed 110/384
+      after p2: Kingdra 175/291, Scrafty 334/334
+
+  Turn 22
+    p1 mcts: pass, move 4
+      search (44000 visits): No Move;protect,1 43771v 31689 | No Move;scald,1 107v 32 | No Move;icywind,0 64v 11 | No Move;scald,0 58v 8
+    p2 greedy: move 2 2, move 2 2
+      p1b Politoed used Protect  [[still]]
+              p1b Politoed -- IT FAILED
+      p2a Kingdra used Hydro Pump -> p1b: Politoed
+      p2b Scrafty used Knock Off -> p1b: Politoed
+      after p1: Kingdra 0/291, Politoed 11/384
+      after p2: Kingdra 146/291, Scrafty 334/334
+
+  Turn 23
+    p1 mcts: pass, move 4
+      search (47000 visits): No Move;protect,1 46860v 33973 | No Move;icywind,0 52v 5 | No Move;scald,1 45v 2 | No Move;scald,0 43v 2
+    p2 greedy: move 2 2, move 2 2
+      p1b Politoed used Protect
+      p2a Kingdra used Hydro Pump -> p1b: Politoed
+              p1b Politoed -- move: Protect
+      p2b Scrafty used Knock Off -> p1b: Politoed
+              p1b Politoed -- move: Protect
+      after p1: Kingdra 0/291, Politoed 11/384
+      after p2: Kingdra 146/291, Scrafty 334/334
+
+  Turn 24
+    p1 mcts: pass, move 4
+      search (60000 visits): No Move;protect,1 59871v 43943 | No Move;icywind,0 46v 3 | No Move;scald,1 42v 1 | No Move;scald,0 41v 0
+    p2 greedy: move 2 2, move 2 2
+      p1b Politoed used Protect  [[still]]
+              p1b Politoed -- IT FAILED
+      p2a Kingdra used Hydro Pump -> p1b: Politoed
+      p1b Politoed fainted
+      after p1: Kingdra 0/291, Politoed 0/384
+      after p2: Kingdra 117/291, Scrafty 334/334
+
+  RESULT: p2 wins

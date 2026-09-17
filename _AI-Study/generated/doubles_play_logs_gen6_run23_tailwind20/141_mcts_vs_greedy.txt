@@ -1,0 +1,173 @@
+battle 141   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: A Faraway Place: Gengar-Mega, Terrakion, Scizor, Whimsicott, Landorus-Therian, Latios
+  p2: ORAS Doubles OU: Aegislash, Deoxys-Attack, Amoonguss, Gardevoir, Talonflame, Landorus-Therian
+
+  Turn 1
+    p1 mcts: switch 5, switch 6   (slot0 Gengar-Mega -> Landorus-Therian; slot1 Terrakion -> Latios)
+      search (14000 visits): switch landorustherian;switch latios 832v 594 | switch landorustherian;switch whimsicott 644v 447 | switch landorustherian;switch scizor 582v 398 | switch landorustherian;stoneedge,0 500v 335
+    p2 greedy: move 1 1, move 1 1
+      p1b <- Latios comes in (360/360)
+      p1a <- Landorus-Therian comes in (382/382)
+              p2a Aegislash atk 1 fell
+              p2b Deoxys atk 1 fell
+      p2b Deoxys used Psycho Boost -> p1a: Landorus
+              p2b Deoxys spa 2 fell
+      p2a Aegislash used Shadow Ball -> p1a: Landorus
+      after p1: Landorus-Therian 42/382, Latios 360/360
+      after p2: Aegislash-Blade 324/324, Deoxys-Attack 241/241
+
+  Turn 2
+    p1 mcts: move 1, move 4
+      search (23000 visits): earthquake,0;tailwind,1 1176v 745 | earthquake,0;icebeam,1 1087v 683 | earthquake,0;psyshock,1 939v 580 | earthquake,0;icebeam,0 560v 322
+    p2 greedy: move 1 1, move 1 1
+      p2b Deoxys used Psycho Boost -> p1a: Landorus
+              p2b Deoxys spa 2 fell
+      p1a Landorus fainted
+      p1b Latios used Tailwind
+      -sidestart p1: A move: Tailwind
+      p2a Aegislash used Shadow Ball -> p1b: Latios
+      after p1: Landorus-Therian 0/382, Latios 54/360
+      after p2: Aegislash-Blade 324/324, Deoxys-Attack 241/241
+
+  Turn 3
+      p1a <- Scizor comes in (311/311)
+      after p1: Scizor 311/311, Latios 54/360
+      after p2: Aegislash-Blade 324/324, Deoxys-Attack 241/241
+
+  Turn 4
+    p1 mcts: move 3 1, move 3 2
+      search (27000 visits): pursuit,0;icebeam,1 1038v 400 | uturn,0;icebeam,1 800v 292 | pursuit,0;icebeam,0 656v 229 | pursuit,0;psyshock,1 600v 204
+    p2 greedy: move 1 2, move 1 2
+      p1b Latios used Ice Beam -> p2b: Deoxys
+              p2b Deoxys used up its Focus Sash
+      p2b Deoxys used Psycho Boost -> p1b: Latios
+              p2b Deoxys spa 2 fell
+      p1a Scizor used Pursuit -> p2a: Aegislash
+      p2a Aegislash fainted
+      after p1: Scizor 311/311, Latios 7/360
+      after p2: Aegislash 0/324, Deoxys-Attack 1/241
+
+  Turn 5
+      p2a <- Amoonguss comes in (432/432)
+      after p1: Scizor 311/311, Latios 7/360
+      after p2: Amoonguss 432/432, Deoxys-Attack 1/241
+
+  Turn 6
+    p1 mcts: move 3 1, move 3 1
+      search (28000 visits): pursuit,0;icebeam,0 856v 73 | switch gengarmega;icebeam,0 811v 66 | pursuit,0;psyshock,0 777v 61 | switch gengarmega;icebeam,1 738v 54
+    p2 greedy: move 3 2, move 1 2
+      p1b Latios used Ice Beam -> p2a: Amoonguss
+      p2b Deoxys used Psycho Boost -> p1b: Latios
+      p1b Latios fainted
+      p1a Scizor used Pursuit -> p2a: Amoonguss
+      p2a Amoonguss used Giga Drain -> p1a: Scizor
+      after p1: Scizor 236/311, Latios 0/360
+      after p2: Amoonguss 78/432, Deoxys-Attack 1/241
+
+  Turn 7
+      p1b <- Whimsicott comes in (324/324)
+      after p1: Scizor 236/311, Whimsicott 324/324
+      after p2: Amoonguss 78/432, Deoxys-Attack 1/241
+
+  Turn 8
+    p1 mcts: move 3 1, move 2 1
+      search (23000 visits): pursuit,0;uturn,0 815v 40 | pursuit,0;moonblast,0 787v 37 | switch gengarmega;moonblast,1 787v 37 | pursuit,0;uturn,1 754v 33
+    p2 greedy: move 3 1, move 1 1
+      p1b Whimsicott used U-turn -> p2a: Amoonguss
+      after p1: Scizor 236/311, Whimsicott 270/324
+      after p2: Amoonguss 43/432, Deoxys-Attack 1/241
+
+  Turn 9
+      p1b <- Gengar-Mega comes in (324/324)
+      p2b Deoxys used Psycho Boost -> p1a: Scizor
+      p1a Scizor used Pursuit -> p2a: Amoonguss
+      p2a Amoonguss fainted
+      -sideend p1: A move: Tailwind
+      after p1: Scizor 138/311, Gengar-Mega 324/324
+      after p2: Amoonguss 0/432, Deoxys-Attack 1/241
+
+  Turn 10
+      p2a <- Gardevoir comes in (279/279)
+      after p1: Scizor 138/311, Gengar-Mega 324/324
+      after p2: Gardevoir 279/279, Deoxys-Attack 1/241
+
+  Turn 11
+    p1 mcts: move 3 1, move 1 1
+      search (24000 visits): pursuit,0;shadowball,0 9318v 3390 | pursuit,0;protect,1 2435v 777 | pursuit,0;hiddenpower,0 2184v 686 | pursuit,0;switch whimsicott 2061v 642
+    p2 greedy: move 3 1, move 1 1
+      p2b Deoxys used Psycho Boost -> p1a: Scizor  [[miss]]
+              p2b Deoxys -- MISSED
+      p1b Gengar used Shadow Ball -> p2a: Gardevoir
+      p2a Gardevoir fainted
+      p1a Scizor used Pursuit -> p2b: Deoxys
+      p2b Deoxys fainted
+      after p1: Scizor 138/311, Gengar-Mega 324/324
+      after p2: Gardevoir 0/279, Deoxys-Attack 0/241
+
+  Turn 12
+      p2b <- Landorus-Therian comes in (319/319)
+      p2a <- Talonflame comes in (297/297)
+              p1a Scizor atk 1 fell
+              p1b Gengar atk 1 fell
+      after p1: Scizor 138/311, Gengar-Mega 324/324
+      after p2: Talonflame 297/297, Landorus-Therian 319/319
+
+  Turn 13
+    p1 mcts: move 3 2, move 4
+      search (34000 visits): pursuit,1;protect,1 6188v 2004 | pursuit,0;protect,1 5872v 1893 | switch whimsicott;protect,1 5364v 1714 | switch terrakion;protect,1 1095v 267
+    p2 greedy: move 1 1, move 4 1
+      p1b Gengar used Protect
+      p2a Talonflame used Brave Bird -> p1a: Scizor
+      p1a Scizor fainted
+      p2b Landorus used Superpower -> p1b: Gengar
+              p1b Gengar -- IMMUNE
+      after p1: Scizor 0/311, Gengar-Mega 324/324
+      after p2: Talonflame 222/297, Landorus-Therian 319/319
+
+  Turn 14
+      p1a <- Whimsicott comes in (270/324)
+      after p1: Whimsicott 270/324, Gengar-Mega 324/324
+      after p2: Talonflame 222/297, Landorus-Therian 319/319
+
+  Turn 15
+    p1 mcts: move 1 2, move 1 1
+      search (32000 visits): moonblast,1;shadowball,0 3997v 3354 | tailwind,0;shadowball,0 3742v 3131 | moonblast,0;shadowball,1 2649v 2179 | tailwind,0;shadowball,1 2222v 1810
+    p2 greedy: move 1 1, move 4 1
+      p2a Talonflame used Brave Bird -> p1a: Whimsicott
+      p1a Whimsicott fainted
+      p2b Landorus used Superpower -> p1b: Gengar
+              p1b Gengar -- IMMUNE
+      p1b Gengar used Shadow Ball -> p2a: Talonflame
+      p2a Talonflame fainted
+      after p1: Whimsicott 0/324, Gengar-Mega 324/324
+      after p2: Talonflame 0/297, Landorus-Therian 319/319
+
+  Turn 16
+      p1a <- Terrakion comes in (323/323)
+      after p1: Terrakion 323/323, Gengar-Mega 324/324
+      after p2: Talonflame 0/297, Landorus-Therian 319/319
+
+  Turn 17
+    p1 mcts: move 1 2, move 1 2
+      search (469000 visits): closecombat,1;shadowball,1 132149v 131999 | stoneedge,1;shadowball,1 101768v 101453 | quickguard,0;shadowball,1 66048v 65588 | closecombat,1;hiddenpower,1 54453v 53964
+    p2 greedy: pass, move 4 1
+      p2b Landorus used Superpower -> p1a: Terrakion
+              p2b Landorus atk 1 fell
+              p2b Landorus def 1 fell
+      p1a Terrakion fainted
+      p1b Gengar used Shadow Ball -> p2b: Landorus
+      after p1: Terrakion 0/323, Gengar-Mega 324/324
+      after p2: Talonflame 0/297, Landorus-Therian 118/319
+
+  Turn 18
+    p1 mcts: pass, move 1 2
+      search (1276000 visits): No Move;shadowball,1 348859v 348859 | No Move;hiddenpower,1 348859v 348859 | No Move;disable,1 289141v 288886 | No Move;protect,1 289141v 288886
+    p2 greedy: pass, move 4 2
+      p2b Landorus used Superpower -> p1b: Gengar
+              p1b Gengar -- IMMUNE
+      p1b Gengar used Shadow Ball -> p2b: Landorus
+      p2b Landorus fainted
+      after p1: Terrakion 0/323, Gengar-Mega 324/324
+      after p2: Talonflame 0/297, Landorus-Therian 0/319
+
+  RESULT: p1 wins

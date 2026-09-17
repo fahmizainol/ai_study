@@ -1,0 +1,262 @@
+battle 35   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: ORAS Doubles OU: Pelipper, Araquanid, Oranguru, Thundurus, Latias, Kingdra
+  p2: Copy of Untitled 650: Kyurem-Black, Gardevoir-Mega, Volcanion, Amoonguss, Landorus-Therian, Thundurus
+
+  Turn 1
+    p1 mcts: switch 3, move 1 2   (slot0 Pelipper -> Oranguru)
+      search (18000 visits): switch oranguru;liquidation,1 320v 184 | hurricane,0;liquidation,1 305v 173 | scald,0;liquidation,1 287v 161 | switch thundurus;liquidation,1 285v 160
+    p2 greedy: move 2 1, move 1
+      p1a <- Oranguru comes in (383/383)
+      p2b Gardevoir used Hyper Voice -> p1b: Araquanid  [[spread] p1a,p1b]
+      p2a Kyurem used Ice Beam -> p1a: Oranguru
+      p1b Araquanid used Liquidation -> p2b: Gardevoir
+      p2b Gardevoir fainted
+      after p1: Oranguru 211/383, Araquanid 262/339
+      after p2: Kyurem-Black 418/418, Gardevoir-Mega 0/277
+
+  Turn 2
+      p2b <- Volcanion comes in (363/363)
+      after p1: Oranguru 211/383, Araquanid 262/339
+      after p2: Kyurem-Black 418/418, Volcanion 363/363
+
+  Turn 3
+    p1 mcts: move 2, move 1 1
+      search (8000 visits): reflect,0;liquidation,0 232v 159 | reflect,0;poisonjab,1 138v 83 | reflect,0;liquidation,1 136v 81 | reflect,0;poisonjab,0 134v 80
+    p2 greedy: move 2 1, move 3 1
+      p2a Kyurem used Ice Beam -> p1a: Oranguru
+      p2b Volcanion used Overheat -> p1a: Oranguru
+              p2b Volcanion spa 2 fell
+      p1b Araquanid used Liquidation -> p2a: Kyurem
+              p2a Kyurem -- critical hit
+      p1a Oranguru used Reflect
+      -sidestart p1: A Reflect
+      after p1: Oranguru 24/383, Araquanid 262/339
+      after p2: Kyurem-Black 180/418, Volcanion 363/363
+
+  Turn 4
+    p1 mcts: switch 6, move 1 1   (slot0 Oranguru -> Kingdra)
+      search (16000 visits): switch kingdra;liquidation,0 845v 311 | switch pelipper;liquidation,0 677v 237 | switch thundurus;liquidation,0 592v 200 | reflect,0;liquidation,0 536v 176
+    p2 greedy: move 2 1, move 3 1
+      p1a <- Kingdra comes in (292/292)
+      p2a Kyurem used Ice Beam -> p1a: Kingdra
+      p2b Volcanion used Overheat -> p1a: Kingdra
+              p1a Kingdra -- critical hit
+              p2b Volcanion spa 2 fell
+      p1b Araquanid used Liquidation -> p2a: Kyurem
+      after p1: Kingdra 62/292, Araquanid 262/339
+      after p2: Kyurem-Black 35/418, Volcanion 363/363
+
+  Turn 5
+    p1 mcts: move 1, move 1 1
+      search (16000 visits): muddywater,0;liquidation,0 259v 85 | hydropump,0;liquidation,1 248v 80 | muddywater,0;liquidation,1 233v 73 | muddywater,0;switch pelipper 231v 72
+    p2 greedy: move 2 1, move 3 1
+      p1a Kingdra used Muddy Water -> p2a: Kyurem  [[spread] p2a]
+              p2b Volcanion -- IMMUNE
+      p2a Kyurem fainted
+      p2b Volcanion used Overheat -> p1a: Kingdra
+              p2b Volcanion spa 2 fell
+      p1b Araquanid used Liquidation -> p2b: Volcanion
+              p2b Volcanion -- IMMUNE
+      after p1: Kingdra 24/292, Araquanid 262/339
+      after p2: Kyurem-Black 0/418, Volcanion 363/363
+
+  Turn 6
+      p2a <- Amoonguss comes in (431/431)
+      after p1: Kingdra 24/292, Araquanid 262/339
+      after p2: Amoonguss 431/431, Volcanion 363/363
+
+  Turn 7
+    p1 mcts: move 2 2, move 1 1
+      search (23000 visits): dracometeor,1;liquidation,0 336v 91 | dracometeor,0;liquidation,0 299v 76 | protect,0;switch latias 290v 73 | dracometeor,0;switch latias 285v 71
+    p2 greedy: move 3 1, move 3 1
+      p1a Kingdra used Draco Meteor -> p2b: Volcanion
+              p1a Kingdra spa 2 fell
+      p1a Kingdra fainted
+      p2b Volcanion used Overheat -> p1b: Araquanid
+      p1b Araquanid used Liquidation -> p2a: Amoonguss
+      p2a Amoonguss used Giga Drain -> p1b: Araquanid
+      after p1: Kingdra 0/292, Araquanid 137/339
+      after p2: Amoonguss 299/431, Volcanion 190/363
+
+  Turn 8
+      p1a <- Pelipper comes in (324/324)
+      after p1: Pelipper 324/324, Araquanid 137/339
+      after p2: Amoonguss 299/431, Volcanion 190/363
+
+  Turn 9
+    p1 mcts: move 1 1, move 1 1
+      search (22000 visits): hurricane,0;liquidation,0 323v 43 | hurricane,1;liquidation,1 311v 40 | hurricane,0;liquidation,1 309v 40 | scald,0;liquidation,0 294v 36
+    p2 greedy: move 3 2, move 3 2
+      p2b Volcanion used Overheat -> p1b: Araquanid
+      p1a Pelipper used Hurricane -> p2a: Amoonguss
+              p2a Amoonguss gained confusion
+      p1b Araquanid used Liquidation -> p2a: Amoonguss
+      p2a Amoonguss fainted
+      -sideend p1: A Reflect
+      after p1: Pelipper 324/324, Araquanid 69/339
+      after p2: Amoonguss 0/431, Volcanion 190/363
+
+  Turn 10
+      p2a <- Landorus-Therian comes in (319/319)
+              p1a Pelipper atk 1 fell
+              p1b Araquanid atk 1 fell
+      after p1: Pelipper 324/324, Araquanid 69/339
+      after p2: Landorus-Therian 319/319, Volcanion 190/363
+
+  Turn 11
+    p1 mcts: move 2 1, move 4
+      search (25000 visits): scald,0;protect,1 1453v 635 | scald,0;switch thundurus 510v 181 | scald,0;switch latias 463v 160 | hurricane,0;protect,1 447v 153
+    p2 greedy: move 4 2, move 3 2
+      p1b Araquanid used Protect
+      p2a Landorus used Superpower -> p1b: Araquanid
+              p1b Araquanid -- move: Protect
+      p2b Volcanion used Overheat -> p1b: Araquanid
+              p1b Araquanid -- move: Protect
+      p1a Pelipper used Scald -> p2a: Landorus
+      after p1: Pelipper 324/324, Araquanid 69/339
+      after p2: Landorus-Therian 11/319, Volcanion 190/363
+
+  Turn 12
+    p1 mcts: move 3 2, switch 5   (slot1 Araquanid -> Latias)
+      search (18000 visits): uturn,1;switch latias 412v 207 | uturn,1;switch thundurus 387v 191 | uturn,0;switch latias 354v 172 | uturn,1;switch oranguru 337v 161
+    p2 greedy: move 4 2, move 3 2
+      p1b <- Latias comes in (362/362)
+      p2a Landorus used Superpower -> p1b: Latias
+              p2a Landorus atk 1 fell
+              p2a Landorus def 1 fell
+      p2b Volcanion used Overheat -> p1b: Latias
+      p1a Pelipper used U-turn -> p2b: Volcanion
+      after p1: Pelipper 324/324, Latias 273/362
+      after p2: Landorus-Therian 11/319, Volcanion 182/363
+
+  Turn 13
+      p1a <- Thundurus comes in (299/299)
+      after p1: Thundurus 299/299, Latias 273/362
+      after p2: Landorus-Therian 11/319, Volcanion 182/363
+
+  Turn 14
+    p1 mcts: move 2 1, move 2 2
+      search (18000 visits): thunder,0;psychic,1 408v 165 | thunder,0;helpinghand,0 325v 123 | thunder,0;psychic,0 310v 116 | thunderwave,1;psychic,1 309v 115
+    p2 greedy: move 4 2, move 3 2
+      p2a Landorus used Superpower -> p1b: Latias
+              p2a Landorus atk 1 fell
+              p2a Landorus def 1 fell
+      p1a Thundurus used Thunder -> p2a: Landorus
+              p2a Landorus -- IMMUNE
+      p1b Latias used Psychic -> p2b: Volcanion
+      p2b Volcanion used Overheat -> p1b: Latias
+      after p1: Thundurus 299/299, Latias 204/362
+      after p2: Landorus-Therian 11/319, Volcanion 106/363
+
+  Turn 15
+    p1 mcts: move 2 1, move 4 -1
+      search (18000 visits): thunder,0;helpinghand,0 386v 114 | thunder,0;psychic,0 381v 112 | thunder,0;tailwind,1 331v 92 | thunder,0;switch araquanid 273v 69
+    p2 greedy: move 4 2, move 1 2
+      p1b Latias used Helping Hand -> p1a: Thundurus
+      p2a Landorus used Superpower -> p1b: Latias
+              p2a Landorus atk 1 fell
+              p2a Landorus def 1 fell
+              p1b Latias used up its Sitrus Berry
+      p1a Thundurus used Thunder -> p2a: Landorus
+              p2a Landorus -- IMMUNE
+      p2b Volcanion used Steam Eruption -> p1b: Latias
+              p1b Latias is now brn
+      after p1: Thundurus 299/299, Latias 180/362
+      after p2: Landorus-Therian 11/319, Volcanion 106/363
+
+  Turn 16
+    p1 mcts: move 2 1, move 4 -1
+      search (21000 visits): thunder,0;helpinghand,0 444v 115 | thunder,0;psychic,0 430v 110 | thunder,0;tailwind,1 378v 91 | thunder,0;switch araquanid 332v 75
+    p2 greedy: move 4 2, move 1 2
+      p1b Latias used Helping Hand -> p1a: Thundurus
+      p2a Landorus used Superpower -> p1b: Latias
+              p2a Landorus atk 1 fell
+              p2a Landorus def 1 fell
+      p1a Thundurus used Thunder -> p2a: Landorus
+              p2a Landorus -- IMMUNE
+      p2b Volcanion used Steam Eruption -> p1b: Latias
+      after p1: Thundurus 299/299, Latias 72/362
+      after p2: Landorus-Therian 11/319, Volcanion 106/363
+
+  Turn 17
+    p1 mcts: move 2 1, move 4 -1
+      search (18000 visits): thunder,0;helpinghand,0 337v 74 | thunder,0;psychic,0 302v 62 | thunder,0;tailwind,1 292v 59 | switch araquanid;tailwind,1 245v 44
+    p2 greedy: move 4 2, move 1 2
+      p1b Latias used Helping Hand -> p1a: Thundurus
+      p2a Landorus used Superpower -> p1b: Latias
+              p2a Landorus atk 1 fell
+              p2a Landorus def 1 fell
+      p1a Thundurus used Thunder -> p2a: Landorus
+              p2a Landorus -- IMMUNE
+      p2b Volcanion used Steam Eruption -> p1b: Latias
+      p1b Latias fainted
+      after p1: Thundurus 299/299, Latias 0/362
+      after p2: Landorus-Therian 11/319, Volcanion 106/363
+
+  Turn 18
+      p1b <- Pelipper comes in (324/324)
+      after p1: Thundurus 299/299, Pelipper 324/324
+      after p2: Landorus-Therian 11/319, Volcanion 106/363
+
+  Turn 19
+    p1 mcts: move 2 1, move 2 1
+      search (16000 visits): thunder,0;scald,0 368v 84 | thunder,0;uturn,1 290v 58 | switch araquanid;uturn,1 289v 57 | hiddenpower,1;uturn,1 281v 55
+    p2 greedy: move 4 1, move 1 1
+      p2a Landorus used Superpower -> p1a: Thundurus
+              p2a Landorus atk 1 fell
+              p2a Landorus def 1 fell
+      p1a Thundurus used Thunder -> p2a: Landorus
+              p2a Landorus -- IMMUNE
+      p2b Volcanion used Steam Eruption -> p1a: Thundurus
+      p1b Pelipper used Scald -> p2a: Landorus
+      p2a Landorus fainted
+      after p1: Thundurus 179/299, Pelipper 324/324
+      after p2: Landorus-Therian 0/319, Volcanion 106/363
+
+  Turn 20
+      p2a <- Thundurus comes in (359/359)
+      after p1: Thundurus 179/299, Pelipper 324/324
+      after p2: Thundurus 359/359, Volcanion 106/363
+
+  Turn 21
+    p1 mcts: move 2 1, switch 6   (slot1 Pelipper -> Oranguru)
+      search (20000 visits): thunder,0;switch oranguru 648v 245 | thunder,0;switch araquanid 614v 229 | thunderwave,1;switch oranguru 521v 186 | hiddenpower,0;switch araquanid 486v 170
+    p2 greedy: move 1 1, move 1 1
+      p1b <- Oranguru comes in (24/383)
+      p1a Thundurus used Thunder -> p2a: Thundurus
+              p2a Thundurus used up its Sitrus Berry
+      p2a Thundurus used Thunderbolt -> p1a: Thundurus
+              p1a Thundurus used up its Sitrus Berry
+              p1b Oranguru -- ability: Symbiosis Choice Band
+      p2b Volcanion used Steam Eruption -> p1a: Thundurus
+      after p1: Thundurus 28/299, Oranguru 24/383
+      after p2: Thundurus 243/359, Volcanion 106/363
+
+  Turn 22
+    p1 mcts: move 2 1, move 4 1
+      search (27000 visits): thunder,0;swagger,0 1458v 700 | thunder,0;switch pelipper 1009v 461 | thunder,0;reflect,1 976v 443 | thunder,1;reflect,1 959v 434
+    p2 greedy: move 1 2, move 1 2
+      p1a Thundurus used Thunder -> p2a: Thundurus
+              p2a Thundurus -- critical hit
+      p2a Thundurus fainted
+      p2b Volcanion used Steam Eruption -> p1b: Oranguru
+      p1b Oranguru fainted
+      after p1: Thundurus 28/299, Oranguru 0/383
+      after p2: Thundurus 0/359, Volcanion 106/363
+
+  Turn 23
+      p1b <- Araquanid comes in (69/339)
+      after p1: Thundurus 28/299, Araquanid 69/339
+      after p2: Thundurus 0/359, Volcanion 106/363
+
+  Turn 24
+    p1 mcts: move 2 2, switch 6   (slot1 Araquanid -> Pelipper)
+      search (1051000 visits): thunder,1;switch pelipper 1032160v 1032160 | thunder,1;poisonjab,1 13928v 13379 | thunder,1;leechlife,1 2178v 1943 | thunder,1;protect,1 2042v 1815
+    p2 greedy: pass, move 1 1
+      p1b <- Pelipper comes in (324/324)
+      p1a Thundurus used Thunder -> p2b: Volcanion
+      p2b Volcanion fainted
+      after p1: Thundurus 28/299, Pelipper 324/324
+      after p2: Thundurus 0/359, Volcanion 0/363
+
+  RESULT: p1 wins

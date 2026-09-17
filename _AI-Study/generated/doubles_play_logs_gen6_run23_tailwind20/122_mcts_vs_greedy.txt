@@ -1,0 +1,218 @@
+battle 122   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: oraspl/Untitled 196: Kangaskhan-Mega, Volcarona, Landorus-Therian, Aegislash, Amoonguss, Keldeo-Resolute
+  p2: cleefable: Kangaskhan-Mega, Thundurus, Volcanion, Clefable, Bisharp, Terrakion
+
+  Turn 1
+    p1 mcts: move 3 2, move 2
+      search (14000 visits): return,1;heatwave,0 367v 260 | return,1;quiverdance,1 319v 220 | fakeout,1;quiverdance,1 301v 206 | poweruppunch,0;quiverdance,1 289v 196
+    p2 greedy: move 4 1, move 1 1
+      p2a Kangaskhan used Sucker Punch -> p1a: Kangaskhan
+      p2b Thundurus used Thunderbolt -> p1a: Kangaskhan
+              p1a Kangaskhan is now par
+      p1a Kangaskhan used Return -> p2b: Thundurus
+              p2b Thundurus used up its Sitrus Berry
+      p1b Volcarona used Heat Wave -> p2a: Kangaskhan  [[spread] p2a]
+              p1b Volcarona -- MISSED
+              p2a Kangaskhan -- critical hit
+      after p1: Kangaskhan-Mega 139/351, Volcarona 311/311
+      after p2: Kangaskhan-Mega 187/385, Thundurus 188/362
+
+  Turn 2
+    p1 mcts: switch 4, move 1   (slot0 Kangaskhan-Mega -> Aegislash)
+      search (21000 visits): switch aegislash;quiverdance,1 517v 325 | switch landorustherian;bugbuzz,0 464v 286 | switch landorustherian;quiverdance,1 436v 266 | switch landorustherian;heatwave,0 430v 262
+    p2 greedy: move 4 1, move 1 1
+      p1a <- Aegislash comes in (324/324)
+      p2a Kangaskhan used Sucker Punch  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p2b Thundurus used Thunderbolt -> p1a: Aegislash
+      p1b Volcarona used Quiver Dance
+              p1b Volcarona spa 1 rose
+              p1b Volcarona spd 1 rose
+              p1b Volcarona spe 1 rose
+      after p1: Aegislash 263/324, Volcarona 311/311
+      after p2: Kangaskhan-Mega 187/385, Thundurus 188/362
+
+  Turn 3
+    p1 mcts: move 2 2, move 2
+      search (20000 visits): shadowball,1;heatwave,0 1314v 1055 | flashcannon,1;heatwave,0 1136v 902 | flashcannon,0;heatwave,0 1022v 804 | switch landorustherian;heatwave,0 1011v 794
+    p2 greedy: move 4 1, move 1 1
+      p2a Kangaskhan used Sucker Punch -> p1a: Aegislash
+      p1b Volcarona used Heat Wave -> p2a: Kangaskhan  [[spread] p2a,p2b]
+      p2a Kangaskhan fainted
+      p2b Thundurus fainted
+      p1a Aegislash used Shadow Ball -> p2: Kangaskhan  [[notarget]]
+              p1a Aegislash -- IT FAILED
+      after p1: Aegislash-Blade 173/324, Volcarona 311/311
+      after p2: Kangaskhan-Mega 0/385, Thundurus 0/362
+
+  Turn 4
+      p2b <- Clefable comes in (394/394)
+      p2a <- Volcanion comes in (363/363)
+      after p1: Aegislash-Blade 173/324, Volcarona 311/311
+      after p2: Volcanion 363/363, Clefable 394/394
+
+  Turn 5
+    p1 mcts: switch 3, move 1   (slot0 Aegislash-Blade -> Landorus-Therian)
+      search (13000 visits): switch landorustherian;quiverdance,1 753v 465 | switch landorustherian;heatwave,0 570v 338 | switch landorustherian;bugbuzz,0 436v 247 | switch kangaskhanmega;quiverdance,1 410v 230
+    p2 greedy: move 4 1, move 3 1
+      p1a <- Landorus-Therian comes in (382/382)
+              p2a Volcanion atk 1 fell
+              p2b Clefable atk 1 fell
+      p1b Volcarona used Quiver Dance
+              p1b Volcarona spa 1 rose
+              p1b Volcarona spd 1 rose
+              p1b Volcarona spe 1 rose
+      p2a Volcanion used Overheat -> p1a: Landorus
+              p1a Landorus -- critical hit
+              p2a Volcanion spa 2 fell
+      p2b Clefable used Flamethrower -> p1a: Landorus
+              p1a Landorus -- critical hit
+      after p1: Landorus-Therian 89/382, Volcarona 311/311
+      after p2: Volcanion 363/363, Clefable 394/394
+
+  Turn 6
+    p1 mcts: move 2 1, move 2
+      search (13000 visits): uturn,0;heatwave,0 610v 325 | uturn,0;bugbuzz,0 421v 209 | uturn,1;heatwave,0 419v 208 | switch aegislash;heatwave,0 361v 173
+    p2 greedy: move 4 1, move 3 1
+      p1b Volcarona used Heat Wave -> p2b: Clefable  [[spread] p2a]
+              p1b Volcarona -- MISSED
+      p1a Landorus used U-turn -> p2a: Volcanion
+      after p1: Landorus-Therian 89/382, Volcarona 311/311
+      after p2: Volcanion 283/363, Clefable 394/394
+
+  Turn 7
+      p1a <- Aegislash comes in (173/324)
+      p2a Volcanion used Overheat -> p1a: Aegislash
+              p2a Volcanion spa 2 fell
+      p2b Clefable used Flamethrower -> p1a: Aegislash
+      p1a Aegislash fainted
+      after p1: Aegislash 0/324, Volcarona 311/311
+      after p2: Volcanion 283/363, Clefable 394/394
+
+  Turn 8
+      p1a <- Landorus-Therian comes in (89/382)
+              p2a Volcanion atk 1 fell
+              p2b Clefable atk 1 fell
+      after p1: Landorus-Therian 89/382, Volcarona 311/311
+      after p2: Volcanion 283/363, Clefable 394/394
+
+  Turn 9
+    p1 mcts: move 2 1, move 2
+      search (12000 visits): uturn,0;heatwave,0 472v 198 | uturn,1;heatwave,0 395v 159 | uturn,1;bugbuzz,0 308v 115 | earthquake,0;protect,1 300v 111
+    p2 greedy: move 4 1, move 3 1
+      p1b Volcarona used Heat Wave -> p2b: Clefable  [[spread] p2a,p2b]
+              p2b Clefable is now brn
+      p1a Landorus used U-turn -> p2a: Volcanion
+      after p1: Landorus-Therian 89/382, Volcarona 311/311
+      after p2: Volcanion 204/363, Clefable 271/394
+
+  Turn 10
+      p1a <- Kangaskhan-Mega comes in (139/351)
+      p2a Volcanion used Overheat -> p1a: Kangaskhan
+              p2a Volcanion spa 2 fell
+      p2b Clefable used Flamethrower -> p1a: Kangaskhan
+      after p1: Kangaskhan-Mega 1/351, Volcarona 311/311
+      after p2: Volcanion 204/363, Clefable 222/394
+
+  Turn 11
+    p1 mcts: switch 6, move 2   (slot0 Kangaskhan-Mega -> Keldeo-Resolute)
+      search (15000 visits): switch keldeoresolute;heatwave,0 392v 125 | fakeout,0;heatwave,0 366v 114 | fakeout,1;bugbuzz,0 307v 89 | switch keldeoresolute;bugbuzz,0 307v 89
+    p2 greedy: move 4 1, move 3 1
+      p1a <- Keldeo-Resolute comes in (323/323)
+      p1b Volcarona used Heat Wave -> p2a: Volcanion  [[spread] p2b]
+              p1b Volcarona -- MISSED
+      p2a Volcanion used Overheat -> p1a: Keldeo
+      p2b Clefable used Flamethrower -> p1a: Keldeo
+      after p1: Keldeo-Resolute 254/323, Volcarona 311/311
+      after p2: Volcanion 204/363, Clefable 59/394
+
+  Turn 12
+    p1 mcts: move 3 1, move 1
+      search (15000 visits): secretsword,0;quiverdance,1 639v 289 | secretsword,1;quiverdance,1 508v 220 | secretsword,0;bugbuzz,1 485v 207 | hydropump,1;quiverdance,1 472v 200
+    p2 greedy: move 4 1, move 3 1
+      p1b Volcarona used Quiver Dance
+              p1b Volcarona spa 1 rose
+              p1b Volcarona spd 1 rose
+              p1b Volcarona spe 1 rose
+      p1a Keldeo used Secret Sword -> p2a: Volcanion
+      p2a Volcanion used Overheat -> p1a: Keldeo
+      p2b Clefable used Flamethrower -> p1a: Keldeo
+      after p1: Keldeo-Resolute 153/323, Volcarona 311/311
+      after p2: Volcanion 44/363, Clefable 10/394
+
+  Turn 13
+    p1 mcts: move 3 2, move 1
+      search (20000 visits): secretsword,1;quiverdance,1 761v 253 | hydropump,1;quiverdance,1 729v 240 | hydropump,0;quiverdance,1 557v 170 | switch kangaskhanmega;quiverdance,1 552v 168
+    p2 greedy: move 4 1, move 3 1
+      p1b Volcarona used Quiver Dance
+              p1b Volcarona spa 1 rose
+              p1b Volcarona spd 1 rose
+              p1b Volcarona spe 1 rose
+      p1a Keldeo used Secret Sword -> p2b: Clefable
+              p2b Clefable -- critical hit
+      p2b Clefable fainted
+      p2a Volcanion used Overheat -> p1a: Keldeo
+      after p1: Keldeo-Resolute 95/323, Volcarona 311/311
+      after p2: Volcanion 44/363, Clefable 0/394
+
+  Turn 14
+      p2b <- Bisharp comes in (271/271)
+      after p1: Keldeo-Resolute 95/323, Volcarona 311/311
+      after p2: Volcanion 44/363, Bisharp 271/271
+
+  Turn 15
+    p1 mcts: move 3 2, move 1
+      search (17000 visits): secretsword,1;quiverdance,1 722v 315 | switch kangaskhanmega;bugbuzz,1 676v 291 | secretsword,1;heatwave,0 652v 279 | secretsword,1;protect,1 647v 276
+    p2 greedy: move 4 1, move 1 1
+      p2b Bisharp used Sucker Punch -> p1a: Keldeo
+      p1a Keldeo fainted
+      p1b Volcarona used Quiver Dance
+              p1b Volcarona spa 1 rose
+              p1b Volcarona spd 1 rose
+              p1b Volcarona spe 1 rose
+      p2a Volcanion used Overheat -> p1b: Volcarona
+      after p1: Keldeo-Resolute 0/323, Volcarona 295/311
+      after p2: Volcanion 44/363, Bisharp 244/271
+
+  Turn 16
+      p1a <- Landorus-Therian comes in (89/382)
+              p2a Volcanion atk 1 fell
+              p2b Bisharp atk 1 fell
+              p2b Bisharp atk 2 rose
+      after p1: Landorus-Therian 89/382, Volcarona 295/311
+      after p2: Volcanion 44/363, Bisharp 244/271
+
+  Turn 17
+    p1 mcts: switch 5, move 3 2   (slot0 Landorus-Therian -> Amoonguss)
+      search (29000 visits): switch amoonguss;bugbuzz,1 5493v 2505 | switch kangaskhanmega;bugbuzz,1 2450v 1043 | earthquake,0;protect,1 1298v 509 | switch kangaskhanmega;heatwave,0 1169v 450
+    p2 greedy: move 4 1, move 1 1
+      p1a <- Amoonguss comes in (432/432)
+      p2b Bisharp used Sucker Punch  [[still]]
+              p2b Bisharp -- IT FAILED
+      p1b Volcarona used Bug Buzz -> p2b: Bisharp
+      p2b Bisharp fainted
+      p2a Volcanion used Overheat -> p1a: Amoonguss
+      after p1: Amoonguss 328/432, Volcarona 295/311
+      after p2: Volcanion 44/363, Bisharp 0/271
+
+  Turn 18
+      p2b <- Terrakion comes in (323/323)
+      after p1: Amoonguss 328/432, Volcarona 295/311
+      after p2: Volcanion 44/363, Terrakion 323/323
+
+  Turn 19
+    p1 mcts: move 3 2, move 2
+      search (20000 visits): energyball,1;heatwave,0 1720v 507 | switch landorustherian;bugbuzz,1 1486v 426 | spore,0;bugbuzz,1 1079v 287 | energyball,1;bugbuzz,1 954v 246
+    p2 greedy: move 1 1, move 3 1
+      p1b Volcarona used Heat Wave -> p2a: Volcanion  [[spread] p2a,p2b]
+      p2a Volcanion fainted
+      p2b Terrakion used Close Combat -> p1a: Amoonguss
+              p2b Terrakion def 1 fell
+              p2b Terrakion spd 1 fell
+              p1a Amoonguss used up its Sitrus Berry
+      p1a Amoonguss used Energy Ball -> p2b: Terrakion
+      p2b Terrakion fainted
+      after p1: Amoonguss 289/432, Volcarona 295/311
+      after p2: Volcanion 0/363, Terrakion 0/323
+
+  RESULT: p1 wins

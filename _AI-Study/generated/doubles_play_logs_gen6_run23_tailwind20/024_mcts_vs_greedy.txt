@@ -1,0 +1,157 @@
+battle 24   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: ORAS Doubles OU: Smeargle, Espeon, Whimsicott, Jirachi, Azelf, Clefable
+  p2: oraspl/Untitled 352: Kangaskhan-Mega, Darkrai, Landorus, Amoonguss, Volcanion, Scrafty
+
+  Turn 1
+    p1 mcts: move 3 1, move 2
+      search (40000 visits): spore,0;dazzlinggleam,0 2731v 1115 | geomancy,0;storedpower,0 2320v 930 | geomancy,0;dazzlinggleam,0 2245v 897 | spore,0;substitute,1 1898v 742
+    p2 greedy: move 4 1, move 1 1
+      p2a Kangaskhan used Sucker Punch  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p2b Darkrai used Ice Beam -> p1a: Smeargle
+      p1a Smeargle used Spore -> p2a: Kangaskhan
+              p2a Kangaskhan is now slp
+      p1b Espeon used Dazzling Gleam -> p2a: Kangaskhan  [[spread] p2a,p2b]
+      after p1: Smeargle 73/251, Espeon 321/321
+      after p2: Kangaskhan-Mega 297/351, Darkrai 151/281
+
+  Turn 2
+    p1 mcts: move 1, move 2
+      search (46000 visits): geomancy,0;dazzlinggleam,0 2382v 892 | cottonguard,0;dazzlinggleam,0 2096v 771 | spore,0;dazzlinggleam,0 1799v 647 | geomancy,0;storedpower,0 1755v 629
+    p2 greedy: move 4 1, move 1 1
+              p2a Kangaskhan COULD NOT MOVE (slp)
+      p2b Darkrai used Ice Beam -> p1a: Smeargle
+      p1a Smeargle fainted
+      p1b Espeon used Dazzling Gleam -> p2b: Darkrai  [[spread] p2a,p2b]
+      after p1: Smeargle 0/251, Espeon 321/321
+      after p2: Kangaskhan-Mega 240/351, Darkrai 31/281
+
+  Turn 3
+      p1a <- Whimsicott comes in (323/323)
+      after p1: Whimsicott 323/323, Espeon 321/321
+      after p2: Kangaskhan-Mega 240/351, Darkrai 31/281
+
+  Turn 4
+    p1 mcts: move 1, move 2
+      search (63000 visits): tailwind,0;dazzlinggleam,0 3159v 1017 | tailwind,0;substitute,1 2354v 727 | memento,0;substitute,1 2270v 697 | memento,0;dazzlinggleam,0 2045v 617
+    p2 greedy: move 4 1, move 1 1
+      p1a Whimsicott used Tailwind
+      -sidestart p1: A move: Tailwind
+              p2a Kangaskhan COULD NOT MOVE (slp)
+      p2b Darkrai used Ice Beam -> p1a: Whimsicott
+      p1b Espeon used Dazzling Gleam -> p2b: Darkrai  [[spread] p2a,p2b]
+              p2a Kangaskhan -- critical hit
+      p2b Darkrai fainted
+      after p1: Whimsicott 43/323, Espeon 321/321
+      after p2: Kangaskhan-Mega 158/351, Darkrai 0/281
+
+  Turn 5
+      p2b <- Landorus comes in (319/319)
+      after p1: Whimsicott 43/323, Espeon 321/321
+      after p2: Kangaskhan-Mega 158/351, Landorus 319/319
+
+  Turn 6
+    p1 mcts: move 4 2, move 3
+      search (57000 visits): memento,1;substitute,1 1399v 100 | protect,0;substitute,1 1189v 73 | memento,1;dazzlinggleam,0 1184v 72 | taunt,0;substitute,1 1183v 72
+    p2 greedy: move 4 1, move 1 1
+      p1a Whimsicott used Memento -> p2b: Landorus
+              p2b Landorus atk 2 fell
+              p2b Landorus spa 2 fell
+      p1a Whimsicott fainted
+              p2a Kangaskhan is cured of slp
+      p2a Kangaskhan used Sucker Punch  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p1b Espeon used Substitute
+              p1b Espeon gained Substitute
+      p2b Landorus used Earth Power -> p1b: Espeon
+              p1b Espeon lost Substitute
+      after p1: Whimsicott 0/323, Espeon 261/321
+      after p2: Kangaskhan-Mega 158/351, Landorus 319/319
+
+  Turn 7
+      p1a <- Jirachi comes in (401/401)
+      after p1: Jirachi 401/401, Espeon 261/321
+      after p2: Kangaskhan-Mega 158/351, Landorus 319/319
+
+  Turn 8
+    p1 mcts: move 3 1, move 1 1
+      search (64000 visits): thunderwave,0;storedpower,0 12262v 10739 | ironhead,0;substitute,1 1286v 39 | ironhead,0;dazzlinggleam,0 1232v 34 | ironhead,0;storedpower,1 1161v 28
+    p2 greedy: move 4 2, move 1 2
+      p2a Kangaskhan used Sucker Punch -> p1b: Espeon
+      p1b Espeon used Stored Power -> p2a: Kangaskhan
+      p1a Jirachi used Thunder Wave -> p2a: Kangaskhan
+              p2a Kangaskhan is now par
+      p2b Landorus used Earth Power -> p1b: Espeon
+      p1b Espeon fainted
+      after p1: Jirachi 401/401, Espeon 0/321
+      after p2: Kangaskhan-Mega 130/351, Landorus 319/319
+
+  Turn 9
+      p1b <- Azelf comes in (353/353)
+      after p1: Jirachi 401/401, Azelf 353/353
+      after p2: Kangaskhan-Mega 130/351, Landorus 319/319
+
+  Turn 10
+    p1 mcts: move 3 2, move 2
+      search (62000 visits): thunderwave,1;lightscreen,1 21343v 19794 | switch clefable;explosion,0 1857v 100 | switch clefable;lightscreen,1 1674v 80 | thunderwave,1;explosion,0 1644v 77
+    p2 greedy: move 4 1, move 1 1
+      p2a Kangaskhan used Sucker Punch  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p1b Azelf used Light Screen
+      -sidestart p1: A move: Light Screen
+      p1a Jirachi used Thunder Wave -> p2b: Landorus
+              p2b Landorus -- IMMUNE
+      p2b Landorus used Earth Power -> p1a: Jirachi
+      -sideend p1: A move: Tailwind
+      after p1: Jirachi 245/401, Azelf 353/353
+      after p2: Kangaskhan-Mega 130/351, Landorus 319/319
+
+  Turn 11
+    p1 mcts: move 4 1, move 1
+      search (68000 visits): ironhead,0;reflect,1 30126v 28217 | switch clefable;explosion,0 1867v 113 | ironhead,0;explosion,0 1796v 105 | followme,0;explosion,0 1779v 103
+    p2 greedy: move 4 1, move 1 1
+      p2a Kangaskhan used Sucker Punch -> p1a: Jirachi
+      p1b Azelf used Reflect
+      -sidestart p1: A Reflect
+      p2b Landorus used Earth Power -> p1a: Jirachi
+      p1a Jirachi fainted
+      after p1: Jirachi 0/401, Azelf 353/353
+      after p2: Kangaskhan-Mega 130/351, Landorus 319/319
+
+  Turn 12
+      p1a <- Clefable comes in (385/385)
+      after p1: Clefable 385/385, Azelf 353/353
+      after p2: Kangaskhan-Mega 130/351, Landorus 319/319
+
+  Turn 13
+    p1 mcts: move 1, move 4
+      search (45000 visits): followme,0;explosion,0 2942v 113 | psychup,0;explosion,0 2829v 104 | moonblast,0;explosion,0 2798v 102 | moonblast,1;explosion,0 2761v 99
+    p2 greedy: move 4 1, move 1 1
+      p1a Clefable used Follow Me
+      p2a Kangaskhan used Sucker Punch  [[still]]
+              p2a Kangaskhan -- IT FAILED
+      p1b Azelf used Explosion -> p2a: Kangaskhan  [[spread] p1a,p2a,p2b]
+      p1b Azelf fainted
+      p2a Kangaskhan fainted
+      p2b Landorus used Earth Power -> p1a: Clefable
+              p1a Clefable used up its Sitrus Berry
+      after p1: Clefable 224/385, Azelf 0/353
+      after p2: Kangaskhan-Mega 0/351, Landorus 114/319
+
+  Turn 14
+      p2a <- Amoonguss comes in (432/432)
+      after p1: Clefable 224/385, Azelf 0/353
+      after p2: Amoonguss 432/432, Landorus 114/319
+
+  Turn 15
+    p1 mcts: move 4 1, pass
+      search (124000 visits): psychup,0;No Move 62422v 4532 | moonblast,1;No Move 20688v 1224 | psychup,1;No Move 16609v 914 | followme,0;No Move 16157v 882
+    p2 greedy: move 3 1, move 1 1
+      p2b Landorus used Earth Power -> p1a: Clefable
+      p1a Clefable used Psych Up -> p2a: Amoonguss
+      p2a Amoonguss used Energy Ball -> p1a: Clefable
+      p1a Clefable fainted
+      after p1: Clefable 0/385, Azelf 0/353
+      after p2: Amoonguss 432/432, Landorus 114/319
+
+  RESULT: p2 wins

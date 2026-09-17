@@ -1,0 +1,115 @@
+battle 69   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: DPL vs SMB: Kangaskhan-Mega, Conkeldurr, Thundurus, Deoxys-Speed, Volcanion, Bisharp
+  p2: Gar Gene Deo: Gengar-Mega, Genesect, Landorus-Therian, Diancie, Volcanion, Deoxys-Attack
+
+  Turn 1
+    p1 mcts: move 4 -2, move 1 2
+      search (39000 visits): helpinghand,1;drainpunch,1 2362v 1951 | lowkick,1;drainpunch,1 2231v 1836 | seismictoss,1;knockoff,1 2037v 1667 | fakeout,1;drainpunch,1 1922v 1567
+    p2 greedy: move 4 1, move 4
+      p1a Kangaskhan used Helping Hand -> p1b: Conkeldurr
+      p2a Gengar used Sludge Bomb -> p1a: Kangaskhan
+      p2b Genesect used Explosion -> p1a: Kangaskhan  [[spread] p1a,p1b]
+              p2a Gengar -- IMMUNE
+              p1b Conkeldurr -- critical hit
+      p2b Genesect fainted
+      p1a Kangaskhan fainted
+      p1b Conkeldurr fainted
+      after p1: Kangaskhan-Mega 0/414, Conkeldurr 0/414
+      after p2: Gengar-Mega 324/324, Genesect 0/283
+
+  Turn 2
+      p1a <- Thundurus comes in (361/361)
+      p2b <- Landorus-Therian comes in (319/319)
+      p1b <- Deoxys-Speed comes in (303/303)
+              p1a Thundurus atk 1 fell
+              p1b Deoxys atk 1 fell
+      after p1: Thundurus 361/361, Deoxys-Speed 303/303
+      after p2: Gengar-Mega 324/324, Landorus-Therian 319/319
+
+  Turn 3
+    p1 mcts: move 1 1, move 2 2
+      search (7000 visits): thunderbolt,0;icebeam,1 440v 314 | thunderwave,0;icebeam,1 388v 272 | thunderbolt,1;icebeam,1 333v 228 | thunderwave,1;icebeam,1 277v 183
+    p2 greedy: move 4 1, move 4 1
+      p1b Deoxys used Ice Beam -> p2b: Landorus
+      p2b Landorus fainted
+      p2a Gengar used Sludge Bomb -> p1a: Thundurus
+              p1a Thundurus used up its Sitrus Berry
+      p1a Thundurus used Thunderbolt -> p2a: Gengar
+      after p1: Thundurus 261/361, Deoxys-Speed 303/303
+      after p2: Gengar-Mega 197/324, Landorus-Therian 0/319
+
+  Turn 4
+      p2b <- Diancie comes in (304/304)
+      after p1: Thundurus 261/361, Deoxys-Speed 303/303
+      after p2: Gengar-Mega 197/324, Diancie 304/304
+
+  Turn 5
+    p1 mcts: move 1 1, move 2 1
+      search (8000 visits): thunderbolt,0;icebeam,0 339v 166 | thunderbolt,1;psychoboost,0 332v 162 | thunderwave,1;psychoboost,0 243v 109 | thunderwave,0;psychoboost,0 242v 108
+    p2 greedy: move 4 1, move 1
+      p1b Deoxys used Ice Beam -> p2a: Gengar
+      p2a Gengar used Sludge Bomb -> p1a: Thundurus
+      p1a Thundurus used Thunderbolt -> p2a: Gengar
+      p2a Gengar fainted
+      p2b Diancie used Diamond Storm -> p1b: Deoxys  [[spread] p1a,p1b]
+              p2b Diancie def 1 rose
+      p1a Thundurus fainted
+      after p1: Thundurus 0/361, Deoxys-Speed 189/303
+      after p2: Gengar-Mega 0/324, Diancie 304/304
+
+  Turn 6
+      p2a <- Volcanion comes in (363/363)
+      p1a <- Volcanion comes in (363/363)
+      after p1: Volcanion 363/363, Deoxys-Speed 189/303
+      after p2: Volcanion 363/363, Diancie 304/304
+
+  Turn 7
+    p1 mcts: move 2 2, move 3
+      search (3000 visits): steameruption,1;stealthrock,0 78v 38 | earthpower,0;switch bisharp 74v 34 | earthpower,0;icebeam,1 71v 33 | steameruption,1;icebeam,1 66v 29
+    p2 greedy: move 2 2, move 1
+      p1b Deoxys used Stealth Rock -> p2a: Volcanion
+      -sidestart p2: B move: Stealth Rock
+      p2a Volcanion used Steam Eruption -> p1b: Deoxys
+      p1b Deoxys fainted
+      p1a Volcanion used Steam Eruption -> p2b: Diancie
+      p2b Diancie used Diamond Storm -> p1a: Volcanion
+              p2b Diancie def 1 rose
+      after p1: Volcanion 127/363, Deoxys-Speed 0/303
+      after p2: Volcanion 363/363, Diancie 88/304
+
+  Turn 8
+      p1b <- Bisharp comes in (271/271)
+      after p1: Volcanion 127/363, Bisharp 271/271
+      after p2: Volcanion 363/363, Diancie 88/304
+
+  Turn 9
+    p1 mcts: move 3 2, move 2 1
+      search (14000 visits): earthpower,1;knockoff,0 2239v 1474 | steameruption,1;knockoff,0 1627v 1045 | earthpower,0;knockoff,0 1041v 640 | steameruption,1;protect,1 963v 587
+    p2 greedy: move 2 1, move 1
+      p1b Bisharp used Knock Off -> p2a: Volcanion
+              p2a Volcanion used up its Assault Vest
+      p2a Volcanion used Steam Eruption -> p1a: Volcanion
+      p1a Volcanion used Earth Power -> p2b: Diancie
+              p2b Diancie -- critical hit
+      p2b Diancie fainted
+      after p1: Volcanion 217/363, Bisharp 244/271
+      after p2: Volcanion 164/363, Diancie 0/304
+
+  Turn 10
+      p2b <- Deoxys-Attack comes in (241/241)
+      after p1: Volcanion 217/363, Bisharp 244/271
+      after p2: Volcanion 164/363, Deoxys-Attack 211/241
+
+  Turn 11
+    p1 mcts: move 3 1, move 1 2
+      search (22000 visits): earthpower,0;suckerpunch,1 2850v 1948 | earthpower,0;protect,1 1418v 920 | heatwave,0;knockoff,0 948v 589 | heatwave,0;protect,1 826v 505
+    p2 greedy: move 2 1, move 1 1
+      p1b Bisharp used Sucker Punch -> p2b: Deoxys
+      p2b Deoxys fainted
+      p2a Volcanion used Steam Eruption -> p1a: Volcanion
+      p1a Volcanion used Earth Power -> p2a: Volcanion
+      p2a Volcanion fainted
+      after p1: Volcanion 307/363, Bisharp 217/271
+      after p2: Volcanion 0/363, Deoxys-Attack 0/241
+
+  RESULT: p1 wins

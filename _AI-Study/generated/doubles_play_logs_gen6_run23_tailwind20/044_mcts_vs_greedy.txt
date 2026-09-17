@@ -1,0 +1,112 @@
+battle 44   p1=mcts vs p2=greedy   mcts 300 ms a decision
+  p1: glurak gaming: Charizard-Mega-Y, Conkeldurr, Aegislash, Landorus-Therian, Thundurus, Deoxys-Speed
+  p2: Copy of Untitled 480: Kyurem-Black, Manectric-Mega, Volcarona, Blastoise, Landorus, Mew
+
+  Turn 1
+    p1 mcts: move 4, move 1 1
+      search (19000 visits): protect,0;drainpunch,0 619v 379 | heatwave,0;switch landorustherian 501v 296 | heatwave,0;drainpunch,0 423v 243 | heatwave,0;drainpunch,1 283v 149
+    p2 greedy: move 2 1, move 4 1
+      p1a Charizard used Protect
+      p2b Manectric used Overheat -> p1a: Charizard
+              p1a Charizard -- move: Protect
+      p2a Kyurem used Fusion Bolt -> p1a: Charizard
+              p1a Charizard -- move: Protect
+      p1b Conkeldurr used Drain Punch -> p2a: Kyurem
+      after p1: Charizard-Mega-Y 351/351, Conkeldurr 413/413
+      after p2: Kyurem-Black 92/440, Manectric-Mega 344/344
+
+  Turn 2
+    p1 mcts: move 1, switch 4   (slot1 Conkeldurr -> Landorus-Therian)
+      search (26000 visits): heatwave,0;switch landorustherian 1932v 1321 | heatwave,0;machpunch,0 595v 358 | switch landorustherian;machpunch,0 525v 309 | heatwave,0;machpunch,1 501v 293
+    p2 greedy: move 2 1, move 4 1
+      p1b <- Landorus-Therian comes in (358/358)
+              p2a Kyurem atk 1 fell
+              p2b Manectric atk 1 fell
+      p2b Manectric used Overheat -> p1a: Charizard  [[miss]]
+              p2b Manectric -- MISSED
+      p1a Charizard used Heat Wave -> p2a: Kyurem  [[spread] p2a,p2b]
+      p2a Kyurem fainted
+      after p1: Charizard-Mega-Y 351/351, Landorus-Therian 358/358
+      after p2: Kyurem-Black 0/440, Manectric-Mega 124/344
+
+  Turn 3
+      p2a <- Volcarona comes in (311/311)
+      after p1: Charizard-Mega-Y 351/351, Landorus-Therian 358/358
+      after p2: Volcarona 311/311, Manectric-Mega 124/344
+
+  Turn 4
+    p1 mcts: move 1, move 1
+      search (26000 visits): heatwave,0;earthquake,0 6541v 5397 | overheat,0;earthquake,0 1188v 891 | solarbeam,0;earthquake,0 811v 586 | heatwave,0;uturn,1 792v 571
+    p2 greedy: move 1, move 4 1
+      p1b Landorus used Earthquake -> p2a: Volcarona  [[spread] p2a,p2b]
+              p1a Charizard -- IMMUNE
+      p2b Manectric fainted
+      p1a Charizard used Heat Wave -> p2a: Volcarona
+      p2a Volcarona fainted
+      after p1: Charizard-Mega-Y 351/351, Landorus-Therian 358/358
+      after p2: Volcarona 0/311, Manectric-Mega 0/344
+
+  Turn 5
+      p2b <- Landorus comes in (319/319)
+      p2a <- Blastoise comes in (362/362)
+      after p1: Charizard-Mega-Y 351/351, Landorus-Therian 358/358
+      after p2: Blastoise 362/362, Landorus 319/319
+
+  Turn 6
+    p1 mcts: move 1, switch 5   (slot1 Landorus-Therian -> Thundurus)
+      search (18000 visits): heatwave,0;switch thundurus 1563v 1191 | heatwave,0;earthquake,0 1442v 1092 | heatwave,0;switch aegislash 1044v 769 | solarbeam,1;switch thundurus 972v 711
+    p2 greedy: move 3 1, move 1 1
+      p1b <- Thundurus comes in (361/361)
+      p2b Landorus used Earth Power -> p1a: Charizard
+              p1a Charizard -- IMMUNE
+      p1a Charizard used Heat Wave -> p2a: Blastoise  [[spread] p2a,p2b]
+              p2a Blastoise -- critical hit
+      p2a Blastoise used Scald -> p1a: Charizard
+      after p1: Charizard-Mega-Y 273/351, Thundurus 361/361
+      after p2: Blastoise 233/362, Landorus 103/319
+
+  Turn 7
+    p1 mcts: move 1, move 1 1
+      search (24000 visits): heatwave,0;thunderbolt,0 1350v 1138 | heatwave,0;thunderwave,0 807v 651 | heatwave,0;switch landorustherian 696v 553 | solarbeam,1;thunderbolt,0 687v 545
+    p2 greedy: move 3 1, move 1 1
+      p2b Landorus used Earth Power -> p1a: Charizard
+              p1a Charizard -- IMMUNE
+      p1a Charizard used Heat Wave -> p2a: Blastoise  [[spread] p2a]
+              p1a Charizard -- MISSED
+              p2a Blastoise is now brn
+      p1b Thundurus used Thunderbolt -> p2a: Blastoise
+      p2a Blastoise fainted
+      after p1: Charizard-Mega-Y 273/351, Thundurus 361/361
+      after p2: Blastoise 0/362, Landorus 103/319
+
+  Turn 8
+      p2a <- Mew comes in (401/401)
+      after p1: Charizard-Mega-Y 273/351, Thundurus 361/361
+      after p2: Mew 401/401, Landorus 103/319
+
+  Turn 9
+    p1 mcts: move 1, move 1 1
+      search (15000 visits): heatwave,0;thunderbolt,0 1238v 1030 | heatwave,0;switch landorustherian 633v 495 | heatwave,0;hiddenpower,0 580v 449 | overheat,0;thunderbolt,0 474v 358
+    p2 greedy: move 2 1, move 1 1
+      p2b Landorus used Earth Power -> p1a: Charizard
+              p1a Charizard -- IMMUNE
+      p1a Charizard used Heat Wave -> p2b: Landorus  [[spread] p2a,p2b]
+      p2b Landorus fainted
+      p2a Mew used Ice Beam -> p1a: Charizard
+      p1b Thundurus used Thunderbolt -> p2a: Mew
+              p2a Mew is now par
+              p2a Mew -- ability: Synchronize
+              p1b Thundurus -- IMMUNE
+      after p1: Charizard-Mega-Y 207/351, Thundurus 361/361
+      after p2: Mew 144/401, Landorus 0/319
+
+  Turn 10
+    p1 mcts: move 1, move 1 1
+      search (219000 visits): heatwave,0;thunderbolt,0 20379v 19992 | overheat,0;thunderbolt,0 19880v 19494 | heatwave,0;hiddenpower,0 14815v 14445 | overheat,0;hiddenpower,0 14173v 13806
+    p2 greedy: move 2 1, pass
+      p1a Charizard used Heat Wave -> p2a: Mew
+      p2a Mew fainted
+      after p1: Charizard-Mega-Y 207/351, Thundurus 361/361
+      after p2: Mew 0/401, Landorus 0/319
+
+  RESULT: p1 wins
