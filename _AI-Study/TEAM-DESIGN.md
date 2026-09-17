@@ -895,7 +895,7 @@ validator   27 teams, 0 errors, 13 warnings (the pre-existing 13)
 | `tools/fight_context.py` | §6.8 deriver: each fight's context → candidate archetype x mode plans, built and scored |
 | `generated/fight_plans.json` | the chosen plan per fight — the only thing both generators read for archetype/mode |
 | `tools/team_shape.py` | the role/mode vocabulary and the corpus reference both the generator and the diagnostic read |
-| `tools/boss_studio.py` | local UI (127.0.0.1:8731): the knobs, all 27 rosters live (nine gyms + 18 named trainers), the §6.8 candidates panel, and Install, which writes both team files, regenerates the registry and injects it into the game bundle — all four replaced together or none |
+| `tools/boss_studio.py` | local UI (127.0.0.1:8731): the knobs, all 27 rosters live (nine gyms + 18 named trainers), the §6.8 candidates panel, and Install, which writes both team files, regenerates the registry and injects it into the game bundle — all four replaced together or none. A fight can be **frozen** (`FROZEN` in a preset, keyed `g<n>`/`t<slot>`): it then ships the exact team it was frozen at and the generator is not consulted for it, so knobs, card overrides and a moved PBS/Smogon corpus all stop reaching it. That is what lets a committed preset rebuild the same teams on another machine, which an unfrozen one cannot promise |
 | `extracted/smogon-sets/` | `@smogon/sets` gen 6-9 — set corpus (**`dex` half is copyrighted**) |
 | `extracted/smogon-stats/` | Smogon 2019-06 gen-7 moveset stats — teammate correlation |
 | `extracted/smogon-formats/` | Showdown `formats-data.ts` — the authoritative competitive tier |

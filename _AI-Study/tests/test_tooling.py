@@ -86,14 +86,82 @@ class TeamOverrideBattleFormatTest(unittest.TestCase):
             self.emit("triple")
 
     def test_studio_export_imports_politoed_from_poliwhirl_family(self):
+        """The branching-evolution un-pin: POLIWHIRL supplies POLIWRATH *or*
+        POLITOED, so un-pinning on family membership alone dropped an imported
+        POLITOED and shifted the whole gym up a slot.
+
+        Reads the SHIPPED gym file, not a draft export: teams_bosses_studio.json
+        was the draft and is gone, and guarding this on a file that can vanish is
+        how the regression stopped being covered at all."""
         import boss_studio
-        path = STUDY / "generated" / "teams_bosses_studio.json"
-        if not path.exists():
-            self.skipTest("Studio export is absent")
+        path = STUDY / "generated" / "teams_bosses_gyms.json"
+        self.assertTrue(path.exists(), f"{path.name} is the shipped gym file")
+        team = json.loads(path.read_text(encoding="utf-8"))
+        if not any(mon["species"] == "POLITOED" for mon in team[2]["mons"]):
+            self.skipTest("gym 3 no longer carries POLITOED to regress on")
         loaded = boss_studio.team_load(path.name, boss_studio.defaults())
         self.assertEqual(9, loaded["gyms"])
-        self.assertEqual(54, loaded["mons"])
+        self.assertEqual(sum(len(r["mons"]) for r in team), loaded["mons"])
         self.assertTrue(loaded["settings"]["PICKS"]["g2"]["keep"]["POLITOED"])
+
+
+class BossStudioFreezeTest(unittest.TestCase):
+    """Freezing pins a fight to a team the generator is then never asked to
+    re-derive. The point is that it survives the thing card overrides cannot:
+    PBS and the Smogon dump live outside this repo, so the same knobs give
+    different teams later, and a preset that only stores knobs cannot promise
+    another machine the same teams."""
+
+    @classmethod
+    def setUpClass(cls):
+        sys.path.insert(0, str(STUDY / "tools"))
+        import boss_studio
+        cls.BS = boss_studio
+        cls.base = boss_studio.run({})
+
+    @staticmethod
+    def sig(records):
+        return [[mon["species"] for mon in r["mons"]] for r in records]
+
+    # Knobs chosen to reroll everything if anything is listening: a theme every
+    # gym has to rebuild around, a band nothing currently sits in, a fresh seed.
+    HOSTILE = {"THEME": ["STEEL"] * 9, "TARGET": [300] * 9, "SET_SEED": 777}
+
+    def test_frozen_fights_ignore_knobs_that_would_reroll_them(self):
+        frozen = self.BS.set_frozen({}, None, True)
+        self.assertEqual(27, frozen["count"], "nine gyms plus 18 named trainers")
+        got = self.BS.run({**frozen["settings"], **self.HOSTILE})
+        self.assertEqual(self.sig(self.base["records"]), self.sig(got["records"]))
+        self.assertEqual(self.sig(self.base["trainer_records"]),
+                         self.sig(got["trainer_records"]))
+        self.assertEqual(self.base["sha"], got["sha"])
+
+    def test_the_same_knobs_do_reroll_an_unfrozen_build(self):
+        """Without this the test above passes on a generator that ignores the
+        knobs entirely, which would prove nothing about freezing."""
+        loose = self.BS.run(dict(self.HOSTILE))
+        self.assertNotEqual(self.sig(self.base["records"]),
+                            self.sig(loose["records"]))
+
+    def test_unfreezing_one_fight_rerolls_only_that_one(self):
+        frozen = self.BS.set_frozen({}, None, True)["settings"]
+        one = self.BS.set_frozen({**frozen, **self.HOSTILE}, ["g3"], False)
+        self.assertEqual(26, one["count"])
+        got = self.sig(self.BS.run(one["settings"])["records"])
+        moved = [i for i, (a, b) in
+                 enumerate(zip(got, self.sig(self.base["records"]))) if a != b]
+        self.assertEqual([3], moved)
+
+    def test_frozen_payload_survives_json(self):
+        """Presets and localStorage are both JSON, so a set or a Counter left in
+        the payload would come back as something the next build cannot use."""
+        frozen = self.BS.set_frozen({}, None, True)["settings"]
+        got = self.BS.run(json.loads(json.dumps(frozen)))
+        self.assertEqual(self.base["sha"], got["sha"])
+        # And byte-stable, or every preset save churns its own diff.
+        again = self.BS.set_frozen({}, None, True)["settings"]
+        self.assertEqual(json.dumps(frozen, sort_keys=True),
+                         json.dumps(again, sort_keys=True))
 
 
 class RealideaHiddenPowerTest(unittest.TestCase):

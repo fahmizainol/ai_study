@@ -457,20 +457,108 @@ def _apply_loadout(build, fight_key):
         role for mon in build["team"] for role in mon.get("roles", ()))
 
 
+def set_frozen(over, keys, on):
+    """Freeze or unfreeze fights, and hand back the settings that say so.
+
+    Freezing needs the build, and only the server has one, so this is a round trip
+    rather than a checkbox the client can tick on its own: build at the CURRENT
+    settings, keep what those fights came out as, and return the whole `over` for
+    the page to adopt. `keys` of None means every fight, which is the bulk toggle.
+
+    Unfreezing does not restore anything -- it drops the payload and the fight goes
+    back to being generated, which under drifted PBS or Smogon data is very likely a
+    different team. That is the honest behaviour and the reason the card says so."""
+    over = dict(over or {})
+    frozen = dict(_thaw(over.get("FROZEN")))
+    wanted = None if keys is None else {str(k) for k in keys}
+    if not on:
+        frozen = {} if wanted is None else {k: v for k, v in frozen.items()
+                                           if k not in wanted}
+        over["FROZEN"] = frozen
+        return {"frozen": sorted(frozen), "count": len(frozen), "settings": over}
+
+    # Build at the settings as they stand, then keep those fights verbatim. Anything
+    # already frozen is left exactly as it is: re-freezing an untouched fight would
+    # silently re-roll it under whatever the data says today.
+    got = run(over)
+    fresh = {}
+    for i, build in enumerate(got["_gym_builds"]):
+        fresh[f"g{i}"] = build
+    for slot, build in got["_trainer_builds"].items():
+        fresh[f"t{slot}"] = build
+    for key, build in fresh.items():
+        if (wanted is None or key in wanted) and key not in frozen:
+            frozen[key] = _freezable(build)
+    over["FROZEN"] = frozen
+    return {"frozen": sorted(frozen), "count": len(frozen), "settings": over}
+
+
+def _thaw(raw):
+    """FROZEN card keys -> the build dict each frozen fight ships verbatim.
+
+    The payload IS a build -- the shape make_gym()/make_trainer() return -- which is
+    why nothing downstream needs a frozen branch: _card() and as_team_record() both
+    already consume exactly this. Storing the build rather than the finished record
+    also keeps `roles` and `floors` as the GENERATOR's own tallies. Recomputing them
+    would quietly misreport: role_counts reads move names, so an ability-derived role
+    (Sand Stream setting sand, Swift Swim abusing it) scores a frozen gym 6 at 1/3
+    against a build that genuinely meets 3/3.
+
+    Unknown keys are dropped the way _fight_picks drops them, so a preset written
+    when there were eight gyms cannot resurrect a ninth."""
+    fights = T.load_fights()
+    out = {}
+    for k, build in (raw or {}).items():
+        if not isinstance(build, dict) or "team" not in build:
+            continue
+        if k[:1] == "g" and k[1:].isdigit() and int(k[1:]) < len(G.CAPS):
+            out[k] = build
+        elif k[:1] == "t" and k[1:].isdigit() and int(k[1:]) < len(fights):
+            out[k] = build
+    return out
+
+
+def _freezable(build):
+    """A build as JSON, ready to store: sets out, Counters flattened.
+
+    as_team_record() already sorts a mon's `roles` set on the way to a record, and
+    this is the same normalisation one level up -- so a thawed build is byte-stable
+    and a preset carrying one does not reorder on every save."""
+    got = {}
+    for key, value in build.items():
+        if isinstance(value, set):
+            got[key] = sorted(value)
+        elif isinstance(value, collections.Counter):
+            got[key] = dict(value)
+        elif key == "team":
+            got[key] = [{k: (sorted(v) if isinstance(v, set) else v)
+                         for k, v in mon.items()} for mon in value]
+        else:
+            got[key] = value
+    return got
+
+
 def run(over):
     with _LOCK, settings(over):
+        frozen = _thaw(over.get("FROZEN"))
         formats = battle_formats(over)
-        gyms = [G.make_gym(i) for i in range(9)]
         orders = over.get("ORDER") if isinstance(over.get("ORDER"), dict) else {}
+        gyms = [frozen[f"g{i}"] if f"g{i}" in frozen else G.make_gym(i)
+                for i in range(9)]
         for i, gym in enumerate(gyms):
+            # A frozen fight ships the team it was frozen at. Card overrides and the
+            # party order are how a GENERATED team is steered, so applying them here
+            # would be re-deriving the thing freezing exists to stop re-deriving.
+            if f"g{i}" in frozen:
+                continue
             _apply_loadout(gym, G.gym_id(i))
             gym["team"] = _ordered_team(gym["team"], orders.get(f"g{i}"))
         type_ids = G._type_ids()
         records = [G.as_team_record(g, type_ids) for g in gyms]
         for i, record in enumerate(records):
             record["battle_format"] = formats[i]
-        out = [_card(g, idx=g["idx"], theme=g["theme"],
-                     battle_format=formats[i]) for i, g in enumerate(gyms)]
+        out = [_card(g, idx=g["idx"], theme=g["theme"], battle_format=formats[i],
+                     frozen=f"g{i}" in frozen) for i, g in enumerate(gyms)]
         # The named non-gym trainers -- rivals, the recurring bosses, the post-game
         # superboss. A different generator owns them and a different file ships them,
         # so they are built beside the gyms and kept out of `records`, which is what
@@ -483,19 +571,23 @@ def run(over):
         # loaded. `slot` is the index into load_fights() -- a stable handle that is
         # not a name, since the cards no longer carry one.
         tplans = {int(k): v for k, v in (over.get("TRAINER_PLANS") or {}).items()}
-        trainers, trainer_records = [], []
+        trainers, trainer_records, tbuilds = [], [], {}
         for i, b in enumerate(T.load_fights()):
             pick = tplans.get(i)
-            got = T.make_trainer(b, (pick[0] or None, pick[1] or None) if pick else None)
+            got = frozen.get(f"t{i}") or T.make_trainer(
+                b, (pick[0] or None, pick[1] or None) if pick else None)
             if got:
-                _apply_loadout(got, T.fight_id(b))
-                got["team"] = _ordered_team(got["team"], orders.get(f"t{i}"))
+                if f"t{i}" not in frozen:
+                    _apply_loadout(got, T.fight_id(b))
+                    got["team"] = _ordered_team(got["team"], orders.get(f"t{i}"))
                 # Records stay in load_fights() order while the cards below get
                 # sorted up the curve: the file is what ships and what git diffs,
                 # so it must not reshuffle when a target moves.
+                tbuilds[i] = got
                 trainer_records.append(T.as_team_record(got, type_ids))
                 trainers.append(_card(got, slot=i, who=_alias(b["type"]),
-                                      ace=got["ace"], dynamic=got["dynamic"]))
+                                      ace=got["ace"], dynamic=got["dynamic"],
+                                      frozen=f"t{i}" in frozen))
         trainers.sort(key=lambda c: (c["target"], c["who"]))
         # Second encounters only once the order is fixed, so "Rival 1 (2nd)" is the
         # second one up the curve rather than the second one out of load_fights().
@@ -514,6 +606,9 @@ def run(over):
         return {
             "gyms": out, "trainers": trainers, "records": records,
             "trainer_records": trainer_records,
+            # The builds themselves, for set_frozen to keep. Not serialised to the
+            # page: /api/generate pops them the way it pops the records.
+            "_gym_builds": gyms, "_trainer_builds": tbuilds,
             # A fingerprint of the TEAMS, not of the settings that asked for them.
             # Those are different claims: identical settings reproduce identical
             # teams only while the PBS tables, the Smogon dump and this generator all
@@ -1354,8 +1449,9 @@ class Handler(http.server.BaseHTTPRequestHandler):
         try:
             if path == "/api/generate":
                 r = run(body)
-                r.pop("records")
-                r.pop("trainer_records")
+                for key in ("records", "trainer_records",
+                            "_gym_builds", "_trainer_builds"):
+                    r.pop(key)
                 return self._send(200, json.dumps(r))
             if path == "/api/sets":
                 sp = FT.fold(body.get("species") or "")
@@ -1391,6 +1487,10 @@ class Handler(http.server.BaseHTTPRequestHandler):
                         {"error": f"{os.path.basename(dest)} exists — tick overwrite"}))
                 return self._send(200, json.dumps(preset_save(
                     body["name"], body.get("settings") or {}, body.get("note") or "")))
+            if path == "/api/freeze":
+                return self._send(200, json.dumps(set_frozen(
+                    body.get("settings") or {}, body.get("keys"),
+                    bool(body.get("on", True)))))
             if path == "/api/import":
                 if not (body.get("name") or "").strip():
                     return self._send(400, json.dumps({"error": "choose a team JSON"}))
@@ -1458,6 +1558,9 @@ h1{font-size:15px;margin:0;letter-spacing:.02em}
 fieldset{border:1px solid var(--line);border-radius:8px;padding:10px 12px;margin:0 0 12px;
          background:var(--card)}
 fieldset fieldset{margin-bottom:0}
+.gym.frozen{border-color:var(--accent)}
+button.tiny.frz{margin-left:6px;vertical-align:middle}
+button.tiny.frz.on{border-color:var(--accent);color:var(--accent)}
 legend{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--dim);padding:0 4px}
 .row{display:grid;grid-template-columns:1fr auto;gap:6px;align-items:center;margin:7px 0}
 .row label{font-size:12px}
@@ -1641,6 +1744,14 @@ button.tiny{padding:2px 7px;font-size:11px;font-weight:500}
       live files are replaced together, or none of them are.</div>
     <div class="exp"><button id="install">Install into game</button></div>
     <div id="imsg"></div>
+    <div class="sub" style="margin-top:12px">freezing pins a fight to the team it is
+      showing now: the generator is not consulted for it again, so the knobs, the card
+      edits and a moved PBS or Smogon corpus all stop reaching it. Freeze the ones you
+      have settled and keep rerolling the rest &mdash; a preset carrying frozen fights
+      rebuilds them exactly on another machine, which an unfrozen one cannot promise.</div>
+    <div class="exp"><button class="ghost" id="frzall">Freeze all 27</button>
+      <button class="ghost" id="frznone">Unfreeze all</button></div>
+    <div id="frzmsg"></div>
   </fieldset>
   <fieldset><legend>import &middot; recover cards from teams</legend>
     <div class="sub">for a team JSON someone handed you, or when the teams outlived
@@ -1845,6 +1956,11 @@ let CARD={};
 // Party order per card. The first species is the battle lead. Kept separate from
 // PICKS because order changes neither species selection nor set selection.
 let ORDER={};
+// Fights pinned to an exact team, by card key -> the build the server froze. The
+// generator is not consulted for these at all, which is what makes a preset carrying
+// them reproduce under PBS or Smogon data that has since moved. Server-filled: only
+// it has a build, so freezing is a round trip rather than a checkbox.
+let FROZEN={};
 // The last build's mons, by card key + species, so an editor opened after the
 // fact shows the set and level that build actually used.
 let MONS={};
@@ -1858,6 +1974,7 @@ const cardOf=fk=>{
 };
 const get=()=>{
   const o={level_mode:$('level_mode').value,TRAINER_PLANS:PLAN.tr,PICKS:CARD,ORDER,
+    FROZEN,
     SET_FORMATS:[...$('setfmt').querySelectorAll('input:checked')].map(e=>e.value)};
   for(const k in S.meta) o[k]=+$('s_'+k).value;
   for(const k of ['TARGET','SPREAD','THEME','FORMAT'])
@@ -1892,6 +2009,7 @@ function setAll(o){
   PLAN.tr=(o.TRAINER_PLANS&&typeof o.TRAINER_PLANS==='object')?o.TRAINER_PLANS:{};
   CARD=(o.PICKS&&typeof o.PICKS==='object')?o.PICKS:{};
   ORDER=(o.ORDER&&typeof o.ORDER==='object')?o.ORDER:{};
+  FROZEN=(o.FROZEN&&typeof o.FROZEN==='object')?o.FROZEN:{};
   buildSave();               // a loaded preset survives a reload like anything else
   return true;
 }
@@ -2031,13 +2149,37 @@ const dirtyOf=(fk,i)=>{
   const order=Array.isArray(ORDER[fk])&&ORDER[fk].length>0;
   return (mons||plan||format||order)?{mons,plan,format,order}:null;
 };
+// Global because the card buttons are inline onclick, and the cards are re-rendered
+// wholesale on every build so a bound listener would not survive.
+async function toggleFreeze(keys,on){
+  const box=$('frzmsg');
+  if(box) box.innerHTML=on?'freezing…':'unfreezing…';
+  const r=await fetch('/api/freeze',{method:'POST',body:JSON.stringify(
+    {keys,on,settings:get()})});
+  const d=await r.json();
+  if(d.error){ if(box) box.innerHTML='<span class="bad">'+esc(d.error)+'</span>'; return; }
+  setAll(d.settings);
+  await go();
+  if(box) box.innerHTML=d.count
+    ?`<span class="ok">${d.count} of 27 fights frozen</span>`
+    :'<span class="warn">nothing frozen — every fight regenerates</span>';
+}
 const teamCard=(g,title,was,pick,fk,i)=>{
-  const gap=g.ebst-g.target, j=g.judge, d=fk?dirtyOf(fk,i):null;
-  return `<div class="gym${d?' dirty':''}"><h3><span>${title}${d?
+  const gap=g.ebst-g.target, j=g.judge;
+  // While a fight is frozen its card overrides and party order are not applied --
+  // run() skips them, because applying them would be re-deriving the team freezing
+  // exists to stop re-deriving. So the "edited" tag is suppressed rather than left
+  // claiming an edit that is doing nothing, and the frozen chip says why.
+  const d=(fk&&!g.frozen)?dirtyOf(fk,i):null;
+  const frz=fk?`<button class="tiny frz${g.frozen?' on':' ghost'}"
+      title="${g.frozen?'shipping the team it was frozen at — knobs and card edits do not touch it; unfreeze to regenerate (which under changed PBS or Smogon data very likely gives a different team)':'pin this team exactly as it is now, so nothing rerolls it'}"
+      onclick="toggleFreeze(['${fk}'],${g.frozen?'false':'true'})">${
+      g.frozen?'frozen':'freeze'}</button>`:'';
+  return `<div class="gym${d?' dirty':''}${g.frozen?' frozen':''}"><h3><span>${title}${d?
       ` <span class="tag edited">edited${d.plan?' · plan':''}${
         d.format?' · format':''}${
         d.mons?' · '+d.mons+' mon'+(d.mons>1?'s':''):''}${
-        d.order?' · order':''}</span>`:''}</span>
+        d.order?' · order':''}</span>`:''}${frz}</span>
     <span>${pick||''}</span></h3>
     <div class="meta">eBST <b class="${Math.abs(gap)<=3?'ok':Math.abs(gap)<=12?'warn':'bad'}">${g.ebst}</b>/${g.target}
       · <span class="tag">${esc(g.battle_format==='inherit'?'original format':g.battle_format)}</span>
@@ -2167,7 +2309,7 @@ const freeSave=()=>saveForm(FREE_KEY,freeControls);
 // save of its own that could fall out of step with them.
 function buildSave(){
   saveForm(BUILD_KEY,buildControls);
-  try{localStorage.setItem(PLAN_KEY,JSON.stringify({PLAN,CARD,ORDER}));}catch(e){}
+  try{localStorage.setItem(PLAN_KEY,JSON.stringify({PLAN,CARD,ORDER,FROZEN}));}catch(e){}
 }
 const freeRestore=()=>restoreForm(FREE_KEY,freeControls);
 // Restoring knobs means the Builder no longer shows what the repo ships, so say so
@@ -2182,6 +2324,7 @@ function buildRestore(){
   const plan=saved&&saved.PLAN?saved.PLAN:saved;
   if(saved&&saved.CARD&&typeof saved.CARD==='object') CARD=saved.CARD;
   if(saved&&saved.ORDER&&typeof saved.ORDER==='object') ORDER=saved.ORDER;
+  if(saved&&saved.FROZEN&&typeof saved.FROZEN==='object') FROZEN=saved.FROZEN;
   // Shape-check rather than trust: a saved PLAN from an older page could be missing
   // halves, and a bad ARCHETYPE entry reaches the generator as a dict key.
   if(plan&&Array.isArray(plan.gym)&&plan.gym.length===9){
@@ -2603,6 +2746,8 @@ async function init(){
     location.reload();};
   presetList();
   importFileList('teams_bosses_gyms.json');
+  $('frzall').onclick=()=>toggleFreeze(null,true);
+  $('frznone').onclick=()=>toggleFreeze(null,false);
   $('imget').onclick=async()=>{
     const name=$('imload').value;
     if(!name) return void($('immsg').innerHTML='<span class="warn">no importable team JSON</span>');
