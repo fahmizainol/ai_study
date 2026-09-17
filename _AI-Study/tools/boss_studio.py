@@ -24,6 +24,7 @@ through _remap_anchors(mode), and early_items() is cached but depends only on kn
 this UI does not expose.
 """
 import collections
+import copy
 import contextlib
 import datetime
 import hashlib
@@ -457,6 +458,25 @@ def _apply_loadout(build, fight_key):
         role for mon in build["team"] for role in mon.get("roles", ()))
 
 
+def _edit_frozen(build, fight_key, order):
+    """Card edits on a fight whose TEAM is fixed.
+
+    Frozen means the generator is not consulted for this fight. It does not mean the
+    team is read-only, and conflating the two left no way to change a frozen fight at
+    all: unfreezing hands it back to the generator, which rerolls it and loses exactly
+    the team you were trying to keep, so "drop one Pokemon from this team" had no
+    answer short of hand-editing the JSON.
+
+    So an untick removes a body, and the per-species overrides apply the way they do
+    anywhere else. Nothing is ADDED -- a tick on a species the team does not have has
+    nothing to pin here, because there is no generator to ask it of."""
+    keep = (G.PICKS.get(fight_key) or {}).get("keep") or {}
+    build["team"] = [mon for mon in build["team"]
+                     if keep.get(mon["species"]) is not False]
+    _apply_loadout(build, fight_key)
+    build["team"] = _ordered_team(build["team"], order)
+
+
 def _companion(team_name):
     """The preset name a team file ties itself to: its own stem.
 
@@ -575,16 +595,22 @@ def _thaw(raw):
     against a build that genuinely meets 3/3.
 
     Unknown keys are dropped the way _fight_picks drops them, so a preset written
-    when there were eight gyms cannot resurrect a ninth."""
+    when there were eight gyms cannot resurrect a ninth.
+
+    DEEP COPIED, because what comes back is handed to _edit_frozen and _apply_loadout,
+    which mutate a build in place -- untick a mon and the stored payload would lose it
+    permanently, and roles_of writes a set that no longer survives the JSON a preset
+    and localStorage are made of. The frozen payload is the source of truth and a
+    render must not be able to edit it."""
     fights = T.load_fights()
     out = {}
     for k, build in (raw or {}).items():
         if not isinstance(build, dict) or "team" not in build:
             continue
         if k[:1] == "g" and k[1:].isdigit() and int(k[1:]) < len(G.CAPS):
-            out[k] = build
+            out[k] = copy.deepcopy(build)
         elif k[:1] == "t" and k[1:].isdigit() and int(k[1:]) < len(fights):
-            out[k] = build
+            out[k] = copy.deepcopy(build)
     return out
 
 
@@ -616,10 +642,8 @@ def run(over):
         gyms = [frozen[f"g{i}"] if f"g{i}" in frozen else G.make_gym(i)
                 for i in range(9)]
         for i, gym in enumerate(gyms):
-            # A frozen fight ships the team it was frozen at. Card overrides and the
-            # party order are how a GENERATED team is steered, so applying them here
-            # would be re-deriving the thing freezing exists to stop re-deriving.
             if f"g{i}" in frozen:
+                _edit_frozen(gym, G.gym_id(i), orders.get(f"g{i}"))
                 continue
             _apply_loadout(gym, G.gym_id(i))
             gym["team"] = _ordered_team(gym["team"], orders.get(f"g{i}"))
@@ -647,7 +671,9 @@ def run(over):
             got = frozen.get(f"t{i}") or T.make_trainer(
                 b, (pick[0] or None, pick[1] or None) if pick else None)
             if got:
-                if f"t{i}" not in frozen:
+                if f"t{i}" in frozen:
+                    _edit_frozen(got, T.fight_id(b), orders.get(f"t{i}"))
+                else:
                     _apply_loadout(got, T.fight_id(b))
                     got["team"] = _ordered_team(got["team"], orders.get(f"t{i}"))
                 # Records stay in load_fights() order while the cards below get
@@ -2479,13 +2505,9 @@ async function toggleFreeze(keys,on){
 }
 const teamCard=(g,title,was,pick,fk,i)=>{
   const gap=g.ebst-g.target, j=g.judge;
-  // While a fight is frozen its card overrides and party order are not applied --
-  // run() skips them, because applying them would be re-deriving the team freezing
-  // exists to stop re-deriving. So the "edited" tag is suppressed rather than left
-  // claiming an edit that is doing nothing, and the frozen chip says why.
-  const d=(fk&&!g.frozen)?dirtyOf(fk,i):null;
+  const d=fk?dirtyOf(fk,i):null;
   const frz=fk?`<button class="tiny frz${g.frozen?' on':' ghost'}"
-      title="${g.frozen?'shipping the team it was frozen at — knobs and card edits do not touch it; unfreeze to regenerate (which under changed PBS or Smogon data very likely gives a different team)':'pin this team exactly as it is now, so nothing rerolls it'}"
+      title="${g.frozen?'this team is fixed — knobs and rerolls cannot touch it, but you can still untick a mon or change its set. Unfreezing hands it back to the generator, which rebuilds it from scratch':'pin this team exactly as it is now, so nothing rerolls it'}"
       onclick="toggleFreeze(['${fk}'],${g.frozen?'false':'true'})">${
       g.frozen?'frozen':'freeze'}</button>`:'';
   return `<div class="gym${d?' dirty':''}${g.frozen?' frozen':''}"><h3><span>${title}${d?

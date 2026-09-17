@@ -66,7 +66,7 @@
     ],
     "src": "Boss Studio custom moves",
     "fidelity": 4,
-    "inherited": "CRUSTLE",
+    "inherited": null,
     "pinned": true,
     "kept": true,
     "why": "pinned on the card"
@@ -199,8 +199,10 @@
    "notes": [
     "dropped DEWPIDER (269 BST, band 302-492)",
     "ANORITH re-equipped to cover setup"
-   ]
-  }
+   ],
+   "preset": "teams_bosses_gyms"
+  },
+  "battle_format": "inherit"
  },
  {
   "id": "gym2_AIMI_Aimi",
@@ -409,8 +411,10 @@
     "dropped MAWILE (380 BST, band 392-582)",
     "evolved MARILL (250) -> AZUMARILL (410, (OU)) to reach the band",
     "dropped AZUMARILL -- unticked on the card"
-   ]
-  }
+   ],
+   "preset": "teams_bosses_gyms"
+  },
+  "battle_format": "inherit"
  },
  {
   "id": "gym3_KENN_Kenn",
@@ -620,10 +624,11 @@
    "notes": [
     "dropped BRIONNE -- unticked on the card",
     "dropped PYUKUMUKU -- unticked on the card",
-    "evolved POLIWHIRL (385) -> POLIWRATH (500, ZU) to reach the band",
-    "dropped POLIWRATH -- unticked on the card"
-   ]
-  }
+    "evolved POLIWHIRL (385) -> POLIWRATH (500, ZU) to reach the band"
+   ],
+   "preset": "teams_bosses_gyms"
+  },
+  "battle_format": "inherit"
  },
  {
   "id": "gym4_DOUGLAS_Douglas",
@@ -813,9 +818,8 @@
     "src": "Boss Studio custom moves",
     "fidelity": 4,
     "inherited": null,
-    "pinned": true,
     "kept": true,
-    "why": "pinned on the card"
+    "why": "original, re-set for mega"
    }
   ],
   "design": {
@@ -823,11 +827,14 @@
    "level": 36,
    "theme": "ICE",
    "notes": [
-    "dropped WEAVILE -- unticked on the card",
-    "dropped FROSLASS -- unticked on the card",
-    "evolved PILOSWINE (450) -> MAMOSWINE (530, UU) to reach the band"
-   ]
-  }
+    "dropped WEAVILE (510 BST, band 520-582)",
+    "dropped FROSLASS (480 BST, band 520-582)",
+    "evolved PILOSWINE (450) -> MAMOSWINE (530, UU) to reach the band",
+    "GYARADOS re-equipped to cover mega"
+   ],
+   "preset": "teams_bosses_gyms"
+  },
+  "battle_format": "inherit"
  },
  {
   "id": "gym5_CIARA_Ciara",
@@ -1029,10 +1036,12 @@
    "level": 40,
    "theme": "DARK",
    "notes": [
-    "dropped MIGHTYENA (420 BST, band 449-601)",
+    "dropped MIGHTYENA (420 BST, band 470-580)",
     "MALAMAR re-equipped to cover recovery"
-   ]
-  }
+   ],
+   "preset": "teams_bosses_gyms"
+  },
+  "battle_format": "inherit"
  },
  {
   "id": "gym6_DHARA_Dhara",
@@ -1195,7 +1204,7 @@
     "roles": [],
     "src": "Boss Studio custom moves",
     "fidelity": 4,
-    "inherited": null,
+    "inherited": "RHYDON",
     "pinned": true,
     "kept": true,
     "why": "pinned on the card"
@@ -1240,8 +1249,10 @@
    "theme": "GROUND",
    "notes": [
     "dropped CLAYDOL (500 BST, band 513-653)"
-   ]
-  }
+   ],
+   "preset": "teams_bosses_gyms"
+  },
+  "battle_format": "inherit"
  },
  {
   "id": "gym7_ARDILLO_Lawrence",
@@ -1452,12 +1463,14 @@
    "level": 52,
    "theme": "PSYCHIC",
    "notes": [
-    "dropped ESPEON (525 BST, band 567-619)",
-    "dropped SLOWKING (490 BST, band 567-619)",
-    "dropped BEHEEYEM (485 BST, band 567-619)",
-    "dropped WOBBUFFET (405 BST, band 567-619)"
-   ]
-  }
+    "dropped ESPEON (525 BST, band 570-616)",
+    "dropped SLOWKING (490 BST, band 570-616)",
+    "dropped BEHEEYEM (485 BST, band 570-616)",
+    "dropped WOBBUFFET (405 BST, band 570-616)"
+   ],
+   "preset": "teams_bosses_gyms"
+  },
+  "battle_format": "inherit"
  },
  {
   "id": "gym8_BAY_Bay",
@@ -1594,68 +1607,64 @@
     "why": "original, re-set for setup"
    },
    {
-    "species": "REGIGIGAS",
+    "species": "DIALGA",
     "level": 56,
     "moves": [
-     "RETURN",
-     "KNOCKOFF",
-     "THUNDERWAVE",
-     "DRAINPUNCH"
+     "STEALTHROCK",
+     "DRACOMETEOR",
+     "FLASHCANNON",
+     "THUNDER"
     ],
-    "item": "LEFTOVERS",
+    "item": "SHUCABERRY",
     "ability": 0,
-    "nature": "ADAMANT",
+    "nature": "MODEST",
     "iv": 31,
     "ev": [
-     252,
-     252,
-     4,
+     244,
      0,
      0,
+     12,
+     252,
      0
     ],
     "roles": [
-     "speed",
-     "status"
+     "hazards"
     ],
-    "src": "Boss Studio custom moves",
+    "src": "gen6ubers/dex/Offensive Utility",
     "fidelity": 4,
     "inherited": null,
-    "pinned": true,
-    "kept": true,
-    "why": "pinned on the card"
+    "kept": false,
+    "why": "off-theme"
    },
    {
-    "species": "SLAKING",
+    "species": "RAYQUAZA",
     "level": 57,
     "moves": [
-     "BULKUP",
-     "SLACKOFF",
-     "TAUNT",
-     "RETURN"
+     "SWORDSDANCE",
+     "DRAGONASCENT",
+     "EARTHQUAKE",
+     "FLY"
     ],
-    "item": null,
+    "item": "LIFEORB",
     "ability": 0,
     "nature": "JOLLY",
     "iv": 31,
     "ev": [
+     0,
+     252,
+     4,
      252,
      0,
-     0,
-     16,
-     0,
-     240
+     0
     ],
     "roles": [
-     "recovery",
      "setup"
     ],
-    "src": "Boss Studio custom moves",
-    "fidelity": 4,
-    "inherited": "VIGOROTH",
-    "pinned": false,
-    "kept": true,
-    "why": "original"
+    "src": "gen6anythinggoes/dex/Swords Dance",
+    "fidelity": 3,
+    "inherited": null,
+    "kept": false,
+    "why": "off-theme"
    }
   ],
   "design": {
@@ -1663,12 +1672,18 @@
    "level": 57,
    "theme": "NORMAL",
    "notes": [
-    "dropped TOGEKISS -- unticked on the card",
-    "dropped SNORLAX -- unticked on the card",
-    "dropped BEWEAR -- unticked on the card",
+    "dropped SLAKING (670 BST, band 554-640)",
+    "dropped TOGEKISS (545 BST, band 554-640)",
+    "dropped SNORLAX (540 BST, band 554-640)",
+    "dropped BEWEAR (500 BST, band 554-640)",
+    "dropped REGIGIGAS (670 BST, band 554-640)",
+    "DIALGA off-theme: 46% Smogon co-occurrence",
+    "RAYQUAZA off-theme: 36% Smogon co-occurrence",
     "MELOETTA re-equipped to cover setup"
-   ]
-  }
+   ],
+   "preset": "teams_bosses_gyms"
+  },
+  "battle_format": "inherit"
  },
  {
   "id": "gym9_FINALILLIANA_Lilliana",
@@ -1837,33 +1852,32 @@
     "why": "original"
    },
    {
-    "species": "DIALGA",
+    "species": "PALKIA",
     "level": 61,
     "moves": [
-     "DRACOMETEOR",
-     "FIREBLAST",
+     "SPACIALREND",
+     "HYDROPUMP",
      "THUNDER",
-     "POWERGEM"
+     "FOCUSPUNCH"
     ],
-    "item": "CHOICESPECS",
+    "item": "LIFEORB",
     "ability": 0,
-    "nature": "MODEST",
+    "nature": "TIMID",
     "iv": 31,
     "ev": [
      0,
-     0,
      4,
+     0,
      252,
      252,
      0
     ],
     "roles": [],
-    "src": "Boss Studio custom moves",
+    "src": "gen6ubers/dex/All-Out Attacker",
     "fidelity": 4,
     "inherited": null,
-    "pinned": true,
-    "kept": true,
-    "why": "pinned on the card"
+    "kept": false,
+    "why": "off-theme"
    }
   ],
   "design": {
@@ -1871,11 +1885,15 @@
    "level": 61,
    "theme": "STEEL",
    "notes": [
-    "dropped EMPOLEON -- unticked on the card",
-    "dropped AEGISLASH -- unticked on the card",
-    "dropped BISHARP (490 BST, band 509-691)",
-    "dropped SKARMORY (465 BST, band 509-691)"
-   ]
-  }
+    "dropped EMPOLEON (530 BST, band 550-650)",
+    "dropped AEGISLASH (520 BST, band 550-650)",
+    "dropped BISHARP (490 BST, band 550-650)",
+    "dropped SKARMORY (465 BST, band 550-650)",
+    "dropped DIALGA (680 BST, band 550-650)",
+    "PALKIA off-theme: resists FIRE"
+   ],
+   "preset": "teams_bosses_gyms"
+  },
+  "battle_format": "inherit"
  }
 ]

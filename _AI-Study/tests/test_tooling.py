@@ -425,6 +425,59 @@ class ShippedTeamFilesTest(unittest.TestCase):
                          + "; ".join(errors[:3]))
 
 
+class FrozenFightIsEditableTest(unittest.TestCase):
+    """Frozen means the generator is not consulted, not that the team is read-only.
+    Conflating them left no way to change a frozen fight: unfreezing rerolls it and
+    loses the team you were keeping, so "drop one Pokemon" meant editing JSON."""
+
+    def setUp(self):
+        sys.path.insert(0, str(STUDY / "tools"))
+        import boss_studio
+        self.BS = boss_studio
+        self.settings = boss_studio.set_frozen({}, None, True)["settings"]
+        self.base = boss_studio.run(self.settings)
+        self.gym1 = [m["species"] for m in self.base["records"][0]["mons"]]
+
+    @staticmethod
+    def sig(records):
+        return [[mon["species"] for mon in r["mons"]] for r in records]
+
+    def _with(self, **over):
+        return {**json.loads(json.dumps(self.settings)), **over}
+
+    def test_unticking_removes_a_mon_from_a_frozen_team(self):
+        drop = self.gym1[3]
+        got = self.BS.run(self._with(PICKS={"g0": {"keep": {drop: False}}}))
+        self.assertEqual([s for s in self.gym1 if s != drop],
+                         self.sig(got["records"])[0])
+        self.assertEqual(self.sig(self.base["records"])[1:],
+                         self.sig(got["records"])[1:], "other fights untouched")
+
+    def test_per_species_overrides_reach_a_frozen_mon(self):
+        got = self.BS.run(self._with(PICKS={"g0": {"items": {self.gym1[0]: "LEFTOVERS"}}}))
+        self.assertEqual("LEFTOVERS", got["records"][0]["mons"][0]["item"])
+        self.assertEqual(self.gym1, self.sig(got["records"])[0], "species unchanged")
+
+    def test_the_edit_still_survives_knobs_that_would_reroll(self):
+        drop = self.gym1[3]
+        edited = self._with(PICKS={"g0": {"keep": {drop: False}}})
+        hostile = {**edited, "THEME": ["STEEL"] * 9, "TARGET": [300] * 9,
+                   "SET_SEED": 4242}
+        self.assertEqual([s for s in self.gym1 if s != drop],
+                         self.sig(self.BS.run(hostile)["records"])[0])
+
+    def test_rendering_does_not_mutate_the_stored_payload(self):
+        """_edit_frozen and _apply_loadout both mutate a build in place, and roles_of
+        writes a set that no JSON preset could hold. The payload is the source of
+        truth; a render must not be able to edit it."""
+        drop = self.gym1[3]
+        settings = self._with(PICKS={"g0": {"keep": {drop: False}}})
+        for _ in range(3):
+            self.BS.run(settings)
+        self.assertEqual(len(self.gym1), len(settings["FROZEN"]["g0"]["team"]))
+        json.dumps(settings)          # raises if a set leaked back in
+
+
 class BossStudioLoadUnpinsTest(unittest.TestCase):
     """Loading used to hand back a board of locked cards. Pinning every species is
     the reverse-engineering path's only lever, but freezing holds the same teams
