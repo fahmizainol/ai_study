@@ -2985,8 +2985,10 @@ than stylistic:
   like the game simply failing to launch, and `Data/ai_foulplay_log.txt` is then the only
   explanation available.
 
-The dialog names both ways out — start the launcher, or set `foul_play=false` — so the
-check cannot lock anyone out of their own game.
+The dialog gives one instruction — start the launcher — and deliberately not the escape
+hatch. `foul_play=false` still works and is documented here, but offering a way to switch
+the search off in the same breath as reporting it missing invites the outcome the check
+exists to prevent. The refusal is recorded to `Data/ai_foulplay_log.txt` regardless.
 
 The alternative considered and rejected as the *primary* fix was renaming `Game.exe` so the
 launcher is the only door. It works, but it is a convention rather than a guarantee, and it
@@ -3038,13 +3040,16 @@ a red result about it.
 **Three things are not proven here.** A **played turn** — that needs `Game.exe`, and the
 check is inverted: a working bridge shows *nothing*, so seeing either dialog means the
 bridge is off and the reason is on screen. And **`print` under mkxp-z at script-load
-time** — RGSS implements it as a message box and mkxp-z reimplements RGSS, but that
-specific timing is untested here. Its failure direction is safe: the dialog is separately
+time** — resolved since writing: confirmed live, see below. Its failure direction was
+safe anyway. Its failure direction is safe: the dialog is separately
 guarded, the log line still records the refusal, and the `exit` happens regardless. **And
 `exit` itself under mkxp-z at load time** — `SystemExit` raised out of a script eval should
 terminate the player, but if something upstream catches it the game boots and the
 per-battle alert becomes the backstop, which is the old behaviour rather than a new
-failure. Likewise, the boot check reads
+failure. **`print` under mkxp-z at load time is now confirmed in the wild** — the refusal
+dialog was seen on a real launch (2026-09-18), which also confirms the boot check fires and
+that RGSS `print` renders before `Graphics` exists. `exit` is still unconfirmed separately.
+Likewise, the boot check reads
 `Data/portable_ai.txt` relatively, so if mkxp-z's working directory at load time were not
 the game folder the check would silently not fire rather than misfire.
 

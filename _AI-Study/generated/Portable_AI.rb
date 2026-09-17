@@ -8890,13 +8890,15 @@ portable_ai_boot_refusal = nil
 begin
   if PortableAIRealidea::Harness.live_overrides["foul_play"] &&
      !PortableAIRealidea::FoulPlay.ready?
+    # One instruction, and only the one that is right almost every time. The escape
+    # hatch (foul_play=false in Data/ai_harness.txt) and the log path are still true
+    # and still documented -- they are just not what a player who launched the wrong
+    # way needs to read, and offering a way to switch the search OFF in the same breath
+    # as telling them it is missing invites exactly the outcome this check exists to
+    # prevent. The log line below records the refusal either way.
     portable_ai_boot_refusal =
       "The Foul Play search is NOT running, so the game will not start.\n\n" \
-      "Start it with \"Play with Foul Play.bat\" instead of Game.exe.\n\n" \
-      "To play WITHOUT the search -- enemy trainers using the backup rule AI -- open " \
-      "Data\\ai_harness.txt and set:\n\n" \
-      "    foul_play=false\n\n" \
-      "Details are logged to Data\\ai_foulplay_log.txt."
+      "Start it with \"Play with Foul Play.bat\" instead of Game.exe."
   end
 rescue Exception
   # Deciding whether to refuse must never itself be the reason the game will not boot.
