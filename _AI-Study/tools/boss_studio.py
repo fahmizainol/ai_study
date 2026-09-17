@@ -680,6 +680,10 @@ def run(over):
             # it. Trainers are in here as well as the gyms: "the same team" means all
             # 27 fights, even though only the nine are what /api/export writes.
             "sha": _sha(records, trainers),
+            # Per-half, over the importable fields only, so the page can compare a
+            # build against a file on disk without loading it.
+            "gyms_sha": _payload_sha(records),
+            "trainers_sha": _payload_sha(trainer_records),
             "errors": errs, "warnings": warns,
             "mad": round(statistics.mean(
                 [abs(o["ebst"] - o["target"]) for o in out]), 1),
@@ -1005,6 +1009,18 @@ def _file_list(reader):
     return sorted(out, key=lambda x: (x["saved"], x["name"]), reverse=True)
 
 
+def _payload_sha(records):
+    """Fingerprint of the fields an import promises to reproduce, and nothing else.
+
+    Deliberately _team_payload's view rather than the whole record: `design`,
+    `cheat_tier` and the companion pointer are not teams, and a build that differs
+    only in those has not changed a team. Lets "the cards already ARE this file" be
+    answered by comparing two shas instead of remembering who loaded what -- which
+    is the only version of the question that survives a hard reload."""
+    blob = json.dumps(_team_payload(records), sort_keys=True, default=str)
+    return hashlib.sha256(blob.encode("utf-8")).hexdigest()[:12]
+
+
 def _read_team_or_trainers(name):
     """Whatever this file carries of either keyspace, for the file lister."""
     gyms, trainers = _file_kinds(name)
@@ -1033,8 +1049,24 @@ def _file_kinds(name):
 
 
 def import_file_list():
-    """Files the import control can read, newest first -- either keyspace."""
-    return _file_list(_read_team_or_trainers)
+    """Files the import control can read, newest first -- either keyspace.
+
+    Each row carries a sha for the halves it holds, so the page can tell whether
+    the cards already are this file without loading it to find out."""
+    out = _file_list(_read_team_or_trainers)
+    for row in out:
+        try:
+            gyms, trainers = _file_kinds(row["name"])
+            if gyms:
+                row["gyms_sha"] = _payload_sha(_read_team_file(row["name"]))
+            if trainers:
+                found = _read_records(row["name"], _trainer_slots(),
+                                     "named trainers", whole=False)
+                row["trainers_sha"] = _payload_sha(
+                    [found[slot] for slot in sorted(found)])
+        except (OSError, ValueError, TypeError, KeyError):
+            continue
+    return out
 
 
 _IMPORTED_MON_FIELDS = ("species", "level", "moves", "item", "ability",
@@ -1881,19 +1913,13 @@ button.tiny{padding:2px 7px;font-size:11px;font-weight:500}
   <div id="slot_build"></div>
   <div id="globals"></div>
   <fieldset><legend>load &middot; a team JSON</legend>
-    <div class="sub">pick a team JSON and get those teams back. Anything Export or
-      Install wrote names a companion preset holding them frozen, and loading the
-      team file follows that &mdash; exact, and it cannot fail. A file with no
-      companion (someone hand-edited one, or it predates this) is reverse-engineered
-      from the knobs instead, which has to prove the round trip; the message says
-      which of the two you got. Gyms, trainers or a file holding both.</div>
+    <div class="sub">pick a team JSON and get those teams back. Gyms, trainers or
+      both &mdash; it works out which.</div>
     <select id="imload"></select>
     <div class="exp"><button class="ghost" id="imget">Load into cards</button></div>
     <div id="immsg"></div>
-    <div class="sub" style="margin-top:10px">what you are authoring. Loading a team
-      JSON sets this to match it. A half that is out of scope is hidden below AND left
-      alone by Export and Install &mdash; its file is read off disk instead of taken
-      from cards you cannot see.</div>
+    <div class="sub" style="margin-top:10px">what you are authoring. Anything out of
+      scope is hidden, and Export and Install leave its file alone.</div>
     <select id="scope">
       <option value="all">all 27 fights</option>
       <option value="gyms">the nine gyms only</option>
@@ -1901,11 +1927,8 @@ button.tiny{padding:2px 7px;font-size:11px;font-weight:500}
     </select>
   </fieldset>
   <fieldset><legend>preset &middot; your settings</legend>
-    <div class="sub">the whole Builder in one file under generated/studio_presets/ &mdash;
-      every knob, every per-fight plan and every card override. Commit it and someone
-      else Loads it and gets these teams. Loading a team JSON above already follows
-      the preset tied to it, so reach for this when you want a SESSION rather than a
-      team &mdash; the knobs and plans you were working with, not a finished roster.</div>
+    <div class="sub">a whole session in one file &mdash; knobs, plans and card
+      overrides. For picking up where you left off, rather than loading a roster.</div>
     <select id="pload"></select>
     <div class="exp"><button class="ghost" id="pget">Load</button></div>
     <input type="text" id="pname" placeholder="name this preset">
@@ -1915,9 +1938,8 @@ button.tiny{padding:2px 7px;font-size:11px;font-weight:500}
     <div id="pmsg"></div>
   </fieldset>
   <fieldset><legend>export &middot; write the team files</legend>
-    <div class="sub">every fight the Studio owns lives in exactly two files: the nine
-      gyms, and the 18 named trainers. These names are for Export only &mdash; Install
-      always writes the shipped pair, whatever is typed here.</div>
+    <div class="sub">two files: nine gyms, 18 named trainers. These names are for
+      Export only &mdash; Install always writes the shipped pair.</div>
     <input type="text" id="fname" value="teams_bosses_gyms.json"
            title="the nine gym fights">
     <input type="text" id="tfname" value="teams_trainers.json"
@@ -1927,18 +1949,14 @@ button.tiny{padding:2px 7px;font-size:11px;font-weight:500}
     <div id="msg"></div>
   </fieldset>
   <fieldset><legend>install &middot; into the game</legend>
-    <div class="sub">builds what the cards are showing, regenerates the registry and
-      injects it into Realidea V4.1&rsquo;s compiled Team_Overrides section. Every live
-      file is replaced together or none of them are. It reads no team JSON: load one
-      first if you want a file&rsquo;s teams installed.</div>
+    <div class="sub">injects what the cards are showing into the game. All files
+      replaced together, or none. Reads no team JSON &mdash; load one first.</div>
     <div id="scopenote" class="sub"></div>
     <div class="exp"><button id="install">Install into game</button></div>
     <div id="imsg"></div>
     <div class="sub" style="margin-top:12px">freezing pins a fight to the team it is
-      showing now: the generator is not consulted for it again, so the knobs, the card
-      edits and a moved PBS or Smogon corpus all stop reaching it. Freeze the ones you
-      have settled and keep rerolling the rest &mdash; a preset carrying frozen fights
-      rebuilds them exactly on another machine, which an unfrozen one cannot promise.</div>
+      showing now &mdash; nothing rerolls it, and a preset carrying it rebuilds the
+      same teams anywhere. Freeze what you have settled, keep rerolling the rest.</div>
     <div class="exp"><button class="ghost" id="frzall">Freeze all 27</button>
       <button class="ghost" id="frznone">Unfreeze all</button></div>
     <div id="frzmsg"></div>
@@ -2208,8 +2226,8 @@ async function presetList(sel){
 async function importFileList(sel){
   const d=await (await fetch('/api/import-files')).json();
   const now=sel||$('imload').value;
-  fileStamp={};
-  (d.files||[]).forEach(f=>{fileStamp[f.name]=f.saved||'';});
+  fileRow={};
+  (d.files||[]).forEach(f=>{fileRow[f.name]=f;});
   $('imload').innerHTML=(d.files||[]).map(f=>
     `<option value="${esc(f.name)}" ${f.name===now?'selected':''}>${esc(f.name)} · ${
       f.mons} mons${f.saved?' · '+esc(f.saved.slice(0,10)):''}</option>`).join('')
@@ -2221,9 +2239,13 @@ async function importFileList(sel){
 // otherwise the only way to find out is to click and watch nothing change.
 function syncLoadButton(){
   const btn=$('imget'); if(!btn) return;
-  const name=$('imload')?$('imload').value:'';
-  const same=!!(loaded&&name&&loaded.name===name&&loaded.sha&&loaded.sha===lastSha
-    &&loaded.stamp===(fileStamp[name]||''));
+  const f=fileRow[$('imload')?$('imload').value:''], b=lastBuild;
+  // Every half the file carries must already match the build. A file whose sha could
+  // not be read carries neither, and never counts as loaded.
+  const has=f&&(f.gyms_sha!==undefined||f.trainers_sha!==undefined);
+  const same=!!(has&&b
+    &&(f.gyms_sha===undefined||f.gyms_sha===b.gyms_sha)
+    &&(f.trainers_sha===undefined||f.trainers_sha===b.trainers_sha));
   btn.disabled=same;
   btn.textContent=same?'Loaded':'Load into cards';
   btn.title=same
@@ -2239,15 +2261,11 @@ const deb=()=>{clearTimeout(timer);timer=setTimeout(go,120);};
 let busy=false, pending=false, lastSha=null;
 // The most recent build, so a check needing the cards can run after go().
 let lastBuild=null;
-// What the cards currently ARE: the file they came from, the sha that build produced,
-// and that file's mtime as the listing reported it. The sha already fingerprints all
-// 27 teams, so "nothing has changed since you loaded this" is exactly sha equality --
-// no second comparison to keep in step with the first. The stamp is here because the
-// file can be rewritten underneath us (another Export, a pull), and a remembered sha
-// would otherwise keep Load disabled against teams that have moved on.
-let loaded=null;
-// name -> mtime, from the last /api/import-files.
-let fileStamp={};
+// The import listing, by filename: each row carries a sha per half it holds, so
+// "the cards already ARE this file" is two shas compared and nothing remembered.
+// The remembered-loader version could not answer that after a hard reload, and
+// answered it wrongly for a restored session it had not loaded itself.
+let fileRow={};
 async function go(){
   if(busy){ pending=true; return; }
   busy=true; $('v_build').classList.add('busy');
@@ -2541,8 +2559,7 @@ const freeSave=()=>saveForm(FREE_KEY,freeControls);
 // save of its own that could fall out of step with them.
 function buildSave(){
   saveForm(BUILD_KEY,buildControls);
-  try{localStorage.setItem(PLAN_KEY,JSON.stringify(
-    {PLAN,CARD,ORDER,FROZEN,SCOPE,loaded}));}catch(e){}
+  try{localStorage.setItem(PLAN_KEY,JSON.stringify({PLAN,CARD,ORDER,FROZEN,SCOPE}));}catch(e){}
 }
 const freeRestore=()=>restoreForm(FREE_KEY,freeControls);
 // Restoring knobs means the Builder no longer shows what the repo ships, so say so
@@ -2559,7 +2576,6 @@ function buildRestore(){
   if(saved&&saved.ORDER&&typeof saved.ORDER==='object') ORDER=saved.ORDER;
   if(saved&&saved.FROZEN&&typeof saved.FROZEN==='object') FROZEN=saved.FROZEN;
   if(saved&&typeof saved.SCOPE==='string') setScope(saved.SCOPE);
-  if(saved&&saved.loaded&&typeof saved.loaded==='object') loaded=saved.loaded;
   // Shape-check rather than trust: a saved PLAN from an older page could be missing
   // halves, and a bad ARCHETYPE entry reaches the generator as a dict key.
   if(plan&&Array.isArray(plan.gym)&&plan.gym.length===9){
@@ -3008,7 +3024,9 @@ async function init(){
     try{localStorage.removeItem(BUILD_KEY);localStorage.removeItem(PLAN_KEY);}catch(e){}
     location.reload();};
   presetList();
-  importFileList('teams_bosses_gyms.json');
+  // Awaited: the boot check reads fileRow, and an un-awaited listing left it empty
+  // so the button could never report Loaded on a fresh page.
+  await importFileList('teams_bosses_gyms.json');
   $('imload').onchange=syncLoadButton;
   $('scope').onchange=()=>setScope($('scope').value);
   $('frzall').onclick=()=>toggleFreeze(null,true);
@@ -3027,8 +3045,7 @@ async function init(){
     // did not load are neither shown nor shipped.
     setScope(d.gyms&&d.trainers?'all':d.gyms?'gyms':'trainers');
     await go();
-    loaded={name,sha:lastSha,stamp:fileStamp[name]||''};
-    buildSave(); syncLoadButton();
+    syncLoadButton();
     const what=[d.gyms?d.gyms+' gyms':'',d.trainers?d.trainers+' trainers':'']
       .filter(Boolean).join(' + ');
     // Two different promises, so they are never worded the same: following the tie
@@ -3100,14 +3117,7 @@ async function init(){
   let bootLoaded=false;
   if(!restored) bootLoaded=await loadInstalled();
   await go();
-  if(bootLoaded){
-    // The autoload followed the SHIPPED gym file, so that is what Load would
-    // re-read; saying "Loaded" against it is the same claim the button makes
-    // anywhere else.
-    const name='teams_bosses_gyms.json';
-    loaded={name,sha:lastSha,stamp:fileStamp[name]||''};
-    buildSave(); syncLoadButton();
-  }
+  syncLoadButton();
   if(restored&&lastBuild&&installedDiffers(lastBuild.gyms||[]))
     $('immsg').innerHTML='<span class="warn">this is your saved session — the game '
       +'holds different teams</span> <span class="sub">Load teams_bosses_gyms.json '
