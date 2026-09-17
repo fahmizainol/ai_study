@@ -1,4 +1,6 @@
 import json
+import os
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -162,6 +164,90 @@ class BossStudioFreezeTest(unittest.TestCase):
         again = self.BS.set_frozen({}, None, True)["settings"]
         self.assertEqual(json.dumps(frozen, sort_keys=True),
                          json.dumps(again, sort_keys=True))
+
+
+class BossStudioCompanionPresetTest(unittest.TestCase):
+    """A team file written by Export or Install names a companion preset holding
+    those teams frozen, so loading the TEAM JSON is exact rather than a
+    reverse-engineering of the knobs that might reach them."""
+
+    def setUp(self):
+        sys.path.insert(0, str(STUDY / "tools"))
+        import boss_studio
+        self.BS = boss_studio
+        self.dir = tempfile.mkdtemp(prefix="studio-tie-")
+        self._gen, self._pre = boss_studio.GENDIR, boss_studio.PRESETS
+        boss_studio.GENDIR = self.dir
+        boss_studio.PRESETS = os.path.join(self.dir, "presets")
+        os.makedirs(boss_studio.PRESETS, exist_ok=True)
+
+    def tearDown(self):
+        self.BS.GENDIR, self.BS.PRESETS = self._gen, self._pre
+        shutil.rmtree(self.dir, ignore_errors=True)
+
+    @staticmethod
+    def sig(records):
+        return [[mon["species"] for mon in r["mons"]] for r in records]
+
+    def _export(self, settings=None):
+        """What /api/export does: snapshot a companion preset, stamp the tie, write."""
+        built = self.BS.run(settings or {})
+        preset = self.BS._companion("teams_bosses_gyms.json")
+        self.BS.preset_save(preset, self.BS._snapshot(settings or {}, built), "probe")
+        for name, key in (("teams_bosses_gyms.json", "records"),
+                          ("teams_trainers.json", "trainer_records")):
+            with open(os.path.join(self.dir, name), "w", encoding="utf-8") as fh:
+                json.dump(self.BS._tie(built[key], preset), fh, indent=1)
+        return built, preset
+
+    def test_loading_the_team_json_follows_the_tie_and_is_exact(self):
+        built, preset = self._export()
+        got = self.BS.import_teams("teams_bosses_gyms.json", {})
+        self.assertTrue(got["exact"])
+        self.assertEqual(preset, got["preset"])
+        rebuilt = self.BS.run(got["settings"])
+        self.assertEqual(self.sig(built["records"]), self.sig(rebuilt["records"]))
+        self.assertEqual(self.sig(built["trainer_records"]),
+                         self.sig(rebuilt["trainer_records"]))
+        self.assertEqual(built["sha"], rebuilt["sha"])
+
+    def test_the_tie_holds_when_the_receiving_knobs_are_hostile(self):
+        """The whole point: another machine's data and knobs must not reach it."""
+        built, _ = self._export()
+        got = self.BS.import_teams("teams_bosses_gyms.json", {})
+        hostile = {**got["settings"], "THEME": ["STEEL"] * 9,
+                   "TARGET": [300] * 9, "SET_SEED": 31337}
+        self.assertEqual(self.sig(built["records"]),
+                         self.sig(self.BS.run(hostile)["records"]))
+
+    def test_exporting_does_not_freeze_the_live_session(self):
+        """Handing someone an exact artifact must not pin the cards you are still
+        editing -- the snapshot is frozen, the settings it came from are not."""
+        built, preset = self._export()
+        snap = self.BS.preset_load(preset)["settings"]
+        self.assertEqual(27, len(snap["FROZEN"]))
+        self.assertEqual({}, self.BS._thaw({}.get("FROZEN")))
+
+    def test_a_file_with_no_companion_falls_back_and_says_so(self):
+        self._export()
+        path = os.path.join(self.dir, "teams_trainers.json")
+        bare = json.loads(open(path, encoding="utf-8").read())
+        for record in bare:
+            record["design"].pop("preset", None)
+        with open(os.path.join(self.dir, "bare.json"), "w", encoding="utf-8") as fh:
+            json.dump(bare, fh, indent=1)
+        got = self.BS.import_teams("bare.json", {})
+        self.assertFalse(got["exact"])
+        self.assertEqual(18, got["trainers"])
+
+    def test_a_stitched_file_naming_two_presets_is_not_trusted(self):
+        built, preset = self._export()
+        path = os.path.join(self.dir, "teams_bosses_gyms.json")
+        rows = json.loads(open(path, encoding="utf-8").read())
+        rows[0]["design"]["preset"] = "somewhere_else"
+        with open(path, "w", encoding="utf-8") as fh:
+            json.dump(rows, fh, indent=1)
+        self.assertIsNone(self.BS._pointed_preset("teams_bosses_gyms.json"))
 
 
 class RealideaHiddenPowerTest(unittest.TestCase):

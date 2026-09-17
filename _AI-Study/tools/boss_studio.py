@@ -457,6 +457,68 @@ def _apply_loadout(build, fight_key):
         role for mon in build["team"] for role in mon.get("roles", ()))
 
 
+def _companion(team_name):
+    """The preset name a team file ties itself to: its own stem.
+
+    Deriving it from the filename rather than a separate field is what keeps the
+    two from drifting -- you cannot rename one without renaming the tie, and there
+    is no box to forget to fill in. Export a different filename and you get a
+    differently-named snapshot, which is the only override anyone needs."""
+    return os.path.splitext(os.path.basename(team_name))[0]
+
+
+def _snapshot(over, result):
+    """`over` with every fight frozen at the teams `result` just produced.
+
+    The companion preset is frozen even when the live session is not: exporting
+    should hand someone an exact artifact without pinning the cards you are still
+    working on. Already-frozen fights keep the build they hold, which is the same
+    object `result` was built from, so setdefault is not losing anything."""
+    snap = dict(over or {})
+    frozen = dict(_thaw(snap.get("FROZEN")))
+    for i, build in enumerate(result["_gym_builds"]):
+        frozen.setdefault(f"g{i}", _freezable(build))
+    for slot, build in result["_trainer_builds"].items():
+        frozen.setdefault(f"t{slot}", _freezable(build))
+    snap["FROZEN"] = frozen
+    return snap
+
+
+def _tie(records, preset):
+    """Stamp the companion preset name into each record's design block.
+
+    `design` is the right home because nothing downstream reads it -- neither
+    emit_registry nor validate_team mentions it -- so the tie rides inside the
+    artifact without changing the format the pipeline consumes, and a person
+    opening the JSON can see what it is tied to."""
+    for record in records:
+        record.setdefault("design", {})["preset"] = preset
+    return records
+
+
+def _pointed_preset(name):
+    """The companion preset this team file names, if it still exists.
+
+    Every record should carry the same name; disagreement means the file was
+    stitched together from two exports, so the tie is not trusted and the caller
+    falls back to reverse-engineering."""
+    try:
+        with open(_team_path(name), encoding="utf-8") as fh:
+            records = json.load(fh)
+    except (OSError, ValueError):
+        return None
+    if not isinstance(records, list):
+        return None
+    names = {(r.get("design") or {}).get("preset")
+             for r in records if isinstance(r, dict)}
+    names.discard(None)
+    if len(names) != 1:
+        return None
+    preset = names.pop()
+    return preset if isinstance(preset, str) and \
+        os.path.exists(_preset_path(preset)) else None
+
+
 def set_frozen(over, keys, on):
     """Freeze or unfreeze fights, and hand back the settings that say so.
 
@@ -1136,9 +1198,26 @@ def import_teams(name, over):
     has_gyms, has_trainers = _file_kinds(name)
     if not (has_gyms or has_trainers):
         raise ValueError("no gym or named-trainer teams in this file")
+
+    # A file written by Export or Install names its companion preset, which holds
+    # these teams frozen. Following that is exact and cannot fail, so it beats
+    # reverse-engineering the knobs whenever the tie is intact.
+    tied = _pointed_preset(name)
+    if tied:
+        got = preset_load(tied)
+        counted = run(got["settings"])
+        return {"name": os.path.basename(_team_path(name)), "preset": tied,
+                "exact": True, "warning": "",
+                "gyms": len(counted["records"]) if has_gyms else 0,
+                "trainers": len(counted["trainer_records"]) if has_trainers else 0,
+                "mons": sum(len(r["mons"]) for r in
+                            (counted["records"] if has_gyms else [])
+                            + (counted["trainer_records"] if has_trainers else [])),
+                "settings": got["settings"]}
+
     settings = over or {}
-    out = {"name": os.path.basename(_team_path(name)),
-           "gyms": 0, "trainers": 0, "mons": 0, "warning": ""}
+    out = {"name": os.path.basename(_team_path(name)), "preset": "",
+           "exact": False, "gyms": 0, "trainers": 0, "mons": 0, "warning": ""}
 
     # What the half this file does NOT carry looks like before we touch anything,
     # so a one-sided import cannot quietly move the other half through SPREAD.
@@ -1344,8 +1423,14 @@ def install_game(over):
     """
     with _INSTALL_LOCK:
         result = run(over or {})
-        records = result["records"]
-        trainer_records = result["trainer_records"]
+        # Install ships the same two files Export writes, so it ties them the same
+        # way: whatever is in the game can be loaded straight back into the cards.
+        # Only the NAME is needed to stamp the records; the preset itself is written
+        # at the end, because a snapshot saying "this is installed" should not
+        # survive an install that then failed to replace anything.
+        preset = _companion(SHIPPED)
+        records = _tie(result["records"], preset)
+        trainer_records = _tie(result["trainer_records"], preset)
         other_records = list(trainer_records)
         for path in DISK_TEAMS:
             with open(path, encoding="utf-8") as fh:
@@ -1389,7 +1474,9 @@ def install_game(over):
         trainer_bytes = (json.dumps(trainer_records, indent=1) + "\n").encode("utf-8")
         _replace_all({SHIPPED: shipped_bytes, SHIPPED_TRAINERS: trainer_bytes,
                       REGISTRY: registry_bytes, GAME_BUNDLE: bundle_bytes})
-        return {"ok": True, "gyms": len(records),
+        preset_save(preset, _snapshot(over or {}, result),
+                    "companion snapshot written by Install")
+        return {"ok": True, "preset": preset, "gyms": len(records),
                 "trainers": len(trainer_records),
                 "mons": sum(len(row["mons"]) for row in records)
                 + sum(len(row["mons"]) for row in trainer_records),
@@ -1516,14 +1603,20 @@ class Handler(http.server.BaseHTTPRequestHandler):
                         return self._send(409, json.dumps(
                             {"error": f"{name} exists — tick overwrite to replace it"}))
                     dests.append((dest, rows))
-                r = run(body.get("settings") or {})
+                settings = body.get("settings") or {}
+                r = run(settings)
+                # The tie is made in the same operation that writes the teams, so
+                # the pointer and the file it points from cannot disagree.
+                preset = _companion(dests[0][0])
+                preset_save(preset, _snapshot(settings, r),
+                            "companion snapshot written by Export")
                 for dest, rows in dests:
                     with open(dest, "w", encoding="utf-8") as fh:
-                        json.dump(r[rows], fh, indent=1)
+                        json.dump(_tie(r[rows], preset), fh, indent=1)
                         fh.write("\n")
                 return self._send(200, json.dumps(
                     {"ok": ", ".join(os.path.relpath(d) for d, _ in dests),
-                     "errors": len(r["errors"])}))
+                     "preset": preset, "errors": len(r["errors"])}))
         except Exception as exc:                       # noqa: BLE001 - show it in the UI
             return self._send(500, json.dumps({"error": f"{type(exc).__name__}: {exc}"}))
         self._send(404, '{"error":"not found"}')
@@ -1754,10 +1847,12 @@ button.tiny{padding:2px 7px;font-size:11px;font-weight:500}
     <div id="frzmsg"></div>
   </fieldset>
   <fieldset><legend>import &middot; recover cards from teams</legend>
-    <div class="sub">for a team JSON someone handed you, or when the teams outlived
-      the preset that built them. Gyms, trainers or a file holding both &mdash; it reads
-      the ids and works out which. Unlike a preset this reverse-engineers the card
-      overrides from finished teams, so it proves the round trip and says so.</div>
+    <div class="sub">pick a team JSON and get those teams back. Anything Export or
+      Install wrote names a companion preset holding them frozen, and loading the
+      team file follows that &mdash; exact, and it cannot fail. A file with no
+      companion (someone hand-edited one, or it predates this) is reverse-engineered
+      from the knobs instead, which has to prove the round trip; the message says
+      which of the two you got. Gyms, trainers or a file holding both.</div>
     <select id="imload"></select>
     <div class="exp"><button class="ghost" id="imget">Load into cards</button></div>
     <div id="immsg"></div>
@@ -2761,8 +2856,16 @@ async function init(){
     await go();
     const what=[d.gyms?d.gyms+' gyms':'',d.trainers?d.trainers+' trainers':'']
       .filter(Boolean).join(' + ');
-    $('immsg').innerHTML=`<span class="ok">loaded ${esc(d.name)} — ${what}, ${
-      d.mons} Pokémon, exact round trip</span>`
+    // Two different promises, so they are never worded the same: following the tie
+    // replays the teams themselves, while reverse-engineering only proves the
+    // generator can still reach them from knobs today.
+    $('immsg').innerHTML=(d.exact
+      ? `<span class="ok">loaded ${esc(d.name)} — ${what}, ${d.mons} Pokémon,
+         exactly as saved</span> <span class="sub">via its companion preset
+         <b>${esc(d.preset)}</b></span>`
+      : `<span class="ok">loaded ${esc(d.name)} — ${what}, ${d.mons} Pokémon,
+         exact round trip</span> <span class="sub">rebuilt from knobs: this file
+         names no companion preset</span>`)
       +(d.warning?`<br><span class="warn">${esc(d.warning)}</span>`:'');
   };
   // Load is the half that matters: it applies the file, rebuilds, and then says
