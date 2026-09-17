@@ -1262,6 +1262,47 @@ def import_teams(name, over):
     return out
 
 
+def load_installed(over):
+    """Follow the shipped pair back into the cards -- what the game is running.
+
+    This is what a page with no saved session should show. Without it a new
+    checkout opens on teams built from the DEFAULT knobs, which match the
+    installed file on none of the nine gyms, with nothing on screen saying so.
+
+    Install stamps both files with the same companion preset, so the normal case
+    is one preset load covering all 27 fights. They can only disagree if the two
+    were written by separate scoped exports, and then each file is followed on its
+    own -- trainers first, the order the shared SPREAD band requires."""
+    files = [os.path.basename(p) for p in (SHIPPED_TRAINERS, SHIPPED)
+             if os.path.exists(p)]
+    if not files:
+        raise ValueError("nothing is installed to load")
+    ties = {name: _pointed_preset(name) for name in files}
+    shared = set(ties.values())
+    if len(shared) == 1 and None not in shared:
+        preset = shared.pop()
+        got = preset_load(preset)
+        built = run(got["settings"])
+        return {"name": ", ".join(files), "preset": preset, "exact": True,
+                "warning": "", "gyms": len(built["records"]),
+                "trainers": len(built["trainer_records"]),
+                "mons": sum(len(r["mons"]) for r in
+                            built["records"] + built["trainer_records"]),
+                "settings": got["settings"]}
+    settings, out = over or {}, {"name": ", ".join(files), "preset": "",
+                                "exact": False, "warning": "",
+                                "gyms": 0, "trainers": 0, "mons": 0}
+    for name in files:
+        got = import_teams(name, settings)
+        settings = got["settings"]
+        for key in ("gyms", "trainers", "mons"):
+            out[key] += got[key]
+        out["warning"] = got["warning"] or out["warning"]
+        out["preset"] = got["preset"] or out["preset"]
+    out["settings"] = settings
+    return out
+
+
 def _card_overrides(mons, keep):
     """The per-species half of a card override, for the real bodies only.
 
@@ -1602,6 +1643,9 @@ class Handler(http.server.BaseHTTPRequestHandler):
                 return self._send(200, json.dumps(set_frozen(
                     body.get("settings") or {}, body.get("keys"),
                     bool(body.get("on", True)))))
+            if path == "/api/load-installed":
+                return self._send(200, json.dumps(
+                    load_installed(body.get("settings") or {})))
             if path == "/api/import":
                 if not (body.get("name") or "").strip():
                     return self._send(400, json.dumps({"error": "choose a team JSON"}))
@@ -2176,6 +2220,8 @@ const deb=()=>{clearTimeout(timer);timer=setTimeout(go,120);};
 // last one asked for. One in flight at a time, with a single trailing re-run that
 // collapses however many changes landed while it was busy.
 let busy=false, pending=false, lastSha=null;
+// The most recent build, so a check needing the cards can run after go().
+let lastBuild=null;
 async function go(){
   if(busy){ pending=true; return; }
   busy=true; $('v_build').classList.add('busy');
@@ -2192,6 +2238,7 @@ async function go(){
 function render(d){
   MONS={};
   lastSha=d.sha||null;
+  lastBuild=d;
   const remember=(fk,mons)=>mons.forEach(m=>{MONS[fk+'|'+m.species]=m;});
   const cls=v=>v<=2?'ok':v<=6?'warn':'bad';
   $('stats').innerHTML=[
@@ -2492,10 +2539,38 @@ function buildRestore(){
   }
   if(plan&&plan.tr&&typeof plan.tr==='object') PLAN.tr=plan.tr;
   const knobs=restoreForm(BUILD_KEY,buildControls);
-  if(!knobs&&!plan) return;
+  if(!knobs&&!plan) return false;   // nothing saved: the caller shows what is installed
   for(const k in S.meta) if($('val_'+k)) $('val_'+k).textContent=$('s_'+k).value;
   $('msg').innerHTML='<span class="warn">restored your saved knobs</span> — '
     +'Reset returns to the shipped values.';
+  return true;
+}
+
+// A page with no saved session should open on what the game is actually running,
+// not on whatever the default knobs happen to generate -- those agree on none of
+// the nine gyms. Follows the same tie the Load button does, and simply gives up if
+// there is nothing installed to follow.
+async function loadInstalled(){
+  try{
+    const r=await fetch('/api/load-installed',{method:'POST',
+      body:JSON.stringify({settings:get()})});
+    const d=await r.json();
+    if(d.error||!d.settings||!setAll(d.settings)) return false;
+    setScope('all');
+    $('immsg').innerHTML=`<span class="ok">showing what is installed — ${
+      d.gyms} gyms + ${d.trainers} trainers</span> <span class="sub">${d.exact
+      ?'via companion preset <b>'+esc(d.preset)+'</b>':'rebuilt from knobs'}</span>`;
+    return true;
+  }catch(e){ return false; }
+}
+
+// Only when a saved session is in play: say that the game holds something else,
+// rather than silently showing teams that are not what is installed. S.shipped is
+// the installed gym roster, which /api/state already carries for the was-column.
+function installedDiffers(gyms){
+  const was=Object.values(S.shipped||{});
+  if(was.length!==gyms.length) return false;
+  return gyms.some((g,i)=>(g.mons||[]).map(m=>m.species).join()!==(was[i]||[]).join());
 }
 function freeSpec(){
   return {cores:[...Array(6).keys()].map(i=>$('core_'+i).value.trim()).filter(Boolean),
@@ -2899,7 +2974,7 @@ async function init(){
     `<label><input type="checkbox" value="${r}" checked> ${r}</label>`).join('');
   freeRestore();
   loadCoreSets();
-  buildRestore();
+  const restored=buildRestore();
   $('reset').onclick=()=>{
     try{localStorage.removeItem(BUILD_KEY);localStorage.removeItem(PLAN_KEY);}catch(e){}
     location.reload();};
@@ -2988,7 +3063,14 @@ async function init(){
       $('imsg').innerHTML=`<span class="bad">install request failed: ${esc(e.message)}</span>`;
     }finally{button.disabled=false;}
   };
-  go();
+  // Before the first build, not after: a number that is about to be replaced is
+  // worse than a slower first paint.
+  if(!restored) await loadInstalled();
+  await go();
+  if(restored&&lastBuild&&installedDiffers(lastBuild.gyms||[]))
+    $('immsg').innerHTML='<span class="warn">this is your saved session — the game '
+      +'holds different teams</span> <span class="sub">Load teams_bosses_gyms.json '
+      +'to see what is installed</span>';
 }
 init();
 </script></body></html>"""

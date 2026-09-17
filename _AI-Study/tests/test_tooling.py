@@ -312,6 +312,40 @@ class BossStudioInstallScopeTest(unittest.TestCase):
             self.assertIn(name, res["replaced"])
 
 
+class BossStudioLoadInstalledTest(unittest.TestCase):
+    """A page with no saved session must open on what the game is running. Without
+    it a fresh checkout shows teams built from the DEFAULT knobs, which match the
+    installed gym file on none of the nine."""
+
+    def setUp(self):
+        sys.path.insert(0, str(STUDY / "tools"))
+        import boss_studio
+        self.BS = boss_studio
+
+    @staticmethod
+    def sig(records):
+        return [[mon["species"] for mon in r["mons"]] for r in records]
+
+    def _disk(self, path):
+        return json.loads(Path(path).read_text(encoding="utf-8"))
+
+    def test_it_reproduces_both_installed_files(self):
+        got = self.BS.load_installed({})
+        self.assertEqual(9, got["gyms"])
+        self.assertEqual(18, got["trainers"])
+        built = self.BS.run(got["settings"])
+        self.assertEqual(self.sig(self._disk(self.BS.SHIPPED)),
+                         self.sig(built["records"]))
+        self.assertEqual(self.sig(self._disk(self.BS.SHIPPED_TRAINERS)),
+                         self.sig(built["trainer_records"]))
+
+    def test_the_default_knobs_do_not_already_match(self):
+        """Otherwise the test above proves nothing -- it would pass on a page that
+        never loaded anything."""
+        fresh = self.sig(self.BS.run({})["records"])
+        self.assertNotEqual(self.sig(self._disk(self.BS.SHIPPED)), fresh)
+
+
 class RealideaHiddenPowerTest(unittest.TestCase):
     """The IV solver in showdown_names.Realidea.
 
