@@ -2208,10 +2208,27 @@ async function presetList(sel){
 async function importFileList(sel){
   const d=await (await fetch('/api/import-files')).json();
   const now=sel||$('imload').value;
+  fileStamp={};
+  (d.files||[]).forEach(f=>{fileStamp[f.name]=f.saved||'';});
   $('imload').innerHTML=(d.files||[]).map(f=>
     `<option value="${esc(f.name)}" ${f.name===now?'selected':''}>${esc(f.name)} · ${
       f.mons} mons${f.saved?' · '+esc(f.saved.slice(0,10)):''}</option>`).join('')
     ||'<option value="">(no importable team JSON found)</option>';
+  syncLoadButton();
+}
+
+// Disabled means "the cards already ARE this file", which is a thing worth saying:
+// otherwise the only way to find out is to click and watch nothing change.
+function syncLoadButton(){
+  const btn=$('imget'); if(!btn) return;
+  const name=$('imload')?$('imload').value:'';
+  const same=!!(loaded&&name&&loaded.name===name&&loaded.sha&&loaded.sha===lastSha
+    &&loaded.stamp===(fileStamp[name]||''));
+  btn.disabled=same;
+  btn.textContent=same?'Loaded':'Load into cards';
+  btn.title=same
+    ?'the cards already are these teams — nothing to load'
+    :'read this file back into the cards';
 }
 const deb=()=>{clearTimeout(timer);timer=setTimeout(go,120);};
 // A rebuild is ~2s for 27 fights, and every tick, every dropdown and every knob asks
@@ -2222,6 +2239,15 @@ const deb=()=>{clearTimeout(timer);timer=setTimeout(go,120);};
 let busy=false, pending=false, lastSha=null;
 // The most recent build, so a check needing the cards can run after go().
 let lastBuild=null;
+// What the cards currently ARE: the file they came from, the sha that build produced,
+// and that file's mtime as the listing reported it. The sha already fingerprints all
+// 27 teams, so "nothing has changed since you loaded this" is exactly sha equality --
+// no second comparison to keep in step with the first. The stamp is here because the
+// file can be rewritten underneath us (another Export, a pull), and a remembered sha
+// would otherwise keep Load disabled against teams that have moved on.
+let loaded=null;
+// name -> mtime, from the last /api/import-files.
+let fileStamp={};
 async function go(){
   if(busy){ pending=true; return; }
   busy=true; $('v_build').classList.add('busy');
@@ -2230,6 +2256,7 @@ async function go(){
     const d=await r.json();
     if(d.error){$('stats').innerHTML='<span class="bad">'+d.error+'</span>';return;}
     render(d);
+    syncLoadButton();
   } finally {
     busy=false; $('v_build').classList.remove('busy');
     if(pending){ pending=false; go(); }
@@ -2514,7 +2541,8 @@ const freeSave=()=>saveForm(FREE_KEY,freeControls);
 // save of its own that could fall out of step with them.
 function buildSave(){
   saveForm(BUILD_KEY,buildControls);
-  try{localStorage.setItem(PLAN_KEY,JSON.stringify({PLAN,CARD,ORDER,FROZEN,SCOPE}));}catch(e){}
+  try{localStorage.setItem(PLAN_KEY,JSON.stringify(
+    {PLAN,CARD,ORDER,FROZEN,SCOPE,loaded}));}catch(e){}
 }
 const freeRestore=()=>restoreForm(FREE_KEY,freeControls);
 // Restoring knobs means the Builder no longer shows what the repo ships, so say so
@@ -2531,6 +2559,7 @@ function buildRestore(){
   if(saved&&saved.ORDER&&typeof saved.ORDER==='object') ORDER=saved.ORDER;
   if(saved&&saved.FROZEN&&typeof saved.FROZEN==='object') FROZEN=saved.FROZEN;
   if(saved&&typeof saved.SCOPE==='string') setScope(saved.SCOPE);
+  if(saved&&saved.loaded&&typeof saved.loaded==='object') loaded=saved.loaded;
   // Shape-check rather than trust: a saved PLAN from an older page could be missing
   // halves, and a bad ARCHETYPE entry reaches the generator as a dict key.
   if(plan&&Array.isArray(plan.gym)&&plan.gym.length===9){
@@ -2980,6 +3009,7 @@ async function init(){
     location.reload();};
   presetList();
   importFileList('teams_bosses_gyms.json');
+  $('imload').onchange=syncLoadButton;
   $('scope').onchange=()=>setScope($('scope').value);
   $('frzall').onclick=()=>toggleFreeze(null,true);
   $('frznone').onclick=()=>toggleFreeze(null,false);
@@ -2997,6 +3027,8 @@ async function init(){
     // did not load are neither shown nor shipped.
     setScope(d.gyms&&d.trainers?'all':d.gyms?'gyms':'trainers');
     await go();
+    loaded={name,sha:lastSha,stamp:fileStamp[name]||''};
+    buildSave(); syncLoadButton();
     const what=[d.gyms?d.gyms+' gyms':'',d.trainers?d.trainers+' trainers':'']
       .filter(Boolean).join(' + ');
     // Two different promises, so they are never worded the same: following the tie
@@ -3065,8 +3097,17 @@ async function init(){
   };
   // Before the first build, not after: a number that is about to be replaced is
   // worse than a slower first paint.
-  if(!restored) await loadInstalled();
+  let bootLoaded=false;
+  if(!restored) bootLoaded=await loadInstalled();
   await go();
+  if(bootLoaded){
+    // The autoload followed the SHIPPED gym file, so that is what Load would
+    // re-read; saying "Loaded" against it is the same claim the button makes
+    // anywhere else.
+    const name='teams_bosses_gyms.json';
+    loaded={name,sha:lastSha,stamp:fileStamp[name]||''};
+    buildSave(); syncLoadButton();
+  }
   if(restored&&lastBuild&&installedDiffers(lastBuild.gyms||[]))
     $('immsg').innerHTML='<span class="warn">this is your saved session — the game '
       +'holds different teams</span> <span class="sub">Load teams_bosses_gyms.json '
