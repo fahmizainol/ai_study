@@ -176,6 +176,55 @@ def main():
     for v in likely:
         print("   ", v)
 
+    constructor_coverage()
+
+
+def constructor_coverage():
+    """Engine inputs the bridge never fills.
+
+    Both fixed defects were this shape: a field the engine reads that nothing on our
+    side writes. Names are only half the surface -- a name audit cannot see a field
+    that is simply absent, which is how run 11's volatiles went unpassed while the
+    lookup table beside them looked complete.
+
+    Read the PYTHON constructors, not the Rust structs. The two differ, and the Rust
+    struct says `use_last_used_move: false` where the binding calls
+    set_conditional_mechanics() a line later -- reading the wrong one manufactures a
+    defect that does not exist.
+    """
+    clone = STUDY / "generated" / "foul_play" / "poke-engine"
+    lib = clone / "poke-engine-py" / "src" / "lib.rs"
+    if not lib.exists():
+        print("\n(engine clone absent; skipping constructor coverage)")
+        return
+    lib_src = lib.read_text()
+    sidecar = (STUDY / "tools" / "foul_play_sidecar.py").read_text()
+
+    print("\n" + "=" * 72)
+    print("D. ENGINE CONSTRUCTOR FIELDS THE BRIDGE LEAVES AT THEIR DEFAULT")
+    print("=" * 72)
+    for cls, call in [("PyState", "pe.State("), ("PySide", "pe.Side("),
+                      ("PyPokemon", "pe.Pokemon(")]:
+        seg = lib_src[lib_src.index(f"impl {cls} {{"):][:6000]
+        match = re.search(r"#\[pyo3\(signature = \((.*?)\)\)\]", seg, re.S)
+        if not match:
+            continue
+        sig = [p.split("=")[0].strip()
+               for p in re.split(r",(?![^(]*\))", match.group(1)) if p.strip()]
+        start = sidecar.index(call)
+        depth = 0
+        for end in range(start + len(call) - 1, len(sidecar)):
+            if sidecar[end] == "(":
+                depth += 1
+            elif sidecar[end] == ")":
+                depth -= 1
+                if depth == 0:
+                    break
+        sent = set(re.findall(r"^\s*(\w+)=", sidecar[start:end], re.M))
+        missing = [f for f in sig if f not in sent and f.isidentifier()]
+        print(f"\n{cls}: {len(sig) - len(missing)}/{len(sig)} filled")
+        print("    " + (", ".join(missing) or "(all filled)"))
+
 
 if __name__ == "__main__":
     main()
