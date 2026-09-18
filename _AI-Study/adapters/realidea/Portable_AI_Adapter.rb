@@ -2825,6 +2825,13 @@ module PortableAIRealidea
       [:Disable,     "DISABLE",          :positive],
       [:FocusEnergy, "FOCUSENERGY",      :positive],
       [:Protect,     "PROTECT",          :flag],
+      # Each of these sets ONLY its own effect and ProtectRate -- never PBEffects::
+      # Protect -- so a lone PROTECT row exported nothing while one was up and the
+      # search planned attacks into a shield that blocks them outright. The engine
+      # has all three; there was simply no wire.
+      [:KingsShield,   "KINGSSHIELD",    :flag],
+      [:SpikyShield,   "SPIKYSHIELD",    :flag],
+      [:BanefulBunker, "BANEFULBUNKER",  :flag],
       [:Roost,       "ROOST",            :flag],
       [:SmackDown,   "SMACKDOWN",        :flag],
       [:Foresight,   "FORESIGHT",        :flag],
@@ -3149,7 +3156,12 @@ module PortableAIRealidea
         "evs" => [evs[0], evs[1], evs[2], evs[4], evs[5], evs[3]].map { |v| v.to_i },
         "status" => (STATUS_NAMES[source.status.to_i] || "none"),
         "status_count" => (source.statusCount.to_i rescue 0),
-        "weight_kg" => ((member.weight rescue 0).to_f / 10.0),
+        # `source` is the battler when this slot is active, and PokeBattle_Battler#
+        # weight applies Heavy Metal, Light Metal, Float Stone and WeightChange --
+        # which is where Autotomize lives. `member` is the party Pokemon, whose
+        # weight is the flat dex figure, so reading it lost all four at once. Every
+        # other field in this hash already reads `source`; this one was the outlier.
+        "weight_kg" => ((source.weight rescue 0).to_f / 10.0),
         "moves" => moves
       }
     end
