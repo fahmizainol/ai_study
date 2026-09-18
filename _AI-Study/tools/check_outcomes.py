@@ -42,12 +42,31 @@ DEFAULT_LOG = STUDY.parent / "Realidea V4.1" / "Data" / "ai_foulplay_battles.ndj
 
 
 def rows_by_battle(path):
+    """Decisions grouped per battle AND per actor, from either recording.
+
+    The live log writes one row per decision with the action at top level. A traced
+    gauntlet run (trace=true) writes one row per BATTLE with the decisions under
+    "trace" and the action nested under "portable" -- and it records BOTH sides, so
+    the actor has to be part of the key. Grouping by battle alone would pair one
+    side's move with the other side's view and compare a body against its opponent.
+    """
     battles = collections.OrderedDict()
     with open(path, errors="replace") as handle:
         for line in handle:
-            if line.strip():
-                row = json.loads(line)
-                battles.setdefault(row.get("battle_id"), []).append(row)
+            if not line.strip():
+                continue
+            row = json.loads(line)
+            trace = row.get("trace")
+            if isinstance(trace, list):
+                battle_id = str(row.get("id") or len(battles))
+                for entry in trace:
+                    decision = dict(entry)
+                    summary = entry.get("portable") or {}
+                    for field in ("type", "move_id", "target", "score"):
+                        decision.setdefault(field, summary.get(field))
+                    battles.setdefault((battle_id, entry.get("actor")), []).append(decision)
+            else:
+                battles.setdefault((row.get("battle_id"), row.get("actor")), []).append(row)
     return battles
 
 
@@ -57,7 +76,7 @@ def target_of(row):
 
 
 def divergences(battles, floor):
-    for battle_id, rows in battles.items():
+    for (battle_id, _actor), rows in battles.items():
         for row, nxt in zip(rows, rows[1:]):
             if row.get("type") != "move":
                 continue
@@ -92,7 +111,7 @@ def divergences(battles, floor):
             if observed < -0.5:
                 continue
             yield {
-                "battle": battle_id,
+                "battle": str(battle_id),
                 "turn": row.get("turn"),
                 "user": (row.get("view") or {}).get("species"),
                 "move": row.get("move_id"),

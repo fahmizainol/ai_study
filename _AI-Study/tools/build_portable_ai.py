@@ -35,6 +35,10 @@ TARGETS = {
             STUDY / "adapters" / "realidea" / "Portable_AI_Gauntlet.rb",
             # Tier suite. Regenerate with tools/make_tier_teams.py --game realidea.
             STUDY / "generated" / "tier_teams_realidea.rb",
+            # Mechanics suite. Must follow the tier file, which declares SUITES; this
+            # appends to it rather than redeclaring it. Regenerate with
+            # tools/make_mechanics_teams.py.
+            STUDY / "generated" / "mechanics_teams_realidea.rb",
         ],
         "out": STUDY / "generated" / "Portable_AI.rb",
     },
