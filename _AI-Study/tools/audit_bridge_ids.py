@@ -45,8 +45,11 @@ def pbs_column(path, index):
 
 
 def pbs_species(path):
+    """Internal names AS THE BRIDGE SENDS THEM. The adapter upcases every constant
+    name (constant_key), so PBS's NIDORANfE reaches the sidecar as NIDORANFE; an
+    audit that reads the file's own spelling audits a string nothing ever emits."""
     text = path.read_text(encoding="utf-8-sig", errors="replace")
-    return set(re.findall(r"^InternalName=(\w+)", text, re.M))
+    return {n.upper() for n in re.findall(r"^InternalName=(\w+)", text, re.M)}
 
 
 def held_items():
@@ -84,33 +87,51 @@ NIDORAN = {"NIDORANfE": "NIDORANF", "NIDORANmA": "NIDORANM"}
 
 
 def near(name, pool):
-    """The alias an unknown name should map to, or None if it is genuinely custom.
+    """(alias, structural) for an unknown name; (None, False) if genuinely custom.
 
-    Custom content SHOULD be unmappable -- a fakemon with no near match is not a
-    defect, and forcing one onto a real species would be worse than leaving it NONE.
+    Structural means the name follows a known convention and can be trusted. A merely
+    FUZZY match must be read before it is believed: DRIFBLIMF sits one letter from
+    DRIFBLIM and is a different Pokemon -- Ghost/Fire with its own statline -- so
+    acting on the resemblance would map custom content onto a real species. Custom
+    content SHOULD be unmappable; that is not a defect.
     """
     if name in NIDORAN:
-        return NIDORAN[name] if NIDORAN[name] in pool else None
+        return (NIDORAN[name], True) if NIDORAN[name] in pool else (None, False)
     if name.startswith("A") and name[1:] + "ALOLA" in pool:
-        return name[1:] + "ALOLA"
+        return name[1:] + "ALOLA", True
     hit = difflib.get_close_matches(name, pool, n=1, cutoff=0.82)
-    return hit[0] if hit else None
+    return (hit[0], False) if hit else (None, False)
 
 
 def main():
     ids = json.loads(fps.IDS_FILE.read_text())
     report = []
 
-    checks = [
-        ("items", set(held_items()), fps.NAMED_ALIASES.get("items", {})),
-        ("abilities", pbs_column(GAME / "PBS/abilities.txt", 1), {}),
-        ("moves", pbs_column(GAME / "PBS/moves.txt", 1), {}),
-        ("pokemon", pbs_species(GAME / "PBS/pokemon.txt"), fps.SPECIES_ALIASES),
-    ]
+    # Ask the SIDECAR what it would emit, rather than reimplementing its aliasing.
+    # A copy of the rules drifts from the rules: the first version of this audit
+    # applied SPECIES_ALIASES by hand and so could not see the regional-form rule
+    # that lives inside species_id, and reported eighteen drops that were fixed.
+    resolvers = {
+        "items": lambda n, pr: fps.named("items", n, ids, pr, "NONE"),
+        "abilities": lambda n, pr: fps.named("abilities", n, ids, pr, "NONE"),
+        "moves": lambda n, pr: fps.move_id({"id": n}, ids, pr),
+        "pokemon": lambda n, pr: fps.species_id({"species": n}, ids, pr),
+    }
+    universe = {
+        "items": set(held_items()),
+        "abilities": pbs_column(GAME / "PBS/abilities.txt", 1),
+        "moves": pbs_column(GAME / "PBS/moves.txt", 1),
+        "pokemon": pbs_species(GAME / "PBS/pokemon.txt"),
+    }
 
-    for kind, present, aliases in checks:
-        known = set(ids[kind])
-        missing = sorted(n for n in present if aliases.get(n, n) not in known)
+    for kind, resolve in resolvers.items():
+        present = universe[kind]
+        missing = []
+        for name in sorted(present):
+            problems = set()
+            resolve(name, problems)
+            if problems:
+                missing.append(name)
         report.append((kind, len(present), missing))
 
     print("=" * 72)
@@ -119,8 +140,13 @@ def main():
     for kind, total, missing in report:
         print(f"\n{kind}: {len(missing)} of {total} unknown")
         for name in missing:
-            match = near(name, ids[kind])
-            note = f"-> alias to {match}" if match else "(no near match: custom content)"
+            match, structural = near(name, ids[kind])
+            if match and structural:
+                note = f"-> alias to {match}"
+            elif match:
+                note = f"-> VERIFY: looks like {match}, but read the entry first"
+            else:
+                note = "(no near match: custom content)"
             print(f"    {name:<18} {note}")
 
     # C. Volatiles the engine models that the adapter has no row for. The adapter's

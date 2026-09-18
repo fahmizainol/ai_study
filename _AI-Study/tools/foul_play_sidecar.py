@@ -71,9 +71,17 @@ SPECIES_ALIASES = {
     "GULLIBY": "WINGULL",
     "SEAGHOUL": "PELIPPER",
     "SAIGULL": "SWANNA",
+    # Essentials distinguishes the Nidoran by an embedded gender letter, and the
+    # adapter upcases every constant name (constant_key), so the bridge sends
+    # NIDORANFE -- not the PBS spelling NIDORANfE. Key on what arrives.
+    "NIDORANFE": "NIDORANF",
+    "NIDORANMA": "NIDORANM",
 }
 NAMED_ALIASES = {
     "items": {"ORANBERRY": "SITRUSBERRY"},
+    # Vice Grip is spelled Vise Grip upstream. An unmapped move is built as `none`,
+    # so the search reads the 17 Realidea sets carrying it as holding a dead slot.
+    "moves": {"VICEGRIP": "VISEGRIP"},
 }
 
 # Realidea's forme index -> the suffix poke-engine's PokemonName carries. The same
@@ -144,6 +152,15 @@ def species_id(mon, ids, problems):
     else:
         candidate = base
     candidate = SPECIES_ALIASES.get(candidate, candidate)
+    # Realidea gives a regional form its own species entry carrying the region as a
+    # PREFIX, where poke-engine carries it as a SUFFIX. That is a convention, so it is
+    # expressed as one rather than as eighteen separate facts. It is deliberately not
+    # a nearest-string match: fuzz reads ANINETALES as NINETALES, quietly turning
+    # Ice/Fairy into Fire. DRIFBLIMF looks like the same shape and is NOT -- it is
+    # Ghost/Fire with its own statline, custom content wearing a familiar name.
+    if (candidate not in ids["pokemon"] and candidate.startswith("A")
+            and candidate[1:] + "ALOLA" in ids["pokemon"]):
+        candidate = candidate[1:] + "ALOLA"
     if candidate not in ids["pokemon"]:
         problems.add(f"species {candidate} unknown to poke-engine")
         return "NONE"
@@ -159,6 +176,7 @@ def move_id(entry, ids, problems):
             return candidate
         problems.add(f"move {candidate} unknown to poke-engine; using HIDDENPOWER")
         return "HIDDENPOWER"
+    key = NAMED_ALIASES.get("moves", {}).get(key, key)
     if key not in ids["moves"]:
         problems.add(f"move {key} unknown to poke-engine")
         return "NONE"
