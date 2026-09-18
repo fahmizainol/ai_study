@@ -58,7 +58,12 @@ def rows_by_battle(path):
             row = json.loads(line)
             trace = row.get("trace")
             if isinstance(trace, list):
-                battle_id = str(row.get("id") or len(battles))
+                # "id" is the MATCHUP name, shared by every seed and both modes -- 16
+                # rows apiece here. Keying on it alone concatenates eight separate
+                # battles into one sequence and pairs the last decision of one with the
+                # first of the next, which manufactured a 22-hit cluster on the first
+                # run of this. Identity is the matchup, the seed and the mode together.
+                battle_id = "/".join(str(row.get(k)) for k in ("id", "seed", "mode"))
                 for entry in trace:
                     decision = dict(entry)
                     summary = entry.get("portable") or {}

@@ -12,20 +12,20 @@ module PortableAIRealideaMechanics
   SETS = {
     "mech_a" => {
       "team1" => [
-        ["EXCADRILL", %w[DIG DRILLRUN STRENGTH XSCISSOR], { "item" => "LEFTOVERS", "ability" => 0, "nature" => 0, "evs" => [0, 252, 0, 252, 0, 4] }],  # DIG
-        ["SKARMORY", %w[FLY DRILLPECK XSCISSOR NIGHTSLASH], { "item" => "LEFTOVERS", "ability" => 0, "nature" => 0, "evs" => [0, 252, 0, 252, 0, 4] }],  # FLY
-        ["EMPOLEON", %w[DIVE HYDROPUMP DRILLPECK STRENGTH], { "item" => "LEFTOVERS", "ability" => 0, "nature" => 0, "evs" => [0, 252, 0, 252, 0, 4] }],  # DIVE
-        ["LOPUNNY", %w[BOUNCE HYPERVOICE STRENGTH CUT], { "item" => "LEFTOVERS", "ability" => 0, "nature" => 0, "evs" => [0, 252, 0, 252, 0, 4] }],  # BOUNCE
-        ["VENUSAUR", %w[SOLARBEAM SEEDBOMB STRENGTH RAZORLEAF], { "item" => "LEFTOVERS", "ability" => 0, "nature" => 0, "evs" => [0, 252, 0, 252, 0, 4] }],  # SOLARBEAM
-        ["AEGISLASH", %w[KINGSSHIELD NIGHTSLASH SHADOWCLAW SLASH], { "item" => "LEFTOVERS", "ability" => 0, "nature" => 0, "evs" => [0, 252, 0, 252, 0, 4] }],  # KINGSSHIELD
+        ["EXCADRILL", %w[DIG STRENGTH XSCISSOR SHADOWCLAW], { "item" => nil, "ability" => 0, "nature" => 0, "evs" => [0, 252, 0, 252, 0, 4] }],  # DIG
+        ["SKARMORY", %w[FLY DRILLPECK XSCISSOR NIGHTSLASH], { "item" => nil, "ability" => 0, "nature" => 0, "evs" => [0, 252, 0, 252, 0, 4] }],  # FLY
+        ["EMPOLEON", %w[DIVE DRILLPECK STRENGTH SHADOWCLAW], { "item" => nil, "ability" => 0, "nature" => 0, "evs" => [0, 252, 0, 252, 0, 4] }],  # DIVE
+        ["LOPUNNY", %w[BOUNCE HYPERVOICE STRENGTH AQUAJET], { "item" => nil, "ability" => 0, "nature" => 0, "evs" => [0, 252, 0, 252, 0, 4] }],  # BOUNCE
+        ["VENUSAUR", %w[SOLARBEAM SEEDBOMB STRENGTH TACKLE], { "item" => nil, "ability" => 0, "nature" => 0, "evs" => [0, 252, 0, 252, 0, 4] }],  # SOLARBEAM
+        ["AEGISLASH", %w[KINGSSHIELD NIGHTSLASH SHADOWCLAW SLASH], { "item" => nil, "ability" => 0, "nature" => 0, "evs" => [0, 252, 0, 252, 0, 4] }],  # KINGSSHIELD
       ],
       "team2" => [
-        ["CHESNAUGHT", %w[SPIKYSHIELD STONEEDGE DRAGONCLAW SEEDBOMB], { "item" => "LEFTOVERS", "ability" => 0, "nature" => 0, "evs" => [0, 252, 0, 252, 0, 4] }],  # SPIKYSHIELD
-        ["TOXAPEX", %w[BANEFULBUNKER BLIZZARD ICEBEAM SLUDGEWAVE], { "item" => "LEFTOVERS", "ability" => 0, "nature" => 0, "evs" => [0, 252, 0, 252, 0, 4] }],  # BANEFULBUNKER
-        ["STEELIX", %w[AUTOTOMIZE STONEEDGE AQUATAIL DRAGONPULSE], { "item" => "LEFTOVERS", "ability" => 0, "nature" => 0, "evs" => [0, 252, 0, 252, 0, 4] }],  # AUTOTOMIZE
-        ["SNORLAX", %w[REST HYPERVOICE SEEDBOMB STRENGTH], { "item" => "LEFTOVERS", "ability" => 0, "nature" => 0, "evs" => [0, 252, 0, 252, 0, 4] }],  # REST
-        ["CELEBI", %w[BATONPASS SEEDBOMB CUT AQUAJET], { "item" => "LEFTOVERS", "ability" => 0, "nature" => 0, "evs" => [0, 252, 0, 252, 0, 4] }],  # BATONPASS
-        ["REUNICLUS", %w[FUTURESIGHT STRENGTH FOCUSBLAST SUPERPOWER], { "item" => "LEFTOVERS", "ability" => 0, "nature" => 0, "evs" => [0, 252, 0, 252, 0, 4] }],  # FUTURESIGHT
+        ["CHESNAUGHT", %w[SPIKYSHIELD DRAGONCLAW SEEDBOMB STRENGTH], { "item" => nil, "ability" => 0, "nature" => 0, "evs" => [0, 252, 0, 252, 0, 4] }],  # SPIKYSHIELD
+        ["TOXAPEX", %w[BANEFULBUNKER ICEBEAM SLUDGEWAVE SLUDGEBOMB], { "item" => nil, "ability" => 0, "nature" => 0, "evs" => [0, 252, 0, 252, 0, 4] }],  # BANEFULBUNKER
+        ["STEELIX", %w[AUTOTOMIZE DRAGONPULSE STRENGTH TACKLE], { "item" => nil, "ability" => 0, "nature" => 0, "evs" => [0, 252, 0, 252, 0, 4] }],  # AUTOTOMIZE
+        ["SNORLAX", %w[REST HYPERVOICE SEEDBOMB STRENGTH], { "item" => nil, "ability" => 0, "nature" => 0, "evs" => [0, 252, 0, 252, 0, 4] }],  # REST
+        ["CELEBI", %w[BATONPASS SEEDBOMB AQUAJET FAIRYWIND], { "item" => nil, "ability" => 0, "nature" => 0, "evs" => [0, 252, 0, 252, 0, 4] }],  # BATONPASS
+        ["REUNICLUS", %w[FUTURESIGHT STRENGTH SUPERPOWER PSYCHIC], { "item" => nil, "ability" => 0, "nature" => 0, "evs" => [0, 252, 0, 252, 0, 4] }],  # FUTURESIGHT
       ],
     }
   }

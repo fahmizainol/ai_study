@@ -93,6 +93,12 @@ FORMES = {
     "THUNDURUS": {1: "THERIAN"},
     "TORNADUS": {1: "THERIAN"},
     "KYUREM": {1: "WHITE", 2: "BLACK"},
+    # Found by the mechanics run, 2026-09-19: 37 warnings in 16 battles. Like the
+    # regional forms this is correctness and log hygiene rather than better play --
+    # poke-engine carries STANCECHANGE as an enum entry with no implementation and
+    # never reads AEGISLASHBLADE, and the adapter passes the battler's real stats
+    # anyway. Noise is still worth removing: it is what buried TWOTURN for a week.
+    "AEGISLASH": {1: "BLADE"},
 }
 # Species whose two megas are told apart by forme index (125_Pokemon_MegaEvolution.rb).
 MEGA_XY = {"CHARIZARD", "MEWTWO"}

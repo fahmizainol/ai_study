@@ -58,13 +58,27 @@ SLOTS = [
 PLAIN_FUNCTION_CODE = "000"
 # Anything enormous is a one-shot that ends the battle before mechanics get traffic.
 FILLER_POWER = (40, 120)
+# Filler must not miss. Measured on the first run: Focus Blast at 70% accuracy produced
+# three "predicted to land, did nothing" rows that were simply misses, and a detector
+# whose rule is "read the repeats" cannot afford filler that manufactures them.
+FILLER_MIN_ACCURACY = 100
+# NO held item. The first run gave everything Leftovers and 22 of 32 flagged rows were
+# one stall loop: Skarmory's Fly is resisted by Steelix (Flying into Steel/Ground is
+# x0.5) for about 12% every two turns, against 12.5% of recovery over the same two
+# turns, so the target oscillated between 88% and 96% for twenty-four turns and never
+# died. Damage exactly cancelled by recovery reads identically to damage that never
+# landed. An item is a mechanic too, and this suite is meant to isolate one at a time.
+HELD_ITEM = None
 # Not every species has three plain moves -- Toxapex has almost none -- so filler falls
 # back to effect-bearing moves, minus the codes that carry a MECHANIC. Those codes are
 # read off these exemplars rather than guessed, so they stay correct for this game's
 # own moves.txt instead of encoding my assumptions about Essentials' numbering.
 CODE_EXEMPLARS = ["DIG", "FLY", "DIVE", "BOUNCE", "SOLARBEAM", "RAZORWIND", "SKYATTACK",
                   "SKULLBASH", "HYPERBEAM", "GIGAIMPACT", "EXPLOSION", "SELFDESTRUCT",
-                  "FOCUSPUNCH", "KINGSSHIELD", "SPIKYSHIELD", "BANEFULBUNKER"]
+                  "FOCUSPUNCH", "KINGSSHIELD", "SPIKYSHIELD", "BANEFULBUNKER",
+                  # Conditional damage: zero unless the target is asleep, so it would
+                  # flag on every use and drown the signal it is meant to leave alone.
+                  "DREAMEATER"]
 
 
 def learnsets():
@@ -105,13 +119,15 @@ def filler_moves():
         parts = line.split(",")
         if len(parts) > 6 and parts[0].strip().isdigit():
             try:
-                rows[parts[1].strip().upper()] = (parts[3].strip(), int(parts[4]))
+                rows[parts[1].strip().upper()] = (parts[3].strip(), int(parts[4]),
+                                                  int(parts[7]))
             except ValueError:
                 pass
     banned = {rows[m][0] for m in CODE_EXEMPLARS if m in rows}
     plain, fallback = {}, {}
-    for name, (code, strength) in rows.items():
-        if not FILLER_POWER[0] <= strength <= FILLER_POWER[1] or code in banned:
+    for name, (code, strength, accuracy) in rows.items():
+        if (not FILLER_POWER[0] <= strength <= FILLER_POWER[1] or code in banned
+                or accuracy < FILLER_MIN_ACCURACY):
             continue
         fallback[name] = strength
         if code == PLAIN_FUNCTION_CODE:
@@ -165,7 +181,7 @@ def main():
         for species, moves, mechanic in team:
             lines.append(
                 f'        ["{species}", %w[{" ".join(moves)}], '
-                f'{{ "item" => "LEFTOVERS", "ability" => 0, "nature" => 0, '
+                f'{{ "item" => nil, "ability" => 0, "nature" => 0, '
                 f'"evs" => [0, 252, 0, 252, 0, 4] }}],  # {mechanic}')
         lines.append("      ],")
     lines += [
