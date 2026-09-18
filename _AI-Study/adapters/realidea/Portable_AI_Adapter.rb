@@ -2853,7 +2853,7 @@ module PortableAIRealidea
       [:DestinyBond, "DESTINYBOND",      :flag],
       [:Grudge,      "GRUDGE",           :flag],
       [:Substitute,  "SUBSTITUTE",       :positive],
-      [:TwoTurnAttack, "TWOTURN",        :positive]
+      [:TwoTurnAttack, nil,               :move]
     ]
 
     # Side effect -> poke-engine side condition. Layer counts and turn counters pass
@@ -2996,11 +2996,22 @@ module PortableAIRealidea
         value = PortableAIRealidea.safe_effect(active, name, nil)
         next if value.nil?
         on = case test
-             when :positive then value.is_a?(Numeric) && value > 0
-             when :set      then value.is_a?(Numeric) && value >= 0
+             when :positive, :move then value.is_a?(Numeric) && value > 0
+             when :set             then value.is_a?(Numeric) && value >= 0
              else value ? true : false
              end
-        volatiles << key if on && !volatiles.include?(key)
+        next unless on
+        # A two-turn move's effect value IS the charging move's id, so :move resolves
+        # the key from it. poke-engine keys BOTH halves of the mechanic on a volatile
+        # named for that move -- the forced move (active_is_charging_move collapses the
+        # side's options to it) and the semi-invulnerability (damage_calc returns 0
+        # against DIG/FLY/DIVE/BOUNCE/PHANTOMFORCE/SHADOWFORCE). Flattening it to a
+        # constant "TWOTURN" named nothing the engine could read, so a charging foe
+        # looked free to act AND free to hit: measured 2026-09-18, Eevee threw four
+        # Facades at an Excadrill that was underground for two of them, and a
+        # Ground-immune Mantyke was priced against the Rock Slide it could not use.
+        key = PortableAIRealidea.move_key(value) if test == :move
+        volatiles << key unless volatiles.include?(key)
       end
       stages = active.stages || []
       pokemon = []

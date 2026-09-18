@@ -16,7 +16,7 @@
 # Everything else is optional evidence used to improve the score.
 
 module PortableAI
-  VERSION = "0.8.4" unless const_defined?(:VERSION)
+  VERSION = "0.8.5" unless const_defined?(:VERSION)
 
   module Model
     DEFAULT_CONFIG = {
