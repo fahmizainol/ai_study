@@ -1,7 +1,7 @@
 {
  "name": "teams_trainers",
  "note": "companion snapshot written by Export",
- "saved": "2026-09-17T15:48:38",
+ "saved": "2026-09-19T00:04:21",
  "settings": {
   "ARCHETYPE": [
    "hyper offense",
@@ -14,9 +14,9 @@
    "hyper offense",
    "offense"
   ],
-  "BP_CAP": 70,
-  "BP_CAP_UNTIL": 3,
-  "CHASE": 0.9,
+  "BP_CAP": 75,
+  "BP_CAP_UNTIL": 1,
+  "CHASE": 0.8,
   "EARLY_MOVES": 0,
   "FORMAT": [
    "inherit",
@@ -540,9 +540,7 @@
      "trainer_type": "KENN"
     },
     "floors": {
-     "hazards": 1,
-     "recovery": 2,
-     "setup": 2
+     "hazards": 1
     },
     "idx": 2,
     "leader": "Kenn",
@@ -551,15 +549,17 @@
     "notes": [
      "dropped BRIONNE -- unticked on the card",
      "dropped PYUKUMUKU -- unticked on the card",
-     "evolved POLIWHIRL (385) -> POLIWRATH (500, ZU) to reach the band"
+     "evolved POLIWHIRL (385) -> POLIWRATH (500, ZU) to reach the band",
+     "dropped POLIWRATH -- unticked on the card",
+     "AZUMARILL: no set you named survives level 31, so its moves were written from the learnset",
+     "MANTINE: no set you named survives level 31, so its moves were written from the learnset"
     ],
     "roles": {
      "hazards": 1,
-     "priority": 2,
-     "protect": 5,
+     "priority": 1,
+     "protect": 4,
      "rain": 2,
-     "speed": 1,
-     "status": 1,
+     "snow": 1,
      "weather": 1
     },
     "target": 504,
@@ -575,7 +575,7 @@
        252
       ],
       "fidelity": 4,
-      "inherited": "TENTACOOL",
+      "inherited": null,
       "item": "SITRUSBERRY",
       "iv": 31,
       "kept": true,
@@ -645,7 +645,7 @@
       "moves": [
        "PERISHSONG",
        "PROTECT",
-       "WATERPULSE",
+       "SURF",
        "ENDEAVOR"
       ],
       "nature": "MODEST",
@@ -670,14 +670,14 @@
        0
       ],
       "fidelity": 4,
-      "inherited": "MANTYKE",
+      "inherited": null,
       "item": "WACANBERRY",
       "iv": 31,
       "kept": true,
       "level": 31,
       "moves": [
        "RAINDANCE",
-       "BUBBLEBEAM",
+       "HAIL",
        "PSYBEAM",
        "PROTECT"
       ],
@@ -685,7 +685,8 @@
       "pinned": true,
       "roles": [
        "protect",
-       "rain"
+       "rain",
+       "snow"
       ],
       "species": "MANTINE",
       "src": "Boss Studio custom moves",
@@ -708,16 +709,15 @@
       "kept": true,
       "level": 31,
       "moves": [
-       "WATERPULSE",
+       "SURF",
        "ROUND",
-       "ICYWIND",
+       "ICEBEAM",
        "PROTECT"
       ],
       "nature": "MODEST",
       "pinned": true,
       "roles": [
-       "protect",
-       "speed"
+       "protect"
       ],
       "species": "GOREBYSS",
       "src": "Boss Studio custom moves",
@@ -734,7 +734,7 @@
        236
       ],
       "fidelity": 4,
-      "inherited": "EEVEE",
+      "inherited": null,
       "item": "LEFTOVERS",
       "iv": 31,
       "kept": true,
@@ -742,8 +742,8 @@
       "moves": [
        "PROTECT",
        "QUICKATTACK",
-       "WATERPULSE",
-       "AURORABEAM"
+       "SURF",
+       "ICEBEAM"
       ],
       "nature": "ADAMANT",
       "pinned": true,
@@ -760,8 +760,8 @@
    "g3": {
     "archetype": "offense",
     "band": [
-     520.5,
-     581.5
+     470,
+     580
     ],
     "cap": {
      "badges": 3,
@@ -795,27 +795,23 @@
     },
     "floors": {
      "hazards": 1,
-     "mega": 1,
-     "recovery": 2,
-     "setup": 2
+     "mega": 1
     },
     "idx": 3,
     "leader": "Douglas",
     "level": 36,
     "mode": null,
     "notes": [
-     "dropped WEAVILE (510 BST, band 520-582)",
-     "dropped FROSLASS (480 BST, band 520-582)",
-     "evolved PILOSWINE (450) -> MAMOSWINE (530, UU) to reach the band",
-     "GYARADOS re-equipped to cover mega"
+     "evolved PILOSWINE (450) -> MAMOSWINE (530, UU) to reach the band"
     ],
     "roles": {
      "hazards": 1,
-     "mega": 1,
      "priority": 2,
-     "rain": 1
+     "protect": 1,
+     "recovery": 1,
+     "status": 1
     },
-    "target": 551,
+    "target": 525,
     "team": [
      {
       "ability": 1,
@@ -862,7 +858,7 @@
       "inherited": null,
       "item": "CHOICESPECS",
       "iv": 31,
-      "kept": true,
+      "kept": false,
       "level": 35,
       "moves": [
        "ICEBEAM",
@@ -871,11 +867,10 @@
        "HYPERBEAM"
       ],
       "nature": "MODEST",
-      "pinned": true,
       "roles": [],
       "species": "GLACEON",
       "src": "Boss Studio custom moves",
-      "why": "pinned on the card"
+      "why": "theme"
      },
      {
       "ability": 2,
@@ -911,92 +906,94 @@
      {
       "ability": 0,
       "ev": [
-       252,
+       248,
        0,
        0,
        0,
-       252,
-       4
+       8,
+       252
       ],
-      "fidelity": 4,
+      "fidelity": 3,
       "inherited": null,
       "item": "LEFTOVERS",
       "iv": 31,
-      "kept": true,
+      "kept": false,
       "level": 35,
       "moves": [
+       "TOXIC",
+       "PROTECT",
        "SURF",
-       "ICEBEAM",
-       "RAINDANCE",
-       "GIGAIMPACT"
+       "ICESHARD"
       ],
-      "nature": "MODEST",
-      "pinned": true,
+      "nature": "CALM",
       "roles": [
-       "rain"
+       "priority",
+       "protect",
+       "status"
       ],
-      "species": "LAPRAS",
-      "src": "Boss Studio custom moves",
-      "why": "pinned on the card"
-     },
-     {
-      "ability": 1,
-      "ev": [
-       0,
-       0,
-       0,
-       252,
-       252,
-       4
-      ],
-      "fidelity": 4,
-      "inherited": null,
-      "item": "CHOICESCARF",
-      "iv": 31,
-      "kept": true,
-      "level": 35,
-      "moves": [
-       "AIRSLASH",
-       "FIREBLAST",
-       "AURASPHERE",
-       "TRICK"
-      ],
-      "nature": "TIMID",
-      "pinned": true,
-      "roles": [],
-      "species": "TOGEKISS",
-      "src": "Boss Studio custom moves",
-      "why": "pinned on the card"
+      "species": "DEWGONG",
+      "src": "gen6pu/dex/Specially Defensive",
+      "why": "theme"
      },
      {
       "ability": 0,
       "ev": [
-       0,
+       4,
        252,
        0,
        252,
        0,
-       4
+       0
       ],
-      "fidelity": 4,
+      "fidelity": 0,
       "inherited": null,
-      "item": "GYARADOSITE",
+      "item": null,
       "iv": 31,
       "kept": true,
-      "level": 36,
+      "level": 35,
       "moves": [
-       "WATERFALL",
-       "EARTHQUAKE",
+       "ICEPUNCH",
        "ICEFANG",
-       "BOUNCE"
+       "ASTONISH",
+       "REST"
+      ],
+      "nature": "ADAMANT",
+      "pinned": false,
+      "roles": [
+       "recovery"
+      ],
+      "species": "FROSLASS",
+      "src": "generated (no published set fits)",
+      "why": "original"
+     },
+     {
+      "ability": 2,
+      "ev": [
+       0,
+       252,
+       4,
+       252,
+       0,
+       0
+      ],
+      "fidelity": 2,
+      "inherited": "SNEASEL",
+      "item": "LIFEORB",
+      "iv": 31,
+      "kept": true,
+      "level": 35,
+      "moves": [
+       "KNOCKOFF",
+       "LOWKICK",
+       "ICEPUNCH",
+       "GIGAIMPACT"
       ],
       "nature": "JOLLY",
-      "roles": [
-       "mega"
-      ],
-      "species": "GYARADOS",
-      "src": "Boss Studio custom moves",
-      "why": "original, re-set for mega"
+      "pinned": false,
+      "roles": [],
+      "species": "WEAVILE",
+      "src": "gen6ru/dex/All-Out Attacker",
+      "why": "original"
      }
     ],
     "theme": "ICE"
@@ -3076,12 +3073,14 @@
     "dynamic": false,
     "floors": {
      "hazards": 1,
-     "mega": 1
+     "mega": 1,
+     "setup": 2
     },
     "level": 40,
     "median": 38,
     "mode": null,
     "notes": [
+     "dropped EELEKTRIK -- unticked on the card",
      "albapoke2 left to the engine \u2014 resolves to the starter matching the player's"
     ],
     "roles": {
@@ -3089,7 +3088,7 @@
      "mega": 1,
      "pivot": 1,
      "priority": 1,
-     "rain": 1,
+     "setup": 2,
      "status": 1
     },
     "stage": 4,
@@ -3099,32 +3098,32 @@
       "ability": 0,
       "ev": [
        252,
-       0,
        4,
        0,
        0,
-       252
+       252,
+       0
       ],
       "fidelity": 4,
       "inherited": null,
-      "item": "EVIOLITE",
+      "item": "ASSAULTVEST",
       "iv": 31,
       "kept": true,
       "level": 40,
       "moves": [
-       "UTURN",
-       "KNOCKOFF",
+       "VOLTSWITCH",
+       "FLAMETHROWER",
        "GIGADRAIN",
-       "SUPERFANG"
+       "KNOCKOFF"
       ],
-      "nature": "RELAXED",
-      "pinned": false,
+      "nature": "QUIET",
+      "pinned": true,
       "roles": [
        "pivot"
       ],
-      "species": "EELEKTRIK",
-      "src": "Boss Studio custom moves",
-      "why": "original"
+      "species": "EELEKTROSS",
+      "src": "gen6ru/dex/Assault Vest",
+      "why": "pinned on the card"
      },
      {
       "ability": 0,
@@ -3195,34 +3194,6 @@
        0,
        0,
        0,
-       252,
-       252,
-       4
-      ],
-      "fidelity": 4,
-      "inherited": null,
-      "item": "LEFTOVERS",
-      "iv": 31,
-      "kept": false,
-      "level": 39,
-      "moves": [
-       "AIRSLASH",
-       "FLAMETHROWER",
-       "EARTHQUAKE",
-       "HYPERBEAM"
-      ],
-      "nature": "TIMID",
-      "roles": [],
-      "species": "CHARIZARD",
-      "src": "Boss Studio custom moves",
-      "why": "added:power"
-     },
-     {
-      "ability": 0,
-      "ev": [
-       0,
-       0,
-       0,
        0,
        0,
        0
@@ -3241,7 +3212,37 @@
       "why": "starter slot"
      },
      {
-      "ability": 2,
+      "ability": 1,
+      "ev": [
+       0,
+       252,
+       0,
+       252,
+       0,
+       4
+      ],
+      "fidelity": 3,
+      "inherited": null,
+      "item": "LIFEORB",
+      "iv": 31,
+      "kept": false,
+      "level": 39,
+      "moves": [
+       "SWORDSDANCE",
+       "KNOCKOFF",
+       "SUPERPOWER",
+       "GIGAIMPACT"
+      ],
+      "nature": "ADAMANT",
+      "roles": [
+       "setup"
+      ],
+      "species": "ABSOL",
+      "src": "gen6ru/dex/Swords Dance",
+      "why": "added:setup"
+     },
+     {
+      "ability": 0,
       "ev": [
        0,
        252,
@@ -3252,24 +3253,24 @@
       ],
       "fidelity": 4,
       "inherited": null,
-      "item": "SWAMPERTITE",
+      "item": "SCEPTILITE",
       "iv": 31,
       "kept": false,
       "level": 39,
       "moves": [
-       "RAINDANCE",
-       "WATERFALL",
-       "EARTHQUAKE",
-       "ICEPUNCH"
+       "SWORDSDANCE",
+       "LEAFBLADE",
+       "DRAGONCLAW",
+       "EARTHQUAKE"
       ],
-      "nature": "ADAMANT",
+      "nature": "JOLLY",
       "roles": [
        "mega",
-       "rain"
+       "setup"
       ],
-      "species": "SWAMPERT",
-      "src": "gen6uu/dex/Rain Sweeper",
-      "why": "added:mega"
+      "species": "SCEPTILE",
+      "src": "gen6uu/dex/Swords Dance",
+      "why": "added:setup"
      }
     ]
    },
@@ -6295,87 +6296,56 @@
     },
     "dynamic": false,
     "floors": {
-     "hazards": 1
+     "hazards": 1,
+     "setup": 2
     },
     "level": 29,
     "median": 23,
     "mode": null,
     "notes": [
+     "dropped MANTYKE -- unticked on the card",
      "owenpoke2 left to the engine \u2014 resolves to the starter matching the player's"
     ],
     "roles": {
      "hazards": 1,
      "pivot": 1,
-     "protect": 1,
-     "rain": 1,
+     "protect": 2,
      "recovery": 1,
-     "speed": 1,
+     "setup": 1,
      "status": 1
     },
     "stage": 2,
     "target": 504,
     "team": [
      {
-      "ability": 1,
+      "ability": 0,
       "ev": [
+       252,
        0,
-       236,
-       36,
+       252,
        0,
        0,
-       236
+       4
       ],
-      "fidelity": 4,
-      "inherited": null,
-      "item": "EVIOLITE",
+      "fidelity": 3,
+      "inherited": "SYLVEON",
+      "item": "SILKSCARF",
       "iv": 31,
       "kept": true,
       "level": 29,
       "moves": [
+       "HYPERVOICE",
+       "HEALBELL",
        "PROTECT",
-       "QUICKATTACK",
-       "BITE",
-       "FACADE"
+       "DIG"
       ],
-      "nature": "ADAMANT",
+      "nature": "BOLD",
       "pinned": false,
       "roles": [
        "protect"
       ],
       "species": "EEVEE",
-      "src": "Boss Studio custom moves",
-      "why": "original"
-     },
-     {
-      "ability": 1,
-      "ev": [
-       76,
-       0,
-       36,
-       196,
-       200,
-       0
-      ],
-      "fidelity": 4,
-      "inherited": null,
-      "item": "EVIOLITE",
-      "iv": 31,
-      "kept": true,
-      "level": 29,
-      "moves": [
-       "RAINDANCE",
-       "BUBBLEBEAM",
-       "ROUND",
-       "ICYWIND"
-      ],
-      "nature": "MODEST",
-      "pinned": false,
-      "roles": [
-       "rain",
-       "speed"
-      ],
-      "species": "MANTYKE",
-      "src": "Boss Studio custom moves",
+      "src": "gen6uu/dex/Cleric",
       "why": "original"
      },
      {
@@ -6396,9 +6366,9 @@
       "level": 30,
       "moves": [
        "VOLTSWITCH",
-       "SHOCKWAVE",
-       "ROUND",
-       "MUDSLAP"
+       "HYPERVOICE",
+       "SIGNALBEAM",
+       "THUNDERBOLT"
       ],
       "nature": "TIMID",
       "pinned": false,
@@ -6406,8 +6376,101 @@
        "pivot"
       ],
       "species": "HELIOLISK",
-      "src": "Boss Studio custom moves",
+      "src": "gen6uu/dex/Special Attacker (dev set was CHARGE/PARABOLICCHARGE/QUICKATTACK/TAILWHIP)",
       "why": "original"
+     },
+     {
+      "ability": 0,
+      "ev": [
+       4,
+       0,
+       0,
+       252,
+       252,
+       0
+      ],
+      "fidelity": 0,
+      "inherited": null,
+      "item": null,
+      "iv": 31,
+      "kept": true,
+      "level": 30,
+      "moves": [
+       "SURF",
+       "SCALD",
+       "BUBBLEBEAM",
+       "REST"
+      ],
+      "nature": "MODEST",
+      "pinned": true,
+      "roles": [
+       "recovery"
+      ],
+      "species": "MANTINE",
+      "src": "generated (no published set fits)",
+      "why": "pinned on the card"
+     },
+     {
+      "ability": 0,
+      "ev": [
+       248,
+       0,
+       252,
+       0,
+       0,
+       8
+      ],
+      "fidelity": 3,
+      "inherited": null,
+      "item": "HARDSTONE",
+      "iv": 31,
+      "kept": false,
+      "level": 28,
+      "moves": [
+       "STEALTHROCK",
+       "ENCORE",
+       "TOXIC",
+       "STONEEDGE"
+      ],
+      "nature": "BOLD",
+      "roles": [
+       "hazards",
+       "status"
+      ],
+      "species": "SHUCKLE",
+      "src": "gen6uu/dex/Holy Shuck!",
+      "why": "added:hazards"
+     },
+     {
+      "ability": 0,
+      "ev": [
+       0,
+       0,
+       0,
+       252,
+       252,
+       4
+      ],
+      "fidelity": 4,
+      "inherited": null,
+      "item": "CHARCOAL",
+      "iv": 31,
+      "kept": false,
+      "level": 28,
+      "moves": [
+       "NASTYPLOT",
+       "FIREBLAST",
+       "ENERGYBALL",
+       "SUBSTITUTE"
+      ],
+      "nature": "TIMID",
+      "roles": [
+       "protect",
+       "setup"
+      ],
+      "species": "NINETALES",
+      "src": "gen6pu/dex/Nasty Plot",
+      "why": "added:setup"
      },
      {
       "ability": 0,
@@ -6431,67 +6494,6 @@
       "species": "owenpoke2",
       "src": "engine (Pokes Rivales starter slot)",
       "why": "starter slot"
-     },
-     {
-      "ability": 0,
-      "ev": [
-       248,
-       0,
-       252,
-       0,
-       0,
-       8
-      ],
-      "fidelity": 3,
-      "inherited": null,
-      "item": "SILVERPOWDER",
-      "iv": 31,
-      "kept": false,
-      "level": 28,
-      "moves": [
-       "STEALTHROCK",
-       "ENCORE",
-       "TOXIC",
-       "BUGBITE"
-      ],
-      "nature": "BOLD",
-      "roles": [
-       "hazards",
-       "status"
-      ],
-      "species": "SHUCKLE",
-      "src": "gen6uu/dex/Holy Shuck!",
-      "why": "added:hazards"
-     },
-     {
-      "ability": 2,
-      "ev": [
-       252,
-       0,
-       0,
-       0,
-       252,
-       4
-      ],
-      "fidelity": 2,
-      "inherited": null,
-      "item": "SITRUSBERRY",
-      "iv": 31,
-      "kept": false,
-      "level": 28,
-      "moves": [
-       "LEECHSEED",
-       "SLEEPPOWDER",
-       "CONFUSION",
-       "GRASSKNOT"
-      ],
-      "nature": "MODEST",
-      "roles": [
-       "recovery"
-      ],
-      "species": "EXEGGUTOR",
-      "src": "gen6nu/stats/Showdown Usage",
-      "why": "added:power"
      }
     ]
    },
@@ -6736,7 +6738,7 @@
    "",
    ""
   ],
-  "ON_THEME_MIN": 4,
+  "ON_THEME_MIN": 6,
   "ORDER": {
    "g0": [
     "KARRABLAST",
@@ -6835,12 +6837,12 @@
     "GYARADOS"
    ],
    "t11": [
-    "EELEKTRIK",
+    "EELEKTROSS",
     "METANG",
     "GOURGEIST",
     "CHARIZARD",
-    "GYARADOS",
-    "albapoke2"
+    "albapoke2",
+    "SWAMPERT"
    ],
    "t12": [
     "MANTINE",
@@ -6940,10 +6942,10 @@
    ],
    "t8": [
     "EEVEE",
-    "MANTYKE",
     "HELIOLISK",
-    "GYARADOS",
-    "ARCANINE",
+    "MANTINE",
+    "SHUCKLE",
+    "NINETALES",
     "owenpoke2"
    ],
    "t9": [
@@ -7312,21 +7314,21 @@
       "BULLDOZE"
      ],
      "GOREBYSS": [
-      "WATERPULSE",
+      "SURF",
       "ROUND",
-      "ICYWIND",
+      "ICEBEAM",
       "PROTECT"
      ],
      "MANTINE": [
       "RAINDANCE",
-      "BUBBLEBEAM",
+      "HAIL",
       "PSYBEAM",
       "PROTECT"
      ],
      "POLITOED": [
       "PERISHSONG",
       "PROTECT",
-      "WATERPULSE",
+      "SURF",
       "ENDEAVOR"
      ],
      "TENTACRUEL": [
@@ -7338,8 +7340,8 @@
      "VAPOREON": [
       "PROTECT",
       "QUICKATTACK",
-      "WATERPULSE",
-      "AURORABEAM"
+      "SURF",
+      "ICEBEAM"
      ]
     },
     "natures": {
@@ -7350,7 +7352,10 @@
      "TENTACRUEL": "CALM",
      "VAPOREON": "ADAMANT"
     },
-    "sets": {}
+    "sets": {
+     "AZUMARILL": "gen6battlespotsingles/dex/All-Out Attacker",
+     "MANTINE": "gen6lc/stats/Showdown Usage"
+    }
    },
    "g3": {
     "abilities": {
@@ -8536,7 +8541,6 @@
    "t11": {
     "abilities": {
      "CHARIZARD": 0,
-     "EELEKTRIK": 0,
      "GOURGEIST": 1,
      "GYARADOS": 0,
      "METANG": 0
@@ -8549,14 +8553,6 @@
       252,
       252,
       4
-     ],
-     "EELEKTRIK": [
-      252,
-      0,
-      4,
-      0,
-      0,
-      252
      ],
      "GOURGEIST": [
       44,
@@ -8585,14 +8581,12 @@
     },
     "items": {
      "CHARIZARD": "LEFTOVERS",
-     "EELEKTRIK": "EVIOLITE",
      "GOURGEIST": "CHOICESCARF",
      "GYARADOS": "GYARADOSITE",
      "METANG": "EVIOLITE"
     },
     "ivs": {
      "CHARIZARD": 31,
-     "EELEKTRIK": 31,
      "GOURGEIST": 31,
      "GYARADOS": 31,
      "METANG": 31
@@ -8600,7 +8594,6 @@
     "keep": {},
     "levels": {
      "CHARIZARD": 39,
-     "EELEKTRIK": 40,
      "GOURGEIST": 40,
      "GYARADOS": 39,
      "METANG": 40
@@ -8611,12 +8604,6 @@
       "FLAMETHROWER",
       "EARTHQUAKE",
       "HYPERBEAM"
-     ],
-     "EELEKTRIK": [
-      "UTURN",
-      "KNOCKOFF",
-      "GIGADRAIN",
-      "SUPERFANG"
      ],
      "GOURGEIST": [
       "TRICK",
@@ -8639,7 +8626,6 @@
     },
     "natures": {
      "CHARIZARD": "TIMID",
-     "EELEKTRIK": "RELAXED",
      "GOURGEIST": "ADAMANT",
      "GYARADOS": "JOLLY",
      "METANG": "ADAMANT"
@@ -10102,116 +10088,14 @@
     "sets": {}
    },
    "t8": {
-    "abilities": {
-     "ARCANINE": 0,
-     "EEVEE": 1,
-     "GYARADOS": 0,
-     "HELIOLISK": 0,
-     "MANTYKE": 1
-    },
-    "evs": {
-     "ARCANINE": [
-      236,
-      0,
-      156,
-      0,
-      0,
-      116
-     ],
-     "EEVEE": [
-      0,
-      236,
-      36,
-      0,
-      0,
-      236
-     ],
-     "GYARADOS": [
-      0,
-      252,
-      4,
-      252,
-      0,
-      0
-     ],
-     "HELIOLISK": [
-      0,
-      0,
-      0,
-      252,
-      252,
-      4
-     ],
-     "MANTYKE": [
-      76,
-      0,
-      36,
-      196,
-      200,
-      0
-     ]
-    },
-    "items": {
-     "ARCANINE": "CHARCOAL",
-     "EEVEE": "EVIOLITE",
-     "GYARADOS": "LUMBERRY",
-     "HELIOLISK": "SITRUSBERRY",
-     "MANTYKE": "EVIOLITE"
-    },
-    "ivs": {
-     "ARCANINE": 31,
-     "EEVEE": 31,
-     "GYARADOS": 31,
-     "HELIOLISK": 31,
-     "MANTYKE": 31
-    },
+    "abilities": {},
+    "evs": {},
+    "items": {},
+    "ivs": {},
     "keep": {},
-    "levels": {
-     "ARCANINE": 28,
-     "EEVEE": 29,
-     "GYARADOS": 28,
-     "HELIOLISK": 30,
-     "MANTYKE": 29
-    },
-    "moves": {
-     "ARCANINE": [
-      "WILLOWISP",
-      "FIREFANG",
-      "FACADE",
-      "THUNDERFANG"
-     ],
-     "EEVEE": [
-      "PROTECT",
-      "QUICKATTACK",
-      "BITE",
-      "FACADE"
-     ],
-     "GYARADOS": [
-      "AQUAJET",
-      "FACADE",
-      "BITE",
-      "BULLDOZE"
-     ],
-     "HELIOLISK": [
-      "VOLTSWITCH",
-      "SHOCKWAVE",
-      "ROUND",
-      "MUDSLAP"
-     ],
-     "MANTYKE": [
-      "RAINDANCE",
-      "BUBBLEBEAM",
-      "ROUND",
-      "ICYWIND"
-     ]
-    },
-    "natures": {
-     "ARCANINE": "IMPISH",
-     "EEVEE": "ADAMANT",
-     "GYARADOS": "JOLLY",
-     "HELIOLISK": "TIMID",
-     "MANTYKE": "MODEST"
-    },
+    "levels": {},
+    "moves": {},
+    "natures": {},
     "sets": {}
    },
    "t9": {
@@ -10328,13 +10212,22 @@
   },
   "PICK_SEED": 0,
   "REPEAT_BAND": 2,
-  "SET_FORMATS": [],
+  "SET_FORMATS": [
+   "pu",
+   "ubers",
+   "ou",
+   "uu",
+   "nationaldex",
+   "ru",
+   "anythinggoes",
+   "nationaldexag"
+  ],
   "SET_SEED": 0,
   "SPREAD": [
    190,
    190,
    230,
-   61,
+   110,
    110,
    140,
    45,
@@ -10345,7 +10238,7 @@
    397,
    487,
    504,
-   551,
+   525,
    525,
    583,
    593,
@@ -10369,5 +10262,5 @@
   "UNLOCK_STAGE": 3,
   "level_mode": "expert"
  },
- "sha": "47a49baf61c8"
+ "sha": "340f39dc273f"
 }
