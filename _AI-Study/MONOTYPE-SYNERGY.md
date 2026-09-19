@@ -249,6 +249,44 @@ Defence to Ice types on top — so the substitute for a resist is a blanket, and
 bought by nearly every team rather than by a slot. It is not a gen 9 invention: 88% of gen
 7 Ice teams already ran the veil.
 
+### It does not generalise, and popularity does not follow it either
+
+The section title above is an overgeneralisation from Ice, and testing it across all
+eighteen themes says so. Auto-weather uptake against the theme's own defensive resist rate,
+gens 6-9 pooled (1 auto-setter ability anywhere on the team):
+
+| theme | resist rate | weather | | theme | resist rate | weather |
+|---|--:|--:|---|---|--:|--:|
+| Ice | 8% | **89%** | | Grass | 1% | 10% |
+| Rock | 13% | **85%** | | Dragon | 0% | **0%** |
+| Fire | 43% | 76% | | Fighting | 12% | **0%** |
+| Ground | 48% | 47% | | Psychic | 16% | **0%** |
+| Dark | 17% | 42% | | Ghost | 17% | **0%** |
+| Water | 48% | 36% | | Bug | 16% | **0%** |
+| Flying | 33% | 25% | | Steel / Poison / Electric / Normal | 83-97% | **0%** |
+
+**Spearman = −0.05.** "Themes that cannot resist buy a blanket instead" is true of Ice and
+Rock and false of Bug, Dragon, Fighting, Ghost and Psychic, which resist 0-17% of their
+weaknesses and run no weather at all. What actually explains the column is **availability**:
+every theme at 0% is one with no auto-setter of its own type, and every theme above 0% has
+one (Ninetales-Alola, Tyranitar, Torkoal, Hippowdon, Pelipper, Politoed, Abomasnow). Uptake
+then ranges 4-89% and is highest where the theme has nothing else, but Grass at 10% and
+Fairy at 4% have setters and decline them. So Ice's snow package is real and the mechanism
+class is real; the *rule* is not.
+
+**Popularity does not follow weather either** — the hypothesis is worth recording because it
+is the obvious one. Ranked by teams posted, gens 6-9 pooled: Water 391, Flying 317, Psychic
+313, Dark 286, Steel 284, Ground 261, Dragon 252, Ghost 214, Fairy 207, Fighting 202, Fire
+187, Ice 183, Bug/Normal/Poison 180, Electric 165, Grass 153, Rock 137. Spearman against
+auto-weather share is **−0.06**: the three themes that run weather on more than half their
+teams (Ice, Rock, Fire) average 169 teams where the other fifteen average 239, and the two
+most posted themes run it on 36% and 25%. Nothing else measured predicts it either — number
+of weaknesses +0.01, resist rate +0.10, legal species available +0.19, all at n=18 themes.
+And the ranking is **not stable**: Psychic leads gen 6 and leaves the top five by gen 9, Dark
+arrives at number one in gen 9, and only Water is top-two in all four generations. Whatever
+drives it is metagame-specific and outside this corpus — and note the proxy is **teams posted
+to a forum, not ladder usage**, which no vendored file covers.
+
 **This is a limit of everything above, not a footnote.** Every number in §3-§6 is a type
 multiplier, so screens, weather, terrain, bulk and Regenerator are all invisible to it. An
 8% coverage score and a 94% weather package are both true of the same 51 teams. Where a
