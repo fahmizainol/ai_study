@@ -1194,5 +1194,52 @@ class MonoSynergyTypeMathTest(unittest.TestCase):
         self.assertEqual((9, "date"), self.M.infer_gen(modern, dex))
 
 
+class ArchetypeProfileTest(unittest.TestCase):
+    """The three metrics that replace "the theme's weaknesses" on a normal team."""
+
+    def setUp(self):
+        import archetype_coverage
+        self.A = archetype_coverage
+        self.chart = {
+            "Fire": {"Water": 1, "Fire": 2, "Grass": 2},
+            "Water": {"Grass": 1, "Water": 2, "Fire": 2},
+            "Grass": {"Fire": 1, "Grass": 2, "Water": 2},
+            "Stellar": {},
+        }
+
+    def team(self, *types):
+        return {"gen": 9, "format": "gen9ou",
+                "mons": [{"types": list(t), "ability": "", "item": "", "tera": None,
+                          "moves": []} for t in types]}
+
+    def test_a_hole_needs_both_nobody_resisting_and_several_weak(self):
+        """Six Grass bodies: all weak to Fire and no member resists it, so Fire is one hole.
+
+        The first draft of this test used four Grass plus two Water and expected the same
+        answer -- but Water resists Fire, so two teammates were quietly covering it. A hole
+        takes BOTH conditions, which is the whole reason the metric is not just "weak"."""
+        t = self.team(*[("Grass",)] * 6)
+        p = self.A.profile(t, self.chart, {}, collections.defaultdict(collections.Counter))
+        self.assertEqual(1, p["holes"], "Fire: six weak, nobody resists")
+        self.assertEqual(1, p["stacked"], "only Fire has three or more weak")
+        self.assertEqual(1, p["blind"], "Grass resists Grass and Water, so only Fire is blind")
+        self.assertEqual(1, p["lose_to"], "no moves at all, so the hole cannot be hit back")
+        self.assertEqual(0.0, p["reach"], "no moves, no reach, and an empty population")
+
+    def test_two_water_teammates_cover_the_fire_hole(self):
+        """The paired case, so the conjunction is asserted and not just described."""
+        t = self.team(*([("Grass",)] * 4 + [("Water",)] * 2))
+        p = self.A.profile(t, self.chart, {}, collections.defaultdict(collections.Counter))
+        self.assertEqual(1, p["stacked"], "four are still weak to Fire")
+        self.assertEqual(0, p["holes"], "but Water resists it, so it is not a hole")
+
+    def test_stellar_is_not_one_of_the_eighteen(self):
+        """It is a key in the gen 9 chart and never an attacking type, so counting it would
+        inflate `blind` by one for every team ever measured."""
+        t = self.team(("Fire",), ("Water",), ("Grass",), ("Fire",), ("Water",), ("Grass",))
+        p = self.A.profile(t, self.chart, {}, collections.defaultdict(collections.Counter))
+        self.assertEqual(0, p["blind"], "each of Fire/Water/Grass is resisted by someone")
+
+
 if __name__ == "__main__":
     unittest.main()

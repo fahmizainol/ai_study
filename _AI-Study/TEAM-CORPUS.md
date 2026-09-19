@@ -10,7 +10,8 @@ document:** `MONOTYPE-SYNERGY.md` asks whether a team answers the weaknesses its
 hand it, using the 4,092 monotype teams in the same dump — the one tier where the
 weakness list is fixed before the first pick, so the question has a clean answer. It also
 records why two of this dump's filenames cannot be trusted (`gen6monotype.json` is not
-monotype, `gen9monotype.json` is not gen 9). This file is the
+monotype, `gen9monotype.json` is not gen 9). **§12 below** asks the same of normal teams,
+split by the archetype labels of §2. This file is the
 findings: what the corpus measured, what it changed, and — as much of the value —
 which readings did **not** survive checking.
 
@@ -490,3 +491,87 @@ Eleven mode/weather tags are scraped; six are modelled. Of the rest:
 (`hazards`); `para` has the same shape as screens — buy speed control, cash it with
 setup. Both are additions rather than fixes. Note also that **0 Realidea species learn
 Aurora Veil**, so the screens mode is Reflect and Light Screen only.
+
+## 12. Type coverage by archetype: everyone covers, they just pay differently
+
+`MONOTYPE-SYNERGY.md` could ask whether a team answers its weaknesses because monotype
+fixes the weakness list before the first pick. A normal team has no theme, so the question
+inverts: the six picks *create* the profile. What replaces "the theme's weaknesses":
+
+| | |
+|---|---|
+| `blind` | attacking types NO member resists — no switch-in exists |
+| `stacked` | attacking types three or more members are weak to |
+| `holes` | both at once. The thing that loses games |
+| `lose_to` | a hole the team also cannot hit super-effectively |
+| `reach` | share of the format's real member bodies the team hits for ×2 |
+
+    python3 tools/archetype_coverage.py                  # 1,662 titled teams
+    python3 tools/archetype_coverage.py --format gen8ou   # one format, no tier confound
+
+1,662 usable teams of 1,954 titled six-mon singles teams. Archetype comes from the title
+(§2's vocabulary, `tools/team_tags.py`); typing, abilities, items and moves come from the
+per-generation Showdown dex through `tools/type_model.py`, shared with the monotype work.
+
+**The tier mix differs by archetype** — bulky offense is 38% Ubers where stall is 26%
+gen8ou — so a raw archetype table is partly a tier table, and one column of it really is:
+pooled, stall looks *worse* than balance on `blind` (1.45 vs 1.13), and within a single
+format it does not (0.70 vs 0.64). Every claim below is therefore the residual against a
+null drawn from **that team's own format** at that format's own species frequencies.
+
+### Against its own tier, every archetype is arranged better than chance
+
+| archetype | n | blind | stacked | holes | lose_to | reach |
+|---|--:|--:|--:|--:|--:|--:|
+| stall | 239 | −0.62 | −0.79 | −0.26 | −0.05 | **−9.3 pts** |
+| semi-stall | 42 | −0.54 | −0.80 | −0.30 | −0.08 | −5.4 |
+| balance | 401 | −0.98 | −0.48 | −0.27 | −0.07 | +1.8 |
+| bulky offense | 372 | −0.79 | −0.41 | −0.22 | −0.06 | **+3.4** |
+| offense | 202 | −0.55 | −0.46 | −0.20 | −0.06 | +3.2 |
+| hyper offense | 406 | −0.33 | −0.04 | −0.15 | −0.06 | +2.4 |
+
+Every archetype sits **below** its own tier's null on all four defensive axes, most of them
+at |t| > 6. Covering weaknesses is not an archetype trait; it is what building a team *is*,
+and the corpus does it whether the title says stall or hyper offense.
+
+**What the archetype picks is the price.** The `reach` column is a clean trade with no
+overlap: stall gives up **9.3 points** of offensive reach against its own tier (t = −11.4)
+and buys the tidiest defensive profile; the offensive archetypes buy 2-3 points of reach
+and accept it. Ordered along §2's offence axis, the defensive residual shrinks monotonically
+— holes −0.26 for stall to −0.15 for hyper offense, and `stacked` from −0.79 to −0.04, i.e.
+hyper offense is the one archetype that lets stacked weaknesses sit where its tier put them.
+In gen8ou alone its `stacked` residual is **positive** (+0.19): it accepts more shared
+weakness than a random gen8ou six.
+
+### Stall does not solve damage with resistances
+
+The mechanism behind the trade, per member:
+
+| archetype | resists/member | weak/member | pure-typed |
+|---|--:|--:|--:|
+| stall | **5.34** | **2.69** | **40%** |
+| balance | 5.84 | 3.19 | 31% |
+| bulky offense | 5.98 | 3.21 | 26% |
+| hyper offense | 5.58 | 3.34 | 29% |
+
+Stall's members resist the **fewest** types of any archetype and are weak to the fewest, and
+40% of them are pure-typed — Blissey, Clefable, Chansey. Stall buys neutral sponges with
+enormous bulk and recovery, not resistances, and reaches its low hole count by having little
+that is weak rather than much that resists. That is the same shape as the snow package on
+monotype Ice (`MONOTYPE-SYNERGY.md` §7): when typing cannot buy defence, HP and recovery do,
+and a type-multiplier metric cannot see it.
+
+### What did not survive checking here
+
+- **The pooled `blind` column is confounded and the single-format run corrects it.** Stall
+  pooled 1.45 against balance's 1.13 reads as stall being careless; in gen8ou the order is
+  the expected 0.70 against 0.64, and every archetype's residual is negative in both. Only
+  the residual and the single-format tables are safe to quote.
+- **`lose_to` t-statistics are not trustworthy.** The observed value is 0 for almost every
+  team (0.00-0.04 of 18 types), so the standard deviation collapses and t runs to −22 on 35
+  teams. The *mean* is the finding — a hole you cannot even hit back is vanishingly rare,
+  which is the same conclusion as `MONOTYPE-SYNERGY.md` §8 reached from the other side.
+- **The generation must come from the format file here, the opposite of monotype.**
+  `gen9monotype.json` is one subforum's whole history so its name says nothing, but
+  `gen6ou.json` really is ORAS OU. Leading with the post date instead moved 55 titled gen 6
+  teams into gen 7 and left gen 6 with none at all, which is what exposed it.
