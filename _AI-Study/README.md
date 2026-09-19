@@ -79,8 +79,12 @@ _AI-Study/
 ├── MONOTYPE-SYNERGY.md            type synergy in 4,092 real monotype teams: whether a team
 │                                 answers the weaknesses its theme hands it (every typing
 │                                 answer is an IMMUNITY, never a resist), what it buys when
-│                                 nothing can be bought, and the offensive half. The normal-
-│                                 team version, split by archetype, is TEAM-CORPUS.md §12
+│                                 nothing can be bought, and the offensive half. §11 turns it
+│                                 into generator rules re-measured on Realidea's own chart and
+│                                 dex — 17 of the nine gyms' 24 weaknesses can never be
+│                                 answered by typing, and the generated teams cannot hit 4 of
+│                                 24 threats. The normal-team version, split by archetype, is
+│                                 TEAM-CORPUS.md §12
 ├── PORTABLE-AI-REBORN.md          THE working log: every version, every measurement, the backlog
 ├── PORTABLE-AI-REALIDEA.md        the v16 adapter: probe, tier gauntlet, mega evolution
 ├── PORTABLE-AI-DIAGNOSIS.md       0.3.2 → 0.4 gap analysis — history, numbers superseded
@@ -211,7 +215,7 @@ mistaken for current ones once.
 
 ## Traps that produce confidently wrong answers
 
-Corpus traps (the type-coverage work found all four; `MONOTYPE-SYNERGY.md` §10-§11 and
+Corpus traps (the type-coverage work found all four; `MONOTYPE-SYNERGY.md` §10 and §12 and
 `TEAM-CORPUS.md` §12 have the numbers):
 
 - **A dump filename states neither the tier nor the generation.** `gen6monotype.json` is

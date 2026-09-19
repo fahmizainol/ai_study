@@ -372,7 +372,7 @@ beside a post-gen-7 species, or gen 8+ items like Heavy-Duty Boots on Buzzwole. 
 real tier with megas *and* the modern dex; it needs a merged dex this tool does not build,
 and it is the obvious next pool to run.
 
-## 12. What this says to Realidea's team generator
+## 11. What this says to Realidea's team generator
 
 `generate_bosses.py` sets `ON_THEME_MIN = 6`, so **the nine gym teams are monotype teams by
 construction** and §2-§8 apply to them literally rather than by analogy. Everything below is
@@ -479,7 +479,7 @@ and the feasibility table above says it can always be met.
 - **Stall is still unbuildable** (`generate_bosses.py` line 255), which is why TEAM-CORPUS
   §12's stall row — the one archetype that trades reach for defence — has no application here.
 
-## 11. What did not survive checking
+## 12. What did not survive checking
 
 - **"Water teams answer Grass with Water/Grass or Water/Poison."** They cannot. Those
   are ×1, not resists. The finding survives only as *neutral bodies*: 98% of Water teams
