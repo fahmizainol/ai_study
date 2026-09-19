@@ -252,6 +252,20 @@ the shuffle in any generation, because a coverage move costs one of four slots o
 member — it is bought everywhere at once, by 2 to 5 members of a six-mon team, and
 shuffling cannot break it. Stable across gens: 92/92/90/91% in gens 6/7/8/9.
 
+Four shuffles of each pool make the difference concrete. Water resisting Electric scatters
+— 0, 1, 2, 1 answers, because the answer is three species out of the whole pool — while
+real teams put **113 of 122 on exactly one**. Ice hitting Steel comes out 5, 2, 2, 3: every
+shuffle works, and real teams span the same 2-to-5 range. **You cannot draw an Ice team that
+fails to hit Steel**, which is why 100% there is not evidence of anything.
+
+**A null-equal result does not mean the choice was not deliberate**, and reading it that way
+is the trap this design invites. Earthquake on Mamoswine is a deliberate pick; it is in the
+null because *every* Ice team makes it. The null preserves which species are popular and
+which sets they run, and destroys only which sets were put together — so it is blind by
+construction to any decision the whole metagame makes identically, and can only detect
+coordination BETWEEN slots. "Coverage is so universal that composition is irrelevant to it"
+is the claim §8 supports; "Ice players do not think about Steel" is not.
+
 **35 of the 51 pairs have the theme's own STAB resisted or nullified by the type attacking
 it**, and that is where coverage stops being optional. In essentially every one of them,
 ~100% of teams carry an off-type move anyway:
