@@ -1,3 +1,4 @@
+import collections
 import json
 import os
 import re
@@ -1079,6 +1080,84 @@ class CrossFightVarietyTest(unittest.TestCase):
         self.assertEqual(gym1, {m["species"] for m in
                                 self.BS.run({})["records"][0]["mons"]},
                          "the frozen fight itself must not move")
+
+class MonoSynergyTypeMathTest(unittest.TestCase):
+    """The multiplier math and the two rules everything in MONOTYPE-SYNERGY.md rests on.
+
+    Built on a hand-written four-type chart rather than the real dex: these assertions
+    are about the arithmetic, and a test that needed node plus a 5,000-team scrape to
+    run would not be run."""
+
+    def setUp(self):
+        import mono_synergy
+        self.M = mono_synergy
+        # Water weak to Grass and Electric, Ground immune to Electric, Grass resists
+        # Grass -- the smallest chart that can express the real question.
+        self.chart = {
+            "Water": {"Grass": 1, "Electric": 1, "Ground": 0, "Water": 2},
+            "Ground": {"Electric": 3, "Grass": 1, "Ground": 0, "Water": 1},
+            "Grass": {"Grass": 2, "Electric": 2, "Ground": 2, "Water": 2},
+            "Electric": {"Electric": 2, "Grass": 0, "Ground": 1, "Water": 0},
+        }
+
+    def mon(self, types, ability="", item="", tera=None):
+        return {"types": types, "ability": ability, "item": item, "tera": tera}
+
+    def test_second_type_can_only_reach_neutral_unless_it_is_immune(self):
+        """The claim the whole report is organised around, asserted as arithmetic.
+
+        A monotype member always carries the theme's x2, so a second type that merely
+        resists brings it back to x1 and a resist is never an answer. Only an immunity
+        gets under 1."""
+        self.assertEqual(1.0, self.M.multiplier("Grass", ["Water", "Grass"], self.chart))
+        self.assertEqual(0.0, self.M.multiplier("Electric", ["Water", "Ground"], self.chart))
+        self.assertEqual(4.0, self.M.multiplier("Grass", ["Water", "Ground"], self.chart),
+                         "the Ground immunity to Electric costs a x4 to Grass")
+        self.assertEqual([], self.M.typing_answer_possible("Water", "Grass", self.chart))
+        self.assertEqual(["Ground"],
+                         self.M.typing_answer_possible("Water", "Electric", self.chart))
+
+    def test_ability_and_item_stack_onto_the_chart(self):
+        sap = self.mon(["Water"], ability="Sap Sipper")
+        self.assertEqual(0.0, self.M.taken("Grass", sap, self.chart))
+        self.assertEqual("ability", self.M.mechanism("Grass", sap, self.chart))
+        balloon = self.mon(["Water"], item="Air Balloon")
+        self.assertEqual(0.0, self.M.taken("Ground", balloon, self.chart))
+        berry = self.mon(["Water"], item="Rindo Berry")
+        self.assertEqual(1.0, self.M.taken("Grass", berry, self.chart),
+                         "a resist berry halves the x2 hit it is held for")
+        self.assertEqual(2.0, self.M.taken("Grass", berry, self.chart, use_item=False),
+                         "and is excluded when the caller asks for coverage without items")
+
+    def test_typing_wins_the_mechanism_label_when_typing_alone_is_enough(self):
+        both = self.mon(["Water", "Ground"], ability="Levitate")
+        self.assertEqual("type2", self.M.mechanism("Electric", both, self.chart))
+
+    def test_tera_stellar_does_not_retype_the_holder(self):
+        """Tera Stellar keeps the holder's types, so counting it would invent resists."""
+        stats = collections.Counter()
+        dex = {"gen9": {"chart": self.chart}}
+        self.assertIsNone(self.M.tera_type("Stellar", 9, dex, stats))
+        self.assertEqual("Ground", self.M.tera_type("ground", 9, dex, stats),
+                         "the scrape keeps the author's casing")
+        self.assertIsNone(self.M.tera_type("Water", 7, dex, stats), "no Tera before gen 9")
+        self.assertIsNone(self.M.tera_type("Fire", 9, dex, stats), "not in this chart")
+
+    def test_generation_comes_from_the_post_date_and_legality_only_vetoes(self):
+        """gen9monotype.json is the monotype subforum's whole history, so the filename
+        cannot label the generation and megas make "latest legal gen" label gen 6 as 7."""
+        dex = {"gen%d" % g: {"species": {"swampert": {"nonstandard": None}},
+                             "items": {"leftovers": {"nonstandard": None},
+                                       "swampertite": {"nonstandard": None if g in (6, 7) else "Past"}}}
+               for g in (6, 7, 8, 9)}
+        mega = {"date": "2015-06-01", "data": [{"species": "Swampert", "item": "Swampertite"}]}
+        self.assertEqual((6, "date"), self.M.infer_gen(mega, dex))
+        late = dict(mega, date="2024-06-01")
+        self.assertEqual((7, "legality veto"), self.M.infer_gen(late, dex),
+                         "a mega stone posted in gen 9 is an older team re-posted")
+        modern = {"date": "2024-06-01", "data": [{"species": "Swampert", "item": "Leftovers"}]}
+        self.assertEqual((9, "date"), self.M.infer_gen(modern, dex))
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -5,7 +5,12 @@ carries* and *how strong it is*. Neither asks whether the result looks like a te
 anyone would build, because until this corpus existed there was nothing to ask.
 
 Provenance, per-tier pools, parser traps and tag validation live in
-`extracted/smogon-dump/SOURCE.md` and are not repeated here. This file is the
+`extracted/smogon-dump/SOURCE.md` and are not repeated here. **Type coverage has its own
+document:** `MONOTYPE-SYNERGY.md` asks whether a team answers the weaknesses its types
+hand it, using the 4,092 monotype teams in the same dump — the one tier where the
+weakness list is fixed before the first pick, so the question has a clean answer. It also
+records why two of this dump's filenames cannot be trusted (`gen6monotype.json` is not
+monotype, `gen9monotype.json` is not gen 9). This file is the
 findings: what the corpus measured, what it changed, and — as much of the value —
 which readings did **not** survive checking.
 
