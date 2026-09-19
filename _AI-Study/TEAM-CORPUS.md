@@ -561,6 +561,56 @@ that is weak rather than much that resists. That is the same shape as the snow p
 monotype Ice (`MONOTYPE-SYNERGY.md` §7): when typing cannot buy defence, HP and recovery do,
 and a type-multiplier metric cannot see it.
 
+### One team, with every number derived
+
+    python3 tools/archetype_coverage.py --example offense --format gen8ou
+
+picks the team closest to its archetype's own means on the four axes — an outlier would read
+better and mean less — and prints the whole 18-type breakdown. The `offense` pick is
+**"grass offense"**, a gen8ou team from the SOLT VIII playoffs:
+
+| | typing | ability | item | moves |
+|---|---|---|---|---|
+| Tapu Bulu | Grass/Fairy | Grassy Surge | Leftovers | Horn Leech, Stone Edge, Synthesis, Swords Dance |
+| Kartana | Grass/Steel | Beast Boost | Life Orb | Leaf Blade, Swords Dance, Knock Off, Smart Strike |
+| Tornadus-Therian | Flying | Regenerator | Heavy-Duty Boots | Hurricane, Knock Off, Defog, U-turn |
+| Heatran | Fire/Steel | Flash Fire | Leftovers | Stealth Rock, Magma Storm, Earth Power, Toxic |
+| Zygarde | Dragon/Ground | Aura Break | Leftovers | Thousand Arrows, Coil, Glare, Substitute |
+| Toxapex | Poison/Water | Regenerator | Black Sludge | Toxic Spikes, Scald, Recover, Haze |
+
+| | team | gen8ou null | residual | the `offense` row |
+|---|--:|--:|--:|--:|
+| blind | 1 | 1.69 | −0.69 | −0.55 |
+| stacked | 1 | 1.56 | −0.56 | −0.46 |
+| holes | **0** | 0.32 | −0.32 | −0.20 |
+| lose_to | 0 | 0.06 | −0.06 | −0.06 |
+| reach | **92%** | 88% | +4 pts | +3.2 |
+
+Every metric is visible in the six sets:
+
+- **`stacked` = 1, and it is Ice.** Tapu Bulu ×2, Tornadus-T ×2, **Zygarde ×4** — three weak,
+  which is the threshold, and the only type that reaches it.
+- **`holes` = 0, which is the point.** Ice is stacked but Heatran (×0.25) and Toxapex (×0.5)
+  sit behind it, so it is not a hole. That conjunction is exactly the behaviour that puts
+  every archetype below its tier's null: a random gen8ou six leaves 0.32 holes, this leaves
+  none.
+- **`blind` = 1 and it is harmless — which is why `blind` is the weak metric.** Nothing
+  resists Ghost and nothing is weak to it either; all six take ×1. The same insensitivity is
+  what made the pooled `blind` column mislead about stall.
+- **`lose_to` = 0, concretely.** Two types nothing on the team hits super-effectively:
+  **Dragon** and **Normal** (no Ice, Dragon, Fairy or Fighting move anywhere on it — Smart
+  Strike is Steel, neutral into Dragon). Both are types it is not threatened by: Dragon is
+  1 weak / 3 resists, Normal 0 weak / 2 resists. The gap and the hole landing on the same
+  type is the rare case, which is the whole `lose_to ≈ 0` result.
+- **`reach` = 92%.** Ground, Fire, Flying, Grass, Rock, Dark, Steel and Water across six
+  sets reach 92% of gen8ou's real member bodies for ×2 — the few points of reach the
+  offensive archetypes buy and stall gives up nine of.
+
+It also reproduces `MONOTYPE-SYNERGY.md` §6 without being asked to: **Zygarde is the team's
+Electric answer** (Dragon/Ground is immune) **and the member that is ×4 to Ice.** The Ground
+typing that buys the immunity is what creates the stacked weakness, so this team's one
+stacked type follows from the pick that solved Electric.
+
 ### What did not survive checking here
 
 - **The pooled `blind` column is confounded and the single-format run corrects it.** Stall

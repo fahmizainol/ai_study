@@ -8,7 +8,8 @@ The study has two phases, and they are still both live:
 
 - **Phase 1 — teardown.** Read every game's AI out of its shipped build and write down
   what it actually does. Static analysis only, no playtesting. → `ANALYSIS.md`,
-  `AI-PORTABILITY.md`, `TEAM-DESIGN.md`, `BOSS-CURVE.md`, `TEAM-CORPUS.md`.
+  `AI-PORTABILITY.md`, `TEAM-DESIGN.md`, `BOSS-CURVE.md`, `TEAM-CORPUS.md`,
+  `MONOTYPE-SYNERGY.md`.
 - **Phase 2 — build and measure.** One engine-independent core (`portable_ai/`) plus a
   thin per-game adapter, installed into a real game, then measured against that game's
   own AI in its own engine. → `SIM-SPEC.md` (the method), `PORTABLE-AI-REBORN.md` (the
@@ -75,6 +76,11 @@ _AI-Study/
 │                                 archetype role profiles, per-mode type lift (sun/rain/sand/
 │                                 snow/TR/screens), what they proved about the boss teams,
 │                                 and which readings failed their null
+├── MONOTYPE-SYNERGY.md            type synergy in 4,092 real monotype teams: whether a team
+│                                 answers the weaknesses its theme hands it (every typing
+│                                 answer is an IMMUNITY, never a resist), what it buys when
+│                                 nothing can be bought, and the offensive half. The normal-
+│                                 team version, split by archetype, is TEAM-CORPUS.md §12
 ├── PORTABLE-AI-REBORN.md          THE working log: every version, every measurement, the backlog
 ├── PORTABLE-AI-REALIDEA.md        the v16 adapter: probe, tier gauntlet, mega evolution
 ├── PORTABLE-AI-DIAGNOSIS.md       0.3.2 → 0.4 gap analysis — history, numbers superseded
@@ -204,6 +210,32 @@ mistaken for current ones once.
   and 0.6.2 are both deliberate batches with one paired number at the end.
 
 ## Traps that produce confidently wrong answers
+
+Corpus traps (the type-coverage work found all four; `MONOTYPE-SYNERGY.md` §10-§11 and
+`TEAM-CORPUS.md` §12 have the numbers):
+
+- **A dump filename states neither the tier nor the generation.** `gen6monotype.json` is
+  not monotype — 30 of 30 teams share no type and it is one "Any Ability" thread — and
+  `gen9monotype.json` is not gen 9: it is the monotype subforum's whole history, posts from
+  2014 on, 2,428 of 4,337 teams holding a species gen 9 does not have. Validate the tier
+  structurally and infer the generation per team.
+- **The generation must be inferred differently per corpus, and both ways are right.** A
+  normal format file (`gen6ou.json`) really is that format, so its own claim wins whenever
+  the team is legal in it; the monotype file's claim is worthless, so the post date leads
+  there. Leading with the date on normal formats moved 55 titled gen 6 teams into gen 7 and
+  left gen 6 with none at all.
+- **Showdown's export writes the PRE-MEGA ability.** "Venusaur-Mega / Chlorophyll" plays as
+  Thick Fat and "Houndoom-Mega / Flash Fire" as Solar Power; 1,047 monotype sets needed the
+  forme's own ability substituted, and 345 more name an ability that is simply wrong (Gengar
+  with Levitate, lost in gen 7) and must be dropped rather than guessed. 449 further sets
+  write the base species beside its stone, which is not cosmetic: base Gyarados takes
+  Electric at ×4, Mega Gyarados at ×2.
+- **A dex field can be a shape you did not expect, and the symptom is silence.**
+  `item.megaStone` is a MAP (`{"Venusaur": "Venusaur-Mega"}`), so reading it as a name
+  yields `undefined` for every stone while `!!it.megaStone` stays true; the typed Hidden
+  Powers resolve through `moves.get()` but are absent from `moves.all()`, and each one comes
+  back carrying the BASE move's id, so keying by it overwrites one entry eighteen times. In
+  all three cases the output came back byte-identical and nothing errored.
 
 Phase-2 traps (the full list is under "Traps for future agents" in
 `PORTABLE-AI-REBORN.md` — read it, it is longer than this):

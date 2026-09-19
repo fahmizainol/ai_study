@@ -8,9 +8,16 @@ same one.
 
 Regenerate everything below with:
 
-    python3 tools/mono_synergy.py --gen 6 7 8 9        # the whole report
+    python3 tools/mono_synergy.py --gen 6 7 8 9        # the whole report, both halves
     python3 tools/mono_synergy.py --theme Water        # one theme, naming the answers
     python3 -m unittest tests.test_tooling.MonoSynergyTypeMathTest
+
+The dex, the forme a set will actually play as, generation inference, the multipliers and
+the null draws live in `tools/type_model.py`, shared with `tools/archetype_coverage.py` —
+the same question asked of normal teams, where the weakness list comes from the six picks
+instead of from a theme (`TEAM-CORPUS.md` §12). Any refactor of that module should be
+checked by re-running this report to byte-identical output, which is how the extraction was
+proved.
 
 Type, ability and item facts come from the `pokemon-showdown` checkout via
 `tools/dump_showdown_dex.js` (cached in `generated/showdown_dex.json`, gitignored like
@@ -233,7 +240,7 @@ Ferrothorn.
 
 | | defence | offence |
 |---|--:|--:|
-| pairs where ≥1 member handles the threat (gen 9, team-weighted) | **31%** | **92%** |
+| pairs where ≥1 member handles the threat (gen 9, team-weighted) | **31%** | **91%** |
 | share of the threat's real bodies hit for ×2 | — | **92%** |
 | share reachable at neutral or better | — | **100%** |
 | mean members contributing | 0.38 of 6 | 1.0-4.7 of 6 |
@@ -243,7 +250,7 @@ Ferrothorn.
 particular species, so it becomes a reserved slot (§4). Offensive coverage does not beat
 the shuffle in any generation, because a coverage move costs one of four slots on *any*
 member — it is bought everywhere at once, by 2 to 5 members of a six-mon team, and
-shuffling cannot break it. Stable across gens: 90/92/92/92% in gens 6/7/8/9.
+shuffling cannot break it. Stable across gens: 92/92/90/91% in gens 6/7/8/9.
 
 **35 of the 51 pairs have the theme's own STAB resisted or nullified by the type attacking
 it**, and that is where coverage stops being optional. In essentially every one of them,
@@ -282,7 +289,8 @@ super-effective answer either.
 ### One mon doing both jobs
 
 The strongest form of the question is whether the member that walls the threat can also
-threaten it. Over all 51 gen 9 pairs: resist 30%, hit 92%, **both on the same member 14%**,
+threaten it. Over all 51 gen 9 pairs: resist 30%, hit 92% of pairs-weighted-equally,
+**both on the same member 14%**,
 and **31 of 51 pairs have no two-way answer on any team**. Where it does happen, the
 measurement names the tier's famous answers without being told about them:
 
