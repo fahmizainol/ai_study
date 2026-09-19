@@ -372,6 +372,113 @@ beside a post-gen-7 species, or gen 8+ items like Heavy-Duty Boots on Buzzwole. 
 real tier with megas *and* the modern dex; it needs a merged dex this tool does not build,
 and it is the obvious next pool to run.
 
+## 12. What this says to Realidea's team generator
+
+`generate_bosses.py` sets `ON_THEME_MIN = 6`, so **the nine gym teams are monotype teams by
+construction** and §2-§8 apply to them literally rather than by analogy. Everything below is
+re-measured on **Realidea's own PBS chart, dex, learnsets and engine** — none of it is
+carried over from the Smogon corpus, because the corpus cannot know what this build can hold.
+
+### Defence: eight of the twenty-four pairs are answerable, and one of those is a mirage
+
+The nine themes carry 24 weaknesses between them. Reading immunities off Realidea's own
+`types.txt` and then asking whether a species with both types exists below the gym's level:
+
+| gym | theme | answerable weaknesses | the species that answers it |
+|---|---|---|---|
+| Aimi | FAIRY | Poison (needs Fairy/Steel) | Mawile, Klefki, Magearna, Faemie |
+| Kenn | WATER | Electric (Water/Ground) | Wooper, Quagsire, Marshtomp, Barboach |
+| Douglas | ICE | Fighting (Ice/Ghost) | **Froslass only** |
+| Ciara | DARK | Fighting (Dark/Ghost) | Sableye, Spiritomb |
+| Lawrence | PSYCHIC | Ghost (Psychic/Normal) | Girafarig, Meloetta, Oranguru |
+| Bay | NORMAL | Fighting (Normal/Ghost) | **none — no Normal/Ghost exists** |
+| Lilliana | STEEL | Fighting (Steel/Ghost), Ground (Steel/Flying) | Honedge/Doublade/Aegislash, Skarmory/Celesteela |
+| Abi | BUG | none of its three | — |
+| Dhara | GROUND | none of its three | — |
+
+**Sixteen of the 24 can never be answered by typing** and no amount of searching will find a
+body for them — Bug, Dark, Fairy, Fire, Flying, Grass, Ice, Rock, Steel and Water have no
+immune type. Bay's single pair is the on-paper-only case from §2, and it reproduces here
+exactly as it did in gens 6-8. A generator that scores "resists what the theme is weak to"
+as a soft goal will fail 17 of 24 pairs forever and should not be penalised for it.
+
+What real teams do instead, and the numbers to aim at (§3, §4):
+
+- **Exactly one answer, not two.** 93% of real Water teams carry one Electric answer where a
+  shuffle of the same species gets one only 47% of the time. Redundancy appears only where
+  the threat is existential (Electric-vs-Ground, Steel-vs-Ground, mean 2.1).
+- **For the unanswerable sixteen, target a neutral body and nothing more.** 61% of real
+  theme-weakness pairs sit at "best case ×1" and that is the correct build; the state to
+  avoid is every member at ×2, which real teams reach only 8% of the time.
+- **Abilities are 30% of real answers and they work here.** All eleven damage-negating
+  abilities — Levitate, Water Absorb, Volt Absorb, Sap Sipper, Flash Fire, Storm Drain,
+  Thick Fat, Motor Drive, Lightning Rod, Dry Skin, Heatproof — are referenced by 7-11 of the
+  decompiled scripts, so unlike the terrain surges of `DEAD_PRIMARY` they have real handlers.
+  This is the only route for the sixteen unanswerable pairs (Steel-vs-Fire is 100% ability on
+  real teams).
+- **Expect the answer to cost a ×4 elsewhere** (§6) and do not treat it as a bug: 98% of real
+  Water teams that answer Electric hold a member that is ×4 to Grass. On a boss that is a
+  designed exploit, not a flaw.
+
+### Offence: the generated teams fail 4 of 24, and every failure is one move swap
+
+This is the half that is currently wrong. Scoring `generated/teams_bosses_gyms.json` the way
+§8 scores real teams:
+
+| gym | cannot hit | own STAB into it | members resisting it |
+|---|---|--:|--:|
+| **Aimi** (Fairy) | **Poison** | ×0.5 | 1 |
+| **Aimi** (Fairy) | **Steel** | ×0.5 | 0 |
+| Douglas (Ice) | Fighting | ×1 | 1 |
+| Lawrence (Psychic) | Bug | ×1 | 0 |
+
+Real monotype teams carry super-effective coverage on **100% of teams** wherever their STAB
+is resisted (§8, 35 of 51 pairs). Aimi is the worst shape in the study: Fairy STAB is
+resisted by both Poison and Steel, the team can hit neither, and **nothing on it resists
+Steel** — a Steel opponent walls all six members while taking nothing worse than neutral.
+That is the Dragon-vs-Fairy pattern, and it is the one matchup type this corpus shows real
+players never accept.
+
+**All 24 pairs are buildable**: every gym/threat pair has 22 to 132 on-theme Realidea species
+that can learn a super-effective move at the gym's level. So this is a **set-selection**
+failure, not a species-selection one, and each of the four is one slot on a member already
+present:
+
+| gym | needs | member already on the team that can learn it |
+|---|---|---|
+| Aimi vs Poison | Ground or Psychic | Granbull → Earthquake; Ribombee → Psychic; Klefki → Psychic |
+| Aimi vs Steel | Fighting, Fire or Ground | Granbull → Focus Blast/Overheat; Ribombee → Fire Blast |
+| Douglas vs Fighting | Fairy, Flying or Psychic | Froslass → Psychic; Weavile → Aerial Ace |
+| Lawrence vs Bug | Fire, Flying or Rock | Azelf → Fire Blast; Gallade → Stone Edge/Rock Slide |
+
+**The root cause is not too few attacking moves — that hypothesis was measured and refuted.**
+The generated gyms carry **2.93 damaging moves per set against real monotype teams' 2.56-2.64**,
+and 0.3 members per team with one or fewer against real teams' 0.8-1.1. They are *more*
+offensive than the real thing. What is low is which types those moves are: 8.4 distinct
+attacking types per team against 9.3-9.4, and in the failing cases the moves simply do not
+line up with the threats — Aimi fields seven attacking types and not one of Ground, Psychic,
+Fighting or Fire; Lawrence seven and none of Fire, Flying or Rock. The generator is choosing
+attacking moves by power and role, where a real builder chooses one of them by threat.
+
+So the rule worth adding is narrow: **for each type the theme's STAB is resisted by, require
+one damaging move on the team that hits it for ×2, and satisfy it from the learnset when the
+published set does not carry one.** That is a per-team gate on 1-2 move slots, not a rebuild,
+and the feasibility table above says it can always be met.
+
+### What does not transfer from the Smogon corpus
+
+- **Nothing about which species answer what.** The immunity list is chart-derived and the
+  chart is this build's; the bodies are this dex's, filtered by level and BST band. Both are
+  re-measured above and both must be re-measured if PBS changes.
+- **`reach` and the body-weighted numbers do not apply at all.** §8's coverage is weighted by
+  the opposing metagame's real member population. A boss faces the *player*, not a
+  distribution, so the bare-type test is the right gate here and the 92% figure is not a
+  target.
+- **Tera and the snow package are both out.** There is no Tera in this engine (§9 is moot),
+  and §7's Aurora Veil answer is on the permanent exclusion list with Sticky Web.
+- **Stall is still unbuildable** (`generate_bosses.py` line 255), which is why TEAM-CORPUS
+  §12's stall row — the one archetype that trades reach for defence — has no application here.
+
 ## 11. What did not survive checking
 
 - **"Water teams answer Grass with Water/Grass or Water/Poison."** They cannot. Those
