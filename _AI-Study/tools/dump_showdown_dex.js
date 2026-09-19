@@ -54,6 +54,22 @@ for (const gen of [5, 6, 7, 8, 9]) {
                     target: m.target, self_switch: !!m.selfSwitch, nonstandard: m.isNonstandard || null,
                     heal: !!m.heal || !!(m.flags||{}).heal };
   }
+  // The 18 typed Hidden Powers resolve through moves.get() but are NOT in moves.all(),
+  // so enumerating the dex silently omits them. They are 1,277 slots in this corpus and
+  // the coverage move of the gen 6-7 era (Hidden Power Ice 495 uses) -- dropping them
+  // would have undercounted offensive coverage exactly where it matters most.
+  // Keyed by the REQUESTED id, not hp.id: a typed Hidden Power comes back with the base
+  // move's id ('hiddenpower'), so moves[hp.id] overwrites one entry eighteen times and the
+  // move count does not move -- which is the only symptom.
+  for (const t of dex.types.all()) {
+    const id = 'hiddenpower' + t.id;
+    const hp = dex.moves.get(id);
+    if (hp && hp.exists && hp.type === t.name) {
+      moves[id] = { name: hp.name, type: hp.type, category: hp.category, bp: hp.basePower,
+                       target: hp.target, self_switch: false, nonstandard: hp.isNonstandard || null,
+                       heal: false };
+    }
+  }
   out['gen' + gen] = { species, chart, moves, items };
 }
 process.stdout.write(JSON.stringify(out));

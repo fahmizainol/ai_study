@@ -1094,14 +1094,16 @@ class MonoSynergyTypeMathTest(unittest.TestCase):
         # Water weak to Grass and Electric, Ground immune to Electric, Grass resists
         # Grass -- the smallest chart that can express the real question.
         self.chart = {
-            "Water": {"Grass": 1, "Electric": 1, "Ground": 0, "Water": 2},
-            "Ground": {"Electric": 3, "Grass": 1, "Ground": 0, "Water": 1},
-            "Grass": {"Grass": 2, "Electric": 2, "Ground": 2, "Water": 2},
-            "Electric": {"Electric": 2, "Grass": 0, "Ground": 1, "Water": 0},
+            "Water": {"Grass": 1, "Electric": 1, "Ground": 0, "Water": 2, "Ice": 2},
+            "Ground": {"Electric": 3, "Grass": 1, "Ground": 0, "Water": 1, "Ice": 0},
+            "Grass": {"Grass": 2, "Electric": 2, "Ground": 2, "Water": 2, "Ice": 1},
+            "Electric": {"Electric": 2, "Grass": 0, "Ground": 1, "Water": 0, "Ice": 0},
+            "Ice": {"Ice": 2, "Grass": 0, "Water": 0, "Electric": 0, "Ground": 0},
         }
 
-    def mon(self, types, ability="", item="", tera=None):
-        return {"types": types, "ability": ability, "item": item, "tera": tera}
+    def mon(self, types, ability="", item="", tera=None, moves=()):
+        return {"types": types, "ability": ability, "item": item, "tera": tera,
+                "moves": list(moves)}
 
     def test_second_type_can_only_reach_neutral_unless_it_is_immune(self):
         """The claim the whole report is organised around, asserted as arithmetic.
@@ -1142,6 +1144,39 @@ class MonoSynergyTypeMathTest(unittest.TestCase):
                          "the scrape keeps the author's casing")
         self.assertIsNone(self.M.tera_type("Water", 7, dex, stats), "no Tera before gen 9")
         self.assertIsNone(self.M.tera_type("Fire", 9, dex, stats), "not in this chart")
+
+    def test_a_move_type_that_follows_the_user_rather_than_the_move(self):
+        """Five moves in the corpus carry no type of their own, and one of them is Weather
+        Ball, whose type comes from a TEAMMATE's ability rather than from the holder."""
+        moves = {"icebeam": {"type": "Ice", "bp": 90},
+                 "terablast": {"type": "Normal", "bp": 80},
+                 "weatherball": {"type": "Normal", "bp": 50},
+                 "recover": {"type": "Normal", "bp": 0}}
+        holder = self.mon(["Water"], tera="Ground")
+        setter = self.mon(["Water"], ability="Snow Warning")
+        team = {"theme": "Water", "mons": [holder, setter]}
+        self.assertEqual(["Ice"], self.M.attack_types("icebeam", holder, team, moves))
+        self.assertEqual(["Ground"], self.M.attack_types("terablast", holder, team, moves),
+                         "Tera Blast becomes the declared Tera type")
+        self.assertEqual(["Ice"], self.M.attack_types("weatherball", holder, team, moves),
+                         "the weather comes from the teammate")
+        self.assertEqual([], self.M.attack_types("recover", holder, team, moves),
+                         "a status move is not coverage")
+
+    def test_off_type_only_excludes_the_theme_stab(self):
+        """The offensive half counts what a moveslot BOUGHT, so STAB cannot be the answer."""
+        moves = {"surf": {"type": "Water", "bp": 90}, "icebeam": {"type": "Ice", "bp": 90}}
+        mon = self.mon(["Water"])
+        mon["moves"] = ["surf", "icebeam"]
+        team = {"theme": "Water", "mons": [mon]}
+        self.assertEqual(2.0, self.M.best_into("Grass", mon, team, self.chart, moves))
+        self.assertEqual(2.0, self.M.best_into("Grass", mon, team, self.chart, moves,
+                                               off_type_only=True))
+        mon["moves"] = ["surf"]
+        self.assertEqual(0.5, self.M.best_into("Grass", mon, team, self.chart, moves),
+                         "Water STAB is resisted by Grass, which is the whole problem")
+        self.assertEqual(0.0, self.M.best_into("Grass", mon, team, self.chart, moves,
+                                               off_type_only=True))
 
     def test_generation_comes_from_the_post_date_and_legality_only_vetoes(self):
         """gen9monotype.json is the monotype subforum's whole history, so the filename

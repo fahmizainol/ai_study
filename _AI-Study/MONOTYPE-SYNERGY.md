@@ -222,7 +222,84 @@ multiplier, so screens, weather, terrain, bulk and Regenerator are all invisible
 theme lands on the §3 table says what its *typing* can do; it does not say the team has no
 plan.
 
-## 8. Tera is not the coverage tool it looks like
+## 8. The offensive half: they can nearly always hit back, and it costs them nothing
+
+A theme's weakness list doubles as its **threat list** — in this tier the Grass attacks
+that hit a Water team come from a Grass *team* — so the same 51 pairs can be asked the
+other question. Effectiveness is measured against the **real member population** of the
+threatening theme, weighted by how often each body appears, not against the bare type:
+"Ice Beam is super effective on Grass" is true of a pure Grass body and false of
+Ferrothorn.
+
+| | defence | offence |
+|---|--:|--:|
+| pairs where ≥1 member handles the threat (gen 9, team-weighted) | **31%** | **92%** |
+| share of the threat's real bodies hit for ×2 | — | **92%** |
+| share reachable at neutral or better | — | **100%** |
+| mean members contributing | 0.38 of 6 | 1.0-4.7 of 6 |
+| pairs beating the co-occurrence null | 9 of 51 | **0-5 of 51** |
+
+**The null is the point.** Defensive coverage beats a shuffled team because it needs a
+particular species, so it becomes a reserved slot (§4). Offensive coverage does not beat
+the shuffle in any generation, because a coverage move costs one of four slots on *any*
+member — it is bought everywhere at once, by 2 to 5 members of a six-mon team, and
+shuffling cannot break it. Stable across gens: 90/92/92/92% in gens 6/7/8/9.
+
+**35 of the 51 pairs have the theme's own STAB resisted or nullified by the type attacking
+it**, and that is where coverage stops being optional. In essentially every one of them,
+~100% of teams carry an off-type move anyway:
+
+| theme | threat | own STAB | teams with SE coverage | real bodies hit | by STAB alone | coverage used |
+|---|---|--:|--:|--:|--:|---|
+| **Ice** | **Steel** | **×0.5** | **100%** | **84%** | **0%** | Ground 65, Fighting 34 |
+| Ice | Fire | ×0.5 | 100% | 93% | 0% | Ground 63, Rock 22, Water 15 |
+| Water | Grass | ×0.5 | 100% | 99% | 0% | Ice 39, Poison 26, Bug 18 |
+| Electric | Ground | **×0** | 100% | 94% | 0% | Ice 45, Water 37, Grass 17 |
+| Fire | Rock | ×0.5 | 100% | 92% | 0% | Grass 34, Ground 30, Fighting 26 |
+| Flying | Rock | ×0.5 | 100% | 99% | 0% | Ground 43, Fighting 34, Steel 15 |
+| Steel | Fire | ×0.5 | 98% | 95% | 0% | Ground 67, Rock 28 |
+| Dragon | Fairy | **×0** | **77%** | 89% | 0% | Steel 81, Poison 19 |
+
+So the Ice/Steel case is emphatic: **Ice cannot resist Steel on a single team in 183, and
+every single team can hit Steel super-effectively** — Earthquake and High Horsepower on 65%
+of the coverage slots, Close Combat and Low Kick on 34%.
+
+**The blind spots are few and they are offensive, not defensive.** Threats that over a
+quarter of gen 9 teams cannot hit super-effectively at all:
+
+| pair | teams with SE coverage | and defensively |
+|---|--:|---|
+| Ground vs Water | **41%** (15-30% in gens 7-8) | 92% resist — walls it, cannot kill it |
+| Dark vs Bug | 51% | 0% resist |
+| Steel vs Fighting | 65% | 91% resist |
+| Steel vs Ground | 73% | 98% resist |
+| **Dragon vs Fairy** | **77%** | **0% resist**, and STAB is ×0 |
+
+Dragon vs Fairy is the worst matchup in the tier on both axes at once: Fairy is immune to
+Dragon's STAB, no Dragon body resists Fairy, and roughly a quarter of Dragon teams have no
+super-effective answer either.
+
+### One mon doing both jobs
+
+The strongest form of the question is whether the member that walls the threat can also
+threaten it. Over all 51 gen 9 pairs: resist 30%, hit 92%, **both on the same member 14%**,
+and **31 of 51 pairs have no two-way answer on any team**. Where it does happen, the
+measurement names the tier's famous answers without being told about them:
+
+| pair | two-way | who |
+|---|--:|---|
+| Poison vs Psychic | 96% | Muk-Alola 66%, Overqwil 18%, Skuntank 9% |
+| Water vs Electric | 89% | Swampert 38%, Gastrodon 29%, Quagsire 20% |
+| Flying vs Electric | 84% | Landorus 53%, Gliscor 51% |
+| Electric vs Ground | 77% | Rotom-Wash 71% |
+| Steel vs Fire | 75% | Heatran 75% |
+| Bug vs Fire | 47% | Araquanid 47% |
+| Rock vs Ground | 44% | Drednaw 35%, Glimmora 12% |
+
+Swampert is not just the Electric-immune slot from §4; it is the Electric-immune slot that
+clicks Earthquake. That is why one slot is enough for 93% of Water teams.
+
+## 9. Tera is not the coverage tool it looks like
 
 Gen 9 sets record a Tera type on 13,306 of 28,749 sets, and on the face of it Tera
 rescues the uncoverable pairs: 36% of teams facing a weakness nothing resists hold a Tera
@@ -236,7 +313,7 @@ Hearthflame's Tera Fire against Ice, Rotom-Wash's Tera Electric. Counting "the T
 resists it" as coverage would have turned an offensive habit into a defensive plan.
 `Tera Stellar` is excluded outright (31 sets): it does not change the holder's types.
 
-## 9. Corpus, and two files whose names lie
+## 10. Corpus, and two files whose names lie
 
 4,092 usable teams from 5,109 scraped records. A team is usable when all six species
 resolve, all six share exactly one type, and one generation's dex can hold the whole
@@ -273,7 +350,7 @@ beside a post-gen-7 species, or gen 8+ items like Heavy-Duty Boots on Buzzwole. 
 real tier with megas *and* the modern dex; it needs a merged dex this tool does not build,
 and it is the obvious next pool to run.
 
-## 10. What did not survive checking
+## 11. What did not survive checking
 
 - **"Water teams answer Grass with Water/Grass or Water/Poison."** They cannot. Those
   are ×1, not resists. The finding survives only as *neutral bodies*: 98% of Water teams
@@ -311,6 +388,20 @@ and it is the obvious next pool to run.
 - **`type1` answers looked like a bug and were not.** A single-typed answer should be
   impossible on a monotype team; the eight that exist are Mega Aggron shedding Rock
   (§2). Worth re-checking if the count ever rises outside gen 6-7.
+- **The typed Hidden Powers are absent from `Dex.moves.all()`** though `moves.get()`
+  resolves them, so the first dump omitted all 1,277 of them — Hidden Power Ice alone is 495
+  sets and it is the gen 6-7 coverage move. Fixing it was correct and **its measured effect
+  is ~1%**: it is the *only* super-effective answer for 14 of 1,278 gen 6 theme-threat
+  instances and 44 of 3,822 in gen 7 (0.1-0.2% in gens 8-9). Offensive coverage is so
+  redundant that removing a move rarely removes the answer. Two mistakes were needed to get
+  there: a typed Hidden Power comes back carrying the BASE move's id, so `moves[hp.id] = ...`
+  overwrote one key eighteen times and the move count never moved.
+- Five moves in the corpus do not carry their own type and are resolved rather than read:
+  Tera Blast (the declared Tera), Ivy Cudgel (Ogerpon's non-Grass half, 146 sets), Weather
+  Ball (the weather a *teammate* sets — Ice on a snow team), and Judgment / Multi-Attack /
+  Revelation Dance / Raging Bull / Aura Wheel (the user's own typing, therefore never the
+  off-type coverage §8 counts). Three remain unresolved (Terrain Pulse, Techno Blast,
+  Natural Gift) and are counted as no coverage.
 - Multiple comparisons are real: 51 pairs at α = 0.05 buys ~2.5 false positives, so the
   Bonferroni counts (10 above the pool null, 5 above the team null in gen 9) are the
   conservative read of §4. The `res%`-vs-null p-values also move with the null's seed for

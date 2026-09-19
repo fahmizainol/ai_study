@@ -429,37 +429,178 @@ def _spread(hit, counts, n):
             "exactly1": sum(1 for c in counts if c == 1) / n}
 
 
-def null_team(theme, gen, teams, chart, n, rng):
-    """Draw six sets from this theme's own observed pool, species-weighted.
+def null_draws(theme, gen, teams, n, rng):
+    """`n` random six-set teams from this theme's own observed pool, species-weighted.
 
-    Species frequency and each species' own ability/item/tera distribution are both
-    preserved -- a drawn species carries one of the sets it was really given -- so the
-    only thing this destroys is which sets appeared together. Species Clause is kept:
-    a redraw that repeats a species is rejected, as real teams cannot repeat one."""
+    Species frequency and each species' own set distribution are both preserved -- a drawn
+    species carries one of the sets it was really given -- so the only thing this destroys
+    is which sets appeared together. Species Clause is kept: a draw that repeats a species
+    is rejected, as real teams cannot repeat one. Shared by the defensive and offensive
+    nulls so that "above the null" means the same thing in both halves."""
     pool = collections.defaultdict(list)
     for t in teams:
-        if t["theme"] != theme or t["gen"] != gen:
-            continue
-        for m in t["mons"]:
-            pool[m["species"]].append(m)
+        if t["theme"] == theme and t["gen"] == gen:
+            for m in t["mons"]:
+                pool[m["species"]].append(m)
     if len(pool) < 6:
-        return None
+        return
     names = list(pool)
     wt = [len(pool[k]) for k in names]
-    weak = weaknesses(theme, chart)
-    hits = collections.Counter(); counts = collections.defaultdict(list)
     for _ in range(n):
         pick, seen = [], set()
         while len(pick) < 6:
             k = rng.choices(names, wt)[0]
             if k in seen:
                 continue
-            seen.add(k); pick.append(rng.choice(pool[k]))
+            seen.add(k)
+            pick.append(rng.choice(pool[k]))
+        yield pick
+
+
+def null_team(theme, gen, teams, chart, n, rng):
+    """Defensive null: how often a shuffled team still resists each theme weakness."""
+    weak = weaknesses(theme, chart)
+    hits = collections.Counter(); counts = collections.defaultdict(list); drawn = 0
+    for pick in null_draws(theme, gen, teams, n, rng):
+        drawn += 1
         for atk in weak:
             c = sum(1 for m in pick if taken(atk, m, chart) < 1)
             hits[atk] += c > 0
             counts[atk].append(c)
-    return {a: _spread(hits[a], counts[a], n) for a in weak}
+    if not drawn:
+        return None
+    return {a: _spread(hits[a], counts[a], drawn) for a in weak}
+
+
+def null_offence(theme, gen, teams, chart, moves, n, rng):
+    """Offensive null: how often a shuffled team still hits each threatening type."""
+    weak = weaknesses(theme, chart)
+    hits = collections.Counter(); counts = collections.defaultdict(list); drawn = 0
+    for pick in null_draws(theme, gen, teams, n, rng):
+        drawn += 1
+        fake = {"theme": theme, "mons": pick}
+        for atk in weak:
+            c = sum(1 for m in pick if best_into(atk, m, fake, chart, moves) >= 2)
+            hits[atk] += c > 0
+            counts[atk].append(c)
+    if not drawn:
+        return None
+    return {a: _spread(hits[a], counts[a], drawn) for a in weak}
+
+
+# ------------------------------------------------------------------------- the offence
+# A theme's weakness list doubles as its threat list: in this tier the Grass attacks that
+# hit a Water team come from a Grass TEAM, so "can we answer Grass" also asks whether we
+# can hit Grass back. That second half is not symmetric with the first -- a coverage move
+# costs one of four slots on any member, where a defensive answer costs a team slot and a
+# species that exists -- and the two interact: the theme's own STAB is resisted by some of
+# the very types that threaten it (Ice into Steel, Water into Grass), which is when a
+# coverage move stops being optional.
+WEATHER_BALL = {"Drought": "Fire", "Orichalcum Pulse": "Fire", "Drizzle": "Water",
+                "Primordial Sea": "Water", "Snow Warning": "Ice", "Sand Stream": "Rock",
+                "Sand Spit": "Rock", "Desolate Land": "Fire"}
+# Moves whose type follows the user's own forme rather than the move: on a monotype team
+# these are STAB by construction and can never be the off-type coverage this section is
+# looking for, which is worth stating rather than leaving them miscounted as Normal.
+SELF_TYPED = {"judgment", "multiattack", "revelationdance", "ragingbull", "aurawheel"}
+DYNAMIC_UNRESOLVED = {"terrainpulse", "technoblast", "naturalgift"}
+
+
+def attack_types(name, mon, team, moves, unresolved=None):
+    """Attacking types a move can actually come out as, [] if it does no damage.
+
+    Five moves do not carry their own type and all five are in this corpus: Tera Blast
+    becomes the declared Tera type (that is the entire point of the move), Ivy Cudgel
+    Ogerpon's non-Grass half, Weather Ball the weather a TEAMMATE sets, and Judgment,
+    Multi-Attack, Revelation Dance, Raging Bull and Aura Wheel the user's own typing."""
+    rec = moves.get(name)
+    if not rec or rec["bp"] <= 0:
+        return []
+    if name == "terablast":
+        return [mon["tera"]] if mon["tera"] else [rec["type"]]
+    if name == "ivycudgel":
+        return [t for t in mon["types"] if t != "Grass"] or [rec["type"]]
+    if name == "weatherball":
+        setters = {WEATHER_BALL[m["ability"]] for m in team["mons"]
+                   if m["ability"] in WEATHER_BALL}
+        return sorted(setters) or [rec["type"]]
+    if name in SELF_TYPED:
+        return list(mon["types"])
+    if name in DYNAMIC_UNRESOLVED:
+        if unresolved is not None:
+            unresolved[name] += 1
+        return []
+    return [rec["type"]]
+
+
+def best_into(target, mon, team, chart, moves, off_type_only=False):
+    """Best multiplier this set can put into a defender typed `target` (a type or list)."""
+    types = [target] if isinstance(target, str) else list(target)
+    best = 0.0
+    for name in mon["moves"]:
+        for at in attack_types(name, mon, team, moves):
+            if off_type_only and at == team["theme"]:
+                continue
+            best = max(best, multiplier(at, types, chart))
+    return best
+
+
+def bodies(teams):
+    """{(gen, theme): Counter of type-combination -> appearances}.
+
+    The realistic defender. "Ice Beam is super effective on Grass" is true of a pure Grass
+    body and false of Ferrothorn, so coverage measured against the bare threatening type
+    overstates what a move does to the team that actually shows up."""
+    out = collections.defaultdict(collections.Counter)
+    for t in teams:
+        for m in t["mons"]:
+            out[(t["gen"], t["theme"])][tuple(m["types"])] += 1
+    return out
+
+
+def offence(team, chart, moves, pop, unresolved=None):
+    """Per threatening type: can this team hit back, and with what.
+
+    `stab` is the theme's own STAB into the threat -- when it is below 1 the matchup is
+    doubly bad (they hit us for x2, we are resisted) and a coverage move is the only way
+    to threaten anything. `bodies` is the share of the threatening theme's REAL member
+    population this team can hit for x2 or better, weighted by how often those bodies
+    appear, which is the number that says whether the coverage actually does the job."""
+    out = {}
+    for atk in weaknesses(team["theme"], chart):
+        rows = []
+        for m in team["mons"]:
+            rows.append({"mon": m,
+                         "best": best_into(atk, m, team, chart, moves),
+                         "off": best_into(atk, m, team, chart, moves, off_type_only=True)})
+        population = pop[(team["gen"], atk)]
+        total = sum(population.values()) or 1
+
+        def share(pred):
+            return sum(n for body, n in population.items() if pred(body)) / total
+
+        hit = share(lambda body: any(best_into(list(body), m, team, chart, moves) >= 2
+                                     for m in team["mons"]))
+        # STAB only, and only if the team actually carries a theme-type attack: otherwise
+        # this would report the type chart's potential rather than what the team can do.
+        has_stab = any(team["theme"] in attack_types(name, m, team, moves)
+                       for m in team["mons"] for name in m["moves"])
+        stab_hit = share(lambda body: has_stab
+                         and multiplier(team["theme"], list(body), chart) >= 2)
+        neutral = share(lambda body: any(best_into(list(body), m, team, chart, moves) >= 1
+                                         for m in team["mons"]))
+        if unresolved is not None:
+            for m in team["mons"]:
+                for name in m["moves"]:
+                    attack_types(name, m, team, moves, unresolved)
+        out[atk] = {
+            "stab": multiplier(team["theme"], [atk], chart),
+            "se": sum(1 for r in rows if r["best"] >= 2),
+            "off_se": sum(1 for r in rows if r["off"] >= 2),
+            "bodies_hit": hit, "bodies_stab": stab_hit, "bodies_neutral": neutral,
+            "rows": rows,
+        }
+    return out
 
 
 # ---------------------------------------------------------------------------- report
@@ -535,6 +676,9 @@ def summarise(teams, d, gen, theme, trials, rng):
     return rows
 
 
+POP = [None]          # bodies(teams), built once in main
+
+
 def report(teams, d, gens, themes, trials, rng, verbose_theme=None):
     for gen in gens:
         chart = d["gen%d" % gen]["chart"]
@@ -572,6 +716,7 @@ def report(teams, d, gens, themes, trials, rng, verbose_theme=None):
                     100 * r["exactly1"], 100 * (r["team_ex1"] or 0),
                     100 * r["tera_only"], 100 * r["tera_offtype"], ms))
         digest(allrows, gen)
+        report_offence(teams, d, gen, themes, trials, rng, POP[0])
     if verbose_theme:
         for gen in gens:
             detail(teams, d, verbose_theme, gen)
@@ -630,6 +775,80 @@ def digest(rows, gen):
                              and r["p_team"] < strict)))
 
 
+def report_offence(teams, d, gen, themes, trials, rng, pop):
+    """The other half: against the types that threaten it, can the theme hit back?"""
+    chart, moves = d["gen%d" % gen]["chart"], d["gen%d" % gen]["moves"]
+    present = sorted({t["theme"] for t in teams if t["gen"] == gen})
+    rows = [th for th in present if not themes or th in themes]
+    if not rows:
+        return
+    unresolved = collections.Counter()
+    print("\n--- gen %d, offence: %-38s ---" % (gen, "hitting the types that hit us"))
+    print("%-8s %4s %-8s | %5s | %5s %4s %5s | %6s %6s %6s | %5s %5s %6s | %s" % (
+        "theme", "n", "threat", "STAB", "se%", "mean", "off%",
+        "bodies", "bySTAB", "neu", "se%", "team%", "p", "coverage types used"))
+    out = []
+    for th in rows:
+        ts = [t for t in teams if t["gen"] == gen and t["theme"] == th]
+        scored = [offence(t, chart, moves, pop, unresolved) for t in ts]
+        nl = null_offence(th, gen, teams, chart, moves, trials, rng)
+        for atk in weaknesses(th, chart):
+            n = len(ts)
+            se = sum(1 for s in scored if s[atk]["se"] > 0) / n
+            off = sum(1 for s in scored if s[atk]["off_se"] > 0) / n
+            mean = sum(s[atk]["se"] for s in scored) / n
+            bh = sum(s[atk]["bodies_hit"] for s in scored) / n
+            bs = sum(s[atk]["bodies_stab"] for s in scored) / n
+            bn = sum(s[atk]["bodies_neutral"] for s in scored) / n
+            stab = scored[0][atk]["stab"]
+            kinds = collections.Counter()
+            for t, s in zip(ts, scored):
+                for r in s[atk]["rows"]:
+                    for name in r["mon"]["moves"]:
+                        for at in attack_types(name, r["mon"], t, moves):
+                            if at != th and multiplier(at, [atk], chart) >= 2:
+                                kinds[at] += 1
+            tot = sum(kinds.values()) or 1
+            p = ztest(se, n, nl[atk]["share"], trials) if nl else 1.0
+            out.append({"theme": th, "atk": atk, "n": n, "stab": stab, "se": se, "off": off,
+                        "bodies": bh, "by_stab": bs, "neutral": bn,
+                        "null": nl[atk]["share"] if nl else None, "p": p})
+            print("%-8s %4d %-8s | %5s | %5.0f %4.2f %5.0f | %6.0f %6.0f %6.0f | %5.0f %5.0f %6.3f | %s" % (
+                th, n, atk, ("x%g" % stab) + ("!" if stab < 1 else ""), 100 * se, mean,
+                100 * off, 100 * bh, 100 * bs, 100 * bn, 100 * se,
+                100 * (nl[atk]["share"] if nl else 0), p,
+                " ".join("%s %.0f" % (k, 100 * v / tot) for k, v in kinds.most_common(3))))
+    digest_offence(out, unresolved)
+
+
+def digest_offence(rows, unresolved):
+    wt = sum(r["n"] for r in rows) or 1
+    mean = lambda k: sum(r[k] * r["n"] for r in rows) / wt
+    print("  -- team-weighted: %.0f%% of teams hit the threatening type super-effectively, "
+          "and they hit %.0f%% of its real bodies for x2 (%.0f%% of bodies from the theme's own "
+          "STAB, %.0f%% reachable at neutral or better)"
+          % (100 * mean("se"), 100 * mean("bodies"), 100 * mean("by_stab"), 100 * mean("neutral")))
+    hard = [r for r in rows if r["stab"] < 1]
+    if hard:
+        print("  -- matchups where the theme's own STAB is RESISTED by the type attacking it, "
+              "so a coverage move is the only threat:")
+        for r in sorted(hard, key=lambda r: -r["se"]):
+            print("       %-8s vs %-8s STAB x%g | %3.0f%% of teams carry SE coverage, hitting "
+                  "%3.0f%% of real bodies (STAB alone: %2.0f%%)"
+                  % (r["theme"], r["atk"], r["stab"], 100 * r["se"], 100 * r["bodies"],
+                     100 * r["by_stab"]))
+    blind = [r for r in rows if r["se"] < 0.5]
+    print("  -- threats over half of teams cannot hit super-effectively at all: %s"
+          % (", ".join("%s/%s %.0f%%" % (r["theme"], r["atk"], 100 * r["se"]) for r in
+                       sorted(blind, key=lambda r: r["se"])) or "none"))
+    above = [r for r in rows if r["null"] is not None and r["se"] > r["null"] and r["p"] < 0.05]
+    below = [r for r in rows if r["null"] is not None and r["se"] < r["null"] and r["p"] < 0.05]
+    print("  -- vs the same co-occurrence null: %d above, %d below, %d indistinguishable"
+          % (len(above), len(below), len(rows) - len(above) - len(below)))
+    if unresolved:
+        print("  -- move types left unresolved (counted as no coverage): %s" % dict(unresolved))
+
+
 def detail(teams, d, theme, gen):
     """Who answers, by what, and whether the answer is built to switch in."""
     chart = d["gen%d" % gen]["chart"]
@@ -669,6 +888,18 @@ def detail(teams, d, theme, gen):
             print("       (nothing resists; the best switch-ins are neutral bodies)")
             for name, k in neu.most_common(5):
                 print("       %-44s %3d teams (%2.0f%%)" % (name + "  x1", k, 100 * k / len(ts)))
+        mv = d["gen%d" % gen]["moves"]
+        cov = collections.Counter()
+        for t in ts:
+            for m in t["mons"]:
+                for name in m["moves"]:
+                    for at in attack_types(name, m, t, mv):
+                        if at != theme and multiplier(at, [atk], chart) >= 2:
+                            cov["%s (%s)" % (mv[name]["name"] if name in mv else name, at)] += 1
+        if cov:
+            print("     hitting %s back -- off-type coverage moves on these teams:" % atk)
+            for name, k in cov.most_common(5):
+                print("       %-44s %3d sets" % (name, k))
         for name, k in teras.most_common(3):
             print("       [tera] %-37s %3d teams (%2.0f%%)" % (name, k, 100 * k / len(ts)))
 
@@ -686,6 +917,7 @@ def main():
         dex(force=True)
     d = dex()
     teams, stats = read_teams(GENS)
+    POP[0] = bodies(teams)
     print("corpus:", dict(stats))
     report(teams, d, a.gen, a.theme, a.trials, random.Random(a.seed),
            verbose_theme=(a.theme[0] if a.theme else None))
