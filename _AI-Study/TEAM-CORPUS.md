@@ -625,3 +625,61 @@ stacked type follows from the pick that solved Electric.
   `gen9monotype.json` is one subforum's whole history so its name says nothing, but
   `gen6ou.json` really is ORAS OU. Leading with the post date instead moved 55 titled gen 6
   teams into gen 7 and left gen 6 with none at all, which is what exposed it.
+
+## 13. Taunt: the sharpest archetype signal in the corpus, and absent from ROLE_MOVES
+
+Measured over the same 41,538 non-monotype six-mon teams as the hazard counts, plus 4,177
+monotype teams for comparison.
+
+| | teams | has Taunt | ≥2 | per team | status moves/team |
+|---|--:|--:|--:|--:|--:|
+| all non-monotype | 41,538 | **29%** | 4% | 0.34 | 8.6 |
+| gen 6 / 7 / 8 / 9 | | 31 / **36** / 25 / 26% | | | 8.3 / 8.8 / 9.0 / 8.2 |
+| stall | 239 | **16%** | 0% | 0.17 | **14.6** |
+| semi-stall | 42 | 19% | 0% | 0.19 | 13.2 |
+| balance | 401 | 26% | 3% | 0.29 | 10.9 |
+| bulky offense | 372 | 26% | 1% | 0.27 | 9.6 |
+| offense | 202 | 43% | 5% | 0.50 | 8.5 |
+| hyper offense | 406 | **56%** | **14%** | **0.73** | 9.1 |
+| monotype | 4,177 | 25% | 3% | 0.28 | 7.7 |
+
+**A 3.5× spread from stall to hyper offense** — wider than any role in §2 except screens — and it
+runs the opposite way to the thing Taunt preys on. Status moves per team goes stall 14.6 →
+hyper offense 9.1, so **the archetype most vulnerable to Taunt carries it least and the least
+vulnerable carries it most.** Taunt is not a defensive tool in this corpus; it is how offence
+stops the other side setting up, healing or laying hazards during the turns it needs.
+
+### What it can actually stop, read off the dex rather than assumed
+
+| blocked (Status) | immune (damaging) |
+|---|---|
+| Stealth Rock, Spikes, Toxic Spikes, Sticky Web | **Ceaseless Edge** 65 BP, **Stone Axe** 65 BP |
+| **Defog**, Court Change, Tidy Up | **Rapid Spin** 50 BP, Mortal Spin 30 BP |
+| Recover, Roost, Calm Mind, Swords Dance, Toxic | — |
+
+So of the 30,974 removal slots counted in §12's hazard pass, **20,892 (67%) are Taunt-blockable
+Defog/Court Change/Tidy Up and 10,342 (33%) are spin moves Taunt cannot touch.** Gen 9 also
+added the first hazard setters Taunt cannot stop — Ceaseless Edge and Stone Axe are physical
+attacks that set Spikes and Stealth Rock as a secondary effect — which is a mechanic change,
+not a usage one, and worth knowing before treating Taunt as hazard control.
+
+Commonest carriers: Heatran 1,711, Tapu Fini 1,084, Yveltal 633, Tornadus-Therian 414, Tapu
+Koko 390, Froslass 300, Jellicent 293, Deoxys-Speed 287, Qwilfish 280, Mew 251.
+
+### For the generator
+
+**Taunt is in no `ROLE_MOVES` role at all** (`tools/team_shape.py`), so nothing in the boss
+generator can ask for it, count it or cap it — the same shape as the priority and status gaps
+§2 found. It is worth adding as an offence-leaning role rather than a universal one, with the
+archetype floors above as the targets: 16% at stall, 56% at hyper offense.
+
+**It is fully available in Realidea**: `TAUNT` is in the PBS as a 0 BP Dark move and 13 of the
+decompiled scripts reference it, so unlike Sticky Web or Aurora Veil there is nothing to
+exclude.
+
+And a correction to an easy assumption: `ROLE_MOVES["removal"]` being `{RAPIDSPIN, DEFOG}` is
+**not** a gen-8/9 omission for the generator's purposes — Court Change, Tidy Up, Mortal Spin,
+Ceaseless Edge and Stone Axe are **not in Realidea's dex at all**. The list is exactly right
+for what this engine can build. It is only incomplete when the same table is used to score the
+*Smogon* corpus, and even there it misses 703 of 30,974 removal slots (2.3%), which is why
+§2's 68% and §12's 69% agree.
