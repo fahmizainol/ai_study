@@ -143,6 +143,60 @@ def null_profile(team, teams_by_format, chart, moves, pop, n, rng):
     return {k: acc[k] / drawn for k in AXES}
 
 
+def show_example(teams, d, pop, by_format, arch, trials, rng, want_format=None):
+    """One real team of `arch`, with every number in the report derived in front of you.
+
+    The team picked is the one closest to its archetype's own means on the four axes, so it
+    illustrates the row rather than decorating it -- an outlier would make the walkthrough
+    read better and mean less."""
+    pool = [t for t in teams if t["archetype"] == arch
+            and (not want_format or t["format"] == want_format)]
+    if not pool:
+        raise SystemExit("no %s teams%s" % (arch, " in " + want_format if want_format else ""))
+    scored = []
+    for t in pool:
+        chart, moves = d["gen%d" % t["gen"]]["chart"], d["gen%d" % t["gen"]]["moves"]
+        scored.append((t, profile(t, chart, moves, pop)))
+    keys = ("blind", "stacked", "holes", "reach")
+    mean = {k: sum(p[k] for _, p in scored) / len(scored) for k in keys}
+    sd = {k: max((sum((p[k] - mean[k]) ** 2 for _, p in scored) / len(scored)) ** 0.5, 1e-9)
+          for k in keys}
+    team, p = min(scored, key=lambda tp: sum(((tp[1][k] - mean[k]) / sd[k]) ** 2 for k in keys))
+    chart, moves = d["gen%d" % team["gen"]]["chart"], d["gen%d" % team["gen"]]["moves"]
+
+    print("\n=== %s, the team closest to the archetype's own means ===" % arch)
+    print("%s  [%s]\n%s" % (team["name"], team["format"], team["url"]))
+    for m in team["mons"]:
+        print("  %-18s %-16s %-16s %-18s %s" % (
+            m["species"], "/".join(m["types"]), m["ability"] or "-", m["item"] or "-",
+            ", ".join(m["moves"][:4])))
+    print("\n  attacking type   weak  resists   best switch-in   can we hit it x2")
+    for atk in sorted(chart):
+        if atk == "Stellar":
+            continue
+        weak = [m for m in team["mons"] if taken(atk, m, chart) >= 2]
+        res = [m for m in team["mons"] if taken(atk, m, chart) < 1]
+        se = [m for m in team["mons"] if best_into(atk, m, team, chart, moves) >= 2]
+        flag = ("HOLE" if not res and len(weak) >= 3 else
+                "stacked" if len(weak) >= 3 else "blind" if not res else "")
+        print("  %-14s %5d %8d   %-16s %-4s %s" % (
+            atk, len(weak), len(res),
+            (res[0]["species"][:16] if res else "-- none --"),
+            "yes" if se else "NO", flag))
+    q = null_profile(team, by_format, chart, moves, pop, trials, rng)
+    print("\n  this team: blind %d | stacked %d | holes %d | lose_to %d | reach %.0f%%"
+          % (p["blind"], p["stacked"], p["holes"], p["lose_to"], 100 * p["reach"]))
+    if q:
+        print("  %s null:  blind %.2f | stacked %.2f | holes %.2f | lose_to %.2f | reach %.0f%%"
+              % (team["format"], q["blind"], q["stacked"], q["holes"], q["lose_to"],
+                 100 * q["reach"]))
+        print("  residual:  blind %+.2f | stacked %+.2f | holes %+.2f | lose_to %+.2f | reach %+.0f pts"
+              % (p["blind"] - q["blind"], p["stacked"] - q["stacked"], p["holes"] - q["holes"],
+                 p["lose_to"] - q["lose_to"], 100 * (p["reach"] - q["reach"])))
+    print("  archetype means over %d %s teams: blind %.2f | stacked %.2f | holes %.2f | reach %.0f%%"
+          % (len(scored), arch, mean["blind"], mean["stacked"], mean["holes"], 100 * mean["reach"]))
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__,
                                 formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -150,6 +204,8 @@ def main():
     ap.add_argument("--format", help="restrict to one format, e.g. gen8ou")
     ap.add_argument("--seed", type=int, default=20260919)
     ap.add_argument("--min-n", type=int, default=15, help="skip archetypes below this")
+    ap.add_argument("--example", help="also walk one real team of this archetype through "
+                                     "every number in the report")
     a = ap.parse_args()
     rng = random.Random(a.seed)
     d = dex()
@@ -171,6 +227,9 @@ def main():
         obs[t["archetype"]].append(p)
         if q:
             delta[t["archetype"]].append({k: p[k] - q[k] for k in AXES})
+
+    if a.example:
+        show_example(teams, d, pop, by_format, a.example, a.trials, rng, a.format)
 
     print("\n=== observed, 18 attacking types per team ===")
     print("%-14s %5s | %6s %8s %6s %8s %9s %7s" % (
