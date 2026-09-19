@@ -563,6 +563,69 @@ def detail(teams, d, theme, gen):
             print("       [tera] %-37s %3d teams (%2.0f%%)" % (name, k, 100 * k / len(ts)))
 
 
+def example(teams, d, theme, gen, pop):
+    """One real team of `theme`, with both halves derived member by member.
+
+    Picks the team closest to its theme's own means, as archetype_coverage's --example does
+    and for the same reason: an outlier would read better and illustrate less."""
+    chart, moves = d["gen%d" % gen]["chart"], d["gen%d" % gen]["moves"]
+    ts = [t for t in teams if t["theme"] == theme and t["gen"] == gen]
+    if not ts:
+        raise SystemExit("no gen %d %s teams" % (gen, theme))
+    weak = weaknesses(theme, chart)
+    rows = []
+    for t in ts:
+        ds, os_ = score(t, chart), offence(t, chart, moves, pop)
+        rows.append((t, ds, os_,
+                     (sum(ds[a]["answers"] for a in weak) / len(weak),
+                      sum(1 for a in weak if ds[a]["best"] >= 2) / len(weak),
+                      sum(os_[a]["se"] for a in weak) / len(weak))))
+    mean = [sum(r[3][i] for r in rows) / len(rows) for i in range(3)]
+    sd = [max((sum((r[3][i] - mean[i]) ** 2 for r in rows) / len(rows)) ** 0.5, 1e-9)
+          for i in range(3)]
+    team, ds, os_, _ = min(rows, key=lambda r: sum(((r[3][i] - mean[i]) / sd[i]) ** 2
+                                                   for i in range(3)))
+    print("\n=== gen %d %s, the team closest to the theme's own means (of %d) ===" % (
+        gen, theme, len(ts)))
+    print("%s\n%s" % (team["name"] or "(untitled)", team["url"]))
+    for m in team["mons"]:
+        print("  %-18s %-16s %-15s %-17s %-7s %s" % (
+            m["display"], "/".join(m["types"]), m["ability"] or "-", m["item"] or "-",
+            ("Tera " + m["tera"]) if m["tera"] else "-",
+            ", ".join(m["moves"][:4])))
+    for atk in weak:
+        immune = typing_answer_possible(theme, atk, chart)
+        print("\n  --- weak to %s (%s) ---" % (
+            atk, ("a %s/%s would be immune" % (theme, "|".join(immune))) if immune
+            else "NO typing answer exists: nothing is immune to %s" % atk))
+        for m, dr, orow in zip(team["mons"], ds[atk]["rows"], os_[atk]["rows"]):
+            verdict = ("RESISTS via %s" % dr["mech"] if dr["full"] < 1
+                       else "weak" if dr["full"] >= 2 else "neutral")
+            hits = [x for x in m["moves"]
+                    if any(multiplier(a, [atk], chart) >= 2
+                           for a in attack_types(x, m, team, moves))]
+            print("     %-18s x%-4g %-16s | hits back: %s" % (
+                m["display"], dr["full"], verdict, ", ".join(hits) or "no"))
+        print("     team: %d resist, %d neutral, %d weak | %d can hit %s back%s"
+              % (ds[atk]["answers"],
+                 sum(1 for r in ds[atk]["rows"] if r["full"] == 1),
+                 ds[atk]["still_weak"], os_[atk]["se"], atk,
+                 "" if os_[atk]["stab"] >= 1 else
+                 " (and %s STAB is resisted by %s, x%g)" % (theme, atk, os_[atk]["stab"])))
+    print("\n  the %s rows this team sits in (all %d gen %d %s teams):" % (theme, len(ts), gen, theme))
+    for atk in weak:
+        n = len(ts)
+        print("     vs %-8s res %3.0f%% | neutral-only %3.0f%% | nothing %3.0f%% | "
+              "hits it %3.0f%% (mean %.2f members)"
+              % (atk,
+                 100 * sum(1 for _, x, _, _ in rows if x[atk]["answers"] > 0) / n,
+                 100 * sum(1 for _, x, _, _ in rows if x[atk]["answers"] == 0
+                           and x[atk]["best"] <= 1) / n,
+                 100 * sum(1 for _, x, _, _ in rows if x[atk]["best"] >= 2) / n,
+                 100 * sum(1 for _, _, y, _ in rows if y[atk]["se"] > 0) / n,
+                 sum(y[atk]["se"] for _, _, y, _ in rows) / n))
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--gen", nargs="*", type=int, default=[9], choices=GENS)
@@ -571,6 +634,8 @@ def main():
     ap.add_argument("--seed", type=int, default=20260919)
     ap.add_argument("--json", help="write per-team coverage records here")
     ap.add_argument("--rebuild-dex", action="store_true")
+    ap.add_argument("--example", action="store_true",
+                    help="with --theme: walk one real team of it through both halves")
     a = ap.parse_args()
     if a.rebuild_dex:
         dex(force=True)
@@ -578,6 +643,11 @@ def main():
     teams, stats = read_teams(GENS)
     POP[0] = bodies(teams)
     print("corpus:", dict(stats))
+    if a.example:
+        for th in (a.theme or []):
+            for gen in a.gen:
+                example(teams, d, th, gen, POP[0])
+        return
     report(teams, d, a.gen, a.theme, a.trials, random.Random(a.seed),
            verbose_theme=(a.theme[0] if a.theme else None))
     if a.json:

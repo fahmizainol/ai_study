@@ -118,6 +118,32 @@ one answer.
 Dragon and Grass are the themes with nothing to click: Dragon resists none of Ice, Fairy
 or Dragon on any member in any of 116 teams.
 
+### One team, derived
+
+    python3 tools/mono_synergy.py --gen 9 --theme Water --example
+
+picks the team closest to its theme's own means and walks both halves member by member. The
+gen 9 Water pick is an SV sample team — Kingdra, **Swampert**, Ogerpon-Wellspring, Pelipper,
+Primarina, Urshifu-Rapid-Strike:
+
+| weak to | resist | neutral | weak | hits it back |
+|---|--:|--:|--:|--:|
+| Electric | 1 (Swampert, ×0) | 2 | 3 (Pelipper ×4) | 1 — Swampert's Earthquake |
+| Grass | 0 | 3 | 3 (**Swampert ×4**) | 3 — Hurricane, Ice Beam, Ice Spinner |
+
+Every result in this document is visible in those two rows. Swampert is the designated
+Electric slot (§4) and the *only* member that threatens Electric back, so it is the two-way
+answer of §8; it is also the member that is ×4 to Grass, which is §6's cost; and the Grass row
+has no resist at all because nothing is immune to Grass (§2), so three neutral bodies and Ice
+coverage are the whole plan.
+
+The same command on `--theme Ice` and `--theme Ground` shows the two extremes. The Ice team
+resists **nothing** across all four of its weaknesses — 6 of 6 members weak to Rock, Alolan
+Ninetales ×4 to Steel — while hitting all four back with 1-4 members, and it runs the §7 snow
+package (Snow Warning, Aurora Veil, Light Clay, Slush Rush Cetitan). The Ground team is the
+mirror: Clodsire's Water Absorb walls Water outright and **no member can hit Water back at
+all**, which is §8's one real blind spot (only 41% of Ground teams can).
+
 ## 4. The answer is a designated slot, not redundancy
 
 Ten pairs in gen 9 cover *more* than the co-occurrence null **and** with a tighter
