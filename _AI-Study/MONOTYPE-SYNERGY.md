@@ -183,7 +183,46 @@ another of the theme's weaknesses:
   slots), Steel answers Fire and goes ×4 to Ground (67), Fire answers Ground and goes ×4
   to Rock (35), Fighting answers Psychic and goes ×4 to Fairy (31).
 
-## 7. Tera is not the coverage tool it looks like
+## 7. When nothing can be bought, a theme buys untyped defence instead
+
+Ranked by the share of its own weakness list it answers, gen 9:
+
+| best | | worst | |
+|---|--:|---|--:|
+| Electric (1 weakness, 1 answerable) | 97% | Dragon (3, 1) | **0%** |
+| Poison (2, 2) | 94% | Grass (5, 1) | 1% |
+| Steel (3, 2) | 88% | **Ice (4, 1)** | **8%** |
+| Normal (1, 1) | 83% | Fighting (3, 1) | 12% |
+| Fairy / Ground / Water | 48% | Rock (5, 2) | 13% |
+
+**Ice is the clean case of a theme with nothing to click.** Over all 183 Ice teams in the
+corpus, gens 6 through 9: **not one has a single member that resists Rock, and not one
+resists Steel.** Fighting is answered only by Ice/Ghost Froslass (27% of gen 9 teams,
+against a 13% pool null, p = 0.002) and Fire only by Water/Ice with Thick Fat, 15 teams in
+183. Alolan Sandslash is the one member neutral to both Rock and Steel and pays ×4 to Fire
+*and* ×4 to Fighting for it.
+
+What Ice does instead is buy a **damage multiplier that has no type at all**:
+
+| gen | n | Snow Warning | Aurora Veil | Slush Rush / Ice Body | Icy Rock | all three |
+|---|--:|--:|--:|--:|--:|--:|
+| 7 | 67 | 91% | 88% | 48% | 10% | 43% |
+| 8 | 55 | 80% | 73% | 29% | 7% | 16% |
+| 9 | 51 | **94%** | **84%** | 59% | 31% | 45% |
+
+Aurora Veil on the other 17 gen 9 themes: **1%**. Veil halves damage from everything,
+including the Rock and Steel moves no Ice typing can touch, and in gen 9 snow adds +50%
+Defence to Ice types on top — so the substitute for a resist is a blanket, and it is
+bought by nearly every team rather than by a slot. It is not a gen 9 invention: 88% of gen
+7 Ice teams already ran the veil.
+
+**This is a limit of everything above, not a footnote.** Every number in §3-§6 is a type
+multiplier, so screens, weather, terrain, bulk and Regenerator are all invisible to it. An
+8% coverage score and a 94% weather package are both true of the same 51 teams. Where a
+theme lands on the §3 table says what its *typing* can do; it does not say the team has no
+plan.
+
+## 8. Tera is not the coverage tool it looks like
 
 Gen 9 sets record a Tera type on 13,306 of 28,749 sets, and on the face of it Tera
 rescues the uncoverable pairs: 36% of teams facing a weakness nothing resists hold a Tera
@@ -197,7 +236,7 @@ Hearthflame's Tera Fire against Ice, Rotom-Wash's Tera Electric. Counting "the T
 resists it" as coverage would have turned an offensive habit into a defensive plan.
 `Tera Stellar` is excluded outright (31 sets): it does not change the holder's types.
 
-## 8. Corpus, and two files whose names lie
+## 9. Corpus, and two files whose names lie
 
 4,092 usable teams from 5,109 scraped records. A team is usable when all six species
 resolve, all six share exactly one type, and one generation's dex can hold the whole
@@ -234,7 +273,7 @@ beside a post-gen-7 species, or gen 8+ items like Heavy-Duty Boots on Buzzwole. 
 real tier with megas *and* the modern dex; it needs a merged dex this tool does not build,
 and it is the obvious next pool to run.
 
-## 9. What did not survive checking
+## 10. What did not survive checking
 
 - **"Water teams answer Grass with Water/Grass or Water/Poison."** They cannot. Those
   are ×1, not resists. The finding survives only as *neutral bodies*: 98% of Water teams
