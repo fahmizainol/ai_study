@@ -673,6 +673,14 @@ added the first hazard setters Taunt cannot stop — Ceaseless Edge and Stone Ax
 attacks that set Spikes and Stealth Rock as a secondary effect — which is a mechanic change,
 not a usage one, and worth knowing before treating Taunt as hazard control.
 
+**A correction to §12's reading of the hazard numbers.** That section noted removal falling as
+Heavy-Duty Boots rose and called removal "replaced, not abandoned". That is co-occurrence, not
+a mechanism, and the monotype corpus — where per-theme species supply is visible — says the
+mechanism is something else: `MONOTYPE-SYNERGY.md` §11 splits removal by theme and era and finds
+five themes gaining 40-70 points while five lose 50-68, every move traceable to a species
+arriving or leaving, with Latios and Latias alone taking Psychic from 68% to **zero**. The
+pooled decline is real; the Boots explanation for it is unsupported.
+
 Commonest carriers: Heatran 1,711, Tapu Fini 1,084, Yveltal 633, Tornadus-Therian 414, Tapu
 Koko 390, Froslass 300, Jellicent 293, Deoxys-Speed 287, Qwilfish 280, Mew 251.
 

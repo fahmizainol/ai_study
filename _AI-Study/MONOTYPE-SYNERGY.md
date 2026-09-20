@@ -529,6 +529,72 @@ one damaging move on the team that hits it for ×2, and satisfy it from the lear
 published set does not carry one.** That is a per-team gate on 1-2 move slots, not a rebuild,
 and the feasibility table above says it can always be met.
 
+### Hazards and Taunt, and why the gen 6-7 rows are the ones to copy
+
+Over the 4,092 monotype teams: **hazard setter 87%** (3,554 teams, 4,698 sets), **remover 59%**
+(2,423 teams, 2,583 sets), **Taunt 25%** (1,030 teams, 1,144 sets), Heavy-Duty Boots 33%.
+Against normal teams (`TEAM-CORPUS.md` §12-§13) monotype does less of all three — setter 87 vs
+92%, remover 59 vs 69%, Taunt 25 vs 29% — and Defog and Rapid Spin are nearly even here
+(1,322 vs 1,163) where normal teams run 2:1 Defog, because a monotype team takes whichever
+remover its own theme happens to own.
+
+**Removal per theme is decided by species supply, one generation at a time, and the swings are
+enormous in both directions.** Boots do not exist before gen 8, so the left column is the clean
+measurement and the one Realidea's gen-6-era dex should be compared against:
+
+| theme | gens 6-7 | gen 8 | gen 9 | what changed |
+|---|--:|--:|--:|---|
+| Fire | 96% | 93% | 86% | — |
+| Ice | 96% | 95% | 73% | — |
+| **Psychic** | **68%** | 31% | **0%** | Latios/Latias Defog (81 sets) left the dex; nothing replaced them |
+| **Dragon** | 80% | 59% | **21%** | the same Lati twins (58 sets), part-replaced by Cyclizar |
+| **Dark** | 66% | 71% | **16%** | Mandibuzz Defog 61 sets → 17 |
+| Water | 88% | 73% | 49% | Tentacruel/Pelipper → Quaquaval |
+| **Fairy** | 18% | 13% | **0%** | Tapu Fini/Klefki Defog gone |
+| **Fighting** | **3%** | 16% | **74%** | **Great Tusk Rapid Spin, 59 of 85 teams** |
+| **Rock** | 7% | 67% | **86%** | Coalossal Rapid Spin, then Glimmora Mortal Spin |
+| **Grass** | 6% | 23% | **61%** | Brambleghast and Toedscruel Rapid Spin |
+| Steel | 44% | 61% | 80% | Excadrill → Iron Treads + Corviknight |
+| pooled | **63%** | 58% | 55% | Boots 0% → 47% → 67% |
+
+The pooled column looks like Heavy-Duty Boots quietly replacing removal. **Per theme it is
+nothing of the kind**: five themes gain 40-70 points while five lose 50-68, and every single
+move is a species arriving or leaving. Two Pokemon, Latios and Latias, account for Psychic
+going to *zero* and most of Dragon's collapse. Any target taken from a pooled removal figure is
+an average over a mechanism that does not operate at the pooled level.
+
+**Realidea's own supply, on-theme species that can learn Defog or Rapid Spin at the gym's level:**
+
+| gym | theme | carriers | who |
+|---|---|--:|---|
+| Kenn | WATER | 8 of 135 | Squirtle line, Staryu/Starmie, Ducklett … |
+| Dhara | GROUND | 7 of 67 | Sandshrew/Sandslash, Donphan, Baltoy/Claydol, Drilbur … |
+| Douglas | ICE | 4 of 36 | Cryogonal, Bergmite/Avalugg, A-Sandshrew |
+| Bay | NORMAL | 4 of 113 | Rufflet/Braviary, Komala, A-Sandslash |
+| Lilliana | STEEL | 4 of 50 | Forretress, Excadrill, Kartana, A-Sandshrew |
+| Abi | BUG | 3 of 77 | Pineco/Forretress, Pheromosa |
+| Lawrence | PSYCHIC | 3 of 85 | Starmie, Baltoy/Claydol |
+| Ciara | DARK | 2 of 55 | Vullaby, Mandibuzz |
+| **Aimi** | **FAIRY** | **1 of 55 — and it is excluded** | **Tapu Fini, which is in `DEAD_PRIMARY`** |
+
+So **the Fairy gym cannot have hazard removal at all**: its only Defog carrier is a Tapu, whose
+terrain surge has no handler in this engine. That is the same outcome gen 9 Fairy monotype
+reaches at 0%, by an unrelated route. Every other gym has 2-8 bodies, which is thin but real,
+so removal is a reachable floor for eight of nine and an impossible one for the ninth — worth
+knowing before a quota charges Aimi for missing it.
+
+**Taunt is the substitute where removal is impossible, and the corpus agrees.** Monotype Taunt
+by theme runs Fighting 53%, Ghost 50%, Dark 42%, Fire 41%, Steel 40% against Bug 3%, Grass 7%,
+Ground 8% — and Fighting and Ghost are exactly the two themes that could not remove hazards in
+the pre-gen-9 dex (3% and 27%). They stop hazards being set instead of clearing them. Taunt is
+a 0 BP Dark move in Realidea's PBS referenced by 13 decompiled scripts, and it is in **no
+`ROLE_MOVES` role**, so nothing in the generator can currently ask for it.
+
+**One PBS fact to know before cross-checking any of this against Showdown**: Realidea has
+**Alolan Sandslash as pure NORMAL** (Alolan Sandshrew is correctly Ice/Steel). It is therefore a
+legal Normal-theme body in this build and not an Ice or Steel one, the generator and the game
+agree with each other, and only canon disagrees.
+
 ### What does not transfer from the Smogon corpus
 
 - **Nothing about which species answer what.** The immunity list is chart-derived and the
