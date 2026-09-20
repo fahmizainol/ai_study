@@ -611,6 +611,37 @@ nothing the first pick did was visible to the second.
 
 Gyms 4-9 are byte-identical either side of this change.
 
+#### How a role reaches a team: four routes, and only one of them is a floor
+
+A floor is a **minimum**, and `CHASE` decides only which roles become floors at all. Four
+separate things put a role on a finished team, and confusing them is how "the generator
+does not build removal" gets misdiagnosed as a missing quota:
+
+| route | what it does | driven by |
+|---|---|---|
+| **floor** | *requires* n sets; chased with a body budget, then reported missed | `role_plan()["floor"]`, gated by `CHASE = 0.90` |
+| **cap** | *forbids* more than mean+1 (and `ROLE_CAP` where mechanical) | every job role, **no carry gate** |
+| **`avoid=capped()`** | once a role is at cap, later picks prefer sets **without** it | the cap, via `build()` |
+| **the published set** | the role arrives free because a real set carries it | nothing — it is a side effect |
+
+`want=role` in `build()` fires only for an unmet floor or a mode setter, so for a
+non-floored role the only positive pressure is the fourth route, and the only negative one
+is a cap on some *other* role nudging picks sideways. That is enough for setup and recovery,
+which published sets are full of. **It is not enough for removal**: the nine gym teams carry
+`setup` 0-3 with nothing asking for it, and `removal` **0 of 9**.
+
+**The global knob is `CHASE`, and §5 prices it.** No archetype carries removal 90% of the
+time, so at the default nothing forces it anywhere; 0.80 buys it on 4 of 9 and costs ~2.6 BST
+of curve MAD and about a fifth of the variety — and it buys it *everywhere*, including the
+Fairy gym, whose only Defog carrier in Realidea is Tapu Fini and therefore in `DEAD_PRIMARY`.
+A global threshold cannot express "remove hazards where the dex can".
+
+**The per-gym floors in `MONOTYPE-SYNERGY.md` §11 can.** Douglas takes `removal 1` because
+monotype Ice removes on 89% of real teams and his own theme x archetype cell clears the bar;
+no other gym is charged, and Aimi is explicitly exempt. Floored roles per gym 1.33 against
+the shipped 1.11 — the same order of constraint, aimed differently, which is what §5 says is
+the only kind of change that does not cost the curve.
+
 ### 6.7 Named non-gym trainers (`tools/generate_trainers.py`)
 
 Eighteen more fights run through the same builder: the three rivals (Owen, Alba,
