@@ -636,6 +636,16 @@ of curve MAD and about a fifth of the variety — and it buys it *everywhere*, i
 Fairy gym, whose only Defog carrier in Realidea is Tapu Fini and therefore in `DEAD_PRIMARY`.
 A global threshold cannot express "remove hazards where the dex can".
 
+**Shipped.** `mono_role_profile.py --write` emits `generated/theme_role_profile.json` (18
+themes, 87 cells, 4,092 teams; carry and mean only — the floor rule stays in `team_shape` so one
+threshold governs every floor in the build), `team_shape.theme_plan()` applies the ladder
+cell → theme → nothing at `CELL_MIN = 50`, and `plan_for(..., theme=)` replaces the archetype
+floors with it and clamps the result to `ROLE_CAP`. A call without a theme is byte-identical to
+before, which is what keeps `free_team` and `generate_trainers` untouched. Measured over a
+dry run of the nine: curve MAD 16.5 → 17.1 BST, four gyms change bodies, Abi goes 1/1 floors met
+to 3/3, and **Douglas is asked for removal and misses it** — no member of his card can learn
+Defog or Rapid Spin in this dex, so the floor does the one thing a floor is for and says so.
+
 **The per-gym floors in `MONOTYPE-SYNERGY.md` §11 can.** Douglas takes `removal 1` because
 monotype Ice removes on 89% of real teams and his own theme x archetype cell clears the bar;
 no other gym is charged, and Aimi is explicitly exempt. Floored roles per gym 1.33 against

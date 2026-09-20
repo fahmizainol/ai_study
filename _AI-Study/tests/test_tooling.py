@@ -1391,5 +1391,74 @@ class ArchetypeProfileTest(unittest.TestCase):
         self.assertEqual(0, p["blind"], "each of Fire/Water/Grass is resisted by someone")
 
 
+class ThemeFloorTest(unittest.TestCase):
+    """The per-gym floors: the ladder, the clamp, and that a theme REPLACES.
+
+    The mistake these guard against is the one the table itself shipped with -- numbers
+    that read as measured while describing the wrong population. Here the risk is a
+    theme quietly ADDING to the archetype floors, which would pass every eyeball check
+    (the floors look right, there are just more of them) and cost the curve for nothing,
+    per the CHASE sweep in TEAM-CORPUS.md section 5."""
+
+    @classmethod
+    def setUpClass(cls):
+        import team_shape, generate_bosses
+        cls.TS, cls.G = team_shape, generate_bosses
+        if cls.TS.theme_profile() is None:
+            raise unittest.SkipTest("generated/theme_role_profile.json not written")
+
+    def test_a_theme_replaces_the_archetype_floors_and_does_not_add_to_them(self):
+        bare, _ = self.G.plan_for("balance", False)
+        themed, _ = self.G.plan_for("balance", False, theme="DARK")
+        self.assertIn("recovery", bare, "themeless balance floors recovery")
+        self.assertNotIn("recovery", themed,
+                         "Dark teams do not carry recovery at CHASE, so a themed "
+                         "balance fight must not inherit the themeless floor")
+        self.assertLessEqual(len(themed), len(bare),
+                             "replacing can only keep the floor count level or lower")
+
+    def test_a_thin_cell_falls_back_to_the_theme_row(self):
+        """Dark x balance is 32 teams; the Dark row is 286. A floor decided by three
+        teams either way is not a floor, so the ladder must not read the cell."""
+        cell = self.TS.theme_profile()["cell"].get("DARK|balance")
+        self.assertIsNotNone(cell)
+        self.assertLess(cell["n"], self.TS.CELL_MIN)
+        plan = self.TS.theme_plan("DARK", "balance")
+        self.assertEqual("theme", plan["source"])
+        self.assertEqual(self.TS.theme_profile()["theme"]["DARK"]["n"], plan["n"])
+
+    def test_a_fat_cell_is_used(self):
+        plan = self.TS.theme_plan("ICE", "offense")
+        self.assertEqual("cell", plan["source"])
+        self.assertGreaterEqual(plan["n"], self.TS.CELL_MIN)
+        self.assertEqual(1, plan["floor"].get("removal"),
+                         "monotype Ice removes hazards on 89% of teams -- the one gym "
+                         "the corpus says should be REQUIRED to carry removal")
+
+    def test_a_theme_floor_cannot_lift_a_mechanical_cap(self):
+        """Monotype Bug averages 1.54 hazard setters, so its cell floors hazards at 2,
+        and ROLE_CAP says one. The cap wins: plan_for() raises a cap to meet a floor,
+        so an unclamped floor would silently permit a second Stealth Rock."""
+        self.assertEqual(2, self.TS.theme_plan("BUG", "hyper offense")["floor"]["hazards"])
+        floors, caps = self.G.plan_for("hyper offense", False, theme="BUG")
+        self.assertEqual(1, floors["hazards"])
+        self.assertEqual(1, caps["hazards"])
+
+    def test_no_theme_leaves_every_existing_caller_untouched(self):
+        """free_team and generate_trainers call plan_for without a theme."""
+        for arch in self.TS.ARCHETYPES:
+            self.assertEqual(self.TS.role_plan(arch)["floor"],
+                             self.G.plan_for(arch, False)[0])
+
+    def test_taunt_is_a_cap_and_never_a_floor(self):
+        """57% at hyper offense is the corpus high and still far under CHASE. If this
+        ever fails, something has forced nine bosses to carry Taunt."""
+        prof = self.TS.profile()
+        for arch in self.TS.ARCHETYPES:
+            self.assertIn("disrupt", self.TS.role_plan(arch)["cap"])
+            self.assertNotIn("disrupt", self.TS.role_plan(arch)["floor"])
+            self.assertLess(prof["archetype"][arch]["carry"]["disrupt"], self.TS.CHASE)
+
+
 if __name__ == "__main__":
     unittest.main()

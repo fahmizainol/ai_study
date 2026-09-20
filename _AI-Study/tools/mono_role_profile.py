@@ -111,6 +111,69 @@ def validate(lab, cent):
         print("%-10s %s" % (r, " ".join("%17s" % c for c in cells)))
 
 
+THEME_PROFILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), os.pardir,
+                             "generated", "theme_role_profile.json")
+# Bump when the SHAPE changes, exactly as team_shape.PROFILE_VERSION does: a consumer
+# holding an older file must rebuild rather than read fields that have moved.
+THEME_PROFILE_VERSION = 1
+
+
+def measure():
+    """({theme: [role_counts]}, {(theme, archetype): [role_counts]}) over the corpus.
+
+    One pass shared by the two tables and by the written profile, so the numbers the
+    generator reads and the numbers this tool prints cannot drift apart."""
+    lab, _ = load()
+    cent = centroids(lab)
+    teams, _ = mono_synergy.read_teams(mono_synergy.GENS)
+    theme, cell = collections.defaultdict(list), collections.defaultdict(list)
+    for t in teams:
+        rc = TS.role_counts(t["data"])
+        off = statistics.mean(TS.offence_pct(s.get("evs") or {}) for s in t["data"])
+        theme[t["theme"].upper()].append(rc)
+        cell[(t["theme"].upper(), band(off, cent))].append(rc)
+    return theme, cell
+
+
+def stats(rows):
+    return {"n": len(rows),
+            "carry": {r: round(sum(1 for rc in rows if rc[r]) / len(rows), 4) for r in JOB},
+            "mean": {r: round(statistics.mean(rc[r] for rc in rows), 3) for r in JOB}}
+
+
+def write_profile():
+    """Ship the measurement as generated/theme_role_profile.json.
+
+    Carries carry% and mean, NOT floors: the floor rule (team_shape.CHASE and the
+    mechanical caps) belongs to the consumer, so that changing the threshold does not
+    mean regenerating the measurement, and so one rule governs every floor in the
+    build. This file is to a THEMED fight what archetype_role_profile.json is to a
+    themeless one, and it is written by the same kind of offline pass."""
+    theme, cell = measure()
+    out = {
+        "version": THEME_PROFILE_VERSION,
+        "_doc": "Role frequencies of MONOTYPE teams from extracted/smogon-dump, per "
+                "theme and per theme x archetype cell. `carry` = share of teams with "
+                ">=1 set covering the role, `mean` = sets per team. The theme is a "
+                "VALIDATED label (every member shares it), so the `theme` half needs no "
+                "classifier; the archetype half is recovered from EV offence share "
+                "alone (mono_role_profile.band) because monotype teams are almost never "
+                "author-tagged -- 5 of 1,959. Floors are NOT stored: apply "
+                "team_shape.CHASE to `carry` and round `mean`, as team_shape.theme_plan "
+                "does. See MONOTYPE-SYNERGY.md section 11.",
+        "n": sum(len(v) for v in theme.values()),
+        "gens": list(mono_synergy.GENS),
+        "theme": {t: stats(v) for t, v in sorted(theme.items())},
+        "cell": {"%s|%s" % k: stats(v) for k, v in sorted(cell.items())},
+    }
+    os.makedirs(os.path.dirname(THEME_PROFILE), exist_ok=True)
+    with open(THEME_PROFILE, "w", encoding="utf-8") as fh:
+        json.dump(out, fh, indent=1)
+        fh.write("\n")
+    print("wrote %s: %d themes, %d cells, %d teams"
+          % (os.path.relpath(THEME_PROFILE), len(out["theme"]), len(out["cell"]), out["n"]))
+
+
 def by_theme():
     """Role profile per THEME, which needs no classifier at all.
 
@@ -227,7 +290,12 @@ def main():
                     help="role profile per theme instead of per archetype band")
     ap.add_argument("--by-gym", action="store_true",
                     help="the theme x archetype cell each of the nine gyms occupies")
+    ap.add_argument("--write", action="store_true",
+                    help="write generated/theme_role_profile.json for the generator")
     a = ap.parse_args()
+    if a.write:
+        write_profile()
+        return
     if a.by_gym:
         by_gym()
         return

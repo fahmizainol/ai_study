@@ -401,17 +401,32 @@ def plan_of(fight_id):
     return entry.get("archetype"), entry.get("mode")
 
 
-def plan_for(archetype, mega_ok, mode=None):
+def plan_for(archetype, mega_ok, mode=None, theme=None):
     """(floors, caps) for a fight: what it must carry, and at most.
 
     `archetype` None is the flat presence quota above -- what a named trainer with no
     playstyle assigned gets. An archetype replaces it with COUNTS from the corpus,
     and a mode adds its own setter floor on top. The three never contradict each
     other because they name disjoint roles: role_plan() never returns a mode role
-    (team_shape.MODE_ROLES) and FLAT_QUOTA names neither."""
+    (team_shape.MODE_ROLES) and FLAT_QUOTA names neither.
+
+    `theme` REPLACES the archetype's floors with the same rule measured on monotype
+    teams of that theme -- see team_shape.theme_plan() for why it replaces rather than
+    adds, and MONOTYPE-SYNERGY.md section 11 for the table. A gym is a monotype team by
+    construction (ON_THEME_MIN), and the archetype floors it was being held to were
+    measured on 1,959 tagged teams of which 5 are monotype. Caps are NOT re-measured:
+    a cap exists to stop an archetype drifting back to the middle, which is a statement
+    about the archetype and not about the theme."""
     if archetype:
         plan = TS.role_plan(archetype)
         floor, cap = dict(plan["floor"]), dict(plan["cap"])
+        themed = TS.theme_plan(theme, archetype)
+        if themed["source"] != "none":
+            # Clamped here and not in theme_plan() because ROLE_CAP is this module's
+            # mechanical table: monotype Bug averages 1.54 hazard setters, and a floor
+            # allowed to outrank "a second Stealth Rock does nothing" would lift it.
+            floor = {r: min(n, ROLE_CAP[r]) if r in ROLE_CAP else n
+                     for r, n in themed["floor"].items()}
     else:
         floor, cap = {r: 1 for r in FLAT_QUOTA if r != "mega"}, {}
     if mega_ok:
@@ -628,7 +643,12 @@ for _i in range(len(CAPS)):
 
 # Every role some fight is told to carry -- what boss_diagnostic.py must hold out to
 # ask whether being told is what makes the nine teams alike.
-CHASED_ROLES = sorted({r for a in set(ARCHETYPE) for r in TS.role_plan(a)["floor"]})
+# Per FIGHT, not per archetype: with a theme in the plan two gyms of the same
+# archetype are told different things, so a union over archetypes would hold out roles
+# nobody was asked for and miss ones somebody was.
+CHASED_ROLES = sorted({r for _i in range(len(CAPS))
+                       for r in plan_for(ARCHETYPE[_i], False,
+                                         theme=THEME[CAPS[_i]["trainer"]])[0]})
 
 
 def remap(level):
@@ -2356,7 +2376,7 @@ def make_gym(idx, seen=None):
     # team 100 eBST it never receives (that alone had gyms 1-5 ~16 BST under target).
     mega_ok = idx >= UNLOCK_STAGE
     floors, caps = plan_for(ARCHETYPE[idx], mega_ok,
-                            mode if idx >= MODE_FROM else None)
+                            mode if idx >= MODE_FROM else None, theme=theme)
     originals = [m["species"] for m in cap["team"] if m["species"] in _sp]
     built = assemble({
         "level": level - 1, "ace_level": level, "stage": idx,

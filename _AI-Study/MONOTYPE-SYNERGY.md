@@ -773,10 +773,13 @@ rows as "no strong floor" rather than as precise zeroes. And the table is only a
 plans file: re-derive it after `fight_context.py` is run again, because a re-chosen archetype
 moves a gym to a different cell.
 
-### The Taunt role, as a spec
+### The Taunt role — shipped
 
-Adding it is four lines and one version bump, and it buys a **cap, not a floor** — which is
-the correct outcome and worth knowing before anyone is surprised by it.
+**Shipped as `disrupt` in `team_shape.ROLE_MOVES`, with `PROFILE_VERSION` 4 → 5 and the profile
+rebuilt.** The prediction held exactly: it buys a **cap, not a floor**. Measured on the rebuilt
+profile, carry runs stall 15% → hyper offense 57% and no archetype comes near `CHASE`, so
+`role_plan()` floors it nowhere and caps it at 1 everywhere except hyper offense, which gets 2.
+The spec it was built from follows.
 
     # team_shape.py, among the job roles and BEFORE the modes
     "disrupt": {"TAUNT"},
@@ -795,6 +798,11 @@ What the corpus puts in each half, from `TEAM-CORPUS.md` §13:
 | bulky offense | 26% | 0.27 | none | 1 |
 | offense | 43% | 0.50 | none | 1 |
 | hyper offense | **56%** | **0.73** | none | **2** |
+
+Re-measured by the shipped role itself (`archetype_role_profile.json` v5, which counts TAUNT
+through `role_counts` rather than by a separate pass): stall 15% (0.15), balance 25% (0.28),
+bulky offense 26% (0.27), offense 41% (0.48), hyper offense 57% (0.74) — the same picture to
+within a point or two, and the caps land 1/1/1/1/**2** as predicted.
 
 **No archetype carries Taunt 90% of the time, so `CHASE = 0.90` floors it nowhere** — exactly
 the situation the `CHASE` comment already describes for removal. The cap alone is still worth

@@ -1,0 +1,3060 @@
+{
+ "version": 1,
+ "_doc": "Role frequencies of MONOTYPE teams from extracted/smogon-dump, per theme and per theme x archetype cell. `carry` = share of teams with >=1 set covering the role, `mean` = sets per team. The theme is a VALIDATED label (every member shares it), so the `theme` half needs no classifier; the archetype half is recovered from EV offence share alone (mono_role_profile.band) because monotype teams are almost never author-tagged -- 5 of 1,959. Floors are NOT stored: apply team_shape.CHASE to `carry` and round `mean`, as team_shape.theme_plan does. See MONOTYPE-SYNERGY.md section 11.",
+ "n": 4092,
+ "gens": [
+  6,
+  7,
+  8,
+  9
+ ],
+ "theme": {
+  "BUG": {
+   "n": 180,
+   "carry": {
+    "hazards": 0.9611,
+    "removal": 0.7556,
+    "setup": 0.9944,
+    "pivot": 0.7111,
+    "recovery": 0.4333,
+    "speed": 0.8444,
+    "priority": 0.8611,
+    "status": 0.3167,
+    "protect": 0.3222,
+    "phaze": 0.0056,
+    "disrupt": 0.0278
+   },
+   "mean": {
+    "hazards": 1.544,
+    "removal": 0.783,
+    "setup": 2.25,
+    "pivot": 1.228,
+    "recovery": 0.556,
+    "speed": 0.928,
+    "priority": 1.067,
+    "status": 0.389,
+    "protect": 0.394,
+    "phaze": 0.006,
+    "disrupt": 0.028
+   }
+  },
+  "DARK": {
+   "n": 286,
+   "carry": {
+    "hazards": 0.8497,
+    "removal": 0.4371,
+    "setup": 0.8846,
+    "pivot": 0.7063,
+    "recovery": 0.7517,
+    "speed": 0.3112,
+    "priority": 0.8427,
+    "status": 0.6818,
+    "protect": 0.3881,
+    "phaze": 0.1888,
+    "disrupt": 0.4231
+   },
+   "mean": {
+    "hazards": 1.031,
+    "removal": 0.437,
+    "setup": 1.703,
+    "pivot": 0.976,
+    "recovery": 1.07,
+    "speed": 0.336,
+    "priority": 1.36,
+    "status": 0.93,
+    "protect": 0.479,
+    "phaze": 0.192,
+    "disrupt": 0.5
+   }
+  },
+  "DRAGON": {
+   "n": 252,
+   "carry": {
+    "hazards": 0.9087,
+    "removal": 0.4841,
+    "setup": 0.8492,
+    "pivot": 0.4524,
+    "recovery": 0.619,
+    "speed": 0.3373,
+    "priority": 0.5516,
+    "status": 0.4881,
+    "protect": 0.4881,
+    "phaze": 0.4603,
+    "disrupt": 0.1389
+   },
+   "mean": {
+    "hazards": 1.147,
+    "removal": 0.484,
+    "setup": 1.373,
+    "pivot": 0.524,
+    "recovery": 0.79,
+    "speed": 0.377,
+    "priority": 0.563,
+    "status": 0.56,
+    "protect": 0.798,
+    "phaze": 0.512,
+    "disrupt": 0.147
+   }
+  },
+  "ELECTRIC": {
+   "n": 165,
+   "carry": {
+    "hazards": 0.5697,
+    "removal": 0.703,
+    "setup": 0.6606,
+    "pivot": 0.9636,
+    "recovery": 0.6909,
+    "speed": 0.3273,
+    "priority": 0.0909,
+    "status": 0.7091,
+    "protect": 0.4485,
+    "phaze": 0.0182,
+    "disrupt": 0.1455
+   },
+   "mean": {
+    "hazards": 0.636,
+    "removal": 0.709,
+    "setup": 1.158,
+    "pivot": 2.818,
+    "recovery": 0.776,
+    "speed": 0.412,
+    "priority": 0.091,
+    "status": 1.018,
+    "protect": 0.564,
+    "phaze": 0.03,
+    "disrupt": 0.152
+   }
+  },
+  "FAIRY": {
+   "n": 207,
+   "carry": {
+    "hazards": 0.9082,
+    "removal": 0.1111,
+    "setup": 0.7874,
+    "pivot": 0.3527,
+    "recovery": 0.5556,
+    "speed": 0.57,
+    "priority": 0.8357,
+    "status": 0.4928,
+    "protect": 0.3575,
+    "phaze": 0.0145,
+    "disrupt": 0.2174
+   },
+   "mean": {
+    "hazards": 1.271,
+    "removal": 0.111,
+    "setup": 1.536,
+    "pivot": 0.43,
+    "recovery": 0.812,
+    "speed": 0.749,
+    "priority": 1.15,
+    "status": 0.604,
+    "protect": 0.536,
+    "phaze": 0.014,
+    "disrupt": 0.237
+   }
+  },
+  "FIGHTING": {
+   "n": 202,
+   "carry": {
+    "hazards": 0.8465,
+    "removal": 0.3515,
+    "setup": 0.8663,
+    "pivot": 0.5,
+    "recovery": 0.203,
+    "speed": 0.4851,
+    "priority": 0.8465,
+    "status": 0.3119,
+    "protect": 0.3515,
+    "phaze": 0.0396,
+    "disrupt": 0.5297
+   },
+   "mean": {
+    "hazards": 0.896,
+    "removal": 0.351,
+    "setup": 1.589,
+    "pivot": 0.644,
+    "recovery": 0.233,
+    "speed": 0.639,
+    "priority": 1.163,
+    "status": 0.317,
+    "protect": 0.446,
+    "phaze": 0.04,
+    "disrupt": 0.658
+   }
+  },
+  "FIRE": {
+   "n": 187,
+   "carry": {
+    "hazards": 0.8128,
+    "removal": 0.7647,
+    "setup": 0.877,
+    "pivot": 0.7487,
+    "recovery": 0.5455,
+    "speed": 0.0909,
+    "priority": 0.6631,
+    "status": 0.7487,
+    "protect": 0.2032,
+    "phaze": 0.0428,
+    "disrupt": 0.4064
+   },
+   "mean": {
+    "hazards": 0.834,
+    "removal": 0.914,
+    "setup": 1.519,
+    "pivot": 1.075,
+    "recovery": 0.668,
+    "speed": 0.102,
+    "priority": 0.882,
+    "status": 1.08,
+    "protect": 0.257,
+    "phaze": 0.043,
+    "disrupt": 0.428
+   }
+  },
+  "FLYING": {
+   "n": 317,
+   "carry": {
+    "hazards": 0.817,
+    "removal": 0.8517,
+    "setup": 0.7287,
+    "pivot": 0.8328,
+    "recovery": 0.9338,
+    "speed": 0.2871,
+    "priority": 0.4479,
+    "status": 0.6593,
+    "protect": 0.6183,
+    "phaze": 0.3754,
+    "disrupt": 0.3502
+   },
+   "mean": {
+    "hazards": 0.924,
+    "removal": 1.076,
+    "setup": 1.129,
+    "pivot": 1.505,
+    "recovery": 2.726,
+    "speed": 0.322,
+    "priority": 0.464,
+    "status": 0.931,
+    "protect": 0.852,
+    "phaze": 0.413,
+    "disrupt": 0.385
+   }
+  },
+  "GHOST": {
+   "n": 214,
+   "carry": {
+    "hazards": 0.8411,
+    "removal": 0.271,
+    "setup": 0.9673,
+    "pivot": 0.2664,
+    "recovery": 0.8318,
+    "speed": 0.3551,
+    "priority": 0.8178,
+    "status": 0.8785,
+    "protect": 0.5654,
+    "phaze": 0.0327,
+    "disrupt": 0.4953
+   },
+   "mean": {
+    "hazards": 0.939,
+    "removal": 0.271,
+    "setup": 2.07,
+    "pivot": 0.299,
+    "recovery": 1.551,
+    "speed": 0.551,
+    "priority": 1.103,
+    "status": 1.701,
+    "protect": 0.729,
+    "phaze": 0.033,
+    "disrupt": 0.57
+   }
+  },
+  "GRASS": {
+   "n": 153,
+   "carry": {
+    "hazards": 0.8758,
+    "removal": 0.281,
+    "setup": 0.7843,
+    "pivot": 0.5621,
+    "recovery": 0.9216,
+    "speed": 0.4575,
+    "priority": 0.549,
+    "status": 0.4641,
+    "protect": 0.634,
+    "phaze": 0.0131,
+    "disrupt": 0.0719
+   },
+   "mean": {
+    "hazards": 1.353,
+    "removal": 0.281,
+    "setup": 1.386,
+    "pivot": 0.771,
+    "recovery": 2.216,
+    "speed": 0.542,
+    "priority": 0.706,
+    "status": 0.562,
+    "protect": 0.843,
+    "phaze": 0.013,
+    "disrupt": 0.078
+   }
+  },
+  "GROUND": {
+   "n": 261,
+   "carry": {
+    "hazards": 0.9808,
+    "removal": 0.7548,
+    "setup": 0.7126,
+    "pivot": 0.3525,
+    "recovery": 0.908,
+    "speed": 0.0575,
+    "priority": 0.6628,
+    "status": 0.6935,
+    "protect": 0.3793,
+    "phaze": 0.5211,
+    "disrupt": 0.0766
+   },
+   "mean": {
+    "hazards": 1.429,
+    "removal": 0.778,
+    "setup": 0.996,
+    "pivot": 0.41,
+    "recovery": 1.602,
+    "speed": 0.065,
+    "priority": 0.705,
+    "status": 0.927,
+    "protect": 0.46,
+    "phaze": 0.544,
+    "disrupt": 0.084
+   }
+  },
+  "ICE": {
+   "n": 183,
+   "carry": {
+    "hazards": 0.9071,
+    "removal": 0.8907,
+    "setup": 0.6776,
+    "pivot": 0.3169,
+    "recovery": 0.694,
+    "speed": 0.1639,
+    "priority": 0.7869,
+    "status": 0.3825,
+    "protect": 0.306,
+    "phaze": 0.2514,
+    "disrupt": 0.1257
+   },
+   "mean": {
+    "hazards": 1.049,
+    "removal": 0.923,
+    "setup": 1.027,
+    "pivot": 0.344,
+    "recovery": 0.88,
+    "speed": 0.175,
+    "priority": 1.246,
+    "status": 0.421,
+    "protect": 0.393,
+    "phaze": 0.273,
+    "disrupt": 0.126
+   }
+  },
+  "NORMAL": {
+   "n": 180,
+   "carry": {
+    "hazards": 0.7944,
+    "removal": 0.6556,
+    "setup": 0.6333,
+    "pivot": 0.6667,
+    "recovery": 0.85,
+    "speed": 0.6222,
+    "priority": 0.1333,
+    "status": 0.6222,
+    "protect": 0.2778,
+    "phaze": 0.0278,
+    "disrupt": 0.0667
+   },
+   "mean": {
+    "hazards": 0.8,
+    "removal": 0.672,
+    "setup": 0.906,
+    "pivot": 1.061,
+    "recovery": 2.067,
+    "speed": 0.761,
+    "priority": 0.156,
+    "status": 0.856,
+    "protect": 0.433,
+    "phaze": 0.033,
+    "disrupt": 0.067
+   }
+  },
+  "POISON": {
+   "n": 180,
+   "carry": {
+    "hazards": 0.7611,
+    "removal": 0.7389,
+    "setup": 0.4556,
+    "pivot": 0.3278,
+    "recovery": 0.9167,
+    "speed": 0.1222,
+    "priority": 0.3056,
+    "status": 0.7,
+    "protect": 0.5667,
+    "phaze": 0.0611,
+    "disrupt": 0.2056
+   },
+   "mean": {
+    "hazards": 1.061,
+    "removal": 0.75,
+    "setup": 0.606,
+    "pivot": 0.35,
+    "recovery": 1.944,
+    "speed": 0.122,
+    "priority": 0.35,
+    "status": 1.283,
+    "protect": 0.7,
+    "phaze": 0.061,
+    "disrupt": 0.206
+   }
+  },
+  "PSYCHIC": {
+   "n": 313,
+   "carry": {
+    "hazards": 0.8275,
+    "removal": 0.4345,
+    "setup": 0.7923,
+    "pivot": 0.6805,
+    "recovery": 0.7412,
+    "speed": 0.5687,
+    "priority": 0.2109,
+    "status": 0.6102,
+    "protect": 0.2843,
+    "phaze": 0.0032,
+    "disrupt": 0.3003
+   },
+   "mean": {
+    "hazards": 0.879,
+    "removal": 0.438,
+    "setup": 1.246,
+    "pivot": 1.08,
+    "recovery": 1.329,
+    "speed": 0.808,
+    "priority": 0.217,
+    "status": 0.923,
+    "protect": 0.374,
+    "phaze": 0.003,
+    "disrupt": 0.304
+   }
+  },
+  "ROCK": {
+   "n": 137,
+   "carry": {
+    "hazards": 0.8759,
+    "removal": 0.3212,
+    "setup": 0.8394,
+    "pivot": 0.0657,
+    "recovery": 0.4161,
+    "speed": 0.6496,
+    "priority": 0.2336,
+    "status": 0.3942,
+    "protect": 0.219,
+    "phaze": 0.0438,
+    "disrupt": 0.1241
+   },
+   "mean": {
+    "hazards": 1.073,
+    "removal": 0.328,
+    "setup": 1.27,
+    "pivot": 0.066,
+    "recovery": 0.489,
+    "speed": 0.745,
+    "priority": 0.292,
+    "status": 0.467,
+    "protect": 0.255,
+    "phaze": 0.058,
+    "disrupt": 0.131
+   }
+  },
+  "STEEL": {
+   "n": 284,
+   "carry": {
+    "hazards": 0.9542,
+    "removal": 0.588,
+    "setup": 0.8486,
+    "pivot": 0.4366,
+    "recovery": 0.8345,
+    "speed": 0.4366,
+    "priority": 0.7254,
+    "status": 0.6655,
+    "protect": 0.5423,
+    "phaze": 0.3099,
+    "disrupt": 0.4049
+   },
+   "mean": {
+    "hazards": 1.489,
+    "removal": 0.606,
+    "setup": 1.472,
+    "pivot": 0.549,
+    "recovery": 1.518,
+    "speed": 0.546,
+    "priority": 0.986,
+    "status": 1.032,
+    "protect": 0.866,
+    "phaze": 0.359,
+    "disrupt": 0.479
+   }
+  },
+  "WATER": {
+   "n": 391,
+   "carry": {
+    "hazards": 0.9207,
+    "removal": 0.7238,
+    "setup": 0.7519,
+    "pivot": 0.6573,
+    "recovery": 0.7954,
+    "speed": 0.2583,
+    "priority": 0.4194,
+    "status": 0.6036,
+    "protect": 0.5166,
+    "phaze": 0.3606,
+    "disrupt": 0.1816
+   },
+   "mean": {
+    "hazards": 1.404,
+    "removal": 0.744,
+    "setup": 1.113,
+    "pivot": 0.852,
+    "recovery": 1.701,
+    "speed": 0.302,
+    "priority": 0.455,
+    "status": 0.852,
+    "protect": 0.752,
+    "phaze": 0.368,
+    "disrupt": 0.187
+   }
+  }
+ },
+ "cell": {
+  "BUG|balance": {
+   "n": 8,
+   "carry": {
+    "hazards": 1.0,
+    "removal": 0.875,
+    "setup": 1.0,
+    "pivot": 1.0,
+    "recovery": 0.875,
+    "speed": 0.625,
+    "priority": 0.625,
+    "status": 0.75,
+    "protect": 0.5,
+    "phaze": 0.0,
+    "disrupt": 0.125
+   },
+   "mean": {
+    "hazards": 2,
+    "removal": 1.375,
+    "setup": 1.5,
+    "pivot": 2,
+    "recovery": 1.875,
+    "speed": 0.625,
+    "priority": 0.625,
+    "status": 1.125,
+    "protect": 0.5,
+    "phaze": 0,
+    "disrupt": 0.125
+   }
+  },
+  "BUG|bulky offense": {
+   "n": 12,
+   "carry": {
+    "hazards": 0.9167,
+    "removal": 1.0,
+    "setup": 1.0,
+    "pivot": 1.0,
+    "recovery": 0.9167,
+    "speed": 0.9167,
+    "priority": 0.8333,
+    "status": 0.5833,
+    "protect": 0.25,
+    "phaze": 0.0,
+    "disrupt": 0.0
+   },
+   "mean": {
+    "hazards": 1.417,
+    "removal": 1,
+    "setup": 2,
+    "pivot": 2.083,
+    "recovery": 1.083,
+    "speed": 1.25,
+    "priority": 1,
+    "status": 0.667,
+    "protect": 0.333,
+    "phaze": 0,
+    "disrupt": 0
+   }
+  },
+  "BUG|hyper offense": {
+   "n": 115,
+   "carry": {
+    "hazards": 0.9565,
+    "removal": 0.687,
+    "setup": 0.9913,
+    "pivot": 0.6,
+    "recovery": 0.2522,
+    "speed": 0.9043,
+    "priority": 0.887,
+    "status": 0.2,
+    "protect": 0.3217,
+    "phaze": 0.0,
+    "disrupt": 0.0261
+   },
+   "mean": {
+    "hazards": 1.565,
+    "removal": 0.687,
+    "setup": 2.33,
+    "pivot": 0.957,
+    "recovery": 0.278,
+    "speed": 0.974,
+    "priority": 1.078,
+    "status": 0.226,
+    "protect": 0.409,
+    "phaze": 0,
+    "disrupt": 0.026
+   }
+  },
+  "BUG|offense": {
+   "n": 43,
+   "carry": {
+    "hazards": 0.9767,
+    "removal": 0.8372,
+    "setup": 1.0,
+    "pivot": 0.8605,
+    "recovery": 0.6744,
+    "speed": 0.7442,
+    "priority": 0.8605,
+    "status": 0.4419,
+    "protect": 0.2791,
+    "phaze": 0.0233,
+    "disrupt": 0.0233
+   },
+   "mean": {
+    "hazards": 1.465,
+    "removal": 0.86,
+    "setup": 2.209,
+    "pivot": 1.581,
+    "recovery": 0.791,
+    "speed": 0.814,
+    "priority": 1.14,
+    "status": 0.535,
+    "protect": 0.302,
+    "phaze": 0.023,
+    "disrupt": 0.023
+   }
+  },
+  "BUG|stall": {
+   "n": 2,
+   "carry": {
+    "hazards": 1.0,
+    "removal": 1.0,
+    "setup": 1.0,
+    "pivot": 1.0,
+    "recovery": 1.0,
+    "speed": 0.0,
+    "priority": 0.5,
+    "status": 1.0,
+    "protect": 1.0,
+    "phaze": 0.0,
+    "disrupt": 0.0
+   },
+   "mean": {
+    "hazards": 1,
+    "removal": 1,
+    "setup": 3,
+    "pivot": 1,
+    "recovery": 3,
+    "speed": 0,
+    "priority": 1,
+    "status": 2,
+    "protect": 1.5,
+    "phaze": 0,
+    "disrupt": 0
+   }
+  },
+  "DARK|balance": {
+   "n": 32,
+   "carry": {
+    "hazards": 0.875,
+    "removal": 0.6562,
+    "setup": 0.8125,
+    "pivot": 0.6562,
+    "recovery": 0.875,
+    "speed": 0.375,
+    "priority": 0.6562,
+    "status": 0.875,
+    "protect": 0.4062,
+    "phaze": 0.2188,
+    "disrupt": 0.3438
+   },
+   "mean": {
+    "hazards": 1.125,
+    "removal": 0.656,
+    "setup": 1.031,
+    "pivot": 0.812,
+    "recovery": 1.906,
+    "speed": 0.438,
+    "priority": 1,
+    "status": 1.688,
+    "protect": 0.625,
+    "phaze": 0.219,
+    "disrupt": 0.375
+   }
+  },
+  "DARK|bulky offense": {
+   "n": 67,
+   "carry": {
+    "hazards": 0.9552,
+    "removal": 0.5373,
+    "setup": 0.806,
+    "pivot": 0.8209,
+    "recovery": 0.9552,
+    "speed": 0.4179,
+    "priority": 0.6866,
+    "status": 0.8955,
+    "protect": 0.4328,
+    "phaze": 0.194,
+    "disrupt": 0.3881
+   },
+   "mean": {
+    "hazards": 1.239,
+    "removal": 0.537,
+    "setup": 1.284,
+    "pivot": 1.299,
+    "recovery": 1.343,
+    "speed": 0.448,
+    "priority": 1.03,
+    "status": 1.313,
+    "protect": 0.537,
+    "phaze": 0.194,
+    "disrupt": 0.433
+   }
+  },
+  "DARK|hyper offense": {
+   "n": 70,
+   "carry": {
+    "hazards": 0.6571,
+    "removal": 0.2,
+    "setup": 0.9571,
+    "pivot": 0.6857,
+    "recovery": 0.3286,
+    "speed": 0.2,
+    "priority": 0.9429,
+    "status": 0.2714,
+    "protect": 0.4143,
+    "phaze": 0.0143,
+    "disrupt": 0.6286
+   },
+   "mean": {
+    "hazards": 0.714,
+    "removal": 0.2,
+    "setup": 2.4,
+    "pivot": 0.871,
+    "recovery": 0.343,
+    "speed": 0.2,
+    "priority": 1.543,
+    "status": 0.271,
+    "protect": 0.514,
+    "phaze": 0.014,
+    "disrupt": 0.771
+   }
+  },
+  "DARK|offense": {
+   "n": 112,
+   "carry": {
+    "hazards": 0.9018,
+    "removal": 0.4464,
+    "setup": 0.9196,
+    "pivot": 0.6875,
+    "recovery": 0.8482,
+    "speed": 0.2857,
+    "priority": 0.9375,
+    "status": 0.7411,
+    "protect": 0.3482,
+    "phaze": 0.2589,
+    "disrupt": 0.3482
+   },
+   "mean": {
+    "hazards": 1.062,
+    "removal": 0.446,
+    "setup": 1.732,
+    "pivot": 0.929,
+    "recovery": 1.027,
+    "speed": 0.312,
+    "priority": 1.562,
+    "status": 0.866,
+    "protect": 0.384,
+    "phaze": 0.259,
+    "disrupt": 0.411
+   }
+  },
+  "DARK|stall": {
+   "n": 5,
+   "carry": {
+    "hazards": 0.8,
+    "removal": 0.8,
+    "setup": 0.6,
+    "pivot": 0.2,
+    "recovery": 1.0,
+    "speed": 0.6,
+    "priority": 0.6,
+    "status": 1.0,
+    "protect": 0.2,
+    "phaze": 0.8,
+    "disrupt": 0.2
+   },
+   "mean": {
+    "hazards": 1.4,
+    "removal": 0.8,
+    "setup": 1.2,
+    "pivot": 0.2,
+    "recovery": 3.2,
+    "speed": 0.6,
+    "priority": 1,
+    "status": 1.6,
+    "protect": 0.4,
+    "phaze": 1,
+    "disrupt": 0.4
+   }
+  },
+  "DRAGON|bulky offense": {
+   "n": 22,
+   "carry": {
+    "hazards": 0.9545,
+    "removal": 0.1364,
+    "setup": 0.8182,
+    "pivot": 0.7727,
+    "recovery": 0.7273,
+    "speed": 0.6818,
+    "priority": 0.0455,
+    "status": 0.7727,
+    "protect": 0.7273,
+    "phaze": 0.6364,
+    "disrupt": 0.0455
+   },
+   "mean": {
+    "hazards": 1.182,
+    "removal": 0.136,
+    "setup": 1.364,
+    "pivot": 0.818,
+    "recovery": 0.864,
+    "speed": 0.818,
+    "priority": 0.045,
+    "status": 0.955,
+    "protect": 1.318,
+    "phaze": 0.818,
+    "disrupt": 0.045
+   }
+  },
+  "DRAGON|hyper offense": {
+   "n": 147,
+   "carry": {
+    "hazards": 0.8912,
+    "removal": 0.6259,
+    "setup": 0.8299,
+    "pivot": 0.3605,
+    "recovery": 0.5918,
+    "speed": 0.2313,
+    "priority": 0.6871,
+    "status": 0.3741,
+    "protect": 0.3605,
+    "phaze": 0.3401,
+    "disrupt": 0.1973
+   },
+   "mean": {
+    "hazards": 1.109,
+    "removal": 0.626,
+    "setup": 1.347,
+    "pivot": 0.422,
+    "recovery": 0.776,
+    "speed": 0.238,
+    "priority": 0.694,
+    "status": 0.395,
+    "protect": 0.51,
+    "phaze": 0.374,
+    "disrupt": 0.211
+   }
+  },
+  "DRAGON|offense": {
+   "n": 83,
+   "carry": {
+    "hazards": 0.9277,
+    "removal": 0.3253,
+    "setup": 0.8916,
+    "pivot": 0.5301,
+    "recovery": 0.6386,
+    "speed": 0.4337,
+    "priority": 0.4458,
+    "status": 0.6145,
+    "protect": 0.6506,
+    "phaze": 0.6265,
+    "disrupt": 0.0602
+   },
+   "mean": {
+    "hazards": 1.205,
+    "removal": 0.325,
+    "setup": 1.422,
+    "pivot": 0.627,
+    "recovery": 0.795,
+    "speed": 0.506,
+    "priority": 0.47,
+    "status": 0.747,
+    "protect": 1.169,
+    "phaze": 0.675,
+    "disrupt": 0.06
+   }
+  },
+  "ELECTRIC|balance": {
+   "n": 10,
+   "carry": {
+    "hazards": 0.8,
+    "removal": 0.6,
+    "setup": 0.9,
+    "pivot": 1.0,
+    "recovery": 1.0,
+    "speed": 0.4,
+    "priority": 0.0,
+    "status": 0.8,
+    "protect": 0.6,
+    "phaze": 0.1,
+    "disrupt": 0.3
+   },
+   "mean": {
+    "hazards": 0.8,
+    "removal": 0.6,
+    "setup": 2,
+    "pivot": 2.1,
+    "recovery": 1.3,
+    "speed": 0.5,
+    "priority": 0,
+    "status": 1.5,
+    "protect": 1.1,
+    "phaze": 0.2,
+    "disrupt": 0.3
+   }
+  },
+  "ELECTRIC|bulky offense": {
+   "n": 17,
+   "carry": {
+    "hazards": 0.7059,
+    "removal": 0.6471,
+    "setup": 0.7059,
+    "pivot": 0.8824,
+    "recovery": 0.7647,
+    "speed": 0.4118,
+    "priority": 0.1765,
+    "status": 0.7647,
+    "protect": 0.5882,
+    "phaze": 0.0588,
+    "disrupt": 0.1765
+   },
+   "mean": {
+    "hazards": 0.765,
+    "removal": 0.647,
+    "setup": 1.471,
+    "pivot": 2.235,
+    "recovery": 0.941,
+    "speed": 0.529,
+    "priority": 0.176,
+    "status": 1.353,
+    "protect": 0.706,
+    "phaze": 0.059,
+    "disrupt": 0.235
+   }
+  },
+  "ELECTRIC|hyper offense": {
+   "n": 71,
+   "carry": {
+    "hazards": 0.5493,
+    "removal": 0.6056,
+    "setup": 0.7606,
+    "pivot": 0.9859,
+    "recovery": 0.5352,
+    "speed": 0.3662,
+    "priority": 0.0704,
+    "status": 0.6197,
+    "protect": 0.4648,
+    "phaze": 0.0141,
+    "disrupt": 0.1268
+   },
+   "mean": {
+    "hazards": 0.62,
+    "removal": 0.62,
+    "setup": 1.197,
+    "pivot": 2.873,
+    "recovery": 0.549,
+    "speed": 0.465,
+    "priority": 0.07,
+    "status": 0.831,
+    "protect": 0.563,
+    "phaze": 0.028,
+    "disrupt": 0.127
+   }
+  },
+  "ELECTRIC|offense": {
+   "n": 66,
+   "carry": {
+    "hazards": 0.5303,
+    "removal": 0.8485,
+    "setup": 0.5,
+    "pivot": 0.9545,
+    "recovery": 0.7879,
+    "speed": 0.2424,
+    "priority": 0.1061,
+    "status": 0.7727,
+    "protect": 0.3636,
+    "phaze": 0.0,
+    "disrupt": 0.1364
+   },
+   "mean": {
+    "hazards": 0.606,
+    "removal": 0.848,
+    "setup": 0.909,
+    "pivot": 3.045,
+    "recovery": 0.879,
+    "speed": 0.288,
+    "priority": 0.106,
+    "status": 1.045,
+    "protect": 0.439,
+    "phaze": 0,
+    "disrupt": 0.136
+   }
+  },
+  "ELECTRIC|stall": {
+   "n": 1,
+   "carry": {
+    "hazards": 0.0,
+    "removal": 0.0,
+    "setup": 1.0,
+    "pivot": 1.0,
+    "recovery": 1.0,
+    "speed": 1.0,
+    "priority": 0.0,
+    "status": 1.0,
+    "protect": 1.0,
+    "phaze": 0.0,
+    "disrupt": 0.0
+   },
+   "mean": {
+    "hazards": 0,
+    "removal": 0,
+    "setup": 1,
+    "pivot": 1,
+    "recovery": 2,
+    "speed": 2,
+    "priority": 0,
+    "status": 2,
+    "protect": 1,
+    "phaze": 0,
+    "disrupt": 0
+   }
+  },
+  "FAIRY|balance": {
+   "n": 27,
+   "carry": {
+    "hazards": 0.7778,
+    "removal": 0.1111,
+    "setup": 0.8519,
+    "pivot": 0.1111,
+    "recovery": 0.7407,
+    "speed": 0.7407,
+    "priority": 0.5185,
+    "status": 0.7407,
+    "protect": 0.5185,
+    "phaze": 0.0741,
+    "disrupt": 0.2222
+   },
+   "mean": {
+    "hazards": 1.037,
+    "removal": 0.111,
+    "setup": 2.037,
+    "pivot": 0.148,
+    "recovery": 1.259,
+    "speed": 1.148,
+    "priority": 0.63,
+    "status": 0.926,
+    "protect": 1.185,
+    "phaze": 0.074,
+    "disrupt": 0.222
+   }
+  },
+  "FAIRY|bulky offense": {
+   "n": 38,
+   "carry": {
+    "hazards": 0.9737,
+    "removal": 0.1842,
+    "setup": 0.8684,
+    "pivot": 0.3421,
+    "recovery": 0.6053,
+    "speed": 0.5526,
+    "priority": 0.8158,
+    "status": 0.6053,
+    "protect": 0.4737,
+    "phaze": 0.0263,
+    "disrupt": 0.1053
+   },
+   "mean": {
+    "hazards": 1.158,
+    "removal": 0.184,
+    "setup": 1.658,
+    "pivot": 0.395,
+    "recovery": 0.921,
+    "speed": 0.842,
+    "priority": 1.132,
+    "status": 0.816,
+    "protect": 0.553,
+    "phaze": 0.026,
+    "disrupt": 0.105
+   }
+  },
+  "FAIRY|hyper offense": {
+   "n": 46,
+   "carry": {
+    "hazards": 0.9565,
+    "removal": 0.1087,
+    "setup": 0.7609,
+    "pivot": 0.4783,
+    "recovery": 0.3478,
+    "speed": 0.5435,
+    "priority": 0.9565,
+    "status": 0.3478,
+    "protect": 0.3261,
+    "phaze": 0.0,
+    "disrupt": 0.3043
+   },
+   "mean": {
+    "hazards": 1.5,
+    "removal": 0.109,
+    "setup": 1.413,
+    "pivot": 0.543,
+    "recovery": 0.413,
+    "speed": 0.565,
+    "priority": 1.543,
+    "status": 0.391,
+    "protect": 0.326,
+    "phaze": 0,
+    "disrupt": 0.348
+   }
+  },
+  "FAIRY|offense": {
+   "n": 92,
+   "carry": {
+    "hazards": 0.913,
+    "removal": 0.087,
+    "setup": 0.75,
+    "pivot": 0.3804,
+    "recovery": 0.5761,
+    "speed": 0.5435,
+    "priority": 0.8804,
+    "status": 0.4457,
+    "protect": 0.2717,
+    "phaze": 0.0,
+    "disrupt": 0.2174
+   },
+   "mean": {
+    "hazards": 1.283,
+    "removal": 0.087,
+    "setup": 1.402,
+    "pivot": 0.489,
+    "recovery": 0.772,
+    "speed": 0.685,
+    "priority": 1.13,
+    "status": 0.522,
+    "protect": 0.435,
+    "phaze": 0,
+    "disrupt": 0.239
+   }
+  },
+  "FAIRY|stall": {
+   "n": 4,
+   "carry": {
+    "hazards": 0.5,
+    "removal": 0.0,
+    "setup": 0.75,
+    "pivot": 0.0,
+    "recovery": 0.75,
+    "speed": 0.5,
+    "priority": 0.75,
+    "status": 0.5,
+    "protect": 0.5,
+    "phaze": 0.0,
+    "disrupt": 0.25
+   },
+   "mean": {
+    "hazards": 1,
+    "removal": 0,
+    "setup": 1.5,
+    "pivot": 0,
+    "recovery": 2.25,
+    "speed": 0.75,
+    "priority": 0.75,
+    "status": 0.75,
+    "protect": 0.75,
+    "phaze": 0,
+    "disrupt": 0.25
+   }
+  },
+  "FIGHTING|balance": {
+   "n": 1,
+   "carry": {
+    "hazards": 1.0,
+    "removal": 1.0,
+    "setup": 1.0,
+    "pivot": 0.0,
+    "recovery": 0.0,
+    "speed": 0.0,
+    "priority": 1.0,
+    "status": 0.0,
+    "protect": 0.0,
+    "phaze": 0.0,
+    "disrupt": 0.0
+   },
+   "mean": {
+    "hazards": 1,
+    "removal": 1,
+    "setup": 2,
+    "pivot": 0,
+    "recovery": 0,
+    "speed": 0,
+    "priority": 1,
+    "status": 0,
+    "protect": 0,
+    "phaze": 0,
+    "disrupt": 0
+   }
+  },
+  "FIGHTING|bulky offense": {
+   "n": 17,
+   "carry": {
+    "hazards": 1.0,
+    "removal": 0.7647,
+    "setup": 0.8824,
+    "pivot": 0.5294,
+    "recovery": 0.5294,
+    "speed": 0.2941,
+    "priority": 0.7059,
+    "status": 0.2353,
+    "protect": 0.2941,
+    "phaze": 0.1176,
+    "disrupt": 0.2941
+   },
+   "mean": {
+    "hazards": 1.118,
+    "removal": 0.765,
+    "setup": 1.647,
+    "pivot": 0.824,
+    "recovery": 0.706,
+    "speed": 0.353,
+    "priority": 0.765,
+    "status": 0.235,
+    "protect": 0.353,
+    "phaze": 0.118,
+    "disrupt": 0.412
+   }
+  },
+  "FIGHTING|hyper offense": {
+   "n": 133,
+   "carry": {
+    "hazards": 0.8722,
+    "removal": 0.188,
+    "setup": 0.8722,
+    "pivot": 0.4286,
+    "recovery": 0.1128,
+    "speed": 0.6241,
+    "priority": 0.9023,
+    "status": 0.391,
+    "protect": 0.3083,
+    "phaze": 0.015,
+    "disrupt": 0.6917
+   },
+   "mean": {
+    "hazards": 0.902,
+    "removal": 0.188,
+    "setup": 1.609,
+    "pivot": 0.519,
+    "recovery": 0.113,
+    "speed": 0.812,
+    "priority": 1.308,
+    "status": 0.391,
+    "protect": 0.368,
+    "phaze": 0.015,
+    "disrupt": 0.872
+   }
+  },
+  "FIGHTING|offense": {
+   "n": 49,
+   "carry": {
+    "hazards": 0.7347,
+    "removal": 0.6122,
+    "setup": 0.8367,
+    "pivot": 0.7143,
+    "recovery": 0.3061,
+    "speed": 0.1837,
+    "priority": 0.7551,
+    "status": 0.1224,
+    "protect": 0.4694,
+    "phaze": 0.0816,
+    "disrupt": 0.1837
+   },
+   "mean": {
+    "hazards": 0.816,
+    "removal": 0.612,
+    "setup": 1.531,
+    "pivot": 0.959,
+    "recovery": 0.327,
+    "speed": 0.286,
+    "priority": 0.898,
+    "status": 0.122,
+    "protect": 0.673,
+    "phaze": 0.082,
+    "disrupt": 0.184
+   }
+  },
+  "FIGHTING|stall": {
+   "n": 2,
+   "carry": {
+    "hazards": 0.5,
+    "removal": 1.0,
+    "setup": 1.0,
+    "pivot": 0.0,
+    "recovery": 1.0,
+    "speed": 0.5,
+    "priority": 0.5,
+    "status": 0.5,
+    "protect": 1.0,
+    "phaze": 0.0,
+    "disrupt": 0.5
+   },
+   "mean": {
+    "hazards": 0.5,
+    "removal": 1,
+    "setup": 1,
+    "pivot": 0,
+    "recovery": 2,
+    "speed": 0.5,
+    "priority": 1.5,
+    "status": 1,
+    "protect": 1,
+    "phaze": 0,
+    "disrupt": 0.5
+   }
+  },
+  "FIRE|bulky offense": {
+   "n": 15,
+   "carry": {
+    "hazards": 0.7333,
+    "removal": 0.8,
+    "setup": 0.8,
+    "pivot": 0.6667,
+    "recovery": 0.8,
+    "speed": 0.0667,
+    "priority": 0.5333,
+    "status": 0.7333,
+    "protect": 0.4,
+    "phaze": 0.0667,
+    "disrupt": 0.6
+   },
+   "mean": {
+    "hazards": 0.733,
+    "removal": 1,
+    "setup": 1.4,
+    "pivot": 1.267,
+    "recovery": 1.133,
+    "speed": 0.067,
+    "priority": 0.733,
+    "status": 1.533,
+    "protect": 0.533,
+    "phaze": 0.067,
+    "disrupt": 0.6
+   }
+  },
+  "FIRE|hyper offense": {
+   "n": 108,
+   "carry": {
+    "hazards": 0.7778,
+    "removal": 0.7593,
+    "setup": 0.8704,
+    "pivot": 0.7315,
+    "recovery": 0.4537,
+    "speed": 0.0926,
+    "priority": 0.7222,
+    "status": 0.7593,
+    "protect": 0.1759,
+    "phaze": 0.037,
+    "disrupt": 0.3519
+   },
+   "mean": {
+    "hazards": 0.806,
+    "removal": 0.861,
+    "setup": 1.472,
+    "pivot": 0.954,
+    "recovery": 0.519,
+    "speed": 0.102,
+    "priority": 0.954,
+    "status": 0.991,
+    "protect": 0.222,
+    "phaze": 0.037,
+    "disrupt": 0.38
+   }
+  },
+  "FIRE|offense": {
+   "n": 61,
+   "carry": {
+    "hazards": 0.9344,
+    "removal": 0.8033,
+    "setup": 0.918,
+    "pivot": 0.8033,
+    "recovery": 0.623,
+    "speed": 0.0984,
+    "priority": 0.6066,
+    "status": 0.7377,
+    "protect": 0.1803,
+    "phaze": 0.0328,
+    "disrupt": 0.459
+   },
+   "mean": {
+    "hazards": 0.951,
+    "removal": 1.033,
+    "setup": 1.656,
+    "pivot": 1.246,
+    "recovery": 0.738,
+    "speed": 0.115,
+    "priority": 0.82,
+    "status": 1.131,
+    "protect": 0.213,
+    "phaze": 0.033,
+    "disrupt": 0.475
+   }
+  },
+  "FIRE|stall": {
+   "n": 3,
+   "carry": {
+    "hazards": 0.0,
+    "removal": 0.0,
+    "setup": 0.6667,
+    "pivot": 0.6667,
+    "recovery": 1.0,
+    "speed": 0.0,
+    "priority": 0.3333,
+    "status": 0.6667,
+    "protect": 0.6667,
+    "phaze": 0.3333,
+    "disrupt": 0.3333
+   },
+   "mean": {
+    "hazards": 0,
+    "removal": 0,
+    "setup": 1,
+    "pivot": 1,
+    "recovery": 2.333,
+    "speed": 0,
+    "priority": 0.333,
+    "status": 1,
+    "protect": 1,
+    "phaze": 0.333,
+    "disrupt": 0.333
+   }
+  },
+  "FLYING|balance": {
+   "n": 66,
+   "carry": {
+    "hazards": 0.8788,
+    "removal": 0.9242,
+    "setup": 0.6061,
+    "pivot": 0.7727,
+    "recovery": 1.0,
+    "speed": 0.2273,
+    "priority": 0.2424,
+    "status": 0.803,
+    "protect": 0.7576,
+    "phaze": 0.5303,
+    "disrupt": 0.3182
+   },
+   "mean": {
+    "hazards": 1.015,
+    "removal": 1.212,
+    "setup": 0.848,
+    "pivot": 1.455,
+    "recovery": 3.667,
+    "speed": 0.227,
+    "priority": 0.242,
+    "status": 1.273,
+    "protect": 1.121,
+    "phaze": 0.545,
+    "disrupt": 0.364
+   }
+  },
+  "FLYING|bulky offense": {
+   "n": 75,
+   "carry": {
+    "hazards": 0.7733,
+    "removal": 0.9333,
+    "setup": 0.7333,
+    "pivot": 0.8933,
+    "recovery": 1.0,
+    "speed": 0.2133,
+    "priority": 0.3733,
+    "status": 0.7067,
+    "protect": 0.6533,
+    "phaze": 0.36,
+    "disrupt": 0.2933
+   },
+   "mean": {
+    "hazards": 0.84,
+    "removal": 1.2,
+    "setup": 1.093,
+    "pivot": 1.52,
+    "recovery": 2.853,
+    "speed": 0.253,
+    "priority": 0.373,
+    "status": 0.947,
+    "protect": 0.867,
+    "phaze": 0.373,
+    "disrupt": 0.307
+   }
+  },
+  "FLYING|hyper offense": {
+   "n": 63,
+   "carry": {
+    "hazards": 0.8571,
+    "removal": 0.746,
+    "setup": 0.8571,
+    "pivot": 0.873,
+    "recovery": 0.6667,
+    "speed": 0.3968,
+    "priority": 0.7937,
+    "status": 0.3016,
+    "protect": 0.3492,
+    "phaze": 0.0476,
+    "disrupt": 0.5873
+   },
+   "mean": {
+    "hazards": 0.889,
+    "removal": 0.857,
+    "setup": 1.492,
+    "pivot": 1.476,
+    "recovery": 1.127,
+    "speed": 0.476,
+    "priority": 0.857,
+    "status": 0.365,
+    "protect": 0.413,
+    "phaze": 0.048,
+    "disrupt": 0.619
+   }
+  },
+  "FLYING|offense": {
+   "n": 80,
+   "carry": {
+    "hazards": 0.7625,
+    "removal": 0.825,
+    "setup": 0.7625,
+    "pivot": 0.8125,
+    "recovery": 1.0,
+    "speed": 0.2375,
+    "priority": 0.575,
+    "status": 0.65,
+    "protect": 0.6,
+    "phaze": 0.35,
+    "disrupt": 0.275
+   },
+   "mean": {
+    "hazards": 0.85,
+    "removal": 1.012,
+    "setup": 1.2,
+    "pivot": 1.562,
+    "recovery": 2.487,
+    "speed": 0.275,
+    "priority": 0.588,
+    "status": 0.762,
+    "protect": 0.738,
+    "phaze": 0.362,
+    "disrupt": 0.338
+   }
+  },
+  "FLYING|stall": {
+   "n": 33,
+   "carry": {
+    "hazards": 0.8485,
+    "removal": 0.7879,
+    "setup": 0.6364,
+    "pivot": 0.7879,
+    "recovery": 1.0,
+    "speed": 0.4848,
+    "priority": 0.0606,
+    "status": 0.9697,
+    "protect": 0.8182,
+    "phaze": 0.7879,
+    "disrupt": 0.2727
+   },
+   "mean": {
+    "hazards": 1.182,
+    "removal": 1.091,
+    "setup": 0.909,
+    "pivot": 1.485,
+    "recovery": 4.182,
+    "speed": 0.485,
+    "priority": 0.061,
+    "status": 1.697,
+    "protect": 1.394,
+    "phaze": 1.061,
+    "disrupt": 0.273
+   }
+  },
+  "GHOST|balance": {
+   "n": 25,
+   "carry": {
+    "hazards": 0.76,
+    "removal": 0.12,
+    "setup": 0.96,
+    "pivot": 0.12,
+    "recovery": 0.96,
+    "speed": 0.56,
+    "priority": 0.8,
+    "status": 1.0,
+    "protect": 0.36,
+    "phaze": 0.04,
+    "disrupt": 0.44
+   },
+   "mean": {
+    "hazards": 0.88,
+    "removal": 0.12,
+    "setup": 1.8,
+    "pivot": 0.2,
+    "recovery": 2.04,
+    "speed": 1.24,
+    "priority": 0.84,
+    "status": 2.12,
+    "protect": 0.44,
+    "phaze": 0.04,
+    "disrupt": 0.48
+   }
+  },
+  "GHOST|bulky offense": {
+   "n": 39,
+   "carry": {
+    "hazards": 0.8974,
+    "removal": 0.3077,
+    "setup": 0.8718,
+    "pivot": 0.2051,
+    "recovery": 0.9231,
+    "speed": 0.3846,
+    "priority": 0.7179,
+    "status": 0.8974,
+    "protect": 0.4615,
+    "phaze": 0.0,
+    "disrupt": 0.5641
+   },
+   "mean": {
+    "hazards": 1.026,
+    "removal": 0.308,
+    "setup": 1.462,
+    "pivot": 0.231,
+    "recovery": 2.077,
+    "speed": 0.667,
+    "priority": 0.769,
+    "status": 2.077,
+    "protect": 0.564,
+    "phaze": 0,
+    "disrupt": 0.744
+   }
+  },
+  "GHOST|hyper offense": {
+   "n": 71,
+   "carry": {
+    "hazards": 0.831,
+    "removal": 0.2394,
+    "setup": 1.0,
+    "pivot": 0.3803,
+    "recovery": 0.6197,
+    "speed": 0.338,
+    "priority": 0.9014,
+    "status": 0.7183,
+    "protect": 0.6479,
+    "phaze": 0.0141,
+    "disrupt": 0.493
+   },
+   "mean": {
+    "hazards": 0.887,
+    "removal": 0.239,
+    "setup": 2.634,
+    "pivot": 0.423,
+    "recovery": 0.845,
+    "speed": 0.408,
+    "priority": 1.451,
+    "status": 1.099,
+    "protect": 0.859,
+    "phaze": 0.014,
+    "disrupt": 0.535
+   }
+  },
+  "GHOST|offense": {
+   "n": 77,
+   "carry": {
+    "hazards": 0.8442,
+    "removal": 0.3247,
+    "setup": 1.0,
+    "pivot": 0.2338,
+    "recovery": 0.9351,
+    "speed": 0.2857,
+    "priority": 0.8052,
+    "status": 0.974,
+    "protect": 0.6104,
+    "phaze": 0.0519,
+    "disrupt": 0.4805
+   },
+   "mean": {
+    "hazards": 0.948,
+    "removal": 0.325,
+    "setup": 1.987,
+    "pivot": 0.247,
+    "recovery": 1.74,
+    "speed": 0.39,
+    "priority": 1.052,
+    "status": 1.896,
+    "protect": 0.779,
+    "phaze": 0.052,
+    "disrupt": 0.545
+   }
+  },
+  "GHOST|stall": {
+   "n": 2,
+   "carry": {
+    "hazards": 1.0,
+    "removal": 0.5,
+    "setup": 0.5,
+    "pivot": 0.5,
+    "recovery": 1.0,
+    "speed": 0.5,
+    "priority": 0.5,
+    "status": 1.0,
+    "protect": 0.5,
+    "phaze": 0.5,
+    "disrupt": 0.5
+   },
+   "mean": {
+    "hazards": 1.5,
+    "removal": 0.5,
+    "setup": 0.5,
+    "pivot": 0.5,
+    "recovery": 3,
+    "speed": 1,
+    "priority": 0.5,
+    "status": 3,
+    "protect": 1,
+    "phaze": 0.5,
+    "disrupt": 0.5
+   }
+  },
+  "GRASS|balance": {
+   "n": 24,
+   "carry": {
+    "hazards": 1.0,
+    "removal": 0.2083,
+    "setup": 0.5,
+    "pivot": 0.5,
+    "recovery": 0.9583,
+    "speed": 0.625,
+    "priority": 0.4583,
+    "status": 0.7083,
+    "protect": 0.75,
+    "phaze": 0.0,
+    "disrupt": 0.125
+   },
+   "mean": {
+    "hazards": 1.75,
+    "removal": 0.208,
+    "setup": 0.667,
+    "pivot": 0.667,
+    "recovery": 3.042,
+    "speed": 0.625,
+    "priority": 0.708,
+    "status": 1.042,
+    "protect": 0.875,
+    "phaze": 0,
+    "disrupt": 0.167
+   }
+  },
+  "GRASS|bulky offense": {
+   "n": 42,
+   "carry": {
+    "hazards": 0.9524,
+    "removal": 0.1905,
+    "setup": 0.7381,
+    "pivot": 0.3571,
+    "recovery": 1.0,
+    "speed": 0.381,
+    "priority": 0.619,
+    "status": 0.6429,
+    "protect": 0.8571,
+    "phaze": 0.0,
+    "disrupt": 0.0714
+   },
+   "mean": {
+    "hazards": 1.69,
+    "removal": 0.19,
+    "setup": 0.952,
+    "pivot": 0.405,
+    "recovery": 2.976,
+    "speed": 0.429,
+    "priority": 0.69,
+    "status": 0.643,
+    "protect": 1.095,
+    "phaze": 0,
+    "disrupt": 0.071
+   }
+  },
+  "GRASS|hyper offense": {
+   "n": 38,
+   "carry": {
+    "hazards": 0.7632,
+    "removal": 0.4474,
+    "setup": 0.8947,
+    "pivot": 0.6842,
+    "recovery": 0.7368,
+    "speed": 0.4737,
+    "priority": 0.5526,
+    "status": 0.1579,
+    "protect": 0.3947,
+    "phaze": 0.0526,
+    "disrupt": 0.0526
+   },
+   "mean": {
+    "hazards": 0.947,
+    "removal": 0.447,
+    "setup": 1.974,
+    "pivot": 0.947,
+    "recovery": 0.947,
+    "speed": 0.579,
+    "priority": 0.684,
+    "status": 0.158,
+    "protect": 0.5,
+    "phaze": 0.053,
+    "disrupt": 0.053
+   }
+  },
+  "GRASS|offense": {
+   "n": 47,
+   "carry": {
+    "hazards": 0.8511,
+    "removal": 0.2766,
+    "setup": 0.8936,
+    "pivot": 0.6809,
+    "recovery": 0.9787,
+    "speed": 0.4043,
+    "priority": 0.5532,
+    "status": 0.4255,
+    "protect": 0.5532,
+    "phaze": 0.0,
+    "disrupt": 0.0638
+   },
+   "mean": {
+    "hazards": 1.191,
+    "removal": 0.277,
+    "setup": 1.681,
+    "pivot": 1.021,
+    "recovery": 2.064,
+    "speed": 0.511,
+    "priority": 0.766,
+    "status": 0.532,
+    "protect": 0.872,
+    "phaze": 0,
+    "disrupt": 0.064
+   }
+  },
+  "GRASS|stall": {
+   "n": 2,
+   "carry": {
+    "hazards": 0.5,
+    "removal": 0.0,
+    "setup": 0.5,
+    "pivot": 0.5,
+    "recovery": 1.0,
+    "speed": 1.0,
+    "priority": 0.0,
+    "status": 0.5,
+    "protect": 1.0,
+    "phaze": 0.0,
+    "disrupt": 0.0
+   },
+   "mean": {
+    "hazards": 1,
+    "removal": 0,
+    "setup": 1,
+    "pivot": 0.5,
+    "recovery": 4,
+    "speed": 2,
+    "priority": 0,
+    "status": 1.5,
+    "protect": 1,
+    "phaze": 0,
+    "disrupt": 0
+   }
+  },
+  "GROUND|balance": {
+   "n": 29,
+   "carry": {
+    "hazards": 1.0,
+    "removal": 0.8621,
+    "setup": 0.4138,
+    "pivot": 0.6552,
+    "recovery": 0.931,
+    "speed": 0.1724,
+    "priority": 0.2414,
+    "status": 0.8621,
+    "protect": 0.6552,
+    "phaze": 0.6552,
+    "disrupt": 0.2069
+   },
+   "mean": {
+    "hazards": 1.897,
+    "removal": 0.862,
+    "setup": 0.621,
+    "pivot": 0.759,
+    "recovery": 1.828,
+    "speed": 0.207,
+    "priority": 0.276,
+    "status": 1.207,
+    "protect": 0.793,
+    "phaze": 0.69,
+    "disrupt": 0.207
+   }
+  },
+  "GROUND|bulky offense": {
+   "n": 58,
+   "carry": {
+    "hazards": 0.9655,
+    "removal": 0.7414,
+    "setup": 0.7069,
+    "pivot": 0.3448,
+    "recovery": 0.9828,
+    "speed": 0.0172,
+    "priority": 0.6552,
+    "status": 0.7586,
+    "protect": 0.6207,
+    "phaze": 0.5,
+    "disrupt": 0.0517
+   },
+   "mean": {
+    "hazards": 1.517,
+    "removal": 0.793,
+    "setup": 0.931,
+    "pivot": 0.448,
+    "recovery": 1.862,
+    "speed": 0.017,
+    "priority": 0.672,
+    "status": 0.966,
+    "protect": 0.776,
+    "phaze": 0.552,
+    "disrupt": 0.052
+   }
+  },
+  "GROUND|hyper offense": {
+   "n": 55,
+   "carry": {
+    "hazards": 0.9636,
+    "removal": 0.7091,
+    "setup": 0.8182,
+    "pivot": 0.2545,
+    "recovery": 0.7091,
+    "speed": 0.0364,
+    "priority": 0.7636,
+    "status": 0.4727,
+    "protect": 0.2,
+    "phaze": 0.4727,
+    "disrupt": 0.0727
+   },
+   "mean": {
+    "hazards": 1.109,
+    "removal": 0.727,
+    "setup": 1.2,
+    "pivot": 0.291,
+    "recovery": 0.764,
+    "speed": 0.036,
+    "priority": 0.8,
+    "status": 0.527,
+    "protect": 0.2,
+    "phaze": 0.473,
+    "disrupt": 0.073
+   }
+  },
+  "GROUND|offense": {
+   "n": 106,
+   "carry": {
+    "hazards": 1.0,
+    "removal": 0.7358,
+    "setup": 0.7547,
+    "pivot": 0.3208,
+    "recovery": 0.9528,
+    "speed": 0.0566,
+    "priority": 0.8113,
+    "status": 0.7075,
+    "protect": 0.217,
+    "phaze": 0.5283,
+    "disrupt": 0.0283
+   },
+   "mean": {
+    "hazards": 1.311,
+    "removal": 0.755,
+    "setup": 1.047,
+    "pivot": 0.358,
+    "recovery": 1.726,
+    "speed": 0.066,
+    "priority": 0.877,
+    "status": 0.981,
+    "protect": 0.274,
+    "phaze": 0.538,
+    "disrupt": 0.028
+   }
+  },
+  "GROUND|stall": {
+   "n": 13,
+   "carry": {
+    "hazards": 0.9231,
+    "removal": 0.9231,
+    "setup": 0.6154,
+    "pivot": 0.3846,
+    "recovery": 1.0,
+    "speed": 0.0769,
+    "priority": 0.0,
+    "status": 0.8462,
+    "protect": 0.7692,
+    "phaze": 0.4615,
+    "disrupt": 0.3077
+   },
+   "mean": {
+    "hazards": 2.308,
+    "removal": 0.923,
+    "setup": 0.846,
+    "pivot": 0.385,
+    "recovery": 2.462,
+    "speed": 0.077,
+    "priority": 0,
+    "status": 1.385,
+    "protect": 0.923,
+    "phaze": 0.538,
+    "disrupt": 0.462
+   }
+  },
+  "ICE|balance": {
+   "n": 3,
+   "carry": {
+    "hazards": 1.0,
+    "removal": 1.0,
+    "setup": 1.0,
+    "pivot": 0.0,
+    "recovery": 0.6667,
+    "speed": 0.3333,
+    "priority": 1.0,
+    "status": 0.3333,
+    "protect": 0.6667,
+    "phaze": 0.0,
+    "disrupt": 0.0
+   },
+   "mean": {
+    "hazards": 1,
+    "removal": 1,
+    "setup": 1.333,
+    "pivot": 0,
+    "recovery": 2,
+    "speed": 0.333,
+    "priority": 1.667,
+    "status": 0.333,
+    "protect": 0.667,
+    "phaze": 0,
+    "disrupt": 0
+   }
+  },
+  "ICE|bulky offense": {
+   "n": 7,
+   "carry": {
+    "hazards": 1.0,
+    "removal": 1.0,
+    "setup": 0.4286,
+    "pivot": 0.2857,
+    "recovery": 0.8571,
+    "speed": 0.1429,
+    "priority": 0.5714,
+    "status": 0.8571,
+    "protect": 0.7143,
+    "phaze": 0.2857,
+    "disrupt": 0.0
+   },
+   "mean": {
+    "hazards": 1.429,
+    "removal": 1,
+    "setup": 0.571,
+    "pivot": 0.286,
+    "recovery": 1.571,
+    "speed": 0.143,
+    "priority": 0.857,
+    "status": 1,
+    "protect": 1.143,
+    "phaze": 0.286,
+    "disrupt": 0
+   }
+  },
+  "ICE|hyper offense": {
+   "n": 108,
+   "carry": {
+    "hazards": 0.8889,
+    "removal": 0.8519,
+    "setup": 0.713,
+    "pivot": 0.2963,
+    "recovery": 0.5278,
+    "speed": 0.2222,
+    "priority": 0.8796,
+    "status": 0.25,
+    "protect": 0.25,
+    "phaze": 0.1296,
+    "disrupt": 0.1852
+   },
+   "mean": {
+    "hazards": 1.037,
+    "removal": 0.87,
+    "setup": 1.139,
+    "pivot": 0.324,
+    "recovery": 0.602,
+    "speed": 0.241,
+    "priority": 1.481,
+    "status": 0.287,
+    "protect": 0.324,
+    "phaze": 0.13,
+    "disrupt": 0.185
+   }
+  },
+  "ICE|offense": {
+   "n": 63,
+   "carry": {
+    "hazards": 0.9206,
+    "removal": 0.9524,
+    "setup": 0.6349,
+    "pivot": 0.381,
+    "recovery": 0.9524,
+    "speed": 0.0635,
+    "priority": 0.6508,
+    "status": 0.5556,
+    "protect": 0.3175,
+    "phaze": 0.4762,
+    "disrupt": 0.0476
+   },
+   "mean": {
+    "hazards": 1.032,
+    "removal": 1.016,
+    "setup": 0.889,
+    "pivot": 0.413,
+    "recovery": 1.143,
+    "speed": 0.063,
+    "priority": 0.889,
+    "status": 0.571,
+    "protect": 0.397,
+    "phaze": 0.54,
+    "disrupt": 0.048
+   }
+  },
+  "ICE|stall": {
+   "n": 2,
+   "carry": {
+    "hazards": 1.0,
+    "removal": 0.5,
+    "setup": 0.5,
+    "pivot": 0.0,
+    "recovery": 1.0,
+    "speed": 0.0,
+    "priority": 0.5,
+    "status": 0.5,
+    "protect": 1.0,
+    "phaze": 0.0,
+    "disrupt": 0.0
+   },
+   "mean": {
+    "hazards": 1,
+    "removal": 0.5,
+    "setup": 0.5,
+    "pivot": 0,
+    "recovery": 3.5,
+    "speed": 0,
+    "priority": 0.5,
+    "status": 1,
+    "protect": 1,
+    "phaze": 0,
+    "disrupt": 0
+   }
+  },
+  "NORMAL|balance": {
+   "n": 51,
+   "carry": {
+    "hazards": 0.8824,
+    "removal": 0.8627,
+    "setup": 0.6471,
+    "pivot": 0.5882,
+    "recovery": 1.0,
+    "speed": 0.5882,
+    "priority": 0.0588,
+    "status": 0.7451,
+    "protect": 0.3333,
+    "phaze": 0.0588,
+    "disrupt": 0.0196
+   },
+   "mean": {
+    "hazards": 0.882,
+    "removal": 0.882,
+    "setup": 0.882,
+    "pivot": 0.882,
+    "recovery": 2.725,
+    "speed": 0.725,
+    "priority": 0.078,
+    "status": 0.961,
+    "protect": 0.529,
+    "phaze": 0.078,
+    "disrupt": 0.02
+   }
+  },
+  "NORMAL|bulky offense": {
+   "n": 39,
+   "carry": {
+    "hazards": 0.8205,
+    "removal": 0.7179,
+    "setup": 0.5641,
+    "pivot": 0.6923,
+    "recovery": 0.9744,
+    "speed": 0.6667,
+    "priority": 0.0769,
+    "status": 0.7436,
+    "protect": 0.2564,
+    "phaze": 0.0,
+    "disrupt": 0.0769
+   },
+   "mean": {
+    "hazards": 0.821,
+    "removal": 0.718,
+    "setup": 0.744,
+    "pivot": 1.026,
+    "recovery": 2.308,
+    "speed": 0.821,
+    "priority": 0.103,
+    "status": 1.103,
+    "protect": 0.462,
+    "phaze": 0,
+    "disrupt": 0.077
+   }
+  },
+  "NORMAL|hyper offense": {
+   "n": 37,
+   "carry": {
+    "hazards": 0.8378,
+    "removal": 0.3514,
+    "setup": 0.4865,
+    "pivot": 0.8649,
+    "recovery": 0.3784,
+    "speed": 0.7297,
+    "priority": 0.2703,
+    "status": 0.2432,
+    "protect": 0.1081,
+    "phaze": 0.0541,
+    "disrupt": 0.1351
+   },
+   "mean": {
+    "hazards": 0.838,
+    "removal": 0.351,
+    "setup": 0.649,
+    "pivot": 1.541,
+    "recovery": 0.459,
+    "speed": 0.919,
+    "priority": 0.27,
+    "status": 0.243,
+    "protect": 0.162,
+    "phaze": 0.054,
+    "disrupt": 0.135
+   }
+  },
+  "NORMAL|offense": {
+   "n": 32,
+   "carry": {
+    "hazards": 0.5312,
+    "removal": 0.375,
+    "setup": 0.8125,
+    "pivot": 0.625,
+    "recovery": 0.9062,
+    "speed": 0.4375,
+    "priority": 0.25,
+    "status": 0.5625,
+    "protect": 0.3125,
+    "phaze": 0.0,
+    "disrupt": 0.0625
+   },
+   "mean": {
+    "hazards": 0.562,
+    "removal": 0.375,
+    "setup": 1.25,
+    "pivot": 1.125,
+    "recovery": 1.531,
+    "speed": 0.5,
+    "priority": 0.312,
+    "status": 0.719,
+    "protect": 0.469,
+    "phaze": 0,
+    "disrupt": 0.062
+   }
+  },
+  "NORMAL|stall": {
+   "n": 21,
+   "carry": {
+    "hazards": 0.8571,
+    "removal": 1.0,
+    "setup": 0.7143,
+    "pivot": 0.5238,
+    "recovery": 1.0,
+    "speed": 0.7143,
+    "priority": 0.0,
+    "status": 0.8571,
+    "protect": 0.4286,
+    "phaze": 0.0,
+    "disrupt": 0.0476
+   },
+   "mean": {
+    "hazards": 0.857,
+    "removal": 1.095,
+    "setup": 1.19,
+    "pivot": 0.619,
+    "recovery": 3.667,
+    "speed": 0.857,
+    "priority": 0,
+    "status": 1.429,
+    "protect": 0.571,
+    "phaze": 0,
+    "disrupt": 0.048
+   }
+  },
+  "POISON|balance": {
+   "n": 77,
+   "carry": {
+    "hazards": 0.8052,
+    "removal": 0.7792,
+    "setup": 0.4156,
+    "pivot": 0.3377,
+    "recovery": 0.987,
+    "speed": 0.0909,
+    "priority": 0.2987,
+    "status": 0.7013,
+    "protect": 0.5195,
+    "phaze": 0.026,
+    "disrupt": 0.2338
+   },
+   "mean": {
+    "hazards": 1.13,
+    "removal": 0.779,
+    "setup": 0.545,
+    "pivot": 0.377,
+    "recovery": 2.286,
+    "speed": 0.091,
+    "priority": 0.351,
+    "status": 1.325,
+    "protect": 0.623,
+    "phaze": 0.026,
+    "disrupt": 0.234
+   }
+  },
+  "POISON|bulky offense": {
+   "n": 22,
+   "carry": {
+    "hazards": 0.8636,
+    "removal": 0.5,
+    "setup": 0.5,
+    "pivot": 0.4091,
+    "recovery": 0.8182,
+    "speed": 0.1818,
+    "priority": 0.3636,
+    "status": 0.5909,
+    "protect": 0.5455,
+    "phaze": 0.0909,
+    "disrupt": 0.1364
+   },
+   "mean": {
+    "hazards": 1.318,
+    "removal": 0.5,
+    "setup": 0.636,
+    "pivot": 0.409,
+    "recovery": 1.5,
+    "speed": 0.182,
+    "priority": 0.455,
+    "status": 0.955,
+    "protect": 0.636,
+    "phaze": 0.091,
+    "disrupt": 0.136
+   }
+  },
+  "POISON|hyper offense": {
+   "n": 12,
+   "carry": {
+    "hazards": 0.9167,
+    "removal": 0.6667,
+    "setup": 0.5,
+    "pivot": 0.5,
+    "recovery": 0.4167,
+    "speed": 0.1667,
+    "priority": 0.5,
+    "status": 0.3333,
+    "protect": 0.4167,
+    "phaze": 0.0,
+    "disrupt": 0.25
+   },
+   "mean": {
+    "hazards": 1.083,
+    "removal": 0.667,
+    "setup": 1.083,
+    "pivot": 0.583,
+    "recovery": 0.583,
+    "speed": 0.167,
+    "priority": 0.5,
+    "status": 0.333,
+    "protect": 0.5,
+    "phaze": 0,
+    "disrupt": 0.25
+   }
+  },
+  "POISON|offense": {
+   "n": 21,
+   "carry": {
+    "hazards": 0.9048,
+    "removal": 0.7619,
+    "setup": 0.4762,
+    "pivot": 0.5238,
+    "recovery": 0.9048,
+    "speed": 0.2857,
+    "priority": 0.4286,
+    "status": 0.4762,
+    "protect": 0.5238,
+    "phaze": 0.0476,
+    "disrupt": 0.2857
+   },
+   "mean": {
+    "hazards": 1.286,
+    "removal": 0.762,
+    "setup": 0.524,
+    "pivot": 0.524,
+    "recovery": 1.381,
+    "speed": 0.286,
+    "priority": 0.524,
+    "status": 0.714,
+    "protect": 0.619,
+    "phaze": 0.048,
+    "disrupt": 0.286
+   }
+  },
+  "POISON|stall": {
+   "n": 48,
+   "carry": {
+    "hazards": 0.5417,
+    "removal": 0.7917,
+    "setup": 0.4792,
+    "pivot": 0.1458,
+    "recovery": 0.9792,
+    "speed": 0.0625,
+    "priority": 0.1875,
+    "status": 0.9375,
+    "protect": 0.7083,
+    "phaze": 0.125,
+    "disrupt": 0.1458
+   },
+   "mean": {
+    "hazards": 0.729,
+    "removal": 0.833,
+    "setup": 0.604,
+    "pivot": 0.146,
+    "recovery": 2.188,
+    "speed": 0.062,
+    "priority": 0.188,
+    "status": 1.854,
+    "protect": 0.938,
+    "phaze": 0.125,
+    "disrupt": 0.146
+   }
+  },
+  "PSYCHIC|balance": {
+   "n": 37,
+   "carry": {
+    "hazards": 0.7568,
+    "removal": 0.3243,
+    "setup": 0.8919,
+    "pivot": 0.5676,
+    "recovery": 0.8108,
+    "speed": 0.6486,
+    "priority": 0.1622,
+    "status": 0.5405,
+    "protect": 0.2162,
+    "phaze": 0.0,
+    "disrupt": 0.0541
+   },
+   "mean": {
+    "hazards": 0.811,
+    "removal": 0.324,
+    "setup": 1.622,
+    "pivot": 0.838,
+    "recovery": 1.595,
+    "speed": 1.297,
+    "priority": 0.162,
+    "status": 0.919,
+    "protect": 0.27,
+    "phaze": 0,
+    "disrupt": 0.054
+   }
+  },
+  "PSYCHIC|bulky offense": {
+   "n": 66,
+   "carry": {
+    "hazards": 0.8182,
+    "removal": 0.3788,
+    "setup": 0.8182,
+    "pivot": 0.697,
+    "recovery": 0.8939,
+    "speed": 0.697,
+    "priority": 0.1212,
+    "status": 0.7727,
+    "protect": 0.303,
+    "phaze": 0.0,
+    "disrupt": 0.3182
+   },
+   "mean": {
+    "hazards": 0.909,
+    "removal": 0.379,
+    "setup": 1.242,
+    "pivot": 1.152,
+    "recovery": 1.864,
+    "speed": 1.121,
+    "priority": 0.121,
+    "status": 1.333,
+    "protect": 0.394,
+    "phaze": 0,
+    "disrupt": 0.318
+   }
+  },
+  "PSYCHIC|hyper offense": {
+   "n": 108,
+   "carry": {
+    "hazards": 0.8519,
+    "removal": 0.5648,
+    "setup": 0.7315,
+    "pivot": 0.7037,
+    "recovery": 0.4907,
+    "speed": 0.3796,
+    "priority": 0.3148,
+    "status": 0.4537,
+    "protect": 0.2685,
+    "phaze": 0.0093,
+    "disrupt": 0.4537
+   },
+   "mean": {
+    "hazards": 0.889,
+    "removal": 0.574,
+    "setup": 1.102,
+    "pivot": 1.037,
+    "recovery": 0.694,
+    "speed": 0.435,
+    "priority": 0.324,
+    "status": 0.556,
+    "protect": 0.398,
+    "phaze": 0.009,
+    "disrupt": 0.463
+   }
+  },
+  "PSYCHIC|offense": {
+   "n": 100,
+   "carry": {
+    "hazards": 0.84,
+    "removal": 0.36,
+    "setup": 0.8,
+    "pivot": 0.68,
+    "recovery": 0.88,
+    "speed": 0.66,
+    "priority": 0.18,
+    "status": 0.7,
+    "protect": 0.3,
+    "phaze": 0.0,
+    "disrupt": 0.22
+   },
+   "mean": {
+    "hazards": 0.88,
+    "removal": 0.36,
+    "setup": 1.26,
+    "pivot": 1.16,
+    "recovery": 1.52,
+    "speed": 0.83,
+    "priority": 0.19,
+    "status": 1.06,
+    "protect": 0.35,
+    "phaze": 0,
+    "disrupt": 0.22
+   }
+  },
+  "PSYCHIC|stall": {
+   "n": 2,
+   "carry": {
+    "hazards": 0.5,
+    "removal": 1.0,
+    "setup": 1.0,
+    "pivot": 1.0,
+    "recovery": 1.0,
+    "speed": 0.5,
+    "priority": 0.0,
+    "status": 0.5,
+    "protect": 1.0,
+    "phaze": 0.0,
+    "disrupt": 0.0
+   },
+   "mean": {
+    "hazards": 0.5,
+    "removal": 1,
+    "setup": 1.5,
+    "pivot": 1.5,
+    "recovery": 3.5,
+    "speed": 0.5,
+    "priority": 0,
+    "status": 0.5,
+    "protect": 1.5,
+    "phaze": 0,
+    "disrupt": 0
+   }
+  },
+  "ROCK|balance": {
+   "n": 11,
+   "carry": {
+    "hazards": 1.0,
+    "removal": 0.2727,
+    "setup": 0.4545,
+    "pivot": 0.0909,
+    "recovery": 0.9091,
+    "speed": 0.9091,
+    "priority": 0.0909,
+    "status": 0.9091,
+    "protect": 0.1818,
+    "phaze": 0.1818,
+    "disrupt": 0.0
+   },
+   "mean": {
+    "hazards": 1.091,
+    "removal": 0.273,
+    "setup": 0.727,
+    "pivot": 0.091,
+    "recovery": 1.273,
+    "speed": 1,
+    "priority": 0.182,
+    "status": 1.091,
+    "protect": 0.182,
+    "phaze": 0.182,
+    "disrupt": 0
+   }
+  },
+  "ROCK|bulky offense": {
+   "n": 23,
+   "carry": {
+    "hazards": 0.8696,
+    "removal": 0.3478,
+    "setup": 0.7826,
+    "pivot": 0.087,
+    "recovery": 0.6087,
+    "speed": 0.8261,
+    "priority": 0.1304,
+    "status": 0.4783,
+    "protect": 0.2609,
+    "phaze": 0.0435,
+    "disrupt": 0.087
+   },
+   "mean": {
+    "hazards": 1.13,
+    "removal": 0.348,
+    "setup": 1.087,
+    "pivot": 0.087,
+    "recovery": 0.739,
+    "speed": 0.957,
+    "priority": 0.13,
+    "status": 0.565,
+    "protect": 0.261,
+    "phaze": 0.043,
+    "disrupt": 0.087
+   }
+  },
+  "ROCK|hyper offense": {
+   "n": 39,
+   "carry": {
+    "hazards": 0.8974,
+    "removal": 0.1538,
+    "setup": 0.9231,
+    "pivot": 0.1026,
+    "recovery": 0.2821,
+    "speed": 0.4615,
+    "priority": 0.1795,
+    "status": 0.2051,
+    "protect": 0.3077,
+    "phaze": 0.0256,
+    "disrupt": 0.2051
+   },
+   "mean": {
+    "hazards": 0.974,
+    "removal": 0.154,
+    "setup": 1.564,
+    "pivot": 0.103,
+    "recovery": 0.308,
+    "speed": 0.513,
+    "priority": 0.205,
+    "status": 0.256,
+    "protect": 0.436,
+    "phaze": 0.026,
+    "disrupt": 0.205
+   }
+  },
+  "ROCK|offense": {
+   "n": 63,
+   "carry": {
+    "hazards": 0.8571,
+    "removal": 0.4127,
+    "setup": 0.873,
+    "pivot": 0.0317,
+    "recovery": 0.3333,
+    "speed": 0.6667,
+    "priority": 0.3333,
+    "status": 0.3968,
+    "protect": 0.1587,
+    "phaze": 0.0159,
+    "disrupt": 0.1111
+   },
+   "mean": {
+    "hazards": 1.127,
+    "removal": 0.429,
+    "setup": 1.238,
+    "pivot": 0.032,
+    "recovery": 0.365,
+    "speed": 0.778,
+    "priority": 0.429,
+    "status": 0.46,
+    "protect": 0.159,
+    "phaze": 0.016,
+    "disrupt": 0.127
+   }
+  },
+  "ROCK|stall": {
+   "n": 1,
+   "carry": {
+    "hazards": 0.0,
+    "removal": 1.0,
+    "setup": 1.0,
+    "pivot": 0.0,
+    "recovery": 1.0,
+    "speed": 0.0,
+    "priority": 0.0,
+    "status": 0.0,
+    "protect": 0.0,
+    "phaze": 1.0,
+    "disrupt": 0.0
+   },
+   "mean": {
+    "hazards": 0,
+    "removal": 1,
+    "setup": 2,
+    "pivot": 0,
+    "recovery": 1,
+    "speed": 0,
+    "priority": 0,
+    "status": 0,
+    "protect": 0,
+    "phaze": 3,
+    "disrupt": 0
+   }
+  },
+  "STEEL|balance": {
+   "n": 99,
+   "carry": {
+    "hazards": 0.9394,
+    "removal": 0.5657,
+    "setup": 0.798,
+    "pivot": 0.4747,
+    "recovery": 0.9293,
+    "speed": 0.5253,
+    "priority": 0.6667,
+    "status": 0.7475,
+    "protect": 0.7374,
+    "phaze": 0.3535,
+    "disrupt": 0.3434
+   },
+   "mean": {
+    "hazards": 1.626,
+    "removal": 0.586,
+    "setup": 1.333,
+    "pivot": 0.646,
+    "recovery": 1.939,
+    "speed": 0.737,
+    "priority": 0.798,
+    "status": 1.303,
+    "protect": 1.202,
+    "phaze": 0.424,
+    "disrupt": 0.343
+   }
+  },
+  "STEEL|bulky offense": {
+   "n": 64,
+   "carry": {
+    "hazards": 0.9531,
+    "removal": 0.6406,
+    "setup": 0.9219,
+    "pivot": 0.4219,
+    "recovery": 0.9375,
+    "speed": 0.4219,
+    "priority": 0.6562,
+    "status": 0.75,
+    "protect": 0.6406,
+    "phaze": 0.3125,
+    "disrupt": 0.3906
+   },
+   "mean": {
+    "hazards": 1.453,
+    "removal": 0.641,
+    "setup": 1.531,
+    "pivot": 0.562,
+    "recovery": 1.75,
+    "speed": 0.484,
+    "priority": 0.859,
+    "status": 1.125,
+    "protect": 1.031,
+    "phaze": 0.344,
+    "disrupt": 0.406
+   }
+  },
+  "STEEL|hyper offense": {
+   "n": 54,
+   "carry": {
+    "hazards": 0.9815,
+    "removal": 0.463,
+    "setup": 0.9444,
+    "pivot": 0.2963,
+    "recovery": 0.4074,
+    "speed": 0.4259,
+    "priority": 0.9074,
+    "status": 0.5556,
+    "protect": 0.1111,
+    "phaze": 0.0926,
+    "disrupt": 0.6481
+   },
+   "mean": {
+    "hazards": 1.278,
+    "removal": 0.463,
+    "setup": 1.778,
+    "pivot": 0.333,
+    "recovery": 0.481,
+    "speed": 0.463,
+    "priority": 1.537,
+    "status": 0.63,
+    "protect": 0.13,
+    "phaze": 0.093,
+    "disrupt": 1.019
+   }
+  },
+  "STEEL|offense": {
+   "n": 55,
+   "carry": {
+    "hazards": 0.9455,
+    "removal": 0.7091,
+    "setup": 0.8364,
+    "pivot": 0.5091,
+    "recovery": 0.9273,
+    "speed": 0.2364,
+    "priority": 0.7636,
+    "status": 0.5091,
+    "protect": 0.4182,
+    "phaze": 0.3818,
+    "disrupt": 0.3455
+   },
+   "mean": {
+    "hazards": 1.473,
+    "removal": 0.764,
+    "setup": 1.509,
+    "pivot": 0.564,
+    "recovery": 1.291,
+    "speed": 0.255,
+    "priority": 1.018,
+    "status": 0.618,
+    "protect": 0.545,
+    "phaze": 0.473,
+    "disrupt": 0.345
+   }
+  },
+  "STEEL|stall": {
+   "n": 12,
+   "carry": {
+    "hazards": 1.0,
+    "removal": 0.5,
+    "setup": 0.5,
+    "pivot": 0.5,
+    "recovery": 1.0,
+    "speed": 0.75,
+    "priority": 0.5833,
+    "status": 0.75,
+    "protect": 0.9167,
+    "phaze": 0.5833,
+    "disrupt": 0.1667
+   },
+   "mean": {
+    "hazards": 1.583,
+    "removal": 0.5,
+    "setup": 0.75,
+    "pivot": 0.583,
+    "recovery": 2.5,
+    "speed": 1,
+    "priority": 0.583,
+    "status": 2,
+    "protect": 2,
+    "phaze": 0.583,
+    "disrupt": 0.167
+   }
+  },
+  "WATER|balance": {
+   "n": 71,
+   "carry": {
+    "hazards": 0.9155,
+    "removal": 0.7887,
+    "setup": 0.8028,
+    "pivot": 0.7042,
+    "recovery": 0.9718,
+    "speed": 0.1268,
+    "priority": 0.2958,
+    "status": 0.7183,
+    "protect": 0.493,
+    "phaze": 0.3803,
+    "disrupt": 0.1408
+   },
+   "mean": {
+    "hazards": 1.493,
+    "removal": 0.803,
+    "setup": 1.085,
+    "pivot": 0.915,
+    "recovery": 2.62,
+    "speed": 0.127,
+    "priority": 0.296,
+    "status": 1.07,
+    "protect": 0.606,
+    "phaze": 0.38,
+    "disrupt": 0.141
+   }
+  },
+  "WATER|bulky offense": {
+   "n": 103,
+   "carry": {
+    "hazards": 0.9806,
+    "removal": 0.6505,
+    "setup": 0.7961,
+    "pivot": 0.6893,
+    "recovery": 0.9417,
+    "speed": 0.2233,
+    "priority": 0.4951,
+    "status": 0.7087,
+    "protect": 0.3981,
+    "phaze": 0.466,
+    "disrupt": 0.165
+   },
+   "mean": {
+    "hazards": 1.35,
+    "removal": 0.67,
+    "setup": 1.155,
+    "pivot": 0.913,
+    "recovery": 1.689,
+    "speed": 0.291,
+    "priority": 0.524,
+    "status": 0.893,
+    "protect": 0.505,
+    "phaze": 0.485,
+    "disrupt": 0.165
+   }
+  },
+  "WATER|hyper offense": {
+   "n": 68,
+   "carry": {
+    "hazards": 0.8529,
+    "removal": 0.6618,
+    "setup": 0.7647,
+    "pivot": 0.6912,
+    "recovery": 0.5,
+    "speed": 0.4265,
+    "priority": 0.5147,
+    "status": 0.2647,
+    "protect": 0.4559,
+    "phaze": 0.1029,
+    "disrupt": 0.2647
+   },
+   "mean": {
+    "hazards": 1.309,
+    "removal": 0.676,
+    "setup": 1.338,
+    "pivot": 0.882,
+    "recovery": 0.588,
+    "speed": 0.456,
+    "priority": 0.618,
+    "status": 0.279,
+    "protect": 0.559,
+    "phaze": 0.103,
+    "disrupt": 0.294
+   }
+  },
+  "WATER|offense": {
+   "n": 106,
+   "carry": {
+    "hazards": 0.9151,
+    "removal": 0.7453,
+    "setup": 0.7453,
+    "pivot": 0.6604,
+    "recovery": 0.6415,
+    "speed": 0.3491,
+    "priority": 0.5094,
+    "status": 0.5283,
+    "protect": 0.5566,
+    "phaze": 0.3679,
+    "disrupt": 0.2075
+   },
+   "mean": {
+    "hazards": 1.443,
+    "removal": 0.783,
+    "setup": 1.085,
+    "pivot": 0.858,
+    "recovery": 0.925,
+    "speed": 0.425,
+    "priority": 0.547,
+    "status": 0.642,
+    "protect": 0.83,
+    "phaze": 0.368,
+    "disrupt": 0.208
+   }
+  },
+  "WATER|stall": {
+   "n": 43,
+   "carry": {
+    "hazards": 0.907,
+    "removal": 0.8372,
+    "setup": 0.5581,
+    "pivot": 0.4419,
+    "recovery": 1.0,
+    "speed": 0.0698,
+    "priority": 0.0698,
+    "status": 0.8837,
+    "protect": 0.8372,
+    "phaze": 0.4651,
+    "disrupt": 0.093
+   },
+   "mean": {
+    "hazards": 1.442,
+    "removal": 0.837,
+    "setup": 0.767,
+    "pivot": 0.535,
+    "recovery": 3.884,
+    "speed": 0.07,
+    "priority": 0.07,
+    "status": 1.814,
+    "protect": 1.698,
+    "phaze": 0.488,
+    "disrupt": 0.093
+   }
+  }
+ }
+}

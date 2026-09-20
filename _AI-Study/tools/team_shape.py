@@ -33,12 +33,14 @@ import smogon_corpus as SC
 HERE = os.path.dirname(os.path.abspath(__file__))
 GEN = os.path.join(HERE, "..", "generated")
 PROFILE = os.path.join(GEN, "archetype_role_profile.json")
+# The themed counterpart, written by mono_role_profile.py --write.
+THEME_PROFILE = os.path.join(GEN, "theme_role_profile.json")
 SAMPLE_N = 2000
 # Bumped whenever the shape of the cached file changes. v2 widened ROLES with the
 # five mode roles -- which moves every column of `sample.rows` -- and added `mode`.
 # v3 added `mode.*.payoff` and `mode.*.abuser_mean`. A stale file read by newer code
 # does not fail, it silently answers the wrong question, so the check is not optional.
-PROFILE_VERSION = 4
+PROFILE_VERSION = 5
 
 # Roles overlap on purpose -- Thunder Wave is both speed control and status, and a
 # team that runs it gets credit for both. They are not a partition of the move pool.
@@ -59,6 +61,12 @@ ROLE_MOVES = {
     "status": {"TOXIC", "WILLOWISP", "THUNDERWAVE", "YAWN"},
     "protect": {"PROTECT", "SUBSTITUTE", "DETECT"},
     "phaze": {"ROAR", "WHIRLWIND", "DRAGONTAIL", "CIRCLETHROW"},
+    # The sharpest archetype signal in the corpus and the last job role to be added:
+    # 16% of stall teams carry Taunt against 56% of hyper offence, a 3.5x spread wider
+    # than any role here but `screens` (TEAM-CORPUS.md section 13). It buys a CAP
+    # rather than a floor -- no archetype is anywhere near CHASE -- which is the right
+    # outcome: nothing should be forced to Taunt, and nothing should carry three.
+    "disrupt": {"TAUNT"},
     "screens": {"REFLECT", "LIGHTSCREEN", "AURORAVEIL"},
     # Modes: a team-wide plan one set turns on and the other five are chosen for.
     # Appended at the END because ROLES is the column order of `sample.rows`, and a
@@ -658,6 +666,62 @@ def role_plan(archetype, prof=None):
                   if a["carry"][k] >= CHASE and round(a["mean"][k]) >= 1},
         "cap": {k: round(a["mean"][k]) + 1 for k in job},
     }
+
+
+# How many teams a theme x archetype cell needs before its floors are trusted. The
+# cells run 2 to 115 and a floor is a carry rate against CHASE, so a 30-team cell can
+# cross or miss the bar on three teams -- Dark/balance is 32 and Normal/hyper offense
+# 37. Below this the theme's own row is used instead, which is the same measurement
+# over every archetype of that theme (137-391 teams) rather than a guess.
+CELL_MIN = 50
+
+
+def theme_profile():
+    """The monotype role reference, or None if it has not been written.
+
+    Optional on purpose: a checkout without it builds exactly as before, because
+    theme_plan() then returns no floors and the archetype plan stands."""
+    if _MEMO.get("theme") is None:
+        if not os.path.exists(THEME_PROFILE):
+            return None
+        with open(THEME_PROFILE, encoding="utf-8") as fh:
+            _MEMO["theme"] = json.load(fh)
+    return _MEMO["theme"]
+
+
+def theme_plan(theme, archetype=None, prof=None):
+    """{"floor": {role: min sets}, "n": .., "source": ..} for a THEMED fight.
+
+    The floors an archetype gets are measured on teams that have no theme -- 5 of the
+    1,959 author-tagged teams are monotype -- so a gym is held to a shape built from a
+    pool it is not in. This is the same rule (CHASE against carry, mean rounded) over
+    monotype teams of the gym's OWN theme, which is a validated label rather than an
+    inferred one.
+
+    It REPLACES the archetype floors rather than adding to them. A union would be
+    strictly more floors, and the CHASE sweep (TEAM-CORPUS.md section 5) measured that
+    more floors cost the curve and buy no variety past about two per team; the point of
+    this table is to aim the same number of floors differently. Compare
+    mono_role_profile.py --by-gym, which prints both columns.
+
+    Floors are clamped to ROLE_CAP where one exists: monotype Bug carries 1.54 hazard
+    setters and the mechanical cap is 1, and a floor that outranks a mechanical cap
+    would quietly lift it."""
+    prof = prof or theme_profile()
+    if not prof or not theme:
+        return {"floor": {}, "n": 0, "source": "none"}
+    row, source = None, "none"
+    cell = prof["cell"].get("%s|%s" % (theme.upper(), archetype or ""))
+    if cell and cell["n"] >= CELL_MIN:
+        row, source = cell, "cell"
+    elif prof["theme"].get(theme.upper()):
+        row, source = prof["theme"][theme.upper()], "theme"
+    if not row:
+        return {"floor": {}, "n": 0, "source": "none"}
+    job = [k for k in ROLES if k not in MODE_ROLES]
+    return {"floor": {k: round(row["mean"][k]) for k in job
+                      if row["carry"].get(k, 0) >= CHASE and round(row["mean"][k]) >= 1},
+            "n": row["n"], "source": source}
 
 
 def abuses(mode, types, abilities, base_speed, moves, roles=(), prof=None):
