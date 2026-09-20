@@ -590,6 +590,51 @@ the pre-gen-9 dex (3% and 27%). They stop hazards being set instead of clearing 
 a 0 BP Dark move in Realidea's PBS referenced by 13 decompiled scripts, and it is in **no
 `ROLE_MOVES` role**, so nothing in the generator can currently ask for it.
 
+### The role floors are derived from teams that are not monotype
+
+Worth knowing before any floor is trusted on a gym. `team_shape.profile()` loads every six-mon
+singles team in the dump, monotype files included, so the `all` column is **9.0% monotype**
+(4,898 of 54,522). But the floors come from the **archetype** columns, and those are built from
+the 1,959 title-tagged teams — of which **5 are monotype, 0.3%**. Monotype teams are titled
+"Water Balance" almost never; the tagged pool is tournament and RMT posts from standard tiers.
+So every floor a gym is held to was measured on teams that had no theme.
+
+The same role table, split by tier class, says how much that matters:
+
+| role | monotype (4,898) | other (49,624) | rounded floor |
+|---|--:|--:|---|
+| hazards | 86% (1.11) | 92% (1.20) | same, 1 |
+| removal | 58% (0.61) | 69% (0.74) | same, 1 |
+| setup | 80% (1.38) | 79% (1.46) | same, 1 |
+| **pivot** | **56% (0.87)** | **70% (1.23)** | same, 1 |
+| **recovery** | **73% (1.39)** | **79% (1.81)** | **1 vs 2** |
+| speed | 36% (0.45) | 29% (0.37) | same, 0 |
+| priority | 54% (0.69) | 48% (0.62) | same, 1 |
+| status | 59% (0.84) | 63% (0.99) | same, 1 |
+| protect | 42% (0.59) | 39% (0.52) | same, 1 |
+| phaze | 18% (0.20) | 17% (0.19) | same, 0 |
+| EV offence | **62%** | 56% | — |
+
+**Nine of ten roles round to the same floor, so the proxy is fair — with one exception, and it is
+one of the two floors that actually bind.** Monotype teams carry **23% less recovery** (1.39
+against 1.81) and 29% less pivot. Applying that ratio to the per-archetype recovery means puts a
+monotype balance gym at 3.03 × 0.77 ≈ **2.3, i.e. a floor of 2 rather than 3**, and a monotype
+bulky-offence gym at ≈ 2.0 — also 2. The recovery floor is the one to discount for a themed
+fight, by about a quarter.
+
+**That is an inference from marginals, not a measurement.** With 5 labelled monotype teams there
+is no way to compute a monotype *balance* profile directly, so the adjustment above assumes the
+archetype effect and the monotype effect are separable, which nothing here checks. Treat it as a
+reason to be suspicious of a recovery floor a themed fight keeps missing, not as a replacement
+number to type in. It does line up with one thing already known independently: **stall is
+unbuildable on any theme here** precisely because it wants five recovery sets, and a pool
+carrying 23% less recovery is the same fact from the other side.
+
+The two directions monotype runs *higher* are consistent with the rest of this document: **EV
+offence 62% against 56%**, plus more speed control and more priority. A team that cannot resist
+what threatens it races instead — which is §7's snow package and §8's near-free offence showing
+up in the EV spreads.
+
 ### The Taunt role, as a spec
 
 Adding it is four lines and one version bump, and it buys a **cap, not a floor** — which is
