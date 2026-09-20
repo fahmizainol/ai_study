@@ -590,6 +590,82 @@ the pre-gen-9 dex (3% and 27%). They stop hazards being set instead of clearing 
 a 0 BP Dark move in Realidea's PBS referenced by 13 decompiled scripts, and it is in **no
 `ROLE_MOVES` role**, so nothing in the generator can currently ask for it.
 
+### The Taunt role, as a spec
+
+Adding it is four lines and one version bump, and it buys a **cap, not a floor** — which is
+the correct outcome and worth knowing before anyone is surprised by it.
+
+    # team_shape.py, among the job roles and BEFORE the modes
+    "disrupt": {"TAUNT"},
+
+`ROLES` is the column order of `sample.rows` and the file already warns that a cached profile
+written against the old width is silently misread, so **`PROFILE_VERSION` must go 4 → 5** in the
+same change; that is what forces the regeneration rather than a wrong read. Add it to `CHASED`
+only if a floor is wanted — see below.
+
+What the corpus puts in each half, from `TEAM-CORPUS.md` §13:
+
+| archetype | teams carrying | per team | floor at CHASE 0.90 | cap = mean+1 |
+|---|--:|--:|---|--:|
+| stall | 16% | 0.17 | none | 1 |
+| balance | 26% | 0.29 | none | 1 |
+| bulky offense | 26% | 0.27 | none | 1 |
+| offense | 43% | 0.50 | none | 1 |
+| hyper offense | **56%** | **0.73** | none | **2** |
+
+**No archetype carries Taunt 90% of the time, so `CHASE = 0.90` floors it nowhere** — exactly
+the situation the `CHASE` comment already describes for removal. The cap alone is still worth
+having: it stops a balance team collecting three Taunts out of published sets, and it lets hyper
+offense hold the two that 14% of real hyper-offence teams do. Forcing one takes the same knob
+removal needs (`CHASE` 0.80), and one gotcha: **Python's `round(0.5)` is 0**, so `offense`'s 0.50
+mean rounds *down* and its cap lands at 1, not 2.
+
+**For a themed gym the theme predicts Taunt better than the archetype does**, and the current
+machinery cannot express that — floors and caps are per-archetype only. Monotype Taunt by theme:
+
+| Fighting | Ghost | Dark | Fire | Steel | Psychic | … | Ground | Grass | Bug |
+|--:|--:|--:|--:|--:|--:|--|--:|--:|--:|
+| 53% | 50% | 42% | 41% | 40% | 30% | | 8% | 7% | **3%** |
+
+The two at the top, Fighting and Ghost, are the two themes that could not remove hazards in a
+pre-gen-9 dex (3% and 27%). If a per-theme term is not wanted, the cap plus supply gets most of
+the way there on its own, because supply already varies the same way.
+
+### Supply is the whole story, and Taunt is 7x easier than removal
+
+Counted over Realidea's dex with no theme filter, and level-independent because all three come
+by TM here:
+
+| role move | species that can learn it |
+|---|--:|
+| Defog | **8** |
+| Rapid Spin | 27 |
+| either (= `removal`) | **35** |
+| Taunt | **241** |
+
+Removal is a 35-species role in this dex — that is why `CHASE = 0.90` leaving it unforced costs
+so little, and why forcing it is expensive. Per gym, on-theme:
+
+| gym | theme | removal carriers | Taunt carriers |
+|---|---|--:|--:|
+| Ciara | DARK | 2 | **46** |
+| Lawrence | PSYCHIC | 3 | 30 |
+| Bay | NORMAL | 4 | 27 |
+| Kenn | WATER | 8 | 26 |
+| Dhara | GROUND | 7 | 13 |
+| **Aimi** | **FAIRY** | **1, and it is `DEAD_PRIMARY`** | **12** |
+| Lilliana | STEEL | 4 | 11 |
+| Douglas | ICE | 4 | 10 |
+| Abi | BUG | 3 | **6** |
+
+So the exemption and its replacement fall out together: **Aimi cannot be floored on removal and
+can be floored on Taunt**, which is what the corpus does with Fighting and Ghost anyway. The
+mechanism for the exemption already exists — `role_supply(level, stage, roles, theme=...)` takes
+a theme precisely because a floor measured without it "says a floor is meetable that the fight
+cannot meet". Abi is the one to watch on the other side: 6 Taunt carriers of 77, and Bug
+monotype runs Taunt on 3% of teams, so a Taunt floor on a Bug gym would be fighting both the
+dex and the corpus.
+
 **One PBS fact to know before cross-checking any of this against Showdown**: Realidea has
 **Alolan Sandslash as pure NORMAL** (Alolan Sandshrew is correctly Ice/Steel). It is therefore a
 legal Normal-theme body in this build and not an Ice or Steel one, the generator and the game

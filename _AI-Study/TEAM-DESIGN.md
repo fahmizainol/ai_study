@@ -504,12 +504,58 @@ Four rules earned by output that was visibly wrong without them:
   never receives — each of those five was ~16 BST under its target before this was
   found. `UNLOCK_STAGE = 3` therefore assumes switch 512's set moves to Ciudad
   Anatasa; until it does, the megas at gyms 4-5 will not fire.
-- **A dev original whose evolution fits is evolved, not dropped.** Aimi's Marill is
-  250 BST against a 392 floor, but Azumarill is 410, `(OU)`, and evolves at 18.
-  Cheapest qualifying evolution, not strongest — the point is to rescue the dev's
-  line with the least deviation. Three of the twenty band-failures recover this way
-  (Marill→Azumarill, Poliwhirl→Poliwrath, Piloswine→Mamoswine); the rest have nowhere
-  to go.
+- **A dev original is put where its own level puts it.** Alba's Beldum is level 29
+  and Beldum evolves at 20; Owen's Mantyke is level 29 and Mantine wants a Remoraid
+  in the party. Neither is a Pokemon the player could meet at that level, and neither
+  is a choice the generator should be making — the dev picked the *line*, and the
+  line has moved on. So `grown()` runs on every kept mon before the band is
+  consulted, whatever the band says: an evolution is not a power-budget decision.
+  Twelve of the eighteen named-trainer fights change, Beldum→Metang and
+  Mantyke→Mantine among them.
+
+  The gate is the level and nothing else. A stone, friendship, a held item or a party
+  member is a condition the player meets whenever they please, so `evo_floor()` gives
+  those edges a level of their own, read off the *stated* level evolutions of the
+  same shape in this dex (25th percentile: 16 for the first hop of a three-stage
+  line, 25 for the last hop of a two-stage line, 34 for the last hop of a three-stage
+  one). That number is the one knob here — it is what makes Mantine legal at 25 and
+  keeps Togekiss out of a level-25 gym. Branches (Eevee, Kirlia, Clamperl) go to the
+  fight's own theme first, then to tier rank.
+
+  The band keeps one evolution of its own, as a rescue: a kept mon still under the
+  floor with its levels exhausted is evolved *early* rather than dropped — but only
+  across an inferred floor, never a stated one. Kenn's Poliwhirl misses gym 3's floor
+  by four points with its Water Stone two levels out of reach, and becomes Poliwrath;
+  gym 1's Dewpider does **not** become an Araquanid, because the dex states that
+  evolution at 22 and the fight is at 19. Growth may never *cause* a drop either: a
+  mon is dropped for being too heavy only if the dev's own pick was already too
+  heavy.
+- **`LEGEND_MAX` caps how many legendaries one team is made of.** A different
+  question from `LEGEND_BST`, which says how far into the game a legendary may
+  *arrive*: with only that gate, gym 7 came back as Azelf, Mesprit, Meloetta, Jirachi
+  and Latios — five of six. BST cannot express the cap, because 600 is exactly where
+  Metagross, Garchomp, Dragonite, Tyranitar, Hydreigon, Goodra and Salamence sit
+  beside Jirachi, Latios, Manaphy and Diancie; a team of three pseudo-legends is a
+  team and a team of three box legendaries is a joke. So the count reads
+  `LEGENDARY`, a name list, while the stage gate goes on reading BST.
+
+  The list is derived, not typed from memory: Realidea's `pokemon.txt` puts every
+  legendary in the `Undiscovered` egg group, so the rule is *every member of this
+  line is Undiscovered* — which keeps the lines that evolve (Cosmog, Type: Null) and
+  drops the eighteen babies that share the group, each of whose line ends in an
+  ordinary Pokémon. It separates the pseudo-legends for free (Metagross is Mineral,
+  Dragonite Water 1, Garchomp Monster). Three hand corrections, and only three:
+  **Manaphy** added (the one legendary that breeds, so the egg group cannot see it —
+  and the one a dev actually fielded), **Unown** removed (Undiscovered at catch rate
+  225), **Alolan Vulpix** removed (Realidea's Alolan forms are separate species at
+  custom stats, marked Undiscovered to stop them breeding). Phione is deliberately
+  out; the fakemon Faemiebichito is in, at catch rate 3.
+
+  Kept mons count toward the cap and are never dropped for it — the same asymmetry
+  `LEGEND_FROM` has, and Teresa keeps her Manaphy at `LEGEND_MAX = 0`. Ships at 6,
+  which is off. It is not free: mean deviation across the nine goes **16.6 off → 17.4
+  at 3 → 20.8 at 2 → 26.1 at 1**, all of it in gyms 7-9, which lean on legendaries to
+  reach eBST targets of 593/597/600.
 - **Mega is +100 BST, and only while unspent.** Realidea keeps mega stats in
   `MultipleForms.rb`, not `pokemon.txt`, so a base species' PBS BST understates a
   stone holder by exactly 100 — every mega and both primals, without exception. Once
@@ -603,6 +649,64 @@ exactly where they stand, but stage `UNLOCK_STAGE` spans the entire walk from gy
 to gym 4, and Silver waits on Ruta 11 partway along it. On that one boundary the
 fight has to actually be in the unlock town to count as past the shop, so Atlas (in
 Ciudad Anatasa) megas and Silver and Teresa's Pueblo Lapis fight do not.
+
+#### Type coverage and hazards for a themeless fight
+
+`MONOTYPE-SYNERGY.md` §11 is the gym spec and **does not apply here**: it is built on a theme
+fixing the weakness list before the first pick, and a rival has no theme. The themeless
+reference is `TEAM-CORPUS.md` §12-§13, measured on 1,662 archetype-labelled real teams, and the
+metrics are different because the weaknesses come from the six picks instead of from a type.
+
+**Targets, as residuals against the fight's own pool — not absolutes.** Every archetype in the
+corpus is arranged better than a random draw from its own tier on all four defensive axes, so
+the target is the direction and rough size, not a number to hit:
+
+| axis | what to chase | why |
+|---|---|---|
+| `holes` (≥3 weak AND nobody resists) | **−0.15 to −0.27** vs pool | the only defensive axis worth chasing; every archetype beats its pool here |
+| `stacked` (≥3 members weak) | −0.41 (BO) to −0.79 (stall); **~0 for hyper offense** | hyper offence is the one archetype that leaves these where its tier put them |
+| `blind` (nobody resists) | **do not chase** | teams sit *above* their pool on it, and it is often harmless — a type nobody is weak to either |
+| `reach` (share of real bodies hit ×2) | stall **−9 pts**, offensive archetypes **+2 to +3** | the actual archetype trade, and the sharpest of the four |
+| `lose_to` (a hole nothing can hit back) | ~0 | vanishingly rare in real teams; a useful assertion, not a target |
+
+`generate_bosses.COVER_BAND` and `HOLE_MIN_WEAK` already implement the `holes` term and its
+mid-build bar, and their own sweep reached the same conclusion from the other side: chasing
+`blind` needed a wide band and was worse than no term at all, while `holes` won on both axes
+(1.86 → 0.86 at curve MAD 0.10 → 0.62). Nothing here asks for a new term — it says which one to
+keep pointed at what.
+
+**Hazards and Taunt, by archetype** (`TEAM-CORPUS.md` §13, share of teams carrying at least one):
+
+| archetype | setter | remover | Taunt |
+|---|--:|--:|--:|
+| stall | 91% | **87%** | 16% |
+| balance | 98% | 85% | 26% |
+| bulky offense | 95% | 84% | 26% |
+| offense | 94% | 65% | 43% |
+| hyper offense | 90% | **42%** | **56%** |
+
+Setters are near-universal and already floored. **Removal is the axis these fights separate on**,
+and it is the one `CHASE = 0.90` cannot reach — no archetype carries it 90% of the time, so only
+the cap is active. Taunt is not in `ROLE_MOVES` at all; §11 of `MONOTYPE-SYNERGY.md` carries the
+four-line spec and the `PROFILE_VERSION` bump it needs.
+
+**Two facts about this dex that decide what is affordable.** Counted with no theme filter and
+level-independent, because all three come by TM: **Defog 8 species, Rapid Spin 27, either 35,
+Taunt 241.** A themeless fight can draw removal from all 35 where a themed gym gets 1-8, so the
+removal floor that is unmeetable for the Fairy gym is comfortable here — this is the one axis
+where the rivals are *easier* to build than the gyms. Taunt at 241 is not a constraint at all.
+
+**The short-party caveat, and it is not small.** These fights ship 1-6 and everything after gym 1
+is padded to 6, but every metric above is defined over **six members and 18 attacking types**. On
+a three-mon fight `blind` and `holes` rise mechanically — half the bodies, the same 18 columns —
+so a bar calibrated on six-mon corpus teams reads a short party as careless when it is only
+short. Either compare a padded roster or scale the bar; do not compare a 3-mon fight against
+these numbers directly.
+
+**Not a gap any more**: §6.8's note that these trainers "get a flat presence quota because nobody
+ever chose anything else for them" predates `fight_plans.json`, which now carries an archetype
+for all **27** fights — the nine gyms and all eighteen of these. The flat quota is the
+no-entry fallback only.
 
 ### 6.8 Context-derived plans (`tools/fight_context.py`)
 
@@ -818,7 +922,7 @@ handler anywhere.** Two consequences:
 
 - **`generate_bosses.DEAD_PRIMARY`** — ten species whose *first* ability is one of the
   sixteen: Solgaleo, Lunala, Necrozma, the four Tapus, Alolan Raichu, and the fakemon
-  Megumin and Tartaglia. `eligible()` and `evolve_into_band()` both refuse them.
+  Megumin and Tartaglia. `eligible()` and `grown()` both refuse them.
   The test is the **primary** slot, not every slot, and the user set that line: "tapu
   koko the terrain surge doesnt work but the poke is there so i dun think i wanna put
   them in the generator. xurkitrees beast boost work and they should be in the
