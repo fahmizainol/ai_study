@@ -569,15 +569,66 @@ def _ordered_team(team, requested):
     return ordered
 
 
+def _apply_set(mon, species, level, labels, mode):
+    """Rebuild one mon from a published set a card named.
+
+    A "set" is a BUNDLE of the fields the per-species overrides already carry --
+    moves, item, ability, nature, EVs -- so applying it here makes `sets` sugar over
+    those rather than a second way to describe a mon. That is what lets the explicit
+    overrides keep winning: they are applied after this and overwrite whichever
+    fields they name.
+
+    G.build() with `only` does the whole job -- it exists to say "build this mon from
+    THESE published sets without reimplementing the legality rules" -- so the filler
+    top-up, the item substitution, the ability-slot resolution and the mode's abuser
+    swap all behave exactly as they do when the generator chooses the set itself.
+    Reimplementing that here is how a rendered card would start disagreeing with the
+    team a regenerate installs.
+
+    The enumeration matches /api/sets: no power cap and no banned item, because a set
+    the picker offered and this refused would be precisely the "checkbox that
+    silently does nothing" free_team.sets_for warns about. `early` is passed even
+    though the picker omits it -- it only ever ADDS candidates -- so what a card
+    shows is what a rebuild at these settings would produce.
+    """
+    got = G.build(species, level or 50, mode=mode, only=labels,
+                  formats=G.set_formats(), early=bool(G.EARLY_MOVES))
+    if not got:
+        raise ValueError(f"{species} cannot be built from "
+                         f"{labels[0]} at level {level}")
+    for field in ("moves", "item", "ability", "nature", "iv", "ev",
+                  "roles", "src", "fidelity", "inherited"):
+        mon[field] = got[field]
+
+
 def _apply_loadout(build, fight_key):
-    """Apply Studio item/move/ability choices before rendering and export."""
+    """Apply Studio set/item/move/ability choices before rendering and export.
+
+    Every choice here is a RENDER-time override: it restyles a body the team already
+    has, needs no generator, and so reaches a held card as readily as a fresh build.
+    `sets` used to be the exception -- the only per-mon control that was a generator
+    input (make_gym passes it as `set_filter`) -- which made it silently inert on
+    every held card while the controls beside it in the same row all worked. It is
+    applied here now; set_filter keeps its own job of steering which SPECIES score
+    well at build time.
+    """
     choices = G.PICKS.get(fight_key) or {}
     items, moves = choices.get("items") or {}, choices.get("moves") or {}
     abilities = choices.get("abilities") or {}
     natures, ivs = choices.get("natures") or {}, choices.get("ivs") or {}
     evs, levels = choices.get("evs") or {}, choices.get("levels") or {}
+    sets = choices.get("sets") or {}
     for mon in build["team"]:
         species = mon["species"]
+        # The level is settled FIRST because everything below is resolved at it: a
+        # set legal at 36 need not be legal at 20, and the move check already read
+        # it. Moving the assignment up is the whole of that change.
+        if species in levels:
+            mon["level"] = levels[species]
+        level = mon.get("level") if isinstance(mon.get("level"), int) \
+            else mon.get("design_level")
+        if species in sets:
+            _apply_set(mon, species, level, sets[species], build.get("mode"))
         if species in items:
             mon["item"] = items[species]
         if species in abilities:
@@ -588,11 +639,7 @@ def _apply_loadout(build, fight_key):
             mon["iv"] = ivs[species]
         if species in evs:
             mon["ev"] = list(evs[species])
-        if species in levels:
-            mon["level"] = levels[species]
         if species in moves:
-            level = mon.get("level") if isinstance(mon.get("level"), int) \
-                else mon.get("design_level")
             illegal = [move for move in moves[species]
                        if not G._knows(species, move, level or 50,
                                        bool(G.EARLY_MOVES))]

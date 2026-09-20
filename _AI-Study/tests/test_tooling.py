@@ -522,6 +522,46 @@ class HeldFightIsEditableTest(unittest.TestCase):
         self.assertEqual("LEFTOVERS", got["records"][0]["mons"][0]["item"])
         self.assertEqual(self.gym1, self.sig(got["records"])[0], "species unchanged")
 
+    def test_a_set_choice_reaches_a_held_mon(self):
+        """`sets` was the one per-mon control that was a GENERATOR input rather than
+        a render-time override -- make_gym passes it as `set_filter` -- so on a held
+        card it was stored and silently ignored while the item, move and ability
+        controls in the same row all worked. Unfreezing did not help, because
+        unfreeze clears FROZEN and a held card is still held.
+
+        It changes THAT MON and nothing else: the promise that separates applying a
+        set here from regenerating the card to get one."""
+        sp = self.gym1[0]
+        mon = self.base["records"][0]["mons"][0]
+        level = mon.get("move_level") or int(str(mon["level"]).strip() or 50)
+        other = next((c["label"] for c in self.BS.FT.sets_for(sp, level)
+                      if c["label"] != mon["src"]), None)
+        if other is None:
+            self.skipTest(f"{sp} has only one published set at level {level}")
+        got = self.BS.run(self._with(PICKS={"g0": {"sets": {sp: other}}}))
+        self.assertEqual(other, got["records"][0]["mons"][0]["src"])
+        self.assertEqual(self.sig(self.base["records"]), self.sig(got["records"]),
+                         "a set choice moved a species")
+        self.assertEqual(self.base["records"][0]["mons"][1:],
+                         got["records"][0]["mons"][1:], "it moved a teammate")
+
+    def test_an_explicit_field_beats_the_set_it_came_from(self):
+        """A set is a BUNDLE of the per-species overrides, so it is applied before
+        them and they overwrite whatever they name. Without the ordering, picking a
+        set would silently undo the item you had already chosen."""
+        sp = self.gym1[0]
+        mon = self.base["records"][0]["mons"][0]
+        level = mon.get("move_level") or int(str(mon["level"]).strip() or 50)
+        sets = self.BS.FT.sets_for(sp, level)
+        other = next((c for c in sets if c["label"] != mon["src"]), None)
+        if other is None:
+            self.skipTest(f"{sp} has only one published set at level {level}")
+        item = "SITRUSBERRY" if other["item"] != "SITRUSBERRY" else "LEFTOVERS"
+        got = self.BS.run(self._with(PICKS={"g0": {
+            "sets": {sp: other["label"]}, "items": {sp: item}}}))
+        self.assertEqual(other["label"], got["records"][0]["mons"][0]["src"])
+        self.assertEqual(item, got["records"][0]["mons"][0]["item"])
+
     def test_the_edit_still_survives_knobs_that_would_reroll(self):
         drop = self.gym1[3]
         edited = self._with(PICKS={"g0": {"keep": {drop: False}}})
