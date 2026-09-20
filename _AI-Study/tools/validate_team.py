@@ -59,6 +59,11 @@ def validate(teams, slack=2, early=False):
     hard = _stated_floor()
     for t in teams:
         tid = t.get("id", "?")
+        # A record may declare the knob it was BUILT under, which outranks the
+        # caller's default: a file on disk knows something the reader does not, and
+        # the alternative is a team that installs cleanly and is then refused by the
+        # next thing to read it.
+        early_t = early or bool((t.get("design") or {}).get("early_moves"))
         def err(rule, msg): errs.append(f"{tid}: [{rule}] {msg}")
         def warn(rule, msg): warns.append(f"{tid}: [{rule}] {msg}")
         if t.get("battle_format", "inherit") not in ("inherit", "single", "double"):
@@ -134,7 +139,7 @@ def validate(teams, slack=2, early=False):
                     over = int(how.split("+")[1])
                     if over <= slack:
                         warn("LEARN", f"{tag}: {mo} is +{over} over level (leader privilege)")
-                    elif early:
+                    elif early_t:
                         warn("LEARN", f"{tag}: {mo} is learnset lv{lvl + over}, "
                                       f"+{over} early (EARLY_MOVES is on)")
                     else:

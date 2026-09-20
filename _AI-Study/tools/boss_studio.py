@@ -416,20 +416,41 @@ def _ability_options(species):
     return out
 
 
-def _where(result):
-    """The failing cards, named the way the BOARD names them.
+def _early(over):
+    """Whether this request's build was allowed precocious moves.
+
+    One reader, because the two gates that ask are in different places: run() is
+    inside settings() and can read the applied global, while install_teams() runs
+    after that block has been unwound and has only the request. Two readings of the
+    same knob is how Export came to accept a build that Install then refused."""
+    value = (over or {}).get("EARLY_MOVES")
+    return bool(G.EARLY_MOVES if value is None else int(value))
+
+
+def _where(result, offboard=()):
+    """Where the failures are, named the way the BOARD names them.
 
     A record id is the wrong answer to "where is it": the id spells a trainer out
     and the cards deliberately do not, so "rival_ALBA_Alba_map164" sends someone
-    hunting for a label that is not on screen. "Rival 2" is."""
+    hunting for a label that is not on screen. "Rival 2" is.
+
+    `offboard` is for the half Install reads off DISK when a scope is set. Those
+    records have no card at all, and telling someone to look for a red card that
+    cannot exist is worse than saying nothing -- so they are named as what they are,
+    a file, with the id kept because for a file the id IS the address."""
     hit = [(c.get("who") or f"Boss {c['idx'] + 1} · {c.get('theme', '')}".strip(),
             c["errors"][0])
            for c in result["gyms"] + result["trainers"] if c.get("errors")]
-    if not hit:
-        return "no card claims them"
-    first = f"{hit[0][0]}: {hit[0][1]}"
-    return first if len(hit) == 1 else f"{first} (and {len(hit) - 1} more card"\
-                                       f"{'s' if len(hit) > 2 else ''})"
+    if hit:
+        first = f"{hit[0][0]}: {hit[0][1]}"
+        return first if len(hit) == 1 else \
+            f"{first} (and {len(hit) - 1} more card{'s' if len(hit) > 2 else ''}) "\
+            f"— the cards that fail are outlined in red and say what is wrong"
+    if offboard:
+        return (f"not on any card — {offboard[0]}. That is a team file on disk, not "
+                f"something the board is showing: install BOTH halves once to "
+                f"rewrite it")
+    return "no card claims them"
 
 
 def _attach_findings(cards, ids, errs, warns):
@@ -919,8 +940,18 @@ def run(over):
             gym["team"] = _ordered_team(gym["team"], orders.get(f"g{i}"))
         type_ids = G._type_ids()
         records = [G.as_team_record(g, type_ids) for g in gyms]
+        # Stamp the knob the build was made under. A team FILE outlives the request
+        # that made it: a test, the CLI, and installing the other half all validate
+        # records read off disk, and none of them can see a studio knob. Without
+        # this, installing an EARLY_MOVES build succeeds and then every later check
+        # of the same file refuses it -- 24 errors on a file that was correct when
+        # it was written. `design` is the right home because nothing downstream
+        # reads it and _team_payload does not compare it, so the declaration rides
+        # inside the artifact without changing the format the pipeline consumes.
+        early = _early(over)
         for i, record in enumerate(records):
             record["battle_format"] = formats[i]
+            record.setdefault("design", {})["early_moves"] = early
         out = [_card(g, idx=g["idx"], theme=g["theme"], battle_format=formats[i],
                      frozen=f"g{i}" in frozen) for i, g in enumerate(gyms)]
         # The named non-gym trainers -- rivals, the recurring bosses, the post-game
@@ -956,7 +987,9 @@ def run(over):
                 # sorted up the curve: the file is what ships and what git diffs,
                 # so it must not reshuffle when a target moves.
                 tbuilds[i] = got
-                trainer_records.append(T.as_team_record(got, type_ids))
+                trainer_record = T.as_team_record(got, type_ids)
+                trainer_record.setdefault("design", {})["early_moves"] = early
+                trainer_records.append(trainer_record)
                 trainers.append(_card(got, slot=i, who=_alias(b["type"]),
                                       ace=got["ace"], dynamic=got["dynamic"],
                                       frozen=f"t{i}" in frozen))
@@ -973,11 +1006,10 @@ def run(over):
         # All 27, not just the nine. The trainers ship through the same pipeline
         # and the same legality gate, so a count that covered only the gyms was
         # reporting "clean" about two thirds of what Install would check.
-        # EARLY_MOVES is read HERE, inside settings(), so the gate is judged under
-        # the same knob the teams were built under. Turning it on and then being
-        # refused at Export is the knob contradicting itself.
-        errs, warns = V.validate(records + trainer_records,
-                                 early=bool(G.EARLY_MOVES))
+        # Judged under the same knob the teams were built under -- turning EARLY_MOVES
+        # on and then being refused at Export is the knob contradicting itself. Via
+        # _early() rather than G.EARLY_MOVES so this and Install cannot drift apart.
+        errs, warns = V.validate(records + trainer_records, early=_early(over))
         # Hang each failure on the card it is about. The message names a RECORD ID
         # ("rival_ALBA_Alba_map164") and the board never shows one -- the trainer
         # cards are anonymised on purpose, so `who` is "Rival 2" and nothing on
@@ -1944,9 +1976,18 @@ def install_game(over, scope="all"):
         other_records = list(trainer_records)
         for path in DISK_TEAMS:
             other_records.extend(_disk_records(path))
-        errors, warnings = V.validate(records + other_records)
+        # Read off `over`, NOT off G.EARLY_MOVES: run() above has already exited its
+        # settings() block, so the global is back to the module default here and the
+        # knob the teams were built under is gone. Validating an EARLY_MOVES build
+        # without it refuses the exact teams the knob exists to produce -- 42 of them.
+        errors, warnings = V.validate(records + other_records, early=_early(over))
         if errors:
-            raise ValueError(f"validation failed with {len(errors)} errors: {errors[0]}")
+            onboard = {c for g in (result["gyms"], result["trainers"]) for c in g
+                       for c in c.get("errors") or ()}
+            raise ValueError(
+                f"validation failed with {len(errors)} error"
+                f"{'s' if len(errors) > 1 else ''} — "
+                f"{_where(result, [e for e in errors if e.split(': ', 1)[-1] not in onboard])}")
 
         with tempfile.TemporaryDirectory(prefix="boss-studio-install-") as stage:
             staged_teams = os.path.join(stage, "teams_bosses_gyms.json")
@@ -2138,9 +2179,7 @@ class Handler(http.server.BaseHTTPRequestHandler):
                 if r["errors"]:
                     return self._send(400, json.dumps({"error":
                         f"{len(r['errors'])} validation error"
-                        f"{'s' if len(r['errors']) > 1 else ''} — "
-                        f"{_where(r)}. The cards that fail are outlined in red and "
-                        f"say what is wrong."}))
+                        f"{'s' if len(r['errors']) > 1 else ''} — {_where(r)}"}))
                 # The tie is made in the same operation that writes the teams, so
                 # the pointer and the file it points from cannot disagree.
                 preset = _companion(dests[0][0])
