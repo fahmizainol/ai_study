@@ -136,7 +136,7 @@ def marginal():
 # a percentile ladder per axis and ~2 KB. Bump VERSION whenever `coverage()` changes
 # what an axis MEANS -- a stale ladder does not fail, it silently answers the wrong
 # question, the same trap team_shape.PROFILE_VERSION exists for.
-REFERENCE_VERSION = 1
+REFERENCE_VERSION = 2   # 2: gained `holes` and `threat`
 REFERENCE = os.path.join(os.path.dirname(os.path.abspath(__file__)),
                          "..", "generated", "team_coverage_reference.json")
 _MEMO = {}
@@ -232,11 +232,9 @@ def _combos(team):
 
 def _uncovered(team):
     """Attacking types nothing on the team resists yet."""
-    chart = D.type_chart()
     sp = D.species()
-    types = [sp[m["species"]]["types"] for m in team if m["species"] in sp]
-    return [a for a in sorted(chart[0])
-            if not any(TS.type_multiplier(a, t, chart) < 1 for t in types)]
+    return TS.uncovered([sp[m["species"]]["types"] for m in team
+                         if m["species"] in sp])
 
 
 def rank_for(sup, basis, seed):
@@ -403,7 +401,10 @@ def sets_for(species, level, allow_mega=True):
     that silently does nothing."""
     banned = frozenset() if allow_mega else frozenset(G.MEGASTONE)
     out = []
-    for c in G.usable_sets(species, level, banned, None, None):
+    # Same format filter the builders use, or this panel offers a set from a format
+    # no build will draw -- the exact "checkbox that silently does nothing" the
+    # docstring above is about.
+    for c in G.usable_sets(species, level, banned, None, None, G.set_formats()):
         out.append({"label": c["label"], "fmt": c["fmt"], "source": c["source"],
                     "setname": c["setname"], "item": c["item"],
                     "ability": c["ability"], "moves": list(c["ok"]),
@@ -503,7 +504,9 @@ def spec_for(filters, seed, sup, basis):
         # actually filters.
         "theme": None, "on_theme_min": 0,
         "kept": [{"species": c, "level": level} for c in filters["cores"]],
-        "keep_band": False, "note_unknown": True,
+        # A core is someone naming the Pokemon they want to build around, so it is
+        # taken at its word: if they asked for Beldum at level 50 they get Beldum.
+        "keep_band": False, "grow_kept": False, "note_unknown": True,
         "floors": floors, "caps": caps, "mode": mode, "mega_ok": mega_ok,
         "ubers_ok": True, "project_spent_mega": True,
         "why_theme": ("%s", "pick"), "why_open": ("for %s", "fills out the team"),
@@ -512,6 +515,7 @@ def spec_for(filters, seed, sup, basis):
         # The half of an archetype that is NOT a role floor. Without it "stall" and
         # "hyper offense" hand a core the same set whenever it fills no floor.
         "offence": TS.profile()["archetype"][archetype]["offence"],
+        "offence_hist": TS.profile()["archetype"][archetype].get("offence_hist"),
         "pool_filter": pool_filter_for(filters),
         "set_formats": filters.get("set_formats"),
         "early_moves": filters.get("early_moves"),
@@ -709,8 +713,7 @@ def run_build(cores, args):
         scored = judge(mons)
         dup = scored["axes"]["dup_types"]["value"]
         unc = scored["axes"]["nobody_resists"]["value"]
-        tag = " (repeat)" if v["repeat"] else ""
-        print(f"\n--- variation {v['seed']}{tag} · "
+        print(f"\n--- variation {v['seed']} · "
               f"dup_types {dup} · nobody_resists {unc}")
         for m in v["team"]:
             thin = " · no published set" if m["fidelity"] == 0 else ""

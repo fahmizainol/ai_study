@@ -40,6 +40,7 @@ import json
 import os
 import sys
 
+import free_team as FT
 import generate_bosses as G
 import generate_trainers as T
 import realidea_data as D
@@ -336,7 +337,18 @@ def score(ctx, archetype, mode):
             "met": len(need) - len(missed), "need": len(need), "missed": missed,
             "gap": round(sum(G.ebst(m) for m in real) / max(len(real), 1)
                          - ctx["target"]),
+            # The coverage read the studio cards already show. Computed here so the
+            # sort can see it and so every caller gets the same number -- it is a
+            # property of the built team, not of the card that displays it.
+            "cov": _coverage(real),
             "floors": floors, "roles": dict(roles), "team": team}
+
+
+def _coverage(real):
+    """(types nothing on the team resists, repeated type combinations)."""
+    ax = FT.judge(FT._team_mons([m["species"] for m in real],
+                                {m["species"]: m["moves"] for m in real}))["axes"]
+    return ax["nobody_resists"]["value"], ax["dup_types"]["value"]
 
 
 def candidates(ctx, how="evidence"):
@@ -370,11 +382,19 @@ def _order(s, how):
     # sand and did not build it. That is the defect this whole pass exists to remove,
     # and which sort you asked for is not a reason to reintroduce it. The sort chooses
     # between plans that build; it does not decide what counts as built.
+    # Coverage sits LAST, under every term that was already deciding, so it can
+    # only separate plans the sort had no further opinion about -- where it used to
+    # fall through to the incumbent. It is not a third answer to "which plan": a
+    # plan that reads better or lands closer still wins, and Dhara keeps the sand
+    # she has evidence for rather than trading it for two resistances. What it
+    # reaches is the case the incumbent tiebreak was deciding by accident: gym 8
+    # had a plan with the same evidence AND the same curve gap that left 8 types
+    # unresisted against the other's 2.
     if how == "strength":
         return (s["gated"], s["met"] < s["need"], abs(s["gap"]), -s["evidence"],
-                not s["incumbent"])
+                s["cov"], not s["incumbent"])
     return (s["gated"], s["met"] < s["need"], -s["evidence"], abs(s["gap"]),
-            not s["incumbent"])
+            s["cov"], not s["incumbent"])
 
 
 # ---------------------------------------------------------------- output

@@ -85,24 +85,119 @@ def species_by_id():
     return out
 
 
+# Evolution methods that name a level in their parameter. Everything else -- a
+# stone, happiness, a held item, a move, a party member -- names a condition the
+# player meets whenever they please, so the data gives those edges no level at all.
+LEVEL_METHODS = frozenset({
+    "Level", "LevelDay", "LevelNight", "LevelDayTime", "LevelMale", "LevelFemale",
+    "LevelDarkInParty", "AttackGreater", "DefenseGreater", "AtkDefEqual",
+    "Silcoon", "Cascoon", "Ninjask", "Shedinja"})
+
+
+@lru_cache(maxsize=1)
+def _stage():
+    """{INTERNALNAME: 1, 2 or 3} -- how far along its line a species sits."""
+    sp = species()
+    parents = {name: [] for name in sp}
+    for parent, data in sp.items():
+        for child, _, _ in data["evolutions"]:
+            if child in parents:
+                parents[child].append(parent)
+    stage, changed = {name: 1 for name in sp}, True
+    while changed:                              # a fixpoint, not one pass: a line is
+        changed = False                         # only as settled as its base is
+        for name, ps in parents.items():
+            want = max([stage[p] + 1 for p in ps] + [1])
+            if want > stage[name] and want <= 3:
+                stage[name], changed = want, True
+    return stage
+
+
+@lru_cache(maxsize=1)
+def _condition_floor():
+    """{(parent stage, child is final): level} for evolutions that name no level.
+
+    A stone or a friendship evolution has no level in the data, which read literally
+    means "legal at level 1" -- and that is how a level-4 Heliolisk and a level-17
+    Togekiss get through. It is not true of the game either: the player meets those
+    conditions somewhere, and the dex says where, because the level-method edges of
+    the same SHAPE are the same design decision written down with a number on it.
+
+    Measured on this dex, the three shapes separate cleanly (medians 20 / 30 / 36):
+    the first hop of a three-stage line happens early, the last hop of a two-stage
+    line in the late twenties, the last hop of a three-stage line in the mid
+    thirties. The 25th percentile rather than the median because a condition the
+    player controls is met at the EARLY end of that spread -- a stone is bought, not
+    waited for. That choice is the one knob here, and it is what puts Mantine at 25
+    rather than 30."""
+    sp, stage = species(), _stage()
+    final = {name: not [c for c, _, _ in s["evolutions"] if c in sp]
+             for name, s in sp.items()}
+    seen = {}
+    for parent, data in sp.items():
+        for child, method, param in data["evolutions"]:
+            if child in sp and method in LEVEL_METHODS and param.isdigit():
+                seen.setdefault((stage[parent], final[child]), []).append(int(param))
+    return {k: sorted(v)[len(v) // 4] for k, v in seen.items() if v}
+
+
+@lru_cache(maxsize=1)
+def evo_floor():
+    """{(PARENT, CHILD): the level at which PARENT may become CHILD}.
+
+    The one place that answers "when does this evolution happen", for every method.
+    min_level() (may this species appear at all?) and the generators' staleness tests
+    (should this one have evolved by now?) are both questions about this number, and
+    each used to answer it with its own Level-only reading plus a local patch for
+    everything else -- which is why a level-29 Mantyke stayed a Mantyke."""
+    sp, cond = species(), _condition_floor()
+    stage = _stage()
+    final = {name: not [c for c, _, _ in s["evolutions"] if c in sp]
+             for name, s in sp.items()}
+    out = {}
+    for parent, data in sp.items():
+        for child, method, param in data["evolutions"]:
+            if child not in sp:
+                continue
+            if method in LEVEL_METHODS and param.isdigit():
+                out[(parent, child)] = int(param)
+            else:
+                out[(parent, child)] = cond.get((stage[parent], final[child]), 30)
+    return out
+
+
+@lru_cache(maxsize=1)
+def evo_stated():
+    """The evolution edges whose level pokemon.txt states outright.
+
+    The complement -- a stone, happiness, a held item, a party member -- is where
+    evo_floor() had to infer a level, and the difference matters to anyone deciding
+    whether an evolution may run EARLY: a Water Stone at level 31 is a shopping trip,
+    an Araquanid at level 19 is impossible."""
+    sp = species()
+    return frozenset((parent, child)
+                     for parent, data in sp.items()
+                     for child, method, param in data["evolutions"]
+                     if child in sp and method in LEVEL_METHODS and param.isdigit())
+
+
 @lru_cache(maxsize=1)
 def min_level():
-    """{INTERNALNAME: minimum legal level} from Level-method evolution chains.
-    Non-level methods (item/trade/happiness...) contribute no floor."""
+    """{INTERNALNAME: minimum legal level} from the evolution graph.
+
+    Every method counts -- see evo_floor(). A three-stage line is walked to a
+    fixpoint so the third stage never sits under the second, whatever order
+    pokemon.txt happens to list the two edges in."""
     sp = species()
     floor = {name: 1 for name in sp}
-    for parent, data in sp.items():
-        for child, method, param in data["evolutions"]:
-            if child not in floor:
-                continue
-            if method in ("Level", "AttackGreater", "DefenseGreater", "AtkDefEqual",
-                          "Silcoon", "Cascoon", "Ninjask", "Shedinja") and param.isdigit():
-                floor[child] = max(floor[child], int(param))
-    # second pass for 3-stage lines (floor of stage3 >= floor of stage2)
-    for parent, data in sp.items():
-        for child, method, param in data["evolutions"]:
-            if child in floor and floor[parent] > floor[child]:
-                floor[child] = floor[parent]
+    for (parent, child), level in evo_floor().items():
+        floor[child] = max(floor[child], level)
+    changed = True
+    while changed:
+        changed = False
+        for (parent, child), _ in evo_floor().items():
+            if floor[parent] > floor[child]:
+                floor[child], changed = floor[parent], True
     return floor
 
 

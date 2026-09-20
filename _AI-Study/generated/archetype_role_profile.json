@@ -1,5 +1,5 @@
 {
- "version": 3,
+ "version": 4,
  "_doc": "Per-archetype role frequencies from extracted/smogon-dump. `carry` = share of teams with >=1 set covering the role; `mean` = sets per team; `offence` = mean EV offence share (team_shape.offence_pct). Archetype columns are AUTHOR-TAGGED teams only (team_tags.py), singles only, six-mon teams only. `mode` columns are author-tagged AND agreement-validated teams (team_tags.agreement): `setter_mean` = sets per team carrying the mode's own move, `abuser_mean` = sets per six that CASH the mode (setter evidence stripped) and `abuser_base` the same over the whole corpus, `payoff` move, `payoff` = moves the mode over-represents by 5.0x (weather only), `type_lift` = P(type | mode teams) / P(type | all teams) over the 66% of corpus sets whose species exists in Realidea's dex.",
  "gens": "all",
  "all": {
@@ -40,7 +40,19 @@
    "snow": 0.002,
    "trickroom": 0.058
   },
-  "offence": 56.4
+  "offence": 56.4,
+  "offence_hist": [
+   0.2843,
+   0.0472,
+   0.0276,
+   0.02,
+   0.067,
+   0.0484,
+   0.0215,
+   0.0251,
+   0.0353,
+   0.4236
+  ]
  },
  "all_type_freq": {
   "BUG": 0.05059,
@@ -165,8 +177,8 @@
   "snow": {
    "n": 33,
    "setter_mean": 0.97,
-   "abuser_mean": 2.0,
-   "abuser_base": 0.175,
+   "abuser_mean": 1.758,
+   "abuser_base": 0.161,
    "payoff": [
     "AURORAVEIL",
     "BLIZZARD",
@@ -38291,7 +38303,19 @@
     "snow": 0.003,
     "trickroom": 0
    },
-   "offence": 15.2
+   "offence": 15.2,
+   "offence_hist": [
+    0.7068,
+    0.0709,
+    0.0466,
+    0.0208,
+    0.0427,
+    0.0223,
+    0.006,
+    0.0045,
+    0.0069,
+    0.0724
+   ]
   },
   "balance": {
    "n": 452,
@@ -38331,7 +38355,19 @@
     "snow": 0,
     "trickroom": 0.009
    },
-   "offence": 41.7
+   "offence": 41.7,
+   "offence_hist": [
+    0.4133,
+    0.0848,
+    0.0376,
+    0.0184,
+    0.0608,
+    0.0339,
+    0.0166,
+    0.014,
+    0.0243,
+    0.2961
+   ]
   },
   "bulky offense": {
    "n": 416,
@@ -38371,7 +38407,19 @@
     "snow": 0.002,
     "trickroom": 0.014
    },
-   "offence": 49.9
+   "offence": 49.9,
+   "offence_hist": [
+    0.3249,
+    0.0769,
+    0.0381,
+    0.026,
+    0.0565,
+    0.0292,
+    0.02,
+    0.0345,
+    0.0541,
+    0.3397
+   ]
   },
   "offense": {
    "n": 255,
@@ -38411,7 +38459,19 @@
     "snow": 0,
     "trickroom": 0.008
    },
-   "offence": 62.5
+   "offence": 62.5,
+   "offence_hist": [
+    0.2222,
+    0.0438,
+    0.0307,
+    0.0268,
+    0.0458,
+    0.0438,
+    0.0366,
+    0.0444,
+    0.0366,
+    0.4693
+   ]
   },
   "hyper offense": {
    "n": 500,
@@ -38451,7 +38511,19 @@
     "snow": 0.004,
     "trickroom": 0.058
    },
-   "offence": 77.6
+   "offence": 77.6,
+   "offence_hist": [
+    0.0717,
+    0.0227,
+    0.0297,
+    0.0137,
+    0.0817,
+    0.057,
+    0.026,
+    0.0523,
+    0.0447,
+    0.6007
+   ]
   }
  }
 }

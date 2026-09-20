@@ -231,8 +231,12 @@ def make_trainer(battle, plan=None, seen=None):
     # can name which published sets a species may use. A starter slot is never
     # droppable: it is a method the engine resolves, not a species anyone chose.
     keep, sets_ = G.picks_for(fight_id(battle))
+    _sset, _pseed = G.salts(fight_id(battle))
     kept = [{"species": m["species"], "level": G.remap(lvl),
-             "moves": m.get("moves"), "dynamic": is_dynamic(m["species"])}
+             "moves": m.get("moves"), "dynamic": is_dynamic(m["species"]),
+             # See make_gym: ticking the box asks for the mon even when the mon is
+             # already the trainer's own, and the slot trim has to be able to tell.
+             "asked": keep.get(m["species"]) is True}
             for m, lvl in zip(battle["party"], party_levels)]
     own = {m["species"] for m in battle["party"]}
     lv = G.remap(max(party_levels) if party_levels else median)
@@ -249,7 +253,7 @@ def make_trainer(battle, plan=None, seen=None):
         "target": target, "lo": target - G.SPREAD[stage] / 2,
         "hi": target + G.SPREAD[stage] / 2,
         "theme": None, "on_theme_min": 0, "why_theme": None,
-        "kept": kept, "keep_band": False, "note_unknown": True,
+        "kept": kept, "keep_band": False, "grow_kept": True, "note_unknown": True,
         "floors": floors, "caps": caps, "mode": mode, "mega_ok": unlocked,
         "ubers_ok": False, "project_spent_mega": False,
         "why_open": ("added:%s", "added:power"),
@@ -257,13 +261,11 @@ def make_trainer(battle, plan=None, seen=None):
         # A rival's roster IS the character, so the families they bring to two or more
         # of their own fights are held back on top of the mode's evidence.
         "keep_drop": G.KEEP_DROP, "keep_test": G.keep_filter(keep),
-        "set_formats": G.SET_FORMATS, "early_moves": G.EARLY_MOVES,
-        "set_seed": G.SET_SEED or None,
-        # Salted with the fight -- see make_gym. A rival needs it more than a gym
+        "set_formats": G.set_formats(), "early_moves": G.EARLY_MOVES,
+        # Salted with the fight -- see G.salts(). A rival needs that more than a gym
         # does: nine gyms are pulled apart by nine different themes, and these
         # eighteen pass theme=None, so an unsalted seed leaves them identical.
-        "pick_seed": (f"{G.PICK_SEED}:{fight_id(battle)}"
-                      if G.PICK_SEED else None),
+        "set_seed": _sset, "pick_seed": _pseed,
         "seen": seen,
         "set_filter": sets_,
         "protected": ([m["species"] for m in battle["party"]

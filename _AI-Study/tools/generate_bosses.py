@@ -47,6 +47,23 @@ EXTRACTED = os.path.join(STUDY, "extracted")
 # Every Mega Evolution and both Primals are exactly +100 BST over the base form, and
 # Realidea keeps mega stats in MultipleForms.rb rather than pokemon.txt -- so the
 # base species' PBS BST understates a mega holder by exactly this much.
+# Moves whose PBS power is not what they are worth. A recharge move costs the turn
+# after, a suicide move costs the body, and Focus Punch is 150 only if nothing touched
+# the user first -- which on a set with no Substitute is most turns. Priced at face
+# value, Focus Punch won a coverage slot off Heracross's Knock Off on the first run.
+# A move that spends two turns to hit once is worth about half its column, which is
+# the same arithmetic as a recharge move read from the other end. Without these the
+# gate kept picking whatever had the biggest number: Focus Punch, then Solar Beam,
+# then Fly, each time off a perfectly good move.
+CONDITIONAL = {"SOLARBEAM": 0.5, "FLY": 0.5, "DIG": 0.5, "DIVE": 0.5, "BOUNCE": 0.5,
+               "SKYATTACK": 0.5, "RAZORWIND": 0.5, "SKULLBASH": 0.5, "SKYDROP": 0.5,
+               "FREEZESHOCK": 0.4, "ICEBURN": 0.4, "GEOMANCY": 0.5, "PHANTOMFORCE": 0.6,
+               "SHADOWFORCE": 0.6, "SOLARBLADE": 0.5,
+               "FOCUSPUNCH": 0.35, "EXPLOSION": 0.3, "SELFDESTRUCT": 0.3,
+               "HYPERBEAM": 0.55, "GIGAIMPACT": 0.55, "FRENZYPLANT": 0.55,
+               "HYDROCANNON": 0.55, "BLASTBURN": 0.55, "ROCKWRECKER": 0.55,
+               "LASTRESORT": 0.5, "FINALGAMBIT": 0.0, "MEMENTO": 0.0}
+
 MEGA_BONUS = 100
 
 # ------------------------------------------------------------- the progression
@@ -60,7 +77,14 @@ MEGA_BONUS = 100
 # shape -- its Shelly (487) outweighs its Shade (472) -- and is kept deliberately.
 TARGET = [397, 487, 504, 551, 525, 583, 593, 597, 600]
 # Measured BST spread within each Reborn fight; the band is target +- spread/2.
-SPREAD = [190, 190, 230, 61, 110, 140, 45, 85, 100]
+# Gym 4 is widened from its measured 61 on request. At 61 only four ICE bodies sit in
+# band, so ON_THEME_MIN cannot bind there and FROSLASS -- the dev's own pick, and the
+# single Ice/Ghost that answers Fighting -- is dropped 40 BST short. 142 reaches it.
+# The cost is measured and accepted: with on-theme 6 the wider band also admits enough
+# Ice to evict the off-theme bodies that carried the resistances, so holes go 1 -> 4
+# and threat 5 -> 16. See MONOTYPE-SYNERGY.md section 7 -- no Ice team in 183 resists
+# Rock or Steel, so a pure Ice gym eats three of its four weaknesses by construction.
+SPREAD = [190, 190, 230, 142, 110, 140, 45, 85, 100]
 # Ubers unlock at gym 7 -- the user wants them to arrive, but as the late escalation.
 UBER_FROM = 6
 # Legendaries and pseudo-legends unlock at gym 6, one step before the Ubers. Detected
@@ -91,6 +115,23 @@ UBER_FROM = 6
 # Manaphy are the dev's own casting decisions, and this knob is about what we add.
 LEGEND_BST = 580
 LEGEND_FROM = 5
+# How many LEGENDARIES one team may hold. Six is off (a team cannot hold more), and
+# off is what shipped before this existed -- which is why gym 7 came back with Azelf,
+# Mesprit, Meloetta, Jirachi and Latios, five of six. Separate from LEGEND_BST because
+# it answers a different question: that one says how far into the game a legendary may
+# arrive, this one says how many of them a single fight may be made of.
+#
+# BST cannot express it. LEGEND_BST deliberately catches the pseudo-legends -- 600 is
+# where Dragonite, Tyranitar, Metagross, Garchomp, Hydreigon, Goodra and Salamence sit
+# EXACTLY alongside Manaphy, Jirachi, Latios and Diancie -- and that is right for a
+# stage gate (a level-30 fight should field neither) and wrong for a count (a team of
+# three pseudo-legends is a team, a team of three box legendaries is a joke). So the
+# count reads LEGENDARY, a name list, and the stage gate keeps reading BST.
+#
+# Kept mons COUNT and are never dropped for it, the same asymmetry LEGEND_FROM has:
+# Teresa's Manaphy is the dev's casting, and the knob is about what we add. A fight
+# already over the cap simply adds none.
+LEGEND_MAX = 6
 # Gym 4's town, Ciudad Anatasa (map 96), is where strong held items and mega stones
 # become purchasable. Before it, a boss may only carry gear an early player plausibly
 # has: berries and type-boost items, and no mega at all.
@@ -133,7 +174,13 @@ MODE_FROM = 0
 THEME = {"Abi": "BUG", "Aimi": "FAIRY", "Kenn": "WATER", "Douglas": "ICE",
          "Ciara": "DARK", "Dhara": "GROUND", "Lawrence": "PSYCHIC",
          "Bay": "NORMAL", "Lilliana": "STEEL"}
-ON_THEME_MIN = 4          # of 6; the rest may be off-theme (user: "1,2 can differ")
+# Of 6. At 6 a gym is a true monotype team and MONOTYPE-SYNERGY.md applies to it
+# directly: every member carries the theme type, so a member's multiplier into a theme
+# weakness is 2 x m(atk -> type2) and only an IMMUNITY can answer one -- a resist just
+# returns it to neutral. Three of Ice's four weaknesses have no immune type at all, so
+# a monotype Ice gym cannot answer them by typing however it is built.
+# Was 4 ("1,2 can differ"); raised on request.
+ON_THEME_MIN = 6
 TEAM_SIZE = 6
 # Off-theme picks must earn the slot: this much Smogon co-occurrence with the core,
 # or a resistance to what the theme is weak to. Ungated, correlation alone drags in
@@ -157,6 +204,30 @@ KEEP_DROP = 0
 # today's behaviour. This filters the SET pool, not the species pool: it is a
 # different question from a tier ceiling, which asks what a species is ranked.
 SET_FORMATS = ()
+# Formats this project never draws a set from, whatever is ticked. Battle Spot
+# Singles is a 3v3 flat-level bring-six ladder: its sets are built around a
+# best-of-three team preview and a 50-cap, which makes them Protect-heavy, short on
+# hazard control and often item-locked in ways a 6v6 story boss reads as simply
+# wrong. 615 of 8327 sets (7.4%), and NO species depends on it -- every one of the
+# 173 that has a Battle Spot set has another too -- so nothing loses its only set.
+#
+# Subtracted from the tick list rather than hidden from the UI alone: "none ticked"
+# means "all formats", so removing it from the offered boxes would leave the default
+# still drawing from it.
+SET_FORMATS_OFF = ("battlespotsingles",)
+
+
+def set_formats():
+    """The FORMAT tiers a build may draw from, as an explicit frozenset.
+
+    Explicit and never None, because SET_FORMATS_OFF has to bite in the default
+    case too, and `None` inside usable_sets() means "no filter at all". Kept as a
+    returned value rather than read inside usable_sets() for the reason that
+    function's docstring gives: it is lru_cached, so a global read in there would be
+    invisible to the cache key and a studio request that changed it would be served
+    the previous request's answer."""
+    picked = frozenset(SET_FORMATS) or frozenset(SC.set_tiers())
+    return picked - frozenset(SET_FORMATS_OFF)
 # 1 keeps the learnset LEVEL gate: a published move the species has not reached yet is
 # dropped and the slot topped up from filler. 0 lets the set keep it. The species gate
 # is not optional either way -- a mon that can never learn a move never gets it.
@@ -167,10 +238,41 @@ EARLY_MOVES = 0
 # far cheaper than the other. SET_SEED changes only WHICH published set a species
 # gets, so the roster is untouched and every mon is still a mon the dev chose or the
 # curve asked for. PICK_SEED changes WHICH SPECIES get picked, which rewrites the
-# team. Measured over the nine gyms: a set seed moves 11-18 of 54 mons' sets and
-# almost no species; a pick seed moves 32-41 of 54 species.
+# team. Measured over the nine gyms: a set seed moves 16-18 of 54 mons' sets and
+# almost no species; a pick seed moves 8-10 of 54 species and 3-4 of the nine teams.
+# That last figure was 32-41 when it was written and is not any more: ON_THEME_MIN
+# has since risen to 6, so every slot must be on-theme and a narrow pool (ICE, FAIRY,
+# NORMAL) simply has no alternative for the jitter to reach. Which is why a card
+# reroll below bumps BOTH seeds -- the species are often forced, the sets rarely are.
 SET_SEED = 0
 PICK_SEED = 0
+# How many times ONE fight has been rerolled on its own, by fight id. The global
+# seeds above move every fight at once; this moves a single card, which is what a
+# Boss Studio card's Regenerate button needs and what the seeds cannot express.
+# Filled by boss_studio.settings() the way PICKS is, and empty everywhere else.
+REROLL = {}
+
+
+def salts(fight):
+    """(set_seed, pick_seed) for one fight: the global seeds, salted with it.
+
+    Both None when nothing is set, so an untouched fight is today's behaviour
+    byte-for-byte -- assemble() tests `if not pseed` and `seed is None` to decide
+    whether the jitter runs at all, and 0 must keep meaning "no jitter".
+
+    The pick salt carries the FIGHT because the rng inside ranked() is keyed
+    "{seed}:{species}": unsalted, every fight gets the same perturbation and rerolls
+    who everybody's favourite is, never that they share one.
+
+    The set salt carries the fight ONLY once that fight has been rerolled on its own.
+    A global SET_SEED deliberately gives the same species the same set across fights,
+    and salting it always would quietly change that; salting it only for n > 0 buys a
+    card its own sets without touching what the knob has always meant.
+    """
+    n = REROLL.get(fight, 0)
+    sset = f"{SET_SEED}.{n}:{fight}" if n else (SET_SEED or None)
+    pseed = f"{PICK_SEED}.{n}:{fight}" if (PICK_SEED or n) else None
+    return sset, pseed
 # How hard a fight is pushed off a family another fight already has, in AFFINITY_BAND
 # units per prior use. Nothing else in either generator counts species ACROSS fights:
 # `dedupe` is about move roles and team_shape's worst_shared is type overlap inside
@@ -372,6 +474,23 @@ def ability_name(mon):
     return sp["hidden_ability"] or None
 
 
+def hits_type(moves, atk):
+    """Does any damaging move in `moves` hit `atk` for x2?"""
+    return any(x in _mv and _mv[x]["power"] > 0
+               and TS.type_multiplier(_mv[x]["type"], [atk]) > 1 for x in moves)
+
+
+def unanswered(team, theme):
+    """Types `theme` is weak to that nothing on `team` can hit super-effectively.
+
+    The theme's weaknesses are also its THREAT list -- what hits a Water gym for
+    Grass is a Grass body -- so this is the one number MONOTYPE-SYNERGY.md section 8
+    says real monotype teams never let rise above zero.
+    """
+    return [a for a in sorted(WEAK.get(theme, ()))
+            if not any(hits_type(m.get("moves") or (), a) for m in team)]
+
+
 def roles_of(moves, item, ability, mode=None, sp=None):
     """The jobs one set covers, plus `<mode>_abuse` when the set CASHES the mode.
 
@@ -393,6 +512,8 @@ def roles_of(moves, item, ability, mode=None, sp=None):
 # ---------------------------------------------------------------- PBS-derived
 _sp = D.species()
 _floor = D.min_level()
+_evo = D.evo_floor()
+_evo_stated = D.evo_stated()
 _mv = D.moves()
 _items = D.items()
 
@@ -723,6 +844,12 @@ def substitute_item(species, moves, pool):
 # fit. Wide, because offence_pct over a published set is a coarse read (it ignores the
 # item and the nature) and a 10-point difference between two Azumarill sets is noise.
 OFFENCE_BAND = 20
+# How many rank steps the corpus-shape term may span, and how far a set seed may
+# move a set inside it. Kept coarse for the same reason OFFENCE_BAND is: this term
+# sits above `legal` and `source`, so a fine-grained one would decide every set by
+# itself and the reroll would rerank nothing.
+OFFENCE_STEPS = 4
+OFFENCE_JITTER = 0.25
 
 
 @functools.lru_cache(maxsize=4096)
@@ -805,7 +932,7 @@ def usable_sets(species, level, banned=frozenset(), cap=None, mode=None,
 
 
 def build(species, level, banned_items=(), want=None, avoid=(), allow_items=None,
-          cap=None, mode=None, offence=None, seed=None, only=None,
+          cap=None, mode=None, offence=None, offence_hist=None, seed=None, only=None,
           formats=None, early=False):
     """Best level-legal published set for `species`, or None if none survives.
 
@@ -863,7 +990,19 @@ def build(species, level, banned_items=(), want=None, avoid=(), allow_items=None
         # this trades a filler move for a role, never a whole set.
         rng = (None if seed is None else
                random.Random(f"{seed}:{species}:{fmt}:{source}:{setname}"))
-        if offence is None:
+        if offence_hist:
+            # How badly the team still NEEDS a set of this offence share. Not
+            # distance from the archetype's mean (which rejects both the walls and
+            # the sweepers a balance team is made of), and not how common the share
+            # is either (which just returns the modal bucket six times). The need is
+            # what is left of the archetype's own bucket quota after the sets already
+            # taken, so what this slot wants depends on what the previous ones took.
+            w = offence_hist[TS.offence_bucket(
+                TS.offence_pct(st.get("evs") or {}))]
+            if rng:
+                w += rng.uniform(0, OFFENCE_JITTER)
+            fit = int(w * OFFENCE_STEPS)
+        elif offence is None:
             fit = 0
         else:
             miss = abs(TS.offence_pct(st.get("evs") or {}) - offence)
@@ -1062,39 +1201,49 @@ def dedupe_roles(team, caps, cap=None, mode=None):
     return team
 
 
-def descendants(name):
-    """Every form `name` can eventually evolve into, at any depth."""
-    out, stack = [], [c[0] for c in _sp[name]["evolutions"] if c[0] in _sp]
-    while stack:
-        c = stack.pop()
-        if c in out:
-            continue
-        out.append(c)
-        stack += [x[0] for x in _sp[c]["evolutions"] if x[0] in _sp]
-    return out
-
-
 def excluded(name, stage):
     """Species the generator may never CHOOSE at `stage`, whatever else fits.
 
     The one predicate behind both gates, so that eligible() (what we shop from) and
-    evolve_into_band() (where we push a dev's mon) cannot disagree -- Cosmog's line
-    ends in Solgaleo and Lunala, and evolving into one is still picking one."""
+    grown() (where a dev's mon ends up) cannot disagree -- Cosmog's line ends in
+    Solgaleo and Lunala, and evolving into one is still picking one."""
     return (name in DEAD_PRIMARY
             or (_sp[name]["bst"] >= LEGEND_BST and stage < LEGEND_FROM))
 
 
-def evolve_into_band(name, level, stage, lo, hi, mega_ok):
-    """The cheapest evolution of `name` that is legal at `level` and clears the band.
+def grown(name, level, stage, theme=None, early=False):
+    """What `name` has already become by `level`, gating on the level alone.
 
-    A dev-chosen mon whose own evolution fits should be evolved, not discarded --
-    Aimi's Marill is 250 BST against a 392 floor, but Azumarill is 410, (OU), and
-    evolves at 18. Cheapest rather than strongest: the point is to rescue the line
-    with the least deviation from what the dev picked, not to upgrade it."""
-    fits = [c for c in descendants(name)
-            if _floor[c] <= level and not excluded(c, stage)
-            and potential_bst(c, mega_ok) >= lo and bst(c) <= hi]
-    return min(fits, key=bst) if fits else None
+    The dev's Beldum is level 29 and Beldum evolves at 20; their Mantyke is level 29
+    and Mantine wants a Remoraid in the party. Neither is a Pokemon the player would
+    ever meet at that level, and neither is a choice this generator should be making
+    -- the dev picked the LINE, and the line has moved on. So every kept mon is put
+    where its own level puts it, whatever the band says: an evolution is not a power
+    budget decision, it is the passage of time.
+
+    "The only gate here should be the level" -- a stone, a friendship or a party
+    member is a condition the player meets when they like, and evo_floor() is where
+    those get a level to be compared against.
+
+    Branches (Eevee, Kirlia, Clamperl) are settled by the fight first: an Eevee on a
+    Water gym is a Vaporeon. Failing that by the same tier ranking the generator uses
+    to choose any other body, and then by name, so the answer is never arbitrary.
+    excluded() stops the walk, so growing a dev's mon can never reach a body the
+    generator is forbidden to choose -- a Cosmog stops at Cosmoem.
+
+    `early` waives the levels evo_floor() INFERRED for stones and the like, and only
+    those: a stated level is a fact about the game and is never waived. It is the
+    band rescue in assemble(), and nothing else, that asks for it."""
+    cur, seen = name, {name}
+    while True:
+        nxt = [c for c, _, _ in _sp[cur]["evolutions"]
+               if c in _sp and c not in seen and not excluded(c, stage)
+               and (_evo[(cur, c)] <= level
+                    or (early and (cur, c) not in _evo_stated))]
+        if not nxt:
+            return cur
+        cur = min(nxt, key=lambda c: (theme not in _sp[c]["types"], SC.rank(c), c))
+        seen.add(cur)
 
 
 # Species whose FIRST ability is one the engine never reads. Measured, not assumed:
@@ -1126,6 +1275,47 @@ DEAD_PRIMARY = frozenset({
 })
 
 
+# The legendaries, for LEGEND_MAX. Derived, not typed out from memory: Realidea's own
+# pokemon.txt puts every one of them in the `Undiscovered` egg group, so the rule is
+# "every member of this species' evolution line is Undiscovered" -- which keeps the
+# lines that evolve (Cosmog, Type: Null) and drops the babies that share the group
+# (Riolu, Togepi, Munchlax and fifteen more, each of whose line ends in an ordinary
+# Pokemon). It separates the pseudo-legends for free: Metagross is Mineral, Dragonite
+# is Water 1, Garchomp is Monster.
+#
+# Frozen here as a literal rather than computed, so it can be READ and argued with --
+# the same reason DEAD_PRIMARY is a literal. Three hand corrections, and there are
+# only three:
+#
+#   MANAPHY is added. It is the one legendary that breeds (Water 1/Fairy, it lays
+#   Phione), so the egg group cannot see it -- and it is the one a dev actually
+#   fielded, on Teresa.
+#   UNOWN is removed. Undiscovered and catch rate 225: the group's other reason for
+#   existing is "cannot breed", and Unown is not a legendary by any other measure.
+#   AVULPIX is removed. Realidea's Alolan forms are separate species at custom stats
+#   (this one is 600 BST, against 299 in the official dex) and are marked Undiscovered
+#   to stop them breeding. Its line is the only one where that reaches this rule.
+#
+# PHIONE is deliberately NOT here: it is the breedable one, 480 BST, and nothing in
+# this generator should treat it as a box legendary. FAEMIEBICHITO is, fakemon or not
+# -- Undiscovered at catch rate 3 is the dev saying so.
+LEGENDARY = frozenset({
+    "ARCEUS", "ARTICUNO", "AZELF", "BUZZWOLE", "CELEBI", "CELESTEELA",
+    "COBALION", "COSMOEM", "COSMOG", "CRESSELIA", "DARKRAI", "DEOXYS",
+    "DIALGA", "DIANCIE", "ENTEI", "FAEMIEBICHITO", "GENESECT", "GIRATINA",
+    "GROUDON", "GUZZLORD", "HEATRAN", "HOOH", "HOOPA", "JIRACHI", "KARTANA",
+    "KELDEO", "KYOGRE", "KYUREM", "LANDORUS", "LATIAS", "LATIOS", "LUGIA",
+    "LUNALA", "MAGEARNA", "MANAPHY", "MARSHADOW", "MELOETTA", "MESPRIT",
+    "MEW", "MEWTWO", "MOLTRES", "NECROZMA", "NIHILEGO", "PALKIA",
+    "PHEROMOSA", "RAIKOU", "RAYQUAZA", "REGICE", "REGIGIGAS", "REGIROCK",
+    "REGISTEEL", "RESHIRAM", "SHAYMIN", "SILVALLY", "SOLGALEO", "SUICUNE",
+    "TAPUBULU", "TAPUFINI", "TAPUKOKO", "TAPULELE", "TERRAKION",
+    "THUNDURUS", "TORNADUS", "TYPENULL", "UXIE", "VICTINI", "VIRIZION",
+    "VOLCANION", "XERNEAS", "XURKITREE", "YVELTAL", "ZAPDOS", "ZEKROM",
+    "ZYGARDE", "ZYGARDE10",
+})
+
+
 def eligible(level, stage, theme=None, exclude_theme=None):
     """Species this leader could legally and sensibly field at `level`."""
     out = []
@@ -1138,9 +1328,11 @@ def eligible(level, stage, theme=None, exclude_theme=None):
             continue
         if exclude_theme and exclude_theme in s["types"]:
             continue
-        # a mon that should have evolved several levels ago reads as a mistake
-        evo = [int(e[2]) for e in s["evolutions"]
-               if e[1] == "Level" and str(e[2]).isdigit()]
+        # a mon that should have evolved several levels ago reads as a mistake --
+        # by any method, not just a levelling one: before evo_floor() gave stones and
+        # friendship a level of their own this test could not see them, so the pool
+        # offered a level-40 Pikachu and a level-8 Lucario in the same breath
+        evo = [_evo[(name, c)] for c, _, _ in s["evolutions"] if c in _sp]
         if evo and level > min(evo) + 6:
             continue
         if SC.band(name) == "Uber" and stage < UBER_FROM:
@@ -1213,6 +1405,29 @@ def role_supply(level, stage, roles, mode=None, theme=None):
 # 100 BST off curve, which is the same failure that put a 600 Jirachi and a mega
 # Lucario on the level-20 first gym when correlation outranked it.
 AFFINITY_BAND = 30
+# How close to the ideal eBST counts as "near enough" for coverage to decide.
+# Swept against the nine gyms: 5 is worse than no change on BOTH axes (it perturbs
+# the argmin without ever letting the term fire), 10 and 15 move one gym, 30 moves
+# five. The curve cost is the bucketing's, not the term's -- a control with the
+# term disabled at 30 lands at MAD 2.52 against this arm's 1.98.
+# How far off the ideal eBST still counts as "near enough" for coverage to decide.
+#
+# Swept twice, and the second sweep reversed the first. Against `blind` the best band
+# was 30 and narrow bands were worse than no term at all; against `holes` the order
+# inverts and 10 wins on BOTH axes -- holes 1.86 -> 0.86 and curve MAD 0.10 -> 0.62,
+# where 30 gives 1.57 at 1.71 and 60 gives 1.57 at 5.07. The reason is that a useful
+# body is common when the target is a real hole and rare when it is a harmless blind
+# spot, so chasing blind needed a wide band to find anything, and a wide band spends
+# the curve early and starves the slots that follow.
+COVER_BAND = 10
+# How many members must be weak to a type before it counts as a HOLE rather than a
+# harmless blind spot. TEAM-CORPUS.md section 12 uses 3 of 6; mid-build the roster is
+# partial, so 2 is the working bar. At 1 every blind spot is a hole again, which is
+# the metric both corpus reports call the weak one.
+HOLE_MIN_WEAK = 2
+# 1 runs the post-pass that guarantees one super-effective move per theme weakness
+# (MONOTYPE-SYNERGY.md section 11). 0 is the behaviour before it existed.
+THREAT_COVER = 1
 
 
 def is_dynamic(species):
@@ -1229,29 +1444,30 @@ def keep_filter(keep):
     gym 2's roster holds Marill and the card says Azumarill, so a test against the
     raw original would never match what anyone unticked. That is why this is a
     keep_test and not a filter on spec["kept"]: by the time assemble() calls it,
-    evolve_into_band() has already resolved the species.
+    grown() has already resolved the species.
 
     An explicit untick also outranks `protected`. Protection exists to stop the
     generator deleting the reason a fight is what it is; it is not there to overrule
     a person who has looked at the card and said no."""
-    dropped_families = {}
+    dropped_lines = {}
     for other, on in (keep or {}).items():
         if on is False and other in _sp:
-            for kin in family(other):
-                dropped_families.setdefault(kin, other)
+            dropped_lines.setdefault(root(other), other)
 
     def test(name, mon, protect=()):
         if keep.get(name) is False:
             return "unticked on the card"
-        # An untick names ONE form, and the roster can arrive as another: evolve_
-        # into_band turns a dropped Poliwhirl into a Poliwrath, which no untick ever
-        # mentioned, so the drop missed it and the fight came out seven strong. The
-        # card's list is a blocklist of names, and a name it never saw is kept by
-        # default -- so a drop has to cover the family, not the spelling. An explicit
-        # tick still wins: unticking the pre-evolution and pinning the evolution is a
-        # coherent thing to ask for.
-        if keep.get(name) is not True and name in dropped_families:
-            return f"unticked on the card (as {dropped_families[name]})"
+        # An untick names ONE form, and the roster can arrive as another: grown()
+        # turns a dropped Poliwhirl into a Poliwrath, which no untick ever mentioned,
+        # so the drop missed it and the fight came out seven strong. The card's list
+        # is a blocklist of names, and a name it never saw is kept by default -- so a
+        # drop has to cover the LINE, not the spelling and not one hop of it: a
+        # dropped Beldum grows two hops to Metagross in a level-45 fight, which
+        # family() (one hop each way, for set inheritance) would have let through. An
+        # explicit tick still wins: unticking the pre-evolution and pinning the
+        # evolution is a coherent thing to ask for.
+        if keep.get(name) is not True and root(name) in dropped_lines:
+            return f"unticked on the card (as {dropped_lines[root(name)]})"
         return keep_competent(name, mon, protect)
     return test
 
@@ -1303,8 +1519,13 @@ def assemble(spec):
                         A theme also switches on the off-theme gate, because "earns
                         an off-theme slot" is not a question a themeless fight has.
       kept              the dev's own roster, in build order: [{species, level,
-                        moves?, dynamic?}]. `keep_band` drops or evolves the ones
-                        outside the band; without it every one is kept as it is.
+                        moves?, dynamic?}]. `keep_band` drops the ones outside the
+                        band; without it every one is kept as it is.
+      grow_kept         put each kept mon where its own level puts it -- see
+                        grown(). On for a fight we are RE-BUILDING, because a level-29
+                        Beldum is the dev's roster gone stale and not a decision.
+                        Off where the kept list is a person naming the species they
+                        want (free_team's cores), which growth would overrule.
       note_unknown      say so when a kept species is not in pokemon.txt, or filter
                         it silently
       floors, caps      what this fight must carry and at most, in chase order
@@ -1350,6 +1571,23 @@ def assemble(spec):
     # did -- which is checked by rebuilding the gyms and the trainers byte-for-byte.
     size = spec.get("size") or TEAM_SIZE
     off = spec.get("offence")
+    off_quota = TS.offence_quota(spec.get("offence_hist"), size)
+
+    def off_need(skip=None):
+        """The archetype's bucket quota minus what the team already holds, 0-1.
+
+        `skip` leaves one member out, so a mon can be re-priced against the team
+        around it rather than against a team that still contains its own old set."""
+        if not off_quota:
+            return None
+        left = list(off_quota)
+        for j, m in enumerate(team):
+            if j == skip:
+                continue
+            b = TS.offence_bucket(TS.offence_pct(dict(zip(TS.PBS_EV, m["ev"]))))
+            left[b] -= 1
+        top = max(left) or 1.0
+        return [max(v, 0.0) / top for v in left]
     sset = spec.get("set_seed")
     pseed = spec.get("pick_seed")
     # Families the fights built BEFORE this one already claimed. Read-only here: the
@@ -1368,6 +1606,15 @@ def assemble(spec):
 
     def capped():
         return {r for r, n in caps.items() if have[r] >= n}
+
+    def legend_full():
+        """Whether this team has all the legendaries LEGEND_MAX allows it.
+
+        Counted off the live roster rather than tallied, because step 5 can POP a
+        kept mon and refill the slot -- a counter would still be holding the victim.
+        Kept mons count: the cap is a fact about the finished team, and the dev's own
+        legendary is never the one given up for it."""
+        return sum(1 for m in team if m["species"] in LEGENDARY) >= LEGEND_MAX
 
     def add(name, mon, why, kept):
         # Two invariants nothing else enforces, and both were being broken: a species
@@ -1430,6 +1677,11 @@ def assemble(spec):
         if spec.get("rank"):
             return spec["rank"](state, tail)
 
+        # Per SLOT, not per candidate: the team does not change during one sort, and
+        # ranked() is called fresh before each pool.sort().
+        gaps = TS.holes([_sp[m["species"]]["types"] for m in team
+                         if m["species"] in _sp], HOLE_MIN_WEAK) if COVER_BAND else ()
+
         def key(n):
             # The repeat penalty rides INSIDE the distance, for the same reason the
             # seed's jitter does: every branch below either compares `gap` directly
@@ -1440,10 +1692,39 @@ def assemble(spec):
             # preference.
             gap = (abs(projected(n) - deficit())
                    + AFFINITY_BAND * REPEAT_BAND * seen.get(root(n), 0))
+            # BINARY, and INSIDE the band, for the two reasons the jitter is.
+            #
+            # HOLES, not blind spots: a type nothing resists and nothing is weak
+            # to is free, and chasing it spent slots plugging Dragon on teams that
+            # never feared Dragon (TEAM-CORPUS.md section 12, MONOTYPE-SYNERGY.md
+            # section 3 -- both reports reach it independently).
+            #
+            # Binary because "closes the MOST holes" is an optimum with one winner,
+            # and free_team measured what that picks: Sawsbuck and Cacturne over
+            # Landorus, for three holes instead of two. A constraint is satisfied or
+            # it is not; the curve decides among those who satisfy it.
+            #
+            # Inside, because a term under a CONTINUOUS gap fires only on an exact
+            # float tie and reranks nothing -- so the no-mode branch buckets its gap
+            # here exactly as the mode branch already does, and coverage chooses
+            # within the bucket the way affinity does. That is the cost of the term
+            # and the whole of it: picks may now land up to one band off the ideal,
+            # which deficit() then spreads over the slots that are left.
+            # At COVER_BAND 0 the term is off: `covers` goes constant so it
+            # cannot separate anything, and the no-mode branch returns to the
+            # CONTINUOUS gap it used before coverage existed. Bucketing without the
+            # term is strictly worse than either (measured: holes 1.86 -> 1.71 for
+            # MAD 0.10 -> 2.52), so "off" must undo the bucket too.
+            covers = 0
+            if COVER_BAND:
+                covers = 0 if any(TS.type_multiplier(a, _sp[n]["types"]) < 1
+                                  for a in gaps) else 1
             if not pseed:
                 if mode:
-                    return (gap // AFFINITY_BAND, -species_affinity(n)) + tail(n)
-                return (gap,) + tail(n)
+                    return (gap // AFFINITY_BAND, -species_affinity(n),
+                            covers) + tail(n)
+                return ((gap // COVER_BAND, covers) if COVER_BAND
+                        else (gap,)) + tail(n)
             # Seeded: the noise goes INSIDE the band and the jitter goes ABOVE the
             # tail, and both of those placements are the whole feature.
             #
@@ -1462,8 +1743,9 @@ def assemble(spec):
             rng = random.Random(f"{pseed}:{n}")
             band = int(gap + rng.uniform(0, AFFINITY_BAND)) // AFFINITY_BAND
             if mode:
-                return (band, -species_affinity(n), rng.random()) + tail(n)
-            return (band, rng.random()) + tail(n)
+                return (band, -species_affinity(n), covers,
+                        rng.random()) + tail(n)
+            return (band, covers, rng.random()) + tail(n)
         return key
 
     def take(pool, role, why):
@@ -1485,12 +1767,13 @@ def assemble(spec):
         describes, one key higher up."""
         for strict in (True, False):
             full = capped()
+            over = legend_full()
             for name in pool:
-                if name in used:
+                if name in used or (over and name in LEGENDARY):
                     continue
                 mon = build(name, level, banned, want=role,
                             avoid=full if strict else (),
-                            allow_items=allow, cap=ceiling, mode=mode, offence=off,
+                            allow_items=allow, cap=ceiling, mode=mode, offence=off, offence_hist=off_need(),
                             seed=sset, formats=fmts, early=early,
                             only=sfilter.get(name))
                 # A published set is always preferred; this only catches the species
@@ -1535,7 +1818,44 @@ def assemble(spec):
     #    ceiling earns its keep. A rival is the other way round: their roster IS the
     #    character, so nothing is dropped for sitting under the curve and the padding
     #    slots carry the power instead.
-    for k in spec["kept"]:
+    #    A PIN OUTRANKS A DEFAULT when there is not room for both. Both halves arrive
+    #    through this one list -- the dev's own roster first, then whatever a card
+    #    pinned -- and add() refuses everything past `size`, so an over-long list was
+    #    trimmed from its END, which is exactly where the pins are. Pin five mons onto
+    #    a gym whose dev roster is three and all three came back and took the pins'
+    #    slots, the freshly swapped-in species among them. The roster is a DEFAULT --
+    #    what this fight has when nobody says otherwise -- and a pin is an
+    #    instruction, so the default is what gives way.
+    #
+    #    Trimmed from the tail of the droppable run, which leaves the surviving order
+    #    alone: make_gym sorts its originals heaviest-first and the mega goes to the
+    #    first that can hold one, so the holder is never the one displaced. A starter
+    #    slot is exempt -- it is a method the engine resolves, not a species anyone
+    #    chose, and nothing on a card can pin one back.
+    #    Only a pin displaces anything. A roster that is over-length on its own is
+    #    left exactly as it was, for add() to refuse with its own note: "a pin took
+    #    its slot" has to be true when it is said.
+    #
+    #    "Asked for" is the test, not "pinned": an original the card ticked carries no
+    #    `pinned` flag (that flag says "yours, not the game's", and the card reads it
+    #    to mark the row), so without `asked` a Pidgeot you pinned looked exactly like
+    #    one you had merely not removed, and gave its slot away.
+    #
+    #    Family membership is deliberately NOT a defence here. An original whose line
+    #    ends at a pinned species looks like the same mon, but grown() picks the
+    #    branch: gym 3 pins POLITOED and its roster carries POLIWHIRL, which grows to
+    #    POLIWRATH, so protecting it spends a slot on a mon nobody asked for and the
+    #    pin that needed the slot is refused.
+    keep_list = list(spec["kept"])
+    spoken = {i for i, k in enumerate(keep_list)
+              if k.get("pinned") or k.get("asked") or k.get("dynamic")}
+    loose = [i for i in range(len(keep_list)) if i not in spoken]
+    room = size - len(spoken)
+    if spoken and len(loose) > room:
+        for i in sorted(loose[max(room, 0):], reverse=True):
+            notes.append(f"dropped {keep_list[i]['species']} — a pin took its slot")
+            keep_list.pop(i)
+    for k in keep_list:
         name, at = k["species"], k["level"]
         if k.get("dynamic"):
             team.append({"species": name, "level": at, "moves": [], "item": None,
@@ -1555,17 +1875,41 @@ def assemble(spec):
         # able to tell "this is the game's Pokemon" from "this is yours", and
         # `kept` alone cannot, now that both arrive through spec["kept"].
         pick, why = name, "pinned on the card" if k.get("pinned") else "original"
-        if spec["keep_band"] and not (lo <= potential_bst(name, mega_ok)
-                                      and bst(name) <= hi):
-            # a dev-chosen mon whose own evolution fits the band is evolved, not lost
-            grown = evolve_into_band(name, at, stage, lo, hi, mega_ok)
-            if grown is None:
-                notes.append(f"dropped {name} ({bst(name)} BST, "
-                             f"band {lo:.0f}-{hi:.0f})")
-                continue
-            notes.append(f"evolved {name} ({bst(name)}) -> {grown} ({bst(grown)}, "
-                         f"{SC.tier(grown)}) to reach the band")
-            pick, why = grown, "evolved original"
+        # The dev picked the LINE; the level says where along it this mon is. Done
+        # before the band and regardless of it: an evolution the mon has already
+        # earned is not a power-budget decision. This also subsumes what the band
+        # used to do on its own -- Aimi's Marill is 250 BST against a 392 floor and
+        # became Azumarill (410) only because the floor pushed it, which left Alba's
+        # Beldum a Beldum at level 29 because 300 happened to sit inside the band.
+        up = grown(pick, at, stage, theme) if spec["grow_kept"] else pick
+        if up != pick:
+            notes.append(f"evolved {pick} ({bst(pick)}) -> {up} ({bst(up)}, "
+                         f"{SC.tier(up)}) — legal at level {at}")
+            pick = up
+        # Under the floor and out of levels: evolve it EARLY rather than lose it.
+        # The level gate says what the player would see; the choice here is against
+        # not seeing the mon at all, and Kenn's Poliwhirl misses gym 3's floor by
+        # four points with its Water Stone still two levels out of reach.
+        if spec["keep_band"] and potential_bst(pick, mega_ok) < lo:
+            rescue = grown(pick, at, stage, theme, early=True)
+            if lo <= potential_bst(rescue, mega_ok) and bst(rescue) <= hi:
+                notes.append(f"evolved {pick} ({bst(pick)}) -> {rescue} "
+                             f"({bst(rescue)}, {SC.tier(rescue)}) ahead of its level "
+                             f"to reach the band")
+                pick, up = rescue, rescue
+        # The band still decides whether to KEEP it, with one asymmetry: a mon may be
+        # dropped for what the dev chose, never for what we just evolved it into. Too
+        # light is terminal (the rescue above is its last chance); too heavy is only
+        # terminal if it was too heavy before we touched it.
+        if spec["keep_band"] and not (lo <= potential_bst(pick, mega_ok)
+                                      and bst(pick) <= hi) \
+                and not (up != name and lo <= potential_bst(name, mega_ok)
+                         and bst(name) <= hi):
+            notes.append(f"dropped {pick} ({bst(pick)} BST, "
+                         f"band {lo:.0f}-{hi:.0f})")
+            continue
+        if up != name:
+            why = "evolved " + why
         # A kept mon keeps its SPECIES, not its set -- so the set is the only lever the
         # plan has on it, and it went unused: build() was called with want=None, which
         # leaves the choice to move fidelity alone and hands Dhara's Hippowdon the same
@@ -1596,13 +1940,13 @@ def assemble(spec):
         mon = None
         for role in sorted(unmet(), key=lambda r: r != mode):
             mon = build(pick, at, banned, want=role, avoid=capped(),
-                        allow_items=allow, cap=ceiling, mode=mode, offence=off,
+                        allow_items=allow, cap=ceiling, mode=mode, offence=off, offence_hist=off_need(),
                         seed=sset, formats=fmts, early=early, only=sfilter.get(pick))
             if mon and role in mon["roles"]:
                 break
             mon = None
         mon = mon or build(pick, at, banned, avoid=capped(), allow_items=allow,
-                           cap=ceiling, mode=mode, offence=off, seed=sset, formats=fmts, early=early,
+                           cap=ceiling, mode=mode, offence=off, offence_hist=off_need(), seed=sset, formats=fmts, early=early,
                            only=sfilter.get(pick)) \
             or fallback(pick, at, ceiling)
         # A named set that cannot survive this level looks identical to "nothing was
@@ -1655,9 +1999,18 @@ def assemble(spec):
                 correlation[mate] = max(correlation[mate], pct)
 
     def resisted(name):
+        """Theme weaknesses this body actually takes for less than neutral.
+
+        MULTIPLIED, not checked half by half. Asking whether either type resists
+        credits Aerodactyl with answering Fighting on an Ice gym -- Flying halves it,
+        Rock doubles it, and the body takes x1. 808 of 6,562 claims across the nine
+        themes were neutral or worse that way, and the note printed on the card said
+        "resists FIGHTING" for every one of them. See MONOTYPE-SYNERGY.md section 2:
+        on a typed team the halves multiply, which is also why only an IMMUNITY can
+        answer a weakness of the team's OWN type."""
         types = _sp[name]["types"]
         return [w for w in WEAK.get(theme, [])
-                if any(w in RESIST.get(t, []) + IMMUNE.get(t, []) for t in types)]
+                if TS.type_multiplier(w, types) < 1]
 
     pool = [n for n in eligible(level, stage, exclude_theme=theme)
             if n not in used and potential_bst(n, mega_ok) >= lo
@@ -1703,7 +2056,7 @@ def assemble(spec):
                     continue
                 alt = build(m["species"], m["level"], banned, want=role,
                             avoid=capped(), allow_items=allow, cap=ceiling,
-                            mode=mode, offence=off, seed=sset, formats=fmts, early=early)
+                            mode=mode, offence=off, offence_hist=off_need(), seed=sset, formats=fmts, early=early)
                 if alt and role in alt["roles"]:
                     alt["kept"], alt["why"] = True, f"original, re-set for {role}"
                     have.subtract(m["roles"])
@@ -1798,6 +2151,173 @@ def assemble(spec):
             if mode in m["roles"]:
                 team.insert(0, team.pop(i))
                 break
+    # ---- build order: a kept core is priced before the quota has been spent ------
+    # It is built FIRST, when nothing is taken and the largest bucket is walls, so the
+    # one mon that owns BOTH a wall set and a sweeper set takes the wall -- and then
+    # Lunatone and Aegislash, which own only wall sets, take walls anyway. The team
+    # lands short of the archetype it asked for, and the mon that was misused is
+    # exactly the one that had a choice. Re-pricing the cores once the rest of the
+    # roster exists spends the quota on the mons that had none.
+    #
+    # The SPECIES never changes -- only its set, and only when the swap moves the mon
+    # into a bucket the team is actually short of AND costs no floor that is currently
+    # just met. A megastone may be kept or dropped but never traded across: the stone
+    # is 100 eBST the band already counted, so changing mega-ness would silently move
+    # the fight off its curve. Keeping it is free, and it is the case that matters --
+    # a Mega Gardevoir has published sweeper sets that hold the stone too, and refusing
+    # to touch stone holders at all left the one mon this pass exists for untouched.
+    if off_quota:
+        for i, m in enumerate(team):
+            if not m.get("kept"):
+                continue
+            need = off_need(skip=i)
+            was = TS.offence_bucket(TS.offence_pct(dict(zip(TS.PBS_EV, m["ev"]))))
+            load_bearing = {r for r in floors if have[r] <= floors[r]} & m["roles"]
+            alt = build(m["species"], m["level"],
+                        banned_items=banned | {x["item"] for j, x in enumerate(team)
+                                               if j != i and x["item"]},
+                        cap=ceiling, mode=mode, allow_items=allow,
+                        offence=off, offence_hist=need,
+                        seed=sset, formats=fmts, early=early)
+            if not alt:
+                continue
+            # Mega in must equal mega out -- see above.
+            if (alt["item"] in MEGASTONE) != (m["item"] in MEGASTONE):
+                continue
+            # Only a move to a bucket the team is SHORTER of counts. Without this the
+            # pass swaps sets inside one bucket, which changes nothing it is measured
+            # on and quietly costs whatever role the old set happened to carry --
+            # it traded a Life Orb Gallade for a Choice Scarf one and lost `setup`.
+            now = TS.offence_bucket(TS.offence_pct(dict(zip(TS.PBS_EV, alt["ev"]))))
+            if need[now] <= need[was]:
+                continue
+            if not load_bearing <= alt["roles"]:
+                continue
+            # ...and it must not push a capped role past its cap. take() spends a
+            # whole strict/loose two-pass on this; a swap that skipped the check
+            # handed Douglas a second hazard setter over a cap of one.
+            if any(have[r] - (r in m["roles"]) + (r in alt["roles"]) > n
+                   for r, n in caps.items()):
+                continue
+            notes.append(f"{m['species']} re-priced for the offence quota: "
+                         f"{m['src']} -> {alt['src']}")
+            alt["kept"], alt["why"] = m["kept"], m["why"]
+            have.subtract(m["roles"])
+            have.update(alt["roles"])
+            team[i] = alt
+
+    # ---- one super-effective answer per type the theme is weak to -----------
+    #
+    # MONOTYPE-SYNERGY.md section 11. Real monotype teams carry SE coverage on 100% of
+    # teams wherever their own STAB is resisted -- 35 of 51 pairs -- and ours failed 5
+    # of 24. The cause was measured there and the obvious hypothesis refuted: the
+    # generated gyms carry MORE damaging moves than real teams (2.93 per set against
+    # 2.56-2.64), just fewer attacking TYPES (8.4 against 9.3). So this is one move on
+    # a member already present, never a re-pick, and the feasibility table says every
+    # pair has 22-132 on-theme species that can learn something.
+    #
+    # A GATE rather than a rank term, and the null is why. Offensive coverage does not
+    # beat a shuffled null in any generation -- but that means composition is
+    # irrelevant to it, NOT that nobody chose it: you cannot draw an Ice team that
+    # fails to hit Steel, and ours did. A term that competes with the curve would lose
+    # to it; every real team simply has this.
+    if theme and THREAT_COVER:
+        def hits(atk, swap=None):
+            """unanswered()'s predicate, with one member's set optionally replaced.
+
+            `swap` is (index, moves) to score a hypothetical set for one member."""
+            return any(hits_type(swap[1] if swap and swap[0] == j else mm["moves"],
+                                 atk)
+                       for j, mm in enumerate(team))
+
+        for atk in sorted(WEAK.get(theme, ())):
+            if hits(atk):
+                continue
+            able = [x for x, r in _mv.items()
+                    if r["power"] > 0 and TS.type_multiplier(r["type"], [atk]) > 1]
+            best = None
+            for i, m in enumerate(team):
+                if is_dynamic(m["species"]):
+                    continue
+                dmg = sorted((x for x in m["moves"]
+                              if x in _mv and _mv[x]["power"] > 0),
+                             key=lambda x: _mv[x]["power"])
+                # Never the member's best attack, and never its only one: the point is
+                # to add a type, not to disarm the body that carries the fight.
+                #
+                # "Best" cannot be read off PBS power alone. A weight- or speed-scaled
+                # move is written at its FLOOR (Heavy Slam sits at 1), so ranking by
+                # the column made Aggron's only Steel attack look like its weakest and
+                # the first run traded it away for an Aerial Ace. Its STAB is the thing
+                # a boss is built around, so protect the last one outright.
+                bs = _sp[m["species"]]["base_stats"]   # HP ATK DEF SPE SPA SPD
+                evs = m["ev"]
+                stab = [x for x in dmg if _mv[x]["type"] in _sp[m["species"]]["types"]]
+                for old in dmg[:-1]:
+                    if len(stab) == 1 and old == stab[0]:
+                        continue
+                    for new in able:
+                        if new in m["moves"]:
+                            continue
+                        if D.learnable(m["species"], new, m["level"], 0) \
+                                not in ("levelup", "tm"):
+                            continue
+                        moves = [new if x == old else x for x in m["moves"]]
+                        got = roles_of(moves, m["item"], ability_name(m), mode,
+                                       _sp[m["species"]])
+                        # A swap must not un-answer a threat already answered.
+                        # Genesect's Ice Beam WAS gym 9's Ground answer; taking it
+                        # for a Fighting move cost the pair, and only alphabetical
+                        # order (FIGHTING before GROUND) repaired it on the next
+                        # pass. Reversed, it would have shipped.
+                        if any(t != atk and hits(t)
+                               and not hits(t, (i, moves))
+                               for t in WEAK.get(theme, ())):
+                            continue
+                        delta = lambda r: have[r] - (r in m["roles"]) + (r in got)
+                        # Must not make a floor WORSE -- not must leave every floor
+                        # met. A move swap cannot supply a mega, so demanding the
+                        # mega floor be satisfied here rejected all twenty legal
+                        # swaps on a pure-Ice gym 4 and reported it as "no member can
+                        # learn one", which was false: Weavile learns Aerial Ace.
+                        if any(delta(r) < min(n, have[r]) for r, n in floors.items()):
+                            continue
+                        if any(delta(r) > n for r, n in caps.items()):
+                            continue
+                        # Priced through the BODY, not off the column. Power alone
+                        # handed Heracross a Focus Blast -- base 40 SpA, Jolly, no
+                        # special EVs, behind a Swords Dance that boosts the other
+                        # stat -- when Close Combat hits Rock for the same x2 off
+                        # base 125. The stat and its investment dominate, which is
+                        # what makes a special move on a physical body lose.
+                        def worth(x):
+                            rec = _mv[x]
+                            phys = rec["category"] == "Physical"
+                            stat = bs[1] if phys else bs[4]
+                            ev = evs[1] if phys else evs[4]
+                            return (rec["power"] * CONDITIONAL.get(x, 1.0)
+                                    * stat * (1 + ev / 504))
+                        score = worth(new) - worth(old)
+                        if not best or score > best[0]:
+                            best = (score, i, old, new, moves, got)
+            if not best:
+                can = any(D.learnable(m["species"], x, m["level"], 0)
+                          in ("levelup", "tm")
+                          for m in team if not is_dynamic(m["species"])
+                          for x in able)
+                notes.append(
+                    f"nothing here can answer {atk}: "
+                    + ("no legal swap -- every candidate would cost a role or "
+                       "un-answer another threat" if can else
+                       "no member can learn a move that hits it"))
+                continue
+            _score, i, old, new, moves, got = best
+            m = team[i]
+            have.subtract(m["roles"])
+            have.update(got)
+            m["moves"], m["roles"] = moves, got
+            notes.append(f"{m['species']}: {old} -> {new}, the team's answer to {atk}")
+
     return {"team": team, "roles": have, "notes": notes, "band": (lo, hi)}
 
 
@@ -1824,6 +2344,7 @@ def make_gym(idx, seen=None):
     `seen` is the running tally from claim(); pass it to build the nine as a set that
     does not repeat itself, omit it to build this one alone."""
     _keep, _sets = picks_for(gym_id(idx))
+    _sset, _pseed = salts(gym_id(idx))
     cap = CAPS[idx]
     leader = cap["trainer"]
     theme = THEME[leader]
@@ -1847,13 +2368,20 @@ def make_gym(idx, seen=None):
         # after the originals so the roster order -- heaviest first -- still decides
         # who gets the mega, which is a property of the dev's roster and not of a
         # tick box.
-        "kept": [{"species": n, "level": level - 1} for n in
+        # `asked` is NOT `pinned`. `pinned` says "this is yours, not the game's" and
+        # the card reads it to mark the row, so an original never carries it however
+        # hard you tick the box. But ticking the box IS asking for the mon, and
+        # assemble's slot trim has to know: without this an original you pinned
+        # looked exactly like one you had merely not removed, and gym 8's Pidgeot
+        # gave its slot to another pin.
+        "kept": [{"species": n, "level": level - 1,
+                  "asked": _keep.get(n) is True} for n in
                  sorted(originals, key=lambda n: -potential_bst(n, mega_ok))]
                 + [{"species": n, "level": level - 1, "pinned": True}
                    for n, on in _keep.items()
                    if on and n not in originals and n in _sp],
         "set_filter": _sets,
-        "keep_band": True, "note_unknown": False,
+        "keep_band": True, "grow_kept": True, "note_unknown": False,
         "floors": floors, "caps": caps, "mode": mode, "mega_ok": mega_ok,
         "ubers_ok": True, "project_spent_mega": True,
         "why_theme": ("theme:%s", "theme"), "why_open": ("off-theme", "off-theme"),
@@ -1865,14 +2393,9 @@ def make_gym(idx, seen=None):
         # makes the fight theirs, and it survives losing a Pokemon. Only the mode's
         # own evidence is held back.
         "keep_drop": KEEP_DROP, "keep_test": keep_filter(_keep),
-        "set_formats": SET_FORMATS, "early_moves": EARLY_MOVES,
-        "set_seed": SET_SEED or None,
-        # Salted with the fight, because the rng inside ranked() is keyed
-        # "{seed}:{species}" -- so an UNSALTED seed gives every fight the same
-        # perturbation and rerolls who everybody's favourite is, never that they
-        # share one. The salt is what makes a reroll vary the nine against each
-        # other; seed 0 still means "no jitter, best-ranked body wins".
-        "pick_seed": f"{PICK_SEED}:{gym_id(idx)}" if PICK_SEED else None,
+        "set_formats": set_formats(), "early_moves": EARLY_MOVES,
+        "set_seed": _sset,
+        "pick_seed": _pseed,
         "seen": seen,
         "protected": [n for n in originals if mode_evidence(n, mode)],
     })

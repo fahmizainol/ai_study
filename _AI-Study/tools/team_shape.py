@@ -38,7 +38,7 @@ SAMPLE_N = 2000
 # five mode roles -- which moves every column of `sample.rows` -- and added `mode`.
 # v3 added `mode.*.payoff` and `mode.*.abuser_mean`. A stale file read by newer code
 # does not fail, it silently answers the wrong question, so the check is not optional.
-PROFILE_VERSION = 3
+PROFILE_VERSION = 4
 
 # Roles overlap on purpose -- Thunder Wave is both speed control and status, and a
 # team that runs it gets credit for both. They are not a partition of the move pool.
@@ -221,6 +221,52 @@ def team_offence(evs_list):
     return statistics.mean([offence_pct(e or {}) for e in evs_list])
 
 
+# Width of the per-set offence histogram carried per archetype. Ten 10-point buckets
+# is as fine as 255 sets -- the thinnest archetype column -- supports before the
+# tails start being single teams.
+OFFENCE_BUCKETS = 10
+
+
+PBS_EV = ["hp", "atk", "def", "spe", "spa", "spd"]
+
+
+def offence_bucket(pct, n=OFFENCE_BUCKETS):
+    return min(int(pct) * n // 100, n - 1)
+
+
+def offence_quota(hist, size):
+    """How many of `size` sets this archetype puts in each offence bucket.
+
+    A COUNT, not a target -- the same correction §2 made to the role vocabulary, for
+    the same reason. A balance team is 42% offence on average because ~2.5 of its six
+    sets sit under 10% and ~1.8 sit over 90%; it is not six sets at 42%, and it is
+    not six sets in the single most common bucket either. Scoring each slot on its
+    own -- by distance from the mean OR by how common it is -- can only ever return
+    one kind of set six times. A quota is what makes the mixture reachable, because
+    what the next slot wants depends on what the previous ones took."""
+    return [h * size for h in (hist or [])]
+
+
+def offence_fit(hist, pct):
+    """How common a set at `pct` offence is within this archetype, 0-1 (peak = 1).
+
+    Replaces "distance from the archetype's MEAN offence share". That mean was handed
+    to every slot as its own target, and it is the one value a real set is LEAST
+    likely to hold: a balance team reaches 42% by combining 41% of its sets under 10
+    and 30% of them over 90, with only ~11% anywhere near 42. Ranking sets by distance
+    from 42 therefore discarded both halves of what a balance team is made of -- it is
+    why a Mega Gardevoir came back carrying Wish/Protect while four published sweeper
+    sets were rejected as too offensive.
+
+    Measured per archetype, so stall still resolves to walls and hyper offence still
+    resolves to sweepers; only the assumption that a slot should look like the team
+    average is gone."""
+    if not hist:
+        return 0.0
+    i = min(int(pct) * len(hist) // 100, len(hist) - 1)
+    return hist[i] / (max(hist) or 1.0)
+
+
 # ---------------------------------------------------------------- type coverage
 # The axis the corpus work never looked at. Roles say what a team DOES; these say
 # what it can take and what it can hit, and they are a different question -- a team
@@ -235,8 +281,8 @@ def team_offence(evs_list):
 # cut used `types[0]`, which is a PBS ordering artifact and not a game concept: it
 # scored Azumarill (WATER/FAIRY) and Florges (FAIRY) as different where the real
 # question is whether two members share a defensive profile.
-COVERAGE_AXES = ("nobody_resists", "worst_shared", "off_se", "atk_types",
-                 "bst_sd", "spe_sd", "dup_types")
+COVERAGE_AXES = ("holes", "threat", "nobody_resists", "worst_shared", "off_se",
+                 "atk_types", "bst_sd", "spe_sd", "dup_types")
 
 
 def type_multiplier(atk, types, chart=None):
@@ -251,6 +297,36 @@ def type_multiplier(atk, types, chart=None):
         elif atk in res.get(t, ()):
             mult *= 0.5
     return mult
+
+
+def uncovered(types):
+    """Attacking types nothing in `types` resists. `types` is one list per member.
+
+    The live half of coverage(): coverage() reports a finished team, this is what a
+    builder asks mid-roster. Kept here rather than in either caller because both of
+    them rank on it and generate_bosses cannot import free_team."""
+    chart = D.type_chart()
+    return [a for a in sorted(chart[0])
+            if not any(type_multiplier(a, t, chart) < 1 for t in types)]
+
+
+def holes(types, min_weak=2):
+    """Attacking types nothing resists AND that `min_weak`+ members are weak to.
+
+    uncovered() on its own is the weak metric, and both corpus reports say so
+    independently: a type nothing resists and nothing is WEAK to costs nothing, and
+    counting it flattened the difference between a gym whose blind spots are Dragon
+    and Fairy and one whose blind spots fold four bodies. TEAM-CORPUS.md section 12
+    names the conjunction `holes` -- "the thing that loses games" -- at 3 of 6.
+    Mid-build a roster is partial, so the bar here is lower and the caller sets it.
+    """
+    chart = D.type_chart()
+    out = []
+    for a in sorted(chart[0]):
+        ms = [type_multiplier(a, t, chart) for t in types]
+        if not any(m < 1 for m in ms) and sum(1 for m in ms if m > 1) >= min_weak:
+            out.append(a)
+    return out
 
 
 def coverage(mons):
@@ -277,6 +353,7 @@ def coverage(mons):
                 atk_types.add(rec["type"])
 
     defending = sorted(chart[0])
+    hol = holes(types)
     return {
         "n": len(mons),
         # types no member resists: the team's blind spots on defence
@@ -294,6 +371,16 @@ def coverage(mons):
         "bst_sd": statistics.pstdev(bst) if len(bst) > 1 else 0.0,
         "spe_sd": statistics.pstdev(spe) if len(spe) > 1 else 0.0,
         "dup_types": len(mons) - len({frozenset(t) for t in types}),
+        # The conjunction, and the reason the two axes above it are kept but no
+        # longer lead: `nobody_resists` counts a type nothing resists AND nothing
+        # fears, `worst_shared` counts a type four members fear with a fifth walling
+        # it, and neither of those loses a fight. TEAM-CORPUS.md section 12 measures
+        # the overlap and calls it the thing that does.
+        "holes": len(hol),
+        # Weighted by how much of the team each hole actually folds, because one
+        # hole that takes five bodies is not one hole that takes two.
+        "threat": sum(sum(1 for t in types if type_multiplier(a, t, chart) > 1)
+                      for a in hol),
     }
 
 
@@ -336,13 +423,14 @@ def build_profile(gens=None):
     every, every_sets = [], []
     for _stem, team in SC.dump_teams(gens=gens):
         rc = role_counts(team["data"])
-        off = team_offence([s.get("evs") for s in team["data"]])
-        every.append((rc, off))
+        spread = [offence_pct(s.get("evs") or {}) for s in team["data"]]
+        off = statistics.mean(spread)
+        every.append((rc, off, spread))
         every_sets.append(team["data"])
         tag = team_tags.tags(team["name"])
         arch = tag["archetype"]
         if arch:
-            tagged[_FOLD[arch]].append((rc, off))
+            tagged[_FOLD[arch]].append((rc, off, spread))
         # A mode tag is the author's word; agreement() checks it against the moves and
         # abilities the team actually runs, and only tags that survive that count. The
         # dropped tags (webs, spikes, baton pass, para, spam) are real team plans that
@@ -356,13 +444,21 @@ def build_profile(gens=None):
     all_freq, all_mapped = type_freq(every_sets)
 
     def reduce(rows):
+        # Per-SET offence, not only the team mean. The mean alone was being handed to
+        # every slot as its own target, which is the one thing a real set is least
+        # likely to look like -- see offence_fit().
+        spread = [p for _, _, sp in rows for p in sp]
+        hist = [0.0] * OFFENCE_BUCKETS
+        for p in spread:
+            hist[min(int(p) * OFFENCE_BUCKETS // 100, OFFENCE_BUCKETS - 1)] += 1
         return {
             "n": len(rows),
-            "carry": {k: round(sum(1 for rc, _ in rows if rc[k]) / len(rows), 4)
+            "carry": {k: round(sum(1 for rc, _, _ in rows if rc[k]) / len(rows), 4)
                       for k in ROLES},
-            "mean": {k: round(statistics.mean([rc[k] for rc, _ in rows]), 3)
+            "mean": {k: round(statistics.mean([rc[k] for rc, _, _ in rows]), 3)
                      for k in ROLES},
-            "offence": round(statistics.mean([o for _, o in rows]), 1),
+            "offence": round(statistics.mean([o for _, o, _ in rows]), 1),
+            "offence_hist": [round(h / max(len(spread), 1), 4) for h in hist],
         }
 
     # A team's roles are correlated (recovery and status travel together; screens and
@@ -371,7 +467,7 @@ def build_profile(gens=None):
     # fixed-seed sample of real vectors keeps those answerable without the 86 MB.
     rng = random.Random(20260911)
     sample = [[rc[k] for k in ROLES] + [round(off, 1)]
-              for rc, off in rng.sample(every, min(SAMPLE_N, len(every)))]
+              for rc, off, _ in rng.sample(every, min(SAMPLE_N, len(every)))]
 
     def move_freq(rows):
         """(sets carrying each move, species carrying it, sets seen)."""

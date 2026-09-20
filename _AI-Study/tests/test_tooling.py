@@ -111,12 +111,14 @@ class TeamOverrideBattleFormatTest(unittest.TestCase):
         self.assertTrue(loaded["settings"]["PICKS"]["g2"]["keep"]["POLITOED"])
 
 
-class BossStudioFreezeTest(unittest.TestCase):
-    """Freezing pins a fight to a team the generator is then never asked to
-    re-derive. The point is that it survives the thing card overrides cannot:
-    PBS and the Smogon dump live outside this repo, so the same knobs give
-    different teams later, and a preset that only stores knobs cannot promise
-    another machine the same teams."""
+class BossStudioHoldTest(unittest.TestCase):
+    """A card HOLDS the team it is showing, and freezing only exempts it from the
+    regenerate. Those are two different jobs, and they used to be one key: the
+    payload WAS the flag, so dropping it to unfreeze a card rerolled the card.
+
+    Holding is what survives the thing card overrides cannot: PBS and the Smogon
+    dump live outside this repo, so the same knobs give different teams later, and a
+    preset that only stores knobs cannot promise another machine the same teams."""
 
     @classmethod
     def setUpClass(cls):
@@ -133,41 +135,102 @@ class BossStudioFreezeTest(unittest.TestCase):
     # gym has to rebuild around, a band nothing currently sits in, a fresh seed.
     HOSTILE = {"THEME": ["STEEL"] * 9, "TARGET": [300] * 9, "SET_SEED": 777}
 
-    def test_frozen_fights_ignore_knobs_that_would_reroll_them(self):
-        frozen = self.BS.set_frozen({}, None, True)
-        self.assertEqual(27, frozen["count"], "nine gyms plus 18 named trainers")
-        got = self.BS.run({**frozen["settings"], **self.HOSTILE})
-        self.assertEqual(self.sig(self.base["records"]), self.sig(got["records"]))
-        self.assertEqual(self.sig(self.base["trainer_records"]),
-                         self.sig(got["trainer_records"]))
-        self.assertEqual(self.base["sha"], got["sha"])
+    def held(self, keys=None):
+        return self.BS._hold({}, keys)
 
-    def test_the_same_knobs_do_reroll_an_unfrozen_build(self):
+    def assertUnmoved(self, got, why=""):
+        self.assertEqual(self.sig(self.base["records"]), self.sig(got["records"]), why)
+        self.assertEqual(self.sig(self.base["trainer_records"]),
+                         self.sig(got["trainer_records"]), why)
+        self.assertEqual(self.base["sha"], got["sha"], why)
+
+    def test_held_fights_ignore_knobs_that_would_reroll_them(self):
+        held = self.held()
+        self.assertEqual(27, len(held["HELD"]), "nine gyms plus 18 named trainers")
+        self.assertUnmoved(self.BS.run({**held, **self.HOSTILE}))
+
+    def test_the_same_knobs_do_reroll_a_build_that_holds_nothing(self):
         """Without this the test above passes on a generator that ignores the
-        knobs entirely, which would prove nothing about freezing."""
+        knobs entirely, which would prove nothing about holding."""
         loose = self.BS.run(dict(self.HOSTILE))
         self.assertNotEqual(self.sig(self.base["records"]),
                             self.sig(loose["records"]))
 
-    def test_unfreezing_one_fight_rerolls_only_that_one(self):
-        frozen = self.BS.set_frozen({}, None, True)["settings"]
-        one = self.BS.set_frozen({**frozen, **self.HOSTILE}, ["g3"], False)
-        self.assertEqual(26, one["count"])
-        got = self.sig(self.BS.run(one["settings"])["records"])
-        moved = [i for i, (a, b) in
-                 enumerate(zip(got, self.sig(self.base["records"]))) if a != b]
-        self.assertEqual([3], moved)
+    def test_unfreezing_moves_nothing(self):
+        """The whole point of the split. Unfreezing used to hand the fight back to
+        the generator and lose exactly the team you were trying to keep; now the
+        team lives in HELD, so dropping the flag cannot reach it -- even under the
+        knobs that reroll everything else."""
+        held = self.held()
+        thawed = {**held, **self.HOSTILE, "FROZEN": {}}
+        self.assertEqual(set(), self.BS._frozen_keys(thawed))
+        self.assertUnmoved(self.BS.run(thawed), "unfreezing rerolled a card")
 
-    def test_frozen_payload_survives_json(self):
+    def test_regenerating_one_fight_moves_only_that_one(self):
+        out, got, stuck = self.BS.regenerate(
+            {**self.held(), **self.HOSTILE}, ["g3"], False)
+        self.assertEqual([], stuck)
+        moved = [i for i, (a, b) in
+                 enumerate(zip(self.sig(got["records"]),
+                               self.sig(self.base["records"]))) if a != b]
+        self.assertEqual([3], moved)
+        self.assertEqual(27, len(out["HELD"]), "the other 26 still hold a team")
+
+    def test_a_reroll_returns_a_different_team_every_press(self):
+        """A build at unchanged settings is deterministic, so without a new salt
+        Regenerate would hand back the same team and look broken."""
+        out, seen = self.held(), []
+        for _ in range(3):
+            out, got, stuck = self.BS.regenerate(out, ["g3"], True)
+            self.assertEqual([], stuck, "gym 4 ran out of teams")
+            seen.append(self.BS._team_of(out["HELD"]["g3"]))
+        self.assertEqual(len(seen), len({repr(t) for t in seen}),
+                         "a press repeated a team it had already shown")
+        self.assertTrue(out["REROLL"]["g3"] >= 3)
+
+    @staticmethod
+    def shown(records):
+        """Species, moves and item -- everything a person can see on a card, which
+        is what a reroll promises to change and what it must not change elsewhere.
+        Species alone is too weak a signature to assert on: a narrow theme (gym 4 is
+        ICE, and ON_THEME_MIN is 6) can have no other body to offer, so its reroll
+        legitimately moves only the sets."""
+        return [[(m["species"], tuple(m["moves"]), m.get("item")) for m in r["mons"]]
+                for r in records]
+
+    def test_a_reroll_leaves_every_other_fight_alone(self):
+        out, got, _ = self.BS.regenerate(self.held(), ["g3"], True)
+        for i, (a, b) in enumerate(zip(self.shown(self.base["records"]),
+                                       self.shown(got["records"]))):
+            self.assertEqual(a != b, i == 3, f"gym {i + 1} moved when gym 4 rerolled")
+        self.assertEqual(self.shown(self.base["trainer_records"]),
+                         self.shown(got["trainer_records"]))
+
+    def test_an_untouched_reroll_is_todays_build_byte_for_byte(self):
+        """REROLL absent must reach the generator as no salt at all, or every team
+        this repo has ever shipped moves the day the counter is introduced."""
+        self.assertEqual({}, self.BS._fight_rerolls(None))
+        self.assertUnmoved(self.BS.run({"REROLL": {}}))
+
+    def test_held_payload_survives_json(self):
         """Presets and localStorage are both JSON, so a set or a Counter left in
         the payload would come back as something the next build cannot use."""
-        frozen = self.BS.set_frozen({}, None, True)["settings"]
-        got = self.BS.run(json.loads(json.dumps(frozen)))
-        self.assertEqual(self.base["sha"], got["sha"])
+        held = self.held()
+        self.assertUnmoved(self.BS.run(json.loads(json.dumps(held))))
         # And byte-stable, or every preset save churns its own diff.
-        again = self.BS.set_frozen({}, None, True)["settings"]
-        self.assertEqual(json.dumps(frozen, sort_keys=True),
-                         json.dumps(again, sort_keys=True))
+        self.assertEqual(json.dumps(held, sort_keys=True),
+                         json.dumps(self.held(), sort_keys=True))
+
+    def test_a_preset_from_before_the_split_still_holds_its_teams(self):
+        """The old shape put the BUILD where the flag now lives. Read off the value
+        rather than a version stamp, so nothing has to be written into a file that
+        was saved before the distinction existed."""
+        legacy = {"FROZEN": self.held()["HELD"]}
+        split = self.BS._split_legacy_frozen(legacy)
+        self.assertEqual(27, len(split["HELD"]))
+        self.assertEqual(27, len(self.BS._frozen_keys(legacy)),
+                         "an old preset's fights must come back protected")
+        self.assertUnmoved(self.BS.run({**legacy, **self.HOSTILE}))
 
 
 class BossStudioCompanionPresetTest(unittest.TestCase):
@@ -426,16 +489,16 @@ class ShippedTeamFilesTest(unittest.TestCase):
                          + "; ".join(errors[:3]))
 
 
-class FrozenFightIsEditableTest(unittest.TestCase):
-    """Frozen means the generator is not consulted, not that the team is read-only.
-    Conflating them left no way to change a frozen fight: unfreezing rerolls it and
-    loses the team you were keeping, so "drop one Pokemon" meant editing JSON."""
+class HeldFightIsEditableTest(unittest.TestCase):
+    """Holding means the generator is not consulted, not that the team is read-only.
+    Conflating them left no way to change a held fight: unfreezing rerolled it and
+    lost the team you were keeping, so "drop one Pokemon" meant editing JSON."""
 
     def setUp(self):
         sys.path.insert(0, str(STUDY / "tools"))
         import boss_studio
         self.BS = boss_studio
-        self.settings = boss_studio.set_frozen({}, None, True)["settings"]
+        self.settings = boss_studio._hold({})
         self.base = boss_studio.run(self.settings)
         self.gym1 = [m["species"] for m in self.base["records"][0]["mons"]]
 
@@ -446,7 +509,7 @@ class FrozenFightIsEditableTest(unittest.TestCase):
     def _with(self, **over):
         return {**json.loads(json.dumps(self.settings)), **over}
 
-    def test_unticking_removes_a_mon_from_a_frozen_team(self):
+    def test_removing_drops_a_mon_from_a_held_team(self):
         drop = self.gym1[3]
         got = self.BS.run(self._with(PICKS={"g0": {"keep": {drop: False}}}))
         self.assertEqual([s for s in self.gym1 if s != drop],
@@ -454,7 +517,7 @@ class FrozenFightIsEditableTest(unittest.TestCase):
         self.assertEqual(self.sig(self.base["records"])[1:],
                          self.sig(got["records"])[1:], "other fights untouched")
 
-    def test_per_species_overrides_reach_a_frozen_mon(self):
+    def test_per_species_overrides_reach_a_held_mon(self):
         got = self.BS.run(self._with(PICKS={"g0": {"items": {self.gym1[0]: "LEFTOVERS"}}}))
         self.assertEqual("LEFTOVERS", got["records"][0]["mons"][0]["item"])
         self.assertEqual(self.gym1, self.sig(got["records"])[0], "species unchanged")
@@ -468,21 +531,39 @@ class FrozenFightIsEditableTest(unittest.TestCase):
                          self.sig(self.BS.run(hostile)["records"])[0])
 
     def test_rendering_does_not_mutate_the_stored_payload(self):
-        """_edit_frozen and _apply_loadout both mutate a build in place, and roles_of
+        """_edit_held and _apply_loadout both mutate a build in place, and roles_of
         writes a set that no JSON preset could hold. The payload is the source of
         truth; a render must not be able to edit it."""
         drop = self.gym1[3]
         settings = self._with(PICKS={"g0": {"keep": {drop: False}}})
         for _ in range(3):
             self.BS.run(settings)
-        self.assertEqual(len(self.gym1), len(settings["FROZEN"]["g0"]["team"]))
+        self.assertEqual(len(self.gym1), len(settings["HELD"]["g0"]["team"]))
         json.dumps(settings)          # raises if a set leaked back in
+
+    def test_an_edit_is_a_render_and_never_reaches_the_store(self):
+        """What the card holds is the build the GENERATOR made. Store the edited
+        team instead and clearing an override could never put the generated value
+        back -- the value to restore is the one that got overwritten."""
+        was = self.base["records"][0]["mons"][0]["item"]
+        sp = self.gym1[0]
+        edited = self._with(PICKS={"g0": {"items": {sp: "LEFTOVERS"}}})
+        # the page adopts HELD from every build, so the edited board round trips
+        carried = {**edited, "HELD": self.BS.run(edited)["_held"]}
+        self.assertEqual("LEFTOVERS",
+                         self.BS.run(carried)["records"][0]["mons"][0]["item"])
+        cleared = {**carried, "PICKS": {}}
+        self.assertEqual(was, self.BS.run(cleared)["records"][0]["mons"][0]["item"],
+                         "the generated item did not come back")
+        self.assertEqual(self.gym1, self.sig(self.BS.run(cleared)["records"])[0],
+                         "clearing a removal did not bring the mon back")
 
 
 class BossStudioLoadUnpinsTest(unittest.TestCase):
-    """Loading used to hand back a board of locked cards. Pinning every species is
-    the reverse-engineering path's only lever, but freezing holds the same teams
-    outright, so once it is on the pins hold nothing and are cleared."""
+    """Loading used to hand back a board of locked cards. Pinning every species and
+    naming every item, move and spread is the reverse-engineering path's only lever,
+    but holding keeps the same teams outright, so once HELD is filled every one of
+    those overrides is residue and is cleared."""
 
     def setUp(self):
         sys.path.insert(0, str(STUDY / "tools"))
@@ -513,7 +594,24 @@ class BossStudioLoadUnpinsTest(unittest.TestCase):
                 self.assertEqual(self.sig(disk),
                                  self.sig(self.BS.run(settings)[key]))
 
-    def test_the_freeze_is_what_holds_them_now(self):
+    def test_loading_leaves_no_per_species_overrides_at_all(self):
+        """Not just the pins. Every mon came back marked pinned, set fixed, item
+        fixed and moves fixed, with a dotted stripe down every row and an "edited"
+        badge on every card -- none of which you did. The marks exist to say "you
+        changed this", so scaffolding wearing them is a lie about your own board."""
+        got = self.BS.import_teams("teams_trainers.json", {})
+        left = {kind: sum(len(v.get(kind) or {}) for v in
+                          (got["settings"].get("PICKS") or {}).values()
+                          if isinstance(v, dict))
+                for kind in self.BS._IMPORT_OVERRIDES}
+        self.assertEqual({k: 0 for k in self.BS._IMPORT_OVERRIDES}, left)
+        # and the teams are still exactly the file's, which is what makes it safe
+        disk = json.loads(
+            Path(self.BS.SHIPPED_TRAINERS).read_text(encoding="utf-8"))
+        self.assertEqual(self.sig(disk),
+                         self.sig(self.BS.run(got["settings"])["trainer_records"]))
+
+    def test_the_hold_is_what_keeps_them_now(self):
         """Unpinned teams must survive knobs that would otherwise reroll them --
         otherwise clearing the pins quietly threw the teams away."""
         got = self.BS.import_teams("teams_trainers.json", {})
@@ -1066,20 +1164,72 @@ class CrossFightVarietyTest(unittest.TestCase):
         self.G.make_gym(0), self.G.make_gym(1)
         self.assertEqual(2, len(set(seeds)), "two fights, two seeds")
 
-    def test_frozen_fights_claim_their_families_before_anything_is_built(self):
-        """A fight pinned by hand owns its species outright and the generator routes
-        around it -- which is why this is a tally and not a reroll."""
+    def test_held_fights_claim_their_families_before_anything_is_built(self):
+        """A fight already on the board owns its species outright and the generator
+        routes around it -- which is why this is a tally and not a reroll."""
         self.G.REPEAT_BAND = 1
-        frozen = self.BS.set_frozen({}, ["g0"], True)["settings"]
+        held = self.BS._hold({}, ["g0"])
         seen = {}
-        for build in self.BS._thaw(frozen["FROZEN"]).values():
+        for build in self.BS._thaw(held["HELD"]).values():
             self.G.claim(seen, build["team"])
-        self.assertTrue(seen, "freezing gym 1 claimed nothing")
-        got = self.BS.run(frozen)
+        self.assertTrue(seen, "holding gym 1 claimed nothing")
+        got = self.BS.run(held)
         gym1 = {m["species"] for m in got["records"][0]["mons"]}
         self.assertEqual(gym1, {m["species"] for m in
                                 self.BS.run({})["records"][0]["mons"]},
-                         "the frozen fight itself must not move")
+                         "the held fight itself must not move")
+
+    # gym 3's dev roster, and six Water bodies that are not on it. The theme is
+    # WATER and ON_THEME_MIN is 6, so every pin here is one the fight can legally
+    # field -- the test is about slots, and an off-theme pin would fail for a
+    # different reason and prove nothing.
+    GYM3, GYM3_ORIG = 2, ("PYUKUMUKU", "POLIWHIRL", "BRIONNE")
+    GYM3_PINS = ("AZUMARILL", "POLITOED", "MANTINE", "GOREBYSS", "VAPOREON",
+                 "GASTRODON")
+
+    def test_a_pin_outranks_the_dev_roster_for_a_slot(self):
+        """Six pins onto a gym whose dev roster is three: all three came back and
+        took the pins' slots, the species just swapped in among them. The roster is
+        what the fight has when nobody says otherwise; a pin is someone saying
+        otherwise, so the roster is what gives way."""
+        self.addCleanup(setattr, self.G, "PICKS", self.G.PICKS)
+        key = self.G.gym_id(self.GYM3)
+        self.assertEqual(list(self.GYM3_ORIG),
+                         [m["species"] for m in self.G.CAPS[self.GYM3]["team"]
+                          if m["species"] in self.G._sp],
+                         "gym 3's roster moved; repoint this test")
+        self.G.PICKS = {key: {"keep": {n: True for n in self.GYM3_PINS}}}
+        on = {m["species"] for m in self.G.make_gym(self.GYM3)["team"]}
+        for n in self.GYM3_PINS:
+            self.assertIn(n, on, f"{n} was pinned and lost its slot anyway")
+
+    def test_pins_that_fit_alongside_the_roster_displace_nothing(self):
+        """The roster only gives way for a pin that has nowhere else to go."""
+        self.addCleanup(setattr, self.G, "PICKS", self.G.PICKS)
+        self.G.PICKS = {self.G.gym_id(self.GYM3):
+                        {"keep": {n: True for n in self.GYM3_PINS[:2]}}}
+        got = self.G.make_gym(self.GYM3)
+        self.assertFalse([n for n in got["notes"] if "took its slot" in n])
+        on = {m["species"] for m in got["team"]}
+        self.assertTrue(set(self.GYM3_ORIG) & on, "the roster was dropped anyway")
+
+    def test_nothing_is_displaced_when_no_one_pinned_anything(self):
+        """"a pin took its slot" has to be true when it is said, so a roster that
+        merely does not fit is left for add() to refuse with its own note."""
+        for i in range(9):
+            self.assertFalse(
+                [n for n in self.G.make_gym(i)["notes"] if "took its slot" in n],
+                f"gym {i + 1} blamed a pin nobody made")
+
+    def test_a_card_reroll_salts_only_its_own_fight(self):
+        """The counter is per fight, so one card's Regenerate must not perturb the
+        ranking of the twenty-six it did not touch."""
+        self.addCleanup(setattr, self.G, "REROLL", self.G.REROLL)
+        self.G.REROLL = {self.G.gym_id(1): 2}
+        self.assertEqual((None, None), self.G.salts(self.G.gym_id(0)))
+        sset, pseed = self.G.salts(self.G.gym_id(1))
+        self.assertTrue(sset and pseed, "a rerolled fight needs both salts")
+        self.assertIn(self.G.gym_id(1), pseed)
 
 class MonoSynergyTypeMathTest(unittest.TestCase):
     """The multiplier math and the two rules everything in MONOTYPE-SYNERGY.md rests on.

@@ -59,19 +59,16 @@ def seed_for(battle):
 def pool_for(theme, level, bst_cap, rng, curveball):
     """Species pool for GENERATED growth slots only (originals are kept as-is).
     Excludes mons that should have evolved by now, so extras aren't babies."""
-    sp, floor = D.species(), D.min_level()
+    sp, floor, evo = D.species(), D.min_level(), D.evo_floor()
     def ok(name, want_theme):
         s = sp[name]
         if not s["types"] or s["bst"] > bst_cap or floor[name] > level:
             return False
-        # skip stage-1 mons whose evolution level is far behind (stale pick like lv40 Caterpie)
-        evolvable = [p for p in s["evolutions"] if p[1] == "Level" and p[2].isdigit()]
-        if evolvable and level > int(min(int(e[2]) for e in evolvable)) + 6:
-            return False
-        # non-level evolutions (item/happiness/trade/move) carry no level floor, so a
-        # baby like Bonsly/Jigglypuff would otherwise pass at lv50. From mid-game on,
-        # skip any still-evolvable mon that is clearly weaker than the band ceiling.
-        if s["evolutions"] and level >= 30 and s["bst"] < bst_cap - 40:
+        # skip mons whose evolution is far behind them (a stale pick like a lv40
+        # Caterpie, or the lv50 Bonsly this used to let through: a stone or a
+        # friendship evolution carries a level of its own now -- see D.evo_floor())
+        ahead = [evo[(name, c)] for c, _, _ in s["evolutions"] if c in sp]
+        if ahead and level > min(ahead) + 6:
             return False
         if want_theme and theme and not (set(s["types"]) & set(theme)):
             return False

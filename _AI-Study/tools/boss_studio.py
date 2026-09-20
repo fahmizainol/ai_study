@@ -96,9 +96,10 @@ SCALARS = {
                     "1 lets a published set keep a move the species has not reached "
                     "yet instead of dropping it for filler. The species gate still "
                     "holds -- nothing gets a move it could never learn -- but these "
-                    "builds DO fail validate_team.py's learnset check (16 errors on "
-                    "the nine gyms), so only turn it on if the fangame is meant to "
-                    "field precocious bosses"),
+                    "moves then show as warnings rather than errors, because with "
+                    "this on they are a choice and not a defect -- so the teams "
+                    "still export. Only turn it on if the fangame is meant to field "
+                    "precocious bosses"),
     "SET_SEED": ("int", 0, 40, 1,
                  "0 is off. Any other value rerolls WHICH published set each mon "
                  "gets, leaving the roster alone -- 9 to 20 of the 54 mons change "
@@ -128,6 +129,41 @@ SCALARS = {
                    "BST at which a species counts as one. 580 is where the dex cuts "
                    "(580-599 is eighteen legendaries and nothing else); 600 spares "
                    "the 580 club, 570 would take the Ultra Beasts with it"),
+    "LEGEND_MAX": ("int", 0, 6, 1,
+                   "how many LEGENDARIES one team may hold. 6 is off, and off is "
+                   "what every team here was built with -- which is how gym 7 came "
+                   "back as Azelf, Mesprit, Meloetta, Jirachi and Latios, five of "
+                   "six. Pseudo-legends do not count: this reads a name list, not "
+                   "BST, because 600 is exactly where Metagross and Garchomp sit "
+                   "beside Jirachi and Latios. A leader's OWN legendary counts "
+                   "toward the cap and is never dropped for it, so a fight already "
+                   "over simply adds none. The nine gyms lean on them to reach the "
+                   "late eBST targets, so it is not free: mean deviation goes 16.6 "
+                   "off -> 17.4 at 3 -> 20.8 at 2 -> 26.1 at 1, all of it in gyms "
+                   "7-9"),
+    "COVER_BAND": ("int", 0, 60, 5,
+                   "0 is off. Otherwise how far off the ideal eBST a body may sit "
+                   "and still be judged on COVERAGE instead -- the curve buckets at "
+                   "this width and \"does it resist a type nothing here resists and "
+                   "2+ of us fold to\" decides inside the bucket. Swept on the nine: "
+                   "10 halves the holes (1.86 -> 0.86) for 0.5 BST of mean "
+                   "deviation, and WIDER IS WORSE, not better -- 30 gives 1.57 at "
+                   "1.7 BST and 60 gives 1.57 at 5.1. A wide band spends the curve "
+                   "early and starves the slots after it"),
+    "HOLE_MIN_WEAK": ("int", 1, 4, 1,
+                      "how many members must be weak to a type before it counts as "
+                      "a hole worth fixing. At 1 it is 'nobody resists this', which "
+                      "both corpus reports measured as the WEAK metric: it spends "
+                      "slots plugging Dragon on teams nothing fears Dragon from. 2 "
+                      "is the working bar mid-build; TEAM-CORPUS.md section 12 uses "
+                      "3 of a finished six"),
+    "THREAT_COVER": ("int", 0, 1, 1,
+                     "1 guarantees the team carries one super-effective move per "
+                     "type its theme is weak to, swapping a single move on a member "
+                     "already present. Real monotype teams do this on 100% of teams "
+                     "where their own STAB is resisted (MONOTYPE-SYNERGY.md section "
+                     "8); the nine gyms failed 5 of 24 without it. A GATE, not a "
+                     "rank term -- it never moves a species, an item or the eBST"),
     "UNLOCK_STAGE": ("int", 0, 9, 1, "badge from which megas and strong items unlock"),
     "BP_CAP": ("int", 40, 150, 5, "early-game move-power ceiling"),
     "BP_CAP_UNTIL": ("int", 0, 9, 1, "badge at which that ceiling lifts"),
@@ -145,7 +181,12 @@ GROUPS = [
                            "LEGEND_BST", "BP_CAP", "BP_CAP_UNTIL", "EARLY_MOVES",
                            "per_fight"]),
     ("team", ["TEAM_SIZE", "ON_THEME_MIN", "CHASE", "MIN_CORR", "SET_FORMATS",
-              "KEEP_DROP", "KEEP_NEED_SET", "KEEP_MIN_BAND"]),
+              "KEEP_DROP", "KEEP_NEED_SET", "KEEP_MIN_BAND", "LEGEND_MAX"]),
+    # A fourth question: not what the team must BE or how different it should be, but
+    # whether it can answer what beats it. Defence is a preference the curve outranks
+    # (COVER_BAND, HOLE_MIN_WEAK); offence is a gate, because every real team simply
+    # has it and a term competing with the curve would lose.
+    ("coverage", ["COVER_BAND", "HOLE_MIN_WEAK", "THREAT_COVER"]),
     # A third question, and the reason these are not filed under "team": every other
     # knob here says what a team must BE, and these three only say "give me a
     # different one". All are off at 0. The two seeds ship off; REPEAT_BAND ships at
@@ -182,18 +223,48 @@ def battle_formats(over, fallback=None):
             for value in (list(raw) + ["inherit"] * 9)[:9]]
 
 
+def _card_keys():
+    """Every card key the board has, gyms then trainers, in card order."""
+    return [f"g{i}" for i in range(len(G.CAPS))] + \
+           [f"t{i}" for i in range(len(T.load_fights()))]
+
+
+def _fight_id(key):
+    """Card key -> the fight id the generators key their per-fight state by, or
+    None for a key this board does not have. The single place that mapping lives;
+    _fight_picks and _fight_rerolls both go through it."""
+    fights = T.load_fights()
+    if key[:1] == "g" and key[1:].isdigit() and int(key[1:]) < len(G.CAPS):
+        return G.gym_id(int(key[1:]))
+    if key[:1] == "t" and key[1:].isdigit() and int(key[1:]) < len(fights):
+        return T.fight_id(fights[int(key[1:])])
+    return None
+
+
+def _fight_rerolls(raw):
+    """Card keys -> how many times that one card has been rerolled.
+
+    The sibling of _fight_picks, and deliberately its own settings key rather than
+    another field inside PICKS: everything in PICKS is a per-SPECIES override that
+    says what a team must contain, and this is a per-FIGHT counter that says only
+    "give me a different one". Filing it with the pins would also put it in reach of
+    the two places that clear them (_settle, _snapshot), which must not reset it."""
+    out = {}
+    for key, n in (raw or {}).items():
+        fight = _fight_id(str(key))
+        if fight and isinstance(n, int) and n > 0:
+            out[fight] = n
+    return out
+
+
 def _fight_picks(raw):
     """Card keys -> fight ids. "g3" is gym 4, "t7" the eighth fight load_fights()
     yields. The client is given indices and never a name, because the trainer cards
     are anonymised and a fight id spells the trainer out."""
-    fights = T.load_fights()
     out = {}
     for k, v in (raw or {}).items():
-        if k[:1] == "g" and k[1:].isdigit() and int(k[1:]) < len(G.CAPS):
-            key = G.gym_id(int(k[1:]))
-        elif k[:1] == "t" and k[1:].isdigit() and int(k[1:]) < len(fights):
-            key = T.fight_id(fights[int(k[1:])])
-        else:
+        key = _fight_id(k)
+        if key is None:
             continue
         sets = {sp: ([lbl] if isinstance(lbl, str) else list(lbl))
                 for sp, lbl in (v.get("sets") or {}).items() if lbl}
@@ -270,7 +341,8 @@ def settings(over):
     """Apply overrides to the generator's globals, then put everything back.
 
     Caller must hold _LOCK: these are process-wide globals, not per-request state."""
-    saved = {k: getattr(G, k) for k in list(SCALARS) + LISTS + ["THEME", "PICKS"]
+    saved = {k: getattr(G, k)
+             for k in list(SCALARS) + LISTS + ["THEME", "PICKS", "REROLL"]
              if hasattr(G, k)}
     saved["_TS_CHASE"], saved["_AX"], saved["_AY"] = TS.CHASE, G._AX, G._AY
     try:
@@ -281,6 +353,7 @@ def settings(over):
         if over.get("THEME"):
             G.THEME = dict(zip(_leaders(), over["THEME"]))
         G.PICKS = _fight_picks(over.get("PICKS"))
+        G.REROLL = _fight_rerolls(over.get("REROLL"))
         for k in SCALARS:
             if over.get(k) is None:
                 continue
@@ -343,6 +416,40 @@ def _ability_options(species):
     return out
 
 
+def _where(result):
+    """The failing cards, named the way the BOARD names them.
+
+    A record id is the wrong answer to "where is it": the id spells a trainer out
+    and the cards deliberately do not, so "rival_ALBA_Alba_map164" sends someone
+    hunting for a label that is not on screen. "Rival 2" is."""
+    hit = [(c.get("who") or f"Boss {c['idx'] + 1} · {c.get('theme', '')}".strip(),
+            c["errors"][0])
+           for c in result["gyms"] + result["trainers"] if c.get("errors")]
+    if not hit:
+        return "no card claims them"
+    first = f"{hit[0][0]}: {hit[0][1]}"
+    return first if len(hit) == 1 else f"{first} (and {len(hit) - 1} more card"\
+                                       f"{'s' if len(hit) > 2 else ''})"
+
+
+def _attach_findings(cards, ids, errs, warns):
+    """Give every card the validator lines that are about it, minus the id prefix.
+
+    Matched on the id the validator prints, so a card cannot be given someone
+    else's line by sitting at the same index -- the trainer cards are SORTED up the
+    curve while the records stay in load_fights() order, and those two are not the
+    same sequence."""
+    by_id = {}
+    for line, kind in [(e, "errors") for e in errs] + [(w, "warnings") for w in warns]:
+        fight, _, rest = line.partition(": ")
+        by_id.setdefault(fight, {}).setdefault(kind, []).append(rest or line)
+    for card, fight in zip(cards, ids):
+        found = by_id.get(fight) or {}
+        card["errors"] = found.get("errors") or []
+        card["warnings"] = found.get("warnings") or []
+    return cards
+
+
 def _card(build, **extra):
     """One team's Builder card.
 
@@ -389,6 +496,17 @@ def _card(build, **extra):
         "judge": {k: v["value"] for k, v in FT.judge(FT._team_mons(
             [m["species"] for m in real],
             {m["species"]: m["moves"] for m in real}))["axes"].items()},
+        # The offensive half, which the type-only judge cannot see: it needs the
+        # THEME to know what the fight is threatened by. Absent on an unthemed
+        # build, and the card drops the column rather than showing a zero.
+        #
+        # Both go over as NAMES. "holes 4" tells a person the team is in trouble
+        # and nothing about what to do; "FIGHTING, FIRE, ROCK, STEEL" is the fix
+        # list, and it is the same read the generator made.
+        "hole_types": TS.holes([G._sp[m["species"]]["types"] for m in real
+                                if m["species"] in G._sp]),
+        "cant_hit": (G.unanswered(real, build.get("theme"))
+                     if build.get("theme") else None),
         "mons": [{"species": m["species"], "level": T.show_level(m["level"]),
                   "item": m.get("item"), "nature": m.get("nature"),
                   "iv": m.get("iv"), "ev": m.get("ev"),
@@ -470,18 +588,16 @@ def _apply_loadout(build, fight_key):
         role for mon in build["team"] for role in mon.get("roles", ()))
 
 
-def _edit_frozen(build, fight_key, order):
-    """Card edits on a fight whose TEAM is fixed.
+def _edit_held(build, fight_key, order):
+    """Card edits on a fight that is showing a HELD team -- which is every fight
+    this build is not regenerating, so this is the common path, not the exception.
 
-    Frozen means the generator is not consulted for this fight. It does not mean the
-    team is read-only, and conflating the two left no way to change a frozen fight at
-    all: unfreezing hands it back to the generator, which rerolls it and loses exactly
-    the team you were trying to keep, so "drop one Pokemon from this team" had no
-    answer short of hand-editing the JSON.
-
-    So an untick removes a body, and the per-species overrides apply the way they do
-    anywhere else. Nothing is ADDED -- a tick on a species the team does not have has
-    nothing to pin here, because there is no generator to ask it of."""
+    The generator is not consulted here. That does not make the team read-only: a
+    removal drops a body and the per-species overrides apply the way they do
+    anywhere else, none of which needs a new body built. Nothing is ADDED -- pinning
+    a species the team does not have has nothing to act on here, because there is no
+    generator to ask it of. Pins are honoured on the next regenerate, which is what
+    the card's Regenerate button is for."""
     keep = (G.PICKS.get(fight_key) or {}).get("keep") or {}
     build["team"] = [mon for mon in build["team"]
                      if keep.get(mon["species"]) is not False]
@@ -499,26 +615,40 @@ def _companion(team_name):
     return os.path.splitext(os.path.basename(team_name))[0]
 
 
+def _held_of(result):
+    """The HELD map a finished build produces: every card key -> its build, as JSON.
+
+    One conversion, used by the snapshot a companion preset is made of and by the
+    response every build returns to the page. They have to agree: the page adopts
+    this as what its cards are showing, and a preset is that same board saved."""
+    held = {f"g{i}": _freezable(build)
+            for i, build in enumerate(result["_gym_builds"])}
+    held.update({f"t{slot}": _freezable(build)
+                 for slot, build in result["_trainer_builds"].items()})
+    return held
+
+
 def _snapshot(over, result):
-    """`over` with every fight frozen at the teams `result` just produced.
+    """`over` with every fight held AND frozen at the teams `result` just produced.
 
     The companion preset is frozen even when the live session is not: exporting
     should hand someone an exact artifact without pinning the cards you are still
-    working on. Already-frozen fights keep the build they hold, which is the same
-    object `result` was built from, so setdefault is not losing anything."""
-    snap = dict(over or {})
-    frozen = dict(_thaw(snap.get("FROZEN")))
-    for i, build in enumerate(result["_gym_builds"]):
-        frozen.setdefault(f"g{i}", _freezable(build))
-    for slot, build in result["_trainer_builds"].items():
-        frozen.setdefault(f"t{slot}", _freezable(build))
-    snap["FROZEN"] = frozen
-    # Every fight in a snapshot is frozen, so every pin in it holds nothing. Dropping
+    working on.
+
+    Both keys, not just HELD. HELD alone would reproduce these teams exactly today
+    and then lose them the first time the next person slid a knob, because an
+    unfrozen card is what a global regenerate is allowed to take. Freezing them all
+    is the promise the export has always made, and it is now a promise about
+    rerolling rather than about storage."""
+    snap = dict(_split_legacy_frozen(over or {}))
+    snap["HELD"] = _held_of(result)
+    snap["FROZEN"] = {key: True for key in snap["HELD"]}
+    # Every fight in a snapshot is held, so every pin in it holds nothing. Dropping
     # them here is what keeps a companion preset from handing the next person a board
     # of locked cards -- the pins were only ever scaffolding for a reproduction the
-    # freeze now does outright. The live session keeps its own; exporting must not
-    # reach back and edit the cards you are working on.
-    snap["PICKS"] = {k: ({**v, "keep": {}} if isinstance(v, dict) and k in frozen
+    # held payload now does outright. The live session keeps its own; exporting must
+    # not reach back and edit the cards you are working on.
+    snap["PICKS"] = {k: ({**v, "keep": {}} if isinstance(v, dict) and k in snap["HELD"]
                          else v)
                      for k, v in (snap.get("PICKS") or {}).items()}
     return snap
@@ -559,44 +689,132 @@ def _pointed_preset(name):
         os.path.exists(_preset_path(preset)) else None
 
 
-def set_frozen(over, keys, on):
-    """Freeze or unfreeze fights, and hand back the settings that say so.
+def _hold(over, keys=None):
+    """Build once, and store those fights as what their cards are showing.
 
-    Freezing needs the build, and only the server has one, so this is a round trip
-    rather than a checkbox the client can tick on its own: build at the CURRENT
-    settings, keep what those fights came out as, and return the whole `over` for
-    the page to adopt. `keys` of None means every fight, which is the bulk toggle.
-
-    Unfreezing does not restore anything -- it drops the payload and the fight goes
-    back to being generated, which under drifted PBS or Smogon data is very likely a
-    different team. That is the honest behaviour and the reason the card says so."""
-    over = dict(over or {})
-    frozen = dict(_thaw(over.get("FROZEN")))
+    The server half of holding a team. `keys` of None means every fight. Anything
+    already held keeps the build it has: rebuilding it would re-roll it under
+    whatever the PBS tables and the Smogon dump say TODAY, which is the one thing a
+    held team exists to prevent."""
+    over = dict(_split_legacy_frozen(over or {}))
+    held = dict(_thaw(over.get("HELD")))
     wanted = None if keys is None else {str(k) for k in keys}
-    if not on:
-        frozen = {} if wanted is None else {k: v for k, v in frozen.items()
-                                           if k not in wanted}
-        over["FROZEN"] = frozen
-        return {"frozen": sorted(frozen), "count": len(frozen), "settings": over}
-
-    # Build at the settings as they stand, then keep those fights verbatim. Anything
-    # already frozen is left exactly as it is: re-freezing an untouched fight would
-    # silently re-roll it under whatever the data says today.
-    got = run(over)
-    fresh = {}
-    for i, build in enumerate(got["_gym_builds"]):
-        fresh[f"g{i}"] = build
-    for slot, build in got["_trainer_builds"].items():
-        fresh[f"t{slot}"] = build
+    fresh = _held_of(run(over))
     for key, build in fresh.items():
-        if (wanted is None or key in wanted) and key not in frozen:
-            frozen[key] = _freezable(build)
-    over["FROZEN"] = frozen
-    return {"frozen": sorted(frozen), "count": len(frozen), "settings": over}
+        if (wanted is None or key in wanted) and key not in held:
+            held[key] = build
+    over["HELD"] = held
+    return over
+
+
+# How many salt steps a card's Regenerate may walk before it gives up and says the
+# fight has no alternative. Measured over the nine gyms on the real build path: every
+# one of them lands a different team within three steps, and the pools that resist
+# longest are the narrow themes (ICE, FAIRY, NORMAL) where ON_THEME_MIN = 6 leaves
+# genuinely few bodies to choose between. Eight is that worst case with room over it,
+# and it is a bound rather than a loop-until-different because "this fight has no
+# other team at these settings" is a real answer the button has to be able to give.
+REROLL_TRIES = 8
+
+
+def regenerate(over, keys, vary):
+    """Rebuild `keys` and hand back the board, the new HELD and the new REROLL.
+
+    Two intents, one door. `vary` False is the automatic rebuild: the knobs just
+    moved, so the teams will differ on their own and forcing a new salt on top would
+    only churn what the knobs already decided. `vary` True is a person pressing
+    Regenerate, where nothing else has changed -- and a build at unchanged settings
+    is deterministic, so without a new salt the button would return the same team and
+    look broken. That fight's own salt is therefore walked until the team it produces
+    differs from the one it was showing.
+
+    The walk is per fight and bounded. It is affordable only because a build with the
+    other 26 cards held generates exactly ONE team, so a step costs a fight rather
+    than a board."""
+    over = dict(_split_legacy_frozen(over or {}))
+    keys = [k for k in dict.fromkeys(str(k) for k in (keys or []))
+            if _fight_id(k)]
+    if not keys:
+        result = run(over)
+        over["HELD"] = result["_held"]
+        return over, result, []
+
+    over["REGEN"] = keys
+    before = _thaw(over.get("HELD"))
+    result = run(over)
+    if vary:
+        reroll = dict(over.get("REROLL") or {})
+        for key in keys:
+            was = _team_of(before.get(key))
+            # Nothing was showing, so whatever came out is already a change.
+            for _ in range(REROLL_TRIES):
+                if was is None or _team_of(result["_held"].get(key)) != was:
+                    break
+                reroll[key] = int(reroll.get(key) or 0) + 1
+                over["REROLL"] = reroll
+                result = run(over)
+        over["REROLL"] = reroll
+    over.pop("REGEN", None)
+    # Only the regenerated cards move. The other 26 were never rebuilt, so their
+    # entries come back out of `_held` exactly as they went in.
+    over["HELD"] = result["_held"]
+    stuck = [k for k in keys
+             if _team_of(before.get(k)) is not None
+             and _team_of(result["_held"].get(k)) == _team_of(before.get(k))]
+    return over, result, stuck
+
+
+def _team_of(build):
+    """What "a different team" means when a reroll asks. Species, sets and items --
+    the three things a person looking at a card can see -- and not the notes or the
+    tallies around them, which can differ without anything on screen moving."""
+    if not isinstance(build, dict):
+        return None
+    return [(m.get("species"), tuple(m.get("moves") or ()), m.get("item"))
+            for m in build.get("team") or ()]
+
+
+def _split_legacy_frozen(over):
+    """Settings whose FROZEN is the OLD payload map, split into HELD + FROZEN.
+
+    Before the two were separated, FROZEN did both jobs at once: it stored the team
+    AND exempted the fight from rerolling, which is why unfreezing rerolled a card --
+    dropping the payload WAS regenerating it. A preset or a localStorage session
+    written then carries `{cardKey: build}` where the flag now lives.
+
+    Detected on the VALUE, not on a version stamp: a build is an object with a
+    "team", a flag never is, so the two shapes cannot be confused and no file needs
+    anything written into it to be read correctly. The old teams become HELD (held
+    exactly as they were) and every key becomes frozen (protected exactly as it
+    was), which together are what that preset meant on the day it was saved."""
+    frozen = over.get("FROZEN")
+    if not isinstance(frozen, dict) or not any(
+            isinstance(v, dict) and "team" in v for v in frozen.values()):
+        return over
+    over = dict(over)
+    held = dict(over.get("HELD") or {})
+    for key, build in frozen.items():
+        if isinstance(build, dict) and "team" in build:
+            held.setdefault(key, build)
+    over["HELD"] = held
+    over["FROZEN"] = {k: True for k in frozen}
+    return over
+
+
+def _frozen_keys(over):
+    """The card keys a global or automatic regenerate must skip.
+
+    A SET of keys and nothing else. Holding a team is HELD's job now, so freezing
+    says only "leave this one alone" -- which is what makes unfreezing free: the
+    team does not live here, so dropping the flag cannot lose it."""
+    frozen = _split_legacy_frozen(over).get("FROZEN") or {}
+    if isinstance(frozen, dict):
+        return {k for k, on in frozen.items() if on and _fight_id(k)}
+    return {k for k in frozen if isinstance(k, str) and _fight_id(k)}
 
 
 def _thaw(raw):
-    """FROZEN card keys -> the build dict each frozen fight ships verbatim.
+    """HELD card keys -> the build dict each card ships verbatim.
 
     The payload IS a build -- the shape make_gym()/make_trainer() return -- which is
     why nothing downstream needs a frozen branch: _card() and as_team_record() both
@@ -609,19 +827,14 @@ def _thaw(raw):
     Unknown keys are dropped the way _fight_picks drops them, so a preset written
     when there were eight gyms cannot resurrect a ninth.
 
-    DEEP COPIED, because what comes back is handed to _edit_frozen and _apply_loadout,
-    which mutate a build in place -- untick a mon and the stored payload would lose it
+    DEEP COPIED, because what comes back is handed to _edit_held and _apply_loadout,
+    which mutate a build in place -- remove a mon and the stored payload would lose it
     permanently, and roles_of writes a set that no longer survives the JSON a preset
-    and localStorage are made of. The frozen payload is the source of truth and a
+    and localStorage are made of. The held payload is the source of truth and a
     render must not be able to edit it."""
-    fights = T.load_fights()
     out = {}
     for k, build in (raw or {}).items():
-        if not isinstance(build, dict) or "team" not in build:
-            continue
-        if k[:1] == "g" and k[1:].isdigit() and int(k[1:]) < len(G.CAPS):
-            out[k] = copy.deepcopy(build)
-        elif k[:1] == "t" and k[1:].isdigit() and int(k[1:]) < len(fights):
+        if isinstance(build, dict) and "team" in build and _fight_id(k):
             out[k] = copy.deepcopy(build)
     return out
 
@@ -647,32 +860,60 @@ def _freezable(build):
 
 
 def run(over):
+    """Build the board: every card shows its HELD team, and only the cards named in
+    REGEN are asked of the generator.
+
+    That split is the whole model. HELD is what each card is showing; FROZEN is only
+    "a global or automatic regenerate skips me". Before they were separated, one key
+    did both, so dropping the payload to unfreeze a card WAS regenerating it and
+    there was no way to unfreeze a team without losing it.
+
+    REGEN is therefore the only door to the generator. An empty one means "re-render
+    what is held, with the card edits applied" -- which is every edit that does not
+    need a new body, and costs no build at all."""
+    over = _split_legacy_frozen(over)
     with _LOCK, settings(over):
-        frozen = _thaw(over.get("FROZEN"))
+        held = _thaw(over.get("HELD"))
+        for key in (over.get("REGEN") or ()):
+            held.pop(str(key), None)
+        frozen = _frozen_keys(over)
+        # What each card will be HOLDING afterwards: the build as the GENERATOR made
+        # it, snapshotted before any card edit touches it. Storing the edited team
+        # instead would bake the edits into the payload, and then clearing an
+        # override could never put the generated value back -- the value it would
+        # have to restore is the one that got overwritten. This is the same reason
+        # _thaw deep copies, one level up: edits apply to a render, never to the
+        # store, so a card entry changes only when that card is regenerated.
+        pristine = {key: _freezable(build) for key, build in held.items()}
         formats = battle_formats(over)
         orders = over.get("ORDER") if isinstance(over.get("ORDER"), dict) else {}
         # One variety tally across all 27 fights: each build is ranked knowing what
         # the fights before it already took, so a hazards floor stops answering
         # "Blissey" twenty-seven times. See generate_bosses.REPEAT_BAND.
         #
-        # FROZEN claims first, and that is the whole reason this is a tally rather
-        # than a reroll: a fight you pinned by hand owns its species outright, and
+        # HELD claims first, and that is the whole reason this is a tally rather
+        # than a reroll: a fight already on the board owns its species outright, and
         # the generator routes the rest around it instead of competing with it.
-        # A frozen team claims what it was frozen WITH -- a mon you have since
-        # unticked still holds its family, which only ever buys more variety.
+        # A held team claims what it was built WITH -- a mon you have since
+        # removed still holds its family, which only ever buys more variety.
+        #
+        # Regenerating ONE card therefore routes it around the other 26 rather than
+        # around the handful built before it, which is strictly more information
+        # than the ladder pass has.
         seen = {}
-        for build in frozen.values():
+        for build in held.values():
             G.claim(seen, build["team"])
         gyms = []
         for i in range(9):
-            gym = frozen.get(f"g{i}")
+            gym = held.get(f"g{i}")
             if gym is None:
                 gym = G.make_gym(i, seen)
                 G.claim(seen, gym["team"])
+                pristine[f"g{i}"] = _freezable(gym)
             gyms.append(gym)
         for i, gym in enumerate(gyms):
-            if f"g{i}" in frozen:
-                _edit_frozen(gym, G.gym_id(i), orders.get(f"g{i}"))
+            if f"g{i}" in held:
+                _edit_held(gym, G.gym_id(i), orders.get(f"g{i}"))
                 continue
             _apply_loadout(gym, G.gym_id(i))
             gym["team"] = _ordered_team(gym["team"], orders.get(f"g{i}"))
@@ -697,16 +938,17 @@ def run(over):
         trainers, trainer_records, tbuilds = [], [], {}
         for i, b in enumerate(T.load_fights()):
             pick = tplans.get(i)
-            got = frozen.get(f"t{i}")
+            got = held.get(f"t{i}")
             if got is None:
                 got = T.make_trainer(
                     b, (pick[0] or None, pick[1] or None) if pick else None,
                     seen=seen)
                 if got:
                     G.claim(seen, got["team"])
+                    pristine[f"t{i}"] = _freezable(got)
             if got:
-                if f"t{i}" in frozen:
-                    _edit_frozen(got, T.fight_id(b), orders.get(f"t{i}"))
+                if f"t{i}" in held:
+                    _edit_held(got, T.fight_id(b), orders.get(f"t{i}"))
                 else:
                     _apply_loadout(got, T.fight_id(b))
                     got["team"] = _ordered_team(got["team"], orders.get(f"t{i}"))
@@ -731,7 +973,22 @@ def run(over):
         # All 27, not just the nine. The trainers ship through the same pipeline
         # and the same legality gate, so a count that covered only the gyms was
         # reporting "clean" about two thirds of what Install would check.
-        errs, warns = V.validate(records + trainer_records)
+        # EARLY_MOVES is read HERE, inside settings(), so the gate is judged under
+        # the same knob the teams were built under. Turning it on and then being
+        # refused at Export is the knob contradicting itself.
+        errs, warns = V.validate(records + trainer_records,
+                                 early=bool(G.EARLY_MOVES))
+        # Hang each failure on the card it is about. The message names a RECORD ID
+        # ("rival_ALBA_Alba_map164") and the board never shows one -- the trainer
+        # cards are anonymised on purpose, so `who` is "Rival 2" and nothing on
+        # screen spells the fight out. That left a refusal naming a fight you could
+        # not find. The id prefix is stripped rather than forwarded, because sending
+        # it would undo the anonymising; what is left is the part that locates the
+        # problem WITHIN the card, and the card locates itself.
+        _attach_findings(out + trainers,
+                         [G.gym_id(i) for i in range(len(out))]
+                         + [T.fight_id(T.load_fights()[c["slot"]]) for c in trainers],
+                         errs, warns)
         vec = [[TS.role_counts(g["team"], lambda m: m["moves"])[k] for k in TS.ROLES]
                for g in gyms]
         null = _NULL.setdefault(len(vec), _null(len(vec)))
@@ -739,9 +996,15 @@ def run(over):
         return {
             "gyms": out, "trainers": trainers, "records": records,
             "trainer_records": trainer_records,
-            # The builds themselves, for set_frozen to keep. Not serialised to the
-            # page: /api/generate pops them the way it pops the records.
+            # The builds themselves, EDITED -- what this board actually shipped.
+            # _hold and _snapshot want exactly these: an artifact is the team you can
+            # see, removals and overrides included, which is what lets a companion
+            # preset drop the pins that produced it. Not serialised to the page:
+            # /api/generate pops them the way it pops the records.
             "_gym_builds": gyms, "_trainer_builds": tbuilds,
+            # And the same builds UNEDITED, which is what the cards hold. See the
+            # note beside `pristine` above for why the two must not be the same map.
+            "_held": pristine,
             # A fingerprint of the TEAMS, not of the settings that asked for them.
             # Those are different claims: identical settings reproduce identical
             # teams only while the PBS tables, the Smogon dump and this generator all
@@ -772,7 +1035,13 @@ _CANDIDATES = {}
 
 
 def candidates(fight_id, how, over):
-    key = (fight_id, how, json.dumps(over, sort_keys=True, default=str))
+    # Keyed on the KNOBS only. HELD and REROLL say which teams are on the board, and
+    # settings() reads neither, so a candidate set cannot depend on them -- while
+    # leaving them in would throw away a ~1.5 s-per-fight cache every time any card
+    # was regenerated.
+    knobs = {k: v for k, v in (over or {}).items()
+             if k not in ("HELD", "FROZEN", "REGEN", "VARY")}
+    key = (fight_id, how, json.dumps(knobs, sort_keys=True, default=str))
     if key in _CANDIDATES:
         return _CANDIDATES[key]
     with _LOCK, settings(over):
@@ -806,6 +1075,11 @@ def candidates(fight_id, how, over):
                 "judge": {k: v["value"] for k, v in FT.judge(FT._team_mons(
                     [m["species"] for m in s["team"]],
                     {m["species"]: m["moves"] for m in s["team"]}))["axes"].items()},
+                "hole_types": TS.holes([G._sp[m["species"]]["types"]
+                                        for m in s["team"]
+                                        if m["species"] in G._sp]),
+                "cant_hit": (G.unanswered(s["team"], ctx["theme"])
+                             if ctx["theme"] else None),
                 "mons": [{"species": m["species"], "level": m["level"],
                           "item": m["item"], "moves": m["moves"], "kept": m["kept"],
                           "why": m["why"], "fidelity": m["fidelity"],
@@ -889,6 +1163,11 @@ def free_build(payload):
                 "seed": v["seed"], "notes": v["notes"], "plan": v["plan"],
                 "trace": v.get("trace"),
                 "judge": {k: axes[k]["value"] for k in axes},
+                # No theme on a free build, so no threat list and no `cant_hit` --
+                # the card drops that column rather than inventing one.
+                "hole_types": TS.holes([G._sp[m["species"]]["types"]
+                                        for m in v["team"]
+                                        if m["species"] in G._sp]),
                 "paste": FT.showdown_paste(v["team"]),
                 # The evidence behind the pick, not just the pick. `support` is
                 # the number rank_for actually ranked on, so a card can say why a
@@ -940,11 +1219,18 @@ def defaults():
         "tiers": SC.RANK,
         # Every role any archetype can make mandatory, so the UI can offer to turn
         # each one off. `mega` is in here for the same reason the others are.
-        "set_tiers": SC.set_tiers(),
+        # Minus the formats nothing draws from: an unticked box that changes no
+        # build is worse than no box.
+        "set_tiers": [t for t in SC.set_tiers() if t not in G.SET_FORMATS_OFF],
         "items": sorted(D.held_items()),
         "floor_roles": sorted({r for a in TS.ARCHETYPES
                                for r in G.plan_for(a, True, None)[0]}),
         "shipped": {t["id"]: [m["species"] for m in t["mons"]] for t in shipped},
+        # Every card key the board has. The page needs the whole list to work out
+        # what a GLOBAL regenerate covers -- "all of them except the frozen ones" --
+        # and deriving it from the last render would be wrong for a trainer the
+        # generator currently declines to build.
+        "keys": _card_keys(),
     }
 
 
@@ -1276,22 +1562,46 @@ def _trainer_payload(settings, found):
     return _team_payload([built[who] for who in order])
 
 
+# The per-species overrides _card_overrides writes to make the generator re-derive an
+# imported team. Named once because _settle has to clear exactly this set and nothing
+# else: `sets` is in it too, and a key that went missing from this list would survive
+# an import as a permanent override nobody made.
+_IMPORT_OVERRIDES = ("keep", "sets", "items", "moves", "abilities",
+                     "natures", "ivs", "evs", "levels")
+
+
 def _settle(settings, keys):
-    """Freeze what was just loaded, and drop the pins that were only holding it.
+    """Hold and freeze what was just loaded, and drop the overrides that were only
+    holding it.
 
-    Pinning every species is the reverse-engineering path's ONLY lever -- it has to
-    persuade the generator to re-derive the team -- so a load used to hand back cards
-    with every mon locked under 154 synthetic overrides. Freezing holds the same teams
-    outright, so once it is on those pins hold nothing. Clearing them leaves the cards
-    legible: what is pinned is then what YOU pinned.
+    Pinning every species and naming every item, move and spread is the
+    reverse-engineering path's ONLY lever -- it has to persuade the generator to
+    re-derive the team -- so a load used to hand back cards on which every mon was
+    marked pinned, set fixed, item fixed and moves fixed, with a dotted stripe down
+    every row and an "edited" badge on every card. None of it was anything YOU did.
 
-    Only `keep` goes. The per-species item, move and spread overrides are inert while a
-    fight is frozen, and are what the team falls back on if it is ever unfrozen."""
-    out = set_frozen(settings, keys, True)["settings"]
+    ALL of them go, not just the pins. Holding the team outright reproduces it
+    exactly, which is strictly better than re-deriving it from overrides, so once
+    HELD is filled the overrides are pure residue -- and residue that lies, because
+    the card marks exist to say "you changed this". The old reason for keeping them
+    was that they were "what the team falls back on if it is ever unfrozen", and
+    unfreezing no longer rebuilds anything.
+
+    The round trip is still PROVED with them in place before they are dropped: the
+    caller has already raised if the generator could not reach this file. What is
+    cleared is the scaffolding, after it has done its job.
+
+    The cost, stated plainly: regenerating an imported card gives a team built from
+    the knobs with none of the file's sets. That is what Regenerate means, and the
+    alternative -- new species wearing the imported team's forced moves -- is worse.
+    Re-import to get them back."""
+    out = _hold(settings, keys)
+    out["FROZEN"] = {key: True for key in _frozen_keys(out) | set(keys)}
     picks = dict(out.get("PICKS") or {})
     for key in keys:
         if isinstance(picks.get(key), dict):
-            picks[key] = {**picks[key], "keep": {}}
+            picks[key] = {k: v for k, v in picks[key].items()
+                          if k not in _IMPORT_OVERRIDES}
     out["PICKS"] = picks
     return out
 
@@ -1333,11 +1643,12 @@ def import_teams(name, over):
     tied = _pointed_preset(name)
     if tied:
         got = preset_load(tied)
-        # Everything the preset froze, not just this file's halves: a companion
+        # Everything the preset holds, not just this file's halves: a companion
         # written before snapshots were cleaned still carries pins for the other
         # half, and they are just as redundant.
         got["settings"] = _settle(got["settings"], sorted(
-            set(keys) | set(_thaw(got["settings"].get("FROZEN")))))
+            set(keys) | set(_thaw(
+                _split_legacy_frozen(got["settings"]).get("HELD")))))
         counted = run(got["settings"])
         return {"name": os.path.basename(_team_path(name)), "preset": tied,
                 "exact": True, "warning": "",
@@ -1736,10 +2047,21 @@ class Handler(http.server.BaseHTTPRequestHandler):
             return self._send(400, '{"error":"bad json"}')
         try:
             if path == "/api/generate":
-                r = run(body)
+                # The page owns the board state, so every build hands it back what
+                # its cards are now holding. Freezing needs no call of its own any
+                # more: the flag is the page's to flip, because the team no longer
+                # lives inside it.
+                settings_, r, stuck = regenerate(
+                    body, body.get("REGEN"), bool(body.get("VARY")))
                 for key in ("records", "trainer_records",
-                            "_gym_builds", "_trainer_builds"):
+                            "_gym_builds", "_trainer_builds", "_held"):
                     r.pop(key)
+                r["held"] = settings_.get("HELD") or {}
+                r["reroll"] = settings_.get("REROLL") or {}
+                # Fights the reroll could not move: at these settings the pool has
+                # nothing else to offer, and the button must be able to say so
+                # rather than look dead.
+                r["stuck"] = stuck
                 return self._send(200, json.dumps(r))
             if path == "/api/sets":
                 sp = FT.fold(body.get("species") or "")
@@ -1775,10 +2097,6 @@ class Handler(http.server.BaseHTTPRequestHandler):
                         {"error": f"{os.path.basename(dest)} exists — tick overwrite"}))
                 return self._send(200, json.dumps(preset_save(
                     body["name"], body.get("settings") or {}, body.get("note") or "")))
-            if path == "/api/freeze":
-                return self._send(200, json.dumps(set_frozen(
-                    body.get("settings") or {}, body.get("keys"),
-                    bool(body.get("on", True)))))
             if path == "/api/load-installed":
                 return self._send(200, json.dumps(
                     load_installed(body.get("settings") or {})))
@@ -1819,8 +2137,10 @@ class Handler(http.server.BaseHTTPRequestHandler):
                 # cannot be installed is not worth writing.
                 if r["errors"]:
                     return self._send(400, json.dumps({"error":
-                        f"{len(r['errors'])} validation errors, first: "
-                        f"{r['errors'][0]}"}))
+                        f"{len(r['errors'])} validation error"
+                        f"{'s' if len(r['errors']) > 1 else ''} — "
+                        f"{_where(r)}. The cards that fail are outlined in red and "
+                        f"say what is wrong."}))
                 # The tie is made in the same operation that writes the teams, so
                 # the pointer and the file it points from cannot disagree.
                 preset = _companion(dests[0][0])
@@ -1868,6 +2188,15 @@ fieldset{border:1px solid var(--line);border-radius:8px;padding:10px 12px;margin
          background:var(--card)}
 fieldset fieldset{margin-bottom:0}
 .gym.frozen{border-color:var(--accent)}
+/* A card that cannot ship says so ON the card. The validator names a record id and
+   the board shows none -- the trainer cards are anonymous -- so a refusal used to
+   name a fight nobody could find. */
+.gym.broken{border-color:var(--bad)}
+.finding{font-size:11px;margin:3px 0;padding:2px 6px;border-radius:3px;
+  background:color-mix(in srgb,var(--bad) 12%,transparent)}
+.finding.bad{color:var(--bad)}
+.finding.warn{color:var(--warn);
+  background:color-mix(in srgb,var(--warn) 12%,transparent)}
 button.tiny.frz{margin-left:6px;vertical-align:middle}
 button.tiny.frz.on{border-color:var(--accent);color:var(--accent)}
 legend{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--dim);padding:0 4px}
@@ -1940,6 +2269,13 @@ button.tiny[disabled]{opacity:.35;cursor:default}
   background:color-mix(in srgb,var(--accent) 6%,transparent)}
 .mon.isitem{border-left:4px dotted var(--accent)}
 .mon.ispin.isset{border-left-style:solid}
+/* The legend's swatches are the row edges themselves, so the key cannot drift from
+   what it describes: same width, same colour, same three styles. */
+#marks{margin:0 0 10px;display:flex;flex-wrap:wrap;gap:4px 10px;align-items:center}
+#marks .mk{display:inline-block;width:0;height:12px;vertical-align:-2px;
+  border-left:4px solid var(--accent)}
+#marks .mk.isset{border-left-style:dashed}
+#marks .mk.isitem{border-left-style:dotted}
 /* The row is the affordance: no furniture until you click it. */
 .mon.editable{cursor:pointer}
 .mon.editable:hover{background:color-mix(in srgb,var(--accent) 7%,transparent)}
@@ -1981,6 +2317,14 @@ button.tiny[disabled]{opacity:.35;cursor:default}
 .gym h3{margin:0 0 2px;font-size:13px;display:flex;justify-content:space-between;gap:8px}
 .tag{font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--dim)}
 .meta{color:var(--dim);font-size:11px;margin-bottom:7px;font-variant-numeric:tabular-nums}
+/* The hole and can't-hit-back TYPE NAMES, inline beside their count. A count says a
+   team is in trouble; the names are the fix list. Dimmer than the number so the row
+   still scans, and hidden under 900px where the card is too narrow to hold them --
+   the tooltip carries the same names there. */
+.tset{color:#6b7684;font-size:10px;margin-left:4px;letter-spacing:.02em}
+.tset:not(:empty)::before{content:'('}
+.tset:not(:empty)::after{content:')'}
+@media(max-width:900px){.tset{display:none}}
 .mon{padding:4px 0;border-top:1px solid var(--line)}
 .mon .sp{font-weight:600}
 .mon .mv{color:var(--dim);font-size:11px}
@@ -2066,9 +2410,11 @@ button.tiny{padding:2px 7px;font-size:11px;font-weight:500}
     <div id="scopenote" class="sub"></div>
     <div class="exp"><button id="install">Install into game</button></div>
     <div id="imsg"></div>
-    <div class="sub" style="margin-top:12px">freezing pins a fight to the team it is
-      showing now &mdash; nothing rerolls it, and a preset carrying it rebuilds the
-      same teams anywhere. Freeze what you have settled, keep rerolling the rest.</div>
+    <div class="sub" style="margin-top:12px">every card HOLDS the team it is showing,
+      and a preset carrying it rebuilds the same teams anywhere. Freezing only keeps
+      a card out of <b>Regenerate all</b> and out of the rebuild a knob slide fires
+      &mdash; so unfreezing never changes a team, and you can go on editing the card
+      you thawed. Freeze what you have settled, keep regenerating the rest.</div>
     <div class="exp">freeze
       <button class="ghost" id="frzall">all 27</button>
       <button class="ghost" id="frzgyms">gyms</button>
@@ -2083,6 +2429,14 @@ button.tiny{padding:2px 7px;font-size:11px;font-weight:500}
 </div>
 <div>
   <div class="stats" id="stats"></div>
+  <!-- The stripes and the blue names were already there and said nothing. A mark
+       whose meaning is not written down reads as noise even when it is right. -->
+  <div class="sub" id="marks">what the marks mean &mdash;
+    <span class="mk ispin">&nbsp;</span> pinned &nbsp;
+    <span class="mk isset">&nbsp;</span> set fixed &nbsp;
+    <span class="mk isitem">&nbsp;</span> item, moves or ability fixed &nbsp;
+    <span class="new">blue name</span> not on the team the game is running now
+    &nbsp; <span class="tag van">vanilla</span> the game put it on this fight</div>
   <div class="gyms" id="gyms"></div>
   <h3 class="sect" id="tsect">named trainers &middot; <span id="tcount">0</span>
     <span class="tag">edits ship on Install, same as the gyms</span></h3>
@@ -2201,6 +2555,30 @@ const whyPanel=tr=>`<details class="picks"><summary>why these picks</summary>
     <td>${band(r.marg,r.marg_band,1)}</td><td>${band(r.gap,r.gap_band,0)}</td>
     <td>${esc(r.tier)}</td></tr>`).join('')}</table>`).join('')}
 </details>`;
+// One definition, three card renderers. The numbers quoted are the corpus ladder in
+// generated/team_coverage_reference.json, so a reader can tell "bad" from "unusual".
+const TIP={
+ holes:"attacking types that BOTH have no switch-in (nothing here resists them) "
+   +"AND fold 2 or more members.\n"
+   +"Either half alone is harmless -- a type nobody resists but nobody fears "
+   +"costs nothing, and a type four members fear is fine if a fifth walls it.\n"
+   +"It is the overlap that loses fights.\n"
+   +"29,956 real teams: median 0, 90th percentile 2.",
+ threat:"the holes weighted by how much of the team each one takes down: for every "
+   +"hole, how many members are weak to it, added up.\n"
+   +"Five bodies folding to Rock is not the same as two, and the hole count alone "
+   +"cannot say so.\n"
+   +"29,956 real teams: median 0, 90th percentile 6.",
+ cant:"types this fight's THEME is weak to that NO damaging move on the team hits "
+   +"for x2 -- walled, and unable to punish.\n"
+   +"Real monotype teams never accept this: 0 on all 51 theme/threat pairs across "
+   +"four generations. These nine were at 5 of 24 before the gate.\n"
+   +"Blank on an unthemed build, which has no threat list.",
+ repeats:"members sharing a type combination. 92.9% of real teams have none.",
+ unres:"attacking types nothing here resists, whether or not anything fears them.\n"
+   +"Kept for reference only: both corpus reports measured this as the WEAK metric, "
+   +"which is why holes leads instead."};
+const tipList=(names,tip)=>esc((names&&names.length?names.join(', ')+'\n\n':'')+tip);
 const STATNAMES=['HP','Atk','Def','Spe','SpA','SpD'];
 const trainingLine=m=>{
   const bits=[];
@@ -2227,13 +2605,14 @@ const monLine=(m,cls,isNew,detail,editKey,orderIndex,orderKey=editKey)=>{
     ((CARD[editKey]||{}).moves||{}),m.species);
   const fixedAbility=editKey&&Object.prototype.hasOwnProperty.call(
     ((CARD[editKey]||{}).abilities||{}),m.species);
-  // The generator only flags `pinned` for a species that is not on the dev's own
-  // roster -- ticking one that IS on it adds nothing for it to send back -- so a
-  // held vanilla core had no mark at all. Read the tick off CARD like `fixed` does:
-  // the two facts are independent (the game put it here AND you are holding it), so
-  // they are two tags rather than one winning over the other.
+  // Read off CARD, never off the build's own `pinned`. They answer different
+  // questions: `pinned` is why this body was PUT here and is baked into the held
+  // team, so it survives the pin being cleared and then claims you are forcing a
+  // species you are not. The override is the live truth, and a mark that says "you
+  // changed this" has to read the thing you changed. `m.kept` keeps its own
+  // `vanilla` tag -- the game put it here -- which is a separate fact.
   const held=editKey&&((CARD[editKey]||{}).keep||{})[m.species]===true;
-  return `<div class="${cls}${editKey?' editable':''}${m.pinned||held?' ispin':''}${
+  return `<div class="${cls}${editKey?' editable':''}${held?' ispin':''}${
     fixed?' isset':''}${fixedItem||fixedMoves||fixedAbility?' isitem':''}" title="${esc(m.src||m.why||'')}"${editKey?` data-edit="${editKey}"`:''}${
     orderKey?` draggable="true" data-order-card="${orderKey}" data-sp="${esc(m.species)}"`:''}>
   ${orderKey?`<span class="draghandle" draggable="true" title="Drag to reorder"
@@ -2243,7 +2622,7 @@ const monLine=(m,cls,isNew,detail,editKey,orderIndex,orderKey=editKey)=>{
         title="Move ${esc(m.species)} to slot 1">make lead</button>`}`:''}
   <span class="sp ${isNew?'new':''}">${esc(m.species)}</span>
   ${m.kept&&!m.pinned?'<span class="tag van">vanilla</span>':''}
-  ${m.pinned||held?'<span class="tag van">pinned</span>':''}
+  ${held?'<span class="tag van">pinned</span>':''}
   ${fixed?'<span class="tag van">set fixed</span>':''}
   ${fixedItem?'<span class="tag van">item fixed</span>':''}
   ${fixedMoves?'<span class="tag van">moves fixed</span>':''}
@@ -2261,7 +2640,14 @@ const monLine=(m,cls,isNew,detail,editKey,orderIndex,orderKey=editKey)=>{
    ].filter(Boolean).join(' · ')}</div>`:''}</div>`;};
 // What a candidate set was built under. Anything that changes it makes the cards on
 // screen a picture of a build nobody would get now.
-const sig=()=>JSON.stringify(get())+'|'+$('cf').value+'|'+$('cs').value;
+// The KNOBS a candidate set was built under, which is why HELD and REROLL are left
+// out: they say which teams are on the board, and a candidate is built from the
+// knobs alone. Leaving them in marked the panel stale every time any card was
+// regenerated, and put 74 KB through a string compare on every keystroke.
+const sig=()=>{
+  const {HELD:_h,REROLL:_r,...knobs}=get();
+  return JSON.stringify(knobs)+'|'+$('cf').value+'|'+$('cs').value;
+};
 function checkStale(){ if(builtAs) $('cwarn').hidden = sig()===builtAs; }
 // The plan a fight is built under, per card. ONE place it lives: the selects are
 // re-rendered with the cards on every build, so reading the choice back off the DOM
@@ -2274,11 +2660,20 @@ let CARD={};
 // Party order per card. The first species is the battle lead. Kept separate from
 // PICKS because order changes neither species selection nor set selection.
 let ORDER={};
-// Fights pinned to an exact team, by card key -> the build the server froze. The
-// generator is not consulted for these at all, which is what makes a preset carrying
-// them reproduce under PBS or Smogon data that has since moved. Server-filled: only
-// it has a build, so freezing is a round trip rather than a checkbox.
+// What each card is SHOWING, by card key -> the build behind it. The generator is
+// not consulted for a held fight at all, which is what makes a preset carrying these
+// reproduce under PBS or Smogon data that has since moved. Server-filled: only it
+// has a build, so every build hands the page back what its cards now hold.
+let HELD={};
+// Which cards a global or automatic regenerate must SKIP, by card key. A flag and
+// nothing else -- the team lives in HELD, which is what makes unfreezing free: it
+// cannot lose a team it does not store. The two used to be one key, and that is
+// exactly why unfreezing a card rerolled it.
 let FROZEN={};
+// How many times each card has been rerolled on its own. The server owns the value
+// -- a press may have to walk several steps to find a team that differs -- so this
+// is adopted from the response rather than incremented here.
+let REROLL={};
 // Which half is being authored. A VIEW-and-ACTION setting, not a generator knob:
 // it never enters `over`, so it cannot leak into a preset or change a team.
 let SCOPE='all';
@@ -2293,9 +2688,27 @@ const cardOf=fk=>{
   c.levels=c.levels||{};
   return c;
 };
+// The twin of the server's _split_legacy_frozen. A preset or a saved session from
+// before the split put the BUILD where the flag now lives, so FROZEN carrying an
+// object with a `team` is the old shape: its teams become HELD (held exactly as they
+// were) and its keys become frozen (protected exactly as they were). Read off the
+// VALUE rather than a version stamp, so nothing has to be written into a file that
+// was saved before the distinction existed.
+const splitLegacy=o=>{
+  const f=(o&&typeof o.FROZEN==='object'&&o.FROZEN)||{};
+  const held=(o&&typeof o.HELD==='object'&&o.HELD)||{};
+  const legacy=Object.values(f).some(v=>v&&typeof v==='object'&&v.team);
+  if(!legacy) return {HELD:{...held},FROZEN:{...f}};
+  const out={HELD:{...held},FROZEN:{}};
+  for(const k in f){
+    if(f[k]&&typeof f[k]==='object'&&f[k].team&&!(k in out.HELD)) out.HELD[k]=f[k];
+    out.FROZEN[k]=true;
+  }
+  return out;
+};
 const get=()=>{
   const o={level_mode:$('level_mode').value,TRAINER_PLANS:PLAN.tr,PICKS:CARD,ORDER,
-    FROZEN,
+    HELD,FROZEN,REROLL,
     SET_FORMATS:[...$('setfmt').querySelectorAll('input:checked')].map(e=>e.value)};
   for(const k in S.meta) o[k]=+$('s_'+k).value;
   for(const k of ['TARGET','SPREAD','THEME','FORMAT'])
@@ -2330,7 +2743,8 @@ function setAll(o){
   PLAN.tr=(o.TRAINER_PLANS&&typeof o.TRAINER_PLANS==='object')?o.TRAINER_PLANS:{};
   CARD=(o.PICKS&&typeof o.PICKS==='object')?o.PICKS:{};
   ORDER=(o.ORDER&&typeof o.ORDER==='object')?o.ORDER:{};
-  FROZEN=(o.FROZEN&&typeof o.FROZEN==='object')?o.FROZEN:{};
+  ({HELD,FROZEN}=splitLegacy(o));
+  REROLL=(o.REROLL&&typeof o.REROLL==='object')?o.REROLL:{};
   buildSave();               // a loaded preset survives a reload like anything else
   return true;
 }
@@ -2371,13 +2785,30 @@ function syncLoadButton(){
     ?'the cards already are these teams — nothing to load'
     :'read this file back into the cards';
 }
-const deb=()=>{clearTimeout(timer);timer=setTimeout(go,120);};
+// Two debounced shapes, because an edit either needs a new body or it does not.
+// EDIT is every change that lands on the team already held -- a removal, the party
+// order, any per-species override, the battle format -- and asks for no build at
+// all. REBUILD is the automatic global regenerate a knob slide fires, which takes
+// every card except the frozen ones.
+const deb=()=>{clearTimeout(timer);timer=setTimeout(()=>go([]),120);};
+const debAll=()=>{clearTimeout(timer);timer=setTimeout(()=>go(loose()),120);};
+// One card needs the generator again -- its plan changed, or a species was swapped
+// in that nothing on the team can stand for. Its own card only, frozen or not:
+// touching that control IS asking for it, and a frozen card's are disabled anyway.
+const debCard=fk=>{clearTimeout(timer);timer=setTimeout(()=>go([fk]),120);};
 // A rebuild is ~2s for 27 fights, and every tick, every dropdown and every knob asks
 // for one. Without a guard a person clicking four boxes gets four concurrent builds
 // racing to write the same DOM, and the last response to ARRIVE wins rather than the
 // last one asked for. One in flight at a time, with a single trailing re-run that
 // collapses however many changes landed while it was busy.
 let busy=false, pending=false, lastSha=null;
+// What the trailing re-run must still regenerate, and whether it was a person
+// asking. A build in flight used to swallow the arguments of whatever was queued
+// behind it, so a Regenerate pressed while the board was busy did nothing at all.
+// Unioned rather than replaced: two edits that land together want BOTH their cards
+// rebuilt, and `vary` sticks because a button press queued behind a knob slide is
+// still a button press.
+let pendRegen=new Set(), pendVary=false;
 // The most recent build, so a check needing the cards can run after go().
 let lastBuild=null;
 // The import listing, by filename: each row carries a sha per half it holds, so
@@ -2385,20 +2816,48 @@ let lastBuild=null;
 // The remembered-loader version could not answer that after a hard reload, and
 // answered it wrongly for a restored session it had not loaded itself.
 let fileRow={};
-async function go(){
+// `regen` is the card keys to ask the generator for -- [] re-renders what is held
+// with the card edits applied, and costs no build at all. `vary` is a person having
+// pressed Regenerate: at unchanged settings a build is deterministic, so the server
+// walks that fight's own salt until the team differs.
+async function go(regen,vary){
+  for(const k of regen||[]) pendRegen.add(k);
+  pendVary = pendVary || !!vary;
   if(busy){ pending=true; return; }
+  const keys=[...pendRegen], asked=pendVary;
+  pendRegen.clear(); pendVary=false;
   busy=true; $('v_build').classList.add('busy');
   try{
-    const r=await fetch('/api/generate',{method:'POST',body:JSON.stringify(get())});
+    const r=await fetch('/api/generate',{method:'POST',
+      body:JSON.stringify({...get(),REGEN:keys,VARY:asked})});
     const d=await r.json();
     if(d.error){$('stats').innerHTML='<span class="bad">'+d.error+'</span>';return;}
+    // Adopted BEFORE the render, so the cards and the state they will send back on
+    // the next build are the same board.
+    if(d.held&&typeof d.held==='object') HELD=d.held;
+    if(d.reroll&&typeof d.reroll==='object') REROLL=d.reroll;
+    buildSave();
     render(d);
     syncLoadButton();
+    if(asked) sayStuck(keys,d.stuck||[]);
   } finally {
     busy=false; $('v_build').classList.remove('busy');
     if(pending){ pending=false; go(); }
   }
 }
+// A reroll that could not move a fight is a real answer, not a dead button: at these
+// settings that pool has nothing else to offer. Said out loud, because the card
+// looking identical is otherwise indistinguishable from a broken press.
+function sayStuck(keys,stuck){
+  const box=$('frzmsg'); if(!box||!keys.length) return;
+  box.innerHTML=stuck.length
+    ?`<span class="warn">${stuck.length===keys.length?'no other team':
+        stuck.length+' of these fights have no other team'} at these settings —
+      widen the band, the theme or the set formats</span>`
+    :`<span class="ok">regenerated ${keys.length} fight${keys.length>1?'s':''}</span>`;
+}
+// Every card that a global or automatic regenerate is allowed to take.
+const loose=()=>(S.keys||[]).filter(k=>!FROZEN[k]);
 function render(d){
   MONS={};
   lastSha=d.sha||null;
@@ -2434,14 +2893,23 @@ const opts=(vals,sel,blank)=>vals.map(v=>
 // Per-card plan. A gym gets no blank archetype -- the generator indexes ARCHETYPE[i]
 // straight into the role table and "" is not a key there -- while a trainer may
 // genuinely have none, which is what the flat presence quota is.
-const planPick=(kind,slot,a,m)=>`<div class="plan">
-  <select data-plan="${kind}" data-slot="${slot}" data-f="a">${
+// The archetype and mode are the only card controls that CANNOT be honoured without
+// building a new team, so on a frozen card they are disabled rather than left to do
+// nothing when clicked. Unfreezing to reach them is free now -- it does not move the
+// team -- which is what makes disabling them an honest answer instead of a wall.
+// The format select is NOT one of them: it is stamped on after the build.
+const planPick=(kind,slot,a,m)=>{
+  const off=FROZEN[(kind==='gym'?'g':'t')+slot]
+    ?' disabled title="frozen — unfreeze to change the plan (the team will not move)"'
+    :'';
+  return `<div class="plan">
+  <select data-plan="${kind}" data-slot="${slot}" data-f="a"${off}>${
     opts(kind==='tr'?[''].concat(S.archetypes):S.archetypes,a||'','flat quota')}</select>
-  <select data-plan="${kind}" data-slot="${slot}" data-f="m">${
+  <select data-plan="${kind}" data-slot="${slot}" data-f="m"${off}>${
     opts(S.modes,m||'','no mode')}</select>${kind==='gym'?`<select data-format="${slot}"
     title="battle format">${S.battle_formats.map(v=>`<option value="${v}" ${
       v===$('FORMAT_'+slot).value?'selected':''}>${v==='inherit'?'original':v}</option>`
-    ).join('')}</select>`:''}</div>`;
+    ).join('')}</select>`:''}</div>`;};
 // Per-mon controls open on CLICK, one row at a time. They used to sit in a row under
 // every name: 27 cards x 6 mons is 162 always-visible checkboxes and set menus, for
 // something used on a handful of them, and it buried the moves the card exists to
@@ -2454,7 +2922,8 @@ const monEditor=(fk,m)=>{
   const c=CARD[fk]||{}, customMoves=(c.moves||{})[m.species];
   const chosen=customMoves||m.moves||[], customAbility=(c.abilities||{})[m.species];
   return `<div class="edit">
-  <label>Pokémon<select data-swap="${fk}" data-sp="${esc(m.species)}">
+  <label>Pokémon<select data-swap="${fk}" data-sp="${esc(m.species)}"${
+    FROZEN[fk]?' disabled title="frozen — unfreeze to swap a species (the team will not move)"':''}>
     ${S.dex.map(species=>`<option value="${esc(species)}"${
       species===m.species?' selected':''}>${esc(species)}</option>`).join('')}
   </select></label>
@@ -2478,7 +2947,13 @@ const monEditor=(fk,m)=>{
       (((CARD[fk]||{}).items||{})[m.species]===item)?'selected':''}>${esc(item)}</option>`).join('')}
   </select></label>
   <label class="keep"><input type="checkbox" data-pin="${fk}"
-    data-sp="${esc(m.species)}" ${m.kept?'checked':''}>keep this Pokémon on the fight</label>
+    data-sp="${esc(m.species)}" ${((c.keep||{})[m.species]===true)?'checked':''}
+    ${FROZEN[fk]?'disabled':''}>pin this species${
+      FROZEN[fk]?' — unfreeze to change':' — a regenerate must keep it'}</label>
+  <label class="keep"><button type="button" class="tiny ghost" data-drop="${fk}"
+    data-sp="${esc(m.species)}" title="drop this Pokémon from the team and keep the
+      generator from bringing it back. The card's reset undoes it"
+    >remove from this team</button></label>
 </div>`;};
 // One Builder card, for a gym and for a named trainer alike.
 // What this card has been told to do that the globals did not ask for. Counted, not
@@ -2520,31 +2995,36 @@ function setScope(v){
        The other file is read off disk and left as it is.`;
   buildSave();
 }
-async function toggleFreeze(keys,on){
-  const box=$('frzmsg');
-  if(box) box.innerHTML=on?'freezing…':'unfreezing…';
-  const r=await fetch('/api/freeze',{method:'POST',body:JSON.stringify(
-    {keys,on,settings:get()})});
-  const d=await r.json();
-  if(d.error){ if(box) box.innerHTML='<span class="bad">'+esc(d.error)+'</span>'; return; }
-  setAll(d.settings);
-  await go();
-  if(box){
-    const g=(d.frozen||[]).filter(k=>k[0]==='g').length;
-    const t=(d.frozen||[]).filter(k=>k[0]==='t').length;
-    box.innerHTML=d.count
-      ?`<span class="ok">frozen: ${g} gyms, ${t} trainers</span>`
-      :'<span class="warn">nothing frozen — every fight regenerates</span>';
-  }
+// A flag flip and nothing else -- no server call, and above all no build. Freezing
+// used to be a round trip because only the server had a team to store; the team now
+// lives in HELD, which is what makes UNfreezing free. It cannot lose a team it does
+// not hold, so the cards do not move and you can go on editing the one you thawed.
+function toggleFreeze(keys,on){
+  for(const k of (keys&&keys.length?keys:(S.keys||[])))
+    if(on) FROZEN[k]=true; else delete FROZEN[k];
+  buildSave();
+  go([]);                      // re-render the badges; nothing is rebuilt
+  const box=$('frzmsg'); if(!box) return;
+  const n=Object.keys(FROZEN);
+  box.innerHTML=n.length
+    ?`<span class="ok">frozen: ${n.filter(k=>k[0]==='g').length} gyms, ${
+        n.filter(k=>k[0]==='t').length} trainers</span> <span class="sub">these sit
+        out Regenerate all and the rebuild a knob slide fires</span>`
+    :'<span class="warn">nothing frozen — every card is in scope for a regenerate</span>';
 }
 const teamCard=(g,title,was,pick,fk,i)=>{
   const gap=g.ebst-g.target, j=g.judge;
   const d=fk?dirtyOf(fk,i):null;
-  const frz=fk?`<button class="tiny frz${g.frozen?' on':' ghost'}"
-      title="${g.frozen?'this team is fixed — knobs and rerolls cannot touch it, but you can still untick a mon or change its set. Unfreezing hands it back to the generator, which rebuilds it from scratch':'pin this team exactly as it is now, so nothing rerolls it'}"
+  const frz=fk?`<button class="tiny" data-regen="${fk}"
+      title="build this one fight again, and keep going until the team is genuinely
+        different. Nothing else on the board moves. A frozen card can use this too —
+        it is how you let one you have settled catch up to knobs it sat out"
+      >regenerate</button><button class="tiny frz${g.frozen?' on':' ghost'}"
+      title="${g.frozen?'sliding a knob and Regenerate all both skip this card. Unfreezing does NOT change the team — it only stops protecting it':'leave this card out of Regenerate all and out of the rebuild a knob slide fires. The team it shows is already held either way'}"
       onclick="toggleFreeze(['${fk}'],${g.frozen?'false':'true'})">${
       g.frozen?'frozen':'freeze'}</button>`:'';
-  return `<div class="gym${d?' dirty':''}${g.frozen?' frozen':''}"><h3><span>${title}${d?
+  return `<div class="gym${d?' dirty':''}${g.frozen?' frozen':''}${
+      (g.errors||[]).length?' broken':''}"><h3><span>${title}${d?
       ` <span class="tag edited">edited${d.plan?' · plan':''}${
         d.format?' · format':''}${
         d.mons?' · '+d.mons+' mon'+(d.mons>1?'s':''):''}${
@@ -2556,9 +3036,19 @@ const teamCard=(g,title,was,pick,fk,i)=>{
       g.ev_target==null?'':` <span class="${Math.abs(g.offence-g.ev_target)<=12?'ok':'warn'}">(want ${g.ev_target}%)</span>`}
       · floors ${g.met}/${Object.keys(g.floors).length}
       · mega ${esc(g.mega||'—')}</div>
-    <div class="meta">unresisted <b class="${j.nobody_resists>4?'bad':'ok'}">${
-      j.nobody_resists}</b> · repeats <b class="${j.dup_types?'bad':'ok'}">${
-      j.dup_types}</b> · worst shared ${j.worst_shared} · hits ${j.off_se}/18</div>
+    <div class="meta" title="${tipList(g.hole_types,TIP.holes)}">holes <b class="${
+      j.holes>2?'bad':j.holes?'warn':'ok'}">${j.holes}</b><span class="tset">${
+      esc((g.hole_types||[]).join(' '))}</span> · <span title="${
+      tipList(g.hole_types,TIP.threat)}">threat</span> <b class="${
+      j.threat>6?'bad':j.threat?'warn':'ok'}">${j.threat}</b>${
+      g.cant_hit==null?'':` · <span title="${tipList(g.cant_hit,TIP.cant)}">can't hit back</span> <b class="${
+      g.cant_hit.length?'bad':'ok'}">${g.cant_hit.length}</b><span class="tset">${
+      esc(g.cant_hit.join(' '))}</span>`} · <span title="${
+      TIP.repeats}">repeats</span> <b class="${
+      j.dup_types?'bad':'ok'}">${j.dup_types}</b> · <span title="${
+      TIP.unres}">unresisted ${j.nobody_resists}</span> · hits ${j.off_se}/18</div>
+    ${(g.errors||[]).map(e=>`<div class="finding bad">${esc(e)}</div>`).join('')}
+    ${(g.warnings||[]).map(w=>`<div class="finding warn">${esc(w)}</div>`).join('')}
     ${g.mons.map((m,mi)=>monLine(m,'mon',!!was&&!was.includes(m.species),true,
                             fk&&!m.dynamic?fk:'',mi,fk)).join('')}
     <div class="exp"><button class="tiny ${d?'':'ghost'}" data-reset="${fk}"${
@@ -2612,10 +3102,18 @@ async function candidates(){
           <span class="${p.met<p.need?'bad':'ok'}">floors ${p.met}/${p.need}</span>
           ${p.missed.length?'('+p.missed.join(', ')+')':''} ·
           gap <span class="${Math.abs(p.gap)<=3?'ok':Math.abs(p.gap)<=12?'warn':'bad'}">${p.gap>0?'+':''}${p.gap}</span>
-          · unresisted <span class="${p.judge.nobody_resists>4?'bad':'ok'}">${
-            p.judge.nobody_resists}</span> · repeats <span class="${
-            p.judge.dup_types?'bad':'ok'}">${p.judge.dup_types}</span> · hits ${
-            p.judge.off_se}/18
+          · <span title="${tipList(p.hole_types,TIP.holes)}">holes</span> <span class="${
+            p.judge.holes>2?'bad':p.judge.holes?'warn':'ok'}">${
+            p.judge.holes}</span><span class="tset">${
+            esc((p.hole_types||[]).join(' '))}</span> · <span title="${
+            tipList(p.hole_types,TIP.threat)}">threat</span> <span class="${
+            p.judge.threat>6?'bad':p.judge.threat?'warn':'ok'}">${
+            p.judge.threat}</span>${p.cant_hit==null?'':
+            ` · <span title="${tipList(p.cant_hit,TIP.cant)}">can't hit back</span> <span class="${
+            p.cant_hit.length?'bad':'ok'}">${p.cant_hit.length}</span><span class="tset">${
+            esc(p.cant_hit.join(' '))}</span>`} · <span title="${
+            TIP.repeats}">repeats</span> <span class="${
+            p.judge.dup_types?'bad':'ok'}">${p.judge.dup_types}</span>
         </span></h4>
         <div class="mons">${p.mons.map(m=>monLine(m,'m',!m.kept,true)).join('')}</div>
         <div class="exp"><button class="tiny ghost"
@@ -2678,7 +3176,11 @@ const freeSave=()=>saveForm(FREE_KEY,freeControls);
 // save of its own that could fall out of step with them.
 function buildSave(){
   saveForm(BUILD_KEY,buildControls);
-  try{localStorage.setItem(PLAN_KEY,JSON.stringify({PLAN,CARD,ORDER,FROZEN,SCOPE}));}catch(e){}
+  // HELD rides along: it IS the board, so a reload without it opens on teams the
+  // generator happens to build today rather than the ones you left on screen.
+  // Measured at ~75 KB for all 27, against a multi-megabyte localStorage budget.
+  try{localStorage.setItem(PLAN_KEY,JSON.stringify(
+    {PLAN,CARD,ORDER,HELD,FROZEN,REROLL,SCOPE}));}catch(e){}
 }
 const freeRestore=()=>restoreForm(FREE_KEY,freeControls);
 // Restoring knobs means the Builder no longer shows what the repo ships, so say so
@@ -2693,7 +3195,8 @@ function buildRestore(){
   const plan=saved&&saved.PLAN?saved.PLAN:saved;
   if(saved&&saved.CARD&&typeof saved.CARD==='object') CARD=saved.CARD;
   if(saved&&saved.ORDER&&typeof saved.ORDER==='object') ORDER=saved.ORDER;
-  if(saved&&saved.FROZEN&&typeof saved.FROZEN==='object') FROZEN=saved.FROZEN;
+  if(saved&&(saved.FROZEN||saved.HELD)) ({HELD,FROZEN}=splitLegacy(saved));
+  if(saved&&saved.REROLL&&typeof saved.REROLL==='object') REROLL=saved.REROLL;
   if(saved&&typeof saved.SCOPE==='string') setScope(saved.SCOPE);
   // Shape-check rather than trust: a saved PLAN from an older page could be missing
   // halves, and a bad ARCHETYPE entry reaches the generator as a dict key.
@@ -2813,8 +3316,12 @@ async function freeBuild(){
       v.plan.mode?' + '+esc(v.plan.mode):''}`:'';
     return `<div class="cand best"><h4><span>variation ${v.seed}${
       plan?` <span class="tag accent">${plan}</span>`:''}</span>
-      <span class="num">unresisted <span class="${j.nobody_resists>4?'bad':'ok'}">${
-        j.nobody_resists}</span> · repeats <span class="${
+      <span class="num"><span title="${tipList(v.hole_types,TIP.holes)}">holes</span> <span class="${
+        j.holes>2?'bad':j.holes?'warn':'ok'}">${
+        j.holes}</span><span class="tset">${esc((v.hole_types||[]).join(' '))}</span> · <span title="${
+        tipList(v.hole_types,TIP.threat)}">threat</span> <span class="${
+        j.threat>6?'bad':j.threat?'warn':'ok'}">${
+        j.threat}</span> · <span title="${TIP.repeats}">repeats</span> <span class="${
         j.dup_types?'bad':'ok'}">${j.dup_types}</span> · hits ${j.off_se}/18</span></h4>
       <div class="mons">${v.mons.map(m=>monLine(m,'m',!m.kept,true)).join('')}</div>
       ${v.notes.map(n=>`<div class="sub">${esc(n)}</div>`).join('')}
@@ -2879,7 +3386,17 @@ async function init(){
     <legend>${esc(label)}</legend>${keys.map(k=>{
       if(CTL[k]) return CTL[k]();
       if(!S.meta[k]) throw new Error('no control for '+k);
-      return slider(k);}).join('')}</fieldset>`).join('');
+      return slider(k);}).join('')}${label!=='reroll'?'':
+      // Its home is this group by definition: "reroll" is the one place that says
+      // "give me a different one", and the two seeds beside it are the same
+      // instruction sent to all 27 at once instead of to the cards you can still see.
+      `<div class="row" title="${esc(
+        'build every card that is not frozen again, each until its team is genuinely '
+        +'different. This is the same thing a knob slide does automatically, except '
+        +'that nothing has changed but your asking.')}">
+        <label>regenerate</label>
+        <button class="tiny" id="regenall">all unfrozen cards</button></div>`
+      }</fieldset>`).join('');
   // archetype and mode are chosen ON THE CARD, so they are not here as well: two
   // controls for one value is two states and a sync bug the first time they disagree.
   $('per').innerHTML='<tr><th></th><th>format</th><th>theme</th><th>tgt</th><th>±</th></tr>'
@@ -2909,7 +3426,10 @@ async function init(){
     checkStale();
     // Regenerating the nine while the Plans tab is up is work nobody asked for, so
     // it is deferred to the moment you go back to it.
-    if($('v_build').hidden) dirty=true; else deb();
+    // FORMAT is stamped onto the record after the build, so changing one needs no
+    // new body -- it rides the EDIT path with the card-level controls.
+    const edit=/^FORMAT_\d+$/.test(e.target.id);
+    if($('v_build').hidden) dirty=true; else if(edit) deb(); else debAll();
   };
   $('v_build').querySelectorAll('input,select').forEach(
     el=>el.addEventListener('input',onKnob));
@@ -2929,14 +3449,27 @@ async function init(){
     };
     $(host).addEventListener('change',e=>{
       const el=e.target, d=el.dataset;
+      // Which card, if any, this edit needs a new body for. A plan change and a
+      // species swap are the only two: everything else lands on the team already
+      // held. Set, not returned, because the branches below fall through to one
+      // place that decides what to run.
+      let needs='';
       if(d.plan){
         if(d.plan==='gym') PLAN.gym[+d.slot][d.f]=el.value;
         else (PLAN.tr[d.slot]=PLAN.tr[d.slot]||['',''])[d.f==='a'?0:1]=el.value;
+        needs=(d.plan==='gym'?'g':'t')+d.slot;
       } else if(d.format!==undefined){
         const left=$('FORMAT_'+d.format);
         if(left) left.value=el.value;
       } else if(d.pin!==undefined){
-        cardOf(d.pin).keep[d.sp]=el.checked;
+        // PIN, not "keep on the fight". The box used to render checked from the
+        // BUILD's own `kept` flag while writing your OVERRIDE, so after a load every
+        // box was ticked with nothing behind it -- and unticking went straight from
+        // "no override" to `false`, which means BAN, which drops the body. On a held
+        // card nothing refills it, so the mon simply vanished. Unticking now clears
+        // the override instead: stop forcing it, and leave the team alone.
+        if(el.checked) cardOf(d.pin).keep[d.sp]=true;
+        else delete cardOf(d.pin).keep[d.sp];
       } else if(d.swap!==undefined){
         const to=el.value.trim().toUpperCase(), from=d.sp;
         if(!to||to===from){ el.value=from; return; }
@@ -2967,6 +3500,9 @@ async function init(){
         delete c.levels[from];
         // A species change replaces this row, so carry its party position forward.
         ORDER[d.swap]=teammates.map(species=>species===from?to:species);
+        // The only edit on a card that cannot be honoured without the generator:
+        // pinning a body the team does not have needs one BUILT.
+        needs=d.swap;
       } else if(d.set!==undefined){
         const c=cardOf(d.set);
         if(el.value) c.sets[d.sp]=el.value; else delete c.sets[d.sp];
@@ -2984,7 +3520,8 @@ async function init(){
           .map(x=>x.value).filter(Boolean);
         if(chosen.length) c.moves[d.sp]=chosen; else delete c.moves[d.sp];
       } else return;
-      buildSave(); checkStale(); deb();
+      buildSave(); checkStale();
+      needs?debCard(needs):deb();
     });
     // The set list is per species AND per level, so it is fetched when you open the
     // menu rather than shipped with all 27 cards -- 162 mons' worth of set lists is
@@ -3025,8 +3562,22 @@ async function init(){
         if(first&&first!==row) parent.insertBefore(row,first);
         commitOrder(row); return;
       }
-      const fk=e.target.dataset&&e.target.dataset.reset;
-      if(fk){ delete CARD[fk]; delete ORDER[fk]; buildSave(); deb(); return; }
+      const data=e.target.dataset||{};
+      if(data.reset!==undefined&&data.reset){
+        delete CARD[data.reset]; delete ORDER[data.reset];
+        buildSave(); deb(); return;
+      }
+      // Drop a body. `false` is the one value that does both jobs: _edit_held drops
+      // it from the held team now, and keep_filter bans it from the pool so a later
+      // regenerate does not hand it straight back.
+      if(data.drop!==undefined&&data.drop){
+        cardOf(data.drop).keep[data.sp]=false;
+        buildSave(); checkStale(); deb(); return;
+      }
+      // Ask the generator for this one fight again. Frozen or not: pressing a
+      // card's own button is as explicit as it gets, and it is what lets a card you
+      // have frozen catch up to knobs it sat out without giving up the freeze.
+      if(data.regen!==undefined&&data.regen){ go([data.regen],true); return; }
       if(e.target.closest('.draghandle')) return;
       // Inside an open editor is not a click ON the row.
       if(e.target.closest('.edit')) return;
@@ -3091,7 +3642,9 @@ async function init(){
     $('where').textContent={build:'the nine gym fights, live',
       plans:'27 fights · '+(Object.keys(S.plans).length||'no')+' plans recorded',
       free:'build around your own cores'}[v];
-    if(v==='build'&&dirty){dirty=false;go();}
+    // The knob slides you made while this tab was hidden, run now -- the global
+    // regenerate they would have fired had you been looking at the cards.
+    if(v==='build'&&dirty){dirty=false;go(loose());}
   };
   $('t_build').onclick=()=>show('build');
   $('t_plans').onclick=()=>show('plans');
@@ -3158,19 +3711,23 @@ async function init(){
     const box=$('frzmsg');
     if(!pinnedCards.length)
       return void(box.innerHTML='<span class="warn">nothing is pinned</span>');
-    const loose=pinnedCards.filter(k=>!FROZEN[k]);
-    if(loose.length&&!confirm(
-        `${loose.length} of these fights are not frozen.\n\n`
-        +`Unpinning lets the generator reroll them, so those teams will change. `
-        +`Freeze first if you want to keep them exactly as they are.\n\nUnpin anyway?`))
-      return;
-    let n=0;
-    pinnedCards.forEach(k=>{n+=Object.keys(CARD[k].keep).length; CARD[k].keep={};});
+    // No confirm any more, and nothing to warn about. This used to ask, because an
+    // unfrozen card handed its pins back to the generator and rerolled on the spot;
+    // a pin is now an instruction the NEXT regenerate reads, so dropping one changes
+    // no team today. A removal is a pin too (`false`), so the bodies those were
+    // holding out do come back -- which is the undo this button has always been.
+    let n=0, back=0;
+    pinnedCards.forEach(k=>{
+      n+=Object.keys(CARD[k].keep).length;
+      back+=Object.values(CARD[k].keep).filter(on=>on===false).length;
+      CARD[k].keep={};
+    });
     buildSave();
     box.innerHTML=`<span class="ok">unpinned ${n} species across ${
-      pinnedCards.length} fights</span>`+(loose.length
-      ?` <span class="sub">${loose.length} were not frozen and may have rerolled</span>`:'');
-    go();
+      pinnedCards.length} fights</span>`+(back
+      ?` <span class="sub">${back} removed Pokémon came back</span>`
+      :' <span class="sub">no team changed — pins are read by the next regenerate</span>');
+    go([]);
   };
   // Half at a time, because the two halves are settled at different times: the
   // gyms are a curve you tune together, a rival is one fight you are done with.
@@ -3178,6 +3735,7 @@ async function init(){
   // a fight, so the slots present are not always 0..17.
   const gymKeys=()=>[...Array(9).keys()].map(i=>'g'+i);
   const trainerKeys=()=>((lastBuild&&lastBuild.trainers)||[]).map(t=>'t'+t.slot);
+  $('regenall').onclick=()=>go(loose(),true);
   $('frzall').onclick=()=>toggleFreeze(null,true);
   $('frznone').onclick=()=>toggleFreeze(null,false);
   $('frzgyms').onclick=()=>toggleFreeze(gymKeys(),true);
@@ -3197,7 +3755,7 @@ async function init(){
     // Scope follows the file: a trainers JSON puts you in trainers, so the gyms you
     // did not load are neither shown nor shipped.
     setScope(d.gyms&&d.trainers?'all':d.gyms?'gyms':'trainers');
-    await go();
+    await go([]);          // the loaded settings already hold their teams
     syncLoadButton();
     const what=[d.gyms?d.gyms+' gyms':'',d.trainers?d.trainers+' trainers':'']
       .filter(Boolean).join(' + ');
@@ -3224,7 +3782,7 @@ async function init(){
     if(!setAll(d.settings))
       return void($('pmsg').innerHTML='<span class="bad">that preset has no settings</span>');
     $('pmsg').innerHTML='rebuilding…';
-    await go();
+    await go([]);          // a preset carries its own HELD; asking again would reroll it
     const same=d.sha&&lastSha&&d.sha===lastSha;
     $('pmsg').innerHTML=same
       ? `<span class="ok">loaded ${esc(d.name)} — teams match its fingerprint `
@@ -3269,7 +3827,10 @@ async function init(){
   // worse than a slower first paint.
   let bootLoaded=false;
   if(!restored) bootLoaded=await loadInstalled();
-  await go();
+  // [] is not "build nothing": a card with no held team has none to show, so the
+  // generator is asked for it anyway. What [] rules out is REPLACING one that is
+  // already there, which is exactly right for a first paint and for a reload.
+  await go([]);
   syncLoadButton();
   if(restored&&lastBuild&&installedDiffers(lastBuild.gyms||[]))
     $('immsg').innerHTML='<span class="warn">this is your saved session — the game '

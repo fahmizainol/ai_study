@@ -1,7 +1,7 @@
 {
  "name": "teams_trainers",
  "note": "companion snapshot written by Export",
- "saved": "2026-09-19T00:04:21",
+ "saved": "2026-09-19T20:30:33",
  "settings": {
   "ARCHETYPE": [
    "hyper offense",
@@ -14,9 +14,10 @@
    "hyper offense",
    "offense"
   ],
-  "BP_CAP": 75,
-  "BP_CAP_UNTIL": 1,
-  "CHASE": 0.8,
+  "BP_CAP": 70,
+  "BP_CAP_UNTIL": 2,
+  "CHASE": 0.9,
+  "COVER_BAND": 10,
   "EARLY_MOVES": 0,
   "FORMAT": [
    "inherit",
@@ -2341,52 +2342,23 @@
     "level": 37,
     "median": 34,
     "mode": null,
-    "notes": [],
+    "notes": [
+     "evolved PILOSWINE (450) -> MAMOSWINE (530, UU) \u2014 legal at level 37"
+    ],
     "roles": {
      "hazards": 1,
      "mega": 1,
      "pivot": 1,
      "priority": 1,
-     "protect": 2,
-     "recovery": 2,
+     "protect": 1,
+     "recovery": 1,
      "setup": 1,
      "speed": 1,
-     "status": 3
+     "status": 2
     },
     "stage": 4,
-    "target": 525,
+    "target": 545,
     "team": [
-     {
-      "ability": 2,
-      "ev": [
-       0,
-       252,
-       0,
-       252,
-       0,
-       4
-      ],
-      "fidelity": 4,
-      "inherited": "MAMOSWINE",
-      "item": "LIFEORB",
-      "iv": 31,
-      "kept": true,
-      "level": 37,
-      "moves": [
-       "ICESHARD",
-       "EARTHQUAKE",
-       "SUPERPOWER",
-       "GIGAIMPACT"
-      ],
-      "nature": "ADAMANT",
-      "pinned": false,
-      "roles": [
-       "priority"
-      ],
-      "species": "PILOSWINE",
-      "src": "Boss Studio custom moves",
-      "why": "original"
-     },
      {
       "ability": 1,
       "ev": [
@@ -2484,67 +2456,95 @@
       "why": "original"
      },
      {
-      "ability": 2,
+      "ability": 1,
       "ev": [
+       0,
+       0,
+       0,
        252,
-       0,
-       0,
-       0,
        252,
        4
       ],
       "fidelity": 4,
       "inherited": null,
-      "item": "CHOICESPECS",
+      "item": "LIFEORB",
       "iv": 31,
       "kept": false,
       "level": 36,
       "moves": [
-       "FLASHCANNON",
-       "THUNDERBOLT",
        "VOLTSWITCH",
-       "THUNDERWAVE"
+       "THUNDERBOLT",
+       "FLAMETHROWER",
+       "OVERHEAT"
       ],
-      "nature": "MODEST",
+      "nature": "TIMID",
       "roles": [
-       "pivot",
-       "speed",
-       "status"
+       "pivot"
       ],
-      "species": "MAGNEZONE",
-      "src": "gen6battlespotsingles/stats/Showdown Usage",
+      "species": "MANECTRIC",
+      "src": "gen6nu/stats/Showdown Usage",
       "why": "added:pivot"
+     },
+     {
+      "ability": 2,
+      "ev": [
+       0,
+       252,
+       0,
+       252,
+       0,
+       4
+      ],
+      "fidelity": 3,
+      "inherited": null,
+      "item": "LIFEORB",
+      "iv": 31,
+      "kept": true,
+      "level": 37,
+      "moves": [
+       "ICESHARD",
+       "EARTHQUAKE",
+       "SUPERPOWER",
+       "GIGAIMPACT"
+      ],
+      "nature": "ADAMANT",
+      "pinned": false,
+      "roles": [
+       "priority"
+      ],
+      "species": "MAMOSWINE",
+      "src": "gen6ou/dex/Wallbreaker (dev set was ICEFANG/AMNESIA/ROCKTOMB/TAKEDOWN)",
+      "why": "evolved original"
      },
      {
       "ability": 0,
       "ev": [
-       248,
+       220,
        0,
-       252,
+       244,
+       44,
        0,
-       0,
-       8
+       0
       ],
-      "fidelity": 3,
+      "fidelity": 4,
       "inherited": null,
-      "item": "LEFTOVERS",
+      "item": "ROCKYHELMET",
       "iv": 31,
       "kept": false,
       "level": 36,
       "moves": [
-       "TOXIC",
-       "SOFTBOILED",
-       "PROTECT",
-       "HYPERBEAM"
+       "WATERFALL",
+       "ICEFANG",
+       "THUNDERWAVE",
+       "TAUNT"
       ],
-      "nature": "BOLD",
+      "nature": "IMPISH",
       "roles": [
-       "protect",
-       "recovery",
+       "speed",
        "status"
       ],
-      "species": "BLISSEY",
-      "src": "gen6ou/dex/Special Wall",
+      "species": "GYARADOS",
+      "src": "gen7battlespotsingles/dex/Defensive",
       "why": "added:power"
      }
     ]
@@ -2589,9 +2589,10 @@
     ],
     "roles": {
      "hazards": 1,
-     "pivot": 2,
-     "recovery": 2,
-     "setup": 3,
+     "pivot": 1,
+     "priority": 2,
+     "recovery": 1,
+     "setup": 2,
      "status": 1
     },
     "stage": 0,
@@ -2707,6 +2708,41 @@
       "ability": 0,
       "design_level": 19,
       "ev": [
+       88,
+       252,
+       0,
+       168,
+       0,
+       0
+      ],
+      "fidelity": 1,
+      "inherited": "SWAMPERT",
+      "item": "SOFTSAND",
+      "iv": 31,
+      "kept": false,
+      "level": [
+       "balanceo",
+       1
+      ],
+      "moves": [
+       "TOXIC",
+       "BULLDOZE",
+       "AQUAJET",
+       "FACADE"
+      ],
+      "nature": "ADAMANT",
+      "roles": [
+       "priority",
+       "status"
+      ],
+      "species": "MARSHTOMP",
+      "src": "gen7uu/dex/Choice Band",
+      "why": "added:power"
+     },
+     {
+      "ability": 0,
+      "design_level": 19,
+      "ev": [
        0,
        252,
        4,
@@ -2714,9 +2750,9 @@
        0,
        0
       ],
-      "fidelity": 1,
+      "fidelity": 2,
       "inherited": null,
-      "item": "SILVERPOWDER",
+      "item": "MYSTICWATER",
       "iv": 31,
       "kept": false,
       "level": [
@@ -2724,69 +2760,33 @@
        1
       ],
       "moves": [
-       "SWORDSDANCE",
-       "UTURN",
-       "POISONSTING",
-       "FACADE"
+       "RETURN",
+       "AQUAJET",
+       "BULLDOZE",
+       "THIEF"
       ],
-      "nature": "JOLLY",
+      "nature": "ADAMANT",
       "roles": [
-       "pivot",
-       "setup"
+       "priority"
       ],
-      "species": "BEEDRILL",
-      "src": "gen6zu/dex/Swords Dance",
+      "species": "BIBAREL",
+      "src": "gen7pu/dex/Swords Dance",
       "why": "added:power"
      },
      {
       "ability": 0,
       "design_level": 19,
       "ev": [
+       4,
+       0,
+       0,
        252,
-       0,
-       200,
-       0,
-       0,
-       56
+       252,
+       0
       ],
       "fidelity": 2,
-      "inherited": "PORYGON2",
-      "item": "EVIOLITE",
-      "iv": 31,
-      "kept": false,
-      "level": [
-       "balanceo",
-       1
-      ],
-      "moves": [
-       "RECOVER",
-       "TOXIC",
-       "ROUND",
-       "PSYBEAM"
-      ],
-      "nature": "CALM",
-      "roles": [
-       "recovery",
-       "status"
-      ],
-      "species": "PORYGON",
-      "src": "gen6ou/dex/Defensive",
-      "why": "added:power"
-     },
-     {
-      "ability": 1,
-      "design_level": 19,
-      "ev": [
-       0,
-       252,
-       0,
-       252,
-       0,
-       4
-      ],
-      "fidelity": 4,
       "inherited": null,
-      "item": "SILKSCARF",
+      "item": "SITRUSBERRY",
       "iv": 31,
       "kept": false,
       "level": [
@@ -2794,17 +2794,17 @@
        1
       ],
       "moves": [
-       "TAILSLAP",
-       "UTURN",
-       "BULLETSEED",
-       "KNOCKOFF"
+       "VOLTSWITCH",
+       "TRICK",
+       "SHOCKWAVE",
+       "ROUND"
       ],
-      "nature": "JOLLY",
+      "nature": "TIMID",
       "roles": [
        "pivot"
       ],
-      "species": "CINCCINO",
-      "src": "gen6monotype/dex/Choice Band",
+      "species": "ROTOM",
+      "src": "gen6nu/dex/Choice Scarf",
       "why": "added:pivot"
      }
     ]
@@ -2848,10 +2848,12 @@
      "pivot": 2,
      "protect": 1,
      "recovery": 3,
+     "removal": 1,
+     "speed": 1,
      "status": 3
     },
     "stage": 3,
-    "target": 551,
+    "target": 530,
     "team": [
      {
       "ability": 2,
@@ -2949,13 +2951,44 @@
       "why": "original"
      },
      {
+      "ability": 0,
+      "ev": [
+       248,
+       56,
+       120,
+       84,
+       0,
+       0
+      ],
+      "fidelity": 3,
+      "inherited": null,
+      "item": "COLBURBERRY",
+      "iv": 31,
+      "kept": false,
+      "level": 32,
+      "moves": [
+       "RAPIDSPIN",
+       "ANCHORSHOT",
+       "REST",
+       "SHADOWCLAW"
+      ],
+      "nature": "ADAMANT",
+      "roles": [
+       "recovery",
+       "removal"
+      ],
+      "species": "DHELMISE",
+      "src": "gen7ru/dex/Bulky Spinner",
+      "why": "added:recovery"
+     },
+     {
       "ability": 2,
       "ev": [
-       0,
        252,
        0,
-       252,
        0,
+       0,
+       252,
        4
       ],
       "fidelity": 4,
@@ -2965,80 +2998,51 @@
       "kept": false,
       "level": 32,
       "moves": [
-       "WILDCHARGE",
-       "FACADE",
-       "SUPERPOWER",
-       "VOLTSWITCH"
+       "PSYCHIC",
+       "GIGADRAIN",
+       "LEECHSEED",
+       "SLEEPPOWDER"
       ],
-      "nature": "JOLLY",
+      "nature": "MODEST",
       "roles": [
-       "pivot"
+       "recovery"
       ],
-      "species": "LUXRAY",
-      "src": "gen7pu/dex/All-Out Attacker",
-      "why": "added:power"
+      "species": "EXEGGUTOR",
+      "src": "gen6nu/stats/Showdown Usage",
+      "why": "added:recovery"
      },
      {
       "ability": 0,
       "ev": [
-       248,
-       0,
-       252,
        0,
        0,
-       8
+       236,
+       0,
+       76,
+       196
       ],
-      "fidelity": 3,
-      "inherited": "CHANSEY",
-      "item": "SILKSCARF",
+      "fidelity": 4,
+      "inherited": "NOSEPASS",
+      "item": "BERRYJUICE",
       "iv": 31,
       "kept": false,
       "level": 32,
       "moves": [
        "STEALTHROCK",
-       "SOFTBOILED",
-       "TOXIC",
-       "HYPERBEAM"
+       "THUNDERWAVE",
+       "VOLTSWITCH",
+       "POWERGEM"
       ],
       "nature": "BOLD",
       "roles": [
        "hazards",
-       "recovery",
+       "pivot",
+       "speed",
        "status"
       ],
-      "species": "BLISSEY",
-      "src": "gen6monotype/dex/Support",
+      "species": "PROBOPASS",
+      "src": "gen6lc/dex/Utility",
       "why": "added:hazards"
-     },
-     {
-      "ability": 0,
-      "ev": [
-       252,
-       0,
-       252,
-       0,
-       0,
-       4
-      ],
-      "fidelity": 4,
-      "inherited": null,
-      "item": "SITRUSBERRY",
-      "iv": 31,
-      "kept": false,
-      "level": 32,
-      "moves": [
-       "WISH",
-       "SYNTHESIS",
-       "MOONBLAST",
-       "AROMATHERAPY"
-      ],
-      "nature": "BOLD",
-      "roles": [
-       "recovery"
-      ],
-      "species": "FLORGES",
-      "src": "gen6uu/dex/Defensive Support",
-      "why": "added:recovery"
      }
     ]
    },
@@ -3073,26 +3077,25 @@
     "dynamic": false,
     "floors": {
      "hazards": 1,
-     "mega": 1,
-     "setup": 2
+     "mega": 1
     },
     "level": 40,
     "median": 38,
     "mode": null,
     "notes": [
-     "dropped EELEKTRIK -- unticked on the card",
+     "evolved EELEKTRIK (405) -> EELEKTROSS (515, PU) \u2014 legal at level 40",
      "albapoke2 left to the engine \u2014 resolves to the starter matching the player's"
     ],
     "roles": {
      "hazards": 1,
-     "mega": 1,
+     "phaze": 1,
      "pivot": 1,
      "priority": 1,
-     "setup": 2,
-     "status": 1
+     "removal": 1,
+     "status": 2
     },
     "stage": 4,
-    "target": 525,
+    "target": 545,
     "team": [
      {
       "ability": 0,
@@ -3117,13 +3120,13 @@
        "KNOCKOFF"
       ],
       "nature": "QUIET",
-      "pinned": true,
+      "pinned": false,
       "roles": [
        "pivot"
       ],
       "species": "EELEKTROSS",
       "src": "gen6ru/dex/Assault Vest",
-      "why": "pinned on the card"
+      "why": "evolved original"
      },
      {
       "ability": 0,
@@ -3194,6 +3197,34 @@
        0,
        0,
        0,
+       252,
+       252,
+       4
+      ],
+      "fidelity": 4,
+      "inherited": null,
+      "item": "LEFTOVERS",
+      "iv": 31,
+      "kept": false,
+      "level": 39,
+      "moves": [
+       "AIRSLASH",
+       "FLAMETHROWER",
+       "EARTHQUAKE",
+       "HYPERBEAM"
+      ],
+      "nature": "TIMID",
+      "roles": [],
+      "species": "CHARIZARD",
+      "src": "Boss Studio custom moves",
+      "why": "added:mega"
+     },
+     {
+      "ability": 0,
+      "ev": [
+       0,
+       0,
+       0,
        0,
        0,
        0
@@ -3212,65 +3243,36 @@
       "why": "starter slot"
      },
      {
-      "ability": 1,
-      "ev": [
-       0,
-       252,
-       0,
-       252,
-       0,
-       4
-      ],
-      "fidelity": 3,
-      "inherited": null,
-      "item": "LIFEORB",
-      "iv": 31,
-      "kept": false,
-      "level": 39,
-      "moves": [
-       "SWORDSDANCE",
-       "KNOCKOFF",
-       "SUPERPOWER",
-       "GIGAIMPACT"
-      ],
-      "nature": "ADAMANT",
-      "roles": [
-       "setup"
-      ],
-      "species": "ABSOL",
-      "src": "gen6ru/dex/Swords Dance",
-      "why": "added:setup"
-     },
-     {
       "ability": 0,
       "ev": [
-       0,
        252,
        0,
        252,
        0,
-       4
+       4,
+       0
       ],
       "fidelity": 4,
       "inherited": null,
-      "item": "SCEPTILITE",
+      "item": "LEFTOVERS",
       "iv": 31,
       "kept": false,
       "level": 39,
       "moves": [
-       "SWORDSDANCE",
-       "LEAFBLADE",
-       "DRAGONCLAW",
-       "EARTHQUAKE"
+       "SCALD",
+       "RAPIDSPIN",
+       "ROAR",
+       "TOXIC"
       ],
-      "nature": "JOLLY",
+      "nature": "BOLD",
       "roles": [
-       "mega",
-       "setup"
+       "phaze",
+       "removal",
+       "status"
       ],
-      "species": "SCEPTILE",
-      "src": "gen6uu/dex/Swords Dance",
-      "why": "added:setup"
+      "species": "BLASTOISE",
+      "src": "gen6uu/dex/Defensive Spinner",
+      "why": "added:power"
      }
     ]
    },
@@ -3316,6 +3318,7 @@
     "median": 41,
     "mode": null,
     "notes": [
+     "evolved MAGMAR (495) -> MAGMORTAR (540, NU) \u2014 legal at level 46",
      "owenpoke3 left to the engine \u2014 resolves to the starter matching the player's"
     ],
     "roles": {
@@ -3388,35 +3391,6 @@
        "pivot"
       ],
       "species": "HELIOLISK",
-      "src": "Boss Studio custom moves",
-      "why": "original"
-     },
-     {
-      "ability": 2,
-      "ev": [
-       0,
-       0,
-       0,
-       252,
-       252,
-       4
-      ],
-      "fidelity": 4,
-      "inherited": null,
-      "item": "CHOICESPECS",
-      "iv": 31,
-      "kept": true,
-      "level": 46,
-      "moves": [
-       "FIREBLAST",
-       "OVERHEAT",
-       "FOCUSBLAST",
-       "PSYCHIC"
-      ],
-      "nature": "TIMID",
-      "pinned": false,
-      "roles": [],
-      "species": "MAGMAR",
       "src": "Boss Studio custom moves",
       "why": "original"
      },
@@ -3503,6 +3477,35 @@
       "species": "owenpoke3",
       "src": "engine (Pokes Rivales starter slot)",
       "why": "starter slot"
+     },
+     {
+      "ability": 0,
+      "ev": [
+       0,
+       0,
+       0,
+       252,
+       252,
+       4
+      ],
+      "fidelity": 4,
+      "inherited": null,
+      "item": "ASSAULTVEST",
+      "iv": 31,
+      "kept": true,
+      "level": 46,
+      "moves": [
+       "THUNDERBOLT",
+       "FIREBLAST",
+       "FOCUSBLAST",
+       "PSYCHIC"
+      ],
+      "nature": "TIMID",
+      "pinned": false,
+      "roles": [],
+      "species": "MAGMORTAR",
+      "src": "gen6ru/stats/Showdown Usage",
+      "why": "evolved original"
      }
     ]
    },
@@ -4866,50 +4869,19 @@
     "median": 19,
     "mode": null,
     "notes": [
+     "evolved HELIOPTILE (289) -> HELIOLISK (481, NU) \u2014 legal at level 25",
      "owenpoke2 left to the engine \u2014 resolves to the starter matching the player's"
     ],
     "roles": {
      "hazards": 1,
-     "pivot": 2,
+     "pivot": 1,
+     "priority": 2,
      "protect": 1,
-     "recovery": 1,
-     "speed": 1,
-     "status": 2
+     "rain": 1
     },
     "stage": 1,
     "target": 487,
     "team": [
-     {
-      "ability": 0,
-      "ev": [
-       0,
-       0,
-       0,
-       252,
-       252,
-       4
-      ],
-      "fidelity": 4,
-      "inherited": "HELIOLISK",
-      "item": "SITRUSBERRY",
-      "iv": 31,
-      "kept": true,
-      "level": 25,
-      "moves": [
-       "VOLTSWITCH",
-       "GRASSKNOT",
-       "SHOCKWAVE",
-       "ROUND"
-      ],
-      "nature": "TIMID",
-      "pinned": false,
-      "roles": [
-       "pivot"
-      ],
-      "species": "HELIOPTILE",
-      "src": "Boss Studio custom moves",
-      "why": "original"
-     },
      {
       "ability": 1,
       "ev": [
@@ -4968,33 +4940,91 @@
       "ability": 0,
       "ev": [
        0,
-       76,
-       236,
+       252,
+       4,
+       252,
        0,
-       0,
-       196
+       0
       ],
       "fidelity": 4,
-      "inherited": "NOSEPASS",
-      "item": "BERRYJUICE",
+      "inherited": null,
+      "item": "LUMBERRY",
+      "iv": 31,
+      "kept": false,
+      "level": 24,
+      "moves": [
+       "AQUAJET",
+       "FACADE",
+       "BITE",
+       "BULLDOZE"
+      ],
+      "nature": "JOLLY",
+      "roles": [
+       "priority"
+      ],
+      "species": "GYARADOS",
+      "src": "Boss Studio custom moves",
+      "why": "added:power"
+     },
+     {
+      "ability": 0,
+      "ev": [
+       0,
+       0,
+       0,
+       252,
+       252,
+       4
+      ],
+      "fidelity": 1,
+      "inherited": null,
+      "item": "SITRUSBERRY",
+      "iv": 31,
+      "kept": true,
+      "level": 25,
+      "moves": [
+       "VOLTSWITCH",
+       "SHOCKWAVE",
+       "ROUND",
+       "MUDSLAP"
+      ],
+      "nature": "TIMID",
+      "pinned": false,
+      "roles": [
+       "pivot"
+      ],
+      "species": "HELIOLISK",
+      "src": "gen6uu/dex/Special Attacker",
+      "why": "evolved original"
+     },
+     {
+      "ability": 0,
+      "ev": [
+       0,
+       252,
+       0,
+       252,
+       0,
+       4
+      ],
+      "fidelity": 2,
+      "inherited": null,
+      "item": "SHARPBEAK",
       "iv": 31,
       "kept": false,
       "level": 24,
       "moves": [
        "STEALTHROCK",
-       "ROCKBLAST",
-       "THUNDERWAVE",
-       "VOLTSWITCH"
+       "AERIALACE",
+       "SMACKDOWN",
+       "FACADE"
       ],
-      "nature": "RELAXED",
+      "nature": "JOLLY",
       "roles": [
-       "hazards",
-       "pivot",
-       "speed",
-       "status"
+       "hazards"
       ],
-      "species": "PROBOPASS",
-      "src": "gen7lc/dex/SturdyJuice Utility",
+      "species": "AERODACTYL",
+      "src": "gen6ru/stats/Showdown Usage",
       "why": "added:hazards"
      },
      {
@@ -5002,59 +5032,30 @@
       "ev": [
        252,
        0,
+       0,
+       0,
        252,
-       0,
-       0,
        4
       ],
-      "fidelity": 3,
-      "inherited": null,
-      "item": "SITRUSBERRY",
-      "iv": 31,
-      "kept": false,
-      "level": 24,
-      "moves": [
-       "WISH",
-       "SYNTHESIS",
-       "AROMATHERAPY",
-       "FAIRYWIND"
-      ],
-      "nature": "BOLD",
-      "roles": [
-       "recovery"
-      ],
-      "species": "FLORGES",
-      "src": "gen6uu/dex/Defensive Support",
-      "why": "added:power"
-     },
-     {
-      "ability": 0,
-      "ev": [
-       236,
-       0,
-       156,
-       0,
-       0,
-       116
-      ],
       "fidelity": 1,
-      "inherited": "GROWLITHE",
-      "item": "CHARCOAL",
+      "inherited": null,
+      "item": "NEVERMELTICE",
       "iv": 31,
       "kept": false,
       "level": 24,
       "moves": [
-       "WILLOWISP",
-       "FIREFANG",
-       "FACADE",
-       "THUNDERFANG"
+       "RAINDANCE",
+       "ICESHARD",
+       "AQUAJET",
+       "FACADE"
       ],
-      "nature": "IMPISH",
+      "nature": "MODEST",
       "roles": [
-       "status"
+       "priority",
+       "rain"
       ],
-      "species": "ARCANINE",
-      "src": "gen6lc/dex/Physically Defensive",
+      "species": "LAPRAS",
+      "src": "gen6nu/stats/Showdown Usage",
       "why": "added:power"
      }
     ]
@@ -5101,14 +5102,13 @@
     ],
     "roles": {
      "hazards": 1,
-     "mega": 1,
      "pivot": 1,
      "protect": 1,
-     "setup": 1,
+     "recovery": 1,
      "status": 1
     },
     "stage": 3,
-    "target": 551,
+    "target": 530,
     "team": [
      {
       "ability": 1,
@@ -5205,6 +5205,36 @@
      {
       "ability": 0,
       "ev": [
+       248,
+       0,
+       204,
+       16,
+       24,
+       16
+      ],
+      "fidelity": 4,
+      "inherited": null,
+      "item": "BLACKSLUDGE",
+      "iv": 31,
+      "kept": false,
+      "level": 33,
+      "moves": [
+       "GIGADRAIN",
+       "SLUDGEBOMB",
+       "SYNTHESIS",
+       "KNOCKOFF"
+      ],
+      "nature": "BOLD",
+      "roles": [
+       "recovery"
+      ],
+      "species": "VENUSAUR",
+      "src": "Boss Studio custom moves",
+      "why": "added:mega"
+     },
+     {
+      "ability": 0,
+      "ev": [
        0,
        0,
        0,
@@ -5226,64 +5256,33 @@
       "why": "starter slot"
      },
      {
-      "ability": 0,
-      "ev": [
-       0,
-       196,
-       116,
-       196,
-       0,
-       0
-      ],
-      "fidelity": 3,
-      "inherited": "RIOLU",
-      "item": "LIFEORB",
-      "iv": 31,
-      "kept": false,
-      "level": 33,
-      "moves": [
-       "SWORDSDANCE",
-       "COPYCAT",
-       "ZENHEADBUTT",
-       "FOCUSPUNCH"
-      ],
-      "nature": "JOLLY",
-      "roles": [
-       "setup"
-      ],
-      "species": "LUCARIO",
-      "src": "gen6lc/dex/Offensive Swords Dance Sweeper",
-      "why": "added:power"
-     },
-     {
       "ability": 1,
       "ev": [
-       40,
-       252,
        0,
-       216,
+       252,
+       4,
+       252,
        0,
        0
       ],
       "fidelity": 4,
       "inherited": null,
-      "item": "AERODACTYLITE",
+      "item": "FOCUSSASH",
       "iv": 31,
       "kept": false,
       "level": 33,
       "moves": [
        "STEALTHROCK",
-       "TAUNT",
-       "STONEEDGE",
+       "XSCISSOR",
+       "ROCKTOMB",
        "EARTHQUAKE"
       ],
-      "nature": "JOLLY",
+      "nature": "ADAMANT",
       "roles": [
-       "hazards",
-       "mega"
+       "hazards"
       ],
-      "species": "AERODACTYL",
-      "src": "gen6ubers/dex/Prehistoric Beast (Offensive)",
+      "species": "PINSIR",
+      "src": "gen6nu/dex/Stealth Rock",
       "why": "added:hazards"
      }
     ]
@@ -5332,11 +5331,12 @@
      "mega": 1,
      "rain": 1,
      "recovery": 1,
-     "status": 1,
+     "setup": 1,
+     "status": 2,
      "sun": 1
     },
     "stage": 3,
-    "target": 551,
+    "target": 530,
     "team": [
      {
       "ability": 0,
@@ -5442,40 +5442,6 @@
       "why": "original"
      },
      {
-      "ability": 0,
-      "design_level": 35,
-      "ev": [
-       248,
-       0,
-       204,
-       16,
-       24,
-       16
-      ],
-      "fidelity": 4,
-      "inherited": null,
-      "item": "BLACKSLUDGE",
-      "iv": 31,
-      "kept": false,
-      "level": [
-       "balanceo",
-       -2
-      ],
-      "moves": [
-       "GIGADRAIN",
-       "SLUDGEBOMB",
-       "SYNTHESIS",
-       "KNOCKOFF"
-      ],
-      "nature": "BOLD",
-      "roles": [
-       "recovery"
-      ],
-      "species": "VENUSAUR",
-      "src": "Boss Studio custom moves",
-      "why": "added:power"
-     },
-     {
       "ability": 1,
       "design_level": 36,
       "ev": [
@@ -5517,14 +5483,14 @@
       "ev": [
        0,
        252,
-       4,
+       0,
        252,
        0,
-       0
+       4
       ],
-      "fidelity": 4,
+      "fidelity": 3,
       "inherited": null,
-      "item": "FOCUSSASH",
+      "item": "LIFEORB",
       "iv": 31,
       "kept": false,
       "level": [
@@ -5532,17 +5498,53 @@
        -2
       ],
       "moves": [
-       "STEALTHROCK",
-       "XSCISSOR",
-       "ROCKTOMB",
-       "EARTHQUAKE"
+       "SWORDSDANCE",
+       "KNOCKOFF",
+       "SUPERPOWER",
+       "GIGAIMPACT"
       ],
       "nature": "ADAMANT",
       "roles": [
-       "hazards"
+       "setup"
       ],
-      "species": "PINSIR",
-      "src": "gen6nu/dex/Stealth Rock",
+      "species": "ABSOL",
+      "src": "gen6ru/dex/Swords Dance",
+      "why": "added:power"
+     },
+     {
+      "ability": 0,
+      "design_level": 35,
+      "ev": [
+       252,
+       0,
+       252,
+       0,
+       0,
+       4
+      ],
+      "fidelity": 3,
+      "inherited": null,
+      "item": "LEFTOVERS",
+      "iv": 31,
+      "kept": false,
+      "level": [
+       "balanceo",
+       -2
+      ],
+      "moves": [
+       "SOFTBOILED",
+       "TOXIC",
+       "STEALTHROCK",
+       "HYPERBEAM"
+      ],
+      "nature": "BOLD",
+      "roles": [
+       "hazards",
+       "recovery",
+       "status"
+      ],
+      "species": "BLISSEY",
+      "src": "gen6ou/stats/Showdown Usage",
       "why": "added:hazards"
      }
     ]
@@ -5583,44 +5585,22 @@
     "median": 16,
     "mode": null,
     "notes": [
+     "evolved BELDUM (300) -> METANG (420, NFE) \u2014 legal at level 22",
      "albapoke1 left to the engine \u2014 resolves to the starter matching the player's"
     ],
     "roles": {
      "hazards": 1,
-     "phaze": 1,
      "pivot": 1,
-     "status": 1
+     "protect": 1,
+     "recovery": 1,
+     "setup": 1,
+     "speed": 1,
+     "status": 2,
+     "trickroom": 1
     },
     "stage": 1,
     "target": 487,
     "team": [
-     {
-      "ability": 0,
-      "ev": [
-       4,
-       252,
-       0,
-       252,
-       0,
-       0
-      ],
-      "fidelity": 2,
-      "inherited": null,
-      "item": null,
-      "iv": 31,
-      "kept": true,
-      "level": 22,
-      "moves": [
-       "IRONHEAD",
-       "IRONDEFENSE"
-      ],
-      "nature": "ADAMANT",
-      "pinned": false,
-      "roles": [],
-      "species": "BELDUM",
-      "src": "Boss Studio custom moves",
-      "why": "original"
-     },
      {
       "ability": 1,
       "ev": [
@@ -5684,34 +5664,6 @@
       "why": "original"
      },
      {
-      "ability": 1,
-      "ev": [
-       4,
-       252,
-       0,
-       0,
-       0,
-       252
-      ],
-      "fidelity": 4,
-      "inherited": null,
-      "item": "SILKSCARF",
-      "iv": 31,
-      "kept": false,
-      "level": 21,
-      "moves": [
-       "RETURN",
-       "FACADE",
-       "BULLDOZE",
-       "SMACKDOWN"
-      ],
-      "nature": "ADAMANT",
-      "roles": [],
-      "species": "SNORLAX",
-      "src": "Boss Studio custom moves",
-      "why": "added:power"
-     },
-     {
       "ability": 0,
       "ev": [
        0,
@@ -5737,33 +5689,97 @@
      {
       "ability": 0,
       "ev": [
-       52,
-       204,
-       140,
+       252,
+       176,
+       80,
        0,
        0,
-       76
+       0
       ],
       "fidelity": 2,
-      "inherited": "TYRUNT",
-      "item": "BERRYJUICE",
+      "inherited": null,
+      "item": "EVIOLITE",
+      "iv": 31,
+      "kept": true,
+      "level": 22,
+      "moves": [
+       "STEALTHROCK",
+       "TOXIC",
+       "METALCLAW",
+       "FACADE"
+      ],
+      "nature": "ADAMANT",
+      "pinned": false,
+      "roles": [
+       "hazards",
+       "status"
+      ],
+      "species": "METANG",
+      "src": "gen7pu/dex/Stealth Rock",
+      "why": "evolved original"
+     },
+     {
+      "ability": 0,
+      "ev": [
+       12,
+       244,
+       0,
+       252,
+       0,
+       0
+      ],
+      "fidelity": 3,
+      "inherited": null,
+      "item": "SITRUSBERRY",
       "iv": 31,
       "kept": false,
       "level": 21,
       "moves": [
-       "STEALTHROCK",
-       "DRAGONTAIL",
-       "ROCKTOMB",
-       "FACADE"
+       "SUBSTITUTE",
+       "SWORDSDANCE",
+       "ACROBATICS",
+       "LOWSWEEP"
       ],
       "nature": "JOLLY",
       "roles": [
-       "hazards",
-       "phaze"
+       "protect",
+       "setup"
       ],
-      "species": "TYRANTRUM",
-      "src": "gen6lc/dex/Stealth Rock Phazer",
-      "why": "added:hazards"
+      "species": "HAWLUCHA",
+      "src": "gen6ou/dex/Substitute + Swords Dance",
+      "why": "added:power"
+     },
+     {
+      "ability": 1,
+      "ev": [
+       252,
+       0,
+       0,
+       0,
+       252,
+       4
+      ],
+      "fidelity": 2,
+      "inherited": null,
+      "item": "EVIOLITE",
+      "iv": 31,
+      "kept": false,
+      "level": 21,
+      "moves": [
+       "TRICKROOM",
+       "RECOVER",
+       "ROUND",
+       "PSYBEAM"
+      ],
+      "nature": "QUIET",
+      "roles": [
+       "recovery",
+       "speed",
+       "trickroom"
+      ],
+      "species": "PORYGON2",
+      "src": "gen6uu/dex/Offensive",
+      "why": "added:power"
      }
     ]
    },
@@ -5806,9 +5822,10 @@
      "pivot": 1,
      "priority": 1,
      "recovery": 3,
-     "removal": 1,
-     "setup": 1,
-     "status": 2
+     "setup": 2,
+     "speed": 1,
+     "status": 3,
+     "trickroom": 1
     },
     "stage": 1,
     "target": 487,
@@ -5910,94 +5927,97 @@
       "why": "original"
      },
      {
-      "ability": 2,
+      "ability": 0,
       "ev": [
-       244,
+       252,
        0,
-       20,
-       112,
+       252,
        0,
-       132
+       0,
+       4
       ],
-      "fidelity": 2,
+      "fidelity": 3,
       "inherited": null,
-      "item": "SHARPBEAK",
+      "item": "SITRUSBERRY",
+      "iv": 31,
+      "kept": false,
+      "level": 22,
+      "moves": [
+       "CALMMIND",
+       "IRONDEFENSE",
+       "REST",
+       "FAIRYWIND"
+      ],
+      "nature": "BOLD",
+      "roles": [
+       "recovery",
+       "setup"
+      ],
+      "species": "CARBINK",
+      "src": "gen6zu/dex/Double Dance",
+      "why": "added:recovery"
+     },
+     {
+      "ability": 0,
+      "ev": [
+       248,
+       0,
+       252,
+       0,
+       0,
+       8
+      ],
+      "fidelity": 3,
+      "inherited": null,
+      "item": "SILVERPOWDER",
       "iv": 31,
       "kept": false,
       "level": 22,
       "moves": [
        "STEALTHROCK",
-       "TAUNT",
-       "AERIALACE",
-       "BULLDOZE"
+       "ENCORE",
+       "TOXIC",
+       "BUGBITE"
       ],
-      "nature": "JOLLY",
+      "nature": "BOLD",
       "roles": [
-       "hazards"
+       "hazards",
+       "status"
       ],
-      "species": "GLISCOR",
-      "src": "gen6monotype/dex/Specially Defensive (Flying)",
+      "species": "SHUCKLE",
+      "src": "gen6uu/dex/Holy Shuck!",
       "why": "added:hazards"
      },
      {
       "ability": 1,
       "ev": [
-       116,
+       252,
        0,
-       156,
-       236,
        0,
-       0
+       0,
+       252,
+       4
       ],
       "fidelity": 2,
-      "inherited": "STARYU",
-      "item": "MYSTICWATER",
+      "inherited": null,
+      "item": "EVIOLITE",
       "iv": 31,
       "kept": false,
       "level": 22,
       "moves": [
-       "RAPIDSPIN",
+       "TRICKROOM",
        "RECOVER",
-       "BUBBLEBEAM",
-       "SWIFT"
+       "ROUND",
+       "PSYBEAM"
       ],
-      "nature": "TIMID",
+      "nature": "QUIET",
       "roles": [
        "recovery",
-       "removal"
+       "speed",
+       "trickroom"
       ],
-      "species": "STARMIE",
-      "src": "gen6lc/dex/Spinner",
-      "why": "added:recovery"
-     },
-     {
-      "ability": 2,
-      "ev": [
-       252,
-       0,
-       252,
-       4,
-       0,
-       0
-      ],
-      "fidelity": 2,
-      "inherited": "TANGELA",
-      "item": "MIRACLESEED",
-      "iv": 31,
-      "kept": false,
-      "level": 22,
-      "moves": [
-       "SLEEPPOWDER",
-       "SYNTHESIS",
-       "ABSORB",
-       "SHOCKWAVE"
-      ],
-      "nature": "BOLD",
-      "roles": [
-       "recovery"
-      ],
-      "species": "TANGROWTH",
-      "src": "gen6pu/dex/Defensive",
+      "species": "PORYGON2",
+      "src": "gen6uu/dex/Offensive",
       "why": "added:recovery"
      }
     ]
@@ -6039,7 +6059,7 @@
     "median": 32,
     "mode": null,
     "notes": [
-     "dropped SNEASEL -- unticked on the card",
+     "evolved SNEASEL (430) -> WEAVILE (510, UUBL) \u2014 legal at level 35",
      "levels stay dynamic (balanceo-2); band read from between Ruta 10 and Ruta 12 -> level 32, gym 4"
     ],
     "roles": {
@@ -6049,7 +6069,7 @@
      "setup": 3
     },
     "stage": 3,
-    "target": 551,
+    "target": 530,
     "team": [
      {
       "ability": 2,
@@ -6078,11 +6098,11 @@
        "GIGAIMPACT"
       ],
       "nature": "JOLLY",
-      "pinned": true,
+      "pinned": false,
       "roles": [],
       "species": "WEAVILE",
       "src": "gen6ru/dex/All-Out Attacker",
-      "why": "pinned on the card"
+      "why": "evolved original"
      },
      {
       "ability": 0,
@@ -6193,15 +6213,15 @@
       "design_level": 34,
       "ev": [
        0,
-       252,
-       4,
-       252,
+       196,
+       116,
        0,
-       0
+       0,
+       196
       ],
       "fidelity": 3,
-      "inherited": null,
-      "item": "MIRACLESEED",
+      "inherited": "RIOLU",
+      "item": "METALCOAT",
       "iv": 31,
       "kept": false,
       "level": [
@@ -6209,34 +6229,33 @@
        -2
       ],
       "moves": [
+       "COPYCAT",
        "SWORDSDANCE",
-       "EARTHQUAKE",
-       "SYNTHESIS",
-       "SEEDBOMB"
+       "DRAINPUNCH",
+       "IRONTAIL"
       ],
-      "nature": "JOLLY",
+      "nature": "ADAMANT",
       "roles": [
-       "recovery",
        "setup"
       ],
-      "species": "MEGANIUM",
-      "src": "gen6zu/dex/Swords Dance",
+      "species": "LUCARIO",
+      "src": "gen6lc/stats/Showdown Usage",
       "why": "added:setup"
      },
      {
       "ability": 0,
       "design_level": 34,
       "ev": [
+       252,
        0,
-       76,
-       52,
-       180,
+       252,
        0,
-       140
+       0,
+       4
       ],
-      "fidelity": 3,
-      "inherited": "SKIDDO",
-      "item": "MIRACLESEED",
+      "fidelity": 4,
+      "inherited": null,
+      "item": "SITRUSBERRY",
       "iv": 31,
       "kept": false,
       "level": [
@@ -6244,17 +6263,18 @@
        -2
       ],
       "moves": [
-       "BULKUP",
-       "ROCKSLIDE",
-       "BRICKBREAK",
-       "SEEDBOMB"
+       "CALMMIND",
+       "MOONBLAST",
+       "SYNTHESIS",
+       "AROMATHERAPY"
       ],
-      "nature": "ADAMANT",
+      "nature": "BOLD",
       "roles": [
+       "recovery",
        "setup"
       ],
-      "species": "GOGOAT",
-      "src": "gen6lc/dex/Bulk Up",
+      "species": "FLORGES",
+      "src": "gen6uu/dex/Defensive Calm Mind",
       "why": "added:setup"
      }
     ]
@@ -6296,57 +6316,89 @@
     },
     "dynamic": false,
     "floors": {
-     "hazards": 1,
-     "setup": 2
+     "hazards": 1
     },
     "level": 29,
     "median": 23,
     "mode": null,
     "notes": [
-     "dropped MANTYKE -- unticked on the card",
+     "evolved EEVEE (325) -> SYLVEON (525, UU) \u2014 legal at level 29",
+     "evolved MANTYKE (345) -> MANTINE (465, RU) \u2014 legal at level 29",
      "owenpoke2 left to the engine \u2014 resolves to the starter matching the player's"
     ],
     "roles": {
      "hazards": 1,
      "pivot": 1,
-     "protect": 2,
+     "protect": 1,
+     "rain": 1,
      "recovery": 1,
      "setup": 1,
      "status": 1
     },
     "stage": 2,
-    "target": 504,
+    "target": 487,
     "team": [
      {
-      "ability": 0,
+      "ability": 1,
       "ev": [
-       252,
+       76,
        0,
-       252,
-       0,
-       0,
-       4
+       36,
+       196,
+       200,
+       0
       ],
       "fidelity": 3,
-      "inherited": "SYLVEON",
-      "item": "SILKSCARF",
+      "inherited": "MANTYKE",
+      "item": "MYSTICWATER",
       "iv": 31,
       "kept": true,
       "level": 29,
       "moves": [
-       "HYPERVOICE",
-       "HEALBELL",
-       "PROTECT",
-       "DIG"
+       "SCALD",
+       "ICEBEAM",
+       "RAINDANCE",
+       "HYPERBEAM"
       ],
-      "nature": "BOLD",
+      "nature": "MODEST",
       "pinned": false,
       "roles": [
-       "protect"
+       "rain"
       ],
-      "species": "EEVEE",
-      "src": "gen6uu/dex/Cleric",
-      "why": "original"
+      "species": "MANTINE",
+      "src": "gen6lc/stats/Showdown Usage",
+      "why": "evolved original"
+     },
+     {
+      "ability": 2,
+      "ev": [
+       248,
+       0,
+       252,
+       0,
+       0,
+       8
+      ],
+      "fidelity": 3,
+      "inherited": null,
+      "item": "MYSTICWATER",
+      "iv": 31,
+      "kept": false,
+      "level": 28,
+      "moves": [
+       "PROTECT",
+       "TOXIC",
+       "KNOCKOFF",
+       "DIVE"
+      ],
+      "nature": "IMPISH",
+      "roles": [
+       "protect",
+       "status"
+      ],
+      "species": "ALOMOMOLA",
+      "src": "gen6ubers/dex/Kindhearted Fish",
+      "why": "added:power"
      },
      {
       "ability": 0,
@@ -6380,97 +6432,66 @@
       "why": "original"
      },
      {
-      "ability": 0,
+      "ability": 1,
       "ev": [
-       4,
-       0,
-       0,
+       236,
        252,
-       252,
+       0,
+       20,
+       0,
        0
       ],
-      "fidelity": 0,
+      "fidelity": 4,
       "inherited": null,
-      "item": null,
-      "iv": 31,
-      "kept": true,
-      "level": 30,
-      "moves": [
-       "SURF",
-       "SCALD",
-       "BUBBLEBEAM",
-       "REST"
-      ],
-      "nature": "MODEST",
-      "pinned": true,
-      "roles": [
-       "recovery"
-      ],
-      "species": "MANTINE",
-      "src": "generated (no published set fits)",
-      "why": "pinned on the card"
-     },
-     {
-      "ability": 0,
-      "ev": [
-       248,
-       0,
-       252,
-       0,
-       0,
-       8
-      ],
-      "fidelity": 3,
-      "inherited": null,
-      "item": "HARDSTONE",
+      "item": "DRAGONFANG",
       "iv": 31,
       "kept": false,
       "level": 28,
       "moves": [
        "STEALTHROCK",
-       "ENCORE",
-       "TOXIC",
-       "STONEEDGE"
+       "DRAGONCLAW",
+       "FIREPUNCH",
+       "GUNKSHOT"
       ],
-      "nature": "BOLD",
+      "nature": "ADAMANT",
       "roles": [
-       "hazards",
-       "status"
+       "hazards"
       ],
-      "species": "SHUCKLE",
-      "src": "gen6uu/dex/Holy Shuck!",
+      "species": "DRUDDIGON",
+      "src": "gen6uu/dex/Stealth Rock Setter",
       "why": "added:hazards"
      },
      {
-      "ability": 0,
+      "ability": 2,
       "ev": [
+       244,
        0,
-       0,
-       0,
-       252,
-       252,
+       172,
+       20,
+       68,
        4
       ],
       "fidelity": 4,
       "inherited": null,
-      "item": "CHARCOAL",
+      "item": "CHESTOBERRY",
       "iv": 31,
-      "kept": false,
-      "level": 28,
+      "kept": true,
+      "level": 29,
       "moves": [
-       "NASTYPLOT",
-       "FIREBLAST",
-       "ENERGYBALL",
-       "SUBSTITUTE"
+       "CALMMIND",
+       "REST",
+       "HYPERVOICE",
+       "SNORE"
       ],
-      "nature": "TIMID",
+      "nature": "MODEST",
+      "pinned": false,
       "roles": [
-       "protect",
+       "recovery",
        "setup"
       ],
-      "species": "NINETALES",
-      "src": "gen6pu/dex/Nasty Plot",
-      "why": "added:setup"
+      "species": "SYLVEON",
+      "src": "gen6battlespotsingles/dex/Calm Mind + Rest",
+      "why": "evolved original"
      },
      {
       "ability": 0,
@@ -6533,45 +6554,17 @@
     "median": 23,
     "mode": null,
     "notes": [
+     "evolved BELDUM (300) -> METANG (420, NFE) \u2014 legal at level 29",
      "albapoke1 left to the engine \u2014 resolves to the starter matching the player's"
     ],
     "roles": {
      "hazards": 1,
-     "phaze": 1,
      "pivot": 1,
-     "setup": 1,
-     "status": 1
+     "status": 2
     },
     "stage": 2,
-    "target": 504,
+    "target": 487,
     "team": [
-     {
-      "ability": 0,
-      "ev": [
-       4,
-       252,
-       0,
-       252,
-       0,
-       0
-      ],
-      "fidelity": 2,
-      "inherited": null,
-      "item": null,
-      "iv": 31,
-      "kept": true,
-      "level": 29,
-      "moves": [
-       "IRONHEAD",
-       "IRONDEFENSE"
-      ],
-      "nature": "ADAMANT",
-      "pinned": false,
-      "roles": [],
-      "species": "BELDUM",
-      "src": "Boss Studio custom moves",
-      "why": "original"
-     },
      {
       "ability": 1,
       "ev": [
@@ -6582,7 +6575,7 @@
        0,
        0
       ],
-      "fidelity": 4,
+      "fidelity": 3,
       "inherited": "GOURGEIST",
       "item": "MIRACLESEED",
       "iv": 31,
@@ -6591,7 +6584,7 @@
       "moves": [
        "TRICK",
        "WILLOWISP",
-       "RAZORLEAF",
+       "SEEDBOMB",
        "ASTONISH"
       ],
       "nature": "ADAMANT",
@@ -6600,8 +6593,40 @@
        "status"
       ],
       "species": "PUMPKABOO",
-      "src": "Boss Studio custom moves",
+      "src": "gen6pu/dex/Choice Scarf",
       "why": "original"
+     },
+     {
+      "ability": 0,
+      "ev": [
+       252,
+       176,
+       80,
+       0,
+       0,
+       0
+      ],
+      "fidelity": 3,
+      "inherited": null,
+      "item": "EVIOLITE",
+      "iv": 31,
+      "kept": true,
+      "level": 29,
+      "moves": [
+       "STEALTHROCK",
+       "EARTHQUAKE",
+       "TOXIC",
+       "IRONHEAD"
+      ],
+      "nature": "ADAMANT",
+      "pinned": false,
+      "roles": [
+       "hazards",
+       "status"
+      ],
+      "species": "METANG",
+      "src": "gen7pu/dex/Stealth Rock",
+      "why": "evolved original"
      },
      {
       "ability": 2,
@@ -6620,10 +6645,10 @@
       "kept": true,
       "level": 69,
       "moves": [
+       "BRAVEBIRD",
        "RETURN",
-       "UTURN",
-       "AERIALACE",
-       "SHADOWCLAW"
+       "SUPERPOWER",
+       "UTURN"
       ],
       "nature": "ADAMANT",
       "pinned": false,
@@ -6631,8 +6656,64 @@
        "pivot"
       ],
       "species": "BRAVIARY",
-      "src": "Boss Studio custom moves",
+      "src": "gen6ru/dex/Physical Attacker",
       "why": "original"
+     },
+     {
+      "ability": 2,
+      "ev": [
+       252,
+       0,
+       252,
+       0,
+       0,
+       4
+      ],
+      "fidelity": 4,
+      "inherited": null,
+      "item": "MIRACLESEED",
+      "iv": 31,
+      "kept": false,
+      "level": 28,
+      "moves": [
+       "KNOCKOFF",
+       "GIGADRAIN",
+       "EARTHQUAKE",
+       "SLUDGEBOMB"
+      ],
+      "nature": "RELAXED",
+      "roles": [],
+      "species": "TANGROWTH",
+      "src": "gen8nationaldex/stats/Showdown Usage",
+      "why": "added:power"
+     },
+     {
+      "ability": 1,
+      "ev": [
+       4,
+       252,
+       0,
+       0,
+       0,
+       252
+      ],
+      "fidelity": 4,
+      "inherited": null,
+      "item": "SILKSCARF",
+      "iv": 31,
+      "kept": false,
+      "level": 28,
+      "moves": [
+       "RETURN",
+       "FACADE",
+       "EARTHQUAKE",
+       "FIREPUNCH"
+      ],
+      "nature": "ADAMANT",
+      "roles": [],
+      "species": "SNORLAX",
+      "src": "gen6uu/dex/Choice Band",
+      "why": "added:power"
      },
      {
       "ability": 0,
@@ -6656,71 +6737,11 @@
       "species": "albapoke1",
       "src": "engine (Pokes Rivales starter slot)",
       "why": "starter slot"
-     },
-     {
-      "ability": 0,
-      "ev": [
-       116,
-       116,
-       196,
-       36,
-       0,
-       36
-      ],
-      "fidelity": 3,
-      "inherited": "PHANPY",
-      "item": "SOFTSAND",
-      "iv": 31,
-      "kept": false,
-      "level": 28,
-      "moves": [
-       "STEALTHROCK",
-       "KNOCKOFF",
-       "ROAR",
-       "BULLDOZE"
-      ],
-      "nature": "IMPISH",
-      "roles": [
-       "hazards",
-       "phaze"
-      ],
-      "species": "DONPHAN",
-      "src": "gen6lc/dex/Utility",
-      "why": "added:hazards"
-     },
-     {
-      "ability": 1,
-      "ev": [
-       168,
-       252,
-       4,
-       84,
-       0,
-       0
-      ],
-      "fidelity": 3,
-      "inherited": null,
-      "item": "LUMBERRY",
-      "iv": 31,
-      "kept": false,
-      "level": 28,
-      "moves": [
-       "SWORDSDANCE",
-       "RETURN",
-       "KNOCKOFF",
-       "BULLDOZE"
-      ],
-      "nature": "ADAMANT",
-      "roles": [
-       "setup"
-      ],
-      "species": "LICKILICKY",
-      "src": "gen6pu/dex/Swords Dance",
-      "why": "added:power"
      }
     ]
    }
   },
+  "HOLE_MIN_WEAK": 2,
   "KEEP_DROP": 0,
   "KEEP_MIN_BAND": 0,
   "KEEP_NEED_SET": 0,
@@ -6939,22 +6960,6 @@
     "CROBAT",
     "MEGANIUM",
     "GOGOAT"
-   ],
-   "t8": [
-    "EEVEE",
-    "HELIOLISK",
-    "MANTINE",
-    "SHUCKLE",
-    "NINETALES",
-    "owenpoke2"
-   ],
-   "t9": [
-    "BELDUM",
-    "PUMPKABOO",
-    "BRAVIARY",
-    "SNORLAX",
-    "GYARADOS",
-    "albapoke1"
    ]
   },
   "PICKS": {
@@ -10086,148 +10091,17 @@
      "TANGROWTH": "RELAXED"
     },
     "sets": {}
-   },
-   "t8": {
-    "abilities": {},
-    "evs": {},
-    "items": {},
-    "ivs": {},
-    "keep": {},
-    "levels": {},
-    "moves": {},
-    "natures": {},
-    "sets": {}
-   },
-   "t9": {
-    "abilities": {
-     "BELDUM": 0,
-     "BRAVIARY": 2,
-     "GYARADOS": 0,
-     "PUMPKABOO": 1,
-     "SNORLAX": 1
-    },
-    "evs": {
-     "BELDUM": [
-      4,
-      252,
-      0,
-      252,
-      0,
-      0
-     ],
-     "BRAVIARY": [
-      0,
-      252,
-      4,
-      252,
-      0,
-      0
-     ],
-     "GYARADOS": [
-      0,
-      252,
-      4,
-      252,
-      0,
-      0
-     ],
-     "PUMPKABOO": [
-      44,
-      252,
-      0,
-      212,
-      0,
-      0
-     ],
-     "SNORLAX": [
-      4,
-      252,
-      0,
-      0,
-      0,
-      252
-     ]
-    },
-    "items": {
-     "BELDUM": null,
-     "BRAVIARY": "SHARPBEAK",
-     "GYARADOS": "LUMBERRY",
-     "PUMPKABOO": "MIRACLESEED",
-     "SNORLAX": "SILKSCARF"
-    },
-    "ivs": {
-     "BELDUM": 31,
-     "BRAVIARY": 31,
-     "GYARADOS": 31,
-     "PUMPKABOO": 31,
-     "SNORLAX": 31
-    },
-    "keep": {},
-    "levels": {
-     "BELDUM": 29,
-     "BRAVIARY": 69,
-     "GYARADOS": 28,
-     "PUMPKABOO": 29,
-     "SNORLAX": 28
-    },
-    "moves": {
-     "BELDUM": [
-      "IRONHEAD",
-      "IRONDEFENSE"
-     ],
-     "BRAVIARY": [
-      "RETURN",
-      "UTURN",
-      "AERIALACE",
-      "SHADOWCLAW"
-     ],
-     "GYARADOS": [
-      "AQUAJET",
-      "FACADE",
-      "BITE",
-      "BULLDOZE"
-     ],
-     "PUMPKABOO": [
-      "TRICK",
-      "WILLOWISP",
-      "RAZORLEAF",
-      "ASTONISH"
-     ],
-     "SNORLAX": [
-      "RETURN",
-      "FACADE",
-      "BULLDOZE",
-      "SMACKDOWN"
-     ]
-    },
-    "natures": {
-     "BELDUM": "ADAMANT",
-     "BRAVIARY": "ADAMANT",
-     "GYARADOS": "JOLLY",
-     "PUMPKABOO": "ADAMANT",
-     "SNORLAX": "ADAMANT"
-    },
-    "sets": {}
    }
   },
   "PICK_SEED": 0,
-  "REPEAT_BAND": 2,
-  "SET_FORMATS": [
-   "pu",
-   "ubers",
-   "ou",
-   "uu",
-   "nationaldex",
-   "ru",
-   "anythinggoes",
-   "nationaldexag"
-  ],
+  "REPEAT_BAND": 1,
+  "SET_FORMATS": [],
   "SET_SEED": 0,
   "SPREAD": [
    190,
    190,
    230,
-   110,
+   142,
    110,
    140,
    45,
@@ -10237,9 +10111,9 @@
   "TARGET": [
    397,
    487,
-   504,
-   525,
-   525,
+   487,
+   530,
+   545,
    583,
    593,
    597,
@@ -10257,10 +10131,11 @@
    "NORMAL",
    "STEEL"
   ],
+  "THREAT_COVER": 1,
   "TRAINER_PLANS": {},
   "UBER_FROM": 6,
   "UNLOCK_STAGE": 3,
   "level_mode": "expert"
  },
- "sha": "340f39dc273f"
+ "sha": "2082a24a4448"
 }

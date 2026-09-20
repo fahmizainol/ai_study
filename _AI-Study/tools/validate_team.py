@@ -12,14 +12,51 @@ Input: a JSON file — list of team objects:
 Exit 0 = all teams pass. Every failure is printed as  team_id: [RULE] detail.
 Warnings (don't fail): levelup+N within slack, non-level evolution methods.
 
-Usage: validate_team.py teams.json [--slack 2]
+Usage: validate_team.py teams.json [--slack 2] [--early]
 """
 import json, sys
 import realidea_data as D
 
-def validate(teams, slack=2):
+
+def _stated_floor():
+    """{INTERNALNAME: the lowest level this species can possibly exist at}.
+
+    The half of min_level() the dex states outright. min_level() also carries an
+    INFERRED floor for every evolution whose method names no level -- a stone, a
+    friendship, a held item -- estimated from the level-method edges of the same
+    shape. That estimate is good, and it is still an estimate, which is exactly the
+    line realidea_data.evo_stated() draws: "a Water Stone at level 31 is a shopping
+    trip, an Araquanid at level 19 is impossible."
+
+    Only the impossible half belongs in a hard error. Chained the same way, so a
+    species is held to a floor only where every edge that reaches it states one; a
+    single inferred hop anywhere up the line makes the whole floor an estimate.
+    """
+    sp, edges, stated = D.species(), D.evo_floor(), D.evo_stated()
+    out = {name: 1 for name in sp}
+    changed = True
+    while changed:                      # a fixpoint: a line is only as settled as
+        changed = False                 # its base is -- see realidea_data._stage()
+        for (parent, child), lvl in edges.items():
+            if (parent, child) not in stated:
+                continue
+            want = max(out[parent], lvl)
+            if want > out[child]:
+                out[child], changed = want, True
+    return out
+
+
+def validate(teams, slack=2, early=False):
+    """`early` is generate_bosses.EARLY_MOVES: the build was told it may keep a move
+    the species has not reached yet. Then a levelup+N move is a CHOICE, not a defect,
+    and refusing to ship it makes the knob unusable -- it exists precisely so a
+    fangame can field precocious bosses. The SPECIES half of the gate is untouched:
+    a move the mon could never learn stays a hard error however early the build is
+    allowed to be, which is the same line the EVO rule draws between a level the dex
+    states and one it merely implies."""
     errs, warns = [], []
     sp, floor, mv, it = D.species(), D.min_level(), D.moves(), D.items()
+    hard = _stated_floor()
     for t in teams:
         tid = t.get("id", "?")
         def err(rule, msg): errs.append(f"{tid}: [{rule}] {msg}")
@@ -41,7 +78,11 @@ def validate(teams, slack=2):
                 if isinstance(m.get("species"), str) and not m["species"].islower()]
         for name in sorted({n for n in seen if seen.count(n) > 1}):
             err("DUPLICATE", f"{name} appears {seen.count(name)} times")
-        for i, m in enumerate(t.get("mons", [])):
+        # 1-based, because every place a person can SEE this team counts from one:
+        # the card lists mon 1..6 and the party in game is slots 1..6. Numbering from
+        # zero here sent anyone reading "mon5 TYRANTRUM" to the fifth row, which held
+        # something else entirely, and the sixth row is where the Tyrantrum was.
+        for i, m in enumerate(t.get("mons", []), 1):
             tag = f"mon{i} {m.get('species')}"
             # A lowercase species is an engine-resolved slot, not a species: the
             # rival fights fill their starter slot from the Pokes Rivales script at
@@ -64,14 +105,22 @@ def validate(teams, slack=2):
             if not isinstance(lvl, int) or not 1 <= lvl <= 100:
                 err("LEVEL", f"{tag}: level {lvl!r}"); continue
             if lvl < floor[m["species"]]:
-                # a kept original species below its level-evo floor is the dev's own
-                # roster choice (the engine instantiates it fine) — warn, don't fail.
-                # A GENERATED mon under floor is our bug -> hard error.
+                # Three cases, and only one of them is a bug. Below a floor the dex
+                # STATES, a generated mon cannot exist and that is ours to fix. Below
+                # an inferred floor it merely arrives early -- the player bought the
+                # stone sooner than most lines suggest -- which is a judgement call
+                # about the fight, not an illegal team, so it is said and not failed.
+                # A kept original is the dev's own roster choice either way.
                 if m.get("kept"):
                     warn("EVO", f"{tag}: level {lvl} < evolution floor "
                                 f"{floor[m['species']]} (kept original)")
+                elif lvl < hard[m["species"]]:
+                    err("EVO", f"{tag}: level {lvl} < evolution floor "
+                               f"{hard[m['species']]}")
                 else:
-                    err("EVO", f"{tag}: level {lvl} < evolution floor {floor[m['species']]}")
+                    warn("EVO", f"{tag}: level {lvl} < evolution floor "
+                                f"{floor[m['species']]} (estimated — this line names "
+                                f"no level, so it is early, not impossible)")
             mvs = m.get("moves", [])
             if not 1 <= len(mvs) <= 4:
                 err("MOVES", f"{tag}: {len(mvs)} moves")
@@ -83,10 +132,13 @@ def validate(teams, slack=2):
                     err("LEARN", f"{tag}: can't learn {mo} (not learnset/TM)")
                 elif how.startswith("levelup+"):
                     over = int(how.split("+")[1])
-                    if over > slack:
-                        err("LEARN", f"{tag}: {mo} is learnset lv{lvl+over}, over slack +{slack}")
-                    else:
+                    if over <= slack:
                         warn("LEARN", f"{tag}: {mo} is +{over} over level (leader privilege)")
+                    elif early:
+                        warn("LEARN", f"{tag}: {mo} is learnset lv{lvl + over}, "
+                                      f"+{over} early (EARLY_MOVES is on)")
+                    else:
+                        err("LEARN", f"{tag}: {mo} is learnset lv{lvl+over}, over slack +{slack}")
             if m.get("item") is not None and m["item"] not in it:
                 err("ITEM", f"{tag}: {m['item']} not in items.txt")
             ab = m.get("ability", 0)
@@ -113,10 +165,16 @@ if __name__ == "__main__":
     args = sys.argv[1:]
     if "--slack" in args:
         i = args.index("--slack"); slack = int(args[i + 1]); del args[i:i + 2]
+    # Match the build: a file written with EARLY_MOVES on is meant to carry moves
+    # the species has not reached, so checking it without this reports a defect the
+    # author chose. The studio passes the knob straight through.
+    early = "--early" in args
+    if early:
+        args.remove("--early")
     teams = []
     for path in args:
         teams += json.load(open(path))
-    errs, warns = validate(teams, slack)
+    errs, warns = validate(teams, slack, early)
     for w in warns: print("WARN", w)
     for e in errs: print("FAIL", e)
     print(f"{len(teams)} teams: {len(errs)} errors, {len(warns)} warnings")
