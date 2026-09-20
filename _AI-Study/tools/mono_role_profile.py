@@ -24,6 +24,7 @@ recover those on the labelled teams they can be checked against.
 """
 import argparse
 import collections
+import json
 import os
 import statistics
 import sys
@@ -147,22 +148,53 @@ def by_theme():
                                   or "(none)"))
 
 
-# The nine gyms and the archetype each is assigned in generate_bosses.ARCHETYPE, so the
-# per-gym cut can be read without importing the generator (which another session is editing).
-GYMS = (("BUG", "Abi", "hyper offense"), ("FAIRY", "Aimi", "offense"),
-        ("WATER", "Kenn", "offense"), ("ICE", "Douglas", "offense"),
-        ("DARK", "Ciara", "offense"), ("GROUND", "Dhara", "offense"),
-        ("PSYCHIC", "Lawrence", "balance"), ("NORMAL", "Bay", "bulky offense"),
-        ("STEEL", "Lilliana", "bulky offense"))
+# The nine gyms and their themes -- generate_bosses.THEME, which is stable.
+THEME = (("BUG", "Abi"), ("FAIRY", "Aimi"), ("WATER", "Kenn"), ("ICE", "Douglas"),
+         ("DARK", "Ciara"), ("GROUND", "Dhara"), ("PSYCHIC", "Lawrence"),
+         ("NORMAL", "Bay"), ("STEEL", "Lilliana"))
+# The archetype each fight is built as, if fight_plans.json has been derived and chosen.
+# Only used when it has not: generate_bosses.plan_of() PREFERS the plans file, so a table
+# built from the static defaults describes a build nobody runs. Hand-copying both lists is
+# what produced the error this replaces -- four of the nine rows took the static archetype
+# while the plans file said otherwise, and the table read as measured either way.
+STATIC_ARCHETYPE = {"Abi": "offense", "Aimi": "balance", "Kenn": "bulky offense",
+                    "Douglas": "hyper offense", "Ciara": "offense", "Dhara": "offense",
+                    "Lawrence": "balance", "Bay": "bulky offense",
+                    "Lilliana": "bulky offense"}
+PLANS = os.path.join(os.path.dirname(os.path.abspath(__file__)), os.pardir,
+                     "generated", "fight_plans.json")
+
+
+def gyms():
+    """(theme, leader, archetype, where it came from) for the nine gyms.
+
+    Read off the plans file rather than by importing generate_bosses, which another session
+    is editing -- but read off the SAME file the generator prefers, so the two cannot
+    disagree about what a gym is being built as."""
+    plans = {}
+    if os.path.exists(PLANS):
+        with open(PLANS, encoding="utf-8") as fh:
+            plans = json.load(fh).get("fights") or {}
+    by_leader = {k.split("_")[-1]: v for k, v in plans.items() if k.startswith("gym")}
+    out = []
+    for theme, who in THEME:
+        entry = by_leader.get(who) or {}
+        arch = entry.get("archetype")
+        out.append((theme, who, arch or STATIC_ARCHETYPE[who],
+                    "plan" if arch else "static default"))
+    return tuple(out)
 
 
 def by_gym():
     """The cell each gym actually occupies: its own theme AND its assigned archetype.
 
     This is the narrowest cut the corpus supports and the one the generator should use, because
-    a floor ought to describe teams of this type built this way. Cell sizes are 37-115, so the
-    thin ones (Psychic/balance 37, Normal/bulky offense 39) carry real sampling noise and a
-    carry rate sitting right on the 0.90 bar there should not be trusted to a single point."""
+    a floor ought to describe teams of this type built this way. Cell sizes run from the
+    thirties up, so the thin ones carry real sampling noise and a carry rate sitting right on
+    the 0.90 bar there should not be trusted to a single point -- the printed n says which.
+
+    A trailing * on the archetype means fight_plans.json had no entry for that gym and the
+    static default was used."""
     lab, _ = load()
     cent = centroids(lab)
     teams, _ = mono_synergy.read_teams(mono_synergy.GENS)
@@ -172,17 +204,17 @@ def by_gym():
         cell[(t["theme"].upper(), band(off, cent))].append(TS.role_counts(t["data"]))
     print("\nPER-GYM FLOORS from the theme x archetype cell each one occupies")
     print("%-9s %-9s %-14s %5s  %s" % ("theme", "gym", "archetype", "n", "floors from that cell"))
-    for th, who, arch in GYMS:
+    for th, who, arch, src_of in gyms():
         v = cell[(th, arch)]
         if not v:
-            print("%-9s %-9s %-14s %5d  (cell empty)" % (th, who, arch, 0))
+            print("%-9s %-9s %-14s  %5d  (cell empty)" % (th, who, arch, 0))
             continue
         floor = {r: round(statistics.mean(rc[r] for rc in v)) for r in JOB
                  if sum(1 for rc in v if rc[r]) / len(v) >= TS.CHASE
                  and round(statistics.mean(rc[r] for rc in v)) >= 1}
         shipped = TS.role_plan(arch)["floor"]
-        print("%-9s %-9s %-14s %5d  %-34s (shipped: %s)"
-              % (th, who, arch, len(v),
+        print("%-9s %-9s %-14s%1s %5d  %-34s (shipped: %s)"
+              % (th, who, arch, "" if src_of == "plan" else "*", len(v),
                  ", ".join("%s %d" % kv for kv in sorted(floor.items())) or "(none)",
                  ", ".join("%s %d" % kv for kv in sorted(shipped.items())) or "(none)"))
 

@@ -438,8 +438,9 @@ and it is the obvious next pool to run.
 
 ## 11. What this says to Realidea's team generator
 
-`generate_bosses.py` sets `ON_THEME_MIN = 6`, so **the nine gym teams are monotype teams by
-construction** and §2-§8 apply to them literally rather than by analogy. Everything below is
+`generate_bosses.py` sets `ON_THEME_MIN = 6` in the working tree (committed HEAD still has 4),
+so **the nine gym teams are monotype teams by construction** at 6 and four-sixths monotype at 4;
+§2-§8 apply to them literally rather than by analogy either way, and more exactly at 6. Everything below is
 re-measured on **Realidea's own PBS chart, dex, learnsets and engine** — none of it is
 carried over from the Smogon corpus, because the corpus cannot know what this build can hold.
 
@@ -741,24 +742,36 @@ floors that fall out are type-appropriate in a way a generic archetype floor can
 | FAIRY | Aimi | offense | 92 | hazards 1 | hazards 1 |
 | WATER | Kenn | offense | 106 | hazards 1 | hazards 1 |
 | ICE | Douglas | offense | 63 | hazards 1, recovery 1, **removal 1** | hazards 1 |
-| DARK | Ciara | offense | 112 | hazards 1, **priority 2**, setup 2 | hazards 1 |
+| DARK | Ciara | balance | 32 | **(none)** | hazards 1, recovery 3 |
 | GROUND | Dhara | offense | 106 | hazards 1, recovery 2 | hazards 1 |
-| PSYCHIC | Lawrence | balance | 37 | **(none)** | hazards 1, recovery 3 |
-| NORMAL | Bay | bulky offense | 39 | recovery 2 | hazards 1, recovery **3** |
-| STEEL | Lilliana | bulky offense | 64 | hazards 1, recovery 2, setup 2 | hazards 1, recovery **3** |
+| PSYCHIC | Lawrence | offense | 100 | **(none)** | hazards 1 |
+| NORMAL | Bay | hyper offense | 37 | **(none)** | setup 3 |
+| STEEL | Lilliana | offense | 55 | hazards 1, recovery 1 | hazards 1 |
 
-Mean floors per gym is **1.9**, against the shipped 1.8 — so this is not a *tighter* constraint,
-it is a **differently aimed** one, which is the whole point. Douglas gains a removal floor because
-Ice teams really do remove (89%) and his cell clears the bar; Ciara gains priority 2 because Dark
-is the Sucker Punch theme; Abi's setup drops 3 → 2 because monotype Bug hyper offence carries
-2.25, not 3.06; Lawrence loses both his floors because Psychic/balance teams carry neither
-reliably. **Every one of those is a floor the current per-archetype table either asks for where
-the dex will not supply it, or fails to ask for where the corpus says it belongs.**
+**The archetype column is read off `generated/fight_plans.json`, not off `ARCHETYPE`.** That
+matters and it is the error this table was first published with: `plan_of()` prefers the chosen
+plan, and the two disagree for six of the nine gyms, so a per-gym table built from the static
+defaults describes a build nobody runs. Hand-copying either list is what produced the fault --
+the first version of this table took the plan for gyms 1-4 and the static default for 5-9, which
+put Ciara, Lawrence, Bay and Lilliana in the wrong cell and read as measured all the same.
+`mono_role_profile.gyms()` now reads the file the generator reads.
 
-Two limits to respect. The **archetype half is still the EV-band proxy**, so only the theme axis
-is an exact label. And **Psychic (37) and Normal (39) are the thin cells** — a carry rate sitting
-right on the 0.90 bar there moves with a handful of teams, so those two rows should be read as
-"no strong floor" rather than as precise zeroes.
+Floored ROLES per gym come to **1.33 against the shipped 1.11**, and summed sets **1.67 against
+1.78** — so this is not a *tighter* constraint, it is a **differently aimed** one, which is the
+whole point. Douglas gains a removal floor because Ice teams really do remove (89%) and his cell
+clears the bar; Abi's setup drops 3 → 2 because monotype Bug hyper offence carries 2.25, not
+3.06; Lilliana's recovery is 1 where the themeless bulky-offence table wanted 3 -- and he is an
+`offense` fight in the plan anyway, so the shipped floor was never the 3; Ciara, Lawrence and Bay
+get no floor at all from their own cells. **Every one of those is a floor the current
+per-archetype table either asks for where the dex will not supply it, or fails to ask for where
+the corpus says it belongs.**
+
+Three limits to respect. The **archetype half is still the EV-band proxy**, so only the theme
+axis is an exact label. **Dark/balance (32) and Normal/hyper offense (37) are the thin cells** --
+a carry rate sitting right on the 0.90 bar there moves with a handful of teams, so read those
+rows as "no strong floor" rather than as precise zeroes. And the table is only as current as the
+plans file: re-derive it after `fight_context.py` is run again, because a re-chosen archetype
+moves a gym to a different cell.
 
 ### The Taunt role, as a spec
 
