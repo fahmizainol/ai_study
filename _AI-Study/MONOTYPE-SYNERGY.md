@@ -705,6 +705,61 @@ monotype's own EV distribution skews offensive (31% and 32% in the top two bands
 and 25%), which is a real difference in the population and not a classifier artifact, but it
 does mean the stall centroid is being applied further from its training mass.
 
+### Split it by theme, and the floors become per-gym
+
+    python3 tools/mono_role_profile.py --by-theme   # 18 themes, no classifier at all
+    python3 tools/mono_role_profile.py --by-gym     # the cell each gym actually occupies
+
+The archetype cut above has to *infer* its class. **A theme does not** — every member carries it,
+so a per-theme profile is a direct measurement over the 4,092 theme-validated teams, and it is
+the cut a themed generator actually wants: a Bug gym's floors should come from Bug teams, not
+from what a monotype team carries averaged over eighteen dexes with nothing in common.
+
+The per-theme spread is far wider than the per-archetype one, and every extreme is a fact about
+that type's dex:
+
+| theme | n | the row's own shape |
+|---|--:|---|
+| Electric | 165 | **pivot 96% (2.82)** — Volt Switch; nearly three pivots a team, the highest single figure in the table |
+| Bug | 180 | setup **99% (2.25)**, hazards 96%, speed 84% |
+| Ghost | 214 | setup **97% (2.07)**, status 88% (1.70), removal 27% |
+| Flying | 317 | recovery **93% (2.73)**, pivot 83%, removal 85% — strongest defensive row |
+| Poison | 180 | recovery **92% (1.94)**, setup 46% |
+| Dark | 286 | **priority 84% (1.36)** — Sucker Punch |
+| Fighting | 202 | **recovery 20% (0.23)** — the floor of the table |
+| Rock | 137 | **pivot 7% (0.07)** — Rock teams do not pivot |
+| Psychic | 313 | **phaze 0%** of 313 teams |
+| Fairy | 207 | **removal 11%** |
+
+**And theme × archetype is viable for exactly the nine cells that matter.** Each gym's assigned
+archetype crossed with its own theme leaves 37-115 teams — thin, but not too thin — and the
+floors that fall out are type-appropriate in a way a generic archetype floor cannot be:
+
+| theme | gym | archetype | n | floors from that cell | shipped |
+|---|---|---|--:|---|---|
+| BUG | Abi | hyper offense | 115 | hazards 2, **setup 2**, speed 1 | setup 3 |
+| FAIRY | Aimi | offense | 92 | hazards 1 | hazards 1 |
+| WATER | Kenn | offense | 106 | hazards 1 | hazards 1 |
+| ICE | Douglas | offense | 63 | hazards 1, recovery 1, **removal 1** | hazards 1 |
+| DARK | Ciara | offense | 112 | hazards 1, **priority 2**, setup 2 | hazards 1 |
+| GROUND | Dhara | offense | 106 | hazards 1, recovery 2 | hazards 1 |
+| PSYCHIC | Lawrence | balance | 37 | **(none)** | hazards 1, recovery 3 |
+| NORMAL | Bay | bulky offense | 39 | recovery 2 | hazards 1, recovery **3** |
+| STEEL | Lilliana | bulky offense | 64 | hazards 1, recovery 2, setup 2 | hazards 1, recovery **3** |
+
+Mean floors per gym is **1.9**, against the shipped 1.8 — so this is not a *tighter* constraint,
+it is a **differently aimed** one, which is the whole point. Douglas gains a removal floor because
+Ice teams really do remove (89%) and his cell clears the bar; Ciara gains priority 2 because Dark
+is the Sucker Punch theme; Abi's setup drops 3 → 2 because monotype Bug hyper offence carries
+2.25, not 3.06; Lawrence loses both his floors because Psychic/balance teams carry neither
+reliably. **Every one of those is a floor the current per-archetype table either asks for where
+the dex will not supply it, or fails to ask for where the corpus says it belongs.**
+
+Two limits to respect. The **archetype half is still the EV-band proxy**, so only the theme axis
+is an exact label. And **Psychic (37) and Normal (39) are the thin cells** — a carry rate sitting
+right on the 0.90 bar there moves with a handful of teams, so those two rows should be read as
+"no strong floor" rather than as precise zeroes.
+
 ### The Taunt role, as a spec
 
 Adding it is four lines and one version bump, and it buys a **cap, not a floor** — which is

@@ -125,6 +125,10 @@ def read_teams(gens):
                 stats["no single shared type" if not theme else "ambiguous theme"] += 1
                 continue
             out.append({"gen": gen, "how": how, "theme": theme.pop(), "mons": mons,
+                        # the scraped sets as they arrived, so a caller that wants
+                        # team_shape's role counts can have them against a VALIDATED
+                        # theme without re-deriving the theme itself
+                        "data": data,
                         "url": team.get("url", ""), "name": team.get("name", "")})
             stats["usable"] += 1
     return out, stats

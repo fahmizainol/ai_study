@@ -29,6 +29,7 @@ import statistics
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import mono_synergy                                    # noqa: E402
 import smogon_corpus as SC                             # noqa: E402
 import team_shape as TS                                # noqa: E402
 import team_tags                                       # noqa: E402
@@ -109,11 +110,98 @@ def validate(lab, cent):
         print("%-10s %s" % (r, " ".join("%17s" % c for c in cells)))
 
 
+def by_theme():
+    """Role profile per THEME, which needs no classifier at all.
+
+    The archetype cut above has to infer its class; a theme is a validated label -- every
+    member shares it -- so this is a direct measurement and the one a themed generator
+    actually wants. A Bug gym's floors should come from Bug teams, not from what a monotype
+    team carries on average across eighteen dexes that have nothing in common."""
+    teams, _ = mono_synergy.read_teams(mono_synergy.GENS)
+    grouped = collections.defaultdict(list)
+    for t in teams:
+        grouped[t["theme"]].append(TS.role_counts(t["data"]))
+    print("\nROLE PROFILE BY THEME, carry%% (mean) -- %d theme-validated teams, no classifier"
+          % len(teams))
+    print("%-9s %5s %s" % ("theme", "n", " ".join("%13s" % r[:12] for r in JOB)))
+    overall = {r: statistics.mean([rc[r] for v in grouped.values() for rc in v]) for r in JOB}
+    for th in sorted(grouped, key=lambda x: -len(grouped[x])):
+        v = grouped[th]
+        cells = ["%5.0f%%(%.2f)" % (100 * sum(1 for rc in v if rc[r]) / len(v),
+                                    statistics.mean(rc[r] for rc in v)) for r in JOB]
+        print("%-9s %5d %s" % (th, len(v), " ".join("%13s" % c for c in cells)))
+    print("%-9s %5s %s" % ("ALL", len(teams),
+                           " ".join("%13s" % ("      (%.2f)" % overall[r]) for r in JOB)))
+    print("\nfloors each THEME implies (carry >= %.2f, round(mean) >= 1). Gym themes marked:"
+          % TS.CHASE)
+    gyms = {"BUG": "Abi", "FAIRY": "Aimi", "WATER": "Kenn", "ICE": "Douglas", "DARK": "Ciara",
+            "GROUND": "Dhara", "PSYCHIC": "Lawrence", "NORMAL": "Bay", "STEEL": "Lilliana"}
+    for th in sorted(grouped):
+        v = grouped[th]
+        floor = {r: round(statistics.mean(rc[r] for rc in v)) for r in JOB
+                 if sum(1 for rc in v if rc[r]) / len(v) >= TS.CHASE
+                 and round(statistics.mean(rc[r] for rc in v)) >= 1}
+        who = gyms.get(th.upper())
+        print("  %-9s %-9s %s" % (th, ("<- " + who) if who else "",
+                                  ", ".join("%s %d" % kv for kv in sorted(floor.items()))
+                                  or "(none)"))
+
+
+# The nine gyms and the archetype each is assigned in generate_bosses.ARCHETYPE, so the
+# per-gym cut can be read without importing the generator (which another session is editing).
+GYMS = (("BUG", "Abi", "hyper offense"), ("FAIRY", "Aimi", "offense"),
+        ("WATER", "Kenn", "offense"), ("ICE", "Douglas", "offense"),
+        ("DARK", "Ciara", "offense"), ("GROUND", "Dhara", "offense"),
+        ("PSYCHIC", "Lawrence", "balance"), ("NORMAL", "Bay", "bulky offense"),
+        ("STEEL", "Lilliana", "bulky offense"))
+
+
+def by_gym():
+    """The cell each gym actually occupies: its own theme AND its assigned archetype.
+
+    This is the narrowest cut the corpus supports and the one the generator should use, because
+    a floor ought to describe teams of this type built this way. Cell sizes are 37-115, so the
+    thin ones (Psychic/balance 37, Normal/bulky offense 39) carry real sampling noise and a
+    carry rate sitting right on the 0.90 bar there should not be trusted to a single point."""
+    lab, _ = load()
+    cent = centroids(lab)
+    teams, _ = mono_synergy.read_teams(mono_synergy.GENS)
+    cell = collections.defaultdict(list)
+    for t in teams:
+        off = statistics.mean(TS.offence_pct(s.get("evs") or {}) for s in t["data"])
+        cell[(t["theme"].upper(), band(off, cent))].append(TS.role_counts(t["data"]))
+    print("\nPER-GYM FLOORS from the theme x archetype cell each one occupies")
+    print("%-9s %-9s %-14s %5s  %s" % ("theme", "gym", "archetype", "n", "floors from that cell"))
+    for th, who, arch in GYMS:
+        v = cell[(th, arch)]
+        if not v:
+            print("%-9s %-9s %-14s %5d  (cell empty)" % (th, who, arch, 0))
+            continue
+        floor = {r: round(statistics.mean(rc[r] for rc in v)) for r in JOB
+                 if sum(1 for rc in v if rc[r]) / len(v) >= TS.CHASE
+                 and round(statistics.mean(rc[r] for rc in v)) >= 1}
+        shipped = TS.role_plan(arch)["floor"]
+        print("%-9s %-9s %-14s %5d  %-34s (shipped: %s)"
+              % (th, who, arch, len(v),
+                 ", ".join("%s %d" % kv for kv in sorted(floor.items())) or "(none)",
+                 ", ".join("%s %d" % kv for kv in sorted(shipped.items())) or "(none)"))
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__,
                                 formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--validate", action="store_true", help="check the bands against labels")
+    ap.add_argument("--by-theme", action="store_true",
+                    help="role profile per theme instead of per archetype band")
+    ap.add_argument("--by-gym", action="store_true",
+                    help="the theme x archetype cell each of the nine gyms occupies")
     a = ap.parse_args()
+    if a.by_gym:
+        by_gym()
+        return
+    if a.by_theme:
+        by_theme()
+        return
     lab, mono = load()
     cent = centroids(lab)
     print("labelled non-monotype teams %d | monotype teams %d" % (len(lab), len(mono)))
