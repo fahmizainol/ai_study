@@ -146,7 +146,8 @@ def null_profile(team, teams_by_format, chart, moves, pop, n, rng):
 HAZARD_SET = {"stealthrock", "spikes", "toxicspikes", "stickyweb", "ceaselessedge", "stoneaxe"}
 
 
-def show_example(teams, d, pop, by_format, arch, trials, rng, want_format=None, count=1):
+def show_example(teams, d, pop, by_format, arch, trials, rng, want_format=None, count=1,
+                 pick_random=False):
     """`count` real teams of `arch`, with every number in the report derived in front of you.
 
     Teams are picked closest to the archetype's own means on the four axes, so they
@@ -166,7 +167,16 @@ def show_example(teams, d, pop, by_format, arch, trials, rng, want_format=None, 
     mean = {k: sum(p[k] for _, p in scored) / len(scored) for k in keys}
     sd = {k: max((sum((p[k] - mean[k]) ** 2 for _, p in scored) / len(scored)) ** 0.5, 1e-9)
           for k in keys}
-    order = sorted(scored, key=lambda tp: sum(((tp[1][k] - mean[k]) / sd[k]) ** 2 for k in keys))
+    # Representative and random answer different questions and must not be confused: the
+    # nearest-to-mean picks show what the archetype's ROW looks like, a random draw shows the
+    # SPREAD behind it, including the teams that miss. Each team's distance from the mean is
+    # printed either way so a random pick cannot be mistaken for a typical one.
+    if pick_random:
+        order = list(scored)
+        rng.shuffle(order)
+    else:
+        order = sorted(scored,
+                       key=lambda tp: sum(((tp[1][k] - mean[k]) / sd[k]) ** 2 for k in keys))
     picks, seen = [], set()
     for tp in order:                      # one per format first, then fill
         if len(picks) >= count:
@@ -176,10 +186,15 @@ def show_example(teams, d, pop, by_format, arch, trials, rng, want_format=None, 
             picks.append(tp)
     picks += [tp for tp in order if tp not in picks][:max(0, count - len(picks))]
 
-    print("\n=== %d %s team%s closest to the archetype's own means (of %d) ===" % (
-        len(picks), arch, "" if len(picks) == 1 else "s", len(scored)))
+    print("\n=== %d %s team%s, %s (of %d) ===" % (
+        len(picks), arch, "" if len(picks) == 1 else "s",
+        "drawn at random" if pick_random else "closest to the archetype's own means",
+        len(scored)))
     for team, p in picks:
         show_one(team, p, d, pop, by_format, trials, rng)
+        print("  distance from the %s mean: %s" % (arch, " ".join(
+            "%s %+.2f" % (k, p[k] - mean[k]) if k != "reach"
+            else "reach %+.0f pts" % (100 * (p[k] - mean[k])) for k in keys)))
     print("\n  archetype means over %d %s teams: blind %.2f | stacked %.2f | holes %.2f | "
           "reach %.0f%%" % (len(scored), arch, mean["blind"], mean["stacked"], mean["holes"],
                             100 * mean["reach"]))
@@ -234,6 +249,8 @@ def main():
     ap.add_argument("--example", help="also walk real teams of this archetype through "
                                      "every number in the report")
     ap.add_argument("--n", type=int, default=1, help="how many example teams")
+    ap.add_argument("--random", action="store_true",
+                    help="draw the examples at random instead of nearest-to-mean")
     a = ap.parse_args()
     rng = random.Random(a.seed)
     d = dex()
@@ -259,7 +276,8 @@ def main():
     if a.example:
         # An example is asked for instead of the report, not alongside it: the report's null
         # sweep is 1,662 teams x trials and would keep the walkthrough waiting for minutes.
-        show_example(teams, d, pop, by_format, a.example, a.trials, rng, a.format, a.n)
+        show_example(teams, d, pop, by_format, a.example, a.trials, rng, a.format, a.n,
+                     a.random)
         return
 
     print("\n=== observed, 18 attacking types per team ===")

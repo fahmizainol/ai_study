@@ -621,6 +621,16 @@ stacked type follows from the pick that solved Electric.
   team (0.00-0.04 of 18 types), so the standard deviation collapses and t runs to −22 on 35
   teams. The *mean* is the finding — a hole you cannot even hit back is vanishingly rare,
   which is the same conclusion as `MONOTYPE-SYNERGY.md` §8 reached from the other side.
+- **45 teams carry a duplicate species and every one of them is legal.** All 45 are Anything
+  Goes, where `Standard AG` is only Obtainable / Team Preview / HP Percentage / Cancel /
+  Endless Battle — **Species Clause lives in `Standard`, not `Standard AG`** — so a team with
+  two Zacian-Crowned is a real AG team and not a parse artifact. Two consequences. They are
+  2.7% of the corpus but 11% of the `offense` row, and excluding them moves nothing that
+  matters (offense blind 1.76 → 1.64, stacked 0.97 → 1.03, reach 91% → 93%, holes 0.15 →
+  0.14), so they stay in. And `null_draws` rejects repeated species to honour Species Clause,
+  which is a constraint AG does not impose: for AG formats the null is drawn with more type
+  diversity than a real builder is held to, which makes those teams look slightly *worse*
+  against their null than they should. The bias runs against the conclusion, not for it.
 - **The generation must come from the format file here, the opposite of monotype.**
   `gen9monotype.json` is one subforum's whole history so its name says nothing, but
   `gen6ou.json` really is ORAS OU. Leading with the post date instead moved 55 titled gen 6
