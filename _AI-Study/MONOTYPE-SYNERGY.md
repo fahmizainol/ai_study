@@ -635,6 +635,76 @@ offence 62% against 56%**, plus more speed control and more priority. A team tha
 what threatens it races instead — which is §7's snow package and §8's near-free offence showing
 up in the EV spreads.
 
+### The monotype role table, and the floors it gives instead
+
+    python3 tools/mono_role_profile.py --validate   # the check
+    python3 tools/mono_role_profile.py              # the table
+
+There are 4,898 monotype teams and no archetype labels on them, so the class has to be
+recovered. It is recovered from **EV offence share alone** — §2 of `TEAM-CORPUS.md` measured
+that offensive EV share orders monotonically along the archetype axis (stall 14% → hyper
+offense 78%), so one feature carries the signal. **Recovery and setup counts are deliberately
+not used as features**: the floors *are* those counts, so a classifier fed them would reproduce
+them by construction. An EV spread is not a move, so banding on it and then reporting move
+roles is a real measurement rather than a tautology.
+
+**The fitness test is not per-team accuracy** — that is 53% over five classes and irrelevant,
+because a floor is a per-class mean. What matters is whether the bands recover the true
+per-archetype role means, and on the 1,954 labelled teams they do:
+
+| role | stall | balance | bulky off | offense | hyper off |
+|---|---|---|---|---|---|
+| recovery | 4.81 / **4.80** | 3.03 / 3.32 | 2.54 / 2.33 | 1.55 / **1.57** | 0.88 / 0.51 |
+| setup | 0.94 / 1.04 | 1.12 / 1.20 | 1.33 / **1.29** | 1.79 / 1.68 | 3.06 / **3.04** |
+| status | 2.29 / 2.15 | 1.57 / **1.53** | 1.19 / 1.35 | 0.81 / 0.90 | 0.49 / 0.33 |
+| hazards | 1.40 / **1.39** | 1.36 / 1.31 | 1.25 / **1.28** | 1.19 / **1.21** | 0.99 / **1.02** |
+| removal | 1.20 / 1.15 | 0.95 / **0.94** | 0.91 / **0.92** | 0.69 / 0.77 | 0.43 / 0.38 |
+
+(true / EV-banded.) The one soft cell is **hyper offense recovery, 0.88 true against 0.51
+banded** — the band is purer than the label — so treat monotype hyper-offence recovery as a
+floor, not a level. Everything else lands within about 0.3.
+
+**The monotype table** (carry% and mean per band, 4,898 teams):
+
+| role | stall 243 | balance 707 | bulky off 875 | offense 1,499 | hyper off 1,574 |
+|---|--:|--:|--:|--:|--:|
+| hazards | 77% (1.16) | 87% (1.26) | 90% (1.19) | 86% (1.09) | 84% (1.01) |
+| removal | 79% (0.85) | 65% (0.70) | 58% (0.61) | 57% (0.61) | 52% (0.54) |
+| setup | 61% (0.91) | 71% (1.13) | 79% (1.24) | 82% (1.39) | **84% (1.63)** |
+| pivot | 44% (0.59) | 54% (0.82) | 59% (0.91) | 58% (0.94) | 55% (0.84) |
+| recovery | **99% (3.24)** | **94% (2.41)** | **91% (1.81)** | 77% (1.23) | 45% (0.56) |
+| speed | 29% (0.35) | 37% (0.52) | 37% (0.48) | 34% (0.41) | 39% (0.45) |
+| priority | 16% (0.19) | 38% (0.45) | 47% (0.57) | 58% (0.74) | 67% (0.91) |
+| status | 86% (1.65) | 76% (1.22) | 71% (1.03) | 59% (0.79) | 40% (0.47) |
+| protect | 70% (1.11) | 54% (0.79) | 49% (0.67) | 39% (0.54) | 32% (0.41) |
+| phaze | 36% (0.42) | 23% (0.26) | 22% (0.24) | 21% (0.22) | 9% (0.09) |
+
+**The floors it gives are fewer and lower — five against eight:**
+
+| archetype | monotype floors | shipped (tagged, themeless) |
+|---|---|---|
+| stall | recovery **3** | hazards 1, recovery **5**, status 2 |
+| balance | recovery **2** | hazards 1, recovery **3** |
+| bulky offense | hazards 1, recovery **2** | hazards 1, recovery **3** |
+| offense | **(none)** | hazards 1 |
+| hyper offense | **(none)** | setup **3** |
+
+Three changes matter. **Recovery drops a step everywhere** — 5 → 3 for stall, 3 → 2 for balance
+and bulky offence — which is the 23% marginal gap above, now measured per class instead of
+inferred from it. **Hazards stops being a floor for three of five classes** (77%, 87%, 86% all
+under the 90% bar), so the near-universal role is near-universal only off-theme. And **hyper
+offence loses its setup floor outright**: 84% carry at a mean of 1.63 against the themeless
+97% at 3.06. A monotype team cannot shop the whole dex for setup sweepers, so it carries about
+half as much, and `setup 3` on a themed hyper-offence gym is asking for roughly double what
+real monotype teams of that shape do.
+
+Two things to hold on to before any of this is typed in. The **stall band is 243 teams** and
+stall is 5% of monotype against 9% off-theme, so its row is the thinnest here. And the bands
+are only as good as the centroids they inherit — those come from themeless labelled teams, and
+monotype's own EV distribution skews offensive (31% and 32% in the top two bands against 25%
+and 25%), which is a real difference in the population and not a classifier artifact, but it
+does mean the stall centroid is being applied further from its training mass.
+
 ### The Taunt role, as a spec
 
 Adding it is four lines and one version bump, and it buys a **cap, not a floor** — which is
