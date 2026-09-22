@@ -8,7 +8,8 @@
 // source here that gets each generation's own chart and legality.
 //
 //   node tools/dump_showdown_dex.js > generated/showdown_dex.json
-const P = '/mnt/c/Users/kny/Documents/Games/Norm/pokemon-showdown';
+// SHOWDOWN_DIR overrides the checkout, e.g. an `npm install pokemon-showdown` tree.
+const P = process.env.SHOWDOWN_DIR || '/mnt/c/Users/kny/Documents/Games/Norm/pokemon-showdown';
 const { Dex } = require(P + '/dist/sim/dex');
 
 const out = {};

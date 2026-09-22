@@ -1,0 +1,29 @@
+Pokémon Run & Bun — trainer documentation manifest
+===================================================
+Recorded 2026-09-22.
+
+Run & Bun is a GBA Emerald hack. Nothing here was extracted from a ROM: the source is
+the game's own public documentation, shared as a Google Drive folder.
+
+  Drive folder   https://drive.google.com/drive/folders/1M-PdZrACBkGPpceTanCq_ltbGNT24lR8
+  Trainer sheet  https://docs.google.com/spreadsheets/d/1Ezdd8k-pDlVocd0NHUkGwZXcegfG-KTOraM_uZUsr6s
+                 (exported per tab with /export?format=csv&gid=<gid>)
+
+runandbun/
+  00-Route-102.csv ... 09-Elite-Four-and-Champion.csv
+      The ten sheet tabs, renamed by their first area and numbered in STORY order. The
+      order is not stated anywhere in the sheet; it was read off the boss level caps in
+      "Mechanic Changes.txt". gid per file:
+        00 665425777   01 2121814178  02 728959301   03 137520681   04 1140782082
+        05 1850847175  06 10316561    07 597988788   08 1701857055  09 1958874892
+  Mechanic Changes.txt
+      Verbatim from the Drive folder. The facts the study leans on: EVs are removed,
+      Gen 8 mechanics otherwise, the boss list with level caps, permanent overworld
+      weather/effects per area, no bag in trainer battles.
+
+Also in the Drive folder, not copied: "Learnset, Evolution Methods and Abilities.txt"
+(no base stats -- the study uses Showdown's gen 9 numbers), runandbun.lua, and sheets for
+item/Pokémon locations, move changes, post-KO switch AI and the Hall of Fame.
+
+Every opponent Pokémon runs 31 IVs -- stated by the study's author, not by these files.
+The absence of EVs is in "Mechanic Changes.txt" ("EVs are removed from the game").

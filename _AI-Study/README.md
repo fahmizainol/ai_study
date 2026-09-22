@@ -9,7 +9,7 @@ The study has two phases, and they are still both live:
 - **Phase 1 — teardown.** Read every game's AI out of its shipped build and write down
   what it actually does. Static analysis only, no playtesting. → `ANALYSIS.md`,
   `AI-PORTABILITY.md`, `TEAM-DESIGN.md`, `BOSS-CURVE.md`, `TEAM-CORPUS.md`,
-  `MONOTYPE-SYNERGY.md`.
+  `MONOTYPE-SYNERGY.md`, `RNB-STUDY.md`.
 - **Phase 2 — build and measure.** One engine-independent core (`portable_ai/`) plus a
   thin per-game adapter, installed into a real game, then measured against that game's
   own AI in its own engine. → `SIM-SPEC.md` (the method), `PORTABLE-AI-REBORN.md` (the
@@ -85,6 +85,10 @@ _AI-Study/
 │                                 answered by typing, and the generated teams cannot hit 4 of
 │                                 24 threats. The normal-team version, split by archetype, is
 │                                 TEAM-CORPUS.md §12
+├── RNB-STUDY.md                   Run & Bun: difficulty curve vs the level cap, its teams scored
+│                                 with the corpus code, and its singles bosses played against
+│                                 BST-matched gen 9 Smogon teams by Foul Play on both sides
+│                                 (56/160 won; no static metric predicts which). tools/rnb/
 ├── PORTABLE-AI-REBORN.md          THE working log: every version, every measurement, the backlog
 ├── PORTABLE-AI-REALIDEA.md        the v16 adapter: probe, tier gauntlet, mega evolution
 ├── PORTABLE-AI-DIAGNOSIS.md       0.3.2 → 0.4 gap analysis — history, numbers superseded
@@ -223,6 +227,10 @@ Corpus traps (the type-coverage work found all four; `MONOTYPE-SYNERGY.md` §10 
   `gen9monotype.json` is not gen 9: it is the monotype subforum's whole history, posts from
   2014 on, 2,428 of 4,337 teams holding a species gen 9 does not have. Validate the tier
   structurally and infer the generation per team.
+- **Not even a normal format file is safe.** `gen9ubers.json`: 2,004 of its teams were
+  posted before gen 9 existed and 935 more hold a species or item gen 9 lacks — one
+  "gen 9 Ubers" team was gen 1 with no abilities. Filter on post date AND legality before
+  using it as gen 9 (`RNB-STUDY.md` §7, `tools/rnb/make_battle_teams.py`).
 - **The generation must be inferred differently per corpus, and both ways are right.** A
   normal format file (`gen6ou.json`) really is that format, so its own claim wins whenever
   the team is legal in it; the monotype file's claim is worthless, so the post date leads

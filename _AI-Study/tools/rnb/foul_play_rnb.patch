@@ -1,0 +1,122 @@
+diff --git a/fp/data/__init__.py b/fp/data/__init__.py
+index 5dbb1f6..305e09f 100644
+--- a/fp/data/__init__.py
++++ b/fp/data/__init__.py
+@@ -10,6 +10,11 @@ move_json_location = os.path.join(PWD, "moves.json")
+ with open(move_json_location) as f:
+     all_move_json = json.load(f)
+ 
++# RnB study: the natdex set datasets carry typeless "hiddenpower60/70", which moves.json
++# only has as "hiddenpower"; alias them so every lookup site resolves.
++for _suffix in ("60", "70"):
++    all_move_json.setdefault("hiddenpower" + _suffix, all_move_json["hiddenpower"])
++
+ pkmn_json_location = os.path.join(PWD, "pokedex.json")
+ with open(pkmn_json_location, "r") as f:
+     pokedex = json.loads(f.read())
+diff --git a/fp/data/sets/base.py b/fp/data/sets/base.py
+index 370a470..42d481a 100644
+--- a/fp/data/sets/base.py
++++ b/fp/data/sets/base.py
+@@ -173,6 +173,7 @@ class PredictedPokemonSet:
+                     all_move_json[mv][constants.CATEGORY]
+                     == constants.MoveCategory.STATUS
+                     for mv in self.pkmn_moveset.moves
++                    if mv in all_move_json  # RnB study: dataset has typeless hiddenpower60
+                 ):
+                     return False
+ 
+@@ -182,7 +183,9 @@ class PredictedPokemonSet:
+                     return False
+ 
+         for mv in self.pkmn_moveset.moves:
+-            move_data = all_move_json[mv]
++            move_data = all_move_json.get(mv)
++            if move_data is None:  # RnB study: dataset has moves (hiddenpower60) absent from moves.json
++                continue
+             if not damaging_move_is_utility(move_data):
+                 match move_data[constants.CATEGORY]:
+                     case constants.MoveCategory.PHYSICAL:
+diff --git a/fp/data/sets/smogon.py b/fp/data/sets/smogon.py
+index 7959972..e0791ab 100644
+--- a/fp/data/sets/smogon.py
++++ b/fp/data/sets/smogon.py
+@@ -289,9 +289,9 @@ class SmogonSets(PokemonSets):
+     def move_usage_rates(self, pkmn: Pokemon) -> list[tuple[str, float]]:
+         # (move, usage_rate) pairs sorted by usage; smogon stats carry no
+         # move associations so this is the only moveset information available
+-        return self.get_pkmn_by_name_in_dict(pkmn, self.raw_pkmn_sets).get(
+-            MOVES_STRING, []
+-        )
++        # RnB study: a species absent from the stats file must not crash the bot
++        found = self.get_pkmn_by_name_in_dict(pkmn, self.raw_pkmn_sets)
++        return found.get(MOVES_STRING, []) if isinstance(found, dict) else []
+ 
+     def get_raw_count(self, pkmn_name) -> int | None:
+         if pkmn_name not in self.all_pkmn_counts:
+diff --git a/fp/data/sets/team_datasets.py b/fp/data/sets/team_datasets.py
+index 8d77df9..24a38c3 100644
+--- a/fp/data/sets/team_datasets.py
++++ b/fp/data/sets/team_datasets.py
+@@ -153,7 +153,7 @@ class TeamDatasets(FullSetDatasets):
+     def initialize(self, format_spec: FormatSpec, pkmn_names: set[str]):
+         self.raw_pkmn_sets = {}
+         self.pkmn_sets = {}
+-        self.pkmn_mode = format_spec.full_name
++        self.pkmn_mode = format_spec.full_name.replace("nationaldexrnb", "nationaldex")  # RnB study: custom local format uses natdex sets
+         get_all_pkmn = format_spec.gen_number in (1, 2, 3, 4)
+         self._load_team_datasets(pkmn_names, get_all_pkmn)
+         self._add_to_pkmn_sets(self.raw_pkmn_sets)
+@@ -232,7 +232,7 @@ class BattleFactoryTeamDatasets(TeamDatasets):
+     def initialize(self, format_spec: FormatSpec, pkmn_names: set[str]):
+         self.raw_pkmn_sets = {}
+         self.pkmn_sets = {}
+-        self.pkmn_mode = format_spec.full_name
++        self.pkmn_mode = format_spec.full_name.replace("nationaldexrnb", "nationaldex")  # RnB study: custom local format uses natdex sets
+         self._load_battle_factory_team_datasets(
+             pkmn_names, self.battle_factory_tier_name
+         )
+diff --git a/fp/modes/base.py b/fp/modes/base.py
+index 3d2c4dc..f273159 100644
+--- a/fp/modes/base.py
++++ b/fp/modes/base.py
+@@ -44,7 +44,10 @@ class BattleMode:
+         for pkmn, possible_mega_evos in mega_formes.items():
+             for mega_info in possible_mega_evos:
+                 if not smogon_sets.mega_lower_usage_than_non_mega(pkmn, mega_info[0]):
+-                    mega_usage_rate = smogon_sets.get_raw_count(mega_info[0])
++                    # RnB study: a mega absent from the stats (e.g. new Z-A megas) has no count
++                    mega_usage_rate = smogon_sets.get_raw_count(mega_info[0]) or 0
++                    if not mega_usage_rate:
++                        continue
+                     mega_formes_to_select_from.append(
+                         (pkmn, mega_info, mega_usage_rate)
+                     )
+diff --git a/fp/websocket_client.py b/fp/websocket_client.py
+index d49b726..2d9c08d 100644
+--- a/fp/websocket_client.py
++++ b/fp/websocket_client.py
+@@ -92,6 +92,23 @@ class PSWebsocketClient:
+ 
+         guest_login = self.password is None
+ 
++        # RnB study: a local server with noguestsecurity takes an empty token, so never
++        # round-trip to the public login server (it rate-limits, leaving the bot unnamed)
++        if guest_login and ("localhost" in self.address or "127.0.0.1" in self.address):
++            await self.send_message("", ["/trn " + self.username + ",0,"])
++            # The server applies a rename asynchronously; a challenge sent before it lands is
++            # issued from the guest name and silently dropped. Wait for the confirmation.
++            want = "|updateuser| " + self.username + "|1|"
++            deadline = time.time() + 30
++            while time.time() < deadline:
++                msg = await asyncio.wait_for(self.receive_message(), timeout=max(0.1, deadline - time.time()))
++                if want in msg:
++                    break
++            else:
++                raise LoginError("rename to {} not confirmed".format(self.username))
++            logger.info("Logged in locally without an assertion (rename confirmed)")
++            return self.username
++
+         if guest_login:
+             response = requests.post(
+                 self.login_uri,
