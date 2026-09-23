@@ -424,13 +424,35 @@ moves 2.4 on average (max 5). Same pairings, 2 rounds:
 Battle for battle the collages lost 29 the intact teams won and won 25 they lost (sign
 test p = 0.68). Six sets do not need to have been written together: six sets from six
 different real teams are as strong. So the generator assembling slots independently is
-not what costs it, and neither are cores — a separate check found the generator already
+not what costs it. What the shuffle breaks is SET-level co-authorship, not species
+pairing: gen 7 teams are built from a few staples, so shuffled teams still carry 9.4 of
+15 species pairs seen together on 3+ real gen 7 teams (intact 12.7, generator gyms 2.8,
+non-gym 1.7). Cores are nonetheless not the lever here — a separate check found the generator already
 fields the species cores real teams use wherever the dex and band allow them (gym4 all
 of its Ice cores; gyms 1, 6 and 8 have none to use). What remains is **the sets
 themselves**: at the same BST, the sets the generator ends with are weaker than real
 teams' sets. One thing the shuffle cannot rule out: it keeps the POOL's mix (about 46%
 defensive items, 23% one-attack walls), so a team may still need a typical balance of
 roles, and the generator's sets have a different balance.
+
+Composition before and after the shuffle (sets classed as attacker: 3-4 attacks or a
+Choice/Life Orb item; wall/support: at most 1 attack, or a defensive item with recovery
+and at most 2; in between: the rest):
+
+| | attacker | in between | wall/support | defensive item | teams with no wall | removal | setup |
+|---|--:|--:|--:|--:|--:|--:|--:|
+| gen 7 intact | 51% | 17% | 32% | 47% | 27% | 79% | 44% |
+| gen 7 shuffled | 51% | 17% | 32% | 47% | 5% | 58% | 45% |
+| generator gyms | 52% | 33% | 15% | 26% | 44% | 11% | 100% |
+| generator non-gym | 52% | 27% | 22% | 23% | 10% | 30% | 100% |
+| Run & Bun bosses | 84% | 12% | 4% | 18% | 75% | 0% | 80% |
+
+The shuffle averages real teams' distinct styles (hyper offense, balance, 4-6-wall
+stall) into 1-3 walls each and still wins as often, and it costs some type synergy
+(types nobody resists 1.5 -> 2.2, holes 0.17 -> 0.26; gyms 7.2 and 2.2, non-gym 3.5 and
+0.5). Offensive coverage is flat everywhere (15-16 of 18 types). What separates the
+generator is the KIND of set: a third are two-attack in-betweens, half as many walls
+on half as many defensive items, setup on every team, almost no removal.
 
 A first version drew replacements instead of swapping and favoured some sets: the
 sets it left out had KO'd 0.79 a battle in the intact run against 0.64 for the ones it
