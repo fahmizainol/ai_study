@@ -391,9 +391,25 @@ the generator starts from a published set and replaces the moves a species canno
 at its in-game level, which at L100 are just worse moves. Intact sets (4 of 4 kept) do
 KO more, 0.50 per battle v ~0.34 for 2-3 kept (456 slot-battles), but the trend is not
 monotone and strong species may simply be the ones whose sets survive — a minor factor
-at most. The clean next test is an ablation: the same generator species on their
-**unmodified published sets**. If that reaches ~65%, set construction is the problem; if
-it stays near 27%, it is which species go together.
+at most.
+
+**The ablation settles it: the species, not the sets.** Same generator species on the
+**unmodified published sets** the generator started from (`make_gen_battles.py
+--published`; 112 of 114 slots have one, and it changes 0.6-0.7 of 4 moves per slot),
+identical pairings and rounds, played on Windows at 4 workers:
+
+| | generator sets | published sets |
+|---|--:|--:|
+| gyms | 28/108 (25.9%) | 35/108 (32.4%) |
+| bosses + rivals | 33/120 (27.5%) | 42/120 (35.0%) |
+| pooled | 61/228 (26.8%) | 77/228 (33.8%) |
+
+Battle for battle, published sets won 44 the generator lost and lost 28 the generator
+won (sign test p = 0.076): the generator's move swaps cost about **7 points**, suggestive
+but not significant here. Real teams win ~65% against the same bosses, so the move
+swaps explain at most a quarter of the ~38-point gap. **The rest is which species, and
+which sets, the generator puts together** — the published sets it picks are not bad on
+their own, but six of them chosen this way do not make a team that wins.
 
 **Traps met on the way** (all fixed in the tools):
 - On a machine where 127.0.0.1 has no rDNS and something listens on port 80, Showdown
