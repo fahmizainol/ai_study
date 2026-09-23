@@ -409,7 +409,7 @@ it stays near 27%, it is which species go together.
   forks two searches per bot), not from other jobs; iteration counts track the position,
   not the load, so no measurable weakening was found. 11 gym battles that overlapped a
   real other-session job are listed in `generated/rnb_vs_gen/contended.txt`; dropping
-  them changes the gyms' rate by 3 points.
+  them moves the gyms from 25.9% to 23.7%.
 
 ```
 python3 tools/rnb/make_gen_battles.py 4 [--trainers]          # -> generated/rnb_vs_gen[_trainers]/
