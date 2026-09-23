@@ -19,7 +19,8 @@ import math
 import os
 import sys
 
-from paths import RNB, STUDY
+from make_battle_teams import tid
+from paths import RNB, STUDY, pokedex
 
 GEN = os.environ.get("RNB_OUT", os.path.join(STUDY, "generated", "rnb_vs_gen"))
 
@@ -44,8 +45,26 @@ def contended():
         return {ln.strip() for ln in fh if ln.strip() and not ln.startswith("#")}
 
 
+def unpilotable(r):
+    """A team holding two formes of one species (gen 7 Anything Goes has no Species
+    Clause: three Arceus). Foul Play tracks mons by species and crashes when one forme
+    is renamed to another, so the battles that survive are the ones that never exposed
+    it -- a biased sample. The whole pairing is dropped instead."""
+    dex = pokedex()
+    path = os.path.join(GEN, "teams", r.get("opp_side", "smogon"), r["opp"])
+    base = [tid(dex[tid(b.split("\n")[0].split(" @ ")[0])].get("baseSpecies", b.split("\n")[0].split(" @ ")[0]))
+            for b in open(path).read().strip().split("\n\n")]
+    return len(set(base)) < len(base)
+
+
 def main():
     V = clean(os.path.join(GEN, "results.ndjson"))
+    bad = {r["opp"] for r in V if unpilotable(r)}
+    if bad:
+        V = [r for r in V if r["opp"] not in bad]
+        print("dropped %d pairing(s) Foul Play cannot pilot: %s" % (len(bad), ", ".join(sorted(bad))))
+    # the opponent seat holds generator teams, or (a baseline run) Smogon teams
+    who = "generator teams" if V and V[0].get("opp_side") == "gen" else "Smogon teams (%s)" % os.path.basename(GEN)
     if "--uncontended" in sys.argv:
         skip = contended()
         V = [r for r in V if r["tag"] not in skip]
@@ -53,15 +72,15 @@ def main():
     n, gen_w = len(V), sum(r["winner"] != "rnb" for r in V)
     p = gen_w / n
     se = math.sqrt(p * (1 - p) / n)
-    print("generator teams win %d/%d = %.1f%% (95%% CI %.0f-%.0f%%)"
-          % (gen_w, n, 100 * p, 100 * (p - 1.96 * se), 100 * (p + 1.96 * se)))
+    print("%s win %d/%d = %.1f%% (95%% CI %.0f-%.0f%%)"
+          % (who, gen_w, n, 100 * p, 100 * (p - 1.96 * se), 100 * (p + 1.96 * se)))
 
     smog = collections.defaultdict(list)
     for r in clean(os.path.join(RNB, "results.ndjson")):
         smog[r["boss"]].append(r["winner"] == "rnb")
     rate = {b: sum(x) / len(x) for b, x in smog.items()}
 
-    print("\n%-6s%5s %5s   opponents (Run & Bun boss: W-L for the generator team)" % ("team", "BST", "W-L"))
+    print("\n%-6s%5s %5s   opponents (Run & Bun boss: W-L for the %s)" % ("team", "BST", "W-L", who))
     by = collections.defaultdict(list)
     for r in V:
         by[r["opp"]].append(r)
@@ -82,9 +101,9 @@ def main():
     z = (obs - exp) / math.sqrt(var)
     pz = math.erfc(abs(z) / math.sqrt(2))
     print("\npaired with the Smogon run (same Run & Bun bosses):")
-    print("  Run & Bun wins vs generator teams: %d/%d; expected vs Smogon-strength teams: %.1f" % (obs, n, exp))
-    print("  => generator teams win %.1f%% where Smogon teams would win %.1f%%  (z = %+.2f, two-sided p = %.3f)"
-          % (100 * gen_w / n, 100 * (n - exp) / n, z, pz))
+    print("  Run & Bun wins vs %s: %d/%d; expected vs the study's gen 9 teams: %.1f" % (who, obs, n, exp))
+    print("  => %s win %.1f%% where gen 9 Smogon teams would win %.1f%%  (z = %+.2f, two-sided p = %.3f)"
+          % (who, 100 * gen_w / n, 100 * (n - exp) / n, z, pz))
 
 
 if __name__ == "__main__":

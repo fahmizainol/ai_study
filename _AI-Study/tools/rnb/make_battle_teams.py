@@ -17,6 +17,14 @@ type_model.legal_in(9) (National Dex is exempt from that check: it allows past s
 with an ability on every set.
 
     python3 tools/rnb/make_battle_teams.py [K=4]
+    RNB_OUT=generated/rnb_vs_gen7 python3 tools/rnb/make_battle_teams.py 4 --gen7
+
+--gen7 draws the opponents from gen 7 instead -- the ceiling the boss generator works
+under (Realidea's dex stops at gen 7), so it is the fair baseline for generator teams.
+Same filters with gen 7's launch date and legality, and every team carrying a Z-crystal
+is DROPPED (80% of them): Realidea has no Z-move engine, and swapping the crystal for
+another item would quietly weaken four teams in five. Tate and Liza are left out of the
+schedule rather than played and discarded.
 """
 import collections
 import json
@@ -25,14 +33,27 @@ import random
 import re
 import sys
 
-from paths import DUMP, OUT, TOOLS, out, pokedex
+from paths import DUMP, OUT, RNB, TOOLS, out, pokedex
 
 sys.path.insert(0, TOOLS)
 import type_model as TM  # noqa: E402
 
 GEN9_START = "2022-11-18"
 POOL_FORMATS = ("gen9nationaldex", "gen9ubers", "gen9anythinggoes")
+GEN7_START = "2016-11-18"
+GEN7_FORMATS = ("gen7ou", "gen7ubers", "gen7uu", "gen7anythinggoes")
+EXCLUDED = ("Leader_Tate", "Leader_Liza")
+# Species gen 9 National Dex refuses although the client pokedex flags them exactly like a
+# legal mega; validate_teams.js is the authority and found this one in the gen 7 pool.
+UNPLAYABLE = {"greninjaash"}
 ALIAS = {"enamorust": "enamorustherian"}
+
+
+def first_option(s):
+    """A scraped set can record a SLOT -- "Focus Blast/Dragon Pulse", "Chople Berry /
+    Leftovers" -- which Showdown reads as one garbage name. Play the first option, as the
+    doubles bridge does. No real move or item name contains a slash."""
+    return s.split("/")[0].strip()
 
 
 def tid(s):
@@ -84,19 +105,26 @@ def singles_bosses(trainers, rows):
     return out_
 
 
-def smogon_pool(ex):
+def smogon_pool(ex, gen=9):
     dex9 = TM.dex()
+    formats, start = (GEN7_FORMATS, GEN7_START) if gen == 7 else (POOL_FORMATS, GEN9_START)
     dropped, pool = collections.Counter(), []
-    for fmt in POOL_FORMATS:
+    for fmt in formats:
         with open(os.path.join(DUMP, fmt + ".json"), encoding="utf-8") as fh:
             raw = json.load(fh)
         for team in raw:
             data = team.get("data") or []
-            if (team.get("date") or "") < GEN9_START:
-                dropped[fmt + ": posted before gen 9"] += 1
+            if (team.get("date") or "") < start:
+                dropped[fmt + ": posted before gen %d" % gen] += 1
                 continue
-            if fmt != "gen9nationaldex" and not TM.legal_in(9, data, dex9):
-                dropped[fmt + ": not gen-9 legal"] += 1
+            if fmt != "gen9nationaldex" and not TM.legal_in(gen, data, dex9):
+                dropped[fmt + ": not gen-%d legal" % gen] += 1
+                continue
+            if gen == 7 and any((m.get("item") or "").endswith(" Z") for m in data):
+                dropped[fmt + ": carries a Z-crystal"] += 1
+                continue
+            if any(tid(m["species"]) in UNPLAYABLE for m in data):
+                dropped[fmt + ": species the format refuses"] += 1
                 continue
             if any((m.get("ability") or "").lower() in ("", "no ability", "none") for m in data):
                 dropped[fmt + ": missing ability"] += 1
@@ -112,10 +140,10 @@ def smogon_pool(ex):
                 e = ex.mega.get((tid(e.get("baseSpecies", e["name"])), m.get("item")), e)
                 bst += sum(e["baseStats"].values())
                 species = m["species"].replace("-Gmax", "")   # cosmetic; foul-play cannot match it
-                mons.append({"sp": species, "item": m.get("item") or "",
+                mons.append({"sp": species, "item": first_option(m.get("item") or ""),
                              "ability": m.get("ability") or ex.dex[tid(species)]["abilities"]["0"],
                              "nature": m.get("nature") or "",
-                             "moves": [mv for mv in m.get("moves") or [] if mv]})
+                             "moves": [first_option(mv) for mv in m.get("moves") or [] if mv]})
             if any(not x["moves"] for x in mons):
                 continue
             pool.append({"fmt": fmt, "name": team.get("name") or "", "url": team.get("url", ""),
@@ -126,10 +154,12 @@ def smogon_pool(ex):
 
 
 def main():
-    k = int(sys.argv[1]) if len(sys.argv) > 1 else 4
-    with open(out("trainers.json"), encoding="utf-8") as fh:
+    args = [a for a in sys.argv[1:] if not a.startswith("--")]
+    k = int(args[0]) if args else 4
+    gen = 7 if "--gen7" in sys.argv else 9
+    with open(os.path.join(RNB, "trainers.json"), encoding="utf-8") as fh:
         trainers = json.load(fh)
-    with open(out("rows.json")) as fh:
+    with open(os.path.join(RNB, "rows.json")) as fh:
         rows = json.load(fh)
     ex = Exporter(pokedex())
     tdir = {side: os.path.join(OUT, "teams", side) for side in ("rnb", "smogon")}
@@ -140,11 +170,13 @@ def main():
 
     bosses = []
     for slug, t, r in singles_bosses(trainers, rows):
+        if gen == 7 and slug.startswith(EXCLUDED):
+            continue
         with open(os.path.join(tdir["rnb"], slug), "w") as fh:
             fh.write(ex.export(t["mons"]))
         bosses.append({"slug": slug, "name": t["name"], "cap": r["cap"], "bst": ex.bst(t["mons"])})
 
-    pool = smogon_pool(ex)
+    pool = smogon_pool(ex, gen)
     rng, used, pairs = random.Random(42), set(), []
     for b in bosses:
         near = sorted((p for i, p in enumerate(pool) if i not in used),

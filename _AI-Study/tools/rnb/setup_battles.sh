@@ -60,4 +60,7 @@ exports.nothrottle = true;
 exports.noipchecks = true;
 EOF
 fi
+# Keep every battle's full protocol log (faints, damage, switches) under
+# logs/<month>/<format>/<day>/*.log.json -- the bots' own logs record no faints.
+grep -qs "^exports.logchallenges = true" "$PS/config/config.js" || echo "exports.logchallenges = true;" >> "$PS/config/config.js"
 echo "ready: $WORK"
