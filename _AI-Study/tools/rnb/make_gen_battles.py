@@ -5,8 +5,13 @@ Writes generated/rnb_vs_gen/: teams/gen/ (the gyms, exported for Foul Play), tea
 (copies of the Run & Bun bosses used) and pairs.json -- every gym against the K Run & Bun
 bosses nearest its mean BST. Run with the study's harness:
 
-    python3 tools/rnb/make_gen_battles.py [K=4]
+    python3 tools/rnb/make_gen_battles.py [K=4] [--trainers]
     RNB_OUT=generated/rnb_vs_gen python3 tools/rnb/run_battles.py 4 2
+
+--trainers exports the non-gym fights instead (teams_trainers.json -> generated/
+rnb_vs_gen_trainers/). A rival team holding an engine-filled starter slot (`owenpoke2`
+and friends: a Realidea fakemon Showdown does not know, with no moveset) is skipped --
+played 5-v-6 it would measure nothing, the Tate & Liza mistake.
 
 Same rules as RNB-STUDY.md §5, so the two runs compare: level 100, NO EVs (the
 generator's spreads are dropped, natures kept), 31 IVs, no Tera, megas exported as the
@@ -15,9 +20,10 @@ items and natures map to Showdown by id, and the ability index is resolved again
 Realidea's own pokemon.txt (index 2 = HiddenAbility), so a hidden ability is the one the
 game would give.
 
-Gyms are named gym1..gym9 only: Realidea's trainer names are spoilers, so they are kept
-out of every file this experiment writes.
+Teams are named gym1..gym9 (or boss1.., rival1.. in file order) only: Realidea's
+trainer names are spoilers, so they are kept out of every file this experiment writes.
 """
+import collections
 import json
 import os
 import shutil
@@ -27,9 +33,9 @@ from make_battle_teams import Exporter, tid
 from paths import RNB, STUDY, pokedex
 
 GYMS = os.path.join(STUDY, "generated", "teams_bosses_gyms.json")
+TRAINERS = os.path.join(STUDY, "generated", "teams_trainers.json")
 PBS = os.path.join(STUDY, "..", "Realidea V4.1", "PBS", "pokemon.txt")
 SHOWDOWN_DEX = os.path.join(STUDY, "generated", "showdown_dex.json")
-OUT = os.path.join(STUDY, "generated", "rnb_vs_gen")
 EXCLUDED = ("Leader_Tate", "Leader_Liza")   # one double battle in the game; see summarize_battles
 
 
@@ -54,8 +60,26 @@ def ability_name(species, index, pbs):
     return slots[index] if index < len(slots) else slots[0]
 
 
+def fights(trainers):
+    """(anonymous id, team) for every playable fight in the chosen file."""
+    if not trainers:
+        # "gym3_<CLASS>_<Name>" -> "gym3"
+        return [(g["id"].split("_", 1)[0], g) for g in json.load(open(GYMS))]
+    out, n = [], collections.Counter()
+    for t in json.load(open(TRAINERS)):
+        if any(m["species"].islower() for m in t["mons"]):   # engine-filled starter slot
+            continue
+        kind = t["id"].split("_", 1)[0]                      # "boss" / "rival"
+        n[kind] += 1
+        out.append(("%s%d" % (kind, n[kind]), t))
+    return out
+
+
 def main():
-    k = int(sys.argv[1]) if len(sys.argv) > 1 else 4
+    args = [a for a in sys.argv[1:] if not a.startswith("--")]
+    k = int(args[0]) if args else 4
+    trainers = "--trainers" in sys.argv
+    OUT = os.path.join(STUDY, "generated", "rnb_vs_gen_trainers" if trainers else "rnb_vs_gen")
     dex = pokedex()
     sd = json.load(open(SHOWDOWN_DEX))["gen9"]
     abilities = {tid(a): a for e in dex.values() for a in e.get("abilities", {}).values()}
@@ -75,8 +99,7 @@ def main():
         os.makedirs(d)
 
     gyms = []
-    for g in json.load(open(GYMS)):
-        gid = g["id"].split("_", 1)[0]          # "gym3_<CLASS>_<Name>" -> "gym3"
+    for gid, g in fights(trainers):
         mons, bst = [], 0
         for m in g["mons"]:
             item = name(items, m["item"], "item") if m["item"] else ""
@@ -107,7 +130,7 @@ def main():
         json.dump(pairs, fh, indent=1)
     for p in pairs:
         print("%-6s %4d  vs  %-40s %4d" % (p["opp"], p["opp_bst"], p["boss"], p["boss_bst"]))
-    print("%d gyms, %d pairings -> %s" % (len(gyms), len(pairs), OUT))
+    print("%d teams, %d pairings -> %s" % (len(gyms), len(pairs), OUT))
 
 
 if __name__ == "__main__":

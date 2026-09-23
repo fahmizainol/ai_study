@@ -8,6 +8,7 @@ strong as Smogon teams, Run & Bun would win the sum of those rates; fewer wins m
 the gyms are stronger. This removes the "different mix of bosses" confound.
 
     python3 tools/rnb/summarize_gen_battles.py [--uncontended]
+    RNB_OUT=generated/rnb_vs_gen_trainers python3 tools/rnb/summarize_gen_battles.py
 
 --uncontended drops the battles listed in contended.txt: played while another job held
 the CPU, so both bots searched less than in the Smogon run.
@@ -20,7 +21,7 @@ import sys
 
 from paths import RNB, STUDY
 
-GEN = os.path.join(STUDY, "generated", "rnb_vs_gen")
+GEN = os.environ.get("RNB_OUT", os.path.join(STUDY, "generated", "rnb_vs_gen"))
 
 
 def clean(path):
@@ -52,7 +53,7 @@ def main():
     n, gen_w = len(V), sum(r["winner"] != "rnb" for r in V)
     p = gen_w / n
     se = math.sqrt(p * (1 - p) / n)
-    print("generator gyms win %d/%d = %.1f%% (95%% CI %.0f-%.0f%%)"
+    print("generator teams win %d/%d = %.1f%% (95%% CI %.0f-%.0f%%)"
           % (gen_w, n, 100 * p, 100 * (p - 1.96 * se), 100 * (p + 1.96 * se)))
 
     smog = collections.defaultdict(list)
@@ -60,17 +61,17 @@ def main():
         smog[r["boss"]].append(r["winner"] == "rnb")
     rate = {b: sum(x) / len(x) for b, x in smog.items()}
 
-    print("\n%-6s%5s %5s   opponents (Run & Bun boss: W-L for the gym)" % ("gym", "BST", "W-L"))
+    print("\n%-6s%5s %5s   opponents (Run & Bun boss: W-L for the generator team)" % ("team", "BST", "W-L"))
     by = collections.defaultdict(list)
     for r in V:
         by[r["opp"]].append(r)
-    for g in sorted(by, key=lambda g: int(g[3:])):
+    for g in sorted(by, key=lambda g: (g.rstrip("0123456789"), int(g[len(g.rstrip("0123456789")):]))):
         rs = by[g]
         w = sum(r["winner"] != "rnb" for r in rs)
         per = collections.Counter()
         for r in rs:
             per[r["boss"], r["winner"] != "rnb"] += 1
-        opps = ", ".join("%s %d-%d" % (b.rsplit("_", 1)[0], per[b, True], per[b, False])
+        opps = ", ".join("%s %d-%d" % (b, per[b, True], per[b, False])
                          for b in dict.fromkeys(r["boss"] for r in rs))
         print("%-6s%5d %2d-%-2d   %s" % (g, rs[0]["opp_bst"], w, len(rs) - w, opps))
 
@@ -81,8 +82,8 @@ def main():
     z = (obs - exp) / math.sqrt(var)
     pz = math.erfc(abs(z) / math.sqrt(2))
     print("\npaired with the Smogon run (same Run & Bun bosses):")
-    print("  Run & Bun wins vs gyms: %d/%d; expected vs Smogon-strength teams: %.1f" % (obs, n, exp))
-    print("  => gyms win %.1f%% where Smogon teams would win %.1f%%  (z = %+.2f, two-sided p = %.3f)"
+    print("  Run & Bun wins vs generator teams: %d/%d; expected vs Smogon-strength teams: %.1f" % (obs, n, exp))
+    print("  => generator teams win %.1f%% where Smogon teams would win %.1f%%  (z = %+.2f, two-sided p = %.3f)"
           % (100 * gen_w / n, 100 * (n - exp) / n, z, pz))
 
 
