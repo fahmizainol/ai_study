@@ -348,3 +348,73 @@ the CPU does not slow the run — it quietly weakens both bots.
 | `tools/rnb/` | the scripts above, `foul_play_rnb.patch`, `FOUL_PLAY_COMMIT`, the Showdown format |
 
 Raw bot logs (~120 MB) are not kept.
+
+## 10. The boss generator's teams against the same bosses
+
+Follow-up, 2026-09-23. The question: do the teams `generate_bosses.py` builds for Realidea
+hold up where real Smogon teams do? Same rules as §5 (L100, 0 EV, 31 IV, natures kept, no
+Tera, Foul Play v Foul Play at 500 ms); each generator team plays the 4 Run & Bun singles
+bosses nearest its mean BST, 3 rounds. **Realidea's trainer names are spoilers**, so
+teams are `gym1..9`, `boss1..7`, `rival1..3` everywhere.
+
+| Opponent of the Run & Bun bosses | battles | wins | same bosses v gen 9 Smogon (§5) | paired z |
+|---|--:|--:|--:|--:|
+| generator gyms (monotype, 9 teams) | 108 | **25.9%** | 62.8% | +9.1 |
+| generator bosses + rivals (no theme, 10 teams) | 120 | **27.5%** | 66.2% | +10.2 |
+| gen 7 Smogon teams (80 teams, Z-crystal teams dropped) | 156 | **67.9%** | 64.6% | −1.0 |
+
+"Paired" scores each battle against that same boss's record v gen 9 Smogon teams, so the
+mix of bosses a pool happened to draw cancels out.
+
+**Ruled out:**
+- **The monotype theme.** Generator teams with no theme lose as often as the gyms, in
+  every BST band (7/24 v 7/24 under 500, 5/16 v 7/24 at 500-550, 7/32 v 8/32 above).
+- **The gen 7 ceiling** (Realidea's dex stops at gen 7; Run & Bun and §5's teams do not).
+  Real gen 7 teams, held to the same ceiling, beat these bosses as often as gen 9 teams.
+- **Stat spread.** At matched BST the generator's species average base Speed 82-83,
+  best attacking stat 109, 35% at Speed ≥ 100 — the same as either Smogon pool (81,
+  108-110, 31-32%). Bulk is 10-25 points lower.
+- **Passengers.** Slots that never contribute (no KO, under 2 turns on the field) are
+  21.8% / 18.8% of generator slots and 21.1% of real gen 7 slots.
+- **Attack count.** 62-63% of generator moves attack, v 57-62% for Smogon teams.
+
+**What the full battle logs show** (round 3 and the last ~150 gen 7 battles, from
+Showdown's own logs via `read_battles.py`): every generator slot is less effective, not a
+few of them. KOs per slot per battle: generator 0.41 / 0.45, real gen 7 0.67. The setup
+users are the sharpest case — generator teams put a setup move on 32-39% of slots (gen 7
+Smogon 10%, gen 9 Smogon ~30%: 1.82 setup mons a team), use it about as often (32-33% of
+battles v 38%), and get **half the KOs** from it (0.51-0.53 v 0.99 per battle).
+
+**Not settled.** Why each slot is weaker. One generator-specific candidate is `fidelity`:
+the generator starts from a published set and replaces the moves a species cannot know
+at its in-game level, which at L100 are just worse moves. Intact sets (4 of 4 kept) do
+KO more, 0.50 per battle v ~0.34 for 2-3 kept (456 slot-battles), but the trend is not
+monotone and strong species may simply be the ones whose sets survive — a minor factor
+at most. The clean next test is an ablation: the same generator species on their
+**unmodified published sets**. If that reaches ~65%, set construction is the problem; if
+it stays near 27%, it is which species go together.
+
+**Traps met on the way** (all fixed in the tools):
+- On a machine where 127.0.0.1 has no rDNS and something listens on port 80, Showdown
+  calls localhost an open proxy and locks every bot (`setup_battles.sh` now declares
+  loopback residential).
+- Foul Play indexed a revealed 5th move as `move:4` after truncating the moveset to 4 —
+  a poke-engine panic (fixed in `foul_play_rnb.patch`).
+- Foul Play cannot pilot a team holding two formes of one species (gen 7 AG allows three
+  Arceus); such pairings are dropped whole, not kept where the crash happened not to fire.
+- Scraped sets record move/item SLOTS ("Focus Blast/Dragon Pulse"); the first option plays.
+- Showdown's `config.js` hot-reloads, so turning on `logchallenges` mid-run logged the
+  rest of that run too.
+- Load spikes to 13+ on 6 cores came from 4 battles searching at once (each decision
+  forks two searches per bot), not from other jobs; iteration counts track the position,
+  not the load, so no measurable weakening was found. 11 gym battles that overlapped a
+  real other-session job are listed in `generated/rnb_vs_gen/contended.txt`; dropping
+  them changes the gyms' rate by 3 points.
+
+```
+python3 tools/rnb/make_gen_battles.py 4 [--trainers]          # -> generated/rnb_vs_gen[_trainers]/
+RNB_OUT=generated/rnb_vs_gen7 python3 tools/rnb/make_battle_teams.py 4 --gen7
+RNB_OUT=generated/rnb_vs_gen python3 tools/rnb/run_battles.py 4 3
+RNB_OUT=generated/rnb_vs_gen python3 tools/rnb/summarize_gen_battles.py [--uncontended]
+python3 tools/rnb/read_battles.py generated/rnb_vs_gen [--pool]   # needs logchallenges
+```
