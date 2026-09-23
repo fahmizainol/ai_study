@@ -38,6 +38,12 @@ if [ ! -d "$PS" ]; then
   (cd "$WORK/showdown" && npm install --silent pokemon-showdown@0.11.11)
 fi
 cp "$HERE/showdown-custom-formats.js" "$PS/dist/config/custom-formats.js"
+# Showdown reverse-resolves every connecting IP; where 127.0.0.1 has no rDNS entry and
+# something listens on port 80, its fallback probe calls localhost an open proxy and
+# locks every bot (the rename comes back as "‽name" and login never confirms). Declare
+# loopback residential so the probe never runs.
+mkdir -p "$PS/config/chat-plugins"
+grep -qs "^RANGE,127.0.0.0," "$PS/config/hosts.csv" || echo "RANGE,127.0.0.0,127.255.255.255,localhost/res" >> "$PS/config/hosts.csv"
 mkdir -p "$PS/config" "$PS/logs/repl" "$PS/logs/chat" "$PS/logs/modlog" "$PS/logs/ladderlogs" "$PS/databases"
 if [ ! -f "$PS/config/config.js" ]; then
   cp "$PS/dist/config/config-example.js" "$PS/config/config.js"

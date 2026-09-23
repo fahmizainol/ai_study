@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # One Foul Play vs Foul Play battle on the local server:
-#   battle.sh TAG RNB_TEAM SMOGON_TEAM [search_ms]  -> $RNB_WORK/runs/TAG_{a,b}.log
+#   battle.sh TAG RNB_TEAM OPP_SIDE/OPP_TEAM [search_ms]  -> $RNB_WORK/runs/TAG_{a,b}.log
 # Side a plays the Run & Bun team and challenges; side b plays the Smogon team and accepts.
 #
 # Watchdog: if no turn has started within START_WAIT seconds both bots are killed and the
@@ -21,7 +21,7 @@ COMMON=(--websocket-uri ws://localhost:8123/showdown/websocket --pokemon-format 
         --smogon-stats-format gen9nationaldexubers --search-time-ms "$MS" --run-count 1 --log-level INFO)
 UA="r${TAG//[^a-z0-9]/}"; UB="s${TAG//[^a-z0-9]/}"
 LA="$WORK/runs/${TAG}_a.log"; LB="$WORK/runs/${TAG}_b.log"
-$P run.py "${COMMON[@]}" --ps-username "$UB" --bot-mode accept_challenge --team-name "smogon/$B" > "$LB" 2>&1 &
+$P run.py "${COMMON[@]}" --ps-username "$UB" --bot-mode accept_challenge --team-name "$B" > "$LB" 2>&1 &
 PB=$!
 sleep 6
 timeout 1800 $P run.py "${COMMON[@]}" --ps-username "$UA" --bot-mode challenge_user --user-to-challenge "$UB" --team-name "rnb/$A" > "$LA" 2>&1 &

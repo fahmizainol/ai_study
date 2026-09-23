@@ -3,6 +3,9 @@
 
     python3 tools/rnb/run_battles.py [WORKERS=2] [ROUNDS=1] [SEARCH_MS=500]
 
+RNB_OUT=<dir> runs another experiment's pairs.json (a pairing's opponent is read from
+teams/<opp_side>/, default smogon).
+
 Appends one record per attempt to generated/rnb/results.ndjson and is resumable: a tag
 (b<pairing>x<round>) with a clean result is skipped, anything else is played again. A
 result is NOT clean when either bot's log has a traceback, when no winner was logged, or
@@ -31,7 +34,7 @@ RESULTS = out("results.ndjson")
 
 def sync_teams():
     """foul-play loads teams from its own fp/teams/teams/; the tracked copies live in OUT."""
-    for side in ("rnb", "smogon"):
+    for side in os.listdir(os.path.join(OUT, "teams")):
         dst = os.path.join(TEAM_DIR, side)
         shutil.rmtree(dst, ignore_errors=True)
         shutil.copytree(os.path.join(OUT, "teams", side), dst)
@@ -52,7 +55,8 @@ def play(job):
     tag, p = job
     t0 = time.time()
     run_tag = "%st%d" % (tag, int(t0) % 100000)     # fresh bot usernames on every attempt
-    rc = subprocess.run([os.path.join(HERE, "battle.sh"), run_tag, p["boss"], p["opp"],
+    rc = subprocess.run([os.path.join(HERE, "battle.sh"), run_tag, p["boss"],
+                         p.get("opp_side", "smogon") + "/" + p["opp"],
                          SEARCH_MS]).returncode
     logs = [os.path.join(WORK, "runs", "%s_%s.log" % (run_tag, side)) for side in "ab"]
     a, b = (open(f).read() if os.path.exists(f) else "" for f in logs)

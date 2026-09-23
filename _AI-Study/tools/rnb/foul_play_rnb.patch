@@ -92,6 +92,21 @@ index 3d2c4dc..f273159 100644
                      mega_formes_to_select_from.append(
                          (pkmn, mega_info, mega_usage_rate)
                      )
+diff --git a/fp/search/poke_engine_helpers.py b/fp/search/poke_engine_helpers.py
+index 81d3957..bfa6e05 100644
+--- a/fp/search/poke_engine_helpers.py
++++ b/fp/search/poke_engine_helpers.py
+@@ -117,7 +117,9 @@ def battler_to_poke_engine_side(
+     if battler.last_used_move.move.startswith("switch "):
+         last_used_move = "switch:0"
+     elif battler.last_used_move.move:
+-        pkmn_moves = [m.name for m in battler.active.moves]
++        # RnB study: only the first 4 moves reach the engine (see the truncation in
++        # pokemon_to_poke_engine_pkmn); a revealed 5th move must not be indexed as move:4
++        pkmn_moves = [m.name for m in battler.active.moves][:4]
+         for i, move in enumerate(pkmn_moves):
+             if move == battler.last_used_move.move:
+                 last_used_move = "move:{}".format(i)
 diff --git a/fp/websocket_client.py b/fp/websocket_client.py
 index d49b726..2d9c08d 100644
 --- a/fp/websocket_client.py
