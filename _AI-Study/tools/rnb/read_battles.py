@@ -55,7 +55,11 @@ def hp(s):
 
 def battle(path):
     """Replay one protocol log -> (winner side, per-(side, species) Counter)."""
-    d = json.load(open(path))
+    try:
+        with open(path, encoding="utf-8") as fh:
+            d = json.load(fh)
+    except ValueError:                        # truncated by a crash mid-write
+        return {}, None, None
     lines = d["log"] if isinstance(d.get("log"), list) else d["log"].split("\n")
     names = {"p1": d.get("p1", ""), "p2": d.get("p2", "")}
     active, cur, last_hit = {}, {}, {}
@@ -141,13 +145,13 @@ def main():
         p = pairs[int(m.group(1))]
         team = p["opp"]
         path = os.path.join(out, "teams", p.get("opp_side", "smogon"), team)
-        own = {tid(b.split("\n")[0].split(" @ ")[0]) for b in open(path).read().strip().split("\n\n")}
+        own = {tid(b.split("\n")[0].split(" @ ")[0]) for b in open(path, encoding="utf-8").read().strip().split("\n\n")}
         base = {tid(dex[sp].get("baseSpecies", sp)) for sp in own}
         if not {sp for (s, sp) in stat if s == oside} <= own or len(base) < len(own):
             continue                    # another experiment's tag, or two formes of one species
         record[team, won == oside] += 1
         sets = {tid(b.split("\n")[0].split(" @ ")[0]): {tid(ln[2:]) for ln in b.split("\n") if ln.startswith("- ")}
-                for b in open(path).read().strip().split("\n\n")}
+                for b in open(path, encoding="utf-8").read().strip().split("\n\n")}
         for sp, moves in sets.items():
             c = stat.get((oside, sp), collections.Counter())
             per[team, sp].update(c)
