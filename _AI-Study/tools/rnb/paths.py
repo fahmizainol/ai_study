@@ -1,6 +1,7 @@
 """Where the Run & Bun study reads and writes. See RNB-STUDY.md for the whole pipeline."""
 import json
 import os
+import threading
 import urllib.request
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -27,6 +28,40 @@ POKEDEX_URL = "https://play.pokemonshowdown.com/data/pokedex.json"
 
 def out(name):
     return os.path.join(OUT, name)
+
+
+_append_lock = threading.Lock()
+
+
+def read_results(path):
+    """Every record in a results.ndjson. A power cut can leave a half-written last line;
+    it is skipped (that battle is simply played again), never allowed to stop a resume."""
+    if not os.path.exists(path):
+        return []
+    recs = []
+    with open(path, encoding="utf-8") as fh:
+        for line in fh:
+            try:
+                recs.append(json.loads(line))
+            except ValueError:
+                continue
+    return recs
+
+
+def append_result(path, rec):
+    """Append one record. If the file ends mid-line (a cut-off write), start on a fresh
+    line so the new record is not glued onto the fragment. Workers are threads, so the
+    append is locked."""
+    with _append_lock:
+        with open(path, "a+b") as fh:
+            fh.seek(0, os.SEEK_END)
+            if fh.tell():
+                fh.seek(-1, os.SEEK_END)
+                if fh.read(1) != b"\n":
+                    fh.write(b"\n")
+            fh.write((json.dumps(rec) + "\n").encode("utf-8"))
+            fh.flush()
+            os.fsync(fh.fileno())
 
 
 def pokedex():

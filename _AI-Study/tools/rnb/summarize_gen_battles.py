@@ -20,7 +20,7 @@ import os
 import sys
 
 from make_battle_teams import tid
-from paths import RNB, STUDY, pokedex
+from paths import RNB, STUDY, pokedex, read_results
 
 GEN = os.environ.get("RNB_OUT", os.path.join(STUDY, "generated", "rnb_vs_gen"))
 
@@ -28,11 +28,9 @@ GEN = os.environ.get("RNB_OUT", os.path.join(STUDY, "generated", "rnb_vs_gen"))
 def clean(path):
     """Latest clean attempt per tag, as run_battles.py defines clean."""
     latest = {}
-    with open(path) as fh:
-        for line in fh:
-            r = json.loads(line)
-            if not r["error"] and r["turns"] > 0 and r["winner"]:
-                latest[r["tag"]] = r
+    for r in read_results(path):
+        if not r["error"] and r["turns"] > 0 and r["winner"]:
+            latest[r["tag"]] = r
     return list(latest.values())
 
 

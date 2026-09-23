@@ -28,7 +28,7 @@ import sys
 import time
 from concurrent.futures import ThreadPoolExecutor
 
-from paths import FOUL_PLAY, OUT, TEAM_DIR, VENV_PY, WORK, out
+from paths import FOUL_PLAY, OUT, TEAM_DIR, VENV_PY, WORK, append_result, out, read_results
 
 WORKERS = int(sys.argv[1]) if len(sys.argv) > 1 else 2
 ROUNDS = int(sys.argv[2]) if len(sys.argv) > 2 else 1
@@ -47,14 +47,7 @@ def sync_teams():
 
 
 def clean_tags():
-    done = set()
-    if os.path.exists(RESULTS):
-        with open(RESULTS) as fh:
-            for line in fh:
-                r = json.loads(line)
-                if not r["error"] and r["turns"] > 0:
-                    done.add(r["tag"])
-    return done
+    return {r["tag"] for r in read_results(RESULTS) if not r["error"] and r["turns"] > 0}
 
 
 def battle(run_tag, rnb_team, opp_team):
@@ -117,8 +110,7 @@ def play(job):
     err = "Traceback" in a or "Traceback" in b or turns == 0 or not w
     rec = dict(tag=tag, **p, winner=winner, turns=turns, secs=round(time.time() - t0), rc=rc,
                error=err)
-    with open(RESULTS, "a") as fh:
-        fh.write(json.dumps(rec) + "\n")
+    append_result(RESULTS, rec)
     print(tag, p["boss"], "vs", p["opp"], "->", winner, turns, "turns", rec["secs"], "s",
           "ERR" if err else "", flush=True)
 

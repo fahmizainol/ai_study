@@ -17,7 +17,7 @@ import random
 import statistics as st
 
 import team_synergy as SY
-from paths import out
+from paths import out, read_results
 
 EXCLUDED = ("Leader_Tate", "Leader_Liza")
 METRICS = ["bst", "cap", "blind", "stacked", "holes", "reach",
@@ -26,13 +26,11 @@ METRICS = ["bst", "cap", "blind", "stacked", "holes", "reach",
 
 def clean_results():
     latest = {}
-    with open(out("results.ndjson")) as fh:
-        for line in fh:
-            r = json.loads(line)
-            if r["boss"].startswith(EXCLUDED):
-                continue
-            if not r["error"] and r["turns"] > 0 and r["winner"]:
-                latest[r["tag"]] = r
+    for r in read_results(out("results.ndjson")):
+        if r["boss"].startswith(EXCLUDED):
+            continue
+        if not r["error"] and r["turns"] > 0 and r["winner"]:
+            latest[r["tag"]] = r
     return list(latest.values())
 
 
