@@ -411,6 +411,31 @@ swaps explain at most a quarter of the ~38-point gap. **The rest is which specie
 which sets, the generator puts together** — the published sets it picks are not bad on
 their own, but six of them chosen this way do not make a team that wins.
 
+**Cohesion is not it either** (`make_collage.py`). The 78 gen 7 teams were shuffled
+into collages: repeated swaps of similar-BST sets between teams, so every one of the
+468 sets is used exactly once, only 9 stay on their own team, and each team's mean BST
+moves 2.4 on average (max 5). Same pairings, 2 rounds:
+
+| | wins |
+|---|--:|
+| gen 7 teams, intact | 106/156 (67.9%) |
+| the same sets, shuffled | 102/156 (65.4%) |
+
+Battle for battle the collages lost 29 the intact teams won and won 25 they lost (sign
+test p = 0.68). Six sets do not need to have been written together: six sets from six
+different real teams are as strong. So the generator assembling slots independently is
+not what costs it, and neither are cores — a separate check found the generator already
+fields the species cores real teams use wherever the dex and band allow them (gym4 all
+of its Ice cores; gyms 1, 6 and 8 have none to use). What remains is **the sets
+themselves**: at the same BST, the sets the generator ends with are weaker than real
+teams' sets. One thing the shuffle cannot rule out: it keeps the POOL's mix (about 46%
+defensive items, 23% one-attack walls), so a team may still need a typical balance of
+roles, and the generator's sets have a different balance.
+
+A first version drew replacements instead of swapping and favoured some sets: the
+sets it left out had KO'd 0.79 a battle in the intact run against 0.64 for the ones it
+used, which would have made collages look weak for the wrong reason.
+
 **Traps met on the way** (all fixed in the tools):
 - On a machine where 127.0.0.1 has no rDNS and something listens on port 80, Showdown
   calls localhost an open proxy and locks every bot (`setup_battles.py` now declares
