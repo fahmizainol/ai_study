@@ -8,6 +8,14 @@ bosses nearest its mean BST. Run with the study's harness:
     python3 tools/rnb/make_gen_battles.py [K=4] [--trainers]
     RNB_OUT=generated/rnb_vs_gen python3 tools/rnb/run_battles.py 4 2
 
+--published is the ablation: the same species, each on the published set the generator
+started from, UNMODIFIED -- no level-legality move swaps, no role re-sets (written to
+<dir>_published/, same pairings, so tags line up with the generator run). Its ability and
+item come along too, unless the set was borrowed from a relative's entry (`inherited`) or
+the item is a Z-crystal (Realidea has no Z-move engine); then the generator's stand. A
+slot with no published source (a Studio custom set, a "generated" fallback) keeps the
+generator's set.
+
 --trainers exports the non-gym fights instead (teams_trainers.json -> generated/
 rnb_vs_gen_trainers/). A rival team holding an engine-filled starter slot (`owenpoke2`
 and friends: a Realidea fakemon Showdown does not know, with no moveset) is skipped --
@@ -26,11 +34,15 @@ trainer names are spoilers, so they are kept out of every file this experiment w
 import collections
 import json
 import os
+import re
 import shutil
 import sys
 
-from make_battle_teams import Exporter, tid
-from paths import RNB, STUDY, pokedex
+from make_battle_teams import Exporter, first_option, tid
+from paths import RNB, STUDY, TOOLS, pokedex
+
+sys.path.insert(0, TOOLS)
+import smogon_corpus as SC  # noqa: E402
 
 GYMS = os.path.join(STUDY, "generated", "teams_bosses_gyms.json")
 TRAINERS = os.path.join(STUDY, "generated", "teams_trainers.json")
@@ -60,6 +72,24 @@ def ability_name(species, index, pbs):
     return slots[index] if index < len(slots) else slots[0]
 
 
+def published(m, dex):
+    """The published set a generator slot started from, or None. `src` is
+    "<fmt>/<source>/<set name>" plus the generator's own suffixes."""
+    src = re.sub(r"( \((dev set was [^)]*|-\w+)\))+$", "", m["src"])
+    key = tuple(src.split("/", 2))
+    st = SC.sets().get(SC.norm(m.get("inherited") or m["species"]), {}).get(key)
+    if st is None:
+        return None
+    out = {"moves": [first_option(mv) for mv in st["moves"] if mv], "nature": st.get("nature")}
+    own = {tid(a) for a in dex[tid(m["species"])]["abilities"].values()}
+    if not m.get("inherited") and tid(st.get("ability") or "") in own:
+        out["ability"] = st["ability"]
+    item = first_option(st.get("item") or "")
+    if not m.get("inherited") and item and not item.endswith(" Z"):
+        out["item"] = item
+    return out
+
+
 def fights(trainers):
     """(anonymous id, team) for every playable fight in the chosen file."""
     if not trainers:
@@ -79,7 +109,10 @@ def main():
     args = [a for a in sys.argv[1:] if not a.startswith("--")]
     k = int(args[0]) if args else 4
     trainers = "--trainers" in sys.argv
-    OUT = os.path.join(STUDY, "generated", "rnb_vs_gen_trainers" if trainers else "rnb_vs_gen")
+    pub = "--published" in sys.argv
+    OUT = os.path.join(STUDY, "generated", ("rnb_vs_gen_trainers" if trainers else "rnb_vs_gen")
+                       + ("_published" if pub else ""))
+    used = collections.Counter()
     dex = pokedex()
     sd = json.load(open(SHOWDOWN_DEX))["gen9"]
     abilities = {tid(a): a for e in dex.values() for a in e.get("abilities", {}).values()}
@@ -103,10 +136,21 @@ def main():
         mons, bst = [], 0
         for m in g["mons"]:
             item = name(items, m["item"], "item") if m["item"] else ""
-            mons.append({"sp": m["species"], "item": item,
-                         "ability": name(abilities, ability_name(m["species"], m["ability"], pbs), "ability"),
-                         "nature": m["nature"].capitalize(),
-                         "moves": [name(moves, mv, "move") for mv in m["moves"]]})
+            mon = {"sp": m["species"], "item": item,
+                   "ability": name(abilities, ability_name(m["species"], m["ability"], pbs), "ability"),
+                   "nature": m["nature"].capitalize(),
+                   "moves": [name(moves, mv, "move") for mv in m["moves"]]}
+            p = published(m, dex) if pub else None
+            if pub:
+                used["published" if p else "no published source: generator set kept"] += 1
+            if p:
+                mon["moves"] = [name(moves, mv, "move") for mv in p["moves"]]
+                mon["nature"] = p["nature"] or mon["nature"]
+                if "ability" in p:
+                    mon["ability"] = name(abilities, p["ability"], "ability")
+                if "item" in p:
+                    mon["item"] = item = name(items, p["item"], "item")
+            mons.append(mon)
             e = ex.entry(m["species"])
             e = ex.mega.get((tid(e.get("baseSpecies", e["name"])), item), e)
             bst += sum(e["baseStats"].values())
@@ -131,6 +175,8 @@ def main():
     for p in pairs:
         print("%-6s %4d  vs  %-40s %4d" % (p["opp"], p["opp_bst"], p["boss"], p["boss_bst"]))
     print("%d teams, %d pairings -> %s" % (len(gyms), len(pairs), OUT))
+    if pub:
+        print(dict(used))
 
 
 if __name__ == "__main__":

@@ -16,6 +16,8 @@ OUT = os.environ.get("RNB_OUT", RNB)
 # The foul-play clone and the pokemon-showdown npm install the battles need. Untracked.
 WORK = os.environ.get("RNB_WORK", os.path.join(STUDY, "generated", "rnb_work"))
 FOUL_PLAY = os.path.join(WORK, "foul-play")
+VENV_PY = os.path.join(FOUL_PLAY, ".venv", *(("Scripts", "python.exe") if os.name == "nt" else ("bin", "python")))
+SHOWDOWN = os.path.join(WORK, "showdown")
 TEAM_DIR = os.path.join(FOUL_PLAY, "fp", "teams", "teams")   # foul-play loads teams from here
 DUMP = os.path.join(STUDY, "extracted", "smogon-dump")
 

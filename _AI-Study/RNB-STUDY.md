@@ -326,10 +326,11 @@ python3 tools/rnb/team_synergy.py          # §4   (needs generated/showdown_dex
                                            #       SHOWDOWN_DIR=... node tools/dump_showdown_dex.js)
 python3 tools/rnb/make_battle_teams.py 4   # §5 schedule + team files (byte-identical to the run's)
 
-tools/rnb/setup_battles.sh                 # foul-play + patch + engine, showdown + format
-tools/rnb/start_server.sh &
+# the battles: Windows Python, NOT from WSL (a full run in WSL crashed the machine)
+python tools/rnb/setup_battles.py          # foul-play + patch + engine, showdown + format
+python tools/rnb/start_server.py           # (own window; leave it running)
 node tools/rnb/validate_teams.js           # every team must pass the custom format
-python3 tools/rnb/run_battles.py 3 2       # 3 at a time, 2 rounds; resumable, retries failures
+python tools/rnb/run_battles.py 3 2        # 3 at a time, 2 rounds; resumable, retries failures
 python3 tools/rnb/summarize_battles.py     # §5
 ```
 
@@ -396,7 +397,7 @@ it stays near 27%, it is which species go together.
 
 **Traps met on the way** (all fixed in the tools):
 - On a machine where 127.0.0.1 has no rDNS and something listens on port 80, Showdown
-  calls localhost an open proxy and locks every bot (`setup_battles.sh` now declares
+  calls localhost an open proxy and locks every bot (`setup_battles.py` now declares
   loopback residential).
 - Foul Play indexed a revealed 5th move as `move:4` after truncating the moveset to 4 —
   a poke-engine panic (fixed in `foul_play_rnb.patch`).

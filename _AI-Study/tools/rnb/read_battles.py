@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Per-Pokemon contribution from Showdown's own battle logs (the bots' logs carry no faints).
 
-Needs the server started with exports.logchallenges (setup_battles.sh sets it); each
+Needs the server started with exports.logchallenges (setup_battles.py sets it); each
 finished battle is saved as logs/<month>/gen9nationaldexrnb/<day>/*.log.json. Side a (the
 challenger) is always Run & Bun, so its username starts with "r"; the opponent is side b.
 
