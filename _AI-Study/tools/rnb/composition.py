@@ -78,60 +78,66 @@ def typing(t):
     return blind, holes, len(hit)
 
 
-# species pairs seen together on real gen 7 teams (3+ teams)
-pair_n = collections.Counter()
-for f in ("gen7ou", "gen7ubers", "gen7uu", "gen7anythinggoes"):
-    for tm in json.load(open(os.path.join(STUDY, "extracted", "smogon-dump", f + ".json"), encoding="utf-8")):
-        sps = sorted({tid(DEX.get(tid(m["species"]), {}).get("baseSpecies", m["species"])) for m in tm.get("data") or []})
-        pair_n.update(itertools.combinations(sps, 2))
-CORE = {p for p, n in pair_n.items() if n >= 3}
+def main():
+    """Print the composition tables (importing this module prints nothing)."""
+    # species pairs seen together on real gen 7 teams (3+ teams)
+    pair_n = collections.Counter()
+    for f in ("gen7ou", "gen7ubers", "gen7uu", "gen7anythinggoes"):
+        for tm in json.load(open(os.path.join(STUDY, "extracted", "smogon-dump", f + ".json"), encoding="utf-8")):
+            sps = sorted({tid(DEX.get(tid(m["species"]), {}).get("baseSpecies", m["species"])) for m in tm.get("data") or []})
+            pair_n.update(itertools.combinations(sps, 2))
+    CORE = {p for p, n in pair_n.items() if n >= 3}
 
-pools = {
-    "gen 7 intact": ("rnb_vs_gen7", "smogon"),
-    "gen 7 shuffled": ("rnb_vs_gen7_collage", "smogon"),
-    "generator gyms": ("rnb_vs_gen", "gen"),
-    "generator non-gym": ("rnb_vs_gen_trainers", "gen"),
-    "Run & Bun bosses": ("rnb", "rnb"),
-}
-keep = set(os.listdir(os.path.join(G, "rnb_vs_gen7_collage", "teams", "smogon")))   # pilotable 78
-rows = {}
-for name, (exp, side) in pools.items():
-    d = os.path.join(G, exp, "teams", side)
-    files = [f for f in os.listdir(d) if side != "smogon" or f in keep]
-    if side == "rnb":
-        files = [f for f in files if not f.startswith(("Leader_Tate", "Leader_Liza"))]
-    T = [team(os.path.join(d, f)) for f in files]
-    k = collections.Counter(kind(m) for t in T for m in t)
-    n = sum(k.values())
-    roles = collections.defaultdict(list)
-    for t in T:
-        rc = TS.role_counts([{"moves": m["moves"]} for m in t])
-        for r in ("hazards", "removal", "pivot", "recovery", "setup", "status"):
-            roles[r].append(rc.get(r, 0) > 0)
-    ty = [typing(t) for t in T]
-    cores = [sum(tuple(sorted(p)) in CORE for p in itertools.combinations({m["species"] for m in t}, 2)) for t in T]
-    rows[name] = (len(T), k, n, roles, ty, cores, T)
+    pools = {
+        "gen 7 intact": ("rnb_vs_gen7", "smogon"),
+        "gen 7 shuffled": ("rnb_vs_gen7_collage", "smogon"),
+        "generator gyms": ("rnb_vs_gen", "gen"),
+        "generator non-gym": ("rnb_vs_gen_trainers", "gen"),
+        "Run & Bun bosses": ("rnb", "rnb"),
+    }
+    keep = set(os.listdir(os.path.join(G, "rnb_vs_gen7_collage", "teams", "smogon")))   # pilotable 78
+    rows = {}
+    for name, (exp, side) in pools.items():
+        d = os.path.join(G, exp, "teams", side)
+        files = [f for f in os.listdir(d) if side != "smogon" or f in keep]
+        if side == "rnb":
+            files = [f for f in files if not f.startswith(("Leader_Tate", "Leader_Liza"))]
+        T = [team(os.path.join(d, f)) for f in files]
+        k = collections.Counter(kind(m) for t in T for m in t)
+        n = sum(k.values())
+        roles = collections.defaultdict(list)
+        for t in T:
+            rc = TS.role_counts([{"moves": m["moves"]} for m in t])
+            for r in ("hazards", "removal", "pivot", "recovery", "setup", "status"):
+                roles[r].append(rc.get(r, 0) > 0)
+        ty = [typing(t) for t in T]
+        cores = [sum(tuple(sorted(p)) in CORE for p in itertools.combinations({m["species"] for m in t}, 2)) for t in T]
+        rows[name] = (len(T), k, n, roles, ty, cores, T)
 
-print("## Offence v defence (share of sets)")
-print("%-18s %5s %9s %11s %13s %14s" % ("", "teams", "attacker", "in between", "wall/support", "def. item"))
-for name, (nt, k, n, roles, ty, cores, T) in rows.items():
-    di = st.mean(m["item"] in DEF_ITEMS for t in T for m in t)
-    print("%-18s %5d %8.0f%% %10.0f%% %12.0f%% %13.0f%%" % (name, nt, 100 * k["attacker"] / n,
-          100 * k["in between"] / n, 100 * k["wall/support"] / n, 100 * di))
-print("\n## Walls/support sets per team (distribution)")
-for name, (nt, k, n, roles, ty, cores, T) in rows.items():
-    c = collections.Counter(sum(kind(m) == "wall/support" for m in t) for t in T)
-    print("%-18s " % name + "  ".join("%d:%3.0f%%" % (i, 100 * c[i] / nt) for i in range(5)))
-print("\n## Roles (share of teams carrying at least one)")
-print("%-18s" % "" + "".join("%10s" % r for r in ("hazards", "removal", "pivot", "recovery", "setup", "status")))
-for name, (nt, k, n, roles, ty, cores, T) in rows.items():
-    print("%-18s" % name + "".join("%9.0f%%" % (100 * st.mean(roles[r])) for r in
-                                   ("hazards", "removal", "pivot", "recovery", "setup", "status")))
-print("\n## Type synergy / coverage (per team, mean)")
-print("%-18s %22s %30s %26s" % ("", "types nobody resists", "holes (3+ weak, no resist)", "types hit super-eff. /18"))
-for name, (nt, k, n, roles, ty, cores, T) in rows.items():
-    print("%-18s %22.2f %30.2f %26.1f" % (name, st.mean(x[0] for x in ty), st.mean(x[1] for x in ty),
-                                         st.mean(x[2] for x in ty)))
-print("\n## Cores: species pairs on the team that also appear together on 3+ real gen 7 teams")
-for name, (nt, k, n, roles, ty, cores, T) in rows.items():
-    print("%-18s mean %.1f of 15 pairs; teams with none %3.0f%%" % (name, st.mean(cores), 100 * st.mean(c == 0 for c in cores)))
+    print("## Offence v defence (share of sets)")
+    print("%-18s %5s %9s %11s %13s %14s" % ("", "teams", "attacker", "in between", "wall/support", "def. item"))
+    for name, (nt, k, n, roles, ty, cores, T) in rows.items():
+        di = st.mean(m["item"] in DEF_ITEMS for t in T for m in t)
+        print("%-18s %5d %8.0f%% %10.0f%% %12.0f%% %13.0f%%" % (name, nt, 100 * k["attacker"] / n,
+              100 * k["in between"] / n, 100 * k["wall/support"] / n, 100 * di))
+    print("\n## Walls/support sets per team (distribution)")
+    for name, (nt, k, n, roles, ty, cores, T) in rows.items():
+        c = collections.Counter(sum(kind(m) == "wall/support" for m in t) for t in T)
+        print("%-18s " % name + "  ".join("%d:%3.0f%%" % (i, 100 * c[i] / nt) for i in range(5)))
+    print("\n## Roles (share of teams carrying at least one)")
+    print("%-18s" % "" + "".join("%10s" % r for r in ("hazards", "removal", "pivot", "recovery", "setup", "status")))
+    for name, (nt, k, n, roles, ty, cores, T) in rows.items():
+        print("%-18s" % name + "".join("%9.0f%%" % (100 * st.mean(roles[r])) for r in
+                                       ("hazards", "removal", "pivot", "recovery", "setup", "status")))
+    print("\n## Type synergy / coverage (per team, mean)")
+    print("%-18s %22s %30s %26s" % ("", "types nobody resists", "holes (3+ weak, no resist)", "types hit super-eff. /18"))
+    for name, (nt, k, n, roles, ty, cores, T) in rows.items():
+        print("%-18s %22.2f %30.2f %26.1f" % (name, st.mean(x[0] for x in ty), st.mean(x[1] for x in ty),
+                                             st.mean(x[2] for x in ty)))
+    print("\n## Cores: species pairs on the team that also appear together on 3+ real gen 7 teams")
+    for name, (nt, k, n, roles, ty, cores, T) in rows.items():
+        print("%-18s mean %.1f of 15 pairs; teams with none %3.0f%%" % (name, st.mean(cores), 100 * st.mean(c == 0 for c in cores)))
+
+
+if __name__ == "__main__":
+    main()

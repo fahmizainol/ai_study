@@ -454,6 +454,42 @@ stall) into 1-3 walls each and still wins as often, and it costs some type syner
 generator is the KIND of set: a third are two-attack in-betweens, half as many walls
 on half as many defensive items, setup on every team, almost no removal.
 
+**The generator's sets are weaker, and now it is measured directly** (`make_injected.py`,
+`injected_sets.py`). Each of the 78 gen 7 teams had 2 of its sets swapped for generator
+sets of similar BST (108 of the 114 generator sets used), same pairings, 2 rounds:
+
+| | wins |
+|---|--:|
+| gen 7 teams, intact | 106/156 (67.9%) |
+| the same teams with 2 generator sets each | 90/156 (57.7%) |
+
+Battle for battle: 38 lost that the intact teams won, 22 won that they lost (sign test
+p = 0.052). About 5 points a set; six would land near 38%, close to the published-set
+arm's 34% and the generator's own 27%. Each generator set against the real set it
+replaced, same team and bosses, from the logs:
+
+| | KOs per battle | fainted | turns in |
+|---|--:|--:|--:|
+| generator sets (156 slots, 318 slot-battles) | 0.53 | 59% | 4.4 |
+| the real sets they replaced | 0.57 | 47% | 4.8 |
+| generator attackers / real attackers | 0.51 / **0.80** | 62% / 57% | 3.1 / 4.1 |
+| generator walls-support / real walls-support | 0.53 / 0.39 | **60% / 32%** | 7.2 / 5.9 |
+
+Why, from the swapped sets:
+- **The generator's walls are offensive species in wall sets.** Higher BST (534 v 502)
+  but less bulk (HP+Def+SpD 287 v 311), the rest spent on offence (100 v 80) and Speed
+  (76 v 55); 16 of 28 on a defensive item v 41 of 53. Real walls are Chansey on
+  Eviolite, Mandibuzz, Toxapex: species built for it.
+- **The generator's attackers carry setup and weaker items.** 27 of 78 carry a setup
+  move (real 8 of 74) -- a slot not spent attacking, and the logs show setup is used in
+  about a third of battles; 19 hold a type booster (real 0); half the megas (6 v 12).
+  Their stats are close (offence 114 v 119, Speed 90 v 94).
+
+So the fix is at the SET level, and concrete: pick bulky species for defensive slots,
+put defensive items on them, cap setup (every generator team carries it; 44% of real
+teams do), and do not trade Leftovers or Choice items for type boosters (gyms 1-3's
+early-item rule does exactly that).
+
 A first version drew replacements instead of swapping and favoured some sets: the
 sets it left out had KO'd 0.79 a battle in the intact run against 0.64 for the ones it
 used, which would have made collages look weak for the wrong reason.
