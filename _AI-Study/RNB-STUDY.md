@@ -490,6 +490,26 @@ put defensive items on them, cap setup (every generator team carries it; 44% of 
 teams do), and do not trade Leftovers or Choice items for type boosters (gyms 1-3's
 early-item rule does exactly that).
 
+**Those fixes, applied, do not measurably help** (`generate_bosses.py` switches
+SET_FIT / SETUP_CAP / ITEM_PURPOSE, default off; `gen_fixes.py`). Gyms and trainers
+regenerated from the same code with the switches off and on (SETUP_CAP 1), same
+pairings, 3 rounds:
+
+| | fixes off | fixes on | battle for battle |
+|---|--:|--:|---|
+| gyms | 22/108 (20.4%) | 26/108 (24.1%) | on gained 16, lost 12 |
+| bosses + rivals | 42/117 (35.9%) | 42/117 (35.9%) | on gained 20, lost 20 |
+| pooled | 64/225 (28.4%) | 68/225 (30.2%) | 36 v 32, p = 0.72 |
+
+They changed too little to show: 16 of 54 gym sets and 19 of 60 trainer sets, often only
+an item or a move (setup users per team 1.56 -> 0.89 and 1.80 -> 1.20; type boosters
+10 -> 7 and 16 -> 7; non-bulky walls 4 -> 2 and 10 -> 7). The larger finding -- the
+generator's attackers KO 0.51 a battle v a real attacker's 0.80 -- is about WHICH
+species and sets it picks (by BST closeness, theme and role, never by evidence that a
+set is strong), which set-level tweaks do not reach. The switches stay off.
+(The CLI baseline, 20.4% for the gyms, is below the committed Boss Studio gyms' 25.9%;
+arms must come from the same generation.)
+
 A first version drew replacements instead of swapping and favoured some sets: the
 sets it left out had KO'd 0.79 a battle in the intact run against 0.64 for the ones it
 used, which would have made collages look weak for the wrong reason.
