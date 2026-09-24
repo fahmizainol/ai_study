@@ -188,6 +188,11 @@ SCALARS = {
                     "a fast top end, few slow mons, a pivot or a Scarf"),
     "GYM_MODES": ("int", 0, 1, 1,
                   "1 gives a gym with no mode its type's weather: Water rain, Ground sand"),
+    "WALL_MIN": ("int", 0, 4, 1,
+                 "0 is off. Otherwise every fight chases this many walls: a wall/support "
+                 "set on a species built for it (HP+Def+SpD >= WALL_BULK of its BST). "
+                 "Lifts SHAPE_CHECK's wall floor too"),
+    "REMOVAL_MIN": ("int", 0, 1, 1, "1 chases a Rapid Spin or Defog user on every fight"),
     "UNLOCK_STAGE": ("int", 0, 9, 1, "badge from which megas and strong items unlock"),
     "EARLY_ITEM_CAP": ("int", 0, 1, 1,
                        "1 holds fights before UNLOCK_STAGE to the early item pool "
@@ -216,7 +221,7 @@ GROUPS = [
     # has it and a term competing with the curve would lose.
     ("coverage", ["COVER_BAND", "HOLE_MIN_WEAK", "THREAT_COVER", "OFF_THEME_COVER",
                   "TIER_BAND", "USAGE_BAND", "SET_TIER_MATCH", "SHAPE_CHECK",
-                  "GYM_MODES"]),
+                  "GYM_MODES", "WALL_MIN", "REMOVAL_MIN"]),
     # A third question, and the reason these are not filed under "team": every other
     # knob here says what a team must BE, and these three only say "give me a
     # different one". All are off at 0. The two seeds ship off; REPEAT_BAND ships at

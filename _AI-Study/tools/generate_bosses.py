@@ -245,6 +245,25 @@ ARCH_WALLS = {"hyper offense": (0, 0), "offense": (0, 1), "bulky offense": (1, 2
 HO_TOP = 120
 HO_SLOW = 60
 GYM_MODES = 0
+# Defence, after the §10 composition tables: the generator's teams run 0.6-0.9 walls and
+# 30% defensive items against real gen 7 teams' 1.9 and 47%, and hazard removal on 10-22%
+# of teams against 79% -- while the defensive real teams are the ones that beat these
+# bosses (gen 7 stall +32 over the rest, p = 0.001).
+#   WALL_MIN     0 off; else every fight chases this many `wall` sets -- a wall/support
+#                set (wall_set) on a species built for it (bulky(): HP+Def+SpD at least
+#                WALL_BULK of its BST), the Chansey / Toxapex / Mandibuzz real teams use.
+#                It also lifts SHAPE_CHECK's wall floor, over whatever the archetype says.
+#   REMOVAL_MIN  0 off; 1 chases a Rapid Spin or Defog user on every fight.
+#   WALL_SLACK   with WALL_MIN on, a bulky species may be picked this far under a fight's
+#                band floor. Walls are low-BST species (Chansey 450, Skarmory 465,
+#                Ferrothorn 489, Toxapex 495) and the band shut every one of them out of
+#                the late fights -- the reason the generator had none. They still rank
+#                by distance from the target, so one is taken only when nothing nearer
+#                fills the role, and deficit() lifts the slots after it.
+# On since 2026-09-25: gyms 41/108 against 22/108 without them (RNB-STUDY.md §10).
+WALL_MIN = 2
+REMOVAL_MIN = 1
+WALL_SLACK = 100
 MODE_OF_THEME = {"WATER": "rain", "GROUND": "sand"}
 # How many of the dev's own Pokemon a fight may SPEND to cover a floor nothing else
 # can reach. 0 is the shipped behaviour: every original that fits the band is kept and
@@ -528,6 +547,15 @@ def plan_for(archetype, mega_ok, mode=None, theme=None):
         mp = TS.mode_plan(mode)
         floor.update(mp["floor"])
         caps.update(mp["cap"])
+    # First in the dict, because unmet() walks it in order and each free slot goes to
+    # the first unmet role a candidate can fill: last, they lost every slot to hazards
+    # and setup. Removal before walls -- scarcer, and many walls carry it anyway.
+    lead = {}
+    if REMOVAL_MIN:
+        lead["removal"] = max(floor.pop("removal", 0), REMOVAL_MIN)
+    if WALL_MIN:
+        lead["wall"] = max(floor.pop("wall", 0), WALL_MIN)
+    floor = {**lead, **floor}
     # A floor the cap forbids is a generator that spins: hazards floors at 1 and the
     # mechanical cap is 1, which is fine, but nothing guarantees that in general.
     return floor, {r: max(c, floor.get(r, 0)) for r, c in caps.items()}
@@ -609,6 +637,10 @@ def roles_of(moves, item, ability, mode=None, sp=None):
     Without it the plan asks for a setter and nothing else, which is how a rain team
     came to be six Bugs and a lone Rain Dance nobody on the team can use."""
     r = TS.roles_of(moves, item, ability, MEGASTONE)
+    if WALL_MIN and sp is not None and wall_set(moves, item):   # off: labels unchanged
+        b = sp["base_stats"]
+        if (b[0] + b[2] + b[5]) / sum(b) >= WALL_BULK:      # bulky(), from the dict
+            r.add("wall")
     if mode and sp is not None and TS.abuses(
             mode, sp["types"], [ability], sp["base_stats"][3], moves, r):
         r.add(TS.abuse_role(mode))
@@ -1096,6 +1128,8 @@ def shape_miss(team, archetype, mode):
         return 0
     walls = sum(wall_set(m["moves"], m.get("item")) for m in real)
     lo, hi = ARCH_WALLS.get(archetype, (0, 6))
+    lo = max(lo, WALL_MIN)
+    hi = max(hi, lo)
     miss = max(0, lo - walls, walls - hi)
     if walls == 0:
         spe = [_sp[m["species"]]["base_stats"][3] * (1.5 if m.get("item") == "CHOICESCARF" else 1)
@@ -2204,6 +2238,11 @@ def assemble(spec):
     # at, and only the ace is promoted to the cap afterwards. Filtering at the cap
     # instead lets through mons whose evolution floor is exactly the cap, which then
     # get placed one level under it (an illegal lv19 Ninjask, floor 20).
+    def in_band(n):
+        """Over the band floor -- or, with WALL_MIN on, a bulky body within WALL_SLACK."""
+        pb = potential_bst(n, mega_ok)
+        return pb >= lo or bool(WALL_MIN and bulky(n) and pb >= lo - WALL_SLACK)
+
     def on_theme():
         return sum(1 for m in team if not is_dynamic(m["species"])
                    and theme in _sp[m["species"]]["types"])
@@ -2211,7 +2250,7 @@ def assemble(spec):
     core = []
     if theme:
         core = [n for n in eligible(level, stage, theme=theme)
-                if n not in used and potential_bst(n, mega_ok) >= lo and keep(n)]
+                if n not in used and in_band(n) and keep(n)]
         while on_theme() < spec["on_theme_min"] and len(team) < size and core:
             todo = unmet()
             core.sort(key=ranked(lambda n: (SC.rank(n),)))
@@ -2251,7 +2290,7 @@ def assemble(spec):
 
     cover = theme and OFF_THEME_COVER
     pool = [n for n in eligible(level, stage, exclude_theme=theme)
-            if n not in used and potential_bst(n, mega_ok) >= lo
+            if n not in used and in_band(n)
             and (spec["ubers_ok"] or SC.band(n) != "Uber")
             and (not theme or resisted(n)
                  or (not cover and correlation[SC.norm(n)] >= MIN_CORR))

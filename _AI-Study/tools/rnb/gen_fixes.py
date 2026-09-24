@@ -15,6 +15,10 @@ generated/ that ships is touched:
     python tools/rnb/gen_fixes.py tier   OUTDIR   # theme + TIER_BAND 40
     python tools/rnb/gen_fixes.py all    OUTDIR   # theme + SET_TIER_MATCH, USAGE_BAND 30,
                                                    # SHAPE_CHECK, GYM_MODES
+    python tools/rnb/gen_fixes.py choices OUTDIR  # the 2026-09-25 defaults before the walls:
+                                                   # ladder sets, no early item cap,
+                                                   # SHAPE_CHECK, SET_FIT, SETUP_CAP 1
+    python tools/rnb/gen_fixes.py defense OUTDIR  # choices + WALL_MIN 2, REMOVAL_MIN 1
     python tools/rnb/gen_fixes.py shipped OUTDIR  # the generator's current defaults
 
 Every arm but `shipped` pins the defaults its test ran under, so an arm keeps
@@ -35,12 +39,18 @@ import generate_bosses as GB  # noqa: E402
 import generate_trainers as GT  # noqa: E402
 
 arm, out = sys.argv[1], os.path.abspath(sys.argv[2])
-if arm not in ("off", "on", "theme", "tier", "all", "shipped"):
-    sys.exit("arm is off, on, theme, tier, all or shipped")
-if arm != "shipped":
+ARMS = ("off", "on", "theme", "tier", "all", "choices", "defense", "shipped")
+if arm not in ARMS:
+    sys.exit("arm is one of " + ", ".join(ARMS))
+if arm == "choices":
+    GB.WALL_MIN, GB.REMOVAL_MIN = 0, 0
+if arm == "defense":
+    GB.WALL_MIN, GB.REMOVAL_MIN = 2, 1
+if arm not in ("choices", "defense", "shipped"):
     # the defaults every test arm below was played under (changed 2026-09-25)
     GB.SET_FORMATS, GB.EARLY_ITEM_CAP = (), 1
     GB.SET_FIT, GB.SETUP_CAP, GB.SHAPE_CHECK = False, None, 0
+    GB.WALL_MIN, GB.REMOVAL_MIN = 0, 0
 if arm in ("off", "on"):
     # the theme rules the off/on test ran under, before they changed
     GB.ON_THEME_MIN, GB.THEME_MIN, GB.OFF_THEME_COVER = 6, {}, 0

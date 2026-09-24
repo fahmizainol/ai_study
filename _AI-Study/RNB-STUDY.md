@@ -681,6 +681,37 @@ stay off. What this batch adds to the picture: making the generator's teams LOOK
 real teams -- own-tier sets, archetype-shaped, weather-built -- does not make them play
 like them.
 
+**Design choices, then walls** (2026-09-25, same machine and settings). Chosen as
+defaults without a test: sets from the standard ladders only (SET_FORMATS: ubers, ou,
+uu, ru, nu, AG, National Dex, National Dex AG; out go pu, zu, lc and monotype, which
+leaves 9 of 54 gym mons on learnset moves against 2), no early item cap
+(EARLY_ITEM_CAP 0; stones stay off before the unlock), SHAPE_CHECK, SET_FIT and
+SETUP_CAP 1 -- `gen_fixes.py choices`. Their composition (`composition.py`, which now
+takes extra pools as LABEL=EXPERIMENT:SIDE) fixed boosters (1.4 -> 0.1 a gym team),
+setup (2.3 -> 0.9) and gym typing (types nobody resists 7.2 -> 3.8) but went all-out
+offence: 78% attacker sets, 0.6 walls a gym team, hazard removal on 22%.
+
+So a wall ROLE: a wall/support set on a species built for it (HP+Def+SpD >= 55% of BST).
+WALL_MIN 2 chases two per fight and lifts SHAPE_CHECK's wall floor; REMOVAL_MIN 1 chases
+a Rapid Spin or Defog user; both go first in the floor order. They could not bite at
+first: walls are low-BST species (Chansey 450, Skarmory 465, Toxapex 495) and the band
+shut them out of every late fight -- the plain reason the generator had none. WALL_SLACK
+lets a bulky body in 100 under the band floor. Result (`gen_fixes.py defense`): walls
+26% of gym sets (real 32%), defensive items 48% (47%), no wall-less team, removal on
+every gym -- at a price, gyms 36 eBST under target on average against 14.
+
+| gyms, 108 battles each | wins | v theme rules, 95% CI |
+|---|--:|---|
+| theme rules (`rnb_vs_gen_theme`) | 32 (29.6%) | |
+| + the choices (`rnb_vs_gen_choices`) | 22 (20.4%) | −8.6 [−17.7, +0.7] |
+| + the choices + walls (`rnb_vs_gen_defense`) | **41 (38.0%)** | **+12.6** [−1.8, +27.7] |
+
+Walls against the choices alone, on the 66 shared battles: 12 gained, 3 lost (p = 0.035);
+gym 7 went 11-1, gym 2 0-12 -> 5-7. The choices cost the theme gain; the walls bought it
+back and more, on teams 36 eBST lighter -- the stall finding again, from the other side.
+Trainers did not move (theme 44/120, choices 38, walls 43): with three to five of their
+own mons kept, only 4 of 18 reach two walls. WALL_MIN 2 and REMOVAL_MIN 1 are now on.
+
 A first version drew replacements instead of swapping and favoured some sets: the
 sets it left out had KO'd 0.79 a battle in the intact run against 0.64 for the ones it
 used, which would have made collages look weak for the wrong reason.

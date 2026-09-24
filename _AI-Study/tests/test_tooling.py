@@ -1489,9 +1489,11 @@ class ThemeFloorTest(unittest.TestCase):
 
     def test_no_theme_leaves_every_existing_caller_untouched(self):
         """free_team and generate_trainers call plan_for without a theme."""
-        # SETUP_CAP lowers the setup floor on purpose; this is about the theme alone
-        self.addCleanup(setattr, self.G, "SETUP_CAP", self.G.SETUP_CAP)
-        self.G.SETUP_CAP = None
+        # SETUP_CAP lowers the setup floor and WALL_MIN / REMOVAL_MIN add floors on
+        # purpose; this is about the theme alone
+        for knob, off in (("SETUP_CAP", None), ("WALL_MIN", 0), ("REMOVAL_MIN", 0)):
+            self.addCleanup(setattr, self.G, knob, getattr(self.G, knob))
+            setattr(self.G, knob, off)
         for arch in self.TS.ARCHETYPES:
             self.assertEqual(self.TS.role_plan(arch)["floor"],
                              self.G.plan_for(arch, False)[0])

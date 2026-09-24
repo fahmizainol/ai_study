@@ -7,7 +7,10 @@ attack or a defensive item plus recovery and at most 2, IN BETWEEN otherwise. Ty
 synergy ignores immunity abilities (Levitate etc.). A core pair is two species seen
 together on 3+ real gen 7 teams (gen7 OU/Ubers/UU/AG in the dump).
 
-    python tools/rnb/composition.py
+    python tools/rnb/composition.py [LABEL=EXPERIMENT:SIDE ...]
+
+Extra LABEL=EXPERIMENT:SIDE arguments add pools, e.g.
+"new gyms=rnb_vs_gen_shipped:gen".
 """
 import collections
 import itertools
@@ -95,6 +98,10 @@ def main():
         "generator non-gym": ("rnb_vs_gen_trainers", "gen"),
         "Run & Bun bosses": ("rnb", "rnb"),
     }
+    for arg in sys.argv[1:]:
+        label, _, where = arg.partition("=")
+        exp, _, side = where.partition(":")
+        pools[label] = (exp, side or "gen")
     keep = set(os.listdir(os.path.join(G, "rnb_vs_gen7_collage", "teams", "smogon")))   # pilotable 78
     rows = {}
     for name, (exp, side) in pools.items():
