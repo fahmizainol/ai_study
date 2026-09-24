@@ -627,11 +627,35 @@ eBST curve, not the theme, keeps them out. So the theme rules changed in
   (Fighting/Ground/Fire), Magnezone onto Dark.
 - `TIER_BAND` (off, 40 in the test): inside 40 eBST of the ideal, tier before distance.
 
-`gen_fixes.py off` rebuilds the fixes-off gyms byte for byte, so that run (22/108,
-20.4%) is the baseline and needs no replay. The arms to play, same rules, 3 rounds:
-`generated/rnb_vs_gen_theme/` (theme rules) and `generated/rnb_vs_gen_tier/` (theme +
-TIER_BAND 40). Their pairings differ from the baseline's -- new teams, new mean BST --
-so compare them by paired score against the gen 9 baseline, not battle for battle.
+`gen_fixes.py off` rebuilds the fixes-off gyms byte for byte, so that arm is the old
+rules exactly. **Played on the Linux machine (Steam Deck), all three arms there, at
+100 ms search** (Foul Play's own default; every earlier run used 500 ms, so these
+numbers compare with each other and with nothing else in this study): 4 workers, 3
+rounds, arms interleaved round by round, 324 battles, 0 errors. Bots searched a median
+21k iterations a decision (123k at 500 ms, 3 workers, measured on the same machine).
+
+| arm (`generated/`) | wins | boss-adjusted | v baseline, 95% CI (resampling gyms) |
+|---|--:|--:|---|
+| old rules (`rnb_vs_gen_deckoff`) | 21/108 (19.4%) | −2.8 | |
+| theme rules (`rnb_vs_gen_theme`) | 32/108 (29.6%) | +5.7 | **+8.5** [−0.8, +17.3] |
+| theme + TIER_BAND 40 (`rnb_vs_gen_tier`) | 22/108 (20.4%) | −2.9 | −0.0 [−13.6, +14.6] |
+
+Boss-adjusted: each battle against the pooled win rate of all three arms on that boss,
+since new teams drew partly different bosses. On the 93 battles the arms share
+(`compare_runs.py`), theme won 28 to the baseline's 19 (19 gained, 10 lost, p = 0.14).
+
+- **The theme rules help, probably.** +8.5 points, 97% of resamples above zero, the
+  interval just touching it. The gain is the off-theme slot doing its job, one swap at a
+  time: gym 8 Lopunny -> Moltres (0-12 -> 5-7), gym 2 Klefki -> Arcanine (0-12 -> 3-9),
+  gym 5 Honchkrow -> Charizard (2-10 -> 4-8), gym 1 Joltik/Kricketune -> Slowpoke/Minun
+  (0-12 -> 2-10). Gyms 6, 7 and 9 did not move.
+- **TIER_BAND adds nothing, and undoes the theme gain** (−8.6 against theme alone,
+  interval [−19.2, +4.2]). Ranking tier before distance inside 40 eBST lands on higher-
+  tier species (Blaziken, Celesteela, Landorus, Zygarde) whose sets do no better, and
+  moves gyms 8 and 9 onto worse draws. It stays off.
+- Weak bots make single battles noisier, which blurs small effects -- a reason to read
+  the theme result as "likely helps" rather than a measured size. The theme rules stay
+  on; ship them by setting the Studio preset's ON_THEME_MIN to 5 and regenerating.
 
 A first version drew replacements instead of swapping and favoured some sets: the
 sets it left out had KO'd 0.79 a battle in the intact run against 0.64 for the ones it
@@ -667,6 +691,10 @@ REALIDEA_PBS=<game>/PBS python3 tools/rnb/team_profile.py
 # the theme test: build an arm, export it, play it (Windows)
 python3 tools/rnb/gen_fixes.py theme|tier OUTDIR
 python3 tools/rnb/make_gen_battles.py 4 --from OUTDIR --name theme|tier
-RNB_OUT=generated/rnb_vs_gen_theme python3 tools/rnb/run_battles.py 4 3
-RNB_OUT=generated/rnb_vs_gen_tier python3 tools/rnb/run_battles.py 4 3
+RNB_OUT=generated/rnb_vs_gen_theme python3 tools/rnb/run_battles.py 4 3 100   # 100 ms, as played
+python3 tools/rnb/score_arms.py rnb_vs_gen_deckoff rnb_vs_gen_theme rnb_vs_gen_tier
+python3 tools/rnb/compare_runs.py rnb_vs_gen_deckoff rnb_vs_gen_theme
+# on Linux: Python 3.12 for setup_battles.py (uv), cargo (rustup); add
+# exports.repl = false (socket path too long) and exports.bindaddress = "127.0.0.1"
+# to the local Showdown config.js
 ```
