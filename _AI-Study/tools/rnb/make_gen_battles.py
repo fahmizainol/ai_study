@@ -49,7 +49,9 @@ import smogon_corpus as SC  # noqa: E402
 
 GYMS = os.path.join(STUDY, "generated", "teams_bosses_gyms.json")
 TRAINERS = os.path.join(STUDY, "generated", "teams_trainers.json")
-PBS = os.path.join(STUDY, "..", "Realidea V4.1", "PBS", "pokemon.txt")
+# REALIDEA_PBS as realidea_data.py reads it: a checkout's own copy may be incomplete
+PBS = os.path.join(os.environ.get("REALIDEA_PBS") or os.path.join(STUDY, "..", "Realidea V4.1", "PBS"),
+                   "pokemon.txt")
 SHOWDOWN_DEX = os.path.join(STUDY, "generated", "showdown_dex.json")
 EXCLUDED = ("Leader_Tate", "Leader_Liza")   # one double battle in the game; see summarize_battles
 

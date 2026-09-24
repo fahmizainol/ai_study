@@ -179,13 +179,38 @@ THEME = {"Abi": "BUG", "Aimi": "FAIRY", "Kenn": "WATER", "Douglas": "ICE",
 # weakness is 2 x m(atk -> type2) and only an IMMUNITY can answer one -- a resist just
 # returns it to neutral. Three of Ice's four weaknesses have no immune type at all, so
 # a monotype Ice gym cannot answer them by typing however it is built.
-# Was 4 ("1,2 can differ"); raised on request.
-ON_THEME_MIN = 6
+# Was 4 ("1,2 can differ"); raised to 6 on request (a preference, no measured reason),
+# now 5: one slot may leave the type to cover what the type cannot (RNB-STUDY.md §10).
+ON_THEME_MIN = 5
+# Per-THEME ceiling on ON_THEME_MIN, for the themes whose legal pool cannot field six
+# strong bodies. Measured at each gym's level (RNB-STUDY.md §10): Bug at 20 has 50 of
+# 56 legal species at PU or below and nothing strong inside its band; Ice has no OU at
+# all, its three UU already on the team, and three of four weaknesses no type is
+# immune to. A fight's minimum is the SMALLER of the two, so a preset still saying 6
+# keeps the deep themes pure and loosens only these. Keyed by type, not leader: a thin
+# pool is a fact about the type, and the Studio can hand a leader a different one.
+THEME_MIN = {"BUG": 4, "ICE": 4}
 TEAM_SIZE = 6
 # Off-theme picks must earn the slot: this much Smogon co-occurrence with the core,
 # or a resistance to what the theme is weak to. Ungated, correlation alone drags in
 # mons that merely share a metagame (a Mandibuzz onto a Steel champion).
 MIN_CORR = 25.0
+# On, a THEMED fight's off-theme slot must answer a theme weakness nothing on the team
+# answers yet (MIN_CORR stops qualifying on its own), and among those the higher Smogon
+# tier wins. That is what Run & Bun's gyms do with their off-theme mon -- Bisharp on
+# Roxanne -- and why they answer their themes better than real monotype (RNB-STUDY.md
+# §4). Co-occurrence alone was filling the slot with a mon that shares a metagame, not
+# one that covers a gap. With no gap left, any body that resists a theme weakness
+# qualifies; with no body at all, the slot goes back to the on-theme pool rather than
+# being left empty. Off is the co-occurrence-or-resistance gate as before.
+OFF_THEME_COVER = 1
+# 0 is off. Otherwise candidates within this many eBST of the ideal are ranked by
+# Smogon tier BEFORE exact distance, so a pick lands on the species that is strong for
+# its BST instead of the one nearest the number: at the same BST real teams field
+# Uber/OU species 60% of the time at 450-500 where the generator fields none (RNB-STUDY
+# .md §10). Only the unseeded, mode-less ranking changes -- a mode already buckets by
+# AFFINITY_BAND and ranks tier in its tail. Off until a battle run says it helps.
+TIER_BAND = 0
 # How many of the dev's own Pokemon a fight may SPEND to cover a floor nothing else
 # can reach. 0 is the shipped behaviour: every original that fits the band is kept and
 # a floor no remaining body covers is simply reported missed. Raising it trades the
@@ -1804,6 +1829,10 @@ def assemble(spec):
                 if mode:
                     return (gap // AFFINITY_BAND, -species_affinity(n),
                             covers) + tail(n)
+                if TIER_BAND:
+                    # coverage still first inside the band: it is a gate on holes,
+                    # tier is a preference among the bodies that pass it
+                    return (gap // TIER_BAND, covers, SC.rank(n), gap) + tail(n)
                 return ((gap // COVER_BAND, covers) if COVER_BAND
                         else (gap,)) + tail(n)
             # Seeded: the noise goes INSIDE the band and the jitter goes ABOVE the
@@ -1962,7 +1991,11 @@ def assemble(spec):
         # used to do on its own -- Aimi's Marill is 250 BST against a 392 floor and
         # became Azumarill (410) only because the floor pushed it, which left Alba's
         # Beldum a Beldum at level 29 because 300 happened to sit inside the band.
-        up = grown(pick, at, stage, theme) if spec["grow_kept"] else pick
+        # A PIN names a species, not a line: Studio's import pins every exported mon,
+        # and growing a pinned Porygon2 into Porygon-Z (legal at 69) made a trainer
+        # it had generated impossible to load back. Only the dev's own grow.
+        up = grown(pick, at, stage, theme) \
+            if spec["grow_kept"] and not k.get("pinned") else pick
         if up != pick:
             notes.append(f"evolved {pick} ({bst(pick)}) -> {up} ({bst(up)}, "
                          f"{SC.tier(up)}) — legal at level {at}")
@@ -2093,31 +2126,64 @@ def assemble(spec):
         return [w for w in WEAK.get(theme, [])
                 if TS.type_multiplier(w, types) < 1]
 
+    def gaps():
+        """Theme weaknesses nothing on the team yet takes for less than neutral."""
+        return [w for w in WEAK.get(theme, [])
+                if not any(TS.type_multiplier(w, _sp[m["species"]]["types"]) < 1
+                           for m in team if m["species"] in _sp)]
+
+    cover = theme and OFF_THEME_COVER
     pool = [n for n in eligible(level, stage, exclude_theme=theme)
             if n not in used and potential_bst(n, mega_ok) >= lo
             and (spec["ubers_ok"] or SC.band(n) != "Uber")
-            and (not theme or correlation[SC.norm(n)] >= MIN_CORR or resisted(n))
+            and (not theme or resisted(n)
+                 or (not cover and correlation[SC.norm(n)] >= MIN_CORR))
             and keep(n)]
     # Correlation and coverage already decided who is ELIGIBLE for an off-theme slot;
     # among those, the target decides who gets it.
-    open_tail = ((lambda n: (-correlation[SC.norm(n)], -len(resisted(n)))) if theme
-                 else (lambda n: (SC.rank(n),)))
+    if cover:
+        # Re-read per slot: the team, and so the gap list, changes with every pick.
+        open_tail = lambda n: (-sum(w in gaps() for w in resisted(n)),  # noqa: E731
+                               SC.rank(n), -len(resisted(n)))
+    elif theme:
+        open_tail = lambda n: (-correlation[SC.norm(n)], -len(resisted(n)))  # noqa: E731
+    else:
+        open_tail = lambda n: (SC.rank(n),)  # noqa: E731
 
     while len(team) < size and pool:
         todo = unmet()
-        pool.sort(key=ranked(open_tail))
-        if not (any(take(pool, r, _why(spec["why_open"], r)) for r in todo)
-                or take(pool, None, _why(spec["why_open"], None))):
+        # A gap outranks the curve: with one off-theme slot the point of the slot is
+        # the gap, and a body a band nearer the target that covers nothing new is
+        # the co-occurrence pick this gate replaced. With no gap left, the curve
+        # decides as before.
+        live = gaps() if cover else []
+        cand = ([n for n in pool if set(resisted(n)) & set(live)] or pool) if live else pool
+        cand.sort(key=ranked(open_tail))
+        before = len(team)
+        if not (any(take(cand, r, _why(spec["why_open"], r)) for r in todo)
+                or take(cand, None, _why(spec["why_open"], None))):
             break
-        if theme:
+        # take() removes its pick from the list it was handed; keep `pool` in step
+        if cand is not pool and len(team) > before and team[-1]["species"] in pool:
+            pool.remove(team[-1]["species"])
+        if theme and len(team) > before:
             m = team[-1]
             corr = correlation[SC.norm(m["species"])]
-            if corr >= MIN_CORR:
+            if not cover and corr >= MIN_CORR:
                 notes.append(f"{m['species']} off-theme: {corr:.0f}% Smogon "
                              f"co-occurrence")
             else:
                 notes.append(f"{m['species']} off-theme: resists "
                              f"{'/'.join(resisted(m['species']))}")
+
+    # With the co-occurrence route closed, a theme whose weaknesses no legal body
+    # resists can run out of off-theme candidates. The slot goes back to the theme
+    # rather than the team walking in short.
+    if cover:
+        while len(team) < size and core:
+            core.sort(key=ranked(lambda n: (SC.rank(n),)))
+            if not take(core, None, _why(spec["why_theme"], None)):
+                break
 
     # 4) a fight with five dev-chosen mons has only one free slot, so a missing role
     #    cannot be covered by adding a body. The set is the other lever: re-equip a
@@ -2443,7 +2509,7 @@ def make_gym(idx, seen=None):
         "level": level - 1, "ace_level": level, "stage": idx,
         "target": target, "lo": target - SPREAD[idx] / 2,
         "hi": target + SPREAD[idx] / 2,
-        "theme": theme, "on_theme_min": ON_THEME_MIN,
+        "theme": theme, "on_theme_min": min(ON_THEME_MIN, THEME_MIN.get(theme, 6)),
         # A Builder card can pin a species onto this fight or drop one of its own,
         # and can name which published sets a species may use. Pins are appended
         # after the originals so the roster order -- heaviest first -- still decides

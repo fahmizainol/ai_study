@@ -610,6 +610,29 @@ after-the-fact filter), and check a wall-less team as hyper offense -- a 120+ to
 few slow mons unless it runs Trick Room or weather, pivots or a Scarf. boss7 passes the
 second already (Scarf Galvantula 162, Froslass and Latias 110).
 
+**Monotype gyms: what their type pool can field** (2026-09-24). At each gym's level, the
+legal on-type pool is the limit for two themes only: Bug at 20 (50 of 56 legal species
+PU or below, nothing strong in its band) and Ice (no OU at all, its three UU already on
+the team). The deep themes skip strong on-type bodies inside their band -- Steel fields
+Steelix with Ferrothorn, Skarmory and Scizor legal; Normal fields Regigigas and Slaking
+with Chansey and Porygon-Z legal, though those two sit far under a 597 target, and the
+eBST curve, not the theme, keeps them out. So the theme rules changed in
+`generate_bosses.py`, and the change is being tested before it ships:
+
+- `ON_THEME_MIN` 6 -> 5, and `THEME_MIN` caps Bug and Ice at 4 (the smaller wins, so a
+  preset still saying 6 loosens only those two).
+- `OFF_THEME_COVER` (on): an off-theme slot must resist a theme weakness nothing on the
+  team resists yet, higher tier first; co-occurrence (MIN_CORR) no longer qualifies a
+  pick alone. On the nine: Starmie onto Ice (Fighting/Steel/Fire), Dragonite onto Steel
+  (Fighting/Ground/Fire), Magnezone onto Dark.
+- `TIER_BAND` (off, 40 in the test): inside 40 eBST of the ideal, tier before distance.
+
+`gen_fixes.py off` rebuilds the fixes-off gyms byte for byte, so that run (22/108,
+20.4%) is the baseline and needs no replay. The arms to play, same rules, 3 rounds:
+`generated/rnb_vs_gen_theme/` (theme rules) and `generated/rnb_vs_gen_tier/` (theme +
+TIER_BAND 40). Their pairings differ from the baseline's -- new teams, new mean BST --
+so compare them by paired score against the gen 9 baseline, not battle for battle.
+
 A first version drew replacements instead of swapping and favoured some sets: the
 sets it left out had KO'd 0.79 a battle in the intact run against 0.64 for the ones it
 used, which would have made collages look weak for the wrong reason.
@@ -641,4 +664,9 @@ python3 tools/rnb/read_battles.py generated/rnb_vs_gen [--pool]   # needs logcha
 REALIDEA_PBS=<game>/PBS python3 tools/rnb/archetypes.py
 REALIDEA_PBS=<game>/PBS python3 tools/rnb/tiers.py
 REALIDEA_PBS=<game>/PBS python3 tools/rnb/team_profile.py
+# the theme test: build an arm, export it, play it (Windows)
+python3 tools/rnb/gen_fixes.py theme|tier OUTDIR
+python3 tools/rnb/make_gen_battles.py 4 --from OUTDIR --name theme|tier
+RNB_OUT=generated/rnb_vs_gen_theme python3 tools/rnb/run_battles.py 4 3
+RNB_OUT=generated/rnb_vs_gen_tier python3 tools/rnb/run_battles.py 4 3
 ```

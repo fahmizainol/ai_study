@@ -36,6 +36,8 @@ RUNS = [   # label, experiment dir, opponent side
     ("gen non-gym, fixes on", "rnb_vs_gen_trainers_on", "gen"),
     ("gen gyms, published", "rnb_vs_gen_published", "gen"),
     ("gen non-gym, published", "rnb_vs_gen_trainers_published", "gen"),
+    ("gen gyms, theme rules", "rnb_vs_gen_theme", "gen"),        # skipped until played
+    ("gen gyms, theme + tier", "rnb_vs_gen_tier", "gen"),
 ]
 ARCH = ["hyper offense", "offense", "balance", "stall"]
 

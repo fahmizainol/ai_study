@@ -164,6 +164,18 @@ SCALARS = {
                      "where their own STAB is resisted (MONOTYPE-SYNERGY.md section "
                      "8); the nine gyms failed 5 of 24 without it. A GATE, not a "
                      "rank term -- it never moves a species, an item or the eBST"),
+    "OFF_THEME_COVER": ("int", 0, 1, 1,
+                        "1 makes a themed fight's off-theme slot answer a theme "
+                        "weakness nothing on the team answers yet, higher Smogon tier "
+                        "first -- what Run & Bun's gyms do with theirs (Bisharp on "
+                        "Roxanne). MIN_CORR then no longer qualifies a pick on its "
+                        "own. 0 is the co-occurrence-or-resistance gate"),
+    "TIER_BAND": ("int", 0, 80, 10,
+                  "0 is off. Otherwise bodies within this many eBST of the ideal are "
+                  "ranked by Smogon tier before exact distance, so a pick lands on "
+                  "the species that is strong for its BST rather than the one "
+                  "nearest the number. It cannot reach below the band: gym 8's "
+                  "Chansey (450) stays out of a 597 target. Untested in battle"),
     "UNLOCK_STAGE": ("int", 0, 9, 1, "badge from which megas and strong items unlock"),
     "BP_CAP": ("int", 40, 150, 5, "early-game move-power ceiling"),
     "BP_CAP_UNTIL": ("int", 0, 9, 1, "badge at which that ceiling lifts"),
@@ -186,7 +198,8 @@ GROUPS = [
     # whether it can answer what beats it. Defence is a preference the curve outranks
     # (COVER_BAND, HOLE_MIN_WEAK); offence is a gate, because every real team simply
     # has it and a term competing with the curve would lose.
-    ("coverage", ["COVER_BAND", "HOLE_MIN_WEAK", "THREAT_COVER"]),
+    ("coverage", ["COVER_BAND", "HOLE_MIN_WEAK", "THREAT_COVER", "OFF_THEME_COVER",
+                  "TIER_BAND"]),
     # A third question, and the reason these are not filed under "team": every other
     # knob here says what a team must BE, and these three only say "give me a
     # different one". All are off at 0. The two seeds ship off; REPEAT_BAND ships at
