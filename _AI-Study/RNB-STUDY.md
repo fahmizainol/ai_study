@@ -508,7 +508,107 @@ generator's attackers KO 0.51 a battle v a real attacker's 0.80 -- is about WHIC
 species and sets it picks (by BST closeness, theme and role, never by evidence that a
 set is strong), which set-level tweaks do not reach. The switches stay off.
 (The CLI baseline, 20.4% for the gyms, is below the committed Boss Studio gyms' 25.9%;
-arms must come from the same generation.)
+arms must come from the same generation. The non-gym teams went the other way, 27.5%
+committed v 35.9% regenerated: all 10 teams differ, and about half the pairings drew
+other bosses. The spread between two draws of the same generator is about 8 points.)
+
+**Every run, cut by archetype, tier and team traits** (`archetypes.py`, `tiers.py`,
+`team_profile.py`; 2026-09-24). All 11 battle runs pooled: 76 generator team-runs, the 78
+gen 7 and 80 gen 9 real teams. A team's battles are not independent, so every test is
+at TEAM level -- each team scored by wins minus what the same bosses gave up to §5's gen 9
+teams ("points" below), p from permuting the trait across teams. About a dozen tests
+were run; read p ~ 0.03 as soft.
+
+*Archetype.* The generator records none, so it is read off the team: wall/support sets
+per team (composition.py's classes), 0 hyper offense, 1 offense, 2-3 balance, 4+ stall.
+
+| points v the gen 9 baseline (win %) | hyper offense | offense | balance | stall |
+|---|--:|--:|--:|--:|
+| real teams (gen 7 + 9) | −7 (54%) | +1 (64%) | +1 (69%) | **+14 (79%)** |
+| generator teams | −30 (33%) | −37 (29%) | −38 (28%) | 1 team |
+
+- Against these bosses (84% attackers) defence pays for real teams: gen 7 stall won 35 of
+  40, +32 over the rest of gen 7 (p = 0.001; in gen 7 OU alone 26 of 30), gen 7 hyper
+  offense −22 (p = 0.025). Gen 9 shows none of it (stall +1, p = 0.96).
+- The generator almost never builds stall (1 of 76), and its gap is 30-40 points
+  inside EVERY archetype: its balance teams win 28%, real balance 69%. Archetype does
+  not explain it.
+- Weather, hazard removal and team speed separate nothing, for either side.
+
+*Species tier* (gen 7 Showdown tier, `SC.tier`, the generator's own; a mega as its
+forme). The generator fields 0.8 Uber/OU species a team (real gen 7: 3.0) and 34% of its
+slots are PU or below (13%). Each team fights the bosses nearest its mean BST, so the
+test that matters is at the same BST, by the slot's own BST:
+
+| slot BST | real gen 7: Uber+OU | generator: Uber+OU | real: PU and below | generator: PU and below |
+|---|--:|--:|--:|--:|
+| under 450 | 4% | 11% | 67% | 84% |
+| 450-500 | **60%** | **0%** | 15% | 42% |
+| 500-550 | 27% | 5% | 9% | 24% |
+| 550+ | 73% | 48% | 1% | 9% |
+
+At the same BST real players pick species that are strong for it (Toxapex, Ferrothorn at
+450-500); the generator, choosing by BST closeness, theme and role, lands on ZU species
+(45 of its 228 slots) and unevolved ones (18 NFE/LC, real 2). Its sets follow: 13 of the
+114 committed sets are Little Cup sets and 15 are PU sets. Smogon's tier is the evidence
+of strength the generator's picking never consults -- the "which species" of the
+ablation, measured directly. Within a pool it predicts less: real teams win as often
+with 0-1 Uber/OU species as with 4-6 (UU teams still field their tier's best), and
+generator teams with any PU-or-below species run 14 points under those without
+(p = 0.043, 38 teams).
+
+*boss7*, the one generator team that holds up: 28-20 over the four runs it appears in
+(5-7, 9-3, 7-5, 7-5; same core, one or two slots differ), −10 against the baseline where
+the other generator teams are −36. It swept both Vitos 3-0, Vito 2 being among the harder
+late bosses (5-3 against gen 9 teams).
+
+| per team | boss7 | other generator | real gen 7 | real gen 9 | r with result, generator team-runs |
+|---|--:|--:|--:|--:|---|
+| setup users | 1.0 | 1.8 | 0.6 | 1.7 | −0.43 (p < 0.001) |
+| Choice / Life Orb / Sash | 3.5 | 1.6 | 1.6 | 0.8 | +0.29 (p = 0.006) |
+| type boosters / gems | 0 | 1.1 | 0.1 | 0.3 | −0.20 (p = 0.08) |
+| PU-and-below species | 0.5 | 2.1 | 0.8 | 0.5* | −0.20 (p = 0.09) |
+| Uber + OU species | 1.5 | 0.8 | 3.0 | 2.0* | +0.11 |
+| types nobody resists | 2.0 | 5.0 | 1.5 | 1.2 | −0.16 |
+| wall/support sets | 0 | 1.1 | 1.9 | 1.8 | −0.16 |
+| mean Speed (Scarf ×1.5) | 100 | 81 | 85 | 81 | +0.08 |
+
+\* gen 7 tiers miss the gen 8-9 species, 2.7 of a gen 9 team's 6.
+
+Among generator teams, setup and offensive items track the result, but gen 9 rules both
+out as causes: real gen 9 teams carry as much setup (1.7) and the fewest offensive items
+(0.8) and still win 65%. Setup marks the generator's weak way of building (as SETUP_CAP
+changing nothing already said). What boss7 shares with real teams is the rest: strong
+species, no low-tier ones, no type boosters, real-team type coverage. Its lack of walls
+and its item load are its own style.
+
+*Teams with no wall/support set* make up for it with speed and momentum -- when they are
+real. Spread of the team's mean Speed (Scarf ×1.5):
+
+| | min | p25 | median | p75 | max | fastest mon, min | pivot users | Scarf users |
+|---|--:|--:|--:|--:|--:|--:|--:|--:|
+| generator, no walls (24) | **58** | 69 | 85 | 98 | 104 | **70** | 0.58 | 0.29 |
+| generator, 1+ walls (52) | 49 | 68 | 78 | 98 | 108 | 70 | 0.69 | 0.31 |
+| real gen 7, no walls (21) | **75** | 93 | 100 | 102 | 111 | **120** | 2.05 | 0.95 |
+| real gen 7, 1+ walls (57) | 49 | 65 | 80 | 91 | 113 | 61 | 1.16 | 0.35 |
+| real gen 9, no walls (23) | 58 | 81 | 94 | 107 | 116 | **110** | 1.52 | 0.52 |
+| real gen 9, 1+ walls (57) | 44 | 57 | 75 | 88 | 119 | 67 | 0.91 | 0.32 |
+
+Every real gen 7 no-wall team averages Speed 75+ and has a mon at 120+; they carry nearly
+twice the pivots of teams with walls, and gen 7's three times the Scarves. The
+generator's no-wall teams are no faster than its others and carry no extra pivots or
+Scarves: they are wall-less by accident (gym1: Joltik, Skorupi, Anorith, Kricketune,
+Vespiquen, Heracross; nothing over 85). Inside every pool the faster half of the no-wall
+teams does better -- generator −37 v −24, gen 7 −24 v −3, gen 9 −19 v +2 (small groups,
+untested). The slow extremes are partly by design: the slow gen 9 no-wall teams that won
+are Trick Room (Hatterene, Torkoal), and gym3 (Politoed, Gorebyss, Mantine), the least bad
+slow generator team, may be rain; base Speed misses both.
+
+So two concrete rules to test, in order: pick species by tier RELATIVE to BST (prefer
+species ranked above what their BST suggests, at the build, not as KEEP_MIN_BAND's
+after-the-fact filter), and check a wall-less team as hyper offense -- a 120+ top end,
+few slow mons unless it runs Trick Room or weather, pivots or a Scarf. boss7 passes the
+second already (Scarf Galvantula 162, Froslass and Latias 110).
 
 A first version drew replacements instead of swapping and favoured some sets: the
 sets it left out had KO'd 0.79 a battle in the intact run against 0.64 for the ones it
@@ -537,4 +637,8 @@ RNB_OUT=generated/rnb_vs_gen7 python3 tools/rnb/make_battle_teams.py 4 --gen7
 RNB_OUT=generated/rnb_vs_gen python3 tools/rnb/run_battles.py 4 3
 RNB_OUT=generated/rnb_vs_gen python3 tools/rnb/summarize_gen_battles.py [--uncontended]
 python3 tools/rnb/read_battles.py generated/rnb_vs_gen [--pool]   # needs logchallenges
+# archetype / tier / team-trait cuts over every run; composition.py needs the game's PBS
+REALIDEA_PBS=<game>/PBS python3 tools/rnb/archetypes.py
+REALIDEA_PBS=<game>/PBS python3 tools/rnb/tiers.py
+REALIDEA_PBS=<game>/PBS python3 tools/rnb/team_profile.py
 ```
