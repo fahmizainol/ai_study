@@ -1189,6 +1189,9 @@ class CrossFightVarietyTest(unittest.TestCase):
         perturbs every fight identically and rerolls who everyone's favourite is
         rather than that they share one."""
         self.addCleanup(setattr, self.G, "PICK_SEED", self.G.PICK_SEED)
+        # SHAPE_CHECK's rebuilds reroll on purpose; this is about the seed knob alone
+        self.addCleanup(setattr, self.G, "SHAPE_CHECK", self.G.SHAPE_CHECK)
+        self.G.SHAPE_CHECK = 0
         seeds = []
         real = self.G.assemble
         def spy(spec):
@@ -1486,6 +1489,9 @@ class ThemeFloorTest(unittest.TestCase):
 
     def test_no_theme_leaves_every_existing_caller_untouched(self):
         """free_team and generate_trainers call plan_for without a theme."""
+        # SETUP_CAP lowers the setup floor on purpose; this is about the theme alone
+        self.addCleanup(setattr, self.G, "SETUP_CAP", self.G.SETUP_CAP)
+        self.G.SETUP_CAP = None
         for arch in self.TS.ARCHETYPES:
             self.assertEqual(self.TS.role_plan(arch)["floor"],
                              self.G.plan_for(arch, False)[0])

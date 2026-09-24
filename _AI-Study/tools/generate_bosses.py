@@ -217,7 +217,8 @@ OFF_THEME_COVER = 1
 # .md §10). Only the unseeded, mode-less ranking changes -- a mode already buckets by
 # AFFINITY_BAND and ranks tier in its tail. Off until a battle run says it helps.
 TIER_BAND = 0
-# The rest of RNB-STUDY.md §10's proposals, each OFF, tested together as one arm.
+# The rest of RNB-STUDY.md §10's proposals, tested together as one arm (it lost 8
+# points); SHAPE_CHECK has since been switched on by choice, the others stay off.
 #   SET_TIER_MATCH  a species prefers a set written for its OWN tier (an OU mon's OU
 #                   set); a Little Cup set on a grown mon, or a monotype set, ranks last.
 #                   13 of the 114 committed sets were Little Cup sets.
@@ -237,7 +238,7 @@ TIER_BAND = 0
 #                   (MODE_OF_THEME). Ice is absent: this engine never reads Slush Rush.
 SET_TIER_MATCH = 0
 USAGE_BAND = 0
-SHAPE_CHECK = 0
+SHAPE_CHECK = 1   # on since 2026-09-25, by choice (tested only in the losing all-on arm)
 SHAPE_TRIES = 8
 ARCH_WALLS = {"hyper offense": (0, 0), "offense": (0, 1), "bulky offense": (1, 2),
               "balance": (2, 3), "stall": (4, 6)}
@@ -267,9 +268,10 @@ KEEP_DROP = 0
 #               holding Silver Powder. On, a defensive item or a wall/support set is
 #               swapped for Eviolite (if it can still evolve) or Sitrus Berry instead.
 #               The rule itself -- only items the player can get yet -- stays.
-SET_FIT = False
+# SET_FIT and SETUP_CAP 1 on since 2026-09-25, by choice (tested: no measurable effect).
+SET_FIT = True
 WALL_BULK = 0.55
-SETUP_CAP = None
+SETUP_CAP = 1
 ITEM_PURPOSE = False
 # Competence tests for the dev's OWN Pokemon, both OFF by default because a fangame
 # roster is a design choice before it is a competitive one -- a level-31 water gym is
