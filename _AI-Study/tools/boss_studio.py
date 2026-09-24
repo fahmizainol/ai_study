@@ -189,6 +189,10 @@ SCALARS = {
     "GYM_MODES": ("int", 0, 1, 1,
                   "1 gives a gym with no mode its type's weather: Water rain, Ground sand"),
     "UNLOCK_STAGE": ("int", 0, 9, 1, "badge from which megas and strong items unlock"),
+    "EARLY_ITEM_CAP": ("int", 0, 1, 1,
+                       "1 holds fights before UNLOCK_STAGE to the early item pool "
+                       "(berries, type boosters, Eviolite); 0 keeps published items. "
+                       "Mega stones stay off before the unlock either way"),
     "BP_CAP": ("int", 40, 150, 5, "early-game move-power ceiling"),
     "BP_CAP_UNTIL": ("int", 0, 9, 1, "badge at which that ceiling lifts"),
 }
@@ -201,7 +205,7 @@ SCALARS = {
 # two questions (which ladder; which sets a build may draw from) even though neither
 # is a range; the client renders those two itself and every other key as a slider.
 GROUPS = [
-    ("progression gates", ["level_mode", "UNLOCK_STAGE", "UBER_FROM", "LEGEND_FROM",
+    ("progression gates", ["level_mode", "UNLOCK_STAGE", "EARLY_ITEM_CAP", "UBER_FROM", "LEGEND_FROM",
                            "LEGEND_BST", "BP_CAP", "BP_CAP_UNTIL", "EARLY_MOVES",
                            "per_fight"]),
     ("team", ["TEAM_SIZE", "ON_THEME_MIN", "CHASE", "MIN_CORR", "SET_FORMATS",

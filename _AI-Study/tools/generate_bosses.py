@@ -152,6 +152,12 @@ LEGEND_MAX = 6
 # (Switch 234 is a separate temporary enable, toggled on and back off inside the
 # Battle Arena for its set-piece fights.)
 UNLOCK_STAGE = 3
+# 1 holds fights before UNLOCK_STAGE to the early item pool (berries, type boosters,
+# Eviolite, Berry Juice: what the player could have found). 0 lets them keep their
+# published items -- Leftovers, Life Orb, Choice -- from gym 1, gyms and trainers alike.
+# 0 since 2026-09-25, by choice. Mega stones stay banned before the unlock either way:
+# that is the engine's switch 512, not an item rule, and a dead stone costs its holder.
+EARLY_ITEM_CAP = 0
 # Early-game move-power ceiling. TM legality has NO level test -- tm.txt says which
 # species CAN learn a machine, never when -- so with nothing to stop it a level-19
 # Dwebble is handed Earthquake and a level-25 Wigglytuff Fire Blast.
@@ -273,10 +279,14 @@ ITEM_PURPOSE = False
 # every kept mon in gyms 1, 2, 3 and 7, which is not "drop the incompetent ones", it
 # is "replace the rosters". They are separate knobs for that reason.
 # Which published-set FORMATS a build may draw from -- SC.set_tier of a set's
-# provenance ("ou", "uu", "ubers", "monotype", ...). Empty means all 14, which is
-# today's behaviour. This filters the SET pool, not the species pool: it is a
-# different question from a tier ceiling, which asks what a species is ranked.
-SET_FORMATS = ()
+# provenance ("ou", "uu", "ubers", "monotype", ...). Empty means all 14. This filters
+# the SET pool, not the species pool: it is a different question from a tier ceiling,
+# which asks what a species is ranked.
+# Default since 2026-09-25, by choice: the standard ladders only. Out: pu, zu, lc (sets
+# for weak or unevolved mons), monotype and nationaldexmonotype (sets built around a
+# type, not the mon) -- about 3,600 of the 8,300 sets. Untested in battle.
+SET_FORMATS = ("ubers", "ou", "uu", "ru", "nu", "anythinggoes", "nationaldex",
+               "nationaldexag")
 # Formats this project never draws a set from, whatever is ticked. Battle Spot
 # Singles is a 3v3 flat-level bring-six ladder: its sets are built around a
 # best-of-three team preview and a 50-cap, which makes them Protect-heavy, short on
@@ -1762,7 +1772,7 @@ def assemble(spec):
     theme, mode = spec["theme"], spec["mode"]
     floors, caps, mega_ok = spec["floors"], spec["caps"], spec["mega_ok"]
     ceiling = bp_cap(stage)
-    allow = None if mega_ok else early_items()
+    allow = None if mega_ok or not EARLY_ITEM_CAP else early_items()
     banned = set() if mega_ok else set(MEGASTONE)
     # `mega_ok` answers "is this fight past the item unlock", and decides the item
     # pool and the stone ban together because for a gym they ARE the same question.
