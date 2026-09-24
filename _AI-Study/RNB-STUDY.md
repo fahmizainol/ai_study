@@ -657,6 +657,30 @@ since new teams drew partly different bosses. On the 93 battles the arms share
   the theme result as "likely helps" rather than a measured size. The theme rules stay
   on; ship them by setting the Studio preset's ON_THEME_MIN to 5 and regenerating.
 
+**The rest of the proposals, all on at once, make things worse** (2026-09-25, same
+machine and settings, 348 battles, 0 errors). Four new switches in `generate_bosses.py`,
+all off by default: SET_TIER_MATCH (a species prefers a set from its own tier; Little
+Cup and monotype sets last), USAGE_BAND 30 (inside 30 eBST, prefer the higher Smogon
+viability ceiling), SHAPE_CHECK (rebuild on fresh seeds, up to 8 tries, until the wall
+count fits the archetype and a wall-less team has a fast top end, few slow mons and a
+pivot or Scarf) and GYM_MODES (Water gets rain, Ground sand). The swap of type boosters
+for offensive items was dropped: before the unlock the pool holds no offensive item.
+They did what they say -- gym sets from their own tier 19 -> 34 of 54, Little Cup and
+monotype sets 27 -> 9 across gyms and trainers, every gym passing the shape check (5
+rebuilt), rain on gym 3, sand on gym 6 -- and lost:
+
+| on top of the theme rules | theme rules | all four on | difference, 95% CI |
+|---|--:|--:|---|
+| gyms (`rnb_vs_gen_all`) | 32/108 | 23/108 | −8.3 [−15.9, +0.1] |
+| trainers (`rnb_vs_gen_trainers_all`, baseline `_trainers_theme`) | 44/120 | 35/120 | −3.3 [−16.4, +9.3] |
+
+Shared pairings: gyms 16 lost v 7 gained (p = 0.09), trainers 17 v 10 (p = 0.25). The
+gyms fall back to the old rules' level; the losses sit on gym 6 (sand, 5-7 -> 2-10), gym
+7 (rebuilt, 5-7 -> 2-10) and gym 1. One arm cannot say which switch cost it; all four
+stay off. What this batch adds to the picture: making the generator's teams LOOK like
+real teams -- own-tier sets, archetype-shaped, weather-built -- does not make them play
+like them.
+
 A first version drew replacements instead of swapping and favoured some sets: the
 sets it left out had KO'd 0.79 a battle in the intact run against 0.64 for the ones it
 used, which would have made collages look weak for the wrong reason.

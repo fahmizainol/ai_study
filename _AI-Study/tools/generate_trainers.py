@@ -208,6 +208,13 @@ def fight_band(battle):
 
 
 def make_trainer(battle, plan=None, seen=None):
+    """_make_trainer under G.SHAPE_CHECK (a no-op wrapper while it is off)."""
+    archetype, mode = plan if plan else G.plan_of(fight_id(battle))
+    return G.shape_checked(fight_id(battle), lambda: _make_trainer(battle, plan, seen),
+                           archetype, mode)
+
+
+def _make_trainer(battle, plan=None, seen=None):
     band = fight_band(battle)
     if band is None:
         return None

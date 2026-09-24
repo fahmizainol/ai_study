@@ -176,6 +176,18 @@ SCALARS = {
                   "the species that is strong for its BST rather than the one "
                   "nearest the number. It cannot reach below the band: gym 8's "
                   "Chansey (450) stays out of a 597 target. Untested in battle"),
+    "SET_TIER_MATCH": ("int", 0, 1, 1,
+                       "1 makes a species prefer a set written for its OWN tier; a "
+                       "Little Cup set on a grown mon or a monotype set ranks last"),
+    "USAGE_BAND": ("int", 0, 80, 10,
+                   "0 is off. Otherwise bodies within this many eBST of the ideal are "
+                   "ranked by Smogon viability ceiling before exact distance"),
+    "SHAPE_CHECK": ("int", 0, 1, 1,
+                    "1 rebuilds a fight (fresh seeds, up to 8 tries) until its wall count "
+                    "fits its archetype and, with no walls, it looks like hyper offense: "
+                    "a fast top end, few slow mons, a pivot or a Scarf"),
+    "GYM_MODES": ("int", 0, 1, 1,
+                  "1 gives a gym with no mode its type's weather: Water rain, Ground sand"),
     "UNLOCK_STAGE": ("int", 0, 9, 1, "badge from which megas and strong items unlock"),
     "BP_CAP": ("int", 40, 150, 5, "early-game move-power ceiling"),
     "BP_CAP_UNTIL": ("int", 0, 9, 1, "badge at which that ceiling lifts"),
@@ -199,7 +211,8 @@ GROUPS = [
     # (COVER_BAND, HOLE_MIN_WEAK); offence is a gate, because every real team simply
     # has it and a term competing with the curve would lose.
     ("coverage", ["COVER_BAND", "HOLE_MIN_WEAK", "THREAT_COVER", "OFF_THEME_COVER",
-                  "TIER_BAND"]),
+                  "TIER_BAND", "USAGE_BAND", "SET_TIER_MATCH", "SHAPE_CHECK",
+                  "GYM_MODES"]),
     # A third question, and the reason these are not filed under "team": every other
     # knob here says what a team must BE, and these three only say "give me a
     # different one". All are off at 0. The two seeds ship off; REPEAT_BAND ships at

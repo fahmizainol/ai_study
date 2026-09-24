@@ -211,6 +211,34 @@ OFF_THEME_COVER = 1
 # .md §10). Only the unseeded, mode-less ranking changes -- a mode already buckets by
 # AFFINITY_BAND and ranks tier in its tail. Off until a battle run says it helps.
 TIER_BAND = 0
+# The rest of RNB-STUDY.md §10's proposals, each OFF, tested together as one arm.
+#   SET_TIER_MATCH  a species prefers a set written for its OWN tier (an OU mon's OU
+#                   set); a Little Cup set on a grown mon, or a monotype set, ranks last.
+#                   13 of the 114 committed sets were Little Cup sets.
+#   USAGE_BAND      0 off; else inside this many eBST of the ideal, prefer the species
+#                   with the higher Smogon viability ceiling (the GXE of its best users,
+#                   max over the gen 7 tiers) -- a finer read of "strong for its BST"
+#                   than the tier letter TIER_BAND ranked by, which tested flat.
+#   SHAPE_CHECK     after a fight is built, check its shape and rebuild on fresh pick and
+#                   set seeds (up to SHAPE_TRIES) until it passes, keeping the best: the
+#                   wall count must sit in the archetype's range (ARCH_WALLS; 5 of the 9
+#                   committed gyms came out another archetype than they asked for), and a
+#                   team with NO wall must look like hyper offense -- a top end near
+#                   HO_TOP, at most one mon under HO_SLOW unless a mode is set, and a
+#                   pivot or a Choice Scarf. Real no-wall teams all do; the generator's
+#                   were wall-less by accident.
+#   GYM_MODES       a gym with no mode of its own takes its type's weather
+#                   (MODE_OF_THEME). Ice is absent: this engine never reads Slush Rush.
+SET_TIER_MATCH = 0
+USAGE_BAND = 0
+SHAPE_CHECK = 0
+SHAPE_TRIES = 8
+ARCH_WALLS = {"hyper offense": (0, 0), "offense": (0, 1), "bulky offense": (1, 2),
+              "balance": (2, 3), "stall": (4, 6)}
+HO_TOP = 120
+HO_SLOW = 60
+GYM_MODES = 0
+MODE_OF_THEME = {"WATER": "rain", "GROUND": "sand"}
 # How many of the dev's own Pokemon a fight may SPEND to cover a floor nothing else
 # can reach. 0 is the shipped behaviour: every original that fits the band is kept and
 # a floor no remaining body covers is simply reported missed. Raising it trades the
@@ -1029,6 +1057,79 @@ def usable_sets(species, level, banned=frozenset(), cap=None, mode=None,
     return out
 
 
+_OWN_FORMAT = {"Uber": "ubers", "OU": "ou", "UU": "uu", "RU": "ru", "NU": "nu", "low": "pu"}
+
+
+def set_tier_fit(species, fmt, is_lc):
+    """2: a set written for this species' own tier; 1: another ladder; 0: a Little Cup
+    set on a mon past Little Cup levels, or a monotype set (built around a type, not
+    around the mon)."""
+    t = SC.set_tier(fmt)
+    if t == "monotype" or (t.endswith("lc") and not is_lc):
+        return 0
+    return 2 if t == _OWN_FORMAT.get(SC.band(species)) else 1
+
+
+@functools.lru_cache(maxsize=None)
+def viability(species):
+    """Smogon's viability ceiling for the species, max over the gen 7 tiers; 0 unlisted."""
+    return max((e.get("viability") or 0
+                for e in SC.usage().get(SC.norm(species), {}).values()), default=0)
+
+
+def shape_miss(team, archetype, mode):
+    """How many of SHAPE_CHECK's tests a built team fails (0 = passes)."""
+    real = [m for m in team if not is_dynamic(m["species"]) and m["species"] in _sp]
+    if not real:
+        return 0
+    walls = sum(wall_set(m["moves"], m.get("item")) for m in real)
+    lo, hi = ARCH_WALLS.get(archetype, (0, 6))
+    miss = max(0, lo - walls, walls - hi)
+    if walls == 0:
+        spe = [_sp[m["species"]]["base_stats"][3] * (1.5 if m.get("item") == "CHOICESCARF" else 1)
+               for m in real]
+        mean_bst = sum(bst(m["species"]) for m in real) / len(real)
+        # the 120 bar is an L100 real-team fact at ~530 BST; an early low-BST team is
+        # held to the same share of its BST instead
+        miss += max(spe) < min(HO_TOP, 0.22 * mean_bst)
+        miss += not mode and sum(s < HO_SLOW for s in spe) > 1
+        miss += not any("pivot" in m["roles"] or m.get("item") == "CHOICESCARF" for m in real)
+    return miss
+
+
+def shape_checked(fight, make, archetype, mode):
+    """make() under SHAPE_CHECK: rebuild on fresh reroll salts until the shape passes.
+
+    The retries go through REROLL, the same per-fight salt a Studio reroll uses, so they
+    are reproducible, and it is restored after. Try 0 is the unsalted build, so a team
+    that already passes is exactly what it was without the check."""
+    if not SHAPE_CHECK:
+        return make()
+    was, best = REROLL.get(fight), None
+    try:
+        for k in range(SHAPE_TRIES):
+            if k:
+                REROLL[fight] = (was or 0) + 1000 + k
+            r = make()
+            if r is None:
+                return r
+            miss = shape_miss(r["team"], archetype, mode)
+            if best is None or miss < best[0]:
+                best = (miss, k, r)
+            if not miss:
+                break
+    finally:
+        if was is None:
+            REROLL.pop(fight, None)
+        else:
+            REROLL[fight] = was
+    miss, k, r = best
+    if k or miss:
+        r["notes"].append(f"shape check: kept rebuild {k} of {SHAPE_TRIES}, "
+                          f"{miss} test(s) still failing")
+    return r
+
+
 def build(species, level, banned_items=(), want=None, avoid=(), allow_items=None,
           cap=None, mode=None, offence=None, offence_hist=None, seed=None, only=None,
           formats=None, early=False):
@@ -1115,7 +1216,9 @@ def build(species, level, banned_items=(), want=None, avoid=(), allow_items=None
         # role the plan asked for.
         misfit = bool(SET_FIT and wall_set([SC.norm(x) for x in st["moves"]], item)
                       and not bulky(species))
-        cands.append(((-len(r & set(avoid)), bool(want and want in r), -misfit, fit,
+        # SET_TIER_MATCH: below `want` and the misfit term, above the archetype fit
+        tier_fit = set_tier_fit(species, fmt, is_lc) if SET_TIER_MATCH else 0
+        cands.append(((-len(r & set(avoid)), bool(want and want in r), -misfit, tier_fit, fit,
                        TS.affinity(mode, sp["types"], [ability],
                                    sp["base_stats"][3], ok, r),
                        legal,
@@ -1833,6 +1936,8 @@ def assemble(spec):
                     # coverage still first inside the band: it is a gate on holes,
                     # tier is a preference among the bodies that pass it
                     return (gap // TIER_BAND, covers, SC.rank(n), gap) + tail(n)
+                if USAGE_BAND:
+                    return (gap // USAGE_BAND, covers, -viability(n), gap) + tail(n)
                 return ((gap // COVER_BAND, covers) if COVER_BAND
                         else (gap,)) + tail(n)
             # Seeded: the noise goes INSIDE the band and the jitter goes ABOVE the
@@ -2481,7 +2586,18 @@ def claim(seen, team):
     return seen
 
 
+def gym_mode(idx):
+    """MODE[idx], or under GYM_MODES the theme's weather when the fight has none."""
+    return MODE[idx] or (MODE_OF_THEME.get(THEME[CAPS[idx]["trainer"]]) if GYM_MODES else None)
+
+
 def make_gym(idx, seen=None):
+    """_make_gym under SHAPE_CHECK (a no-op wrapper while it is off)."""
+    return shape_checked(gym_id(idx), lambda: _make_gym(idx, seen), ARCHETYPE[idx],
+                         gym_mode(idx))
+
+
+def _make_gym(idx, seen=None):
     """Build one gym team. idx is the badge count (0 = gym 1, 8 = Champion).
 
     ARCHETYPE[idx] and MODE[idx] are read HERE rather than captured at import, so a
@@ -2497,7 +2613,7 @@ def make_gym(idx, seen=None):
     theme = THEME[leader]
     level = remap(cap["cap"])
     target = TARGET[idx]
-    mode = MODE[idx]
+    mode = gym_mode(idx)
     # Before UNLOCK_STAGE a boss carries only what an early player could hold, and
     # no mega at all: an unusable stone costs its holder a real item AND credits the
     # team 100 eBST it never receives (that alone had gyms 1-5 ~16 BST under target).
