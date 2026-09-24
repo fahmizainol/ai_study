@@ -16,6 +16,9 @@ the item is a Z-crystal (Realidea has no Z-move engine); then the generator's st
 slot with no published source (a Studio custom set, a "generated" fallback) keeps the
 generator's set.
 
+--from DIR --name NAME exports a generator run written elsewhere (tools/rnb/gen_fixes.py
+writes DIR/gyms.json and DIR/trainers.json) to generated/rnb_vs_gen[_trainers]_NAME/.
+
 --trainers exports the non-gym fights instead (teams_trainers.json -> generated/
 rnb_vs_gen_trainers/). A rival team holding an engine-filled starter slot (`owenpoke2`
 and friends: a Realidea fakemon Showdown does not know, with no moveset) is skipped --
@@ -94,9 +97,9 @@ def fights(trainers):
     """(anonymous id, team) for every playable fight in the chosen file."""
     if not trainers:
         # "gym3_<CLASS>_<Name>" -> "gym3"
-        return [(g["id"].split("_", 1)[0], g) for g in json.load(open(GYMS))]
+        return [(g["id"].split("_", 1)[0], g) for g in json.load(open(GYMS, encoding="utf-8"))]
     out, n = [], collections.Counter()
-    for t in json.load(open(TRAINERS)):
+    for t in json.load(open(TRAINERS, encoding="utf-8")):
         if any(m["species"].islower() for m in t["mons"]):   # engine-filled starter slot
             continue
         kind = t["id"].split("_", 1)[0]                      # "boss" / "rival"
@@ -110,11 +113,20 @@ def main():
     k = int(args[0]) if args else 4
     trainers = "--trainers" in sys.argv
     pub = "--published" in sys.argv
-    OUT = os.path.join(STUDY, "generated", ("rnb_vs_gen_trainers" if trainers else "rnb_vs_gen")
-                       + ("_published" if pub else ""))
+    base = "rnb_vs_gen_trainers" if trainers else "rnb_vs_gen"
+    if "--from" in sys.argv:
+        # a generator run written elsewhere (gen_fixes.py): DIR/gyms.json, DIR/trainers.json,
+        # exported to generated/<base>_<NAME>
+        global GYMS, TRAINERS
+        src, name = sys.argv[sys.argv.index("--from") + 1], sys.argv[sys.argv.index("--name") + 1]
+        args = [a for a in args if a not in (src, name)]
+        k = int(args[0]) if args else 4
+        GYMS, TRAINERS = os.path.join(src, "gyms.json"), os.path.join(src, "trainers.json")
+        base += "_" + name
+    OUT = os.path.join(STUDY, "generated", base + ("_published" if pub else ""))
     used = collections.Counter()
     dex = pokedex()
-    sd = json.load(open(SHOWDOWN_DEX))["gen9"]
+    sd = json.load(open(SHOWDOWN_DEX, encoding="utf-8"))["gen9"]
     abilities = {tid(a): a for e in dex.values() for a in e.get("abilities", {}).values()}
 
     def name(table, internal, what):
@@ -154,13 +166,13 @@ def main():
             e = ex.entry(m["species"])
             e = ex.mega.get((tid(e.get("baseSpecies", e["name"])), item), e)
             bst += sum(e["baseStats"].values())
-        with open(os.path.join(tdir["gen"], gid), "w") as fh:
+        with open(os.path.join(tdir["gen"], gid), "w", encoding="utf-8", newline="\n") as fh:
             fh.write(ex.export(mons))
         gyms.append({"id": gid, "bst": bst / len(mons)})
 
     # the Run & Bun bosses and their BSTs, exactly as the Smogon run paired them
     bosses = {}
-    for p in json.load(open(os.path.join(RNB, "pairs.json"))):
+    for p in json.load(open(os.path.join(RNB, "pairs.json"), encoding="utf-8")):
         if not p["boss"].startswith(EXCLUDED):
             bosses.setdefault(p["boss"], p)
     pairs = []
@@ -170,7 +182,7 @@ def main():
             pairs.append({"boss": b["boss"], "boss_name": b["boss_name"], "cap": b["cap"],
                           "boss_bst": b["boss_bst"], "opp": g["id"], "opp_side": "gen",
                           "opp_bst": round(g["bst"])})
-    with open(os.path.join(OUT, "pairs.json"), "w") as fh:
+    with open(os.path.join(OUT, "pairs.json"), "w", encoding="utf-8", newline="\n") as fh:
         json.dump(pairs, fh, indent=1)
     for p in pairs:
         print("%-6s %4d  vs  %-40s %4d" % (p["opp"], p["opp_bst"], p["boss"], p["boss_bst"]))

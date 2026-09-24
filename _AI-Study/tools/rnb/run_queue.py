@@ -7,7 +7,10 @@ plays every battle without a clean result (run_battles.py skips the clean ones),
 second pass for anything that errored. A battle cut off by a shutdown has no clean
 record, so it is simply played again.
 
-    python tools/rnb/run_queue.py rnb_vs_gen7_injected [more experiments...]
+    python tools/rnb/run_queue.py [--rounds N] rnb_vs_gen7_injected [more experiments...]
+
+--rounds fixes the round count for every experiment listed (default: what each has
+already been played with, or 2 for a fresh one).
 
 Experiments are folders under generated/. Run with WINDOWS Python (see setup_battles.py).
 4 workers: every published number was played at that search depth.
@@ -59,13 +62,19 @@ def rounds_of(exp):
 
 
 def main():
-    exps = sys.argv[1:]
+    args = sys.argv[1:]
+    fixed = None
+    if "--rounds" in args:
+        i = args.index("--rounds")
+        fixed = args[i + 1]
+        del args[i:i + 2]
+    exps = args
     if not exps:
         sys.exit(__doc__)
     ensure_server()
     for exp in exps:
         env = dict(os.environ, RNB_OUT=os.path.join(STUDY, "generated", exp), RNB_WORK=WORK)
-        rounds = rounds_of(exp)
+        rounds = fixed or rounds_of(exp)
         for attempt in (1, 2):
             print("== %s: pass %d, %s rounds" % (exp, attempt, rounds), flush=True)
             subprocess.run([sys.executable, "-u", os.path.join(HERE, "run_battles.py"), WORKERS, rounds],

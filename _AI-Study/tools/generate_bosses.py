@@ -192,6 +192,26 @@ MIN_CORR = 25.0
 # least useful kept mon for one that does the job -- see assemble() step 5 for the two
 # things it will never trade away, neither of which is a setting.
 KEEP_DROP = 0
+# Set-level fixes from the Run & Bun battle study (RNB-STUDY.md section 10), all OFF by
+# default so a clean checkout still reproduces the shipped teams byte for byte. Swapping
+# generator sets into real Smogon teams cost them ~5 points a set; the logs said why:
+#   SET_FIT     the generator's walls are OFFENSIVE species in wall sets (bulk 287 v a
+#               real wall's 311, offence 100 v 80) and faint 60% v 32%. On, build()
+#               ranks a wall/support set below a species' attacking sets unless the
+#               species is bulky: HP+Def+SpD >= WALL_BULK of its BST.
+#   SETUP_CAP   27 of 78 generator attackers carry a setup move (real 8 of 74), and
+#               setup is used in a third of battles; every generator team has one, 44%
+#               of real teams do. On (an int), no team carries more than that many
+#               setup users -- floors included.
+#   ITEM_PURPOSE the early-item rule (gyms before UNLOCK_STAGE) swaps an unobtainable item
+#               for the type boost of the strongest STAB, so a Leftovers wall walks in
+#               holding Silver Powder. On, a defensive item or a wall/support set is
+#               swapped for Eviolite (if it can still evolve) or Sitrus Berry instead.
+#               The rule itself -- only items the player can get yet -- stays.
+SET_FIT = False
+WALL_BULK = 0.55
+SETUP_CAP = None
+ITEM_PURPOSE = False
 # Competence tests for the dev's OWN Pokemon, both OFF by default because a fangame
 # roster is a design choice before it is a competitive one -- a level-31 water gym is
 # SUPPOSED to be low tier. Measured across the nine gyms: the published-set test drops
@@ -433,6 +453,12 @@ def plan_for(archetype, mega_ok, mode=None, theme=None):
         floor["mega"] = 1
     caps = {r: min(cap.get(r, 99), ROLE_CAP.get(r, 99))
             for r in set(cap) | set(ROLE_CAP)}
+    if SETUP_CAP is not None:
+        # a cap on setup users, floors included: a themed floor of 2 would otherwise
+        # lift it straight back by the max() below
+        caps["setup"] = min(caps.get("setup", 99), SETUP_CAP)
+        if "setup" in floor:
+            floor["setup"] = min(floor["setup"], SETUP_CAP)
     if mode:
         mp = TS.mode_plan(mode)
         floor.update(mp["floor"])
@@ -844,11 +870,38 @@ def family(name):
 _EV_ORDER = {"hp": 0, "atk": 1, "def": 2, "spe": 3, "spa": 4, "spd": 5}
 
 
-def substitute_item(species, moves, pool):
+DEFENSIVE_ITEMS = {"LEFTOVERS", "BLACKSLUDGE", "ROCKYHELMET", "ASSAULTVEST", "EVIOLITE"}
+
+
+def wall_set(moves, item=None):
+    """A wall/support set: at most one damaging move, or at most two on a defensive item
+    with a recovery move. The line RNB-STUDY.md §10's composition tables draw
+    (tools/rnb/composition.kind), which is what the walls-faint-60% finding measured."""
+    attacks = sum(_mv.get(m, {}).get("power", 0) > 0 for m in moves)
+    recovers = any(m in TS.ROLE_MOVES["recovery"] for m in moves)
+    return attacks <= 1 or (item in DEFENSIVE_ITEMS and recovers and attacks <= 2)
+
+
+def bulky(species):
+    """HP+Def+SpD share of BST at or over WALL_BULK. base_stats are in Essentials order
+    (HP, Atk, Def, Spe, SpA, SpD)."""
+    b = _sp[species]["base_stats"]
+    return (b[0] + b[2] + b[5]) / sum(b) >= WALL_BULK
+
+
+def substitute_item(species, moves, pool, was=None):
     """An in-pool stand-in for a held item the early game cannot supply.
 
     Prefers the type-boost item matching the mon's strongest STAB, so a Life Orb
-    attacker keeps being an attacker; falls back to a Sitrus Berry."""
+    attacker keeps being an attacker; falls back to a Sitrus Berry. With ITEM_PURPOSE a
+    defensive item (`was`) or a wall/support set gets a defensive stand-in instead --
+    Eviolite on something that can still evolve, else Sitrus Berry -- so a Leftovers
+    wall does not become a Silver Powder attacker."""
+    if ITEM_PURPOSE and (was in DEFENSIVE_ITEMS or wall_set(moves, was)):
+        if _sp[species]["evolutions"] and "EVIOLITE" in pool:
+            return "EVIOLITE"
+        if "SITRUSBERRY" in pool:
+            return "SITRUSBERRY"
     types = _sp[species]["types"]
     stab = [m for m in moves
             if _mv.get(m, {}).get("power", 0) > 0 and _mv[m]["type"] in types]
@@ -1030,7 +1083,14 @@ def build(species, level, banned_items=(), want=None, avoid=(), allow_items=None
                 miss += rng.uniform(0, OFFENCE_BAND)
             fit = -(int(miss) // OFFENCE_BAND)
         jitter = 0 if rng is None else rng.random()
-        cands.append(((-len(r & set(avoid)), bool(want and want in r), fit,
+        # SET_FIT: a wall/support set on a species built to attack is the generator's
+        # most expensive habit (its walls faint 60% v a real wall's 32%). Read off the
+        # PUBLISHED moves, not `ok`: a set that lost attacks to the power ceiling is
+        # still the attacking set it was written as. Below `want`, so it never costs a
+        # role the plan asked for.
+        misfit = bool(SET_FIT and wall_set([SC.norm(x) for x in st["moves"]], item)
+                      and not bulky(species))
+        cands.append(((-len(r & set(avoid)), bool(want and want in r), -misfit, fit,
                        TS.affinity(mode, sp["types"], [ability],
                                    sp["base_stats"][3], ok, r),
                        legal,
@@ -1089,12 +1149,13 @@ def build(species, level, banned_items=(), want=None, avoid=(), allow_items=None
         if _mv[pick]["power"] > 0:
             covered.add(_mv[pick]["type"])
 
+    published_item = item
     if item not in _items:
         item = None
     if item == "EVIOLITE" and not s["evolutions"]:
         item = None                            # nothing left to evolve into
     if allow_items is not None and item not in allow_items:
-        item = substitute_item(species, moves, allow_items)
+        item = substitute_item(species, moves, allow_items, published_item)
 
     ev = [0] * 6
     for k, v in (st.get("evs") or {}).items():
