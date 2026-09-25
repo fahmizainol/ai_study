@@ -1143,15 +1143,20 @@ def shape_miss(team, archetype, mode):
     return miss
 
 
-def shape_checked(fight, make, archetype, mode):
+def shape_checked(fight, make, archetype, mode, patience=None):
     """make() under SHAPE_CHECK: rebuild on fresh reroll salts until the shape passes.
 
     The retries go through REROLL, the same per-fight salt a Studio reroll uses, so they
     are reproducible, and it is restored after. Try 0 is the unsalted build, so a team
-    that already passes is exactly what it was without the check."""
+    that already passes is exactly what it was without the check.
+
+    `patience` stops after that many rebuilds in a row that do no better than the best
+    so far. Measured on the 27 fights: every trainer that failed, failed identically all
+    8 times (its missing wall has no body in its band), while three gyms improved at the
+    4th, 6th and 8th try -- so trainers get patience and gyms do not."""
     if not SHAPE_CHECK:
         return make()
-    was, best = REROLL.get(fight), None
+    was, best, stale = REROLL.get(fight), None, 0
     try:
         for k in range(SHAPE_TRIES):
             if k:
@@ -1161,8 +1166,10 @@ def shape_checked(fight, make, archetype, mode):
                 return r
             miss = shape_miss(r["team"], archetype, mode)
             if best is None or miss < best[0]:
-                best = (miss, k, r)
-            if not miss:
+                best, stale = (miss, k, r), 0
+            else:
+                stale += 1
+            if not miss or (patience is not None and stale >= patience):
                 break
     finally:
         if was is None:

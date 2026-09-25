@@ -712,6 +712,14 @@ back and more, on teams 36 eBST lighter -- the stall finding again, from the oth
 Trainers did not move (theme 44/120, choices 38, walls 43): with three to five of their
 own mons kept, only 4 of 18 reach two walls. WALL_MIN 2 and REMOVAL_MIN 1 are now on.
 
+**Search depth, on the real teams** (`rnb_vs_gen7_25ms`, 2026-09-25): the same 80 gen 7
+pairings, 2 rounds, at 25 ms search on the Linux machine against the 500 ms Windows run.
+Real teams win 93/156 (59.6%) against 106/156 (67.9%); on the 158 shared battles 35 lost
+v 22 gained (p = 0.11). Shallower search pulls the stronger side toward a coin flip, so
+the bots at 25 ms blur team strength -- about 8 points here, not significant. A battle
+takes ~20 s (160 in ~15 min at 4 workers). 100 ms, used for the rule tests above, sits
+between: ~25k iterations a search against ~88-123k at 500 ms.
+
 A first version drew replacements instead of swapping and favoured some sets: the
 sets it left out had KO'd 0.79 a battle in the intact run against 0.64 for the ones it
 used, which would have made collages look weak for the wrong reason.
