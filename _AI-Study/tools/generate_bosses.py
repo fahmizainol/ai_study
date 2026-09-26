@@ -264,6 +264,36 @@ GYM_MODES = 0
 WALL_MIN = 2
 REMOVAL_MIN = 1
 WALL_SLACK = 100
+# 1 holds generated picks above the fight's band floor (target - SPREAD/2). 0 lets any
+# eligible species in; deficit() still steers the running mean onto target, so a light
+# pick is paid for by the slots after it. 0 since 2026-09-26: the floor was what kept
+# Chansey, Ferrothorn and Skarmory out of every late fight. Kept originals keep their
+# own band test (keep_band).
+PICK_FLOOR = 0
+# 1 keeps generated picks out of the "low" tier band (PU, ZU, NFE, LC by gen 7's tiers);
+# kept originals are untouched. Since 2026-09-27, by choice. A theme whose legal pool
+# is all low tier (Bug at level 20) falls back to the low band rather than walk in short.
+PICK_NO_LOW = 1
+# What a real gen 7 attacker is (RNB-STUDY.md §10, 237 attacker slots): a Choice item,
+# Life Orb, Assault Vest or a mega stone on 70% of them (Leftovers 7%), U-turn or Volt
+# Switch on a third, and either a strong attacking stat at speed or the bulk to stay in
+# with four attacks. The generator's attackers were slow, frail low-tier species on
+# Leftovers, and its KOs split on exactly those stats (best attack 120+: 0.97 a battle,
+# under 100: 0.38). All on since 2026-09-27, by choice.
+#   ATTACKER_SHAPE  inside the coverage band, a body with a best attacking stat under
+#                   ATTACKER_OFF and HP+Def+SpD under ATTACKER_BULK ranks after the rest
+#   ATTACKER_ITEM   an attacking set holding a Choice item, Life Orb, Expert Belt,
+#                   Assault Vest or a mega stone ranks above one on Leftovers or a Sash
+#   PIVOT_MIN       chase this many U-turn / Volt Switch users per fight
+#   KEPT_ANY_FORMAT a dev's own Pokemon may take a set from any format (PU, LC,
+#                   monotype included): its species is not up for debate, so the best
+#                   published set for it beats learnset filler
+ATTACKER_SHAPE = 1
+ATTACKER_OFF = 105
+ATTACKER_BULK = 265
+ATTACKER_ITEM = 1
+PIVOT_MIN = 1
+KEPT_ANY_FORMAT = 1
 MODE_OF_THEME = {"WATER": "rain", "GROUND": "sand"}
 # How many of the dev's own Pokemon a fight may SPEND to cover a floor nothing else
 # can reach. 0 is the shipped behaviour: every original that fits the band is kept and
@@ -306,8 +336,9 @@ ITEM_PURPOSE = False
 # Default since 2026-09-25, by choice: the standard ladders only. Out: pu, zu, lc (sets
 # for weak or unevolved mons), monotype and nationaldexmonotype (sets built around a
 # type, not the mon) -- about 3,600 of the 8,300 sets. Untested in battle.
-SET_FORMATS = ("ubers", "ou", "uu", "ru", "nu", "anythinggoes", "nationaldex",
-               "nationaldexag")
+# Back to every format since 2026-09-26: the ladders-only pool left 9 of 54 gym slots on
+# learnset filler, and those slots scored 0 KOs (RNB-STUDY.md §10).
+SET_FORMATS = ()
 # Formats this project never draws a set from, whatever is ticked. Battle Spot
 # Singles is a 3v3 flat-level bring-six ladder: its sets are built around a
 # best-of-three team preview and a 50-cap, which makes them Protect-heavy, short on
@@ -318,7 +349,12 @@ SET_FORMATS = ("ubers", "ou", "uu", "ru", "nu", "anythinggoes", "nationaldex",
 # Subtracted from the tick list rather than hidden from the UI alone: "none ticked"
 # means "all formats", so removing it from the offered boxes would leave the default
 # still drawing from it.
-SET_FORMATS_OFF = ("battlespotsingles",)
+# Since 2026-09-27, by choice, also out: the monotype formats (a monotype set is built
+# around a type's needs, not the mon's) and PU, ZU and Little Cup (sets for weak or
+# unevolved mons). That leaves the standard ladders, AG and National Dex. With
+# EARLY_MOVES on a mon keeps its OU/UU set at any level, so this costs fewer slots than
+# the ladders-only pool did with the level gate (9 of 54 learnset-written then).
+SET_FORMATS_OFF = ("battlespotsingles", "monotype", "nationaldexmonotype", "pu", "zu", "lc")
 
 
 def set_formats():
@@ -335,7 +371,7 @@ def set_formats():
 # 1 keeps the learnset LEVEL gate: a published move the species has not reached yet is
 # dropped and the slot topped up from filler. 0 lets the set keep it. The species gate
 # is not optional either way -- a mon that can never learn a move never gets it.
-EARLY_MOVES = 0
+EARLY_MOVES = 1   # 1 since 2026-09-26: a set keeps a move the mon has not reached yet
 # Reroll seeds. 0 is off on both, and off is today's behaviour byte-for-byte.
 #
 # They are two knobs because they reroll two different decisions and one of them is
@@ -387,7 +423,7 @@ def salts(fight):
 # A penalty rather than a reroll on purpose: it keeps the tail's vote, so the second
 # fight gets the second-BEST body for the role instead of a random one. 0 restores
 # the one-fight-at-a-time behaviour every shipped team before this was built with.
-REPEAT_BAND = 1
+REPEAT_BAND = 3   # 3 since 2026-09-27: with the pool above PU thin, 1 left Starmie on 6 fights
 # Per-fight overrides a person made on a Builder card, keyed by fight:
 #   {"keep": {SPECIES: bool}, "sets": {SPECIES: [label, ...]}}
 # `keep` is a TRISTATE by omission -- absent means "whatever this fight does by
@@ -401,7 +437,23 @@ def picks_for(key):
     got = PICKS.get(key) or {}
     return got.get("keep") or {}, got.get("sets") or {}
 
-KEEP_NEED_SET = 0   # 1 = drop a kept original with no published set usable at its level
+KEEP_NEED_SET = 1   # 1 = drop a kept original with no published set usable at its level (on since 2026-09-26)
+# Keep-or-replace a dev's own Pokemon on how it PLAYED, not its tier. The table is what
+# the battle logs say each kept mon did on its own fight (tools/rnb/core_strength.py
+# --write -> generated/core_strength.json): KOs and damage dealt per battle, how often
+# it fainted, turns on the field, over every arm it was played in. Tier misjudged this
+# badly -- Electrode (ZU) 0.88 KO a battle, Mega Houndoom (PUBL) 0.92, against Hippowdon
+# (UU) 0.19 and Reuniclus (RUBL) 0.19 (RNB-STUDY.md §10). A mon with fewer than
+# MEASURED_MIN_BATTLES on record is kept: no evidence is not evidence of weakness.
+# An attacking set is replaceable under MEASURED_DEALT % of an opposing HP bar a battle
+# AND at most MEASURED_KOS KOs; a wall/support set under MEASURED_TURNS turns on the
+# field AND over MEASURED_FAINT % fainted -- a wall is judged on staying in, not KOs.
+# `protect` still wins: a rival's core and a mode's evidence are never measured out.
+KEEP_MEASURED = 1   # on since 2026-09-27; the table pools the 100 ms and 10 ms arms
+MEASURED_TABLE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "generated", "core_strength.json")
+MEASURED_MIN_BATTLES = 24
+MEASURED_DEALT, MEASURED_KOS = 35.0, 0.2
+MEASURED_TURNS, MEASURED_FAINT = 4.0, 85.0
 KEEP_MIN_BAND = 0   # 0 = off; else how many tier bands from the top a kept original may
                     # sit in, over SC.BANDS -- 3 is "Uber, OU or UU"
 
@@ -555,6 +607,8 @@ def plan_for(archetype, mega_ok, mode=None, theme=None):
         lead["removal"] = max(floor.pop("removal", 0), REMOVAL_MIN)
     if WALL_MIN:
         lead["wall"] = max(floor.pop("wall", 0), WALL_MIN)
+    if PIVOT_MIN:
+        lead["pivot"] = max(floor.pop("pivot", 0), PIVOT_MIN)
     floor = {**lead, **floor}
     # A floor the cap forbids is a generator that spins: hazards floors at 1 and the
     # mechanical cap is 1, which is fine, but nothing guarantees that in general.
@@ -888,6 +942,22 @@ def map_stage(map_id):
 
 
 # ---------------------------------------------------------------- set building
+# Never chosen as FILLER (a published set that carries one keeps it): recharge and
+# conditional-power moves are a wasted turn when the bot clicks them, and the filler
+# ranking is power x accuracy, which is exactly what puts Giga Impact on every attacker
+# that lost a move. Falls back to them only when nothing else is legal.
+FILLER_AVOID = {"GIGAIMPACT", "HYPERBEAM", "BLASTBURN", "HYDROCANNON", "FRENZYPLANT",
+                "ROAROFTIME", "ROCKWRECKER", "PRISMATICLASER", "LASTRESORT", "FACADE",
+                "SNORE", "BIDE", "FLING", "DREAMEATER", "NATURALGIFT", "BELCH", "SPITUP",
+                "FRUSTRATION", "SYNCHRONOISE", "SKYDROP", "FLAIL", "REVERSAL", "STOREDPOWER"}
+
+
+def filler(moves):
+    """`moves` minus FILLER_AVOID, unless that leaves nothing."""
+    kept = [m for m in moves if m not in FILLER_AVOID]
+    return kept or list(moves)
+
+
 def legal_moves(species, level, cap=None):
     """Every move the species can have at `level`, TMs included.
 
@@ -933,7 +1003,7 @@ def best_moves(species, level, k=4, support=True, cap=None):
                 d["type"] in s["types"],
                 d["power"] * (d["accuracy"] or 100) / 100,
                 D.learnable(species, m, level, 0) == "levelup")
-    damaging = sorted((m for m in known if _mv[m]["power"] > 0),
+    damaging = sorted((m for m in filler(known) if _mv[m]["power"] > 0),
                       key=score, reverse=True)
     picked = damaging[:k - 1] if support else damaging[:k]
     if support:
@@ -1104,6 +1174,15 @@ def usable_sets(species, level, banned=frozenset(), cap=None, mode=None,
 _OWN_FORMAT = {"Uber": "ubers", "OU": "ou", "UU": "uu", "RU": "ru", "NU": "nu", "low": "pu"}
 
 
+ATTACK_ITEMS = {"CHOICEBAND", "CHOICESPECS", "CHOICESCARF", "LIFEORB", "EXPERTBELT", "ASSAULTVEST"}
+
+
+def attacker_shaped(species):
+    """Strong enough to attack, or bulky enough to stay in while doing it."""
+    b = _sp[species]["base_stats"]      # HP, Atk, Def, Spe, SpA, SpD
+    return max(b[1], b[4]) >= ATTACKER_OFF or b[0] + b[2] + b[5] >= ATTACKER_BULK
+
+
 def set_tier_fit(species, fmt, is_lc):
     """2: a set written for this species' own tier; 1: another ladder; 0: a Little Cup
     set on a mon past Little Cup levels, or a monotype set (built around a type, not
@@ -1271,7 +1350,10 @@ def build(species, level, banned_items=(), want=None, avoid=(), allow_items=None
                       and not bulky(species))
         # SET_TIER_MATCH: below `want` and the misfit term, above the archetype fit
         tier_fit = set_tier_fit(species, fmt, is_lc) if SET_TIER_MATCH else 0
-        cands.append(((-len(r & set(avoid)), bool(want and want in r), -misfit, tier_fit, fit,
+        # ATTACKER_ITEM: neutral for wall sets, so it never trades a wall for an attacker
+        item_fit = int(not ATTACKER_ITEM or wall_set([SC.norm(x) for x in st["moves"]], item)
+                       or item in ATTACK_ITEMS or item in MEGASTONE)
+        cands.append(((-len(r & set(avoid)), bool(want and want in r), -misfit, tier_fit, item_fit, fit,
                        TS.affinity(mode, sp["types"], [ability],
                                    sp["base_stats"][3], ok, r),
                        legal,
@@ -1320,7 +1402,7 @@ def build(species, level, banned_items=(), want=None, avoid=(), allow_items=None
     # nothing the first pick did was visible to the second.
     covered = {_mv[m]["type"] for m in ok
                if _mv[m]["power"] > 0 and m not in ROLE_MOVE}
-    spare = [m for m in legal_moves(species, level, cap) if m not in ok]
+    spare = [m for m in filler(legal_moves(species, level, cap)) if m not in ok]
     moves = list(ok)
     while len(moves) < 4 and spare:
         pick = max(spare, key=lambda m: (_mv[m]["power"] > 0,
@@ -1699,8 +1781,10 @@ def is_dynamic(species):
     return species[:1].islower()
 
 
-def keep_filter(keep):
+def keep_filter(keep, fight=None):
     """A fight's keep_test: the card's own drops first, then the competence knobs.
+
+    `fight` is the fight id the measured table is keyed by (KEEP_MEASURED).
 
     Drops are checked against the name the card SHOWED, which is the evolved one --
     gym 2's roster holds Marill and the card says Azumarill, so a test against the
@@ -1710,7 +1794,9 @@ def keep_filter(keep):
 
     An explicit untick also outranks `protected`. Protection exists to stop the
     generator deleting the reason a fight is what it is; it is not there to overrule
-    a person who has looked at the card and said no."""
+    a person who has looked at the card and said no. And an explicit TICK outranks the
+    competence knobs (KEEP_NEED_SET, KEEP_MIN_BAND, KEEP_MEASURED) for the same reason
+    in the other direction: they judge the game's defaults, not a pin someone made."""
     dropped_lines = {}
     for other, on in (keep or {}).items():
         if on is False and other in _sp:
@@ -1730,11 +1816,39 @@ def keep_filter(keep):
         # evolution is a coherent thing to ask for.
         if keep.get(name) is not True and root(name) in dropped_lines:
             return f"unticked on the card (as {dropped_lines[root(name)]})"
-        return keep_competent(name, mon, protect)
+        if keep.get(name) is True:
+            return None
+        return keep_competent(name, mon, protect, fight)
     return test
 
 
-def keep_competent(name, mon, protect=()):
+@functools.lru_cache(maxsize=1)
+def measured():
+    """{fight id: {SPECIES: {battles, kos, dealt, fainted, turns, kind}}}, or {} without a table."""
+    if not os.path.exists(MEASURED_TABLE):
+        return {}
+    with open(MEASURED_TABLE, encoding="utf-8") as fh:
+        return json.load(fh).get("fights", {})
+
+
+def measured_weak(fight, name):
+    """The measured reason to replace `name` on `fight`, or None."""
+    e = (measured().get(fight) or {}).get(SC.norm(name))
+    if not e or e["battles"] < MEASURED_MIN_BATTLES:
+        return None
+    if e["kind"] == "wall/support":
+        # a wall that neither stays in nor hits; one that KOs anyway is doing a job
+        if e["turns"] < MEASURED_TURNS and e["fainted"] > MEASURED_FAINT and e["kos"] <= MEASURED_KOS:
+            return (f"measured: {e['turns']:.1f} turns on the field, fainted {e['fainted']:.0f}%, "
+                    f"{e['kos']:.2f} KOs a battle over {e['battles']} battles")
+        return None
+    if e["dealt"] < MEASURED_DEALT and e["kos"] <= MEASURED_KOS:
+        return (f"measured: {e['kos']:.2f} KOs and {e['dealt']:.0f}% dealt a battle "
+                f"over {e['battles']} battles")
+    return None
+
+
+def keep_competent(name, mon, protect=(), fight=None):
     """Why this dev-chosen Pokemon should not be kept, or None to keep it.
 
     Both tests are off by default, so this returns None and assemble() behaves exactly
@@ -1754,6 +1868,8 @@ def keep_competent(name, mon, protect=()):
         allowed = SC.BANDS[:KEEP_MIN_BAND]
         if SC.band(name) not in allowed:
             return f"{SC.tier(name)} is below {allowed[-1]}"
+    if KEEP_MEASURED and fight:
+        return measured_weak(fight, name)
     return None
 
 
@@ -1859,6 +1975,8 @@ def assemble(spec):
     # Which published-set FORMATS this build may draw from. A parameter all the
     # way down rather than a global, because usable_sets() is lru_cached.
     fmts = frozenset(spec.get("set_formats") or ()) or None
+    # a dev's own Pokemon may draw from every format but Battle Spot (KEPT_ANY_FORMAT)
+    kept_fmts = (frozenset(SC.set_tiers()) - frozenset(SET_FORMATS_OFF[:1])) if KEPT_ANY_FORMAT else fmts
     early = bool(spec.get("early_moves"))
     # {SPECIES: {"fmt/source/setname", ...}} -- restrict a KEPT mon to named sets.
     # Only the kept half: a generated pick is chosen by the generator, so naming its
@@ -1991,7 +2109,8 @@ def assemble(spec):
                     return (gap // TIER_BAND, covers, SC.rank(n), gap) + tail(n)
                 if USAGE_BAND:
                     return (gap // USAGE_BAND, covers, -viability(n), gap) + tail(n)
-                return ((gap // COVER_BAND, covers) if COVER_BAND
+                shape = 0 if not ATTACKER_SHAPE or attacker_shaped(n) else 1
+                return ((gap // COVER_BAND, covers, shape) if COVER_BAND
                         else (gap,)) + tail(n)
             # Seeded: the noise goes INSIDE the band and the jitter goes ABOVE the
             # tail, and both of those placements are the whole feature.
@@ -2213,12 +2332,12 @@ def assemble(spec):
         for role in sorted(unmet(), key=lambda r: r != mode):
             mon = build(pick, at, banned, want=role, avoid=capped(),
                         allow_items=allow, cap=ceiling, mode=mode, offence=off, offence_hist=off_need(),
-                        seed=sset, formats=fmts, early=early, only=sfilter.get(pick))
+                        seed=sset, formats=kept_fmts, early=early, only=sfilter.get(pick))
             if mon and role in mon["roles"]:
                 break
             mon = None
         mon = mon or build(pick, at, banned, avoid=capped(), allow_items=allow,
-                           cap=ceiling, mode=mode, offence=off, offence_hist=off_need(), seed=sset, formats=fmts, early=early,
+                           cap=ceiling, mode=mode, offence=off, offence_hist=off_need(), seed=sset, formats=kept_fmts, early=early,
                            only=sfilter.get(pick)) \
             or fallback(pick, at, ceiling)
         # A named set that cannot survive this level looks identical to "nothing was
@@ -2247,6 +2366,8 @@ def assemble(spec):
     # get placed one level under it (an illegal lv19 Ninjask, floor 20).
     def in_band(n):
         """Over the band floor -- or, with WALL_MIN on, a bulky body within WALL_SLACK."""
+        if not PICK_FLOOR:
+            return True
         pb = potential_bst(n, mega_ok)
         return pb >= lo or bool(WALL_MIN and bulky(n) and pb >= lo - WALL_SLACK)
 
@@ -2254,16 +2375,31 @@ def assemble(spec):
         return sum(1 for m in team if not is_dynamic(m["species"])
                    and theme in _sp[m["species"]]["types"])
 
+    def tier_ok(n):
+        return not PICK_NO_LOW or SC.band(n) != "low"
+
     core = []
     if theme:
         core = [n for n in eligible(level, stage, theme=theme)
-                if n not in used and in_band(n) and keep(n)]
+                if n not in used and in_band(n) and keep(n) and tier_ok(n)]
         while on_theme() < spec["on_theme_min"] and len(team) < size and core:
             todo = unmet()
             core.sort(key=ranked(lambda n: (SC.rank(n),)))
             if not any(take(core, r, _why(spec["why_theme"], r)) for r in todo) \
                     and not take(core, None, _why(spec["why_theme"], None)):
                 break
+        # The theme minimum outranks the tier floor: Bug at level 20 has three species
+        # above PU, and a first gym with three Bugs is not a Bug gym.
+        if PICK_NO_LOW and on_theme() < spec["on_theme_min"] and len(team) < size:
+            low = [n for n in eligible(level, stage, theme=theme)
+                   if n not in used and in_band(n) and keep(n)]
+            while on_theme() < spec["on_theme_min"] and len(team) < size and low:
+                todo = unmet()
+                low.sort(key=ranked(lambda n: (SC.rank(n),)))
+                if not any(take(low, r, _why(spec["why_theme"], r)) for r in todo) \
+                        and not take(low, None, _why(spec["why_theme"], None)):
+                    break
+            notes.append("tier floor relaxed for the theme minimum: nothing above PU left")
 
     # 3) fill what is left from the open pool. With a theme, a pick there is going
     #    OFF it and has to earn the slot, either by Smogon co-occurrence with the
@@ -2296,12 +2432,15 @@ def assemble(spec):
                            for m in team if m["species"] in _sp)]
 
     cover = theme and OFF_THEME_COVER
-    pool = [n for n in eligible(level, stage, exclude_theme=theme)
-            if n not in used and in_band(n)
-            and (spec["ubers_ok"] or SC.band(n) != "Uber")
-            and (not theme or resisted(n)
-                 or (not cover and correlation[SC.norm(n)] >= MIN_CORR))
-            and keep(n)]
+    def open_pool(tiered):
+        return [n for n in eligible(level, stage, exclude_theme=theme)
+                if n not in used and in_band(n)
+                and (spec["ubers_ok"] or SC.band(n) != "Uber")
+                and (not theme or resisted(n)
+                     or (not cover and correlation[SC.norm(n)] >= MIN_CORR))
+                and keep(n) and (not tiered or tier_ok(n))]
+
+    pool = open_pool(True)
     # Correlation and coverage already decided who is ELIGIBLE for an off-theme slot;
     # among those, the target decides who gets it.
     if cover:
@@ -2348,6 +2487,25 @@ def assemble(spec):
             if not take(core, None, _why(spec["why_theme"], None)):
                 break
 
+    # PICK_NO_LOW's fallback: a pool that was all low tier has left the team short.
+    # Refill from the low band -- theme first, up to its minimum, then anything.
+    if PICK_NO_LOW and len(team) < size:
+        low_core = [n for n in eligible(level, stage, theme=theme)
+                    if n not in used and in_band(n) and keep(n)] if theme else []
+        low_pool = open_pool(False)
+        for src, why in ((low_core, spec["why_theme"]), (low_pool, spec["why_open"])):
+            while len(team) < size and src:
+                if src is low_core and on_theme() >= spec["on_theme_min"]:
+                    break
+                src.sort(key=ranked(lambda n: (SC.rank(n),)))
+                todo = unmet()
+                if not (any(take(src, r, _why(why, r)) for r in todo)
+                        or take(src, None, _why(why, None))):
+                    break
+        if len(team) < size and (low_core or low_pool):
+            pass
+        notes.append("tier floor relaxed: the band above PU could not fill the team")
+
     # 4) a fight with five dev-chosen mons has only one free slot, so a missing role
     #    cannot be covered by adding a body. The set is the other lever: re-equip a
     #    kept mon toward it. That changes what it does, never which mon it is.
@@ -2366,7 +2524,7 @@ def assemble(spec):
                     continue
                 alt = build(m["species"], m["level"], banned, want=role,
                             avoid=capped(), allow_items=allow, cap=ceiling,
-                            mode=mode, offence=off, offence_hist=off_need(), seed=sset, formats=fmts, early=early)
+                            mode=mode, offence=off, offence_hist=off_need(), seed=sset, formats=kept_fmts, early=early)
                 if alt and role in alt["roles"]:
                     alt["kept"], alt["why"] = True, f"original, re-set for {role}"
                     have.subtract(m["roles"])
@@ -2713,7 +2871,7 @@ def _make_gym(idx, seen=None):
         # A gym leader fights once, so no family is "the character" -- THEME is what
         # makes the fight theirs, and it survives losing a Pokemon. Only the mode's
         # own evidence is held back.
-        "keep_drop": KEEP_DROP, "keep_test": keep_filter(_keep),
+        "keep_drop": KEEP_DROP, "keep_test": keep_filter(_keep, gym_id(idx)),
         "set_formats": set_formats(), "early_moves": EARLY_MOVES,
         "set_seed": _sset,
         "pick_seed": _pseed,

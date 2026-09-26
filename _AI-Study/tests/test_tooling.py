@@ -438,6 +438,11 @@ class OversizeTeamTest(unittest.TestCase):
         sys.path.insert(0, str(STUDY / "tools"))
         import generate_bosses, validate_team
         self.G, self.V = generate_bosses, validate_team
+        # these tests hand the keep-test an empty set; the competence knobs are not the
+        # thing under test here
+        for knob in ("KEEP_NEED_SET", "KEEP_MIN_BAND", "KEEP_MEASURED"):
+            self.addCleanup(setattr, self.G, knob, getattr(self.G, knob))
+            setattr(self.G, knob, 0)
 
     def test_an_untick_covers_the_family_not_just_the_spelling(self):
         test = self.G.keep_filter({"POLIWHIRL": False})
@@ -1249,6 +1254,10 @@ class CrossFightVarietyTest(unittest.TestCase):
     def test_pins_that_fit_alongside_the_roster_displace_nothing(self):
         """The roster only gives way for a pin that has nowhere else to go."""
         self.addCleanup(setattr, self.G, "PICKS", self.G.PICKS)
+        # slot logic only: the competence knobs would drop gym 3's originals on their own
+        for knob in ("KEEP_NEED_SET", "KEEP_MEASURED"):
+            self.addCleanup(setattr, self.G, knob, getattr(self.G, knob))
+            setattr(self.G, knob, 0)
         self.G.PICKS = {self.G.gym_id(self.GYM3):
                         {"keep": {n: True for n in self.GYM3_PINS[:2]}}}
         got = self.G.make_gym(self.GYM3)
@@ -1491,7 +1500,7 @@ class ThemeFloorTest(unittest.TestCase):
         """free_team and generate_trainers call plan_for without a theme."""
         # SETUP_CAP lowers the setup floor and WALL_MIN / REMOVAL_MIN add floors on
         # purpose; this is about the theme alone
-        for knob, off in (("SETUP_CAP", None), ("WALL_MIN", 0), ("REMOVAL_MIN", 0)):
+        for knob, off in (("SETUP_CAP", None), ("WALL_MIN", 0), ("REMOVAL_MIN", 0), ("PIVOT_MIN", 0)):
             self.addCleanup(setattr, self.G, knob, getattr(self.G, knob))
             setattr(self.G, knob, off)
         for arch in self.TS.ARCHETYPES:

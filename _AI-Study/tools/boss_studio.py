@@ -193,6 +193,27 @@ SCALARS = {
                  "set on a species built for it (HP+Def+SpD >= WALL_BULK of its BST). "
                  "Lifts SHAPE_CHECK's wall floor too"),
     "REMOVAL_MIN": ("int", 0, 1, 1, "1 chases a Rapid Spin or Defog user on every fight"),
+    "PICK_FLOOR": ("int", 0, 1, 1,
+                   "1 keeps generated picks above the fight's eBST band floor; 0 lets any "
+                   "legal species in and leaves the target steering to pay for light picks"),
+    "PICK_NO_LOW": ("int", 0, 1, 1,
+                    "1 keeps generated picks out of PU and below (gen 7 tiers); a theme "
+                    "with nothing above PU at its level falls back to it"),
+    "ATTACKER_SHAPE": ("int", 0, 1, 1,
+                       "1 ranks a frail body with a weak attacking stat after the rest "
+                       "inside the coverage band (real attackers are 105+ or bulky)"),
+    "ATTACKER_ITEM": ("int", 0, 1, 1,
+                      "1 prefers attacking sets on a Choice item, Life Orb, Expert Belt, "
+                      "Assault Vest or mega stone over Leftovers or a Sash"),
+    "PIVOT_MIN": ("int", 0, 2, 1, "U-turn / Volt Switch users chased per fight"),
+    "KEPT_ANY_FORMAT": ("int", 0, 1, 1,
+                        "1 lets a dev's own Pokemon take a set from any format, whatever "
+                        "SET_FORMATS says for generated picks"),
+    "KEEP_MEASURED": ("int", 0, 1, 1,
+                      "1 replaces a dev Pokemon that the battle logs say did nothing on its "
+                      "fight (generated/core_strength.json): an attacking set under 35% "
+                      "dealt and 0.2 KOs a battle, a wall under 4 turns in and over 85% "
+                      "fainted, 24+ battles on record. Rival cores and mode evidence stay"),
     "UNLOCK_STAGE": ("int", 0, 9, 1, "badge from which megas and strong items unlock"),
     "EARLY_ITEM_CAP": ("int", 0, 1, 1,
                        "1 holds fights before UNLOCK_STAGE to the early item pool "
@@ -213,15 +234,16 @@ GROUPS = [
     ("progression gates", ["level_mode", "UNLOCK_STAGE", "EARLY_ITEM_CAP", "UBER_FROM", "LEGEND_FROM",
                            "LEGEND_BST", "BP_CAP", "BP_CAP_UNTIL", "EARLY_MOVES",
                            "per_fight"]),
-    ("team", ["TEAM_SIZE", "ON_THEME_MIN", "CHASE", "MIN_CORR", "SET_FORMATS",
-              "KEEP_DROP", "KEEP_NEED_SET", "KEEP_MIN_BAND", "LEGEND_MAX"]),
+    ("team", ["TEAM_SIZE", "ON_THEME_MIN", "CHASE", "MIN_CORR", "SET_FORMATS", "PICK_FLOOR", "PICK_NO_LOW",
+              "KEEP_DROP", "KEEP_NEED_SET", "KEEP_MIN_BAND", "KEEP_MEASURED", "LEGEND_MAX"]),
     # A fourth question: not what the team must BE or how different it should be, but
     # whether it can answer what beats it. Defence is a preference the curve outranks
     # (COVER_BAND, HOLE_MIN_WEAK); offence is a gate, because every real team simply
     # has it and a term competing with the curve would lose.
     ("coverage", ["COVER_BAND", "HOLE_MIN_WEAK", "THREAT_COVER", "OFF_THEME_COVER",
                   "TIER_BAND", "USAGE_BAND", "SET_TIER_MATCH", "SHAPE_CHECK",
-                  "GYM_MODES", "WALL_MIN", "REMOVAL_MIN"]),
+                  "GYM_MODES", "WALL_MIN", "REMOVAL_MIN", "PIVOT_MIN", "ATTACKER_SHAPE",
+                  "ATTACKER_ITEM", "KEPT_ANY_FORMAT"]),
     # A third question, and the reason these are not filed under "team": every other
     # knob here says what a team must BE, and these three only say "give me a
     # different one". All are off at 0. The two seeds ship off; REPEAT_BAND ships at

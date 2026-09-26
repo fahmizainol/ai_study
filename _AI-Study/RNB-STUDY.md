@@ -720,6 +720,156 @@ the bots at 25 ms blur team strength -- about 8 points here, not significant. A 
 takes ~20 s (160 in ~15 min at 4 workers). 100 ms, used for the rule tests above, sits
 between: ~25k iterations a search against ~88-123k at 500 ms.
 
+**Every slot, every arm** (`deck_slots.py`, 2026-09-26). Showdown's logs for the 100 ms
+arms, each log assigned to its arm by the attempt's start time (the bot username carries
+it; `read_battles.py`'s tag matching over-reads once arms share pairing numbers), so each
+arm reads exactly its battle count. Per set kind (`composition.kind`), per battle:
+
+| gyms, 100 ms | won | attackers: KO / fainted / turns in | walls: KO / fainted / turns in | wall slots |
+|---|--:|---|---|--:|
+| old rules | 19.4% | 0.46 / 93% / 3.4 | 0.22 / 86% / 6.6 | 6 of 54 |
+| theme rules | 29.6% | 0.57 / 85% / 3.8 | 0.27 / 81% / 6.7 | 8 |
+| theme + tier | 20.4% | 0.50 / 91% / 3.9 | 0.23 / 94% / 7.9 | 9 |
+| all four rules | 21.3% | 0.44 / 93% / 3.3 | 0.24 / 91% / 5.1 | 8 |
+| the choices | 20.4% | 0.50 / 91% / 3.9 | 0.27 / 93% / 5.2 | 5 |
+| the choices + walls | **38.0%** | **0.59 / 73% / 3.6** | **0.38 / 68% / 6.5** | 14 |
+| real gen 7, 25 ms | 59.6% | 0.82 / 71% / 3.8 | 0.41 / 55% / 6.7 | 152 of 468 |
+
+Trainers (theme 36.7%, all 29.2%, choices 31.7%, walls 35.8%): attackers 0.51-0.61 KO
+and 79-85% fainted in every arm; the walls arm's trainer walls are the weakest (0.25 KO,
+80% fainted) -- what a trainer can fit within its band are poor walls.
+
+- Generated attackers faint in 85-93% of their battles in every arm but one. Real
+  attackers faint 71%.
+- **The walls helped the attackers**, not only the walls: against the choices arm (the
+  same settings minus walls) attackers went 0.50 KO / 91% fainted -> 0.59 / 73%. Walls
+  absorb hits and the attackers get turns. The walls themselves (0.38, 68%) approach
+  real walls (0.41, 55%).
+- Attackers remain the gap: 0.59 v 0.82 KO a battle; damage dealt 71% of an opposing
+  mon's max HP a battle v 92%, 19.6% a turn on the field v 24.1% at about the same time
+  in (3.6 v 3.8 turns).
+- Caveat on the walls arm: gym 7's Xerneas (Geomancy, Power Herb) scored 5.08 KO a battle
+  alone and gym 7 went 11-1 against 5-7 in the theme arm; without gym 7 the arms are 30/96
+  v 27/96. Two low-BST walls raise the deficit for the slots after them, so the picker
+  reaches for an Uber -- most of the +9 wins is one mon.
+- The slot list said why the attackers are weak. A third of the "attacker" slots were
+  not attackers: learnset filler with three weak attacks (Wigglytuff Round / Echoed Voice /
+  Snore / Rest, 0 KOs; Pyukumuku Facade / Bide / Fling / Grass Knot, 0) or Rapid Spin
+  utility sets (three Claydols, Donphan, Forretress, 0-0.25). The real attackers carried
+  filler where a published move failed the level gate: Giga Impact on Weavile, Bisharp,
+  Zoroark, Mamoswine, Gallade and Hippowdon; Facade, Round, Swift; Starmie at gym 2 on
+  Rapid Spin / Recover / Bubble Beam / Swift. And low-tier species in attacking slots
+  (Vespiquen, Anorith, Frogadier, Poliwrath, Pineco). The attackers that were real
+  attackers on real sets did fine: Weavile 1.17, Malamar 1.25, Starmie 1.2-1.3, Arceus
+  0.92 -- at or above the real average.
+
+**What a real gen 7 attacker is** (`attacker_profile.py`, 237 attacker slots of 468).
+Items: Choice 33% (Scarf 39 slots, Band/Specs 39), Assault Vest 12%, Life Orb / Expert
+Belt 14%, mega 11%, Leftovers 7%. Moves: four attacks 55%, U-turn or Volt Switch 34%,
+setup 8%, priority 14%. Stats: BST 548, best attacking stat 119, Speed 100 with a Scarf
+counted x1.5, 48% at 100+. Tier: Uber/OU 49%, PU and below 14%. Species: Landorus-Therian
+on 22 of the 78 teams, Tapu Koko 11, Charizard, Greninja and Magearna 7 each; the top 12
+species fill 39% of the attacker slots -- real teams repeat the proven few, the opposite
+of what REPEAT_BAND asks for. How each group did at 25 ms: Band/Specs 1.06 KO a battle
+(114% dealt), mega 0.94, Scarf 0.88, Life Orb 0.75 (2.6 turns in), Leftovers 0.53, Sash
+0.45; setup attackers 1.19 at 53% fainted, but only 18 slots; Speed 100+ v under (0.86 v
+0.79) and STAB count (0.83 v 0.82) split nothing; the best-attack-under-100 group scores
+the MOST, 1.12 at 5.0 turns and 53% fainted -- the Assault Vest Tangrowths and Amoonguss,
+four attacks, built to stay in. The generator's attackers at 100 ms (walls arm) split
+exactly where the real ones do not: Speed 100+ 0.82 v under 100 0.51; best attack 120+
+0.97 v under 100 0.38; PU and below 0.28 (39% dealt). A real weak-stat attacker is a
+bulky pivot that lasts five turns; the generator's is a frail low-tier species that deals
+39% of a health bar and faints. The tier rows for real teams are confounded by boss draw
+(low-tier real attackers sit on low-BST teams that face the early bosses).
+
+**Core strength: measured, not inferred** (`core_strength.py`, 2026-09-27). The dev's own
+(kept) Pokemon are on the team in every arm, so each has 48-72 slot-battles on its own
+fight across the 100 ms runs. Kept v generated, all arms pooled: gym kept attackers 0.46
+KO / 59% dealt / 88% fainted / 3.2 turns in against generated 0.55 / 75% / 88% / 4.0;
+trainer kept attackers 0.58 / 63% against 0.51 / 77%; trainer kept walls 0.42 KO against
+generated 0.31. The core as a group is a little weaker than the picks; the problem is
+its tail. Per species -- weakest: Wigglytuff (gym 2) 0.07 KO / 11% dealt, Finneon
+(Teresa) 0.10 / 8%, Pyukumuku (gym 3) 0.12 / 20% at 3.1 turns in and 86% fainted (it
+fails as a wall too), Dwebble 0.15, Camerupt (gym 6's mega ace) 0.15 / 20%, Karrablast
+0.17, Steelix (gym 9) 0.17, Anorith 0.18 at 99% fainted, Braixen 0.19, Reuniclus 0.19,
+Hippowdon (UU) 0.19 / 33%, then Leavanny, Spiritomb, Lumineon twice, Vespiquen 0.22.
+Strongest: Lucario 1.23, Weavile 1.04, Gengar 0.98, Gardevoir 0.94, Houndoom 0.92,
+Gallade 0.88 at 57% fainted, Electrode 0.88, Mamoswine 0.83-0.85 (real attackers: 0.82).
+Tier misjudges it: Electrode (ZU) 0.88 and Mega Houndoom (PUBL) 0.92 against Hippowdon
+(UU) 0.19 and Reuniclus (RUBL) 0.19; of the gyms' mega aces Gallade and Pidgeot pull their
+weight and Camerupt does not, so a tier-based drop (KEEP_MIN_BAND) would cut the wrong
+mons. Keep-or-replace should be decided on measured contribution -- a KEEP_MEASURED test,
+being built -- after the set is fixed first (KEPT_ANY_FORMAT: Pyukumuku spent these arms
+on learnset filler, Hippowdon on an attacking set), and with walls judged on turns in and
+faint rate, never KOs. Proposed rule: an attacker is replaceable under ~35% dealt and at
+most 0.2 KO a battle (half what the generated attackers on the same teams deal); a wall
+under 4 turns in and over 85% fainted. About 14 flagged today, 5 of them rival core
+families (Finneon, Lumineon twice, Braixen, Reuniclus), which every drop test protects --
+a design call, not a strength one.
+
+**The limiters, released** (2026-09-26/27, each a switch in `generate_bosses.py`, all on;
+measured on builds, NOT yet in battle). In order:
+- `EARLY_MOVES` 1: a published set keeps a move the mon has not reached at its level (the
+  species gate stays); `FILLER_AVOID`: no recharge or gimmick move as filler (Giga Impact,
+  Hyper Beam, Last Resort, Facade, Snore, Bide, Fling ...).
+- `SET_FORMATS` back to every format, then `SET_FORMATS_OFF` = battlespotsingles +
+  monotype + nationaldexmonotype + pu + zu + lc: the standard ladders, AG and National Dex.
+- `PICK_FLOOR` 0: no band floor on generated picks; deficit() still steers the mean.
+- `PICK_NO_LOW` 1: no PU-and-below species as a generated pick; the theme minimum outranks
+  it (Bug at level 20 has three species above PU, so gym 1 relaxes to reach 4 of 6).
+- `KEEP_NEED_SET` 1: a dev mon with no published set at its level is dropped (Brionne at
+  gym 3). `KEPT_ANY_FORMAT` 1: a dev mon may take a set from any format, so the rivals'
+  Glaceon, Pumpkaboo, Gourgeist, Finneon and Lumineon keep real sets.
+- `REPEAT_BAND` 1 -> 3.
+- The attacker rules, from the profile above: `ATTACKER_SHAPE` (inside the coverage band,
+  a body with a best attacking stat under 105 and HP+Def+SpD under 265 ranks after the
+  rest), `ATTACKER_ITEM` (an attacking set on a Choice item, Life Orb, Expert Belt,
+  Assault Vest or mega stone ranks above one on Leftovers or a Sash), `PIVOT_MIN` 1.
+
+What the rosters did, walls arm -> current: learnset-written slots gyms 7 -> 2 and
+trainers 13 -> 0 (9 again while the PU/LC sets were out, 0 once KEPT_ANY_FORMAT came in);
+recharge/gimmick filler moves 18 -> 1 (gyms) and 21 -> 0 (trainers); gym mean eBST v
+target -36 -> -12 before the attacker rules, the current build spreading gym 1 +47 over
+and gyms 4 and 6 about 45-51 under; PU-and-below species gyms 24 -> 5 and trainers 43 ->
+29, the remainder kept dev mons. Attackers now: Choice 27%, Life Orb / Belt 35%,
+Leftovers 15%, four attacks 54%, pivot 16%, best attacking stat 107, Speed 100+ 36%,
+Uber/OU 12%, PU and below 27% (real: 33 / 14 / 7 / 55 / 34 / 119 / 48 / 49 / 14). A
+pivot user on 21 of 27 fights (real teams 72%). The most-used generated species are on 5
+fights instead of 6 (Starmie, Excadrill, Dhelmise, the Slowpoke line): with the pool above
+PU thin, the variety penalty has little to choose among. Xerneas is back, on gym 9 with
+Genesect beside it.
+
+**The 10 ms baseline** (2026-09-27, `generated/rnb_vs_*_10ms/`): real gen 7 (2 rounds),
+the walls arm and the new roster, gyms and trainers, all at 10 ms search on the Deck --
+~3,000 iterations a search, against ~7,000 at 25 ms and ~25,000 at 100 ms; a battle still
+takes ~26 s, since the fixed overhead dominates, so the shallow search buys no time. It is
+the reference for what follows. 616 battles, the only errors the unpilotable two-Arceus
+pairing (three hangs, ended by the new idle watchdog in run_battles.py: two live bots
+with no CPU for 120 s is a dead battle).
+
+| at 10 ms | wins | v the walls arm, 95% CI | shared battles |
+|---|--:|---|---|
+| real gen 7 teams | 100/156 (64.1%) | | |
+| walls arm, gyms | 34/108 (31.5%) | | |
+| **new roster, gyms** | **38/108 (35.2%)** | +8.3 [−9.3, +27.4] | 27 gained v 14 lost, p = 0.06 |
+| walls arm, trainers | 34/120 (28.3%) | | |
+| **new roster, trainers** | **42/120 (35.0%)** | +9.3 [−3.3, +22.2] | 27 gained v 13 lost, **p = 0.039** |
+
+The real teams land where they did at 500 ms (64.1% v 67.9%), so 10 ms flattens less
+than 25 ms did (59.6%). The walls arm itself reads lower here than at 100 ms (31.5% v
+38.0%): its gym 7 Xerneas carried less with the shallow search. The new roster gains
+on both sides -- the first change since the theme rules to move the TRAINERS, whose kept
+originals limit everything else -- but the gym gain rides on gym 1 (0-12 -> 9-3, the one
+47 eBST over its target) and gym 4 (5-7 -> 8-4), against gym 5 (8-4 -> 1-11, its Slowbro
+wall gone) and gym 7 (5-7 -> 2-10, Xerneas moved to gym 9). Pooled, gyms and trainers,
+80/228 (35.1%) against 68/228 (29.8%).
+
+The measured core table from these four arms (`core_strength.py --write`, 24 battles a
+kept mon) flags five: Karrablast, Wigglytuff, Aggron (gym 9's mega ace: 0.12 KO, 11%
+dealt, 2.2 turns), and Teresa's Duosion and Finneon, which are protected rival cores. The
+100 ms table (48-72 battles a mon) flagged seven, Wigglytuff and Karrablast on both;
+Pyukumuku, on its real wall set now, passes.
+
 A first version drew replacements instead of swapping and favoured some sets: the
 sets it left out had KO'd 0.79 a battle in the intact run against 0.64 for the ones it
 used, which would have made collages look weak for the wrong reason.
@@ -751,6 +901,10 @@ python3 tools/rnb/read_battles.py generated/rnb_vs_gen [--pool]   # needs logcha
 REALIDEA_PBS=<game>/PBS python3 tools/rnb/archetypes.py
 REALIDEA_PBS=<game>/PBS python3 tools/rnb/tiers.py
 REALIDEA_PBS=<game>/PBS python3 tools/rnb/team_profile.py
+# per-slot KOs / damage / faints from this machine's Showdown logs, by arm (SCHEDULE inside)
+REALIDEA_PBS=<game>/PBS python3 tools/rnb/deck_slots.py            # DETAIL=<arm> lists its attacker slots
+REALIDEA_PBS=<game>/PBS python3 tools/rnb/attacker_profile.py [NEW_ARM]
+REALIDEA_PBS=<game>/PBS [GEN_ARMS=dir] python3 tools/rnb/core_strength.py
 # the theme test: build an arm, export it, play it (Windows)
 python3 tools/rnb/gen_fixes.py theme|tier OUTDIR
 python3 tools/rnb/make_gen_battles.py 4 --from OUTDIR --name theme|tier

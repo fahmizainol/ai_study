@@ -19,7 +19,12 @@ generated/ that ships is touched:
                                                    # ladder sets, no early item cap,
                                                    # SHAPE_CHECK, SET_FIT, SETUP_CAP 1
     python tools/rnb/gen_fixes.py defense OUTDIR  # choices + WALL_MIN 2, REMOVAL_MIN 1
+    python tools/rnb/gen_fixes.py atk     OUTDIR  # the 2026-09-27 roster as played at 10 ms:
+                                                   # everything current but KEEP_MEASURED
     python tools/rnb/gen_fixes.py shipped OUTDIR  # the generator's current defaults
+    python tools/rnb/gen_fixes.py open    OUTDIR  # defense + the four limiters released
+                                                   # (2026-09-26): EARLY_MOVES, all set
+                                                   # formats, PICK_FLOOR 0, KEEP_NEED_SET
 
 Every arm but `shipped` pins the defaults its test ran under, so an arm keeps
 rebuilding the teams it was played with after a default changes.
@@ -39,14 +44,26 @@ import generate_bosses as GB  # noqa: E402
 import generate_trainers as GT  # noqa: E402
 
 arm, out = sys.argv[1], os.path.abspath(sys.argv[2])
-ARMS = ("off", "on", "theme", "tier", "all", "choices", "defense", "shipped")
+ARMS = ("off", "on", "theme", "tier", "all", "choices", "defense", "open", "atk", "shipped")
 if arm not in ARMS:
     sys.exit("arm is one of " + ", ".join(ARMS))
 if arm == "choices":
     GB.WALL_MIN, GB.REMOVAL_MIN = 0, 0
 if arm == "defense":
     GB.WALL_MIN, GB.REMOVAL_MIN = 2, 1
-if arm not in ("choices", "defense", "shipped"):
+if arm in ("choices", "defense"):
+    # the 2026-09-26 releases, pinned back to how those arms were played
+    GB.EARLY_MOVES, GB.KEEP_NEED_SET, GB.PICK_FLOOR = 0, 0, 1
+    GB.SET_FORMATS = ("ubers", "ou", "uu", "ru", "nu", "anythinggoes", "nationaldex", "nationaldexag")
+    GB.FILLER_AVOID = frozenset()
+if arm not in ("atk", "shipped"):
+    # the 2026-09-27 choices, pinned back for every earlier arm
+    GB.PICK_NO_LOW, GB.SET_FORMATS_OFF = 0, ("battlespotsingles",)
+    GB.ATTACKER_SHAPE, GB.ATTACKER_ITEM, GB.PIVOT_MIN, GB.KEPT_ANY_FORMAT = 0, 0, 0, 0
+    GB.REPEAT_BAND = 1
+if arm != "shipped":
+    GB.KEEP_MEASURED = 0          # on since 2026-09-27, after the atk arm was played
+if arm not in ("choices", "defense", "open", "atk", "shipped"):
     # the defaults every test arm below was played under (changed 2026-09-25)
     GB.SET_FORMATS, GB.EARLY_ITEM_CAP = (), 1
     GB.SET_FIT, GB.SETUP_CAP, GB.SHAPE_CHECK = False, None, 0

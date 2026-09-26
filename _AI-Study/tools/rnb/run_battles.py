@@ -36,6 +36,41 @@ SEARCH_MS = sys.argv[3] if len(sys.argv) > 3 else "500"
 RESULTS = out("results.ndjson")
 START_WAIT = 120        # seconds for turn 1 to appear before the attempt is abandoned
 BATTLE_CAP = 1800       # seconds a battle may take before both bots are killed
+# A hung battle is two live bots burning no CPU: Foul Play freezes (the two-formes crash
+# renames one Arceus into another) and the other side waits forever, and only BATTLE_CAP
+# ends it. A live battle never idles -- each turn both bots search -- so when neither
+# process has gained CPU time for IDLE_CAP seconds the battle is dead and both are killed.
+IDLE_CAP = 120
+
+
+def cpu_ticks(pid):
+    """User + system CPU ticks a process has used, or None once it is gone."""
+    try:
+        with open("/proc/%d/stat" % pid) as fh:
+            f = fh.read().rsplit(")", 1)[1].split()
+        return int(f[11]) + int(f[12])
+    except (OSError, IndexError, ValueError):
+        return None
+
+
+def wait_or_idle(pa, pb, log):
+    """pa's exit code; -9 after BATTLE_CAP, -8 once both bots idle for IDLE_CAP."""
+    end = time.time() + BATTLE_CAP
+    last, since = (cpu_ticks(pa.pid), cpu_ticks(pb.pid)), time.time()
+    while time.time() < end:
+        try:
+            return pa.wait(timeout=5)
+        except subprocess.TimeoutExpired:
+            pass
+        now = (cpu_ticks(pa.pid), cpu_ticks(pb.pid))
+        if now != last:
+            last, since = now, time.time()
+        elif time.time() - since > IDLE_CAP and os.name != "nt":
+            log.write("WATCHDOG: both bots idle for %ds, battle hung\n" % IDLE_CAP)
+            pa.kill()
+            return -8
+    pa.kill()
+    return -9
 
 
 def sync_teams():
@@ -85,11 +120,7 @@ def battle(run_tag, rnb_team, opp_team):
             pa.kill()
             pb.kill()
             return 3
-        try:
-            rc = pa.wait(timeout=BATTLE_CAP)
-        except subprocess.TimeoutExpired:
-            pa.kill()
-            rc = -9
+        rc = wait_or_idle(pa, pb, fa)
         try:
             pb.wait(timeout=60)
         except subprocess.TimeoutExpired:

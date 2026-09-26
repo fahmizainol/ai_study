@@ -267,7 +267,7 @@ def _make_trainer(battle, plan=None, seen=None):
         "reequip": True, "dedupe": False,
         # A rival's roster IS the character, so the families they bring to two or more
         # of their own fights are held back on top of the mode's evidence.
-        "keep_drop": G.KEEP_DROP, "keep_test": G.keep_filter(keep),
+        "keep_drop": G.KEEP_DROP, "keep_test": G.keep_filter(keep, fight_id(battle)),
         "set_formats": G.set_formats(), "early_moves": G.EARLY_MOVES,
         # Salted with the fight -- see G.salts(). A rival needs that more than a gym
         # does: nine gyms are pulled apart by nine different themes, and these
