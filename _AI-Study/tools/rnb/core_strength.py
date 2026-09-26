@@ -45,7 +45,9 @@ JSON = {"rnb_vs_gen_deckoff": "off", "rnb_vs_gen_theme": "theme", "rnb_vs_gen_ti
         "rnb_vs_gen_trainers_choices": "shipped", "rnb_vs_gen_trainers_defense": "defense",
         # the 10 ms baseline (2026-09-27)
         "rnb_vs_gen_defense_10ms": "defense", "rnb_vs_gen_trainers_defense_10ms": "defense",
-        "rnb_vs_gen_atk_10ms": "atk", "rnb_vs_gen_trainers_atk_10ms": "atk"}
+        "rnb_vs_gen_atk_10ms": "atk", "rnb_vs_gen_trainers_atk_10ms": "atk",
+        "rnb_vs_gen_atk_10ms_b": "atk", "rnb_vs_gen_trainers_atk_10ms_b": "atk",
+        "rnb_vs_gen_measured_10ms": "measured", "rnb_vs_gen_trainers_measured_10ms": "measured"}
 TABLE = os.path.join(TOOLS, "..", "generated", "core_strength.json")
 
 

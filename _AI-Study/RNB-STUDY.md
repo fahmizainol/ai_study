@@ -870,6 +870,38 @@ dealt, 2.2 turns), and Teresa's Duosion and Finneon, which are protected rival c
 100 ms table (48-72 battles a mon) flagged seven, Wigglytuff and Karrablast on both;
 Pyukumuku, on its real wall set now, passes.
 
+**KEEP_MEASURED on, pooled table** (2026-09-27, `rnb_vs_gen_measured_10ms`,
+`rnb_vs_gen_trainers_measured_10ms`). The table pooled over the 100 ms and 10 ms arms
+(72-96 battles a kept mon) drops five: Wigglytuff (0.08 KO, 11% dealt), Pyukumuku (0.16,
+22% -- mostly on the filler sets it ran in the 100 ms arms; the 10 ms arms alone pass
+it), Mega Steelix (0.20, 26%), Karrablast (2.6 turns, 92% fainted, 0.12 KO) and Dwebble
+(0.18, 22%). Aggron, Anorith, Camerupt and Vespiquen pass the pooled table. Gym 9's mega
+moves to Mewtwo X and Xerneas leaves; Camus gets Vivillon, Scarf Rotom and Miltank;
+Alba's map164 fight takes Eviolite Chansey because Camus took Miltank. An explicit card
+tick now outranks every competence knob, as an untick already outranked protection.
+
+| at 10 ms | walls arm | new roster | + KEEP_MEASURED |
+|---|--:|--:|--:|
+| gyms | 34/108 (31.5%) | 38/108 (35.2%) | **41/108 (38.0%)**, +10.5 v walls [−7.6, +29.6] |
+| trainers | 34/120 (28.3%) | 42/120 (35.0%) | **59/120 (49.2%)**, +23.6 v walls [+10.0, +37.5] |
+
+Against the new roster on shared battles: gyms 19 gained v 11 lost (p = 0.20), trainers
+35 v 17 (p = 0.018). But only ONE battled trainer team changed (Camus, 2-10 -> 7-5); the
+other nine, identical rosters against identical bosses, went from 40/108 to 52/108
+between the two runs. That is the 10 ms noise floor showing itself: about 11 points on
+108 battles from nothing at all, which is the size of every generator-v-generator
+difference measured at this depth so far, the new roster's +8/+9 included. An identical
+replay of the new-roster arms (`rnb_vs_gen_atk_10ms_b`, `_trainers_atk_10ms_b`) measured
+it directly: same teams, same pairings, gyms 38 -> 47 of 108, trainers 42 -> 50 of 120
+(24 flips one way v 15 the other, and 26 v 18). **Two runs of one arm differ by 7-8
+points at 10 ms**, so every generator-v-generator difference of that size above -- the
+new roster's +8/+9 over the walls arm, KEEP_MEASURED's +3 on the gyms -- is not
+established, and its +14 on the trainers is about half noise and half Camus. What the
+10 ms baseline does establish: pooling the two identical runs, the new roster sits at
+gyms 85/216 (39.4%) and trainers 92/240 (38.3%), against real gen 7 teams at 64.1%;
+the gap is ~25 points and shrinking slowly. A difference has to reach ~15 points on 108
+battles, or be replayed, before it means anything at this depth.
+
 A first version drew replacements instead of swapping and favoured some sets: the
 sets it left out had KO'd 0.79 a battle in the intact run against 0.64 for the ones it
 used, which would have made collages look weak for the wrong reason.

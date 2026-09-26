@@ -75,6 +75,21 @@ SCHEDULE = [
     ("2026-09-27 01:50:39", "rnb_vs_gen_atk_10ms"),
     ("2026-09-27 01:54:47", "rnb_vs_gen_trainers_atk_10ms"),
     ("2026-09-27 02:00:03", None),
+    # KEEP_MEASURED roster and the identical replay of the new roster (2026-09-27)
+    ("2026-09-27 02:17:58", "rnb_vs_gen_measured_10ms"),
+    ("2026-09-27 02:22:03", "rnb_vs_gen_trainers_measured_10ms"),
+    ("2026-09-27 02:27:06", "rnb_vs_gen_measured_10ms"),
+    ("2026-09-27 02:30:43", "rnb_vs_gen_trainers_measured_10ms"),
+    ("2026-09-27 02:35:12", "rnb_vs_gen_measured_10ms"),
+    ("2026-09-27 02:39:04", "rnb_vs_gen_trainers_measured_10ms"),
+    ("2026-09-27 02:43:28", None),
+    ("2026-09-27 02:46:55", "rnb_vs_gen_atk_10ms_b"),
+    ("2026-09-27 02:50:31", "rnb_vs_gen_trainers_atk_10ms_b"),
+    ("2026-09-27 02:55:13", "rnb_vs_gen_atk_10ms_b"),
+    ("2026-09-27 02:59:01", "rnb_vs_gen_trainers_atk_10ms_b"),
+    ("2026-09-27 03:03:37", "rnb_vs_gen_atk_10ms_b"),
+    ("2026-09-27 03:07:27", "rnb_vs_gen_trainers_atk_10ms_b"),
+    ("2026-09-27 03:11:49", None),
 ]
 SCHED = [(time.mktime(datetime.datetime.strptime(s, "%Y-%m-%d %H:%M:%S").timetuple()), a) for s, a in SCHEDULE]
 ORDER = ["rnb_vs_gen_deckoff", "rnb_vs_gen_theme", "rnb_vs_gen_tier", "rnb_vs_gen_all",
