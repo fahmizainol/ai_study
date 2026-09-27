@@ -1371,6 +1371,71 @@ play copy (keeping a `.bak`) and boot it once under Proton to the title; the aut
 classifier refused that write here. The Team_Overrides syntax check passes, the bundle still
 defines `PBEffects::AuroraVeil`, and the overrides carry the NINETALES form-1 row.
 
+**The breaking core, read off real teams** (2026-09-28, `tools/rnb/breaking_core.py`, after
+Pinkacross's "How to Build UNSTOPPABLE Teams in Competitive Pokemon Singles", gen 9 OU): a
+team starts from a breaker plus a partner that removes what walls it, ideally a second
+breaker, so answering one opens the way for the other; support comes after, and "not four
+defensive Pokemon". On the real teams played here (breaker 1 = attacking set, best attack
+counting a mega; its walls = types resisting every STAB attack it carries):
+
+| | mainstream gen 7 (156) | monotype gen 7-9 (145) |
+|---|--:|--:|
+| breaker 1 has types walling its STAB | 92% | 78% |
+| a teammate hits those walls SE | 87% | 75% |
+| that teammate is itself a 2nd breaker | 69% | 69% |
+| mutual pair (each hits the other's walls) | 37% | 38% |
+| breaker + remover share of team KOs | 43% | 42% |
+| speed control on the team | 55% | 79% |
+| priority on the team | 49% | 61% |
+
+Win rate on the Run & Bun bosses by number of attacking sets runs opposite ways: mainstream
+teams with 1-2 attackers win 95% / 79% and those with 4-6 about 50% (defensive teams beat
+these bosses), while monotype teams win 41% with 3 attackers, 63% with 4, 56% with 5 and 71%
+with 6. Monotype teams with a mutual breaking pair win 59% against 54% without (noise).
+Reading: the breaking core is there on most real teams of both kinds, and a monotype team
+leans on attackers and speed control more than a mainstream one does.
+
+**The breaking core in the generator, measured without installing** (2026-09-28,
+`rnb_vs_gen_breakers_10ms`, gyms only on fix2's draw; `gen_fixes.py shipped`, with the
+installed build now the `cores2` arm). Three switches, themed fights only, trainers
+byte-identical:
+- `SECOND_BREAKER`: after anchor + enabler, an attacking set hitting the anchor's STAB walls
+  super-effectively -- one that fills a still-open floor first, then a mutual pair, then
+  attack counting the mega -- from the kept roster, then on-theme, then the off-theme slot;
+  with nothing walling the anchor, the next attacking set. It is skipped, with a note, when
+  the wall / removal / pivot / hazards / mode floors plus the off-theme cover slot need the
+  room: without that check gym 7 lost its pivot and gym 8 its Spikes.
+- `ATTACKERS_MIN 4`: once the wall floor is met picks prefer non-wall sets, and a last pass
+  re-sets members toward attacking sets. It had nothing to do: all nine gyms already field
+  4-6 attacking sets (`wall_set()`).
+- `SPEED_FLOOR`: one speed-control user, a held Choice Scarf counting. Asking build() for
+  Scarf sets made three of gym 5's six Scarfed, so a Scarf only counts; the floor is chased
+  last, and when no slot reached it one member is re-set, or one move swapped (never a
+  status move on a Choice / Vest set, never Rest away from Sleep Talk). Before, gyms 1, 3,
+  4 and 9 had none; now all nine do (Rotom and Blissey Thunder Wave, Froslass Icy Wind,
+  a Thunder Wave Registeel set, Magneton / Malamar / Greninja Scarves).
+
+Roster against the installed build: breaker 2 is new on gym 7 (Meloetta, U-turn Specs, hits
+Psychic, mutual), gym 8 (Kartana off-theme, hits Rock / Steel, for Landorus) and gym 9 (Scarf
+Victini off-theme, hits Steel, for Dragonite); on gyms 1, 2, 4 and 5 it names a member
+already there (Vivillon, Comfey, Cloyster, Malamar); gyms 3 and 6 skip it for slots. Gym 3
+also trades Tangrowth for a Scarf Magneton in the cover slot, gym 7 Lugia / Victini / Bewear
+for Meloetta / Cresselia / Keldeo.
+
+| arm | gyms | adjusted |
+|---|--:|--:|
+| fix2 | 52/108 (48.1%) | -4.0 |
+| cores2 (installed) | 59/108 (54.6%) | +2.5 |
+| **breakers** | **58/108 (53.7%)** | **+1.5** |
+
+Against cores2: 14 won / 15 lost on matched battles (sign test p = 1.0); against fix2 +5.6
+(95% interval -12.2 to +22.7, p = 0.44) -- inside the ~8-point noise floor on 108 battles.
+The second breakers: Comfey 1.83 KOs a battle, Kartana (gym 8) 1.25, Malamar 0.92, Meloetta
+0.75, Victini 0.17 (a Final Gambit / Trick set); the anchors 0.50-1.33 (Mamoswine 1.33,
+Kartana 1.08). Gym 6, unchanged, went 8-4 again; gym 9 lost two games with Victini in for
+Dragonite. Reading: the model is on the real teams and the generator now builds it, and the
+sims cannot tell it from the installed roster. Not installed.
+
 **Traps met on the way** (all fixed in the tools):
 - On a machine where 127.0.0.1 has no rDNS and something listens on port 80, Showdown
   calls localhost an open proxy and locks every bot (`setup_battles.py` now declares

@@ -134,6 +134,10 @@ SCHEDULE = [
     ("2026-09-28 02:36:07", "rnb_vs_gen_cores2_10ms"),
     ("2026-09-28 02:39:59", "rnb_vs_gen_trainers_cores2_10ms"),
     ("2026-09-28 02:44:15", None),
+    # the breaking core (second breaker, 4 attacking sets, speed control), gyms only, not
+    # installed, on fix2's draw (2026-09-28)
+    ("2026-09-28 03:08:17", "rnb_vs_gen_breakers_10ms"),
+    ("2026-09-28 03:19:14", None),
 ]
 SCHED = [(time.mktime(datetime.datetime.strptime(s, "%Y-%m-%d %H:%M:%S").timetuple()), a) for s, a in SCHEDULE]
 ORDER = ["rnb_vs_gen_deckoff", "rnb_vs_gen_theme", "rnb_vs_gen_tier", "rnb_vs_gen_all",
