@@ -9,7 +9,12 @@ iterations, and writes Data/ai_foulplay_reply.txt naming the most-visited choice
 slot the adapter can register. Files travel through temp names and os.replace, so
 neither side reads a half-written one.
 
-    tools/foul_play_sidecar.py --game "<dir containing Data/>" [--iterations N] [--check]
+Two settings play it the way Foul Play itself does, at the cost of a paired run and its
+shadow twin deciding alike: search_ms searches for a time instead of a count, and band
+draws among the options near the top one's visits instead of always taking the top.
+
+    tools/foul_play_sidecar.py --game "<dir containing Data/>" [--iterations N]
+                               [--search-ms MS] [--band 0.75] [--check]
     tools/foul_play_sidecar.py --once state.json [--check]       one state, print the reply
     tools/foul_play_sidecar.py --extract-ids <poke-engine clone>  refresh the id list
 
@@ -29,6 +34,7 @@ gen 6 is from this engine, decision by decision.
 import argparse
 import json
 import os
+import random
 import re
 import signal
 import sys
@@ -388,21 +394,43 @@ def label_for(choice, doc_side, state_side):
     return None
 
 
-def search(doc, state, iterations):
+def search(doc, state, iterations, search_ms=0, band=0.0, rng=random):
     import poke_engine as pe
 
-    result = pe.monte_carlo_tree_search(state, iterations=iterations)
+    # poke-engine reads duration_ms only when iterations is 0, so a timed search passes
+    # 0 on purpose. The one-option early exit in its binding still applies either way.
+    if search_ms > 0:
+        result = pe.monte_carlo_tree_search(state, duration_ms=search_ms, iterations=0)
+    else:
+        result = pe.monte_carlo_tree_search(state, iterations=iterations)
     own = []
     for entry in result.side_one:
         label = label_for(entry.move_choice, doc["side_one"], state.side_one)
         own.append((label or entry.move_choice, entry.visits, entry.total_score))
     foe = [(label_for(e.move_choice, doc["side_two"], state.side_two) or e.move_choice, e.visits)
            for e in result.side_two]
-    best = max(own, key=lambda item: item[1])
+    best = pick(own, band, rng)
     return best, own, foe, result.total_visits
 
 
-def reply_text(best, own, foe, total, iterations):
+def pick(own, band=0.0, rng=random):
+    """The most-visited option, or with a band, Foul Play's own pick.
+
+    Foul Play (fp/search/main.py, select_move_from_mcts_results) keeps every option with
+    at least 0.75 of the top option's visit share and draws one weighted by share, so a
+    near-tie is not always settled the same way and a player cannot read the bot off one
+    position. Only options that mapped to a slot are drawn: an unmapped one would hand
+    the turn to the rules, which the most-visited pick only risks when it is the top one.
+    """
+    best = max(own, key=lambda item: item[1])
+    if band <= 0 or best[1] <= 0:
+        return best
+    floor = best[1] * band
+    near = [o for o in own if o[1] >= floor and (o is best or ":" in o[0])]
+    return rng.choices(near, weights=[o[1] for o in near])[0]
+
+
+def reply_text(best, own, foe, total, iterations, search_ms=0, band=0.0):
     label, visits, score = best
     kind, _, slot = label.partition(":")
     lines = [
@@ -410,11 +438,17 @@ def reply_text(best, own, foe, total, iterations):
         f"slot={slot}",
         f"visits={visits}",
         f"score={(score / visits) if visits else 0.0:.6f}",
-        f"iterations={iterations}",
+        # A timed search has no requested count, so it reports what it managed.
+        f"iterations={total if search_ms > 0 else iterations}",
         f"total={total}",
         "own=" + ",".join(f"{l}:{v}" for l, v, _ in own),
         "foe=" + ",".join(f"{l}:{v}" for l, v in foe),
     ]
+    # Only when set, so a counted, most-visited reply stays byte-for-byte what 0.8.0 wrote.
+    if search_ms > 0:
+        lines.append(f"search_ms={search_ms}")
+    if band > 0:
+        lines.append(f"band={band:g}")
     return "\n".join(lines) + "\n"
 
 
@@ -488,12 +522,17 @@ def write_atomic(path, text):
     os.replace(tmp, path)
 
 
-def handle_state(doc, ids, iterations, check, data_dir=None):
+def handle_state(doc, ids, iterations, check, data_dir=None, search_ms=None, band=None):
     problems = Problems()
     state = build_state(doc, ids, problems)
     wanted = int(iterations or doc.get("iterations") or 5000)
+    # An --iterations override means a fixed count, so it also overrides a time the
+    # state asks for; --search-ms overrides both.
+    timed = int(search_ms or (0 if iterations else doc.get("search_ms") or 0))
+    # 0 is the most-visited pick; above 1 nothing but the top option could qualify.
+    spread = min(float(band if band is not None else doc.get("band") or 0), 1.0)
     started = time.time()
-    best, own, foe, total = search(doc, state, wanted)
+    best, own, foe, total = search(doc, state, wanted, timed, spread)
     elapsed = time.time() - started
     if data_dir is not None:
         for problem in problems:
@@ -502,7 +541,7 @@ def handle_state(doc, ids, iterations, check, data_dir=None):
             with open(data_dir / CHECK_NAME, "a", encoding="utf-8") as handle:
                 for row in damage_check(doc, state, ids):
                     handle.write(json.dumps(row) + "\n")
-    return reply_text(best, own, foe, total, wanted), elapsed, problems
+    return reply_text(best, own, foe, total, wanted, timed, spread), elapsed, problems
 
 
 def check_engine_build():
@@ -545,7 +584,7 @@ def beat(ready_path):
         write_atomic(ready_path, f"pid={os.getpid()}\n")
 
 
-def serve(game_dir, iterations, check, keep_states=None, poll=0.004):
+def serve(game_dir, iterations, check, keep_states=None, poll=0.004, search_ms=None, band=None):
     data_dir = Path(game_dir) / "Data"
     state_path = data_dir / STATE_NAME
     reply_path = data_dir / REPLY_NAME
@@ -571,13 +610,13 @@ def serve(game_dir, iterations, check, keep_states=None, poll=0.004):
     signal.signal(signal.SIGINT, stop)
     try:
         serve_loop(data_dir, state_path, reply_path, ready_path, ids, iterations,
-                   check, keep_states, poll)
+                   check, keep_states, poll, search_ms, band)
     finally:
         clear_marker(ready_path)
 
 
 def serve_loop(data_dir, state_path, reply_path, ready_path, ids, iterations,
-               check, keep_states, poll):
+               check, keep_states, poll, search_ms=None, band=None):
     # The adapter checks this before handing over a turn. It makes a failed launcher
     # an immediate rules fallback instead of blocking the RGSS game loop.
     write_atomic(ready_path, f"pid={os.getpid()}\n")
@@ -606,7 +645,7 @@ def serve_loop(data_dir, state_path, reply_path, ready_path, ids, iterations,
             with open(Path(keep_states) / f"state_{decisions:05d}.json", "w", encoding="utf-8") as handle:
                 json.dump(doc, handle)
         try:
-            text, elapsed, problems = handle_state(doc, ids, iterations, check, data_dir)
+            text, elapsed, problems = handle_state(doc, ids, iterations, check, data_dir, search_ms, band)
         except (KeyboardInterrupt, SystemExit):
             raise
         except BaseException as error:  # noqa: BLE001 - a Rust panic arrives as a BaseException
@@ -623,7 +662,8 @@ def serve_loop(data_dir, state_path, reply_path, ready_path, ids, iterations,
             # timeout", which is the failure this whole except branch exists to avoid.
             elapsed = None
         write_atomic(reply_path, text)
-        # A decision runs ~10 ms, so the idle heartbeat above covers it many times
+        # A decision runs ~10 ms at 5000 iterations (100 ms at the Foul Play default
+        # time), so the idle heartbeat above covers it many times
         # over; restamping here as well means even a pathologically slow search cannot
         # let the marker go stale while we are demonstrably alive and working on it.
         beat(ready_path)
@@ -639,6 +679,11 @@ def main(argv=None):
     parser.add_argument("--game", help="game directory (the one containing Data/)")
     parser.add_argument("--once", help="process one exported state file and print the reply")
     parser.add_argument("--iterations", type=int, help="override the iterations the state asks for")
+    parser.add_argument("--search-ms", type=int,
+                        help="search for this many ms instead of a count, whatever the state asks for")
+    parser.add_argument("--band", type=float,
+                        help="draw among options with at least this share of the top one's visits "
+                             "(Foul Play uses 0.75; 0 takes the most-visited), whatever the state asks for")
     parser.add_argument("--check", action="store_true", help="also write the damage comparison")
     parser.add_argument("--extract-ids", metavar="CLONE", help="rebuild the id list from a poke-engine clone")
     parser.add_argument("--keep-states", metavar="DIR", help="save every exported state under DIR (serve mode)")
@@ -668,7 +713,8 @@ def main(argv=None):
         with open(args.once, encoding="utf-8") as handle:
             doc = json.load(handle)
         ids = load_ids()
-        text, elapsed, problems = handle_state(doc, ids, args.iterations, False)
+        text, elapsed, problems = handle_state(doc, ids, args.iterations, False, search_ms=args.search_ms,
+                                               band=args.band)
         sys.stdout.write(text)
         for problem in problems:
             print("problem:", problem)
@@ -680,7 +726,8 @@ def main(argv=None):
         return 0
     if not args.game:
         parser.error("--game or --once is required")
-    serve(args.game, args.iterations, args.check, args.keep_states)
+    serve(args.game, args.iterations, args.check, args.keep_states, search_ms=args.search_ms,
+          band=args.band)
     return 0
 
 

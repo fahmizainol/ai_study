@@ -31,6 +31,8 @@ if not exist "%~dp0Data\portable_ai.txt" (
 if not exist "%~dp0Data\ai_harness.txt" (
   >"%~dp0Data\ai_harness.txt" echo foul_play=true
   >>"%~dp0Data\ai_harness.txt" echo foul_play_iterations=5000
+  >>"%~dp0Data\ai_harness.txt" echo foul_play_search_ms=100
+  >>"%~dp0Data\ai_harness.txt" echo foul_play_band=0.75
   echo Switched the bridge on ^(created Data\ai_harness.txt^).
 )
 
