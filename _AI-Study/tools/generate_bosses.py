@@ -1939,10 +1939,10 @@ def role_supply(level, stage, roles, mode=None, theme=None):
 
     for name in eligible(level, stage, theme=theme):
         sp = _sp[name]
-        legal = {m for m in asked
+        known = {m for m in asked
                  if m in _mv and legal(D.learnable(name, m, level, 0))}
         for role, pool in move_roles.items():
-            if legal & pool:
+            if known & pool:
                 learns[role] += 1
 
         # A published set only counts if the moves it brings SURVIVE this level --
