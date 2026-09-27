@@ -1189,6 +1189,14 @@ pinned off for every played arm):
   -- Icicle Crash / Pursuit / Ice Shard, Knock Off swapped to Aerial Ace for Fighting -- and
   the three Quagsires the gen 6 OU Unaware Wall with Recover (an egg move).
 
+**Installed** (2026-09-27, evening): the current defaults, through Boss Studio's install
+(`install_game({}, "all")`, not the pre-study companion preset): 9 gyms, 18 trainers, 161
+teams in `Team_Overrides.rb`, the gen 7 learnsets in the game's PBS, and the Aurora Veil
+patch in `Scripts.rxdata` -- both the repo's game copy and the play copy under
+`~/Projects`, byte-identical, originals kept as `.pre-*.bak`. Pending: the same three files
+on the Windows machine the game is played on, one debug-mode start there to recompile the
+PBS, and `learnset_merge.py --with-aurora-veil` once the move is seen working.
+
 **Traps met on the way** (all fixed in the tools):
 - On a machine where 127.0.0.1 has no rDNS and something listens on port 80, Showdown
   calls localhost an open proxy and locks every bot (`setup_battles.py` now declares

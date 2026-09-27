@@ -175,7 +175,7 @@ def setter_for(mode, level, stage, lo=None, hi=None):
             if has and (lo is None or lo <= G.bst(name) <= hi):
                 return name
             continue
-        if has or any(D.learnable(name, mv, level) in ("levelup", "tm")
+        if has or any(G.legal(D.learnable(name, mv, level))
                       for mv in TS.ROLE_MOVES[mode]):
             return name
     return None
