@@ -216,6 +216,14 @@ SCALARS = {
                       "fight (generated/core_strength.json): an attacking set under 60% "
                       "dealt and 0.6 KOs a battle, a wall under 4 turns in and over 85% "
                       "fainted, 24+ battles on record. Rival cores and mode evidence stay"),
+    "OFF_THEME_CAP": ("int", 0, 1, 1,
+                      "1 holds an off-theme pick under the fight's band ceiling"),
+    "OFF_THEME_MOST": ("int", 0, 1, 1,
+                       "1 gives the off-theme slot to the bodies resisting the most theme "
+                       "weaknesses still open, and lets the curve choose among them"),
+    "OFF_THEME_EXTRA": ("int", 0, 1, 1,
+                        "1 spends a second slot off-theme (down to 4 on-theme) when a "
+                        "theme weakness is still unresisted after the build"),
     "GROW_TO_TARGET": ("int", 0, 6, 1,
                        "levels ahead of a stated evolution level a dev's own Pokemon may "
                        "evolve when the evolved form sits nearer the fight's target; 0 never"),
@@ -271,7 +279,8 @@ GROUPS = [
                   "TIER_BAND", "USAGE_BAND", "SET_TIER_MATCH", "SHAPE_CHECK",
                   "GYM_MODES", "WALL_MIN", "REMOVAL_MIN", "PIVOT_MIN", "ATTACKER_SHAPE",
                   "ATTACKER_ITEM", "KEPT_ANY_FORMAT", "NO_PLAN_SETS", "ITEM_FALLBACK", "SET_COHERENCE",
-                  "CORE_FIRST", "THEME_FLOORS", "GROW_TO_TARGET"]),
+                  "CORE_FIRST", "THEME_FLOORS", "GROW_TO_TARGET",
+                  "OFF_THEME_CAP", "OFF_THEME_MOST", "OFF_THEME_EXTRA"]),
     # A third question, and the reason these are not filed under "team": every other
     # knob here says what a team must BE, and these three only say "give me a
     # different one". All are off at 0. The two seeds ship off; REPEAT_BAND ships at
@@ -894,9 +903,20 @@ def regenerate(over, keys, vary):
 
     over["REGEN"] = keys
     before = _thaw(over.get("HELD"))
+    if vary:
+        # A press IS a new salt, before anything is built. A rebuilt card is routed
+        # around all 26 others where the ladder routed it around the few built before
+        # it (see run()), so an unsalted rebuild can already differ from what was
+        # showing -- gym 4's off-theme slot does, once OFF_THEME_MOST leaves the repeat
+        # penalty to break a tie -- and a press that then kept the old salt would show
+        # a new team while REROLL said nothing had been pressed. The salt is still
+        # walked further when the new one reproduces the old team.
+        reroll = dict(over.get("REROLL") or {})
+        for key in keys:
+            reroll[key] = int(reroll.get(key) or 0) + 1
+        over["REROLL"] = reroll
     result = run(over)
     if vary:
-        reroll = dict(over.get("REROLL") or {})
         for key in keys:
             was = _team_of(before.get(key))
             # Nothing was showing, so whatever came out is already a change.
@@ -1701,9 +1721,19 @@ def team_load(name, over):
         raw_originals = [m["species"] for m in G.CAPS[i]["team"]
                          if m["species"] in G._sp]
         for species in wanted:
-            if species in baseline and species not in raw_originals and any(
-                    species in G.family(original) for original in raw_originals):
-                keep.pop(species, None)
+            if species in baseline and species not in raw_originals:
+                line = [o for o in raw_originals if species in G.family(o)]
+                if line:
+                    keep.pop(species, None)
+                    # The original now SUPPLIES the imported species, so it has to be
+                    # asked for: assemble() trims un-asked originals when the pins
+                    # fill the team ("a pin took its slot"), and an un-pinned
+                    # Azumarill whose Marill was trimmed reached the team by neither
+                    # route. Ticking the original also carries the tick down the
+                    # line (keep_filter), so no competence knob drops what it grows
+                    # into.
+                    for o in line:
+                        keep[o] = True
         for old in baseline:
             if old not in wanted:
                 keep[old] = False

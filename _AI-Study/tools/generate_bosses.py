@@ -323,6 +323,27 @@ ATTACKER_ITEM = 2
 #                 type runs. SETUP_CAP still caps setup; priority is floored at most 1.
 CORE_FIRST = 1
 THEME_FLOORS = 1
+# The off-theme slot, after the core-first runs (2026-09-27, all by choice, no sims):
+#   OFF_THEME_CAP   1 holds an off-theme pick under the fight's band ceiling (target +
+#                   SPREAD/2), the ceiling kept originals already obey. Generated picks
+#                   have only a floor because deficit() steers them -- but five light
+#                   on-theme bodies leave a deficit the one off-theme slot then fills
+#                   with the heaviest body it can find: a 570 Kartana on the level-20
+#                   first gym (2.83 KOs a battle, and not a Bug gym any more).
+#   OFF_THEME_MOST  1 gives the slot to the bodies that resist the MOST theme weaknesses
+#                   still open, and lets the curve choose among those. Before, any body
+#                   resisting one open weakness qualified and the curve chose, so the
+#                   Psychic gym took a Fire/Water Volcanion (Bug) with Dark and Ghost --
+#                   the two types its draw beats it with -- both still open.
+#   OFF_THEME_EXTRA 1 spends one more slot off-theme (down to THEME_MIN_FLOOR on-theme)
+#                   when a theme weakness is still unresisted after the build and an
+#                   off-theme body could resist it: the second slot gym 7 needs
+#                   (RNB-STUDY.md §10). Only when a weakness is really open, so a gym
+#                   whose one cover body answers everything stays at ON_THEME_MIN.
+OFF_THEME_CAP = 1
+OFF_THEME_MOST = 1
+OFF_THEME_EXTRA = 1
+THEME_MIN_FLOOR = 4
 # How many levels ahead of its evolution level (stated, or the one evo_floor() infers for
 # a stone or friendship) a dev's own Pokemon may evolve when the evolved form sits nearer
 # the fight's eBST target (0 = never). Kenn's Brionne (420)
@@ -1961,10 +1982,12 @@ def keep_filter(keep, fight=None):
     a person who has looked at the card and said no. And an explicit TICK outranks the
     competence knobs (KEEP_NEED_SET, KEEP_MIN_BAND, KEEP_MEASURED) for the same reason
     in the other direction: they judge the game's defaults, not a pin someone made."""
-    dropped_lines = {}
+    dropped_lines, ticked_lines = {}, {}
     for other, on in (keep or {}).items():
         if on is False and other in _sp:
             dropped_lines.setdefault(root(other), other)
+        elif on is True and other in _sp:
+            ticked_lines.setdefault(root(other), other)
 
     def test(name, mon, protect=()):
         if keep.get(name) is False:
@@ -1981,6 +2004,11 @@ def keep_filter(keep, fight=None):
         if keep.get(name) is not True and root(name) in dropped_lines:
             return f"unticked on the card (as {dropped_lines[root(name)]})"
         if keep.get(name) is True:
+            return None
+        # A tick covers the LINE the way an untick does: a ticked Marill arrives as
+        # the Azumarill it grew into, and the competence knobs judge the game's
+        # defaults, not a mon somebody asked for.
+        if root(name) in ticked_lines:
             return None
         return keep_competent(name, mon, protect, fight)
     return test
@@ -2704,6 +2732,7 @@ def assemble(spec):
     def open_pool(tiered):
         return [n for n in eligible(level, stage, exclude_theme=theme)
                 if n not in used and in_band(n)
+                and (not (theme and OFF_THEME_CAP) or potential_bst(n, mega_ok) <= hi)
                 and (spec["ubers_ok"] or SC.band(n) != "Uber")
                 and (not theme or resisted(n)
                      or (not cover and correlation[SC.norm(n)] >= MIN_CORR))
@@ -2728,7 +2757,11 @@ def assemble(spec):
         # the co-occurrence pick this gate replaced. With no gap left, the curve
         # decides as before.
         live = gaps() if cover else []
-        cand = ([n for n in pool if set(resisted(n)) & set(live)] or pool) if live else pool
+        if live and OFF_THEME_MOST:
+            best = max((len(set(resisted(n)) & set(live)) for n in pool), default=0)
+            cand = [n for n in pool if len(set(resisted(n)) & set(live)) == best] if best else pool
+        else:
+            cand = ([n for n in pool if set(resisted(n)) & set(live)] or pool) if live else pool
         cand.sort(key=ranked(open_tail))
         before = len(team)
         if not (any(take(cand, r, _why(spec["why_open"], r)) for r in todo)
@@ -2746,6 +2779,36 @@ def assemble(spec):
             else:
                 notes.append(f"{m['species']} off-theme: resists "
                              f"{'/'.join(resisted(m['species']))}")
+
+    # OFF_THEME_EXTRA: a weakness still open after the build, and the team already at its
+    # on-theme minimum, so the one cover slot was not enough. Give up the lightest
+    # generated on-theme body -- never a kept one, never a floor's last holder -- for an
+    # off-theme body that resists what is open, down to THEME_MIN_FLOOR on-theme.
+    if cover and OFF_THEME_EXTRA and len(team) >= size and gaps() \
+            and on_theme() > THEME_MIN_FLOOR:
+        live = gaps()
+        able = [n for n in pool if set(resisted(n)) & set(live)]
+        spare = [m for m in team if not m["kept"] and not is_dynamic(m["species"])
+                 and theme in _sp[m["species"]]["types"]
+                 and not any(have[r] <= floors[r] for r in floors if r in m["roles"])]
+        if able and spare:
+            victim = min(spare, key=ebst)
+            i = team.index(victim)
+            team.pop(i)
+            have.subtract(victim["roles"])
+            used.discard(victim["species"])
+            best = max(len(set(resisted(n)) & set(live)) for n in able)
+            cand = [n for n in able if len(set(resisted(n)) & set(live)) == best]
+            cand.sort(key=ranked(open_tail))
+            if take(cand, None, _why(spec["why_open"], None)):
+                m = team[-1]
+                notes.append(f"{m['species']} off-theme, a second cover slot: resists "
+                             f"{'/'.join(resisted(m['species']))}, open after the build; "
+                             f"{victim['species']} gave up its slot")
+            else:
+                team.insert(i, victim)
+                have.update(victim["roles"])
+                used.add(victim["species"])
 
     # With the co-occurrence route closed, a theme whose weaknesses no legal body
     # resists can run out of off-theme candidates. The slot goes back to the theme

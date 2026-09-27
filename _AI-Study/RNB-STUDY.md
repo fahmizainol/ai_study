@@ -1108,6 +1108,38 @@ which six bodies are chosen by these rules. What has not been tried: the second 
 slot gym 7's draw needs, and speed / EV spreads, which the sims play at zero EVs.
 
 
+**The off-theme slot, and shipping** (2026-09-27, no sims -- three rosters in a row sat
+inside the noise of each other, so these were judged on the roster). Three switches:
+- `OFF_THEME_CAP` holds an off-theme pick under the fight's band ceiling, the ceiling kept
+  originals already obey. It removes the level-20 Kartana from the Bug gym (Minior and
+  Klefki cover Flying/Fire and Flying/Rock instead) and Ho-Oh (680 against a 650 ceiling)
+  from the Champion, who takes a Band Dragonite (Fighting/Ground/Fire) instead.
+- `OFF_THEME_MOST` gives the slot to the bodies that resist the MOST theme weaknesses still
+  open, then lets the curve choose among them. Psychic's slot goes from a Fire/Water
+  Volcanion (Bug only) to Magearna (Bug and Dark); Dark's from Dhelmise (Fighting) to
+  Toxapex (Fighting, Bug and Fairy -- all three); Ice's from Slowking to Quagsire (Rock,
+  Steel, Fire). Ghost stays open on gym 7: no legal body resists all three, and the floors
+  protect every on-theme slot (see next).
+- `OFF_THEME_EXTRA` spends a second slot off-theme, down to four on-theme, when a theme
+  weakness is still unresisted after the build -- giving up the lightest generated
+  on-theme body that is not a floor's last holder. It fires on the Ground gym only (Water
+  was open; Celebi comes in for Donphan, whose Rapid Spin Excadrill already carries). On the
+  Psychic gym every on-theme body is the last holder of a floor, so it does not fire.
+
+The Boss Studio import is repaired: `team_load` un-pins an imported evolution in favour of
+the original that grows into it but left that original un-asked, so the slot trim dropped
+the original and the evolution reached the team by neither route (the shipped gym 2's
+Azumarill). The original is now ticked, and a tick covers the line the way an untick does.
+
+Shipping: the generator's current defaults are what the sims measured; the shipped
+companion preset still carries pre-study settings (six on-theme, KEEP_MIN_BAND 5, hand
+edits to a gym 2 roster that no longer exists), so the install should run from the
+defaults, not the preset. `Install into game` in the Studio, or
+`boss_studio.install_game({}, "all")`, validates the 27 fights, writes
+teams_bosses_gyms.json / teams_trainers.json / Team_Overrides.rb and replaces the
+Team_Overrides section of `Realidea V4.1/Data/Scripts.rxdata`; on the Deck the in-repo
+bundle is byte-identical to the game's, so the game copy needs the same file afterwards.
+
 **Traps met on the way** (all fixed in the tools):
 - On a machine where 127.0.0.1 has no rDNS and something listens on port 80, Showdown
   calls localhost an open proxy and locks every bot (`setup_battles.py` now declares
