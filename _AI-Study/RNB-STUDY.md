@@ -933,6 +933,31 @@ Ho-Oh and Mega Metagross in for Jirachi and Mewtwo), gym 3 2-10 -> 4-8, gym 6 5-
 gym 8 fell 6-6 -> 3-9 and gym 7 stayed 2-10. Trainers did not move: the cap never applied
 to them and they carried one plan set. Real gen 7 teams at this depth: 64.1%.
 
+**The item has to agree with the moves** (2026-09-27, `rnb_vs_gen_fix2_10ms`,
+`_trainers_fix2_10ms`). Left in the fixed roster: an Assault Vest Ho-Oh with Recover (the
+Vest blocks it), a Scarf Honchkrow with Sucker Punch and the two-turn Sky Attack, Solar
+Beam on a Cresselia with no sun, Round on a Specs Rotom. SET_COHERENCE replaces a status
+move on a Vest set with an attack the species has (or the Vest with Leftovers), turns a
+Choice set with a status move and no Trick into Life Orb, and ranks a Scarf set with a
+priority move last; FILLER_AVOID gains the 40-60 power fillers and the two-turn attacks;
+SETUP_CAP goes 1 -> 2 because a kept Swords Dance user was blocking every other setup set
+(Xerneas still did not get Geomancy at gym 7: Gallade and a Calm Mind Cresselia fill
+both). 20 of 27 teams changed a slot. Played: gyms 52/108 (48.1%) v 55/108, trainers
+66/120 (55.0%) v 58/120 -- −2.8 and +7.3, both inside the replay floor. A cleanup with no
+measured cost or gain; the roster is what the previous run established, about half the
+battles won against these bosses, real gen 7 teams at 64%.
+
+Where the generator stands at 10 ms, in order of change:
+
+| roster | gyms | trainers |
+|---|--:|--:|
+| walls arm (2026-09-25 rules) | 31.5% | 28.3% |
+| limiters released + attacker rules (two identical runs) | 35.2% / 43.5% | 35.0% / 41.7% |
+| + KEEP_MEASURED | 38.0% | 49.2% |
+| + the four weak-roster fixes | **50.9%** | 48.3% |
+| + set coherence | 48.1% | **55.0%** |
+| real gen 7 teams | 64.1% | |
+
 A first version drew replacements instead of swapping and favoured some sets: the
 sets it left out had KO'd 0.79 a battle in the intact run against 0.64 for the ones it
 used, which would have made collages look weak for the wrong reason.
