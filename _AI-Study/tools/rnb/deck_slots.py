@@ -90,6 +90,14 @@ SCHEDULE = [
     ("2026-09-27 03:03:37", "rnb_vs_gen_atk_10ms_b"),
     ("2026-09-27 03:07:27", "rnb_vs_gen_trainers_atk_10ms_b"),
     ("2026-09-27 03:11:49", None),
+    # the four weak-roster fixes (2026-09-27)
+    ("2026-09-27 11:27:52", "rnb_vs_gen_fix_10ms"),
+    ("2026-09-27 11:31:53", "rnb_vs_gen_trainers_fix_10ms"),
+    ("2026-09-27 11:36:28", "rnb_vs_gen_fix_10ms"),
+    ("2026-09-27 11:40:14", "rnb_vs_gen_trainers_fix_10ms"),
+    ("2026-09-27 11:45:00", "rnb_vs_gen_fix_10ms"),
+    ("2026-09-27 11:48:51", "rnb_vs_gen_trainers_fix_10ms"),
+    ("2026-09-27 11:53:38", None),
 ]
 SCHED = [(time.mktime(datetime.datetime.strptime(s, "%Y-%m-%d %H:%M:%S").timetuple()), a) for s, a in SCHEDULE]
 ORDER = ["rnb_vs_gen_deckoff", "rnb_vs_gen_theme", "rnb_vs_gen_tier", "rnb_vs_gen_all",

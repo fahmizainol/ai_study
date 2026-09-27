@@ -337,7 +337,7 @@ KEEP_DROP = 0
 # SET_FIT and SETUP_CAP 1 on since 2026-09-25, by choice (tested: no measurable effect).
 SET_FIT = True
 WALL_BULK = 0.55
-SETUP_CAP = 1
+SETUP_CAP = 2   # 2 since 2026-09-27: at 1 a kept Swords Dance user blocked Xerneas's Geomancy
 ITEM_PURPOSE = False
 # Competence tests for the dev's OWN Pokemon, both OFF by default because a fangame
 # roster is a design choice before it is a competitive one -- a level-31 water gym is
@@ -963,10 +963,24 @@ def map_stage(map_id):
 # conditional-power moves are a wasted turn when the bot clicks them, and the filler
 # ranking is power x accuracy, which is exactly what puts Giga Impact on every attacker
 # that lost a move. Falls back to them only when nothing else is legal.
-FILLER_AVOID = {"GIGAIMPACT", "HYPERBEAM", "BLASTBURN", "HYDROCANNON", "FRENZYPLANT",
-                "ROAROFTIME", "ROCKWRECKER", "PRISMATICLASER", "LASTRESORT", "FACADE",
-                "SNORE", "BIDE", "FLING", "DREAMEATER", "NATURALGIFT", "BELCH", "SPITUP",
-                "FRUSTRATION", "SYNCHRONOISE", "SKYDROP", "FLAIL", "REVERSAL", "STOREDPOWER"}
+FILLER_AVOID_V1 = {"GIGAIMPACT", "HYPERBEAM", "BLASTBURN", "HYDROCANNON", "FRENZYPLANT",
+                   "ROAROFTIME", "ROCKWRECKER", "PRISMATICLASER", "LASTRESORT", "FACADE",
+                   "SNORE", "BIDE", "FLING", "DREAMEATER", "NATURALGIFT", "BELCH", "SPITUP",
+                   "FRUSTRATION", "SYNCHRONOISE", "SKYDROP", "FLAIL", "REVERSAL", "STOREDPOWER"}
+# V2 (2026-09-27) adds the 40-60 power fillers that reached Specs Rotom and Whimsicott, and
+# the two-turn attacks (Sky Attack on a Scarf Honchkrow, Solar Beam on a Cresselia with no
+# sun). A published set that carries one keeps it -- a sun team's Solar Beam is its own.
+FILLER_AVOID = FILLER_AVOID_V1 | {"ROUND", "SWIFT", "ECHOEDVOICE", "SKYATTACK", "SOLARBEAM",
+                                  "SOLARBLADE", "FLY", "DIG", "BOUNCE", "SKULLBASH", "RAZORWIND",
+                                  "PHANTOMFORCE", "SHADOWFORCE", "FREEZESHOCK", "ICEBURN",
+                                  "METEORBEAM", "GEOMANCY"}
+# The item and the moves have to agree (SET_COHERENCE, 2026-09-27): an Assault Vest blocks
+# status moves, so a Vest set that arrives with one (Ho-Oh's Recover, after a swap) gets
+# the status move replaced by an attack the species has, or the Vest becomes Leftovers;
+# a Choice set with a status move and no Trick becomes Life Orb; and a Scarf set carrying
+# a priority move ranks bottom for the item, since the Scarf makes the priority pointless
+# and the lock makes it a trap.
+SET_COHERENCE = 1
 
 
 def filler(moves):
@@ -1208,6 +1222,8 @@ def item_tier(moves, item):
         locked_ok = all(_mv.get(m, {}).get("power", 0) > 0 for m in moves) \
             or {"TRICK", "SWITCHEROO"} & set(moves)
         if not locked_ok:
+            return 0
+        if item == "CHOICESCARF" and SET_COHERENCE and set(moves) & TS.ROLE_MOVES["priority"]:
             return 0
         return 3 if item != "CHOICESCARF" else 2
     if item in MEGASTONE or item == "ASSAULTVEST":
@@ -1462,6 +1478,23 @@ def build(species, level, banned_items=(), want=None, avoid=(), allow_items=None
         item = "LEFTOVERS" if wall_set(moves) or "LIFEORB" not in _items else "LIFEORB"
         if item not in _items:
             item = None
+    if SET_COHERENCE and item in ("ASSAULTVEST", "CHOICEBAND", "CHOICESPECS", "CHOICESCARF"):
+        status = [m for m in moves if _mv[m]["power"] == 0]
+        if item == "ASSAULTVEST" and status:
+            # an attack the species has and the set lacks, else no Vest
+            pool = [m for m in filler(legal_moves(species, level, cap))
+                    if m not in moves and _mv[m]["power"] > 0]
+            for st_move in status:
+                if not pool:
+                    break
+                pick = max(pool, key=lambda m: (_mv[m]["type"] not in covered, score(m)))
+                pool.remove(pick)
+                moves[moves.index(st_move)] = pick
+                covered.add(_mv[pick]["type"])
+            if any(_mv[m]["power"] == 0 for m in moves):
+                item = "LEFTOVERS" if "LEFTOVERS" in _items else None
+        elif item != "ASSAULTVEST" and status and not {"TRICK", "SWITCHEROO"} & set(moves):
+            item = "LIFEORB" if "LIFEORB" in _items else item
 
     ev = [0] * 6
     for k, v in (st.get("evs") or {}).items():

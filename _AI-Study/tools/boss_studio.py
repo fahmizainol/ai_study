@@ -223,6 +223,11 @@ SCALARS = {
     "ITEM_FALLBACK": ("int", 0, 1, 1,
                       "1 gives a set that arrives with no usable item Leftovers (wall) or "
                       "Life Orb (attacker); never a Choice item"),
+    "SET_COHERENCE": ("int", 0, 1, 1,
+                      "1 makes the item and the moves agree: a status move on an Assault "
+                      "Vest set is replaced by an attack (or the Vest by Leftovers), a "
+                      "Choice set with a status move and no Trick becomes Life Orb, a "
+                      "Scarf set with a priority move ranks last"),
     "UNLOCK_STAGE": ("int", 0, 9, 1, "badge from which megas and strong items unlock"),
     "EARLY_ITEM_CAP": ("int", 0, 1, 1,
                        "1 holds fights before UNLOCK_STAGE to the early item pool "
@@ -252,7 +257,7 @@ GROUPS = [
     ("coverage", ["COVER_BAND", "HOLE_MIN_WEAK", "THREAT_COVER", "OFF_THEME_COVER",
                   "TIER_BAND", "USAGE_BAND", "SET_TIER_MATCH", "SHAPE_CHECK",
                   "GYM_MODES", "WALL_MIN", "REMOVAL_MIN", "PIVOT_MIN", "ATTACKER_SHAPE",
-                  "ATTACKER_ITEM", "KEPT_ANY_FORMAT", "NO_PLAN_SETS", "ITEM_FALLBACK"]),
+                  "ATTACKER_ITEM", "KEPT_ANY_FORMAT", "NO_PLAN_SETS", "ITEM_FALLBACK", "SET_COHERENCE"]),
     # A third question, and the reason these are not filed under "team": every other
     # knob here says what a team must BE, and these three only say "give me a
     # different one". All are off at 0. The two seeds ship off; REPEAT_BAND ships at
