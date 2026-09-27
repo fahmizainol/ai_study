@@ -1197,6 +1197,21 @@ patch in `Scripts.rxdata` -- both the repo's game copy and the play copy under
 on the Windows machine the game is played on, one debug-mode start there to recompile the
 PBS, and `learnset_merge.py --with-aurora-veil` once the move is seen working.
 
+**The PBS compile, and why the compiled data is now committed** (2026-09-28). Realidea's
+shipped `Game.exe` is an mkxp-z build and its Compiler section runs only `if $DEBUG &&
+!$MKXP`, so the player never turns PBS/*.txt into Data/*.dat; the stock RGSS player it also
+ships (`Game (old).exe`, which reads `Game (old).ini`) crashes with an access violation in
+every RGSS DLL on the Windows machine the game is played on, with or without the study's
+bundle. `tools/compile_pbs_bundle.py` stages a one-run bundle whose Compiler section
+compiles unconditionally (the Win32 progress call made a no-op, since under mkxp it raises
+and the rescue deletes every .dat). Run once on the Deck through Proton (memory:
+realidea-under-proton) with `Data/portable_ai.txt` set aside: all 21 data files plus
+Constants.rxdata and messages.dat rewritten in about a minute, no error log, and the game
+booted on them -- attacksRS.dat 56,968 -> 59,552 bytes (level-up moves), tm.dat 65,931 ->
+78,061 (tutor sections), eggEmerald.dat 13,146 -> 13,750 (egg moves), moves.dat unchanged
+(no new moves). Those files are committed under `Realidea V4.1/Data/` beside the bundle, so
+a pull is the whole install and nobody compiles.
+
 **Traps met on the way** (all fixed in the tools):
 - On a machine where 127.0.0.1 has no rDNS and something listens on port 80, Showdown
   calls localhost an open proxy and locks every bot (`setup_battles.py` now declares
