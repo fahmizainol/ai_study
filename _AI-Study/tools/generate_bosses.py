@@ -353,6 +353,13 @@ THEME_FLOORS = 1
 #                   off-theme body could resist it: the second slot gym 7 needs
 #                   (RNB-STUDY.md §10). Only when a weakness is really open, so a gym
 #                   whose one cover body answers everything stays at ON_THEME_MIN.
+# 1 fills a themed fight's mode setter (weather, Trick Room) FIRST, from its own type, before
+# the core and even when the kept originals already meet the theme minimum. A mode is a
+# plan the other five are chosen for; before this, gym 4 in hail came out with no Snow
+# Warning at all -- its four kept Ice mons met the Ice minimum, so both free slots went
+# off-theme, and every hail setter at level 35 is an Ice type (2026-09-28). Low-tier
+# setters are a fallback: a mode with no setter is no mode.
+MODE_SETTER_FIRST = 1
 OFF_THEME_CAP = 1
 OFF_THEME_MOST = 1
 OFF_THEME_EXTRA = 1
@@ -1772,7 +1779,7 @@ def excluded(name, stage):
     The one predicate behind both gates, so that eligible() (what we shop from) and
     grown() (where a dev's mon ends up) cannot disagree -- Cosmog's line ends in
     Solgaleo and Lunala, and evolving into one is still picking one."""
-    return (name in DEAD_PRIMARY
+    return (name in DEAD_PRIMARY or name in D.DEAD_SLOTS
             or (_sp[name]["bst"] >= LEGEND_BST and stage < LEGEND_FROM))
 
 
@@ -2711,10 +2718,27 @@ def assemble(spec):
                                  f"{'/'.join(lose)}, which beats {' + '.join(pair)}; "
                                  f"left to the off-theme slot")
 
+    def setter_first(core):
+        """MODE_SETTER_FIRST: the mode's setter takes the first free slot, on-theme."""
+        low = [n for n in eligible(level, stage, theme=theme)
+               if n not in used and n not in core and in_band(n) and keep(n)]
+        for src in (core, low):
+            cand = [n for n in src if n not in used]
+            cand.sort(key=ranked(lambda n: (SC.rank(n),)))
+            if take(cand, mode, _why(spec["why_theme"], mode)):
+                name = team[-1]["species"]
+                if name in core:
+                    core.remove(name)
+                notes.append(f"{name} sets the {mode} plan, placed before the core")
+                return
+        notes.append(f"no on-theme {mode} setter at level {level}; left to the open pool")
+
     core = []
     if theme:
         core = [n for n in eligible(level, stage, theme=theme)
                 if n not in used and in_band(n) and keep(n) and tier_ok(n)]
+        if MODE_SETTER_FIRST and mode and have[mode] < floors.get(mode, 0) and len(team) < size:
+            setter_first(core)
         if CORE_FIRST and core and len(team) < size:
             core_first(core)
         while on_theme() < spec["on_theme_min"] and len(team) < size and core:

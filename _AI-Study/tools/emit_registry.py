@@ -40,14 +40,23 @@ def emit_level(lv):
     token, off = lv
     return f'[{rstr(token)},{off}]'
 
+# The study's species for a scripted form (realidea_data.FORM_SPECIES), e.g. ANINETALES,
+# goes to the game as its base species and form -- createPokemon("NINETALES") and form 1 --
+# since the slot's own sprite is another Pokemon. Mirrored here so this module stays free
+# of the PBS reader.
+FORM_SPECIES = {"ANINETALES": ("NINETALES", 1)}
+
+
 def emit_mon(m):
     iv = m.get("iv", 31)
     ivs = [iv] * 6 if isinstance(iv, int) else iv
     moves = "[" + ",".join(rsym(x) for x in m["moves"]) + "]"
     item = rsym(m["item"]) if m.get("item") else "nil"
-    return (f'[{rstr(m["species"])},{emit_level(m["level"])},{moves},{item},'
+    species, form = FORM_SPECIES.get(m["species"], (m["species"], None))
+    tail = f",{form}" if form is not None else ""
+    return (f'[{rstr(species)},{emit_level(m["level"])},{moves},{item},'
             f'{m.get("ability", 0)},{rsym(m["nature"])},'
-            f'{ivs},{m.get("ev", [0]*6)}]')
+            f'{ivs},{m.get("ev", [0]*6)}{tail}]')
 
 def main(out_path, *team_files):
     teams = []
@@ -121,7 +130,7 @@ def main(out_path, *team_files):
         lines.append(']')
         lines.append("")
     lines += [
-        "# Shared builder: spec row = [species, level, [moves], item, abil, nature, ivs, evs]",
+        "# Shared builder: spec row = [species, level, [moves], item, abil, nature, ivs, evs, form?]",
         "#",
         "# A lowercase species is a METHOD name, not a species: the rival fights build",
         "# their starter slot from Pokes Rivales (owenpoke2, albapoke1, ...), which pick",
@@ -141,6 +150,9 @@ def main(out_path, *team_files):
         "    # no fixed species here, so it cannot carry a precomputed set",
         "    poke = ms[2].empty? ? createPokemon(sp, lv) : createPokemon(sp, lv, ms[2].dup)",
         "    if poke",
+        "      # a scripted form (Alolan Ninetales = NINETALES form 1): set before the",
+        "      # ability, whose list the form replaces, and before calcStats",
+        "      poke.form = ms[8] if ms[8]",
         "      poke.setItem(getConst(PBItems, ms[3])) if ms[3]",
         "      poke.setAbility(ms[4])",
         "      poke.iv = ms[6].dup",

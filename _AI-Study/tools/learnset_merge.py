@@ -81,8 +81,20 @@ def realidea_moves(pbs):
     return out
 
 
+NAMES = {}      # INTERNAL -> Name=, filled by main(); an A-slot is Alolan only if it matches
+# Species with no pre-evolution in Realidea whose Showdown pre-evolution carries the egg
+# moves: Alolan Ninetales is slot ANINETALES, and nothing in pokemon.txt evolves into it
+# (the game's Alolan Vulpix is VULPIX form 1), so Alolan Vulpix's egg moves -- Freeze-Dry,
+# Moonblast, Encore -- land on it directly.
+EGG_FROM_PREVO = {"ANINETALES"}
+
+
 def showdown_id(internal, sd):
-    """Realidea internal name -> Showdown species id, or None (fakemon, unknown forme)."""
+    """Realidea internal name -> Showdown species id, or None (fakemon, unknown forme).
+
+    Realidea reuses two Alolan slots for fakemons (AVULPIX is Stantious, ASANDSLASH is
+    Stagbrood); the first merge gave both the Alolan learnsets. An A-prefixed name maps to
+    the Alolan forme only when its Name= is the base species' Name=."""
     t = tid(internal)
     if t in sd:
         return t
@@ -90,7 +102,8 @@ def showdown_id(internal, sd):
         return "nidoranf"
     if internal == "NIDORANmA":
         return "nidoranm"
-    if internal.startswith("A") and tid(internal[1:]) + "alola" in sd:   # ARAICHU -> raichualola
+    if internal.startswith("A") and tid(internal[1:]) + "alola" in sd \
+            and NAMES.get(internal) and NAMES.get(internal) == NAMES.get(internal[1:]):   # ARAICHU -> raichualola
         return tid(internal[1:]) + "alola"
     return None
 
@@ -115,9 +128,13 @@ def main(argv):
     # ---- pokemon.txt -------------------------------------------------------------
     lines, bom, crlf = read_lines(os.path.join(pbs, "pokemon.txt"))
     species_at = {}          # INTERNAL -> index of its InternalName= line
+    name = None
     for i, ln in enumerate(lines):
-        if ln.startswith("InternalName="):
+        if ln.startswith("Name="):
+            name = ln.split("=", 1)[1].strip()
+        elif ln.startswith("InternalName="):
             species_at[ln.split("=", 1)[1].strip()] = i
+            NAMES[ln.split("=", 1)[1].strip()] = name
     order = sorted(species_at, key=species_at.get)
     bounds = {sp: (species_at[sp], species_at[order[k + 1]] if k + 1 < len(order) else len(lines))
               for k, sp in enumerate(order)}
@@ -157,6 +174,13 @@ def main(argv):
                 add_level.append((max(lv, 1), mv))
             elif "E" in kinds and not entry["prevo"]:
                 add_egg.append(mv)
+        if sp in EGG_FROM_PREVO and entry["prevo"] in sd:
+            for move_id, srcs in sd[entry["prevo"]]["moves"].items():
+                mv = internal_move(move_id)
+                if any(s[1] == "E" for s in srcs) and mv and mv not in EXCLUDE \
+                        and mv not in known[sp] and mv not in add_egg \
+                        and mv not in {m for _, m in add_level}:
+                    add_egg.append(mv)
         if add_level:
             merged = sorted(level + add_level, key=lambda x: x[0])   # stable: existing first at a level
             lines[mi] = "Moves=" + ",".join(f"{lv},{m}" for lv, m in merged)

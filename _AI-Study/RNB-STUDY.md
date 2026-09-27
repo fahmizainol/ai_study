@@ -1214,6 +1214,42 @@ a pull is the whole install and nobody compiles. Aurora Veil was seen working in
 2026-09-28, so the merge was rerun with `--with-aurora-veil`: one new `[AURORAVEIL]` tutor
 section for its 13 gen 7 learners, no roster changes, tm.dat recompiled (78,092 bytes).
 
+**Alolan slots, Ninetales as a form, and a mode setter first** (2026-09-28). Asked what gym
+4 looks like as a hail fight, the generator changed nothing: no Snow Warning setter reached
+the team. Three causes, all fixed:
+- Slots 804-821 of `pokemon.txt` are a gen 7 "Alolan forms as species" layer the game never
+  wired up. Nothing evolves into them, and `Graphics/Battlers/804-821.png` are Naganadel
+  through Rookidee, so Alolan Ninetales (slot 810) appeared in battle as Grookey. The game's
+  one real Alolan form is Ninetales FORM 1 (`Pokemon_MultipleForms`: Ice/Fairy, Snow
+  Warning, `038_1.png`). `realidea_data.DEAD_SLOTS` (the other 17) is now never chosen by
+  the boss or filler generators; `FORM_SPECIES` keeps ANINETALES as the study's species
+  (its PBS entry has the form's types, stats and abilities, and the corpus calls it
+  NINETALESALOLA: UUBL, 13 sets) with the level floor of Ninetales, and `emit_registry`
+  sends it to the game as `NINETALES` + form 1 (a ninth spec-row field; the builder sets
+  `poke.form`). Four filler fights had drawn dead slots (two Alolan Persians, a Raticate,
+  a Dugtrio) and showed gen 8 sprites; only those four were regenerated.
+- The first learnset merge gave Alolan learnsets to the two fakemons Realidea parks in
+  the layer (AVULPIX is Stantious, ASANDSLASH is Stagbrood). The merge now maps an A-slot
+  to its Alolan forme only when its `Name=` matches the base species', was rerun from the
+  `.pre-gen7` backups, and gives Alolan Ninetales Alolan Vulpix's egg moves (Freeze-Dry,
+  Moonblast, Encore), since nothing links the two in Realidea. PBS recompiled.
+- `MODE_SETTER_FIRST` (on): a themed fight's weather / Trick Room setter takes the first
+  free slot, on-theme, before the core -- gym 4's four kept Ice mons meet the Ice minimum,
+  so both free slots used to go off-theme, and every hail setter at level 35 is Ice.
+
+Gym 4 (level 36, four kept Ice mons), built in the nine-gym order:
+
+| Ice minimum | weather | team |
+|---|---|---|
+| 4 | none (shipped) | Mamoswine, Weavile, Cloyster, Froslass, Quagsire, Magnezone |
+| 4 | hail | **Light Clay Alolan Ninetales** (Aurora Veil / Freeze-Dry / Moonblast / Blizzard) leads; Magnezone out |
+| 5 | none | the same Ninetales takes the fifth Ice slot, not leading (Snow Warning still sets hail) |
+| 5 | hail | as Ice 4 + hail |
+
+Player-side caveat: in the game, Alolan Ninetales is NINETALES form 1, and Essentials v16
+keys TM / tutor compatibility by species, so a player's Alolan Ninetales still reads fire
+Ninetales's TM list (no Aurora Veil). Bosses are unaffected -- `createPokemon` sets moves.
+
 **Traps met on the way** (all fixed in the tools):
 - On a machine where 127.0.0.1 has no rDNS and something listens on port 80, Showdown
   calls localhost an open proxy and locks every bot (`setup_battles.py` now declares

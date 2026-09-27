@@ -64,6 +64,10 @@ def pool_for(theme, level, bst_cap, rng, curveball):
         s = sp[name]
         if not s["types"] or s["bst"] > bst_cap or floor[name] > level:
             return False
+        # slots whose sprite is another Pokemon (D.DEAD_SLOTS): four filler fights
+        # showed an Alolan-slot Persian / Raticate / Dugtrio as a gen 8 mon
+        if name in D.DEAD_SLOTS:
+            return False
         # skip mons whose evolution is far behind them (a stale pick like a lv40
         # Caterpie, or the lv50 Bonsly this used to let through: a stone or a
         # friendship evolution carries a level of its own now -- see D.evo_floor())

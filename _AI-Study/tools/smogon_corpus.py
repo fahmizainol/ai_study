@@ -41,8 +41,17 @@ def stats_only(on=True):
     sets.cache_clear()
 
 
+# Realidea's one real Alolan form is Ninetales form 1 (Pokemon_MultipleForms); the study
+# models it as the species ANINETALES (slot 810, whose PBS entry carries the form's
+# types, stats and abilities) and the registry emits it as NINETALES form 1
+# (realidea_data.FORM_SPECIES). The corpus spells it NINETALESALOLA. Every other
+# A-prefixed slot is dead (realidea_data.DEAD_SLOTS) and never chosen (2026-09-28).
+SPECIES_ALIAS = {"ANINETALES": "NINETALESALOLA"}
+
+
 def norm(s):
-    return re.sub(r"[^A-Z0-9]", "", (s or "").upper())
+    n = re.sub(r"[^A-Z0-9]", "", (s or "").upper())
+    return SPECIES_ALIAS.get(n, n)
 
 
 # ---------------------------------------------------------------- tiers

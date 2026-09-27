@@ -60,6 +60,7 @@ if arm != "shipped":
     # that -- the .pre-gen7-*.bak files beside them.
     GB.OFF_THEME_CAP, GB.OFF_THEME_MOST, GB.OFF_THEME_EXTRA, GB.EGG_MOVES = 0, 0, 0, 0
     GB.SET_GEN_MAX, GB.FILLER_AVOID = 0, GB.FILLER_AVOID_V2
+    GB.MODE_SETTER_FIRST = 0
 if arm not in ("core2", "shipped"):
     # evolving a kept original toward the target, and the higher measured bar, after
     # the core arm was played

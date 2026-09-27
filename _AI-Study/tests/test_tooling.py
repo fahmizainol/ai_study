@@ -411,6 +411,12 @@ class BossStudioLoadInstalledTest(unittest.TestCase):
         """Otherwise the test above proves nothing -- it would pass on a page that
         never loaded anything."""
         fresh = self.sig(self.BS.run({})["records"])
+        if self.sig(self._disk(self.BS.SHIPPED)) == fresh:
+            # Since 2026-09-27 the game ships the generator's defaults (install_game({})),
+            # so the installed gyms ARE the default build and this cannot tell a load from
+            # no load. Not a failure of the loader; the check only means something while
+            # the installed file carries edits of its own.
+            self.skipTest("the installed gyms are the default build")
         self.assertNotEqual(self.sig(self._disk(self.BS.SHIPPED)), fresh)
 
 

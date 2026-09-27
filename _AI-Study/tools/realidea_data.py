@@ -43,12 +43,14 @@ STAT_ORDER = ["HP", "ATK", "DEF", "SPD", "SPA", "SPDEF"]
 def species():
     """{INTERNALNAME: {types, base_stats(list of 6, PBS order), bst, abilities,
     hidden_ability, learnset [(level, MOVE)...], evolutions [(child, method, param)]}}"""
-    out, cur = {}, None
+    out, cur, name = {}, None, None
     for line in open(os.path.join(PBS, "pokemon.txt"), encoding="utf-8-sig", errors="replace"):
         line = line.strip()
-        if line.startswith("InternalName="):
+        if line.startswith("Name="):
+            name = line.split("=", 1)[1]
+        elif line.startswith("InternalName="):
             cur = line.split("=", 1)[1]
-            out[cur] = {"types": [], "abilities": [], "hidden_ability": None,
+            out[cur] = {"types": [], "abilities": [], "hidden_ability": None, "name": name,
                         "learnset": [], "egg": [], "evolutions": [], "base_stats": [], "bst": 0}
         elif cur is None:
             continue
@@ -71,6 +73,21 @@ def species():
             f = line.split("=", 1)[1].split(",")
             out[cur]["evolutions"] = [tuple(f[i:i+3]) for i in range(0, len(f) - 2, 3)]
     return out
+
+
+# Slots 804-821 of pokemon.txt are a gen 7 "Alolan forms as species" layer the game never
+# wired up: nothing evolves into them, and Graphics/Battlers/804-821.png are Naganadel
+# through Rookidee (national dex numbers), so a boss holding one shows the wrong Pokemon --
+# ANINETALES appeared in battle as Grookey (2026-09-28). The game's one real Alolan form is
+# Ninetales FORM 1 (Pokemon_MultipleForms: Ice/Fairy, Snow Warning, 038_1.png). So:
+#   FORM_SPECIES  a slot the study keeps as a species but the game gets as (base, form);
+#                 its PBS entry already carries the form's types, stats and abilities
+#   DEAD_SLOTS    every other slot in that layer, never chosen by a generator
+FORM_SPECIES = {"ANINETALES": ("NINETALES", 1)}
+DEAD_SLOTS = frozenset({
+    "ARATTATA", "ARATICATE", "ARAICHU", "ASANDSHREW", "ASANDSLASH", "AVULPIX", "ADIGLETT",
+    "ADUGTRIO", "AMEOWTH", "APERSIAN", "AGEODUDE", "AGRAVELER", "AGOLEM", "AGRIMER", "AMUK",
+    "AEXEGGUTOR", "AMAROWAK"})
 
 
 @lru_cache(maxsize=1)
@@ -200,6 +217,10 @@ def min_level():
         for (parent, child), _ in evo_floor().items():
             if floor[parent] > floor[child]:
                 floor[child], changed = floor[parent], True
+    # a form arrives the way its base does (Alolan Ninetales: Vulpix + Ice Stone)
+    for name, (base, _form) in FORM_SPECIES.items():
+        if name in floor and base in floor:
+            floor[name] = max(floor[name], floor[base])
     return floor
 
 

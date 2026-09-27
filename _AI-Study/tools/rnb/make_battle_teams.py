@@ -47,6 +47,8 @@ EXCLUDED = ("Leader_Tate", "Leader_Liza")
 # legal mega; validate_teams.js is the authority and found this one in the gen 7 pool.
 UNPLAYABLE = {"greninjaash"}
 ALIAS = {"enamorust": "enamorustherian"}
+# Alolan Ninetales (Realidea's ANINETALES, i.e. NINETALES form 1) -- smogon_corpus.SPECIES_ALIAS.
+ALIAS["aninetales"] = "ninetalesalola"
 
 
 def first_option(s):
