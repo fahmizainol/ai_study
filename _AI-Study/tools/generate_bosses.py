@@ -1785,7 +1785,8 @@ def excluded(name, stage):
     grown() (where a dev's mon ends up) cannot disagree -- Cosmog's line ends in
     Solgaleo and Lunala, and evolving into one is still picking one."""
     return (name in DEAD_PRIMARY or name in D.DEAD_SLOTS
-            or (_sp[name]["bst"] >= LEGEND_BST and stage < LEGEND_FROM))
+            or ((_sp[name]["bst"] >= LEGEND_BST or name in ULTRA_BEASTS)
+                and stage < LEGEND_FROM))
 
 
 def grown(name, level, stage, theme=None, early=False, slack=0):
@@ -1878,6 +1879,11 @@ DEAD_PRIMARY = frozenset({
 # PHIONE is deliberately NOT here: it is the breedable one, 480 BST, and nothing in
 # this generator should treat it as a box legendary. FAEMIEBICHITO is, fakemon or not
 # -- Undiscovered at catch rate 3 is the dev saying so.
+# All seven sit at 570 BST, ten under LEGEND_BST, so the stage gate let them through from
+# gym 1: Xurkitree on Teresa's level-22 fight, Nihilego on two rival fights at 28 and 32,
+# Kartana on gym 3 (2026-09-28). The games hold them back as legendaries; so does this.
+ULTRA_BEASTS = frozenset({"NIHILEGO", "BUZZWOLE", "PHEROMOSA", "XURKITREE", "CELESTEELA",
+                          "KARTANA", "GUZZLORD"})
 LEGENDARY = frozenset({
     "ARCEUS", "ARTICUNO", "AZELF", "BUZZWOLE", "CELEBI", "CELESTEELA",
     "COBALION", "COSMOEM", "COSMOG", "CRESSELIA", "DARKRAI", "DEOXYS",

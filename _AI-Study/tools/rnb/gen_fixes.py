@@ -63,6 +63,7 @@ if arm != "shipped":
     GB.MODE_SETTER_FIRST = 0
     # gym 4's hail plan and the Ice minimum of 5 (2026-09-28)
     GB.MODE[3] = None
+    GB.ULTRA_BEASTS = frozenset()   # the Ultra Beast stage gate (2026-09-28)
     GB.THEME_MIN = dict(GB.THEME_MIN, ICE=4)
 if arm not in ("core2", "shipped"):
     # evolving a kept original toward the target, and the higher measured bar, after
