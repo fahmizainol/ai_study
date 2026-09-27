@@ -50,7 +50,8 @@ JSON = {"rnb_vs_gen_deckoff": "off", "rnb_vs_gen_theme": "theme", "rnb_vs_gen_ti
         "rnb_vs_gen_measured_10ms": "measured", "rnb_vs_gen_trainers_measured_10ms": "measured",
         "rnb_vs_gen_fix_10ms": "fix", "rnb_vs_gen_trainers_fix_10ms": "fix",
         "rnb_vs_gen_fix2_10ms": "fix2", "rnb_vs_gen_trainers_fix2_10ms": "fix2",
-        "rnb_vs_gen_core_10ms": "core"}
+        "rnb_vs_gen_core_10ms": "core",
+        "rnb_vs_gen_core2_10ms": "shipped", "rnb_vs_gen_trainers_core2_10ms": "shipped"}
 TABLE = os.path.join(TOOLS, "..", "generated", "core_strength.json")
 
 

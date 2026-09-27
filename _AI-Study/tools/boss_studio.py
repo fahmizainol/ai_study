@@ -213,9 +213,12 @@ SCALARS = {
                         "SET_FORMATS says for generated picks"),
     "KEEP_MEASURED": ("int", 0, 1, 1,
                       "1 replaces a dev Pokemon that the battle logs say did nothing on its "
-                      "fight (generated/core_strength.json): an attacking set under 35% "
-                      "dealt and 0.2 KOs a battle, a wall under 4 turns in and over 85% "
+                      "fight (generated/core_strength.json): an attacking set under 60% "
+                      "dealt and 0.6 KOs a battle, a wall under 4 turns in and over 85% "
                       "fainted, 24+ battles on record. Rival cores and mode evidence stay"),
+    "GROW_TO_TARGET": ("int", 0, 6, 1,
+                       "levels ahead of a stated evolution level a dev's own Pokemon may "
+                       "evolve when the evolved form sits nearer the fight's target; 0 never"),
     "CORE_FIRST": ("int", 0, 1, 1,
                    "1 builds a themed fight core first: the roster's strongest attacker "
                    "is the anchor, then an on-theme body that resists what it is weak to "
@@ -268,7 +271,7 @@ GROUPS = [
                   "TIER_BAND", "USAGE_BAND", "SET_TIER_MATCH", "SHAPE_CHECK",
                   "GYM_MODES", "WALL_MIN", "REMOVAL_MIN", "PIVOT_MIN", "ATTACKER_SHAPE",
                   "ATTACKER_ITEM", "KEPT_ANY_FORMAT", "NO_PLAN_SETS", "ITEM_FALLBACK", "SET_COHERENCE",
-                  "CORE_FIRST", "THEME_FLOORS"]),
+                  "CORE_FIRST", "THEME_FLOORS", "GROW_TO_TARGET"]),
     # A third question, and the reason these are not filed under "team": every other
     # knob here says what a team must BE, and these three only say "give me a
     # different one". All are off at 0. The two seeds ship off; REPEAT_BAND ships at

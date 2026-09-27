@@ -993,6 +993,121 @@ A first version drew replacements instead of swapping and favoured some sets: th
 sets it left out had KO'd 0.79 a battle in the intact run against 0.64 for the ones it
 used, which would have made collages look weak for the wrong reason.
 
+**What real monotype teams have in common, and per type** (2026-09-27, 1,588 gen 8+9
+Smogon monotype team-types from the same dump, against the nine fix2 gyms; a team of two
+shared types counts for both). The universal habits, mean per team or share of teams:
+
+| | real mono | gyms (fix2) |
+|---|--:|--:|
+| offensive setup users | 1.47 | 1.22 |
+| priority users | 0.81 | 0.67 |
+| hazard setter on the team | 83% | 67% |
+| hazard removal on the team | 56% | 89% |
+| pivots | 1.01 | 0.89 |
+| walls | 1.44 | 1.44 |
+| dual-typed members | 5.36 | 4.33 |
+| Choice items | 1.46 | 1.56 |
+| Leftovers | 0.96 | 1.89 |
+| Assault Vest | 0.22 | 0.78 |
+
+Fighting is the universal off-type coverage (a top-three attacking type on every theme but
+Normal's own), Dark and Ice the next. The types have shapes: Bug, Fairy, Ice and Dark are
+offensive (2.5 / 1.9 / 1.7 / 1.8 setup users, 0.6-1.2 walls, 1.2-1.7 priority users) and
+Ground, Water and Normal bulky (0.6-1.2 setup, 1.8-2.6 walls, 0.1-0.6 priority); Psychic
+sets up (1.7) and runs almost no priority (0.2). The fix2 gyms had the same flat shape on
+every type -- WALL_MIN 2, no priority floor -- so the offensive gyms carried too many walls
+(Bug 2.0 against 0.6) and the bulky ones too few (Ground 1.0 against 2.1).
+
+The cores are concentrated: the top species of a type sit on 60-85% of its teams (Volcarona +
+Scizor on 73% of Bug, Ting-Lu on 71% of Dark, Heatran on 76% of Steel, Klefki + Azumarill
+on Fairy), the gyms carry almost none of them, and about half of the core species are gen
+8-9 and outside Realidea's dex -- so co-occurrence cannot be copied, only the FUNCTION of
+the partners. iStarlyTV's singles teambuilding guide (`pgz_aHzdWtw`) defines a core that
+way: an anchor, an enabler that removes the anchor's specific weakness (Focus Sash
+Hydreigon with Stealth Rock + Taunt so a rocks-weak Mega Charizard X can work), then a
+patch for the one threat the pair both lose to (Corviknight for the Garchomp that beats
+both), and afterwards the explicit question "how does this team lose?" answered with a
+slot. Partners are chosen because they let the anchor use its strengths, resist what it is
+weak to, or answer a named threat -- never because they appear together a lot ("common
+teammates" mostly echo the usage leaders, he says, which is what §4 found too). His
+"two independent 3-mon cores" relies on Champions' bring-6-pick-3; a 6v6 gym fight wants
+one core and glue.
+
+**Core first, and per-type floors** (2026-09-27, `rnb_vs_gen_core_10ms`, both switches in
+`generate_bosses.py`, pinned off for every earlier arm in `gen_fixes.py`; the trainers
+have no theme and are byte-identical to fix2, so only the gyms were replayed, on fix2's
+exact boss draw via `make_gen_battles.py --pairs-from`):
+- `CORE_FIRST` builds a themed fight's first free on-theme slots by function. The anchor
+  is the dev's strongest kept attacker (with nothing kept, the strongest attacker-shaped
+  on-theme body the curve allows). The enabler is an on-theme body that RESISTS a type the
+  anchor is weak to, asked in order for hazard removal (a Rock-weak anchor), hazards (a
+  setup anchor), a pivot, then any unmet floor. The patch is an on-theme body that resists
+  a type both lose to AND can learn a move that hits it back. Each step gates the pool by
+  the job and lets the eBST curve choose among the bodies that qualify, the way the
+  off-theme slot already gates by uncovered weaknesses; a step nothing on-theme can do is
+  noted and left to that slot. The theme minimum, the floors and the glue fill as before.
+- `THEME_FLOORS` gives a themed fight its type's measured shape (`THEME_SHAPE`): the type's
+  own wall count in place of WALL_MIN's flat 2 (Bug/Fairy/Ice/Psychic 1, the rest 2), a
+  hazard setter, and the setup and priority users a typical team of the type runs (setup
+  2 on the offensive types and Psychic, 1 on Normal and Steel; priority 1 on Bug, Fairy,
+  Ice and Dark), inside SETUP_CAP. SHAPE_CHECK's wall floor follows it.
+- `ITEM_FALLBACK 2` judges a bare set as a wall as if it already held Leftovers: the first
+  build gave a Toxic / Rest / two-attack Aegislash a Life Orb.
+
+What changed on the roster: seven of nine gyms. Gym 2's Whimsicott is now the enabler
+(shields Azumarill from Electric/Grass, pivots) and Klefki the patch (resists and hits the
+Poison that beats both). Gym 7 loses Bronzong and Xerneas for a Stealth Rock Metagross
+(shields Gallade from Fairy/Flying), Meloetta as the Ghost patch, and a Specs Volcanion
+off-theme. Gym 5 trades Mega Sharpedo for a Choice Scarf U-turn Greninja (Fire shield for
+Bisharp; Greninja is a top-six species on real Dark monotype). Gym 8 trades Porygon-Z for
+a Specs Heliolisk (Electric shield for Pidgeot) and puts Stealth Rock on Arceus. Gym 9
+takes Aegislash (Fighting shield for Aggron) and Lucario over Mega Metagross and Registeel.
+Gym 1 takes Durant (Steel shield for Anorith) and a Sash Kartana off-theme; gym 3 Quagsire
+(Electric shield for Brionne) and Forretress. Gyms 4 and 6 are unchanged: Douglas keeps
+four originals so no slot was free, and nothing on Ground resists Grass, Ice or Water.
+
+Result, gyms, 3 rounds on fix2's draw: **51/108 (47.2%) against fix2's 52/108** -- no
+change (adjusted -0.9, 95% interval -15 to +14; shared battles 13 won / 14 lost, sign test
+p = 1.0). Per gym: Dark went 2-10 to 5-7 (the Scarf U-turn Greninja enabler made 1.17 KOs a
+battle and dealt 139%), Bug 7-5 to 10-2 (the Sash Kartana the off-theme slot drew made
+2.83 KOs -- an OU Ultra Beast on a level-20 first gym, which the curve permitted because
+five light bodies left a deficit), Ice 7-5 to 9-3 and Ground 5-7 to 1-11 on UNCHANGED
+rosters, which is the noise floor in one line. The new functional slots: Whimsicott 1.00
+KOs, Heliolisk 0.75, Durant 0.75, Metagross 0.42, Meloetta 0.42, Quagsire 0.25; the Mega
+Lucario the Steel gym took over Mega Metagross made 0.08 at 1.2 turns in, and Steel went
+5-7 to 3-9. The build is more like a real monotype team in shape (walls per type, a hazard
+setter everywhere, the partners chosen for what they resist) and the sims cannot tell it
+apart from the roster before it.
+
+**Evolving toward the target, and a real bar for the originals** (2026-09-27,
+`rnb_vs_gen_core2_10ms` and `_trainers_core2_10ms`, both on fix2's draws):
+- `GROW_TO_TARGET 3`: a dev's own Pokemon may evolve up to three levels ahead of its
+  evolution level when the evolved form sits nearer the fight's eBST target. Kenn's
+  Brionne (420, Primarina wants level 34 and the fight is 31) anchored gym 3 at 60 SpA
+  against a 504 target; it is now a Specs Primarina (530), and Abi's Dewpider (269, dropped
+  under the band before) comes in as an Assault Vest Araquanid (454). Owen's Eevee and
+  Teresa's Braixen evolve the same way.
+- The measured bar rises from 0.2 KOs / 35% dealt to **0.6 KOs / 60% dealt** (the user's
+  call, with a real attacker slot at 0.82 / 92% and an in-between set at 0.66): Anorith,
+  Vespiquen, Wigglytuff, Pyukumuku, Zoroark, Camerupt (Dhara's mega ace), Aggron and
+  Steelix leave the gyms; Leavanny, Roserade, Poliwrath and Duosion the trainers. Rival
+  core families and mode evidence stay (Hippowdon at 0.25 KOs is gym 6's Sand Stream, so it
+  stays). Gym 9 keeps nothing and takes Heatran as the anchor the curve allows; gym 6 puts
+  the mega on Swampert, gym 5 gets Mega Sharpedo back beside Greninja.
+
+Result: **gyms 49/108 (45.4%), trainers 63/120 (52.5%)**, against fix2's 52 and 66 --
+both inside the noise (adjusted -2.8 and -2.5, intervals -17 to +13 and -15 to +9; sign
+tests p = 0.74 and 0.76). The new bodies did their jobs -- Primarina 1.08 KOs / 147%
+dealt, Mega Swampert 1.08 / 102%, Heracross 1.50, Forretress 0.83, Araquanid 0.75 --
+and the total did not move: gym 7 went 0-12 (Psychic against Matt's Kartana and Sidney,
+the draw the real Psychic teams also lose 0-4), Normal 2-10, the rest within a game or
+two of fix2. Mega Sharpedo made 0.08 KOs on a Protect set. Three arms in a row now sit at
+45-51% on the gyms and 48-55% on the trainers under quite different rosters, which says
+the remaining gap to the real teams (64% balanced, 55-58% own-type monotype) is not in
+which six bodies are chosen by these rules. What has not been tried: the second off-theme
+slot gym 7's draw needs, and speed / EV spreads, which the sims play at zero EVs.
+
+
 **Traps met on the way** (all fixed in the tools):
 - On a machine where 127.0.0.1 has no rDNS and something listens on port 80, Showdown
   calls localhost an open proxy and locks every bot (`setup_battles.py` now declares

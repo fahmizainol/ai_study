@@ -323,6 +323,14 @@ ATTACKER_ITEM = 2
 #                 type runs. SETUP_CAP still caps setup; priority is floored at most 1.
 CORE_FIRST = 1
 THEME_FLOORS = 1
+# How many levels ahead of its evolution level (stated, or the one evo_floor() infers for
+# a stone or friendship) a dev's own Pokemon may evolve when the evolved form sits nearer
+# the fight's eBST target (0 = never). Kenn's Brionne (420)
+# stays a Brionne at level 31 because Primarina wants 34, three levels the fight has not
+# reached, and anchors gym 3 at 60 SpA against a 504 target that Primarina (530) meets;
+# the band rescue does not apply, since 420 is inside the band. The line is still the
+# dev's -- only the form moves, and only toward the curve (2026-09-27).
+GROW_TO_TARGET = 3
 # {THEME: {role: floor}} -- means per real team were walls / offensive setup / priority:
 # Bug 0.6/2.5/1.7, Fairy 1.2/1.9/1.2, Water 1.8/0.8/0.6, Ice 0.9/1.7/1.6, Dark
 # 1.7/1.8/1.6, Ground 2.1/0.6/0.6, Psychic 1.1/1.7/0.2, Normal 2.6/1.2/0.1, Steel
@@ -521,7 +529,12 @@ KEEP_NEED_SET = 1   # 1 = drop a kept original with no published set usable at i
 KEEP_MEASURED = 1   # on since 2026-09-27; the table pools the 100 ms and 10 ms arms
 MEASURED_TABLE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "generated", "core_strength.json")
 MEASURED_MIN_BATTLES = 24
-MEASURED_DEALT, MEASURED_KOS = 35.0, 0.2
+# 0.6 KOs / 60% dealt since 2026-09-27 (was 0.2 / 35%, half of what the generated attackers
+# on the same teams manage, which only caught dead weight). A real gen 7 attacker slot
+# makes 0.82 KOs and deals 92% a battle, an in-between set 0.66, a wall 0.41; the user's
+# call: "i dont mind replacing the vanilla mons if they suck". Rival core families and
+# mode evidence are still never dropped.
+MEASURED_DEALT, MEASURED_KOS = 60.0, 0.6
 MEASURED_TURNS, MEASURED_FAINT = 4.0, 85.0
 KEEP_MIN_BAND = 0   # 0 = off; else how many tier bands from the top a kept original may
                     # sit in, over SC.BANDS -- 3 is "Uber, OU or UU"
@@ -1704,7 +1717,7 @@ def excluded(name, stage):
             or (_sp[name]["bst"] >= LEGEND_BST and stage < LEGEND_FROM))
 
 
-def grown(name, level, stage, theme=None, early=False):
+def grown(name, level, stage, theme=None, early=False, slack=0):
     """What `name` has already become by `level`, gating on the level alone.
 
     The dev's Beldum is level 29 and Beldum evolves at 20; their Mantyke is level 29
@@ -1726,12 +1739,14 @@ def grown(name, level, stage, theme=None, early=False):
 
     `early` waives the levels evo_floor() INFERRED for stones and the like, and only
     those: a stated level is a fact about the game and is never waived. It is the
-    band rescue in assemble(), and nothing else, that asks for it."""
+    band rescue in assemble(), and nothing else, that asks for it. `slack` lets the
+    evolution level, stated or inferred, be up to that many levels away
+    (GROW_TO_TARGET), and nothing else asks for that either."""
     cur, seen = name, {name}
     while True:
         nxt = [c for c, _, _ in _sp[cur]["evolutions"]
                if c in _sp and c not in seen and not excluded(c, stage)
-               and (_evo[(cur, c)] <= level
+               and (_evo[(cur, c)] <= level + slack
                     or (early and (cur, c) not in _evo_stated))]
         if not nxt:
             return cur
@@ -2437,6 +2452,18 @@ def assemble(spec):
                              f"({bst(rescue)}, {SC.tier(rescue)}) ahead of its level "
                              f"to reach the band")
                 pick, up = rescue, rescue
+        # Inside the band but a few levels short of the form the curve wants: evolve it
+        # ahead of its level when that lands NEARER the target (GROW_TO_TARGET). The
+        # rescue above is for a mon the band would otherwise drop; this is for one it
+        # keeps too weak. Never a pin -- a pin names a form.
+        if GROW_TO_TARGET and spec["grow_kept"] and not k.get("pinned"):
+            near = grown(pick, at, stage, theme, slack=GROW_TO_TARGET)
+            if near != pick and bst(near) <= hi and \
+                    abs(potential_bst(near, mega_ok) - target) < abs(potential_bst(pick, mega_ok) - target):
+                notes.append(f"evolved {pick} ({bst(pick)}) -> {near} ({bst(near)}, "
+                             f"{SC.tier(near)}) up to {GROW_TO_TARGET} levels ahead — "
+                             f"nearer the {target:.0f} target")
+                pick, up = near, near
         # The band still decides whether to KEEP it, with one asymmetry: a mon may be
         # dropped for what the dev chose, never for what we just evolved it into. Too
         # light is terminal (the rescue above is its last chance); too heavy is only

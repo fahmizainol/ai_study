@@ -117,6 +117,14 @@ SCHEDULE = [
     # core-first + per-type floors, gyms only, on fix2's draw (2026-09-27)
     ("2026-09-27 17:08:22", "rnb_vs_gen_core_10ms"),
     ("2026-09-27 17:19:22", None),
+    # core + GROW_TO_TARGET + the 0.6 KO / 60% measured bar, gyms and trainers (2026-09-27)
+    ("2026-09-27 17:19:30", "rnb_vs_gen_core2_10ms"),
+    ("2026-09-27 17:23:07", "rnb_vs_gen_trainers_core2_10ms"),
+    ("2026-09-27 17:27:48", "rnb_vs_gen_core2_10ms"),
+    ("2026-09-27 17:31:43", "rnb_vs_gen_trainers_core2_10ms"),
+    ("2026-09-27 17:36:19", "rnb_vs_gen_core2_10ms"),
+    ("2026-09-27 17:40:04", "rnb_vs_gen_trainers_core2_10ms"),
+    ("2026-09-27 17:44:45", None),
 ]
 SCHED = [(time.mktime(datetime.datetime.strptime(s, "%Y-%m-%d %H:%M:%S").timetuple()), a) for s, a in SCHEDULE]
 ORDER = ["rnb_vs_gen_deckoff", "rnb_vs_gen_theme", "rnb_vs_gen_tier", "rnb_vs_gen_all",
