@@ -402,6 +402,22 @@ WALL_NEEDS_BULK = 1
 # Recovery users a named trainer's team may carry (0 = the plan's own cap): the balance
 # plan floors recovery at 3, and Teresa's second fight came out with four (2026-09-28).
 TRAINER_RECOVERY_CAP = 2
+# The breaking core (2026-09-28, Pinkacross's "How to Build UNSTOPPABLE Teams" read off the
+# real teams played here by tools/rnb/breaking_core.py, RNB-STUDY.md §10). Themed fights only:
+#   SECOND_BREAKER  1 adds a second breaker after anchor + enabler: an attacking set that hits
+#                   super-effectively the types resisting every STAB attack the anchor
+#                   carries, a mutual pair first (the anchor also hits its walls). On real
+#                   teams a teammate hits breaker 1's walls on 75-87% of teams and is itself
+#                   a breaker on 69%; the pair makes 42-43% of the team's KOs.
+#   ATTACKERS_MIN   4: the wall floor is a minimum, not a filler -- once it is met, picks
+#                   prefer sets that are not wall_set(), and a last pass re-sets members
+#                   toward attacking sets until four of six attack. Real monotype teams won
+#                   41% with 3 attacking sets, 63% with 4, 71% with 6 on these bosses.
+#   SPEED_FLOOR     1 floors one speed-control user (the `speed` moves, or a Choice Scarf):
+#                   on 79% of real monotype teams.
+SECOND_BREAKER = 1
+ATTACKERS_MIN = 4
+SPEED_FLOOR = 1
 OFF_THEME_CAP = 1
 OFF_THEME_MOST = 1
 OFF_THEME_EXTRA = 1
@@ -787,6 +803,10 @@ def plan_for(archetype, mega_ok, mode=None, theme=None):
         for r in ("setup", "priority"):
             if shape.get(r):
                 floor[r] = max(floor.get(r, 0), shape[r])
+        if SPEED_FLOOR:
+            # chased last: a slot left over takes it, and assemble() swaps one move for it
+            # when none did -- ahead of hazards it cost gym 8 its Spikes
+            floor["speed"] = max(floor.pop("speed", 0), SPEED_FLOOR)
         if SETUP_CAP is not None and "setup" in floor:
             floor["setup"] = min(floor["setup"], SETUP_CAP)
     # A floor the cap forbids is a generator that spins: hazards floors at 1 and the
@@ -1545,7 +1565,8 @@ def shape_checked(fight, make, archetype, mode, patience=None, theme=None):
 
 def build(species, level, banned_items=(), want=None, avoid=(), allow_items=None,
           cap=None, mode=None, offence=None, offence_hist=None, seed=None, only=None,
-          formats=None, early=False, want_attack=False, weather=None, no_passive=False):
+          formats=None, early=False, want_attack=False, weather=None, no_passive=False,
+          prefer_attack=False):
     """Best level-legal published set for `species`, or None if none survives.
 
     want:        prefer a set that provides this role.
@@ -1590,6 +1611,7 @@ def build(species, level, banned_items=(), want=None, avoid=(), allow_items=None
                  what survives of it is dropped from the chosen set.
     no_passive:  WALL_NEEDS_BULK -- a species that is not bulky() may not take a wall
                  set at all.
+    prefer_attack: ATTACKERS_MIN -- rank sets that are not wall_set() first, under `want`.
     """
     is_lc = level <= 25
     sp = _sp[species]
@@ -1646,7 +1668,8 @@ def build(species, level, banned_items=(), want=None, avoid=(), allow_items=None
             continue
         attack = bool(want_attack and attacking_set(pub, item))
         alien = len(foreign_weather(pub, SC.norm(ability), weather))
-        cands.append(((attack, -len(r & set(avoid)), bool(want and want in r), -alien, -misfit, tier_fit, item_fit, fit,
+        cands.append(((attack, -len(r & set(avoid)), bool(want and want in r), -alien,
+                       bool(prefer_attack and not passive), -misfit, tier_fit, item_fit, fit,
                        TS.affinity(mode, sp["types"], [ability],
                                    sp["base_stats"][3], ok, r),
                        legal,
@@ -2490,7 +2513,22 @@ def assemble(spec):
         return next((w for m in team for w in TS.WEATHER_MODES if w in m["roles"]), None)
 
     def passive_ask(role):
-        return bool(WALL_NEEDS_BULK) and role in ("wall", "recovery")
+        # on a themed fight under ATTACKERS_MIN, speed control on a frail body comes on an
+        # attacking set too (gym 8 answered it with a Perish Song Meloetta)
+        return bool(WALL_NEEDS_BULK) and (role in ("wall", "recovery") or bool(
+            theme and ATTACKERS_MIN and role == "speed"))
+
+    # SPEED_FLOOR: a Choice Scarf a set already holds counts as speed control. Only
+    # counted, never chased: asking build() for Scarf sets made three of gym 5's six.
+    scarf = bool(theme and SPEED_FLOOR)
+
+    def gives(mon, role):
+        return role in mon["roles"] or (scarf and role == "speed"
+                                        and mon.get("item") == "CHOICESCARF")
+
+    def lean():
+        """ATTACKERS_MIN: once a themed fight's wall floor is met, prefer attacking sets."""
+        return bool(theme and ATTACKERS_MIN) and have["wall"] >= floors.get("wall", 0)
 
     def take(pool, role, why, attack=False):
         """Pick the best candidate from `pool` for `role` (None = any).
@@ -2520,7 +2558,8 @@ def assemble(spec):
                             allow_items=allow, cap=ceiling, mode=mode, offence=off, offence_hist=off_need(),
                             seed=sset, formats=fmts, early=early,
                             only=sfilter.get(name), want_attack=attack,
-                            weather=team_weather(), no_passive=passive_ask(role))
+                            weather=team_weather(), no_passive=passive_ask(role),
+                            prefer_attack=lean())
                 # A published set is always preferred; this only catches the species
                 # build() dropped entirely for want of one that survives the level.
                 # It widens the pool and it also REMOVES A FLOOR -- with it on, no
@@ -2530,7 +2569,7 @@ def assemble(spec):
                 # rules or claim a mode role, and both rejections below still run.
                 if not mon and spec.get("fallback_picks"):
                     mon = fallback(name, level, ceiling)
-                if not mon or (role is not None and role not in mon["roles"]):
+                if not mon or (role is not None and not gives(mon, role)):
                     continue
                 # an anchor must come out on an attacking set (CORE_ANCHOR_RULE)
                 if attack and not attacking_set(mon["moves"], mon["item"]):
@@ -2543,7 +2582,9 @@ def assemble(spec):
         return False
 
     def unmet():
-        return [r for r in floors if have[r] < floors[r]]
+        return [r for r in floors if have[r] + (r == "speed" and scarf and sum(
+            1 for m in team if m.get("item") == "CHOICESCARF" and "speed" not in m["roles"]))
+            < floors[r]]
 
     # Handed to spec["rank"]. Deliberately the LIVE objects: `team` and `have` are
     # mutated as the team grows, and a rank hook that cannot see what has already
@@ -2707,7 +2748,7 @@ def assemble(spec):
                         allow_items=allow, cap=ceiling, mode=mode, offence=off, offence_hist=off_need(),
                         seed=sset, formats=kept_fmts, early=early, only=sfilter.get(pick),
                         weather=team_weather(), no_passive=passive_ask(role))
-            if mon and role in mon["roles"]:
+            if mon and gives(mon, role):
                 break
             mon = None
         mon = mon or build(pick, at, banned, avoid=capped(), allow_items=allow,
@@ -2877,6 +2918,148 @@ def assemble(spec):
                      + (f" and brings {job}" if job else ""))
         return m
 
+    def stab_walls(species, moves=None):
+        """Types resisting every STAB attack (every attack, with no STAB one) a set carries;
+        with no set yet, every one of the species' own types (tools/rnb/breaking_core.walls)."""
+        if moves is None:
+            hit = set(_sp[species]["types"])
+        else:
+            hit = {_mv[x]["type"] for x in moves if _mv.get(x, {}).get("power", 0) > 0}
+            hit = hit & set(_sp[species]["types"]) or hit
+        return [t for t in ALL_TYPES if hit and all(TS.type_multiplier(h, [t]) < 1 for h in hit)]
+
+    def second_breaker(core, anchor):
+        """SECOND_BREAKER: an attacking set hitting the anchor's walls super-effectively, a
+        mutual pair first, from the kept roster, then on-theme, then the off-theme slot."""
+        a1 = next(m for m in team if m["species"] == anchor)
+        walls = stab_walls(anchor, a1["moves"])
+        mutual = lambda w: bool(w) and any(hits_type(a1["moves"], t) for t in w)  # noqa: E731
+        # the floors a slot of their own may still be needed for (speed control has the
+        # one-move swap after the build, setup / priority / mega come with attackers)
+        need_roles = ("wall", "removal", "pivot", "hazards") + (
+            (mode, TS.abuse_role(mode)) if mode else ())
+        left = {r: floors[r] - have[r] for r in need_roles if floors.get(r, 0) > have[r]}
+        taken = {m["species"] for m in team if (m.get("why") or "").startswith("core ")}
+        kept = [m for m in team if m["kept"] and not is_dynamic(m["species"])
+                and m["species"] in _sp and m["species"] not in taken | {anchor}
+                and attacking_set(m["moves"], m["item"])]
+        kkey = lambda m: ([t for t in walls if hits_type(m["moves"], t)],  # noqa: E731
+                          mutual(stab_walls(m["species"], m["moves"])),
+                          anchor_power(m["species"], m["item"] in MEGASTONE), ebst(m))
+
+        def options(src, off_theme):
+            out = []
+            for n in src:
+                if n in used or n == anchor:
+                    continue
+                stone = mega_av and not have["mega"] and bool(MEGA_OF.get(n, set()) - banned)
+                ceiling_ok = (lambda b: b <= hi) if (not off_theme or OFF_THEME_CAP) else (lambda b: True)
+                for mega in ((True, False) if stone else (False,)):
+                    b = bst(n) + MEGA_BONUS * mega
+                    if lo <= b and ceiling_ok(b):
+                        out.append((n, mega, off_theme))
+            return out
+
+        fills_of, refused = {}, []
+
+        def fills(n):
+            """The unmet floors an attacking set of `n` can fill (built to find out)."""
+            if n not in fills_of:
+                fills_of[n] = [r for r in unmet() if r != "mega" and (lambda mon: mon and gives(mon, r)
+                               and attacking_set(mon["moves"], mon["item"]))(
+                    build(n, level, banned, want=r, allow_items=allow, cap=ceiling, mode=mode,
+                          seed=sset, formats=fmts, early=early, want_attack=True,
+                          weather=team_weather()))]
+            return fills_of[n]
+
+        def gkey(o):
+            n, mega, _ = o
+            return ([t for t in walls if hits_back(n, level, t)], bool(set(fills(n)) & set(left)),
+                    bool(fills(n)), mutual(stab_walls(n)), anchor_power(n, mega),
+                    bst(n) + MEGA_BONUS * mega)
+
+        def build_one(o, need_hit):
+            n, mega, off_theme = o
+            own = 1 if set(fills(n)) & set(left) else 0
+            # an on-theme breaker leaves the off-theme slot to the cover it is gated for,
+            # so that slot cannot hold a floor either (gym 7 lost its pivot to it)
+            off_now = sum(1 for m in team if not is_dynamic(m["species"])
+                          and theme not in _sp[m["species"]]["types"])
+            reserve = int(bool(OFF_THEME_COVER) and not off_theme
+                          and size - spec["on_theme_min"] > off_now)
+            if size - len(team) - 1 - reserve < sum(left.values()) - own \
+                    or (off_theme and not off_room()):
+                refused.append(n)
+                return None
+            saved = set(banned)
+            if not mega:
+                banned.update(MEGA_OF.get(n, set()))
+            try:
+                got = False
+                for r in (["mega"] if mega else fills(n)) + [None]:
+                    got = take([n], r, "core breaker 2" if r is None
+                               else f"core breaker 2:{r}", attack=True)
+                    if got:
+                        break
+            finally:
+                if not got:
+                    banned.clear()
+                    banned.update(saved)
+            if not got:
+                return None
+            m = team[-1]
+            if not mega:
+                banned.clear()
+                banned.update(saved)
+            if need_hit and not any(hits_type(m["moves"], t) for t in walls):
+                team.pop()                  # the built set dropped the move that hit them
+                have.subtract(m["roles"])
+                used.discard(n)
+                banned.clear()
+                banned.update(saved)
+                return None
+            if n in core:
+                core.remove(n)
+            return m
+
+        def say(m, how):
+            hit = [t for t in walls if hits_type(m["moves"], t)]
+            mut = mutual(stab_walls(m["species"], m["moves"]))
+            notes.append(f"core breaker 2: {m['species']} ({how}) "
+                         + (f"hits {'/'.join(hit)}, which wall {anchor}" if hit
+                            else f"-- nothing hits what walls {anchor} "
+                                 f"({'/'.join(walls) or 'nothing'}); the next attacking set")
+                         + (", a mutual pair" if mut else ""))
+            anchors.add(m["species"])
+            return m["species"]
+
+        # the anchor's walls, answered: kept, then on-theme, then off-theme
+        if walls:
+            hitters = sorted((m for m in kept if kkey(m)[0]), key=kkey, reverse=True)
+            if hitters:
+                return say(hitters[0], "kept")
+            for src, off_theme, how in ((core, False, "on-theme"),
+                                         (off_theme_pool() if theme else [], True, "off-theme")):
+                opts = sorted((o for o in options(src, off_theme) if gkey(o)[0]),
+                              key=gkey, reverse=True)
+                for o in opts:
+                    m = build_one(o, True)
+                    if m:
+                        return say(m, how)
+        # nothing hits them (or nothing walls the anchor): the next best attacking set
+        if kept:
+            return say(max(kept, key=kkey), "kept")
+        for o in sorted(options(core, False), key=gkey, reverse=True):
+            m = build_one(o, False)
+            if m:
+                return say(m, "on-theme")
+        if refused:
+            notes.append(f"core breaker 2: skipped, {size - len(team)} slot(s) left for "
+                         f"{'/'.join(left) or 'the floors'} (and the off-theme cover)")
+        else:
+            notes.append(f"core breaker 2: no attacking set in the {lo:.0f}-{hi:.0f} band")
+        return None
+
     def core_first(core):
         """CORE_FIRST: anchor, enabler, patch -- the functional core (module comment).
 
@@ -2944,6 +3127,9 @@ def assemble(spec):
                     notes.append(f"core patch: nothing on-theme both resists and hits "
                                  f"{'/'.join(lose)}, which beats {' + '.join(pair)}; "
                                  f"left to the off-theme slot")
+        # 4) SECOND_BREAKER: a second breaker for what walls the anchor
+        if SECOND_BREAKER and theme:
+            second_breaker(core, anchor)
 
     def setter_first(core):
         """MODE_SETTER_FIRST: the mode's setter takes the first free slot, on-theme."""
@@ -3078,7 +3264,7 @@ def assemble(spec):
         live = gaps()
         able = [n for n in pool if set(resisted(n)) & set(live)]
         spare = [m for m in team if not m["kept"] and not is_dynamic(m["species"])
-                 and theme in _sp[m["species"]]["types"]
+                 and theme in _sp[m["species"]]["types"] and m["species"] not in anchors
                  and not any(have[r] <= floors[r] for r in floors if r in m["roles"])]
         if able and spare:
             victim = min(spare, key=ebst)
@@ -3132,7 +3318,7 @@ def assemble(spec):
     #    kept mon toward it. That changes what it does, never which mon it is.
     if spec["reequip"]:
         for role in floors:
-            if have[role] >= floors[role]:
+            if role not in unmet():
                 continue
             for i, m in enumerate(team):
                 # "does only one job" -- counted against the roles this generator
@@ -3147,7 +3333,7 @@ def assemble(spec):
                             avoid=capped(), allow_items=allow, cap=ceiling,
                             mode=mode, offence=off, offence_hist=off_need(), seed=sset, formats=kept_fmts, early=early,
                             weather=team_weather(), no_passive=passive_ask(role))
-                if alt and role in alt["roles"]:
+                if alt and gives(alt, role):
                     alt["kept"], alt["why"] = True, f"original, re-set for {role}"
                     have.subtract(m["roles"])
                     have.update(alt["roles"])
@@ -3298,6 +3484,139 @@ def assemble(spec):
             have.update(alt["roles"])
             team[i] = alt
 
+    # ---- SPEED_FLOOR: one member re-set toward speed control, when no slot reached it --
+    # The floor is chased with the others, but a gym whose slots all went to walls,
+    # removal and cover (gym 9 keeps nothing) never asks a body for it. Same guards as
+    # the passes around it: species, mega and just-met floors stay; caps hold; an
+    # anchor or breaker keeps its set; an attacking set stays one while ATTACKERS_MIN
+    # needs it.
+    if scarf and "speed" in unmet():
+        def n_attack():
+            return sum(1 for m in team if not is_dynamic(m["species"])
+                       and not wall_set(m["moves"], m["item"]))
+        order = sorted((i for i, m in enumerate(team) if not is_dynamic(m["species"])
+                        and m["species"] not in anchors), key=lambda i: ebst(team[i]))
+        for i in order:
+            m = team[i]
+            load_bearing = {r for r in floors if have[r] <= floors[r]} & m["roles"]
+            alt = build(m["species"], m["level"],
+                        banned_items=(banned - {m["item"]}) | {x["item"] for j, x in enumerate(team)
+                                                             if j != i and x["item"]},
+                        want="speed", avoid=capped() - m["roles"], cap=ceiling, mode=mode,
+                        allow_items=allow, offence=off, seed=sset,
+                        formats=kept_fmts if m["kept"] else fmts, early=early,
+                        only=sfilter.get(m["species"]) if m["kept"] else None,
+                        weather=team_weather())
+            if not alt or not gives(alt, "speed") \
+                    or (alt["item"] in MEGASTONE) != (m["item"] in MEGASTONE) \
+                    or not all(gives(alt, r) for r in load_bearing) \
+                    or any(have[r] - (r in m["roles"]) + (r in alt["roles"]) > n
+                           for r, n in caps.items()):
+                continue
+            if ATTACKERS_MIN and not wall_set(m["moves"], m["item"]) \
+                    and wall_set(alt["moves"], alt["item"]) and n_attack() <= ATTACKERS_MIN:
+                continue
+            notes.append(f"{m['species']} re-set for speed control: {m['src']} -> {alt['src']}")
+            alt["kept"], alt["why"] = m["kept"], m["why"]
+            if "pinned" in m:
+                alt["pinned"] = m["pinned"]
+            have.subtract(m["roles"])
+            have.update(alt["roles"])
+            team[i] = alt
+            break
+        else:
+            # no whole set will do: swap one move for a speed-control move instead, the
+            # way THREAT_COVER adds a type -- never the member's best attack or its only
+            # STAB, and never a move a just-met floor rests on
+            moves_ok = sorted(ROLE_MOVES["speed"] - ({"TRICKROOM"} if mode != "trickroom" else set()))
+            done = False
+            for i in order:
+                m = team[i]
+                if done:
+                    break
+                load_bearing = {r for r in floors if have[r] <= floors[r]} & m["roles"]
+                dmg = sorted((x for x in m["moves"] if _mv.get(x, {}).get("power", 0) > 0),
+                             key=lambda x: _mv[x]["power"])
+                stab = [x for x in dmg if _mv[x]["type"] in _sp[m["species"]]["types"]]
+                spare = [x for x in m["moves"] if x not in dmg] + dmg[:-1]
+                for old_mv in spare:
+                    if len(stab) == 1 and old_mv == stab[0]:
+                        continue
+                    if old_mv == "REST" and "SLEEPTALK" in m["moves"]:
+                        continue            # Sleep Talk is nothing without it
+                    for new_mv in moves_ok:
+                        if _mv[new_mv]["power"] == 0 and m["item"] in (
+                                "CHOICEBAND", "CHOICESPECS", "CHOICESCARF", "ASSAULTVEST"):
+                            continue        # a status move on a locked or Vest set
+                        if new_mv in m["moves"] or not legal(
+                                D.learnable(m["species"], new_mv, m["level"], 0)):
+                            continue
+                        mv = [new_mv if x == old_mv else x for x in m["moves"]]
+                        got = roles_of(mv, m["item"], ability_name(m), mode, _sp[m["species"]])
+                        if not load_bearing <= got or any(
+                                have[r] - (r in m["roles"]) + (r in got) > n
+                                for r, n in caps.items()):
+                            continue
+                        if ATTACKERS_MIN and not wall_set(m["moves"], m["item"]) \
+                                and wall_set(mv, m["item"]) and n_attack() <= ATTACKERS_MIN:
+                            continue
+                        notes.append(f"{m['species']}: {old_mv} -> {new_mv}, the team's "
+                                     f"speed control")
+                        have.subtract(m["roles"])
+                        have.update(got)
+                        m["moves"], m["roles"] = mv, got
+                        done = True
+                        break
+                    if done:
+                        break
+            if not done:
+                notes.append("speed control: no member can carry it without breaking a floor")
+
+    # ---- ATTACKERS_MIN: at least four attacking sets on a themed fight -------------
+    # Modelled on the re-pricing pass above: the species never changes, only its set;
+    # a mega is never traded across, a floor that is only just met is never broken, and
+    # no cap is pushed past. Frail bodies on wall sets go first, then the strongest.
+    if theme and ATTACKERS_MIN:
+        def attackers():
+            return sum(1 for m in team if not is_dynamic(m["species"])
+                       and not wall_set(m["moves"], m["item"]))
+        walled = [i for i, m in enumerate(team) if not is_dynamic(m["species"])
+                  and wall_set(m["moves"], m["item"])]
+        walled.sort(key=lambda i: (bulky(team[i]["species"]),
+                                   -anchor_power(team[i]["species"])))
+        for i in walled:
+            if attackers() >= ATTACKERS_MIN:
+                break
+            m = team[i]
+            load_bearing = {r for r in floors if have[r] <= floors[r]} & m["roles"]
+            alt = build(m["species"], m["level"],
+                        banned_items=(banned - {m["item"]}) | {x["item"] for j, x in enumerate(team)
+                                                             if j != i and x["item"]},
+                        cap=ceiling, mode=mode, allow_items=allow, offence=off,
+                        seed=sset, formats=kept_fmts if m["kept"] else fmts, early=early,
+                        only=sfilter.get(m["species"]) if m["kept"] else None,
+                        want_attack=True, weather=team_weather())
+            if not alt or wall_set(alt["moves"], alt["item"]):
+                continue
+            if (alt["item"] in MEGASTONE) != (m["item"] in MEGASTONE):
+                continue
+            if not all(gives(alt, r) for r in load_bearing):
+                continue
+            if any(have[r] - (r in m["roles"]) + (r in alt["roles"]) > n
+                   for r, n in caps.items()):
+                continue
+            notes.append(f"{m['species']} re-set to attack (ATTACKERS_MIN): "
+                         f"{m['src']} -> {alt['src']}")
+            alt["kept"], alt["why"] = m["kept"], m["why"]
+            if "pinned" in m:
+                alt["pinned"] = m["pinned"]
+            have.subtract(m["roles"])
+            have.update(alt["roles"])
+            team[i] = alt
+        if attackers() < ATTACKERS_MIN:
+            notes.append(f"{attackers()} attacking sets: no member left that can re-set "
+                         f"to one without breaking a floor")
+
     # ---- one super-effective answer per type the theme is weak to -----------
     #
     # MONOTYPE-SYNERGY.md section 11. Real monotype teams carry SE coverage on 100% of
@@ -3408,6 +3727,10 @@ def assemble(spec):
             m["moves"], m["roles"] = moves, got
             notes.append(f"{m['species']}: {old} -> {new}, the team's answer to {atk}")
 
+    if scarf:
+        # SPEED_FLOOR counted a Choice Scarf; say so wherever "floors met" is read
+        have["speed"] += sum(1 for m in team if m.get("item") == "CHOICESCARF"
+                             and "speed" not in m["roles"])
     return {"team": team, "roles": have, "notes": notes, "band": (lo, hi)}
 
 

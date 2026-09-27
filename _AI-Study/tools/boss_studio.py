@@ -269,6 +269,17 @@ SCALARS = {
     "TRAINER_RECOVERY_CAP": ("int", 0, 4, 1,
                              "recovery users a named trainer's team may carry; 0 leaves the "
                              "plan's own cap"),
+    "SECOND_BREAKER": ("int", 0, 1, 1,
+                       "1 adds a second breaker after a themed fight's anchor + enabler: an "
+                       "attacking set hitting what walls the anchor's STAB, a mutual pair "
+                       "first; kept roster, then on-theme, then the off-theme slot"),
+    "ATTACKERS_MIN": ("int", 0, 6, 1,
+                      "attacking sets (not wall sets) a themed fight must field: once the wall "
+                      "floor is met picks prefer attackers, and a last pass re-sets members "
+                      "toward attacking sets; 0 is off"),
+    "SPEED_FLOOR": ("int", 0, 2, 1,
+                    "speed-control users a themed fight must carry (Thunder Wave, Icy Wind, "
+                    "Sticky Web... or a Choice Scarf); 0 is off"),
     "NO_PLAN_SETS": ("int", 0, 1, 1,
                      "1 skips sets written for a team plan the fight is not running: Trick "
                      "Room without a trickroom mode, Baton Pass, Memento, Lunar Dance, "
@@ -316,7 +327,7 @@ GROUPS = [
                   "OFF_THEME_CAP", "OFF_THEME_MOST", "OFF_THEME_EXTRA", "EGG_MOVES", "SET_GEN_MAX",
                   "MODE_SETTER_FIRST", "CORE_ANCHOR_RULE", "ENABLER_OFF_THEME", "CORE_PATCH",
                   "WALL_PROTECT", "WEATHER_EXCLUSIVE", "WALL_NEEDS_BULK",
-                  "TRAINER_RECOVERY_CAP"]),
+                  "TRAINER_RECOVERY_CAP", "SECOND_BREAKER", "ATTACKERS_MIN", "SPEED_FLOOR"]),
     # A third question, and the reason these are not filed under "team": every other
     # knob here says what a team must BE, and these three only say "give me a
     # different one". All are off at 0. The two seeds ship off; REPEAT_BAND ships at
