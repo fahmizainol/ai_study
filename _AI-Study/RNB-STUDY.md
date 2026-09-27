@@ -1253,6 +1253,28 @@ Player-side caveat: in the game, Alolan Ninetales is NINETALES form 1, and Essen
 keys TM / tutor compatibility by species, so a player's Alolan Ninetales still reads fire
 Ninetales's TM list (no Aurora Veil). Bosses are unaffected -- `createPokemon` sets moves.
 
+**What picks a team's anchor? Tested on real teams** (2026-09-28, `tools/rnb/anchor_test.py`).
+Core-first chose gym 9's anchor by distance from the eBST target, attack stat as tie-break,
+and got a defensive Heatran over Mega Lucario. Before replacing that, each candidate ranking
+was scored on the 301 real Smogon teams already played here (gen 7 at 25 / 10 ms, monotype gen
+7-9 at 10 ms, 2+ battles each): within a team it picks one member, scored by that member's
+real KOs a battle.
+
+| ranking | anchor KOs / battle | picked the team's top KO-getter |
+|---|--:|--:|
+| BST counting the mega | 0.96 | 33% |
+| best attack stat counting the mega | 0.93 | 33% |
+| attacking set, then mega attack, then tier | 0.92 | 33% |
+| best base attack stat (the current tie-break) | 0.92 | 34% |
+| attacking set, then tier, then mega attack | 0.81 | 29% |
+| Smogon tier | 0.69 | 22% |
+| a random member | 0.67 | 24% |
+
+Smogon tier alone is no better than a random member: inside a real team the members are all
+viable, and tier does not tell which one carries. Raw power counting the mega is the best
+signal. So the anchor fix is to rank by mega-counting attack within the fight's whole band
+(not the nearest 10 BST) and give the anchor an attacking set -- not to rank by tier.
+
 **Traps met on the way** (all fixed in the tools):
 - On a machine where 127.0.0.1 has no rDNS and something listens on port 80, Showdown
   calls localhost an open proxy and locks every bot (`setup_battles.py` now declares
