@@ -1275,6 +1275,23 @@ viable, and tier does not tell which one carries. Raw power counting the mega is
 signal. So the anchor fix is to rank by mega-counting attack within the fight's whole band
 (not the nearest 10 BST) and give the anchor an attacking set -- not to rank by tier.
 
+**Core-first read off real teams: monotype v mainstream** (2026-09-28, `tools/rnb/core_on_real.py`,
+the same anchor / enabler / patch tests on every real team played here with 2+ battles):
+
+| | teams | enabler | enabler with a job | a type hits anchor + enabler | patch | anchor on an attacking item | anchor = top KO-getter |
+|---|--:|--:|--:|--:|--:|--:|--:|
+| monotype, gen 7-9 | 145 | 81% | 48% | 80% | 9% | 37% | 30% |
+| mainstream gen 7 (OU, UU, Ubers...) | 156 | 97% | 56% | 31% | 14% | 63% | 38% |
+
+Monotype building does differ. A mainstream anchor almost always has a partner resisting its
+weaknesses (97%), and the pair then shares a weakness on only 31% of teams -- the core covers
+itself, which is the teambuilding guide's model. On a monotype team the partner shares the
+type: 80% of anchor + enabler pairs share a weakness, and only 9% of teams field a Pokemon
+that both resists it and hits it back -- the type cannot supply one. Real monotype teams answer
+that threat off-type or not at all. For the gyms (5 of 6 on-theme) that argues for: the
+enabler may come from the off-theme cover slot when the type has none, the patch step is
+dropped or optional, and the anchor holds an attacking item (63% of mainstream anchors do).
+
 **Traps met on the way** (all fixed in the tools):
 - On a machine where 127.0.0.1 has no rDNS and something listens on port 80, Showdown
   calls localhost an open proxy and locks every bot (`setup_battles.py` now declares

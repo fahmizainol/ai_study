@@ -42,52 +42,80 @@ def eff(atk, types):
     return m
 
 
+ATTACK_ITEMS = {"choiceband", "choicespecs", "choicescarf", "lifeorb", "expertbelt", "loadeddice"}
+
+
+def typed(ms, ex):
+    for m in ms:
+        e = ex.entry(m["sp"])
+        base = tid(e.get("baseSpecies", e["name"]))
+        mega = next((v for (b, it), v in ex.mega.items() if b == base), None) if m["mega"] else None
+        m["types"] = (mega or e)["types"]
+        m["name"] = e["name"]
+    return ms
+
+
+def core(ms):
+    """-> anchor, weak, enabler, shields, job, lose, patch, answers"""
+    anchor = max(ms, key=lambda m: (max(m["form"]["atk"], m["form"]["spa"]), sum(m["form"].values())))
+    weak = [t for t in TYPES if eff(t, anchor["types"]) > 1]
+    rest = [m for m in ms if m is not anchor]
+    shields = lambda m: [w for w in weak if eff(w, m["types"]) < 1]  # noqa: E731
+    enabler = max(rest, key=lambda m: len(shields(m))) if any(shields(m) for m in rest) else None
+    job = next((j for j, mv in JOBS if enabler and set(enabler["moves"]) & mv), None) if enabler else None
+    pair = [anchor] + ([enabler] if enabler else [])
+    lose = [t for t in TYPES if all(eff(t, m["types"]) > 1 for m in pair)]
+
+    def answers(m):
+        hits = {C.MV[x]["type"] for x in m["moves"] if C.MV.get(x, {}).get("bp")}
+        return [t for t in lose if eff(t, m["types"]) < 1 and any(eff(h, [t]) > 1 for h in hits)]
+    cand = [m for m in ms if m not in pair and answers(m)]
+    patch = max(cand, key=lambda m: len(answers(m))) if cand else None
+    return anchor, weak, enabler, (shields(enabler) if enabler else []), job, lose, patch, (answers(patch) if patch else [])
+
+
 def main():
     per, kinds, record = DS.collect()
     ex = Exporter(pokedex())
-    for arm in ("rnb_vs_mono_10ms", "rnb_vs_mono8_10ms"):
-        pairs = json.load(open(os.path.join(DS.G, arm, "pairs.json")))
-        by_theme = collections.defaultdict(list)
-        for p in pairs:
-            by_theme[p["theme"]].append(p["opp"])
-        print(f"\n# {arm}: one real team per type (the one played most)")
-        for theme in THEMES:
-            teams = by_theme.get(theme)
-            if not teams:
-                continue
-            team = max(set(teams), key=lambda t: (sum(record[arm][t, w] for w in (True, False)), t))
-            path = os.path.join(DS.G, arm, "teams", "smogon", team)
-            ms = members(path, ex)
-            for m in ms:
-                e = ex.entry(m["sp"])
-                meg = ex.mega.get((tid(e.get("baseSpecies", e["name"])), open(path).read() and ""))
-                m["types"] = e["types"] if not m["mega"] else [
-                    x for x in next(v for (b, it), v in ex.mega.items() if tid(v["baseSpecies"]) == tid(e.get("baseSpecies", e["name"])))["types"]]
-                m["name"] = e["name"]
-            won = record[arm][team, True]
-            lost = record[arm][team, False]
-            kpb = {m["sp"]: per[arm][team, m["sp"]]["kos"] / max(per[arm][team, m["sp"]]["battles"], 1) for m in ms}
-            anchor = max(ms, key=lambda m: (max(m["form"]["atk"], m["form"]["spa"]), sum(m["form"].values())))
-            weak = [t for t in TYPES if eff(t, anchor["types"]) > 1]
-            rest = [m for m in ms if m is not anchor]
-            shields = lambda m: [w for w in weak if eff(w, m["types"]) < 1]  # noqa: E731
-            enabler = max(rest, key=lambda m: len(shields(m))) if any(shields(m) for m in rest) else None
-            job = next((j for j, mv in JOBS if enabler and set(enabler["moves"]) & mv), None) if enabler else None
-            pair = [anchor] + ([enabler] if enabler else [])
-            lose = [t for t in TYPES if all(eff(t, m["types"]) > 1 for m in pair)]
-
-            def answers(m):
-                hits = {C.MV[x]["type"] for x in m["moves"] if C.MV.get(x, {}).get("bp")}
-                return [t for t in lose if eff(t, m["types"]) < 1 and any(eff(h, [t]) > 1 for h in hits)]
-            cand = [m for m in ms if m not in pair and answers(m)]
-            patch = max(cand, key=lambda m: len(answers(m))) if cand else None
-            top = max(ms, key=lambda m: kpb[m["sp"]])
-            fmt = lambda m: f"{m['name']}{' (mega)' if m['mega'] else ''}"  # noqa: E731
-            print(f"\n{theme:8s} {team}  {won}-{lost} on the gym's bosses; top KO-getter: {fmt(top)} {kpb[top['sp']]:.2f}/battle")
-            print(f"   anchor  : {fmt(anchor)}  (atk {max(anchor['form']['atk'], anchor['form']['spa'])}; weak to {'/'.join(weak)}) {kpb[anchor['sp']]:.2f} KOs/battle")
-            print(f"   enabler : {fmt(enabler) + ' shields ' + '/'.join(shields(enabler)) + (', ' + job if job else '') if enabler else 'none'}")
-            print(f"   patch   : {fmt(patch) + ' answers ' + '/'.join(answers(patch)) if patch else ('none (nothing hits both)' if not lose else 'none: nobody resists and hits back ' + '/'.join(lose))}")
-            print(f"   team    : {', '.join(fmt(m) + ' @ ' + m['item'] for m in ms)}")
+    groups = {"monotype (gen 7-9)": ("rnb_vs_mono_10ms", "rnb_vs_mono8_10ms", "rnb_vs_mono7_10ms"),
+              "mainstream gen 7 (OU, UU, Ubers...)": ("rnb_vs_gen7_25ms", "rnb_vs_gen7_10ms")}
+    summary = {}
+    examples = []
+    for label, arms in groups.items():
+        rows = []
+        for arm in arms:
+            teams = {t for (t, sp) in per.get(arm, {})}
+            for team in sorted(teams):
+                path = os.path.join(DS.G, arm, "teams", "smogon", team)
+                if not os.path.exists(path):
+                    continue
+                ms = typed(members(path, ex), ex)
+                if any(per[arm][team, m["sp"]]["battles"] < 2 for m in ms):
+                    continue
+                kpb = {m["sp"]: per[arm][team, m["sp"]]["kos"] / per[arm][team, m["sp"]]["battles"] for m in ms}
+                a, weak, en, sh, job, lose, pa, ans = core(ms)
+                top = max(kpb.values())
+                rows.append({"enabler": en is not None, "job": job is not None, "lose": bool(lose),
+                             "patch": pa is not None, "anchor_top": kpb[a["sp"]] == top,
+                             "anchor_item": a["item"] in ATTACK_ITEMS or a["mega"],
+                             "anchor_kos": kpb[a["sp"]], "team_best": top})
+                if label.startswith("mainstream") and arm == "rnb_vs_gen7_25ms":
+                    examples.append((team, ms, kpb, (a, weak, en, sh, job, lose, pa, ans)))
+        summary[label] = rows
+    n = lambda rows, k: 100 * sum(r[k] for r in rows) / len(rows)  # noqa: E731
+    print(f"{'':40s} {'teams':>6s} {'enabler':>8s} {'+job':>6s} {'a type hits both':>17s} {'patch':>6s} {'anchor on attack item':>22s} {'anchor = top KO':>16s}")
+    for label, rows in summary.items():
+        print(f"{label:40s} {len(rows):6d} {n(rows,'enabler'):7.0f}% {n(rows,'job'):5.0f}% {n(rows,'lose'):16.0f}% {n(rows,'patch'):5.0f}% {n(rows,'anchor_item'):21.0f}% {n(rows,'anchor_top'):15.0f}%")
+    fmt = lambda m: f"{m['name']}{' (mega)' if m['mega'] else ''}"  # noqa: E731
+    print("\n# mainstream gen 7 examples")
+    examples.sort(key=lambda e: e[0])
+    for team, ms, kpb, (a, weak, en, sh, job, lose, pa, ans) in examples[:: max(1, len(examples) // 9)][:9]:
+        top = max(ms, key=lambda m: kpb[m["sp"]])
+        print(f"\n{team}   top KO-getter: {fmt(top)} {kpb[top['sp']]:.2f}/battle")
+        print(f"   anchor  : {fmt(a)} @ {a['item']} (weak to {'/'.join(weak)}) {kpb[a['sp']]:.2f} KOs/battle")
+        print(f"   enabler : {fmt(en) + ' shields ' + '/'.join(sh) + (', ' + job if job else '') if en else 'none'}")
+        print(f"   patch   : {fmt(pa) + ' answers ' + '/'.join(ans) if pa else ('none (nothing hits both)' if not lose else 'none')}")
+        print(f"   team    : {', '.join(fmt(m) for m in ms)}")
 
 
 if __name__ == "__main__":
