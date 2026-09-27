@@ -76,8 +76,8 @@ def main():
             attacking(m, k), max(m["form"]["atk"], m["form"]["spa"]), -tier_rank(m["tier_name"])),
         "random member": lambda m, k: rng.random(),
     }
-    res = collections.defaultdict(list)
-    teams = 0
+    res = collections.defaultdict(lambda: collections.defaultdict(list))
+    teams = collections.Counter()
     arms = [a for a in per if not a.startswith(("rnb_vs_gen_", "rnb_vs_gen_trainers"))]
     for arm in sorted(arms):
         by_team = collections.defaultdict(dict)
@@ -94,17 +94,22 @@ def main():
             kpb = {m["sp"]: mons[m["sp"]]["kos"] / mons[m["sp"]]["battles"] for m in ms if m["sp"] in mons}
             if len(kpb) < 6:
                 continue
-            teams += 1
+            group = "monotype" if "mono" in arm else "mainstream"
+            teams[group] += 1
             best, mean = max(kpb.values()), st.mean(kpb.values())
             for name, f in rankers.items():
                 pick = max(ms, key=lambda m: f(m, kinds.get((arm, team), {}).get(m["sp"])))
                 got = kpb[pick["sp"]]
-                res[name].append((got, got == best, got - mean))
-    print(f"{teams} real Smogon teams with {MIN_BATTLES}+ battles each, arms: {', '.join(sorted(arms))}")
-    print(f"{'ranking':46s} {'anchor KOs/battle':>18s} {'picked the top KO-getter':>25s} {'vs team average':>16s}")
-    for name, rows in sorted(res.items(), key=lambda kv: -st.mean(r[0] for r in kv[1])):
-        print(f"{name:46s} {st.mean(r[0] for r in rows):18.2f} {100 * st.mean(r[1] for r in rows):24.0f}% "
-              f"{st.mean(r[2] for r in rows):+16.2f}")
+                res[group][name].append((got, got == best, got - mean))
+                res["all"][name].append((got, got == best, got - mean))
+    print(f"arms: {', '.join(sorted(arms))}")
+    for group in ("mainstream", "monotype", "all"):
+        n = teams[group] if group != "all" else sum(teams.values())
+        print(f"\n## {group}: {n} real Smogon teams with {MIN_BATTLES}+ battles each")
+        print(f"{'ranking':46s} {'anchor KOs/battle':>18s} {'picked the top KO-getter':>25s} {'vs team average':>16s}")
+        for name, rows in sorted(res[group].items(), key=lambda kv: -st.mean(r[0] for r in kv[1])):
+            print(f"{name:46s} {st.mean(r[0] for r in rows):18.2f} {100 * st.mean(r[1] for r in rows):24.0f}% "
+                  f"{st.mean(r[2] for r in rows):+16.2f}")
 
 
 if __name__ == "__main__":
