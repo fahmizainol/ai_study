@@ -1292,6 +1292,22 @@ that threat off-type or not at all. For the gyms (5 of 6 on-theme) that argues f
 enabler may come from the off-theme cover slot when the type has none, the patch step is
 dropped or optional, and the anchor holds an attacking item (63% of mainstream anchors do).
 
+**Two anchors, read off real teams** (2026-09-28, `tools/rnb/two_cores.py`). The guide builds two
+mini-cores; core-first built one. Split each real team into anchor 1 (attacking set, best
+attack stat counting a mega) + its enabler, and anchor 2 (another attacking set, preferring one
+that hits what resists every attack anchor 1 carries) + its enabler:
+
+| | teams | top KO-getter is anchor 1 | is one of the two anchors | two random members | the two anchors' share of team KOs |
+|---|--:|--:|--:|--:|--:|
+| mainstream gen 7 | 156 | 35% | 54% | 43% | 39% (33% if even) |
+| monotype gen 7-9 | 145 | 32% | 65% | 41% | 47% |
+
+A second anchor is there on 92-99% of teams and carries far more in monotype: the two anchors
+make 47% of a monotype team's KOs, and the carry is one of them 65% of the time against 41% for
+any two members. The "hits what anchor 1 cannot" test rarely binds (12% / 21%) -- most anchors
+are walled by nothing -- so in practice anchor 2 is the second-best attacking set. Enabler 2
+exists on 86% of mainstream and 66% of monotype teams.
+
 **Traps met on the way** (all fixed in the tools):
 - On a machine where 127.0.0.1 has no rDNS and something listens on port 80, Showdown
   calls localhost an open proxy and locks every bot (`setup_battles.py` now declares
