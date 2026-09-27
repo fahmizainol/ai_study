@@ -98,6 +98,22 @@ SCHEDULE = [
     ("2026-09-27 11:45:00", "rnb_vs_gen_fix_10ms"),
     ("2026-09-27 11:48:51", "rnb_vs_gen_trainers_fix_10ms"),
     ("2026-09-27 11:53:38", None),
+    # set coherence (2026-09-27)
+    ("2026-09-27 12:40:48", "rnb_vs_gen_fix2_10ms"),
+    ("2026-09-27 12:44:42", "rnb_vs_gen_trainers_fix2_10ms"),
+    ("2026-09-27 12:49:12", "rnb_vs_gen_fix2_10ms"),
+    ("2026-09-27 12:52:45", "rnb_vs_gen_trainers_fix2_10ms"),
+    ("2026-09-27 12:57:03", "rnb_vs_gen_fix2_10ms"),
+    ("2026-09-27 13:00:45", "rnb_vs_gen_trainers_fix2_10ms"),
+    ("2026-09-27 13:05:21", None),
+    # real monotype teams on the gyms' draws (2026-09-27)
+    ("2026-09-27 15:33:47", "rnb_vs_mono_10ms"),
+    ("2026-09-27 15:40:38", "rnb_vs_mono8_10ms"),
+    ("2026-09-27 15:47:10", "rnb_vs_mono7_10ms"),
+    ("2026-09-27 15:48:15", "rnb_vs_mono_10ms"),
+    ("2026-09-27 15:55:42", "rnb_vs_mono8_10ms"),
+    ("2026-09-27 16:02:13", "rnb_vs_mono7_10ms"),
+    ("2026-09-27 16:03:25", None),
 ]
 SCHED = [(time.mktime(datetime.datetime.strptime(s, "%Y-%m-%d %H:%M:%S").timetuple()), a) for s, a in SCHEDULE]
 ORDER = ["rnb_vs_gen_deckoff", "rnb_vs_gen_theme", "rnb_vs_gen_tier", "rnb_vs_gen_all",

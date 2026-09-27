@@ -958,6 +958,37 @@ Where the generator stands at 10 ms, in order of change:
 | + set coherence | 48.1% | **55.0%** |
 | real gen 7 teams | 64.1% | |
 
+**Real monotype teams on the gyms' own draws** (2026-09-27, `make_mono_battles.py`,
+`generated/rnb_vs_mono_10ms` gen 9, `_mono8_10ms` gen 8, `_mono7_10ms` gen 7). The gyms
+are monotype and every real team played so far is not, so the 64% yardstick was never
+theirs. Smogon monotype teams of each gym's type, nearest in BST, against the gym's own
+four bosses, 2 a boss, 2 rounds, 10 ms: gen 9 1,414 legal teams (72 pairings), gen 8 174
+(65), gen 7 only 11 once Z-crystals and legality are applied (11, five types).
+
+| type | generated gym | gen 9 mono | gen 8 mono | gen 7 mono |
+|---|--:|--:|--:|--:|
+| Bug | 58% | **88%** | 86% | |
+| Fairy | **100%** | 94% | 69% | |
+| Water | 67% | 69% | 71% | 8-0 |
+| Ice | 58% | 75% | 62% | 0-2 |
+| Dark | **17%** | **81%** | 90% | |
+| Ground | 42% | 43% | 44% | 2-4 |
+| Psychic | 25% | 25% | 6% | |
+| Normal | 25% | 12% | 40% | 0-2 |
+| Steel | 42% | 31% | 44% | 2-2 |
+| all | **48%** | **58%** | **55%** | 55% |
+
+Against real teams of their own type the gyms sit 7-10 points back, not the 16 the
+balanced gen 7 teams showed: the monotype constraint itself costs real teams too. Gym 7's
+draw is what beats Psychic -- real Psychic monotypes go 0-4 v Matt's Kartana in both gens
+and 0-4 / 1-3 v Sidney -- and Ground, Steel and Normal gyms match their real counterparts.
+The under-built gyms are Dark (17% v 81-90%) and Bug (58% v 86-88%), Ice less so (58% v
+62-75%); Fairy and Water are at parity or ahead. The real monotype teams carry a hazard
+setter and a remover, one or two setup sweepers, a pivot, Choice or Vest items, and their
+type's off-type answers (the Psychic team's Knock Off, Focus Blast, Draco Meteor and
+Earthquake); the gen 8 Psychic team is a four-member Trick Room plan, the shape
+NO_PLAN_SETS strips from the generator because there the setter has no team behind it.
+
 A first version drew replacements instead of swapping and favoured some sets: the
 sets it left out had KO'd 0.79 a battle in the intact run against 0.64 for the ones it
 used, which would have made collages look weak for the wrong reason.
@@ -996,6 +1027,7 @@ REALIDEA_PBS=<game>/PBS [GEN_ARMS=dir] python3 tools/rnb/core_strength.py
 # the theme test: build an arm, export it, play it (Windows)
 python3 tools/rnb/gen_fixes.py theme|tier OUTDIR
 python3 tools/rnb/make_gen_battles.py 4 --from OUTDIR --name theme|tier
+python3 tools/rnb/make_mono_battles.py rnb_vs_gen_fix2_10ms 2 [--gen7|--gen8]   # real monotype on the gyms' draws
 RNB_OUT=generated/rnb_vs_gen_theme python3 tools/rnb/run_battles.py 4 3 100   # 100 ms, as played
 python3 tools/rnb/score_arms.py rnb_vs_gen_deckoff rnb_vs_gen_theme rnb_vs_gen_tier
 python3 tools/rnb/compare_runs.py rnb_vs_gen_deckoff rnb_vs_gen_theme
