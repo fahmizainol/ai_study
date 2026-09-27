@@ -125,6 +125,15 @@ SCHEDULE = [
     ("2026-09-27 17:36:19", "rnb_vs_gen_core2_10ms"),
     ("2026-09-27 17:40:04", "rnb_vs_gen_trainers_core2_10ms"),
     ("2026-09-27 17:44:45", None),
+    # the installed core-first fixes (attacking anchor, off-theme enabler, no patch, one
+    # weather, protect walls, no passive attackers), gyms and trainers (2026-09-28)
+    ("2026-09-28 02:20:44", "rnb_vs_gen_cores2_10ms"),
+    ("2026-09-28 02:24:18", "rnb_vs_gen_trainers_cores2_10ms"),
+    ("2026-09-28 02:28:26", "rnb_vs_gen_cores2_10ms"),
+    ("2026-09-28 02:31:55", "rnb_vs_gen_trainers_cores2_10ms"),
+    ("2026-09-28 02:36:07", "rnb_vs_gen_cores2_10ms"),
+    ("2026-09-28 02:39:59", "rnb_vs_gen_trainers_cores2_10ms"),
+    ("2026-09-28 02:44:15", None),
 ]
 SCHED = [(time.mktime(datetime.datetime.strptime(s, "%Y-%m-%d %H:%M:%S").timetuple()), a) for s, a in SCHEDULE]
 ORDER = ["rnb_vs_gen_deckoff", "rnb_vs_gen_theme", "rnb_vs_gen_tier", "rnb_vs_gen_all",

@@ -1308,6 +1308,69 @@ any two members. The "hits what anchor 1 cannot" test rarely binds (12% / 21%) -
 are walled by nothing -- so in practice anchor 2 is the second-best attacking set. Enabler 2
 exists on 86% of mainstream and 66% of monotype teams.
 
+**Core-first fixed from the real-team readings, installed** (2026-09-28,
+`rnb_vs_gen_cores2_10ms` and `_trainers_cores2_10ms`, both on fix2's draws; measured on the
+INSTALLED files). Six switches in `generate_bosses.py`, pinned off for every earlier arm
+(fix2 and core2 still rebuild byte-identical):
+- `CORE_ANCHOR_RULE`: the anchor holds an attacking set (Choice, Life Orb, Expert Belt,
+  Vest, mega, or setup + 2 attacks), ranked by best attacking stat counting the mega (the
+  dex has no mega formes: base stat plus its share of MEGA_BONUS), then BST. A kept one on
+  an attacking set first; with none, the strongest kept one is re-set toward one (the
+  later re-equip and offence re-price passes may not undo it); with nothing kept that can
+  attack, the best on-theme body across the whole band, not the eBST-nearest.
+- `ENABLER_OFF_THEME`: with nothing on-theme resisting the anchor's weaknesses, the
+  enabler comes off-theme and spends the off-theme slot. `CORE_PATCH 0` drops the patch.
+- `WALL_PROTECT` (King's Shield etc. count as a wall's sustain, in the generator only),
+  `WEATHER_EXCLUSIVE` (another weather's move dropped, its ability swapped),
+  `WALL_NEEDS_BULK` (a frail species asked for wall / recovery must answer with an
+  attacking set) and `TRAINER_RECOVERY_CAP 2`. The cap is an ordinary cap: take()'s loose
+  pass still breaks it when every body able to fill a floor recovers, which leaves Camus
+  and Teresa's first fight at 3 (the wall floor at stages 0-1), as before.
+- The second core (`CORE_ANCHORS`, from two_cores.py) is on hold by the user's choice and
+  not built.
+
+What changed on the roster (against the previous install, which also lacked the Ultra
+Beast gate that ships with this one): gym 1 re-sets Araquanid from its Sticky Web lead to
+Assault Vest and takes an off-theme Rotom (Defog / Volt Switch) as its enabler; the gym now
+has no hazard setter (nothing else on Bug at level 20 carries one). Gym 2 re-sets
+Azumarill from Defensive to Choice Band; Ribombee is the enabler, Sylveon the wall, Lucario
+off-theme; Klefki (the patch), Comfey and Starmie leave. Gym 3 drops the patch Quagsire and
+the level-32 Kartana (Ultra Beast gate) for Alomomola and an Assault Vest Tangrowth. Gym 4
+keeps hail with Alolan Ninetales leading; an off-theme Assault Vest Incineroar (Fire /
+Grass / Steel for Mamoswine, a pivot) takes Quagsire's slot. Gym 6 anchors on Flygon
+(Hippowdon keeps its wall set and Sand Stream) with a Mega Steelix enabler; Swampert and its
+Rain Dance leave. Gym 7 loses the patch Meloetta, Reuniclus, Latios and Kommo-o for Lugia,
+Starmie, a Scarf Victini and Bewear. Gym 9 anchors on a Choice Band Kartana (570, the best
+attacking stat in the 550-650 band) instead of the defensive Heatran; Aegislash moves from
+Rest / Sleep Talk to King's Shield, and Mega Scizor, Magearna and a Band Dragonite replace
+Heatran, Empoleon, Genesect and Mega Aerodactyl. Gyms 5 and 8 are unchanged. Trainers: 11
+of 18 change; Teresa's second fight goes from four recovery users to two, and Delphox from
+Wish / Protect / Mystical Fire / Toxic to a Choice Scarf attacking set.
+
+| arm | gyms | adjusted | trainers | adjusted |
+|---|--:|--:|--:|--:|
+| fix2 | 52/108 (48.1%) | -1.2 | 66/120 (55.0%) | +1.9 |
+| core2 | 49/108 (45.4%) | -4.0 | 63/120 (52.5%) | -0.6 |
+| **cores2 (installed)** | **59/108 (54.6%)** | **+5.2** | **62/120 (51.7%)** | **-1.4** |
+
+Against fix2 the gyms are +6.5 (95% interval -9.0 to +22.7; matched battles 24 won / 17
+lost, sign test p = 0.35) and the trainers -3.3 (-15.4 to +8.7; 19 / 23, p = 0.64); against
+core2 the gyms are 22 / 12 on matched battles (p = 0.12). All inside the noise floor of
+about 8 points on 108 battles. Gym 5, UNCHANGED from fix2 roster for roster, went 2-10 to
+9-3, which is that noise in one line. The anchors: Mamoswine 1.67 KOs a battle, Flygon
+1.33, Kartana 1.33, Primarina 1.08, Azumarill and Bisharp 0.92, Araquanid and Gallade 0.67
+(Pidgeot's Roost / Defog set is not read as an attacker); the anchor is its team's top
+KO-getter on 4 of 9 gyms. The re-set anchors did their job where the old ones did not --
+gym 6's Hippowdon anchor made 0.17 KOs in core2, Flygon now 1.33; Azumarill went from 0.58
+to 0.92 -- and the off-theme enablers held their slots (Incineroar 0.92, Greninja 1.42).
+Reading: the rule picks the right bodies for the right jobs, as on the real teams, and the
+total is the best of the four core arms without being distinguishable from any of them.
+
+Pending (the user's step): copy the tracked `Realidea V4.1/Data/Scripts.rxdata` over the
+play copy (keeping a `.bak`) and boot it once under Proton to the title; the auto-mode
+classifier refused that write here. The Team_Overrides syntax check passes, the bundle still
+defines `PBEffects::AuroraVeil`, and the overrides carry the NINETALES form-1 row.
+
 **Traps met on the way** (all fixed in the tools):
 - On a machine where 127.0.0.1 has no rDNS and something listens on port 80, Showdown
   calls localhost an open proxy and locks every bot (`setup_battles.py` now declares
