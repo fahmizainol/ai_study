@@ -114,6 +114,9 @@ SCHEDULE = [
     ("2026-09-27 15:55:42", "rnb_vs_mono8_10ms"),
     ("2026-09-27 16:02:13", "rnb_vs_mono7_10ms"),
     ("2026-09-27 16:03:25", None),
+    # core-first + per-type floors, gyms only, on fix2's draw (2026-09-27)
+    ("2026-09-27 17:08:22", "rnb_vs_gen_core_10ms"),
+    ("2026-09-27 17:19:22", None),
 ]
 SCHED = [(time.mktime(datetime.datetime.strptime(s, "%Y-%m-%d %H:%M:%S").timetuple()), a) for s, a in SCHEDULE]
 ORDER = ["rnb_vs_gen_deckoff", "rnb_vs_gen_theme", "rnb_vs_gen_tier", "rnb_vs_gen_all",
