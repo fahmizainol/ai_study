@@ -298,6 +298,19 @@ ATTACKER_BULK = 265
 # all attacks or carries Trick / Switcheroo, since the lock makes any other move a wasted
 # turn. 1 is the old two-way preference. Wall sets are never ranked on the item.
 ATTACKER_ITEM = 2
+# 1 accepts a move on a species' (or its pre-evolution's) EggMoves= line as legal for a
+# generated or kept set, the way TMs are. Off, the generator only knew level-up and TM
+# moves, which is why every published Weavile set lost Fake Out and Pursuit and why the
+# filler had to invent a fourth move (RNB-STUDY.md §10). On since 2026-09-27, with the
+# gen 7 learnset merge (tools/learnset_merge.py).
+EGG_MOVES = 1
+
+
+def legal(kind):
+    """Is a realidea_data.learnable() answer a move the mon can have at its level?"""
+    return kind in ("levelup", "tm") or (bool(EGG_MOVES) and kind == "egg")
+
+
 # Core first (2026-09-27), after iStarlyTV's singles teambuilding guide (RNB-STUDY.md
 # §10, "core-first"). His core is FUNCTIONAL, not statistical: an anchor, an enabler that
 # removes the anchor's worst weakness (Hydreigon's Stealth Rock + Taunt in front of a
@@ -785,7 +798,7 @@ def hits_type(moves, atk):
 @functools.lru_cache(maxsize=None)
 def hits_back(species, level, atk):
     """Can `species` learn, at `level`, a damaging move that hits `atk` for x2?"""
-    return any(D.learnable(species, x, level, 0) in ("levelup", "tm")
+    return any(legal(D.learnable(species, x, level, 0))
                for x, r in _mv.items()
                if r["power"] > 0 and TS.type_multiplier(r["type"], [atk]) > 1)
 
@@ -1101,7 +1114,7 @@ def legal_moves(species, level, cap=None):
     `cap` is a SOFT power ceiling: damaging moves above it are dropped, unless that
     would leave the species with no attack at all, in which case its weakest one is
     kept. Status moves are never capped -- they have no power to cap."""
-    known = [m for m in _mv if D.learnable(species, m, level, 0) in ("levelup", "tm")]
+    known = [m for m in _mv if legal(D.learnable(species, m, level, 0))]
     if cap is None:
         return known
     damaging = [m for m in known if _mv[m]["power"] > 0 and m not in ROLE_MOVE]
@@ -1237,7 +1250,7 @@ def _knows(species, move, level, early):
     species does learn but N levels from now, which is exactly "cannot YET". Truthy
     covers levelup / tm / levelup+N; the strict reading keeps only the first two."""
     kind = D.learnable(species, move, level, 0)
-    return bool(kind) if early else kind in ("levelup", "tm")
+    return bool(kind) if early else legal(kind)
 
 
 def usable_sets(species, level, banned=frozenset(), cap=None, mode=None,
@@ -1902,7 +1915,7 @@ def role_supply(level, stage, roles, mode=None, theme=None):
     for name in eligible(level, stage, theme=theme):
         sp = _sp[name]
         legal = {m for m in asked
-                 if m in _mv and D.learnable(name, m, level, 0) in ("levelup", "tm")}
+                 if m in _mv and legal(D.learnable(name, m, level, 0))}
         for role, pool in move_roles.items():
             if legal & pool:
                 learns[role] += 1
@@ -1915,7 +1928,7 @@ def role_supply(level, stage, roles, mode=None, theme=None):
             for st in SC.sets().get(SC.norm(src), {}).values():
                 ok = [m for m in (SC.norm(x) for x in st["moves"])
                       if m in _mv
-                      and D.learnable(name, m, level, 0) in ("levelup", "tm")]
+                      and legal(D.learnable(name, m, level, 0))]
                 got |= roles_of(ok, SC.norm(st.get("item")),
                                 SC.norm(st.get("ability")), mode, sp)
         for role in roles:
@@ -3059,8 +3072,7 @@ def assemble(spec):
                     for new in able:
                         if new in m["moves"]:
                             continue
-                        if D.learnable(m["species"], new, m["level"], 0) \
-                                not in ("levelup", "tm"):
+                        if not legal(D.learnable(m["species"], new, m["level"], 0)):
                             continue
                         moves = [new if x == old else x for x in m["moves"]]
                         got = roles_of(moves, m["item"], ability_name(m), mode,
@@ -3101,8 +3113,7 @@ def assemble(spec):
                         if not best or score > best[0]:
                             best = (score, i, old, new, moves, got)
             if not best:
-                can = any(D.learnable(m["species"], x, m["level"], 0)
-                          in ("levelup", "tm")
+                can = any(legal(D.learnable(m["species"], x, m["level"], 0))
                           for m in team if not is_dynamic(m["species"])
                           for x in able)
                 notes.append(

@@ -1140,6 +1140,41 @@ teams_bosses_gyms.json / teams_trainers.json / Team_Overrides.rb and replaces th
 Team_Overrides section of `Realidea V4.1/Data/Scripts.rxdata`; on the Deck the in-repo
 bundle is byte-identical to the game's, so the game copy needs the same file afterwards.
 
+**Realidea's learnsets were gen 5, and the generator refused egg moves** (2026-09-27).
+Weavile's shipped set was Swords Dance / Aerial Ace / Ice Shard / Focus Punch: a gen 9 set
+(the only ones carrying the Swords Dance the Ice floors asked for), Triple Axel replaced by
+the strongest legal filler. Chasing why led to two facts about the game data rather than
+the generator. Realidea's `pokemon.txt` carries Black/White egg lists (Sneasel's stops
+before the gen 6 Icicle Crash and gen 7 Throat Chop) and its `tm.txt` has 171 of the gen 7
+TM+tutor moves; and `realidea_data.learnable()` skipped the `EggMoves=` line on purpose.
+- `tools/learnset_merge.py` brings the learnsets to gen 7 from Showdown's USUM data
+  (`generated/showdown_learnsets_gen7.json`), additively and only for species and moves
+  Realidea already defines: 646 level-up moves on 381 species, 302 egg moves (base stage),
+  5,991 TM / tutor compatibilities (23 new `tm.txt` sections). Only `Moves=` / `EggMoves=`
+  lines change. Excluded: Aurora Veil (below), Power Trip (function code 0 here), and Beak
+  Blast, Revelation Dance, Solar Blade (no `PokeBattle_Move_` class in the scripts).
+  Every other added move's function code has a handler, checked against the 382 effect
+  classes in `Scripts.rxdata`; 415 of the 432 moves used are already taught to someone.
+  Installed into the game's PBS with `.pre-gen7-*.bak` beside the originals; the game
+  needs one debug-mode start to recompile. Reborn Yang's PBS was pulled to the Deck as a
+  format reference and turned out to be gen 8/9 in its `tm.txt`, so it is not the source.
+- `EGG_MOVES` (on): the generator accepts a move on the species' or a pre-evolution's egg
+  list, as it does TMs. With both, set fidelity across the 54 gym slots rose 182 -> 201
+  surviving published moves; every gym's roster moves (Araquanid takes the gen 7 OU Sticky
+  Web lead set). Weavile still lands on the gen 8 set through the setup floor, so the
+  filler avoid-list and a gen cap on sets remain open.
+- Sticky Web WORKS in this engine (setter, switch-in Speed drop, Defog / Rapid Spin
+  clearing, AI scoring all present); the study's exclusion was that no species learned
+  it, which the merge fixes (Galvantula, Shuckle, Ribombee, Kartana by level).
+- Aurora Veil was a stub: setter only, no `PBEffects::AuroraVeil` constant (using it
+  raised an error), no damage hook, no countdown, no clearing. `tools/patch_aurora_veil.py`
+  mirrors Reflect at every site (eight script sections, +55 lines: constant, side init,
+  damage calc for both categories without stacking on the covering screen, end-of-round
+  countdown, Defog / Brick Break / Shadow Shed clearing, stock AI, the study's probe) and
+  stages the result at `generated/aurora_veil/Scripts.rxdata`; installing it is a copy the
+  person makes. After that, `learnset_merge.py --with-aurora-veil` adds the move's
+  learnsets (Alolan Vulpix / Ninetales and the other gen 7 learners).
+
 **Traps met on the way** (all fixed in the tools):
 - On a machine where 127.0.0.1 has no rDNS and something listens on port 80, Showdown
   calls localhost an open proxy and locks every bot (`setup_battles.py` now declares

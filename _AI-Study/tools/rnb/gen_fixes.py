@@ -54,8 +54,11 @@ ARMS = ("off", "on", "theme", "tier", "all", "choices", "defense", "open", "atk"
 if arm not in ARMS:
     sys.exit("arm is one of " + ", ".join(ARMS))
 if arm != "shipped":
-    # the off-theme slot rules, after the core2 arm was played (never played)
-    GB.OFF_THEME_CAP, GB.OFF_THEME_MOST, GB.OFF_THEME_EXTRA = 0, 0, 0
+    # the off-theme slot rules and egg moves, after the core2 arm was played. NOTE: the
+    # game's pokemon.txt / tm.txt were brought to gen 7 on 2026-09-27 (learnset_merge.py),
+    # so every arm below rebuilds byte for byte only against the PBS as it was before
+    # that -- the .pre-gen7-*.bak files beside them.
+    GB.OFF_THEME_CAP, GB.OFF_THEME_MOST, GB.OFF_THEME_EXTRA, GB.EGG_MOVES = 0, 0, 0, 0
 if arm not in ("core2", "shipped"):
     # evolving a kept original toward the target, and the higher measured bar, after
     # the core arm was played

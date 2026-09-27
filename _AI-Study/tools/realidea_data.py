@@ -49,7 +49,7 @@ def species():
         if line.startswith("InternalName="):
             cur = line.split("=", 1)[1]
             out[cur] = {"types": [], "abilities": [], "hidden_ability": None,
-                        "learnset": [], "evolutions": [], "base_stats": [], "bst": 0}
+                        "learnset": [], "egg": [], "evolutions": [], "base_stats": [], "bst": 0}
         elif cur is None:
             continue
         elif line.startswith("Type1=") or line.startswith("Type2="):
@@ -65,6 +65,8 @@ def species():
         elif line.startswith("Moves="):
             f = line.split("=", 1)[1].split(",")
             out[cur]["learnset"] = [(int(f[i]), f[i+1]) for i in range(0, len(f) - 1, 2)]
+        elif line.startswith("EggMoves="):
+            out[cur]["egg"] = [m for m in line.split("=", 1)[1].split(",") if m]
         elif line.startswith("Evolutions=") and line != "Evolutions=":
             f = line.split("=", 1)[1].split(",")
             out[cur]["evolutions"] = [tuple(f[i:i+3]) for i in range(0, len(f) - 2, 3)]
@@ -321,7 +323,7 @@ def pre_evolutions():
 def learnable(sp_name, move, level, slack=0):
     """How can sp_name know `move` at `level`? Returns one of:
     'levelup', 'levelup+N' (over by N but within slack... always returned when over),
-    'tm', None.
+    'tm', 'egg', None.
 
     A PRE-EVOLUTION's level-up move counts as 'levelup' for the evolved form.
     Essentials carries moves through evolution and the player can hold evolution off
@@ -332,8 +334,11 @@ def learnable(sp_name, move, level, slack=0):
     published Cloyster set fell under build()'s legality floor and gym 4 got
     Dive/Aqua Jet/Explosion/Rest out of the fallback instead.
 
-    Egg moves stay out: species() never parses `EggMoves=`, and a bred move is not
-    something a trainer's mon plausibly has.
+    'egg' is a move on the species' or a pre-evolution's `EggMoves=` line: known from
+    hatching, so legal at any level. Whether a caller ACCEPTS it is the caller's policy
+    (generate_bosses.EGG_MOVES) -- the generator refused them until 2026-09-27 on the
+    view that a trainer's mon would not plausibly carry a bred move, which real games'
+    boss trainers and every published set contradict.
 
     The evolution LEVEL is deliberately not checked here -- whether the species can
     exist at this level at all is min_level()'s question, and validate_team.py
@@ -348,6 +353,8 @@ def learnable(sp_name, move, level, slack=0):
         return "levelup"
     if sp_name in tm_moves().get(move, ()):
         return "tm"
+    if move in sp["egg"] or any(move in species()[p]["egg"] for p in pre_evolutions()[sp_name]):
+        return "egg"
     if lvls:
         return f"levelup+{min(lvls) - level}"
     return None
