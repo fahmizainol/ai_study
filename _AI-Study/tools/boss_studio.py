@@ -246,6 +246,29 @@ SCALARS = {
                      "1 gives a themed fight its type's real monotype shape: the type's "
                      "own wall count instead of WALL_MIN, a hazard setter, and the setup "
                      "and priority users a typical team of the type runs (THEME_SHAPE)"),
+    "CORE_ANCHOR_RULE": ("int", 0, 1, 1,
+                         "1 makes the core anchor an attacking set (Choice, Life Orb, Expert "
+                         "Belt, Vest, mega, or setup + 2 attacks) ranked by attacking stat "
+                         "counting the mega: a kept one first, else the best on-theme body "
+                         "in the whole band. 0 is the strongest kept / nearest-curve body"),
+    "ENABLER_OFF_THEME": ("int", 0, 1, 1,
+                          "1 takes the core enabler off-theme, in the off-theme slot, when "
+                          "nothing on-theme resists the anchor's weaknesses"),
+    "CORE_PATCH": ("int", 0, 1, 1,
+                   "1 adds core-first's patch: an on-theme body resisting and hitting back "
+                   "a type that beats anchor + enabler (9% of real monotype teams have one)"),
+    "WALL_PROTECT": ("int", 0, 1, 1,
+                     "1 counts King's Shield / Spiky Shield / Baneful Bunker / Protect / "
+                     "Detect like a recovery move when judging a wall set"),
+    "WEATHER_EXCLUSIVE": ("int", 0, 1, 1,
+                          "1 keeps a team to one weather: another weather's move is dropped "
+                          "and its setting ability swapped once the mode or a member sets one"),
+    "WALL_NEEDS_BULK": ("int", 0, 1, 1,
+                        "1 lets a species that is not bulky answer a wall or recovery "
+                        "request only with an attacking set -- no passive attackers"),
+    "TRAINER_RECOVERY_CAP": ("int", 0, 4, 1,
+                             "recovery users a named trainer's team may carry; 0 leaves the "
+                             "plan's own cap"),
     "NO_PLAN_SETS": ("int", 0, 1, 1,
                      "1 skips sets written for a team plan the fight is not running: Trick "
                      "Room without a trickroom mode, Baton Pass, Memento, Lunar Dance, "
@@ -291,7 +314,9 @@ GROUPS = [
                   "ATTACKER_ITEM", "KEPT_ANY_FORMAT", "NO_PLAN_SETS", "ITEM_FALLBACK", "SET_COHERENCE",
                   "CORE_FIRST", "THEME_FLOORS", "GROW_TO_TARGET",
                   "OFF_THEME_CAP", "OFF_THEME_MOST", "OFF_THEME_EXTRA", "EGG_MOVES", "SET_GEN_MAX",
-                  "MODE_SETTER_FIRST"]),
+                  "MODE_SETTER_FIRST", "CORE_ANCHOR_RULE", "ENABLER_OFF_THEME", "CORE_PATCH",
+                  "WALL_PROTECT", "WEATHER_EXCLUSIVE", "WALL_NEEDS_BULK",
+                  "TRAINER_RECOVERY_CAP"]),
     # A third question, and the reason these are not filed under "team": every other
     # knob here says what a team must BE, and these three only say "give me a
     # different one". All are off at 0. The two seeds ship off; REPEAT_BAND ships at

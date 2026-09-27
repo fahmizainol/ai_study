@@ -230,6 +230,11 @@ def _make_trainer(battle, plan=None, seen=None):
     if stage < G.MODE_FROM:
         mode = None
     floors, caps = G.plan_for(archetype, unlocked, mode)
+    if G.TRAINER_RECOVERY_CAP:
+        # the balance plan floors recovery at 3; Teresa's second fight carried four
+        caps["recovery"] = min(caps.get("recovery", 99), G.TRAINER_RECOVERY_CAP)
+        if floors.get("recovery", 0) > caps["recovery"]:
+            floors["recovery"] = caps["recovery"]
 
     # 1) every dev-chosen mon is kept and re-equipped, at its own remapped level.
     #    The starter slots Owen and Alba carry are passed through untouched: the

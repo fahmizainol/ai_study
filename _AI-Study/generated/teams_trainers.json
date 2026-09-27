@@ -78,37 +78,6 @@
     "why": "added:wall"
    },
    {
-    "species": "HERACROSS",
-    "level": 37,
-    "moves": [
-     "SWORDSDANCE",
-     "CLOSECOMBAT",
-     "KNOCKOFF",
-     "MEGAHORN"
-    ],
-    "item": "LEFTOVERS",
-    "ability": 1,
-    "nature": "ADAMANT",
-    "iv": 31,
-    "ev": [
-     0,
-     252,
-     4,
-     252,
-     0,
-     0
-    ],
-    "roles": [
-     "setup"
-    ],
-    "src": "gen6uu/dex/Swords Dance (dev set was SWORDSDANCE/SHADOWCLAW/PINMISSILE/RETALIATE)",
-    "fidelity": 4,
-    "inherited": null,
-    "pinned": false,
-    "kept": true,
-    "why": "original"
-   },
-   {
     "species": "ROSERADE",
     "level": 38,
     "moves": [
@@ -133,6 +102,38 @@
      "hazards"
     ],
     "src": "gen6monotype/stats/Showdown Usage (dev set was SHADOWBALL/SLUDGEBOMB/DAZZLINGGLEAM/SYNTHESIS)",
+    "fidelity": 4,
+    "inherited": null,
+    "pinned": false,
+    "kept": true,
+    "why": "original"
+   },
+   {
+    "species": "GARDEVOIR",
+    "level": 37,
+    "moves": [
+     "CALMMIND",
+     "MOONBLAST",
+     "PSYSHOCK",
+     "SUBSTITUTE"
+    ],
+    "item": "LEFTOVERS",
+    "ability": 1,
+    "nature": "TIMID",
+    "iv": 31,
+    "ev": [
+     0,
+     0,
+     0,
+     252,
+     252,
+     4
+    ],
+    "roles": [
+     "protect",
+     "setup"
+    ],
+    "src": "gen6uu/dex/Calm Mind (dev set was CALMMIND/MAGICALLEAF/PSYBEAM/DAZZLINGGLEAM)",
     "fidelity": 4,
     "inherited": null,
     "pinned": false,
@@ -171,33 +172,31 @@
     "why": "evolved original"
    },
    {
-    "species": "GARDEVOIR",
+    "species": "HERACROSS",
     "level": 37,
     "moves": [
-     "WISH",
-     "PROTECT",
-     "HYPERVOICE",
-     "WILLOWISP"
+     "CLOSECOMBAT",
+     "PINMISSILE",
+     "ROCKBLAST",
+     "SUBSTITUTE"
     ],
-    "item": "GARDEVOIRITE",
-    "ability": 1,
-    "nature": "TIMID",
+    "item": "HERACRONITE",
+    "ability": 2,
+    "nature": "ADAMANT",
     "iv": 31,
     "ev": [
-     248,
+     240,
+     136,
      0,
-     244,
-     16,
+     132,
      0,
      0
     ],
     "roles": [
      "mega",
-     "protect",
-     "recovery",
-     "status"
+     "protect"
     ],
-    "src": "gen6monotype/dex/Wish + Protect (Psychic) (dev set was CALMMIND/MAGICALLEAF/PSYBEAM/DAZZLINGGLEAM)",
+    "src": "gen6ou/dex/Bulky Wallbreaker (dev set was SWORDSDANCE/SHADOWCLAW/PINMISSILE/RETALIATE)",
     "fidelity": 4,
     "inherited": null,
     "pinned": false,
@@ -331,40 +330,6 @@
     "design_level": 19
    },
    {
-    "species": "ROTOM",
-    "level": [
-     "balanceo",
-     1
-    ],
-    "moves": [
-     "VOLTSWITCH",
-     "TRICK",
-     "SHOCKWAVE",
-     "HIDDENPOWER"
-    ],
-    "item": "CHOICESPECS",
-    "ability": 0,
-    "nature": "TIMID",
-    "iv": 31,
-    "ev": [
-     4,
-     0,
-     0,
-     252,
-     252,
-     0
-    ],
-    "roles": [
-     "pivot"
-    ],
-    "src": "gen6nu/dex/Choice Specs",
-    "fidelity": 2,
-    "inherited": null,
-    "kept": false,
-    "why": "added:power",
-    "design_level": 19
-   },
-   {
     "species": "CHANSEY",
     "level": [
      "balanceo",
@@ -398,6 +363,41 @@
     "inherited": "BLISSEY",
     "kept": false,
     "why": "added:wall",
+    "design_level": 19
+   },
+   {
+    "species": "BRUXISH",
+    "level": [
+     "balanceo",
+     1
+    ],
+    "moves": [
+     "SWORDSDANCE",
+     "AQUAJET",
+     "ICEFANG",
+     "BITE"
+    ],
+    "item": "LIFEORB",
+    "ability": 1,
+    "nature": "JOLLY",
+    "iv": 31,
+    "ev": [
+     0,
+     252,
+     4,
+     252,
+     0,
+     0
+    ],
+    "roles": [
+     "priority",
+     "setup"
+    ],
+    "src": "gen7ru/dex/Swords Dance",
+    "fidelity": 2,
+    "inherited": null,
+    "kept": false,
+    "why": "added:power",
     "design_level": 19
    },
    {
@@ -493,37 +493,6 @@
     "why": "added:removal"
    },
    {
-    "species": "HARIYAMA",
-    "level": 24,
-    "moves": [
-     "CLOSECOMBAT",
-     "KNOCKOFF",
-     "REST",
-     "SLEEPTALK"
-    ],
-    "item": "LEFTOVERS",
-    "ability": 0,
-    "nature": "IMPISH",
-    "iv": 31,
-    "ev": [
-     12,
-     0,
-     252,
-     0,
-     0,
-     244
-    ],
-    "roles": [
-     "recovery",
-     "wall"
-    ],
-    "src": "gen7nu/dex/Defensive",
-    "fidelity": 4,
-    "inherited": null,
-    "kept": false,
-    "why": "added:wall"
-   },
-   {
     "species": "HELIOLISK",
     "level": 25,
     "moves": [
@@ -558,31 +527,64 @@
     "species": "DRUDDIGON",
     "level": 24,
     "moves": [
-     "STEALTHROCK",
-     "DRAGONCLAW",
+     "OUTRAGE",
+     "SUCKERPUNCH",
      "FIREPUNCH",
-     "GUNKSHOT"
+     "IRONTAIL"
     ],
-    "item": "ROSELIBERRY",
+    "item": "LIFEORB",
     "ability": 1,
     "nature": "ADAMANT",
     "iv": 31,
     "ev": [
-     236,
+     224,
      252,
      0,
-     20,
+     32,
      0,
      0
     ],
     "roles": [
-     "hazards"
+     "priority"
     ],
-    "src": "gen6uu/dex/Stealth Rock Setter",
+    "src": "gen6ru/dex/All-out Attacker",
     "fidelity": 4,
     "inherited": null,
     "kept": false,
-    "why": "added:hazards"
+    "why": "added:power"
+   },
+   {
+    "species": "MILTANK",
+    "level": 24,
+    "moves": [
+     "BODYSLAM",
+     "MILKDRINK",
+     "TOXIC",
+     "STEALTHROCK"
+    ],
+    "item": "LEFTOVERS",
+    "ability": 2,
+    "nature": "IMPISH",
+    "iv": 31,
+    "ev": [
+     252,
+     0,
+     240,
+     16,
+     0,
+     0
+    ],
+    "roles": [
+     "hazards",
+     "recovery",
+     "status",
+     "wall"
+    ],
+    "src": "gen6nu/dex/Physically Defensive",
+    "fidelity": 4,
+    "inherited": null,
+    "kept": false,
+    "why": "added:wall"
    },
    {
     "species": "SYLVEON",
@@ -1375,34 +1377,62 @@
     "species": "BRAIXEN",
     "level": 23,
     "moves": [
-     "WISH",
-     "PROTECT",
-     "TOXIC",
-     "OVERHEAT"
+     "FIREBLAST",
+     "PSYCHIC",
+     "TRICK",
+     "SHOCKWAVE"
     ],
-    "item": "LEFTOVERS",
+    "item": "CHOICESCARF",
     "ability": 0,
     "nature": "TIMID",
     "iv": 31,
     "ev": [
+     0,
+     0,
+     4,
      252,
-     0,
-     0,
-     228,
-     28,
+     252,
      0
     ],
-    "roles": [
-     "protect",
-     "recovery",
-     "status"
-    ],
-    "src": "gen7nu/dex/Wish + Protect",
+    "roles": [],
+    "src": "gen6ru/dex/Speedy Roaster (Choice Scarf)",
     "fidelity": 3,
     "inherited": "DELPHOX",
     "pinned": false,
     "kept": true,
     "why": "original"
+   },
+   {
+    "species": "QUAGSIRE",
+    "level": 22,
+    "moves": [
+     "SCALD",
+     "RECOVER",
+     "EARTHQUAKE",
+     "TOXIC"
+    ],
+    "item": "LEFTOVERS",
+    "ability": 2,
+    "nature": "RELAXED",
+    "iv": 31,
+    "ev": [
+     252,
+     0,
+     252,
+     0,
+     0,
+     4
+    ],
+    "roles": [
+     "recovery",
+     "status",
+     "wall"
+    ],
+    "src": "gen6ou/dex/Unaware Wall",
+    "fidelity": 4,
+    "inherited": null,
+    "kept": false,
+    "why": "added:wall"
    },
    {
     "species": "SKARMORY",
@@ -1439,48 +1469,15 @@
     "why": "added:wall"
    },
    {
-    "species": "MILTANK",
+    "species": "PORYGON2",
     "level": 22,
     "moves": [
-     "BODYSLAM",
-     "MILKDRINK",
-     "TOXIC",
-     "STEALTHROCK"
-    ],
-    "item": "LEFTOVERS",
-    "ability": 2,
-    "nature": "IMPISH",
-    "iv": 31,
-    "ev": [
-     252,
-     0,
-     240,
-     16,
-     0,
-     0
-    ],
-    "roles": [
-     "hazards",
-     "recovery",
-     "status",
-     "wall"
-    ],
-    "src": "gen6nu/dex/Physically Defensive",
-    "fidelity": 4,
-    "inherited": null,
-    "kept": false,
-    "why": "added:wall"
-   },
-   {
-    "species": "XURKITREE",
-    "level": 22,
-    "moves": [
-     "TAILGLOW",
+     "TRIATTACK",
      "THUNDERBOLT",
-     "ENERGYBALL",
-     "DAZZLINGGLEAM"
+     "TRICK",
+     "ICEBEAM"
     ],
-    "item": "SHUCABERRY",
+    "item": "CHOICESPECS",
     "ability": 0,
     "nature": "TIMID",
     "iv": 31,
@@ -1492,12 +1489,10 @@
      252,
      4
     ],
-    "roles": [
-     "setup"
-    ],
-    "src": "gen8nationaldex/dex/Special Sweeper",
+    "roles": [],
+    "src": "gen6uu/dex/Choice Specs",
     "fidelity": 3,
-    "inherited": null,
+    "inherited": "PORYGONZ",
     "kept": false,
     "why": "added:power"
    }
@@ -1790,37 +1785,6 @@
     "why": "evolved original"
    },
    {
-    "species": "BRUXISH",
-    "level": 28,
-    "moves": [
-     "SWORDSDANCE",
-     "AQUAJET",
-     "CRUNCH",
-     "IRONTAIL"
-    ],
-    "item": "LIFEORB",
-    "ability": 1,
-    "nature": "JOLLY",
-    "iv": 31,
-    "ev": [
-     0,
-     252,
-     4,
-     252,
-     0,
-     0
-    ],
-    "roles": [
-     "priority",
-     "setup"
-    ],
-    "src": "gen7ru/dex/Swords Dance",
-    "fidelity": 3,
-    "inherited": null,
-    "kept": false,
-    "why": "added:power"
-   },
-   {
     "species": "HELIOLISK",
     "level": 30,
     "moves": [
@@ -1850,6 +1814,66 @@
     "pinned": false,
     "kept": true,
     "why": "original"
+   },
+   {
+    "species": "AERODACTYL",
+    "level": 28,
+    "moves": [
+     "STONEEDGE",
+     "EARTHQUAKE",
+     "STEALTHROCK",
+     "AERIALACE"
+    ],
+    "item": "LIFEORB",
+    "ability": 0,
+    "nature": "JOLLY",
+    "iv": 31,
+    "ev": [
+     0,
+     252,
+     0,
+     252,
+     0,
+     4
+    ],
+    "roles": [
+     "hazards"
+    ],
+    "src": "gen6ru/stats/Showdown Usage",
+    "fidelity": 4,
+    "inherited": null,
+    "kept": false,
+    "why": "added:hazards"
+   },
+   {
+    "species": "YANMEGA",
+    "level": 28,
+    "moves": [
+     "BUGBUZZ",
+     "AIRSLASH",
+     "GIGADRAIN",
+     "UTURN"
+    ],
+    "item": "CHOICESPECS",
+    "ability": 1,
+    "nature": "TIMID",
+    "iv": 31,
+    "ev": [
+     0,
+     0,
+     0,
+     252,
+     252,
+     4
+    ],
+    "roles": [
+     "pivot"
+    ],
+    "src": "gen6uu/dex/Choice Specs",
+    "fidelity": 4,
+    "inherited": null,
+    "kept": false,
+    "why": "added:power"
    },
    {
     "species": "SYLVEON",
@@ -1883,36 +1907,6 @@
     "pinned": false,
     "kept": true,
     "why": "evolved original"
-   },
-   {
-    "species": "NIHILEGO",
-    "level": 28,
-    "moves": [
-     "SLUDGEWAVE",
-     "THUNDERBOLT",
-     "GRASSKNOT",
-     "STEALTHROCK"
-    ],
-    "item": "BLACKSLUDGE",
-    "ability": 0,
-    "nature": "TIMID",
-    "iv": 31,
-    "ev": [
-     0,
-     0,
-     0,
-     252,
-     252,
-     4
-    ],
-    "roles": [
-     "hazards"
-    ],
-    "src": "gen7uu/dex/3 Attacks",
-    "fidelity": 4,
-    "inherited": null,
-    "kept": false,
-    "why": "added:hazards"
    },
    {
     "species": "owenpoke2",
@@ -2229,6 +2223,38 @@
     "why": "original"
    },
    {
+    "species": "FORRETRESS",
+    "level": 32,
+    "moves": [
+     "STEALTHROCK",
+     "RAPIDSPIN",
+     "SPIKES",
+     "TOXICSPIKES"
+    ],
+    "item": "LEFTOVERS",
+    "ability": 0,
+    "nature": "ADAMANT",
+    "iv": 31,
+    "ev": [
+     252,
+     252,
+     0,
+     0,
+     0,
+     4
+    ],
+    "roles": [
+     "hazards",
+     "removal",
+     "wall"
+    ],
+    "src": "gen7uu/stats/Showdown Usage",
+    "fidelity": 4,
+    "inherited": null,
+    "kept": false,
+    "why": "added:wall"
+   },
+   {
     "species": "HARIYAMA",
     "level": 32,
     "moves": [
@@ -2263,29 +2289,25 @@
     "species": "DELPHOX",
     "level": 33,
     "moves": [
-     "WISH",
-     "PROTECT",
-     "MYSTICALFIRE",
-     "TOXIC"
+     "FIREBLAST",
+     "PSYCHIC",
+     "DAZZLINGGLEAM",
+     "TRICK"
     ],
-    "item": "LEFTOVERS",
+    "item": "CHOICESCARF",
     "ability": 0,
     "nature": "TIMID",
     "iv": 31,
     "ev": [
+     0,
+     0,
+     4,
      252,
-     0,
-     0,
-     228,
-     28,
+     252,
      0
     ],
-    "roles": [
-     "protect",
-     "recovery",
-     "status"
-    ],
-    "src": "gen7nu/dex/Wish + Protect",
+    "roles": [],
+    "src": "gen6ru/dex/Speedy Roaster (Choice Scarf)",
     "fidelity": 4,
     "inherited": null,
     "pinned": false,
@@ -2293,66 +2315,34 @@
     "why": "evolved original"
    },
    {
-    "species": "SNORLAX",
+    "species": "ARCANINE",
     "level": 32,
     "moves": [
-     "CURSE",
-     "RETURN",
-     "REST",
-     "SLEEPTALK"
+     "FLAREBLITZ",
+     "EXTREMESPEED",
+     "WILDCHARGE",
+     "CLOSECOMBAT"
     ],
-    "item": "LEFTOVERS",
+    "item": "LIFEORB",
     "ability": 1,
-    "nature": "CAREFUL",
-    "iv": 31,
-    "ev": [
-     188,
-     0,
-     144,
-     0,
-     0,
-     176
-    ],
-    "roles": [
-     "recovery",
-     "setup",
-     "wall"
-    ],
-    "src": "gen6uu/dex/CurseLax",
-    "fidelity": 4,
-    "inherited": null,
-    "kept": false,
-    "why": "added:wall"
-   },
-   {
-    "species": "NIHILEGO",
-    "level": 32,
-    "moves": [
-     "SLUDGEWAVE",
-     "THUNDERBOLT",
-     "GRASSKNOT",
-     "STEALTHROCK"
-    ],
-    "item": "BLACKSLUDGE",
-    "ability": 0,
-    "nature": "TIMID",
+    "nature": "JOLLY",
     "iv": 31,
     "ev": [
      0,
-     0,
-     0,
      252,
+     4,
      252,
-     4
+     0,
+     0
     ],
     "roles": [
-     "hazards"
+     "priority"
     ],
-    "src": "gen7uu/dex/3 Attacks",
+    "src": "gen6uu/dex/Offensive",
     "fidelity": 4,
     "inherited": null,
     "kept": false,
-    "why": "added:hazards"
+    "why": "added:power"
    }
   ],
   "design": {
@@ -2813,29 +2803,29 @@
     "species": "SPIRITOMB",
     "level": 73,
     "moves": [
-     "CALMMIND",
-     "DARKPULSE",
-     "REST",
-     "WILLOWISP"
+     "SUCKERPUNCH",
+     "WILLOWISP",
+     "FOULPLAY",
+     "TAUNT"
     ],
-    "item": "LEFTOVERS",
-    "ability": 0,
-    "nature": "BOLD",
+    "item": "BLACKGLASSES",
+    "ability": 2,
+    "nature": "ADAMANT",
     "iv": 31,
     "ev": [
      252,
-     0,
      252,
+     4,
      0,
      0,
-     4
+     0
     ],
     "roles": [
-     "recovery",
-     "setup",
+     "disrupt",
+     "priority",
      "status"
     ],
-    "src": "gen6uu/dex/Calm Mind",
+    "src": "gen6uu/dex/Offensive Support",
     "fidelity": 4,
     "inherited": null,
     "pinned": false,
@@ -2875,28 +2865,27 @@
     "species": "LUCARIO",
     "level": 73,
     "moves": [
-     "SWORDSDANCE",
-     "CLOSECOMBAT",
-     "EXTREMESPEED",
-     "ICEPUNCH"
+     "NASTYPLOT",
+     "FOCUSBLAST",
+     "FLASHCANNON",
+     "VACUUMWAVE"
     ],
     "item": "LIFEORB",
-    "ability": 2,
-    "nature": "ADAMANT",
+    "ability": 0,
+    "nature": "TIMID",
     "iv": 31,
     "ev": [
      0,
-     252,
+     0,
      0,
      252,
-     0,
+     252,
      4
     ],
     "roles": [
-     "priority",
      "setup"
     ],
-    "src": "gen6uu/dex/Swords Dance",
+    "src": "gen6uu/dex/Nasty Plot",
     "fidelity": 4,
     "inherited": null,
     "pinned": false,
@@ -2971,7 +2960,8 @@
    "target_ebst": 600,
    "stage": 8,
    "notes": [
-    "MILOTIC re-equipped to cover wall"
+    "MILOTIC re-equipped to cover wall",
+    "shape check: kept rebuild 0 of 8, 1 test(s) still failing"
    ],
    "early_moves": true,
    "preset": "teams_bosses_gyms"
@@ -2988,30 +2978,31 @@
   "trainer_items": [],
   "mons": [
    {
-    "species": "HERACROSS",
+    "species": "GARDEVOIR",
     "level": 52,
     "moves": [
-     "SWORDSDANCE",
-     "CLOSECOMBAT",
-     "KNOCKOFF",
-     "MEGAHORN"
+     "CALMMIND",
+     "MOONBLAST",
+     "PSYSHOCK",
+     "SUBSTITUTE"
     ],
     "item": "LEFTOVERS",
     "ability": 1,
-    "nature": "ADAMANT",
+    "nature": "TIMID",
     "iv": 31,
     "ev": [
      0,
-     252,
-     4,
-     252,
      0,
-     0
+     0,
+     252,
+     252,
+     4
     ],
     "roles": [
+     "protect",
      "setup"
     ],
-    "src": "gen6uu/dex/Swords Dance (dev set was SWORDSDANCE/EARTHQUAKE/PINMISSILE/CLOSECOMBAT)",
+    "src": "gen6uu/dex/Calm Mind (dev set was CALMMIND/MOONBLAST/PSYCHIC/THUNDERBOLT)",
     "fidelity": 4,
     "inherited": null,
     "pinned": false,
@@ -3051,63 +3042,62 @@
     "why": "original"
    },
    {
-    "species": "SUICUNE",
-    "level": 51,
+    "species": "HERACROSS",
+    "level": 52,
     "moves": [
-     "ROAR",
-     "SCALD",
-     "REST",
-     "SLEEPTALK"
+     "CLOSECOMBAT",
+     "PINMISSILE",
+     "ROCKBLAST",
+     "SUBSTITUTE"
     ],
-    "item": "LEFTOVERS",
-    "ability": 0,
-    "nature": "BOLD",
+    "item": "HERACRONITE",
+    "ability": 2,
+    "nature": "ADAMANT",
     "iv": 31,
     "ev": [
-     252,
+     240,
+     136,
      0,
-     252,
+     132,
      0,
-     0,
-     4
+     0
     ],
     "roles": [
-     "phaze",
-     "recovery",
-     "wall"
+     "mega",
+     "protect"
     ],
-    "src": "gen6uu/dex/RoarCune",
+    "src": "gen6ou/dex/Bulky Wallbreaker (dev set was SWORDSDANCE/EARTHQUAKE/PINMISSILE/CLOSECOMBAT)",
     "fidelity": 4,
     "inherited": null,
-    "kept": false,
-    "why": "added:wall"
+    "pinned": false,
+    "kept": true,
+    "why": "original"
    },
    {
-    "species": "LATIAS",
+    "species": "LATIOS",
     "level": 51,
     "moves": [
-     "DEFOG",
-     "ROOST",
      "DRACOMETEOR",
-     "GRASSKNOT"
+     "PSYSHOCK",
+     "DEFOG",
+     "TRICK"
     ],
-    "item": "SOULDEW",
+    "item": "CHOICESCARF",
     "ability": 0,
     "nature": "TIMID",
     "iv": 31,
     "ev": [
-     212,
+     4,
      0,
      0,
-     176,
-     120,
+     252,
+     252,
      0
     ],
     "roles": [
-     "recovery",
      "removal"
     ],
-    "src": "gen6ubers/dex/Support",
+    "src": "gen6ou/dex/Choice Scarf",
     "fidelity": 4,
     "inherited": null,
     "kept": false,
@@ -3146,38 +3136,36 @@
     "why": "added:wall"
    },
    {
-    "species": "GARDEVOIR",
-    "level": 52,
+    "species": "VOLCANION",
+    "level": 51,
     "moves": [
-     "WISH",
-     "PROTECT",
-     "HYPERVOICE",
-     "WILLOWISP"
+     "STEAMERUPTION",
+     "FLAMETHROWER",
+     "TOXIC",
+     "PROTECT"
     ],
-    "item": "GARDEVOIRITE",
-    "ability": 1,
-    "nature": "TIMID",
+    "item": "LEFTOVERS",
+    "ability": 0,
+    "nature": "MODEST",
     "iv": 31,
     "ev": [
      248,
      0,
-     244,
-     16,
      0,
+     216,
+     44,
      0
     ],
     "roles": [
-     "mega",
      "protect",
-     "recovery",
-     "status"
+     "status",
+     "wall"
     ],
-    "src": "gen6monotype/dex/Wish + Protect (Psychic) (dev set was CALMMIND/MOONBLAST/PSYCHIC/THUNDERBOLT)",
+    "src": "gen7uu/dex/Toxic",
     "fidelity": 4,
     "inherited": null,
-    "pinned": false,
-    "kept": true,
-    "why": "original"
+    "kept": false,
+    "why": "added:wall"
    }
   ],
   "design": {
@@ -3295,65 +3283,64 @@
     "why": "original"
    },
    {
-    "species": "MANDIBUZZ",
+    "species": "SUICUNE",
     "level": 59,
     "moves": [
-     "FOULPLAY",
-     "TAUNT",
-     "TOXIC",
-     "ROOST"
+     "CALMMIND",
+     "SUBSTITUTE",
+     "PROTECT",
+     "SCALD"
     ],
     "item": "LEFTOVERS",
-    "ability": 1,
-    "nature": "CAREFUL",
+    "ability": 0,
+    "nature": "TIMID",
     "iv": 31,
     "ev": [
-     248,
+     252,
      0,
      0,
-     136,
+     216,
      0,
-     124
+     40
     ],
     "roles": [
-     "disrupt",
-     "recovery",
-     "status",
+     "protect",
+     "setup",
      "wall"
     ],
-    "src": "gen7uu/dex/Utility Birb",
+    "src": "gen6ou/dex/Substitute + Protect",
     "fidelity": 4,
     "inherited": null,
     "kept": false,
     "why": "added:wall"
    },
    {
-    "species": "CRESSELIA",
+    "species": "VOLCANION",
     "level": 59,
     "moves": [
-     "CALMMIND",
-     "PSYSHOCK",
-     "MOONBLAST",
-     "MOONLIGHT"
+     "STEAMERUPTION",
+     "FLAMETHROWER",
+     "TOXIC",
+     "PROTECT"
     ],
     "item": "LEFTOVERS",
     "ability": 0,
-    "nature": "BOLD",
+    "nature": "MODEST",
     "iv": 31,
     "ev": [
-     240,
+     248,
      0,
-     252,
-     16,
      0,
+     216,
+     44,
      0
     ],
     "roles": [
-     "recovery",
-     "setup",
+     "protect",
+     "status",
      "wall"
     ],
-    "src": "gen6uu/dex/Calm Mind",
+    "src": "gen7uu/dex/Toxic",
     "fidelity": 4,
     "inherited": null,
     "kept": false,
@@ -3540,30 +3527,31 @@
     "why": "original, re-set for setup"
    },
    {
-    "species": "VOLCANION",
+    "species": "LATIAS",
     "level": 59,
     "moves": [
      "DEFOG",
-     "STEAMERUPTION",
-     "FLAMETHROWER",
-     "SLUDGEBOMB"
+     "ROOST",
+     "DRACOMETEOR",
+     "GRASSKNOT"
     ],
-    "item": "SHUCABERRY",
+    "item": "SOULDEW",
     "ability": 0,
-    "nature": "MODEST",
+    "nature": "TIMID",
     "iv": 31,
     "ev": [
-     40,
+     212,
      0,
      0,
-     216,
-     252,
+     176,
+     120,
      0
     ],
     "roles": [
+     "recovery",
      "removal"
     ],
-    "src": "gen7uu/dex/Defog",
+    "src": "gen6ubers/dex/Support",
     "fidelity": 4,
     "inherited": null,
     "kept": false,
@@ -3651,29 +3639,30 @@
     "species": "REUNICLUS",
     "level": 61,
     "moves": [
-     "CALMMIND",
-     "PSYSHOCK",
-     "FOCUSBLAST",
-     "RECOVER"
+     "KNOCKOFF",
+     "RECOVER",
+     "PSYCHIC",
+     "THUNDERWAVE"
     ],
-    "item": "LEFTOVERS",
+    "item": "ROCKYHELMET",
     "ability": 1,
     "nature": "BOLD",
     "iv": 31,
     "ev": [
      252,
      0,
-     200,
+     252,
      0,
      0,
-     56
+     4
     ],
     "roles": [
      "recovery",
-     "setup",
+     "speed",
+     "status",
      "wall"
     ],
-    "src": "gen6ou/dex/Calm Mind (dev set was CALMMIND/PSYSHOCK/FOCUSBLAST/ENERGYBALL)",
+    "src": "gen6ou/dex/Utility (dev set was CALMMIND/PSYSHOCK/FOCUSBLAST/ENERGYBALL)",
     "fidelity": 4,
     "inherited": null,
     "pinned": false,
@@ -3717,29 +3706,27 @@
     "species": "DELPHOX",
     "level": 61,
     "moves": [
-     "WISH",
-     "PROTECT",
-     "MYSTICALFIRE",
-     "TOXIC"
+     "FIREBLAST",
+     "PSYCHIC",
+     "CALMMIND",
+     "GRASSKNOT"
     ],
-    "item": "LEFTOVERS",
+    "item": "LIFEORB",
     "ability": 0,
     "nature": "TIMID",
     "iv": 31,
     "ev": [
+     4,
+     0,
+     0,
      252,
-     0,
-     0,
-     228,
-     28,
+     252,
      0
     ],
     "roles": [
-     "protect",
-     "recovery",
-     "status"
+     "setup"
     ],
-    "src": "gen7nu/dex/Wish + Protect (dev set was CALMMIND/FIREBLAST/PSYCHIC/GRASSKNOT)",
+    "src": "gen6ru/dex/Offensive Calm Mind (dev set was CALMMIND/FIREBLAST/PSYCHIC/GRASSKNOT)",
     "fidelity": 4,
     "inherited": null,
     "pinned": false,
@@ -3778,33 +3765,31 @@
     "why": "original"
    },
    {
-    "species": "TYRANITAR",
+    "species": "SWAMPERT",
     "level": 60,
     "moves": [
      "STEALTHROCK",
-     "CRUNCH",
-     "SUPERPOWER",
-     "PURSUIT"
+     "WATERFALL",
+     "EARTHQUAKE",
+     "ICEPUNCH"
     ],
-    "item": "TYRANITARITE",
-    "ability": 0,
+    "item": "SWAMPERTITE",
+    "ability": 2,
     "nature": "ADAMANT",
     "iv": 31,
     "ev": [
-     248,
-     104,
+     212,
+     252,
      0,
-     36,
+     44,
      0,
-     120
+     0
     ],
     "roles": [
      "hazards",
-     "mega",
-     "sand",
-     "weather"
+     "mega"
     ],
-    "src": "gen6ou/dex/Bulky Support",
+    "src": "gen6uu/dex/Offensive Stealth Rock",
     "fidelity": 4,
     "inherited": null,
     "kept": false,

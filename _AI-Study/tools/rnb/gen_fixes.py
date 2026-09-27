@@ -65,6 +65,11 @@ if arm != "shipped":
     GB.MODE[3] = None
     GB.ULTRA_BEASTS = frozenset()   # the Ultra Beast stage gate (2026-09-28)
     GB.THEME_MIN = dict(GB.THEME_MIN, ICE=4)
+    # the core-first fixes read off real teams (2026-09-28): attacking anchor, off-theme
+    # enabler, no patch, protect walls, one weather, no passive attackers, recovery cap
+    GB.CORE_ANCHOR_RULE, GB.ENABLER_OFF_THEME, GB.CORE_PATCH = 0, 0, 1
+    GB.WALL_PROTECT, GB.WEATHER_EXCLUSIVE, GB.WALL_NEEDS_BULK = 0, 0, 0
+    GB.TRAINER_RECOVERY_CAP = 0
 if arm not in ("core2", "shipped"):
     # evolving a kept original toward the target, and the higher measured bar, after
     # the core arm was played

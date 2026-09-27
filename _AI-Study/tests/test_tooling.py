@@ -178,7 +178,14 @@ class BossStudioHoldTest(unittest.TestCase):
 
     def test_a_reroll_returns_a_different_team_every_press(self):
         """A build at unchanged settings is deterministic, so without a new salt
-        Regenerate would hand back the same team and look broken."""
+        Regenerate would hand back the same team and look broken.
+
+        ENABLER_OFF_THEME is held off: gym 4's one free slot is then a gated pick (an
+        off-theme pivot resisting Mamoswine's weaknesses) with too few bodies for three
+        presses to differ, which says nothing about the salt this tests."""
+        G = self.BS.G
+        self.addCleanup(setattr, G, "ENABLER_OFF_THEME", G.ENABLER_OFF_THEME)
+        G.ENABLER_OFF_THEME = 0
         out, seen = self.held(), []
         for _ in range(3):
             out, got, stuck = self.BS.regenerate(out, ["g3"], True)
