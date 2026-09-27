@@ -168,7 +168,8 @@ EARLY_ITEM_CAP = 0
 # player has the Anatasa shop, megas and level ~36, and a published Smogon set
 # should apply as written.
 BP_CAP = 70
-BP_CAP_UNTIL = 3          # stages 0-2 = gyms 1-3
+BP_CAP_UNTIL = 1          # gym 1 only since 2026-09-27: at gyms 2-3 the 70 cap stripped Play
+                          # Rough, Hydro Pump and Waterfall for Covet, Swift and Bubble Beam (§10)
 
 # Badge from which a fight may be given a MODE (sun, sand, Trick Room...). 0 means
 # any fight may have one; the plan that assigns them is fight_context.py, and this
@@ -291,7 +292,23 @@ PICK_NO_LOW = 1
 ATTACKER_SHAPE = 1
 ATTACKER_OFF = 105
 ATTACKER_BULK = 265
-ATTACKER_ITEM = 1
+# 2 ranks the item on an attacking set in tiers, from the real attackers' KOs a battle
+# (§10): Choice Band / Specs first, then Scarf, a mega stone or an Assault Vest, then
+# Life Orb / Expert Belt, then the rest -- and a Choice item counts only on a set that is
+# all attacks or carries Trick / Switcheroo, since the lock makes any other move a wasted
+# turn. 1 is the old two-way preference. Wall sets are never ranked on the item.
+ATTACKER_ITEM = 2
+# Sets written for a team plan this fight does not have: Trick Room (unless the mode is
+# trickroom), Baton Pass, and the self-removing supports Memento, Lunar Dance and Healing
+# Wish. On a real team they serve a sweeper or a core; here they were a slot that dealt
+# nothing and often removed itself (Uxie Memento 0.06 KO, Cresselia Trick Room + Lunar
+# Dance 0.19, §10). Screens stay: a screen still helps whoever comes in next.
+NO_PLAN_SETS = 1
+PLAN_MOVES = {"BATONPASS", "MEMENTO", "LUNARDANCE", "HEALINGWISH"}
+# A set that arrives with no usable item (none published, or one this dex lacks) gets
+# Leftovers on a wall set and Life Orb otherwise -- never a Choice item, which needs a
+# set built for the lock. Gym 9's Aggron walked in bare (0.08 KO, 5% dealt, §10).
+ITEM_FALLBACK = 1
 PIVOT_MIN = 1
 KEPT_ANY_FORMAT = 1
 MODE_OF_THEME = {"WATER": "rain", "GROUND": "sand"}
@@ -1153,6 +1170,10 @@ def usable_sets(species, level, banned=frozenset(), cap=None, mode=None,
             ok = [m for m in legal
                   if cap is None or _mv[m]["power"] <= cap or m in ROLE_MOVE]
             item = SC.norm(st.get("item"))
+            if NO_PLAN_SETS:
+                pm = {SC.norm(x) for x in st["moves"]}
+                if pm & PLAN_MOVES or ("TRICKROOM" in pm and mode != "trickroom"):
+                    continue                  # a plan this fight is not running
             if item and (item not in _items or item.endswith("IUMZ")):
                 continue                      # Realidea has no Z-move engine
             if item in banned:
@@ -1175,6 +1196,25 @@ _OWN_FORMAT = {"Uber": "ubers", "OU": "ou", "UU": "uu", "RU": "ru", "NU": "nu", 
 
 
 ATTACK_ITEMS = {"CHOICEBAND", "CHOICESPECS", "CHOICESCARF", "LIFEORB", "EXPERTBELT", "ASSAULTVEST"}
+
+
+def item_tier(moves, item):
+    """How well an attacking set's item suits it, 0-3 (ATTACKER_ITEM); walls score 3."""
+    if not ATTACKER_ITEM or wall_set(moves, item):
+        return 3
+    if ATTACKER_ITEM == 1:
+        return 3 if item in ATTACK_ITEMS or item in MEGASTONE else 0
+    if item in ("CHOICEBAND", "CHOICESPECS", "CHOICESCARF"):
+        locked_ok = all(_mv.get(m, {}).get("power", 0) > 0 for m in moves) \
+            or {"TRICK", "SWITCHEROO"} & set(moves)
+        if not locked_ok:
+            return 0
+        return 3 if item != "CHOICESCARF" else 2
+    if item in MEGASTONE or item == "ASSAULTVEST":
+        return 2
+    if item in ("LIFEORB", "EXPERTBELT"):
+        return 1
+    return 0
 
 
 def attacker_shaped(species):
@@ -1351,8 +1391,7 @@ def build(species, level, banned_items=(), want=None, avoid=(), allow_items=None
         # SET_TIER_MATCH: below `want` and the misfit term, above the archetype fit
         tier_fit = set_tier_fit(species, fmt, is_lc) if SET_TIER_MATCH else 0
         # ATTACKER_ITEM: neutral for wall sets, so it never trades a wall for an attacker
-        item_fit = int(not ATTACKER_ITEM or wall_set([SC.norm(x) for x in st["moves"]], item)
-                       or item in ATTACK_ITEMS or item in MEGASTONE)
+        item_fit = item_tier([SC.norm(x) for x in st["moves"]], item)
         cands.append(((-len(r & set(avoid)), bool(want and want in r), -misfit, tier_fit, item_fit, fit,
                        TS.affinity(mode, sp["types"], [ability],
                                    sp["base_stats"][3], ok, r),
@@ -1419,6 +1458,10 @@ def build(species, level, banned_items=(), want=None, avoid=(), allow_items=None
         item = None                            # nothing left to evolve into
     if allow_items is not None and item not in allow_items:
         item = substitute_item(species, moves, allow_items, published_item)
+    if item is None and ITEM_FALLBACK and (allow_items is None or "LEFTOVERS" in allow_items):
+        item = "LEFTOVERS" if wall_set(moves) or "LIFEORB" not in _items else "LIFEORB"
+        if item not in _items:
+            item = None
 
     ev = [0] * 6
     for k, v in (st.get("evs") or {}).items():

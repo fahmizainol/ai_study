@@ -202,9 +202,11 @@ SCALARS = {
     "ATTACKER_SHAPE": ("int", 0, 1, 1,
                        "1 ranks a frail body with a weak attacking stat after the rest "
                        "inside the coverage band (real attackers are 105+ or bulky)"),
-    "ATTACKER_ITEM": ("int", 0, 1, 1,
+    "ATTACKER_ITEM": ("int", 0, 2, 1,
                       "1 prefers attacking sets on a Choice item, Life Orb, Expert Belt, "
-                      "Assault Vest or mega stone over Leftovers or a Sash"),
+                      "Assault Vest or mega stone over Leftovers or a Sash; 2 ranks them "
+                      "Band/Specs > Scarf, mega, Vest > Life Orb, and counts a Choice item "
+                      "only on a set that is all attacks or carries Trick"),
     "PIVOT_MIN": ("int", 0, 2, 1, "U-turn / Volt Switch users chased per fight"),
     "KEPT_ANY_FORMAT": ("int", 0, 1, 1,
                         "1 lets a dev's own Pokemon take a set from any format, whatever "
@@ -214,6 +216,13 @@ SCALARS = {
                       "fight (generated/core_strength.json): an attacking set under 35% "
                       "dealt and 0.2 KOs a battle, a wall under 4 turns in and over 85% "
                       "fainted, 24+ battles on record. Rival cores and mode evidence stay"),
+    "NO_PLAN_SETS": ("int", 0, 1, 1,
+                     "1 skips sets written for a team plan the fight is not running: Trick "
+                     "Room without a trickroom mode, Baton Pass, Memento, Lunar Dance, "
+                     "Healing Wish"),
+    "ITEM_FALLBACK": ("int", 0, 1, 1,
+                      "1 gives a set that arrives with no usable item Leftovers (wall) or "
+                      "Life Orb (attacker); never a Choice item"),
     "UNLOCK_STAGE": ("int", 0, 9, 1, "badge from which megas and strong items unlock"),
     "EARLY_ITEM_CAP": ("int", 0, 1, 1,
                        "1 holds fights before UNLOCK_STAGE to the early item pool "
@@ -243,7 +252,7 @@ GROUPS = [
     ("coverage", ["COVER_BAND", "HOLE_MIN_WEAK", "THREAT_COVER", "OFF_THEME_COVER",
                   "TIER_BAND", "USAGE_BAND", "SET_TIER_MATCH", "SHAPE_CHECK",
                   "GYM_MODES", "WALL_MIN", "REMOVAL_MIN", "PIVOT_MIN", "ATTACKER_SHAPE",
-                  "ATTACKER_ITEM", "KEPT_ANY_FORMAT"]),
+                  "ATTACKER_ITEM", "KEPT_ANY_FORMAT", "NO_PLAN_SETS", "ITEM_FALLBACK"]),
     # A third question, and the reason these are not filed under "team": every other
     # knob here says what a team must BE, and these three only say "give me a
     # different one". All are off at 0. The two seeds ship off; REPEAT_BAND ships at
