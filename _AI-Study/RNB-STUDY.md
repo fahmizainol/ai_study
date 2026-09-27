@@ -902,6 +902,37 @@ gyms 85/216 (39.4%) and trainers 92/240 (38.3%), against real gen 7 teams at 64.
 the gap is ~25 points and shrinking slowly. A difference has to reach ~15 points on 108
 battles, or be replayed, before it means anything at this depth.
 
+**What the weak rosters showed, and the fixes** (2026-09-27, `rnb_vs_gen_fix_10ms`,
+`_trainers_fix_10ms`). Per-slot reading of the 10 ms losers (gym 9 1-11, gyms 3 and 7
+2-10, Jerebuzo 4-32) against how real gen 7 teams did on the same bosses: gym 3's draw is
+EASY for real teams (81%; Norman 88% v the generator's 15%), gym 9's and 7's about
+average (59%, 53%), only Jerebuzo's hard (44%). So "hard boss" mostly meant hard for the
+generator -- Sidney and Norman beat 85-88% of generated teams and 12% of real ones. Four
+causes were visible in the slots: (1) support sets written for a plan the fight is not
+running -- Uxie's Memento (0.06 KO, 4% dealt), Cresselia's Trick Room + Lunar Dance
+(0.19, twice), Vaporeon's Baton Pass, all slots that dealt nothing and removed themselves;
+(2) the 70-power move cap at gyms 2-3, which stripped Play Rough, Hydro Pump and Waterfall
+and filled with Covet, Rollout, Swift and Bubble Beam -- Choice Band Azumarill with Aqua
+Jet / Bulldoze / Covet / Rollout; (3) a set arriving bare when its stone went to a
+teammate (gym 9's Aggron, 0.08 KO, 5% dealt); (4) frail Life Orb attackers lasting two
+turns, where the real-attacker profile had Band/Specs best. The fixes, all switches:
+NO_PLAN_SETS (screens stay), BP_CAP_UNTIL 3 -> 1, ITEM_FALLBACK (Leftovers or Life Orb,
+never a Choice item), ATTACKER_ITEM 2 (Band/Specs > Scarf/mega/Vest > Life Orb, and a
+Choice item counts only on a set that is all attacks or carries Trick, since the lock
+wastes any other move). 23 of 27 teams changed.
+
+| at 10 ms | measured roster | + the four fixes | difference |
+|---|--:|--:|---|
+| gyms | 41/108 (38.0%) | **55/108 (50.9%)** | +13.3 [−4.3, +31.6]; shared battles 25 gained v 10 lost, **p = 0.017** |
+| trainers | 59/120 (49.2%) | 58/120 (48.3%) | −0.8; 22 v 23 |
+
+The first generator result over 50% at any depth, and the first gym difference to clear
+the 7-8 point replay floor with a significant sign test. Gym 2 went 4-8 -> 11-1 and gym 4
+8-4 -> 11-1 (the cap lifted), gym 9 1-11 -> 5-7 (Aggron on Leftovers, Genesect on a Band,
+Ho-Oh and Mega Metagross in for Jirachi and Mewtwo), gym 3 2-10 -> 4-8, gym 6 5-7 -> 7-5;
+gym 8 fell 6-6 -> 3-9 and gym 7 stayed 2-10. Trainers did not move: the cap never applied
+to them and they carried one plan set. Real gen 7 teams at this depth: 64.1%.
+
 A first version drew replacements instead of swapping and favoured some sets: the
 sets it left out had KO'd 0.79 a battle in the intact run against 0.64 for the ones it
 used, which would have made collages look weak for the wrong reason.
