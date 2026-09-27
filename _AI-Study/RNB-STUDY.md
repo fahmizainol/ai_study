@@ -1175,6 +1175,20 @@ TM+tutor moves; and `realidea_data.learnable()` skipped the `EggMoves=` line on 
   person makes. After that, `learnset_merge.py --with-aurora-veil` adds the move's
   learnsets (Alolan Vulpix / Ninetales and the other gen 7 learners).
 
+**Sets from this game's generation, and no conditional fillers** (2026-09-27, both switches,
+pinned off for every played arm):
+- `SET_GEN_MAX 7`: a species' published sets from later generations are used only when none
+  from gen 7 or earlier survives its level. The corpus filters by tier, not gen, so gen 8/9
+  sets -- written around Triple Axel, Heavy-Duty Boots and Tera -- won ties whenever a floor
+  asked for a role only they carried. Every gym set is now gen 6 (36) or gen 7 (18); the
+  species lists do not change.
+- `FILLER_AVOID` V3 adds Focus Punch, Explosion, Self-Destruct, Thrash, Outrage and Petal
+  Dance as substitutions: high base power only under a condition the filler cannot see.
+  Published sets that carry them keep them (Scarf Flygon's Outrage, Metagross's Explosion).
+- With the gen 7 learnsets and egg moves, gym 4's Weavile is the gen 6 OU Choice Band set
+  -- Icicle Crash / Pursuit / Ice Shard, Knock Off swapped to Aerial Ace for Fighting -- and
+  the three Quagsires the gen 6 OU Unaware Wall with Recover (an egg move).
+
 **Traps met on the way** (all fixed in the tools):
 - On a machine where 127.0.0.1 has no rDNS and something listens on port 80, Showdown
   calls localhost an open proxy and locks every bot (`setup_battles.py` now declares

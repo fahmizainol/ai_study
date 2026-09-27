@@ -1089,10 +1089,25 @@ FILLER_AVOID_V1 = {"GIGAIMPACT", "HYPERBEAM", "BLASTBURN", "HYDROCANNON", "FRENZ
 # V2 (2026-09-27) adds the 40-60 power fillers that reached Specs Rotom and Whimsicott, and
 # the two-turn attacks (Sky Attack on a Scarf Honchkrow, Solar Beam on a Cresselia with no
 # sun). A published set that carries one keeps it -- a sun team's Solar Beam is its own.
-FILLER_AVOID = FILLER_AVOID_V1 | {"ROUND", "SWIFT", "ECHOEDVOICE", "SKYATTACK", "SOLARBEAM",
-                                  "SOLARBLADE", "FLY", "DIG", "BOUNCE", "SKULLBASH", "RAZORWIND",
-                                  "PHANTOMFORCE", "SHADOWFORCE", "FREEZESHOCK", "ICEBURN",
-                                  "METEORBEAM", "GEOMANCY"}
+FILLER_AVOID_V2 = FILLER_AVOID_V1 | {"ROUND", "SWIFT", "ECHOEDVOICE", "SKYATTACK", "SOLARBEAM",
+                                     "SOLARBLADE", "FLY", "DIG", "BOUNCE", "SKULLBASH", "RAZORWIND",
+                                     "PHANTOMFORCE", "SHADOWFORCE", "FREEZESHOCK", "ICEBURN",
+                                     "METEORBEAM", "GEOMANCY"}
+# V3 (2026-09-27) adds the moves whose base power is high only because of a condition the
+# filler cannot see: Focus Punch fails when hit, Explosion / Self-Destruct remove the user,
+# Thrash / Outrage / Petal Dance lock it in. The filler chose Focus Punch nine times on the
+# shipping roster (Weavile, both Quagsires, Mega Swampert, Snorlax) once a set's missing
+# move had to be replaced by the strongest legal one.
+FILLER_AVOID = FILLER_AVOID_V2 | {"FOCUSPUNCH", "EXPLOSION", "SELFDESTRUCT", "THRASH", "OUTRAGE",
+                                  "PETALDANCE"}
+# Published sets are drawn from every generation's Smogon dex and usage data, and the
+# format filter is by tier, not gen. A gen 8/9 set is written around moves and items this
+# gen 7 game lacks (Triple Axel, Heavy-Duty Boots, Tera), so it is the set most likely to
+# need filler -- and it still won ties, because the floors ask for a role (gym 4's setup
+# floor and Weavile: only the gen 8/9 sets carry Swords Dance). SET_GEN_MAX keeps a species'
+# sets from later generations out of the choice whenever any set from this gen or earlier
+# survives its level; 0 is off. On since 2026-09-27.
+SET_GEN_MAX = 7
 # The item and the moves have to agree (SET_COHERENCE, 2026-09-27): an Assault Vest blocks
 # status moves, so a Vest set that arrives with one (Ho-Oh's Recover, after a swap) gets
 # the status move replaced by an attack the species has, or the Vest becomes Leftovers;
@@ -1352,6 +1367,12 @@ def item_tier(moves, item):
     return 0
 
 
+def set_gen(label_or_fmt):
+    """The generation a published set was written for, from its format ("gen7ou/...")."""
+    m = re.match(r"gen(\d)", label_or_fmt or "")
+    return int(m.group(1)) if m else 99
+
+
 def attacker_shaped(species):
     """Strong enough to attack, or bulky enough to stay in while doing it."""
     b = _sp[species]["base_stats"]      # HP, Atk, Def, Spe, SpA, SpD
@@ -1536,6 +1557,10 @@ def build(species, level, banned_items=(), want=None, avoid=(), allow_items=None
                       ok, item, st, src, r, c["label"], legal))
     if not cands:
         return None
+    if SET_GEN_MAX:
+        early_gen = [c for c in cands if set_gen(c[6]) <= SET_GEN_MAX]   # c[6] is the "genN.../..." label
+        if early_gen:
+            cands = early_gen
     cands.sort(key=lambda x: x[0], reverse=True)
     _, ok, item, st, src, _r, label, n_legal = cands[0]
 

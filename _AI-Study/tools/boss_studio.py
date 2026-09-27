@@ -216,6 +216,9 @@ SCALARS = {
                       "fight (generated/core_strength.json): an attacking set under 60% "
                       "dealt and 0.6 KOs a battle, a wall under 4 turns in and over 85% "
                       "fainted, 24+ battles on record. Rival cores and mode evidence stay"),
+    "SET_GEN_MAX": ("int", 0, 9, 1,
+                    "a species' published sets from generations after this are used only "
+                    "when none from this one or earlier survives its level; 0 uses every gen"),
     "EGG_MOVES": ("int", 0, 1, 1,
                   "1 lets a set use a move on the species' (or a pre-evolution's) EggMoves= "
                   "line, the way TMs are allowed; 0 knows level-up and TM moves only"),
@@ -283,7 +286,7 @@ GROUPS = [
                   "GYM_MODES", "WALL_MIN", "REMOVAL_MIN", "PIVOT_MIN", "ATTACKER_SHAPE",
                   "ATTACKER_ITEM", "KEPT_ANY_FORMAT", "NO_PLAN_SETS", "ITEM_FALLBACK", "SET_COHERENCE",
                   "CORE_FIRST", "THEME_FLOORS", "GROW_TO_TARGET",
-                  "OFF_THEME_CAP", "OFF_THEME_MOST", "OFF_THEME_EXTRA", "EGG_MOVES"]),
+                  "OFF_THEME_CAP", "OFF_THEME_MOST", "OFF_THEME_EXTRA", "EGG_MOVES", "SET_GEN_MAX"]),
     # A third question, and the reason these are not filed under "team": every other
     # knob here says what a team must BE, and these three only say "give me a
     # different one". All are off at 0. The two seeds ship off; REPEAT_BAND ships at
