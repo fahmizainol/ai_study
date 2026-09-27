@@ -1210,7 +1210,9 @@ Constants.rxdata and messages.dat rewritten in about a minute, no error log, and
 booted on them -- attacksRS.dat 56,968 -> 59,552 bytes (level-up moves), tm.dat 65,931 ->
 78,061 (tutor sections), eggEmerald.dat 13,146 -> 13,750 (egg moves), moves.dat unchanged
 (no new moves). Those files are committed under `Realidea V4.1/Data/` beside the bundle, so
-a pull is the whole install and nobody compiles.
+a pull is the whole install and nobody compiles. Aurora Veil was seen working in a battle on
+2026-09-28, so the merge was rerun with `--with-aurora-veil`: one new `[AURORAVEIL]` tutor
+section for its 13 gen 7 learners, no roster changes, tm.dat recompiled (78,092 bytes).
 
 **Traps met on the way** (all fixed in the tools):
 - On a machine where 127.0.0.1 has no rDNS and something listens on port 80, Showdown
