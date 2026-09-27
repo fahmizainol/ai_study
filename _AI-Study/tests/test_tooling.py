@@ -1460,6 +1460,10 @@ class ThemeFloorTest(unittest.TestCase):
             raise unittest.SkipTest("generated/theme_role_profile.json not written")
 
     def test_a_theme_replaces_the_archetype_floors_and_does_not_add_to_them(self):
+        # THEME_FLOORS adds the type's measured hazard / setup / priority floors on
+        # purpose (THEME_SHAPE); this is about theme_plan() replacing the archetype's
+        self.addCleanup(setattr, self.G, "THEME_FLOORS", self.G.THEME_FLOORS)
+        self.G.THEME_FLOORS = 0
         bare, _ = self.G.plan_for("balance", False)
         themed, _ = self.G.plan_for("balance", False, theme="DARK")
         self.assertIn("recovery", bare, "themeless balance floors recovery")

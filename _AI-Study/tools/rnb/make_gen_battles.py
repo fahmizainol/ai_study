@@ -19,6 +19,10 @@ generator's set.
 --from DIR --name NAME exports a generator run written elsewhere (tools/rnb/gen_fixes.py
 writes DIR/gyms.json and DIR/trainers.json) to generated/rnb_vs_gen[_trainers]_NAME/.
 
+--pairs-from DIR plays each fight against the bosses DIR/pairs.json drew for it (a
+generated/rnb_vs_gen_* folder) instead of drawing afresh by BST, so two arms whose
+team BSTs differ still meet the same bosses and compare battle for battle.
+
 --trainers exports the non-gym fights instead (teams_trainers.json -> generated/
 rnb_vs_gen_trainers/). A rival team holding an engine-filled starter slot (`owenpoke2`
 and friends: a Realidea fakemon Showdown does not know, with no moveset) is skipped --
@@ -112,6 +116,8 @@ def fights(trainers):
 
 def main():
     args = [a for a in sys.argv[1:] if not a.startswith("--")]
+    if "--pairs-from" in sys.argv:
+        args = [a for a in args if a != sys.argv[sys.argv.index("--pairs-from") + 1]]
     k = int(args[0]) if args else 4
     trainers = "--trainers" in sys.argv
     pub = "--published" in sys.argv
@@ -177,9 +183,17 @@ def main():
     for p in json.load(open(os.path.join(RNB, "pairs.json"), encoding="utf-8")):
         if not p["boss"].startswith(EXCLUDED):
             bosses.setdefault(p["boss"], p)
+    fixed = None
+    if "--pairs-from" in sys.argv:
+        fixed = collections.defaultdict(list)
+        for p in json.load(open(os.path.join(sys.argv[sys.argv.index("--pairs-from") + 1],
+                                             "pairs.json"), encoding="utf-8")):
+            fixed[p["opp"]].append(bosses[p["boss"]])
     pairs = []
     for g in gyms:
-        for b in sorted(bosses.values(), key=lambda b: abs(b["boss_bst"] - g["bst"]))[:k]:
+        draw = fixed[g["id"]] if fixed is not None else \
+            sorted(bosses.values(), key=lambda b: abs(b["boss_bst"] - g["bst"]))[:k]
+        for b in draw:
             shutil.copy(os.path.join(RNB, "teams", "rnb", b["boss"]), tdir["rnb"])
             pairs.append({"boss": b["boss"], "boss_name": b["boss_name"], "cap": b["cap"],
                           "boss_bst": b["boss_bst"], "opp": g["id"], "opp_side": "gen",

@@ -298,6 +298,55 @@ ATTACKER_BULK = 265
 # all attacks or carries Trick / Switcheroo, since the lock makes any other move a wasted
 # turn. 1 is the old two-way preference. Wall sets are never ranked on the item.
 ATTACKER_ITEM = 2
+# Core first (2026-09-27), after iStarlyTV's singles teambuilding guide (RNB-STUDY.md
+# §10, "core-first"). His core is FUNCTIONAL, not statistical: an anchor, an enabler that
+# removes the anchor's worst weakness (Hydreigon's Stealth Rock + Taunt in front of a
+# Charizard X that loses half its HP to rocks), then a patch for the one threat the pair
+# both lose to (Corviknight for the Garchomp that beats both) -- and only then glue.
+# Co-occurrence cannot pick those: "common teammates" mostly echo the usage leaders.
+#   CORE_FIRST    1 builds a THEMED fight's first free on-theme slots that way. The
+#                 anchor is the dev's strongest kept attacker (with nothing kept, the
+#                 strongest attacker-shaped on-theme body the curve allows). The enabler
+#                 is an on-theme body that RESISTS what the anchor is weak to, asked in
+#                 order for hazard removal (a Rock-weak anchor), hazards (a setup
+#                 anchor), a pivot, then any unmet floor. The patch is an on-theme body
+#                 that resists a type both lose to AND can learn a move that hits it
+#                 back. The theme minimum, the floors and the off-theme cover slot then
+#                 fill around the three exactly as before; a step nothing on-theme can
+#                 do is noted and left to the off-theme slot, which already chases the
+#                 team's uncovered weaknesses (gaps()).
+#   THEME_FLOORS  1 gives a themed fight the shape real monotype teams of ITS type have
+#                 (THEME_SHAPE, measured on 1,588 gen 8+9 Smogon monotype team-types,
+#                 tools/rnb + RNB-STUDY.md §10): the type's own wall count in place of
+#                 WALL_MIN's flat 2 (Bug 0.6 walls a team, Ground 2.1), a hazard setter
+#                 (83% of teams), and the setup and priority users a typical team of the
+#                 type runs. SETUP_CAP still caps setup; priority is floored at most 1.
+CORE_FIRST = 1
+THEME_FLOORS = 1
+# {THEME: {role: floor}} -- means per real team were walls / offensive setup / priority:
+# Bug 0.6/2.5/1.7, Fairy 1.2/1.9/1.2, Water 1.8/0.8/0.6, Ice 0.9/1.7/1.6, Dark
+# 1.7/1.8/1.6, Ground 2.1/0.6/0.6, Psychic 1.1/1.7/0.2, Normal 2.6/1.2/0.1, Steel
+# 1.5/1.3/0.8. A role is floored where the mean is at least 1 (rounded), walls clamped to
+# 1-2 and priority to 1.
+THEME_SHAPE = {
+    "BUG":     {"wall": 1, "setup": 2, "priority": 1},
+    "FAIRY":   {"wall": 1, "setup": 2, "priority": 1},
+    "WATER":   {"wall": 2},
+    "ICE":     {"wall": 1, "setup": 2, "priority": 1},
+    "DARK":    {"wall": 2, "setup": 2, "priority": 1},
+    "GROUND":  {"wall": 2},
+    "PSYCHIC": {"wall": 1, "setup": 2},
+    "NORMAL":  {"wall": 2, "setup": 1},
+    "STEEL":   {"wall": 2, "setup": 1},
+}
+
+
+def wall_min(theme=None):
+    """The wall floor for a fight: the type's own under THEME_FLOORS, else WALL_MIN."""
+    shape = THEME_SHAPE.get((theme or "").upper()) if THEME_FLOORS and WALL_MIN else None
+    return shape["wall"] if shape else WALL_MIN
+
+
 # Sets written for a team plan this fight does not have: Trick Room (unless the mode is
 # trickroom), Baton Pass, and the self-removing supports Memento, Lunar Dance and Healing
 # Wish. On a real team they serve a sweeper or a core; here they were a slot that dealt
@@ -308,7 +357,10 @@ PLAN_MOVES = {"BATONPASS", "MEMENTO", "LUNARDANCE", "HEALINGWISH"}
 # A set that arrives with no usable item (none published, or one this dex lacks) gets
 # Leftovers on a wall set and Life Orb otherwise -- never a Choice item, which needs a
 # set built for the lock. Gym 9's Aggron walked in bare (0.08 KO, 5% dealt, §10).
-ITEM_FALLBACK = 1
+# 2 judges "wall set" as if the set already held Leftovers: wall_set() only counts a
+# two-attack recovery set as a wall ON a defensive item, so a bare Toxic / Rest / two
+# attacks Aegislash read as an attacker and took Life Orb (2026-09-27).
+ITEM_FALLBACK = 2
 PIVOT_MIN = 1
 KEPT_ANY_FORMAT = 1
 MODE_OF_THEME = {"WATER": "rain", "GROUND": "sand"}
@@ -623,10 +675,21 @@ def plan_for(archetype, mega_ok, mode=None, theme=None):
     if REMOVAL_MIN:
         lead["removal"] = max(floor.pop("removal", 0), REMOVAL_MIN)
     if WALL_MIN:
-        lead["wall"] = max(floor.pop("wall", 0), WALL_MIN)
+        lead["wall"] = max(floor.pop("wall", 0), wall_min(theme))
     if PIVOT_MIN:
         lead["pivot"] = max(floor.pop("pivot", 0), PIVOT_MIN)
     floor = {**lead, **floor}
+    # THEME_FLOORS: the rest of the type's shape. Hazards on 83% of real monotype teams,
+    # then the setup and priority users a team of this type typically runs. Applied over
+    # the corpus floors above, never under them, and inside SETUP_CAP.
+    shape = THEME_SHAPE.get((theme or "").upper()) if THEME_FLOORS and theme else None
+    if shape:
+        floor.setdefault("hazards", 1)
+        for r in ("setup", "priority"):
+            if shape.get(r):
+                floor[r] = max(floor.get(r, 0), shape[r])
+        if SETUP_CAP is not None and "setup" in floor:
+            floor["setup"] = min(floor["setup"], SETUP_CAP)
     # A floor the cap forbids is a generator that spins: hazards floors at 1 and the
     # mechanical cap is 1, which is fine, but nothing guarantees that in general.
     return floor, {r: max(c, floor.get(r, 0)) for r, c in caps.items()}
@@ -683,6 +746,14 @@ def hits_type(moves, atk):
     """Does any damaging move in `moves` hit `atk` for x2?"""
     return any(x in _mv and _mv[x]["power"] > 0
                and TS.type_multiplier(_mv[x]["type"], [atk]) > 1 for x in moves)
+
+
+@functools.lru_cache(maxsize=None)
+def hits_back(species, level, atk):
+    """Can `species` learn, at `level`, a damaging move that hits `atk` for x2?"""
+    return any(D.learnable(species, x, level, 0) in ("levelup", "tm")
+               for x, r in _mv.items()
+               if r["power"] > 0 and TS.type_multiplier(r["type"], [atk]) > 1)
 
 
 def unanswered(team, theme):
@@ -760,6 +831,7 @@ for _stone, _owner in MEGASTONE.items():
 
 
 WEAK, RESIST, IMMUNE = D.type_chart()
+ALL_TYPES = sorted(WEAK)
 
 
 @functools.lru_cache(maxsize=1)
@@ -1256,14 +1328,14 @@ def viability(species):
                 for e in SC.usage().get(SC.norm(species), {}).values()), default=0)
 
 
-def shape_miss(team, archetype, mode):
+def shape_miss(team, archetype, mode, theme=None):
     """How many of SHAPE_CHECK's tests a built team fails (0 = passes)."""
     real = [m for m in team if not is_dynamic(m["species"]) and m["species"] in _sp]
     if not real:
         return 0
     walls = sum(wall_set(m["moves"], m.get("item")) for m in real)
     lo, hi = ARCH_WALLS.get(archetype, (0, 6))
-    lo = max(lo, WALL_MIN)
+    lo = max(lo, wall_min(theme))
     hi = max(hi, lo)
     miss = max(0, lo - walls, walls - hi)
     if walls == 0:
@@ -1278,7 +1350,7 @@ def shape_miss(team, archetype, mode):
     return miss
 
 
-def shape_checked(fight, make, archetype, mode, patience=None):
+def shape_checked(fight, make, archetype, mode, patience=None, theme=None):
     """make() under SHAPE_CHECK: rebuild on fresh reroll salts until the shape passes.
 
     The retries go through REROLL, the same per-fight salt a Studio reroll uses, so they
@@ -1299,7 +1371,7 @@ def shape_checked(fight, make, archetype, mode, patience=None):
             r = make()
             if r is None:
                 return r
-            miss = shape_miss(r["team"], archetype, mode)
+            miss = shape_miss(r["team"], archetype, mode, theme)
             if best is None or miss < best[0]:
                 best, stale = (miss, k, r), 0
             else:
@@ -1475,7 +1547,8 @@ def build(species, level, banned_items=(), want=None, avoid=(), allow_items=None
     if allow_items is not None and item not in allow_items:
         item = substitute_item(species, moves, allow_items, published_item)
     if item is None and ITEM_FALLBACK and (allow_items is None or "LEFTOVERS" in allow_items):
-        item = "LEFTOVERS" if wall_set(moves) or "LIFEORB" not in _items else "LIFEORB"
+        item = "LEFTOVERS" if wall_set(moves, "LEFTOVERS" if ITEM_FALLBACK >= 2 else None) \
+            or "LIFEORB" not in _items else "LIFEORB"
         if item not in _items:
             item = None
     if SET_COHERENCE and item in ("ASSAULTVEST", "CHOICEBAND", "CHOICESPECS", "CHOICESCARF"):
@@ -2454,10 +2527,103 @@ def assemble(spec):
     def tier_ok(n):
         return not PICK_NO_LOW or SC.band(n) != "low"
 
+    def core_first(core):
+        """CORE_FIRST: anchor, enabler, patch -- the functional core (module comment).
+
+        Each step gates the on-theme pool by what the slot is FOR and lets the curve
+        choose among the bodies that qualify, the way the off-theme slot already gates
+        by gaps(): a core partner that merely sits near the target is the co-occurrence
+        pick this replaces. A step with no qualifying on-theme body is skipped and said
+        so -- the off-theme cover slot chases uncovered weaknesses anyway."""
+        types = lambda n: _sp[n]["types"]  # noqa: E731
+        offence = lambda n: max(_sp[n]["base_stats"][1], _sp[n]["base_stats"][4])  # noqa: E731
+        real = [m for m in team if not is_dynamic(m["species"]) and m["species"] in _sp]
+        if real:
+            # 1) the dev's roster is the anchor: its strongest attacker, on-theme first
+            anchor = max(real, key=lambda m: (theme in types(m["species"]),
+                                              offence(m["species"]), ebst(m)))["species"]
+            notes.append(f"core anchor: {anchor}, the roster's strongest attacker")
+        else:
+            cand = [n for n in core if attacker_shaped(n)] or list(core)
+            cand.sort(key=ranked(lambda n: (-offence(n), SC.rank(n))))
+            if not take(cand, None, "core anchor"):
+                return
+            anchor = team[-1]["species"]
+            core.remove(anchor)
+            notes.append(f"core anchor: {anchor}, the strongest attacker the curve allows")
+        anchor_mon = next(m for m in team if m["species"] == anchor)
+        weak_to = [t for t in ALL_TYPES if TS.type_multiplier(t, types(anchor)) > 1]
+        pair = [anchor]
+
+        def room():
+            return len(team) < size and on_theme() < spec["on_theme_min"]
+
+        # 2) the enabler: resists what the anchor is weak to, and does the job the
+        #    anchor most needs done -- rocks off the field for a Rock-weak anchor, rocks
+        #    ON it for a sweeper, a pivot to bring it in safely, else an unmet floor
+        if room() and weak_to:
+            shields = lambda n: [w for w in weak_to if TS.type_multiplier(w, types(n)) < 1]  # noqa: E731
+            cand = [n for n in core if shields(n)]
+            if cand:
+                cand.sort(key=ranked(lambda n: (-len(shields(n)), SC.rank(n))))
+                jobs = []
+                if TS.type_multiplier("ROCK", types(anchor)) > 1:
+                    jobs.append("removal")
+                if "setup" in anchor_mon["roles"]:
+                    jobs.append("hazards")
+                jobs.append("pivot")
+                jobs += [r for r in unmet() if r not in jobs]
+                before, job = len(team), None
+                for job in jobs + [None]:
+                    if take(cand, job, "core enabler" if job is None
+                            else f"core enabler:{job}"):
+                        break
+                if len(team) > before:
+                    m = team[-1]["species"]
+                    if m in core:
+                        core.remove(m)
+                    pair.append(m)
+                    notes.append(f"core enabler: {m} shields {anchor} from "
+                                 f"{'/'.join(shields(m))}"
+                                 + (f" and brings {job}" if job else ""))
+            else:
+                notes.append(f"core enabler: nothing on-theme resists what {anchor} is "
+                             f"weak to ({'/'.join(weak_to)}); left to the off-theme slot")
+        # 3) the patch: "how does this pair lose?" -- a type that hits both for x2 --
+        #    answered by an on-theme body that resists it and can hit it back
+        if room():
+            lose = [t for t in ALL_TYPES
+                    if all(TS.type_multiplier(t, types(n)) > 1 for n in pair)]
+            if lose:
+                def answers(n):
+                    return [t for t in lose if TS.type_multiplier(t, types(n)) < 1
+                            and hits_back(n, level, t)]
+                cand = [n for n in core if answers(n)]
+                if cand:
+                    cand.sort(key=ranked(lambda n: (-len(answers(n)), SC.rank(n))))
+                    before = len(team)
+                    for job in unmet() + [None]:
+                        if take(cand, job, "core patch" if job is None
+                                else f"core patch:{job}"):
+                            break
+                    if len(team) > before:
+                        m = team[-1]["species"]
+                        if m in core:
+                            core.remove(m)
+                        notes.append(f"core patch: {m} resists and hits back "
+                                     f"{'/'.join(answers(m))}, which beats "
+                                     f"{' + '.join(pair)}")
+                else:
+                    notes.append(f"core patch: nothing on-theme both resists and hits "
+                                 f"{'/'.join(lose)}, which beats {' + '.join(pair)}; "
+                                 f"left to the off-theme slot")
+
     core = []
     if theme:
         core = [n for n in eligible(level, stage, theme=theme)
                 if n not in used and in_band(n) and keep(n) and tier_ok(n)]
+        if CORE_FIRST and core and len(team) < size:
+            core_first(core)
         while on_theme() < spec["on_theme_min"] and len(team) < size and core:
             todo = unmet()
             core.sort(key=ranked(lambda n: (SC.rank(n),)))
@@ -2886,7 +3052,7 @@ def gym_mode(idx):
 def make_gym(idx, seen=None):
     """_make_gym under SHAPE_CHECK (a no-op wrapper while it is off)."""
     return shape_checked(gym_id(idx), lambda: _make_gym(idx, seen), ARCHETYPE[idx],
-                         gym_mode(idx))
+                         gym_mode(idx), theme=THEME[CAPS[idx]["trainer"]])
 
 
 def _make_gym(idx, seen=None):

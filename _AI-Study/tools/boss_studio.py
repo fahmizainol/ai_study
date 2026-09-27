@@ -216,13 +216,23 @@ SCALARS = {
                       "fight (generated/core_strength.json): an attacking set under 35% "
                       "dealt and 0.2 KOs a battle, a wall under 4 turns in and over 85% "
                       "fainted, 24+ battles on record. Rival cores and mode evidence stay"),
+    "CORE_FIRST": ("int", 0, 1, 1,
+                   "1 builds a themed fight core first: the roster's strongest attacker "
+                   "is the anchor, then an on-theme body that resists what it is weak to "
+                   "(removal for a Rock-weak anchor, hazards for a setup one, else a "
+                   "pivot), then one that resists and hits back a type both lose to"),
+    "THEME_FLOORS": ("int", 0, 1, 1,
+                     "1 gives a themed fight its type's real monotype shape: the type's "
+                     "own wall count instead of WALL_MIN, a hazard setter, and the setup "
+                     "and priority users a typical team of the type runs (THEME_SHAPE)"),
     "NO_PLAN_SETS": ("int", 0, 1, 1,
                      "1 skips sets written for a team plan the fight is not running: Trick "
                      "Room without a trickroom mode, Baton Pass, Memento, Lunar Dance, "
                      "Healing Wish"),
-    "ITEM_FALLBACK": ("int", 0, 1, 1,
+    "ITEM_FALLBACK": ("int", 0, 2, 1,
                       "1 gives a set that arrives with no usable item Leftovers (wall) or "
-                      "Life Orb (attacker); never a Choice item"),
+                      "Life Orb (attacker); never a Choice item. 2 judges the wall as if it "
+                      "held Leftovers, so a two-attack recovery set is a wall too"),
     "SET_COHERENCE": ("int", 0, 1, 1,
                       "1 makes the item and the moves agree: a status move on an Assault "
                       "Vest set is replaced by an attack (or the Vest by Leftovers), a "
@@ -257,7 +267,8 @@ GROUPS = [
     ("coverage", ["COVER_BAND", "HOLE_MIN_WEAK", "THREAT_COVER", "OFF_THEME_COVER",
                   "TIER_BAND", "USAGE_BAND", "SET_TIER_MATCH", "SHAPE_CHECK",
                   "GYM_MODES", "WALL_MIN", "REMOVAL_MIN", "PIVOT_MIN", "ATTACKER_SHAPE",
-                  "ATTACKER_ITEM", "KEPT_ANY_FORMAT", "NO_PLAN_SETS", "ITEM_FALLBACK", "SET_COHERENCE"]),
+                  "ATTACKER_ITEM", "KEPT_ANY_FORMAT", "NO_PLAN_SETS", "ITEM_FALLBACK", "SET_COHERENCE",
+                  "CORE_FIRST", "THEME_FLOORS"]),
     # A third question, and the reason these are not filed under "team": every other
     # knob here says what a team must BE, and these three only say "give me a
     # different one". All are off at 0. The two seeds ship off; REPEAT_BAND ships at
