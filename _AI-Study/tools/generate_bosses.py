@@ -196,7 +196,9 @@ ON_THEME_MIN = 5
 # immune to. A fight's minimum is the SMALLER of the two, so a preset still saying 6
 # keeps the deep themes pure and loosens only these. Keyed by type, not leader: a thin
 # pool is a fact about the type, and the Studio can hand a leader a different one.
-THEME_MIN = {"BUG": 4, "ICE": 4}
+# Ice back to 5 on 2026-09-28 with gym 4's hail plan: the fifth Ice slot and the Snow
+# Warning setter are the same Pokemon (Alolan Ninetales), so hail costs no Ice body.
+THEME_MIN = {"BUG": 4, "ICE": 5}
 TEAM_SIZE = 6
 # Off-theme picks must earn the slot: this much Smogon co-occurrence with the core,
 # or a resistance to what the theme is weak to. Ungated, correlation alone drags in
@@ -644,6 +646,9 @@ ARCHETYPE = ["offense", "balance", "bulky offense", "hyper offense", "offense",
 # or Trick Room, and nothing in the corpus can make that claim for a particular gym.
 # fight_context.py derives candidates and writes the chosen ones to PLANS_PATH.
 MODE = [None] * 9
+# Gym 4 (Douglas, Ice) is a hail fight since 2026-09-28, by choice: MODE_SETTER_FIRST
+# leads it with a Light Clay Alolan Ninetales (Snow Warning, Aurora Veil, Blizzard).
+MODE[3] = "snow"
 # Mechanical caps -- these are not about playstyle. A second Stealth Rock does
 # nothing on any team ever built, and the mega and weather budgets are one apiece.
 # They override the archetype's own (softer) cap wherever they are tighter.

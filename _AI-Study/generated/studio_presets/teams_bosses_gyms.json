@@ -1,7 +1,7 @@
 {
  "name": "teams_bosses_gyms",
  "note": "companion snapshot written by Install",
- "saved": "2026-09-27T22:27:37",
+ "saved": "2026-09-28T00:59:33",
  "settings": {
   "FROZEN": {
    "g0": true,
@@ -834,33 +834,69 @@
      "recovery": 1,
      "removal": 1,
      "setup": 2,
+     "snow": 1,
+     "snow_abuse": 1,
      "wall": 1
     },
     "idx": 3,
     "leader": "Douglas",
     "level": 36,
-    "mode": null,
+    "mode": "snow",
     "notes": [
      "evolved PILOSWINE (450) -> MAMOSWINE (530, UU) \u2014 legal at level 35",
+     "ANINETALES sets the snow plan, placed before the core",
      "core anchor: MAMOSWINE, the roster's strongest attacker",
-     "QUAGSIRE off-theme: resists ROCK/STEEL/FIRE",
-     "MAGNEZONE off-theme: resists ROCK/STEEL",
-     "WEAVILE: KNOCKOFF -> AERIALACE, the team's answer to FIGHTING"
+     "QUAGSIRE off-theme: resists ROCK/STEEL/FIRE"
     ],
     "roles": {
      "disrupt": 1,
      "hazards": 1,
-     "pivot": 1,
      "priority": 2,
      "recovery": 1,
      "removal": 1,
+     "screens": 1,
      "setup": 1,
-     "speed": 1,
-     "status": 2,
-     "wall": 1
+     "snow": 1,
+     "snow_abuse": 1,
+     "status": 1,
+     "wall": 1,
+     "weather": 1
     },
     "target": 551,
     "team": [
+     {
+      "ability": 2,
+      "ev": [
+       252,
+       0,
+       0,
+       252,
+       4,
+       0
+      ],
+      "fidelity": 4,
+      "inherited": null,
+      "item": "LIGHTCLAY",
+      "iv": 31,
+      "kept": false,
+      "level": 35,
+      "moves": [
+       "AURORAVEIL",
+       "FREEZEDRY",
+       "MOONBLAST",
+       "BLIZZARD"
+      ],
+      "nature": "TIMID",
+      "roles": [
+       "screens",
+       "snow",
+       "snow_abuse",
+       "weather"
+      ],
+      "species": "ANINETALES",
+      "src": "gen7ou/stats/Showdown Usage",
+      "why": "theme:snow"
+     },
      {
       "ability": 2,
       "ev": [
@@ -941,7 +977,7 @@
       "kept": true,
       "level": 35,
       "moves": [
-       "AERIALACE",
+       "KNOCKOFF",
        "ICICLECRASH",
        "PURSUIT",
        "ICESHARD"
@@ -1003,7 +1039,7 @@
       "item": "CHOICEBAND",
       "iv": 31,
       "kept": true,
-      "level": 35,
+      "level": 36,
       "moves": [
        "ICICLECRASH",
        "EARTHQUAKE",
@@ -1018,38 +1054,6 @@
       "species": "MAMOSWINE",
       "src": "gen6monotype/dex/Choice Band (Ground)",
       "why": "evolved original"
-     },
-     {
-      "ability": 2,
-      "ev": [
-       0,
-       0,
-       0,
-       252,
-       252,
-       4
-      ],
-      "fidelity": 4,
-      "inherited": "MAGNETON",
-      "item": "LIFEORB",
-      "iv": 31,
-      "kept": false,
-      "level": 36,
-      "moves": [
-       "FLASHCANNON",
-       "THUNDERBOLT",
-       "VOLTSWITCH",
-       "THUNDERWAVE"
-      ],
-      "nature": "TIMID",
-      "roles": [
-       "pivot",
-       "speed",
-       "status"
-      ],
-      "species": "MAGNEZONE",
-      "src": "gen6ru/stats/Showdown Usage",
-      "why": "off-theme"
      }
     ],
     "theme": "ICE"
@@ -7011,5 +7015,5 @@
   },
   "PICKS": {}
  },
- "sha": "41119fdfcc0e"
+ "sha": "2a90e9726ab3"
 }

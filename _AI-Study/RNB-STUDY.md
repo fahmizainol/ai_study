@@ -1246,6 +1246,9 @@ Gym 4 (level 36, four kept Ice mons), built in the nine-gym order:
 | 5 | none | the same Ninetales takes the fifth Ice slot, not leading (Snow Warning still sets hail) |
 | 5 | hail | as Ice 4 + hail |
 
+Shipped 2026-09-28: gym 4 is a hail fight with an Ice minimum of 5 (Magnezone out, Light Clay
+Alolan Ninetales leads); the other eight gyms and every trainer are unchanged.
+
 Player-side caveat: in the game, Alolan Ninetales is NINETALES form 1, and Essentials v16
 keys TM / tutor compatibility by species, so a player's Alolan Ninetales still reads fire
 Ninetales's TM list (no Aurora Veil). Bosses are unaffected -- `createPokemon` sets moves.

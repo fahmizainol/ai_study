@@ -657,6 +657,39 @@
   "trainer_items": [],
   "mons": [
    {
+    "species": "ANINETALES",
+    "level": 35,
+    "moves": [
+     "AURORAVEIL",
+     "FREEZEDRY",
+     "MOONBLAST",
+     "BLIZZARD"
+    ],
+    "item": "LIGHTCLAY",
+    "ability": 2,
+    "nature": "TIMID",
+    "iv": 31,
+    "ev": [
+     252,
+     0,
+     0,
+     252,
+     4,
+     0
+    ],
+    "roles": [
+     "screens",
+     "snow",
+     "snow_abuse",
+     "weather"
+    ],
+    "src": "gen7ou/stats/Showdown Usage",
+    "fidelity": 4,
+    "inherited": null,
+    "kept": false,
+    "why": "theme:snow"
+   },
+   {
     "species": "QUAGSIRE",
     "level": 35,
     "moves": [
@@ -723,7 +756,7 @@
     "species": "WEAVILE",
     "level": 35,
     "moves": [
-     "AERIALACE",
+     "KNOCKOFF",
      "ICICLECRASH",
      "PURSUIT",
      "ICESHARD"
@@ -785,7 +818,7 @@
    },
    {
     "species": "MAMOSWINE",
-    "level": 35,
+    "level": 36,
     "moves": [
      "ICICLECRASH",
      "EARTHQUAKE",
@@ -813,38 +846,6 @@
     "pinned": false,
     "kept": true,
     "why": "evolved original"
-   },
-   {
-    "species": "MAGNEZONE",
-    "level": 36,
-    "moves": [
-     "FLASHCANNON",
-     "THUNDERBOLT",
-     "VOLTSWITCH",
-     "THUNDERWAVE"
-    ],
-    "item": "LIFEORB",
-    "ability": 2,
-    "nature": "TIMID",
-    "iv": 31,
-    "ev": [
-     0,
-     0,
-     0,
-     252,
-     252,
-     4
-    ],
-    "roles": [
-     "pivot",
-     "speed",
-     "status"
-    ],
-    "src": "gen6ru/stats/Showdown Usage",
-    "fidelity": 4,
-    "inherited": "MAGNETON",
-    "kept": false,
-    "why": "off-theme"
    }
   ],
   "design": {
@@ -853,10 +854,9 @@
    "theme": "ICE",
    "notes": [
     "evolved PILOSWINE (450) -> MAMOSWINE (530, UU) \u2014 legal at level 35",
+    "ANINETALES sets the snow plan, placed before the core",
     "core anchor: MAMOSWINE, the roster's strongest attacker",
-    "QUAGSIRE off-theme: resists ROCK/STEEL/FIRE",
-    "MAGNEZONE off-theme: resists ROCK/STEEL",
-    "WEAVILE: KNOCKOFF -> AERIALACE, the team's answer to FIGHTING"
+    "QUAGSIRE off-theme: resists ROCK/STEEL/FIRE"
    ],
    "early_moves": true,
    "preset": "teams_bosses_gyms"
