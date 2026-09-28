@@ -230,6 +230,9 @@ def _make_trainer(battle, plan=None, seen=None):
     if stage < G.MODE_FROM:
         mode = None
     floors, caps = G.plan_for(archetype, unlocked, mode)
+    if G.TRAINER_CORE and G.SPEED_FLOOR:
+        # chased last, as on a themed gym; assemble() swaps a move in when no slot reached it
+        floors["speed"] = max(floors.pop("speed", 0), G.SPEED_FLOOR)
     if G.TRAINER_RECOVERY_CAP:
         # the balance plan floors recovery at 3; Teresa's second fight carried four
         caps["recovery"] = min(caps.get("recovery", 99), G.TRAINER_RECOVERY_CAP)
@@ -248,18 +251,42 @@ def _make_trainer(battle, plan=None, seen=None):
              "moves": m.get("moves"), "dynamic": is_dynamic(m["species"]),
              # See make_gym: ticking the box asks for the mon even when the mon is
              # already the trainer's own, and the slot trim has to be able to tell.
-             "asked": keep.get(m["species"]) is True}
+             "asked": keep.get(m["species"]) is True,
+             # unticked on the card: dropped by keep_test, so it takes no seat in the trim
+             "unticked": keep.get(m["species"]) is False}
             for m, lvl in zip(battle["party"], party_levels)]
     own = {m["species"] for m in battle["party"]}
     lv = G.remap(max(party_levels) if party_levels else median)
     kept += [{"species": n, "level": lv, "moves": None, "dynamic": False,
               "pinned": True}
              for n, on in keep.items() if on and n not in own and n in G._sp]
+    # KEEP_MAX: at most that many of the dev's own, leaving the framework room; the
+    # starter slot is not counted. A Builder card that speaks for this fight switches it
+    # off: the card has chosen the roster (and Studio's import of an exported team
+    # relies on it, since a generated pick can share a species with an original).
+    capped = []
+    if G.KEEP_MAX and not keep:
+        core = set(recurring(battle["type"]))
 
-    # 2) pad to six against this stage's eBST target. Rivals get no Ubers at any
-    #    stage: eligible() opens that pool from gym 7, which is right for a gym
-    #    leader whose picks are still theme-locked -- a rival has no theme, so the
-    #    whole box-legendary pool comes with it and Owen turns up with an Arceus.
+        def rank(k):
+            n = k["species"]
+            if n not in G._sp:
+                return (False, False, False, 0)
+            up = G.grown(n, k["level"], stage)
+            # one the battle logs already measured doing nothing (KEEP_MEASURED) goes last
+            weak = bool(G.KEEP_MEASURED and (G.measured_weak(fight_id(battle), n)
+                                             or G.measured_weak(fight_id(battle), up)))
+            return (not weak, n in G.LEGENDARY or up in G.LEGENDARY, G.root(n) in core,
+                    G.anchor_power(up), G.bst(up))
+        own_line = [k for k in kept if not k.get("dynamic")]
+        stay = sorted(own_line, key=rank, reverse=True)[:G.KEEP_MAX]
+        capped = [k["species"] for k in own_line if k not in stay]
+        kept = [k for k in kept if k["species"] not in capped]
+
+    # 2) pad to six against this stage's eBST target. Rivals got no Ubers at any
+    #    stage: a rival has no theme, so the whole box-legendary pool came with it and
+    #    Owen turned up with an Arceus. Under TRAINER_UBERS they open from UBER_FROM,
+    #    and the ace rule (one power pick, one box legendary at most) is what limits it.
     built = G.assemble({
         "level": max(2, G.remap(median) - 1), "ace_level": None, "stage": stage,
         "target": target, "lo": target - G.SPREAD[stage] / 2,
@@ -267,7 +294,8 @@ def _make_trainer(battle, plan=None, seen=None):
         "theme": None, "on_theme_min": 0, "why_theme": None,
         "kept": kept, "keep_band": False, "grow_kept": True, "note_unknown": True,
         "floors": floors, "caps": caps, "mode": mode, "mega_ok": unlocked,
-        "ubers_ok": False, "project_spent_mega": False,
+        "ubers_ok": bool(G.TRAINER_UBERS) and stage >= G.UBER_FROM,
+        "trainer_core": bool(G.TRAINER_CORE), "project_spent_mega": False,
         "why_open": ("added:%s", "added:power"),
         "reequip": True, "dedupe": False,
         # A rival's roster IS the character, so the families they bring to two or more
@@ -286,6 +314,8 @@ def _make_trainer(battle, plan=None, seen=None):
                          if G.mode_evidence(m["species"], mode)]),
     })
     team, notes = built["team"], built["notes"]
+    if capped:
+        notes.insert(0, f"KEEP_MAX {G.KEEP_MAX}: left out {', '.join(capped)}")
 
     # 3) a scaled fight keeps its scaling. Every slot goes back to the token it was
     #    built from -- padded slots included, taking the offset the party already uses

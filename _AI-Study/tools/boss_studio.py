@@ -280,6 +280,23 @@ SCALARS = {
     "SPEED_FLOOR": ("int", 0, 2, 1,
                     "speed-control users a themed fight must carry (Thunder Wave, Icy Wind, "
                     "Sticky Web... or a Choice Scarf); 0 is off"),
+    "LEGEND_ACE": ("int", 0, 1, 1,
+                   "1 makes core-first's anchor an ACE: the heaviest power pick (Uber, "
+                   "legendary, Ultra Beast, or 600+ BST with a mega) on an attacking set, "
+                   "over the band ceiling up to ACE_BST; one box legendary a team at most"),
+    "ACE_FROM": ("int", 0, 9, 1, "stage (badge count) from which the ace may be a power pick"),
+    "ACE_BST": ("int", 580, 780, 10, "heaviest ace allowed, counting a mega (720 lets Arceus in)"),
+    "ACE_OU": ("int", 0, 1, 1,
+               "1 makes the best OU-tier attacking set the ace where no power pick is allowed "
+               "or in reach (gyms 1-3, and fights with none)"),
+    "TRAINER_CORE": ("int", 0, 1, 1,
+                     "1 runs the core framework on named trainers too: ace, enabler, second "
+                     "breaker over every type, plus the speed floor and 4 attacking sets"),
+    "TRAINER_UBERS": ("int", 0, 1, 1, "1 opens Ubers to named trainers from UBER_FROM"),
+    "KEEP_MAX": ("int", 0, 6, 1,
+                 "most of the dev's own Pokemon a named trainer keeps (starter slot not "
+                 "counted; own legendary, then recurring lines, then the strongest); a card "
+                 "that speaks for the fight switches it off; 0 keeps all"),
     "NO_PLAN_SETS": ("int", 0, 1, 1,
                      "1 skips sets written for a team plan the fight is not running: Trick "
                      "Room without a trickroom mode, Baton Pass, Memento, Lunar Dance, "
@@ -327,7 +344,9 @@ GROUPS = [
                   "OFF_THEME_CAP", "OFF_THEME_MOST", "OFF_THEME_EXTRA", "EGG_MOVES", "SET_GEN_MAX",
                   "MODE_SETTER_FIRST", "CORE_ANCHOR_RULE", "ENABLER_OFF_THEME", "CORE_PATCH",
                   "WALL_PROTECT", "WEATHER_EXCLUSIVE", "WALL_NEEDS_BULK",
-                  "TRAINER_RECOVERY_CAP", "SECOND_BREAKER", "ATTACKERS_MIN", "SPEED_FLOOR"]),
+                  "TRAINER_RECOVERY_CAP", "SECOND_BREAKER", "ATTACKERS_MIN", "SPEED_FLOOR",
+                  "LEGEND_ACE", "ACE_FROM", "ACE_BST", "ACE_OU", "TRAINER_CORE",
+                  "TRAINER_UBERS", "KEEP_MAX"]),
     # A third question, and the reason these are not filed under "team": every other
     # knob here says what a team must BE, and these three only say "give me a
     # different one". All are off at 0. The two seeds ship off; REPEAT_BAND ships at
@@ -2061,6 +2080,13 @@ def trainer_load(name, over):
         for old in (m["species"] for m in base.get(who, {}).get("mons", [])):
             if old in G._sp and old not in keep:
                 keep[old] = False
+        # A card switches KEEP_MAX off for its fight (the card speaks for the roster), so
+        # every original the file neither carries nor grows into is dropped explicitly:
+        # under the cap the baseline above may never have held it to be dropped.
+        for o in (m["species"] for m in fights[slot]["party"]):
+            if o in G._sp and o not in keep and not any(
+                    sp in G.family(o) for sp in species if sp in G._sp):
+                keep[o] = False
         picks[f"t{slot}"] = _card_overrides(mons, keep)
         orders[f"t{slot}"] = species
         stage = (record.get("design") or {}).get("stage")

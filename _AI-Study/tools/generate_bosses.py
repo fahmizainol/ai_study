@@ -85,8 +85,9 @@ TARGET = [397, 487, 504, 551, 525, 583, 593, 597, 600]
 # and threat 5 -> 16. See MONOTYPE-SYNERGY.md section 7 -- no Ice team in 183 resists
 # Rock or Steel, so a pure Ice gym eats three of its four weaknesses by construction.
 SPREAD = [190, 190, 230, 142, 110, 140, 45, 85, 100]
-# Ubers unlock at gym 7 -- the user wants them to arrive, but as the late escalation.
-UBER_FROM = 6
+# Ubers unlock at gym 4 since 2026-09-28 (the user's call; gym 7 before). Only Aegislash
+# and Blaziken open that early: every other Uber is 580+ BST and waits for LEGEND_FROM.
+UBER_FROM = 3
 # Legendaries and pseudo-legends unlock at gym 6, one step before the Ubers. Detected
 # by BST rather than by name, because Realidea's dex is not the official one: it holds
 # fakemon (MEGUMIN 618, TARTAGLIA 232) that no name list would ever cover, and the one
@@ -418,6 +419,28 @@ TRAINER_RECOVERY_CAP = 2
 SECOND_BREAKER = 1
 ATTACKERS_MIN = 4
 SPEED_FLOOR = 1
+# The ace (2026-09-28, the user's design): from stage ACE_FROM, core-first's anchor is a
+# POWER PICK on an attacking set -- Uber tier, legendary, Ultra Beast, or 600+ BST counting
+# a mega -- up to ACE_BST, exempt from the band ceiling (the team's mean still steers the
+# other five lighter). A kept power pick is the ace; otherwise it outranks the dev's own
+# attackers, who move to breaker 2. At most one 670+ box legendary a team. Run & Bun's
+# late bosses carry one box legendary beside an ordinary team; the ceiling kept ours out.
+LEGEND_ACE = 1
+ACE_FROM = 3
+ACE_BST = 720
+# 1: where no power pick can be the ace -- before ACE_FROM (gyms 1-3), or a fight with
+# none in reach -- the best OU-tier attacking set is, by the same ranking (the user's
+# call, 2026-09-28: "if the earlier game parts dont have uber, substitute ou").
+ACE_OU = 1
+# Named trainers get the same framework (2026-09-28): TRAINER_CORE runs core-first -- ace
+# (from ACE_FROM), anchor, enabler, second breaker -- over every type, plus the speed floor
+# and ATTACKERS_MIN; TRAINER_UBERS opens Ubers to them from UBER_FROM (never before);
+# KEEP_MAX keeps at most that many of the dev's own Pokemon (the starter slot and a card's
+# pins and ticks not counted): their own legendary first, then their recurring lines, then
+# the strongest attacker. Rivals kept 3-6 of theirs, which left the framework no room.
+TRAINER_CORE = 1
+TRAINER_UBERS = 1
+KEEP_MAX = 2
 OFF_THEME_CAP = 1
 OFF_THEME_MOST = 1
 OFF_THEME_EXTRA = 1
@@ -1274,6 +1297,7 @@ def family(name):
 _EV_ORDER = {"hp": 0, "atk": 1, "def": 2, "spe": 3, "spa": 4, "spd": 5}
 
 
+PRIMAL_ORB = {"REDORB": "GROUDON", "BLUEORB": "KYOGRE"}
 DEFENSIVE_ITEMS = {"LEFTOVERS", "BLACKSLUDGE", "ROCKYHELMET", "ASSAULTVEST", "EVIOLITE"}
 PROTECT_MOVES = {"KINGSSHIELD", "SPIKYSHIELD", "BANEFULBUNKER", "PROTECT", "DETECT"}
 WEATHER_MOVE = {"SUNNYDAY": "sun", "RAINDANCE": "rain", "SANDSTORM": "sand", "HAIL": "snow"}
@@ -1963,7 +1987,7 @@ def grown(name, level, stage, theme=None, early=False, slack=0):
 # Permanent, like the Sticky Web and Aurora Veil exclusions -- a fact about this
 # build's engine, not a difficulty setting, so it is not badge-gated and has no knob.
 # (The four terrain MOVES do work; it is only the surge abilities that are unwired.)
-DEAD_PRIMARY = frozenset({
+DEAD_PRIMARY_V1 = frozenset({
     "SOLGALEO",   # FULLMETALBODY
     "LUNALA",     # SHADOWSHIELD
     "MEGUMIN",    # ACAPARAEXP (fakemon)
@@ -1973,6 +1997,10 @@ DEAD_PRIMARY = frozenset({
                   # ability can set here anyway
     "TARTAGLIA",  # NOTENGOATARGALIA (fakemon)
 })
+# Solgaleo and Lunala back in (2026-09-28, the user's call): their lost abilities only
+# block stat drops / soften a full-HP hit, which a player barely sees, unlike a Tapu that
+# never sets its terrain; Sunsteel Strike and Moongeist Beam have a working move class.
+DEAD_PRIMARY = DEAD_PRIMARY_V1 - {"SOLGALEO", "LUNALA"}
 
 
 # The legendaries, for LEGEND_MAX. Derived, not typed out from memory: Realidea's own
@@ -2520,7 +2548,9 @@ def assemble(spec):
 
     # SPEED_FLOOR: a Choice Scarf a set already holds counts as speed control. Only
     # counted, never chased: asking build() for Scarf sets made three of gym 5's six.
-    scarf = bool(theme and SPEED_FLOOR)
+    # the core framework runs on a themed fight, and on a named trainer under TRAINER_CORE
+    framework = bool(theme) or bool(spec.get("trainer_core"))
+    scarf = bool(framework and SPEED_FLOOR)
 
     def gives(mon, role):
         return role in mon["roles"] or (scarf and role == "speed"
@@ -2528,7 +2558,7 @@ def assemble(spec):
 
     def lean():
         """ATTACKERS_MIN: once a themed fight's wall floor is met, prefer attacking sets."""
-        return bool(theme and ATTACKERS_MIN) and have["wall"] >= floors.get("wall", 0)
+        return bool(framework and ATTACKERS_MIN) and have["wall"] >= floors.get("wall", 0)
 
     def take(pool, role, why, attack=False):
         """Pick the best candidate from `pool` for `role` (None = any).
@@ -2550,8 +2580,12 @@ def assemble(spec):
         for strict in (True, False):
             full = capped()
             over = legend_full()
+            box = LEGEND_ACE and any(bst(m["species"]) >= 670 for m in team
+                                     if m["species"] in _sp)
             for name in pool:
                 if name in used or (over and name in LEGENDARY):
+                    continue
+                if box and bst(name) >= 670:     # one box legendary a team (LEGEND_ACE)
                     continue
                 mon = build(name, level, banned, want=role,
                             avoid=full if strict else (),
@@ -2573,6 +2607,10 @@ def assemble(spec):
                     continue
                 # an anchor must come out on an attacking set (CORE_ANCHOR_RULE)
                 if attack and not attacking_set(mon["moves"], mon["item"]):
+                    continue
+                # WEATHER_EXCLUSIVE: a species whose every ability sets another weather
+                # (Groudon on a sand team) cannot be made to fit, so it is refused
+                if foreign_weather((), ability_name(mon), team_weather()):
                     continue
                 if strict and mon["roles"] & full:
                     continue
@@ -2638,7 +2676,8 @@ def assemble(spec):
     keep_list = list(spec["kept"])
     spoken = {i for i, k in enumerate(keep_list)
               if k.get("pinned") or k.get("asked") or k.get("dynamic")}
-    loose = [i for i in range(len(keep_list)) if i not in spoken]
+    loose = [i for i in range(len(keep_list)) if i not in spoken
+             and not keep_list[i].get("unticked")]
     room = size - len(spoken)
     if spoken and len(loose) > room:
         for i in sorted(loose[max(room, 0):], reverse=True):
@@ -2795,6 +2834,8 @@ def assemble(spec):
 
     def off_room():
         """Slots left beyond what the theme minimum still needs: the off-theme budget."""
+        if not theme:
+            return len(team) < size
         return size - len(team) > max(0, spec["on_theme_min"] - on_theme())
 
     def off_theme_pool():
@@ -2805,6 +2846,95 @@ def assemble(spec):
                 and (spec["ubers_ok"] or SC.band(n) != "Uber")
                 and keep(n) and tier_ok(n)]
 
+    def power_pick(n, mega):
+        """LEGEND_ACE's pool: Uber tier, legendary, Ultra Beast, or 600+ BST with the mega."""
+        return (SC.band(n) == "Uber" or n in LEGENDARY or n in ULTRA_BEASTS
+                or bst(n) + MEGA_BONUS * mega >= 600)
+
+    def pick_ace(core, kept):
+        """LEGEND_ACE: the anchor is a power pick on an attacking set, the heaviest first
+        (BST counting a mega, then attack), up to ACE_BST and over the band ceiling; with
+        ACE_OU, an OU-tier one where no power pick is allowed or in reach. A kept one is
+        the ace only when nothing heavier is in reach -- a Mega Gallade (618) does not keep
+        gym 7's Psychic legendaries out. None when nothing qualifies, and the anchor rule
+        runs as before."""
+        tiers = []
+        if stage >= ACE_FROM:
+            tiers.append(("power pick", power_pick))
+        if ACE_OU:
+            tiers.append(("OU pick", lambda n, mega: SC.band(n) == "OU"))
+        for what, test in tiers:
+            got = ace_of(core, kept, what, test)
+            if got:
+                return got
+        notes.append("core ace: no " + " or ".join(w for w, _ in tiers)
+                     + " on an attacking set in reach; the anchor rule")
+        return None
+
+    def ace_of(core, kept, what, test):
+        """One tier of pick_ace: the heaviest `test` candidate that builds attacking."""
+        box = any(bst(m["species"]) >= 670 for m in team if m["species"] in _sp)
+        # a fight whose plan still lacks its abuser (gym 6's sand) takes a candidate that
+        # cashes the mode first -- the plan is what the other five are built for
+        plan = TS.abuse_role(mode) if mode and TS.abuse_role(mode) in unmet() else None
+
+        def cashes(n):
+            if not plan:
+                return False
+            mon = build(n, level, banned, want=plan, allow_items=allow, cap=ceiling, mode=mode,
+                        seed=sset, formats=fmts, early=early, want_attack=True,
+                        weather=team_weather())
+            return bool(mon and plan in mon["roles"] and attacking_set(mon["moves"], mon["item"]))
+        cands = [(False, 0, ebst(m), anchor_power(m["species"], m["item"] in MEGASTONE), 1,
+                  m["species"], None)
+                 for _i, m in kept
+                 if test(m["species"], m["item"] in MEGASTONE)
+                 and attacking_set(m["moves"], m["item"])]
+        for n in core:
+            if n in used:
+                continue
+            stone = mega_av and not have["mega"] and bool(MEGA_OF.get(n, set()) - banned)
+            for mega in ((True, False) if stone else (False,)):
+                b = bst(n) + MEGA_BONUS * mega
+                if test(n, mega) and lo <= b <= ACE_BST and not (box and bst(n) >= 670):
+                    cands.append((cashes(n), -seen.get(root(n), 0), b, anchor_power(n, mega),
+                                  0, n, mega))
+        # a family other fights already field ranks behind (REPEAT_BAND's tally), or every
+        # late trainer takes the same Arceus
+        cands.sort(reverse=True)
+        for fits, _rep, b, _pw, is_kept, n, mega in cands:
+            if is_kept:
+                notes.append(f"core ace: {n}, the roster's own {what} ({b})")
+                return n
+            if n in used:
+                continue
+            # a non-mega option may not grow past its BST, and a primal orb is +100 more:
+            # Primal Groudon / Kyogre (770) sit over ACE_BST 720
+            extra = (set() if mega else set(MEGA_OF.get(n, ()))) | {
+                o for o, owner in PRIMAL_ORB.items() if owner == n and b + MEGA_BONUS > ACE_BST}
+            extra -= banned
+            banned.update(extra)
+            saved = set(banned)
+            try:
+                got = take([n], plan if fits else ("mega" if mega else None), "core ace",
+                           attack=True)
+            finally:
+                banned.difference_update(extra)
+            if got and {"REST", "SLEEPTALK"} <= set(team[-1]["moves"]):
+                m = team.pop()              # a stone makes Rest / Sleep Talk "attacking"
+                have.subtract(m["roles"])
+                used.discard(n)
+                banned.clear()
+                banned.update(saved - extra)
+                continue
+            if got:
+                core.remove(n)
+                notes.append(f"core ace: {n}{' (mega)' if mega else ''}, the heaviest {what} "
+                             f"up to {ACE_BST} BST ({b})"
+                             + (f" that cashes the {mode} plan" if fits else ""))
+                return n
+        return None
+
     def pick_anchor(core):
         """CORE_ANCHOR_RULE: the kept Pokemon on the best attacking set, else the on-theme
         body with the best attacking stat counting its mega, anywhere in the band, built
@@ -2812,6 +2942,10 @@ def assemble(spec):
         label = "core anchor"
         kept = [(i, m) for i, m in enumerate(team) if m["kept"] and not is_dynamic(m["species"])
                 and m["species"] in _sp]
+        if LEGEND_ACE and (stage >= ACE_FROM or ACE_OU):
+            got = pick_ace(core, kept)
+            if got:
+                return got
         key = lambda im: (attacking_set(im[1]["moves"], im[1]["item"]),  # noqa: E731
                           theme in _sp[im[1]["species"]]["types"],
                           anchor_power(im[1]["species"], im[1]["item"] in MEGASTONE),
@@ -2888,7 +3022,8 @@ def assemble(spec):
         if not cand and ENABLER_OFF_THEME and off_room():
             src, where = off_theme_pool(), " (off-theme)"
             cand = [n for n in src if shields(n)]
-        elif not (cand and len(team) < size and on_theme() < spec["on_theme_min"]):
+        elif not (cand and len(team) < size
+                  and (not theme or on_theme() < spec["on_theme_min"])):
             if not cand:
                 notes.append(f"{label}: nothing on-theme resists what {anchor} is "
                              f"weak to ({'/'.join(weak_to)}); left to the off-theme slot")
@@ -2985,7 +3120,7 @@ def assemble(spec):
             # so that slot cannot hold a floor either (gym 7 lost its pivot to it)
             off_now = sum(1 for m in team if not is_dynamic(m["species"])
                           and theme not in _sp[m["species"]]["types"])
-            reserve = int(bool(OFF_THEME_COVER) and not off_theme
+            reserve = int(bool(theme and OFF_THEME_COVER) and not off_theme
                           and size - spec["on_theme_min"] > off_now)
             if size - len(team) - 1 - reserve < sum(left.values()) - own \
                     or (off_theme and not off_room()):
@@ -3038,7 +3173,7 @@ def assemble(spec):
             hitters = sorted((m for m in kept if kkey(m)[0]), key=kkey, reverse=True)
             if hitters:
                 return say(hitters[0], "kept")
-            for src, off_theme, how in ((core, False, "on-theme"),
+            for src, off_theme, how in ((core, False, "on-theme" if theme else "generated"),
                                          (off_theme_pool() if theme else [], True, "off-theme")):
                 opts = sorted((o for o in options(src, off_theme) if gkey(o)[0]),
                               key=gkey, reverse=True)
@@ -3052,7 +3187,7 @@ def assemble(spec):
         for o in sorted(options(core, False), key=gkey, reverse=True):
             m = build_one(o, False)
             if m:
-                return say(m, "on-theme")
+                return say(m, "on-theme" if theme else "generated")
         if refused:
             notes.append(f"core breaker 2: skipped, {size - len(team)} slot(s) left for "
                          f"{'/'.join(left) or 'the floors'} (and the off-theme cover)")
@@ -3092,7 +3227,7 @@ def assemble(spec):
         pair = [anchor]
 
         def room():
-            return len(team) < size and on_theme() < spec["on_theme_min"]
+            return len(team) < size and (not theme or on_theme() < spec["on_theme_min"])
 
         # 2) the enabler
         if room() or (ENABLER_OFF_THEME and off_room()):
@@ -3128,7 +3263,7 @@ def assemble(spec):
                                  f"{'/'.join(lose)}, which beats {' + '.join(pair)}; "
                                  f"left to the off-theme slot")
         # 4) SECOND_BREAKER: a second breaker for what walls the anchor
-        if SECOND_BREAKER and theme:
+        if SECOND_BREAKER and framework:
             second_breaker(core, anchor)
 
     def setter_first(core):
@@ -3147,6 +3282,12 @@ def assemble(spec):
         notes.append(f"no on-theme {mode} setter at level {level}; left to the open pool")
 
     core = []
+    if not theme and spec.get("trainer_core") and CORE_FIRST and len(team) < size:
+        # TRAINER_CORE: the same core over every type (a trainer has no theme to keep)
+        tcore = [n for n in eligible(level, stage) if n not in used and keep(n) and tier_ok(n)
+                 and (spec["ubers_ok"] or SC.band(n) != "Uber")]
+        if tcore:
+            core_first(tcore)
     if theme:
         core = [n for n in eligible(level, stage, theme=theme)
                 if n not in used and in_band(n) and keep(n) and tier_ok(n)]
@@ -3265,6 +3406,7 @@ def assemble(spec):
         able = [n for n in pool if set(resisted(n)) & set(live)]
         spare = [m for m in team if not m["kept"] and not is_dynamic(m["species"])
                  and theme in _sp[m["species"]]["types"] and m["species"] not in anchors
+                 and not (LEGEND_ACE and (m.get("why") or "").startswith("core "))
                  and not any(have[r] <= floors[r] for r in floors if r in m["roles"])]
         if able and spare:
             victim = min(spare, key=ebst)
@@ -3576,7 +3718,7 @@ def assemble(spec):
     # Modelled on the re-pricing pass above: the species never changes, only its set;
     # a mega is never traded across, a floor that is only just met is never broken, and
     # no cap is pushed past. Frail bodies on wall sets go first, then the strongest.
-    if theme and ATTACKERS_MIN:
+    if framework and ATTACKERS_MIN:
         def attackers():
             return sum(1 for m in team if not is_dynamic(m["species"])
                        and not wall_set(m["moves"], m["item"]))

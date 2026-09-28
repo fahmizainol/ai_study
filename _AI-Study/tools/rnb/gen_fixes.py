@@ -28,8 +28,11 @@ generated/ that ships is touched:
     python tools/rnb/gen_fixes.py core2   OUTDIR  # core + GROW_TO_TARGET, 0.6 KO bar, as played
     python tools/rnb/gen_fixes.py cores2  OUTDIR  # core2 + the off-theme slot rules and the
                                                    # core-first fixes, installed and played
+    python tools/rnb/gen_fixes.py breakers OUTDIR # cores2 + the breaking core, as played
     python tools/rnb/gen_fixes.py shipped OUTDIR  # the generator's current defaults
-                                                   # (= cores2 + the breaking core)
+                                                   # (= breakers + the ace (OU before gym 4),
+                                                   # trainers' core, Ubers from gym 4,
+                                                   # KEEP_MAX 2)
     python tools/rnb/gen_fixes.py open    OUTDIR  # defense + the four limiters released
                                                    # (2026-09-26): EARLY_MOVES, all set
                                                    # formats, PICK_FLOOR 0, KEEP_NEED_SET
@@ -52,13 +55,18 @@ import generate_bosses as GB  # noqa: E402
 import generate_trainers as GT  # noqa: E402
 
 arm, out = sys.argv[1], os.path.abspath(sys.argv[2])
-ARMS = ("off", "on", "theme", "tier", "all", "choices", "defense", "open", "atk", "measured", "fix", "fix2", "core", "core2", "cores2", "shipped")
+ARMS = ("off", "on", "theme", "tier", "all", "choices", "defense", "open", "atk", "measured", "fix", "fix2", "core", "core2", "cores2", "breakers", "shipped")
 if arm not in ARMS:
     sys.exit("arm is one of " + ", ".join(ARMS))
 if arm != "shipped":
+    # the ace, the trainers' core, Ubers from gym 4, KEEP_MAX, Solgaleo / Lunala (2026-09-28)
+    GB.LEGEND_ACE, GB.TRAINER_CORE, GB.TRAINER_UBERS, GB.KEEP_MAX = 0, 0, 0, 0
+    GB.ACE_OU = 0
+    GB.UBER_FROM, GB.DEAD_PRIMARY = 6, GB.DEAD_PRIMARY_V1
+if arm not in ("breakers", "shipped"):
     # the breaking core (2026-09-28): second breaker, four attacking sets, speed control
     GB.SECOND_BREAKER, GB.ATTACKERS_MIN, GB.SPEED_FLOOR = 0, 0, 0
-if arm not in ("cores2", "shipped"):
+if arm not in ("cores2", "breakers", "shipped"):
     # the off-theme slot rules and egg moves, after the core2 arm was played. NOTE: the
     # game's pokemon.txt / tm.txt were brought to gen 7 on 2026-09-27 (learnset_merge.py),
     # so every arm below rebuilds byte for byte only against the PBS as it was before
@@ -75,16 +83,16 @@ if arm not in ("cores2", "shipped"):
     GB.CORE_ANCHOR_RULE, GB.ENABLER_OFF_THEME, GB.CORE_PATCH = 0, 0, 1
     GB.WALL_PROTECT, GB.WEATHER_EXCLUSIVE, GB.WALL_NEEDS_BULK = 0, 0, 0
     GB.TRAINER_RECOVERY_CAP = 0
-if arm not in ("core2", "cores2", "shipped"):
+if arm not in ("core2", "cores2", "breakers", "shipped"):
     # evolving a kept original toward the target, and the higher measured bar, after
     # the core arm was played
     GB.GROW_TO_TARGET = 0
     GB.MEASURED_DEALT, GB.MEASURED_KOS = 35.0, 0.2
-if arm not in ("core", "core2", "cores2", "shipped"):
+if arm not in ("core", "core2", "cores2", "breakers", "shipped"):
     # the core-first build and the per-type floors, after the fix2 arm was played
     GB.CORE_FIRST, GB.THEME_FLOORS = 0, 0
     GB.ITEM_FALLBACK = min(GB.ITEM_FALLBACK, 1)
-if arm not in ("fix2", "core", "core2", "cores2", "shipped"):
+if arm not in ("fix2", "core", "core2", "cores2", "breakers", "shipped"):
     # the 2026-09-27 evening changes, after the fix arm was played
     GB.FILLER_AVOID, GB.SET_COHERENCE, GB.SETUP_CAP = GB.FILLER_AVOID_V1, 0, 1
 if arm == "choices":
@@ -96,19 +104,19 @@ if arm in ("choices", "defense"):
     GB.EARLY_MOVES, GB.KEEP_NEED_SET, GB.PICK_FLOOR = 0, 0, 1
     GB.SET_FORMATS = ("ubers", "ou", "uu", "ru", "nu", "anythinggoes", "nationaldex", "nationaldexag")
     GB.FILLER_AVOID = frozenset()
-if arm not in ("atk", "measured", "fix", "fix2", "core", "core2", "cores2", "shipped"):
+if arm not in ("atk", "measured", "fix", "fix2", "core", "core2", "cores2", "breakers", "shipped"):
     # the 2026-09-27 choices, pinned back for every earlier arm
     GB.PICK_NO_LOW, GB.SET_FORMATS_OFF = 0, ("battlespotsingles",)
     GB.ATTACKER_SHAPE, GB.ATTACKER_ITEM, GB.PIVOT_MIN, GB.KEPT_ANY_FORMAT = 0, 0, 0, 0
     GB.REPEAT_BAND = 1
-if arm not in ("measured", "fix", "fix2", "core", "core2", "cores2", "shipped"):
+if arm not in ("measured", "fix", "fix2", "core", "core2", "cores2", "breakers", "shipped"):
     GB.KEEP_MEASURED = 0          # on since 2026-09-27, after the atk arm was played
-if arm not in ("fix", "fix2", "core", "core2", "cores2", "shipped"):
+if arm not in ("fix", "fix2", "core", "core2", "cores2", "breakers", "shipped"):
     # the changes after the measured arm was played (2026-09-27, late)
     GB.BP_CAP_UNTIL, GB.NO_PLAN_SETS, GB.ITEM_FALLBACK = 3, 0, 0
     if GB.ATTACKER_ITEM:
         GB.ATTACKER_ITEM = 1
-if arm not in ("choices", "defense", "open", "atk", "measured", "fix", "fix2", "core", "core2", "cores2", "shipped"):
+if arm not in ("choices", "defense", "open", "atk", "measured", "fix", "fix2", "core", "core2", "cores2", "breakers", "shipped"):
     # the defaults every test arm below was played under (changed 2026-09-25)
     GB.SET_FORMATS, GB.EARLY_ITEM_CAP = (), 1
     GB.SET_FIT, GB.SETUP_CAP, GB.SHAPE_CHECK = False, None, 0
