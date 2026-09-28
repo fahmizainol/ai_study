@@ -751,8 +751,14 @@ def _apply_set(mon, species, level, labels, mode):
     though the picker omits it -- it only ever ADDS candidates -- so what a card
     shows is what a rebuild at these settings would produce.
     """
+    # A kept or pinned mon draws from every format but Battle Spot at build time
+    # (KEPT_ANY_FORMAT, assemble's kept_fmts); rendering must allow the same, or a card
+    # naming a monotype set builds and then refuses to render.
+    formats = G.set_formats()
+    if mon.get("kept") and G.KEPT_ANY_FORMAT:
+        formats = frozenset(G.SC.set_tiers()) - frozenset(G.SET_FORMATS_OFF[:1])
     got = G.build(species, level or 50, mode=mode, only=labels,
-                  formats=G.set_formats(), early=bool(G.EARLY_MOVES))
+                  formats=formats, early=bool(G.EARLY_MOVES))
     if not got:
         raise ValueError(f"{species} cannot be built from "
                          f"{labels[0]} at level {level}")

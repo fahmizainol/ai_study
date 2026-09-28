@@ -1481,6 +1481,34 @@ under Proton with `portable_ai.txt` set aside: the game window opened and ran 2.
 with no script error (a load-time error ends mkxp-z with a message box), though the
 capture showed the window blank, so the title screen itself was not seen.
 
+**Gym 9, one fight fixed by a Studio card** (2026-09-28, `rnb_vs_gen_g9*_50ms`, gym 9 only
+at 50 ms on fix2's draw -- Drake, Glacia, Sidney, Maxie). Per type, the gyms were read
+against real Smogon monotype teams on the same draws: gyms 6-9 draw Run & Bun's endgame and
+real teams of those types also lose there (Psychic 16%, Normal 21%, Steel 39%, Ground 42%),
+gyms 1 and 5 trail real teams only because a level-20 / level-39 leader cannot own Scizor,
+Volcarona, Tyranitar or the legendaries real teams carry (the sims play everyone at level
+100). Two universal rules were tested on the 148 real teams and refuted: covering every
+weakness the type shares (5 of 148 teams do it; they won 20% v 58%), and "the carry is the
+member not sharing the type's weaknesses" (such members make 0.46 KOs a battle v 0.76). What
+was left was one fight: gym 9 v Maxie, 0-24 for us where real Steel teams split 4-4 (both
+winners had a Fire-proof attacker -- Air Balloon Heatran, Hisuian Goodra). Variants through
+the Studio's per-fight card, gym 9 only:
+
+| gym 9 | battles | record |
+|---|--:|--:|
+| installed (ace build) | 36 | 5-31 (14%) |
+| + Heatran, Air Balloon monotype set | 48 | 15-33 (31%) |
+| + Dialga (band widened to 680) | 24 | 5-19 |
+| + Heatran + Dialga | 24 | 8-16 |
+| + Heatran + Celesteela | 24 | 8-16 |
+| **+ Celesteela** | 48 | **18-30 (38%)** -- Maxie 4-8, Drake 4-8 |
+
+Celesteela itself makes 0.08 KOs; pinning it reshuffles the build (Empoleon for Excadrill,
+Toxapex for Celebi) and Mega Metagross faints less. The Heatran variants' gain rides on
+Metagross too (0.50 -> 1.12 KOs). Found on the way: Boss Studio rendered a card's named set
+only from the generated picks' formats, so a pinned mon named with a monotype set built and
+then failed to render; it now uses the kept formats, as the build does.
+
 **Traps met on the way** (all fixed in the tools):
 - On a machine where 127.0.0.1 has no rDNS and something listens on port 80, Showdown
   calls localhost an open proxy and locks every bot (`setup_battles.py` now declares

@@ -157,6 +157,18 @@ SCHEDULE = [
     ("2026-09-28 14:57:23", "rnb_vs_gen_trainers_ace_50ms"),
     ("2026-09-28 15:02:29", "rnb_vs_gen_trainers_cores2_50ms"),
     ("2026-09-28 15:07:14", None),
+    # gym 9 fixes through Studio-style pins, gym 9 only, 6 rounds at 50 ms (2026-09-28)
+    ("2026-09-28 15:46:22", "rnb_vs_gen_g9base_50ms"),
+    ("2026-09-28 15:48:22", "rnb_vs_gen_g9dialga_50ms"),
+    ("2026-09-28 15:51:01", "rnb_vs_gen_g9heatran_50ms"),
+    ("2026-09-28 15:53:19", "rnb_vs_gen_g9both_50ms"),
+    ("2026-09-28 15:55:52", None),
+    ("2026-09-28 16:07:58", "rnb_vs_gen_g9cel_50ms"),
+    ("2026-09-28 16:10:13", "rnb_vs_gen_g9celonly_50ms"),
+    ("2026-09-28 16:12:33", None),
+    ("2026-09-28 16:17:56", "rnb_vs_gen_g9celonly_50ms"),
+    ("2026-09-28 16:20:29", "rnb_vs_gen_g9heatran_50ms"),
+    ("2026-09-28 16:22:55", None),
 ]
 SCHED = [(time.mktime(datetime.datetime.strptime(s, "%Y-%m-%d %H:%M:%S").timetuple()), a) for s, a in SCHEDULE]
 ORDER = ["rnb_vs_gen_deckoff", "rnb_vs_gen_theme", "rnb_vs_gen_tier", "rnb_vs_gen_all",
