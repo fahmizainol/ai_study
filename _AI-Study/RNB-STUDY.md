@@ -1436,6 +1436,14 @@ Kartana 1.08). Gym 6, unchanged, went 8-4 again; gym 9 lost two games with Victi
 Dragonite. Reading: the model is on the real teams and the generator now builds it, and the
 sims cannot tell it from the installed roster. Not installed.
 
+The same two builds at 50 ms (2026-09-28, `rnb_vs_gen_cores2_50ms`, `rnb_vs_gen_breakers_50ms`,
+same teams and draw, arms interleaved per round; about 5x the search of 10 ms): installed
+60/108 (55.6%), breakers 54/107 (50.5%; one battle ended in an engine error and is not
+scored). Matched battles 20 lost / 15 won for breakers (sign test p = 0.50, difference -4.8,
+interval -18.8 to +7.8). Each build against itself across search times: installed 59 -> 60
+(p = 1.0), breakers 58 -> 54 (p = 0.58). Deeper search moves neither build, and the gap
+between them stays inside the noise, now slightly the installed build's way.
+
 **Traps met on the way** (all fixed in the tools):
 - On a machine where 127.0.0.1 has no rDNS and something listens on port 80, Showdown
   calls localhost an open proxy and locks every bot (`setup_battles.py` now declares

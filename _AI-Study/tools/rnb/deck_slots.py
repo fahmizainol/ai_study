@@ -138,6 +138,14 @@ SCHEDULE = [
     # installed, on fix2's draw (2026-09-28)
     ("2026-09-28 03:08:17", "rnb_vs_gen_breakers_10ms"),
     ("2026-09-28 03:19:14", None),
+    # the installed build and the breaking core at 50 ms, gyms only, on fix2's draw (2026-09-28)
+    ("2026-09-28 11:57:17", "rnb_vs_gen_cores2_50ms"),
+    ("2026-09-28 12:01:36", "rnb_vs_gen_breakers_50ms"),
+    ("2026-09-28 12:05:41", "rnb_vs_gen_cores2_50ms"),
+    ("2026-09-28 12:09:39", "rnb_vs_gen_breakers_50ms"),
+    ("2026-09-28 12:13:43", "rnb_vs_gen_cores2_50ms"),
+    ("2026-09-28 12:17:37", "rnb_vs_gen_breakers_50ms"),
+    ("2026-09-28 12:21:52", None),
 ]
 SCHED = [(time.mktime(datetime.datetime.strptime(s, "%Y-%m-%d %H:%M:%S").timetuple()), a) for s, a in SCHEDULE]
 ORDER = ["rnb_vs_gen_deckoff", "rnb_vs_gen_theme", "rnb_vs_gen_tier", "rnb_vs_gen_all",
