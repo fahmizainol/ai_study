@@ -22,7 +22,7 @@ reported and deduped (first wins), so both twins field the first one's team.
 
 Usage: emit_registry.py out.rb teams_boss.json teams_filler.json [...]
 """
-import json, sys, re
+import json, os, sys, re
 
 def rsym(s):
     assert re.fullmatch(r'[A-Za-z0-9_]+', s), f"unsafe symbol: {s!r}"
@@ -58,7 +58,19 @@ def emit_mon(m):
             f'{m.get("ability", 0)},{rsym(m["nature"])},'
             f'{ivs},{m.get("ev", [0]*6)}{tail}]')
 
-def main(out_path, *team_files):
+def active_curve():
+    """The level ladder the generator builds on (realidea_level_curve.json)."""
+    here = os.path.dirname(os.path.abspath(__file__))
+    with open(os.path.join(here, "..", "generated", "realidea_level_curve.json"),
+              encoding="utf-8") as fh:
+        return json.load(fh)["active_mode"]
+
+
+def main(out_path, *team_files, curve=None):
+    """`curve` is the ladder the generated teams were built on; Level_Scaling moves them
+    from it to the game's cap mode at runtime (and assumes "expert" without it), so an
+    rnb-built registry that did not say so would be raised twice."""
+    curve = curve or active_curve()
     teams = []
     for f in team_files:
         with open(f, encoding="utf-8") as team_file:
@@ -84,6 +96,8 @@ def main(out_path, *team_files):
         "TEAM_OVERRIDE_FORMATS = {}",
         "TEAM_OVERRIDES_DAT = {}",
         'TEAM_OVERRIDES_DISABLE_FILE = "Data/original_teams.txt"',
+        "# The ladder the generated overrides were built on (Level_Scaling reads it).",
+        f'TEAM_OVERRIDES_CURVE = "{curve}"',
         "",
     ]
     seen = {}

@@ -169,6 +169,20 @@ SCHEDULE = [
     ("2026-09-28 16:17:56", "rnb_vs_gen_g9celonly_50ms"),
     ("2026-09-28 16:20:29", "rnb_vs_gen_g9heatran_50ms"),
     ("2026-09-28 16:22:55", None),
+    # the rnb level curve (Studio build + gym 9 card, not installed) v the current install, 50 ms (2026-09-28)
+    ("2026-09-28 17:18:33", "rnb_vs_gen_rnbcurve_50ms"),
+    ("2026-09-28 17:22:34", "rnb_vs_gen_inst_50ms"),
+    ("2026-09-28 17:26:53", "rnb_vs_gen_trainers_rnbcurve_50ms"),
+    ("2026-09-28 17:31:45", "rnb_vs_gen_trainers_inst_50ms"),
+    ("2026-09-28 17:36:48", "rnb_vs_gen_rnbcurve_50ms"),
+    ("2026-09-28 17:41:03", "rnb_vs_gen_inst_50ms"),
+    ("2026-09-28 17:45:27", "rnb_vs_gen_trainers_rnbcurve_50ms"),
+    ("2026-09-28 17:50:20", "rnb_vs_gen_trainers_inst_50ms"),
+    ("2026-09-28 17:55:21", "rnb_vs_gen_rnbcurve_50ms"),
+    ("2026-09-28 17:59:23", "rnb_vs_gen_inst_50ms"),
+    ("2026-09-28 18:03:25", "rnb_vs_gen_trainers_rnbcurve_50ms"),
+    ("2026-09-28 18:07:58", "rnb_vs_gen_trainers_inst_50ms"),
+    ("2026-09-28 18:12:54", None),
 ]
 SCHED = [(time.mktime(datetime.datetime.strptime(s, "%Y-%m-%d %H:%M:%S").timetuple()), a) for s, a in SCHEDULE]
 ORDER = ["rnb_vs_gen_deckoff", "rnb_vs_gen_theme", "rnb_vs_gen_tier", "rnb_vs_gen_all",

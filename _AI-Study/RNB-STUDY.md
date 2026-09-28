@@ -1517,6 +1517,28 @@ nothing else changes. The companion preset holds and freezes every team (the tic
 is dropped from the snapshot, by design), and both files reload into Boss Studio exactly.
 Play copy updated (`Scripts.rxdata.pre-g9card.bak` kept).
 
+**The generator on Run & Bun's level curve** (2026-09-28, not installed; the level half of
+PLAYER-CURVE.md section 4 -- its gate changes were declined). `realidea_level_curve.json`
+`active_mode` is `rnb` (gyms 21 25 35 42 57 69 85 91 95, Champion 99) and `emit_registry.py`
+writes `TEAM_OVERRIDES_CURVE = "<curve>"` into Team_Overrides.rb (Boss Studio passes its
+level setting, which now offers rnb), so Level_Scaling does not raise rnb-built teams a
+second time; the filler and dat teams keep their original aces and are read as "original"
+either way. Every earlier arm is pinned to the expert ladder in gen_fixes.py (a new `ace`
+arm is the installed build; cores2, breakers and ace rebuild byte for byte). At the higher
+levels gyms 1-6 change a slot or two (gym 5 at 57 takes Aegislash and Mandibuzz, gym 6 at 69
+Garchomp for Swampert), gyms 7-9 keep their species, and the trainers reshuffle more (their
+levels and the Studio's cross-fight repeat tally both move).
+
+| 50 ms, fix2's draws, Studio build with gym 9's card | installed (expert) | rnb curve |
+|---|--:|--:|
+| gyms | 59/108 (54.6%) | 56/108 (51.9%) |
+| trainers | 86/120 (71.7%) | 80/120 (66.7%) |
+
+Both inside the noise (gyms p = 0.76, trainers p = 0.42). One fight collapsed: Jeremiah 2
+went 0-12 on the rnb build (10-2 installed) on a passive rebuild -- a Spikes / Taunt /
+Counter Deoxys lead, a Rest / Sleep Talk Giratina and a Substitute / Roost Moltres beside
+Mega Tyranitar; without it the rnb trainers lead 80/108 to 76/108.
+
 **Traps met on the way** (all fixed in the tools):
 - On a machine where 127.0.0.1 has no rDNS and something listens on port 80, Showdown
   calls localhost an open proxy and locks every bot (`setup_battles.py` now declares

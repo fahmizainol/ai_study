@@ -1469,7 +1469,7 @@ def defaults():
                    for f in FC.fights()],
         "plans": G.load_plans(),
         "level_mode": curve["active_mode"],
-        "level_modes": ["expert", "vanilla"],
+        "level_modes": ["expert", "vanilla", "rnb"],
         "dex": FT.dex(),
         "generations": FT.GENERATIONS,
         "tiers": SC.RANK,
@@ -2239,7 +2239,8 @@ def install_game(over, scope="all"):
                 with open(path, "w", encoding="utf-8", newline="\n") as fh:
                     json.dump(rows, fh, indent=1)
                     fh.write("\n")
-            ER.main(staged_registry, staged_teams, staged_trainers, *DISK_TEAMS)
+            ER.main(staged_registry, staged_teams, staged_trainers, *DISK_TEAMS,
+                    curve=over.get("level_mode") or ER.active_curve())
             registry_bytes = _read_bytes(staged_registry)
 
         raw, count, spans = PR.scan(GAME_BUNDLE)

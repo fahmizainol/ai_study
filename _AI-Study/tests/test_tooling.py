@@ -1186,6 +1186,12 @@ class CrossFightVarietyTest(unittest.TestCase):
                          [m["species"] for m in self.G.make_gym(3, loaded)["team"]])
 
     def test_a_taken_family_is_given_up_when_something_else_is_near_enough(self):
+        # On the expert ladder: at the rnb curve's level 42 gym 4 generates only gated
+        # picks (the one hail setter, the one enabler that fits), with nothing near
+        # enough to give either up for -- a fact about that level, not the penalty.
+        self.addCleanup(setattr, self.G, "_AY", self.G._AY)
+        self.addCleanup(setattr, self.G, "_AX", self.G._AX)
+        _, self.G._AX, self.G._AY = self.G._remap_anchors("expert")
         self.G.REPEAT_BAND = 1
         alone = self.G.make_gym(3)
         taken = self.families(alone, self.G)
