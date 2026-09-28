@@ -32,16 +32,48 @@
 # Measured across both corpora the gap is bimodal - every other fight sits at 7 or
 # below, these two at 37+ - so the cut point is not a tuned number.
 #
+# CURVE REMAP. Before the anchor is applied, every designed level L_i is moved to
+# the active cap curve at the same story point (RealideaLevelCap.remap), so L_i in
+# the formula above is the level the fight WOULD have been written at for that
+# curve. Without it a route trainer written at 45 could only reach 51 under the
+# rnb curve's 73 cap. Where a fight's levels come from decides the source ladder:
+#   the event's own party, and filler overrides that keep it   -> "original"
+#   a generated override (its ace differs from the event's)    -> TEAM_OVERRIDES_CURVE
+#                                                                 ("expert" if absent)
+#   any fight whose levels were written with `balanceo`        -> not remapped; it
+#                                                                 already tracks the party
+# `balanceo` is detected by hooking it: a call marks the next trainer built. The
+# mark is used up by that trainer, and cleared after a wild battle or a gift (the
+# other things written with `balanceo`) and at the start of every map-scene update,
+# so it cannot outlive the event step that set it. Graphics.frame_count is NOT
+# used: measured in-engine it does not advance under a frozen screen. The two
+# pinned-outlier fights above call it through createPokemon too, so they keep
+# their designed levels (the anchor still lifts them) -- the same two the outlier
+# guard exists for.
+#
+# WILD LEVELS. Data/wild_scaling.txt moves random encounters (walking, surfing,
+# fishing: PokemonEncounters#pbEncounteredPokemon) through the same remap from
+# "original". Scripted wild battles pass their level straight to pbWildBattle and
+# are not touched; the legendaries among them are written `balanceo` already.
+#
 # This section must load AFTER Team_Overrides so its aliases wrap it: the
 # override supplies the designed levels, and this clamps them.
 
 REALIDEA_LEVEL_SCALING_FILE = "Data/level_scaling.txt"
+REALIDEA_WILD_SCALING_FILE = "Data/wild_scaling.txt"
 
 module RealideaLevelScaling
   DEFAULT_LEASH = 6
+  DEFAULT_OVERRIDE_CURVE = "expert"
 
   def self.enabled?
     return File.exist?(REALIDEA_LEVEL_SCALING_FILE)
+  rescue
+    return false
+  end
+
+  def self.wild_enabled?
+    return File.exist?(REALIDEA_WILD_SCALING_FILE)
   rescue
     return false
   end
@@ -66,6 +98,58 @@ module RealideaLevelScaling
     @suspended = value
   end
 
+  # --- where a fight's levels came from --------------------------------------
+  def self.override_built?
+    return @override_built ? true : false
+  end
+
+  def self.override_built=(value)
+    @override_built = value
+  end
+
+  def self.note_balanceo
+    @balanceo_seen = true
+  end
+
+  def self.balanceo_seen?
+    return @balanceo_seen ? true : false
+  end
+
+  def self.clear_balanceo
+    @balanceo_seen = false
+  end
+
+  # The ladder the active cap mode stands on, or nil when nothing should move:
+  # no Level_Cap section, or the original rosters (uncapped vanilla play).
+  def self.target_curve
+    return nil if !defined?(RealideaLevelCap)
+    return nil if !RealideaLevelCap.edited_teams?
+    return RealideaLevelCap.mode
+  rescue
+    return nil
+  end
+
+  def self.override_curve
+    return TEAM_OVERRIDES_CURVE if defined?(TEAM_OVERRIDES_CURVE)
+    return DEFAULT_OVERRIDE_CURVE
+  end
+
+  def self.max_level(party)
+    ace = nil
+    return nil if !party
+    for pkmn in party
+      next if pkmn.nil?
+      ace = pkmn.level if ace.nil? || pkmn.level > ace
+    end
+    return ace
+  end
+
+  def self.remap_level(level, source)
+    target = target_curve
+    return level if source.nil? || target.nil?
+    return RealideaLevelCap.remap(level, source, target)
+  end
+
   def self.anchor
     return nil if !$Trainer
     party = $Trainer.party
@@ -85,34 +169,89 @@ module RealideaLevelScaling
     return levels[(levels.length - 1) / 2] + (2 * lsh)
   end
 
-  # Re-levels `party` in place. Any failure leaves it untouched.
-  def self.apply(party)
+  # Re-levels `party` in place: onto the active curve from `source` (nil = leave
+  # the designed levels), then up toward the anchor. Any failure leaves the
+  # party as the remap left it -- never weaker than designed.
+  def self.apply(party, source=nil)
     return if !enabled? || suspended?
     return if !party || party.length == 0
-    a = anchor
-    return if !a
     lsh = leash
+    # outliers are judged on the DESIGNED levels, before anything moves
     ceiling = outlier_ceiling(party, lsh)
-    ace = nil
+    members = []
     for pkmn in party
-      next if pkmn.nil? || pkmn.level > ceiling
-      ace = pkmn.level if ace.nil? || pkmn.level > ace
+      members.push(pkmn) if !pkmn.nil? && pkmn.level <= ceiling
     end
-    return if ace.nil?
-    for pkmn in party
-      next if pkmn.nil? || pkmn.level > ceiling
-      old = pkmn.level
-      new = a + (old - ace)
-      new = old if new < old                  # floor: never weaker than designed
-      new = old + lsh if new > old + lsh      # ceiling: a bounded rise
-      new = 1 if new < 1
-      new = PBExperience::MAXLEVEL if new > PBExperience::MAXLEVEL
-      next if new == old
-      pkmn.level = new    # moves @exp only
+    return if members.length == 0
+    moved = []
+    if !source.nil?
+      for pkmn in members
+        new = remap_level(pkmn.level, source)
+        next if new == pkmn.level
+        pkmn.level = new    # moves @exp only
+        moved.push(pkmn)
+      end
+    end
+    a = anchor
+    if a
+      ace = nil
+      for pkmn in members
+        ace = pkmn.level if ace.nil? || pkmn.level > ace
+      end
+      for pkmn in members
+        old = pkmn.level
+        new = a + (old - ace)
+        new = old if new < old                  # floor: never weaker than designed
+        new = old + lsh if new > old + lsh      # ceiling: a bounded rise
+        new = 1 if new < 1
+        new = PBExperience::MAXLEVEL if new > PBExperience::MAXLEVEL
+        next if new == old
+        pkmn.level = new
+        moved.push(pkmn) if !moved.include?(pkmn)
+      end
+    end
+    for pkmn in moved
       pkmn.calcStats      # stats are stale without this; it clamps @hp itself
     end
   rescue
     # a scaling failure must never cost the player a fight
+  end
+
+  # Source ladder for an inline createTrainer fight. `event_ace` is the ace of the
+  # party the event passed in, before any override swapped it.
+  def self.inline_source(event_ace, party)
+    return nil if balanceo_seen?
+    return "original" if !override_built?
+    return "original" if max_level(party) == event_ace   # filler: levels kept
+    return override_curve
+  end
+
+  # Random encounters: [species, level] from the encounter table.
+  def self.wild(encounter)
+    return encounter if !wild_enabled? || !encounter
+    level = remap_level(encounter[1], "original")
+    return encounter if level == encounter[1]
+    return [encounter[0], level] + encounter[2..-1].to_a
+  rescue
+    return encounter
+  end
+end
+
+# `balanceo` levels track the party already; remember when one was just taken.
+if defined?(balanceo)
+  alias level_scaling_orig_balanceo balanceo
+  def balanceo
+    RealideaLevelScaling.note_balanceo
+    return level_scaling_orig_balanceo
+  end
+end
+
+# A generated override replaced the event's party.
+if defined?(team_override_build)
+  alias level_scaling_orig_team_override_build team_override_build
+  def team_override_build(spec)
+    RealideaLevelScaling.override_built = true
+    return level_scaling_orig_team_override_build(spec)
   end
 end
 
@@ -121,18 +260,27 @@ end
 # opponent.party is the same array object, so re-levelling in place covers both.
 alias level_scaling_orig_createTrainer createTrainer
 def createTrainer(trainerid, trainername, party, items=[])
+  event_ace = RealideaLevelScaling.max_level(party)
+  RealideaLevelScaling.override_built = false
   result = level_scaling_orig_createTrainer(trainerid, trainername, party, items)
-  RealideaLevelScaling.apply(result[2]) if result
+  if result
+    source = RealideaLevelScaling.inline_source(event_ace, result[2])
+    RealideaLevelScaling.apply(result[2], source)
+  end
   return result
+ensure
+  RealideaLevelScaling.clear_balanceo
 end
 
 # Path 2: pbTrainerBattle / .dat fights. pbLoadTrainer returns
 # [opponent, items, party] or nil, and never assigns opponent.party — the battle
-# reads index 2, so that is the array to re-level.
+# reads index 2, so that is the array to re-level. Their levels are the game's
+# own, and so are the dat overrides' (filler keeps them), so the ladder is
+# "original" either way.
 alias level_scaling_orig_pbLoadTrainer pbLoadTrainer
 def pbLoadTrainer(trainerid, trainername, partyid=0)
   result = level_scaling_orig_pbLoadTrainer(trainerid, trainername, partyid)
-  RealideaLevelScaling.apply(result[2]) if result
+  RealideaLevelScaling.apply(result[2], "original") if result
   return result
 end
 
@@ -143,4 +291,40 @@ def pbRegisterPartner(trainerid, trainername, partyid=0)
   return level_scaling_orig_pbRegisterPartner(trainerid, trainername, partyid)
 ensure
   RealideaLevelScaling.suspended = false
+end
+
+class PokemonEncounters
+  alias level_scaling_orig_pbEncounteredPokemon pbEncounteredPokemon
+
+  def pbEncounteredPokemon(enctype, tries=1)
+    return RealideaLevelScaling.wild(level_scaling_orig_pbEncounteredPokemon(enctype, tries))
+  end
+end
+
+# The other things written with `balanceo` -- scripted wild battles and gifts --
+# must not leave a mark for the next trainer. Splat arguments: the game defines
+# pbWildBattle twice and the later (*args) one wins.
+alias level_scaling_orig_pbWildBattle pbWildBattle
+def pbWildBattle(*args)
+  RealideaLevelScaling.clear_balanceo
+  return level_scaling_orig_pbWildBattle(*args)
+ensure
+  RealideaLevelScaling.clear_balanceo
+end
+
+alias level_scaling_orig_pbAddPokemon pbAddPokemon
+def pbAddPokemon(*args)
+  return level_scaling_orig_pbAddPokemon(*args)
+ensure
+  RealideaLevelScaling.clear_balanceo
+end
+
+# Each map-scene update is a new event step: nothing marked before it counts.
+class Scene_Map
+  alias level_scaling_orig_update update
+
+  def update
+    RealideaLevelScaling.clear_balanceo
+    return level_scaling_orig_update
+  end
 end

@@ -7980,6 +7980,9 @@ module PortableAIRealidea
     LOG_FILE   = "Data/ai_foulplay_log.txt"
     BATTLE_LOG_FILE = "Data/ai_foulplay_battles.ndjson"
     DEFAULT_ITERATIONS = 5000
+    # foul_play_search_ms is capped well under @timeout below: a search that outlasts the
+    # wait is answered after the rules have already taken the turn.
+    MAX_SEARCH_MS = 2000
 
     # Live RGSS treats a long file wait as a stuck script and force-quits the game.
     # A healthy sidecar answers in milliseconds and the launcher warms it before
@@ -8140,6 +8143,16 @@ module PortableAIRealidea
       return nil if !state
       state["iterations"] = (config["foul_play_iterations"] || DEFAULT_ITERATIONS).to_i
       state["iterations"] = DEFAULT_ITERATIONS if state["iterations"] <= 0
+      # A time budget, as Foul Play itself runs, replaces the count when set. It trades
+      # away the count's one guarantee -- a paired run deciding alike on any machine --
+      # so it is for play, not for a measured arm.
+      search_ms = config["foul_play_search_ms"].to_i
+      state["search_ms"] = [search_ms, MAX_SEARCH_MS].min if search_ms > 0
+      # Foul Play's 75% band: draw among the options near the top one's visits rather
+      # than always the top one, so a player cannot learn the bot's answer to a position.
+      # Same trade as search_ms. Unset or 0 is the most-visited pick.
+      band = config["foul_play_band"].to_f
+      state["band"] = [band, 1.0].min if band > 0
       reply = exchange(state)
       if !reply
         # A sidecar that was not running does not start mid-battle, and the wait is
@@ -8173,6 +8186,9 @@ module PortableAIRealidea
           "rankings" => [ranked]
         }
       }
+      # Only when set, so a counted, most-visited decision's diagnostics are unchanged.
+      plan["diagnostics"]["search_ms"] = reply["search_ms"].to_i if reply["search_ms"]
+      plan["diagnostics"]["band"] = reply["band"].to_f if reply["band"]
       record_live_decision(battle, snapshot, plan, index)
       plan
     rescue Exception => error
@@ -8688,7 +8704,13 @@ module PortableAIRealidea
       ["foul_play_iterations", :float],
       # 0.8.3. Whether the bridge also answers forced replacements. Unset follows
       # foul_play; false is the 0.8.2 control, where replacements stay with the rules.
-      ["foul_play_replacement", :boolean]
+      ["foul_play_replacement", :boolean],
+      # After 0.8.6. Search for this many ms instead of foul_play_iterations, as Foul Play
+      # itself does; 0 or unset keeps the count. For play, not for a measured arm.
+      ["foul_play_search_ms",  :float],
+      # After 0.8.6. Draw among options with at least this share of the top one's visits
+      # (Foul Play uses 0.75); 0 or unset takes the most-visited. Play only, likewise.
+      ["foul_play_band",       :float]
     ]
 
     def self.config
