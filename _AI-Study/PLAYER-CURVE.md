@@ -88,3 +88,45 @@ pseudos off the 580-BST gate, minor legendaries from gym 2, `LEGEND_MAX` 1, box 
 for the Champion only, and Ultra Beasts and Ubers from gym 7. The user declined those
 (2026-09-28): only the level change was meant. They are recorded here as the measured
 alternative, not as pending work.
+
+## 5. Moves and held items: open, not rationed (built 2026-09-28)
+
+Run & Bun's TM / tutor / held-item tabs were placed by badge first (the drip-fed draft in
+git history, 2026-09-28). The user declined that shape: Run & Bun rations the player to
+prop up a weak AI, and Realidea's bosses run a search AI with these moves and items from
+gym 1. What shipped (`Player_Services`, switch `Data/player_services.txt`):
+
+**Realidea before:** no move tutor anywhere; 51 of 103 TMs/HMs with no source and 92
+`tm.txt` moves with no TM, so 142 of 194 TM/tutor moves unlearnable; no source for Choice
+items, Assault Vest, Focus Sash, Rocky Helmet, Muscle Band, Wise Glasses, the herbs, Eject
+Button, Red Card or any Gem. (Counts after the `extract_item_sources.py` fix, which now
+reads `if`-branch gifts and Bea's shard list: 304 -> 353 obtainable items.)
+
+**The code NPC's menu:**
+
+| entry | what it does |
+|---|---|
+| Badge rewards (N waiting) | shown only while something waits; section 2's table |
+| Teach a move | free; Pokémon -> type -> move ("Ice Beam · ICE · 90"): any `tm.dat` move it can learn (form-aware) and does not know |
+| Remember moves | the game's Move Reminder, which now also lists the line's egg moves |
+| Buy held items | three shops at own prices (PBS prices are placeholders) |
+| Enter a code | the NPC's original prompt |
+
+**Shop:** battle items (premium 8,000: Choice Band / Scarf / Specs, Life Orb, Assault
+Vest, Leftovers, Focus Sash, Weakness Policy, Expert Belt, **from 2 badges**; utility
+3,000: Rocky Helmet, Air Balloon, Eviolite, Light Clay, herbs, Eject Button, Red Card,
+lenses, weather rocks, terrain seeds, orbs...), type boosters / plates / Gems 1,000,
+berries 500 (Lum, Sitrus, pinch and resist berries). 121 items. A Rare Candy is 4,800.
+
+**Egg moves:** every stage of the line's `eggEmerald.dat` list (an incense baby and the
+stage that hatches without it both count); the Alolan Vulpix line (form 1) uses
+Showdown's gen 7 list instead of fire Vulpix's.
+
+Verified in-engine (23/23 with the rest of this doc): Weavile can be taught 59 moves
+including Knock Off; Alolan Ninetales gets Aurora Veil, fire Ninetales does not; Weavile's
+Move Reminder has Icicle Crash; the Alolan line gets Freeze-Dry and not Flare Blitz; all
+121 shop items resolve. Not verified: the menus driven by hand.
+
+Not coverable without a PBS recompile: 27 Run & Bun moves Realidea has no learner list for
+(Play Rough, Hurricane, Aura Sphere, Hydro Pump...); Heavy-Duty Boots, Room Service and
+Eject Pack are not in Realidea's item data. Realidea's Knock Off is 20 power (its move data).

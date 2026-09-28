@@ -228,7 +228,7 @@ module RealideaBadgeRewards
 
   def self.offer
     return if !enabled? || !pending?
-    Kernel.pbMessage(_INTL("By the way... I have something for you for your badges."))
+    Kernel.pbMessage(_INTL("Here's what your badges have earned you."))
     for b in pending_badges
       break if !offer_badge(b)
     end

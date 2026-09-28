@@ -6,7 +6,8 @@
 #
 # Insert before Main in a SCRATCH bundle only. Trigger: Data/curve_selftest.txt.
 # Writes Data/curve_selftest_results.txt. Expects Data/level_cap_mode.txt = rnb,
-# Data/level_scaling.txt, Data/wild_scaling.txt and Data/badge_rewards.txt present.
+# Data/level_scaling.txt, Data/wild_scaling.txt, Data/badge_rewards.txt and
+# Data/player_services.txt present.
 
 module CurveSelfTest
   TRIGGER = "Data/curve_selftest.txt"
@@ -168,6 +169,59 @@ module CurveSelfTest
       after = $game_switches[512]
       set_badges(0)
       [!before && during == true && !after, "2 badges #{before.inspect}, 3 badges #{during.inspect}, after #{after.inspect}"]
+    end
+
+    # --- Player_Services -------------------------------------------------------
+    check("player services hooks wired") do
+      want = [:player_services_orig_pbCodeMysteryGift, :player_services_orig_pbGetRelearnableMoves]
+      missing = want.reject { |m| Object.private_method_defined?(m) || Object.method_defined?(m) }
+      [missing.empty? && RealideaPlayerServices.enabled?, missing.empty? ? "both" : missing.inspect]
+    end
+    check("tutor: Weavile can be taught Knock Off, not what it knows") do
+      w = mon(:WEAVILE, 50)
+      list = RealideaPlayerServices.teachable(w)
+      ko = getConst(PBMoves, :KNOCKOFF)
+      known = w.moves.collect { |m| m.id }.select { |i| i > 0 }
+      [list.include?(ko) && (list & known).empty? && list.length > 20,
+       "#{list.length} moves; Knock Off #{list.include?(ko)}; label '#{RealideaPlayerServices.move_label(ko)}'"]
+    end
+    check("tutor: Alolan Ninetales gets Aurora Veil, fire Ninetales does not") do
+      a = mon(:NINETALES, 50); a.form = 1
+      f = mon(:NINETALES, 50)
+      av = getConst(PBMoves, :AURORAVEIL)
+      [RealideaPlayerServices.teachable(a).include?(av) && !RealideaPlayerServices.teachable(f).include?(av),
+       "alolan #{RealideaPlayerServices.teachable(a).include?(av)}, fire #{RealideaPlayerServices.teachable(f).include?(av)}"]
+    end
+    check("egg moves: Weavile has Icicle Crash in the Move Reminder") do
+      w = mon(:WEAVILE, 50)
+      ic = getConst(PBMoves, :ICICLECRASH)
+      [RealideaPlayerServices.egg_moves(w).include?(ic) && pbGetRelearnableMoves(w).include?(ic),
+       "#{RealideaPlayerServices.egg_moves(w).length} egg moves"]
+    end
+    check("egg moves: Alolan line gets Freeze-Dry, fire line does not") do
+      a = mon(:NINETALES, 50); a.form = 1
+      f = mon(:NINETALES, 50)
+      fd = getConst(PBMoves, :FREEZEDRY); fb = getConst(PBMoves, :FLAREBLITZ)
+      ea = RealideaPlayerServices.egg_moves(a); ef = RealideaPlayerServices.egg_moves(f)
+      [ea.include?(fd) && !ea.include?(fb) && ef.include?(fb) && !ef.include?(fd),
+       "alolan #{ea.length}, fire #{ef.length}"]
+    end
+    check("egg moves: Marill line reaches both stages' lists") do
+      m = mon(:AZUMARILL, 50)
+      [RealideaPlayerServices.egg_moves(m).length > 0, "#{RealideaPlayerServices.egg_moves(m).length} egg moves"]
+    end
+    check("shop: every item resolves; the gate opens at 2 badges") do
+      total = RealideaPlayerServices::PRICE.inject(0) { |t, (l, _)| t + l.length }
+      set_badges(1); early = RealideaPlayerServices.stock
+      set_badges(2); open = RealideaPlayerServices.stock
+      set_badges(0)
+      cb = getConst(PBItems, :CHOICEBAND)
+      [open.length == total && !early.collect { |r| r[0] }.include?(cb) && open.collect { |r| r[0] }.include?(cb),
+       "#{early.length} items at 1 badge, #{open.length}/#{total} at 2"]
+    end
+    check("shop: the mart takes custom prices") do
+      [$game_temp.respond_to?(:mart_prices=) && RealideaPlayerServices::SHOPS.length == 3,
+       "mart_prices= #{$game_temp.respond_to?(:mart_prices=)}, shops #{RealideaPlayerServices::SHOPS.collect { |x| x[0] }.inspect}"]
     end
 
     File.open(OUT, "wb") do |f|
