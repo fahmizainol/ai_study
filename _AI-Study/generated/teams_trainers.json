@@ -41,39 +41,6 @@
     "why": "core enabler:removal"
    },
    {
-    "species": "ALOMOMOLA",
-    "level": 36,
-    "moves": [
-     "WISH",
-     "ICYWIND",
-     "TOXIC",
-     "KNOCKOFF"
-    ],
-    "item": "LEFTOVERS",
-    "ability": 2,
-    "nature": "IMPISH",
-    "iv": 31,
-    "ev": [
-     248,
-     0,
-     252,
-     0,
-     0,
-     8
-    ],
-    "roles": [
-     "recovery",
-     "speed",
-     "status",
-     "wall"
-    ],
-    "src": "gen6ubers/dex/Kindhearted Fish",
-    "fidelity": 4,
-    "inherited": null,
-    "kept": false,
-    "why": "added:wall"
-   },
-   {
     "species": "COFAGRIGUS",
     "level": 36,
     "moves": [
@@ -137,11 +104,42 @@
     "why": "original"
    },
    {
+    "species": "AEGISLASH",
+    "level": 36,
+    "moves": [
+     "KINGSSHIELD",
+     "GYROBALL",
+     "TOXIC",
+     "PURSUIT"
+    ],
+    "item": "LEFTOVERS",
+    "ability": 0,
+    "nature": "SASSY",
+    "iv": 31,
+    "ev": [
+     252,
+     0,
+     4,
+     0,
+     0,
+     252
+    ],
+    "roles": [
+     "status",
+     "wall"
+    ],
+    "src": "gen6ubers/dex/Defensive",
+    "fidelity": 4,
+    "inherited": null,
+    "kept": false,
+    "why": "added:wall"
+   },
+   {
     "species": "MAMOSWINE",
     "level": 37,
     "moves": [
      "EARTHQUAKE",
-     "ICESHARD",
+     "ICYWIND",
      "ICICLECRASH",
      "STEALTHROCK"
     ],
@@ -159,7 +157,7 @@
     ],
     "roles": [
      "hazards",
-     "priority"
+     "speed"
     ],
     "src": "gen6ou/stats/Showdown Usage (dev set was ICEFANG/AMNESIA/ROCKTOMB/TAKEDOWN)",
     "fidelity": 4,
@@ -210,7 +208,7 @@
     "core ace: GYARADOS (mega), the heaviest power pick up to 720 BST (640)",
     "core enabler: HITMONLEE shields GYARADOS from ROCK and brings removal",
     "core breaker 2: GARDEVOIR (kept) -- nothing hits what walls GYARADOS (nothing); the next attacking set, a mutual pair",
-    "ALOMOMOLA: PROTECT -> ICYWIND, the team's speed control"
+    "MAMOSWINE: ICESHARD -> ICYWIND, the team's speed control"
    ],
    "early_moves": true,
    "preset": "teams_bosses_gyms"
@@ -335,6 +333,43 @@
     "design_level": 19
    },
    {
+    "species": "ALOMOMOLA",
+    "level": [
+     "balanceo",
+     1
+    ],
+    "moves": [
+     "WISH",
+     "PROTECT",
+     "TOXIC",
+     "KNOCKOFF"
+    ],
+    "item": "LEFTOVERS",
+    "ability": 2,
+    "nature": "IMPISH",
+    "iv": 31,
+    "ev": [
+     248,
+     0,
+     252,
+     0,
+     0,
+     8
+    ],
+    "roles": [
+     "protect",
+     "recovery",
+     "status",
+     "wall"
+    ],
+    "src": "gen6ubers/dex/Kindhearted Fish",
+    "fidelity": 4,
+    "inherited": null,
+    "kept": false,
+    "why": "added:wall",
+    "design_level": 19
+   },
+   {
     "species": "PASSIMIAN",
     "level": [
      "balanceo",
@@ -366,43 +401,6 @@
     "inherited": null,
     "kept": false,
     "why": "core breaker 2:pivot",
-    "design_level": 19
-   },
-   {
-    "species": "MILTANK",
-    "level": [
-     "balanceo",
-     1
-    ],
-    "moves": [
-     "MILKDRINK",
-     "TOXIC",
-     "STEALTHROCK",
-     "DIZZYPUNCH"
-    ],
-    "item": "LEFTOVERS",
-    "ability": 2,
-    "nature": "IMPISH",
-    "iv": 31,
-    "ev": [
-     252,
-     0,
-     240,
-     16,
-     0,
-     0
-    ],
-    "roles": [
-     "hazards",
-     "recovery",
-     "status",
-     "wall"
-    ],
-    "src": "gen6nu/dex/Physically Defensive",
-    "fidelity": 3,
-    "inherited": null,
-    "kept": false,
-    "why": "added:wall",
     "design_level": 19
    },
    {

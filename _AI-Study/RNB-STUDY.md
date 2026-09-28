@@ -1509,6 +1509,14 @@ Metagross too (0.50 -> 1.12 KOs). Found on the way: Boss Studio rendered a card'
 only from the generated picks' formats, so a pinned mon named with a monotype set built and
 then failed to render; it now uses the kept formats, as the build does.
 
+Installed (2026-09-28): the ace build with gym 9's card ticking Celesteela
+(`install_game({"PICKS": {"g8": {"keep": {"CELESTEELA": true}}}}, "all")`). Gym 9 is
+Toxapex, Empoleon, Celesteela, Registeel, Magearna, Mega Metagross; Jeremiah 1 (Aegislash
+for Alomomola) and Camus (Alomomola for Miltank) move by one through the repeat tally;
+nothing else changes. The companion preset holds and freezes every team (the tick itself
+is dropped from the snapshot, by design), and both files reload into Boss Studio exactly.
+Play copy updated (`Scripts.rxdata.pre-g9card.bak` kept).
+
 **Traps met on the way** (all fixed in the tools):
 - On a machine where 127.0.0.1 has no rDNS and something listens on port 80, Showdown
   calls localhost an open proxy and locks every bot (`setup_battles.py` now declares

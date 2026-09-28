@@ -1,7 +1,7 @@
 {
  "name": "teams_bosses_gyms",
  "note": "companion snapshot written by Install",
- "saved": "2026-09-28T15:29:10",
+ "saved": "2026-09-28T16:41:37",
  "settings": {
   "FROZEN": {
    "g0": true,
@@ -2165,24 +2165,26 @@
     "level": 61,
     "mode": null,
     "notes": [
+     "dropped SKARMORY \u2014 a pin took its slot",
      "dropped AGGRON -- measured: 0.25 KOs and 31% dealt a battle over 96 battles",
      "dropped STEELIX -- measured: 0.20 KOs and 26% dealt a battle over 96 battles",
      "dropped EMPOLEON (530 BST, band 550-650)",
      "dropped AEGISLASH (520 BST, band 550-650)",
      "dropped BISHARP (490 BST, band 550-650)",
-     "dropped SKARMORY (465 BST, band 550-650)",
      "core ace: METAGROSS (mega), the heaviest power pick up to 720 BST (700)",
      "core enabler: MAGEARNA shields METAGROSS from DARK and brings pivot",
-     "core breaker 2: CELEBI (off-theme) hits STEEL, which wall METAGROSS, a mutual pair"
+     "core breaker 2: skipped, 3 slot(s) left for wall/removal/hazards (and the off-theme cover)",
+     "TOXAPEX off-theme: resists FIGHTING/FIRE"
     ],
     "roles": {
      "hazards": 1,
      "mega": 1,
      "pivot": 1,
+     "protect": 1,
      "recovery": 1,
      "removal": 1,
-     "setup": 1,
-     "status": 1,
+     "speed": 1,
+     "status": 2,
      "wall": 2
     },
     "target": 600,
@@ -2190,63 +2192,93 @@
      {
       "ability": 2,
       "ev": [
-       0,
        252,
        0,
-       252,
+       4,
        0,
-       4
+       0,
+       252
       ],
       "fidelity": 4,
       "inherited": null,
-      "item": "CHOICESCARF",
+      "item": "BLACKSLUDGE",
       "iv": 31,
       "kept": false,
       "level": 60,
       "moves": [
-       "ROCKSLIDE",
-       "RAPIDSPIN",
-       "EARTHQUAKE",
-       "IRONHEAD"
+       "RECOVER",
+       "SCALD",
+       "HAZE",
+       "TOXIC"
       ],
-      "nature": "JOLLY",
+      "nature": "CALM",
+      "roles": [
+       "recovery",
+       "status",
+       "wall"
+      ],
+      "species": "TOXAPEX",
+      "src": "gen7ou/stats/Showdown Usage",
+      "why": "off-theme"
+     },
+     {
+      "ability": 0,
+      "ev": [
+       212,
+       0,
+       0,
+       44,
+       252,
+       0
+      ],
+      "fidelity": 4,
+      "inherited": null,
+      "item": "SHUCABERRY",
+      "iv": 31,
+      "kept": false,
+      "level": 60,
+      "moves": [
+       "DEFOG",
+       "HYDROPUMP",
+       "ICEBEAM",
+       "GRASSKNOT"
+      ],
+      "nature": "MODEST",
       "roles": [
        "removal"
       ],
-      "species": "EXCADRILL",
-      "src": "gen6ou/dex/Choice Scarf",
+      "species": "EMPOLEON",
+      "src": "gen6uu/dex/Offensive Defog",
       "why": "theme:removal"
      },
      {
       "ability": 0,
       "ev": [
+       0,
+       0,
+       0,
        252,
-       0,
-       4,
-       0,
-       0,
-       252
+       252,
+       4
       ],
       "fidelity": 4,
       "inherited": null,
-      "item": "LEFTOVERS",
+      "item": "METRONOME",
       "iv": 31,
-      "kept": false,
+      "kept": true,
       "level": 60,
       "moves": [
-       "KINGSSHIELD",
-       "GYROBALL",
-       "TOXIC",
-       "PURSUIT"
+       "AUTOTOMIZE",
+       "AIRSLASH",
+       "FLASHCANNON",
+       "FLAMETHROWER"
       ],
-      "nature": "SASSY",
-      "roles": [
-       "status",
-       "wall"
-      ],
-      "species": "AEGISLASH",
-      "src": "gen6ubers/dex/Defensive",
-      "why": "theme:wall"
+      "nature": "TIMID",
+      "pinned": true,
+      "roles": [],
+      "species": "CELESTEELA",
+      "src": "gen7monotype/dex/Autotomize Sweeper (Flying)",
+      "why": "pinned on the card"
      },
      {
       "ability": 0,
@@ -2265,19 +2297,21 @@
       "kept": false,
       "level": 60,
       "moves": [
-       "CURSE",
+       "STEALTHROCK",
+       "THUNDERWAVE",
        "IRONHEAD",
-       "REST",
-       "SLEEPTALK"
+       "PROTECT"
       ],
       "nature": "CAREFUL",
       "roles": [
-       "recovery",
-       "setup",
+       "hazards",
+       "protect",
+       "speed",
+       "status",
        "wall"
       ],
       "species": "REGISTEEL",
-      "src": "gen6ru/dex/Curse",
+      "src": "gen6uu/dex/Specially Defensive",
       "why": "theme:wall"
      },
      {
@@ -2309,36 +2343,6 @@
       "species": "MAGEARNA",
       "src": "gen7ou/stats/Showdown Usage",
       "why": "core enabler:pivot"
-     },
-     {
-      "ability": 0,
-      "ev": [
-       0,
-       0,
-       0,
-       252,
-       252,
-       4
-      ],
-      "fidelity": 4,
-      "inherited": null,
-      "item": "LIFEORB",
-      "iv": 31,
-      "kept": false,
-      "level": 60,
-      "moves": [
-       "STEALTHROCK",
-       "LEAFSTORM",
-       "PSYCHIC",
-       "EARTHPOWER"
-      ],
-      "nature": "TIMID",
-      "roles": [
-       "hazards"
-      ],
-      "species": "CELEBI",
-      "src": "gen6uu/dex/Offensive Stealth Rock",
-      "why": "core breaker 2:hazards"
      },
      {
       "ability": 0,
@@ -2446,15 +2450,14 @@
      "core ace: GYARADOS (mega), the heaviest power pick up to 720 BST (640)",
      "core enabler: HITMONLEE shields GYARADOS from ROCK and brings removal",
      "core breaker 2: GARDEVOIR (kept) -- nothing hits what walls GYARADOS (nothing); the next attacking set, a mutual pair",
-     "ALOMOMOLA: PROTECT -> ICYWIND, the team's speed control"
+     "MAMOSWINE: ICESHARD -> ICYWIND, the team's speed control"
     ],
     "roles": {
      "disrupt": 1,
      "hazards": 1,
      "mega": 1,
-     "priority": 2,
+     "priority": 1,
      "protect": 1,
-     "recovery": 1,
      "removal": 1,
      "setup": 2,
      "speed": 1,
@@ -2494,39 +2497,6 @@
       "species": "HITMONLEE",
       "src": "gen6uu/dex/Wallbreaker",
       "why": "core enabler:removal"
-     },
-     {
-      "ability": 2,
-      "ev": [
-       248,
-       0,
-       252,
-       0,
-       0,
-       8
-      ],
-      "fidelity": 4,
-      "inherited": null,
-      "item": "LEFTOVERS",
-      "iv": 31,
-      "kept": false,
-      "level": 36,
-      "moves": [
-       "WISH",
-       "ICYWIND",
-       "TOXIC",
-       "KNOCKOFF"
-      ],
-      "nature": "IMPISH",
-      "roles": [
-       "recovery",
-       "speed",
-       "status",
-       "wall"
-      ],
-      "species": "ALOMOMOLA",
-      "src": "gen6ubers/dex/Kindhearted Fish",
-      "why": "added:wall"
      },
      {
       "ability": 0,
@@ -2592,6 +2562,37 @@
       "why": "original"
      },
      {
+      "ability": 0,
+      "ev": [
+       252,
+       0,
+       4,
+       0,
+       0,
+       252
+      ],
+      "fidelity": 4,
+      "inherited": null,
+      "item": "LEFTOVERS",
+      "iv": 31,
+      "kept": false,
+      "level": 36,
+      "moves": [
+       "KINGSSHIELD",
+       "GYROBALL",
+       "TOXIC",
+       "PURSUIT"
+      ],
+      "nature": "SASSY",
+      "roles": [
+       "status",
+       "wall"
+      ],
+      "species": "AEGISLASH",
+      "src": "gen6ubers/dex/Defensive",
+      "why": "added:wall"
+     },
+     {
       "ability": 2,
       "ev": [
        0,
@@ -2609,7 +2610,7 @@
       "level": 37,
       "moves": [
        "EARTHQUAKE",
-       "ICESHARD",
+       "ICYWIND",
        "ICICLECRASH",
        "STEALTHROCK"
       ],
@@ -2617,7 +2618,7 @@
       "pinned": false,
       "roles": [
        "hazards",
-       "priority"
+       "speed"
       ],
       "species": "MAMOSWINE",
       "src": "gen6ou/stats/Showdown Usage (dev set was ICEFANG/AMNESIA/ROCKTOMB/TAKEDOWN)",
@@ -2706,10 +2707,10 @@
      "levels stay dynamic (balanceo+1); band read from own map -> level 14, gym 1"
     ],
     "roles": {
-     "hazards": 2,
+     "hazards": 1,
      "phaze": 1,
      "pivot": 3,
-     "protect": 1,
+     "protect": 2,
      "recovery": 3,
      "removal": 1,
      "setup": 1,
@@ -2831,6 +2832,43 @@
       "ability": 2,
       "design_level": 19,
       "ev": [
+       248,
+       0,
+       252,
+       0,
+       0,
+       8
+      ],
+      "fidelity": 4,
+      "inherited": null,
+      "item": "LEFTOVERS",
+      "iv": 31,
+      "kept": false,
+      "level": [
+       "balanceo",
+       1
+      ],
+      "moves": [
+       "WISH",
+       "PROTECT",
+       "TOXIC",
+       "KNOCKOFF"
+      ],
+      "nature": "IMPISH",
+      "roles": [
+       "protect",
+       "recovery",
+       "status",
+       "wall"
+      ],
+      "species": "ALOMOMOLA",
+      "src": "gen6ubers/dex/Kindhearted Fish",
+      "why": "added:wall"
+     },
+     {
+      "ability": 2,
+      "design_level": 19,
+      "ev": [
        0,
        252,
        4,
@@ -2860,43 +2898,6 @@
       "species": "PASSIMIAN",
       "src": "gen7ru/dex/Choice Band",
       "why": "core breaker 2:pivot"
-     },
-     {
-      "ability": 2,
-      "design_level": 19,
-      "ev": [
-       252,
-       0,
-       240,
-       16,
-       0,
-       0
-      ],
-      "fidelity": 3,
-      "inherited": null,
-      "item": "LEFTOVERS",
-      "iv": 31,
-      "kept": false,
-      "level": [
-       "balanceo",
-       1
-      ],
-      "moves": [
-       "MILKDRINK",
-       "TOXIC",
-       "STEALTHROCK",
-       "DIZZYPUNCH"
-      ],
-      "nature": "IMPISH",
-      "roles": [
-       "hazards",
-       "recovery",
-       "status",
-       "wall"
-      ],
-      "species": "MILTANK",
-      "src": "gen6nu/dex/Physically Defensive",
-      "why": "added:wall"
      },
      {
       "ability": 0,
@@ -7079,7 +7080,11 @@
     ]
    }
   },
-  "PICKS": {}
+  "PICKS": {
+   "g8": {
+    "keep": {}
+   }
+  }
  },
- "sha": "0afd2fa85f9e"
+ "sha": "641c45146477"
 }

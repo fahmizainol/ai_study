@@ -1737,47 +1737,17 @@
   "trainer_items": [],
   "mons": [
    {
-    "species": "EXCADRILL",
+    "species": "TOXAPEX",
     "level": 60,
     "moves": [
-     "ROCKSLIDE",
-     "RAPIDSPIN",
-     "EARTHQUAKE",
-     "IRONHEAD"
+     "RECOVER",
+     "SCALD",
+     "HAZE",
+     "TOXIC"
     ],
-    "item": "CHOICESCARF",
+    "item": "BLACKSLUDGE",
     "ability": 2,
-    "nature": "JOLLY",
-    "iv": 31,
-    "ev": [
-     0,
-     252,
-     0,
-     252,
-     0,
-     4
-    ],
-    "roles": [
-     "removal"
-    ],
-    "src": "gen6ou/dex/Choice Scarf",
-    "fidelity": 4,
-    "inherited": null,
-    "kept": false,
-    "why": "theme:removal"
-   },
-   {
-    "species": "AEGISLASH",
-    "level": 60,
-    "moves": [
-     "KINGSSHIELD",
-     "GYROBALL",
-     "TOXIC",
-     "PURSUIT"
-    ],
-    "item": "LEFTOVERS",
-    "ability": 0,
-    "nature": "SASSY",
+    "nature": "CALM",
     "iv": 31,
     "ev": [
      252,
@@ -1788,23 +1758,83 @@
      252
     ],
     "roles": [
+     "recovery",
      "status",
      "wall"
     ],
-    "src": "gen6ubers/dex/Defensive",
+    "src": "gen7ou/stats/Showdown Usage",
     "fidelity": 4,
     "inherited": null,
     "kept": false,
-    "why": "theme:wall"
+    "why": "off-theme"
+   },
+   {
+    "species": "EMPOLEON",
+    "level": 60,
+    "moves": [
+     "DEFOG",
+     "HYDROPUMP",
+     "ICEBEAM",
+     "GRASSKNOT"
+    ],
+    "item": "SHUCABERRY",
+    "ability": 0,
+    "nature": "MODEST",
+    "iv": 31,
+    "ev": [
+     212,
+     0,
+     0,
+     44,
+     252,
+     0
+    ],
+    "roles": [
+     "removal"
+    ],
+    "src": "gen6uu/dex/Offensive Defog",
+    "fidelity": 4,
+    "inherited": null,
+    "kept": false,
+    "why": "theme:removal"
+   },
+   {
+    "species": "CELESTEELA",
+    "level": 60,
+    "moves": [
+     "AUTOTOMIZE",
+     "AIRSLASH",
+     "FLASHCANNON",
+     "FLAMETHROWER"
+    ],
+    "item": "METRONOME",
+    "ability": 0,
+    "nature": "TIMID",
+    "iv": 31,
+    "ev": [
+     0,
+     0,
+     0,
+     252,
+     252,
+     4
+    ],
+    "roles": [],
+    "src": "gen7monotype/dex/Autotomize Sweeper (Flying)",
+    "fidelity": 4,
+    "inherited": null,
+    "pinned": true,
+    "kept": true,
+    "why": "pinned on the card"
    },
    {
     "species": "REGISTEEL",
     "level": 60,
     "moves": [
-     "CURSE",
+     "STEALTHROCK",
+     "THUNDERWAVE",
      "IRONHEAD",
-     "REST",
-     "SLEEPTALK"
+     "PROTECT"
     ],
     "item": "LEFTOVERS",
     "ability": 0,
@@ -1819,11 +1849,13 @@
      252
     ],
     "roles": [
-     "recovery",
-     "setup",
+     "hazards",
+     "protect",
+     "speed",
+     "status",
      "wall"
     ],
-    "src": "gen6ru/dex/Curse",
+    "src": "gen6uu/dex/Specially Defensive",
     "fidelity": 4,
     "inherited": null,
     "kept": false,
@@ -1858,36 +1890,6 @@
     "inherited": null,
     "kept": false,
     "why": "core enabler:pivot"
-   },
-   {
-    "species": "CELEBI",
-    "level": 60,
-    "moves": [
-     "STEALTHROCK",
-     "LEAFSTORM",
-     "PSYCHIC",
-     "EARTHPOWER"
-    ],
-    "item": "LIFEORB",
-    "ability": 0,
-    "nature": "TIMID",
-    "iv": 31,
-    "ev": [
-     0,
-     0,
-     0,
-     252,
-     252,
-     4
-    ],
-    "roles": [
-     "hazards"
-    ],
-    "src": "gen6uu/dex/Offensive Stealth Rock",
-    "fidelity": 4,
-    "inherited": null,
-    "kept": false,
-    "why": "core breaker 2:hazards"
    },
    {
     "species": "METAGROSS",
@@ -1925,15 +1927,16 @@
    "level": 61,
    "theme": "STEEL",
    "notes": [
+    "dropped SKARMORY \u2014 a pin took its slot",
     "dropped AGGRON -- measured: 0.25 KOs and 31% dealt a battle over 96 battles",
     "dropped STEELIX -- measured: 0.20 KOs and 26% dealt a battle over 96 battles",
     "dropped EMPOLEON (530 BST, band 550-650)",
     "dropped AEGISLASH (520 BST, band 550-650)",
     "dropped BISHARP (490 BST, band 550-650)",
-    "dropped SKARMORY (465 BST, band 550-650)",
     "core ace: METAGROSS (mega), the heaviest power pick up to 720 BST (700)",
     "core enabler: MAGEARNA shields METAGROSS from DARK and brings pivot",
-    "core breaker 2: CELEBI (off-theme) hits STEEL, which wall METAGROSS, a mutual pair"
+    "core breaker 2: skipped, 3 slot(s) left for wall/removal/hazards (and the off-theme cover)",
+    "TOXAPEX off-theme: resists FIGHTING/FIRE"
    ],
    "early_moves": true,
    "preset": "teams_bosses_gyms"
