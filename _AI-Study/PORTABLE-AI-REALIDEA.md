@@ -3167,9 +3167,11 @@ Copy that folder into the game as `FoulPlay/`. The adapter's boot check then cal
 it is measured at 146 ms. The player just runs `Game.exe`. The sidecar gets
 `--parent-pid` and exits within a heartbeat (1 s) of the game, whether the game closes
 normally or is killed. A lock on `Data/ai_foulplay_sidecar.lock` makes a second sidecar
-for the same game step aside, which replaces the `.bat`'s `pkill`. Without `FoulPlay/`,
-everything is exactly as before: the `.bat` and the WSL sidecar still work, and the refusal
-dialog still names the `.bat`.
+for the same game step aside, which replaces the `.bat`'s `pkill`. **`Play with Foul
+Play.bat` was then deleted** (2026-09-28). Without `FoulPlay/`, the refusal dialog now
+names the missing folder. The study's WSL sidecar (`tools/foul_play_sidecar.bat`,
+started before `Game.exe`) still works, because the adapter accepts any sidecar that
+keeps the ready marker fresh.
 
 **Live play only.** `launch_sidecar` returns false under `$PORTABLE_AI_CONFIG` (the same
 test `fall_back` uses), so a gauntlet worker copied from a game that ships the exe cannot

@@ -2881,8 +2881,8 @@ module PortableAIRealidea
       fix = if sidecar_shipped?
               "To play against the search, quit and start the game again."
             else
-              "To play against the search, quit and start the game with " \
-              "\"Play with Foul Play.bat\"."
+              "The FoulPlay folder is missing from the game folder. Restore it " \
+              "(git pull, or unpack the game again) to play against the search."
             end
       print("The Foul Play search is unavailable: #{reason}.\n\n" \
             "This trainer is using the backup rule AI. The reason is logged to " \
@@ -3792,8 +3792,12 @@ begin
         "The Foul Play search could not start, so the game will not start.\n\n" \
         "The reason is in Data/ai_foulplay_log.txt."
       else
+        # The launcher .bat is gone (the game starts the shipped exe itself), so the
+        # one fix left is the missing folder. The study's tools/foul_play_sidecar.bat
+        # still serves a copy without it, and satisfies ready? before this is reached.
         "The Foul Play search is NOT running, so the game will not start.\n\n" \
-        "Start it with \"Play with Foul Play.bat\" instead of Game.exe."
+        "The FoulPlay folder is missing from the game folder. Restore it " \
+        "(git pull, or unpack the game again)."
       end
   end
 rescue Exception
