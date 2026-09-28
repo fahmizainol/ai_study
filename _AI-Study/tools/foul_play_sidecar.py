@@ -42,6 +42,10 @@ import time
 from pathlib import Path
 
 STUDY = Path(__file__).resolve().parents[1]
+# Frozen into foul_play_sidecar.exe (tools/build_sidecar_exe.sh), there is no study
+# beside us: the id list travels inside the bundle, at the same relative path.
+if getattr(sys, "frozen", False):
+    STUDY = Path(sys._MEIPASS)
 IDS_FILE = STUDY / "generated" / "poke_engine_ids_gen6.json"
 
 STATE_NAME = "ai_foulplay_state.json"
@@ -584,19 +588,86 @@ def beat(ready_path):
         write_atomic(ready_path, f"pid={os.getpid()}\n")
 
 
-def serve(game_dir, iterations, check, keep_states=None, poll=0.004, search_ms=None, band=None):
+def parent_watch(pid):
+    """A callable answering "is the process that started us still running?".
+
+    The game starts the frozen sidecar itself (FoulPlay.launch_sidecar) and cannot stop
+    it: RGSS has no exit hook that survives a closed window or a crash. So the sidecar
+    outlives nothing -- it polls the game's pid and leaves when the game has.
+
+    Not os.kill(pid, 0) on Windows: there, any signal other than CTRL_C/CTRL_BREAK is
+    TerminateProcess, so the liveness probe would kill the game it is asking about.
+    """
+    if pid is None:
+        return lambda: True
+    if os.name == "nt":
+        import ctypes
+        kernel32 = ctypes.windll.kernel32
+        handle = kernel32.OpenProcess(0x00100000, False, pid)  # SYNCHRONIZE
+        if not handle:
+            return lambda: False
+        return lambda: kernel32.WaitForSingleObject(handle, 0) != 0  # 0 = WAIT_OBJECT_0, exited
+
+    def alive():
+        try:
+            os.kill(pid, 0)
+        except ProcessLookupError:
+            return False
+        except PermissionError:
+            pass
+        return True
+    return alive
+
+
+def hold_lock(data_dir):
+    """Take Data/ai_foulplay_sidecar.lock, or return None if another sidecar holds it.
+
+    Two sidecars on one game answer the same state file and their replies cross. The
+    .bat cleared a leftover with pkill; a game that starts its own sidecar instead has
+    to make the second one step aside, and a lock the OS drops with the process cannot
+    go stale the way a pid file does.
+    """
+    handle = open(data_dir / "ai_foulplay_sidecar.lock", "a+")
+    try:
+        if os.name == "nt":
+            import msvcrt
+            handle.seek(0)
+            msvcrt.locking(handle.fileno(), msvcrt.LK_NBLCK, 1)
+        else:
+            import fcntl
+            fcntl.flock(handle.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
+    except OSError:
+        handle.close()
+        return None
+    return handle
+
+
+def serve(game_dir, iterations, check, keep_states=None, poll=0.004, search_ms=None, band=None,
+          parent_pid=None):
     data_dir = Path(game_dir) / "Data"
     state_path = data_dir / STATE_NAME
     reply_path = data_dir / REPLY_NAME
     ready_path = data_dir / READY_NAME
+    lock = hold_lock(data_dir)
+    if lock is None:
+        # Not an error: the one already running is serving this game correctly. Leave
+        # its marker alone -- clearing it below would blind the adapter to a live sidecar.
+        print(f"another sidecar is already serving {data_dir}", flush=True)
+        return
     # Before the build check, not after it. This clears any marker a previous session
     # left behind, so a sidecar that refuses to start (a stale engine below, a missing
     # id list) leaves the adapter seeing no marker at all rather than the last run's --
     # which is the difference between the next battle falling to the rules instantly
     # and with a log line, or doing it after a 3 s stall on every single battle.
     clear_marker(ready_path)
-    check_engine_build()
-    ids = load_ids()
+    try:
+        check_engine_build()
+        ids = load_ids()
+    except BaseException as error:
+        # The frozen exe has no console, so a refusal printed here reaches nobody. The
+        # log is the one place the game's own fallback alert points the player at.
+        log(data_dir, f"sidecar refused to start: {error}")
+        raise
     if keep_states:
         Path(keep_states).mkdir(parents=True, exist_ok=True)
     # pkill (how the launcher stops us) sends SIGTERM, whose default handler exits
@@ -610,13 +681,14 @@ def serve(game_dir, iterations, check, keep_states=None, poll=0.004, search_ms=N
     signal.signal(signal.SIGINT, stop)
     try:
         serve_loop(data_dir, state_path, reply_path, ready_path, ids, iterations,
-                   check, keep_states, poll, search_ms, band)
+                   check, keep_states, poll, search_ms, band, parent_watch(parent_pid))
     finally:
         clear_marker(ready_path)
+        lock.close()
 
 
 def serve_loop(data_dir, state_path, reply_path, ready_path, ids, iterations,
-               check, keep_states, poll, search_ms=None, band=None):
+               check, keep_states, poll, search_ms=None, band=None, parent_alive=lambda: True):
     # The adapter checks this before handing over a turn. It makes a failed launcher
     # an immediate rules fallback instead of blocking the RGSS game loop.
     write_atomic(ready_path, f"pid={os.getpid()}\n")
@@ -626,6 +698,9 @@ def serve_loop(data_dir, state_path, reply_path, ready_path, ids, iterations,
     while True:
         now = time.time()
         if now - last_beat >= HEARTBEAT_SECONDS:
+            if not parent_alive():
+                print("the game has exited; stopping", flush=True)
+                return
             beat(ready_path)
             last_beat = now
         if not state_path.exists():
@@ -687,6 +762,8 @@ def main(argv=None):
     parser.add_argument("--check", action="store_true", help="also write the damage comparison")
     parser.add_argument("--extract-ids", metavar="CLONE", help="rebuild the id list from a poke-engine clone")
     parser.add_argument("--keep-states", metavar="DIR", help="save every exported state under DIR (serve mode)")
+    parser.add_argument("--parent-pid", type=int,
+                        help="stop serving once this process (the game) has exited")
     parser.add_argument("--check-engine", action="store_true",
                         help="exit 0 if the installed poke_engine matches this sidecar, "
                              f"{STALE_ENGINE_EXIT} if it is out of date and needs rebuilding")
@@ -727,7 +804,7 @@ def main(argv=None):
     if not args.game:
         parser.error("--game or --once is required")
     serve(args.game, args.iterations, args.check, args.keep_states, search_ms=args.search_ms,
-          band=args.band)
+          band=args.band, parent_pid=args.parent_pid)
     return 0
 
 

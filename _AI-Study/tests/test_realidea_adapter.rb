@@ -2313,6 +2313,92 @@ class PortableAIRealideaAdapterTest < Test::Unit::TestCase
     end
   end
 
+  # ---- the shipped sidecar the game starts itself ------------------------------
+
+  def test_launch_sidecar_starts_the_shipped_exe_in_live_play_and_waits_for_it
+    $PORTABLE_AI_CONFIG = nil
+    fp = PortableAIRealidea::FoulPlay
+    fp.instance_variable_set(:@launches, 0)
+    Dir.chdir(foul_play_scratch) do
+      Dir.mkdir("Data") if !File.exist?("Data")
+      Dir.mkdir("FoulPlay") if !File.exist?("FoulPlay")
+      File.delete(fp::READY_FILE) if File.exist?(fp::READY_FILE)
+      # A stand-in exe: publish the marker the way the real one does, after its args.
+      File.open(fp::SIDECAR_EXE, "wb") do |file|
+        file.write("#!/bin/sh\n[ \"$1\" = --game ] && [ \"$3\" = --parent-pid ] && echo pid=$4 > Data/ai_foulplay_ready.txt\n")
+      end
+      File.chmod(0755, fp::SIDECAR_EXE)
+      assert(fp.launch_sidecar, "the shipped exe is started and waited for")
+      assert_equal("pid=#{Process.pid}", File.read(fp::READY_FILE).strip,
+                   "the sidecar is told which process to outlive")
+      assert_equal(1, fp.instance_variable_get(:@launches))
+      assert(fp.launch_sidecar)
+      assert_equal(1, fp.instance_variable_get(:@launches), "a serving sidecar is not started twice")
+    end
+  ensure
+    fp.instance_variable_set(:@launches, 0)
+    Dir.chdir(foul_play_scratch) do
+      File.delete(fp::READY_FILE) if File.exist?(fp::READY_FILE)
+      File.delete(fp::SIDECAR_EXE) if File.exist?(fp::SIDECAR_EXE)
+    end
+  end
+
+  def test_utf16le_matches_rubys_own_encoder
+    ["open", "C:\\Games\\Realidea V4.1\\FoulPlay\\foul_play_sidecar.exe",
+     "C:/Jeux/Pokémon Réalidea", "ゲーム", "save \u{1F600}\0"].each do |text|
+      assert_equal(text.encode("UTF-16LE").b, PortableAIRealidea::FoulPlay.utf16le(text).b, text)
+    end
+  end
+
+  def test_launch_sidecar_never_starts_one_inside_a_measured_run
+    fp = PortableAIRealidea::FoulPlay
+    fp.instance_variable_set(:@launches, 0)
+    $PORTABLE_AI_CONFIG = { "foul_play" => true }
+    Dir.chdir(foul_play_scratch) do
+      Dir.mkdir("FoulPlay") if !File.exist?("FoulPlay")
+      File.delete(fp::READY_FILE) if File.exist?(fp::READY_FILE)
+      File.open(fp::SIDECAR_EXE, "wb") { |file| file.write("#!/bin/sh\necho x > Data/ai_foulplay_ready.txt\n") }
+      File.chmod(0755, fp::SIDECAR_EXE)
+      assert(!fp.launch_sidecar)
+      assert_equal(0, fp.instance_variable_get(:@launches))
+      $PORTABLE_AI_CONFIG = nil
+      File.delete(fp::SIDECAR_EXE)
+      assert(!fp.launch_sidecar, "without the exe this is exactly ready?")
+      assert_equal(0, fp.instance_variable_get(:@launches))
+    end
+  ensure
+    $PORTABLE_AI_CONFIG = nil
+    Dir.chdir(foul_play_scratch) do
+      File.delete(fp::SIDECAR_EXE) if File.exist?(fp::SIDECAR_EXE)
+    end
+  end
+
+  def test_launch_sidecar_gives_up_after_max_launches
+    $PORTABLE_AI_CONFIG = nil
+    fp = PortableAIRealidea::FoulPlay
+    fp.instance_variable_set(:@launches, 0)
+    wait = fp::LAUNCH_WAIT
+    fp.send(:remove_const, :LAUNCH_WAIT)
+    fp.const_set(:LAUNCH_WAIT, 0.05)
+    Dir.chdir(foul_play_scratch) do
+      Dir.mkdir("FoulPlay") if !File.exist?("FoulPlay")
+      File.delete(fp::READY_FILE) if File.exist?(fp::READY_FILE)
+      File.open(fp::SIDECAR_EXE, "wb") { |file| file.write("#!/bin/sh\nexit 1\n") }
+      File.chmod(0755, fp::SIDECAR_EXE)
+      (fp::MAX_LAUNCHES + 2).times { assert(!fp.launch_sidecar) }
+      assert_equal(fp::MAX_LAUNCHES, fp.instance_variable_get(:@launches),
+                   "a sidecar that dies on start is not retried every battle")
+      assert_match(/not ready after/, File.read(fp::LOG_FILE))
+    end
+  ensure
+    fp.send(:remove_const, :LAUNCH_WAIT)
+    fp.const_set(:LAUNCH_WAIT, wait)
+    fp.instance_variable_set(:@launches, 0)
+    Dir.chdir(foul_play_scratch) do
+      File.delete(fp::SIDECAR_EXE) if File.exist?(fp::SIDECAR_EXE)
+    end
+  end
+
   # ---- 0.8.1 live play ----------------------------------------------------------
 
   def test_live_overrides_come_from_the_harness_file_only_when_the_marker_is_present

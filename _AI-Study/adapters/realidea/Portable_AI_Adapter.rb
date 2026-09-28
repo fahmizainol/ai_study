@@ -2774,6 +2774,87 @@ module PortableAIRealidea
       false
     end
 
+    # The frozen Windows sidecar (tools/build_sidecar_exe.sh), shipped inside the game.
+    # When it is present the game starts it and nobody needs a launcher: it is a
+    # GUI-subsystem program, so no console window opens, and --parent-pid makes it exit
+    # when this process does -- which the game could not otherwise arrange, since RGSS
+    # has no exit hook that survives a closed window or a crash.
+    SIDECAR_EXE = "FoulPlay/foul_play_sidecar.exe"
+    # Measured 146 ms from spawn to marker on a warm disk. Ten seconds covers a cold one
+    # and a first-run antivirus scan, and is paid only by a sidecar that never comes up.
+    LAUNCH_WAIT = 10.0
+    # A sidecar that dies mid-session is restarted at the next battle's first decision,
+    # but not forever: one that crashes on start would otherwise cost LAUNCH_WAIT on
+    # every battle of the campaign.
+    MAX_LAUNCHES = 3
+    @launches = 0
+
+    def self.sidecar_shipped?
+      File.exist?(SIDECAR_EXE)
+    end
+
+    # Start the shipped sidecar unless one is already serving; true once it is ready.
+    # Without the exe this is exactly ready? -- the study's WSL sidecar and the .bat
+    # still work unchanged.
+    #
+    # Live play only, by fall_back's test: a measured run brings its own sidecar (or
+    # deliberately none), and a gauntlet worker copied from a game that ships the exe
+    # must not start a second, differently-built engine behind the run's back.
+    def self.launch_sidecar
+      return true if ready?
+      return false if defined?($PORTABLE_AI_CONFIG) && $PORTABLE_AI_CONFIG
+      return false if !sidecar_shipped? || @launches >= MAX_LAUNCHES
+      @launches += 1
+      # A second sidecar for this game steps aside on its own lock (hold_lock), so a
+      # spawn racing a slow start cannot produce two answering the same file.
+      start_process(File.expand_path(SIDECAR_EXE),
+                    ["--game", Dir.pwd, "--parent-pid", Process.pid.to_s])
+      deadline = Time.now + LAUNCH_WAIT
+      sleep(0.05) while !ready? && Time.now < deadline
+      log("launch: sidecar #{ready? ? 'ready' : "not ready after #{LAUNCH_WAIT}s"} (attempt #{@launches})")
+      ready?
+    rescue Exception => error
+      log("launch: could not start #{SIDECAR_EXE}: #{error.class}: #{error.message}")
+      false
+    end
+
+    # mkxp-z builds its Ruby without Process.spawn, system or backticks (NoMethodError
+    # on the first live try), but keeps Win32API -- which the game's own scripts already
+    # use -- so the game starts the exe through the shell. Wide strings, since the game
+    # folder is wherever the player unpacked it. Process.spawn is the path the tests take.
+    def self.start_process(exe, args)
+      if !defined?(Win32API)
+        Process.spawn(exe, *args)
+        return
+      end
+      wide = lambda { |text| utf16le(text + "\0") }
+      params = args.map { |arg| arg.include?(" ") ? "\"#{arg}\"" : arg }.join(" ")
+      shell = Win32API.new("shell32", "ShellExecuteW", "LppppI", "L")
+      # 0 = SW_HIDE; the exe has no window anyway, this only keeps the shell from
+      # making one. A return of 32 or less is an error code, not an instance handle.
+      result = shell.call(0, wide.call("open"), wide.call(exe.tr("/", "\\")),
+                          wide.call(params), wide.call(Dir.pwd.tr("/", "\\")), 0)
+      raise "ShellExecuteW returned #{result}" if result <= 32
+    end
+
+    # By hand because mkxp-z's Ruby has no String#encode either (the second live
+    # NoMethodError), nor Array#flat_map (the third) -- so plain loops only, nothing
+    # past what Ruby 1.8 had. UTF-8 in, UTF-16LE bytes out, astral code points as
+    # surrogates.
+    def self.utf16le(text)
+      units = []
+      text.unpack("U*").each do |cp|
+        if cp < 0x10000
+          units << cp
+        else
+          cp -= 0x10000
+          units << (0xD800 + (cp >> 10))
+          units << (0xDC00 + (cp & 0x3FF))
+        end
+      end
+      units.pack("v*")
+    end
+
     # Stop asking for the rest of this battle, and tell the player once.
     #
     # Every way the bridge can fail is invisible from inside the game: the sidecar
@@ -2797,11 +2878,15 @@ module PortableAIRealidea
       return if battle.instance_variable_get(:@portable_ai_foul_play_told)
       battle.instance_variable_set(:@portable_ai_foul_play_told, true)
       return if defined?($PORTABLE_AI_CONFIG) && $PORTABLE_AI_CONFIG
+      fix = if sidecar_shipped?
+              "To play against the search, quit and start the game again."
+            else
+              "To play against the search, quit and start the game with " \
+              "\"Play with Foul Play.bat\"."
+            end
       print("The Foul Play search is unavailable: #{reason}.\n\n" \
             "This trainer is using the backup rule AI. The reason is logged to " \
-            "Data/ai_foulplay_log.txt.\n\n" \
-            "To play against the search, quit and start the game with " \
-            "\"Play with Foul Play.bat\".")
+            "Data/ai_foulplay_log.txt.\n\n" + fix)
     rescue Exception
       nil
     end
@@ -2889,7 +2974,7 @@ module PortableAIRealidea
 
     def self.plan(battle, snapshot, config)
       return nil if battle.doublebattle
-      if !ready?
+      if !launch_sidecar
         log("turn=#{battle.turncount rescue '?'} sidecar not ready; rules took the battle")
         fall_back(battle, "not ready")
         return nil
@@ -3691,8 +3776,11 @@ end
 # mid-session cannot apply to half a battle"), now enforced from the earliest point.
 portable_ai_boot_refusal = nil
 begin
+  # launch_sidecar first: with the shipped exe the game starts its own sidecar here, and
+  # the refusal below is left for the case where it cannot (no FoulPlay/ folder and no
+  # launcher, or an exe that would not come up -- its reason is in the log).
   if PortableAIRealidea::Harness.live_overrides["foul_play"] &&
-     !PortableAIRealidea::FoulPlay.ready?
+     !PortableAIRealidea::FoulPlay.launch_sidecar
     # One instruction, and only the one that is right almost every time. The escape
     # hatch (foul_play=false in Data/ai_harness.txt) and the log path are still true
     # and still documented -- they are just not what a player who launched the wrong
@@ -3700,8 +3788,13 @@ begin
     # as telling them it is missing invites exactly the outcome this check exists to
     # prevent. The log line below records the refusal either way.
     portable_ai_boot_refusal =
-      "The Foul Play search is NOT running, so the game will not start.\n\n" \
-      "Start it with \"Play with Foul Play.bat\" instead of Game.exe."
+      if PortableAIRealidea::FoulPlay.sidecar_shipped?
+        "The Foul Play search could not start, so the game will not start.\n\n" \
+        "The reason is in Data/ai_foulplay_log.txt."
+      else
+        "The Foul Play search is NOT running, so the game will not start.\n\n" \
+        "Start it with \"Play with Foul Play.bat\" instead of Game.exe."
+      end
   end
 rescue Exception
   # Deciding whether to refuse must never itself be the reason the game will not boot.

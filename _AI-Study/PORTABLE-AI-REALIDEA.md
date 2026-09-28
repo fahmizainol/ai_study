@@ -3151,6 +3151,65 @@ core 213, tooling 75.
 two dialog truth tables above run against the extracted source. Install
 backup: `Realidea V4.1/Data/Scripts.rxdata.bak-20260918-011418`.
 
+### The shipped sidecar — no WSL, no launcher, no console, 2026-09-28
+
+Through here, live play needed `Play with Foul Play.bat`. It opened two console windows
+(itself, plus the one it `start`s for the sidecar) and ran the sidecar through `wsl.exe`,
+in the one distro the venv's python symlinks into. That's fine for the study machine and
+impossible to hand to a player.
+
+**What ships now.** `tools/build_sidecar_exe.sh` (Git Bash on Windows) builds the same
+engine — pinned commit f4e224c, the permanent-fields patch, the gen 5 feature — as a
+native `win_amd64` wheel, then freezes `tools/foul_play_sidecar.py` with PyInstaller
+(`--onedir --noconsole`, 21 MB) into `generated/foul_play/win/dist/foul_play_sidecar/`.
+Copy that folder into the game as `FoulPlay/`. The adapter's boot check then calls
+`FoulPlay.launch_sidecar`, which starts the exe and waits for its ready marker. Starting
+it is measured at 146 ms. The player just runs `Game.exe`. The sidecar gets
+`--parent-pid` and exits within a heartbeat (1 s) of the game, whether the game closes
+normally or is killed. A lock on `Data/ai_foulplay_sidecar.lock` makes a second sidecar
+for the same game step aside, which replaces the `.bat`'s `pkill`. Without `FoulPlay/`,
+everything is exactly as before: the `.bat` and the WSL sidecar still work, and the refusal
+dialog still names the `.bat`.
+
+**Live play only.** `launch_sidecar` returns false under `$PORTABLE_AI_CONFIG` (the same
+test `fall_back` uses), so a gauntlet worker copied from a game that ships the exe cannot
+start a second, differently built engine behind a measured run. A sidecar that dies
+mid-session is restarted at the next battle's first decision, at most `MAX_LAUNCHES` (3)
+times.
+
+**mkxp-z's Ruby is missing more than it looks.** It took three live boots to get past it,
+each failing with a NoMethodError the tests (system Ruby 3.2) could not see:
+`Process.spawn`, `String#encode` and `Array#flat_map` are all absent. The exe is started
+through `Win32API` → `ShellExecuteW`, with UTF-16LE built by hand (`FoulPlay.utf16le`,
+tested against real `encode`). **Anything new in the live path must be booted in the
+real game, not just unit-tested.**
+
+**Verified against the WSL build it replaces**, on worker `realidea-w1` (bundle 0.8.6),
+`gen6uu_a`, 5000 iterations:
+
+| arm | portable | stock (control) |
+|---|---|---|
+| WSL gen5 wheel | 55-3-2 | 33-22-4, 1 engine error |
+| Windows gen5 wheel | 53-3-2, 2 engine errors | 33-22-4, 1 engine error |
+
+The controls are identical, so the pairing holds. The 2-win gap is inside the sampler's
+±3 run-to-run spread. The 2 engine errors are the Ruby `basedamage` NoMethodError that
+also hits the stock arm, not the sidecar. The sidecar logged no errors in about 2,400
+decisions. Deterministically, 244 of the Windows arm's kept states replayed through both
+engines give **byte-identical damage checks** (507 rows). The 0.8.6 worker is not the
+0.8.0 bundle behind the published 54-4-2, which is why the WSL arm was re-run rather than
+compared against that number. Artifacts:
+`generated/realidea_{tier_gen6uu_a_0_8_1_foul_play_5000,foulplay_check_gen6uu_a_0_8_1}_gen5wheel_{win,wslctl}.ndjson`.
+
+**Committed with the game:** `Data/portable_ai.txt`, `Data/ai_harness.txt`
+(`foul_play=true`, 5000 iterations) and `FoulPlay/`, so a fresh clone plays against the
+search from `Game.exe` alone. Until now the two switches were untracked on purpose,
+because a worker copied from a `Data/` that has the marker runs both arms portable.
+That risk is unchanged: a copy on disk carried the marker already. **Delete
+`portable_ai.txt` in a worker before a measured run.** `FoulPlay/` is a build artifact,
+so rebuild and recommit it after changing `foul_play_sidecar.py` or the engine patch.
+The pre-change bundle is `backups/realidea_Scripts.rxdata.pre-sidecar-exe`.
+
 ## Future-agent handoff
 
 ### 0.6.2 port (2026-09-06)

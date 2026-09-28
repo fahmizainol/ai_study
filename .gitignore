@@ -15,6 +15,15 @@
 !/Realidea V4.1/PBS/pokemon.txt
 !/Realidea V4.1/PBS/tm.txt
 !/Realidea V4.1/Data/ai_scenarios.txt
+# Live play against the Foul Play search: the two switches that turn it on, and the
+# native sidecar the game starts itself (built by _AI-Study/tools/build_sidecar_exe.sh --
+# rebuild and recommit it after any change to foul_play_sidecar.py or the engine patch).
+# The switches only apply in live play: the gauntlet and probe wrap every battle in
+# with_config, which neither reads them nor auto-starts the exe. A worker copied from
+# this Data/ still carries portable_ai.txt, so delete it there before a measured run.
+!/Realidea V4.1/Data/portable_ai.txt
+!/Realidea V4.1/Data/ai_harness.txt
+!/Realidea V4.1/FoulPlay/
 # the player-curve switches (PLAYER-CURVE.md): tracked so a pull turns them on
 !/Realidea V4.1/Data/level_cap_mode.txt
 !/Realidea V4.1/Data/wild_scaling.txt

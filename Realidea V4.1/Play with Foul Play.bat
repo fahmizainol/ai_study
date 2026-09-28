@@ -21,9 +21,10 @@ if not exist "%~dp0Game.exe" (
   goto :done
 )
 
-REM Turn the AI on. These two are deliberately NOT committed: a marker inside a
-REM tracked Data\ would be copied into the gauntlet workers, and a measured run with
-REM the marker present makes both arms portable and invalidates the comparison.
+REM Turn the AI on. Both are committed now (with the FoulPlay\ exe, Game.exe alone is
+REM enough); this only recreates them if deleted. A gauntlet worker copied from this
+REM Data\ must have portable_ai.txt removed before a measured run, or both arms go
+REM portable and the comparison is invalid.
 if not exist "%~dp0Data\portable_ai.txt" (
   >"%~dp0Data\portable_ai.txt" echo enabled
   echo Enabled the Portable AI ^(created Data\portable_ai.txt^).
