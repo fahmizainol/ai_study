@@ -87,7 +87,7 @@ module CurveSelfTest
       $Trainer.party = [mon(:RATTATA, 10)]
       [got == [b, b - 2], "balanceo #{b} -> #{got.inspect}"]
     end
-    check("Abi's generated override moves expert -> rnb") do
+    check("Abi's generated override lands on rnb gym 1 (ace 21), raised once") do
       saved = $game_map
       $game_map = Map78.new
       begin
@@ -100,9 +100,9 @@ module CurveSelfTest
         $game_map = saved
       end
     end
-    check("dat path and partner") do
-      [RealideaLevelScaling.override_curve == "expert" || defined?(TEAM_OVERRIDES_CURVE),
-       "override curve #{RealideaLevelScaling.override_curve}"]
+    check("registry curve is read") do
+      want = defined?(TEAM_OVERRIDES_CURVE) ? TEAM_OVERRIDES_CURVE : "expert"
+      [RealideaLevelScaling.override_curve == want, "override curve #{RealideaLevelScaling.override_curve}"]
     end
 
     check("wild Ruta 1 levels follow the curve") do
