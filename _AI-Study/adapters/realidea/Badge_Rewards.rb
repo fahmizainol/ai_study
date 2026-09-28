@@ -15,6 +15,9 @@
 #      the length of the check only and restored, so no event ever sees it change.
 #   3. A HINT after each badge whose reward is waiting.
 #
+# The section's own lines are in English; species and item names, and the game's own
+# "obtained"/"received" messages, come from the game and stay in Spanish.
+#
 # Gifts arrive GIFT_BELOW_CAP levels under the current level cap, evolved as far as
 # that level allows (pbCheckEvolution, then resetMoves). The table follows Run & Bun's
 # Game Corner order one-to-one by badge; see _AI-Study/PLAYER-CURVE.md.
@@ -181,7 +184,7 @@ module RealideaBadgeRewards
   # --- the offer, inside pbCodeMysteryGift ---------------------------------------
   def self.choose(message, symbols, namer)
     names = symbols.collect { |s| namer.call(s) }
-    names.push(_INTL("Más tarde"))
+    names.push(_INTL("Later"))
     idx = Kernel.pbMessage(message, names, names.length)
     return nil if idx.nil? || idx < 0 || idx >= symbols.length
     return symbols[idx]
@@ -198,7 +201,7 @@ module RealideaBadgeRewards
   # Returns false when the player said "later", which ends the whole offer.
   def self.offer_badge(badge)
     if pokemon_pending?(badge)
-      sym = choose(_INTL("Por la medalla número {1}, elige un Pokémon.", badge),
+      sym = choose(_INTL("For badge {1}, pick a Pokémon.", badge),
                    species_choices(badge), proc { |s| species_name(s) })
       return false if !sym
       poke = build(sym, gift_level)
@@ -212,7 +215,7 @@ module RealideaBadgeRewards
         next if claimed?(stone_tag(badge, k))
         choices = stone_choices(badge)
         break if choices.empty?
-        sym = choose(_INTL("Por la medalla número {1}, elige una megapiedra.", badge),
+        sym = choose(_INTL("For badge {1}, pick a Mega Stone.", badge),
                      choices, proc { |s| item_name(s) })
         return false if !sym
         Kernel.pbReceiveItem(item_id(sym))
@@ -225,7 +228,7 @@ module RealideaBadgeRewards
 
   def self.offer
     return if !enabled? || !pending?
-    Kernel.pbMessage(_INTL("Por cierto... tengo algo para ti por tus medallas."))
+    Kernel.pbMessage(_INTL("By the way... I have something for you for your badges."))
     for b in pending_badges
       break if !offer_badge(b)
     end
@@ -272,7 +275,7 @@ if defined?(renderBadgeAnimation)
     ret = badge_rewards_orig_renderBadgeAnimation(badge_number)
     begin
       if RealideaBadgeRewards.enabled? && RealideaBadgeRewards.pending?
-        Kernel.pbMessage(_INTL("El señor de los códigos del Centro Pokémon tiene algo para ti."))
+        Kernel.pbMessage(_INTL("The code guy at the Pokémon Center has something for you."))
       end
     rescue
     end
