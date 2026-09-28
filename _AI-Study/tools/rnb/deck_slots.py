@@ -146,6 +146,17 @@ SCHEDULE = [
     ("2026-09-28 12:13:43", "rnb_vs_gen_cores2_50ms"),
     ("2026-09-28 12:17:37", "rnb_vs_gen_breakers_50ms"),
     ("2026-09-28 12:21:52", None),
+    # the ace + trainers' core build (not installed) and the installed trainers at 50 ms (2026-09-28)
+    ("2026-09-28 14:24:30", "rnb_vs_gen_ace_50ms"),
+    ("2026-09-28 14:28:30", "rnb_vs_gen_trainers_ace_50ms"),
+    ("2026-09-28 14:33:45", "rnb_vs_gen_trainers_cores2_50ms"),
+    ("2026-09-28 14:38:56", "rnb_vs_gen_ace_50ms"),
+    ("2026-09-28 14:43:00", "rnb_vs_gen_trainers_ace_50ms"),
+    ("2026-09-28 14:48:29", "rnb_vs_gen_trainers_cores2_50ms"),
+    ("2026-09-28 14:53:16", "rnb_vs_gen_ace_50ms"),
+    ("2026-09-28 14:57:23", "rnb_vs_gen_trainers_ace_50ms"),
+    ("2026-09-28 15:02:29", "rnb_vs_gen_trainers_cores2_50ms"),
+    ("2026-09-28 15:07:14", None),
 ]
 SCHED = [(time.mktime(datetime.datetime.strptime(s, "%Y-%m-%d %H:%M:%S").timetuple()), a) for s, a in SCHEDULE]
 ORDER = ["rnb_vs_gen_deckoff", "rnb_vs_gen_theme", "rnb_vs_gen_tier", "rnb_vs_gen_all",

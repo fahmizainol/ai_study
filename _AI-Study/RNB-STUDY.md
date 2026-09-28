@@ -1444,6 +1444,32 @@ interval -18.8 to +7.8). Each build against itself across search times: installe
 (p = 1.0), breakers 58 -> 54 (p = 0.58). Deeper search moves neither build, and the gap
 between them stays inside the noise, now slightly the installed build's way.
 
+**The ace, and the core framework on trainers** (2026-09-28, commit 6bd038e, not installed;
+`rnb_vs_gen_ace_50ms` and `_trainers_ace_50ms` against the installed build's
+`rnb_vs_gen_cores2_50ms` and a new `_trainers_cores2_50ms`, all 3 rounds at 50 ms on fix2's
+draws, the trainer arms interleaved with the ace ones). From gym 4 core-first's anchor is
+an ACE -- the heaviest power pick (Uber, legendary, Ultra Beast, 600+ BST with a mega) on an
+attacking set, over the band ceiling up to 720 BST, one box legendary a team; before that,
+or where none fits, the best OU attacker. Ubers open at gym 4; Solgaleo and Lunala are back.
+Named trainers run the same core over every type and keep at most two of the dev's own
+(starter slot free, own legendary and recurring lines first). Aces: gym 7 Mewtwo, gym 8
+Arceus, gym 9 Mega Metagross, gym 6 a Sand Force Landorus; trainers Mega Tyranitar,
+Mega Salamence, Latias, Mega Houndoom, Azumarill, Hawlucha and the like.
+
+| arm | gyms | trainers |
+|---|--:|--:|
+| installed (cores2), 50 ms | 60/108 (55.6%) | 70/120 (58.3%) |
+| breakers, 50 ms | 54/107 (50.5%) | = installed |
+| **ace**, 50 ms | **57/108 (52.8%)** | **77/120 (64.2%)** |
+
+Gyms: -2.8 against installed (interval -15.6 to +11.5; matched 12 won / 15 lost, p = 0.70).
+Arceus carried gym 8 from 2-10 to 6-6 (1.50 KOs a battle, 198% dealt), gym 4 went 11-1; gym
+3 fell 11-1 to 7-5 and gym 9's Mega Metagross (0.83 KOs) went 2-10. Trainers: +5.8 (interval
+-7.5 to +18.8; matched 30 won / 23 lost, p = 0.41) -- Simon 5-7 to 11-1 behind a Mega
+Tyranitar (1.67 KOs), Teresa 1 6-6 to 11-1 behind an Azumarill ace (1.83), Atlas 9-3 to 5-7.
+Inside the noise on both halves; the trainers lean the ace's way, which is where the change
+is largest (KEEP_MAX frees two to four seats a fight).
+
 **Traps met on the way** (all fixed in the tools):
 - On a machine where 127.0.0.1 has no rDNS and something listens on port 80, Showdown
   calls localhost an open proxy and locks every bot (`setup_battles.py` now declares
