@@ -57,11 +57,22 @@ class Mon
   def isEgg?; false; end
 end
 
+# tm.dat: move => species that can learn it
+$tm_loads = 0
 def load_data(path)
   raise "unexpected #{path}" if path != "Data/tm.dat"
+  $tm_loads += 1
   data = []
-  [10, 11, 12, 13].each { |m| data[m] = [1] }
+  { 10 => [21, 23], 11 => [21], 12 => [21], 13 => [99] }.each { |m, sp| data[m] = sp }
   return data
+end
+
+# the Alolan form (23 form 1) carries its own list, as Pokemon_MultipleForms does
+module MultipleForms
+  def self.call(name, pokemon)
+    return nil if name != "getMoveCompatibility"
+    return (pokemon.species == 23 && pokemon.form == 1) ? [:FREEZEDRY, 15] : nil
+  end
 end
 
 # eggEmerald.dat: species => moves
@@ -223,20 +234,31 @@ class RealideaPlayerServicesTest < Test::Unit::TestCase
   end
 
   def test_teachable_is_compatible_unknown_moves_by_name
-    mon = Mon.new(21, [12], [10, 11, 12])      # knows Toxic; Surf incompatible
+    mon = Mon.new(21, [12])                    # knows Toxic; Surf is not Weavile's
     assert_equal([10, 11], RealideaPlayerServices.teachable(mon))
+  end
+
+  def test_tm_data_is_read_once_not_once_per_move
+    before = $tm_loads
+    3.times { RealideaPlayerServices.teachable(Mon.new(21)) }
+    assert($tm_loads - before <= 1, "tm.dat loaded #{$tm_loads - before} times")
+  end
+
+  def test_a_form_with_its_own_list_uses_it
+    assert_equal([14, 15].sort, RealideaPlayerServices.teachable(Mon.new(23, [], [], 1)).sort)
+    assert_equal([10], RealideaPlayerServices.teachable(Mon.new(23)))
   end
 
   def test_tutor_picks_a_type_then_a_move
     in_game do
-      mon = Mon.new(21, [], [10, 11, 13])
+      mon = Mon.new(21)
       $Trainer.party = [mon]
       $choose = [0, -1]
-      Kernel.answers = [0, 0]                    # types sorted: DARK, ICE, WATER -> DARK; Knock Off
+      Kernel.answers = [0, 0]                    # types sorted: DARK, ICE, POISON -> DARK; Knock Off
       Kernel.confirms = [false]
       RealideaPlayerServices.tutor
       assert_equal([[mon, 11]], $learned)
-      assert_equal(["DARK (1)", "ICE (1)", "WATER (1)", "Back"], Kernel.shown[0][1])
+      assert_equal(["DARK (1)", "ICE (1)", "POISON (1)", "Back"], Kernel.shown[0][1])
       assert_equal(["Knock Off · DARK · 65", "Back"], Kernel.shown[1][1])
     end
   end

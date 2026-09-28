@@ -185,6 +185,25 @@ module CurveSelfTest
       [list.include?(ko) && (list & known).empty? && list.length > 20,
        "#{list.length} moves; Knock Off #{list.include?(ko)}; label '#{RealideaPlayerServices.move_label(ko)}'"]
     end
+    check("tutor list is fast and matches the game's own check move for move") do
+      bad = []
+      times = []
+      [[:WEAVILE, 0], [:NINETALES, 1], [:NINETALES, 0], [:AZUMARILL, 0]].each do |sym, form|
+        p = mon(sym, 50); p.form = form
+        t0 = Time.now
+        fast = RealideaPlayerServices.teachable(p)
+        times.push(Time.now - t0)
+        data = RealideaPlayerServices.tm_data
+        t1 = Time.now
+        slow = (1...data.length).select { |m| data[m] && !p.hasMove?(m) && p.isCompatibleWithMove?(m) }
+        times.push(Time.now - t1)
+        # a form's own list may hold moves with no tm.dat row; the tutor teaches those too
+        bad.push("#{sym}/#{form}") if (slow - fast).length > 0
+      end
+      fast_max = [times[0], times[2], times[4], times[6]].max
+      slow_max = [times[1], times[3], times[5], times[7]].max
+      [bad.empty? && fast_max < 0.5, "fast max #{(fast_max * 1000).round} ms, game's check #{(slow_max * 1000).round} ms, mismatches #{bad.inspect}"]
+    end
     check("tutor: Alolan Ninetales gets Aurora Veil, fire Ninetales does not") do
       a = mon(:NINETALES, 50); a.form = 1
       f = mon(:NINETALES, 50)

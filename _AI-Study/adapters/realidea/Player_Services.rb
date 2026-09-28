@@ -140,15 +140,30 @@ module RealideaPlayerServices
     return @tm_data
   end
 
-  # every TM/tutor move this Pokémon can learn and does not know, by name
-  def self.teachable(pokemon)
+  # every TM/tutor move this Pokémon can learn and does not know, by name.
+  #
+  # Same answer as asking isCompatibleWithMove? of every move, without asking it:
+  # the species path (pbSpeciesCompatible?) runs load_data("Data/tm.dat") on EVERY
+  # call, so ~700 calls froze the game for tens of seconds after picking a Pokémon.
+  # A form with its own list (MultipleForms getMoveCompatibility) is read directly,
+  # exactly as isCompatibleWithMove? does; otherwise tm.dat is read once and cached.
+  def self.compatible_moves(pokemon)
+    forms = nil
+    forms = MultipleForms.call("getMoveCompatibility", pokemon) if defined?(MultipleForms)
+    if forms
+      return forms.collect { |m| m.is_a?(Integer) ? m : const(PBMoves, m) }.compact
+    end
     data = tm_data
+    species = pokemon.species
     out = []
     for move in 1...data.length
-      next if !data[move]
-      next if pokemon.hasMove?(move)
-      out.push(move) if pokemon.isCompatibleWithMove?(move)
+      out.push(move) if data[move] && data[move].include?(species)
     end
+    return out
+  end
+
+  def self.teachable(pokemon)
+    out = compatible_moves(pokemon).select { |m| m > 0 && !pokemon.hasMove?(m) }.uniq
     return out.sort_by { |m| PBMoves.getName(m) }
   rescue
     return []
