@@ -1,7 +1,7 @@
 # Player Curve — fitting Run & Bun's power curve to Realidea
 
-Status: **adapters written and tested in-engine (2026-09-28); generator half handed to
-the boss-generator session.** Companion to [LEVEL-SCALING.md](LEVEL-SCALING.md).
+Status: **adapters installed and tested in-engine (2026-09-28); the generator moves to the
+rnb curve in the boss-generator session (section 4). Its gates stay as installed.** Companion to [LEVEL-SCALING.md](LEVEL-SCALING.md).
 
 ## 1. What Run & Bun does, measured
 
@@ -72,13 +72,19 @@ stay behind switch 536 (set after the Champion). Claims live in `$Trainer.regalo
 
 ## 4. Generator half (boss-generator session)
 
+**Agreed (in progress in that session, not installed):**
 1. `realidea_level_curve.json` has an `rnb` column; set `active_mode` to `rnb` and
-   regenerate the gyms and trainers.
-2. Emit `TEAM_OVERRIDES_CURVE = "<active_mode>"` from `emit_registry.py`. Until then
-   Level_Scaling assumes `"expert"` for generated overrides, which is correct for the
-   current install and wrong the moment they are generated on `rnb`: they would be
-   raised twice.
-3. Gates, per the Run & Bun fit: pseudos gated by evolution level only (drop them from
-   the 580-BST gate); minor legendaries (≤ 600, not box) from gym 2 inside the power band;
-   `LEGEND_MAX = 1` (Champion 2); box legendaries Champion only; Ultra Beasts from gym 7, max
-   1; the Uber band from gym 7; megas unchanged (1 per team from gym 4, now able to fire).
+   regenerate the gyms and trainers on it.
+2. Emit `TEAM_OVERRIDES_CURVE = "<active_mode>"` from `emit_registry.py` in the same
+   change. Until then Level_Scaling assumes `"expert"` for generated overrides, which is
+   correct for the current install and wrong the moment they are generated on `rnb`:
+   they would be raised twice.
+3. Measure at 50 ms on fix2's draws against the current install; install only on the
+   user's word.
+
+**Not agreed -- the installed generator choices stay:** Ubers from gym 4, the ace rule with
+box legendaries from gym 6, `LEGEND_MAX` 6. The Run & Bun fit in section 1 suggested
+pseudos off the 580-BST gate, minor legendaries from gym 2, `LEGEND_MAX` 1, box legendaries
+for the Champion only, and Ultra Beasts and Ubers from gym 7. The user declined those
+(2026-09-28): only the level change was meant. They are recorded here as the measured
+alternative, not as pending work.
