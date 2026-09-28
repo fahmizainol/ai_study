@@ -95,6 +95,15 @@ def scan():
                 p = c.get("@parameters") or []
                 buf.append(p[0] if p and isinstance(p[0], str) else "")
                 continue
+            # 111 type 12 is a conditional branch on a script: `if Kernel.pbReceiveItem(
+            # :TM26)` gives the item AND tests the result, and events write most item
+            # balls this way. Reading 355/655 alone missed 43 items, 22 of them TMs.
+            p = c.get("@parameters") or []
+            if c["@code"] == 111 and len(p) > 1 and p[0] == 12 and isinstance(p[1], str):
+                for fn, args in CALL.findall(p[1]):
+                    kind = "mart" if fn == "pbPokemonMart" else "map event"
+                    for item in NAME.findall(args):
+                        route[item].add(f"{kind} @ {where}")
             for fn, args in CALL.findall("".join(buf)):
                 kind = "mart" if fn == "pbPokemonMart" else "map event"
                 for item in NAME.findall(args):
@@ -114,9 +123,14 @@ def scan():
     # rather than keeping a copy of a game script in this repo
     block = ""
     for _name, src in sections(os.path.join(GAME, "Scripts.rxdata")):
-        if "def Kernel.pbPickup" in src:
+        if "def Kernel.pbPickup" in src and not block:
             block = src[src.index("def Kernel.pbPickup"):][:2500]
-            break
+        # Bea ("Cosas para bea") trades 3 Yellow Shards for a random TM off a fixed
+        # list kept in script, not in any event: 12 TMs no event scan can see.
+        m = re.search(r"@cosasdebea\s*=\s*\[(.*?)\]", src, re.S)
+        if m:
+            for item in re.findall(r":([A-Z][A-Z0-9]+)", m.group(1)):
+                route[item].add("Bea's shard trade (3 Yellow Shards, random TM)")
     for tag, pat in (("pickup", r"pickupList=pbDynamicItemList\((.*?)\)"),
                      ("pickup rare", r"pickupListRare=pbDynamicItemList\((.*?)\)")):
         m = re.search(pat, block, re.S)
