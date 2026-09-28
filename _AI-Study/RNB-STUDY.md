@@ -1470,6 +1470,17 @@ Tyranitar (1.67 KOs), Teresa 1 6-6 to 11-1 behind an Azumarill ace (1.83), Atlas
 Inside the noise on both halves; the trainers lean the ace's way, which is where the change
 is largest (KEEP_MAX frees two to four seats a fight).
 
+**Installed: the ace build** (2026-09-28, evening): `install_game({}, "all")` from the
+generator's defaults (commit 6bd038e) -- 9 gyms, 18 trainers, 161 teams in
+Team_Overrides.rb, 0 validation errors; the Aurora Veil patch and the Alolan Ninetales
+form row intact; no Ultra Beast or 580+ generated pick before gym 6, one box legendary a
+team at most. Both team files load back into Boss Studio exactly (they name the
+`teams_bosses_gyms` companion preset). Copied over the play copy (old bundle kept as
+`Scripts.rxdata.pre-ace.bak`), byte-identical; PBS and compiled data unchanged. Booted
+under Proton with `portable_ai.txt` set aside: the game window opened and ran 2.5 minutes
+with no script error (a load-time error ends mkxp-z with a message box), though the
+capture showed the window blank, so the title screen itself was not seen.
+
 **Traps met on the way** (all fixed in the tools):
 - On a machine where 127.0.0.1 has no rDNS and something listens on port 80, Showdown
   calls localhost an open proxy and locks every bot (`setup_battles.py` now declares
