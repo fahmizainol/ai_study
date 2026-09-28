@@ -183,6 +183,12 @@ SCHEDULE = [
     ("2026-09-28 18:03:25", "rnb_vs_gen_trainers_rnbcurve_50ms"),
     ("2026-09-28 18:07:58", "rnb_vs_gen_trainers_inst_50ms"),
     ("2026-09-28 18:12:54", None),
+    # Jeremiah 2 under offense / hyper offense, then Simon + Teresa 3 after the offense ripple (2026-09-28)
+    ("2026-09-28 19:35:38", "rnb_vs_gen_trainers_j2offense_50ms"),
+    ("2026-09-28 19:38:10", "rnb_vs_gen_trainers_j2hyperoffense_50ms"),
+    ("2026-09-28 19:40:58", None),
+    ("2026-09-28 19:48:15", "rnb_vs_gen_trainers_j2late_50ms"),
+    ("2026-09-28 19:51:32", None),
 ]
 SCHED = [(time.mktime(datetime.datetime.strptime(s, "%Y-%m-%d %H:%M:%S").timetuple()), a) for s, a in SCHEDULE]
 ORDER = ["rnb_vs_gen_deckoff", "rnb_vs_gen_theme", "rnb_vs_gen_tier", "rnb_vs_gen_all",

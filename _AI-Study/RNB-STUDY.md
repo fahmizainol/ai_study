@@ -1539,6 +1539,24 @@ went 0-12 on the rnb build (10-2 installed) on a passive rebuild -- a Spikes / T
 Counter Deoxys lead, a Rest / Sleep Talk Giratina and a Substitute / Roost Moltres beside
 Mega Tyranitar; without it the rnb trainers lead 80/108 to 76/108.
 
+**Jeremiah 2's archetype, and installing the rnb curve** (2026-09-28). Jeremiah 2 has no plan
+on file, so he gets the flat job list (2 walls, removal, hazards, pivot, recovery, setup, speed);
+on the rnb build three of those jobs landed on legendaries in support sets (a Spikes / Taunt /
+Counter Deoxys enabler for a setup ace, Rest / Sleep Talk Giratina, Defog Moltres) and he went
+0-12. The same fight on the Studio card with an archetype, 50 ms: offense 16-8 (Choice Band
+Zekrom ace, Specs Noivern, Mega Gardevoir), hyper offense 4-20 (its plan still asks for walls
+and removal, and the passive seats return). The offense card shifts Simon, Alba 4 and Teresa 3
+through the repeat tally; Simon 8-4 and Teresa 3 11-1 on the new rosters (Alba 4 has the starter
+slot and is not exported). By archetype over the 50 ms builds the gyms read balance 83% / 67%,
+offense 54% / 50%, hyper offense 42% / 50% -- confounded with each fight's draw, since every
+fight has one archetype.
+
+Installed: the rnb-curve build (`install_game({"PICKS": {"g8": {"keep": {"CELESTEELA": true}}},
+"TRAINER_PLANS": {"14": ["offense", ""]}}, "all")`) -- `TEAM_OVERRIDES_CURVE = "rnb"` in the
+registry, upserted into the player-curve bundle (its Level_Cap, Level_Scaling and Badge_Rewards
+sections intact), 0 validation errors, gates hold, gyms and trainers exactly the tested builds,
+both files reload into Boss Studio exactly. Play copy updated (`Scripts.rxdata.pre-rnbcurve.bak`).
+
 **Traps met on the way** (all fixed in the tools):
 - On a machine where 127.0.0.1 has no rDNS and something listens on port 80, Showdown
   calls localhost an open proxy and locks every bot (`setup_battles.py` now declares

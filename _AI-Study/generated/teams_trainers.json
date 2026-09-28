@@ -10,47 +10,48 @@
   "trainer_items": [],
   "mons": [
    {
-    "species": "HITMONLEE",
-    "level": 36,
+    "species": "ROTOM",
+    "level": 44,
     "moves": [
-     "HIGHJUMPKICK",
-     "KNOCKOFF",
-     "RAPIDSPIN",
-     "MACHPUNCH"
+     "DEFOG",
+     "VOLTSWITCH",
+     "WILLOWISP",
+     "HEX"
     ],
-    "item": "LIFEORB",
-    "ability": 1,
-    "nature": "ADAMANT",
+    "item": "COLBURBERRY",
+    "ability": 0,
+    "nature": "TIMID",
     "iv": 31,
     "ev": [
+     248,
+     0,
      0,
      252,
-     4,
-     252,
-     0,
+     8,
      0
     ],
     "roles": [
-     "priority",
-     "removal"
+     "pivot",
+     "removal",
+     "status"
     ],
-    "src": "gen6uu/dex/Wallbreaker",
+    "src": "gen7nu/dex/Defensive Defog",
     "fidelity": 4,
     "inherited": null,
     "kept": false,
     "why": "core enabler:removal"
    },
    {
-    "species": "COFAGRIGUS",
-    "level": 36,
+    "species": "REUNICLUS",
+    "level": 44,
     "moves": [
-     "WILLOWISP",
-     "SHADOWBALL",
-     "PAINSPLIT",
-     "HAZE"
+     "KNOCKOFF",
+     "RECOVER",
+     "PSYCHIC",
+     "THUNDERWAVE"
     ],
-    "item": "COLBURBERRY",
-    "ability": 0,
+    "item": "ROCKYHELMET",
+    "ability": 1,
     "nature": "BOLD",
     "iv": 31,
     "ev": [
@@ -58,14 +59,16 @@
      0,
      252,
      0,
-     4,
-     0
+     0,
+     4
     ],
     "roles": [
+     "recovery",
+     "speed",
      "status",
      "wall"
     ],
-    "src": "gen7ru/dex/Defensive",
+    "src": "gen6ou/dex/Utility",
     "fidelity": 4,
     "inherited": null,
     "kept": false,
@@ -73,7 +76,7 @@
    },
    {
     "species": "GARDEVOIR",
-    "level": 37,
+    "level": 45,
     "moves": [
      "CALMMIND",
      "MOONBLAST",
@@ -104,31 +107,32 @@
     "why": "original"
    },
    {
-    "species": "AEGISLASH",
-    "level": 36,
+    "species": "SYLVEON",
+    "level": 44,
     "moves": [
-     "KINGSSHIELD",
-     "GYROBALL",
-     "TOXIC",
-     "PURSUIT"
+     "HYPERVOICE",
+     "HEALBELL",
+     "WISH",
+     "PROTECT"
     ],
     "item": "LEFTOVERS",
-    "ability": 0,
-    "nature": "SASSY",
+    "ability": 2,
+    "nature": "BOLD",
     "iv": 31,
     "ev": [
      252,
      0,
-     4,
+     252,
      0,
      0,
-     252
+     4
     ],
     "roles": [
-     "status",
+     "protect",
+     "recovery",
      "wall"
     ],
-    "src": "gen6ubers/dex/Defensive",
+    "src": "gen6uu/dex/Cleric",
     "fidelity": 4,
     "inherited": null,
     "kept": false,
@@ -136,10 +140,10 @@
    },
    {
     "species": "MAMOSWINE",
-    "level": 37,
+    "level": 45,
     "moves": [
      "EARTHQUAKE",
-     "ICYWIND",
+     "ICESHARD",
      "ICICLECRASH",
      "STEALTHROCK"
     ],
@@ -157,7 +161,7 @@
     ],
     "roles": [
      "hazards",
-     "speed"
+     "priority"
     ],
     "src": "gen6ou/stats/Showdown Usage (dev set was ICEFANG/AMNESIA/ROCKTOMB/TAKEDOWN)",
     "fidelity": 4,
@@ -168,7 +172,7 @@
    },
    {
     "species": "GYARADOS",
-    "level": 36,
+    "level": 44,
     "moves": [
      "CRUNCH",
      "EARTHQUAKE",
@@ -204,11 +208,10 @@
    "stage": 4,
    "notes": [
     "KEEP_MAX 2: left out HERACROSS, ROSERADE",
-    "evolved PILOSWINE (450) -> MAMOSWINE (530, UU) \u2014 legal at level 37",
+    "evolved PILOSWINE (450) -> MAMOSWINE (530, UU) \u2014 legal at level 45",
     "core ace: GYARADOS (mega), the heaviest power pick up to 720 BST (640)",
-    "core enabler: HITMONLEE shields GYARADOS from ROCK and brings removal",
-    "core breaker 2: GARDEVOIR (kept) -- nothing hits what walls GYARADOS (nothing); the next attacking set, a mutual pair",
-    "MAMOSWINE: ICESHARD -> ICYWIND, the team's speed control"
+    "core enabler: ROTOM shields GYARADOS from ELECTRIC and brings removal",
+    "core breaker 2: GARDEVOIR (kept) -- nothing hits what walls GYARADOS (nothing); the next attacking set, a mutual pair"
    ],
    "early_moves": true,
    "preset": "teams_bosses_gyms"
@@ -225,56 +228,20 @@
   "trainer_items": [],
   "mons": [
    {
-    "species": "GLIGAR",
+    "species": "DIGGERSBY",
     "level": [
      "balanceo",
      1
     ],
     "moves": [
-     "UTURN",
-     "ROOST",
-     "DEFOG",
-     "AERIALACE"
+     "RETURN",
+     "QUICKATTACK",
+     "SPIKES",
+     "BULLDOZE"
     ],
-    "item": "EVIOLITE",
-    "ability": 0,
-    "nature": "IMPISH",
-    "iv": 31,
-    "ev": [
-     252,
-     0,
-     16,
-     0,
-     0,
-     240
-    ],
-    "roles": [
-     "pivot",
-     "recovery",
-     "removal"
-    ],
-    "src": "gen6uu/dex/Pivot",
-    "fidelity": 3,
-    "inherited": null,
-    "kept": false,
-    "why": "added:removal",
-    "design_level": 19
-   },
-   {
-    "species": "TOGEDEMARU",
-    "level": [
-     "balanceo",
-     1
-    ],
-    "moves": [
-     "UTURN",
-     "NUZZLE",
-     "GYROBALL",
-     "COVET"
-    ],
-    "item": "CHOICESCARF",
-    "ability": 1,
-    "nature": "JOLLY",
+    "item": "LIFEORB",
+    "ability": 2,
+    "nature": "ADAMANT",
     "iv": 31,
     "ev": [
      0,
@@ -285,52 +252,86 @@
      0
     ],
     "roles": [
-     "pivot"
+     "hazards"
     ],
-    "src": "gen7nu/dex/Choice Scarf",
-    "fidelity": 2,
+    "src": "gen7ou/dex/Choice Band",
+    "fidelity": 3,
     "inherited": null,
     "kept": false,
-    "why": "added:speed",
-    "design_level": 19
+    "why": "core enabler:hazards",
+    "design_level": 20
    },
    {
-    "species": "SKARMORY",
+    "species": "CHANSEY",
     "level": [
      "balanceo",
      1
     ],
     "moves": [
-     "ROOST",
-     "SPIKES",
+     "THUNDERWAVE",
      "TOXIC",
-     "WHIRLWIND"
+     "SOFTBOILED",
+     "HIDDENPOWER"
     ],
-    "item": "LEFTOVERS",
-    "ability": 1,
+    "item": "EVIOLITE",
+    "ability": 0,
     "nature": "BOLD",
     "iv": 31,
     "ev": [
+     0,
+     0,
      252,
+     4,
      0,
-     252,
-     0,
-     0,
-     4
+     252
     ],
     "roles": [
-     "hazards",
-     "phaze",
      "recovery",
+     "speed",
      "status",
      "wall"
     ],
-    "src": "gen6ubers/dex/Physically Defensive",
-    "fidelity": 4,
+    "src": "gen6ubers/dex/Support",
+    "fidelity": 3,
     "inherited": null,
     "kept": false,
-    "why": "core enabler:hazards",
-    "design_level": 19
+    "why": "added:wall",
+    "design_level": 20
+   },
+   {
+    "species": "HITMONLEE",
+    "level": [
+     "balanceo",
+     1
+    ],
+    "moves": [
+     "KNOCKOFF",
+     "RAPIDSPIN",
+     "MACHPUNCH",
+     "RETALIATE"
+    ],
+    "item": "LIFEORB",
+    "ability": 1,
+    "nature": "ADAMANT",
+    "iv": 31,
+    "ev": [
+     0,
+     252,
+     4,
+     252,
+     0,
+     0
+    ],
+    "roles": [
+     "priority",
+     "removal"
+    ],
+    "src": "gen6uu/dex/Wallbreaker",
+    "fidelity": 3,
+    "inherited": null,
+    "kept": false,
+    "why": "added:removal",
+    "design_level": 20
    },
    {
     "species": "ALOMOMOLA",
@@ -367,7 +368,7 @@
     "inherited": null,
     "kept": false,
     "why": "added:wall",
-    "design_level": 19
+    "design_level": 20
    },
    {
     "species": "PASSIMIAN",
@@ -401,7 +402,7 @@
     "inherited": null,
     "kept": false,
     "why": "core breaker 2:pivot",
-    "design_level": 19
+    "design_level": 20
    },
    {
     "species": "HAWLUCHA",
@@ -436,7 +437,7 @@
     "inherited": null,
     "kept": false,
     "why": "core ace",
-    "design_level": 19
+    "design_level": 20
    }
   ],
   "design": {
@@ -447,9 +448,9 @@
     "dropped KARRABLAST -- measured: 2.6 turns on the field, fainted 92%, 0.12 KOs a battle over 72 battles",
     "dropped LEAVANNY -- measured: 0.21 KOs and 46% dealt a battle over 72 battles",
     "core ace: HAWLUCHA, the heaviest OU pick up to 720 BST (500)",
-    "core enabler: SKARMORY shields HAWLUCHA from FAIRY/FLYING/PSYCHIC and brings hazards",
+    "core enabler: DIGGERSBY shields HAWLUCHA from ELECTRIC and brings hazards",
     "core breaker 2: PASSIMIAN (generated) -- nothing hits what walls HAWLUCHA (nothing); the next attacking set, a mutual pair",
-    "3 attacking sets: no member left that can re-set to one without breaking a floor",
+    "CHANSEY re-set for speed control: gen7ubers/dex/Support -> gen6ubers/dex/Support",
     "levels stay dynamic (balanceo+1); band read from own map -> level 14, gym 1"
    ],
    "early_moves": true,
@@ -467,32 +468,65 @@
   "trainer_items": [],
   "mons": [
    {
-    "species": "KLEFKI",
-    "level": 24,
+    "species": "GOLBAT",
+    "level": 23,
     "moves": [
+     "BRAVEBIRD",
+     "TAILWIND",
+     "DEFOG",
+     "ZENHEADBUTT"
+    ],
+    "item": "LIFEORB",
+    "ability": 2,
+    "nature": "JOLLY",
+    "iv": 31,
+    "ev": [
+     0,
+     252,
+     0,
+     252,
+     0,
+     4
+    ],
+    "roles": [
+     "removal",
+     "speed"
+    ],
+    "src": "gen6uu/dex/BRAVE BAT (Choice Band)",
+    "fidelity": 3,
+    "inherited": "CROBAT",
+    "kept": false,
+    "why": "added:removal"
+   },
+   {
+    "species": "SKARMORY",
+    "level": 23,
+    "moves": [
+     "ROOST",
      "SPIKES",
-     "PLAYROUGH",
-     "THUNDERWAVE",
-     "TOXIC"
+     "TOXIC",
+     "WHIRLWIND"
     ],
     "item": "LEFTOVERS",
-    "ability": 0,
-    "nature": "CAREFUL",
+    "ability": 1,
+    "nature": "BOLD",
     "iv": 31,
     "ev": [
      252,
      0,
-     4,
+     252,
      0,
      0,
-     252
+     4
     ],
     "roles": [
      "hazards",
-     "speed",
-     "status"
+     "phaze",
+     "recovery",
+     "status",
+     "wall"
     ],
-    "src": "gen7ubers/dex/Spikes Support",
+    "src": "gen6ubers/dex/Physically Defensive",
     "fidelity": 4,
     "inherited": null,
     "kept": false,
@@ -500,7 +534,7 @@
    },
    {
     "species": "HELIOLISK",
-    "level": 25,
+    "level": 24,
     "moves": [
      "VOLTSWITCH",
      "HYPERVOICE",
@@ -531,64 +565,34 @@
    },
    {
     "species": "HAWLUCHA",
-    "level": 24,
+    "level": 23,
     "moves": [
+     "SUBSTITUTE",
      "SWORDSDANCE",
-     "ACROBATICS",
      "HIGHJUMPKICK",
-     "SUBSTITUTE"
+     "ACROBATICS"
     ],
-    "item": "ELECTRICSEED",
+    "item": "SITRUSBERRY",
     "ability": 0,
-    "nature": "ADAMANT",
+    "nature": "JOLLY",
     "iv": 31,
     "ev": [
-     96,
+     12,
+     244,
+     0,
      252,
      0,
-     124,
-     0,
-     36
+     0
     ],
     "roles": [
      "protect",
      "setup"
     ],
-    "src": "gen7ou/dex/Terrain Seed Sweeper",
+    "src": "gen6ou/dex/Substitute + Swords Dance",
     "fidelity": 4,
     "inherited": null,
     "kept": false,
     "why": "core ace"
-   },
-   {
-    "species": "DHELMISE",
-    "level": 24,
-    "moves": [
-     "ANCHORSHOT",
-     "RAPIDSPIN",
-     "POWERWHIP",
-     "KNOCKOFF"
-    ],
-    "item": "ASSAULTVEST",
-    "ability": 0,
-    "nature": "ADAMANT",
-    "iv": 31,
-    "ev": [
-     248,
-     252,
-     0,
-     0,
-     0,
-     8
-    ],
-    "roles": [
-     "removal"
-    ],
-    "src": "gen7ru/stats/Showdown Usage",
-    "fidelity": 4,
-    "inherited": null,
-    "kept": false,
-    "why": "added:removal"
    },
    {
     "species": "SYLVEON",
@@ -625,7 +629,7 @@
    },
    {
     "species": "owenpoke2",
-    "level": 25,
+    "level": 24,
     "moves": [],
     "item": null,
     "ability": 0,
@@ -652,13 +656,13 @@
    "stage": 1,
    "notes": [
     "evolved EEVEE (325) -> SYLVEON (525, UU) up to 3 levels ahead \u2014 nearer the 487 target",
-    "evolved HELIOPTILE (289) -> HELIOLISK (481, NU) \u2014 legal at level 25",
+    "evolved HELIOPTILE (289) -> HELIOLISK (481, NU) up to 3 levels ahead \u2014 nearer the 487 target",
     "owenpoke2 left to the engine \u2014 resolves to the starter matching the player's",
     "core ace: HAWLUCHA, the heaviest OU pick up to 720 BST (500)",
-    "core enabler: KLEFKI shields HAWLUCHA from FAIRY/FLYING/ICE/PSYCHIC and brings hazards",
+    "core enabler: SKARMORY shields HAWLUCHA from FAIRY/FLYING/PSYCHIC and brings hazards",
     "core breaker 2: HELIOLISK (kept) -- nothing hits what walls HAWLUCHA (nothing); the next attacking set",
-    "3 attacking sets: no member left that can re-set to one without breaking a floor",
-    "shape check: kept rebuild 2 of 8, 0 test(s) still failing"
+    "GOLBAT: UTURN -> TAILWIND, the team's speed control",
+    "3 attacking sets: no member left that can re-set to one without breaking a floor"
    ],
    "early_moves": true,
    "preset": "teams_bosses_gyms"
@@ -676,90 +680,63 @@
   "mons": [
    {
     "species": "HELIOLISK",
-    "level": 35,
+    "level": 40,
     "moves": [
-     "THUNDERBOLT",
-     "SURF",
      "GLARE",
-     "UTURN"
+     "UTURN",
+     "THUNDERBOLT",
+     "SURF"
     ],
     "item": "LIFEORB",
     "ability": 0,
     "nature": "TIMID",
     "iv": 31,
     "ev": [
+     4,
      0,
-     0,
-     92,
+     172,
      196,
-     192,
-     16
+     32,
+     96
     ],
     "roles": [
      "pivot",
      "speed"
     ],
-    "src": "gen7lc/dex/Life Orb",
+    "src": "gen6lc/dex/Paralysis Pivot",
     "fidelity": 4,
     "inherited": "HELIOPTILE",
     "kept": true,
-    "why": "original, re-set for speed"
+    "why": "original",
+    "pinned": false
    },
    {
     "species": "AERODACTYL",
-    "level": 33,
+    "level": 38,
     "moves": [
-     "STONEEDGE",
-     "EARTHQUAKE",
      "STEALTHROCK",
-     "AERIALACE"
+     "TAUNT",
+     "EARTHQUAKE",
+     "DEFOG"
     ],
-    "item": "LIFEORB",
-    "ability": 0,
+    "item": "ROCKYHELMET",
+    "ability": 1,
     "nature": "JOLLY",
     "iv": 31,
     "ev": [
+     4,
      0,
      252,
-     0,
      252,
      0,
-     4
+     0
     ],
     "roles": [
-     "hazards"
-    ],
-    "src": "gen6ru/stats/Showdown Usage",
-    "fidelity": 4,
-    "inherited": null,
-    "kept": false,
-    "why": "core enabler:hazards"
-   },
-   {
-    "species": "STARMIE",
-    "level": 33,
-    "moves": [
-     "RAPIDSPIN",
-     "ICEBEAM",
-     "HYDROPUMP",
-     "PSYSHOCK"
-    ],
-    "item": "ASSAULTVEST",
-    "ability": 2,
-    "nature": "TIMID",
-    "iv": 31,
-    "ev": [
-     0,
-     0,
-     0,
-     252,
-     252,
-     4
-    ],
-    "roles": [
+     "disrupt",
+     "hazards",
      "removal"
     ],
-    "src": "gen7ou/stats/Showdown Usage",
+    "src": "gen6ou/dex/Lead",
     "fidelity": 4,
     "inherited": null,
     "kept": false,
@@ -767,7 +744,7 @@
    },
    {
     "species": "GLACEON",
-    "level": 34,
+    "level": 39,
     "moves": [
      "ICEBEAM",
      "SHADOWBALL",
@@ -797,32 +774,62 @@
     "why": "original"
    },
    {
-    "species": "VENUSAUR",
-    "level": 33,
+    "species": "INFERNAPE",
+    "level": 38,
     "moves": [
-     "GIGADRAIN",
-     "SLUDGEBOMB",
-     "GROWTH",
-     "SYNTHESIS"
+     "CLOSECOMBAT",
+     "FLAREBLITZ",
+     "MACHPUNCH",
+     "UTURN"
     ],
-    "item": "VENUSAURITE",
+    "item": "CHOICEBAND",
     "ability": 2,
-    "nature": "MODEST",
+    "nature": "JOLLY",
     "iv": 31,
     "ev": [
-     248,
      0,
-     8,
-     16,
-     208,
-     28
+     252,
+     0,
+     252,
+     0,
+     4
+    ],
+    "roles": [
+     "pivot",
+     "priority"
+    ],
+    "src": "gen6uu/dex/Choice Band",
+    "fidelity": 4,
+    "inherited": null,
+    "kept": false,
+    "why": "core enabler:pivot"
+   },
+   {
+    "species": "SWAMPERT",
+    "level": 38,
+    "moves": [
+     "RAINDANCE",
+     "WATERFALL",
+     "EARTHQUAKE",
+     "ICEPUNCH"
+    ],
+    "item": "SWAMPERTITE",
+    "ability": 2,
+    "nature": "ADAMANT",
+    "iv": 31,
+    "ev": [
+     0,
+     252,
+     0,
+     252,
+     0,
+     4
     ],
     "roles": [
      "mega",
-     "recovery",
-     "setup"
+     "rain"
     ],
-    "src": "gen6ou/dex/Offensive",
+    "src": "gen6uu/dex/Rain Sweeper",
     "fidelity": 4,
     "inherited": null,
     "kept": false,
@@ -830,7 +837,7 @@
    },
    {
     "species": "owenpoke2",
-    "level": 34,
+    "level": 39,
     "moves": [],
     "item": null,
     "ability": 0,
@@ -858,11 +865,11 @@
    "notes": [
     "KEEP_MAX 2: left out MANTINE",
     "owenpoke2 left to the engine \u2014 resolves to the starter matching the player's",
-    "core ace: VENUSAUR (mega), the heaviest power pick up to 720 BST (625)",
-    "core enabler: AERODACTYL shields VENUSAUR from FIRE/FLYING and brings hazards",
-    "core breaker 2: GLACEON (kept) -- nothing hits what walls VENUSAUR (POISON/STEEL); the next attacking set, a mutual pair",
-    "HELIOLISK re-equipped to cover speed",
-    "shape check: kept rebuild 0 of 8, 2 test(s) still failing"
+    "core ace: SWAMPERT (mega), the heaviest power pick up to 720 BST (635)",
+    "core enabler: INFERNAPE shields SWAMPERT from GRASS and brings pivot",
+    "core breaker 2: GLACEON (kept) hits GRASS, which wall SWAMPERT, a mutual pair",
+    "HELIOLISK re-set for speed control: gen7nu/dex/All-out Attacker -> gen6lc/dex/Paralysis Pivot",
+    "shape check: kept rebuild 0 of 8, 1 test(s) still failing"
    ],
    "early_moves": true,
    "preset": "teams_bosses_gyms"
@@ -879,39 +886,39 @@
   "trainer_items": [],
   "mons": [
    {
-    "species": "CLEFABLE",
+    "species": "COFAGRIGUS",
     "level": [
      "balanceo",
      -2
     ],
     "moves": [
-     "MOONBLAST",
-     "THUNDERWAVE",
-     "KNOCKOFF",
-     "FIREBLAST"
+     "WILLOWISP",
+     "SHADOWBALL",
+     "PAINSPLIT",
+     "HAZE"
     ],
-    "item": "LEFTOVERS",
-    "ability": 1,
-    "nature": "CALM",
+    "item": "COLBURBERRY",
+    "ability": 0,
+    "nature": "BOLD",
     "iv": 31,
     "ev": [
      252,
      0,
-     160,
+     252,
      0,
-     0,
-     96
+     4,
+     0
     ],
     "roles": [
-     "speed",
-     "status"
+     "status",
+     "wall"
     ],
-    "src": "gen6ou/dex/Specially Defensive",
-    "fidelity": 3,
+    "src": "gen7ru/dex/Defensive",
+    "fidelity": 4,
     "inherited": null,
     "kept": false,
-    "why": "added:speed",
-    "design_level": 35
+    "why": "added:wall",
+    "design_level": 41
    },
    {
     "species": "MUK",
@@ -920,35 +927,35 @@
      -2
     ],
     "moves": [
-     "REST",
-     "SLEEPTALK",
      "CURSE",
-     "POISONJAB"
+     "POISONJAB",
+     "REST",
+     "SLEEPTALK"
     ],
-    "item": "LEFTOVERS",
+    "item": "BLACKSLUDGE",
     "ability": 1,
     "nature": "CAREFUL",
     "iv": 31,
     "ev": [
-     252,
-     4,
+     248,
      0,
+     8,
+     12,
      0,
-     0,
-     252
+     240
     ],
     "roles": [
      "recovery",
      "setup",
      "wall"
     ],
-    "src": "gen7zu/dex/Curse",
+    "src": "gen6pu/dex/CroMuk",
     "fidelity": 4,
     "inherited": null,
     "pinned": false,
     "kept": true,
     "why": "original",
-    "design_level": 36
+    "design_level": 42
    },
    {
     "species": "ROSERADE",
@@ -982,42 +989,7 @@
     "inherited": null,
     "kept": false,
     "why": "core breaker 2:hazards",
-    "design_level": 35
-   },
-   {
-    "species": "AEGISLASH",
-    "level": [
-     "balanceo",
-     -2
-    ],
-    "moves": [
-     "KINGSSHIELD",
-     "GYROBALL",
-     "TOXIC",
-     "PURSUIT"
-    ],
-    "item": "LEFTOVERS",
-    "ability": 0,
-    "nature": "SASSY",
-    "iv": 31,
-    "ev": [
-     252,
-     0,
-     4,
-     0,
-     0,
-     252
-    ],
-    "roles": [
-     "status",
-     "wall"
-    ],
-    "src": "gen6ubers/dex/Defensive",
-    "fidelity": 4,
-    "inherited": null,
-    "kept": false,
-    "why": "added:wall",
-    "design_level": 35
+    "design_level": 41
    },
    {
     "species": "DECIDUEYE",
@@ -1027,12 +999,48 @@
     ],
     "moves": [
      "DEFOG",
-     "LEAFSTORM",
+     "GRASSKNOT",
      "ROOST",
      "UTURN"
     ],
     "item": "COLBURBERRY",
-    "ability": 0,
+    "ability": 2,
+    "nature": "CALM",
+    "iv": 31,
+    "ev": [
+     248,
+     0,
+     100,
+     16,
+     0,
+     144
+    ],
+    "roles": [
+     "pivot",
+     "recovery",
+     "removal"
+    ],
+    "src": "gen7nu/dex/Defensive Defog",
+    "fidelity": 4,
+    "inherited": null,
+    "kept": false,
+    "why": "core enabler:removal",
+    "design_level": 41
+   },
+   {
+    "species": "TYPHLOSION",
+    "level": [
+     "balanceo",
+     -2
+    ],
+    "moves": [
+     "ERUPTION",
+     "FOCUSBLAST",
+     "EXTRASENSORY",
+     "FIREBLAST"
+    ],
+    "item": "CHOICESCARF",
+    "ability": 2,
     "nature": "TIMID",
     "iv": 31,
     "ev": [
@@ -1043,17 +1051,13 @@
      252,
      4
     ],
-    "roles": [
-     "pivot",
-     "recovery",
-     "removal"
-    ],
-    "src": "gen7nu/dex/Offensive Defog",
+    "roles": [],
+    "src": "gen6ru/stats/Showdown Usage",
     "fidelity": 4,
     "inherited": null,
     "kept": false,
-    "why": "core enabler:removal",
-    "design_level": 35
+    "why": "added:speed",
+    "design_level": 41
    },
    {
     "species": "HOUNDOOM",
@@ -1062,34 +1066,35 @@
      -2
     ],
     "moves": [
-     "SUNNYDAY",
+     "NASTYPLOT",
      "FIREBLAST",
      "DARKPULSE",
-     "SOLARBEAM"
+     "WILLOWISP"
     ],
     "item": "HOUNDOOMINITE",
     "ability": 1,
     "nature": "TIMID",
     "iv": 31,
     "ev": [
+     40,
      0,
-     0,
-     0,
+     8,
      252,
-     252,
-     4
+     208,
+     0
     ],
     "roles": [
      "mega",
-     "sun"
+     "setup",
+     "status"
     ],
-    "src": "gen6uu/dex/SunnyDoom",
+    "src": "gen6ou/dex/Utility Attacker",
     "fidelity": 4,
     "inherited": null,
     "pinned": false,
     "kept": true,
     "why": "original",
-    "design_level": 36
+    "design_level": 42
    }
   ],
   "design": {
@@ -1100,8 +1105,7 @@
     "core ace: HOUNDOOM, the roster's own power pick (600)",
     "core enabler: DECIDUEYE shields HOUNDOOM from FIGHTING/GROUND/WATER and brings removal",
     "core breaker 2: ROSERADE (generated) -- nothing hits what walls HOUNDOOM (nothing); the next attacking set, a mutual pair",
-    "levels stay dynamic (balanceo-2); band read from area Ciudad Anatasa -> level 33, gym 4",
-    "shape check: kept rebuild 1 of 8, 0 test(s) still failing"
+    "levels stay dynamic (balanceo-2); band read from area Ciudad Anatasa -> level 33, gym 4"
    ],
    "early_moves": true,
    "preset": "teams_bosses_gyms"
@@ -1209,7 +1213,7 @@
    },
    {
     "species": "BRAVIARY",
-    "level": 69,
+    "level": 97,
     "moves": [
      "BRAVEBIRD",
      "RETURN",
@@ -1411,68 +1415,67 @@
     "why": "core ace"
    },
    {
-    "species": "MILTANK",
+    "species": "TOGEDEMARU",
     "level": 22,
     "moves": [
-     "BODYSLAM",
-     "MILKDRINK",
+     "UTURN",
+     "ZINGZAP",
+     "IRONHEAD",
+     "NUZZLE"
+    ],
+    "item": "CHOICESCARF",
+    "ability": 1,
+    "nature": "JOLLY",
+    "iv": 31,
+    "ev": [
+     0,
+     252,
+     4,
+     252,
+     0,
+     0
+    ],
+    "roles": [
+     "pivot"
+    ],
+    "src": "gen7nu/dex/Choice Scarf",
+    "fidelity": 4,
+    "inherited": null,
+    "kept": false,
+    "why": "core enabler:pivot"
+   },
+   {
+    "species": "ALOMOMOLA",
+    "level": 22,
+    "moves": [
+     "WISH",
+     "PROTECT",
      "TOXIC",
-     "STEALTHROCK"
+     "KNOCKOFF"
     ],
     "item": "LEFTOVERS",
     "ability": 2,
     "nature": "IMPISH",
     "iv": 31,
     "ev": [
+     248,
+     0,
      252,
      0,
-     240,
-     16,
      0,
-     0
+     8
     ],
     "roles": [
-     "hazards",
+     "protect",
      "recovery",
      "status",
      "wall"
     ],
-    "src": "gen6nu/dex/Physically Defensive",
+    "src": "gen6ubers/dex/Kindhearted Fish",
     "fidelity": 4,
     "inherited": null,
     "kept": false,
     "why": "added:wall"
-   },
-   {
-    "species": "TALONFLAME",
-    "level": 22,
-    "moves": [
-     "BRAVEBIRD",
-     "FLAREBLITZ",
-     "ROOST",
-     "UTURN"
-    ],
-    "item": "LIFEORB",
-    "ability": 2,
-    "nature": "JOLLY",
-    "iv": 31,
-    "ev": [
-     0,
-     252,
-     0,
-     252,
-     0,
-     4
-    ],
-    "roles": [
-     "pivot",
-     "recovery"
-    ],
-    "src": "gen6ubers/stats/Showdown Usage",
-    "fidelity": 4,
-    "inherited": null,
-    "kept": false,
-    "why": "core enabler:pivot"
    },
    {
     "species": "AERODACTYL",
@@ -1513,7 +1516,7 @@
    "notes": [
     "KEEP_MAX 2: left out FINNEON",
     "core ace: AZUMARILL, the heaviest OU pick up to 720 BST (410)",
-    "core enabler: TALONFLAME shields AZUMARILL from GRASS and brings pivot",
+    "core enabler: TOGEDEMARU shields AZUMARILL from ELECTRIC/GRASS/POISON and brings pivot",
     "core breaker 2: DUOSION (kept) -- nothing hits what walls AZUMARILL (nothing); the next attacking set, a mutual pair"
    ],
    "early_moves": true,
@@ -1561,7 +1564,7 @@
     "pinned": false,
     "kept": true,
     "why": "original",
-    "design_level": 35
+    "design_level": 41
    },
    {
     "species": "WEAVILE",
@@ -1570,7 +1573,7 @@
      -2
     ],
     "moves": [
-     "ICYWIND",
+     "KNOCKOFF",
      "ICICLECRASH",
      "PURSUIT",
      "ICESHARD"
@@ -1588,8 +1591,7 @@
      0
     ],
     "roles": [
-     "priority",
-     "speed"
+     "priority"
     ],
     "src": "gen6ou/dex/Choice Band",
     "fidelity": 4,
@@ -1597,7 +1599,7 @@
     "pinned": false,
     "kept": true,
     "why": "evolved original",
-    "design_level": 35
+    "design_level": 41
    },
    {
     "species": "YANMEGA",
@@ -1631,39 +1633,76 @@
     "inherited": null,
     "kept": false,
     "why": "core enabler:pivot",
-    "design_level": 34
+    "design_level": 40
    },
    {
-    "species": "TANGROWTH",
+    "species": "SERPERIOR",
     "level": [
      "balanceo",
      -2
     ],
     "moves": [
      "LEAFSTORM",
-     "KNOCKOFF",
-     "EARTHQUAKE",
-     "SLUDGEBOMB"
+     "GLARE",
+     "DEFOG",
+     "KNOCKOFF"
     ],
-    "item": "ASSAULTVEST",
+    "item": "LIFEORB",
     "ability": 2,
-    "nature": "SASSY",
+    "nature": "TIMID",
     "iv": 31,
     "ev": [
+     0,
+     0,
+     0,
+     252,
+     252,
+     4
+    ],
+    "roles": [
+     "removal",
+     "speed"
+    ],
+    "src": "gen7ou/dex/Choice Scarf",
+    "fidelity": 4,
+    "inherited": null,
+    "kept": false,
+    "why": "added:removal",
+    "design_level": 40
+   },
+   {
+    "species": "BLAZIKEN",
+    "level": [
+     "balanceo",
+     -2
+    ],
+    "moves": [
+     "FLAREBLITZ",
+     "PROTECT",
+     "HIGHJUMPKICK",
+     "EARTHQUAKE"
+    ],
+    "item": "LIFEORB",
+    "ability": 2,
+    "nature": "NAUGHTY",
+    "iv": 31,
+    "ev": [
+     0,
+     252,
+     4,
      252,
      0,
-     4,
-     0,
-     0,
-     252
+     0
     ],
-    "roles": [],
-    "src": "gen6ou/dex/Assault Vest",
+    "roles": [
+     "protect"
+    ],
+    "src": "gen6ubers/dex/Physical Attacker",
     "fidelity": 3,
     "inherited": null,
     "kept": false,
     "why": "core ace",
-    "design_level": 34
+    "design_level": 40
    },
    {
     "species": "SNORLAX",
@@ -1699,42 +1738,7 @@
     "inherited": null,
     "kept": false,
     "why": "added:wall",
-    "design_level": 34
-   },
-   {
-    "species": "TOGEKISS",
-    "level": [
-     "balanceo",
-     -2
-    ],
-    "moves": [
-     "AIRSLASH",
-     "HEALBELL",
-     "ROOST",
-     "DEFOG"
-    ],
-    "item": "LEFTOVERS",
-    "ability": 1,
-    "nature": "BOLD",
-    "iv": 31,
-    "ev": [
-     252,
-     0,
-     160,
-     96,
-     0,
-     0
-    ],
-    "roles": [
-     "recovery",
-     "removal"
-    ],
-    "src": "gen7uu/dex/Support",
-    "fidelity": 4,
-    "inherited": null,
-    "kept": false,
-    "why": "added:removal",
-    "design_level": 34
+    "design_level": 40
    }
   ],
   "design": {
@@ -1742,12 +1746,12 @@
    "stage": 3,
    "notes": [
     "KEEP_MAX 2: left out FERALIGATR, CROBAT",
-    "evolved SNEASEL (430) -> WEAVILE (510, UUBL) \u2014 legal at level 35",
-    "core ace: TANGROWTH, the heaviest OU pick up to 720 BST (535)",
-    "core enabler: YANMEGA shields TANGROWTH from BUG and brings pivot",
-    "core breaker 2: GENGAR (kept) hits GRASS/STEEL, which wall TANGROWTH",
-    "WEAVILE: KNOCKOFF -> ICYWIND, the team's speed control",
-    "levels stay dynamic (balanceo-2); band read from between Ruta 10 and Ruta 12 -> level 32, gym 4"
+    "evolved SNEASEL (430) -> WEAVILE (510, UUBL) \u2014 legal at level 41",
+    "core ace: BLAZIKEN, the heaviest power pick up to 720 BST (530)",
+    "core enabler: YANMEGA shields BLAZIKEN from GROUND and brings pivot",
+    "core breaker 2: GENGAR (kept) -- nothing hits what walls BLAZIKEN (nothing); the next attacking set",
+    "levels stay dynamic (balanceo-2); band read from between Ruta 10 and Ruta 12 -> level 32, gym 4",
+    "shape check: kept rebuild 0 of 8, 1 test(s) still failing"
    ],
    "early_moves": true,
    "preset": "teams_bosses_gyms"
@@ -1764,73 +1768,40 @@
   "trainer_items": [],
   "mons": [
    {
-    "species": "PELIPPER",
-    "level": 28,
+    "species": "RIBOMBEE",
+    "level": 29,
     "moves": [
-     "SCALD",
+     "MOONBLAST",
+     "BUGBUZZ",
      "UTURN",
-     "ROOST",
-     "DEFOG"
+     "STICKYWEB"
     ],
-    "item": "DAMPROCK",
-    "ability": 0,
-    "nature": "RELAXED",
+    "item": "LIFEORB",
+    "ability": 1,
+    "nature": "TIMID",
     "iv": 31,
     "ev": [
-     248,
+     0,
+     0,
      0,
      252,
-     0,
-     0,
-     8
+     252,
+     4
     ],
     "roles": [
+     "hazards",
      "pivot",
-     "recovery",
-     "removal"
+     "speed"
     ],
-    "src": "gen7ou/dex/Defensive Rain Setter",
+    "src": "gen7ru/dex/Choice Specs",
     "fidelity": 4,
     "inherited": null,
     "kept": false,
     "why": "core enabler:pivot"
    },
    {
-    "species": "MANTINE",
-    "level": 28,
-    "moves": [
-     "ROOST",
-     "SCALD",
-     "DEFOG",
-     "TOXIC"
-    ],
-    "item": "LEFTOVERS",
-    "ability": 1,
-    "nature": "CALM",
-    "iv": 31,
-    "ev": [
-     252,
-     0,
-     36,
-     0,
-     0,
-     220
-    ],
-    "roles": [
-     "recovery",
-     "removal",
-     "status",
-     "wall"
-    ],
-    "src": "gen7ou/dex/Mixed Wall",
-    "fidelity": 4,
-    "inherited": null,
-    "kept": false,
-    "why": "added:wall"
-   },
-   {
     "species": "HELIOLISK",
-    "level": 30,
+    "level": 32,
     "moves": [
      "VOLTSWITCH",
      "HYPERVOICE",
@@ -1860,8 +1831,38 @@
     "why": "original"
    },
    {
-    "species": "SYLVEON",
+    "species": "STARMIE",
     "level": 29,
+    "moves": [
+     "RAPIDSPIN",
+     "ICEBEAM",
+     "HYDROPUMP",
+     "PSYSHOCK"
+    ],
+    "item": "ASSAULTVEST",
+    "ability": 2,
+    "nature": "TIMID",
+    "iv": 31,
+    "ev": [
+     0,
+     0,
+     0,
+     252,
+     252,
+     4
+    ],
+    "roles": [
+     "removal"
+    ],
+    "src": "gen7ou/stats/Showdown Usage",
+    "fidelity": 4,
+    "inherited": null,
+    "kept": false,
+    "why": "added:removal"
+   },
+   {
+    "species": "SYLVEON",
+    "level": 30,
     "moves": [
      "HYPERVOICE",
      "HEALBELL",
@@ -1888,13 +1889,12 @@
     "src": "gen6uu/dex/Cleric",
     "fidelity": 4,
     "inherited": null,
-    "pinned": false,
     "kept": true,
-    "why": "evolved original"
+    "why": "original, re-set for wall"
    },
    {
     "species": "TANGROWTH",
-    "level": 28,
+    "level": 29,
     "moves": [
      "LEAFSTORM",
      "KNOCKOFF",
@@ -1922,7 +1922,7 @@
    },
    {
     "species": "owenpoke2",
-    "level": 29,
+    "level": 30,
     "moves": [],
     "item": null,
     "ability": 0,
@@ -1949,13 +1949,13 @@
    "stage": 2,
    "notes": [
     "KEEP_MAX 2: left out MANTYKE",
-    "evolved EEVEE (325) -> SYLVEON (525, UU) \u2014 legal at level 29",
+    "evolved EEVEE (325) -> SYLVEON (525, UU) \u2014 legal at level 30",
     "owenpoke2 left to the engine \u2014 resolves to the starter matching the player's",
     "core ace: TANGROWTH, the heaviest OU pick up to 720 BST (535)",
-    "core enabler: PELIPPER shields TANGROWTH from BUG/FIRE and brings pivot",
+    "core enabler: RIBOMBEE shields TANGROWTH from BUG and brings pivot",
     "core breaker 2: HELIOLISK (kept) hits FIRE/FLYING, which wall TANGROWTH",
-    "speed control: no member can carry it without breaking a floor",
-    "3 attacking sets: no member left that can re-set to one without breaking a floor"
+    "SYLVEON re-equipped to cover wall",
+    "shape check: kept rebuild 0 of 8, 1 test(s) still failing"
    ],
    "early_moves": true,
    "preset": "teams_bosses_gyms"
@@ -1973,7 +1973,7 @@
   "mons": [
    {
     "species": "METANG",
-    "level": 29,
+    "level": 30,
     "moves": [
      "STEALTHROCK",
      "METEORMASH",
@@ -2003,34 +2003,63 @@
     "why": "evolved original"
    },
    {
-    "species": "SLOWKING",
-    "level": 28,
+    "species": "PELIPPER",
+    "level": 29,
     "moves": [
      "SCALD",
-     "PROTECT",
-     "SLACKOFF",
-     "THUNDERWAVE"
+     "UTURN",
+     "ICYWIND",
+     "DEFOG"
     ],
-    "item": "LEFTOVERS",
-    "ability": 2,
-    "nature": "CALM",
+    "item": "DAMPROCK",
+    "ability": 0,
+    "nature": "RELAXED",
     "iv": 31,
     "ev": [
-     244,
+     248,
      0,
-     196,
+     252,
      0,
      0,
-     68
+     8
     ],
     "roles": [
-     "protect",
+     "pivot",
+     "removal",
+     "speed"
+    ],
+    "src": "gen7ou/dex/Defensive Rain Setter",
+    "fidelity": 4,
+    "inherited": null,
+    "kept": false,
+    "why": "core enabler:pivot"
+   },
+   {
+    "species": "HARIYAMA",
+    "level": 29,
+    "moves": [
+     "CLOSECOMBAT",
+     "KNOCKOFF",
+     "REST",
+     "SLEEPTALK"
+    ],
+    "item": "LEFTOVERS",
+    "ability": 0,
+    "nature": "IMPISH",
+    "iv": 31,
+    "ev": [
+     12,
+     0,
+     252,
+     0,
+     0,
+     244
+    ],
+    "roles": [
      "recovery",
-     "speed",
-     "status",
      "wall"
     ],
-    "src": "gen6ou/dex/Defensive",
+    "src": "gen7nu/dex/Defensive",
     "fidelity": 4,
     "inherited": null,
     "kept": false,
@@ -2038,7 +2067,7 @@
    },
    {
     "species": "BRAVIARY",
-    "level": 69,
+    "level": 97,
     "moves": [
      "BRAVEBIRD",
      "RETURN",
@@ -2068,71 +2097,36 @@
     "why": "original"
    },
    {
-    "species": "GLISCOR",
-    "level": 28,
+    "species": "TANGROWTH",
+    "level": 29,
     "moves": [
-     "SWORDSDANCE",
-     "ROOST",
+     "LEAFSTORM",
+     "KNOCKOFF",
      "EARTHQUAKE",
-     "FACADE"
+     "SLUDGEBOMB"
     ],
-    "item": "TOXICORB",
+    "item": "ASSAULTVEST",
     "ability": 2,
-    "nature": "CAREFUL",
+    "nature": "SASSY",
     "iv": 31,
     "ev": [
-     248,
+     252,
+     0,
+     4,
      0,
      0,
-     56,
-     0,
-     204
+     252
     ],
-    "roles": [
-     "recovery",
-     "setup"
-    ],
-    "src": "gen6ou/dex/Swords Dance Wallbreaker",
-    "fidelity": 4,
+    "roles": [],
+    "src": "gen6ou/dex/Assault Vest",
+    "fidelity": 3,
     "inherited": null,
     "kept": false,
     "why": "core ace"
    },
    {
-    "species": "CLOYSTER",
-    "level": 28,
-    "moves": [
-     "RAPIDSPIN",
-     "TOXICSPIKES",
-     "ICICLESPEAR",
-     "SHELLSMASH"
-    ],
-    "item": "FOCUSSASH",
-    "ability": 1,
-    "nature": "JOLLY",
-    "iv": 31,
-    "ev": [
-     0,
-     252,
-     4,
-     252,
-     0,
-     0
-    ],
-    "roles": [
-     "hazards",
-     "removal",
-     "setup"
-    ],
-    "src": "gen6ubers/dex/Hazard Control",
-    "fidelity": 4,
-    "inherited": null,
-    "kept": false,
-    "why": "core enabler:hazards"
-   },
-   {
     "species": "albapoke1",
-    "level": 29,
+    "level": 30,
     "moves": [],
     "item": null,
     "ability": 0,
@@ -2159,11 +2153,12 @@
    "stage": 2,
    "notes": [
     "KEEP_MAX 2: left out PUMPKABOO",
-    "evolved BELDUM (300) -> METANG (420, NFE) \u2014 legal at level 29",
+    "evolved BELDUM (300) -> METANG (420, NFE) \u2014 legal at level 30",
     "albapoke1 left to the engine \u2014 resolves to the starter matching the player's",
-    "core ace: GLISCOR, the heaviest OU pick up to 720 BST (510)",
-    "core enabler: CLOYSTER shields GLISCOR from ICE/WATER and brings hazards",
-    "core breaker 2: BRAVIARY (kept) hits BUG/GRASS, which wall GLISCOR, a mutual pair",
+    "core ace: TANGROWTH, the heaviest OU pick up to 720 BST (535)",
+    "core enabler: PELIPPER shields TANGROWTH from BUG/FIRE and brings pivot",
+    "core breaker 2: METANG (kept) hits FIRE/POISON/STEEL, which wall TANGROWTH, a mutual pair",
+    "PELIPPER: ROOST -> ICYWIND, the team's speed control",
     "shape check: kept rebuild 0 of 8, 1 test(s) still failing"
    ],
    "early_moves": true,
@@ -2181,110 +2176,82 @@
   "trainer_items": [],
   "mons": [
    {
-    "species": "DUOSION",
-    "level": 34,
+    "species": "REUNICLUS",
+    "level": 38,
     "moves": [
      "CALMMIND",
-     "RECOVER",
      "PSYSHOCK",
-     "THUNDER"
+     "FOCUSBLAST",
+     "RECOVER"
     ],
-    "item": "LIFEORB",
+    "item": "LEFTOVERS",
     "ability": 1,
     "nature": "BOLD",
     "iv": 31,
     "ev": [
      252,
      0,
-     216,
-     8,
-     32,
-     0
+     200,
+     0,
+     0,
+     56
     ],
     "roles": [
      "recovery",
-     "setup"
+     "setup",
+     "wall"
     ],
-    "src": "gen7uu/stats/Showdown Usage",
-    "fidelity": 3,
-    "inherited": "REUNICLUS",
+    "src": "gen6ou/dex/Calm Mind",
+    "fidelity": 4,
+    "inherited": null,
     "pinned": false,
     "kept": true,
-    "why": "original"
+    "why": "evolved original"
    },
    {
-    "species": "FORRETRESS",
-    "level": 32,
+    "species": "BRONZONG",
+    "level": 36,
     "moves": [
      "STEALTHROCK",
-     "RAPIDSPIN",
-     "SPIKES",
-     "TOXICSPIKES"
+     "GYROBALL",
+     "TOXIC",
+     "PROTECT"
     ],
     "item": "LEFTOVERS",
     "ability": 0,
-    "nature": "ADAMANT",
+    "nature": "SASSY",
     "iv": 31,
     "ev": [
      252,
-     252,
+     4,
      0,
      0,
      0,
-     4
+     252
     ],
     "roles": [
      "hazards",
-     "removal",
+     "protect",
+     "status",
      "wall"
     ],
-    "src": "gen7uu/stats/Showdown Usage",
+    "src": "gen6ubers/dex/Special Tank",
     "fidelity": 4,
     "inherited": null,
     "kept": false,
     "why": "added:wall"
    },
    {
-    "species": "VIKAVOLT",
-    "level": 32,
+    "species": "TSAREENA",
+    "level": 36,
     "moves": [
-     "BUGBUZZ",
-     "THUNDERBOLT",
-     "ENERGYBALL",
-     "VOLTSWITCH"
+     "POWERWHIP",
+     "KNOCKOFF",
+     "HIGHJUMPKICK",
+     "UTURN"
     ],
-    "item": "CHOICESPECS",
-    "ability": 0,
-    "nature": "MODEST",
-    "iv": 31,
-    "ev": [
-     104,
-     0,
-     0,
-     152,
-     252,
-     0
-    ],
-    "roles": [
-     "pivot"
-    ],
-    "src": "gen7nu/dex/Choice Specs",
-    "fidelity": 4,
-    "inherited": null,
-    "kept": false,
-    "why": "core enabler:pivot"
-   },
-   {
-    "species": "EXCADRILL",
-    "level": 32,
-    "moves": [
-     "ROCKSLIDE",
-     "RAPIDSPIN",
-     "EARTHQUAKE",
-     "IRONHEAD"
-    ],
-    "item": "CHOICESCARF",
-    "ability": 2,
+    "item": "CHOICEBAND",
+    "ability": 1,
     "nature": "JOLLY",
     "iv": 31,
     "ev": [
@@ -2296,17 +2263,79 @@
      4
     ],
     "roles": [
-     "removal"
+     "pivot"
     ],
-    "src": "gen6ou/dex/Choice Scarf",
+    "src": "gen7uu/dex/Choice Band",
     "fidelity": 4,
+    "inherited": null,
+    "kept": false,
+    "why": "core enabler:pivot"
+   },
+   {
+    "species": "BLAZIKEN",
+    "level": 36,
+    "moves": [
+     "FLAREBLITZ",
+     "PROTECT",
+     "HIGHJUMPKICK",
+     "EARTHQUAKE"
+    ],
+    "item": "LIFEORB",
+    "ability": 2,
+    "nature": "NAUGHTY",
+    "iv": 31,
+    "ev": [
+     0,
+     252,
+     4,
+     252,
+     0,
+     0
+    ],
+    "roles": [
+     "protect"
+    ],
+    "src": "gen6ubers/dex/Physical Attacker",
+    "fidelity": 3,
     "inherited": null,
     "kept": false,
     "why": "core ace"
    },
    {
+    "species": "BLASTOISE",
+    "level": 36,
+    "moves": [
+     "SCALD",
+     "RAPIDSPIN",
+     "ROAR",
+     "TOXIC"
+    ],
+    "item": "LEFTOVERS",
+    "ability": 0,
+    "nature": "BOLD",
+    "iv": 31,
+    "ev": [
+     252,
+     0,
+     252,
+     0,
+     4,
+     0
+    ],
+    "roles": [
+     "phaze",
+     "removal",
+     "status"
+    ],
+    "src": "gen6uu/dex/Defensive Spinner",
+    "fidelity": 4,
+    "inherited": null,
+    "kept": false,
+    "why": "added:removal"
+   },
+   {
     "species": "DELPHOX",
-    "level": 33,
+    "level": 37,
     "moves": [
      "FIREBLAST",
      "PSYCHIC",
@@ -2332,38 +2361,6 @@
     "pinned": false,
     "kept": true,
     "why": "evolved original"
-   },
-   {
-    "species": "SNORLAX",
-    "level": 32,
-    "moves": [
-     "CURSE",
-     "RETURN",
-     "REST",
-     "SLEEPTALK"
-    ],
-    "item": "LEFTOVERS",
-    "ability": 1,
-    "nature": "CAREFUL",
-    "iv": 31,
-    "ev": [
-     188,
-     0,
-     144,
-     0,
-     0,
-     176
-    ],
-    "roles": [
-     "recovery",
-     "setup",
-     "wall"
-    ],
-    "src": "gen6uu/dex/CurseLax",
-    "fidelity": 4,
-    "inherited": null,
-    "kept": false,
-    "why": "added:wall"
    }
   ],
   "design": {
@@ -2371,10 +2368,11 @@
    "stage": 3,
    "notes": [
     "KEEP_MAX 2: left out LUMINEON",
-    "evolved BRAIXEN (409) -> DELPHOX (534, NU) up to 3 levels ahead \u2014 nearer the 551 target",
-    "core ace: EXCADRILL, the heaviest OU pick up to 720 BST (508)",
-    "core enabler: VIKAVOLT shields EXCADRILL from FIGHTING and brings pivot",
-    "core breaker 2: DUOSION (kept) -- nothing hits what walls EXCADRILL (nothing); the next attacking set, a mutual pair"
+    "evolved BRAIXEN (409) -> DELPHOX (534, NU) \u2014 legal at level 37",
+    "evolved DUOSION (370) -> REUNICLUS (490, RUBL) up to 3 levels ahead \u2014 nearer the 551 target",
+    "core ace: BLAZIKEN, the heaviest power pick up to 720 BST (530)",
+    "core enabler: TSAREENA shields BLAZIKEN from GROUND/WATER and brings pivot",
+    "core breaker 2: DELPHOX (kept) -- nothing hits what walls BLAZIKEN (nothing); the next attacking set"
    ],
    "early_moves": true,
    "preset": "teams_bosses_gyms"
@@ -2391,8 +2389,40 @@
   "trainer_items": [],
   "mons": [
    {
+    "species": "FORRETRESS",
+    "level": 56,
+    "moves": [
+     "RAPIDSPIN",
+     "STEALTHROCK",
+     "VOLTSWITCH",
+     "GYROBALL"
+    ],
+    "item": "LEFTOVERS",
+    "ability": 0,
+    "nature": "RELAXED",
+    "iv": 31,
+    "ev": [
+     252,
+     0,
+     252,
+     0,
+     0,
+     4
+    ],
+    "roles": [
+     "hazards",
+     "pivot",
+     "removal"
+    ],
+    "src": "gen6uu/dex/Defensive Rapid Spin",
+    "fidelity": 4,
+    "inherited": null,
+    "kept": false,
+    "why": "core enabler:pivot"
+   },
+   {
     "species": "GOURGEIST",
-    "level": 40,
+    "level": 57,
     "moves": [
      "TRICK",
      "WILLOWISP",
@@ -2423,72 +2453,8 @@
     "why": "original"
    },
    {
-    "species": "BRONZONG",
-    "level": 39,
-    "moves": [
-     "STEALTHROCK",
-     "GYROBALL",
-     "TOXIC",
-     "PROTECT"
-    ],
-    "item": "LEFTOVERS",
-    "ability": 0,
-    "nature": "SASSY",
-    "iv": 31,
-    "ev": [
-     252,
-     4,
-     0,
-     0,
-     0,
-     252
-    ],
-    "roles": [
-     "hazards",
-     "protect",
-     "status",
-     "wall"
-    ],
-    "src": "gen6ubers/dex/Special Tank",
-    "fidelity": 4,
-    "inherited": null,
-    "kept": false,
-    "why": "core enabler:hazards"
-   },
-   {
-    "species": "DONPHAN",
-    "level": 39,
-    "moves": [
-     "RAPIDSPIN",
-     "EARTHQUAKE",
-     "KNOCKOFF",
-     "ICESHARD"
-    ],
-    "item": "ASSAULTVEST",
-    "ability": 0,
-    "nature": "ADAMANT",
-    "iv": 31,
-    "ev": [
-     172,
-     252,
-     0,
-     84,
-     0,
-     0
-    ],
-    "roles": [
-     "priority",
-     "removal"
-    ],
-    "src": "gen6uu/dex/Offensive Spinner",
-    "fidelity": 4,
-    "inherited": null,
-    "kept": false,
-    "why": "added:removal"
-   },
-   {
     "species": "EELEKTROSS",
-    "level": 40,
+    "level": 57,
     "moves": [
      "VOLTSWITCH",
      "FLAMETHROWER",
@@ -2518,326 +2484,8 @@
     "why": "evolved original"
    },
    {
-    "species": "BLAZIKEN",
-    "level": 39,
-    "moves": [
-     "SWORDSDANCE",
-     "FLAREBLITZ",
-     "LOWKICK",
-     "STONEEDGE"
-    ],
-    "item": "BLAZIKENITE",
-    "ability": 2,
-    "nature": "ADAMANT",
-    "iv": 31,
-    "ev": [
-     0,
-     252,
-     4,
-     252,
-     0,
-     0
-    ],
-    "roles": [
-     "mega",
-     "setup"
-    ],
-    "src": "gen7ubers/dex/Swords Dance",
-    "fidelity": 4,
-    "inherited": null,
-    "kept": false,
-    "why": "core ace"
-   },
-   {
-    "species": "albapoke2",
-    "level": 40,
-    "moves": [],
-    "item": null,
-    "ability": 0,
-    "nature": "HARDY",
-    "iv": 31,
-    "ev": [
-     0,
-     0,
-     0,
-     0,
-     0,
-     0
-    ],
-    "roles": [],
-    "src": "engine (Pokes Rivales starter slot)",
-    "fidelity": 0,
-    "inherited": null,
-    "kept": true,
-    "why": "starter slot"
-   }
-  ],
-  "design": {
-   "target_ebst": 525,
-   "stage": 4,
-   "notes": [
-    "KEEP_MAX 2: left out METANG",
-    "evolved EELEKTRIK (405) -> EELEKTROSS (515, PU) \u2014 legal at level 40",
-    "albapoke2 left to the engine \u2014 resolves to the starter matching the player's",
-    "core ace: BLAZIKEN (mega), the heaviest power pick up to 720 BST (630)",
-    "core enabler: BRONZONG shields BLAZIKEN from FLYING/PSYCHIC and brings hazards",
-    "core breaker 2: EELEKTROSS (kept) -- nothing hits what walls BLAZIKEN (nothing); the next attacking set, a mutual pair",
-    "3 attacking sets: no member left that can re-set to one without breaking a floor"
-   ],
-   "early_moves": true,
-   "preset": "teams_bosses_gyms"
-  }
- },
- {
-  "id": "rival_OWEN1_Owen_map264",
-  "map": 264,
-  "type_id": 17,
-  "class": "OWEN1",
-  "name": "Owen",
-  "orig_ace_level": 42,
-  "cheat_tier": false,
-  "trainer_items": [],
-  "mons": [
-   {
-    "species": "HELIOLISK",
-    "level": 48,
-    "moves": [
-     "GLARE",
-     "UTURN",
-     "THUNDERBOLT",
-     "SURF"
-    ],
-    "item": "LIFEORB",
-    "ability": 0,
-    "nature": "TIMID",
-    "iv": 31,
-    "ev": [
-     4,
-     0,
-     172,
-     196,
-     32,
-     96
-    ],
-    "roles": [
-     "pivot",
-     "speed"
-    ],
-    "src": "gen6lc/dex/Paralysis Pivot",
-    "fidelity": 4,
-    "inherited": "HELIOPTILE",
-    "kept": true,
-    "why": "original",
-    "pinned": false
-   },
-   {
-    "species": "GLACEON",
-    "level": 46,
-    "moves": [
-     "ICEBEAM",
-     "SHADOWBALL",
-     "SIGNALBEAM",
-     "WISH"
-    ],
-    "item": "LIFEORB",
-    "ability": 2,
-    "nature": "MODEST",
-    "iv": 31,
-    "ev": [
-     252,
-     0,
-     0,
-     0,
-     252,
-     4
-    ],
-    "roles": [
-     "recovery"
-    ],
-    "src": "gen6pu/stats/Showdown Usage",
-    "fidelity": 4,
-    "inherited": null,
-    "pinned": false,
-    "kept": true,
-    "why": "original"
-   },
-   {
-    "species": "SUICUNE",
-    "level": 45,
-    "moves": [
-     "CALMMIND",
-     "PROTECT",
-     "SCALD",
-     "SUBSTITUTE"
-    ],
-    "item": "LEFTOVERS",
-    "ability": 0,
-    "nature": "TIMID",
-    "iv": 31,
-    "ev": [
-     252,
-     0,
-     0,
-     216,
-     0,
-     40
-    ],
-    "roles": [
-     "protect",
-     "setup",
-     "wall"
-    ],
-    "src": "gen7uu/dex/Calm Mind + Protect",
-    "fidelity": 4,
-    "inherited": null,
-    "kept": false,
-    "why": "added:wall"
-   },
-   {
-    "species": "YVELTAL",
-    "level": 45,
-    "moves": [
-     "KNOCKOFF",
-     "FOULPLAY",
-     "UTURN",
-     "SUCKERPUNCH"
-    ],
-    "item": "CHOICEBAND",
-    "ability": 0,
-    "nature": "JOLLY",
-    "iv": 31,
-    "ev": [
-     0,
-     252,
-     4,
-     252,
-     0,
-     0
-    ],
-    "roles": [
-     "pivot",
-     "priority"
-    ],
-    "src": "gen7ubers/dex/Choice Band",
-    "fidelity": 4,
-    "inherited": null,
-    "kept": false,
-    "why": "core enabler:pivot"
-   },
-   {
-    "species": "LATIOS",
-    "level": 45,
-    "moves": [
-     "PSYCHIC",
-     "DRACOMETEOR",
-     "ROOST",
-     "DEFOG"
-    ],
-    "item": "LATIOSITE",
-    "ability": 0,
-    "nature": "TIMID",
-    "iv": 31,
-    "ev": [
-     0,
-     0,
-     0,
-     252,
-     252,
-     4
-    ],
-    "roles": [
-     "mega",
-     "recovery",
-     "removal"
-    ],
-    "src": "gen6ou/dex/Special Attacker",
-    "fidelity": 4,
-    "inherited": null,
-    "kept": false,
-    "why": "core ace"
-   },
-   {
-    "species": "owenpoke3",
-    "level": 46,
-    "moves": [],
-    "item": null,
-    "ability": 0,
-    "nature": "HARDY",
-    "iv": 31,
-    "ev": [
-     0,
-     0,
-     0,
-     0,
-     0,
-     0
-    ],
-    "roles": [],
-    "src": "engine (Pokes Rivales starter slot)",
-    "fidelity": 0,
-    "inherited": null,
-    "kept": true,
-    "why": "starter slot"
-   }
-  ],
-  "design": {
-   "target_ebst": 593,
-   "stage": 6,
-   "notes": [
-    "KEEP_MAX 2: left out MANTINE, MAGMAR",
-    "owenpoke3 left to the engine \u2014 resolves to the starter matching the player's",
-    "core ace: LATIOS (mega), the heaviest power pick up to 720 BST (700)",
-    "core enabler: YVELTAL shields LATIOS from DARK/GHOST and brings pivot",
-    "core breaker 2: GLACEON (kept) -- nothing hits what walls LATIOS (STEEL); the next attacking set",
-    "HELIOLISK re-set for speed control: gen7nu/dex/All-out Attacker -> gen6lc/dex/Paralysis Pivot",
-    "shape check: kept rebuild 2 of 8, 1 test(s) still failing"
-   ],
-   "early_moves": true,
-   "preset": "teams_bosses_gyms"
-  }
- },
- {
-  "id": "boss_CINTIA_Cintia_map272",
-  "map": 272,
-  "type_id": 38,
-  "class": "CINTIA",
-  "name": "Cintia",
-  "orig_ace_level": 66,
-  "cheat_tier": false,
-  "trainer_items": [],
-  "mons": [
-   {
-    "species": "ROSERADE",
-    "level": 73,
-    "moves": [
-     "SLUDGEBOMB",
-     "LEAFSTORM",
-     "GIGADRAIN",
-     "SHADOWBALL"
-    ],
-    "item": "BLACKSLUDGE",
-    "ability": 2,
-    "nature": "TIMID",
-    "iv": 31,
-    "ev": [
-     0,
-     0,
-     0,
-     252,
-     252,
-     4
-    ],
-    "roles": [],
-    "src": "gen7uu/stats/Showdown Usage",
-    "fidelity": 3,
-    "inherited": null,
-    "pinned": false,
-    "kept": true,
-    "why": "original"
-   },
-   {
     "species": "MILOTIC",
-    "level": 72,
+    "level": 56,
     "moves": [
      "SCALD",
      "ICEBEAM",
@@ -2867,8 +2515,357 @@
     "why": "added:wall"
    },
    {
-    "species": "JIRACHI",
+    "species": "SCEPTILE",
+    "level": 56,
+    "moves": [
+     "DRAGONPULSE",
+     "GIGADRAIN",
+     "FOCUSBLAST",
+     "SUBSTITUTE"
+    ],
+    "item": "SCEPTILITE",
+    "ability": 0,
+    "nature": "TIMID",
+    "iv": 31,
+    "ev": [
+     0,
+     0,
+     0,
+     252,
+     252,
+     4
+    ],
+    "roles": [
+     "mega",
+     "protect"
+    ],
+    "src": "gen6ou/dex/Substitute",
+    "fidelity": 4,
+    "inherited": null,
+    "kept": false,
+    "why": "core ace"
+   },
+   {
+    "species": "albapoke2",
+    "level": 57,
+    "moves": [],
+    "item": null,
+    "ability": 0,
+    "nature": "HARDY",
+    "iv": 31,
+    "ev": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    "roles": [],
+    "src": "engine (Pokes Rivales starter slot)",
+    "fidelity": 0,
+    "inherited": null,
+    "kept": true,
+    "why": "starter slot"
+   }
+  ],
+  "design": {
+   "target_ebst": 525,
+   "stage": 4,
+   "notes": [
+    "KEEP_MAX 2: left out METANG",
+    "evolved EELEKTRIK (405) -> EELEKTROSS (515, PU) \u2014 legal at level 57",
+    "albapoke2 left to the engine \u2014 resolves to the starter matching the player's",
+    "core ace: SCEPTILE (mega), the heaviest power pick up to 720 BST (630)",
+    "core enabler: FORRETRESS shields SCEPTILE from BUG/ICE/POISON and brings pivot",
+    "core breaker 2: EELEKTROSS (kept) hits BUG/FLYING/GRASS/STEEL, which wall SCEPTILE, a mutual pair",
+    "3 attacking sets: no member left that can re-set to one without breaking a floor"
+   ],
+   "early_moves": true,
+   "preset": "teams_bosses_gyms"
+  }
+ },
+ {
+  "id": "rival_OWEN1_Owen_map264",
+  "map": 264,
+  "type_id": 17,
+  "class": "OWEN1",
+  "name": "Owen",
+  "orig_ace_level": 42,
+  "cheat_tier": false,
+  "trainer_items": [],
+  "mons": [
+   {
+    "species": "HELIOLISK",
+    "level": 75,
+    "moves": [
+     "VOLTSWITCH",
+     "HYPERVOICE",
+     "THUNDERBOLT",
+     "SURF"
+    ],
+    "item": "CHOICESPECS",
+    "ability": 0,
+    "nature": "TIMID",
+    "iv": 31,
+    "ev": [
+     0,
+     0,
+     4,
+     252,
+     252,
+     0
+    ],
+    "roles": [
+     "pivot"
+    ],
+    "src": "gen7nu/dex/All-out Attacker",
+    "fidelity": 4,
+    "inherited": null,
+    "pinned": false,
+    "kept": true,
+    "why": "original"
+   },
+   {
+    "species": "GLACEON",
     "level": 72,
+    "moves": [
+     "ICEBEAM",
+     "SHADOWBALL",
+     "SIGNALBEAM",
+     "ICYWIND"
+    ],
+    "item": "LIFEORB",
+    "ability": 2,
+    "nature": "MODEST",
+    "iv": 31,
+    "ev": [
+     252,
+     0,
+     0,
+     0,
+     252,
+     4
+    ],
+    "roles": [
+     "speed"
+    ],
+    "src": "gen6pu/stats/Showdown Usage",
+    "fidelity": 4,
+    "inherited": null,
+    "pinned": false,
+    "kept": true,
+    "why": "original"
+   },
+   {
+    "species": "SUICUNE",
+    "level": 71,
+    "moves": [
+     "CALMMIND",
+     "SUBSTITUTE",
+     "PROTECT",
+     "SCALD"
+    ],
+    "item": "LEFTOVERS",
+    "ability": 0,
+    "nature": "TIMID",
+    "iv": 31,
+    "ev": [
+     252,
+     0,
+     0,
+     216,
+     0,
+     40
+    ],
+    "roles": [
+     "protect",
+     "setup",
+     "wall"
+    ],
+    "src": "gen6ou/dex/Substitute + Protect",
+    "fidelity": 4,
+    "inherited": null,
+    "kept": false,
+    "why": "added:wall"
+   },
+   {
+    "species": "HOOH",
+    "level": 71,
+    "moves": [
+     "BRAVEBIRD",
+     "SACREDFIRE",
+     "DEFOG",
+     "TOXIC"
+    ],
+    "item": "LIFEORB",
+    "ability": 2,
+    "nature": "ADAMANT",
+    "iv": 31,
+    "ev": [
+     0,
+     252,
+     4,
+     252,
+     0,
+     0
+    ],
+    "roles": [
+     "removal",
+     "status"
+    ],
+    "src": "gen7anythinggoes/dex/Tank Birb (Life Orb)",
+    "fidelity": 4,
+    "inherited": null,
+    "kept": false,
+    "why": "core enabler:removal"
+   },
+   {
+    "species": "SALAMENCE",
+    "level": 71,
+    "moves": [
+     "DOUBLEEDGE",
+     "ROOST",
+     "FACADE",
+     "DRAGONDANCE"
+    ],
+    "item": "SALAMENCITE",
+    "ability": 0,
+    "nature": "ADAMANT",
+    "iv": 31,
+    "ev": [
+     248,
+     124,
+     0,
+     136,
+     0,
+     0
+    ],
+    "roles": [
+     "mega",
+     "recovery",
+     "setup"
+    ],
+    "src": "gen6ubers/dex/Dragon Dance",
+    "fidelity": 4,
+    "inherited": null,
+    "kept": false,
+    "why": "core ace"
+   },
+   {
+    "species": "owenpoke3",
+    "level": 72,
+    "moves": [],
+    "item": null,
+    "ability": 0,
+    "nature": "HARDY",
+    "iv": 31,
+    "ev": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    "roles": [],
+    "src": "engine (Pokes Rivales starter slot)",
+    "fidelity": 0,
+    "inherited": null,
+    "kept": true,
+    "why": "starter slot"
+   }
+  ],
+  "design": {
+   "target_ebst": 593,
+   "stage": 6,
+   "notes": [
+    "KEEP_MAX 2: left out MANTINE, MAGMAR",
+    "owenpoke3 left to the engine \u2014 resolves to the starter matching the player's",
+    "core ace: SALAMENCE (mega), the heaviest power pick up to 720 BST (700)",
+    "core enabler: HOOH shields SALAMENCE from FAIRY and brings removal",
+    "core breaker 2: HELIOLISK (kept) hits ROCK, which wall SALAMENCE",
+    "GLACEON: WISH -> ICYWIND, the team's speed control",
+    "shape check: kept rebuild 0 of 8, 1 test(s) still failing"
+   ],
+   "early_moves": true,
+   "preset": "teams_bosses_gyms"
+  }
+ },
+ {
+  "id": "boss_CINTIA_Cintia_map272",
+  "map": 272,
+  "type_id": 38,
+  "class": "CINTIA",
+  "name": "Cintia",
+  "orig_ace_level": 66,
+  "cheat_tier": false,
+  "trainer_items": [],
+  "mons": [
+   {
+    "species": "SCRAFTY",
+    "level": 97,
+    "moves": [
+     "BULKUP",
+     "KNOCKOFF",
+     "DRAINPUNCH",
+     "REST"
+    ],
+    "item": "LEFTOVERS",
+    "ability": 0,
+    "nature": "CAREFUL",
+    "iv": 31,
+    "ev": [
+     252,
+     4,
+     0,
+     0,
+     0,
+     252
+    ],
+    "roles": [
+     "recovery",
+     "setup",
+     "wall"
+    ],
+    "src": "gen7nu/dex/Bulk Up",
+    "fidelity": 4,
+    "inherited": null,
+    "kept": false,
+    "why": "added:wall"
+   },
+   {
+    "species": "ROSERADE",
+    "level": 98,
+    "moves": [
+     "SLUDGEBOMB",
+     "LEAFSTORM",
+     "GIGADRAIN",
+     "SHADOWBALL"
+    ],
+    "item": "BLACKSLUDGE",
+    "ability": 2,
+    "nature": "TIMID",
+    "iv": 31,
+    "ev": [
+     0,
+     0,
+     0,
+     252,
+     252,
+     4
+    ],
+    "roles": [],
+    "src": "gen7uu/stats/Showdown Usage",
+    "fidelity": 3,
+    "inherited": null,
+    "pinned": false,
+    "kept": true,
+    "why": "original"
+   },
+   {
+    "species": "JIRACHI",
+    "level": 97,
     "moves": [
      "WISH",
      "PROTECT",
@@ -2900,7 +2897,7 @@
    },
    {
     "species": "LATIOS",
-    "level": 72,
+    "level": 97,
     "moves": [
      "DRACOMETEOR",
      "PSYSHOCK",
@@ -2930,7 +2927,7 @@
    },
    {
     "species": "VOLCANION",
-    "level": 72,
+    "level": 97,
     "moves": [
      "STEAMERUPTION",
      "FLAMETHROWER",
@@ -2962,7 +2959,7 @@
    },
    {
     "species": "GARCHOMP",
-    "level": 75,
+    "level": 99,
     "moves": [
      "DRACOMETEOR",
      "EARTHQUAKE",
@@ -3018,40 +3015,41 @@
   "trainer_items": [],
   "mons": [
    {
-    "species": "GARDEVOIR",
-    "level": 52,
+    "species": "SLOWBRO",
+    "level": 84,
     "moves": [
-     "ICYWIND",
-     "MOONBLAST",
-     "PSYSHOCK",
-     "SUBSTITUTE"
+     "SCALD",
+     "SLACKOFF",
+     "ICEBEAM",
+     "THUNDERWAVE"
     ],
     "item": "LEFTOVERS",
-    "ability": 1,
-    "nature": "TIMID",
+    "ability": 2,
+    "nature": "BOLD",
     "iv": 31,
     "ev": [
-     0,
-     0,
-     0,
      252,
-     252,
-     4
+     0,
+     176,
+     0,
+     0,
+     80
     ],
     "roles": [
-     "protect",
-     "speed"
+     "recovery",
+     "speed",
+     "status",
+     "wall"
     ],
-    "src": "gen6uu/dex/Calm Mind (dev set was CALMMIND/MOONBLAST/PSYCHIC/THUNDERBOLT)",
+    "src": "gen6ou/dex/Defensive",
     "fidelity": 4,
     "inherited": null,
-    "pinned": false,
-    "kept": true,
-    "why": "original"
+    "kept": false,
+    "why": "added:wall"
    },
    {
     "species": "MAMOSWINE",
-    "level": 52,
+    "level": 85,
     "moves": [
      "EARTHQUAKE",
      "ICESHARD",
@@ -3082,129 +3080,124 @@
     "why": "original"
    },
    {
-    "species": "BLASTOISE",
-    "level": 51,
+    "species": "NOIVERN",
+    "level": 84,
     "moves": [
-     "SCALD",
-     "RAPIDSPIN",
-     "ROAR",
-     "TOXIC"
+     "DRACOMETEOR",
+     "HURRICANE",
+     "FLAMETHROWER",
+     "UTURN"
     ],
-    "item": "LEFTOVERS",
-    "ability": 0,
-    "nature": "BOLD",
+    "item": "CHOICESPECS",
+    "ability": 1,
+    "nature": "TIMID",
     "iv": 31,
     "ev": [
-     252,
+     0,
+     0,
      0,
      252,
-     0,
-     4,
-     0
+     252,
+     4
     ],
     "roles": [
-     "phaze",
-     "removal",
-     "status"
+     "pivot"
     ],
-    "src": "gen6uu/dex/Defensive Spinner",
+    "src": "gen7ru/stats/Showdown Usage",
     "fidelity": 4,
     "inherited": null,
     "kept": false,
-    "why": "core enabler:removal"
+    "why": "core enabler:pivot"
    },
    {
-    "species": "VOLCANION",
-    "level": 51,
+    "species": "MEW",
+    "level": 84,
     "moves": [
-     "STEAMERUPTION",
-     "FLAMETHROWER",
-     "TOXIC",
-     "PROTECT"
+     "DEFOG",
+     "ICEBEAM",
+     "WILLOWISP",
+     "ROOST"
     ],
     "item": "LEFTOVERS",
     "ability": 0,
-    "nature": "MODEST",
+    "nature": "CALM",
     "iv": 31,
     "ev": [
      248,
      0,
+     60,
      0,
-     216,
-     44,
-     0
+     0,
+     200
     ],
     "roles": [
-     "protect",
-     "status",
-     "wall"
+     "recovery",
+     "removal",
+     "status"
     ],
-    "src": "gen7uu/dex/Toxic",
+    "src": "gen7uu/stats/Showdown Usage",
     "fidelity": 4,
     "inherited": null,
     "kept": false,
-    "why": "added:wall"
+    "why": "added:removal"
    },
    {
-    "species": "LUGIA",
-    "level": 51,
+    "species": "GARDEVOIR",
+    "level": 85,
     "moves": [
-     "ROOST",
-     "WHIRLWIND",
-     "TOXIC",
-     "ICEBEAM"
+     "HYPERVOICE",
+     "PSYSHOCK",
+     "FOCUSBLAST",
+     "TAUNT"
     ],
-    "item": "LEFTOVERS",
-    "ability": 2,
-    "nature": "BOLD",
+    "item": "GARDEVOIRITE",
+    "ability": 1,
+    "nature": "MODEST",
     "iv": 31,
     "ev": [
-     252,
-     0,
      120,
-     136,
      0,
+     52,
+     120,
+     216,
      0
     ],
     "roles": [
-     "phaze",
-     "recovery",
-     "status",
-     "wall"
+     "disrupt",
+     "mega"
     ],
-    "src": "gen6ubers/dex/Physically Defensive",
+    "src": "gen6ou/dex/Bulky Attacker (dev set was CALMMIND/MOONBLAST/PSYCHIC/THUNDERBOLT)",
     "fidelity": 4,
     "inherited": null,
-    "kept": false,
-    "why": "added:wall"
+    "pinned": false,
+    "kept": true,
+    "why": "original"
    },
    {
-    "species": "SALAMENCE",
-    "level": 51,
+    "species": "ZEKROM",
+    "level": 84,
     "moves": [
-     "DOUBLEEDGE",
-     "ROOST",
-     "FACADE",
-     "DRAGONDANCE"
+     "BOLTSTRIKE",
+     "OUTRAGE",
+     "DRAGONCLAW",
+     "VOLTSWITCH"
     ],
-    "item": "SALAMENCITE",
+    "item": "CHOICEBAND",
     "ability": 0,
     "nature": "ADAMANT",
     "iv": 31,
     "ev": [
-     248,
-     124,
      0,
-     136,
+     252,
      0,
+     252,
+     4,
      0
     ],
     "roles": [
-     "mega",
-     "recovery",
-     "setup"
+     "pivot"
     ],
-    "src": "gen6ubers/dex/Dragon Dance",
+    "src": "gen6ubers/dex/Choice Band",
     "fidelity": 4,
     "inherited": null,
     "kept": false,
@@ -3216,10 +3209,9 @@
    "stage": 6,
    "notes": [
     "KEEP_MAX 2: left out HERACROSS, ROSERADE",
-    "core ace: SALAMENCE (mega), the heaviest power pick up to 720 BST (700)",
-    "core enabler: BLASTOISE shields SALAMENCE from ICE and brings removal",
-    "core breaker 2: MAMOSWINE (kept) hits ROCK/STEEL, which wall SALAMENCE",
-    "GARDEVOIR: CALMMIND -> ICYWIND, the team's speed control"
+    "core ace: ZEKROM, the heaviest power pick up to 720 BST (680)",
+    "core enabler: NOIVERN shields ZEKROM from GROUND and brings pivot",
+    "core breaker 2: GARDEVOIR (kept) -- nothing hits what walls ZEKROM (nothing); the next attacking set"
    ],
    "early_moves": true,
    "preset": "teams_bosses_gyms"
@@ -3237,7 +3229,7 @@
   "mons": [
    {
     "species": "GALVANTULA",
-    "level": 61,
+    "level": 95,
     "moves": [
      "THUNDERBOLT",
      "BUGBUZZ",
@@ -3268,7 +3260,7 @@
    },
    {
     "species": "HONCHKROW",
-    "level": 60,
+    "level": 94,
     "moves": [
      "DEFOG",
      "FOULPLAY",
@@ -3300,7 +3292,7 @@
    },
    {
     "species": "XURKITREE",
-    "level": 59,
+    "level": 93,
     "moves": [
      "TAILGLOW",
      "THUNDERBOLT",
@@ -3330,7 +3322,7 @@
    },
    {
     "species": "DIANCIE",
-    "level": 59,
+    "level": 93,
     "moves": [
      "STEALTHROCK",
      "HEALBELL",
@@ -3362,7 +3354,7 @@
    },
    {
     "species": "GIRATINA",
-    "level": 59,
+    "level": 93,
     "moves": [
      "WILLOWISP",
      "ROAR",
@@ -3395,7 +3387,7 @@
    },
    {
     "species": "TYRANITAR",
-    "level": 59,
+    "level": 93,
     "moves": [
      "DRAGONDANCE",
      "STONEEDGE",
@@ -3453,7 +3445,7 @@
   "mons": [
    {
     "species": "EELEKTROSS",
-    "level": 60,
+    "level": 94,
     "moves": [
      "VOLTSWITCH",
      "FLAMETHROWER",
@@ -3484,7 +3476,7 @@
    },
    {
     "species": "ZAPDOS",
-    "level": 59,
+    "level": 93,
     "moves": [
      "VOLTSWITCH",
      "HEATWAVE",
@@ -3514,72 +3506,72 @@
     "why": "core enabler:pivot"
    },
    {
-    "species": "SUICUNE",
-    "level": 59,
+    "species": "MOLTRES",
+    "level": 93,
     "moves": [
-     "CALMMIND",
      "SUBSTITUTE",
-     "PROTECT",
-     "SCALD"
+     "ROOST",
+     "DEFOG",
+     "FLAMETHROWER"
     ],
     "item": "LEFTOVERS",
     "ability": 0,
     "nature": "TIMID",
     "iv": 31,
     "ev": [
-     252,
+     208,
      0,
+     60,
+     240,
      0,
-     216,
-     0,
-     40
+     0
     ],
     "roles": [
      "protect",
-     "setup",
-     "wall"
-    ],
-    "src": "gen6ou/dex/Substitute + Protect",
-    "fidelity": 4,
-    "inherited": null,
-    "kept": false,
-    "why": "added:wall"
-   },
-   {
-    "species": "MEW",
-    "level": 59,
-    "moves": [
-     "DEFOG",
-     "ICEBEAM",
-     "WILLOWISP",
-     "ROOST"
-    ],
-    "item": "LEFTOVERS",
-    "ability": 0,
-    "nature": "CALM",
-    "iv": 31,
-    "ev": [
-     248,
-     0,
-     60,
-     0,
-     0,
-     200
-    ],
-    "roles": [
      "recovery",
-     "removal",
-     "status"
+     "removal"
     ],
-    "src": "gen7uu/stats/Showdown Usage",
+    "src": "gen7ou/dex/Pressure",
     "fidelity": 4,
     "inherited": null,
     "kept": false,
     "why": "added:removal"
    },
    {
+    "species": "VOLCANION",
+    "level": 93,
+    "moves": [
+     "STEAMERUPTION",
+     "FLAMETHROWER",
+     "TOXIC",
+     "PROTECT"
+    ],
+    "item": "LEFTOVERS",
+    "ability": 0,
+    "nature": "MODEST",
+    "iv": 31,
+    "ev": [
+     248,
+     0,
+     0,
+     216,
+     44,
+     0
+    ],
+    "roles": [
+     "protect",
+     "status",
+     "wall"
+    ],
+    "src": "gen7uu/dex/Toxic",
+    "fidelity": 4,
+    "inherited": null,
+    "kept": false,
+    "why": "added:wall"
+   },
+   {
     "species": "METAGROSS",
-    "level": 60,
+    "level": 94,
     "moves": [
      "STEALTHROCK",
      "EARTHQUAKE",
@@ -3611,7 +3603,7 @@
    },
    {
     "species": "albapoke2",
-    "level": 60,
+    "level": 94,
     "moves": [],
     "item": null,
     "ability": 0,
@@ -3661,7 +3653,7 @@
   "mons": [
    {
     "species": "REUNICLUS",
-    "level": 61,
+    "level": 95,
     "moves": [
      "CALMMIND",
      "PSYSHOCK",
@@ -3694,7 +3686,7 @@
    },
    {
     "species": "SCIZOR",
-    "level": 60,
+    "level": 94,
     "moves": [
      "BULLETPUNCH",
      "UTURN",
@@ -3725,7 +3717,7 @@
    },
    {
     "species": "REGISTEEL",
-    "level": 60,
+    "level": 94,
     "moves": [
      "STEALTHROCK",
      "THUNDERWAVE",
@@ -3759,7 +3751,7 @@
    },
    {
     "species": "MANAPHY",
-    "level": 62,
+    "level": 95,
     "moves": [
      "TAILGLOW",
      "SURF",
@@ -3790,7 +3782,7 @@
    },
    {
     "species": "XERNEAS",
-    "level": 60,
+    "level": 94,
     "moves": [
      "MOONBLAST",
      "FOCUSBLAST",
@@ -3820,7 +3812,7 @@
    },
    {
     "species": "LATIAS",
-    "level": 60,
+    "level": 94,
     "moves": [
      "THUNDERBOLT",
      "ICEBEAM",
