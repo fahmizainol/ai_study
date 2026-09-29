@@ -107,7 +107,7 @@ reads `if`-branch gifts and Bea's shard list: 304 -> 353 obtainable items.)
 | entry | what it does |
 |---|---|
 | Badge rewards (N waiting) | shown only while something waits; section 2's table |
-| Teach a move | free; Pokémon -> type -> move ("Ice Beam · ICE · 90"): any `tm.dat` move it can learn (form-aware) and does not know |
+| Teach a move | free; Pokémon -> one alphabetical list ("Ice Beam · ICE · 90"): any `tm.dat` move it can learn (form-aware) and does not know |
 | Remember moves | the game's Move Reminder, which now also lists the line's egg moves |
 | Buy held items | three shops at own prices (PBS prices are placeholders) |
 | Enter a code | the NPC's original prompt |

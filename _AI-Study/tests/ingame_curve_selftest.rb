@@ -204,6 +204,15 @@ module CurveSelfTest
       slow_max = [times[1], times[3], times[5], times[7]].max
       [bad.empty? && fast_max < 0.5, "fast max #{(fast_max * 1000).round} ms, game's check #{(slow_max * 1000).round} ms, mismatches #{bad.inspect}"]
     end
+    check("tutor menu labels build fast") do
+      w = mon(:WEAVILE, 50)
+      t0 = Time.now
+      moves = RealideaPlayerServices.teachable(w)
+      labels = moves.collect { |m| RealideaPlayerServices.move_label(m) }
+      dt = Time.now - t0
+      sorted = labels == labels.sort_by { |l| l }
+      [dt < 0.5, "#{labels.length} labels in #{(dt * 1000).round} ms; first #{labels[0, 3].inspect}"]
+    end
     check("tutor: Alolan Ninetales gets Aurora Veil, fire Ninetales does not") do
       a = mon(:NINETALES, 50); a.form = 1
       f = mon(:NINETALES, 50)

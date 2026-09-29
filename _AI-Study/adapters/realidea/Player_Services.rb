@@ -8,8 +8,8 @@
 #
 #   CODE NPC ("señorcodiguito", common event 79 -> pbCodeMysteryGift) opens a menu:
 #     Badge rewards (N waiting)  only while something waits; Badge_Rewards' offer.
-#     Teach a move    free. Pick a Pokémon, then a type, then any TM or tutor move of
-#                     that type it can learn and does not know ("Ice Beam · ICE · 90") --
+#     Teach a move    free. Pick a Pokémon, then any TM or tutor move it can learn and
+#                     does not know, one alphabetical list ("Ice Beam · ICE · 90") --
 #                     every move in tm.dat, checked with the game's own form-aware
 #                     isCompatibleWithMove?. The game has no move tutor of its own, and
 #                     142 of its 194 TM/tutor moves had no source.
@@ -181,12 +181,6 @@ module RealideaPlayerServices
     return chosen >= 0 ? $Trainer.party[chosen] : nil
   end
 
-  def self.move_type(move)
-    return PBMoveData.new(move).type
-  rescue
-    return -1
-  end
-
   def self.move_label(move)
     data = PBMoveData.new(move)
     power = data.basedamage > 1 ? data.basedamage.to_s : "-"
@@ -195,22 +189,13 @@ module RealideaPlayerServices
     return PBMoves.getName(move)
   end
 
-  # pick a type, then a move of that type; nil when the player backs out
+  # one alphabetical list of every teachable move; nil when the player backs out
   def self.pick_move(pokemon, moves)
-    loop do
-      types = moves.collect { |m| move_type(m) }.uniq.sort_by { |t| (PBTypes.getName(t) rescue t.to_s) }
-      names = types.collect { |t| n = moves.select { |m| move_type(m) == t }.length
-                                  "#{(PBTypes.getName(t) rescue '?')} (#{n})" }
-      names.push(_INTL("Back"))
-      ti = Kernel.pbMessage(_INTL("{1} can learn {2} moves. Which type?", pokemon.name, moves.length),
-                            names, names.length)
-      return nil if ti < 0 || ti >= types.length
-      of_type = moves.select { |m| move_type(m) == types[ti] }
-      labels = of_type.collect { |m| move_label(m) }
-      labels.push(_INTL("Back"))
-      mi = Kernel.pbMessage(_INTL("Which move should {1} learn?", pokemon.name), labels, labels.length)
-      return of_type[mi] if mi >= 0 && mi < of_type.length
-    end
+    labels = moves.collect { |m| move_label(m) }
+    labels.push(_INTL("Back"))
+    mi = Kernel.pbMessage(_INTL("{1} can learn {2} moves. Which one?", pokemon.name, moves.length),
+                          labels, labels.length)
+    return (mi >= 0 && mi < moves.length) ? moves[mi] : nil
   end
 
   def self.tutor

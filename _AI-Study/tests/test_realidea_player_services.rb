@@ -249,17 +249,18 @@ class RealideaPlayerServicesTest < Test::Unit::TestCase
     assert_equal([10], RealideaPlayerServices.teachable(Mon.new(23)))
   end
 
-  def test_tutor_picks_a_type_then_a_move
+  def test_tutor_lists_every_move_alphabetically
     in_game do
       mon = Mon.new(21)
       $Trainer.party = [mon]
       $choose = [0, -1]
-      Kernel.answers = [0, 0]                    # types sorted: DARK, ICE, POISON -> DARK; Knock Off
+      Kernel.answers = [1]                       # Ice Beam, Knock Off, Toxic -> Knock Off
       Kernel.confirms = [false]
       RealideaPlayerServices.tutor
       assert_equal([[mon, 11]], $learned)
-      assert_equal(["DARK (1)", "ICE (1)", "POISON (1)", "Back"], Kernel.shown[0][1])
-      assert_equal(["Knock Off · DARK · 65", "Back"], Kernel.shown[1][1])
+      assert_equal(["Ice Beam · ICE · 90", "Knock Off · DARK · 65", "Toxic · POISON · -", "Back"],
+                   Kernel.shown[0][1])
+      assert_equal("Mon can learn 3 moves. Which one?", Kernel.shown[0][0])
     end
   end
 
