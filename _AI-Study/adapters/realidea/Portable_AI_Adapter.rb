@@ -2956,6 +2956,10 @@ module PortableAIRealidea
     SIDE_CONDITIONS = [
       [:Reflect,      "reflect"],
       [:LightScreen,  "light_screen"],
+      # Only in a game carrying tools/patch_aurora_veil.py (safe_side_effect reads 0
+      # without the constant). Missing from this table when the patch landed, so the
+      # search saw Veil down every turn and re-cast it, failing, turn after turn.
+      [:AuroraVeil,   "aurora_veil"],
       [:Spikes,       "spikes"],
       [:ToxicSpikes,  "toxic_spikes"],
       [:StealthRock,  "stealth_rock"],

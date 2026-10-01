@@ -64,6 +64,7 @@ module PBEffects
   # Side effects (own array, so the index reuse below is Realidea's own).
   LightScreen = 4; Rainbow = 9; Reflect = 10; Safeguard = 12; Spikes = 14
   StealthRock = 15; StickyWeb = 16; Tailwind = 18; ToxicSpikes = 19
+  AuroraVeil = 21  # added by tools/patch_aurora_veil.py; the stock engine has none
   # Field effects.
   TrickRoom = 10
 end
@@ -2111,6 +2112,7 @@ class PortableAIRealideaAdapterTest < Test::Unit::TestCase
     actor.effects[PBEffects::Confusion] = 3
     battle.sides[1].effects[PBEffects::Spikes] = 2
     battle.sides[1].effects[PBEffects::StealthRock] = true
+    battle.sides[1].effects[PBEffects::AuroraVeil] = 5
     battle
   end
 
@@ -2132,6 +2134,10 @@ class PortableAIRealideaAdapterTest < Test::Unit::TestCase
     assert_equal(1, own["conditions"]["stealth_rock"], "a boolean hazard becomes a layer count")
     assert_equal(0, foe["conditions"]["stealth_rock"])
     assert_equal(25, own["substitute_health"])
+    # Unexported, the search saw Veil down every turn and re-cast it four turns running
+    # in a played hail battle (+200 a cast in poke-engine's evaluate, failing in-game).
+    assert_equal(5, own["conditions"]["aurora_veil"], "a Veil already up reaches the search")
+    assert_equal(0, foe["conditions"]["aurora_veil"])
     assert(own["volatiles"].include?("SUBSTITUTE"))
     assert(own["volatiles"].include?("CONFUSION"))
     assert(!own["volatiles"].include?("LEECHSEED"), "-1 is the engine's 'off' for Leech Seed")
