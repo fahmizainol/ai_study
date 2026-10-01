@@ -571,6 +571,21 @@ def check_engine_build():
         # Anything else means the probe state was too empty to build, not that the
         # engine is stale. Real states are validated per decision.
         pass
+    # patches/poke_engine_light_clay.patch adds an item, not a field, so the constructor
+    # probe above cannot see it: an engine without it parses LIGHTCLAY to UNKNOWNITEM
+    # without complaint, and every Light Clay screen in the search lasts 5 turns, not 8.
+    try:
+        import poke_engine as pe
+        probe = pe.State(side_one=pe.Side(pokemon=[pe.Pokemon(item="LIGHTCLAY")]),
+                         side_two=pe.Side(pokemon=[pe.Pokemon()])).to_string().upper()
+    except Exception:
+        return
+    if "LIGHTCLAY" not in probe:
+        raise SystemExit(
+            "poke-engine in this venv predates patches/poke_engine_light_clay.patch.\n"
+            "Rebuild it from the study root:\n"
+            "    tools/build_sidecar_exe.sh   # the Windows exe"
+        )
 
 
 def clear_marker(ready_path):

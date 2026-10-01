@@ -26,10 +26,14 @@ GEN="${1:-gen5}"
 TARGET="$HERE/generated/foul_play/win"
 COMMIT=f4e224c75bf7af885c85c1dcba982b4143ebf582
 PATCH="$HERE/patches/poke_engine_permanent_fields.patch"
+# Stacks on the one above: the LIGHTCLAY item and its 8-turn screens (Reflect, Light
+# Screen, Aurora Veil). Without it the search reads Light Clay as no item at all.
+CLAY_PATCH="$HERE/patches/poke_engine_light_clay.patch"
 mkdir -p "$TARGET"
 if [ ! -d "$TARGET/poke-engine/.git" ]; then
-  # autocrlf off: a CRLF checkout does not take the LF patch.
-  git -c core.autocrlf=false clone --quiet https://github.com/pmariglia/poke-engine "$TARGET/poke-engine"
+  # autocrlf off, and kept off (--config persists it): a CRLF checkout does not take
+  # the LF patches, and a later checkout would otherwise convert it back.
+  git clone --quiet --config core.autocrlf=false https://github.com/pmariglia/poke-engine "$TARGET/poke-engine"
 fi
 git -C "$TARGET/poke-engine" -c core.autocrlf=false checkout --quiet "$COMMIT"
 if git -C "$TARGET/poke-engine" apply --reverse --check "$PATCH" 2>/dev/null; then
@@ -37,6 +41,12 @@ if git -C "$TARGET/poke-engine" apply --reverse --check "$PATCH" 2>/dev/null; th
 else
   git -C "$TARGET/poke-engine" apply "$PATCH"
   echo "applied poke-engine permanent-field forecast patch"
+fi
+if git -C "$TARGET/poke-engine" apply --reverse --check "$CLAY_PATCH" 2>/dev/null; then
+  echo "poke-engine Light Clay patch already applied"
+else
+  git -C "$TARGET/poke-engine" apply "$CLAY_PATCH"
+  echo "applied poke-engine Light Clay patch"
 fi
 VENV="$TARGET/venv-$GEN"
 PY="$VENV/Scripts/python.exe"

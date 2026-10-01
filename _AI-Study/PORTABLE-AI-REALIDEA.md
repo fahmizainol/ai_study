@@ -3212,6 +3212,36 @@ That risk is unchanged: a copy on disk carried the marker already. **Delete
 so rebuild and recommit it after changing `foul_play_sidecar.py` or the engine patch.
 The pre-change bundle is `backups/realidea_Scripts.rxdata.pre-sidecar-exe`.
 
+### Aurora Veil spam, and Light Clay, 2026-10-01
+
+**The spam.** In a played hail battle the bridge cast Aurora Veil four turns running
+(turns 3–6, about 3,200 of 5,000 visits each), and every repeat failed in-game.
+`FoulPlay::SIDE_CONDITIONS` never gained `AuroraVeil` when `patch_aurora_veil.py` added
+the effect, so every exported state read `aurora_veil=0`. In hail, poke-engine scores a
+fresh Veil at +40 a turn, so the search re-cast it every turn. Fixed by adding the row
+(commit 5671f4d). On a real saved state in hail, Veil down → picked 10/10 (26% of
+visits); Veil up → 0/10 (5%). It reproduced on the gen5 wheel, and nothing in
+poke-engine's Veil handling depends on the generation.
+
+**Light Clay.** poke-engine had no `LIGHTCLAY` item: the sidecar logged it unknown and
+the engine would have read it as UNKNOWNITEM. So in its simulation a screen it was about
+to cast lasted 5 turns, not 8. `patches/poke_engine_light_clay.patch` stacks on the
+permanent-fields patch. It adds the item (255 of the u8 enum's 256) and gives Reflect,
+Light Screen and Aurora Veil 8 turns when the user holds it. Safeguard and Mist stay at
+5. It also adds three engine tests: gen5 632/632, gen6 635/635. Through the bridge, a
+held Light Clay sets `AuroraVeil: 8` and any other item 5. Two more things changed with
+it:
+- `generated/poke_engine_ids_gen6.json` was regenerated: exactly one id added
+  (LIGHTCLAY).
+- `check_engine_build` gained a round-trip probe. An item is not a constructor field, so
+  the old probe could not see a wheel built without the patch. Such a wheel now refuses
+  to start.
+
+Only `build_sidecar_exe.sh` applies the new patch. **The WSL wheels were deliberately
+not rebuilt**, and the new probe makes the WSL sidecar refuse to start until
+`build_poke_engine.sh` learns the patch. That clone also checks out CRLF, which the
+Windows build now avoids by persisting `core.autocrlf=false`.
+
 ## Future-agent handoff
 
 ### 0.6.2 port (2026-09-06)

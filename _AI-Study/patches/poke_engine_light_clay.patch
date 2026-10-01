@@ -1,0 +1,152 @@
+diff --git a/src/genx/generate_instructions.rs b/src/genx/generate_instructions.rs
+index 4df706d..c4063d0 100644
+--- a/src/genx/generate_instructions.rs
++++ b/src/genx/generate_instructions.rs
+@@ -148,6 +148,7 @@ pub const SALT_CURE_DAMAGE_DIVISOR: f32 = 8.0;
+ pub const SALT_CURE_DAMAGE_DIVISOR: f32 = 16.0;
+ 
+ pub const SIDE_CONDITION_DURATION: i8 = 5;
++pub const LIGHT_CLAY_DURATION: i8 = 8;
+ pub const TAILWIND_DURATION: i8 = 4;
+ 
+ const PROTECT_VOLATILES: [PokemonVolatileStatus; 6] = [
+@@ -623,9 +624,27 @@ fn generate_instructions_from_side_conditions(
+     match side_condition.condition {
+         PokemonSideCondition::AuroraVeil
+         | PokemonSideCondition::LightScreen
+-        | PokemonSideCondition::Reflect
+-        | PokemonSideCondition::Safeguard
+-        | PokemonSideCondition::Mist => {
++        | PokemonSideCondition::Reflect => {
++            // Light Clay stretches the three screens (not Safeguard or Mist) to 8 turns.
++            let duration = if state
++                .get_side_immutable(attacking_side_reference)
++                .get_active_immutable()
++                .item
++                == Items::LIGHTCLAY
++            {
++                LIGHT_CLAY_DURATION
++            } else {
++                SIDE_CONDITION_DURATION
++            };
++            generate_instructions_from_duration_side_conditions(
++                state,
++                side_condition,
++                attacking_side_reference,
++                incoming_instructions,
++                duration,
++            );
++        }
++        PokemonSideCondition::Safeguard | PokemonSideCondition::Mist => {
+             generate_instructions_from_duration_side_conditions(
+                 state,
+                 side_condition,
+diff --git a/src/genx/items.rs b/src/genx/items.rs
+index 785833d..5539c82 100644
+--- a/src/genx/items.rs
++++ b/src/genx/items.rs
+@@ -131,6 +131,7 @@ define_enum_with_from_str! {
+         DRACOPLATE,
+         PIXIEPLATE,
+         LIGHTBALL,
++        LIGHTCLAY,
+         FOCUSSASH,
+         ASPEARBERRY,
+         CHERIBERRY,
+diff --git a/tests/test_battle_mechanics.rs b/tests/test_battle_mechanics.rs
+index f7b2ac0..838c0f0 100644
+--- a/tests/test_battle_mechanics.rs
++++ b/tests/test_battle_mechanics.rs
+@@ -17889,6 +17889,92 @@ fn test_using_auroraveil_in_snow_sets_turns_and_decrements_end_of_turn() {
+     assert_eq!(expected_instructions, vec_of_instructions);
+ }
+ 
++#[test]
++fn test_light_clay_reflect_lasts_eight_turns() {
++    let mut state = State::default();
++    state.side_one.get_active().item = Items::LIGHTCLAY;
++
++    let vec_of_instructions = set_moves_on_pkmn_and_call_generate_instructions(
++        &mut state,
++        Choices::REFLECT,
++        Choices::SPLASH,
++    );
++
++    let expected_instructions = vec![StateInstructions {
++        percentage: 100.0,
++        instruction_list: vec![
++            Instruction::ChangeSideCondition(ChangeSideConditionInstruction {
++                side_ref: SideReference::SideOne,
++                side_condition: PokemonSideCondition::Reflect,
++                amount: 8,
++            }),
++            Instruction::ChangeSideCondition(ChangeSideConditionInstruction {
++                side_ref: SideReference::SideOne,
++                side_condition: PokemonSideCondition::Reflect,
++                amount: -1,
++            }),
++        ],
++    }];
++    assert_eq!(expected_instructions, vec_of_instructions);
++}
++
++#[test]
++fn test_light_clay_auroraveil_in_snow_lasts_eight_turns() {
++    let mut state = State::default();
++    state.weather.turns_remaining = 5;
++    state.weather.weather_type = Weather::SNOW;
++    state.side_one.get_active().item = Items::LIGHTCLAY;
++
++    let vec_of_instructions = set_moves_on_pkmn_and_call_generate_instructions(
++        &mut state,
++        Choices::AURORAVEIL,
++        Choices::SPLASH,
++    );
++
++    let expected_instructions = vec![StateInstructions {
++        percentage: 100.0,
++        instruction_list: vec![
++            Instruction::ChangeSideCondition(ChangeSideConditionInstruction {
++                side_ref: SideReference::SideOne,
++                side_condition: PokemonSideCondition::AuroraVeil,
++                amount: 8,
++            }),
++            Instruction::DecrementWeatherTurnsRemaining,
++            Instruction::ChangeSideCondition(ChangeSideConditionInstruction {
++                side_ref: SideReference::SideOne,
++                side_condition: PokemonSideCondition::AuroraVeil,
++                amount: -1,
++            }),
++        ],
++    }];
++    assert_eq!(expected_instructions, vec_of_instructions);
++}
++
++#[test]
++fn test_light_clay_does_not_extend_safeguard() {
++    let mut state = State::default();
++    state.side_one.get_active().item = Items::LIGHTCLAY;
++
++    let vec_of_instructions = set_moves_on_pkmn_and_call_generate_instructions(
++        &mut state,
++        Choices::SAFEGUARD,
++        Choices::SPLASH,
++    );
++
++    let expected_instructions = vec![StateInstructions {
++        percentage: 100.0,
++        instruction_list: vec![
++            Instruction::ChangeSideCondition(ChangeSideConditionInstruction {
++                side_ref: SideReference::SideOne,
++                side_condition: PokemonSideCondition::Safeguard,
++                amount: 5,
++            }),
++            // (no end-of-turn decrement: this engine does not count Safeguard down)
++        ],
++    }];
++    assert_eq!(expected_instructions, vec_of_instructions);
++}
++
+ #[test]
+ fn test_tailwind() {
+     let mut state = State::default();
