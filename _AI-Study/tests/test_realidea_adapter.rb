@@ -2453,14 +2453,15 @@ class PortableAIRealideaAdapterTest < Test::Unit::TestCase
       File.open(harness::FILE, "wb") { |file| file.write("foul_play=true\nfoul_play_iterations=5000\n") }
       harness.instance_variable_set(:@live_overrides, nil)
       live = PortableAIRealidea.config_overrides
-      assert_equal(100.0, live["foul_play_search_ms"], "the stale file gets the timed search")
-      assert_equal(0.75, live["foul_play_band"])
+      assert_equal(0.0, live["foul_play_search_ms"], "a count, not a time: the same search on any PC")
+      assert_equal(0.75, live["foul_play_band"], "the stale file gets the band")
       assert_equal(5000.0, live["foul_play_iterations"], "what the file does say is kept")
 
       File.delete(harness::FILE)
       harness.instance_variable_set(:@live_overrides, nil)
-      assert_equal(true, PortableAIRealidea.config_overrides["foul_play"],
-                   "the marker alone plays the search")
+      live = PortableAIRealidea.config_overrides
+      assert_equal(true, live["foul_play"], "the marker alone plays the search")
+      assert_equal(60000.0, live["foul_play_iterations"], "at the shipped 60,000")
 
       File.open(harness::FILE, "wb") { |file| file.write("foul_play=false\nfoul_play_search_ms=0\n") }
       harness.instance_variable_set(:@live_overrides, nil)

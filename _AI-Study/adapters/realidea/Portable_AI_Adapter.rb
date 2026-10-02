@@ -3633,13 +3633,20 @@ module PortableAIRealidea
     # What a played battle runs when Data/ai_harness.txt does not say: the shipped
     # search. Filled in key by key, so a file that predates a setting gets it while
     # anything the file does set -- foul_play=false included -- still wins. Before
-    # this, a copy whose pull kept an old harness file played a fixed 5,000 iterations
-    # instead of ~40,000 in 100 ms, and one with no file played no search at all.
-    # Live play only: measured runs never reach live_overrides.
+    # this, a copy whose pull kept an old harness file played a fixed 5,000 iterations,
+    # and one with no file played no search at all. Live play only: measured runs never
+    # reach live_overrides.
+    #
+    # A fixed COUNT, not a time budget: 100 ms gave ~40,000 iterations on a Ryzen 5
+    # 5600G and ~60,000 on a Core Ultra, so the same gym was a harder fight on the
+    # faster PC. 60,000 is the same search everywhere -- ~175 ms a decision on the
+    # 5600G (212 ms at worst on saved states), well inside FoulPlay's 3 s wait.
+    # search_ms 0 is what keeps it a count (a time budget replaces the count when set).
     LIVE_DEFAULTS = {
-      "foul_play"           => true,
-      "foul_play_search_ms" => 100.0,
-      "foul_play_band"      => 0.75
+      "foul_play"            => true,
+      "foul_play_iterations" => 60000.0,
+      "foul_play_search_ms"  => 0.0,
+      "foul_play_band"       => 0.75
     }
 
     # Install this run's overrides for the duration of the block and hand the block the
