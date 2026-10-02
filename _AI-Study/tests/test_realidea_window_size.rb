@@ -23,6 +23,8 @@ module Graphics
   class << self
     attr_accessor :fullscreen, :scale, :centered
     def center; @centered = true; end
+    def update; @updates = (@updates || 0) + 1; end
+    attr_reader :updates
   end
 end
 
@@ -70,7 +72,7 @@ class RealideaWindowSizeTest < Test::Unit::TestCase
     in_scratch do
       option = PokemonOptionScene.new.pbAddOnOptions([]).last
       assert_equal("Window size", option.name)
-      assert_equal(["S", "M", "L", "XL", "Full"], option.values)
+      assert_equal(["S", "M", "L", "XL", "Full", "Brdls"], option.values)
       option.set_proc.call(1)
       assert_equal("1", File.read(RealideaWindowSize::FILE).strip)
       assert_equal(1.5, Graphics.scale)
@@ -92,10 +94,26 @@ class RealideaWindowSizeTest < Test::Unit::TestCase
   def test_a_garbled_or_out_of_range_file_is_clamped
     in_scratch do
       File.open(RealideaWindowSize::FILE, "wb") { |f| f.write("99\n") }
-      assert_equal(RealideaWindowSize::FULL, RealideaWindowSize.choice)
+      assert_equal(RealideaWindowSize::BORDERLESS, RealideaWindowSize.choice, "clamped to the last")
       File.open(RealideaWindowSize::FILE, "wb") { |f| f.write("big\n") }
       assert_equal(RealideaWindowSize::FULL, RealideaWindowSize.choice)
     end
+  end
+
+  def test_borderless_leaves_fullscreen_and_survives_no_win32
+    in_scratch do
+      Graphics.fullscreen = true
+      RealideaWindowSize.apply(RealideaWindowSize::BORDERLESS)
+      assert_equal(false, Graphics.fullscreen, "mkxp-z's fullscreen is the topmost one")
+      assert(!RealideaWindowSize.watching?, "no window to watch without Win32API")
+      before = Graphics.updates.to_i
+      Graphics.update
+      assert_equal(before + 1, Graphics.updates, "the wrapped update still runs the original")
+    end
+  end
+
+  def test_wide_strings_are_utf16le_with_a_terminator
+    assert_equal("S\0D\0L\0\0\0".b, RealideaWindowSize.wide("SDL").b)
   end
 
   def test_the_game_s_own_add_on_options_are_kept
