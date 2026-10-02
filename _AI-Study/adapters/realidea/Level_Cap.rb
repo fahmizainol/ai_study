@@ -2,7 +2,9 @@
 #
 # The selected curve supplies one cap for each of Realidea's nine current
 # pre-final progression stages (badge counts 0..8). Data/level_cap_mode.txt may
-# contain "vanilla", "expert" or "rnb"; expert is the default.
+# contain "vanilla", "expert" or "rnb"; rnb is the default, so a copy missing the
+# file plays the shipped curve rather than silently falling back to expert (a
+# player reported cap 36 at 3 badges: expert's number, not rnb's 42).
 # See generated/realidea_level_curve.json for the source table transcription.
 #
 #   rnb  Run & Bun's caps taken one-to-one: gym N gets the cap Run & Bun had for
@@ -35,7 +37,7 @@ module RealideaLevelCap
   }
   CHAMPION_CAP_BY_MODE = { "vanilla" => 66, "expert" => 75, "rnb" => 99 }
   ORIGINAL_LADDER = [0, 14, 20, 26, 33, 38, 40, 45, 48, 51, 66]
-  DEFAULT_MODE = "expert"
+  DEFAULT_MODE = "rnb"
   MODE_FILE = "Data/level_cap_mode.txt"
   EXP_FILE = "Data/exp_multiplier.txt"
   ORIGINAL_TEAMS_FILE = "Data/original_teams.txt"

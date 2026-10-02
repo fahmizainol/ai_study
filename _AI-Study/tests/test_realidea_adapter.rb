@@ -2441,6 +2441,46 @@ class PortableAIRealideaAdapterTest < Test::Unit::TestCase
     end
   end
 
+  # A copy whose ai_harness.txt predates the play settings -- or has none -- plays the
+  # shipped search, not a fixed 5,000 (a player's pull left exactly that file behind).
+  def test_live_play_defaults_fill_what_the_harness_file_leaves_out
+    $PORTABLE_AI_CONFIG = nil
+    harness = PortableAIRealidea::Harness
+    Dir.chdir(foul_play_scratch) do
+      Dir.mkdir("Data") if !File.exist?("Data")
+      File.open(PortableAIRealidea::ENABLE_FILE, "wb") { |file| file.write("on\n") }
+
+      File.open(harness::FILE, "wb") { |file| file.write("foul_play=true\nfoul_play_iterations=5000\n") }
+      harness.instance_variable_set(:@live_overrides, nil)
+      live = PortableAIRealidea.config_overrides
+      assert_equal(100.0, live["foul_play_search_ms"], "the stale file gets the timed search")
+      assert_equal(0.75, live["foul_play_band"])
+      assert_equal(5000.0, live["foul_play_iterations"], "what the file does say is kept")
+
+      File.delete(harness::FILE)
+      harness.instance_variable_set(:@live_overrides, nil)
+      assert_equal(true, PortableAIRealidea.config_overrides["foul_play"],
+                   "the marker alone plays the search")
+
+      File.open(harness::FILE, "wb") { |file| file.write("foul_play=false\nfoul_play_search_ms=0\n") }
+      harness.instance_variable_set(:@live_overrides, nil)
+      live = PortableAIRealidea.config_overrides
+      assert_equal(false, live["foul_play"], "an explicit off still wins")
+      assert_equal(0.0, live["foul_play_search_ms"], "and so does an explicit count-only search")
+
+      File.delete(PortableAIRealidea::ENABLE_FILE)
+      harness.instance_variable_set(:@live_overrides, nil)
+      assert_equal({}, PortableAIRealidea.config_overrides, "no marker, no defaults: measured runs untouched")
+    end
+  ensure
+    $PORTABLE_AI_CONFIG = nil
+    PortableAIRealidea::Harness.instance_variable_set(:@live_overrides, nil)
+    Dir.chdir(foul_play_scratch) do
+      File.delete(PortableAIRealidea::ENABLE_FILE) if File.exist?(PortableAIRealidea::ENABLE_FILE)
+      File.delete(PortableAIRealidea::Harness::FILE) if File.exist?(PortableAIRealidea::Harness::FILE)
+    end
+  end
+
   def test_a_silent_sidecar_stops_being_asked_for_the_rest_of_the_battle
     battle = foul_play_battle
     $PORTABLE_AI_CONFIG = { "foul_play" => true, "party_matrix" => true }

@@ -3622,11 +3622,25 @@ module PortableAIRealidea
     # solely from with_config and is unaffected by this path.
     def self.live_overrides
       return {} if !File.exist?(ENABLE_FILE)
-      @live_overrides = config_overrides_from(config) if !defined?(@live_overrides) || !@live_overrides
+      if !defined?(@live_overrides) || !@live_overrides
+        @live_overrides = LIVE_DEFAULTS.merge(config_overrides_from(config))
+      end
       @live_overrides
     rescue
       {}
     end
+
+    # What a played battle runs when Data/ai_harness.txt does not say: the shipped
+    # search. Filled in key by key, so a file that predates a setting gets it while
+    # anything the file does set -- foul_play=false included -- still wins. Before
+    # this, a copy whose pull kept an old harness file played a fixed 5,000 iterations
+    # instead of ~40,000 in 100 ms, and one with no file played no search at all.
+    # Live play only: measured runs never reach live_overrides.
+    LIVE_DEFAULTS = {
+      "foul_play"           => true,
+      "foul_play_search_ms" => 100.0,
+      "foul_play_band"      => 0.75
+    }
 
     # Install this run's overrides for the duration of the block and hand the block the
     # raw config so it can read its own non-core keys (trace, seeds, append).

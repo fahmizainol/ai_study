@@ -38,12 +38,25 @@ class RealideaLevelCapTest < Test::Unit::TestCase
     RealideaLevelCap.exp_pokemon = nil
   end
 
-  def test_default_caps_match_unbound_expert_curve
-    assert_equal([20, 26, 32, 36, 40, 45, 52, 57, 61],
-                 (0..8).map do |badges|
-                   $Trainer.numbadges = badges
-                   RealideaLevelCap.current
-                 end)
+  # rnb with no Data/level_cap_mode.txt: a copy missing the file plays the shipped curve.
+  def test_default_caps_are_the_rnb_curve
+    in_data_dir do
+      assert_equal([21, 25, 35, 42, 57, 69, 85, 91, 95],
+                   (0..8).map do |badges|
+                     $Trainer.numbadges = badges
+                     RealideaLevelCap.current
+                   end)
+    end
+  end
+
+  def test_expert_curve_matches_unbound
+    in_data_dir("level_cap_mode.txt" => "expert\n") do
+      assert_equal([20, 26, 32, 36, 40, 45, 52, 57, 61],
+                   (0..8).map do |badges|
+                     $Trainer.numbadges = badges
+                     RealideaLevelCap.current
+                   end)
+    end
   end
 
   def test_vanilla_curve_is_available
@@ -76,7 +89,7 @@ class RealideaLevelCapTest < Test::Unit::TestCase
         file.write("enabled\n")
       end
       Dir.chdir(directory) do
-        assert_equal(75, RealideaLevelCap.current)
+        assert_equal(99, RealideaLevelCap.current)   # rnb's Champion, the default curve
         File.open(File.join("Data", "level_cap_mode.txt"), "wb") do |file|
           file.write("vanilla\n")
         end
@@ -86,16 +99,24 @@ class RealideaLevelCapTest < Test::Unit::TestCase
   end
 
   def test_pokemon_at_cap_gets_one_battle_exp
-    pokemon = PokemonStub.new(20, 1_000)
-    result = PokeBattle_Battle.new([pokemon]).pbGainExpOne(0, nil, 0, 0, false)
-    assert_equal(1_001, result)
-    assert_nil(RealideaLevelCap.exp_pokemon)
+    # The expert curve: these were written on its cap 20 at 0 badges.
+    in_data_dir("level_cap_mode.txt" => "expert
+") do
+      pokemon = PokemonStub.new(20, 1_000)
+      result = PokeBattle_Battle.new([pokemon]).pbGainExpOne(0, nil, 0, 0, false)
+      assert_equal(1_001, result)
+      assert_nil(RealideaLevelCap.exp_pokemon)
+    end
   end
 
   def test_pokemon_below_cap_gets_normal_battle_exp
-    pokemon = PokemonStub.new(19, 1_000)
-    result = PokeBattle_Battle.new([pokemon]).pbGainExpOne(0, nil, 0, 0, false)
-    assert_equal(1_100, result)
+    # The expert curve: these were written on its cap 20 at 0 badges.
+    in_data_dir("level_cap_mode.txt" => "expert
+") do
+      pokemon = PokemonStub.new(19, 1_000)
+      result = PokeBattle_Battle.new([pokemon]).pbGainExpOne(0, nil, 0, 0, false)
+      assert_equal(1_100, result)
+    end
   end
 
   def test_non_battle_experience_is_unchanged
@@ -157,15 +178,23 @@ class RealideaLevelCapTest < Test::Unit::TestCase
   end
 
   def test_boosted_battle_exp_below_the_cap
-    pokemon = PokemonStub.new(15, 1_500)   # cap 20, five short -> x2
-    result = PokeBattle_Battle.new([pokemon]).pbGainExpOne(0, nil, 0, 0, false)
-    assert_equal(1_700, result)
+    # The expert curve: these were written on its cap 20 at 0 badges.
+    in_data_dir("level_cap_mode.txt" => "expert
+") do
+      pokemon = PokemonStub.new(15, 1_500)   # cap 20, five short -> x2
+      result = PokeBattle_Battle.new([pokemon]).pbGainExpOne(0, nil, 0, 0, false)
+      assert_equal(1_700, result)
+    end
   end
 
   def test_boost_stops_at_the_cap_but_never_below_the_plain_award
-    pokemon = PokemonStub.new(10, 1_950)   # cap 20 starts at 2_000; x3.25 of 100 = 325
-    result = PokeBattle_Battle.new([pokemon]).pbGainExpOne(0, nil, 0, 0, false)
-    assert_equal(2_050, result)            # the plain 100 still lands, as before
+    # The expert curve: these were written on its cap 20 at 0 badges.
+    in_data_dir("level_cap_mode.txt" => "expert
+") do
+      pokemon = PokemonStub.new(10, 1_950)   # cap 20 starts at 2_000; x3.25 of 100 = 325
+      result = PokeBattle_Battle.new([pokemon]).pbGainExpOne(0, nil, 0, 0, false)
+      assert_equal(2_050, result)            # the plain 100 still lands, as before
+    end
   end
 
   def test_exp_multiplier_file_sets_a_flat_rate_or_turns_it_off

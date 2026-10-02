@@ -143,7 +143,7 @@ class RealideaLevelScalingTest < Test::Unit::TestCase
   end
 
   def test_expert_overrides_are_untouched_in_expert_mode
-    in_game("level_scaling.txt" => "") do
+    in_game("level_scaling.txt" => "", "level_cap_mode.txt" => "expert") do
       $override_spec = [20, 19]
       assert_equal([20, 19], levels(createTrainer(1, "Abi", [Mon.new(14)])))
     end
