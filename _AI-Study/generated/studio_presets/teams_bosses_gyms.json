@@ -2447,7 +2447,8 @@
      "evolved PILOSWINE (450) -> MAMOSWINE (530, UU) \u2014 legal at level 45",
      "core ace: GYARADOS (mega), the heaviest power pick up to 720 BST (640)",
      "core enabler: ROTOM shields GYARADOS from ELECTRIC and brings removal",
-     "core breaker 2: GARDEVOIR (kept) -- nothing hits what walls GYARADOS (nothing); the next attacking set, a mutual pair"
+     "core breaker 2: GARDEVOIR (kept) -- nothing hits what walls GYARADOS (nothing); the next attacking set, a mutual pair",
+     "Rotom-Wash: bulky competitive pivot with Hydro Pump, Volt Switch, Will-O-Wisp and Pain Split; Leftovers, Bold, 248 HP / 216 Def / 44 Spe."
     ],
     "roles": {
      "disrupt": 1,
@@ -2456,47 +2457,55 @@
      "pivot": 1,
      "priority": 1,
      "protect": 2,
-     "recovery": 2,
-     "removal": 1,
+     "recovery": 3,
+     "removal": 0,
      "setup": 2,
      "speed": 1,
      "status": 2,
-     "wall": 2
+     "wall": 3
     },
     "stage": 4,
     "target": 525,
     "team": [
      {
+      "species": "ROTOM",
+      "level": 57,
+      "moves": [
+       "HYDROPUMP",
+       "VOLTSWITCH",
+       "WILLOWISP",
+       "PAINSPLIT"
+      ],
+      "item": "LEFTOVERS",
       "ability": 0,
+      "nature": "BOLD",
+      "iv": [
+       31,
+       0,
+       31,
+       31,
+       31,
+       31
+      ],
       "ev": [
        248,
        0,
+       216,
+       44,
        0,
-       252,
-       8,
        0
       ],
-      "fidelity": 4,
-      "inherited": null,
-      "item": "COLBURBERRY",
-      "iv": 31,
-      "kept": false,
-      "level": 57,
-      "moves": [
-       "DEFOG",
-       "VOLTSWITCH",
-       "WILLOWISP",
-       "HEX"
-      ],
-      "nature": "TIMID",
       "roles": [
        "pivot",
-       "removal",
-       "status"
+       "recovery",
+       "status",
+       "wall"
       ],
-      "species": "ROTOM",
-      "src": "gen7nu/dex/Defensive Defog",
-      "why": "core enabler:removal",
+      "src": "gen6ou/dex/Rotom-Wash / Defensive (adapted)",
+      "fidelity": 4,
+      "inherited": null,
+      "kept": false,
+      "why": "bulky Wash pivot with Water STAB and recovery",
       "form": 2
      },
      {

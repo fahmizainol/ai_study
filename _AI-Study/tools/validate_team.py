@@ -133,6 +133,10 @@ def validate(teams, slack=2, early=False):
                 if mo not in mv:
                     err("MOVE", f"{tag}: {mo} not in moves.txt"); continue
                 how = D.learnable(m["species"], mo, lvl)
+                # Pokemon_MultipleForms grants Hydro Pump when Rotom becomes Wash.
+                # Its base-species PBS learnset does not contain appliance moves.
+                if m["species"] == "ROTOM" and m.get("form") == 2 and mo == "HYDROPUMP":
+                    how = "form"
                 if how is None:
                     err("LEARN", f"{tag}: can't learn {mo} (not learnset/TM)")
                 elif how.startswith("levelup+"):
