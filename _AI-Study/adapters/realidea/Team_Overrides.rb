@@ -105,12 +105,12 @@ TEAM_OVERRIDES[[156,101,"Lilliana",51]] = [
 
 # boss_JEREMIAH_Jeremiah_map016
 TEAM_OVERRIDES[[16,57,"Jeremiah",35]] = [
-  ["ROTOM",44,[:DEFOG,:VOLTSWITCH,:WILLOWISP,:HEX],:COLBURBERRY,0,:TIMID,[31, 31, 31, 31, 31, 31],[248, 0, 0, 252, 8, 0]],
-  ["REUNICLUS",44,[:KNOCKOFF,:RECOVER,:PSYCHIC,:THUNDERWAVE],:ROCKYHELMET,1,:BOLD,[31, 31, 31, 31, 31, 31],[252, 0, 252, 0, 0, 4]],
-  ["GARDEVOIR",45,[:CALMMIND,:MOONBLAST,:PSYSHOCK,:SUBSTITUTE],:LEFTOVERS,1,:TIMID,[31, 31, 31, 31, 31, 31],[0, 0, 0, 252, 252, 4]],
-  ["SYLVEON",44,[:HYPERVOICE,:HEALBELL,:WISH,:PROTECT],:LEFTOVERS,2,:BOLD,[31, 31, 31, 31, 31, 31],[252, 0, 252, 0, 0, 4]],
-  ["MAMOSWINE",45,[:EARTHQUAKE,:ICESHARD,:ICICLECRASH,:STEALTHROCK],:LIFEORB,2,:JOLLY,[31, 31, 31, 31, 31, 31],[0, 252, 0, 252, 0, 4]],
-  ["GYARADOS",44,[:CRUNCH,:EARTHQUAKE,:TAUNT,:DRAGONDANCE],:GYARADOSITE,0,:ADAMANT,[31, 31, 31, 31, 31, 31],[0, 252, 4, 252, 0, 0]],
+  ["ROTOM",57,[:DEFOG,:VOLTSWITCH,:WILLOWISP,:HEX],:COLBURBERRY,0,:TIMID,[31, 31, 31, 31, 31, 31],[248, 0, 0, 252, 8, 0],2],
+  ["REUNICLUS",58,[:KNOCKOFF,:RECOVER,:PSYCHIC,:THUNDERWAVE],:ROCKYHELMET,1,:BOLD,[31, 31, 31, 31, 31, 31],[252, 0, 252, 0, 0, 4]],
+  ["GARDEVOIR",58,[:CALMMIND,:MOONBLAST,:PSYSHOCK,:SUBSTITUTE],:LEFTOVERS,1,:TIMID,[31, 31, 31, 31, 31, 31],[0, 0, 0, 252, 252, 4]],
+  ["SYLVEON",58,[:HYPERVOICE,:HEALBELL,:WISH,:PROTECT],:LEFTOVERS,2,:BOLD,[31, 31, 31, 31, 31, 31],[252, 0, 252, 0, 0, 4]],
+  ["MAMOSWINE",58,[:EARTHQUAKE,:ICESHARD,:ICICLECRASH,:STEALTHROCK],:LIFEORB,2,:JOLLY,[31, 31, 31, 31, 31, 31],[0, 252, 0, 252, 0, 4]],
+  ["GYARADOS",59,[:CRUNCH,:EARTHQUAKE,:TAUNT,:DRAGONDANCE],:GYARADOSITE,0,:ADAMANT,[31, 31, 31, 31, 31, 31],[0, 252, 4, 252, 0, 0]],
 ]
 
 # boss_CAMUS_Camus_map078
@@ -1150,7 +1150,8 @@ def team_override_build(spec)
     if poke
       # a scripted form (Alolan Ninetales = NINETALES form 1): set before the
       # ability, whose list the form replaces, and before calcStats
-      poke.form = ms[8] if ms[8]
+      # Avoid onSetForm move-learning prompts for scripted enemy loadouts.
+      poke.formNoCall = ms[8] if ms[8]
       poke.setItem(getConst(PBItems, ms[3])) if ms[3]
       poke.setAbility(ms[4])
       poke.iv = ms[6].dup

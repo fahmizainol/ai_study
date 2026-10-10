@@ -53,6 +53,9 @@ def emit_mon(m):
     moves = "[" + ",".join(rsym(x) for x in m["moves"]) + "]"
     item = rsym(m["item"]) if m.get("item") else "nil"
     species, form = FORM_SPECIES.get(m["species"], (m["species"], None))
+    form = m.get("form", form)
+    if form is not None and (type(form) is not int or form < 0):
+        raise ValueError(f"invalid form: {form!r}")
     tail = f",{form}" if form is not None else ""
     return (f'[{rstr(species)},{emit_level(m["level"])},{moves},{item},'
             f'{m.get("ability", 0)},{rsym(m["nature"])},'
@@ -166,7 +169,8 @@ def main(out_path, *team_files, curve=None):
         "    if poke",
         "      # a scripted form (Alolan Ninetales = NINETALES form 1): set before the",
         "      # ability, whose list the form replaces, and before calcStats",
-        "      poke.form = ms[8] if ms[8]",
+        "      # Avoid onSetForm move-learning prompts for scripted enemy loadouts.",
+        "      poke.formNoCall = ms[8] if ms[8]",
         "      poke.setItem(getConst(PBItems, ms[3])) if ms[3]",
         "      poke.setAbility(ms[4])",
         "      poke.iv = ms[6].dup",

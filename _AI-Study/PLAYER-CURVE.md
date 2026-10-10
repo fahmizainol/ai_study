@@ -130,3 +130,51 @@ Move Reminder has Icicle Crash; the Alolan line gets Freeze-Dry and not Flare Bl
 Not coverable without a PBS recompile: 27 Run & Bun moves Realidea has no learner list for
 (Play Rough, Hurricane, Aura Sphere, Hydro Pump...); Heavy-Duty Boots, Room Service and
 Eject Pack are not in Realidea's item data. Realidea's Knock Off is 20 power (its move data).
+
+## 6. Competitive NPC claims and held-item recovery (2026-10-10)
+
+This supersedes section 5's two-badge premium-item gate and the earlier equipped-slot
+proposal. The existing Pokemon Centre code NPC, **Buy held items**, separates
+competitive items from specialized items and offers **Check competitive claims**.
+
+| Badges earned | Cumulative competitive item purchases from this NPC |
+|---|---|
+| 0-3 | 0 |
+| 4-5 | 1 total |
+| 6-7 | 2 total (one additional if the first was used) |
+| 8+ | Unlimited |
+
+The competitive list is `RealideaPlayerServices::COMPETITIVE` in
+`adapters/realidea/Player_Services.rb`: Choice Band, Choice Specs, Choice Scarf,
+Life Orb, Assault Vest, Focus Sash, and Eviolite. Leftovers and Black Sludge are
+specialized and unrestricted, as are the remaining specialized items, boosters,
+gems and berries. Prices are unchanged. Each confirmed competitive purchase gives
+one copy and counts once; buying the same item twice counts twice. Failed or
+cancelled purchases cost neither money nor a claim. Ordinary specialized shops
+cannot sell competitive items, including via an unrestricted stock call.
+
+Claims are stored in `$Trainer`'s `@realidea_competitive_claims` and survive saves.
+Selling, transferring, consuming or storing an item does not refund a claim.
+Existing saves start at zero: earlier purchases were not tracked and cannot be
+reconstructed reliably from inventory. Existing items are not confiscated, and
+there is no longer any team equipment limit or pre-battle item-removal menu.
+This restriction applies to this NPC's purchases, not gifts or other item sources.
+Mega Stones retain their existing reward/unlock behavior. TM access is unchanged.
+
+`Held_Item_Recovery.rb`, loaded after Player_Services, records original player-held
+items at battle start and consumption through `PokeBattle_Battler#pbConsumeItem`.
+After battle cleanup it restores missing consumed copies, normally to the original
+holder. Consumption and Recycle/Harvest/Pickup still work normally during battle;
+owned-item totals prevent adding duplicate copies when an item was already recovered.
+Wild and Trainer battles, wins, losses, escape, capture and abort paths are covered.
+Unconsumed item transfers are left to the game's existing rules; opponents, partners
+and newly acquired items do not generate player recovery entitlements.
+
+If the holder has acquired a different item, recovery goes to the Bag. If the Bag
+is full, the recovered item waits in the save (`@realidea_pending_item_restores`)
+and the NPC delivers it once there is space. Neither item is overwritten or lost.
+The policy follows the existing `Data/player_services.txt` enable file.
+
+Verified with the player-services regression suite (25 tests, 80 assertions) and
+held-item recovery suite (14 tests, 82 assertions). Live NPC menus and full battles
+still need an in-game playtest.

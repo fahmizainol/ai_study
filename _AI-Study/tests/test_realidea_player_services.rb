@@ -17,7 +17,9 @@ def getConst(mod, sym)
   return table[sym]
 end
 
-module PBItems; end
+module PBItems
+  def self.getName(id); ITEMS.key(id).to_s; end
+end
 module PBSpecies; end
 module PBMoves
   NAMES = { 10 => "Ice Beam", 11 => "Knock Off", 12 => "Toxic", 13 => "Surf" }
@@ -44,17 +46,29 @@ end
 $game_temp = GameTemp.new
 
 class TrainerStub
-  attr_accessor :numbadges, :party
+  attr_accessor :numbadges, :party, :money
+end
+
+class BagStub
+  attr_accessor :items, :full
+  def initialize; @items = []; @full = false; end
+  def pbQuantity(item); @items.find_all { |id| id == item }.length; end
+  def pbStoreItem(item)
+    return false if @full
+    @items.push(item)
+    return true
+  end
 end
 
 class Mon
-  attr_accessor :species, :form, :name, :known, :compat
+  attr_accessor :species, :form, :name, :known, :compat, :item, :egg, :hp
   def initialize(species, known=[], compat=[], form=0)
     @species = species; @known = known; @compat = compat; @form = form; @name = "Mon"
+    @item = 0; @egg = false; @hp = 100
   end
   def hasMove?(m); @known.include?(m); end
   def isCompatibleWithMove?(m); @compat.include?(m); end
-  def isEgg?; false; end
+  def isEgg?; @egg; end
 end
 
 # tm.dat: move => species that can learn it
@@ -152,12 +166,22 @@ def pbCodeMysteryGift
   badge_rewards_orig_pbCodeMysteryGift
 end
 
+BR_LOSS = 2
+$trainer_calls = []
+def pbTrainerBattle(*args); $trainer_calls.push([:single, args]); true; end
+def pbDoubleTrainerBattle(*args); $trainer_calls.push([:double, args]); true; end
+def customTrainerBattle(*args); $trainer_calls.push([:custom, args]); 1; end
+
 load File.expand_path("../adapters/realidea/Player_Services.rb", __dir__)
 
 class RealideaPlayerServicesTest < Test::Unit::TestCase
   def setup
     $Trainer = TrainerStub.new
     $Trainer.numbadges = 0
+    $Trainer.money = 100000
+    $Trainer.party = []
+    $trainer_calls = []
+    $PokemonBag = BagStub.new
     $game_temp.mart_prices = { :before => 1 }
     $mart = nil; $learned = []; $code_prompts = []; $choose = []
     Kernel.answers = []; Kernel.shown = []; Kernel.confirms = []
@@ -210,11 +234,13 @@ class RealideaPlayerServicesTest < Test::Unit::TestCase
     end
   end
 
-  def test_the_strongest_items_open_at_two_badges
+  def test_competitive_items_open_at_four_badges
     in_game do
       $Trainer.numbadges = 1
       assert(!RealideaPlayerServices.stock.collect { |r| r[0] }.include?(1))
-      $Trainer.numbadges = 2
+      $Trainer.numbadges = 3
+      assert(!RealideaPlayerServices.stock.collect { |r| r[0] }.include?(2))
+      $Trainer.numbadges = 4
       assert_equal([[1, 8000], [2, 8000], [3, 3000], [4, 1000], [5, 500]],
                    RealideaPlayerServices.stock)
     end
@@ -222,11 +248,11 @@ class RealideaPlayerServicesTest < Test::Unit::TestCase
 
   def test_the_shop_sets_its_prices_and_restores_the_old_ones
     in_game do
-      $Trainer.numbadges = 2
+      $Trainer.numbadges = 4
       RealideaPlayerServices.shop
       stock, prices, cantsell = $mart
-      assert_equal([1, 2, 3, 4, 5], stock)
-      assert_equal([8000, 4000], prices[1])
+      assert_equal([3, 4, 5], stock)
+      assert_equal([3000, 1500], prices[3])
       assert_equal([500, 250], prices[5])
       assert(cantsell)
       assert_equal({ :before => 1 }, $game_temp.mart_prices)
@@ -271,10 +297,10 @@ class RealideaPlayerServicesTest < Test::Unit::TestCase
   def test_shop_categories_and_the_gate_notice
     in_game do
       $Trainer.numbadges = 1
-      Kernel.answers = [0, :cancel]
+      Kernel.answers = [0, 1, :cancel]
       RealideaPlayerServices.shops
-      assert_equal([3], $mart[0])                # battle items without the gated ones
-      assert(Kernel.shown.any? { |m, c| m.index("after your second badge") })
+      assert_equal([3], $mart[0])                # specialized items stay available
+      assert(Kernel.shown.any? { |m, c| m.index("after your fourth badge") })
     end
   end
 
@@ -303,6 +329,117 @@ class RealideaPlayerServicesTest < Test::Unit::TestCase
     end
     in_game({}) do
       assert_equal([99], pbGetRelearnableMoves(Mon.new(21)))
+    end
+  end
+
+  def test_competitive_allowance_badge_boundaries
+    [0, 0, 0, 0, 1, 1, 2, 2, nil, nil].each_with_index do |limit, badges|
+      $Trainer.numbadges = badges
+      assert_equal(limit, RealideaPlayerServices.competitive_limit)
+    end
+  end
+
+  def test_claims_are_cumulative_across_badge_unlocks_and_each_copy_counts
+    in_game do
+      $Trainer.numbadges = 3
+      assert_equal(false, RealideaPlayerServices.buy_competitive(1))
+      $Trainer.numbadges = 4
+      assert_equal(true, RealideaPlayerServices.buy_competitive(1))
+      assert_equal(false, RealideaPlayerServices.buy_competitive(2))
+      $Trainer.numbadges = 6
+      assert_equal(true, RealideaPlayerServices.buy_competitive(1))
+      assert_equal(false, RealideaPlayerServices.buy_competitive(2))
+      assert_equal([1, 1], RealideaPlayerServices.competitive_claims)
+      assert_equal([1, 1], $PokemonBag.items)
+      assert_equal(84000, $Trainer.money)
+      $Trainer.numbadges = 8
+      5.times { assert_equal(true, RealideaPlayerServices.buy_competitive(2)) }
+    end
+  end
+
+  def test_claim_history_survives_save_reload_and_selling_does_not_refund_it
+    in_game do
+      $Trainer.numbadges = 4
+      RealideaPlayerServices.buy_competitive(1)
+      $Trainer = Marshal.load(Marshal.dump($Trainer))
+      $PokemonBag.items.clear
+      assert_equal([1], RealideaPlayerServices.competitive_claims)
+      assert_equal(false, RealideaPlayerServices.buy_competitive(2))
+    end
+  end
+
+  def test_failed_purchase_and_noncompetitive_items_do_not_use_money_or_claims
+    in_game do
+      $Trainer.numbadges = 4
+      assert_equal(false, RealideaPlayerServices.buy_competitive(3))
+      $PokemonBag.full = true
+      assert_equal(false, RealideaPlayerServices.buy_competitive(1))
+      assert_equal(100000, $Trainer.money)
+      $PokemonBag.full = false
+      $Trainer.money = 7999
+      assert_equal(false, RealideaPlayerServices.buy_competitive(1))
+      assert_equal(7999, $Trainer.money)
+      assert_equal([], RealideaPlayerServices.competitive_claims)
+      assert_equal([], $PokemonBag.items)
+    end
+  end
+
+  def test_competitive_shop_buys_one_copy_and_stops_at_allowance
+    in_game do
+      $Trainer.numbadges = 4
+      Kernel.answers = [0]
+      Kernel.confirms = [true]
+      RealideaPlayerServices.shop([RealideaPlayerServices::COMPETITIVE])
+      assert_equal([1], $PokemonBag.items)
+      assert_equal([1], RealideaPlayerServices.competitive_claims)
+      assert_equal(92000, $Trainer.money)
+      assert(Kernel.shown.last[0].include?("1/1 total"))
+    end
+  end
+
+  def test_cancelled_competitive_purchase_uses_no_claim
+    in_game do
+      $Trainer.numbadges = 4
+      Kernel.answers = [0, :cancel]
+      Kernel.confirms = [false]
+      RealideaPlayerServices.competitive_shop
+      assert_equal([], RealideaPlayerServices.competitive_claims)
+      assert_equal([], $PokemonBag.items)
+      assert_equal(100000, $Trainer.money)
+    end
+  end
+
+  def test_leftovers_and_black_sludge_are_specialized_and_early_stock
+    assert(!RealideaPlayerServices::COMPETITIVE.include?(:LEFTOVERS))
+    assert(!RealideaPlayerServices::COMPETITIVE.include?(:BLACKSLUDGE))
+    assert(RealideaPlayerServices::SPECIALIZED.include?(:LEFTOVERS))
+    assert(RealideaPlayerServices::SPECIALIZED.include?(:BLACKSLUDGE))
+    ITEMS[:LEFTOVERS] = 50; ITEMS[:BLACKSLUDGE] = 51
+    in_game do
+      assert(RealideaPlayerServices.stock([RealideaPlayerServices::SPECIALIZED]).map { |r| r[0] }.include?(50))
+      assert(RealideaPlayerServices.stock([RealideaPlayerServices::SPECIALIZED]).map { |r| r[0] }.include?(51))
+    end
+  ensure
+    ITEMS.delete(:LEFTOVERS); ITEMS.delete(:BLACKSLUDGE)
+  end
+
+  def test_equipped_items_no_longer_block_battles
+    in_game do
+      $Trainer.party = Array.new(6) { Mon.new(21) }
+      $Trainer.party.each { |mon| mon.item = 1 }
+      assert_equal(true, pbTrainerBattle(1, "Boss", "End"))
+      assert_equal(true, pbDoubleTrainerBattle(1, "A", 0, "End", 2, "B", 0, "End"))
+      assert_equal(1, customTrainerBattle(:trainer, "End"))
+    end
+  end
+
+  def test_shop_claim_check_lists_purchase_history
+    in_game do
+      $Trainer.numbadges = 4
+      RealideaPlayerServices.buy_competitive(2)
+      Kernel.answers = [RealideaPlayerServices::SHOPS.length, :cancel]
+      RealideaPlayerServices.shops
+      assert(Kernel.shown.any? { |message, commands| message.include?("1/1 total") && message.include?("LIFEORB") })
     end
   end
 end

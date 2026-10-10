@@ -2,8 +2,10 @@
 # Reminder offers egg moves.
 #
 # Create Data/player_services.txt to enable. Realidea's bosses run a search AI and
-# carry these moves and items from gym 1, so the player is not rationed the way Run &
-# Bun rations its players (its limits exist to prop up a weak AI). See
+# carry these moves and items from gym 1. Competitive NPC purchases unlock at
+# 4 badges (one cumulative purchase), 6 badges (two), and 8 badges (unlimited).
+# Specialized items are unlimited. Claims persist in the trainer save; there is
+# no equipped-item restriction. Consumed held items recover after battle. See
 # _AI-Study/PLAYER-CURVE.md section 5.
 #
 #   CODE NPC ("señorcodiguito", common event 79 -> pbCodeMysteryGift) opens a menu:
@@ -14,9 +16,10 @@
 #                     isCompatibleWithMove?. The game has no move tutor of its own, and
 #                     142 of its 194 TM/tutor moves had no source.
 #     Remember moves  the game's Move Reminder, which now also lists egg moves.
-#     Buy held items  three shops (battle items / type boosters and Gems / berries) at
+#     Buy held items  competitive / specialized / type boosters and Gems / berries at
 #                     own prices (the PBS prices are placeholders: Choice Band 100). The
-#                     strongest items open at GATE_BADGES badges.
+#                     competitive items open at GATE_BADGES badges. The shop also
+#                     shows the remaining cumulative purchase allowance.
 #     Enter a code    the NPC's original code prompt.
 #   MOVE REMINDER. pbGetRelearnableMoves also lists the line's egg moves (the baby's
 #   and the root's eggEmerald.dat lists). Egg moves are stored per species, so the
@@ -26,7 +29,9 @@
 
 module RealideaPlayerServices
   FILE = "Data/player_services.txt"
-  GATE_BADGES = 2
+  GATE_BADGES = 4
+  COMPETITIVE = [:CHOICEBAND, :CHOICESPECS, :CHOICESCARF, :LIFEORB,
+                 :ASSAULTVEST, :FOCUSSASH, :EVIOLITE]
 
   GATED = [:CHOICEBAND, :CHOICESCARF, :CHOICESPECS, :LIFEORB, :ASSAULTVEST, :LEFTOVERS,
            :FOCUSSASH, :WEAKNESSPOLICY, :EXPERTBELT]
@@ -86,7 +91,9 @@ module RealideaPlayerServices
     return nil
   end
 
-  SHOPS = [[_INTL("Battle items"), [GATED, UTILITY]],
+  SPECIALIZED = (GATED + UTILITY) - COMPETITIVE
+  SHOPS = [[_INTL("Competitive items"), [COMPETITIVE]],
+           [_INTL("Specialized items (unlimited)"), [SPECIALIZED]],
            [_INTL("Type boosters and Gems"), [BOOSTERS]],
            [_INTL("Berries"), [BERRIES]]] rescue []
 
@@ -94,9 +101,9 @@ module RealideaPlayerServices
   def self.stock(lists=nil)
     out = []
     for list, price in PRICE
-      next if lists && !lists.any? { |l| l.equal?(list) }
-      next if list.equal?(GATED) && badges < GATE_BADGES
       for sym in list
+        next if lists && !lists.any? { |l| l.include?(sym) }
+        next if COMPETITIVE.include?(sym) && badges < GATE_BADGES
         id = const(PBItems, sym)
         out.push([id, price]) if id
       end
@@ -105,7 +112,8 @@ module RealideaPlayerServices
   end
 
   def self.shop(lists=nil)
-    rows = stock(lists)
+    return competitive_shop if lists && lists.any? { |list| list.equal?(COMPETITIVE) }
+    rows = stock(lists).reject { |row| competitive_ids.include?(row[0]) }
     return if rows.empty?
     saved = $game_temp.mart_prices
     prices = {}
@@ -123,15 +131,119 @@ module RealideaPlayerServices
   def self.shops
     loop do
       names = SHOPS.collect { |s| s[0] }
+      names.push(_INTL("Check competitive claims"))
       names.push(_INTL("Back"))
-      idx = Kernel.pbMessage(_INTL("What are you after?"), names, names.length)
-      return if idx < 0 || idx >= SHOPS.length
+      idx = Kernel.pbMessage(allowance_text, names, names.length)
+      return if idx < 0 || idx > SHOPS.length
+      if idx == SHOPS.length
+        Kernel.pbMessage(claim_history_text)
+        next
+      end
       lists = SHOPS[idx][1]
-      if lists.any? { |l| l.equal?(GATED) } && badges < GATE_BADGES
-        Kernel.pbMessage(_INTL("Choice items, Life Orb, Assault Vest, Leftovers, Focus Sash, Weakness Policy and Expert Belt come in after your second badge."))
+      if idx == 0 && badges < GATE_BADGES
+        Kernel.pbMessage(_INTL("Competitive items unlock after your fourth badge. Specialized items are unlimited. You may buy 1 competitive item total at four badges, 2 total at six, and unlimited at eight."))
+        next
       end
       shop(lists)
     end
+  end
+
+  # Cumulative NPC purchases, not equipped slots. Existing saves start at zero:
+  # earlier purchases were not recorded and are not inferred from current inventory.
+  def self.competitive_limit
+    return nil if badges >= 8
+    return 2 if badges >= 6
+    return 1 if badges >= 4
+    return 0
+  end
+
+  def self.competitive_ids
+    return COMPETITIVE.collect { |sym| const(PBItems, sym) }.compact
+  end
+
+  def self.competitive_claims
+    return [] if !$Trainer
+    claims = $Trainer.instance_variable_get(:@realidea_competitive_claims)
+    if !claims.is_a?(Array)
+      claims = []
+      $Trainer.instance_variable_set(:@realidea_competitive_claims, claims)
+    end
+    return claims
+  end
+
+  def self.allowance_text
+    limit = competitive_limit
+    used = competitive_claims.length
+    return _INTL("Competitive items bought: {1}. Purchases are unlimited after eight badges. Specialized items are always unlimited.", used) if limit.nil?
+    return _INTL("Competitive items bought: {1}/{2} total. Allowance: 1 after four badges, 2 after six, unlimited after eight. Specialized items are always unlimited.", used, limit)
+  end
+
+  def self.claim_history_text
+    text = allowance_text
+    for item in competitive_claims
+      text += "\n" + PBItems.getName(item)
+    end
+    return text
+  end
+
+  # Single-copy transactions prevent a bulk purchase from exceeding the allowance.
+  # Money and claims change only after the Bag accepted the selected item.
+  def self.buy_competitive(item)
+    return false if !$Trainer || !competitive_ids.include?(item)
+    limit = competitive_limit
+    return false if !limit.nil? && competitive_claims.length >= limit
+    sym = COMPETITIVE.find { |s| const(PBItems, s) == item }
+    price = price_of(sym)
+    if $Trainer.money < price
+      Kernel.pbMessage(_INTL("You do not have enough money."))
+      return false
+    end
+    if !$PokemonBag || !$PokemonBag.pbStoreItem(item)
+      Kernel.pbMessage(_INTL("There is no room in your Bag."))
+      return false
+    end
+    $Trainer.money -= price
+    competitive_claims.push(item)
+    return true
+  end
+
+  def self.competitive_shop
+    deliver_pending_restores
+    loop do
+      limit = competitive_limit
+      if !limit.nil? && competitive_claims.length >= limit
+        Kernel.pbMessage(allowance_text)
+        return
+      end
+      rows = stock([COMPETITIVE])
+      return if rows.empty?
+      commands = rows.collect { |id, price| _INTL("{1} - ${2}", PBItems.getName(id), price) }
+      commands.push(_INTL("Back"))
+      idx = Kernel.pbMessage(allowance_text, commands, commands.length)
+      return if !idx || idx < 0 || idx >= rows.length
+      item, price = rows[idx]
+      next if !Kernel.pbConfirmMessage(_INTL("Buy one {1} for ${2}? This uses one competitive claim.", PBItems.getName(item), price))
+      if buy_competitive(item)
+        Kernel.pbMessage(_INTL("Purchased {1}.", PBItems.getName(item)))
+      end
+    end
+  end
+
+  def self.pending_restores
+    return [] if !$Trainer
+    pending = $Trainer.instance_variable_get(:@realidea_pending_item_restores)
+    if !pending.is_a?(Array)
+      pending = []
+      $Trainer.instance_variable_set(:@realidea_pending_item_restores, pending)
+    end
+    return pending
+  end
+
+  # Rare case: the original holder has acquired a different item and the Bag is
+  # full. Keep the recovered item in the save until space is available.
+  def self.deliver_pending_restores
+    return if !$Trainer || !defined?($PokemonBag) || !$PokemonBag
+    pending_restores.delete_if { |item| $PokemonBag.pbStoreItem(item) }
   end
 
   # --- the tutor ---------------------------------------------------------------
@@ -241,6 +353,10 @@ module RealideaPlayerServices
   end
 
   def self.menu(code_prompt)
+    deliver_pending_restores
+    if pending_restores.length > 0
+      Kernel.pbMessage(_INTL("{1} recovered held item(s) are waiting. Make room in your Bag and speak to me again.", pending_restores.length))
+    end
     loop do
       acts = []
       cmds = []
