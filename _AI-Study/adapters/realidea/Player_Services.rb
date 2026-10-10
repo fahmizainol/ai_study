@@ -31,11 +31,11 @@ module RealideaPlayerServices
   FILE = "Data/player_services.txt"
   GATE_BADGES = 4
   COMPETITIVE = [:CHOICEBAND, :CHOICESPECS, :CHOICESCARF, :LIFEORB,
-                 :ASSAULTVEST, :FOCUSSASH, :EVIOLITE]
+                 :ASSAULTVEST, :FOCUSSASH]
 
   GATED = [:CHOICEBAND, :CHOICESCARF, :CHOICESPECS, :LIFEORB, :ASSAULTVEST, :LEFTOVERS,
            :FOCUSSASH, :WEAKNESSPOLICY, :EXPERTBELT]
-  UTILITY = [:ROCKYHELMET, :AIRBALLOON, :BLACKSLUDGE, :EVIOLITE, :LIGHTCLAY, :WHITEHERB,
+  UTILITY = [:ROCKYHELMET, :AIRBALLOON, :HEAVYDUTYBOOTS, :BLACKSLUDGE, :EVIOLITE, :LIGHTCLAY, :WHITEHERB,
              :POWERHERB, :MENTALHERB, :EJECTBUTTON, :REDCARD, :PROTECTIVEPADS, :SAFETYGOGGLES,
              :MUSCLEBAND, :WISEGLASSES, :SCOPELENS, :RAZORCLAW, :WIDELENS, :ZOOMLENS,
              :BRIGHTPOWDER, :QUICKCLAW, :KINGSROCK, :SHELLBELL, :METRONOME, :BIGROOT,
@@ -92,7 +92,7 @@ module RealideaPlayerServices
   end
 
   SPECIALIZED = (GATED + UTILITY) - COMPETITIVE
-  SHOPS = [[_INTL("Competitive items"), [COMPETITIVE]],
+  SHOPS = [[_INTL("Competitive claims"), [COMPETITIVE]],
            [_INTL("Specialized items (unlimited)"), [SPECIALIZED]],
            [_INTL("Type boosters and Gems"), [BOOSTERS]],
            [_INTL("Berries"), [BERRIES]]] rescue []
@@ -131,14 +131,9 @@ module RealideaPlayerServices
   def self.shops
     loop do
       names = SHOPS.collect { |s| s[0] }
-      names.push(_INTL("Check competitive claims"))
       names.push(_INTL("Back"))
-      idx = Kernel.pbMessage(allowance_text, names, names.length)
-      return if idx < 0 || idx > SHOPS.length
-      if idx == SHOPS.length
-        Kernel.pbMessage(claim_history_text)
-        next
-      end
+      idx = Kernel.pbMessage(_INTL("Which held items would you like?"), names, names.length)
+      return if idx < 0 || idx >= SHOPS.length
       lists = SHOPS[idx][1]
       if idx == 0 && badges < GATE_BADGES
         Kernel.pbMessage(_INTL("Competitive items unlock after your fourth badge. Specialized items are unlimited. You may buy 1 competitive item total at four badges, 2 total at six, and unlimited at eight."))
@@ -168,6 +163,9 @@ module RealideaPlayerServices
       claims = []
       $Trainer.instance_variable_set(:@realidea_competitive_claims, claims)
     end
+    # Eviolite is now specialized; its earlier purchases no longer use a claim.
+    eviolite = const(PBItems, :EVIOLITE)
+    claims.delete(eviolite) if eviolite
     return claims
   end
 
@@ -212,14 +210,14 @@ module RealideaPlayerServices
     loop do
       limit = competitive_limit
       if !limit.nil? && competitive_claims.length >= limit
-        Kernel.pbMessage(allowance_text)
+        Kernel.pbMessage(claim_history_text)
         return
       end
       rows = stock([COMPETITIVE])
       return if rows.empty?
       commands = rows.collect { |id, price| _INTL("{1} - ${2}", PBItems.getName(id), price) }
       commands.push(_INTL("Back"))
-      idx = Kernel.pbMessage(allowance_text, commands, commands.length)
+      idx = Kernel.pbMessage(claim_history_text, commands, commands.length)
       return if !idx || idx < 0 || idx >= rows.length
       item, price = rows[idx]
       next if !Kernel.pbConfirmMessage(_INTL("Buy one {1} for ${2}? This uses one competitive claim.", PBItems.getName(item), price))

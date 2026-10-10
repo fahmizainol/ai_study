@@ -409,18 +409,35 @@ class RealideaPlayerServicesTest < Test::Unit::TestCase
     end
   end
 
-  def test_leftovers_and_black_sludge_are_specialized_and_early_stock
+  def test_leftovers_black_sludge_and_eviolite_are_specialized_and_early_stock
     assert(!RealideaPlayerServices::COMPETITIVE.include?(:LEFTOVERS))
     assert(!RealideaPlayerServices::COMPETITIVE.include?(:BLACKSLUDGE))
     assert(RealideaPlayerServices::SPECIALIZED.include?(:LEFTOVERS))
     assert(RealideaPlayerServices::SPECIALIZED.include?(:BLACKSLUDGE))
-    ITEMS[:LEFTOVERS] = 50; ITEMS[:BLACKSLUDGE] = 51
+    assert(!RealideaPlayerServices::COMPETITIVE.include?(:EVIOLITE))
+    assert(RealideaPlayerServices::SPECIALIZED.include?(:EVIOLITE))
+    ITEMS[:LEFTOVERS] = 50; ITEMS[:BLACKSLUDGE] = 51; ITEMS[:EVIOLITE] = 52
     in_game do
       assert(RealideaPlayerServices.stock([RealideaPlayerServices::SPECIALIZED]).map { |r| r[0] }.include?(50))
       assert(RealideaPlayerServices.stock([RealideaPlayerServices::SPECIALIZED]).map { |r| r[0] }.include?(51))
+      assert(RealideaPlayerServices.stock([RealideaPlayerServices::SPECIALIZED]).map { |r| r[0] }.include?(52))
+      $Trainer.instance_variable_set(:@realidea_competitive_claims, [52, 1])
+      assert_equal([1], RealideaPlayerServices.competitive_claims)
     end
   ensure
-    ITEMS.delete(:LEFTOVERS); ITEMS.delete(:BLACKSLUDGE)
+    ITEMS.delete(:LEFTOVERS); ITEMS.delete(:BLACKSLUDGE); ITEMS.delete(:EVIOLITE)
+  end
+
+  def test_boots_are_unrestricted_specialized_stock
+    ITEMS[:HEAVYDUTYBOOTS] = 743
+    in_game do
+      $Trainer.numbadges = 0
+      assert(!RealideaPlayerServices::COMPETITIVE.include?(:HEAVYDUTYBOOTS))
+      assert(RealideaPlayerServices::SPECIALIZED.include?(:HEAVYDUTYBOOTS))
+      assert(RealideaPlayerServices.stock([RealideaPlayerServices::SPECIALIZED]).any? { |r| r[0] == 743 })
+    end
+  ensure
+    ITEMS.delete(:HEAVYDUTYBOOTS)
   end
 
   def test_equipped_items_no_longer_block_battles
@@ -437,8 +454,9 @@ class RealideaPlayerServicesTest < Test::Unit::TestCase
     in_game do
       $Trainer.numbadges = 4
       RealideaPlayerServices.buy_competitive(2)
-      Kernel.answers = [RealideaPlayerServices::SHOPS.length, :cancel]
+      Kernel.answers = [0, :cancel]
       RealideaPlayerServices.shops
+      assert_equal("Which held items would you like?", Kernel.shown.first[0])
       assert(Kernel.shown.any? { |message, commands| message.include?("1/1 total") && message.include?("LIFEORB") })
     end
   end
